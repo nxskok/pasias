@@ -14,4 +14,4 @@ description: "A set of problems and solutions on various parts of applied statis
 
 # Introduction
 
-This is the introduction to my book.
+This book will hold a collection of problems, and their solutions, in applied statistics with R. These come from my courses STAC32 and STAD29 at the University of Toronto Scarborough.

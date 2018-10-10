@@ -7,82 +7,124 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages -------------------------------------------------------------------------------------- tidyverse 1.2.1 --
+## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.0.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.6
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ----------------------------------------------------------------------------------------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
+## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 
 
-  
-## The very basics in R
 
- Do this question in R. It is just like the one on
-Assignment 0.
+## Getting started on R Studio Cloud
+
+ Follow these steps to get an R Studio Cloud account.
 
 
-(a) Read the data $1,2,3,4,5,7$ into a variable in R. Verify
-that your variable contains the correct values. (Hint:
-`c()`.)
 
+(a) Point your web browser at [rstudio.cloud](rstudio.cloud). (If you already
+have R and R Studio installed on your computer, you can use that
+instead, throughout the course; just do part (d) of this
+question. Any references to R Studio Cloud in this assignment also
+apply to R Studio on your computer.)
 
 Solution
 
 
-Call the variable whatever you like. I used `w`.
-
-```r
-w=c(1,2,3,4,5,7)
-w  
-```
-
-```
-## [1] 1 2 3 4 5 7
-```
-
-Top two lines in a Script window, echoed in the Console; bottom line
-in the Console.
-      
+You should see this:
+![](Screenshot_2018-07-02_14-47-28.png). Click
+on Get Started. You might instead see the screen in the next part.
 
 
-(b) Find the mean and the standard deviation of your variable.
-
+(b) Choose an account to use.
 
 Solution
 
 
-Ask for them, one by one:
+Here's what you should see now:
 
-```r
-mean(w)  
-```
+![](Screenshot_2018-07-02_14-44-18.png)      
 
-```
-## [1] 3.666667
-```
-and
+If you're happy with using your Google account, click that
+button. You will probably have to enter your Google password. (If
+you are doing this on your own computer, you might not have to do
+that.) If you have a GitHub account and you want to use
+*that*, same principle.
+You can also use an email address as your login to R Studio
+Cloud. (You can use any e-mail address; I'm not checking.) Enter
+it in the top box, and enter a password to use with R Studio Cloud
+in the second. (This does not have to be, and indeed probably
+should not be, the same as your email password.)  Below that,
+enter your first and last name. This will appear at the top right
+of the screen when you are logged in. Then click Sign Up. After
+that, you will have to make a unique account name (which
+*you* actually never use, but verb+rstudio.cloud+ uses to
+name your files).
+After that, you are automatically logged in.
 
-```r
-sd(w)  
-```
 
-```
-## [1] 2.160247
-```
+(c) Take a look around, and create a new Project. Give the new
+project any name you like.
+
+Solution
 
 
+This is what you see now:
+![](Screenshot_2018-07-02_15-08-07.png)
+Click on the blue New Project button to create a new Project. (A
+project is a self-contained piece of work, like for example an
+assignment.)
+You will see the words "Loading Project" and spinning circles
+for a few moments. Then you see this:
+![](Screenshot_2018-07-02_15-19-12.png)
+To give your project a name, click at the top where it says
+Untitled Project and type a name like Assignment 0 into the box.
 
+
+(d) Before we get to work, look for the blue `>` at the
+bottom left. Click next to it to get a flashing cursor, and then
+type what you see here (in blue):
+
+![](Screenshot_2018-07-02_15-25-20.png)    
+
+Then press Enter.
+
+Solution
+
+
+This lets it install a bunch of things. It may take some
+time. If you are watching it, look out for lines beginning with
+`g++`, which are C++ code that needs to be compiled. This is
+the end of what I had. Look out for the word DONE near the bottom:
+
+![](Screenshot_2018-07-02_15-34-40.png)    
+
+
+
+(e) Not for now, but for later: if you are on a lab computer, you
+should probably log out when you are done. To do that, find your
+name at the top right. Click on it, and two things should pop out to
+the right: Profile and Log Out. Select Log Out. You should be
+returned to one of the screens you began with, possibly the Welcome
+to R Studio Cloud one. 
+To log back in, now or next time, look for
+Log In at the top right. Click it, to get this:
+
+![](Screenshot_2018-07-02_15-54-17.png)    
+
+and then you can log in with your email and password, or Google or
+Github IDs, whichever you used.
+Now we can get down to some actual work.
 
 
 
@@ -323,7 +365,7 @@ This is what you should see:
 boxplot(mtcars$mpg)
 ```
 
-![](01-getting-used_files/figure-latex/unnamed-chunk-11-1.pdf)<!-- --> 
+<img src="01-getting-used_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 The long upper whisker supports our guess from before that the
 distribution is right-skewed.
@@ -464,7 +506,7 @@ library(tidyverse)
 ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()
 ```
 
-![](01-getting-used_files/figure-latex/unnamed-chunk-13-1.pdf)<!-- --> 
+<img src="01-getting-used_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 $ %$ %$ 
 
 This shows a somewhat downward trend, which is what you'd expect,
@@ -488,7 +530,7 @@ of adding this to the end of the plotting command:
 ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()+geom_smooth(method="lm")
 ```
 
-![](01-getting-used_files/figure-latex/unnamed-chunk-14-1.pdf)<!-- --> 
+<img src="01-getting-used_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 The line definitely goes downhill. Decide for yourself how well you
 think a line fits these data.
@@ -638,7 +680,7 @@ so the right syntax is this:
 ggplot(rats,aes(x=group, y=density))+geom_boxplot()
 ```
 
-![](01-getting-used_files/figure-latex/unnamed-chunk-18-1.pdf)<!-- --> 
+<img src="01-getting-used_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 
 Given the amount of variability, the control and low-jump groups are
 very similar (with the control group having a couple of outliers), but
