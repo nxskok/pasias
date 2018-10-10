@@ -15,3 +15,7 @@ description: "A set of problems and solutions on various parts of applied statis
 # Introduction
 
 This book will hold a collection of problems, and their solutions, in applied statistics with R. These come from my courses STAC32 and STAD29 at the University of Toronto Scarborough.
+
+The problems were originally written in Sweave (that is, LaTeX with R code chunks), using the `exam` document class. I wrote a Perl program to strip out the LaTeX and turn each problem into R Markdown for this book. You will undoubtedly see bits of LaTeX still embedded in the text. I am trying to update my program to catch them, but I am sure to miss some. If you see anything, [file an issue](https://github.com/nxskok/pasias/issues) on the Github page for now. I want to fix problems programmatically at first, but when the majority of the problems have been caught, I will certainly take pull requests.
+
+Current progress: 5 chapters (up to one-sample inference), but the problems in chapters 4 and 5 don't have titles yet. (I want to fix up my Perl to catch some more latexery, and when I am happy with that, the problems will get titles.)

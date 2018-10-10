@@ -1,0 +1,256 @@
+
+## Question title
+
+ Nenana, Alaska, is about 50 miles west of Fairbanks.
+Every spring, there is a contest in Nenana. A wooden tripod is
+placed on the frozen river, and people try to guess the exact minute
+when the ice melts enough for the tripod to fall through the ice. The
+contest started in 1917 as an amusement for railway workers, and has
+taken place every year since. Now, hundreds of thousands of people
+enter their guesses on the Internet and the prize for the winner can
+be as much as $300,000. 
+
+Because so much money is at stake, and because the exact same tripod
+is placed at the exact same spot on the ice every year, the data are
+consistent and accurate. The data are in
+[http://www.utsc.utoronto.ca/~butler/c32/nenana.txt](http://www.utsc.utoronto.ca/~butler/c32/nenana.txt). 
+
+
+
+(a) Read the data into R.  Note that the values are
+separated by *tabs* rather than spaces, so you'll need an
+appropriate `read_` to read it in.
+
+
+Solution
+
+
+These are "tab-separated values", so `read_tsv` is the
+thing, as for the Australian athletes:
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/nenana.txt"
+nenana=read_tsv(myurl)
+```       
+
+Use whatever name you like for the data frame. One that is different
+from any of the column headers is smart; then it is clear whether you
+mean the whole data frame or one of its columns. `ice` or
+`melt` or anything like that would also be good.
+
+I haven't asked you to display or check the data (that's coming up),
+but if you look at it and find that it didn't work, you'll know to
+come back and try this part again. R usually gets it right or gives
+you an error. 
+
+If you look at the data, they do appear to be separated by spaces, but
+the text version of the date and time *also* have spaces in them,
+so things might go astray if you try and read the values in without
+recognizing that the actual separator is a tab:
+
+```{r }
+x=read_delim(myurl," ")
+``` 
+
+Ouch! A hint as to what went wrong comes from looking at the read-in
+data frame:
+
+```{r }
+x
+``` 
+
+Those verb=t= symbols mean "tab character", which is our hint that
+the values were separated by tabs rather than spaces.
+
+More detail (if you can bear to see it) is here:
+
+```{r }
+problems(x)
+``` 
+
+The first line of the data file (with the variable names in it) had no
+spaces, only tabs, so `read_delim` thinks there is *one*
+column with a very long name, but in the actual data, there are
+*five* space-separated columns.  The text date-times are of the
+form "April 30 at 11:30 AM", which, if you think it's all separated
+by spaces, is actually 5 things: April, 30, at and so on. These are
+the only things that are separated by spaces, so, from that point of
+view, there are five columns.
+
+
+
+(b) Find a way of displaying how many rows and columns your
+data frame has, and some of the values. Describe the first and last
+of the variables that
+you appear to have.
+
+
+Solution
+
+
+The easiest is just to display the tibble:
+```{r }
+nenana
+```       
+Alternatively, you can take a `glimpse` of it:
+
+```{r }
+glimpse(nenana)
+``` 
+
+There are 87 years, and 3 columns (variables).
+The first column is year, and the last
+column is the date and time that the tripod fell into the river,
+written as a piece of text. I explain the second column in a moment.
+
+
+
+(c) Dates and times are awkward to handle with software. (We
+see more ways later in the course.)  The column `JulianDate`
+expresses the time that the tripod fell through the ice as a
+fractional number of days since December 31. This enables the time
+(as a fraction of the way through the day) to be recorded as well,
+the whole thing being an ordinary number.
+Make a histogram of the Julian dates. Comment briefly on its shape.
+
+
+Solution
+
+
+With a `ggplot` histogram, we need a number of bins
+first. I can do Sturges' rule in my head: the next power of 2 up
+from 87 (our $n$) is 128, which is $2^7$, so the base 2 log of
+87 rounds up to 7. That plus one is 8, so we need 8 bins. For
+you, any not-insane number of bins will do, or any not-insane
+bin width, if you want to go that way:
+```{r }
+ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
+```       
+
+Note that you need to type `JulianDate` exactly as it
+appears, capital letters and all. R is case-sensitive.
+
+This histogram looks more or less symmetric (and, indeed, normal). I
+really don't think you can justify an answer other than "symmetric"
+here. (Or "approximately normal": that's good too.) If your
+histogram is different, say so. I think that "hole" in the middle is
+not especially important.
+
+We haven't done normal quantile plots yet, but looking ahead:
+
+```{r }
+ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
+``` 
+
+That hugs the line pretty well, so I would call it close to
+normally-distributed. It bulges away from the line because there are
+more values just below 120 than you would expect for a
+normal. This corresponds to the histogram bar centred just below 120
+being taller than you would have expected.endnote{That is to say, the
+principal deviation from normality is not the "hole" on the
+histogram, the bar centred around 123 being too short, but that the
+bar centred just below 120 is too *tall*.}
+
+Extra: looking *way* ahead (to almost the end of the R stuff),
+this is how you handle the dates and times:
+
+```{r }
+library(lubridate)
+nenana %>% 
+mutate(longdt=str_c(Year," ",`Date&Time`)) %>%
+mutate(datetime=ymd_hm(longdt,tz="America/Anchorage"))
+``` 
+
+I am not doing any further analysis with these, so just displaying them is good. 
+
+I have to do a preliminary step to get the date-times *with* their year in one place. verb-str_c- glues pieces of text together: in this case, the year, a space, and then the rest of the 
+verb-Date&Time-. I stored this in verb-longdt-. The second verb-mutate- is the business end of it: verb-ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
+The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the verb-lubridate- function is called verb-yday- for "day of year"):
+
+```{r }
+nenana %>% 
+mutate(longdt=str_c(Year," ",`Date&Time`)) %>%
+mutate(datetime=ymd_hm(longdt,tz="America/Anchorage")) %>% 
+mutate(jd=yday(datetime)) ->
+nenana2
+nenana2 %>% select(JulianDate,jd,datetime)
+``` 
+
+Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. verb-round- rounds off to the nearest integer (since these are actually decimal numbers):
+
+```{r }
+nenana2 %>% 
+filter(round(JulianDate) != round(jd)) %>% 
+select(JulianDate,jd,datetime)
+```
+
+The ones shown here are all *after noon*, and the Julian date in
+the data file appears as one more than the one calculated by
+verb-lubridate-. What has actually happened is a quirk of how tibbles
+are displayed: they show 3 significant digits, *rounded*. The
+Julian dates given by verb-yday- are the whole-number part, so the
+ones in the data value are that plus more than 0.5, which will round
+*up*. The first line of code below displays 6 significant digits
+rather than only three:
+
+```{r }
+options(pillar.sigfig=6)
+nenana2 %>% 
+filter(round(JulianDate) != round(jd)) %>% 
+select(JulianDate,jd,datetime)
+```
+
+Displaying more decimals shows that I was right: verb-jd- is (to this accuracy) a whole number, but verb-JulianDate- is a decimal with fractional part greater than 0.50.
+
+Now I have to turn the extra signficant digits off:
+
+```{r }
+options(pillar.sigfig=3)
+```
+
+
+
+(d) Plot `JulianDate` against `Year` on a
+scatterplot. What recent trends, if any, do you see? Comment briefly.
+
+
+Solution
+
+
+
+verb+geom_point+:
+
+```{r }
+ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
+``` 
+This is actually a small-but-real downward trend, especially since
+about 1960, 
+but the large amount
+of variability makes it hard to see, so I'm good with either ``no
+trend'' or "weak downward trend" 
+or anything roughly like that. There is definitely not much trend
+before 1960, but most of the really early break-ups (less than about
+118) have been since about 1990.
+
+You can even add to the `ggplot`, by putting a smooth trend on it:
+
+```{r }
+ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
+``` 
+
+This is R's version of a trend that is not constrained
+to be linear (so that it "lets the data speak for itself").
+
+Now there is something obvious to see: after about 1960, there is a clear
+downward trend: the ice is breaking up earlier on average every
+year. Even though there is a lot of variability, the overall trend,
+viewed this way, is clear.
+
+What does this mean, in practice? This notion of the ice melting
+earlier than it used to is consistent all over the Arctic, and is one
+more indication of climate change. Precisely, it is an indication that
+climate change is happening, but we would have to delve further to
+make any statements about the *cause* of that climate change.
+
+
+
+

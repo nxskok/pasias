@@ -1,0 +1,150 @@
+
+## Question title
+
+ A used-car website lists several used
+Toyota Corollas for sale within a 250-mile radius of Redlands,
+California. For each car, its age (in years) and advertised price (in
+thousands of dollars) are recorded. The data are in
+[http://www.utsc.utoronto.ca/~butler/c32/corollas.txt](http://www.utsc.utoronto.ca/~butler/c32/corollas.txt).
+
+
+
+(a) Read the data into SAS and display the whole data set. (It
+is not too big, so displaying the whole thing is OK.)
+
+
+Solution
+
+
+The usual:
+begin{Sascode}[store=lujup]
+filename myurl url "http://www.utsc.utoronto.ca/~butler/c32/corollas.txt";
+
+proc import
+datafile=myurl
+out=corollas
+dbms=dlm
+replace;
+getnames=yes;
+delimiter=' ';
+proc print;
+end{Sascode}
+Listing[store=lujup,fontsize=small]{lujupp}
+
+
+
+(b) Make a suitable graph of your two variables. Justify your
+choice of graph briefly.
+
+
+Solution
+
+
+The two variables `age` and `price` are both
+quantitative, so the right graph is a scatterplot. I think that
+the price is an outcome variable and age is explanatory, so
+`price` should be on the $y$-axis and `age` on the
+$x$. You should justify which variable is on which axis, or be
+able to say that it doesn't matter (if you can come up with a
+convincing argument for the latter, I'm good with it):
+begin{Sascode}[store=sisag]
+proc sgplot;
+scatter y=price x=age;
+end{Sascode}
+The `x=` and `y=` can be in either order. All that
+matters is that they are both there.
+Graphic[store=sisag, scale=0.8]{sisagg}
+If you like (not obligatory, but it makes the next part easier),
+you can add a regression line to the plot, thus:
+begin{Sascode}[store=lufix]
+proc sgplot;
+scatter y=price x=age;
+reg y=price x=age;      
+end{Sascode}
+Graphic[store=lufix, scale=0.8]{lufixx}
+    
+
+
+(c) What does your plot tell you about any association between
+`age` and `price`? Does that correspond to what you
+know or can guess about the association between age and price of
+used cars? Explain briefly.
+
+
+Solution
+
+
+The scatterplots (especially my one with the regression line on it)
+point to a *downward* trend: that is to say, older cars tend
+to have a *lower* price. You would probably guess that an
+older car would have fewer years of use left, or would have been
+driven more kilometres, or would need a lot of repair, and so you
+would expect to pay less money for an older car. (Any one of those
+reasons is good.)
+Note also that these cars are all the same model (Toyota Corollas), so there should be no effect of the data being a mixture of different models of car, which would weaken the trend. This is a decently strong trend.
+    
+
+
+(d) Find the mean and standard deviation of age and price. (It is enough to obtain output with these values on it.)
+
+
+Solution
+
+
+This is a simple application of `proc means`. You don't need to specify anything at all by way of variables, because these are all the quantitative variables in the data set:
+begin{Sascode}[store=yekaq]
+proc means;
+end{Sascode}
+Listing[store=yekaq, fontsize=small]{yekaqq}
+There is no problem about specifying the names of the variables whose mean and SD you want, since the answer will be the same:
+begin{Sascode}[store=bacix]
+proc means;
+var age price;
+end{Sascode}
+Listing[store=bacix, fontsize=small]{bacixx}
+or even asking for the mean and SD by name:
+begin{Sascode}[store=vojun]
+proc means mean stddev;
+var age price;
+end{Sascode}
+Listing[store=vojun, fontsize=small]{vojunn}
+Anything that gets the answers is good. I don't mind how you do
+it, but you may as well figure out how to do it with the smallest
+amount of work. In this case, that would mean figuring out that
+the defaults are what you need: that you don't need a `var`
+or a `class` for this one.
+    
+
+
+(e) Find the median and inter-quartile range of `price`.
+Again, obtaining output with the answers on it is good.
+
+
+Solution
+
+
+This is `proc means` again, but specifying the things to
+calculate on the first line, and this time you definitely do need
+to specify the variable to calculate them for:
+begin{Sascode}[store=wirul]
+proc means median Qrange;
+var price;
+end{Sascode}
+Listing[store=wirul, fontsize=small]{wirull}
+The median price is 13 (thousand dollars) and the inter-quartile range is 3.44 (thousand dollars). 
+This might seem like a largish spread. If you knew the
+`age` of a car, you could use regression to predict its
+selling price more accurately than this based on its age, because
+we saw earlier that older cars typically sell for less money (and
+therefore, knowing the age is valuable information if you want to
+say something about selling price). This is the kind of issue that
+R-squared in a regression gets into: the standard deviation (or
+the IQR) of price tells you that there is a largish amount of
+variation in the prices overall, but R-squared, which will also be
+fairly large, tells you that quite a lot of that variation is
+because we have a mixture of cars of different ages. Thus knowing
+the age of a car would allow you to predict its selling price with
+reasonable accuracy.
+    
+
+

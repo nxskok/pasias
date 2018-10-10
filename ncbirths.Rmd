@@ -1,0 +1,256 @@
+
+
+## Question title
+
+ The data in file
+[http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
+500 randomly chosen births of babies in North Carolina. There is a lot
+of information: not just the weight at birth of the baby, but whether
+the baby was born prematurely, the ages of the parents, whether the
+parents are married, how long (in weeks) the pregnancy lasted (this is
+called the "gestation") and so on. 
+
+
+
+(a) Read in the data from the file into R, bearing in mind what
+type of file it is. 
+
+
+Solution
+
+
+This is a `.csv` file (it came from a spreadsheet), so it
+needs reading in accordingly. Work directly from the URL (rather
+than downloading the file, unless you are working offline):
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv"
+bw=read_csv(myurl)
+``` 
+
+This shows you which variables the data set has (some of the names got
+a bit mangled), and it shows you that they are all integers except for
+the birth weight (a decimal number).
+
+The easiest way to find out how many rows and columns there are is
+simply to list the data frame:
+
+```{r }
+bw
+``` 
+
+or you can take a "glimpse" of it:
+
+```{r }
+glimpse(bw)
+``` 
+Either of these displays show that there are 500 rows  (observations,
+here births) and 10 columns (variables), and they both show what the
+variables are called. So they're both good as an answer to the
+question. 
+
+What you'll notice is that the variables have *spaces* in their
+names, which will require special handling later. These outputs show
+you what to do about those spaces in variable names: surround the
+variable name with "backticks". (On my keyboard, that's on the key
+to the left of number 1, where the squiggle is, that looks like a
+backwards apostrophe. Probably next to `Esc`, depending on the
+layout of your keyboard.)
+
+Although almost all of the variables are stored as integers, the ones
+that have a question mark in their name are actually "logical", true
+or false, with 1 denoting true and 0 false. We could convert them
+later if we want to. (A question mark is not a traditional character
+to put in a variable name, so we have to surround these variables with
+backticks too.)
+
+
+
+(b) From your output, verify that you have the
+right number of observations and that you have several
+variables. Which of your variables correspond to birthweight,
+prematureness and length of pregnancy? (You might have to make guesses
+based on the names of the variables.) 
+
+
+
+Solution
+
+
+I do indeed have 500 observations on 10 variables ("several"). (If
+you don't have several variables, check to see that you didn't use
+`read_delim` or something by mistake.) After the ``500
+observations of 10 variables'' line(s) in each case, you see all the
+variables by name, with what type of values they haveendnote{these
+are mostly `int` or "integer".}, and the first few of the
+values.endnote{Other possible variable types are `num` for
+(real, decimal) numbers such as birth weight, `chr` for
+text, and `Factor` (with the number of levels) for
+factors/categorical variables. We don't have any of the last two
+here. There is also `lgl` for "logical", things that were
+actually recorded as TRUE or FALSE. We have some variables that
+are actually logical ones, but they are recorded as integer
+values.}
+
+The variable verb=`Weight (pounds)`= is the birthweight (in pounds),
+verb=`Premie?`= is 1 for a premature baby and 0 for a full-term baby,
+and verb=`Weeks Gestation`= is the number of weeks the pregnancy
+lasted. I've put backticks around each of those to remind us that
+that's how we'll need to refer to them when we use them
+later.endnote{The backticks look different from each other for
+annoying technical reasons, but they're all backticks.}
+ 
+
+
+(c) The theory behind the $t$-test (which we do later) says that the
+distribution of birth weights should be (approximately) normally
+distributed. Obtain a histogram of the birth weights. Does it look
+approximately normal?  Comment briefly. (You'll have to pick a number
+of bins for your histogram first. I don't mind very much what you
+pick, as long as it's not obviously too many or too few bins.)
+
+
+
+Solution
+
+
+You'll have seen that I often start with 10 bins, or maybe not quite
+that many if I don't have much data, and this is a decent general
+principle. That would give
+```{r }
+ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
+``` 
+
+which is perfectly acceptable. You can try something a bit more or a
+bit less, and see how you like it in comparison. What you are looking
+for is a nice clear picture of *shape*. If you have too few bins,
+you'll lose the shape:
+
+```{r }
+ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
+``` 
+
+(is that leftmost bin an indication of skewness or some observations
+that happen to be smallish?)
+
+And if you have too many, the shape will be there, but
+it will be hard to make out in all the noise, with frequencies going
+up and down:
+
+```{r }
+ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
+``` 
+
+I generally am fairly relaxed about the number of bins you use, as
+long as it's not clearly too few or too many. You might have done
+exercises in the past that illustrate that the choice of number of
+bins (or the class intervals where you move from one bin to the next,
+which is another issue that I won't explore here) can make an
+appreciable difference to how a histogram looks.
+Extra: I had some thoughts about this issue that I put in a blog
+post, that you might like to read:
+[http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/](http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/). The
+nice thing about Sturges' rule, mentioned there, is that you can
+almost get a number of bins for your histogram in your head (as long
+as you know the powers of 2, that is). What you do is to start with
+your sample size, here $n=500$. You find the next power of 2 above
+that, which is here $512=2^9$. You then take that power and add 1,
+to get 10 bins. If you don't like that, you can get R to calculate
+it for you:
+
+```{r }
+nclass.Sturges(bw$`Weight (pounds)`)
+``` 
+
+The place where Sturges' rule comes from is an assumption of normal
+data (actually a binomial approximation to the normal, backwards
+though that sounds). If you have less than 30 observations, you'll get
+fewer than 6 bins, which won't do much of a job of showing the
+shape. Rob Hyndman wrote a
+href{https://robjhyndman.com/papers/sturges.pdf}{critical note} about
+Sturges' rule in which he asserts that it is just plain wrong (if you
+have taken B57, this note is very readable).
+
+So what to use instead? Well, judgment is still better than something
+automatic, but if you want a place to start from, something with a
+better foundation than Sturges is the Freedman-Diaconis rule. This, in
+its original formulation, gives a bin width rather than a number of bins:
+
+$$ 
+w=2(IQR)n^{-1/3}
+$$
+
+The nice thing about this is that it uses the interquartile range, so
+it won't be distorted by outliers. verb=geom_histogram= can take a
+bin width, so we can use it as follows:
+
+```{r }
+w=2*IQR(bw$`Weight (pounds)`)*500^(-1/3)
+w
+ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
+``` 
+
+R also has
+
+```{r }
+nc=nclass.FD(bw$`Weight (pounds)`)
+nc
+``` 
+
+which turns the Freedman-Diaconis rule into a number of bins rather
+than a binwidth; using that gives the same histogram as we got with `binwidth`.
+
+In my opinion, Freedman-Diaconis tends to give too many bins (here
+there are 26 rather than the 10 of Sturges). But I put it out there
+for you to make your own call.
+
+Another way to go is a "density plot". This is a smoothed-out version of a histogram that is not obviously frequencies in bins, but which does have a theoretical basis. It goes something like this:
+
+```{r }
+ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
+``` 
+
+verb=geom_density= has an optional parameter that controls how smooth
+or wiggly the picture is, but the default is usually good.
+
+Alright, before we got distracted, we were assessing normality. What
+about that?
+
+It is mostly normal-looking, but I am suspicious about those
+*very* low birth weights, the ones below about 4 pounds. There
+are a few too many of those, as I see it.
+
+If you think this is approximately normal, you need to make some
+comment along the lines of ``the shape is approximately symmetric with
+no outliers''. I think my first answer is better, but this answer is
+worth something, since it is a not completely unreasonable
+interpretation of the histogram.
+
+I have been making the distinction between a histogram (for one
+quantitative variable) and side-by-side boxplots (for one quantitative
+variable divided into groups by one categorical variable). When you
+learned the boxplot, you probably learned it in the context of one
+quantitative variable. You can draw a boxplot for that, too, but the
+`ggplot` boxplot has an `x` as well as a
+`y`. What you do to make a single boxplot is to set the
+`x` equal 1, which produces a weird $x$-axis (that you ignore):
+
+```{r }
+ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
+``` 
+
+The high weight is actually an outlier, but look at all those outliers
+at the bottom!endnote{When Tukey, a name we will see again, invented
+the boxplot in the 1950s, 500 observations would have been
+considered a big data set. He designed the boxplot to produce a
+sensible number of outliers for the typical size of data set of his
+day, but a boxplot of a large data set tends to have a lot of
+outliers that are probably not really outliers at all.}
+
+*I* think the reason for those extra very low values is that they
+are the premature births (that can result in *very* small
+babies). Which leads to the additional question coming up.
+
+
+
+
+

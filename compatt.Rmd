@@ -1,0 +1,193 @@
+
+## Question title
+
+ Beginning accounting students need to
+learn to learn to audit in a computerized environment. A sample of
+beginning accounting students took each of two tests: the Computer
+Attitude Scale (CAS) and the Computer Anxiety Rating Scale (CARS). A
+higher score in each indicates greater anxiety around computers. The test scores are scaled to be between 0 and 5. Also
+noted was each student's gender. The data are in
+[http://www.utsc.utoronto.ca/~butler/c32/compatt.txt](http://www.utsc.utoronto.ca/~butler/c32/compatt.txt). The data values are separated by spaces.
+
+
+
+(a) Read the data into R. Do you have what you expected? Explain briefly. 
+
+
+Solution
+
+
+Read in and display the data. This, I think, is the easiest way.
+```{r }
+url="http://www.utsc.utoronto.ca/~butler/c32/compatt.txt"
+anxiety=read_delim(url," ")
+anxiety
+```     
+
+There is a total of 35 students with a CAS score, a CARS score and a
+gender recorded for each. This is in line with what I was
+expecting. (You can also note that the genders appear to be a mixture
+of males and females.)
+    
+
+
+(b) How many males and females were there in the sample?
+
+
+Solution
+
+
+Most easily `count`:
+```{r }
+anxiety %>% count(gender)
+```     
+
+This also works (and is therefore good):
+
+```{r }
+anxiety %>% group_by(gender) %>% summarize(count=n())
+``` 
+
+I want you to use R to do the counting (that is, don't just list out
+the whole data set with `print(n=Inf)` and count the males and
+females yourself). This is because you might have thousands of data
+values and you need to learn how to get R (or, later, SAS) to count them for
+you.
+
+15 females and 20 males, *which you should say*. I made a point
+of *not* saying that it is enough to get the output with the
+answers on it, so you need to tell me what the answer is.
+    
+
+
+(c) Do the CAS scores tend to be higher for females or for males? Draw a suitable graph to help you decide, and come to a conclusion.
+
+
+Solution
+
+
+Gender is categorical and CAS score is quantitative, so a boxplot would appear to be the thing:
+```{r }
+ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
+```     
+
+The median for males is slightly higher, so male accountants are more anxious around computers than female accountants are.
+
+If you wish, side-by-side (or, better, above-and-below) histograms
+would also work:
+
+```{r }
+ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
+facet_wrap(~gender,ncol=1)
+``` 
+
+If you go this way, you have to make a call about where the centres of the histograms are. I guess the male one is slightly further to the right, but it's not so easy to tell. (Make a call.)
+    
+
+
+(d) Find the median CAS scores for each gender. Does this support what you saw on your plot? Explain briefly.
+
+
+Solution
+
+
+Group-by and summarize:
+```{r }
+anxiety %>% group_by(gender) %>% summarize(med=median(CAS))
+```     
+
+The median is a bit higher for males, which is what I got on my
+boxplot (and is apparently the same thing as is on the histograms, but
+it's harder to be sure there).
+    
+
+
+(e) Find the mean and standard deviation of both CAS and CARS scores (for all the students combined, ie. not separated by gender) *without* naming those columns explicitly.
+
+
+Solution
+
+
+Without naming them explicitly means using some other way to pick them out of the data frame, either `summarize_if` or `summarize_at`. To do it the first way, ask what these two columns have in common: they are the only two numeric (quantitative) columns:
+```{r }
+anxiety %>% summarize_if(is.numeric,funs(mean,sd))
+```     
+
+Or the second way, asking yourself what the *names* of those columns have in common: they start with C and the gender column doesn't:
+
+```{r }
+anxiety %>% summarize_at(vars(starts_with("C")),funs(mean,sd))
+``` 
+
+Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends_with` S):
+
+```{r }
+anxiety %>% summarize_at(vars(ends_with("S")),funs(mean,sd))
+``` 
+
+Because I didn't say otherwise, you should tell me what the means and SDs are, rounding off suitably: the CAS scores have mean 2.82 and SD 0.48, and the CARS scores have mean 2.77 and SD 0.67.
+
+Yet another way to do it is to select the columns you want first (which
+you can do by number so as not to name them), and then find the mean
+and SD of all of them. This uses two tools that we haven't seen yet:
+
+```{r }
+anxiety %>% select(2:3) %>% summarize_all(funs(mean,sd))
+``` 
+
+This doesn't work:
+
+```{r }
+summary(anxiety)
+``` 
+
+because, although it gets the means, it does not get the standard
+deviations. (I added the SD to the original question to make you find
+a way other than this.)
+
+In summary, find a way to get those answers without naming those
+columns in your code, and I'm good.
+
+In case you were wondering about how to do this separately by gender, well, put the `group_by` in like you did before:
+
+```{r }
+anxiety %>% group_by(gender) %>%
+summarize_if(is.numeric,funs(mean,sd))
+``` 
+
+or
+
+```{r }
+anxiety %>% group_by(gender) %>%
+summarize_at(vars(starts_with("C")),funs(mean,sd))
+``` 
+
+The male means are slightly higher on both tests, but the male
+standard deviations are a little smaller.
+You might be wondering whether the test scores are related. They are both quantitative, so the obvious way to find out is a scatterplot:
+
+```{r }
+ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
+``` 
+
+The two variables can be on either axis, since there is no obvious
+response or explanatory variable. A higher score on one scale goes
+with a higher score on the other, suggesting that the two scales are
+measuring the same thing.
+
+This plot mixes up the males and females, so you might like to distinguish them, which goes like this:
+
+```{r }
+ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
+``` 
+
+There is a slight (but only slight) tendency for the males to be up
+and to the right, and for the females to be down and to the left. This
+is about what you would expect, given that the male means are slightly
+bigger on both scores, but the difference in means is not that big
+compared to the SD.
+    
+
+
+
+

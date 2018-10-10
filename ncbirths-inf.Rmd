@@ -1,0 +1,181 @@
+
+
+## Question title
+
+ The data in file
+[http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
+500 randomly chosen births of babies in North Carolina. There is a lot
+of information: not just the weight at birth of the baby, but whether
+the baby was born prematurely, the ages of the parents, whether the
+parents are married, how long (in weeks) the pregnancy lasted (this is
+called the "gestation") and so on. We have seen these data before.
+
+
+
+(a) Read in the data from the file into R, bearing in mind what
+type of file it is. 
+
+
+Solution
+
+
+This is a `.csv` file (it came from a spreadsheet), so it
+needs reading in accordingly. Work directly from the URL (rather
+than downloading the file, unless you are working offline):
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv"
+bw=read_csv(myurl)
+``` 
+
+
+
+(b) Find a 95% confidence interval for the mean birth weight of
+all babies born in North Carolina (of which these babies are a
+sample). At the end, you should state what the confidence interval is.
+Giving some output is necessary, but *not* enough by itself.
+
+If your variable name has a space or other special character (like a
+question mark) in it, remember that you have to surround its name with
+backticks, as discussed the first time we looked at these data.
+
+
+
+Solution
+
+
+This:
+
+```{r }
+t.test(bw$`Weight (pounds)`)  
+``` 
+
+or (the same, but remember to match your brackets):
+
+```{r }
+with(bw,t.test(`Weight (pounds)`))
+``` 
+
+The confidence interval goes from 6.94 to 7.20 pounds.
+
+There is an annoyance about `t.test`. Sometimes you can use
+`data=` with it, and sometimes not. When we do a two-sample
+$t$-test later, there is a "model formula" with a squiggle in it,
+and there we can use `data=`, but here not, so you have to use
+the dollar sign or the `with` to say which data frame to get
+things from. The distinction seems to be that emph{if you are using a
+model formula}, you can use `data=`, and if not, not.
+
+This is one of those things that is a consequence of R's history. The
+original `t.test` was without the model formula and thus
+without the `data=`, but the model formula got "retro-fitted"
+to it later. Since the model formula comes from things like
+regression, where `data=` is legit, that had to be retro-fitted
+as well. Or, at least, that's my understanding.
+
+
+
+
+
+(c) Birth weights of babies born in the United States have a mean
+of 7.3 pounds. Is there any evidence that babies born in North
+Carolina are less heavy on average? State appropriate hypotheses, do your
+test, obtain a P-value and state your conclusion, in terms of the
+original data.
+
+
+
+Solution
+
+
+Null is that the population mean (the mean weight of all babies born
+in North Carolina) is $H_0: mu=7.3$ pounds, and the alternative  is
+that the mean is less: $H_a: mu<7.3$ pounds. This is a one-sided
+alternative, which we need to feed into `t.test`:
+
+```{r }
+t.test(bw$`Weight (pounds)`,mu=7.3,alternative="less")
+``` 
+$ %$ 
+
+Or with `with`. If you see what I mean.
+
+The P-value is 0.0003, which is *less* than any $alpha$ we might
+have chosen: we *reject* the null hypothesis in favour of the
+alternative, and thus we conclude that the mean birth weight of babies
+in North Carolina
+is indeed less than 7.3 pounds.
+
+"Reject the null hypothesis" is *not* a complete answer. You
+need to say something about what rejecting the null hypothesis means
+*in this case*: that is, you must make a statement about birth
+weights of babies.
+
+
+
+
+
+(d) The theory behind the $t$-test says that the distribution of
+birth weights should be (approximately) normally distributed. Obtain a
+histogram of the birth weights. Does it look approximately normal?
+Comment briefly. (You'll have to pick a number of bins for your
+histogram first. I don't mind very much what you pick, as long as it's
+not obviously too many or too few bins.)
+
+
+
+Solution
+
+
+We did this before (and discussed the number of bins before), so
+I'll just reproduce my 10-bin histogram (which is what I preferred,
+but this is a matter of taste):
+```{r }
+ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
+``` 
+
+So, we were assessing normality. What about that?
+
+It is mostly normal-looking, but I am suspicious about those
+*very* low birth weights, the ones below about 4 pounds. There
+are too many of those, as I see it.
+
+If you think this is approximately normal, you need to make some
+comment along the lines of ``the shape is approximately symmetric with
+no outliers''. I think my first answer is better, but this answer is
+worth something, since it is a not completely unreasonable
+interpretation of the histogram.
+
+A normal quantile plot is better for assessing normality
+than a histogram is, but I won't make you do one until we have seen
+the idea in class. Here's the normal quantile plot for these data:
+
+```{r }
+ggplot(bw,aes(sample=`Weight (pounds)`))+stat_qq()+stat_qq_line()
+``` 
+
+This is rather striking: the lowest birthweights (the ones below 5
+pounds or so) are *way* too low for a normal distribution to
+apply. The top end is fine (except perhaps for that one very heavy
+baby), but there are too many low birthweights for a normal
+distribution to be believable. Note how much clearer this story is
+than on the histogram.
+
+Having said that, the $t$-test, especially with a sample size as big
+as this (500), behaves *very* well when the data are somewhat
+non-normal (because it takes advantage of the Central Limit Theorem:
+that is, it's the *sampling distribution of the sample mean*
+whose shape matters). So, even though the data are definitely not
+normal, I wouldn't be too worried about our test.
+
+This perhaps gives some insight as to why Freedman-Diaconis said we
+should use so many bins for our histogram. We have a lot of low-end
+outliers, so that the IQR is actually *small* compared to the
+overall spread of the data (as measured, say, by the SD or the range)
+and so FD thinks we need a lot of bins to describe the shape. Sturges
+is based on data being approximately normal, so it will tend to
+produce a small number of bins for data that have outliers.
+
+
+
+
+

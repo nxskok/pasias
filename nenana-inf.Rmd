@@ -1,0 +1,167 @@
+
+## Question title
+
+ Nenana, Alaska, is about 50 miles west of Fairbanks.
+Every spring, there is a contest in Nenana. A wooden tripod is
+placed on the frozen river, and people try to guess the exact minute
+when the ice melts enough for the tripod to fall through the ice. The
+contest started in 1917 as an amusement for railway workers, and has
+taken place every year since. Now, hundreds of thousands of people
+enter their guesses on the Internet and the prize for the winner can
+be as much as $300,000. 
+
+Because so much money is at stake, and because the exact same tripod
+is placed at the exact same spot on the ice every year, the data are
+consistent and accurate. The data are in
+[http://www.utsc.utoronto.ca/~butler/c32/nenana.txt](http://www.utsc.utoronto.ca/~butler/c32/nenana.txt). 
+
+Yes, we saw these data before.
+
+
+
+(a) Read the data into R, as before, or use the data frame that
+you read in before.  Note that the values are separated by
+*tabs* rather than spaces, so you'll need an appropriate
+`read_` to read it in.
+
+
+Solution
+
+
+These are "tab-separated values", so `read_tsv` is the
+thing, as for the Australian athletes:
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/nenana.txt"
+nenana=read_tsv(myurl)
+```       
+
+Use whatever name you like for the data frame. One that is different
+from any of the column headers is smart; then it is clear whether you
+mean the whole data frame or one of its columns. `ice` or
+`melt` or anything like that would also be good.
+    
+
+
+(b) Obtain a 90% confidence interval for the mean
+`JulianDate`. What interval do you get? Looking back at your
+histogram, do you have any doubts about the validity of what you
+have just done?
+
+
+Solution
+
+
+This is a matter of using `t.test` and pulling out the
+interval. Since we are looking for a non-standard interval, we
+have to remember `conf.level` as the way to get the
+confidence level that we want. I'm going with `with` this
+time, though the dollar-sign thing is equally as good:
+```{r }
+with(nenana,t.test(JulianDate,conf.level=0.90))
+```       
+
+Between 124.5 and 126.6 days into the year. Converting that into
+something we can understand (because I want to), there are
+$31+28+31+30=120$ days in 
+January through April (in a non-leap year), so this says that the mean
+breakup date is between about May 4 and May 6. 
+
+The $t$-test is based on an assumption of data coming from a normal
+distribution. The histogram we made earlier looks pretty much normal,
+so there are no doubts about normality and thus no doubts about the
+validity of what we have done, on the evidence we have seen so far. (I
+have some doubts on different grounds, based on another of the plots
+we did earlier, which I'll explain later, but all I'm expecting you to
+do is to look at the histogram and say ``Yep, that's normal
+enough''. Bear in mind that the sample size is 87, which is large
+enough for the Central Limit Theorem to be pretty helpful, so that we don't need the data to be more than "approximately normal" for the sampling distribution of the sample mean to be very close to $t$ with the right df.)
+    
+
+
+(c) An old-timer in Nenana strokes his grey beard and says
+``When I were young, I remember the tripod used to fall into the
+water around May 10''. In a non-leap year, May 10 is Julian day
+130. Test the null hypothesis that the mean `JulianDay` is
+130, against the alternative that it is less.  What do you conclude?
+What practical implication does that have 
+(assuming that the old-timer has a good memory)?
+
+
+Solution
+
+
+The test is `t.test` again, but this time we have to
+specify a null mean and a direction of alternative:
+```{r }
+with(nenana,t.test(JulianDate,mu=130,alternative="less"))
+```       
+
+For a test, look first at the P-value, which is 0.0000000002575: that
+is to say, the P-value is very small, definitely smaller than 0.05 (or
+any other $alpha$ you might have chosen). So we *reject* the
+null hypothesis, and conclude that the mean `JulianDate` is actually
+*less* than 130.
+
+Now, this is the date on which the ice breaks up on average, and we
+have concluded that it is *earlier* than it used to be, since we
+are assuming the old-timer's memory is correct. 
+
+This is evidence in
+favour of global warming; a small piece of evidence, to be sure, but
+the ice is melting earlier than it used to all over the Arctic, so
+it's not just in Nenana that it is happening. You don't need to get to
+the "global warming" part, but I *do* want you to observe that
+the ice is breaking up earlier than it used to.
+    
+
+
+(d) Plot `JulianDate` against `Year` on a
+scatterplot. What recent trends, if any, do you see? Comment
+briefly. (You did this before, but I have some extra comments on
+the graph this time, so feel free to just read this part.)
+
+
+Solution
+
+
+I liked  the `ggplot` with a smooth trend on it:
+
+```{r }
+ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
+``` 
+
+There was something obvious to see: after about 1960, there is a clear
+downward trend: the ice is breaking up earlier on average every
+year. Even though there is a lot of variability, the overall trend,
+viewed this way, is clear (and consistent with the test we did
+earlier). Note that the old-timer's value of 130 is the kind of
+`JulianDate` we would typically observe around 1920, which
+would make the old-timer over 90 years old.
+
+All right, why did I say I had some doubts earlier? Well, because of
+this downward trend, the mean is not actually the same all the way
+through, so it doesn't make all that much sense to estimate it, which
+is what we were doing earlier by doing a confidence interval or a
+hypothesis test. What would actually make more sense is to estimate
+the mean `JulianDate` *for a particular year*. This could
+be done by a regression: predict `JulianDate` from
+`Year`, and then get a ``confidence interval for the mean
+response'' (as you would have seen in B27 or will see in C67). The
+trend isn't really linear, but is not that far off. I can modify the
+previous picture to give you an idea. Putting in `method="lm"`
+fits a line; as we see later, `lm` does regressions in R:
+
+```{r }
+ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+
+geom_smooth(method="lm")
+``` 
+
+Compare the confidence interval for the mean `JulianDate` in
+1920: 126 to 131 (the shaded area on the graph), with 2000: 121 to
+125. A change of about 5 days over 80 years. And with the recent trend
+that we saw above, it's probably changing faster than that
+now. Sobering indeed.
+      
+
+
+
