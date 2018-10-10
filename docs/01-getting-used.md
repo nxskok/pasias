@@ -29,7 +29,7 @@ and so to the problems:
 
 
 
-## Getting started on R Studio Cloud
+## Question title
 
  Follow these steps to get an R Studio Cloud account.
 
@@ -71,7 +71,7 @@ should not be, the same as your email password.)  Below that,
 enter your first and last name. This will appear at the top right
 of the screen when you are logged in. Then click Sign Up. After
 that, you will have to make a unique account name (which
-*you* actually never use, but verb+rstudio.cloud+ uses to
+*you* actually never use, but ``rstudio.cloud+ uses to
 name your files).
 After that, you are automatically logged in.
 
@@ -131,8 +131,8 @@ Now we can get down to some actual work.
 
 
 
-  
-## Getting used to R Studio
+##  Getting started
+
 
  This question is to get you started using R.
 
@@ -147,7 +147,9 @@ Solution
 You ought to see something like this. I have a dark blue
 background here, which you probably do not. 
 
-![](empty.png)        
+
+![](empty.png)
+        
 
 It won't look exactly like that (for example, the background
 will probably be white) but there should be one thing
@@ -174,7 +176,9 @@ The first time, you'll be invited to "install some packages"
 to make the Notebook thing work. Let it do that by clicking
 Yes. After that, you'll have this:
 
-![](rnote1.png)        
+
+![](rnote1.png)
+        
 
 Find the Insert and Run buttons along the top of the R Notebook
 window. We'll be using them shortly. (The template notebook may
@@ -196,7 +200,9 @@ Solution
 
 Something like this:
 
-![](chunk1.png)        
+
+![](chunk1.png)
+        
 
 
 
@@ -216,7 +222,9 @@ Solution
 What this will do: get hold of a built-in data set with
 information about some different models of car, and display it.
 
-![](chunk2.png)        
+
+![](chunk2.png)
+        
 
 In approximately five seconds, you'll be demonstrating that for
 yourself. 
@@ -233,7 +241,9 @@ Solution
 
 Here's what I get (yours will be the same). 
 
-![](chunk3.png)        
+
+![](chunk3.png)
+        
 
 This is a rectangular array of rows and columns, with
 individuals in rows and variables in columns, known as a 
@@ -277,7 +287,7 @@ mtcars
 ## # ... with 22 more rows
 ```
 
-The top bit is the code, the bottom bit with the `##` the
+The top bit is the code, the bottom bit with the `\#\#` the
 output. In this kind of display, you only see the first ten rows (by
 default). 
 
@@ -309,7 +319,9 @@ Solution
 
 This is what you should see:
 
-![](chunk4.png)        
+
+![](chunk4.png)
+        
 
 or the other way:
 
@@ -357,7 +369,7 @@ this output genuinely *is* obtained by running the code you see.)
 (g) Let's make a boxplot of the gas mileage data. This is a 
 "poor man's boxplot"; we'll see a nicer-looking way later. To do it
 this way, make another new code chunk, enter the code
-`boxplot(mtcars$mpg)` into it, and run the chunk.
+`boxplot(mtcars\$mpg)` into it, and run the chunk.
 
 Solution
 
@@ -431,19 +443,12 @@ the same line as New Folder and Upload), then select Export (and
 click Download). This will put a copy in your downloads folder
 on your computer, and you can open it from there.
 If you're feeling extra-ambitious, you can try Knit to PDF. This
-produces something that looks as if it was written in LaTeX,
+produces something that looks as if it was written in \LaTeX,
 but actually wasn't. To make this work, if you have a
 `library(tidyverse)` line somewhere, as you probably
 will, find the code chunk it's in, and make it look like this:
 
-```
-
-
-```r
-library(tidyverse)
-```
-
-```
+![](Screenshot_2018-10-10_17-24-47.png)
 
 Then it will work.
 Extra extra: if you like the keyboard better than the mouse, R
@@ -466,7 +471,7 @@ There are two steps: download the HTML file onto your computer,
 and then handing it in on Quercus.
 To download: find the HTML file that you want to download in the
 Files pane bottom right. There should be two files starting with
-the same thing, eg. `test1.Rmd`, which is the notebook
+the same thing, eg.\ `test1.Rmd`, which is the notebook
 you wrote, and `test1.nb.html`, which is the previewed
 version of it, and is the one you want to download. (The
 `test1` part is the name *you* chose when you saved
@@ -509,7 +514,7 @@ library(tidyverse)
 ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="01-getting-used_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 $ %$ %$ 
 
 This shows a somewhat downward trend, which is what you'd expect,
@@ -522,7 +527,7 @@ what to plot. The first thing in a `ggplot` is a data frame
 will have `hp` on the
 $x$-axis and `mpg` on the $y$-axis, taken from the data frame
 that you specified.  That's all of the what-to-plot. The last thing is
-how to plot it; `geom_point()` says to plot the data values as
+how to plot it; `geom\_point()` says to plot the data values as
 points.
 
 You might like to add a regression line to the plot. That is a matter
@@ -533,7 +538,7 @@ of adding this to the end of the plotting command:
 ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="01-getting-used_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 The line definitely goes downhill. Decide for yourself how well you
 think a line fits these data.
@@ -683,7 +688,7 @@ so the right syntax is this:
 ggplot(rats,aes(x=group, y=density))+geom_boxplot()
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="01-getting-used_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 Given the amount of variability, the control and low-jump groups are
 very similar (with the control group having a couple of outliers), but

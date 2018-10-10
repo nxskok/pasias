@@ -8,7 +8,7 @@ when the ice melts enough for the tripod to fall through the ice. The
 contest started in 1917 as an amusement for railway workers, and has
 taken place every year since. Now, hundreds of thousands of people
 enter their guesses on the Internet and the prize for the winner can
-be as much as $300,000. 
+be as much as \$300,000. 
 
 Because so much money is at stake, and because the exact same tripod
 is placed at the exact same spot on the ice every year, the data are
@@ -19,13 +19,13 @@ consistent and accurate. The data are in
 
 (a) Read the data into R.  Note that the values are
 separated by *tabs* rather than spaces, so you'll need an
-appropriate `read_` to read it in.
+appropriate `read\_` to read it in.
 
 
 Solution
 
 
-These are "tab-separated values", so `read_tsv` is the
+These are "tab-separated values", so `read\_tsv` is the
 thing, as for the Australian athletes:
 ```{r }
 myurl="http://www.utsc.utoronto.ca/~butler/c32/nenana.txt"
@@ -58,7 +58,7 @@ data frame:
 x
 ``` 
 
-Those verb=t= symbols mean "tab character", which is our hint that
+Those "\t= symbols mean ``tab character", which is our hint that
 the values were separated by tabs rather than spaces.
 
 More detail (if you can bear to see it) is here:
@@ -68,7 +68,7 @@ problems(x)
 ``` 
 
 The first line of the data file (with the variable names in it) had no
-spaces, only tabs, so `read_delim` thinks there is *one*
+spaces, only tabs, so `read\_delim` thinks there is *one*
 column with a very long name, but in the actual data, there are
 *five* space-separated columns.  The text date-times are of the
 form "April 30 at 11:30 AM", which, if you think it's all separated
@@ -145,7 +145,7 @@ That hugs the line pretty well, so I would call it close to
 normally-distributed. It bulges away from the line because there are
 more values just below 120 than you would expect for a
 normal. This corresponds to the histogram bar centred just below 120
-being taller than you would have expected.endnote{That is to say, the
+being taller than you would have expected.\endnote{That is to say, the
 principal deviation from normality is not the "hole" on the
 histogram, the bar centred around 123 being too short, but that the
 bar centred just below 120 is too *tall*.}
@@ -162,9 +162,9 @@ mutate(datetime=ymd_hm(longdt,tz="America/Anchorage"))
 
 I am not doing any further analysis with these, so just displaying them is good. 
 
-I have to do a preliminary step to get the date-times *with* their year in one place. verb-str_c- glues pieces of text together: in this case, the year, a space, and then the rest of the 
-verb-Date&Time-. I stored this in verb-longdt-. The second verb-mutate- is the business end of it: verb-ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
-The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the verb-lubridate- function is called verb-yday- for "day of year"):
+I have to do a preliminary step to get the date-times *with* their year in one place. ``str_c- glues pieces of text together: in this case, the year, a space, and then the rest of the 
+``Date&Time-. I stored this in ``longdt-. The second ``mutate- is the business end of it: ``ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
+The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the ``lubridate- function is called ``yday- for "day of year"):
 
 ```{r }
 nenana %>% 
@@ -175,7 +175,7 @@ nenana2
 nenana2 %>% select(JulianDate,jd,datetime)
 ``` 
 
-Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. verb-round- rounds off to the nearest integer (since these are actually decimal numbers):
+Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. ``round- rounds off to the nearest integer (since these are actually decimal numbers):
 
 ```{r }
 nenana2 %>% 
@@ -185,9 +185,9 @@ select(JulianDate,jd,datetime)
 
 The ones shown here are all *after noon*, and the Julian date in
 the data file appears as one more than the one calculated by
-verb-lubridate-. What has actually happened is a quirk of how tibbles
+``lubridate-. What has actually happened is a quirk of how tibbles
 are displayed: they show 3 significant digits, *rounded*. The
-Julian dates given by verb-yday- are the whole-number part, so the
+Julian dates given by ``yday- are the whole-number part, so the
 ones in the data value are that plus more than 0.5, which will round
 *up*. The first line of code below displays 6 significant digits
 rather than only three:
@@ -199,7 +199,7 @@ filter(round(JulianDate) != round(jd)) %>%
 select(JulianDate,jd,datetime)
 ```
 
-Displaying more decimals shows that I was right: verb-jd- is (to this accuracy) a whole number, but verb-JulianDate- is a decimal with fractional part greater than 0.50.
+Displaying more decimals shows that I was right: ``jd- is (to this accuracy) a whole number, but ``JulianDate- is a decimal with fractional part greater than 0.50.
 
 Now I have to turn the extra signficant digits off:
 
@@ -217,7 +217,7 @@ Solution
 
 
 
-verb+geom_point+:
+``geom_point+:
 
 ```{r }
 ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()

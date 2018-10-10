@@ -10,8 +10,9 @@ sub main {
     my $content=read_file($filename);
     my @letters=("null","a".."z"); # array starts at zero
     # change all the things in content
+    $content=~s/^\%\%(.*)/## $1\n/g;
     $content=~s/\n\s\s+/\n/g;
-    $content=~s/\\question/\n## Question title\n\n/g;
+    $content=~s/\\question/\n\n/g;
     $content=~s/\\begin\{parts\}//g;
     $content=~s/\\end\{parts\}//g;
     $content=~s/\\begin\{select\}//g;
@@ -19,6 +20,7 @@ sub main {
     $content=~s/\\end\{solution\}//g;
     $content=~s/\\begin\{center\}//g;
     $content=~s/\\end\{center\}//g;
+    $content=~s/\\verb.(.*)\1/`$1`/g;
 
     # quotes
 
@@ -36,7 +38,7 @@ sub main {
     $content=~s/\\emph\{(.*?)\}/*$1*/g;
     $content=~s/\\textbf\{(.*?)\}/**$1**/g;
 
-    $content=~s/\\includegraphics\[*.*\]\{(.*)\}/![]($1.png)/g;
+    $content=~s/\\includegraphics\[*.*\]\{(.*)\}/\n![]($1.png)\n/g;
     $content=~s/\\url\{(.*)\}/\[$1\]($1)/g;
     $content=~s/\\begin\{verbatim\}/\n```\n/g;
     $content=~s/\\end\{verbatim\}/\n```\n/g;
@@ -51,9 +53,9 @@ sub main {
     }
 
 
-    # any stray backslashes, get rid of
+    # any stray backslashes, get rid of (not yet)
 
-    $content=~s/\\//g;
+    # $content=~s/\\//g;
 
     # any stray comments
 

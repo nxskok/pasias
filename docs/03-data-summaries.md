@@ -200,7 +200,7 @@ principle. That would give
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 which is perfectly acceptable. You can try something a bit more or a
 bit less, and see how you like it in comparison. What you are looking
@@ -212,7 +212,7 @@ you'll lose the shape:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 (is that leftmost bin an indication of skewness or some observations
 that happen to be smallish?)
@@ -226,7 +226,7 @@ up and down:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
 I generally am fairly relaxed about the number of bins you use, as
 long as it's not clearly too few or too many. You might have done
@@ -290,7 +290,7 @@ w
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 R also has
 
@@ -318,7 +318,7 @@ Another way to go is a "density plot". This is a smoothed-out version of a histo
 ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 
 verb=geom_density= has an optional parameter that controls how smooth
 or wiggly the picture is, but the default is usually good.
@@ -350,7 +350,7 @@ quantitative variable. You can draw a boxplot for that, too, but the
 ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 The high weight is actually an outlier, but look at all those outliers
 at the bottom!endnote{When Tukey, a name we will see again, invented
@@ -404,7 +404,7 @@ ggplot(bw,aes(x=factor(`Premie?`),y=`Weeks Gestation`))+geom_boxplot()
 ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 
 The warning is because the prematurity of one of the babies is not known.
 Or
@@ -418,7 +418,7 @@ ggplot(bw,aes(x=`Premie?`,y=`Weeks Gestation`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-19-1.png" width="672" />
 
 The same warning again, for the same reason.
 
@@ -551,7 +551,7 @@ ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-23-1.png" width="672" />
 
 You see a rather clear upward trend. Those very underweight babies
 came from very short pregnancies, but the vast majority of pregnancies
@@ -571,7 +571,7 @@ colour=`Premie?`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672" />
 
 That was rather silly because `ggplot` treated prematureness as a *continuous* variable, and plotted the values on a dark blue-light blue scale. This is the same issue as on the boxplot above, and has the same solution:
 
@@ -585,7 +585,7 @@ colour=factor(`Premie?`)))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-25-1.png" width="672" />
 
 Better.
 
@@ -632,7 +632,7 @@ when the ice melts enough for the tripod to fall through the ice. The
 contest started in 1917 as an amusement for railway workers, and has
 taken place every year since. Now, hundreds of thousands of people
 enter their guesses on the Internet and the prize for the winner can
-be as much as $300,000. 
+be as much as \$300,000. 
 
 Because so much money is at stake, and because the exact same tripod
 is placed at the exact same spot on the ice every year, the data are
@@ -643,13 +643,13 @@ consistent and accurate. The data are in
 
 (a) Read the data into R.  Note that the values are
 separated by *tabs* rather than spaces, so you'll need an
-appropriate `read_` to read it in.
+appropriate `read\_` to read it in.
 
 
 Solution
 
 
-These are "tab-separated values", so `read_tsv` is the
+These are "tab-separated values", so `read\_tsv` is the
 thing, as for the Australian athletes:
 
 ```r
@@ -730,7 +730,7 @@ x
 ## # ... with 77 more rows
 ```
 
-Those verb=t= symbols mean "tab character", which is our hint that
+Those "\t= symbols mean ``tab character", which is our hint that
 the values were separated by tabs rather than spaces.
 
 More detail (if you can bear to see it) is here:
@@ -758,7 +758,7 @@ problems(x)
 ```
 
 The first line of the data file (with the variable names in it) had no
-spaces, only tabs, so `read_delim` thinks there is *one*
+spaces, only tabs, so `read\_delim` thinks there is *one*
 column with a very long name, but in the actual data, there are
 *five* space-separated columns.  The text date-times are of the
 form "April 30 at 11:30 AM", which, if you think it's all separated
@@ -844,7 +844,7 @@ bin width, if you want to go that way:
 ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-33-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672" />
 
 Note that you need to type `JulianDate` exactly as it
 appears, capital letters and all. R is case-sensitive.
@@ -862,13 +862,13 @@ We haven't done normal quantile plots yet, but looking ahead:
 ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-34-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-33-1.png" width="672" />
 
 That hugs the line pretty well, so I would call it close to
 normally-distributed. It bulges away from the line because there are
 more values just below 120 than you would expect for a
 normal. This corresponds to the histogram bar centred just below 120
-being taller than you would have expected.endnote{That is to say, the
+being taller than you would have expected.\endnote{That is to say, the
 principal deviation from normality is not the "hole" on the
 histogram, the bar centred around 123 being too short, but that the
 bar centred just below 120 is too *tall*.}
@@ -917,9 +917,9 @@ mutate(datetime=ymd_hm(longdt,tz="America/Anchorage"))
 
 I am not doing any further analysis with these, so just displaying them is good. 
 
-I have to do a preliminary step to get the date-times *with* their year in one place. verb-str_c- glues pieces of text together: in this case, the year, a space, and then the rest of the 
-verb-Date&Time-. I stored this in verb-longdt-. The second verb-mutate- is the business end of it: verb-ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
-The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the verb-lubridate- function is called verb-yday- for "day of year"):
+I have to do a preliminary step to get the date-times *with* their year in one place. ``str_c- glues pieces of text together: in this case, the year, a space, and then the rest of the 
+``Date&Time-. I stored this in ``longdt-. The second ``mutate- is the business end of it: ``ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
+The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the ``lubridate- function is called ``yday- for "day of year"):
 
 
 ```r
@@ -948,7 +948,7 @@ nenana2 %>% select(JulianDate,jd,datetime)
 ## # ... with 77 more rows
 ```
 
-Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. verb-round- rounds off to the nearest integer (since these are actually decimal numbers):
+Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. ``round- rounds off to the nearest integer (since these are actually decimal numbers):
 
 
 ```r
@@ -976,9 +976,9 @@ select(JulianDate,jd,datetime)
 
 The ones shown here are all *after noon*, and the Julian date in
 the data file appears as one more than the one calculated by
-verb-lubridate-. What has actually happened is a quirk of how tibbles
+``lubridate-. What has actually happened is a quirk of how tibbles
 are displayed: they show 3 significant digits, *rounded*. The
-Julian dates given by verb-yday- are the whole-number part, so the
+Julian dates given by ``yday- are the whole-number part, so the
 ones in the data value are that plus more than 0.5, which will round
 *up*. The first line of code below displays 6 significant digits
 rather than only three:
@@ -1008,7 +1008,7 @@ select(JulianDate,jd,datetime)
 ## # ... with 51 more rows
 ```
 
-Displaying more decimals shows that I was right: verb-jd- is (to this accuracy) a whole number, but verb-JulianDate- is a decimal with fractional part greater than 0.50.
+Displaying more decimals shows that I was right: ``jd- is (to this accuracy) a whole number, but ``JulianDate- is a decimal with fractional part greater than 0.50.
 
 Now I have to turn the extra signficant digits off:
 
@@ -1027,14 +1027,14 @@ Solution
 
 
 
-verb+geom_point+:
+``geom_point+:
 
 
 ```r
 ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-40-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672" />
 This is actually a small-but-real downward trend, especially since
 about 1960, 
 but the large amount
@@ -1055,7 +1055,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-41-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-40-1.png" width="672" />
 
 This is R's version of a trend that is not constrained
 to be linear (so that it "lets the data speak for itself").
@@ -1072,158 +1072,6 @@ climate change is happening, but we would have to delve further to
 make any statements about the *cause* of that climate change.
 
 
-
-
-
-
-
-## Question title
-
- A used-car website lists several used
-Toyota Corollas for sale within a 250-mile radius of Redlands,
-California. For each car, its age (in years) and advertised price (in
-thousands of dollars) are recorded. The data are in
-[http://www.utsc.utoronto.ca/~butler/c32/corollas.txt](http://www.utsc.utoronto.ca/~butler/c32/corollas.txt).
-
-
-
-(a) Read the data into SAS and display the whole data set. (It
-is not too big, so displaying the whole thing is OK.)
-
-
-Solution
-
-
-The usual:
-begin{Sascode}[store=lujup]
-filename myurl url "http://www.utsc.utoronto.ca/~butler/c32/corollas.txt";
-
-proc import
-datafile=myurl
-out=corollas
-dbms=dlm
-replace;
-getnames=yes;
-delimiter=' ';
-proc print;
-end{Sascode}
-Listing[store=lujup,fontsize=small]{lujupp}
-
-
-
-(b) Make a suitable graph of your two variables. Justify your
-choice of graph briefly.
-
-
-Solution
-
-
-The two variables `age` and `price` are both
-quantitative, so the right graph is a scatterplot. I think that
-the price is an outcome variable and age is explanatory, so
-`price` should be on the $y$-axis and `age` on the
-$x$. You should justify which variable is on which axis, or be
-able to say that it doesn't matter (if you can come up with a
-convincing argument for the latter, I'm good with it):
-begin{Sascode}[store=sisag]
-proc sgplot;
-scatter y=price x=age;
-end{Sascode}
-The `x=` and `y=` can be in either order. All that
-matters is that they are both there.
-Graphic[store=sisag, scale=0.8]{sisagg}
-If you like (not obligatory, but it makes the next part easier),
-you can add a regression line to the plot, thus:
-begin{Sascode}[store=lufix]
-proc sgplot;
-scatter y=price x=age;
-reg y=price x=age;      
-end{Sascode}
-Graphic[store=lufix, scale=0.8]{lufixx}
-    
-
-
-(c) What does your plot tell you about any association between
-`age` and `price`? Does that correspond to what you
-know or can guess about the association between age and price of
-used cars? Explain briefly.
-
-
-Solution
-
-
-The scatterplots (especially my one with the regression line on it)
-point to a *downward* trend: that is to say, older cars tend
-to have a *lower* price. You would probably guess that an
-older car would have fewer years of use left, or would have been
-driven more kilometres, or would need a lot of repair, and so you
-would expect to pay less money for an older car. (Any one of those
-reasons is good.)
-Note also that these cars are all the same model (Toyota Corollas), so there should be no effect of the data being a mixture of different models of car, which would weaken the trend. This is a decently strong trend.
-    
-
-
-(d) Find the mean and standard deviation of age and price. (It is enough to obtain output with these values on it.)
-
-
-Solution
-
-
-This is a simple application of `proc means`. You don't need to specify anything at all by way of variables, because these are all the quantitative variables in the data set:
-begin{Sascode}[store=yekaq]
-proc means;
-end{Sascode}
-Listing[store=yekaq, fontsize=small]{yekaqq}
-There is no problem about specifying the names of the variables whose mean and SD you want, since the answer will be the same:
-begin{Sascode}[store=bacix]
-proc means;
-var age price;
-end{Sascode}
-Listing[store=bacix, fontsize=small]{bacixx}
-or even asking for the mean and SD by name:
-begin{Sascode}[store=vojun]
-proc means mean stddev;
-var age price;
-end{Sascode}
-Listing[store=vojun, fontsize=small]{vojunn}
-Anything that gets the answers is good. I don't mind how you do
-it, but you may as well figure out how to do it with the smallest
-amount of work. In this case, that would mean figuring out that
-the defaults are what you need: that you don't need a `var`
-or a `class` for this one.
-    
-
-
-(e) Find the median and inter-quartile range of `price`.
-Again, obtaining output with the answers on it is good.
-
-
-Solution
-
-
-This is `proc means` again, but specifying the things to
-calculate on the first line, and this time you definitely do need
-to specify the variable to calculate them for:
-begin{Sascode}[store=wirul]
-proc means median Qrange;
-var price;
-end{Sascode}
-Listing[store=wirul, fontsize=small]{wirull}
-The median price is 13 (thousand dollars) and the inter-quartile range is 3.44 (thousand dollars). 
-This might seem like a largish spread. If you knew the
-`age` of a car, you could use regression to predict its
-selling price more accurately than this based on its age, because
-we saw earlier that older cars typically sell for less money (and
-therefore, knowing the age is valuable information if you want to
-say something about selling price). This is the kind of issue that
-R-squared in a regression gets into: the standard deviation (or
-the IQR) of price tells you that there is a largish amount of
-variation in the prices overall, but R-squared, which will also be
-fairly large, tells you that quite a lot of that variation is
-because we have a mixture of cars of different ages. Thus knowing
-the age of a car would allow you to predict its selling price with
-reasonable accuracy.
-    
 
 
 
@@ -1350,7 +1198,7 @@ Gender is categorical and CAS score is quantitative, so a boxplot would appear t
 ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-45-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-44-1.png" width="672" />
 
 The median for males is slightly higher, so male accountants are more anxious around computers than female accountants are.
 
@@ -1363,7 +1211,7 @@ ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
 facet_wrap(~gender,ncol=1)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-46-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-45-1.png" width="672" />
 
 If you go this way, you have to make a call about where the centres of the histograms are. I guess the male one is slightly further to the right, but it's not so easy to tell. (Make a call.)
     
@@ -1525,7 +1373,7 @@ You might be wondering whether the test scores are related. They are both quanti
 ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-55-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672" />
 
 The two variables can be on either axis, since there is no obvious
 response or explanatory variable. A higher score on one scale goes
@@ -1539,7 +1387,7 @@ This plot mixes up the males and females, so you might like to distinguish them,
 ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-56-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-55-1.png" width="672" />
 
 There is a slight (but only slight) tendency for the males to be up
 and to the right, and for the females to be down and to the left. This
@@ -1647,13 +1495,13 @@ Solution
 The mean for the world as a whole ("average", as stated earlier)
 is 7.38. Let $mu$ denote the population mean for Australia (of
 which these societies are a sample). Then our hypotheses are:
-$$ H_0: mu=7.38$$
+$$ H_0: \mu=7.38$$
 and
-$$ H_a: mu ne 7.38.$$
+$$ H_a: \mu \ne 7.38.$$
 There is no reason for a one-sided alternative here, since all we
 are interested in is whether Australia is different from the rest
 of the world.
-*Expect to lose a point* if you use the symbol $mu$ without
+*Expect to lose a point* if you use the symbol $\mu$ without
 saying what it means.
 
 
@@ -1713,7 +1561,7 @@ comes from Sturges' rule:
 ggplot(societies,aes(x=density))+geom_histogram(bins=5)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-60-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-59-1.png" width="672" />
 Your conclusion might depend on how many bins you chose for your
 histogram. Here's 8 bins (which is really too many with only 13
 observations, but it actually shows the shape well): 
@@ -1723,7 +1571,7 @@ observations, but it actually shows the shape well):
 ggplot(societies,aes(x=density))+geom_histogram(bins=8)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-61-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-60-1.png" width="672" />
 
 or you can get a number of bins from one of the built-in functions,
 such as:
@@ -1749,7 +1597,7 @@ Other choices: a one-group boxplot:
 ggplot(societies,aes(x=1,y=density))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-63-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-62-1.png" width="672" />
 
 This isn't the best for assessing normality as such, but it will tell
 you about lack of symmetry and outliers, which are the most important
@@ -1761,7 +1609,7 @@ ggplot(societies,aes(sample=density))+
 stat_qq()+stat_qq_line()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-64-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-63-1.png" width="672" />
 
 This is actually the best way to assess normality, but I'm not
 expecting you to use this plot here, because we may not have gotten to
@@ -1787,23 +1635,4 @@ an example for another test, precisely *because* they thought the
 distribution was right-skewed. Later on, we'll learn about the sign
 test for the median, which I think is actually a better test here.
  
- 4 distribution of hunter-gatherer population densities (N = 86)
- across all forest ecosystems worldwide is skewed to the right and is
- non-normal. The median is therefore the most reliable measure of
- central tendency. As such, the median population density (per 100 km)
- of forest hunter-gatherers is ηo = 7.38. An interesting question that
- we may want to ask is whether this value is an accurate estimate of
- the population density of forest hunter-gatherers on specific
- continents; the results might answer the question of whether
- hunter-gatherer population densities are determined primarily by
- large-scale ecological constraints (such as resource availability), or
- whether there seem to be other factors, possibly social and/or
- historic, determining population density. For this example we will
- look at the hunter-gatherer groups of the northern Australian forests
- (n = 13).  Let ηo be the median population density of all forest
- hunter-gatherer groups (N = 86), where ηo = 7.38, and let η be the
- median population density for Australian forest hunter-gatherer groups
- (n = 13).  Formally, we wish to test the hypothesis at the a = 0.05
- (95%) level:
-
 

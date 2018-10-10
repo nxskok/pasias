@@ -285,7 +285,7 @@ when the ice melts enough for the tripod to fall through the ice. The
 contest started in 1917 as an amusement for railway workers, and has
 taken place every year since. Now, hundreds of thousands of people
 enter their guesses on the Internet and the prize for the winner can
-be as much as $300,000. 
+be as much as \$300,000. 
 
 Because so much money is at stake, and because the exact same tripod
 is placed at the exact same spot on the ice every year, the data are
@@ -299,13 +299,13 @@ Yes, we saw these data before.
 (a) Read the data into R, as before, or use the data frame that
 you read in before.  Note that the values are separated by
 *tabs* rather than spaces, so you'll need an appropriate
-`read_` to read it in.
+`read\_` to read it in.
 
 
 Solution
 
 
-These are "tab-separated values", so `read_tsv` is the
+These are "tab-separated values", so `read\_tsv` is the
 thing, as for the Australian athletes:
 
 ```r
@@ -329,7 +329,7 @@ mean the whole data frame or one of its columns. `ice` or
     
 
 
-(b) Obtain a 90% confidence interval for the mean
+(b) Obtain a 90\% confidence interval for the mean
 `JulianDate`. What interval do you get? Looking back at your
 histogram, do you have any doubts about the validity of what you
 have just done?
@@ -381,8 +381,8 @@ enough for the Central Limit Theorem to be pretty helpful, so that we don't need
 
 
 (c) An old-timer in Nenana strokes his grey beard and says
-``When I were young, I remember the tripod used to fall into the
-water around May 10''. In a non-leap year, May 10 is Julian day
+"When I were young, I remember the tripod used to fall into the water around May 10". 
+In a non-leap year, May 10 is Julian day
 130. Test the null hypothesis that the mean `JulianDay` is
 130, against the alternative that it is less.  What do you conclude?
 What practical implication does that have 
@@ -415,7 +415,7 @@ with(nenana,t.test(JulianDate,mu=130,alternative="less"))
 
 For a test, look first at the P-value, which is 0.0000000002575: that
 is to say, the P-value is very small, definitely smaller than 0.05 (or
-any other $alpha$ you might have chosen). So we *reject* the
+any other $\alpha$ you might have chosen). So we *reject* the
 null hypothesis, and conclude that the mean `JulianDate` is actually
 *less* than 130.
 
@@ -469,8 +469,9 @@ is what we were doing earlier by doing a confidence interval or a
 hypothesis test. What would actually make more sense is to estimate
 the mean `JulianDate` *for a particular year*. This could
 be done by a regression: predict `JulianDate` from
-`Year`, and then get a ``confidence interval for the mean
-response'' (as you would have seen in B27 or will see in C67). The
+`Year`, and then get a 
+"confidence interval for the mean response" 
+(as you would have seen in B27 or will see in C67). The
 trend isn't really linear, but is not that far off. I can modify the
 previous picture to give you an idea. Putting in `method="lm"`
 fits a line; as we see later, `lm` does regressions in R:
