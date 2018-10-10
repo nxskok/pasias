@@ -1,0 +1,106 @@
+
+## Question title
+
+ In the lecture notes, we looked at some
+data on different athletes from the Australian Institute of
+Sport. This data set can be found at
+\url{http://www.utsc.utoronto.ca/~butler/c32/ais.txt}. Recall that the
+values are separated by *tabs*.  In this question, we will assess
+one of the variables in the data set for normality.
+
+
+
+(a)[1] Read the data set into R. (Only one point since you can
+copy from the lecture notes.)
+%  
+
+Solution
+
+
+`read\_tsv` is the right thing:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
+athletes
+```       
+
+I listed the data to check that I had it right, but I didn't ask you
+to. (If you didn't have it right, that will show up soon enough.)
+
+%  
+
+(b)[3] One of the variables, `Ferr`, is a measurement of
+Ferritin for each athlete. Obtain a normal quantile plot of the
+Ferritin values, for all the athletes together. What do you
+conclude about the shape of the distribution? Explain briefly.
+%  
+
+Solution
+
+
+As you would expect:
+
+```{r }
+ggplot(athletes, aes(sample=Ferr))+
+stat_qq()+stat_qq_line()
+``` 
+
+This is almost a classic right skew: the values are too bunched up at
+the bottom and too spread out at the top. The curved shape should be
+making you think ``skewed'' and then you can work out which way it's
+skewed. 
+
+%  
+
+(c)[3] It is possible that the shape you found in the previous
+part is because the athletes from all the different sports were
+mixed together. Use `ggplot` to obtain one normal quantile
+plot for each sport, collected together on one plot. 
+%  
+
+Solution
+
+
+Your previous plot had all the sports mixed together. To that
+you add something that will put each sport in its own facet:
+
+```{r }
+ggplot(athletes,aes(sample=Ferr))+stat_qq()+stat_qq_line()+
+facet_wrap(~Sport)
+``` 
+
+%  
+
+(d)[2] Looking at the plots in the previous part, would you say
+that the Ferritin values for each sport individually have a more
+normal shape than they do for all the sports together? Explain
+briefly. 
+%  
+
+Solution
+
+
+There are a couple of ways you can go, and as ever I'm looking
+mostly for consistency of argument. The two major directions you
+can go are (i) most of these plots are still curved the same way
+as the previous one, and (ii) they are mostly straighter than
+they were before.
+Possible lines of argument include that pretty much all of these
+plots are right-skewed still, with the same upward-opening
+curve. Pretty much the only one that doesn't is Gymnastics, for
+which there are only four observations, so you can't really
+tell. So, by this argument, Ferritin just *does* have a
+right-skewed distribution, and breaking things out by sport
+doesn't make much difference to that.
+Or, you could go another way and say that the plot of all the
+data together was *very* curved, and these plots are much
+less curved, that is to say, much less skewed. Some of them,
+such as basketball and netball, are almost straight, and they
+are almost normally distributed. Some of the distributions, such
+as track sprinting (`TSprnt`), are definitely still
+right-skewed, but not as seriously so as before.
+Decide what you think and then discuss how you see it.
+
+%  
+
+

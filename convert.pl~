@@ -1,0 +1,43 @@
+use strict;
+use warnings;
+use File::Slurp;
+use 5.010;
+
+main(@ARGV);
+
+sub main {
+    my $filename=shift;
+    my $content=read_file($filename);
+    my @letters=("null","a".."z"); # array starts at zero
+    # change all the things in content
+    $content=~s/\n\s\s+/\n/g;
+    $content=~s/\\question/\n## Question title\n\n/g;
+    $content=~s/\\begin\{parts\}//g;
+    $content=~s/\\end\{parts\}//g;
+    $content=~s/\\begin\{select\}//g;
+    $content=~s/\\end\{select\}//g;
+    $content=~s/\\end\{solution\}//g;
+    
+    $content=~s/\\part/\nNextyy part/g;
+    $content=~s/\\begin\{solution\}/\nSolution\n\n/g;
+
+    $content=~s/<<(.*)>>=/```\{r $1\}/g;
+    $content=~s/@/```/g;
+    # text formatting
+
+    $content=~s/\\texttt\{(.*)\}/`$1`/g;
+    $content=~s/\\emph\{(.*)\}/*$1*/g;
+    $content=~s/\\textbf\{(.*)\}/**$1**/g;
+
+    # number the parts
+
+    for my $i (1..20) {
+	if ($content=~/Nextyy part/) {
+	    my $replacement="($letters[$i])";
+	    $content=~s/Nextyy part/$replacement/;
+	}
+    }
+
+    
+    say $content;
+}

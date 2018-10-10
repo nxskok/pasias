@@ -1,0 +1,79 @@
+
+## Question title
+
+ Does attendance at baseball games depend on how warm it is,
+and if so, how? The data in
+\url{http://www.utsc.utoronto.ca/~butler/d29/baseball.txt} were
+collected by a minor league baseball team. The first column is the
+temperature at 6:00pm on the night of a game, and the second column is
+the attendance at  that night's game.
+
+
+
+(a) Read in the data and verify that you have seven
+temperatures and attendances.
+
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/baseball.txt"
+night.games=read.table(my_url,header=T)
+night.games
+```     
+
+Seven, by counting them. Or,
+
+```{r }
+dim(night.games)
+``` 
+
+Seven rows and two columns.
+
+
+(b)\label{part:scplot} Make a scatterplot for predicting
+attendance from temperature. Is there an apparent relationship? Is
+it approximately linear?
+
+Solution
+
+
+```{r penzance}
+attach(night.games)
+plot(attendance~temperature)
+```     
+This is a very weak relationship. If there is anything happening at
+all, the attendance appears to go up with temperature and then down
+again. So whatever trend there is, it does not appear to be linear.
+
+ 
+
+
+(c) Fit a linear relationship for predicting attendance from
+temperature. Take a look at the summary. Is there something in here
+that supports the conclusion you drew in (\ref{part:scplot})?
+
+
+Solution
+
+
+```{r }
+night.games.1=lm(attendance~temperature)
+summary(night.games.1)
+``` 
+
+The $F$ test for the regression (or the $t$-test for the slope of
+`temperature`) is not significant, meaning that there is no
+evidence of a linear relationship beyond chance. That supports the
+``no relationship'' conclusion from (\ref{part:scplot}), but it also
+kind of supports the ``up and down'' trend idea, because that is not a
+linear trend. Either way, the message is ``a linear trend does not
+describe the data''. 
+
+fit quadratic term?
+
+put residual plot in with multiple regression?
+
+ 
+
+
