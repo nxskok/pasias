@@ -1,6 +1,8 @@
 
 # Getting used to R and R Studio
 
+We begin with this:
+
 
 ```r
 library(tidyverse)
@@ -23,6 +25,7 @@ library(tidyverse)
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
 
+and so to the problems:
 
 
 

@@ -1,0 +1,157 @@
+
+
+## Orange juice
+
+ The quality of orange juice produced by a manufacturer
+(identity unknown) is constantly being monitored. The manufacturer has
+developed a "sweetness index" for its orange juice, for which a
+higher value means sweeter juice. Is the sweetness index related to a
+chemical measure such as the amount of water-soluble pectin (parts per
+million) in the
+orange juice? Data were obtained from 24 production runs, and the
+sweetness and pectin content were measured for each run. The data are
+in [http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt](http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt). Open that
+link up now. You can click on that link just above to open the file.
+
+
+
+(a) The data values are separated by a space. Use the appropriate
+Tidyverse function to read the data directly from the course website
+into a "tibble".
+
+
+Solution
+
+
+Start with this (almost always):
+
+```{r }
+library(tidyverse)
+``` 
+
+The appropriate function, the data values being separated by a space,
+will be `read_delim`. Put the URL as the first thing in
+`read_delim`, or (better) define it into a variable
+first:endnote{I say "better" because otherwise the
+`read_delim` gets rather long. This way you read it as ``the
+URL is some long thing that I don't care about especially, and I what
+I need to do is to read the data from that URL, separated by spaces.''}
+
+```{r }
+url="http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt"
+juice=read_delim(url," ")
+``` 
+
+`read_delim` (or `read_csv` or any of the others) tell
+you what variables were read in, and also tell you about any ``parsing
+errors'' where it couldn't work out what was what. Here, we have three
+variables, which is entirely consistent with the three columns of data
+values in the file.
+
+`read_delim` can handle data values separated by *any*
+character, not just spaces, but the separating character, known as a
+"delimiter", does *not* have a default, so you have to say what
+it is, every time.
+
+
+
+
+(b) Take a look at what got read in. Do you
+have data for all 24 runs? 
+
+
+Solution
+
+
+Type the name of the data frame in a code chunk (a new one, or
+add it to the end of the previous one). Because this is actually
+a "tibble", which is what `read_delim` reads in,
+you'll only actually see the first 10 lines, but it will tell
+you how many lines there are altogether, and you can click on
+the appropriate thing to see the rest of it.
+```{r }
+juice  
+``` 
+
+I appear to have all the data. If you want further convincing, click
+Next a couple of times (on yours) to be sure that the runs go down to
+number 24.
+
+
+
+(c) In your data frame, where did the column (variable) names
+come from? How did R know where to get them from?
+
+
+Solution
+
+
+They came from the top line of the data file, so we didn't 
+have to specify them. This is the default behaviour of all the
+`read_` functions, so we don't have to ask for it
+specially. 
+In fact, if the top line of your data file is
+*not* variable names, *that's* when you have to say
+something special. The `read_` functions have an
+option `col_names` which can either be `TRUE`
+(the default), which means "read them in from the top line",
+`FALSE` ("they are not there, so make some up") or a
+list of column names to use. You might use the last
+alternative when the column names that are in the file are
+*not* the ones you want to use; in that case, you would
+also say `skip=1` to skip the first line. For example,
+with file `a.txt` thus:
+
+```{bash, echo=F}
+cat a.txt
+```
+
+     
+you could read the same data but call the columns `x` and
+`y` thus:
+
+```{r }
+read_delim("a.txt"," ",col_names=c("x","y"),skip=1)
+```         
+
+
+
+(d) The juice manufacturer was interested in whether there was a
+relationship between sweetness and pectin. To assess this, draw a
+scatterplot.  Does it look as if there is any kind of a
+relationship? (I think `sweetness` is the outcome variable
+and `pectin` is explanatory, so draw your scatterplot
+appropriately.) 
+
+
+Solution
+
+
+This requires a `ggplot` plot. You can go back and look
+at the lecture notes to figure out how to make a scatterplot:
+the "what to plot" is the $x$-axis and $y$-axis variables,
+with the response on the $y$-axis (starting with a data frame
+to get the variables from),  and the "how to plot" is
+`geom_point` to plot the points:
+```{r }
+ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()
+```         
+
+It looks to me as if there is a negative relationship: as pectin goes
+up, sweetness tends to go *down*. The trend appears to go top
+left to bottom right. 
+
+Having said that, I'm wondering how much of the
+apparent trend is caused by those two observations bottom right with
+pectin over 350. If you take those away, the trend seems to me to be a
+lot less convincing. As an extra, you could add a smooth trend to the plot:
+
+```{r }
+ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()+geom_smooth()
+```         
+
+The smooth trend is kind of downhill, but not very convincing.
+
+
+
+
