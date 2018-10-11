@@ -301,7 +301,7 @@ mtcars
 ## # ... with 22 more rows
 ```
 
-The top bit is the code, the bottom bit with the `\##` the
+The top bit is the code, the bottom bit with the `##` the
 output. In this kind of display, you only see the first ten rows (by
 default). 
 
@@ -383,7 +383,7 @@ this output genuinely *is* obtained by running the code you see.)
 (g) Let's make a boxplot of the gas mileage data. This is a 
 "poor man's boxplot"; we'll see a nicer-looking way later. To do it
 this way, make another new code chunk, enter the code
-`boxplot(mtcars\$mpg)` into it, and run the chunk.
+`boxplot(mtcars$mpg)` into it, and run the chunk.
 
 Solution
 
@@ -485,7 +485,7 @@ There are two steps: download the HTML file onto your computer,
 and then handing it in on Quercus.
 To download: find the HTML file that you want to download in the
 Files pane bottom right. There should be two files starting with
-the same thing, eg.\ `test1.Rmd`, which is the notebook
+the same thing, eg. `test1.Rmd`, which is the notebook
 you wrote, and `test1.nb.html`, which is the previewed
 version of it, and is the one you want to download. (The
 `test1` part is the name *you* chose when you saved
@@ -541,7 +541,7 @@ what to plot. The first thing in a `ggplot` is a data frame
 will have `hp` on the
 $x$-axis and `mpg` on the $y$-axis, taken from the data frame
 that you specified.  That's all of the what-to-plot. The last thing is
-how to plot it; `geom\_point()` says to plot the data values as
+how to plot it; `geom_point()` says to plot the data values as
 points.
 
 You might like to add a regression line to the plot. That is a matter
@@ -602,8 +602,8 @@ this session.)
 
 
 (c) Put the URL of the data file in a variable called
-`my\_url`. Then use `read\_delim` to read in the
-file. (See solutions for how.) `read\_delim` reads data files
+`my_url`. Then use `read_delim` to read in the
+file. (See solutions for how.) `read_delim` reads data files
 where the data values are always separated by the same single
 character, here a space. Save the data frame in a variable `rats`.
 
@@ -625,8 +625,8 @@ rats=read_delim(my_url," ")
 ## )
 ```
 
-The second thing in `read\_delim` is the thing that separates
-the data values. Often when you use `read\_delim` it'll be a space.
+The second thing in `read_delim` is the thing that separates
+the data values. Often when you use `read_delim` it'll be a space.
 
 
 (d) Take a look at your data frame, by making a new code chunk and
@@ -666,7 +666,7 @@ There are 30 rows and two columns, as there should be.
 Solution
 
 
-This is something you'll see a lot: `group\_by` followed by
+This is something you'll see a lot: `group_by` followed by
 `summarize`. Reminder: to get that funny thing with the
 percent signs (called the "pipe symbol"), type control-shift-M (or
 equivalent on a Mac):
