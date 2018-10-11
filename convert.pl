@@ -20,11 +20,13 @@ sub main {
     $content=~s/\\end\{solution\}//g;
     $content=~s/\\begin\{center\}//g;
     $content=~s/\\end\{center\}//g;
-    $content=~s/\\verb.(.*)\1/`$1`/g;
-
+    $content=~s/\\verb(.)(.*)\1/`$2`/g;
+    $content=~s/\\begin\{itemize\}//g;
+    $content=~s/\\end\{itemize\}//g;
+    $content=~s/\\item\s(.*)/\n* $1/g;
     # quotes
 
-    $content=~s/``(.*?)''/"$1"/g;
+    $content=~s/``(.*?)''/"$1"/g; # in the original, all on one line
 	
     
     $content=~s/\\part/\nNextyy part/g;
@@ -42,6 +44,12 @@ sub main {
     $content=~s/\\url\{(.*)\}/\[$1\]($1)/g;
     $content=~s/\\begin\{verbatim\}/\n```\n/g;
     $content=~s/\\end\{verbatim\}/\n```\n/g;
+
+    # no backslashes in quotes (do it twice)
+
+    $content=~s/`(.*)\\(.*)`/`$1$2`/g;
+    $content=~s/`(.*)\\(.*)`/`$1$2`/g;
+    $content=~s/eg.\\/eg./g;
 
     # number the parts
 

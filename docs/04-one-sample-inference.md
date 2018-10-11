@@ -24,9 +24,8 @@ library(tidyverse)
 
 
 
+##  Length of gestation in North Carolina
 
-
-## Question title
 
  The data in file
 [http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
@@ -72,7 +71,7 @@ bw=read_csv(myurl)
 
 
 
-(b) Find a 95% confidence interval for the mean birth weight of
+(b) Find a 95\% confidence interval for the mean birth weight of
 all babies born in North Carolina (of which these babies are a
 sample). At the end, you should state what the confidence interval is.
 Giving some output is necessary, but *not* enough by itself.
@@ -135,7 +134,7 @@ There is an annoyance about `t.test`. Sometimes you can use
 $t$-test later, there is a "model formula" with a squiggle in it,
 and there we can use `data=`, but here not, so you have to use
 the dollar sign or the `with` to say which data frame to get
-things from. The distinction seems to be that emph{if you are using a
+things from. The distinction seems to be that \emph{if you are using a
 model formula}, you can use `data=`, and if not, not.
 
 This is one of those things that is a consequence of R's history. The
@@ -161,8 +160,8 @@ Solution
 
 
 Null is that the population mean (the mean weight of all babies born
-in North Carolina) is $H_0: mu=7.3$ pounds, and the alternative  is
-that the mean is less: $H_a: mu<7.3$ pounds. This is a one-sided
+in North Carolina) is $H_0: \mu=7.3$ pounds, and the alternative  is
+that the mean is less: $H_a: \mu<7.3$ pounds. This is a one-sided
 alternative, which we need to feed into `t.test`:
 
 
@@ -187,7 +186,7 @@ $ %$
 
 Or with `with`. If you see what I mean.
 
-The P-value is 0.0003, which is *less* than any $alpha$ we might
+The P-value is 0.0003, which is *less* than any $\alpha$ we might
 have chosen: we *reject* the null hypothesis in favour of the
 alternative, and thus we conclude that the mean birth weight of babies
 in North Carolina
@@ -275,8 +274,8 @@ produce a small number of bins for data that have outliers.
 
 
 
+##  Inferring ice break-up in Nenana
 
-## Question title
 
  Nenana, Alaska, is about 50 miles west of Fairbanks.
 Every spring, there is a contest in Nenana. A wooden tripod is
@@ -299,13 +298,13 @@ Yes, we saw these data before.
 (a) Read the data into R, as before, or use the data frame that
 you read in before.  Note that the values are separated by
 *tabs* rather than spaces, so you'll need an appropriate
-`read\_` to read it in.
+`read_` to read it in.
 
 
 Solution
 
 
-These are "tab-separated values", so `read\_tsv` is the
+These are "tab-separated values", so `read_tsv` is the
 thing, as for the Australian athletes:
 
 ```r
@@ -382,9 +381,8 @@ enough for the Central Limit Theorem to be pretty helpful, so that we don't need
 
 (c) An old-timer in Nenana strokes his grey beard and says
 "When I were young, I remember the tripod used to fall into the water around May 10". 
-In a non-leap year, May 10 is Julian day
-130. Test the null hypothesis that the mean `JulianDay` is
-130, against the alternative that it is less.  What do you conclude?
+In a non-leap year, May 10 is Julian day 130. Test the null hypothesis that the 
+mean `JulianDay` is 130, against the alternative that it is less.  What do you conclude?
 What practical implication does that have 
 (assuming that the old-timer has a good memory)?
 

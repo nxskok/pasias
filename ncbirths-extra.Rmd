@@ -1,6 +1,5 @@
+##  More about the NC births
 
-
-## Question title
 
  This is an exploration of
 some extra issues around the North Carolina births data set.
@@ -19,7 +18,7 @@ Solution
 
 To figure it out from the data, we can
 see how ``Weeks Gestation`` depends
-on verb=`Premie?`=. Some possibilities are boxplots or a
+on ``Premie?``. Some possibilities are boxplots or a
 scatterplot. Either of the first two graphs would get full credit (for
 the graphing part: you still have to do the explanation) if this
 were being marked:
@@ -40,7 +39,7 @@ Notice how the graphs are similar in syntax, because the
 what-to-plot is the same (apart from the `factor` thing) and we
 just make a small change in 
 how-to-plot-it. In the boxplot, the thing on the $x$-scale needs to be
-categorical, and verb=`Premie?`= is actually a number, so we'd better
+categorical, and ``Premie?`` is actually a number, so we'd better
 make it into a `factor`, which is R's version of a categorical
 variable. 
 ``Premie.`` is actually a categorical variable ("premature" or
@@ -50,7 +49,7 @@ you're familiar with that term.
 
 It looks as if the breakpoint is 37 weeks: a pregnancy at least that
 long is considered normal, but a shorter one ends with a premature
-birth. Both plots show the same thing: the verb+`Premie?`=1+ births
+birth. Both plots show the same thing: the ``Premie?`=1` births
 all go with short pregnancies, shorter than 37 weeks. This is
 completely clear cut.
 
@@ -62,7 +61,7 @@ min=min(`Weeks Gestation`),
 max=max(`Weeks Gestation`))
 ``` 
 
-only this is for *all* the babies, premature or not.endnote{I
+only this is for *all* the babies, premature or not.\endnote{I
 explain the missing values below.} So we want it by prematurity,
 which means a `group_by` first:
 
@@ -74,7 +73,7 @@ max=max(`Weeks Gestation`))
 ```  
 
 `group_by` with a number works, even though using the number
-in verb=`Premie?`= in a boxplot didn't. `group_by` just uses
+in ``Premie?`` in a boxplot didn't. `group_by` just uses
 the distinct values, whether they are numbers, text or factor levels.
 
 Any of these graphs or summaries will help you answer the question, in
@@ -88,9 +87,9 @@ don't know what the missing value is). That's why the first
 of gestation in with all the ones for which we had values, so the max
 and min had to be missing as well. In the second `summarize`,
 the one by whether a baby was born prematurely or not, we learn a bit
-more about that missing verb=`Premie?`=: evidently its weeks of
+more about that missing ``Premie?``: evidently its weeks of
 gestation was missing as well, since the min and max of that were
-missing.endnote{If there had been a weeks of gestation, we could have
+missing.\endnote{If there had been a weeks of gestation, we could have
 figured out whether it was premature or not, according to whether the
 weeks of gestation was less than 37.}
 

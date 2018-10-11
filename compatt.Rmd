@@ -1,5 +1,5 @@
+##  Computerized accounting
 
-## Question title
 
  Beginning accounting students need to
 learn to learn to audit in a computerized environment. A sample of
@@ -102,13 +102,13 @@ it's harder to be sure there).
     
 
 
-(e) Find the mean and standard deviation of both CAS and CARS scores (for all the students combined, ie. not separated by gender) *without* naming those columns explicitly.
+(e) Find the mean and standard deviation of both CAS and CARS scores (for all the students combined, ie.\ not separated by gender) *without* naming those columns explicitly.
 
 
 Solution
 
 
-Without naming them explicitly means using some other way to pick them out of the data frame, either `summarize_if` or `summarize_at`. To do it the first way, ask what these two columns have in common: they are the only two numeric (quantitative) columns:
+Without naming them explicitly means using some other way to pick them out of the data frame, either `summarize\_if` or `summarize\_at`. To do it the first way, ask what these two columns have in common: they are the only two numeric (quantitative) columns:
 ```{r }
 anxiety %>% summarize_if(is.numeric,funs(mean,sd))
 ```     
@@ -119,7 +119,7 @@ Or the second way, asking yourself what the *names* of those columns have in com
 anxiety %>% summarize_at(vars(starts_with("C")),funs(mean,sd))
 ``` 
 
-Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends_with` S):
+Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends\_with` S):
 
 ```{r }
 anxiety %>% summarize_at(vars(ends_with("S")),funs(mean,sd))
@@ -148,7 +148,7 @@ a way other than this.)
 In summary, find a way to get those answers without naming those
 columns in your code, and I'm good.
 
-In case you were wondering about how to do this separately by gender, well, put the `group_by` in like you did before:
+In case you were wondering about how to do this separately by gender, well, put the `group\_by` in like you did before:
 
 ```{r }
 anxiety %>% group_by(gender) %>%

@@ -1,6 +1,5 @@
+##  North Carolina births
 
-
-## Question title
 
  The data in file
 [http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
@@ -78,11 +77,11 @@ Solution
 
 I do indeed have 500 observations on 10 variables ("several"). (If
 you don't have several variables, check to see that you didn't use
-`read_delim` or something by mistake.) After the ``500
-observations of 10 variables'' line(s) in each case, you see all the
-variables by name, with what type of values they haveendnote{these
+`read_delim` or something by mistake.) After the 
+"500 observations of 10 variables" line(s) in each case, you see all the
+variables by name, with what type of values they have\endnote{these
 are mostly `int` or "integer".}, and the first few of the
-values.endnote{Other possible variable types are `num` for
+values.\endnote{Other possible variable types are `num` for
 (real, decimal) numbers such as birth weight, `chr` for
 text, and `Factor` (with the number of levels) for
 factors/categorical variables. We don't have any of the last two
@@ -91,12 +90,12 @@ actually recorded as TRUE or FALSE. We have some variables that
 are actually logical ones, but they are recorded as integer
 values.}
 
-The variable verb=`Weight (pounds)`= is the birthweight (in pounds),
-verb=`Premie?`= is 1 for a premature baby and 0 for a full-term baby,
-and verb=`Weeks Gestation`= is the number of weeks the pregnancy
-lasted. I've put backticks around each of those to remind us that
-that's how we'll need to refer to them when we use them
-later.endnote{The backticks look different from each other for
+The variable `Weight (pounds)` is the birthweight (in pounds),
+`Premie?` is 1 for a premature baby and 0 for a full-term baby,
+and `Weeks Gestation` is the number of weeks the pregnancy
+lasted. Don't forget to put backticks around each of those when
+you use them
+later.\endnote{The backticks look different from each other for
 annoying technical reasons, but they're all backticks.}
  
 
@@ -166,7 +165,7 @@ data (actually a binomial approximation to the normal, backwards
 though that sounds). If you have less than 30 observations, you'll get
 fewer than 6 bins, which won't do much of a job of showing the
 shape. Rob Hyndman wrote a
-href{https://robjhyndman.com/papers/sturges.pdf}{critical note} about
+\href{https://robjhyndman.com/papers/sturges.pdf}{critical note} about
 Sturges' rule in which he asserts that it is just plain wrong (if you
 have taken B57, this note is very readable).
 
@@ -180,7 +179,7 @@ w=2(IQR)n^{-1/3}
 $$
 
 The nice thing about this is that it uses the interquartile range, so
-it won't be distorted by outliers. verb=geom_histogram= can take a
+it won't be distorted by outliers. `geom_histogram` can take a
 bin width, so we can use it as follows:
 
 ```{r }
@@ -209,7 +208,7 @@ Another way to go is a "density plot". This is a smoothed-out version of a histo
 ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
 ``` 
 
-verb=geom_density= has an optional parameter that controls how smooth
+`geom_density` has an optional parameter that controls how smooth
 or wiggly the picture is, but the default is usually good.
 
 Alright, before we got distracted, we were assessing normality. What
@@ -239,7 +238,7 @@ ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 ``` 
 
 The high weight is actually an outlier, but look at all those outliers
-at the bottom!endnote{When Tukey, a name we will see again, invented
+at the bottom!\endnote{When Tukey, a name we will see again, invented
 the boxplot in the 1950s, 500 observations would have been
 considered a big data set. He designed the boxplot to produce a
 sensible number of outliers for the typical size of data set of his

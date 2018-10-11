@@ -2,9 +2,8 @@
 # Reading in data and drawing some graphs
 
 
+##  Orange juice
 
-
-## Orange juice
 
  The quality of orange juice produced by a manufacturer
 (identity unknown) is constantly being monitored. The manufacturer has
@@ -54,7 +53,7 @@ library(tidyverse)
 The appropriate function, the data values being separated by a space,
 will be `read_delim`. Put the URL as the first thing in
 `read_delim`, or (better) define it into a variable
-first:endnote{I say "better" because otherwise the
+first:\endnote{I say "better" because otherwise the
 `read_delim` gets rather long. This way you read it as ``the
 URL is some long thing that I don't care about especially, and I what
 I need to do is to read the data from that URL, separated by spaces.''}
@@ -151,16 +150,7 @@ alternative when the column names that are in the file are
 *not* the ones you want to use; in that case, you would
 also say `skip=1` to skip the first line. For example,
 with file `a.txt` thus:
-
-
-```
-## a b
-## 1 2
-## 3 4
-## 5 6
-```
-
-     
+``timinput{a.txt}        
 you could read the same data but call the columns `x` and
 `y` thus:
 
@@ -210,7 +200,7 @@ to get the variables from),  and the "how to plot" is
 ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 It looks to me as if there is a negative relationship: as pectin goes
 up, sweetness tends to go *down*. The trend appears to go top
@@ -230,8 +220,7 @@ ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-10-1.png" width="672" />
-
+<img src="02-reading-in_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 The smooth trend is kind of downhill, but not very convincing.
 
 
@@ -239,9 +228,8 @@ The smooth trend is kind of downhill, but not very convincing.
 
 
 
+##  Making soap
 
-
-## Making soap
 
  A company operates two production lines in a factory for
 making soap bars. The production lines are
@@ -317,7 +305,7 @@ Solution
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 
 
@@ -343,7 +331,7 @@ with. This is 8 bins rather than 10:
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=8)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
 The middle low-frequency bin has gone, and this one just looks
 symmetric, with a kind of "flat top".
@@ -363,7 +351,7 @@ Solution
 ggplot(soap,aes(x=line,y=scrap))+geom_boxplot()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-13-1.png" width="672" />
 
 One categorical, one quantitative variable, so boxplots make sense.
 
@@ -384,7 +372,7 @@ could also make the case that, although the medians are rather
 different, there is a lot of variability and hence a lot of
 overlap between the two boxplots, and therefore that there is
 not a "substantial" difference.
-I would say that either of those answers are good emph{if you
+I would say that either of those answers are good \emph{if you
 back them up with proper reasons}. This is going to be a
 common theme in this course: I am going to ask you to make a
 decision and support it, where the reasons you provide are often
@@ -432,7 +420,7 @@ that I explain afterwards:
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)+facet_grid(line~.)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 
 I could have used `facet_wrap`, but that would have put the
 histograms side by side, and I wanted them one above the other (for
@@ -478,7 +466,7 @@ Same mechanism as before:
 ggplot(soap,aes(x=speed,y=scrap))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 
 
 
@@ -493,8 +481,9 @@ Solution
 There seems to be a pretty evident upward trend, apparently
 linear, which means that if the speed of the production line is
 higher, the amount of scrap produced is also higher.
-My last sentence was meant to remind you that ``there is an
-upward trend'' is *not a complete answer*: we are concerned
+My last sentence was meant to remind you that 
+"there is an upward trend" is *not a complete answer*: 
+we are concerned
 with what that upward trend tells us about the data. 
 This, in other words, confirms the suspicion expressed in the
 question, which was therefore a rather large clue: more speed
@@ -506,7 +495,7 @@ What we haven't done is to assess the relationship between speed
 and scrap for *each* production line. To do that, we want
 to plot the scrap-speed points distinguished for each production
 line. `ggplot` makes that easy: you add a
-`colour`endnote{If you are concerned about the spelling:
+`colour`\endnote{If you are concerned about the spelling:
 the guy who wrote `ggplot` is from New Zealand, where they
 spell "colour" the same way we do. However, if you want to
 use `color=`, that works too.} to say what you want to
@@ -517,7 +506,7 @@ categorical variable, if you want to think of it that way:
 ggplot(soap,aes(x=speed,y=scrap,colour=line))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 Notice that we get a legend, automatically.
 
@@ -536,7 +525,7 @@ ggplot(soap,aes(x=speed,y=scrap,colour=line))+
 geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 
 The points and lines have come out in different colours, without our
 having to think too hard.
@@ -566,7 +555,7 @@ geom_point(data=soap2,colour="grey")+
 geom_point(aes(colour=line))+facet_wrap(~line)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672" />
 $
 
 The idea is that we plot all the points in grey (to ``put them in the
@@ -578,15 +567,19 @@ run. (I discovered this technique only yesterday. I think the code is
 remarkably concise for what it does.)
 
 The logic of the code is:
-begin{itemize}
-item create a new data frame that contains everything in
+
+
+* create a new data frame that contains everything in
 `soap` except for `line`
-item make a scatter plot of all the points in this new data frame,
+
+* make a scatter plot of all the points in this new data frame,
 coloured grey
-item plot the points again (from the original data frame), coloured by
+
+* plot the points again (from the original data frame), coloured by
 which production line they're from
-item produce a separate scatterplot for each production line.
-end{itemize}
+
+* produce a separate scatterplot for each production line.
+
 
 The trick about creating the new data frame was to enable plotting of
 all points regardless of group on each subplot ("facet" in
@@ -628,22 +621,22 @@ summary(scrap.1)
 ```
 
 The P-values for `speed` and `line` are the second and
-third things in the last column, $7 times 10^{-16}$  and $1 times 10^{-6}$
+third things in the last column, $7 \times 10^{-16}$  and $1 \times 10^{-6}$
 respectively. These are both very strongly significant, in contrast to
 the two-sample $t$-test where `line` was not significant.
 
 So does production line make a difference or not?
 
 The plot says that it does, and the meaning of model `scrap.1`
-just above is that emph{`speed` affects scrap when you account
+just above is that \emph{`speed` affects scrap when you account
 for `line`}, and emph{`line` affects scrap when you
 account for speed}. (In the two-sample $t$-test above we didn't
 account for speed at all, since the various speeds were all mixed up.)
 
 There is a moral to this story, which I would like you to get even if
-you don't get any of the statistics: emph{if a variable makes a
+you don't get any of the statistics: \emph{if a variable makes a
 difference}, it should be in your model and on your
-graph,endnote{Meaning that the graph should contain all three
+graph,\endnote{Meaning that the graph should contain all three
 variables, `speed`, `scrap` and `line`.} because
 it enables you to get better (more precise) conclusions about your
 other variables. Here, there really is a difference between the
@@ -655,8 +648,8 @@ to unearth it (because `speed` made a difference as well).
 
 
 
+##  Handling shipments
 
-## Handling shipments
 
  A company called Global Electronics from
 time to time imports shipments of a certain large part used as a
@@ -739,14 +732,14 @@ Solution
 The wording of the question says that cost is the response and so
 belongs on the $y$-axis. To make the plot, `ggplot` with an
 `x=` and a `y=` in the `aes` (the ``what to
-plot'' part), and a `geom_point()` after (the ``how to
+plot'' part), and a `geom\_point()` after (the ``how to
 plot it''):
 
 ```r
 ggplot(shipments,aes(x=size,y=cost))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-23-1.png" width="672" />
 
 As a matter of coding, there are usually *two* brackets to close
 after the `aes`, the one that begins the `ggplot` and
@@ -796,7 +789,7 @@ variable `warehouse`, which suggests drawing boxplots:
 ggplot(shipments,aes(x=warehouse,y=size))+geom_boxplot()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-24-1.png" width="672" />
 
 Well, there's the answer right there. When the shipment has small
 `size`, it goes to warehouse A, and when it's large, it goes to
@@ -816,10 +809,10 @@ ggplot(shipments,aes(x=size,y=cost,colour=warehouse))+
 geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-25-1.png" width="672" />
 
 As a point of technique, you can split lines of code to make them fit
-on your screen. You can do this as long as emph{the code that ends
+on your screen. You can do this as long as \emph{the code that ends
 the line must be incomplete}, so that R knows more is to
 come. Ending a line with a pipe symbol, or, as here, with one of the
 pluses in the middle of a `ggplot`, will work. If you put the
@@ -836,12 +829,12 @@ In the place where I got these data, it said ``larger shipments are
 sent to Warehouse B, since this warehouse has specialized equipment
 that provides greater economies of scale for larger shipments''. That
 is to say, very large shipments are more expensive to handle, but not
-as expensive as you might think.endnote{This is the same idea that it
+as expensive as you might think.\endnote{This is the same idea that it
 costs more to ride the GO bus from UTSC to York U than it does to
 ride from UTSC to Scarborough Town, but if you work out how much it
 costs per kilometre, the longer journey costs less per km. As of
-when I'm writing this, $5.30 for the 7.2 km to Scarborough Town and
-$6.75 for the 38 km to York. That's quite an economy of scale,
+when I'm writing this, \$5.30 for the 7.2 km to Scarborough Town and
+\$6.75 for the 38 km to York. That's quite an economy of scale,
 isn't it?} That makes sense with our scatterplot, because the
 *slope* for larger shipments is less than for smaller shipments.
 

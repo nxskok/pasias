@@ -28,8 +28,8 @@ library(tidyverse)
 and so to the problems:
 
 
+##  Getting an R Studio Cloud account
 
-## Question title
 
  Follow these steps to get an R Studio Cloud account.
 
@@ -45,7 +45,9 @@ Solution
 
 
 You should see this:
-![](Screenshot_2018-07-02_14-47-28.png). Click
+
+![](Screenshot_2018-07-02_14-47-28.png)
+. Click
 on Get Started. You might instead see the screen in the next part.
 
 
@@ -56,7 +58,9 @@ Solution
 
 Here's what you should see now:
 
-![](Screenshot_2018-07-02_14-44-18.png)      
+
+![](Screenshot_2018-07-02_14-44-18.png)
+      
 
 If you're happy with using your Google account, click that
 button. You will probably have to enter your Google password. (If
@@ -83,13 +87,17 @@ Solution
 
 
 This is what you see now:
+
 ![](Screenshot_2018-07-02_15-08-07.png)
+
 Click on the blue New Project button to create a new Project. (A
 project is a self-contained piece of work, like for example an
 assignment.)
 You will see the words "Loading Project" and spinning circles
 for a few moments. Then you see this:
+
 ![](Screenshot_2018-07-02_15-19-12.png)
+
 To give your project a name, click at the top where it says
 Untitled Project and type a name like Assignment 0 into the box.
 
@@ -98,7 +106,9 @@ Untitled Project and type a name like Assignment 0 into the box.
 bottom left. Click next to it to get a flashing cursor, and then
 type what you see here (in blue):
 
-![](Screenshot_2018-07-02_15-25-20.png)    
+
+![](Screenshot_2018-07-02_15-25-20.png)
+    
 
 Then press Enter.
 
@@ -110,7 +120,9 @@ time. If you are watching it, look out for lines beginning with
 `g++`, which are C++ code that needs to be compiled. This is
 the end of what I had. Look out for the word DONE near the bottom:
 
-![](Screenshot_2018-07-02_15-34-40.png)    
+
+![](Screenshot_2018-07-02_15-34-40.png)
+    
 
 
 
@@ -123,7 +135,9 @@ to R Studio Cloud one.
 To log back in, now or next time, look for
 Log In at the top right. Click it, to get this:
 
-![](Screenshot_2018-07-02_15-54-17.png)    
+
+![](Screenshot_2018-07-02_15-54-17.png)
+    
 
 and then you can log in with your email and password, or Google or
 Github IDs, whichever you used.
@@ -287,7 +301,7 @@ mtcars
 ## # ... with 22 more rows
 ```
 
-The top bit is the code, the bottom bit with the `\#\#` the
+The top bit is the code, the bottom bit with the `\##` the
 output. In this kind of display, you only see the first ten rows (by
 default). 
 
@@ -443,7 +457,7 @@ the same line as New Folder and Upload), then select Export (and
 click Download). This will put a copy in your downloads folder
 on your computer, and you can open it from there.
 If you're feeling extra-ambitious, you can try Knit to PDF. This
-produces something that looks as if it was written in \LaTeX,
+produces something that looks as if it was written in LaTeX,
 but actually wasn't. To make this work, if you have a
 `library(tidyverse)` line somewhere, as you probably
 will, find the code chunk it's in, and make it look like this:
@@ -547,8 +561,8 @@ think a line fits these data.
 
 
 
+##  Reading data from a file
 
-## Data file operations
 
  In this question, we read a file from the web and do some
 descriptive statistics and a graph. This is very like what you will be
@@ -588,8 +602,8 @@ this session.)
 
 
 (c) Put the URL of the data file in a variable called
-`my_url`. Then use `read_delim` to read in the
-file. (See solutions for how.) `read_delim` reads data files
+`my\_url`. Then use `read\_delim` to read in the
+file. (See solutions for how.) `read\_delim` reads data files
 where the data values are always separated by the same single
 character, here a space. Save the data frame in a variable `rats`.
 
@@ -599,7 +613,6 @@ Solution
 Like this:
 
 ```r
-library(tidyverse)
 my_url="https://www.utsc.utoronto.ca/~butler/c32/jumping.txt"
 rats=read_delim(my_url," ")
 ```
@@ -612,8 +625,8 @@ rats=read_delim(my_url," ")
 ## )
 ```
 
-The second thing in `read_delim` is the thing that separates
-the data values. Often when you use `read_delim` it'll be a space.
+The second thing in `read\_delim` is the thing that separates
+the data values. Often when you use `read\_delim` it'll be a space.
 
 
 (d) Take a look at your data frame, by making a new code chunk and
@@ -653,7 +666,7 @@ There are 30 rows and two columns, as there should be.
 Solution
 
 
-This is something you'll see a lot: `group_by` followed by
+This is something you'll see a lot: `group\_by` followed by
 `summarize`. Reminder: to get that funny thing with the
 percent signs (called the "pipe symbol"), type control-shift-M (or
 equivalent on a Mac):

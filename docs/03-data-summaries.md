@@ -24,9 +24,8 @@ library(tidyverse)
 
 
 
+##  North Carolina births
 
-
-## Question title
 
  The data in file
 [http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
@@ -157,11 +156,11 @@ Solution
 
 I do indeed have 500 observations on 10 variables ("several"). (If
 you don't have several variables, check to see that you didn't use
-`read_delim` or something by mistake.) After the ``500
-observations of 10 variables'' line(s) in each case, you see all the
-variables by name, with what type of values they haveendnote{these
+`read_delim` or something by mistake.) After the 
+"500 observations of 10 variables" line(s) in each case, you see all the
+variables by name, with what type of values they have\endnote{these
 are mostly `int` or "integer".}, and the first few of the
-values.endnote{Other possible variable types are `num` for
+values.\endnote{Other possible variable types are `num` for
 (real, decimal) numbers such as birth weight, `chr` for
 text, and `Factor` (with the number of levels) for
 factors/categorical variables. We don't have any of the last two
@@ -170,12 +169,12 @@ actually recorded as TRUE or FALSE. We have some variables that
 are actually logical ones, but they are recorded as integer
 values.}
 
-The variable verb=`Weight (pounds)`= is the birthweight (in pounds),
-verb=`Premie?`= is 1 for a premature baby and 0 for a full-term baby,
-and verb=`Weeks Gestation`= is the number of weeks the pregnancy
-lasted. I've put backticks around each of those to remind us that
-that's how we'll need to refer to them when we use them
-later.endnote{The backticks look different from each other for
+The variable `Weight (pounds)` is the birthweight (in pounds),
+`Premie?` is 1 for a premature baby and 0 for a full-term baby,
+and `Weeks Gestation` is the number of weeks the pregnancy
+lasted. Don't forget to put backticks around each of those when
+you use them
+later.\endnote{The backticks look different from each other for
 annoying technical reasons, but they're all backticks.}
  
 
@@ -259,7 +258,7 @@ data (actually a binomial approximation to the normal, backwards
 though that sounds). If you have less than 30 observations, you'll get
 fewer than 6 bins, which won't do much of a job of showing the
 shape. Rob Hyndman wrote a
-href{https://robjhyndman.com/papers/sturges.pdf}{critical note} about
+\href{https://robjhyndman.com/papers/sturges.pdf}{critical note} about
 Sturges' rule in which he asserts that it is just plain wrong (if you
 have taken B57, this note is very readable).
 
@@ -273,7 +272,7 @@ w=2(IQR)n^{-1/3}
 $$
 
 The nice thing about this is that it uses the interquartile range, so
-it won't be distorted by outliers. verb=geom_histogram= can take a
+it won't be distorted by outliers. `geom_histogram` can take a
 bin width, so we can use it as follows:
 
 
@@ -320,7 +319,7 @@ ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 
-verb=geom_density= has an optional parameter that controls how smooth
+`geom_density` has an optional parameter that controls how smooth
 or wiggly the picture is, but the default is usually good.
 
 Alright, before we got distracted, we were assessing normality. What
@@ -353,7 +352,7 @@ ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 The high weight is actually an outlier, but look at all those outliers
-at the bottom!endnote{When Tukey, a name we will see again, invented
+at the bottom!\endnote{When Tukey, a name we will see again, invented
 the boxplot in the 1950s, 500 observations would have been
 considered a big data set. He designed the boxplot to produce a
 sensible number of outliers for the typical size of data set of his
@@ -370,9 +369,8 @@ babies). Which leads to the additional question coming up.
 
 
 
+##  More about the NC births
 
-
-## Question title
 
  This is an exploration of
 some extra issues around the North Carolina births data set.
@@ -391,7 +389,7 @@ Solution
 
 To figure it out from the data, we can
 see how ``Weeks Gestation`` depends
-on verb=`Premie?`=. Some possibilities are boxplots or a
+on ``Premie?``. Some possibilities are boxplots or a
 scatterplot. Either of the first two graphs would get full credit (for
 the graphing part: you still have to do the explanation) if this
 were being marked:
@@ -426,7 +424,7 @@ Notice how the graphs are similar in syntax, because the
 what-to-plot is the same (apart from the `factor` thing) and we
 just make a small change in 
 how-to-plot-it. In the boxplot, the thing on the $x$-scale needs to be
-categorical, and verb=`Premie?`= is actually a number, so we'd better
+categorical, and ``Premie?`` is actually a number, so we'd better
 make it into a `factor`, which is R's version of a categorical
 variable. 
 ``Premie.`` is actually a categorical variable ("premature" or
@@ -436,7 +434,7 @@ you're familiar with that term.
 
 It looks as if the breakpoint is 37 weeks: a pregnancy at least that
 long is considered normal, but a shorter one ends with a premature
-birth. Both plots show the same thing: the verb+`Premie?`=1+ births
+birth. Both plots show the same thing: the ``Premie?`=1` births
 all go with short pregnancies, shorter than 37 weeks. This is
 completely clear cut.
 
@@ -456,7 +454,7 @@ max=max(`Weeks Gestation`))
 ## 1   500    NA    NA
 ```
 
-only this is for *all* the babies, premature or not.endnote{I
+only this is for *all* the babies, premature or not.\endnote{I
 explain the missing values below.} So we want it by prematurity,
 which means a `group_by` first:
 
@@ -478,7 +476,7 @@ max=max(`Weeks Gestation`))
 ```
 
 `group_by` with a number works, even though using the number
-in verb=`Premie?`= in a boxplot didn't. `group_by` just uses
+in ``Premie?`` in a boxplot didn't. `group_by` just uses
 the distinct values, whether they are numbers, text or factor levels.
 
 Any of these graphs or summaries will help you answer the question, in
@@ -492,9 +490,9 @@ don't know what the missing value is). That's why the first
 of gestation in with all the ones for which we had values, so the max
 and min had to be missing as well. In the second `summarize`,
 the one by whether a baby was born prematurely or not, we learn a bit
-more about that missing verb=`Premie?`=: evidently its weeks of
+more about that missing ``Premie?``: evidently its weeks of
 gestation was missing as well, since the min and max of that were
-missing.endnote{If there had been a weeks of gestation, we could have
+missing.\endnote{If there had been a weeks of gestation, we could have
 figured out whether it was premature or not, according to whether the
 weeks of gestation was less than 37.}
 
@@ -622,8 +620,8 @@ trust what its website says.
 
 
 
+##  Nenana, Alaska
 
-## Question title
 
  Nenana, Alaska, is about 50 miles west of Fairbanks.
 Every spring, there is a contest in Nenana. A wooden tripod is
@@ -1076,8 +1074,8 @@ make any statements about the *cause* of that climate change.
 
 
 
+##  Computerized accounting
 
-## Question title
 
  Beginning accounting students need to
 learn to learn to audit in a computerized environment. A sample of
@@ -1243,13 +1241,13 @@ it's harder to be sure there).
     
 
 
-(e) Find the mean and standard deviation of both CAS and CARS scores (for all the students combined, ie. not separated by gender) *without* naming those columns explicitly.
+(e) Find the mean and standard deviation of both CAS and CARS scores (for all the students combined, ie.\ not separated by gender) *without* naming those columns explicitly.
 
 
 Solution
 
 
-Without naming them explicitly means using some other way to pick them out of the data frame, either `summarize_if` or `summarize_at`. To do it the first way, ask what these two columns have in common: they are the only two numeric (quantitative) columns:
+Without naming them explicitly means using some other way to pick them out of the data frame, either `summarize\_if` or `summarize\_at`. To do it the first way, ask what these two columns have in common: they are the only two numeric (quantitative) columns:
 
 ```r
 anxiety %>% summarize_if(is.numeric,funs(mean,sd))
@@ -1276,7 +1274,7 @@ anxiety %>% summarize_at(vars(starts_with("C")),funs(mean,sd))
 ## 1     2.82      2.77  0.484   0.671
 ```
 
-Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends_with` S):
+Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends\_with` S):
 
 
 ```r
@@ -1332,7 +1330,7 @@ a way other than this.)
 In summary, find a way to get those answers without naming those
 columns in your code, and I'm good.
 
-In case you were wondering about how to do this separately by gender, well, put the `group_by` in like you did before:
+In case you were wondering about how to do this separately by gender, well, put the `group\_by` in like you did before:
 
 
 ```r
@@ -1401,8 +1399,8 @@ compared to the SD.
 
 
 
+##  Hunter-gatherers in Australia
 
-## Question title
 
  A hunter-gatherer society is one where people get their food
 by hunting, fishing or foraging rather than by agriculture or by
@@ -1429,7 +1427,7 @@ Explain briefly.
 Solution
 
 
-The data values are separated by (single) spaces, so `read_delim`
+The data values are separated by (single) spaces, so `read\_delim`
 is the thing:
 
 ```r
@@ -1446,7 +1444,7 @@ societies=read_delim(url," ")
 ```
 
 I like to put the URL in a variable first, because if I don't, the
-`read_delim` line can be rather long. But if you want to do it
+`read\_delim` line can be rather long. But if you want to do it
 in one step, that's fine, as long as it's clear that you are doing the
 right thing.
 
@@ -1493,7 +1491,7 @@ Solution
 
 
 The mean for the world as a whole ("average", as stated earlier)
-is 7.38. Let $mu$ denote the population mean for Australia (of
+is 7.38. Let $\mu$ denote the population mean for Australia (of
 which these societies are a sample). Then our hypotheses are:
 $$ H_0: \mu=7.38$$
 and
@@ -1533,7 +1531,7 @@ t.test(societies$density,mu=7.38)
 ##  26.21846
 ```
 
-The P-value is 0.0023, less than the usual $alpha$ of 0.05, so we
+The P-value is 0.0023, less than the usual $\alpha$ of 0.05, so we
 *reject* the null hypothesis and conclude that the mean
 population density is not equal to 7.38. That is to say, Australia is
 different from the rest of the world in this sense.
@@ -1623,7 +1621,7 @@ graph you drew: if you think your graph is symmetric and outlier-free,
 you should have no doubts about your $t$-test; if you think it has
 something wrong with it, you should say what it is and express your
 doubts. My guess is that you will think this distribution is skewed to
-the right. Most of my plots are saying that.endnote{The normal
+the right. Most of my plots are saying that.\endnote{The normal
 quantile plot is rather interesting: it says that the uppermost
 values are approximately normal, but the *smallest* eight or so
 values are too bunched up to be normal. That is, normality fails not
@@ -1635,4 +1633,23 @@ an example for another test, precisely *because* they thought the
 distribution was right-skewed. Later on, we'll learn about the sign
 test for the median, which I think is actually a better test here.
  
+ 4 distribution of hunter-gatherer population densities (N = 86)
+ across all forest ecosystems worldwide is skewed to the right and is
+ non-normal. The median is therefore the most reliable measure of
+ central tendency. As such, the median population density (per 100 km)
+ of forest hunter-gatherers is ηo = 7.38. An interesting question that
+ we may want to ask is whether this value is an accurate estimate of
+ the population density of forest hunter-gatherers on specific
+ continents; the results might answer the question of whether
+ hunter-gatherer population densities are determined primarily by
+ large-scale ecological constraints (such as resource availability), or
+ whether there seem to be other factors, possibly social and/or
+ historic, determining population density. For this example we will
+ look at the hunter-gatherer groups of the northern Australian forests
+ (n = 13).  Let ηo be the median population density of all forest
+ hunter-gatherer groups (N = 86), where ηo = 7.38, and let η be the
+ median population density for Australian forest hunter-gatherer groups
+ (n = 13).  Formally, we wish to test the hypothesis at the a = 0.05
+ (95%) level:
+
 
