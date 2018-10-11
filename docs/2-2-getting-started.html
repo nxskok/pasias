@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2018-10-09" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a><ul>
+<li><a href="2-1-getting-an-r-studio-cloud-account.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="2-2-getting-started.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="2-3-reading-data-from-a-file.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="3-1-orange-juice.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="3-2-making-soap.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="3-3-handling-shipments.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="4-1-north-carolina-births.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
+<li><a href="4-2-more-about-the-nc-births.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
+<li><a href="4-3-nenana-alaska.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
+<li><a href="4-4-computerized-accounting.html#computerized-accounting"><span class="toc-section-number">4.4</span> Computerized accounting</a></li>
+</ul></li>
+<li class="has-sub"><a href="5-one-sample-inference.html#one-sample-inference"><span class="toc-section-number">5</span> One-sample inference</a><ul>
+<li><a href="5-1-hunter-gatherers-in-australia.html#hunter-gatherers-in-australia"><span class="toc-section-number">5.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="5-2-length-of-gestation-in-north-carolina.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">5.2</span> Length of gestation in North Carolina</a></li>
+<li><a href="5-3-inferring-ice-break-up-in-nenana.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">5.3</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="6-two-sample-inference.html#two-sample-inference"><span class="toc-section-number">6</span> Two-sample inference</a><ul>
+<li><a href="6-1-children-and-electronic-devices.html#children-and-electronic-devices"><span class="toc-section-number">6.1</span> Children and electronic devices</a></li>
+<li><a href="6-2-parking-close-to-the-curb.html#parking-close-to-the-curb"><span class="toc-section-number">6.2</span> Parking close to the curb</a></li>
+</ul></li>
+<li class="has-sub"><a href="7-power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">7</span> Power and sample size</a><ul>
+<li><a href="7-1-simulating-power.html#simulating-power"><span class="toc-section-number">7.1</span> Simulating power</a></li>
+<li><a href="7-2-calculating-power-and-sample-size-for-estimating-mean.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">7.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="7-3-simulating-power-for-proportions.html#simulating-power-for-proportions"><span class="toc-section-number">7.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="8-the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">8</span> The sign test and Mood’s median test</a></li>
+<li><a href="9-matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a></li>
+<li><a href="10-normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="getting-started" class="section level2">
+<h2><span class="header-section-number">2.2</span> Getting started</h2>
+<p>This question is to get you started using R.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Start R Studio Cloud, in some project. (If you started up a
+new project in the previous question and are still logged in, use
+that; if not, create a new project.)</li>
+</ol>
+<p>Solution</p>
+<p>You ought to see something like this. I have a dark blue
+background here, which you probably do not.</p>
+<p><img src="empty.png" /></p>
+<p>It won’t look exactly like that (for example, the background
+will probably be white) but there should be one thing
+on the left half, and at the top
+right it’ll say “Environment is empty”.
+Extra: if you want to tweak things, select Tools (at the top of
+the screen) and from it Global Options, then click
+Appearance. You can make the text bigger or smaller via Editor
+Font Size, and choose a different colour scheme by picking one
+of the Editor Themes (which previews on the right). My favourite
+is Tomorrow Night Blue. Click Apply or OK when you have found
+something you like. (I spend a lot of time in R Studio, and I
+like having a dark background to be easier on my eyes.)</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>We’re going to do some stuff in R here, just to get used to
+it. First, make an R Notebook by selecting File, New File and R
+Notebook.</li>
+</ol>
+<p>Solution</p>
+<p>The first time, you’ll be invited to “install some packages”
+to make the Notebook thing work. Let it do that by clicking
+Yes. After that, you’ll have this:</p>
+<p><img src="rnote1.png" /></p>
+<p>Find the Insert and Run buttons along the top of the R Notebook
+window. We’ll be using them shortly. (The template notebook may
+or may not be maximized; it doesn’t matter either way. You might
+see all four panes or as few as one. If you want to control
+that, select View at the top, then Panes, then either Show All
+Panes or Zoom Source, as you prefer. In the menus, you’ll also
+see keyboard shortcuts for these, which you might find worth
+learning.)</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Change the title to something of your choosing. Then go down
+to line 5, click on the Insert button and select R. You should see
+a “code chunk” appear at line 5, which we are going to use in a
+moment.</li>
+</ol>
+<p>Solution</p>
+<p>Something like this:</p>
+<p><img src="chunk1.png" /></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Type the line of code shown below into the chunk in the
+R Notebook:</li>
+</ol>
+<pre><code>
+mtcars
+</code></pre>
+<p>Solution</p>
+<p>What this will do: get hold of a built-in data set with
+information about some different models of car, and display it.</p>
+<p><img src="chunk2.png" /></p>
+<p>In approximately five seconds, you’ll be demonstrating that for
+yourself.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Run this command. To do that, look at the top right of
+your code chunk block (shaded in a slightly different colour). You
+should see a gear symbol, a down arrow and a green ``play
+button’’. Click the play button. This will run the code, and show
+the output below the code chunk.</li>
+</ol>
+<p>Solution</p>
+<p>Here’s what I get (yours will be the same).</p>
+<p><img src="chunk3.png" /></p>
+<p>This is a rectangular array of rows and columns, with
+individuals in rows and variables in columns, known as a
+“data frame”. When you display a data frame in an R Notebook, you see
+10 rows and as many columns as will fit on the screen. At the
+bottom, it says how many rows and columns there are altogether
+(here 32 rows and 11 columns), and which ones are being
+displayed. You can see more rows by clicking on Next, and if
+there are more columns, you’ll see a little arrow next to the
+rightmost column (as here next to <code>am</code>) that you can
+click on to see more columns. Try it and see. Or if you want to
+go to a particular collection of rows, click one of the numbers
+between Previous and Next: 1 is rows 1–10, 2 is rows 11–20,
+and so on.
+The column on the left without a header (containing the names of
+the cars) is called “row names”. These have a funny kind of
+status, kind of a column and kind of not a column; usually, if
+we need to use the names, we have to put them in a column first.
+In future solutions, rather than showing you a screenshot,
+expect me to show you something like this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">mtcars</a></code></pre></div>
+<pre><code>## # A tibble: 32 x 11
+##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+##  * &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
+##  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
+##  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
+##  4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
+##  5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
+##  6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
+##  7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
+##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
+##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
+## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
+## # ... with 22 more rows</code></pre>
+<p>The top bit is the code, the bottom bit with the <code>##</code> the
+output. In this kind of display, you only see the first ten rows (by
+default).</p>
+<p>If you don’t see the “play button”, make sure that what you have
+really is a code chunk. (I often accidentally delete one of the
+special characters above or below the code chunk). If you can’t figure
+it out, delete this code chunk and make a new one. Sometimes R Studio
+gets confused.</p>
+<p>On the code chunk, the other symbols are the settings for this chunk
+(you have the choice to display or not display the code or the output
+or to not actually run the code). The second one, the down arrow, runs
+all the chunks prior to this one (but not this one).</p>
+<p>The output has its own little buttons. The first one pops the output
+out into its own window; the second one shows or hides the output, and
+the third one deletes the output (so that you have to run the chunk
+again to get it back). Experiment. You can’t do much damage here.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Something a little more interesting: <code>summary</code>
+obtains a summary of whatever you feed it (the five-number summary
+plus the mean for numerical variables). Obtain this for our data
+frame. To do this, create a new code chunk below the previous one,
+type <code>summary(mtcars)</code> into the code chunk, and run it.</li>
+</ol>
+<p>Solution</p>
+<p>This is what you should see:</p>
+<p><img src="chunk4.png" /></p>
+<p>or the other way:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">summary</span>(mtcars)</a></code></pre></div>
+<pre><code>##       mpg             cyl             disp             hp       
+##  Min.   :10.40   Min.   :4.000   Min.   : 71.1   Min.   : 52.0  
+##  1st Qu.:15.43   1st Qu.:4.000   1st Qu.:120.8   1st Qu.: 96.5  
+##  Median :19.20   Median :6.000   Median :196.3   Median :123.0  
+##  Mean   :20.09   Mean   :6.188   Mean   :230.7   Mean   :146.7  
+##  3rd Qu.:22.80   3rd Qu.:8.000   3rd Qu.:326.0   3rd Qu.:180.0  
+##  Max.   :33.90   Max.   :8.000   Max.   :472.0   Max.   :335.0  
+##       drat             wt             qsec             vs        
+##  Min.   :2.760   Min.   :1.513   Min.   :14.50   Min.   :0.0000  
+##  1st Qu.:3.080   1st Qu.:2.581   1st Qu.:16.89   1st Qu.:0.0000  
+##  Median :3.695   Median :3.325   Median :17.71   Median :0.0000  
+##  Mean   :3.597   Mean   :3.217   Mean   :17.85   Mean   :0.4375  
+##  3rd Qu.:3.920   3rd Qu.:3.610   3rd Qu.:18.90   3rd Qu.:1.0000  
+##  Max.   :4.930   Max.   :5.424   Max.   :22.90   Max.   :1.0000  
+##        am              gear            carb      
+##  Min.   :0.0000   Min.   :3.000   Min.   :1.000  
+##  1st Qu.:0.0000   1st Qu.:3.000   1st Qu.:2.000  
+##  Median :0.0000   Median :4.000   Median :2.000  
+##  Mean   :0.4062   Mean   :3.688   Mean   :2.812  
+##  3rd Qu.:1.0000   3rd Qu.:4.000   3rd Qu.:4.000  
+##  Max.   :1.0000   Max.   :5.000   Max.   :8.000</code></pre>
+<p>For the gas mileage column <code>mpg</code>, the mean is bigger than the
+median, and the largest value is unusually large compared with the
+others, suggesting a distribution that is skewed to the right.</p>
+<p>There are 11 numeric (quantitative) variables, so we get the
+five-number summary plus mean for each one. Categorical variables, if
+we had any here, would be displayed a different way.</p>
+<p>(In case you are wondering, the way without screenshots is obtained by
+<em>my</em> writing a notebook with code chunks and running them, so
+this output genuinely <em>is</em> obtained by running the code you see.)</p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Let’s make a boxplot of the gas mileage data. This is a
+“poor man’s boxplot”; we’ll see a nicer-looking way later. To do it
+this way, make another new code chunk, enter the code
+<code>boxplot(mtcars$mpg)</code> into it, and run the chunk.</li>
+</ol>
+<p>Solution</p>
+<p>This is what you should see:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">boxplot</span>(mtcars<span class="op">$</span>mpg)</a></code></pre></div>
+<p><img src="01-getting-used_files/figure-html/unnamed-chunk-8-1.png" width="672"  /></p>
+<p>The long upper whisker supports our guess from before that the
+distribution is right-skewed.</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>Some aesthetics to finish with: delete the template notebook
+(all the stuff you didn’t type below your code chunks and
+output). Then add some narrative text above and below your code
+chunks. Above the code chunk is where you say what you are going
+to do (and maybe why you are doing it), and below is where you say
+what you conclude from the output you just obtained.</li>
+</ol>
+<p>Solution</p>
+<p>My complete R Notebook is at
+<a href="http://www.utsc.utoronto.ca/~butler/c32/a0-notebook-1.Rmd" class="uri">http://www.utsc.utoronto.ca/~butler/c32/a0-notebook-1.Rmd</a>. Take
+a look at it. I added one extra thing: my variable names have
+“backticks” around them. You’ll see the effect of this in a
+moment. Backtick is on the key to the left of 1 and below Esc
+on your keyboard, along with a “squiggle” symbol that we’ll be
+using later in the course.</p>
+<ol style="list-style-type: lower-roman">
+<li>Save your notebook (the usual way with File and Save). This
+saves it <em>on the R Studio Cloud servers</em> (and not on your
+computer). This means that when you come back to R Studio Cloud
+later, even from another device, this notebook will still be
+available to you.
+Now click Preview. This produces a pretty HTML version of your
+notebook.</li>
+</ol>
+<p>Solution</p>
+<p>Note that the HTML document only contains output from the chunks
+you’ve run in the notebook, so it’s up to you to run them there
+first.<br />
+My HTML document is at
+<a href="http://www.utsc.utoronto.ca/~butler/c32/a0-notebook-1.nb.html" class="uri">http://www.utsc.utoronto.ca/~butler/c32/a0-notebook-1.nb.html</a>.
+Here’s where you see the effect of the backticks: all the
+variable names are in <code>typewriter font</code> so that you can
+see they are variable names and not something else. If you want
+to try this notebook out yourself, you have a couple of options:
+(i) make a new R Notebook on R Studio Cloud and copy-paste the
+contents of my file (it’s just text), or (ii) download my R
+Notebook onto your computer, and then upload it to R Studio
+Cloud. Look in the Files pane bottom right, and next to New
+Folder you should see Upload. Upload the file from wherever it
+got saved to when you downloaded it.
+Extra: if you’re feeling ambitious, click the arrow to the right
+of Preview and select Knit to Word. The button changes to Knit
+with a ball of wool beside it. Now, when you “knit” the
+notebook, you get a Word document directly — look for it in
+the Files pane. If you want to, you can hand this kind of thing
+in (on later assignments), but you’ll have to do a little work
+first: first, find it in your Files list, then click the
+checkbox to the left of it, then click More (with the gear, on
+the same line as New Folder and Upload), then select Export (and
+click Download). This will put a copy in your downloads folder
+on your computer, and you can open it from there.
+If you’re feeling extra-ambitious, you can try Knit to PDF. This
+produces something that looks as if it was written in LaTeX,
+but actually wasn’t. To make this work, if you have a
+<code>library(tidyverse)</code> line somewhere, as you probably
+will, find the code chunk it’s in, and make it look like this:</p>
+<p><img src="Screenshot_2018-10-10_17-24-47.png" /></p>
+<p>Then it will work.
+Extra extra: if you like the keyboard better than the mouse, R
+Studio has a lot of keyboard shortcuts. Two that are useful now:
+control-alt-i inserts a code chunk where the
+cursor is, and control-shift-enter runs the code chunk that the
+cursor is in, if it is in one. (Mac users, “command” instead
+of “control” in both cases.) I use these two a lot.</p>
+<ol start="10" style="list-style-type: lower-alpha">
+<li>Optional extra: practice handing in your previewed R
+notebook, as if it were an assignment that was worth
+something. (It is good to get the practice in a low-stakes
+situation, so that you’ll know what to do next week.)</li>
+</ol>
+<p>Solution</p>
+<p>There are two steps: download the HTML file onto your computer,
+and then handing it in on Quercus.
+To download: find the HTML file that you want to download in the
+Files pane bottom right. There should be two files starting with
+the same thing, eg. <code>test1.Rmd</code>, which is the notebook
+you wrote, and <code>test1.nb.html</code>, which is the previewed
+version of it, and is the one you want to download. (The
+<code>test1</code> part is the name <em>you</em> chose when you saved
+it.) Click the checkbox to the left of the HTML file.
+Now click on More above the bottom-right pane. This pops up a
+menu from which you choose Export. This will pop up another
+window called Export Files, where you put the name that the file
+will have on your computer. (I usually leave the name the same.)
+Click Download. The file will go to your Downloads folder, or
+wherever things you download off the web go.
+Now, to hand it in. Open up Quercus at <code>q.utoronto.ca</code>,
+log in and navigate to this course. Click Assignments. Click
+(the title of) Assignment 0. There is a big blue Submit
+Assignment button top right. Click it. You’ll get a File Upload
+at the bottom of the screen.
+Click Choose File and find the HTML file that you
+downloaded. Click Open (or equivalent on your system). The name
+of the file should appear next to Choose File. Click Submit
+Assignment. You’ll see Submitted at the top right.
+If you want to try this again, you can Re-submit Assignment as
+many times as you like. (For the real thing, you can use this if
+you realize you made a mistake in something you submitted. The
+graders’ instructions, for the real thing, are to grade the
+<em>last</em> file submitted, so in that case you need to make
+sure that the last thing submitted includes <em>everything</em>
+that you want graded. Here, though, it doesn’t matter.)</p>
+<ol start="11" style="list-style-type: lower-alpha">
+<li>Optional extra. Something more ambitious: make a scatterplot of gas
+mileage <code>mpg</code>, on the <span class="math inline">\(y\)</span> axis, against horsepower,
+<code>hp</code>, on the <span class="math inline">\(x\)</span>-axis.</li>
+</ol>
+<p>Solution</p>
+<p>That goes like this. I’ll explain the steps below.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">ggplot</span>(mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>hp, <span class="dt">y=</span>mpg))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="01-getting-used_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+$ %$ %$</p>
+<p>This shows a somewhat downward trend, which is what you’d expect,
+since a larger <code>hp</code> value means a more powerful engine, which
+will probably consume more gas and get <em>fewer</em> miles per gallon.
+As for the code: to make a <code>ggplot</code> plot, as we will shortly
+see in class, you first need a <code>ggplot</code> statement that says
+what to plot. The first thing in a <code>ggplot</code> is a data frame
+(<code>mtcars</code> here), and then the <code>aes</code> says that the plot
+will have <code>hp</code> on the
+<span class="math inline">\(x\)</span>-axis and <code>mpg</code> on the <span class="math inline">\(y\)</span>-axis, taken from the data frame
+that you specified. That’s all of the what-to-plot. The last thing is
+how to plot it; <code>geom_point()</code> says to plot the data values as
+points.</p>
+<p>You might like to add a regression line to the plot. That is a matter
+of adding this to the end of the plotting command:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">ggplot</span>(mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>hp, <span class="dt">y=</span>mpg))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<p><img src="01-getting-used_files/figure-html/unnamed-chunk-10-1.png" width="672"  /></p>
+<p>The line definitely goes downhill. Decide for yourself how well you
+think a line fits these data.</p>
+</div>
+<p style="text-align: center;">
+<a href="2-1-getting-an-r-studio-cloud-account.html"><button class="btn btn-default">Previous</button></a>
+<a href="2-3-reading-data-from-a-file.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

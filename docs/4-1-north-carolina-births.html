@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2018-10-09" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a><ul>
+<li><a href="2-1-getting-an-r-studio-cloud-account.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="2-2-getting-started.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="2-3-reading-data-from-a-file.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="3-1-orange-juice.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="3-2-making-soap.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="3-3-handling-shipments.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="4-1-north-carolina-births.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
+<li><a href="4-2-more-about-the-nc-births.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
+<li><a href="4-3-nenana-alaska.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
+<li><a href="4-4-computerized-accounting.html#computerized-accounting"><span class="toc-section-number">4.4</span> Computerized accounting</a></li>
+</ul></li>
+<li class="has-sub"><a href="5-one-sample-inference.html#one-sample-inference"><span class="toc-section-number">5</span> One-sample inference</a><ul>
+<li><a href="5-1-hunter-gatherers-in-australia.html#hunter-gatherers-in-australia"><span class="toc-section-number">5.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="5-2-length-of-gestation-in-north-carolina.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">5.2</span> Length of gestation in North Carolina</a></li>
+<li><a href="5-3-inferring-ice-break-up-in-nenana.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">5.3</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="6-two-sample-inference.html#two-sample-inference"><span class="toc-section-number">6</span> Two-sample inference</a><ul>
+<li><a href="6-1-children-and-electronic-devices.html#children-and-electronic-devices"><span class="toc-section-number">6.1</span> Children and electronic devices</a></li>
+<li><a href="6-2-parking-close-to-the-curb.html#parking-close-to-the-curb"><span class="toc-section-number">6.2</span> Parking close to the curb</a></li>
+</ul></li>
+<li class="has-sub"><a href="7-power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">7</span> Power and sample size</a><ul>
+<li><a href="7-1-simulating-power.html#simulating-power"><span class="toc-section-number">7.1</span> Simulating power</a></li>
+<li><a href="7-2-calculating-power-and-sample-size-for-estimating-mean.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">7.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="7-3-simulating-power-for-proportions.html#simulating-power-for-proportions"><span class="toc-section-number">7.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="8-the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">8</span> The sign test and Mood’s median test</a></li>
+<li><a href="9-matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a></li>
+<li><a href="10-normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="north-carolina-births" class="section level2">
+<h2><span class="header-section-number">4.1</span> North Carolina births</h2>
+<p>The data in file
+<a href="http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv" class="uri">http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv</a> are about
+500 randomly chosen births of babies in North Carolina. There is a lot
+of information: not just the weight at birth of the baby, but whether
+the baby was born prematurely, the ages of the parents, whether the
+parents are married, how long (in weeks) the pregnancy lasted (this is
+called the “gestation”) and so on.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data from the file into R, bearing in mind what
+type of file it is.</li>
+</ol>
+<p>Solution</p>
+<p>This is a <code>.csv</code> file (it came from a spreadsheet), so it
+needs reading in accordingly. Work directly from the URL (rather
+than downloading the file, unless you are working offline):</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv&quot;</span></a>
+<a class="sourceLine" id="cb61-2" data-line-number="2">bw=<span class="kw">read_csv</span>(myurl)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `Father Age` = col_integer(),
+##   `Mother Age` = col_integer(),
+##   `Weeks Gestation` = col_integer(),
+##   `Pre-natal Visits` = col_integer(),
+##   `Marital Status` = col_integer(),
+##   `Mother Weight Gained` = col_integer(),
+##   `Low Birthweight?` = col_integer(),
+##   `Weight (pounds)` = col_double(),
+##   `Premie?` = col_integer(),
+##   `Few Visits?` = col_integer()
+## )</code></pre>
+<p>This shows you which variables the data set has (some of the names got
+a bit mangled), and it shows you that they are all integers except for
+the birth weight (a decimal number).</p>
+<p>The easiest way to find out how many rows and columns there are is
+simply to list the data frame:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1">bw</a></code></pre></div>
+<pre><code>## # A tibble: 500 x 10
+##    `Father Age` `Mother Age` `Weeks Gestatio… `Pre-natal Visi…
+##           &lt;int&gt;        &lt;int&gt;            &lt;int&gt;            &lt;int&gt;
+##  1           27           26               38               14
+##  2           35           33               40               11
+##  3           34           22               37               10
+##  4           NA           16               38                9
+##  5           35           33               39               12
+##  6           32           24               36               12
+##  7           33           33               38               15
+##  8           38           35               38               16
+##  9           28           29               40                5
+## 10           NA           19               34               10
+## # ... with 490 more rows, and 6 more variables: `Marital Status` &lt;int&gt;,
+## #   `Mother Weight Gained` &lt;int&gt;, `Low Birthweight?` &lt;int&gt;, `Weight
+## #   (pounds)` &lt;dbl&gt;, `Premie?` &lt;int&gt;, `Few Visits?` &lt;int&gt;</code></pre>
+<p>or you can take a “glimpse” of it:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">glimpse</span>(bw)</a></code></pre></div>
+<pre><code>## Observations: 500
+## Variables: 10
+## $ `Father Age`           &lt;int&gt; 27, 35, 34, NA, 35, 32, 33, 38, 28, NA,...
+## $ `Mother Age`           &lt;int&gt; 26, 33, 22, 16, 33, 24, 33, 35, 29, 19,...
+## $ `Weeks Gestation`      &lt;int&gt; 38, 40, 37, 38, 39, 36, 38, 38, 40, 34,...
+## $ `Pre-natal Visits`     &lt;int&gt; 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 1...
+## $ `Marital Status`       &lt;int&gt; 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, ...
+## $ `Mother Weight Gained` &lt;int&gt; 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, ...
+## $ `Low Birthweight?`     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, ...
+## $ `Weight (pounds)`      &lt;dbl&gt; 6.8750, 6.8125, 7.2500, 8.8125, 8.8125,...
+## $ `Premie?`              &lt;int&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, ...
+## $ `Few Visits?`          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, ...</code></pre>
+<p>Either of these displays show that there are 500 rows (observations,
+here births) and 10 columns (variables), and they both show what the
+variables are called. So they’re both good as an answer to the
+question.</p>
+<p>What you’ll notice is that the variables have <em>spaces</em> in their
+names, which will require special handling later. These outputs show
+you what to do about those spaces in variable names: surround the
+variable name with “backticks”. (On my keyboard, that’s on the key
+to the left of number 1, where the squiggle is, that looks like a
+backwards apostrophe. Probably next to <code>Esc</code>, depending on the
+layout of your keyboard.)</p>
+<p>Although almost all of the variables are stored as integers, the ones
+that have a question mark in their name are actually “logical”, true
+or false, with 1 denoting true and 0 false. We could convert them
+later if we want to. (A question mark is not a traditional character
+to put in a variable name, so we have to surround these variables with
+backticks too.)</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>From your output, verify that you have the
+right number of observations and that you have several
+variables. Which of your variables correspond to birthweight,
+prematureness and length of pregnancy? (You might have to make guesses
+based on the names of the variables.)</li>
+</ol>
+<p>Solution</p>
+<p>I do indeed have 500 observations on 10 variables (“several”). (If
+you don’t have several variables, check to see that you didn’t use
+<code>read_delim</code> or something by mistake.) After the
+“500 observations of 10 variables” line(s) in each case, you see all the
+variables by name, with what type of values they have, and the first few of the
+values.</p>
+<p>The variable <code>Weight (pounds)</code> is the birthweight (in pounds),
+<code>Premie?</code> is 1 for a premature baby and 0 for a full-term baby,
+and <code>Weeks Gestation</code> is the number of weeks the pregnancy
+lasted. Don’t forget to put backticks around each of those when
+you use them
+later.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>The theory behind the <span class="math inline">\(t\)</span>-test (which we do later) says that the
+distribution of birth weights should be (approximately) normally
+distributed. Obtain a histogram of the birth weights. Does it look
+approximately normal? Comment briefly. (You’ll have to pick a number
+of bins for your histogram first. I don’t mind very much what you
+pick, as long as it’s not obviously too many or too few bins.)</li>
+</ol>
+<p>Solution</p>
+<p>You’ll have seen that I often start with 10 bins, or maybe not quite
+that many if I don’t have much data, and this is a decent general
+principle. That would give</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="kw">ggplot</span>(bw,<span class="kw">aes</span>(<span class="dt">x=</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</a></code></pre></div>
+<p><img src="03-data-summaries_files/figure-html/unnamed-chunk-9-1.png" width="672"  /></p>
+<p>which is perfectly acceptable. You can try something a bit more or a
+bit less, and see how you like it in comparison. What you are looking
+for is a nice clear picture of <em>shape</em>. If you have too few bins,
+you’ll lose the shape:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="kw">ggplot</span>(bw,<span class="kw">aes</span>(<span class="dt">x=</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">4</span>)</a></code></pre></div>
+<p><img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672"  /></p>
+<p>(is that leftmost bin an indication of skewness or some observations
+that happen to be smallish?)</p>
+<p>And if you have too many, the shape will be there, but
+it will be hard to make out in all the noise, with frequencies going
+up and down:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="kw">ggplot</span>(bw,<span class="kw">aes</span>(<span class="dt">x=</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">30</span>)</a></code></pre></div>
+<p><img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672"  /></p>
+<p>I generally am fairly relaxed about the number of bins you use, as
+long as it’s not clearly too few or too many. You might have done
+exercises in the past that illustrate that the choice of number of
+bins (or the class intervals where you move from one bin to the next,
+which is another issue that I won’t explore here) can make an
+appreciable difference to how a histogram looks.
+Extra: I had some thoughts about this issue that I put in a blog
+post, that you might like to read:
+<a href="http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/" class="uri">http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/</a>. The
+nice thing about Sturges’ rule, mentioned there, is that you can
+almost get a number of bins for your histogram in your head (as long
+as you know the powers of 2, that is). What you do is to start with
+your sample size, here <span class="math inline">\(n=500\)</span>. You find the next power of 2 above
+that, which is here <span class="math inline">\(512=2^9\)</span>. You then take that power and add 1,
+to get 10 bins. If you don’t like that, you can get R to calculate
+it for you:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1"><span class="kw">nclass.Sturges</span>(bw<span class="op">$</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)</a></code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<p>The place where Sturges’ rule comes from is an assumption of normal
+data (actually a binomial approximation to the normal, backwards
+though that sounds). If you have less than 30 observations, you’ll get
+fewer than 6 bins, which won’t do much of a job of showing the
+shape. Rob Hyndman wrote a
+ about
+Sturges’ rule in which he asserts that it is just plain wrong (if you
+have taken B57, this note is very readable).</p>
+<p>So what to use instead? Well, judgment is still better than something
+automatic, but if you want a place to start from, something with a
+better foundation than Sturges is the Freedman-Diaconis rule. This, in
+its original formulation, gives a bin width rather than a number of bins:</p>
+<p><span class="math display">\[ 
+w=2(IQR)n^{-1/3}
+\]</span></p>
+<p>The nice thing about this is that it uses the interquartile range, so
+it won’t be distorted by outliers. <code>geom_histogram</code> can take a
+bin width, so we can use it as follows:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1">w=<span class="dv">2</span><span class="op">*</span><span class="kw">IQR</span>(bw<span class="op">$</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)<span class="op">*</span><span class="dv">500</span><span class="op">^</span>(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb72-2" data-line-number="2">w</a></code></pre></div>
+<pre><code>## [1] 0.4094743</code></pre>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="kw">ggplot</span>(bw,<span class="kw">aes</span>(<span class="dt">x=</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">binwidth=</span>w)</a></code></pre></div>
+<p><img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
+<p>R also has</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1">nc=<span class="kw">nclass.FD</span>(bw<span class="op">$</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb75-2" data-line-number="2">nc</a></code></pre></div>
+<pre><code>## [1] 26</code></pre>
+<p>which turns the Freedman-Diaconis rule into a number of bins rather
+than a binwidth; using that gives the same histogram as we got with <code>binwidth</code>.</p>
+<p>In my opinion, Freedman-Diaconis tends to give too many bins (here
+there are 26 rather than the 10 of Sturges). But I put it out there
+for you to make your own call.</p>
+<p>Another way to go is a “density plot”. This is a smoothed-out version of a histogram that is not obviously frequencies in bins, but which does have a theoretical basis. It goes something like this:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" data-line-number="1"><span class="kw">ggplot</span>(bw, <span class="kw">aes</span>(<span class="dt">x=</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))<span class="op">+</span><span class="kw">geom_density</span>()</a></code></pre></div>
+<p><img src="03-data-summaries_files/figure-html/unnamed-chunk-15-1.png" width="672"  /></p>
+<p><code>geom_density</code> has an optional parameter that controls how smooth
+or wiggly the picture is, but the default is usually good.</p>
+<p>Alright, before we got distracted, we were assessing normality. What
+about that?</p>
+<p>It is mostly normal-looking, but I am suspicious about those
+<em>very</em> low birth weights, the ones below about 4 pounds. There
+are a few too many of those, as I see it.</p>
+<p>If you think this is approximately normal, you need to make some
+comment along the lines of ``the shape is approximately symmetric with
+no outliers’’. I think my first answer is better, but this answer is
+worth something, since it is a not completely unreasonable
+interpretation of the histogram.</p>
+<p>I have been making the distinction between a histogram (for one
+quantitative variable) and side-by-side boxplots (for one quantitative
+variable divided into groups by one categorical variable). When you
+learned the boxplot, you probably learned it in the context of one
+quantitative variable. You can draw a boxplot for that, too, but the
+<code>ggplot</code> boxplot has an <code>x</code> as well as a
+<code>y</code>. What you do to make a single boxplot is to set the
+<code>x</code> equal 1, which produces a weird <span class="math inline">\(x\)</span>-axis (that you ignore):</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1"><span class="kw">ggplot</span>(bw,<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  /></p>
+<p>The high weight is actually an outlier, but look at all those outliers
+at the bottom!</p>
+<p><em>I</em> think the reason for those extra very low values is that they
+are the premature births (that can result in <em>very</em> small
+babies). Which leads to the additional question coming up.</p>
+</div>
+<p style="text-align: center;">
+<a href="4-data-exploration.html"><button class="btn btn-default">Previous</button></a>
+<a href="4-2-more-about-the-nc-births.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

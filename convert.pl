@@ -23,6 +23,8 @@ sub main {
     $content=~s/\\verb(.)(.*)\1/`$2`/g;
     $content=~s/\\begin\{itemize\}//g;
     $content=~s/\\end\{itemize\}//g;
+    $content=~s/\\begin\{enumerate\}//g;
+    $content=~s/\\end\{enumerate\}//g;
     $content=~s/\\item\s(.*)/\n* $1/g;
     # quotes
 

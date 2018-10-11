@@ -1,0 +1,207 @@
+##  Children and electronic devices
+
+
+ Do children (aged 8--17) spend more time on electronic
+devices now than they did 10 years ago? Samples of 15 children aged
+8--17 were taken in each of two years, 1999 and 2009, and the children (with
+their parents' help) were
+asked to keep a diary of the number of hours they spent using
+electronic devices on a certain day. The data are in the file
+[http://www.utsc.utoronto.ca/~butler/c32/pluggedin.txt](http://www.utsc.utoronto.ca/~butler/c32/pluggedin.txt).
+
+
+
+(a) Read in the data and  verify that you have 30 rows of data from two
+different years.
+
+
+Solution
+
+
+I see this:
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/pluggedin.txt"
+plugged=read_delim(myurl," ")
+plugged
+``` 
+
+I see only the first ten rows (with an indication that there are 20 more, so 30 altogether). In your notebook, it'll look a bit different: again, you'll see the first 10 rows, but you'll see exactly how many rows and columns there are, and there will be buttons "Next" and "Previous" to see earlier and later rows, and a little right-arrow to see more columns to the right (to which is added a little left-arrow if there are previous columns to scroll back to). If you want to check for yourself that there are 30 rows, you can click Next a couple of times to get down to row 30, and then see that the Next button cannot be clicked again, and therefore that 30 rows is how many there are.
+
+Or, you can summarize the years by counting how many there are
+of each:
+
+```{r }
+plugged %>% count(year)
+``` 
+
+or the more verbose form of the same thing:
+
+```{r }
+plugged %>% group_by(year) %>% summarize(rows=n())
+``` 
+
+Any of those says that it looks good. 30 rows, 1999 and 2009, 15
+measurements for each.
+
+
+
+(b) Draw side-by-side boxplots of the number of hours for each
+year. `year` is a numeric variable that we want to treat as a
+factor, so we need to *make* it into a factor.
+
+
+
+Solution
+
+
+```{r }
+ggplot(plugged,aes(x=factor(year),y=hours))+geom_boxplot()
+``` 
+
+The `fct_inorder` trick from assignment 1 will also work, since
+the years are in the data in the order we want them to be displayed.
+
+The median for 2009 is noticeably higher, and there is no skewness or
+outliers worth worrying about.
+
+The measurements for the two years have a very similar spread, so
+there would be no problem running the pooled test here.
+
+You might be bothered by the `factor(year)` on the $x$-axis. To
+get around that, you can define year-as-factor *first*, using
+`mutate`, then feed your new column into the boxplot. That goes
+like this. There is a wrinkle that I explain afterwards:
+
+```{r }
+plugged %>% mutate(the_year=factor(year)) %>%
+ggplot(aes(x=the_year, y=hours))+geom_boxplot()
+``` 
+
+You could even redefine `year` to be the factor version of
+itself (if you don't need the year-as-number anywhere else). The
+wrinkle I mentioned above is that in the `ggplot` you \emph{do
+not} name the data frame first; the data frame used is the
+(nameless) data frame that came out of the previous step, not
+`plugged` but `plugged` with a new column
+`the_year`.
+
+Note how the $x$-axis now has the name of the new variable.
+
+If you forget to make `year` into a factor, this happens:
+
+```{r }
+ggplot(plugged,aes(x=year,y=hours))+geom_boxplot()
+``` 
+
+You get *one* boxplot, for all the hours, without distinguishing
+by year, and a warning message that tries (and fails) to read our
+mind: yes, we have a continuous, quantitative `x`, but
+`geom_boxplot` doesn't take a `group`.
+
+
+
+
+(c) Test whether the mean number of hours has *increased* since
+1999. Which test did R do?
+
+
+
+Solution
+
+
+The hard part to remember is how you specify a one-sided test in
+R; it's `alternative="less"` (rather
+than "greater") because 1999 is "before" 2009:
+
+```{r }
+t.test(hours~year,data=plugged,alternative="less")  
+``` 
+
+The P-value is 0.0013. R does the Welch-Satterthwaite test by default
+(the unequal-variances one). Since we didn't change that, that's what
+we got. (The pooled test is below.)
+
+This is the cleanest way to do it, because this version of
+`t.test`, with a "model formula" (the thing with the
+squiggle) allows a `data=` to say which data frame to get
+things from. The other ways, using (for example) `with`, also work:
+
+```{r }
+with(plugged,t.test(hours~year,alternative="less"))
+``` 
+
+This also works, but is *ugly*:
+
+```{r }
+t.test(plugged$hours~plugged$year,alternative="less")
+``` 
+
+Ugly because you've just typed the name of the data frame and the
+dollar sign *twice* for no reason. As a general principle, if you
+as a programmer are repeating yourself, you should stop and ask
+yourself how you can avoid the repeat.
+
+If you want the pooled test in R, you have to ask for it:
+
+```{r }
+t.test(hours~year,alternative="less",data=plugged,var.equal=T)    
+``` 
+
+As is often the case, the P-values for the pooled and
+Welch-Satterthwaite tests are very similar, so from that point of view
+it doesn't matter much which one you use. If you remember back to the
+boxplots, the number of hours had about the same spread for the two
+years, so if you used the pooled test instead of the
+Welch-Satterthwaite test, that would have been just fine.
+
+There is a school of thought that says we should learn the
+Welch-Satterthwaite test and use that always. This is because W-S (a)
+works when the populations from which the groups are sampled have
+different SDs and (b) is pretty good even when those SDs are the same.
+
+The pooled test can go badly wrong if the groups have very different
+SDs.  The story is this: if the larger sample is from the population
+with the larger SD, the probability of a type I error will be smaller
+than $\alpha$, and if the larger sample is from the population with
+the *smaller* SD, the probability of a type I error will be
+larger than $\alpha$. This is why you see S-W in STAB22. You see the
+pooled test in STAB57 because the logic of its derivation is so much
+clearer,\endnote{I return to this issue when we look at the same data
+in SAS later.} not because it's really the better test in
+practice. The theory says that if your data are normal in both groups
+with the same variance, then the pooled test is best, but it says
+*nothing* about the quality of the pooled test if any of that
+goes wrong.
+The usual approach to assessing things like this is via simulation,
+as we do for estimating power (later): generate some random data
+eg. from normal distributions with the same means, SDs 10 and 20
+and sample sizes 15 and 30, run the pooled $t$-test, see if you
+reject, then repeat lots of times and see whether you reject about
+5\% of the time. Then do the same thing again with the sample sizes
+switched around. Or, do the same thing with Welch-Satterthwaite.
+
+
+
+
+(d) Obtain a 99\% confidence interval for the difference in means.
+
+
+
+Solution
+
+
+Take off the thing that made it one-sided, and
+put in a thing that gets the right CI:
+
+```{r }
+t.test(hours~year,data=plugged,conf.level=0.99)  
+``` 
+
+$-3.06$ to $-0.27$. The interval contains only negative values, which
+is consistent with our having rejected a null hypothesis of no
+difference in means.
+
+
+
+
+

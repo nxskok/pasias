@@ -1,0 +1,226 @@
+
+
+ Athletes are concerned with measuring their body fat
+percentage. Two different methods are available: one using ultrasound,
+and the other using X-ray technology. We are interested in whether
+there is a difference in the mean body fat percentage as measured by
+these two methods, and if so, how big that difference is. Data on 16
+athletes are at
+[http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
+
+
+
+(a) Explain briefly why a matched pairs analysis is more
+suitable for these data than a two-independent-samples analysis
+(using a two-sample $t$-test). You might find that looking at the
+data (clicking on the link) helps you figure this out.
+
+
+Solution
+
+
+The data file looks like this:
+`timinput{bodyf`t.txt}
+The data are two measurements for each of the 16 athletes: that
+is, each athlete had their body fat percentage measured using
+*both* of the two methods. 
+Extra: a two-sample $t$ approach would be reasonable if one set of 16
+athletes had been measured by X-ray and *another different*
+set of 16 athletes had been measured by ultrasound. (That is, if
+there had been 32 athletes in total, with each one randomly
+assigned to *one* of the measurement methods.) But that's not
+what happened. It is easy to measure one athlete's body fat
+percentage using both of the two methods, so a matched pairs
+design is easy to implement (as well as being better). If you use
+two independent samples (each athlete doing only one measurement
+method), you introduce an extra source of variability: athletes
+differ one from another in body fat, as well as differing possibly
+by measurement method. If you use a matched-pairs design, you
+remove the athlete-to-athlete differences, leaving only the
+differences due to measurement method.
+
+
+
+
+(b) Read in the data and check that you have a sensible number of
+rows and columns.
+
+
+
+Solution
+
+
+This kind of thing. Since you looked at the data (didn't you?),
+you'll know that the values are separated by single spaces:
+
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat=read_delim(myurl," ")
+bodyfat  
+``` 
+
+16 rows (athletes) and 3 columns, one for each measurement
+method and one labelling the athletes. All good.
+
+Since 16 is not too much bigger than 10, I got the whole data frame
+here. (At least, I think that's the reason I got more than 10 rows.)
+In an R Notebook, you'll see the first ten rows as normal, with a
+button to click to see the other six.
+
+
+
+
+
+(c) Carry out a suitable test to determine whether the means are
+the same or different. (At this point, obtain the R output including a P-value.)
+
+
+
+Solution
+
+
+Feed the two columns into `t.test` along with
+`paired=T`. This is a two-sided test, so we don't have to
+take any special steps for that. Note that we're back to the
+"old-fashioned" version of `t.test` that *does not*
+allow `data=`, so we have to go the `with` way:
+
+```{r }
+with(bodyfat,t.test(xray,ultrasound,paired=T))
+``` 
+
+
+
+
+(d) What do you conclude from the test?
+
+
+
+Solution
+
+
+The P-value of 0.7623 is not at all small, so there is no way we can
+reject the null hypothesis.\endnote{My hat stays on my head.} There
+is no evidence of a difference in means; we can act as if the two
+methods produce the same mean body fat percentage. 
+That is to say, on this evidence we can use either method, whichever
+one is cheaper or more convenient.
+Extra: an informal way of seeing whether this is reasonable is to see how
+often the first value of the pair is larger, and how often the
+second. If the null hypothesis is true, there should be about a
+50--50 split, but if false, there should be a very uneven
+split. Here that would go like this:
+
+```{r }
+with(bodyfat,table(xray>ultrasound))
+``` 
+
+or like this:
+
+```{r }
+bodyfat %>% count(xray>ultrasound)
+``` 
+
+6 times the X-ray value was bigger, and 10 times the ultrasound value
+was. A pretty even split, so it's not surprising that we failed to
+reject the null. (You might recognize this as an informal version of
+the sign test.)
+
+
+
+
+(e) Obtain a 95\% confidence interval for the population mean
+difference. How is the interval consistent with your test?
+
+
+
+Solution
+
+
+You don't even need to do any more coding: the test was two-sided,
+so just pick the confidence interval off the output above: $-0.74$
+to 0.56. 
+The interval includes both positive and negative values (or, 0 is
+inside the interval), so the difference could go either way. This is
+entirely consistent with not being able to reject the null.
+
+
+
+
+(f) Calculate the differences, and make a normal quantile plot of
+them. Is there any evidence that normality of differences fails?
+Explain briefly. (If we haven't gotten to normal quantile plots in
+class when you read this, make a different plot to assess this issue.)
+
+
+
+Solution
+
+
+The smoothest\endnote{I learned yesterday that the Welsh word for
+"ironing" is \textsl{smwddio}, which seems weird until you say
+it out loud: it sounds like "smoothio".} way to do this is to
+use a pipeline: use a `mutate` to create the column of
+differences, and then pipe that into `ggplot`, omitting the
+data frame that would normally go first (the input data frame here
+is the new one with the differences in it, which doesn't have a
+name). I'll make a normal quantile plot in a moment, but if we
+haven't talked about that yet, the plot to make is a histogram:
+```{r }
+bodyfat %>% mutate(diff=xray-ultrasound) %>%
+ggplot(aes(x=diff))+geom_histogram(bins=6)
+```   
+
+I don't know whether you'd call that "approximately normal" or
+not. We are in kind of a double-bind with this one: the sample size is
+small, so normality matters, but with a small sample, the data might
+not look very normal. It's kind of skewed right, but most of the
+evidence for the skewness is contained in those two observations with
+difference 2 and above, which is pretty flimsy evidence for
+anything. (In the normal quantile plot below, the suggestion is that
+those two observations really are a bit too large. It's easier to tell
+there.) 
+
+Below, I'm repeating the calculation of the differences, which is
+inefficient. If I'm going to draw two graphs of the differences, the
+right way is to calculate the differences \emph{and save the data
+frame}, then use that new data frame twice. But you're probably only
+going to draw either the histogram or the normal quantile plot, not
+both, so you can use the appropriate one of my two bits of code. The
+normal quantile plot:
+```{r }
+bodyfat %>% mutate(diff=xray-ultrasound) %>%
+ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
+```   
+This is showing a little evidence of skewness or outliers  (depending
+on your point of view: either is good). The lowest and highest values
+are both too high, and the pattern of points on the plot is kind of
+curved (which would be evidence of skewness). Or you could say that
+the two highest values are too high, with the other values being more
+or less in line (that would be evidence of outliers at the upper
+end). I like outliers better than skewness, since those bottom-end
+points are not far off the line. I would also accept ``no substantial
+problems'', if you can make the case that those two highest points are
+not too far off the line. With only 16 observations as we have here,
+even truly normal data would stray off the line a bit.
+
+As ever, your explanation is more important than your conclusion. Can
+you justify what you think?
+
+If you took your differences the other way around, as
+`ultrasound` minus `xray`, your plot will also be the
+other way around, with the "outliers" at the bottom. That's good
+too.
+
+Where this is going (which I didn't ask you) is whether or not we
+trust the result of the matched pairs test. I would say that the test
+is so far from being significant, and the failure of normality is not
+gross, that it is hard to imagine *any* alternative test coming
+up with a significant result. So I would be happy to trust this paired
+$t$-test.
+
+
+
+
+
+

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2018-10-09" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a><ul>
+<li><a href="2-1-getting-an-r-studio-cloud-account.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="2-2-getting-started.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="2-3-reading-data-from-a-file.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="3-1-orange-juice.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="3-2-making-soap.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="3-3-handling-shipments.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="4-1-north-carolina-births.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
+<li><a href="4-2-more-about-the-nc-births.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
+<li><a href="4-3-nenana-alaska.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
+<li><a href="4-4-computerized-accounting.html#computerized-accounting"><span class="toc-section-number">4.4</span> Computerized accounting</a></li>
+</ul></li>
+<li class="has-sub"><a href="5-one-sample-inference.html#one-sample-inference"><span class="toc-section-number">5</span> One-sample inference</a><ul>
+<li><a href="5-1-hunter-gatherers-in-australia.html#hunter-gatherers-in-australia"><span class="toc-section-number">5.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="5-2-length-of-gestation-in-north-carolina.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">5.2</span> Length of gestation in North Carolina</a></li>
+<li><a href="5-3-inferring-ice-break-up-in-nenana.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">5.3</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="6-two-sample-inference.html#two-sample-inference"><span class="toc-section-number">6</span> Two-sample inference</a><ul>
+<li><a href="6-1-children-and-electronic-devices.html#children-and-electronic-devices"><span class="toc-section-number">6.1</span> Children and electronic devices</a></li>
+<li><a href="6-2-parking-close-to-the-curb.html#parking-close-to-the-curb"><span class="toc-section-number">6.2</span> Parking close to the curb</a></li>
+</ul></li>
+<li class="has-sub"><a href="7-power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">7</span> Power and sample size</a><ul>
+<li><a href="7-1-simulating-power.html#simulating-power"><span class="toc-section-number">7.1</span> Simulating power</a></li>
+<li><a href="7-2-calculating-power-and-sample-size-for-estimating-mean.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">7.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="7-3-simulating-power-for-proportions.html#simulating-power-for-proportions"><span class="toc-section-number">7.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="8-the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">8</span> The sign test and Mood’s median test</a></li>
+<li><a href="9-matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a></li>
+<li><a href="10-normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="simulating-power" class="section level2">
+<h2><span class="header-section-number">7.1</span> Simulating power</h2>
+<p>This question investigates power by
+simulation.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Use <code>rnorm</code> to generate 10 random values from a
+normal distribution with mean 20 and SD 2. Do your values look
+reasonable? Explain briefly. (You don’t need to draw a graph.)</li>
+</ol>
+<p>Solution</p>
+<p><code>rnorm</code> with the number of values first, then the mean,
+then the SD:</p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb256-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb256-2" data-line-number="2">x</a></code></pre></div>
+<pre><code>##  [1] 21.59476 18.64044 21.83231 18.76556 18.64861 21.81889 21.62614
+##  [8] 20.18249 16.91266 20.63490</code></pre>
+<p>95% of the sampled values should be within 2 SDs of the mean, that
+is, between 16 and 24 (or 99.7% should be within 3 SDs of the mean,
+between 14 and 26). None of my values are even outside the interval 16
+to 24, though yours may be different.</p>
+<p>I saved mine in a variable and then displayed them, which you don’t
+need to do. I did because there’s another way of assessing them for
+reasonableness: turn the sample into <span class="math inline">\(z\)</span>-scores and see whether the
+values you get look like <span class="math inline">\(z\)</span>-scores (that is, most of them are between
+<span class="math inline">\(-2\)</span> and 2, for example):</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" data-line-number="1">(x<span class="dv">-20</span>)<span class="op">/</span><span class="dv">2</span></a></code></pre></div>
+<pre><code>##  [1]  0.79738130 -0.67977910  0.91615386 -0.61722168 -0.67569291
+##  [6]  0.90944266  0.81307163  0.09124563 -1.54367207  0.31744905</code></pre>
+<p>These ones look very much like <span class="math inline">\(z\)</span>-scores. This, if you think about
+it, is really the flip-side of 68–95–99.7, so it’s another way of
+implementing the same idea.</p>
+<p>You might also think of finding the <em>sample</em> mean and SD, and
+demonstrating that they are close to the right answers. Mine are:</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" data-line-number="1"><span class="kw">mean</span>(x)</a></code></pre></div>
+<pre><code>## [1] 20.06568</code></pre>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb262-1" data-line-number="1"><span class="kw">sd</span>(x)</a></code></pre></div>
+<pre><code>## [1] 1.731305</code></pre>
+<p>The sample SD is more variable than the sample mean, so it can get
+further away from the population SD than the sample mean does from the
+population mean.</p>
+<p>The downside to this idea is that it doesn’t get at
+assessing the normality, which looking at <span class="math inline">\(z\)</span>-scores or equivalent
+does. Maybe coupling the above with a boxplot would have helped, had I
+not said “no graphs”, since then you’d (hopefully) see no outliers
+and a roughly symmetric shape.</p>
+<p>This is old-fashioned “base R” technology; you could do it with a
+data frame like this:</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" data-line-number="1">d=<span class="kw">tibble</span>(<span class="dt">x=</span><span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb264-2" data-line-number="2">d</a></code></pre></div>
+<pre><code>## # A tibble: 10 x 1
+##        x
+##    &lt;dbl&gt;
+##  1  20.6
+##  2  19.3
+##  3  20.2
+##  4  18.7
+##  5  21.3
+##  6  17.8
+##  7  19.8
+##  8  20.9
+##  9  21.7
+## 10  20.6</code></pre>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(x), <span class="dt">s=</span><span class="kw">sd</span>(x))</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 2
+##       m     s
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1  20.1  1.21</code></pre>
+<p>These are different random numbers, but are about equally what you’d
+expect. (These ones are a bit less variable than you’d expect, but
+with only ten values, don’t expect perfection.)</p>
+<p>Some discussion about the kind of values you should get, and whether
+or not you get them, is what is called for here. I want you to say
+something convincing about how the values you get come from a normal
+distribution with mean 20 <em>and</em> SD 2. “Close to 20” is not the
+whole answer here, because that doesn’t get at “how close to 20?”:
+that is, it talks about the mean but not about the SD.</p>
+<p>(b) Estimate by simulation the power of a <span class="math inline">\(t\)</span>-test to reject a
+null hypothesis of 20 when the true mean is also 20, the
+population SD is 2, and the sample size is 10, against a (default)
+two-sided alternative. Remember the
+steps: (i) generate a lot of random samples from the true
+distribution, (ii) run the <span class="math inline">\(t\)</span>-test with the required null mean,
+(iii) pull out the P-values, (iv) count how many of them are 0.05
+or less.</p>
+<p>Solution</p>
+<p>Once you get the hang of these, they all look almost the
+same. This one is easier than some because we don’t have to do
+anything special to get a two-sided alternative hypothesis:</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb268-2" data-line-number="2"><span class="kw">map</span>(<span class="op">~</span><span class="kw">t.test</span>(.,<span class="dt">mu=</span><span class="dv">20</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb268-3" data-line-number="3"><span class="kw">map_dbl</span>(<span class="st">&quot;p.value&quot;</span>) -&gt;</a>
+<a class="sourceLine" id="cb268-4" data-line-number="4">pvals</a>
+<a class="sourceLine" id="cb268-5" data-line-number="5"><span class="kw">tibble</span>(pvals) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(pvals<span class="op">&lt;=</span><span class="fl">0.05</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   `pvals &lt;= 0.05`     n
+##   &lt;lgl&gt;           &lt;int&gt;
+## 1 FALSE             958
+## 2 TRUE               42</code></pre>
+<p>The power is about 4.2%. This seems depressingly small, but see the
+next part.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>In the simulation you just did, was the null hypothesis true
+or false? Do you want to reject the null hypothesis or not?
+Explain briefly why the simulation results you got were (or were
+not) about what you would expect.</li>
+</ol>
+<p>Solution</p>
+<p>The null mean and the true mean were both 20: that is, the
+null hypothesis was correct, and rejecting it would be a
+mistake, to be precise a type I error. We were doing the test
+at <span class="math inline">\(\alpha=0.05\)</span> (by comparing our collection of simulated
+P-values with 0.05), so we should be making a type I error 5%
+of the time. This is entirely in line with the 4.2% of
+(wrong) rejections that I had.
+Your estimation is likely to be different from mine, but you
+should be rejecting about 5% of the time. If your result is
+very different from 5%, that’s an invitation to go back and
+check your code. On the other hand, if it <em>is</em> about 5%,
+that ought to give you confidence to go on and use the same
+ideas for the next part.</p>
+<p>(d) By copying, pasting and editing your code from the previous
+part, estimate the power of the test of <span class="math inline">\(H_0: \mu=20\)</span> (against a
+two-sided alternative) when the true population mean is 22 (rather
+than 20).</p>
+<p>Solution</p>
+<p>Here’s the code we just used:</p>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb270-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb270-2" data-line-number="2"><span class="kw">map</span>(<span class="op">~</span><span class="kw">t.test</span>(.,<span class="dt">mu=</span><span class="dv">20</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb270-3" data-line-number="3"><span class="kw">map_dbl</span>(<span class="st">&quot;p.value&quot;</span>) -&gt;</a>
+<a class="sourceLine" id="cb270-4" data-line-number="4">pvals</a>
+<a class="sourceLine" id="cb270-5" data-line-number="5"><span class="kw">tibble</span>(pvals) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(pvals<span class="op">&lt;=</span><span class="fl">0.05</span>)</a></code></pre></div>
+<p>One of those 20s needs to become 22. Not the one in the
+<code>t.test</code>, since the hypotheses have not changed. So we need to
+change the 20 in the <code>rnorm</code> line to 22, since that’s where
+we’re generating data from the true distribution. The rest of it stays
+the same:</p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">22</span>,<span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb271-2" data-line-number="2"><span class="kw">map</span>(<span class="op">~</span><span class="kw">t.test</span>(.,<span class="dt">mu=</span><span class="dv">20</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb271-3" data-line-number="3"><span class="kw">map_dbl</span>(<span class="st">&quot;p.value&quot;</span>) -&gt;</a>
+<a class="sourceLine" id="cb271-4" data-line-number="4">pvals</a>
+<a class="sourceLine" id="cb271-5" data-line-number="5"><span class="kw">tibble</span>(pvals) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(pvals<span class="op">&lt;=</span><span class="fl">0.05</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   `pvals &lt;= 0.05`     n
+##   &lt;lgl&gt;           &lt;int&gt;
+## 1 FALSE             202
+## 2 TRUE              798</code></pre>
+<p>This time, we <em>want</em> to reject, since the null hypothesis is
+false. So look at the <code>TRUE</code> count of 798: the power is about
+<span class="math inline">\(798/1000 \simeq 80\%\)</span>. We are very likely to correctly reject a null
+of 20 when the mean is actually 22.</p>
+<p>Another way to reason that the power should be fairly large is to
+think about what kind of sample you are likely to get from the true
+distribution: one with a mean around 22 and an SD around 2. Thus the
+<span class="math inline">\(t\)</span>-statistic should be somewhere around this (we have a sample size
+of 10):</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb273-1" data-line-number="1">t_stat=(<span class="dv">22-20</span>)<span class="op">/</span>(<span class="dv">2</span><span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">10</span>))</a>
+<a class="sourceLine" id="cb273-2" data-line-number="2">t_stat</a></code></pre></div>
+<pre><code>## [1] 3.162278</code></pre>
+<p>and the two-sided P-value should be about</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" data-line-number="1"><span class="dv">2</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span><span class="kw">pt</span>(t_stat,<span class="dv">10-1</span>))</a></code></pre></div>
+<pre><code>## [1] 0.01150799</code></pre>
+<p>Of course, with your actual data, you will sometimes be less lucky
+than this (a sample mean nearer 20 or a larger sample SD), but
+sometimes you will be luckier. But the suggestion is that most of the
+time, the P-value will be pretty small and you will end up correctly
+rejecting.</p>
+<p>The quantity <code>t_stat</code> above, , is known to some
+people as an “effect size”, and summarizes how far apart the null
+and true means are, relative to the amount of variability present (in
+the sampling distribution of the sample mean). As effect sizes go,
+this one is pretty large.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Use R to calculate this power exactly (without
+simulation). Compare the exact result with your simulation.</li>
+</ol>
+<p>Solution</p>
+<p>This is <code>power.t.test</code>. The quantity <code>delta</code> is
+the difference between true and null means:</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" data-line-number="1"><span class="kw">power.t.test</span>(<span class="dt">n=</span><span class="dv">10</span>,<span class="dt">delta=</span><span class="dv">22-20</span>,<span class="dt">sd=</span><span class="dv">2</span>,<span class="dt">type=</span><span class="st">&quot;one.sample&quot;</span>,<span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>)</a></code></pre></div>
+<pre><code>## 
+##      One-sample t test power calculation 
+## 
+##               n = 10
+##           delta = 2
+##              sd = 2
+##       sig.level = 0.05
+##           power = 0.8030962
+##     alternative = two.sided</code></pre>
+<p>This, 0.803, is very close to the 0.798 I got from my
+simulation. Which makes me think I did them both right. This is not a watertight proof, though: for example, I might have made a mistake and gotten lucky somewhere. But it does at least give me confidence.
+Extra: when you estimate power by simulation, what you are doing is
+rejecting or not with a certain probability (which is the same for all
+simulations). So the number of times you actually <em>do</em> reject has
+a binomial distribution with <span class="math inline">\(n\)</span> equal to the number of simulated
+P-values you got (1000 in my case; you could do more) and a <span class="math inline">\(p\)</span> that
+the simulation is trying to estimate. This is inference for a
+proportion, exactly what <code>prop.test</code> does.</p>
+<p>Recall that <code>prop.test</code> has as input:</p>
+<ul>
+<li><p>a number of “successes” (rejections of the null in our case)</p></li>
+<li><p>the number of trials (simulated tests)</p></li>
+<li><p>the null-hypothesis value of <code>p</code> (optional if you only
+want a CI)</p></li>
+<li><p>(optional) a confidence level <code>conf.level</code>.</p></li>
+</ul>
+<p>In part (), we knew that the probability of
+(incorrectly) rejecting should have been 0.05 and we rejected 42 times
+out of 1000:</p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" data-line-number="1"><span class="kw">prop.test</span>(<span class="dv">42</span>,<span class="dv">1000</span>,<span class="fl">0.05</span>)</a></code></pre></div>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  42 out of 1000, null probability 0.05
+## X-squared = 1.1842, df = 1, p-value = 0.2765
+## alternative hypothesis: true p is not equal to 0.05
+## 95 percent confidence interval:
+##  0.03079269 0.05685194
+## sample estimates:
+##     p 
+## 0.042</code></pre>
+<p>Looking at the P-value, we definitely fail to reject that the
+probability of (incorrectly) rejecting is the 0.05 that it should
+be. Ouch. That’s true, but unnecessarily confusing. Look at the
+confidence interval instead, 0.031 to 0.057. The right answer is 0.05,
+which is inside that interval, so good.</p>
+<p>In part (), we didn’t know what the power was going
+to be (not until we calculated it with <code>power.t.test</code>, anyway),
+so we go straight for a confidence interval; the default 95% confidence
+level is fine. We (correctly) rejected 798 times out of 1000:</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" data-line-number="1"><span class="kw">prop.test</span>(<span class="dv">798</span>,<span class="dv">1000</span>)</a></code></pre></div>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  798 out of 1000, null probability 0.5
+## X-squared = 354.02, df = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.7714759 0.8221976
+## sample estimates:
+##     p 
+## 0.798</code></pre>
+<p>I left out the 3rd input since we’re not doing a test, and ignore the
+P-value that comes out. (The default null proportion is 0.5, which
+often makes sense, but not here.)</p>
+<p>According to the confidence interval, the estimated power is between
+0.771 and 0.822. This interval definitely includes what we now know is
+the right answer of 0.803.</p>
+<p>This might be an accurate enough assessment of the power for you, but
+if not, you can do more simulations, say 10,000:</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb283-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">10000</span>,<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">22</span>,<span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb283-2" data-line-number="2"><span class="kw">map</span>(<span class="op">~</span><span class="kw">t.test</span>(.,<span class="dt">mu=</span><span class="dv">20</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb283-3" data-line-number="3"><span class="kw">map_dbl</span>(<span class="st">&quot;p.value&quot;</span>) -&gt;</a>
+<a class="sourceLine" id="cb283-4" data-line-number="4">pvals</a>
+<a class="sourceLine" id="cb283-5" data-line-number="5"><span class="kw">tibble</span>(pvals) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(pvals<span class="op">&lt;=</span><span class="fl">0.05</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   `pvals &lt;= 0.05`     n
+##   &lt;lgl&gt;           &lt;int&gt;
+## 1 FALSE            2004
+## 2 TRUE             7996</code></pre>
+<p>I copied and pasted my code again, which means that I’m dangerously
+close to turning it into a function, but anyway.</p>
+<p>The confidence interval for the power is then</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb285-1" data-line-number="1"><span class="kw">prop.test</span>(<span class="dv">7996</span>,<span class="dv">10000</span>)</a></code></pre></div>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  7996 out of 10000, null probability 0.5
+## X-squared = 3589.2, df = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.7915892 0.8073793
+## sample estimates:
+##      p 
+## 0.7996</code></pre>
+<p>that is, from 0.792 to 0.807, which once again includes the right
+answer of 0.803. The first interval, based on 1,000 simulations, has
+length 0.051, while this interval has length 0.015. The first
+interval is more than three times as long as the second, which is
+about what you’d expect since the first one is based on 10 times fewer
+simulations, and thus ought to be a factor of <span class="math inline">\(\sqrt{10}\simeq 3.16\)</span>
+times longer.</p>
+<p>This means that you can estimate power as accurately as you like by
+doing a large enough number of simulations. Provided, that is, that
+you are prepared to wait a possibly long time for it to finish working!</p>
+</div>
+<p style="text-align: center;">
+<a href="7-power-and-sample-size.html"><button class="btn btn-default">Previous</button></a>
+<a href="7-2-calculating-power-and-sample-size-for-estimating-mean.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

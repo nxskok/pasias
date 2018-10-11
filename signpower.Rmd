@@ -1,0 +1,452 @@
+
+
+
+ I've mentioned several times that the sign test has less
+power than the $t$-test. Let's investigate this with a specific example.
+
+Let's suppose we are testing $H_0: \mu=40$ against $H_a: \mu \ne 40$,
+where $\mu$ is the population mean (and median, as we shall see). Our
+population actually has a normal distribution with mean 50 and SD 15,
+so that the null hypothesis is *wrong* and we want to reject it
+most of the time. On the other hand, the population actually *is*
+normally-distributed and so the $t$-test is the right one to use.
+
+(This is an old question, so I tackle the simulated power differently
+than I did it in class this time. But see if you can follow what I do
+here.)
+
+
+
+(a) Use `power.t.test` to find the probability that a
+$t$-test correctly rejects the null hypothesis using a sample size
+of $n=10$.
+
+
+Solution
+
+
+```{r }
+power.t.test(delta=50-40,n=10,sd=15,type="one.sample",alternative="two.sided")
+```       
+
+The power is 0.469. Not great, but we'll see how this stacks up
+against the sign test.
+
+
+
+
+(b) What code in R would draw a random sample of size 10 from the
+*true* population distribution and save the sample in a variable?
+
+
+
+Solution
+
+
+The data actually have a normal distribution with mean 50 and
+SD 15, so we use `rnorm` with this mean and SD, obtaining
+10 values:
+```{r }
+x=rnorm(10,50,15)  
+x
+``` 
+
+
+
+
+(c) What code would count how many of the sampled values are less
+than 40 and how many are greater (or equal)? 
+
+
+
+Solution
+
+
+ The way we know this is to put `x` into a data frame first:
+```{r }
+tibble(x) %>% count(x<40)
+``` 
+
+2 values less (and 8 greater-or-equal).
+
+
+
+
+(d) It turns out the sign test would reject $H_0: M=40$ against
+$H_a: M \ne 40$ at $\alpha=0.05$ if the smaller of the numbers in the
+last part is 1 or less. ($M$ is the population median.) 
+Add to your pipeline to obtain `TRUE`
+if you should reject the null for your
+data and `FALSE` otherwise. 
+
+
+
+Solution
+
+
+This is actually easier than you might think. The output from
+`count` is a data frame with a column called `n`,
+whose minimum value you want. I add to my pipeline:
+```{r }
+tibble(x) %>% count(x<40) %>%
+summarize(the_min=min(n)) %>%
+mutate(is_rejected=(the_min<=1))
+``` 
+
+This will fail sometimes. If all 10 of your sample values are greater
+than 40, which they might turn out to be, you'll get a table with only
+one line, `FALSE` and 10; the minimum of the `n` values
+is 10 (since there is only one), and it will falsely say that you
+should not reject. The fix is
+
+```{r }
+tibble(x) %>% count(x<40) %>%
+summarize(the_min=min(n)) %>%
+mutate(is_rejected=(the_min<=1 | the_min==10))
+``` 
+
+The above is almost the right thing, but not quite: we only want that value
+that I called `is_rejected`, rather than the whole data frame,
+so a `pull` will grab it:
+
+```{r }
+tibble(x) %>% count(x<40) %>%
+summarize(the_min=min(n)) %>%
+mutate(is_rejected=(the_min<=1 | the_min==10)) %>%
+pull(is_rejected)
+``` 
+
+You might be wondering where the "1 or less" came from. Getting a
+P-value for the sign test involves the binomial distribution: if the
+null is correct, each data value is independently either above or
+below 40, with probability 0.5 of each, so the number of values below
+40 (say) is binomial with $n=10$ and $p=0.5$. The P-value for 1
+observed value below 40 and the rest above is
+
+```{r }
+2*pbinom(1,10,0.5)  
+``` 
+
+which is less than 0.05; the P-value for 2 values below 40 and the
+rest above is 
+
+```{r }
+2*pbinom(2,10,0.5)    
+``` 
+
+which is bigger than 0.05. 
+
+You might have encountered the term "critical region" for a
+test. This is the values of your test statistic that you would reject
+the null hypothesis for. In this case, the critical region is 1 and 0
+observations below 40, along with 1 and 0 observations above 40.
+
+When you're thinking about power, I think it's easiest to think in
+terms of the critical region (rather than directly in terms of
+P-values) since you have a certain $\alpha$ in mind all the way
+through, 0.05 in the power examples that I've done. The steps are then:
+
+
+
+* Work out the critical region for your test, the values of the
+test statistic (or sample mean or sample count) that would lead to
+rejecting the null hypothesis.
+
+
+* Under your particular alternative hypothesis, find the
+probability of falling into your critical region.
+
+
+When I say "work out", I mean either calculating (along the lines of
+STAB57), or simulating, as we have done here.
+
+
+
+(e) Use `rerun` to simulate the above process 1000 times:
+drawing a random sample from a normal distribution with mean 50 and SD
+15, counting the number of values below and above 40, rejecting if the
+minimum of those is 1 or less, then counting the number of rejections
+out of 1000.
+
+
+
+Solution
+
+
+The way we've used `rerun` is to use it to select the
+random samples, and then we use `map` ideas to do what we
+want to do with each random sample, along the lines of what we did
+with the one random sample above.
+This is liable to go wrong the first few times, so make sure that
+each line works before you go on to the next. (`rerun` will
+produce you a `list` of random samples, with each of which
+you want to do something.) While you're debugging, try it with a
+small number of random samples like 5.
+I start with setting the random number seed, so it comes out the
+same each time. I discuss the results below and the code below that.
+```{r }
+set.seed(457299)
+rerun(1000,rnorm(10,50,15)) %>% 
+map(~tibble(x=.)) %>% 
+map(~count(.,x<40)) %>% 
+map(~summarize(.,the_min=min(n))) %>% 
+map(~mutate(.,is_rejected=(the_min<=1 | the_min==10))) %>% 
+map_lgl(~pull(.,is_rejected)) %>% 
+tibble(was_true=.) %>% 
+count(was_true)
+```     
+
+The estimated power of the sign test is 0.243, since that was the
+number of times a simulated sample gave us 0 or 1 values above or
+below 40 (and the rest on the other side).
+
+All right, that code is seriously scary. Let me try to take you
+through it.
+
+
+
+* The `rerun` line is the same kind of thing we had before:
+generate 1000 different random samples of size 10 from a normal
+distribution with mean 50 and SD 15.
+
+* The output from the previous step is a `list` of
+vectors. But we like data frames to count things in, so for each
+vector we turn it into a data frame, filling a column called
+`x` with whatever was in each vector (that random sample). So
+now we have 1000 data frames each containing a column called
+`x`.
+
+* Next, in each of those data frames, count up how many of the
+`x` values are less than 40. This will produce a data frame
+each time containing a column `n` that is the
+frequencies. Here and below, the `.`  is used to denote
+"it": that is, each of the elements of the list created originally
+by `rerun` that we are doing something with. Also, at the
+moment, the output for each element of the list is a data frame, so
+we stick with `map` for the time being.
+
+* Next, for each of those tables of frequencies, find the smallest
+one and call it `the_min`. (As discussed above, all the
+values might be bigger than 40, in which case `the_min` will
+be 10 rather than 0, which we handle next.)
+
+* Next, we create a new column called `is_rejected` which
+says that we should reject a median of 40 if the minimum value we
+just calculated is 1 or less, or if it happens to be 10, in which
+case that would have been the only entry in the frequency table, so
+that the missing one would have been zero.
+
+* Next, we pull out only the true-or-false value in
+`is_rejected`. At last, the answer here is not a data frame
+but a simple logical value; `map_lgl` is like
+`map_dbl` except that the thing we are doing returns a
+`TRUE` or a `FALSE` rather than a number.
+
+* At this point we have a vector of 1000 true-or-false. We want to
+count them, so we put them into a data frame (with a column called
+`was_true`), and in the last line, count them up. There are
+243 (correct) rejections and 757 (incorrect) non-rejections.
+
+
+You may now breathe again. 
+
+I'm now thinking a better way to do this is to write a function that
+takes a sample (in a vector) and returns a TRUE or FALSE according to
+whether or not a median of 40 would be rejected for that sample:
+
+```{r }
+is_reject=function(x) {
+tibble(x=x) %>%
+count(x<40) %>%
+summarize(the_min=min(n)) %>%
+mutate(is_rejected=the_min<=1 | the_min==10) %>%
+pull(is_rejected)
+}
+``` 
+
+Now, we have to use that. This function will be "mapped" over for
+each of the random samples that come out of `rerun`, but now
+there will be only one `map` because the complication of the
+multiple `maps` has been subsumed into this one function. I'll
+set my random number seed so that I get the same results as before:
+
+```{r }
+set.seed(457299)
+rerun(1000,rnorm(10,50,15)) %>%
+map_lgl(~is_reject(.)) %>%
+tibble(rejected=.) %>%
+count(rejected)
+``` 
+
+Same results, and yeah, I like that a lot better.
+
+
+
+(f) Which is more powerful in this case, the sign test or the
+$t$-test? How do you know?
+
+
+
+Solution
+
+
+The power of the sign test is estimated as 0.243, which is quite a bit less
+than the power of the $t$-test, which we found back in (a) to be
+0.469. So the $t$-test, in this situation where it is valid, is
+the right test to use: it is (a) valid and (b) more powerful.
+So the $t$-test is more powerful. One way to think about how
+*much* more powerful is to ask ``how much smaller of a sample
+size would be needed for the $t$-test to have the same power as
+this sign test?'' The power of my sign test was 0.243, so in
+`power.t.test` we set
+`power` equal to that and
+omit the sample size `n`:
+
+```{r }
+power.t.test(delta=50-40,power=0.243,sd=15,type="one.sample",alternative="two.sided")
+```       
+A sample of size 6 gives the same power for the $t$-test that a
+sample of size 10 does for the sign test. The ratio of these two
+sample sizes is called the *relative efficiency* of the two
+tests: in this case, the $t$-test is $10/6=1.67$ times more
+efficient. The data that you have are being used ``more
+efficiently'' by the $t$-test.
+It is possible to derive\endnote{Meaning, I forget how to do it.
+But it has something to do with looking at alternatives that are
+very close to the null.}  the limiting relative efficiency of
+the $t$ test relative to the sign test when the data are actually
+normal, as the sample size gets larger. This turns out not to
+depend on how far wrong the null is (as long as it is the same for
+both the $t$-test and the sign test). This ``asymptotic relative
+efficiency'' is $\pi/2=1.57$. Our relative efficiency for power
+0.243, namely 1.67, was pretty close to this, even though our
+sample sizes 10 and 6 are not especially close to infinity.
+This says that, if your data are actually from a normal
+distribution, you do a lot better to use the $t$-test than the
+sign test, because the sign test is wasteful of data (it only uses
+above/below rather than the actual values). 
+If your data are *not* from a normal distribution, then the
+story can be very different. 
+Of course you knew I would investigate this. There is a
+distribution called the "Laplace" or "double exponential"
+distribution, that has very long tails.\endnote{If you've ever run
+into the exponential distribution, you'll recall that this is
+right skewed with a very long tail. The Laplace distribution looks
+like two of these glued back to back.} The distribution is not in
+base R, but there is a package called `smoothmest` that
+contains a function `rdoublex` to generate random values from
+this distribution. So we're going to do a simulation investigation
+of the power of the sign test for Laplace data, by the same
+simulation technique that we did above. Like the normal, the Laplace
+distribution is symmetric, so its mean and median are the same
+(which makes our life easier).\endnote{This is about the *only*
+way in which the normal and Laplace distributions are alike.}
+
+Let's test the hypothesis that the median is zero. We'll suppose that
+the true median is 0.5 (this is called `mu` in
+`rdoublex`). The first problem we run into is that we can't use
+`power.t.test` because they assume normal data, which we are
+far from having. So we have to do two simulations: one to simulate the
+power of the $t$ test, and one to simulate the power of the sign test.
+
+To simulate the $t$ test, we first have to generate some Laplace data
+with the true mean of 0.5. We'll use a sample size of 50 throughout
+these simulations.
+
+```{r }
+library(smoothmest)
+rl=rdoublex(50,mu=0.5)
+rl
+``` 
+
+This seems to have some unusual values, far away from zero:
+
+```{r }
+tibble(rl) %>%
+ggplot(aes(sample=rl))+
+stat_qq()+stat_qq_line()
+``` 
+
+You see the long tails compared to the normal.
+
+Now, we feed these values into `t.test` and see whether we
+reject a null median of zero (at $\alpha=0.05$):
+
+```{r }
+tt=t.test(rl)  
+tt
+``` 
+
+Or we can just pull out the P-value and even compare it to 0.05:
+
+```{r }
+pval=tt$p.value  
+pval
+is.reject=(pval<=0.05)
+is.reject
+``` 
+$
+
+This one has a small P-value and so the null median of 0 should be
+(correctly) rejected.
+
+We'll use these ideas to simulate the power of the $t$-test for these
+data, testing a mean of 0. This uses the same ideas as for any power
+simulation; the difference here is the true distribution:
+
+```{r }
+rerun(1000,rdoublex(50,mu=0.5)) %>%
+map(~t.test(.,mu=0)) %>%
+map_dbl("p.value") ->
+pvals
+``` 
+
+and then count them:
+
+```{r }
+tibble(pvals) %>% count(pvals<=0.05)
+``` 
+
+And now we simulate the sign test. Since what we want is a P-value
+from a vector, the easiest way to do this is to use
+`pval_sign0` from `smmr`, which returns exactly the
+two-sided P-value that we want, so that the procedure is a step simpler:
+
+```{r }
+rerun(1000,rdoublex(50,mu=0.5)) %>%
+map_dbl(~pval_sign0(0,.)) ->
+pvals_sign
+``` 
+
+and then
+
+```{r }
+tibble(pvals_sign) %>% count(pvals_sign<=0.05)
+``` 
+
+For data from this Laplace
+distribution, the power of this $t$-test is 0.696, but the power of
+the sign test on the same data is 0.761, *bigger*.  For
+Laplace-distributed data, the sign test is *more* powerful than
+the $t$-test.
+
+This is not to say that you will ever run into data that comes from
+the Laplace distribution. But the moral of the story is that the sign
+test *can* be more powerful than the $t$-test, under the right
+circumstances (and the above simulation is the "proof" of that
+statement). So a blanket statement like ``the sign test is not very
+powerful'' needs to be qualified a bit: when your data come from a
+sufficiently long-tailed distribution, the sign test can be more
+powerful relative to the $t$-test than you would think.
+
+I finish by "unloading" the two packages that got loaded:
+
+```{r }
+detach(package:smoothmest, unload=T)
+detach(package:MASS, unload=T)
+``` 
+
+
+
+
+

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2018-10-09" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a><ul>
+<li><a href="2-1-getting-an-r-studio-cloud-account.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="2-2-getting-started.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="2-3-reading-data-from-a-file.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="3-1-orange-juice.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="3-2-making-soap.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="3-3-handling-shipments.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="4-1-north-carolina-births.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
+<li><a href="4-2-more-about-the-nc-births.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
+<li><a href="4-3-nenana-alaska.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
+<li><a href="4-4-computerized-accounting.html#computerized-accounting"><span class="toc-section-number">4.4</span> Computerized accounting</a></li>
+</ul></li>
+<li class="has-sub"><a href="5-one-sample-inference.html#one-sample-inference"><span class="toc-section-number">5</span> One-sample inference</a><ul>
+<li><a href="5-1-hunter-gatherers-in-australia.html#hunter-gatherers-in-australia"><span class="toc-section-number">5.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="5-2-length-of-gestation-in-north-carolina.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">5.2</span> Length of gestation in North Carolina</a></li>
+<li><a href="5-3-inferring-ice-break-up-in-nenana.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">5.3</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="6-two-sample-inference.html#two-sample-inference"><span class="toc-section-number">6</span> Two-sample inference</a><ul>
+<li><a href="6-1-children-and-electronic-devices.html#children-and-electronic-devices"><span class="toc-section-number">6.1</span> Children and electronic devices</a></li>
+<li><a href="6-2-parking-close-to-the-curb.html#parking-close-to-the-curb"><span class="toc-section-number">6.2</span> Parking close to the curb</a></li>
+</ul></li>
+<li class="has-sub"><a href="7-power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">7</span> Power and sample size</a><ul>
+<li><a href="7-1-simulating-power.html#simulating-power"><span class="toc-section-number">7.1</span> Simulating power</a></li>
+<li><a href="7-2-calculating-power-and-sample-size-for-estimating-mean.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">7.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="7-3-simulating-power-for-proportions.html#simulating-power-for-proportions"><span class="toc-section-number">7.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="8-the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">8</span> The sign test and Mood’s median test</a></li>
+<li><a href="9-matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a></li>
+<li><a href="10-normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="children-and-electronic-devices" class="section level2">
+<h2><span class="header-section-number">6.1</span> Children and electronic devices</h2>
+<p>Do children (aged 8–17) spend more time on electronic
+devices now than they did 10 years ago? Samples of 15 children aged
+8–17 were taken in each of two years, 1999 and 2009, and the children (with
+their parents’ help) were
+asked to keep a diary of the number of hours they spent using
+electronic devices on a certain day. The data are in the file
+<a href="http://www.utsc.utoronto.ca/~butler/c32/pluggedin.txt" class="uri">http://www.utsc.utoronto.ca/~butler/c32/pluggedin.txt</a>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and verify that you have 30 rows of data from two
+different years.</li>
+</ol>
+<p>Solution</p>
+<p>I see this:</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/pluggedin.txt&quot;</span></a>
+<a class="sourceLine" id="cb193-2" data-line-number="2">plugged=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   year = col_integer(),
+##   hours = col_integer()
+## )</code></pre>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" data-line-number="1">plugged</a></code></pre></div>
+<pre><code>## # A tibble: 30 x 2
+##     year hours
+##    &lt;int&gt; &lt;int&gt;
+##  1  1999     4
+##  2  1999     5
+##  3  1999     7
+##  4  1999     7
+##  5  1999     5
+##  6  1999     7
+##  7  1999     5
+##  8  1999     6
+##  9  1999     5
+## 10  1999     6
+## # ... with 20 more rows</code></pre>
+<p>I see only the first ten rows (with an indication that there are 20 more, so 30 altogether). In your notebook, it’ll look a bit different: again, you’ll see the first 10 rows, but you’ll see exactly how many rows and columns there are, and there will be buttons “Next” and “Previous” to see earlier and later rows, and a little right-arrow to see more columns to the right (to which is added a little left-arrow if there are previous columns to scroll back to). If you want to check for yourself that there are 30 rows, you can click Next a couple of times to get down to row 30, and then see that the Next button cannot be clicked again, and therefore that 30 rows is how many there are.</p>
+<p>Or, you can summarize the years by counting how many there are
+of each:</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" data-line-number="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(year)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##    year     n
+##   &lt;int&gt; &lt;int&gt;
+## 1  1999    15
+## 2  2009    15</code></pre>
+<p>or the more verbose form of the same thing:</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" data-line-number="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">rows=</span><span class="kw">n</span>())</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##    year  rows
+##   &lt;int&gt; &lt;int&gt;
+## 1  1999    15
+## 2  2009    15</code></pre>
+<p>Any of those says that it looks good. 30 rows, 1999 and 2009, 15
+measurements for each.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Draw side-by-side boxplots of the number of hours for each
+year. <code>year</code> is a numeric variable that we want to treat as a
+factor, so we need to <em>make</em> it into a factor.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" data-line-number="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(year),<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="05-two-sample-inference_files/figure-html/unnamed-chunk-5-1.png" width="672"  /></p>
+<p>The <code>fct_inorder</code> trick from assignment 1 will also work, since
+the years are in the data in the order we want them to be displayed.</p>
+<p>The median for 2009 is noticeably higher, and there is no skewness or
+outliers worth worrying about.</p>
+<p>The measurements for the two years have a very similar spread, so
+there would be no problem running the pooled test here.</p>
+<p>You might be bothered by the <code>factor(year)</code> on the <span class="math inline">\(x\)</span>-axis. To
+get around that, you can define year-as-factor <em>first</em>, using
+<code>mutate</code>, then feed your new column into the boxplot. That goes
+like this. There is a wrinkle that I explain afterwards:</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb202-1" data-line-number="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">the_year=</span><span class="kw">factor</span>(year)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb202-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>the_year, <span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="05-two-sample-inference_files/figure-html/unnamed-chunk-6-1.png" width="672"  /></p>
+<p>You could even redefine <code>year</code> to be the factor version of
+itself (if you don’t need the year-as-number anywhere else). The
+wrinkle I mentioned above is that in the <code>ggplot</code> you  name the data frame first; the data frame used is the
+(nameless) data frame that came out of the previous step, not
+<code>plugged</code> but <code>plugged</code> with a new column
+<code>the_year</code>.</p>
+<p>Note how the <span class="math inline">\(x\)</span>-axis now has the name of the new variable.</p>
+<p>If you forget to make <code>year</code> into a factor, this happens:</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" data-line-number="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span>year,<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<pre><code>## Warning: Continuous x aesthetic -- did you forget aes(group=...)?</code></pre>
+<p><img src="05-two-sample-inference_files/figure-html/unnamed-chunk-7-1.png" width="672"  /></p>
+<p>You get <em>one</em> boxplot, for all the hours, without distinguishing
+by year, and a warning message that tries (and fails) to read our
+mind: yes, we have a continuous, quantitative <code>x</code>, but
+<code>geom_boxplot</code> doesn’t take a <code>group</code>.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Test whether the mean number of hours has <em>increased</em> since</li>
+</ol>
+<ol start="1999" style="list-style-type: decimal">
+<li>Which test did R do?</li>
+</ol>
+<p>Solution</p>
+<p>The hard part to remember is how you specify a one-sided test in
+R; it’s <code>alternative=&quot;less&quot;</code> (rather
+than “greater”) because 1999 is “before” 2009:</p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" data-line-number="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)  </a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  hours by year
+## t = -3.3323, df = 24.861, p-value = 0.001348
+## alternative hypothesis: true difference in means is less than 0
+## 95 percent confidence interval:
+##        -Inf -0.8121415
+## sample estimates:
+## mean in group 1999 mean in group 2009 
+##           5.933333           7.600000</code></pre>
+<p>The P-value is 0.0013. R does the Welch-Satterthwaite test by default
+(the unequal-variances one). Since we didn’t change that, that’s what
+we got. (The pooled test is below.)</p>
+<p>This is the cleanest way to do it, because this version of
+<code>t.test</code>, with a “model formula” (the thing with the
+squiggle) allows a <code>data=</code> to say which data frame to get
+things from. The other ways, using (for example) <code>with</code>, also work:</p>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" data-line-number="1"><span class="kw">with</span>(plugged,<span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>))</a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  hours by year
+## t = -3.3323, df = 24.861, p-value = 0.001348
+## alternative hypothesis: true difference in means is less than 0
+## 95 percent confidence interval:
+##        -Inf -0.8121415
+## sample estimates:
+## mean in group 1999 mean in group 2009 
+##           5.933333           7.600000</code></pre>
+<p>This also works, but is <em>ugly</em>:</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" data-line-number="1"><span class="kw">t.test</span>(plugged<span class="op">$</span>hours<span class="op">~</span>plugged<span class="op">$</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  plugged$hours by plugged$year
+## t = -3.3323, df = 24.861, p-value = 0.001348
+## alternative hypothesis: true difference in means is less than 0
+## 95 percent confidence interval:
+##        -Inf -0.8121415
+## sample estimates:
+## mean in group 1999 mean in group 2009 
+##           5.933333           7.600000</code></pre>
+<p>Ugly because you’ve just typed the name of the data frame and the
+dollar sign <em>twice</em> for no reason. As a general principle, if you
+as a programmer are repeating yourself, you should stop and ask
+yourself how you can avoid the repeat.</p>
+<p>If you want the pooled test in R, you have to ask for it:</p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" data-line-number="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>,<span class="dt">data=</span>plugged,<span class="dt">var.equal=</span>T)    </a></code></pre></div>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  hours by year
+## t = -3.3323, df = 28, p-value = 0.001216
+## alternative hypothesis: true difference in means is less than 0
+## 95 percent confidence interval:
+##        -Inf -0.8158312
+## sample estimates:
+## mean in group 1999 mean in group 2009 
+##           5.933333           7.600000</code></pre>
+<p>As is often the case, the P-values for the pooled and
+Welch-Satterthwaite tests are very similar, so from that point of view
+it doesn’t matter much which one you use. If you remember back to the
+boxplots, the number of hours had about the same spread for the two
+years, so if you used the pooled test instead of the
+Welch-Satterthwaite test, that would have been just fine.</p>
+<p>There is a school of thought that says we should learn the
+Welch-Satterthwaite test and use that always. This is because W-S (a)
+works when the populations from which the groups are sampled have
+different SDs and (b) is pretty good even when those SDs are the same.</p>
+<p>The pooled test can go badly wrong if the groups have very different
+SDs. The story is this: if the larger sample is from the population
+with the larger SD, the probability of a type I error will be smaller
+than <span class="math inline">\(\alpha\)</span>, and if the larger sample is from the population with
+the <em>smaller</em> SD, the probability of a type I error will be
+larger than <span class="math inline">\(\alpha\)</span>. This is why you see S-W in STAB22. You see the
+pooled test in STAB57 because the logic of its derivation is so much
+clearer, not because it’s really the better test in
+practice. The theory says that if your data are normal in both groups
+with the same variance, then the pooled test is best, but it says
+<em>nothing</em> about the quality of the pooled test if any of that
+goes wrong.
+The usual approach to assessing things like this is via simulation,
+as we do for estimating power (later): generate some random data
+eg. from normal distributions with the same means, SDs 10 and 20
+and sample sizes 15 and 30, run the pooled <span class="math inline">\(t\)</span>-test, see if you
+reject, then repeat lots of times and see whether you reject about
+5% of the time. Then do the same thing again with the sample sizes
+switched around. Or, do the same thing with Welch-Satterthwaite.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Obtain a 99% confidence interval for the difference in means.</li>
+</ol>
+<p>Solution</p>
+<p>Take off the thing that made it one-sided, and
+put in a thing that gets the right CI:</p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" data-line-number="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">conf.level=</span><span class="fl">0.99</span>)  </a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  hours by year
+## t = -3.3323, df = 24.861, p-value = 0.002696
+## alternative hypothesis: true difference in means is not equal to 0
+## 99 percent confidence interval:
+##  -3.0614628 -0.2718705
+## sample estimates:
+## mean in group 1999 mean in group 2009 
+##           5.933333           7.600000</code></pre>
+<p><span class="math inline">\(-3.06\)</span> to <span class="math inline">\(-0.27\)</span>. The interval contains only negative values, which
+is consistent with our having rejected a null hypothesis of no
+difference in means.</p>
+</div>
+<p style="text-align: center;">
+<a href="6-two-sample-inference.html"><button class="btn btn-default">Previous</button></a>
+<a href="6-2-parking-close-to-the-curb.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

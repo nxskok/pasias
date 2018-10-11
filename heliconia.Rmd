@@ -1,0 +1,213 @@
+
+
+ The tropical flower *Heliconia* is
+fertilized by hummingbirds, a different species for each variety of
+Heliconia. Over time, the lengths of the flowers and the form of the
+hummingbirds' beaks have evolved to match each other. The length of
+the Heliconia flower is therefore an important measurement. Does it
+have a normal distribution for each variety?
+
+The data set at
+[http://www.utsc.utoronto.ca/~butler/c32/heliconia.csv](http://www.utsc.utoronto.ca/~butler/c32/heliconia.csv) contains
+the lengths (in millimetres) of samples of flowers from each of three
+varieties of Heliconia: \textsl{bihai}, \textsl{caribaea} red, and
+\textsl{caribaea} yellow.
+
+
+
+(a) Read the data into R. There are different numbers of length
+measurements for each variety. How does this show up in the data
+frame? (Look at all the rows, not just the first ten.)
+
+
+Solution
+
+
+The usual `read_csv`:
+```{r }
+heliconia=read_csv("heliconia.csv")
+```       
+
+I suggested to look at *all* the rows. Here's why:
+
+```{r }
+heliconia %>% print(n=Inf) 
+``` 
+
+The varieties with fewer values have missings (NAs) attached to the
+end. This is because all the columns in a data frame have to have the
+same number of values. (The missings won't impact what we do below ---
+we get a warning but not an error, and the plots are the same as they
+would be without the missings --- but you might be aesthetically
+offended by them, in which case you can read what I do later on.)
+
+
+
+(b) Make a normal quantile plot for the variety
+\textsl{bihai}. 
+
+
+Solution
+
+
+There's a certain amount of repetitiveness here (that we work
+around later):
+```{r }
+ggplot(heliconia,aes(sample=bihai))+stat_qq()+stat_qq_line()
+```         
+
+I'm saving the comments until we've seen all three.
+
+
+
+(c) Make a normal quantile plot for the variety
+\textsl{Caribaea} red (note that the variable name in the data
+frame has an underscore in it).
+
+
+Solution
+
+          
+Same idea again:
+```{r }
+ggplot(heliconia,aes(sample=caribaea_red))+stat_qq()+stat_qq_line()
+```         
+
+
+
+(d) Make a normal quantile plot for the variety
+\textsl{Caribaea} yellow (this also has an underscore in it).
+
+
+Solution
+
+
+And, one more time:
+
+```{r }
+ggplot(heliconia,aes(sample=caribaea_yellow))+stat_qq()+stat_qq_line()
+```         
+
+I did a lot of copying and pasting there.
+
+
+
+(e) Which of the three varieties is closest to having a normal
+distribution? Explain (very) briefly.
+
+
+Solution
+
+
+Look at the three plots, and see which one stays closest to the
+line. To my mind, this is clearly the last one, \textsl{Caribaea}
+yellow. So your answer ought to be ``\textsl{Caribaea} yellow,
+because the points are closest to the line''. This, I would say,
+is acceptably close to normal, so using a $t$-test here would be fine.
+The answer "the last one" is not quite complete, because I
+asked you which *variety*, so your answer needs to name a variety.
+
+
+
+(f) For each of the two other varieties, apart from the one you
+mentioned in the last part, describe briefly how their distributions fail
+to be normal.
+
+
+Solution
+
+
+Let's look at \textsl{bihai} first. I see this one as an almost
+classic curve: the points are above the line, then below, then
+above again. If you look at the data scale ($y$-axis), the points
+are too bunched up to be normal at the bottom, and too spread out
+at the top: that is, skewed to the *right*.
+You might also (reasonably) take the view that the points at the
+bottom are close to the line (not sure about the very smallest
+one, though), but the points at the top are farther away, so that
+what we have here is two outliers at the top. I'm OK with that.
+It's often difficult to distinguish between skewness and outliers
+(at the end of the long tail). What you conclude can often depend
+on how you look.
+We also had to look at the second plot, \textsl{caribaea}
+red. This is a rather strange one: the points veer away from the
+line at the ends, but look carefully: it is *not* outliers
+at both ends, but rather the points are *too bunched up* to
+be normal at both ends: that is, the distribution has \emph{short
+tails} compared to the normal. It is something more like a
+uniform distribution, which has no tails at all, than a normal
+distribution, which won't have outliers but it *does* have
+some kind of tails. So, "short tails". 
+Extra: that's all you needed, but I mentioned above that you might have
+been offended aesthetically by those missing values that were not
+really missing. Let's see if we can do this aesthetically. As you
+might expect, it uses several of the tools from the "tidyverse".
+First, tidy the data. The three columns of the data frame are all
+lengths, just lengths of different things, which need to be
+labelled. This is `gather` from `tidyr`. 
+```{r }
+heliconia.long=heliconia %>% 
+gather(variety,length,bihai:caribaea_yellow,na.rm=T)
+heliconia.long  
+``` 
+
+This is now aesthetic as well as tidy: all those `NA` lines
+have gone (you can check that 
+there are now $16+23+15=54$ rows of actual data, as there should be).
+
+Now, how to get a normal quantile plot for each variety? This is
+`facet_wrap` on the end of the `ggplot` again. 
+
+```{r }
+ggplot(heliconia.long,aes(sample=length))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~variety,scale="free")
+``` 
+
+These are a bit elongated vertically. The `scale="free"` allows
+a different vertical scale for each plot (otherwise there would be one
+vertical scale for all three plots); I decided that was best here
+since the typical lengths for the three varieties are
+different. \textsl{Caribaea} yellow is more or less straight,
+\textsl{bihai}  has outliers (and may also be curved), \textsl{caribaea}
+red has that peculiar S-bend shape.
+
+I didn't really like the vertical elongation. I'd rather have the
+plots be almost square, which they would be if we put them in three
+cells of a $2 \times 2$ grid. `facet_wrap` has `nrow`
+and `ncol` which you can use one or both of to make this
+happen. This creates an array of plots with two columns and as many
+rows as needed:
+
+```{r }
+ggplot(heliconia.long,aes(sample=length))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~variety,scale="free",ncol=2)
+``` 
+
+I think the square plots make it easier to see the shape of these:
+curved, S-bend, straightish.
+Almost the same code will get a histogram for each variety, which I'll
+also make squarish:
+
+```{r }
+ggplot(heliconia.long,aes(x=length))+
+geom_histogram(binwidth=1)+facet_wrap(~variety,scale="free",ncol=2)
+
+``` 
+
+\textsl{bihai} has those two outliers, \textsl{caribaea} red has no tails
+to speak of (or you might say "it's bimodal", which would be another
+explanation of the pattern on the normal quantile plot\endnote{If you
+have studied a thing called "kurtosis", the fourth moment about
+the mean, you'll know that this measures *both* tail length
+*and* peakedness, so a short-tailed distribution also has a
+strong peak. Or, maybe, in this case, two strong peaks.}), and
+\textsl{caribaea} yellow is shoulder-shruggingly normal (I looked at
+that and said, "well, I *guess* it's normal".)  After you've
+looked at the normal quantile plots, you see what a crude tool a
+histogram is for assessing normality.
+
+
+
+

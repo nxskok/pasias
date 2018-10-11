@@ -1,0 +1,194 @@
+##  Simulating power for proportions
+
+
+ In opinion surveys (and other places), we are testing for a
+proportion $p$ (for example, the proportion of people agreeing with
+some statement). Often, we want to know whether the proportion is
+"really" greater than 0.5.\endnote{That would mean assessing whether
+an observed proportion could be greater than 0.5 just by chance, or
+whether it is "bigger enough" than 0.5 to reject chance as a
+plausible explanation.}  That would entail testing a null
+$H_0: p=0.5$ against an alternative $H_a: p>0.5$. This is usually done
+by calculating the test statistic
+$$ z = { \hat{p} - 0.5 \over \sqrt{0.25/n}},$$
+where $\hat{p}$ is the observed proportion in the sample,
+and getting a P-value from the upper tail of a standard normal
+distribution. (The 0.25 is $p(1-p)$ where $p=0.5$.) This is what
+`prop.test` does, as we investigate shortly.
+
+
+
+(a) Use `rbinom` to generate a random value from a
+binomial distribution with $n=100$ and $p=0.6$. There are three
+inputs to `rbinom`: the first one should be the number 1, and
+the second and third are the $n$ and $p$ of the binomial distribution.
+
+
+Solution
+
+
+I am doing some preparatory work that you don't need to do:
+
+```{r }
+set.seed(457299)
+``` 
+
+By setting the "seed" for the random number generator, I guarantee
+that I will get the same answers every time I run my code below (and
+therefore I can talk about my answers without worrying that they will
+change). Up to you whether you do this. You can "seed" the random
+number generator with any number you like. A lot of people use
+`1`. Mahinda seems to like `123`. Mine is an old phone
+number. 
+
+And so to work:
+```{r }
+rbinom(1,100,0.6)
+```
+
+I got exactly 60\% successes this time. You probably won't get exactly
+60, but you should get somewhere close. (If you use my random number
+seed and use the random number generator exactly the same way I did,
+you should get the same values I did.)
+
+For fun, you can see what happens if you change the 1:
+
+```{r }
+rbinom(3,100,0.6)
+``` 
+
+Three random binomials, that happened to come out just below 60. We're
+going to leave the first input as 1, though, and let `rerun`
+handle "lots of sampled values" later.
+    
+ 
+
+(b) Using the random binomial that you generated just above, use
+`prop.test` to test whether it could reasonably have come
+from a binomial population with $n=100$ and $p=0.5$, or whether $p$
+is actually bigger than 0.5. (Of course,
+you know it actually did not come from a population with $p=0.5$.)
+`prop.test` has, for us, four inputs, thus:
+
+
+* the observed number of successes
+
+* the `n` of the binomial distribution
+
+* the null-hypothesis `p` of the binomial distribution
+
+* the alternative hypothesis, here "greater"
+
+
+
+Solution
+
+
+I got exactly 60 successes, so I do this:
+```{r }
+prop.test(60,100,0.5,alternative="greater")
+```     
+
+The P-value should at least be fairly small, since 60 is a bit bigger
+than 50. (Think about tossing a coin 100 times; would 60 heads make
+you doubt the coin's fairness? The above says it should.)
+    
+
+
+(c) Run `prop.test` again, just as you did before, but this
+time save the result, and extract the piece of it called
+`p.value`. Is that the P-value from your test?
+
+
+Solution
+
+
+Copying and pasting:
+
+```{r }
+p_test=prop.test(60,100,0.5,alternative="greater")
+p_test$p.value
+``` 
+$ %$ %$ 
+
+Yep, the same.
+
+
+
+(d) Use `rerun` to estimate the power of a test of
+$H_0: p=0.5$ against $H_a: p>0.5$ when $n=500$ and $p=0.56$, using
+$\alpha=0.05$. There are three steps:
+
+
+* use `rerun` to generate random samples from binomial
+distributions with $n=500$ and $p=0.56$, repeated "many" times
+(something like 1000 or 10,000 is good)
+
+* use `map` to run `prop.test` on each of those
+random samples
+
+* use `map_dbl` to extract the P-value for each test and
+save the results (in a vector called, perhaps, `pvals`).
+
+So I lied: the fourth and final step is to count how many of
+those P-values are 0.05 or less.
+
+
+Solution
+
+
+The previous parts, using `rbinom` and `prop.test`,
+were meant to provide you with the ingredients for this part.
+The first step is to use `rbinom`. The first input is 1 since
+we only want one random binomial each time (the `rerun` will
+handle the fact that you actually want lots of them). The second step
+runs `prop.test`; the first input to that is each one of the
+numbers of successes from the first step. (This is an implied
+for-each, with each of the simulated binomials playing the role of
+"it", in turn.). The last part is to pull out all the P-values and
+make a table of them, just like the example in class.
+```{r }
+rerun(10000,rbinom(1,500,0.56)) %>%
+map(~prop.test(.,500,0.5,alternative="greater")) %>%
+map_dbl("p.value") -> 
+pvals
+tibble(pvals) %>% count(pvals<=0.05)
+``` 
+
+The estimated power is about 85\%. That is, if $p$ is actually 0.56
+and we have a sample of size 500, we have a good chance of (correctly)
+rejecting that $p=0.5$. 
+
+Extra: I know we haven't learned about SAS yet, but it turns out that SAS can
+obtain this power by calculation. We'll see how later in the course.
+SAS says our power is also about 85\%, the same thing our simulation
+said. I took some care to make sure that SAS did the same thing our
+simulation did. I was actually pleased that my simulation came
+out so close to the right answer.
+
+In contrast to `power.t.test`, SAS's `proc power`
+handles power analyses for a lot of things, including analysis of
+variance, correlation and (multiple) regression. What these have in
+common is some normal-based theory that allows you (under assumptions
+of sufficiently normal-shaped populations) to calculate the exact
+answer (that is, the distribution of the test statistic when the
+*alternative* hypothesis is true). The case we looked at is one
+of those because of the normal approximation to the binomial: once $n$
+gets big, particularly if $p$ is somewhere near 0.5, the binomial is
+very well approximated by a normal with the right mean and SD.
+
+The moral of this story is that when you have a decently large sample,
+$n=500$ in this case, $p$ doesn't have to get very far away from 0.5
+before you can correctly reject 0.5.  Bear in mind that sample sizes
+for estimating proportions need to be larger than those for estimating
+means, so $n=500$ is large without being huge.  The practical upshot
+is that if you design a survey and give it to 500 (or more) randomly
+chosen people, the actual proportion of people in favour doesn't have to be
+much above 50\% for you to correctly infer that it *is* above
+50\%, most of the time.
+
+    
+
+
+
+

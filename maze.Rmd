@@ -1,0 +1,365 @@
+
+
+ A researcher is trying to design a maze that can be run by
+rats in about 60 seconds. One particular maze was run by a sample of
+21 rats, with the times shown in
+[http://www.utsc.utoronto.ca/~butler/c32/maze.txt](http://www.utsc.utoronto.ca/~butler/c32/maze.txt). 
+
+
+
+(a) Read the data into R. What (if anything) are the data values
+delimited by?
+
+Solution
+
+
+Take a look at the data file first. There is only one column of
+data, so you can treat it as being delimited by anything you like:
+a space, or a comma (the file can also be treated as a
+`.csv`), etc.:
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/maze.txt"
+times=read_delim(myurl," ")
+times
+``` 
+
+
+
+(b) Run a sign test, doing it yourself as we did in class:
+count the number of values above and below 60, take the *smaller*
+of those, and find the probability of a value of that or smaller still
+on a binomial distribution with $n=21$ and $p=0.5$ (we have 21 data
+points), doubling the answer because the test is two-sided.
+
+
+
+Solution
+
+
+
+Count how many values are above and below 60:
+
+```{r }
+times %>% count(time>60)
+``` 
+5 above and 16 below. Then find out how likely it is that a binomial
+with $n=21, p=0.5$ would produce 5 or fewer successes:
+
+```{r }
+p=sum(dbinom(0:5,21,0.5))
+p
+``` 
+
+or if you prefer count upwards from 16:
+
+```{r }
+sum(dbinom(16:21,21,0.5))
+``` 
+
+and double it to get a two-sided P-value:
+
+```{r }
+2*p  
+``` 
+
+We'll compare this with `smmr` in a moment.
+
+
+
+
+(c) Install my package `smmr`, if you haven't already. To do
+this, you first need to install the package `devtools` (if you
+haven't already),
+by going to the console and typing
+
+```{r eval=F}
+install.packages("devtools")
+``` 
+
+When that's all done, install `smmr` thus:
+
+```{r eval=F}
+library(devtools)
+install_github("nxskok/smmr")
+``` 
+
+That all needs to be done only once. Then, each R Studio session where
+you want to use `smmr` needs this:
+
+```{r }
+library(smmr)
+``` 
+
+As usual, only the `library` thing only needs to be done every
+time. 
+
+When you have `smmr` installed, use `sign_test` from
+that package to re-run your sign test. Do you get the same P-value?
+
+
+
+Solution
+
+
+The sign test function takes a data frame, an (unquoted) column
+name from that data frame of data to test the median of, and a
+null median (which defaults to 0 if you omit it):
+```{r }
+library(smmr)
+sign_test(times,time,60)
+```     
+
+This shows you two things: a count of the values below and above the
+null median, and then the P-values according to the various
+alternative hypotheses you might have. 
+
+In our case, we see again the 16 maze-running times below 60 seconds
+and 5 above (one of which was a long way above, but we don't care
+about that here). We were testing whether the median was different
+from 60, so we look at the two-sided P-value of 0.0266, which is
+exactly what we had before.
+
+If `sign_test` doesn't work for you (perhaps because it needs
+a function `enquo` that you don't have), there is an
+alternative function `sign_test0` that doesn't use it. It
+requires as input a *column* of values (extracted from the data
+frame) and a null median, thus:
+
+```{r }
+sign_test0(times$time,60)
+``` 
+
+The output should be, and here is, identical.
+
+
+
+
+(d) Package `smmr` also has a function
+`pval_sign`, which has the same input as
+`sign_test`, but with the null median *first*.
+Run it on your data and see what it gives.
+
+
+
+Solution
+
+
+Try it and see:
+```{r }
+pval_sign(60,times,time)
+```     
+
+The two-sided P-value, and that is all. We'll be using this in a minute.
+
+Alternatively, there is also this, which needs a null median and a
+*column* as input:
+
+```{r }
+pval_sign0(60,times$time)
+``` 
+
+
+
+
+(e) Obtain a 95\% confidence interval for the median based on these
+data. Do this two ways. First, use the trial and error way from class
+(either the try-lots-of-values way or the bisection way; either is good).
+Second, use `ci_median` from `smmr`. The latter takes
+as input a data frame, a column name (unquoted) and optionally a
+`conf.level` that defaults to 0.95.
+
+
+
+Solution
+
+
+The reason for showing you `pval_sign` in the previous
+part is that this is a building block for the confidence interval.
+What we do is to try various null medians
+and find out which ones give P-values less than 0.05 (outside the
+interval) and which ones bigger (inside). 
+We know that the value 60 is
+outside the 95\% CI, and the sample median is close to 50 (which we
+expect to be inside), so sensible values to try for the upper end of
+the interval would be between 50 and 60:
+
+```{r }
+pval_sign(58,times,time)
+pval_sign(55,times,time)
+``` 
+
+So, 55 is inside the interval and 58 is outside. I could investigate
+further in similar fashion, but I thought I would try a whole bunch of null
+medians all at once. That goes like this:
+
+```{r }
+meds=seq(55,58,0.25)
+meds
+pvals=map_dbl(meds,pval_sign,times,time)
+data.frame(meds,pvals)
+``` 
+
+So values for the median all the way up to and including 57.5 are in
+the confidence interval.
+
+What `map_dbl` does is to take a vector of values, here the
+ones in `meds` (55 through 58 in steps of 0.25), feed them into
+a function, here `pval_sign`, one by one and gather together
+the results. `pval_sign` has two other inputs, `times` and
+`time`, which are added to `map_dbl` at the end. (They
+are the same no matter what median we are testing.)  So, putting the
+calculated P-values side by side with the null medians they belong to
+shows you which medians are inside the confidence interval and which
+are outside.
+
+The function is called `map_dbl` because *my* function
+called `pval_sign` that is called repeatedly returns a single
+decimal number (a `dbl`). There is also, for example,
+`map_chr` for repeatedly calling a function that returns a
+single piece of text, and plain `map` that is used when the
+repeatedly-called function returns a data frame.
+
+Since you don't know about `map_dbl`, I didn't want to confuse
+things more than necessary, but now that you *do* know what it
+does, you might be in a better position to understand this more
+Tidyverse-flavoured code, with the `map_dbl` inside a
+`mutate` and the data frame created as we go:
+
+```{r }
+tibble(meds=seq(55,58,0.25)) %>%
+mutate(pvals=map_dbl(meds,pval_sign,times,time)) 
+``` 
+
+Now for the other end of the interval. I'm going to do this a
+different way: more efficient, but less transparent. The first thing I
+need is a pair of values for the median: one inside the interval and
+one outside. Let's try 40 and 50:
+
+```{r }
+pval_sign(40,times,time)
+pval_sign(50,times,time)
+``` 
+
+OK, so 40 is outside and 50 is inside. So what do I guess for the next
+value to try? I could do something clever like assuming that the
+relationship between hypothesized median and P-value is *linear*,
+and then guessing where that line crosses 0.05. But I'm going to
+assume *nothing* about the relationship except that it goes
+uphill, and therefore crosses 0.05 somewhere. So my next guess is
+halfway between the two values I tried before:
+
+```{r }
+pval_sign(45,times,time)
+``` 
+
+So, 45 is inside the interval, and my (slightly) improved guess at the
+bottom end of the interval is that it's between 40 and 45. So next, I
+try halfway between *those*:
+
+```{r }
+pval_sign(42.5,times,time)
+``` 
+
+42.5 is outside, so the bottom end of the interval is between 42.5 and 45.
+
+What we are doing is narrowing down where the interval's bottom end
+is. We started by knowing it to within 10, and now we know it to
+within 2.5. So if we keep going, we'll know it as accurately as we wish.
+
+This is called a "bisection" method, because at each step, we're
+dividing our interval by 2.
+
+There is one piece of decision-making at each step: if the P-value for
+the median you try is greater than 0.05, that becomes the top end of
+your interval (as when we tried 45); if it is less, it becomes the
+bottom end (when we tried 42.5).
+
+This all begs to be automated into a loop. It's not a
+`for`-type loop, because we don't know how many times we'll be
+going around. It's a `while` loop: keep going while something
+is true. Here's how it goes:
+
+```{r }
+lo=40
+hi=50
+while(abs(hi-lo)>0.1) {
+try=(hi+lo)/2
+ptry=pval_sign(try,times,time)
+print(c(try,ptry))
+if (ptry<0.05) {
+lo=try
+} else {
+hi=try
+}
+}
+lo
+pval_sign(lo,times,time)
+hi
+pval_sign(hi,times,time)
+``` 
+
+The loop stopped because 44.297 and 44.375 are less than 0.1
+apart. The first of those is outside the interval and the second is
+inside. So the bottom end of our interval is 44.375, to this
+accuracy. If you want it more accurately, change 0.1 in the
+`while` line to something smaller (but then you'll be waiting
+longer for the answer). 
+
+I put the `print` statement in the loop so that you could see
+what values were being tried, and what P-values they were
+producing. What happens with these is that the P-value jumps at each
+data value, so you won't get a P-value exactly 0.05; you'll get one
+above and one below.
+
+Likewise, you can use the function with a zero on its name and feed it
+a column rather than a data frame and a column name:
+
+```{r }
+meds=seq(55,58,0.25)
+meds
+pvals=map_dbl(meds,pval_sign0,times$time)
+data.frame(meds,pvals)
+``` 
+
+Or adapt the idea I had above for bisection.
+All that was a lot of work, but I wanted you to see it all once, so that you
+know where the confidence interval is coming from. `smmr` also
+has a function `ci_median` that does all of the above without
+you having to do it. As I first wrote it, it was using the trial and
+error thing with `map_dbl`, but I chose to rewrite it with the
+bisection idea, because I thought that would be more accurate.
+
+```{r }
+ci_median(times,time)
+``` 
+
+This is a more accurate interval than we got above. (The
+`while` loop for the bisection keeps going until the two
+guesses at the appropriate end of the interval are less than 0.01
+apart, by default.)\endnote{You can change this by adding something
+like `tol=1e-4` to the end of your `ci_median`.} 
+
+If you want some other confidence level, you add `conf.level`
+on the end, as you would for `t.test`:
+
+```{r }
+ci_median(times,time,conf.level=0.75)
+``` 
+
+A 75\% CI, just for fun. This is a shorter interval than the 95\% one,
+as it should be.
+
+Likewise there is a `ci_median0` that takes a column and an
+optional confidence level:
+
+```{r }
+ci_median0(times$time)
+ci_median0(times$time,conf.level=0.75)
+``` 
+
+with the same results. Try `ci_median` first, and if it
+doesn't work, try `ci_median0`.
+
+
+
+

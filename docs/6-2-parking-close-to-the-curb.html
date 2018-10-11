@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2018-10-09" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a><ul>
+<li><a href="2-1-getting-an-r-studio-cloud-account.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="2-2-getting-started.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="2-3-reading-data-from-a-file.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="3-1-orange-juice.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="3-2-making-soap.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="3-3-handling-shipments.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="4-1-north-carolina-births.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
+<li><a href="4-2-more-about-the-nc-births.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
+<li><a href="4-3-nenana-alaska.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
+<li><a href="4-4-computerized-accounting.html#computerized-accounting"><span class="toc-section-number">4.4</span> Computerized accounting</a></li>
+</ul></li>
+<li class="has-sub"><a href="5-one-sample-inference.html#one-sample-inference"><span class="toc-section-number">5</span> One-sample inference</a><ul>
+<li><a href="5-1-hunter-gatherers-in-australia.html#hunter-gatherers-in-australia"><span class="toc-section-number">5.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="5-2-length-of-gestation-in-north-carolina.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">5.2</span> Length of gestation in North Carolina</a></li>
+<li><a href="5-3-inferring-ice-break-up-in-nenana.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">5.3</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="6-two-sample-inference.html#two-sample-inference"><span class="toc-section-number">6</span> Two-sample inference</a><ul>
+<li><a href="6-1-children-and-electronic-devices.html#children-and-electronic-devices"><span class="toc-section-number">6.1</span> Children and electronic devices</a></li>
+<li><a href="6-2-parking-close-to-the-curb.html#parking-close-to-the-curb"><span class="toc-section-number">6.2</span> Parking close to the curb</a></li>
+</ul></li>
+<li class="has-sub"><a href="7-power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">7</span> Power and sample size</a><ul>
+<li><a href="7-1-simulating-power.html#simulating-power"><span class="toc-section-number">7.1</span> Simulating power</a></li>
+<li><a href="7-2-calculating-power-and-sample-size-for-estimating-mean.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">7.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="7-3-simulating-power-for-proportions.html#simulating-power-for-proportions"><span class="toc-section-number">7.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="8-the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">8</span> The sign test and Mood’s median test</a></li>
+<li><a href="9-matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a></li>
+<li><a href="10-normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="parking-close-to-the-curb" class="section level2">
+<h2><span class="header-section-number">6.2</span> Parking close to the curb</h2>
+<p>In 2009, the Toronto Star commissioned a survey to address
+the issue of who is better at parking a car: men or women. The
+researchers recorded 93 drivers who were parallel-parking their car in
+downtown Toronto, and for each driver, recorded the distance between
+the car and the curb, in inches, when the driver was finished parking
+their car. The data are in an Excel spreadsheet,
+<a href="http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx" class="uri">http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx</a>. (Let me
+know if you cannot handle this format.) Click on the link. The data
+will probably download automatically. Check the folder on your
+computer where things get downloaded. If the spreadsheet is just
+displayed and not downloaded, save it somewhere on your computer.</p>
+<ol style="list-style-type: lower-alpha">
+<li>There are two sheets in this spreadsheet workbook. They are
+of the same data in two different formats. Take a look at Sheet 1
+and Sheet 2. Describe the format of the data in each case. Which will be the most suitable data layout, bearing in
+mind that one of the first things we do is to make side-by-side
+boxplots of parking distances for males and females? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The data in Sheet 1 has one column of parking distances for
+males, and another for females. This is often how you see data
+of this sort laid out. Sheet 2 has <em>one</em> column of parking
+distances, all combined together, and a second column indicating
+the gender of the driver whose distance is in the first column.
+If you look back at the kind of data we’ve used to make
+side-by-side boxplots, it’s always been in the format of Sheet
+2: one column containing all the values of the variable we’re
+interested in, with a second column indicating which group each
+observation belongs to (“group” here being
+“gender of driver”).
+So we need to use the data in Sheet 2, because the
+data in Sheet 1 are not easy to handle with R.
+The layout of Sheet 2 is the way R likes to do most things:
+so-called “long format” with a lot of rows and not many
+columns. This is true for descriptive stuff: side-by-side
+boxplots or histograms or means by group, as well as modelling
+such as (here) a two-sample <span class="math inline">\(t\)</span>-test, or (in other
+circumstances, as with several groups) a one-way analysis of
+variance.
+Hadley Wickham, the guy behind the <code>tidyverse</code>, likes to
+talk about “tidy data” (like Sheet 2), with each column
+containing a variable, and “untidy data” (like Sheet 1), where
+the two columns are the same thing (distances), but under
+different circumstances (genders). As we’ll see later, it is
+possible to convert from one format to the other. Usually you
+want to make untidy data tidy (the function for this is called
+<code>gather</code>).</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Read your preferred sheet directly into R, <em>without</em>
+using a <code>.csv</code> file. (There is a clue in the lecture notes,
+in the section about reading in files.) If you get stuck, make a
+<code>.csv</code> file and read that in.</li>
+</ol>
+<p>Solution</p>
+<p>The direct way is to use the package <code>readxl</code>. This has a
+<code>read_excel</code> that works the same way as any of the other
+<code>read_</code> functions. You’ll have to make sure that you
+read in sheet 2, since that’s the one you want.
+There is some setup first. There are a couple of ways you can do that:</p>
+<ul>
+<li><p>Download the spreadsheet to your computer, and upload it
+to your project on R Studio Cloud (or, if you are running R
+Studio on your computer, use something like
+<code>file.choose</code> to get the file from wherever it got
+downloaded to).</p></li>
+<li><p>Use the function <code>download.file</code> to get the file
+from the URL and store it in your project folder
+directly. This also works in R Studio Cloud, and completely
+by-passes the download-upload steps that you would have to do
+otherwise. (I am grateful to Rose Gao for this idea.)
+Here is how you can use <code>download.file</code> here:</p></li>
+</ul>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb215-1" data-line-number="1">my_url=<span class="st">&#39;http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx&#39;</span></a>
+<a class="sourceLine" id="cb215-2" data-line-number="2">local=<span class="st">&quot;parking.xlsx&quot;</span></a>
+<a class="sourceLine" id="cb215-3" data-line-number="3"><span class="kw">download.file</span>(my_url, local, <span class="dt">mode=</span><span class="st">&quot;wb&quot;</span>)</a></code></pre></div>
+<p>When you’ve gotten the spreadsheet into your project folder via one of
+those two ways, you go ahead and do this:</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" data-line-number="1"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb216-2" data-line-number="2">parking=<span class="kw">read_excel</span>(<span class="st">&quot;parking.xlsx&quot;</span>,<span class="dt">sheet=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb216-3" data-line-number="3">parking</a></code></pre></div>
+<pre><code>## # A tibble: 93 x 2
+##    distance gender
+##       &lt;dbl&gt; &lt;chr&gt; 
+##  1      0.5 male  
+##  2      1   male  
+##  3      1.5 male  
+##  4      1.5 male  
+##  5      1.5 male  
+##  6      3   male  
+##  7      3.5 male  
+##  8      5   male  
+##  9      6   male  
+## 10      6   male  
+## # ... with 83 more rows</code></pre>
+<p>You have to do it this way, using the version of the spreadsheet on
+your computer, since <code>read_excel</code> won’t take a
+URL, or if it does, I can’t make it work. I put the spreadsheet in R Studio’s
+current folder, so I could read it in by name, or you can do the
+<code>f=file.choose()</code> thing, find it, then read it in.
+The <code>sheet=</code> thing can take either a number (as here: the
+second sheet in the workbook), or a name (whatever name the sheet has
+on its tab in the workbook).</p>
+<p>Extra: Rose actually came up with a better idea, which I will show
+you and explain:</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb218-1" data-line-number="1">tf=<span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb218-2" data-line-number="2"><span class="kw">download.file</span>(my_url, tf, <span class="dt">mode=</span><span class="st">&quot;wb&quot;</span>)</a>
+<a class="sourceLine" id="cb218-3" data-line-number="3">p=<span class="kw">read_excel</span>(tf, <span class="dt">sheet =</span> <span class="dv">2</span>)</a></code></pre></div>
+<p>What <code>tempfile()</code> does is to create a temporary file to hold the
+spreadsheet that you are about to download. After downloading the
+spreadsheet to the temporary file, you then use <code>read_excel</code> to
+read <em>from the temporary file</em> into the data frame.</p>
+<p>The advantage of this approach is that the temporary file disappears
+as soon as you close R, and so you don’t have a copy of the
+spreadsheet lying around that you don’t need (once you have created
+the data frame that I called <code>parking</code>, anyway).</p>
+<p>If you are wondering about that <code>mode</code> thing on
+<code>download.file</code>: files are of two different types, “text”
+(like the text of an email, that you can open and look at in something
+like Notepad), and “binary” that you can’t look at directly, but for
+which you need special software like Word or Excel to decode it for
+you. The first character in <code>mode</code> is either
+<code>w</code> for “write a new file”, which is what we want here, or
+<code>a</code> for “append”, which would mean adding to the end of a
+file that already exists. Thus <code>mode=&quot;wb&quot;</code> means
+“create a new binary file”.
+End of Extra.
+If you can’t make any of this work, then do it in two steps:
+save the appropriate sheet as a <code>.csv</code>
+file, and then read the <code>.csv</code> file using
+<code>read_csv</code>. If you experiment, you’ll find that saving a
+spreadsheet workbook as <code>.csv</code> only saves the sheet
+you’re looking at, so make sure you are looking at sheet 2
+before you Save As <code>.csv</code>. I did that, and called my
+saved <code>.csv</code> <code>parking2.csv</code> (because it was from
+sheet 2, but you can use any name you like).
+Then I read this into R thus:</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" data-line-number="1">parking2=<span class="kw">read_csv</span>(<span class="st">&quot;parking2.csv&quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   distance = col_double(),
+##   gender = col_character()
+## )</code></pre>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" data-line-number="1">parking2</a></code></pre></div>
+<pre><code>## # A tibble: 93 x 2
+##    distance gender
+##       &lt;dbl&gt; &lt;chr&gt; 
+##  1      0.5 male  
+##  2      1   male  
+##  3      1.5 male  
+##  4      1.5 male  
+##  5      1.5 male  
+##  6      3   male  
+##  7      3.5 male  
+##  8      5   male  
+##  9      6   male  
+## 10      6   male  
+## # ... with 83 more rows</code></pre>
+<p>The read-in data frame <code>parking</code>
+has 93 rows (<span class="math inline">\(47+46=93\)</span> drivers) and two columns: the distance from
+the curb that the driver ended up at, and the gender of the
+driver. This is as the spreadsheet Sheet 2 was, and the first few
+distances match the ones in the spreadsheet.</p>
+<p>If I were grading this, you’d get some credit for the <code>.csv</code>
+route, but I really wanted you to figure out how to read the Excel
+spreadsheet directly, so that’s what would be worth full marks.</p>
+<p>You might want to check that you have some males and some females, and
+how many of each, which you could do this way:</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" data-line-number="1">parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   gender     n
+##   &lt;chr&gt;  &lt;int&gt;
+## 1 female    47
+## 2 male      46</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Obtain side-by-side boxplots of parking distances for
+males and females. Does one
+gender seem to be better at parking than the other? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>With the right data set, this is a piece of cake:</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" data-line-number="1"><span class="kw">ggplot</span>(parking,<span class="kw">aes</span>(<span class="dt">x=</span>gender,<span class="dt">y=</span>distance))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="05-two-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672"  /></p>
+<p>The outcome variable is distance from the curb, so smaller should be
+better (more accurate parking). With that in mind, the median for
+females is a little smaller than for males (about 8.5 vs. about 10),
+so it seems that on average females are more accurate parkers than
+males are. The difference is small, however (and so you might be
+wondering at this point whether it’s a statistically significant
+difference — don’t worry, that’s coming up).</p>
+<p>Before I leave this one, I want to show you something else:
+above-and-below histograms, as another way of comparing males and
+females (two or more groups, in general). First, we make a histogram of all
+the distances, without distinguishing by gender:</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb226-1" data-line-number="1"><span class="kw">ggplot</span>(parking,<span class="kw">aes</span>(<span class="dt">x=</span>distance))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">8</span>)</a></code></pre></div>
+<p><img src="05-two-sample-inference_files/figure-html/unnamed-chunk-19-1.png" width="672"  /></p>
+<p>That big outlier is the very inaccurate male driver.</p>
+<p>Now, how do we get a <em>separate</em> histogram for each
+<code>gender</code>? In <code>ggplot</code>, separate plots for each
+“something” are called <strong>facets</strong>, and the way to get facets
+arranged as you want them is called <code>facet_grid</code>. Let me show you
+the code first, and then explain how it works:</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" data-line-number="1"><span class="kw">ggplot</span>(parking,<span class="kw">aes</span>(<span class="dt">x=</span>distance))<span class="op">+</span></a>
+<a class="sourceLine" id="cb227-2" data-line-number="2"><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">7</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb227-3" data-line-number="3"><span class="kw">facet_grid</span>(gender<span class="op">~</span>.)</a></code></pre></div>
+<p><img src="05-two-sample-inference_files/figure-html/unnamed-chunk-20-1.png" width="672"  /></p>
+<p><code>facet_grid</code> takes a “model formula” with a squiggle, with <span class="math inline">\(y\)</span>
+on the left and <span class="math inline">\(x\)</span> on the right. We want to compare our two
+histograms, one for males and one for females, and I think the best
+way to compare histograms is to have one on top of the other. Note
+that the same <code>distance</code> scale is used for both histograms, so
+that it is a fair comparison. The above-and-below is accomplished by
+having <code>gender</code> as the <span class="math inline">\(y\)</span> in the arrangement of the facets, so
+it goes before the squiggle. We don’t have any <span class="math inline">\(x\)</span> in the arrangement
+of the facets, and we tell <code>ggplot</code> this by putting a dot where
+the <span class="math inline">\(x\)</span> would be.</p>
+<p>You can also use <code>facet_wrap</code> for this, but you have to be
+more careful since you don’t have any control over how the histograms
+come out (you probably get them side by side, which is not so helpful
+for comparing distributions). You can make it work by using
+<code>ncol=1</code> to arrange “all” the histograms in one column:</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb228-1" data-line-number="1"><span class="kw">ggplot</span>(parking,<span class="kw">aes</span>(<span class="dt">x=</span>distance))<span class="op">+</span></a>
+<a class="sourceLine" id="cb228-2" data-line-number="2"><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">7</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb228-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>gender,<span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="05-two-sample-inference_files/figure-html/unnamed-chunk-21-1.png" width="672"  /></p>
+<p>The centres of both histograms are somewhere around 10, so it’s hard
+to see any real difference between males and females here. Maybe this
+is further evidence that the small difference we saw between the
+boxplots is really not worth getting excited about.</p>
+<p>You might be concerned about how you know what to put with the
+squiggle-thing in <code>facet_grid</code> and <code>facet_wrap</code>. The
+answer is that <code>facet_wrap</code> <em>only</em> has something to the
+right of the squiggle (which <code>ggplot</code> then decides how to
+arrange), but <code>facet_grid</code> <em>must</em> have something on
+<em>both</em> sides of the squiggle (how to arrange in the <span class="math inline">\(y\)</span> direction
+on the left, how to arrange in the <span class="math inline">\(x\)</span> direction on the right), and if
+you don’t have anything else to put there, you put a dot. Here’s my
+<code>facet_grid</code> code from above, again:</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" data-line-number="1"><span class="kw">ggplot</span>(parking,<span class="kw">aes</span>(<span class="dt">x=</span>distance))<span class="op">+</span></a>
+<a class="sourceLine" id="cb229-2" data-line-number="2"><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">7</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb229-3" data-line-number="3"><span class="kw">facet_grid</span>(gender<span class="op">~</span>.)</a></code></pre></div>
+<p>We wanted gender to go up and down, and we had nothing to go left and
+right, hence the dot. Contrast that with my <code>facet_wrap</code>
+code:</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" data-line-number="1"><span class="kw">ggplot</span>(parking,<span class="kw">aes</span>(<span class="dt">x=</span>distance))<span class="op">+</span></a>
+<a class="sourceLine" id="cb230-2" data-line-number="2"><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">7</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb230-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</a></code></pre></div>
+<p>This says “make a separate facet for each gender”, but it doesn’t
+say anything about how to arrange them.
+The choice of bins for my histogram(s) came from Sturges’ rule: with
+<span class="math inline">\(n\)</span> being the number of observations, you use <span class="math inline">\(k\)</span> bins where
+<span class="math inline">\(k=\log_2(n)+1\)</span>, rounded up. If we were to make a histogram of all the
+parking distances combined together, we would have <span class="math inline">\(n=47+48=95\)</span>
+observations, so we should use this many bins:</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" data-line-number="1">sturges=<span class="kw">log</span>(<span class="dv">95</span>,<span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb231-2" data-line-number="2">sturges</a></code></pre></div>
+<pre><code>## [1] 7.569856</code></pre>
+<p>Round this up to 8. (The second thing in <code>log</code> is the base of
+the logs, if you specify it, otherwise it defaults to <span class="math inline">\(e\)</span> and gives
+you “natural” logs.) I seem to have the powers of 2 in my head, so I
+can do it mentally by saying ``the next power of 2 is 128, which is
+<span class="math inline">\(2^7\)</span>, so I need <span class="math inline">\(7+1=8\)</span> bins.’’</p>
+<p>Or:</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" data-line-number="1"><span class="kw">with</span>(parking,<span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
+<pre><code>## [1] 8</code></pre>
+<p>Sturges’ rule tends to produce not enough bins if <span class="math inline">\(n\)</span> is small, so be
+prepared to increase it a bit if you don’t have much data.
+I think that gives a fairly bare-bones picture of the shape: skewed to
+the right with outlier.</p>
+<p>The other rule we saw was Freedman-Diaconis:</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" data-line-number="1"><span class="kw">with</span>(parking, <span class="kw">nclass.FD</span>(distance))</a></code></pre></div>
+<pre><code>## [1] 14</code></pre>
+<p>and that leads to this histogram:</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" data-line-number="1"><span class="kw">ggplot</span>(parking,<span class="kw">aes</span>(<span class="dt">x=</span>distance))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">14</span>)</a></code></pre></div>
+<p><img src="05-two-sample-inference_files/figure-html/unnamed-chunk-27-1.png" width="672"  /></p>
+<p>That gives rather more detail (a lot more bars: the binwidth in the
+Sturges-rule histogram is about 7, or twice what you see here), but in
+this case the overall story is about the same.</p>
+<p>In the case of faceted histograms, you would want to apply a rule that
+uses the number of observations in <em>each</em> histogram. The facets
+might have quite different numbers of observations, but you can only
+use one <code>binwidth</code> (or <code>bins</code>), so you may have to
+compromise. For example, using Sturges’ rule based on 47 observations
+(the number of males; the number of females is one more):</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" data-line-number="1"><span class="kw">log</span>(<span class="dv">47</span>,<span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span></a></code></pre></div>
+<pre><code>## [1] 6.554589</code></pre>
+<p>and so each facet should have that many bins, rounded up. That’s where
+I got my 7 for the facetted histogram from. This one doesn’t work
+immediately with <code>nclass.Sturges</code>, because we do not have
+<em>one</em> column whose length is the number of observations we want:
+we have one column of distances that are males and females mixed
+up. To do <em>that</em>, <code>filter</code> one of the genders first:</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" data-line-number="1">parking <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb240-2" data-line-number="2"><span class="kw">filter</span>(gender<span class="op">==</span><span class="st">&quot;female&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb240-3" data-line-number="3"><span class="kw">with</span>(.,<span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
+<pre><code>## [1] 7</code></pre>
+<p>I used the “dot” trick again, which you can read as “it”: `<code>from</code>parking`, take only the rows for the females, and with it,
+give me the number of bins for a histogram by Sturges’ rule.’’</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Explain briefly why this is two independent samples
+rather than matched pairs.</li>
+</ol>
+<p>Solution</p>
+<p>There is no way to pair any male with a corresponding female,
+because they are unrelated people. You might also notice that
+there are not even the <em>same number</em> of males and females,
+so there can be no way of pairing them up without leaving one
+over. (In general, if the two samples are paired, there must be
+the same number of observations in each; if there are different
+numbers in each, as here, they cannot be paired.)
+If you want that more mathematically, let <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_2\)</span> be the
+two sample sizes; then:
+<span class="math display">\[
+\mbox{Paired} \Longrightarrow n_1=n_2
+\]</span></p>
+<p>from which it follows logically (the “contrapositive”) that</p>
+<p><span class="math display">\[
+n_1 \ne n_2 \Longrightarrow \mbox{not paired}
+\]</span>
+You’ll note from the logic that if the two sample sizes are the same,
+that tells you <em>nothing</em> about whether it’s paired or independent
+samples: it could be either, and in that case you have to look at the
+description of the data to decide between them.</p>
+<p>Here, anything that gets at why the males and females cannot be paired
+up is good.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Run a suitable <span class="math inline">\(t\)</span>-test for comparing parking distances
+for males and females. What do you conclude, in the context of the data?</li>
+</ol>
+<p>Solution</p>
+<p>A two-sample <span class="math inline">\(t\)</span>-test. I think either the Welch or the pooled one can
+be justified (and I would expect them to give similar answers). You
+can do the Welch one either without comment or by asserting that the
+boxplots show different spreads; if you are going to do the pooled
+one, you need to say that the spreads are “about equal”, by
+comparing the heights of the boxes on the boxplots:</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" data-line-number="1"><span class="kw">t.test</span>(distance<span class="op">~</span>gender,<span class="dt">data=</span>parking)</a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  distance by gender
+## t = -1.3238, df = 79.446, p-value = 0.1894
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -4.5884103  0.9228228
+## sample estimates:
+## mean in group female   mean in group male 
+##             9.308511            11.141304</code></pre>
+<p>This is the Welch-Satterthwaite version of the test, the one that does
+not assume equal SDs in the two groups. The P-value of 0.1894 is not
+small, so there is no evidence of any difference in parking accuracy
+between males and females.</p>
+<p>Or, this being the pooled one:</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" data-line-number="1"><span class="kw">t.test</span>(distance<span class="op">~</span>gender,<span class="dt">data=</span>parking,<span class="dt">var.equal=</span>T)</a></code></pre></div>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  distance by gender
+## t = -1.329, df = 91, p-value = 0.1872
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -4.5722381  0.9066506
+## sample estimates:
+## mean in group female   mean in group male 
+##             9.308511            11.141304</code></pre>
+<p>You might have thought, looking at the boxplots, that the groups had
+about the same SD (based, for example, on noting that the two boxes
+were about the same height, so the IQRs were about the same). In that
+case, you might run a pooled <span class="math inline">\(t\)</span>-test, which here gives an almost
+identical P-value of 0.1872, and the exact same conclusion.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Why might you have some doubts about the <span class="math inline">\(t\)</span>-test that
+you just did? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The two-sample <span class="math inline">\(t\)</span>-test is based on an assumption of
+normally-distributed data within each group. If you go back
+and look at the boxplots, you’ll see either (depending on
+your point of view) that both groups are right-skewed, or
+that both groups have outliers, neither of which fits a
+normal distribution. The outlier in the male group is
+particularly egregious. So I think we
+are entitled to question whether a two-sample <span class="math inline">\(t\)</span>-test is
+the right thing to do.
+Having said that, we should go back and remember that the
+<span class="math inline">\(t\)</span>-tests are “robust to departures from normality” (since
+we are working with the Central Limit Theorem here), and
+therefore that this test might be quite good even though the
+data are not normal, because the sample sizes of 40-plus are
+large (by the standards of what typically makes the Central
+Limit Theorem work for us). So it may not be as bad as it seems.
+A common competitor for the two-sample <span class="math inline">\(t\)</span>-test is the
+Mann-Whitney test. This doesn’t assume normality, but it
+<em>does</em> assume symmetric distributions, which it’s not
+clear that we have here. I like a test called Mood’s Median
+Test, which is kind of the two-sample equivalent of the sign
+test (which we will also see later). It goes like this:
+Work out the overall median of all the distances, regardless
+of gender:</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb246-1" data-line-number="1">parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(distance))</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##     med
+##   &lt;dbl&gt;
+## 1     9</code></pre>
+<p>The overall median is 9.</p>
+<p>Count up how many distances of each gender were above or below the
+overall median. (Strictly, I’m supposed to throw away any values that
+are exactly equal to the overall median, but I won’t here for clarity
+of exposition.)</p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb248-1" data-line-number="1">tab=<span class="kw">with</span>(parking,<span class="kw">table</span>(gender,distance<span class="op">&lt;</span><span class="dv">9</span>))</a>
+<a class="sourceLine" id="cb248-2" data-line-number="2">tab</a></code></pre></div>
+<pre><code>##         
+## gender   FALSE TRUE
+##   female    23   24
+##   male      27   19</code></pre>
+<p>For example, 19 of the male drivers had a distance (strictly) less than 9.
+Both genders are pretty close to 50–50 above and below the overall
+median, which suggests that the males and females have about the same
+median. This can be tested (it’s a chi-squared test for independence,
+if you know that):</p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" data-line-number="1"><span class="kw">chisq.test</span>(tab,<span class="dt">correct=</span>F)</a></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  tab
+## X-squared = 0.89075, df = 1, p-value = 0.3453</code></pre>
+<p>This is even less significant (P-value 0.3453) than the two-sample
+<span class="math inline">\(t\)</span>-test, and so is consistent with our conclusion from before that
+there is actually no difference between males and females in terms of
+average parking distance. The Mood’s median test is believable because
+it is not affected by outliers or distribution shape.</p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>The Toronto Star in its report said that females are
+more accurate at parking their cars. Why do you think they
+concluded that, and do you think they were right to do so?
+Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The conclusion from the boxplots was that the female
+median distance was less than the males, slightly, in this
+sample. That is probably what the Star seized on.
+Were they right? Well, that was why we did the test of
+significance. We were trying to see whether this observed
+difference between males and females was “real” (would
+hold up if you looked at “all” male and female drivers)
+or “reproducible” (you would expect to see it again if
+you did another study like this one). The large,
+non-significant P-values in all our tests tell us that the
+difference observed here was nothing more than chance. So
+it was not reasonable to conclude that females generally
+are more accurate at parallel-parking than males are.</p>
+
+</div>
+<!-- </div> -->
+<p style="text-align: center;">
+<a href="6-1-children-and-electronic-devices.html"><button class="btn btn-default">Previous</button></a>
+<a href="7-power-and-sample-size.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+
+
+ Can students throw a baseball farther than a softball? A
+statistics class, containing 24 students, went out to a football field
+to try to answer this question. Each student warmed up and then threw
+each type of ball as far as they could. The order of ball types was
+randomized: some students threw the baseball first, and some threw the
+softball first. (A softball is bigger than a baseball, so we might
+expect that a softball would be harder to throw a long way than a
+baseball.) The data are in
+[http://www.utsc.utoronto.ca/~butler/c32/throw.txt](http://www.utsc.utoronto.ca/~butler/c32/throw.txt) in three
+columns: the first is a number identifying the student, the second is
+the distance thrown with the baseball (in yards) and the third is the
+distance thrown with the softball (also in yards).
+
+
+
+(a) Read the data into R. You'll need to supply some names
+to the columns.
+
+
+Solution
+
+
+This kind of thing:
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
+throws=read_delim(myurl," ",col_names=c("student","baseball","softball"))
+throws
+```
+
+This is one of those times where we have to tell R what names to give
+the columns. Or you can put `col_names=F` and leave the
+columns called `X1, X2, X3` or whatever they end up as.
+
+
+
+(b) Calculate a column of differences, baseball minus softball,
+*in* the data frame.
+
+
+Solution
+
+
+Add it to the data frame using `mutate`. Use the
+right-arrow assignment to create what I called
+`throws2` below, or put something like
+`throws2=` on the beginning of the line. Your choice.
+
+```{r }
+throws %>% mutate(diff=baseball-softball) ->
+throws2
+``` 
+
+
+
+(c) Carry out a sign test in R, testing the null hypothesis
+that the median difference is zero, against the alternative that
+it is greater than zero. Obtain a P-value. Your option whether you use
+`smmr` or not.
+
+
+Solution
+
+
+I think using `smmr` is way easier, so I'll do that
+first. There is even a shortcut in that the null median defaults to
+zero, which is exactly what we want here:
+
+```{r }
+library(smmr)
+sign_test(throws2,diff)
+``` 
+
+We want, this time, the upper-tailed one-sided test, since we want to
+prove that students can throw a baseball a *longer* distance
+than a softball. Thus the P-value we want is 0.000033.
+
+To build it yourself, you know the steps by now.
+First step is to count how many differences are greater and less than zero:
+```{r }
+table(throws2$diff>0)
+``` 
+
+or
+
+```{r }
+table(throws2$diff<0)
+``` 
+
+or, since we have things in a data frame,
+
+```{r }
+throws2 %>% count(diff>0)
+``` 
+
+or count those less than zero. I'd take any of those.
+
+Note that these are *not all the same*. One of the differences is
+in fact exactly zero. The technically right thing to do with the zero
+difference is to throw it away (leaving 23 differences with 2 negative
+and 21 positive). I would take that, or 2 or 3 negative differences
+out of 24 (depending on whether you count "greater than zero" or
+"less than zero"). We hope that this won't make a material
+difference to the P-value; it'll make some difference, but won't (we
+hope) change the conclusion about whether to reject.
+
+Second step is to get a P-value for whichever one of those you got,
+from the appropriate binomial distribution. 
+
+The P-value is the probability of getting 21 (or 22) positive
+differences out of 24 (or 23) or more, since this is the end of the
+distribution we should be at if the alternative hypothesis is correct.
+Thus any of these will get you a defensible P-value:
+
+```{r }
+sum(dbinom(21:23,23,0.5))
+sum(dbinom(22:24,24,0.5))
+sum(dbinom(21:24,24,0.5))
+sum(dbinom(0:2,23,0.5))
+sum(dbinom(0:2,24,0.5))
+sum(dbinom(0:3,24,0.5))
+``` 
+
+The first and fourth of those are the same as `smmr` (throwing
+away the exactly-median value). 
+
+As we hoped, there is no *material* difference here: there is no
+doubt with any of these possibilities that we will reject a median
+difference of zero in favour of a median difference greater than
+zero. 
+
+
+```{r }
+
+```     
+
+

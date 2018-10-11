@@ -1,0 +1,310 @@
+##  Simulating power
+
+
+ This question investigates power by
+simulation.
+
+
+(a) Use `rnorm` to generate 10 random values from a
+normal distribution with mean 20 and SD 2. Do your values look
+reasonable? Explain briefly. (You don't need to draw a graph.)
+
+
+Solution
+
+
+`rnorm` with the number of values first, then the mean,
+then the SD:
+```{r echo=F}
+set.seed(457298)
+```       
+
+```{r }
+x=rnorm(10,20,2)
+x
+```       
+
+95\% of the sampled values should be within 2 SDs of the mean, that
+is, between 16 and 24 (or 99.7\% should be within 3 SDs of the mean,
+between 14 and 26). None of my values are even outside the interval 16
+to 24, though yours may be different.
+
+I saved mine in a variable and then displayed them, which you don't
+need to do. I did because there's another way of assessing them for
+reasonableness: turn the sample into $z$-scores and see whether the
+values you get look like $z$-scores (that is, most of them are between
+$-2$ and 2, for example):
+
+```{r }
+(x-20)/2
+``` 
+
+These ones look very much like $z$-scores. This, if you think about
+it, is really the flip-side of 68--95--99.7, so it's another way of
+implementing the same idea.
+
+You might also think of finding the *sample* mean and SD, and
+demonstrating that they are close to the right answers. Mine are:
+
+```{r }
+mean(x)
+sd(x)
+``` 
+
+The sample SD is more variable than the sample mean, so it can get
+further away from the population SD than the sample mean does from the
+population mean. 
+
+The downside to this idea is that it doesn't get at
+assessing the normality, which looking at $z$-scores or equivalent
+does. Maybe coupling the above with a boxplot would have helped, had I
+not said "no graphs", since then you'd (hopefully) see no outliers
+and a roughly symmetric shape.
+
+This is old-fashioned "base R" technology; you could do it with a
+data frame like this:
+
+```{r }
+d=tibble(x=rnorm(10,20,2))
+d
+d %>% summarize(m=mean(x), s=sd(x))
+``` 
+
+These are different random numbers, but are about equally what you'd
+expect. (These ones are a bit less variable than you'd expect, but
+with only ten values, don't expect perfection.)
+
+Some discussion about the kind of values you should get, and whether
+or not you get them, is what is called for here. I want you to say
+something convincing about how the values you get come from a normal
+distribution with mean 20 *and* SD 2.  "Close to 20" is not the
+whole answer here, because that doesn't get at "how close to 20?":
+that is, it talks about the mean but not about the SD.
+
+
+
+(b)\label{part:type-i} Estimate by simulation the power of a $t$-test to reject a
+null hypothesis of 20 when the true mean is also 20, the
+population SD is 2, and the sample size is 10, against a (default)
+two-sided alternative. Remember the
+steps: (i) generate a lot of random samples from the true
+distribution, (ii) run the $t$-test with the required null mean,
+(iii) pull out the P-values, (iv) count how many of them are 0.05
+or less.
+
+
+Solution
+
+
+Once you get the hang of these, they all look almost the
+same. This one is easier than some because we don't have to do
+anything special to get a two-sided alternative hypothesis:
+```{r }
+rerun(1000,rnorm(10,20,2)) %>%
+map(~t.test(.,mu=20)) %>%
+map_dbl("p.value") ->
+pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```         
+
+The power is about 4.2\%. This seems depressingly small, but see the
+next part.
+
+
+
+(c) In the simulation you just did, was the null hypothesis true
+or false? Do you want to reject the null hypothesis or not?
+Explain briefly why the simulation results you got were (or were
+not) about what you would expect.
+
+
+Solution
+
+
+The null mean and the true  mean were both 20: that is, the
+null hypothesis was correct, and rejecting it would be a
+mistake, to be precise a type I error. We were doing the test
+at $\alpha=0.05$ (by comparing our collection of simulated
+P-values with 0.05), so we should be making a type I error 5\%
+of the time. This is entirely in line with the 4.2\% of
+(wrong) rejections that I had.
+Your estimation is likely to be different from mine, but you
+should be rejecting about 5\% of the time. If your result is
+very different from 5\%, that's an invitation to go back and
+check your code. On the other hand, if it *is* about 5\%,
+that ought to give you confidence to go on and use the same
+ideas for the next part.
+
+
+
+(d)\label{part:type-ii} By copying, pasting and editing your code from the previous
+part, estimate the power of the test of $H_0: \mu=20$ (against a
+two-sided alternative) when the true population mean is 22 (rather
+than 20).
+
+
+Solution
+
+
+Here's the code we just used:
+
+```{r eval=F}
+rerun(1000,rnorm(10,20,2)) %>%
+map(~t.test(.,mu=20)) %>%
+map_dbl("p.value") ->
+pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```       
+
+One of those 20s needs to become 22. Not the one in the
+`t.test`, since the hypotheses have not changed.  So we need to
+change the 20 in the `rnorm` line to 22, since that's where
+we're generating data from the true distribution. The rest of it stays
+the same:
+
+```{r }
+rerun(1000,rnorm(10,22,2)) %>%
+map(~t.test(.,mu=20)) %>%
+map_dbl("p.value") ->
+pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```         
+
+This time, we *want* to reject, since the null hypothesis is
+false. So look at the `TRUE` count of 798: the power is about
+$798/1000 \simeq 80\%$. We are very likely to correctly reject a null
+of 20 when the mean is actually 22.
+
+Another way to reason that the power should be fairly large is to
+think about what kind of sample you are likely to get from the true
+distribution: one with a mean around 22 and an SD around 2. Thus the
+$t$-statistic should be somewhere around this (we have a sample size
+of 10):
+
+```{r }
+t_stat=(22-20)/(2/sqrt(10))
+t_stat
+``` 
+
+and the two-sided P-value should be about
+
+```{r }
+2*(1-pt(t_stat,10-1))
+``` 
+
+Of course, with your actual data, you will sometimes be less lucky
+than this (a sample mean nearer 20 or a larger sample SD), but
+sometimes you will be luckier. But the suggestion is that most of the
+time, the P-value will be pretty small and you will end up correctly
+rejecting. 
+
+The quantity `t_stat` above, \Sexpr{round(t_stat,2)}, is known to some
+people as an "effect size", and summarizes how far apart the null
+and true means are, relative to the amount of variability present (in
+the sampling distribution of the sample mean). As effect sizes go,
+this one is pretty large.
+
+
+
+(e) Use R to calculate this power exactly (without
+simulation). Compare the exact result with your simulation.
+
+
+Solution
+
+
+This is `power.t.test`. The quantity `delta` is
+the difference between true and null means:
+```{r }
+power.t.test(n=10,delta=22-20,sd=2,type="one.sample",alternative="two.sided")
+```       
+
+This, 0.803, is very close to the 0.798 I got from my
+simulation. Which makes me think I did them both right. This is not a watertight proof, though: for example, I might have made a mistake and gotten lucky somewhere. But it does at least give me confidence.
+Extra: when you estimate power by simulation, what you are doing is
+rejecting or not with a certain probability (which is the same for all
+simulations). So the number of times you actually *do* reject has
+a binomial distribution with $n$ equal to the number of simulated
+P-values you got (1000 in my case; you could do more) and a $p$ that
+the simulation is trying to estimate. This is inference for a
+proportion, exactly what `prop.test` does.
+
+Recall that `prop.test` has as input:
+
+
+* a number of "successes" (rejections of the null in our case)
+
+* the number of trials (simulated tests)
+
+* the null-hypothesis value of `p` (optional if you only
+want a CI)
+
+* (optional) a confidence level `conf.level`.
+
+
+In part (\ref{part:type-i}), we knew that the probability of
+(incorrectly) rejecting should have been 0.05 and we rejected 42 times
+out of 1000:
+
+```{r }
+prop.test(42,1000,0.05)
+``` 
+
+Looking at the P-value, we definitely fail to reject that the
+probability of (incorrectly) rejecting is the 0.05 that it should
+be. Ouch. That's true, but unnecessarily confusing. Look at the
+confidence interval instead, 0.031 to 0.057. The right answer is 0.05,
+which is inside that interval, so good.
+
+In part (\ref{part:type-ii}), we didn't know what the power was going
+to be (not until we calculated it with `power.t.test`, anyway),
+so we go straight for a confidence interval; the default 95\% confidence
+level is fine. We (correctly) rejected 798 times out of 1000:
+
+```{r }
+prop.test(798,1000)
+``` 
+
+I left out the 3rd input since we're not doing a test, and ignore the
+P-value that comes out. (The default null proportion is 0.5, which
+often makes sense, but not here.)
+
+According to the confidence interval, the estimated power is between
+0.771 and 0.822. This interval definitely includes what we now know is
+the right answer of 0.803.
+
+This might be an accurate enough assessment of the power for you, but
+if not, you can do more simulations, say 10,000:
+
+```{r }
+rerun(10000,rnorm(10,22,2)) %>%
+map(~t.test(.,mu=20)) %>%
+map_dbl("p.value") ->
+pvals
+tibble(pvals) %>% count(pvals<=0.05)
+``` 
+
+I copied and pasted my code again, which means that I'm dangerously
+close to turning it into a function, but anyway.
+
+The confidence interval for the power is then
+
+```{r }
+prop.test(7996,10000)
+``` 
+
+that is, from 0.792 to 0.807, which once again includes the right
+answer of 0.803. The first interval, based on 1,000 simulations, has
+length 0.051, while this interval has length 0.015.  The first
+interval is more than three times as long as the second, which is
+about what you'd expect since the first one is based on 10 times fewer
+simulations, and thus ought to be a factor of $\sqrt{10}\simeq 3.16$
+times longer.
+
+This means that you can estimate power as accurately as you like by
+doing a large enough number of simulations. Provided, that is, that
+you are prepared to wait a possibly long time for it to finish working!
+
+
+
+

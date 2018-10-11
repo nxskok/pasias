@@ -1,0 +1,133 @@
+##  Calculating power and sample size for estimating mean
+
+
+ We are planning a study to estimate a population mean. The
+population standard deviation is believed to be 20, and the population
+distribution is believed to be approximately normal. We will be
+testing the null hypothesis that the population mean is 100. Suppose
+the population mean is actually 110, and we want to determine how
+likely we are to (correctly) reject the null hypothesis in this case,
+using a two-sided (but one-sample) test with $\alpha=0.05$.
+
+
+
+(a) We will take a sample of size $n=30$. Calculate the power of
+this test.
+
+
+Solution
+
+
+`power.t.test`. Fill in: sample size `n`, difference
+in means `delta` ($10=110-100$), population SD `sd`,
+type of test `type` (`one.sample`) and kind of
+alternative hypothesis `alternative`
+(`two.sided`). Leave out `power` since that's what
+we want:
+
+```{r }
+power.t.test(n=30,delta=10,sd=20,type="one.sample",alternative="two.sided")
+``` 
+
+I meant "calculate" exactly rather than "estimate" (by
+simulation). Though if you want to, you can do that as well, thus:
+
+```{r }
+rerun(1000,rnorm(30,110,20)) %>%
+map(~t.test(.,mu=100)) %>%
+map_dbl("p.value") ->
+pvals
+tibble(pvals) %>% count(pvals<=0.05)
+``` 
+
+That came out alarmingly close to the exact answer. 
+
+
+
+(b) Find the sample size necessary to obtain a power
+of at least 0.80 under these conditions. What sample size do you
+need? Explain briefly how your answer is
+consistent with (a).
+
+
+Solution
+
+
+Again, the implication is "by calculation".
+This time, in `power.t.test`, put in 0.80 for
+`power` and leave out `n`. The order of things
+doesn't matter (since I have named everything that's going into
+`power.t.test`): 
+
+```{r }
+power.t.test(delta=10,power=0.80,sd=20,type="one.sample",alternative="two.sided")  
+``` 
+
+To get sample size for power at least 0.80, we have to round 33.36
+*up* to the next whole number, ie.\ $n=34$ is needed. (A sample
+of size 33 wouldn't quite have enough power.)
+
+This answer is consistent with (a) because a sample size of 30 gave a
+power a bit less than 0.80, and so to increase the power by a little
+(0.75 to 0.80),
+we had to increase the sample size by a little (30 to 34).
+
+Estimating sample sizes by simulation is tricky, because the sample size
+has to be input to the simulation. That means your only strategy is to
+try different sample sizes until you find one that gives the right power.
+
+In this case, we know that a sample of size 30 doesn't give quite
+enough power, so we have to up the sample size a bit. How about we try
+40? I copied and pasted my code from above and changed 30 to 40:
+
+```{r }
+rerun(1000,rnorm(40,110,20)) %>%
+map(~t.test(.,mu=100)) %>%
+map_dbl("p.value") ->
+pvals
+tibble(pvals) %>% count(pvals<=0.05)
+``` 
+
+Now the power is a bit too big, so we don't need a sample size quite
+as big as 40. So probably our next guess would be 35. But before we
+copy and paste again, we should be thinking about making a function of
+it first, with the sample size as input. Copy-paste once more and edit:
+
+```{r }
+sim_power=function(n) {
+rerun(1000,rnorm(30,110,20)) %>%
+map(~t.test(.,mu=100)) %>%
+map_dbl("p.value") ->
+pvals
+tibble(pvals) %>% count(pvals<=0.05)
+}
+``` 
+
+In the grand scheme of things, we might want to have the null and true
+means, population SD and $\alpha$ be inputs to the function as well,
+so that we have a more general tool, but this will do for now.
+
+Let's run it with a sample size of 35:
+
+```{r }
+sim_power(35)
+``` 
+
+and I'm going to call that good. (Because there is randomness in the
+estimation of the power, don't expect to get *too* close to the
+right answer. This one came out a fair bit less than the right answer;
+the power for $n=35$ should be a bit *more* than 0.80.)
+
+Now that you have the software to do it, you can see that figuring out
+a sample size like this, at least roughly, won't take very long: each
+one of these simulations takes maybe seconds to run, and all you have
+to do is copy and paste the previous one, and edit it to contain the
+new sample size before running it again. You're making the computer
+work hard while you lazily sip your coffee, but there's no harm in
+that: programmer's brain cells are more valuable than computer CPU
+cycles, and you might as well save your brain cells for when you
+really need them.
+
+
+
+

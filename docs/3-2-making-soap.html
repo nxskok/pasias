@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2018-10-09" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a><ul>
+<li><a href="2-1-getting-an-r-studio-cloud-account.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="2-2-getting-started.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="2-3-reading-data-from-a-file.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="3-1-orange-juice.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="3-2-making-soap.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="3-3-handling-shipments.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="4-1-north-carolina-births.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
+<li><a href="4-2-more-about-the-nc-births.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
+<li><a href="4-3-nenana-alaska.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
+<li><a href="4-4-computerized-accounting.html#computerized-accounting"><span class="toc-section-number">4.4</span> Computerized accounting</a></li>
+</ul></li>
+<li class="has-sub"><a href="5-one-sample-inference.html#one-sample-inference"><span class="toc-section-number">5</span> One-sample inference</a><ul>
+<li><a href="5-1-hunter-gatherers-in-australia.html#hunter-gatherers-in-australia"><span class="toc-section-number">5.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="5-2-length-of-gestation-in-north-carolina.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">5.2</span> Length of gestation in North Carolina</a></li>
+<li><a href="5-3-inferring-ice-break-up-in-nenana.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">5.3</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="6-two-sample-inference.html#two-sample-inference"><span class="toc-section-number">6</span> Two-sample inference</a><ul>
+<li><a href="6-1-children-and-electronic-devices.html#children-and-electronic-devices"><span class="toc-section-number">6.1</span> Children and electronic devices</a></li>
+<li><a href="6-2-parking-close-to-the-curb.html#parking-close-to-the-curb"><span class="toc-section-number">6.2</span> Parking close to the curb</a></li>
+</ul></li>
+<li class="has-sub"><a href="7-power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">7</span> Power and sample size</a><ul>
+<li><a href="7-1-simulating-power.html#simulating-power"><span class="toc-section-number">7.1</span> Simulating power</a></li>
+<li><a href="7-2-calculating-power-and-sample-size-for-estimating-mean.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">7.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="7-3-simulating-power-for-proportions.html#simulating-power-for-proportions"><span class="toc-section-number">7.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="8-the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">8</span> The sign test and Mood’s median test</a></li>
+<li><a href="9-matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a></li>
+<li><a href="10-normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="making-soap" class="section level2">
+<h2><span class="header-section-number">3.2</span> Making soap</h2>
+<p>A company operates two production lines in a factory for
+making soap bars. The production lines are
+labelled A and B. A production line that moves faster may produce more
+soap, but may possibly also produce more “scrap” (that is, bits of
+soap that
+can no longer be made into soap bars and will have to be thrown away).</p>
+<p>The data are in <a href="http://www.utsc.utoronto.ca/~butler/c32/soap.txt" class="uri">http://www.utsc.utoronto.ca/~butler/c32/soap.txt</a>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read the data into R. Display the data. There should be 27
+rows. Are there?</li>
+</ol>
+<p>Solution</p>
+<p>Read directly from the URL, most easily:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/soap.txt&quot;</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">soap=<span class="kw">read_delim</span>(url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   case = col_integer(),
+##   scrap = col_integer(),
+##   speed = col_integer(),
+##   line = col_character()
+## )</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">soap</a></code></pre></div>
+<pre><code>## # A tibble: 27 x 4
+##     case scrap speed line 
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;
+##  1     1   218   100 a    
+##  2     2   248   125 a    
+##  3     3   360   220 a    
+##  4     4   351   205 a    
+##  5     5   470   300 a    
+##  6     6   394   255 a    
+##  7     7   332   225 a    
+##  8     8   321   175 a    
+##  9     9   410   270 a    
+## 10    10   260   170 a    
+## # ... with 17 more rows</code></pre>
+<p>27 rows. <code>line</code>, which is either <code>a</code> or <code>b</code>, was
+correctly deduced to be text.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Obtain a histogram of the <code>scrap</code> values, using 10
+bins for your histogram.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</a></code></pre></div>
+<p><img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672"  /></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Comment briefly on the shape of the histogram. Is it approximately
+symmetric, skewed to the left, skewed to the right or something else? (By ``comment
+briefly’’ I mean “say in a few words why you gave the answer you did.”)</li>
+</ol>
+<p>Solution</p>
+<p>I would call this “bimodal”. There are two peaks to the
+histogram, one around 250 and one around 370, with a very small
+frequency in between (the bar around 300).
+Apart from the bimodality, there is no particular evidence for a
+long tail on either end, so I don’t think you could otherwise
+call it anything other than symmetric.
+Having said that (this is going beyond the question), the way a
+histogram looks can depend on the bins you choose to draw it
+with. This is 8 bins rather than 10:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">8</span>)</a></code></pre></div>
+<p><img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672"  /></p>
+<p>The middle low-frequency bin has gone, and this one just looks
+symmetric, with a kind of “flat top”.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Make side-by-side boxplots of scrap values for each
+production line.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>line,<span class="dt">y=</span>scrap))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="02-reading-in_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
+<p>One categorical, one quantitative variable, so boxplots make sense.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Do you think your boxplot says that there are differences in the
+amount of scrap produced by the two production lines, or not?
+Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>I would say that there <em>is</em> a difference between the two
+production lines, with line A producing an average (median) of
+about 330 and line B producing a median of about 275. But you
+could also make the case that, although the medians are rather
+different, there is a lot of variability and hence a lot of
+overlap between the two boxplots, and therefore that there is
+not a “substantial” difference.
+I would say that either of those answers are good . This is going to be a
+common theme in this course: I am going to ask you to make a
+decision and support it, where the reasons you provide are often
+more
+important than the decision you make.
+You might be wondering whether the medians, or means, since
+there is no serious skewness here and definitely no outliers,
+are “significantly different”. This is inference, which we
+will come to later, but a preview looks like this:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">t.test</span>(scrap<span class="op">~</span>line,<span class="dt">data=</span>soap)</a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  scrap by line
+## t = 1.2493, df = 21.087, p-value = 0.2253
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -26.97888 108.21222
+## sample estimates:
+## mean in group a mean in group b 
+##        333.5333        292.9167</code></pre>
+<p>They are not: the P-value of 0.22 is not anywhere near as small as
+0.05, so we can’t reject the null hypothesis that the two lines have
+equal mean amount of scrap.</p>
+<p>Rusty on this stuff? Don’t worry; we’re going to come back to it later
+in the course.</p>
+<p>I was also wondering about something else: that bimodal
+histogram. Could that be explained by the scrap values being two
+different production lines being mixed together? One way to understand
+that is to have two separate histograms, one for each line, side by
+side, which is what facetting does. There is an extra wrinkle here
+that I explain afterwards:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)<span class="op">+</span><span class="kw">facet_grid</span>(line<span class="op">~</span>.)</a></code></pre></div>
+<p><img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672"  /></p>
+<p>I could have used <code>facet_wrap</code>, but that would have put the
+histograms side by side, and I wanted them one above the other (for
+ease of comparison, since they’ll be on the same
+scale). <code>facet_grid</code> is like <code>facet_wrap</code>, but offers
+you more control over where the facets go: you can arrange them above
+and below by a variable, or left and right by a variable. Whatever is
+facetting the plots up and down (on the <span class="math inline">\(y\)</span> axis) goes before the
+squiggle, and whatever facets them left and right goes after. If there
+is nothing separating the facets in one direction, here horizontally,
+the variable is replaced by a dot.</p>
+<p>In some ways, <code>facet_grid</code> is also <em>less</em> flexible,
+because the facets have to be arranged up/down or left/right by a
+variable. That worked here, but if you think back to the Australian
+athletes, where there were ten different sports, it was
+<code>facet_wrap</code> that did the right thing, arranging the sports
+along rows <em>and</em> columns to produce a pleasing display.</p>
+<p>All right, that bimodality. I was expecting that the scrap values from
+one line would be centred about one value and the scrap values from
+the other line would be centred about a different value, with a gap in
+between. But that’s not what happened at all: the line B values are
+all over the place, while it’s the line A values that are actually
+bimodal all by themselves. I’m not sure whether that really means
+anything, since the data sets are pretty small, but it’s kind of
+interesting.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>We started out with the suspicion that if the line was run
+faster, there would be more scrap. We haven’t assessed this
+yet. Draw a scatter plot with <code>scrap</code> on the <span class="math inline">\(y\)</span> axis and
+<code>speed</code> on the <span class="math inline">\(x\)</span> axis.</li>
+</ol>
+<p>Solution</p>
+<p>Same mechanism as before:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672"  /></p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>What do you think is the most important conclusion from
+your plot of the previous part? Describe your conclusion in the
+context of the data.</li>
+</ol>
+<p>Solution</p>
+<p>There seems to be a pretty evident upward trend, apparently
+linear, which means that if the speed of the production line is
+higher, the amount of scrap produced is also higher.
+My last sentence was meant to remind you that
+“there is an upward trend” is <em>not a complete answer</em>:
+we are concerned
+with what that upward trend tells us about the data.
+This, in other words, confirms the suspicion expressed in the
+question, which was therefore a rather large clue: more speed
+tends to go with more scrap.
+That was as far as I wanted you to go: there seems to be an
+association with speed, and there might be an association with
+<code>line</code> that turned out not to be statistically significant.
+What we haven’t done is to assess the relationship between speed
+and scrap for <em>each</em> production line. To do that, we want
+to plot the scrap-speed points distinguished for each production
+line. <code>ggplot</code> makes that easy: you add a
+<code>colour</code> to say what you want to
+distinguish by colour. This is two quantitative variables and one
+categorical variable, if you want to think of it that way:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap,<span class="dt">colour=</span>line))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="02-reading-in_files/figure-html/unnamed-chunk-17-1.png" width="672"  /></p>
+<p>Notice that we get a legend, automatically.</p>
+<p>What is interesting about this one is the red dots are mostly at the
+top (for any given speed), and the blue dots are mostly at the
+bottom. That seems to mean that <em>when we account for speed</em>,
+there is a difference between lines.</p>
+<p>I want to show you one more embellishment, which is to put the
+regression lines on the plot for each group separately. This is where
+<code>ggplot</code> is so nice, since I just have to add one thing:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap,<span class="dt">colour=</span>line))<span class="op">+</span></a>
+<a class="sourceLine" id="cb46-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
+<p><img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672"  /></p>
+<p>The points and lines have come out in different colours, without our
+having to think too hard.</p>
+<p>Both lines show an upward trend, with about the same slope, which
+means that regardless of line, increasing the speed goes with
+increasing the scrap by the same amount. The fact that the red line is
+above the blue one, however, suggests that production line A produces
+more scrap at the same speed than production line B.</p>
+<p>From a management point of view, there is an interesting dynamic at
+work: if you run the production line faster, you’ll produce more bars
+of soap, but you’ll produce more scrap as well. The crucial thing for
+the people in the supervisor’s office is how much raw material is used
+per bar of soap, and if you make the soap bars faster, you might use
+more raw material, which will eat into your profits (from one angle),
+but you will also have more bars of soap to sell.</p>
+<p>Here’s another way to see the same thing. I’m <em>definitely</em> not
+expecting you to follow the code, but you can admire the result!</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">soap2=soap <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>line)</a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap))<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="kw">geom_point</span>(<span class="dt">data=</span>soap2,<span class="dt">colour=</span><span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-4" data-line-number="4"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">colour=</span>line))<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>line)</a></code></pre></div>
+<p><img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+$</p>
+<p>The idea is that we plot all the points in grey (to ``put them in the
+background’’) and then in each plot we plot the points again,
+<em>coloured, for the group we are looking at</em>: line A in the left,
+line B on the right. This is another way of seeing that line A has
+more scrap than line B, given the speed at which the line was being
+run. (I discovered this technique only yesterday. I think the code is
+remarkably concise for what it does.)</p>
+<p>The logic of the code is:</p>
+<ul>
+<li><p>create a new data frame that contains everything in
+<code>soap</code> except for <code>line</code></p></li>
+<li><p>make a scatter plot of all the points in this new data frame,
+coloured grey</p></li>
+<li><p>plot the points again (from the original data frame), coloured by
+which production line they’re from</p></li>
+<li><p>produce a separate scatterplot for each production line.</p></li>
+</ul>
+<p>The trick about creating the new data frame was to enable plotting of
+all points regardless of group on each subplot (“facet” in
+<code>ggplot</code> terminology), as well as the ones that come from that
+production line.</p>
+<p>I don’t expect you to be able to follow all the details of the code
+below, either,
+but I would like you to try and get the logic. What we do is a
+regression predicting <code>scrap</code> from <em>two</em> things:
+<code>speed</code> and production <code>line</code>. The results we get are these:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">scrap<span class="fl">.1</span>=<span class="kw">lm</span>(scrap<span class="op">~</span>speed<span class="op">+</span>line,<span class="dt">data=</span>soap)</a>
+<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="kw">summary</span>(scrap<span class="fl">.1</span>)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = scrap ~ speed + line, data = soap)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -39.557 -14.161  -0.121  17.518  33.953 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  80.41099   14.54379   5.529 1.10e-05 ***
+## speed         1.23074    0.06555  18.775 7.48e-16 ***
+## lineb       -53.12920    8.21003  -6.471 1.08e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 21.13 on 24 degrees of freedom
+## Multiple R-squared:  0.9402, Adjusted R-squared:  0.9352 
+## F-statistic: 188.6 on 2 and 24 DF,  p-value: 2.104e-15</code></pre>
+<p>The P-values for <code>speed</code> and <code>line</code> are the second and
+third things in the last column, <span class="math inline">\(7 \times 10^{-16}\)</span> and <span class="math inline">\(1 \times 10^{-6}\)</span>
+respectively. These are both very strongly significant, in contrast to
+the two-sample <span class="math inline">\(t\)</span>-test where <code>line</code> was not significant.</p>
+<p>So does production line make a difference or not?</p>
+<p>The plot says that it does, and the meaning of model <code>scrap.1</code>
+just above is that , and emph{<code>line</code> affects scrap when you
+account for speed}. (In the two-sample <span class="math inline">\(t\)</span>-test above we didn’t
+account for speed at all, since the various speeds were all mixed up.)</p>
+<p>There is a moral to this story, which I would like you to get even if
+you don’t get any of the statistics: , it should be in your model and on your
+graph, because
+it enables you to get better (more precise) conclusions about your
+other variables. Here, there really is a difference between the
+production lines, but the <span class="math inline">\(t\)</span>-test was too much of a blunt instrument
+to unearth it (because <code>speed</code> made a difference as well).</p>
+</div>
+<p style="text-align: center;">
+<a href="3-1-orange-juice.html"><button class="btn btn-default">Previous</button></a>
+<a href="3-3-handling-shipments.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

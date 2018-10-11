@@ -1,0 +1,171 @@
+
+
+ A company is growing and would like to attract more
+employees. The company would like to advertise that salaries there are
+increasing. To do this, the company randomly samples 20 employees that
+have been working there since January 2016, and for each of these
+employees, records their salary in January 2016 and January 2017. The
+data, with salaries in thousands of dollars, are in
+[https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt](https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt). 
+
+
+
+(a)[2] Read the data into R and demonstrate that you have two
+salaries for each of 20 employees.
+
+Solution
+
+
+Looking at the file, we see that the values are separated by
+exactly one space:
+```{r }
+my_url="https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt"
+salaries=read_delim(my_url," ")
+salaries
+```     
+
+There are 20 employees (rows), and two columns of salaries: for each
+employee in the data set, their salary in January 2016 and in January
+2017 (thus, two salaries for each employee).
+
+
+(b)[2] To compare the salaries, explain briefly why a
+matched-pairs test would be better than a two-sample test.
+
+Solution
+
+
+A matched-pairs test would be better because we have two
+observations (salaries) for each subject (employee). A two-sample
+test would be appropriate if we had two separate sets of
+employees, one set with their salaries recorded in 2016 and the
+other with their salaries recorded in 2017. That is not what we
+have here.
+You can go after this either way: why a matched-pairs approach is
+appropriate, or why a two-sample approach is not (or a bit of both).
+
+
+(c)[4] Make a suitable graph to assess the assumptions for a
+matched-pairs $t$-test. What does your graph tell you?
+
+Solution
+
+
+This requires thought first before you do any coding (and this is
+the reason for this one being four points). What has to be at
+least approximately normally distributed is the set of
+*differences*, salary at one time point minus the salary at
+the other, for each employee. The individual salaries don't have
+to be normally distributed at all. 
+We don't have the differences here, so we have to calculate them
+first. The smoothest way is to make a pipeline:
+```{r }
+salaries %>%
+mutate(diff=jan2017-jan2016) %>%
+ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
+```     
+
+A couple of coding notes: (i) you can take the differences 2016 minus
+2017 if you like (then they will tend to be negative), (ii)
+`ggplot` used in a pipeline like this does *not* have a
+data frame first (the data frame used is the nameless output from the
+`mutate`, with the differences in it). 
+
+Also, there's no problem doing the `mutate`, saving that, and
+then feeding the saved data frame into `ggplot`. If you find
+that clearer, go for it.
+
+As for what I see: I think those points get a bit far from the
+line at the high and low ends: the high values are too high and the
+low values are too low, which is to say that we have outliers at both
+ends, or the distribution has long tails (either way of saying it is
+good). 
+
+The important conclusion here is whether these differences are normal
+*enough* to trust a matched pairs $t$-test here. We have a sample
+of size 20, so the central limit theorem will help us some, but you
+can reasonably say that these tails are too long and that we should
+not trust a matched-pairs $t$-test.
+
+I actually wanted you to practice doing a matched-pairs $t$-test
+anyway, hence my comment in the next part, but the result is probably
+not *so* trustworthy.
+
+
+(d)[3] Carry out a suitable matched-pairs $t$-test on these data. (If you
+thought in the previous part that this was the wrong thing to do, do
+it anyway for the purposes of this assignment.) What do you conclude?
+
+Solution
+
+
+The company is trying to prove that salaries are *increasing*
+over time, so we need a one-sided alternative.
+Following through the procedure, even though you may not trust it much:
+```{r }
+with(salaries, t.test(jan2016, jan2017, alternative="less", paired=T))
+```     
+
+You could also have the years the other way around, in which case the
+alternative has to be the other way around as well:
+
+```{r }
+with(salaries, t.test(jan2017, jan2016, alternative="greater", paired=T))
+``` 
+
+Or, if you saved the data frame with the differences in it, do a
+one-sample test on those, again making sure that you get the
+`alternative` right. I didn't save it, so I'm calculating the
+differences again:
+
+```{r }
+salaries %>%
+mutate(diff=jan2017-jan2016) %>%
+with(.,t.test(diff, mu=0, alternative="greater"))
+``` 
+
+Whichever way you do it, the P-value is the same $2.271 \times
+10^{-9}$, which is a whole lot less than 0.05, so there is no doubt at
+all that salaries are increasing.
+
+(Your intuition ought to have expected something like this, because
+everyone's 2017 salary appears to be greater than their 2016 salary.)
+
+Extra: you might be feeling that we ought to be doing a matched-pairs
+sign test, which you could do this way:
+
+```{r }
+library(smmr)
+salaries %>%
+mutate(diff=jan2017-jan2016) %>%
+sign_test(diff,0)
+``` 
+
+and then take the "upper" P-value, which is in the same ballpark as
+the one from the $t$-test. So the salaries really are increasing,
+whether you believe the $t$-test or not. And note that \emph{every
+single employee's salary increased}.
+
+(Again, the "missing" data frame in `sign_test` is the nameless
+one with the differences in it.)
+
+
+(e)[2] The company would like to estimate  \emph{how
+much} salaries are increasing, on average. Obtain some output that
+will enable the company to assess this, and tell the CEO which piece
+of the output they should look at.
+
+Solution
+
+
+A confidence interval. 95\% is fine. As before, we have to run
+`t.test` again because we ran a one-sided test and a
+confidence interval for us is two-sided:
+```{r }
+with(salaries, t.test(jan2017, jan2016, paired=T))
+```     
+
+Between about \$5,000 and about \$7,500. This is what to tell the CEO.
+
+ 
+

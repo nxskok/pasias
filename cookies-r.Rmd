@@ -1,0 +1,149 @@
+
+
+ A famous cookie manufacturer claims that
+their bags of chocolate chip cookies contain ``more than 1100
+chocolate chips on average''. A diligent group of students buys 16
+bags of these cookies and counts the number of chocolate chips in each
+bag. The results are in [http://www.utsc.utoronto.ca/~butler/c32/chips.txt](http://www.utsc.utoronto.ca/~butler/c32/chips.txt).
+
+
+
+(a) Read in and display (some of) the data.
+
+
+Solution
+
+
+I'll pretend it's a
+`.csv` this time, just for fun.  Give the data frame a
+name different from `chips`, so that you don't get
+confused:
+```{r }
+bags=read_csv("chips.txt")
+bags
+``` 
+
+That looks sensible.       
+
+
+
+(b) Build your own sign test in R for testing that the median is
+1100 chocolate chips, against the alternative that it is greater.
+(Do this as in class: count the appropriate thing,
+compare it with an appropriate binomial distribution, and obtain a
+P-value.
+
+
+Solution
+
+
+The null median is 1100, so we count the number
+of values above and below:
+
+```{r }
+bags %>% count(chips<1100)
+``` 
+
+The un-standard thing there is that we can put a logical condition
+directly into the `count`. If you don't think of that, you can
+also do this, which creates a new variable `less` that is
+`TRUE` or `FALSE` for each bag appropriately:
+
+```{r }
+bags %>% mutate(less=(chips<1100)) %>% count(less)
+``` 
+
+or the more verbose
+
+```{r }
+bags %>% mutate(less=(chips<1100)) %>%
+group_by(less) %>% summarize(howmany=n())
+``` 
+
+Just one value below, with all the rest above. 
+Getting the right P-value, properly, requires some careful thought
+(but you will probably get the right answer anyway). If the
+alternative hypothesis is true, and the median is actually bigger than
+1100 (say, 1200), you would expect half the data values to be bigger
+than 1200 and half smaller. So *more* than half the data values
+would be bigger than *1100*, and fewer than half of them would be
+less than 1100. So, if we are going to reject the null (as it looks as
+if we will), that small number of values below 1100 is what we want.
+
+The P-value is the probability of a value 1 or less in a binomial
+distribution with $n=16, p=0.5$:
+
+```{r }
+sum(dbinom(0:1,16,0.5))
+``` 
+
+Or, equivalently, count *up* from 15:
+
+```{r }
+sum(dbinom(15:16,16,0.5))
+``` 
+
+This is correctly one-sided, so we don't have to do anything with
+it. 
+
+
+
+(c) Use my R package `smmr` to reproduce your sign test
+above, and verify that you get consistent results. (See the
+maze-design question for instructions on installing this, if you
+haven't yet.)
+
+
+Solution
+
+
+This will mean reading the output carefully:
+```{r }
+library(smmr)
+sign_test(bags,chips,1100)
+```       
+
+This time, we're doing a one-sided test, specifically an
+*upper-tail* test, since we are looking for evidence that the
+median is *greater than* 1100. The results are exactly what we
+got "by hand": 15 values above and one below, and a P-value (look
+along the `upper` line) of 0.00026.
+ The two-sided P-value of 0.00052 rounds to the same 0.0005 as SAS got.
+
+Alternatively, you can do this:
+
+```{r }
+sign_test0(bags$chips,1100)
+``` 
+
+with the same result (but only go this way if you need to).
+
+
+
+(d) Use `smmr` to obtain a 95\% confidence interval for the
+median number of chocolate chips per bag of cookies.
+
+
+Solution
+
+
+Once everything is in place, this is simplicity itself:
+```{r }
+ci_median(bags,chips)
+```       
+
+1135 to 1325. I would round these off to whole numbers, since the data
+values are all whole numbers. These values are all above 1100, which
+supports the conclusion we got above that the median is above
+1100. This is as it should be, because the CI is ``all those medians
+that would *not* be rejected by the sign test''. 
+
+Or, 
+
+```{r }
+ci_median0(bags$chips)
+``` 
+
+
+
+

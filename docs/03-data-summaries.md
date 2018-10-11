@@ -199,7 +199,7 @@ principle. That would give
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 which is perfectly acceptable. You can try something a bit more or a
 bit less, and see how you like it in comparison. What you are looking
@@ -211,7 +211,7 @@ you'll lose the shape:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 (is that leftmost bin an indication of skewness or some observations
 that happen to be smallish?)
@@ -225,7 +225,7 @@ up and down:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 I generally am fairly relaxed about the number of bins you use, as
 long as it's not clearly too few or too many. You might have done
@@ -289,7 +289,7 @@ w
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672" />
 
 R also has
 
@@ -317,7 +317,7 @@ Another way to go is a "density plot". This is a smoothed-out version of a histo
 ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 
 `geom_density` has an optional parameter that controls how smooth
 or wiggly the picture is, but the default is usually good.
@@ -349,7 +349,7 @@ quantitative variable. You can draw a boxplot for that, too, but the
 ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 
 The high weight is actually an outlier, but look at all those outliers
 at the bottom!\endnote{When Tukey, a name we will see again, invented
@@ -402,7 +402,7 @@ ggplot(bw,aes(x=factor(`Premie?`),y=`Weeks Gestation`))+geom_boxplot()
 ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 The warning is because the prematurity of one of the babies is not known.
 Or
@@ -416,7 +416,7 @@ ggplot(bw,aes(x=`Premie?`,y=`Weeks Gestation`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 
 The same warning again, for the same reason.
 
@@ -549,7 +549,7 @@ ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-22-1.png" width="672" />
 
 You see a rather clear upward trend. Those very underweight babies
 came from very short pregnancies, but the vast majority of pregnancies
@@ -569,7 +569,7 @@ colour=`Premie?`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-23-1.png" width="672" />
 
 That was rather silly because `ggplot` treated prematureness as a *continuous* variable, and plotted the values on a dark blue-light blue scale. This is the same issue as on the boxplot above, and has the same solution:
 
@@ -583,7 +583,7 @@ colour=factor(`Premie?`)))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672" />
 
 Better.
 
@@ -842,7 +842,7 @@ bin width, if you want to go that way:
 ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-31-1.png" width="672" />
 
 Note that you need to type `JulianDate` exactly as it
 appears, capital letters and all. R is case-sensitive.
@@ -860,7 +860,7 @@ We haven't done normal quantile plots yet, but looking ahead:
 ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-33-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672" />
 
 That hugs the line pretty well, so I would call it close to
 normally-distributed. It bulges away from the line because there are
@@ -1032,7 +1032,7 @@ Solution
 ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-38-1.png" width="672" />
 This is actually a small-but-real downward trend, especially since
 about 1960, 
 but the large amount
@@ -1053,7 +1053,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-40-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672" />
 
 This is R's version of a trend that is not constrained
 to be linear (so that it "lets the data speak for itself").
@@ -1196,7 +1196,7 @@ Gender is categorical and CAS score is quantitative, so a boxplot would appear t
 ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-44-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-43-1.png" width="672" />
 
 The median for males is slightly higher, so male accountants are more anxious around computers than female accountants are.
 
@@ -1209,7 +1209,7 @@ ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
 facet_wrap(~gender,ncol=1)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-45-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-44-1.png" width="672" />
 
 If you go this way, you have to make a call about where the centres of the histograms are. I guess the male one is slightly further to the right, but it's not so easy to tell. (Make a call.)
     
@@ -1371,7 +1371,7 @@ You might be wondering whether the test scores are related. They are both quanti
 ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-53-1.png" width="672" />
 
 The two variables can be on either axis, since there is no obvious
 response or explanatory variable. A higher score on one scale goes
@@ -1385,7 +1385,7 @@ This plot mixes up the males and females, so you might like to distinguish them,
 ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-55-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672" />
 
 There is a slight (but only slight) tendency for the males to be up
 and to the right, and for the females to be down and to the left. This
@@ -1397,259 +1397,5 @@ compared to the SD.
 
 
 
-
-
-##  Hunter-gatherers in Australia
-
-
- A hunter-gatherer society is one where people get their food
-by hunting, fishing or foraging rather than by agriculture or by
-raising animals. Such societies tend to move from place to place.
-Anthropologists have studied hunter-gatherer societies in forest
-ecosystems across the world. The average population density of these
-societies is 7.38 people per 100 km$^2$. Hunter-gatherer societies on
-different continents might have different population densities,
-possibly because of large-scale ecological constraints (such as
-resource availability), or because of other factors, possibly social
-and/or historic, determining population density.
-
-Some hunter-gatherer societies in Australia were studied, and the
-population density per 100 km$^2$ recorded for each. The data are in
-[http://www.utsc.utoronto.ca/~butler/c32/hg.txt](http://www.utsc.utoronto.ca/~butler/c32/hg.txt). 
-
-
-
-(a) Read the data into R. Do you have the correct variables?
-How many hunter-gatherer societies in Australia were studied?
-Explain briefly.
-
-
-Solution
-
-
-The data values are separated by (single) spaces, so `read\_delim`
-is the thing:
-
-```r
-url="http://www.utsc.utoronto.ca/~butler/c32/hg.txt"
-societies=read_delim(url," ")
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   name = col_character(),
-##   density = col_double()
-## )
-```
-
-I like to put the URL in a variable first, because if I don't, the
-`read\_delim` line can be rather long. But if you want to do it
-in one step, that's fine, as long as it's clear that you are doing the
-right thing.
-
-Let's look at the data frame:
-
-
-```r
-societies
-```
-
-```
-## # A tibble: 13 x 2
-##    name       density
-##    <chr>        <dbl>
-##  1 jeidji       17   
-##  2 kuku         50   
-##  3 mamu         45   
-##  4 ngatjan      59.8 
-##  5 undanbi      21.7 
-##  6 jinibarra    16   
-##  7 ualaria       9   
-##  8 barkindji    15.4 
-##  9 wongaibon     5.12
-## 10 jaralde      40   
-## 11 tjapwurong   35   
-## 12 tasmanians   13.4 
-## 13 badjalang    13.4
-```
-
-I have the name of each society and its population density, as
-promised (so that is correct). There were 13 societies that were
-studied. For me, they were all displayed. For you, you'll probably see only the first ten, and you'll have to click Next to see the last three.
-    
-
-
-(b) The question of interest is whether these Australian
-hunter-gatherer societies are like the rest of the world in terms of mean
-population density. State suitable null and alternative
-hypotheses. *Define any symbols you use*: that is, if you use a
-symbol, you also have to say what it means. 
-
-
-Solution
-
-
-The mean for the world as a whole ("average", as stated earlier)
-is 7.38. Let $\mu$ denote the population mean for Australia (of
-which these societies are a sample). Then our hypotheses are:
-$$ H_0: \mu=7.38$$
-and
-$$ H_a: \mu \ne 7.38.$$
-There is no reason for a one-sided alternative here, since all we
-are interested in is whether Australia is different from the rest
-of the world.
-*Expect to lose a point* if you use the symbol $\mu$ without
-saying what it means.
-
-
-
-(c) Test your hypotheses using a suitable test. What do you
-conclude, in the context of the data?
-
-
-Solution
-
-
-A $t$-test, since we are testing a mean:
-
-```r
-t.test(societies$density,mu=7.38)
-```
-
-```
-## 
-## 	One Sample t-test
-## 
-## data:  societies$density
-## t = 3.8627, df = 12, p-value = 0.002257
-## alternative hypothesis: true mean is not equal to 7.38
-## 95 percent confidence interval:
-##  15.59244 36.84449
-## sample estimates:
-## mean of x 
-##  26.21846
-```
-
-The P-value is 0.0023, less than the usual $\alpha$ of 0.05, so we
-*reject* the null hypothesis and conclude that the mean
-population density is not equal to 7.38. That is to say, Australia is
-different from the rest of the world in this sense.
-
-As you know, "reject the null hypothesis" is only part of the
-answer, so gets only part of the marks.
-    
-
-
-(d) Do you have any doubts about the validity of your test?
-Explain briefly, using a suitable graph to support your
-explanation. 
-
-
-Solution
-
-
-The assumption behind the $t$-test is that the data are
-approximately normal. We can assess that in several ways, but the
-simplest (which is perfectly acceptable at this point) is a
-histogram. You'll need to pick a suitable number of bins. This one
-comes from Sturges' rule:
-
-```r
-ggplot(societies,aes(x=density))+geom_histogram(bins=5)
-```
-
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-59-1.png" width="672" />
-Your conclusion might depend on how many bins you chose for your
-histogram. Here's 8 bins (which is really too many with only 13
-observations, but it actually shows the shape well): 
-
-
-```r
-ggplot(societies,aes(x=density))+geom_histogram(bins=8)
-```
-
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-60-1.png" width="672" />
-
-or you can get a number of bins from one of the built-in functions,
-such as:
-
-
-```r
-mybins=nclass.FD(societies$density)
-mybins
-```
-
-```
-## [1] 3
-```
-
-This one is small. The interquartile range is large and $n$ is small,
-so the binwidth will be large and therefore the number of bins will be
-small. 
-
-Other choices: a one-group boxplot:
-
-
-```r
-ggplot(societies,aes(x=1,y=density))+geom_boxplot()
-```
-
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-62-1.png" width="672" />
-
-This isn't the best for assessing normality as such, but it will tell
-you about lack of symmetry and outliers, which are the most important
-threats to the $t$-test, so it's fine here. Or, a normal quantile plot:
-
-
-```r
-ggplot(societies,aes(sample=density))+
-stat_qq()+stat_qq_line()
-```
-
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-63-1.png" width="672" />
-
-This is actually the best way to assess normality, but I'm not
-expecting you to use this plot here, because we may not have gotten to
-it in class yet. (If you have read ahead and successfully use the
-plot, it's fine.)
-
-After you have drawn your chosen plot (you need *one* plot), you
-need to say something about normality and thus whether you have any
-doubts about the validity of your $t$-test. This will depend on the
-graph you drew: if you think your graph is symmetric and outlier-free,
-you should have no doubts about your $t$-test; if you think it has
-something wrong with it, you should say what it is and express your
-doubts. My guess is that you will think this distribution is skewed to
-the right. Most of my plots are saying that.\endnote{The normal
-quantile plot is rather interesting: it says that the uppermost
-values are approximately normal, but the *smallest* eight or so
-values are too bunched up to be normal. That is, normality fails not
-because of the long tail on the right, but the bunching on the
-left. Still right-skewed, though.}
-
-On the website where I got these data, they were using the data as
-an example for another test, precisely *because* they thought the
-distribution was right-skewed. Later on, we'll learn about the sign
-test for the median, which I think is actually a better test here.
- 
- 4 distribution of hunter-gatherer population densities (N = 86)
- across all forest ecosystems worldwide is skewed to the right and is
- non-normal. The median is therefore the most reliable measure of
- central tendency. As such, the median population density (per 100 km)
- of forest hunter-gatherers is ηo = 7.38. An interesting question that
- we may want to ask is whether this value is an accurate estimate of
- the population density of forest hunter-gatherers on specific
- continents; the results might answer the question of whether
- hunter-gatherer population densities are determined primarily by
- large-scale ecological constraints (such as resource availability), or
- whether there seem to be other factors, possibly social and/or
- historic, determining population density. For this example we will
- look at the hunter-gatherer groups of the northern Australian forests
- (n = 13).  Let ηo be the median population density of all forest
- hunter-gatherer groups (N = 86), where ηo = 7.38, and let η be the
- median population density for Australian forest hunter-gatherer groups
- (n = 13).  Formally, we wish to test the hypothesis at the a = 0.05
- (95%) level:
 
 
