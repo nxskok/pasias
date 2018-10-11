@@ -132,7 +132,7 @@ Solution
 ggplot(plugged,aes(x=factor(year),y=hours))+geom_boxplot()
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
 
 The `fct_inorder` trick from assignment 1 will also work, since
 the years are in the data in the order we want them to be displayed.
@@ -154,7 +154,7 @@ plugged %>% mutate(the_year=factor(year)) %>%
 ggplot(aes(x=the_year, y=hours))+geom_boxplot()
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
 You could even redefine `year` to be the factor version of
 itself (if you don't need the year-as-number anywhere else). The
@@ -177,7 +177,7 @@ ggplot(plugged,aes(x=year,y=hours))+geom_boxplot()
 ## Warning: Continuous x aesthetic -- did you forget aes(group=...)?
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
 You get *one* boxplot, for all the hours, without distinguishing
 by year, and a warning message that tries (and fails) to read our
@@ -617,7 +617,7 @@ With the right data set, this is a piece of cake:
 ggplot(parking,aes(x=gender,y=distance))+geom_boxplot()
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
 The outcome variable is distance from the curb, so smaller should be
 better (more accurate parking). With that in mind, the median for
@@ -637,7 +637,7 @@ the distances, without distinguishing by gender:
 ggplot(parking,aes(x=distance))+geom_histogram(bins=8)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
 That big outlier is the very inaccurate male driver.
 
@@ -654,7 +654,7 @@ geom_histogram(bins=7)+
 facet_grid(gender~.)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
 `facet_grid` takes a "model formula" with a squiggle, with $y$
 on the left and $x$ on the right. We want to compare our two
@@ -682,7 +682,7 @@ geom_histogram(bins=7)+
 facet_wrap(~gender,ncol=1)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
 The centres of both histograms are somewhere around 10, so it's hard
 to see any real difference between males and females here. Maybe this
@@ -775,7 +775,7 @@ and that leads to this histogram:
 ggplot(parking,aes(x=distance))+geom_histogram(bins=14)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-27-1.png" width="672" />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
 That gives rather more detail (a lot more bars: the binwidth in the
 Sturges-rule histogram is about 7, or twice what you see here), but in

@@ -394,7 +394,7 @@ This is what you should see:
 boxplot(mtcars$mpg)
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="01-getting-used_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
 The long upper whisker supports our guess from before that the
 distribution is right-skewed.
@@ -528,7 +528,7 @@ library(tidyverse)
 ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="01-getting-used_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 $ %$ %$ 
 
 This shows a somewhat downward trend, which is what you'd expect,
@@ -552,7 +552,7 @@ of adding this to the end of the plotting command:
 ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="01-getting-used_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
 The line definitely goes downhill. Decide for yourself how well you
 think a line fits these data.
@@ -701,7 +701,7 @@ so the right syntax is this:
 ggplot(rats,aes(x=group, y=density))+geom_boxplot()
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="01-getting-used_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
 Given the amount of variability, the control and low-jump groups are
 very similar (with the control group having a couple of outliers), but

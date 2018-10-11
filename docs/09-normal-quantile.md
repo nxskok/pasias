@@ -24,6 +24,8 @@ library(tidyverse)
 
 
 
+## Lengths of heliconia flowers
+
 
 
  The tropical flower *Heliconia* is
@@ -131,7 +133,7 @@ ggplot(heliconia,aes(sample=bihai))+stat_qq()+stat_qq_line()
 ## Warning: Removed 7 rows containing non-finite values (stat_qq_line).
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-4-1.png" width="672"  />
 
 I'm saving the comments until we've seen all three.
 
@@ -151,7 +153,7 @@ Same idea again:
 ggplot(heliconia,aes(sample=caribaea_red))+stat_qq()+stat_qq_line()
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
 
 
 
@@ -177,7 +179,7 @@ ggplot(heliconia,aes(sample=caribaea_yellow))+stat_qq()+stat_qq_line()
 ## Warning: Removed 8 rows containing non-finite values (stat_qq_line).
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
 I did a lot of copying and pasting there.
 
@@ -274,7 +276,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~variety,scale="free")
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
 These are a bit elongated vertically. The `scale="free"` allows
 a different vertical scale for each plot (otherwise there would be one
@@ -298,7 +300,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~variety,scale="free",ncol=2)
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
 I think the square plots make it easier to see the shape of these:
 curved, S-bend, straightish.
@@ -311,7 +313,7 @@ ggplot(heliconia.long,aes(x=length))+
 geom_histogram(binwidth=1)+facet_wrap(~variety,scale="free",ncol=2)
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
 \textsl{bihai} has those two outliers, \textsl{caribaea} red has no tails
 to speak of (or you might say "it's bimodal", which would be another
@@ -329,6 +331,8 @@ histogram is for assessing normality.
 
 
 
+
+## Ferritin and normality
 
 
 
@@ -416,7 +420,7 @@ ggplot(athletes, aes(sample=Ferr))+
 stat_qq()+stat_qq_line()
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
 This is almost a classic right skew: the values are too bunched up at
 the bottom and too spread out at the top. The curved shape should be
@@ -442,7 +446,7 @@ ggplot(athletes,aes(sample=Ferr))+stat_qq()+stat_qq_line()+
 facet_wrap(~Sport)
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
   
 
 (d)[2] Looking at the plots in the previous part, would you say

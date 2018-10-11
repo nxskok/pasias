@@ -28,6 +28,8 @@ library(smmr)
 
 
 
+## Running a maze
+
 
 
  A researcher is trying to design a maze that can be run by
@@ -912,7 +914,7 @@ ci_median0(bags$chips)
 
 
 
-
+## The power of the sign test
 
 
  I've mentioned several times that the sign test has less
@@ -980,8 +982,8 @@ x
 ```
 
 ```
-##  [1] 76.95700 77.39971 38.34350 22.36697 59.88322 38.86461 34.19786
-##  [8] 35.72710 46.37126 51.38259
+##  [1] 24.88526 18.18060 47.55904 39.84607 56.69949 40.41952 50.10147
+##  [8] 40.19876 45.30753 69.88152
 ```
 
 
@@ -1005,8 +1007,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        5
-## 2 TRUE         5
+## 1 FALSE        7
+## 2 TRUE         3
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1040,7 +1042,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       5 FALSE
+## 1       3 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1060,7 +1062,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       5 FALSE
+## 1       3 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1405,7 +1407,7 @@ ggplot(aes(sample=rl))+
 stat_qq()+stat_qq_line()
 ```
 
-<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-48-1.png" width="672" />
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
 You see the long tails compared to the normal.
 

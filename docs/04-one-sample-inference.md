@@ -183,7 +183,7 @@ comes from Sturges' rule:
 ggplot(societies,aes(x=density))+geom_histogram(bins=5)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 Your conclusion might depend on how many bins you chose for your
 histogram. Here's 8 bins (which is really too many with only 13
 observations, but it actually shows the shape well): 
@@ -193,7 +193,7 @@ observations, but it actually shows the shape well):
 ggplot(societies,aes(x=density))+geom_histogram(bins=8)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
 or you can get a number of bins from one of the built-in functions,
 such as:
@@ -219,7 +219,7 @@ Other choices: a one-group boxplot:
 ggplot(societies,aes(x=1,y=density))+geom_boxplot()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
 This isn't the best for assessing normality as such, but it will tell
 you about lack of symmetry and outliers, which are the most important
@@ -231,7 +231,7 @@ ggplot(societies,aes(sample=density))+
 stat_qq()+stat_qq_line()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
 This is actually the best way to assess normality, but I'm not
 expecting you to use this plot here, because we may not have gotten to
@@ -476,7 +476,7 @@ but this is a matter of taste):
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
 So, we were assessing normality. What about that?
 
@@ -499,7 +499,7 @@ the idea in class. Here's the normal quantile plot for these data:
 ggplot(bw,aes(sample=`Weight (pounds)`))+stat_qq()+stat_qq_line()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
 This is rather striking: the lowest birthweights (the ones below 5
 pounds or so) are *way* too low for a normal distribution to
@@ -705,7 +705,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
 There was something obvious to see: after about 1960, there is a clear
 downward trend: the ice is breaking up earlier on average every
@@ -735,7 +735,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+
 geom_smooth(method="lm")
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
 Compare the confidence interval for the mean `JulianDate` in
 1920: 126 to 131 (the shaded area on the graph), with 2000: 121 to

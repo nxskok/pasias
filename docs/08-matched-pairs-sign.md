@@ -28,6 +28,8 @@ library(smmr)
 
 
 
+## Measuring body fat
+
 
 
  Athletes are concerned with measuring their body fat
@@ -268,7 +270,7 @@ bodyfat %>% mutate(diff=xray-ultrasound) %>%
 ggplot(aes(x=diff))+geom_histogram(bins=6)
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
 I don't know whether you'd call that "approximately normal" or
 not. We are in kind of a double-bind with this one: the sample size is
@@ -293,7 +295,7 @@ bodyfat %>% mutate(diff=xray-ultrasound) %>%
 ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 This is showing a little evidence of skewness or outliers  (depending
 on your point of view: either is good). The lowest and highest values
 are both too high, and the pattern of points on the plot is kind of
@@ -573,6 +575,8 @@ zero.
 
 
 
+## Changes in salary
+
 
 
  A company is growing and would like to attract more
@@ -680,7 +684,7 @@ mutate(diff=jan2017-jan2016) %>%
 ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
 A couple of coding notes: (i) you can take the differences 2016 minus
 2017 if you like (then they will tend to be negative), (ii)

@@ -199,7 +199,7 @@ principle. That would give
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
 which is perfectly acceptable. You can try something a bit more or a
 bit less, and see how you like it in comparison. What you are looking
@@ -211,7 +211,7 @@ you'll lose the shape:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
 (is that leftmost bin an indication of skewness or some observations
 that happen to be smallish?)
@@ -225,7 +225,7 @@ up and down:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
 I generally am fairly relaxed about the number of bins you use, as
 long as it's not clearly too few or too many. You might have done
@@ -289,7 +289,7 @@ w
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
 R also has
 
@@ -317,7 +317,7 @@ Another way to go is a "density plot". This is a smoothed-out version of a histo
 ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
 `geom_density` has an optional parameter that controls how smooth
 or wiggly the picture is, but the default is usually good.
@@ -349,7 +349,7 @@ quantitative variable. You can draw a boxplot for that, too, but the
 ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
 The high weight is actually an outlier, but look at all those outliers
 at the bottom!\endnote{When Tukey, a name we will see again, invented
@@ -402,7 +402,7 @@ ggplot(bw,aes(x=factor(`Premie?`),y=`Weeks Gestation`))+geom_boxplot()
 ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
 The warning is because the prematurity of one of the babies is not known.
 Or
@@ -416,7 +416,7 @@ ggplot(bw,aes(x=`Premie?`,y=`Weeks Gestation`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
 The same warning again, for the same reason.
 
@@ -549,7 +549,7 @@ ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
 You see a rather clear upward trend. Those very underweight babies
 came from very short pregnancies, but the vast majority of pregnancies
@@ -569,7 +569,7 @@ colour=`Premie?`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
 That was rather silly because `ggplot` treated prematureness as a *continuous* variable, and plotted the values on a dark blue-light blue scale. This is the same issue as on the boxplot above, and has the same solution:
 
@@ -583,7 +583,7 @@ colour=factor(`Premie?`)))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
 Better.
 
@@ -842,7 +842,7 @@ bin width, if you want to go that way:
 ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-31-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
 Note that you need to type `JulianDate` exactly as it
 appears, capital letters and all. R is case-sensitive.
@@ -860,7 +860,7 @@ We haven't done normal quantile plots yet, but looking ahead:
 ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
 
 That hugs the line pretty well, so I would call it close to
 normally-distributed. It bulges away from the line because there are
@@ -1032,7 +1032,7 @@ Solution
 ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-38-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 This is actually a small-but-real downward trend, especially since
 about 1960, 
 but the large amount
@@ -1053,7 +1053,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
 This is R's version of a trend that is not constrained
 to be linear (so that it "lets the data speak for itself").
@@ -1196,7 +1196,7 @@ Gender is categorical and CAS score is quantitative, so a boxplot would appear t
 ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-43-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
 The median for males is slightly higher, so male accountants are more anxious around computers than female accountants are.
 
@@ -1209,7 +1209,7 @@ ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
 facet_wrap(~gender,ncol=1)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-44-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
 If you go this way, you have to make a call about where the centres of the histograms are. I guess the male one is slightly further to the right, but it's not so easy to tell. (Make a call.)
     
@@ -1371,7 +1371,7 @@ You might be wondering whether the test scores are related. They are both quanti
 ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-53-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
 The two variables can be on either axis, since there is no obvious
 response or explanatory variable. A higher score on one scale goes
@@ -1385,7 +1385,7 @@ This plot mixes up the males and females, so you might like to distinguish them,
 ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672" />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
 There is a slight (but only slight) tendency for the males to be up
 and to the right, and for the females to be down and to the left. This

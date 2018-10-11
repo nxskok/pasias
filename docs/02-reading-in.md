@@ -200,7 +200,7 @@ to get the variables from),  and the "how to plot" is
 ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
 It looks to me as if there is a negative relationship: as pectin goes
 up, sweetness tends to go *down*. The trend appears to go top
@@ -220,7 +220,7 @@ ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 The smooth trend is kind of downhill, but not very convincing.
 
 
@@ -305,7 +305,7 @@ Solution
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
 
 
@@ -331,7 +331,7 @@ with. This is 8 bins rather than 10:
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=8)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
 The middle low-frequency bin has gone, and this one just looks
 symmetric, with a kind of "flat top".
@@ -351,7 +351,7 @@ Solution
 ggplot(soap,aes(x=line,y=scrap))+geom_boxplot()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
 One categorical, one quantitative variable, so boxplots make sense.
 
@@ -420,7 +420,7 @@ that I explain afterwards:
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)+facet_grid(line~.)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
 I could have used `facet_wrap`, but that would have put the
 histograms side by side, and I wanted them one above the other (for
@@ -466,7 +466,7 @@ Same mechanism as before:
 ggplot(soap,aes(x=speed,y=scrap))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
 
 
@@ -506,7 +506,7 @@ categorical variable, if you want to think of it that way:
 ggplot(soap,aes(x=speed,y=scrap,colour=line))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
 Notice that we get a legend, automatically.
 
@@ -525,7 +525,7 @@ ggplot(soap,aes(x=speed,y=scrap,colour=line))+
 geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
 The points and lines have come out in different colours, without our
 having to think too hard.
@@ -555,7 +555,7 @@ geom_point(data=soap2,colour="grey")+
 geom_point(aes(colour=line))+facet_wrap(~line)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 $
 
 The idea is that we plot all the points in grey (to ``put them in the
@@ -739,7 +739,7 @@ plot it''):
 ggplot(shipments,aes(x=size,y=cost))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
 As a matter of coding, there are usually *two* brackets to close
 after the `aes`, the one that begins the `ggplot` and
@@ -789,7 +789,7 @@ variable `warehouse`, which suggests drawing boxplots:
 ggplot(shipments,aes(x=warehouse,y=size))+geom_boxplot()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
 Well, there's the answer right there. When the shipment has small
 `size`, it goes to warehouse A, and when it's large, it goes to
@@ -809,7 +809,7 @@ ggplot(shipments,aes(x=size,y=cost,colour=warehouse))+
 geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
 As a point of technique, you can split lines of code to make them fit
 on your screen. You can do this as long as \emph{the code that ends
