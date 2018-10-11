@@ -653,6 +653,8 @@ doesn't work, try `ci_median0`.
 
 
 
+## Chocolate chips
+
 
 
  A famous cookie manufacturer claims that
@@ -978,8 +980,8 @@ x
 ```
 
 ```
-##  [1] 50.56866 44.78518 49.89290 35.70511 56.74026 37.23364 48.58599
-##  [8] 54.90412 48.41221 55.52626
+##  [1] 76.95700 77.39971 38.34350 22.36697 59.88322 38.86461 34.19786
+##  [8] 35.72710 46.37126 51.38259
 ```
 
 
@@ -1003,8 +1005,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        8
-## 2 TRUE         2
+## 1 FALSE        5
+## 2 TRUE         5
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1038,7 +1040,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       2 FALSE
+## 1       5 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1058,7 +1060,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       2 FALSE
+## 1       5 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
