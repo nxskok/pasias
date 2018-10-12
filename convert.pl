@@ -41,6 +41,7 @@ sub main {
     $content=~s/\\texttt\{(.*?)\}/`$1`/g;
     $content=~s/\\emph\{(.*?)\}/*$1*/g;
     $content=~s/\\textbf\{(.*?)\}/**$1**/g;
+    $content=~s/\\textsl\{(.*?)\}/*$1*/g;
 
     $content=~s/\\includegraphics\[*.*\]\{(.*)\}/\n![]($1.png)\n/g;
     $content=~s/\\url\{(.*)\}/\[$1\]($1)/g;

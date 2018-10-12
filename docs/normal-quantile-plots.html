@@ -169,12 +169,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="normal-quantile-plots" class="section level1">
 <h1><span class="header-section-number">Chapter 10</span> Normal quantile plots</h1>
 <div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb499-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<pre><code>## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <div id="lengths-of-heliconia-flowers" class="section level2">
@@ -188,8 +188,8 @@ have a normal distribution for each variety?</p>
 <p>The data set at
 <a href="http://www.utsc.utoronto.ca/~butler/c32/heliconia.csv" class="uri">http://www.utsc.utoronto.ca/~butler/c32/heliconia.csv</a> contains
 the lengths (in millimetres) of samples of flowers from each of three
-varieties of Heliconia: ,  red, and
- yellow.</p>
+varieties of Heliconia: <em>bihai</em>, <em>caribaea</em> red, and
+<em>caribaea</em> yellow.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Read the data into R. There are different numbers of length
 measurements for each variety. How does this show up in the data
@@ -240,7 +240,7 @@ would be without the missings — but you might be aesthetically
 offended by them, in which case you can read what I do later on.)</p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Make a normal quantile plot for the variety
-.</li>
+<em>bihai</em>.</li>
 </ol>
 <p>Solution</p>
 <p>There’s a certain amount of repetitiveness here (that we work
@@ -252,7 +252,7 @@ around later):</p>
 <p>I’m saving the comments until we’ve seen all three.</p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Make a normal quantile plot for the variety
- red (note that the variable name in the data
+<em>Caribaea</em> red (note that the variable name in the data
 frame has an underscore in it).</li>
 </ol>
 <p>Solution</p>
@@ -261,7 +261,7 @@ frame has an underscore in it).</li>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-5-1.png" width="672"  /></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Make a normal quantile plot for the variety
- yellow (this also has an underscore in it).</li>
+<em>Caribaea</em> yellow (this also has an underscore in it).</li>
 </ol>
 <p>Solution</p>
 <p>And, one more time:</p>
@@ -276,8 +276,8 @@ distribution? Explain (very) briefly.</li>
 </ol>
 <p>Solution</p>
 <p>Look at the three plots, and see which one stays closest to the
-line. To my mind, this is clearly the last one, 
-yellow. So your answer ought to be `` yellow,
+line. To my mind, this is clearly the last one, <em>Caribaea</em>
+yellow. So your answer ought to be ``<em>Caribaea</em> yellow,
 because the points are closest to the line’’. This, I would say,
 is acceptably close to normal, so using a <span class="math inline">\(t\)</span>-test here would be fine.
 The answer “the last one” is not quite complete, because I
@@ -288,7 +288,7 @@ mentioned in the last part, describe briefly how their distributions fail
 to be normal.</li>
 </ol>
 <p>Solution</p>
-<p>Let’s look at  first. I see this one as an almost
+<p>Let’s look at <em>bihai</em> first. I see this one as an almost
 classic curve: the points are above the line, then below, then
 above again. If you look at the data scale (<span class="math inline">\(y\)</span>-axis), the points
 are too bunched up to be normal at the bottom, and too spread out
@@ -300,7 +300,7 @@ what we have here is two outliers at the top. I’m OK with that.
 It’s often difficult to distinguish between skewness and outliers
 (at the end of the long tail). What you conclude can often depend
 on how you look.
-We also had to look at the second plot, 
+We also had to look at the second plot, <em>caribaea</em>
 red. This is a rather strange one: the points veer away from the
 line at the ends, but look carefully: it is <em>not</em> outliers
 at both ends, but rather the points are <em>too bunched up</em> to
@@ -345,8 +345,8 @@ there are now <span class="math inline">\(16+23+15=54\)</span> rows of actual da
 a different vertical scale for each plot (otherwise there would be one
 vertical scale for all three plots); I decided that was best here
 since the typical lengths for the three varieties are
-different.  yellow is more or less straight,
- has outliers (and may also be curved), 
+different. <em>Caribaea</em> yellow is more or less straight,
+<em>bihai</em> has outliers (and may also be curved), <em>caribaea</em>
 red has that peculiar S-bend shape.</p>
 <p>I didn’t really like the vertical elongation. I’d rather have the
 plots be almost square, which they would be if we put them in three
@@ -365,10 +365,10 @@ also make squarish:</p>
 <div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb518-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">x=</span>length))<span class="op">+</span></a>
 <a class="sourceLine" id="cb518-2" data-line-number="2"><span class="kw">geom_histogram</span>(<span class="dt">binwidth=</span><span class="dv">1</span>)<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-10-1.png" width="672"  /></p>
-<p> has those two outliers,  red has no tails
+<p><em>bihai</em> has those two outliers, <em>caribaea</em> red has no tails
 to speak of (or you might say “it’s bimodal”, which would be another
 explanation of the pattern on the normal quantile plot), and
- yellow is shoulder-shruggingly normal (I looked at
+<em>caribaea</em> yellow is shoulder-shruggingly normal (I looked at
 that and said, “well, I <em>guess</em> it’s normal”.) After you’ve
 looked at the normal quantile plots, you see what a crude tool a
 histogram is for assessing normality.</p>
