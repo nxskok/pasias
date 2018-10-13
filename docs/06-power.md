@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -676,10 +676,9 @@ really need them.
  In opinion surveys (and other places), we are testing for a
 proportion $p$ (for example, the proportion of people agreeing with
 some statement). Often, we want to know whether the proportion is
-"really" greater than 0.5.\endnote{That would mean assessing whether
-an observed proportion could be greater than 0.5 just by chance, or
-whether it is "bigger enough" than 0.5 to reject chance as a
-plausible explanation.}  That would entail testing a null
+"really" greater than 0.5.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That would mean assessing whether  an observed proportion could be greater than 0.5 just by chance, or  whether it is bigger enough than 0.5 to reject chance as a  plausible explanation.</span>  
+That would entail testing a null
 $H_0: p=0.5$ against an alternative $H_a: p>0.5$. This is usually done
 by calculating the test statistic
 $$ z = { \hat{p} - 0.5 \over \sqrt{0.25/n}},$$
@@ -872,10 +871,27 @@ and we have a sample of size 500, we have a good chance of (correctly)
 rejecting that $p=0.5$. 
 
 Extra: I know we haven't learned about SAS yet, but it turns out that SAS can
-obtain this power by calculation. We'll see how later in the course.
+obtain this power by calculation, thus (don't worry too much about the
+code yet: that will become clearer later):
+
+\begin{Sascode}[store=gicit]
+proc power;
+onesamplefreq
+test=z
+method=normal
+nullproportion=0.5
+proportion=0.56
+sides=U
+ntotal=500
+power=.;
+\end{Sascode}
+
+\Listing[store=gicit,fontsize=small]{gicitt}
+
 SAS says our power is also about 85\%, the same thing our simulation
 said. I took some care to make sure that SAS did the same thing our
-simulation did. I was actually pleased that my simulation came
+simulation did (the `test=z`, the `method=normal`, and
+the `sides=U`). I was actually pleased that my simulation came
 out so close to the right answer.
 
 In contrast to `power.t.test`, SAS's `proc power`
@@ -895,7 +911,7 @@ before you can correctly reject 0.5.  Bear in mind that sample sizes
 for estimating proportions need to be larger than those for estimating
 means, so $n=500$ is large without being huge.  The practical upshot
 is that if you design a survey and give it to 500 (or more) randomly
-chosen people, the actual proportion of people in favour doesn't have to be
+chosen people, the proportion of people in favour doesn't have to be
 much above 50\% for you to correctly infer that it *is* above
 50\%, most of the time.
 

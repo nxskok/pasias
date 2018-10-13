@@ -9,7 +9,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -20,7 +20,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -246,8 +246,8 @@ yourself.
 
 (e) Run this command. To do that, look at the top right of
 your code chunk block (shaded in a slightly different colour). You
-should see a gear symbol, a down arrow and a green ``play
-button''. Click the play button. This will run the code, and show
+should see a gear symbol, a down arrow and a green "play    button". 
+Click the play button. This will run the code, and show
 the output below the code chunk.
 
 Solution

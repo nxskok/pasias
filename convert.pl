@@ -26,6 +26,7 @@ sub main {
     $content=~s/\\begin\{enumerate\}//g;
     $content=~s/\\end\{enumerate\}//g;
     $content=~s/\\item\s(.*)/\n* $1/g;
+    $content=~s/\\endnote\{(.*)\}/\n`r tufte::margin_note(\"$1\")`/g;
     # quotes
 
     $content=~s/``(.*?)''/"$1"/g; # in the original, all on one line

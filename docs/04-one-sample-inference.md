@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -245,36 +245,17 @@ graph you drew: if you think your graph is symmetric and outlier-free,
 you should have no doubts about your $t$-test; if you think it has
 something wrong with it, you should say what it is and express your
 doubts. My guess is that you will think this distribution is skewed to
-the right. Most of my plots are saying that.\endnote{The normal
-quantile plot is rather interesting: it says that the uppermost
-values are approximately normal, but the *smallest* eight or so
-values are too bunched up to be normal. That is, normality fails not
-because of the long tail on the right, but the bunching on the
-left. Still right-skewed, though.}
+the right. Most of my plots are saying that.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The normal  quantile plot is rather interesting: it says that the uppermost  values are approximately normal, but the *smallest* eight or so  values are too bunched up to be normal. That is, normality fails not  because of the long tail on the right, but the bunching on the  left. Still right-skewed, though.</span>
 
 On the website where I got these data, they were using the data as
 an example for another test, precisely *because* they thought the
 distribution was right-skewed. Later on, we'll learn about the sign
 test for the median, which I think is actually a better test here.
- 
- 4 distribution of hunter-gatherer population densities (N = 86)
- across all forest ecosystems worldwide is skewed to the right and is
- non-normal. The median is therefore the most reliable measure of
- central tendency. As such, the median population density (per 100 km)
- of forest hunter-gatherers is ηo = 7.38. An interesting question that
- we may want to ask is whether this value is an accurate estimate of
- the population density of forest hunter-gatherers on specific
- continents; the results might answer the question of whether
- hunter-gatherer population densities are determined primarily by
- large-scale ecological constraints (such as resource availability), or
- whether there seem to be other factors, possibly social and/or
- historic, determining population density. For this example we will
- look at the hunter-gatherer groups of the northern Australian forests
- (n = 13).  Let ηo be the median population density of all forest
- hunter-gatherer groups (N = 86), where ηo = 7.38, and let η be the
- median population density for Australian forest hunter-gatherer groups
- (n = 13).  Formally, we wish to test the hypothesis at the a = 0.05
- (95%) level:
+    
+
+
+
 
 
 
@@ -485,8 +466,8 @@ It is mostly normal-looking, but I am suspicious about those
 are too many of those, as I see it.
 
 If you think this is approximately normal, you need to make some
-comment along the lines of ``the shape is approximately symmetric with
-no outliers''. I think my first answer is better, but this answer is
+comment along the lines of "the shape is approximately symmetric with no outliers". 
+I think my first answer is better, but this answer is
 worth something, since it is a not completely unreasonable
 interpretation of the histogram.
 
@@ -628,8 +609,8 @@ so there are no doubts about normality and thus no doubts about the
 validity of what we have done, on the evidence we have seen so far. (I
 have some doubts on different grounds, based on another of the plots
 we did earlier, which I'll explain later, but all I'm expecting you to
-do is to look at the histogram and say ``Yep, that's normal
-enough''. Bear in mind that the sample size is 87, which is large
+do is to look at the histogram and say "Yep, that's normal enough". 
+Bear in mind that the sample size is 87, which is large
 enough for the Central Limit Theorem to be pretty helpful, so that we don't need the data to be more than "approximately normal" for the sampling distribution of the sample mean to be very close to $t$ with the right df.)
     
 

@@ -169,12 +169,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="data-exploration" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Data exploration</h1>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <div id="north-carolina-births" class="section level2">
@@ -274,14 +274,18 @@ based on the names of the variables.)</li>
 you don’t have several variables, check to see that you didn’t use
 <code>read_delim</code> or something by mistake.) After the
 “500 observations of 10 variables” line(s) in each case, you see all the
-variables by name, with what type of values they have, and the first few of the
-values.</p>
+variables by name, with what type of values they have,
+<label for="tufte-mn-5" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-5" class="margin-toggle"><span class="marginnote">these are mostly <em>int</em> or <em>integer</em>.</span>
+and the first few of the
+values.
+<label for="tufte-mn-6" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-6" class="margin-toggle"><span class="marginnote">Other possible variable types are <em>num</em> for (real, decimal) numbers such as birth weight, <em>chr</em> for text, and <em>Factor</em> (with the number of levels) for factors/categorical variables. We don’t have any of the last two here. There is also <em>lgl</em> for <em>logical</em>, things that were actually recorded as TRUE or FALSE. We have some variables that are actually logical ones, but they are recorded as integer values.</span></p>
 <p>The variable <code>Weight (pounds)</code> is the birthweight (in pounds),
 <code>Premie?</code> is 1 for a premature baby and 0 for a full-term baby,
 and <code>Weeks Gestation</code> is the number of weeks the pregnancy
 lasted. Don’t forget to put backticks around each of those when
 you use them
-later.</p>
+later.
+<label for="tufte-mn-7" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-7" class="margin-toggle"><span class="marginnote">The backticks look different from each other for annoying technical reasons, but they’re all backticks.</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>The theory behind the <span class="math inline">\(t\)</span>-test (which we do later) says that the
 distribution of birth weights should be (approximately) normally
@@ -370,8 +374,8 @@ about that?</p>
 <em>very</em> low birth weights, the ones below about 4 pounds. There
 are a few too many of those, as I see it.</p>
 <p>If you think this is approximately normal, you need to make some
-comment along the lines of ``the shape is approximately symmetric with
-no outliers’’. I think my first answer is better, but this answer is
+comment along the lines of “the shape is approximately symmetric with no outliers”.
+I think my first answer is better, but this answer is
 worth something, since it is a not completely unreasonable
 interpretation of the histogram.</p>
 <p>I have been making the distinction between a histogram (for one
@@ -385,7 +389,8 @@ quantitative variable. You can draw a boxplot for that, too, but the
 <div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1"><span class="kw">ggplot</span>(bw,<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  /></p>
 <p>The high weight is actually an outlier, but look at all those outliers
-at the bottom!</p>
+at the bottom!
+<label for="tufte-mn-8" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-8" class="margin-toggle"><span class="marginnote">When Tukey, a name we will see again, invented the boxplot in the 1950s, 500 observations would have been considered a big data set. He designed the boxplot to produce a sensible number of outliers for the typical size of data set of his day, but a boxplot of a large data set tends to have a lot of outliers that are probably not really outliers at all.</span></p>
 <p><em>I</em> think the reason for those extra very low values is that they
 are the premature births (that can result in <em>very</em> small
 babies). Which leads to the additional question coming up.</p>
@@ -440,7 +445,8 @@ max and min:</p>
 ##       n   min   max
 ##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1   500    NA    NA</code></pre>
-<p>only this is for <em>all</em> the babies, premature or not. So we want it by prematurity,
+<p>only this is for <em>all</em> the babies, premature or not.
+<label for="tufte-mn-9" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-9" class="margin-toggle"><span class="marginnote">I explain the missing values below.</span> So we want it by prematurity,
 which means a <code>group_by</code> first:</p>
 <div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" data-line-number="1">bw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(<span class="st">`</span><span class="dt">Premie?</span><span class="st">`</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb85-2" data-line-number="2"><span class="kw">summarize</span>( <span class="dt">n=</span><span class="kw">n</span>(),</a>
@@ -456,8 +462,7 @@ which means a <code>group_by</code> first:</p>
 in <code>Premie?</code> in a boxplot didn’t. <code>group_by</code> just uses
 the distinct values, whether they are numbers, text or factor levels.</p>
 <p>Any of these graphs or summaries will help you answer the question, in
-the same way. The ultimate issue here is ``something that will get the
-job done’’: it doesn’t matter so much what.</p>
+the same way. The ultimate issue here is “something that will get the job done”: it doesn’t matter so much what.</p>
 <p>In R, <code>NA</code> means “missing”. When you try to compute something
 containing a missing value, the answer is usually missing (since you
 don’t know what the missing value is). That’s why the first
@@ -467,7 +472,8 @@ and min had to be missing as well. In the second <code>summarize</code>,
 the one by whether a baby was born prematurely or not, we learn a bit
 more about that missing <code>Premie?</code>: evidently its weeks of
 gestation was missing as well, since the min and max of that were
-missing.</p>
+missing.
+<label for="tufte-mn-10" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-10" class="margin-toggle"><span class="marginnote">If there had been a weeks of gestation, we could have figured out whether it was premature or not, according to whether the weeks of gestation was less than 37.</span></p>
 <p>Here’s that baby. I’m doing a bit of fiddling to show all the columns
 (as rows, since there’s only one actual row). Don’t worry about the
 second line of code below; we will investigate that later.</p>
@@ -530,8 +536,8 @@ the address of the website you found.</li>
 </ol>
 <p>Solution</p>
 <p>The website <a href="http://www.mayoclinic.org/diseases-conditions/premature-birth/basics/definition/con-20020050" class="uri">http://www.mayoclinic.org/diseases-conditions/premature-birth/basics/definition/con-20020050</a>
-says that ``a premature birth is one that occurs before the start of
-the 37th week of pregnancy’’, which is exactly what we found. (Note
+says that “a premature birth is one that occurs before the start of the 37th week of pregnancy”,
+which is exactly what we found. (Note
 that I am citing the webpage on which I found this, and I even made it
 into a link so that you can check it.) The Mayo Clinic is a famous
 hospital system with locations in several US states, so I think we can
@@ -554,10 +560,10 @@ consistent and accurate. The data are in
 <ol style="list-style-type: lower-alpha">
 <li>Read the data into R. Note that the values are
 separated by <em>tabs</em> rather than spaces, so you’ll need an
-appropriate <code>read\_</code> to read it in.</li>
+appropriate <code>read_</code> to read it in.</li>
 </ol>
 <p>Solution</p>
-<p>These are “tab-separated values”, so <code>read\_tsv</code> is the
+<p>These are “tab-separated values”, so <code>read_tsv</code> is the
 thing, as for the Australian athletes:</p>
 <div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/nenana.txt&quot;</span></a>
 <a class="sourceLine" id="cb95-2" data-line-number="2">nenana=<span class="kw">read_tsv</span>(myurl)</a></code></pre></div>
@@ -607,7 +613,7 @@ data frame:</p>
 ##  9 &quot;1925\t127.7726\tMay&quot;        
 ## 10 &quot;1926\t116.6691\tApril&quot;      
 ## # ... with 77 more rows</code></pre>
-<p>Those “= symbols mean ``tab character”, which is our hint that
+<p>Those <code>t</code> symbols mean “tab character”, which is our hint that
 the values were separated by tabs rather than spaces.</p>
 <p>More detail (if you can bear to see it) is here:</p>
 <div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" data-line-number="1"><span class="kw">problems</span>(x)</a></code></pre></div>
@@ -626,7 +632,7 @@ the values were separated by tabs rather than spaces.</p>
 ## 10    10 &lt;NA&gt;  1 columns 5 colum… &#39;http://www.utsc.utoronto.ca/~butler/c3…
 ## # ... with 77 more rows</code></pre>
 <p>The first line of the data file (with the variable names in it) had no
-spaces, only tabs, so <code>read\_delim</code> thinks there is <em>one</em>
+spaces, only tabs, so <code>read_delim</code> thinks there is <em>one</em>
 column with a very long name, but in the actual data, there are
 <em>five</em> space-separated columns. The text date-times are of the
 form “April 30 at 11:30 AM”, which, if you think it’s all separated
@@ -699,7 +705,8 @@ not especially important.</p>
 normally-distributed. It bulges away from the line because there are
 more values just below 120 than you would expect for a
 normal. This corresponds to the histogram bar centred just below 120
-being taller than you would have expected.</p>
+being taller than you would have expected.
+<label for="tufte-mn-11" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-11" class="margin-toggle"><span class="marginnote">That is to say, the principal deviation from normality is not the hole on the histogram, the bar centred around 123 being too short, but that the bar centred just below 120 is too <em>tall</em>.</span></p>
 <p>Extra: looking <em>way</em> ahead (to almost the end of the R stuff),
 this is how you handle the dates and times:</p>
 <div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a></code></pre></div>
@@ -726,7 +733,9 @@ this is how you handle the dates and times:</p>
 ## 10  1926       117. April 26 at 4:03… 1926 April 26 a… 1926-04-26 16:03:00
 ## # ... with 77 more rows</code></pre>
 <p>I am not doing any further analysis with these, so just displaying them is good.</p>
-<p>I have to do a preliminary step to get the date-times <em>with</em> their year in one place. <code>str_c- glues pieces of text together: in this case, the year, a space, and then the rest of the</code>Date&amp;Time-. I stored this in <code>longdt-. The second</code>mutate- is the business end of it: <code>ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly. The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the</code>lubridate- function is called ``yday- for “day of year”):</p>
+<p>I have to do a preliminary step to get the date-times <em>with</em> their year in one place. <code>str_c</code> glues pieces of text together: in this case, the year, a space, and then the rest of the
+<code>Date&amp;Time-. I stored this in \verb-longdt-. The second verb-mutate- is the business end of it: verb-ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date</code>time. Note that the AM/PM was handled properly.
+The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the <code>lubridate- function is called verb-yday</code> for “day of year”):</p>
 <div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1">nenana <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb116-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">longdt=</span><span class="kw">str_c</span>(Year,<span class="st">&quot; &quot;</span>,<span class="st">`</span><span class="dt">Date&amp;Time</span><span class="st">`</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb116-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">datetime=</span><span class="kw">ymd_hm</span>(longdt,<span class="dt">tz=</span><span class="st">&quot;America/Anchorage&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -747,7 +756,7 @@ this is how you handle the dates and times:</p>
 ##  9       128.   127 1925-05-07 18:32:00
 ## 10       117.   116 1926-04-26 16:03:00
 ## # ... with 77 more rows</code></pre>
-<p>Hmm, some of those are off by one. What do the off-by-one ones have in common? Let’s look at more of them. ``round- rounds off to the nearest integer (since these are actually decimal numbers):</p>
+<p>Hmm, some of those are off by one. What do the off-by-one ones have in common? Let’s look at more of them. <code>round</code> rounds off to the nearest integer (since these are actually decimal numbers):</p>
 <div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1">nenana2 <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb118-2" data-line-number="2"><span class="kw">filter</span>(<span class="kw">round</span>(JulianDate) <span class="op">!=</span><span class="st"> </span><span class="kw">round</span>(jd)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb118-3" data-line-number="3"><span class="kw">select</span>(JulianDate,jd,datetime)</a></code></pre></div>
@@ -767,7 +776,9 @@ this is how you handle the dates and times:</p>
 ## # ... with 51 more rows</code></pre>
 <p>The ones shown here are all <em>after noon</em>, and the Julian date in
 the data file appears as one more than the one calculated by
-<code>lubridate-. What has actually happened is a quirk of how tibbles are displayed: they show 3 significant digits, *rounded*. The Julian dates given by</code>yday- are the whole-number part, so the
+<code>lubridate</code>. What has actually happened is a quirk of how tibbles
+are displayed: they show 3 significant digits, <em>rounded</em>. The
+Julian dates given by <code>yday- are the whole</code>number part, so the
 ones in the data value are that plus more than 0.5, which will round
 <em>up</em>. The first line of code below displays 6 significant digits
 rather than only three:</p>
@@ -789,7 +800,7 @@ rather than only three:</p>
 ##  9    128.813   128 1933-05-08 19:30:00
 ## 10    120.588   120 1934-04-30 14:07:00
 ## # ... with 51 more rows</code></pre>
-<p>Displaying more decimals shows that I was right: <code>jd- is (to this accuracy) a whole number, but</code>JulianDate- is a decimal with fractional part greater than 0.50.</p>
+<p>Displaying more decimals shows that I was right: <code>jd- is (to this accuracy) a whole number, but verb-JulianDate</code> is a decimal with fractional part greater than 0.50.</p>
 <p>Now I have to turn the extra signficant digits off:</p>
 <div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">pillar.sigfig=</span><span class="dv">3</span>)</a></code></pre></div>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -797,14 +808,14 @@ rather than only three:</p>
 scatterplot. What recent trends, if any, do you see? Comment briefly.</li>
 </ol>
 <p>Solution</p>
-<p>``geom_point+:</p>
+<p><code>geom_point</code>:</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" data-line-number="1"><span class="kw">ggplot</span>(nenana,<span class="kw">aes</span>(<span class="dt">x=</span>Year,<span class="dt">y=</span>JulianDate))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="03-data-summaries_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 This is actually a small-but-real downward trend, especially since
 about 1960,
 but the large amount
-of variability makes it hard to see, so I’m good with either ``no
-trend’’ or “weak downward trend”
+of variability makes it hard to see, so I’m good with either “no trend”
+or “weak downward trend”
 or anything roughly like that. There is definitely not much trend
 before 1960, but most of the really early break-ups (less than about
 118) have been since about 1990.</p>

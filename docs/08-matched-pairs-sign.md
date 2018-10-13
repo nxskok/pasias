@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -182,7 +182,8 @@ Solution
 
 
 The P-value of 0.7623 is not at all small, so there is no way we can
-reject the null hypothesis.\endnote{My hat stays on my head.} There
+reject the null hypothesis.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">My hat stays on my head.</span> There
 is no evidence of a difference in means; we can act as if the two
 methods produce the same mean body fat percentage. 
 That is to say, on this evidence we can use either method, whichever
@@ -255,9 +256,9 @@ class when you read this, make a different plot to assess this issue.)
 Solution
 
 
-The smoothest\endnote{I learned yesterday that the Welsh word for
-"ironing" is \textsl{smwddio}, which seems weird until you say
-it out loud: it sounds like "smoothio".} way to do this is to
+The smoothest
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I learned yesterday that the Welsh word for *ironing* is *smwddio*, which seems weird until you say    it out loud: it sounds like *smoothio*.</span> 
+way to do this is to
 use a pipeline: use a `mutate` to create the column of
 differences, and then pipe that into `ggplot`, omitting the
 data frame that would normally go first (the input data frame here
@@ -303,8 +304,8 @@ curved (which would be evidence of skewness). Or you could say that
 the two highest values are too high, with the other values being more
 or less in line (that would be evidence of outliers at the upper
 end). I like outliers better than skewness, since those bottom-end
-points are not far off the line. I would also accept ``no substantial
-problems'', if you can make the case that those two highest points are
+points are not far off the line. I would also accept "no substantial problems", 
+if you can make the case that those two highest points are
 not too far off the line. With only 16 observations as we have here,
 even truly normal data would stray off the line a bit.
 

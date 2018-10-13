@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -609,8 +609,8 @@ ci_median(times,time)
 This is a more accurate interval than we got above. (The
 `while` loop for the bisection keeps going until the two
 guesses at the appropriate end of the interval are less than 0.01
-apart, by default.)\endnote{You can change this by adding something
-like `tol=1e-4` to the end of your `ci_median`.} 
+apart, by default.)
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You can change this by adding something  like *tol=1e-4* to the end of your *ci_median*.</span> 
 
 If you want some other confidence level, you add `conf.level`
 on the end, as you would for `t.test`:
@@ -660,8 +660,7 @@ doesn't work, try `ci_median0`.
 
 
  A famous cookie manufacturer claims that
-their bags of chocolate chip cookies contain ``more than 1100
-chocolate chips on average''. A diligent group of students buys 16
+their bags of chocolate chip cookies contain "more than 1100 chocolate chips on average". A diligent group of students buys 16
 bags of these cookies and counts the number of chocolate chips in each
 bag. The results are in [http://www.utsc.utoronto.ca/~butler/c32/chips.txt](http://www.utsc.utoronto.ca/~butler/c32/chips.txt).
 
@@ -895,8 +894,7 @@ ci_median(bags,chips)
 1135 to 1325. I would round these off to whole numbers, since the data
 values are all whole numbers. These values are all above 1100, which
 supports the conclusion we got above that the median is above
-1100. This is as it should be, because the CI is ``all those medians
-that would *not* be rejected by the sign test''. 
+1100. This is as it should be, because the CI is "all those medians that would *not* be rejected by the sign test". 
 
 Or, 
 
@@ -914,7 +912,7 @@ ci_median0(bags$chips)
 
 
 
-## The power of the sign test
+##  The power of the sign test
 
 
  I've mentioned several times that the sign test has less
@@ -982,8 +980,8 @@ x
 ```
 
 ```
-##  [1] 37.21790 77.22271 43.95329 48.56146 56.10315 33.07776 56.94570
-##  [8] 55.28935 52.79955 49.10414
+##  [1] 63.14111 46.02872 46.44480 49.88765 51.36734 27.03391 57.84854
+##  [8] 62.69191 58.58864 51.29370
 ```
 
 
@@ -1007,8 +1005,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        8
-## 2 TRUE         2
+## 1 FALSE        9
+## 2 TRUE         1
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1042,7 +1040,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       2 FALSE
+## 1       1 TRUE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1062,7 +1060,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       2 FALSE
+## 1       1 TRUE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1078,7 +1076,7 @@ pull(is_rejected)
 ```
 
 ```
-## [1] FALSE
+## [1] TRUE
 ```
 
 You might be wondering where the "1 or less" came from. Getting a
@@ -1289,9 +1287,8 @@ than the power of the $t$-test, which we found back in (a) to be
 0.469. So the $t$-test, in this situation where it is valid, is
 the right test to use: it is (a) valid and (b) more powerful.
 So the $t$-test is more powerful. One way to think about how
-*much* more powerful is to ask ``how much smaller of a sample
-size would be needed for the $t$-test to have the same power as
-this sign test?'' The power of my sign test was 0.243, so in
+*much* more powerful is to ask "how much smaller of a sample    size would be needed for the $t$-test to have the same power as    this sign test?" 
+The power of my sign test was 0.243, so in
 `power.t.test` we set
 `power` equal to that and
 omit the sample size `n`:
@@ -1316,16 +1313,16 @@ A sample of size 6 gives the same power for the $t$-test that a
 sample of size 10 does for the sign test. The ratio of these two
 sample sizes is called the *relative efficiency* of the two
 tests: in this case, the $t$-test is $10/6=1.67$ times more
-efficient. The data that you have are being used ``more
-efficiently'' by the $t$-test.
-It is possible to derive\endnote{Meaning, I forget how to do it.
-But it has something to do with looking at alternatives that are
-very close to the null.}  the limiting relative efficiency of
+efficient. The data that you have are being used "more    efficiently" 
+by the $t$-test.
+It is possible to derive
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Meaning, I forget how to do it.      But it has something to do with looking at alternatives that are      very close to the null.</span>  
+the limiting relative efficiency of
 the $t$ test relative to the sign test when the data are actually
 normal, as the sample size gets larger. This turns out not to
 depend on how far wrong the null is (as long as it is the same for
-both the $t$-test and the sign test). This ``asymptotic relative
-efficiency'' is $\pi/2=1.57$. Our relative efficiency for power
+both the $t$-test and the sign test). This "asymptotic relative    efficiency" is $\pi/2=1.57$. 
+Our relative efficiency for power
 0.243, namely 1.67, was pretty close to this, even though our
 sample sizes 10 and 6 are not especially close to infinity.
 This says that, if your data are actually from a normal
@@ -1336,18 +1333,17 @@ If your data are *not* from a normal distribution, then the
 story can be very different. 
 Of course you knew I would investigate this. There is a
 distribution called the "Laplace" or "double exponential"
-distribution, that has very long tails.\endnote{If you've ever run
-into the exponential distribution, you'll recall that this is
-right skewed with a very long tail. The Laplace distribution looks
-like two of these glued back to back.} The distribution is not in
+distribution, that has very long tails.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you've ever run    into the exponential distribution, you'll recall that this is    right skewed with a very long tail. The Laplace distribution looks    like two of these glued back to back.</span> 
+The distribution is not in
 base R, but there is a package called `smoothmest` that
 contains a function `rdoublex` to generate random values from
 this distribution. So we're going to do a simulation investigation
 of the power of the sign test for Laplace data, by the same
 simulation technique that we did above. Like the normal, the Laplace
 distribution is symmetric, so its mean and median are the same
-(which makes our life easier).\endnote{This is about the *only*
-way in which the normal and Laplace distributions are alike.}
+(which makes our life easier).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is about the *only*  way in which the normal and Laplace distributions are alike.</span>
 
 Let's test the hypothesis that the median is zero. We'll suppose that
 the true median is 0.5 (this is called `mu` in
@@ -1523,8 +1519,8 @@ This is not to say that you will ever run into data that comes from
 the Laplace distribution. But the moral of the story is that the sign
 test *can* be more powerful than the $t$-test, under the right
 circumstances (and the above simulation is the "proof" of that
-statement). So a blanket statement like ``the sign test is not very
-powerful'' needs to be qualified a bit: when your data come from a
+statement). So a blanket statement like "the sign test is not very powerful" 
+needs to be qualified a bit: when your data come from a
 sufficiently long-tailed distribution, the sign test can be more
 powerful relative to the $t$-test than you would think.
 

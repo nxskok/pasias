@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -158,24 +158,19 @@ I do indeed have 500 observations on 10 variables ("several"). (If
 you don't have several variables, check to see that you didn't use
 `read_delim` or something by mistake.) After the 
 "500 observations of 10 variables" line(s) in each case, you see all the
-variables by name, with what type of values they have\endnote{these
-are mostly `int` or "integer".}, and the first few of the
-values.\endnote{Other possible variable types are `num` for
-(real, decimal) numbers such as birth weight, `chr` for
-text, and `Factor` (with the number of levels) for
-factors/categorical variables. We don't have any of the last two
-here. There is also `lgl` for "logical", things that were
-actually recorded as TRUE or FALSE. We have some variables that
-are actually logical ones, but they are recorded as integer
-values.}
+variables by name, with what type of values they have,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">these    are mostly *int* or *integer*.</span>
+and the first few of the
+values.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Other possible variable types are *num* for    (real, decimal) numbers such as birth weight, *chr* for    text, and *Factor* (with the number of levels) for    factors/categorical variables. We don't have any of the last two    here. There is also *lgl* for *logical*, things that were    actually recorded as TRUE or FALSE. We have some variables that    are actually logical ones, but they are recorded as integer    values.</span>
 
 The variable `Weight (pounds)` is the birthweight (in pounds),
 `Premie?` is 1 for a premature baby and 0 for a full-term baby,
 and `Weeks Gestation` is the number of weeks the pregnancy
 lasted. Don't forget to put backticks around each of those when
 you use them
-later.\endnote{The backticks look different from each other for
-annoying technical reasons, but they're all backticks.}
+later.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The backticks look different from each other for  annoying technical reasons, but they're all backticks.</span>
  
 
 
@@ -330,8 +325,8 @@ It is mostly normal-looking, but I am suspicious about those
 are a few too many of those, as I see it.
 
 If you think this is approximately normal, you need to make some
-comment along the lines of ``the shape is approximately symmetric with
-no outliers''. I think my first answer is better, but this answer is
+comment along the lines of "the shape is approximately symmetric with no outliers". 
+I think my first answer is better, but this answer is
 worth something, since it is a not completely unreasonable
 interpretation of the histogram.
 
@@ -352,12 +347,8 @@ ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
 The high weight is actually an outlier, but look at all those outliers
-at the bottom!\endnote{When Tukey, a name we will see again, invented
-the boxplot in the 1950s, 500 observations would have been
-considered a big data set. He designed the boxplot to produce a
-sensible number of outliers for the typical size of data set of his
-day, but a boxplot of a large data set tends to have a lot of
-outliers that are probably not really outliers at all.}
+at the bottom!
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When Tukey, a name we will see again, invented  the boxplot in the 1950s, 500 observations would have been  considered a big data set. He designed the boxplot to produce a  sensible number of outliers for the typical size of data set of his  day, but a boxplot of a large data set tends to have a lot of  outliers that are probably not really outliers at all.</span>
 
 *I* think the reason for those extra very low values is that they
 are the premature births (that can result in *very* small
@@ -454,8 +445,8 @@ max=max(`Weeks Gestation`))
 ## 1   500    NA    NA
 ```
 
-only this is for *all* the babies, premature or not.\endnote{I
-explain the missing values below.} So we want it by prematurity,
+only this is for *all* the babies, premature or not.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I  explain the missing values below.</span> So we want it by prematurity,
 which means a `group_by` first:
 
 
@@ -480,8 +471,7 @@ in ``Premie?`` in a boxplot didn't. `group_by` just uses
 the distinct values, whether they are numbers, text or factor levels.
 
 Any of these graphs or summaries will help you answer the question, in
-the same way. The ultimate issue here is ``something that will get the
-job done'': it doesn't matter so much what.
+the same way. The ultimate issue here is "something that will get the job done": it doesn't matter so much what.
 
 In R, `NA` means "missing". When you try to compute something
 containing a missing value, the answer is usually missing (since you
@@ -492,9 +482,8 @@ and min had to be missing as well. In the second `summarize`,
 the one by whether a baby was born prematurely or not, we learn a bit
 more about that missing ``Premie?``: evidently its weeks of
 gestation was missing as well, since the min and max of that were
-missing.\endnote{If there had been a weeks of gestation, we could have
-figured out whether it was premature or not, according to whether the
-weeks of gestation was less than 37.}
+missing.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If there had been a weeks of gestation, we could have figured out whether it was premature or not, according to whether the weeks of gestation was less than 37.</span>
 
 Here's that baby. I'm doing a bit of fiddling to show all the columns
 (as rows, since there's only one actual row). Don't worry about the
@@ -608,8 +597,8 @@ Solution
 
 
 The website [http://www.mayoclinic.org/diseases-conditions/premature-birth/basics/definition/con-20020050](http://www.mayoclinic.org/diseases-conditions/premature-birth/basics/definition/con-20020050)
-says that ``a premature birth is one that occurs before the start of
-the 37th week of pregnancy'', which is exactly what we found. (Note
+says that "a premature birth is one that occurs before the start of the 37th week of pregnancy", 
+which is exactly what we found. (Note
 that I am citing the webpage on which I found this, and I even made it
 into a link so that you can check it.) The Mayo Clinic is a famous
 hospital system with locations in several US states, so I think we can
@@ -641,13 +630,13 @@ consistent and accurate. The data are in
 
 (a) Read the data into R.  Note that the values are
 separated by *tabs* rather than spaces, so you'll need an
-appropriate `read\_` to read it in.
+appropriate `read_` to read it in.
 
 
 Solution
 
 
-These are "tab-separated values", so `read\_tsv` is the
+These are "tab-separated values", so `read_tsv` is the
 thing, as for the Australian athletes:
 
 ```r
@@ -728,7 +717,7 @@ x
 ## # ... with 77 more rows
 ```
 
-Those "\t= symbols mean ``tab character", which is our hint that
+Those `t` symbols mean "tab character", which is our hint that
 the values were separated by tabs rather than spaces.
 
 More detail (if you can bear to see it) is here:
@@ -756,7 +745,7 @@ problems(x)
 ```
 
 The first line of the data file (with the variable names in it) had no
-spaces, only tabs, so `read\_delim` thinks there is *one*
+spaces, only tabs, so `read_delim` thinks there is *one*
 column with a very long name, but in the actual data, there are
 *five* space-separated columns.  The text date-times are of the
 form "April 30 at 11:30 AM", which, if you think it's all separated
@@ -866,10 +855,8 @@ That hugs the line pretty well, so I would call it close to
 normally-distributed. It bulges away from the line because there are
 more values just below 120 than you would expect for a
 normal. This corresponds to the histogram bar centred just below 120
-being taller than you would have expected.\endnote{That is to say, the
-principal deviation from normality is not the "hole" on the
-histogram, the bar centred around 123 being too short, but that the
-bar centred just below 120 is too *tall*.}
+being taller than you would have expected.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is to say, the  principal deviation from normality is not the hole on the histogram, the bar centred around 123 being too short, but that the bar centred just below 120 is too *tall*.</span>
 
 Extra: looking *way* ahead (to almost the end of the R stuff),
 this is how you handle the dates and times:
@@ -915,9 +902,9 @@ mutate(datetime=ymd_hm(longdt,tz="America/Anchorage"))
 
 I am not doing any further analysis with these, so just displaying them is good. 
 
-I have to do a preliminary step to get the date-times *with* their year in one place. ``str_c- glues pieces of text together: in this case, the year, a space, and then the rest of the 
-``Date&Time-. I stored this in ``longdt-. The second ``mutate- is the business end of it: ``ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
-The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the ``lubridate- function is called ``yday- for "day of year"):
+I have to do a preliminary step to get the date-times *with* their year in one place. `str_c` glues pieces of text together: in this case, the year, a space, and then the rest of the 
+`Date&Time-. I stored this in \verb-longdt-. The second verb-mutate- is the business end of it: verb-ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date`time. Note that the AM/PM was handled properly.
+The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the `lubridate- function is called verb-yday` for "day of year"):
 
 
 ```r
@@ -946,7 +933,7 @@ nenana2 %>% select(JulianDate,jd,datetime)
 ## # ... with 77 more rows
 ```
 
-Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. ``round- rounds off to the nearest integer (since these are actually decimal numbers):
+Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. `round` rounds off to the nearest integer (since these are actually decimal numbers):
 
 
 ```r
@@ -974,9 +961,9 @@ select(JulianDate,jd,datetime)
 
 The ones shown here are all *after noon*, and the Julian date in
 the data file appears as one more than the one calculated by
-``lubridate-. What has actually happened is a quirk of how tibbles
+`lubridate`. What has actually happened is a quirk of how tibbles
 are displayed: they show 3 significant digits, *rounded*. The
-Julian dates given by ``yday- are the whole-number part, so the
+Julian dates given by `yday- are the whole`number part, so the
 ones in the data value are that plus more than 0.5, which will round
 *up*. The first line of code below displays 6 significant digits
 rather than only three:
@@ -1006,7 +993,7 @@ select(JulianDate,jd,datetime)
 ## # ... with 51 more rows
 ```
 
-Displaying more decimals shows that I was right: ``jd- is (to this accuracy) a whole number, but ``JulianDate- is a decimal with fractional part greater than 0.50.
+Displaying more decimals shows that I was right: `jd- is (to this accuracy) a whole number, but verb-JulianDate` is a decimal with fractional part greater than 0.50.
 
 Now I have to turn the extra signficant digits off:
 
@@ -1025,7 +1012,7 @@ Solution
 
 
 
-``geom_point+:
+`geom_point`:
 
 
 ```r
@@ -1036,8 +1023,8 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
 This is actually a small-but-real downward trend, especially since
 about 1960, 
 but the large amount
-of variability makes it hard to see, so I'm good with either ``no
-trend'' or "weak downward trend" 
+of variability makes it hard to see, so I'm good with either "no trend" 
+or "weak downward trend" 
 or anything roughly like that. There is definitely not much trend
 before 1960, but most of the really early break-ups (less than about
 118) have been since about 1990.

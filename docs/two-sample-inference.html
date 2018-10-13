@@ -169,12 +169,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="two-sample-inference" class="section level1">
 <h1><span class="header-section-number">Chapter 6</span> Two-sample inference</h1>
 <div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb189-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <div id="children-and-electronic-devices" class="section level2">
@@ -356,7 +356,9 @@ than <span class="math inline">\(\alpha\)</span>, and if the larger sample is fr
 the <em>smaller</em> SD, the probability of a type I error will be
 larger than <span class="math inline">\(\alpha\)</span>. This is why you see S-W in STAB22. You see the
 pooled test in STAB57 because the logic of its derivation is so much
-clearer, not because it’s really the better test in
+clearer,
+<label for="tufte-mn-13" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-13" class="margin-toggle"><span class="marginnote">I return to this issue when we look at the same data in SAS later.</span>
+not because it’s really the better test in
 practice. The theory says that if your data are normal in both groups
 with the same variance, then the pooled test is best, but it says
 <em>nothing</em> about the quality of the pooled test if any of that
@@ -401,7 +403,9 @@ their car. The data are in an Excel spreadsheet,
 <a href="http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx" class="uri">http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx</a>. (Let me
 know if you cannot handle this format.) Click on the link. The data
 will probably download automatically. Check the folder on your
-computer where things get downloaded. If the spreadsheet is just
+computer where things get downloaded.
+<label for="tufte-mn-14" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-14" class="margin-toggle"><span class="marginnote">Mine is rather prosaically called <em>Downloads</em>.</span>
+If the spreadsheet is just
 displayed and not downloaded, save it somewhere on your computer.</p>
 <ol style="list-style-type: lower-alpha">
 <li>There are two sheets in this spreadsheet workbook. They are
@@ -488,7 +492,9 @@ those two ways, you go ahead and do this:</p>
 ## # ... with 83 more rows</code></pre>
 <p>You have to do it this way, using the version of the spreadsheet on
 your computer, since <code>read_excel</code> won’t take a
-URL, or if it does, I can’t make it work. I put the spreadsheet in R Studio’s
+URL, or if it does, I can’t make it work.
+<label for="tufte-mn-15" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-15" class="margin-toggle"><span class="marginnote">Let me know if you have more success than I did.</span>
+I put the spreadsheet in R Studio’s
 current folder, so I could read it in by name, or you can do the
 <code>f=file.choose()</code> thing, find it, then read it in.
 The <code>sheet=</code> thing can take either a number (as here: the
@@ -512,7 +518,9 @@ the data frame that I called <code>parking</code>, anyway).</p>
 (like the text of an email, that you can open and look at in something
 like Notepad), and “binary” that you can’t look at directly, but for
 which you need special software like Word or Excel to decode it for
-you. The first character in <code>mode</code> is either
+you.
+<label for="tufte-mn-16" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-16" class="margin-toggle"><span class="marginnote">A Word or Excel document has all kinds of formatting information hidden in the file as well as the text that you see on the screen.</span><br />
+The first character in  is either
 <code>w</code> for “write a new file”, which is what we want here, or
 <code>a</code> for “append”, which would mean adding to the end of a
 file that already exists. Thus <code>mode=&quot;wb&quot;</code> means
@@ -606,7 +614,8 @@ that it is a fair comparison. The above-and-below is accomplished by
 having <code>gender</code> as the <span class="math inline">\(y\)</span> in the arrangement of the facets, so
 it goes before the squiggle. We don’t have any <span class="math inline">\(x\)</span> in the arrangement
 of the facets, and we tell <code>ggplot</code> this by putting a dot where
-the <span class="math inline">\(x\)</span> would be.</p>
+the <span class="math inline">\(x\)</span> would be.
+<label for="tufte-mn-17" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-17" class="margin-toggle"><span class="marginnote">You might have a second categorical variable by which you want to arrange the facets left and right, and that would go where the dot is.</span></p>
 <p>You can also use <code>facet_wrap</code> for this, but you have to be
 more careful since you don’t have any control over how the histograms
 come out (you probably get them side by side, which is not so helpful
@@ -634,7 +643,8 @@ you don’t have anything else to put there, you put a dot. Here’s my
 <a class="sourceLine" id="cb229-3" data-line-number="3"><span class="kw">facet_grid</span>(gender<span class="op">~</span>.)</a></code></pre></div>
 <p>We wanted gender to go up and down, and we had nothing to go left and
 right, hence the dot. Contrast that with my <code>facet_wrap</code>
-code:</p>
+code:
+<label for="tufte-mn-18" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-18" class="margin-toggle"><span class="marginnote">I took out the <em>ncol</em> since that confuses the explanation here.</span></p>
 <div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" data-line-number="1"><span class="kw">ggplot</span>(parking,<span class="kw">aes</span>(<span class="dt">x=</span>distance))<span class="op">+</span></a>
 <a class="sourceLine" id="cb230-2" data-line-number="2"><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">7</span>)<span class="op">+</span></a>
 <a class="sourceLine" id="cb230-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</a></code></pre></div>
@@ -651,8 +661,7 @@ observations, so we should use this many bins:</p>
 <p>Round this up to 8. (The second thing in <code>log</code> is the base of
 the logs, if you specify it, otherwise it defaults to <span class="math inline">\(e\)</span> and gives
 you “natural” logs.) I seem to have the powers of 2 in my head, so I
-can do it mentally by saying ``the next power of 2 is 128, which is
-<span class="math inline">\(2^7\)</span>, so I need <span class="math inline">\(7+1=8\)</span> bins.’’</p>
+can do it mentally by saying “the next power of 2 is 128, which is <span class="math inline">\(2^7\)</span>, so I need <span class="math inline">\(7+1=8\)</span> bins.”</p>
 <p>Or:</p>
 <div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" data-line-number="1"><span class="kw">with</span>(parking,<span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
 <pre><code>## [1] 8</code></pre>
@@ -687,8 +696,7 @@ up. To do <em>that</em>, <code>filter</code> one of the genders first:</p>
 <a class="sourceLine" id="cb240-2" data-line-number="2"><span class="kw">filter</span>(gender<span class="op">==</span><span class="st">&quot;female&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb240-3" data-line-number="3"><span class="kw">with</span>(.,<span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
 <pre><code>## [1] 7</code></pre>
-<p>I used the “dot” trick again, which you can read as “it”: `<code>from</code>parking`, take only the rows for the females, and with it,
-give me the number of bins for a histogram by Sturges’ rule.’’</p>
+<p>I used the “dot” trick again, which you can read as “it”: “from <code>parking</code>, take only the rows for the females, and with it, give me the number of bins for a histogram by Sturges’ rule.”</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Explain briefly why this is two independent samples
 rather than matched pairs.</li>
@@ -772,7 +780,8 @@ and look at the boxplots, you’ll see either (depending on
 your point of view) that both groups are right-skewed, or
 that both groups have outliers, neither of which fits a
 normal distribution. The outlier in the male group is
-particularly egregious. So I think we
+particularly egregious.
+<label for="tufte-mn-19" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-19" class="margin-toggle"><span class="marginnote">Google defines this as meaning <em>outstandingly bad, shocking</em>.</span> So I think we
 are entitled to question whether a two-sample <span class="math inline">\(t\)</span>-test is
 the right thing to do.
 Having said that, we should go back and remember that the

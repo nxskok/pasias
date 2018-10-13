@@ -34,7 +34,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -45,7 +45,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -53,10 +53,8 @@ library(tidyverse)
 The appropriate function, the data values being separated by a space,
 will be `read_delim`. Put the URL as the first thing in
 `read_delim`, or (better) define it into a variable
-first:\endnote{I say "better" because otherwise the
-`read_delim` gets rather long. This way you read it as ``the
-URL is some long thing that I don't care about especially, and I what
-I need to do is to read the data from that URL, separated by spaces.''}
+first:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I say *better* because otherwise the read_delim gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*</span>
 
 
 ```r
@@ -74,8 +72,8 @@ juice=read_delim(url," ")
 ```
 
 `read_delim` (or `read_csv` or any of the others) tell
-you what variables were read in, and also tell you about any ``parsing
-errors'' where it couldn't work out what was what. Here, we have three
+you what variables were read in, and also tell you about any "parsing errors" 
+where it couldn't work out what was what. Here, we have three
 variables, which is entirely consistent with the three columns of data
 values in the file.
 
@@ -150,7 +148,7 @@ alternative when the column names that are in the file are
 *not* the ones you want to use; in that case, you would
 also say `skip=1` to skip the first line. For example,
 with file `a.txt` thus:
-``timinput{a.txt}        
+`timinput{`.txt}        
 you could read the same data but call the columns `x` and
 `y` thus:
 
@@ -310,8 +308,7 @@ ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)
 
 
 (c) Comment briefly on the shape of the histogram. Is it approximately
-symmetric, skewed to the left, skewed to the right or something else? (By ``comment
-briefly'' I mean "say in a few words why you gave the answer you did.")
+symmetric, skewed to the left, skewed to the right or something else? (By "comment  briefly" I mean "say in a few words why you gave the answer you did.")
 
 
 Solution
@@ -495,10 +492,8 @@ What we haven't done is to assess the relationship between speed
 and scrap for *each* production line. To do that, we want
 to plot the scrap-speed points distinguished for each production
 line. `ggplot` makes that easy: you add a
-`colour`\endnote{If you are concerned about the spelling:
-the guy who wrote `ggplot` is from New Zealand, where they
-spell "colour" the same way we do. However, if you want to
-use `color=`, that works too.} to say what you want to
+`colour`
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you are concerned about the spelling: the guy who wrote ggplot is from New Zealand, where they spell *colour* the same way we do. However, if you want to use *color*, that works too.</span> to say what you want to
 distinguish by colour. This is two quantitative variables and one
 categorical variable, if you want to think of it that way:
 
@@ -558,8 +553,8 @@ geom_point(aes(colour=line))+facet_wrap(~line)
 <img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 $
 
-The idea is that we plot all the points in grey (to ``put them in the
-background'') and then in each plot we plot the points again,
+The idea is that we plot all the points in grey (to "put them in the background") 
+ and then in each plot we plot the points again,
 *coloured, for the group we are looking at*: line A in the left,
 line B on the right. This is another way of seeing that line A has
 more scrap than line B, given the speed at which the line was being
@@ -634,11 +629,11 @@ account for speed}. (In the two-sample $t$-test above we didn't
 account for speed at all, since the various speeds were all mixed up.)
 
 There is a moral to this story, which I would like you to get even if
-you don't get any of the statistics: \emph{if a variable makes a
-difference}, it should be in your model and on your
-graph,\endnote{Meaning that the graph should contain all three
-variables, `speed`, `scrap` and `line`.} because
-it enables you to get better (more precise) conclusions about your
+you don't get any of the statistics: if a variable makes a
+difference, it should be in your model and on your
+graph,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Meaning that the graph should contain all three variables, *speed*, *scrap* and *line*.</span>
+because it enables you to get better (more precise) conclusions about your
 other variables. Here, there really is a difference between the
 production lines, but the $t$-test was too much of a blunt instrument
 to unearth it (because `speed` made a difference as well).
@@ -731,9 +726,8 @@ Solution
 
 The wording of the question says that cost is the response and so
 belongs on the $y$-axis. To make the plot, `ggplot` with an
-`x=` and a `y=` in the `aes` (the ``what to
-plot'' part), and a `geom\_point()` after (the ``how to
-plot it''):
+`x=` and a `y=` in the `aes` (the "what to  plot" 
+part), and a `geom_point()` after (the "how to plot it"):
 
 ```r
 ggplot(shipments,aes(x=size,y=cost))+geom_point()
@@ -825,17 +819,12 @@ B. But we don't know cost when the decision is made about which
 warehouse to send a shipment to, so the decision must be based on
 `size`. 
 
-In the place where I got these data, it said ``larger shipments are
-sent to Warehouse B, since this warehouse has specialized equipment
-that provides greater economies of scale for larger shipments''. That
+In the place where I got these data, it said "larger shipments are sent to Warehouse B, since this warehouse has specialized equipment that provides greater economies of scale for larger shipments". 
+That
 is to say, very large shipments are more expensive to handle, but not
-as expensive as you might think.\endnote{This is the same idea that it
-costs more to ride the GO bus from UTSC to York U than it does to
-ride from UTSC to Scarborough Town, but if you work out how much it
-costs per kilometre, the longer journey costs less per km. As of
-when I'm writing this, \$5.30 for the 7.2 km to Scarborough Town and
-\$6.75 for the 38 km to York. That's quite an economy of scale,
-isn't it?} That makes sense with our scatterplot, because the
+as expensive as you might think.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is the same idea that it  costs more to ride the GO bus from UTSC to York U than it does to  ride from UTSC to Scarborough Town, but if you work out how much it  costs per kilometre, the longer journey costs less per km. As of  when I'm writing this, $5.30 for the 7.2 km to Scarborough Town and  $6.75 for the 38 km to York. That's quite an economy of scale,  isn't it?</span> 
+That makes sense with our scatterplot, because the
 *slope* for larger shipments is less than for smaller shipments.
 
 When we get to regression later, we'll see what happens if we fit a

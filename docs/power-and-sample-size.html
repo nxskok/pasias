@@ -169,12 +169,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="power-and-sample-size" class="section level1">
 <h1><span class="header-section-number">Chapter 7</span> Power and sample size</h1>
 <div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb252-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <div id="simulating-power" class="section level2">
@@ -590,7 +590,9 @@ really need them.</p>
 <p>In opinion surveys (and other places), we are testing for a
 proportion <span class="math inline">\(p\)</span> (for example, the proportion of people agreeing with
 some statement). Often, we want to know whether the proportion is
-“really” greater than 0.5. That would entail testing a null
+“really” greater than 0.5.
+<label for="tufte-mn-20" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-20" class="margin-toggle"><span class="marginnote">That would mean assessing whether an observed proportion could be greater than 0.5 just by chance, or whether it is bigger enough than 0.5 to reject chance as a plausible explanation.</span><br />
+That would entail testing a null
 <span class="math inline">\(H_0: p=0.5\)</span> against an alternative <span class="math inline">\(H_a: p&gt;0.5\)</span>. This is usually done
 by calculating the test statistic
 <span class="math display">\[ z = { \hat{p} - 0.5 \over \sqrt{0.25/n}},\]</span>
@@ -711,10 +713,14 @@ make a table of them, just like the example in class.</p>
 and we have a sample of size 500, we have a good chance of (correctly)
 rejecting that <span class="math inline">\(p=0.5\)</span>.</p>
 <p>Extra: I know we haven’t learned about SAS yet, but it turns out that SAS can
-obtain this power by calculation. We’ll see how later in the course.
-SAS says our power is also about 85%, the same thing our simulation
+obtain this power by calculation, thus (don’t worry too much about the
+code yet: that will become clearer later):</p>
+
+
+<p>SAS says our power is also about 85%, the same thing our simulation
 said. I took some care to make sure that SAS did the same thing our
-simulation did. I was actually pleased that my simulation came
+simulation did (the <code>test=z</code>, the <code>method=normal</code>, and
+the <code>sides=U</code>). I was actually pleased that my simulation came
 out so close to the right answer.</p>
 <p>In contrast to <code>power.t.test</code>, SAS’s <code>proc power</code>
 handles power analyses for a lot of things, including analysis of
@@ -732,7 +738,7 @@ before you can correctly reject 0.5. Bear in mind that sample sizes
 for estimating proportions need to be larger than those for estimating
 means, so <span class="math inline">\(n=500\)</span> is large without being huge. The practical upshot
 is that if you design a survey and give it to 500 (or more) randomly
-chosen people, the actual proportion of people in favour doesn’t have to be
+chosen people, the proportion of people in favour doesn’t have to be
 much above 50% for you to correctly infer that it <em>is</em> above
 50%, most of the time.</p>
 

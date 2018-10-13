@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -312,8 +312,9 @@ than $\alpha$, and if the larger sample is from the population with
 the *smaller* SD, the probability of a type I error will be
 larger than $\alpha$. This is why you see S-W in STAB22. You see the
 pooled test in STAB57 because the logic of its derivation is so much
-clearer,\endnote{I return to this issue when we look at the same data
-in SAS later.} not because it's really the better test in
+clearer,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I return to this issue when we look at the same data  in SAS later.</span> 
+not because it's really the better test in
 practice. The theory says that if your data are normal in both groups
 with the same variance, then the pooled test is best, but it says
 *nothing* about the quality of the pooled test if any of that
@@ -380,8 +381,9 @@ their car. The data are in an Excel spreadsheet,
 [http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx](http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx). (Let me
 know if you cannot handle this format.) Click on the link. The data
 will probably download automatically. Check the folder on your
-computer where things get downloaded.\endnote{Mine is rather
-prosaically called `Downloads`.} If the spreadsheet is just
+computer where things get downloaded.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mine is rather  prosaically called *Downloads*.</span> 
+If the spreadsheet is just
 displayed and not downloaded, save it somewhere on your computer.
 
 
@@ -490,8 +492,9 @@ parking
 
 You have to do it this way, using the version of the spreadsheet on
 your computer, since `read_excel` won't take a
-URL, or if it does, I can't make it work.\endnote{Let me know if you
-have more success than I did.} I put the spreadsheet in R Studio's
+URL, or if it does, I can't make it work.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Let me know if you  have more success than I did.</span> 
+I put the spreadsheet in R Studio's
 current folder, so I could read it in by name, or you can do the
 `f=file.choose()` thing, find it, then read it in.
 The `sheet=` thing can take either a number (as here: the
@@ -523,9 +526,9 @@ If you are wondering about that `mode` thing on
 (like the text of an email, that you can open and look at in something
 like Notepad), and "binary" that you can't look at directly, but for
 which you need special software like Word or Excel to decode it for
-you.\endnote{A Word or Excel document has all kinds of formatting
-information hidden in the file as well as the text that you see on
-the screen.}  The first character in `mode` is either
+you.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">A Word or Excel document has all kinds of formatting  information hidden in the file as well as the text that you see on  the screen.</span>  
+The first character in \textt{mode} is either
 `w` for "write a new file", which is what we want here, or
 `a` for "append", which would mean adding to the end of a
 file that already exists. Thus `mode="wb"` means 
@@ -665,9 +668,8 @@ that it is a fair comparison.  The above-and-below is accomplished by
 having `gender` as the $y$ in the arrangement of the facets, so
 it goes before the squiggle. We don't have any $x$ in the arrangement
 of the facets, and we tell `ggplot` this by putting a dot where
-the $x$ would be.\endnote{You might have a second categorical variable
-by which you want to arrange the facets left and right, and that
-would go where the dot is.}
+the $x$ would be.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might have a second categorical variable  by which you want to arrange the facets left and right, and that  would go where the dot is.</span>
 
 You can also use `facet_wrap` for this, but you have to be
 more careful since you don't have any control over how the histograms
@@ -708,8 +710,8 @@ facet_grid(gender~.)
 
 We wanted gender to go up and down, and we had nothing to go left and
 right, hence the dot. Contrast that with my `facet_wrap`
-code:\endnote{I took out the `ncol` since that confuses the
-explanation here.} 
+code:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I took out the *ncol* since that confuses the  explanation here.</span> 
 
 
 ```r
@@ -739,8 +741,7 @@ sturges
 Round this up to 8. (The second thing in `log` is the base of
 the logs, if you specify it, otherwise it defaults to $e$ and gives
 you "natural" logs.) I seem to have the powers of 2 in my head, so I
-can do it mentally by saying ``the next power of 2 is 128, which is
-$2^7$, so I need $7+1=8$ bins.''
+can do it mentally by saying "the next power of 2 is 128, which is $2^7$, so I need $7+1=8$ bins."
 
 Or:
 
@@ -815,9 +816,7 @@ with(.,nclass.Sturges(distance))
 ## [1] 7
 ```
 
-I used the "dot" trick again, which you can read as "it": ``from
-`parking`, take only the rows for the females, and with it,
-give me the number of bins for a histogram by Sturges' rule.''
+I used the "dot" trick again, which you can read as "it": "from `parking`, take only the rows for the females, and with it, give me the number of bins for a histogram by Sturges' rule."
 
 
 
@@ -935,8 +934,8 @@ and look at the boxplots, you'll see either (depending on
 your point of view) that both groups are right-skewed, or
 that both groups have outliers, neither of which fits a
 normal distribution. The outlier in the male group is
-particularly egregious.\endnote{Google defines this as
-meaning "outstandingly bad, shocking".} So I think we
+particularly egregious.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Google defines this as            meaning *outstandingly bad, shocking*.</span> So I think we
 are entitled to question whether a two-sample $t$-test is
 the right thing to do.
 Having said that, we should go back and remember that the

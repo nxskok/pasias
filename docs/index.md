@@ -18,10 +18,4 @@ This book will hold a collection of problems, and their solutions, in applied st
 
 The problems were originally written in Sweave (that is, LaTeX with R code chunks), using the `exam` document class. I wrote a Perl program to strip out the LaTeX and turn each problem into R Markdown for this book. You will undoubtedly see bits of LaTeX still embedded in the text. I am trying to update my program to catch them, but I am sure to miss some. If you see anything, [file an issue](https://github.com/nxskok/pasias/issues) on the Github page for now. I want to fix problems programmatically at first, but when the majority of the problems have been caught, I will certainly take pull requests. I will acknowledge all the people who catch things.
 
-Current progress: 10 chapters (up to normal quantile plots). I am catching more of the latexery. But I still seem to have too many backslashes that are refugees from the sweave.
-
-Next:
-
-* give titles to the problems missing them
-* handle my footnotes. I think the easiest way to do that is to go Tufte-style and make them  margin notes. But I have to figure out how.
-
+It looks as if everything compiles, but how does it look?

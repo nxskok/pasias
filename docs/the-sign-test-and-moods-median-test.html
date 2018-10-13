@@ -169,12 +169,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="the-sign-test-and-moods-median-test" class="section level1">
 <h1><span class="header-section-number">Chapter 8</span> The sign test and Mood’s median test</h1>
 <div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb309-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb313-1" data-line-number="1"><span class="kw">library</span>(smmr)</a></code></pre></div>
@@ -505,7 +505,8 @@ bisection idea, because I thought that would be more accurate.</p>
 <p>This is a more accurate interval than we got above. (The
 <code>while</code> loop for the bisection keeps going until the two
 guesses at the appropriate end of the interval are less than 0.01
-apart, by default.)</p>
+apart, by default.)
+<label for="tufte-mn-21" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-21" class="margin-toggle"><span class="marginnote">You can change this by adding something like <em>tol=1e-4</em> to the end of your <em>ci_median</em>.</span></p>
 <p>If you want some other confidence level, you add <code>conf.level</code>
 on the end, as you would for <code>t.test</code>:</p>
 <div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb371-1" data-line-number="1"><span class="kw">ci_median</span>(times,time,<span class="dt">conf.level=</span><span class="fl">0.75</span>)</a></code></pre></div>
@@ -524,8 +525,7 @@ doesn’t work, try <code>ci_median0</code>.</p>
 <div id="chocolate-chips" class="section level2">
 <h2><span class="header-section-number">8.2</span> Chocolate chips</h2>
 <p>A famous cookie manufacturer claims that
-their bags of chocolate chip cookies contain ``more than 1100
-chocolate chips on average’’. A diligent group of students buys 16
+their bags of chocolate chip cookies contain “more than 1100 chocolate chips on average”. A diligent group of students buys 16
 bags of these cookies and counts the number of chocolate chips in each
 bag. The results are in <a href="http://www.utsc.utoronto.ca/~butler/c32/chips.txt" class="uri">http://www.utsc.utoronto.ca/~butler/c32/chips.txt</a>.</p>
 <ol style="list-style-type: lower-alpha">
@@ -662,8 +662,7 @@ median number of chocolate chips per bag of cookies.</li>
 <p>1135 to 1325. I would round these off to whole numbers, since the data
 values are all whole numbers. These values are all above 1100, which
 supports the conclusion we got above that the median is above
-1100. This is as it should be, because the CI is ``all those medians
-that would <em>not</em> be rejected by the sign test’’.</p>
+1100. This is as it should be, because the CI is “all those medians that would <em>not</em> be rejected by the sign test”.</p>
 <p>Or,</p>
 <div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb397-1" data-line-number="1"><span class="kw">ci_median0</span>(bags<span class="op">$</span>chips)</a></code></pre></div>
 <pre><code>## [1] 1135.003 1324.996</code></pre>
@@ -709,8 +708,8 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb401-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 37.21790 77.22271 43.95329 48.56146 56.10315 33.07776 56.94570
-##  [8] 55.28935 52.79955 49.10414</code></pre>
+<pre><code>##  [1] 63.14111 46.02872 46.44480 49.88765 51.36734 27.03391 57.84854
+##  [8] 62.69191 58.58864 51.29370</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
@@ -721,8 +720,8 @@ than 40 and how many are greater (or equal)?</li>
 <pre><code>## # A tibble: 2 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE        8
-## 2 TRUE         2</code></pre>
+## 1 FALSE        9
+## 2 TRUE         1</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -742,7 +741,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       2 FALSE</code></pre>
+## 1       1 TRUE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
@@ -754,7 +753,7 @@ should not reject. The fix is</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       2 FALSE</code></pre>
+## 1       1 TRUE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>
@@ -762,7 +761,7 @@ so a <code>pull</code> will grab it:</p>
 <a class="sourceLine" id="cb409-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb409-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb409-4" data-line-number="4"><span class="kw">pull</span>(is_rejected)</a></code></pre></div>
-<pre><code>## [1] FALSE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 <p>You might be wondering where the “1 or less” came from. Getting a
 P-value for the sign test involves the binomial distribution: if the
 null is correct, each data value is independently either above or
@@ -905,7 +904,11 @@ than the power of the <span class="math inline">\(t\)</span>-test, which we foun
 0.469. So the <span class="math inline">\(t\)</span>-test, in this situation where it is valid, is
 the right test to use: it is (a) valid and (b) more powerful.
 So the <span class="math inline">\(t\)</span>-test is more powerful. One way to think about how
-<em>much</em> more powerful is to ask `<code>how much smaller of a sample size would be needed for the $t$-test to have the same power as this sign test?'' The power of my sign test was 0.243, so in</code>power.t.test<code>we set</code>power<code>equal to that and omit the sample size</code>n`:</p>
+<em>much</em> more powerful is to ask “how much smaller of a sample size would be needed for the <span class="math inline">\(t\)</span>-test to have the same power as this sign test?”
+The power of my sign test was 0.243, so in
+<code>power.t.test</code> we set
+<code>power</code> equal to that and
+omit the sample size <code>n</code>:</p>
 <div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb420-1" data-line-number="1"><span class="kw">power.t.test</span>(<span class="dt">delta=</span><span class="dv">50-40</span>,<span class="dt">power=</span><span class="fl">0.243</span>,<span class="dt">sd=</span><span class="dv">15</span>,<span class="dt">type=</span><span class="st">&quot;one.sample&quot;</span>,<span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##      One-sample t test power calculation 
@@ -920,8 +923,16 @@ So the <span class="math inline">\(t\)</span>-test is more powerful. One way to 
 sample of size 10 does for the sign test. The ratio of these two
 sample sizes is called the <em>relative efficiency</em> of the two
 tests: in this case, the <span class="math inline">\(t\)</span>-test is <span class="math inline">\(10/6=1.67\)</span> times more
-efficient. The data that you have are being used <code>more efficiently'' by the $t$-test. It is possible to derive\endnote{Meaning, I forget how to do it. But it has something to do with looking at alternatives that are very close to the null.}  the limiting relative efficiency of the $t$ test relative to the sign test when the data are actually normal, as the sample size gets larger. This turns out not to depend on how far wrong the null is (as long as it is the same for both the $t$-test and the sign test). This</code>asymptotic relative
-efficiency’’ is <span class="math inline">\(\pi/2=1.57\)</span>. Our relative efficiency for power
+efficient. The data that you have are being used “more efficiently”
+by the <span class="math inline">\(t\)</span>-test.
+It is possible to derive
+<label for="tufte-mn-22" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-22" class="margin-toggle"><span class="marginnote">Meaning, I forget how to do it. But it has something to do with looking at alternatives that are very close to the null.</span><br />
+the limiting relative efficiency of
+the <span class="math inline">\(t\)</span> test relative to the sign test when the data are actually
+normal, as the sample size gets larger. This turns out not to
+depend on how far wrong the null is (as long as it is the same for
+both the <span class="math inline">\(t\)</span>-test and the sign test). This “asymptotic relative efficiency” is <span class="math inline">\(\pi/2=1.57\)</span>.
+Our relative efficiency for power
 0.243, namely 1.67, was pretty close to this, even though our
 sample sizes 10 and 6 are not especially close to infinity.
 This says that, if your data are actually from a normal
@@ -932,14 +943,17 @@ If your data are <em>not</em> from a normal distribution, then the
 story can be very different.
 Of course you knew I would investigate this. There is a
 distribution called the “Laplace” or “double exponential”
-distribution, that has very long tails. The distribution is not in
+distribution, that has very long tails.
+<label for="tufte-mn-23" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-23" class="margin-toggle"><span class="marginnote">If you’ve ever run into the exponential distribution, you’ll recall that this is right skewed with a very long tail. The Laplace distribution looks like two of these glued back to back.</span>
+The distribution is not in
 base R, but there is a package called <code>smoothmest</code> that
 contains a function <code>rdoublex</code> to generate random values from
 this distribution. So we’re going to do a simulation investigation
 of the power of the sign test for Laplace data, by the same
 simulation technique that we did above. Like the normal, the Laplace
 distribution is symmetric, so its mean and median are the same
-(which makes our life easier).</p>
+(which makes our life easier).
+<label for="tufte-mn-24" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-24" class="margin-toggle"><span class="marginnote">This is about the <em>only</em> way in which the normal and Laplace distributions are alike.</span></p>
 <p>Let’s test the hypothesis that the median is zero. We’ll suppose that
 the true median is 0.5 (this is called <code>mu</code> in
 <code>rdoublex</code>). The first problem we run into is that we can’t use
@@ -1036,8 +1050,8 @@ the <span class="math inline">\(t\)</span>-test.</p>
 the Laplace distribution. But the moral of the story is that the sign
 test <em>can</em> be more powerful than the <span class="math inline">\(t\)</span>-test, under the right
 circumstances (and the above simulation is the “proof” of that
-statement). So a blanket statement like ``the sign test is not very
-powerful’’ needs to be qualified a bit: when your data come from a
+statement). So a blanket statement like “the sign test is not very powerful”
+needs to be qualified a bit: when your data come from a
 sufficiently long-tailed distribution, the sign test can be more
 powerful relative to the <span class="math inline">\(t\)</span>-test than you would think.</p>
 <p>I finish by “unloading” the two packages that got loaded:</p>
