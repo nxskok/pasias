@@ -1,0 +1,252 @@
+##  Growth of tomatoes
+
+
+ A biology graduate student exposed each of 32
+tomato plants to one of four different colours of light (8 plants to
+each colour). The growth rate of each plant, in millimetres per week,
+was recorded. The data are in
+[http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt](http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt). 
+
+
+
+(a) Read the data into R and confirm that you have 8 rows and 5
+columns of data.
+
+
+Solution
+
+
+This kind of thing:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt"
+toms1=read_delim(my_url," ")
+toms1
+``` 
+
+I do indeed have 8 rows and 5 columns.
+
+With only 8 rows, listing the data like this is good. 
+
+
+
+(b) Re-arrange the data so that you have *one* column
+containing all the growth rates, and another column saying which
+colour light each plant was exposed to. (The aim here is to produce
+something suitable for feeding into `aov` later.) 
+
+
+Solution
+
+
+This is a job for `gather`:
+```{r }
+toms2 = toms1 %>% gather(colour,growthrate,blue:green)
+toms2
+```       
+
+Reminder: data frame to gather, what makes the columns different
+(they're different colours), what makes them the same (they're all
+growth rates), which columns to gather together (all the colour ones).
+
+Since the column `plant` was never mentioned, this gets
+repeated as necessary, so now it denotes ``plant within colour
+group'', which in this case is not very useful. (Where you have
+matched pairs, or repeated measures in general, you *do* want to
+keep track of which individual is which. But this is not repeated
+measures because plant number 1 in the blue group and plant number 1
+in the red group  are *different* plants.)
+
+There were 8 rows originally and 4 different colours, so there should
+be, and are, $8 \times 4=32$ rows in the gathered-up data set.
+
+
+
+(c) Save the data in the new format to a text file. This is
+most easily done using `write_csv`, which is the opposite
+of `read_csv`. It requires two things: a data frame, and
+the name of a file to save in, which should have a `.csv`
+extension.  
+
+
+Solution
+
+
+The code is easy enough:
+```{r }
+write_csv(toms2,"tomatoes2.csv")
+```       
+
+If no error, it worked. That's all you need.
+
+To verify (for my satisfaction) that it was saved correctly:
+
+```{r engine="bash"}
+cat tomatoes2.csv 
+``` 
+
+On my system, that will list the contents of the file. Or you can just
+open it in R Studio (if you saved it the way I did, it'll be in the
+same folder, and you can find it in the Files pane.)
+
+
+
+(d) Make a suitable boxplot, and use it to assess the assumptions
+for ANOVA. What do you conclude? Explain briefly. 
+
+
+Solution
+
+
+Nothing terribly surprising here. My data frame is called
+`toms2`, for some reason:
+```{r }
+ggplot(toms2,aes(x=colour, y=growthrate))+geom_boxplot()
+```     
+
+There are no outliers, but there is a little skewness (compare the
+*whiskers*, not the placement of the median within the box,
+because what matters with skewness is the *tails*, not the middle
+of the distribution; it's problems in the tails that make the mean
+unsuitable as a measure of centre). The Red group looks the most
+skewed. Also, the Yellow group has smaller spread than the others (we
+assume that the population variances within each group are equal). The
+thing to bear in mind here, though, is that there are only eight
+observations per group, so the distributions could appear to have
+unequal variances or some non-normality by chance. 
+
+My take is that these data, all things considered, are \emph{just
+about} OK for ANOVA. Another option would be to do Welch's ANOVA as
+well and compare with the regular ANOVA: if they give more or less the
+same P-value, that's a sign that I didn't need to worry.
+
+Extra: some people like to run a formal test on the variances to test
+them for equality. My favourite (for reasons explained elsewhere) is
+the Levene test, if you insist on going this way. It lives in package
+`car`, and *does not* take a `data=`, so you need
+to do the `with` thing:
+
+```{r }
+library(car)
+with(toms2,leveneTest(growthrate,colour))
+``` 
+
+The warning is because `colour` was actually text, but the test
+did the right thing by turning it into a factor, so that's OK.
+
+There is no way we can reject equal variances in the four groups. The
+$F$-statistic is less than 1, in fact, which says that if the four
+groups have the same population variances, the sample variances will
+be *more* different than the ones we observed on average, and so
+there is no way that these sample variances indicate different
+population variances. (This is because of 8 observations only per
+group; if there had been 80 observations per group, it would have been
+a different story.)
+
+With that in mind, I think the regular ANOVA will be perfectly good,
+and we would expect that and the Welch ANOVA to give very similar results.
+
+I don't need `car` again, so let's get rid of it:
+
+```{r }
+detach("package:car",unload=T)
+``` 
+
+
+
+(e) Run (regular) ANOVA on these data. What do you conclude?
+(Optional extra: if you think that some other variant of ANOVA would
+be better, run that as well and compare the results.)
+
+
+Solution
+
+
+`aov`, bearing in mind that Tukey is likely to follow:
+
+```{r }
+toms.1=aov(growthrate~colour,data=toms2)
+summary(toms.1)
+``` 
+
+This is a tiny P-value, so the mean growth rate for the different
+colours is definitely *not* the same for all colours. Or, if you
+like, one or more of the colours has a different mean growth rate than
+the others.
+
+This, remember, is as far as we go right now.
+
+Extra: if you thought that normality was OK but not equal spreads,
+then Welch ANOVA is the way to go:
+
+```{r }
+toms.2=oneway.test(growthrate~colour,data=toms2)
+toms.2
+``` 
+
+The P-value is not *quite* as small as for the regular ANOVA, but
+it is still very small, and the conclusion is the same.
+
+If you had doubts about the normality (that were sufficiently great,
+even given the small sample sizes), then go with Mood's median test
+for multiple groups:
+
+```{r }
+library(smmr)
+median_test(toms2,growthrate,colour)
+``` 
+
+The P-value is again extremely small (though not quite as small as for
+the other two tests, for the usual reason that Mood's median test
+doesn't use the data very efficiently: it doesn't use how *far*
+above or below the overall median the data values are.)
+
+The story here, as ever, is consistency: whatever you thought was
+wrong, looking at the boxplots, needs to guide the test you do. This
+should probably be a flow chart, but this way works too:
+
+
+
+* if you are not happy with normality, go with
+`median_test` from `smmr` (Mood's median test). 
+
+* if you are happy with normality and equal variances, go with
+`aov`.
+
+* if you are happy with normality but not equal variances, go with
+`oneway.test` (Welch ANOVA).
+
+
+So the first thing to think about is normality, and if you are OK with
+normality, then think about equal spreads. Bear in mind that you need
+to be willing to tolerate a certain amount of non-normality and
+inequality in the spreads, given that your data are only samples from
+their populations. (Don't expect perfection, in short.)
+
+
+
+(f) If warranted, run Tukey. (If not warranted, explain briefly
+why not.)
+
+
+Solution
+
+
+The reason to run Tukey is that you have found some differences
+among the groups, and you want to know what they are. Here, we
+*have* said that the colours do not all have the same mean
+growth rate, so we want to find what the differences
+are. (Looking at the boxplots suggests that red is clearly best
+and green clearly worst, and it is possible that all the colours
+are significantly different from each other.)
+```{r }
+TukeyHSD(toms.1)
+```       
+
+All of the differences are (strongly) significant, except for yellow
+and blue, the two with middling growth rates on the boxplot. Thus we
+would have no hesitation in saying that growth rate is biggest in red
+light and smallest in green light.
+
+
+
+

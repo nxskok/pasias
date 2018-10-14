@@ -1,0 +1,312 @@
+##  Location, species and disease in plants
+
+
+ The table below is a "contingency table", showing
+frequencies of diseased and undiseased plants of two different species
+in two different locations:
+
+
+```
+
+Species     Disease present         Disease absent
+Location X Location Y  Location X Location Y
+A            44         12          38        10
+B            28         22          20        18
+
+```
+
+
+The data were saved as
+[http://www.utsc.utoronto.ca/~butler/c32/disease.txt](http://www.utsc.utoronto.ca/~butler/c32/disease.txt). In that
+file, the columns are coded by two letters: a `p` or an
+`a` to denote presence or absence of disease, and an `x`
+or a `y` to denote location X or Y. The data are separated by
+multiple spaces and aligned with the variable names. 
+
+
+
+(a) Read in and display the data.
+
+
+Solution
+
+
+`read_table` again. You know this because, when you looked
+at the data file, which of course you did (didn't you?), you saw
+that the data values were aligned by columns with multiple spaces
+between them:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/disease.txt"
+tbl=read_table(my_url)
+tbl
+``` 
+
+I was thinking ahead, since I'll be wanting to have one of my columns
+called `disease`, so I'm *not* calling the data frame
+`disease`. 
+
+You'll also have noticed that I simplified the data frame that I had
+you read in, because the original contingency table I showed you has
+*two* header rows, and we have to have *one* header row. So
+I mixed up the information in the two header rows into one.
+
+
+
+(b)\label{part:nottidy} Explain briefly how these data are not "tidy".
+
+
+Solution
+
+
+The simple answer is that there are 8 frequencies, that each ought
+to be in a row by themselves. Or, if you like, there are three
+variables, Species, Disease status and Location, and each of
+*those* should be in a *column* of its own. 
+Either one
+of these ideas, or something like it, is good. I need you to
+demonstrate that you know something about "tidy data" in this context.
+
+
+
+(c) Use a suitable `tidyr` tool to get all the things
+that are the same into a single column. (You'll need to make up a
+temporary name for the other new column that you create.) Show your
+result. 
+
+
+Solution
+
+
+`gather` is the tool. All the columns apart from
+`Species` contain frequencies, so that's what's ``the
+same''. They are frequencies in disease-location combinations, so
+I'll call the column of "what's different" `disloc`. Feel
+free to call it `temp` for now if you prefer:
+```{r }
+(tbl %>% gather(disloc,frequency,px:ay) -> tbl.2)
+``` 
+
+This also works ("gather together everything but `Species`"):
+
+```{r }
+(tbl %>% gather(disloc,frequency,-Species) -> tbl.2)
+``` 
+
+
+
+(d) Explain briefly how the data frame you just created is
+still not "tidy" yet.
+
+
+Solution
+
+
+The column I called `disloc` actually contains *two*
+variables, disease and location, which need to be split up. A
+check on this is that we 
+have two columns (not including the frequencies), but back in
+(\ref{part:nottidy}) we found *three* variables, so there
+ought to be three non-frequency columns.
+
+
+
+(e) Use one more `tidyr` tool to make these data tidy,
+and show your result.
+
+
+Solution
+
+
+This means splitting up `disloc` into two separate columns,
+splitting after the first character, thus:
+```{r }
+(tbl.2 %>% separate(disloc,c("disease","location"),1) -> tbl.3)
+``` 
+
+This is now tidy: eight frequencies in rows, and three non-frequency
+columns. (Go back and look at your answer to part (\ref{part:nottidy})
+and note that the issues you found there have all been resolved now.)
+
+
+
+(f) Let's see if we can re-construct the original contingency
+table (or something equivalent to it). Use the function
+`xtabs`. This requires first a model formula with the frequency
+variable on the left of the squiggle, and the other variables
+separated by plus signs on the right. Second it requires a data
+frame, with `data=`. Feed
+your data frame from the previous part into `xtabs`. Save the
+result in a variable and display the result.
+
+
+Solution
+
+
+```{r }
+tbl.4=xtabs(frequency~Species+disease+location,data=tbl.3)
+tbl.4
+``` 
+
+This shows a pair of contingency tables, one each for each of the two
+locations (in general, the variable you put last on the right side of
+the model formula). You can check that everything corresponds with the
+original data layout at the beginning of the question, possibly with
+some things rearranged (but with the same frequencies in the same
+places). 
+
+
+
+(g) Take the output from the last part and feed it into the
+function `ftable`. How has the output been changed? Which do
+you like better? Explain briefly.
+
+
+Solution
+
+
+This:
+```{r }
+ftable(tbl.4)  
+``` 
+
+This is the same output, but shown more compactly. (Rather like a
+vertical version of the original data, in fact.) I like
+`ftable` better because it displays the data in the smallest
+amount of space, though I'm fine if you prefer the `xtabs`
+output because it spreads things out more. This is a matter of
+taste. Pick one and tell me why you prefer it, and I'm good.
+
+That's the end of what you had to do, but I thought I would do some
+modelling and try to find out what's associated with disease. The
+appropriate modelling with frequencies is called ``log-linear
+modelling'', and it assumes that the log of the frequencies has a
+linear relationship with the effects of the other variables. This is
+not quite as simple as the log transformations we had before, because
+bigger frequencies are going to be more variable, so we fit a
+generalized linear model with a Poisson-distributed response and log
+link. (It's better if you know what that means, but you ought to be
+able to follow the logic if you don't.)
+
+First, fit a model predicting frequency from everything, including all
+the interactions. (The reason for doing it this way will become clear later):
+
+```{r }
+model.1=glm(frequency~Species*location*disease,data=tbl.3,family="poisson")
+drop1(model.1,test="Chisq")
+``` 
+
+The residuals are all zero because this model fits perfectly. The
+problem is that it is very complicated, so it offers no insight. So
+what we do is to look at the highest-order interaction
+`Species:location:disease` and see whether it is
+significant. It is not, so we can remove it. This is reminiscent of
+variable selection in regression, where we pull the least significant
+thing out of the model in turn until we can go no further. But here,
+we have additional things to think about: we have to get rid of all
+the three-way interactions before we can tackle the two-way ones, and
+all the two-way ones before we can tackle the main effects. There is a
+so-called "nested" structure happening here that says you don't look
+at, say, `Species`, until you have removed *all* the
+higher-order interactions involving `Species`. Not clear yet?
+Don't fret. `drop1` allows you to assess what is currently up
+for grabs (here, only the three-way interaction, which is not
+significant, so out it comes).
+
+Let's get rid of that three-way interaction. This is another use for
+`update` that we've seen in connection with multiple regression
+(to make small changes to a big model):
+
+```{r }
+model.2=update(model.1,.~.-Species:location:disease)
+drop1(model.2,test="Chisq")
+``` 
+
+Notice how `update` saved us having to write the whole model
+out again.
+
+Now the three two-way interactions are up for grabs:
+`Species:location`, `Species:disease` and
+`location:disease`. The last of these is the least significant,
+so out it comes. I did some copying and pasting, but I had to remember
+which model I was working with and what I was removing:
+
+```{r }
+model.3=update(model.2,.~.-location:disease)
+drop1(model.3,test="Chisq")  
+``` 
+
+`Species:disease` comes out, but it looks as if
+`Species:location` will have to stay:
+
+```{r }
+model.4=update(model.3,.~.-Species:disease)
+drop1(model.4,test="Chisq")  
+``` 
+
+`Species:location` indeed stays. That means that anything
+"contained in" it also has to stay, regardless of its main
+effect. So the only candidate for removal now is `disease`: not
+significant, out it comes:
+
+```{r }
+model.5=update(model.4,.~.-disease)
+drop1(model.5,test="Chisq")  
+``` 
+
+And now we have to stop.
+
+What does this final model mean? Well, frequency depends significantly
+on the `Species:location` combination, but not on anything
+else. To see how, we make a contingency table of species by location
+(totalling up over disease status, since that is not significant):
+
+```{r }
+xtabs(frequency~Species+location,data=tbl.3)  
+``` 
+
+Most of the species A's are at location X, but the species B's are
+about evenly divided between the two locations. Or, if you prefer
+(equally good): location X has mostly species A, while location Y has
+mostly species B. You can condition on either variable and compare the
+conditional distribution of the other one.
+
+Now, this is rather interesting, because this began as a study of
+disease, but disease has completely disappeared from our final model!
+That means that nothing in our final model has any relationship with
+disease. Indeed, if you check the original table, you'll find that
+disease is present slightly more than it's absent, for all
+combinations of species and location. That is, neither species nor
+location has any particular association with (effect on) disease,
+since disease prevalence doesn't change appreciably if you change
+location, species or the combination of them.
+
+The way an association with disease would show up is if a
+`disease:`something interaction had been significant and had
+stayed in the model, that something would have been associated with
+disease. For example, if the `disease:Species` table had looked
+like this:
+
+```{r }
+disease=c("a","a","p","p")
+Species=c("A","B","A","B")
+frequency=c(10,50,30,30)
+xx=data.frame(disease,Species,frequency)
+xtabs(frequency~disease+Species)
+``` 
+
+For species A, disease is present 75\% of the time, but for species B
+it's present less than 40\% of the time. So in this one there ought to be a
+significant association between disease and species:
+
+```{r }
+xx.1=glm(frequency~disease*Species,data=xx,family="poisson")
+drop1(xx.1,test="Chisq")
+``` 
+
+And so there is. Nothing can come out of the model. (This is the same
+kind of test as a chi-squared test for association, if you know about
+that.  The log-linear model is a multi-variable generalization of that.)
+
+
+
+

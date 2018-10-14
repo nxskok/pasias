@@ -1,0 +1,305 @@
+##  Pain relief in migraine headaches (again)
+
+
+ The data in
+[http://www.utsc.utoronto.ca/~butler/c32/migraine.txt](http://www.utsc.utoronto.ca/~butler/c32/migraine.txt) are from a
+study of pain relief in migraine headaches. Specifically, 27 subjects
+were randomly assigned to receive *one* of three pain relieving
+drugs, labelled A, B and C. Each subject reported the number of hours
+of pain relief they obtained (that is, the number of hours between
+taking the drug and the migraine symptoms returning). A higher value
+is therefore better. Can we make some recommendation about which drug
+is best for the population of migraine sufferers?
+
+
+
+(a) Read in and display the data. Take a look at the data
+file first, and see if you can say why `read_table` will
+work and `read_delim` will not.
+
+
+Solution
+
+
+The key is two things: the data values are \emph{lined up in
+columns}, and \emph{there is more than one space between
+values}. The second thing is why `read_delim` will not
+work. If you look carefully at the data file, you'll see that
+the column names are above and aligned with the columns, which
+is what `read_table` wants. If the column names had
+*not* been aligned with the columns, we would have needed
+`read_table2`. 
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/migraine.txt"
+migraine=read_table(my_url)
+migraine
+``` 
+
+Success.
+ We'll not be reading data like this into SAS in this course, but you
+ might like to know how it goes (for future reference). It uses a
+ `data` step, like we've been using to create new variables, thus:
+ 
+ \begin{Datastep}
+ filename myurl url 'http://www.utsc.utoronto.ca/~butler/c32/migraine.txt';
+ data pain;
+   infile myurl firstobs=2;
+   input druga drugb drugc;
+ \end{Datastep}
+ 
+ \begin{Sascode}[store=maqax]
+ proc print;  
+ \end{Sascode}
+ 
+ \Listing[store=maqax, fontsize=footnotesize]{maqaxx}
+
+
+
+(b) What is it about the experimental design that makes a one-way
+analysis of variance plausible for data like this?
+
+
+Solution
+
+
+Each experimental subject only tested *one* drug, so that
+we have 27 independent observations, nine from each drug. This
+is exactly the setup that a one-way ANOVA requires. 
+Compare that to, for example, a situation where you had only 9
+subjects, but they each tested *all* the drugs (so that
+each subject produced three measurements). That is like a
+three-measurement version of matched pairs, a so-called
+**repeated-measures design**, which requires its own kind
+of analysis.\endnote{To allow for the fact that measurements on the same
+subject are not independent but correlated.} 
+
+
+
+(c) What is wrong with the current format of the data as far as
+doing a one-way ANOVA analysis is concerned? (This is related to the
+idea of whether or not the data are "tidy".)
+
+
+Solution
+
+
+For our analysis, we need one column of pain relief time and one
+column labelling the drug that the subject in question took. 
+Or, if you prefer to think about what would make these data
+"tidy": there are 27 subjects, so there ought to be 27 rows,
+and all three columns are measurements of pain relief, so they
+ought to be in one column.
+
+
+
+(d) "Tidy" the data to produce a data frame suitable for your
+analysis. 
+
+
+Solution
+
+
+`gather` the columns that are all measurements of one
+thing.
+The syntax of `gather` is: what
+makes the columns different, what makes them the same, and which
+columns need to be gathered together. Use a pipe to name the
+dataframe to work with. I'm going to save my new data frame:
+```{r }
+(migraine %>% gather(drug,painrelief,DrugA:DrugC) -> migraine2)
+``` 
+
+The brackets around the whole thing print out the result as well as
+saving it. If you don't have those, you'll need to type
+`migraine2` again to display it.
+
+We do indeed have a new data frame with 27 rows, one per observation,
+and 2 columns, one for each variable: the pain relief hours, plus a
+column identifying which drug that pain relief time came from. Exactly
+what `aov` needs.
+
+You can probably devise a better name for your new data frame.
+
+
+
+(e) Go ahead and run your one-way ANOVA (and Tukey if
+necessary). Assume for this that the pain relief hours in each group
+are sufficiently close to normally distributed with sufficiently
+equal spreads.
+
+
+Solution
+
+
+My last sentence absolves us from doing the boxplots that we
+would normally insist on doing. 
+```{r }
+painrelief.1=aov(painrelief~drug,data=migraine2)
+summary(painrelief.1)
+``` 
+
+There are (strongly) significant differences among the drugs, so it is
+definitely worth firing up Tukey to figure out where the differences are:
+
+```{r }
+TukeyHSD(painrelief.1)  
+``` 
+
+Both the differences involving drug A are significant, and because a
+high value of `painrelief` is better, in both cases drug A is
+*worse* than the other drugs. Drugs B and C are not significantly
+different from each other.
+
+Extra: we can also use the "pipe" to do this all in one go:
+
+```{r }
+migraine %>%
+gather(drug,painrelief,DrugA:DrugC) %>%
+aov(painrelief~drug,data=.) %>%
+summary()
+``` 
+
+with the same results as before. Notice that I never actually created
+a second data frame by name; it was created by `gather` and
+then immediately used as input to `aov`.\endnote{And then thrown
+away.} I also used the
+`data=.` trick to use ``the data frame that came out of the
+previous step'' as my input to `aov`.
+
+Read the above like this: ``take `migraine`, and then gather
+together the `DrugA` through `DrugC` columns into a
+column `painrelief`, labelling each by its drug, and then do an
+ANOVA of `painrelief` by `drug`, and then summarize the results.''
+
+What is even more alarming is that I can feed the output from
+`aov` straight into `TukeyHSD`:
+
+```{r }
+migraine %>%
+gather(drug,painrelief,DrugA:DrugC) %>%
+aov(painrelief~drug,data=.) %>%
+TukeyHSD()
+``` 
+
+I wasn't sure whether this would work, since the output from
+`aov` is an R `list` rather than a data frame, but the
+output from `aov` is sent into `TukeyHSD` whatever
+kind of thing it is.
+
+What I am missing here is to display the result of `aov`
+*and* use it as input to `TukeyHSD`. Of course, I had to
+discover that this could be solved, and indeed it can:
+
+```{r }
+migraine %>%
+gather(drug,painrelief,DrugA:DrugC) %>%
+aov(painrelief~drug,data=.) %>%
+{ print(summary(.)) ; . } %>%
+TukeyHSD()
+``` 
+
+The odd-looking second-last line of that uses that `.` trick
+for "whatever came out of the previous step". The thing inside the
+curly brackets is two commands one after the other; the first is to
+display the `summary` of that `aov`\endnote{It needs
+`print` around it to display it, as you need `print`
+to display something within a loop or a function.} and the second
+part after the `;` is to just pass whatever came out of the
+previous line, the output from `aov`, on, unchanged, into
+`TukeyHSD`. 
+
+In the Unix world this is called `tee`,
+where you print something *and* pass it on to the next step. The
+name `tee` comes from a (real) pipe that plumbers would use to
+split water flow into two, which looks like a letter T.
+
+
+
+(f) What recommendation would you make about the best drug or
+drugs? Explain briefly.
+
+
+Solution
+
+
+Drug A is significantly the worst, so we eliminate that. But
+there is no significant difference between drugs B and C, so we
+have no reproducible reason for preferring one rather than the
+other. Thus, we recommend "either B or C". 
+If you weren't sure which way around the drugs actually came
+out, then you should work out the mean pain relief score by
+drug:
+
+```{r }
+migraine2 %>%
+group_by(drug) %>%
+summarize(m=mean(painrelief))
+``` 
+These confirm that A is worst, and there is nothing much to choose
+between B and C.
+You should *not* recommend drug C over drug B on this evidence,
+just because its (sample) mean is higher than B's. The point about significant
+differences is that they are supposed to stand up to replication: in
+another experiment, or in real-life experiences with these drugs, the
+mean pain relief score for drug A is expected to be worst, but between
+drugs B and C, sometimes the mean of B will come out higher and
+sometimes C's mean will be higher, because there is no significant
+difference between them.
+`r tufte::margin_note("This talks about emph{means")` rather
+than individual observations; in individual cases, sometimes even
+drug *A* will come out best. But we're interested in
+population means, since we want to do the greatest good for the
+greatest number.}\endnote{"Greatest good for the greatest number"
+is from Jeremy Bentham, 1748--1832, British
+philosopher and advocate of utilitarianism.}
+Another way is to draw a boxplot of pain-relief scores:
+
+```{r }
+ggplot(migraine2,aes(x=drug,y=painrelief))+geom_boxplot()
+``` 
+
+The medians of drugs B and C are actually exactly the same. Because
+the pain relief values are all whole numbers (and there are only 9 in
+each group), you get that thing where enough of them are equal that
+the median and third quartiles are equal, actually for all three
+groups. 
+
+Despite the outlier, I'm willing to call these groups sufficiently
+symmetric for the ANOVA to be OK (but I didn't ask you to draw the
+boxplot, because I didn't want to confuse the issue with this. The
+point of this question was to get the data tidy enough to do an
+analysis.) Think about it for a moment: that outlier is a value of 8.
+This is really not that much bigger than the value of 7 that is the
+highest one on drug C. The 7 for drug C is not an outlier. The only
+reason the 8 came out as an outlier was because the IQR was only 1. If
+the IQR on drug B had happened to be a bit bigger, the 8 would not
+have been an outlier. 
+
+As I said, I didn't want you to have to get into this, but if you are
+worried, you know what the remedy is --- Mood's median test. Don't
+forget to use the right data frame:
+
+```{r }
+library(smmr)
+median_test(migraine2,painrelief,drug)
+``` 
+
+Because the pain relief scores are integers, there are probably a lot
+of them equal to the overall median. There were 27 observations
+altogether, but Mood's median test will discard any that are equal to
+this value. There must have been 9 observations in each group to start
+with, but if you look at each row of the table, there are only 8
+observations listed for drug A, 7 for drug B and 6 for drug C, so
+there must have been 1, 2 and 3 (totalling 6) observations equal to
+the median that were discarded.
+
+The P-value is a little bigger than came out of the $F$-test, but the
+conclusion is still that there are definitely differences among the
+drugs in terms of pain relief. The table at the top of the output
+again suggests that drug A is worse than the others, but to confirm
+that you'd have to do Mood's median test on all three *pairs* of
+drugs, and then use Bonferroni to allow for your having done three tests.
+
+
+
+

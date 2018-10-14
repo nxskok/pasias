@@ -1,0 +1,287 @@
+##  Deer and how much they eat
+
+
+ Do adult deer eat different amounts of food at different
+times of the year? The data in
+[http://www.utsc.utoronto.ca/~butler/c32/deer.txt](http://www.utsc.utoronto.ca/~butler/c32/deer.txt) are the weights
+of food (in kilograms) consumed by randomly selected adult deer
+observed at different times of the year (in February, May, August and
+November). We will assume that these were different deer observed in
+the different months. (If the same animals had been observed at
+different times, we would have been in the domain of ``repeated
+measures'', which would require a different analysis, beyond the scope
+of this course.)
+
+
+
+(a) Read the data into R, and calculate numbers of observations
+and the median amounts of food
+eaten each month.
+ 
+Solution
+
+
+The usual stuff for data values separated by spaces:
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/deer.txt"
+deer=read_delim(myurl," ")
+```     
+
+and then, recalling that `n()` is the handy way of getting the
+number of observations in each group:
+
+```{r }
+deer %>% group_by(month) %>% 
+summarize(n=n(),med=median(food))
+``` 
+
+When you want the number of observations *plus* some other
+summaries, as here, the group-by and summarize idea is the way, using
+`n()` to get the number of observations in each
+group. `count` counts the number of observations per group when
+you *only* have grouping variables.
+
+The medians differ a bit, but it's hard to judge without a sense of
+spread, which the boxplots (next) provide. November is a bit higher
+and May a bit lower.
+ 
+
+(b) Make side-by-side boxplots of the amount of food eaten each
+month. Comment briefly on what you see. 
+ 
+Solution
+
+
+```{r }
+ggplot(deer,aes(x=month,y=food))+geom_boxplot()
+```     
+
+This offers the suggestion that maybe November will be significantly
+higher than the rest and May significantly lower, or at least they
+will be significantly different from each other.
+
+This is perhaps getting ahead of the game: we should be thinking about
+spread and shape. Bear in mind that there are only 5 or 6 observations
+in each group, so you won't be able to say much about normality. In
+any case, we are going to be doing a Mood's median test, so any lack
+of normality doesn't matter (eg. perhaps that 4.4 observation in
+August). Given the small sample sizes, I actually think the spreads
+are quite similar.
+
+Another way of looking at the data, especially with these small sample
+sizes, is a "dot plot": instead of making a boxplot for each month,
+we plot the actual points for each month as if we were making a
+scatterplot. I make one extra refinement, which I talk about below:
+
+```{r }
+ggplot(deer,aes(x=month,y=food))+geom_jitter(width=0,height=0.05)
+``` 
+
+The obvious thing would have been to use `geom_point`, except
+that this would have plotted observations with identical `food`
+values on top of each other, so that you wouldn't see them.\endnote{There are
+actual identical values in the data, which you can check, but since
+the data values are only given to one decimal, it's a sensible thing
+to be worried about in any case.}  Using `geom_jitter` instead
+moves the points about a bit so that you can see them all. I wanted to
+keep them above the months they belong to, so I only allowed vertical
+jitter (you can check that you can see the right number of
+observations above each month). If you like, you can colour the
+months; it's up to you whether you think that's making the plot easier
+to read, or is overkill (see my point on the facetted plots on the
+2017 midterm).
+
+This way you see the whole distribution for each month. Normally it's
+nicer to see the summary made by the boxplots, but here there are not
+very many points. The value of 4.4 in August does look quite a bit
+lower than the rest, but the other months look believably normal given
+the small sample sizes. I don't know about equal spreads (November
+looks more spread out), but normality looks believable. Maybe this is
+the kind of situation in which Welch's ANOVA is a good idea.
+ 
+
+(c) Run a Mood's median test as in lecture (ie.\ not using
+`smmr`). What do you conclude, in the context of the data? 
+ 
+Solution
+
+
+To give you some practice with the mechanics, first find the
+overall median:
+```{r }
+deer %>% summarize(med=median(food))
+```     
+
+or
+
+```{r }
+median(deer$food)
+``` 
+
+I like the first way because it's the same idea as we did before, just
+not differentiating by month. I think there are some observations
+exactly equal to the median, which will mess things up later:
+
+```{r }
+deer %>% filter(food==4.7)
+``` 
+
+There are, two in February and two in August.
+
+Next, make (and save) a table of the observations within each month
+that are above and below this median:
+
+```{r }
+tab1=with(deer,table(month,food<4.7))
+tab1
+``` 
+
+or
+
+```{r }
+tab2=with(deer,table(month,food>4.7))
+tab2
+``` 
+
+Either of these is good, but note that they are different. Two of the
+February observations (the ones that were exactly 4.7) have ``switched
+sides'', and (look carefully) two of the August ones also.  Hence the
+test results will be different, and `smmr` (later) will give
+different results again:
+
+```{r }
+chisq.test(tab1,correct=F)
+chisq.test(tab2,correct=F)
+``` 
+
+The warnings are because of the small frequencies. If you've done
+these by hand before (which you will have if you took PSYC08), you'll
+remember that thing about "expected frequencies less than 5". This
+is that. It means "don't take those P-values *too* seriously."
+
+The P-values are different, but they are both clearly significant, so the
+median amounts of food eaten in the different months are not all the
+same. (This is the same "there are differences" that you get from an
+ANOVA, which you would follow up with Tukey.) Despite the injunction
+not to take the P-values too seriously, I think these are small enough
+that they could be off by a bit without affecting the conclusion.
+
+The first table came out with a smaller P-value because it looked more
+extreme: all of the February measurements were taken as higher than
+the overall median (since we were counting "strictly less" and ``the
+rest''). In the second table, the February measurements look more
+evenly split, so the overall P-value is not quite so small.
+
+You can make a guess as to what `smmr` will come out with
+(next), since it throws away any data values exactly equal to the median.
+ 
+
+(d) Run a Mood's median test using `smmr`, and compare the
+results with the previous part.
+ 
+Solution
+
+
+Off we go:
+```{r }
+library(smmr)
+median_test(deer,food,month)
+```     
+
+The P-value came out in between the other two, but the conclusion is
+the same all three ways: the months are not all the same in terms of
+median food eaten. The researchers can then go ahead and try to figure
+out *why* the animals eat different amounts in the different months.
+
+You might be wondering how you could get rid of the equal-to-median
+values in the build-it-yourself way. This is `filter` from
+`dplyr`, which you use first:
+
+```{r }
+deer2 = deer %>% filter(food != 4.7) 
+tab3 = with(deer2, table(month, food<4.7))
+tab3
+chisq.test(tab3)
+``` 
+
+which is exactly what `smmr` does, so the answer is
+identical.\endnote{The computer scientists among you will note that I
+should not use equals or not-equals to compare a decimal
+"floating-point" number, since decimal numbers are not represented
+exactly in the computer. R, however, is ahead of us here, since when
+you try to do "`food` not equal to 4.7", it tests whether
+`food` is more than a small distance away from 4.7, which is
+the right way to do it. In R, therefore, code like my \texttt{food !=
+4.7} does exactly what I want, but in something like C, it
+*does not*, and you have to be more careful:
+`abs(food-4.7)>1e-8`, or something like that. The small number
+`1e-8` is known as "machine epsilon", the smallest number on
+a computer that is distinguishable from zero.}
+How would an ANOVA come out here? My guess is, very similarly:
+
+```{r }
+deer.1=aov(food~month,data=deer)
+summary(deer.1)
+TukeyHSD(deer.1)
+``` 
+
+The conclusion is the same, but the P-value on the $F$-test is much
+smaller. I think this is because the $F$-test uses the actual values,
+rather than just whether they are bigger or smaller than 4.7. The
+Tukey says that all the months are different in terms of (now) mean,
+except for February and August, which were those two very similar ones
+on the boxplot.
+ 
+
+
+(e) How is it that Mood's median test does not completely answer the
+question you really want to answer? How might you get an answer to the
+question you *really* want answered? Explain briefly, and obtain
+the answer you *really* want, discussing your results briefly.
+
+
+
+Solution
+
+
+That's rather a lot, so let's take those things one at a
+time.
+`r tufte::margin_note("Most of these parts are old from assignment questions that I actually asked a previous class to do, but not this part. I added it later.")`
+
+Mood's median test is really like the $F$-test in ANOVA: it's testing
+the null hypothesis
+that the groups (months) all have the same median (of food eaten),
+against the alternative that the null is not true. We rejected this
+null, but we don't know which months differ significantly from
+which. To resolve this in ANOVA, we do Tukey (or Games-Howell if we
+did the Welch ANOVA). The corresponding thing here is to do all the
+possible two-group Mood tests on all the pairs of groups, and, after
+adjusting for doing (here) six tests at once, look at the adjusted
+P-values to see how the months differ in terms of food eaten.
+
+This is accomplished in `smmr` via `pairwise_median_test`,
+thus: 
+
+```{r }
+pairwise_median_test(deer, food, month)
+``` 
+
+This compares each month with each other month. Looking at the last
+column, there are only three significant differences: August-November,
+February-May and May-November. Going back to the table of medians we
+made in (a), November is significantly higher (in terms of median food
+eaten) than August and May (but not February), and February is
+significantly higher than May. The other differences are not big
+enough to be significant.
+
+Extra: Pairwise median tests done this way are not likely to be very
+sensitive (that is, powerful), for a couple of reasons: (i) the usual
+one that the median tests don't use the data very efficiently, and
+(ii) the way I go from the unadjusted to the adjusted P-values is via
+Bonferroni (here, multiply the P-values by 6), which is known to be
+safe but conservative. This is why the Tukey produced more significant
+differences among the months than the pairwise median tests did.
+
+
+
+

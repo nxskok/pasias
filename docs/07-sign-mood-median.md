@@ -980,8 +980,8 @@ x
 ```
 
 ```
-##  [1] 63.14111 46.02872 46.44480 49.88765 51.36734 27.03391 57.84854
-##  [8] 62.69191 58.58864 51.29370
+##  [1] 45.30661 38.36307 46.80519 40.60002 44.78384 44.18677 40.42911
+##  [8] 50.41877 82.56341 40.58691
 ```
 
 
@@ -1534,6 +1534,988 @@ detach(package:MASS, unload=T)
 
 
 
+
+
+
+
+##  Sugar in breakfast cereals
+
+
+ The data for this question are in
+[http://www.utsc.utoronto.ca/~butler/c32/cereal-sugar.txt](http://www.utsc.utoronto.ca/~butler/c32/cereal-sugar.txt). The
+story here is whether breakfast cereals marketed to children have a
+lot of sugar in them; in particular, whether they have more sugar on
+average than cereals marketed to adults.
+
+
+(a) Read in the data (to R) and display the data set. Do you have
+a variable that distinguishes the children's cereals from the
+adults' cereals, and another that contains the amount of sugar?
+
+
+
+Solution
+
+
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/cereal-sugar.txt"
+cereals=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   who = col_character(),
+##   sugar = col_double()
+## )
+```
+
+```r
+cereals
+```
+
+```
+## # A tibble: 40 x 2
+##    who      sugar
+##    <chr>    <dbl>
+##  1 children  40.3
+##  2 children  55  
+##  3 children  45.7
+##  4 children  43.3
+##  5 children  50.3
+##  6 children  45.9
+##  7 children  53.5
+##  8 children  43  
+##  9 children  44.2
+## 10 children  44  
+## # ... with 30 more rows
+```
+
+The variable `who` is a categorical variable saying who the
+cereal is intended for, and the variable `sugar` says how much
+sugar each cereal has.
+
+
+
+
+
+(b) Calculate the mean sugar content for each group of cereals (the
+adults' ones and the children's ones). Do they look similar or different?
+
+
+
+Solution
+
+
+`group_by` and `summarize`:
+
+```r
+cereals %>% group_by(who) %>%
+summarize(sugar_mean=mean(sugar))
+```
+
+```
+## # A tibble: 2 x 2
+##   who      sugar_mean
+##   <chr>         <dbl>
+## 1 adults         10.9
+## 2 children       46.6
+```
+
+These means look very different, though it would be better to look at
+a boxplot (coming up in a moment).
+
+
+
+(c) Make side-by-side boxplots of the sugar contents of the two
+types of cereal. What do you see that is out of the ordinary? 
+
+
+
+
+Solution
+
+
+The usual:
+
+
+```r
+ggplot(cereals,aes(x=who,y=sugar))+geom_boxplot()
+```
+
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-58-1.png" width="672"  />
+
+I see outliers: two high ones on the adults' cereals, and one high and
+one low on the children's cereals.
+
+My thought above about the means being very different is definitely supported by the medians being very different on the boxplots. We should have no trouble declaring that the "typical" amounts of sugar in the adults' and children's cereals are different. 
+
+
+
+
+
+(d) Explain briefly why you would not trust a two-sample $t$-test
+with these data. (That is, say what the problem  is, and why it's a
+problem.)
+
+
+
+Solution
+
+
+The problem is the outliers (which is rather a giveaway), but the
+reason it's a problem is that the two-sample $t$-test assumes
+(approximately) normal data, and a normal distribution doesn't
+have outliers.
+Not only do you need to note the outliers, but you also need to
+say why the outliers cause a problem *in this case*. Anything
+less than that is not a complete answer. 
+
+
+
+
+(e) Run a suitable test to see whether the "typical" amount of
+sugar differs between adult's and children's cereals. Justify the test
+that you run. (You can use the version of your test that lives in a
+package, if that is easier for you.) What do you conclude, in the
+context of the data?
+
+
+
+Solution
+
+
+Having ruled out the two-sample $t$-test, we are left with Mood's
+median test. I didn't need you to build it yourself, so you can
+use package `smmr` to run it with:
+
+```r
+library(smmr)
+median_test(cereals,sugar,who)
+```
+
+```
+## $table
+##           above
+## group      above below
+##   adults       2    19
+##   children    18     1
+## 
+## $test
+##        what        value
+## 1 statistic 2.897243e+01
+## 2        df 1.000000e+00
+## 3   P-value 7.341573e-08
+```
+
+We conclude that there *is* a difference between the median
+amounts of sugar between the two groups of cereals, the P-value of 0.00000007
+being extremely small.
+
+Why did it come out so small? Because the amount of sugar was smaller
+than the overall median for almost all the adult cereals, and larger
+than the overall median for almost all the children's ones. That is,
+the children's cereals really do have more sugar.
+
+Mood's median test doesn't come with a confidence interval (for the
+difference in population medians), because whether or not a certain
+difference in medians is rejected depends on what those medians
+actually are, and the idea of the duality of the test and CI doesn't
+carry over as we would like.
+
+My daughter likes chocolate Cheerios, but she also likes Shredded
+Wheat and *Bran Flakes*. Go figure. (Her current favourite is
+Raisin Bran, even though she doesn't like raisins by themselves.)
+
+Mood's median test is the test we should trust, but you might be
+curious about how the $t$-test stacks up here:
+
+
+```r
+t.test(sugar~who,data=cereals)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  sugar by who
+## t = -11.002, df = 37.968, p-value = 2.278e-13
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -42.28180 -29.13925
+## sample estimates:
+##   mean in group adults mean in group children 
+##               10.90000               46.61053
+```
+
+The P-value is *even smaller*, and we have the advantage of
+getting a confidence interval for the difference in means: from about
+30 to about 40 units less sugar in the adult cereals. Whatever the
+units were.
+
+
+
+
+
+
+
+##  Fear of math
+
+
+ Two new short courses have been proposed for helping
+students who suffer from severe math phobia. The courses are labelled
+A and B. Ten students were randomly allocated to one of these two
+courses, and each student's score on a math phobia test was recorded
+after they completed their course. The math phobia test produces
+whole-number scores between 0 and 10, with a higher score indicating a
+greater fear of mathematics. The data can be found in
+[http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt](http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt). We start
+with R for this question.
+
+
+
+(a) Read in the data and check, however you like, that you have 10
+observations, 5 from each course.
+
+
+Solution
+
+
+This doesn't need much comment:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt"
+math=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   course = col_character(),
+##   phobia = col_integer()
+## )
+```
+
+```r
+math
+```
+
+```
+## # A tibble: 10 x 2
+##    course phobia
+##    <chr>   <int>
+##  1 a           8
+##  2 a           7
+##  3 a           7
+##  4 a           6
+##  5 a           6
+##  6 b           9
+##  7 b           8
+##  8 b           7
+##  9 b           2
+## 10 b           1
+```
+
+This will do, counting the `a` and `b`. Or, to save
+yourself that trouble:
+
+
+```r
+math %>% count(course)
+```
+
+```
+## # A tibble: 2 x 2
+##   course     n
+##   <chr>  <int>
+## 1 a          5
+## 2 b          5
+```
+
+Five each. The story is to get the computer to do the grunt work for
+you, if you can make it do so. Other ways:
+
+
+```r
+math %>% group_by(course) %>% summarize(count=n())
+```
+
+```
+## # A tibble: 2 x 2
+##   course count
+##   <chr>  <int>
+## 1 a          5
+## 2 b          5
+```
+
+and this:
+
+
+```r
+with(math,table(course))
+```
+
+```
+## course
+## a b 
+## 5 5
+```
+
+giving the same answer. Lots of ways.
+
+Extra: there is an experimental design issue here. You might have noticed that each student did only *one* of the courses. Couldn't students do both, in a matched-pairs kind of way? Well, it's a bit like the kids learning to read in that if the first of the courses reduces a student's anxiety, the second course won't appear to do much good (even if it actually would have been helpful had the student done that one first). This is the same idea as the kids learning to read: once you've learned to read, you've learned to read, and learning to read a second way won't help much. The place where matched pairs scores is when you can "wipe out" the effect of one treatment before a subject gets the other one. We have an example of kids throwing baseballs and softballs that is like that: if you throw one kind of ball, that won't affect how far you can throw the other kind.
+
+
+
+(b) Do a two-sample $t$-test to assess whether there is a
+difference in mean phobia scores after the students have taken the two
+courses. What do you conclude? (You have no \textsl{a
+priori}\endnote{That is, before looking at the data. This is
+Latin. It's also the place that the Bayesian "prior distribution"
+comes from. The "posterior distribution" comes from the Latin
+*a posteriori*, which means "afterwards", that is, after
+you have looked at the data.} reason to
+suppose that a particular one of the tests will produce a higher mean
+than the other, so do a two-sided test.)
+
+
+
+Solution
+
+
+A two-sided test is the default, so there is not much to do here:
+
+
+```r
+t.test(phobia~course,data=math)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  phobia by course
+## t = 0.83666, df = 4.4199, p-value = 0.4456
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -3.076889  5.876889
+## sample estimates:
+## mean in group a mean in group b 
+##             6.8             5.4
+```
+
+The P-value of 0.4456 is nowhere near less than 0.05, so there is no
+evidence at all that the  
+mean math phobia scores are different between the two courses. 
+
+
+
+
+(c) Draw boxplots of the math phobia scores for each group (one
+line of code). What is the most striking thing that you notice?
+
+
+
+Solution
+
+
+
+```r
+ggplot(math,aes(x=course,y=phobia))+geom_boxplot()
+```
+
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+
+Boxplot `a` is just weird. The bar across the middle is
+actually at the top, and it has no bottom. (Noting something sensible
+like this is enough.) Boxplot `b` is hugely spread
+out.\endnote{The two groups have very different spreads, but that is
+not a problem as long as we remember to do the Welch-Satterthwaite
+test that does not assume equal spreads. This is the default in R,
+so we are good, at least with that.}
+
+By way of explanation: the course `a` scores have a number of
+values equal so that the 3rd quartile and the median are the name, and
+also that the first quartile and the minimum value are the same:
+
+
+```r
+tmp=math %>% filter(course=="a")
+tmp %>% count(phobia)
+```
+
+```
+## # A tibble: 3 x 2
+##   phobia     n
+##    <int> <int>
+## 1      6     2
+## 2      7     2
+## 3      8     1
+```
+
+```r
+summary(tmp)
+```
+
+```
+##     course              phobia   
+##  Length:5           Min.   :6.0  
+##  Class :character   1st Qu.:6.0  
+##  Mode  :character   Median :7.0  
+##                     Mean   :6.8  
+##                     3rd Qu.:7.0  
+##                     Max.   :8.0
+```
+
+The phobia scores from course A are two 6's, two 7's and an 8. The
+median and third quartile are both 7, and the first quartile is the
+same as the lowest value, 6.
+
+Technique note: I wanted to do two things with the phobia scores from
+course A: count up how many of each score, and show you what the
+five-number summary looks like. One pipe won't do this (the pipe
+"branches"), so I saved what I needed to use, before it branched,
+into a data frame `tmp` and then used `tmp` twice. Pipes
+are powerful, but not *all*-powerful.
+
+
+
+
+
+(d) Explain briefly why a $t$-test would not be good for these
+data. (There are two things that you need to say.)
+
+
+
+Solution
+
+
+The easiest way to structure this is to ask yourself first what the
+$t$-test needs, and second whether you have it.
+The $t$-test assumes (approximately) normal data. The boxplot for
+group `a` doesn't even look symmetric, and the one for group
+`b` has an oddly asymmetric box. So I think the normality is
+in question here, and therefore another test would be
+better. (This is perhaps a bit glib of an answer, since there are
+only 5 values in each group, and so they can certainly look
+non-normal even if they actually are normal, but these values are
+all integers, so it is perhaps wise to be cautious.)
+We have the machinery to assess the normality for these, in one shot:
+
+```r
+ggplot(math,aes(sample=phobia))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~course,ncol=1, scales="free")
+```
+
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
+
+I don't know what *you* make of those, but they both look pretty
+straight to me (and there are only five observations, so it's hard to
+judge). Course `b` maybe has a "hole" in it (three large
+values and two small ones). Maybe. I dunno. What I would *really*
+be worried about is outliers, and at least we don't have those.
+I mentioned in class that the $t$-tests are robust to non-normality. I
+ought to have expanded on that a bit: what really makes the $t$-test
+still behave itself with non-normality is when you have *large*
+samples, that is, when the Central Limit Theorem has had a chance to
+take hold. (That's what drives the normality not really being
+necessary in most cases.) But, even with small samples, exact
+normality doesn't matter so much.  Here, we have two tiny samples, and
+so we have to insist a bit more, but only a bit more, on a
+more-or-less normal shape in each group. (It's kind of a double
+jeopardy in that the situation where normality matters most, namely
+with small samples, is where it's the hardest to judge, because
+samples of size 5 even from a normal distribution can look very
+non-normal.)
+But, the biggest threats to the $t$-test are big-time skewness and
+outliers, and we are not suffering too badly from those.
+  
+
+
+
+(e) Run a suitable test to compare the "typical" scores for the
+two courses. (You can use the version from a package rather than
+building your own.) What do you conclude?
+
+
+
+Solution
+
+
+This is an invite to use `smmr`:
+
+```r
+library(smmr)
+median_test(math,phobia,course)
+```
+
+```
+## $table
+##      above
+## group above below
+##     a     1     2
+##     b     2     2
+## 
+## $test
+##        what     value
+## 1 statistic 0.1944444
+## 2        df 1.0000000
+## 3   P-value 0.6592430
+```
+
+We are nowhere near rejecting equal medians; in fact, both courses are
+very close to 50--50 above and below the overall median.
+
+If you look at the frequency table, you might be confused by
+something: there were 10 observations, but there are only $1+2+2+2=7$
+in the table. This is because three of the observations were equal to
+the overall median, and had to be thrown away:
+
+
+```r
+math %>% summarize(med=median(phobia))
+```
+
+```
+## # A tibble: 1 x 1
+##     med
+##   <dbl>
+## 1     7
+```
+
+```r
+math %>% count(phobia)
+```
+
+```
+## # A tibble: 6 x 2
+##   phobia     n
+##    <int> <int>
+## 1      1     1
+## 2      2     1
+## 3      6     2
+## 4      7     3
+## 5      8     2
+## 6      9     1
+```
+
+The overall median was 7. Because the actual data were really discrete
+(the phobia scores could only be whole numbers), we risked losing a
+lot of our data when we did this test (and we didn't have much to
+begin with). The other thing to say is that with small sample sizes,
+the frequencies in the table have to be *very* lopsided for you
+to have a chance of rejecting the null. Something like this is what
+you'd need:
+
+
+```r
+x=c(1,1,2,6,6,6,7,8,9,10)
+g=c(1,1,1,1,1,2,2,2,2,2)
+d=tibble(x,g)
+median_test(d,x,g)
+```
+
+```
+## $table
+##      above
+## group above below
+##     1     0     3
+##     2     4     0
+## 
+## $test
+##        what       value
+## 1 statistic 7.000000000
+## 2        df 1.000000000
+## 3   P-value 0.008150972
+```
+
+I faked it up so that we had 10 observations, three of which were
+equal to the overall median. Of the rest, all the small ones were in
+group 1 and all the large ones were in group 2. This is lopsided
+enough to reject with, though, because of the small frequencies, there
+actually was a warning about ``chi-squared approximation
+may be inaccurate''.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There emph{was</span>, in the
+`chisq.test` inside `median_test`, but in
+`smmr` I didn't pass that warning back to the outside world.}
+
+
+
+
+
+
+##  Medical instructions
+
+
+ Do people understand medical instructions better at certain
+times of the day? In a study, students in a grade 12 class are
+randomly divided into two groups, A and B. All students see a video
+describing how to use an infant forehead thermometer. The students in
+Group A see the video at 8:30 am, while the students in Group B see
+the same video at 3:00 pm (on the same day). The next day, all the
+students are given a test on the material in the video (graded out of
+100). The observed scores are in
+[http://www.utsc.utoronto.ca/~butler/c32/forehead.txt](http://www.utsc.utoronto.ca/~butler/c32/forehead.txt) (values
+separated by spaces).
+
+
+
+(a) Read the data into R and display the (first ten) values.
+
+
+Solution
+
+
+Separated by spaces, so `read_delim`:
+
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/forehead.txt"
+instr=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   group = col_character(),
+##   score = col_integer()
+## )
+```
+
+```r
+instr
+```
+
+```
+## # A tibble: 18 x 2
+##    group score
+##    <chr> <int>
+##  1 A        88
+##  2 A        89
+##  3 A        79
+##  4 A       100
+##  5 A        98
+##  6 A        89
+##  7 A        65
+##  8 A        94
+##  9 A        95
+## 10 A        91
+## 11 B        87
+## 12 B        69
+## 13 B        78
+## 14 B        79
+## 15 B        83
+## 16 B        90
+## 17 B        85
+## 18 B        58
+```
+    
+
+
+(b) Obtain a suitable plot that will enable you to assess the
+assumptions for a two-sample $t$-test.
+
+
+Solution
+
+
+We need the values in each group to be approximately normally
+distributed. Side-by-side boxplots will do it:
+
+```r
+ggplot(instr,aes(x=group,y=score))+geom_boxplot()
+```
+
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
+
+or, if you like, separate (facetted) normal quantile plots, which I
+would do this way:
+
+
+```r
+ggplot(instr,aes(sample=score))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~group,ncol=1)
+```
+
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
+    
+
+
+(c) Why might you have doubts about using a two-sample $t$-test here?
+
+
+Solution
+
+
+We are looking for non-normality in at least one of the
+groups. Here, both groups have an outlier at the low end that
+would be expected to pull the mean downward. I don't think there
+is left-skewness here, since there is no particular evidence of
+the high-end values being bunched up: the problem in both cases
+with normality is at the low end. 
+One way or another, I'm expecting you to have noticed the outliers.
+Extra: last year, when I first drew the normal quantile plots,
+there was no `stat_qq_line`, so you had to imagine where
+the line went if you did it this way. Without the line, these
+plots look somewhat curved, which would have pointed to
+left-skewness, but now we see that the lowest observation is too
+low, and maybe the second-lowest one as well, while the other
+observations are just fine.
+    
+
+
+(d) Run Mood's median test as in class (*without* using
+`smmr`). What do you conclude, in the context of the data?
+What recommendation would you make about the time of day to see the
+video?  (You might get a warning about ``chisquared approximation
+being incorrect'', which you can ignore here.)
+
+
+Solution
+
+
+The overall median first:
+
+```r
+instr %>% summarize(med=median(score))
+```
+
+```
+## # A tibble: 1 x 1
+##     med
+##   <dbl>
+## 1  87.5
+```
+
+87.5, which is not equal to any of the data values (they are all
+integers). This will avoid any issues with values-equal-to-median later.
+
+Then, create and save a table of the value by group and above/below
+median. You can count either above or below (it comes out equivalently
+either way):
+
+
+```r
+tab=with(instr,table(group,score>87.5))
+tab
+```
+
+```
+##      
+## group FALSE TRUE
+##     A     2    8
+##     B     7    1
+```
+
+Then, chi-squared test for independence (the null) or association of
+some kind (the alternative). The `correct=F` is saying not to
+do Yates's correction, so that it would come out the same if you were
+doing it by hand (``observed minus expected, squared, divided by
+expected'' and all that stuff).
+
+
+```r
+chisq.test(tab,correct=F)
+```
+
+```
+## Warning in chisq.test(tab, correct = F): Chi-squared approximation may be
+## incorrect
+```
+
+```
+## 
+## 	Pearson's Chi-squared test
+## 
+## data:  tab
+## X-squared = 8.1, df = 1, p-value = 0.004427
+```
+
+The P-value is 0.0044, which is (much) smaller than 0.05, and
+therefore you can reject independence and conclude association: that
+is, whether a student scores above or below the median depends on
+which group they are in, or, that the median scores are different for
+the two groups.
+
+The warning is because the expected frequencies are on the small side
+(if you have done this kind of problem by hand, you might remember
+something about "expected frequencies less than 5". This is that.)
+Here, the P-value is so small that we can afford to have it be
+inaccurate by a bit and still not affect the conclusion, so I think we
+are safe.
+
+As for which group is better, well, the easiest way is to go back to
+your boxplots and see that the median for group A (8:30 am) is
+substantially higher than for group B (3:00pm). But you can also see
+it from your frequency table, if you displayed it:
+
+
+```r
+tab
+```
+
+```
+##      
+## group FALSE TRUE
+##     A     2    8
+##     B     7    1
+```
+
+Most of the people in the 8:30 am group scored above the median, and
+most of the people in the 3:00 pm group scored below the median. So
+the scores at 8:30 am were better overall.
+
+As I write this, it is just after 3:00 pm and I am about to make
+myself a pot of tea!
+
+Extra: about that `correct=F` thing. There was a point of view for a
+long time that when you are dealing with a $2 \times 2$ table, you can
+get better P-values by, before squaring "observed minus expected",
+taking 0.5 away from the absolute value of the difference. This is
+called Yates's correction. It is in the same spirit as the
+"continuity correction" that you might have encountered in the
+normal approximation to the binomial, where in the binomial you have
+to have a whole number of successes, but the normal allows fractional
+values as well.  In about the 1960s, the usefulness of Yates's
+correction was shot down, for general contingency tables. There is,
+however, one case where it *is* useful, and that is the case
+where the row totals and column totals are *fixed*.
+
+What do I mean by that? Well, first let's look at a case where the
+totals are *not* all fixed. Consider a survey in which you want
+to see whether males and females agree or disagree on some burning
+issue of the day. You collect random samples of, say, 500 males and
+500 females, and you count how many of them say Yes or No to your
+statement.\endnote{To simplify things, we'll assume that everyone gave
+a Yes or a No answer, though you could add a column like "No answer"
+if you wanted to make it more realistic.}
+You might get results like this:
+
+
+```
+
+Yes  No  Total
+Males    197 303   500
+Females  343 157   500
+Total    540 460  1000
+
+```
+
+
+In this table, the row totals must be 500, because you asked this many
+males and this many females, and each one must have answered
+something. The column totals, however, are not fixed: you didn't know,
+ahead of time, that 540 people would answer "yes". That was just the
+way the data turned out, and if you did another survey with the same
+design, you'd probably get a different number of people saying
+"yes". 
+
+For another example, let's go back to Fisher (yes, *that*
+Fisher). A "lady" of his acquaintance claimed to be able, by
+drinking a cup of tea with milk and sugar in it, whether the milk or
+the sugar had been added first. Fisher, or, more likely, his
+housekeeper, prepared 8 cups of tea, 4 with milk first and 4 with
+sugar first. The lady knew that four of the cups had milk first, and
+her job was to say which four. The results might have been like this:
+
+
+```
+
+Actual 
+Milk first  sugar first  Total
+Lady   Milk first        3            1         4
+says   sugar first       1            3         4
+Total             4            4         8
+
+```
+
+
+This time, all of the row totals and all of the column totals must be
+4, regardless of what the lady thinks. Even if she thinks 5 of the
+cups of tea actually had milk first, she is going to pick 4 of them to
+say that they have milk first, since she knows there are only 4. In
+this case, all of the row and column totals are fixed at 4, and the
+right analysis is called Fisher's Exact Test, based on the
+hypergeometric distribution. In a $2\times 2$ table like this one,
+there is only one "degree of freedom", since as soon as you specify
+one of the frequencies, say the number of cups where the lady said
+milk first and they actually were milk first, you can work out the
+others.  But, leaving that aside, the usual chi-squared analysis is a
+perfectly good approximation, especially if the frequencies are large,
+and especially if you use Yates's correction.
+
+It is clear that Fisher must have been English, since he was able to
+get a publication out of drinking tea.
+
+How does that apply to Mood's median test? Well, let's remind
+ourselves of the table we had:
+
+
+```r
+tab
+```
+
+```
+##      
+## group FALSE TRUE
+##     A     2    8
+##     B     7    1
+```
+
+We know how many students were in each group: 10 in group A and 8 in
+B. So the row totals are fixed. What about the columns? These are
+whether each observation was above or below the overall median. There
+were 18 observations altogether, so there *must* be 9 above and 9
+below.\endnote{Except in the case of the previous problem, where there
+were multiple observations equal to the overall median. Which we
+ignore for the moment.} So the column totals are fixed as well. All
+totals fixed, so we should be using Yates's correction. I didn't,
+because I wanted to keep things simple, but I should have done.
+
+R's `chisq.test` by default *always* uses Yates's
+correction, and if you don't want it, you have to say
+`correct=F`.  Which is why I have been doing so all through.
+    
+
+
+(e) Run Mood's median test on these data using my `smmr`
+package, and verify that you get the same answer.
+
+
+Solution
+
+
+Not much to it, since the data is already read in:
+
+```r
+library(smmr)
+median_test(instr, score, group)
+```
+
+```
+## $table
+##      above
+## group above below
+##     A     8     2
+##     B     1     7
+## 
+## $test
+##        what       value
+## 1 statistic 8.100000000
+## 2        df 1.000000000
+## 3   P-value 0.004426526
+```
+
+Identical, test statistic, degrees of freedom and P-value. The table
+of frequencies is also the same, just with columns rearranged. (In
+`smmr` I counted the number of values below the overall median,
+whereas in my build-it-yourself I counted  the number of
+values above.)
+    
 
 
 

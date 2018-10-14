@@ -1,0 +1,371 @@
+##  Atomic weight of carbon
+
+
+\label{q:carbon} The atomic weight of the chemical element
+carbon is 12. Two methods of measuring the atomic weight of samples of
+carbon were compared. The results are shown in
+[http://www.utsc.utoronto.ca/~butler/c32/carbon.txt](http://www.utsc.utoronto.ca/~butler/c32/carbon.txt). The methods
+are labelled 1 and 2.  The first task is to find out whether the two
+methods have different "typical" measures (mean or median, as
+appropriate) of the atomic weight of carbon.
+
+For this question, compose a report in R Markdown.  (R Markdown is
+what you use in an R Notebook, but you can also have a separate R
+Markdown document from which you can produce HTML, Word etc. output.)
+See part (a) for how to get this started.
+
+Your report should
+read like an actual report, not just the answers to some questions
+that I set you. To help with that, write some text that links the
+parts of the report together smoothly, so that it reads as a coherent
+whole. The grader had 3 discretionary marks to award for the overall
+quality of your writing. The scale for this was:
+
+
+
+* 3 points: excellent writing. The report flows smoothly, is easy
+to read, and contains everything it should (and nothing it
+shouldn't).
+
+* 2 points: satisfactory writing. Not the easiest to read, but
+says what it should, and it looks at least somewhat like a report
+rather than a string of answers to questions.
+
+* 1 point: writing that is hard to read or to understand. If you
+get this (or 0), you should consider what you need to do to improve
+when you write your project.
+
+* 0 points: you answered the questions, but you did almost nothing
+to make it read like a report.
+
+
+
+(a) Create a new R Markdown document. To do this, in R Studio, select File,
+New File, R Markdown. Type the report title and your name in the
+boxes, and leave the output on the default HTML. Click OK. 
+
+Solution
+
+
+You'll
+see the title and your name in a section at the top of the document,
+and below that you'll see a template document, as you would for an R
+Notebook. The difference is that where you are used to seeing
+Preview, it now says "knit", but this has the same effect of
+producing the formatted version of your report.    
+
+
+(b) Write an introduction that explains the purpose of this
+study and the data collected in your own words.
+
+
+Solution
+
+
+Something like this:
+\begin{quote}
+This study is intended to compare two different methods
+(labelled 1 and 2) for measuring the atomic weight of carbon
+(which is known in actual fact to be 12). Fifteen samples of
+carbon were used; ten of these were assessed using method 1 and
+the remaining five using method 2. The primary interest in this
+particular study is to see whether there is a difference in the
+mean or median atomic weight as measured by the two methods.
+\end{quote}
+Before that, start a new section like this:
+`## Introduction`. 
+Also, get used to expressing your understanding in your words,
+not mine. (Using my words, in this course, is likely to be
+worth very little.)
+
+
+
+(c) Begin an appropriately-titled new section in your report,
+read the data into R and display the results.
+
+
+Solution
+
+
+Values separated by spaces:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/carbon.txt"
+carbon=read_delim(my_url," ")
+carbon
+```     
+
+I would expect you to include, without being told to include it, some
+text in your report indicating that you have sensible data: two
+methods labelled 1 and 2 as promised, and a bunch\endnote{It's
+probably better in a report to use language a bit more formal than
+"a bunch". Something like "a number" would be better.} of atomic
+weights close to the nominal figure of 12.
+
+
+
+(d) Make an appropriate plot to compare the measurements
+obtained by the two methods. You might need to do something about
+the two methods being given as numbers even though they are really
+only identifiers. (If you do, your report ought to say what you did
+and why.)
+
+
+Solution
+
+
+The appropriate plot, with a categorical method and quantitative
+weight, is something like a boxplot. If you're not careful,
+`method` will get treated as a quantitative variable,
+which you don't want; the easiest way around that, for a boxplot
+at least, is to turn it into a factor like this:
+```{r }
+ggplot(carbon,aes(x=factor(method),y=weight))+geom_boxplot()
+```       
+
+If you insist, you could do a faceted histogram (above and below, for preference):
+```{r }
+ggplot(carbon,aes(x=weight))+geom_histogram(bins=5)+
+facet_wrap(~method,ncol=1)
+``` 
+
+There are really not enough data values for a histogram to be of much
+help, so I don't like this as much. 
+
+If you are thinking ahead (we are going to be doing a $t$-test), then
+you'll realize that normality is the kind of thing we're looking for,
+in which case normal quantile plots would be the thing. However, we
+might have to be rather forgiving for method 2 since there are only 5
+observations: 
+
+```{r }
+ggplot(carbon,aes(sample=weight))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~method)
+``` 
+
+I don't mind these coming out side by side, though I would rather have
+them squarer.
+
+I would say, boxplots are the best, normal quantile plots are also
+acceptable, but expect to lose something for histograms because they
+offer only a rather crude comparison in this case.
+
+
+
+(e) Comment briefly on what you see in your plot.
+
+
+Solution
+
+
+In boxplots, if that's what you drew, there are several things
+that deserve comment: the medians, the spreads and the
+shapes. The median for method 1 is a little bit lower than for
+method 2 (the means are probably more different, given the
+shapes of the boxes). The spread for method 2 is a lot
+bigger. (Looking forward, that suggests a Welch-Satterthwaite
+rather than a pooled test.) As for shape, the method 2
+measurements seem more or less symmetric (the whiskers are equal
+anyway, even if the position of the median in the box isn't),
+but the method 1 measurements have a low outlier.
+The histograms are hard to compare. Try to say something about
+centre and spread and shape. I think the method 2 histogram has
+a slightly higher centre and definitely bigger spread. On my
+histogram for method 1, the distribution looks skewed left.
+If you did normal quantile plots, say something sensible about
+normality for each of the two methods. For method 1, I would say
+the low value is an outlier and the rest of the values look
+pretty straight. Up to you whether you think there is a curve on
+the plot (which would indicate skewness, but then that highest
+value is too high: it would be bunched up with the other values
+below 12.01 if there were really skewness). 
+For method 2, it's really hard to say anything since there are
+only five values. Given where the line goes, there isn't much
+you can say to doubt normality.  Perhaps the best you can say
+here is that in a sample of size 5, it's difficult to assess
+normality at all.
+
+
+
+(f) Carry out the most appropriate $t$-test. (You might like to
+begin another new section in your report here.)
+
+
+Solution
+
+
+This would be the Welch-Satterthwaite version of the two-sample
+$t$-test, since the two groups do appear to have different spreads:
+```{r }
+t.test(weight~method,data=carbon)
+```   
+
+Imagining that this is a report that would go to your boss, you ought
+to defend your choice of the Welch-Satterthwaite test (as I did
+above), and not just do the default $t$-test without comment.
+
+If, in your discussion above, you thought the spreads were equal
+enough, then you should do the pooled $t$-test here, which goes like this:
+
+```{r }
+t.test(weight~method,data=carbon,var.equal=T)
+``` 
+
+The point here is that you should do the right test based on your
+conclusion. Being consistent is the most important thing. (In this
+case, note that the P-values are very different. We'll get to that
+shortly.)
+
+If we were doing this in SAS, as we see later, we'd get a test at the
+bottom of the output that compares the two variances. I feel that it's
+just as good to eyeball the spreads and make a call about whether they
+are "reasonably close". Or even, to always do the
+Welch-Satterthwaite test on the basis that it is pretty good even if
+the two populations have the same variance. (If this last point of
+view is one that you share, you ought to say something about that when
+you do your $t$-test.)
+
+Extra: I guess this is a good place to say something about tests for comparing
+variances, given that you might be pondering that. There are
+several that I can think of, that R can do, of which I mention two.
+
+The first is the $F$-test for variances that you might have learned in
+B57 (that is the basis for the ANOVA $F$-test):
+
+```{r }
+var.test(weight~method,data=carbon)
+``` 
+
+This, unfortunately, is rather dependent on the data in the two groups
+being approximately normal. Since we are talking variances rather than
+means, there is no Central Limit Theorem to rescue us for large
+samples (quite aside from the fact that these samples are *not*
+large). Since the ANOVA $F$-test is based on the same theory, this is
+why normality is also more important in ANOVA than it is in a $t$-test.
+
+The second is Levene's test. This doesn't depend on normality (at
+least, not nearly so much), so I like it better in general:
+
+```{r }
+library(car)
+leveneTest(weight~factor(method),data=carbon)
+``` 
+
+Levene's test takes a different approach: first the absolute
+differences from the group medians are calculated, and then an ANOVA
+is run on the absolute differences. If, say, one of the groups has a
+larger spread than the other(s), its absolute differences from the
+median will tend to be bigger.\endnote{The use of absolute differences, and
+the median, downplays the influence of outliers. The assumption here
+is that the absolute differences from the medians are approximately
+normal, which seems a less big assumption than assuming the actual
+data are approximately normal.}
+As for what we conclude here, well, neither of the variance tests show
+any significance at all, so from that point of view there is no
+evidence against using the pooled $t$-test. Having said that, the
+samples are small, and so it would be difficult to *prove* that
+the two methods have different variance, even if they actually
+did.
+`r tufte::margin_note("This is coming back to the emph{power")` of something like
+Levene's test; the power of any test is not going to be very big if
+the sample sizes are small.}
+
+Things are never as clear-cut as you would like. In the end, it all
+comes down to making a call and defending it.
+
+
+
+(g) Do the most appropriate test you know that does not assume
+normally-distributed data.
+
+
+Solution
+
+
+That would be Mood's median test. Since I didn't say anything
+about building it yourself, feel free to use `smmr`:
+```{r }
+library(smmr)
+median_test(carbon, weight, method)
+``` 
+
+As an aside, if you have run into a non-parametric test such as
+Mann-Whitney or Kruskal-Wallis that applies in this situation, be
+careful about using it here, because they have additional assumptions
+that you may not want to trust. Mann-Whitney started life as a test for
+"equal distributions".
+`r tufte::margin_note("The test goes back to the 1940s.")` This
+means that the null is equal location *and* equal spread, and if
+you reject the null, one of those has failed. But here, we suspect that
+equal spread will fail, so that the Mann-Whitney test may end up
+rejecting *whether or not* the medians are different, so it won't
+answer the question you want an answer to. Mood's median test doesn't
+have that problem; all it's saying if the null is true is that the
+medians are equal; the spreads could be anything at all.
+
+The same kind of issues apply to the signed-rank test vs.\ the sign
+test. In the case of the signed-rank test, the extra assumption is of
+a symmetric distribution --- to my mind, if you don't believe
+normality, you probably don't have much confidence in symmetry
+either. That's why I like the sign test and Mood's median test: in the
+situation where you don't want to be dealing with assumptions, these
+tests don't make you worry about that.
+
+Another comment that you don't need to make is based on the
+not-quite-significance of the Mood test. The P-value is less than 0.10
+but not less than 0.05, so it doesn't quite reach significance by the
+usual standard. But if you look up at the table, the frequencies seem
+rather unbalanced: 6 out of the remaining 9 weights in group 1 are
+below the overall median, but 4 out of 5 weights in group 2 are
+above. This seems as if it ought to be significant, but bear in mind
+that the sample sizes are small, and thus Mood's median test needs
+*very* unbalanced frequencies, which we don't quite have here.
+
+
+
+(h) Discuss the results of your tests and what they say about
+the two methods for measuring the atomic weight of carbon. If it
+seems appropriate, put the discussion into a section called
+Conclusions. 
+
+
+Solution
+
+
+Begin by pulling out the P-values for your preferred test(s) and
+say what they mean. The P-value for the Welch-Satterthwaite
+$t$-test is 0.1238, which indicates no difference in mean atomic
+weights between the two methods. The Mood median test gives a
+similarly non-significant 0.0943, indicating no difference in
+the *median* weights. If you think both tests are
+plausible, then give both P-values and do a compare-and-contrast
+with them; if you think that one of the tests is clearly
+preferable, then say so (and why) and focus on that test's
+results. 
+If you thought the pooled test was the right one, then you'll
+have a bit more discussion to do, since its P-value is 0.0499,
+and at $\alpha=0.05$ this test disagrees with the others. If you
+are comparing this test with the Mood test, you ought to make
+some kind of reasoned recommendation about which test to
+believe. 
+As ever, be consistent in your reasoning.
+This dataset, where I found it, was actually being used to
+illustrate a case where the pooled and the Welch-Satterthwaite
+tests disagreed. The authors of the original paper that used
+this dataset (a 1987 paper by Rayner and Best,
+\cite{rayner-best}; the data come from 1924!) point out that the
+pooled $t$-test can be especially misleading when the smaller
+sample is also the one with the larger variance. This is what
+happened here.
+In the Rayner and Best paper, the Mood (or the Mann-Whitney) test was
+not being considered, but I think it's good practice to draw a
+picture and make a call about which test is appropriate.
+I loaded package `car` above; I'd better be tidy and
+unload it before I go on:
+```{r }
+detach(package:car,unload=T)
+```       
+
+
+
+

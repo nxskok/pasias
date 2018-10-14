@@ -1,0 +1,489 @@
+##  Movie ratings again
+
+
+\label{q:movies-b} This question again uses the movie rating data at
+[http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
+
+
+
+(a) Read the data into R and obtain the number of movies of
+each rating and the *median* length of movies of each rating.
+
+
+Solution
+
+
+Reading in is as in the other question using these data (just copy
+your code, or mine). No credit for that, since you've done it before.
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv"
+movies=read_csv(my_url)
+movies
+``` 
+
+Now, the actual for-credit part, which is a `group_by` and
+`summarize`: 
+
+```{r }
+movies %>% group_by(rating) %>%
+ summarize(count=n(),med=median(length))
+``` 
+
+The G movies have a smaller median than the others, but also the PG-13
+movies seem to be longer on average (not what we found before). 
+    
+
+
+(b) Obtain a suitable graph that assesses the assumptions for
+ANOVA. Why do you think it is not reasonable to run ANOVA here? Explain
+briefly. 
+
+
+Solution
+
+
+The graph would seem to be a boxplot, side by side for each group:
+```{r }
+ggplot(movies,aes(x=rating, y=length))+geom_boxplot()
+```     
+
+We are looking for approximate normal distributions with approximately
+equal spreads, which I don't think we have: there are outliers, at the
+low end for G movies, and at the high end for PG and PG-13
+movies. Also, you might observe that the distribution of lengths for R
+movies is skewed to the right. (Noting either the outliers or skewness
+as a reason for not believing normality is enough, since all we need
+is *one* way that normality fails.)
+
+I think the spreads (as measured by the interquartile ranges) are
+acceptably similar, but since we have rejected normality, it is a bit
+late for that.
+
+So I think it is far from reasonable to run an ANOVA here. In my
+opinion 15 observations in each group is not enough to gain much from
+the Central Limit Theorem either.
+
+Extra: since part of the assumption for ANOVA is (approximate)
+normality, it would also be entirely reasonable to make normal
+quantile plots, one for each movie type, facetted. Remember the
+process: you pretend that you are making a normal quantile plot for
+all the data together, regardless of group, and then at the last
+minute, you throw in a `facet_wrap`. I've written the code out
+on three lines, so that you can see the pieces: the "what to plot",
+then the normal quantile plot part, then the facetting:
+
+```{r }
+ggplot(movies,aes(sample=length))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~rating)
+``` 
+
+Since there are four movie ratings, `facet_wrap` has arranged
+them into a $2\times 2$ grid, which satisfyingly means that each
+normal quantile plot is more or less square and thus easy to
+interpret. 
+
+The principal problem unveiled by these plots is outliers. It looks as
+if the G movies have one low outlier, the PG movies have two high
+outliers, the PG-13 movies have one or maybe three high outliers
+(depending on how you count them), and the R movies have none. Another
+way to look at the last two is you could call them curved, with too
+much bunching up at the bottom and (on PG-13) too much spread-out-ness
+at the top, indicating right-skewed distributions. The distribution
+of lengths of the R-rated movies is too bunched up at the bottom, but
+as you would expect for a normal at the top. The R movies show the
+right-skewedness in an odd way: usually this skewness shows up by
+having too many high values, but this time it's having too *few*
+*low* values.
+
+The assumption for ANOVA is that all four of these are at least
+approximately normal (with the same spread). We found problems with
+the normality on at least three of them, so we definitely have doubts
+about trusting ANOVA here.
+
+I could have used `scales=free` here to get a separate $y$-axis
+for each plot, but since the $y$-axis is movie length each time, and
+all four groups would be expected to have at least roughly similar
+movie lengths, I left it as it was. (The other advantage of leaving
+the scales the same is that you can compare spread by comparing the
+slopes of the lines on these graphs; since the lines connect the
+observed and theoretical quartiles, a steeper slope means a larger
+IQR. Here, the R line is steepest and the PG line is flattest. Compare
+this with the spreads of the boxplots.)
+
+Extra extra: if you want, you can compare the normal quantile plots
+with the boxplots to see whether you get the same conclusion from
+both. For the G movies, the low outlier shows up both ways, and the
+rest of the distribution is at least more or less normal. For the PG
+movies, I'd say the distribution is basically normal except for the
+highest two values (on both plots). For the PG-13 movies, only the
+highest value shows up as an outlier, but the next two apparent
+outliers on the normal quantile plot are at the  upper end of the long
+upper whisker, so the boxplot is saying ``right-skewed with one upper
+outlier'' rather than "three upper outliers". The distribution of
+the R movies is skewed right, with the bunching at the bottom showing
+up as the very small lower whisker.
+
+The boxplots and the normal quantile plots are basically telling the
+same story in each case, but they are doing it in a slightly different
+way. 
+    
+
+
+(c) Run a Mood's median test (use `smmr` if you
+like). What do you conclude, in the context of the data?
+
+
+Solution
+
+
+The smart way is to use `smmr`, since it is much easier:
+```{r }
+library(smmr)
+median_test(movies,length,rating)
+```     
+
+The movies do not all have the same median length, or at least one of
+the rating types has movies of different median length from the
+others. Or something equivalent to that. It's the same conclusion as
+for ANOVA, only with medians instead of means.
+
+You can speculate about why the test came out significant. 
+My guess is that the G movies are shorter than
+average, and that the PG-13 movies are longer than average. (We had
+the first conclusion before, but not the second. This is where medians
+are different from means.)
+
+The easiest way to see which movie types really differ in length from
+which is to do all the pairwise median tests, which is in
+`smmr` thus:
+
+```{r }
+pairwise_median_test(movies, length, rating)
+``` 
+
+The inputs for this are the same ones in the same order as for
+`median_test`. (A design decision on my part, since otherwise
+*I* would never have been able to remember how to run these!)
+Only the first two of these are significant (look in the last
+column). We can remind ourselves of the sample medians:
+
+```{r }
+movies %>% group_by(rating) %>%
+summarize(count=n(),med=median(length))
+``` 
+
+The G movies are significantly shorter than the PG and PG-13 movies,
+but not quite significantly different from the R movies. This is a
+little odd, since the difference in sample medians between G and PG,
+significant, is *less* than for G and R (not significant).
+There are several Extras here, which you can skip if you don't care
+about the background. First, we can do the median test by hand:
+This has about four steps: (i) find the median of all the data, (ii) make a
+table tabulating the number of values above and below the overall
+median for each group, (iii) test the table for association, (iv)
+draw a conclusion.
+Thus (i):
+```{r }
+median(movies$length)
+```  
+
+or
+
+```{r }
+movies %>% summarize(med=median(length))
+``` 
+
+or store it in a variable,
+and then (ii):
+
+```{r }
+tab1=with(movies,table(length<100,rating))
+tab1
+``` 
+
+or
+
+```{r }
+tab2=with(movies,table(length>100,rating))
+tab2
+``` 
+
+These differ because there are evidently some movies of length exactly
+100 minutes, and it matters whether you count $<$ and $\ge$ (as in
+`tab1`) or $>$ and $le$ (`tab2`). Either is good. 
+
+Was I right about movies of length exactly 100 minutes?
+
+```{r }
+movies %>% filter(length==100)
+``` 
+
+One PG and one R. It makes a difference to the R movies, but if you
+look carefully, it makes a difference to the PG movies as well,
+because the False and True switch roles between `tab1` and
+`tab2` (compare the G movies, for instance).
+You
+need to store your table in a variable because it has to get passed on
+to `chisq.test` below, (iii):
+
+```{r }
+chisq.test(tab1, correct=F)
+``` 
+
+or 
+
+```{r }
+chisq.test(tab2, correct=F)
+``` 
+
+Either is correct, or, actually, without the `correct=F`.\endnote{see
+discussion elsewhere about Yates' Correction and fixed margins.}
+
+The conclusion (iv) is the same either way: the null of no association
+is clearly rejected (with a P-value of 0.0028 or 0.0036 as
+appropriate), and therefore whether a movie is longer or shorter than
+median length depends on what rating it has: that is, the median
+lengths do differ among the ratings. The same conclusion, in other
+words, as the $F$-test gave, though with not quite such a small
+P-value. 
+
+Second, you might be curious about how
+we might do something like Tukey having found some significant
+differences (that is, what's lurking in the background of
+`pairwise_median_test`). 
+
+Let's first suppose we are comparing G and PG movies. We need
+to pull out just those, and then compare them using
+`smmr`. Because the first input to `median_test` is a
+data frame, it fits neatly into a pipe (with the data frame omitted):
+
+```{r }
+movies %>% filter(rating=="G" | rating=="PG") %>%
+median_test(length,rating)
+``` 
+
+We're going to be doing this about six times --- ${4 \choose 2}=6$ choices
+of two rating groups to compare out of the four --- so we should have a
+function to do it. I think the input to the function should be a data
+frame that has a column called `rating`, and two names of
+ratings to compare:
+
+```{r }
+comp2=function(rat_1,rat_2,d) {
+d %>% filter(rating==rat_1 | rating==rat_2) %>%
+median_test(length,rating)
+}
+``` 
+
+The way I wrote this function is that you have to specify the movie
+ratings in quotes. It is *possible* to write it in such a way
+that you input them without quotes, `tidyverse` style, but that
+gets into "non-standard evaluation" and `enquo()` and
+`!!`, which (i) I have to look up every time I want to do it,
+and (ii) I am feeling that the effort involved in explaining it to you
+is going to exceed the benefit you will gain from it. I mastered it enough
+to make it work in `smmr` (note that you specify column names
+without quotes there). There are tutorials on this kind of thing if
+you're interested.
+
+Anyway, testing:
+
+```{r }
+comp2("G","PG",movies)
+``` 
+
+That works, but I really only want to pick out the P-value, which is
+in the list item `test` in the column `value`, the third
+entry. So let's rewrite the function to return just that:
+
+```{r }
+comp2=function(rat_1,rat_2,d) {
+d %>% filter(rating==rat_1 | rating==rat_2) %>%
+median_test(length,rating) %>% pluck("test","value",3)
+}
+comp2("G","PG",movies)
+``` 
+
+Gosh.
+
+What `median_test` returns is an R `list` that has two
+things in it, one called `table` and one called
+`test`. The thing  called `test` is a data frame with a
+column called `value` that contains the P-values. The third of
+these is the two-sided P-value that we want.
+
+You might not have seen `pluck` before. This is a way of
+getting things out of complicated data structures. This one takes the
+output from `median_test` and from it grabs the piece called
+`test`. This is a data frame. Next, we want the column called
+`value`, and from that we want the third row. These are
+specified one after the other to `pluck` and it pulls out the
+right thing.
+
+So now our function returns just the P-value.
+
+I have to say that it took me several goes and some playing around in
+R Studio to sort this one out. Once I thought I understood
+`pluck`, I wondered why my function was not returning a
+value. And then I realized that I was saving the value inside the
+function and not returning it. Ooops. The nice thing about
+`pluck` is that I can put it on the end of the pipeline and and
+it will pull out (and return) whatever I want it to.
+
+Let's grab a hold of the different rating groups we have:
+```{r }
+the_ratings=unique(movies$rating)
+the_ratings
+``` 
+
+The Pythonisti among you will know how to finish this off: do a
+loop-inside-a-loop over the rating groups, and get the P-value for
+each pair. You can do that in R, if you must. It's not pretty at all,
+but it works:
+
+```{r }
+ii=character(0)
+jj=character(0)
+pp=numeric(0)
+for (i in the_ratings) {
+for (j in the_ratings) {
+pval=comp2(i,j,movies)
+ii=c(ii,i)
+jj=c(jj,j)
+pp=c(pp,pval)
+}
+}  
+tibble(ii,jj,pp)
+``` 
+
+This is a lot of fiddling about, since you have to initialize three
+vectors, and then update them every time through the loop. It's hard
+to read, because the actual business part of the loop is the
+calculation of the P-value, and that's almost hidden by all the
+book-keeping.  (It's also slow and inefficient, though the slowness
+doesn't matter too much here since it's not a very big problem.)
+
+Let's try another way:
+
+```{r }
+crossing(first=the_ratings,second=the_ratings)
+```
+
+This does "all possible combinations" of one rating with another. We
+don't actually need all of that; we just need the ones where the first
+one is (alphabetically) strictly less than the second one. This is
+because we're never comparing a rating with itself, and each pair of
+ratings appears twice, once in alphabetical order, and once the other
+way around. The ones we need are these:
+
+```{r }
+crossing(first=the_ratings,second=the_ratings) %>%
+filter(first<second)
+``` 
+
+A technique thing to note: instead of asking ``how do I pick out the
+distinct pairs of ratings?'', I use two simpler tools: first I make
+all the combinations of pairs of ratings, and then out of those, pick
+the ones that are alphabetically in ascending order, which we know how
+to do.
+
+Now we want to call our function `comp2` for each of the things
+in `first` *and* each of the things in `second`,
+and make a new column called `pval` that contains exactly
+that. This (coming fresh from page 332 of the R book, this being the
+first time I've ever used it\endnote{This was a year ago when I first
+wrote this}) is exactly what the `map2` family of functions
+does. In our case, `comp2` returns a decimal number, a
+`dbl`, so `map2_dbl` does it.  Thus:
+```{r }
+crossing(first=the_ratings,second=the_ratings) %>%
+filter(first<second) %>% 
+mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies)))
+``` 
+
+The logic of `map2_dbl` is ``for each of the things in
+`first`, and each of the things in `second`, taken in
+parallel, call the function `comp2` with those two inputs in
+that order, always with data frame `movies`''. The `.x`
+and `.y` play the role of the `.` that we usually have
+inside a map, but now we're "mapping" over two things rather than
+just one, so that they cannot both be called `.`.
+
+One more thing: we're doing 6 tests at once here, so we're giving
+ourselves 6 chances to reject a null (all medians equal) that might
+have been true. So the true probability of a type I error is no longer
+0.05 but something bigger. 
+
+The easiest way around that is to do a so-called Bonferroni
+adjustment: instead of rejecting if the P-value is less than 0.05, we
+only reject if it is less than $0.05/6$, since we are doing 6
+tests. This is a fiddly calculation to do by hand, but it's easy to
+build in another `mutate`, thus:
+`r tufte::margin_note("In the pairwise median test in *smmr*, I did this backwards: rather than changing the $alpha$ that you compare each P-value with from 0.05 to $0.05/6$, I flip it around so that you adjust the P-values by *multiplying* them by 6, and then comparing the adjusted P-values with the usual 0.05. It comes to the same place in the end.")`
+```{r }
+crossing(first=the_ratings,second=the_ratings) %>%
+filter(first<second) %>% 
+mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies))) %>%
+mutate(reject=pval<0.05/6)
+``` 
+
+And not a loop in sight.
+
+This is how I coded it in `pairwise_median_test`. If you want to
+check it, it's on Github:
+[https://raw.githubusercontent.com/nxskok/smmr/master/R/pairwise_median_test.R](https://raw.githubusercontent.com/nxskok/smmr/master/R/pairwise_median_test.R). 
+The function `median_test_pair` is the same as `comp2`
+above. 
+
+So the only significant differences are now G compared to PG and
+PG-13. There is not a significant difference in median movie length
+between G and R, though it is a close call. We thought the PG-13
+movies might have a significantly different median from other rating
+groups beyond G, but they turn out not to have. (The third and fourth
+comparisons would have been significant had we not made the Bonferroni
+adjustment to compensate for doing six tests at once; with that
+adjustment, we only reject if the P-value is less than
+$0.05/6=0.0083$, and so 0.0106 is not quite small enough to reject
+with.) 
+
+Listing the rating groups sorted by median would give you an idea of
+how far different the medians have to be to be significantly different:
+
+```{r }
+medians=movies %>% group_by(rating) %>%
+summarize(med=median(length)) %>%
+arrange(desc(med))
+medians
+``` 
+
+Something rather interesting has happened: even though the comparison of
+G and PG (18 apart) is significant, the comparison of G and R (21
+apart) is not significant. This seems very odd, but it happens because
+the Mood median test is not actually literally comparing the sample
+medians, but only assessing the splits of values above and below the
+median of the combined sample. A subtlety, rather than an error, I'd say.
+
+Here's something extremely flashy to finish with:
+
+```{r }
+crossing(first=the_ratings,second=the_ratings) %>%
+filter(first<second) %>% 
+mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies))) %>%
+mutate(reject=pval<0.05/6) %>%
+left_join(medians,by=c("first"="rating")) %>%
+left_join(medians,by=c("second"="rating"))
+``` 
+
+The additional two lines look up the medians of the rating groups in
+`first`, then `second`, so that you can see the actual
+medians of the groups being compared each time. You see that medians
+different by 30 are definitely different, ones differing by 15 or less
+are definitely not different, and ones differing by about 20 could go
+either way.
+
+I think that's *quite* enough of that.
+    
+
+
+

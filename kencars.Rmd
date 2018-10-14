@@ -1,0 +1,138 @@
+##  Ken's cars
+
+
+ My cars data file can be found at
+[http://www.utsc.utoronto.ca/~butler/c32/cars.csv](http://www.utsc.utoronto.ca/~butler/c32/cars.csv). We're doing
+this question in R now, but later we'll be doing the exact same thing
+in SAS, so you'll be able then to compare your results.  The values in
+the data file are separated by commas; the car names are up to 29
+characters long.  Display your results for each part after (a). In R,
+displaying a `tibble` normally shows its first ten lines, which
+is all you need here; there's no need to display all the lines unless
+you want to.
+
+
+(a) Read the data into R and list the values.
+
+
+Solution
+
+
+`read_csv` will do it:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/cars.csv"
+cars=read_csv(my_url)  
+cars
+``` 
+      
+
+
+(b) Display only the car names and the countries they come from.
+
+
+Solution
+
+
+
+```{r }
+cars %>% select(car,country)
+``` 
+
+This *almost* works, but not quite:
+
+```{r }
+cars %>% select(starts_with("c"))
+``` 
+
+It gets *all* the columns that start with `c`, which
+includes `cylinders` as well.
+      
+
+
+(c) Display everything *except* horsepower:
+
+
+Solution
+
+
+Naming what you *don't* want is sometimes easier:
+```{r }
+cars %>% select(-hp)  
+``` 
+      
+
+
+(d) Display only the cars that have 8-cylinder engines (but
+display all the variables for those cars).
+
+
+Solution
+
+
+This:
+```{r }
+cars %>% filter(cylinders==8)  
+``` 
+8 of them, all from the US.
+      
+
+
+(e) Display the cylinders and horsepower for the cars that have
+horsepower 70 or less.
+
+
+Solution
+
+
+This one is selecting some observations and some variables:
+```{r }
+cars %>% filter(hp<=70) %>% select(cylinders:hp)
+``` 
+
+Cylinders and horsepower are consecutive columns, so we can select
+them either using the colon `:` or by
+`c(cylinders,hp)`. 
+
+You can also do the `filter` and the
+`select` the other way around.
+This one works because the *rows* you want to
+choose are determined by a column you're going to keep. If you wanted
+to display the cylinders and horsepower of the cars with `mpg`
+over 30, you would have to choose the rows first, because after you've
+chosen the columns, there is no `mpg` any more.
+      
+
+
+(f) Find the mean and SD of gas mileage of the cars with 4 cylinders.
+
+
+Solution
+
+
+
+```{r }
+cars %>% filter(cylinders==4) %>% summarize(m=mean(MPG),s=sd(MPG))  
+``` 
+
+Or you can get the mean and SD of gas mileage for all numbers of
+cylinders, and pick out the one you want:
+
+```{r }
+cars %>% group_by(cylinders) %>% summarize(m=mean(MPG),s=sd(MPG))
+``` 
+
+Top row is the same as before. And since the output is a data frame,
+you can do any of these things with *that*, for example:
+
+```{r }
+cars %>% group_by(cylinders) %>% 
+summarize(m=mean(MPG),s=sd(MPG)) %>%
+filter(cylinders==4)
+``` 
+
+to pick out just the right row.
+This is a very easy kind of question to set on an exam. Just so you know.
+      
+
+
+

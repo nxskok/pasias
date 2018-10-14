@@ -1,0 +1,269 @@
+##  Medical instructions
+
+
+ Do people understand medical instructions better at certain
+times of the day? In a study, students in a grade 12 class are
+randomly divided into two groups, A and B. All students see a video
+describing how to use an infant forehead thermometer. The students in
+Group A see the video at 8:30 am, while the students in Group B see
+the same video at 3:00 pm (on the same day). The next day, all the
+students are given a test on the material in the video (graded out of
+100). The observed scores are in
+[http://www.utsc.utoronto.ca/~butler/c32/forehead.txt](http://www.utsc.utoronto.ca/~butler/c32/forehead.txt) (values
+separated by spaces).
+
+
+
+(a) Read the data into R and display the (first ten) values.
+
+
+Solution
+
+
+Separated by spaces, so `read_delim`:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/forehead.txt"
+instr=read_delim(my_url," ")
+instr
+``` 
+    
+
+
+(b) Obtain a suitable plot that will enable you to assess the
+assumptions for a two-sample $t$-test.
+
+
+Solution
+
+
+We need the values in each group to be approximately normally
+distributed. Side-by-side boxplots will do it:
+```{r }
+ggplot(instr,aes(x=group,y=score))+geom_boxplot()
+```     
+
+or, if you like, separate (facetted) normal quantile plots, which I
+would do this way:
+
+```{r }
+ggplot(instr,aes(sample=score))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~group,ncol=1)
+``` 
+    
+
+
+(c) Why might you have doubts about using a two-sample $t$-test here?
+
+
+Solution
+
+
+We are looking for non-normality in at least one of the
+groups. Here, both groups have an outlier at the low end that
+would be expected to pull the mean downward. I don't think there
+is left-skewness here, since there is no particular evidence of
+the high-end values being bunched up: the problem in both cases
+with normality is at the low end. 
+One way or another, I'm expecting you to have noticed the outliers.
+Extra: last year, when I first drew the normal quantile plots,
+there was no `stat_qq_line`, so you had to imagine where
+the line went if you did it this way. Without the line, these
+plots look somewhat curved, which would have pointed to
+left-skewness, but now we see that the lowest observation is too
+low, and maybe the second-lowest one as well, while the other
+observations are just fine.
+    
+
+
+(d) Run Mood's median test as in class (*without* using
+`smmr`). What do you conclude, in the context of the data?
+What recommendation would you make about the time of day to see the
+video?  (You might get a warning about ``chisquared approximation
+being incorrect'', which you can ignore here.)
+
+
+Solution
+
+
+The overall median first:
+```{r }
+instr %>% summarize(med=median(score))
+```     
+
+87.5, which is not equal to any of the data values (they are all
+integers). This will avoid any issues with values-equal-to-median later.
+
+Then, create and save a table of the value by group and above/below
+median. You can count either above or below (it comes out equivalently
+either way):
+
+```{r }
+tab=with(instr,table(group,score>87.5))
+tab
+``` 
+
+Then, chi-squared test for independence (the null) or association of
+some kind (the alternative). The `correct=F` is saying not to
+do Yates's correction, so that it would come out the same if you were
+doing it by hand (``observed minus expected, squared, divided by
+expected'' and all that stuff).
+
+```{r }
+chisq.test(tab,correct=F)
+``` 
+
+The P-value is 0.0044, which is (much) smaller than 0.05, and
+therefore you can reject independence and conclude association: that
+is, whether a student scores above or below the median depends on
+which group they are in, or, that the median scores are different for
+the two groups.
+
+The warning is because the expected frequencies are on the small side
+(if you have done this kind of problem by hand, you might remember
+something about "expected frequencies less than 5". This is that.)
+Here, the P-value is so small that we can afford to have it be
+inaccurate by a bit and still not affect the conclusion, so I think we
+are safe.
+
+As for which group is better, well, the easiest way is to go back to
+your boxplots and see that the median for group A (8:30 am) is
+substantially higher than for group B (3:00pm). But you can also see
+it from your frequency table, if you displayed it:
+
+```{r }
+tab
+``` 
+
+Most of the people in the 8:30 am group scored above the median, and
+most of the people in the 3:00 pm group scored below the median. So
+the scores at 8:30 am were better overall.
+
+As I write this, it is just after 3:00 pm and I am about to make
+myself a pot of tea!
+
+Extra: about that `correct=F` thing. There was a point of view for a
+long time that when you are dealing with a $2 \times 2$ table, you can
+get better P-values by, before squaring "observed minus expected",
+taking 0.5 away from the absolute value of the difference. This is
+called Yates's correction. It is in the same spirit as the
+"continuity correction" that you might have encountered in the
+normal approximation to the binomial, where in the binomial you have
+to have a whole number of successes, but the normal allows fractional
+values as well.  In about the 1960s, the usefulness of Yates's
+correction was shot down, for general contingency tables. There is,
+however, one case where it *is* useful, and that is the case
+where the row totals and column totals are *fixed*.
+
+What do I mean by that? Well, first let's look at a case where the
+totals are *not* all fixed. Consider a survey in which you want
+to see whether males and females agree or disagree on some burning
+issue of the day. You collect random samples of, say, 500 males and
+500 females, and you count how many of them say Yes or No to your
+statement.\endnote{To simplify things, we'll assume that everyone gave
+a Yes or a No answer, though you could add a column like "No answer"
+if you wanted to make it more realistic.}
+You might get results like this:
+
+
+```
+
+Yes  No  Total
+Males    197 303   500
+Females  343 157   500
+Total    540 460  1000
+
+```
+
+
+In this table, the row totals must be 500, because you asked this many
+males and this many females, and each one must have answered
+something. The column totals, however, are not fixed: you didn't know,
+ahead of time, that 540 people would answer "yes". That was just the
+way the data turned out, and if you did another survey with the same
+design, you'd probably get a different number of people saying
+"yes". 
+
+For another example, let's go back to Fisher (yes, *that*
+Fisher). A "lady" of his acquaintance claimed to be able, by
+drinking a cup of tea with milk and sugar in it, whether the milk or
+the sugar had been added first. Fisher, or, more likely, his
+housekeeper, prepared 8 cups of tea, 4 with milk first and 4 with
+sugar first. The lady knew that four of the cups had milk first, and
+her job was to say which four. The results might have been like this:
+
+
+```
+
+Actual 
+Milk first  sugar first  Total
+Lady   Milk first        3            1         4
+says   sugar first       1            3         4
+Total             4            4         8
+
+```
+
+
+This time, all of the row totals and all of the column totals must be
+4, regardless of what the lady thinks. Even if she thinks 5 of the
+cups of tea actually had milk first, she is going to pick 4 of them to
+say that they have milk first, since she knows there are only 4. In
+this case, all of the row and column totals are fixed at 4, and the
+right analysis is called Fisher's Exact Test, based on the
+hypergeometric distribution. In a $2\times 2$ table like this one,
+there is only one "degree of freedom", since as soon as you specify
+one of the frequencies, say the number of cups where the lady said
+milk first and they actually were milk first, you can work out the
+others.  But, leaving that aside, the usual chi-squared analysis is a
+perfectly good approximation, especially if the frequencies are large,
+and especially if you use Yates's correction.
+
+It is clear that Fisher must have been English, since he was able to
+get a publication out of drinking tea.
+
+How does that apply to Mood's median test? Well, let's remind
+ourselves of the table we had:
+
+```{r }
+tab
+``` 
+
+We know how many students were in each group: 10 in group A and 8 in
+B. So the row totals are fixed. What about the columns? These are
+whether each observation was above or below the overall median. There
+were 18 observations altogether, so there *must* be 9 above and 9
+below.\endnote{Except in the case of the previous problem, where there
+were multiple observations equal to the overall median. Which we
+ignore for the moment.} So the column totals are fixed as well. All
+totals fixed, so we should be using Yates's correction. I didn't,
+because I wanted to keep things simple, but I should have done.
+
+R's `chisq.test` by default *always* uses Yates's
+correction, and if you don't want it, you have to say
+`correct=F`.  Which is why I have been doing so all through.
+    
+
+
+(e) Run Mood's median test on these data using my `smmr`
+package, and verify that you get the same answer.
+
+
+Solution
+
+
+Not much to it, since the data is already read in:
+```{r }
+library(smmr)
+median_test(instr, score, group)
+```     
+
+Identical, test statistic, degrees of freedom and P-value. The table
+of frequencies is also the same, just with columns rearranged. (In
+`smmr` I counted the number of values below the overall median,
+whereas in my build-it-yourself I counted  the number of
+values above.)
+    
+
+
+

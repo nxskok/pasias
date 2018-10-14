@@ -49,6 +49,10 @@ sub main {
     $content=~s/\\begin\{verbatim\}/\n```\n/g;
     $content=~s/\\end\{verbatim\}/\n```\n/g;
 
+    # inline R code
+    
+    $content=~s/\\Sexpr\{(.*)\}/`r $1`/g;
+
     # no backslashes in quotes (do it twice)
 
     $content=~s/`(.*)\\(.*)`/`$1$2`/g;

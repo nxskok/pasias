@@ -302,7 +302,7 @@ sometimes you will be luckier. But the suggestion is that most of the
 time, the P-value will be pretty small and you will end up correctly
 rejecting. 
 
-The quantity `t_stat` above, \Sexpr{round(t_stat,2)}, is known to some
+The quantity `t_stat` above, 3.16, is known to some
 people as an "effect size", and summarizes how far apart the null
 and true means are, relative to the amount of variability present (in
 the sampling distribution of the sample mean). As effect sizes go,
@@ -359,7 +359,7 @@ want a CI)
 * (optional) a confidence level `conf.level`.
 
 
-In part (\ref{part:type-i}), we knew that the probability of
+In part (b), we knew that the probability of
 (incorrectly) rejecting should have been 0.05 and we rejected 42 times
 out of 1000:
 
@@ -388,7 +388,7 @@ be. Ouch. That's true, but unnecessarily confusing. Look at the
 confidence interval instead, 0.031 to 0.057. The right answer is 0.05,
 which is inside that interval, so good.
 
-In part (\ref{part:type-ii}), we didn't know what the power was going
+In part (c), we didn't know what the power was going
 to be (not until we calculated it with `power.t.test`, anyway),
 so we go straight for a confidence interval; the default 95\% confidence
 level is fine. We (correctly) rejected 798 times out of 1000:

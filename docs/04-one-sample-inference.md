@@ -395,9 +395,13 @@ original data.
 Solution
 
 
-Null is that the population mean (the mean weight of all babies born
-in North Carolina) is $H_0: \mu=7.3$ pounds, and the alternative  is
-that the mean is less: $H_a: \mu<7.3$ pounds. This is a one-sided
+Let $\mu$ be the population mean (the mean weight of all babies born
+in North Carolina). Null hypothesis is $H_0: \mu=7.3$ pounds, and the alternative  is
+that the mean is less: $H_a: \mu<7.3$ pounds.
+
+Note that I defined $\mu$ first before I used it.
+
+This is a one-sided
 alternative, which we need to feed into `t.test`:
 
 

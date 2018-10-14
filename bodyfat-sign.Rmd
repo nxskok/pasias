@@ -1,0 +1,151 @@
+% Body fat revisited
+
+
+
+ Athletes are concerned with measuring their body fat
+percentage. Two different methods are available: one using ultrasound,
+and the other using X-ray technology. We are interested in whether
+there is a difference in the mean body fat percentage as measured by
+these two methods, and if so, how big that difference is. Data on 16
+athletes are at
+[http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
+
+We saw this data set before.
+
+
+
+
+(a) Read in the data again.
+
+
+
+Solution
+
+
+This kind of thing. Since you looked at the data (didn't you?),
+you'll know that the values are separated by single spaces:
+
+```{r }
+myurl="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat=read_delim(myurl," ")
+bodyfat  
+``` 
+%%%
+
+
+(b) Calculate the differences, and make a normal quantile plot of
+them. Is there any evidence that normality of differences fails?
+Explain briefly. 
+
+
+
+Solution
+
+
+This is a good place to look ahead. We'll need the differences in two
+places, most likely: first for the normal quantile plot, and second
+for the matched-pairs sign test. So we should calculate and save them first:
+
+```{r }
+bodyfat %>% mutate(diff=xray-ultrasound) -> bodyfat2
+``` 
+
+I seem to be using a 2 on the end to name my
+dataframe-with-differences, but you can use whatever name you like.
+
+Then, not forgetting to use the data frame that we just made:
+
+```{r }
+ggplot(bodyfat2,aes(sample=diff))+stat_qq()+stat_qq_line()
+```   
+This is showing a little evidence of skewness or outliers  (depending
+on your point of view: either is good). The lowest and highest values
+are both too high, and the pattern of points on the plot is kind of
+curved (which would be evidence of skewness). Or you could say that
+the two highest values are too high, with the other values being more
+or less in line (that would be evidence of outliers at the upper
+end). I like outliers better than skewness, since those bottom-end
+points are not far off the line. I would also accept ``no substantial
+problems'', if you can make the case that those two highest points are
+not too far off the line. With only 16 observations as we have here,
+even truly normal data would stray off the line a bit.
+
+As ever, your explanation is more important than your conclusion. Can
+you justify what you think?
+
+If you took your differences the other way around, as
+`ultrasound` minus `xray`, your plot will also be the
+other way around, with the "outliers" at the bottom. That's good
+too.
+
+
+
+
+
+(c) Previously, we did a matched-pairs $t$-test for these data. In
+the light of your normal quantile plot, do you think that was a good
+idea? Explain briefly.
+
+
+
+Solution
+
+
+We are looking for the differences to be approximately normal,
+bearing in mind that we have a sample of size 16, which is not
+that large. Say what you think here; the points, if I were giving
+any here, would be for the way in which you support it.
+The comment I made before when we did a matched-pairs $t$-test
+was that the P-value was so large and non-significant that it was
+hard to imagine any other test giving a significant
+result. Another way of saying that is that I considered these
+differences to be "normal enough", given the circumstances.
+You might very well take a different view. You could say that
+these differences are clearly not normal, and that the sample size
+of 16 is not large enough to get any substantial help from the
+Central Limit Theorem. From that point of view, running the
+$t$-test is clearly not advisable.
+
+
+
+
+(d) Use the sign test appropriately to compare the two methods for
+measuring body fat. (Use `smmr` if you wish.) What do you
+conclude, as ever in the context of the data?
+
+
+
+Solution
+
+
+That means using a sign test to test the null hypothesis that the
+median difference is zero, against the alternative that it is not
+zero. (I don't see anything here to indicate that we are looking only
+for positive or only for negative differences, so I think two-sided is
+right. You need some reason to do a one-sided test, and there isn't
+one here.)
+
+Remembering again to use the data frame that has the differences in it:
+
+```{r }
+sign_test(bodyfat2, diff, 0)
+``` 
+
+The two-sided P-value is 0.4545, so we are nowhere near rejecting the
+null hypothesis that the median difference is zero. There is no
+evidence that the two methods for measuring body fat show any
+difference on average.
+
+The table of aboves and belows says that there were 6 positive
+differences and 10 negative ones. This is not far from an even split,
+so the lack of significance is entirely what we would expect. 
+
+Extra: this is the same conclusion that we drew the last time we
+looked at these data (with a matched-pairs $t$-test). That supports
+what I said then, which is that the $t$-test was so far from being
+significant, that it could be very wrong without changing the
+conclusion. That is what seems to have happened.
+
+
+
+

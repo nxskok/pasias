@@ -1,0 +1,234 @@
+##  Fear of math
+
+
+ Two new short courses have been proposed for helping
+students who suffer from severe math phobia. The courses are labelled
+A and B. Ten students were randomly allocated to one of these two
+courses, and each student's score on a math phobia test was recorded
+after they completed their course. The math phobia test produces
+whole-number scores between 0 and 10, with a higher score indicating a
+greater fear of mathematics. The data can be found in
+[http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt](http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt). We start
+with R for this question.
+
+
+
+(a) Read in the data and check, however you like, that you have 10
+observations, 5 from each course.
+
+
+Solution
+
+
+This doesn't need much comment:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt"
+math=read_delim(my_url," ")
+math
+``` 
+
+This will do, counting the `a` and `b`. Or, to save
+yourself that trouble:
+
+```{r }
+math %>% count(course)
+``` 
+
+Five each. The story is to get the computer to do the grunt work for
+you, if you can make it do so. Other ways:
+
+```{r }
+math %>% group_by(course) %>% summarize(count=n())
+``` 
+
+and this:
+
+```{r }
+with(math,table(course))
+``` 
+
+giving the same answer. Lots of ways.
+
+Extra: there is an experimental design issue here. You might have noticed that each student did only *one* of the courses. Couldn't students do both, in a matched-pairs kind of way? Well, it's a bit like the kids learning to read in that if the first of the courses reduces a student's anxiety, the second course won't appear to do much good (even if it actually would have been helpful had the student done that one first). This is the same idea as the kids learning to read: once you've learned to read, you've learned to read, and learning to read a second way won't help much. The place where matched pairs scores is when you can "wipe out" the effect of one treatment before a subject gets the other one. We have an example of kids throwing baseballs and softballs that is like that: if you throw one kind of ball, that won't affect how far you can throw the other kind.
+
+
+
+(b) Do a two-sample $t$-test to assess whether there is a
+difference in mean phobia scores after the students have taken the two
+courses. What do you conclude? (You have no \textsl{a
+priori}\endnote{That is, before looking at the data. This is
+Latin. It's also the place that the Bayesian "prior distribution"
+comes from. The "posterior distribution" comes from the Latin
+*a posteriori*, which means "afterwards", that is, after
+you have looked at the data.} reason to
+suppose that a particular one of the tests will produce a higher mean
+than the other, so do a two-sided test.)
+
+
+
+Solution
+
+
+A two-sided test is the default, so there is not much to do here:
+
+```{r }
+t.test(phobia~course,data=math)
+``` 
+
+The P-value of 0.4456 is nowhere near less than 0.05, so there is no
+evidence at all that the  
+mean math phobia scores are different between the two courses. 
+
+
+
+
+(c) Draw boxplots of the math phobia scores for each group (one
+line of code). What is the most striking thing that you notice?
+
+
+
+Solution
+
+
+```{r }
+ggplot(math,aes(x=course,y=phobia))+geom_boxplot()
+``` 
+
+Boxplot `a` is just weird. The bar across the middle is
+actually at the top, and it has no bottom. (Noting something sensible
+like this is enough.) Boxplot `b` is hugely spread
+out.\endnote{The two groups have very different spreads, but that is
+not a problem as long as we remember to do the Welch-Satterthwaite
+test that does not assume equal spreads. This is the default in R,
+so we are good, at least with that.}
+
+By way of explanation: the course `a` scores have a number of
+values equal so that the 3rd quartile and the median are the name, and
+also that the first quartile and the minimum value are the same:
+
+```{r }
+tmp=math %>% filter(course=="a")
+tmp %>% count(phobia)
+summary(tmp)
+``` 
+
+The phobia scores from course A are two 6's, two 7's and an 8. The
+median and third quartile are both 7, and the first quartile is the
+same as the lowest value, 6.
+
+Technique note: I wanted to do two things with the phobia scores from
+course A: count up how many of each score, and show you what the
+five-number summary looks like. One pipe won't do this (the pipe
+"branches"), so I saved what I needed to use, before it branched,
+into a data frame `tmp` and then used `tmp` twice. Pipes
+are powerful, but not *all*-powerful.
+
+
+
+
+
+(d) Explain briefly why a $t$-test would not be good for these
+data. (There are two things that you need to say.)
+
+
+
+Solution
+
+
+The easiest way to structure this is to ask yourself first what the
+$t$-test needs, and second whether you have it.
+The $t$-test assumes (approximately) normal data. The boxplot for
+group `a` doesn't even look symmetric, and the one for group
+`b` has an oddly asymmetric box. So I think the normality is
+in question here, and therefore another test would be
+better. (This is perhaps a bit glib of an answer, since there are
+only 5 values in each group, and so they can certainly look
+non-normal even if they actually are normal, but these values are
+all integers, so it is perhaps wise to be cautious.)
+We have the machinery to assess the normality for these, in one shot:
+```{r }
+ggplot(math,aes(sample=phobia))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~course,ncol=1, scales="free")
+```   
+
+I don't know what *you* make of those, but they both look pretty
+straight to me (and there are only five observations, so it's hard to
+judge). Course `b` maybe has a "hole" in it (three large
+values and two small ones). Maybe. I dunno. What I would *really*
+be worried about is outliers, and at least we don't have those.
+I mentioned in class that the $t$-tests are robust to non-normality. I
+ought to have expanded on that a bit: what really makes the $t$-test
+still behave itself with non-normality is when you have *large*
+samples, that is, when the Central Limit Theorem has had a chance to
+take hold. (That's what drives the normality not really being
+necessary in most cases.) But, even with small samples, exact
+normality doesn't matter so much.  Here, we have two tiny samples, and
+so we have to insist a bit more, but only a bit more, on a
+more-or-less normal shape in each group. (It's kind of a double
+jeopardy in that the situation where normality matters most, namely
+with small samples, is where it's the hardest to judge, because
+samples of size 5 even from a normal distribution can look very
+non-normal.)
+But, the biggest threats to the $t$-test are big-time skewness and
+outliers, and we are not suffering too badly from those.
+  
+
+
+
+(e) Run a suitable test to compare the "typical" scores for the
+two courses. (You can use the version from a package rather than
+building your own.) What do you conclude?
+
+
+
+Solution
+
+
+This is an invite to use `smmr`:
+```{r }
+library(smmr)
+median_test(math,phobia,course)
+```     
+
+We are nowhere near rejecting equal medians; in fact, both courses are
+very close to 50--50 above and below the overall median.
+
+If you look at the frequency table, you might be confused by
+something: there were 10 observations, but there are only $1+2+2+2=7$
+in the table. This is because three of the observations were equal to
+the overall median, and had to be thrown away:
+
+```{r }
+math %>% summarize(med=median(phobia))
+math %>% count(phobia)
+``` 
+
+The overall median was 7. Because the actual data were really discrete
+(the phobia scores could only be whole numbers), we risked losing a
+lot of our data when we did this test (and we didn't have much to
+begin with). The other thing to say is that with small sample sizes,
+the frequencies in the table have to be *very* lopsided for you
+to have a chance of rejecting the null. Something like this is what
+you'd need:
+
+```{r }
+x=c(1,1,2,6,6,6,7,8,9,10)
+g=c(1,1,1,1,1,2,2,2,2,2)
+d=tibble(x,g)
+median_test(d,x,g)
+``` 
+
+I faked it up so that we had 10 observations, three of which were
+equal to the overall median. Of the rest, all the small ones were in
+group 1 and all the large ones were in group 2. This is lopsided
+enough to reject with, though, because of the small frequencies, there
+actually was a warning about ``chi-squared approximation
+may be inaccurate''.
+`r tufte::margin_note("There emph{was")`, in the
+`chisq.test` inside `median_test`, but in
+`smmr` I didn't pass that warning back to the outside world.}
+
+
+
+
