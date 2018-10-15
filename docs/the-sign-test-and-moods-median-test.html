@@ -187,12 +187,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="the-sign-test-and-moods-median-test" class="section level1">
 <h1><span class="header-section-number">Chapter 8</span> The sign test and Mood’s median test</h1>
 <div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb309-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<pre><code>## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb313-1" data-line-number="1"><span class="kw">library</span>(smmr)</a></code></pre></div>
@@ -726,8 +726,8 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb401-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 45.30661 38.36307 46.80519 40.60002 44.78384 44.18677 40.42911
-##  [8] 50.41877 82.56341 40.58691</code></pre>
+<pre><code>##  [1] 70.56273 35.78007 43.45861 35.04980 47.72966 65.73529 58.80891
+##  [8] 35.72740 42.00374 44.46319</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
@@ -738,8 +738,8 @@ than 40 and how many are greater (or equal)?</li>
 <pre><code>## # A tibble: 2 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE        9
-## 2 TRUE         1</code></pre>
+## 1 FALSE        7
+## 2 TRUE         3</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -759,7 +759,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       1 TRUE</code></pre>
+## 1       3 FALSE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
@@ -771,7 +771,7 @@ should not reject. The fix is</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       1 TRUE</code></pre>
+## 1       3 FALSE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>
@@ -779,7 +779,7 @@ so a <code>pull</code> will grab it:</p>
 <a class="sourceLine" id="cb409-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb409-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb409-4" data-line-number="4"><span class="kw">pull</span>(is_rejected)</a></code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
 <p>You might be wondering where the “1 or less” came from. Getting a
 P-value for the sign test involves the binomial distribution: if the
 null is correct, each data value is independently either above or
@@ -920,7 +920,7 @@ set my random number seed so that I get the same results as before:</p>
 <p>The power of the sign test is estimated as 0.243, which is quite a bit less
 than the power of the <span class="math inline">\(t\)</span>-test, which we found back in (a) to be
 0.469. So the <span class="math inline">\(t\)</span>-test, in this situation where it is valid, is
-the right test to use: it is (a) valid and (b) more powerful.
+the right test to use: it is (i) valid and (ii) more powerful.
 So the <span class="math inline">\(t\)</span>-test is more powerful. One way to think about how
 <em>much</em> more powerful is to ask “how much smaller of a sample size would be needed for the <span class="math inline">\(t\)</span>-test to have the same power as this sign test?”
 The power of my sign test was 0.243, so in

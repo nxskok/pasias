@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -301,9 +301,9 @@ years, so if you used the pooled test instead of the
 Welch-Satterthwaite test, that would have been just fine.
 
 There is a school of thought that says we should learn the
-Welch-Satterthwaite test and use that always. This is because W-S (a)
+Welch-Satterthwaite test and use that always. This is because W-S (i)
 works when the populations from which the groups are sampled have
-different SDs and (b) is pretty good even when those SDs are the same.
+different SDs and (ii) is pretty good even when those SDs are the same.
 
 The pooled test can go badly wrong if the groups have very different
 SDs.  The story is this: if the larger sample is from the population

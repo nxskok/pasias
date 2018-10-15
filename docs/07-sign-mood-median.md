@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -980,8 +980,8 @@ x
 ```
 
 ```
-##  [1] 45.30661 38.36307 46.80519 40.60002 44.78384 44.18677 40.42911
-##  [8] 50.41877 82.56341 40.58691
+##  [1] 70.56273 35.78007 43.45861 35.04980 47.72966 65.73529 58.80891
+##  [8] 35.72740 42.00374 44.46319
 ```
 
 
@@ -1005,8 +1005,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        9
-## 2 TRUE         1
+## 1 FALSE        7
+## 2 TRUE         3
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1040,7 +1040,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       1 TRUE
+## 1       3 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1060,7 +1060,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       1 TRUE
+## 1       3 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1076,7 +1076,7 @@ pull(is_rejected)
 ```
 
 ```
-## [1] TRUE
+## [1] FALSE
 ```
 
 You might be wondering where the "1 or less" came from. Getting a
@@ -1285,7 +1285,7 @@ Solution
 The power of the sign test is estimated as 0.243, which is quite a bit less
 than the power of the $t$-test, which we found back in (a) to be
 0.469. So the $t$-test, in this situation where it is valid, is
-the right test to use: it is (a) valid and (b) more powerful.
+the right test to use: it is (i) valid and (ii) more powerful.
 So the $t$-test is more powerful. One way to think about how
 *much* more powerful is to ask "how much smaller of a sample    size would be needed for the $t$-test to have the same power as    this sign test?" 
 The power of my sign test was 0.243, so in
