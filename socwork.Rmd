@@ -1,0 +1,361 @@
+## Salaries of social workers
+
+
+
+ Another salary-prediction question: does the number of years
+of work experience that a social worker has help to predict their 
+salary? Data for 50 social workers are in
+[http://www.utsc.utoronto.ca/~butler/c32/socwork.txt](http://www.utsc.utoronto.ca/~butler/c32/socwork.txt). 
+
+
+
+(a) Read the data into R. Check that you have 50 observations on
+two variables. Also do something to check that the years of
+experience and annual salary figures look reasonable overall.
+
+
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/socwork.txt"
+soc=read_delim(my_url," ")
+soc
+``` 
+
+That checks that we have the right *number* of observations; to
+check that we have sensible *values*, something like
+`summary` is called for:
+
+```{r }
+summary(soc)  
+``` 
+
+A person working in any field cannot have a negative number of years
+of experience, and cannot have more than about 40 years of experience
+(or else they would have retired). Our experience numbers fit
+that. Salaries had better be five or six figures, and salaries for
+social workers are not generally all that high, so these figures look
+reasonable. 
+
+A rather more `tidyverse` way is this:
+
+```{r }
+soc %>% summarize_all(c("min","max")) 
+``` 
+
+This gets the minimum and maximum of all the variables. I would have
+liked them arranged in a nice rectangle (`min` and `max`
+as rows, the variables as columns), but that's not how this comes out.
+
+Here is another:
+
+```{r }
+soc %>% map(quantile) %>% bind_rows() 
+``` 
+
+These are the five-number summaries of each variable. Normally, they
+come with names attached:
+
+```{r }
+quantile(soc$experience)
+``` 
+
+but the names get lost in the transition to a `tibble`, and I
+haven't found out how to get them back.
+
+If you haven't seen `map` before: it says ``do whatever is in
+the brackets for each column of the data frame''. This comes out as an
+R `list`, so we glue it back into a data frame with the
+`bind_rows` on the end.
+
+`map` and its single-value counterpart `map_dbl` are
+actually very flexible: they run a function "for each" anything and
+glue the results together, like this:
+
+```{r }
+soc %>% map_dbl(median) 
+``` 
+
+which gets the median for each variable. That's the same thing as this:
+
+```{r }
+soc %>% summarize_all("median")
+``` 
+
+
+
+(b) Make a scatterplot showing how salary depends on
+experience. Does the nature of the trend make sense?
+
+
+Solution
+
+
+The usual:
+```{r }
+ggplot(soc,aes(x=experience,y=salary))+geom_point()
+``` 
+
+As experience goes up, salary also goes up, as you would expect. Also,
+the trend seems more or less straight.
+
+
+
+(c) Fit a regression predicting salary from experience, and
+display the results. Is the slope positive or negative? Does that
+make sense?
+
+
+Solution
+
+
+```{r }
+soc.1=lm(salary~experience,data=soc)
+summary(soc.1)
+``` 
+
+The slope is (significantly) positive, which squares with our guess
+(more experience goes with greater salary), and also the upward trend
+on the scatterplot. The value of the slope is about 2,000; this means
+that one more year of experience goes with about a \$2,000 increase in
+salary. 
+
+
+
+(d) Obtain and plot the residuals against the fitted values. What
+problem do you see?
+
+
+Solution
+
+
+The easiest way to do this with `ggplot` is to plot the
+*regression object* (even though it is not actually a data
+frame), and plot the `.fitted` and `.resid`
+columns in it, not forgetting the initial dots:
+```{r }
+ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
+```       
+I see a "fanning-out": the residuals are getting bigger *in size* 
+(further away from zero) as the fitted values get bigger. That
+is, when the (estimated) salary gets larger, it also gets more
+variable. 
+
+Fanning-out is sometimes hard to see. What you can do if you suspect
+that it might have happened is to plot the *absolute value* of
+the residuals against the fitted values. The absolute value is the
+residual without its plus or minus sign, so if the residuals are
+getting bigger in size, their absolute values are getting bigger. That
+would look like this:
+
+```{r }
+ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
+``` 
+
+I added a smooth trend to this to help us judge whether the
+absolute-value-residuals are getting bigger as the fitted values get
+bigger. It looks to me as if the overall trend is an increasing one,
+apart from those few small fitted values that have larger-sized
+residuals. Don't get thrown off by the kinks in the smooth trend. Here
+is a smoother version:
+
+```{r }
+ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
+``` 
+
+The larger fitted values, according to this, have residuals larger in size.
+
+The thing that controls the smoothness of the smooth trend is the
+value of `span` in `geom_smooth`. The default is
+0.75. The larger the value you use, the smoother the trend; the
+smaller, the more wiggly. I'm inclined to think that the default value
+is a bit too small. Possibly this value is too big, but it shows you
+the idea.
+
+
+
+(e) The problem you unearthed in the previous part is often helped
+by a transformation. Run Box-Cox on your data to find a suitable
+transformation. What transformation is suggested?
+
+
+Solution
+
+
+You'll need to call in (and install if necessary) the package
+`MASS` that contains `boxcox`:
+```{r }
+library(MASS)
+``` 
+
+I explain that "masked" thing below.
+
+```{r }
+boxcox(salary~experience,data=soc)
+``` 
+
+That one looks like $\lambda=0$ or log. You could probably also
+justify fourth root (power 0.25), but log is a very common
+transformation, which people won't need much persuasion to accept.
+
+There's one annoyance with `MASS`: it has a `select`
+(which I have never used), and if you load `tidyverse` first
+and `MASS` second, as I have done here, when you mean to run
+the column-selection `select`, it will actually run the
+`select` that comes from `MASS`, and give you an error
+that you will have a terrible time debugging. That's what that
+"masked" message was when you loaded `MASS`.
+
+So I'm going to be tidy and get rid of `MASS`, now that I'm
+finished with it. Let's first see which packages are loaded, rather a
+lot in my case:
+`r tufte::margin_note("The packages before *tidyverse* other than *MASS* are all loaded by the *tidyverse*, which  is why there are so many.")`
+
+```{r }
+search()
+``` 
+
+then get rid of `MASS`:
+
+```{r }
+detach("package:MASS",unload=T)
+``` 
+Now check that it has gone:
+
+```{r }
+search()
+``` 
+It has. Now any calls to `select` will use the right one. We hope.
+
+The output of `search` is called the **search list**, and
+it tells you where R will go looking for things. The first one
+`.GlobalEnv` is where all\endnote{All the ones that are part of
+this project, anyway.} your
+variables, data frames etc.\ get stored, and that is what gets
+searched first.\endnote{That means that if you write a function with
+the same name as one that is built into R or a package, yours is the
+one that will get called. This is probably a bad idea, since you
+won't be able to get at R's function by that name.} Then R will go
+looking in each thing in turn until it finds what it is looking
+for. When you load a package with `library()`, it gets added to
+the list *in second place*, behind `.GlobalEnv`. So, when
+we had `MASS` loaded (the first `search()`), if we
+called `select`, then it would find the one in `MASS`
+first.
+
+If you want to insist on something like "the `select` that lives in `dplyr`", 
+you can do that by saying
+`dplyr::select`. But this is kind of cumbersome if you don't
+need to do it, which is why I got rid of `MASS` here.
+
+
+
+(f) Calculate a new variable as suggested by your
+transformation. Use your transformed response in a regression,
+showing the summary.
+
+
+Solution
+
+
+The best way is to add the new variable to the data frame using
+`mutate`, and save that new data frame. That goes like this:
+```{r }
+soc.2=soc %>% mutate(log_salary=log(salary))
+```       
+
+and then
+
+```{r }
+soc.3=lm(log_salary~experience,data=soc.2)
+summary(soc.3)
+``` 
+
+I think it's best to save the data frame with `log_salary` in
+it, since we'll be doing a couple of things with it, and it's best to
+be able to start from `soc.2`. But you can also do this:
+
+```{r }
+soc %>% mutate(log_salary=log(salary)) %>%
+lm(log_salary~experience,data=.) %>%
+summary()
+``` 
+
+The second line is where the fun starts: `lm` wants the data
+frame as a `data=` at the end. So, to specify a data frame in
+something like `lm`, we have to use the special symbol
+`.`, which is another way to say ``the data frame that came out
+of the previous step''.
+
+Got that? All right. The last line is a piece of cake in
+comparison. Normally `summary` would require a data frame or a
+fitted model object, but the second line produces one (a fitted model
+object) as output, which goes into `summary` as the first
+(and only) thing, so all is good and we get the regression output.
+
+What we lose by doing this is that if we need something later from this
+fitted model object, we are out of luck since we didn't save
+it. That's why I created `soc.2` and `soc.3` above.
+
+You can also put functions of things directly into `lm`:
+
+```{r }
+soc.1a=lm(log(salary)~experience, data=soc)
+summary(soc.1a)
+``` 
+
+
+
+(g) Obtain and plot the residuals against the fitted values for
+this regression. Do you seem to have solved the problem with the
+previous residual plot?
+
+
+Solution
+
+
+As we did before, treating the regression object as if it were a
+data frame:
+```{r }
+ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
+```       
+
+That, to my mind, is a horizontal band of points, so I would say yes,
+I have solved the fanning out.
+
+One concern I have about the residuals is that there seem to be a
+couple of very negative values: that is, are the residuals normally
+distributed as they should be? Well, that's easy enough to check:
+
+```{r }
+ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
+``` 
+
+The issues here are that those bottom two values are a bit too low,
+and the top few values are a bit bunched up (that curve at the top).
+It is really not bad, though, so I am making the call that I don't
+think I needed to worry.
+Note that the transformation we found here is the same as the
+log-salary used by the management consultants in the
+backward-elimination question, and with the same effect: an extra year
+of experience goes with a *percent* increase in salary.
+
+What increase? Well, the slope is about 0.05, so adding a year of
+experience is predicted to increase log-salary by 0.05, or to
+multiply actual salary by 
+
+```{r }
+exp(0.05)  
+``` 
+
+or to increase salary by about 5\%.\endnote{Mathematically,
+$e^x \simeq 1+x$ for small $x$, which winds up meaning that the
+slope in a model like this, if it is small, indicates about the
+percent increase in the response associated with a 1-unit change in
+the explanatory variable. Note that this only works with $e^x$ and
+natural logs, not base 10 logs or anything like that.}
+
+
+
+

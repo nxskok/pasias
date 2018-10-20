@@ -1,0 +1,376 @@
+## Number 1 songs
+
+
+
+ The data file
+[http://stat405.had.co.nz/data/billboard.csv](http://stat405.had.co.nz/data/billboard.csv) contains a lot of
+information about songs popular in 2000. This dataset is untidy.  Our
+ultimate aim is to answer ``which song occupied the \#1 position for
+the largest number of weeks?''. To do that, we will build a pipe that
+starts from the data frame read in from the URL above, and finishes
+with an answer to the question. I will take you through this step by
+step. Each part will involve adding something to the pipe you built
+previously (possibly after removing a line or two that you used to
+display the previous result).
+
+
+
+(a) Read the data and display what you have.
+
+
+Solution
+
+
+```{r }
+billboard=read_csv("http://stat405.had.co.nz/data/billboard.csv")
+```       
+
+There are a *lot* of columns. What does this look like?
+
+```{r }
+billboard
+``` 
+
+On yours, you will definitely see a little arrow top right saying
+"there are more columns", and you will have to click on it several
+times to see them all.
+
+ 
+
+(b) The columns `x1st.week` through
+`x76th.week` contain the rank of each song in the Billboard
+chart in that week, with week 1 being the first week that the song
+appeared in the chart.  Convert all these columns into two: an
+indication of week, called `week`, and of rank, called
+`rank`. Most songs appeared in the Billboard chart for a
+lot less than 76 weeks, so there are missing values, which you
+want to remove.  (I say "indication of week" since this will
+probably be text at the moment). Display your new data frame. Do
+you have fewer columns?  Why do you have a lot more rows? Explain
+briefly.
+
+
+Solution
+
+
+This is `gather`ing up all those columns, with
+`na.rm=T` to get rid of the missings:
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) 
+```         
+
+Another way to do this is with a select-helper: all those column names
+end with `week`, so we can select them all thus:
+
+```{r }
+billboard %>% gather(week,rank,ends_with("week"),na.rm=T)
+``` 
+
+There are now only 9 columns, a lot fewer than we started with. This
+is (I didn't need you to say) because we have collected together all
+those `week` columns into one (a column called `rank`
+with an indication of which `week` it came from). The logic of
+the `gather` is that all those columns contain ranks (which is
+what make them the same), but they are ranks from different weeks
+(which is what makes them different).
+
+What has actually happened is that we have turned "wide" format into
+"long" format. This is not very insightful, so I would like you to
+go a bit further in your explanation. The original data frame encodes
+the rank of each song in each week, and what the `gather` has
+done is to make that explicit: in the new data frame, each song's rank
+in each week appears in *one* row, so that there are as many rows
+as there are song-week combinations. The original data frame had 317
+songs over 76 weeks, so this many:
+
+```{r }
+317*76
+``` 
+
+song-week combinations.
+
+Not every song appeared in the Billboard chart for 76 weeks, so our tidy
+data frame has a lot fewer rows than this.
+
+You need to say that the original data frame had each song appearing
+once (on one line), but now each song appears on multiple rows, one
+for each week that the song was in the chart. Or something equivalent
+to that.
+
+ 
+
+(c) Display just your two new columns (for the first few
+rows). Add something appropriate onto the end of your pipe to do this.
+
+
+Solution
+
+
+A `select` is the thing:
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+select(week, rank)
+```         
+
+
+
+(d) Both your `week` and `rank` columns are
+(probably) text. Create new columns that contain just the numeric
+values, and display just your new columns, again adding onto the
+end of your pipe. (In the previous part, you probably had some
+code that picked out a few columns to display them. Get rid of
+that.) 
+ 
+
+Solution
+
+
+`parse_number` is the easiest. Create new columns,
+with `mutate`, that are the `parse_number`-ed
+versions of the old ones.
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+select(ends_with("number"))
+```         
+You see that these are indeed numbers. (I gave my new columns names
+that ended with `number`, which meant that I could select them
+with the select-helper `ends_with`. I'm not insisting that you
+do this, but it's a handy trick.)
+
+Since `rank` already looks like a number, but happens to be
+text, you can also convert it with `as.numeric` (or
+`as.integer`, since it is actually text that looks like a whole
+number). For converting `rank`, these are also good, but for
+converting `week`, you need something that will pull out the
+number. (`str_extract` from `stringr` will also do it,
+but that's beyond our scope now. It's on page 212 of the R book if
+you wish to investigate it. But `parse_number` is a lot
+easier.) 
+
+ 
+
+(e) The meaning of your week-number column is that it refers
+to the number of weeks *after* the song first appeared in the
+Billboard chart. That is, if a song's first appearance (in
+`date.entered)` is July 24, then week 1 is July 24, week 2
+is July 31, week 3 is August 7, and so on. Create a column
+`current` by adding the appropriate number of *days*,
+based on your week number, to `date.entered`. Display
+`date.entered`, your week number, and `current` to
+show that you have calculated the right thing. Note that you can
+add a number of days onto a date and you will get another date.
+
+
+Solution
+
+
+There is a (small) gotcha here: if you read carefully, you'll
+see that "week 1" is actually "week 0"  in terms of the
+number of days to add on to `date.entered`. So you have
+to subtract one from the number of weeks before you multiply
+it by seven to get a number of days.
+After that thinking, this:
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+select(date.entered,week_number,current)
+```         
+
+Don't forget to use your `week`-turned-into-number, or else it
+won't work! (This bit me too, so you don't need to feel bad.)
+
+You can also combine the three column-definition statements into one
+mutate. It doesn't matter; as soon as you have defined a column, you
+can use it in defining another column, even within the same
+`mutate`. 
+
+Anyway, the rows displayed are all `week_number` 1, so the
+`current` date should be the same as `date.entered`, and
+is. (These are all the first week that a song is in the Billboard
+chart). 
+
+You might be thinking that this is not much of a check, and you would
+be right. A handy trick is to display a random sample of 10 (say) out
+of the 5,000-odd rows of the data frame. To do that, add the line
+`sample_n(10)` on the end, like this:
+
+```{r echo=F}
+set.seed(457299)
+``` 
+
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+select(date.entered,week_number,current) %>%
+sample_n(10)  
+``` 
+
+This gives a variety of rows to check. The first `current`
+should be $27-1=26$ weeks, or about 6 months, after the date the song
+entered the chart, and so it is; the second one should be $3-1=2$
+weeks after entry, and it is. The third one should be 3 weeks after
+September 23; this is (as I figure it) September $23+21=44$, and
+September has 30 days, so this is really October 14. Check.
+
+Your random selection of rows is likely to be different from mine, but
+the same kind of thinking will enable you to check whether it makes
+sense. 
+
+ 
+
+(f) Reaching the \#1 rank on the Billboard chart is one of
+the highest accolades in the popular music world. List all the
+songs that reached `rank` 1. For these songs, list the
+artist (as given in the data set), the song title, and the date(s)
+for which the song was ranked number 1. Arrange the songs in date
+order of being ranked \#1. Display all the songs (I found 55 of them).
+
+
+Solution
+
+
+To the previous pipe, add the last lines below. You can use
+either `rank` (text) or what I called
+`rank_number` (a number). It doesn't matter here,
+since we are only checking for equal-to, not something like
+"less than":
+```{r size="scriptsize"}
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(artist.inverted,track,current) 
+```         
+
+You'll see the first ten rows, as here, but with clickable buttons to
+see the next 10 (and the previous 10 if you have moved beyond 1--10). 
+The "artist" column is called `artist.inverted` because, if
+the artist is a single person rather than a group, their last name is
+listed first. The song title appears in the column `track`. 
+
+The song by Destiny's Child spills into 2001 because it entered the
+chart in 2000, and the data set keeps a record of all such songs until
+they drop out of the chart. I'm not sure what happened to the song
+that was \#1 on January 8, 2000; maybe it entered the chart in
+1999
+`r tufte::margin_note("Which was the title of a song by Prince.")` and so is not
+listed here.
+
+ 
+
+(g) Use R to find out which song held the \#1 rank for the
+largest number of weeks. For this, you can assume that the song
+titles are all unique (if it's the same song title, it's the same
+song), but the artists might not be (for example, Madonna might
+have had two different songs reach the \#1 rank). The information
+you need is in the output you obtained for the previous part, so
+it's a matter of adding some code to the end of that.
+The last mark was for displaying *only* the song that was
+ranked \#1 for the largest number of weeks, or for otherwise
+making it easy to see which song it was.
+
+
+Solution
+
+
+This is a question of using `count`, but on the
+`track` title:
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(artist.inverted,track,current) %>%
+count(track)
+```         
+
+Then you can scan down the `n` column, find that the
+biggest number is 11, and say: it's the song ``Independent Women Part
+I'' by Destiny's Child. This is 3 points (out of 4, when the question
+was to be handed in).
+
+But, this is a data frame, so anything we can do to a data frame we
+can do to this, like listing out only the row(s) where `n` is
+equal to its maximum value:
+
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(artist.inverted,track,current) %>%
+count(track) %>%
+filter(n==max(n))
+``` 
+
+or arranging them in (most logically, descending) order by `n`
+to make it easier to pick out the top one:
+
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(artist.inverted,track,current) %>%
+count(track) %>%
+arrange(desc(n))
+``` 
+
+Either of those will net you the 4th point.
+
+If you want to be a little bit more careful, you can make an
+artist-track combination as below. This would catch occasions where
+the same song by two different artists made it to \#1, or two
+different songs that happened to have the same title did. It's not
+very likely that the same artist would record two *different*
+songs with the same title, though it is possible that the same song by
+the same artist could appear in the Billboard chart on two different
+occasions.
+`r tufte::margin_note("As, for example, when Prince died.")`
+
+I think I want to create an artist-song combo fairly early in my pipe,
+and then display *that* later, something like this. This means
+replacing `track` by my `combo` later in the pipe,
+wherever it appears:
+
+```{r }
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(combo=paste(track,artist.inverted,sep=" by ")) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(combo,current) %>%
+count(combo) %>%
+arrange(desc(n))
+``` 
+
+I don't think it makes any difference here, but it might in other
+years, or if you look over several years where you might get cover
+versions of the same song performed by different artists.
+
+Zero-point bonus: how many of these artists have you heard of? How
+many have your parents heard of? (I followed popular music quite
+closely much earlier than this, in the early 1980s in the UK. I
+remember both Madonna and U2 when they *first* became
+famous. U2's first single was called "Fire" and it just scraped into
+the UK top 40. Things changed after that.)
+
+ 
+
+

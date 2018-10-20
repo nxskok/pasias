@@ -1,0 +1,227 @@
+## Facebook friends and grey matter
+
+
+
+ Is there a relationship between the number
+of Facebook friends a person has, and the density of grey matter in
+the areas of the brain associated with social perception and
+associative memory? To find out, a 2012 study measured both of these
+variables for a sample of 40 students at City University in London
+(England). The data are at
+[http://www.utsc.utoronto.ca/~butler/c32/facebook.txt](http://www.utsc.utoronto.ca/~butler/c32/facebook.txt). The grey
+matter density is on a $z$-score standardized scale. The values are
+separated by *tabs*.
+
+The aim of this question is to produce an R Markdown report that
+contains your answers to the questions below. 
+
+You should aim to make your report flow smoothly, so that it would be
+pleasant for a grader to read, and can stand on its own as an analysis
+(rather than just being the answer to a question that I set you).
+Some suggestions: give your report a title and arrange it into
+sections with an Introduction; add a small amount of additional text
+here and there explaining what you are doing and why. I don't expect
+you to spend a large amount of time on this, but I *do* hope
+you will make some effort. (My report came out to 4 Word pages.)
+
+
+(a) Read in the data and make a scatterplot for predicting the
+number of Facebook friends from the grey matter density. On your
+scatterplot, add a smooth trend.
+
+
+Solution
+
+
+Begin your document with a code chunk containing
+`library(tidyverse)`. The data values are
+separated by tabs, which you will need to take into account:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/facebook.txt"
+fb=read_tsv(my_url)
+fb
+ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
+```       
+
+
+
+(b) Describe what you see on your scatterplot: is there a
+trend, and if so, what kind of trend is it? (Don't get too taken in
+by the exact shape of your smooth trend.) Think ``form, direction,
+strength''. 
+
+
+Solution
+
+
+I'd say there seems to be a weak, upward, apparently linear
+trend. The points are not especially close to the trend, so I
+don't think there's any justification for calling this other
+than "weak". (If you think the trend is, let's say,
+"moderate", you ought to say what makes you think that: for
+example, that the people with a lot of Facebook friends also
+tend to have a higher grey matter density. I can live with a
+reasonably-justified "moderate".)
+The reason I said not to get taken in by the shape of the smooth
+trend is that this has a "wiggle" in it: it goes down again
+briefly in the middle. But this is likely a quirk of the data,
+and the trend, if there is any, seems to be an upward one.
+
+
+
+(c) Fit a regression predicting the number of Facebook friends
+from the grey matter density, and display the output.
+
+
+Solution
+
+
+That looks like this. You can call the "fitted model object"
+whatever you like, but you'll need to get the capitalization of
+the  variable names correct:
+```{r }
+fb.1=lm(FBfriends~GMdensity,data=fb)
+summary(fb.1)
+```       
+
+I observe, though I didn't ask you to, that the R-squared is pretty
+awful, going with a correlation of 
+```{r }
+sqrt(0.1904)
+``` 
+
+which *would* look
+like as weak of a trend as we saw.
+`r tufte::margin_note("Correlations have to go up beyond 0.50 before they start looking at all interesting.")`
+
+
+
+(d) Is the slope of your regression line significantly
+different from zero? What does that mean, in the context of the
+data?
+
+
+Solution
+
+
+The P-value of the slope is 0.005, which is less than
+0.05. Therefore the slope *is* significantly different from
+zero. That means that the number of Facebook friends really does
+depend on the grey matter density, for the whole population of
+interest and not just the 40 students observed here (that were a
+sample from that population). I don't mind so much what you
+think the population is, but it needs to be clear that the
+relationship applies to a population. 
+Another way to approach this is to say that you would expect
+this relationship to show up again in another similar
+experiment. That also works, because it gets at the idea of
+reproducibility. 
+
+
+
+(e) Are you surprised by the results of
+parts (b) and (d)? Explain briefly.
+
+
+Solution
+
+
+I *am* surprised, because I thought the trend on the
+scatterplot was so weak that there would not be a significant
+slope. I guess there was enough of an upward trend to be
+significant, and with $n=40$ observations we were able to get a
+significant slope out of that scatterplot. With this many
+observations, even a weak correlation can be significantly
+nonzero. 
+You can be surprised or not, but you need to have some kind of
+consideration of the strength of the trend on the scatterplot as
+against the significance of the slope. For example, if you
+decided that the trend was "moderate" in strength, you would
+be justified in being less surprised than I was. 
+Here, there is the usual issue that we have proved that the
+slope is not zero (that the relationship is not flat), but we
+may not have a very clear idea of what the slope actually
+*is*. There are a couple of ways to get a confidence
+interval. The obvious one is to use R as a calculator and go up
+and down twice its standard error (to get a rough idea):
+```{r }
+82.45+2*27.58*c(-1,1)
+```       
+The `c()` thing is to get both confidence limits at once. The
+smoother way is this:
+
+```{r }
+confint(fb.1)
+``` 
+
+Feed `confint` a "fitted model object" and it'll give you
+confidence intervals (by default 95\%) for all the parameters in it. 
+
+The confidence interval for the slope goes from about 27 to about
+138. That is to say, a one-unit increase in grey matter density goes
+with an increase in Facebook friends of this much. This is not
+especially insightful: it's bigger than zero (the test was
+significant), but other than that, it could be almost
+anything. *This* is where the weakness of the trend comes back to
+bite us. With this much scatter in our data, we need a *much*
+larger sample size to estimate accurately how big an effect grey
+matter density has.
+
+
+
+(f) Obtain a scatterplot with the regression line on it.
+
+
+Solution
+
+
+Just a modification
+of (a):
+```{r }
+ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+
+geom_smooth(method="lm")
+```       
+
+
+
+(g) Obtain a plot of the residuals from the regression against
+the fitted values, and comment briefly on it.
+
+
+Solution
+
+
+This is, to my mind, the easiest way:
+```{r }
+ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
+```       
+
+There is some "magic" here, since the fitted model object is not
+actually a data frame, but it works this way.
+That looks to me like a completely random scatter of
+points. Thus, I am completely happy with the straight-line regression
+that we fitted, and I see no need to improve it.
+
+(You should make two points here: one, describe what you see, and two,
+what it implies about whether or not your regression is satisfactory.)
+
+Compare that residual plot with this one:
+
+```{r }
+ggplot(fb.1,aes(x=.fitted,y=.resid))+
+geom_point()+geom_smooth()
+```       
+Now, why did I try adding a smooth trend, and why is it not
+necessarily a good idea? The idea of a residual plot is that there
+should be no trend, and so the smooth trend curve ought to go straight
+across. The problem is that it will tend to wiggle, just by chance, as
+here: it looks as if it goes up and down before flattening out. But if
+you look at the points, *they* are all over the place, not close
+to the smooth trend at all. So the smooth trend is rather
+deceiving. Or, to put it another way, to indicate a real problem, the
+smooth trend would have to be a *lot* farther from flat than this
+one is. I'd call this one basically flat.
+
+
+
+

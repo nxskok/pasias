@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -194,7 +194,8 @@ similar: teams go on "road trips", playing several different teams
 before returning home. Hockey teams, though, tend to play each team
 only once on a road trip: for example, a west coast team like the
 Canucks might play a game in each of Toronto, Montreal, Boston and
-New York on a road trip.} You might have noticed something else;
+New York on a road trip. Well, maybe three games in the New York
+area: one each against the Rangers, Islanders and Devils.} You might have noticed something else;
 that's fine for this. For example, ``each of the games lasted less
 than three hours'', or "the attendances were all small" (since we
 looked at all the attendances in class). I just want you to notice
@@ -1684,7 +1685,27 @@ conclusion is still that there are definitely differences among the
 drugs in terms of pain relief. The table at the top of the output
 again suggests that drug A is worse than the others, but to confirm
 that you'd have to do Mood's median test on all three *pairs* of
-drugs, and then use Bonferroni to allow for your having done three tests.
+drugs, and then use Bonferroni to allow for your having done three tests:
+
+
+```r
+pairwise_median_test(migraine2, painrelief, drug)
+```
+
+```
+## # A tibble: 3 x 4
+##   g1    g2     p_value adj_p_value
+##   <chr> <chr>    <dbl>       <dbl>
+## 1 DrugA DrugB 0.00721     0.0216  
+## 2 DrugA DrugC 0.000183    0.000548
+## 3 DrugB DrugC 0.921       2.76
+```
+
+Drug A gives worse pain relief (fewer hours) than both drugs B and C,
+which are not significantly different from each hour. This is exactly
+what you would have guessed from the boxplot.
+
+I gotta do something about those adjusted P-values bigger than 1!
 
 
 
@@ -1768,7 +1789,7 @@ I mixed up the information in the two header rows into one.
 
 
 
-(b)\label{part:nottidy} Explain briefly how these data are not "tidy".
+(b) Explain briefly how these data are not "tidy".
 
 
 Solution
@@ -1794,8 +1815,8 @@ Solution
 
 
 `gather` is the tool. All the columns apart from
-`Species` contain frequencies, so that's what's ``the
-same''. They are frequencies in disease-location combinations, so
+`Species` contain frequencies, so that's what's "the same". 
+They are frequencies in disease-location combinations, so
 I'll call the column of "what's different" `disloc`. Feel
 free to call it `temp` for now if you prefer:
 
@@ -1851,7 +1872,7 @@ The column I called `disloc` actually contains *two*
 variables, disease and location, which need to be split up. A
 check on this is that we 
 have two columns (not including the frequencies), but back in
-(\ref{part:nottidy}) we found *three* variables, so there
+(b) we found *three* variables, so there
 ought to be three non-frequency columns.
 
 
@@ -1885,7 +1906,6 @@ splitting after the first character, thus:
 ```
 
 This is now tidy: eight frequencies in rows, and three non-frequency
-columns. (Go back and look at your answer to part (\ref{part:nottidy})
 and note that the issues you found there have all been resolved now.)
 
 
@@ -2476,6 +2496,663 @@ to pick out just the right row.
 This is a very easy kind of question to set on an exam. Just so you know.
       
 
+
+
+
+
+## Number 1 songs
+
+
+
+ The data file
+[http://stat405.had.co.nz/data/billboard.csv](http://stat405.had.co.nz/data/billboard.csv) contains a lot of
+information about songs popular in 2000. This dataset is untidy.  Our
+ultimate aim is to answer ``which song occupied the \#1 position for
+the largest number of weeks?''. To do that, we will build a pipe that
+starts from the data frame read in from the URL above, and finishes
+with an answer to the question. I will take you through this step by
+step. Each part will involve adding something to the pipe you built
+previously (possibly after removing a line or two that you used to
+display the previous result).
+
+
+
+(a) Read the data and display what you have.
+
+
+Solution
+
+
+
+```r
+billboard=read_csv("http://stat405.had.co.nz/data/billboard.csv")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   .default = col_integer(),
+##   artist.inverted = col_character(),
+##   track = col_character(),
+##   time = col_time(format = ""),
+##   genre = col_character(),
+##   date.entered = col_date(format = ""),
+##   date.peaked = col_date(format = ""),
+##   x66th.week = col_character(),
+##   x67th.week = col_character(),
+##   x68th.week = col_character(),
+##   x69th.week = col_character(),
+##   x70th.week = col_character(),
+##   x71st.week = col_character(),
+##   x72nd.week = col_character(),
+##   x73rd.week = col_character(),
+##   x74th.week = col_character(),
+##   x75th.week = col_character(),
+##   x76th.week = col_character()
+## )
+```
+
+```
+## See spec(...) for full column specifications.
+```
+
+There are a *lot* of columns. What does this look like?
+
+
+```r
+billboard
+```
+
+```
+## # A tibble: 317 x 83
+##     year artist.inverted track time  genre date.entered date.peaked
+##    <int> <chr>           <chr> <tim> <chr> <date>       <date>     
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18 
+##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08 
+##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29 
+##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16 
+##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14 
+##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26 
+##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18 
+##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24 
+##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12 
+## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04 
+## # ... with 307 more rows, and 76 more variables: x1st.week <int>,
+## #   x2nd.week <int>, x3rd.week <int>, x4th.week <int>, x5th.week <int>,
+## #   x6th.week <int>, x7th.week <int>, x8th.week <int>, x9th.week <int>,
+## #   x10th.week <int>, x11th.week <int>, x12th.week <int>,
+## #   x13th.week <int>, x14th.week <int>, x15th.week <int>,
+## #   x16th.week <int>, x17th.week <int>, x18th.week <int>,
+## #   x19th.week <int>, x20th.week <int>, x21st.week <int>,
+## #   x22nd.week <int>, x23rd.week <int>, x24th.week <int>,
+## #   x25th.week <int>, x26th.week <int>, x27th.week <int>,
+## #   x28th.week <int>, x29th.week <int>, x30th.week <int>,
+## #   x31st.week <int>, x32nd.week <int>, x33rd.week <int>,
+## #   x34th.week <int>, x35th.week <int>, x36th.week <int>,
+## #   x37th.week <int>, x38th.week <int>, x39th.week <int>,
+## #   x40th.week <int>, x41st.week <int>, x42nd.week <int>,
+## #   x43rd.week <int>, x44th.week <int>, x45th.week <int>,
+## #   x46th.week <int>, x47th.week <int>, x48th.week <int>,
+## #   x49th.week <int>, x50th.week <int>, x51st.week <int>,
+## #   x52nd.week <int>, x53rd.week <int>, x54th.week <int>,
+## #   x55th.week <int>, x56th.week <int>, x57th.week <int>,
+## #   x58th.week <int>, x59th.week <int>, x60th.week <int>,
+## #   x61st.week <int>, x62nd.week <int>, x63rd.week <int>,
+## #   x64th.week <int>, x65th.week <int>, x66th.week <chr>,
+## #   x67th.week <chr>, x68th.week <chr>, x69th.week <chr>,
+## #   x70th.week <chr>, x71st.week <chr>, x72nd.week <chr>,
+## #   x73rd.week <chr>, x74th.week <chr>, x75th.week <chr>, x76th.week <chr>
+```
+
+On yours, you will definitely see a little arrow top right saying
+"there are more columns", and you will have to click on it several
+times to see them all.
+
+ 
+
+(b) The columns `x1st.week` through
+`x76th.week` contain the rank of each song in the Billboard
+chart in that week, with week 1 being the first week that the song
+appeared in the chart.  Convert all these columns into two: an
+indication of week, called `week`, and of rank, called
+`rank`. Most songs appeared in the Billboard chart for a
+lot less than 76 weeks, so there are missing values, which you
+want to remove.  (I say "indication of week" since this will
+probably be text at the moment). Display your new data frame. Do
+you have fewer columns?  Why do you have a lot more rows? Explain
+briefly.
+
+
+Solution
+
+
+This is `gather`ing up all those columns, with
+`na.rm=T` to get rid of the missings:
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) 
+```
+
+```
+## # A tibble: 5,307 x 9
+##     year artist.inverted track time  genre date.entered date.peaked week 
+##  * <int> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
+##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
+##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
+##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16  x1st…
+##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14  x1st…
+##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26  x1st…
+##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18  x1st…
+##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
+##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
+## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
+## # ... with 5,297 more rows, and 1 more variable: rank <chr>
+```
+
+Another way to do this is with a select-helper: all those column names
+end with `week`, so we can select them all thus:
+
+
+```r
+billboard %>% gather(week,rank,ends_with("week"),na.rm=T)
+```
+
+```
+## # A tibble: 5,307 x 9
+##     year artist.inverted track time  genre date.entered date.peaked week 
+##  * <int> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
+##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
+##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
+##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16  x1st…
+##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14  x1st…
+##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26  x1st…
+##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18  x1st…
+##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
+##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
+## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
+## # ... with 5,297 more rows, and 1 more variable: rank <chr>
+```
+
+There are now only 9 columns, a lot fewer than we started with. This
+is (I didn't need you to say) because we have collected together all
+those `week` columns into one (a column called `rank`
+with an indication of which `week` it came from). The logic of
+the `gather` is that all those columns contain ranks (which is
+what make them the same), but they are ranks from different weeks
+(which is what makes them different).
+
+What has actually happened is that we have turned "wide" format into
+"long" format. This is not very insightful, so I would like you to
+go a bit further in your explanation. The original data frame encodes
+the rank of each song in each week, and what the `gather` has
+done is to make that explicit: in the new data frame, each song's rank
+in each week appears in *one* row, so that there are as many rows
+as there are song-week combinations. The original data frame had 317
+songs over 76 weeks, so this many:
+
+
+```r
+317*76
+```
+
+```
+## [1] 24092
+```
+
+song-week combinations.
+
+Not every song appeared in the Billboard chart for 76 weeks, so our tidy
+data frame has a lot fewer rows than this.
+
+You need to say that the original data frame had each song appearing
+once (on one line), but now each song appears on multiple rows, one
+for each week that the song was in the chart. Or something equivalent
+to that.
+
+ 
+
+(c) Display just your two new columns (for the first few
+rows). Add something appropriate onto the end of your pipe to do this.
+
+
+Solution
+
+
+A `select` is the thing:
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+select(week, rank)
+```
+
+```
+## # A tibble: 5,307 x 2
+##    week      rank 
+##  * <chr>     <chr>
+##  1 x1st.week 78   
+##  2 x1st.week 15   
+##  3 x1st.week 71   
+##  4 x1st.week 41   
+##  5 x1st.week 57   
+##  6 x1st.week 59   
+##  7 x1st.week 83   
+##  8 x1st.week 63   
+##  9 x1st.week 77   
+## 10 x1st.week 81   
+## # ... with 5,297 more rows
+```
+
+
+
+(d) Both your `week` and `rank` columns are
+(probably) text. Create new columns that contain just the numeric
+values, and display just your new columns, again adding onto the
+end of your pipe. (In the previous part, you probably had some
+code that picked out a few columns to display them. Get rid of
+that.) 
+ 
+
+Solution
+
+
+`parse_number` is the easiest. Create new columns,
+with `mutate`, that are the `parse_number`-ed
+versions of the old ones.
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+select(ends_with("number"))
+```
+
+```
+## # A tibble: 5,307 x 2
+##    week_number rank_number
+##          <dbl>       <dbl>
+##  1           1          78
+##  2           1          15
+##  3           1          71
+##  4           1          41
+##  5           1          57
+##  6           1          59
+##  7           1          83
+##  8           1          63
+##  9           1          77
+## 10           1          81
+## # ... with 5,297 more rows
+```
+You see that these are indeed numbers. (I gave my new columns names
+that ended with `number`, which meant that I could select them
+with the select-helper `ends_with`. I'm not insisting that you
+do this, but it's a handy trick.)
+
+Since `rank` already looks like a number, but happens to be
+text, you can also convert it with `as.numeric` (or
+`as.integer`, since it is actually text that looks like a whole
+number). For converting `rank`, these are also good, but for
+converting `week`, you need something that will pull out the
+number. (`str_extract` from `stringr` will also do it,
+but that's beyond our scope now. It's on page 212 of the R book if
+you wish to investigate it. But `parse_number` is a lot
+easier.) 
+
+ 
+
+(e) The meaning of your week-number column is that it refers
+to the number of weeks *after* the song first appeared in the
+Billboard chart. That is, if a song's first appearance (in
+`date.entered)` is July 24, then week 1 is July 24, week 2
+is July 31, week 3 is August 7, and so on. Create a column
+`current` by adding the appropriate number of *days*,
+based on your week number, to `date.entered`. Display
+`date.entered`, your week number, and `current` to
+show that you have calculated the right thing. Note that you can
+add a number of days onto a date and you will get another date.
+
+
+Solution
+
+
+There is a (small) gotcha here: if you read carefully, you'll
+see that "week 1" is actually "week 0"  in terms of the
+number of days to add on to `date.entered`. So you have
+to subtract one from the number of weeks before you multiply
+it by seven to get a number of days.
+After that thinking, this:
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+select(date.entered,week_number,current)
+```
+
+```
+## # A tibble: 5,307 x 3
+##    date.entered week_number current   
+##    <date>             <dbl> <date>    
+##  1 2000-09-23             1 2000-09-23
+##  2 2000-02-12             1 2000-02-12
+##  3 1999-10-23             1 1999-10-23
+##  4 2000-08-12             1 2000-08-12
+##  5 2000-08-05             1 2000-08-05
+##  6 2000-06-17             1 2000-06-17
+##  7 1999-12-25             1 1999-12-25
+##  8 2000-04-01             1 2000-04-01
+##  9 2000-06-24             1 2000-06-24
+## 10 1999-06-05             1 1999-06-05
+## # ... with 5,297 more rows
+```
+
+Don't forget to use your `week`-turned-into-number, or else it
+won't work! (This bit me too, so you don't need to feel bad.)
+
+You can also combine the three column-definition statements into one
+mutate. It doesn't matter; as soon as you have defined a column, you
+can use it in defining another column, even within the same
+`mutate`. 
+
+Anyway, the rows displayed are all `week_number` 1, so the
+`current` date should be the same as `date.entered`, and
+is. (These are all the first week that a song is in the Billboard
+chart). 
+
+You might be thinking that this is not much of a check, and you would
+be right. A handy trick is to display a random sample of 10 (say) out
+of the 5,000-odd rows of the data frame. To do that, add the line
+`sample_n(10)` on the end, like this:
+
+
+
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+select(date.entered,week_number,current) %>%
+sample_n(10)  
+```
+
+```
+## # A tibble: 10 x 3
+##    date.entered week_number current   
+##    <date>             <dbl> <date>    
+##  1 2000-03-18            27 2000-09-16
+##  2 2000-08-12             3 2000-08-26
+##  3 2000-09-23             4 2000-10-14
+##  4 1999-12-04            11 2000-02-12
+##  5 2000-01-22             8 2000-03-11
+##  6 2000-05-27            16 2000-09-09
+##  7 2000-04-29             5 2000-05-27
+##  8 2000-06-10             4 2000-07-01
+##  9 2000-04-15            12 2000-07-01
+## 10 2000-08-26            18 2000-12-23
+```
+
+This gives a variety of rows to check. The first `current`
+should be $27-1=26$ weeks, or about 6 months, after the date the song
+entered the chart, and so it is; the second one should be $3-1=2$
+weeks after entry, and it is. The third one should be 3 weeks after
+September 23; this is (as I figure it) September $23+21=44$, and
+September has 30 days, so this is really October 14. Check.
+
+Your random selection of rows is likely to be different from mine, but
+the same kind of thinking will enable you to check whether it makes
+sense. 
+
+ 
+
+(f) Reaching the \#1 rank on the Billboard chart is one of
+the highest accolades in the popular music world. List all the
+songs that reached `rank` 1. For these songs, list the
+artist (as given in the data set), the song title, and the date(s)
+for which the song was ranked number 1. Arrange the songs in date
+order of being ranked \#1. Display all the songs (I found 55 of them).
+
+
+Solution
+
+
+To the previous pipe, add the last lines below. You can use
+either `rank` (text) or what I called
+`rank_number` (a number). It doesn't matter here,
+since we are only checking for equal-to, not something like
+"less than":
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(artist.inverted,track,current) 
+```
+
+```
+## # A tibble: 55 x 3
+##    artist.inverted     track                 current   
+##    <chr>               <chr>                 <date>    
+##  1 Aguilera, Christina What A Girl Wants     2000-01-15
+##  2 Aguilera, Christina What A Girl Wants     2000-01-22
+##  3 Savage Garden       I Knew I Loved You    2000-01-29
+##  4 Savage Garden       I Knew I Loved You    2000-02-05
+##  5 Savage Garden       I Knew I Loved You    2000-02-12
+##  6 Carey, Mariah       Thank God I Found You 2000-02-19
+##  7 Savage Garden       I Knew I Loved You    2000-02-26
+##  8 Lonestar            Amazed                2000-03-04
+##  9 Lonestar            Amazed                2000-03-11
+## 10 Destiny's Child     Say My Name           2000-03-18
+## # ... with 45 more rows
+```
+
+You'll see the first ten rows, as here, but with clickable buttons to
+see the next 10 (and the previous 10 if you have moved beyond 1--10). 
+The "artist" column is called `artist.inverted` because, if
+the artist is a single person rather than a group, their last name is
+listed first. The song title appears in the column `track`. 
+
+The song by Destiny's Child spills into 2001 because it entered the
+chart in 2000, and the data set keeps a record of all such songs until
+they drop out of the chart. I'm not sure what happened to the song
+that was \#1 on January 8, 2000; maybe it entered the chart in
+1999
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which was the title of a song by Prince.</span> and so is not
+listed here.
+
+ 
+
+(g) Use R to find out which song held the \#1 rank for the
+largest number of weeks. For this, you can assume that the song
+titles are all unique (if it's the same song title, it's the same
+song), but the artists might not be (for example, Madonna might
+have had two different songs reach the \#1 rank). The information
+you need is in the output you obtained for the previous part, so
+it's a matter of adding some code to the end of that.
+The last mark was for displaying *only* the song that was
+ranked \#1 for the largest number of weeks, or for otherwise
+making it easy to see which song it was.
+
+
+Solution
+
+
+This is a question of using `count`, but on the
+`track` title:
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(artist.inverted,track,current) %>%
+count(track)
+```
+
+```
+## # A tibble: 17 x 2
+##    track                                     n
+##    <chr>                                 <int>
+##  1 Amazed                                    2
+##  2 Bent                                      1
+##  3 Be With You                               3
+##  4 Come On Over Baby (All I Want Is You)     4
+##  5 Doesn't Really Matter                     3
+##  6 Everything You Want                       1
+##  7 I Knew I Loved You                        4
+##  8 Incomplete                                2
+##  9 Independent Women Part I                 11
+## 10 It's Gonna Be Me                          2
+## 11 Maria, Maria                             10
+## 12 Music                                     4
+## 13 Say My Name                               3
+## 14 Thank God I Found You                     1
+## 15 Try Again                                 1
+## 16 What A Girl Wants                         2
+## 17 With Arms Wide Open                       1
+```
+
+Then you can scan down the `n` column, find that the
+biggest number is 11, and say: it's the song ``Independent Women Part
+I'' by Destiny's Child. This is 3 points (out of 4, when the question
+was to be handed in).
+
+But, this is a data frame, so anything we can do to a data frame we
+can do to this, like listing out only the row(s) where `n` is
+equal to its maximum value:
+
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(artist.inverted,track,current) %>%
+count(track) %>%
+filter(n==max(n))
+```
+
+```
+## # A tibble: 1 x 2
+##   track                        n
+##   <chr>                    <int>
+## 1 Independent Women Part I    11
+```
+
+or arranging them in (most logically, descending) order by `n`
+to make it easier to pick out the top one:
+
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(artist.inverted,track,current) %>%
+count(track) %>%
+arrange(desc(n))
+```
+
+```
+## # A tibble: 17 x 2
+##    track                                     n
+##    <chr>                                 <int>
+##  1 Independent Women Part I                 11
+##  2 Maria, Maria                             10
+##  3 Come On Over Baby (All I Want Is You)     4
+##  4 I Knew I Loved You                        4
+##  5 Music                                     4
+##  6 Be With You                               3
+##  7 Doesn't Really Matter                     3
+##  8 Say My Name                               3
+##  9 Amazed                                    2
+## 10 Incomplete                                2
+## 11 It's Gonna Be Me                          2
+## 12 What A Girl Wants                         2
+## 13 Bent                                      1
+## 14 Everything You Want                       1
+## 15 Thank God I Found You                     1
+## 16 Try Again                                 1
+## 17 With Arms Wide Open                       1
+```
+
+Either of those will net you the 4th point.
+
+If you want to be a little bit more careful, you can make an
+artist-track combination as below. This would catch occasions where
+the same song by two different artists made it to \#1, or two
+different songs that happened to have the same title did. It's not
+very likely that the same artist would record two *different*
+songs with the same title, though it is possible that the same song by
+the same artist could appear in the Billboard chart on two different
+occasions.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As, for example, when Prince died.</span>
+
+I think I want to create an artist-song combo fairly early in my pipe,
+and then display *that* later, something like this. This means
+replacing `track` by my `combo` later in the pipe,
+wherever it appears:
+
+
+```r
+billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
+mutate(week_number=parse_number(week),
+rank_number=parse_number(rank)) %>%
+mutate(combo=paste(track,artist.inverted,sep=" by ")) %>%
+mutate(current=date.entered+(week_number-1)*7) %>%
+filter(rank==1) %>%
+arrange(current) %>%
+select(combo,current) %>%
+count(combo) %>%
+arrange(desc(n))
+```
+
+```
+## # A tibble: 17 x 2
+##    combo                                                            n
+##    <chr>                                                        <int>
+##  1 Independent Women Part I by Destiny's Child                     11
+##  2 Maria, Maria by Santana                                         10
+##  3 Come On Over Baby (All I Want Is You) by Aguilera, Christina     4
+##  4 I Knew I Loved You by Savage Garden                              4
+##  5 Music by Madonna                                                 4
+##  6 Be With You by Iglesias, Enrique                                 3
+##  7 Doesn't Really Matter by Janet                                   3
+##  8 Say My Name by Destiny's Child                                   3
+##  9 Amazed by Lonestar                                               2
+## 10 Incomplete by Sisqo                                              2
+## 11 It's Gonna Be Me by N'Sync                                       2
+## 12 What A Girl Wants by Aguilera, Christina                         2
+## 13 Bent by matchbox twenty                                          1
+## 14 Everything You Want by Vertical Horizon                          1
+## 15 Thank God I Found You by Carey, Mariah                           1
+## 16 Try Again by Aaliyah                                             1
+## 17 With Arms Wide Open by Creed                                     1
+```
+
+I don't think it makes any difference here, but it might in other
+years, or if you look over several years where you might get cover
+versions of the same song performed by different artists.
+
+Zero-point bonus: how many of these artists have you heard of? How
+many have your parents heard of? (I followed popular music quite
+closely much earlier than this, in the early 1980s in the UK. I
+remember both Madonna and U2 when they *first* became
+famous. U2's first single was called "Fire" and it just scraped into
+the UK top 40. Things changed after that.)
+
+ 
 
 
 

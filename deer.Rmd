@@ -71,22 +71,36 @@ are quite similar.
 Another way of looking at the data, especially with these small sample
 sizes, is a "dot plot": instead of making a boxplot for each month,
 we plot the actual points for each month as if we were making a
-scatterplot. I make one extra refinement, which I talk about below:
+scatterplot:
+
+```{r }
+ggplot(deer,aes(x=month,y=food))+geom_point()
+``` 
+
+Wait a minute. There were five deer in February and six in
+August. Where did they go?
+
+The problem is *overplotting*: more than one of the deer plotted
+in the same place on the plot, because the amounts of food eaten were
+only given to one decimal place and there were some duplicated values.
+One way to solve this is to randomly
+move the points around so that no two of them plot in the same
+place. This is called *jittering*, and is done like this:
 
 ```{r }
 ggplot(deer,aes(x=month,y=food))+geom_jitter(width=0,height=0.05)
 ``` 
 
-The obvious thing would have been to use `geom_point`, except
-that this would have plotted observations with identical `food`
-values on top of each other, so that you wouldn't see them.\endnote{There are
-actual identical values in the data, which you can check, but since
-the data values are only given to one decimal, it's a sensible thing
-to be worried about in any case.}  Using `geom_jitter` instead
-moves the points about a bit so that you can see them all. I wanted to
-keep them above the months they belong to, so I only allowed vertical
-jitter (you can check that you can see the right number of
-observations above each month). If you like, you can colour the
+Now you see all the deer, and you can see that two pairs of points in
+August and one pair of points in February are close enough on the
+jittered plot that they would have been the same to one decimal place.
+
+I wanted to
+keep the points above the months they belong to, so I only allowed vertical
+jitter (that's the `width` and `height` in the
+`geom_jitter`; the width is zero so there is no horizontal
+jittering). 
+If you like, you can colour the
 months; it's up to you whether you think that's making the plot easier
 to read, or is overkill (see my point on the facetted plots on the
 2017 midterm).
@@ -97,7 +111,10 @@ very many points. The value of 4.4 in August does look quite a bit
 lower than the rest, but the other months look believably normal given
 the small sample sizes. I don't know about equal spreads (November
 looks more spread out), but normality looks believable. Maybe this is
-the kind of situation in which Welch's ANOVA is a good idea.
+the kind of situation in which Welch's ANOVA is a good idea. (If you
+believe that the normality-with-unequal-spreads is a reasonable
+assumption to make, then the Welch ANOVA will be more powerful than
+the Mood's median test, and so should be preferred.)
  
 
 (c) Run a Mood's median test as in lecture (ie.\ not using

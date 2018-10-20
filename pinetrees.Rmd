@@ -1,0 +1,407 @@
+## Predicting volume of wood in pine trees
+
+
+
+ In forestry, the financial value of a tree
+is the volume of wood that it contains. This is difficult to estimate
+while the tree is still standing, but the diameter is easy to measure
+with a tape measure (to measure the circumference) and a calculation
+involving $\pi$, assuming that the cross-section of the tree is at
+least approximately circular.  The standard measurement is ``diameter
+at breast height'' (that is, at the height of a human breast or
+chest), defined as being 4.5 feet above the ground.
+
+Several pine trees had their diameter measured shortly before being
+cut down, and for each tree, the volume of wood was recorded. The data
+are in
+[http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt](http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt). The
+diameter is in inches and the volume is in cubic inches.  Is it
+possible to predict the volume of wood from the diameter?
+
+
+
+(a) Read the data into R and display the values (there are not
+very many).
+
+
+Solution
+
+
+Observe that the data values are separated by spaces, and therefore
+that `read_delim` will do it:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt"
+trees=read_delim(my_url," ")
+trees
+```    
+
+That looks like the data file.
+
+
+
+(b) Make a suitable plot.
+
+
+Solution
+
+
+No clues this time. You need to recognize that you have two
+quantitative variables, so that a scatterplot is called
+for. Also, the volume is the response, so that should go on the $y$-axis:
+```{r }
+ggplot(trees,aes(x=diameter,y=volume))+geom_point()
+```       
+
+You can put a smooth trend on it if you like, which would
+look like this:
+
+```{r }
+ggplot(trees,aes(x=diameter,y=volume))+
+geom_point()+geom_smooth()
+```       
+
+I'll take either of those for this part, though I think the smooth
+trend actually obscures the issue here (because there is not so much
+data). 
+
+ 
+
+(c) Describe what you learn from your plot about the
+relationship between diameter and volume, if anything.
+
+
+Solution
+
+
+The word "relationship" offers a clue that a scatterplot would
+have been a good idea, if you hadn't realized by now. 
+I am guided by "form, direction, strength" in looking at a scatterplot:
+
+
+* Form: it is an apparently linear relationship.
+
+* Direction: it is an upward trend: that is, a tree with a larger diameter also has a larger volume of wood. (This is not very surprising.)
+
+* Strength:  I'd call this a strong (or moderate-to-strong) relationship. (We'll see in a minute what the R-squared is.)
+
+You don't need to be as formal as this, but you *do* need
+to get at the idea that it is an upward trend, apparently
+linear, and at least fairly strong.
+`r tufte::margin_note("When this was graded, it was 3 marks, to clue you in that there are three things to say.")`
+
+
+
+(d) Fit a (linear) regression, predicting volume from diameter,
+and obtain the `summary`. How would you describe the R-squared?
+
+
+Solution
+
+
+My naming convention is (usually) to call the fitted model
+object by the name of the response variable and a number. (I
+have always used dots, but in the spirit of the
+`tidyverse` I suppose I should use underscores.)
+```{r }
+volume.1=lm(volume~diameter,data=trees)
+summary(volume.1)
+```       
+
+R-squared is nearly 96\%, so the relationship is definitely a strong one.
+
+I also wanted to mention the `broom` package, which was
+installed with the `tidyverse` but which you need to load
+separately. It provides two handy ways to summarize a fitted model
+(regression, analysis of variance or whatever):
+
+```{r }
+library(broom)
+glance(volume.1)
+``` 
+
+This gives a one-line summary of a model, including things like
+R-squared. This is handy if you're fitting more than one model,
+because you can collect the one-line summaries together into a data
+frame and eyeball them.
+
+The other summary is this one:
+
+```{r }
+tidy(volume.1)
+``` 
+
+This gives a table of intercepts, slopes and their P-values, but the
+value to this one is that it is a *data frame*, so if you want to
+pull anything out of it, you know how to do that:\endnote{The
+`summary` output is more designed for looking at than for
+extracting things from.}
+```{r }
+tidy(volume.1) %>% filter(term=="diameter")
+``` 
+
+This gets the estimated slope and its P-value, without worrying about
+the corresponding things for the intercept, which are usually of less
+interest anyway.
+
+
+
+(e) Draw a graph that will help you decide whether you trust
+the linearity of this regression. What do you conclude? Explain briefly.
+
+
+Solution
+
+
+The thing I'm fishing for is a residual plot (of the residuals
+against the fitted values), and on it you are looking for a
+random mess of nothingness:
+```{r }
+ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
+```       
+
+Make a call. You could say that there's no discernible pattern,
+especially with such a small data set, and
+therefore that the regression is fine. Or you could say that there is
+fanning-in: the two points on the right have residuals close to 0
+while the points on the left have residuals larger in size. Say
+something. 
+
+I don't think you can justify a curve or a trend, because
+the residuals on the left are both positive and negative.
+
+My feeling is that the residuals on the right are close to 0 because
+these points have noticeably larger diameter than the others, and they
+are *influential* points in the regression that will pull the
+line closer to themselves. This is why their residuals are close to
+zero. But I am happy with either of the points made in the paragraph
+under the plot.
+
+
+
+(f) What would you guess would be the volume of a tree of
+diameter zero? Is that what the regression predicts? Explain briefly.
+
+
+Solution
+
+
+Logically, a tree that has diameter zero is a non-existent tree,
+so its volume should be zero as well. 
+In the regression, the quantity that says what volume is when
+diameter is zero is the *intercept*. Here the intercept is
+$-192$, which is definitely not zero. In fact, if you look at
+the P-value, the intercept is significantly *less* than
+zero. Thus, the model makes no logical sense for trees of small
+diameter. The smallest tree in the data set has diameter 18,
+which is not really small, I suppose, but it is a little
+disconcerting to have a model that makes no logical sense.
+
+ 
+
+(g) A simple way of modelling a tree's shape is to pretend it is a
+cone, like this, but probably taller and skinnier:
+
+
+![](/home/ken/Pictures/conebnw.jpg.png)
+        
+
+with its base on the ground. What is the relationship between the
+*diameter* (at the base) and volume of a cone? (If you don't
+remember, look it up. You'll probably get a formula in terms of the
+radius, which you'll have to convert.
+Cite the website you used.)
+
+
+Solution
+
+
+According to
+[http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx](http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx),
+the volume of a cone is $V=\pi r^2h/3$, where $V$ is the volume,
+$r$ is the radius (at the bottom of the cone) and $h$ is the
+height. The diameter is twice the radius, so replace $r$ by
+$d/2$, $d$ being the diameter. A little algebra gives 
+$$ V = \pi d^2 h / 12.$$
+
+ 
+
+(h) Fit a regression model that predicts volume from diameter
+according to the formula you obtained in the previous part. You can
+assume that the trees in this data set are of similar heights, so
+that the height can be treated as a constant.  
+Display the
+results.
+
+
+Solution
+
+
+According to my formula, the volume depends on the diameter
+squared, which I include in the model thus:
+```{r }
+volume.2=lm(volume~I(diameter^2),data=trees)
+summary(volume.2)
+```       
+
+This adds an intercept as well, which is fine (there are technical
+difficulties around removing the intercept).
+
+That's as far as I wanted you to go, but (of course) I have a few
+comments.
+
+The intercept here is still negative, but not significantly different
+from zero, which is a step forward. The R-squared for this regression
+is very similar to that from our linear model (the one for which the
+intercept made no sense). So, from that point of view, either model
+predicts the data well. I should look at the residuals from this one:
+
+```{r }
+ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
+``` 
+
+I really don't think there are any problems there.
+
+Now, I said to assume that the trees are all of similar height. This
+seems entirely questionable, since the trees vary quite a bit in
+diameter, and you would guess that trees with bigger diameter would
+also be taller. It seems more plausible that the same kind of trees
+(pine trees in this case) would have the same "shape", so that if
+you knew the diameter you could *predict* the height, with
+larger-diameter trees being taller. Except that we don't have the
+heights here, so we can't build a model for that.
+
+So I went looking in the literature. I found this paper:
+[https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf](https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf). This
+gives several models for relationships between volume, diameter and height. In
+the formulas below, there is an implied "plus error" on the right,
+and the $\alpha_i$ are parameters to be estimated.
+
+For predicting height from diameter (equation 1 in paper):
+
+$$  h = \exp(\alpha_1+\alpha_2 d^{\alpha_3}) $$
+
+For predicting volume from height and diameter (equation 6):
+
+$$  V = \alpha_1 d^{\alpha_2} h^{\alpha_3} $$
+
+This is a take-off on our assumption that the trees were cone-shaped,
+with cone-shaped trees having $\alpha_1=\pi/12$, $\alpha_2=2$ and
+$\alpha_3=1$. The paper uses different units, so $\alpha_1$ is not
+comparable, but $\alpha_2$ and $\alpha_3$ are (as estimated from the
+data in the paper, which were for longleaf pine) quite close to 2 and
+1.
+
+Last, the actual relationship that helps us: predicting volume from
+just diameter (equation 5):
+
+$$  V = \alpha_1 d^{\alpha_2}$$
+
+This is a power law type of relationship. For example, if you were
+willing to pretend that a tree was a cone with height proportional to
+diameter (one way of getting at the idea of a bigger tree typically
+being taller, instead of assuming constant height as we did), that
+would imply $\alpha_2=3$ here.
+
+This is non-linear as it stands, but we can bash it into shape by taking
+logs:
+
+\begin{equation}
+\ln V = \ln(\alpha_1)+ \alpha_2 \ln d
+\end{equation}
+
+so that log-volume has a linear relationship with log-diameter and we
+can go ahead and estimate it:
+
+```{r }
+volume.3=lm(log(volume)~log(diameter),data=trees)
+summary(volume.3)
+``` 
+
+The parameter that I called $\alpha_2$ above is the slope of this
+model, 3.13. This is a bit different from the figure in the paper,
+which was 2.19. I think these are comparable even though the other
+parameter is not (again, measurements in different units, plus, this
+time we need to take the log of it). I think the "slopes" are
+comparable because we haven't estimated our slope all that accurately:
+
+```{r }
+confint(volume.3)
+``` 
+
+From 2.3 to 3.9. It is definitely not zero, but we are rather less
+sure about what it is, and 2.19 is not implausible.
+
+The R-squared here, though it is less than the other ones we
+got, is still high. The residuals are these:
+
+```{r }
+ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
+``` 
+
+which again seem to show no problems. The residuals are smaller in
+size now because of the log transformation: the actual and predicted
+log-volumes are smaller numbers than the actual and predicted volumes,
+so the residuals are now closer to zero.
+
+Does this model behave itself at zero? Well, roughly at least: if the
+diameter is very small, its log is very negative, and the predicted
+log-volume is also very negative (the slope is positive). So the
+predicted actual volume will be close to zero. (If you want to make
+that mathematically rigorous, you can take limits, but that's the
+intuition.) 
+
+I mentioned `broom` earlier. We can make a data frame out of
+the one-line summaries of our three models:
+
+```{r }
+bind_rows(glance(volume.1),glance(volume.2),glance(volume.3))
+``` 
+
+(I mistakenly put `glimpse` instead of `glance` there
+the first time. The former is for a quick look at a *data frame*,
+while the latter is for a quick look at a *model*.)
+
+The three R-squareds are all high, with the one from the third model
+being a bit lower as we saw before. 
+
+My code is rather repetitious. There has to be a way to streamline
+it. I was determined to find out how. My solution involves putting the
+three models in a `list`, and then using `map` to
+get the `glance` output for each one, and `bind_rows`
+to glue the results together into one data frame. I was inspired to
+try this by remembering that `map_df` will work for a function
+like `glance` that outputs a data frame:
+
+```{r }
+model_list=list(volume.1,volume.2,volume.3)
+map_df(model_list,~glance(.)) 
+``` 
+
+It works. You see the three R-squared values in the first column. The
+third model is otherwise a lot different from the others because it
+has a different response variable.
+
+Other thoughts:
+
+How might you measure or estimate the height of a
+tree (other than by climbing it and dropping a tape measure down)? One
+way, that works if the tree is fairly isolated, is to walk away from
+its base. Periodically, you point at the top of the tree, and when the
+angle between your arm and the ground reaches 45 degrees, you stop
+walking. (If it's greater than 45 degrees, you walk further away, and
+if it's less, you walk back towards the tree.) The distance between
+you and the base of the tree is then equal to the height of the tree,
+and if you have a long enough tape measure you can measure it.
+
+The above works because the tangent of 45 degrees is 1. If you have a
+device that will measure the actual angle,\endnote{These days, there
+are apps that will let you do this with your phone. I found one
+called Clinometer. See also [https://gabrielhemery.com/2011/05/15/how-to-calculate-tree-height-using-a-smartphone}.](https://gabrielhemery.com/2011/05/15/how-to-calculate-tree-height-using-a-smartphone}.) you
+can be any distance away from the tree, point the device at the top,
+record the angle, and do some trigonometry to estimate the height of
+the tree (to which you add the height of your eyes).
+
+
+ 
+
+

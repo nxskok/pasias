@@ -1,0 +1,327 @@
+## Endogenous nitrogen excretion in carp
+
+
+
+ A paper in Fisheries Science reported on variables that
+affect "endogenous nitrogen excretion" or ENE in carp raised in
+Japan. A number of carp were divided into groups based on body weight,
+and each group was placed in a different tank. The mean body weight of
+the carp placed in each tank was recorded. The carp were then fed a
+protein-free diet three times daily for a period of 20 days. At the
+end of the experiment, the amount of ENE in each tank was measured, in
+milligrams of total fish body weight per day. (Thus it should not
+matter that some of the tanks had more fish than others, because the
+scaling is done properly.)
+
+For this question, write a report in R Markdown that answers the
+questions below and contains some narrative that describes your
+analysis. Create an HTML document from your R Markdown.
+
+
+
+(a) Read the data in from
+[http://www.utsc.utoronto.ca/~butler/c32/carp.txt](http://www.utsc.utoronto.ca/~butler/c32/carp.txt). There are 10
+tanks. 
+
+
+Solution
+
+
+Just this. Listing the data is up to you, but doing so and
+commenting that the values appear to be correct will improve your report.
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/carp.txt"
+carp=read_delim(my_url," ")  
+carp
+``` 
+
+
+
+(b) Create a scatterplot of ENE (response) against bodyweight
+(explanatory). Add a smooth trend to your plot.
+
+
+Solution
+
+
+```{r }
+ggplot(carp,aes(x=bodyweight,y=ENE))+geom_point()+
+geom_smooth()
+``` 
+
+This part is just about getting the plot. Comments are coming in a
+minute. Note that `ENE` is capital letters, so that
+`ene` will not work.
+
+
+
+(c) Is there an upward or downward trend (or neither)? Is the
+relationship a line or a curve? Explain briefly.
+
+
+Solution
+
+
+The trend is downward: as bodyweight increases, ENE
+decreases. However, the decrease is rapid at first and then levels
+off, so the relationship is nonlinear. I want some kind of
+support for an assertion of non-linearity: anything that says that
+the slope or rate of decrease is not constant is good.
+
+
+
+(d) Fit a straight line to the data, and obtain the R-squared
+for the regression.
+
+
+Solution
+
+
+`lm`. The first stage is to fit the straight line, saving
+the result in a  variable, and the second stage is to look at the
+"fitted model object", here via `summary`:
+```{r }
+carp.1=lm(ENE~bodyweight,data=carp)
+summary(carp.1)
+``` 
+Finally, you need to give me a (suitably rounded) value for
+R-squared: 46.6\% or 47\% or the equivalents as a decimal. I just
+need the value at this point.
+This kind of R-squared is actually pretty good for natural data, but
+the issue is whether we can improve it by fitting a non-linear
+model.\endnote{The suspicion being that we can, since the
+scatterplot suggested serious non-linearity.}
+
+
+
+(e) Obtain a residual plot (residuals against fitted values)
+for this regression. Do you see any problems? If so, what does that
+tell you about the relationship in the data?
+
+
+Solution
+
+
+
+This is the easiest way: feed the output of the regression
+straight into `ggplot`:
+
+```{r }
+ggplot(carp.1,aes(x=.fitted,y=.resid))+geom_point()
+``` 
+
+
+
+(f) Fit a parabola to the data (that is, including an
+$x$-squared term). Compare the R-squared values for the models in
+this part and part (????). Does that suggest that the parabola
+model is an improvement here over the linear model?
+
+
+Solution
+
+
+Add bodyweight-squared to
+the regression. Don't forget the `I()`:
+```{r }
+carp.2=lm(ENE~bodyweight+I(bodyweight^2),data=carp)
+summary(carp.2)
+``` 
+
+R-squared has gone up from 47\% to 74\%, a substantial
+improvement. This suggests to me that the parabola model is a
+substantial improvement.\endnote{Again, not a surprise, given our initial
+scatterplot.} 
+
+I try to avoid using the word "significant" in this context, since
+we haven't actually done a test of significance.
+
+The reason for the `I()` is that the up-arrow has a special
+meaning in `lm`, relating to interactions between factors (as
+in ANOVA), that we don't want here. Putting `I()` around it
+means "use as is", that is, raise bodyweight to power 2, rather than
+using the special meaning of the up-arrow in `lm`.
+
+Because it's the up-arrow that is the problem, this applies whenever
+you're raising an explanatory variable to a power (or taking a
+reciprocal or a square root, say).
+
+
+
+(g) Is the test for the slope coefficient for the squared term
+significant? What does this mean?
+
+
+Solution
+
+
+Look along the `bodyweight`-squared line to get a P-value
+of 0.031. This is less than the default 0.05, so it *is*
+significant.
+This means, in short, that the quadratic model is a significant
+*improvement* over the linear one.\endnote{Now we can use that word
+"significant".} 
+Said longer: the null hypothesis being tested is that the slope
+coefficient of the squared term is zero (that is, that the squared
+term has nothing to add over the linear model). This is rejected,
+so the squared term has *something* to add in terms of
+quality of prediction.
+
+
+
+(h) Make the scatterplot of part (????), but add
+the fitted curve. Describe any way in which the curve fails to fit well.
+
+
+Solution
+
+
+This is a bit slippery, because the points to plot and the
+fitted curve are from different data frames. What you do in this
+case is to put a `data=` in one of the `geom`s,
+which says ``don't use the data frame that was in the
+`ggplot`, but use this one instead''. I would think about
+starting with the regression object `carp.2` as my base
+data frame, since we want (or I want) to do two things with
+that: plot the fitted values and join them with lines. Then I
+want to add the original data, just the points:
+```{r }
+ggplot(carp.2,aes(x=carp$bodyweight,y=.fitted),colour="blue")+
+geom_line(colour="blue")+
+geom_point(data=carp,aes(x=bodyweight,y=ENE))
+```       
+$ %$ %$
+
+This works, but is not very aesthetic, because the bodyweight that is
+plotted against the fitted values is in the wrong data frame, and so
+we have to use the dollar-sign thing to get it from the right one.
+
+A better way around this is "fortify" the regression object. What
+that means, in the context of `ggplot`, is to add the original
+data back onto the regression object, so that we can plot any
+combination of original data and values derived from the
+regression. That goes like this:
+
+```{r }
+carp.2.fort=fortify(carp.2)
+carp.2.fort
+``` 
+
+so now you see what `carp.2.fort` has in it, and then:
+
+```{r }
+g=ggplot(carp.2.fort,aes(x=bodyweight,y=.fitted))+
+geom_line(colour="blue")+
+geom_point(aes(y=ENE))
+``` 
+
+This is easier coding: there are only two non-standard things. The
+first is that the fitted-value lines should be a distinct colour like
+blue so that you can tell them from the data points. The second thing
+is that for the second `geom_point`, the one that plots the data,
+the $x$ coordinate `bodyweight` is correct so that we don't
+have to change that; we only have to change the $y$-coordinate, which
+is `ENE`. The plot is this:
+
+```{r }
+g
+``` 
+
+Concerning interpretation, you have a number of possibilities
+here. The simplest is that the points in the middle are above the
+curve, and the points at the ends are below. (That is, negative
+residuals at the ends, and positive ones in the middle, which gives
+you a hint for the next part.) Another is that the parabola curve
+fails to capture the *shape* of the relationship; for example, I
+see nothing much in the data suggesting that the relationship should go
+back up, and even given that, the fitted curve doesn't go especially
+near any of the points.
+
+I was thinking that the data should be fit better by something like
+the left half of an upward-opening parabola, but I guess the curvature
+on the left half of the plot suggests that it needs most of the left
+half of the parabola just to cover the left half of the plot.
+
+The moral of the story, as we see in the next part, is that the
+parabola is the wrong curve for the job.
+
+
+
+(i) Obtain a residual plot for the parabola model. Do you see
+any problems with it? (If you do, I'm not asking you to do anything
+about them in this question, but I will.)
+
+
+Solution
+
+
+The same idea as before for the other residual plot.  Use the
+fitted model object `carp.2` as your data frame for the
+`ggplot`:
+```{r }
+ggplot(carp.2,aes(x=.fitted,y=.resid))+geom_point()
+``` 
+
+I think this is *still* a curve (or, it goes down and then
+sharply up at the end). Either way, there is still a pattern. 
+
+That was all I needed, but as to what this means: our parabola was a
+curve all right, but it appears not to be the right *kind* of
+curve. I think the original data looks more like a hyperbola (a curve
+like $y=1/x$) than a parabola, in that it seems to decrease fast and
+then gradually to a limit, and *that* suggests, as in the class
+example, that we should try an asymptote model. Note how I specify it,
+with the `I()` thing again, since a reciprocal is power $-1$:
+
+```{r }
+carp.3=lm(ENE~I(bodyweight^(-1)),data=carp)
+summary(carp.3)
+``` 
+
+That fits *extraordinarily* well, with an R-squared up near
+98\%. The intercept is the asymptote, which suggests a (lower) limit
+of about 5.2 for `ENE` (in the limit for large bodyweight). We
+would have to ask the fisheries scientist whether this kind of thing
+is a reasonable biological mechanism. It says that a carp always has
+some ENE, no matter how big it gets, but a smaller carp will have a
+lot more.
+
+Does the fitted value plot look reasonable now? The "fortify" thing
+doesn't quite work here, since `bodyweight` doesn't itself get
+added to the fortified data set (it is not part of the model), so it
+looks as if we are working with two data frames. I cheated and pulled
+the things I wanted out of `carp` without doing a
+`data=`:
+
+```{r }
+ggplot(carp.3,aes(x=carp$bodyweight,y=.fitted))+
+geom_line(colour="blue")+
+geom_point(aes(y=carp$ENE))
+``` 
+
+I'd say that does a really nice job of fitting the data. But it would
+be nice to have a few more tanks with large-bodyweight fish, to
+convince us that we have the shape of the trend right.
+
+And, as ever, the residual plot. That's a lot easier than the plot we
+just did:
+
+```{r }
+ggplot(carp.3,aes(x=.fitted,y=.resid))+geom_point()
+``` 
+
+All in all, that looks pretty good (and certainly a vast improvement
+over the ones you got before).
+
+When you write up your report, you can make it flow better by writing
+it in a way that suggests that each thing was the obvious thing to do
+next: that is, that *you* would have thought to do it next,
+rather than me telling you what to do.
+
+My report (as an R Markdown file) is at
+[http://www.utsc.utoronto.ca/~butler/c32/carp.Rmd](http://www.utsc.utoronto.ca/~butler/c32/carp.Rmd). Download it,
+knit it, play with it.
+
+
+
+

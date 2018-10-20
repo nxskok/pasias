@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2018-10-09" />
+
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="header">
+<h1 class="title">Problems and Solutions in Applied Statistics</h1>
+<h4 class="author"><em>Ken Butler</em></h4>
+<h4 class="date"><em>2018-10-09</em></h4>
+</div>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<p>This book will hold a collection of problems, and my solutions to them, in applied statistics with R. These come from my courses STAC32 and STAD29 at the University of Toronto Scarborough.</p>
+<p>The problems were originally written in Sweave (that is, LaTeX with R code chunks), using the <code>exam</code> document class. I wrote <a href="https://raw.githubusercontent.com/nxskok/pasias/master/convert.pl">a Perl program</a> to strip out the LaTeX and turn each problem into R Markdown for this book. You will undoubtedly see bits of LaTeX still embedded in the text. I am trying to update my program to catch them, but I am sure to miss some. If you see anything, <a href="https://github.com/nxskok/pasias/issues">file an issue</a> on the Github page for now. I want to fix problems programmatically at first, but when the majority of the problems have been caught, I will certainly take pull requests. I will acknowledge all the people who catch things.</p>
+<p>It looks as if everything compiles, but how does it look?</p>
+<p>The next thing to nail down is converting LaTeX cross-references to R Markdown ones. Some reading required first. (I refer to other parts in the questions from time to time, and I want to do that properly in case I add new parts.) I am stuck as to how to do that. I can translate a <code>\label</code> into HTML as <code>&lt;a name=&quot;thing&quot;&gt;&lt;/a&gt;</code>, and I can refer to it with <code>[my_thing](#thing)</code>, and it works, but <code>\ref{part:this}</code> is trickier, because I need not just the <code>part:this</code> (which gains a <code>#</code> on the front and goes in the <code>()</code> brackets), but I need something like <code>(c)</code> to go into the <code>my_thing</code> slot, and I don’t know how to get that programmatically, since that seems internal to LaTeX.</p>
+<p>I don’t think <code>pandoc</code> can help me here, because I can’t even get it to convert the output of Sweave (a <code>.tex</code> file) into Markdown.</p>
+<p>I have an extremely hacky “solution” to this for now: replace any <code>\ref{}</code> I find with <code>????</code> in the R Markdown, so that when I see it, I can hand-convert it. Ugh.</p>
+<p>&lt;= a7 done. There don’t seem to be many ordinary regressions yet (most of them are tied up into writing reports).</p>
+</div>
+<p style="text-align: center;">
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

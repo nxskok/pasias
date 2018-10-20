@@ -6,7 +6,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -394,25 +394,42 @@ are quite similar.
 Another way of looking at the data, especially with these small sample
 sizes, is a "dot plot": instead of making a boxplot for each month,
 we plot the actual points for each month as if we were making a
-scatterplot. I make one extra refinement, which I talk about below:
+scatterplot:
+
+
+```r
+ggplot(deer,aes(x=month,y=food))+geom_point()
+```
+
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+
+Wait a minute. There were five deer in February and six in
+August. Where did they go?
+
+The problem is *overplotting*: more than one of the deer plotted
+in the same place on the plot, because the amounts of food eaten were
+only given to one decimal place and there were some duplicated values.
+One way to solve this is to randomly
+move the points around so that no two of them plot in the same
+place. This is called *jittering*, and is done like this:
 
 
 ```r
 ggplot(deer,aes(x=month,y=food))+geom_jitter(width=0,height=0.05)
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
-The obvious thing would have been to use `geom_point`, except
-that this would have plotted observations with identical `food`
-values on top of each other, so that you wouldn't see them.\endnote{There are
-actual identical values in the data, which you can check, but since
-the data values are only given to one decimal, it's a sensible thing
-to be worried about in any case.}  Using `geom_jitter` instead
-moves the points about a bit so that you can see them all. I wanted to
-keep them above the months they belong to, so I only allowed vertical
-jitter (you can check that you can see the right number of
-observations above each month). If you like, you can colour the
+Now you see all the deer, and you can see that two pairs of points in
+August and one pair of points in February are close enough on the
+jittered plot that they would have been the same to one decimal place.
+
+I wanted to
+keep the points above the months they belong to, so I only allowed vertical
+jitter (that's the `width` and `height` in the
+`geom_jitter`; the width is zero so there is no horizontal
+jittering). 
+If you like, you can colour the
 months; it's up to you whether you think that's making the plot easier
 to read, or is overkill (see my point on the facetted plots on the
 2017 midterm).
@@ -423,7 +440,10 @@ very many points. The value of 4.4 in August does look quite a bit
 lower than the rest, but the other months look believably normal given
 the small sample sizes. I don't know about equal spreads (November
 looks more spread out), but normality looks believable. Maybe this is
-the kind of situation in which Welch's ANOVA is a good idea.
+the kind of situation in which Welch's ANOVA is a good idea. (If you
+believe that the normality-with-unequal-spreads is a reasonable
+assumption to make, then the Welch ANOVA will be more powerful than
+the Mood's median test, and so should be preferred.)
  
 
 (c) Run a Mood's median test as in lecture (ie.\ not using
@@ -770,10 +790,11 @@ differences among the months than the pairwise median tests did.
 
 
 
-##  Movie ratings again
+## Movie ratings again
 
 
-\label{q:movies-b} This question again uses the movie rating data at
+
+ This question again uses the movie rating data at
 [http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
 
 
@@ -860,7 +881,7 @@ The graph would seem to be a boxplot, side by side for each group:
 ggplot(movies,aes(x=rating, y=length))+geom_boxplot()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
 We are looking for approximate normal distributions with approximately
 equal spreads, which I don't think we have: there are outliers, at the
@@ -894,7 +915,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~rating)
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
 Since there are four movie ratings, `facet_wrap` has arranged
 them into a $2\times 2$ grid, which satisfyingly means that each
@@ -1554,10 +1575,11 @@ I think that's *quite* enough of that.
 
 
 
-##  Atomic weight of carbon
+## Atomic weight of carbon
 
 
-\label{q:carbon} The atomic weight of the chemical element
+
+ The atomic weight of the chemical element
 carbon is 12. Two methods of measuring the atomic weight of samples of
 carbon were compared. The results are shown in
 [http://www.utsc.utoronto.ca/~butler/c32/carbon.txt](http://www.utsc.utoronto.ca/~butler/c32/carbon.txt). The methods
@@ -1712,7 +1734,7 @@ at least, is to turn it into a factor like this:
 ggplot(carbon,aes(x=factor(method),y=weight))+geom_boxplot()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
 
 If you insist, you could do a faceted histogram (above and below, for preference):
 
@@ -1721,7 +1743,7 @@ ggplot(carbon,aes(x=weight))+geom_histogram(bins=5)+
 facet_wrap(~method,ncol=1)
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
 There are really not enough data values for a histogram to be of much
 help, so I don't like this as much. 
@@ -1739,7 +1761,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~method)
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
 I don't mind these coming out side by side, though I would rather have
 them squarer.
