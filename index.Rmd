@@ -29,4 +29,4 @@ I have an extremely hacky "solution" to this for now: replace any `\ref{}` I fin
 
 <= a7 done. There don't seem to be many ordinary regressions yet (most of them are tied up into writing reports).
 
-Sparrowhawks question may still need some attention.
+Sparrowhawks question may still need some attention. Idea: use screenshots of the R Markdown of the report.
