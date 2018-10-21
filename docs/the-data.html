@@ -186,10 +186,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="has-sub"><a href="the-data.html#the-data"><span class="toc-section-number">14</span> The data</a><ul>
 <li><a href="the-data.html#exploratory-analysis"><span class="toc-section-number">14.0.1</span> Exploratory analysis</a></li>
-<li><a href="the-data.html#regression-analysis"><span class="toc-section-number">14.0.2</span> Regression analysis</a></li>
-<li><a href="the-data.html#conclusions"><span class="toc-section-number">14.0.3</span> Conclusions</a></li>
-<li><a href="the-data.html#salaries-of-social-workers"><span class="toc-section-number">14.1</span> Salaries of social workers</a></li>
-<li><a href="the-data.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">14.2</span> Predicting volume of wood in pine trees</a></li>
+<li class="has-sub"><a href="the-data.html#regression-analysis"><span class="toc-section-number">14.1</span> Regression analysis</a><ul>
+<li><a href="the-data.html#conclusions"><span class="toc-section-number">14.1.1</span> Conclusions</a></li>
+</ul></li>
+<li><a href="the-data.html#salaries-of-social-workers"><span class="toc-section-number">14.2</span> Salaries of social workers</a></li>
+<li><a href="the-data.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">14.3</span> Predicting volume of wood in pine trees</a></li>
 </ul></li>
 </ul>
 </div>
@@ -248,8 +249,10 @@ which I mention here in case you are interested (if you are not,
 feel free to skip this). What you do is to make what is called an
 &quot;inline code chunk&quot;. Where you want a number to appear in the
 text, you have some R Markdown that looks like this:
+
+![](sh4.png)
+
 </code></pre>
-<p>There are 13 rows altogether.</p>
 <p>```</p>
 <p>The piece inside the backticks is the letter <code>r</code>, a space,
 and then one line of R code. The one line of code will be run, and
@@ -277,6 +280,7 @@ suitable text to your report.</li>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="12-regression_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 The piece of report that I added looks like this:</p>
+<p><img src="sh5.png" /></p>
 <p>```</p>
 <div id="exploratory-analysis" class="section level3">
 <h3><span class="header-section-number">14.0.1</span> Exploratory analysis</h3>
@@ -315,6 +319,7 @@ column and each other column. Obviously the correlation between a
 column and itself is 1, and that is <em>not</em> the one we want.</p>
 <p>I added this to the report (still in the Exploratory Analysis
 section, since it seems to belong there):</p>
+<p><img src="sh6.png" /></p>
 <p>```</p>
 <p>What is the correlation between these two variables?</p>
 <div class="sourceCode" id="cb958"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb958-1" data-line-number="1"><span class="kw">with</span>(sparrowhawks,<span class="kw">cor</span>(newadults,returning))</a></code></pre></div>
@@ -357,10 +362,11 @@ the slope significant? What does that mean, in the context of the data?</li>
 <p>Solution</p>
 <p>See the output in the previous part. That’s what we need to talk about.
 I added this to the report. I thought we deserved a new section here:</p>
+<p><img src="sh7.png" /></p>
 <p>```</p>
 </div>
-<div id="regression-analysis" class="section level3">
-<h3><span class="header-section-number">14.0.2</span> Regression analysis</h3>
+<div id="regression-analysis" class="section level2">
+<h2><span class="header-section-number">14.1</span> Regression analysis</h2>
 <p>The regression for predicting the number of new adults from the
 percentage of returning adults is as shown:</p>
 <div class="sourceCode" id="cb962"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb962-1" data-line-number="1">newadults<span class="fl">.1</span>=<span class="kw">lm</span>(newadults<span class="op">~</span>returning,<span class="dt">data=</span>sparrowhawks)</a>
@@ -414,14 +420,14 @@ discussion of this issue.</li>
 </ol>
 <p>Solution</p>
 <p>My addition to the report looks like this:</p>
+<p><img src="sh6.png" /></p>
 <p>```</p>
 <p>A plot of the data with the regression line superimposed is as shown:</p>
 <div class="sourceCode" id="cb965"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb965-1" data-line-number="1"><span class="kw">ggplot</span>(sparrowhawks,<span class="kw">aes</span>(<span class="dt">x=</span>returning,<span class="dt">y=</span>newadults))<span class="op">+</span></a>
 <a class="sourceLine" id="cb965-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
 <p><img src="12-regression_files/figure-html/unnamed-chunk-34-1.png" width="672"  /></p>
-</div>
 <div id="conclusions" class="section level3">
-<h3><span class="header-section-number">14.0.3</span> Conclusions</h3>
+<h3><span class="header-section-number">14.1.1</span> Conclusions</h3>
 <p>The association is negative, as seen from the scatterplot and
 correlation, and also from the negative slope of the regression
 line. This suggests that sparrowhawks are long-lived territorial
@@ -431,8 +437,9 @@ discourage new adults from joining the colony.</p>
 <p>```</p>
 <p>I think that rounds off the report nicely.</p>
 </div>
+</div>
 <div id="salaries-of-social-workers" class="section level2">
-<h2><span class="header-section-number">14.1</span> Salaries of social workers</h2>
+<h2><span class="header-section-number">14.2</span> Salaries of social workers</h2>
 <p>Another salary-prediction question: does the number of years
 of work experience that a social worker has help to predict their
 salary? Data for 50 social workers are in
@@ -789,7 +796,7 @@ multiply actual salary by</p>
 <p>or to increase salary by about 5%.</p>
 </div>
 <div id="predicting-volume-of-wood-in-pine-trees" class="section level2">
-<h2><span class="header-section-number">14.2</span> Predicting volume of wood in pine trees</h2>
+<h2><span class="header-section-number">14.3</span> Predicting volume of wood in pine trees</h2>
 <p>In forestry, the financial value of a tree
 is the volume of wood that it contains. This is difficult to estimate
 while the tree is still standing, but the diameter is easy to measure
@@ -856,13 +863,18 @@ data).</p>
 relationship between diameter and volume, if anything.</li>
 </ol>
 <p>Solution</p>
-The word “relationship” offers a clue that a scatterplot would
+<p>The word “relationship” offers a clue that a scatterplot would
 have been a good idea, if you hadn’t realized by now.
-I am guided by “form, direction, strength” in looking at a scatterplot:
-
+I am guided by “form, direction, strength” in looking at a scatterplot:</p>
+<ul>
+<li><p>Form: it is an apparently linear relationship.</p></li>
+<li><p>Direction: it is an upward trend: that is, a tree with a larger diameter also has a larger volume of wood. (This is not very surprising.)</p></li>
+<li><p>Strength: I’d call this a strong (or moderate-to-strong) relationship. (We’ll see in a minute what the R-squared is.)</p></li>
+</ul>
 <p>You don’t need to be as formal as this, but you <em>do</em> need
 to get at the idea that it is an upward trend, apparently
-linear, and at least fairly strong.</p>
+linear, and at least fairly strong.
+<label for="tufte-mn-38" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-38" class="margin-toggle"><span class="marginnote">When this was graded, it was 3 marks, to clue you in that there are three things to say.</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Fit a (linear) regression, predicting volume from diameter,
 and obtain the <code>summary</code>. How would you describe the R-squared?</li>

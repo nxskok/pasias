@@ -23,56 +23,35 @@ Solution
 
 In R Studio, select File, New File, R Markdown. Fill in the Title,
 Author and leave the Default Output Format at HTML. You'll see a
-template report with the document info at the top. This is mine:
+template report with the document info at the top. This is my document info:
 
-```
-
----
-title: "Sparrowhawks"
-author: "Ken Butler"
-date: "October 13, 2015"
-output: html_document
----
-
-```
-
+![](sh0.png)
+ 
 This is known in the jargon as a "YAML block".\endnote{YAML
 stands for "yet another markup language", but we're not using
 it in this course, other than as the top bit of an R Markdown document.}
-Below that is the template R Markdown document. You can copy and cut it,
-or leave it lying around for reminders and delete it later. Up to you.
+Below that is the template R Markdown document, which you can delete now or later.
 
 
 
-(b) Read in the data and display all the values (there are only 13
-rows, so this is OK). Add some text saying how many rows of data
+(b) Read in the data and display the  first few values.  Add some text saying how many rows of data
 there are.
 
 
 Solution
 
 
-Copy the data as usual to a file that R Studio can find. In your
+Read the data into a data frame. In your
 report, add some text like "we read in the data", perhaps
-after a section heading like "The data". Then add a \emph{code
-chunk} by selecting Chunks and Insert Chunk, or by pressing
-control-alt-I. So far you have something like this. (I'm using level-3 headings, for annoying technical reasons, but you should probably use second-level headings.)
+after a section heading like "The data". Then add a *code chunk* 
+by selecting Chunks and Insert Chunk, or by pressing
+control-alt-I. So far you have something like this. 
 
-```
-
-### The data
-
-We begin by reading in the data.
-
-```{r}
-
-```
-
-```
+![](sh1.png)
 
 Inside the code chunk, that is, in the bit between the
 backtick characters, put R code, just as you would type it at
-the Console or put in an  R script. In this case, that would be
+the Console or put in an  R notebook. In this case, that would be
 the following code, minus the message that comes out of
 `read_delim`: 
 ```{r results="hide"}
@@ -84,22 +63,8 @@ sparrowhawks
 For you, it looks like this:
 
 
-```
+![](sh2.png)
 
-The data
-========
-We begin by reading in the data, and loading in our usual stuff (for
-use later):
-```{r}
-library(tidyverse)
-my_url="http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt"
-sparrowhawks=read_delim(my_url," ")
-sparrowhawks
-```
-
-There are xxx rows of data altogether.
-
-```
 
 We don't know how many rows of data there are yet, so I've left a
 "placeholder" for it, when we figure it out.
@@ -122,11 +87,7 @@ feel free to skip this). What you do is to make what is called an
 "inline code chunk". Where you want a number to appear in the
 text, you have some R Markdown that looks like this:
 
-```
-
-There are `r nrow(sparrowhawks)` rows altogether.
-
-```
+![](sh3.png)
 
 The piece inside the backticks is the letter `r`, a space,
 and then one line of R code. The one line of code will be run, and
@@ -158,29 +119,13 @@ library(tidyverse)
 ggplot(sparrowhawks,aes(x=returning,y=newadults))+
 geom_point()+geom_smooth()
 ``` 
+
+<br>
+
 The piece of report that I added looks like this:
 
 
-```
-
-### Exploratory analysis
-
-We should look at a scatterplot of the data, to see what, if any,
-relationship there is. We add a smooth trend, to guide the eye:
-
-```{r}
-ggplot(sparrowhawks,aes(x=returning,y=newadults))+
-geom_point()+geom_smooth()
-```
-
-This seems to be something of a downward trend, though it is not
-completely convincing.  That is, a larger percentage of returning
-adults is associated with a *smaller* number of new adults. Is the
-relationship straight? Well, the smooth trend has a strange
-wiggle in the middle, but the trend overall does not seem
-obviously curved. 
-
-```
+![](sh4.png)
 
 
 Note (i) that you have to do nothing special to get the plot to
@@ -215,20 +160,7 @@ column and itself is 1, and that is *not* the one we want.
 I added this to the report (still in the Exploratory Analysis
 section, since it seems to belong there):
 
-```
-
-What is the correlation between these two variables?
-
-```{r}
-with(sparrowhawks,cor(newadults,returning))
-```
-
-The correlation is about -0.75. This seems surprisingly close to -1 to me, since I
-didn't think the trend was that strong, but it is no surprise that the correlation
-is negative, since the trend is definitely downward rather than
-upward. 
-
-```
+![](sh5.png)
 
 
 
@@ -258,29 +190,8 @@ Solution
 See the output in the previous part. That's what we need to talk about.
 I added this to the report. I thought we deserved a new section here:
 
-```
-
-### Regression analysis
-The regression for predicting the number of new adults from the
-percentage of returning adults is as shown: 
-
-```{r}
-newadults.1=lm(newadults~returning,data=sparrowhawks)
-summary(newadults.1)
-```
-
-The intercept is about 32 and the slope is about -0.3. This means that
-each additional one percentage point in returning adults is associated
-with a *decrease* of approximately 0.3 new adults.  
-
-The P-value attached to the slope is about 0.003. This means that the
-slope is *not* zero, and that there is a significant association
-between the number of returning adults and the number of new
-adults. (This is despite the apparently weak trend, and the small
-number, 13, of data points.) 
-
-```
-
+![](sh6.png)
+ 
 
 
 
@@ -290,7 +201,8 @@ number, 13, of data points.)
 Solution
 
 
-This code. Using `geom_smooth= with `method`"lm"`
+This code. Using `geom_smooth` with 
+`method="lm"`
 will add the regression line to the plot:
 
 ```{r }
@@ -318,27 +230,10 @@ Solution
 My addition to the report looks like this:
 
 
-```
-
-A plot of the data with the regression line superimposed is as shown:
-
-```{r}
-ggplot(sparrowhawks,aes(x=returning,y=newadults))+
-geom_point()+geom_smooth(method="lm")
-```
-
-### Conclusions
-The association is negative, as seen from the scatterplot and
-correlation, and also from the negative slope of the regression
-line. This suggests that sparrowhawks are long-lived territorial
-birds rather than short-lived birds. We would expect to observe
-returning birds displaying territorial behaviour that would
-discourage new adults from joining the colony.
-
-```
+![](sh7.png)
 
 
-I think that rounds off the report nicely. 
+I think that rounds off the report nicely.
 
 
 

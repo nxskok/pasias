@@ -7,8 +7,8 @@ is the volume of wood that it contains. This is difficult to estimate
 while the tree is still standing, but the diameter is easy to measure
 with a tape measure (to measure the circumference) and a calculation
 involving $\pi$, assuming that the cross-section of the tree is at
-least approximately circular.  The standard measurement is ``diameter
-at breast height'' (that is, at the height of a human breast or
+least approximately circular.  The standard measurement is "diameter at breast height" 
+(that is, at the height of a human breast or
 chest), defined as being 4.5 feet above the ground.
 
 Several pine trees had their diameter measured shortly before being
@@ -305,9 +305,9 @@ would imply $\alpha_2=3$ here.
 This is non-linear as it stands, but we can bash it into shape by taking
 logs:
 
-\begin{equation}
-\ln V = \ln(\alpha_1)+ \alpha_2 \ln d
-\end{equation}
+$$
+\ln V = \ln \alpha_1 + \alpha_2 \ln d
+$$
 
 so that log-volume has a linear relationship with log-diameter and we
 can go ahead and estimate it:
@@ -329,7 +329,7 @@ confint(volume.3)
 ``` 
 
 From 2.3 to 3.9. It is definitely not zero, but we are rather less
-sure about what it is, and 2.19 is not implausible.
+sure about what it is, and 2.19 is not completely implausible.
 
 The R-squared here, though it is less than the other ones we
 got, is still high. The residuals are these:
@@ -346,9 +346,31 @@ so the residuals are now closer to zero.
 Does this model behave itself at zero? Well, roughly at least: if the
 diameter is very small, its log is very negative, and the predicted
 log-volume is also very negative (the slope is positive). So the
-predicted actual volume will be close to zero. (If you want to make
+predicted actual volume will be close to zero. If you want to make
 that mathematically rigorous, you can take limits, but that's the
-intuition.) 
+intuition. We can also do some predictions: set up a data frame that has a column called `diameter` with some diameters to predict for:
+
+```{r }
+d=tibble(diameter=c(1,2,seq(5,50,5)))
+d
+```
+
+and then feed that into `predict`:
+
+```{r }
+p=predict(volume.3,d)
+d %>% mutate(pred=p)
+```
+
+These are predicted log-volumes, so we'd better anti-log them. `log` in R is natural logs, so this is inverted using `exp`: 
+
+```{r }
+d %>% mutate(pred=exp(p))
+```
+
+For a diameter near zero, the predicted volume appears to be near zero as well.
+
+<br>
 
 I mentioned `broom` earlier. We can make a data frame out of
 the one-line summaries of our three models:
@@ -394,9 +416,9 @@ you and the base of the tree is then equal to the height of the tree,
 and if you have a long enough tape measure you can measure it.
 
 The above works because the tangent of 45 degrees is 1. If you have a
-device that will measure the actual angle,\endnote{These days, there
-are apps that will let you do this with your phone. I found one
-called Clinometer. See also [https://gabrielhemery.com/2011/05/15/how-to-calculate-tree-height-using-a-smartphone}.](https://gabrielhemery.com/2011/05/15/how-to-calculate-tree-height-using-a-smartphone}.) you
+device that will measure the actual angle,
+`r tufte::margin_note("These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).")` 
+you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of
 the tree (to which you add the height of your eyes).

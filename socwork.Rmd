@@ -51,7 +51,7 @@ as rows, the variables as columns), but that's not how this comes out.
 Here is another:
 
 ```{r }
-soc %>% map(quantile) %>% bind_rows() 
+soc %>% map_df(quantile) 
 ``` 
 
 These are the five-number summaries of each variable. Normally, they
@@ -64,12 +64,13 @@ quantile(soc$experience)
 but the names get lost in the transition to a `tibble`, and I
 haven't found out how to get them back.
 
-If you haven't seen `map` before: it says ``do whatever is in
-the brackets for each column of the data frame''. This comes out as an
+In this context, `map` says 
+"do whatever is in the brackets for each column of the data frame". 
+(That's the implied "for each".) This comes out as an
 R `list`, so we glue it back into a data frame with the
 `bind_rows` on the end.
 
-`map` and its single-value counterpart `map_dbl` are
+As you know, `map` and its single-value counterpart `map_dbl` are
 actually very flexible: they run a function "for each" anything and
 glue the results together, like this:
 

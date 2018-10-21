@@ -844,54 +844,35 @@ Solution
 
 In R Studio, select File, New File, R Markdown. Fill in the Title,
 Author and leave the Default Output Format at HTML. You'll see a
-template report with the document info at the top. This is mine:
+template report with the document info at the top. This is my document info:
 
-```
-
----
-title: "Sparrowhawks"
-author: "Ken Butler"
-date: "October 13, 2015"
-output: html_document
----
-
-```
-
+![](sh0.png)
+ 
 This is known in the jargon as a "YAML block".\endnote{YAML
 stands for "yet another markup language", but we're not using
 it in this course, other than as the top bit of an R Markdown document.}
-Below that is the template R Markdown document. You can copy and cut it,
-or leave it lying around for reminders and delete it later. Up to you.
+Below that is the template R Markdown document, which you can delete now or later.
 
 
 
-(b) Read in the data and display all the values (there are only 13
-rows, so this is OK). Add some text saying how many rows of data
+(b) Read in the data and display the  first few values.  Add some text saying how many rows of data
 there are.
 
 
 Solution
 
 
-Copy the data as usual to a file that R Studio can find. In your
+Read the data into a data frame. In your
 report, add some text like "we read in the data", perhaps
-after a section heading like "The data". Then add a \emph{code
-chunk} by selecting Chunks and Insert Chunk, or by pressing
-control-alt-I. So far you have something like this. (I'm using level-3 headings, for annoying technical reasons, but you should probably use second-level headings.)
+after a section heading like "The data". Then add a *code chunk* 
+by selecting Chunks and Insert Chunk, or by pressing
+control-alt-I. So far you have something like this. 
 
-```
-
-### The data
-
-We begin by reading in the data.
-
-
-
-```
+![](sh1.png)
 
 Inside the code chunk, that is, in the bit between the
 backtick characters, put R code, just as you would type it at
-the Console or put in an  R script. In this case, that would be
+the Console or put in an  R notebook. In this case, that would be
 the following code, minus the message that comes out of
 `read_delim`: 
 
@@ -915,53 +896,8 @@ sparrowhawks
 For you, it looks like this:
 
 
-```
+![](sh2.png)
 
-The data
-========
-We begin by reading in the data, and loading in our usual stuff (for
-use later):
-
-```r
-library(tidyverse)
-my_url="http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt"
-sparrowhawks=read_delim(my_url," ")
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   returning = col_integer(),
-##   newadults = col_integer()
-## )
-```
-
-```r
-sparrowhawks
-```
-
-```
-## # A tibble: 13 x 2
-##    returning newadults
-##        <int>     <int>
-##  1        74         5
-##  2        66         6
-##  3        81         8
-##  4        52        11
-##  5        73        12
-##  6        62        15
-##  7        52        16
-##  8        45        17
-##  9        62        18
-## 10        46        18
-## 11        60        19
-## 12        46        20
-## 13        38        20
-```
-
-There are xxx rows of data altogether.
-
-```
 
 We don't know how many rows of data there are yet, so I've left a
 "placeholder" for it, when we figure it out.
@@ -984,11 +920,7 @@ feel free to skip this). What you do is to make what is called an
 "inline code chunk". Where you want a number to appear in the
 text, you have some R Markdown that looks like this:
 
-```
-
-There are 13 rows altogether.
-
-```
+![](sh3.png)
 
 The piece inside the backticks is the letter `r`, a space,
 and then one line of R code. The one line of code will be run, and
@@ -1026,37 +958,14 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+
+<br>
+
 The piece of report that I added looks like this:
 
 
-```
-
-### Exploratory analysis
-
-We should look at a scatterplot of the data, to see what, if any,
-relationship there is. We add a smooth trend, to guide the eye:
-
-
-```r
-ggplot(sparrowhawks,aes(x=returning,y=newadults))+
-geom_point()+geom_smooth()
-```
-
-```
-## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
-```
-
-<img src="12-regression_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
-
-This seems to be something of a downward trend, though it is not
-completely convincing.  That is, a larger percentage of returning
-adults is associated with a *smaller* number of new adults. Is the
-relationship straight? Well, the smooth trend has a strange
-wiggle in the middle, but the trend overall does not seem
-obviously curved. 
-
-```
+![](sh4.png)
 
 
 Note (i) that you have to do nothing special to get the plot to
@@ -1103,25 +1012,7 @@ column and itself is 1, and that is *not* the one we want.
 I added this to the report (still in the Exploratory Analysis
 section, since it seems to belong there):
 
-```
-
-What is the correlation between these two variables?
-
-
-```r
-with(sparrowhawks,cor(newadults,returning))
-```
-
-```
-## [1] -0.7484673
-```
-
-The correlation is about -0.75. This seems surprisingly close to -1 to me, since I
-didn't think the trend was that strong, but it is no surprise that the correlation
-is negative, since the trend is definitely downward rather than
-upward. 
-
-```
+![](sh5.png)
 
 
 
@@ -1173,51 +1064,8 @@ Solution
 See the output in the previous part. That's what we need to talk about.
 I added this to the report. I thought we deserved a new section here:
 
-```
-
-### Regression analysis
-The regression for predicting the number of new adults from the
-percentage of returning adults is as shown: 
-
-
-```r
-newadults.1=lm(newadults~returning,data=sparrowhawks)
-summary(newadults.1)
-```
-
-```
-## 
-## Call:
-## lm(formula = newadults ~ returning, data = sparrowhawks)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.8687 -1.2532  0.0508  2.0508  5.3071 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept) 31.93426    4.83762   6.601 3.86e-05 ***
-## returning   -0.30402    0.08122  -3.743  0.00325 ** 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 3.667 on 11 degrees of freedom
-## Multiple R-squared:  0.5602,	Adjusted R-squared:  0.5202 
-## F-statistic: 14.01 on 1 and 11 DF,  p-value: 0.003248
-```
-
-The intercept is about 32 and the slope is about -0.3. This means that
-each additional one percentage point in returning adults is associated
-with a *decrease* of approximately 0.3 new adults.  
-
-The P-value attached to the slope is about 0.003. This means that the
-slope is *not* zero, and that there is a significant association
-between the number of returning adults and the number of new
-adults. (This is despite the apparently weak trend, and the small
-number, 13, of data points.) 
-
-```
-
+![](sh6.png)
+ 
 
 
 
@@ -1227,7 +1075,8 @@ number, 13, of data points.)
 Solution
 
 
-This code. Using `geom_smooth= with `method`"lm"`
+This code. Using `geom_smooth` with 
+`method="lm"`
 will add the regression line to the plot:
 
 
@@ -1236,7 +1085,7 @@ ggplot(sparrowhawks,aes(x=returning,y=newadults))+
 geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
 I added a bit of text to the report, which I will show in a moment.
 
@@ -1258,30 +1107,10 @@ Solution
 My addition to the report looks like this:
 
 
-```
-
-A plot of the data with the regression line superimposed is as shown:
+![](sh7.png)
 
 
-```r
-ggplot(sparrowhawks,aes(x=returning,y=newadults))+
-geom_point()+geom_smooth(method="lm")
-```
-
-<img src="12-regression_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
-
-### Conclusions
-The association is negative, as seen from the scatterplot and
-correlation, and also from the negative slope of the regression
-line. This suggests that sparrowhawks are long-lived territorial
-birds rather than short-lived birds. We would expect to observe
-returning birds displaying territorial behaviour that would
-discourage new adults from joining the colony.
-
-```
-
-
-I think that rounds off the report nicely. 
+I think that rounds off the report nicely.
 
 
 
@@ -1391,7 +1220,7 @@ Here is another:
 
 
 ```r
-soc %>% map(quantile) %>% bind_rows() 
+soc %>% map_df(quantile) 
 ```
 
 ```
@@ -1421,12 +1250,13 @@ quantile(soc$experience)
 but the names get lost in the transition to a `tibble`, and I
 haven't found out how to get them back.
 
-If you haven't seen `map` before: it says ``do whatever is in
-the brackets for each column of the data frame''. This comes out as an
+In this context, `map` says 
+"do whatever is in the brackets for each column of the data frame". 
+(That's the implied "for each".) This comes out as an
 R `list`, so we glue it back into a data frame with the
 `bind_rows` on the end.
 
-`map` and its single-value counterpart `map_dbl` are
+As you know, `map` and its single-value counterpart `map_dbl` are
 actually very flexible: they run a function "for each" anything and
 glue the results together, like this:
 
@@ -1469,7 +1299,7 @@ The usual:
 ggplot(soc,aes(x=experience,y=salary))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
 As experience goes up, salary also goes up, as you would expect. Also,
 the trend seems more or less straight.
@@ -1535,7 +1365,7 @@ columns in it, not forgetting the initial dots:
 ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 I see a "fanning-out": the residuals are getting bigger *in size* 
 (further away from zero) as the fitted values get bigger. That
 is, when the (estimated) salary gets larger, it also gets more
@@ -1557,7 +1387,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
 I added a smooth trend to this to help us judge whether the
 absolute-value-residuals are getting bigger as the fitted values get
@@ -1575,7 +1405,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
 The larger fitted values, according to this, have residuals larger in size.
 
@@ -1621,7 +1451,7 @@ I explain that "masked" thing below.
 boxcox(salary~experience,data=soc)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
 That one looks like $\lambda=0$ or log. You could probably also
 justify fourth root (power 0.25), but log is a very common
@@ -1840,7 +1670,7 @@ data frame:
 ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
 That, to my mind, is a horizontal band of points, so I would say yes,
 I have solved the fanning out.
@@ -1854,7 +1684,7 @@ distributed as they should be? Well, that's easy enough to check:
 ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
 The issues here are that those bottom two values are a bit too low,
 and the top few values are a bit bunched up (that curve at the top).
@@ -1899,8 +1729,8 @@ is the volume of wood that it contains. This is difficult to estimate
 while the tree is still standing, but the diameter is easy to measure
 with a tape measure (to measure the circumference) and a calculation
 involving $\pi$, assuming that the cross-section of the tree is at
-least approximately circular.  The standard measurement is ``diameter
-at breast height'' (that is, at the height of a human breast or
+least approximately circular.  The standard measurement is "diameter at breast height" 
+(that is, at the height of a human breast or
 chest), defined as being 4.5 feet above the ground.
 
 Several pine trees had their diameter measured shortly before being
@@ -1973,7 +1803,7 @@ for. Also, the volume is the response, so that should go on the $y$-axis:
 ggplot(trees,aes(x=diameter,y=volume))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
 You can put a smooth trend on it if you like, which would
 look like this:
@@ -1988,7 +1818,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
 
 I'll take either of those for this part, though I think the smooth
 trend actually obscures the issue here (because there is not so much
@@ -2006,19 +1836,18 @@ Solution
 The word "relationship" offers a clue that a scatterplot would
 have been a good idea, if you hadn't realized by now. 
 I am guided by "form, direction, strength" in looking at a scatterplot:
-\begin{description}
-\item[Form:] it is an apparently linear relationship.
-\item[Direction:] it is an upward trend: that is, a tree with a
-larger diameter also has a larger volume of wood. (This is not
-very surprising.)
-\item[Strength:] I'd call this a strong (or moderate-to-strong)
-relationship. (We'll see in a minute what the R-squared is.)
-\end{description}
+
+
+* Form: it is an apparently linear relationship.
+
+* Direction: it is an upward trend: that is, a tree with a larger diameter also has a larger volume of wood. (This is not very surprising.)
+
+* Strength:  I'd call this a strong (or moderate-to-strong) relationship. (We'll see in a minute what the R-squared is.)
+
 You don't need to be as formal as this, but you *do* need
 to get at the idea that it is an upward trend, apparently
-linear, and at least fairly strong.\endnote{I just went back and
-changed it to 3 marks, to clue you in that there are three
-things to say.}
+linear, and at least fairly strong.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When this was graded, it was 3 marks, to clue you in that there are three things to say.</span>
 
 
 
@@ -2139,7 +1968,7 @@ random mess of nothingness:
 ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
 
 Make a call. You could say that there's no discernible pattern,
 especially with such a small data set, and
@@ -2264,7 +2093,7 @@ predicts the data well. I should look at the residuals from this one:
 ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
 I really don't think there are any problems there.
 
@@ -2312,9 +2141,9 @@ would imply $\alpha_2=3$ here.
 This is non-linear as it stands, but we can bash it into shape by taking
 logs:
 
-\begin{equation}
-\ln V = \ln(\alpha_1)+ \alpha_2 \ln d
-\end{equation}
+$$
+\ln V = \ln \alpha_1 + \alpha_2 \ln d
+$$
 
 so that log-volume has a linear relationship with log-diameter and we
 can go ahead and estimate it:
@@ -2365,7 +2194,7 @@ confint(volume.3)
 ```
 
 From 2.3 to 3.9. It is definitely not zero, but we are rather less
-sure about what it is, and 2.19 is not implausible.
+sure about what it is, and 2.19 is not completely implausible.
 
 The R-squared here, though it is less than the other ones we
 got, is still high. The residuals are these:
@@ -2375,7 +2204,7 @@ got, is still high. The residuals are these:
 ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
 
 which again seem to show no problems. The residuals are smaller in
 size now because of the log transformation: the actual and predicted
@@ -2385,9 +2214,88 @@ so the residuals are now closer to zero.
 Does this model behave itself at zero? Well, roughly at least: if the
 diameter is very small, its log is very negative, and the predicted
 log-volume is also very negative (the slope is positive). So the
-predicted actual volume will be close to zero. (If you want to make
+predicted actual volume will be close to zero. If you want to make
 that mathematically rigorous, you can take limits, but that's the
-intuition.) 
+intuition. We can also do some predictions: set up a data frame that has a column called `diameter` with some diameters to predict for:
+
+
+```r
+d=tibble(diameter=c(1,2,seq(5,50,5)))
+d
+```
+
+```
+## # A tibble: 12 x 1
+##    diameter
+##       <dbl>
+##  1        1
+##  2        2
+##  3        5
+##  4       10
+##  5       15
+##  6       20
+##  7       25
+##  8       30
+##  9       35
+## 10       40
+## 11       45
+## 12       50
+```
+
+and then feed that into `predict`:
+
+
+```r
+p=predict(volume.3,d)
+d %>% mutate(pred=p)
+```
+
+```
+## # A tibble: 12 x 2
+##    diameter   pred
+##       <dbl>  <dbl>
+##  1        1 -5.92 
+##  2        2 -3.76 
+##  3        5 -0.889
+##  4       10  1.28 
+##  5       15  2.55 
+##  6       20  3.45 
+##  7       25  4.15 
+##  8       30  4.72 
+##  9       35  5.20 
+## 10       40  5.62 
+## 11       45  5.98 
+## 12       50  6.31
+```
+
+These are predicted log-volumes, so we'd better anti-log them. `log` in R is natural logs, so this is inverted using `exp`: 
+
+
+```r
+d %>% mutate(pred=exp(p))
+```
+
+```
+## # A tibble: 12 x 2
+##    diameter      pred
+##       <dbl>     <dbl>
+##  1        1   0.00267
+##  2        2   0.0234 
+##  3        5   0.411  
+##  4       10   3.59   
+##  5       15  12.8    
+##  6       20  31.4    
+##  7       25  63.2    
+##  8       30 112.     
+##  9       35 181.     
+## 10       40 275.     
+## 11       45 397.     
+## 12       50 552.
+```
+
+For a diameter near zero, the predicted volume appears to be near zero as well.
+
+<br>
 
 I mentioned `broom` earlier. We can make a data frame out of
 the one-line summaries of our three models:
@@ -2455,9 +2363,9 @@ you and the base of the tree is then equal to the height of the tree,
 and if you have a long enough tape measure you can measure it.
 
 The above works because the tangent of 45 degrees is 1. If you have a
-device that will measure the actual angle,\endnote{These days, there
-are apps that will let you do this with your phone. I found one
-called Clinometer. See also [https://gabrielhemery.com/2011/05/15/how-to-calculate-tree-height-using-a-smartphone}.](https://gabrielhemery.com/2011/05/15/how-to-calculate-tree-height-using-a-smartphone}.) you
+device that will measure the actual angle,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).</span> 
+you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of
 the tree (to which you add the height of your eyes).
