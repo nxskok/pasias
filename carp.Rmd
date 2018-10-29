@@ -20,7 +20,7 @@ analysis. Create an HTML document from your R Markdown.
 
 
 (a) Read the data in from
-[http://www.utsc.utoronto.ca/~butler/c32/carp.txt](http://www.utsc.utoronto.ca/~butler/c32/carp.txt). There are 10
+[link](http://www.utsc.utoronto.ca/~butler/c32/carp.txt). There are 10
 tanks. 
 
 
@@ -33,11 +33,13 @@ commenting that the values appear to be correct will improve your report.
 my_url="http://www.utsc.utoronto.ca/~butler/c32/carp.txt"
 carp=read_delim(my_url," ")  
 carp
-``` 
+```
+
+ 
 
 
 
-(b) Create a scatterplot of ENE (response) against bodyweight
+(b)??scatter-one?? Create a scatterplot of ENE (response) against bodyweight
 (explanatory). Add a smooth trend to your plot.
 
 
@@ -47,7 +49,9 @@ Solution
 ```{r }
 ggplot(carp,aes(x=bodyweight,y=ENE))+geom_point()+
 geom_smooth()
-``` 
+```
+
+ 
 
 This part is just about getting the plot. Comments are coming in a
 minute. Note that `ENE` is capital letters, so that
@@ -70,7 +74,7 @@ the slope or rate of decrease is not constant is good.
 
 
 
-(d) Fit a straight line to the data, and obtain the R-squared
+(d)??linear?? Fit a straight line to the data, and obtain the R-squared
 for the regression.
 
 
@@ -83,7 +87,9 @@ the result in a  variable, and the second stage is to look at the
 ```{r }
 carp.1=lm(ENE~bodyweight,data=carp)
 summary(carp.1)
-``` 
+```
+
+ 
 Finally, you need to give me a (suitably rounded) value for
 R-squared: 46.6\% or 47\% or the equivalents as a decimal. I just
 need the value at this point.
@@ -108,13 +114,15 @@ straight into `ggplot`:
 
 ```{r }
 ggplot(carp.1,aes(x=.fitted,y=.resid))+geom_point()
-``` 
+```
+
+ 
 
 
 
 (f) Fit a parabola to the data (that is, including an
 $x$-squared term). Compare the R-squared values for the models in
-this part and part (????). Does that suggest that the parabola
+this part and part (??linear??). Does that suggest that the parabola
 model is an improvement here over the linear model?
 
 
@@ -126,7 +134,9 @@ the regression. Don't forget the `I()`:
 ```{r }
 carp.2=lm(ENE~bodyweight+I(bodyweight^2),data=carp)
 summary(carp.2)
-``` 
+```
+
+ 
 
 R-squared has gone up from 47\% to 74\%, a substantial
 improvement. This suggests to me that the parabola model is a
@@ -169,7 +179,7 @@ quality of prediction.
 
 
 
-(h) Make the scatterplot of part (????), but add
+(h) Make the scatterplot of part (??scatter-one??), but add
 the fitted curve. Describe any way in which the curve fails to fit well.
 
 
@@ -179,8 +189,8 @@ Solution
 This is a bit slippery, because the points to plot and the
 fitted curve are from different data frames. What you do in this
 case is to put a `data=` in one of the `geom`s,
-which says ``don't use the data frame that was in the
-`ggplot`, but use this one instead''. I would think about
+which says "don't use the data frame that was in the  `ggplot`, but use this one instead". 
+I would think about
 starting with the regression object `carp.2` as my base
 data frame, since we want (or I want) to do two things with
 that: plot the fitted values and join them with lines. Then I
@@ -189,31 +199,34 @@ want to add the original data, just the points:
 ggplot(carp.2,aes(x=carp$bodyweight,y=.fitted),colour="blue")+
 geom_line(colour="blue")+
 geom_point(data=carp,aes(x=bodyweight,y=ENE))
-```       
-$ %$ %$
+```
+
+       
 
 This works, but is not very aesthetic, because the bodyweight that is
 plotted against the fitted values is in the wrong data frame, and so
 we have to use the dollar-sign thing to get it from the right one.
 
-A better way around this is "fortify" the regression object. What
-that means, in the context of `ggplot`, is to add the original
-data back onto the regression object, so that we can plot any
-combination of original data and values derived from the
-regression. That goes like this:
+A better way around this is "augment" the data with output from the regression object. 
+This is done using `augment` from 
+package `broom`:
+```{r augment1, eval=F, error=TRUE}
+library(broom)
+carp.2a=augment(carp, carp.2)
+carp.2a
+```
 
-```{r }
-carp.2.fort=fortify(carp.2)
-carp.2.fort
-``` 
+ 
 
-so now you see what `carp.2.fort` has in it, and then:
+so now you see what `carp.2a` has in it, and then:
 
-```{r }
-g=ggplot(carp.2.fort,aes(x=bodyweight,y=.fitted))+
+```{r error=TRUE}
+g=ggplot(carp.2a,aes(x=bodyweight,y=.fitted))+
 geom_line(colour="blue")+
 geom_point(aes(y=ENE))
-``` 
+```
+
+ 
 
 This is easier coding: there are only two non-standard things. The
 first is that the fitted-value lines should be a distinct colour like
@@ -223,9 +236,11 @@ the $x$ coordinate `bodyweight` is correct so that we don't
 have to change that; we only have to change the $y$-coordinate, which
 is `ENE`. The plot is this:
 
-```{r }
+```{r error=T}
 g
-``` 
+```
+
+ 
 
 Concerning interpretation, you have a number of possibilities
 here. The simplest is that the points in the middle are above the
@@ -260,7 +275,9 @@ fitted model object `carp.2` as your data frame for the
 `ggplot`:
 ```{r }
 ggplot(carp.2,aes(x=.fitted,y=.resid))+geom_point()
-``` 
+```
+
+ 
 
 I think this is *still* a curve (or, it goes down and then
 sharply up at the end). Either way, there is still a pattern. 
@@ -271,12 +288,15 @@ curve. I think the original data looks more like a hyperbola (a curve
 like $y=1/x$) than a parabola, in that it seems to decrease fast and
 then gradually to a limit, and *that* suggests, as in the class
 example, that we should try an asymptote model. Note how I specify it,
-with the `I()` thing again, since a reciprocal is power $-1$:
-
+with the `I()` thing again, since `/` has a special meaning 
+to `lm` in the same way that 
+`^` does:
 ```{r }
-carp.3=lm(ENE~I(bodyweight^(-1)),data=carp)
+carp.3=lm(ENE~I(1/bodyweight),data=carp)
 summary(carp.3)
-``` 
+```
+
+ 
 
 That fits *extraordinarily* well, with an R-squared up near
 98\%. The intercept is the asymptote, which suggests a (lower) limit
@@ -286,18 +306,16 @@ is a reasonable biological mechanism. It says that a carp always has
 some ENE, no matter how big it gets, but a smaller carp will have a
 lot more.
 
-Does the fitted value plot look reasonable now? The "fortify" thing
-doesn't quite work here, since `bodyweight` doesn't itself get
-added to the fortified data set (it is not part of the model), so it
-looks as if we are working with two data frames. I cheated and pulled
-the things I wanted out of `carp` without doing a
-`data=`:
-
-```{r }
-ggplot(carp.3,aes(x=carp$bodyweight,y=.fitted))+
+Does the fitted value plot look reasonable now? This is `augment` again since the fitted values and observed data come from different data frames:
+```{r augment2, error=T}
+library(broom)
+augment(carp, carp.3) %>% 
+ggplot(aes(x=bodyweight,y=.fitted))+
 geom_line(colour="blue")+
-geom_point(aes(y=carp$ENE))
-``` 
+geom_point(aes(y=ENE))
+```
+
+ 
 
 I'd say that does a really nice job of fitting the data. But it would
 be nice to have a few more tanks with large-bodyweight fish, to
@@ -306,9 +324,11 @@ convince us that we have the shape of the trend right.
 And, as ever, the residual plot. That's a lot easier than the plot we
 just did:
 
-```{r }
+```{r error=T}
 ggplot(carp.3,aes(x=.fitted,y=.resid))+geom_point()
-``` 
+```
+
+ 
 
 All in all, that looks pretty good (and certainly a vast improvement
 over the ones you got before).
@@ -319,7 +339,7 @@ next: that is, that *you* would have thought to do it next,
 rather than me telling you what to do.
 
 My report (as an R Markdown file) is at
-[http://www.utsc.utoronto.ca/~butler/c32/carp.Rmd](http://www.utsc.utoronto.ca/~butler/c32/carp.Rmd). Download it,
+[link](http://www.utsc.utoronto.ca/~butler/c32/carp.Rmd). Download it,
 knit it, play with it.
 
 

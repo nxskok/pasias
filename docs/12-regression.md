@@ -2087,7 +2087,8 @@ variables when you do your analysis.\endnote{And it shows the
 value of looking at relevant plots.} If the species had been
 observed at opposite temperatures, we might have
 concluded
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mistakenly.} that textsl{niveus</span> have the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mistakenly.</span> 
+that *niveus* have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
 comes out of the regression model with temperature.
@@ -2300,7 +2301,7 @@ the areas of the brain associated with social perception and
 associative memory? To find out, a 2012 study measured both of these
 variables for a sample of 40 students at City University in London
 (England). The data are at
-[http://www.utsc.utoronto.ca/~butler/c32/facebook.txt](http://www.utsc.utoronto.ca/~butler/c32/facebook.txt). The grey
+[link](http://www.utsc.utoronto.ca/~butler/c32/facebook.txt). The grey
 matter density is on a $z$-score standardized scale. The values are
 separated by *tabs*.
 
@@ -2373,12 +2374,13 @@ ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
 
 <img src="12-regression_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
 
+       
 
 
-(b) Describe what you see on your scatterplot: is there a
+
+(b)??part:scatterconc?? Describe what you see on your scatterplot: is there a
 trend, and if so, what kind of trend is it? (Don't get too taken in
-by the exact shape of your smooth trend.) Think ``form, direction,
-strength''. 
+by the exact shape of your smooth trend.) Think "form, direction,  strength". 
 
 
 Solution
@@ -2436,6 +2438,8 @@ summary(fb.1)
 ## F-statistic: 8.936 on 1 and 38 DF,  p-value: 0.004882
 ```
 
+       
+
 I observe, though I didn't ask you to, that the R-squared is pretty
 awful, going with a correlation of 
 
@@ -2447,13 +2451,15 @@ sqrt(0.1904)
 ## [1] 0.4363485
 ```
 
+ 
+
 which *would* look
 like as weak of a trend as we saw.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Correlations have to go up beyond 0.50 before they start looking at all interesting.</span>
 
 
 
-(d) Is the slope of your regression line significantly
+(d)??part:regtest?? Is the slope of your regression line significantly
 different from zero? What does that mean, in the context of the
 data?
 
@@ -2477,7 +2483,7 @@ reproducibility.
 
 
 (e) Are you surprised by the results of
-parts (b) and (d)? Explain briefly.
+parts (??part:scatterconc??) and (??part:regtest??)? Explain briefly.
 
 
 Solution
@@ -2509,6 +2515,8 @@ and down twice its standard error (to get a rough idea):
 ```
 ## [1]  27.29 137.61
 ```
+
+       
 The `c()` thing is to get both confidence limits at once. The
 smoother way is this:
 
@@ -2522,6 +2530,8 @@ confint(fb.1)
 ## (Intercept) 313.30872 419.9810
 ## GMdensity    26.61391 138.2836
 ```
+
+ 
 
 Feed `confint` a "fitted model object" and it'll give you
 confidence intervals (by default 95\%) for all the parameters in it. 
@@ -2554,6 +2564,8 @@ geom_smooth(method="lm")
 
 <img src="12-regression_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
 
+       
+
 
 
 (g) Obtain a plot of the residuals from the regression against
@@ -2570,6 +2582,8 @@ ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
 <img src="12-regression_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
+
+       
 
 There is some "magic" here, since the fitted model object is not
 actually a data frame, but it works this way.
@@ -2593,6 +2607,8 @@ geom_point()+geom_smooth()
 ```
 
 <img src="12-regression_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
+
+       
 Now, why did I try adding a smooth trend, and why is it not
 necessarily a good idea? The idea of a residual plot is that there
 should be no trend, and so the smooth trend curve ought to go straight
@@ -2631,7 +2647,7 @@ analysis. Create an HTML document from your R Markdown.
 
 
 (a) Read the data in from
-[http://www.utsc.utoronto.ca/~butler/c32/carp.txt](http://www.utsc.utoronto.ca/~butler/c32/carp.txt). There are 10
+[link](http://www.utsc.utoronto.ca/~butler/c32/carp.txt). There are 10
 tanks. 
 
 
@@ -2675,9 +2691,11 @@ carp
 ## 10    10      286.    6
 ```
 
+ 
 
 
-(b) Create a scatterplot of ENE (response) against bodyweight
+
+(b)??scatter-one?? Create a scatterplot of ENE (response) against bodyweight
 (explanatory). Add a smooth trend to your plot.
 
 
@@ -2695,6 +2713,8 @@ geom_smooth()
 ```
 
 <img src="12-regression_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
+
+ 
 
 This part is just about getting the plot. Comments are coming in a
 minute. Note that `ENE` is capital letters, so that
@@ -2717,7 +2737,7 @@ the slope or rate of decrease is not constant is good.
 
 
 
-(d) Fit a straight line to the data, and obtain the R-squared
+(d)??linear?? Fit a straight line to the data, and obtain the R-squared
 for the regression.
 
 
@@ -2753,6 +2773,8 @@ summary(carp.1)
 ## Multiple R-squared:  0.4656,	Adjusted R-squared:  0.3988 
 ## F-statistic: 6.971 on 1 and 8 DF,  p-value: 0.0297
 ```
+
+ 
 Finally, you need to give me a (suitably rounded) value for
 R-squared: 46.6\% or 47\% or the equivalents as a decimal. I just
 need the value at this point.
@@ -2782,11 +2804,13 @@ ggplot(carp.1,aes(x=.fitted,y=.resid))+geom_point()
 
 <img src="12-regression_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
 
+ 
+
 
 
 (f) Fit a parabola to the data (that is, including an
 $x$-squared term). Compare the R-squared values for the models in
-this part and part (????). Does that suggest that the parabola
+this part and part (??linear??). Does that suggest that the parabola
 model is an improvement here over the linear model?
 
 
@@ -2822,6 +2846,8 @@ summary(carp.2)
 ## Multiple R-squared:  0.7374,	Adjusted R-squared:  0.6624 
 ## F-statistic: 9.829 on 2 and 7 DF,  p-value: 0.009277
 ```
+
+ 
 
 R-squared has gone up from 47\% to 74\%, a substantial
 improvement. This suggests to me that the parabola model is a
@@ -2864,7 +2890,7 @@ quality of prediction.
 
 
 
-(h) Make the scatterplot of part (????), but add
+(h) Make the scatterplot of part (??scatter-one??), but add
 the fitted curve. Describe any way in which the curve fails to fit well.
 
 
@@ -2874,8 +2900,8 @@ Solution
 This is a bit slippery, because the points to plot and the
 fitted curve are from different data frames. What you do in this
 case is to put a `data=` in one of the `geom`s,
-which says ``don't use the data frame that was in the
-`ggplot`, but use this one instead''. I would think about
+which says "don't use the data frame that was in the  `ggplot`, but use this one instead". 
+I would think about
 starting with the regression object `carp.2` as my base
 data frame, since we want (or I want) to do two things with
 that: plot the fitted values and join them with lines. Then I
@@ -2888,57 +2914,35 @@ geom_point(data=carp,aes(x=bodyweight,y=ENE))
 ```
 
 <img src="12-regression_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
-$ %$ %$
+
+       
 
 This works, but is not very aesthetic, because the bodyweight that is
 plotted against the fitted values is in the wrong data frame, and so
 we have to use the dollar-sign thing to get it from the right one.
 
-A better way around this is "fortify" the regression object. What
-that means, in the context of `ggplot`, is to add the original
-data back onto the regression object, so that we can plot any
-combination of original data and values derived from the
-regression. That goes like this:
+A better way around this is "augment" the data with output from the regression object. 
+This is done using `augment` from 
+package `broom`:
+
+```r
+library(broom)
+carp.2a=augment(carp, carp.2)
+carp.2a
+```
+
+ 
+
+so now you see what `carp.2a` has in it, and then:
 
 
 ```r
-carp.2.fort=fortify(carp.2)
-carp.2.fort
-```
-
-```
-##     ENE bodyweight I(bodyweight^2)      .hat   .sigma    .cooksd   .fitted
-## 1  15.3       11.7          136.89 0.2392022 1.992810 0.21499558 12.558657
-## 2   9.3       25.3          640.09 0.1629840 2.193651 0.06514640 11.311261
-## 3   6.5       90.2         8136.04 0.2396677 2.367208 0.00182089  6.751885
-## 4   6.0      213.0           45369 0.3246419 2.237874 0.12169479  4.428445
-## 5  15.7       10.2          104.04 0.2511559 1.902036 0.27859605 12.702432
-## 6  10.0       17.6          309.76 0.1993691 2.186473 0.08656338 12.005083
-## 7   8.6       32.6         1062.76 0.1425478 2.184918 0.05826041 10.683427
-## 8   6.4       81.3         6609.69 0.2112076 2.338418 0.01661407  7.240829
-## 9   5.6      141.5        20022.25 0.3546865 2.333053 0.03982493  4.778159
-## 10  6.0      285.7        81624.49 0.8745372 2.108136 3.39715895  6.939822
-##        .resid  .stdresid
-## 1   2.7413428  1.4322784
-## 2  -2.0112607 -1.0018443
-## 3  -0.2518851 -0.1316435
-## 4   1.5715555  0.8714880
-## 5   2.9975680  1.5785999
-## 6  -2.0050832 -1.0212098
-## 7  -2.0834268 -1.0253497
-## 8  -0.8408294 -0.4314448
-## 9   0.8218410  0.4662310
-## 10 -0.9398221 -1.2091687
-```
-
-so now you see what `carp.2.fort` has in it, and then:
-
-
-```r
-g=ggplot(carp.2.fort,aes(x=bodyweight,y=.fitted))+
+g=ggplot(carp.2a,aes(x=bodyweight,y=.fitted))+
 geom_line(colour="blue")+
 geom_point(aes(y=ENE))
 ```
+
+ 
 
 This is easier coding: there are only two non-standard things. The
 first is that the fitted-value lines should be a distinct colour like
@@ -2953,7 +2957,11 @@ is `ENE`. The plot is this:
 g
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
+```
+## Error in eval(expr, envir, enclos): object 'g' not found
+```
+
+ 
 
 Concerning interpretation, you have a number of possibilities
 here. The simplest is that the points in the middle are above the
@@ -2993,6 +3001,8 @@ ggplot(carp.2,aes(x=.fitted,y=.resid))+geom_point()
 
 <img src="12-regression_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
+ 
+
 I think this is *still* a curve (or, it goes down and then
 sharply up at the end). Either way, there is still a pattern. 
 
@@ -3002,27 +3012,27 @@ curve. I think the original data looks more like a hyperbola (a curve
 like $y=1/x$) than a parabola, in that it seems to decrease fast and
 then gradually to a limit, and *that* suggests, as in the class
 example, that we should try an asymptote model. Note how I specify it,
-with the `I()` thing again, since a reciprocal is power $-1$:
-
+with the `I()` thing again, since `/` has a special meaning 
+to `lm= in the same way that verb=^` does:
 
 ```r
-carp.3=lm(ENE~I(bodyweight^(-1)),data=carp)
+carp.3=lm(ENE~I(1/bodyweight),data=carp)
 summary(carp.3)
 ```
 
 ```
 ## 
 ## Call:
-## lm(formula = ENE ~ I(bodyweight^(-1)), data = carp)
+## lm(formula = ENE ~ I(1/bodyweight), data = carp)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
 ## -1.29801 -0.12830  0.04029  0.26702  0.91707 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)          5.1804     0.2823   18.35 8.01e-08 ***
-## I(bodyweight^(-1)) 107.6690     5.8860   18.29 8.21e-08 ***
+##                 Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)       5.1804     0.2823   18.35 8.01e-08 ***
+## I(1/bodyweight) 107.6690     5.8860   18.29 8.21e-08 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -3030,6 +3040,8 @@ summary(carp.3)
 ## Multiple R-squared:  0.9766,	Adjusted R-squared:  0.9737 
 ## F-statistic: 334.6 on 1 and 8 DF,  p-value: 8.205e-08
 ```
+
+ 
 
 That fits *extraordinarily* well, with an R-squared up near
 98\%. The intercept is the asymptote, which suggests a (lower) limit
@@ -3039,21 +3051,20 @@ is a reasonable biological mechanism. It says that a carp always has
 some ENE, no matter how big it gets, but a smaller carp will have a
 lot more.
 
-Does the fitted value plot look reasonable now? The "fortify" thing
-doesn't quite work here, since `bodyweight` doesn't itself get
-added to the fortified data set (it is not part of the model), so it
-looks as if we are working with two data frames. I cheated and pulled
-the things I wanted out of `carp` without doing a
-`data=`:
-
+Does the fitted value plot look reasonable now? This is `augment` again since the fitted values and observed data come from different data frames:
 
 ```r
-ggplot(carp.3,aes(x=carp$bodyweight,y=.fitted))+
+augment(carp, carp.3) %>% 
+ggplot(aes(x=bodyweight,y=.fitted))+
 geom_line(colour="blue")+
-geom_point(aes(y=carp$ENE))
+geom_point(aes(y=ENE))
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
+```
+## Error in augment(carp, carp.3): could not find function "augment"
+```
+
+ 
 
 I'd say that does a really nice job of fitting the data. But it would
 be nice to have a few more tanks with large-bodyweight fish, to
@@ -3069,6 +3080,8 @@ ggplot(carp.3,aes(x=.fitted,y=.resid))+geom_point()
 
 <img src="12-regression_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
 
+ 
+
 All in all, that looks pretty good (and certainly a vast improvement
 over the ones you got before).
 
@@ -3078,7 +3091,7 @@ next: that is, that *you* would have thought to do it next,
 rather than me telling you what to do.
 
 My report (as an R Markdown file) is at
-[http://www.utsc.utoronto.ca/~butler/c32/carp.Rmd](http://www.utsc.utoronto.ca/~butler/c32/carp.Rmd). Download it,
+[link](http://www.utsc.utoronto.ca/~butler/c32/carp.Rmd). Download it,
 knit it, play with it.
 
 
@@ -3391,7 +3404,7 @@ I think that rounds off the report nicely.
  Another salary-prediction question: does the number of years
 of work experience that a social worker has help to predict their 
 salary? Data for 50 social workers are in
-[http://www.utsc.utoronto.ca/~butler/c32/socwork.txt](http://www.utsc.utoronto.ca/~butler/c32/socwork.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/socwork.txt). 
 
 
 
@@ -3438,6 +3451,8 @@ soc
 ## # ... with 40 more rows
 ```
 
+ 
+
 That checks that we have the right *number* of observations; to
 check that we have sensible *values*, something like
 `summary` is called for:
@@ -3456,6 +3471,8 @@ summary(soc)
 ##  3rd Qu.:24.75   3rd Qu.:65204  
 ##  Max.   :28.00   Max.   :99139
 ```
+
+ 
 
 A person working in any field cannot have a negative number of years
 of experience, and cannot have more than about 40 years of experience
@@ -3478,6 +3495,8 @@ soc %>% summarize_all(c("min","max"))
 ## 1              1      16105             28      99139
 ```
 
+ 
+
 This gets the minimum and maximum of all the variables. I would have
 liked them arranged in a nice rectangle (`min` and `max`
 as rows, the variables as columns), but that's not how this comes out.
@@ -3486,7 +3505,7 @@ Here is another:
 
 
 ```r
-soc %>% map_df(quantile) 
+soc %>% map_df(~quantile(.)) 
 ```
 
 ```
@@ -3500,8 +3519,10 @@ soc %>% map_df(quantile)
 ## 5       28   99139
 ```
 
+ 
+
 These are the five-number summaries of each variable. Normally, they
-come with names attached:
+come with percentiles attached:
 
 
 ```r
@@ -3513,16 +3534,45 @@ quantile(soc$experience)
 ##  1.00 13.50 20.00 24.75 28.00
 ```
 
-but the names get lost in the transition to a `tibble`, and I
+ 
+
+but the percentiles get lost in the transition to a `tibble`, and I
 haven't found out how to get them back.
+
+This almost works:
+
+
+```r
+soc %>% map_df(~enframe(quantile(.)))
+```
+
+```
+## # A tibble: 10 x 2
+##    name    value
+##    <chr>   <dbl>
+##  1 0%        1  
+##  2 25%      13.5
+##  3 50%      20  
+##  4 75%      24.8
+##  5 100%     28  
+##  6 0%    16105  
+##  7 25%   36990. 
+##  8 50%   50948. 
+##  9 75%   65204. 
+## 10 100%  99139
+```
+
+
+
+but, though we now have the percentiles, we've lost the names of the variables, so it isn't much better.
 
 In this context, `map` says 
 "do whatever is in the brackets for each column of the data frame". 
-(That's the implied "for each".) This comes out as an
-R `list`, so we glue it back into a data frame with the
-`bind_rows` on the end.
+(That's the implied "for each".) The output from `quantile` 
+is a vector that we would like to have display as a data frame, so `map_df` 
+instead of any other form of `map`.
 
-As you know, `map` and its single-value counterpart `map_dbl` are
+As you know, the `map` family is 
 actually very flexible: they run a function "for each" anything and
 glue the results together, like this:
 
@@ -3535,6 +3585,8 @@ soc %>% map_dbl(median)
 ## experience     salary 
 ##       20.0    50947.5
 ```
+
+ 
 
 which gets the median for each variable. That's the same thing as this:
 
@@ -3549,6 +3601,8 @@ soc %>% summarize_all("median")
 ##        <dbl>  <dbl>
 ## 1         20 50948.
 ```
+
+ 
 
 
 
@@ -3565,7 +3619,9 @@ The usual:
 ggplot(soc,aes(x=experience,y=salary))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-90-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-91-1.png" width="672"  />
+
+ 
 
 As experience goes up, salary also goes up, as you would expect. Also,
 the trend seems more or less straight.
@@ -3607,6 +3663,8 @@ summary(soc.1)
 ## F-statistic: 177.3 on 1 and 48 DF,  p-value: < 2.2e-16
 ```
 
+ 
+
 The slope is (significantly) positive, which squares with our guess
 (more experience goes with greater salary), and also the upward trend
 on the scatterplot. The value of the slope is about 2,000; this means
@@ -3631,7 +3689,9 @@ columns in it, not forgetting the initial dots:
 ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
+
+       
 I see a "fanning-out": the residuals are getting bigger *in size* 
 (further away from zero) as the fitted values get bigger. That
 is, when the (estimated) salary gets larger, it also gets more
@@ -3653,7 +3713,9 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-94-1.png" width="672"  />
+
+ 
 
 I added a smooth trend to this to help us judge whether the
 absolute-value-residuals are getting bigger as the fitted values get
@@ -3671,7 +3733,9 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-94-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
+
+ 
 
 The larger fitted values, according to this, have residuals larger in size.
 
@@ -3710,6 +3774,8 @@ library(MASS)
 ##     select
 ```
 
+ 
+
 I explain that "masked" thing below.
 
 
@@ -3717,7 +3783,9 @@ I explain that "masked" thing below.
 boxcox(salary~experience,data=soc)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-96-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-97-1.png" width="672"  />
+
+ 
 
 That one looks like $\lambda=0$ or log. You could probably also
 justify fourth root (power 0.25), but log is a very common
@@ -3751,12 +3819,16 @@ search()
 ## [19] "package:methods"   "Autoloads"         "package:base"
 ```
 
+ 
+
 then get rid of `MASS`:
 
 
 ```r
 detach("package:MASS",unload=T)
 ```
+
+ 
 Now check that it has gone:
 
 
@@ -3773,6 +3845,8 @@ search()
 ## [16] "package:utils"     "package:datasets"  "package:methods"  
 ## [19] "Autoloads"         "package:base"
 ```
+
+ 
 It has. Now any calls to `select` will use the right one. We hope.
 
 The output of `search` is called the **search list**, and
@@ -3813,6 +3887,8 @@ The best way is to add the new variable to the data frame using
 soc.2=soc %>% mutate(log_salary=log(salary))
 ```
 
+       
+
 and then
 
 
@@ -3841,6 +3917,8 @@ summary(soc.3)
 ## Multiple R-squared:  0.8635,	Adjusted R-squared:  0.8607 
 ## F-statistic: 303.7 on 1 and 48 DF,  p-value: < 2.2e-16
 ```
+
+ 
 
 I think it's best to save the data frame with `log_salary` in
 it, since we'll be doing a couple of things with it, and it's best to
@@ -3874,11 +3952,12 @@ summary()
 ## F-statistic: 303.7 on 1 and 48 DF,  p-value: < 2.2e-16
 ```
 
+ 
+
 The second line is where the fun starts: `lm` wants the data
 frame as a `data=` at the end. So, to specify a data frame in
 something like `lm`, we have to use the special symbol
-`.`, which is another way to say ``the data frame that came out
-of the previous step''.
+`.`, which is another way to say "the data frame that came out of the previous step".
 
 Got that? All right. The last line is a piece of cake in
 comparison. Normally `summary` would require a data frame or a
@@ -3919,6 +3998,8 @@ summary(soc.1a)
 ## F-statistic: 303.7 on 1 and 48 DF,  p-value: < 2.2e-16
 ```
 
+ 
+
 
 
 (g) Obtain and plot the residuals against the fitted values for
@@ -3936,7 +4017,9 @@ data frame:
 ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
+
+       
 
 That, to my mind, is a horizontal band of points, so I would say yes,
 I have solved the fanning out.
@@ -3950,7 +4033,9 @@ distributed as they should be? Well, that's easy enough to check:
 ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
+
+ 
 
 The issues here are that those bottom two values are a bit too low,
 and the top few values are a bit bunched up (that curve at the top).
@@ -3973,6 +4058,8 @@ exp(0.05)
 ```
 ## [1] 1.051271
 ```
+
+ 
 
 or to increase salary by about 5\%.\endnote{Mathematically,
 $e^x \simeq 1+x$ for small $x$, which winds up meaning that the
@@ -4069,7 +4156,7 @@ for. Also, the volume is the response, so that should go on the $y$-axis:
 ggplot(trees,aes(x=diameter,y=volume))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-109-1.png" width="672"  />
 
 You can put a smooth trend on it if you like, which would
 look like this:
@@ -4084,7 +4171,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-109-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-110-1.png" width="672"  />
 
 I'll take either of those for this part, though I think the smooth
 trend actually obscures the issue here (because there is not so much
@@ -4234,7 +4321,7 @@ random mess of nothingness:
 ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-114-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
 
 Make a call. You could say that there's no discernible pattern,
 especially with such a small data set, and
@@ -4359,7 +4446,7 @@ predicts the data well. I should look at the residuals from this one:
 ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-116-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
 
 I really don't think there are any problems there.
 
@@ -4470,7 +4557,7 @@ got, is still high. The residuals are these:
 ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
 
 which again seem to show no problems. The residuals are smaller in
 size now because of the log transformation: the actual and predicted

@@ -5,7 +5,7 @@
  Another salary-prediction question: does the number of years
 of work experience that a social worker has help to predict their 
 salary? Data for 50 social workers are in
-[http://www.utsc.utoronto.ca/~butler/c32/socwork.txt](http://www.utsc.utoronto.ca/~butler/c32/socwork.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/socwork.txt). 
 
 
 
@@ -21,7 +21,9 @@ Solution
 my_url="http://www.utsc.utoronto.ca/~butler/c32/socwork.txt"
 soc=read_delim(my_url," ")
 soc
-``` 
+```
+
+ 
 
 That checks that we have the right *number* of observations; to
 check that we have sensible *values*, something like
@@ -29,7 +31,9 @@ check that we have sensible *values*, something like
 
 ```{r }
 summary(soc)  
-``` 
+```
+
+ 
 
 A person working in any field cannot have a negative number of years
 of experience, and cannot have more than about 40 years of experience
@@ -42,7 +46,9 @@ A rather more `tidyverse` way is this:
 
 ```{r }
 soc %>% summarize_all(c("min","max")) 
-``` 
+```
+
+ 
 
 This gets the minimum and maximum of all the variables. I would have
 liked them arranged in a nice rectangle (`min` and `max`
@@ -51,38 +57,56 @@ as rows, the variables as columns), but that's not how this comes out.
 Here is another:
 
 ```{r }
-soc %>% map_df(quantile) 
-``` 
+soc %>% map_df(~quantile(.)) 
+```
+
+ 
 
 These are the five-number summaries of each variable. Normally, they
-come with names attached:
+come with percentiles attached:
 
 ```{r }
 quantile(soc$experience)
-``` 
+```
 
-but the names get lost in the transition to a `tibble`, and I
+ 
+
+but the percentiles get lost in the transition to a `tibble`, and I
 haven't found out how to get them back.
+
+This almost works:
+
+```{r }
+soc %>% map_df(~enframe(quantile(.)))
+```
+
+
+
+but, though we now have the percentiles, we've lost the names of the variables, so it isn't much better.
 
 In this context, `map` says 
 "do whatever is in the brackets for each column of the data frame". 
-(That's the implied "for each".) This comes out as an
-R `list`, so we glue it back into a data frame with the
-`bind_rows` on the end.
+(That's the implied "for each".) The output from `quantile` 
+is a vector that we would like to have display as a data frame, so `map_df` 
+instead of any other form of `map`.
 
-As you know, `map` and its single-value counterpart `map_dbl` are
+As you know, the `map` family is 
 actually very flexible: they run a function "for each" anything and
 glue the results together, like this:
 
 ```{r }
 soc %>% map_dbl(median) 
-``` 
+```
+
+ 
 
 which gets the median for each variable. That's the same thing as this:
 
 ```{r }
 soc %>% summarize_all("median")
-``` 
+```
+
+ 
 
 
 
@@ -96,7 +120,9 @@ Solution
 The usual:
 ```{r }
 ggplot(soc,aes(x=experience,y=salary))+geom_point()
-``` 
+```
+
+ 
 
 As experience goes up, salary also goes up, as you would expect. Also,
 the trend seems more or less straight.
@@ -114,7 +140,9 @@ Solution
 ```{r }
 soc.1=lm(salary~experience,data=soc)
 summary(soc.1)
-``` 
+```
+
+ 
 
 The slope is (significantly) positive, which squares with our guess
 (more experience goes with greater salary), and also the upward trend
@@ -137,7 +165,9 @@ frame), and plot the `.fitted` and `.resid`
 columns in it, not forgetting the initial dots:
 ```{r }
 ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
-```       
+```
+
+       
 I see a "fanning-out": the residuals are getting bigger *in size* 
 (further away from zero) as the fitted values get bigger. That
 is, when the (estimated) salary gets larger, it also gets more
@@ -152,7 +182,9 @@ would look like this:
 
 ```{r }
 ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
-``` 
+```
+
+ 
 
 I added a smooth trend to this to help us judge whether the
 absolute-value-residuals are getting bigger as the fitted values get
@@ -163,7 +195,9 @@ is a smoother version:
 
 ```{r }
 ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
-``` 
+```
+
+ 
 
 The larger fitted values, according to this, have residuals larger in size.
 
@@ -188,13 +222,17 @@ You'll need to call in (and install if necessary) the package
 `MASS` that contains `boxcox`:
 ```{r }
 library(MASS)
-``` 
+```
+
+ 
 
 I explain that "masked" thing below.
 
 ```{r }
 boxcox(salary~experience,data=soc)
-``` 
+```
+
+ 
 
 That one looks like $\lambda=0$ or log. You could probably also
 justify fourth root (power 0.25), but log is a very common
@@ -215,18 +253,24 @@ lot in my case:
 
 ```{r }
 search()
-``` 
+```
+
+ 
 
 then get rid of `MASS`:
 
 ```{r }
 detach("package:MASS",unload=T)
-``` 
+```
+
+ 
 Now check that it has gone:
 
 ```{r }
 search()
-``` 
+```
+
+ 
 It has. Now any calls to `select` will use the right one. We hope.
 
 The output of `search` is called the **search list**, and
@@ -264,14 +308,18 @@ The best way is to add the new variable to the data frame using
 `mutate`, and save that new data frame. That goes like this:
 ```{r }
 soc.2=soc %>% mutate(log_salary=log(salary))
-```       
+```
+
+       
 
 and then
 
 ```{r }
 soc.3=lm(log_salary~experience,data=soc.2)
 summary(soc.3)
-``` 
+```
+
+ 
 
 I think it's best to save the data frame with `log_salary` in
 it, since we'll be doing a couple of things with it, and it's best to
@@ -281,13 +329,14 @@ be able to start from `soc.2`. But you can also do this:
 soc %>% mutate(log_salary=log(salary)) %>%
 lm(log_salary~experience,data=.) %>%
 summary()
-``` 
+```
+
+ 
 
 The second line is where the fun starts: `lm` wants the data
 frame as a `data=` at the end. So, to specify a data frame in
 something like `lm`, we have to use the special symbol
-`.`, which is another way to say ``the data frame that came out
-of the previous step''.
+`.`, which is another way to say "the data frame that came out of the previous step".
 
 Got that? All right. The last line is a piece of cake in
 comparison. Normally `summary` would require a data frame or a
@@ -304,7 +353,9 @@ You can also put functions of things directly into `lm`:
 ```{r }
 soc.1a=lm(log(salary)~experience, data=soc)
 summary(soc.1a)
-``` 
+```
+
+ 
 
 
 
@@ -320,7 +371,9 @@ As we did before, treating the regression object as if it were a
 data frame:
 ```{r }
 ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
-```       
+```
+
+       
 
 That, to my mind, is a horizontal band of points, so I would say yes,
 I have solved the fanning out.
@@ -331,7 +384,9 @@ distributed as they should be? Well, that's easy enough to check:
 
 ```{r }
 ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
-``` 
+```
+
+ 
 
 The issues here are that those bottom two values are a bit too low,
 and the top few values are a bit bunched up (that curve at the top).
@@ -348,7 +403,9 @@ multiply actual salary by
 
 ```{r }
 exp(0.05)  
-``` 
+```
+
+ 
 
 or to increase salary by about 5\%.\endnote{Mathematically,
 $e^x \simeq 1+x$ for small $x$, which winds up meaning that the

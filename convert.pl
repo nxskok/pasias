@@ -20,7 +20,7 @@ sub main {
     $content=~s/\\end\{solution\}//g;
     $content=~s/\\begin\{center\}//g;
     $content=~s/\\end\{center\}//g;
-    $content=~s/\\verb(.)(.*)\1/`$2`/g;
+    $content=~s/\\verb(.)(.*?)\1/`$2`/g;
     $content=~s/\\begin\{itemize\}//g;
     $content=~s/\\end\{itemize\}//g;
     $content=~s/\\begin\{enumerate\}//g;
