@@ -28,8 +28,8 @@ sub main {
     $content=~s/\\item\s(.*)/\n* $1/g;
     $content=~s/\\endnote\{(.*)\}/\n`r tufte::margin_note(\"$1\")`/g;
     # alert me to the need to fix up references
-    $content=~s/\\label\{(.*?)\}//g;
-    $content=~s/\\ref\{(.*?)\}/????/g;
+    $content=~s/\\label\{(.*?)\}/??$1??/g;
+    $content=~s/\\ref\{(.*?)\}/??$1??/g;
     # quotes
 
     $content=~s/``(.*?)''/"$1"/g; # in the original, all on one line
@@ -38,8 +38,8 @@ sub main {
     $content=~s/\\part/\nNextyy part/g;
     $content=~s/\\begin\{solution\}/\nSolution\n\n/g;
 
-    $content=~s/<<(.*)>>=/```\{r $1\}/g;
-    $content=~s/@/```/g;
+    $content=~s/\n<<(.*)>>=/\n```\{r $1\}/g;
+    $content=~s/\n@/\n```\n\n/g;
     # text formatting
 
     $content=~s/\\texttt\{(.*?)\}/`$1`/g;
@@ -48,7 +48,7 @@ sub main {
     $content=~s/\\textsl\{(.*?)\}/*$1*/g;
 
     $content=~s/\\includegraphics\[*.*\]\{(.*)\}/\n![]($1.png)\n/g;
-    $content=~s/\\url\{(.*)\}/\[$1\]($1)/g;
+    $content=~s/\\url\{(.*)\}/\[link\]($1)/g;
     $content=~s/\\begin\{verbatim\}/\n```\n/g;
     $content=~s/\\end\{verbatim\}/\n```\n/g;
 

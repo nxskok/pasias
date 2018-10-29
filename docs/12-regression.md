@@ -23,6 +23,2273 @@ library(tidyverse)
 ```
 
 
+##  Rainfall in California
+
+
+ The data in
+[link](http://www.utsc.utoronto.ca/~butler/c32/calirain.txt) are
+rainfall and other measurements for 30 weather stations in
+California. Our aim is to understand how well the annual rainfall at
+these stations (measured in inches) can be predicted from the other
+measurements, which are the altitude (in feet above sea level), the
+latitude (degrees north of the equator) and the distance from the
+coast (in miles).
+
+
+
+(a) Read the data into R. You'll have to be careful here, since the
+values are space-delimited, but sometimes by more than one space, to
+make the columns line up.  `read_table2`, with filename or
+url, will read it in.
+One of the variables
+is called `rainfall`, so as long as you *do not* call
+the data frame that, you should be safe.
+
+
+Solution
+
+
+I used `rains` as the name of my data frame: 
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/calirain.txt"
+rains=read_table2(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   station = col_character(),
+##   rainfall = col_double(),
+##   altitude = col_integer(),
+##   latitude = col_double(),
+##   fromcoast = col_integer()
+## )
+```
+
+ 
+
+I have the right number of rows and columns.
+
+There is also `read_table`, but that requires *all* the
+columns, including the header row, to be lined up. You can try that
+here and see how it fails.
+
+I don't need you to investigate the data yet (that happens in the next
+part), but this is interesting (to me):
+
+
+```r
+rains
+```
+
+```
+## # A tibble: 30 x 5
+##    station      rainfall altitude latitude fromcoast
+##    <chr>           <dbl>    <int>    <dbl>     <int>
+##  1 Eureka           39.6       43     40.8         1
+##  2 RedBluff         23.3      341     40.2        97
+##  3 Thermal          18.2     4152     33.8        70
+##  4 FortBragg        37.5       74     39.4         1
+##  5 SodaSprings      49.3     6752     39.3       150
+##  6 SanFrancisco     21.8       52     37.8         5
+##  7 Sacramento       18.1       25     38.5        80
+##  8 SanJose          14.2       95     37.4        28
+##  9 GiantForest      42.6     6360     36.6       145
+## 10 Salinas          13.8       74     36.7        12
+## # ... with 20 more rows
+```
+
+ 
+
+Some of the station names are two words, but they have been smooshed
+into one word, so that `read_table2` will recognize them as a
+single thing. Someone had already done that for us, so I didn't even
+have to do it myself. 
+
+If the station names had been two genuine words, a `.csv` would
+probably have been the best choice (the actual data values being
+separated by commas then, and not spaces).
+
+
+
+(b) Make a boxplot of the rainfall figures, and explain why the
+values are reasonable. (A rainfall cannot be negative, and it is
+unusual for a annual rainfall to exceed 60 inches.) A
+`ggplot` boxplot needs *something* on the $x$-axis: the
+number 1 will do.
+
+
+Solution
+
+
+
+
+```r
+ggplot(rains,aes(y=rainfall,x=1))+geom_boxplot()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-4-1.png" width="672"  />
+
+     
+There is only one rainfall over 60 inches, and the smallest one is
+close to zero but positive, so that is good.
+
+Another possible plot here is a histogram, since there is only one quantitative variable:
+
+
+```r
+ggplot(rains, aes(x=rainfall))+geom_histogram(bins=7)
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+
+
+
+This clearly shows the rainfall value above 60 inches, but some other things are less clear: are those two rainfall values around 50 inches above or below 50, and are those six rainfall values near zero actually above zero? 
+Extra: What stations have those extreme values? Should you wish to find out:
+
+```r
+rains %>% filter(rainfall>60)
+```
+
+```
+## # A tibble: 1 x 5
+##   station      rainfall altitude latitude fromcoast
+##   <chr>           <dbl>    <int>    <dbl>     <int>
+## 1 CrescentCity     74.9       35     41.7         1
+```
+
+ 
+This is a place right on the Pacific coast, almost up into Oregon (it's almost
+the northernmost of all the stations). So it makes sense that it would
+have a high rainfall, if anywhere does. (If you know anything about
+rainy places, you'll probably think of Vancouver and Seattle, in the
+Pacific Northwest.) Here it is:
+[link](https://www.google.ca/maps/place/Crescent+City,+CA,+USA/@41.7552589,-123.9652917,8.42z/data=!4m5!3m4!1s0x54d066375c6288db:0x76e89ab07375e62e!8m2!3d41.7557501!4d-124.2025913). 
+Which station has less than 2 inches of annual rainfall?
+
+```r
+rains %>% filter(rainfall<2)  
+```
+
+```
+## # A tibble: 1 x 5
+##   station     rainfall altitude latitude fromcoast
+##   <chr>          <dbl>    <int>    <dbl>     <int>
+## 1 DeathValley     1.66     -178     36.5       194
+```
+
+ 
+The name of the station is a clue: this one is in the desert. So you'd
+expect very little rain. Its altitude is *negative*, so it's
+actually *below* sea level. This is correct. Here is where it is:
+[link](https://www.google.ca/maps/place/Death+Valley,+CA,+USA/@36.6341288,-118.2252974,7.75z/data=!4m5!3m4!1s0x80c739a21e8fffb1:0x1c897383d723dd25!8m2!3d36.5322649!4d-116.9325408).
+
+
+
+(c) Plot `rainfall` against each of the other quantitative
+variables (that is, not `station`). 
+
+
+Solution
+
+
+That is, `altitude`, `latitude` and
+`fromcoast`. The obvious way to do this (perfectly
+acceptable) is one plot at a time:
+
+```r
+ggplot(rains,aes(y=rainfall,x=altitude))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+
+     
+
+
+```r
+ggplot(rains,aes(y=rainfall,x=latitude))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+
+ 
+
+and finally 
+
+
+```r
+ggplot(rains,aes(y=rainfall,x=fromcoast))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+
+ 
+
+You can add a smooth trend to these if you want. Up to you. Just the
+points is fine with me.
+
+Here is a funky way to get all three plots in one shot:
+
+
+```r
+rains %>% gather(xname,x,altitude:fromcoast) %>%
+ggplot(aes(x=x,y=rainfall))+geom_point()+
+facet_wrap(~xname,scales="free")
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+ 
+
+This always seems extraordinarily strange if you haven't run into it
+before. The strategy is to put *all* the $x$-variables you want
+to plot into *one* column and then plot your $y$ against the
+$x$-column. A nice side-effect of the way `gather` works is
+that what makes the $x$-columns different is that they are
+$x$-variables with different *names*, which is exactly what you
+want later for the facets. Thus: make a column of all the $x$'s glued
+together, labelled by which $x$ they are, then plot $y$ against $x$
+but make a different sub-plot or "facet" for each different
+$x$-name. The last thing is that each $x$ is measured on a different
+scale, and unless we take steps, all the sub-plots will have the
+*same* scale on each axis, which we don't want.
+
+I'm not sure I like how it came out, with three very tall
+plots. `facet_wrap` can also take an `nrow` or an
+`ncol`, which tells it how many rows or columns to use for the
+display. Here, for example, two columns because I thought three was
+too many:
+
+
+```r
+rains %>% gather(xname,x,altitude:fromcoast) %>%
+ggplot(aes(x=x,y=rainfall))+geom_point()+
+facet_wrap(~xname,scales="free",ncol=2)
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+
+ 
+
+Now, the three plots have come out about square, which I like a lot better.
+
+
+
+(d) Look at the relationship of each other variable with
+`rainfall`. 
+Justify the assertion that `latitude` seems most strongly
+related with `rainfall`. Is that relationship positive or negative? linear? Explain
+briefly. 
+
+
+Solution
+
+
+Let's look at the three variables in turn:
+
+
+* `altitude`: not much of anything. The stations near
+sea level have rainfall all over the place, though the three
+highest-altitude stations have the three highest rainfalls apart
+from Crescent City.
+
+* `latitude`: there is a definite upward trend here, in
+that stations further north (higher latitude) are likely to have
+a higher rainfall. I'd call this trend linear (or, not obviously
+curved), though the two most northerly stations have one higher
+and one much lower rainfall than you'd expect.
+
+* `fromcoast`: this is a weak downward trend, though
+the trend is spoiled by those three stations about 150 miles
+from the coast that have more than 40 inches of rainfall.
+
+Out of those, only `latitude` seems to have any meaningful
+relationship with `rainfall`.
+
+
+
+(e) Fit a regression with `rainfall` as the response
+variable, and `latitude` as your explanatory variable. What
+are the intercept, slope and R-squared values? Is there a 
+*significant* relationship between `rainfall` and your
+explanatory variable? What does that mean?
+
+
+Solution
+
+
+Save your `lm` into a
+variable, since it will get used again later:
+
+```r
+rainfall.1=lm(rainfall~latitude,data=rains)
+summary(rainfall.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = rainfall ~ latitude, data = rains)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -27.297  -7.956  -2.103   6.082  38.262 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -113.3028    35.7210  -3.172  0.00366 ** 
+## latitude       3.5950     0.9623   3.736  0.00085 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 13.82 on 28 degrees of freedom
+## Multiple R-squared:  0.3326,	Adjusted R-squared:  0.3088 
+## F-statistic: 13.96 on 1 and 28 DF,  p-value: 0.0008495
+```
+
+ 
+
+My intercept is $-113.3$, slope is $3.6$ and R-squared is $0.33$ or
+33\%. (I want you to pull these numbers out of the output and round
+them off to something sensible.) The slope is significantly nonzero,
+its P-value being 0.00085: rainfall really does depend on latitude, although
+not strongly so.
+
+Extra: Of course, I can easily do the others as well, though you don't have to:
+
+
+```r
+rainfall.2=lm(rainfall~fromcoast,data=rains)
+summary(rainfall.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = rainfall ~ fromcoast, data = rains)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -15.240  -9.431  -6.603   2.871  51.147 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 23.77306    4.61296   5.154 1.82e-05 ***
+## fromcoast   -0.05039    0.04431  -1.137    0.265    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 16.54 on 28 degrees of freedom
+## Multiple R-squared:  0.04414,	Adjusted R-squared:   0.01 
+## F-statistic: 1.293 on 1 and 28 DF,  p-value: 0.2651
+```
+
+ 
+
+Here, the intercept is 23.8, the slope is $-0.05$ and R-squared is a
+dismal 0.04 (4\%).  This is a way of seeing that this relationship is
+really weak, and it doesn't even have a curve to the trend or anything
+that would compensate for this. I looked at the scatterplot again and
+saw that if it were not for the point bottom right which is furthest
+from the coast and has almost no rainfall, there would be almost no
+trend at all. The slope here is not significantly different from zero,
+with a P-value of 0.265.
+
+Finally:
+
+
+```r
+rainfall.3=lm(rainfall~altitude,data=rains)
+summary(rainfall.3)
+```
+
+```
+## 
+## Call:
+## lm(formula = rainfall ~ altitude, data = rains)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -20.620  -8.479  -2.729   4.555  58.271 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 16.514799   3.539141   4.666  6.9e-05 ***
+## altitude     0.002394   0.001428   1.676    0.105    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 16.13 on 28 degrees of freedom
+## Multiple R-squared:  0.09121,	Adjusted R-squared:  0.05875 
+## F-statistic:  2.81 on 1 and 28 DF,  p-value: 0.1048
+```
+
+ 
+
+The intercept is 16.5, the slope is 0.002 and the R-squared is 0.09 or
+9\%, also terrible. The P-value is 0.105, which is not small enough to
+be significant. 
+
+So it looks as if it's only `latitude` that
+has any impact at all. This is the only explanatory variable with a
+significantly nonzero slope. On its own, at least.
+
+
+
+(f) Fit a multiple regression predicting `rainfall` from
+all three of the other (quantitative) variables. Display the
+results. Comment is coming up later.
+
+
+Solution
+
+
+This, then:
+
+```r
+rainfall.4=lm(rainfall~latitude+altitude+fromcoast,data=rains)
+summary(rainfall.4)
+```
+
+```
+## 
+## Call:
+## lm(formula = rainfall ~ latitude + altitude + fromcoast, data = rains)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -28.722  -5.603  -0.531   3.510  33.317 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -1.024e+02  2.921e+01  -3.505 0.001676 ** 
+## latitude     3.451e+00  7.949e-01   4.342 0.000191 ***
+## altitude     4.091e-03  1.218e-03   3.358 0.002431 ** 
+## fromcoast   -1.429e-01  3.634e-02  -3.931 0.000559 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 11.1 on 26 degrees of freedom
+## Multiple R-squared:  0.6003,	Adjusted R-squared:  0.5542 
+## F-statistic: 13.02 on 3 and 26 DF,  p-value: 2.205e-05
+```
+
+ 
+
+
+
+(g) What is the R-squared for the regression of the last part?
+How does that compare with the R-squared of your regression in part (e)?
+
+
+Solution
+
+
+The R-squared is 0.60 (60\%), which is quite a bit bigger than the
+R-squared of 0.33 (33\%) we got back in (e). 
+
+
+
+(h) What do you conclude about the importance of the variables
+that you did *not* include in your model in
+(e)? Explain briefly.
+
+
+Solution
+
+
+Both variables `altitude` and `fromcoast` are
+significant in this regression, so they have *something to add* over and above `latitude` when it comes to
+predicting rainfall, even though (and this seems odd) they have no
+apparent relationship with `rainfall` on their own. 
+Another way to say this is that the three variables work together
+as a team to predict rainfall, and together they do much better
+than any one of them can do by themselves.  
+This also goes to show that the scatterplots we began
+with don't get to the heart of multi-variable relationships,
+because they are only looking at the variables two at a time.
+
+
+
+(i) Make a suitable hypothesis test that the variables
+`altitude` and `fromcoast` significantly improve the
+prediction of `rainfall` over the use of `latitude`
+alone. What do you conclude?
+
+
+Solution
+
+
+This calls for `anova`. Feed this two fitted models,
+smaller (fewer explanatory variables) first. The null hypothesis
+is that the two models are equally good (so we should go with the
+smaller); the alternative is that the larger model is better, so
+that the extra complication is worth it:
+
+```r
+anova(rainfall.1,rainfall.4)  
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: rainfall ~ latitude
+## Model 2: rainfall ~ latitude + altitude + fromcoast
+##   Res.Df    RSS Df Sum of Sq      F   Pr(>F)   
+## 1     28 5346.8                                
+## 2     26 3202.3  2    2144.5 8.7057 0.001276 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+ 
+
+The P-value is small, so we reject the null in favour of the
+alternative: the regression with all three explanatory variables fits
+better than the one with just `latitude`, so the bigger model
+is the one we should go with.
+
+If you have studied these things: this one is a 
+"multiple-partial $F$-test", for testing the combined significance of more than one $x$
+but less than all the $x$'s.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you had just one $x$, you'd  use a $t$-test for its slope, and if you were testing all the $x$'s, you'd use the global $F$-test that appears in the regression output.</span>
+
+
+
+
+
+
+
+##  Carbon monoxide in cigarettes
+
+
+ The (US) Federal Trade Commission assesses cigarettes
+according to their tar, nicotine and carbon monoxide contents. In a
+particular year, 25 brands were assessed. For each brand, the tar,
+nicotine and carbon monoxide (all in milligrams) were measured, along
+with the weight in grams. Our aim is to predict carbon monoxide from
+any or all of the other variables. The data are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/ftccigar.txt). These are
+aligned by column (except for the variable names), with more than one
+space between each column of data.
+
+
+(a) Read the data into R, and check that you have 25 observations
+and 4 variables.
+
+
+Solution
+
+
+This specification calls for `read_table2`:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ftccigar.txt"
+cigs=read_table2(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   tar = col_double(),
+##   nicotine = col_double(),
+##   weight = col_double(),
+##   co = col_double()
+## )
+```
+
+```r
+cigs
+```
+
+```
+## # A tibble: 25 x 4
+##      tar nicotine weight    co
+##    <dbl>    <dbl>  <dbl> <dbl>
+##  1  14.1     0.86  0.985  13.6
+##  2  16       1.06  1.09   16.6
+##  3  29.8     2.03  1.16   23.5
+##  4   8       0.67  0.928  10.2
+##  5   4.1     0.4   0.946   5.4
+##  6  15       1.04  0.888  15  
+##  7   8.8     0.76  1.03    9  
+##  8  12.4     0.95  0.922  12.3
+##  9  16.6     1.12  0.937  16.3
+## 10  14.9     1.02  0.886  15.4
+## # ... with 15 more rows
+```
+
+ 
+Yes, I have 25 observations on 4 variables indeed.
+
+`read_delim` won't work (try it and see what happens), because
+that would require the values to be separated by *exactly one* space.
+
+
+
+
+(b)??part:regone?? Run a regression to predict carbon monoxide from the other
+variables, and obtain a summary of the output.
+
+
+Solution
+
+
+The word "summary" is meant to be a big clue that
+`summary` is what you need:
+
+```r
+cigs.1=lm(co~tar+nicotine+weight,data=cigs) 
+summary(cigs.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = co ~ tar + nicotine + weight, data = cigs)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.89261 -0.78269  0.00428  0.92891  2.45082 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.2022     3.4618   0.925 0.365464    
+## tar           0.9626     0.2422   3.974 0.000692 ***
+## nicotine     -2.6317     3.9006  -0.675 0.507234    
+## weight       -0.1305     3.8853  -0.034 0.973527    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.446 on 21 degrees of freedom
+## Multiple R-squared:  0.9186,	Adjusted R-squared:  0.907 
+## F-statistic: 78.98 on 3 and 21 DF,  p-value: 1.329e-11
+```
+
+ 
+
+
+
+(c)??part:regtwo?? Which one of your explanatory variables would you
+remove from this regression? Explain (very) briefly. Go ahead and
+fit the regression  without it, and describe how the change in
+R-squared from the regression in (??part:regone??) was entirely predictable.
+
+
+Solution
+
+
+First, the $x$-variable to remove. The obvious candidate is
+`weight`, since it has easily the highest, and clearly
+non-significant, P-value. So, out it comes:
+
+```r
+cigs.2=lm(co~tar+nicotine,data=cigs)
+summary(cigs.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = co ~ tar + nicotine, data = cigs)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.89941 -0.78470 -0.00144  0.91585  2.43064 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.0896     0.8438   3.662 0.001371 ** 
+## tar           0.9625     0.2367   4.067 0.000512 ***
+## nicotine     -2.6463     3.7872  -0.699 0.492035    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.413 on 22 degrees of freedom
+## Multiple R-squared:  0.9186,	Adjusted R-squared:  0.9112 
+## F-statistic: 124.1 on 2 and 22 DF,  p-value: 1.042e-12
+```
+
+ 
+
+R-squared has dropped from 0.9186 to \ldots 0.9186! That is, taking
+out `weight` has not just had a minimal effect on R-squared;
+it's not changed R-squared at all. This is because `weight` was
+so far from being significant: it literally had *nothing* to add.
+
+Another way of achieving the same thing is via the function
+`update`, which takes a fitted model object and describes the
+*change* that you want to make:
+
+
+```r
+cigs.2a=update(cigs.1,.~.-weight)
+summary(cigs.2a)
+```
+
+```
+## 
+## Call:
+## lm(formula = co ~ tar + nicotine, data = cigs)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.89941 -0.78470 -0.00144  0.91585  2.43064 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.0896     0.8438   3.662 0.001371 ** 
+## tar           0.9625     0.2367   4.067 0.000512 ***
+## nicotine     -2.6463     3.7872  -0.699 0.492035    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.413 on 22 degrees of freedom
+## Multiple R-squared:  0.9186,	Adjusted R-squared:  0.9112 
+## F-statistic: 124.1 on 2 and 22 DF,  p-value: 1.042e-12
+```
+
+ 
+
+This can be shorter than describing the whole model again, as you do
+with the `cigs.2` version of `lm`. The syntax is that
+you first specify a "base"  fitted model object that you're going to
+update. Because the model `cigs.1` contains all the information
+about the kind of model it is, and which data frame the data come
+from, R already knows that this is a linear 
+multiple regression and which $x$'s it contains. The second thing to describe is the change from
+the "base". In this case, we want to use the same response variable
+and all the same explanatory variables that we had before, except for
+`weight`. This is specified by a special kind of model formula
+where `.` means "whatever was there before": in English,
+"same response and same explanatories except take out `weight`". 
+
+
+
+(d)??part:regthree?? Fit a regression predicting carbon monoxide from
+`nicotine` *only*, and display the summary.
+
+
+Solution
+
+
+As you would guess:
+
+```r
+cigs.3=lm(co~nicotine,data=cigs)
+summary(cigs.3)
+```
+
+```
+## 
+## Call:
+## lm(formula = co ~ nicotine, data = cigs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.3273 -1.2228  0.2304  1.2700  3.9357 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   1.6647     0.9936   1.675    0.107    
+## nicotine     12.3954     1.0542  11.759 3.31e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.828 on 23 degrees of freedom
+## Multiple R-squared:  0.8574,	Adjusted R-squared:  0.8512 
+## F-statistic: 138.3 on 1 and 23 DF,  p-value: 3.312e-11
+```
+
+ 
+
+
+
+(e) `nicotine` was far from being significant in the model
+of (??part:regtwo??), and yet in the model of
+(??part:regthree??), it was *strongly* significant, and the
+R-squared value of (??part:regthree??) was almost as high as that
+of (??part:regtwo??). What does this say about the importance of
+`nicotine` as an explanatory variable? Explain, as briefly as
+you can manage.
+
+
+Solution
+
+
+What this says is that you *cannot* say anything about the
+"importance" of `nicotine` without also describing the
+context that you're talking about.  *By itself*,
+`nicotine` is important, but \emph{when you have
+`tar` in the model}, `nicotine` is not
+important: precisely, it now has nothing to add over and above
+the predictive value that `tar` has. You might guess that
+this is because `tar` and `nicotine` are ``saying
+the same thing'' in some fashion. We'll explore that in a moment.
+
+
+
+(f) Make a "pairs plot": that is, scatter plots between all
+pairs of variables. This can be done by feeding the whole data frame
+into `plot`.\endnote{This is a "base graphics" graph rather
+than a "ggplot" one, but it will do for our purposes.}
+Do you see any strong relationships that do
+*not* include `co`? Does that shed any light on the last
+part? Explain briefly (or "at length" if that's how it comes
+out). 
+
+
+Solution
+
+
+Plot the entire data frame:
+
+```r
+plot(cigs)  
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+
+ 
+
+We're supposed to ignore `co`, but I comment that strong
+relationships between `co` and *both* of `tar` and
+`nicotine` show up here, along with `weight` being
+at most weakly related to anything else.
+
+That leaves the relationship of `tar` and `nicotine`
+with each other. That also looks like a strong linear trend. When you
+have correlations between explanatory variables, it is called
+"multicollinearity". 
+
+I mentioned a while back (in class) that having correlated $x$'s was
+trouble. Here is where we find out why. The problem is that when
+`co` is large, `nicotine` is large, and a large value of
+`tar` will come along with it. So we don't know whether a large
+value of `co` is caused by a large value of `tar` or a
+large value of `nicotine`: there is no way to separate out
+their effects because in effect they are "glued together". 
+
+You might know of this effect (in an experimental design context) as
+"confounding": the effect of `tar` on `co` is
+confounded with the effect of `nicotine` on `co`, and
+you can't tell which one deserves the credit for predicting `co`.
+
+If you were able to design an experiment here, you could (in
+principle) manufacture a bunch of cigarettes with high tar; some of
+them would have high  nicotine and some would have low. Likewise for
+low tar. Then the
+correlation between `nicotine` and `tar` would go away,
+their effects on `co` would no longer be confounded, and you
+could see unambiguously which one of the variables deserves credit for
+predicting `co`. Or maybe it depends on both, genuinely, but at
+least then you'd know.
+
+We, however, have an observational study, so we have to make do with
+the data we have. Confounding is one of the risks we take when we work
+with observational data.
+
+This was a "base graphics" plot. There is a way of doing a
+`ggplot`-style "pairs plot", as this is called, thus:
+
+
+```r
+library(GGally)
+```
+
+```
+## 
+## Attaching package: 'GGally'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     nasa
+```
+
+```r
+cigs %>% ggpairs()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+
+ 
+
+As ever, `install.packages` first, in the likely event that you
+don't have this package installed yet. Once you do, though, I think
+this is a nicer way to get a pairs plot.
+
+This plot is a bit more sophisticated: instead of just having the
+scatterplots of the pairs of variables in the row and column, it uses
+the diagonal to show a "kernel density" (a smoothed-out histogram),
+and upper-right it shows the correlation between each pair of
+variables. The three correlations between `co`, `tar`
+and `nicotine` are clearly the highest.
+
+If you want only some of the columns to appear in your pairs plot,
+`select` them first, and then pass that data frame into
+`ggpairs`. Here, we found that `weight` was not
+correlated with anything much, so we can take it out and then make a
+pairs plot of the other variables:
+
+
+```r
+cigs %>% select(-weight) %>% ggpairs()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+
+ 
+
+The three correlations that remain are all very high, which is
+entirely consistent with the strong linear relationships that you see
+bottom left.
+
+
+
+
+
+
+
+##  Maximal oxygen uptake in young boys
+
+
+ A physiologist wanted to understand the relationship between
+physical characteristics of pre-adolescent boys and their maximal
+oxygen uptake (millilitres of oxygen per kilogram of body weight). The
+data are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/youngboys.txt) for a
+random sample of 10 pre-adolescent boys. The variables are (with
+units):
+
+
+
+* `uptake`: Oxygen uptake (millitres of oxygen per kilogram
+of body weight)
+
+* `age`: boy's age (years)
+
+* `height`: boy's height (cm)
+
+* `weight`: boy's weight (kg)
+
+* `chest`: chest depth (cm).
+
+
+
+
+(a) Read the data into R and confirm that you do indeed have
+10 observations.
+
+
+Solution
+
+
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/youngboys.txt"
+boys=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   uptake = col_double(),
+##   age = col_double(),
+##   height = col_double(),
+##   weight = col_double(),
+##   chest = col_double()
+## )
+```
+
+```r
+boys
+```
+
+```
+## # A tibble: 10 x 5
+##    uptake   age height weight chest
+##     <dbl> <dbl>  <dbl>  <dbl> <dbl>
+##  1   1.54   8.4   132    29.1  14.4
+##  2   1.74   8.7   136.   29.7  14.5
+##  3   1.32   8.9   128.   28.4  14  
+##  4   1.5    9.9   131.   28.8  14.2
+##  5   1.46   9     130    25.9  13.6
+##  6   1.35   7.7   128.   27.6  13.9
+##  7   1.53   7.3   130.   29    14  
+##  8   1.71   9.9   138.   33.6  14.6
+##  9   1.27   9.3   127.   27.7  13.9
+## 10   1.5    8.1   132.   30.8  14.5
+```
+
+         
+
+10 boys (rows) indeed.
+
+
+
+(b) Fit a regression predicting oxygen uptake from all the
+other variables, and display the results.
+
+
+Solution
+
+
+Fitting four explanatory variables with only ten observations is likely to be pretty shaky, but we 
+press ahead regardless:
+
+```r
+boys.1=lm(uptake~age+height+weight+chest,data=boys) 
+summary(boys.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = uptake ~ age + height + weight + chest, data = boys)
+## 
+## Residuals:
+##         1         2         3         4         5         6         7 
+## -0.020697  0.019741 -0.003649  0.038470 -0.023639 -0.026026  0.050459 
+##         8         9        10 
+## -0.014380  0.004294 -0.024573 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -4.774739   0.862818  -5.534 0.002643 ** 
+## age         -0.035214   0.015386  -2.289 0.070769 .  
+## height       0.051637   0.006215   8.308 0.000413 ***
+## weight      -0.023417   0.013428  -1.744 0.141640    
+## chest        0.034489   0.085239   0.405 0.702490    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.03721 on 5 degrees of freedom
+## Multiple R-squared:  0.9675,	Adjusted R-squared:  0.9415 
+## F-statistic:  37.2 on 4 and 5 DF,  p-value: 0.0006513
+```
+
+         
+
+
+
+(c) (A one-mark question.) Would you say, on the evidence so
+far, that the regression fits well or badly?  Explain (very)
+briefly.
+
+
+Solution
+
+
+R-squared of 0.97 (97\%) is very high, so I'd say this
+regression fits very well. That's all.
+I said "on the evidence so far" to dissuade you from
+overthinking this, or thinking that you needed to produce
+some more evidence. That, plus the fact that this was only
+one mark.
+
+
+
+(d) It seems reasonable that an older boy should have a
+greater oxygen uptake, all else being equal. Is this supported
+by your output?  Explain briefly.
+
+
+Solution
+
+
+If an older boy has greater oxygen uptake (the "all else   equal" was a hint), 
+the slope of `age` should be
+positive. It is not: it is $-0.035$, so it is suggesting
+(all else equal) that a greater age goes with a
+*smaller* oxygen uptake.
+The reason why this happens (which you didn't need, but
+you can include it if you like) is that `age` has a
+non-small P-value of 0.07, so that the `age` slope
+is not significantly different from zero. With all the
+other variables, `age` has nothing to *add*
+over and above them, and we could therefore remove it.
+
+
+
+(e) It seems reasonable that a boy with larger weight
+should have larger lungs and thus a \emph{statistically
+significantly} larger oxygen uptake. Is that what happens
+here? Explain briefly.
+
+
+Solution
+
+
+Look at the P-value for `weight`. This is 0.14,
+not small, and so a boy with larger weight does not have
+a significantly larger oxygen uptake, all else
+equal. (The slope for `weight` is not
+significantly different from zero either.)
+I emphasized "statistically significant" to remind you
+that this means to do a test and get a P-value.
+
+
+
+(f) Fit a model that contains only the significant
+explanatory variables from your first regression. How do
+the R-squared values from the two regressions compare?
+(The last sentence asks for more or less the same thing as
+the next part. Answer it either here or there. Either
+place is good.)
+
+
+Solution
+
+
+Only `height` is significant, so that's the
+only explanatory variable we need to keep. I would
+just do the regression straight rather than using
+`update` here:
+
+```r
+boys.2=lm(uptake~height,data=boys) 
+summary(boys.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = uptake ~ height, data = boys)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.069879 -0.033144  0.001407  0.009581  0.084012 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -3.843326   0.609198  -6.309 0.000231 ***
+## height       0.040718   0.004648   8.761 2.26e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.05013 on 8 degrees of freedom
+## Multiple R-squared:  0.9056,	Adjusted R-squared:  0.8938 
+## F-statistic: 76.75 on 1 and 8 DF,  p-value: 2.258e-05
+```
+
+        
+
+If you want, you can use `update` here, which looks like this:
+
+
+```r
+boys.2a=update(boys.1,.~.-age-weight-chest)  
+summary(boys.2a)
+```
+
+```
+## 
+## Call:
+## lm(formula = uptake ~ height, data = boys)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.069879 -0.033144  0.001407  0.009581  0.084012 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -3.843326   0.609198  -6.309 0.000231 ***
+## height       0.040718   0.004648   8.761 2.26e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.05013 on 8 degrees of freedom
+## Multiple R-squared:  0.9056,	Adjusted R-squared:  0.8938 
+## F-statistic: 76.75 on 1 and 8 DF,  p-value: 2.258e-05
+```
+
+ 
+
+This doesn't go quite so smoothly here because there are three
+variables being removed, and it's a bit of work to type them all. 
+
+
+
+(g) How has R-squared changed between your two
+regressions? Describe what you see in a few words.
+
+
+Solution
+
+
+R-squared has dropped by a bit, from 97\% to 91\%. (Make your own
+call: pull out the two R-squared numbers, and say a word or two about
+how they compare. I don't much mind what you say: 
+"R-squared has decreased (noticeably)", "R-squared has hardly changed". But say
+something.)
+
+ 
+
+(h) Carry out a test comparing the fit of your
+two regression models. What do you conclude, and
+therefore what recommendation would you make about the
+regression that would be preferred?
+
+
+Solution
+
+
+The word "test" again implies something that  produces a P-value with a
+null hypothesis that you might reject. In this case, the test that
+compares two models differing by more than one $x$ uses
+`anova`, testing the null hypothesis that the two regressions
+are equally good, against the alternative that the bigger (first) one
+is better. Feed `anova` two fitted model objects, smaller first:
+
+
+```r
+anova(boys.2, boys.1)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: uptake ~ height
+## Model 2: uptake ~ age + height + weight + chest
+##   Res.Df       RSS Df Sum of Sq      F Pr(>F)
+## 1      8 0.0201016                           
+## 2      5 0.0069226  3  0.013179 3.1729  0.123
+```
+
+ 
+
+This P-value of 0.123 is not small, so we do not reject the null
+hypothesis. There is not a significant difference in fit between the
+two models. Therefore, we should go with the smaller model
+`boys.2` because it is simpler. 
+
+That drop in R-squared from 97\% to 91\% was, it turns out, *not*
+significant: the three extra variables
+could have produced a change in R-squared like that, 
+*even if  they were worthless*.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Recall that adding $x$'s to a regression will always make R-squared go up, even if they are just random noise.</span>
+
+If you have learned about "adjusted R-squared", you might recall
+that this is supposed to go down *only* if the variables you took
+out should not have been taken out. But adjusted R-squared goes down
+here as well, from 94\% to 89\% (not quite as much, therefore). What
+happens is that adjusted R-squared is rather more relaxed about
+keeping variables than the `anova` $F$-test is; if we had used
+an $\alpha$ of something like 0.10, the decision between the two
+models would have been a lot closer, and this is reflected in the
+adjusted R-squared values.
+
+
+
+(i) Obtain a table of correlations between all
+the variables in the data frame. Do this by feeding
+the whole data frame into `cor`. 
+We found that a regression predicting oxygen uptake
+from just `height` was acceptably good. What
+does your table of correlations say about why that
+is? (Hint: look for all the correlations that are
+*large*.) 
+
+
+Solution
+
+
+Correlations first:
+
+
+```r
+cor(boys)
+```
+
+```
+##           uptake       age    height    weight     chest
+## uptake 1.0000000 0.1361907 0.9516347 0.6576883 0.7182659
+## age    0.1361907 1.0000000 0.3274830 0.2307403 0.1657523
+## height 0.9516347 0.3274830 1.0000000 0.7898252 0.7909452
+## weight 0.6576883 0.2307403 0.7898252 1.0000000 0.8809605
+## chest  0.7182659 0.1657523 0.7909452 0.8809605 1.0000000
+```
+
+ 
+The correlations with `age` are all on the low side, but all
+the other correlations are high, not just between `uptake` and the
+other variables, but between the explanatory variables as well.
+
+Why is this helpful in understanding what's going on? Well, imagine a
+boy with large height (a tall one). The regression `boys.2`
+says that this alone is enough to predict that such a boy's oxygen
+uptake is likely to be large, since the slope is positive. But the
+correlations tell you more: a boy with large height is also (somewhat)
+likely to be older (have large age), heavier (large weight) and to have
+larger `chest` cavity. So oxygen uptake does depend on those other
+variables as well, but once you know `height` you can make a
+good guess at their values; you don't need to know them.
+
+Further remarks: `age` has a low correlation with
+`uptake`, so its non-significance earlier appears to be
+"real": it really does have nothing extra to say, because the other
+variables have a stronger link with `uptake` than
+`age`. Height, however, seems to be the best way of relating
+oxygen uptake to any of the other variables. I think the suppositions
+from earlier about relating oxygen uptake to "bigness"\endnote{This
+is not, I don't think, a real word, but I mean "size" emphasizing
+how big a boy is generally, rather than how small.} in some sense
+are actually sound, but age and weight and `chest` capture
+"bigness" worse than height does. Later, when you learn about
+Principal Components, you will see that the first principal component,
+the one that best captures how the variables vary together, is often
+"bigness" in some sense.
+
+Another way to think about these things is via pairwise
+scatterplots. The nicest way to produce these is via `ggpairs`
+from package `ggally`:
+
+
+```r
+boys %>% ggpairs()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+
+ 
+
+A final remark: with five variables, we really ought to have more than
+ten observations (something like 50 would be better). But with more
+observations and the same correlation structure, the same issues would
+come up again, so the question would not be materially changed.
+
+
+ 
+
+
+
+##  Mating songs in crickets
+
+
+ Male tree crickets produce "mating songs" by rubbing their
+wings together to produce a chirping sound. It is hypothesized that
+female tree crickets identify males of the correct species by how fast
+(in chirps per second) the male's mating song is. This is called the
+"pulse rate".  Some data for two species of crickets are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/crickets.txt). The
+columns, which are unlabelled, are temperature and pulse rate
+(respectively) for *Oecanthus exclamationis* (first two
+columns) and *Oecanthus niveus* (third and fourth columns). The
+columns are separated by tabs. There are some missing values in the
+first two columns because fewer *exclamationis* crickets than
+*niveus* crickets were measured.
+The research question is whether males
+of the different species have different average pulse rates. It is
+also of interest to see whether temperature has an effect, and if
+so, what.
+
+
+(a) Read in the data, allowing for the fact that you have no
+column names. You'll see that the
+columns have names `X1` through `X4`. This is
+OK.
+
+
+Solution
+
+
+Tab-separated, so `read_tsv`; no column names, so `col_names=F`:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
+crickets=read_tsv(my_url,col_names=F)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   X1 = col_double(),
+##   X2 = col_double(),
+##   X3 = col_double(),
+##   X4 = col_double()
+## )
+```
+
+```r
+crickets  
+```
+
+```
+## # A tibble: 17 x 4
+##       X1    X2    X3    X4
+##    <dbl> <dbl> <dbl> <dbl>
+##  1  20.8  67.9  17.2  44.3
+##  2  20.8  65.1  18.3  47.2
+##  3  24    77.3  18.3  47.6
+##  4  24    78.7  18.3  49.6
+##  5  24    79.4  18.9  50.3
+##  6  24    80.4  18.9  51.8
+##  7  26.2  85.8  20.4  60  
+##  8  26.2  86.6  21    58.5
+##  9  26.2  87.5  21    58.9
+## 10  26.2  89.1  22.1  60.7
+## 11  28.4  98.6  23.5  69.8
+## 12  29   101.   24.2  70.9
+## 13  30.4  99.3  25.9  76.2
+## 14  30.4 102.   26.5  76.1
+## 15  NA    NA    26.5  77  
+## 16  NA    NA    26.5  77.7
+## 17  NA    NA    28.6  84.7
+```
+
+ 
+
+As promised.
+
+If you didn't catch the tab-separated part, this probably happened to you:
+
+
+```r
+d=read_delim(my_url," ",col_names=F)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   X1 = col_character()
+## )
+```
+
+```
+## Warning in rbind(names(probs), probs_f): number of columns of result is not
+## a multiple of vector length (arg 1)
+```
+
+```
+## Warning: 3 parsing failures.
+## row # A tibble: 3 x 5 col     row col   expected  actual   file                                      expected   <int> <chr> <chr>     <chr>    <chr>                                     actual 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… file 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… row 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+```
+
+ 
+
+This doesn't look good:
+
+
+```r
+problems(d)
+```
+
+```
+## # A tibble: 3 x 5
+##     row col   expected  actual   file                                     
+##   <int> <chr> <chr>     <chr>    <chr>                                    
+## 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+## 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+## 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+```
+
+ 
+
+The "expected columns" being 1 should bother you, since we know
+there are supposed to be 4 columns. At this point, we take a look at
+what got read in:
+
+
+```r
+d
+```
+
+```
+## # A tibble: 17 x 1
+##    X1                       
+##    <chr>                    
+##  1 "20.8\t67.9\t17.2\t44.3" 
+##  2 "20.8\t65.1\t18.3\t47.2" 
+##  3 "24.0\t77.3\t18.3\t47.6" 
+##  4 "24.0\t78.7\t18.3\t49.6" 
+##  5 "24.0\t79.4\t18.9\t50.3" 
+##  6 "24.0\t80.4\t18.9\t51.8" 
+##  7 "26.2\t85.8\t20.4\t60.0" 
+##  8 "26.2\t86.6\t21.0\t58.5" 
+##  9 "26.2\t87.5\t21.0\t58.9" 
+## 10 "26.2\t89.1\t22.1\t60.7" 
+## 11 "28.4\t98.6\t23.5\t69.8" 
+## 12 "29.0\t100.8\t24.2\t70.9"
+## 13 "30.4\t99.3\t25.9\t76.2" 
+## 14 "30.4\t101.7\t26.5\t76.1"
+## 15 "NA\tNA"                 
+## 16 "NA\tNA"                 
+## 17 "NA\tNA"
+```
+
+
+
+and there you see the `t` or "tab" characters separating the
+values, instead of spaces. (This is what I tried first, and once I
+looked at this, I realized that `read_tsv` was what I needed.)
+
+
+
+(b) These data are rather far from being tidy. There need to be
+three variables, temperature, pulse rate and species, and there
+are $14+17=31$ observations altogether. This one is tricky in that
+there are temperature and pulse rate for each of two levels of a
+factor, so I'll suggest combining the temperature and chirp rate
+together into one thing for each species, then gathering them,
+then splitting them again. Create new columns, named for  each species,
+that contain the temperature and pulse rate for that species in
+that order, `unite`d together.
+For the rest of this question, start from the data frame you read
+in, and build a pipe, one or two steps at a time, to save creating
+a lot of temporary data frames.
+
+
+Solution
+
+
+Breathe, and then begin. `unite` creates new columns by
+joining together old ones:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As *str_c* or *paste* do, actually, but the advantage of *unite* is that it gets rid of the other columns, which you probably no longer need.</span>
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) 
+```
+
+```
+## # A tibble: 17 x 2
+##    exclamationis niveus   
+##    <chr>         <chr>    
+##  1 20.8_67.9     17.2_44.3
+##  2 20.8_65.1     18.3_47.2
+##  3 24_77.3       18.3_47.6
+##  4 24_78.7       18.3_49.6
+##  5 24_79.4       18.9_50.3
+##  6 24_80.4       18.9_51.8
+##  7 26.2_85.8     20.4_60  
+##  8 26.2_86.6     21_58.5  
+##  9 26.2_87.5     21_58.9  
+## 10 26.2_89.1     22.1_60.7
+## 11 28.4_98.6     23.5_69.8
+## 12 29_100.8      24.2_70.9
+## 13 30.4_99.3     25.9_76.2
+## 14 30.4_101.7    26.5_76.1
+## 15 NA_NA         26.5_77  
+## 16 NA_NA         26.5_77.7
+## 17 NA_NA         28.6_84.7
+```
+
+ 
+
+Note that the original columns `X1:X4` are *gone*, which
+is fine, because the information we needed from them is contained in
+the two new columns. `unite` by default uses an underscore to
+separate the joined-together values, which is generally safe since you
+won't often find those in data.
+
+Digression: `unite`-ing with a space could cause problems if
+the data values have spaces in them already. Consider this list of names:
+
+
+```r
+names=c("Cameron McDonald","Durwin Yang","Ole Gunnar Solskjaer","Mahmudullah")
+```
+
+ 
+
+Two very former students of mine, a Norwegian soccer player, and a
+Bangladeshi cricketer. Only one of these has played for Manchester United:
+
+
+```r
+manu=c(F,F,T,F)
+```
+
+ 
+
+and let's make a data frame:
+
+
+```r
+d=tibble(name=names,manu=manu)
+d
+```
+
+```
+## # A tibble: 4 x 2
+##   name                 manu 
+##   <chr>                <lgl>
+## 1 Cameron McDonald     FALSE
+## 2 Durwin Yang          FALSE
+## 3 Ole Gunnar Solskjaer TRUE 
+## 4 Mahmudullah          FALSE
+```
+
+
+
+Now, what happens if we `unite` those columns, separating them
+by a space?
+
+
+```r
+d %>% unite(joined,name:manu,sep=" ")
+```
+
+```
+## # A tibble: 4 x 1
+##   joined                   
+##   <chr>                    
+## 1 Cameron McDonald FALSE   
+## 2 Durwin Yang FALSE        
+## 3 Ole Gunnar Solskjaer TRUE
+## 4 Mahmudullah FALSE
+```
+
+ 
+
+If we then try to separate them again, what happens?
+
+
+```r
+d %>% unite(joined,name:manu,sep=" ") %>%
+separate(joined,c("one","two")," ")
+```
+
+```
+## Warning: Expected 2 pieces. Additional pieces discarded in 3 rows [1, 2,
+## 3].
+```
+
+```
+## # A tibble: 4 x 2
+##   one         two     
+##   <chr>       <chr>   
+## 1 Cameron     McDonald
+## 2 Durwin      Yang    
+## 3 Ole         Gunnar  
+## 4 Mahmudullah FALSE
+```
+
+ 
+
+Things have gotten lost: most of the original values of `manu`
+and some of the names. If we use a different separator character,
+either choosing one deliberately or going with the default underscore,
+everything works swimmingly:
+
+
+```r
+d %>% unite(joined,name:manu,sep=":") %>%
+separate(joined,c("one","two"),":")
+```
+
+```
+## # A tibble: 4 x 2
+##   one                  two  
+##   <chr>                <chr>
+## 1 Cameron McDonald     FALSE
+## 2 Durwin Yang          FALSE
+## 3 Ole Gunnar Solskjaer TRUE 
+## 4 Mahmudullah          FALSE
+```
+
+ 
+
+and we are back to where we started.
+
+If you run just the `unite` line (move the pipe symbol to the
+next line so that the `unite` line is complete as it stands),
+you'll see what happened.
+      
+
+
+(c) The two columns `exclamationis` and `niveus`
+that you just created are both temperature-pulse rate combos, but
+for different species. `gather` them together into one
+column, labelled by species. (This is a straight `tidyr`
+`gather`, even though they contain something odd-looking.)
+
+
+Solution
+
+
+Thus, this, naming the new column `temp_pulse` since it
+contains both of those things. Add to the end of the pipe you
+started building in the previous part:
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus)  
+```
+
+```
+## # A tibble: 34 x 2
+##    species       temp_pulse
+##    <chr>         <chr>     
+##  1 exclamationis 20.8_67.9 
+##  2 exclamationis 20.8_65.1 
+##  3 exclamationis 24_77.3   
+##  4 exclamationis 24_78.7   
+##  5 exclamationis 24_79.4   
+##  6 exclamationis 24_80.4   
+##  7 exclamationis 26.2_85.8 
+##  8 exclamationis 26.2_86.6 
+##  9 exclamationis 26.2_87.5 
+## 10 exclamationis 26.2_89.1 
+## # ... with 24 more rows
+```
+
+ 
+
+Yep. If you scroll down with Next, you'll see the other species of
+crickets, and you'll see some missing values at the bottom, labelled,
+at the moment, `NA_NA`. 
+
+This is going to get rather long, but don't fret: we debugged the two
+`unite` lines before, so if you get any errors, they must
+have come from the `gather`. So that would be the place to check.
+      
+
+
+(d) Now split up the temperature-pulse combos at the underscore, into
+two separate columns. This is `separate`. When specifying
+what to separate by, you can use a number ("split after this many characters") or a piece of text, in quotes ("when you see this text, split at it"). 
+
+
+Solution
+
+
+The text to split by is an underscore (in quotes), since
+`unite` by default puts an underscore in between the
+values it pastes together. Glue the `separate` onto the
+end. We are creating two new variables `temperature` and
+`pulse_rate`:
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_")
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>         <chr>       <chr>     
+##  1 exclamationis 20.8        67.9      
+##  2 exclamationis 20.8        65.1      
+##  3 exclamationis 24          77.3      
+##  4 exclamationis 24          78.7      
+##  5 exclamationis 24          79.4      
+##  6 exclamationis 24          80.4      
+##  7 exclamationis 26.2        85.8      
+##  8 exclamationis 26.2        86.6      
+##  9 exclamationis 26.2        87.5      
+## 10 exclamationis 26.2        89.1      
+## # ... with 24 more rows
+```
+
+ 
+
+You'll note that `unite` and `separate` are opposites ("inverses") of each other, but we haven't just done something and then undone it, because we have a `gather` in between; in fact, arranging it this way has done precisely the tidying we wanted.
+      
+
+
+(e) Almost there.  Temperature and pulse rate are still text
+(because `unite` turned them into text), but they should be
+numbers. Create new variables that are numerical versions of
+temperature and pulse rate (using `as.numeric`). Check that
+you have no extraneous variables (and, if necessary, get rid of
+the ones you don't want). (Species is also text and really ought
+to be a factor, but having it as text doesn't seem to cause any
+problems.)
+You can, if you like, use `parse_number` instead of
+`as.numeric`. They should both work. The distinction I
+prefer to make is that `parse_number` is good for text
+with a number in it (that we want to pull the number out of),
+while `as.numeric` is for turning something that looks like
+a number but isn't one into a genuine number.\endnote{You could
+just as well make the point that the text 20.8 contains the
+number 20.8 and nothing else, so that `parse_number`
+will pull out 20.8 as a number. If that logic works for you, go
+with it.}
+
+
+Solution
+
+
+`mutate`-ing into a column that already exists overwrites
+the variable that's already there (which saves us some effort
+here). 
+
+```r
+crickets.1 = crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate(temperature=as.numeric(temperature)) %>%
+mutate(pulse_rate=as.numeric(pulse_rate))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```r
+crickets.1  
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+I saved the data frame this time, since this is the one we will use
+for our analysis.
+
+The warning message tells us that we got genuine missing-value NAs
+back, which is probably what we want. Specifically, they got turned
+from missing *text* to missing *numbers*!
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might think that missing is just missing, but R distinguishes between types of missing.</span>
+The R word
+"coercion" means values being changed from one type of thing to
+another type of thing.  (We'll ignore the missings and see if they
+cause us any trouble. The same warning messages will show up on graphs
+later.)  So I have 34 rows (including three rows of missings) instead
+of the 31 rows I would have liked. Otherwise, success.
+
+There is (inevitably) another way to do this. We are doing the
+`as.numeric` twice, exactly the same on two different columns,
+and when you are doing the same thing on a number of columns, here a
+`mutate` with the same function, you have the option of using
+`mutate_if` or `mutate_at`. These are like
+`summarize_if` and `summarize_at` that we used way
+back to compute numerical summaries of a bunch of columns: the
+`if` variant works on columns that share a property, like being
+numeric, and the `at` variant works on columns whose names have
+something in common or that we can list, which is what we want here:
+
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate_at(vars(temperature:pulse_rate),funs(as.numeric))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+Can't I just say that these are columns 2 and 3?
+
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate_at(vars(2:3),funs(as.numeric))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+Yes. Equally good. What goes into the `vars`
+is the same as can go into a `select`: column numbers, names,
+or any of those "select helpers" like `starts_with`.
+
+You might think of `mutate_if` here, but if you scroll back, you'll find that all the columns are text, before you convert temperature and pulse rate to numbers, and so there's no way to pick out just the two columns you want that way. 
+
+Check that the temperature and pulse rate columns are now labelled
+`dbl`, which means they actually *are* decimal numbers
+(and don't just look like decimal numbers).
+
+Either way, using `unite` and then `separate` means that
+all the columns we created we want to keep (or, all the ones we would
+have wanted to get rid of have already been gotten rid of).
+
+Now we can actually do some statistics.
+      
+
+
+(f) Do a two-sample $t$-test to see whether the mean pulse rates
+differ between species. What do you conclude?
+
+
+Solution
+
+
+Drag your mind way back to this:
+
+```r
+t.test(pulse_rate~species,data=crickets.1)  
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  pulse_rate by species
+## t = 5.2236, df = 28.719, p-value = 1.401e-05
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  14.08583 32.22677
+## sample estimates:
+## mean in group exclamationis        mean in group niveus 
+##                    85.58571                    62.42941
+```
+
+ 
+
+There is strong evidence of a difference in means (a P-value around
+0.00001), and the confidence interval says that the mean chirp rate is
+higher for *exclamationis*. That is, not just for the crickets
+that were observed here, but for *all* crickets of these two
+species. 
+      
+
+
+(g) The analysis in the last part did not use temperature,
+however. Is it possible that temperature also has an effect? To
+assess this, draw a scatterplot of pulse rate against temperature,
+with the points distinguished, somehow, by the species they are
+from.\endnote{This was the actual reason I gave you this question:
+I wanted you to do this. It sort of morphed into all the other
+stuff as well.}  
+
+
+Solution
+
+
+One of the wonderful things about `ggplot` is that doing
+the obvious thing works:
+
+```r
+ggplot(crickets.1,aes(x=temperature,y=pulse_rate,colour=species))+
+geom_point()
+```
+
+```
+## Warning: Removed 3 rows containing missing values (geom_point).
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
+
+       
+    
+
+
+(h) What does the plot tell you that the $t$-test doesn't? How
+would you describe differences in pulse rates between species now?
+
+
+Solution
+
+
+The plot tells you that (for both species) as temperature goes
+up, pulse rate goes up as well. *Allowing for that*, the
+difference in pulse rates between the two species is even
+clearer than it was before. To see an example, pick a
+temperature, and note that the mean pulse rate at that
+temperature seems to be at least 10 higher for
+*exclamationis*, with a high degree of consistency.
+The $t$-test mixed up all the pulse rates at all the different
+temperatures. Even though the conclusion was clear enough, it
+could be clearer if we incorporated temperature into the analysis.
+There was also a potential source of unfairness in that the
+*exclamationis* crickets tended to be observed at higher
+temperatures than *niveus* crickets; since pulse rates
+increase with temperature, the apparent difference in pulse
+rates between the species might have been explainable by one
+species being observed mainly in higher temperatures. This was
+*utterly invisible* to us when we did the $t$-test, but it
+shows the importance of accounting for all the relevant
+variables when you do your analysis.\endnote{And it shows the
+value of looking at relevant plots.} If the species had been
+observed at opposite temperatures, we might have
+concluded
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mistakenly.} that textsl{niveus</span> have the
+higher pulse rates on average. I come back to this later when I
+discuss the confidence interval for species difference that
+comes out of the regression model with temperature.
+      
+
+
+(i) Fit a regression predicting pulse rate from species and
+temperature. Compare the P-value for species in this regression to
+the one from the $t$-test. What does that tell you?
+
+
+Solution
+
+
+This is actually a so-called "analysis of covariance model",
+which properly belongs in D29, but it's really just a regression:
+
+```r
+pulse.1=lm(pulse_rate~species+temperature,data=crickets.1)
+summary(pulse.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = pulse_rate ~ species + temperature, data = crickets.1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.0128 -1.1296 -0.3912  0.9650  3.7800 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    -7.21091    2.55094  -2.827  0.00858 ** 
+## speciesniveus -10.06529    0.73526 -13.689 6.27e-14 ***
+## temperature     3.60275    0.09729  37.032  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.786 on 28 degrees of freedom
+##   (3 observations deleted due to missingness)
+## Multiple R-squared:  0.9896,	Adjusted R-squared:  0.9888 
+## F-statistic:  1331 on 2 and 28 DF,  p-value: < 2.2e-16
+```
+
+ 
+
+The P-value for species is now $6.27\times 10^{-14}$ or 0.00000000000006, which is even less than
+the P-value of 0.00001 that came out of the $t$-test. That is to say,
+when you know temperature, you can be even more sure of your
+conclusion that there is a difference between the species.
+
+The R-squared for this regression is almost 99\%, which says that if
+you know both temperature and species, you can predict the pulse rate
+almost exactly.
+
+In the regression output, the slope for species is about $-10$. It is
+labelled `speciesniveus`. Since species is categorical,
+`lm` uses the first category, *exclamationis*, as the
+baseline and expresses each other species relative to that. Since the
+slope is about $-10$, it says that at any given temperature, the mean
+pulse rate for *niveus* is about 10 less than for
+*exclamationis*. This is pretty much what the scatterplot told
+us.
+
+We can go a little further here:
+
+
+```r
+confint(pulse.1)
+```
+
+```
+##                    2.5 %    97.5 %
+## (Intercept)   -12.436265 -1.985547
+## speciesniveus -11.571408 -8.559175
+## temperature     3.403467  3.802038
+```
+
+ 
+
+The second line says that the pulse rate for *niveus* is
+between about 8.5 and 11.5 less than for *exclamationis*, at
+any given temperature (comparing the two species at the same
+temperature as each other, but that temperature could be
+anything). This is a lot shorter than the CI that came out of the
+$t$-test, that went from 14 to 32. This is because we are now
+accounting for temperature, which also makes a difference. (In the
+$t$-test, the temperatures were all mixed up). What we also see is
+that the $t$-interval is shifted up compared to the one from the
+regression. This is because the $t$-interval conflates\endnote{Mixes
+up.} two things: the *exclamationis* crickets do have a
+higher pulse rate, but they were also observed at higher temperatures,
+which makes it look as if their pulse rates are more
+higher
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
+really are, when you account for temperature.
+
+This particular model constrains the slope with temperature to be the
+same for both species (just the intercepts differ). If you want to
+allow the slopes to differ between species, you add an interaction
+between temperature and species:
+
+
+```r
+pulse.2=lm(pulse_rate~species*temperature,data=crickets.1)
+summary(pulse.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = pulse_rate ~ species * temperature, data = crickets.1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.7031 -1.3417 -0.1235  0.8100  3.6330 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)               -11.0408     4.1515  -2.659    0.013 *  
+## speciesniveus              -4.3484     4.9617  -0.876    0.389    
+## temperature                 3.7514     0.1601  23.429   <2e-16 ***
+## speciesniveus:temperature  -0.2340     0.2009  -1.165    0.254    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.775 on 27 degrees of freedom
+##   (3 observations deleted due to missingness)
+## Multiple R-squared:  0.9901,	Adjusted R-squared:  0.989 
+## F-statistic: 898.9 on 3 and 27 DF,  p-value: < 2.2e-16
+```
+
+ 
+
+To see whether adding the interaction term added anything to the
+prediction,\endnote{Though it's hard to imagine being able to improve on an
+R-squared of 99\%.} compare the model with and without using `anova`:
+
+
+```r
+anova(pulse.1,pulse.2)  
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: pulse_rate ~ species + temperature
+## Model 2: pulse_rate ~ species * temperature
+##   Res.Df    RSS Df Sum of Sq     F Pr(>F)
+## 1     28 89.350                          
+## 2     27 85.074  1    4.2758 1.357 0.2542
+```
+
+ 
+
+There's no significant improvement by adding the interaction, so
+there's no evidence that having different slopes for each species is
+necessary. Note that `anova` gave the same P-value as did the
+$t$-test for the slope coefficient for the interaction in
+`summary`, 0.254 in both cases. This is because there were only
+two species and therefore only one slope coefficient was required to
+distinguish them. If there had been three species, we would have had
+to look at the `anova` output to hunt for a difference among
+species, since there would have been two slope coefficients, each with
+its own P-value.\endnote{This wouldn't have told us about the overall
+effect of `species.`} 
+
+The upshot is that we do not need different slopes; the model
+`pulse.1` with the same slope for each species describes what
+is going on.
+
+`ggplot` makes it almost laughably easy to add regression lines
+for each species to our plot, thus:
+
+
+```r
+ggplot(crickets.1,aes(x=temperature,y=pulse_rate,colour=species))+
+geom_point()+geom_smooth(method="lm",se=F)
+```
+
+```
+## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+```
+
+```
+## Warning: Removed 3 rows containing missing values (geom_point).
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
+
+ 
+
+The lines are almost exactly parallel, so having the same slope for
+each species makes perfect sense.
+      
+
+
+
+
+
+
 ## Facebook friends and grey matter
 
 
@@ -104,7 +2371,7 @@ ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-2-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
 
 
 
@@ -285,7 +2552,7 @@ ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+
 geom_smooth(method="lm")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
 
 
 
@@ -302,7 +2569,7 @@ This is, to my mind, the easiest way:
 ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
 There is some "magic" here, since the fitted model object is not
 actually a data frame, but it works this way.
@@ -325,7 +2592,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
 Now, why did I try adding a smooth trend, and why is it not
 necessarily a good idea? The idea of a residual plot is that there
 should be no trend, and so the smooth trend curve ought to go straight
@@ -427,7 +2694,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
 
 This part is just about getting the plot. Comments are coming in a
 minute. Note that `ENE` is capital letters, so that
@@ -513,7 +2780,7 @@ straight into `ggplot`:
 ggplot(carp.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
 
 
 
@@ -620,7 +2887,7 @@ geom_line(colour="blue")+
 geom_point(data=carp,aes(x=bodyweight,y=ENE))
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
 $ %$ %$
 
 This works, but is not very aesthetic, because the bodyweight that is
@@ -686,7 +2953,7 @@ is `ENE`. The plot is this:
 g
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
 Concerning interpretation, you have a number of possibilities
 here. The simplest is that the points in the middle are above the
@@ -724,7 +2991,7 @@ fitted model object `carp.2` as your data frame for the
 ggplot(carp.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
 I think this is *still* a curve (or, it goes down and then
 sharply up at the end). Either way, there is still a pattern. 
@@ -786,7 +3053,7 @@ geom_line(colour="blue")+
 geom_point(aes(y=carp$ENE))
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
 
 I'd say that does a really nice job of fitting the data. But it would
 be nice to have a few more tanks with large-bodyweight fish, to
@@ -800,7 +3067,7 @@ just did:
 ggplot(carp.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
 
 All in all, that looks pretty good (and certainly a vast improvement
 over the ones you got before).
@@ -819,8 +3086,7 @@ knit it, play with it.
 
 
 
-## Sparrowhawks
-
+##  Sparrowhawks
 
 
  One of nature's patterns is the relationship
@@ -958,7 +3224,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-78-1.png" width="672"  />
 
 <br>
 
@@ -1085,7 +3351,7 @@ ggplot(sparrowhawks,aes(x=returning,y=newadults))+
 geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-82-1.png" width="672"  />
 
 I added a bit of text to the report, which I will show in a moment.
 
@@ -1299,7 +3565,7 @@ The usual:
 ggplot(soc,aes(x=experience,y=salary))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-90-1.png" width="672"  />
 
 As experience goes up, salary also goes up, as you would expect. Also,
 the trend seems more or less straight.
@@ -1365,7 +3631,7 @@ columns in it, not forgetting the initial dots:
 ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
 I see a "fanning-out": the residuals are getting bigger *in size* 
 (further away from zero) as the fitted values get bigger. That
 is, when the (estimated) salary gets larger, it also gets more
@@ -1387,7 +3653,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
 
 I added a smooth trend to this to help us judge whether the
 absolute-value-residuals are getting bigger as the fitted values get
@@ -1405,7 +3671,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-94-1.png" width="672"  />
 
 The larger fitted values, according to this, have residuals larger in size.
 
@@ -1451,7 +3717,7 @@ I explain that "masked" thing below.
 boxcox(salary~experience,data=soc)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-96-1.png" width="672"  />
 
 That one looks like $\lambda=0$ or log. You could probably also
 justify fourth root (power 0.25), but log is a very common
@@ -1476,13 +3742,13 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:MASS"      "package:bindrcpp" 
-##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
-##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
-## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
-## [13] "package:stats"     "package:graphics"  "package:grDevices"
-## [16] "package:utils"     "package:datasets"  "package:methods"  
-## [19] "Autoloads"         "package:base"
+##  [1] ".GlobalEnv"        "package:MASS"      "package:GGally"   
+##  [4] "package:bindrcpp"  "package:forcats"   "package:stringr"  
+##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
+## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
+## [13] "package:tidyverse" "package:stats"     "package:graphics" 
+## [16] "package:grDevices" "package:utils"     "package:datasets" 
+## [19] "package:methods"   "Autoloads"         "package:base"
 ```
 
 then get rid of `MASS`:
@@ -1499,13 +3765,13 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:bindrcpp"  "package:forcats"  
-##  [4] "package:stringr"   "package:dplyr"     "package:purrr"    
-##  [7] "package:readr"     "package:tidyr"     "package:tibble"   
-## [10] "package:ggplot2"   "package:tidyverse" "package:stats"    
-## [13] "package:graphics"  "package:grDevices" "package:utils"    
-## [16] "package:datasets"  "package:methods"   "Autoloads"        
-## [19] "package:base"
+##  [1] ".GlobalEnv"        "package:GGally"    "package:bindrcpp" 
+##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
+##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
+## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
+## [13] "package:stats"     "package:graphics"  "package:grDevices"
+## [16] "package:utils"     "package:datasets"  "package:methods"  
+## [19] "Autoloads"         "package:base"
 ```
 It has. Now any calls to `select` will use the right one. We hope.
 
@@ -1670,7 +3936,7 @@ data frame:
 ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
 
 That, to my mind, is a horizontal band of points, so I would say yes,
 I have solved the fanning out.
@@ -1684,7 +3950,7 @@ distributed as they should be? Well, that's easy enough to check:
 ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
 
 The issues here are that those bottom two values are a bit too low,
 and the top few values are a bit bunched up (that curve at the top).
@@ -1803,7 +4069,7 @@ for. Also, the volume is the response, so that should go on the $y$-axis:
 ggplot(trees,aes(x=diameter,y=volume))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
 
 You can put a smooth trend on it if you like, which would
 look like this:
@@ -1818,7 +4084,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-109-1.png" width="672"  />
 
 I'll take either of those for this part, though I think the smooth
 trend actually obscures the issue here (because there is not so much
@@ -1968,7 +4234,7 @@ random mess of nothingness:
 ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-114-1.png" width="672"  />
 
 Make a call. You could say that there's no discernible pattern,
 especially with such a small data set, and
@@ -2093,7 +4359,7 @@ predicts the data well. I should look at the residuals from this one:
 ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-116-1.png" width="672"  />
 
 I really don't think there are any problems there.
 
@@ -2204,7 +4470,7 @@ got, is still high. The residuals are these:
 ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
 
 which again seem to show no problems. The residuals are smaller in
 size now because of the log transformation: the actual and predicted

@@ -8,7 +8,7 @@ the areas of the brain associated with social perception and
 associative memory? To find out, a 2012 study measured both of these
 variables for a sample of 40 students at City University in London
 (England). The data are at
-[http://www.utsc.utoronto.ca/~butler/c32/facebook.txt](http://www.utsc.utoronto.ca/~butler/c32/facebook.txt). The grey
+[link](http://www.utsc.utoronto.ca/~butler/c32/facebook.txt). The grey
 matter density is on a $z$-score standardized scale. The values are
 separated by *tabs*.
 
@@ -41,14 +41,15 @@ my_url="http://www.utsc.utoronto.ca/~butler/c32/facebook.txt"
 fb=read_tsv(my_url)
 fb
 ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
-```       
+```
+
+       
 
 
 
-(b) Describe what you see on your scatterplot: is there a
+(b)??part:scatterconc?? Describe what you see on your scatterplot: is there a
 trend, and if so, what kind of trend is it? (Don't get too taken in
-by the exact shape of your smooth trend.) Think ``form, direction,
-strength''. 
+by the exact shape of your smooth trend.) Think "form, direction,  strength". 
 
 
 Solution
@@ -82,13 +83,17 @@ the  variable names correct:
 ```{r }
 fb.1=lm(FBfriends~GMdensity,data=fb)
 summary(fb.1)
-```       
+```
+
+       
 
 I observe, though I didn't ask you to, that the R-squared is pretty
 awful, going with a correlation of 
 ```{r }
 sqrt(0.1904)
-``` 
+```
+
+ 
 
 which *would* look
 like as weak of a trend as we saw.
@@ -96,7 +101,7 @@ like as weak of a trend as we saw.
 
 
 
-(d) Is the slope of your regression line significantly
+(d)??part:regtest?? Is the slope of your regression line significantly
 different from zero? What does that mean, in the context of the
 data?
 
@@ -120,7 +125,7 @@ reproducibility.
 
 
 (e) Are you surprised by the results of
-parts (b) and (d)? Explain briefly.
+parts (??part:scatterconc??) and (??part:regtest??)? Explain briefly.
 
 
 Solution
@@ -146,13 +151,17 @@ interval. The obvious one is to use R as a calculator and go up
 and down twice its standard error (to get a rough idea):
 ```{r }
 82.45+2*27.58*c(-1,1)
-```       
+```
+
+       
 The `c()` thing is to get both confidence limits at once. The
 smoother way is this:
 
 ```{r }
 confint(fb.1)
-``` 
+```
+
+ 
 
 Feed `confint` a "fitted model object" and it'll give you
 confidence intervals (by default 95\%) for all the parameters in it. 
@@ -180,7 +189,9 @@ of (a):
 ```{r }
 ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+
 geom_smooth(method="lm")
-```       
+```
+
+       
 
 
 
@@ -194,7 +205,9 @@ Solution
 This is, to my mind, the easiest way:
 ```{r }
 ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
-```       
+```
+
+       
 
 There is some "magic" here, since the fitted model object is not
 actually a data frame, but it works this way.
@@ -210,7 +223,9 @@ Compare that residual plot with this one:
 ```{r }
 ggplot(fb.1,aes(x=.fitted,y=.resid))+
 geom_point()+geom_smooth()
-```       
+```
+
+       
 Now, why did I try adding a smooth trend, and why is it not
 necessarily a good idea? The idea of a residual plot is that there
 should be no trend, and so the smooth trend curve ought to go straight

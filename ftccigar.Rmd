@@ -1,0 +1,243 @@
+##  Carbon monoxide in cigarettes
+
+
+ The (US) Federal Trade Commission assesses cigarettes
+according to their tar, nicotine and carbon monoxide contents. In a
+particular year, 25 brands were assessed. For each brand, the tar,
+nicotine and carbon monoxide (all in milligrams) were measured, along
+with the weight in grams. Our aim is to predict carbon monoxide from
+any or all of the other variables. The data are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/ftccigar.txt). These are
+aligned by column (except for the variable names), with more than one
+space between each column of data.
+
+
+(a) Read the data into R, and check that you have 25 observations
+and 4 variables.
+
+
+Solution
+
+
+This specification calls for `read_table2`:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ftccigar.txt"
+cigs=read_table2(my_url)
+cigs
+```
+
+ 
+Yes, I have 25 observations on 4 variables indeed.
+
+`read_delim` won't work (try it and see what happens), because
+that would require the values to be separated by *exactly one* space.
+
+
+
+
+(b)??part:regone?? Run a regression to predict carbon monoxide from the other
+variables, and obtain a summary of the output.
+
+
+Solution
+
+
+The word "summary" is meant to be a big clue that
+`summary` is what you need:
+```{r }
+cigs.1=lm(co~tar+nicotine+weight,data=cigs) 
+summary(cigs.1)
+```
+
+ 
+
+
+
+(c)??part:regtwo?? Which one of your explanatory variables would you
+remove from this regression? Explain (very) briefly. Go ahead and
+fit the regression  without it, and describe how the change in
+R-squared from the regression in (??part:regone??) was entirely predictable.
+
+
+Solution
+
+
+First, the $x$-variable to remove. The obvious candidate is
+`weight`, since it has easily the highest, and clearly
+non-significant, P-value. So, out it comes:
+```{r }
+cigs.2=lm(co~tar+nicotine,data=cigs)
+summary(cigs.2)
+```
+
+ 
+
+R-squared has dropped from 0.9186 to \ldots 0.9186! That is, taking
+out `weight` has not just had a minimal effect on R-squared;
+it's not changed R-squared at all. This is because `weight` was
+so far from being significant: it literally had *nothing* to add.
+
+Another way of achieving the same thing is via the function
+`update`, which takes a fitted model object and describes the
+*change* that you want to make:
+
+```{r }
+cigs.2a=update(cigs.1,.~.-weight)
+summary(cigs.2a)
+```
+
+ 
+
+This can be shorter than describing the whole model again, as you do
+with the `cigs.2` version of `lm`. The syntax is that
+you first specify a "base"  fitted model object that you're going to
+update. Because the model `cigs.1` contains all the information
+about the kind of model it is, and which data frame the data come
+from, R already knows that this is a linear 
+multiple regression and which $x$'s it contains. The second thing to describe is the change from
+the "base". In this case, we want to use the same response variable
+and all the same explanatory variables that we had before, except for
+`weight`. This is specified by a special kind of model formula
+where `.` means "whatever was there before": in English,
+"same response and same explanatories except take out `weight`". 
+
+
+
+(d)??part:regthree?? Fit a regression predicting carbon monoxide from
+`nicotine` *only*, and display the summary.
+
+
+Solution
+
+
+As you would guess:
+```{r }
+cigs.3=lm(co~nicotine,data=cigs)
+summary(cigs.3)
+```
+
+ 
+
+
+
+(e) `nicotine` was far from being significant in the model
+of (??part:regtwo??), and yet in the model of
+(??part:regthree??), it was *strongly* significant, and the
+R-squared value of (??part:regthree??) was almost as high as that
+of (??part:regtwo??). What does this say about the importance of
+`nicotine` as an explanatory variable? Explain, as briefly as
+you can manage.
+
+
+Solution
+
+
+What this says is that you *cannot* say anything about the
+"importance" of `nicotine` without also describing the
+context that you're talking about.  *By itself*,
+`nicotine` is important, but \emph{when you have
+`tar` in the model}, `nicotine` is not
+important: precisely, it now has nothing to add over and above
+the predictive value that `tar` has. You might guess that
+this is because `tar` and `nicotine` are ``saying
+the same thing'' in some fashion. We'll explore that in a moment.
+
+
+
+(f) Make a "pairs plot": that is, scatter plots between all
+pairs of variables. This can be done by feeding the whole data frame
+into `plot`.\endnote{This is a "base graphics" graph rather
+than a "ggplot" one, but it will do for our purposes.}
+Do you see any strong relationships that do
+*not* include `co`? Does that shed any light on the last
+part? Explain briefly (or "at length" if that's how it comes
+out). 
+
+
+Solution
+
+
+Plot the entire data frame:
+```{r }
+plot(cigs)  
+```
+
+ 
+
+We're supposed to ignore `co`, but I comment that strong
+relationships between `co` and *both* of `tar` and
+`nicotine` show up here, along with `weight` being
+at most weakly related to anything else.
+
+That leaves the relationship of `tar` and `nicotine`
+with each other. That also looks like a strong linear trend. When you
+have correlations between explanatory variables, it is called
+"multicollinearity". 
+
+I mentioned a while back (in class) that having correlated $x$'s was
+trouble. Here is where we find out why. The problem is that when
+`co` is large, `nicotine` is large, and a large value of
+`tar` will come along with it. So we don't know whether a large
+value of `co` is caused by a large value of `tar` or a
+large value of `nicotine`: there is no way to separate out
+their effects because in effect they are "glued together". 
+
+You might know of this effect (in an experimental design context) as
+"confounding": the effect of `tar` on `co` is
+confounded with the effect of `nicotine` on `co`, and
+you can't tell which one deserves the credit for predicting `co`.
+
+If you were able to design an experiment here, you could (in
+principle) manufacture a bunch of cigarettes with high tar; some of
+them would have high  nicotine and some would have low. Likewise for
+low tar. Then the
+correlation between `nicotine` and `tar` would go away,
+their effects on `co` would no longer be confounded, and you
+could see unambiguously which one of the variables deserves credit for
+predicting `co`. Or maybe it depends on both, genuinely, but at
+least then you'd know.
+
+We, however, have an observational study, so we have to make do with
+the data we have. Confounding is one of the risks we take when we work
+with observational data.
+
+This was a "base graphics" plot. There is a way of doing a
+`ggplot`-style "pairs plot", as this is called, thus:
+
+```{r }
+library(GGally)
+cigs %>% ggpairs()
+```
+
+ 
+
+As ever, `install.packages` first, in the likely event that you
+don't have this package installed yet. Once you do, though, I think
+this is a nicer way to get a pairs plot.
+
+This plot is a bit more sophisticated: instead of just having the
+scatterplots of the pairs of variables in the row and column, it uses
+the diagonal to show a "kernel density" (a smoothed-out histogram),
+and upper-right it shows the correlation between each pair of
+variables. The three correlations between `co`, `tar`
+and `nicotine` are clearly the highest.
+
+If you want only some of the columns to appear in your pairs plot,
+`select` them first, and then pass that data frame into
+`ggpairs`. Here, we found that `weight` was not
+correlated with anything much, so we can take it out and then make a
+pairs plot of the other variables:
+
+```{r }
+cigs %>% select(-weight) %>% ggpairs()
+```
+
+ 
+
+The three correlations that remain are all very high, which is
+entirely consistent with the strong linear relationships that you see
+bottom left.
+
+
+
+

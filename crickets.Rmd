@@ -1,0 +1,533 @@
+##  Mating songs in crickets
+
+
+ Male tree crickets produce "mating songs" by rubbing their
+wings together to produce a chirping sound. It is hypothesized that
+female tree crickets identify males of the correct species by how fast
+(in chirps per second) the male's mating song is. This is called the
+"pulse rate".  Some data for two species of crickets are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/crickets.txt). The
+columns, which are unlabelled, are temperature and pulse rate
+(respectively) for *Oecanthus exclamationis* (first two
+columns) and *Oecanthus niveus* (third and fourth columns). The
+columns are separated by tabs. There are some missing values in the
+first two columns because fewer *exclamationis* crickets than
+*niveus* crickets were measured.
+The research question is whether males
+of the different species have different average pulse rates. It is
+also of interest to see whether temperature has an effect, and if
+so, what.
+
+
+(a) Read in the data, allowing for the fact that you have no
+column names. You'll see that the
+columns have names `X1` through `X4`. This is
+OK.
+
+
+Solution
+
+
+Tab-separated, so `read_tsv`; no column names, so `col_names=F`:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
+crickets=read_tsv(my_url,col_names=F)
+crickets  
+```
+
+ 
+
+As promised.
+
+If you didn't catch the tab-separated part, this probably happened to you:
+
+```{r }
+d=read_delim(my_url," ",col_names=F)
+```
+
+ 
+
+This doesn't look good:
+
+```{r }
+problems(d)
+```
+
+ 
+
+The "expected columns" being 1 should bother you, since we know
+there are supposed to be 4 columns. At this point, we take a look at
+what got read in:
+
+```{r }
+d
+```
+
+
+
+and there you see the `t` or "tab" characters separating the
+values, instead of spaces. (This is what I tried first, and once I
+looked at this, I realized that `read_tsv` was what I needed.)
+
+
+
+(b) These data are rather far from being tidy. There need to be
+three variables, temperature, pulse rate and species, and there
+are $14+17=31$ observations altogether. This one is tricky in that
+there are temperature and pulse rate for each of two levels of a
+factor, so I'll suggest combining the temperature and chirp rate
+together into one thing for each species, then gathering them,
+then splitting them again. Create new columns, named for  each species,
+that contain the temperature and pulse rate for that species in
+that order, `unite`d together.
+For the rest of this question, start from the data frame you read
+in, and build a pipe, one or two steps at a time, to save creating
+a lot of temporary data frames.
+
+
+Solution
+
+
+Breathe, and then begin. `unite` creates new columns by
+joining together old ones:
+`r tufte::margin_note("As *str_c* or *paste* do, actually, but the advantage of *unite* is that it gets rid of the other columns, which you probably no longer need.")`
+```{r }
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) 
+```
+
+ 
+
+Note that the original columns `X1:X4` are *gone*, which
+is fine, because the information we needed from them is contained in
+the two new columns. `unite` by default uses an underscore to
+separate the joined-together values, which is generally safe since you
+won't often find those in data.
+
+Digression: `unite`-ing with a space could cause problems if
+the data values have spaces in them already. Consider this list of names:
+
+```{r }
+names=c("Cameron McDonald","Durwin Yang","Ole Gunnar Solskjaer","Mahmudullah")
+```
+
+ 
+
+Two very former students of mine, a Norwegian soccer player, and a
+Bangladeshi cricketer. Only one of these has played for Manchester United:
+
+```{r }
+manu=c(F,F,T,F)
+```
+
+ 
+
+and let's make a data frame:
+
+```{r }
+d=tibble(name=names,manu=manu)
+d
+```
+
+
+
+Now, what happens if we `unite` those columns, separating them
+by a space?
+
+```{r }
+d %>% unite(joined,name:manu,sep=" ")
+```
+
+ 
+
+If we then try to separate them again, what happens?
+
+```{r }
+d %>% unite(joined,name:manu,sep=" ") %>%
+separate(joined,c("one","two")," ")
+```
+
+ 
+
+Things have gotten lost: most of the original values of `manu`
+and some of the names. If we use a different separator character,
+either choosing one deliberately or going with the default underscore,
+everything works swimmingly:
+
+```{r }
+d %>% unite(joined,name:manu,sep=":") %>%
+separate(joined,c("one","two"),":")
+```
+
+ 
+
+and we are back to where we started.
+
+If you run just the `unite` line (move the pipe symbol to the
+next line so that the `unite` line is complete as it stands),
+you'll see what happened.
+      
+
+
+(c) The two columns `exclamationis` and `niveus`
+that you just created are both temperature-pulse rate combos, but
+for different species. `gather` them together into one
+column, labelled by species. (This is a straight `tidyr`
+`gather`, even though they contain something odd-looking.)
+
+
+Solution
+
+
+Thus, this, naming the new column `temp_pulse` since it
+contains both of those things. Add to the end of the pipe you
+started building in the previous part:
+```{r }
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus)  
+```
+
+ 
+
+Yep. If you scroll down with Next, you'll see the other species of
+crickets, and you'll see some missing values at the bottom, labelled,
+at the moment, `NA_NA`. 
+
+This is going to get rather long, but don't fret: we debugged the two
+`unite` lines before, so if you get any errors, they must
+have come from the `gather`. So that would be the place to check.
+      
+
+
+(d) Now split up the temperature-pulse combos at the underscore, into
+two separate columns. This is `separate`. When specifying
+what to separate by, you can use a number ("split after this many characters") or a piece of text, in quotes ("when you see this text, split at it"). 
+
+
+Solution
+
+
+The text to split by is an underscore (in quotes), since
+`unite` by default puts an underscore in between the
+values it pastes together. Glue the `separate` onto the
+end. We are creating two new variables `temperature` and
+`pulse_rate`:
+```{r }
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_")
+```
+
+ 
+
+You'll note that `unite` and `separate` are opposites ("inverses") of each other, but we haven't just done something and then undone it, because we have a `gather` in between; in fact, arranging it this way has done precisely the tidying we wanted.
+      
+
+
+(e) Almost there.  Temperature and pulse rate are still text
+(because `unite` turned them into text), but they should be
+numbers. Create new variables that are numerical versions of
+temperature and pulse rate (using `as.numeric`). Check that
+you have no extraneous variables (and, if necessary, get rid of
+the ones you don't want). (Species is also text and really ought
+to be a factor, but having it as text doesn't seem to cause any
+problems.)
+You can, if you like, use `parse_number` instead of
+`as.numeric`. They should both work. The distinction I
+prefer to make is that `parse_number` is good for text
+with a number in it (that we want to pull the number out of),
+while `as.numeric` is for turning something that looks like
+a number but isn't one into a genuine number.\endnote{You could
+just as well make the point that the text 20.8 contains the
+number 20.8 and nothing else, so that `parse_number`
+will pull out 20.8 as a number. If that logic works for you, go
+with it.}
+
+
+Solution
+
+
+`mutate`-ing into a column that already exists overwrites
+the variable that's already there (which saves us some effort
+here). 
+```{r }
+crickets.1 = crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate(temperature=as.numeric(temperature)) %>%
+mutate(pulse_rate=as.numeric(pulse_rate))
+crickets.1  
+```
+
+ 
+
+I saved the data frame this time, since this is the one we will use
+for our analysis.
+
+The warning message tells us that we got genuine missing-value NAs
+back, which is probably what we want. Specifically, they got turned
+from missing *text* to missing *numbers*!
+`r tufte::margin_note("You might think that missing is just missing, but R distinguishes between types of missing.")`
+The R word
+"coercion" means values being changed from one type of thing to
+another type of thing.  (We'll ignore the missings and see if they
+cause us any trouble. The same warning messages will show up on graphs
+later.)  So I have 34 rows (including three rows of missings) instead
+of the 31 rows I would have liked. Otherwise, success.
+
+There is (inevitably) another way to do this. We are doing the
+`as.numeric` twice, exactly the same on two different columns,
+and when you are doing the same thing on a number of columns, here a
+`mutate` with the same function, you have the option of using
+`mutate_if` or `mutate_at`. These are like
+`summarize_if` and `summarize_at` that we used way
+back to compute numerical summaries of a bunch of columns: the
+`if` variant works on columns that share a property, like being
+numeric, and the `at` variant works on columns whose names have
+something in common or that we can list, which is what we want here:
+
+```{r }
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate_at(vars(temperature:pulse_rate),funs(as.numeric))
+```
+
+ 
+
+Can't I just say that these are columns 2 and 3?
+
+```{r }
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate_at(vars(2:3),funs(as.numeric))
+```
+
+ 
+
+Yes. Equally good. What goes into the `vars`
+is the same as can go into a `select`: column numbers, names,
+or any of those "select helpers" like `starts_with`.
+
+You might think of `mutate_if` here, but if you scroll back, you'll find that all the columns are text, before you convert temperature and pulse rate to numbers, and so there's no way to pick out just the two columns you want that way. 
+
+Check that the temperature and pulse rate columns are now labelled
+`dbl`, which means they actually *are* decimal numbers
+(and don't just look like decimal numbers).
+
+Either way, using `unite` and then `separate` means that
+all the columns we created we want to keep (or, all the ones we would
+have wanted to get rid of have already been gotten rid of).
+
+Now we can actually do some statistics.
+      
+
+
+(f) Do a two-sample $t$-test to see whether the mean pulse rates
+differ between species. What do you conclude?
+
+
+Solution
+
+
+Drag your mind way back to this:
+```{r }
+t.test(pulse_rate~species,data=crickets.1)  
+```
+
+ 
+
+There is strong evidence of a difference in means (a P-value around
+0.00001), and the confidence interval says that the mean chirp rate is
+higher for *exclamationis*. That is, not just for the crickets
+that were observed here, but for *all* crickets of these two
+species. 
+      
+
+
+(g) The analysis in the last part did not use temperature,
+however. Is it possible that temperature also has an effect? To
+assess this, draw a scatterplot of pulse rate against temperature,
+with the points distinguished, somehow, by the species they are
+from.\endnote{This was the actual reason I gave you this question:
+I wanted you to do this. It sort of morphed into all the other
+stuff as well.}  
+
+
+Solution
+
+
+One of the wonderful things about `ggplot` is that doing
+the obvious thing works:
+```{r }
+ggplot(crickets.1,aes(x=temperature,y=pulse_rate,colour=species))+
+geom_point()
+```
+
+       
+    
+
+
+(h) What does the plot tell you that the $t$-test doesn't? How
+would you describe differences in pulse rates between species now?
+
+
+Solution
+
+
+The plot tells you that (for both species) as temperature goes
+up, pulse rate goes up as well. *Allowing for that*, the
+difference in pulse rates between the two species is even
+clearer than it was before. To see an example, pick a
+temperature, and note that the mean pulse rate at that
+temperature seems to be at least 10 higher for
+*exclamationis*, with a high degree of consistency.
+The $t$-test mixed up all the pulse rates at all the different
+temperatures. Even though the conclusion was clear enough, it
+could be clearer if we incorporated temperature into the analysis.
+There was also a potential source of unfairness in that the
+*exclamationis* crickets tended to be observed at higher
+temperatures than *niveus* crickets; since pulse rates
+increase with temperature, the apparent difference in pulse
+rates between the species might have been explainable by one
+species being observed mainly in higher temperatures. This was
+*utterly invisible* to us when we did the $t$-test, but it
+shows the importance of accounting for all the relevant
+variables when you do your analysis.\endnote{And it shows the
+value of looking at relevant plots.} If the species had been
+observed at opposite temperatures, we might have
+concluded
+`r tufte::margin_note("Mistakenly.")` 
+that *niveus* have the
+higher pulse rates on average. I come back to this later when I
+discuss the confidence interval for species difference that
+comes out of the regression model with temperature.
+      
+
+
+(i) Fit a regression predicting pulse rate from species and
+temperature. Compare the P-value for species in this regression to
+the one from the $t$-test. What does that tell you?
+
+
+Solution
+
+
+This is actually a so-called "analysis of covariance model",
+which properly belongs in D29, but it's really just a regression:
+```{r }
+pulse.1=lm(pulse_rate~species+temperature,data=crickets.1)
+summary(pulse.1)
+```
+
+ 
+
+The P-value for species is now $6.27\times 10^{-14}$ or 0.00000000000006, which is even less than
+the P-value of 0.00001 that came out of the $t$-test. That is to say,
+when you know temperature, you can be even more sure of your
+conclusion that there is a difference between the species.
+
+The R-squared for this regression is almost 99\%, which says that if
+you know both temperature and species, you can predict the pulse rate
+almost exactly.
+
+In the regression output, the slope for species is about $-10$. It is
+labelled `speciesniveus`. Since species is categorical,
+`lm` uses the first category, *exclamationis*, as the
+baseline and expresses each other species relative to that. Since the
+slope is about $-10$, it says that at any given temperature, the mean
+pulse rate for *niveus* is about 10 less than for
+*exclamationis*. This is pretty much what the scatterplot told
+us.
+
+We can go a little further here:
+
+```{r }
+confint(pulse.1)
+```
+
+ 
+
+The second line says that the pulse rate for *niveus* is
+between about 8.5 and 11.5 less than for *exclamationis*, at
+any given temperature (comparing the two species at the same
+temperature as each other, but that temperature could be
+anything). This is a lot shorter than the CI that came out of the
+$t$-test, that went from 14 to 32. This is because we are now
+accounting for temperature, which also makes a difference. (In the
+$t$-test, the temperatures were all mixed up). What we also see is
+that the $t$-interval is shifted up compared to the one from the
+regression. This is because the $t$-interval conflates\endnote{Mixes
+up.} two things: the *exclamationis* crickets do have a
+higher pulse rate, but they were also observed at higher temperatures,
+which makes it look as if their pulse rates are more
+higher
+`r tufte::margin_note("This is actually grammatically correct.")` than they
+really are, when you account for temperature.
+
+This particular model constrains the slope with temperature to be the
+same for both species (just the intercepts differ). If you want to
+allow the slopes to differ between species, you add an interaction
+between temperature and species:
+
+```{r }
+pulse.2=lm(pulse_rate~species*temperature,data=crickets.1)
+summary(pulse.2)
+```
+
+ 
+
+To see whether adding the interaction term added anything to the
+prediction,\endnote{Though it's hard to imagine being able to improve on an
+R-squared of 99\%.} compare the model with and without using `anova`:
+
+```{r }
+anova(pulse.1,pulse.2)  
+```
+
+ 
+
+There's no significant improvement by adding the interaction, so
+there's no evidence that having different slopes for each species is
+necessary. Note that `anova` gave the same P-value as did the
+$t$-test for the slope coefficient for the interaction in
+`summary`, 0.254 in both cases. This is because there were only
+two species and therefore only one slope coefficient was required to
+distinguish them. If there had been three species, we would have had
+to look at the `anova` output to hunt for a difference among
+species, since there would have been two slope coefficients, each with
+its own P-value.\endnote{This wouldn't have told us about the overall
+effect of `species.`} 
+
+The upshot is that we do not need different slopes; the model
+`pulse.1` with the same slope for each species describes what
+is going on.
+
+`ggplot` makes it almost laughably easy to add regression lines
+for each species to our plot, thus:
+
+```{r }
+ggplot(crickets.1,aes(x=temperature,y=pulse_rate,colour=species))+
+geom_point()+geom_smooth(method="lm",se=F)
+```
+
+ 
+
+The lines are almost exactly parallel, so having the same slope for
+each species makes perfect sense.
+      
+
+
+

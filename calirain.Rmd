@@ -1,0 +1,367 @@
+##  Rainfall in California
+
+
+ The data in
+[link](http://www.utsc.utoronto.ca/~butler/c32/calirain.txt) are
+rainfall and other measurements for 30 weather stations in
+California. Our aim is to understand how well the annual rainfall at
+these stations (measured in inches) can be predicted from the other
+measurements, which are the altitude (in feet above sea level), the
+latitude (degrees north of the equator) and the distance from the
+coast (in miles).
+
+
+
+(a) Read the data into R. You'll have to be careful here, since the
+values are space-delimited, but sometimes by more than one space, to
+make the columns line up.  `read_table2`, with filename or
+url, will read it in.
+One of the variables
+is called `rainfall`, so as long as you *do not* call
+the data frame that, you should be safe.
+
+
+Solution
+
+
+I used `rains` as the name of my data frame: 
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/calirain.txt"
+rains=read_table2(my_url)
+```
+
+ 
+
+I have the right number of rows and columns.
+
+There is also `read_table`, but that requires *all* the
+columns, including the header row, to be lined up. You can try that
+here and see how it fails.
+
+I don't need you to investigate the data yet (that happens in the next
+part), but this is interesting (to me):
+
+```{r }
+rains
+```
+
+ 
+
+Some of the station names are two words, but they have been smooshed
+into one word, so that `read_table2` will recognize them as a
+single thing. Someone had already done that for us, so I didn't even
+have to do it myself. 
+
+If the station names had been two genuine words, a `.csv` would
+probably have been the best choice (the actual data values being
+separated by commas then, and not spaces).
+
+
+
+(b) Make a boxplot of the rainfall figures, and explain why the
+values are reasonable. (A rainfall cannot be negative, and it is
+unusual for a annual rainfall to exceed 60 inches.) A
+`ggplot` boxplot needs *something* on the $x$-axis: the
+number 1 will do.
+
+
+Solution
+
+
+
+```{r }
+ggplot(rains,aes(y=rainfall,x=1))+geom_boxplot()
+```
+
+     
+There is only one rainfall over 60 inches, and the smallest one is
+close to zero but positive, so that is good.
+
+Another possible plot here is a histogram, since there is only one quantitative variable:
+
+```{r }
+ggplot(rains, aes(x=rainfall))+geom_histogram(bins=7)
+```
+
+
+
+This clearly shows the rainfall value above 60 inches, but some other things are less clear: are those two rainfall values around 50 inches above or below 50, and are those six rainfall values near zero actually above zero? 
+Extra: What stations have those extreme values? Should you wish to find out:
+```{r }
+rains %>% filter(rainfall>60)
+```
+
+ 
+This is a place right on the Pacific coast, almost up into Oregon (it's almost
+the northernmost of all the stations). So it makes sense that it would
+have a high rainfall, if anywhere does. (If you know anything about
+rainy places, you'll probably think of Vancouver and Seattle, in the
+Pacific Northwest.) Here it is:
+[link](https://www.google.ca/maps/place/Crescent+City,+CA,+USA/@41.7552589,-123.9652917,8.42z/data=!4m5!3m4!1s0x54d066375c6288db:0x76e89ab07375e62e!8m2!3d41.7557501!4d-124.2025913). 
+Which station has less than 2 inches of annual rainfall?
+```{r }
+rains %>% filter(rainfall<2)  
+```
+
+ 
+The name of the station is a clue: this one is in the desert. So you'd
+expect very little rain. Its altitude is *negative*, so it's
+actually *below* sea level. This is correct. Here is where it is:
+[link](https://www.google.ca/maps/place/Death+Valley,+CA,+USA/@36.6341288,-118.2252974,7.75z/data=!4m5!3m4!1s0x80c739a21e8fffb1:0x1c897383d723dd25!8m2!3d36.5322649!4d-116.9325408).
+
+
+
+(c) Plot `rainfall` against each of the other quantitative
+variables (that is, not `station`). 
+
+
+Solution
+
+
+That is, `altitude`, `latitude` and
+`fromcoast`. The obvious way to do this (perfectly
+acceptable) is one plot at a time:
+```{r }
+ggplot(rains,aes(y=rainfall,x=altitude))+geom_point()
+```
+
+     
+
+```{r }
+ggplot(rains,aes(y=rainfall,x=latitude))+geom_point()
+```
+
+ 
+
+and finally 
+
+```{r }
+ggplot(rains,aes(y=rainfall,x=fromcoast))+geom_point()
+```
+
+ 
+
+You can add a smooth trend to these if you want. Up to you. Just the
+points is fine with me.
+
+Here is a funky way to get all three plots in one shot:
+
+```{r }
+rains %>% gather(xname,x,altitude:fromcoast) %>%
+ggplot(aes(x=x,y=rainfall))+geom_point()+
+facet_wrap(~xname,scales="free")
+```
+
+ 
+
+This always seems extraordinarily strange if you haven't run into it
+before. The strategy is to put *all* the $x$-variables you want
+to plot into *one* column and then plot your $y$ against the
+$x$-column. A nice side-effect of the way `gather` works is
+that what makes the $x$-columns different is that they are
+$x$-variables with different *names*, which is exactly what you
+want later for the facets. Thus: make a column of all the $x$'s glued
+together, labelled by which $x$ they are, then plot $y$ against $x$
+but make a different sub-plot or "facet" for each different
+$x$-name. The last thing is that each $x$ is measured on a different
+scale, and unless we take steps, all the sub-plots will have the
+*same* scale on each axis, which we don't want.
+
+I'm not sure I like how it came out, with three very tall
+plots. `facet_wrap` can also take an `nrow` or an
+`ncol`, which tells it how many rows or columns to use for the
+display. Here, for example, two columns because I thought three was
+too many:
+
+```{r }
+rains %>% gather(xname,x,altitude:fromcoast) %>%
+ggplot(aes(x=x,y=rainfall))+geom_point()+
+facet_wrap(~xname,scales="free",ncol=2)
+```
+
+ 
+
+Now, the three plots have come out about square, which I like a lot better.
+
+
+
+(d) Look at the relationship of each other variable with
+`rainfall`. 
+Justify the assertion that `latitude` seems most strongly
+related with `rainfall`. Is that relationship positive or negative? linear? Explain
+briefly. 
+
+
+Solution
+
+
+Let's look at the three variables in turn:
+
+
+* `altitude`: not much of anything. The stations near
+sea level have rainfall all over the place, though the three
+highest-altitude stations have the three highest rainfalls apart
+from Crescent City.
+
+* `latitude`: there is a definite upward trend here, in
+that stations further north (higher latitude) are likely to have
+a higher rainfall. I'd call this trend linear (or, not obviously
+curved), though the two most northerly stations have one higher
+and one much lower rainfall than you'd expect.
+
+* `fromcoast`: this is a weak downward trend, though
+the trend is spoiled by those three stations about 150 miles
+from the coast that have more than 40 inches of rainfall.
+
+Out of those, only `latitude` seems to have any meaningful
+relationship with `rainfall`.
+
+
+
+(e) Fit a regression with `rainfall` as the response
+variable, and `latitude` as your explanatory variable. What
+are the intercept, slope and R-squared values? Is there a 
+*significant* relationship between `rainfall` and your
+explanatory variable? What does that mean?
+
+
+Solution
+
+
+Save your `lm` into a
+variable, since it will get used again later:
+```{r }
+rainfall.1=lm(rainfall~latitude,data=rains)
+summary(rainfall.1)
+```
+
+ 
+
+My intercept is $-113.3$, slope is $3.6$ and R-squared is $0.33$ or
+33\%. (I want you to pull these numbers out of the output and round
+them off to something sensible.) The slope is significantly nonzero,
+its P-value being 0.00085: rainfall really does depend on latitude, although
+not strongly so.
+
+Extra: Of course, I can easily do the others as well, though you don't have to:
+
+```{r }
+rainfall.2=lm(rainfall~fromcoast,data=rains)
+summary(rainfall.2)
+```
+
+ 
+
+Here, the intercept is 23.8, the slope is $-0.05$ and R-squared is a
+dismal 0.04 (4\%).  This is a way of seeing that this relationship is
+really weak, and it doesn't even have a curve to the trend or anything
+that would compensate for this. I looked at the scatterplot again and
+saw that if it were not for the point bottom right which is furthest
+from the coast and has almost no rainfall, there would be almost no
+trend at all. The slope here is not significantly different from zero,
+with a P-value of 0.265.
+
+Finally:
+
+```{r }
+rainfall.3=lm(rainfall~altitude,data=rains)
+summary(rainfall.3)
+```
+
+ 
+
+The intercept is 16.5, the slope is 0.002 and the R-squared is 0.09 or
+9\%, also terrible. The P-value is 0.105, which is not small enough to
+be significant. 
+
+So it looks as if it's only `latitude` that
+has any impact at all. This is the only explanatory variable with a
+significantly nonzero slope. On its own, at least.
+
+
+
+(f) Fit a multiple regression predicting `rainfall` from
+all three of the other (quantitative) variables. Display the
+results. Comment is coming up later.
+
+
+Solution
+
+
+This, then:
+```{r }
+rainfall.4=lm(rainfall~latitude+altitude+fromcoast,data=rains)
+summary(rainfall.4)
+```
+
+ 
+
+
+
+(g) What is the R-squared for the regression of the last part?
+How does that compare with the R-squared of your regression in part (e)?
+
+
+Solution
+
+
+The R-squared is 0.60 (60\%), which is quite a bit bigger than the
+R-squared of 0.33 (33\%) we got back in (e). 
+
+
+
+(h) What do you conclude about the importance of the variables
+that you did *not* include in your model in
+(e)? Explain briefly.
+
+
+Solution
+
+
+Both variables `altitude` and `fromcoast` are
+significant in this regression, so they have *something to add* over and above `latitude` when it comes to
+predicting rainfall, even though (and this seems odd) they have no
+apparent relationship with `rainfall` on their own. 
+Another way to say this is that the three variables work together
+as a team to predict rainfall, and together they do much better
+than any one of them can do by themselves.  
+This also goes to show that the scatterplots we began
+with don't get to the heart of multi-variable relationships,
+because they are only looking at the variables two at a time.
+
+
+
+(i) Make a suitable hypothesis test that the variables
+`altitude` and `fromcoast` significantly improve the
+prediction of `rainfall` over the use of `latitude`
+alone. What do you conclude?
+
+
+Solution
+
+
+This calls for `anova`. Feed this two fitted models,
+smaller (fewer explanatory variables) first. The null hypothesis
+is that the two models are equally good (so we should go with the
+smaller); the alternative is that the larger model is better, so
+that the extra complication is worth it:
+```{r }
+anova(rainfall.1,rainfall.4)  
+```
+
+ 
+
+The P-value is small, so we reject the null in favour of the
+alternative: the regression with all three explanatory variables fits
+better than the one with just `latitude`, so the bigger model
+is the one we should go with.
+
+If you have studied these things: this one is a 
+"multiple-partial $F$-test", for testing the combined significance of more than one $x$
+but less than all the $x$'s.
+`r tufte::margin_note("If you had just one $x$, you'd  use a $t$-test for its slope, and if you were testing all the $x$'s, you'd use the global $F$-test that appears in the regression output.")`
+
+
+
+
+

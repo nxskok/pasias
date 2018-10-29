@@ -1,0 +1,285 @@
+##  Maximal oxygen uptake in young boys
+
+
+ A physiologist wanted to understand the relationship between
+physical characteristics of pre-adolescent boys and their maximal
+oxygen uptake (millilitres of oxygen per kilogram of body weight). The
+data are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/youngboys.txt) for a
+random sample of 10 pre-adolescent boys. The variables are (with
+units):
+
+
+
+* `uptake`: Oxygen uptake (millitres of oxygen per kilogram
+of body weight)
+
+* `age`: boy's age (years)
+
+* `height`: boy's height (cm)
+
+* `weight`: boy's weight (kg)
+
+* `chest`: chest depth (cm).
+
+
+
+
+(a) Read the data into R and confirm that you do indeed have
+10 observations.
+
+
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/youngboys.txt"
+boys=read_delim(my_url," ")
+boys
+```
+
+         
+
+10 boys (rows) indeed.
+
+
+
+(b) Fit a regression predicting oxygen uptake from all the
+other variables, and display the results.
+
+
+Solution
+
+
+Fitting four explanatory variables with only ten observations is likely to be pretty shaky, but we 
+press ahead regardless:
+```{r }
+boys.1=lm(uptake~age+height+weight+chest,data=boys) 
+summary(boys.1)
+```
+
+         
+
+
+
+(c) (A one-mark question.) Would you say, on the evidence so
+far, that the regression fits well or badly?  Explain (very)
+briefly.
+
+
+Solution
+
+
+R-squared of 0.97 (97\%) is very high, so I'd say this
+regression fits very well. That's all.
+I said "on the evidence so far" to dissuade you from
+overthinking this, or thinking that you needed to produce
+some more evidence. That, plus the fact that this was only
+one mark.
+
+
+
+(d) It seems reasonable that an older boy should have a
+greater oxygen uptake, all else being equal. Is this supported
+by your output?  Explain briefly.
+
+
+Solution
+
+
+If an older boy has greater oxygen uptake (the "all else   equal" was a hint), 
+the slope of `age` should be
+positive. It is not: it is $-0.035$, so it is suggesting
+(all else equal) that a greater age goes with a
+*smaller* oxygen uptake.
+The reason why this happens (which you didn't need, but
+you can include it if you like) is that `age` has a
+non-small P-value of 0.07, so that the `age` slope
+is not significantly different from zero. With all the
+other variables, `age` has nothing to *add*
+over and above them, and we could therefore remove it.
+
+
+
+(e) It seems reasonable that a boy with larger weight
+should have larger lungs and thus a \emph{statistically
+significantly} larger oxygen uptake. Is that what happens
+here? Explain briefly.
+
+
+Solution
+
+
+Look at the P-value for `weight`. This is 0.14,
+not small, and so a boy with larger weight does not have
+a significantly larger oxygen uptake, all else
+equal. (The slope for `weight` is not
+significantly different from zero either.)
+I emphasized "statistically significant" to remind you
+that this means to do a test and get a P-value.
+
+
+
+(f) Fit a model that contains only the significant
+explanatory variables from your first regression. How do
+the R-squared values from the two regressions compare?
+(The last sentence asks for more or less the same thing as
+the next part. Answer it either here or there. Either
+place is good.)
+
+
+Solution
+
+
+Only `height` is significant, so that's the
+only explanatory variable we need to keep. I would
+just do the regression straight rather than using
+`update` here:
+```{r }
+boys.2=lm(uptake~height,data=boys) 
+summary(boys.2)
+```
+
+        
+
+If you want, you can use `update` here, which looks like this:
+
+```{r }
+boys.2a=update(boys.1,.~.-age-weight-chest)  
+summary(boys.2a)
+```
+
+ 
+
+This doesn't go quite so smoothly here because there are three
+variables being removed, and it's a bit of work to type them all. 
+
+
+
+(g) How has R-squared changed between your two
+regressions? Describe what you see in a few words.
+
+
+Solution
+
+
+R-squared has dropped by a bit, from 97\% to 91\%. (Make your own
+call: pull out the two R-squared numbers, and say a word or two about
+how they compare. I don't much mind what you say: 
+"R-squared has decreased (noticeably)", "R-squared has hardly changed". But say
+something.)
+
+ 
+
+(h) Carry out a test comparing the fit of your
+two regression models. What do you conclude, and
+therefore what recommendation would you make about the
+regression that would be preferred?
+
+
+Solution
+
+
+The word "test" again implies something that  produces a P-value with a
+null hypothesis that you might reject. In this case, the test that
+compares two models differing by more than one $x$ uses
+`anova`, testing the null hypothesis that the two regressions
+are equally good, against the alternative that the bigger (first) one
+is better. Feed `anova` two fitted model objects, smaller first:
+
+```{r }
+anova(boys.2, boys.1)
+```
+
+ 
+
+This P-value of 0.123 is not small, so we do not reject the null
+hypothesis. There is not a significant difference in fit between the
+two models. Therefore, we should go with the smaller model
+`boys.2` because it is simpler. 
+
+That drop in R-squared from 97\% to 91\% was, it turns out, *not*
+significant: the three extra variables
+could have produced a change in R-squared like that, 
+*even if  they were worthless*.
+`r tufte::margin_note("Recall that adding $x$'s to a regression will always make R-squared go up, even if they are just random noise.")`
+
+If you have learned about "adjusted R-squared", you might recall
+that this is supposed to go down *only* if the variables you took
+out should not have been taken out. But adjusted R-squared goes down
+here as well, from 94\% to 89\% (not quite as much, therefore). What
+happens is that adjusted R-squared is rather more relaxed about
+keeping variables than the `anova` $F$-test is; if we had used
+an $\alpha$ of something like 0.10, the decision between the two
+models would have been a lot closer, and this is reflected in the
+adjusted R-squared values.
+
+
+
+(i) Obtain a table of correlations between all
+the variables in the data frame. Do this by feeding
+the whole data frame into `cor`. 
+We found that a regression predicting oxygen uptake
+from just `height` was acceptably good. What
+does your table of correlations say about why that
+is? (Hint: look for all the correlations that are
+*large*.) 
+
+
+Solution
+
+
+Correlations first:
+
+```{r }
+cor(boys)
+```
+
+ 
+The correlations with `age` are all on the low side, but all
+the other correlations are high, not just between `uptake` and the
+other variables, but between the explanatory variables as well.
+
+Why is this helpful in understanding what's going on? Well, imagine a
+boy with large height (a tall one). The regression `boys.2`
+says that this alone is enough to predict that such a boy's oxygen
+uptake is likely to be large, since the slope is positive. But the
+correlations tell you more: a boy with large height is also (somewhat)
+likely to be older (have large age), heavier (large weight) and to have
+larger `chest` cavity. So oxygen uptake does depend on those other
+variables as well, but once you know `height` you can make a
+good guess at their values; you don't need to know them.
+
+Further remarks: `age` has a low correlation with
+`uptake`, so its non-significance earlier appears to be
+"real": it really does have nothing extra to say, because the other
+variables have a stronger link with `uptake` than
+`age`. Height, however, seems to be the best way of relating
+oxygen uptake to any of the other variables. I think the suppositions
+from earlier about relating oxygen uptake to "bigness"\endnote{This
+is not, I don't think, a real word, but I mean "size" emphasizing
+how big a boy is generally, rather than how small.} in some sense
+are actually sound, but age and weight and `chest` capture
+"bigness" worse than height does. Later, when you learn about
+Principal Components, you will see that the first principal component,
+the one that best captures how the variables vary together, is often
+"bigness" in some sense.
+
+Another way to think about these things is via pairwise
+scatterplots. The nicest way to produce these is via `ggpairs`
+from package `ggally`:
+
+```{r }
+boys %>% ggpairs()
+```
+
+ 
+
+A final remark: with five variables, we really ought to have more than
+ten observations (something like 50 would be better). But with more
+observations and the same correlation structure, the same issues would
+come up again, so the question would not be materially changed.
+
+
+ 
+

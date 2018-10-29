@@ -1,0 +1,302 @@
+##  Executive salaries
+
+
+ A management consultancy obtained data on salaries and other
+work information of 100 company executives (from different
+companies). Their aim was to predict salary from some or all of the
+other variables (and to determine which of those other variables are
+important determinants of salary). The data are in
+[http://www.utsc.utoronto.ca/~butler/c32/execsal.xlsx](http://www.utsc.utoronto.ca/~butler/c32/execsal.xlsx), as an
+Excel spreadsheet, with the
+columns being (respectively):
+
+
+
+* Row number (ignore)
+
+* Log of annual salary
+
+* experience (years)
+
+* education (years)
+
+
+* gender (1=male, 0=female)
+
+* number of employees supervised
+
+* corporate assets (millions of dollars)
+
+
+* board member (1=yes, 0=no)
+
+* age (years)
+
+* company profits (past 12 months, millions of dollars)
+
+* has international responsibility (1=yes, 0=no)
+
+
+* company's total sales (past 12 months, millions of dollars)
+
+
+The consultancy used log of salary because the relationship with other
+variables (in previous studies) seemed to be straighter. (A
+consequence of using logs is that a one-unit increase in any of the
+other variables is associated with a certain *percentage*
+increase in annual salary, which often makes sense.) Note that the
+data set already contains a variable `logsal`, which is the
+log-salary, so you don't need to create one.
+
+
+
+(a) Read the data into SAS, bearing in mind the format of the
+data. You'll need to know the name of the sheet you want to read
+in. Also, reading an Excel file only works "locally": that is,
+you'll need to grab your own copy of the spreadsheet and upload it
+to SAS Studio.
+
+
+Solution
+
+
+First, open the spreadsheet and take a look at it. The sheet you
+want is called `execsal2`. Save it somewhere on your
+computer and then upload it to SAS Studio.
+Then, find a previous `proc import` with
+`dbms=xlsx`, and adapt it to what you need, replacing my
+username with yours:
+
+\begin{Datastep}
+proc import
+datafile='/home/ken/execsal.xlsx'
+dbms=xlsx
+out=salaries
+replace;
+sheet=execsal2;
+getnames=yes;
+\end{Datastep}
+
+Or remember DODRG and this time note that you need an extra S for "sheet".
+
+I ran that through `proc print` to check that I had the right
+thing, and I did. Or you can summarize:
+
+\begin{Sascode}[store=wucuz]
+proc means;  
+\end{Sascode}
+
+\Listing[store=wucuz, fontsize=footnotesize]{wucuzz}
+
+As you see, there are 100 rows of data, which would be a lot for
+someone else to look at. The names (you can check) match up with what
+I said the variables were.
+
+
+
+(b) Run a regression predicting log-salary from everything else,
+except row number. Show the text output (here and below).
+
+
+Solution
+
+
+\begin{Sascode}[store=exa]
+proc reg;
+model logsal=exp educ gender sup cass board age profits int sales;
+\end{Sascode}
+
+with output
+\Listing[store=exa,fontsize=small]{exaa}
+
+and the graphs
+
+\Graphic[store=exa, scale=0.8]{exab}
+
+I didn't ask you to look at the plots, because I wanted you to do the
+variable-elimination (coming up). Normally, you would check that
+things are at least approximately OK, here and at the end. So I'll do
+it here, starting with the array of nine graphs of which I look at the
+usual two:
+
+
+
+* residuals vs.\ fitted values, top left: a tiny bit of evidence
+of fanning-in, since the four residuals farthest from zero are all
+on the left. I'd really want more evidence of fanning-in than this,
+though.
+
+* normal quantile plot of residuals: as straight as you could wish
+for. 
+
+* There are a lot of explanatory variables, and we get a plot of
+residuals against each one. These look pretty random and trend-free,
+so I don't think we need to be concerned. Note that some of the
+variables take only a few possible values (they are rather
+discrete), so you get stacks of points one above another, eg. for
+profits. Some of the explanatory variables are either 0 or 1 (these
+are "indicators" for categorical variables with two
+categories). For these, you want both categories to have average
+residual around zero with equal spread. For `gender` 1, the
+males, the residuals appear less spread out. I think we will have to
+live with that. (Another way would be to do the regression twice,
+for males and females separately.)
+
+
+
+
+(c) Which explanatory variable is least significant? Run a
+regression without it.
+
+
+Solution
+
+
+This question is going to involve a great deal of copying and
+pasting. `sales` comes out first:
+
+\begin{Sascode}[store=exb]
+proc reg;
+model logsal=exp educ gender sup cass board age profits int;
+\end{Sascode}
+
+with output
+
+\Listing[store=exb]{exbb}
+
+
+
+(d) Continue removing the least significant variable until you
+need to stop, and explain briefly why you stopped.
+
+
+Solution
+
+
+You might guess that `board`, `age`,  `profits` and
+`int` will need to come out, but take them one at a
+time, `age` first:
+\begin{Sascode}[store=exc]
+proc reg;
+model logsal=exp educ gender sup cass board profits int;
+\end{Sascode}
+
+giving
+
+\Listing[store=exc]{excc}
+
+Then `profits`:
+
+\begin{Sascode}[store=exd]
+proc reg;
+model logsal=exp educ gender sup cass board int;
+\end{Sascode}
+
+giving
+
+\Listing[store=exd]{exdd}
+
+Then `board`:
+
+\begin{Sascode}[store=exe]
+proc reg;
+model logsal=exp educ gender sup cass int;
+\end{Sascode}
+
+\Listing[store=exe]{exee}
+
+Finally (we hope) `int`:
+
+\begin{Sascode}[store=exf]
+proc reg;
+model logsal=exp educ gender sup cass;
+\end{Sascode}
+
+\Listing[store=exf]{exff}
+Yep, that's the end. Everything else is strongly significant and has
+to stay in the model.
+
+Also note that R-squared began and also ended around 92\%: taking out
+those variables has had only a tiny effect on the fit of the model.
+
+
+
+(e) Which explanatory variables are in your final model? Name them
+in full. That is, don't just list the names of the variables.
+
+
+Solution
+
+
+These ones:
+
+
+* Years of experience
+
+* Years of education
+
+* Gender
+
+* Number of employees supervised
+
+* Corporate assets
+
+
+
+
+(f) Look at each of your slope coefficients. Are they positive or
+negative? Does that make sense in the context of this problem?
+
+
+Solution
+
+
+Mine are all positive. That is, someone who has more years of
+experience, more education, supervises more employees or works
+in a company with more corporate assets would be expected to
+receive a higher salary. We'd expect all of these variables to
+have this kind of effect.
+The one I didn't talk about was `gender`. This is also
+positive. Since males were 1 and females 0, according to the
+question, this means that males are expected to make more than
+females, *all else being equal*. This may not make you
+happy, but it's what the data are saying. (And note the strength
+of the conclusion: it's \emph{after adjusting for any other
+differences between males and females}.)
+The right thing to do next is to look at residual plots for your
+final model. The *right* thing to do is to split your data
+into a "training set" with which you build your model, and a
+separate "test set" on which you see how well it works. But
+that's farther than we go now.
+SAS also contains a procedure called `glmselect`, which
+automates this process. Here's how it looks for this dataset:
+\begin{Sascode}[store=exh]
+proc glmselect;
+model logsal=exp educ gender sup cass board age profits int sales
+/ selection=backward;
+\end{Sascode}
+
+with output
+
+\Listing[store=exh]{exhh}
+
+You can read through the output to see which variables were removed at
+each step, and which ones were left at the end: the same five as we
+found, since the procedure is supposed to be identical. 
+
+`proc glmselect` can also produce plots. See the baseball
+example at
+[https://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/viewer.htm#statug_glmselect_sect030.htm](https://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/viewer.htm#statug_glmselect_sect030.htm)
+for illustrations. 
+
+We should probably look at our residual plots (from our last
+regression) just to make sure that all is OK:
+
+\Graphic[store=exf, scale=0.7]{exfg}
+
+The few issues we have are the same as before, which we decided to
+live with.
+
+
+
+

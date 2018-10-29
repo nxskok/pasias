@@ -790,8 +790,7 @@ differences among the months than the pairwise median tests did.
 
 
 
-## Movie ratings again
-
+##  Movie ratings again
 
 
  This question again uses the movie rating data at
@@ -1469,7 +1468,7 @@ adjustment: instead of rejecting if the P-value is less than 0.05, we
 only reject if it is less than $0.05/6$, since we are doing 6
 tests. This is a fiddly calculation to do by hand, but it's easy to
 build in another `mutate`, thus:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In the pairwise median test in *smmr*, I did this backwards: rather than changing the $alpha$ that you compare each P-value with from 0.05 to $0.05/6$, I flip it around so that you adjust the P-values by *multiplying* them by 6, and then comparing the adjusted P-values with the usual 0.05. It comes to the same place in the end.</span>
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In the pairwise median  test in *smmr*, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I  flip it around so that you adjust the P-values by *multiplying*  them by 6, and then comparing the adjusted P-values with the usual  0.05. It comes to the same place in the end, except that this way  you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.</span>
 
 ```r
 crossing(first=the_ratings,second=the_ratings) %>%
