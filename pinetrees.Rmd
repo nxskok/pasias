@@ -14,7 +14,7 @@ chest), defined as being 4.5 feet above the ground.
 Several pine trees had their diameter measured shortly before being
 cut down, and for each tree, the volume of wood was recorded. The data
 are in
-[http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt](http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt). The
+[link](http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt). The
 diameter is in inches and the volume is in cubic inches.  Is it
 possible to predict the volume of wood from the diameter?
 
@@ -33,7 +33,9 @@ that `read_delim` will do it:
 my_url="http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt"
 trees=read_delim(my_url," ")
 trees
-```    
+```
+
+    
 
 That looks like the data file.
 
@@ -50,7 +52,9 @@ quantitative variables, so that a scatterplot is called
 for. Also, the volume is the response, so that should go on the $y$-axis:
 ```{r }
 ggplot(trees,aes(x=diameter,y=volume))+geom_point()
-```       
+```
+
+       
 
 You can put a smooth trend on it if you like, which would
 look like this:
@@ -58,7 +62,9 @@ look like this:
 ```{r }
 ggplot(trees,aes(x=diameter,y=volume))+
 geom_point()+geom_smooth()
-```       
+```
+
+       
 
 I'll take either of those for this part, though I think the smooth
 trend actually obscures the issue here (because there is not so much
@@ -105,7 +111,9 @@ have always used dots, but in the spirit of the
 ```{r }
 volume.1=lm(volume~diameter,data=trees)
 summary(volume.1)
-```       
+```
+
+       
 
 R-squared is nearly 96\%, so the relationship is definitely a strong one.
 
@@ -117,7 +125,9 @@ separately. It provides two handy ways to summarize a fitted model
 ```{r }
 library(broom)
 glance(volume.1)
-``` 
+```
+
+ 
 
 This gives a one-line summary of a model, including things like
 R-squared. This is handy if you're fitting more than one model,
@@ -128,7 +138,9 @@ The other summary is this one:
 
 ```{r }
 tidy(volume.1)
-``` 
+```
+
+ 
 
 This gives a table of intercepts, slopes and their P-values, but the
 value to this one is that it is a *data frame*, so if you want to
@@ -137,7 +149,9 @@ pull anything out of it, you know how to do that:\endnote{The
 extracting things from.}
 ```{r }
 tidy(volume.1) %>% filter(term=="diameter")
-``` 
+```
+
+ 
 
 This gets the estimated slope and its P-value, without worrying about
 the corresponding things for the intercept, which are usually of less
@@ -157,7 +171,9 @@ against the fitted values), and on it you are looking for a
 random mess of nothingness:
 ```{r }
 ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
-```       
+```
+
+       
 
 Make a call. You could say that there's no discernible pattern,
 especially with such a small data set, and
@@ -202,7 +218,7 @@ disconcerting to have a model that makes no logical sense.
 cone, like this, but probably taller and skinnier:
 
 
-![](/home/ken/Pictures/conebnw.jpg.png)
+![](/home/ken/Pictures/conebnw.png)
         
 
 with its base on the ground. What is the relationship between the
@@ -216,7 +232,7 @@ Solution
 
 
 According to
-[http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx](http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx),
+[link](http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx),
 the volume of a cone is $V=\pi r^2h/3$, where $V$ is the volume,
 $r$ is the radius (at the bottom of the cone) and $h$ is the
 height. The diameter is twice the radius, so replace $r$ by
@@ -241,7 +257,9 @@ squared, which I include in the model thus:
 ```{r }
 volume.2=lm(volume~I(diameter^2),data=trees)
 summary(volume.2)
-```       
+```
+
+       
 
 This adds an intercept as well, which is fine (there are technical
 difficulties around removing the intercept).
@@ -257,7 +275,9 @@ predicts the data well. I should look at the residuals from this one:
 
 ```{r }
 ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
-``` 
+```
+
+ 
 
 I really don't think there are any problems there.
 
@@ -271,7 +291,7 @@ larger-diameter trees being taller. Except that we don't have the
 heights here, so we can't build a model for that.
 
 So I went looking in the literature. I found this paper:
-[https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf](https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf). This
+[link](https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf). This
 gives several models for relationships between volume, diameter and height. In
 the formulas below, there is an implied "plus error" on the right,
 and the $\alpha_i$ are parameters to be estimated.
@@ -315,7 +335,9 @@ can go ahead and estimate it:
 ```{r }
 volume.3=lm(log(volume)~log(diameter),data=trees)
 summary(volume.3)
-``` 
+```
+
+ 
 
 The parameter that I called $\alpha_2$ above is the slope of this
 model, 3.13. This is a bit different from the figure in the paper,
@@ -326,7 +348,9 @@ comparable because we haven't estimated our slope all that accurately:
 
 ```{r }
 confint(volume.3)
-``` 
+```
+
+ 
 
 From 2.3 to 3.9. It is definitely not zero, but we are rather less
 sure about what it is, and 2.19 is not completely implausible.
@@ -336,7 +360,9 @@ got, is still high. The residuals are these:
 
 ```{r }
 ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
-``` 
+```
+
+ 
 
 which again seem to show no problems. The residuals are smaller in
 size now because of the log transformation: the actual and predicted
@@ -355,6 +381,8 @@ d=tibble(diameter=c(1,2,seq(5,50,5)))
 d
 ```
 
+
+
 and then feed that into `predict`:
 
 ```{r }
@@ -362,11 +390,15 @@ p=predict(volume.3,d)
 d %>% mutate(pred=p)
 ```
 
+
+
 These are predicted log-volumes, so we'd better anti-log them. `log` in R is natural logs, so this is inverted using `exp`: 
 
 ```{r }
 d %>% mutate(pred=exp(p))
 ```
+
+
 
 For a diameter near zero, the predicted volume appears to be near zero as well.
 
@@ -377,7 +409,9 @@ the one-line summaries of our three models:
 
 ```{r }
 bind_rows(glance(volume.1),glance(volume.2),glance(volume.3))
-``` 
+```
+
+ 
 
 (I mistakenly put `glimpse` instead of `glance` there
 the first time. The former is for a quick look at a *data frame*,
@@ -397,7 +431,9 @@ like `glance` that outputs a data frame:
 ```{r }
 model_list=list(volume.1,volume.2,volume.3)
 map_df(model_list,~glance(.)) 
-``` 
+```
+
+ 
 
 It works. You see the three R-squared values in the first column. The
 third model is otherwise a lot different from the others because it
@@ -417,7 +453,7 @@ and if you have a long enough tape measure you can measure it.
 
 The above works because the tangent of 45 degrees is 1. If you have a
 device that will measure the actual angle,
-`r tufte::margin_note("These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).")` 
+`r tufte::margin_note("These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [link](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).")` 
 you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of

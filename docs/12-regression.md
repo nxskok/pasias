@@ -2927,8 +2927,25 @@ package `broom`:
 
 ```r
 library(broom)
-carp.2a=augment(carp, carp.2)
+carp.2a=augment(carp.2, carp)
 carp.2a
+```
+
+```
+## # A tibble: 10 x 10
+##     tank bodyweight   ENE .fitted .se.fit .resid  .hat .sigma .cooksd
+##  * <int>      <dbl> <dbl>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>   <dbl>
+##  1     1       11.7  15.3   12.6    1.07   2.74  0.239   1.99 0.215  
+##  2     2       25.3   9.3   11.3    0.886 -2.01  0.163   2.19 0.0651 
+##  3     3       90.2   6.5    6.75   1.07  -0.252 0.240   2.37 0.00182
+##  4     4      213     6      4.43   1.25   1.57  0.325   2.24 0.122  
+##  5     5       10.2  15.7   12.7    1.10   3.00  0.251   1.90 0.279  
+##  6     6       17.6  10     12.0    0.980 -2.01  0.199   2.19 0.0866 
+##  7     7       32.6   8.6   10.7    0.828 -2.08  0.143   2.18 0.0583 
+##  8     8       81.3   6.4    7.24   1.01  -0.841 0.211   2.34 0.0166 
+##  9     9      142.    5.6    4.78   1.31   0.822 0.355   2.33 0.0398 
+## 10    10      286.    6      6.94   2.05  -0.940 0.875   2.11 3.40   
+## # ... with 1 more variable: .std.resid <dbl>
 ```
 
  
@@ -2957,9 +2974,7 @@ is `ENE`. The plot is this:
 g
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'g' not found
-```
+<img src="12-regression_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
 
  
 
@@ -2999,7 +3014,7 @@ fitted model object `carp.2` as your data frame for the
 ggplot(carp.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
  
 
@@ -3013,7 +3028,8 @@ like $y=1/x$) than a parabola, in that it seems to decrease fast and
 then gradually to a limit, and *that* suggests, as in the class
 example, that we should try an asymptote model. Note how I specify it,
 with the `I()` thing again, since `/` has a special meaning 
-to `lm= in the same way that verb=^` does:
+to `lm` in the same way that 
+`^` does:
 
 ```r
 carp.3=lm(ENE~I(1/bodyweight),data=carp)
@@ -3054,15 +3070,14 @@ lot more.
 Does the fitted value plot look reasonable now? This is `augment` again since the fitted values and observed data come from different data frames:
 
 ```r
-augment(carp, carp.3) %>% 
+library(broom)
+augment(carp.3, carp) %>% 
 ggplot(aes(x=bodyweight,y=.fitted))+
 geom_line(colour="blue")+
 geom_point(aes(y=ENE))
 ```
 
-```
-## Error in augment(carp, carp.3): could not find function "augment"
-```
+<img src="12-regression_files/figure-html/augment2-1.png" width="672"  />
 
  
 
@@ -3078,7 +3093,7 @@ just did:
 ggplot(carp.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
 
  
 
@@ -3237,7 +3252,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-78-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
 
 <br>
 
@@ -3364,7 +3379,7 @@ ggplot(sparrowhawks,aes(x=returning,y=newadults))+
 geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-82-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
 
 I added a bit of text to the report, which I will show in a moment.
 
@@ -3619,7 +3634,7 @@ The usual:
 ggplot(soc,aes(x=experience,y=salary))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-91-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-89-1.png" width="672"  />
 
  
 
@@ -3689,7 +3704,7 @@ columns in it, not forgetting the initial dots:
 ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-91-1.png" width="672"  />
 
        
 I see a "fanning-out": the residuals are getting bigger *in size* 
@@ -3713,7 +3728,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-94-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
 
  
 
@@ -3733,7 +3748,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
 
  
 
@@ -3783,7 +3798,7 @@ I explain that "masked" thing below.
 boxcox(salary~experience,data=soc)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-97-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
 
  
 
@@ -3810,13 +3825,14 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:MASS"      "package:GGally"   
-##  [4] "package:bindrcpp"  "package:forcats"   "package:stringr"  
-##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
-## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
-## [13] "package:tidyverse" "package:stats"     "package:graphics" 
-## [16] "package:grDevices" "package:utils"     "package:datasets" 
-## [19] "package:methods"   "Autoloads"         "package:base"
+##  [1] ".GlobalEnv"        "package:MASS"      "package:broom"    
+##  [4] "package:GGally"    "package:bindrcpp"  "package:forcats"  
+##  [7] "package:stringr"   "package:dplyr"     "package:purrr"    
+## [10] "package:readr"     "package:tidyr"     "package:tibble"   
+## [13] "package:ggplot2"   "package:tidyverse" "package:stats"    
+## [16] "package:graphics"  "package:grDevices" "package:utils"    
+## [19] "package:datasets"  "package:methods"   "Autoloads"        
+## [22] "package:base"
 ```
 
  
@@ -3837,13 +3853,13 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:GGally"    "package:bindrcpp" 
-##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
-##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
-## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
-## [13] "package:stats"     "package:graphics"  "package:grDevices"
-## [16] "package:utils"     "package:datasets"  "package:methods"  
-## [19] "Autoloads"         "package:base"
+##  [1] ".GlobalEnv"        "package:broom"     "package:GGally"   
+##  [4] "package:bindrcpp"  "package:forcats"   "package:stringr"  
+##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
+## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
+## [13] "package:tidyverse" "package:stats"     "package:graphics" 
+## [16] "package:grDevices" "package:utils"     "package:datasets" 
+## [19] "package:methods"   "Autoloads"         "package:base"
 ```
 
  
@@ -4017,7 +4033,7 @@ data frame:
 ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
 
        
 
@@ -4033,7 +4049,7 @@ distributed as they should be? Well, that's easy enough to check:
 ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
 
  
 
@@ -4089,7 +4105,7 @@ chest), defined as being 4.5 feet above the ground.
 Several pine trees had their diameter measured shortly before being
 cut down, and for each tree, the volume of wood was recorded. The data
 are in
-[http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt](http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt). The
+[link](http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt). The
 diameter is in inches and the volume is in cubic inches.  Is it
 possible to predict the volume of wood from the diameter?
 
@@ -4138,6 +4154,8 @@ trees
 ## 10       18     15
 ```
 
+    
+
 That looks like the data file.
 
 
@@ -4156,7 +4174,9 @@ for. Also, the volume is the response, so that should go on the $y$-axis:
 ggplot(trees,aes(x=diameter,y=volume))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-109-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
+
+       
 
 You can put a smooth trend on it if you like, which would
 look like this:
@@ -4171,7 +4191,9 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-110-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
+
+       
 
 I'll take either of those for this part, though I think the smooth
 trend actually obscures the issue here (because there is not so much
@@ -4242,6 +4264,8 @@ summary(volume.1)
 ## F-statistic:   185 on 1 and 8 DF,  p-value: 8.217e-07
 ```
 
+       
+
 R-squared is nearly 96\%, so the relationship is definitely a strong one.
 
 I also wanted to mention the `broom` package, which was
@@ -4263,6 +4287,8 @@ glance(volume.1)
 ## # ... with 2 more variables: deviance <dbl>, df.residual <int>
 ```
 
+ 
+
 This gives a one-line summary of a model, including things like
 R-squared. This is handy if you're fitting more than one model,
 because you can collect the one-line summaries together into a data
@@ -4283,6 +4309,8 @@ tidy(volume.1)
 ## 2 diameter        10.9     0.801     13.6  0.000000822
 ```
 
+ 
+
 This gives a table of intercepts, slopes and their P-values, but the
 value to this one is that it is a *data frame*, so if you want to
 pull anything out of it, you know how to do that:\endnote{The
@@ -4299,6 +4327,8 @@ tidy(volume.1) %>% filter(term=="diameter")
 ##   <chr>       <dbl>     <dbl>     <dbl>       <dbl>
 ## 1 diameter     10.9     0.801      13.6 0.000000822
 ```
+
+ 
 
 This gets the estimated slope and its P-value, without worrying about
 the corresponding things for the intercept, which are usually of less
@@ -4321,7 +4351,9 @@ random mess of nothingness:
 ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
+
+       
 
 Make a call. You could say that there's no discernible pattern,
 especially with such a small data set, and
@@ -4366,7 +4398,7 @@ disconcerting to have a model that makes no logical sense.
 cone, like this, but probably taller and skinnier:
 
 
-![](/home/ken/Pictures/conebnw.jpg.png)
+![](/home/ken/Pictures/conebnw.png)
         
 
 with its base on the ground. What is the relationship between the
@@ -4380,7 +4412,7 @@ Solution
 
 
 According to
-[http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx](http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx),
+[link](http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx),
 the volume of a cone is $V=\pi r^2h/3$, where $V$ is the volume,
 $r$ is the radius (at the bottom of the cone) and $h$ is the
 height. The diameter is twice the radius, so replace $r$ by
@@ -4429,6 +4461,8 @@ summary(volume.2)
 ## F-statistic: 162.2 on 1 and 8 DF,  p-value: 1.359e-06
 ```
 
+       
+
 This adds an intercept as well, which is fine (there are technical
 difficulties around removing the intercept).
 
@@ -4446,7 +4480,9 @@ predicts the data well. I should look at the residuals from this one:
 ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
+
+ 
 
 I really don't think there are any problems there.
 
@@ -4460,7 +4496,7 @@ larger-diameter trees being taller. Except that we don't have the
 heights here, so we can't build a model for that.
 
 So I went looking in the literature. I found this paper:
-[https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf](https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf). This
+[link](https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf). This
 gives several models for relationships between volume, diameter and height. In
 the formulas below, there is an implied "plus error" on the right,
 and the $\alpha_i$ are parameters to be estimated.
@@ -4528,6 +4564,8 @@ summary(volume.3)
 ## F-statistic: 78.68 on 1 and 8 DF,  p-value: 2.061e-05
 ```
 
+ 
+
 The parameter that I called $\alpha_2$ above is the slope of this
 model, 3.13. This is a bit different from the figure in the paper,
 which was 2.19. I think these are comparable even though the other
@@ -4546,6 +4584,8 @@ confint(volume.3)
 ## log(diameter)  2.315115  3.941665
 ```
 
+ 
+
 From 2.3 to 3.9. It is definitely not zero, but we are rather less
 sure about what it is, and 2.19 is not completely implausible.
 
@@ -4557,7 +4597,9 @@ got, is still high. The residuals are these:
 ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-118-1.png" width="672"  />
+
+ 
 
 which again seem to show no problems. The residuals are smaller in
 size now because of the log transformation: the actual and predicted
@@ -4595,6 +4637,8 @@ d
 ## 12       50
 ```
 
+
+
 and then feed that into `predict`:
 
 
@@ -4621,6 +4665,8 @@ d %>% mutate(pred=p)
 ## 12       50  6.31
 ```
 
+
+
 These are predicted log-volumes, so we'd better anti-log them. `log` in R is natural logs, so this is inverted using `exp`: 
 
 
@@ -4646,6 +4692,8 @@ d %>% mutate(pred=exp(p))
 ## 12       50 552.
 ```
 
+
+
 For a diameter near zero, the predicted volume appears to be near zero as well.
 
 <br>
@@ -4667,6 +4715,8 @@ bind_rows(glance(volume.1),glance(volume.2),glance(volume.3))
 ## 3     0.908         0.896  0.303      78.7 2.06e-5     2  -1.12  8.25  9.16
 ## # ... with 2 more variables: deviance <dbl>, df.residual <int>
 ```
+
+ 
 
 (I mistakenly put `glimpse` instead of `glance` there
 the first time. The former is for a quick look at a *data frame*,
@@ -4699,6 +4749,8 @@ map_df(model_list,~glance(.))
 ## # ... with 2 more variables: deviance <dbl>, df.residual <int>
 ```
 
+ 
+
 It works. You see the three R-squared values in the first column. The
 third model is otherwise a lot different from the others because it
 has a different response variable.
@@ -4717,7 +4769,7 @@ and if you have a long enough tape measure you can measure it.
 
 The above works because the tangent of 45 degrees is 1. If you have a
 device that will measure the actual angle,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).</span> 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [link](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).</span> 
 you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of

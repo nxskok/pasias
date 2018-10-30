@@ -2067,12 +2067,26 @@ we have to use the dollar-sign thing to get it from the right one.</p>
 This is done using <code>augment</code> from
 package <code>broom</code>:</p>
 <div class="sourceCode" id="cb1046"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1046-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
-<a class="sourceLine" id="cb1046-2" data-line-number="2">carp<span class="fl">.2</span>a=<span class="kw">augment</span>(carp, carp<span class="fl">.2</span>)</a>
+<a class="sourceLine" id="cb1046-2" data-line-number="2">carp<span class="fl">.2</span>a=<span class="kw">augment</span>(carp<span class="fl">.2</span>, carp)</a>
 <a class="sourceLine" id="cb1046-3" data-line-number="3">carp<span class="fl">.2</span>a</a></code></pre></div>
+<pre><code>## # A tibble: 10 x 10
+##     tank bodyweight   ENE .fitted .se.fit .resid  .hat .sigma .cooksd
+##  * &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1     1       11.7  15.3   12.6    1.07   2.74  0.239   1.99 0.215  
+##  2     2       25.3   9.3   11.3    0.886 -2.01  0.163   2.19 0.0651 
+##  3     3       90.2   6.5    6.75   1.07  -0.252 0.240   2.37 0.00182
+##  4     4      213     6      4.43   1.25   1.57  0.325   2.24 0.122  
+##  5     5       10.2  15.7   12.7    1.10   3.00  0.251   1.90 0.279  
+##  6     6       17.6  10     12.0    0.980 -2.01  0.199   2.19 0.0866 
+##  7     7       32.6   8.6   10.7    0.828 -2.08  0.143   2.18 0.0583 
+##  8     8       81.3   6.4    7.24   1.01  -0.841 0.211   2.34 0.0166 
+##  9     9      142.    5.6    4.78   1.31   0.822 0.355   2.33 0.0398 
+## 10    10      286.    6      6.94   2.05  -0.940 0.875   2.11 3.40   
+## # ... with 1 more variable: .std.resid &lt;dbl&gt;</code></pre>
 <p>so now you see what <code>carp.2a</code> has in it, and then:</p>
-<div class="sourceCode" id="cb1047"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1047-1" data-line-number="1">g=<span class="kw">ggplot</span>(carp<span class="fl">.2</span>a,<span class="kw">aes</span>(<span class="dt">x=</span>bodyweight,<span class="dt">y=</span>.fitted))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1047-2" data-line-number="2"><span class="kw">geom_line</span>(<span class="dt">colour=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb1047-3" data-line-number="3"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>ENE))</a></code></pre></div>
+<div class="sourceCode" id="cb1048"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1048-1" data-line-number="1">g=<span class="kw">ggplot</span>(carp<span class="fl">.2</span>a,<span class="kw">aes</span>(<span class="dt">x=</span>bodyweight,<span class="dt">y=</span>.fitted))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1048-2" data-line-number="2"><span class="kw">geom_line</span>(<span class="dt">colour=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1048-3" data-line-number="3"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>ENE))</a></code></pre></div>
 <p>This is easier coding: there are only two non-standard things. The
 first is that the fitted-value lines should be a distinct colour like
 blue so that you can tell them from the data points. The second thing
@@ -2080,8 +2094,8 @@ is that for the second <code>geom_point</code>, the one that plots the data,
 the <span class="math inline">\(x\)</span> coordinate <code>bodyweight</code> is correct so that we don’t
 have to change that; we only have to change the <span class="math inline">\(y\)</span>-coordinate, which
 is <code>ENE</code>. The plot is this:</p>
-<div class="sourceCode" id="cb1048"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1048-1" data-line-number="1">g</a></code></pre></div>
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;g&#39; not found</code></pre>
+<div class="sourceCode" id="cb1049"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1049-1" data-line-number="1">g</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-71-1.png" width="672"  /></p>
 <p>Concerning interpretation, you have a number of possibilities
 here. The simplest is that the points in the middle are above the
 curve, and the points at the ends are below. (That is, negative
@@ -2107,7 +2121,7 @@ about them in this question, but I will.)</li>
 fitted model object <code>carp.2</code> as your data frame for the
 <code>ggplot</code>:</p>
 <div class="sourceCode" id="cb1050"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1050-1" data-line-number="1"><span class="kw">ggplot</span>(carp<span class="fl">.2</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-73-1.png" width="672"  /></p>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  /></p>
 <p>I think this is <em>still</em> a curve (or, it goes down and then
 sharply up at the end). Either way, there is still a pattern.</p>
 <p>That was all I needed, but as to what this means: our parabola was a
@@ -2117,7 +2131,8 @@ like <span class="math inline">\(y=1/x\)</span>) than a parabola, in that it see
 then gradually to a limit, and <em>that</em> suggests, as in the class
 example, that we should try an asymptote model. Note how I specify it,
 with the <code>I()</code> thing again, since <code>/</code> has a special meaning
-to <code>lm= in the same way that verb=^</code> does:</p>
+to <code>lm</code> in the same way that
+<code>^</code> does:</p>
 <div class="sourceCode" id="cb1051"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1051-1" data-line-number="1">carp<span class="fl">.3</span>=<span class="kw">lm</span>(ENE<span class="op">~</span><span class="kw">I</span>(<span class="dv">1</span><span class="op">/</span>bodyweight),<span class="dt">data=</span>carp)</a>
 <a class="sourceLine" id="cb1051-2" data-line-number="2"><span class="kw">summary</span>(carp<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## 
@@ -2146,18 +2161,19 @@ is a reasonable biological mechanism. It says that a carp always has
 some ENE, no matter how big it gets, but a smaller carp will have a
 lot more.</p>
 <p>Does the fitted value plot look reasonable now? This is <code>augment</code> again since the fitted values and observed data come from different data frames:</p>
-<div class="sourceCode" id="cb1053"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1053-1" data-line-number="1"><span class="kw">augment</span>(carp, carp<span class="fl">.3</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1053-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>bodyweight,<span class="dt">y=</span>.fitted))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1053-3" data-line-number="3"><span class="kw">geom_line</span>(<span class="dt">colour=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb1053-4" data-line-number="4"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>ENE))</a></code></pre></div>
-<pre><code>## Error in augment(carp, carp.3): could not find function &quot;augment&quot;</code></pre>
+<div class="sourceCode" id="cb1053"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1053-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb1053-2" data-line-number="2"><span class="kw">augment</span>(carp<span class="fl">.3</span>, carp) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1053-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>bodyweight,<span class="dt">y=</span>.fitted))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1053-4" data-line-number="4"><span class="kw">geom_line</span>(<span class="dt">colour=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1053-5" data-line-number="5"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>ENE))</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/augment2-1.png" width="672"  /></p>
 <p>I’d say that does a really nice job of fitting the data. But it would
 be nice to have a few more tanks with large-bodyweight fish, to
 convince us that we have the shape of the trend right.</p>
 <p>And, as ever, the residual plot. That’s a lot easier than the plot we
 just did:</p>
-<div class="sourceCode" id="cb1055"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1055-1" data-line-number="1"><span class="kw">ggplot</span>(carp<span class="fl">.3</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-76-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1054"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1054-1" data-line-number="1"><span class="kw">ggplot</span>(carp<span class="fl">.3</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-74-1.png" width="672"  /></p>
 <p>All in all, that looks pretty good (and certainly a vast improvement
 over the ones you got before).</p>
 <p>When you write up your report, you can make it flow better by writing
@@ -2206,15 +2222,15 @@ backtick characters, put R code, just as you would type it at
 the Console or put in an R notebook. In this case, that would be
 the following code, minus the message that comes out of
 <code>read_delim</code>:</p>
-<div class="sourceCode" id="cb1056"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1056-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1056-2" data-line-number="2">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt&quot;</span></a>
-<a class="sourceLine" id="cb1056-3" data-line-number="3">sparrowhawks=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1055"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1055-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1055-2" data-line-number="2">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt&quot;</span></a>
+<a class="sourceLine" id="cb1055-3" data-line-number="3">sparrowhawks=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   returning = col_integer(),
 ##   newadults = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb1058"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1058-1" data-line-number="1">sparrowhawks</a></code></pre></div>
+<div class="sourceCode" id="cb1057"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1057-1" data-line-number="1">sparrowhawks</a></code></pre></div>
 <p>For you, it looks like this:</p>
 <p><img src="sh2.png" /></p>
 <p>We don’t know how many rows of data there are yet, so I’ve left a
@@ -2256,11 +2272,11 @@ suitable text to your report.</li>
 <p>Solution</p>
 <p>The R code you add should look like this, with the results shown
 (when you knit the report again):</p>
-<div class="sourceCode" id="cb1059"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1059-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1059-2" data-line-number="2"><span class="kw">ggplot</span>(sparrowhawks,<span class="kw">aes</span>(<span class="dt">x=</span>returning,<span class="dt">y=</span>newadults))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1059-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1058"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1058-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1058-2" data-line-number="2"><span class="kw">ggplot</span>(sparrowhawks,<span class="kw">aes</span>(<span class="dt">x=</span>returning,<span class="dt">y=</span>newadults))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1058-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-78-1.png" width="672"  /></p>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-76-1.png" width="672"  /></p>
 <p><br></p>
 <p>The piece of report that I added looks like this:</p>
 <p><img src="sh4.png" /></p>
@@ -2274,10 +2290,10 @@ you need is <code>cor</code>. You can feed it a data frame.)</li>
 </ol>
 <p>Solution</p>
 <p>The appropriate R code is this, in another code chunk:</p>
-<div class="sourceCode" id="cb1061"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1061-1" data-line-number="1"><span class="kw">with</span>(sparrowhawks,<span class="kw">cor</span>(newadults,returning))</a></code></pre></div>
+<div class="sourceCode" id="cb1060"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1060-1" data-line-number="1"><span class="kw">with</span>(sparrowhawks,<span class="kw">cor</span>(newadults,returning))</a></code></pre></div>
 <pre><code>## [1] -0.7484673</code></pre>
 <p>Or you can ask for the correlations of the whole data frame:</p>
-<div class="sourceCode" id="cb1063"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1063-1" data-line-number="1"><span class="kw">cor</span>(sparrowhawks)</a></code></pre></div>
+<div class="sourceCode" id="cb1062"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1062-1" data-line-number="1"><span class="kw">cor</span>(sparrowhawks)</a></code></pre></div>
 <pre><code>##            returning  newadults
 ## returning  1.0000000 -0.7484673
 ## newadults -0.7484673  1.0000000</code></pre>
@@ -2293,8 +2309,8 @@ adults from the percentage of returning adults.</li>
 </ol>
 <p>Solution</p>
 <p>This R code, in another code chunk:</p>
-<div class="sourceCode" id="cb1065"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1065-1" data-line-number="1">newadults<span class="fl">.1</span>=<span class="kw">lm</span>(newadults<span class="op">~</span>returning,<span class="dt">data=</span>sparrowhawks)</a>
-<a class="sourceLine" id="cb1065-2" data-line-number="2"><span class="kw">summary</span>(newadults<span class="fl">.1</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb1064"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1064-1" data-line-number="1">newadults<span class="fl">.1</span>=<span class="kw">lm</span>(newadults<span class="op">~</span>returning,<span class="dt">data=</span>sparrowhawks)</a>
+<a class="sourceLine" id="cb1064-2" data-line-number="2"><span class="kw">summary</span>(newadults<span class="fl">.1</span>)  </a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = newadults ~ returning, data = sparrowhawks)
@@ -2328,9 +2344,9 @@ I added this to the report. I thought we deserved a new section here:</p>
 <p>This code. Using <code>geom_smooth</code> with
 <code>method=&quot;lm&quot;</code>
 will add the regression line to the plot:</p>
-<div class="sourceCode" id="cb1067"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1067-1" data-line-number="1"><span class="kw">ggplot</span>(sparrowhawks,<span class="kw">aes</span>(<span class="dt">x=</span>returning,<span class="dt">y=</span>newadults))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1067-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-82-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1066"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1066-1" data-line-number="1"><span class="kw">ggplot</span>(sparrowhawks,<span class="kw">aes</span>(<span class="dt">x=</span>returning,<span class="dt">y=</span>newadults))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1066-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-80-1.png" width="672"  /></p>
 <p>I added a bit of text to the report, which I will show in a moment.</p>
 <ol start="8" style="list-style-type: lower-alpha">
 <li>For short-lived birds, the association between these two
@@ -2359,14 +2375,14 @@ two variables. Also do something to check that the years of
 experience and annual salary figures look reasonable overall.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb1068"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1068-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/socwork.txt&quot;</span></a>
-<a class="sourceLine" id="cb1068-2" data-line-number="2">soc=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1067"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1067-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/socwork.txt&quot;</span></a>
+<a class="sourceLine" id="cb1067-2" data-line-number="2">soc=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   experience = col_integer(),
 ##   salary = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb1070"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1070-1" data-line-number="1">soc</a></code></pre></div>
+<div class="sourceCode" id="cb1069"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1069-1" data-line-number="1">soc</a></code></pre></div>
 <pre><code>## # A tibble: 50 x 2
 ##    experience salary
 ##         &lt;int&gt;  &lt;int&gt;
@@ -2384,7 +2400,7 @@ experience and annual salary figures look reasonable overall.</li>
 <p>That checks that we have the right <em>number</em> of observations; to
 check that we have sensible <em>values</em>, something like
 <code>summary</code> is called for:</p>
-<div class="sourceCode" id="cb1072"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1072-1" data-line-number="1"><span class="kw">summary</span>(soc)  </a></code></pre></div>
+<div class="sourceCode" id="cb1071"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1071-1" data-line-number="1"><span class="kw">summary</span>(soc)  </a></code></pre></div>
 <pre><code>##    experience        salary     
 ##  Min.   : 1.00   Min.   :16105  
 ##  1st Qu.:13.50   1st Qu.:36990  
@@ -2399,7 +2415,7 @@ that. Salaries had better be five or six figures, and salaries for
 social workers are not generally all that high, so these figures look
 reasonable.</p>
 <p>A rather more <code>tidyverse</code> way is this:</p>
-<div class="sourceCode" id="cb1074"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1074-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(<span class="kw">c</span>(<span class="st">&quot;min&quot;</span>,<span class="st">&quot;max&quot;</span>)) </a></code></pre></div>
+<div class="sourceCode" id="cb1073"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1073-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(<span class="kw">c</span>(<span class="st">&quot;min&quot;</span>,<span class="st">&quot;max&quot;</span>)) </a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##   experience_min salary_min experience_max salary_max
 ##            &lt;dbl&gt;      &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
@@ -2408,7 +2424,7 @@ reasonable.</p>
 liked them arranged in a nice rectangle (<code>min</code> and <code>max</code>
 as rows, the variables as columns), but that’s not how this comes out.</p>
 <p>Here is another:</p>
-<div class="sourceCode" id="cb1076"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1076-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_df</span>(<span class="op">~</span><span class="kw">quantile</span>(.)) </a></code></pre></div>
+<div class="sourceCode" id="cb1075"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1075-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_df</span>(<span class="op">~</span><span class="kw">quantile</span>(.)) </a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   experience salary
 ##        &lt;dbl&gt;  &lt;dbl&gt;
@@ -2419,13 +2435,13 @@ as rows, the variables as columns), but that’s not how this comes out.</p>
 ## 5       28   99139</code></pre>
 <p>These are the five-number summaries of each variable. Normally, they
 come with percentiles attached:</p>
-<div class="sourceCode" id="cb1078"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1078-1" data-line-number="1"><span class="kw">quantile</span>(soc<span class="op">$</span>experience)</a></code></pre></div>
+<div class="sourceCode" id="cb1077"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1077-1" data-line-number="1"><span class="kw">quantile</span>(soc<span class="op">$</span>experience)</a></code></pre></div>
 <pre><code>##    0%   25%   50%   75%  100% 
 ##  1.00 13.50 20.00 24.75 28.00</code></pre>
 <p>but the percentiles get lost in the transition to a <code>tibble</code>, and I
 haven’t found out how to get them back.</p>
 <p>This almost works:</p>
-<div class="sourceCode" id="cb1080"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1080-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_df</span>(<span class="op">~</span><span class="kw">enframe</span>(<span class="kw">quantile</span>(.)))</a></code></pre></div>
+<div class="sourceCode" id="cb1079"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1079-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_df</span>(<span class="op">~</span><span class="kw">enframe</span>(<span class="kw">quantile</span>(.)))</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ##    name    value
 ##    &lt;chr&gt;   &lt;dbl&gt;
@@ -2448,11 +2464,11 @@ instead of any other form of <code>map</code>.</p>
 <p>As you know, the <code>map</code> family is
 actually very flexible: they run a function “for each” anything and
 glue the results together, like this:</p>
-<div class="sourceCode" id="cb1082"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1082-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_dbl</span>(median) </a></code></pre></div>
+<div class="sourceCode" id="cb1081"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1081-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_dbl</span>(median) </a></code></pre></div>
 <pre><code>## experience     salary 
 ##       20.0    50947.5</code></pre>
 <p>which gets the median for each variable. That’s the same thing as this:</p>
-<div class="sourceCode" id="cb1084"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1084-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(<span class="st">&quot;median&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1083"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1083-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(<span class="st">&quot;median&quot;</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 2
 ##   experience salary
 ##        &lt;dbl&gt;  &lt;dbl&gt;
@@ -2463,8 +2479,8 @@ experience. Does the nature of the trend make sense?</li>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb1086"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1086-1" data-line-number="1"><span class="kw">ggplot</span>(soc,<span class="kw">aes</span>(<span class="dt">x=</span>experience,<span class="dt">y=</span>salary))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-91-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1085"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1085-1" data-line-number="1"><span class="kw">ggplot</span>(soc,<span class="kw">aes</span>(<span class="dt">x=</span>experience,<span class="dt">y=</span>salary))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-89-1.png" width="672"  /></p>
 <p>As experience goes up, salary also goes up, as you would expect. Also,
 the trend seems more or less straight.</p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -2473,8 +2489,8 @@ display the results. Is the slope positive or negative? Does that
 make sense?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb1087"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1087-1" data-line-number="1">soc<span class="fl">.1</span>=<span class="kw">lm</span>(salary<span class="op">~</span>experience,<span class="dt">data=</span>soc)</a>
-<a class="sourceLine" id="cb1087-2" data-line-number="2"><span class="kw">summary</span>(soc<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1086"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1086-1" data-line-number="1">soc<span class="fl">.1</span>=<span class="kw">lm</span>(salary<span class="op">~</span>experience,<span class="dt">data=</span>soc)</a>
+<a class="sourceLine" id="cb1086-2" data-line-number="2"><span class="kw">summary</span>(soc<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = salary ~ experience, data = soc)
@@ -2507,8 +2523,8 @@ problem do you see?</li>
 <em>regression object</em> (even though it is not actually a data
 frame), and plot the <code>.fitted</code> and <code>.resid</code>
 columns in it, not forgetting the initial dots:</p>
-<div class="sourceCode" id="cb1089"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1089-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-93-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1088"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1088-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-91-1.png" width="672"  /></p>
 <p>I see a “fanning-out”: the residuals are getting bigger <em>in size</em>
 (further away from zero) as the fitted values get bigger. That
 is, when the (estimated) salary gets larger, it also gets more
@@ -2519,18 +2535,18 @@ the residuals against the fitted values. The absolute value is the
 residual without its plus or minus sign, so if the residuals are
 getting bigger in size, their absolute values are getting bigger. That
 would look like this:</p>
-<div class="sourceCode" id="cb1090"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1090-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span><span class="kw">abs</span>(.resid)))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1089"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1089-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span><span class="kw">abs</span>(.resid)))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-94-1.png" width="672"  /></p>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  /></p>
 <p>I added a smooth trend to this to help us judge whether the
 absolute-value-residuals are getting bigger as the fitted values get
 bigger. It looks to me as if the overall trend is an increasing one,
 apart from those few small fitted values that have larger-sized
 residuals. Don’t get thrown off by the kinks in the smooth trend. Here
 is a smoother version:</p>
-<div class="sourceCode" id="cb1092"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1092-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span><span class="kw">abs</span>(.resid)))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">span=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1091"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1091-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span><span class="kw">abs</span>(.resid)))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">span=</span><span class="dv">2</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-95-1.png" width="672"  /></p>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-93-1.png" width="672"  /></p>
 <p>The larger fitted values, according to this, have residuals larger in size.</p>
 <p>The thing that controls the smoothness of the smooth trend is the
 value of <code>span</code> in <code>geom_smooth</code>. The default is
@@ -2546,15 +2562,15 @@ transformation. What transformation is suggested?</li>
 <p>Solution</p>
 <p>You’ll need to call in (and install if necessary) the package
 <code>MASS</code> that contains <code>boxcox</code>:</p>
-<div class="sourceCode" id="cb1094"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1094-1" data-line-number="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
+<div class="sourceCode" id="cb1093"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1093-1" data-line-number="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;MASS&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
 ## 
 ##     select</code></pre>
 <p>I explain that “masked” thing below.</p>
-<div class="sourceCode" id="cb1097"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1097-1" data-line-number="1"><span class="kw">boxcox</span>(salary<span class="op">~</span>experience,<span class="dt">data=</span>soc)</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-97-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1096"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1096-1" data-line-number="1"><span class="kw">boxcox</span>(salary<span class="op">~</span>experience,<span class="dt">data=</span>soc)</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-95-1.png" width="672"  /></p>
 <p>That one looks like <span class="math inline">\(\lambda=0\)</span> or log. You could probably also
 justify fourth root (power 0.25), but log is a very common
 transformation, which people won’t need much persuasion to accept.</p>
@@ -2569,25 +2585,26 @@ that you will have a terrible time debugging. That’s what that
 finished with it. Let’s first see which packages are loaded, rather a
 lot in my case:
 <label for="tufte-mn-43" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-43" class="margin-toggle"><span class="marginnote">The packages before <em>tidyverse</em> other than <em>MASS</em> are all loaded by the <em>tidyverse</em>, which is why there are so many.</span></p>
-<div class="sourceCode" id="cb1098"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1098-1" data-line-number="1"><span class="kw">search</span>()</a></code></pre></div>
-<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:MASS&quot;      &quot;package:GGally&quot;   
+<div class="sourceCode" id="cb1097"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1097-1" data-line-number="1"><span class="kw">search</span>()</a></code></pre></div>
+<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:MASS&quot;      &quot;package:broom&quot;    
+##  [4] &quot;package:GGally&quot;    &quot;package:bindrcpp&quot;  &quot;package:forcats&quot;  
+##  [7] &quot;package:stringr&quot;   &quot;package:dplyr&quot;     &quot;package:purrr&quot;    
+## [10] &quot;package:readr&quot;     &quot;package:tidyr&quot;     &quot;package:tibble&quot;   
+## [13] &quot;package:ggplot2&quot;   &quot;package:tidyverse&quot; &quot;package:stats&quot;    
+## [16] &quot;package:graphics&quot;  &quot;package:grDevices&quot; &quot;package:utils&quot;    
+## [19] &quot;package:datasets&quot;  &quot;package:methods&quot;   &quot;Autoloads&quot;        
+## [22] &quot;package:base&quot;</code></pre>
+<p>then get rid of <code>MASS</code>:</p>
+<div class="sourceCode" id="cb1099"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1099-1" data-line-number="1"><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>,<span class="dt">unload=</span>T)</a></code></pre></div>
+<p>Now check that it has gone:</p>
+<div class="sourceCode" id="cb1100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1100-1" data-line-number="1"><span class="kw">search</span>()</a></code></pre></div>
+<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:broom&quot;     &quot;package:GGally&quot;   
 ##  [4] &quot;package:bindrcpp&quot;  &quot;package:forcats&quot;   &quot;package:stringr&quot;  
 ##  [7] &quot;package:dplyr&quot;     &quot;package:purrr&quot;     &quot;package:readr&quot;    
 ## [10] &quot;package:tidyr&quot;     &quot;package:tibble&quot;    &quot;package:ggplot2&quot;  
 ## [13] &quot;package:tidyverse&quot; &quot;package:stats&quot;     &quot;package:graphics&quot; 
 ## [16] &quot;package:grDevices&quot; &quot;package:utils&quot;     &quot;package:datasets&quot; 
 ## [19] &quot;package:methods&quot;   &quot;Autoloads&quot;         &quot;package:base&quot;</code></pre>
-<p>then get rid of <code>MASS</code>:</p>
-<div class="sourceCode" id="cb1100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1100-1" data-line-number="1"><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>,<span class="dt">unload=</span>T)</a></code></pre></div>
-<p>Now check that it has gone:</p>
-<div class="sourceCode" id="cb1101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1101-1" data-line-number="1"><span class="kw">search</span>()</a></code></pre></div>
-<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:GGally&quot;    &quot;package:bindrcpp&quot; 
-##  [4] &quot;package:forcats&quot;   &quot;package:stringr&quot;   &quot;package:dplyr&quot;    
-##  [7] &quot;package:purrr&quot;     &quot;package:readr&quot;     &quot;package:tidyr&quot;    
-## [10] &quot;package:tibble&quot;    &quot;package:ggplot2&quot;   &quot;package:tidyverse&quot;
-## [13] &quot;package:stats&quot;     &quot;package:graphics&quot;  &quot;package:grDevices&quot;
-## [16] &quot;package:utils&quot;     &quot;package:datasets&quot;  &quot;package:methods&quot;  
-## [19] &quot;Autoloads&quot;         &quot;package:base&quot;</code></pre>
 <p>It has. Now any calls to <code>select</code> will use the right one. We hope.</p>
 <p>The output of <code>search</code> is called the <strong>search list</strong>, and
 it tells you where R will go looking for things. The first one
@@ -2612,10 +2629,10 @@ showing the summary.</li>
 <p>Solution</p>
 <p>The best way is to add the new variable to the data frame using
 <code>mutate</code>, and save that new data frame. That goes like this:</p>
-<div class="sourceCode" id="cb1103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1103-1" data-line-number="1">soc<span class="fl">.2</span>=soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">log_salary=</span><span class="kw">log</span>(salary))</a></code></pre></div>
+<div class="sourceCode" id="cb1102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1102-1" data-line-number="1">soc<span class="fl">.2</span>=soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">log_salary=</span><span class="kw">log</span>(salary))</a></code></pre></div>
 <p>and then</p>
-<div class="sourceCode" id="cb1104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1104-1" data-line-number="1">soc<span class="fl">.3</span>=<span class="kw">lm</span>(log_salary<span class="op">~</span>experience,<span class="dt">data=</span>soc<span class="fl">.2</span>)</a>
-<a class="sourceLine" id="cb1104-2" data-line-number="2"><span class="kw">summary</span>(soc<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1103-1" data-line-number="1">soc<span class="fl">.3</span>=<span class="kw">lm</span>(log_salary<span class="op">~</span>experience,<span class="dt">data=</span>soc<span class="fl">.2</span>)</a>
+<a class="sourceLine" id="cb1103-2" data-line-number="2"><span class="kw">summary</span>(soc<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = log_salary ~ experience, data = soc.2)
@@ -2637,9 +2654,9 @@ showing the summary.</li>
 <p>I think it’s best to save the data frame with <code>log_salary</code> in
 it, since we’ll be doing a couple of things with it, and it’s best to
 be able to start from <code>soc.2</code>. But you can also do this:</p>
-<div class="sourceCode" id="cb1106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1106-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">log_salary=</span><span class="kw">log</span>(salary)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1106-2" data-line-number="2"><span class="kw">lm</span>(log_salary<span class="op">~</span>experience,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1106-3" data-line-number="3"><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1105-1" data-line-number="1">soc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">log_salary=</span><span class="kw">log</span>(salary)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1105-2" data-line-number="2"><span class="kw">lm</span>(log_salary<span class="op">~</span>experience,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1105-3" data-line-number="3"><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = log_salary ~ experience, data = .)
@@ -2671,8 +2688,8 @@ object) as output, which goes into <code>summary</code> as the first
 fitted model object, we are out of luck since we didn’t save
 it. That’s why I created <code>soc.2</code> and <code>soc.3</code> above.</p>
 <p>You can also put functions of things directly into <code>lm</code>:</p>
-<div class="sourceCode" id="cb1108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1108-1" data-line-number="1">soc<span class="fl">.1</span>a=<span class="kw">lm</span>(<span class="kw">log</span>(salary)<span class="op">~</span>experience, <span class="dt">data=</span>soc)</a>
-<a class="sourceLine" id="cb1108-2" data-line-number="2"><span class="kw">summary</span>(soc<span class="fl">.1</span>a)</a></code></pre></div>
+<div class="sourceCode" id="cb1107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1107-1" data-line-number="1">soc<span class="fl">.1</span>a=<span class="kw">lm</span>(<span class="kw">log</span>(salary)<span class="op">~</span>experience, <span class="dt">data=</span>soc)</a>
+<a class="sourceLine" id="cb1107-2" data-line-number="2"><span class="kw">summary</span>(soc<span class="fl">.1</span>a)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = log(salary) ~ experience, data = soc)
@@ -2699,15 +2716,15 @@ previous residual plot?</li>
 <p>Solution</p>
 <p>As we did before, treating the regression object as if it were a
 data frame:</p>
-<div class="sourceCode" id="cb1110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1110-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.3</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1109-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.3</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-103-1.png" width="672"  /></p>
 <p>That, to my mind, is a horizontal band of points, so I would say yes,
 I have solved the fanning out.</p>
 <p>One concern I have about the residuals is that there seem to be a
 couple of very negative values: that is, are the residuals normally
 distributed as they should be? Well, that’s easy enough to check:</p>
-<div class="sourceCode" id="cb1111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1111-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.3</span>,<span class="kw">aes</span>(<span class="dt">sample=</span>.resid))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-106-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1110-1" data-line-number="1"><span class="kw">ggplot</span>(soc<span class="fl">.3</span>,<span class="kw">aes</span>(<span class="dt">sample=</span>.resid))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-104-1.png" width="672"  /></p>
 <p>The issues here are that those bottom two values are a bit too low,
 and the top few values are a bit bunched up (that curve at the top).
 It is really not bad, though, so I am making the call that I don’t
@@ -2719,7 +2736,7 @@ of experience goes with a <em>percent</em> increase in salary.</p>
 <p>What increase? Well, the slope is about 0.05, so adding a year of
 experience is predicted to increase log-salary by 0.05, or to
 multiply actual salary by</p>
-<div class="sourceCode" id="cb1112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1112-1" data-line-number="1"><span class="kw">exp</span>(<span class="fl">0.05</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb1111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1111-1" data-line-number="1"><span class="kw">exp</span>(<span class="fl">0.05</span>)  </a></code></pre></div>
 <pre><code>## [1] 1.051271</code></pre>
 <p>or to increase salary by about 5%.</p>
 </div>
@@ -2736,7 +2753,7 @@ chest), defined as being 4.5 feet above the ground.</p>
 <p>Several pine trees had their diameter measured shortly before being
 cut down, and for each tree, the volume of wood was recorded. The data
 are in
-<a href="http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt" class="uri">http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt</a>. The
+<a href="http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt">link</a>. The
 diameter is in inches and the volume is in cubic inches. Is it
 possible to predict the volume of wood from the diameter?</p>
 <ol style="list-style-type: lower-alpha">
@@ -2746,14 +2763,14 @@ very many).</li>
 <p>Solution</p>
 <p>Observe that the data values are separated by spaces, and therefore
 that <code>read_delim</code> will do it:</p>
-<div class="sourceCode" id="cb1114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1114-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt&quot;</span></a>
-<a class="sourceLine" id="cb1114-2" data-line-number="2">trees=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1113-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt&quot;</span></a>
+<a class="sourceLine" id="cb1113-2" data-line-number="2">trees=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   diameter = col_integer(),
 ##   volume = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb1116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1116-1" data-line-number="1">trees</a></code></pre></div>
+<div class="sourceCode" id="cb1115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1115-1" data-line-number="1">trees</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ##    diameter volume
 ##       &lt;int&gt;  &lt;int&gt;
@@ -2775,14 +2792,14 @@ that <code>read_delim</code> will do it:</p>
 <p>No clues this time. You need to recognize that you have two
 quantitative variables, so that a scatterplot is called
 for. Also, the volume is the response, so that should go on the <span class="math inline">\(y\)</span>-axis:</p>
-<div class="sourceCode" id="cb1118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1118-1" data-line-number="1"><span class="kw">ggplot</span>(trees,<span class="kw">aes</span>(<span class="dt">x=</span>diameter,<span class="dt">y=</span>volume))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-109-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1117-1" data-line-number="1"><span class="kw">ggplot</span>(trees,<span class="kw">aes</span>(<span class="dt">x=</span>diameter,<span class="dt">y=</span>volume))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-107-1.png" width="672"  /></p>
 <p>You can put a smooth trend on it if you like, which would
 look like this:</p>
-<div class="sourceCode" id="cb1119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1119-1" data-line-number="1"><span class="kw">ggplot</span>(trees,<span class="kw">aes</span>(<span class="dt">x=</span>diameter,<span class="dt">y=</span>volume))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1119-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1118-1" data-line-number="1"><span class="kw">ggplot</span>(trees,<span class="kw">aes</span>(<span class="dt">x=</span>diameter,<span class="dt">y=</span>volume))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1118-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-110-1.png" width="672"  /></p>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  /></p>
 <p>I’ll take either of those for this part, though I think the smooth
 trend actually obscures the issue here (because there is not so much
 data).</p>
@@ -2812,8 +2829,8 @@ and obtain the <code>summary</code>. How would you describe the R-squared?</li>
 object by the name of the response variable and a number. (I
 have always used dots, but in the spirit of the
 <code>tidyverse</code> I suppose I should use underscores.)</p>
-<div class="sourceCode" id="cb1121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1121-1" data-line-number="1">volume<span class="fl">.1</span>=<span class="kw">lm</span>(volume<span class="op">~</span>diameter,<span class="dt">data=</span>trees)</a>
-<a class="sourceLine" id="cb1121-2" data-line-number="2"><span class="kw">summary</span>(volume<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1120-1" data-line-number="1">volume<span class="fl">.1</span>=<span class="kw">lm</span>(volume<span class="op">~</span>diameter,<span class="dt">data=</span>trees)</a>
+<a class="sourceLine" id="cb1120-2" data-line-number="2"><span class="kw">summary</span>(volume<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = volume ~ diameter, data = trees)
@@ -2837,8 +2854,8 @@ have always used dots, but in the spirit of the
 installed with the <code>tidyverse</code> but which you need to load
 separately. It provides two handy ways to summarize a fitted model
 (regression, analysis of variance or whatever):</p>
-<div class="sourceCode" id="cb1123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1123-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
-<a class="sourceLine" id="cb1123-2" data-line-number="2"><span class="kw">glance</span>(volume<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1122-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb1122-2" data-line-number="2"><span class="kw">glance</span>(volume<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 11
 ##   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
 ## *     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -2849,7 +2866,7 @@ R-squared. This is handy if you’re fitting more than one model,
 because you can collect the one-line summaries together into a data
 frame and eyeball them.</p>
 <p>The other summary is this one:</p>
-<div class="sourceCode" id="cb1125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1125-1" data-line-number="1"><span class="kw">tidy</span>(volume<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1124-1" data-line-number="1"><span class="kw">tidy</span>(volume<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   term        estimate std.error statistic     p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
@@ -2858,7 +2875,7 @@ frame and eyeball them.</p>
 <p>This gives a table of intercepts, slopes and their P-values, but the
 value to this one is that it is a <em>data frame</em>, so if you want to
 pull anything out of it, you know how to do that:</p>
-<div class="sourceCode" id="cb1127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1127-1" data-line-number="1"><span class="kw">tidy</span>(volume<span class="fl">.1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(term<span class="op">==</span><span class="st">&quot;diameter&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1126-1" data-line-number="1"><span class="kw">tidy</span>(volume<span class="fl">.1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(term<span class="op">==</span><span class="st">&quot;diameter&quot;</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 5
 ##   term     estimate std.error statistic     p.value
 ##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
@@ -2874,8 +2891,8 @@ the linearity of this regression. What do you conclude? Explain briefly.</li>
 <p>The thing I’m fishing for is a residual plot (of the residuals
 against the fitted values), and on it you are looking for a
 random mess of nothingness:</p>
-<div class="sourceCode" id="cb1129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1129-1" data-line-number="1"><span class="kw">ggplot</span>(volume<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-115-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1128-1" data-line-number="1"><span class="kw">ggplot</span>(volume<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-113-1.png" width="672"  /></p>
 <p>Make a call. You could say that there’s no discernible pattern,
 especially with such a small data set, and
 therefore that the regression is fine. Or you could say that there is
@@ -2909,7 +2926,7 @@ disconcerting to have a model that makes no logical sense.</p>
 <li>A simple way of modelling a tree’s shape is to pretend it is a
 cone, like this, but probably taller and skinnier:</li>
 </ol>
-<p><img src="/home/ken/Pictures/conebnw.jpg.png" /></p>
+<p><img src="/home/ken/Pictures/conebnw.png" /></p>
 <p>with its base on the ground. What is the relationship between the
 <em>diameter</em> (at the base) and volume of a cone? (If you don’t
 remember, look it up. You’ll probably get a formula in terms of the
@@ -2917,7 +2934,7 @@ radius, which you’ll have to convert.
 Cite the website you used.)</p>
 <p>Solution</p>
 <p>According to
-<a href="http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx" class="uri">http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx</a>,
+<a href="http://www.web-formulas.com/Math_Formulas/Geometry_Volume_of_Cone.aspx">link</a>,
 the volume of a cone is <span class="math inline">\(V=\pi r^2h/3\)</span>, where <span class="math inline">\(V\)</span> is the volume,
 <span class="math inline">\(r\)</span> is the radius (at the bottom of the cone) and <span class="math inline">\(h\)</span> is the
 height. The diameter is twice the radius, so replace <span class="math inline">\(r\)</span> by
@@ -2934,8 +2951,8 @@ results.</li>
 <p>Solution</p>
 <p>According to my formula, the volume depends on the diameter
 squared, which I include in the model thus:</p>
-<div class="sourceCode" id="cb1130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1130-1" data-line-number="1">volume<span class="fl">.2</span>=<span class="kw">lm</span>(volume<span class="op">~</span><span class="kw">I</span>(diameter<span class="op">^</span><span class="dv">2</span>),<span class="dt">data=</span>trees)</a>
-<a class="sourceLine" id="cb1130-2" data-line-number="2"><span class="kw">summary</span>(volume<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1129-1" data-line-number="1">volume<span class="fl">.2</span>=<span class="kw">lm</span>(volume<span class="op">~</span><span class="kw">I</span>(diameter<span class="op">^</span><span class="dv">2</span>),<span class="dt">data=</span>trees)</a>
+<a class="sourceLine" id="cb1129-2" data-line-number="2"><span class="kw">summary</span>(volume<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = volume ~ I(diameter^2), data = trees)
@@ -2963,8 +2980,8 @@ from zero, which is a step forward. The R-squared for this regression
 is very similar to that from our linear model (the one for which the
 intercept made no sense). So, from that point of view, either model
 predicts the data well. I should look at the residuals from this one:</p>
-<div class="sourceCode" id="cb1132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1132-1" data-line-number="1"><span class="kw">ggplot</span>(volume<span class="fl">.2</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-117-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1131-1" data-line-number="1"><span class="kw">ggplot</span>(volume<span class="fl">.2</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-115-1.png" width="672"  /></p>
 <p>I really don’t think there are any problems there.</p>
 <p>Now, I said to assume that the trees are all of similar height. This
 seems entirely questionable, since the trees vary quite a bit in
@@ -2975,7 +2992,7 @@ you knew the diameter you could <em>predict</em> the height, with
 larger-diameter trees being taller. Except that we don’t have the
 heights here, so we can’t build a model for that.</p>
 <p>So I went looking in the literature. I found this paper:
-<a href="https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf" class="uri">https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf</a>. This
+<a href="https://pdfs.semanticscholar.org/5497/3d02d63428e3dfed6645acfdba874ad80822.pdf">link</a>. This
 gives several models for relationships between volume, diameter and height. In
 the formulas below, there is an implied “plus error” on the right,
 and the <span class="math inline">\(\alpha_i\)</span> are parameters to be estimated.</p>
@@ -3004,8 +3021,8 @@ logs:</p>
 \]</span></p>
 <p>so that log-volume has a linear relationship with log-diameter and we
 can go ahead and estimate it:</p>
-<div class="sourceCode" id="cb1133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1133-1" data-line-number="1">volume<span class="fl">.3</span>=<span class="kw">lm</span>(<span class="kw">log</span>(volume)<span class="op">~</span><span class="kw">log</span>(diameter),<span class="dt">data=</span>trees)</a>
-<a class="sourceLine" id="cb1133-2" data-line-number="2"><span class="kw">summary</span>(volume<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1132-1" data-line-number="1">volume<span class="fl">.3</span>=<span class="kw">lm</span>(<span class="kw">log</span>(volume)<span class="op">~</span><span class="kw">log</span>(diameter),<span class="dt">data=</span>trees)</a>
+<a class="sourceLine" id="cb1132-2" data-line-number="2"><span class="kw">summary</span>(volume<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = log(volume) ~ log(diameter), data = trees)
@@ -3030,7 +3047,7 @@ which was 2.19. I think these are comparable even though the other
 parameter is not (again, measurements in different units, plus, this
 time we need to take the log of it). I think the “slopes” are
 comparable because we haven’t estimated our slope all that accurately:</p>
-<div class="sourceCode" id="cb1135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1135-1" data-line-number="1"><span class="kw">confint</span>(volume<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1134-1" data-line-number="1"><span class="kw">confint</span>(volume<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>##                   2.5 %    97.5 %
 ## (Intercept)   -8.635791 -3.212752
 ## log(diameter)  2.315115  3.941665</code></pre>
@@ -3038,8 +3055,8 @@ comparable because we haven’t estimated our slope all that accurately:</p>
 sure about what it is, and 2.19 is not completely implausible.</p>
 <p>The R-squared here, though it is less than the other ones we
 got, is still high. The residuals are these:</p>
-<div class="sourceCode" id="cb1137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1137-1" data-line-number="1"><span class="kw">ggplot</span>(volume<span class="fl">.3</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-120-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1136-1" data-line-number="1"><span class="kw">ggplot</span>(volume<span class="fl">.3</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-118-1.png" width="672"  /></p>
 <p>which again seem to show no problems. The residuals are smaller in
 size now because of the log transformation: the actual and predicted
 log-volumes are smaller numbers than the actual and predicted volumes,
@@ -3050,8 +3067,8 @@ log-volume is also very negative (the slope is positive). So the
 predicted actual volume will be close to zero. If you want to make
 that mathematically rigorous, you can take limits, but that’s the
 intuition. We can also do some predictions: set up a data frame that has a column called <code>diameter</code> with some diameters to predict for:</p>
-<div class="sourceCode" id="cb1138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1138-1" data-line-number="1">d=<span class="kw">tibble</span>(<span class="dt">diameter=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="kw">seq</span>(<span class="dv">5</span>,<span class="dv">50</span>,<span class="dv">5</span>)))</a>
-<a class="sourceLine" id="cb1138-2" data-line-number="2">d</a></code></pre></div>
+<div class="sourceCode" id="cb1137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1137-1" data-line-number="1">d=<span class="kw">tibble</span>(<span class="dt">diameter=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="kw">seq</span>(<span class="dv">5</span>,<span class="dv">50</span>,<span class="dv">5</span>)))</a>
+<a class="sourceLine" id="cb1137-2" data-line-number="2">d</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 1
 ##    diameter
 ##       &lt;dbl&gt;
@@ -3068,8 +3085,8 @@ intuition. We can also do some predictions: set up a data frame that has a colum
 ## 11       45
 ## 12       50</code></pre>
 <p>and then feed that into <code>predict</code>:</p>
-<div class="sourceCode" id="cb1140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1140-1" data-line-number="1">p=<span class="kw">predict</span>(volume<span class="fl">.3</span>,d)</a>
-<a class="sourceLine" id="cb1140-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pred=</span>p)</a></code></pre></div>
+<div class="sourceCode" id="cb1139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1139-1" data-line-number="1">p=<span class="kw">predict</span>(volume<span class="fl">.3</span>,d)</a>
+<a class="sourceLine" id="cb1139-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pred=</span>p)</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 2
 ##    diameter   pred
 ##       &lt;dbl&gt;  &lt;dbl&gt;
@@ -3086,7 +3103,7 @@ intuition. We can also do some predictions: set up a data frame that has a colum
 ## 11       45  5.98 
 ## 12       50  6.31</code></pre>
 <p>These are predicted log-volumes, so we’d better anti-log them. <code>log</code> in R is natural logs, so this is inverted using <code>exp</code>:</p>
-<div class="sourceCode" id="cb1142"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1142-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pred=</span><span class="kw">exp</span>(p))</a></code></pre></div>
+<div class="sourceCode" id="cb1141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1141-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pred=</span><span class="kw">exp</span>(p))</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 2
 ##    diameter      pred
 ##       &lt;dbl&gt;     &lt;dbl&gt;
@@ -3106,7 +3123,7 @@ intuition. We can also do some predictions: set up a data frame that has a colum
 <p><br></p>
 <p>I mentioned <code>broom</code> earlier. We can make a data frame out of
 the one-line summaries of our three models:</p>
-<div class="sourceCode" id="cb1144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1144-1" data-line-number="1"><span class="kw">bind_rows</span>(<span class="kw">glance</span>(volume<span class="fl">.1</span>),<span class="kw">glance</span>(volume<span class="fl">.2</span>),<span class="kw">glance</span>(volume<span class="fl">.3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1143-1" data-line-number="1"><span class="kw">bind_rows</span>(<span class="kw">glance</span>(volume<span class="fl">.1</span>),<span class="kw">glance</span>(volume<span class="fl">.2</span>),<span class="kw">glance</span>(volume<span class="fl">.3</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 11
 ##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
 ##       &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -3126,8 +3143,8 @@ get the <code>glance</code> output for each one, and <code>bind_rows</code>
 to glue the results together into one data frame. I was inspired to
 try this by remembering that <code>map_df</code> will work for a function
 like <code>glance</code> that outputs a data frame:</p>
-<div class="sourceCode" id="cb1146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1146-1" data-line-number="1">model_list=<span class="kw">list</span>(volume<span class="fl">.1</span>,volume<span class="fl">.2</span>,volume<span class="fl">.3</span>)</a>
-<a class="sourceLine" id="cb1146-2" data-line-number="2"><span class="kw">map_df</span>(model_list,<span class="op">~</span><span class="kw">glance</span>(.)) </a></code></pre></div>
+<div class="sourceCode" id="cb1145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1145-1" data-line-number="1">model_list=<span class="kw">list</span>(volume<span class="fl">.1</span>,volume<span class="fl">.2</span>,volume<span class="fl">.3</span>)</a>
+<a class="sourceLine" id="cb1145-2" data-line-number="2"><span class="kw">map_df</span>(model_list,<span class="op">~</span><span class="kw">glance</span>(.)) </a></code></pre></div>
 <pre><code>## # A tibble: 3 x 11
 ##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
 ##       &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -3150,7 +3167,7 @@ you and the base of the tree is then equal to the height of the tree,
 and if you have a long enough tape measure you can measure it.</p>
 <p>The above works because the tangent of 45 degrees is 1. If you have a
 device that will measure the actual angle,
-<label for="tufte-mn-45" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-45" class="margin-toggle"><span class="marginnote">These days, there are apps that will let you do this with your phone. I found one called Clinometer. See also <a href="https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/" class="uri">https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/</a>.</span>
+<label for="tufte-mn-45" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-45" class="margin-toggle"><span class="marginnote">These days, there are apps that will let you do this with your phone. I found one called Clinometer. See also <a href="https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/">link</a>.</span>
 you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of

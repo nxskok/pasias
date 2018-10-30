@@ -1,5 +1,5 @@
 .PHONY: rmds
-rmds: carp.Rmd socwork.Rmd
+rmds: carp.Rmd socwork.Rmd pinetrees.Rmd
 %.Rmd: ~/teaching/c32/assgt/%.Rnw convert.pl
 	perl convert.pl $< > $@
 docs/index.html: index.Rmd

@@ -210,9 +210,9 @@ we have to use the dollar-sign thing to get it from the right one.
 A better way around this is "augment" the data with output from the regression object. 
 This is done using `augment` from 
 package `broom`:
-```{r augment1, eval=F, error=TRUE}
+```{r augment1, error=TRUE}
 library(broom)
-carp.2a=augment(carp, carp.2)
+carp.2a=augment(carp.2, carp)
 carp.2a
 ```
 
@@ -309,7 +309,7 @@ lot more.
 Does the fitted value plot look reasonable now? This is `augment` again since the fitted values and observed data come from different data frames:
 ```{r augment2, error=T}
 library(broom)
-augment(carp, carp.3) %>% 
+augment(carp.3, carp) %>% 
 ggplot(aes(x=bodyweight,y=.fitted))+
 geom_line(colour="blue")+
 geom_point(aes(y=ENE))
