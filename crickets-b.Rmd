@@ -1,0 +1,570 @@
+##  Crickets revisited
+
+
+ This is a reorganization of the crickets problem that you
+may have seen before (minus the data tidying).
+
+Male tree crickets produce "mating songs" by rubbing their wings
+together to produce a chirping sound. It is hypothesized that female
+tree crickets identify males of the correct species by how fast (in
+chirps per second) the male's mating song is. This is called the
+"pulse rate".  Some data for two species of crickets are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/crickets2.csv) as a CSV
+file. The columns are species (text), temperature, and pulse
+rate (numbers). This is the tidied version of the data set that the
+previous version of this question had you create.
+The research question is whether males
+of the different species have different average pulse rates. It is
+also of interest to see whether temperature has an effect, and if
+so, what.
+
+
+(a) Read the data into R and display what you have.
+
+
+Solution
+
+
+Nothing terribly surprising here:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/crickets2.csv"
+crickets=read_csv(my_url)
+crickets
+```
+
+ 
+
+31 crickets, which is what I remember. What species are there?
+
+```{r }
+crickets %>% count(species)
+```
+
+ 
+
+That looks good. We proceed.
+
+
+
+(b) Do a two-sample $t$-test to see whether the mean pulse rates
+differ between species. What do you conclude?
+
+
+Solution
+
+
+Drag your mind way back to this:
+```{r }
+t.test(pulse_rate~species,data=crickets) 
+```
+
+ 
+
+There is strong evidence of a difference in means (a P-value around
+0.00001), and the confidence interval says that the mean chirp rate is
+higher for *exclamationis*. That is, not just for the crickets
+that were observed here, but for *all* crickets of these two
+species. 
+      
+
+
+(c) Can you do that two-sample $t$-test as a regression?
+
+
+Solution
+
+
+Hang onto the "pulse rate depends on species" idea and try
+that in `lm`:
+```{r }
+pulse.0=lm(pulse_rate~species,data=crickets)
+summary(pulse.0)
+```
+
+         
+
+I had to use "model 0" for this since I already have a
+`pulse.1` below and I didn't want to go down and renumber
+everything. 
+
+Look along the `speciesniveus` line. Ignoring the fact that it
+is negative, the $t$-statistic is almost the same as before (5.17 vs.\
+5.22) and so is the P-value ($1.4 \times 10^{-5}$ vs.\ $1.6 \times
+10^{-5}$). 
+
+Why aren't they exactly the same? Regression is assuming equal
+variances everywhere (that is, within the two `species`), and
+before, we did the Welch-Satterthwaite test that does not assume equal
+variances. What if we do the pooled $t$-test instead?
+
+```{r }
+t.test(pulse_rate~species,data=crickets,var.equal=T) 
+```
+
+ 
+
+Now the regression and the $t$-test *do* give exactly the same
+answers. We'll think about that equal-spreads assumption again later.
+
+
+
+(d) The analysis in the last part did not use temperature,
+however. Is it possible that temperature also has an effect? To
+assess this, draw a scatterplot of pulse rate against temperature,
+with the points distinguished, somehow, by the species they are
+from.\endnote{This was the actual reason I thought of this
+question originally:
+I wanted you to do this.}
+
+
+Solution
+
+
+One of the wonderful things about `ggplot` is that doing
+the obvious thing works:
+```{r }
+ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
+geom_point()
+```
+
+       
+    
+
+
+(e) What does the plot tell you that the $t$-test doesn't? How
+would you describe differences in pulse rates between species now?
+
+
+Solution
+
+
+The plot tells you that (for both species) as temperature goes
+up, pulse rate goes up as well. *Allowing for that*, the
+difference in pulse rates between the two species is even
+clearer than it was before. To see an example, pick a
+temperature, and note that the mean pulse rate at that
+temperature seems to be at least 10 higher for
+\testsl{exclamationis}, with a high degree of consistency.
+The $t$-test mixed up all the pulse rates at all the different
+temperatures. Even though the conclusion was clear enough, it
+could be clearer if we incorporated temperature into the analysis.
+There was also a potential source of unfairness in that the
+\testsl{exclamationis} crickets tended to be observed at higher
+temperatures than \testsl{niveus} crickets; since pulse rates
+increase with temperature, the apparent difference in pulse
+rates between the species might have been explainable by one
+species being observed mainly in higher temperatures. This was
+*utterly invisible* to us when we did the $t$-test, but it
+shows the importance of accounting for all the relevant
+variables when you do your analysis.\endnote{And it shows the
+value of looking at relevant plots.} If the species had been
+observed at opposite temperatures, we might have
+concluded
+`r tufte::margin_note("Mistakenly.} that testsl{niveus")` have the
+higher pulse rates on average. I come back to this later when I
+discuss the confidence interval for species difference that
+comes out of the regression model with temperature.
+      
+
+
+(f) Fit a regression predicting pulse rate from species and
+temperature. Compare the P-value for species in this regression to
+the one from the $t$-test. What does that tell you?
+
+
+Solution
+
+
+This is actually a so-called "analysis of covariance model",
+which properly belongs in D29, but it's really just a regression:
+```{r }
+pulse.1=lm(pulse_rate~species+temperature,data=crickets)
+summary(pulse.1)
+```
+
+ 
+
+The P-value for species is now $6.27\times 10^{-14}$ or
+0.00000000000006, which is even less than the P-value of 0.00001 that
+came out of the $t$-test. That is to say, when you know temperature,
+you can be even more sure of your conclusion that there is a
+difference between the species.
+
+The R-squared for this regression is almost 99\%, which says that if
+you know both temperature and species, you can predict the pulse rate
+almost exactly.
+
+In the regression output, the slope for species is about $-10$. It is
+labelled `speciesniveus`. Since species is categorical,
+`lm` uses the first category, \testsl{exclamationis}, as the
+baseline and expresses each other species relative to that. Since the
+slope is about $-10$, it says that at any given temperature, the mean
+pulse rate for \testsl{niveus} is about 10 less than for
+\testsl{exclamationis}. This is pretty much what the scatterplot told
+us.
+
+We can go a little further here:
+
+```{r }
+confint(pulse.1)
+```
+
+ 
+
+The second line says that the pulse rate for *niveus* is
+between about 8.5 and 11.5 less than for *exclamationis*, at
+any given temperature (comparing the two species at the same
+temperature as each other, but that temperature could be
+anything). This is a lot shorter than the CI that came out of the
+$t$-test, that went from 14 to 32. This is because we are now
+accounting for temperature, which also makes a difference. (In the
+$t$-test, the temperatures were all mixed up). What we also see is
+that the $t$-interval is shifted up compared to the one from the
+regression. This is because the $t$-interval conflates\endnote{Mixes
+up.} two things: the *exclamationis* crickets do have a
+higher pulse rate, but they were also observed at higher temperatures,
+which makes it look as if their pulse rates are more
+higher
+`r tufte::margin_note("This is actually grammatically correct.")` than they
+really are, when you account for temperature.
+
+This particular model constrains the slope with temperature to be the
+same for both species (just the intercepts differ). If you want to
+allow the slopes to differ between species, you add an interaction
+between temperature and species:
+
+```{r }
+pulse.2=lm(pulse_rate~species*temperature,data=crickets)
+summary(pulse.2)
+```
+
+ 
+
+To see whether adding the interaction term added anything to the
+prediction,\endnote{Though it's hard to imagine being able to improve on an
+R-squared of 99\%.} compare the model with and without using `anova`:
+
+```{r }
+anova(pulse.1,pulse.2)  
+```
+
+ 
+
+There's no significant improvement by adding the interaction, so
+there's no evidence that having different slopes for each species is
+necessary. This is the same interpretation as any `anova` for
+comparing two regressions: the two models are not significantly
+different in fit, so go with the simpler one, that is, the one without
+the interaction.
+
+Note that `anova` gave the same P-value as did the
+$t$-test for the slope coefficient for the interaction in
+`summary`, 0.254 in both cases. This is because there were only
+two species and therefore only one slope coefficient was required to
+distinguish them. If there had been three species, we would have had
+to look at the `anova` output to hunt for a difference among
+species, since there would have been two slope coefficients, each with
+its own P-value.\endnote{This wouldn't have told us about the overall
+effect of `species.`} 
+
+If you haven't seen interactions before, don't worry about this. The
+idea behind it is that we are testing whether we needed lines with
+different slopes and we concluded that we don't. Don't worry so much
+about the mechanism behind `pulse.2`; just worry about how it
+somehow provides a way of modelling two different slopes, one for each
+species, which we can then test to see whether it helps.
+
+The upshot is that we do not need different slopes; the model
+`pulse.1` with the same slope for each species describes what
+is going on.
+
+`ggplot` makes it almost laughably easy to add regression lines
+for each species to our plot, thus:
+
+```{r }
+ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
+geom_point()+geom_smooth(method="lm",se=F)
+```
+
+ 
+
+The lines are almost exactly parallel, so having the same slope for
+each species makes perfect sense.
+      
+
+
+(g) Make suitable residual plots for the regression
+`pulse.1`. 
+
+
+Solution
+
+
+First, the plot of residuals against fitted values (after all,
+it *is* a regression):
+```{r }
+ggplot(pulse.1,aes(x=.fitted,y=.resid))+geom_point()
+```
+
+         
+
+This looks nice and random.
+
+Now, we plot the residuals against the explanatory variables. There
+are two, temperature and species, but the latter is categorical. We'll
+have some extra issues around species, but before we get to that, we
+have to remember that the data and the output from the regression are
+in different places when we plot them. There are different ways to get
+around that. Perhaps the simplest is to use `pulse.1` as our
+"default" data frame and then get `temperature` from the
+right place:
+
+```{r }
+ggplot(pulse.1,aes(x=crickets$temperature,y=.resid))+geom_point()
+```
+
+ 
+
+I don't see anything untoward there.
+
+Species. We want to compare the residuals for the two species, which
+is categorical. Since the residuals are quantitative, this suggests a
+boxplot. Remembering to get species from the right place again, that
+goes like this:
+
+```{r }
+ggplot(pulse.1,aes(x=crickets$species,y=.resid))+geom_boxplot()
+```
+
+ 
+
+For the residuals, the median should be zero within each group, and
+the two groups should be approximately normal with mean 0 and about
+the same spread. Same spread looks OK, since the boxes are almost
+exactly the same height, but the normality is not quite there, since
+both distributions are a little bit skewed to the right. That would
+also explain why the median residual in each group is a little bit
+less than zero, because the mathematics requires the overall
+*mean* residual to be zero, and the right-skewness would make the
+mean higher than the median.
+
+Is that non-normality really problematic? Well, I could look at the
+normal quantile plot of all the residuals together. This is the one
+without the line:
+
+```{r }
+ggplot(pulse.1,aes(sample=.resid))+stat_qq()
+```
+
+ 
+
+There's a little weirdness at the top, and a tiny indication of a
+curve (that would suggest a little right-skewedness), but not really
+much to worry about. If that third-highest residual were a bit
+lower (say, 3 rather than 3.5) and maybe if the lowest residual was a
+bit lower, I don't think we'd have anything to complain about at all.
+
+So, I'm not worried.
+   
+
+ Again using the crickets data, let's see if we can
+   reproduce what we did in R, following the steps below.
+   
+   
+     
+(h)     First, read in and display the data.
+     
+     
+       
+Solution
+         Same old same old:
+         \begin{Sascode}[store=curaw]
+ filename myurl url "http://www.utsc.utoronto.ca/~butler/c32/crickets2.csv";
+ 
+ proc import          
+   datafile=myurl
+   out=crickets
+   dbms=csv
+   replace;
+   getnames=yes;
+   
+ proc print;
+         \end{Sascode}
+         
+         \Listing[store=curaw, fontsize=footnotesize]{curaww}
+         
+         31 crickets, of two different species. Check.
+       
+     
+ 
+     
+(i) Carry out a two-sample $t$-test to compare mean pulse rates
+     in the two different species.
+     
+     
+       
+Solution
+         This is actually a piece of cake (if you remember how to do it):
+         
+         \begin{Sascode}[store=pejeq]
+ proc ttest;
+   var pulse_rate;
+   class species;
+         \end{Sascode}
+         
+         \Listing[store=pejeq, fontsize=small]{pejeqq}
+       
+       
+       Remembering to look at the pooled test, the $t$-statistic and
+       its P-value are the same as we got from R. SAS gives us (at the
+       bottom) a test that the pulse rate variances are the same for
+       each species, and this is not rejected, so using the pooled test
+       is sound.\endnote{This is actually an accident, since the regression
+       *assumes* each observation has the same variance, and so
+       the regression will always correspond to the pooled test in this
+       situation, regardless of whether the pooled test is actually the
+       right thing to do.}
+     
+     
+     
+(j) Reproduce the two-sample $t$-test using a regression
+     predicting pulse rate from species.
+     
+     
+       
+Solution
+         Think carefully here: it's a regression, but the explanatory
+         variable is categorical, so we have to use `proc glm`
+         rather than `proc reg`:
+         
+         \begin{Sascode}[store=xaqiv]
+ proc glm;
+   class species;
+   model pulse_rate=species / solution;
+         \end{Sascode}
+         
+         \Listing[store=xaqiv, fontsize=footnotesize]{xaqivv}
+         
+         Look along the line for the `species` that is not the
+         baseline (*exclamationis*): the $t$-statistic is the
+         same 5.17 as the $t$-test gave. Also, if you check the type
+         III sums of squares table above, you'll find that the
+         $F$-value of 26.74 is the *square* of the $t$-value, and
+         its P-value is the same.
+         
+         If we had had more than two species, this would have been like
+         the pigs example in class, where the appropriate test would
+         have been an analysis of variance. The $F$-statistic from that
+         would have been the same as the $F$-statistic in the type III
+         sums of squares table.
+       
+       
+       
+     
+     
+     
+(k) Fit a regression predicting pulse rate from species and
+     temperature as well. Compare your answers with R's. (Display the
+     graphical output as well.)
+     
+     
+       
+Solution
+ Same idea again: one of the explanatory variables is categorical, so
+ we need to use `proc glm`:
+ 
+ \begin{Sascode}[store=cejos]
+ proc glm;
+   class species;
+   model pulse_rate=species temperature / solution;
+ \end{Sascode}
+ 
+ \Listing[store=cejos, fontsize=scriptsize]{cejoss}
+ 
+ In the bottom table, the estimates are the same as R's, at least
+ allowing for the fact that the other species was used as the baseline
+ (so the sign got switched). Everything else is consistent.
+ 
+ We don't have the output from R to compare the type III sums of
+ squares with. This is what came from `drop1`:
+ 
+ <<>>=
+ drop1(pulse.1,test="F")
+ @ 
+ 
+ and these are the same as the type III tests.
+ 
+ Incidentally, `anova` corresponds to the type I sum of squares
+ (that we ignore):
+ 
+ <<>>=
+ anova(pulse.1)
+ @ 
+ 
+ Here's the graph that comes out:
+ 
+ \Graphic[store=cejos, scale=0.7]{cejost}
+ 
+ This is like the graph we drew in R, except that here the two lines
+ are *constrained* to come out with the same slope, whether the
+ data support that or not. The fact that it looks the same as R's graph
+ suggests that identical slopes *is* supported by the data.
+ 
+ As far as I currently understand (and I am typing this while heading
+ home on the bus, so I can't check just yet), `proc glm` doesn't
+ naturally produce residual plots, because it takes an ANOVA-like
+ approach to the analysis rather than a regression-like one. 
+ 
+ I'm home now. This is how it's done:
+ 
+ \begin{Sascode}[store=xaxax]
+ proc glm plots=(diagnostics residuals);
+   class species;
+   model pulse_rate=species temperature / solution;
+ \end{Sascode}
+ 
+ \Graphic[store=xaxax,scale=0.7]{xaxaxx}
+ 
+ This looks like a regression output. In the first set of plots, we see
+ that the residuals against fitted (top left) look random and the
+ residuals are close to normal (2nd row, 1st plot). Below that, the
+ residuals against temperature also look random. But we don't get a
+ plot of residuals against species (that we made with a boxplot
+ before). To get *that*, I need to do this:
+ 
+ 
+ \begin{Sascode}[store=petes]
+ proc glm;
+   class species;
+   model pulse_rate=species temperature / solution;
+   output out=res p=fitted r=resid;  
+ \end{Sascode}
+ 
+ That makes us a dataset (which becomes the current one) containing all
+ the data plus the fitted values and residuals from this model. Then we
+ use `proc sgplot` to plot whatever we want to plot, namely this:
+ 
+ \begin{Sascode}[store=xixiv]
+ proc sgplot;
+   vbox resid / category=species;
+ \end{Sascode}
+ 
+ \Graphic[store=xixiv, scale=0.7]{xixivv}
+ 
+ All of these plots give us the same results as before.
+ 
+ A remark: now that I've gotten the output data set with residuals and
+ stuff in it, I could have used that to make all of my residual plots,
+ and dispensed with the `plots` on my `proc glm`
+ earlier. It's normally more convenient to take the plots SAS gives
+ you, but there is no problem in obtaining an output data set and using
+ that to make your plots. If it works, it's good.\endnote{I made a whole set
+ of residual plots this way while on the bus, in case this was the way
+ it had to be done..}
+ 
+       
+     
+     
+   
+

@@ -1,0 +1,330 @@
+##  Making some R functions
+
+
+ Let's write some simple R functions to convert temperatures,
+and later to play with text.
+
+
+
+(a) A temperature in Celsius is converted to one in Kelvin by
+adding 273.15. (A temperature of $-273.15$ Celsius, 0 Kelvin, is the "absolute zero" 
+temperature that nothing can be colder than.) Write a
+function called `c_to_k` that converts an input Celsius
+temperature to one in Kelvin, and test that it works.
+
+Solution
+
+
+This is mostly an exercise in structuring your function
+correctly. Let's call the input `C` (uppercase C, since
+lowercase c has a special meaning to R):
+```{r }
+c_to_k=function(C) {
+C+273.15
+}
+c_to_k(0)
+c_to_k(20)
+```
+
+     
+
+This is the simplest way to do it: the last line of the function, if
+calculated but not saved, is the value that gets returned to the
+outside world. The checks suggest that it worked.
+
+If you're used to Python or similar, you might prefer to calculate the
+value to be returned and then return it. You can do that in R too:
+
+```{r }
+c_to_k=function(C) {
+K=C+273.15
+return(K)
+}
+c_to_k(0)
+c_to_k(20)
+```
+
+ 
+
+That works just as well, and for the rest of this question, you can go
+either way.
+`r tufte::margin_note("R style is to use the last line of the function  for the return value, unless you are jumping out of the function  before the end, in which case use *return*.")`
+
+
+(b) Write a function to convert a Fahrenheit temperature to
+Celsius. The way you do that is to subtract 32 and then multiply by
+$5/9$. 
+
+Solution
+
+
+On the model of the previous one, we should call this
+`f_to_c`. I'm going to return the last line, but you can
+save the calculated value and return that instead:
+```{r }
+f_to_c=function(F) {
+(F-32)*5/9
+}
+f_to_c(32)
+f_to_c(50)
+f_to_c(68)
+```
+
+     
+
+Americans are very good at saying things like "temperatures in the 50s", 
+which don't mean much to me, so I like to have benchmarks to
+work with: these are the Fahrenheit versions of 0, 10, and 20 Celsius.
+
+Thus "in the 50s" means "between about 10 and 15 Celsius".
+
+
+(c) *Using the functions you already wrote*, write a function
+to convert an input Fahrenheit temperature to Kelvin.
+
+Solution
+
+
+This implies that you can piggy-back on the functions you just
+wrote, which goes as below. First you convert the Fahrenheit to
+Celsius, and then you convert *that* to Kelvin. (This is less
+error-prone than trying to use algebra to get a formula for this
+conversion and then implementing that):
+```{r }
+f_to_k=function(F) {
+C=f_to_c(F)
+K=c_to_k(C)
+return(K)
+}
+f_to_k(32)
+f_to_k(68)
+```
+
+     
+
+These check because in Celsius they are 0 and 20 and we found the
+Kelvin equivalents of those to be these values earlier.
+
+I wrote this one with a `return` because I thought it made the
+structure clearer: run one function, save the result, run another
+function, save the result, then return what you've got.
+
+
+(d) Rewrite your Fahrenheit-to-Celsius convertor to take a
+suitable default value and check that it works as a default.
+
+Solution
+
+
+You can choose any default you like. I'll take a default of 68
+(what I would call "a nice day"):
+```{r }
+f_to_c=function(F=68) {
+(F-32)*5/9
+}
+f_to_c(68)
+f_to_c()
+```
+
+     
+
+The change is in the top line of the function. You see the result: if
+we run it without an input, we get the same answer as if the input had
+been 68.
+
+
+(e) What happens if you feed your Fahrenheit-to-Celsius convertor
+a *vector* of Fahrenheit temperatures? What if you use it in a
+`mutate`? 
+
+Solution
+
+
+Try it and see:
+```{r }
+temps=seq(30,80,10)
+temps
+f_to_c(temps)
+```
+
+     
+
+Each of the Fahrenheit temperatures gets converted into a Celsius
+one. This is perhaps more useful in a data frame, thus:
+
+```{r }
+tibble(temps=seq(30,80,10)) %>%
+mutate(celsius=f_to_c(temps))
+```
+
+ 
+
+All the temperatures are side-by-side with their equivalents.
+
+Here's another way to do the above:
+
+```{r }
+temps=seq(30,80,10) 
+temps %>%
+enframe(value="fahrenheit") %>%
+mutate(celsius=f_to_c(temps))
+```
+
+ 
+
+`enframe` creates a two-column data frame out of a vector (like
+`temps`). A vector can have "names", in which case they'll be
+used as the `name` column; the values will go in a column
+called `value` unless you rename it, as I did.
+
+
+(f) Write another function called `wrap` that takes two
+arguments: a piece of text called `text`, which defaults to
+`hello`, and another piece of text called `outside`,
+which defaults to `*`. The function returns `text`
+with the text `outside` placed before and after, so that
+calling the function with the defaults should return
+`*hello*`. To do this, you can use `str_c` from
+`stringr` (loaded with the `tidyverse`) which places
+its text arguments side by side and glues them together into one
+piece of text.  Test your function briefly.
+
+Solution
+
+
+This:
+```{r }
+wrap=function(text="hello",outside="*") {
+str_c(outside,text,outside)
+}
+```
+
+     
+
+I can run this with the defaults:
+
+```{r }
+wrap()
+```
+
+ 
+
+or with text of my choosing:
+
+```{r }
+wrap("goodbye","_")
+```
+
+ 
+
+I think that's what I meant by "test briefly".
+
+
+(g) What happens if you want to change the default
+`outside` but use the default for `text`? How do you
+make sure that happens? Explore.
+
+Solution
+
+
+The obvious thing is this, which doesn't work:
+```{r }
+wrap("!")
+```
+
+     
+
+This takes *`text`* to be `!`, and `outside`
+to be the default. How do we get `outside` to be `!`
+instead? The key is to specify the input by name:
+
+```{r }
+wrap(outside="!")
+```
+
+ 
+
+This correctly uses the default for `text`.
+
+If you specify inputs without names, they are
+taken to be in the order that they appear in the function
+definition. As soon as they get out of order, which typically happens
+by using the default for something early in the list, as we did here
+for `text`, you have to specify names for anything that comes
+after that. These are the names you put on the function's top line.
+
+You can always use names:
+
+```{r }
+wrap(text="thing",outside="**")
+```
+
+ 
+
+and if you use names, they don't even have to be in order:
+
+```{r }
+wrap(outside="!?",text="fred")
+```
+
+ 
+
+
+(h) What happens if you feed your function `wrap` a vector
+for either of its arguments? What about if you use it in a
+`mutate`? 
+
+Solution
+
+
+Let's try:
+```{r }
+mytext=c("a","b","c")
+wrap(text=mytext)
+```
+
+     
+
+```{r }
+myout=c("*","!")
+wrap(outside=myout)
+```
+
+ 
+
+If one of the inputs is a vector, the other one gets "recycled" as
+many times as the vector is long. What if they're both vectors?
+
+```{r }
+mytext2=c("a","b","c","d")
+wrap(mytext2,myout)
+```
+
+ 
+
+This uses the two inputs in parallel, repeating the short one as
+needed. But this, though it works, gives a warning:
+
+```{r }
+wrap(mytext,myout)
+```
+
+ 
+
+This is because the shorter vector (of length 2 here) doesn't go
+evenly into the longer one (length 3). It gives a warning because this
+is probably not what you wanted.
+
+The `mutate` thing is easier, because all the columns in a data
+frame have to be the same length. `LETTERS` is a vector with
+the uppercase letters in it:
+
+```{r }
+tibble(mytext=LETTERS[1:6],myout=c("*","**","!","!!","_","__")) %>%
+mutate(newthing=wrap(mytext,myout))                               
+```
+
+ 
+
+
+

@@ -1,0 +1,126 @@
+##  Growth of Mizuna lettuce seeds
+
+
+ In 2010, a group of students planted some Mizuna lettuce
+seeds, and recorded how they grew. The data were saved in an Excel
+spreadsheet, which is at
+[link](http://www.utsc.utoronto.ca/~butler/c32/mizuna.xlsx). The columns
+are: the date, the height (in cm) of (I presume) the tallest plant,
+the amount of water added since the previous date (ml), the
+temperature in the container where the seedlings were growing, and any
+additional notes that the students made (edited for length by me). The
+top line of the data file is variable names.
+
+
+
+(a) Read the
+spreadsheet data.
+
+
+Solution
+
+
+This is `read_excel` from package `readxl`. I'm
+not sure what will happen to the dates yet. Note that this needs
+a "local" copy of the spreadsheet (that is, you have to
+download it and save it on your computer, then upload it to
+`rstudio.cloud`), possibly using `file.choose` to
+help R find it. I put my copy in the same project folder as I was
+working in, so I just need the file name:
+```{r }
+library(readxl)
+mizuna=read_excel("mizuna.xlsx")
+mizuna
+```
+
+     
+
+The dates *did* get read properly. `dttm` is
+"date-time", so I guess it's allowing for the possibility that my
+dates had times attached as well. Unlike with SAS (as we see later),
+the years came out right.
+
+
+
+(b) Make a plot of `height` against your
+dates, with the points joined by lines.
+
+
+Solution
+
+
+```{r }
+ggplot(mizuna,aes(x=date,y=height))+geom_point()+geom_line()
+```
+
+       
+
+
+
+(c) Label each point on the plot with the
+amount of water added up to that point.
+
+
+Solution
+
+
+This is `water` again. The way to do this is to load
+`ggrepel`, then add `geom_text_repel` to the
+plot, by adding `label=water` to the *original*
+`aes`:
+```{r }
+library(ggrepel)
+ggplot(mizuna,aes(x=date,y=height,label=water))+
+geom_point()+geom_line()+geom_text_repel(colour="red")
+```
+
+ 
+
+I made the text red, so that you can see it more easily. It "repels"
+away from the points, but not from the lines joining them. Which makes
+me wonder whether this would work better (I explain `alpha` afterwards):
+
+```{r }
+library(ggrepel)
+ggplot(mizuna,aes(x=date,y=height,label=water))+
+geom_point()+geom_line()+geom_label_repel(colour="red",alpha=0.7)
+```
+
+ 
+
+The difference between `text` and `label` is that
+`text` just uses the text of the variable to mark the point,
+while `label` puts that text in a box.
+
+I think it works better. You can see where the line goes (under the boxes with
+the labels in them), but you can see the labels clearly.
+
+What that `alpha` does is to make the thing it's attached to
+(the labels) partly *transparent*. If you leave it out (try it),
+the black line disappears completely under the label boxes and you
+can't see where it goes at all. The value you give for `alpha`
+says how transparent the thing is, from 1 (not transparent at all)
+down to 0 (invisible). I first tried 0.3, and you could hardly see the
+boxes; then I tried 0.7 so that the boxes were a bit more
+prominent but the lines underneath were still slightly visible, and I
+decided that this is what I liked. I think making the labels a
+different colour was a good idea, since that helps to distinguish the
+number on the label from the line underneath.
+
+You can apply `alpha` to pretty much any `ggplot` thing
+that might be on top of something else, to make it possible to see
+what's underneath it. The commonest use for it is if you have a
+scatterplot with a lot of points; normally, you only see some of the
+points, because the plot is then a sea of black. But if you make the
+points partly transparent, you can see more of what's nearby that
+would otherwise have been hidden. 
+
+At some point, I also have to show
+you folks `jitter`, which plots in slightly different places
+points that would otherwise overprint each other exactly, and you
+wouldn't know how many of them there were, like the outliers on the
+boxplots of German children near the new airport.
+
+
+
+

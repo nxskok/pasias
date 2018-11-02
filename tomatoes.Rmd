@@ -5,7 +5,7 @@
 tomato plants to one of four different colours of light (8 plants to
 each colour). The growth rate of each plant, in millimetres per week,
 was recorded. The data are in
-[http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt](http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt). 
 
 
 
@@ -21,7 +21,9 @@ This kind of thing:
 my_url="http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt"
 toms1=read_delim(my_url," ")
 toms1
-``` 
+```
+
+ 
 
 I do indeed have 8 rows and 5 columns.
 
@@ -42,15 +44,17 @@ This is a job for `gather`:
 ```{r }
 toms2 = toms1 %>% gather(colour,growthrate,blue:green)
 toms2
-```       
+```
+
+       
 
 Reminder: data frame to gather, what makes the columns different
 (they're different colours), what makes them the same (they're all
 growth rates), which columns to gather together (all the colour ones).
 
 Since the column `plant` was never mentioned, this gets
-repeated as necessary, so now it denotes ``plant within colour
-group'', which in this case is not very useful. (Where you have
+repeated as necessary, so now it denotes "plant within colour group", 
+which in this case is not very useful. (Where you have
 matched pairs, or repeated measures in general, you *do* want to
 keep track of which individual is which. But this is not repeated
 measures because plant number 1 in the blue group and plant number 1
@@ -74,7 +78,9 @@ Solution
 The code is easy enough:
 ```{r }
 write_csv(toms2,"tomatoes2.csv")
-```       
+```
+
+       
 
 If no error, it worked. That's all you need.
 
@@ -82,7 +88,9 @@ To verify (for my satisfaction) that it was saved correctly:
 
 ```{r engine="bash"}
 cat tomatoes2.csv 
-``` 
+```
+
+ 
 
 On my system, that will list the contents of the file. Or you can just
 open it in R Studio (if you saved it the way I did, it'll be in the
@@ -101,7 +109,9 @@ Nothing terribly surprising here. My data frame is called
 `toms2`, for some reason:
 ```{r }
 ggplot(toms2,aes(x=colour, y=growthrate))+geom_boxplot()
-```     
+```
+
+     
 
 There are no outliers, but there is a little skewness (compare the
 *whiskers*, not the placement of the median within the box,
@@ -128,7 +138,9 @@ to do the `with` thing:
 ```{r }
 library(car)
 with(toms2,leveneTest(growthrate,colour))
-``` 
+```
+
+ 
 
 The warning is because `colour` was actually text, but the test
 did the right thing by turning it into a factor, so that's OK.
@@ -140,7 +152,7 @@ be *more* different than the ones we observed on average, and so
 there is no way that these sample variances indicate different
 population variances. (This is because of 8 observations only per
 group; if there had been 80 observations per group, it would have been
-a different story.)
+a different story.) Decide for yourself whether you're surprised by this.
 
 With that in mind, I think the regular ANOVA will be perfectly good,
 and we would expect that and the Welch ANOVA to give very similar results.
@@ -149,7 +161,9 @@ I don't need `car` again, so let's get rid of it:
 
 ```{r }
 detach("package:car",unload=T)
-``` 
+```
+
+ 
 
 
 
@@ -166,7 +180,9 @@ Solution
 ```{r }
 toms.1=aov(growthrate~colour,data=toms2)
 summary(toms.1)
-``` 
+```
+
+ 
 
 This is a tiny P-value, so the mean growth rate for the different
 colours is definitely *not* the same for all colours. Or, if you
@@ -181,7 +197,9 @@ then Welch ANOVA is the way to go:
 ```{r }
 toms.2=oneway.test(growthrate~colour,data=toms2)
 toms.2
-``` 
+```
+
+ 
 
 The P-value is not *quite* as small as for the regular ANOVA, but
 it is still very small, and the conclusion is the same.
@@ -193,7 +211,9 @@ for multiple groups:
 ```{r }
 library(smmr)
 median_test(toms2,growthrate,colour)
-``` 
+```
+
+ 
 
 The P-value is again extremely small (though not quite as small as for
 the other two tests, for the usual reason that Mood's median test
@@ -224,28 +244,65 @@ their populations. (Don't expect perfection, in short.)
 
 
 
-(f) If warranted, run Tukey. (If not warranted, explain briefly
+(f) If warranted, run a suitable follow-up. (If not warranted, explain briefly
 why not.)
 
 
 Solution
 
 
-The reason to run Tukey is that you have found some differences
-among the groups, and you want to know what they are. Here, we
-*have* said that the colours do not all have the same mean
-growth rate, so we want to find what the differences
-are. (Looking at the boxplots suggests that red is clearly best
+Whichever flavour of ANOVA you ran (regular ANOVA, Welch ANOVA,
+Mood's median test), you got the same conclusion for these data:
+that the average growth rates were not all the same for the four
+colours. That, as you'll remember, is as far as you go. To find
+out which colours differ from which in terms of growth rate, you
+need to run some kind of multiple-comparisons follow-up, the
+right one for the analysis you did. Looking at the boxplots suggests that red is clearly best
 and green clearly worst, and it is possible that all the colours
 are significantly different from each other.)
+If you did regular ANOVA, Tukey is what you need:
 ```{r }
 TukeyHSD(toms.1)
-```       
+```
+
+       
 
 All of the differences are (strongly) significant, except for yellow
 and blue, the two with middling growth rates on the boxplot. Thus we
 would have no hesitation in saying that growth rate is biggest in red
 light and smallest in green light.
+
+If you did Welch ANOVA, you need Games-Howell, which you have to get
+from one of the packages that offers it:
+
+```{r }
+library(PMCMRplus)
+gamesHowellTest(growthrate~factor(colour),data=toms2)
+```
+
+ 
+
+The conclusions are the same as for the Tukey: all the means are
+significantly different except for yellow and blue.
+Finally, if you did Mood's median test, you need this one:
+
+```{r }
+pairwise_median_test(toms2, growthrate, colour)
+```
+
+ 
+
+Same conclusions again. This is what I would have guessed; the
+conclusions from Tukey were so clear-cut that it really didn't matter
+which way you went; you'd come to the same conclusion.
+
+That said, what I am looking for from you is a sensible choice of
+analysis of variance (ANOVA, Welch's ANOVA or Mood's median test) for
+a good reason, followed by the *right* follow-up for the test you
+did. Even though the conclusions are all the same no matter what you
+do here, I want you to get
+used to following the right method, so that you will be able to do the
+right thing when it *does* matter.
 
 
 

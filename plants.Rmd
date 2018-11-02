@@ -17,7 +17,7 @@ B            28         22          20        18
 
 
 The data were saved as
-[http://www.utsc.utoronto.ca/~butler/c32/disease.txt](http://www.utsc.utoronto.ca/~butler/c32/disease.txt). In that
+[link](http://www.utsc.utoronto.ca/~butler/c32/disease.txt). In that
 file, the columns are coded by two letters: a `p` or an
 `a` to denote presence or absence of disease, and an `x`
 or a `y` to denote location X or Y. The data are separated by
@@ -39,7 +39,9 @@ between them:
 my_url="http://www.utsc.utoronto.ca/~butler/c32/disease.txt"
 tbl=read_table(my_url)
 tbl
-``` 
+```
+
+ 
 
 I was thinking ahead, since I'll be wanting to have one of my columns
 called `disease`, so I'm *not* calling the data frame
@@ -52,7 +54,7 @@ I mixed up the information in the two header rows into one.
 
 
 
-(b) Explain briefly how these data are not "tidy".
+(b)??part:nottidy?? Explain briefly how these data are not "tidy".
 
 
 Solution
@@ -84,13 +86,17 @@ I'll call the column of "what's different" `disloc`. Feel
 free to call it `temp` for now if you prefer:
 ```{r }
 (tbl %>% gather(disloc,frequency,px:ay) -> tbl.2)
-``` 
+```
+
+ 
 
 This also works ("gather together everything but `Species`"):
 
 ```{r }
 (tbl %>% gather(disloc,frequency,-Species) -> tbl.2)
-``` 
+```
+
+ 
 
 
 
@@ -105,7 +111,7 @@ The column I called `disloc` actually contains *two*
 variables, disease and location, which need to be split up. A
 check on this is that we 
 have two columns (not including the frequencies), but back in
-(b) we found *three* variables, so there
+(??part:nottidy??) we found *three* variables, so there
 ought to be three non-frequency columns.
 
 
@@ -121,9 +127,12 @@ This means splitting up `disloc` into two separate columns,
 splitting after the first character, thus:
 ```{r }
 (tbl.2 %>% separate(disloc,c("disease","location"),1) -> tbl.3)
-``` 
+```
+
+ 
 
 This is now tidy: eight frequencies in rows, and three non-frequency
+columns. (Go back and look at your answer to part (??part:nottidy??)
 and note that the issues you found there have all been resolved now.)
 
 
@@ -144,7 +153,9 @@ Solution
 ```{r }
 tbl.4=xtabs(frequency~Species+disease+location,data=tbl.3)
 tbl.4
-``` 
+```
+
+ 
 
 This shows a pair of contingency tables, one each for each of the two
 locations (in general, the variable you put last on the right side of
@@ -166,7 +177,9 @@ Solution
 This:
 ```{r }
 ftable(tbl.4)  
-``` 
+```
+
+ 
 
 This is the same output, but shown more compactly. (Rather like a
 vertical version of the original data, in fact.) I like
@@ -177,8 +190,8 @@ taste. Pick one and tell me why you prefer it, and I'm good.
 
 That's the end of what you had to do, but I thought I would do some
 modelling and try to find out what's associated with disease. The
-appropriate modelling with frequencies is called ``log-linear
-modelling'', and it assumes that the log of the frequencies has a
+appropriate modelling with frequencies is called "log-linear modelling", 
+and it assumes that the log of the frequencies has a
 linear relationship with the effects of the other variables. This is
 not quite as simple as the log transformations we had before, because
 bigger frequencies are going to be more variable, so we fit a
@@ -192,7 +205,9 @@ the interactions. (The reason for doing it this way will become clear later):
 ```{r }
 model.1=glm(frequency~Species*location*disease,data=tbl.3,family="poisson")
 drop1(model.1,test="Chisq")
-``` 
+```
+
+ 
 
 The residuals are all zero because this model fits perfectly. The
 problem is that it is very complicated, so it offers no insight. So
@@ -218,7 +233,9 @@ Let's get rid of that three-way interaction. This is another use for
 ```{r }
 model.2=update(model.1,.~.-Species:location:disease)
 drop1(model.2,test="Chisq")
-``` 
+```
+
+ 
 
 Notice how `update` saved us having to write the whole model
 out again.
@@ -232,7 +249,9 @@ which model I was working with and what I was removing:
 ```{r }
 model.3=update(model.2,.~.-location:disease)
 drop1(model.3,test="Chisq")  
-``` 
+```
+
+ 
 
 `Species:disease` comes out, but it looks as if
 `Species:location` will have to stay:
@@ -240,7 +259,9 @@ drop1(model.3,test="Chisq")
 ```{r }
 model.4=update(model.3,.~.-Species:disease)
 drop1(model.4,test="Chisq")  
-``` 
+```
+
+ 
 
 `Species:location` indeed stays. That means that anything
 "contained in" it also has to stay, regardless of its main
@@ -250,7 +271,9 @@ significant, out it comes:
 ```{r }
 model.5=update(model.4,.~.-disease)
 drop1(model.5,test="Chisq")  
-``` 
+```
+
+ 
 
 And now we have to stop.
 
@@ -261,7 +284,9 @@ else. To see how, we make a contingency table of species by location
 
 ```{r }
 xtabs(frequency~Species+location,data=tbl.3)  
-``` 
+```
+
+ 
 
 Most of the species A's are at location X, but the species B's are
 about evenly divided between the two locations. Or, if you prefer
@@ -291,7 +316,9 @@ Species=c("A","B","A","B")
 frequency=c(10,50,30,30)
 xx=data.frame(disease,Species,frequency)
 xtabs(frequency~disease+Species)
-``` 
+```
+
+ 
 
 For species A, disease is present 75\% of the time, but for species B
 it's present less than 40\% of the time. So in this one there ought to be a
@@ -300,7 +327,9 @@ significant association between disease and species:
 ```{r }
 xx.1=glm(frequency~disease*Species,data=xx,family="poisson")
 drop1(xx.1,test="Chisq")
-``` 
+```
+
+ 
 
 And so there is. Nothing can come out of the model. (This is the same
 kind of test as a chi-squared test for association, if you know about

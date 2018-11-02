@@ -1,0 +1,175 @@
+
+
+ A poll on the Discovery Channel asked people to nominate the
+best roller-coasters in the United States. We will examine the 10
+roller-coasters that received the most votes. Two features of a
+roller-coaster that are of interest are the distance it drops from
+start to finish, measured here in feet\endnote{Roller-coasters work by
+gravity, so there must be some drop.} and the duration of the ride,
+measured in seconds. Is it true that roller-coasters with a bigger
+drop also tend to have a longer ride? The data are at
+[link](http://www.utsc.utoronto.ca/~butler/c32/coasters.csv).\endnote{These
+are not to be confused with what your mom insists that you place
+between your coffee mug and the table.}
+
+
+
+(a) Read the data into R and verify that you have a sensible
+number of rows and columns.
+
+
+Solution
+
+
+A `.csv`, so the usual for that:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/coasters.csv"
+coasters=read_csv(my_url)
+coasters
+```
+
+ 
+
+The number of marks for this kind of thing has been decreasing through
+the course, since by now you ought to have figured out how to do it
+without looking it up.
+
+There are 10 rows for the promised 10 roller-coasters, and there are
+several columns: the drop for each roller-coaster and the duration of
+its ride, as promised, as well as the name of each roller-coaster and the state
+that it is in. (A lot of them seem to be in Ohio, for some reason that
+I don't know.) So this all looks good.
+
+
+
+(b) Make a scatterplot of duration (response) against drop
+(explanatory), labelling each roller-coaster with its name in such a
+way that the labels do not overlap. Add a regression line to your plot.
+
+
+Solution
+
+
+The last part, about the labels not overlapping, is an
+invitation to use `ggrepel`, which is the way I'd
+recommend doing this. (If not, you have to do potentially lots
+of work organizing where the labels sit relative to the points,
+which is time you probably don't want to spend.) Thus:
+```{r }
+library(ggrepel)
+ggplot(coasters,aes(x=drop,y=duration,label=coaster_name))+
+geom_point()+geom_text_repel()+geom_smooth(method="lm",se=F)
+```
+
+       
+
+The `se=F` at the end is optional; if you omit it, you get that
+"envelope" around the line, which is fine here.
+
+Note that with the labelling done this way, you can easily identify
+which roller-coaster is which.
+
+
+
+(c) Would you say that roller-coasters with a larger drop tend
+to have a longer ride? Explain briefly.
+
+
+Solution
+
+
+I think there are two good answers here: "yes" and "kind of".
+Supporting "yes" is the fact that the regression line does go
+uphill, so that overall, or on average, roller-coasters with a
+larger drop do tend to have a longer duration of ride as well.
+Supporting "kind of" is the fact that, though the regression
+line goes uphill, there are a lot of roller-coasters that are
+some way off the trend, far from the regression line.
+I am happy to go with either of those. I could also go with
+"not really" and the same discussion that I attached to ``kind
+of''. 
+
+
+
+(d) Find a roller-coaster that is unusual compared to the
+others. What about its combination of `drop` and
+`duration` is unusual?
+
+
+Solution
+
+
+This is an invitation to find a point that is a long way off the
+line. I think the obvious choice is my first one below, but I
+would take either of the others as well:
+
+
+* "Nitro" is a long way above the line. That means it has
+a long duration, relative to its drop. There are two other
+roller-coasters that have a larger drop but not as long a
+duration. In other words, this roller-coaster drops slowly,
+presumably by doing a lot of twisting, loop-the-loop and so on.
+
+* "The Beast" is a long way below the line, so it has a
+short duration relative to its drop. It is actually the
+shortest ride of all, but is only a bit below average in terms
+of drop. This suggests that The Beast is one of those rides
+that drops a long way quickly.
+
+* "Millennium Force" has the biggest drop of all, but a
+shorter-than-average duration. This looks like another ride
+with a big drop in it.
+
+A roller-coaster that is "unusual" will have a residual that
+is large in size (either positive, like Nitro, or negative, like
+the other two). I didn't ask you to find the residuals, but if
+you want to, `augment` from `broom` is the
+smoothest way to go:
+```{r }
+library(broom)
+duration.1=lm(duration~drop,data=coasters) 
+augment(duration.1,coasters) %>%
+select(coaster_name,duration,drop,.resid) %>%
+arrange(desc(abs(.resid)))
+```
+
+       
+
+`augment` produces a data frame (of the original data frame
+with some new columns that come from the regression), so I can feed it
+into a pipe to do things with it, like only displaying the columns I
+want, and arranging them in order by absolute value of residual, so
+that the roller-coasters further from the line come out first. This
+identifies the three that we found above. The fourth one, ``Ghost
+Rider'', is like Nitro in that it takes a (relatively) long time to
+fall not very far.
+You can also put `augment` in the *middle* of a pipe, but then
+you seem to lose things that were not in the regression:
+
+```{r }
+coasters %>%
+lm(duration~drop, data=.) %>%
+augment() %>%
+arrange(desc(abs(.resid)))
+```
+
+ 
+
+I wanted to hang on to the roller-coaster names, so I went the other
+way. The advantage of this way is less typing. You have to specify the
+`data=.` thing in the regression because the data frame is
+*not* the first input to `lm` (the model is), but you have
+a much simpler `augment` because its first input is the model
+that came out of the previous step. If the second input to
+`augment` is missing, as it is here, it ``attempts to
+reconstruct the data from the model''\endnote{A quote from the package
+vignette.} which I think means that things like the coaster names that
+were not part of the regression won't be part of `augment`'s
+output either. That's my understanding. My first way explicitly
+supplies the original data frame to `augment` so there is no
+question about what it is using.
+
+
+
+

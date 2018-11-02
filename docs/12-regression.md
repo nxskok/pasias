@@ -4780,3 +4780,1169 @@ the tree (to which you add the height of your eyes).
 
 
 
+
+##  Mating songs in crickets
+
+
+ Male tree crickets produce "mating songs" by rubbing their
+wings together to produce a chirping sound. It is hypothesized that
+female tree crickets identify males of the correct species by how fast
+(in chirps per second) the male's mating song is. This is called the
+"pulse rate".  Some data for two species of crickets are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/crickets.txt). The
+columns, which are unlabelled, are temperature and pulse rate
+(respectively) for *Oecanthus exclamationis* (first two
+columns) and *Oecanthus niveus* (third and fourth columns). The
+columns are separated by tabs. There are some missing values in the
+first two columns because fewer *exclamationis* crickets than
+*niveus* crickets were measured.
+The research question is whether males
+of the different species have different average pulse rates. It is
+also of interest to see whether temperature has an effect, and if
+so, what.
+
+
+(a) Read in the data, allowing for the fact that you have no
+column names. You'll see that the
+columns have names `X1` through `X4`. This is
+OK.
+
+
+Solution
+
+
+Tab-separated, so `read_tsv`; no column names, so `col_names=F`:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
+crickets=read_tsv(my_url,col_names=F)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   X1 = col_double(),
+##   X2 = col_double(),
+##   X3 = col_double(),
+##   X4 = col_double()
+## )
+```
+
+```r
+crickets  
+```
+
+```
+## # A tibble: 17 x 4
+##       X1    X2    X3    X4
+##    <dbl> <dbl> <dbl> <dbl>
+##  1  20.8  67.9  17.2  44.3
+##  2  20.8  65.1  18.3  47.2
+##  3  24    77.3  18.3  47.6
+##  4  24    78.7  18.3  49.6
+##  5  24    79.4  18.9  50.3
+##  6  24    80.4  18.9  51.8
+##  7  26.2  85.8  20.4  60  
+##  8  26.2  86.6  21    58.5
+##  9  26.2  87.5  21    58.9
+## 10  26.2  89.1  22.1  60.7
+## 11  28.4  98.6  23.5  69.8
+## 12  29   101.   24.2  70.9
+## 13  30.4  99.3  25.9  76.2
+## 14  30.4 102.   26.5  76.1
+## 15  NA    NA    26.5  77  
+## 16  NA    NA    26.5  77.7
+## 17  NA    NA    28.6  84.7
+```
+
+ 
+
+As promised.
+
+If you didn't catch the tab-separated part, this probably happened to you:
+
+
+```r
+d=read_delim(my_url," ",col_names=F)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   X1 = col_character()
+## )
+```
+
+```
+## Warning in rbind(names(probs), probs_f): number of columns of result is not
+## a multiple of vector length (arg 1)
+```
+
+```
+## Warning: 3 parsing failures.
+## row # A tibble: 3 x 5 col     row col   expected  actual   file                                      expected   <int> <chr> <chr>     <chr>    <chr>                                     actual 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… file 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… row 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+```
+
+ 
+
+This doesn't look good:
+
+
+```r
+problems(d)
+```
+
+```
+## # A tibble: 3 x 5
+##     row col   expected  actual   file                                     
+##   <int> <chr> <chr>     <chr>    <chr>                                    
+## 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+## 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+## 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+```
+
+ 
+
+The "expected columns" being 1 should bother you, since we know
+there are supposed to be 4 columns. At this point, we take a look at
+what got read in:
+
+
+```r
+d
+```
+
+```
+## # A tibble: 17 x 1
+##    X1                       
+##    <chr>                    
+##  1 "20.8\t67.9\t17.2\t44.3" 
+##  2 "20.8\t65.1\t18.3\t47.2" 
+##  3 "24.0\t77.3\t18.3\t47.6" 
+##  4 "24.0\t78.7\t18.3\t49.6" 
+##  5 "24.0\t79.4\t18.9\t50.3" 
+##  6 "24.0\t80.4\t18.9\t51.8" 
+##  7 "26.2\t85.8\t20.4\t60.0" 
+##  8 "26.2\t86.6\t21.0\t58.5" 
+##  9 "26.2\t87.5\t21.0\t58.9" 
+## 10 "26.2\t89.1\t22.1\t60.7" 
+## 11 "28.4\t98.6\t23.5\t69.8" 
+## 12 "29.0\t100.8\t24.2\t70.9"
+## 13 "30.4\t99.3\t25.9\t76.2" 
+## 14 "30.4\t101.7\t26.5\t76.1"
+## 15 "NA\tNA"                 
+## 16 "NA\tNA"                 
+## 17 "NA\tNA"
+```
+
+
+
+and there you see the `t` or "tab" characters separating the
+values, instead of spaces. (This is what I tried first, and once I
+looked at this, I realized that `read_tsv` was what I needed.)
+
+
+
+(b) These data are rather far from being tidy. There need to be
+three variables, temperature, pulse rate and species, and there
+are $14+17=31$ observations altogether. This one is tricky in that
+there are temperature and pulse rate for each of two levels of a
+factor, so I'll suggest combining the temperature and chirp rate
+together into one thing for each species, then gathering them,
+then splitting them again. Create new columns, named for  each species,
+that contain the temperature and pulse rate for that species in
+that order, `unite`d together.
+For the rest of this question, start from the data frame you read
+in, and build a pipe, one or two steps at a time, to save creating
+a lot of temporary data frames.
+
+
+Solution
+
+
+Breathe, and then begin. `unite` creates new columns by
+joining together old ones:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As *str_c* or *paste* do, actually, but the advantage of *unite* is that it gets rid of the other columns, which you probably no longer need.</span>
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) 
+```
+
+```
+## # A tibble: 17 x 2
+##    exclamationis niveus   
+##    <chr>         <chr>    
+##  1 20.8_67.9     17.2_44.3
+##  2 20.8_65.1     18.3_47.2
+##  3 24_77.3       18.3_47.6
+##  4 24_78.7       18.3_49.6
+##  5 24_79.4       18.9_50.3
+##  6 24_80.4       18.9_51.8
+##  7 26.2_85.8     20.4_60  
+##  8 26.2_86.6     21_58.5  
+##  9 26.2_87.5     21_58.9  
+## 10 26.2_89.1     22.1_60.7
+## 11 28.4_98.6     23.5_69.8
+## 12 29_100.8      24.2_70.9
+## 13 30.4_99.3     25.9_76.2
+## 14 30.4_101.7    26.5_76.1
+## 15 NA_NA         26.5_77  
+## 16 NA_NA         26.5_77.7
+## 17 NA_NA         28.6_84.7
+```
+
+ 
+
+Note that the original columns `X1:X4` are *gone*, which
+is fine, because the information we needed from them is contained in
+the two new columns. `unite` by default uses an underscore to
+separate the joined-together values, which is generally safe since you
+won't often find those in data.
+
+Digression: `unite`-ing with a space could cause problems if
+the data values have spaces in them already. Consider this list of names:
+
+
+```r
+names=c("Cameron McDonald","Durwin Yang","Ole Gunnar Solskjaer","Mahmudullah")
+```
+
+ 
+
+Two very former students of mine, a Norwegian soccer player, and a
+Bangladeshi cricketer. Only one of these has played for Manchester United:
+
+
+```r
+manu=c(F,F,T,F)
+```
+
+ 
+
+and let's make a data frame:
+
+
+```r
+d=tibble(name=names,manu=manu)
+d
+```
+
+```
+## # A tibble: 4 x 2
+##   name                 manu 
+##   <chr>                <lgl>
+## 1 Cameron McDonald     FALSE
+## 2 Durwin Yang          FALSE
+## 3 Ole Gunnar Solskjaer TRUE 
+## 4 Mahmudullah          FALSE
+```
+
+
+
+Now, what happens if we `unite` those columns, separating them
+by a space?
+
+
+```r
+d %>% unite(joined,name:manu,sep=" ")
+```
+
+```
+## # A tibble: 4 x 1
+##   joined                   
+##   <chr>                    
+## 1 Cameron McDonald FALSE   
+## 2 Durwin Yang FALSE        
+## 3 Ole Gunnar Solskjaer TRUE
+## 4 Mahmudullah FALSE
+```
+
+ 
+
+If we then try to separate them again, what happens?
+
+
+```r
+d %>% unite(joined,name:manu,sep=" ") %>%
+separate(joined,c("one","two")," ")
+```
+
+```
+## Warning: Expected 2 pieces. Additional pieces discarded in 3 rows [1, 2,
+## 3].
+```
+
+```
+## # A tibble: 4 x 2
+##   one         two     
+##   <chr>       <chr>   
+## 1 Cameron     McDonald
+## 2 Durwin      Yang    
+## 3 Ole         Gunnar  
+## 4 Mahmudullah FALSE
+```
+
+ 
+
+Things have gotten lost: most of the original values of `manu`
+and some of the names. If we use a different separator character,
+either choosing one deliberately or going with the default underscore,
+everything works swimmingly:
+
+
+```r
+d %>% unite(joined,name:manu,sep=":") %>%
+separate(joined,c("one","two"),":")
+```
+
+```
+## # A tibble: 4 x 2
+##   one                  two  
+##   <chr>                <chr>
+## 1 Cameron McDonald     FALSE
+## 2 Durwin Yang          FALSE
+## 3 Ole Gunnar Solskjaer TRUE 
+## 4 Mahmudullah          FALSE
+```
+
+ 
+
+and we are back to where we started.
+
+If you run just the `unite` line (move the pipe symbol to the
+next line so that the `unite` line is complete as it stands),
+you'll see what happened.
+      
+
+
+(c) The two columns `exclamationis` and `niveus`
+that you just created are both temperature-pulse rate combos, but
+for different species. `gather` them together into one
+column, labelled by species. (This is a straight `tidyr`
+`gather`, even though they contain something odd-looking.)
+
+
+Solution
+
+
+Thus, this, naming the new column `temp_pulse` since it
+contains both of those things. Add to the end of the pipe you
+started building in the previous part:
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus)  
+```
+
+```
+## # A tibble: 34 x 2
+##    species       temp_pulse
+##    <chr>         <chr>     
+##  1 exclamationis 20.8_67.9 
+##  2 exclamationis 20.8_65.1 
+##  3 exclamationis 24_77.3   
+##  4 exclamationis 24_78.7   
+##  5 exclamationis 24_79.4   
+##  6 exclamationis 24_80.4   
+##  7 exclamationis 26.2_85.8 
+##  8 exclamationis 26.2_86.6 
+##  9 exclamationis 26.2_87.5 
+## 10 exclamationis 26.2_89.1 
+## # ... with 24 more rows
+```
+
+ 
+
+Yep. If you scroll down with Next, you'll see the other species of
+crickets, and you'll see some missing values at the bottom, labelled,
+at the moment, `NA_NA`. 
+
+This is going to get rather long, but don't fret: we debugged the two
+`unite` lines before, so if you get any errors, they must
+have come from the `gather`. So that would be the place to check.
+      
+
+
+(d) Now split up the temperature-pulse combos at the underscore, into
+two separate columns. This is `separate`. When specifying
+what to separate by, you can use a number ("split after this many characters") or a piece of text, in quotes ("when you see this text, split at it"). 
+
+
+Solution
+
+
+The text to split by is an underscore (in quotes), since
+`unite` by default puts an underscore in between the
+values it pastes together. Glue the `separate` onto the
+end. We are creating two new variables `temperature` and
+`pulse_rate`:
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_")
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>         <chr>       <chr>     
+##  1 exclamationis 20.8        67.9      
+##  2 exclamationis 20.8        65.1      
+##  3 exclamationis 24          77.3      
+##  4 exclamationis 24          78.7      
+##  5 exclamationis 24          79.4      
+##  6 exclamationis 24          80.4      
+##  7 exclamationis 26.2        85.8      
+##  8 exclamationis 26.2        86.6      
+##  9 exclamationis 26.2        87.5      
+## 10 exclamationis 26.2        89.1      
+## # ... with 24 more rows
+```
+
+ 
+
+You'll note that `unite` and `separate` are opposites ("inverses") of each other, but we haven't just done something and then undone it, because we have a `gather` in between; in fact, arranging it this way has done precisely the tidying we wanted.
+      
+
+
+(e) Almost there.  Temperature and pulse rate are still text
+(because `unite` turned them into text), but they should be
+numbers. Create new variables that are numerical versions of
+temperature and pulse rate (using `as.numeric`). Check that
+you have no extraneous variables (and, if necessary, get rid of
+the ones you don't want). (Species is also text and really ought
+to be a factor, but having it as text doesn't seem to cause any
+problems.)
+You can, if you like, use `parse_number` instead of
+`as.numeric`. They should both work. The distinction I
+prefer to make is that `parse_number` is good for text
+with a number in it (that we want to pull the number out of),
+while `as.numeric` is for turning something that looks like
+a number but isn't one into a genuine number.\endnote{You could
+just as well make the point that the text 20.8 contains the
+number 20.8 and nothing else, so that `parse_number`
+will pull out 20.8 as a number. If that logic works for you, go
+with it.}
+
+
+Solution
+
+
+`mutate`-ing into a column that already exists overwrites
+the variable that's already there (which saves us some effort
+here). 
+
+```r
+crickets.1 = crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate(temperature=as.numeric(temperature)) %>%
+mutate(pulse_rate=as.numeric(pulse_rate))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```r
+crickets.1  
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+I saved the data frame this time, since this is the one we will use
+for our analysis.
+
+The warning message tells us that we got genuine missing-value NAs
+back, which is probably what we want. Specifically, they got turned
+from missing *text* to missing *numbers*!
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might think that missing is just missing, but R distinguishes between types of missing.</span>
+The R word
+"coercion" means values being changed from one type of thing to
+another type of thing.  (We'll ignore the missings and see if they
+cause us any trouble. The same warning messages will show up on graphs
+later.)  So I have 34 rows (including three rows of missings) instead
+of the 31 rows I would have liked. Otherwise, success.
+
+There is (inevitably) another way to do this. We are doing the
+`as.numeric` twice, exactly the same on two different columns,
+and when you are doing the same thing on a number of columns, here a
+`mutate` with the same function, you have the option of using
+`mutate_if` or `mutate_at`. These are like
+`summarize_if` and `summarize_at` that we used way
+back to compute numerical summaries of a bunch of columns: the
+`if` variant works on columns that share a property, like being
+numeric, and the `at` variant works on columns whose names have
+something in common or that we can list, which is what we want here:
+
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate_at(vars(temperature:pulse_rate),funs(as.numeric))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+Can't I just say that these are columns 2 and 3?
+
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate_at(vars(2:3),funs(as.numeric))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+Yes. Equally good. What goes into the `vars`
+is the same as can go into a `select`: column numbers, names,
+or any of those "select helpers" like `starts_with`.
+
+You might think of `mutate_if` here, but if you scroll back, you'll find that all the columns are text, before you convert temperature and pulse rate to numbers, and so there's no way to pick out just the two columns you want that way. 
+
+Check that the temperature and pulse rate columns are now labelled
+`dbl`, which means they actually *are* decimal numbers
+(and don't just look like decimal numbers).
+
+Either way, using `unite` and then `separate` means that
+all the columns we created we want to keep (or, all the ones we would
+have wanted to get rid of have already been gotten rid of).
+
+Now we can actually do some statistics.
+      
+
+
+(f) Do a two-sample $t$-test to see whether the mean pulse rates
+differ between species. What do you conclude?
+
+
+Solution
+
+
+Drag your mind way back to this:
+
+```r
+t.test(pulse_rate~species,data=crickets.1)  
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  pulse_rate by species
+## t = 5.2236, df = 28.719, p-value = 1.401e-05
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  14.08583 32.22677
+## sample estimates:
+## mean in group exclamationis        mean in group niveus 
+##                    85.58571                    62.42941
+```
+
+ 
+
+There is strong evidence of a difference in means (a P-value around
+0.00001), and the confidence interval says that the mean chirp rate is
+higher for *exclamationis*. That is, not just for the crickets
+that were observed here, but for *all* crickets of these two
+species. 
+      
+
+
+(g) The analysis in the last part did not use temperature,
+however. Is it possible that temperature also has an effect? To
+assess this, draw a scatterplot of pulse rate against temperature,
+with the points distinguished, somehow, by the species they are
+from.\endnote{This was the actual reason I gave you this question:
+I wanted you to do this. It sort of morphed into all the other
+stuff as well.}  
+
+
+Solution
+
+
+One of the wonderful things about `ggplot` is that doing
+the obvious thing works:
+
+```r
+ggplot(crickets.1,aes(x=temperature,y=pulse_rate,colour=species))+
+geom_point()
+```
+
+```
+## Warning: Removed 3 rows containing missing values (geom_point).
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-141-1.png" width="672"  />
+
+       
+    
+
+
+(h) What does the plot tell you that the $t$-test doesn't? How
+would you describe differences in pulse rates between species now?
+
+
+Solution
+
+
+The plot tells you that (for both species) as temperature goes
+up, pulse rate goes up as well. *Allowing for that*, the
+difference in pulse rates between the two species is even
+clearer than it was before. To see an example, pick a
+temperature, and note that the mean pulse rate at that
+temperature seems to be at least 10 higher for
+*exclamationis*, with a high degree of consistency.
+The $t$-test mixed up all the pulse rates at all the different
+temperatures. Even though the conclusion was clear enough, it
+could be clearer if we incorporated temperature into the analysis.
+There was also a potential source of unfairness in that the
+*exclamationis* crickets tended to be observed at higher
+temperatures than *niveus* crickets; since pulse rates
+increase with temperature, the apparent difference in pulse
+rates between the species might have been explainable by one
+species being observed mainly in higher temperatures. This was
+*utterly invisible* to us when we did the $t$-test, but it
+shows the importance of accounting for all the relevant
+variables when you do your analysis.\endnote{And it shows the
+value of looking at relevant plots.} If the species had been
+observed at opposite temperatures, we might have
+concluded
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mistakenly.</span> 
+that *niveus* have the
+higher pulse rates on average. I come back to this later when I
+discuss the confidence interval for species difference that
+comes out of the regression model with temperature.
+      
+
+
+(i) Fit a regression predicting pulse rate from species and
+temperature. Compare the P-value for species in this regression to
+the one from the $t$-test. What does that tell you?
+
+
+Solution
+
+
+This is actually a so-called "analysis of covariance model",
+which properly belongs in D29, but it's really just a regression:
+
+```r
+pulse.1=lm(pulse_rate~species+temperature,data=crickets.1)
+summary(pulse.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = pulse_rate ~ species + temperature, data = crickets.1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.0128 -1.1296 -0.3912  0.9650  3.7800 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    -7.21091    2.55094  -2.827  0.00858 ** 
+## speciesniveus -10.06529    0.73526 -13.689 6.27e-14 ***
+## temperature     3.60275    0.09729  37.032  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.786 on 28 degrees of freedom
+##   (3 observations deleted due to missingness)
+## Multiple R-squared:  0.9896,	Adjusted R-squared:  0.9888 
+## F-statistic:  1331 on 2 and 28 DF,  p-value: < 2.2e-16
+```
+
+ 
+
+The P-value for species is now $6.27\times 10^{-14}$ or 0.00000000000006, which is even less than
+the P-value of 0.00001 that came out of the $t$-test. That is to say,
+when you know temperature, you can be even more sure of your
+conclusion that there is a difference between the species.
+
+The R-squared for this regression is almost 99\%, which says that if
+you know both temperature and species, you can predict the pulse rate
+almost exactly.
+
+In the regression output, the slope for species is about $-10$. It is
+labelled `speciesniveus`. Since species is categorical,
+`lm` uses the first category, *exclamationis*, as the
+baseline and expresses each other species relative to that. Since the
+slope is about $-10$, it says that at any given temperature, the mean
+pulse rate for *niveus* is about 10 less than for
+*exclamationis*. This is pretty much what the scatterplot told
+us.
+
+We can go a little further here:
+
+
+```r
+confint(pulse.1)
+```
+
+```
+##                    2.5 %    97.5 %
+## (Intercept)   -12.436265 -1.985547
+## speciesniveus -11.571408 -8.559175
+## temperature     3.403467  3.802038
+```
+
+ 
+
+The second line says that the pulse rate for *niveus* is
+between about 8.5 and 11.5 less than for *exclamationis*, at
+any given temperature (comparing the two species at the same
+temperature as each other, but that temperature could be
+anything). This is a lot shorter than the CI that came out of the
+$t$-test, that went from 14 to 32. This is because we are now
+accounting for temperature, which also makes a difference. (In the
+$t$-test, the temperatures were all mixed up). What we also see is
+that the $t$-interval is shifted up compared to the one from the
+regression. This is because the $t$-interval conflates\endnote{Mixes
+up.} two things: the *exclamationis* crickets do have a
+higher pulse rate, but they were also observed at higher temperatures,
+which makes it look as if their pulse rates are more
+higher
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
+really are, when you account for temperature.
+
+This particular model constrains the slope with temperature to be the
+same for both species (just the intercepts differ). If you want to
+allow the slopes to differ between species, you add an interaction
+between temperature and species:
+
+
+```r
+pulse.2=lm(pulse_rate~species*temperature,data=crickets.1)
+summary(pulse.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = pulse_rate ~ species * temperature, data = crickets.1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.7031 -1.3417 -0.1235  0.8100  3.6330 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)               -11.0408     4.1515  -2.659    0.013 *  
+## speciesniveus              -4.3484     4.9617  -0.876    0.389    
+## temperature                 3.7514     0.1601  23.429   <2e-16 ***
+## speciesniveus:temperature  -0.2340     0.2009  -1.165    0.254    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.775 on 27 degrees of freedom
+##   (3 observations deleted due to missingness)
+## Multiple R-squared:  0.9901,	Adjusted R-squared:  0.989 
+## F-statistic: 898.9 on 3 and 27 DF,  p-value: < 2.2e-16
+```
+
+ 
+
+To see whether adding the interaction term added anything to the
+prediction,\endnote{Though it's hard to imagine being able to improve on an
+R-squared of 99\%.} compare the model with and without using `anova`:
+
+
+```r
+anova(pulse.1,pulse.2)  
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: pulse_rate ~ species + temperature
+## Model 2: pulse_rate ~ species * temperature
+##   Res.Df    RSS Df Sum of Sq     F Pr(>F)
+## 1     28 89.350                          
+## 2     27 85.074  1    4.2758 1.357 0.2542
+```
+
+ 
+
+There's no significant improvement by adding the interaction, so
+there's no evidence that having different slopes for each species is
+necessary. Note that `anova` gave the same P-value as did the
+$t$-test for the slope coefficient for the interaction in
+`summary`, 0.254 in both cases. This is because there were only
+two species and therefore only one slope coefficient was required to
+distinguish them. If there had been three species, we would have had
+to look at the `anova` output to hunt for a difference among
+species, since there would have been two slope coefficients, each with
+its own P-value.\endnote{This wouldn't have told us about the overall
+effect of `species.`} 
+
+The upshot is that we do not need different slopes; the model
+`pulse.1` with the same slope for each species describes what
+is going on.
+
+`ggplot` makes it almost laughably easy to add regression lines
+for each species to our plot, thus:
+
+
+```r
+ggplot(crickets.1,aes(x=temperature,y=pulse_rate,colour=species))+
+geom_point()+geom_smooth(method="lm",se=F)
+```
+
+```
+## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+```
+
+```
+## Warning: Removed 3 rows containing missing values (geom_point).
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
+
+ 
+
+The lines are almost exactly parallel, so having the same slope for
+each species makes perfect sense.
+      
+
+
+
+
+
+
+
+ A poll on the Discovery Channel asked people to nominate the
+best roller-coasters in the United States. We will examine the 10
+roller-coasters that received the most votes. Two features of a
+roller-coaster that are of interest are the distance it drops from
+start to finish, measured here in feet\endnote{Roller-coasters work by
+gravity, so there must be some drop.} and the duration of the ride,
+measured in seconds. Is it true that roller-coasters with a bigger
+drop also tend to have a longer ride? The data are at
+[link](http://www.utsc.utoronto.ca/~butler/c32/coasters.csv).\endnote{These
+are not to be confused with what your mom insists that you place
+between your coffee mug and the table.}
+
+
+
+(a) Read the data into R and verify that you have a sensible
+number of rows and columns.
+
+
+Solution
+
+
+A `.csv`, so the usual for that:
+
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/coasters.csv"
+coasters=read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   coaster_name = col_character(),
+##   state = col_character(),
+##   drop = col_integer(),
+##   duration = col_integer()
+## )
+```
+
+```r
+coasters
+```
+
+```
+## # A tibble: 10 x 4
+##    coaster_name     state         drop duration
+##    <chr>            <chr>        <int>    <int>
+##  1 Incredible Hulk  Florida        105      135
+##  2 Millennium Force Ohio           300      105
+##  3 Goliath          California     255      180
+##  4 Nitro            New Jersey     215      240
+##  5 Magnum XL-2000   Ohio           195      120
+##  6 The Beast        Ohio           141       65
+##  7 Son of Beast     Ohio           214      140
+##  8 Thunderbolt      Pennsylvania    95       90
+##  9 Ghost Rider      California     108      160
+## 10 Raven            Indiana         86       90
+```
+
+ 
+
+The number of marks for this kind of thing has been decreasing through
+the course, since by now you ought to have figured out how to do it
+without looking it up.
+
+There are 10 rows for the promised 10 roller-coasters, and there are
+several columns: the drop for each roller-coaster and the duration of
+its ride, as promised, as well as the name of each roller-coaster and the state
+that it is in. (A lot of them seem to be in Ohio, for some reason that
+I don't know.) So this all looks good.
+
+
+
+(b) Make a scatterplot of duration (response) against drop
+(explanatory), labelling each roller-coaster with its name in such a
+way that the labels do not overlap. Add a regression line to your plot.
+
+
+Solution
+
+
+The last part, about the labels not overlapping, is an
+invitation to use `ggrepel`, which is the way I'd
+recommend doing this. (If not, you have to do potentially lots
+of work organizing where the labels sit relative to the points,
+which is time you probably don't want to spend.) Thus:
+
+```r
+library(ggrepel)
+ggplot(coasters,aes(x=drop,y=duration,label=coaster_name))+
+geom_point()+geom_text_repel()+geom_smooth(method="lm",se=F)
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-148-1.png" width="672"  />
+
+       
+
+The `se=F` at the end is optional; if you omit it, you get that
+"envelope" around the line, which is fine here.
+
+Note that with the labelling done this way, you can easily identify
+which roller-coaster is which.
+
+
+
+(c) Would you say that roller-coasters with a larger drop tend
+to have a longer ride? Explain briefly.
+
+
+Solution
+
+
+I think there are two good answers here: "yes" and "kind of".
+Supporting "yes" is the fact that the regression line does go
+uphill, so that overall, or on average, roller-coasters with a
+larger drop do tend to have a longer duration of ride as well.
+Supporting "kind of" is the fact that, though the regression
+line goes uphill, there are a lot of roller-coasters that are
+some way off the trend, far from the regression line.
+I am happy to go with either of those. I could also go with
+"not really" and the same discussion that I attached to ``kind
+of''. 
+
+
+
+(d) Find a roller-coaster that is unusual compared to the
+others. What about its combination of `drop` and
+`duration` is unusual?
+
+
+Solution
+
+
+This is an invitation to find a point that is a long way off the
+line. I think the obvious choice is my first one below, but I
+would take either of the others as well:
+
+
+* "Nitro" is a long way above the line. That means it has
+a long duration, relative to its drop. There are two other
+roller-coasters that have a larger drop but not as long a
+duration. In other words, this roller-coaster drops slowly,
+presumably by doing a lot of twisting, loop-the-loop and so on.
+
+* "The Beast" is a long way below the line, so it has a
+short duration relative to its drop. It is actually the
+shortest ride of all, but is only a bit below average in terms
+of drop. This suggests that The Beast is one of those rides
+that drops a long way quickly.
+
+* "Millennium Force" has the biggest drop of all, but a
+shorter-than-average duration. This looks like another ride
+with a big drop in it.
+
+A roller-coaster that is "unusual" will have a residual that
+is large in size (either positive, like Nitro, or negative, like
+the other two). I didn't ask you to find the residuals, but if
+you want to, `augment` from `broom` is the
+smoothest way to go:
+
+```r
+library(broom)
+duration.1=lm(duration~drop,data=coasters) 
+augment(duration.1,coasters) %>%
+select(coaster_name,duration,drop,.resid) %>%
+arrange(desc(abs(.resid)))
+```
+
+```
+## # A tibble: 10 x 4
+##    coaster_name     duration  drop .resid
+##    <chr>               <int> <int>  <dbl>
+##  1 Nitro                 240   215  97.0 
+##  2 The Beast              65   141 -60.1 
+##  3 Millennium Force      105   300 -58.6 
+##  4 Ghost Rider           160   108  42.8 
+##  5 Goliath               180   255  27.3 
+##  6 Thunderbolt            90    95 -24.0 
+##  7 Raven                  90    86 -21.8 
+##  8 Incredible Hulk       135   105  18.6 
+##  9 Magnum XL-2000        120   195 -18.2 
+## 10 Son of Beast          140   214  -2.81
+```
+
+       
+
+`augment` produces a data frame (of the original data frame
+with some new columns that come from the regression), so I can feed it
+into a pipe to do things with it, like only displaying the columns I
+want, and arranging them in order by absolute value of residual, so
+that the roller-coasters further from the line come out first. This
+identifies the three that we found above. The fourth one, ``Ghost
+Rider'', is like Nitro in that it takes a (relatively) long time to
+fall not very far.
+You can also put `augment` in the *middle* of a pipe, but then
+you seem to lose things that were not in the regression:
+
+
+```r
+coasters %>%
+lm(duration~drop, data=.) %>%
+augment() %>%
+arrange(desc(abs(.resid)))
+```
+
+```
+## # A tibble: 10 x 9
+##    duration  drop .fitted .se.fit .resid  .hat .sigma  .cooksd .std.resid
+##       <int> <int>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>    <dbl>      <dbl>
+##  1      240   215    143.    18.9  97.0  0.138   37.5 0.336        2.05  
+##  2       65   141    125.    17.5 -60.1  0.118   48.8 0.106       -1.26  
+##  3      105   300    164.    33.4 -58.6  0.429   45.9 0.870       -1.52  
+##  4      160   108    117.    21.6  42.8  0.180   51.5 0.0946       0.928 
+##  5      180   255    153.    24.9  27.3  0.239   53.2 0.0591       0.614 
+##  6       90    95    114.    23.7 -24.0  0.216   53.5 0.0391      -0.532 
+##  7       90    86    112.    25.2 -21.8  0.245   53.6 0.0395      -0.493 
+##  8      135   105    116.    22.1  18.6  0.188   53.9 0.0189       0.404 
+##  9      120   195    138.    17.0 -18.2  0.111   54.0 0.00898     -0.379 
+## 10      140   214    143.    18.8  -2.81 0.136   54.5 0.000277    -0.0593
+```
+
+ 
+
+I wanted to hang on to the roller-coaster names, so I went the other
+way. The advantage of this way is less typing. You have to specify the
+`data=.` thing in the regression because the data frame is
+*not* the first input to `lm` (the model is), but you have
+a much simpler `augment` because its first input is the model
+that came out of the previous step. If the second input to
+`augment` is missing, as it is here, it ``attempts to
+reconstruct the data from the model''\endnote{A quote from the package
+vignette.} which I think means that things like the coaster names that
+were not part of the regression won't be part of `augment`'s
+output either. That's my understanding. My first way explicitly
+supplies the original data frame to `augment` so there is no
+question about what it is using.
+
+
+
+

@@ -1,0 +1,256 @@
+##  Dealing with dates in the Worcester Heart Attack study
+
+
+ The Worcester Heart Attack Study is an ongoing study of
+heart attacks in the Worcester, MA area. The main purpose of the study
+is to investigate changes over time in incidence and death rates, and also
+the use of different treatment approaches. We will be mainly using
+this data set to investigate data handling and dealing with dates. The
+data can be found at
+[link](http://www.utsc.utoronto.ca/~butler/c32/whas500.txt). 
+
+
+
+(a) Read the data into R. The reading-in part is
+straightforward, but check what type of thing each column is. Is
+that what it should be?
+
+
+Solution
+
+
+This is `read_delim`:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/whas500.txt"
+whas=read_delim(my_url," ")
+whas
+```
+
+   
+
+To see what type everything is, note that when you display a
+`tibble`, the type of all the columns on the screen is
+displayed at the top. Click the little right-arrow to see more columns
+and to check their type.
+
+All the numbers are properly integer (`int`) or decimal
+(`dbl`) numbers, but the date columns are `chr` or
+text. This means that they haven't been read as `Date`s
+(because they were not in year-month-day order).  This is (as we will
+see) unlike SAS, which determined that they were dates, and even used
+the first 20 rows of the file to determine what format of dates they
+were.
+
+
+
+(b) The date columns should be R dates. They are not
+year-month-day, so converting them via `as.Date` (which is
+what `read_delim` tries to do) will not work. Load the
+`lubridate` package, and create new columns in your data
+frame that are properly dates. Save your data frame, and list it to
+demonstrate that it worked.
+
+
+Solution
+
+
+Load `lubridate` first:
+```{r }
+library(lubridate)
+```
+
+       
+
+These dates are day-month-year, so we need `dmy` from
+`lubridate`: 
+
+```{r }
+whas2=whas %>% mutate(admit=dmy(admitdate),
+dis=dmy(disdate),
+f=dmy(fdate)) 
+glimpse(whas2)
+```
+
+ 
+
+There are a lot of columns, so I used `glimpse`.  The three new
+variables we created are at the end of the list. They are correctly
+`Date`s, and they have the right values, the ones we can see at
+least. 
+
+The indentation is up to you. I think it's nice to make the
+creations of the three new variables line up. You can also make the
+opening and closing brackets on the long `mutate` aligned, or
+you can do as I have done here and put two closing brackets on the
+end. The rationale for this is that each of the variable definition
+lines in the `mutate` ends either with a comma or an extra
+closing bracket, the latter being on the last line. Your choice here is
+a matter of taste or (in your working life) the coding norms of the
+team you're working with.
+
+You may have been offended by the repetition above. It so happens that
+these columns' names all end in `date` and they are the only
+ones that do, so we can use a "select helper" to select only them,
+and then submit all of them to a `mutate` via `mutate_at`,
+which goes like this:
+
+```{r }
+whas %>% mutate_at(vars(ends_with("date")),funs(d=dmy)) %>% glimpse()
+```
+
+ 
+
+One line, as you see, not three. The syntax of this is that we first
+say which columns we want to mutate. We can use any of the
+select-helpers for this, including listing the column numbers or
+names; in this case our date variables all ended with
+`date`. Then we have to give a function, or more than one
+function, to mutate them with; in this case we wanted to run all the
+dates-as-text through `dmy`. Because I said `d=dmy`, it
+takes the original date variable names, glues an underscore on the end
+and then the `d` that I said, so we create new variables by
+those names (at the end of the `glimpse` output). If I had just
+said `funs(dmy)`, we would have *overwritten* the original
+values, and `admitdate`, `disdate` and `fdate`
+would now be `date`s. Losing the original variables would have
+been OK here, but I wanted to show you how to create new variables.
+
+
+
+(c) Create three new variables `diff1, diff2, diff3` that
+are the numbers of days between each of your dates, and save the
+data frame in which they have been created. Verify that at
+least some of them are the same as `los` and `lenfol`.
+
+
+Solution
+
+
+I don't know
+what R's internal storage is for dates (it might be seconds or
+milliseconds or anything, not necessarily days),
+so subtracting them requires care; you have to divide by the
+length of a day (in whatever units), thus:
+```{r }
+whas3=whas2 %>% mutate(
+diff1=(dis-admit)/ddays(1),
+diff2=(f-admit)/ddays(1),
+diff3=(f-dis)/ddays(1))
+glimpse(whas3)	   
+```
+
+       
+
+The extra `d` on the front of `ddays` indicates that
+these are what is known to `lubridate` as "durations": a
+period of time 1 day long that could be any day (as opposed to ``June
+1, 1970'' which is 1 day long, but tied to a particular day). 
+
+`los` should be the number of days in hospital, what I
+calculated as `diff1`, and `lenfol` should be the time
+from being admitted to last followup, which is my `diff2`. My
+output from `glimpse` confirms that. 
+
+Of course, checking that the first few values match is a nice
+confirmation, but is not actually a *proof*. For that, we should
+compare all 500 values, and it would be best to do it in such a way
+that R is comparing all 500 values for us, since it would be a lot
+more reliable than the human eye. R has a function `all.equal`
+which does exactly that. By way of warmup:
+
+```{r }
+x=1:4
+y=1:4
+z=c(1,2,3,5)
+all.equal(x,y)
+all.equal(x,z)
+```
+
+ 
+
+I thought the second one was just going to say `FALSE`, but it
+gave us a message instead, saying how close `x` and `z`
+were on average, so that we could decide whether they were close
+enough to call equal, or, as in this case, not.
+
+Anyway:
+
+```{r }
+with(whas3,all.equal(lenfol,diff2))
+with(whas3,all.equal(los,diff1))
+```
+
+ 
+
+so they really are all equal, all 500 of them.\endnote{The computer
+scientists among you will note that I shouldn't have done this,
+because `diff1` through `diff3` are double-precision
+decimal numbers, so I should have tested their equality with
+`lenfol` and `los` by working out the absolute
+differences and testing whether they were all *small*. On
+consulting the help for `all.equal`, though, I find that it
+*does* work properly, because it actually tests whether the
+things being compared differ by less than a quantity
+`tolerance` which defaults to $1.5\times 10^{-8}$, and if
+they do it calls them equal. This is all tied in with the difference
+between integers and decimal numbers as they are represented on a
+computer: exactly and approximately, respectively. A
+double-precision number has about 16 significant digits of accuracy;
+equal things won't have all 16 digits equal, most likely, but they
+would be expected to have at least 8 of those digits the
+same. CSCA08 stuff, I imagine. This is where you can casually toss
+around terms like "machine epsilon". Oh! I just realized
+something. You know how very very small P-values are shown in R as
+`<2.2e-16`? *That's* the machine epsilon,
+$2.2 \times 10^{-16}$. Anything smaller than that is
+indistinguishable from zero, and you can't have a P-value be
+*exactly* zero. The default `tolerance` I mentioned
+above is the square root of this, which is normally used for such
+things.}
+
+
+
+(d) Construct side-by-side boxplots of the length of followup by
+each followup status. You'll need to make sure
+that the followup status, as it gets fed into `ggplot`, is a
+`factor`, or, at least, not the number that it is now.
+
+
+Solution
+
+
+The easiest way to make a factor is to wrap `fstat`, which
+is a numeric 0 or 1, in `factor()`:
+```{r }
+ggplot(whas3,aes(x=factor(fstat),y=lenfol))+geom_boxplot()
+```
+
+       
+
+Or create a factor version of `fstat` first:
+
+```{r }
+whas3 %>% mutate(ffstat=factor(fstat)) %>%
+ggplot(aes(x=ffstat,y=lenfol))+geom_boxplot()
+```
+
+ 
+
+I think the second way looks better, because you
+get a cleaner $x$-axis on your plot. But if you're doing this for
+exploration, rather than as something that's going to appear in a
+report for your boss, the first way is fine.
+
+`ggplot` also treats text stuff as categorical where needed, so
+this also works:
+
+```{r }
+whas3 %>% mutate(cfstat=as.character(fstat)) %>%
+ggplot(aes(x=cfstat, y=lenfol))+geom_boxplot()
+```
+
+ 
+
+
+
+

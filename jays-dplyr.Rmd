@@ -7,7 +7,7 @@ in class).
 
 
 (a) The Blue Jays baseball data set is at
-[http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv](http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv). Read
+[link](http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv). Read
 it into R. Check that you have 25 rows and a bunch of variables.
 
 
@@ -23,6 +23,8 @@ myurl="http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv"
 jays=read_csv(myurl)
 jays
 ```
+
+
 If you must, copy and paste the spreadsheet into R Studio, and read it
 in with `read_delim` (or possibly `read_tsv`), but
 this runs the risk of being defeated by spreadsheet cells that contain
@@ -45,7 +47,9 @@ column specification it inferred for all of them, but you can type
 
 ```{r }
 spec(jays)
-``` 
+```
+
+ 
 
 to find it all out.
 
@@ -63,27 +67,22 @@ Solution
 I get to do this:
 ```{r size="tiny"}
 jays %>% filter(opp=="NYY") %>% print(width=Inf)
-``` 
+```
+
+ 
 
 but you will probably need to click the little right-arrow at the top
 to see more columns. 
 
-I forgot the `width` thing and had to look it up. Also, all the
-columns come out in one row, so I had to display it tiny so that you
-could see it all.
-
 What I notice is that these games are all on consecutive nights
 (against the same team). This is quite common, and goes back to the
 far-off days when teams travelled by train: teams play several games
-on one visit, rather than coming back many times.\endnote{Hockey is
-similar: teams go on "road trips", playing several different teams
-before returning home. Hockey teams, though, tend to play each team
-only once on a road trip: for example, a west coast team like the
-Canucks might play a game in each of Toronto, Montreal, Boston and
-New York on a road trip. Well, maybe three games in the New York
-area: one each against the Rangers, Islanders and Devils.} You might have noticed something else;
-that's fine for this. For example, ``each of the games lasted less
-than three hours'', or "the attendances were all small" (since we
+on one visit, rather than coming back many times.
+`r tufte::margin_note("Hockey is  similar: teams go on road trips, playing several different teams  before returning home. Hockey teams, though, tend to play each team  only once on a road trip: for example, a west coast team like the  Canucks might play a game in each of Toronto, Montreal, Boston and  New York on a road trip. Well, maybe three games in the New York  area: one each against the Rangers, Islanders and Devils.")` 
+You might have noticed something else;
+that's fine for this. For example, 
+"each of the games lasted less than three hours", 
+or "the attendances were all small" (since we
 looked at all the attendances in class). I just want you to notice
 something meaningful that seems to be interesting about these games.
 
@@ -93,7 +92,9 @@ You could also print all the columns in two or more goes, using
 ```{r size="small"}
 jays %>% filter(opp=="NYY") %>% select(row:innings) %>% print(width=Inf)
 jays %>% filter(opp=="NYY") %>% select(wl:streak) %>% print(width=Inf)
-``` 
+```
+
+ 
 
 
 
@@ -115,7 +116,9 @@ Two steps, since we selecting rows *and* columns:
 ```{r }
 jays %>% filter(attendance>30000) %>%
 select(c(attendance,Daynight))
-``` 
+```
+
+ 
 
 The column names do not need quotes; this is part of the nice stuff
 about `dplyr`. Or this way, since we are selecting
@@ -124,7 +127,9 @@ about `dplyr`. Or this way, since we are selecting
 ```{r }
 jays %>% filter(attendance>30000) %>%
 select(c(Daynight:attendance))  
-``` 
+```
+
+ 
 
 There are eight games selected (see the eight rows in the
 result). Only two of them are night games, while the other six are day
@@ -135,7 +140,9 @@ If you wanted to, you could automate the counting, like this:
 ```{r }
 jays %>% filter(attendance>30000) %>%
 count(Daynight)
-``` 
+```
+
+ 
 
 Six day games and two night games.
 
@@ -159,7 +166,9 @@ frame, so I don't need to "select out" the other variables:
 jays %>% group_by(Daynight) %>%
 summarize(mean.att=mean(attendance),
 sd.att=sd(attendance))
-``` 
+```
+
+ 
 
 The mean attendances are about 38 thousand and about 20 thousand. Note
 that the night games have much the larger SD, possibly because of the
@@ -170,7 +179,9 @@ investigate.
 jays %>% group_by(Daynight) %>%
 summarize(median.att=median(attendance),
 iqr.att=IQR(attendance))
-``` 
+```
+
+ 
 This time, the night attendances have a *smaller* spread and a
 noticeably smaller median (compared to the mean), so it must have been
 the outlier that made the difference. There was another high value
@@ -178,7 +189,9 @@ that R marked as an outlier:
 
 ```{r }
 ggplot(jays,aes(x=Daynight,y=attendance))+geom_boxplot()
-``` 
+```
+
+ 
 
 So when you take away those unusual values, the night game attendances
 are indeed less variable.
@@ -189,7 +202,9 @@ of these non-normal data, is Mood's median test:
 ```{r }
 library(smmr)
 median_test(jays,attendance,Daynight)
-``` 
+```
+
+ 
 
 There was one attendance exactly equal to the overall median (as you
 would expect: with an odd number of data values, the median is one of
@@ -201,12 +216,9 @@ on the conclusion.
 The overall median attendance was 21,000, and *none* of the day
 games had attendance less than that. With the small frequencies, the
 accuracy of the P-value is a bit questionable, but taking it at face
-value, there *is* a significant difference between median
-attendances at day and night games.\endnote{If you do this ``by
-hand'', you'll get a warning about the chi-squared approximation
-being inaccurate. This is because of the small frequencies, and
-*not* because of the outliers. Those are not damaging the test
-at all.}
+value, there *is* a significant difference between median 
+attendances at day and night games.
+`r tufte::margin_note("If you do this by  hand, you'll get a warning about the chi-squared approximation  being inaccurate. This is because of the small frequencies, and  *not* because of the outliers. Those are not damaging the test  at all.")`
 
 
 
@@ -226,7 +238,9 @@ plots. Remember that the facetting part goes right at the end:
 ggplot(jays,aes(sample=attendance))+
 stat_qq()+stat_qq_line()+
 facet_wrap(~Daynight,ncol=1)
-```     
+```
+
+     
 The day attendances are pretty normal, though it is hard to be sure
 with only 7 of them. 
 

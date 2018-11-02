@@ -1,15 +1,13 @@
-##  Ken's cars
+##  Cars
 
 
  My cars data file can be found at
-[http://www.utsc.utoronto.ca/~butler/c32/cars.csv](http://www.utsc.utoronto.ca/~butler/c32/cars.csv). We're doing
-this question in R now, but later we'll be doing the exact same thing
-in SAS, so you'll be able then to compare your results.  The values in
+[link](http://www.utsc.utoronto.ca/~butler/c32/cars.csv). 
+The values in
 the data file are separated by commas; the car names are up to 29
 characters long.  Display your results for each part after (a). In R,
 displaying a `tibble` normally shows its first ten lines, which
-is all you need here; there's no need to display all the lines unless
-you want to.
+is all you need here; there's no need to display all the lines.
 
 
 (a) Read the data into R and list the values.
@@ -23,7 +21,9 @@ Solution
 my_url="http://www.utsc.utoronto.ca/~butler/c32/cars.csv"
 cars=read_csv(my_url)  
 cars
-``` 
+```
+
+ 
       
 
 
@@ -36,13 +36,17 @@ Solution
 
 ```{r }
 cars %>% select(car,country)
-``` 
+```
+
+ 
 
 This *almost* works, but not quite:
 
 ```{r }
 cars %>% select(starts_with("c"))
-``` 
+```
+
+ 
 
 It gets *all* the columns that start with `c`, which
 includes `cylinders` as well.
@@ -58,7 +62,9 @@ Solution
 Naming what you *don't* want is sometimes easier:
 ```{r }
 cars %>% select(-hp)  
-``` 
+```
+
+ 
       
 
 
@@ -72,7 +78,9 @@ Solution
 This:
 ```{r }
 cars %>% filter(cylinders==8)  
-``` 
+```
+
+ 
 8 of them, all from the US.
       
 
@@ -87,7 +95,9 @@ Solution
 This one is selecting some observations and some variables:
 ```{r }
 cars %>% filter(hp<=70) %>% select(cylinders:hp)
-``` 
+```
+
+ 
 
 Cylinders and horsepower are consecutive columns, so we can select
 them either using the colon `:` or by
@@ -112,14 +122,18 @@ Solution
 
 ```{r }
 cars %>% filter(cylinders==4) %>% summarize(m=mean(MPG),s=sd(MPG))  
-``` 
+```
+
+ 
 
 Or you can get the mean and SD of gas mileage for all numbers of
 cylinders, and pick out the one you want:
 
 ```{r }
 cars %>% group_by(cylinders) %>% summarize(m=mean(MPG),s=sd(MPG))
-``` 
+```
+
+ 
 
 Top row is the same as before. And since the output is a data frame,
 you can do any of these things with *that*, for example:
@@ -128,7 +142,9 @@ you can do any of these things with *that*, for example:
 cars %>% group_by(cylinders) %>% 
 summarize(m=mean(MPG),s=sd(MPG)) %>%
 filter(cylinders==4)
-``` 
+```
+
+ 
 
 to pick out just the right row.
 This is a very easy kind of question to set on an exam. Just so you know.

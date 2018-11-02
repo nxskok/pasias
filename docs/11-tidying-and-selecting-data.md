@@ -32,7 +32,7 @@ in class).
 
 
 (a) The Blue Jays baseball data set is at
-[http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv](http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv). Read
+[link](http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv). Read
 it into R. Check that you have 25 rows and a bunch of variables.
 
 
@@ -90,6 +90,8 @@ jays
 ## #   gb <chr>, winner <chr>, loser <chr>, save <chr>, `game time` <time>,
 ## #   Daynight <chr>, attendance <int>, streak <chr>
 ```
+
+
 If you must, copy and paste the spreadsheet into R Studio, and read it
 in with `read_delim` (or possibly `read_tsv`), but
 this runs the risk of being defeated by spreadsheet cells that contain
@@ -141,6 +143,8 @@ spec(jays)
 ## )
 ```
 
+ 
+
 to find it all out.
 
 
@@ -179,25 +183,20 @@ jays %>% filter(opp=="NYY") %>% print(width=Inf)
 ## 3 N             21312 +
 ```
 
+ 
+
 but you will probably need to click the little right-arrow at the top
 to see more columns. 
-
-I forgot the `width` thing and had to look it up. Also, all the
-columns come out in one row, so I had to display it tiny so that you
-could see it all.
 
 What I notice is that these games are all on consecutive nights
 (against the same team). This is quite common, and goes back to the
 far-off days when teams travelled by train: teams play several games
-on one visit, rather than coming back many times.\endnote{Hockey is
-similar: teams go on "road trips", playing several different teams
-before returning home. Hockey teams, though, tend to play each team
-only once on a road trip: for example, a west coast team like the
-Canucks might play a game in each of Toronto, Montreal, Boston and
-New York on a road trip. Well, maybe three games in the New York
-area: one each against the Rangers, Islanders and Devils.} You might have noticed something else;
-that's fine for this. For example, ``each of the games lasted less
-than three hours'', or "the attendances were all small" (since we
+on one visit, rather than coming back many times.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Hockey is  similar: teams go on road trips, playing several different teams  before returning home. Hockey teams, though, tend to play each team  only once on a road trip: for example, a west coast team like the  Canucks might play a game in each of Toronto, Montreal, Boston and  New York on a road trip. Well, maybe three games in the New York  area: one each against the Rangers, Islanders and Devils.</span> 
+You might have noticed something else;
+that's fine for this. For example, 
+"each of the games lasted less than three hours", 
+or "the attendances were all small" (since we
 looked at all the attendances in class). I just want you to notice
 something meaningful that seems to be interesting about these games.
 
@@ -241,6 +240,8 @@ jays %>% filter(opp=="NYY") %>% select(wl:streak) %>% print(width=Inf)
 ## 3      21312 +
 ```
 
+ 
+
 
 
 
@@ -278,6 +279,8 @@ select(c(attendance,Daynight))
 ## 8      37929 D
 ```
 
+ 
+
 The column names do not need quotes; this is part of the nice stuff
 about `dplyr`. Or this way, since we are selecting
 *consecutive* columns:
@@ -302,6 +305,8 @@ select(c(Daynight:attendance))
 ## 8 D             37929
 ```
 
+ 
+
 There are eight games selected (see the eight rows in the
 result). Only two of them are night games, while the other six are day
 (weekend) games.
@@ -321,6 +326,8 @@ count(Daynight)
 ## 1 D            6
 ## 2 N            2
 ```
+
+ 
 
 Six day games and two night games.
 
@@ -355,6 +362,8 @@ sd.att=sd(attendance))
 ## 2 N          20087.  8084.
 ```
 
+ 
+
 The mean attendances are about 38 thousand and about 20 thousand. Note
 that the night games have much the larger SD, possibly because of the
 large outlier night attendance (opening night). Which we can also
@@ -374,6 +383,8 @@ iqr.att=IQR(attendance))
 ## 1 D            37929    8754.
 ## 2 N            17928.   6005.
 ```
+
+ 
 This time, the night attendances have a *smaller* spread and a
 noticeably smaller median (compared to the mean), so it must have been
 the outlier that made the difference. There was another high value
@@ -385,6 +396,8 @@ ggplot(jays,aes(x=Daynight,y=attendance))+geom_boxplot()
 ```
 
 <img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+ 
 
 So when you take away those unusual values, the night game attendances
 are indeed less variable.
@@ -412,6 +425,8 @@ median_test(jays,attendance,Daynight)
 ## 3   P-value 0.001668714
 ```
 
+ 
+
 There was one attendance exactly equal to the overall median (as you
 would expect: with an odd number of data values, the median is one of
 the data values). `smmr` removed it; if you did the test by
@@ -422,12 +437,9 @@ on the conclusion.
 The overall median attendance was 21,000, and *none* of the day
 games had attendance less than that. With the small frequencies, the
 accuracy of the P-value is a bit questionable, but taking it at face
-value, there *is* a significant difference between median
-attendances at day and night games.\endnote{If you do this ``by
-hand'', you'll get a warning about the chi-squared approximation
-being inaccurate. This is because of the small frequencies, and
-*not* because of the outliers. Those are not damaging the test
-at all.}
+value, there *is* a significant difference between median 
+attendances at day and night games.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you do this by  hand, you'll get a warning about the chi-squared approximation  being inaccurate. This is because of the small frequencies, and  *not* because of the outliers. Those are not damaging the test  at all.</span>
 
 
 
@@ -451,6 +463,8 @@ facet_wrap(~Daynight,ncol=1)
 ```
 
 <img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+
+     
 The day attendances are pretty normal, though it is hard to be sure
 with only 7 of them. 
 
@@ -817,7 +831,7 @@ that 2 is in between 1 and 4 as the boxplots suggest.
 tomato plants to one of four different colours of light (8 plants to
 each colour). The growth rate of each plant, in millimetres per week,
 was recorded. The data are in
-[http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt](http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt). 
 
 
 
@@ -864,6 +878,8 @@ toms1
 ## 8     8  5.09  13.5   5.25  1.87
 ```
 
+ 
+
 I do indeed have 8 rows and 5 columns.
 
 With only 8 rows, listing the data like this is good. 
@@ -903,13 +919,15 @@ toms2
 ## # ... with 22 more rows
 ```
 
+       
+
 Reminder: data frame to gather, what makes the columns different
 (they're different colours), what makes them the same (they're all
 growth rates), which columns to gather together (all the colour ones).
 
 Since the column `plant` was never mentioned, this gets
-repeated as necessary, so now it denotes ``plant within colour
-group'', which in this case is not very useful. (Where you have
+repeated as necessary, so now it denotes "plant within colour group", 
+which in this case is not very useful. (Where you have
 matched pairs, or repeated measures in general, you *do* want to
 keep track of which individual is which. But this is not repeated
 measures because plant number 1 in the blue group and plant number 1
@@ -935,6 +953,8 @@ The code is easy enough:
 ```r
 write_csv(toms2,"tomatoes2.csv")
 ```
+
+       
 
 If no error, it worked. That's all you need.
 
@@ -981,6 +1001,8 @@ cat tomatoes2.csv
 ## 8,green,1.87
 ```
 
+ 
+
 On my system, that will list the contents of the file. Or you can just
 open it in R Studio (if you saved it the way I did, it'll be in the
 same folder, and you can find it in the Files pane.)
@@ -1002,6 +1024,8 @@ ggplot(toms2,aes(x=colour, y=growthrate))+geom_boxplot()
 ```
 
 <img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+
+     
 
 There are no outliers, but there is a little skewness (compare the
 *whiskers*, not the placement of the median within the box,
@@ -1067,6 +1091,8 @@ with(toms2,leveneTest(growthrate,colour))
 ##       28
 ```
 
+ 
+
 The warning is because `colour` was actually text, but the test
 did the right thing by turning it into a factor, so that's OK.
 
@@ -1077,7 +1103,7 @@ be *more* different than the ones we observed on average, and so
 there is no way that these sample variances indicate different
 population variances. (This is because of 8 observations only per
 group; if there had been 80 observations per group, it would have been
-a different story.)
+a different story.) Decide for yourself whether you're surprised by this.
 
 With that in mind, I think the regular ANOVA will be perfectly good,
 and we would expect that and the Welch ANOVA to give very similar results.
@@ -1088,6 +1114,8 @@ I don't need `car` again, so let's get rid of it:
 ```r
 detach("package:car",unload=T)
 ```
+
+ 
 
 
 
@@ -1115,6 +1143,8 @@ summary(toms.1)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+ 
+
 This is a tiny P-value, so the mean growth rate for the different
 colours is definitely *not* the same for all colours. Or, if you
 like, one or more of the colours has a different mean growth rate than
@@ -1138,6 +1168,8 @@ toms.2
 ## data:  growthrate and colour
 ## F = 81.079, num df = 3.000, denom df = 15.227, p-value = 1.377e-09
 ```
+
+ 
 
 The P-value is not *quite* as small as for the regular ANOVA, but
 it is still very small, and the conclusion is the same.
@@ -1168,6 +1200,8 @@ median_test(toms2,growthrate,colour)
 ## 3   P-value 7.067424e-04
 ```
 
+ 
+
 The P-value is again extremely small (though not quite as small as for
 the other two tests, for the usual reason that Mood's median test
 doesn't use the data very efficiently: it doesn't use how *far*
@@ -1197,20 +1231,23 @@ their populations. (Don't expect perfection, in short.)
 
 
 
-(f) If warranted, run Tukey. (If not warranted, explain briefly
+(f) If warranted, run a suitable follow-up. (If not warranted, explain briefly
 why not.)
 
 
 Solution
 
 
-The reason to run Tukey is that you have found some differences
-among the groups, and you want to know what they are. Here, we
-*have* said that the colours do not all have the same mean
-growth rate, so we want to find what the differences
-are. (Looking at the boxplots suggests that red is clearly best
+Whichever flavour of ANOVA you ran (regular ANOVA, Welch ANOVA,
+Mood's median test), you got the same conclusion for these data:
+that the average growth rates were not all the same for the four
+colours. That, as you'll remember, is as far as you go. To find
+out which colours differ from which in terms of growth rate, you
+need to run some kind of multiple-comparisons follow-up, the
+right one for the analysis you did. Looking at the boxplots suggests that red is clearly best
 and green clearly worst, and it is possible that all the colours
 are significantly different from each other.)
+If you did regular ANOVA, Tukey is what you need:
 
 ```r
 TukeyHSD(toms.1)
@@ -1232,10 +1269,83 @@ TukeyHSD(toms.1)
 ## yellow-red   -6.9975 -8.466129 -5.5288706 0.0000000
 ```
 
+       
+
 All of the differences are (strongly) significant, except for yellow
 and blue, the two with middling growth rates on the boxplot. Thus we
 would have no hesitation in saying that growth rate is biggest in red
 light and smallest in green light.
+
+If you did Welch ANOVA, you need Games-Howell, which you have to get
+from one of the packages that offers it:
+
+
+```r
+library(PMCMRplus)
+gamesHowellTest(growthrate~factor(colour),data=toms2)
+```
+
+```
+## 
+## 	Pairwise comparisons using Games-Howell test
+```
+
+```
+## data: growthrate by factor(colour)
+```
+
+```
+##        blue    green   red    
+## green  1.6e-05 -       -      
+## red    1.5e-06 4.8e-09 -      
+## yellow 0.18707 0.00011 5.8e-07
+```
+
+```
+## 
+## P value adjustment method: none
+```
+
+```
+## alternative hypothesis: two.sided
+```
+
+ 
+
+The conclusions are the same as for the Tukey: all the means are
+significantly different except for yellow and blue.
+Finally, if you did Mood's median test, you need this one:
+
+
+```r
+pairwise_median_test(toms2, growthrate, colour)
+```
+
+```
+## # A tibble: 6 x 4
+##   g1    g2       p_value adj_p_value
+##   <chr> <chr>      <dbl>       <dbl>
+## 1 blue  green  0.0000633    0.000380
+## 2 blue  red    0.0000633    0.000380
+## 3 blue  yellow 0.317        1.90    
+## 4 green red    0.0000633    0.000380
+## 5 green yellow 0.0000633    0.000380
+## 6 red   yellow 0.0000633    0.000380
+```
+
+ 
+
+Same conclusions again. This is what I would have guessed; the
+conclusions from Tukey were so clear-cut that it really didn't matter
+which way you went; you'd come to the same conclusion.
+
+That said, what I am looking for from you is a sensible choice of
+analysis of variance (ANOVA, Welch's ANOVA or Mood's median test) for
+a good reason, followed by the *right* follow-up for the test you
+did. Even though the conclusions are all the same no matter what you
+do here, I want you to get
+used to following the right method, so that you will be able to do the
+right thing when it *does* matter.
 
 
 
@@ -1246,7 +1356,7 @@ light and smallest in green light.
 
 
  The data in
-[http://www.utsc.utoronto.ca/~butler/c32/migraine.txt](http://www.utsc.utoronto.ca/~butler/c32/migraine.txt) are from a
+[link](http://www.utsc.utoronto.ca/~butler/c32/migraine.txt) are from a
 study of pain relief in migraine headaches. Specifically, 27 subjects
 were randomly assigned to receive *one* of three pain relieving
 drugs, labelled A, B and C. Each subject reported the number of hours
@@ -1265,9 +1375,9 @@ work and `read_delim` will not.
 Solution
 
 
-The key is two things: the data values are \emph{lined up in
-columns}, and \emph{there is more than one space between
-values}. The second thing is why `read_delim` will not
+The key is two things: the data values are *lined up in        columns*, and 
+*there is more than one space between  values*. 
+The second thing is why `read_delim` will not
 work. If you look carefully at the data file, you'll see that
 the column names are above and aligned with the columns, which
 is what `read_table` wants. If the column names had
@@ -1307,23 +1417,9 @@ migraine
 ## 9     4    10     5
 ```
 
+ 
+
 Success.
- We'll not be reading data like this into SAS in this course, but you
- might like to know how it goes (for future reference). It uses a
- `data` step, like we've been using to create new variables, thus:
- 
- \begin{Datastep}
- filename myurl url 'http://www.utsc.utoronto.ca/~butler/c32/migraine.txt';
- data pain;
-   infile myurl firstobs=2;
-   input druga drugb drugc;
- \end{Datastep}
- 
- \begin{Sascode}[store=maqax]
- proc print;  
- \end{Sascode}
- 
- \Listing[store=maqax, fontsize=footnotesize]{maqaxx}
 
 
 
@@ -1399,6 +1495,8 @@ dataframe to work with. I'm going to save my new data frame:
 ## # ... with 17 more rows
 ```
 
+ 
+
 The brackets around the whole thing print out the result as well as
 saving it. If you don't have those, you'll need to type
 `migraine2` again to display it.
@@ -1437,6 +1535,8 @@ summary(painrelief.1)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+ 
+
 There are (strongly) significant differences among the drugs, so it is
 definitely worth firing up Tukey to figure out where the differences are:
 
@@ -1457,6 +1557,8 @@ TukeyHSD(painrelief.1)
 ## DrugC-DrugA  2.2222222  0.3132065 4.131238 0.0203671
 ## DrugC-DrugB -0.6666667 -2.5756824 1.242349 0.6626647
 ```
+
+ 
 
 Both the differences involving drug A are significant, and because a
 high value of `painrelief` is better, in both cases drug A is
@@ -1481,17 +1583,15 @@ summary()
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+ 
+
 with the same results as before. Notice that I never actually created
 a second data frame by name; it was created by `gather` and
 then immediately used as input to `aov`.\endnote{And then thrown
 away.} I also used the
-`data=.` trick to use ``the data frame that came out of the
-previous step'' as my input to `aov`.
+`data=.` trick to use "the data frame that came out of the previous step" as my input to `aov`.
 
-Read the above like this: ``take `migraine`, and then gather
-together the `DrugA` through `DrugC` columns into a
-column `painrelief`, labelling each by its drug, and then do an
-ANOVA of `painrelief` by `drug`, and then summarize the results.''
+Read the above like this: "take `migraine`, and then gather together the `DrugA` through `DrugC` columns into a column `painrelief`, labelling each by its drug, and then do an ANOVA of `painrelief` by `drug`, and then summarize the results."
 
 What is even more alarming is that I can feed the output from
 `aov` straight into `TukeyHSD`:
@@ -1516,6 +1616,8 @@ TukeyHSD()
 ## DrugC-DrugA  2.2222222  0.3132065 4.131238 0.0203671
 ## DrugC-DrugB -0.6666667 -2.5756824 1.242349 0.6626647
 ```
+
+ 
 
 I wasn't sure whether this would work, since the output from
 `aov` is an R `list` rather than a data frame, but the
@@ -1555,6 +1657,8 @@ TukeyHSD()
 ## DrugC-DrugA  2.2222222  0.3132065 4.131238 0.0203671
 ## DrugC-DrugB -0.6666667 -2.5756824 1.242349 0.6626647
 ```
+
+ 
 
 The odd-looking second-last line of that uses that `.` trick
 for "whatever came out of the previous step". The thing inside the
@@ -1603,6 +1707,8 @@ summarize(m=mean(painrelief))
 ## 2 DrugB  6.56
 ## 3 DrugC  5.89
 ```
+
+ 
 These confirm that A is worst, and there is nothing much to choose
 between B and C.
 You should *not* recommend drug C over drug B on this evidence,
@@ -1613,13 +1719,7 @@ mean pain relief score for drug A is expected to be worst, but between
 drugs B and C, sometimes the mean of B will come out higher and
 sometimes C's mean will be higher, because there is no significant
 difference between them.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This talks about emph{means</span> rather
-than individual observations; in individual cases, sometimes even
-drug *A* will come out best. But we're interested in
-population means, since we want to do the greatest good for the
-greatest number.}\endnote{"Greatest good for the greatest number"
-is from Jeremy Bentham, 1748--1832, British
-philosopher and advocate of utilitarianism.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This talks about *means* rather  than individual observations; in individual cases, sometimes even  drug *A* will come out best. But we're interested in  population means, since we want to do the greatest good for the  greatest number. *Greatest good for the greatest number*  is from Jeremy Bentham, 1748--1832, British    philosopher and advocate of utilitarianism.</span>
 Another way is to draw a boxplot of pain-relief scores:
 
 
@@ -1627,7 +1727,9 @@ Another way is to draw a boxplot of pain-relief scores:
 ggplot(migraine2,aes(x=drug,y=painrelief))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+
+ 
 
 The medians of drugs B and C are actually exactly the same. Because
 the pain relief values are all whole numbers (and there are only 9 in
@@ -1671,6 +1773,8 @@ median_test(migraine2,painrelief,drug)
 ## 3   P-value 4.825801e-04
 ```
 
+ 
+
 Because the pain relief scores are integers, there are probably a lot
 of them equal to the overall median. There were 27 observations
 altogether, but Mood's median test will discard any that are equal to
@@ -1700,6 +1804,8 @@ pairwise_median_test(migraine2, painrelief, drug)
 ## 2 DrugA DrugC 0.000183    0.000548
 ## 3 DrugB DrugC 0.921       2.76
 ```
+
+ 
 
 Drug A gives worse pain relief (fewer hours) than both drugs B and C,
 which are not significantly different from each hour. This is exactly
@@ -1731,7 +1837,7 @@ B            28         22          20        18
 
 
 The data were saved as
-[http://www.utsc.utoronto.ca/~butler/c32/disease.txt](http://www.utsc.utoronto.ca/~butler/c32/disease.txt). In that
+[link](http://www.utsc.utoronto.ca/~butler/c32/disease.txt). In that
 file, the columns are coded by two letters: a `p` or an
 `a` to denote presence or absence of disease, and an `x`
 or a `y` to denote location X or Y. The data are separated by
@@ -1778,6 +1884,8 @@ tbl
 ## 2 B          28    22    20    18
 ```
 
+ 
+
 I was thinking ahead, since I'll be wanting to have one of my columns
 called `disease`, so I'm *not* calling the data frame
 `disease`. 
@@ -1789,7 +1897,7 @@ I mixed up the information in the two header rows into one.
 
 
 
-(b) Explain briefly how these data are not "tidy".
+(b)??part:nottidy?? Explain briefly how these data are not "tidy".
 
 
 Solution
@@ -1838,6 +1946,8 @@ free to call it `temp` for now if you prefer:
 ## 8 B       ay            18
 ```
 
+ 
+
 This also works ("gather together everything but `Species`"):
 
 
@@ -1859,6 +1969,8 @@ This also works ("gather together everything but `Species`"):
 ## 8 B       ay            18
 ```
 
+ 
+
 
 
 (d) Explain briefly how the data frame you just created is
@@ -1872,7 +1984,7 @@ The column I called `disloc` actually contains *two*
 variables, disease and location, which need to be split up. A
 check on this is that we 
 have two columns (not including the frequencies), but back in
-(b) we found *three* variables, so there
+(??part:nottidy??) we found *three* variables, so there
 ought to be three non-frequency columns.
 
 
@@ -1905,7 +2017,10 @@ splitting after the first character, thus:
 ## 8 B       a       y               18
 ```
 
+ 
+
 This is now tidy: eight frequencies in rows, and three non-frequency
+columns. (Go back and look at your answer to part (??part:nottidy??)
 and note that the issues you found there have all been resolved now.)
 
 
@@ -1945,6 +2060,8 @@ tbl.4
 ##       B 18 22
 ```
 
+ 
+
 This shows a pair of contingency tables, one each for each of the two
 locations (in general, the variable you put last on the right side of
 the model formula). You can check that everything corresponds with the
@@ -1977,6 +2094,8 @@ ftable(tbl.4)
 ##         p                28 22
 ```
 
+ 
+
 This is the same output, but shown more compactly. (Rather like a
 vertical version of the original data, in fact.) I like
 `ftable` better because it displays the data in the smallest
@@ -1986,8 +2105,8 @@ taste. Pick one and tell me why you prefer it, and I'm good.
 
 That's the end of what you had to do, but I thought I would do some
 modelling and try to find out what's associated with disease. The
-appropriate modelling with frequencies is called ``log-linear
-modelling'', and it assumes that the log of the frequencies has a
+appropriate modelling with frequencies is called "log-linear modelling", 
+and it assumes that the log of the frequencies has a
 linear relationship with the effects of the other variables. This is
 not quite as simple as the log transformations we had before, because
 bigger frequencies are going to be more variable, so we fit a
@@ -2013,6 +2132,8 @@ drop1(model.1,test="Chisq")
 ## <none>                      0.000000 55.291                  
 ## Species:location:disease  1 0.070257 53.362 0.070257    0.791
 ```
+
+ 
 
 The residuals are all zero because this model fits perfectly. The
 problem is that it is very complicated, so it offers no insight. So
@@ -2056,6 +2177,8 @@ drop1(model.2,test="Chisq")
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+ 
+
 Notice how `update` saved us having to write the whole model
 out again.
 
@@ -2085,6 +2208,8 @@ drop1(model.3,test="Chisq")
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+ 
+
 `Species:disease` comes out, but it looks as if
 `Species:location` will have to stay:
 
@@ -2106,6 +2231,8 @@ drop1(model.4,test="Chisq")
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
+
+ 
 
 `Species:location` indeed stays. That means that anything
 "contained in" it also has to stay, regardless of its main
@@ -2130,6 +2257,8 @@ drop1(model.5,test="Chisq")
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+ 
+
 And now we have to stop.
 
 What does this final model mean? Well, frequency depends significantly
@@ -2148,6 +2277,8 @@ xtabs(frequency~Species+location,data=tbl.3)
 ##       A 82 22
 ##       B 48 40
 ```
+
+ 
 
 Most of the species A's are at location X, but the species B's are
 about evenly divided between the two locations. Or, if you prefer
@@ -2187,6 +2318,8 @@ xtabs(frequency~disease+Species)
 ##       p 30 30
 ```
 
+ 
+
 For species A, disease is present 75\% of the time, but for species B
 it's present less than 40\% of the time. So in this one there ought to be a
 significant association between disease and species:
@@ -2209,6 +2342,8 @@ drop1(xx.1,test="Chisq")
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+ 
+
 And so there is. Nothing can come out of the model. (This is the same
 kind of test as a chi-squared test for association, if you know about
 that.  The log-linear model is a multi-variable generalization of that.)
@@ -2218,18 +2353,16 @@ that.  The log-linear model is a multi-variable generalization of that.)
 
 
 
-##  Ken's cars
+##  Cars
 
 
  My cars data file can be found at
-[http://www.utsc.utoronto.ca/~butler/c32/cars.csv](http://www.utsc.utoronto.ca/~butler/c32/cars.csv). We're doing
-this question in R now, but later we'll be doing the exact same thing
-in SAS, so you'll be able then to compare your results.  The values in
+[link](http://www.utsc.utoronto.ca/~butler/c32/cars.csv). 
+The values in
 the data file are separated by commas; the car names are up to 29
 characters long.  Display your results for each part after (a). In R,
 displaying a `tibble` normally shows its first ten lines, which
-is all you need here; there's no need to display all the lines unless
-you want to.
+is all you need here; there's no need to display all the lines.
 
 
 (a) Read the data into R and list the values.
@@ -2277,6 +2410,8 @@ cars
 ## 10 Audi 5000           20.3   2.83         5   103 Germany
 ## # ... with 28 more rows
 ```
+
+ 
       
 
 
@@ -2309,6 +2444,8 @@ cars %>% select(car,country)
 ## # ... with 28 more rows
 ```
 
+ 
+
 This *almost* works, but not quite:
 
 
@@ -2332,6 +2469,8 @@ cars %>% select(starts_with("c"))
 ## 10 Audi 5000                  5 Germany
 ## # ... with 28 more rows
 ```
+
+ 
 
 It gets *all* the columns that start with `c`, which
 includes `cylinders` as well.
@@ -2366,6 +2505,8 @@ cars %>% select(-hp)
 ## 10 Audi 5000           20.3   2.83         5 Germany
 ## # ... with 28 more rows
 ```
+
+ 
       
 
 
@@ -2395,6 +2536,8 @@ cars %>% filter(cylinders==8)
 ## 7 Mercury Grand Marquis      16.5   3.96         8   138 U.S.   
 ## 8 Chevy Caprice Classic      17     3.84         8   130 U.S.
 ```
+
+ 
 8 of them, all from the US.
       
 
@@ -2423,6 +2566,8 @@ cars %>% filter(hp<=70) %>% select(cylinders:hp)
 ## 5         4    68
 ## 6         4    68
 ```
+
+ 
 
 Cylinders and horsepower are consecutive columns, so we can select
 them either using the colon `:` or by
@@ -2457,6 +2602,8 @@ cars %>% filter(cylinders==4) %>% summarize(m=mean(MPG),s=sd(MPG))
 ## 1  30.0  4.18
 ```
 
+ 
+
 Or you can get the mean and SD of gas mileage for all numbers of
 cylinders, and pick out the one you want:
 
@@ -2475,6 +2622,8 @@ cars %>% group_by(cylinders) %>% summarize(m=mean(MPG),s=sd(MPG))
 ## 4         8  17.4  1.19
 ```
 
+ 
+
 Top row is the same as before. And since the output is a data frame,
 you can do any of these things with *that*, for example:
 
@@ -2491,6 +2640,8 @@ filter(cylinders==4)
 ##       <int> <dbl> <dbl>
 ## 1         4  30.0  4.18
 ```
+
+ 
 
 to pick out just the right row.
 This is a very easy kind of question to set on an exam. Just so you know.

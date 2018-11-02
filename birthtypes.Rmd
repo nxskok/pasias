@@ -1,0 +1,199 @@
+##  Types of childbirth
+
+
+ Childbirths can be of two types: a
+"vaginal" birth in which the child is born through the mother's
+ vagina in the normal fashion, and a "cesarean section" where a
+ surgeon cuts through the wall of the mother's abdomen, and the baby
+ is delivered through the incision. Cesarean births are used when
+ there are difficulties in pregnancy or during childbirth that would
+ make a vaginal birth too risky.
+A hospital kept track of the number of vaginal and Cesarean births
+ for the twelve months of 2012. Of interest is whether the Cesarean
+ rate (the ratio of Cesarean births to all births) was increasing,
+ decreasing or remaining stable over that time.
+The data may be found at
+ [link](http://www.utsc.utoronto.ca/~butler/c32/birthtypes.txt). The
+ columns are the names of the months (in 2012), the number of cesarean
+ births and the number of vaginal births. (The data are not real, but
+ are typical of the kind of thing you would observe.)
+
+
+(a) Read the data into R and display your data frame.
+
+Solution
+
+
+This is a space-delimited text file, which means:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/birthtypes.txt"
+births=read_delim(my_url, " ")
+births
+```
+
+ 
+
+Some text and two numbers for each month. Check.
+
+
+(b) Create a column of actual dates and also a column of
+cesarean rates, as defined above. Store your new data frame in a
+variable and display it. For the dates, assume that each date is of
+the 1st of the month that it belongs to.
+
+Solution
+
+
+The easiest way is to use `str_c` or `paste` to
+create a text date with year, month and day in some order, and
+then to use the appropriate function from `lubridate` to
+turn that into an actual `date`. If you use
+`str_c`, you (probably) need the `sep` thing to
+make sure the values get a space between them; `paste`
+does this automatically. (The next question is whether
+`ymd` or whatever can cope without spaces, but I'm not
+exploring that.)
+The cesarean rate is `cesarean` divided by
+`cesarean` plus `vaginal`:
+```{r }
+library(lubridate)
+b2 = births %>% mutate(datestr=str_c("2012",month,"1",sep=" ")) %>%
+mutate(thedate=ymd(datestr)) %>%
+mutate(cesarean_rate=cesarean/(cesarean+vaginal))
+b2
+```
+
+        
+
+If you don't like that, create columns that contain 2012 and 1 all
+the way down. If you set a column name equal to a single value, that
+single value gets repeated the right number of times:\endnote{This is
+an example of R's so-called "recycling rules".}
+
+```{r }
+births %>% mutate(year=2012,day=1)
+```
+
+ 
+
+and then use `unite` as in class. The distinction is that
+`unite` *only* works on columns. It also "swallows up"
+the columns that it is made out of; in this case, the original year,
+month and day disappear:
+
+```{r }
+b3 = births %>% mutate(year=2012, day=1) %>%
+unite(datestr,year,month,day) %>%
+mutate(thedate=ymd(datestr)) %>%
+mutate(cesarean_rate=cesarean/(cesarean+vaginal))
+b3
+```
+
+ 
+
+I don't mind which order you glue your year, month and day together,
+as long as you construct the dates with the consistent
+`lubridate` function. 
+
+
+
+(c) Plot the cesarean rate against time, with a smooth
+trend. Do you see an upward trend, a downward trend, no trend, or
+something else?
+
+Solution
+
+
+This is a scatterplot with time on the $x$ axis:
+```{r }
+ggplot(b2,aes(x=thedate,y=cesarean_rate))+geom_point()+geom_smooth()
+```
+
+        
+
+I like this better than joining the points by lines, since we already
+have a trend on the plot, but you can do that in some contrasting way:
+
+```{r }
+ggplot(b2,aes(x=thedate,y=cesarean_rate))+geom_point()+
+geom_line(linetype="dashed")+geom_smooth()
+```
+
+ 
+I see a downward trend. ("A downward trend with a wiggle" if you
+like.) I didn't ask for any explanation. There is a certain unevenness
+in the trend of the actual data, but the overall picture appears to be
+downhill. 
+
+
+(d) Try to summarize the trend you just found with a
+correlation. What goes wrong? How can you fix it?
+
+Solution
+
+
+Something like this is the obvious guess:
+
+```{r error=T}
+with(b2, cor(thedate, cesarean_rate))
+```
+
+ 
+
+This fails because `thedate` is not of itself a number. But
+lurking in the background is how the date is actually
+*represented*: as a number of days since Jan 1, 1970. Thus,
+passing it through `as.numeric` might turn it into that:
+
+```{r }
+b2 %>% mutate(numeric_date=as.numeric(thedate)) -> b5
+b5
+```
+
+ 
+
+A little mental calculation suggests that these dates in 2012 are a
+bit over 40 years, that is $40 \times 365 \simeq 14000$ days, since
+the "zero" date of Jan 1, 1970, and so it turns out. This suggests
+that we can calculate a correlation with the numeric dates:
+
+```{r }
+with(b5, cor(numeric_date, cesarean_rate))
+```
+
+ 
+
+and we can make a test of the null hypothesis that the correlation is
+zero (against a two-sided alternative) thus:
+
+```{r }
+with(b5, cor.test(numeric_date, cesarean_rate))
+```
+
+ 
+
+That downward trend is more than just chance, with a P-value just
+under 0.01. Having said that, though, if you look at the confidence
+interval for the correlation, it includes almost all the negative
+values it could be, so that with only 12 observations we really know
+very little about the correlation other than that it appears to be
+negative. 
+
+Extra: 
+ In practice, you would typically have a much longer time series
+ of measurements than this, such as monthly measurements for
+ several years. In looking at only one year, like we did here,
+ we could get trapped by seasonal effects: for example, cesarean
+ rates might always go down through the year and then jump up
+ again in January. Looking at several years would enable us to
+ disentangle seasonal effects that happen every year from
+ long-term trends. (As an example of this, think of Toronto
+ snowfall: there is almost always snow in the winter and there
+ is never snow in the summer, a seasonal effect, but in
+ assessing climate change, you want to think about long-term
+ trends in snowfall, after allowing for which month you're
+ looking at.)
+ 
+
+

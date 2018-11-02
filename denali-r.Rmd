@@ -1,0 +1,378 @@
+##  Wolves and caribou
+
+
+ In Denali National Park, Alaska, the size of the wolf
+population depends on the size of the caribou population (since
+wolves hunt and kill caribou). This is a large national park, so
+caribou are found in very large herds, so big, in fact, that the
+well-being of the entire herd is not threatened by wolf
+attacks.
+`r tufte::margin_note("In fact, it is believed that wolves help keep caribou    herds strong by preventing over-population: that is, the weakest    caribou are the ones taken by wolves.")` 
+Can the size of the caribou population
+be used to predict the size of the wolf population?
+The data can be found at
+[link](http://www.utsc.utoronto.ca/~butler/c32/caribou.txt). The
+columns 
+are: the date of the survey,
+`r tufte::margin_note("The survey is always taken in    the fall, but the date varies.")` 
+the name of the park employee in charge  of the survey, the caribou population (in hundreds) and the wolf  population (actual count).
+`r tufte::margin_note("Counting animals in a region,    especially rare, hard-to-find animals, is a whole science in    itself. These numbers are probably estimates (with some    uncertainty).")` 
+
+
+(a) Take a look at the data file. How would you describe its
+format? Read it into R, and check that you got something sensible.
+
+
+Solution
+
+
+This looks at first sight as if it's separated by spaces, but
+most of the data values are separated by *more than one*
+space. If you look further, you'll see that the values are
+*lined up in columns*, with the variable names aligned at
+the top. This is exactly the kind of thing that
+`read_table` will read. We start with the usual
+`library(tidyverse)`:
+```{r }
+library(tidyverse)
+my_url="http://www.utsc.utoronto.ca/~butler/c32/caribou.txt"
+denali=read_table(my_url)
+denali
+```
+
+     
+
+That worked: four columns with the right names, and the counts of
+caribou and wolf are numbers. There are only seven years of surveys;
+in real-life data you would have more. But the point here is working
+with dates.
+
+The only (small) weirdness is that the
+dates are text rather than having been converted into dates. This is
+because they are not year-month-day, which is the only format that
+gets automatically converted into dates when read in. (You could use
+`mdy` from `lubridate` to make them dates.)
+
+Extra: you might have wondered how the names survived, even though
+they have spaces in them, sometimes more than one. Here's how the file looks:
+
+
+```
+
+date       name             caribou wolf
+09/01/1995 David S.         30       66
+09/24/1996 Youngjin K.      34       79
+10/03/1997 Srinivasan M.    27       70
+09/15/1998 Lee Anne J.      25       60
+09/08/1999 Stephanie T.     17       48
+09/03/2000 Angus Mc D.      23       55
+10/06/2001 David S.         20       60
+
+```
+
+
+What `read_table` looks for is columns that contain spaces
+*all the way down*, and separates the values there. For example,
+between the year of`date` and the first name in `name`
+there is a space all the way down. After the names and before the
+caribou counts there are several spaces, and there is one space
+between the words `caribou` and `wolf` in the header
+line that goes all the way down. Thus four columns, `date`,
+`name`, `caribou` and `wolf`. This means that the
+spaces within the names don't cause any problems at all, since the
+spaces aren't in the same place in *every* line.
+`r tufte::margin_note("The only way this would fail is if *every* first name had the same number of letters in it; then the space between first name and initial of last name *would* be in the same place in every line.")`
+
+
+
+(b) Create a new data frame where the column labelled
+`date` is now a genuine R `Date`, using something
+from `lubridate`.
+
+Solution
+
+
+What you do is to look at the format of the dates as they are
+now. They appear to be month-day-year, American
+style.
+`r tufte::margin_note("Not a surprise since Denali National Park is in  Alaska.")`  
+Thus the function needed is `mdy`. It doesn't matter
+whether the months are names or numbers:
+```{r }
+denali %>% mutate(date=mdy(date)) -> denali
+denali
+```
+
+     
+
+I lived on the edge and overwrote both my column and the whole data
+frame.
+`r tufte::margin_note("It's actually not *really* living on the edge,  because if it doesn't work, you go back and read the data in from  the file again.")`
+
+The dates are displayed in ISO format, year-month-day. You see at the
+top of the column that they now really *are* dates, not just
+pieces of text that look like dates. 
+
+
+(c) Create new columns containing the days of
+the week and the month names for the dates.
+
+
+Solution
+
+
+This involves digging in the `lubridate` help to find out how to extract things from a date. It turns out that `wday` extracts the day of the week from a date, by default as a number, and `month` gets the month, also by default as a number:
+```{r }
+denali %>% mutate(mon=month(date), wd=wday(date))
+```
+
+     
+
+This is not what we wanted, though; we wanted the names of the months
+and of the days. To fix that, add `label=T` to both functions:
+
+```{r }
+denali %>% mutate(mon=month(date, label=T), wd=wday(date, label=T))
+```
+
+ 
+and that cracks it.
+
+No need to save this data frame anywhere, since we're not using any of
+this later.
+
+Extra: the `ord` means "ordered factor", which makes sense
+since these are categorical variables with a natural order. This means
+that you could do something like counting the number of surveys in
+each month like this:
+
+```{r }
+denali %>% mutate(mon=month(date, label=T), wd=wday(date, label=T)) %>%
+count(mon)
+```
+
+ 
+      
+
+
+(d)??part:scatter?? Enough playing around with dates. Make a scatterplot of
+caribou population (explanatory) against wolf population
+(response). Do you see any relationship?
+
+
+Solution
+
+
+Nothing terribly surprising here:
+```{r }
+ggplot(denali, aes(x=caribou, y=wolf))+geom_point()
+```
+
+       
+If you like, add a smooth trend to it:
+`r tufte::margin_note("This wiggles more than  I would like, with such a small number of observations. Try putting  someting like *span=2* in the smooth to make it less wiggly.")`
+
+```{r }
+ggplot(denali, aes(x=caribou, y=wolf))+geom_point()+geom_smooth(se=F)
+```
+
+       
+
+This is an upward trend: when one population is large, the other one
+is large too. This is typical for predator-prey relationships: when
+there is more to eat (more caribou) the wolf population goes up, and
+when less, it goes down. 
+      
+
+
+(e) On your plot from the previous part, label each point with
+the year it belongs to. You can do this in two steps: first make a
+new column containing just the years, and then use it as labels
+for the points on the plot.
+
+Solution
+
+
+I'm going to use `geom_text_repel` for the labels from package
+`ggrepel`. The year values are gotten using the
+`lubridate` function `year`:
+
+```{r }
+denali %>% mutate(year=year(date)) %>%
+ggplot(aes(x=caribou, y=wolf, label=year))+geom_point()+geom_text_repel()
+```
+
+ 
+
+I thought about joining up the points in year order. This is actually
+*not* `geom_line` as you would have guessed, since what that
+does is to join points in the order of the variable on the
+$x$-axis.
+`r tufte::margin_note("I have to say that I didn't know that until just now.")`
+To join points in the order that they are in the data (what we want
+here, because the points are in time order in the data), use instead 
+`geom_path`:
+
+```{r }
+denali %>% mutate(year=year(date)) %>%
+ggplot(aes(x=caribou, y=wolf, label=year))+geom_point()+
+geom_text_repel()+geom_path()
+```
+
+ 
+
+In 1996, both populations were large, and both showed a steady decline
+until 1999. In 2000 and 2001, both populations seemed to be on the way
+up again, and you can imagine that in a couple of years, things would
+go back to about where they were in 1995.
+
+
+
+(f) Make a plot of caribou population against time (this is done
+the obvious way). What seems to be happening to the caribou
+population over time?
+
+
+Solution
+
+
+Make a scatterplot, with the survey date as explanatory
+variable, and caribou population as response (since time always
+goes on the $x$-axis):
+```{r }
+ggplot(denali, aes(x=date, y=caribou))+geom_point()+geom_line()
+```
+
+ 
+
+I used an ordinary `geom_line` this time, to connect neighbouring
+years, as is often done with a time series. The overall trend is
+downward, though the 1999 value might be a low from which the
+population is recovering.
+      
+
+
+(g) The caribou and wolf populations over time are 
+really "time series". 
+See if you can make a plot of *both* the
+caribou and wolf populations against time. You can make two
+$y$-axes, one for caribou and one for wolf; this will probably
+require some research on your part to figure out.
+
+
+Solution
+
+
+The obvious starting point is to note that both the
+`caribou` and `wolf` columns are animal
+populations, just of different animals. One way of plotting both
+populations is to `gather` them up into one column, and
+then plot them against time, with the two animals distinguished
+by colour:
+```{r }
+denali %>% gather(animal, population, caribou:wolf)  %>%
+ggplot(aes(x=date, y=population, colour=animal))+
+geom_point()+geom_line()
+```
+
+       
+This is not quite the story, though, because the caribou and wolf
+populations are on different scales. The caribou population is
+numbered in hundreds, while the wolf population is an actual count. 
+
+The surveys are late in the year, so the one that is nearly in 1996 is
+actually the 1995 survey.
+
+What would be nice would be to have a secondary $y$-axis, so that
+there were two $y$-scales, one for each animal. This is very easy to
+manipulate, though (you can change either scale and get a very
+different-looking graph), so we ought to be careful.
+
+All right, so let's put the caribou on the left:
+
+```{r }
+ggplot(denali, aes(x=date, y=caribou))+geom_line()
+```
+
+ 
+
+Or we can add a `colour` aesthetic to distinguish the caribou
+from the wolf populations, that we're going to add in a moment. This looks rather odd at first:
+
+```{r }
+ggplot(denali, aes(x=date, y=caribou, colour="caribou"))+geom_line()
+```
+
+ 
+
+Now we think about adding the wolf numbers. This is done by adding a
+second `geom_line`, overriding the `y` and the
+`colour` to specify that this is wolf now:
+
+```{r }
+ggplot(denali, aes(x=date, y=caribou, colour="caribou"))+
+geom_line()+
+geom_line(aes(y=wolf, colour="wolf"))
+```
+
+ 
+
+What has happened is that we get lines of different colour for each
+animal, with a legend. So far so good. The problem is that the wolf
+numbers are about 2.5 times bigger than the caribou
+numbers,
+`r tufte::margin_note("Which means, if you stop to think about it, that  there are *actually* about 40 times more caribou than wolves.")`
+so that
+we don't get a good sense of how they go up and down together. If we
+divided the wolf numbers by 2.5, we would see this better:
+
+```{r }
+ggplot(denali, aes(x=date, y=caribou, colour="caribou"))+
+geom_line()+
+geom_line(aes(y=wolf/2.5, colour="wolf"))
+```
+
+ 
+
+Now we get to the secondary $y$-axis. We want to label this
+`wolf` and have it reflect that we actually made the graph by
+dividing the wolf values by 2.5:
+
+```{r }
+ggplot(denali, aes(x=date, y=caribou, colour="caribou"))+
+geom_line()+
+geom_line(aes(y=wolf/2.5, colour="wolf"))+
+scale_y_continuous(sec.axis=sec_axis(~./2.5,name="wolf"))
+```
+
+ 
+
+Woo, and, very possibly, hoo. I got most of these ideas from
+[link](https://rpubs.com/MarkusLoew/226759). 
+
+Now we see how the populations vary over time, and also that they vary
+together. 
+
+This is about the only double-$y$-axis setup that I like, with scales
+chosen so that both the series vary about the same amount. By
+"discreetly" changing the wolf scale, you could make it look as if
+one population was much bigger than the other, or varied much more
+than the other. Lies and statistics.
+
+In my opinion, too many people just plot series against time, possibly
+with a second $y$-axis.
+`r tufte::margin_note("And all too often with Excel (spit)")`.
+Variables that vary together, like the wolf
+and caribou populations here, ought to be plotted \emph{against each
+other} on a scatterplot, possibly with the time points labelled.
+
+The ambitious among you may like to compare the graphs here with
+other predator-prey relationships. If you are of a mathematical bent,
+you might look into the Lotka-Volterra equations, which is a system of
+two differential equations describing how changes in one population
+cause changes in the other population.
+
+      
+
+
+

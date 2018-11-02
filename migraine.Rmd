@@ -2,7 +2,7 @@
 
 
  The data in
-[http://www.utsc.utoronto.ca/~butler/c32/migraine.txt](http://www.utsc.utoronto.ca/~butler/c32/migraine.txt) are from a
+[link](http://www.utsc.utoronto.ca/~butler/c32/migraine.txt) are from a
 study of pain relief in migraine headaches. Specifically, 27 subjects
 were randomly assigned to receive *one* of three pain relieving
 drugs, labelled A, B and C. Each subject reported the number of hours
@@ -21,9 +21,9 @@ work and `read_delim` will not.
 Solution
 
 
-The key is two things: the data values are \emph{lined up in
-columns}, and \emph{there is more than one space between
-values}. The second thing is why `read_delim` will not
+The key is two things: the data values are *lined up in        columns*, and 
+*there is more than one space between  values*. 
+The second thing is why `read_delim` will not
 work. If you look carefully at the data file, you'll see that
 the column names are above and aligned with the columns, which
 is what `read_table` wants. If the column names had
@@ -33,25 +33,11 @@ is what `read_table` wants. If the column names had
 my_url="http://www.utsc.utoronto.ca/~butler/c32/migraine.txt"
 migraine=read_table(my_url)
 migraine
-``` 
+```
+
+ 
 
 Success.
- We'll not be reading data like this into SAS in this course, but you
- might like to know how it goes (for future reference). It uses a
- `data` step, like we've been using to create new variables, thus:
- 
- \begin{Datastep}
- filename myurl url 'http://www.utsc.utoronto.ca/~butler/c32/migraine.txt';
- data pain;
-   infile myurl firstobs=2;
-   input druga drugb drugc;
- \end{Datastep}
- 
- \begin{Sascode}[store=maqax]
- proc print;  
- \end{Sascode}
- 
- \Listing[store=maqax, fontsize=footnotesize]{maqaxx}
 
 
 
@@ -107,7 +93,9 @@ columns need to be gathered together. Use a pipe to name the
 dataframe to work with. I'm going to save my new data frame:
 ```{r }
 (migraine %>% gather(drug,painrelief,DrugA:DrugC) -> migraine2)
-``` 
+```
+
+ 
 
 The brackets around the whole thing print out the result as well as
 saving it. If you don't have those, you'll need to type
@@ -136,14 +124,18 @@ would normally insist on doing.
 ```{r }
 painrelief.1=aov(painrelief~drug,data=migraine2)
 summary(painrelief.1)
-``` 
+```
+
+ 
 
 There are (strongly) significant differences among the drugs, so it is
 definitely worth firing up Tukey to figure out where the differences are:
 
 ```{r }
 TukeyHSD(painrelief.1)  
-``` 
+```
+
+ 
 
 Both the differences involving drug A are significant, and because a
 high value of `painrelief` is better, in both cases drug A is
@@ -157,19 +149,17 @@ migraine %>%
 gather(drug,painrelief,DrugA:DrugC) %>%
 aov(painrelief~drug,data=.) %>%
 summary()
-``` 
+```
+
+ 
 
 with the same results as before. Notice that I never actually created
 a second data frame by name; it was created by `gather` and
 then immediately used as input to `aov`.\endnote{And then thrown
 away.} I also used the
-`data=.` trick to use ``the data frame that came out of the
-previous step'' as my input to `aov`.
+`data=.` trick to use "the data frame that came out of the previous step" as my input to `aov`.
 
-Read the above like this: ``take `migraine`, and then gather
-together the `DrugA` through `DrugC` columns into a
-column `painrelief`, labelling each by its drug, and then do an
-ANOVA of `painrelief` by `drug`, and then summarize the results.''
+Read the above like this: "take `migraine`, and then gather together the `DrugA` through `DrugC` columns into a column `painrelief`, labelling each by its drug, and then do an ANOVA of `painrelief` by `drug`, and then summarize the results."
 
 What is even more alarming is that I can feed the output from
 `aov` straight into `TukeyHSD`:
@@ -179,7 +169,9 @@ migraine %>%
 gather(drug,painrelief,DrugA:DrugC) %>%
 aov(painrelief~drug,data=.) %>%
 TukeyHSD()
-``` 
+```
+
+ 
 
 I wasn't sure whether this would work, since the output from
 `aov` is an R `list` rather than a data frame, but the
@@ -196,7 +188,9 @@ gather(drug,painrelief,DrugA:DrugC) %>%
 aov(painrelief~drug,data=.) %>%
 { print(summary(.)) ; . } %>%
 TukeyHSD()
-``` 
+```
+
+ 
 
 The odd-looking second-last line of that uses that `.` trick
 for "whatever came out of the previous step". The thing inside the
@@ -234,7 +228,9 @@ drug:
 migraine2 %>%
 group_by(drug) %>%
 summarize(m=mean(painrelief))
-``` 
+```
+
+ 
 These confirm that A is worst, and there is nothing much to choose
 between B and C.
 You should *not* recommend drug C over drug B on this evidence,
@@ -245,18 +241,14 @@ mean pain relief score for drug A is expected to be worst, but between
 drugs B and C, sometimes the mean of B will come out higher and
 sometimes C's mean will be higher, because there is no significant
 difference between them.
-`r tufte::margin_note("This talks about emph{means")` rather
-than individual observations; in individual cases, sometimes even
-drug *A* will come out best. But we're interested in
-population means, since we want to do the greatest good for the
-greatest number.}\endnote{"Greatest good for the greatest number"
-is from Jeremy Bentham, 1748--1832, British
-philosopher and advocate of utilitarianism.}
+`r tufte::margin_note("This talks about *means* rather  than individual observations; in individual cases, sometimes even  drug *A* will come out best. But we're interested in  population means, since we want to do the greatest good for the  greatest number. *Greatest good for the greatest number*  is from Jeremy Bentham, 1748--1832, British    philosopher and advocate of utilitarianism.")`
 Another way is to draw a boxplot of pain-relief scores:
 
 ```{r }
 ggplot(migraine2,aes(x=drug,y=painrelief))+geom_boxplot()
-``` 
+```
+
+ 
 
 The medians of drugs B and C are actually exactly the same. Because
 the pain relief values are all whole numbers (and there are only 9 in
@@ -282,7 +274,9 @@ forget to use the right data frame:
 ```{r }
 library(smmr)
 median_test(migraine2,painrelief,drug)
-``` 
+```
+
+ 
 
 Because the pain relief scores are integers, there are probably a lot
 of them equal to the overall median. There were 27 observations
@@ -302,7 +296,9 @@ drugs, and then use Bonferroni to allow for your having done three tests:
 
 ```{r }
 pairwise_median_test(migraine2, painrelief, drug)
-``` 
+```
+
+ 
 
 Drug A gives worse pain relief (fewer hours) than both drugs B and C,
 which are not significantly different from each hour. This is exactly
