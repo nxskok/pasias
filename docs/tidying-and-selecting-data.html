@@ -178,6 +178,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="tidying-and-selecting-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">12.5</span> Location, species and disease in plants</a></li>
 <li><a href="tidying-and-selecting-data.html#cars"><span class="toc-section-number">12.6</span> Cars</a></li>
 <li><a href="tidying-and-selecting-data.html#number-1-songs"><span class="toc-section-number">12.7</span> Number 1 songs</a></li>
+<li><a href="tidying-and-selecting-data.html#bikes-on-college"><span class="toc-section-number">12.8</span> Bikes on College</a></li>
 </ul></li>
 <li class="has-sub"><a href="regression.html#regression"><span class="toc-section-number">13</span> Regression</a><ul>
 <li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">13.1</span> Rainfall in California</a></li>
@@ -375,7 +376,7 @@ attendance was more than 30,000, showing only the columns
 (just count those too)?</li>
 </ol>
 <p>Solution</p>
-<p>Two steps, since we selecting rows <em>and</em> columns:</p>
+<p>Two steps, since we selecting rows <em>and</em> columns.</p>
 <div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb739-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(attendance<span class="op">&gt;</span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb739-2" data-line-number="2"><span class="kw">select</span>(<span class="kw">c</span>(attendance,Daynight))</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 2
@@ -389,8 +390,7 @@ attendance was more than 30,000, showing only the columns
 ## 6      42419 D       
 ## 7      33086 D       
 ## 8      37929 D</code></pre>
-<p>The column names do not need quotes; this is part of the nice stuff
-about <code>dplyr</code>. Or this way, since we are selecting
+<p>Or this way, since we are selecting
 <em>consecutive</em> columns:</p>
 <div class="sourceCode" id="cb741"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb741-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(attendance<span class="op">&gt;</span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb741-2" data-line-number="2"><span class="kw">select</span>(<span class="kw">c</span>(Daynight<span class="op">:</span>attendance))  </a></code></pre></div>
@@ -1867,10 +1867,9 @@ This is a very easy kind of question to set on an exam. Just so you know.</p>
 <div id="number-1-songs" class="section level2">
 <h2><span class="header-section-number">12.7</span> Number 1 songs</h2>
 <p>The data file
-<a href="http://stat405.had.co.nz/data/billboard.csv" class="uri">http://stat405.had.co.nz/data/billboard.csv</a> contains a lot of
+<a href="http://stat405.had.co.nz/data/billboard.csv">link</a> contains a lot of
 information about songs popular in 2000. This dataset is untidy. Our
-ultimate aim is to answer ``which song occupied the #1 position for
-the largest number of weeks?’’. To do that, we will build a pipe that
+ultimate aim is to answer “which song occupied the #1 position for the largest number of weeks?”. To do that, we will build a pipe that
 starts from the data frame read in from the URL above, and finishes
 with an answer to the question. I will take you through this step by
 step. Each part will involve adding something to the pipe you built
@@ -2254,8 +2253,7 @@ making it easy to see which song it was.</li>
 ## 16 What A Girl Wants                         2
 ## 17 With Arms Wide Open                       1</code></pre>
 <p>Then you can scan down the <code>n</code> column, find that the
-biggest number is 11, and say: it’s the song ``Independent Women Part
-I’’ by Destiny’s Child. This is 3 points (out of 4, when the question
+biggest number is 11, and say: it’s the song “Independent Women Part I” by Destiny’s Child. This is 3 points (out of 4, when the question
 was to be handed in).</p>
 <p>But, this is a data frame, so anything we can do to a data frame we
 can do to this, like listing out only the row(s) where <code>n</code> is
@@ -2357,6 +2355,801 @@ closely much earlier than this, in the early 1980s in the UK. I
 remember both Madonna and U2 when they <em>first</em> became
 famous. U2’s first single was called “Fire” and it just scraped into
 the UK top 40. Things changed after that.)</p>
+</div>
+<div id="bikes-on-college" class="section level2">
+<h2><span class="header-section-number">12.8</span> Bikes on College</h2>
+<p>The City of Toronto collects all kinds of data on aspects of
+life in the city. See
+<a href="http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=1a66e03bb8d1e310VgnVCM10000071d60f89RCRD">link</a>. One
+collection of data is records of the number of cyclists on certain
+downtown streets. The data in
+<a href="http://www.utsc.utoronto.ca/~butler/c32/bikes.csv">link</a> are a record
+of the cyclists on College Street on the block west from Huron to
+Spadina on September 24, 2010. In the spreadsheet, each row relates to
+one cyclist. The first column is the time the cyclist was observed (to
+the nearest 15 minutes). After that, there are four pairs of
+columns. The observer filled in (exactly) one X in each pair of
+columns, according to whether (i) the cyclist was male or female, (ii)
+was or was not wearing a helmet, (iii) was or was not carrying a
+passenger on the bike, (iv) was or was not riding on the sidewalk. We
+want to create a tidy data frame that has the time in each row, and
+has columns containing appropriate values, often <code>TRUE</code> or
+<code>FALSE</code>, for each of the four variables measured.</p>
+<p>I will lead you through the process, which will involve developing a
+(long) pipe, one step at a time.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Take a look at the spreadsheet (using Excel or similar:
+this may open when you click the link). Are there any obvious
+header rows? Is there any extra material before the data start?
+Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>This is what I see (you should see something that looks like this):</p>
+<p><img src="bikes-ss.png" /></p>
+<p>There are really <em>two</em> rows of headers (the rows
+highlighted in yellow). The actual information that says what
+the column pair is about is in the first of those two rows, and
+the second row indicates which category of the information above
+this column refers to.
+This is not the usual way that the column headers encode what
+the columns are about: we are used to having <em>one</em> column
+<code>gender</code> that would take the values <code>female</code> or
+<code>male</code>, or a column <code>helmet</code> containing the values
+<code>yes</code> or <code>no</code>. (You might be sensing
+<code>gather</code> here, which may be one way of tackling this, but
+I lead you into another idea below.)
+There are also six lines above the highlighted ones that contain
+background information about this study. (This is where I got
+the information about the date of the study and which block of
+which street it is about.)
+I am looking for two things: the apparent header line is
+actually two lines (the ones in yellow), and there are extra
+lines above that which are not data.</p>
+<p>(b)??part:firstpart?? Read the data into an R data
+frame. Read <em>without</em> headers, and instruct R how many lines
+to skip over using <code>skip=</code> and a suitable number.
+When this is working, display the first few lines of your data
+frame. Note that your columns have names <code>X1</code> through
+<code>X9</code>.</p>
+<p>Solution</p>
+<p>The actual data start on line 9, so we need to skip 8
+lines. <code>col_names=F</code> is the way to say that we have no
+column names (not ones that we want to use, anyway). Just
+typing the name of the data frame will display “a few” (that
+is, 10) lines of it, so that you can check it for
+plausibleness:</p>
+<div class="sourceCode" id="cb905"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb905-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/bikes.csv&quot;</span></a>
+<a class="sourceLine" id="cb905-2" data-line-number="2">bikes=<span class="kw">read_csv</span>(my_url,<span class="dt">skip=</span><span class="dv">8</span>,<span class="dt">col_names=</span>F)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   X1 = col_time(format = &quot;&quot;),
+##   X2 = col_character(),
+##   X3 = col_character(),
+##   X4 = col_character(),
+##   X5 = col_character(),
+##   X6 = col_character(),
+##   X7 = col_character(),
+##   X8 = col_character(),
+##   X9 = col_character()
+## )</code></pre>
+<div class="sourceCode" id="cb907"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb907-1" data-line-number="1">bikes</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 9
+##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  2    NA  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  3    NA  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  4    NA  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  5    NA  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  6 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  7    NA  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  8    NA  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  9    NA  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt; 
+## 10    NA  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+## # ... with 1,948 more rows</code></pre>
+<p>This seems to have worked: a column with times in it, and four pairs
+of columns, with exactly one of each pair having an X in it. The
+variable names <code>X1</code> through <code>X9</code> were generated by
+<code>read_csv</code>, as it does when you read in data with
+<code>col_names=F</code>. The times are correctly <code>time</code>s, and the
+other columns are all text. The blank cells in the spreadsheet have
+appeared in our data frame as “missing” (<code>NA</code>). The notation
+<code>&lt;NA&gt;</code> means “missing text” (as opposed to a missing number,
+say).</p>
+<p>The first line in our data frame contains the first 7:00 (am) cyclist,
+so it looks as if we skipped the right number of lines.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>What do you notice about the times in your first
+column? What do you think those “missing” times should be?</li>
+</ol>
+<p>Solution</p>
+<p>There are some times and some missing values. It seems a
+reasonable guess that the person recording the data only
+recorded a time when a new period of 15 minutes had begun, so
+that the missing times should be the same as the previous
+non-missing one: For
+example, the first five rows are cyclists observed at 7:00 am
+(or, at least, between 7:00 and 7:15). So they should be
+recorded as 7:00, and the ones in rows 7–10 should be
+recorded as 7:15, and so on.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Find something from the <code>tidyverse</code> that will
+fill
+<label for="tufte-mn-38" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-38" class="margin-toggle"><span class="marginnote">Oh, what a giveaway.</span>
+in those missing values with the right thing.
+Start a pipe from the data frame you read in, that updates the
+appropriate column with the filled-in times.</li>
+</ol>
+<p>Solution</p>
+<p><code>fill</code> from <code>tidyr</code> fills
+in the missing times with the previous non-missing
+value. (This will mean finding the help for <code>fill</code> in R
+Studio or online.)
+I told you it was a giveaway.
+If you look in the help for <code>fill</code> via <code>?fill</code>
+(or if you Google <code>tidyr::fill</code>, which is the full
+name for “the <code>fill</code> that lives in <code>tidyr</code>”),
+you’ll see that it requires up to two
+things (not including the data frame): a column to fill, and
+a direction to fill it (the default of “down” is exactly
+what we want). Thus:</p>
+<div class="sourceCode" id="cb909"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb909-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1)</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 9
+##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  2 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  3 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  4 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  5 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  6 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  7 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  8 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  9 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt; 
+## 10 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+## # ... with 1,948 more rows</code></pre>
+<p>Success!</p>
+<p>We will probably want to rename <code>X1</code> to something like
+<code>time</code>, so let’s do that now before we forget. There is a
+<code>rename</code> that does about what you’d expect:</p>
+<div class="sourceCode" id="cb911"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb911-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1)</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 9
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9   
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  2 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  3 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  4 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  5 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  6 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  7 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  8 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  9 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt; 
+## 10 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+## # ... with 1,948 more rows</code></pre>
+<p>The only thing I keep forgetting is that the syntax of <code>rename</code>
+is “new name equals old name”. Sometimes I think it’s the other way
+around, and then I wonder why it doesn’t work.</p>
+<p>I gave it a capital T so as not to confuse it with other things in R
+called <code>time</code>.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>R’s <code>ifelse</code> function works like <code>=IF</code> in
+Excel. You use it to create values for a new variable, for
+example in a <code>mutate</code>. The first input to it is a
+logical condition (something that is either true or false); the
+second is the value your new variable should take if the
+condition is true, and the third is the value of your new
+variable if the condition is false. Create a new column
+<code>gender</code> in your data frame that is “male” or
+“female” depending on the value of your <code>X2</code> column,
+using <code>mutate</code>. (You can assume that exactly one of the
+second and third columns has an <code>X</code> in it.) Add your code
+to the end of your pipe and display (the first 10 rows of) the
+result.</li>
+</ol>
+<p>Solution</p>
+<p>Under the assumption we are making, we only have to look
+at column <code>X2</code> and we ignore <code>X3</code> totally:</p>
+<div class="sourceCode" id="cb913"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb913-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb913-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">ifelse</span>(X2<span class="op">==</span><span class="st">&quot;X&quot;</span>,<span class="st">&quot;male&quot;</span>,<span class="st">&quot;female&quot;</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 10
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; 
+##  1 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  2 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  3 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  4 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  5 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  6 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  7 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  
+##  8 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  9 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  
+## 10 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+## # ... with 1,948 more rows</code></pre>
+<p>Oh, that didn’t work. The gender column is either <code>male</code> or
+missing; the two missing ones here should say <code>female</code>. What
+happened? Let’s just look at our logical condition this time:</p>
+<div class="sourceCode" id="cb915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb915-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb915-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">isX=</span>(X2<span class="op">==</span><span class="st">&quot;X&quot;</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 10
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    isX  
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt;
+##  1 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     TRUE 
+##  2 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     TRUE 
+##  3 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     TRUE 
+##  4 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     TRUE 
+##  5 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     TRUE 
+##  6 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     TRUE 
+##  7 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     NA   
+##  8 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     TRUE 
+##  9 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt;  NA   
+## 10 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     TRUE 
+## # ... with 1,948 more rows</code></pre>
+<p>This is not true and false, it is true and missing. The idea is that
+if <code>X2</code> is missing, we don’t (in general) know what its value
+is: it might even be <code>X</code>! So if <code>X2</code> is missing, any
+comparison of it with another value ought to be missing as well.</p>
+<p>That’s in general. Here, we know where those missing values came from:
+they were blank cells in the spreadsheet, so we actually have more
+information.</p>
+<p>Perhaps a better way to go is to test whether <code>X2</code> is missing (in which
+case, it’s a female cyclist). R has a function <code>is.na</code> which is
+<code>TRUE</code> if the thing inside it is missing and <code>FALSE</code> if
+the thing inside it has some non-missing value. In our case, it
+goes like this:</p>
+<div class="sourceCode" id="cb917"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb917-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb917-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(X2),<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 10
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; 
+##  1 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  2 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  3 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  4 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  5 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  6 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  7 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     female
+##  8 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+##  9 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt;  female
+## 10 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male  
+## # ... with 1,948 more rows</code></pre>
+<p>Or you can test <code>X3</code> for missingness: if missing, it’s male,
+otherwise it’s female. That also works.</p>
+<p>This made an assumption that the person recording the X’s actually
+<em>did</em> mark an X in exactly one of the columns. For example, the
+columns could <em>both</em> be missing, or <em>both</em> have an X in
+them. This gives us more things to check, at least
+three. <code>ifelse</code> is good for something with only two
+alternatives, but when you have more, <code>case_when</code> is much
+better.
+<label for="tufte-mn-39" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-39" class="margin-toggle"><span class="marginnote">In some languages it is called <em>switch</em>. Python appears not to have it. What you do there instead is to use a Python dictionary to pick out the value you want.</span>
+Here’s how that goes. Our strategy is to
+check for three things: (i) <code>X2</code> has an <code>X</code> and
+<code>X3</code> is missing; (ii) <code>X2</code> is missing and <code>X3</code>
+has an <code>X</code>; (iii) anything else, which is an error:</p>
+<div class="sourceCode" id="cb919"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb919-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb919-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">case_when</span>( </a>
+<a class="sourceLine" id="cb919-3" data-line-number="3">X2<span class="op">==</span><span class="st">&quot;X&quot;</span> <span class="op">&amp;</span><span class="st"> </span><span class="kw">is.na</span>(X3) <span class="op">~</span><span class="st"> &quot;Male&quot;</span>,</a>
+<a class="sourceLine" id="cb919-4" data-line-number="4"><span class="kw">is.na</span>(X2) <span class="op">&amp;</span><span class="st"> </span>X3<span class="op">==</span><span class="st">&quot;X&quot;</span> <span class="op">~</span><span class="st"> &quot;Female&quot;</span>,</a>
+<a class="sourceLine" id="cb919-5" data-line-number="5"><span class="ot">TRUE</span>                <span class="op">~</span><span class="st"> &quot;Error!&quot;</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 10
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; 
+##  1 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     Male  
+##  2 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     Male  
+##  3 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     Male  
+##  4 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     Male  
+##  5 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     Male  
+##  6 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     Male  
+##  7 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     Female
+##  8 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     Male  
+##  9 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt;  Female
+## 10 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     Male  
+## # ... with 1,948 more rows</code></pre>
+<p>It seems nicest to format it like that, with the squiggles lining up,
+so you can see what possible values <code>gender</code> might take.</p>
+<p>The structure of the <code>case_when</code> is that the thing you’re
+checking for goes on the left of the squiggle, and the value you want
+your new variable to take goes on the right. What it does is to go
+down the list of conditions that you are checking for, and as soon as
+it finds one that is true, it grabs the value on the right of the
+squiggle and moves on to the next row. The usual way to write these is
+to have a catch-all condition at the end that is always true, serving
+to make sure that your new variable always gets <em>some</em>
+value. <code>TRUE</code> is, um, always true. If you want an English word
+for the last condition of your <code>case_when</code>, “otherwise” is a
+nice one.</p>
+<p>I wanted to check that the observer did check exactly one of
+<code>V2</code> and <code>V3</code> as I asserted, which can be done by
+gluing this onto the end:</p>
+<div class="sourceCode" id="cb921"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb921-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb921-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">case_when</span>( </a>
+<a class="sourceLine" id="cb921-3" data-line-number="3">X2<span class="op">==</span><span class="st">&quot;X&quot;</span> <span class="op">&amp;</span><span class="st"> </span><span class="kw">is.na</span>(X3) <span class="op">~</span><span class="st"> &quot;Male&quot;</span>,</a>
+<a class="sourceLine" id="cb921-4" data-line-number="4"><span class="kw">is.na</span>(X2) <span class="op">&amp;</span><span class="st"> </span>X3<span class="op">==</span><span class="st">&quot;X&quot;</span> <span class="op">~</span><span class="st"> &quot;Female&quot;</span>,</a>
+<a class="sourceLine" id="cb921-5" data-line-number="5"><span class="ot">TRUE</span>                <span class="op">~</span><span class="st"> &quot;Error!&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb921-6" data-line-number="6"><span class="kw">count</span>(gender)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   gender     n
+##   &lt;chr&gt;  &lt;int&gt;
+## 1 Female   861
+## 2 Male    1097</code></pre>
+<p>There are only Males and Females, so the observer really did mark
+exactly one X. (As a bonus, you see that there were slightly more male
+cyclists than female ones.)</p>
+<p>Extra: I was wondering how <code>gather</code> would play out here. The
+way to do it seems to be to rename the columns first:</p>
+<div class="sourceCode" id="cb923"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb923-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb923-2" data-line-number="2"><span class="kw">rename</span>(<span class="dt">male=</span>X2, <span class="dt">female=</span>X3)</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 9
+##    Time   male  female X4    X5    X6    X7    X8    X9   
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 07:00  X     &lt;NA&gt;   &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  2 07:00  X     &lt;NA&gt;   &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  3 07:00  X     &lt;NA&gt;   &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  4 07:00  X     &lt;NA&gt;   &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  5 07:00  X     &lt;NA&gt;   &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  6 07:15  X     &lt;NA&gt;   X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  7 07:15  &lt;NA&gt;  X      X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  8 07:15  X     &lt;NA&gt;   X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+##  9 07:15  &lt;NA&gt;  X      X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt; 
+## 10 07:15  X     &lt;NA&gt;   X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X    
+## # ... with 1,948 more rows</code></pre>
+<p>and then gather them up:</p>
+<div class="sourceCode" id="cb925"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb925-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb925-2" data-line-number="2"><span class="kw">rename</span>(<span class="dt">male=</span>X2, <span class="dt">female=</span>X3) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb925-3" data-line-number="3"><span class="kw">gather</span>(gender, what, male<span class="op">:</span>female)</a></code></pre></div>
+<pre><code>## # A tibble: 3,916 x 9
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
+##  1 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  2 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  3 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  4 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  5 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  6 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  7 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   &lt;NA&gt; 
+##  8 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  9 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt;  male   &lt;NA&gt; 
+## 10 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+## # ... with 3,906 more rows</code></pre>
+<p>I wasn’t quite sure what to call “what makes them the same”, at
+least not until I had seen how it came out. This is where the
+<code>X</code> or missing goes, so we want the lines where <code>what</code>
+is equal to <code>X</code>:</p>
+<div class="sourceCode" id="cb927"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb927-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb927-2" data-line-number="2"><span class="kw">rename</span>(<span class="dt">male=</span>X2, <span class="dt">female=</span>X3) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb927-3" data-line-number="3"><span class="kw">gather</span>(gender, what, male<span class="op">:</span>female) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb927-4" data-line-number="4"><span class="kw">filter</span>(what<span class="op">==</span><span class="st">&quot;X&quot;</span>)  </a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 9
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
+##  1 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  2 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  3 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  4 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  5 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  6 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  7 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  8 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  9 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+## 10 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+## # ... with 1,948 more rows</code></pre>
+<p>Another way to do this is to remove the missings in the <code>gather</code>:</p>
+<div class="sourceCode" id="cb929"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb929-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb929-2" data-line-number="2"><span class="kw">rename</span>(<span class="dt">male=</span>X2, <span class="dt">female=</span>X3) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb929-3" data-line-number="3"><span class="kw">gather</span>(gender, what, male<span class="op">:</span>female, <span class="dt">na.rm=</span>T) </a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 9
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##  * &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
+##  1 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  2 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  3 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  4 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  5 07:00  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  6 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  7 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  8 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+##  9 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+## 10 07:15  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   X    
+## # ... with 1,948 more rows</code></pre>
+<p>In case you are wondering where the females went, all the males are
+listed first this way, and then all the females. To verify this, we
+can count the males and females obtained this way, and we should get
+the same thing we got before:</p>
+<div class="sourceCode" id="cb931"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb931-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb931-2" data-line-number="2"><span class="kw">rename</span>(<span class="dt">male=</span>X2, <span class="dt">female=</span>X3) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb931-3" data-line-number="3"><span class="kw">gather</span>(gender, what, male<span class="op">:</span>female, <span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb931-4" data-line-number="4"><span class="kw">count</span>(gender)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   gender     n
+##   &lt;chr&gt;  &lt;int&gt;
+## 1 female   861
+## 2 male    1097</code></pre>
+<p>And this is what we had before.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Create variables <code>helmet</code>, <code>passenger</code> and
+<code>sidewalk</code> in your data frame that are <code>TRUE</code> if
+the “Yes” column contains <code>X</code> and <code>FALSE</code>
+otherwise. This will use <code>mutate</code> again, but you don’t
+need <code>ifelse</code>: just set the variable equal to the
+appropriate logical condition. As before, the best way to
+create these variables is to test the appropriate things for
+missingness. Note that you can create as many new variables
+as you like in one <code>mutate</code>. Show the first few lines
+of your new data frame. (Add your code onto the end of the
+pipe you made above.)</li>
+</ol>
+<p>Solution</p>
+<p>On the face of it, the way to do this is to go looking
+for <code>X</code>’s:</p>
+<div class="sourceCode" id="cb933"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb933-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb933-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(X2),<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb933-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">helmet=</span>(X4<span class="op">==</span><span class="st">&quot;X&quot;</span>),</a>
+<a class="sourceLine" id="cb933-4" data-line-number="4"><span class="dt">passenger=</span>(X6<span class="op">==</span><span class="st">&quot;X&quot;</span>),</a>
+<a class="sourceLine" id="cb933-5" data-line-number="5"><span class="dt">sidewalk=</span>(X8<span class="op">==</span><span class="st">&quot;X&quot;</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 13
+##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    &lt;tim&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt; 
+##  1 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   NA    
+##  2 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   NA    
+##  3 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   NA    
+##  4 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   NA    
+##  5 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   NA    
+##  6 07:15 X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+##  7 07:15 &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     female TRUE  
+##  8 07:15 X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+##  9 07:15 &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt;  female TRUE  
+## 10 07:15 X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+## # ... with 1,948 more rows, and 2 more variables: passenger &lt;lgl&gt;,
+## #   sidewalk &lt;lgl&gt;</code></pre>
+<p>But, we run into the same problem that we did with <code>gender</code>:
+the new variables are either <code>TRUE</code> or missing, never <code>FALSE</code>.</p>
+<p>The solution is the same: look for the things that are <em>missing</em>
+if the cyclist is wearing a helmet, carrying a passenger or riding on
+the sidewalk. These are <code>X5, X7, X9</code> respectively:</p>
+<div class="sourceCode" id="cb935"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb935-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb935-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(X2),<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb935-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">helmet=</span><span class="kw">is.na</span>(X5),</a>
+<a class="sourceLine" id="cb935-4" data-line-number="4"><span class="dt">passenger=</span><span class="kw">is.na</span>(X7),</a>
+<a class="sourceLine" id="cb935-5" data-line-number="5"><span class="dt">sidewalk=</span><span class="kw">is.na</span>(X9)) </a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 13
+##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    &lt;tim&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt; 
+##  1 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  2 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  3 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  4 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  5 07:00 X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  6 07:15 X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+##  7 07:15 &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     female TRUE  
+##  8 07:15 X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+##  9 07:15 &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt;  female TRUE  
+## 10 07:15 X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+## # ... with 1,948 more rows, and 2 more variables: passenger &lt;lgl&gt;,
+## #   sidewalk &lt;lgl&gt;</code></pre>
+<p>Again, you can do the <code>mutate</code> all on one line if you want to,
+or all four variable assignments in one <code>mutate</code>,
+but I used newlines and indentation to make the structure
+clear.</p>
+<p>It is less elegant, though equally good for the purposes of the
+assignment, to use <code>ifelse</code> for these as well, which would go
+like this, for example:</p>
+<div class="sourceCode" id="cb937"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb937-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb937-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">ifelse</span>(X2<span class="op">==</span><span class="st">&quot;X&quot;</span>,<span class="st">&quot;male&quot;</span>,<span class="st">&quot;female&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb937-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">helmet=</span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(X5),T,F))</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 11
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    &lt;time&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt; 
+##  1 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  2 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  3 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  4 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  5 07:00  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;  X     male   FALSE 
+##  6 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+##  7 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     &lt;NA&gt;   TRUE  
+##  8 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+##  9 07:15  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;  X     X     &lt;NA&gt;  &lt;NA&gt;   TRUE  
+## 10 07:15  X     &lt;NA&gt;  X     &lt;NA&gt;  &lt;NA&gt;  X     &lt;NA&gt;  X     male   TRUE  
+## # ... with 1,948 more rows</code></pre>
+<p>and the same for <code>passenger</code> and <code>sidewalk</code>. The warning
+is, whenever you see a <code>T</code> and an <code>F</code> in an
+<code>ifelse</code>, that you could probably get rid of the
+<code>ifelse</code> and use the logical condition directly. For <code>gender</code>, though, you need the
+<code>ifelse</code> (or a <code>case_when</code>) because the values you want
+it to take are <code>male</code> and <code>female</code>, something other than
+<code>TRUE</code> and <code>FALSE</code>.</p>
+<p>I like to put brackets around logical conditions when I am assigning
+them to a variable. If I don’t, I get something like</p>
+<div class="sourceCode" id="cb939"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb939-1" data-line-number="1">helmet=V4<span class="op">==</span><span class="st">&quot;X&quot;</span></a></code></pre></div>
+<p>which actually works, but is very hard to read. Well, I <em>think</em> it
+works. Let’s check:</p>
+<div class="sourceCode" id="cb940"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb940-1" data-line-number="1">exes=<span class="kw">c</span>(<span class="st">&quot;X&quot;</span>,<span class="st">&quot;&quot;</span>,<span class="st">&quot;X&quot;</span>,<span class="st">&quot;&quot;</span>,<span class="st">&quot;X&quot;</span>)</a>
+<a class="sourceLine" id="cb940-2" data-line-number="2">y=exes<span class="op">==</span><span class="st">&quot;X&quot;</span></a>
+<a class="sourceLine" id="cb940-3" data-line-number="3">y</a></code></pre></div>
+<pre><code>## [1]  TRUE FALSE  TRUE FALSE  TRUE</code></pre>
+<p>Yes it does. But I would never recommend writing it this way, because
+unless you are paying attention, you won’t notice which <code>=</code> is
+saving in a variable, and which one is “logically equal”.</p>
+<p>It works because of a thing called “operator precedence”: the
+logical-equals is evaluated first, and the result of that is saved in
+the variable. But unless you or your readers remember that, it’s
+better to write</p>
+<div class="sourceCode" id="cb942"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb942-1" data-line-number="1">y=(exes<span class="op">==</span><span class="st">&quot;X&quot;</span>)</a></code></pre></div>
+<p>to draw attention to the order of calculation. This is the same reason that</p>
+<div class="sourceCode" id="cb943"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb943-1" data-line-number="1"><span class="dv">4</span><span class="op">+</span><span class="dv">5</span><span class="op">*</span><span class="dv">6</span></a></code></pre></div>
+<pre><code>## [1] 34</code></pre>
+<p>evaluates this way rather than doing the addition first and getting
+54. BODMAS and all that.</p>
+<p>The <code>gather</code> approach works for these too. Rename the columns
+as <code>yes</code> and <code>no</code>, and then give the “what makes them the same” column a name like <code>helmet</code>.
+Give the “what makes them different” column a name like
+<code>what2</code>, to make it easier to remove later. And then do the
+same with the others, one <code>gather</code> at a time.</p>
+<p>(g)??part:lastpart?? Finally
+(for the data manipulation), get rid of
+all the original columns, keeping only the new ones that
+you created. Save the results in a data frame and display
+its first few rows.</p>
+<p>Solution</p>
+<p>This is a breath of fresh air after all the thinking
+needed above: this is just <code>select</code>, added to
+the end:</p>
+<div class="sourceCode" id="cb945"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb945-1" data-line-number="1">mybikes =<span class="st"> </span>bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb945-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(X2),<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb945-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">helmet=</span><span class="kw">is.na</span>(X5),</a>
+<a class="sourceLine" id="cb945-4" data-line-number="4"><span class="dt">passenger=</span><span class="kw">is.na</span>(X7),</a>
+<a class="sourceLine" id="cb945-5" data-line-number="5"><span class="dt">sidewalk=</span><span class="kw">is.na</span>(X9)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb945-6" data-line-number="6"><span class="kw">select</span>(<span class="op">-</span>(X2<span class="op">:</span>X9))</a>
+<a class="sourceLine" id="cb945-7" data-line-number="7">mybikes</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 5
+##    Time   gender helmet passenger sidewalk
+##    &lt;time&gt; &lt;chr&gt;  &lt;lgl&gt;  &lt;lgl&gt;     &lt;lgl&gt;   
+##  1 07:00  male   FALSE  FALSE     FALSE   
+##  2 07:00  male   FALSE  FALSE     FALSE   
+##  3 07:00  male   FALSE  FALSE     FALSE   
+##  4 07:00  male   FALSE  FALSE     FALSE   
+##  5 07:00  male   FALSE  FALSE     FALSE   
+##  6 07:15  male   TRUE   FALSE     FALSE   
+##  7 07:15  female TRUE   FALSE     FALSE   
+##  8 07:15  male   TRUE   FALSE     FALSE   
+##  9 07:15  female TRUE   FALSE     TRUE    
+## 10 07:15  male   TRUE   FALSE     FALSE   
+## # ... with 1,948 more rows</code></pre>
+<p>You might not have renamed your <code>X1</code>, in which case, you still
+have it, but need to keep it (because it holds the times).</p>
+<p>Another way to do this is to use a “select-helper”, thus:</p>
+<div class="sourceCode" id="cb947"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb947-1" data-line-number="1">bikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(X1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">Time=</span>X1) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb947-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(X2),<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb947-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">helmet=</span><span class="kw">is.na</span>(X5),</a>
+<a class="sourceLine" id="cb947-4" data-line-number="4"><span class="dt">passenger=</span><span class="kw">is.na</span>(X7),</a>
+<a class="sourceLine" id="cb947-5" data-line-number="5"><span class="dt">sidewalk=</span><span class="kw">is.na</span>(X9)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb947-6" data-line-number="6"><span class="kw">select</span>(<span class="op">-</span><span class="kw">num_range</span>(<span class="st">&quot;X&quot;</span>,<span class="dv">2</span><span class="op">:</span><span class="dv">9</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 1,958 x 5
+##    Time   gender helmet passenger sidewalk
+##    &lt;time&gt; &lt;chr&gt;  &lt;lgl&gt;  &lt;lgl&gt;     &lt;lgl&gt;   
+##  1 07:00  male   FALSE  FALSE     FALSE   
+##  2 07:00  male   FALSE  FALSE     FALSE   
+##  3 07:00  male   FALSE  FALSE     FALSE   
+##  4 07:00  male   FALSE  FALSE     FALSE   
+##  5 07:00  male   FALSE  FALSE     FALSE   
+##  6 07:15  male   TRUE   FALSE     FALSE   
+##  7 07:15  female TRUE   FALSE     FALSE   
+##  8 07:15  male   TRUE   FALSE     FALSE   
+##  9 07:15  female TRUE   FALSE     TRUE    
+## 10 07:15  male   TRUE   FALSE     FALSE   
+## # ... with 1,948 more rows</code></pre>
+<p>This means “get rid of all the columns whose names are <em>X</em> followed by a number 2 through 9”.</p>
+<p>The pipe looks long and forbidding, but you built it (and tested it) a
+little at a time. Which is how you do it.</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>The next few parts are a quick-fire analysis of
+the data set. They can all be solved using <code>count</code>.
+How many male and how many female cyclists were observed
+in total?</li>
+</ol>
+<p>Solution</p>
+<p>I already got this one when I was checking for
+observer-notation errors earlier:</p>
+<div class="sourceCode" id="cb949"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb949-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   gender     n
+##   &lt;chr&gt;  &lt;int&gt;
+## 1 female   861
+## 2 male    1097</code></pre>
+<p>861 females and 1097 males.</p>
+<ol style="list-style-type: lower-roman">
+<li>How many male and female cyclists were not
+wearing helmets?</li>
+</ol>
+<p>Solution</p>
+<p>You can count two variables at once, in which case
+you get counts of all combinations of them:</p>
+<div class="sourceCode" id="cb951"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb951-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender,helmet)</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 3
+##   gender helmet     n
+##   &lt;chr&gt;  &lt;lgl&gt;  &lt;int&gt;
+## 1 female FALSE    403
+## 2 female TRUE     458
+## 3 male   FALSE    604
+## 4 male   TRUE     493</code></pre>
+<p>403 females and 604 males were not wearing helmets, picking out what
+we need.</p>
+<p>The real question of interest here is “what <em>proportion</em> of male and female cyclists were not wearing helmets?”
+<label for="tufte-mn-40" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-40" class="margin-toggle"><span class="marginnote">But I didn’t want to complicate this question any farther.</span>
+This has a rather elegant
+solution that I will have to explain. First, let’s go back to the
+<code>group_by</code> and <code>summarize</code> version of the
+<code>count</code> here:</p>
+<div class="sourceCode" id="cb953"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb953-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender,helmet) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb953-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_ount=</span><span class="kw">n</span>())</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 3
+## # Groups:   gender [?]
+##   gender helmet the_ount
+##   &lt;chr&gt;  &lt;lgl&gt;     &lt;int&gt;
+## 1 female FALSE       403
+## 2 female TRUE        458
+## 3 male   FALSE       604
+## 4 male   TRUE        493</code></pre>
+<p>That’s the same table we got just now. Now, let’s calculate a
+proportion and see what happens:</p>
+<div class="sourceCode" id="cb955"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb955-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender,helmet) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb955-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_count=</span><span class="kw">n</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb955-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">prop=</span>the_count<span class="op">/</span><span class="kw">sum</span>(the_count))</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+## # Groups:   gender [2]
+##   gender helmet the_count  prop
+##   &lt;chr&gt;  &lt;lgl&gt;      &lt;int&gt; &lt;dbl&gt;
+## 1 female FALSE        403 0.468
+## 2 female TRUE         458 0.532
+## 3 male   FALSE        604 0.551
+## 4 male   TRUE         493 0.449</code></pre>
+<p>We seem to have the proportions of males and females who were and were
+not wearing a helmet, and you can check that this is indeed the case,
+for example:</p>
+<div class="sourceCode" id="cb957"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb957-1" data-line-number="1"><span class="dv">403</span><span class="op">/</span>(<span class="dv">403</span><span class="op">+</span><span class="dv">458</span>)</a></code></pre></div>
+<pre><code>## [1] 0.4680604</code></pre>
+<p>47% of females were not wearing helmets, while 55% of males were
+helmetless. (You can tell from the original frequencies that a small
+majority of females wore helmets and a small majority of males did not.)</p>
+<p>Now, we have to ask ourselves: how on earth did that work?</p>
+<p>When you calculate a summary (like our <code>sum(count)</code> above), it
+figures that you can’t want the sum by gender-helmet combination,
+since you already have those in <code>count</code>. You must want the sum
+<em>over</em> something. What? What happens is that it goes back to the
+<code>group_by</code> and “peels off” the last thing there, which in
+this case is <code>helmet</code>, leaving only <code>gender</code>. It then
+sums the counts for each gender, giving us what we wanted.</p>
+<p>It just blows my mind that someone (ie., Hadley Wickham) could (i) think
+that this would be a nice syntax to have (instead of just being an
+error), (ii) find a way to implement it and (iii) find a nice logical
+explanation (“peeling off”) to explain how it worked.</p>
+<p>What happens if we switch the order of the things in the <code>group_by</code>?</p>
+<div class="sourceCode" id="cb959"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb959-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(helmet,gender) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb959-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_count=</span><span class="kw">n</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb959-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">prop=</span>the_count<span class="op">/</span><span class="kw">sum</span>(the_count))</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+## # Groups:   helmet [2]
+##   helmet gender the_count  prop
+##   &lt;lgl&gt;  &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt;
+## 1 FALSE  female       403 0.400
+## 2 FALSE  male         604 0.600
+## 3 TRUE   female       458 0.482
+## 4 TRUE   male         493 0.518</code></pre>
+<p>Now we get the proportion of helmeted riders of each gender, which is
+not the same as what we had before. Before, we had “out of males”
+and “out of females”; now we have “out of helmeted riders” and
+“out of helmetless riders”. (The riders with helmets are almost
+50–50 males and females, but the riders without helmets are about
+60% male.)</p>
+<p>This is row and column proportions in a contingency table, B22 style.</p>
+<p>Now, I have to see whether the <code>count</code> variant of this works:</p>
+<div class="sourceCode" id="cb961"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb961-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender,helmet) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb961-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">prop=</span>n<span class="op">/</span><span class="kw">sum</span>(n))</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+##   gender helmet     n  prop
+##   &lt;chr&gt;  &lt;lgl&gt;  &lt;int&gt; &lt;dbl&gt;
+## 1 female FALSE    403 0.206
+## 2 female TRUE     458 0.234
+## 3 male   FALSE    604 0.308
+## 4 male   TRUE     493 0.252</code></pre>
+<p>It doesn’t. Well, it kind of does, but it divided by the sum of all of
+them rather than “peeling off”, so these are overall proportions
+rather than row or column proportions.</p>
+<p>So I think you have to do this the <code>group_by</code> and
+<code>summarize</code> way.</p>
+<ol start="10" style="list-style-type: lower-alpha">
+<li>How many cyclists were riding on the sidewalk
+<em>and</em> carrying a passenger?</li>
+</ol>
+<p>Solution</p>
+<p>Not too many, I’d hope. Again:</p>
+<div class="sourceCode" id="cb963"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb963-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(passenger, sidewalk)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 3
+##   passenger sidewalk     n
+##   &lt;lgl&gt;     &lt;lgl&gt;    &lt;int&gt;
+## 1 FALSE     FALSE     1880
+## 2 FALSE     TRUE        73
+## 3 TRUE      FALSE        5</code></pre>
+<p>We’re looking for the “true”, “true” entry of that table, which
+seems to have vanished. That means the count is <em>zero</em>:
+none at all.
+(There were
+only 5 passenger-carrying riders, and they were all on the road.)</p>
+<ol start="11" style="list-style-type: lower-alpha">
+<li>What was the busiest 15-minute period of the
+day, and how many cyclists were there then?</li>
+</ol>
+<p>Solution</p>
+<p>The obvious way is to list every 15-minute period
+and eyeball the largest frequency. There are quite a
+few 15-minute periods, so be prepared to hit Next a
+few times (or use <code>View</code>):</p>
+<div class="sourceCode" id="cb965"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb965-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Time) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 48 x 2
+##    Time       n
+##    &lt;time&gt; &lt;int&gt;
+##  1 07:00      5
+##  2 07:15      8
+##  3 07:30      9
+##  4 07:45      5
+##  5 08:00     18
+##  6 08:15     14
+##  7 08:30     12
+##  8 08:45     22
+##  9 09:00     17
+## 10 09:15     15
+## 11 09:30     16
+## 12 09:45     12
+## 13 10:00      8
+## 14 10:15     21
+## 15 10:30     22
+## 16 10:45     19
+## 17 11:00     30
+## 18 11:15     14
+## 19 11:30     27
+## 20 11:45     28
+## 21 12:00     22
+## 22 12:15     35
+## 23 12:30     40
+## 24 12:45     33
+## 25 13:00     44
+## 26 13:15     46
+## 27 13:30     29
+## 28 13:45     41
+## 29 14:00     36
+## 30 14:15     45
+## 31 14:30     33
+## 32 14:45     50
+## 33 15:00     49
+## 34 15:15     51
+## 35 15:30     61
+## 36 15:45     79
+## 37 16:00    101
+## 38 16:15     56
+## 39 16:30     51
+## 40 16:45     75
+## 41 17:00    104
+## 42 17:15    128
+## 43 17:30     80
+## 44 17:45     73
+## 45 18:00     75
+## 46 18:15     78
+## 47 18:30     63
+## 48 18:45     58</code></pre>
+<p>17:15, or 5:15 pm, with 128 cyclists.</p>
+<p>But, computers are meant to save us that kind of effort. How? Note
+that the output from <code>count</code> is itself a data frame, so
+anything you can do to a data frame, you can do to <em>it</em>: for
+example, display only the rows where the frequency equals the maximum
+frequency:</p>
+<div class="sourceCode" id="cb967"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb967-1" data-line-number="1">mybikes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Time) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb967-2" data-line-number="2"><span class="kw">filter</span>(n<span class="op">==</span><span class="kw">max</span>(n))</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 2
+##   Time       n
+##   &lt;time&gt; &lt;int&gt;
+## 1 17:15    128</code></pre>
+<p>That will actually display <em>all</em> the times where the cyclist
+count equals the maximum, of which there might be more than one.</p>
 
 </div>
 </div>

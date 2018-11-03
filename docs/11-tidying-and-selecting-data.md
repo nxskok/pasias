@@ -257,7 +257,7 @@ Solution
 
 
 
-Two steps, since we selecting rows *and* columns:
+Two steps, since we selecting rows *and* columns. 
 
 
 ```r
@@ -281,8 +281,7 @@ select(c(attendance,Daynight))
 
  
 
-The column names do not need quotes; this is part of the nice stuff
-about `dplyr`. Or this way, since we are selecting
+Or this way, since we are selecting
 *consecutive* columns:
 
 
@@ -2656,10 +2655,9 @@ This is a very easy kind of question to set on an exam. Just so you know.
 
 
  The data file
-[http://stat405.had.co.nz/data/billboard.csv](http://stat405.had.co.nz/data/billboard.csv) contains a lot of
+[link](http://stat405.had.co.nz/data/billboard.csv) contains a lot of
 information about songs popular in 2000. This dataset is untidy.  Our
-ultimate aim is to answer ``which song occupied the \#1 position for
-the largest number of weeks?''. To do that, we will build a pipe that
+ultimate aim is to answer "which song occupied the \#1 position for the largest number of weeks?". To do that, we will build a pipe that
 starts from the data frame read in from the URL above, and finishes
 with an answer to the question. I will take you through this step by
 step. Each part will involve adding something to the pipe you built
@@ -2706,6 +2704,8 @@ billboard=read_csv("http://stat405.had.co.nz/data/billboard.csv")
 ```
 ## See spec(...) for full column specifications.
 ```
+
+       
 
 There are a *lot* of columns. What does this look like?
 
@@ -2755,6 +2755,8 @@ billboard
 ## #   x73rd.week <chr>, x74th.week <chr>, x75th.week <chr>, x76th.week <chr>
 ```
 
+ 
+
 On yours, you will definitely see a little arrow top right saying
 "there are more columns", and you will have to click on it several
 times to see them all.
@@ -2801,6 +2803,8 @@ billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T)
 ## # ... with 5,297 more rows, and 1 more variable: rank <chr>
 ```
 
+         
+
 Another way to do this is with a select-helper: all those column names
 end with `week`, so we can select them all thus:
 
@@ -2825,6 +2829,8 @@ billboard %>% gather(week,rank,ends_with("week"),na.rm=T)
 ## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
 ## # ... with 5,297 more rows, and 1 more variable: rank <chr>
 ```
+
+ 
 
 There are now only 9 columns, a lot fewer than we started with. This
 is (I didn't need you to say) because we have collected together all
@@ -2851,6 +2857,8 @@ songs over 76 weeks, so this many:
 ```
 ## [1] 24092
 ```
+
+ 
 
 song-week combinations.
 
@@ -2895,6 +2903,8 @@ select(week, rank)
 ## # ... with 5,297 more rows
 ```
 
+         
+
 
 
 (d) Both your `week` and `rank` columns are
@@ -2935,6 +2945,8 @@ select(ends_with("number"))
 ## 10           1          81
 ## # ... with 5,297 more rows
 ```
+
+         
 You see that these are indeed numbers. (I gave my new columns names
 that ended with `number`, which meant that I could select them
 with the select-helper `ends_with`. I'm not insisting that you
@@ -2999,6 +3011,8 @@ select(date.entered,week_number,current)
 ## # ... with 5,297 more rows
 ```
 
+         
+
 Don't forget to use your `week`-turned-into-number, or else it
 won't work! (This bit me too, so you don't need to feel bad.)
 
@@ -3018,6 +3032,8 @@ of the 5,000-odd rows of the data frame. To do that, add the line
 `sample_n(10)` on the end, like this:
 
 
+
+ 
 
 
 ```r
@@ -3044,6 +3060,8 @@ sample_n(10)
 ##  9 2000-04-15            12 2000-07-01
 ## 10 2000-08-26            18 2000-12-23
 ```
+
+ 
 
 This gives a variety of rows to check. The first `current`
 should be $27-1=26$ weeks, or about 6 months, after the date the song
@@ -3101,6 +3119,8 @@ select(artist.inverted,track,current)
 ## 10 Destiny's Child     Say My Name           2000-03-18
 ## # ... with 45 more rows
 ```
+
+         
 
 You'll see the first ten rows, as here, but with clickable buttons to
 see the next 10 (and the previous 10 if you have moved beyond 1--10). 
@@ -3170,9 +3190,10 @@ count(track)
 ## 17 With Arms Wide Open                       1
 ```
 
+         
+
 Then you can scan down the `n` column, find that the
-biggest number is 11, and say: it's the song ``Independent Women Part
-I'' by Destiny's Child. This is 3 points (out of 4, when the question
+biggest number is 11, and say: it's the song "Independent Women Part I" by Destiny's Child. This is 3 points (out of 4, when the question
 was to be handed in).
 
 But, this is a data frame, so anything we can do to a data frame we
@@ -3198,6 +3219,8 @@ filter(n==max(n))
 ##   <chr>                    <int>
 ## 1 Independent Women Part I    11
 ```
+
+ 
 
 or arranging them in (most logically, descending) order by `n`
 to make it easier to pick out the top one:
@@ -3237,6 +3260,8 @@ arrange(desc(n))
 ## 16 Try Again                                 1
 ## 17 With Arms Wide Open                       1
 ```
+
+ 
 
 Either of those will net you the 4th point.
 
@@ -3292,6 +3317,8 @@ arrange(desc(n))
 ## 17 With Arms Wide Open by Creed                                     1
 ```
 
+ 
+
 I don't think it makes any difference here, but it might in other
 years, or if you look over several years where you might get cover
 versions of the same song performed by different artists.
@@ -3304,6 +3331,1203 @@ famous. U2's first single was called "Fire" and it just scraped into
 the UK top 40. Things changed after that.)
 
  
+
+
+
+
+##  Bikes on College
+
+
+ The City of Toronto collects all kinds of data on aspects of
+life in the city. See
+[link](http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=1a66e03bb8d1e310VgnVCM10000071d60f89RCRD). One
+collection of data is records of the number of cyclists on certain
+downtown streets. The data in
+[link](http://www.utsc.utoronto.ca/~butler/c32/bikes.csv) are a record
+of the cyclists on College Street on the block west from Huron to
+Spadina on September 24, 2010. In the spreadsheet, each row relates to
+one cyclist. The first column is the time the cyclist was observed (to
+the nearest 15 minutes). After that, there are four pairs of
+columns. The observer filled in (exactly) one X in each pair of
+columns, according to whether (i) the cyclist was male or female, (ii)
+was or was not wearing a helmet, (iii) was or was not carrying a
+passenger on the bike, (iv) was or was not riding on the sidewalk. We
+want to create a tidy data frame that has the time in each row, and
+has columns containing appropriate values, often `TRUE` or
+`FALSE`, for each of the four variables measured.
+
+I will lead you through the process, which will involve developing a
+(long) pipe, one step at a time.
+
+
+
+(a) Take a look at the spreadsheet (using Excel or similar:
+this may open when you click the link). Are there any obvious
+header rows? Is there any extra material before the data start?
+Explain briefly.
+
+
+Solution
+
+
+This is what I see (you should see something that looks like this):
+
+![](bikes-ss.png)
+
+There are really *two* rows of headers (the rows
+highlighted in yellow). The actual information that says what
+the column pair is about is in the first of those two rows, and
+the second row indicates which category of the information above
+this column refers to.
+This is not the usual way that the column headers encode what
+the columns are about: we are used to having *one* column
+`gender` that would take the values `female` or
+`male`, or a column `helmet` containing the values
+`yes` or `no`. (You might be sensing
+`gather` here, which may be one way of tackling this, but
+I lead you into another idea below.)
+There are also six lines above the highlighted ones that contain
+background information about this study. (This is where I got
+the information about the date of the study and which block of
+which street it is about.)
+I am looking for two things: the apparent header line is
+actually two lines (the ones in yellow), and there are extra
+lines above that which are not data.
+
+
+
+(b)??part:firstpart?? Read the data into an R data
+frame. Read *without* headers, and instruct R how many lines
+to skip over using `skip=` and a suitable number.
+When this is working, display the first few lines of your data
+frame.  Note that your columns have names `X1` through
+`X9`.
+
+
+Solution
+
+
+The actual data start on line 9, so we need to skip 8
+lines. `col_names=F` is the way to say that we have no
+column names (not ones that we want to use, anyway). Just
+typing the name of the data frame will display "a few" (that
+is, 10) lines of it, so that you can check it for
+plausibleness: 
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/bikes.csv"
+bikes=read_csv(my_url,skip=8,col_names=F)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   X1 = col_time(format = ""),
+##   X2 = col_character(),
+##   X3 = col_character(),
+##   X4 = col_character(),
+##   X5 = col_character(),
+##   X6 = col_character(),
+##   X7 = col_character(),
+##   X8 = col_character(),
+##   X9 = col_character()
+## )
+```
+
+```r
+bikes
+```
+
+```
+## # A tibble: 1,958 x 9
+##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  2    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  3    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  4    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  5    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  7    NA  <NA>  X     X     <NA>  <NA>  X     <NA>  X    
+##  8    NA  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  9    NA  <NA>  X     X     <NA>  <NA>  X     X     <NA> 
+## 10    NA  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+## # ... with 1,948 more rows
+```
+
+         
+
+This seems to have worked: a column with times in it, and four pairs
+of columns, with exactly one of each pair having an X in it. The
+variable names `X1` through `X9` were generated by
+`read_csv`, as it does when you read in data with
+`col_names=F`. The times are correctly `time`s, and the
+other columns are all text. The blank cells in the spreadsheet have
+appeared in our data frame as "missing" (`NA`). The notation
+`<NA>` means "missing text" (as opposed to a missing number,
+say). 
+
+The first line in our data frame contains the first 7:00 (am) cyclist,
+so it looks as if we skipped the right number of lines.
+
+
+
+(c) What do you notice about the times in your first
+column? What do you think those "missing" times should be?
+
+Solution
+
+
+There are some times and some missing values. It seems a
+reasonable guess that the person recording the data only
+recorded a time when a new period of 15 minutes had begun, so
+that the missing times should be the same as the previous
+non-missing one: For
+example, the first five rows are cyclists observed at 7:00 am
+(or, at least, between 7:00 and 7:15). So they should be
+recorded as 7:00, and the ones in rows 7--10 should be
+recorded as 7:15, and so on.
+
+
+(d) Find something from the `tidyverse` that will
+fill
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Oh, what a giveaway.</span>
+in those missing values with the right thing.
+Start a pipe from the data frame you read in, that updates the
+appropriate column with the filled-in times.
+
+
+Solution
+
+
+`fill` from `tidyr` fills
+in the missing times with the previous non-missing
+value. (This will mean finding the help for `fill` in R
+Studio or online.)
+I told you it was a giveaway.
+If you look in the help for `fill` via `?fill`
+(or if you Google `tidyr::fill`, which is the full
+name for "the `fill` that lives in          `tidyr`"), 
+you'll see that it requires up to two
+things (not including the data frame): a column to fill, and
+a direction to fill it (the default of "down" is exactly
+what we want). Thus:
+
+```r
+bikes %>% fill(X1)
+```
+
+```
+## # A tibble: 1,958 x 9
+##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X    
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA> 
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+## # ... with 1,948 more rows
+```
+
+           
+
+Success!
+
+We will probably want to rename `X1` to something like
+`time`, so let's do that now before we forget. There is a
+`rename` that does about what you'd expect:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1)
+```
+
+```
+## # A tibble: 1,958 x 9
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9   
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X    
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA> 
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+## # ... with 1,948 more rows
+```
+
+ 
+
+The only thing I keep forgetting is that the syntax of `rename`
+is "new name equals old name". Sometimes I think it's the other way
+around, and then I wonder why it doesn't work.
+
+I gave it a capital T so as not to confuse it with other things in R
+called `time`.
+
+
+
+(e) R's `ifelse` function works like `=IF` in
+Excel. You use it to create values for a new variable, for
+example in a `mutate`.  The first input to it is a
+logical condition (something that is either true or false); the
+second is the value your new variable should take if the
+condition is true, and the third is the value of your new
+variable if the condition is false.  Create a new column
+`gender` in your data frame that is "male" or
+"female" depending on the value of your `X2` column,
+using `mutate`. (You can assume that exactly one of the
+second and third columns has an `X` in it.) Add your code
+to the end of your pipe and display (the first 10 rows of) the
+result.
+
+
+Solution
+
+
+Under the assumption we are making, we only have to look
+at column `X2` and we ignore `X3` totally:
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=ifelse(X2=="X","male","female"))
+```
+
+```
+## # A tibble: 1,958 x 10
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     <NA>  
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  <NA>  
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+## # ... with 1,948 more rows
+```
+
+            
+
+Oh, that didn't work. The gender column is either `male` or
+missing; the two missing ones here should say `female`. What
+happened? Let's just look at our logical condition this time:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(isX=(X2=="X"))
+```
+
+```
+## # A tibble: 1,958 x 10
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    isX  
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <lgl>
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     TRUE 
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     NA   
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     TRUE 
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  NA   
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     TRUE 
+## # ... with 1,948 more rows
+```
+
+ 
+
+This is not true and false, it is true and missing. The idea is that
+if `X2` is missing, we don't (in general) know what its value
+is: it might even be `X`! So if `X2` is missing, any
+comparison of it with another value ought to be missing as well.
+
+That's in general. Here, we know where those missing values came from:
+they were blank cells in the spreadsheet, so we actually have more
+information. 
+
+Perhaps a better way to go is to test whether `X2` is missing (in which
+case, it's a female cyclist). R has a function `is.na` which is
+`TRUE` if the thing inside it is missing and `FALSE` if
+the thing inside it has some non-missing value. In our case, it
+goes like this:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=ifelse(is.na(X2),"female","male"))
+```
+
+```
+## # A tibble: 1,958 x 10
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     female
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  female
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+## # ... with 1,948 more rows
+```
+
+            
+
+Or you can test `X3` for missingness: if missing, it's male,
+otherwise it's female. That also works.
+
+This made an assumption that the person recording the X's actually
+*did* mark an X in exactly one of the columns. For example, the
+columns could *both* be missing, or *both* have an X in
+them. This gives us more things to check, at least
+three. `ifelse` is good for something with only two
+alternatives, but when you have more, `case_when` is much
+better.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In some languages it is called *switch*. Python  appears not to have it. What you do there instead is to use a Python  dictionary to pick out the value you want.</span> 
+Here's how that goes. Our strategy is to
+check for three things: (i) `X2` has an `X` and
+`X3` is missing; (ii) `X2` is missing and `X3`
+has an `X`; (iii) anything else, which is an error:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=case_when( 
+X2=="X" & is.na(X3) ~ "Male",
+is.na(X2) & X3=="X" ~ "Female",
+TRUE                ~ "Error!"))
+```
+
+```
+## # A tibble: 1,958 x 10
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     Male  
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     Female
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     Male  
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  Female
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     Male  
+## # ... with 1,948 more rows
+```
+
+            
+
+It seems nicest to format it like that, with the squiggles lining up,
+so you can see what possible values `gender` might take.
+
+The structure of the `case_when` is that the thing you're
+checking for goes on the left of the squiggle, and the value you want
+your new variable to take goes on the right. What it does is to go
+down the list of conditions that you are checking for, and as soon as
+it finds one that is true, it grabs the value on the right of the
+squiggle and moves on to the next row. The usual way to write these is
+to have a catch-all condition at the end that is always true, serving
+to make sure that your new variable always gets *some*
+value. `TRUE` is, um, always true. If you want an English word
+for the last condition of your `case_when`, "otherwise" is a
+nice one.
+
+I wanted to check that the observer did check exactly one of
+`V2` and `V3` as I asserted, which can be done by
+gluing this onto the end:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=case_when( 
+X2=="X" & is.na(X3) ~ "Male",
+is.na(X2) & X3=="X" ~ "Female",
+TRUE                ~ "Error!")) %>%
+count(gender)
+```
+
+```
+## # A tibble: 2 x 2
+##   gender     n
+##   <chr>  <int>
+## 1 Female   861
+## 2 Male    1097
+```
+
+            
+
+There are only Males and Females, so the observer really did mark
+exactly one X. (As a bonus, you see that there were slightly more male
+cyclists than female ones.)
+
+Extra: I was wondering how `gather` would play out here. The
+way to do it seems to be to rename the columns first:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+rename(male=X2, female=X3)
+```
+
+```
+## # A tibble: 1,958 x 9
+##    Time   male  female X4    X5    X6    X7    X8    X9   
+##    <time> <chr> <chr>  <chr> <chr> <chr> <chr> <chr> <chr>
+##  1 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  2 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  3 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  4 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  5 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  6 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
+##  7 07:15  <NA>  X      X     <NA>  <NA>  X     <NA>  X    
+##  8 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
+##  9 07:15  <NA>  X      X     <NA>  <NA>  X     X     <NA> 
+## 10 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
+## # ... with 1,948 more rows
+```
+
+ 
+
+and then gather them up:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+rename(male=X2, female=X3) %>%
+gather(gender, what, male:female)
+```
+
+```
+## # A tibble: 3,916 x 9
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   <NA> 
+##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  9 07:15  X     <NA>  <NA>  X     X     <NA>  male   <NA> 
+## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## # ... with 3,906 more rows
+```
+
+ 
+
+I wasn't quite sure what to call "what makes them the same", at
+least not until I had seen how it came out. This is where the
+`X` or missing goes, so we want the lines where `what`
+is equal to `X`:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+rename(male=X2, female=X3) %>%
+gather(gender, what, male:female) %>%
+filter(what=="X")  
+```
+
+```
+## # A tibble: 1,958 x 9
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  9 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## # ... with 1,948 more rows
+```
+
+ 
+
+Another way to do this is to remove the missings in the `gather`:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+rename(male=X2, female=X3) %>%
+gather(gender, what, male:female, na.rm=T) 
+```
+
+```
+## # A tibble: 1,958 x 9
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##  * <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  9 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## # ... with 1,948 more rows
+```
+
+ 
+
+In case you are wondering where the females went, all the males are
+listed first this way, and then all the females. To verify this, we
+can count the males and females obtained this way, and we should get
+the same thing we got before:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+rename(male=X2, female=X3) %>%
+gather(gender, what, male:female, na.rm=T) %>%
+count(gender)
+```
+
+```
+## # A tibble: 2 x 2
+##   gender     n
+##   <chr>  <int>
+## 1 female   861
+## 2 male    1097
+```
+
+ 
+
+And this is what we had before.
+
+
+
+(f) Create variables `helmet`, `passenger` and
+`sidewalk` in your data frame that are `TRUE` if
+the "Yes" column contains `X` and `FALSE`
+otherwise. This will use `mutate` again, but you don't
+need `ifelse`: just set the variable equal to the
+appropriate logical condition. As before, the best way to
+create these variables is to test the appropriate things for
+missingness.  Note that you can create as many new variables
+as you like in one `mutate`. Show the first few lines
+of your new data frame. (Add your code onto the end of the
+pipe you made above.)
+
+
+Solution
+
+
+On the face of it, the way to do this is to go looking
+for `X`'s:
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=ifelse(is.na(X2),"female","male")) %>%
+mutate(helmet=(X4=="X"),
+passenger=(X6=="X"),
+sidewalk=(X8=="X"))
+```
+
+```
+## # A tibble: 1,958 x 13
+##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  4 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  5 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  6 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  7 07:15 <NA>  X     X     <NA>  <NA>  X     <NA>  X     female TRUE  
+##  8 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  9 07:15 <NA>  X     X     <NA>  <NA>  X     X     <NA>  female TRUE  
+## 10 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+## # ... with 1,948 more rows, and 2 more variables: passenger <lgl>,
+## #   sidewalk <lgl>
+```
+
+    
+
+But, we run into the same problem that we did with `gender`:
+the new variables are either `TRUE` or missing, never `FALSE`.
+
+The solution is the same: look for the things that are *missing*
+if the cyclist is wearing a helmet, carrying a passenger or riding on
+the sidewalk. These are `X5, X7, X9` respectively:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=ifelse(is.na(X2),"female","male")) %>%
+mutate(helmet=is.na(X5),
+passenger=is.na(X7),
+sidewalk=is.na(X9)) 
+```
+
+```
+## # A tibble: 1,958 x 13
+##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  4 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  5 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  6 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  7 07:15 <NA>  X     X     <NA>  <NA>  X     <NA>  X     female TRUE  
+##  8 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  9 07:15 <NA>  X     X     <NA>  <NA>  X     X     <NA>  female TRUE  
+## 10 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+## # ... with 1,948 more rows, and 2 more variables: passenger <lgl>,
+## #   sidewalk <lgl>
+```
+
+    
+Again, you can do the `mutate` all on one line if you want to,
+or all four variable assignments in one `mutate`,
+but I used newlines and indentation to make the structure
+clear. 
+
+It is less elegant, though equally good for the purposes of the
+assignment, to use `ifelse` for these as well, which would go
+like this, for example:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=ifelse(X2=="X","male","female")) %>%
+mutate(helmet=ifelse(is.na(X5),T,F))
+```
+
+```
+## # A tibble: 1,958 x 11
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     <NA>   TRUE  
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  <NA>   TRUE  
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+## # ... with 1,948 more rows
+```
+
+ 
+
+and the same for `passenger` and `sidewalk`. The warning
+is, whenever you see a `T` and an `F` in an
+`ifelse`, that you could probably get rid of the
+`ifelse` and use the logical condition directly.\endnote{If I
+was helping you, and you were struggling with `ifelse` but
+finally mastered it, it seemed easier to suggest that you used it
+again for the others.}  For `gender`, though, you need the
+`ifelse` (or a `case_when`) because the values you want
+it to take are `male` and `female`, something other than
+`TRUE` and `FALSE`.
+
+I like to put brackets around logical conditions when I am assigning
+them to a variable. If I don't, I get something like
+
+
+```r
+helmet=V4=="X"
+```
+
+ 
+
+which actually works, but is very hard to read. Well, I *think* it
+works. Let's check:
+
+
+```r
+exes=c("X","","X","","X")
+y=exes=="X"
+y
+```
+
+```
+## [1]  TRUE FALSE  TRUE FALSE  TRUE
+```
+
+
+
+Yes it does. But I would never recommend writing it this way, because
+unless you are paying attention, you won't notice which `=` is
+saving in a variable, and which one is "logically equal".
+
+It works because of a thing called "operator precedence": the
+logical-equals is evaluated first, and the result of that is saved in
+the variable. But unless you or your readers remember that, it's
+better to write
+
+
+```r
+y=(exes=="X")
+```
+
+ 
+
+to draw attention to the order of calculation. This is the same reason that
+
+
+```r
+4+5*6
+```
+
+```
+## [1] 34
+```
+
+ 
+
+evaluates this way rather than doing the addition first and getting
+54. BODMAS and all that.
+
+The `gather` approach works for these too. Rename the columns
+as `yes` and `no`, and then give the "what makes them the same" column a name like `helmet`.
+Give the "what makes them different" column a name like
+`what2`, to make it easier to remove later. And then do the
+same with the others, one `gather` at a time.
+
+
+
+(g)??part:lastpart?? Finally 
+(for the data manipulation), get rid of
+all the original columns, keeping only the new ones that
+you created. Save the results in a data frame and display
+its first few rows.
+ 
+
+Solution
+
+
+This is a breath of fresh air after all the thinking
+needed above: this is just `select`, added to
+the end:
+
+```r
+mybikes = bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=ifelse(is.na(X2),"female","male")) %>%
+mutate(helmet=is.na(X5),
+passenger=is.na(X7),
+sidewalk=is.na(X9)) %>%
+select(-(X2:X9))
+mybikes
+```
+
+```
+## # A tibble: 1,958 x 5
+##    Time   gender helmet passenger sidewalk
+##    <time> <chr>  <lgl>  <lgl>     <lgl>   
+##  1 07:00  male   FALSE  FALSE     FALSE   
+##  2 07:00  male   FALSE  FALSE     FALSE   
+##  3 07:00  male   FALSE  FALSE     FALSE   
+##  4 07:00  male   FALSE  FALSE     FALSE   
+##  5 07:00  male   FALSE  FALSE     FALSE   
+##  6 07:15  male   TRUE   FALSE     FALSE   
+##  7 07:15  female TRUE   FALSE     FALSE   
+##  8 07:15  male   TRUE   FALSE     FALSE   
+##  9 07:15  female TRUE   FALSE     TRUE    
+## 10 07:15  male   TRUE   FALSE     FALSE   
+## # ... with 1,948 more rows
+```
+
+           
+
+You might not have renamed your `X1`, in which case, you still
+have it, but need to keep it (because it holds the times).
+
+Another way to do this is to use a "select-helper", thus:
+
+
+```r
+bikes %>% fill(X1) %>% rename(Time=X1) %>%
+mutate(gender=ifelse(is.na(X2),"female","male")) %>%
+mutate(helmet=is.na(X5),
+passenger=is.na(X7),
+sidewalk=is.na(X9)) %>%
+select(-num_range("X",2:9))
+```
+
+```
+## # A tibble: 1,958 x 5
+##    Time   gender helmet passenger sidewalk
+##    <time> <chr>  <lgl>  <lgl>     <lgl>   
+##  1 07:00  male   FALSE  FALSE     FALSE   
+##  2 07:00  male   FALSE  FALSE     FALSE   
+##  3 07:00  male   FALSE  FALSE     FALSE   
+##  4 07:00  male   FALSE  FALSE     FALSE   
+##  5 07:00  male   FALSE  FALSE     FALSE   
+##  6 07:15  male   TRUE   FALSE     FALSE   
+##  7 07:15  female TRUE   FALSE     FALSE   
+##  8 07:15  male   TRUE   FALSE     FALSE   
+##  9 07:15  female TRUE   FALSE     TRUE    
+## 10 07:15  male   TRUE   FALSE     FALSE   
+## # ... with 1,948 more rows
+```
+
+           
+
+This means "get rid of all the columns whose names are *X* followed by a number 2 through 9". 
+
+The pipe looks long and forbidding, but you built it (and tested it) a
+little at a time. Which is how you do it.
+
+
+
+(h) The next few parts are a quick-fire analysis of
+the data set. They can all be solved using `count`.
+How many male and how many female cyclists were observed
+in total?
+
+
+Solution
+
+
+I already got this one when I was checking for
+observer-notation errors earlier:
+
+```r
+mybikes %>% count(gender)
+```
+
+```
+## # A tibble: 2 x 2
+##   gender     n
+##   <chr>  <int>
+## 1 female   861
+## 2 male    1097
+```
+
+                   
+
+861 females and 1097 males.
+
+
+
+(i) How many male and female cyclists were not
+wearing helmets?
+
+
+Solution
+
+
+You can count two variables at once, in which case
+you get counts of all combinations of them:
+
+```r
+mybikes %>% count(gender,helmet)
+```
+
+```
+## # A tibble: 4 x 3
+##   gender helmet     n
+##   <chr>  <lgl>  <int>
+## 1 female FALSE    403
+## 2 female TRUE     458
+## 3 male   FALSE    604
+## 4 male   TRUE     493
+```
+
+                   
+
+403 females and 604 males were not wearing helmets, picking out what
+we need.
+
+The real question of interest here is "what *proportion* of male and female cyclists were not wearing helmets?"
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">But I didn't want to complicate this question any farther.</span> 
+This has a rather elegant
+solution that I will have to explain. First, let's go back to the
+`group_by` and `summarize` version of the
+`count` here:
+
+
+```r
+mybikes %>% group_by(gender,helmet) %>%
+summarize(the_ount=n())
+```
+
+```
+## # A tibble: 4 x 3
+## # Groups:   gender [?]
+##   gender helmet the_ount
+##   <chr>  <lgl>     <int>
+## 1 female FALSE       403
+## 2 female TRUE        458
+## 3 male   FALSE       604
+## 4 male   TRUE        493
+```
+
+ 
+
+That's the same table we got just now. Now, let's calculate a
+proportion and see what happens:
+
+
+```r
+mybikes %>% group_by(gender,helmet) %>%
+summarize(the_count=n()) %>%
+mutate(prop=the_count/sum(the_count))
+```
+
+```
+## # A tibble: 4 x 4
+## # Groups:   gender [2]
+##   gender helmet the_count  prop
+##   <chr>  <lgl>      <int> <dbl>
+## 1 female FALSE        403 0.468
+## 2 female TRUE         458 0.532
+## 3 male   FALSE        604 0.551
+## 4 male   TRUE         493 0.449
+```
+
+ 
+
+We seem to have the proportions of males and females who were and were
+not wearing a helmet, and you can check that this is indeed the case,
+for example:
+
+
+```r
+403/(403+458)
+```
+
+```
+## [1] 0.4680604
+```
+
+ 
+47\% of females were not wearing helmets, while 55\% of males were
+helmetless. (You can tell from the original frequencies that a small
+majority of females wore helmets and a small majority of males did not.)
+
+Now, we have to ask ourselves: how on earth did that work?
+
+When you calculate a summary (like our `sum(count)` above), it
+figures that you can't want the sum by gender-helmet combination,
+since you already have those in `count`. You must want the sum
+*over* something. What? What happens is that it goes back to the
+`group_by` and "peels off" the last thing there, which in
+this case is `helmet`, leaving only `gender`. It then
+sums the counts for each gender, giving us what we wanted.
+
+It just blows my mind that someone (ie., Hadley Wickham) could (i) think
+that this would be a nice syntax to have (instead of just being an
+error), (ii) find a way to implement it and (iii) find a nice logical
+explanation ("peeling off") to explain how it worked.
+
+What happens if we switch the order of the things in the `group_by`?
+
+
+```r
+mybikes %>% group_by(helmet,gender) %>%
+summarize(the_count=n()) %>%
+mutate(prop=the_count/sum(the_count))
+```
+
+```
+## # A tibble: 4 x 4
+## # Groups:   helmet [2]
+##   helmet gender the_count  prop
+##   <lgl>  <chr>      <int> <dbl>
+## 1 FALSE  female       403 0.400
+## 2 FALSE  male         604 0.600
+## 3 TRUE   female       458 0.482
+## 4 TRUE   male         493 0.518
+```
+
+ 
+
+Now we get the proportion of helmeted riders of each gender, which is
+not the same as what we had before. Before, we had "out of males"
+and "out of females"; now we have "out of helmeted riders" and
+"out of helmetless riders". (The riders with helmets are almost
+50--50 males and females, but the riders without helmets are about
+60\% male.)
+
+This is row and column proportions in a contingency table, B22 style.
+
+Now, I have to see whether the `count` variant of this works:
+
+```r
+mybikes %>% count(gender,helmet) %>%
+mutate(prop=n/sum(n))
+```
+
+```
+## # A tibble: 4 x 4
+##   gender helmet     n  prop
+##   <chr>  <lgl>  <int> <dbl>
+## 1 female FALSE    403 0.206
+## 2 female TRUE     458 0.234
+## 3 male   FALSE    604 0.308
+## 4 male   TRUE     493 0.252
+```
+
+ 
+
+It doesn't. Well, it kind of does, but it divided by the sum of all of
+them rather than "peeling off", so these are overall proportions
+rather than row or column proportions.
+
+So I think you have to do this the `group_by` and
+`summarize` way.
+
+
+
+(j) How many cyclists were riding on the sidewalk
+*and* carrying a passenger?
+
+
+Solution
+
+
+Not too many, I'd hope. Again:
+
+```r
+mybikes %>% count(passenger, sidewalk)
+```
+
+```
+## # A tibble: 3 x 3
+##   passenger sidewalk     n
+##   <lgl>     <lgl>    <int>
+## 1 FALSE     FALSE     1880
+## 2 FALSE     TRUE        73
+## 3 TRUE      FALSE        5
+```
+
+                   
+
+We're looking for the "true", "true" entry of that table, which
+seems to have vanished. That means the count is *zero*:
+none at all. 
+(There were
+only 5 passenger-carrying riders, and they were all on the road.)
+
+
+
+(k) What was the busiest 15-minute period of the
+day, and how many cyclists were there then?
+
+
+Solution
+
+
+The obvious way is to list every 15-minute period
+and eyeball the largest frequency. There are quite a
+few 15-minute periods, so be prepared to hit Next a
+few times (or use `View`):
+
+
+```r
+mybikes %>% count(Time) %>% print(n=Inf)
+```
+
+```
+## # A tibble: 48 x 2
+##    Time       n
+##    <time> <int>
+##  1 07:00      5
+##  2 07:15      8
+##  3 07:30      9
+##  4 07:45      5
+##  5 08:00     18
+##  6 08:15     14
+##  7 08:30     12
+##  8 08:45     22
+##  9 09:00     17
+## 10 09:15     15
+## 11 09:30     16
+## 12 09:45     12
+## 13 10:00      8
+## 14 10:15     21
+## 15 10:30     22
+## 16 10:45     19
+## 17 11:00     30
+## 18 11:15     14
+## 19 11:30     27
+## 20 11:45     28
+## 21 12:00     22
+## 22 12:15     35
+## 23 12:30     40
+## 24 12:45     33
+## 25 13:00     44
+## 26 13:15     46
+## 27 13:30     29
+## 28 13:45     41
+## 29 14:00     36
+## 30 14:15     45
+## 31 14:30     33
+## 32 14:45     50
+## 33 15:00     49
+## 34 15:15     51
+## 35 15:30     61
+## 36 15:45     79
+## 37 16:00    101
+## 38 16:15     56
+## 39 16:30     51
+## 40 16:45     75
+## 41 17:00    104
+## 42 17:15    128
+## 43 17:30     80
+## 44 17:45     73
+## 45 18:00     75
+## 46 18:15     78
+## 47 18:30     63
+## 48 18:45     58
+```
+
+                   
+
+17:15, or 5:15 pm, with 128 cyclists. 
+
+But, computers are meant to save us that kind of effort. How?  Note
+that the output from `count` is itself a data frame, so
+anything you can do to a data frame, you can do to *it*: for
+example, display only the rows where the frequency equals the maximum
+frequency:
+
+
+```r
+mybikes %>% count(Time) %>% 
+filter(n==max(n))
+```
+
+```
+## # A tibble: 1 x 2
+##   Time       n
+##   <time> <int>
+## 1 17:15    128
+```
+
+                   
+
+That will actually display *all* the times where the cyclist
+count equals the maximum, of which there might be more than one.
+
 
 
 

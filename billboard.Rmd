@@ -3,10 +3,9 @@
 
 
  The data file
-[http://stat405.had.co.nz/data/billboard.csv](http://stat405.had.co.nz/data/billboard.csv) contains a lot of
+[link](http://stat405.had.co.nz/data/billboard.csv) contains a lot of
 information about songs popular in 2000. This dataset is untidy.  Our
-ultimate aim is to answer ``which song occupied the \#1 position for
-the largest number of weeks?''. To do that, we will build a pipe that
+ultimate aim is to answer "which song occupied the \#1 position for the largest number of weeks?". To do that, we will build a pipe that
 starts from the data frame read in from the URL above, and finishes
 with an answer to the question. I will take you through this step by
 step. Each part will involve adding something to the pipe you built
@@ -23,13 +22,17 @@ Solution
 
 ```{r }
 billboard=read_csv("http://stat405.had.co.nz/data/billboard.csv")
-```       
+```
+
+       
 
 There are a *lot* of columns. What does this look like?
 
 ```{r }
 billboard
-``` 
+```
+
+ 
 
 On yours, you will definitely see a little arrow top right saying
 "there are more columns", and you will have to click on it several
@@ -57,14 +60,18 @@ This is `gather`ing up all those columns, with
 `na.rm=T` to get rid of the missings:
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) 
-```         
+```
+
+         
 
 Another way to do this is with a select-helper: all those column names
 end with `week`, so we can select them all thus:
 
 ```{r }
 billboard %>% gather(week,rank,ends_with("week"),na.rm=T)
-``` 
+```
+
+ 
 
 There are now only 9 columns, a lot fewer than we started with. This
 is (I didn't need you to say) because we have collected together all
@@ -85,7 +92,9 @@ songs over 76 weeks, so this many:
 
 ```{r }
 317*76
-``` 
+```
+
+ 
 
 song-week combinations.
 
@@ -110,7 +119,9 @@ A `select` is the thing:
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 select(week, rank)
-```         
+```
+
+         
 
 
 
@@ -133,7 +144,9 @@ billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
 rank_number=parse_number(rank)) %>%
 select(ends_with("number"))
-```         
+```
+
+         
 You see that these are indeed numbers. (I gave my new columns names
 that ended with `number`, which meant that I could select them
 with the select-helper `ends_with`. I'm not insisting that you
@@ -178,7 +191,9 @@ mutate(week_number=parse_number(week),
 rank_number=parse_number(rank)) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 select(date.entered,week_number,current)
-```         
+```
+
+         
 
 Don't forget to use your `week`-turned-into-number, or else it
 won't work! (This bit me too, so you don't need to feel bad.)
@@ -200,7 +215,9 @@ of the 5,000-odd rows of the data frame. To do that, add the line
 
 ```{r echo=F}
 set.seed(457299)
-``` 
+```
+
+ 
 
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
@@ -209,7 +226,9 @@ rank_number=parse_number(rank)) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 select(date.entered,week_number,current) %>%
 sample_n(10)  
-``` 
+```
+
+ 
 
 This gives a variety of rows to check. The first `current`
 should be $27-1=26$ weeks, or about 6 months, after the date the song
@@ -248,7 +267,9 @@ mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
 select(artist.inverted,track,current) 
-```         
+```
+
+         
 
 You'll see the first ten rows, as here, but with clickable buttons to
 see the next 10 (and the previous 10 if you have moved beyond 1--10). 
@@ -292,11 +313,12 @@ filter(rank==1) %>%
 arrange(current) %>%
 select(artist.inverted,track,current) %>%
 count(track)
-```         
+```
+
+         
 
 Then you can scan down the `n` column, find that the
-biggest number is 11, and say: it's the song ``Independent Women Part
-I'' by Destiny's Child. This is 3 points (out of 4, when the question
+biggest number is 11, and say: it's the song "Independent Women Part I" by Destiny's Child. This is 3 points (out of 4, when the question
 was to be handed in).
 
 But, this is a data frame, so anything we can do to a data frame we
@@ -313,7 +335,9 @@ arrange(current) %>%
 select(artist.inverted,track,current) %>%
 count(track) %>%
 filter(n==max(n))
-``` 
+```
+
+ 
 
 or arranging them in (most logically, descending) order by `n`
 to make it easier to pick out the top one:
@@ -328,7 +352,9 @@ arrange(current) %>%
 select(artist.inverted,track,current) %>%
 count(track) %>%
 arrange(desc(n))
-``` 
+```
+
+ 
 
 Either of those will net you the 4th point.
 
@@ -358,7 +384,9 @@ arrange(current) %>%
 select(combo,current) %>%
 count(combo) %>%
 arrange(desc(n))
-``` 
+```
+
+ 
 
 I don't think it makes any difference here, but it might in other
 years, or if you look over several years where you might get cover
