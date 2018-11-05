@@ -1,5 +1,4 @@
-% Body fat revisited
-
+##  Body fat revisited
 
 
  Athletes are concerned with measuring their body fat
@@ -8,7 +7,7 @@ and the other using X-ray technology. We are interested in whether
 there is a difference in the mean body fat percentage as measured by
 these two methods, and if so, how big that difference is. Data on 16
 athletes are at
-[http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
 
 We saw this data set before.
 
@@ -29,7 +28,7 @@ you'll know that the values are separated by single spaces:
 myurl="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
 bodyfat=read_delim(myurl," ")
 bodyfat  
-``` 
+```
 %%%
 
 
@@ -48,7 +47,9 @@ for the matched-pairs sign test. So we should calculate and save them first:
 
 ```{r }
 bodyfat %>% mutate(diff=xray-ultrasound) -> bodyfat2
-``` 
+```
+
+ 
 
 I seem to be using a 2 on the end to name my
 dataframe-with-differences, but you can use whatever name you like.
@@ -57,7 +58,9 @@ Then, not forgetting to use the data frame that we just made:
 
 ```{r }
 ggplot(bodyfat2,aes(sample=diff))+stat_qq()+stat_qq_line()
-```   
+```
+
+   
 This is showing a little evidence of skewness or outliers  (depending
 on your point of view: either is good). The lowest and highest values
 are both too high, and the pattern of points on the plot is kind of
@@ -129,7 +132,9 @@ Remembering again to use the data frame that has the differences in it:
 
 ```{r }
 sign_test(bodyfat2, diff, 0)
-``` 
+```
+
+ 
 
 The two-sided P-value is 0.4545, so we are nowhere near rejecting the
 null hypothesis that the median difference is zero. There is no

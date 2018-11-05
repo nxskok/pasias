@@ -8,7 +8,7 @@ and the other using X-ray technology. We are interested in whether
 there is a difference in the mean body fat percentage as measured by
 these two methods, and if so, how big that difference is. Data on 16
 athletes are at
-[http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
 
 
 
@@ -59,7 +59,9 @@ you'll know that the values are separated by single spaces:
 myurl="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
 bodyfat=read_delim(myurl," ")
 bodyfat  
-``` 
+```
+
+ 
 
 16 rows (athletes) and 3 columns, one for each measurement
 method and one labelling the athletes. All good.
@@ -89,7 +91,9 @@ allow `data=`, so we have to go the `with` way:
 
 ```{r }
 with(bodyfat,t.test(xray,ultrasound,paired=T))
-``` 
+```
+
+ 
 
 
 
@@ -116,13 +120,17 @@ split. Here that would go like this:
 
 ```{r }
 with(bodyfat,table(xray>ultrasound))
-``` 
+```
+
+ 
 
 or like this:
 
 ```{r }
 bodyfat %>% count(xray>ultrasound)
-``` 
+```
+
+ 
 
 6 times the X-ray value was bigger, and 10 times the ultrasound value
 was. A pretty even split, so it's not surprising that we failed to
@@ -172,7 +180,9 @@ haven't talked about that yet, the plot to make is a histogram:
 ```{r }
 bodyfat %>% mutate(diff=xray-ultrasound) %>%
 ggplot(aes(x=diff))+geom_histogram(bins=6)
-```   
+```
+
+   
 
 I don't know whether you'd call that "approximately normal" or
 not. We are in kind of a double-bind with this one: the sample size is
@@ -194,7 +204,9 @@ normal quantile plot:
 ```{r }
 bodyfat %>% mutate(diff=xray-ultrasound) %>%
 ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
-```   
+```
+
+   
 This is showing a little evidence of skewness or outliers  (depending
 on your point of view: either is good). The lowest and highest values
 are both too high, and the pattern of points on the plot is kind of

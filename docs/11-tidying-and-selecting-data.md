@@ -503,6 +503,316 @@ opening night, the attendance will be much bigger, which points to a
 
 
 
+##  Baseball and softball spaghetti
+
+
+ On a previous assignment, we found that students could throw
+a baseball further than they could throw a softball. In this question,
+we will make a graph called a "spaghetti plot" to illustrate this
+graphically. (The issue previously was that the data were matched
+pairs: the same students threw both balls.)
+
+This seems to work most naturally by building a pipe, a line or two at
+a time. See if you can do it that way. (If you can't, use lots of
+temporary data frames, one to hold the result of each part.)
+
+
+
+(a) Read in the data again from
+[link](http://www.utsc.utoronto.ca/~butler/c32/throw.txt). The
+variables had no names, so supply some, as you did before.
+
+
+Solution
+
+
+Literal copy and paste: 
+
+```r
+myurl="http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
+throws=read_delim(myurl," ",col_names=c("student","baseball","softball"))
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   student = col_integer(),
+##   baseball = col_integer(),
+##   softball = col_integer()
+## )
+```
+
+```r
+throws
+```
+
+```
+## # A tibble: 24 x 3
+##    student baseball softball
+##      <int>    <int>    <int>
+##  1       1       65       57
+##  2       2       90       58
+##  3       3       75       66
+##  4       4       73       61
+##  5       5       79       65
+##  6       6       68       56
+##  7       7       58       53
+##  8       8       41       41
+##  9       9       56       44
+## 10      10       70       65
+## # ... with 14 more rows
+```
+
+       
+
+
+
+(b) Create a new column that is the students turned into a
+`factor`, adding it to your data frame.
+
+
+Solution
+
+
+Feed `student` into `factor`, creating a new
+column with `mutate`:
+
+```r
+throws %>% mutate(fs=factor(student))
+```
+
+```
+## # A tibble: 24 x 4
+##    student baseball softball fs   
+##      <int>    <int>    <int> <fct>
+##  1       1       65       57 1    
+##  2       2       90       58 2    
+##  3       3       75       66 3    
+##  4       4       73       61 4    
+##  5       5       79       65 5    
+##  6       6       68       56 6    
+##  7       7       58       53 7    
+##  8       8       41       41 8    
+##  9       9       56       44 9    
+## 10      10       70       65 10   
+## # ... with 14 more rows
+```
+
+       
+
+This doesn't look any different from the original student numbers, but
+note the variable type at the top of the column.
+
+
+
+(c) Gather together all the throwing distances into one column,
+making a second column that says which ball was thrown.
+
+
+Solution
+
+
+Literally `gather` (from `tidyr`):
+
+```r
+throws %>% mutate(fs=factor(student)) %>% 
+gather(ball,distance,baseball:softball)
+```
+
+```
+## # A tibble: 48 x 4
+##    student fs    ball     distance
+##      <int> <fct> <chr>       <int>
+##  1       1 1     baseball       65
+##  2       2 2     baseball       90
+##  3       3 3     baseball       75
+##  4       4 4     baseball       73
+##  5       5 5     baseball       79
+##  6       6 6     baseball       68
+##  7       7 7     baseball       58
+##  8       8 8     baseball       41
+##  9       9 9     baseball       56
+## 10      10 10    baseball       70
+## # ... with 38 more rows
+```
+
+       
+
+Two columns to include, consecutive ones, or two to omit, the first
+and last. So I think it's
+easier to name the ones you want to include. 
+
+If you want to show off a little, you can use a select-helper, noting
+that the columns you want to gather up all end in "ball":
+
+
+```r
+throws %>% mutate(fs=factor(student)) %>% 
+gather(ball,distance,ends_with("ball"))
+```
+
+```
+## # A tibble: 48 x 4
+##    student fs    ball     distance
+##      <int> <fct> <chr>       <int>
+##  1       1 1     baseball       65
+##  2       2 2     baseball       90
+##  3       3 3     baseball       75
+##  4       4 4     baseball       73
+##  5       5 5     baseball       79
+##  6       6 6     baseball       68
+##  7       7 7     baseball       58
+##  8       8 8     baseball       41
+##  9       9 9     baseball       56
+## 10      10 10    baseball       70
+## # ... with 38 more rows
+```
+
+       
+
+with the same result. Use whichever you like.
+
+
+
+(d) Using your new data frame, make a "scatterplot" of throwing
+distance against type of ball.
+
+
+Solution
+
+
+The obvious thing:
+
+```r
+throws %>% mutate(fs=factor(student)) %>% 
+gather(ball,distance,baseball:softball) %>%
+ggplot(aes(x=ball,y=distance))+geom_point()
+```
+
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+
+       
+
+What this plot is missing is an indication of which student threw
+which ball. As it stands now, it could be an inferior version of a
+boxplot of distances thrown for each ball (which would imply that they
+are two independent sets of students, something that is not true).
+
+
+
+(e) Add two things to your plot: something that will distinguish
+the students by colour (this works best if the thing distinguished
+by colour is a factor),
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You can try it without. See below.</span>
+and something that will join the two points for the same student by
+a line.
+
+
+Solution
+
+
+A `colour` and a `group` in the `aes`, and
+a `geom_line`:
+
+```r
+throws %>% mutate(fs=factor(student)) %>% 
+gather(ball,distance,baseball:softball) %>%
+ggplot(aes(x=ball,y=distance,group=fs,colour=fs))+
+geom_point()+geom_line()
+```
+
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+
+     
+
+You can see what happens if you use the student as a number:
+
+
+```r
+throws %>% mutate(fs=factor(student)) %>% 
+gather(ball,distance,baseball:softball) %>%
+ggplot(aes(x=ball,y=distance,group=student,colour=student))+
+geom_point()+geom_line()
+```
+
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+
+     
+
+Now the student numbers are distinguished as a shade of blue (on an
+implied continuous scale: even a nonsensical fractional student number
+like 17.5 would be a shade of blue). This is not actually so bad here,
+because all we are trying to do is to distinguish the students
+sufficiently from each other so that we can see where the spaghetti
+strands go. But I like the multi-coloured one better.
+
+
+
+(f) The legend is not very informative. Remove it from the plot,
+using `guides`.
+
+
+Solution
+
+
+You won't have seen this before. Here's what to do: Find what's
+at the top of the legend that you want to remove. Here that is
+`fs`. Find where `fs` appears in your
+`aes`. It actually appears in two places: in
+`group` and `colour`. I think the legend we want
+to get rid of is actually the `colour` one, so we do this:
+
+```r
+throws %>% mutate(fs=factor(student)) %>% 
+gather(ball,distance,baseball:softball) %>%
+ggplot(aes(x=ball,y=distance,group=fs,colour=fs))+
+geom_point()+geom_line()+
+guides(colour=F) 
+```
+
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+
+       
+
+That seems to have done it.
+
+
+
+(g) What do you see on the final spaghetti plot? What does that tell you
+about the relative distances a student can throw a baseball vs.\ a
+softball? Explain briefly, blah blah blah.
+
+
+Solution
+
+
+Most of the spaghetti strands go downhill from baseball to
+softball, or at least very few of them go uphill. That tells us
+that most students can throw a baseball further than a softball.
+That was the same impression that the matched-pairs $t$-test
+gave us. But the spaghetti plot tells us something else. If you
+look carefully, you see that most of the big drops are for
+students who could throw a baseball a long way. These students
+also threw a softball further than the other students, but not
+by as much. Most of the spaghetti strands in the bottom half of
+the plot go more or less straight across. This indicates that
+students who cannot throw a baseball very far will throw a
+softball about the same distance as they threw the baseball.
+There is an argument you could make here that the difference
+between distances thrown is a *proportional* one, something
+like "a student typically throws a baseball 20\% further than a softball". 
+That could be assessed by comparing not the
+distances themselves, but the logs of the distances: in other
+words, making a log transformation of all the
+distances. (Distances have a lower limit of zero, so you might
+expect observed distances to be skewed to the right, which is
+another argument for making some kind of transformation.)
+
+
+
+
+
+
 ##  Ethanol and sleep time in rats
 
 
@@ -656,7 +966,7 @@ Solution
 ggplot(sleep,aes(x=treatment,y=sleeptime))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
 
 
@@ -1022,7 +1332,7 @@ Nothing terribly surprising here. My data frame is called
 ggplot(toms2,aes(x=colour, y=growthrate))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
 
      
 
@@ -1726,7 +2036,7 @@ Another way is to draw a boxplot of pain-relief scores:
 ggplot(migraine2,aes(x=drug,y=painrelief))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 

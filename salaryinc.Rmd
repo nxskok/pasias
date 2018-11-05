@@ -8,11 +8,11 @@ increasing. To do this, the company randomly samples 20 employees that
 have been working there since January 2016, and for each of these
 employees, records their salary in January 2016 and January 2017. The
 data, with salaries in thousands of dollars, are in
-[https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt](https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt). 
+[link](https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt). 
 
 
 
-(a)[2] Read the data into R and demonstrate that you have two
+(a) Read the data into R and demonstrate that you have two
 salaries for each of 20 employees.
 
 Solution
@@ -24,14 +24,16 @@ exactly one space:
 my_url="https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt"
 salaries=read_delim(my_url," ")
 salaries
-```     
+```
+
+     
 
 There are 20 employees (rows), and two columns of salaries: for each
 employee in the data set, their salary in January 2016 and in January
 2017 (thus, two salaries for each employee).
 
 
-(b)[2] To compare the salaries, explain briefly why a
+(b) To compare the salaries, explain briefly why a
 matched-pairs test would be better than a two-sample test.
 
 Solution
@@ -47,7 +49,7 @@ You can go after this either way: why a matched-pairs approach is
 appropriate, or why a two-sample approach is not (or a bit of both).
 
 
-(c)[4] Make a suitable graph to assess the assumptions for a
+(c) Make a suitable graph to assess the assumptions for a
 matched-pairs $t$-test. What does your graph tell you?
 
 Solution
@@ -65,7 +67,9 @@ first. The smoothest way is to make a pipeline:
 salaries %>%
 mutate(diff=jan2017-jan2016) %>%
 ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
-```     
+```
+
+     
 
 A couple of coding notes: (i) you can take the differences 2016 minus
 2017 if you like (then they will tend to be negative), (ii)
@@ -94,7 +98,7 @@ anyway, hence my comment in the next part, but the result is probably
 not *so* trustworthy.
 
 
-(d)[3] Carry out a suitable matched-pairs $t$-test on these data. (If you
+(d) Carry out a suitable matched-pairs $t$-test on these data. (If you
 thought in the previous part that this was the wrong thing to do, do
 it anyway for the purposes of this assignment.) What do you conclude?
 
@@ -106,14 +110,18 @@ over time, so we need a one-sided alternative.
 Following through the procedure, even though you may not trust it much:
 ```{r }
 with(salaries, t.test(jan2016, jan2017, alternative="less", paired=T))
-```     
+```
+
+     
 
 You could also have the years the other way around, in which case the
 alternative has to be the other way around as well:
 
 ```{r }
 with(salaries, t.test(jan2017, jan2016, alternative="greater", paired=T))
-``` 
+```
+
+ 
 
 Or, if you saved the data frame with the differences in it, do a
 one-sample test on those, again making sure that you get the
@@ -124,7 +132,9 @@ differences again:
 salaries %>%
 mutate(diff=jan2017-jan2016) %>%
 with(.,t.test(diff, mu=0, alternative="greater"))
-``` 
+```
+
+ 
 
 Whichever way you do it, the P-value is the same $2.271 \times
 10^{-9}$, which is a whole lot less than 0.05, so there is no doubt at
@@ -141,7 +151,9 @@ library(smmr)
 salaries %>%
 mutate(diff=jan2017-jan2016) %>%
 sign_test(diff,0)
-``` 
+```
+
+ 
 
 and then take the "upper" P-value, which is in the same ballpark as
 the one from the $t$-test. So the salaries really are increasing,
@@ -152,7 +164,7 @@ single employee's salary increased}.
 one with the differences in it.)
 
 
-(e)[2] The company would like to estimate  \emph{how
+(e) The company would like to estimate  \emph{how
 much} salaries are increasing, on average. Obtain some output that
 will enable the company to assess this, and tell the CEO which piece
 of the output they should look at.
@@ -165,7 +177,9 @@ A confidence interval. 95\% is fine. As before, we have to run
 confidence interval for us is two-sided:
 ```{r }
 with(salaries, t.test(jan2017, jan2016, paired=T))
-```     
+```
+
+     
 
 Between about \$5,000 and about \$7,500. This is what to tell the CEO.
 

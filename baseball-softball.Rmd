@@ -1,0 +1,197 @@
+##  Throwing baseballs and softballs
+
+
+ Can students throw a baseball farther than a softball? A
+statistics class, containing 24 students, went out to a football field
+to try to answer this question. Each student warmed up and then threw
+each type of ball as far as they could. The order of ball types was
+randomized: some students threw the baseball first, and some threw the
+softball first. (A softball is bigger than a baseball, so we might
+expect that a softball would be harder to throw a long way than a
+baseball.) The data are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/throw.txt) in three
+columns: the first is a number identifying the student, the second is
+the distance thrown with the baseball (in yards) and the third is the
+distance thrown with the softball (also in yards).
+
+
+
+(a) Read the data into SAS. *There are no column headers*,
+which you'll need to take into account.
+
+
+Solution
+
+
+The file extension suggests that the data values are separated by
+spaces, which is correct, but there are *no* variable names,
+so `getnames=no`:
+\begin{Datastep}
+filename myurl url "http://www.utsc.utoronto.ca/~butler/c32/throw.txt";
+
+proc import 
+datafile=myurl
+dbms=dlm
+out=throw
+replace;
+delimiter=' ';
+getnames=no;
+\end{Datastep}
+There are no variable names, so SAS had to invent some:
+\begin{Sascode}[store=dat]
+proc print;      
+\end{Sascode}
+\Listing[store=dat, fontsize=footnotesize]{datt}
+The data values look OK, and there are correctly 24 rows. The
+column names are `VAR1`, the student IDs, `VAR2`,
+the distance thrown with a baseball, and `VAR3`, the
+distance thrown with a softball.
+
+
+
+(b) Calculate a column of differences, baseball minus softball.
+
+
+Solution
+
+
+Remember how SAS wants you to do this: create a new data set,
+copy in everything from the previous one, and *then* create
+your new variable. Don't forget to use SAS's variable names:
+\begin{Datastep}
+data throw2;
+set throw;
+diff=VAR2-VAR3;
+\end{Datastep}
+and for completeness check that it worked, bearing in mind that
+the most-recently created data set is the new one,
+`throw2`, so this will do the right thing:
+\begin{Sascode}[store=gina]
+proc print;        
+\end{Sascode}
+\Listing[store=gina, fontsize=footnotesize]{ginaa}
+which it did.
+
+
+
+(c) Make a normal quantile plot of the differences. On your
+plot, add a line (using a $\mu$ and $\sigma$ estimated from the
+data). What do you conclude from the plot, and thus why would a sign
+test be more appropriate than a matched-pairs $t$-test?
+
+
+Solution
+
+
+This kind of thing:
+\begin{Sascode}[store=dau]
+proc univariate noprint;
+qqplot diff / normal(mu=est sigma=est);
+\end{Sascode}
+with result
+\Graphic[store=dau,scale=0.7]{dauu}
+These differences are mostly normal, except for the outlier at the
+upper end. The outlier makes us doubt normality, which is assumed
+for a $t$-test, so a sign test would be more appropriate.
+You could also reasonably see a curve in the normal quantile plot,
+with the lowest values being a bit too high and the outlier at the
+top end. I'm not sure, myself, that those low-end values are all
+that bunched-up, but this is a reasonable way of looking at the
+plot, and leads to the same conclusion.
+I have made noises elsewhere about not using this line. Does it
+look much different if we use median and IQR?
+\begin{Sascode}[store=yusej]
+proc means median qrange;
+var diff;
+\end{Sascode}
+\Listing[store=yusej]{yusejj}
+
+```{r }
+9/1.35
+```
+
+   
+
+and so:
+
+\begin{Sascode}[store=gewuv]
+proc univariate noprint;
+qqplot diff / normal(mu=5 sigma=6.67);
+\end{Sascode}
+
+\Graphic[store=gewuv, scale=0.7]{gewuvv}
+
+Not much different. Certainly, I think the best conclusion is that
+there is an outlier at the top end.
+
+
+(d) Think about how you would use a sign test in this
+matched-pairs situation. Run an appropriate sign test in SAS,
+bearing in mind the null and alternative hypotheses that you wish to
+test. What do you conclude, in the context of the data?
+
+
+Solution
+
+
+In the matched-pairs context, our null hypothesis is that there is
+no difference  between how far students can throw a baseball and a
+softball: that is, that the median difference is zero. We wanted to
+see whether students can throw a baseball further on average than
+a softball: that is, whether the median difference is *greater*
+than zero (the way around I calculated it: if you did softball
+minus baseball, the median difference would be *less* than zero).
+Thus the SAS code is something like this:
+\begin{Sascode}[store=dav]
+proc univariate mu0=0;
+var diff;
+\end{Sascode}
+This will get us, remember, a two-sided test:
+\Listing[store=dav, objects=testsforlocation, fontsize=footnotesize]{davv}
+The two-sided P-value is less than 0.0001. But we wanted a
+one-sided P-value, for testing that the median difference is
+*greater* than zero. So we ought first to check that the
+median difference in the sample is greater than zero, which is
+also on the `proc univariate` output:
+\Listing[store=dav, objects=basicmeasures, fontsize=footnotesize]{davw}
+The median difference is 5, so we are "on the correct side", and
+our one-sided P-value is half the two-sided one, less than
+0.00005. This is definitely small enough to reject the null with,
+and we can conclude that students really can throw a baseball
+farther than a softball.
+When we did this in R, we got a P-value of 0.000033, which is
+consistent with this one. (You might argue that ``less than
+0.00005'' is as accurate as you need to be, since it points to a
+really small P-value; knowing how much smaller than that it is is
+not really very informative.)
+For a complete answer, you need in your discussion to say that
+SAS's P-value is two-sided and we need a one-sided one. Simply
+halving the two-sided one is not the best (you really ought to
+convince yourself that you are "on the correct side"), but is
+acceptable. An answer simply using SAS's P-value, even though
+"less than 0.0001" is the right answer, is not the right answer
+for the right reason, and so is incomplete.
+
+
+
+(e) Obtain a 95\% confidence interval for the median. Compare with
+what you got before from R.
+
+
+Solution
+
+
+The magic word is `cipctldf`:
+\begin{Sascode}[store=tucoq]
+proc univariate cipctldf;
+var diff;
+\end{Sascode}
+\Listing[store=tucoq, fontsize=footnotesize, objects=quantiles]{tucoqq}
+
+The confidence interval for the median difference is from 2 to
+9. This is how much further, on average, students can throw a
+baseball than a softball. (This is the same interval that came out
+of R.)
+
+
+

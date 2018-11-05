@@ -38,7 +38,7 @@ and the other using X-ray technology. We are interested in whether
 there is a difference in the mean body fat percentage as measured by
 these two methods, and if so, how big that difference is. Data on 16
 athletes are at
-[http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
 
 
 
@@ -126,6 +126,8 @@ bodyfat
 ## 16      16 18         18.2
 ```
 
+ 
+
 16 rows (athletes) and 3 columns, one for each measurement
 method and one labelling the athletes. All good.
 
@@ -171,6 +173,8 @@ with(bodyfat,t.test(xray,ultrasound,paired=T))
 ##                -0.09375
 ```
 
+ 
+
 
 
 
@@ -205,6 +209,8 @@ with(bodyfat,table(xray>ultrasound))
 ##    10     6
 ```
 
+ 
+
 or like this:
 
 
@@ -219,6 +225,8 @@ bodyfat %>% count(xray>ultrasound)
 ## 1 FALSE                  10
 ## 2 TRUE                    6
 ```
+
+ 
 
 6 times the X-ray value was bigger, and 10 times the ultrasound value
 was. A pretty even split, so it's not surprising that we failed to
@@ -273,6 +281,8 @@ ggplot(aes(x=diff))+geom_histogram(bins=6)
 
 <img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
+   
+
 I don't know whether you'd call that "approximately normal" or
 not. We are in kind of a double-bind with this one: the sample size is
 small, so normality matters, but with a small sample, the data might
@@ -297,6 +307,8 @@ ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
 <img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+
+   
 This is showing a little evidence of skewness or outliers  (depending
 on your point of view: either is good). The lowest and highest values
 are both too high, and the pattern of points on the plot is kind of
@@ -577,6 +589,9 @@ zero.
 
 
 
+
+
+
 ## Changes in salary
 
 
@@ -587,11 +602,11 @@ increasing. To do this, the company randomly samples 20 employees that
 have been working there since January 2016, and for each of these
 employees, records their salary in January 2016 and January 2017. The
 data, with salaries in thousands of dollars, are in
-[https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt](https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt). 
+[link](https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt). 
 
 
 
-(a)[2] Read the data into R and demonstrate that you have two
+(a) Read the data into R and demonstrate that you have two
 salaries for each of 20 employees.
 
 Solution
@@ -644,12 +659,14 @@ salaries
 ## 20 U           90     101
 ```
 
+     
+
 There are 20 employees (rows), and two columns of salaries: for each
 employee in the data set, their salary in January 2016 and in January
 2017 (thus, two salaries for each employee).
 
 
-(b)[2] To compare the salaries, explain briefly why a
+(b) To compare the salaries, explain briefly why a
 matched-pairs test would be better than a two-sample test.
 
 Solution
@@ -665,7 +682,7 @@ You can go after this either way: why a matched-pairs approach is
 appropriate, or why a two-sample approach is not (or a bit of both).
 
 
-(c)[4] Make a suitable graph to assess the assumptions for a
+(c) Make a suitable graph to assess the assumptions for a
 matched-pairs $t$-test. What does your graph tell you?
 
 Solution
@@ -687,6 +704,8 @@ ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
 <img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+
+     
 
 A couple of coding notes: (i) you can take the differences 2016 minus
 2017 if you like (then they will tend to be negative), (ii)
@@ -715,7 +734,7 @@ anyway, hence my comment in the next part, but the result is probably
 not *so* trustworthy.
 
 
-(d)[3] Carry out a suitable matched-pairs $t$-test on these data. (If you
+(d) Carry out a suitable matched-pairs $t$-test on these data. (If you
 thought in the previous part that this was the wrong thing to do, do
 it anyway for the purposes of this assignment.) What do you conclude?
 
@@ -744,6 +763,8 @@ with(salaries, t.test(jan2016, jan2017, alternative="less", paired=T))
 ##                  -6.185
 ```
 
+     
+
 You could also have the years the other way around, in which case the
 alternative has to be the other way around as well:
 
@@ -765,6 +786,8 @@ with(salaries, t.test(jan2017, jan2016, alternative="greater", paired=T))
 ## mean of the differences 
 ##                   6.185
 ```
+
+ 
 
 Or, if you saved the data frame with the differences in it, do a
 one-sample test on those, again making sure that you get the
@@ -791,6 +814,8 @@ with(.,t.test(diff, mu=0, alternative="greater"))
 ## mean of x 
 ##     6.185
 ```
+
+ 
 
 Whichever way you do it, the P-value is the same $2.271 \times
 10^{-9}$, which is a whole lot less than 0.05, so there is no doubt at
@@ -822,6 +847,8 @@ sign_test(diff,0)
 ## 3   two-sided 1.907349e-06
 ```
 
+ 
+
 and then take the "upper" P-value, which is in the same ballpark as
 the one from the $t$-test. So the salaries really are increasing,
 whether you believe the $t$-test or not. And note that \emph{every
@@ -831,7 +858,7 @@ single employee's salary increased}.
 one with the differences in it.)
 
 
-(e)[2] The company would like to estimate  \emph{how
+(e) The company would like to estimate  \emph{how
 much} salaries are increasing, on average. Obtain some output that
 will enable the company to assess this, and tell the CEO which piece
 of the output they should look at.
@@ -861,14 +888,15 @@ with(salaries, t.test(jan2017, jan2016, paired=T))
 ##                   6.185
 ```
 
+     
+
 Between about \$5,000 and about \$7,500. This is what to tell the CEO.
 
  
 
 
 
-% Body fat revisited
-
+##  Body fat revisited
 
 
  Athletes are concerned with measuring their body fat
@@ -877,7 +905,7 @@ and the other using X-ray technology. We are interested in whether
 there is a difference in the mean body fat percentage as measured by
 these two methods, and if so, how big that difference is. Data on 16
 athletes are at
-[http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt). 
 
 We saw this data set before.
 
@@ -955,6 +983,8 @@ for the matched-pairs sign test. So we should calculate and save them first:
 bodyfat %>% mutate(diff=xray-ultrasound) -> bodyfat2
 ```
 
+ 
+
 I seem to be using a 2 on the end to name my
 dataframe-with-differences, but you can use whatever name you like.
 
@@ -966,6 +996,8 @@ ggplot(bodyfat2,aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
 <img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+
+   
 This is showing a little evidence of skewness or outliers  (depending
 on your point of view: either is good). The lowest and highest values
 are both too high, and the pattern of points on the plot is kind of
@@ -1051,6 +1083,8 @@ sign_test(bodyfat2, diff, 0)
 ## 2       upper 0.8949432
 ## 3   two-sided 0.4544983
 ```
+
+ 
 
 The two-sided P-value is 0.4545, so we are nowhere near rejecting the
 null hypothesis that the median difference is zero. There is no
