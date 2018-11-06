@@ -704,6 +704,8 @@ I am doing some preparatory work that you don't need to do:
 set.seed(457299)
 ```
 
+ 
+
 By setting the "seed" for the random number generator, I guarantee
 that I will get the same answers every time I run my code below (and
 therefore I can talk about my answers without worrying that they will
@@ -722,6 +724,8 @@ rbinom(1,100,0.6)
 ## [1] 60
 ```
 
+
+
 I got exactly 60\% successes this time. You probably won't get exactly
 60, but you should get somewhere close. (If you use my random number
 seed and use the random number generator exactly the same way I did,
@@ -737,6 +741,8 @@ rbinom(3,100,0.6)
 ```
 ## [1] 58 57 55
 ```
+
+ 
 
 Three random binomials, that happened to come out just below 60. We're
 going to leave the first input as 1, though, and let `rerun`
@@ -785,6 +791,8 @@ prop.test(60,100,0.5,alternative="greater")
 ## 0.6
 ```
 
+     
+
 The P-value should at least be fairly small, since 60 is a bit bigger
 than 50. (Think about tossing a coin 100 times; would 60 heads make
 you doubt the coin's fairness? The above says it should.)
@@ -810,7 +818,8 @@ p_test$p.value
 ```
 ## [1] 0.02871656
 ```
-$ %$ %$ 
+
+ 
 
 Yep, the same.
 
@@ -865,32 +874,16 @@ tibble(pvals) %>% count(pvals<=0.05)
 ## 2 TRUE             8509
 ```
 
+ 
+
 The estimated power is about 85\%. That is, if $p$ is actually 0.56
 and we have a sample of size 500, we have a good chance of (correctly)
 rejecting that $p=0.5$. 
 
-Extra: I know we haven't learned about SAS yet, but it turns out that SAS can
-obtain this power by calculation, thus (don't worry too much about the
-code yet: that will become clearer later):
-
-\begin{Sascode}[store=gicit]
-proc power;
-onesamplefreq
-test=z
-method=normal
-nullproportion=0.5
-proportion=0.56
-sides=U
-ntotal=500
-power=.;
-\end{Sascode}
-
-\Listing[store=gicit,fontsize=small]{gicitt}
-
-SAS says our power is also about 85\%, the same thing our simulation
-said. I took some care to make sure that SAS did the same thing our
-simulation did (the `test=z`, the `method=normal`, and
-the `sides=U`). I was actually pleased that my simulation came
+Extra: It turns out that SAS can work out this power by calculation
+(using `proc power`). 
+SAS says our power is also about 85\%, as our simulation
+said. I was actually pleased that my simulation came
 out so close to the right answer.
 
 In contrast to `power.t.test`, SAS's `proc power`

@@ -589,6 +589,360 @@ zero.
 
 
 
+##  Throwing baseballs and softballs, again
+
+
+ Previously, you carried out a sign test to determine
+whether students could throw a baseball farther than a softball. This
+time, we will calculate a confidence interval for the median
+difference baseball minus softball, using the results of sign tests.
+
+
+
+(a) Read the data into R from
+[link](http://www.utsc.utoronto.ca/~butler/c32/throw.txt), giving
+appropriate names to the columns, and add a column of
+differences. 
+
+
+Solution
+
+
+I did it this way, combining the reading
+of the data with the calculation of the differences in *one* pipe:
+
+
+```r
+myurl="http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
+throws = read_delim(myurl," ",col_names=c("student","baseball","softball")) %>%
+mutate(diff=baseball-softball)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   student = col_integer(),
+##   baseball = col_integer(),
+##   softball = col_integer()
+## )
+```
+
+```r
+throws  
+```
+
+```
+## # A tibble: 24 x 4
+##    student baseball softball  diff
+##      <int>    <int>    <int> <int>
+##  1       1       65       57     8
+##  2       2       90       58    32
+##  3       3       75       66     9
+##  4       4       73       61    12
+##  5       5       79       65    14
+##  6       6       68       56    12
+##  7       7       58       53     5
+##  8       8       41       41     0
+##  9       9       56       44    12
+## 10      10       70       65     5
+## # ... with 14 more rows
+```
+
+ 
+
+
+
+(b) Use `smmr` to find a 95\% confidence interval for the
+median difference.
+
+
+Solution
+
+
+`ci_median`, with 95\% being the default confidence level:
+
+
+```r
+ci_median(throws,diff)
+```
+
+```
+## [1] 2.002930 8.999023
+```
+
+ 
+
+2 to 9. The ends of a CI for the median will be data values, which are
+all whole numbers, so round off that 8.999.
+
+
+
+(c) What function in `smmr` will run a two-sided sign test
+and return only the P-value? Check that it works by testing whether the
+median difference for your data is zero or different from zero.
+
+
+Solution
+
+
+The rest of the way, we are trying to reproduce that confidence
+interval by finding it ourselves.
+The function is called `pval_sign`. If you haven't run into it
+before, in R Studio click on Packages, find `smmr`, and
+click on its name. This will bring up package help, which
+includes a list of all the functions in the package, along with
+a brief description of what each one does. (Clicking
+on a function name brings up the help for that function.)
+Let's check that it works properly by repeating the previous
+`sign_test` and verifying that `pval_sign` gives
+the same thing:
+
+```r
+sign_test(throws,diff,0)
+```
+
+```
+## $above_below
+## below above 
+##     2    21 
+## 
+## $p_values
+##   alternative      p_value
+## 1       lower 9.999971e-01
+## 2       upper 3.302097e-05
+## 3   two-sided 6.604195e-05
+```
+
+```r
+pval_sign(0,throws,diff)
+```
+
+```
+## [1] 6.604195e-05
+```
+
+       
+
+The P-values are the same (for the two-sided test) and both small, so
+the median difference is not zero.
+
+
+
+(d) Based on your P-value, do you think 0 is inside the confidence
+interval or not? Explain briefly.
+
+
+Solution
+
+
+Absolutely not. The median difference is definitely not
+zero, so zero cannot be in the confidence interval.
+Our suspicion, from the one-sided test from earlier, is that
+the differences were mostly positive (people could throw a
+baseball farther than a softball, in most cases). So the
+confidence interval ought to contain only positive values.
+I ask this because it drives what happens below.
+
+
+
+(e) Obtain a 95\% confidence interval for the population
+median difference, baseball minus softball, using a
+trial-and-error procedure that determines whether a number of
+possible medians are inside or outside the CI.
+
+
+Solution
+
+
+ I've given you a fair bit of freedom to tackle this as you
+ wish. Anything that makes sense is good: whatever mixture of
+ mindlessness, guesswork and cleverness that you want to employ.
+The most mindless way to try some values one at a time and see what
+ you get, eg.:
+
+```r
+pval_sign(1,throws,diff)
+```
+
+```
+## [1] 0.001489639
+```
+
+```r
+pval_sign(5,throws,diff)
+```
+
+```
+## [1] 1.168188
+```
+
+  
+
+So median 1 is outside and median 5 is inside the 95\% interval. Keep
+trying values until you've figured out where the lower and upper ends
+of the interval are: where the P-values cross from below 0.05 to
+above, or vice versa.
+
+Something more intelligent is to make a long list of potential
+medians, and get the P-value for each of them, eg.:
+
+
+```r
+d=tibble(my.med=seq(0,20,2))
+d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+```
+
+```
+## # A tibble: 11 x 2
+##    my.med      pvals
+##     <dbl>      <dbl>
+##  1      0 0.0000660 
+##  2      2 0.0525    
+##  3      4 0.839     
+##  4      6 0.678     
+##  5      8 0.210     
+##  6     10 0.0227    
+##  7     12 0.00149   
+##  8     14 0.0000660 
+##  9     16 0.0000359 
+## 10     18 0.00000572
+## 11     20 0.00000298
+```
+
+ 
+
+2 is just inside the interval, 8 is also inside, and 10 is
+outside. Some closer investigation:
+
+
+```r
+d=tibble(my.med=seq(0,2,0.5))
+d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+```
+
+```
+## # A tibble: 5 x 2
+##   my.med     pvals
+##    <dbl>     <dbl>
+## 1    0   0.0000660
+## 2    0.5 0.000277 
+## 3    1   0.00149  
+## 4    1.5 0.0227   
+## 5    2   0.0525
+```
+
+ 
+
+The bottom end of the interval actually is 2, since 2 is inside and
+1.5 is outside.
+
+
+```r
+d=tibble(my.med=seq(8,10,0.5))
+d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+```
+
+```
+## # A tibble: 5 x 2
+##   my.med  pvals
+##    <dbl>  <dbl>
+## 1    8   0.210 
+## 2    8.5 0.152 
+## 3    9   0.0525
+## 4    9.5 0.0227
+## 5   10   0.0227
+```
+
+ 
+
+The top end is 9, 9 being inside and 9.5 outside.
+
+Since the data values are all whole numbers, I think this is accurate enough.
+The most sophisticated way is the "bisection" idea we saw before. We
+already have a kickoff for this, since we found, mindlessly, that 1 is
+outside the interval on the low end and 5 is inside, so the lower
+limit has to be between 1 and 5. Let's try halfway between, ie.\ 3:
+
+
+```r
+pval_sign(3,throws,diff)
+```
+
+```
+## [1] 0.3833103
+```
+
+ 
+
+Inside, so lower limit is between 1 and 3. This can be automated, thus:
+
+
+```r
+lo=1
+hi=3
+while(abs(hi-lo)>0.1) {
+try=(lo+hi)/2
+ptry=pval_sign(try,throws,diff)
+if (ptry>0.05) {
+hi=try
+} else {
+lo=try
+}
+}
+c(lo,hi)
+```
+
+```
+## [1] 1.9375 2.0000
+```
+
+ 
+
+The difficult bit is to decide whether the value `try` becomes
+the new `lo` or the new `hi`. If the P-value for the
+median of `try` is greater than 0.05, `try` is inside
+the interval, and it becomes the new `hi`; otherwise it's
+outside and becomes the new `lo`. Whatever the values are,
+`lo` is always outside the interval and `hi` is always
+inside, and they move closer and closer to each other.
+
+At the other end of the interval, `lo` is inside and
+`hi` is outside, so there is a little switching around within
+the loop. For starting values, you can be fairly mindless: for
+example, we know that 5 is inside and something big like 20 must be outside:
+
+
+```r
+lo=5
+hi=20
+while(abs(hi-lo)>0.1) {
+try=(lo+hi)/2
+ptry=pval_sign(try,throws,diff)
+if (ptry>0.05) {
+lo=try
+} else {
+hi=try
+}
+}
+c(lo,hi)
+```
+
+```
+## [1] 8.984375 9.042969
+```
+
+ 
+
+The interval goes from 2 to (as calculated here) about 9. (This is
+apparently the same as `ci_median` in `smmr` got.)
+`ci_median` uses the bisection method with a smaller "tolerance" than we
+did, so its answer is more accurate. It looks as if the interval goes
+from 2 to 9: that is, students can throw a baseball on average between
+2 and 9 feet further than they can throw a softball.
+
+
+
+
 
 
 
@@ -703,7 +1057,7 @@ mutate(diff=jan2017-jan2016) %>%
 ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
      
 
@@ -962,7 +1316,10 @@ bodyfat
 ## 15      15 17         18   
 ## 16      16 18         18.2
 ```
-%%%
+
+ 
+
+
 
 
 (b) Calculate the differences, and make a normal quantile plot of
@@ -995,7 +1352,7 @@ Then, not forgetting to use the data frame that we just made:
 ggplot(bodyfat2,aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
    
 This is showing a little evidence of skewness or outliers  (depending

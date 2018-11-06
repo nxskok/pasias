@@ -113,9 +113,8 @@ answers. We'll think about that equal-spreads assumption again later.
 however. Is it possible that temperature also has an effect? To
 assess this, draw a scatterplot of pulse rate against temperature,
 with the points distinguished, somehow, by the species they are
-from.\endnote{This was the actual reason I thought of this
-question originally:
-I wanted you to do this.}
+from.
+`r tufte::margin_note("This was the actual reason I thought of this      question originally:    I wanted you to do this.")`
 
 
 Solution
@@ -157,11 +156,11 @@ rates between the species might have been explainable by one
 species being observed mainly in higher temperatures. This was
 *utterly invisible* to us when we did the $t$-test, but it
 shows the importance of accounting for all the relevant
-variables when you do your analysis.\endnote{And it shows the
-value of looking at relevant plots.} If the species had been
+variables when you do your analysis.
+`r tufte::margin_note("And it shows the        value of looking at relevant plots.")` If the species had been
 observed at opposite temperatures, we might have
 concluded
-`r tufte::margin_note("Mistakenly.} that testsl{niveus")` have the
+`r tufte::margin_note("Mistakenly.} that textsl{niveus")` have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
 comes out of the regression model with temperature.
@@ -221,8 +220,8 @@ $t$-test, that went from 14 to 32. This is because we are now
 accounting for temperature, which also makes a difference. (In the
 $t$-test, the temperatures were all mixed up). What we also see is
 that the $t$-interval is shifted up compared to the one from the
-regression. This is because the $t$-interval conflates\endnote{Mixes
-up.} two things: the *exclamationis* crickets do have a
+regression. This is because the $t$-interval conflates
+`r tufte::margin_note("Mixes  up.} two things: the textsl{exclamationis")` crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
@@ -242,8 +241,9 @@ summary(pulse.2)
  
 
 To see whether adding the interaction term added anything to the
-prediction,\endnote{Though it's hard to imagine being able to improve on an
-R-squared of 99\%.} compare the model with and without using `anova`:
+prediction,
+`r tufte::margin_note("Though it's hard to imagine being able to improve on an R-squared of 99%.")` 
+compare the model with and without using `anova`:
 
 ```{r }
 anova(pulse.1,pulse.2)  
@@ -265,8 +265,8 @@ two species and therefore only one slope coefficient was required to
 distinguish them. If there had been three species, we would have had
 to look at the `anova` output to hunt for a difference among
 species, since there would have been two slope coefficients, each with
-its own P-value.\endnote{This wouldn't have told us about the overall
-effect of `species.`} 
+its own P-value.
+`r tufte::margin_note("This wouldn't have told us about the overall  effect of `species.`")` 
 
 If you haven't seen interactions before, don't worry about this. The
 idea behind it is that we are testing whether we needed lines with
@@ -366,205 +366,7 @@ lower (say, 3 rather than 3.5) and maybe if the lowest residual was a
 bit lower, I don't think we'd have anything to complain about at all.
 
 So, I'm not worried.
-   
 
- Again using the crickets data, let's see if we can
-   reproduce what we did in R, following the steps below.
-   
-   
-     
-(h)     First, read in and display the data.
-     
-     
-       
-Solution
-         Same old same old:
-         \begin{Sascode}[store=curaw]
- filename myurl url "http://www.utsc.utoronto.ca/~butler/c32/crickets2.csv";
- 
- proc import          
-   datafile=myurl
-   out=crickets
-   dbms=csv
-   replace;
-   getnames=yes;
-   
- proc print;
-         \end{Sascode}
-         
-         \Listing[store=curaw, fontsize=footnotesize]{curaww}
-         
-         31 crickets, of two different species. Check.
-       
-     
- 
-     
-(i) Carry out a two-sample $t$-test to compare mean pulse rates
-     in the two different species.
-     
-     
-       
-Solution
-         This is actually a piece of cake (if you remember how to do it):
-         
-         \begin{Sascode}[store=pejeq]
- proc ttest;
-   var pulse_rate;
-   class species;
-         \end{Sascode}
-         
-         \Listing[store=pejeq, fontsize=small]{pejeqq}
-       
-       
-       Remembering to look at the pooled test, the $t$-statistic and
-       its P-value are the same as we got from R. SAS gives us (at the
-       bottom) a test that the pulse rate variances are the same for
-       each species, and this is not rejected, so using the pooled test
-       is sound.\endnote{This is actually an accident, since the regression
-       *assumes* each observation has the same variance, and so
-       the regression will always correspond to the pooled test in this
-       situation, regardless of whether the pooled test is actually the
-       right thing to do.}
-     
-     
-     
-(j) Reproduce the two-sample $t$-test using a regression
-     predicting pulse rate from species.
-     
-     
-       
-Solution
-         Think carefully here: it's a regression, but the explanatory
-         variable is categorical, so we have to use `proc glm`
-         rather than `proc reg`:
-         
-         \begin{Sascode}[store=xaqiv]
- proc glm;
-   class species;
-   model pulse_rate=species / solution;
-         \end{Sascode}
-         
-         \Listing[store=xaqiv, fontsize=footnotesize]{xaqivv}
-         
-         Look along the line for the `species` that is not the
-         baseline (*exclamationis*): the $t$-statistic is the
-         same 5.17 as the $t$-test gave. Also, if you check the type
-         III sums of squares table above, you'll find that the
-         $F$-value of 26.74 is the *square* of the $t$-value, and
-         its P-value is the same.
-         
-         If we had had more than two species, this would have been like
-         the pigs example in class, where the appropriate test would
-         have been an analysis of variance. The $F$-statistic from that
-         would have been the same as the $F$-statistic in the type III
-         sums of squares table.
-       
-       
-       
-     
-     
-     
-(k) Fit a regression predicting pulse rate from species and
-     temperature as well. Compare your answers with R's. (Display the
-     graphical output as well.)
-     
-     
-       
-Solution
- Same idea again: one of the explanatory variables is categorical, so
- we need to use `proc glm`:
- 
- \begin{Sascode}[store=cejos]
- proc glm;
-   class species;
-   model pulse_rate=species temperature / solution;
- \end{Sascode}
- 
- \Listing[store=cejos, fontsize=scriptsize]{cejoss}
- 
- In the bottom table, the estimates are the same as R's, at least
- allowing for the fact that the other species was used as the baseline
- (so the sign got switched). Everything else is consistent.
- 
- We don't have the output from R to compare the type III sums of
- squares with. This is what came from `drop1`:
- 
- <<>>=
- drop1(pulse.1,test="F")
- @ 
- 
- and these are the same as the type III tests.
- 
- Incidentally, `anova` corresponds to the type I sum of squares
- (that we ignore):
- 
- <<>>=
- anova(pulse.1)
- @ 
- 
- Here's the graph that comes out:
- 
- \Graphic[store=cejos, scale=0.7]{cejost}
- 
- This is like the graph we drew in R, except that here the two lines
- are *constrained* to come out with the same slope, whether the
- data support that or not. The fact that it looks the same as R's graph
- suggests that identical slopes *is* supported by the data.
- 
- As far as I currently understand (and I am typing this while heading
- home on the bus, so I can't check just yet), `proc glm` doesn't
- naturally produce residual plots, because it takes an ANOVA-like
- approach to the analysis rather than a regression-like one. 
- 
- I'm home now. This is how it's done:
- 
- \begin{Sascode}[store=xaxax]
- proc glm plots=(diagnostics residuals);
-   class species;
-   model pulse_rate=species temperature / solution;
- \end{Sascode}
- 
- \Graphic[store=xaxax,scale=0.7]{xaxaxx}
- 
- This looks like a regression output. In the first set of plots, we see
- that the residuals against fitted (top left) look random and the
- residuals are close to normal (2nd row, 1st plot). Below that, the
- residuals against temperature also look random. But we don't get a
- plot of residuals against species (that we made with a boxplot
- before). To get *that*, I need to do this:
- 
- 
- \begin{Sascode}[store=petes]
- proc glm;
-   class species;
-   model pulse_rate=species temperature / solution;
-   output out=res p=fitted r=resid;  
- \end{Sascode}
- 
- That makes us a dataset (which becomes the current one) containing all
- the data plus the fitted values and residuals from this model. Then we
- use `proc sgplot` to plot whatever we want to plot, namely this:
- 
- \begin{Sascode}[store=xixiv]
- proc sgplot;
-   vbox resid / category=species;
- \end{Sascode}
- 
- \Graphic[store=xixiv, scale=0.7]{xixivv}
- 
- All of these plots give us the same results as before.
- 
- A remark: now that I've gotten the output data set with residuals and
- stuff in it, I could have used that to make all of my residual plots,
- and dispensed with the `plots` on my `proc glm`
- earlier. It's normally more convenient to take the plots SAS gives
- you, but there is no problem in obtaining an output data set and using
- that to make your plots. If it works, it's good.\endnote{I made a whole set
- of residual plots this way while on the bus, in case this was the way
- it had to be done..}
- 
-       
-     
-     
-   
+
+
 

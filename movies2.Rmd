@@ -1,8 +1,8 @@
 ##  Movie ratings again
 
 
- This question again uses the movie rating data at
-[http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
+??q:movies-b?? This question again uses the movie rating data at
+[link](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
 
 
 
@@ -19,7 +19,9 @@ your code, or mine). No credit for that, since you've done it before.
 my_url="http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv"
 movies=read_csv(my_url)
 movies
-``` 
+```
+
+ 
 
 Now, the actual for-credit part, which is a `group_by` and
 `summarize`: 
@@ -27,7 +29,9 @@ Now, the actual for-credit part, which is a `group_by` and
 ```{r }
 movies %>% group_by(rating) %>%
  summarize(count=n(),med=median(length))
-``` 
+```
+
+ 
 
 The G movies have a smaller median than the others, but also the PG-13
 movies seem to be longer on average (not what we found before). 
@@ -45,7 +49,9 @@ Solution
 The graph would seem to be a boxplot, side by side for each group:
 ```{r }
 ggplot(movies,aes(x=rating, y=length))+geom_boxplot()
-```     
+```
+
+     
 
 We are looking for approximate normal distributions with approximately
 equal spreads, which I don't think we have: there are outliers, at the
@@ -76,7 +82,9 @@ then the normal quantile plot part, then the facetting:
 ggplot(movies,aes(sample=length))+
 stat_qq()+stat_qq_line()+
 facet_wrap(~rating)
-``` 
+```
+
+ 
 
 Since there are four movie ratings, `facet_wrap` has arranged
 them into a $2\times 2$ grid, which satisfyingly means that each
@@ -119,8 +127,7 @@ movies, I'd say the distribution is basically normal except for the
 highest two values (on both plots). For the PG-13 movies, only the
 highest value shows up as an outlier, but the next two apparent
 outliers on the normal quantile plot are at the  upper end of the long
-upper whisker, so the boxplot is saying ``right-skewed with one upper
-outlier'' rather than "three upper outliers". The distribution of
+upper whisker, so the boxplot is saying "right-skewed with one upper outlier" rather than "three upper outliers". The distribution of
 the R movies is skewed right, with the bunching at the bottom showing
 up as the very small lower whisker.
 
@@ -141,7 +148,9 @@ The smart way is to use `smmr`, since it is much easier:
 ```{r }
 library(smmr)
 median_test(movies,length,rating)
-```     
+```
+
+     
 
 The movies do not all have the same median length, or at least one of
 the rating types has movies of different median length from the
@@ -160,7 +169,9 @@ which is to do all the pairwise median tests, which is in
 
 ```{r }
 pairwise_median_test(movies, length, rating)
-``` 
+```
+
+ 
 
 The inputs for this are the same ones in the same order as for
 `median_test`. (A design decision on my part, since otherwise
@@ -171,7 +182,9 @@ column). We can remind ourselves of the sample medians:
 ```{r }
 movies %>% group_by(rating) %>%
 summarize(count=n(),med=median(length))
-``` 
+```
+
+ 
 
 The G movies are significantly shorter than the PG and PG-13 movies,
 but not quite significantly different from the R movies. This is a
@@ -186,13 +199,17 @@ draw a conclusion.
 Thus (i):
 ```{r }
 median(movies$length)
-```  
+```
+
+  
 
 or
 
 ```{r }
 movies %>% summarize(med=median(length))
-``` 
+```
+
+ 
 
 or store it in a variable,
 and then (ii):
@@ -200,14 +217,18 @@ and then (ii):
 ```{r }
 tab1=with(movies,table(length<100,rating))
 tab1
-``` 
+```
+
+ 
 
 or
 
 ```{r }
 tab2=with(movies,table(length>100,rating))
 tab2
-``` 
+```
+
+ 
 
 These differ because there are evidently some movies of length exactly
 100 minutes, and it matters whether you count $<$ and $\ge$ (as in
@@ -217,7 +238,9 @@ Was I right about movies of length exactly 100 minutes?
 
 ```{r }
 movies %>% filter(length==100)
-``` 
+```
+
+ 
 
 One PG and one R. It makes a difference to the R movies, but if you
 look carefully, it makes a difference to the PG movies as well,
@@ -229,13 +252,17 @@ to `chisq.test` below, (iii):
 
 ```{r }
 chisq.test(tab1, correct=F)
-``` 
+```
+
+ 
 
 or 
 
 ```{r }
 chisq.test(tab2, correct=F)
-``` 
+```
+
+ 
 
 Either is correct, or, actually, without the `correct=F`.\endnote{see
 discussion elsewhere about Yates' Correction and fixed margins.}
@@ -261,7 +288,9 @@ data frame, it fits neatly into a pipe (with the data frame omitted):
 ```{r }
 movies %>% filter(rating=="G" | rating=="PG") %>%
 median_test(length,rating)
-``` 
+```
+
+ 
 
 We're going to be doing this about six times --- ${4 \choose 2}=6$ choices
 of two rating groups to compare out of the four --- so we should have a
@@ -274,7 +303,9 @@ comp2=function(rat_1,rat_2,d) {
 d %>% filter(rating==rat_1 | rating==rat_2) %>%
 median_test(length,rating)
 }
-``` 
+```
+
+ 
 
 The way I wrote this function is that you have to specify the movie
 ratings in quotes. It is *possible* to write it in such a way
@@ -291,7 +322,9 @@ Anyway, testing:
 
 ```{r }
 comp2("G","PG",movies)
-``` 
+```
+
+ 
 
 That works, but I really only want to pick out the P-value, which is
 in the list item `test` in the column `value`, the third
@@ -303,7 +336,9 @@ d %>% filter(rating==rat_1 | rating==rat_2) %>%
 median_test(length,rating) %>% pluck("test","value",3)
 }
 comp2("G","PG",movies)
-``` 
+```
+
+ 
 
 Gosh.
 
@@ -335,7 +370,9 @@ Let's grab a hold of the different rating groups we have:
 ```{r }
 the_ratings=unique(movies$rating)
 the_ratings
-``` 
+```
+
+ 
 
 The Pythonisti among you will know how to finish this off: do a
 loop-inside-a-loop over the rating groups, and get the P-value for
@@ -355,7 +392,9 @@ pp=c(pp,pval)
 }
 }  
 tibble(ii,jj,pp)
-``` 
+```
+
+ 
 
 This is a lot of fiddling about, since you have to initialize three
 vectors, and then update them every time through the loop. It's hard
@@ -370,6 +409,8 @@ Let's try another way:
 crossing(first=the_ratings,second=the_ratings)
 ```
 
+
+
 This does "all possible combinations" of one rating with another. We
 don't actually need all of that; we just need the ones where the first
 one is (alphabetically) strictly less than the second one. This is
@@ -380,10 +421,13 @@ way around. The ones we need are these:
 ```{r }
 crossing(first=the_ratings,second=the_ratings) %>%
 filter(first<second)
-``` 
+```
 
-A technique thing to note: instead of asking ``how do I pick out the
-distinct pairs of ratings?'', I use two simpler tools: first I make
+ 
+
+A technique thing to note: instead of asking 
+"how do I pick out the distinct pairs of ratings?", 
+I use two simpler tools: first I make
 all the combinations of pairs of ratings, and then out of those, pick
 the ones that are alphabetically in ascending order, which we know how
 to do.
@@ -400,12 +444,13 @@ does. In our case, `comp2` returns a decimal number, a
 crossing(first=the_ratings,second=the_ratings) %>%
 filter(first<second) %>% 
 mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies)))
-``` 
+```
 
-The logic of `map2_dbl` is ``for each of the things in
-`first`, and each of the things in `second`, taken in
-parallel, call the function `comp2` with those two inputs in
-that order, always with data frame `movies`''. The `.x`
+ 
+
+The logic of `map2_dbl` is 
+"for each of the things in `first`, and each of the things in `second`, taken in parallel, call the function `comp2` with those two inputs in that order, always with data frame `movies`". 
+The `.x`
 and `.y` play the role of the `.` that we usually have
 inside a map, but now we're "mapping" over two things rather than
 just one, so that they cannot both be called `.`.
@@ -426,13 +471,15 @@ crossing(first=the_ratings,second=the_ratings) %>%
 filter(first<second) %>% 
 mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies))) %>%
 mutate(reject=pval<0.05/6)
-``` 
+```
+
+ 
 
 And not a loop in sight.
 
 This is how I coded it in `pairwise_median_test`. If you want to
 check it, it's on Github:
-[https://raw.githubusercontent.com/nxskok/smmr/master/R/pairwise_median_test.R](https://raw.githubusercontent.com/nxskok/smmr/master/R/pairwise_median_test.R). 
+[link](https://raw.githubusercontent.com/nxskok/smmr/master/R/pairwise_median_test.R). 
 The function `median_test_pair` is the same as `comp2`
 above. 
 
@@ -455,7 +502,9 @@ medians=movies %>% group_by(rating) %>%
 summarize(med=median(length)) %>%
 arrange(desc(med))
 medians
-``` 
+```
+
+ 
 
 Something rather interesting has happened: even though the comparison of
 G and PG (18 apart) is significant, the comparison of G and R (21
@@ -473,7 +522,9 @@ mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies))) %>%
 mutate(reject=pval<0.05/6) %>%
 left_join(medians,by=c("first"="rating")) %>%
 left_join(medians,by=c("second"="rating"))
-``` 
+```
+
+ 
 
 The additional two lines look up the medians of the rating groups in
 `first`, then `second`, so that you can see the actual

@@ -8,7 +8,7 @@ courses, and each student's score on a math phobia test was recorded
 after they completed their course. The math phobia test produces
 whole-number scores between 0 and 10, with a higher score indicating a
 greater fear of mathematics. The data can be found in
-[http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt](http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt). We start
+[link](http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt). We start
 with R for this question.
 
 
@@ -25,27 +25,35 @@ This doesn't need much comment:
 my_url="http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt"
 math=read_delim(my_url," ")
 math
-``` 
+```
+
+ 
 
 This will do, counting the `a` and `b`. Or, to save
 yourself that trouble:
 
 ```{r }
 math %>% count(course)
-``` 
+```
+
+ 
 
 Five each. The story is to get the computer to do the grunt work for
 you, if you can make it do so. Other ways:
 
 ```{r }
 math %>% group_by(course) %>% summarize(count=n())
-``` 
+```
+
+ 
 
 and this:
 
 ```{r }
 with(math,table(course))
-``` 
+```
+
+ 
 
 giving the same answer. Lots of ways.
 
@@ -73,7 +81,9 @@ A two-sided test is the default, so there is not much to do here:
 
 ```{r }
 t.test(phobia~course,data=math)
-``` 
+```
+
+ 
 
 The P-value of 0.4456 is nowhere near less than 0.05, so there is no
 evidence at all that the  
@@ -92,7 +102,9 @@ Solution
 
 ```{r }
 ggplot(math,aes(x=course,y=phobia))+geom_boxplot()
-``` 
+```
+
+ 
 
 Boxplot `a` is just weird. The bar across the middle is
 actually at the top, and it has no bottom. (Noting something sensible
@@ -110,7 +122,9 @@ also that the first quartile and the minimum value are the same:
 tmp=math %>% filter(course=="a")
 tmp %>% count(phobia)
 summary(tmp)
-``` 
+```
+
+ 
 
 The phobia scores from course A are two 6's, two 7's and an 8. The
 median and third quartile are both 7, and the first quartile is the
@@ -150,7 +164,9 @@ We have the machinery to assess the normality for these, in one shot:
 ggplot(math,aes(sample=phobia))+
 stat_qq()+stat_qq_line()+
 facet_wrap(~course,ncol=1, scales="free")
-```   
+```
+
+   
 
 I don't know what *you* make of those, but they both look pretty
 straight to me (and there are only five observations, so it's hard to
@@ -189,7 +205,9 @@ This is an invite to use `smmr`:
 ```{r }
 library(smmr)
 median_test(math,phobia,course)
-```     
+```
+
+     
 
 We are nowhere near rejecting equal medians; in fact, both courses are
 very close to 50--50 above and below the overall median.
@@ -202,7 +220,9 @@ the overall median, and had to be thrown away:
 ```{r }
 math %>% summarize(med=median(phobia))
 math %>% count(phobia)
-``` 
+```
+
+ 
 
 The overall median was 7. Because the actual data were really discrete
 (the phobia scores could only be whole numbers), we risked losing a
@@ -217,17 +237,17 @@ x=c(1,1,2,6,6,6,7,8,9,10)
 g=c(1,1,1,1,1,2,2,2,2,2)
 d=tibble(x,g)
 median_test(d,x,g)
-``` 
+```
+
+ 
 
 I faked it up so that we had 10 observations, three of which were
 equal to the overall median. Of the rest, all the small ones were in
 group 1 and all the large ones were in group 2. This is lopsided
 enough to reject with, though, because of the small frequencies, there
-actually was a warning about ``chi-squared approximation
-may be inaccurate''.
-`r tufte::margin_note("There emph{was")`, in the
-`chisq.test` inside `median_test`, but in
-`smmr` I didn't pass that warning back to the outside world.}
+actually was a warning about 
+"chi-squared approximation may be inaccurate".
+`r tufte::margin_note("There *was*, in the   *chisq.test* inside *median_test*, but in  *smmr* I didn't pass that warning back to the outside world.")`
 
 
 

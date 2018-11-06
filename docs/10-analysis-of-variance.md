@@ -793,8 +793,8 @@ differences among the months than the pairwise median tests did.
 ##  Movie ratings again
 
 
- This question again uses the movie rating data at
-[http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
+??q:movies-b?? This question again uses the movie rating data at
+[link](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
 
 
 
@@ -842,6 +842,8 @@ movies
 ## # ... with 50 more rows
 ```
 
+ 
+
 Now, the actual for-credit part, which is a `group_by` and
 `summarize`: 
 
@@ -860,6 +862,8 @@ movies %>% group_by(rating) %>%
 ## 3 PG-13     15   117
 ## 4 R         15   103
 ```
+
+ 
 
 The G movies have a smaller median than the others, but also the PG-13
 movies seem to be longer on average (not what we found before). 
@@ -881,6 +885,8 @@ ggplot(movies,aes(x=rating, y=length))+geom_boxplot()
 ```
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+
+     
 
 We are looking for approximate normal distributions with approximately
 equal spreads, which I don't think we have: there are outliers, at the
@@ -915,6 +921,8 @@ facet_wrap(~rating)
 ```
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+
+ 
 
 Since there are four movie ratings, `facet_wrap` has arranged
 them into a $2\times 2$ grid, which satisfyingly means that each
@@ -957,8 +965,7 @@ movies, I'd say the distribution is basically normal except for the
 highest two values (on both plots). For the PG-13 movies, only the
 highest value shows up as an outlier, but the next two apparent
 outliers on the normal quantile plot are at the  upper end of the long
-upper whisker, so the boxplot is saying ``right-skewed with one upper
-outlier'' rather than "three upper outliers". The distribution of
+upper whisker, so the boxplot is saying "right-skewed with one upper outlier" rather than "three upper outliers". The distribution of
 the R movies is skewed right, with the bunching at the bottom showing
 up as the very small lower whisker.
 
@@ -998,6 +1005,8 @@ median_test(movies,length,rating)
 ## 3   P-value  0.003262334
 ```
 
+     
+
 The movies do not all have the same median length, or at least one of
 the rating types has movies of different median length from the
 others. Or something equivalent to that. It's the same conclusion as
@@ -1030,6 +1039,8 @@ pairwise_median_test(movies, length, rating)
 ## 6 PG-13 R     0.273        1.64
 ```
 
+ 
+
 The inputs for this are the same ones in the same order as for
 `median_test`. (A design decision on my part, since otherwise
 *I* would never have been able to remember how to run these!)
@@ -1052,6 +1063,8 @@ summarize(count=n(),med=median(length))
 ## 4 R         15   103
 ```
 
+ 
+
 The G movies are significantly shorter than the PG and PG-13 movies,
 but not quite significantly different from the R movies. This is a
 little odd, since the difference in sample medians between G and PG,
@@ -1072,6 +1085,8 @@ median(movies$length)
 ## [1] 100
 ```
 
+  
+
 or
 
 
@@ -1085,6 +1100,8 @@ movies %>% summarize(med=median(length))
 ##   <dbl>
 ## 1   100
 ```
+
+ 
 
 or store it in a variable,
 and then (ii):
@@ -1102,6 +1119,8 @@ tab1
 ##   TRUE  13  7     3  6
 ```
 
+ 
+
 or
 
 
@@ -1116,6 +1135,8 @@ tab2
 ##   FALSE 13  8     3  7
 ##   TRUE   2  7    12  8
 ```
+
+ 
 
 These differ because there are evidently some movies of length exactly
 100 minutes, and it matters whether you count $<$ and $\ge$ (as in
@@ -1135,6 +1156,8 @@ movies %>% filter(length==100)
 ## 1    100 PG    
 ## 2    100 R
 ```
+
+ 
 
 One PG and one R. It makes a difference to the R movies, but if you
 look carefully, it makes a difference to the PG movies as well,
@@ -1157,6 +1180,8 @@ chisq.test(tab1, correct=F)
 ## X-squared = 14.082, df = 3, p-value = 0.002795
 ```
 
+ 
+
 or 
 
 
@@ -1171,6 +1196,8 @@ chisq.test(tab2, correct=F)
 ## data:  tab2
 ## X-squared = 13.548, df = 3, p-value = 0.003589
 ```
+
+ 
 
 Either is correct, or, actually, without the `correct=F`.\endnote{see
 discussion elsewhere about Yates' Correction and fixed margins.}
@@ -1213,6 +1240,8 @@ median_test(length,rating)
 ## 3   P-value 0.007989183
 ```
 
+ 
+
 We're going to be doing this about six times --- ${4 \choose 2}=6$ choices
 of two rating groups to compare out of the four --- so we should have a
 function to do it. I think the input to the function should be a data
@@ -1226,6 +1255,8 @@ d %>% filter(rating==rat_1 | rating==rat_2) %>%
 median_test(length,rating)
 }
 ```
+
+ 
 
 The way I wrote this function is that you have to specify the movie
 ratings in quotes. It is *possible* to write it in such a way
@@ -1259,6 +1290,8 @@ comp2("G","PG",movies)
 ## 3   P-value 0.007989183
 ```
 
+ 
+
 That works, but I really only want to pick out the P-value, which is
 in the list item `test` in the column `value`, the third
 entry. So let's rewrite the function to return just that:
@@ -1275,6 +1308,8 @@ comp2("G","PG",movies)
 ```
 ## [1] 0.007989183
 ```
+
+ 
 
 Gosh.
 
@@ -1312,6 +1347,8 @@ the_ratings
 ```
 ## [1] "G"     "PG-13" "PG"    "R"
 ```
+
+ 
 
 The Pythonisti among you will know how to finish this off: do a
 loop-inside-a-loop over the rating groups, and get the P-value for
@@ -1356,6 +1393,8 @@ tibble(ii,jj,pp)
 ## 16 R     R     1
 ```
 
+ 
+
 This is a lot of fiddling about, since you have to initialize three
 vectors, and then update them every time through the loop. It's hard
 to read, because the actual business part of the loop is the
@@ -1392,6 +1431,8 @@ crossing(first=the_ratings,second=the_ratings)
 ## 16 R     R
 ```
 
+
+
 This does "all possible combinations" of one rating with another. We
 don't actually need all of that; we just need the ones where the first
 one is (alphabetically) strictly less than the second one. This is
@@ -1417,8 +1458,11 @@ filter(first<second)
 ## 6 PG-13 R
 ```
 
-A technique thing to note: instead of asking ``how do I pick out the
-distinct pairs of ratings?'', I use two simpler tools: first I make
+ 
+
+A technique thing to note: instead of asking 
+"how do I pick out the distinct pairs of ratings?", 
+I use two simpler tools: first I make
 all the combinations of pairs of ratings, and then out of those, pick
 the ones that are alphabetically in ascending order, which we know how
 to do.
@@ -1450,10 +1494,11 @@ mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies)))
 ## 6 PG-13 R      0.273
 ```
 
-The logic of `map2_dbl` is ``for each of the things in
-`first`, and each of the things in `second`, taken in
-parallel, call the function `comp2` with those two inputs in
-that order, always with data frame `movies`''. The `.x`
+ 
+
+The logic of `map2_dbl` is 
+"for each of the things in `first`, and each of the things in `second`, taken in parallel, call the function `comp2` with those two inputs in that order, always with data frame `movies`". 
+The `.x`
 and `.y` play the role of the `.` that we usually have
 inside a map, but now we're "mapping" over two things rather than
 just one, so that they cannot both be called `.`.
@@ -1489,11 +1534,13 @@ mutate(reject=pval<0.05/6)
 ## 6 PG-13 R      0.273     FALSE
 ```
 
+ 
+
 And not a loop in sight.
 
 This is how I coded it in `pairwise_median_test`. If you want to
 check it, it's on Github:
-[https://raw.githubusercontent.com/nxskok/smmr/master/R/pairwise_median_test.R](https://raw.githubusercontent.com/nxskok/smmr/master/R/pairwise_median_test.R). 
+[link](https://raw.githubusercontent.com/nxskok/smmr/master/R/pairwise_median_test.R). 
 The function `median_test_pair` is the same as `comp2`
 above. 
 
@@ -1529,6 +1576,8 @@ medians
 ## 4 G         82
 ```
 
+ 
+
 Something rather interesting has happened: even though the comparison of
 G and PG (18 apart) is significant, the comparison of G and R (21
 apart) is not significant. This seems very odd, but it happens because
@@ -1559,6 +1608,8 @@ left_join(medians,by=c("second"="rating"))
 ## 5 PG    R      0.715     FALSE    100   103
 ## 6 PG-13 R      0.273     FALSE    117   103
 ```
+
+ 
 
 The additional two lines look up the medians of the rating groups in
 `first`, then `second`, so that you can see the actual

@@ -158,8 +158,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a><ul>
 <li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">9.1</span> Measuring body fat</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">9.2</span> Throwing baseballs and softballs</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">9.3</span> Changes in salary</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">9.4</span> Body fat revisited</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">9.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">9.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">9.5</span> Body fat revisited</a></li>
 </ul></li>
 <li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a><ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">10.1</span> Lengths of heliconia flowers</a></li>
@@ -212,7 +213,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="normal-quantile-plots" class="section level1">
 <h1><span class="header-section-number">Chapter 10</span> Normal quantile plots</h1>
-<div class="sourceCode" id="cb565"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb565-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb591"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb591-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
@@ -241,7 +242,7 @@ frame? (Look at all the rows, not just the first ten.)</li>
 </ol>
 <p>Solution</p>
 <p>The usual <code>read_csv</code>:</p>
-<div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb569-1" data-line-number="1">heliconia=<span class="kw">read_csv</span>(<span class="st">&quot;heliconia.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb595"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb595-1" data-line-number="1">heliconia=<span class="kw">read_csv</span>(<span class="st">&quot;heliconia.csv&quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   bihai = col_double(),
@@ -249,7 +250,7 @@ frame? (Look at all the rows, not just the first ten.)</li>
 ##   caribaea_yellow = col_double()
 ## )</code></pre>
 <p>I suggested to look at <em>all</em> the rows. Here’s why:</p>
-<div class="sourceCode" id="cb571"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb571-1" data-line-number="1">heliconia <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb597"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb597-1" data-line-number="1">heliconia <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>) </a></code></pre></div>
 <pre><code>## # A tibble: 23 x 3
 ##    bihai caribaea_red caribaea_yellow
 ##    &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;
@@ -289,7 +290,7 @@ offended by them, in which case you can read what I do later on.)</p>
 <p>Solution</p>
 <p>There’s a certain amount of repetitiveness here (that we work
 around later):</p>
-<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb573-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>bihai))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb599-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>bihai))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <pre><code>## Warning: Removed 7 rows containing non-finite values (stat_qq).</code></pre>
 <pre><code>## Warning: Removed 7 rows containing non-finite values (stat_qq_line).</code></pre>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-4-1.png" width="672"  /></p>
@@ -301,7 +302,7 @@ frame has an underscore in it).</li>
 </ol>
 <p>Solution</p>
 <p>Same idea again:</p>
-<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb576-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>caribaea_red))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb602-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>caribaea_red))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-5-1.png" width="672"  /></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Make a normal quantile plot for the variety
@@ -309,7 +310,7 @@ frame has an underscore in it).</li>
 </ol>
 <p>Solution</p>
 <p>And, one more time:</p>
-<div class="sourceCode" id="cb577"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb577-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>caribaea_yellow))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb603-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>caribaea_yellow))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <pre><code>## Warning: Removed 8 rows containing non-finite values (stat_qq).</code></pre>
 <pre><code>## Warning: Removed 8 rows containing non-finite values (stat_qq_line).</code></pre>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-6-1.png" width="672"  /></p>
@@ -360,9 +361,9 @@ might expect, it uses several of the tools from the “tidyverse”.
 First, tidy the data. The three columns of the data frame are all
 lengths, just lengths of different things, which need to be
 labelled. This is <code>gather</code> from <code>tidyr</code>.</p>
-<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb580-1" data-line-number="1">heliconia.long=heliconia <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb580-2" data-line-number="2"><span class="kw">gather</span>(variety,length,bihai<span class="op">:</span>caribaea_yellow,<span class="dt">na.rm=</span>T)</a>
-<a class="sourceLine" id="cb580-3" data-line-number="3">heliconia.long  </a></code></pre></div>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb606-1" data-line-number="1">heliconia.long=heliconia <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb606-2" data-line-number="2"><span class="kw">gather</span>(variety,length,bihai<span class="op">:</span>caribaea_yellow,<span class="dt">na.rm=</span>T)</a>
+<a class="sourceLine" id="cb606-3" data-line-number="3">heliconia.long  </a></code></pre></div>
 <pre><code>## # A tibble: 54 x 2
 ##    variety length
 ##  * &lt;chr&gt;    &lt;dbl&gt;
@@ -382,9 +383,9 @@ have gone (you can check that
 there are now <span class="math inline">\(16+23+15=54\)</span> rows of actual data, as there should be).</p>
 <p>Now, how to get a normal quantile plot for each variety? This is
 <code>facet_wrap</code> on the end of the <code>ggplot</code> again.</p>
-<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb582-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
-<a class="sourceLine" id="cb582-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb582-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb608-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
+<a class="sourceLine" id="cb608-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb608-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>)</a></code></pre></div>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-8-1.png" width="672"  /></p>
 <p>These are a bit elongated vertically. The <code>scale=&quot;free&quot;</code> allows
 a different vertical scale for each plot (otherwise there would be one
@@ -399,22 +400,22 @@ cells of a <span class="math inline">\(2 \times 2\)</span> grid. <code>facet_wra
 and <code>ncol</code> which you can use one or both of to make this
 happen. This creates an array of plots with two columns and as many
 rows as needed:</p>
-<div class="sourceCode" id="cb583"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb583-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
-<a class="sourceLine" id="cb583-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb583-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb609-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
+<a class="sourceLine" id="cb609-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb609-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-9-1.png" width="672"  /></p>
 <p>I think the square plots make it easier to see the shape of these:
 curved, S-bend, straightish.
 Almost the same code will get a histogram for each variety, which I’ll
 also make squarish:</p>
-<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb584-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">x=</span>length))<span class="op">+</span></a>
-<a class="sourceLine" id="cb584-2" data-line-number="2"><span class="kw">geom_histogram</span>(<span class="dt">binwidth=</span><span class="dv">1</span>)<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb610"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb610-1" data-line-number="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">x=</span>length))<span class="op">+</span></a>
+<a class="sourceLine" id="cb610-2" data-line-number="2"><span class="kw">geom_histogram</span>(<span class="dt">binwidth=</span><span class="dv">1</span>)<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-10-1.png" width="672"  /></p>
 <p><em>bihai</em> has those two outliers, <em>caribaea</em> red has no tails
 to speak of (or you might say “it’s bimodal”, which would be another
 explanation of the pattern on the normal quantile
 plot
-<label for="tufte-mn-27" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-27" class="margin-toggle"><span class="marginnote">If you have studied a thing called kurtosis, the fourth moment about the mean, you’ll know that this measures <em>both</em> tail length <em>and</em> peakedness, so a short-tailed distribution also has a strong peak. Or, maybe, in this case, two strong peaks.</span>), and
+<label for="tufte-mn-28" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-28" class="margin-toggle"><span class="marginnote">If you have studied a thing called kurtosis, the fourth moment about the mean, you’ll know that this measures <em>both</em> tail length <em>and</em> peakedness, so a short-tailed distribution also has a strong peak. Or, maybe, in this case, two strong peaks.</span>), and
 <em>caribaea</em> yellow is shoulder-shruggingly normal (I looked at
 that and said, “well, I <em>guess</em> it’s normal”.) After you’ve
 looked at the normal quantile plots, you see what a crude tool a
@@ -432,8 +433,8 @@ one of the variables in the data set for normality.</p>
 copy from the lecture notes.)</p>
 <p>Solution</p>
 <p><code>read_tsv</code> is the right thing:</p>
-<div class="sourceCode" id="cb585"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb585-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/ais.txt&quot;</span></a>
-<a class="sourceLine" id="cb585-2" data-line-number="2">athletes=<span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb611-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/ais.txt&quot;</span></a>
+<a class="sourceLine" id="cb611-2" data-line-number="2">athletes=<span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Sex = col_character(),
@@ -450,7 +451,7 @@ copy from the lecture notes.)</p>
 ##   Ht = col_double(),
 ##   Wt = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb587-1" data-line-number="1">athletes</a></code></pre></div>
+<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb613-1" data-line-number="1">athletes</a></code></pre></div>
 <pre><code>## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
 ##    &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -473,8 +474,8 @@ Ferritin values, for all the athletes together. What do you
 conclude about the shape of the distribution? Explain briefly.</p>
 <p>Solution</p>
 <p>As you would expect:</p>
-<div class="sourceCode" id="cb589"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb589-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">sample=</span>Ferr))<span class="op">+</span></a>
-<a class="sourceLine" id="cb589-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb615-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">sample=</span>Ferr))<span class="op">+</span></a>
+<a class="sourceLine" id="cb615-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-12-1.png" width="672"  /></p>
 <p>This is almost a classic right skew: the values are too bunched up at
 the bottom and too spread out at the top. The curved shape should be
@@ -487,8 +488,8 @@ plot for each sport, collected together on one plot.</p>
 <p>Solution</p>
 <p>Your previous plot had all the sports mixed together. To that
 you add something that will put each sport in its own facet:</p>
-<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb590-1" data-line-number="1"><span class="kw">ggplot</span>(athletes,<span class="kw">aes</span>(<span class="dt">sample=</span>Ferr))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb590-2" data-line-number="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Sport)</a></code></pre></div>
+<div class="sourceCode" id="cb616"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb616-1" data-line-number="1"><span class="kw">ggplot</span>(athletes,<span class="kw">aes</span>(<span class="dt">sample=</span>Ferr))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb616-2" data-line-number="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Sport)</a></code></pre></div>
 <p><img src="09-normal-quantile_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
 <p>(d)[2] Looking at the plots in the previous part, would you say
 that the Ferritin values for each sport individually have a more

@@ -980,8 +980,8 @@ x
 ```
 
 ```
-##  [1] 31.93487 49.42195 37.81347 30.36285 59.54344 60.05124 27.17946
-##  [8] 28.68094 35.13692 53.81671
+##  [1] 48.88206 51.31744 57.98222 41.09767 34.09644 78.29670 77.34512
+##  [8] 55.43231 49.72759 24.34669
 ```
 
 
@@ -1005,8 +1005,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        4
-## 2 TRUE         6
+## 1 FALSE        8
+## 2 TRUE         2
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1040,7 +1040,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       4 FALSE
+## 1       2 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1060,7 +1060,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       4 FALSE
+## 1       2 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1771,7 +1771,7 @@ courses, and each student's score on a math phobia test was recorded
 after they completed their course. The math phobia test produces
 whole-number scores between 0 and 10, with a higher score indicating a
 greater fear of mathematics. The data can be found in
-[http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt](http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt). We start
+[link](http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt). We start
 with R for this question.
 
 
@@ -1818,6 +1818,8 @@ math
 ## 10 b           1
 ```
 
+ 
+
 This will do, counting the `a` and `b`. Or, to save
 yourself that trouble:
 
@@ -1833,6 +1835,8 @@ math %>% count(course)
 ## 1 a          5
 ## 2 b          5
 ```
+
+ 
 
 Five each. The story is to get the computer to do the grunt work for
 you, if you can make it do so. Other ways:
@@ -1850,6 +1854,8 @@ math %>% group_by(course) %>% summarize(count=n())
 ## 2 b          5
 ```
 
+ 
+
 and this:
 
 
@@ -1862,6 +1868,8 @@ with(math,table(course))
 ## a b 
 ## 5 5
 ```
+
+ 
 
 giving the same answer. Lots of ways.
 
@@ -1906,6 +1914,8 @@ t.test(phobia~course,data=math)
 ##             6.8             5.4
 ```
 
+ 
+
 The P-value of 0.4456 is nowhere near less than 0.05, so there is no
 evidence at all that the  
 mean math phobia scores are different between the two courses. 
@@ -1927,6 +1937,8 @@ ggplot(math,aes(x=course,y=phobia))+geom_boxplot()
 ```
 
 <img src="07-sign-mood-median_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+
+ 
 
 Boxplot `a` is just weird. The bar across the middle is
 actually at the top, and it has no bottom. (Noting something sensible
@@ -1968,6 +1980,8 @@ summary(tmp)
 ##                     3rd Qu.:7.0  
 ##                     Max.   :8.0
 ```
+
+ 
 
 The phobia scores from course A are two 6's, two 7's and an 8. The
 median and third quartile are both 7, and the first quartile is the
@@ -2011,6 +2025,8 @@ facet_wrap(~course,ncol=1, scales="free")
 ```
 
 <img src="07-sign-mood-median_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
+
+   
 
 I don't know what *you* make of those, but they both look pretty
 straight to me (and there are only five observations, so it's hard to
@@ -2066,6 +2082,8 @@ median_test(math,phobia,course)
 ## 3   P-value 0.6592430
 ```
 
+     
+
 We are nowhere near rejecting equal medians; in fact, both courses are
 very close to 50--50 above and below the overall median.
 
@@ -2102,6 +2120,8 @@ math %>% count(phobia)
 ## 6      9     1
 ```
 
+ 
+
 The overall median was 7. Because the actual data were really discrete
 (the phobia scores could only be whole numbers), we risked losing a
 lot of our data when we did this test (and we didn't have much to
@@ -2132,15 +2152,15 @@ median_test(d,x,g)
 ## 3   P-value 0.008150972
 ```
 
+ 
+
 I faked it up so that we had 10 observations, three of which were
 equal to the overall median. Of the rest, all the small ones were in
 group 1 and all the large ones were in group 2. This is lopsided
 enough to reject with, though, because of the small frequencies, there
-actually was a warning about ``chi-squared approximation
-may be inaccurate''.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There emph{was</span>, in the
-`chisq.test` inside `median_test`, but in
-`smmr` I didn't pass that warning back to the outside world.}
+actually was a warning about 
+"chi-squared approximation may be inaccurate".
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There *was*, in the   *chisq.test* inside *median_test*, but in  *smmr* I didn't pass that warning back to the outside world.</span>
 
 
 
