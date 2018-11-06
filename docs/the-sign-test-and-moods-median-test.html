@@ -193,7 +193,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="regression.html#sparrowhawks"><span class="toc-section-number">13.7</span> Sparrowhawks</a></li>
 <li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">13.8</span> Salaries of social workers</a></li>
 <li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">13.9</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="regression.html#mating-songs-in-crickets-1"><span class="toc-section-number">13.10</span> Mating songs in crickets</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">13.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">13.11</span> Roller coasters</a></li>
 </ul></li>
 <li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">14</span> Dates and times</a><ul>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">14.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
@@ -753,8 +754,8 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb401-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 48.88206 51.31744 57.98222 41.09767 34.09644 78.29670 77.34512
-##  [8] 55.43231 49.72759 24.34669</code></pre>
+<pre><code>##  [1] 62.57016 38.38226 56.96030 37.70608 22.80844 50.66678 33.95130
+##  [8] 63.20162 67.90308 76.89659</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
@@ -765,8 +766,8 @@ than 40 and how many are greater (or equal)?</li>
 <pre><code>## # A tibble: 2 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE        8
-## 2 TRUE         2</code></pre>
+## 1 FALSE        6
+## 2 TRUE         4</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -786,7 +787,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       2 FALSE</code></pre>
+## 1       4 FALSE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
@@ -798,7 +799,7 @@ should not reject. The fix is</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       2 FALSE</code></pre>
+## 1       4 FALSE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>

@@ -193,7 +193,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="regression.html#sparrowhawks"><span class="toc-section-number">13.7</span> Sparrowhawks</a></li>
 <li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">13.8</span> Salaries of social workers</a></li>
 <li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">13.9</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="regression.html#mating-songs-in-crickets-1"><span class="toc-section-number">13.10</span> Mating songs in crickets</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">13.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">13.11</span> Roller coasters</a></li>
 </ul></li>
 <li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">14</span> Dates and times</a><ul>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">14.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
@@ -1380,7 +1381,8 @@ You can, if you like, use <code>parse_number</code> instead of
 prefer to make is that <code>parse_number</code> is good for text
 with a number in it (that we want to pull the number out of),
 while <code>as.numeric</code> is for turning something that looks like
-a number but isn’t one into a genuine number.</li>
+a number but isn’t one into a genuine number.
+<label for="tufte-mn-46" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-46" class="margin-toggle"><span class="marginnote">You could just as well make the point that the text 20.8 contains the number 20.8 and nothing else, so that parsing it as text in search of a number will pull out 20.8 as a number. If that logic works for you, go with it.</span></li>
 </ol>
 <p>Solution</p>
 <p><code>mutate</code>-ing into a column that already exists overwrites
@@ -1417,7 +1419,7 @@ for our analysis.</p>
 <p>The warning message tells us that we got genuine missing-value NAs
 back, which is probably what we want. Specifically, they got turned
 from missing <em>text</em> to missing <em>numbers</em>!
-<label for="tufte-mn-46" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-46" class="margin-toggle"><span class="marginnote">You might think that missing is just missing, but R distinguishes between types of missing.</span>
+<label for="tufte-mn-47" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-47" class="margin-toggle"><span class="marginnote">You might think that missing is just missing, but R distinguishes between types of missing.</span>
 The R word
 “coercion” means values being changed from one type of thing to
 another type of thing. (We’ll ignore the missings and see if they
@@ -1522,7 +1524,8 @@ species.</p>
 however. Is it possible that temperature also has an effect? To
 assess this, draw a scatterplot of pulse rate against temperature,
 with the points distinguished, somehow, by the species they are
-from.</li>
+from.
+<label for="tufte-mn-48" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-48" class="margin-toggle"><span class="marginnote">This was the actual reason I gave you this question: I wanted you to do this. It sort of morphed into all the other stuff as well.</span></li>
 </ol>
 <p>Solution</p>
 <p>One of the wonderful things about <code>ggplot</code> is that doing
@@ -1554,10 +1557,11 @@ rates between the species might have been explainable by one
 species being observed mainly in higher temperatures. This was
 <em>utterly invisible</em> to us when we did the <span class="math inline">\(t\)</span>-test, but it
 shows the importance of accounting for all the relevant
-variables when you do your analysis. If the species had been
+variables when you do your analysis.
+<label for="tufte-mn-49" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-49" class="margin-toggle"><span class="marginnote">And it shows the value of looking at relevant plots.</span> If the species had been
 observed at opposite temperatures, we might have
 concluded
-<label for="tufte-mn-47" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-47" class="margin-toggle"><span class="marginnote">Mistakenly.</span>
+<label for="tufte-mn-50" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-50" class="margin-toggle"><span class="marginnote">Mistakenly.</span>
 that <em>niveus</em> have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
@@ -1622,11 +1626,12 @@ anything). This is a lot shorter than the CI that came out of the
 accounting for temperature, which also makes a difference. (In the
 <span class="math inline">\(t\)</span>-test, the temperatures were all mixed up). What we also see is
 that the <span class="math inline">\(t\)</span>-interval is shifted up compared to the one from the
-regression. This is because the <span class="math inline">\(t\)</span>-interval conflates two things: the <em>exclamationis</em> crickets do have a
+regression. This is because the <span class="math inline">\(t\)</span>-interval conflates
+<label for="tufte-mn-51" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-51" class="margin-toggle"><span class="marginnote">Mixes up.} two things: the textsl{exclamationis</span> crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
-<label for="tufte-mn-48" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-48" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
+<label for="tufte-mn-52" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-52" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
 really are, when you account for temperature.</p>
 <p>This particular model constrains the slope with temperature to be the
 same for both species (just the intercepts differ). If you want to
@@ -1656,7 +1661,8 @@ between temperature and species:</p>
 ## Multiple R-squared:  0.9901, Adjusted R-squared:  0.989 
 ## F-statistic: 898.9 on 3 and 27 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>To see whether adding the interaction term added anything to the
-prediction, compare the model with and without using <code>anova</code>:</p>
+prediction,
+<label for="tufte-mn-53" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-53" class="margin-toggle"><span class="marginnote">Though it’s hard to imagine being able to improve on an R-squared of 99%.} compare the model with and without using texttt{anova</span>:</p>
 <div class="sourceCode" id="cb1123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1123-1" data-line-number="1"><span class="kw">anova</span>(pulse<span class="fl">.1</span>,pulse<span class="fl">.2</span>)  </a></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
@@ -1674,7 +1680,8 @@ two species and therefore only one slope coefficient was required to
 distinguish them. If there had been three species, we would have had
 to look at the <code>anova</code> output to hunt for a difference among
 species, since there would have been two slope coefficients, each with
-its own P-value.</p>
+its own P-value.
+<label for="tufte-mn-54" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-54" class="margin-toggle"><span class="marginnote">This wouldn’t have told us about the overall effect of species.</span></p>
 <p>The upshot is that we do not need different slopes; the model
 <code>pulse.1</code> with the same slope for each species describes what
 is going on.</p>
@@ -1793,7 +1800,7 @@ awful, going with a correlation of</p>
 <pre><code>## [1] 0.4363485</code></pre>
 <p>which <em>would</em> look
 like as weak of a trend as we saw.
-<label for="tufte-mn-49" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-49" class="margin-toggle"><span class="marginnote">Correlations have to go up beyond 0.50 before they start looking at all interesting.</span></p>
+<label for="tufte-mn-55" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-55" class="margin-toggle"><span class="marginnote">Correlations have to go up beyond 0.50 before they start looking at all interesting.</span></p>
 <p>(d)??part:regtest?? Is the slope of your regression line significantly
 different from zero? What does that mean, in the context of the
 data?</p>
@@ -2599,7 +2606,7 @@ that you will have a terrible time debugging. That’s what that
 <p>So I’m going to be tidy and get rid of <code>MASS</code>, now that I’m
 finished with it. Let’s first see which packages are loaded, rather a
 lot in my case:
-<label for="tufte-mn-50" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-50" class="margin-toggle"><span class="marginnote">The packages before <em>tidyverse</em> other than <em>MASS</em> are all loaded by the <em>tidyverse</em>, which is why there are so many.</span></p>
+<label for="tufte-mn-56" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-56" class="margin-toggle"><span class="marginnote">The packages before <em>tidyverse</em> other than <em>MASS</em> are all loaded by the <em>tidyverse</em>, which is why there are so many.</span></p>
 <div class="sourceCode" id="cb1209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1209-1" data-line-number="1"><span class="kw">search</span>()</a></code></pre></div>
 <pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:MASS&quot;      &quot;package:broom&quot;    
 ##  [4] &quot;package:GGally&quot;    &quot;package:bindrcpp&quot;  &quot;package:forcats&quot;  
@@ -2834,7 +2841,7 @@ I am guided by “form, direction, strength” in looking at a scatterplot:</p>
 <p>You don’t need to be as formal as this, but you <em>do</em> need
 to get at the idea that it is an upward trend, apparently
 linear, and at least fairly strong.
-<label for="tufte-mn-51" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-51" class="margin-toggle"><span class="marginnote">When this was graded, it was 3 marks, to clue you in that there are three things to say.</span></p>
+<label for="tufte-mn-57" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-57" class="margin-toggle"><span class="marginnote">When this was graded, it was 3 marks, to clue you in that there are three things to say.</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Fit a (linear) regression, predicting volume from diameter,
 and obtain the <code>summary</code>. How would you describe the R-squared?</li>
@@ -3182,416 +3189,72 @@ you and the base of the tree is then equal to the height of the tree,
 and if you have a long enough tape measure you can measure it.</p>
 <p>The above works because the tangent of 45 degrees is 1. If you have a
 device that will measure the actual angle,
-<label for="tufte-mn-52" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-52" class="margin-toggle"><span class="marginnote">These days, there are apps that will let you do this with your phone. I found one called Clinometer. See also <a href="https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/">link</a>.</span>
+<label for="tufte-mn-58" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-58" class="margin-toggle"><span class="marginnote">These days, there are apps that will let you do this with your phone. I found one called Clinometer. See also <a href="https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/">link</a>.</span>
 you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of
 the tree (to which you add the height of your eyes).</p>
 </div>
-<div id="mating-songs-in-crickets-1" class="section level2">
-<h2><span class="header-section-number">13.10</span> Mating songs in crickets</h2>
-<p>Male tree crickets produce “mating songs” by rubbing their
-wings together to produce a chirping sound. It is hypothesized that
-female tree crickets identify males of the correct species by how fast
-(in chirps per second) the male’s mating song is. This is called the
+<div id="crickets-revisited" class="section level2">
+<h2><span class="header-section-number">13.10</span> Crickets revisited</h2>
+<p>This is a reorganization of the crickets problem that you
+may have seen before (minus the data tidying).</p>
+<p>Male tree crickets produce “mating songs” by rubbing their wings
+together to produce a chirping sound. It is hypothesized that female
+tree crickets identify males of the correct species by how fast (in
+chirps per second) the male’s mating song is. This is called the
 “pulse rate”. Some data for two species of crickets are in
-<a href="http://www.utsc.utoronto.ca/~butler/c32/crickets.txt">link</a>. The
-columns, which are unlabelled, are temperature and pulse rate
-(respectively) for <em>Oecanthus exclamationis</em> (first two
-columns) and <em>Oecanthus niveus</em> (third and fourth columns). The
-columns are separated by tabs. There are some missing values in the
-first two columns because fewer <em>exclamationis</em> crickets than
-<em>niveus</em> crickets were measured.
+<a href="http://www.utsc.utoronto.ca/~butler/c32/crickets2.csv">link</a> as a CSV
+file. The columns are species (text), temperature, and pulse
+rate (numbers). This is the tidied version of the data set that the
+previous version of this question had you create.
 The research question is whether males
 of the different species have different average pulse rates. It is
 also of interest to see whether temperature has an effect, and if
 so, what.</p>
 <ol style="list-style-type: lower-alpha">
-<li>Read in the data, allowing for the fact that you have no
-column names. You’ll see that the
-columns have names <code>X1</code> through <code>X4</code>. This is
-OK.</li>
+<li>Read the data into R and display what you have.</li>
 </ol>
 <p>Solution</p>
-<p>Tab-separated, so <code>read_tsv</code>; no column names, so <code>col_names=F</code>:</p>
-<div class="sourceCode" id="cb1259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1259-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/crickets.txt&quot;</span></a>
-<a class="sourceLine" id="cb1259-2" data-line-number="2">crickets=<span class="kw">read_tsv</span>(my_url,<span class="dt">col_names=</span>F)</a></code></pre></div>
+<p>Nothing terribly surprising here:</p>
+<div class="sourceCode" id="cb1259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1259-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/crickets2.csv&quot;</span></a>
+<a class="sourceLine" id="cb1259-2" data-line-number="2">crickets=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   X1 = col_double(),
-##   X2 = col_double(),
-##   X3 = col_double(),
-##   X4 = col_double()
+##   species = col_character(),
+##   temperature = col_double(),
+##   pulse_rate = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1261-1" data-line-number="1">crickets  </a></code></pre></div>
-<pre><code>## # A tibble: 17 x 4
-##       X1    X2    X3    X4
-##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1  20.8  67.9  17.2  44.3
-##  2  20.8  65.1  18.3  47.2
-##  3  24    77.3  18.3  47.6
-##  4  24    78.7  18.3  49.6
-##  5  24    79.4  18.9  50.3
-##  6  24    80.4  18.9  51.8
-##  7  26.2  85.8  20.4  60  
-##  8  26.2  86.6  21    58.5
-##  9  26.2  87.5  21    58.9
-## 10  26.2  89.1  22.1  60.7
-## 11  28.4  98.6  23.5  69.8
-## 12  29   101.   24.2  70.9
-## 13  30.4  99.3  25.9  76.2
-## 14  30.4 102.   26.5  76.1
-## 15  NA    NA    26.5  77  
-## 16  NA    NA    26.5  77.7
-## 17  NA    NA    28.6  84.7</code></pre>
-<p>As promised.</p>
-<p>If you didn’t catch the tab-separated part, this probably happened to you:</p>
-<div class="sourceCode" id="cb1263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1263-1" data-line-number="1">d=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a></code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   X1 = col_character()
-## )</code></pre>
-<pre><code>## Warning in rbind(names(probs), probs_f): number of columns of result is not
-## a multiple of vector length (arg 1)</code></pre>
-<pre><code>## Warning: 3 parsing failures.
-## row # A tibble: 3 x 5 col     row col   expected  actual   file                                      expected   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;                                     actual 1    15 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32… file 2    16 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32… row 3    17 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32…</code></pre>
-<p>This doesn’t look good:</p>
-<div class="sourceCode" id="cb1267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1267-1" data-line-number="1"><span class="kw">problems</span>(d)</a></code></pre></div>
-<pre><code>## # A tibble: 3 x 5
-##     row col   expected  actual   file                                     
-##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;                                    
-## 1    15 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32…
-## 2    16 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32…
-## 3    17 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32…</code></pre>
-<p>The “expected columns” being 1 should bother you, since we know
-there are supposed to be 4 columns. At this point, we take a look at
-what got read in:</p>
-<div class="sourceCode" id="cb1269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1269-1" data-line-number="1">d</a></code></pre></div>
-<pre><code>## # A tibble: 17 x 1
-##    X1                       
-##    &lt;chr&gt;                    
-##  1 &quot;20.8\t67.9\t17.2\t44.3&quot; 
-##  2 &quot;20.8\t65.1\t18.3\t47.2&quot; 
-##  3 &quot;24.0\t77.3\t18.3\t47.6&quot; 
-##  4 &quot;24.0\t78.7\t18.3\t49.6&quot; 
-##  5 &quot;24.0\t79.4\t18.9\t50.3&quot; 
-##  6 &quot;24.0\t80.4\t18.9\t51.8&quot; 
-##  7 &quot;26.2\t85.8\t20.4\t60.0&quot; 
-##  8 &quot;26.2\t86.6\t21.0\t58.5&quot; 
-##  9 &quot;26.2\t87.5\t21.0\t58.9&quot; 
-## 10 &quot;26.2\t89.1\t22.1\t60.7&quot; 
-## 11 &quot;28.4\t98.6\t23.5\t69.8&quot; 
-## 12 &quot;29.0\t100.8\t24.2\t70.9&quot;
-## 13 &quot;30.4\t99.3\t25.9\t76.2&quot; 
-## 14 &quot;30.4\t101.7\t26.5\t76.1&quot;
-## 15 &quot;NA\tNA&quot;                 
-## 16 &quot;NA\tNA&quot;                 
-## 17 &quot;NA\tNA&quot;</code></pre>
-<p>and there you see the <code>t</code> or “tab” characters separating the
-values, instead of spaces. (This is what I tried first, and once I
-looked at this, I realized that <code>read_tsv</code> was what I needed.)</p>
+<div class="sourceCode" id="cb1261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1261-1" data-line-number="1">crickets</a></code></pre></div>
+<pre><code>## # A tibble: 31 x 3
+##    species       temperature pulse_rate
+##    &lt;chr&gt;               &lt;dbl&gt;      &lt;dbl&gt;
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 21 more rows</code></pre>
+<p>31 crickets, which is what I remember. What species are there?</p>
+<div class="sourceCode" id="cb1263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1263-1" data-line-number="1">crickets <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(species)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   species           n
+##   &lt;chr&gt;         &lt;int&gt;
+## 1 exclamationis    14
+## 2 niveus           17</code></pre>
+<p>That looks good. We proceed.</p>
 <ol start="2" style="list-style-type: lower-alpha">
-<li>These data are rather far from being tidy. There need to be
-three variables, temperature, pulse rate and species, and there
-are <span class="math inline">\(14+17=31\)</span> observations altogether. This one is tricky in that
-there are temperature and pulse rate for each of two levels of a
-factor, so I’ll suggest combining the temperature and chirp rate
-together into one thing for each species, then gathering them,
-then splitting them again. Create new columns, named for each species,
-that contain the temperature and pulse rate for that species in
-that order, <code>unite</code>d together.
-For the rest of this question, start from the data frame you read
-in, and build a pipe, one or two steps at a time, to save creating
-a lot of temporary data frames.</li>
-</ol>
-<p>Solution</p>
-<p>Breathe, and then begin. <code>unite</code> creates new columns by
-joining together old ones:
-<label for="tufte-mn-53" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-53" class="margin-toggle"><span class="marginnote">As <em>str_c</em> or <em>paste</em> do, actually, but the advantage of <em>unite</em> is that it gets rid of the other columns, which you probably no longer need.</span></p>
-<div class="sourceCode" id="cb1271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1271-1" data-line-number="1">crickets <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1271-2" data-line-number="2"><span class="kw">unite</span>(exclamationis,X1<span class="op">:</span>X2) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1271-3" data-line-number="3"><span class="kw">unite</span>(niveus,X3<span class="op">:</span>X4) </a></code></pre></div>
-<pre><code>## # A tibble: 17 x 2
-##    exclamationis niveus   
-##    &lt;chr&gt;         &lt;chr&gt;    
-##  1 20.8_67.9     17.2_44.3
-##  2 20.8_65.1     18.3_47.2
-##  3 24_77.3       18.3_47.6
-##  4 24_78.7       18.3_49.6
-##  5 24_79.4       18.9_50.3
-##  6 24_80.4       18.9_51.8
-##  7 26.2_85.8     20.4_60  
-##  8 26.2_86.6     21_58.5  
-##  9 26.2_87.5     21_58.9  
-## 10 26.2_89.1     22.1_60.7
-## 11 28.4_98.6     23.5_69.8
-## 12 29_100.8      24.2_70.9
-## 13 30.4_99.3     25.9_76.2
-## 14 30.4_101.7    26.5_76.1
-## 15 NA_NA         26.5_77  
-## 16 NA_NA         26.5_77.7
-## 17 NA_NA         28.6_84.7</code></pre>
-<p>Note that the original columns <code>X1:X4</code> are <em>gone</em>, which
-is fine, because the information we needed from them is contained in
-the two new columns. <code>unite</code> by default uses an underscore to
-separate the joined-together values, which is generally safe since you
-won’t often find those in data.</p>
-<p>Digression: <code>unite</code>-ing with a space could cause problems if
-the data values have spaces in them already. Consider this list of names:</p>
-<div class="sourceCode" id="cb1273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1273-1" data-line-number="1">names=<span class="kw">c</span>(<span class="st">&quot;Cameron McDonald&quot;</span>,<span class="st">&quot;Durwin Yang&quot;</span>,<span class="st">&quot;Ole Gunnar Solskjaer&quot;</span>,<span class="st">&quot;Mahmudullah&quot;</span>)</a></code></pre></div>
-<p>Two very former students of mine, a Norwegian soccer player, and a
-Bangladeshi cricketer. Only one of these has played for Manchester United:</p>
-<div class="sourceCode" id="cb1274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1274-1" data-line-number="1">manu=<span class="kw">c</span>(F,F,T,F)</a></code></pre></div>
-<p>and let’s make a data frame:</p>
-<div class="sourceCode" id="cb1275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1275-1" data-line-number="1">d=<span class="kw">tibble</span>(<span class="dt">name=</span>names,<span class="dt">manu=</span>manu)</a>
-<a class="sourceLine" id="cb1275-2" data-line-number="2">d</a></code></pre></div>
-<pre><code>## # A tibble: 4 x 2
-##   name                 manu 
-##   &lt;chr&gt;                &lt;lgl&gt;
-## 1 Cameron McDonald     FALSE
-## 2 Durwin Yang          FALSE
-## 3 Ole Gunnar Solskjaer TRUE 
-## 4 Mahmudullah          FALSE</code></pre>
-<p>Now, what happens if we <code>unite</code> those columns, separating them
-by a space?</p>
-<div class="sourceCode" id="cb1277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1277-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unite</span>(joined,name<span class="op">:</span>manu,<span class="dt">sep=</span><span class="st">&quot; &quot;</span>)</a></code></pre></div>
-<pre><code>## # A tibble: 4 x 1
-##   joined                   
-##   &lt;chr&gt;                    
-## 1 Cameron McDonald FALSE   
-## 2 Durwin Yang FALSE        
-## 3 Ole Gunnar Solskjaer TRUE
-## 4 Mahmudullah FALSE</code></pre>
-<p>If we then try to separate them again, what happens?</p>
-<div class="sourceCode" id="cb1279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1279-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unite</span>(joined,name<span class="op">:</span>manu,<span class="dt">sep=</span><span class="st">&quot; &quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1279-2" data-line-number="2"><span class="kw">separate</span>(joined,<span class="kw">c</span>(<span class="st">&quot;one&quot;</span>,<span class="st">&quot;two&quot;</span>),<span class="st">&quot; &quot;</span>)</a></code></pre></div>
-<pre><code>## Warning: Expected 2 pieces. Additional pieces discarded in 3 rows [1, 2,
-## 3].</code></pre>
-<pre><code>## # A tibble: 4 x 2
-##   one         two     
-##   &lt;chr&gt;       &lt;chr&gt;   
-## 1 Cameron     McDonald
-## 2 Durwin      Yang    
-## 3 Ole         Gunnar  
-## 4 Mahmudullah FALSE</code></pre>
-<p>Things have gotten lost: most of the original values of <code>manu</code>
-and some of the names. If we use a different separator character,
-either choosing one deliberately or going with the default underscore,
-everything works swimmingly:</p>
-<div class="sourceCode" id="cb1282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1282-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unite</span>(joined,name<span class="op">:</span>manu,<span class="dt">sep=</span><span class="st">&quot;:&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1282-2" data-line-number="2"><span class="kw">separate</span>(joined,<span class="kw">c</span>(<span class="st">&quot;one&quot;</span>,<span class="st">&quot;two&quot;</span>),<span class="st">&quot;:&quot;</span>)</a></code></pre></div>
-<pre><code>## # A tibble: 4 x 2
-##   one                  two  
-##   &lt;chr&gt;                &lt;chr&gt;
-## 1 Cameron McDonald     FALSE
-## 2 Durwin Yang          FALSE
-## 3 Ole Gunnar Solskjaer TRUE 
-## 4 Mahmudullah          FALSE</code></pre>
-<p>and we are back to where we started.</p>
-<p>If you run just the <code>unite</code> line (move the pipe symbol to the
-next line so that the <code>unite</code> line is complete as it stands),
-you’ll see what happened.</p>
-<ol start="3" style="list-style-type: lower-alpha">
-<li>The two columns <code>exclamationis</code> and <code>niveus</code>
-that you just created are both temperature-pulse rate combos, but
-for different species. <code>gather</code> them together into one
-column, labelled by species. (This is a straight <code>tidyr</code>
-<code>gather</code>, even though they contain something odd-looking.)</li>
-</ol>
-<p>Solution</p>
-<p>Thus, this, naming the new column <code>temp_pulse</code> since it
-contains both of those things. Add to the end of the pipe you
-started building in the previous part:</p>
-<div class="sourceCode" id="cb1284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1284-1" data-line-number="1">crickets <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1284-2" data-line-number="2"><span class="kw">unite</span>(exclamationis,X1<span class="op">:</span>X2) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1284-3" data-line-number="3"><span class="kw">unite</span>(niveus,X3<span class="op">:</span>X4) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1284-4" data-line-number="4"><span class="kw">gather</span>(species,temp_pulse,exclamationis<span class="op">:</span>niveus)  </a></code></pre></div>
-<pre><code>## # A tibble: 34 x 2
-##    species       temp_pulse
-##    &lt;chr&gt;         &lt;chr&gt;     
-##  1 exclamationis 20.8_67.9 
-##  2 exclamationis 20.8_65.1 
-##  3 exclamationis 24_77.3   
-##  4 exclamationis 24_78.7   
-##  5 exclamationis 24_79.4   
-##  6 exclamationis 24_80.4   
-##  7 exclamationis 26.2_85.8 
-##  8 exclamationis 26.2_86.6 
-##  9 exclamationis 26.2_87.5 
-## 10 exclamationis 26.2_89.1 
-## # ... with 24 more rows</code></pre>
-<p>Yep. If you scroll down with Next, you’ll see the other species of
-crickets, and you’ll see some missing values at the bottom, labelled,
-at the moment, <code>NA_NA</code>.</p>
-<p>This is going to get rather long, but don’t fret: we debugged the two
-<code>unite</code> lines before, so if you get any errors, they must
-have come from the <code>gather</code>. So that would be the place to check.</p>
-<ol start="4" style="list-style-type: lower-alpha">
-<li>Now split up the temperature-pulse combos at the underscore, into
-two separate columns. This is <code>separate</code>. When specifying
-what to separate by, you can use a number (“split after this many characters”) or a piece of text, in quotes (“when you see this text, split at it”).</li>
-</ol>
-<p>Solution</p>
-<p>The text to split by is an underscore (in quotes), since
-<code>unite</code> by default puts an underscore in between the
-values it pastes together. Glue the <code>separate</code> onto the
-end. We are creating two new variables <code>temperature</code> and
-<code>pulse_rate</code>:</p>
-<div class="sourceCode" id="cb1286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1286-1" data-line-number="1">crickets <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1286-2" data-line-number="2"><span class="kw">unite</span>(exclamationis,X1<span class="op">:</span>X2) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1286-3" data-line-number="3"><span class="kw">unite</span>(niveus,X3<span class="op">:</span>X4) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1286-4" data-line-number="4"><span class="kw">gather</span>(species,temp_pulse,exclamationis<span class="op">:</span>niveus) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1286-5" data-line-number="5"><span class="kw">separate</span>(temp_pulse,<span class="kw">c</span>(<span class="st">&quot;temperature&quot;</span>,<span class="st">&quot;pulse_rate&quot;</span>),<span class="st">&quot;_&quot;</span>)</a></code></pre></div>
-<pre><code>## # A tibble: 34 x 3
-##    species       temperature pulse_rate
-##    &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;     
-##  1 exclamationis 20.8        67.9      
-##  2 exclamationis 20.8        65.1      
-##  3 exclamationis 24          77.3      
-##  4 exclamationis 24          78.7      
-##  5 exclamationis 24          79.4      
-##  6 exclamationis 24          80.4      
-##  7 exclamationis 26.2        85.8      
-##  8 exclamationis 26.2        86.6      
-##  9 exclamationis 26.2        87.5      
-## 10 exclamationis 26.2        89.1      
-## # ... with 24 more rows</code></pre>
-<p>You’ll note that <code>unite</code> and <code>separate</code> are opposites (“inverses”) of each other, but we haven’t just done something and then undone it, because we have a <code>gather</code> in between; in fact, arranging it this way has done precisely the tidying we wanted.</p>
-<ol start="5" style="list-style-type: lower-alpha">
-<li>Almost there. Temperature and pulse rate are still text
-(because <code>unite</code> turned them into text), but they should be
-numbers. Create new variables that are numerical versions of
-temperature and pulse rate (using <code>as.numeric</code>). Check that
-you have no extraneous variables (and, if necessary, get rid of
-the ones you don’t want). (Species is also text and really ought
-to be a factor, but having it as text doesn’t seem to cause any
-problems.)
-You can, if you like, use <code>parse_number</code> instead of
-<code>as.numeric</code>. They should both work. The distinction I
-prefer to make is that <code>parse_number</code> is good for text
-with a number in it (that we want to pull the number out of),
-while <code>as.numeric</code> is for turning something that looks like
-a number but isn’t one into a genuine number.</li>
-</ol>
-<p>Solution</p>
-<p><code>mutate</code>-ing into a column that already exists overwrites
-the variable that’s already there (which saves us some effort
-here).</p>
-<div class="sourceCode" id="cb1288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1288-1" data-line-number="1">crickets<span class="fl">.1</span> =<span class="st"> </span>crickets <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1288-2" data-line-number="2"><span class="kw">unite</span>(exclamationis,X1<span class="op">:</span>X2) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1288-3" data-line-number="3"><span class="kw">unite</span>(niveus,X3<span class="op">:</span>X4) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1288-4" data-line-number="4"><span class="kw">gather</span>(species,temp_pulse,exclamationis<span class="op">:</span>niveus) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1288-5" data-line-number="5"><span class="kw">separate</span>(temp_pulse,<span class="kw">c</span>(<span class="st">&quot;temperature&quot;</span>,<span class="st">&quot;pulse_rate&quot;</span>),<span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1288-6" data-line-number="6"><span class="kw">mutate</span>(<span class="dt">temperature=</span><span class="kw">as.numeric</span>(temperature)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1288-7" data-line-number="7"><span class="kw">mutate</span>(<span class="dt">pulse_rate=</span><span class="kw">as.numeric</span>(pulse_rate))</a></code></pre></div>
-<pre><code>## Warning in evalq(as.numeric(temperature), &lt;environment&gt;): NAs introduced by
-## coercion</code></pre>
-<pre><code>## Warning in evalq(as.numeric(pulse_rate), &lt;environment&gt;): NAs introduced by
-## coercion</code></pre>
-<div class="sourceCode" id="cb1291"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1291-1" data-line-number="1">crickets<span class="fl">.1</span>  </a></code></pre></div>
-<pre><code>## # A tibble: 34 x 3
-##    species       temperature pulse_rate
-##    &lt;chr&gt;               &lt;dbl&gt;      &lt;dbl&gt;
-##  1 exclamationis        20.8       67.9
-##  2 exclamationis        20.8       65.1
-##  3 exclamationis        24         77.3
-##  4 exclamationis        24         78.7
-##  5 exclamationis        24         79.4
-##  6 exclamationis        24         80.4
-##  7 exclamationis        26.2       85.8
-##  8 exclamationis        26.2       86.6
-##  9 exclamationis        26.2       87.5
-## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows</code></pre>
-<p>I saved the data frame this time, since this is the one we will use
-for our analysis.</p>
-<p>The warning message tells us that we got genuine missing-value NAs
-back, which is probably what we want. Specifically, they got turned
-from missing <em>text</em> to missing <em>numbers</em>!
-<label for="tufte-mn-54" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-54" class="margin-toggle"><span class="marginnote">You might think that missing is just missing, but R distinguishes between types of missing.</span>
-The R word
-“coercion” means values being changed from one type of thing to
-another type of thing. (We’ll ignore the missings and see if they
-cause us any trouble. The same warning messages will show up on graphs
-later.) So I have 34 rows (including three rows of missings) instead
-of the 31 rows I would have liked. Otherwise, success.</p>
-<p>There is (inevitably) another way to do this. We are doing the
-<code>as.numeric</code> twice, exactly the same on two different columns,
-and when you are doing the same thing on a number of columns, here a
-<code>mutate</code> with the same function, you have the option of using
-<code>mutate_if</code> or <code>mutate_at</code>. These are like
-<code>summarize_if</code> and <code>summarize_at</code> that we used way
-back to compute numerical summaries of a bunch of columns: the
-<code>if</code> variant works on columns that share a property, like being
-numeric, and the <code>at</code> variant works on columns whose names have
-something in common or that we can list, which is what we want here:</p>
-<div class="sourceCode" id="cb1293"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1293-1" data-line-number="1">crickets <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1293-2" data-line-number="2"><span class="kw">unite</span>(exclamationis,X1<span class="op">:</span>X2) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1293-3" data-line-number="3"><span class="kw">unite</span>(niveus,X3<span class="op">:</span>X4) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1293-4" data-line-number="4"><span class="kw">gather</span>(species,temp_pulse,exclamationis<span class="op">:</span>niveus) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1293-5" data-line-number="5"><span class="kw">separate</span>(temp_pulse,<span class="kw">c</span>(<span class="st">&quot;temperature&quot;</span>,<span class="st">&quot;pulse_rate&quot;</span>),<span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1293-6" data-line-number="6"><span class="kw">mutate_at</span>(<span class="kw">vars</span>(temperature<span class="op">:</span>pulse_rate),<span class="kw">funs</span>(as.numeric))</a></code></pre></div>
-<pre><code>## Warning in evalq(as.numeric(temperature), &lt;environment&gt;): NAs introduced by
-## coercion</code></pre>
-<pre><code>## Warning in evalq(as.numeric(pulse_rate), &lt;environment&gt;): NAs introduced by
-## coercion</code></pre>
-<pre><code>## # A tibble: 34 x 3
-##    species       temperature pulse_rate
-##    &lt;chr&gt;               &lt;dbl&gt;      &lt;dbl&gt;
-##  1 exclamationis        20.8       67.9
-##  2 exclamationis        20.8       65.1
-##  3 exclamationis        24         77.3
-##  4 exclamationis        24         78.7
-##  5 exclamationis        24         79.4
-##  6 exclamationis        24         80.4
-##  7 exclamationis        26.2       85.8
-##  8 exclamationis        26.2       86.6
-##  9 exclamationis        26.2       87.5
-## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows</code></pre>
-<p>Can’t I just say that these are columns 2 and 3?</p>
-<div class="sourceCode" id="cb1297"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1297-1" data-line-number="1">crickets <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1297-2" data-line-number="2"><span class="kw">unite</span>(exclamationis,X1<span class="op">:</span>X2) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1297-3" data-line-number="3"><span class="kw">unite</span>(niveus,X3<span class="op">:</span>X4) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1297-4" data-line-number="4"><span class="kw">gather</span>(species,temp_pulse,exclamationis<span class="op">:</span>niveus) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1297-5" data-line-number="5"><span class="kw">separate</span>(temp_pulse,<span class="kw">c</span>(<span class="st">&quot;temperature&quot;</span>,<span class="st">&quot;pulse_rate&quot;</span>),<span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1297-6" data-line-number="6"><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>),<span class="kw">funs</span>(as.numeric))</a></code></pre></div>
-<pre><code>## Warning in evalq(as.numeric(temperature), &lt;environment&gt;): NAs introduced by
-## coercion</code></pre>
-<pre><code>## Warning in evalq(as.numeric(pulse_rate), &lt;environment&gt;): NAs introduced by
-## coercion</code></pre>
-<pre><code>## # A tibble: 34 x 3
-##    species       temperature pulse_rate
-##    &lt;chr&gt;               &lt;dbl&gt;      &lt;dbl&gt;
-##  1 exclamationis        20.8       67.9
-##  2 exclamationis        20.8       65.1
-##  3 exclamationis        24         77.3
-##  4 exclamationis        24         78.7
-##  5 exclamationis        24         79.4
-##  6 exclamationis        24         80.4
-##  7 exclamationis        26.2       85.8
-##  8 exclamationis        26.2       86.6
-##  9 exclamationis        26.2       87.5
-## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows</code></pre>
-<p>Yes. Equally good. What goes into the <code>vars</code>
-is the same as can go into a <code>select</code>: column numbers, names,
-or any of those “select helpers” like <code>starts_with</code>.</p>
-<p>You might think of <code>mutate_if</code> here, but if you scroll back, you’ll find that all the columns are text, before you convert temperature and pulse rate to numbers, and so there’s no way to pick out just the two columns you want that way.</p>
-<p>Check that the temperature and pulse rate columns are now labelled
-<code>dbl</code>, which means they actually <em>are</em> decimal numbers
-(and don’t just look like decimal numbers).</p>
-<p>Either way, using <code>unite</code> and then <code>separate</code> means that
-all the columns we created we want to keep (or, all the ones we would
-have wanted to get rid of have already been gotten rid of).</p>
-<p>Now we can actually do some statistics.</p>
-<ol start="6" style="list-style-type: lower-alpha">
 <li>Do a two-sample <span class="math inline">\(t\)</span>-test to see whether the mean pulse rates
 differ between species. What do you conclude?</li>
 </ol>
 <p>Solution</p>
 <p>Drag your mind way back to this:</p>
-<div class="sourceCode" id="cb1301"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1301-1" data-line-number="1"><span class="kw">t.test</span>(pulse_rate<span class="op">~</span>species,<span class="dt">data=</span>crickets<span class="fl">.1</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb1265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1265-1" data-line-number="1"><span class="kw">t.test</span>(pulse_rate<span class="op">~</span>species,<span class="dt">data=</span>crickets) </a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -3608,21 +3271,71 @@ differ between species. What do you conclude?</li>
 higher for <em>exclamationis</em>. That is, not just for the crickets
 that were observed here, but for <em>all</em> crickets of these two
 species.</p>
-<ol start="7" style="list-style-type: lower-alpha">
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Can you do that two-sample <span class="math inline">\(t\)</span>-test as a regression?</li>
+</ol>
+<p>Solution</p>
+<p>Hang onto the “pulse rate depends on species” idea and try
+that in <code>lm</code>:</p>
+<div class="sourceCode" id="cb1267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1267-1" data-line-number="1">pulse<span class="fl">.0</span>=<span class="kw">lm</span>(pulse_rate<span class="op">~</span>species,<span class="dt">data=</span>crickets)</a>
+<a class="sourceLine" id="cb1267-2" data-line-number="2"><span class="kw">summary</span>(pulse<span class="fl">.0</span>)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = pulse_rate ~ species, data = crickets)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -20.486  -9.458  -1.729  13.342  22.271 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     85.586      3.316  25.807  &lt; 2e-16 ***
+## speciesniveus  -23.156      4.478  -5.171 1.58e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 12.41 on 29 degrees of freedom
+## Multiple R-squared:  0.4797, Adjusted R-squared:  0.4617 
+## F-statistic: 26.74 on 1 and 29 DF,  p-value: 1.579e-05</code></pre>
+<p>I had to use “model 0” for this since I already have a
+<code>pulse.1</code> below and I didn’t want to go down and renumber
+everything.</p>
+<p>Look along the <code>speciesniveus</code> line. Ignoring the fact that it
+is negative, the <span class="math inline">\(t\)</span>-statistic is almost the same as before (5.17 vs.<br />
+5.22) and so is the P-value (<span class="math inline">\(1.4 \times 10^{-5}\)</span> vs. <span class="math inline">\(1.6 \times 10^{-5}\)</span>).</p>
+<p>Why aren’t they exactly the same? Regression is assuming equal
+variances everywhere (that is, within the two <code>species</code>), and
+before, we did the Welch-Satterthwaite test that does not assume equal
+variances. What if we do the pooled <span class="math inline">\(t\)</span>-test instead?</p>
+<div class="sourceCode" id="cb1269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1269-1" data-line-number="1"><span class="kw">t.test</span>(pulse_rate<span class="op">~</span>species,<span class="dt">data=</span>crickets,<span class="dt">var.equal=</span>T) </a></code></pre></div>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  pulse_rate by species
+## t = 5.1706, df = 29, p-value = 1.579e-05
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  13.99690 32.31571
+## sample estimates:
+## mean in group exclamationis        mean in group niveus 
+##                    85.58571                    62.42941</code></pre>
+<p>Now the regression and the <span class="math inline">\(t\)</span>-test <em>do</em> give exactly the same
+answers. We’ll think about that equal-spreads assumption again later.</p>
+<ol start="4" style="list-style-type: lower-alpha">
 <li>The analysis in the last part did not use temperature,
 however. Is it possible that temperature also has an effect? To
 assess this, draw a scatterplot of pulse rate against temperature,
 with the points distinguished, somehow, by the species they are
-from.</li>
+from.
+<label for="tufte-mn-59" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-59" class="margin-toggle"><span class="marginnote">This was the actual reason I thought of this question originally: I wanted you to do this.</span></li>
 </ol>
 <p>Solution</p>
 <p>One of the wonderful things about <code>ggplot</code> is that doing
 the obvious thing works:</p>
-<div class="sourceCode" id="cb1303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1303-1" data-line-number="1"><span class="kw">ggplot</span>(crickets<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>temperature,<span class="dt">y=</span>pulse_rate,<span class="dt">colour=</span>species))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1303-2" data-line-number="2"><span class="kw">geom_point</span>()</a></code></pre></div>
-<pre><code>## Warning: Removed 3 rows containing missing values (geom_point).</code></pre>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-141-1.png" width="672"  /></p>
-<ol start="8" style="list-style-type: lower-alpha">
+<div class="sourceCode" id="cb1271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1271-1" data-line-number="1"><span class="kw">ggplot</span>(crickets,<span class="kw">aes</span>(<span class="dt">x=</span>temperature,<span class="dt">y=</span>pulse_rate,<span class="dt">colour=</span>species))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1271-2" data-line-number="2"><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-129-1.png" width="672"  /></p>
+<ol start="5" style="list-style-type: lower-alpha">
 <li>What does the plot tell you that the <span class="math inline">\(t\)</span>-test doesn’t? How
 would you describe differences in pulse rates between species now?</li>
 </ol>
@@ -3633,27 +3346,27 @@ difference in pulse rates between the two species is even
 clearer than it was before. To see an example, pick a
 temperature, and note that the mean pulse rate at that
 temperature seems to be at least 10 higher for
-<em>exclamationis</em>, with a high degree of consistency.
+, with a high degree of consistency.
 The <span class="math inline">\(t\)</span>-test mixed up all the pulse rates at all the different
 temperatures. Even though the conclusion was clear enough, it
 could be clearer if we incorporated temperature into the analysis.
 There was also a potential source of unfairness in that the
-<em>exclamationis</em> crickets tended to be observed at higher
-temperatures than <em>niveus</em> crickets; since pulse rates
+ crickets tended to be observed at higher
+temperatures than  crickets; since pulse rates
 increase with temperature, the apparent difference in pulse
 rates between the species might have been explainable by one
 species being observed mainly in higher temperatures. This was
 <em>utterly invisible</em> to us when we did the <span class="math inline">\(t\)</span>-test, but it
 shows the importance of accounting for all the relevant
-variables when you do your analysis. If the species had been
+variables when you do your analysis.
+<label for="tufte-mn-60" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-60" class="margin-toggle"><span class="marginnote">And it shows the value of looking at relevant plots.</span> If the species had been
 observed at opposite temperatures, we might have
 concluded
-<label for="tufte-mn-55" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-55" class="margin-toggle"><span class="marginnote">Mistakenly.</span>
-that <em>niveus</em> have the
+<label for="tufte-mn-61" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-61" class="margin-toggle"><span class="marginnote">Mistakenly.} that textsl{niveus</span> have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
 comes out of the regression model with temperature.</p>
-<ol style="list-style-type: lower-roman">
+<ol start="6" style="list-style-type: lower-alpha">
 <li>Fit a regression predicting pulse rate from species and
 temperature. Compare the P-value for species in this regression to
 the one from the <span class="math inline">\(t\)</span>-test. What does that tell you?</li>
@@ -3661,11 +3374,11 @@ the one from the <span class="math inline">\(t\)</span>-test. What does that tel
 <p>Solution</p>
 <p>This is actually a so-called “analysis of covariance model”,
 which properly belongs in D29, but it’s really just a regression:</p>
-<div class="sourceCode" id="cb1305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1305-1" data-line-number="1">pulse<span class="fl">.1</span>=<span class="kw">lm</span>(pulse_rate<span class="op">~</span>species<span class="op">+</span>temperature,<span class="dt">data=</span>crickets<span class="fl">.1</span>)</a>
-<a class="sourceLine" id="cb1305-2" data-line-number="2"><span class="kw">summary</span>(pulse<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1272-1" data-line-number="1">pulse<span class="fl">.1</span>=<span class="kw">lm</span>(pulse_rate<span class="op">~</span>species<span class="op">+</span>temperature,<span class="dt">data=</span>crickets)</a>
+<a class="sourceLine" id="cb1272-2" data-line-number="2"><span class="kw">summary</span>(pulse<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## lm(formula = pulse_rate ~ species + temperature, data = crickets.1)
+## lm(formula = pulse_rate ~ species + temperature, data = crickets)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
@@ -3680,26 +3393,26 @@ which properly belongs in D29, but it’s really just a regression:</p>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 1.786 on 28 degrees of freedom
-##   (3 observations deleted due to missingness)
 ## Multiple R-squared:  0.9896, Adjusted R-squared:  0.9888 
 ## F-statistic:  1331 on 2 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>The P-value for species is now <span class="math inline">\(6.27\times 10^{-14}\)</span> or 0.00000000000006, which is even less than
-the P-value of 0.00001 that came out of the <span class="math inline">\(t\)</span>-test. That is to say,
-when you know temperature, you can be even more sure of your
-conclusion that there is a difference between the species.</p>
+<p>The P-value for species is now <span class="math inline">\(6.27\times 10^{-14}\)</span> or
+0.00000000000006, which is even less than the P-value of 0.00001 that
+came out of the <span class="math inline">\(t\)</span>-test. That is to say, when you know temperature,
+you can be even more sure of your conclusion that there is a
+difference between the species.</p>
 <p>The R-squared for this regression is almost 99%, which says that if
 you know both temperature and species, you can predict the pulse rate
 almost exactly.</p>
 <p>In the regression output, the slope for species is about <span class="math inline">\(-10\)</span>. It is
 labelled <code>speciesniveus</code>. Since species is categorical,
-<code>lm</code> uses the first category, <em>exclamationis</em>, as the
+<code>lm</code> uses the first category, , as the
 baseline and expresses each other species relative to that. Since the
 slope is about <span class="math inline">\(-10\)</span>, it says that at any given temperature, the mean
-pulse rate for <em>niveus</em> is about 10 less than for
-<em>exclamationis</em>. This is pretty much what the scatterplot told
+pulse rate for  is about 10 less than for
+. This is pretty much what the scatterplot told
 us.</p>
 <p>We can go a little further here:</p>
-<div class="sourceCode" id="cb1307"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1307-1" data-line-number="1"><span class="kw">confint</span>(pulse<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1274-1" data-line-number="1"><span class="kw">confint</span>(pulse<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##                    2.5 %    97.5 %
 ## (Intercept)   -12.436265 -1.985547
 ## speciesniveus -11.571408 -8.559175
@@ -3713,21 +3426,22 @@ anything). This is a lot shorter than the CI that came out of the
 accounting for temperature, which also makes a difference. (In the
 <span class="math inline">\(t\)</span>-test, the temperatures were all mixed up). What we also see is
 that the <span class="math inline">\(t\)</span>-interval is shifted up compared to the one from the
-regression. This is because the <span class="math inline">\(t\)</span>-interval conflates two things: the <em>exclamationis</em> crickets do have a
+regression. This is because the <span class="math inline">\(t\)</span>-interval conflates
+<label for="tufte-mn-62" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-62" class="margin-toggle"><span class="marginnote">Mixes up.} two things: the textsl{exclamationis</span> crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
-<label for="tufte-mn-56" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-56" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
+<label for="tufte-mn-63" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-63" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
 really are, when you account for temperature.</p>
 <p>This particular model constrains the slope with temperature to be the
 same for both species (just the intercepts differ). If you want to
 allow the slopes to differ between species, you add an interaction
 between temperature and species:</p>
-<div class="sourceCode" id="cb1309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1309-1" data-line-number="1">pulse<span class="fl">.2</span>=<span class="kw">lm</span>(pulse_rate<span class="op">~</span>species<span class="op">*</span>temperature,<span class="dt">data=</span>crickets<span class="fl">.1</span>)</a>
-<a class="sourceLine" id="cb1309-2" data-line-number="2"><span class="kw">summary</span>(pulse<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1276-1" data-line-number="1">pulse<span class="fl">.2</span>=<span class="kw">lm</span>(pulse_rate<span class="op">~</span>species<span class="op">*</span>temperature,<span class="dt">data=</span>crickets)</a>
+<a class="sourceLine" id="cb1276-2" data-line-number="2"><span class="kw">summary</span>(pulse<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
-## lm(formula = pulse_rate ~ species * temperature, data = crickets.1)
+## lm(formula = pulse_rate ~ species * temperature, data = crickets)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
@@ -3743,12 +3457,13 @@ between temperature and species:</p>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 1.775 on 27 degrees of freedom
-##   (3 observations deleted due to missingness)
 ## Multiple R-squared:  0.9901, Adjusted R-squared:  0.989 
 ## F-statistic: 898.9 on 3 and 27 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>To see whether adding the interaction term added anything to the
-prediction, compare the model with and without using <code>anova</code>:</p>
-<div class="sourceCode" id="cb1311"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1311-1" data-line-number="1"><span class="kw">anova</span>(pulse<span class="fl">.1</span>,pulse<span class="fl">.2</span>)  </a></code></pre></div>
+prediction,
+<label for="tufte-mn-64" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-64" class="margin-toggle"><span class="marginnote">Though it’s hard to imagine being able to improve on an R-squared of 99%.</span>
+compare the model with and without using <code>anova</code>:</p>
+<div class="sourceCode" id="cb1278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1278-1" data-line-number="1"><span class="kw">anova</span>(pulse<span class="fl">.1</span>,pulse<span class="fl">.2</span>)  </a></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: pulse_rate ~ species + temperature
@@ -3758,26 +3473,85 @@ prediction, compare the model with and without using <code>anova</code>:</p>
 ## 2     27 85.074  1    4.2758 1.357 0.2542</code></pre>
 <p>There’s no significant improvement by adding the interaction, so
 there’s no evidence that having different slopes for each species is
-necessary. Note that <code>anova</code> gave the same P-value as did the
+necessary. This is the same interpretation as any <code>anova</code> for
+comparing two regressions: the two models are not significantly
+different in fit, so go with the simpler one, that is, the one without
+the interaction.</p>
+<p>Note that <code>anova</code> gave the same P-value as did the
 <span class="math inline">\(t\)</span>-test for the slope coefficient for the interaction in
 <code>summary</code>, 0.254 in both cases. This is because there were only
 two species and therefore only one slope coefficient was required to
 distinguish them. If there had been three species, we would have had
 to look at the <code>anova</code> output to hunt for a difference among
 species, since there would have been two slope coefficients, each with
-its own P-value.</p>
+its own P-value.
+<label for="tufte-mn-65" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-65" class="margin-toggle"><span class="marginnote">This wouldn’t have told us about the overall effect of species.</span></p>
+<p>If you haven’t seen interactions before, don’t worry about this. The
+idea behind it is that we are testing whether we needed lines with
+different slopes and we concluded that we don’t. Don’t worry so much
+about the mechanism behind <code>pulse.2</code>; just worry about how it
+somehow provides a way of modelling two different slopes, one for each
+species, which we can then test to see whether it helps.</p>
 <p>The upshot is that we do not need different slopes; the model
 <code>pulse.1</code> with the same slope for each species describes what
 is going on.</p>
 <p><code>ggplot</code> makes it almost laughably easy to add regression lines
 for each species to our plot, thus:</p>
-<div class="sourceCode" id="cb1313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1313-1" data-line-number="1"><span class="kw">ggplot</span>(crickets<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>temperature,<span class="dt">y=</span>pulse_rate,<span class="dt">colour=</span>species))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1313-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
-<pre><code>## Warning: Removed 3 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 3 rows containing missing values (geom_point).</code></pre>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1280-1" data-line-number="1"><span class="kw">ggplot</span>(crickets,<span class="kw">aes</span>(<span class="dt">x=</span>temperature,<span class="dt">y=</span>pulse_rate,<span class="dt">colour=</span>species))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1280-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-134-1.png" width="672"  /></p>
 <p>The lines are almost exactly parallel, so having the same slope for
 each species makes perfect sense.</p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Make suitable residual plots for the regression
+<code>pulse.1</code>.</li>
+</ol>
+<p>Solution</p>
+<p>First, the plot of residuals against fitted values (after all,
+it <em>is</em> a regression):</p>
+<div class="sourceCode" id="cb1281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1281-1" data-line-number="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>.fitted,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-135-1.png" width="672"  /></p>
+<p>This looks nice and random.</p>
+<p>Now, we plot the residuals against the explanatory variables. There
+are two, temperature and species, but the latter is categorical. We’ll
+have some extra issues around species, but before we get to that, we
+have to remember that the data and the output from the regression are
+in different places when we plot them. There are different ways to get
+around that. Perhaps the simplest is to use <code>pulse.1</code> as our
+“default” data frame and then get <code>temperature</code> from the
+right place:</p>
+<div class="sourceCode" id="cb1282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1282-1" data-line-number="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>crickets<span class="op">$</span>temperature,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-136-1.png" width="672"  /></p>
+<p>I don’t see anything untoward there.</p>
+<p>Species. We want to compare the residuals for the two species, which
+is categorical. Since the residuals are quantitative, this suggests a
+boxplot. Remembering to get species from the right place again, that
+goes like this:</p>
+<div class="sourceCode" id="cb1283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1283-1" data-line-number="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">x=</span>crickets<span class="op">$</span>species,<span class="dt">y=</span>.resid))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-137-1.png" width="672"  /></p>
+<p>For the residuals, the median should be zero within each group, and
+the two groups should be approximately normal with mean 0 and about
+the same spread. Same spread looks OK, since the boxes are almost
+exactly the same height, but the normality is not quite there, since
+both distributions are a little bit skewed to the right. That would
+also explain why the median residual in each group is a little bit
+less than zero, because the mathematics requires the overall
+<em>mean</em> residual to be zero, and the right-skewness would make the
+mean higher than the median.</p>
+<p>Is that non-normality really problematic? Well, I could look at the
+normal quantile plot of all the residuals together. This is the one
+without the line:</p>
+<div class="sourceCode" id="cb1284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1284-1" data-line-number="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">sample=</span>.resid))<span class="op">+</span><span class="kw">stat_qq</span>()</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-138-1.png" width="672"  /></p>
+<p>There’s a little weirdness at the top, and a tiny indication of a
+curve (that would suggest a little right-skewedness), but not really
+much to worry about. If that third-highest residual were a bit
+lower (say, 3 rather than 3.5) and maybe if the lowest residual was a
+bit lower, I don’t think we’d have anything to complain about at all.</p>
+<p>So, I’m not worried.</p>
+</div>
+<div id="roller-coasters" class="section level2">
+<h2><span class="header-section-number">13.11</span> Roller coasters</h2>
 <p>A poll on the Discovery Channel asked people to nominate the
 best roller-coasters in the United States. We will examine the 10
 roller-coasters that received the most votes. Two features of a
@@ -3792,8 +3566,8 @@ number of rows and columns.</li>
 </ol>
 <p>Solution</p>
 <p>A <code>.csv</code>, so the usual for that:</p>
-<div class="sourceCode" id="cb1316"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1316-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/coasters.csv&quot;</span></a>
-<a class="sourceLine" id="cb1316-2" data-line-number="2">coasters=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb1285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1285-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/coasters.csv&quot;</span></a>
+<a class="sourceLine" id="cb1285-2" data-line-number="2">coasters=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   coaster_name = col_character(),
@@ -3801,7 +3575,7 @@ number of rows and columns.</li>
 ##   drop = col_integer(),
 ##   duration = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb1318"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1318-1" data-line-number="1">coasters</a></code></pre></div>
+<div class="sourceCode" id="cb1287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1287-1" data-line-number="1">coasters</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 4
 ##    coaster_name     state         drop duration
 ##    &lt;chr&gt;            &lt;chr&gt;        &lt;int&gt;    &lt;int&gt;
@@ -3834,10 +3608,10 @@ invitation to use <code>ggrepel</code>, which is the way I’d
 recommend doing this. (If not, you have to do potentially lots
 of work organizing where the labels sit relative to the points,
 which is time you probably don’t want to spend.) Thus:</p>
-<div class="sourceCode" id="cb1320"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1320-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a>
-<a class="sourceLine" id="cb1320-2" data-line-number="2"><span class="kw">ggplot</span>(coasters,<span class="kw">aes</span>(<span class="dt">x=</span>drop,<span class="dt">y=</span>duration,<span class="dt">label=</span>coaster_name))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1320-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
-<p><img src="12-regression_files/figure-html/unnamed-chunk-148-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1289"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1289-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a>
+<a class="sourceLine" id="cb1289-2" data-line-number="2"><span class="kw">ggplot</span>(coasters,<span class="kw">aes</span>(<span class="dt">x=</span>drop,<span class="dt">y=</span>duration,<span class="dt">label=</span>coaster_name))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1289-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
+<p><img src="12-regression_files/figure-html/unnamed-chunk-140-1.png" width="672"  /></p>
 <p>The <code>se=F</code> at the end is optional; if you omit it, you get that
 “envelope” around the line, which is fine here.</p>
 <p>Note that with the labelling done this way, you can easily identify
@@ -3886,11 +3660,11 @@ is large in size (either positive, like Nitro, or negative, like
 the other two). I didn’t ask you to find the residuals, but if
 you want to, <code>augment</code> from <code>broom</code> is the
 smoothest way to go:</p>
-<div class="sourceCode" id="cb1321"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1321-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
-<a class="sourceLine" id="cb1321-2" data-line-number="2">duration<span class="fl">.1</span>=<span class="kw">lm</span>(duration<span class="op">~</span>drop,<span class="dt">data=</span>coasters) </a>
-<a class="sourceLine" id="cb1321-3" data-line-number="3"><span class="kw">augment</span>(duration<span class="fl">.1</span>,coasters) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1321-4" data-line-number="4"><span class="kw">select</span>(coaster_name,duration,drop,.resid) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1321-5" data-line-number="5"><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(.resid)))</a></code></pre></div>
+<div class="sourceCode" id="cb1290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1290-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb1290-2" data-line-number="2">duration<span class="fl">.1</span>=<span class="kw">lm</span>(duration<span class="op">~</span>drop,<span class="dt">data=</span>coasters) </a>
+<a class="sourceLine" id="cb1290-3" data-line-number="3"><span class="kw">augment</span>(duration<span class="fl">.1</span>,coasters) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1290-4" data-line-number="4"><span class="kw">select</span>(coaster_name,duration,drop,.resid) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1290-5" data-line-number="5"><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(.resid)))</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 4
 ##    coaster_name     duration  drop .resid
 ##    &lt;chr&gt;               &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
@@ -3911,10 +3685,10 @@ want, and arranging them in order by absolute value of residual, so
 that the roller-coasters further from the line come out first. This
 identifies the three that we found above. The fourth one, `<code>Ghost Rider'', is like Nitro in that it takes a (relatively) long time to fall not very far. You can also put</code>augment` in the <em>middle</em> of a pipe, but then
 you seem to lose things that were not in the regression:</p>
-<div class="sourceCode" id="cb1323"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1323-1" data-line-number="1">coasters <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1323-2" data-line-number="2"><span class="kw">lm</span>(duration<span class="op">~</span>drop, <span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1323-3" data-line-number="3"><span class="kw">augment</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1323-4" data-line-number="4"><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(.resid)))</a></code></pre></div>
+<div class="sourceCode" id="cb1292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1292-1" data-line-number="1">coasters <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1292-2" data-line-number="2"><span class="kw">lm</span>(duration<span class="op">~</span>drop, <span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1292-3" data-line-number="3"><span class="kw">augment</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1292-4" data-line-number="4"><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(.resid)))</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 9
 ##    duration  drop .fitted .se.fit .resid  .hat .sigma  .cooksd .std.resid
 ##       &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;

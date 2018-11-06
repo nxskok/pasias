@@ -193,7 +193,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="regression.html#sparrowhawks"><span class="toc-section-number">13.7</span> Sparrowhawks</a></li>
 <li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">13.8</span> Salaries of social workers</a></li>
 <li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">13.9</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="regression.html#mating-songs-in-crickets-1"><span class="toc-section-number">13.10</span> Mating songs in crickets</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">13.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">13.11</span> Roller coasters</a></li>
 </ul></li>
 <li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">14</span> Dates and times</a><ul>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">14.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
@@ -214,7 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="dates-and-times" class="section level1">
 <h1><span class="header-section-number">Chapter 14</span> Dates and times</h1>
 <p>The usual to begin with:</p>
-<div class="sourceCode" id="cb1325"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1325-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb1294"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1294-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
@@ -239,8 +240,8 @@ that what it should be?</li>
 </ol>
 <p>Solution</p>
 <p>This is <code>read_delim</code>:</p>
-<div class="sourceCode" id="cb1329"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1329-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/whas500.txt&quot;</span></a>
-<a class="sourceLine" id="cb1329-2" data-line-number="2">whas=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1298-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/whas500.txt&quot;</span></a>
+<a class="sourceLine" id="cb1298-2" data-line-number="2">whas=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   .default = col_integer(),
@@ -250,7 +251,7 @@ that what it should be?</li>
 ##   fdate = col_character()
 ## )</code></pre>
 <pre><code>## See spec(...) for full column specifications.</code></pre>
-<div class="sourceCode" id="cb1332"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1332-1" data-line-number="1">whas</a></code></pre></div>
+<div class="sourceCode" id="cb1301"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1301-1" data-line-number="1">whas</a></code></pre></div>
 <pre><code>## # A tibble: 500 x 22
 ##       id   age gender    hr sysbp diasbp   bmi   cvd   afb   sho   chf
 ##    &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
@@ -288,7 +289,7 @@ demonstrate that it worked.</li>
 </ol>
 <p>Solution</p>
 <p>Load <code>lubridate</code> first:</p>
-<div class="sourceCode" id="cb1334"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1334-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a></code></pre></div>
+<div class="sourceCode" id="cb1303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1303-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;lubridate&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:base&#39;:
@@ -296,10 +297,10 @@ demonstrate that it worked.</li>
 ##     date</code></pre>
 <p>These dates are day-month-year, so we need <code>dmy</code> from
 <code>lubridate</code>:</p>
-<div class="sourceCode" id="cb1337"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1337-1" data-line-number="1">whas2=whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">admit=</span><span class="kw">dmy</span>(admitdate),</a>
-<a class="sourceLine" id="cb1337-2" data-line-number="2"><span class="dt">dis=</span><span class="kw">dmy</span>(disdate),</a>
-<a class="sourceLine" id="cb1337-3" data-line-number="3"><span class="dt">f=</span><span class="kw">dmy</span>(fdate)) </a>
-<a class="sourceLine" id="cb1337-4" data-line-number="4"><span class="kw">glimpse</span>(whas2)</a></code></pre></div>
+<div class="sourceCode" id="cb1306"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1306-1" data-line-number="1">whas2=whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">admit=</span><span class="kw">dmy</span>(admitdate),</a>
+<a class="sourceLine" id="cb1306-2" data-line-number="2"><span class="dt">dis=</span><span class="kw">dmy</span>(disdate),</a>
+<a class="sourceLine" id="cb1306-3" data-line-number="3"><span class="dt">f=</span><span class="kw">dmy</span>(fdate)) </a>
+<a class="sourceLine" id="cb1306-4" data-line-number="4"><span class="kw">glimpse</span>(whas2)</a></code></pre></div>
 <pre><code>## Observations: 500
 ## Variables: 25
 ## $ id        &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1...
@@ -345,7 +346,7 @@ these columns’ names all end in <code>date</code> and they are the only
 ones that do, so we can use a “select helper” to select only them,
 and then submit all of them to a <code>mutate</code> via <code>mutate_at</code>,
 which goes like this:</p>
-<div class="sourceCode" id="cb1339"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1339-1" data-line-number="1">whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">ends_with</span>(<span class="st">&quot;date&quot;</span>)),<span class="kw">funs</span>(<span class="dt">d=</span>dmy)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glimpse</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1308-1" data-line-number="1">whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">ends_with</span>(<span class="st">&quot;date&quot;</span>)),<span class="kw">funs</span>(<span class="dt">d=</span>dmy)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glimpse</span>()</a></code></pre></div>
 <pre><code>## Observations: 500
 ## Variables: 25
 ## $ id          &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,...
@@ -399,11 +400,11 @@ what R’s internal storage is for dates (it might be seconds or
 milliseconds or anything, not necessarily days),
 so subtracting them requires care; you have to divide by the
 length of a day (in whatever units), thus:</p>
-<div class="sourceCode" id="cb1341"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1341-1" data-line-number="1">whas3=whas2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb1341-2" data-line-number="2"><span class="dt">diff1=</span>(dis<span class="op">-</span>admit)<span class="op">/</span><span class="kw">ddays</span>(<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb1341-3" data-line-number="3"><span class="dt">diff2=</span>(f<span class="op">-</span>admit)<span class="op">/</span><span class="kw">ddays</span>(<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb1341-4" data-line-number="4"><span class="dt">diff3=</span>(f<span class="op">-</span>dis)<span class="op">/</span><span class="kw">ddays</span>(<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb1341-5" data-line-number="5"><span class="kw">glimpse</span>(whas3)     </a></code></pre></div>
+<div class="sourceCode" id="cb1310"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1310-1" data-line-number="1">whas3=whas2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb1310-2" data-line-number="2"><span class="dt">diff1=</span>(dis<span class="op">-</span>admit)<span class="op">/</span><span class="kw">ddays</span>(<span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb1310-3" data-line-number="3"><span class="dt">diff2=</span>(f<span class="op">-</span>admit)<span class="op">/</span><span class="kw">ddays</span>(<span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb1310-4" data-line-number="4"><span class="dt">diff3=</span>(f<span class="op">-</span>dis)<span class="op">/</span><span class="kw">ddays</span>(<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb1310-5" data-line-number="5"><span class="kw">glimpse</span>(whas3)     </a></code></pre></div>
 <pre><code>## Observations: 500
 ## Variables: 28
 ## $ id        &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1...
@@ -448,21 +449,21 @@ compare all 500 values, and it would be best to do it in such a way
 that R is comparing all 500 values for us, since it would be a lot
 more reliable than the human eye. R has a function <code>all.equal</code>
 which does exactly that. By way of warmup:</p>
-<div class="sourceCode" id="cb1343"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1343-1" data-line-number="1">x=<span class="dv">1</span><span class="op">:</span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb1343-2" data-line-number="2">y=<span class="dv">1</span><span class="op">:</span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb1343-3" data-line-number="3">z=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb1343-4" data-line-number="4"><span class="kw">all.equal</span>(x,y)</a></code></pre></div>
+<div class="sourceCode" id="cb1312"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1312-1" data-line-number="1">x=<span class="dv">1</span><span class="op">:</span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb1312-2" data-line-number="2">y=<span class="dv">1</span><span class="op">:</span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb1312-3" data-line-number="3">z=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb1312-4" data-line-number="4"><span class="kw">all.equal</span>(x,y)</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb1345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1345-1" data-line-number="1"><span class="kw">all.equal</span>(x,z)</a></code></pre></div>
+<div class="sourceCode" id="cb1314"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1314-1" data-line-number="1"><span class="kw">all.equal</span>(x,z)</a></code></pre></div>
 <pre><code>## [1] &quot;Mean relative difference: 0.25&quot;</code></pre>
 <p>I thought the second one was just going to say <code>FALSE</code>, but it
 gave us a message instead, saying how close <code>x</code> and <code>z</code>
 were on average, so that we could decide whether they were close
 enough to call equal, or, as in this case, not.</p>
 <p>Anyway:</p>
-<div class="sourceCode" id="cb1347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1347-1" data-line-number="1"><span class="kw">with</span>(whas3,<span class="kw">all.equal</span>(lenfol,diff2))</a></code></pre></div>
+<div class="sourceCode" id="cb1316"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1316-1" data-line-number="1"><span class="kw">with</span>(whas3,<span class="kw">all.equal</span>(lenfol,diff2))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb1349"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1349-1" data-line-number="1"><span class="kw">with</span>(whas3,<span class="kw">all.equal</span>(los,diff1))</a></code></pre></div>
+<div class="sourceCode" id="cb1318"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1318-1" data-line-number="1"><span class="kw">with</span>(whas3,<span class="kw">all.equal</span>(los,diff1))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>so they really are all equal, all 500 of them.</p>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -474,11 +475,11 @@ that the followup status, as it gets fed into <code>ggplot</code>, is a
 <p>Solution</p>
 <p>The easiest way to make a factor is to wrap <code>fstat</code>, which
 is a numeric 0 or 1, in <code>factor()</code>:</p>
-<div class="sourceCode" id="cb1351"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1351-1" data-line-number="1"><span class="kw">ggplot</span>(whas3,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(fstat),<span class="dt">y=</span>lenfol))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1320"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1320-1" data-line-number="1"><span class="kw">ggplot</span>(whas3,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(fstat),<span class="dt">y=</span>lenfol))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-9-1.png" width="672"  /></p>
 <p>Or create a factor version of <code>fstat</code> first:</p>
-<div class="sourceCode" id="cb1352"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1352-1" data-line-number="1">whas3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">ffstat=</span><span class="kw">factor</span>(fstat)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1352-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ffstat,<span class="dt">y=</span>lenfol))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1321"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1321-1" data-line-number="1">whas3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">ffstat=</span><span class="kw">factor</span>(fstat)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1321-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ffstat,<span class="dt">y=</span>lenfol))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-10-1.png" width="672"  /></p>
 <p>I think the second way looks better, because you
 get a cleaner <span class="math inline">\(x\)</span>-axis on your plot. But if you’re doing this for
@@ -486,8 +487,8 @@ exploration, rather than as something that’s going to appear in a
 report for your boss, the first way is fine.</p>
 <p><code>ggplot</code> also treats text stuff as categorical where needed, so
 this also works:</p>
-<div class="sourceCode" id="cb1353"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1353-1" data-line-number="1">whas3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">cfstat=</span><span class="kw">as.character</span>(fstat)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1353-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>cfstat, <span class="dt">y=</span>lenfol))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1322"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1322-1" data-line-number="1">whas3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">cfstat=</span><span class="kw">as.character</span>(fstat)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1322-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>cfstat, <span class="dt">y=</span>lenfol))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-11-1.png" width="672"  /></p>
 </div>
 <div id="growth-of-mizuna-lettuce-seeds" class="section level2">
@@ -513,9 +514,9 @@ download it and save it on your computer, then upload it to
 <code>rstudio.cloud</code>), possibly using <code>file.choose</code> to
 help R find it. I put my copy in the same project folder as I was
 working in, so I just need the file name:</p>
-<div class="sourceCode" id="cb1354"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1354-1" data-line-number="1"><span class="kw">library</span>(readxl)</a>
-<a class="sourceLine" id="cb1354-2" data-line-number="2">mizuna=<span class="kw">read_excel</span>(<span class="st">&quot;mizuna.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb1354-3" data-line-number="3">mizuna</a></code></pre></div>
+<div class="sourceCode" id="cb1323"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1323-1" data-line-number="1"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb1323-2" data-line-number="2">mizuna=<span class="kw">read_excel</span>(<span class="st">&quot;mizuna.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb1323-3" data-line-number="3">mizuna</a></code></pre></div>
 <pre><code>## # A tibble: 13 x 5
 ##    date                height water temperature notes                     
 ##    &lt;dttm&gt;               &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;                     
@@ -541,7 +542,7 @@ the years came out right.</p>
 dates, with the points joined by lines.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb1356"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1356-1" data-line-number="1"><span class="kw">ggplot</span>(mizuna,<span class="kw">aes</span>(<span class="dt">x=</span>date,<span class="dt">y=</span>height))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1325"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1325-1" data-line-number="1"><span class="kw">ggplot</span>(mizuna,<span class="kw">aes</span>(<span class="dt">x=</span>date,<span class="dt">y=</span>height))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Label each point on the plot with the
@@ -552,16 +553,16 @@ amount of water added up to that point.</li>
 <code>ggrepel</code>, then add <code>geom_text_repel</code> to the
 plot, by adding <code>label=water</code> to the <em>original</em>
 <code>aes</code>:</p>
-<div class="sourceCode" id="cb1357"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1357-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a>
-<a class="sourceLine" id="cb1357-2" data-line-number="2"><span class="kw">ggplot</span>(mizuna,<span class="kw">aes</span>(<span class="dt">x=</span>date,<span class="dt">y=</span>height,<span class="dt">label=</span>water))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1357-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>(<span class="dt">colour=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1326"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1326-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a>
+<a class="sourceLine" id="cb1326-2" data-line-number="2"><span class="kw">ggplot</span>(mizuna,<span class="kw">aes</span>(<span class="dt">x=</span>date,<span class="dt">y=</span>height,<span class="dt">label=</span>water))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1326-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>(<span class="dt">colour=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-14-1.png" width="672"  /></p>
 <p>I made the text red, so that you can see it more easily. It “repels”
 away from the points, but not from the lines joining them. Which makes
 me wonder whether this would work better (I explain <code>alpha</code> afterwards):</p>
-<div class="sourceCode" id="cb1358"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1358-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a>
-<a class="sourceLine" id="cb1358-2" data-line-number="2"><span class="kw">ggplot</span>(mizuna,<span class="kw">aes</span>(<span class="dt">x=</span>date,<span class="dt">y=</span>height,<span class="dt">label=</span>water))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1358-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span><span class="kw">geom_label_repel</span>(<span class="dt">colour=</span><span class="st">&quot;red&quot;</span>,<span class="dt">alpha=</span><span class="fl">0.7</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1327"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1327-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a>
+<a class="sourceLine" id="cb1327-2" data-line-number="2"><span class="kw">ggplot</span>(mizuna,<span class="kw">aes</span>(<span class="dt">x=</span>date,<span class="dt">y=</span>height,<span class="dt">label=</span>water))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1327-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span><span class="kw">geom_label_repel</span>(<span class="dt">colour=</span><span class="st">&quot;red&quot;</span>,<span class="dt">alpha=</span><span class="fl">0.7</span>)</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-15-1.png" width="672"  /></p>
 <p>The difference between <code>text</code> and <code>label</code> is that
 <code>text</code> just uses the text of the variable to mark the point,
@@ -615,15 +616,15 @@ are typical of the kind of thing you would observe.)</p>
 </ol>
 <p>Solution</p>
 <p>This is a space-delimited text file, which means:</p>
-<div class="sourceCode" id="cb1359"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1359-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/birthtypes.txt&quot;</span></a>
-<a class="sourceLine" id="cb1359-2" data-line-number="2">births=<span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1328"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1328-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/birthtypes.txt&quot;</span></a>
+<a class="sourceLine" id="cb1328-2" data-line-number="2">births=<span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   month = col_character(),
 ##   cesarean = col_integer(),
 ##   vaginal = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb1361"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1361-1" data-line-number="1">births</a></code></pre></div>
+<div class="sourceCode" id="cb1330"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1330-1" data-line-number="1">births</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 3
 ##    month cesarean vaginal
 ##    &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;
@@ -658,11 +659,11 @@ does this automatically. (The next question is whether
 exploring that.)
 The cesarean rate is <code>cesarean</code> divided by
 <code>cesarean</code> plus <code>vaginal</code>:</p>
-<div class="sourceCode" id="cb1363"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1363-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
-<a class="sourceLine" id="cb1363-2" data-line-number="2">b2 =<span class="st"> </span>births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">datestr=</span><span class="kw">str_c</span>(<span class="st">&quot;2012&quot;</span>,month,<span class="st">&quot;1&quot;</span>,<span class="dt">sep=</span><span class="st">&quot; &quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1363-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">thedate=</span><span class="kw">ymd</span>(datestr)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1363-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">cesarean_rate=</span>cesarean<span class="op">/</span>(cesarean<span class="op">+</span>vaginal))</a>
-<a class="sourceLine" id="cb1363-5" data-line-number="5">b2</a></code></pre></div>
+<div class="sourceCode" id="cb1332"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1332-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb1332-2" data-line-number="2">b2 =<span class="st"> </span>births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">datestr=</span><span class="kw">str_c</span>(<span class="st">&quot;2012&quot;</span>,month,<span class="st">&quot;1&quot;</span>,<span class="dt">sep=</span><span class="st">&quot; &quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1332-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">thedate=</span><span class="kw">ymd</span>(datestr)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1332-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">cesarean_rate=</span>cesarean<span class="op">/</span>(cesarean<span class="op">+</span>vaginal))</a>
+<a class="sourceLine" id="cb1332-5" data-line-number="5">b2</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 6
 ##    month cesarean vaginal datestr    thedate    cesarean_rate
 ##    &lt;chr&gt;    &lt;int&gt;   &lt;int&gt; &lt;chr&gt;      &lt;date&gt;             &lt;dbl&gt;
@@ -681,7 +682,7 @@ The cesarean rate is <code>cesarean</code> divided by
 <p>If you don’t like that, create columns that contain 2012 and 1 all
 the way down. If you set a column name equal to a single value, that
 single value gets repeated the right number of times:</p>
-<div class="sourceCode" id="cb1365"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1365-1" data-line-number="1">births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="dv">2012</span>,<span class="dt">day=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1334"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1334-1" data-line-number="1">births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="dv">2012</span>,<span class="dt">day=</span><span class="dv">1</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 5
 ##    month cesarean vaginal  year   day
 ##    &lt;chr&gt;    &lt;int&gt;   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -701,11 +702,11 @@ single value gets repeated the right number of times:</p>
 <code>unite</code> <em>only</em> works on columns. It also “swallows up”
 the columns that it is made out of; in this case, the original year,
 month and day disappear:</p>
-<div class="sourceCode" id="cb1367"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1367-1" data-line-number="1">b3 =<span class="st"> </span>births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="dv">2012</span>, <span class="dt">day=</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1367-2" data-line-number="2"><span class="kw">unite</span>(datestr,year,month,day) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1367-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">thedate=</span><span class="kw">ymd</span>(datestr)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1367-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">cesarean_rate=</span>cesarean<span class="op">/</span>(cesarean<span class="op">+</span>vaginal))</a>
-<a class="sourceLine" id="cb1367-5" data-line-number="5">b3</a></code></pre></div>
+<div class="sourceCode" id="cb1336"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1336-1" data-line-number="1">b3 =<span class="st"> </span>births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="dv">2012</span>, <span class="dt">day=</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1336-2" data-line-number="2"><span class="kw">unite</span>(datestr,year,month,day) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1336-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">thedate=</span><span class="kw">ymd</span>(datestr)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1336-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">cesarean_rate=</span>cesarean<span class="op">/</span>(cesarean<span class="op">+</span>vaginal))</a>
+<a class="sourceLine" id="cb1336-5" data-line-number="5">b3</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 5
 ##    datestr    cesarean vaginal thedate    cesarean_rate
 ##    &lt;chr&gt;         &lt;int&gt;   &lt;int&gt; &lt;date&gt;             &lt;dbl&gt;
@@ -731,13 +732,13 @@ something else?</li>
 </ol>
 <p>Solution</p>
 <p>This is a scatterplot with time on the <span class="math inline">\(x\)</span> axis:</p>
-<div class="sourceCode" id="cb1369"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1369-1" data-line-number="1"><span class="kw">ggplot</span>(b2,<span class="kw">aes</span>(<span class="dt">x=</span>thedate,<span class="dt">y=</span>cesarean_rate))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1338"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1338-1" data-line-number="1"><span class="kw">ggplot</span>(b2,<span class="kw">aes</span>(<span class="dt">x=</span>thedate,<span class="dt">y=</span>cesarean_rate))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-20-1.png" width="672"  /></p>
 <p>I like this better than joining the points by lines, since we already
 have a trend on the plot, but you can do that in some contrasting way:</p>
-<div class="sourceCode" id="cb1371"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1371-1" data-line-number="1"><span class="kw">ggplot</span>(b2,<span class="kw">aes</span>(<span class="dt">x=</span>thedate,<span class="dt">y=</span>cesarean_rate))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb1371-2" data-line-number="2"><span class="kw">geom_line</span>(<span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1340"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1340-1" data-line-number="1"><span class="kw">ggplot</span>(b2,<span class="kw">aes</span>(<span class="dt">x=</span>thedate,<span class="dt">y=</span>cesarean_rate))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb1340-2" data-line-number="2"><span class="kw">geom_line</span>(<span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-21-1.png" width="672"  /></p>
 <p>I see a downward trend. (“A downward trend with a wiggle” if you
@@ -750,14 +751,14 @@ correlation. What goes wrong? How can you fix it?</li>
 </ol>
 <p>Solution</p>
 <p>Something like this is the obvious guess:</p>
-<div class="sourceCode" id="cb1373"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1373-1" data-line-number="1"><span class="kw">with</span>(b2, <span class="kw">cor</span>(thedate, cesarean_rate))</a></code></pre></div>
+<div class="sourceCode" id="cb1342"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1342-1" data-line-number="1"><span class="kw">with</span>(b2, <span class="kw">cor</span>(thedate, cesarean_rate))</a></code></pre></div>
 <pre><code>## Error in cor(thedate, cesarean_rate): &#39;x&#39; must be numeric</code></pre>
 <p>This fails because <code>thedate</code> is not of itself a number. But
 lurking in the background is how the date is actually
 <em>represented</em>: as a number of days since Jan 1, 1970. Thus,
 passing it through <code>as.numeric</code> might turn it into that:</p>
-<div class="sourceCode" id="cb1375"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1375-1" data-line-number="1">b2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">numeric_date=</span><span class="kw">as.numeric</span>(thedate)) -&gt;<span class="st"> </span>b5</a>
-<a class="sourceLine" id="cb1375-2" data-line-number="2">b5</a></code></pre></div>
+<div class="sourceCode" id="cb1344"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1344-1" data-line-number="1">b2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">numeric_date=</span><span class="kw">as.numeric</span>(thedate)) -&gt;<span class="st"> </span>b5</a>
+<a class="sourceLine" id="cb1344-2" data-line-number="2">b5</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 7
 ##    month cesarean vaginal datestr    thedate    cesarean_rate numeric_date
 ##    &lt;chr&gt;    &lt;int&gt;   &lt;int&gt; &lt;chr&gt;      &lt;date&gt;             &lt;dbl&gt;        &lt;dbl&gt;
@@ -777,11 +778,11 @@ passing it through <code>as.numeric</code> might turn it into that:</p>
 bit over 40 years, that is <span class="math inline">\(40 \times 365 \simeq 14000\)</span> days, since
 the “zero” date of Jan 1, 1970, and so it turns out. This suggests
 that we can calculate a correlation with the numeric dates:</p>
-<div class="sourceCode" id="cb1377"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1377-1" data-line-number="1"><span class="kw">with</span>(b5, <span class="kw">cor</span>(numeric_date, cesarean_rate))</a></code></pre></div>
+<div class="sourceCode" id="cb1346"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1346-1" data-line-number="1"><span class="kw">with</span>(b5, <span class="kw">cor</span>(numeric_date, cesarean_rate))</a></code></pre></div>
 <pre><code>## [1] -0.7091219</code></pre>
 <p>and we can make a test of the null hypothesis that the correlation is
 zero (against a two-sided alternative) thus:</p>
-<div class="sourceCode" id="cb1379"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1379-1" data-line-number="1"><span class="kw">with</span>(b5, <span class="kw">cor.test</span>(numeric_date, cesarean_rate))</a></code></pre></div>
+<div class="sourceCode" id="cb1348"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1348-1" data-line-number="1"><span class="kw">with</span>(b5, <span class="kw">cor.test</span>(numeric_date, cesarean_rate))</a></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
@@ -822,16 +823,16 @@ wolves hunt and kill caribou). This is a large national park, so
 caribou are found in very large herds, so big, in fact, that the
 well-being of the entire herd is not threatened by wolf
 attacks.
-<label for="tufte-mn-57" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-57" class="margin-toggle"><span class="marginnote">In fact, it is believed that wolves help keep caribou herds strong by preventing over-population: that is, the weakest caribou are the ones taken by wolves.</span>
+<label for="tufte-mn-66" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-66" class="margin-toggle"><span class="marginnote">In fact, it is believed that wolves help keep caribou herds strong by preventing over-population: that is, the weakest caribou are the ones taken by wolves.</span>
 Can the size of the caribou population
 be used to predict the size of the wolf population?
 The data can be found at
 <a href="http://www.utsc.utoronto.ca/~butler/c32/caribou.txt">link</a>. The
 columns
 are: the date of the survey,
-<label for="tufte-mn-58" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-58" class="margin-toggle"><span class="marginnote">The survey is always taken in the fall, but the date varies.</span>
+<label for="tufte-mn-67" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-67" class="margin-toggle"><span class="marginnote">The survey is always taken in the fall, but the date varies.</span>
 the name of the park employee in charge of the survey, the caribou population (in hundreds) and the wolf population (actual count).
-<label for="tufte-mn-59" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-59" class="margin-toggle"><span class="marginnote">Counting animals in a region, especially rare, hard-to-find animals, is a whole science in itself. These numbers are probably estimates (with some uncertainty).</span></p>
+<label for="tufte-mn-68" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-68" class="margin-toggle"><span class="marginnote">Counting animals in a region, especially rare, hard-to-find animals, is a whole science in itself. These numbers are probably estimates (with some uncertainty).</span></p>
 <ol style="list-style-type: lower-alpha">
 <li>Take a look at the data file. How would you describe its
 format? Read it into R, and check that you got something sensible.</li>
@@ -844,9 +845,9 @@ space. If you look further, you’ll see that the values are
 the top. This is exactly the kind of thing that
 <code>read_table</code> will read. We start with the usual
 <code>library(tidyverse)</code>:</p>
-<div class="sourceCode" id="cb1381"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1381-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1381-2" data-line-number="2">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/caribou.txt&quot;</span></a>
-<a class="sourceLine" id="cb1381-3" data-line-number="3">denali=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb1350"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1350-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1350-2" data-line-number="2">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/caribou.txt&quot;</span></a>
+<a class="sourceLine" id="cb1350-3" data-line-number="3">denali=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   date = col_character(),
@@ -854,7 +855,7 @@ the top. This is exactly the kind of thing that
 ##   caribou = col_integer(),
 ##   wolf = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb1383"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1383-1" data-line-number="1">denali</a></code></pre></div>
+<div class="sourceCode" id="cb1352"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1352-1" data-line-number="1">denali</a></code></pre></div>
 <pre><code>## # A tibble: 7 x 4
 ##   date       name          caribou  wolf
 ##   &lt;chr&gt;      &lt;chr&gt;           &lt;int&gt; &lt;int&gt;
@@ -896,7 +897,7 @@ line that goes all the way down. Thus four columns, <code>date</code>,
 <code>name</code>, <code>caribou</code> and <code>wolf</code>. This means that the
 spaces within the names don’t cause any problems at all, since the
 spaces aren’t in the same place in <em>every</em> line.
-<label for="tufte-mn-60" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-60" class="margin-toggle"><span class="marginnote">The only way this would fail is if <em>every</em> first name had the same number of letters in it; then the space between first name and initial of last name <em>would</em> be in the same place in every line.</span></p>
+<label for="tufte-mn-69" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-69" class="margin-toggle"><span class="marginnote">The only way this would fail is if <em>every</em> first name had the same number of letters in it; then the space between first name and initial of last name <em>would</em> be in the same place in every line.</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Create a new data frame where the column labelled
 <code>date</code> is now a genuine R <code>Date</code>, using something
@@ -906,11 +907,11 @@ from <code>lubridate</code>.</li>
 <p>What you do is to look at the format of the dates as they are
 now. They appear to be month-day-year, American
 style.
-<label for="tufte-mn-61" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-61" class="margin-toggle"><span class="marginnote">Not a surprise since Denali National Park is in Alaska.</span><br />
+<label for="tufte-mn-70" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-70" class="margin-toggle"><span class="marginnote">Not a surprise since Denali National Park is in Alaska.</span><br />
 Thus the function needed is <code>mdy</code>. It doesn’t matter
 whether the months are names or numbers:</p>
-<div class="sourceCode" id="cb1386"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1386-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date=</span><span class="kw">mdy</span>(date)) -&gt;<span class="st"> </span>denali</a>
-<a class="sourceLine" id="cb1386-2" data-line-number="2">denali</a></code></pre></div>
+<div class="sourceCode" id="cb1355"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1355-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date=</span><span class="kw">mdy</span>(date)) -&gt;<span class="st"> </span>denali</a>
+<a class="sourceLine" id="cb1355-2" data-line-number="2">denali</a></code></pre></div>
 <pre><code>## # A tibble: 7 x 4
 ##   date       name          caribou  wolf
 ##   &lt;date&gt;     &lt;chr&gt;           &lt;int&gt; &lt;int&gt;
@@ -923,7 +924,7 @@ whether the months are names or numbers:</p>
 ## 7 2001-10-06 David S.           20    60</code></pre>
 <p>I lived on the edge and overwrote both my column and the whole data
 frame.
-<label for="tufte-mn-62" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-62" class="margin-toggle"><span class="marginnote">It’s actually not <em>really</em> living on the edge, because if it doesn’t work, you go back and read the data in from the file again.</span></p>
+<label for="tufte-mn-71" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-71" class="margin-toggle"><span class="marginnote">It’s actually not <em>really</em> living on the edge, because if it doesn’t work, you go back and read the data in from the file again.</span></p>
 <p>The dates are displayed in ISO format, year-month-day. You see at the
 top of the column that they now really <em>are</em> dates, not just
 pieces of text that look like dates.</p>
@@ -933,7 +934,7 @@ the week and the month names for the dates.</li>
 </ol>
 <p>Solution</p>
 <p>This involves digging in the <code>lubridate</code> help to find out how to extract things from a date. It turns out that <code>wday</code> extracts the day of the week from a date, by default as a number, and <code>month</code> gets the month, also by default as a number:</p>
-<div class="sourceCode" id="cb1388"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1388-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon=</span><span class="kw">month</span>(date), <span class="dt">wd=</span><span class="kw">wday</span>(date))</a></code></pre></div>
+<div class="sourceCode" id="cb1357"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1357-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon=</span><span class="kw">month</span>(date), <span class="dt">wd=</span><span class="kw">wday</span>(date))</a></code></pre></div>
 <pre><code>## # A tibble: 7 x 6
 ##   date       name          caribou  wolf   mon    wd
 ##   &lt;date&gt;     &lt;chr&gt;           &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -946,7 +947,7 @@ the week and the month names for the dates.</li>
 ## 7 2001-10-06 David S.           20    60    10     7</code></pre>
 <p>This is not what we wanted, though; we wanted the names of the months
 and of the days. To fix that, add <code>label=T</code> to both functions:</p>
-<div class="sourceCode" id="cb1390"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1390-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon=</span><span class="kw">month</span>(date, <span class="dt">label=</span>T), <span class="dt">wd=</span><span class="kw">wday</span>(date, <span class="dt">label=</span>T))</a></code></pre></div>
+<div class="sourceCode" id="cb1359"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1359-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon=</span><span class="kw">month</span>(date, <span class="dt">label=</span>T), <span class="dt">wd=</span><span class="kw">wday</span>(date, <span class="dt">label=</span>T))</a></code></pre></div>
 <pre><code>## # A tibble: 7 x 6
 ##   date       name          caribou  wolf mon   wd   
 ##   &lt;date&gt;     &lt;chr&gt;           &lt;int&gt; &lt;int&gt; &lt;ord&gt; &lt;ord&gt;
@@ -964,8 +965,8 @@ this later.</p>
 since these are categorical variables with a natural order. This means
 that you could do something like counting the number of surveys in
 each month like this:</p>
-<div class="sourceCode" id="cb1392"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1392-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon=</span><span class="kw">month</span>(date, <span class="dt">label=</span>T), <span class="dt">wd=</span><span class="kw">wday</span>(date, <span class="dt">label=</span>T)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1392-2" data-line-number="2"><span class="kw">count</span>(mon)</a></code></pre></div>
+<div class="sourceCode" id="cb1361"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1361-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon=</span><span class="kw">month</span>(date, <span class="dt">label=</span>T), <span class="dt">wd=</span><span class="kw">wday</span>(date, <span class="dt">label=</span>T)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1361-2" data-line-number="2"><span class="kw">count</span>(mon)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   mon       n
 ##   &lt;ord&gt; &lt;int&gt;
@@ -976,11 +977,11 @@ caribou population (explanatory) against wolf population
 (response). Do you see any relationship?</p>
 <p>Solution</p>
 <p>Nothing terribly surprising here:</p>
-<div class="sourceCode" id="cb1394"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1394-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1363"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1363-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-31-1.png" width="672"  /></p>
 <p>If you like, add a smooth trend to it:
-<label for="tufte-mn-63" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-63" class="margin-toggle"><span class="marginnote">This wiggles more than I would like, with such a small number of observations. Try putting someting like <em>span=2</em> in the smooth to make it less wiggly.</span></p>
-<div class="sourceCode" id="cb1395"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1395-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">se=</span>F)</a></code></pre></div>
+<label for="tufte-mn-72" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-72" class="margin-toggle"><span class="marginnote">This wiggles more than I would like, with such a small number of observations. Try putting someting like <em>span=2</em> in the smooth to make it less wiggly.</span></p>
+<div class="sourceCode" id="cb1364"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1364-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">se=</span>F)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-32-1.png" width="672"  /></p>
 <p>This is an upward trend: when one population is large, the other one
@@ -997,20 +998,20 @@ for the points on the plot.</li>
 <p>I’m going to use <code>geom_text_repel</code> for the labels from package
 <code>ggrepel</code>. The year values are gotten using the
 <code>lubridate</code> function <code>year</code>:</p>
-<div class="sourceCode" id="cb1397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1397-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="kw">year</span>(date)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1397-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf, <span class="dt">label=</span>year))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1366"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1366-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="kw">year</span>(date)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1366-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf, <span class="dt">label=</span>year))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-33-1.png" width="672"  /></p>
 <p>I thought about joining up the points in year order. This is actually
 <em>not</em> <code>geom_line</code> as you would have guessed, since what that
 does is to join points in the order of the variable on the
 <span class="math inline">\(x\)</span>-axis.
-<label for="tufte-mn-64" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-64" class="margin-toggle"><span class="marginnote">I have to say that I didn’t know that until just now.</span>
+<label for="tufte-mn-73" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-73" class="margin-toggle"><span class="marginnote">I have to say that I didn’t know that until just now.</span>
 To join points in the order that they are in the data (what we want
 here, because the points are in time order in the data), use instead
 <code>geom_path</code>:</p>
-<div class="sourceCode" id="cb1398"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1398-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="kw">year</span>(date)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1398-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf, <span class="dt">label=</span>year))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb1398-3" data-line-number="3"><span class="kw">geom_text_repel</span>()<span class="op">+</span><span class="kw">geom_path</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1367"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1367-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="kw">year</span>(date)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1367-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf, <span class="dt">label=</span>year))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb1367-3" data-line-number="3"><span class="kw">geom_text_repel</span>()<span class="op">+</span><span class="kw">geom_path</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-34-1.png" width="672"  /></p>
 <p>In 1996, both populations were large, and both showed a steady decline
 until 1999. In 2000 and 2001, both populations seemed to be on the way
@@ -1025,7 +1026,7 @@ population over time?</li>
 <p>Make a scatterplot, with the survey date as explanatory
 variable, and caribou population as response (since time always
 goes on the <span class="math inline">\(x\)</span>-axis):</p>
-<div class="sourceCode" id="cb1399"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1399-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1368"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1368-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-35-1.png" width="672"  /></p>
 <p>I used an ordinary <code>geom_line</code> this time, to connect neighbouring
 years, as is often done with a time series. The overall trend is
@@ -1046,9 +1047,9 @@ populations, just of different animals. One way of plotting both
 populations is to <code>gather</code> them up into one column, and
 then plot them against time, with the two animals distinguished
 by colour:</p>
-<div class="sourceCode" id="cb1400"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1400-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(animal, population, caribou<span class="op">:</span>wolf)  <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1400-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>population, <span class="dt">colour=</span>animal))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1400-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1369"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1369-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(animal, population, caribou<span class="op">:</span>wolf)  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1369-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>population, <span class="dt">colour=</span>animal))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1369-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-36-1.png" width="672"  /></p>
 <p>This is not quite the story, though, because the caribou and wolf
 populations are on different scales. The caribou population is
@@ -1060,38 +1061,38 @@ there were two <span class="math inline">\(y\)</span>-scales, one for each anima
 manipulate, though (you can change either scale and get a very
 different-looking graph), so we ought to be careful.</p>
 <p>All right, so let’s put the caribou on the left:</p>
-<div class="sourceCode" id="cb1401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1401-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou))<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1370"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1370-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou))<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-37-1.png" width="672"  /></p>
 <p>Or we can add a <code>colour</code> aesthetic to distinguish the caribou
 from the wolf populations, that we’re going to add in a moment. This looks rather odd at first:</p>
-<div class="sourceCode" id="cb1402"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1402-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou, <span class="dt">colour=</span><span class="st">&quot;caribou&quot;</span>))<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1371"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1371-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou, <span class="dt">colour=</span><span class="st">&quot;caribou&quot;</span>))<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-38-1.png" width="672"  /></p>
 <p>Now we think about adding the wolf numbers. This is done by adding a
 second <code>geom_line</code>, overriding the <code>y</code> and the
 <code>colour</code> to specify that this is wolf now:</p>
-<div class="sourceCode" id="cb1403"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1403-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou, <span class="dt">colour=</span><span class="st">&quot;caribou&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1403-2" data-line-number="2"><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb1403-3" data-line-number="3"><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>wolf, <span class="dt">colour=</span><span class="st">&quot;wolf&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1372"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1372-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou, <span class="dt">colour=</span><span class="st">&quot;caribou&quot;</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1372-2" data-line-number="2"><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb1372-3" data-line-number="3"><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>wolf, <span class="dt">colour=</span><span class="st">&quot;wolf&quot;</span>))</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-39-1.png" width="672"  /></p>
 <p>What has happened is that we get lines of different colour for each
 animal, with a legend. So far so good. The problem is that the wolf
 numbers are about 2.5 times bigger than the caribou
 numbers,
-<label for="tufte-mn-65" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-65" class="margin-toggle"><span class="marginnote">Which means, if you stop to think about it, that there are <em>actually</em> about 40 times more caribou than wolves.</span>
+<label for="tufte-mn-74" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-74" class="margin-toggle"><span class="marginnote">Which means, if you stop to think about it, that there are <em>actually</em> about 40 times more caribou than wolves.</span>
 so that
 we don’t get a good sense of how they go up and down together. If we
 divided the wolf numbers by 2.5, we would see this better:</p>
-<div class="sourceCode" id="cb1404"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1404-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou, <span class="dt">colour=</span><span class="st">&quot;caribou&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1404-2" data-line-number="2"><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb1404-3" data-line-number="3"><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>wolf<span class="op">/</span><span class="fl">2.5</span>, <span class="dt">colour=</span><span class="st">&quot;wolf&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1373"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1373-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou, <span class="dt">colour=</span><span class="st">&quot;caribou&quot;</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1373-2" data-line-number="2"><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb1373-3" data-line-number="3"><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>wolf<span class="op">/</span><span class="fl">2.5</span>, <span class="dt">colour=</span><span class="st">&quot;wolf&quot;</span>))</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-40-1.png" width="672"  /></p>
 <p>Now we get to the secondary <span class="math inline">\(y\)</span>-axis. We want to label this
 <code>wolf</code> and have it reflect that we actually made the graph by
 dividing the wolf values by 2.5:</p>
-<div class="sourceCode" id="cb1405"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1405-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou, <span class="dt">colour=</span><span class="st">&quot;caribou&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1405-2" data-line-number="2"><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb1405-3" data-line-number="3"><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>wolf<span class="op">/</span><span class="fl">2.5</span>, <span class="dt">colour=</span><span class="st">&quot;wolf&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1405-4" data-line-number="4"><span class="kw">scale_y_continuous</span>(<span class="dt">sec.axis=</span><span class="kw">sec_axis</span>(<span class="op">~</span>.<span class="op">/</span><span class="fl">2.5</span>,<span class="dt">name=</span><span class="st">&quot;wolf&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1374"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1374-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>caribou, <span class="dt">colour=</span><span class="st">&quot;caribou&quot;</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1374-2" data-line-number="2"><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb1374-3" data-line-number="3"><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>wolf<span class="op">/</span><span class="fl">2.5</span>, <span class="dt">colour=</span><span class="st">&quot;wolf&quot;</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1374-4" data-line-number="4"><span class="kw">scale_y_continuous</span>(<span class="dt">sec.axis=</span><span class="kw">sec_axis</span>(<span class="op">~</span>.<span class="op">/</span><span class="fl">2.5</span>,<span class="dt">name=</span><span class="st">&quot;wolf&quot;</span>))</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-41-1.png" width="672"  /></p>
 <p>Woo, and, very possibly, hoo. I got most of these ideas from
 <a href="https://rpubs.com/MarkusLoew/226759">link</a>.</p>
@@ -1104,7 +1105,7 @@ one population was much bigger than the other, or varied much more
 than the other. Lies and statistics.</p>
 <p>In my opinion, too many people just plot series against time, possibly
 with a second <span class="math inline">\(y\)</span>-axis.
-<label for="tufte-mn-66" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-66" class="margin-toggle"><span class="marginnote">And all too often with Excel (spit)</span>.
+<label for="tufte-mn-75" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-75" class="margin-toggle"><span class="marginnote">And all too often with Excel (spit)</span>.
 Variables that vary together, like the wolf
 and caribou populations here, ought to be plotted  on a scatterplot, possibly with the time points labelled.</p>
 <p>The ambitious among you may like to compare the graphs here with
