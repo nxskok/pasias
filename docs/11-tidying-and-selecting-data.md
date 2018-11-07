@@ -823,7 +823,7 @@ each rat was given an injection having a particular concentration (0,
 labelled `e0, e1, e2, e4`. The "0"
 treatment was a control group. The rapid eye movement (REM) sleep time
 was then recorded for each rat. The data are in
-[http://www.utsc.utoronto.ca/~butler/c32/ratsleep.txt](http://www.utsc.utoronto.ca/~butler/c32/ratsleep.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/ratsleep.txt). 
 
 
 
@@ -866,6 +866,8 @@ sleep1
 ## 4 e4         31    39.6  45.3  25.2  22.7
 ```
 
+ 
+
 There are six columns, but one of them labels the groups, and there
 are correctly five columns of sleep times.
 
@@ -881,7 +883,7 @@ times for each treatment group are on one row, and we should have
 corresponding row should show which treatment group that sleep time
 came from. 
 If you prefer to skip this part: read in the data from
-[http://www.utsc.utoronto.ca/~butler/c32/ratsleep2.txt](http://www.utsc.utoronto.ca/~butler/c32/ratsleep2.txt), and
+[link](http://www.utsc.utoronto.ca/~butler/c32/ratsleep2.txt), and
 proceed to the boxplots in (c).
 The `tidyr` function `gather` turns wide format (which
 we have) into long format (which we want). `gather` needs
@@ -938,15 +940,17 @@ way of saving *and* displaying in one shot:
 ## 19 e2        obs5       38.7
 ## 20 e4        obs5       22.7
 ```
+
+ 
 We have 20 rows of 3 columns. I got all the rows, but you will
 probably get an output with ten rows as usual, and will need to click
 Next to see the last ten rows. The initial display will say how many
 rows (20) and columns (3) you have.
 
 The column `rep` is not very interesting: it just says which
-observation each one was within its group.\endnote{Sometimes the
-column playing the role of "rep" *is* interesting to us, but
-not here.} The interesting things are `treatment` and
+observation each one was within its group.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Sometimes the  column playing the role of *rep* *is* interesting to us, but  not here.</span> 
+The interesting things are `treatment` and
 `sleeptime`, which are the two variables we'll need for our
 analysis of variance.
 
@@ -967,6 +971,8 @@ ggplot(sleep,aes(x=treatment,y=sleeptime))+geom_boxplot()
 ```
 
 <img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+
+ 
 
 
 
@@ -1021,6 +1027,8 @@ summarize(stddev=sd(sleeptime))
 ## 4 e4          9.56
 ```
 
+ 
+
 Those are *very* similar, given only 5 observations per group. No
 problems here.
 
@@ -1051,6 +1059,8 @@ summary(sleep.1)
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
+
+ 
 
 This is a very small P-value, so my conclusion is that the mean sleep
 times are not all the same for the treatment groups. Further than that
@@ -1097,6 +1107,8 @@ TukeyHSD(sleep.1)
 ## e4-e1 -28.78 -46.22636 -11.3336428 0.0011925
 ## e4-e2 -15.16 -32.60636   2.2863572 0.1005398
 ```
+
+ 
 
 
 
@@ -1747,8 +1759,8 @@ subjects, but they each tested *all* the drugs (so that
 each subject produced three measurements). That is like a
 three-measurement version of matched pairs, a so-called
 **repeated-measures design**, which requires its own kind
-of analysis.\endnote{To allow for the fact that measurements on the same
-subject are not independent but correlated.} 
+of analysis.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">To allow for the fact that measurements on the same      subject are not independent but correlated.</span> 
 
 
 
@@ -1896,8 +1908,9 @@ summary()
 
 with the same results as before. Notice that I never actually created
 a second data frame by name; it was created by `gather` and
-then immediately used as input to `aov`.\endnote{And then thrown
-away.} I also used the
+then immediately used as input to `aov`.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">And then thrown away.</span> 
+I also used the
 `data=.` trick to use "the data frame that came out of the previous step" as my input to `aov`.
 
 Read the above like this: "take `migraine`, and then gather together the `DrugA` through `DrugC` columns into a column `painrelief`, labelling each by its drug, and then do an ANOVA of `painrelief` by `drug`, and then summarize the results."
@@ -1972,9 +1985,9 @@ TukeyHSD()
 The odd-looking second-last line of that uses that `.` trick
 for "whatever came out of the previous step". The thing inside the
 curly brackets is two commands one after the other; the first is to
-display the `summary` of that `aov`\endnote{It needs
-`print` around it to display it, as you need `print`
-to display something within a loop or a function.} and the second
+display the `summary` of that `aov`
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It needs  *print* around it to display it, as you need *print*  to display something within a loop or a function.</span> 
+and the second
 part after the `;` is to just pass whatever came out of the
 previous line, the output from `aov`, on, unchanged, into
 `TukeyHSD`. 
@@ -4349,10 +4362,8 @@ mutate(helmet=ifelse(is.na(X5),T,F))
 and the same for `passenger` and `sidewalk`. The warning
 is, whenever you see a `T` and an `F` in an
 `ifelse`, that you could probably get rid of the
-`ifelse` and use the logical condition directly.\endnote{If I
-was helping you, and you were struggling with `ifelse` but
-finally mastered it, it seemed easier to suggest that you used it
-again for the others.}  For `gender`, though, you need the
+`ifelse` and use the logical condition directly.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If I  was helping you, and you were struggling with *ifelse* but  finally mastered it, it seemed easier to suggest that you used it  again for the others.}  For texttt{gender</span>, though, you need the
 `ifelse` (or a `case_when`) because the values you want
 it to take are `male` and `female`, something other than
 `TRUE` and `FALSE`.

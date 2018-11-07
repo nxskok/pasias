@@ -22,4 +22,6 @@ I wrote [a Perl program](https://raw.githubusercontent.com/nxskok/pasias/master/
 
 working on stuff from assignments 9/9a
 
-look at bikes data and maybe heat data
+look at heat data
+
+rejig the crickets questions so less duplication

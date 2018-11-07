@@ -465,7 +465,8 @@ enough to call equal, or, as in this case, not.</p>
 <pre><code>## [1] TRUE</code></pre>
 <div class="sourceCode" id="cb1318"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1318-1" data-line-number="1"><span class="kw">with</span>(whas3,<span class="kw">all.equal</span>(los,diff1))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<p>so they really are all equal, all 500 of them.</p>
+<p>so they really are all equal, all 500 of them.
+<label for="tufte-mn-94" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-94" class="margin-toggle"><span class="marginnote">The computer scientists among you will note that I shouldn’t have done this, because <em>diff1</em> through <em>diff3</em> are double-precision decimal numbers, so I should have tested their equality with <em>lenfol</em> and <em>los</em> by working out the absolute differences and testing whether they were all <em>small</em>. On consulting the help for <em>all.equal</em>, though, I find that it <em>does</em> work properly, because it actually tests whether the things being compared differ by less than a quantity <em>tolerance</em> which defaults to 0.000000015, and if they do it calls them equal. This is all tied in with the difference between integers and decimal numbers as they are represented on a computer: exactly and approximately, respectively. A double-precision number has about 16 significant digits of accuracy; equal things won’t have all 16 digits equal, most likely, but they would be expected to have at least 8 of those digits the same. CSCA08 stuff, I imagine. This is where you can casually toss around terms like <em>machine epsilon</em>. Oh! I just realized something. You know how very very small P-values are shown in R as <em>&lt;2.2e-16</em>? <em>That’s</em> the machine epsilon. Anything smaller than that is indistinguishable from zero, and you can’t have a P-value be <em>exactly</em> zero. The default <em>tolerance</em> I mentioned above is the square root of this, which is normally used for such things.</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Construct side-by-side boxplots of the length of followup by
 each followup status. You’ll need to make sure
@@ -681,7 +682,8 @@ The cesarean rate is <code>cesarean</code> divided by
 ## 12 Dec          8     101 2012 Dec 1 2012-12-01        0.0734</code></pre>
 <p>If you don’t like that, create columns that contain 2012 and 1 all
 the way down. If you set a column name equal to a single value, that
-single value gets repeated the right number of times:</p>
+single value gets repeated the right number of times:
+<label for="tufte-mn-95" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-95" class="margin-toggle"><span class="marginnote">This is an example of R’s so-called <em>recycling rules</em>.</span></p>
 <div class="sourceCode" id="cb1334"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1334-1" data-line-number="1">births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="dv">2012</span>,<span class="dt">day=</span><span class="dv">1</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 5
 ##    month cesarean vaginal  year   day
@@ -823,16 +825,16 @@ wolves hunt and kill caribou). This is a large national park, so
 caribou are found in very large herds, so big, in fact, that the
 well-being of the entire herd is not threatened by wolf
 attacks.
-<label for="tufte-mn-66" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-66" class="margin-toggle"><span class="marginnote">In fact, it is believed that wolves help keep caribou herds strong by preventing over-population: that is, the weakest caribou are the ones taken by wolves.</span>
+<label for="tufte-mn-96" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-96" class="margin-toggle"><span class="marginnote">In fact, it is believed that wolves help keep caribou herds strong by preventing over-population: that is, the weakest caribou are the ones taken by wolves.</span>
 Can the size of the caribou population
 be used to predict the size of the wolf population?
 The data can be found at
 <a href="http://www.utsc.utoronto.ca/~butler/c32/caribou.txt">link</a>. The
 columns
 are: the date of the survey,
-<label for="tufte-mn-67" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-67" class="margin-toggle"><span class="marginnote">The survey is always taken in the fall, but the date varies.</span>
+<label for="tufte-mn-97" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-97" class="margin-toggle"><span class="marginnote">The survey is always taken in the fall, but the date varies.</span>
 the name of the park employee in charge of the survey, the caribou population (in hundreds) and the wolf population (actual count).
-<label for="tufte-mn-68" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-68" class="margin-toggle"><span class="marginnote">Counting animals in a region, especially rare, hard-to-find animals, is a whole science in itself. These numbers are probably estimates (with some uncertainty).</span></p>
+<label for="tufte-mn-98" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-98" class="margin-toggle"><span class="marginnote">Counting animals in a region, especially rare, hard-to-find animals, is a whole science in itself. These numbers are probably estimates (with some uncertainty).</span></p>
 <ol style="list-style-type: lower-alpha">
 <li>Take a look at the data file. How would you describe its
 format? Read it into R, and check that you got something sensible.</li>
@@ -897,7 +899,7 @@ line that goes all the way down. Thus four columns, <code>date</code>,
 <code>name</code>, <code>caribou</code> and <code>wolf</code>. This means that the
 spaces within the names don’t cause any problems at all, since the
 spaces aren’t in the same place in <em>every</em> line.
-<label for="tufte-mn-69" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-69" class="margin-toggle"><span class="marginnote">The only way this would fail is if <em>every</em> first name had the same number of letters in it; then the space between first name and initial of last name <em>would</em> be in the same place in every line.</span></p>
+<label for="tufte-mn-99" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-99" class="margin-toggle"><span class="marginnote">The only way this would fail is if <em>every</em> first name had the same number of letters in it; then the space between first name and initial of last name <em>would</em> be in the same place in every line.</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Create a new data frame where the column labelled
 <code>date</code> is now a genuine R <code>Date</code>, using something
@@ -907,7 +909,7 @@ from <code>lubridate</code>.</li>
 <p>What you do is to look at the format of the dates as they are
 now. They appear to be month-day-year, American
 style.
-<label for="tufte-mn-70" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-70" class="margin-toggle"><span class="marginnote">Not a surprise since Denali National Park is in Alaska.</span><br />
+<label for="tufte-mn-100" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-100" class="margin-toggle"><span class="marginnote">Not a surprise since Denali National Park is in Alaska.</span><br />
 Thus the function needed is <code>mdy</code>. It doesn’t matter
 whether the months are names or numbers:</p>
 <div class="sourceCode" id="cb1355"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1355-1" data-line-number="1">denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date=</span><span class="kw">mdy</span>(date)) -&gt;<span class="st"> </span>denali</a>
@@ -924,7 +926,7 @@ whether the months are names or numbers:</p>
 ## 7 2001-10-06 David S.           20    60</code></pre>
 <p>I lived on the edge and overwrote both my column and the whole data
 frame.
-<label for="tufte-mn-71" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-71" class="margin-toggle"><span class="marginnote">It’s actually not <em>really</em> living on the edge, because if it doesn’t work, you go back and read the data in from the file again.</span></p>
+<label for="tufte-mn-101" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-101" class="margin-toggle"><span class="marginnote">It’s actually not <em>really</em> living on the edge, because if it doesn’t work, you go back and read the data in from the file again.</span></p>
 <p>The dates are displayed in ISO format, year-month-day. You see at the
 top of the column that they now really <em>are</em> dates, not just
 pieces of text that look like dates.</p>
@@ -980,7 +982,7 @@ caribou population (explanatory) against wolf population
 <div class="sourceCode" id="cb1363"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1363-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-31-1.png" width="672"  /></p>
 <p>If you like, add a smooth trend to it:
-<label for="tufte-mn-72" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-72" class="margin-toggle"><span class="marginnote">This wiggles more than I would like, with such a small number of observations. Try putting someting like <em>span=2</em> in the smooth to make it less wiggly.</span></p>
+<label for="tufte-mn-102" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-102" class="margin-toggle"><span class="marginnote">This wiggles more than I would like, with such a small number of observations. Try putting someting like <em>span=2</em> in the smooth to make it less wiggly.</span></p>
 <div class="sourceCode" id="cb1364"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1364-1" data-line-number="1"><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x=</span>caribou, <span class="dt">y=</span>wolf))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">se=</span>F)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-32-1.png" width="672"  /></p>
@@ -1005,7 +1007,7 @@ for the points on the plot.</li>
 <em>not</em> <code>geom_line</code> as you would have guessed, since what that
 does is to join points in the order of the variable on the
 <span class="math inline">\(x\)</span>-axis.
-<label for="tufte-mn-73" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-73" class="margin-toggle"><span class="marginnote">I have to say that I didn’t know that until just now.</span>
+<label for="tufte-mn-103" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-103" class="margin-toggle"><span class="marginnote">I have to say that I didn’t know that until just now.</span>
 To join points in the order that they are in the data (what we want
 here, because the points are in time order in the data), use instead
 <code>geom_path</code>:</p>
@@ -1078,7 +1080,7 @@ second <code>geom_line</code>, overriding the <code>y</code> and the
 animal, with a legend. So far so good. The problem is that the wolf
 numbers are about 2.5 times bigger than the caribou
 numbers,
-<label for="tufte-mn-74" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-74" class="margin-toggle"><span class="marginnote">Which means, if you stop to think about it, that there are <em>actually</em> about 40 times more caribou than wolves.</span>
+<label for="tufte-mn-104" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-104" class="margin-toggle"><span class="marginnote">Which means, if you stop to think about it, that there are <em>actually</em> about 40 times more caribou than wolves.</span>
 so that
 we don’t get a good sense of how they go up and down together. If we
 divided the wolf numbers by 2.5, we would see this better:</p>
@@ -1105,7 +1107,7 @@ one population was much bigger than the other, or varied much more
 than the other. Lies and statistics.</p>
 <p>In my opinion, too many people just plot series against time, possibly
 with a second <span class="math inline">\(y\)</span>-axis.
-<label for="tufte-mn-75" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-75" class="margin-toggle"><span class="marginnote">And all too often with Excel (spit)</span>.
+<label for="tufte-mn-105" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-105" class="margin-toggle"><span class="marginnote">And all too often with Excel (spit)</span>.
 Variables that vary together, like the wolf
 and caribou populations here, ought to be plotted  on a scatterplot, possibly with the time points labelled.</p>
 <p>The ambitious among you may like to compare the graphs here with

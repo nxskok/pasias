@@ -3,7 +3,7 @@
 
  Do adult deer eat different amounts of food at different
 times of the year? The data in
-[http://www.utsc.utoronto.ca/~butler/c32/deer.txt](http://www.utsc.utoronto.ca/~butler/c32/deer.txt) are the weights
+[link](http://www.utsc.utoronto.ca/~butler/c32/deer.txt) are the weights
 of food (in kilograms) consumed by randomly selected adult deer
 observed at different times of the year (in February, May, August and
 November). We will assume that these were different deer observed in
@@ -25,7 +25,9 @@ The usual stuff for data values separated by spaces:
 ```{r }
 myurl="http://www.utsc.utoronto.ca/~butler/c32/deer.txt"
 deer=read_delim(myurl," ")
-```     
+```
+
+     
 
 and then, recalling that `n()` is the handy way of getting the
 number of observations in each group:
@@ -33,7 +35,9 @@ number of observations in each group:
 ```{r }
 deer %>% group_by(month) %>% 
 summarize(n=n(),med=median(food))
-``` 
+```
+
+ 
 
 When you want the number of observations *plus* some other
 summaries, as here, the group-by and summarize idea is the way, using
@@ -54,7 +58,9 @@ Solution
 
 ```{r }
 ggplot(deer,aes(x=month,y=food))+geom_boxplot()
-```     
+```
+
+     
 
 This offers the suggestion that maybe November will be significantly
 higher than the rest and May significantly lower, or at least they
@@ -75,7 +81,9 @@ scatterplot:
 
 ```{r }
 ggplot(deer,aes(x=month,y=food))+geom_point()
-``` 
+```
+
+ 
 
 Wait a minute. There were five deer in February and six in
 August. Where did they go?
@@ -89,7 +97,9 @@ place. This is called *jittering*, and is done like this:
 
 ```{r }
 ggplot(deer,aes(x=month,y=food))+geom_jitter(width=0,height=0.05)
-``` 
+```
+
+ 
 
 Now you see all the deer, and you can see that two pairs of points in
 August and one pair of points in February are close enough on the
@@ -127,13 +137,17 @@ To give you some practice with the mechanics, first find the
 overall median:
 ```{r }
 deer %>% summarize(med=median(food))
-```     
+```
+
+     
 
 or
 
 ```{r }
 median(deer$food)
-``` 
+```
+
+ 
 
 I like the first way because it's the same idea as we did before, just
 not differentiating by month. I think there are some observations
@@ -141,7 +155,9 @@ exactly equal to the median, which will mess things up later:
 
 ```{r }
 deer %>% filter(food==4.7)
-``` 
+```
+
+ 
 
 There are, two in February and two in August.
 
@@ -151,14 +167,18 @@ that are above and below this median:
 ```{r }
 tab1=with(deer,table(month,food<4.7))
 tab1
-``` 
+```
+
+ 
 
 or
 
 ```{r }
 tab2=with(deer,table(month,food>4.7))
 tab2
-``` 
+```
+
+ 
 
 Either of these is good, but note that they are different. Two of the
 February observations (the ones that were exactly 4.7) have ``switched
@@ -169,7 +189,9 @@ different results again:
 ```{r }
 chisq.test(tab1,correct=F)
 chisq.test(tab2,correct=F)
-``` 
+```
+
+ 
 
 The warnings are because of the small frequencies. If you've done
 these by hand before (which you will have if you took PSYC08), you'll
@@ -203,7 +225,9 @@ Off we go:
 ```{r }
 library(smmr)
 median_test(deer,food,month)
-```     
+```
+
+     
 
 The P-value came out in between the other two, but the conclusion is
 the same all three ways: the months are not all the same in terms of
@@ -219,28 +243,22 @@ deer2 = deer %>% filter(food != 4.7)
 tab3 = with(deer2, table(month, food<4.7))
 tab3
 chisq.test(tab3)
-``` 
+```
+
+ 
 
 which is exactly what `smmr` does, so the answer is
-identical.\endnote{The computer scientists among you will note that I
-should not use equals or not-equals to compare a decimal
-"floating-point" number, since decimal numbers are not represented
-exactly in the computer. R, however, is ahead of us here, since when
-you try to do "`food` not equal to 4.7", it tests whether
-`food` is more than a small distance away from 4.7, which is
-the right way to do it. In R, therefore, code like my \texttt{food !=
-4.7} does exactly what I want, but in something like C, it
-*does not*, and you have to be more careful:
-`abs(food-4.7)>1e-8`, or something like that. The small number
-`1e-8` is known as "machine epsilon", the smallest number on
-a computer that is distinguishable from zero.}
+identical.
+`r tufte::margin_note("The computer scientists among you will note that I  should not use equals or not-equals to compare a decimal  floating-point number, since decimal numbers are not represented exactly in the computer. R, however, is ahead of us here, since when you try to do food not equal to 4.7, it tests whether food is more than a small distance away from 4.7, which is the right way to do it. In R, therefore, code like my *food !=  4.7* does exactly what I want, but in something like C, it *does not*, and you have to be more careful: *abs(food-4.7)>1e-8*, or something like that. The small number *1e-8* is typically equal to **machine epsilon**, the smallest number on a computer that is distinguishable from zero.")`
 How would an ANOVA come out here? My guess is, very similarly:
 
 ```{r }
 deer.1=aov(food~month,data=deer)
 summary(deer.1)
 TukeyHSD(deer.1)
-``` 
+```
+
+ 
 
 The conclusion is the same, but the P-value on the $F$-test is much
 smaller. I think this is because the $F$-test uses the actual values,
@@ -281,7 +299,9 @@ thus:
 
 ```{r }
 pairwise_median_test(deer, food, month)
-``` 
+```
+
+ 
 
 This compares each month with each other month. Looking at the last
 column, there are only three significant differences: August-November,

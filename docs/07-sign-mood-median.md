@@ -980,8 +980,8 @@ x
 ```
 
 ```
-##  [1] 62.57016 38.38226 56.96030 37.70608 22.80844 50.66678 33.95130
-##  [8] 63.20162 67.90308 76.89659
+##  [1] 52.37274 31.42856 53.93437 44.60677 84.75210 43.34644 62.58897
+##  [8] 50.14886 39.24088 46.83320
 ```
 
 
@@ -1005,8 +1005,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        6
-## 2 TRUE         4
+## 1 FALSE        8
+## 2 TRUE         2
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1040,7 +1040,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       4 FALSE
+## 1       2 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1060,7 +1060,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       4 FALSE
+## 1       2 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1880,11 +1880,9 @@ Extra: there is an experimental design issue here. You might have noticed that e
 (b) Do a two-sample $t$-test to assess whether there is a
 difference in mean phobia scores after the students have taken the two
 courses. What do you conclude? (You have no \textsl{a
-priori}\endnote{That is, before looking at the data. This is
-Latin. It's also the place that the Bayesian "prior distribution"
-comes from. The "posterior distribution" comes from the Latin
-*a posteriori*, which means "afterwards", that is, after
-you have looked at the data.} reason to
+priori}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is, before looking at the data. This is  Latin. It's also the place that the Bayesian *prior distribution*  comes from. The *posterior distribution* comes from the Latin  *a posteriori*, which means *afterwards*, that is, after  you have looked at the data.</span> 
+reason to
 suppose that a particular one of the tests will produce a higher mean
 than the other, so do a two-sided test.)
 
@@ -1943,10 +1941,8 @@ ggplot(math,aes(x=course,y=phobia))+geom_boxplot()
 Boxplot `a` is just weird. The bar across the middle is
 actually at the top, and it has no bottom. (Noting something sensible
 like this is enough.) Boxplot `b` is hugely spread
-out.\endnote{The two groups have very different spreads, but that is
-not a problem as long as we remember to do the Welch-Satterthwaite
-test that does not assume equal spreads. This is the default in R,
-so we are good, at least with that.}
+out.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The two groups have very different spreads, but that is  not a problem as long as we remember to do the Welch-Satterthwaite  test that does not assume equal spreads. This is the default in R,  so we are good, at least with that.</span>
 
 By way of explanation: the course `a` scores have a number of
 values equal so that the 3rd quartile and the median are the name, and
@@ -2178,7 +2174,7 @@ Group A see the video at 8:30 am, while the students in Group B see
 the same video at 3:00 pm (on the same day). The next day, all the
 students are given a test on the material in the video (graded out of
 100). The observed scores are in
-[http://www.utsc.utoronto.ca/~butler/c32/forehead.txt](http://www.utsc.utoronto.ca/~butler/c32/forehead.txt) (values
+[link](http://www.utsc.utoronto.ca/~butler/c32/forehead.txt) (values
 separated by spaces).
 
 
@@ -2232,6 +2228,8 @@ instr
 ## 17 B        85
 ## 18 B        58
 ```
+
+ 
     
 
 
@@ -2251,6 +2249,8 @@ ggplot(instr,aes(x=group,y=score))+geom_boxplot()
 
 <img src="07-sign-mood-median_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
+     
+
 or, if you like, separate (facetted) normal quantile plots, which I
 would do this way:
 
@@ -2262,6 +2262,8 @@ facet_wrap(~group,ncol=1)
 ```
 
 <img src="07-sign-mood-median_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
+
+ 
     
 
 
@@ -2311,6 +2313,8 @@ instr %>% summarize(med=median(score))
 ## 1  87.5
 ```
 
+     
+
 87.5, which is not equal to any of the data values (they are all
 integers). This will avoid any issues with values-equal-to-median later.
 
@@ -2330,6 +2334,8 @@ tab
 ##     A     2    8
 ##     B     7    1
 ```
+
+ 
 
 Then, chi-squared test for independence (the null) or association of
 some kind (the alternative). The `correct=F` is saying not to
@@ -2354,6 +2360,8 @@ chisq.test(tab,correct=F)
 ## data:  tab
 ## X-squared = 8.1, df = 1, p-value = 0.004427
 ```
+
+ 
 
 The P-value is 0.0044, which is (much) smaller than 0.05, and
 therefore you can reject independence and conclude association: that
@@ -2385,6 +2393,8 @@ tab
 ##     B     7    1
 ```
 
+ 
+
 Most of the people in the 8:30 am group scored above the median, and
 most of the people in the 3:00 pm group scored below the median. So
 the scores at 8:30 am were better overall.
@@ -2410,9 +2420,8 @@ totals are *not* all fixed. Consider a survey in which you want
 to see whether males and females agree or disagree on some burning
 issue of the day. You collect random samples of, say, 500 males and
 500 females, and you count how many of them say Yes or No to your
-statement.\endnote{To simplify things, we'll assume that everyone gave
-a Yes or a No answer, though you could add a column like "No answer"
-if you wanted to make it more realistic.}
+statement.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">To simplify things, we'll assume that everyone gave a Yes or a No answer, though you could add a column like *No answer* if you wanted to make it more realistic.</span>
 You might get results like this:
 
 
@@ -2486,13 +2495,15 @@ tab
 ##     B     7    1
 ```
 
+ 
+
 We know how many students were in each group: 10 in group A and 8 in
 B. So the row totals are fixed. What about the columns? These are
 whether each observation was above or below the overall median. There
 were 18 observations altogether, so there *must* be 9 above and 9
-below.\endnote{Except in the case of the previous problem, where there
-were multiple observations equal to the overall median. Which we
-ignore for the moment.} So the column totals are fixed as well. All
+below.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Except in the case of the previous problem, where there were multiple observations equal to the overall median. Which we ignore for the moment.</span> 
+So the column totals are fixed as well. All
 totals fixed, so we should be using Yates's correction. I didn't,
 because I wanted to keep things simple, but I should have done.
 
@@ -2529,6 +2540,8 @@ median_test(instr, score, group)
 ## 2        df 1.000000000
 ## 3   P-value 0.004426526
 ```
+
+     
 
 Identical, test statistic, degrees of freedom and P-value. The table
 of frequencies is also the same, just with columns rearranged. (In

@@ -1,11 +1,11 @@
 ##  Sparrowhawks
 
 
- One of nature's patterns is the relationship
+??q:hawks?? One of nature's patterns is the relationship
 between the percentage of adult birds in a colony that return from the
 previous year, and the number of new adults that join the colony. Data
 for 13 colonies of sparrowhawks can be found at
-[http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt](http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt). The
+[link](http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt). The
 columns are the percentage of adults returning from the previous year,
 and the number of new adults that join the colony.
 
@@ -26,9 +26,8 @@ template report with the document info at the top. This is my document info:
 
 ![](sh0.png)
  
-This is known in the jargon as a "YAML block".\endnote{YAML
-stands for "yet another markup language", but we're not using
-it in this course, other than as the top bit of an R Markdown document.}
+This is known in the jargon as a "YAML block".
+`r tufte::margin_note("YAML      stands for *Yet Another Markup Language*, but we're not using      it in this course, other than as the top bit of an R Markdown document.")`
 Below that is the template R Markdown document, which you can delete now or later.
 
 
@@ -58,7 +57,9 @@ library(tidyverse)
 my_url="http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt"
 sparrowhawks=read_delim(my_url," ")
 sparrowhawks
-```     
+```
+
+     
 For you, it looks like this:
 
 
@@ -117,7 +118,9 @@ The R code you add should look like this, with the results shown
 library(tidyverse)
 ggplot(sparrowhawks,aes(x=returning,y=newadults))+
 geom_point()+geom_smooth()
-``` 
+```
+
+ 
 
 <br>
 
@@ -144,13 +147,17 @@ Solution
 The appropriate R code  is this, in another code chunk:
 ```{r }
 with(sparrowhawks,cor(newadults,returning))
-``` 
+```
+
+ 
 
 Or you can ask for the correlations of the whole data frame:
 
 ```{r }
 cor(sparrowhawks)
-``` 
+```
+
+ 
 
 This latter is a "correlation matrix" with a correlation between each
 column and each other column. Obviously the correlation between a
@@ -175,7 +182,9 @@ This R code, in another code chunk:
 ```{r }
 newadults.1=lm(newadults~returning,data=sparrowhawks)
 summary(newadults.1)  
-``` 
+```
+
+ 
 
 
 
@@ -207,7 +216,9 @@ will add the regression line to the plot:
 ```{r }
 ggplot(sparrowhawks,aes(x=returning,y=newadults))+
 geom_point()+geom_smooth(method="lm")
-``` 
+```
+
+ 
 
 I added a bit of text to the report, which I will show in a moment.
 

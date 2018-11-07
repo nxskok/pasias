@@ -29,13 +29,13 @@ library(tidyverse)
 
  Before a movie is shown in theatres, it
 receives a "rating" that says what kind of material it
-contains. [https://en.wikipedia.org/wiki/Motion_Picture_Association_of_America_film_rating_system](https://en.wikipedia.org/wiki/Motion_Picture_Association_of_America_film_rating_system)
+contains. [link](https://en.wikipedia.org/wiki/Motion_Picture_Association_of_America_film_rating_system)
 explains the categories, from G (suitable for children) to R (anyone
 under 17 must be accompanied by parent/guardian). In 2011, two
 students collected data on the length (in minutes) and the rating
 category, for 15 movies of each rating category, randomly chosen from
 all the movies released that year. The data are at
-[http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
+[link](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
 
 
 
@@ -81,6 +81,8 @@ movies
 ## # ... with 50 more rows
 ```
 
+     
+
 Something that looks like a length in minutes, and a rating.
 
 
@@ -105,6 +107,8 @@ movies %>% count(rating)
 ## 3 PG-13     15
 ## 4 R         15
 ```
+
+       
 
 Fifteen of each rating. (It's common to have the same number of
 observations in each group, but not necessary for a one-way ANOVA.)
@@ -135,6 +139,8 @@ summary(length.1)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+ 
+
 This P-value is 0.00000459, which is way less than 0.05.
 
 Having rejected the null (which said "all means equal"), we now need to
@@ -161,6 +167,8 @@ TukeyHSD(length.1)
 ## R-PG-13  -12.200000 -31.919771  7.519771 0.3660019
 ```
 
+ 
+
 Cast your eye down the `p adj` column and look for the ones
 that are significant, here the first three. These are all comparisons
 with the G ("general") movies, which are shorter on average than the
@@ -184,6 +192,8 @@ summarize(mean=mean(length))
 ## 4 R      111.
 ```
 
+ 
+
 When we do this problem in SAS, you'll see the Tukey get handled a
 different way, one that you might find more appealing.
   
@@ -202,6 +212,8 @@ ggplot(movies, aes(x=rating, y=length))+geom_boxplot()
 ```
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+
+       
 
 For ANOVA, we are looking for approximately normal distributions
 within each group and approximately equal spreads. Without the
@@ -240,6 +252,8 @@ median_test(movies,length,rating)
 ## 3   P-value  0.003262334
 ```
 
+ 
+
 Still significant, though not quite as small a P-value as before
 (which echoes our thoughts about what the outliers might do to the
 means). If you look at the table above the test results, you see that
@@ -270,6 +284,8 @@ pairwise_median_test(movies,length,rating)
 ## 6 PG-13 R     0.273        1.64
 ```
 
+ 
+
 You can ignore those (adjusted) P-values rather stupidly bigger than
 1. These are not significant.
 
@@ -284,10 +300,8 @@ movies are significantly shorter than the PG movies, but not
 significantly shorter than the R movies, \emph{when the difference in
 medians between G and R movies is bigger}? In Tukey, if the
 difference in means is bigger, the P-value is
-smaller.\endnote{Actually, this doesn't always work if the sample
-sizes in each group are different. If you're comparing two small
-groups, it takes a *very large* difference in means to get a
-small P-value. But in this case the sample sizes are all the same.}
+smaller.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Actually, this doesn't always work if the sample  sizes in each group are different. If you're comparing two small  groups, it takes a *very large* difference in means to get a  small P-value. But in this case the sample sizes are all the same.</span>
 The resolution to this puzzle, such as it is, is that Mood's median
 test is not directly comparing the medians of the groups (despite its
 name); it's counting values above and below a *joint* median,
@@ -303,7 +317,7 @@ which might be a different story.
 
  Do adult deer eat different amounts of food at different
 times of the year? The data in
-[http://www.utsc.utoronto.ca/~butler/c32/deer.txt](http://www.utsc.utoronto.ca/~butler/c32/deer.txt) are the weights
+[link](http://www.utsc.utoronto.ca/~butler/c32/deer.txt) are the weights
 of food (in kilograms) consumed by randomly selected adult deer
 observed at different times of the year (in February, May, August and
 November). We will assume that these were different deer observed in
@@ -336,6 +350,8 @@ deer=read_delim(myurl," ")
 ## )
 ```
 
+     
+
 and then, recalling that `n()` is the handy way of getting the
 number of observations in each group:
 
@@ -354,6 +370,8 @@ summarize(n=n(),med=median(food))
 ## 3 May       6  4.35
 ## 4 Nov       5  5.2
 ```
+
+ 
 
 When you want the number of observations *plus* some other
 summaries, as here, the group-by and summarize idea is the way, using
@@ -379,6 +397,8 @@ ggplot(deer,aes(x=month,y=food))+geom_boxplot()
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
+     
+
 This offers the suggestion that maybe November will be significantly
 higher than the rest and May significantly lower, or at least they
 will be significantly different from each other.
@@ -403,6 +423,8 @@ ggplot(deer,aes(x=month,y=food))+geom_point()
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
+ 
+
 Wait a minute. There were five deer in February and six in
 August. Where did they go?
 
@@ -419,6 +441,8 @@ ggplot(deer,aes(x=month,y=food))+geom_jitter(width=0,height=0.05)
 ```
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+
+ 
 
 Now you see all the deer, and you can see that two pairs of points in
 August and one pair of points in February are close enough on the
@@ -466,6 +490,8 @@ deer %>% summarize(med=median(food))
 ## 1   4.7
 ```
 
+     
+
 or
 
 
@@ -476,6 +502,8 @@ median(deer$food)
 ```
 ## [1] 4.7
 ```
+
+ 
 
 I like the first way because it's the same idea as we did before, just
 not differentiating by month. I think there are some observations
@@ -495,6 +523,8 @@ deer %>% filter(food==4.7)
 ## 3 Aug     4.7
 ## 4 Aug     4.7
 ```
+
+ 
 
 There are, two in February and two in August.
 
@@ -516,6 +546,8 @@ tab1
 ##   Nov     5    0
 ```
 
+ 
+
 or
 
 
@@ -532,6 +564,8 @@ tab2
 ##   May     6    0
 ##   Nov     0    5
 ```
+
+ 
 
 Either of these is good, but note that they are different. Two of the
 February observations (the ones that were exactly 4.7) have ``switched
@@ -573,6 +607,8 @@ chisq.test(tab2,correct=F)
 ## data:  tab2
 ## X-squared = 11.782, df = 3, p-value = 0.008168
 ```
+
+ 
 
 The warnings are because of the small frequencies. If you've done
 these by hand before (which you will have if you took PSYC08), you'll
@@ -625,6 +661,8 @@ median_test(deer,food,month)
 ## 3   P-value  0.002974007
 ```
 
+     
+
 The P-value came out in between the other two, but the conclusion is
 the same all three ways: the months are not all the same in terms of
 median food eaten. The researchers can then go ahead and try to figure
@@ -666,19 +704,11 @@ chisq.test(tab3)
 ## X-squared = 13.95, df = 3, p-value = 0.002974
 ```
 
+ 
+
 which is exactly what `smmr` does, so the answer is
-identical.\endnote{The computer scientists among you will note that I
-should not use equals or not-equals to compare a decimal
-"floating-point" number, since decimal numbers are not represented
-exactly in the computer. R, however, is ahead of us here, since when
-you try to do "`food` not equal to 4.7", it tests whether
-`food` is more than a small distance away from 4.7, which is
-the right way to do it. In R, therefore, code like my \texttt{food !=
-4.7} does exactly what I want, but in something like C, it
-*does not*, and you have to be more careful:
-`abs(food-4.7)>1e-8`, or something like that. The small number
-`1e-8` is known as "machine epsilon", the smallest number on
-a computer that is distinguishable from zero.}
+identical.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The computer scientists among you will note that I  should not use equals or not-equals to compare a decimal  floating-point number, since decimal numbers are not represented exactly in the computer. R, however, is ahead of us here, since when you try to do food not equal to 4.7, it tests whether food is more than a small distance away from 4.7, which is the right way to do it. In R, therefore, code like my *food !=  4.7* does exactly what I want, but in something like C, it *does not*, and you have to be more careful: *abs(food-4.7)>1e-8*, or something like that. The small number *1e-8* is typically equal to **machine epsilon**, the smallest number on a computer that is distinguishable from zero.</span>
 How would an ANOVA come out here? My guess is, very similarly:
 
 
@@ -714,6 +744,8 @@ TukeyHSD(deer.1)
 ## Nov-Feb  0.4200000  0.08647471  0.7535253 0.0109631
 ## Nov-May  0.9066667  0.58734052  1.2259928 0.0000013
 ```
+
+ 
 
 The conclusion is the same, but the P-value on the $F$-test is much
 smaller. I think this is because the $F$-test uses the actual values,
@@ -768,6 +800,8 @@ pairwise_median_test(deer, food, month)
 ## 5 Feb   Nov   0.0578      0.347  
 ## 6 May   Nov   0.00157     0.00939
 ```
+
+ 
 
 This compares each month with each other month. Looking at the last
 column, there are only three significant differences: August-November,
@@ -1199,8 +1233,8 @@ chisq.test(tab2, correct=F)
 
  
 
-Either is correct, or, actually, without the `correct=F`.\endnote{see
-discussion elsewhere about Yates' Correction and fixed margins.}
+Either is correct, or, actually, without the `correct=F`.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">see discussion elsewhere about Yates' Correction and fixed margins.</span>
 
 The conclusion (iv) is the same either way: the null of no association
 is clearly rejected (with a P-value of 0.0028 or 0.0036 as
@@ -1471,8 +1505,8 @@ Now we want to call our function `comp2` for each of the things
 in `first` *and* each of the things in `second`,
 and make a new column called `pval` that contains exactly
 that. This (coming fresh from page 332 of the R book, this being the
-first time I've ever used it\endnote{This was a year ago when I first
-wrote this}) is exactly what the `map2` family of functions
+first time I've ever used it)
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was a year ago when I first  wrote this.} is exactly what the texttt{map2</span> family of functions
 does. In our case, `comp2` returns a decimal number, a
 `dbl`, so `map2_dbl` does it.  Thus:
 
@@ -1625,14 +1659,13 @@ I think that's *quite* enough of that.
 
 
 
-## Atomic weight of carbon
+##  Atomic weight of carbon
 
 
-
- The atomic weight of the chemical element
+??q:carbon?? The atomic weight of the chemical element
 carbon is 12. Two methods of measuring the atomic weight of samples of
 carbon were compared. The results are shown in
-[http://www.utsc.utoronto.ca/~butler/c32/carbon.txt](http://www.utsc.utoronto.ca/~butler/c32/carbon.txt). The methods
+[link](http://www.utsc.utoronto.ca/~butler/c32/carbon.txt). The methods
 are labelled 1 and 2.  The first task is to find out whether the two
 methods have different "typical" measures (mean or median, as
 appropriate) of the atomic weight of carbon.
@@ -1755,11 +1788,13 @@ carbon
 ## 15      2   12.0
 ```
 
+     
+
 I would expect you to include, without being told to include it, some
 text in your report indicating that you have sensible data: two
-methods labelled 1 and 2 as promised, and a bunch\endnote{It's
-probably better in a report to use language a bit more formal than
-"a bunch". Something like "a number" would be better.} of atomic
+methods labelled 1 and 2 as promised, and a bunch
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It's  probably better in a report to use language a bit more formal than  *a bunch*. Something like *a number* would be better.</span> 
+of atomic
 weights close to the nominal figure of 12.
 
 
@@ -1786,6 +1821,8 @@ ggplot(carbon,aes(x=factor(method),y=weight))+geom_boxplot()
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
 
+       
+
 If you insist, you could do a faceted histogram (above and below, for preference):
 
 ```r
@@ -1794,6 +1831,8 @@ facet_wrap(~method,ncol=1)
 ```
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
+
+ 
 
 There are really not enough data values for a histogram to be of much
 help, so I don't like this as much. 
@@ -1812,6 +1851,8 @@ facet_wrap(~method)
 ```
 
 <img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
+
+ 
 
 I don't mind these coming out side by side, though I would rather have
 them squarer.
@@ -1885,6 +1926,8 @@ t.test(weight~method,data=carbon)
 ##        12.00260        12.01428
 ```
 
+   
+
 Imagining that this is a report that would go to your boss, you ought
 to defend your choice of the Welch-Satterthwaite test (as I did
 above), and not just do the default $t$-test without comment.
@@ -1910,6 +1953,8 @@ t.test(weight~method,data=carbon,var.equal=T)
 ## mean in group 1 mean in group 2 
 ##        12.00260        12.01428
 ```
+
+ 
 
 The point here is that you should do the right test based on your
 conclusion. Being consistent is the most important thing. (In this
@@ -1950,6 +1995,8 @@ var.test(weight~method,data=carbon)
 ## ratio of variances 
 ##          0.3576842
 ```
+
+ 
 
 This, unfortunately, is rather dependent on the data in the two groups
 being approximately normal. Since we are talking variances rather than
@@ -1998,24 +2045,21 @@ leveneTest(weight~factor(method),data=carbon)
 ##       13
 ```
 
+ 
+
 Levene's test takes a different approach: first the absolute
 differences from the group medians are calculated, and then an ANOVA
 is run on the absolute differences. If, say, one of the groups has a
 larger spread than the other(s), its absolute differences from the
-median will tend to be bigger.\endnote{The use of absolute differences, and
-the median, downplays the influence of outliers. The assumption here
-is that the absolute differences from the medians are approximately
-normal, which seems a less big assumption than assuming the actual
-data are approximately normal.}
+median will tend to be bigger.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The use of absolute  differences, and the median, downplays the influence of outliers. The assumption here is that the absolute differences from the medians are approximately normal, which seems a less big assumption than assuming the actual data are approximately normal.</span>
 As for what we conclude here, well, neither of the variance tests show
 any significance at all, so from that point of view there is no
 evidence against using the pooled $t$-test. Having said that, the
 samples are small, and so it would be difficult to *prove* that
 the two methods have different variance, even if they actually
 did.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is coming back to the emph{power</span> of something like
-Levene's test; the power of any test is not going to be very big if
-the sample sizes are small.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is coming back to the *power* of something like Levene's test; the power of any test is not going to be very big if the sample sizes are small.</span>
 
 Things are never as clear-cut as you would like. In the end, it all
 comes down to making a call and defending it.
@@ -2050,6 +2094,8 @@ median_test(carbon, weight, method)
 ## 2        df 1.00000000
 ## 3   P-value 0.09426431
 ```
+
+ 
 
 As an aside, if you have run into a non-parametric test such as
 Mann-Whitney or Kruskal-Wallis that applies in this situation, be
@@ -2128,6 +2174,8 @@ unload it before I go on:
 ```r
 detach(package:car,unload=T)
 ```
+
+       
 
 
 

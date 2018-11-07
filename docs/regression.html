@@ -561,7 +561,7 @@ is the one we should go with.</p>
 <p>If you have studied these things: this one is a
 “multiple-partial <span class="math inline">\(F\)</span>-test”, for testing the combined significance of more than one <span class="math inline">\(x\)</span>
 but less than all the <span class="math inline">\(x\)</span>’s.
-<label for="tufte-mn-43" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-43" class="margin-toggle"><span class="marginnote">If you had just one <span class="math inline">\(x\)</span>, you’d use a <span class="math inline">\(t\)</span>-test for its slope, and if you were testing all the <span class="math inline">\(x\)</span>’s, you’d use the global <span class="math inline">\(F\)</span>-test that appears in the regression output.</span></p>
+<label for="tufte-mn-58" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-58" class="margin-toggle"><span class="marginnote">If you had just one <span class="math inline">\(x\)</span>, you’d use a <span class="math inline">\(t\)</span>-test for its slope, and if you were testing all the <span class="math inline">\(x\)</span>’s, you’d use the global <span class="math inline">\(F\)</span>-test that appears in the regression output.</span></p>
 </div>
 <div id="carbon-monoxide-in-cigarettes" class="section level2">
 <h2><span class="header-section-number">13.2</span> Carbon monoxide in cigarettes</h2>
@@ -749,6 +749,7 @@ the same thing’’ in some fashion. We’ll explore that in a moment.</p>
 <li>Make a “pairs plot”: that is, scatter plots between all
 pairs of variables. This can be done by feeding the whole data frame
 into <code>plot</code>.
+<label for="tufte-mn-59" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-59" class="margin-toggle"><span class="marginnote">This is a base graphics graph rather than a ggplot one, but it will do for our purposes.</span>
 Do you see any strong relationships that do
 <em>not</em> include <code>co</code>? Does that shed any light on the last
 part? Explain briefly (or “at length” if that’s how it comes
@@ -1035,7 +1036,7 @@ two models. Therefore, we should go with the smaller model
 significant: the three extra variables
 could have produced a change in R-squared like that,
 <em>even if they were worthless</em>.
-<label for="tufte-mn-44" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-44" class="margin-toggle"><span class="marginnote">Recall that adding <span class="math inline">\(x\)</span>’s to a regression will always make R-squared go up, even if they are just random noise.</span></p>
+<label for="tufte-mn-60" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-60" class="margin-toggle"><span class="marginnote">Recall that adding <span class="math inline">\(x\)</span>’s to a regression will always make R-squared go up, even if they are just random noise.</span></p>
 <p>If you have learned about “adjusted R-squared”, you might recall
 that this is supposed to go down <em>only</em> if the variables you took
 out should not have been taken out. But adjusted R-squared goes down
@@ -1082,7 +1083,8 @@ good guess at their values; you don’t need to know them.</p>
 variables have a stronger link with <code>uptake</code> than
 <code>age</code>. Height, however, seems to be the best way of relating
 oxygen uptake to any of the other variables. I think the suppositions
-from earlier about relating oxygen uptake to “bigness” in some sense
+from earlier about relating oxygen uptake to “bigness”
+<label for="tufte-mn-61" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-61" class="margin-toggle"><span class="marginnote">This is not, I don’t think, a real word, but I mean size emphasizing how big a boy is generally, rather than how small.</span> in some sense
 are actually sound, but age and weight and <code>chest</code> capture
 “bigness” worse than height does. Later, when you learn about
 Principal Components, you will see that the first principal component,
@@ -1090,7 +1092,7 @@ the one that best captures how the variables vary together, is often
 “bigness” in some sense.</p>
 <p>Another way to think about these things is via pairwise
 scatterplots. The nicest way to produce these is via <code>ggpairs</code>
-from package <code>ggally</code>:</p>
+from package <code>GGally</code>:</p>
 <div class="sourceCode" id="cb1070"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1070-1" data-line-number="1">boys <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggpairs</span>()</a></code></pre></div>
 <p><img src="12-regression_files/figure-html/unnamed-chunk-32-1.png" width="672"  /></p>
 <p>A final remark: with five variables, we really ought to have more than
@@ -1217,7 +1219,7 @@ a lot of temporary data frames.</li>
 <p>Solution</p>
 <p>Breathe, and then begin. <code>unite</code> creates new columns by
 joining together old ones:
-<label for="tufte-mn-45" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-45" class="margin-toggle"><span class="marginnote">As <em>str_c</em> or <em>paste</em> do, actually, but the advantage of <em>unite</em> is that it gets rid of the other columns, which you probably no longer need.</span></p>
+<label for="tufte-mn-62" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-62" class="margin-toggle"><span class="marginnote">As <em>str_c</em> or <em>paste</em> do, actually, but the advantage of <em>unite</em> is that it gets rid of the other columns, which you probably no longer need.</span></p>
 <div class="sourceCode" id="cb1083"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1083-1" data-line-number="1">crickets <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb1083-2" data-line-number="2"><span class="kw">unite</span>(exclamationis,X1<span class="op">:</span>X2) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1083-3" data-line-number="3"><span class="kw">unite</span>(niveus,X3<span class="op">:</span>X4) </a></code></pre></div>
@@ -1382,7 +1384,7 @@ prefer to make is that <code>parse_number</code> is good for text
 with a number in it (that we want to pull the number out of),
 while <code>as.numeric</code> is for turning something that looks like
 a number but isn’t one into a genuine number.
-<label for="tufte-mn-46" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-46" class="margin-toggle"><span class="marginnote">You could just as well make the point that the text 20.8 contains the number 20.8 and nothing else, so that parsing it as text in search of a number will pull out 20.8 as a number. If that logic works for you, go with it.</span></li>
+<label for="tufte-mn-63" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-63" class="margin-toggle"><span class="marginnote">You could just as well make the point that the text 20.8 contains the number 20.8 and nothing else, so that parsing it as text in search of a number will pull out 20.8 as a number. If that logic works for you, go with it.</span></li>
 </ol>
 <p>Solution</p>
 <p><code>mutate</code>-ing into a column that already exists overwrites
@@ -1419,7 +1421,7 @@ for our analysis.</p>
 <p>The warning message tells us that we got genuine missing-value NAs
 back, which is probably what we want. Specifically, they got turned
 from missing <em>text</em> to missing <em>numbers</em>!
-<label for="tufte-mn-47" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-47" class="margin-toggle"><span class="marginnote">You might think that missing is just missing, but R distinguishes between types of missing.</span>
+<label for="tufte-mn-64" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-64" class="margin-toggle"><span class="marginnote">You might think that missing is just missing, but R distinguishes between types of missing.</span>
 The R word
 “coercion” means values being changed from one type of thing to
 another type of thing. (We’ll ignore the missings and see if they
@@ -1525,7 +1527,7 @@ however. Is it possible that temperature also has an effect? To
 assess this, draw a scatterplot of pulse rate against temperature,
 with the points distinguished, somehow, by the species they are
 from.
-<label for="tufte-mn-48" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-48" class="margin-toggle"><span class="marginnote">This was the actual reason I gave you this question: I wanted you to do this. It sort of morphed into all the other stuff as well.</span></li>
+<label for="tufte-mn-65" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-65" class="margin-toggle"><span class="marginnote">This was the actual reason I gave you this question: I wanted you to do this. It sort of morphed into all the other stuff as well.</span></li>
 </ol>
 <p>Solution</p>
 <p>One of the wonderful things about <code>ggplot</code> is that doing
@@ -1558,10 +1560,10 @@ species being observed mainly in higher temperatures. This was
 <em>utterly invisible</em> to us when we did the <span class="math inline">\(t\)</span>-test, but it
 shows the importance of accounting for all the relevant
 variables when you do your analysis.
-<label for="tufte-mn-49" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-49" class="margin-toggle"><span class="marginnote">And it shows the value of looking at relevant plots.</span> If the species had been
+<label for="tufte-mn-66" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-66" class="margin-toggle"><span class="marginnote">And it shows the value of looking at relevant plots.</span> If the species had been
 observed at opposite temperatures, we might have
 concluded
-<label for="tufte-mn-50" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-50" class="margin-toggle"><span class="marginnote">Mistakenly.</span>
+<label for="tufte-mn-67" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-67" class="margin-toggle"><span class="marginnote">Mistakenly.</span>
 that <em>niveus</em> have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
@@ -1627,11 +1629,11 @@ accounting for temperature, which also makes a difference. (In the
 <span class="math inline">\(t\)</span>-test, the temperatures were all mixed up). What we also see is
 that the <span class="math inline">\(t\)</span>-interval is shifted up compared to the one from the
 regression. This is because the <span class="math inline">\(t\)</span>-interval conflates
-<label for="tufte-mn-51" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-51" class="margin-toggle"><span class="marginnote">Mixes up.} two things: the textsl{exclamationis</span> crickets do have a
+<label for="tufte-mn-68" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-68" class="margin-toggle"><span class="marginnote">Mixes up.} two things: the textsl{exclamationis</span> crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
-<label for="tufte-mn-52" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-52" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
+<label for="tufte-mn-69" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-69" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
 really are, when you account for temperature.</p>
 <p>This particular model constrains the slope with temperature to be the
 same for both species (just the intercepts differ). If you want to
@@ -1662,7 +1664,7 @@ between temperature and species:</p>
 ## F-statistic: 898.9 on 3 and 27 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>To see whether adding the interaction term added anything to the
 prediction,
-<label for="tufte-mn-53" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-53" class="margin-toggle"><span class="marginnote">Though it’s hard to imagine being able to improve on an R-squared of 99%.} compare the model with and without using texttt{anova</span>:</p>
+<label for="tufte-mn-70" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-70" class="margin-toggle"><span class="marginnote">Though it’s hard to imagine being able to improve on an R-squared of 99%.} compare the model with and without using texttt{anova</span>:</p>
 <div class="sourceCode" id="cb1123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1123-1" data-line-number="1"><span class="kw">anova</span>(pulse<span class="fl">.1</span>,pulse<span class="fl">.2</span>)  </a></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
@@ -1681,7 +1683,7 @@ distinguish them. If there had been three species, we would have had
 to look at the <code>anova</code> output to hunt for a difference among
 species, since there would have been two slope coefficients, each with
 its own P-value.
-<label for="tufte-mn-54" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-54" class="margin-toggle"><span class="marginnote">This wouldn’t have told us about the overall effect of species.</span></p>
+<label for="tufte-mn-71" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-71" class="margin-toggle"><span class="marginnote">This wouldn’t have told us about the overall effect of species.</span></p>
 <p>The upshot is that we do not need different slopes; the model
 <code>pulse.1</code> with the same slope for each species describes what
 is going on.</p>
@@ -1800,7 +1802,7 @@ awful, going with a correlation of</p>
 <pre><code>## [1] 0.4363485</code></pre>
 <p>which <em>would</em> look
 like as weak of a trend as we saw.
-<label for="tufte-mn-55" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-55" class="margin-toggle"><span class="marginnote">Correlations have to go up beyond 0.50 before they start looking at all interesting.</span></p>
+<label for="tufte-mn-72" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-72" class="margin-toggle"><span class="marginnote">Correlations have to go up beyond 0.50 before they start looking at all interesting.</span></p>
 <p>(d)??part:regtest?? Is the slope of your regression line significantly
 different from zero? What does that mean, in the context of the
 data?</p>
@@ -1995,7 +1997,8 @@ R-squared: 46.6% or 47% or the equivalents as a decimal. I just
 need the value at this point.
 This kind of R-squared is actually pretty good for natural data, but
 the issue is whether we can improve it by fitting a non-linear
-model.</p>
+model.
+<label for="tufte-mn-73" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-73" class="margin-toggle"><span class="marginnote">The suspicion being that we can, since the scatterplot suggested serious non-linearity.</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Obtain a residual plot (residuals against fitted values)
 for this regression. Do you see any problems? If so, what does that
@@ -2038,7 +2041,8 @@ the regression. Don’t forget the <code>I()</code>:</p>
 ## F-statistic: 9.829 on 2 and 7 DF,  p-value: 0.009277</code></pre>
 <p>R-squared has gone up from 47% to 74%, a substantial
 improvement. This suggests to me that the parabola model is a
-substantial improvement.</p>
+substantial improvement.
+<label for="tufte-mn-74" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-74" class="margin-toggle"><span class="marginnote">Again, not a surprise, given our initial scatterplot.</span></p>
 <p>I try to avoid using the word “significant” in this context, since
 we haven’t actually done a test of significance.</p>
 <p>The reason for the <code>I()</code> is that the up-arrow has a special
@@ -2059,6 +2063,7 @@ of 0.031. This is less than the default 0.05, so it <em>is</em>
 significant.
 This means, in short, that the quadratic model is a significant
 <em>improvement</em> over the linear one.
+<label for="tufte-mn-75" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-75" class="margin-toggle"><span class="marginnote">Now we can use that word <em>significant</em>.</span>
 Said longer: the null hypothesis being tested is that the slope
 coefficient of the squared term is zero (that is, that the squared
 term has nothing to add over the linear model). This is rejected,
@@ -2208,11 +2213,11 @@ knit it, play with it.</p>
 </div>
 <div id="sparrowhawks" class="section level2">
 <h2><span class="header-section-number">13.7</span> Sparrowhawks</h2>
-<p>One of nature’s patterns is the relationship
+<p>??q:hawks?? One of nature’s patterns is the relationship
 between the percentage of adult birds in a colony that return from the
 previous year, and the number of new adults that join the colony. Data
 for 13 colonies of sparrowhawks can be found at
-<a href="http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt" class="uri">http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt</a>. The
+<a href="http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt">link</a>. The
 columns are the percentage of adults returning from the previous year,
 and the number of new adults that join the colony.</p>
 <ol style="list-style-type: lower-alpha">
@@ -2227,6 +2232,7 @@ Author and leave the Default Output Format at HTML. You’ll see a
 template report with the document info at the top. This is my document info:</p>
 <p><img src="sh0.png" /></p>
 <p>This is known in the jargon as a “YAML block”.
+<label for="tufte-mn-76" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-76" class="margin-toggle"><span class="marginnote">YAML stands for <em>Yet Another Markup Language</em>, but we’re not using it in this course, other than as the top bit of an R Markdown document.</span>
 Below that is the template R Markdown document, which you can delete now or later.</p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Read in the data and display the first few values. Add some text saying how many rows of data
@@ -2606,7 +2612,7 @@ that you will have a terrible time debugging. That’s what that
 <p>So I’m going to be tidy and get rid of <code>MASS</code>, now that I’m
 finished with it. Let’s first see which packages are loaded, rather a
 lot in my case:
-<label for="tufte-mn-56" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-56" class="margin-toggle"><span class="marginnote">The packages before <em>tidyverse</em> other than <em>MASS</em> are all loaded by the <em>tidyverse</em>, which is why there are so many.</span></p>
+<label for="tufte-mn-77" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-77" class="margin-toggle"><span class="marginnote">The packages before <em>tidyverse</em> other than <em>MASS</em> are all loaded by the <em>tidyverse</em>, which is why there are so many.</span></p>
 <div class="sourceCode" id="cb1209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1209-1" data-line-number="1"><span class="kw">search</span>()</a></code></pre></div>
 <pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:MASS&quot;      &quot;package:broom&quot;    
 ##  [4] &quot;package:GGally&quot;    &quot;package:bindrcpp&quot;  &quot;package:forcats&quot;  
@@ -2630,9 +2636,13 @@ lot in my case:
 <p>It has. Now any calls to <code>select</code> will use the right one. We hope.</p>
 <p>The output of <code>search</code> is called the <strong>search list</strong>, and
 it tells you where R will go looking for things. The first one
-<code>.GlobalEnv</code> is where all your
+<code>.GlobalEnv</code> is where all
+<label for="tufte-mn-78" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-78" class="margin-toggle"><span class="marginnote">All the ones that are part of this project, anyway.</span>
+your
 variables, data frames etc. get stored, and that is what gets
-searched first. Then R will go
+searched first.
+<label for="tufte-mn-79" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-79" class="margin-toggle"><span class="marginnote">That means that if you write a function with the same name as one that is built into R or a package, yours is the one that will get called. This is probably a bad idea, since you won’t be able to get at R’s function by that name.</span>
+Then R will go
 looking in each thing in turn until it finds what it is looking
 for. When you load a package with <code>library()</code>, it gets added to
 the list <em>in second place</em>, behind <code>.GlobalEnv</code>. So, when
@@ -2760,7 +2770,8 @@ experience is predicted to increase log-salary by 0.05, or to
 multiply actual salary by</p>
 <div class="sourceCode" id="cb1223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1223-1" data-line-number="1"><span class="kw">exp</span>(<span class="fl">0.05</span>)  </a></code></pre></div>
 <pre><code>## [1] 1.051271</code></pre>
-<p>or to increase salary by about 5%.</p>
+<p>or to increase salary by about 5%.
+<label for="tufte-mn-80" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-80" class="margin-toggle"><span class="marginnote">Mathematically, <span class="math inline">\(e^x simeq 1+x\)</span> for small <span class="math inline">\(x\)</span>, which winds up meaning that the slope in a model like this, if it is small, indicates about the percent increase in the response associated with a 1-unit change in the explanatory variable. Note that this only works with <span class="math inline">\(e^x\)</span> and natural logs, not base 10 logs or anything like that.</span></p>
 </div>
 <div id="predicting-volume-of-wood-in-pine-trees" class="section level2">
 <h2><span class="header-section-number">13.9</span> Predicting volume of wood in pine trees</h2>
@@ -2841,7 +2852,7 @@ I am guided by “form, direction, strength” in looking at a scatterplot:</p>
 <p>You don’t need to be as formal as this, but you <em>do</em> need
 to get at the idea that it is an upward trend, apparently
 linear, and at least fairly strong.
-<label for="tufte-mn-57" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-57" class="margin-toggle"><span class="marginnote">When this was graded, it was 3 marks, to clue you in that there are three things to say.</span></p>
+<label for="tufte-mn-81" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-81" class="margin-toggle"><span class="marginnote">When this was graded, it was 3 marks, to clue you in that there are three things to say.</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Fit a (linear) regression, predicting volume from diameter,
 and obtain the <code>summary</code>. How would you describe the R-squared?</li>
@@ -2896,7 +2907,8 @@ frame and eyeball them.</p>
 ## 2 diameter        10.9     0.801     13.6  0.000000822</code></pre>
 <p>This gives a table of intercepts, slopes and their P-values, but the
 value to this one is that it is a <em>data frame</em>, so if you want to
-pull anything out of it, you know how to do that:</p>
+pull anything out of it, you know how to do that:
+<label for="tufte-mn-82" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-82" class="margin-toggle"><span class="marginnote">The <em>summary</em> output is more designed for looking at than for extracting things from.</span></p>
 <div class="sourceCode" id="cb1238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1238-1" data-line-number="1"><span class="kw">tidy</span>(volume<span class="fl">.1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(term<span class="op">==</span><span class="st">&quot;diameter&quot;</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 5
 ##   term     estimate std.error statistic     p.value
@@ -3189,7 +3201,7 @@ you and the base of the tree is then equal to the height of the tree,
 and if you have a long enough tape measure you can measure it.</p>
 <p>The above works because the tangent of 45 degrees is 1. If you have a
 device that will measure the actual angle,
-<label for="tufte-mn-58" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-58" class="margin-toggle"><span class="marginnote">These days, there are apps that will let you do this with your phone. I found one called Clinometer. See also <a href="https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/">link</a>.</span>
+<label for="tufte-mn-83" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-83" class="margin-toggle"><span class="marginnote">These days, there are apps that will let you do this with your phone. I found one called Clinometer. See also <a href="https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/">link</a>.</span>
 you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of
@@ -3327,7 +3339,7 @@ however. Is it possible that temperature also has an effect? To
 assess this, draw a scatterplot of pulse rate against temperature,
 with the points distinguished, somehow, by the species they are
 from.
-<label for="tufte-mn-59" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-59" class="margin-toggle"><span class="marginnote">This was the actual reason I thought of this question originally: I wanted you to do this.</span></li>
+<label for="tufte-mn-84" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-84" class="margin-toggle"><span class="marginnote">This was the actual reason I thought of this question originally: I wanted you to do this.</span></li>
 </ol>
 <p>Solution</p>
 <p>One of the wonderful things about <code>ggplot</code> is that doing
@@ -3359,10 +3371,10 @@ species being observed mainly in higher temperatures. This was
 <em>utterly invisible</em> to us when we did the <span class="math inline">\(t\)</span>-test, but it
 shows the importance of accounting for all the relevant
 variables when you do your analysis.
-<label for="tufte-mn-60" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-60" class="margin-toggle"><span class="marginnote">And it shows the value of looking at relevant plots.</span> If the species had been
+<label for="tufte-mn-85" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-85" class="margin-toggle"><span class="marginnote">And it shows the value of looking at relevant plots.</span> If the species had been
 observed at opposite temperatures, we might have
 concluded
-<label for="tufte-mn-61" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-61" class="margin-toggle"><span class="marginnote">Mistakenly.} that textsl{niveus</span> have the
+<label for="tufte-mn-86" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-86" class="margin-toggle"><span class="marginnote">Mistakenly.} that textsl{niveus</span> have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
 comes out of the regression model with temperature.</p>
@@ -3427,11 +3439,11 @@ accounting for temperature, which also makes a difference. (In the
 <span class="math inline">\(t\)</span>-test, the temperatures were all mixed up). What we also see is
 that the <span class="math inline">\(t\)</span>-interval is shifted up compared to the one from the
 regression. This is because the <span class="math inline">\(t\)</span>-interval conflates
-<label for="tufte-mn-62" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-62" class="margin-toggle"><span class="marginnote">Mixes up.} two things: the textsl{exclamationis</span> crickets do have a
+<label for="tufte-mn-87" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-87" class="margin-toggle"><span class="marginnote">Mixes up.} two things: the textsl{exclamationis</span> crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
-<label for="tufte-mn-63" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-63" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
+<label for="tufte-mn-88" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-88" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
 really are, when you account for temperature.</p>
 <p>This particular model constrains the slope with temperature to be the
 same for both species (just the intercepts differ). If you want to
@@ -3461,7 +3473,7 @@ between temperature and species:</p>
 ## F-statistic: 898.9 on 3 and 27 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>To see whether adding the interaction term added anything to the
 prediction,
-<label for="tufte-mn-64" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-64" class="margin-toggle"><span class="marginnote">Though it’s hard to imagine being able to improve on an R-squared of 99%.</span>
+<label for="tufte-mn-89" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-89" class="margin-toggle"><span class="marginnote">Though it’s hard to imagine being able to improve on an R-squared of 99%.</span>
 compare the model with and without using <code>anova</code>:</p>
 <div class="sourceCode" id="cb1278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1278-1" data-line-number="1"><span class="kw">anova</span>(pulse<span class="fl">.1</span>,pulse<span class="fl">.2</span>)  </a></code></pre></div>
 <pre><code>## Analysis of Variance Table
@@ -3485,7 +3497,7 @@ distinguish them. If there had been three species, we would have had
 to look at the <code>anova</code> output to hunt for a difference among
 species, since there would have been two slope coefficients, each with
 its own P-value.
-<label for="tufte-mn-65" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-65" class="margin-toggle"><span class="marginnote">This wouldn’t have told us about the overall effect of species.</span></p>
+<label for="tufte-mn-90" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-90" class="margin-toggle"><span class="marginnote">This wouldn’t have told us about the overall effect of species.</span></p>
 <p>If you haven’t seen interactions before, don’t worry about this. The
 idea behind it is that we are testing whether we needed lines with
 different slopes and we concluded that we don’t. Don’t worry so much
@@ -3556,10 +3568,12 @@ bit lower, I don’t think we’d have anything to complain about at all.</p>
 best roller-coasters in the United States. We will examine the 10
 roller-coasters that received the most votes. Two features of a
 roller-coaster that are of interest are the distance it drops from
-start to finish, measured here in feet and the duration of the ride,
+start to finish, measured here in feet
+<label for="tufte-mn-91" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-91" class="margin-toggle"><span class="marginnote">Roller-coasters work by gravity, so there must be some drop.</span> and the duration of the ride,
 measured in seconds. Is it true that roller-coasters with a bigger
 drop also tend to have a longer ride? The data are at
-<a href="http://www.utsc.utoronto.ca/~butler/c32/coasters.csv">link</a>.</p>
+<a href="http://www.utsc.utoronto.ca/~butler/c32/coasters.csv">link</a>.
+<label for="tufte-mn-92" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-92" class="margin-toggle"><span class="marginnote">These are not to be confused with what your mom insists that you place between your coffee mug and the table.</span></p>
 <ol style="list-style-type: lower-alpha">
 <li>Read the data into R and verify that you have a sensible
 number of rows and columns.</li>
@@ -3708,7 +3722,12 @@ way. The advantage of this way is less typing. You have to specify the
 <em>not</em> the first input to <code>lm</code> (the model is), but you have
 a much simpler <code>augment</code> because its first input is the model
 that came out of the previous step. If the second input to
-<code>augment</code> is missing, as it is here, it `<code>attempts to reconstruct the data from the model''\endnote{A quote from the package vignette.} which I think means that things like the coaster names that were not part of the regression won't be part of</code>augment<code>'s output either. That's my understanding. My first way explicitly supplies the original data frame to</code>augment` so there is no
+<code>augment</code> is missing, as it is here, it “attempts to reconstruct the data from the model”
+<label for="tufte-mn-93" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-93" class="margin-toggle"><span class="marginnote">A quote from the package vignette.</span>
+which I think means that things like the coaster names that
+were not part of the regression won’t be part of <code>augment</code>’s
+output either. That’s my understanding. My first way explicitly
+supplies the original data frame to <code>augment</code> so there is no
 question about what it is using.</p>
 
 </div>

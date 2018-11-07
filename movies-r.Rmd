@@ -3,13 +3,13 @@
 
  Before a movie is shown in theatres, it
 receives a "rating" that says what kind of material it
-contains. [https://en.wikipedia.org/wiki/Motion_Picture_Association_of_America_film_rating_system](https://en.wikipedia.org/wiki/Motion_Picture_Association_of_America_film_rating_system)
+contains. [link](https://en.wikipedia.org/wiki/Motion_Picture_Association_of_America_film_rating_system)
 explains the categories, from G (suitable for children) to R (anyone
 under 17 must be accompanied by parent/guardian). In 2011, two
 students collected data on the length (in minutes) and the rating
 category, for 15 movies of each rating category, randomly chosen from
 all the movies released that year. The data are at
-[http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
+[link](http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv).
 
 
 
@@ -24,7 +24,9 @@ Solution
 my_url="http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv"
 movies=read_csv(my_url)
 movies
-```     
+```
+
+     
 
 Something that looks like a length in minutes, and a rating.
 
@@ -38,7 +40,9 @@ Solution
 
 ```{r }
 movies %>% count(rating)
-```       
+```
+
+       
 
 Fifteen of each rating. (It's common to have the same number of
 observations in each group, but not necessary for a one-way ANOVA.)
@@ -58,7 +62,9 @@ ANOVA first:
 ```{r }
 length.1=aov(length~rating,data=movies)
 summary(length.1)
-``` 
+```
+
+ 
 
 This P-value is 0.00000459, which is way less than 0.05.
 
@@ -67,7 +73,9 @@ do Tukey, thus:
 
 ```{r }
 TukeyHSD(length.1)
-``` 
+```
+
+ 
 
 Cast your eye down the `p adj` column and look for the ones
 that are significant, here the first three. These are all comparisons
@@ -79,7 +87,9 @@ If you like, you can make a table of means to verify that:
 ```{r }
 movies %>% group_by(rating) %>%
 summarize(mean=mean(length))
-``` 
+```
+
+ 
 
 When we do this problem in SAS, you'll see the Tukey get handled a
 different way, one that you might find more appealing.
@@ -95,7 +105,9 @@ Solution
 The obvious graph is a boxplot:
 ```{r }
 ggplot(movies, aes(x=rating, y=length))+geom_boxplot()
-```       
+```
+
+       
 
 For ANOVA, we are looking for approximately normal distributions
 within each group and approximately equal spreads. Without the
@@ -115,7 +127,9 @@ groups, and works in the same way as before:
 ```{r }
 library(smmr)
 median_test(movies,length,rating)
-``` 
+```
+
+ 
 
 Still significant, though not quite as small a P-value as before
 (which echoes our thoughts about what the outliers might do to the
@@ -132,7 +146,9 @@ I put it into `smmr` under the name `pairwise_median_test`:
 
 ```{r }
 pairwise_median_test(movies,length,rating)
-``` 
+```
+
+ 
 
 You can ignore those (adjusted) P-values rather stupidly bigger than
 1. These are not significant.
@@ -148,10 +164,8 @@ movies are significantly shorter than the PG movies, but not
 significantly shorter than the R movies, \emph{when the difference in
 medians between G and R movies is bigger}? In Tukey, if the
 difference in means is bigger, the P-value is
-smaller.\endnote{Actually, this doesn't always work if the sample
-sizes in each group are different. If you're comparing two small
-groups, it takes a *very large* difference in means to get a
-small P-value. But in this case the sample sizes are all the same.}
+smaller.
+`r tufte::margin_note("Actually, this doesn't always work if the sample  sizes in each group are different. If you're comparing two small  groups, it takes a *very large* difference in means to get a  small P-value. But in this case the sample sizes are all the same.")`
 The resolution to this puzzle, such as it is, is that Mood's median
 test is not directly comparing the medians of the groups (despite its
 name); it's counting values above and below a *joint* median,

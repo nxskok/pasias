@@ -379,31 +379,8 @@ with(whas3,all.equal(los,diff1))
 
  
 
-so they really are all equal, all 500 of them.\endnote{The computer
-scientists among you will note that I shouldn't have done this,
-because `diff1` through `diff3` are double-precision
-decimal numbers, so I should have tested their equality with
-`lenfol` and `los` by working out the absolute
-differences and testing whether they were all *small*. On
-consulting the help for `all.equal`, though, I find that it
-*does* work properly, because it actually tests whether the
-things being compared differ by less than a quantity
-`tolerance` which defaults to $1.5\times 10^{-8}$, and if
-they do it calls them equal. This is all tied in with the difference
-between integers and decimal numbers as they are represented on a
-computer: exactly and approximately, respectively. A
-double-precision number has about 16 significant digits of accuracy;
-equal things won't have all 16 digits equal, most likely, but they
-would be expected to have at least 8 of those digits the
-same. CSCA08 stuff, I imagine. This is where you can casually toss
-around terms like "machine epsilon". Oh! I just realized
-something. You know how very very small P-values are shown in R as
-`<2.2e-16`? *That's* the machine epsilon,
-$2.2 \times 10^{-16}$. Anything smaller than that is
-indistinguishable from zero, and you can't have a P-value be
-*exactly* zero. The default `tolerance` I mentioned
-above is the square root of this, which is normally used for such
-things.}
+so they really are all equal, all 500 of them.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The computer  scientists among you will note that I shouldn't have done this,  because *diff1* through *diff3* are double-precision  decimal numbers, so I should have tested their equality with  *lenfol* and *los* by working out the absolute  differences and testing whether they were all *small*. On  consulting the help for *all.equal*, though, I find that it  *does* work properly, because it actually tests whether the  things being compared differ by less than a quantity  *tolerance* which defaults to 0.000000015, and if  they  do it calls them equal. This is all tied in with the difference  between integers and decimal numbers as they are represented on a  computer: exactly and approximately, respectively. A  double-precision number has about 16 significant digits of accuracy;  equal things won't have all 16 digits equal, most likely, but they  would be expected to have at least 8 of those digits the  same. CSCA08 stuff, I imagine. This is where you can casually toss  around terms like *machine epsilon*. Oh! I just realized  something. You know how very very small P-values are shown in R as  *<2.2e-16*? *That's* the machine epsilon. Anything smaller than that is  indistinguishable from zero, and you can't have a P-value be  *exactly* zero. The default *tolerance* I mentioned  above is the square root of this, which is normally used for such  things.</span>
 
 
 
@@ -739,8 +716,8 @@ b2
 
 If you don't like that, create columns that contain 2012 and 1 all
 the way down. If you set a column name equal to a single value, that
-single value gets repeated the right number of times:\endnote{This is
-an example of R's so-called "recycling rules".}
+single value gets repeated the right number of times:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is  an example of R's so-called *recycling rules*.</span>
 
 
 ```r

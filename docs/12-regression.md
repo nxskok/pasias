@@ -833,8 +833,8 @@ the same thing'' in some fashion. We'll explore that in a moment.
 
 (f) Make a "pairs plot": that is, scatter plots between all
 pairs of variables. This can be done by feeding the whole data frame
-into `plot`.\endnote{This is a "base graphics" graph rather
-than a "ggplot" one, but it will do for our purposes.}
+into `plot`.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is a base graphics graph rather    than a ggplot one, but it will do for our purposes.</span>
 Do you see any strong relationships that do
 *not* include `co`? Does that shed any light on the last
 part? Explain briefly (or "at length" if that's how it comes
@@ -1335,9 +1335,8 @@ Further remarks: `age` has a low correlation with
 variables have a stronger link with `uptake` than
 `age`. Height, however, seems to be the best way of relating
 oxygen uptake to any of the other variables. I think the suppositions
-from earlier about relating oxygen uptake to "bigness"\endnote{This
-is not, I don't think, a real word, but I mean "size" emphasizing
-how big a boy is generally, rather than how small.} in some sense
+from earlier about relating oxygen uptake to "bigness"
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This  is not, I don't think, a real word, but I mean size emphasizing  how big a boy is generally, rather than how small.</span> in some sense
 are actually sound, but age and weight and `chest` capture
 "bigness" worse than height does. Later, when you learn about
 Principal Components, you will see that the first principal component,
@@ -1346,7 +1345,7 @@ the one that best captures how the variables vary together, is often
 
 Another way to think about these things is via pairwise
 scatterplots. The nicest way to produce these is via `ggpairs`
-from package `ggally`:
+from package `GGally`:
 
 
 ```r
@@ -2621,8 +2620,7 @@ one is. I'd call this one basically flat.
 
 
 
-## Endogenous nitrogen excretion in carp
-
+##  Endogenous nitrogen excretion in carp
 
 
  A paper in Fisheries Science reported on variables that
@@ -2776,8 +2774,8 @@ R-squared: 46.6\% or 47\% or the equivalents as a decimal. I just
 need the value at this point.
 This kind of R-squared is actually pretty good for natural data, but
 the issue is whether we can improve it by fitting a non-linear
-model.\endnote{The suspicion being that we can, since the
-scatterplot suggested serious non-linearity.}
+model.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The suspicion being that we can, since the    scatterplot suggested serious non-linearity.</span>
 
 
 
@@ -2847,8 +2845,8 @@ summary(carp.2)
 
 R-squared has gone up from 47\% to 74\%, a substantial
 improvement. This suggests to me that the parabola model is a
-substantial improvement.\endnote{Again, not a surprise, given our initial
-scatterplot.} 
+substantial improvement.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Again, not a surprise, given our  initial scatterplot.</span> 
 
 I try to avoid using the word "significant" in this context, since
 we haven't actually done a test of significance.
@@ -2876,8 +2874,8 @@ Look along the `bodyweight`-squared line to get a P-value
 of 0.031. This is less than the default 0.05, so it *is*
 significant.
 This means, in short, that the quadratic model is a significant
-*improvement* over the linear one.\endnote{Now we can use that word
-"significant".} 
+*improvement* over the linear one.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Now we can use that word   *significant*.</span> 
 Said longer: the null hypothesis being tested is that the slope
 coefficient of the squared term is zero (that is, that the squared
 term has nothing to add over the linear model). This is rejected,
@@ -3113,11 +3111,11 @@ knit it, play with it.
 ##  Sparrowhawks
 
 
- One of nature's patterns is the relationship
+??q:hawks?? One of nature's patterns is the relationship
 between the percentage of adult birds in a colony that return from the
 previous year, and the number of new adults that join the colony. Data
 for 13 colonies of sparrowhawks can be found at
-[http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt](http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt). The
+[link](http://www.utsc.utoronto.ca/~butler/c32/sparrowhawk.txt). The
 columns are the percentage of adults returning from the previous year,
 and the number of new adults that join the colony.
 
@@ -3138,9 +3136,8 @@ template report with the document info at the top. This is my document info:
 
 ![](sh0.png)
  
-This is known in the jargon as a "YAML block".\endnote{YAML
-stands for "yet another markup language", but we're not using
-it in this course, other than as the top bit of an R Markdown document.}
+This is known in the jargon as a "YAML block".
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">YAML      stands for *Yet Another Markup Language*, but we're not using      it in this course, other than as the top bit of an R Markdown document.</span>
 Below that is the template R Markdown document, which you can delete now or later.
 
 
@@ -3183,6 +3180,8 @@ sparrowhawks=read_delim(my_url," ")
 ```r
 sparrowhawks
 ```
+
+     
 For you, it looks like this:
 
 
@@ -3250,6 +3249,8 @@ geom_point()+geom_smooth()
 
 <img src="12-regression_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
 
+ 
+
 <br>
 
 The piece of report that I added looks like this:
@@ -3282,6 +3283,8 @@ with(sparrowhawks,cor(newadults,returning))
 ## [1] -0.7484673
 ```
 
+ 
+
 Or you can ask for the correlations of the whole data frame:
 
 
@@ -3294,6 +3297,8 @@ cor(sparrowhawks)
 ## returning  1.0000000 -0.7484673
 ## newadults -0.7484673  1.0000000
 ```
+
+ 
 
 This latter is a "correlation matrix" with a correlation between each
 column and each other column. Obviously the correlation between a
@@ -3342,6 +3347,8 @@ summary(newadults.1)
 ## F-statistic: 14.01 on 1 and 11 DF,  p-value: 0.003248
 ```
 
+ 
+
 
 
 (f) What are the intercept and slope of your regression line? Is
@@ -3377,6 +3384,8 @@ geom_point()+geom_smooth(method="lm")
 
 <img src="12-regression_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
 
+ 
+
 I added a bit of text to the report, which I will show in a moment.
 
 
@@ -3408,8 +3417,7 @@ I think that rounds off the report nicely.
 
 
 
-## Salaries of social workers
-
+##  Salaries of social workers
 
 
  Another salary-prediction question: does the number of years
@@ -3863,13 +3871,13 @@ It has. Now any calls to `select` will use the right one. We hope.
 
 The output of `search` is called the **search list**, and
 it tells you where R will go looking for things. The first one
-`.GlobalEnv` is where all\endnote{All the ones that are part of
-this project, anyway.} your
+`.GlobalEnv` is where all
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">All the ones that are part of  this project, anyway.</span> 
+your
 variables, data frames etc.\ get stored, and that is what gets
-searched first.\endnote{That means that if you write a function with
-the same name as one that is built into R or a package, yours is the
-one that will get called. This is probably a bad idea, since you
-won't be able to get at R's function by that name.} Then R will go
+searched first.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That means that if you write a function with  the same name as one that is built into R or a package, yours is the  one that will get called. This is probably a bad idea, since you  won't be able to get at R's function by that name.</span> 
+Then R will go
 looking in each thing in turn until it finds what it is looking
 for. When you load a package with `library()`, it gets added to
 the list *in second place*, behind `.GlobalEnv`. So, when
@@ -4073,20 +4081,15 @@ exp(0.05)
 
  
 
-or to increase salary by about 5\%.\endnote{Mathematically,
-$e^x \simeq 1+x$ for small $x$, which winds up meaning that the
-slope in a model like this, if it is small, indicates about the
-percent increase in the response associated with a 1-unit change in
-the explanatory variable. Note that this only works with $e^x$ and
-natural logs, not base 10 logs or anything like that.}
+or to increase salary by about 5\%.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mathematically,  $e^x simeq 1+x$ for small $x$, which winds up meaning that the  slope in a model like this, if it is small, indicates about the  percent increase in the response associated with a 1-unit change in  the explanatory variable. Note that this only works with $e^x$ and  natural logs, not base 10 logs or anything like that.</span>
 
 
 
 
 
 
-## Predicting volume of wood in pine trees
-
+##  Predicting volume of wood in pine trees
 
 
  In forestry, the financial value of a tree
@@ -4309,9 +4312,8 @@ tidy(volume.1)
 
 This gives a table of intercepts, slopes and their P-values, but the
 value to this one is that it is a *data frame*, so if you want to
-pull anything out of it, you know how to do that:\endnote{The
-`summary` output is more designed for looking at than for
-extracting things from.}
+pull anything out of it, you know how to do that:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The  *summary* output is more designed for looking at than for  extracting things from.</span>
 
 ```r
 tidy(volume.1) %>% filter(term=="diameter")
@@ -5333,13 +5335,12 @@ So, I'm not worried.
 best roller-coasters in the United States. We will examine the 10
 roller-coasters that received the most votes. Two features of a
 roller-coaster that are of interest are the distance it drops from
-start to finish, measured here in feet\endnote{Roller-coasters work by
-gravity, so there must be some drop.} and the duration of the ride,
+start to finish, measured here in feet
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Roller-coasters work by   gravity, so there must be some drop.</span> and the duration of the ride,
 measured in seconds. Is it true that roller-coasters with a bigger
 drop also tend to have a longer ride? The data are at
-[link](http://www.utsc.utoronto.ca/~butler/c32/coasters.csv).\endnote{These
-are not to be confused with what your mom insists that you place
-between your coffee mug and the table.}
+[link](http://www.utsc.utoronto.ca/~butler/c32/coasters.csv).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">These are not to be confused with what your mom insists that you place between your coffee mug and the table.</span>
 
 
 
@@ -5558,9 +5559,9 @@ way. The advantage of this way is less typing. You have to specify the
 *not* the first input to `lm` (the model is), but you have
 a much simpler `augment` because its first input is the model
 that came out of the previous step. If the second input to
-`augment` is missing, as it is here, it ``attempts to
-reconstruct the data from the model''\endnote{A quote from the package
-vignette.} which I think means that things like the coaster names that
+`augment` is missing, as it is here, it "attempts to reconstruct the data from the model"
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">A quote from the package vignette.</span> 
+which I think means that things like the coaster names that
 were not part of the regression won't be part of `augment`'s
 output either. That's my understanding. My first way explicitly
 supplies the original data frame to `augment` so there is no

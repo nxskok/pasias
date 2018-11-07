@@ -754,8 +754,8 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb401-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 62.57016 38.38226 56.96030 37.70608 22.80844 50.66678 33.95130
-##  [8] 63.20162 67.90308 76.89659</code></pre>
+<pre><code>##  [1] 52.37274 31.42856 53.93437 44.60677 84.75210 43.34644 62.58897
+##  [8] 50.14886 39.24088 46.83320</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
@@ -766,8 +766,8 @@ than 40 and how many are greater (or equal)?</li>
 <pre><code>## # A tibble: 2 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE        6
-## 2 TRUE         4</code></pre>
+## 1 FALSE        8
+## 2 TRUE         2</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -787,7 +787,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       4 FALSE</code></pre>
+## 1       2 FALSE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
@@ -799,7 +799,7 @@ should not reject. The fix is</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       4 FALSE</code></pre>
+## 1       2 FALSE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>
@@ -1303,7 +1303,9 @@ you, if you can make it do so. Other ways:</p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Do a two-sample <span class="math inline">\(t\)</span>-test to assess whether there is a
 difference in mean phobia scores after the students have taken the two
-courses. What do you conclude? (You have no  reason to
+courses. What do you conclude? (You have no 
+<label for="tufte-mn-25" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-25" class="margin-toggle"><span class="marginnote">That is, before looking at the data. This is Latin. It’s also the place that the Bayesian <em>prior distribution</em> comes from. The <em>posterior distribution</em> comes from the Latin <em>a posteriori</em>, which means <em>afterwards</em>, that is, after you have looked at the data.</span>
+reason to
 suppose that a particular one of the tests will produce a higher mean
 than the other, so do a two-sided test.)</li>
 </ol>
@@ -1334,7 +1336,8 @@ line of code). What is the most striking thing that you notice?</li>
 <p>Boxplot <code>a</code> is just weird. The bar across the middle is
 actually at the top, and it has no bottom. (Noting something sensible
 like this is enough.) Boxplot <code>b</code> is hugely spread
-out.</p>
+out.
+<label for="tufte-mn-26" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-26" class="margin-toggle"><span class="marginnote">The two groups have very different spreads, but that is not a problem as long as we remember to do the Welch-Satterthwaite test that does not assume equal spreads. This is the default in R, so we are good, at least with that.</span></p>
 <p>By way of explanation: the course <code>a</code> scores have a number of
 values equal so that the 3rd quartile and the median are the name, and
 also that the first quartile and the minimum value are the same:</p>
@@ -1472,7 +1475,7 @@ group 1 and all the large ones were in group 2. This is lopsided
 enough to reject with, though, because of the small frequencies, there
 actually was a warning about
 “chi-squared approximation may be inaccurate”.
-<label for="tufte-mn-25" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-25" class="margin-toggle"><span class="marginnote">There <em>was</em>, in the <em>chisq.test</em> inside <em>median_test</em>, but in <em>smmr</em> I didn’t pass that warning back to the outside world.</span></p>
+<label for="tufte-mn-27" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-27" class="margin-toggle"><span class="marginnote">There <em>was</em>, in the <em>chisq.test</em> inside <em>median_test</em>, but in <em>smmr</em> I didn’t pass that warning back to the outside world.</span></p>
 </div>
 <div id="medical-instructions" class="section level2">
 <h2><span class="header-section-number">8.6</span> Medical instructions</h2>
@@ -1484,7 +1487,7 @@ Group A see the video at 8:30 am, while the students in Group B see
 the same video at 3:00 pm (on the same day). The next day, all the
 students are given a test on the material in the video (graded out of
 100). The observed scores are in
-<a href="http://www.utsc.utoronto.ca/~butler/c32/forehead.txt" class="uri">http://www.utsc.utoronto.ca/~butler/c32/forehead.txt</a> (values
+<a href="http://www.utsc.utoronto.ca/~butler/c32/forehead.txt">link</a> (values
 separated by spaces).</p>
 <ol style="list-style-type: lower-alpha">
 <li>Read the data into R and display the (first ten) values.</li>
@@ -1634,6 +1637,7 @@ to see whether males and females agree or disagree on some burning
 issue of the day. You collect random samples of, say, 500 males and
 500 females, and you count how many of them say Yes or No to your
 statement.
+<label for="tufte-mn-28" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-28" class="margin-toggle"><span class="marginnote">To simplify things, we’ll assume that everyone gave a Yes or a No answer, though you could add a column like <em>No answer</em> if you wanted to make it more realistic.</span>
 You might get results like this:</p>
 <pre><code>
 Yes  No  Total
@@ -1688,7 +1692,9 @@ ourselves of the table we had:</p>
 B. So the row totals are fixed. What about the columns? These are
 whether each observation was above or below the overall median. There
 were 18 observations altogether, so there <em>must</em> be 9 above and 9
-below. So the column totals are fixed as well. All
+below.
+<label for="tufte-mn-29" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-29" class="margin-toggle"><span class="marginnote">Except in the case of the previous problem, where there were multiple observations equal to the overall median. Which we ignore for the moment.</span>
+So the column totals are fixed as well. All
 totals fixed, so we should be using Yates’s correction. I didn’t,
 because I wanted to keep things simple, but I should have done.</p>
 <p>R’s <code>chisq.test</code> by default <em>always</em> uses Yates’s
