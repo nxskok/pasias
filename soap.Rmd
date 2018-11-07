@@ -8,7 +8,7 @@ soap, but may possibly also produce more "scrap" (that is, bits of
 soap that 
 can no longer be made into soap bars and will have to be thrown away).  
 
-The data are in [http://www.utsc.utoronto.ca/~butler/c32/soap.txt](http://www.utsc.utoronto.ca/~butler/c32/soap.txt).
+The data are in [link](http://www.utsc.utoronto.ca/~butler/c32/soap.txt).
 
 
 
@@ -24,7 +24,9 @@ Read directly from the URL, most easily:
 url="http://www.utsc.utoronto.ca/~butler/c32/soap.txt"
 soap=read_delim(url," ")
 soap
-```    
+```
+
+    
 
 27 rows. `line`, which is either `a` or `b`, was
 correctly deduced to be text.
@@ -41,7 +43,9 @@ Solution
 
 ```{r }
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)
-``` 
+```
+
+ 
 
 
 
@@ -63,7 +67,9 @@ histogram looks can depend on the bins you choose to draw it
 with. This is 8 bins rather than 10:
 ```{r }
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=8)
-``` 
+```
+
+ 
 
 The middle low-frequency bin has gone, and this one just looks
 symmetric, with a kind of "flat top".
@@ -81,6 +87,8 @@ Solution
 ```{r }
 ggplot(soap,aes(x=line,y=scrap))+geom_boxplot()
 ```
+
+
 
 One categorical, one quantitative variable, so boxplots make sense.
 
@@ -113,7 +121,9 @@ are "significantly different". This is inference, which we
 will come to later, but a preview looks like this:
 ```{r }
 t.test(scrap~line,data=soap)
-```       
+```
+
+       
 
 They are not: the P-value of 0.22 is not anywhere near as small as
 0.05, so we can't reject the null hypothesis that the two lines have
@@ -131,7 +141,9 @@ that I explain afterwards:
 
 ```{r }
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)+facet_grid(line~.)
-``` 
+```
+
+ 
 
 I could have used `facet_wrap`, but that would have put the
 histograms side by side, and I wanted them one above the other (for
@@ -174,7 +186,9 @@ Solution
 Same mechanism as before:
 ```{r }
 ggplot(soap,aes(x=speed,y=scrap))+geom_point()
-``` 
+```
+
+ 
 
 
 
@@ -209,7 +223,9 @@ distinguish by colour. This is two quantitative variables and one
 categorical variable, if you want to think of it that way:
 ```{r }
 ggplot(soap,aes(x=speed,y=scrap,colour=line))+geom_point()
-```       
+```
+
+       
 
 Notice that we get a legend, automatically.
 
@@ -225,7 +241,9 @@ regression lines on the plot for each group separately. This is where
 ```{r }
 ggplot(soap,aes(x=speed,y=scrap,colour=line))+
 geom_point()+geom_smooth(method="lm",se=F)
-```       
+```
+
+       
 
 The points and lines have come out in different colours, without our
 having to think too hard.
@@ -252,10 +270,11 @@ soap2=soap %>% select(-line)
 ggplot(soap,aes(x=speed,y=scrap))+
 geom_point(data=soap2,colour="grey")+
 geom_point(aes(colour=line))+facet_wrap(~line)
-``` 
+```
 $
 
-The idea is that we plot all the points in grey (to "put them in the background") 
+The idea is that we plot all the points in grey (to 
+"put them in the background") 
  and then in each plot we plot the points again,
 *coloured, for the group we are looking at*: line A in the left,
 line B on the right. This is another way of seeing that line A has
@@ -292,7 +311,9 @@ regression predicting `scrap` from *two* things:
 ```{r }
 scrap.1=lm(scrap~speed+line,data=soap)
 summary(scrap.1)
-``` 
+```
+
+ 
 
 The P-values for `speed` and `line` are the second and
 third things in the last column, $7 \times 10^{-16}$  and $1 \times 10^{-6}$

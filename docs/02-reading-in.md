@@ -13,7 +13,7 @@ chemical measure such as the amount of water-soluble pectin (parts per
 million) in the
 orange juice? Data were obtained from 24 production runs, and the
 sweetness and pectin content were measured for each run. The data are
-in [http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt](http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt). Open that
+in [link](http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt). Open that
 link up now. You can click on that link just above to open the file.
 
 
@@ -50,11 +50,13 @@ library(tidyverse)
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
 
+ 
+
 The appropriate function, the data values being separated by a space,
 will be `read_delim`. Put the URL as the first thing in
 `read_delim`, or (better) define it into a variable
 first:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I say *better* because otherwise the read_delim gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*</span>
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I say *better* because otherwise the read line gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*</span>
 
 
 ```r
@@ -70,6 +72,8 @@ juice=read_delim(url," ")
 ##   pectin = col_integer()
 ## )
 ```
+
+ 
 
 `read_delim` (or `read_csv` or any of the others) tell
 you what variables were read in, and also tell you about any "parsing errors" 
@@ -119,6 +123,8 @@ juice
 ## 10    10       5.9    212
 ## # ... with 14 more rows
 ```
+
+ 
 
 I appear to have all the data. If you want further convincing, click
 Next a couple of times (on yours) to be sure that the runs go down to
@@ -174,6 +180,8 @@ read_delim("a.txt"," ",col_names=c("x","y"),skip=1)
 ## 3     5     6
 ```
 
+         
+
 
 
 (d) The juice manufacturer was interested in whether there was a
@@ -200,6 +208,8 @@ ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
+         
+
 It looks to me as if there is a negative relationship: as pectin goes
 up, sweetness tends to go *down*. The trend appears to go top
 left to bottom right. 
@@ -219,6 +229,8 @@ ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()+geom_smooth()
 ```
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+
+         
 The smooth trend is kind of downhill, but not very convincing.
 
 
@@ -236,7 +248,7 @@ soap, but may possibly also produce more "scrap" (that is, bits of
 soap that 
 can no longer be made into soap bars and will have to be thrown away).  
 
-The data are in [http://www.utsc.utoronto.ca/~butler/c32/soap.txt](http://www.utsc.utoronto.ca/~butler/c32/soap.txt).
+The data are in [link](http://www.utsc.utoronto.ca/~butler/c32/soap.txt).
 
 
 
@@ -285,6 +297,8 @@ soap
 ## # ... with 17 more rows
 ```
 
+    
+
 27 rows. `line`, which is either `a` or `b`, was
 correctly deduced to be text.
 
@@ -304,6 +318,8 @@ ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)
 ```
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+ 
 
 
 
@@ -330,6 +346,8 @@ ggplot(soap,aes(x=scrap))+geom_histogram(bins=8)
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
+ 
+
 The middle low-frequency bin has gone, and this one just looks
 symmetric, with a kind of "flat top".
 
@@ -349,6 +367,8 @@ ggplot(soap,aes(x=line,y=scrap))+geom_boxplot()
 ```
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+
+
 
 One categorical, one quantitative variable, so boxplots make sense.
 
@@ -398,6 +418,8 @@ t.test(scrap~line,data=soap)
 ##        333.5333        292.9167
 ```
 
+       
+
 They are not: the P-value of 0.22 is not anywhere near as small as
 0.05, so we can't reject the null hypothesis that the two lines have
 equal mean amount of scrap. 
@@ -418,6 +440,8 @@ ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)+facet_grid(line~.)
 ```
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+
+ 
 
 I could have used `facet_wrap`, but that would have put the
 histograms side by side, and I wanted them one above the other (for
@@ -465,6 +489,8 @@ ggplot(soap,aes(x=speed,y=scrap))+geom_point()
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
+ 
+
 
 
 (g) What do you think is the most important conclusion from
@@ -503,6 +529,8 @@ ggplot(soap,aes(x=speed,y=scrap,colour=line))+geom_point()
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
+       
+
 Notice that we get a legend, automatically.
 
 What is interesting about this one is the red dots are mostly at the
@@ -521,6 +549,8 @@ geom_point()+geom_smooth(method="lm",se=F)
 ```
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+
+       
 
 The points and lines have come out in different colours, without our
 having to think too hard.
@@ -553,7 +583,8 @@ geom_point(aes(colour=line))+facet_wrap(~line)
 <img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 $
 
-The idea is that we plot all the points in grey (to "put them in the background") 
+The idea is that we plot all the points in grey (to 
+"put them in the background") 
  and then in each plot we plot the points again,
 *coloured, for the group we are looking at*: line A in the left,
 line B on the right. This is another way of seeing that line A has
@@ -615,6 +646,8 @@ summary(scrap.1)
 ## F-statistic: 188.6 on 2 and 24 DF,  p-value: 2.104e-15
 ```
 
+ 
+
 The P-values for `speed` and `line` are the second and
 third things in the last column, $7 \times 10^{-16}$  and $1 \times 10^{-6}$
 respectively. These are both very strongly significant, in contrast to
@@ -651,7 +684,7 @@ time to time imports shipments of a certain large part used as a
 component in several of its products. The size of the shipment varies
 each time. Each shipment is sent to one of two warehouses (labelled A
 and B) for handling. The data in
-[http://www.utsc.utoronto.ca/~butler/c32/global.csv](http://www.utsc.utoronto.ca/~butler/c32/global.csv) show the
+[link](http://www.utsc.utoronto.ca/~butler/c32/global.csv) show the
 `size` of each shipment (in thousands of parts) and the direct
 `cost` of handling it, in thousands of dollars. Also shown is
 the `warehouse` (A or B) that handled each shipment.
@@ -685,6 +718,8 @@ shipments=read_csv(url)
 ## )
 ```
 
+     
+
 If you display your data frame and it looks like this, you are good
 (you can give the data frame any name):
 
@@ -708,6 +743,8 @@ shipments
 ##  9 B           400 15   
 ## 10 A           125  7.97
 ```
+
+ 
 
 It has 10 rows and 3 columns. *You need to say this to get the mark.*
 
@@ -734,6 +771,8 @@ ggplot(shipments,aes(x=size,y=cost))+geom_point()
 ```
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+
+     
 
 As a matter of coding, there are usually *two* brackets to close
 after the `aes`, the one that begins the `ggplot` and
@@ -785,6 +824,8 @@ ggplot(shipments,aes(x=warehouse,y=size))+geom_boxplot()
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
+     
+
 Well, there's the answer right there. When the shipment has small
 `size`, it goes to warehouse A, and when it's large, it goes to
 Warehouse B. We know this because *all* the shipments smaller
@@ -804,6 +845,8 @@ geom_point()
 ```
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+
+     
 
 As a point of technique, you can split lines of code to make them fit
 on your screen. You can do this as long as \emph{the code that ends

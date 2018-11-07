@@ -322,8 +322,9 @@ of food (in kilograms) consumed by randomly selected adult deer
 observed at different times of the year (in February, May, August and
 November). We will assume that these were different deer observed in
 the different months. (If the same animals had been observed at
-different times, we would have been in the domain of ``repeated
-measures'', which would require a different analysis, beyond the scope
+different times, we would have been in the domain of 
+"repeated measures", which would require a different analysis, 
+beyond the scope
 of this course.)
 
 
@@ -624,8 +625,8 @@ that they could be off by a bit without affecting the conclusion.
 
 The first table came out with a smaller P-value because it looked more
 extreme: all of the February measurements were taken as higher than
-the overall median (since we were counting "strictly less" and ``the
-rest''). In the second table, the February measurements look more
+the overall median (since we were counting "strictly less" and 
+"the rest"). In the second table, the February measurements look more
 evenly split, so the overall P-value is not quite so small.
 
 You can make a guess as to what `smmr` will come out with

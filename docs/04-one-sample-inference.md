@@ -264,7 +264,7 @@ test for the median, which I think is actually a better test here.
 
 
  The data in file
-[http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
+[link](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
 500 randomly chosen births of babies in North Carolina. There is a lot
 of information: not just the weight at birth of the baby, but whether
 the baby was born prematurely, the ages of the parents, whether the
@@ -305,6 +305,8 @@ bw=read_csv(myurl)
 ## )
 ```
 
+ 
+
 
 
 (b) Find a 95\% confidence interval for the mean birth weight of
@@ -342,6 +344,8 @@ t.test(bw$`Weight (pounds)`)
 ##   7.06875
 ```
 
+ 
+
 or (the same, but remember to match your brackets):
 
 
@@ -362,6 +366,8 @@ with(bw,t.test(`Weight (pounds)`))
 ## mean of x 
 ##   7.06875
 ```
+
+ 
 
 The confidence interval goes from 6.94 to 7.20 pounds.
 
@@ -463,6 +469,8 @@ ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 
 <img src="04-one-sample-inference_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
+ 
+
 So, we were assessing normality. What about that?
 
 It is mostly normal-looking, but I am suspicious about those
@@ -485,6 +493,8 @@ ggplot(bw,aes(sample=`Weight (pounds)`))+stat_qq()+stat_qq_line()
 ```
 
 <img src="04-one-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+
+ 
 
 This is rather striking: the lowest birthweights (the ones below 5
 pounds or so) are *way* too low for a normal distribution to
@@ -529,7 +539,7 @@ be as much as \$300,000.
 Because so much money is at stake, and because the exact same tripod
 is placed at the exact same spot on the ice every year, the data are
 consistent and accurate. The data are in
-[http://www.utsc.utoronto.ca/~butler/c32/nenana.txt](http://www.utsc.utoronto.ca/~butler/c32/nenana.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/nenana.txt). 
 
 Yes, we saw these data before.
 
@@ -560,6 +570,8 @@ nenana=read_tsv(myurl)
 ##   `Date&Time` = col_character()
 ## )
 ```
+
+       
 
 Use whatever name you like for the data frame. One that is different
 from any of the column headers is smart; then it is clear whether you
@@ -600,6 +612,8 @@ with(nenana,t.test(JulianDate,conf.level=0.90))
 ## mean of x 
 ##  125.5443
 ```
+
+       
 
 Between 124.5 and 126.6 days into the year. Converting that into
 something we can understand (because I want to), there are
@@ -651,6 +665,8 @@ with(nenana,t.test(JulianDate,mu=130,alternative="less"))
 ##  125.5443
 ```
 
+       
+
 For a test, look first at the P-value, which is 0.0000000002575: that
 is to say, the P-value is very small, definitely smaller than 0.05 (or
 any other $\alpha$ you might have chosen). So we *reject* the
@@ -692,6 +708,8 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 
 <img src="04-one-sample-inference_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
+ 
+
 There was something obvious to see: after about 1960, there is a clear
 downward trend: the ice is breaking up earlier on average every
 year. Even though there is a lot of variability, the overall trend,
@@ -721,6 +739,8 @@ geom_smooth(method="lm")
 ```
 
 <img src="04-one-sample-inference_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+
+ 
 
 Compare the confidence interval for the mean `JulianDate` in
 1920: 126 to 131 (the shaded area on the graph), with 2000: 121 to

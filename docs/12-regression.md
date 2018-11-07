@@ -826,8 +826,9 @@ context that you're talking about.  *By itself*,
 `tar` in the model}, `nicotine` is not
 important: precisely, it now has nothing to add over and above
 the predictive value that `tar` has. You might guess that
-this is because `tar` and `nicotine` are ``saying
-the same thing'' in some fashion. We'll explore that in a moment.
+this is because `tar` and `nicotine` are 
+"saying  the same thing" in some fashion. 
+We'll explore that in a moment.
 
 
 
@@ -3977,7 +3978,8 @@ summary()
 The second line is where the fun starts: `lm` wants the data
 frame as a `data=` at the end. So, to specify a data frame in
 something like `lm`, we have to use the special symbol
-`.`, which is another way to say "the data frame that came out of the previous step".
+`.`, which is another way to say 
+"the data frame that came out of the previous step".
 
 Got that? All right. The last line is a piece of cake in
 comparison. Normally `summary` would require a data frame or a
@@ -4082,7 +4084,7 @@ exp(0.05)
  
 
 or to increase salary by about 5\%.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mathematically,  $e^x simeq 1+x$ for small $x$, which winds up meaning that the  slope in a model like this, if it is small, indicates about the  percent increase in the response associated with a 1-unit change in  the explanatory variable. Note that this only works with $e^x$ and  natural logs, not base 10 logs or anything like that.</span>
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mathematically,  $e^x$ is approximately $1+x$ for small $x$, which winds up meaning that the  slope in a model like this, if it is small, indicates about the  percent increase in the response associated with a 1-unit change in  the explanatory variable. Note that this only works with $e^x$ and  natural logs, not base 10 logs or anything like that.</span>
 
 
 
@@ -4097,7 +4099,8 @@ is the volume of wood that it contains. This is difficult to estimate
 while the tree is still standing, but the diameter is easy to measure
 with a tape measure (to measure the circumference) and a calculation
 involving $\pi$, assuming that the cross-section of the tree is at
-least approximately circular.  The standard measurement is "diameter at breast height" 
+least approximately circular.  The standard measurement is
+"diameter at breast height" 
 (that is, at the height of a human breast or
 chest), defined as being 4.5 feet above the ground.
 
@@ -5450,8 +5453,8 @@ Supporting "kind of" is the fact that, though the regression
 line goes uphill, there are a lot of roller-coasters that are
 some way off the trend, far from the regression line.
 I am happy to go with either of those. I could also go with
-"not really" and the same discussion that I attached to ``kind
-of''. 
+"not really" and the same discussion that I attached to 
+"kind of". 
 
 
 
@@ -5521,8 +5524,8 @@ with some new columns that come from the regression), so I can feed it
 into a pipe to do things with it, like only displaying the columns I
 want, and arranging them in order by absolute value of residual, so
 that the roller-coasters further from the line come out first. This
-identifies the three that we found above. The fourth one, ``Ghost
-Rider'', is like Nitro in that it takes a (relatively) long time to
+identifies the three that we found above. The fourth one, "Ghost Rider", 
+is like Nitro in that it takes a (relatively) long time to
 fall not very far.
 You can also put `augment` in the *middle* of a pipe, but then
 you seem to lose things that were not in the regression:

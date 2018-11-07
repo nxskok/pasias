@@ -980,8 +980,8 @@ x
 ```
 
 ```
-##  [1] 52.37274 31.42856 53.93437 44.60677 84.75210 43.34644 62.58897
-##  [8] 50.14886 39.24088 46.83320
+##  [1] 31.84188 68.99242 74.64999 78.73128 31.94940 14.73812 54.10962
+##  [8] 38.24210 49.75730 65.17563
 ```
 
 
@@ -1005,8 +1005,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        8
-## 2 TRUE         2
+## 1 FALSE        6
+## 2 TRUE         4
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1040,7 +1040,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       2 FALSE
+## 1       4 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1060,7 +1060,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       2 FALSE
+## 1       4 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -2293,8 +2293,8 @@ observations are just fine.
 (d) Run Mood's median test as in class (*without* using
 `smmr`). What do you conclude, in the context of the data?
 What recommendation would you make about the time of day to see the
-video?  (You might get a warning about ``chisquared approximation
-being incorrect'', which you can ignore here.)
+video?  (You might get a warning about "chisquared approximation  being incorrect", 
+which you can ignore here.)
 
 
 Solution
@@ -2340,8 +2340,8 @@ tab
 Then, chi-squared test for independence (the null) or association of
 some kind (the alternative). The `correct=F` is saying not to
 do Yates's correction, so that it would come out the same if you were
-doing it by hand (``observed minus expected, squared, divided by
-expected'' and all that stuff).
+doing it by hand ("observed minus expected, squared, divided by expected" 
+and all that stuff).
 
 
 ```r

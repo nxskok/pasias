@@ -28,7 +28,7 @@ library(tidyverse)
 
 
  The data in file
-[http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
+[link](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
 500 randomly chosen births of babies in North Carolina. There is a lot
 of information: not just the weight at birth of the baby, but whether
 the baby was born prematurely, the ages of the parents, whether the
@@ -69,6 +69,8 @@ bw=read_csv(myurl)
 ## )
 ```
 
+ 
+
 This shows you which variables the data set has (some of the names got
 a bit mangled), and it shows you that they are all integers except for
 the birth weight (a decimal number).
@@ -100,6 +102,8 @@ bw
 ## #   (pounds)` <dbl>, `Premie?` <int>, `Few Visits?` <int>
 ```
 
+ 
+
 or you can take a "glimpse" of it:
 
 
@@ -121,6 +125,8 @@ glimpse(bw)
 ## $ `Premie?`              <int> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, ...
 ## $ `Few Visits?`          <int> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, ...
 ```
+
+ 
 Either of these displays show that there are 500 rows  (observations,
 here births) and 10 columns (variables), and they both show what the
 variables are called. So they're both good as an answer to the
@@ -196,6 +202,8 @@ ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
+ 
+
 which is perfectly acceptable. You can try something a bit more or a
 bit less, and see how you like it in comparison. What you are looking
 for is a nice clear picture of *shape*. If you have too few bins,
@@ -207,6 +215,8 @@ ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
 ```
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+
+ 
 
 (is that leftmost bin an indication of skewness or some observations
 that happen to be smallish?)
@@ -222,6 +232,8 @@ ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
+ 
+
 I generally am fairly relaxed about the number of bins you use, as
 long as it's not clearly too few or too many. You might have done
 exercises in the past that illustrate that the choice of number of
@@ -230,7 +242,7 @@ which is another issue that I won't explore here) can make an
 appreciable difference to how a histogram looks.
 Extra: I had some thoughts about this issue that I put in a blog
 post, that you might like to read:
-[http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/](http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/). The
+[link](http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/). The
 nice thing about Sturges' rule, mentioned there, is that you can
 almost get a number of bins for your histogram in your head (as long
 as you know the powers of 2, that is). What you do is to start with
@@ -247,6 +259,8 @@ nclass.Sturges(bw$`Weight (pounds)`)
 ```
 ## [1] 10
 ```
+
+ 
 
 The place where Sturges' rule comes from is an assumption of normal
 data (actually a binomial approximation to the normal, backwards
@@ -286,6 +300,8 @@ ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
+ 
+
 R also has
 
 
@@ -297,6 +313,8 @@ nc
 ```
 ## [1] 26
 ```
+
+ 
 
 which turns the Freedman-Diaconis rule into a number of bins rather
 than a binwidth; using that gives the same histogram as we got with `binwidth`.
@@ -313,6 +331,8 @@ ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
 ```
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+
+ 
 
 `geom_density` has an optional parameter that controls how smooth
 or wiggly the picture is, but the default is usually good.
@@ -345,6 +365,8 @@ ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 ```
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+
+ 
 
 The high weight is actually an outlier, but look at all those outliers
 at the bottom!
@@ -624,7 +646,7 @@ be as much as \$300,000.
 Because so much money is at stake, and because the exact same tripod
 is placed at the exact same spot on the ice every year, the data are
 consistent and accurate. The data are in
-[http://www.utsc.utoronto.ca/~butler/c32/nenana.txt](http://www.utsc.utoronto.ca/~butler/c32/nenana.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/nenana.txt). 
 
 
 
@@ -652,6 +674,8 @@ nenana=read_tsv(myurl)
 ##   `Date&Time` = col_character()
 ## )
 ```
+
+       
 
 Use whatever name you like for the data frame. One that is different
 from any of the column headers is smart; then it is clear whether you
@@ -692,6 +716,8 @@ x=read_delim(myurl," ")
 ## See problems(...) for more details.
 ```
 
+ 
+
 Ouch! A hint as to what went wrong comes from looking at the read-in
 data frame:
 
@@ -716,6 +742,8 @@ x
 ## 10 "1926\t116.6691\tApril"      
 ## # ... with 77 more rows
 ```
+
+ 
 
 Those `t` symbols mean "tab character", which is our hint that
 the values were separated by tabs rather than spaces.
@@ -743,6 +771,8 @@ problems(x)
 ## 10    10 <NA>  1 columns 5 colum… 'http://www.utsc.utoronto.ca/~butler/c3…
 ## # ... with 77 more rows
 ```
+
+ 
 
 The first line of the data file (with the variable names in it) had no
 spaces, only tabs, so `read_delim` thinks there is *one*
@@ -786,6 +816,8 @@ nenana
 ## 10  1926       117. April 26 at 4:03 PM 
 ## # ... with 77 more rows
 ```
+
+       
 Alternatively, you can take a `glimpse` of it:
 
 
@@ -800,6 +832,8 @@ glimpse(nenana)
 ## $ JulianDate  <dbl> 120.4795, 131.3983, 123.6066, 132.4490, 131.2795, ...
 ## $ `Date&Time` <chr> "April 30 at 11:30 AM", "May 11 at 9:33 AM", "May ...
 ```
+
+ 
 
 There are 87 years, and 3 columns (variables).
 The first column is year, and the last
@@ -833,6 +867,8 @@ ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
+       
+
 Note that you need to type `JulianDate` exactly as it
 appears, capital letters and all. R is case-sensitive.
 
@@ -850,6 +886,8 @@ ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
 ```
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+
+ 
 
 That hugs the line pretty well, so I would call it close to
 normally-distributed. It bulges away from the line because there are
@@ -900,11 +938,13 @@ mutate(datetime=ymd_hm(longdt,tz="America/Anchorage"))
 ## # ... with 77 more rows
 ```
 
+ 
+
 I am not doing any further analysis with these, so just displaying them is good. 
 
 I have to do a preliminary step to get the date-times *with* their year in one place. `str_c` glues pieces of text together: in this case, the year, a space, and then the rest of the 
-`Date&Time-. I stored this in \verb-longdt-. The second verb-mutate- is the business end of it: verb-ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date`time. Note that the AM/PM was handled properly.
-The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the `lubridate- function is called verb-yday` for "day of year"):
+`Date&Time`. I stored this in `longdt`. The second `mutate` is the business end of it: `ymd_hm` takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
+The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the `lubridate` function is called `yday` for "day of year"):
 
 
 ```r
@@ -933,7 +973,10 @@ nenana2 %>% select(JulianDate,jd,datetime)
 ## # ... with 77 more rows
 ```
 
-Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. `round` rounds off to the nearest integer (since these are actually decimal numbers):
+ 
+
+Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. `round` 
+rounds off to the nearest integer (since these are actually decimal numbers):
 
 
 ```r
@@ -959,11 +1002,13 @@ select(JulianDate,jd,datetime)
 ## # ... with 51 more rows
 ```
 
+
+
 The ones shown here are all *after noon*, and the Julian date in
 the data file appears as one more than the one calculated by
 `lubridate`. What has actually happened is a quirk of how tibbles
 are displayed: they show 3 significant digits, *rounded*. The
-Julian dates given by `yday- are the whole`number part, so the
+Julian dates given by `yday` are the whole-number part, so the
 ones in the data value are that plus more than 0.5, which will round
 *up*. The first line of code below displays 6 significant digits
 rather than only three:
@@ -993,7 +1038,9 @@ select(JulianDate,jd,datetime)
 ## # ... with 51 more rows
 ```
 
-Displaying more decimals shows that I was right: `jd- is (to this accuracy) a whole number, but verb-JulianDate` is a decimal with fractional part greater than 0.50.
+
+
+Displaying more decimals shows that I was right: `jd` is (to this accuracy) a whole number, but `JulianDate` is a decimal with fractional part greater than 0.50.
 
 Now I have to turn the extra signficant digits off:
 
@@ -1001,6 +1048,8 @@ Now I have to turn the extra signficant digits off:
 ```r
 options(pillar.sigfig=3)
 ```
+
+
 
 
 
@@ -1020,6 +1069,8 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
 ```
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+
+ 
 This is actually a small-but-real downward trend, especially since
 about 1960, 
 but the large amount
@@ -1041,6 +1092,8 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 ```
 
 <img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+
+ 
 
 This is R's version of a trend that is not constrained
 to be linear (so that it "lets the data speak for itself").

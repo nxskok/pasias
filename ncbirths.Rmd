@@ -2,7 +2,7 @@
 
 
  The data in file
-[http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
+[link](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
 500 randomly chosen births of babies in North Carolina. There is a lot
 of information: not just the weight at birth of the baby, but whether
 the baby was born prematurely, the ages of the parents, whether the
@@ -24,7 +24,9 @@ than downloading the file, unless you are working offline):
 ```{r }
 myurl="http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv"
 bw=read_csv(myurl)
-``` 
+```
+
+ 
 
 This shows you which variables the data set has (some of the names got
 a bit mangled), and it shows you that they are all integers except for
@@ -35,13 +37,17 @@ simply to list the data frame:
 
 ```{r }
 bw
-``` 
+```
+
+ 
 
 or you can take a "glimpse" of it:
 
 ```{r }
 glimpse(bw)
-``` 
+```
+
+ 
 Either of these displays show that there are 500 rows  (observations,
 here births) and 10 columns (variables), and they both show what the
 variables are called. So they're both good as an answer to the
@@ -112,7 +118,9 @@ that many if I don't have much data, and this is a decent general
 principle. That would give
 ```{r }
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
-``` 
+```
+
+ 
 
 which is perfectly acceptable. You can try something a bit more or a
 bit less, and see how you like it in comparison. What you are looking
@@ -121,7 +129,9 @@ you'll lose the shape:
 
 ```{r }
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
-``` 
+```
+
+ 
 
 (is that leftmost bin an indication of skewness or some observations
 that happen to be smallish?)
@@ -132,7 +142,9 @@ up and down:
 
 ```{r }
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
-``` 
+```
+
+ 
 
 I generally am fairly relaxed about the number of bins you use, as
 long as it's not clearly too few or too many. You might have done
@@ -142,7 +154,7 @@ which is another issue that I won't explore here) can make an
 appreciable difference to how a histogram looks.
 Extra: I had some thoughts about this issue that I put in a blog
 post, that you might like to read:
-[http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/](http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/). The
+[link](http://ritsokiguess.site/docs/2017/06/08/histograms-and-bins/). The
 nice thing about Sturges' rule, mentioned there, is that you can
 almost get a number of bins for your histogram in your head (as long
 as you know the powers of 2, that is). What you do is to start with
@@ -153,7 +165,9 @@ it for you:
 
 ```{r }
 nclass.Sturges(bw$`Weight (pounds)`)
-``` 
+```
+
+ 
 
 The place where Sturges' rule comes from is an assumption of normal
 data (actually a binomial approximation to the normal, backwards
@@ -181,14 +195,18 @@ bin width, so we can use it as follows:
 w=2*IQR(bw$`Weight (pounds)`)*500^(-1/3)
 w
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
-``` 
+```
+
+ 
 
 R also has
 
 ```{r }
 nc=nclass.FD(bw$`Weight (pounds)`)
 nc
-``` 
+```
+
+ 
 
 which turns the Freedman-Diaconis rule into a number of bins rather
 than a binwidth; using that gives the same histogram as we got with `binwidth`.
@@ -201,7 +219,9 @@ Another way to go is a "density plot". This is a smoothed-out version of a histo
 
 ```{r }
 ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
-``` 
+```
+
+ 
 
 `geom_density` has an optional parameter that controls how smooth
 or wiggly the picture is, but the default is usually good.
@@ -230,7 +250,9 @@ quantitative variable. You can draw a boxplot for that, too, but the
 
 ```{r }
 ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
-``` 
+```
+
+ 
 
 The high weight is actually an outlier, but look at all those outliers
 at the bottom!

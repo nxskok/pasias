@@ -25,3 +25,5 @@ working on stuff from assignments 9/9a
 look at heat data
 
 rejig the crickets questions so less duplication
+
+bodyfat and bodyfat-sign duplication

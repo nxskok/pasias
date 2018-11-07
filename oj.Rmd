@@ -9,7 +9,7 @@ chemical measure such as the amount of water-soluble pectin (parts per
 million) in the
 orange juice? Data were obtained from 24 production runs, and the
 sweetness and pectin content were measured for each run. The data are
-in [http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt](http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt). Open that
+in [link](http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt). Open that
 link up now. You can click on that link just above to open the file.
 
 
@@ -26,18 +26,22 @@ Start with this (almost always):
 
 ```{r }
 library(tidyverse)
-``` 
+```
+
+ 
 
 The appropriate function, the data values being separated by a space,
 will be `read_delim`. Put the URL as the first thing in
 `read_delim`, or (better) define it into a variable
 first:
-`r tufte::margin_note("I say *better* because otherwise the read_delim gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*")`
+`r tufte::margin_note("I say *better* because otherwise the read line gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*")`
 
 ```{r }
 url="http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt"
 juice=read_delim(url," ")
-``` 
+```
+
+ 
 
 `read_delim` (or `read_csv` or any of the others) tell
 you what variables were read in, and also tell you about any "parsing errors" 
@@ -68,7 +72,9 @@ you how many lines there are altogether, and you can click on
 the appropriate thing to see the rest of it.
 ```{r }
 juice  
-``` 
+```
+
+ 
 
 I appear to have all the data. If you want further convincing, click
 Next a couple of times (on yours) to be sure that the runs go down to
@@ -104,7 +110,9 @@ you could read the same data but call the columns `x` and
 
 ```{r }
 read_delim("a.txt"," ",col_names=c("x","y"),skip=1)
-```         
+```
+
+         
 
 
 
@@ -127,7 +135,9 @@ to get the variables from),  and the "how to plot" is
 `geom_point` to plot the points:
 ```{r }
 ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()
-```         
+```
+
+         
 
 It looks to me as if there is a negative relationship: as pectin goes
 up, sweetness tends to go *down*. The trend appears to go top
@@ -140,7 +150,9 @@ lot less convincing. As an extra, you could add a smooth trend to the plot:
 
 ```{r }
 ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()+geom_smooth()
-```         
+```
+
+         
 The smooth trend is kind of downhill, but not very convincing.
 
 

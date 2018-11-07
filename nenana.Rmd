@@ -13,7 +13,7 @@ be as much as \$300,000.
 Because so much money is at stake, and because the exact same tripod
 is placed at the exact same spot on the ice every year, the data are
 consistent and accurate. The data are in
-[http://www.utsc.utoronto.ca/~butler/c32/nenana.txt](http://www.utsc.utoronto.ca/~butler/c32/nenana.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/nenana.txt). 
 
 
 
@@ -30,7 +30,9 @@ thing, as for the Australian athletes:
 ```{r }
 myurl="http://www.utsc.utoronto.ca/~butler/c32/nenana.txt"
 nenana=read_tsv(myurl)
-```       
+```
+
+       
 
 Use whatever name you like for the data frame. One that is different
 from any of the column headers is smart; then it is clear whether you
@@ -49,14 +51,18 @@ recognizing that the actual separator is a tab:
 
 ```{r }
 x=read_delim(myurl," ")
-``` 
+```
+
+ 
 
 Ouch! A hint as to what went wrong comes from looking at the read-in
 data frame:
 
 ```{r }
 x
-``` 
+```
+
+ 
 
 Those `t` symbols mean "tab character", which is our hint that
 the values were separated by tabs rather than spaces.
@@ -65,7 +71,9 @@ More detail (if you can bear to see it) is here:
 
 ```{r }
 problems(x)
-``` 
+```
+
+ 
 
 The first line of the data file (with the variable names in it) had no
 spaces, only tabs, so `read_delim` thinks there is *one*
@@ -90,12 +98,16 @@ Solution
 The easiest is just to display the tibble:
 ```{r }
 nenana
-```       
+```
+
+       
 Alternatively, you can take a `glimpse` of it:
 
 ```{r }
 glimpse(nenana)
-``` 
+```
+
+ 
 
 There are 87 years, and 3 columns (variables).
 The first column is year, and the last
@@ -124,7 +136,9 @@ you, any not-insane number of bins will do, or any not-insane
 bin width, if you want to go that way:
 ```{r }
 ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
-```       
+```
+
+       
 
 Note that you need to type `JulianDate` exactly as it
 appears, capital letters and all. R is case-sensitive.
@@ -139,7 +153,9 @@ We haven't done normal quantile plots yet, but looking ahead:
 
 ```{r }
 ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
-``` 
+```
+
+ 
 
 That hugs the line pretty well, so I would call it close to
 normally-distributed. It bulges away from the line because there are
@@ -156,13 +172,15 @@ library(lubridate)
 nenana %>% 
 mutate(longdt=str_c(Year," ",`Date&Time`)) %>%
 mutate(datetime=ymd_hm(longdt,tz="America/Anchorage"))
-``` 
+```
+
+ 
 
 I am not doing any further analysis with these, so just displaying them is good. 
 
 I have to do a preliminary step to get the date-times *with* their year in one place. `str_c` glues pieces of text together: in this case, the year, a space, and then the rest of the 
-`Date&Time-. I stored this in \verb-longdt-. The second verb-mutate- is the business end of it: verb-ymd_hm- takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date`time. Note that the AM/PM was handled properly.
-The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the `lubridate- function is called verb-yday` for "day of year"):
+`Date&Time`. I stored this in `longdt`. The second `mutate` is the business end of it: `ymd_hm` takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
+The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the `lubridate` function is called `yday` for "day of year"):
 
 ```{r }
 nenana %>% 
@@ -171,9 +189,12 @@ mutate(datetime=ymd_hm(longdt,tz="America/Anchorage")) %>%
 mutate(jd=yday(datetime)) ->
 nenana2
 nenana2 %>% select(JulianDate,jd,datetime)
-``` 
+```
 
-Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. `round` rounds off to the nearest integer (since these are actually decimal numbers):
+ 
+
+Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. `round` 
+rounds off to the nearest integer (since these are actually decimal numbers):
 
 ```{r }
 nenana2 %>% 
@@ -181,11 +202,13 @@ filter(round(JulianDate) != round(jd)) %>%
 select(JulianDate,jd,datetime)
 ```
 
+
+
 The ones shown here are all *after noon*, and the Julian date in
 the data file appears as one more than the one calculated by
 `lubridate`. What has actually happened is a quirk of how tibbles
 are displayed: they show 3 significant digits, *rounded*. The
-Julian dates given by `yday- are the whole`number part, so the
+Julian dates given by `yday` are the whole-number part, so the
 ones in the data value are that plus more than 0.5, which will round
 *up*. The first line of code below displays 6 significant digits
 rather than only three:
@@ -197,13 +220,17 @@ filter(round(JulianDate) != round(jd)) %>%
 select(JulianDate,jd,datetime)
 ```
 
-Displaying more decimals shows that I was right: `jd- is (to this accuracy) a whole number, but verb-JulianDate` is a decimal with fractional part greater than 0.50.
+
+
+Displaying more decimals shows that I was right: `jd` is (to this accuracy) a whole number, but `JulianDate` is a decimal with fractional part greater than 0.50.
 
 Now I have to turn the extra signficant digits off:
 
 ```{r }
 options(pillar.sigfig=3)
 ```
+
+
 
 
 
@@ -219,7 +246,9 @@ Solution
 
 ```{r }
 ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
-``` 
+```
+
+ 
 This is actually a small-but-real downward trend, especially since
 about 1960, 
 but the large amount
@@ -233,7 +262,9 @@ You can even add to the `ggplot`, by putting a smooth trend on it:
 
 ```{r }
 ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
-``` 
+```
+
+ 
 
 This is R's version of a trend that is not constrained
 to be linear (so that it "lets the data speak for itself").

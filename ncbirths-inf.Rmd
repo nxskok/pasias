@@ -2,7 +2,7 @@
 
 
  The data in file
-[http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
+[link](http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv) are about
 500 randomly chosen births of babies in North Carolina. There is a lot
 of information: not just the weight at birth of the baby, but whether
 the baby was born prematurely, the ages of the parents, whether the
@@ -24,7 +24,9 @@ than downloading the file, unless you are working offline):
 ```{r }
 myurl="http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv"
 bw=read_csv(myurl)
-``` 
+```
+
+ 
 
 
 
@@ -46,13 +48,17 @@ This:
 
 ```{r }
 t.test(bw$`Weight (pounds)`)  
-``` 
+```
+
+ 
 
 or (the same, but remember to match your brackets):
 
 ```{r }
 with(bw,t.test(`Weight (pounds)`))
-``` 
+```
+
+ 
 
 The confidence interval goes from 6.94 to 7.20 pounds.
 
@@ -97,7 +103,7 @@ alternative, which we need to feed into `t.test`:
 
 ```{r }
 t.test(bw$`Weight (pounds)`,mu=7.3,alternative="less")
-``` 
+```
 $ %$ 
 
 Or with `with`. If you see what I mean.
@@ -134,7 +140,9 @@ I'll just reproduce my 10-bin histogram (which is what I preferred,
 but this is a matter of taste):
 ```{r }
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
-``` 
+```
+
+ 
 
 So, we were assessing normality. What about that?
 
@@ -154,7 +162,9 @@ the idea in class. Here's the normal quantile plot for these data:
 
 ```{r }
 ggplot(bw,aes(sample=`Weight (pounds)`))+stat_qq()+stat_qq_line()
-``` 
+```
+
+ 
 
 This is rather striking: the lowest birthweights (the ones below 5
 pounds or so) are *way* too low for a normal distribution to
