@@ -7,7 +7,7 @@ researchers recorded 93 drivers who were parallel-parking their car in
 downtown Toronto, and for each driver, recorded the distance between
 the car and the curb, in inches, when the driver was finished parking
 their car. The data are in an Excel spreadsheet,
-[http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx](http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx). (Let me
+[link](http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx). (Let me
 know if you cannot handle this format.) Click on the link. The data
 will probably download automatically. Check the folder on your
 computer where things get downloaded.
@@ -90,7 +90,9 @@ Here is how you can use `download.file` here:
 my_url='http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx'
 local="parking.xlsx"
 download.file(my_url, local, mode="wb")
-```         
+```
+
+         
 
 When you've gotten the spreadsheet into your project folder via one of
 those two ways, you go ahead and do this:      
@@ -98,7 +100,9 @@ those two ways, you go ahead and do this:
 library(readxl)
 parking=read_excel("parking.xlsx",sheet=2)
 parking
-```       
+```
+
+       
 
 You have to do it this way, using the version of the spreadsheet on
 your computer, since `read_excel` won't take a
@@ -118,7 +122,9 @@ you and explain:
 tf=tempfile()
 download.file(my_url, tf, mode="wb")
 p=read_excel(tf, sheet = 2)
-``` 
+```
+
+ 
 
 What `tempfile()` does is to create a temporary file to hold the
 spreadsheet that you are about to download. After downloading the
@@ -137,7 +143,7 @@ like Notepad), and "binary" that you can't look at directly, but for
 which you need special software like Word or Excel to decode it for
 you.
 `r tufte::margin_note("A Word or Excel document has all kinds of formatting  information hidden in the file as well as the text that you see on  the screen.")`  
-The first character in \textt{mode} is either
+The first character in `mode` is either
 `w` for "write a new file", which is what we want here, or
 `a` for "append", which would mean adding to the end of a
 file that already exists. Thus `mode="wb"` means 
@@ -156,7 +162,9 @@ Then I read this into R thus:
 ```{r }
 parking2=read_csv("parking2.csv")
 parking2
-```       
+```
+
+       
 
 The read-in data frame `parking` 
 has 93 rows ($47+46=93$ drivers) and two columns: the distance from
@@ -173,7 +181,9 @@ how many of each, which you could do this way:
 
 ```{r }
 parking %>% count(gender)
-``` 
+```
+
+ 
 
 
 
@@ -188,7 +198,9 @@ Solution
 With the right data set, this is a piece of cake:
 ```{r }
 ggplot(parking,aes(x=gender,y=distance))+geom_boxplot()
-```         
+```
+
+         
 
 The outcome variable is distance from the curb, so smaller should be
 better (more accurate parking). With that in mind, the median for
@@ -205,7 +217,9 @@ the distances, without distinguishing by gender:
 
 ```{r }
 ggplot(parking,aes(x=distance))+geom_histogram(bins=8)
-``` 
+```
+
+ 
 
 That big outlier is the very inaccurate male driver.
 
@@ -219,7 +233,9 @@ the code first, and then explain how it works:
 ggplot(parking,aes(x=distance))+
 geom_histogram(bins=7)+
 facet_grid(gender~.)
-``` 
+```
+
+ 
 
 `facet_grid` takes a "model formula" with a squiggle, with $y$
 on the left and $x$ on the right. We want to compare our two
@@ -243,7 +259,9 @@ for comparing distributions). You can make it work by using
 ggplot(parking,aes(x=distance))+
 geom_histogram(bins=7)+
 facet_wrap(~gender,ncol=1)
-``` 
+```
+
+ 
 
 The centres of both histograms are somewhere around 10, so it's hard
 to see any real difference between males and females here. Maybe this
@@ -264,7 +282,9 @@ you don't have anything else to put there, you put a dot. Here's my
 ggplot(parking,aes(x=distance))+
 geom_histogram(bins=7)+
 facet_grid(gender~.)
-``` 
+```
+
+ 
 
 We wanted gender to go up and down, and we had nothing to go left and
 right, hence the dot. Contrast that with my `facet_wrap`
@@ -275,7 +295,9 @@ code:
 ggplot(parking,aes(x=distance))+
 geom_histogram(bins=7)+
 facet_wrap(~gender)
-``` 
+```
+
+ 
 
 This says "make a separate facet for each gender", but it doesn't
 say anything about how to arrange them.
@@ -288,7 +310,9 @@ observations, so we should use this many bins:
 ```{r }
 sturges=log(95,2)+1
 sturges
-``` 
+```
+
+ 
 
 Round this up to 8. (The second thing in `log` is the base of
 the logs, if you specify it, otherwise it defaults to $e$ and gives
@@ -299,7 +323,9 @@ Or:
 
 ```{r }
 with(parking,nclass.Sturges(distance))
-``` 
+```
+
+ 
 Sturges' rule tends to produce not enough bins if $n$ is small, so be
 prepared to increase it a bit if you don't have much data.
 I think that gives a fairly bare-bones picture of the shape: skewed to
@@ -309,13 +335,17 @@ The other rule we saw was Freedman-Diaconis:
 
 ```{r }
 with(parking, nclass.FD(distance))
-``` 
+```
+
+ 
 
 and that leads to this histogram: 
 
 ```{r }
 ggplot(parking,aes(x=distance))+geom_histogram(bins=14)
-``` 
+```
+
+ 
 
 That gives rather more detail (a lot more bars: the binwidth in the
 Sturges-rule histogram is about 7, or twice what you see here), but in
@@ -330,7 +360,9 @@ compromise. For example, using Sturges' rule based on 47 observations
 
 ```{r }
 log(47,2)+1
-``` 
+```
+
+ 
 
 and so each facet should have that many bins, rounded up. That's where
 I got my 7 for the facetted histogram from. This one doesn't work
@@ -343,7 +375,9 @@ up. To do *that*, `filter` one of the genders first:
 parking %>%
 filter(gender=="female") %>%
 with(.,nclass.Sturges(distance))
-``` 
+```
+
+ 
 
 I used the "dot" trick again, which you can read as "it": "from `parking`, take only the rows for the females, and with it, give me the number of bins for a histogram by Sturges' rule."
 
@@ -399,7 +433,9 @@ Solution
  comparing the heights of the boxes on the boxplots:
 ```{r }
 t.test(distance~gender,data=parking)
-```  
+```
+
+  
 
 This is the Welch-Satterthwaite version of the test, the one that does
 not assume equal SDs in the two groups. The P-value of 0.1894 is not
@@ -410,7 +446,9 @@ Or, this being the pooled one:
 
 ```{r }
 t.test(distance~gender,data=parking,var.equal=T)
-``` 
+```
+
+ 
 
 You might have thought, looking at the boxplots, that the groups had
 about the same SD (based, for example, on noting that the two boxes
@@ -456,6 +494,8 @@ of gender:
 parking %>% summarize(med=median(distance))
 ```
 
+
+
 The overall median is 9.
 
 Count up how many distances of each gender were above or below the
@@ -466,7 +506,9 @@ of exposition.)
 ```{r }
 tab=with(parking,table(gender,distance<9))
 tab
-``` 
+```
+
+ 
 
 For example, 19 of the male drivers had a distance (strictly) less than 9.
 Both genders are pretty close to 50--50 above and below the overall
@@ -476,7 +518,9 @@ if you know that):
 
 ```{r }
 chisq.test(tab,correct=F)
-``` 
+```
+
+ 
 
 This is even less significant (P-value 0.3453) than the two-sample
 $t$-test, and so is consistent with our conclusion from before that
