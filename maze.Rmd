@@ -5,7 +5,7 @@
  A researcher is trying to design a maze that can be run by
 rats in about 60 seconds. One particular maze was run by a sample of
 21 rats, with the times shown in
-[http://www.utsc.utoronto.ca/~butler/c32/maze.txt](http://www.utsc.utoronto.ca/~butler/c32/maze.txt). 
+[link](http://www.utsc.utoronto.ca/~butler/c32/maze.txt). 
 
 
 
@@ -23,7 +23,9 @@ a space, or a comma (the file can also be treated as a
 myurl="http://www.utsc.utoronto.ca/~butler/c32/maze.txt"
 times=read_delim(myurl," ")
 times
-``` 
+```
+
+ 
 
 
 
@@ -43,26 +45,34 @@ Count how many values are above and below 60:
 
 ```{r }
 times %>% count(time>60)
-``` 
+```
+
+ 
 5 above and 16 below. Then find out how likely it is that a binomial
 with $n=21, p=0.5$ would produce 5 or fewer successes:
 
 ```{r }
 p=sum(dbinom(0:5,21,0.5))
 p
-``` 
+```
+
+ 
 
 or if you prefer count upwards from 16:
 
 ```{r }
 sum(dbinom(16:21,21,0.5))
-``` 
+```
+
+ 
 
 and double it to get a two-sided P-value:
 
 ```{r }
 2*p  
-``` 
+```
+
+ 
 
 We'll compare this with `smmr` in a moment.
 
@@ -76,21 +86,27 @@ by going to the console and typing
 
 ```{r eval=F}
 install.packages("devtools")
-``` 
+```
+
+ 
 
 When that's all done, install `smmr` thus:
 
 ```{r eval=F}
 library(devtools)
 install_github("nxskok/smmr")
-``` 
+```
+
+ 
 
 That all needs to be done only once. Then, each R Studio session where
 you want to use `smmr` needs this:
 
 ```{r }
 library(smmr)
-``` 
+```
+
+ 
 
 As usual, only the `library` thing only needs to be done every
 time. 
@@ -109,7 +125,9 @@ null median (which defaults to 0 if you omit it):
 ```{r }
 library(smmr)
 sign_test(times,time,60)
-```     
+```
+
+     
 
 This shows you two things: a count of the values below and above the
 null median, and then the P-values according to the various
@@ -129,7 +147,9 @@ frame) and a null median, thus:
 
 ```{r }
 sign_test0(times$time,60)
-``` 
+```
+
+ 
 
 The output should be, and here is, identical.
 
@@ -149,7 +169,9 @@ Solution
 Try it and see:
 ```{r }
 pval_sign(60,times,time)
-```     
+```
+
+     
 
 The two-sided P-value, and that is all. We'll be using this in a minute.
 
@@ -158,7 +180,9 @@ Alternatively, there is also this, which needs a null median and a
 
 ```{r }
 pval_sign0(60,times$time)
-``` 
+```
+
+ 
 
 
 
@@ -188,7 +212,9 @@ the interval would be between 50 and 60:
 ```{r }
 pval_sign(58,times,time)
 pval_sign(55,times,time)
-``` 
+```
+
+ 
 
 So, 55 is inside the interval and 58 is outside. I could investigate
 further in similar fashion, but I thought I would try a whole bunch of null
@@ -199,7 +225,9 @@ meds=seq(55,58,0.25)
 meds
 pvals=map_dbl(meds,pval_sign,times,time)
 data.frame(meds,pvals)
-``` 
+```
+
+ 
 
 So values for the median all the way up to and including 57.5 are in
 the confidence interval.
@@ -230,7 +258,9 @@ Tidyverse-flavoured code, with the `map_dbl` inside a
 ```{r }
 tibble(meds=seq(55,58,0.25)) %>%
 mutate(pvals=map_dbl(meds,pval_sign,times,time)) 
-``` 
+```
+
+ 
 
 Now for the other end of the interval. I'm going to do this a
 different way: more efficient, but less transparent. The first thing I
@@ -240,7 +270,9 @@ one outside. Let's try 40 and 50:
 ```{r }
 pval_sign(40,times,time)
 pval_sign(50,times,time)
-``` 
+```
+
+ 
 
 OK, so 40 is outside and 50 is inside. So what do I guess for the next
 value to try? I could do something clever like assuming that the
@@ -252,7 +284,9 @@ halfway between the two values I tried before:
 
 ```{r }
 pval_sign(45,times,time)
-``` 
+```
+
+ 
 
 So, 45 is inside the interval, and my (slightly) improved guess at the
 bottom end of the interval is that it's between 40 and 45. So next, I
@@ -260,7 +294,9 @@ try halfway between *those*:
 
 ```{r }
 pval_sign(42.5,times,time)
-``` 
+```
+
+ 
 
 42.5 is outside, so the bottom end of the interval is between 42.5 and 45.
 
@@ -298,7 +334,9 @@ lo
 pval_sign(lo,times,time)
 hi
 pval_sign(hi,times,time)
-``` 
+```
+
+ 
 
 The loop stopped because 44.297 and 44.375 are less than 0.1
 apart. The first of those is outside the interval and the second is
@@ -321,7 +359,9 @@ meds=seq(55,58,0.25)
 meds
 pvals=map_dbl(meds,pval_sign0,times$time)
 data.frame(meds,pvals)
-``` 
+```
+
+ 
 
 Or adapt the idea I had above for bisection.
 All that was a lot of work, but I wanted you to see it all once, so that you
@@ -333,20 +373,24 @@ bisection idea, because I thought that would be more accurate.
 
 ```{r }
 ci_median(times,time)
-``` 
+```
+
+ 
 
 This is a more accurate interval than we got above. (The
 `while` loop for the bisection keeps going until the two
 guesses at the appropriate end of the interval are less than 0.01
 apart, by default.)
-`r tufte::margin_note("You can change this by adding something  like *tol=1e-4* to the end of your *ci_median*.")` 
+`r tufte::margin_note("You can change this by adding something like *tol=1e-4* to the end of your *ci_median*.")` 
 
 If you want some other confidence level, you add `conf.level`
 on the end, as you would for `t.test`:
 
 ```{r }
 ci_median(times,time,conf.level=0.75)
-``` 
+```
+
+ 
 
 A 75\% CI, just for fun. This is a shorter interval than the 95\% one,
 as it should be.
@@ -357,7 +401,9 @@ optional confidence level:
 ```{r }
 ci_median0(times$time)
 ci_median0(times$time,conf.level=0.75)
-``` 
+```
+
+ 
 
 with the same results. Try `ci_median` first, and if it
 doesn't work, try `ci_median0`.
