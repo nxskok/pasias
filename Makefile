@@ -4,4 +4,5 @@ rmds: carp.Rmd socwork.Rmd pinetrees.Rmd jays-dplyr.Rmd tomatoes.Rmd migraine.Rm
 	perl convert.pl $< > $@
 docs/index.html: index.Rmd
 	Rscript -e "bookdown::render_book('index.Rmd')"
-# Rscript -e "bookdown::render_book(\"index.Rmd\", output_format=\"bookdown::tufte_book2\")"
+pasias.pdf: index.Rmd
+	Rscript -e "bookdown::render_book(\"index.Rmd\", output_format=\"bookdown::tufte_book2\")"

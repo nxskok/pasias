@@ -1,5 +1,4 @@
-## Running a maze
-
+##  Running a maze
 
 
  A researcher is trying to design a maze that can be run by
@@ -146,7 +145,7 @@ requires as input a *column* of values (extracted from the data
 frame) and a null median, thus:
 
 ```{r }
-sign_test0(times$time,60)
+with(times, sign_test0(time,60))
 ```
 
  
@@ -179,7 +178,7 @@ Alternatively, there is also this, which needs a null median and a
 *column* as input:
 
 ```{r }
-pval_sign0(60,times$time)
+with(times, pval_sign0(60,time))
 ```
 
  
@@ -357,7 +356,7 @@ a column rather than a data frame and a column name:
 ```{r }
 meds=seq(55,58,0.25)
 meds
-pvals=map_dbl(meds,pval_sign0,times$time)
+pvals=map_dbl(meds,~with(times, pval_sign0(.,time)))
 data.frame(meds,pvals)
 ```
 
@@ -381,7 +380,7 @@ This is a more accurate interval than we got above. (The
 `while` loop for the bisection keeps going until the two
 guesses at the appropriate end of the interval are less than 0.01
 apart, by default.)
-`r tufte::margin_note("You can change this by adding something like *tol=1e-4* to the end of your *ci_median*.")` 
+`r tufte::margin_note("You can change this by adding something like *tol=1e-4* to the end of your *ci-median*.")` 
 
 If you want some other confidence level, you add `conf.level`
 on the end, as you would for `t.test`:
@@ -399,8 +398,8 @@ Likewise there is a `ci_median0` that takes a column and an
 optional confidence level:
 
 ```{r }
-ci_median0(times$time)
-ci_median0(times$time,conf.level=0.75)
+with(times, ci_median0(time))
+with(times, ci_median0(time,conf.level=0.75))
 ```
 
  
