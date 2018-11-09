@@ -607,8 +607,10 @@ and 4 variables.</li>
 <p>Yes, I have 25 observations on 4 variables indeed.</p>
 <p><code>read_delim</code> won’t work (try it and see what happens), because
 that would require the values to be separated by <em>exactly one</em> space.</p>
-<p>(b)??part:regone?? Run a regression to predict carbon monoxide from the other
-variables, and obtain a summary of the output.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Run a regression to predict carbon monoxide from the other
+variables, and obtain a summary of the output.</li>
+</ol>
 <p>Solution</p>
 <p>The word “summary” is meant to be a big clue that
 <code>summary</code> is what you need:</p>
@@ -634,10 +636,12 @@ variables, and obtain a summary of the output.</p>
 ## Residual standard error: 1.446 on 21 degrees of freedom
 ## Multiple R-squared:  0.9186, Adjusted R-squared:  0.907 
 ## F-statistic: 78.98 on 3 and 21 DF,  p-value: 1.329e-11</code></pre>
-<p>(c)??part:regtwo?? Which one of your explanatory variables would you
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Which one of your explanatory variables would you
 remove from this regression? Explain (very) briefly. Go ahead and
 fit the regression without it, and describe how the change in
-R-squared from the regression in (??part:regone??) was entirely predictable.</p>
+R-squared from the regression in (b) was entirely predictable.</li>
+</ol>
 <p>Solution</p>
 <p>First, the <span class="math inline">\(x\)</span>-variable to remove. The obvious candidate is
 <code>weight</code>, since it has easily the highest, and clearly
@@ -703,8 +707,10 @@ and all the same explanatory variables that we had before, except for
 <code>weight</code>. This is specified by a special kind of model formula
 where <code>.</code> means “whatever was there before”: in English,
 “same response and same explanatories except take out <code>weight</code>”.</p>
-<p>(d)??part:regthree?? Fit a regression predicting carbon monoxide from
-<code>nicotine</code> <em>only</em>, and display the summary.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Fit a regression predicting carbon monoxide from
+<code>nicotine</code> <em>only</em>, and display the summary.</li>
+</ol>
 <p>Solution</p>
 <p>As you would guess:</p>
 <div class="sourceCode" id="cb1048"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1048-1" data-line-number="1">cigs<span class="fl">.3</span>=<span class="kw">lm</span>(co<span class="op">~</span>nicotine,<span class="dt">data=</span>cigs)</a>
@@ -729,10 +735,10 @@ where <code>.</code> means “whatever was there before”: in English,
 ## F-statistic: 138.3 on 1 and 23 DF,  p-value: 3.312e-11</code></pre>
 <ol start="5" style="list-style-type: lower-alpha">
 <li><code>nicotine</code> was far from being significant in the model
-of (??part:regtwo??), and yet in the model of
-(??part:regthree??), it was <em>strongly</em> significant, and the
-R-squared value of (??part:regthree??) was almost as high as that
-of (??part:regtwo??). What does this say about the importance of
+of (c), and yet in the model of
+(d), it was <em>strongly</em> significant, and the
+R-squared value of (d) was almost as high as that
+of (c). What does this say about the importance of
 <code>nicotine</code> as an explanatory variable? Explain, as briefly as
 you can manage.</li>
 </ol>
@@ -1220,7 +1226,7 @@ a lot of temporary data frames.</li>
 <p>Solution</p>
 <p>Breathe, and then begin. <code>unite</code> creates new columns by
 joining together old ones:
-<label for="tufte-mn-62" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-62" class="margin-toggle"><span class="marginnote">As <em>str_c</em> or <em>paste</em> do, actually, but the advantage of <em>unite</em> is that it gets rid of the other columns, which you probably no longer need.</span></p>
+<label for="tufte-mn-62" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-62" class="margin-toggle"><span class="marginnote">As <em>str-c</em> or <em>paste</em> do, actually, but the advantage of <em>unite</em> is that it gets rid of the other columns, which you probably no longer need.</span></p>
 <div class="sourceCode" id="cb1083"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1083-1" data-line-number="1">crickets <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb1083-2" data-line-number="2"><span class="kw">unite</span>(exclamationis,X1<span class="op">:</span>X2) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1083-3" data-line-number="3"><span class="kw">unite</span>(niveus,X3<span class="op">:</span>X4) </a></code></pre></div>
@@ -1630,7 +1636,8 @@ accounting for temperature, which also makes a difference. (In the
 <span class="math inline">\(t\)</span>-test, the temperatures were all mixed up). What we also see is
 that the <span class="math inline">\(t\)</span>-interval is shifted up compared to the one from the
 regression. This is because the <span class="math inline">\(t\)</span>-interval conflates
-<label for="tufte-mn-68" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-68" class="margin-toggle"><span class="marginnote">Mixes up.} two things: the textsl{exclamationis</span> crickets do have a
+<label for="tufte-mn-68" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-68" class="margin-toggle"><span class="marginnote">Mixes up.</span>
+two things: the <em>exclamationis</em> crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
@@ -1753,9 +1760,11 @@ separated by tabs, which you will need to take into account:</p>
 <div class="sourceCode" id="cb1132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1132-1" data-line-number="1"><span class="kw">ggplot</span>(fb,<span class="kw">aes</span>(<span class="dt">x=</span>GMdensity,<span class="dt">y=</span>FBfriends))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="12-regression_files/figure-html/unnamed-chunk-56-1.png" width="672"  /></p>
-<p>(b)??part:scatterconc?? Describe what you see on your scatterplot: is there a
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Describe what you see on your scatterplot: is there a
 trend, and if so, what kind of trend is it? (Don’t get too taken in
-by the exact shape of your smooth trend.) Think “form, direction, strength”.</p>
+by the exact shape of your smooth trend.) Think “form, direction, strength”.</li>
+</ol>
 <p>Solution</p>
 <p>I’d say there seems to be a weak, upward, apparently linear
 trend. The points are not especially close to the trend, so I
@@ -1804,9 +1813,11 @@ awful, going with a correlation of</p>
 <p>which <em>would</em> look
 like as weak of a trend as we saw.
 <label for="tufte-mn-72" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-72" class="margin-toggle"><span class="marginnote">Correlations have to go up beyond 0.50 before they start looking at all interesting.</span></p>
-<p>(d)??part:regtest?? Is the slope of your regression line significantly
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Is the slope of your regression line significantly
 different from zero? What does that mean, in the context of the
-data?</p>
+data?</li>
+</ol>
 <p>Solution</p>
 <p>The P-value of the slope is 0.005, which is less than
 0.05. Therefore the slope <em>is</em> significantly different from
@@ -1822,7 +1833,7 @@ experiment. That also works, because it gets at the idea of
 reproducibility.</p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Are you surprised by the results of
-parts (??part:scatterconc??) and (??part:regtest??)? Explain briefly.</li>
+parts (b) and (d)? Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>I <em>am</em> surprised, because I thought the trend on the
@@ -1947,8 +1958,10 @@ commenting that the values appear to be correct will improve your report.</p>
 ##  8     8       81.3   6.4
 ##  9     9      142.    5.6
 ## 10    10      286.    6</code></pre>
-<p>(b)??scatter-one?? Create a scatterplot of ENE (response) against bodyweight
-(explanatory). Add a smooth trend to your plot.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Create a scatterplot of ENE (response) against bodyweight
+(explanatory). Add a smooth trend to your plot.</li>
+</ol>
 <p>Solution</p>
 <div class="sourceCode" id="cb1150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1150-1" data-line-number="1"><span class="kw">ggplot</span>(carp,<span class="kw">aes</span>(<span class="dt">x=</span>bodyweight,<span class="dt">y=</span>ENE))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
 <a class="sourceLine" id="cb1150-2" data-line-number="2"><span class="kw">geom_smooth</span>()</a></code></pre></div>
@@ -1967,8 +1980,10 @@ decreases. However, the decrease is rapid at first and then levels
 off, so the relationship is nonlinear. I want some kind of
 support for an assertion of non-linearity: anything that says that
 the slope or rate of decrease is not constant is good.</p>
-<p>(d)??linear?? Fit a straight line to the data, and obtain the R-squared
-for the regression.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Fit a straight line to the data, and obtain the R-squared
+for the regression.</li>
+</ol>
 <p>Solution</p>
 <p><code>lm</code>. The first stage is to fit the straight line, saving
 the result in a variable, and the second stage is to look at the
@@ -2013,7 +2028,7 @@ straight into <code>ggplot</code>:</p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Fit a parabola to the data (that is, including an
 <span class="math inline">\(x\)</span>-squared term). Compare the R-squared values for the models in
-this part and part (??linear??). Does that suggest that the parabola
+this part and part (d). Does that suggest that the parabola
 model is an improvement here over the linear model?</li>
 </ol>
 <p>Solution</p>
@@ -2071,7 +2086,7 @@ term has nothing to add over the linear model). This is rejected,
 so the squared term has <em>something</em> to add in terms of
 quality of prediction.</p>
 <ol start="8" style="list-style-type: lower-alpha">
-<li>Make the scatterplot of part (??scatter-one??), but add
+<li>Make the scatterplot of part (b), but add
 the fitted curve. Describe any way in which the curve fails to fit well.</li>
 </ol>
 <p>Solution</p>
@@ -2214,7 +2229,7 @@ knit it, play with it.</p>
 </div>
 <div id="sparrowhawks" class="section level2">
 <h2><span class="header-section-number">13.7</span> Sparrowhawks</h2>
-<p>??q:hawks?? One of nature’s patterns is the relationship
+<p>One of nature’s patterns is the relationship
 between the percentage of adult birds in a colony that return from the
 previous year, and the number of new adults that join the colony. Data
 for 13 colonies of sparrowhawks can be found at
@@ -3361,13 +3376,13 @@ difference in pulse rates between the two species is even
 clearer than it was before. To see an example, pick a
 temperature, and note that the mean pulse rate at that
 temperature seems to be at least 10 higher for
-, with a high degree of consistency.
+<em>exclamationis</em>, with a high degree of consistency.
 The <span class="math inline">\(t\)</span>-test mixed up all the pulse rates at all the different
 temperatures. Even though the conclusion was clear enough, it
 could be clearer if we incorporated temperature into the analysis.
 There was also a potential source of unfairness in that the
- crickets tended to be observed at higher
-temperatures than  crickets; since pulse rates
+<em>exclamationis</em> crickets tended to be observed at higher
+temperatures than <em>niveus</em> crickets; since pulse rates
 increase with temperature, the apparent difference in pulse
 rates between the species might have been explainable by one
 species being observed mainly in higher temperatures. This was
@@ -3377,7 +3392,8 @@ variables when you do your analysis.
 <label for="tufte-mn-85" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-85" class="margin-toggle"><span class="marginnote">And it shows the value of looking at relevant plots.</span> If the species had been
 observed at opposite temperatures, we might have
 concluded
-<label for="tufte-mn-86" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-86" class="margin-toggle"><span class="marginnote">Mistakenly.} that textsl{niveus</span> have the
+<label for="tufte-mn-86" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-86" class="margin-toggle"><span class="marginnote">Mistakenly.</span>
+that <em>niveus</em> have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
 comes out of the regression model with temperature.</p>
@@ -3420,11 +3436,11 @@ you know both temperature and species, you can predict the pulse rate
 almost exactly.</p>
 <p>In the regression output, the slope for species is about <span class="math inline">\(-10\)</span>. It is
 labelled <code>speciesniveus</code>. Since species is categorical,
-<code>lm</code> uses the first category, , as the
+<code>lm</code> uses the first category, <em>exclamationis</em>, as the
 baseline and expresses each other species relative to that. Since the
 slope is about <span class="math inline">\(-10\)</span>, it says that at any given temperature, the mean
-pulse rate for  is about 10 less than for
-. This is pretty much what the scatterplot told
+pulse rate for <em>niveus</em> is about 10 less than for
+<em>exclamationis</em>. This is pretty much what the scatterplot told
 us.</p>
 <p>We can go a little further here:</p>
 <div class="sourceCode" id="cb1274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1274-1" data-line-number="1"><span class="kw">confint</span>(pulse<span class="fl">.1</span>)</a></code></pre></div>
@@ -3442,7 +3458,8 @@ accounting for temperature, which also makes a difference. (In the
 <span class="math inline">\(t\)</span>-test, the temperatures were all mixed up). What we also see is
 that the <span class="math inline">\(t\)</span>-interval is shifted up compared to the one from the
 regression. This is because the <span class="math inline">\(t\)</span>-interval conflates
-<label for="tufte-mn-87" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-87" class="margin-toggle"><span class="marginnote">Mixes up.} two things: the textsl{exclamationis</span> crickets do have a
+<label for="tufte-mn-87" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-87" class="margin-toggle"><span class="marginnote">Mixes up.</span>
+two things: the <em>exclamationis</em> crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
@@ -3554,9 +3571,8 @@ less than zero, because the mathematics requires the overall
 <em>mean</em> residual to be zero, and the right-skewness would make the
 mean higher than the median.</p>
 <p>Is that non-normality really problematic? Well, I could look at the
-normal quantile plot of all the residuals together. This is the one
-without the line:</p>
-<div class="sourceCode" id="cb1284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1284-1" data-line-number="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">sample=</span>.resid))<span class="op">+</span><span class="kw">stat_qq</span>()</a></code></pre></div>
+normal quantile plot of all the residuals together:</p>
+<div class="sourceCode" id="cb1284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1284-1" data-line-number="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>,<span class="kw">aes</span>(<span class="dt">sample=</span>.resid))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="12-regression_files/figure-html/unnamed-chunk-138-1.png" width="672"  /></p>
 <p>There’s a little weirdness at the top, and a tiny indication of a
 curve (that would suggest a little right-skewedness), but not really
