@@ -10,7 +10,7 @@ library(tidyverse)
 ```
 
 ```
-## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0
@@ -51,7 +51,29 @@ Solution
 
 
 The data file looks like this:
-`timinput{bodyf`t.txt}
+
+```
+
+athlete xray ultrasound
+1 5.00 4.75
+2 7 3.75
+3 9.25 9
+4 12 11.75
+5 17.25 17
+6 29.5 27.5
+7 5.5 6.5
+8 6 6.75
+9 8 8.75
+10 8.5 9.5
+11 9.25 9.5
+12 11 12
+13 12 12.25
+14 14 15.5
+15 17 18
+16 18 18.25
+
+```
+
 The data are two measurements for each of the 16 athletes: that
 is, each athlete had their body fat percentage measured using
 *both* of the two methods. 
@@ -191,46 +213,7 @@ is no evidence of a difference in means; we can act as if the two
 methods produce the same mean body fat percentage. 
 That is to say, on this evidence we can use either method, whichever
 one is cheaper or more convenient.
-Extra: an informal way of seeing whether this is reasonable is to see how
-often the first value of the pair is larger, and how often the
-second. If the null hypothesis is true, there should be about a
-50--50 split, but if false, there should be a very uneven
-split. Here that would go like this:
 
-
-```r
-with(bodyfat,table(xray>ultrasound))
-```
-
-```
-## 
-## FALSE  TRUE 
-##    10     6
-```
-
- 
-
-or like this:
-
-
-```r
-bodyfat %>% count(xray>ultrasound)
-```
-
-```
-## # A tibble: 2 x 2
-##   `xray > ultrasound`     n
-##   <lgl>               <int>
-## 1 FALSE                  10
-## 2 TRUE                    6
-```
-
- 
-
-6 times the X-ray value was bigger, and 10 times the ultrasound value
-was. A pretty even split, so it's not surprising that we failed to
-reject the null. (You might recognize this as an informal version of
-the sign test.)
 
 
 
@@ -255,8 +238,7 @@ entirely consistent with not being able to reject the null.
 
 (f) Calculate the differences, and make a normal quantile plot of
 them. Is there any evidence that normality of differences fails?
-Explain briefly. (If we haven't gotten to normal quantile plots in
-class when you read this, make a different plot to assess this issue.)
+Explain briefly. 
 
 
 
@@ -270,15 +252,15 @@ use a pipeline: use a `mutate` to create the column of
 differences, and then pipe that into `ggplot`, omitting the
 data frame that would normally go first (the input data frame here
 is the new one with the differences in it, which doesn't have a
-name). I'll make a normal quantile plot in a moment, but if we
-haven't talked about that yet, the plot to make is a histogram:
+name). I'll make a normal quantile plot in a moment, but if you
+haven't seen that yet, the plot to make is a histogram:
 
 ```r
 bodyfat %>% mutate(diff=xray-ultrasound) %>%
 ggplot(aes(x=diff))+geom_histogram(bins=6)
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-4-1.png" width="672"  />
 
    
 
@@ -305,7 +287,7 @@ bodyfat %>% mutate(diff=xray-ultrasound) %>%
 ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
 
    
 This is showing a little evidence of skewness or outliers  (depending
@@ -1057,7 +1039,7 @@ mutate(diff=jan2017-jan2016) %>%
 ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
      
 
@@ -1351,7 +1333,7 @@ Then, not forgetting to use the data frame that we just made:
 ggplot(bodyfat2,aes(sample=diff))+stat_qq()+stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
+<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
    
 This is showing a little evidence of skewness or outliers  (depending

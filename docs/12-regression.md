@@ -10,7 +10,7 @@ library(tidyverse)
 ```
 
 ```
-## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0
@@ -1367,925 +1367,6 @@ come up again, so the question would not be materially changed.
 
 
 
-##  Mating songs in crickets
-
-
- Male tree crickets produce "mating songs" by rubbing their
-wings together to produce a chirping sound. It is hypothesized that
-female tree crickets identify males of the correct species by how fast
-(in chirps per second) the male's mating song is. This is called the
-"pulse rate".  Some data for two species of crickets are in
-[link](http://www.utsc.utoronto.ca/~butler/c32/crickets.txt). The
-columns, which are unlabelled, are temperature and pulse rate
-(respectively) for *Oecanthus exclamationis* (first two
-columns) and *Oecanthus niveus* (third and fourth columns). The
-columns are separated by tabs. There are some missing values in the
-first two columns because fewer *exclamationis* crickets than
-*niveus* crickets were measured.
-The research question is whether males
-of the different species have different average pulse rates. It is
-also of interest to see whether temperature has an effect, and if
-so, what.
-
-
-(a) Read in the data, allowing for the fact that you have no
-column names. You'll see that the
-columns have names `X1` through `X4`. This is
-OK.
-
-
-Solution
-
-
-Tab-separated, so `read_tsv`; no column names, so `col_names=F`:
-
-```r
-my_url="http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
-crickets=read_tsv(my_url,col_names=F)
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   X1 = col_double(),
-##   X2 = col_double(),
-##   X3 = col_double(),
-##   X4 = col_double()
-## )
-```
-
-```r
-crickets  
-```
-
-```
-## # A tibble: 17 x 4
-##       X1    X2    X3    X4
-##    <dbl> <dbl> <dbl> <dbl>
-##  1  20.8  67.9  17.2  44.3
-##  2  20.8  65.1  18.3  47.2
-##  3  24    77.3  18.3  47.6
-##  4  24    78.7  18.3  49.6
-##  5  24    79.4  18.9  50.3
-##  6  24    80.4  18.9  51.8
-##  7  26.2  85.8  20.4  60  
-##  8  26.2  86.6  21    58.5
-##  9  26.2  87.5  21    58.9
-## 10  26.2  89.1  22.1  60.7
-## 11  28.4  98.6  23.5  69.8
-## 12  29   101.   24.2  70.9
-## 13  30.4  99.3  25.9  76.2
-## 14  30.4 102.   26.5  76.1
-## 15  NA    NA    26.5  77  
-## 16  NA    NA    26.5  77.7
-## 17  NA    NA    28.6  84.7
-```
-
- 
-
-As promised.
-
-If you didn't catch the tab-separated part, this probably happened to you:
-
-
-```r
-d=read_delim(my_url," ",col_names=F)
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   X1 = col_character()
-## )
-```
-
-```
-## Warning in rbind(names(probs), probs_f): number of columns of result is not
-## a multiple of vector length (arg 1)
-```
-
-```
-## Warning: 3 parsing failures.
-## row # A tibble: 3 x 5 col     row col   expected  actual   file                                      expected   <int> <chr> <chr>     <chr>    <chr>                                     actual 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… file 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… row 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
-```
-
- 
-
-This doesn't look good:
-
-
-```r
-problems(d)
-```
-
-```
-## # A tibble: 3 x 5
-##     row col   expected  actual   file                                     
-##   <int> <chr> <chr>     <chr>    <chr>                                    
-## 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
-## 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
-## 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
-```
-
- 
-
-The "expected columns" being 1 should bother you, since we know
-there are supposed to be 4 columns. At this point, we take a look at
-what got read in:
-
-
-```r
-d
-```
-
-```
-## # A tibble: 17 x 1
-##    X1                       
-##    <chr>                    
-##  1 "20.8\t67.9\t17.2\t44.3" 
-##  2 "20.8\t65.1\t18.3\t47.2" 
-##  3 "24.0\t77.3\t18.3\t47.6" 
-##  4 "24.0\t78.7\t18.3\t49.6" 
-##  5 "24.0\t79.4\t18.9\t50.3" 
-##  6 "24.0\t80.4\t18.9\t51.8" 
-##  7 "26.2\t85.8\t20.4\t60.0" 
-##  8 "26.2\t86.6\t21.0\t58.5" 
-##  9 "26.2\t87.5\t21.0\t58.9" 
-## 10 "26.2\t89.1\t22.1\t60.7" 
-## 11 "28.4\t98.6\t23.5\t69.8" 
-## 12 "29.0\t100.8\t24.2\t70.9"
-## 13 "30.4\t99.3\t25.9\t76.2" 
-## 14 "30.4\t101.7\t26.5\t76.1"
-## 15 "NA\tNA"                 
-## 16 "NA\tNA"                 
-## 17 "NA\tNA"
-```
-
-
-
-and there you see the `t` or "tab" characters separating the
-values, instead of spaces. (This is what I tried first, and once I
-looked at this, I realized that `read_tsv` was what I needed.)
-
-
-
-(b) These data are rather far from being tidy. There need to be
-three variables, temperature, pulse rate and species, and there
-are $14+17=31$ observations altogether. This one is tricky in that
-there are temperature and pulse rate for each of two levels of a
-factor, so I'll suggest combining the temperature and chirp rate
-together into one thing for each species, then gathering them,
-then splitting them again. Create new columns, named for  each species,
-that contain the temperature and pulse rate for that species in
-that order, `unite`d together.
-For the rest of this question, start from the data frame you read
-in, and build a pipe, one or two steps at a time, to save creating
-a lot of temporary data frames.
-
-
-Solution
-
-
-Breathe, and then begin. `unite` creates new columns by
-joining together old ones:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As *str-c* or *paste* do, actually, but the advantage of *unite* is that it gets rid of the other columns, which you probably no longer need.</span>
-
-```r
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) 
-```
-
-```
-## # A tibble: 17 x 2
-##    exclamationis niveus   
-##    <chr>         <chr>    
-##  1 20.8_67.9     17.2_44.3
-##  2 20.8_65.1     18.3_47.2
-##  3 24_77.3       18.3_47.6
-##  4 24_78.7       18.3_49.6
-##  5 24_79.4       18.9_50.3
-##  6 24_80.4       18.9_51.8
-##  7 26.2_85.8     20.4_60  
-##  8 26.2_86.6     21_58.5  
-##  9 26.2_87.5     21_58.9  
-## 10 26.2_89.1     22.1_60.7
-## 11 28.4_98.6     23.5_69.8
-## 12 29_100.8      24.2_70.9
-## 13 30.4_99.3     25.9_76.2
-## 14 30.4_101.7    26.5_76.1
-## 15 NA_NA         26.5_77  
-## 16 NA_NA         26.5_77.7
-## 17 NA_NA         28.6_84.7
-```
-
- 
-
-Note that the original columns `X1:X4` are *gone*, which
-is fine, because the information we needed from them is contained in
-the two new columns. `unite` by default uses an underscore to
-separate the joined-together values, which is generally safe since you
-won't often find those in data.
-
-Digression: `unite`-ing with a space could cause problems if
-the data values have spaces in them already. Consider this list of names:
-
-
-```r
-names=c("Cameron McDonald","Durwin Yang","Ole Gunnar Solskjaer","Mahmudullah")
-```
-
- 
-
-Two very former students of mine, a Norwegian soccer player, and a
-Bangladeshi cricketer. Only one of these has played for Manchester United:
-
-
-```r
-manu=c(F,F,T,F)
-```
-
- 
-
-and let's make a data frame:
-
-
-```r
-d=tibble(name=names,manu=manu)
-d
-```
-
-```
-## # A tibble: 4 x 2
-##   name                 manu 
-##   <chr>                <lgl>
-## 1 Cameron McDonald     FALSE
-## 2 Durwin Yang          FALSE
-## 3 Ole Gunnar Solskjaer TRUE 
-## 4 Mahmudullah          FALSE
-```
-
-
-
-Now, what happens if we `unite` those columns, separating them
-by a space?
-
-
-```r
-d %>% unite(joined,name:manu,sep=" ")
-```
-
-```
-## # A tibble: 4 x 1
-##   joined                   
-##   <chr>                    
-## 1 Cameron McDonald FALSE   
-## 2 Durwin Yang FALSE        
-## 3 Ole Gunnar Solskjaer TRUE
-## 4 Mahmudullah FALSE
-```
-
- 
-
-If we then try to separate them again, what happens?
-
-
-```r
-d %>% unite(joined,name:manu,sep=" ") %>%
-separate(joined,c("one","two")," ")
-```
-
-```
-## Warning: Expected 2 pieces. Additional pieces discarded in 3 rows [1, 2,
-## 3].
-```
-
-```
-## # A tibble: 4 x 2
-##   one         two     
-##   <chr>       <chr>   
-## 1 Cameron     McDonald
-## 2 Durwin      Yang    
-## 3 Ole         Gunnar  
-## 4 Mahmudullah FALSE
-```
-
- 
-
-Things have gotten lost: most of the original values of `manu`
-and some of the names. If we use a different separator character,
-either choosing one deliberately or going with the default underscore,
-everything works swimmingly:
-
-
-```r
-d %>% unite(joined,name:manu,sep=":") %>%
-separate(joined,c("one","two"),":")
-```
-
-```
-## # A tibble: 4 x 2
-##   one                  two  
-##   <chr>                <chr>
-## 1 Cameron McDonald     FALSE
-## 2 Durwin Yang          FALSE
-## 3 Ole Gunnar Solskjaer TRUE 
-## 4 Mahmudullah          FALSE
-```
-
- 
-
-and we are back to where we started.
-
-If you run just the `unite` line (move the pipe symbol to the
-next line so that the `unite` line is complete as it stands),
-you'll see what happened.
-      
-
-
-(c) The two columns `exclamationis` and `niveus`
-that you just created are both temperature-pulse rate combos, but
-for different species. `gather` them together into one
-column, labelled by species. (This is a straight `tidyr`
-`gather`, even though they contain something odd-looking.)
-
-
-Solution
-
-
-Thus, this, naming the new column `temp_pulse` since it
-contains both of those things. Add to the end of the pipe you
-started building in the previous part:
-
-```r
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus)  
-```
-
-```
-## # A tibble: 34 x 2
-##    species       temp_pulse
-##    <chr>         <chr>     
-##  1 exclamationis 20.8_67.9 
-##  2 exclamationis 20.8_65.1 
-##  3 exclamationis 24_77.3   
-##  4 exclamationis 24_78.7   
-##  5 exclamationis 24_79.4   
-##  6 exclamationis 24_80.4   
-##  7 exclamationis 26.2_85.8 
-##  8 exclamationis 26.2_86.6 
-##  9 exclamationis 26.2_87.5 
-## 10 exclamationis 26.2_89.1 
-## # ... with 24 more rows
-```
-
- 
-
-Yep. If you scroll down with Next, you'll see the other species of
-crickets, and you'll see some missing values at the bottom, labelled,
-at the moment, `NA_NA`. 
-
-This is going to get rather long, but don't fret: we debugged the two
-`unite` lines before, so if you get any errors, they must
-have come from the `gather`. So that would be the place to check.
-      
-
-
-(d) Now split up the temperature-pulse combos at the underscore, into
-two separate columns. This is `separate`. When specifying
-what to separate by, you can use a number ("split after this many characters") or a piece of text, in quotes ("when you see this text, split at it"). 
-
-
-Solution
-
-
-The text to split by is an underscore (in quotes), since
-`unite` by default puts an underscore in between the
-values it pastes together. Glue the `separate` onto the
-end. We are creating two new variables `temperature` and
-`pulse_rate`:
-
-```r
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus) %>%
-separate(temp_pulse,c("temperature","pulse_rate"),"_")
-```
-
-```
-## # A tibble: 34 x 3
-##    species       temperature pulse_rate
-##    <chr>         <chr>       <chr>     
-##  1 exclamationis 20.8        67.9      
-##  2 exclamationis 20.8        65.1      
-##  3 exclamationis 24          77.3      
-##  4 exclamationis 24          78.7      
-##  5 exclamationis 24          79.4      
-##  6 exclamationis 24          80.4      
-##  7 exclamationis 26.2        85.8      
-##  8 exclamationis 26.2        86.6      
-##  9 exclamationis 26.2        87.5      
-## 10 exclamationis 26.2        89.1      
-## # ... with 24 more rows
-```
-
- 
-
-You'll note that `unite` and `separate` are opposites ("inverses") of each other, but we haven't just done something and then undone it, because we have a `gather` in between; in fact, arranging it this way has done precisely the tidying we wanted.
-      
-
-
-(e) Almost there.  Temperature and pulse rate are still text
-(because `unite` turned them into text), but they should be
-numbers. Create new variables that are numerical versions of
-temperature and pulse rate (using `as.numeric`). Check that
-you have no extraneous variables (and, if necessary, get rid of
-the ones you don't want). (Species is also text and really ought
-to be a factor, but having it as text doesn't seem to cause any
-problems.)
-You can, if you like, use `parse_number` instead of
-`as.numeric`. They should both work. The distinction I
-prefer to make is that `parse_number` is good for text
-with a number in it (that we want to pull the number out of),
-while `as.numeric` is for turning something that looks like
-a number but isn't one into a genuine number.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You could      just as well make the point that the text 20.8 contains the      number 20.8 and nothing else, so that parsing it as text in search of a number      will pull out 20.8 as a number. If that logic works for you, go      with it.</span>
-
-
-Solution
-
-
-`mutate`-ing into a column that already exists overwrites
-the variable that's already there (which saves us some effort
-here). 
-
-```r
-crickets.1 = crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus) %>%
-separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
-mutate(temperature=as.numeric(temperature)) %>%
-mutate(pulse_rate=as.numeric(pulse_rate))
-```
-
-```
-## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
-## coercion
-```
-
-```
-## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
-## coercion
-```
-
-```r
-crickets.1  
-```
-
-```
-## # A tibble: 34 x 3
-##    species       temperature pulse_rate
-##    <chr>               <dbl>      <dbl>
-##  1 exclamationis        20.8       67.9
-##  2 exclamationis        20.8       65.1
-##  3 exclamationis        24         77.3
-##  4 exclamationis        24         78.7
-##  5 exclamationis        24         79.4
-##  6 exclamationis        24         80.4
-##  7 exclamationis        26.2       85.8
-##  8 exclamationis        26.2       86.6
-##  9 exclamationis        26.2       87.5
-## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows
-```
-
- 
-
-I saved the data frame this time, since this is the one we will use
-for our analysis.
-
-The warning message tells us that we got genuine missing-value NAs
-back, which is probably what we want. Specifically, they got turned
-from missing *text* to missing *numbers*!
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might think that  missing is just missing, but R distinguishes between types of missing.</span>
-The R word
-"coercion" means values being changed from one type of thing to
-another type of thing.  (We'll ignore the missings and see if they
-cause us any trouble. The same warning messages will show up on graphs
-later.)  So I have 34 rows (including three rows of missings) instead
-of the 31 rows I would have liked. Otherwise, success.
-
-There is (inevitably) another way to do this. We are doing the
-`as.numeric` twice, exactly the same on two different columns,
-and when you are doing the same thing on a number of columns, here a
-`mutate` with the same function, you have the option of using
-`mutate_if` or `mutate_at`. These are like
-`summarize_if` and `summarize_at` that we used way
-back to compute numerical summaries of a bunch of columns: the
-`if` variant works on columns that share a property, like being
-numeric, and the `at` variant works on columns whose names have
-something in common or that we can list, which is what we want here:
-
-
-```r
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus) %>%
-separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
-mutate_at(vars(temperature:pulse_rate),funs(as.numeric))
-```
-
-```
-## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
-## coercion
-```
-
-```
-## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
-## coercion
-```
-
-```
-## # A tibble: 34 x 3
-##    species       temperature pulse_rate
-##    <chr>               <dbl>      <dbl>
-##  1 exclamationis        20.8       67.9
-##  2 exclamationis        20.8       65.1
-##  3 exclamationis        24         77.3
-##  4 exclamationis        24         78.7
-##  5 exclamationis        24         79.4
-##  6 exclamationis        24         80.4
-##  7 exclamationis        26.2       85.8
-##  8 exclamationis        26.2       86.6
-##  9 exclamationis        26.2       87.5
-## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows
-```
-
- 
-
-Can't I just say that these are columns 2 and 3?
-
-
-```r
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus) %>%
-separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
-mutate_at(vars(2:3),funs(as.numeric))
-```
-
-```
-## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
-## coercion
-```
-
-```
-## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
-## coercion
-```
-
-```
-## # A tibble: 34 x 3
-##    species       temperature pulse_rate
-##    <chr>               <dbl>      <dbl>
-##  1 exclamationis        20.8       67.9
-##  2 exclamationis        20.8       65.1
-##  3 exclamationis        24         77.3
-##  4 exclamationis        24         78.7
-##  5 exclamationis        24         79.4
-##  6 exclamationis        24         80.4
-##  7 exclamationis        26.2       85.8
-##  8 exclamationis        26.2       86.6
-##  9 exclamationis        26.2       87.5
-## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows
-```
-
- 
-
-Yes. Equally good. What goes into the `vars`
-is the same as can go into a `select`: column numbers, names,
-or any of those "select helpers" like `starts_with`.
-
-You might think of `mutate_if` here, but if you scroll back, you'll find that all the columns are text, before you convert temperature and pulse rate to numbers, and so there's no way to pick out just the two columns you want that way. 
-
-Check that the temperature and pulse rate columns are now labelled
-`dbl`, which means they actually *are* decimal numbers
-(and don't just look like decimal numbers).
-
-Either way, using `unite` and then `separate` means that
-all the columns we created we want to keep (or, all the ones we would
-have wanted to get rid of have already been gotten rid of).
-
-Now we can actually do some statistics.
-      
-
-
-(f) Do a two-sample $t$-test to see whether the mean pulse rates
-differ between species. What do you conclude?
-
-
-Solution
-
-
-Drag your mind way back to this:
-
-```r
-t.test(pulse_rate~species,data=crickets.1)  
-```
-
-```
-## 
-## 	Welch Two Sample t-test
-## 
-## data:  pulse_rate by species
-## t = 5.2236, df = 28.719, p-value = 1.401e-05
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  14.08583 32.22677
-## sample estimates:
-## mean in group exclamationis        mean in group niveus 
-##                    85.58571                    62.42941
-```
-
- 
-
-There is strong evidence of a difference in means (a P-value around
-0.00001), and the confidence interval says that the mean chirp rate is
-higher for *exclamationis*. That is, not just for the crickets
-that were observed here, but for *all* crickets of these two
-species. 
-      
-
-
-(g) The analysis in the last part did not use temperature,
-however. Is it possible that temperature also has an effect? To
-assess this, draw a scatterplot of pulse rate against temperature,
-with the points distinguished, somehow, by the species they are
-from.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was the actual reason I gave you this question:    I wanted you to do this. It sort of morphed into all the other    stuff as well.</span>  
-
-
-Solution
-
-
-One of the wonderful things about `ggplot` is that doing
-the obvious thing works:
-
-```r
-ggplot(crickets.1,aes(x=temperature,y=pulse_rate,colour=species))+
-geom_point()
-```
-
-```
-## Warning: Removed 3 rows containing missing values (geom_point).
-```
-
-<img src="12-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
-
-       
-    
-
-
-(h) What does the plot tell you that the $t$-test doesn't? How
-would you describe differences in pulse rates between species now?
-
-
-Solution
-
-
-The plot tells you that (for both species) as temperature goes
-up, pulse rate goes up as well. *Allowing for that*, the
-difference in pulse rates between the two species is even
-clearer than it was before. To see an example, pick a
-temperature, and note that the mean pulse rate at that
-temperature seems to be at least 10 higher for
-*exclamationis*, with a high degree of consistency.
-The $t$-test mixed up all the pulse rates at all the different
-temperatures. Even though the conclusion was clear enough, it
-could be clearer if we incorporated temperature into the analysis.
-There was also a potential source of unfairness in that the
-*exclamationis* crickets tended to be observed at higher
-temperatures than *niveus* crickets; since pulse rates
-increase with temperature, the apparent difference in pulse
-rates between the species might have been explainable by one
-species being observed mainly in higher temperatures. This was
-*utterly invisible* to us when we did the $t$-test, but it
-shows the importance of accounting for all the relevant
-variables when you do your analysis.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">And it shows the        value of looking at relevant plots.</span> If the species had been
-observed at opposite temperatures, we might have
-concluded
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mistakenly.</span> 
-that *niveus* have the
-higher pulse rates on average. I come back to this later when I
-discuss the confidence interval for species difference that
-comes out of the regression model with temperature.
-      
-
-
-(i) Fit a regression predicting pulse rate from species and
-temperature. Compare the P-value for species in this regression to
-the one from the $t$-test. What does that tell you?
-
-
-Solution
-
-
-This is actually a so-called "analysis of covariance model",
-which properly belongs in D29, but it's really just a regression:
-
-```r
-pulse.1=lm(pulse_rate~species+temperature,data=crickets.1)
-summary(pulse.1)
-```
-
-```
-## 
-## Call:
-## lm(formula = pulse_rate ~ species + temperature, data = crickets.1)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -3.0128 -1.1296 -0.3912  0.9650  3.7800 
-## 
-## Coefficients:
-##                Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)    -7.21091    2.55094  -2.827  0.00858 ** 
-## speciesniveus -10.06529    0.73526 -13.689 6.27e-14 ***
-## temperature     3.60275    0.09729  37.032  < 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.786 on 28 degrees of freedom
-##   (3 observations deleted due to missingness)
-## Multiple R-squared:  0.9896,	Adjusted R-squared:  0.9888 
-## F-statistic:  1331 on 2 and 28 DF,  p-value: < 2.2e-16
-```
-
- 
-
-The P-value for species is now $6.27\times 10^{-14}$ or 0.00000000000006, which is even less than
-the P-value of 0.00001 that came out of the $t$-test. That is to say,
-when you know temperature, you can be even more sure of your
-conclusion that there is a difference between the species.
-
-The R-squared for this regression is almost 99\%, which says that if
-you know both temperature and species, you can predict the pulse rate
-almost exactly.
-
-In the regression output, the slope for species is about $-10$. It is
-labelled `speciesniveus`. Since species is categorical,
-`lm` uses the first category, *exclamationis*, as the
-baseline and expresses each other species relative to that. Since the
-slope is about $-10$, it says that at any given temperature, the mean
-pulse rate for *niveus* is about 10 less than for
-*exclamationis*. This is pretty much what the scatterplot told
-us.
-
-We can go a little further here:
-
-
-```r
-confint(pulse.1)
-```
-
-```
-##                    2.5 %    97.5 %
-## (Intercept)   -12.436265 -1.985547
-## speciesniveus -11.571408 -8.559175
-## temperature     3.403467  3.802038
-```
-
- 
-
-The second line says that the pulse rate for *niveus* is
-between about 8.5 and 11.5 less than for *exclamationis*, at
-any given temperature (comparing the two species at the same
-temperature as each other, but that temperature could be
-anything). This is a lot shorter than the CI that came out of the
-$t$-test, that went from 14 to 32. This is because we are now
-accounting for temperature, which also makes a difference. (In the
-$t$-test, the temperatures were all mixed up). What we also see is
-that the $t$-interval is shifted up compared to the one from the
-regression. This is because the $t$-interval conflates
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mixes  up.</span> 
-two things: the *exclamationis* crickets do have a
-higher pulse rate, but they were also observed at higher temperatures,
-which makes it look as if their pulse rates are more
-higher
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
-really are, when you account for temperature.
-
-This particular model constrains the slope with temperature to be the
-same for both species (just the intercepts differ). If you want to
-allow the slopes to differ between species, you add an interaction
-between temperature and species:
-
-
-```r
-pulse.2=lm(pulse_rate~species*temperature,data=crickets.1)
-summary(pulse.2)
-```
-
-```
-## 
-## Call:
-## lm(formula = pulse_rate ~ species * temperature, data = crickets.1)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -3.7031 -1.3417 -0.1235  0.8100  3.6330 
-## 
-## Coefficients:
-##                           Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)               -11.0408     4.1515  -2.659    0.013 *  
-## speciesniveus              -4.3484     4.9617  -0.876    0.389    
-## temperature                 3.7514     0.1601  23.429   <2e-16 ***
-## speciesniveus:temperature  -0.2340     0.2009  -1.165    0.254    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.775 on 27 degrees of freedom
-##   (3 observations deleted due to missingness)
-## Multiple R-squared:  0.9901,	Adjusted R-squared:  0.989 
-## F-statistic: 898.9 on 3 and 27 DF,  p-value: < 2.2e-16
-```
-
- 
-
-To see whether adding the interaction term added anything to the
-prediction,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Though it's hard to imagine being able to improve on an R-squared of 99%.} compare the model with and without using texttt{anova</span>:
-
-
-```r
-anova(pulse.1,pulse.2)  
-```
-
-```
-## Analysis of Variance Table
-## 
-## Model 1: pulse_rate ~ species + temperature
-## Model 2: pulse_rate ~ species * temperature
-##   Res.Df    RSS Df Sum of Sq     F Pr(>F)
-## 1     28 89.350                          
-## 2     27 85.074  1    4.2758 1.357 0.2542
-```
-
- 
-
-There's no significant improvement by adding the interaction, so
-there's no evidence that having different slopes for each species is
-necessary. Note that `anova` gave the same P-value as did the
-$t$-test for the slope coefficient for the interaction in
-`summary`, 0.254 in both cases. This is because there were only
-two species and therefore only one slope coefficient was required to
-distinguish them. If there had been three species, we would have had
-to look at the `anova` output to hunt for a difference among
-species, since there would have been two slope coefficients, each with
-its own P-value.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This wouldn't have told us about the overall  effect of species.</span> 
-
-The upshot is that we do not need different slopes; the model
-`pulse.1` with the same slope for each species describes what
-is going on.
-
-`ggplot` makes it almost laughably easy to add regression lines
-for each species to our plot, thus:
-
-
-```r
-ggplot(crickets.1,aes(x=temperature,y=pulse_rate,colour=species))+
-geom_point()+geom_smooth(method="lm",se=F)
-```
-
-```
-## Warning: Removed 3 rows containing non-finite values (stat_smooth).
-```
-
-```
-## Warning: Removed 3 rows containing missing values (geom_point).
-```
-
-<img src="12-regression_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
-
- 
-
-The lines are almost exactly parallel, so having the same slope for
-each species makes perfect sense.
-      
-
-
-
-
 
 
 ## Facebook friends and grey matter
@@ -2369,7 +1450,7 @@ ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
        
 
@@ -2559,7 +1640,7 @@ ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+
 geom_smooth(method="lm")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
        
 
@@ -2578,7 +1659,7 @@ This is, to my mind, the easiest way:
 ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
        
 
@@ -2603,7 +1684,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
        
 Now, why did I try adding a smooth trend, and why is it not
@@ -2708,7 +1789,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 
@@ -2798,7 +1879,7 @@ straight into `ggplot`:
 ggplot(carp.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
  
 
@@ -2909,7 +1990,7 @@ geom_line(colour="blue")+
 geom_point(data=carp,aes(x=bodyweight,y=ENE))
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
        
 
@@ -2970,7 +2051,7 @@ is `ENE`. The plot is this:
 g
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
  
 
@@ -3010,7 +2091,7 @@ fitted model object `carp.2` as your data frame for the
 ggplot(carp.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 
@@ -3089,7 +2170,7 @@ just did:
 ggplot(carp.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -3249,7 +2330,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
  
 
@@ -3384,7 +2465,7 @@ ggplot(sparrowhawks,aes(x=returning,y=newadults))+
 geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
 
  
 
@@ -3640,7 +2721,7 @@ The usual:
 ggplot(soc,aes(x=experience,y=salary))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-89-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
 
  
 
@@ -3710,7 +2791,7 @@ columns in it, not forgetting the initial dots:
 ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-91-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
        
 I see a "fanning-out": the residuals are getting bigger *in size* 
@@ -3734,7 +2815,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
 
  
 
@@ -3754,7 +2835,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
 
  
 
@@ -3804,7 +2885,7 @@ I explain that "masked" thing below.
 boxcox(salary~experience,data=soc)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
  
 
@@ -4040,7 +3121,7 @@ data frame:
 ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
 
        
 
@@ -4056,7 +3137,7 @@ distributed as they should be? Well, that's easy enough to check:
 ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-81-1.png" width="672"  />
 
  
 
@@ -4177,7 +3258,7 @@ for. Also, the volume is the response, so that should go on the $y$-axis:
 ggplot(trees,aes(x=diameter,y=volume))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-84-1.png" width="672"  />
 
        
 
@@ -4194,7 +3275,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-85-1.png" width="672"  />
 
        
 
@@ -4353,7 +3434,7 @@ random mess of nothingness:
 ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-90-1.png" width="672"  />
 
        
 
@@ -4482,7 +3563,7 @@ predicts the data well. I should look at the residuals from this one:
 ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
 
  
 
@@ -4599,7 +3680,7 @@ got, is still high. The residuals are these:
 ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-118-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
 
  
 
@@ -4786,7 +3867,7 @@ the tree (to which you add the height of your eyes).
 ##  Crickets revisited
 
 
- This is a reorganization of the crickets problem that you
+ This is a continuation of the crickets problem that you
 may have seen before (minus the data tidying).
 
 Male tree crickets produce "mating songs" by rubbing their wings
@@ -5004,7 +4085,7 @@ ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
 geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-129-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
 
        
     
@@ -5235,7 +4316,7 @@ ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
 geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-134-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-111-1.png" width="672"  />
 
  
 
@@ -5258,7 +4339,7 @@ it *is* a regression):
 ggplot(pulse.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-135-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-112-1.png" width="672"  />
 
          
 
@@ -5278,7 +4359,7 @@ right place:
 ggplot(pulse.1,aes(x=crickets$temperature,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-136-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
 
  
 
@@ -5294,7 +4375,7 @@ goes like this:
 ggplot(pulse.1,aes(x=crickets$species,y=.resid))+geom_boxplot()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-137-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-114-1.png" width="672"  />
 
  
 
@@ -5316,7 +4397,7 @@ normal quantile plot of all the residuals together:
 ggplot(pulse.1,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-138-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
 
  
 
@@ -5428,7 +4509,7 @@ ggplot(coasters,aes(x=drop,y=duration,label=coaster_name))+
 geom_point()+geom_text_repel()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-140-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
 
        
 

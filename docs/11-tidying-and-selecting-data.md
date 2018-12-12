@@ -10,7 +10,7 @@ library(tidyverse)
 ```
 
 ```
-## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0
@@ -2675,6 +2675,632 @@ that.  The log-linear model is a multi-variable generalization of that.)
 
 
 
+##  Mating songs in crickets
+
+
+ Male tree crickets produce "mating songs" by rubbing their
+wings together to produce a chirping sound. It is hypothesized that
+female tree crickets identify males of the correct species by how fast
+(in chirps per second) the male's mating song is. This is called the
+"pulse rate".  Some data for two species of crickets are in
+[link](http://www.utsc.utoronto.ca/~butler/c32/crickets.txt). The
+columns, which are unlabelled, are temperature and pulse rate
+(respectively) for *Oecanthus exclamationis* (first two
+columns) and *Oecanthus niveus* (third and fourth columns). The
+columns are separated by tabs. There are some missing values in the
+first two columns because fewer *exclamationis* crickets than
+*niveus* crickets were measured.
+The research question is whether males
+of the different species have different average pulse rates. It is
+also of interest to see whether temperature has an effect, and if
+so, what.
+Before we get to that, however, we have some data organization to do.
+
+
+(a) Read in the data, allowing for the fact that you have no
+column names. You'll see that the
+columns have names `X1` through `X4`. This is
+OK.
+
+
+Solution
+
+
+Tab-separated, so `read_tsv`; no column names, so `col_names=F`:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
+crickets=read_tsv(my_url,col_names=F)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   X1 = col_double(),
+##   X2 = col_double(),
+##   X3 = col_double(),
+##   X4 = col_double()
+## )
+```
+
+```r
+crickets  
+```
+
+```
+## # A tibble: 17 x 4
+##       X1    X2    X3    X4
+##    <dbl> <dbl> <dbl> <dbl>
+##  1  20.8  67.9  17.2  44.3
+##  2  20.8  65.1  18.3  47.2
+##  3  24    77.3  18.3  47.6
+##  4  24    78.7  18.3  49.6
+##  5  24    79.4  18.9  50.3
+##  6  24    80.4  18.9  51.8
+##  7  26.2  85.8  20.4  60  
+##  8  26.2  86.6  21    58.5
+##  9  26.2  87.5  21    58.9
+## 10  26.2  89.1  22.1  60.7
+## 11  28.4  98.6  23.5  69.8
+## 12  29   101.   24.2  70.9
+## 13  30.4  99.3  25.9  76.2
+## 14  30.4 102.   26.5  76.1
+## 15  NA    NA    26.5  77  
+## 16  NA    NA    26.5  77.7
+## 17  NA    NA    28.6  84.7
+```
+
+ 
+
+As promised.
+
+If you didn't catch the tab-separated part, this probably happened to you:
+
+
+```r
+d=read_delim(my_url," ",col_names=F)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   X1 = col_character()
+## )
+```
+
+```
+## Warning in rbind(names(probs), probs_f): number of columns of result is not
+## a multiple of vector length (arg 1)
+```
+
+```
+## Warning: 3 parsing failures.
+## row # A tibble: 3 x 5 col     row col   expected  actual   file                                      expected   <int> <chr> <chr>     <chr>    <chr>                                     actual 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… file 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… row 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+```
+
+ 
+
+This doesn't look good:
+
+
+```r
+problems(d)
+```
+
+```
+## # A tibble: 3 x 5
+##     row col   expected  actual   file                                     
+##   <int> <chr> <chr>     <chr>    <chr>                                    
+## 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+## 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+## 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+```
+
+ 
+
+The "expected columns" being 1 should bother you, since we know
+there are supposed to be 4 columns. At this point, we take a look at
+what got read in:
+
+
+```r
+d
+```
+
+```
+## # A tibble: 17 x 1
+##    X1                       
+##    <chr>                    
+##  1 "20.8\t67.9\t17.2\t44.3" 
+##  2 "20.8\t65.1\t18.3\t47.2" 
+##  3 "24.0\t77.3\t18.3\t47.6" 
+##  4 "24.0\t78.7\t18.3\t49.6" 
+##  5 "24.0\t79.4\t18.9\t50.3" 
+##  6 "24.0\t80.4\t18.9\t51.8" 
+##  7 "26.2\t85.8\t20.4\t60.0" 
+##  8 "26.2\t86.6\t21.0\t58.5" 
+##  9 "26.2\t87.5\t21.0\t58.9" 
+## 10 "26.2\t89.1\t22.1\t60.7" 
+## 11 "28.4\t98.6\t23.5\t69.8" 
+## 12 "29.0\t100.8\t24.2\t70.9"
+## 13 "30.4\t99.3\t25.9\t76.2" 
+## 14 "30.4\t101.7\t26.5\t76.1"
+## 15 "NA\tNA"                 
+## 16 "NA\tNA"                 
+## 17 "NA\tNA"
+```
+
+
+
+and there you see the `t` or "tab" characters separating the
+values, instead of spaces. (This is what I tried first, and once I
+looked at this, I realized that `read_tsv` was what I needed.)
+
+
+
+(b) These data are rather far from being tidy. There need to be
+three variables, temperature, pulse rate and species, and there
+are $14+17=31$ observations altogether. This one is tricky in that
+there are temperature and pulse rate for each of two levels of a
+factor, so I'll suggest combining the temperature and chirp rate
+together into one thing for each species, then gathering them,
+then splitting them again. Create new columns, named for  each species,
+that contain the temperature and pulse rate for that species in
+that order, `unite`d together.
+For the rest of this question, start from the data frame you read
+in, and build a pipe, one or two steps at a time, to save creating
+a lot of temporary data frames.
+
+
+Solution
+
+
+Breathe, and then begin. `unite` creates new columns by
+joining together old ones:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As *str-c* or *paste* do, actually, but the advantage of *unite* is that it gets rid of the other columns, which you probably no longer need.</span>
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) 
+```
+
+```
+## # A tibble: 17 x 2
+##    exclamationis niveus   
+##    <chr>         <chr>    
+##  1 20.8_67.9     17.2_44.3
+##  2 20.8_65.1     18.3_47.2
+##  3 24_77.3       18.3_47.6
+##  4 24_78.7       18.3_49.6
+##  5 24_79.4       18.9_50.3
+##  6 24_80.4       18.9_51.8
+##  7 26.2_85.8     20.4_60  
+##  8 26.2_86.6     21_58.5  
+##  9 26.2_87.5     21_58.9  
+## 10 26.2_89.1     22.1_60.7
+## 11 28.4_98.6     23.5_69.8
+## 12 29_100.8      24.2_70.9
+## 13 30.4_99.3     25.9_76.2
+## 14 30.4_101.7    26.5_76.1
+## 15 NA_NA         26.5_77  
+## 16 NA_NA         26.5_77.7
+## 17 NA_NA         28.6_84.7
+```
+
+ 
+
+Note that the original columns `X1:X4` are *gone*, which
+is fine, because the information we needed from them is contained in
+the two new columns. `unite` by default uses an underscore to
+separate the joined-together values, which is generally safe since you
+won't often find those in data.
+
+Digression: `unite`-ing with a space could cause problems if
+the data values have spaces in them already. Consider this list of names:
+
+
+```r
+names=c("Cameron McDonald","Durwin Yang","Ole Gunnar Solskjaer","Mahmudullah")
+```
+
+ 
+
+Two very former students of mine, a Norwegian soccer player, and a
+Bangladeshi cricketer. Only one of these has played for Manchester United:
+
+
+```r
+manu=c(F,F,T,F)
+```
+
+ 
+
+and let's make a data frame:
+
+
+```r
+d=tibble(name=names,manu=manu)
+d
+```
+
+```
+## # A tibble: 4 x 2
+##   name                 manu 
+##   <chr>                <lgl>
+## 1 Cameron McDonald     FALSE
+## 2 Durwin Yang          FALSE
+## 3 Ole Gunnar Solskjaer TRUE 
+## 4 Mahmudullah          FALSE
+```
+
+
+
+Now, what happens if we `unite` those columns, separating them
+by a space?
+
+
+```r
+d %>% unite(joined,name:manu,sep=" ")
+```
+
+```
+## # A tibble: 4 x 1
+##   joined                   
+##   <chr>                    
+## 1 Cameron McDonald FALSE   
+## 2 Durwin Yang FALSE        
+## 3 Ole Gunnar Solskjaer TRUE
+## 4 Mahmudullah FALSE
+```
+
+ 
+
+If we then try to separate them again, what happens?
+
+
+```r
+d %>% unite(joined,name:manu,sep=" ") %>%
+separate(joined,c("one","two")," ")
+```
+
+```
+## Warning: Expected 2 pieces. Additional pieces discarded in 3 rows [1, 2,
+## 3].
+```
+
+```
+## # A tibble: 4 x 2
+##   one         two     
+##   <chr>       <chr>   
+## 1 Cameron     McDonald
+## 2 Durwin      Yang    
+## 3 Ole         Gunnar  
+## 4 Mahmudullah FALSE
+```
+
+ 
+
+Things have gotten lost: most of the original values of `manu`
+and some of the names. If we use a different separator character,
+either choosing one deliberately or going with the default underscore,
+everything works swimmingly:
+
+
+```r
+d %>% unite(joined,name:manu,sep=":") %>%
+separate(joined,c("one","two"),":")
+```
+
+```
+## # A tibble: 4 x 2
+##   one                  two  
+##   <chr>                <chr>
+## 1 Cameron McDonald     FALSE
+## 2 Durwin Yang          FALSE
+## 3 Ole Gunnar Solskjaer TRUE 
+## 4 Mahmudullah          FALSE
+```
+
+ 
+
+and we are back to where we started.
+
+If you run just the `unite` line (move the pipe symbol to the
+next line so that the `unite` line is complete as it stands),
+you'll see what happened.
+      
+
+
+(c) The two columns `exclamationis` and `niveus`
+that you just created are both temperature-pulse rate combos, but
+for different species. `gather` them together into one
+column, labelled by species. (This is a straight `tidyr`
+`gather`, even though they contain something odd-looking.)
+
+
+Solution
+
+
+Thus, this, naming the new column `temp_pulse` since it
+contains both of those things. Add to the end of the pipe you
+started building in the previous part:
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus)  
+```
+
+```
+## # A tibble: 34 x 2
+##    species       temp_pulse
+##    <chr>         <chr>     
+##  1 exclamationis 20.8_67.9 
+##  2 exclamationis 20.8_65.1 
+##  3 exclamationis 24_77.3   
+##  4 exclamationis 24_78.7   
+##  5 exclamationis 24_79.4   
+##  6 exclamationis 24_80.4   
+##  7 exclamationis 26.2_85.8 
+##  8 exclamationis 26.2_86.6 
+##  9 exclamationis 26.2_87.5 
+## 10 exclamationis 26.2_89.1 
+## # ... with 24 more rows
+```
+
+ 
+
+Yep. If you scroll down with Next, you'll see the other species of
+crickets, and you'll see some missing values at the bottom, labelled,
+at the moment, `NA_NA`. 
+
+This is going to get rather long, but don't fret: we debugged the two
+`unite` lines before, so if you get any errors, they must
+have come from the `gather`. So that would be the place to check.
+      
+
+
+(d) Now split up the temperature-pulse combos at the underscore, into
+two separate columns. This is `separate`. When specifying
+what to separate by, you can use a number ("split after this many characters") or a piece of text, in quotes ("when you see this text, split at it"). 
+
+
+Solution
+
+
+The text to split by is an underscore (in quotes), since
+`unite` by default puts an underscore in between the
+values it pastes together. Glue the `separate` onto the
+end. We are creating two new variables `temperature` and
+`pulse_rate`:
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_")
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>         <chr>       <chr>     
+##  1 exclamationis 20.8        67.9      
+##  2 exclamationis 20.8        65.1      
+##  3 exclamationis 24          77.3      
+##  4 exclamationis 24          78.7      
+##  5 exclamationis 24          79.4      
+##  6 exclamationis 24          80.4      
+##  7 exclamationis 26.2        85.8      
+##  8 exclamationis 26.2        86.6      
+##  9 exclamationis 26.2        87.5      
+## 10 exclamationis 26.2        89.1      
+## # ... with 24 more rows
+```
+
+ 
+
+You'll note that `unite` and `separate` are opposites ("inverses") of each other, but we haven't just done something and then undone it, because we have a `gather` in between; in fact, arranging it this way has done precisely the tidying we wanted.
+      
+
+
+(e) Almost there.  Temperature and pulse rate are still text
+(because `unite` turned them into text), but they should be
+numbers. Create new variables that are numerical versions of
+temperature and pulse rate (using `as.numeric`). Check that
+you have no extraneous variables (and, if necessary, get rid of
+the ones you don't want). (Species is also text and really ought
+to be a factor, but having it as text doesn't seem to cause any
+problems.)
+You can, if you like, use `parse_number` instead of
+`as.numeric`. They should both work. The distinction I
+prefer to make is that `parse_number` is good for text
+with a number in it (that we want to pull the number out of),
+while `as.numeric` is for turning something that looks like
+a number but isn't one into a genuine number.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You could      just as well make the point that the text 20.8 contains the      number 20.8 and nothing else, so that parsing it as text in search of a number      will pull out 20.8 as a number. If that logic works for you, go      with it.</span>
+
+
+Solution
+
+
+`mutate`-ing into a column that already exists overwrites
+the variable that's already there (which saves us some effort
+here). 
+
+```r
+crickets.1 = crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate(temperature=as.numeric(temperature)) %>%
+mutate(pulse_rate=as.numeric(pulse_rate))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```r
+crickets.1  
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+I saved the data frame this time, since this is the one we will use
+for our analysis.
+
+The warning message tells us that we got genuine missing-value NAs
+back, which is probably what we want. Specifically, they got turned
+from missing *text* to missing *numbers*!
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might think that  missing is just missing, but R distinguishes between types of missing.</span>
+The R word
+"coercion" means values being changed from one type of thing to
+another type of thing.  (We'll ignore the missings and see if they
+cause us any trouble. The same warning messages will show up on graphs
+later.)  So I have 34 rows (including three rows of missings) instead
+of the 31 rows I would have liked. Otherwise, success.
+
+There is (inevitably) another way to do this. We are doing the
+`as.numeric` twice, exactly the same on two different columns,
+and when you are doing the same thing on a number of columns, here a
+`mutate` with the same function, you have the option of using
+`mutate_if` or `mutate_at`. These are like
+`summarize_if` and `summarize_at` that we used way
+back to compute numerical summaries of a bunch of columns: the
+`if` variant works on columns that share a property, like being
+numeric, and the `at` variant works on columns whose names have
+something in common or that we can list, which is what we want here:
+
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate_at(vars(temperature:pulse_rate),funs(as.numeric))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+Can't I just say that these are columns 2 and 3?
+
+
+```r
+crickets %>% 
+unite(exclamationis,X1:X2) %>%
+unite(niveus,X3:X4) %>%
+gather(species,temp_pulse,exclamationis:niveus) %>%
+separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
+mutate_at(vars(2:3),funs(as.numeric))
+```
+
+```
+## Warning in evalq(as.numeric(temperature), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## Warning in evalq(as.numeric(pulse_rate), <environment>): NAs introduced by
+## coercion
+```
+
+```
+## # A tibble: 34 x 3
+##    species       temperature pulse_rate
+##    <chr>               <dbl>      <dbl>
+##  1 exclamationis        20.8       67.9
+##  2 exclamationis        20.8       65.1
+##  3 exclamationis        24         77.3
+##  4 exclamationis        24         78.7
+##  5 exclamationis        24         79.4
+##  6 exclamationis        24         80.4
+##  7 exclamationis        26.2       85.8
+##  8 exclamationis        26.2       86.6
+##  9 exclamationis        26.2       87.5
+## 10 exclamationis        26.2       89.1
+## # ... with 24 more rows
+```
+
+ 
+
+Yes. Equally good. What goes into the `vars`
+is the same as can go into a `select`: column numbers, names,
+or any of those "select helpers" like `starts_with`.
+
+You might think of `mutate_if` here, but if you scroll back, you'll find that all the columns are text, before you convert temperature and pulse rate to numbers, and so there's no way to pick out just the two columns you want that way. 
+
+Check that the temperature and pulse rate columns are now labelled
+`dbl`, which means they actually *are* decimal numbers
+(and don't just look like decimal numbers).
+
+Either way, using `unite` and then `separate` means that
+all the columns we created we want to keep (or, all the ones we would
+have wanted to get rid of have already been gotten rid of).
+
+Now we could actually do some statistics. That we do elsewhere.
+      
+
+
+
+
+
+
 ##  Cars
 
 
@@ -4850,5 +5476,656 @@ That will actually display *all* the times where the cyclist
 count equals the maximum, of which there might be more than one.
 
 
+
+
+
+
+##  Feeling the heat
+
+
+ In summer, the city of Toronto issues Heat Alerts for 
+"high heat or humidity that is expected to last two or more days". The
+precise definitions are shown at
+[link](http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=923b5ce6dfb31410VgnVCM10000071d60f89RCRD). During
+a heat alert, the city opens Cooling Centres and may extend the hours
+of operation of city swimming pools, among other things. All the heat
+alert days from 2001 to 2016 are listed at
+[link](http://www.utsc.utoronto.ca/~butler/c32/heat.csv).
+
+The word "warning" is sometimes used in place of "alert" in these
+data. They mean the same thing.\endnote{Unlike "thunderstorm watch"
+and "thunderstorm warning", which mean different things.}
+
+
+
+(a) Read the data into R, and display the data frame. Note that there are four columns:
+
+
+* a numerical `id` (numbered upwards from the first Heat
+Alert in 2001; some of the numbers are missing)
+
+* the `date` of the heat alert, in year-month-day
+format with 4-digit years.
+
+* a text `code` for the type of heat alert
+
+* `text` describing the kind of heat alert. This can be quite long. 
+
+
+
+Solution
+
+
+A `.csv`, so:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/heat.csv"
+heat=read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   id = col_integer(),
+##   date = col_date(format = ""),
+##   code = col_character(),
+##   text = col_character()
+## )
+```
+
+```r
+heat
+```
+
+```
+## # A tibble: 200 x 4
+##       id date       code  text                                            
+##    <int> <date>     <chr> <chr>                                           
+##  1   232 2016-09-08 HAU   Toronto's Medical Officer of Health has upgrade…
+##  2   231 2016-09-07 HAE   Toronto's Medical Officer of Health has continu…
+##  3   230 2016-09-06 HA    Toronto's Medical Officer of Health has issued …
+##  4   228 2016-08-13 EHAE  Toronto's Medical Officer of Health has continu…
+##  5   227 2016-08-12 EHAE  Toronto's Medical Officer of Health has continu…
+##  6   226 2016-08-11 HAU   Toronto's Medical Officer of Health has upgrade…
+##  7   225 2016-08-10 HAE   Toronto's Medical Officer of Health has continu…
+##  8   224 2016-08-09 HA    Toronto's Medical Officer of Health has issued …
+##  9   222 2016-08-05 HAE   Toronto's Medical Officer of Health has continu…
+## 10   221 2016-08-04 HA    Toronto's Medical Officer of Health has issued …
+## # ... with 190 more rows
+```
+
+       
+
+You might get a truncated `text` as I did, or you might have to
+click to see more of it. In any case, we won't be using the text, so
+you can just forget about it from here on.
+
+
+
+* In your data frame, are the dates stored as genuine dates or as text? How can you tell?
+
+
+Solution
+
+
+Look at the top of the column on your display of the data frame. Under the date column it says `date` rather than `chr` (which means "text"), so these are genuine dates. 
+This happened because the data file contained the dates in
+year-month-day order, so `read_csv` read them in as
+dates. (If they had been in some other order, they would have
+been read in as text and we would need to use
+`lubridate` to make them into dates.)
+
+
+
+* Which different heat alert codes do you have, and how many of each?
+
+
+Solution
+
+
+`count`, most easily:
+
+```r
+heat %>% count(code)
+```
+
+```
+## # A tibble: 6 x 2
+##   code      n
+##   <chr> <int>
+## 1 EHA      59
+## 2 EHAD      1
+## 3 EHAE     18
+## 4 HA       93
+## 5 HAE      16
+## 6 HAU      13
+```
+
+          
+
+Alternatively, `group_by` and `summarize`:
+
+
+```r
+heat %>% group_by(code) %>% summarize(count=n())
+```
+
+```
+## # A tibble: 6 x 2
+##   code  count
+##   <chr> <int>
+## 1 EHA      59
+## 2 EHAD      1
+## 3 EHAE     18
+## 4 HA       93
+## 5 HAE      16
+## 6 HAU      13
+```
+
+ 
+
+(note that `n()` gives the number of rows, in each group if you have groups.)
+
+There are six different codes, but EHAD only appears once.
+
+
+
+(b) Use the `text` in your dataset (or look back
+at the original data file) to describe briefly in your own
+words what the various codes represent.
+
+
+Solution
+
+
+You can check that each time a certain code appears, the
+text next to it is identical.
+The six codes and my brief descriptions are:
+\begin{description}
+\item[EHA] (Start of) Extended Heat Alert
+\item[EHAD] Extreme Heat Alert downgraded to Heat Alert
+\item[EHAE] Extended Heat Alert continues
+\item[HA] (Start of) Heat Alert
+\item[HAE] Heat Alert continues
+\item[HAU] Heat Alert upgraded to Extended Heat Alert
+\end{description}
+I thought there was such a thing as an Extreme Heat Alert,
+but here the word is (usually) Extended, meaning a heat
+alert that extends over several days, long in duration
+rather than extremely hot. The only place Extreme occurs
+is in EHAD, which only occurs once.
+I want your answer to say or suggest something about
+whether a code applies *only* to continuing heat
+alerts (ie., that EHAD, EHAE, HAE and HAU are different
+from the others).
+
+
+
+(c) How many (regular and extended) heat alert events
+are there altogether? A heat alert event is a stretch of
+consecutive days, on all of which there is a heat alert or
+extended heat alert. Hints: (i) you can answer this from
+output you already have; (ii) how can you tell when a heat
+alert event *starts*?
+
+
+Solution
+
+
+This turned out to be more messed-up than I
+thought. There is a detailed discussion below.
+The codes EHAD, EHAE, HAE, HAU all indicate that there
+was a heat alert on the day before. Only the codes HA
+and EHA can indicate the start of a heat alert
+(event). The problem is that HA and EHA sometimes
+indicate the start of a heat alert event and sometimes
+one that is continuing.  You can check by looking at the
+data that HA and EHA days can (though they don't always:
+see below) have a non-heat-alert day before (below) them
+in the data file: for example, August 4, 2012 is an HA
+day, but August 3 of that year was not part of any kind
+of heat alert.
+I had intended the answer to be this:
+\begin{quote}
+So we get the total number of heat alert events by
+totalling up the number of HA and EHA days:
+$59+93=152$.                 
+\end{quote}
+This is not right because there are some
+consecutive EHA days, eg. 5--8 July 2010, so that EHA
+sometimes indicates the continuation of an extended heat
+alert and sometimes the start of one. I was expecting
+EHA to be used only for the start, and one of the other
+codes to indicate a continuation. The same is
+(sometimes) true of HA.
+So reasonable answers to the question as set include:
+
+
+* 93, the number of HAs
+
+* 59, the number of EHAs
+
+* 152, the number of HAs and EHAs combined
+
+* "152 or less", "between 93 and 152", ``between
+59 and 152'' to reflect that not all of these mark the
+start of a heat alert event.
+
+Any of these, or something similar *with an               explanation of how you got your answer*, are
+acceptable. In your career as a data scientist, you will
+often run into this kind of thing, and it will be your
+job to do something with the data and *explain*
+what you did so that somebody else can decide whether
+they believe you or not. A good explanation, even if it
+is not correct, will help you get at the truth because
+it will inspire someone to say ``in fact, it goes
+*this* way'', and then the two of you can jointly
+figure out what's actually going on.
+Detailed discussion follows. If you have *any*
+ambitions of working with data, you should try to follow
+the paragraphs below, because they indicate how you
+would get an *actual* answer to the question. I
+used R and `dplyr`, because that seemed to be the
+easiest route.
+I think the key is the number of days between one heat
+alert day and the next one. `dplyr` has a
+function `diff` that works out exactly this. Building
+a pipeline, just because:
+
+```r
+heat %>%
+select(-text) %>%
+mutate(daycount=as.numeric(date)) %>%
+mutate(daydiff=abs(c(diff(daycount),0))) 
+```
+
+```
+## # A tibble: 200 x 5
+##       id date       code  daycount daydiff
+##    <int> <date>     <chr>    <dbl>   <dbl>
+##  1   232 2016-09-08 HAU      17052       1
+##  2   231 2016-09-07 HAE      17051       1
+##  3   230 2016-09-06 HA       17050      24
+##  4   228 2016-08-13 EHAE     17026       1
+##  5   227 2016-08-12 EHAE     17025       1
+##  6   226 2016-08-11 HAU      17024       1
+##  7   225 2016-08-10 HAE      17023       1
+##  8   224 2016-08-09 HA       17022       4
+##  9   222 2016-08-05 HAE      17018       1
+## 10   221 2016-08-04 HA       17017      11
+## # ... with 190 more rows
+```
+
+             
+
+Oof. I have some things to keep track of here:
+
+
+
+* Get rid of the `text`, since it serves no purpose here.
+
+* The `date` column is a proper `Date` (I checked).
+
+* Then I want the date as number of days; since it
+is a number of days internally, I just make it a number with
+`as.numeric`. 
+
+* Then I use `diff` to get the difference
+between each date and the previous one, remembering to glue a 0 onto
+the end so that I have the right number of differences.
+
+* Since the dates are most recent first, I take the absolute value
+so that the `daydiff` values are positive (except for the one
+that is 0 on the end).
+
+
+Still with me? All right. You can check that the `daydiff`
+values are the number of days between the date on that line and the
+line below it. For example, there were 24 days between August 13 and
+September 6.
+
+Now, when `daydiff` is 1, there was also a heat alert on the
+previous day (the line below in the file), but when `daydiff` is
+*not* 1, that day must have been the *start* of a heat
+alert event. So if I count the non-1's, that will count the  number of heat
+alert events there were. (That includes the difference of 0 on the
+first day, the one at the end of the file.)
+
+Thus my pipeline continues like this:
+
+
+```r
+heat %>%
+select(-text) %>%
+mutate(daycount=as.numeric(date)) %>%
+mutate(daydiff=abs(c(diff(daycount),0))) %>%
+count(daydiff!=1) 
+```
+
+```
+## # A tibble: 2 x 2
+##   `daydiff != 1`     n
+##   <lgl>          <int>
+## 1 FALSE            121
+## 2 TRUE              79
+```
+
+             
+
+And that's how many actual heat alert events there were: 79, less even
+than the number of HAs. So that tells me that a lot of my HAs and EHAs
+were actually continuations of heat alert events rather than the start
+of them. I think I need to have a word with the City of Toronto about
+their data collection processes.
+
+`count` will count anything that is, or can be made into, a
+categorical variable. It doesn't have to be one of the columns of your
+data frame; here it is something that is either `TRUE` or
+`FALSE` about every row of the data frame.
+
+One step further: what *is* the connection between the codes and
+the start of heat alert events? We can figure that out now:
+
+
+```r
+heat %>%
+select(-text) %>%
+mutate(daycount=as.numeric(date)) %>%
+mutate(daydiff=abs(c(diff(daycount),0))) %>%
+mutate(start=(daydiff!=1)) %>%
+count(code,start)
+```
+
+```
+## # A tibble: 8 x 3
+##   code  start     n
+##   <chr> <lgl> <int>
+## 1 EHA   FALSE    53
+## 2 EHA   TRUE      6
+## 3 EHAD  FALSE     1
+## 4 EHAE  FALSE    18
+## 5 HA    FALSE    20
+## 6 HA    TRUE     73
+## 7 HAE   FALSE    16
+## 8 HAU   FALSE    13
+```
+
+             
+
+I made a column `start` that is `TRUE` at the start of a
+heat alert event and `FALSE` otherwise, by comparing the days
+from the previous heat alert day with 1. Then I can make a
+`table`, or, as here, the `dplyr` equivalent with
+`count`\endnote{I didn't know until just now that you could put
+two variables in a `count` and you get counts of all the
+combinations of them. Just goes to show the value of ``try it and
+see''.} (or `group_by` and `summarize`). What this
+shows is that EHAD, EHAE, HAE and HAU *never* go with the start
+of a heat alert event (as they shouldn't). But look at the HAs and
+EHAs. For the HAs, 73 of them go with the start of an event, but 20 do
+not. For the EHAs, just 6 of them go with the start, and 53 do
+not. (Thus, counting just the HAs was very much a reasonable thing to
+do.)
+
+The 79 heat alert events that we found above had 73 of them starting
+with an HA, and just 6 starting with an EHA.
+I wasn't quite sure how this would come out, but I knew it had
+something to do with the number of days between one heat alert day and
+the next, so I calculated those first and then figured out what to do
+with them.
+ here down is SAS
+
+(d) We are going to investigate how many heat alert
+days
+there were in each year. To do that, we have
+to extract the year from each of our dates. 
+
+
+Solution
+
+
+This will need `lubridate`:
+
+```r
+library(lubridate)
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     date
+```
+
+```r
+heat %>% select(-text) %>% mutate(year=year(date)) %>% sample_n(10)
+```
+
+```
+## # A tibble: 10 x 4
+##       id date       code   year
+##    <int> <date>     <chr> <dbl>
+##  1    48 2005-07-11 EHA    2005
+##  2   131 2011-07-22 EHAE   2011
+##  3   197 2015-08-16 HA     2015
+##  4   114 2010-07-08 EHA    2010
+##  5    47 2005-07-10 HA     2005
+##  6    62 2006-05-31 EHA    2006
+##  7   103 2009-08-17 HA     2009
+##  8   143 2012-06-21 EHAE   2012
+##  9    35 2005-06-07 HA     2005
+## 10    93 2008-06-09 EHA    2008
+```
+
+                 
+That seems to have worked. I listed a random sample of rows to
+get back to previous years.
+Having convinced myself that it worked, let me save it:
+
+```r
+heat %>% select(-text) %>% mutate(year=year(date)) -> heat
+```
+
+                 
+
+
+
+(e) Count the number of heat alert days for each
+year, by tabulating the year variable.
+Looking at this table, would you say that there
+have been more heat alert days in recent years? Explain
+(very) briefly. 
+
+
+Solution
+
+
+Count them again:
+
+```r
+heat %>% count(year)
+```
+
+```
+## # A tibble: 16 x 2
+##     year     n
+##    <dbl> <int>
+##  1  2001     9
+##  2  2002    16
+##  3  2003     6
+##  4  2004     2
+##  5  2005    26
+##  6  2006    17
+##  7  2007    15
+##  8  2008     9
+##  9  2009     3
+## 10  2010    16
+## 11  2011    12
+## 12  2012    21
+## 13  2013    13
+## 14  2014     1
+## 15  2015    12
+## 16  2016    22
+```
+
+                 
+There are various things you could say, most of which are likely to be
+good. My immediate reaction is that most of the years with a lot of
+heat-alert days are in the last few years, and most of the years with
+not many are near the start, so there is something of an upward
+trend. Having said that, 2014 is unusually low (that was a cool
+summer, if you recall), and 2005 was unusually high. (Was that the
+summer of the big power outage? I forget.\endnote{I looked it up. It
+was 2003, my first summer in Ontario.})
+
+You could also reasonably say that there isn't much pattern: the
+number of heat-alert days goes up and down. In fact, anything that's
+not obviously nonsense will do.
+
+I was thinking about making a graph of these frequencies against year,
+and sticking some kind of smooth trend on it. This uses the output we just got, which is itself a data frame:
+
+
+```r
+heat %>% count(year) %>%
+ggplot(aes(x=year, y=n))+geom_point()+geom_smooth(se=F)
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-147-1.png" width="672"  />
+
+ 
+The pattern is very scattered, as is commonly the case with
+environmental-science-type data, but there is a very small upward
+trend. So it seems that either answer is justified, either ``there is
+no trend'' or "there is something of an upward trend".
+
+The other thing I notice on this plot is that if there are a lot of
+heat-alert days one year, there will probably also be a lot in the next
+year (and correspondingly if the number of heat-alert days is below
+average: it tends to be below average again in the next year). This
+pattern is known to time-series people as "autocorrelation" and
+indicates that the number of heat-alert days in one year and the next
+is not independent: if you know one year, you can predict the next
+year. (Assessment of trend and autocorrelation are hard to untangle properly.)
+
+I learn from Environmental Science grad students (of whom we have a
+number at UTSC) that the approved measure of association is called the
+Mann-Kendall correlation, which is the Kendall correlation of the data
+values with time. In the same way that we use the sign test when we
+doubt normality, and it uses the data more crudely but safely, the
+regular (so-called Pearson) correlation assumes normality (of the
+errors in the regression of one variable on the other), and when you
+doubt that (as you typically do with this kind of data) you compute a
+different kind of correlation with time. What the Kendall correlation
+does is to take each pair of observations and ask whether the trend
+with time is uphill or downhill. For example, there were 3 heat-alert
+days in 2009, 16 in 2010 and 12 in 2011. Between 2009 and 2010, the
+trend is uphill (increasing with time), and also between 2009 and 2011
+(there were more heat-alert days in the later year), but between 2010
+and 2011 the trend is downhill. The idea of the Kendall correlation is
+you take *all* the pairs of points, of which there are typically
+rather a lot, count up how many pairs are uphill and how many
+downhill, and apply a formula to get a correlation between $-1$ and
+1. (If there are about an equal number of uphills and downhills, the
+correlation comes out near 0; if they are mostly uphill, the
+correlation is near 1, and if they are mostly downhill, the
+correlation is near $-1$.) It doesn't matter *how* uphill or
+downhill the trends are, only the number of each, in the same way that
+the sign test only counts the *number* of values above or below
+the hypothesized median, not how far above or below they are.
+
+This can be calculated, and even tested:
+
+
+```r
+heat %>% count(year) %>%
+with(.,cor.test(year, n, method="kendall"))
+```
+
+```
+## Warning in cor.test.default(year, n, method = "kendall"): Cannot compute
+## exact p-value with ties
+```
+
+```
+## 
+## 	Kendall's rank correlation tau
+## 
+## data:  year and n
+## z = 0.31612, p-value = 0.7519
+## alternative hypothesis: true tau is not equal to 0
+## sample estimates:
+##        tau 
+## 0.05907646
+```
+
+ 
+
+The Mann-Kendall correlation is a thoroughly unremarkable 0.06, and
+with only 16 data points, a null hypothesis that the correlation is
+zero is far from being rejected, P-value 0.7519 as shown. So this is
+no evidence of a time trend at all.
+
+I'd like to say a word about how I got these data. They came from
+[link](http://app.toronto.ca/opendata/heat_alerts/heat_alerts_list.json). If
+you take a look there, there are no obvious rows and columns. This
+format is called JSON. Look a bit more carefully and you'll see stuff
+like this, repeated:
+
+
+```
+
+{"id":"232","date":"2016-09-08","code":"HAU",
+"text":"Toronto's Medical Officer of Health has upgraded the Heat Warning to an Extended Heat Warning"}
+
+```
+
+
+one for each heat alert day. These are "keys" (on the left side of
+the `:`) and "values" (on the right side).\endnote{This is
+the same kind of thing as a "dictionary" in Python.}  The keys
+are column headers (if the data were in a data frame) and the values
+are the data values that would be in that column. In JSON generally,
+there's no need for the keys to be the same in every row, but if they
+are, as they are here, the data can be arranged in a data frame. How?
+Read on.
+
+I did this in R, using a package called `jsonlite`, with this code:
+
+
+```r
+library(jsonlite)
+url="http://app.toronto.ca/opendata/heat_alerts/heat_alerts_list.json"
+heat=fromJSON(url,simplifyDataFrame = T)
+head(heat)
+write_csv(heat,"heat.csv")
+```
+
+ 
+
+After loading the package, I create a variable `url` that
+contains the URL for the JSON file. The `fromJSON` line takes
+something that is JSON (which could be text, a file or a URL) and
+converts it to and saves it in a data frame. Finally, I save the data
+frame in a `.csv` file.  That's the `.csv` file you used. If you run that code, you'll get a `.csv` file of heat
+alerts right up to the present, and you can update my analysis.
+
+Why `.csv`? If I had used `write_delim`, the values
+would have been separated by spaces.  *But*, the `text` is
+a sentence of several words, which are themselves separated by
+spaces. I could have had you read in everything else and not the
+text, and then separated-by-spaces would have been fine, but I wanted
+you to see the text so that you could understand the `code`
+values. So `.csv` is what it was.
+
+ 
 
 
