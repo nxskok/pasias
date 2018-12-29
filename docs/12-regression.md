@@ -5815,6 +5815,7 @@ intervals from your output is a sure way to lose a point, however.
 
 
 
+##  Where should the fire stations be?
 
 
  In city planning, one major issue is where to locate fire

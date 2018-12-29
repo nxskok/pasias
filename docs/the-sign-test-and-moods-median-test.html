@@ -204,9 +204,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="regression.html#roller-coasters"><span class="toc-section-number">13.11</span> Roller coasters</a></li>
 <li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">13.12</span> Running and blood sugar</a></li>
 <li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">13.13</span> Calories and fat in pizza</a></li>
-<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">13.14</span> Being satisfied with hospital</a></li>
-<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">13.15</span> Salaries of mathematicians</a></li>
-<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">13.16</span> Predicting GPA of computer science students</a></li>
+<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">13.14</span> Where should the fire stations be?</a></li>
+<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">13.15</span> Being satisfied with hospital</a></li>
+<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">13.16</span> Salaries of mathematicians</a></li>
+<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">13.17</span> Predicting GPA of computer science students</a></li>
 </ul></li>
 <li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">14</span> Dates and times</a><ul>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">14.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
@@ -766,8 +767,8 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb493-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb493-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 70.92771 42.47486 46.79637 42.99003 65.81006 94.16516 49.83252
-##  [8] 56.49824 64.27054 62.82915</code></pre>
+<pre><code>##  [1] 51.18808 35.49030 68.91222 45.46705 45.75202 65.43225 40.44263
+##  [8] 55.75638 47.97572 42.12319</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
@@ -775,10 +776,11 @@ than 40 and how many are greater (or equal)?</li>
 <p>Solution</p>
 <p>The way we know this is to put <code>x</code> into a data frame first:</p>
 <div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb495-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>)</a></code></pre></div>
-<pre><code>## # A tibble: 1 x 2
+<pre><code>## # A tibble: 2 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE       10</code></pre>
+## 1 FALSE        9
+## 2 TRUE         1</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -798,7 +800,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1      10 FALSE</code></pre>
+## 1       1 TRUE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
@@ -810,7 +812,7 @@ should not reject. The fix is</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1      10 TRUE</code></pre>
+## 1       1 TRUE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>
