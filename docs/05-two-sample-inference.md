@@ -11,7 +11,7 @@ library(tidyverse)
 
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
@@ -1080,6 +1080,750 @@ it was not reasonable to conclude that females generally
 are more accurate at parallel-parking than males are.
 
 
+
+
+
+
+
+##  Bell peppers and too much water
+
+
+ A pathogen called *Phytophthora capsici* causes bell
+peppers to wilt and die. It is thought that too much water aids in the
+spread of the pathogen. Two fields are under study, labelled
+`a` and `b`. The first step in the research project is
+to compare the mean soil  water content of the two fields.  There is
+a suspicion that field `a` will have a higher water content
+than field `b`. The data
+are in the
+file
+[link](http://www.utsc.utoronto.ca/~butler/d29/bellpepper.csv).
+
+
+(a) Read the file in using `read_csv`, and
+list the resulting data frame.
+ 
+Solution
+
+
+Reading directly from the URL is easiest:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/bellpepper.csv"
+pepper=read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   field = col_character(),
+##   water = col_double()
+## )
+```
+
+```r
+pepper
+```
+
+```
+## # A tibble: 30 x 2
+##    field water
+##    <chr> <dbl>
+##  1 a      10.2
+##  2 a      10.7
+##  3 a      15.5
+##  4 a      10.4
+##  5 a       9.9
+##  6 a      10  
+##  7 a      16.6
+##  8 a      15.1
+##  9 a      15.2
+## 10 a      13.8
+## # ... with 20 more rows
+```
+
+     
+
+If you like, find out how many observations you have from each field, thus:
+
+
+```r
+pepper %>% count(field)
+```
+
+```
+## # A tibble: 2 x 2
+##   field     n
+##   <chr> <int>
+## 1 a        14
+## 2 b        16
+```
+
+ 
+
+Fourteen and sixteen.
+ 
+
+(b) Make side-by-side boxplots of the water content values for
+the two fields. How do the fields seem to compare?
+ 
+Solution
+
+
+This kind of thing:
+
+```r
+ggplot(pepper,aes(x=field,y=water))+geom_boxplot()
+```
+
+<img src="05-two-sample-inference_files/figure-html/dartmouth-1.png" width="672"  />
+
+     
+
+This one is rather interesting: the distribution of water contents for
+field `a` is generally higher than that for field `b`,
+but the median for `a` is actually *lower*.
+
+The other reasonable plot is a facetted histogram, something like this:
+
+
+```r
+ggplot(pepper,aes(x=water))+geom_histogram(bins=6)+
+facet_grid(field~.)
+```
+
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+
+ 
+
+The distribution of water content in field `b` is actually
+bimodal, which is probably the explanation of the funny thing with the
+median. What actually seems to be happening (at least for these data)
+is that the water content in field B is either about the same as field
+A, or a lot less (nothing in between).  I can borrow an idea from
+earlier to find the five-number summaries for each field:
+
+
+```r
+pepper %>% nest(-field) %>%
+mutate(qq=map(data,~enframe(quantile(.$water)))) %>%
+unnest(qq) %>%
+mutate(pctile=parse_number(name)) %>%
+select(-name) %>%
+spread(pctile,value)
+```
+
+```
+## # A tibble: 2 x 6
+##   field   `0`  `25`  `50`  `75` `100`
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1 a       9.9 10.5   11.4  14.8  16.6
+## 2 b       7.1  8.33  11.8  12.6  13.9
+```
+
+ 
+
+This is a weird one: all the quantiles are greater for field A
+*except* for the median.
+ 
+
+(c) Do a two-sample $t$-test to test whether there is evidence
+that the mean water
+content in field `a` is higher than that of field
+`b`. What do you conclude? Explain briefly. (You'll need to
+figure out a way of doing a one-sided test, or how to adapt the
+results from a two-sided test.)
+ 
+Solution
+
+
+
+```r
+t.test(water~field,alternative="greater", data=pepper)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  water by field
+## t = 2.0059, df = 27.495, p-value = 0.0274
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  0.2664399       Inf
+## sample estimates:
+## mean in group a mean in group b 
+##        12.52857        10.76875
+```
+
+     
+
+Note the use of `alternative` to specify that the first group
+mean (that of field `a`) is bigger than the second, field
+`b`, under the alternative hypothesis.
+
+The P-value, 0.0274, is less than 0.05, so we reject the null (equal
+means) in favour of the `a` mean being bigger than the
+`b` mean: field `a` really does have a higher mean water
+content. 
+
+Another way to tackle this is to do a two-sided test and adapt the P-value:
+
+
+```r
+t.test(water~field, data=pepper)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  water by field
+## t = 2.0059, df = 27.495, p-value = 0.0548
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.03878411  3.55842696
+## sample estimates:
+## mean in group a mean in group b 
+##        12.52857        10.76875
+```
+
+ 
+
+This time we do *not* go straight to the P-value. First we check
+that we are on the correct side, which we are since the sample mean
+for field `a` *is* bigger than for field `b`. Then we are
+entitled to take the two-sided P-value 0.0548 and *halve* it to
+get the same 0.0274 that we did before.
+ 
+
+(d) Is the result of your test consistent with the boxplot, or
+not? Explain briefly.
+ 
+Solution
+
+
+The test said that field `a` had a greater mean water
+content. Looking at the boxplot, this is consistent with where the
+boxes sit (`a`'s box is higher up than
+`b`'s). However, it is not consistent with the medians,
+where `b`'s median is actually *bigger*.
+You have two possible right answers here: comparing the boxes with
+the test result (they agree) or comparing the medians with the
+test result (they disagree). Either is good. If you like, you
+could also take the angle that the two boxes overlap a fair bit,
+so it is surprising that the test came out significant. (The
+resolution of this one is that we have 30 measurements altogether,
+14 and 16 in the two groups, so the sample size is not tiny. With
+smaller samples, having overlapping boxes would probably lead to a
+non-significant difference.) 
+ 
+
+
+
+
+##  Exercise and anxiety and bullying mice
+
+
+ Does exercise help to reduce anxiety?
+To assess this, some researchers randomly assigned
+mice to either 
+an enriched environment where there was an exercise wheel available,
+or a standard environment with no exercise options. After three weeks
+in the specified environment, for five minutes a day for two weeks,
+the mice were each exposed to a "mouse bully" --- a mouse who was very
+strong, aggressive, and territorial. One measure of mouse anxiety is
+amount of time hiding in a dark compartment, with mice who are more
+anxious spending more time in darkness. The amount of time spent in
+darkness is recorded for each of the mice. 
+
+The data can be found at
+[link](http://www.utsc.utoronto.ca/~butler/d29/stressedmice.txt). 
+
+
+
+(a)[2] Read the data into R, and display your data frame. Count the number of mice in each group. 
+
+Solution
+
+
+These are aligned columns with spaces in between, so we need `read_table`:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/stressedmice.txt"
+mice=read_table(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   Time = col_integer(),
+##   Environment = col_character()
+## )
+```
+
+```r
+mice
+```
+
+```
+## # A tibble: 14 x 2
+##     Time Environment
+##    <int> <chr>      
+##  1   359 Enriched   
+##  2   280 Enriched   
+##  3   138 Enriched   
+##  4   227 Enriched   
+##  5   203 Enriched   
+##  6   184 Enriched   
+##  7   231 Enriched   
+##  8   394 Standard   
+##  9   477 Standard   
+## 10   439 Standard   
+## 11   428 Standard   
+## 12   391 Standard   
+## 13   488 Standard   
+## 14   454 Standard
+```
+
+   
+
+You can call the data frame whatever you like.
+
+If you must, you can physically count the number of mice in each group, but you ought to get in the habit of coding this kind of thing:
+
+
+```r
+mice %>% count(Environment)
+```
+
+```
+## # A tibble: 2 x 2
+##   Environment     n
+##   <chr>       <int>
+## 1 Enriched        7
+## 2 Standard        7
+```
+
+ 
+
+Seven in each.
+ 
+
+
+(b)[2] Draw side-by-side boxplots of time spent in darkness for each
+group of mice.
+
+Solution
+
+
+This:
+
+```r
+ggplot(mice, aes(x=Environment, y=Time))+geom_boxplot()
+```
+
+<img src="05-two-sample-inference_files/figure-html/artichoke-1.png" width="672"  />
+
+     
+
+You did remember to put capital letters on the variable names, didn't you?
+ 
+
+
+(c)[2] Do the boxplots support the hypothesis about exercise and
+anxiety? Explain briefly.
+
+Solution
+
+
+The hypothesis about exercise and anxiety is that mice who
+exercise more should be less anxious. How does that play out in
+this study? Well, mice in the enriched environment at least have
+the opportunity to exercise, which the mice in the standard
+environment do not, and anxiety is measured by the amount of time
+spent in darkness (more equals more anxious).
+So we'd expect the mice in the standard environment to spend more
+time in darkness, if that hypothesis is correct.
+That's exactly what the boxplots show, with very little
+doubt.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This means that I would expect to reject a null hypothesis of equal means, but I get ahead of myself.</span>
+Your answer needs to make two points: (i) what you would expect to
+see, if the hypothesis about anxiety and exercise is true, and
+(ii) whether you actually did see it. You can do this either way
+around: for example, you can say what you see in the boxplot, and
+then make the case that this *does* support the idea of more
+exercise corresponding with less anxiety.
+ 
+
+
+(d)[2] Carry out a $t$-test for comparing the mean time spent in
+darkness for the mice in the two groups. Think carefully about the
+details of the $t$-test (and what you need evidence in favour of).
+
+Solution
+
+
+We are trying to prove that exercise goes with *less*
+anxiety, so a one-sided test is called for. The other thing to
+think about is how R organizes the groups for
+`Environment`: in alphabetical order. Thus
+`Enriched` is first (like on the boxplot). We're trying to
+prove that the mean `Time` is *less* for
+`Enriched` than for `Standard`, so we need `alternative="less"`:
+
+```r
+with(mice,t.test(Time~Environment,alternative="less"))
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  Time by Environment
+## t = -6.7966, df = 9.1146, p-value = 3.734e-05
+## alternative hypothesis: true difference in means is less than 0
+## 95 percent confidence interval:
+##       -Inf -151.2498
+## sample estimates:
+## mean in group Enriched mean in group Standard 
+##               231.7143               438.7143
+```
+
+     
+ 
+
+
+(e)[2] What do you conclude, in terms of anxiety and exercise (at
+least for mice)? Explain  briefly.
+
+Solution
+
+
+The P-value (from the previous part) is 0.000037, which is way less
+than 0.05 (or 0.01 or whatever $\alpha$ you chose). So the null
+hypothesis (equal means) is resoundingly rejected in favour of the
+one-sided alternative that the mean anxiety (as measured by time
+spent in darkness) is less for the mice who (can) exercise.
+You need to end up by doing a one-sided test. An alternative to
+what I did is to do a two-sided test in the previous part. Then
+you can fix it up by recognizing that the means are the right way
+around for the research hypothesis (the mean time in darkness is
+way less for `Enriched`), and then dividing the two-sided
+P-value by 2. But you need to do the "correct side" thing: just
+halving the two-sided P-value is not enough, because the sample
+mean for `Enriched` might have been *more* than for
+`Standard`. 
+ 
+
+
+(f)[2] Does anything in the previous parts suggest any problems with
+the analysis you just did? Explain briefly.
+
+Solution
+
+
+Look at the side-by-side boxplots. The strict assumptions hiding
+behind the $t$-tests are that the data in each group come from
+normal distributions (equal standard deviations are not
+required). Are the data symmetric? Are there any outliers? Well, I
+see a high outlier in the `Enriched` group, so I have some
+doubts about the normality. On the other hand, I only have seven
+observations in each group, so there is no guarantee even if the
+populations from which they come are normal that the samples will
+be. So maybe things are not so bad.
+This is one of those situations where you make a case and defend it. I
+don't mind so much which case you make, as long as you can defend
+it. Thus, something like either of these two is good:
+
+
+* I see an outlier in the `Enriched` group. The data
+within each group are supposed to be normally distributed, and
+the `Enriched` group is not. So I see a problem.
+
+* I see an outlier in the `Enriched` group. But the
+sample sizes are small, and an apparent outlier could arise by
+chance. So I do not see a problem.
+
+Extra: another way to think about this is normal quantile plots to assess
+normality within each group. This uses the facetting trick to get a separate normal quantile plot for each `Environment`:
+
+```r
+ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
+facet_wrap(~Environment, scales="free")
+```
+
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+
+     
+
+For the `Enhanced` group, the upper-end outlier shows up. In a
+way this plot is no more illuminating than the boxplot, because you
+still have to make a call about whether this is "too big". Bear in
+mind also that these facetted normal quantile plots, with two groups,
+come out tall and skinny, so vertical deviations from the line are
+exaggerated. On this plot, the lowest value also looks too low.
+
+For the `Standard` group, there are no problems with normality
+at all.
+
+What happens if we change the shape of the plots?
+
+
+```r
+ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
+facet_wrap(~Environment, scales="free", ncol=1)
+```
+
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+
+     
+
+This makes the plots come out in one column, that is, short and squat. I'd still call the highest one in `Enhanced` an outlier, but the lowest value now looks pretty close to what you'd expect.
+ 
+
+
+
+
+##  diet and growth in boys
+
+
+ A dietician is studying the effect of
+different diets on children's growth. In part of the study, the
+dietician is investigating two religious sects, labelled `a`
+and `b` in our data set. Both sects are vegetarian; the
+difference between them is that people in Sect A only eat vegetables
+from below the ground, and Sect B only eats vegetables from above the
+ground. The height and weight of the boys
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was not sexism, but a recognition that boys and girls will be of different heights for reasons unrelated to diet. Doing it this way makes the analysis simpler.</span> are measured at regular
+intervals. The data in
+[link](http://www.utsc.utoronto.ca/~butler/d29/kids-diet.txt) are the
+heights of the boys at age 12.
+
+
+
+(a) Read in the data and find out how many observations you have
+and which variables.
+
+
+Solution
+
+
+The data values are separated by one space, so:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/kids-diet.txt"
+diet=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   sect = col_character(),
+##   height = col_integer()
+## )
+```
+
+```r
+diet
+```
+
+```
+## # A tibble: 21 x 2
+##    sect  height
+##    <chr>  <int>
+##  1 a        140
+##  2 a        140
+##  3 a        140
+##  4 a        143
+##  5 a        135
+##  6 a        144
+##  7 a        156
+##  8 a        149
+##  9 a        146
+## 10 a        148
+## # ... with 11 more rows
+```
+
+     
+
+21 observations on two variables, `sect` and
+`height`. (You should state this; it is not enough to make the
+reader figure it out for themselves.)
+
+The heights are evidently in centimetres.
+
+You can call the data frame whatever you like.
+
+
+
+(b) Obtain side-by-side boxplots of the heights for boys from
+each sect. Does it look as if the heights of the boys in each sect
+are different? Comment briefly. 
+
+
+Solution
+
+
+The boxplot is the kind of thing we've seen before:
+
+
+```r
+ggplot(diet,aes(x=sect,y=height))+geom_boxplot()
+```
+
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
+
+ 
+
+It looks to me as if the boys in Sect B are taller on average.
+
+
+
+(c) Looking at your boxplots, do you see any problems with
+doing a two-sample $t$-test? Explain briefly.
+
+
+Solution
+
+
+The assumption is that the data in each group are 
+"approximately normal". Boxplots don't tell you about normality specifically,
+but they tell you whether there are any outliers (none here) and
+something about the shape (via the lengths of the whiskers). I'd
+say the Sect A values are as symmetric as we could hope for. For
+Sect B, you can say either that they're skewed to the left (and
+that therefore we have a problem), or that the heights are close
+enough to symmetric (and that therefore we don't). For me, either
+is good. 
+As ever, normal quantile plots can offer more insight. With
+data in this form, the
+two samples are mixed up, but using facets is the way to go. Philosophically, we draw a normal quantile plot of *all* the heights, and then say at the end that we would actually like a separate plot for each sect:
+
+```r
+diet %>% ggplot(aes(sample=height))+stat_qq()+stat_qq_line()+
+facet_wrap(~sect, ncol=1)
+```
+
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
+
+ 
+
+I decided that I wanted short squat plots rather than tall skinny ones.
+
+With the sizes of the samples, I really don't see any problems
+here. Most of the evidence for the left skewness in Sect B is actually coming
+from that largest value being too small. Sect A is as good as you
+could wish for. Having extreme values being *not extreme enough* is not a problem, since it won't be distorting the mean. 
+
+The other way of doing this is to use `filter` to pull out the
+rows you want and then feed that into the plot:
+
+
+```r
+secta=filter(diet,sect=="a") %>%
+ggplot(aes(sample=sect))+stat_qq()+stat_qq_line()
+```
+
+ 
+
+and the same for sect B. This is the usual `ggplot`-in-pipeline
+thing where you don't have a named data frame in the `ggplot`
+because it will use whatever came out of the previous step of the
+pipeline.
+    
+
+
+(d) Run a $t$-test to determine whether the mean heights differ
+significantly. What do you conclude? Explain briefly. (Run the
+$t$-test even if your previous work suggests that it is not the
+right thing to do.)
+
+
+Solution
+
+
+The wording states that a two-sided test is correct, which is the
+default, so you don't need anything special:
+
+
+```r
+t.test(height~sect,data=diet)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  height by sect
+## t = -1.7393, df = 14.629, p-value = 0.103
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -12.007505   1.229728
+## sample estimates:
+## mean in group a mean in group b 
+##        144.8333        150.2222
+```
+
+ 
+
+This is a two-sample test, so it takes a `data=`. 
+
+Our null hypothesis is that the two sects have equal mean height. The
+P-value of 0.103 is larger than 0.05, so we do not reject that null
+hypothesis. That is, there is no evidence that the sects differ in
+mean height. (That is, our earlier thought that the boys in Sect B were taller
+is explainable by chance.)
+
+You *must* end up with a statement about mean heights, and when
+you do a test, you must state the conclusion in the context of the
+problem, whether I ask you to or not. 
+"Don't reject the null hypothesis" 
+is a step on the way to an answer, not an answer in
+itself. If you think it's an answer in itself, you won't be of much
+use to the world as a statistician.
+
+C32 folks might have been thinking that Mood's median test was the
+thing, if you were worried about that skewness in Sect B. My guess is
+that the $t$-test is the right, so it will be the better test
+(and give the smaller P-value) here, but if you want to do it, you
+could do it this way:
+
+
+```r
+library(smmr)
+median_test(diet,height,sect)
+```
+
+```
+## $table
+##      above
+## group above below
+##     a     4     7
+##     b     6     3
+## 
+## $test
+##        what     value
+## 1 statistic 1.8181818
+## 2        df 1.0000000
+## 3   P-value 0.1775299
+```
+
+ 
+
+My suspicion (that I wrote before doing the test) is correct: there is
+even less evidence of a difference in median height between the
+sects. The table shows that both sects are pretty close to 50--50
+above and below the overall median, and with sample sizes this small,
+they are certainly not significantly different from an even split. The
+small frequencies bring a warning about the chi-squared approximation
+possibly not working (that `smmr` suppresses). We had one like
+this in C32, but there the result was very significant, and this one
+is very non-significant. However, the implication is the same: even if
+the P-value is not very accurate (because the expected frequencies for
+sect B are both 4.5), the conclusion is unlikely to be wrong because
+the P-value is so far from 0.05.
+    
 
 
 

@@ -1,0 +1,196 @@
+##  Exercise and anxiety and bullying mice
+
+
+ Does exercise help to reduce anxiety?
+To assess this, some researchers randomly assigned
+mice to either 
+an enriched environment where there was an exercise wheel available,
+or a standard environment with no exercise options. After three weeks
+in the specified environment, for five minutes a day for two weeks,
+the mice were each exposed to a "mouse bully" --- a mouse who was very
+strong, aggressive, and territorial. One measure of mouse anxiety is
+amount of time hiding in a dark compartment, with mice who are more
+anxious spending more time in darkness. The amount of time spent in
+darkness is recorded for each of the mice. 
+
+The data can be found at
+[link](http://www.utsc.utoronto.ca/~butler/d29/stressedmice.txt). 
+
+
+
+(a)[2] Read the data into R, and display your data frame. Count the number of mice in each group. 
+
+Solution
+
+
+These are aligned columns with spaces in between, so we need `read_table`:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/stressedmice.txt"
+mice=read_table(my_url)
+mice
+```
+
+   
+
+You can call the data frame whatever you like.
+
+If you must, you can physically count the number of mice in each group, but you ought to get in the habit of coding this kind of thing:
+
+```{r }
+mice %>% count(Environment)
+```
+
+ 
+
+Seven in each.
+ 
+
+
+(b)[2] Draw side-by-side boxplots of time spent in darkness for each
+group of mice.
+
+Solution
+
+
+This:
+```{r artichoke}
+ggplot(mice, aes(x=Environment, y=Time))+geom_boxplot()
+```
+
+     
+
+You did remember to put capital letters on the variable names, didn't you?
+ 
+
+
+(c)[2] Do the boxplots support the hypothesis about exercise and
+anxiety? Explain briefly.
+
+Solution
+
+
+The hypothesis about exercise and anxiety is that mice who
+exercise more should be less anxious. How does that play out in
+this study? Well, mice in the enriched environment at least have
+the opportunity to exercise, which the mice in the standard
+environment do not, and anxiety is measured by the amount of time
+spent in darkness (more equals more anxious).
+So we'd expect the mice in the standard environment to spend more
+time in darkness, if that hypothesis is correct.
+That's exactly what the boxplots show, with very little
+doubt.
+`r tufte::margin_note("This means that I would expect to reject a null hypothesis of equal means, but I get ahead of myself.")`
+Your answer needs to make two points: (i) what you would expect to
+see, if the hypothesis about anxiety and exercise is true, and
+(ii) whether you actually did see it. You can do this either way
+around: for example, you can say what you see in the boxplot, and
+then make the case that this *does* support the idea of more
+exercise corresponding with less anxiety.
+ 
+
+
+(d)[2] Carry out a $t$-test for comparing the mean time spent in
+darkness for the mice in the two groups. Think carefully about the
+details of the $t$-test (and what you need evidence in favour of).
+
+Solution
+
+
+We are trying to prove that exercise goes with *less*
+anxiety, so a one-sided test is called for. The other thing to
+think about is how R organizes the groups for
+`Environment`: in alphabetical order. Thus
+`Enriched` is first (like on the boxplot). We're trying to
+prove that the mean `Time` is *less* for
+`Enriched` than for `Standard`, so we need `alternative="less"`:
+```{r }
+with(mice,t.test(Time~Environment,alternative="less"))
+```
+
+     
+ 
+
+
+(e)[2] What do you conclude, in terms of anxiety and exercise (at
+least for mice)? Explain  briefly.
+
+Solution
+
+
+The P-value (from the previous part) is 0.000037, which is way less
+than 0.05 (or 0.01 or whatever $\alpha$ you chose). So the null
+hypothesis (equal means) is resoundingly rejected in favour of the
+one-sided alternative that the mean anxiety (as measured by time
+spent in darkness) is less for the mice who (can) exercise.
+You need to end up by doing a one-sided test. An alternative to
+what I did is to do a two-sided test in the previous part. Then
+you can fix it up by recognizing that the means are the right way
+around for the research hypothesis (the mean time in darkness is
+way less for `Enriched`), and then dividing the two-sided
+P-value by 2. But you need to do the "correct side" thing: just
+halving the two-sided P-value is not enough, because the sample
+mean for `Enriched` might have been *more* than for
+`Standard`. 
+ 
+
+
+(f)[2] Does anything in the previous parts suggest any problems with
+the analysis you just did? Explain briefly.
+
+Solution
+
+
+Look at the side-by-side boxplots. The strict assumptions hiding
+behind the $t$-tests are that the data in each group come from
+normal distributions (equal standard deviations are not
+required). Are the data symmetric? Are there any outliers? Well, I
+see a high outlier in the `Enriched` group, so I have some
+doubts about the normality. On the other hand, I only have seven
+observations in each group, so there is no guarantee even if the
+populations from which they come are normal that the samples will
+be. So maybe things are not so bad.
+This is one of those situations where you make a case and defend it. I
+don't mind so much which case you make, as long as you can defend
+it. Thus, something like either of these two is good:
+
+
+* I see an outlier in the `Enriched` group. The data
+within each group are supposed to be normally distributed, and
+the `Enriched` group is not. So I see a problem.
+
+* I see an outlier in the `Enriched` group. But the
+sample sizes are small, and an apparent outlier could arise by
+chance. So I do not see a problem.
+
+Extra: another way to think about this is normal quantile plots to assess
+normality within each group. This uses the facetting trick to get a separate normal quantile plot for each `Environment`:
+```{r }
+ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
+facet_wrap(~Environment, scales="free")
+```
+
+     
+
+For the `Enhanced` group, the upper-end outlier shows up. In a
+way this plot is no more illuminating than the boxplot, because you
+still have to make a call about whether this is "too big". Bear in
+mind also that these facetted normal quantile plots, with two groups,
+come out tall and skinny, so vertical deviations from the line are
+exaggerated. On this plot, the lowest value also looks too low.
+
+For the `Standard` group, there are no problems with normality
+at all.
+
+What happens if we change the shape of the plots?
+
+```{r }
+ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
+facet_wrap(~Environment, scales="free", ncol=1)
+```
+
+     
+
+This makes the plots come out in one column, that is, short and squat. I'd still call the highest one in `Enhanced` an outlier, but the lowest value now looks pretty close to what you'd expect.
+ 
+
+

@@ -1,0 +1,330 @@
+
+
+ The data in
+[link](http://statweb.lsu.edu/EXSTWeb/StatLab/DataSets/NKNWData/CH06PR09.txt)
+are on shipments of chemicals in drums that arrive at a warehouse. In
+order, the variables are:
+
+
+* the number of minutes required to handle the shipment
+
+* the number of drums in the shipment
+
+* the total weight of the shipment, in hundreds of pounds.
+
+
+
+
+(a) The data set has two features: *no* column names, and
+data aligned in columns (that is, more than one space between data
+values). Read the data in, giving the columns suitable names. To do
+this, you may have to consult an appropriate help file, or do some
+searching, perhaps of one of the other questions on this assignment.
+
+
+Solution
+
+
+The alignment of columns means that we need to use
+`read_table`. Once you've figured *that* out, you can
+search for help by typing `?read_table` in the Console
+window (the help will appear bottom right), or you can put the
+same thing into an R Notebook code chunk, and when you run the
+chunk, the help will be displayed. (Press control-shift-1 to go
+back to the notebook.)
+Or you can Google it, of course.
+The key observation is that you need to supply some column names
+in `col_names`, like this:
+```{r }
+my_url="http://statweb.lsu.edu/EXSTWeb/StatLab/DataSets/NKNWData/CH06PR09.txt"
+cols=c("minutes","drums","weight")
+chemicals=read_table(my_url,col_names=cols)
+chemicals
+```
+
+     
+
+I like to define my URL and column names up front. You can define
+either of them in the `read_table`, but it makes that line
+longer. Up to you.
+
+There is no `skip` here, because the data file starts right
+away with the data and we want to use all the values: we are
+*adding* names to what's in the data file. If you used
+`skip`, you will be one observation short all the way through,
+and your output will be slightly different from mine all the way
+through.
+
+Use any names you like, but they should resemble what the columns
+actually represent.
+    
+
+
+(b) Fit a regression predicting the number of minutes required
+to handle a shipment from the other two variables. Display the results.
+
+
+Solution
+
+
+```{r }
+minutes.1=lm(minutes~drums+weight,data=chemicals)
+summary(minutes.1)
+```
+
+     
+    
+
+
+(c) Explain carefully but briefly what the slope coefficients
+for the two explanatory variables represent. Do their signs
+(positive or negative) make practical sense in the context of
+handling shipments of chemicals?
+
+
+Solution
+
+
+The slope coefficient for `drums` is 3.77; this means that
+a shipment with one extra drum (but the same total weight) would
+take on average 3.77 minutes longer to handle. Likewise, the slope
+coefficient for `weight` is 5.08, so a shipment that
+weighs 1 hundred more pounds but has the same number of drums
+will take 5.08 more minutes to handle.
+Or "each additional drum, all else equal, will take 3.77 more minutes to handle", or similar wording. You have to get at two
+things: a one-unit increase in the explanatory variable going with
+a certain increase in the response, and *also* the "all else    equal" part. How you say it is up to you, but you need to say it.
+That was two marks. The third one comes from noting that both
+slope coefficients are positive, so making a shipment either
+contain more drums or weigh more makes the handling time longer as
+well. This makes perfect sense, since either kind of increase
+would make the shipment more difficult to handle, and thus take
+longer. 
+I was *not* asking about P-values. There isn't really much to
+say about those: they're both significant, so the handling time
+depends on both the total weight and the number of drums. Removing
+either from the regression would be a mistake.
+    
+
+
+(d) Obtain plots of residuals against fitted values, residuals
+against explanatory variables, and a normal quantile plot of the residuals.
+
+
+Solution
+
+
+These are the standard plots from a multiple regression. The
+second one requires care, but the first and last should be straightforward.
+Residuals against fitted values:
+```{r }
+ggplot(minutes.1,aes(x=.fitted,y=.resid))+geom_point()
+```
+
+     
+
+The tricky part about the second one is that the $x$-values and the
+residuals come from different data frames, which has to get expressed
+in the `ggplot`. The obvious way is to do the two plots (one
+for each explanatory variable) one at a time:
+
+```{r }
+ggplot(minutes.1,aes(x=chemicals$drums,y=.resid))+geom_point()
+```
+
+ 
+
+and 
+
+```{r }
+ggplot(minutes.1,aes(x=chemicals$weight,y=.resid))+geom_point()
+```
+$ %$
+
+What would also work is to make a data frame first with the things to plot:
+
+```{r }
+dd=tibble(weight=chemicals$weight,drums=chemicals$drums,res=resid(minutes.1))
+```
+
+ 
+
+and then:
+
+```{r }
+ggplot(dd,aes(x=weight,y=res))+geom_point()
+```
+
+ 
+
+and similarly for `drums`. The `resid` with the model
+name in brackets seems to be necessary.
+
+Another way to approach this is `augment` from
+`broom`. That does this:
+
+```{r }
+library(broom)
+d = minutes.1 %>% augment(chemicals)
+as_tibble(d)
+```
+
+ 
+
+and then you can use `d` as the "base" data frame from which
+everything comes:
+
+```{r }
+ggplot(d,aes(x=drums,y=.resid))+geom_point()
+```
+
+ 
+
+and
+
+```{r }
+ggplot(d,aes(x=weight,y=.resid))+geom_point()
+```
+
+ 
+
+or you can even do that trick to put the two plots on facets:
+
+```{r }
+d %>% gather(xname,x,drums:weight) %>%
+ggplot(aes(x=x,y=.resid))+geom_point()+
+facet_wrap(~xname)
+```
+
+ 
+
+Last, the normal quantile plot:
+
+```{r }
+ggplot(minutes.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+ 
+
+As a check for the grader, there should be four plots, obtained
+somehow: residuals against fitted values, normal quantile plot of
+residuals, residuals against `drums`, residuals against  
+`weight`.
+
+
+
+(e) Do you have any concerns, looking at the residual plots?
+Explain briefly.
+
+
+Solution
+
+
+The (only) concern I have, looking at those four plots, is the one very
+positive residual, the one around 15. Take that away, and I think
+all of the plots are then acceptable. 
+Alternatively, I will take something like "I have no concerns    about the form of the relationship", saying that the *kind*
+of model being fitted here is OK (no evidence of non-linearity,
+fanning out, that kind of stuff). It's up to you to decide whether
+you think "concerns" extends to outliers, high-influence points,
+etc. 
+The normal quantile plot reveals that the most negative residual,
+the one around $-9$, is in fact almost exactly as negative as you
+would expect the most negative residual to be, so it is not an
+outlier at all. The residuals are almost exactly normally
+distributed, *except* for the most positive one.
+I don't think you can justify fanning-in, since the evidence for
+that is mostly from the single point on the right. The other
+points do not really have residuals closer to zero as you move
+left to right.
+
+Do *not* be tempted to pick out everything you can think of wrong
+with these plots. The grader can, and will, take away points if you
+start naming things that are not concerns.
+
+Extra: what else can I find out about that large-positive-residual
+point? This is where having the "augmented" data frame is a plus:
+
+```{r }
+d %>% filter(.resid>10)
+```
+
+ 
+
+As shown. The predicted number of minutes is 96.8, but the actual
+number of minutes it took is 112. Hence the residual of 15.2. 
+Can we find "similar" numbers of `drums` and
+`weight` and compare the `minutes`? Try this:
+
+```{r }
+chemicals %>% filter(between(weight,8,11),
+between(drums,10,14))
+```
+
+ 
+
+You might not have seen `between` before, but it works the way
+you'd expect.
+`r tufte::margin_note("weight between 8 and 11, for example,  returning TRUE or FALSE.")` Two other shipments with similar numbers of drums and
+total weight took around 90--100 minutes to handle, so the 112 does
+look about 15 minutes too long. This was actually an average-sized shipment:
+
+```{r }
+library(ggrepel)
+d %>% mutate(my_label=ifelse(.resid>10,"residual +","")) %>%
+ggplot(aes(x=drums,y=weight,colour=minutes,label=my_label))+
+geom_point()+geom_text_repel()
+```
+
+ 
+
+so it's a bit of a mystery why it took so long to handle. 
+
+I had some fun with the graph: if you set `colour` equal to a
+continuous variable (as `minutes` is here), you get a
+continuous colour scale, by default from dark blue (small) to light
+blue (large). The number of minutes tends to get larger (lighter) as
+you go up and to the right with bigger shipments. The point labelled
+"residual +" is the one with the large residual; it is a
+noticeably lighter blue than the points around it, meaning that it
+took longer to handle than those points. I used the trick from C32 to
+label "some" (here one) of the points: create a new label variable
+with a `mutate` and an `ifelse`, leaving all of the
+other labels blank so you don't see them.
+
+The blue colour scheme is a little hard to judge values on. Here's
+another way to do that:
+
+```{r }
+d %>% mutate(my_label=ifelse(.resid>10,"residual +","")) %>%
+ggplot(aes(x=drums,y=weight,colour=minutes,label=my_label))+
+geom_point()+geom_text_repel()+
+scale_colour_gradient(low="red",high="blue")
+```
+
+ 
+
+The labelled point is a little more blue (purplish) than the more
+clearly red points near it.
+
+The other thing to see is that there is also a positive correlation
+between the number of drums and the total weight, which is what you'd
+expect. Unlike with some of our other examples, this wasn't strong
+enough to cause problems; the separate effects of `drums` and
+`weight` on `minutes` were distinguishable enough to
+allow both explanatory variables to have a strongly significant effect
+on `minutes`.
+
+Post scriptum: the "drums" here are not concert-band-type drums, but
+something like this:
+
+
+
+![](Chemical-Drums-200x200.png.png)
+  
+
+    
+
+
+
+

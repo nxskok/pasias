@@ -34,7 +34,6 @@ requests. I will acknowledge all the people who catch things.
 
 My checklist:
 
-- working on stuff from assignments 9/9a
-- look at heat data
-- bodyfat and bodyfat-sign duplication
 - bring in the D29 questions
+- working on A1 D29
+- look for multiple regression Qs in A6 or wherever

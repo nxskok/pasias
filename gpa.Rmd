@@ -1,0 +1,486 @@
+##  Predicting GPA of computer science students
+
+
+ The file
+[link](http://www.utsc.utoronto.ca/~butler/d29/gpa.txt) contains some
+measurements of academic achievement for a number of university
+students studying computer science:
+
+
+
+* High school grade point average
+
+* Math SAT score
+
+* Verbal SAT score
+
+* Computer Science grade point average
+
+* Overall university grade point average.
+
+
+
+
+(a) Read in the data and display it (or at least the first ten lines).
+
+
+Solution
+
+
+The usual:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/gpa.txt"
+gpa=read_delim(my_url," ")
+gpa
+```
+
+ 
+
+Two SAT scores and three GPAs, as promised.
+
+
+
+(b) Make a scatterplot of high school GPA against university
+GPA. Which variable should be the response and which
+explanatory? Explain briefly. Add a smooth trend to your plot.
+
+
+Solution
+
+
+High school comes before university, so high school should be
+explanatory and university should be the response. (High school
+grades are used as an admission criterion to university, so we
+would hope they would have some predictive value.)
+```{r }
+ggplot(gpa,aes(x=high_GPA,y=univ_GPA))+geom_point()+
+geom_smooth()
+```
+
+   
+    
+
+
+(c) Describe any relationship on your scatterplot: its direction, its
+strength and its shape. Justify your description briefly.
+
+
+Solution
+
+
+Taking these points one at a time:
+
+
+* direction: upward (a higher high-school GPA generally goes
+with a higher university GPA as well. Or you can say that the
+lowest high-school GPAs go with the lowest university GPAs,
+and high with high, at least most of the time).
+
+* strength: something like moderately strong, since while
+the trend is upward, there is quite a lot of scatter. (This is
+a judgement call: something that indicates that you are basing
+your description on something reasonable is fine.)
+
+* shape: I'd call this "approximately linear" since there
+is no clear curve here. The smooth trend wiggles a bit, but
+not enough to make me doubt a straight line.
+
+Looking ahead, I also notice that when high-school GPA is high,
+university GPA is also consistently high, but when high-school
+GPA is low, the university GPA is sometimes low and sometimes
+high, a lot more variable. (This suggests problems with fan-in
+later.) In a practical sense, what this seems to show is that
+people who do well at university usually did well in high-school
+as well, but sometimes their high-school grades were not
+that good. This is especially true for people with university
+GPAs around 3.25.
+      
+
+
+(d)??part:highonly?? Fit a linear regression for predicting university GPA
+from high-school GPA and display the results.
+
+
+Solution
+
+
+Just this, therefore:
+```{r }
+gpa.1=lm(univ_GPA~high_GPA,data=gpa)
+summary(gpa.1)
+```
+
+    
+
+Extra: this question goes on too long, so I didn't ask you to look at the
+residuals from this model, but my comments earlier suggested that we
+might have had some problems with fanning-in (the variability of
+predictions getting less as the high-school GPA increases). In case
+you are interested, I'll look at this here. First, residuals against
+fitted values:
+
+```{r }
+ggplot(gpa.1,aes(x=.fitted,y=.resid))+geom_point()+geom_smooth()
+```
+
+ 
+
+Is that evidence of a trend in the residuals? Dunno. I'm inclined to
+call this an "inconsequential wiggle" and say it's OK. Note that the
+grey envelope includes zero all the way across.
+
+Normal quantile plot of residuals:
+
+```{r }
+ggplot(gpa.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+ 
+
+A somewhat long-tailed distribution: compared to a normal
+distribution, the residuals are a bit too big in size, both on the
+positive and negative end.
+
+The problem I was really worried about was the potential of
+fanning-in, which we can assess by looking at the absolute residuals:
+
+```{r }
+ggplot(gpa.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
+```
+
+ 
+
+That is definitely a downward trend in the size of the residuals, and
+I think I was right to be worried before. The residuals should be of
+similar size all the way across.
+
+The usual problem of this kind is fanning-*out*, where the
+residuals get *bigger* in size as the fitted values increase. The
+bigger values equals more spread is the kind of thing that a
+transformation like taking logs will handle: the bigger values are all
+brought downwards, so they will be both smaller and less variable than
+they were. This one, though, goes the other way, so the only kind of
+transformation that might help is one at the other end of the scale
+(think of the Box-Cox lambda scale), something like maybe reciprocal,
+$\lambda=-1$ maybe.
+
+The other thought I had was that there is this kind of break around a
+high-school GPA of 3 (go back to the scatterplot of (b)): when the
+high-school GPA is higher than 3, the university GPA is very
+consistent (and shows a clear upward trend), but when the high-school
+GPA is less than 3, the university GPA is very variable and there
+doesn't seem to be any trend at all. So maybe two separate analyses
+would be the way to go.
+
+All right, how does Box-Cox work out here, if at all?
+
+```{r }
+library(MASS)
+boxcox(univ_GPA~high_GPA,data=gpa)
+```
+
+ 
+
+It doesn't. All right, that answers *that* question. 
+
+When I loaded `MASS`, I also loaded its `select`
+function,
+`r tufte::margin_note("That is what that masked message above was  about.")` and I might want to use the 
+`tidyverse` `select`
+function later, and things could get confused. So let's "unload"
+`MASS` now:
+
+```{r }
+detach("package:MASS",unload=T)
+```
+
+ 
+        
+
+
+(e) Two students have been admitted to university. One has
+a high school GPA of 3.0 and the other a high school GPA of   
+3.5. Obtain suitable intervals that summarize the GPAs that each of these
+two students might obtain in university.
+
+
+Solution
+
+
+Since we are talking about individual students, rather than
+the  mean of *all* students with these GPAs, prediction
+intervals are called for. The first step is to make a data
+frame to predict from. This has to contain columns for all the
+explanatory variables, just `high_GPA` in this case:
+```{r }
+gpa.new=tibble(high_GPA=c(3,3.5))
+gpa.new
+```
+
+      
+
+and then feed that into `predict`:
+
+```{r }
+preds=predict(gpa.1,gpa.new,interval="p")
+preds
+```
+
+ 
+
+and display that side by side with the values it was predicted from:
+
+```{r }
+cbind(gpa.new,preds)
+```
+
+ 
+
+or this way, if you like it better:
+
+```{r }
+as_tibble(preds) %>% bind_cols(gpa.new) %>% select(high_GPA, everything())
+```
+
+ 
+
+Thus the predicted university GPA for the student with high school GPA
+3.0 is between 2.6 and 3.7, and for the student with high school GPA
+3.5 is between 2.9 and 4.0. (I think this is a good number of decimals
+to give, but in any case, you should actually *say* what the
+intervals are.)
+
+I observe that these intervals are almost exactly the same
+length. This surprises me a bit, since I would have said that 3.0 is
+close to the average high-school GPA and 3.5 is noticeably higher. If
+that's the case, the prediction interval for 3.5 should be longer
+(since there is less "nearby data"). Was I right about that?
+
+```{r }
+gpa %>% summarize( mean=mean(high_GPA),
+med=median(high_GPA),
+q1=quantile(high_GPA,0.25),
+q3=quantile(high_GPA,0.75))
+```
+
+ 
+
+More or less: the mean is close to 3, and 3.5 is close to the third
+quartile. So the thing about the length of the prediction interval is
+a bit of a mystery. Maybe it works better for the confidence interval
+for the mean:
+
+```{r }
+preds=predict(gpa.1,gpa.new,interval="c")
+cbind(gpa.new,preds)
+```
+
+ 
+
+These intervals are a lot shorter, since we are talking about
+*all* students with the high-school GPAs in question, and we
+therefore no longer have to worry about variation from student to
+student (which is considerable). But my supposition about length is
+now correct: the interval for 3.5, which is further from the mean, is
+a little longer than the interval for 3.0. Thinking about it, it seems
+that the individual-to-individual variation, which is large, is
+dominating things for our prediction interval above.
+        
+
+
+(f)??part:all?? Now obtain a regression predicting university GPA from
+high-school GPA as well as the two SAT scores. Display your results.
+
+
+Solution
+
+
+Create a new regression with all the explanatory variables you want in it:
+
+```{r }
+gpa.2=lm(univ_GPA~high_GPA+math_SAT+verb_SAT,data=gpa)
+summary(gpa.2)
+```
+
+ 
+        
+
+
+(g) Test whether adding the two SAT scores has improved the
+prediction of university GPA. What do you conclude?
+
+
+
+Solution
+
+
+Since we added *two* explanatory variables, the $t$-tests in
+`gpa.2` don't apply (they tell us whether we can take out
+*one* $x$-variable). We might have some suspicions, but that's
+all they are.  So we have to do `anova`:
+```{r }
+anova(gpa.1,gpa.2)
+```
+
+   
+
+If you put the models the other way around, you'll get a negative
+$F$-statistic and degrees of freedom, which doesn't make
+much sense (although the test will still work).
+
+The null hypothesis here is that the two models fit equally
+well. Since the P-value is not small, we do not reject that null
+hypothesis, and therefore we conclude that the two models *do*
+fit equally well, and therefore we prefer the smaller one, the one
+that predicts university GPA from just high-school GPA. (Or,
+equivalently, we conclude that those two SAT scores don't add anything
+to the prediction of how well a student will do at university, once
+you know their high-school GPA.)
+
+This might surprise you, given what the SATs are supposed to be
+*for*. But that's what the data say.
+  
+
+
+(h) Carry out a backward elimination starting out from your
+model in part (??part:all??). Which model do you end up with?
+Is it the same model as you fit in (??part:highonly??)?
+
+
+Solution
+
+
+In the model of (??part:all??), `math_SAT` was the
+least significant, so that comes out first. (I use
+`update` but I'm not insisting that you do:)
+```{r }
+gpa.3=update(gpa.2,.~.-math_SAT)
+summary(gpa.3)
+```
+
+ 
+Here is where we have to stop, since both high-school GPA and
+verbal SAT score are significant, and so taking either of them
+out would be a bad idea. 
+This is a *different* model than the one of
+(??part:highonly??). This is the case, even though the model
+with high-school GPA only was not significantly worse than the
+model containing everything. (This goes to show that
+model-building doesn't always have nice clear answers.)
+In the model I called `gpa.2`, neither of the SAT
+scores were anywhere near significant (considered singly), but
+as soon as we took out one of the SAT scores (my model
+`gpa.3`), the other one became significant. This goes
+to show that you shouldn't take out more than one explanatory
+variable based on the results of the $t$-tests, and even if
+you test to see whether you should have taken out both of the SAT,
+you won't necessarily get consistent
+results. Admittedly, it's a close decision whether to
+keep or remove `verb_SAT`, since its P-value is
+close to 0.05.
+The other way of tackling this one is via `step`, which
+does the backward elimination for you (not that it was much
+work here):
+```{r }
+step(gpa.2,direction="backward",test="F")
+```
+
+         
+
+This gives the same result as we did from our backward
+elimination. The tables with AIC in them are each step of
+the elimination, and the variable at the top is the one that comes out
+next. (When `<none>` gets to the top, that's when you stop.)
+What happened is that the two SAT scores started off highest, but once
+we removed `math_SAT`, `verb_SAT` jumped below
+`<none>` and so the verbal SAT score had to stay.
+
+Both the P-value and the AIC say that the decision about keeping or
+removing `verb_SAT` is very close.
+        
+
+
+(i) These students were studying computer science at
+university. Do you find your backward-elimination result
+sensible or surprising, given this? Explain briefly.
+
+
+Solution
+
+
+I would expect computer science students to be strong students
+generally, good at math and possibly not so good with
+words. So it is not surprising that high-school GPA figures
+into the prediction, but I would expect math SAT score to have
+an impact also, and it does not. It is also rather surprising
+that verbal SAT score predicts success at university for these
+computer science students; you wouldn't think that having
+better skills with words would be helpful. So I'm surprised.
+Here, I'm looking for some kind of discussion about what's in
+the final backward-elimination model, and what you would
+expect to be true of computer science students. 
+Let's look at the final model from the backward elimination again:
+```{r }
+summary(gpa.3)
+```
+
+         
+
+The two slope estimates are both positive, meaning that, all else
+equal, a higher value for each explanatory variable goes with a higher
+university GPA. This indicates that a higher verbal SAT score goes
+with a higher university GPA: this is across all the university
+courses that a student takes, which you would expect to be math and
+computer science courses for a Comp Sci student, but might include
+a few electives or writing courses. Maybe what is happening is that
+the math SAT score is telling the same story as the high-school GPA
+for these students, and the verbal SAT score is saying something
+different. (For example, prospective computer science students are
+mostly likely to have high math SAT scores, so there's not much
+information there.)
+
+I think I need to look at the correlations:
+
+```{r }
+cor(gpa)
+```
+
+ 
+
+We'll ignore `comp_GPA` (i) because we haven't been thinking
+about it and (ii) because it's highly correlated with the university
+GPA anyway. (There isn't a sense that one of the two university GPAs
+is explanatory and the other is a response, since students are taking
+the courses that contribute to them at the same time.)
+
+The highest correlation with university GPA of what remains is
+high-school GPA, so it's not at all surprising that this features in
+all our regressions. The correlations between university GPA and the
+two SAT scores are about equal, so there appears to be no reason to
+favour one of the SAT scores over the other. But, the two SAT scores
+are highly correlated with *each other* (0.835), which suggests
+that if you have one, you don't need the other, because they are
+telling more or less the same story. 
+
+That makes me wonder how a regression with the SAT math score and
+*not* the SAT verbal score would look:
+
+```{r }
+gpa.4=lm(univ_GPA~high_GPA+math_SAT,data=gpa)
+summary(gpa.4)
+```
+
+ 
+
+Math SAT does not quite significantly add anything to the prediction,
+which confirms that we do better to use the verbal SAT score
+(surprising though it seems). Though, the two regressions with the
+single SAT scores, `gpa.3` and `gpa.4`, have almost the
+same R-squared values. It's not clear-cut at all. In the end, you have
+to make a call and stand by it.
+        
+
+
+
+

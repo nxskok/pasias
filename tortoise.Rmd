@@ -1,0 +1,214 @@
+##  Tortoise shells and eggs
+
+
+ A biologist measured the length of the carapace (shell) of
+female tortoises, and then x-rayed the tortoises to count how many
+eggs they were carrying. The length is measured in millimetres. The
+data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/tortoise-eggs.txt). The
+biologist is wondering what kind of relationship, if any, there is
+between the carapace length (as an explanatory variable) and the
+number of eggs (as a response variable).
+
+
+
+(a) Read in the data, and check that your values look
+reasonable. 
+ 
+Solution
+
+
+Look at the data first. The columns are aligned and separated by
+more than one space, so it's `read_table`:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/tortoise-eggs.txt"
+tortoises=read_table(my_url)
+tortoises
+```
+
+     
+
+Those look the same as the values in the data file. (*Some*
+comment is needed here. I don't much mind what, but something that
+suggests that you have eyeballed the data and there are no obvious
+problems: that is what I am looking for.)
+ 
+
+
+(b) Obtain a scatterplot, with a smooth trend, of the data.
+
+ 
+Solution
+
+
+Something like this:
+```{r looe}
+ggplot(tortoises,aes(x=length,y=eggs))+geom_point()+geom_smooth()
+```
+
+   
+ 
+
+
+(c) The biologist expected that a larger tortoise would be able
+to carry more eggs. Is that what the scatterplot is suggesting?
+Explain briefly why or why not.
+
+ 
+Solution
+
+
+The biologist's expectation is of an upward trend. But it looks as
+if the trend on the scatterplot is up, then down, ie.\ a curve
+rather than a straight line. So this is not what the biologist was
+expecting. 
+ 
+
+
+(d) Fit a straight-line relationship and display the summary.
+
+ 
+Solution
+
+
+```{r }
+tortoises.1=lm(eggs~length,data=tortoises)
+summary(tortoises.1)
+```
+
+   
+
+I didn't ask for a comment, but feel free to observe that this
+regression is truly awful, with an R-squared of less than 2\% and a
+non-significant effect of `length`.
+ 
+
+
+(e) Add a squared term to your regression, fit that and display
+the  summary.
+
+ 
+Solution
+
+
+The `I()` is needed because the raise-to-a-power symbol has
+a special meaning in a model formula, and we want to *not*
+use that special meaning:
+```{r }
+tortoises.2=lm(eggs~length+I(length^2),data=tortoises)
+summary(tortoises.2)
+```
+
+ 
+
+Another way is to use `update`:
+
+```{r }
+tortoises.2a=update(tortoises.1,.~.+I(length^2))
+summary(tortoises.2a)
+```
+
+ 
+ 
+
+
+(f) Is a curve better than a line for these data? Justify your
+answer in two ways: by comparing a measure of fit, and  by doing a
+suitable test of significance.
+
+ 
+Solution
+
+
+An appropriate measure of fit is R-squared. For the straight line,
+this is about 0.01, and for the regression with the squared term it
+is about 0.43. This tells us that  a straight line fits appallingly
+badly, and that a curve fits a *lot* better. 
+This doesn't do a test, though. For that, look at the slope of the
+length-squared term in the second regression; in particular,
+look at its P-value. This is 0.0045, which is small: the squared
+term is necessary, and taking it out would be a mistake. The
+relationship really is curved, and trying to describe it with a
+straight line would be a big mistake.
+ 
+
+
+(g) Make a residual plot for the straight line model: that is, plot
+the residuals against the fitted values.
+ Does this echo
+your conclusions of the previous part? In what way? Explain briefly.
+
+ 
+Solution
+
+
+Plot the things called `.fitted` and `.resid` from the
+regression object, which is not a data frame but you can treat it as
+if it is for this:
+
+```{r }
+ggplot(tortoises.1,aes(x=.fitted, y=.resid))+geom_point()
+```
+
+ 
+
+Up to you whether you put a smooth trend on it or not:
+
+```{r }
+ggplot(tortoises.1,aes(x=.fitted, y=.resid))+geom_point()+
+geom_smooth()
+```
+
+ 
+Looking at the plot, you see a curve, up and down. The most
+negative residuals go with small or large fitted values; when the
+fitted value is in the middle, the residual is usually positive. A
+curve on the residual plot indicates a curve in the actual
+relationship. We just found above that a curve does fit a lot
+better, so this is all consistent.
+
+Aside: the grey "envelope" is wide, so there is a lot of scatter on the
+residual plot. The grey envelope almost contains zero all the way
+across, so the evidence for a curve (or any other kind of trend) is
+not all that strong, based on this plot. This is in great contrast to
+the regression with length-squared, where the length-squared term is
+*definitely* necessary. 
+
+That was all I wanted, but you can certainly look at other
+plots. Normal quantile plot of the residuals:
+
+```{r }
+ggplot(tortoises.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+ 
+
+This is not the best: the low values are a bit too low, so that the
+whole picture is (a little) skewed to the left.
+`r tufte::margin_note("The very   negative residuals are at the left and right of the residual plot;  they are there because the relationship is a curve. If you were to  look at the residuals from the model with length-squared, you  probably wouldn't see this.")`
+
+Another plot you can make is to assess fan-out: you plot the
+*absolute value*
+`r tufte::margin_note("The value, but throw away the minus sign if it has one.")` of the residuals against the fitted values. The idea
+is that if there is fan-out, the absolute value of the residuals will
+get bigger:
+
+```{r }
+ggplot(tortoises.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+
+geom_smooth()
+```
+
+ 
+
+I put the smooth curve on as a kind of warning: it looks as if the
+size of the residuals goes down and then up again as the fitted values
+increase. But the width of the grey "envelope" and the general
+scatter of the points suggests that there is really not much happening
+here at all. On a plot of residuals, the grey envelope is really more
+informative than the blue smooth trend. On this one, there is no
+evidence of any fan-out (or fan-in). 
+
+ 
+
+
+

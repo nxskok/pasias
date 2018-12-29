@@ -11,7 +11,7 @@ library(tidyverse)
 
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
@@ -21,6 +21,9 @@ library(tidyverse)
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
+These problems are about simple regression (just one $x$-variable):
+
+
 
 
 ##  Rainfall in California
@@ -3864,6 +3867,351 @@ the tree (to which you add the height of your eyes).
 
 
 
+##  Tortoise shells and eggs
+
+
+ A biologist measured the length of the carapace (shell) of
+female tortoises, and then x-rayed the tortoises to count how many
+eggs they were carrying. The length is measured in millimetres. The
+data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/tortoise-eggs.txt). The
+biologist is wondering what kind of relationship, if any, there is
+between the carapace length (as an explanatory variable) and the
+number of eggs (as a response variable).
+
+
+
+(a) Read in the data, and check that your values look
+reasonable. 
+ 
+Solution
+
+
+Look at the data first. The columns are aligned and separated by
+more than one space, so it's `read_table`:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/tortoise-eggs.txt"
+tortoises=read_table(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   length = col_integer(),
+##   eggs = col_integer()
+## )
+```
+
+```r
+tortoises
+```
+
+```
+## # A tibble: 18 x 2
+##    length  eggs
+##     <int> <int>
+##  1    284     3
+##  2    290     2
+##  3    290     7
+##  4    290     7
+##  5    298    11
+##  6    299    12
+##  7    302    10
+##  8    306     8
+##  9    306     8
+## 10    309     9
+## 11    310    10
+## 12    311    13
+## 13    317     7
+## 14    317     9
+## 15    320     6
+## 16    323    13
+## 17    334     2
+## 18    334     8
+```
+
+     
+
+Those look the same as the values in the data file. (*Some*
+comment is needed here. I don't much mind what, but something that
+suggests that you have eyeballed the data and there are no obvious
+problems: that is what I am looking for.)
+ 
+
+
+(b) Obtain a scatterplot, with a smooth trend, of the data.
+
+ 
+Solution
+
+
+Something like this:
+
+```r
+ggplot(tortoises,aes(x=length,y=eggs))+geom_point()+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/looe-1.png" width="672"  />
+
+   
+ 
+
+
+(c) The biologist expected that a larger tortoise would be able
+to carry more eggs. Is that what the scatterplot is suggesting?
+Explain briefly why or why not.
+
+ 
+Solution
+
+
+The biologist's expectation is of an upward trend. But it looks as
+if the trend on the scatterplot is up, then down, ie.\ a curve
+rather than a straight line. So this is not what the biologist was
+expecting. 
+ 
+
+
+(d) Fit a straight-line relationship and display the summary.
+
+ 
+Solution
+
+
+
+```r
+tortoises.1=lm(eggs~length,data=tortoises)
+summary(tortoises.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = eggs ~ length, data = tortoises)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.7790 -1.1772 -0.0065  2.0487  4.8556 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)
+## (Intercept) -0.43532   17.34992  -0.025    0.980
+## length       0.02759    0.05631   0.490    0.631
+## 
+## Residual standard error: 3.411 on 16 degrees of freedom
+## Multiple R-squared:  0.01478,	Adjusted R-squared:  -0.0468 
+## F-statistic:  0.24 on 1 and 16 DF,  p-value: 0.6308
+```
+
+   
+
+I didn't ask for a comment, but feel free to observe that this
+regression is truly awful, with an R-squared of less than 2\% and a
+non-significant effect of `length`.
+ 
+
+
+(e) Add a squared term to your regression, fit that and display
+the  summary.
+
+ 
+Solution
+
+
+The `I()` is needed because the raise-to-a-power symbol has
+a special meaning in a model formula, and we want to *not*
+use that special meaning:
+
+```r
+tortoises.2=lm(eggs~length+I(length^2),data=tortoises)
+summary(tortoises.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = eggs ~ length + I(length^2), data = tortoises)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.0091 -1.8480 -0.1896  2.0989  4.3605 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)   
+## (Intercept) -8.999e+02  2.703e+02  -3.329  0.00457 **
+## length       5.857e+00  1.750e+00   3.347  0.00441 **
+## I(length^2) -9.425e-03  2.829e-03  -3.332  0.00455 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.671 on 15 degrees of freedom
+## Multiple R-squared:  0.4338,	Adjusted R-squared:  0.3583 
+## F-statistic: 5.747 on 2 and 15 DF,  p-value: 0.01403
+```
+
+ 
+
+Another way is to use `update`:
+
+
+```r
+tortoises.2a=update(tortoises.1,.~.+I(length^2))
+summary(tortoises.2a)
+```
+
+```
+## 
+## Call:
+## lm(formula = eggs ~ length + I(length^2), data = tortoises)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.0091 -1.8480 -0.1896  2.0989  4.3605 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)   
+## (Intercept) -8.999e+02  2.703e+02  -3.329  0.00457 **
+## length       5.857e+00  1.750e+00   3.347  0.00441 **
+## I(length^2) -9.425e-03  2.829e-03  -3.332  0.00455 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.671 on 15 degrees of freedom
+## Multiple R-squared:  0.4338,	Adjusted R-squared:  0.3583 
+## F-statistic: 5.747 on 2 and 15 DF,  p-value: 0.01403
+```
+
+ 
+ 
+
+
+(f) Is a curve better than a line for these data? Justify your
+answer in two ways: by comparing a measure of fit, and  by doing a
+suitable test of significance.
+
+ 
+Solution
+
+
+An appropriate measure of fit is R-squared. For the straight line,
+this is about 0.01, and for the regression with the squared term it
+is about 0.43. This tells us that  a straight line fits appallingly
+badly, and that a curve fits a *lot* better. 
+This doesn't do a test, though. For that, look at the slope of the
+length-squared term in the second regression; in particular,
+look at its P-value. This is 0.0045, which is small: the squared
+term is necessary, and taking it out would be a mistake. The
+relationship really is curved, and trying to describe it with a
+straight line would be a big mistake.
+ 
+
+
+(g) Make a residual plot for the straight line model: that is, plot
+the residuals against the fitted values.
+ Does this echo
+your conclusions of the previous part? In what way? Explain briefly.
+
+ 
+Solution
+
+
+Plot the things called `.fitted` and `.resid` from the
+regression object, which is not a data frame but you can treat it as
+if it is for this:
+
+
+```r
+ggplot(tortoises.1,aes(x=.fitted, y=.resid))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
+
+ 
+
+Up to you whether you put a smooth trend on it or not:
+
+
+```r
+ggplot(tortoises.1,aes(x=.fitted, y=.resid))+geom_point()+
+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
+
+ 
+Looking at the plot, you see a curve, up and down. The most
+negative residuals go with small or large fitted values; when the
+fitted value is in the middle, the residual is usually positive. A
+curve on the residual plot indicates a curve in the actual
+relationship. We just found above that a curve does fit a lot
+better, so this is all consistent.
+
+Aside: the grey "envelope" is wide, so there is a lot of scatter on the
+residual plot. The grey envelope almost contains zero all the way
+across, so the evidence for a curve (or any other kind of trend) is
+not all that strong, based on this plot. This is in great contrast to
+the regression with length-squared, where the length-squared term is
+*definitely* necessary. 
+
+That was all I wanted, but you can certainly look at other
+plots. Normal quantile plot of the residuals:
+
+
+```r
+ggplot(tortoises.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
+
+ 
+
+This is not the best: the low values are a bit too low, so that the
+whole picture is (a little) skewed to the left.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The very   negative residuals are at the left and right of the residual plot;  they are there because the relationship is a curve. If you were to  look at the residuals from the model with length-squared, you  probably wouldn't see this.</span>
+
+Another plot you can make is to assess fan-out: you plot the
+*absolute value*
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The value, but throw away the minus sign if it has one.</span> of the residuals against the fitted values. The idea
+is that if there is fan-out, the absolute value of the residuals will
+get bigger:
+
+
+```r
+ggplot(tortoises.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+
+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
+
+ 
+
+I put the smooth curve on as a kind of warning: it looks as if the
+size of the residuals goes down and then up again as the fitted values
+increase. But the width of the grey "envelope" and the general
+scatter of the points suggests that there is really not much happening
+here at all. On a plot of residuals, the grey envelope is really more
+informative than the blue smooth trend. On this one, there is no
+evidence of any fan-out (or fan-in). 
+
+ 
+
+
+
+
+
 ##  Crickets revisited
 
 
@@ -4085,7 +4433,7 @@ ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
 geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-114-1.png" width="672"  />
 
        
     
@@ -4316,7 +4664,7 @@ ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
 geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-111-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
 
  
 
@@ -4339,7 +4687,7 @@ it *is* a regression):
 ggplot(pulse.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-112-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
 
          
 
@@ -4359,7 +4707,7 @@ right place:
 ggplot(pulse.1,aes(x=crickets$temperature,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
 
  
 
@@ -4375,7 +4723,7 @@ goes like this:
 ggplot(pulse.1,aes(x=crickets$species,y=.resid))+geom_boxplot()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-114-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
 
  
 
@@ -4397,7 +4745,7 @@ normal quantile plot of all the residuals together:
 ggplot(pulse.1,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-123-1.png" width="672"  />
 
  
 
@@ -4509,7 +4857,7 @@ ggplot(coasters,aes(x=drop,y=duration,label=coaster_name))+
 geom_point()+geom_text_repel()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
 
        
 
@@ -4652,6 +5000,3823 @@ were not part of the regression won't be part of `augment`'s
 output either. That's my understanding. My first way explicitly
 supplies the original data frame to `augment` so there is no
 question about what it is using.
+
+
+
+
+
+
+##  Running and blood sugar
+
+
+ A diabetic wants to know how aerobic exercise affects his
+blood sugar. When his blood sugar reaches 170 (mg/dl), he goes out for
+a run at a pace of 10 minutes per mile. He runs different distances on
+different days. Each time he runs, he measures his blood sugar after
+the run. (The preferred blood sugar level is between 80 and 120 on
+this scale.) The data are in the file
+[link](http://www.utsc.utoronto.ca/~butler/d29/runner.txt). Save the
+data somewhere that R can find it. Our aim is to predict blood sugar
+from distance.
+
+
+
+(a) Read in the data and display the data frame that you read
+in.
+ 
+Solution
+
+
+From the URL is easiest. These are delimited by one space, as
+you can tell by looking at the file:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/runner.txt"
+runs=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   distance = col_double(),
+##   blood_sugar = col_integer()
+## )
+```
+
+```r
+runs
+```
+
+```
+## # A tibble: 12 x 2
+##    distance blood_sugar
+##       <dbl>       <int>
+##  1      2           136
+##  2      2           146
+##  3      2.5         131
+##  4      2.5         125
+##  5      3           120
+##  6      3           116
+##  7      3.5         104
+##  8      3.5          95
+##  9      4            85
+## 10      4            94
+## 11      4.5          83
+## 12      4.5          75
+```
+
+     
+
+That looks like my data file.
+ 
+
+(b) Make a scatterplot and add a smooth trend to it.
+ 
+Solution
+
+
+
+```r
+ggplot(runs,aes(x=distance,y=blood_sugar))+geom_point()+
+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/plymouth-1.png" width="672"  />
+
+     
+
+`blood_sugar` should be on the vertical axis, since this is
+what we are trying to predict. Getting the `x` and the
+`y` right is easy on these, because they are the $x$ and $y$
+for your plot.
+ 
+
+(c) Would you say that the relationship between blood sugar and
+running distance is approximately linear, or not? It is therefore
+reasonable to use a regression of blood sugar on distance? Explain briefly.
+ 
+Solution
+
+
+I'd say that this is about as linear as you could ever wish
+for. Neither the pattern of points nor the smooth trend have any
+kind of noticeable bend in them. (Observing a lack of curvature in
+either the points or the smooth trend is enough.) The trend
+is a linear one, so using a regression will be just fine. (If it
+weren't, the rest of the question would be kind of dumb.)
+ 
+
+(d) Fit a suitable regression, and obtain the regression output.
+ 
+Solution
+
+
+Two steps: `lm` and then `summary`:
+
+```r
+runs.1=lm(blood_sugar~distance,data=runs)
+summary(runs.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = blood_sugar ~ distance, data = runs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.8238 -3.6167  0.8333  4.0190  5.5476 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  191.624      5.439   35.23 8.05e-12 ***
+## distance     -25.371      1.618  -15.68 2.29e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.788 on 10 degrees of freedom
+## Multiple R-squared:  0.9609,	Adjusted R-squared:  0.957 
+## F-statistic: 245.7 on 1 and 10 DF,  p-value: 2.287e-08
+```
+
+     
+ 
+
+(e) How would you *interpret* the slope? That is, what is
+the slope, and what does that mean about blood sugar and running distance?
+ 
+Solution
+
+
+The slope is $-25.37$. This means that for each additional mile run,
+the runner's blood sugar will decrease on average by about 25 units.
+
+You can check this from the scatterplot. For example, from 2 to 3
+miles, average blood sugar decreases from about 140 to about 115, a
+drop of 25.
+ 
+
+(f) Is there a (statistically) significant relationship between
+running distance and blood sugar? How do you know? Do you find this
+surprising? Explain briefly.
+ 
+Solution
+
+
+Look at the P-value either on the `distance` line (for its
+$t$-test) or for the $F$-statistic on the bottom line. These are
+the same: 0.000000023. (They will be the same any time there is
+one $x$-variable.) This P-value is *way* smaller than 0.05,
+so there *is* a significant relationship between running distance
+and blood sugar. This does not surprise me in the slightest,
+because the trend on the scatterplot is *so* clear, there's
+no way it could have happened by chance if in fact there were no
+relationship between running distance and blood sugar.
+ 
+
+(g) This diabetic is planning to go for a 3-mile run tomorrow
+and a 5-mile run the day after. Obtain suitable 95\% intervals that
+say what his blood sugar might be after each of these runs. 
+ 
+Solution
+
+
+This is a prediction interval, in each case, since we are talking about
+*individual* runs of 3 miles and 5 miles (not the mean blood
+sugar after *all* runs of 3 miles, which is what a confidence
+interval for the mean response would be).
+The procedure is to set up a data frame with the two
+`distance` values in it, and then feed that and the
+regression object into `predict`, coming up in a moment.
+
+```r
+dists=c(3,5)
+dist.new=tibble(distance=dists)
+dist.new
+```
+
+```
+## # A tibble: 2 x 1
+##   distance
+##      <dbl>
+## 1        3
+## 2        5
+```
+
+     
+The important thing is that the name of the column of the new data
+frame must be *exactly* the same as the name of the explanatory
+variable in the regression. If they don't match, `predict`
+won't work. At least, it won't work properly.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It won't give you an error, but it will go back to the *original* data frame to get distances to predict from, and you will get very confused.</span>
+
+Then, `predict`:
+
+
+```r
+pp=predict(runs.1,dist.new,interval="p")
+pp
+```
+
+```
+##         fit       lwr       upr
+## 1 115.50952 104.37000 126.64905
+## 2  64.76667  51.99545  77.53788
+```
+
+ 
+
+and display this with the distances by the side:
+
+
+```r
+cbind(dist.new,pp)
+```
+
+```
+##   distance       fit       lwr       upr
+## 1        3 115.50952 104.37000 126.64905
+## 2        5  64.76667  51.99545  77.53788
+```
+
+ 
+
+or
+
+
+```r
+data.frame(dist.new,pp)
+```
+
+```
+##   distance       fit       lwr       upr
+## 1        3 115.50952 104.37000 126.64905
+## 2        5  64.76667  51.99545  77.53788
+```
+
+ 
+Blood sugar after a 3-mile run is predicted to be between 104 and 127;
+after a 5-mile run it is predicted to be between 52 and 77.5.
+
+Extra: both `cbind` and `data.frame` are "base R" ways of
+combining a data frame with something else to make a new data
+frame. They are not from the `tidyverse`. The
+`tidyverse` way is via `tibble` or `bind_cols`,
+but they are a bit more particular about what they will take:
+`tibble` takes vectors (single variables) and
+`bind_cols` takes vectors or data frames. The problem here is
+that `pp` is not either of those:
+
+
+```r
+class(pp)
+```
+
+```
+## [1] "matrix"
+```
+
+ 
+
+so that we have to use `as_tibble` first to turn it into a
+data frame, and thus:
+
+
+```r
+pp %>% as_tibble() %>% bind_cols(dist.new)
+```
+
+```
+## # A tibble: 2 x 4
+##     fit   lwr   upr distance
+##   <dbl> <dbl> <dbl>    <dbl>
+## 1 116.  104.  127.         3
+## 2  64.8  52.0  77.5        5
+```
+
+ 
+
+which puts things backwards, unless you do it like this:
+
+
+```r
+dist.new %>% bind_cols(as_tibble(pp))
+```
+
+```
+## # A tibble: 2 x 4
+##   distance   fit   lwr   upr
+##      <dbl> <dbl> <dbl> <dbl>
+## 1        3 116.  104.  127. 
+## 2        5  64.8  52.0  77.5
+```
+
+ 
+
+which is a pretty result from very ugly code. 
+
+I also remembered that if you finish with a `select`, you get the columns in the order they were in the `select`:
+
+
+```r
+pp %>% as_tibble() %>% bind_cols(dist.new) %>%
+select(c(4,1:3))
+```
+
+```
+## # A tibble: 2 x 4
+##   distance   fit   lwr   upr
+##      <dbl> <dbl> <dbl> <dbl>
+## 1        3 116.  104.  127. 
+## 2        5  64.8  52.0  77.5
+```
+
+ 
+
+using the numbers of the columns.
+ 
+
+(h) Which of your two intervals is longer? Does this make
+sense? Explain briefly.
+ 
+Solution
+
+
+The intervals are about 22.25 and 25.5 units long. The one for a
+5-mile run is a bit longer. I think this makes sense because 3
+miles is close to the average run distance, so there is a lot of
+"nearby" data. 5 miles is actually longer than any of the runs
+that were actually done (and therefore we are actually
+extrapolating), but the important point for the prediction
+interval is that there is less nearby data: those 2-mile runs
+don't help so much in predicting blood sugar after a 5-mile
+run. (They help *some*, because the trend is so linear. This
+is why the 5-mile interval is not *so* much longer. If the
+trend were less clear, the 5-mile interval would be more
+noticeably worse.)
+ 
+
+
+
+
+##  Calories and fat in pizza
+
+
+ 
+The file at
+[link](http://www.utsc.utoronto.ca/~butler/d29/Pizza.csv) 
+came from a spreadsheet of information about 24 brands
+of pizza: specifically, per 5-ounce serving, the number of calories,
+the grams of fat, and the cost (in US dollars). The names of the pizza
+brands are quite long. This file may open in a spreadsheet when you
+browse to the link, depending on your computer's setup.
+
+
+
+(a) Read in the data and display at least some of the data
+frame. Are the variables of the right types? (In particular, why is
+the number of calories labelled one way and the cost labelled a
+different way?)
+
+Solution
+
+
+`read_csv` is the thing this time:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/Pizza.csv"
+pizza=read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   Type = col_character(),
+##   Calories = col_integer(),
+##   Fat = col_double(),
+##   Cost = col_double()
+## )
+```
+
+```r
+pizza
+```
+
+```
+## # A tibble: 24 x 4
+##    Type                                               Calories   Fat  Cost
+##    <chr>                                                 <int> <dbl> <dbl>
+##  1 Domino's Deep Dish with Pepperoni                       385  19.5  1.87
+##  2 Pizza Hut's Stuffed Crust with Pepperoni                370  15    1.83
+##  3 Pizza Hut's Pan Pizza with Pepperoni                    280  14    1.83
+##  4 Domino's Hand-Tossed with Pepperoni                     305  12    1.67
+##  5 Pizza Hut's Hand-Tossed with Pepperoni                  230   9    1.63
+##  6 Little Caesars' Deep Dish with Pepperoni                350  14.2  1.06
+##  7 Little Caesars' Original Round with Pepperoni           230   8    0.81
+##  8 Freschetta Bakes & Rises  4-Cheese                      364  15    0.98
+##  9 Freschetta Bakes & Rises Sauce Stuffed Crust 4-Ch…      334  11    1.23
+## 10 DiGiorno Rising Crust Four Cheese                       332  12    0.94
+## # ... with 14 more rows
+```
+
+    
+
+The four variables are: the brand of pizza, which got read in as text,
+the number of calories (an integer), and the fat and cost, which are
+both decimal numbers so they get labelled `num`.
+
+Anyway, these are apparently the right thing. The distinction between
+`calories` and `cost` is that the former is a whole
+number and the latter is a decimal number.
+
+Extra: I wanted to mention something else that I discovered
+yesterday.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">R is like that: sometimes it seems as if it has  infinite depth.</span> 
+There is a package called `rio` that will
+read (and write) data in a whole bunch of different formats in a
+unified way.\endnote{It does this by figuring what kind of thing you
+have, from the extension to its filename, and then calling an
+appropriate function to read in or write out the data. This is an
+excellent example of "standing on the shoulders of giants" to make
+our lives easier. The software does the hard work of figuring out
+what kind of thing you have and how to read it in; all we do is say `import`.} Anyway, the usual installation thing, done once:
+
+
+```r
+install.packages("rio")
+```
+
+ 
+
+which takes a moment since it probably has to install some other
+packages too, and then you read in a file like this:
+
+
+```r
+library(rio)
+pizza3=import(my_url)
+head(pizza3)
+```
+
+```
+##                                       Type Calories  Fat Cost
+## 1        Domino's Deep Dish with Pepperoni      385 19.5 1.87
+## 2 Pizza Hut's Stuffed Crust with Pepperoni      370 15.0 1.83
+## 3     Pizza Hut's Pan Pizza with Pepperoni      280 14.0 1.83
+## 4      Domino's Hand-Tossed with Pepperoni      305 12.0 1.67
+## 5   Pizza Hut's Hand-Tossed with Pepperoni      230  9.0 1.63
+## 6 Little Caesars' Deep Dish with Pepperoni      350 14.2 1.06
+```
+
+ 
+
+`import` figures that you have a `.csv` file, so it
+calls up `read_csv` or similar.
+
+Technical note: `rio` does not use the `read_`
+functions, so what it gives you is actually a `data.frame`
+rather than a `tibble`, so that when you display it, you get
+the whole thing even if it is long. Hence the `head` here and
+below to display the first six lines.
+
+I originally had the data as an Excel spreadsheet, but `import`
+will gobble up that pizza too:
+
+
+```r
+my_other_url="http://www.utsc.utoronto.ca/~butler/d29/Pizza_E29.xls"
+pizza4=import(my_other_url)
+head(pizza4)
+```
+
+```
+##                                       Type Calories Fat (g) Cost ($)
+## 1        Domino's Deep Dish with Pepperoni      385    19.5     1.87
+## 2 Pizza Hut's Stuffed Crust with Pepperoni      370    15.0     1.83
+## 3     Pizza Hut's Pan Pizza with Pepperoni      280    14.0     1.83
+## 4      Domino's Hand-Tossed with Pepperoni      305    12.0     1.67
+## 5   Pizza Hut's Hand-Tossed with Pepperoni      230     9.0     1.63
+## 6 Little Caesars' Deep Dish with Pepperoni      350    14.2     1.06
+```
+
+ 
+
+The corresponding function for writing a data frame to a file in the
+right format is, predictably enough, called `export`.
+
+
+(b) Make a scatterplot for predicting calories from the number
+of grams of fat. Add a smooth trend. What kind of relationship do
+you see, if any?
+
+Solution
+
+
+All the variable names start with Capital Letters:
+
+```r
+ggplot(pizza,aes(x=Fat,y=Calories))+geom_point()+
+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/alskhslafkhlksfhsasvvvv-1.png" width="672"  />
+
+       
+
+There is definitely an upward trend: the more fat, the more
+calories. The trend is more or less linear (or, a little bit curved:
+say what you like, as long as it's not obviously crazy). *I*
+think, with this much scatter, there's no real justification for
+fitting a curve.
+ 
+
+(c) Fit a straight-line relationship, and display the intercept,
+slope, R-squared, etc. Is there a real relationship between the two
+variables, or is any apparent trend just chance?
+
+Solution
+
+
+`lm`, with `summary`:
+
+```r
+pizza.1=lm(Calories~Fat,data=pizza)
+summary(pizza.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = Calories ~ Fat, data = pizza)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -55.44 -11.67   6.18  17.87  41.61 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  194.747     21.605   9.014 7.71e-09 ***
+## Fat           10.050      1.558   6.449 1.73e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 25.79 on 22 degrees of freedom
+## Multiple R-squared:  0.654,	Adjusted R-squared:  0.6383 
+## F-statistic: 41.59 on 1 and 22 DF,  p-value: 1.731e-06
+```
+
+       
+
+To assess whether this trend is real or just chance, look at the
+P-value on the end of the `Fat` line, or on the bottom line
+where the $F$-statistic is (they are the same value of $1.73\times
+10^{-6}$ or 0.0000017, so you can pick either). This P-value is
+really small, so the slope is definitely *not* zero, and
+therefore there really is a relationship between the two variables.
+ 
+
+(d) Obtain a plot of the residuals against the fitted values
+for this regression. Does this indicate that there are any problems
+with this regression, or not? Explain briefly.
+
+Solution
+
+
+Use the regression object `pizza.1`:
+
+
+```r
+ggplot(pizza.1,aes(x=.fitted,y=.resid))+geom_point()+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-143-1.png" width="672"  />
+
+ 
+
+On my residual plot, I see a slight curve in the smooth trend,
+but I am not worried about that because the residuals on the plot are
+all over the place in a seemingly random pattern (the grey envelope is
+wide and that is pretty close to going straight across). So I think a
+straight line model is satisfactory. 
+
+That's all you needed, but it is also worth looking at a normal
+quantile plot of the residuals:
+
+
+```r
+ggplot(pizza.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-144-1.png" width="672"  />
+
+ 
+
+A bit skewed to the left (the low ones are too low).
+
+Also a plot of the absolute residuals, for assessing fan-out:
+
+
+```r
+ggplot(pizza.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
+
+ 
+
+A tiny bit of fan-in (residuals getting *smaller* in size as the
+fitted value gets bigger), but nothing much, I think.
+
+Another way of assessing curvedness is to fit a squared term anyway,
+and see whether it is significant:
+
+
+```r
+pizza.2=update(pizza.1,.~.+I(Fat^2))
+summary(pizza.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = Calories ~ Fat + I(Fat^2), data = pizza)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -62.103 -14.280   5.513  15.423  35.474 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)  90.2544    77.8156   1.160   0.2591  
+## Fat          25.9717    11.5121   2.256   0.0349 *
+## I(Fat^2)     -0.5702     0.4086  -1.395   0.1775  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 25.25 on 21 degrees of freedom
+## Multiple R-squared:  0.6834,	Adjusted R-squared:  0.6532 
+## F-statistic: 22.66 on 2 and 21 DF,  p-value: 5.698e-06
+```
+
+ 
+
+The fat-squared term is not significant, so that curve on the smooth trend
+in the (first) residual plot was indeed nothing to get excited about.
+ 
+
+(e) The research assistant in this study returns with two
+new brands of pizza (ones that were not in the original data). The
+fat content of a 5-ounce serving was 12 grams for the first brand
+and 20 grams for the second brand. For each of these brands of
+pizza, obtain a suitable 95\% interval for the number of calories
+contained in a 5-ounce serving.
+
+Solution
+
+
+The suitable interval here is a prediction interval, because we
+are interested in each case in the calorie content of the
+*particular* pizza brands that the research assistant
+returned with (and not, for example, in the mean calorie content
+for *all* brands of pizza that have 12 grams of fat per
+serving). Thus:
+
+```r
+newfat=c(12,20)
+new=tibble(Fat=newfat)
+new
+```
+
+```
+## # A tibble: 2 x 1
+##     Fat
+##   <dbl>
+## 1    12
+## 2    20
+```
+
+```r
+preds=predict(pizza.1,new,interval="p")
+cbind(new,preds)
+```
+
+```
+##   Fat      fit      lwr      upr
+## 1  12 315.3447 260.5524 370.1369
+## 2  20 395.7431 337.1850 454.3011
+```
+
+       
+
+Or, if you like:
+
+
+```r
+as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
+```
+
+```
+## # A tibble: 2 x 4
+##     Fat   fit   lwr   upr
+##   <dbl> <dbl> <dbl> <dbl>
+## 1    12  315.  261.  370.
+## 2    20  396.  337.  454.
+```
+
+ 
+
+For the pizza with 12 grams of fat, the predicted calories are between
+261 and 370 with 95\% confidence, and for the pizza with 20 grams of
+fat, the calories are predicted to be between 337 and 454. (You should
+write down what these intervals are, and not leave the reader to find
+them in the output.)
+
+(Remember the steps: create a new data frame containing the values to
+predict for, and then feed that into `predict` along with the
+model that you want to use to predict with. The variable in the data
+frame has to be called *precisely* `Fat` with a capital F,
+otherwise it won't work.)
+
+These intervals are both pretty awful: you get a very weak picture of
+how many calories per serving the pizza brands in question might
+contain. This is for two reasons: (i) there was a fair bit of scatter
+in the original relationship, R-squared being around 65\%, and (ii)
+even if we knew perfectly where the line went (which we don't),
+there's no guarantee that individual brands of pizza would be on it
+anyway. (Prediction intervals are always hit by this double whammy, in
+that individual observations suffer from variability in where the line
+goes *and* variability around whatever the line is.)
+
+I was expecting, when I put together this question, that the
+20-grams-of-fat interval would  be noticeably worse, because 20 is
+farther away from the mean fat content of all the brands. But there
+isn't much to choose. For the confidence intervals for the mean
+calories of *all* brands with these fat contents, the picture is clearer:
+
+
+```r
+preds=predict(pizza.1,new,interval="c")
+cbind(new,preds)
+```
+
+```
+##   Fat      fit      lwr      upr
+## 1  12 315.3447 303.4683 327.2211
+## 2  20 395.7431 371.9122 419.5739
+```
+
+ 
+
+or, as before:
+
+
+```r
+as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
+```
+
+```
+## # A tibble: 2 x 4
+##     Fat   fit   lwr   upr
+##   <dbl> <dbl> <dbl> <dbl>
+## 1    12  315.  303.  327.
+## 2    20  396.  372.  420.
+```
+
+ 
+
+This time the fat-20 interval is noticeably longer than the fat-12
+one. And these are much shorter than the prediction intervals, as we
+would guess.
+
+This question is a fair bit of work for 3 points, so I'm not insisting that you explain
+your choice of a prediction interval over a confidence interval, but I
+think it is still a smart thing to do, even purely from a marks point
+of view, because if you get it wrong for a semi-plausible reason, you
+might pick up some partial credit. Not pulling out your prediction
+intervals from your output is a sure way to lose a point, however.
+ 
+
+
+
+
+
+
+ In city planning, one major issue is where to locate fire
+stations. If a city has too many fire stations, it will spend too much
+on running them, but if it has too few, there may be unnecessary fire
+damage because the fire trucks take too long to get to the fire.
+
+The first part of a study of this kind of issue is to understand the
+relationship between the distance from the fire station (measured in
+miles in our data set) and the amount of fire damage caused (measured
+in thousands of dollars). A city recorded the fire damage and distance
+from fire station for 15 residential fires (which you can take as a
+sample of "all possible residential fires in that city"). The data
+are in [link](http://www.utsc.utoronto.ca/~butler/d29/fire_damage.txt). 
+
+
+
+(a) Read in and display the data, verifying that you have the
+right number of rows and the right columns.
+
+
+Solution
+
+
+A quick check of the data reveals that the data values are
+separated by exactly  one space, so:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/fire_damage.txt"
+fire=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   distance = col_double(),
+##   damage = col_double()
+## )
+```
+
+```r
+fire
+```
+
+```
+## # A tibble: 15 x 2
+##    distance damage
+##       <dbl>  <dbl>
+##  1      3.4   26.2
+##  2      1.8   17.8
+##  3      4.6   31.3
+##  4      2.3   23.1
+##  5      3.1   27.5
+##  6      5.5   36  
+##  7      0.7   14.1
+##  8      3     22.3
+##  9      2.6   19.6
+## 10      4.3   31.3
+## 11      2.1   24  
+## 12      1.1   17.3
+## 13      6.1   43.2
+## 14      4.8   36.4
+## 15      3.8   26.1
+```
+
+   
+
+15 observations (rows), and promised, and a column each of distances
+and amounts of fire damage, also as promised.
+
+One mark for reading in the data, and one for saying something
+convincing about how you have the right thing.
+    
+
+
+(b)??part:ttest?? Obtain a 95\% confidence interval for the
+mean fire damage. (There is nothing here from STAD29, and your
+answer should have nothing to do with distance.)
+
+
+Solution
+
+
+I wanted to dissuade you  from thinking too hard here. It's just
+an ordinary one-sample $t$-test, extracting the interval from it:
+
+```r
+t.test(fire$damage)
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  fire$damage
+## t = 12.678, df = 14, p-value = 4.605e-09
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  21.94488 30.88178
+## sample estimates:
+## mean of x 
+##  26.41333
+```
+
+     
+
+Or
+
+
+```r
+with(fire,t.test(damage))
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  damage
+## t = 12.678, df = 14, p-value = 4.605e-09
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  21.94488 30.88178
+## sample estimates:
+## mean of x 
+##  26.41333
+```
+
+ 
+
+Ignore the P-value (it's testing that the mean is the default
+*zero*, which makes no sense). The confidence interval either way
+goes from 21.9 to 30.9 (thousand dollars).
+    
+
+
+(c) Draw a scatterplot for predicting the amount of fire damage
+from the distance from the fire station. Add a smooth trend to your
+plot. 
+
+
+Solution
+
+
+We are predicting fire damage, so that goes on the $y$-axis:
+
+```r
+ggplot(fire,aes(x=distance,y=damage))+geom_point()+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-154-1.png" width="672"  />
+
+     
+
+
+
+(d)??part:howgood?? Is there a relationship between distance from fire station
+and fire damage? Is it linear or definitely curved? How strong is
+it? Explain briefly.
+
+
+Solution
+
+
+When the distance is larger, the fire damage is definitely larger,
+so there is clearly a relationship. I would call this one
+approximately linear: it wiggles a bit, but it is not to my mind
+obviously curved. I would also call it a strong relationship,
+since the points are close to the smooth trend.
+    
+
+
+(e) Fit a regression predicting fire damage from distance. How
+is the R-squared consistent (or inconsistent) with your answer from
+part~(??part:howgood??)?
+
+
+Solution
+
+
+The regression is an ordinary `lm`:
+
+```r
+damage.1=lm(damage~distance,data=fire)
+summary(damage.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = damage ~ distance, data = fire)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.4682 -1.4705 -0.1311  1.7915  3.3915 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  10.2779     1.4203   7.237 6.59e-06 ***
+## distance      4.9193     0.3927  12.525 1.25e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.316 on 13 degrees of freedom
+## Multiple R-squared:  0.9235,	Adjusted R-squared:  0.9176 
+## F-statistic: 156.9 on 1 and 13 DF,  p-value: 1.248e-08
+```
+
+     
+
+We need to display the results, since we need to see the R-squared in
+order to say something about it.
+
+R-squared is about 92\%, high, indicating a strong and linear
+relationship. Back in part~(??part:howgood??), I said that the
+relationship is linear and strong, which is entirely consistent with
+such an R-squared. (If you said something different previously, say
+how it does or doesn't square with this kind of R-squared value.)
+
+Points: one for fitting the regression, one for displaying it, and two
+(at the grader's discretion) for saying what the R-squared is and how
+it's consistent (or not) with part~(??part:howgood??).
+
+Extra: if you thought the trend was "definitely curved", you would
+find that a parabola (or some other kind of curve) was definitely
+better than a straight line. Here's the parabola:
+
+
+```r
+damage.2=lm(damage~distance+I(distance^2),data=fire)
+summary(damage.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = damage ~ distance + I(distance^2), data = fire)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.8856 -1.6915 -0.0179  1.5490  3.6278 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    13.3395     2.5303   5.272 0.000197 ***
+## distance        2.6400     1.6302   1.619 0.131327    
+## I(distance^2)   0.3376     0.2349   1.437 0.176215    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.227 on 12 degrees of freedom
+## Multiple R-squared:  0.9347,	Adjusted R-squared:  0.9238 
+## F-statistic: 85.91 on 2 and 12 DF,  p-value: 7.742e-08
+```
+
+ 
+
+There's no evidence here that a quadratic is better.
+
+Or you might even have thought from the wiggles that it was more like cubic:
+
+
+```r
+damage.3=update(damage.2,.~.+I(distance^3))
+summary(damage.3)
+```
+
+```
+## 
+## Call:
+## lm(formula = damage ~ distance + I(distance^2) + I(distance^3), 
+##     data = fire)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.2325 -1.8377  0.0322  1.1512  3.1806 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)    10.8466     4.3618   2.487   0.0302 *
+## distance        5.9555     4.9610   1.200   0.2552  
+## I(distance^2)  -0.8141     1.6409  -0.496   0.6296  
+## I(distance^3)   0.1141     0.1608   0.709   0.4928  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.274 on 11 degrees of freedom
+## Multiple R-squared:  0.9376,	Adjusted R-squared:  0.9205 
+## F-statistic: 55.07 on 3 and 11 DF,  p-value: 6.507e-07
+```
+
+
+
+No evidence that a cubic is better; that increase in R-squared up to
+about 94\% is just chance (bearing in mind that adding *any* $x$,
+even a useless one, will increase R-squared).
+
+How bendy is the cubic?
+
+
+```r
+ggplot(fire,aes(x=distance,y=damage))+geom_point()+
+geom_smooth(method="lm")+
+geom_line(data=damage.3,aes(y=.fitted), colour="red")
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-158-1.png" width="672"  />
+
+ 
+
+The cubic, in red, does bend a little, but it doesn't do an obvious
+job of going through the points better than the straight line does. It
+seems to be mostly swayed by that one observation with damage over 40,
+and choosing a relationship by how well it fits one point is flimsy at
+the best of times.  So, by Occam's Razor, we go with the line rather
+than the cubic because it (i) fits equally well, (ii) is simpler.
+    
+
+
+(f)??part:cim?? Obtain a 95\% confidence interval for the mean fire damage
+\emph{for a residence that is 4 miles from the nearest fire
+station}. (Note the contrast with part~(??part:ttest??).)
+
+
+Solution
+
+
+This is a confidence interval for a mean response at a given value
+of the explanatory variable. This is as opposed to
+part~(??part:ttest??), which is averaged over *all* distances.
+So, follow the steps. Make a tiny data frame with this one value
+of `distance`:
+
+```r
+new=tibble(distance=4)
+```
+
+     
+
+and then feed it into `predict`:
+
+
+```r
+pp=predict(damage.1,new,interval="c")
+```
+
+ 
+
+and then put it side-by-side with the value it's a prediction for:
+
+
+```r
+cbind(new,pp)
+```
+
+```
+##   distance      fit      lwr      upr
+## 1        4 29.95525 28.52604 31.38446
+```
+
+ 
+
+28.5 to 31.4 (thousand dollars).
+
+
+
+(g) Compare the confidence intervals of parts
+(??part:ttest??) and (??part:cim??). Specifically, compare their
+centres and their lengths, and explain briefly why the results
+make sense.
+
+
+Solution
+
+
+Let me just put them side by side for ease of comparison:
+part~(??part:ttest??) is:
+
+```r
+t.test(fire$damage)
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  fire$damage
+## t = 12.678, df = 14, p-value = 4.605e-09
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  21.94488 30.88178
+## sample estimates:
+## mean of x 
+##  26.41333
+```
+
+       
+
+and part~(??part:cim??)'s is
+
+
+```r
+pp
+```
+
+```
+##        fit      lwr      upr
+## 1 29.95525 28.52604 31.38446
+```
+
+ 
+
+I printed them out like this since these give the centres of the
+intervals as well as the lower and upper limits.
+
+The centre of the interval is higher for the mean damage when the
+distance is 4. This is because the mean distance is a bit less than 4:
+
+
+```r
+fire %>% summarize(m=mean(distance))
+```
+
+```
+## # A tibble: 1 x 1
+##       m
+##   <dbl>
+## 1  3.28
+```
+
+ 
+
+We know it's an upward trend, so our best guess at the mean damage is
+higher if the mean distance is higher (in (??part:cim??), the
+distance is *always* 4: we're looking at the mean fire damage for
+*all* residences that are 4 miles from a fire station.)
+
+What about the lengths of the intervals? The one in (??part:ttest??)
+is about $30.9-21.9=9$ (thousand dollars) long, but the one in
+(??part:cim??) is only $31.4-28.5=2.9$ long, much shorter. This
+makes sense because the relationship is a strong one: knowing the
+distance from the fire station is very useful, because the bigger it
+is, the bigger the damage going to be, with near certainty. Said
+differently, if you know the distance, you can estimate the damage
+accurately.  If you don't know the distance (as is the case in
+(??part:ttest??)), you're averaging over a lot of different
+distances and thus there is a lot of uncertainty in the amount of fire
+damage also.
+
+If you have some reasonable discussion of the reason why the centres
+and lengths of the intervals differ, I'm happy. It doesn't have to be
+the same as mine.
+      
+
+
+
+
+
+
+There ought to be some multiple-regression questions here:
+
+
+##  Being satisfied with hospital
+
+
+ A hospital administrator collects data to study the
+effect, if any, of a patient's age, the severity of their
+illness, and their anxiety level, on the patient's satisfaction with
+their hospital experience. The data, in the file
+[link](http://www.utsc.utoronto.ca/~butler/d29/satisfaction.txt), are
+for 46 patients in a survey. The columns are: patient's satisfaction
+score `satis`, on a scale of 0 to 100; the patient's `age` (in
+years), the `severity` of the patient's illness (also on a
+0--100 scale), and the patient's `anxiety` score on a standard
+anxiety test (scale of 0--5). Higher scores mean greater satisfaction,
+increased severity of illness and more anxiety.
+
+
+
+(a) Read in the data and check that you have four columns in
+your data frame, one for each of your variables.   
+ 
+Solution
+
+ This one requires a little thought
+first. The data values are aligned in columns, and so are the
+column headers. Thus, `read_table` is what we need:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/satisfaction.txt"
+satisf=read_table(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   satis = col_integer(),
+##   age = col_integer(),
+##   severity = col_integer(),
+##   anxiety = col_double()
+## )
+```
+
+```r
+satisf
+```
+
+```
+## # A tibble: 46 x 4
+##    satis   age severity anxiety
+##    <int> <int>    <int>   <dbl>
+##  1    48    50       51     2.3
+##  2    57    36       46     2.3
+##  3    66    40       48     2.2
+##  4    70    41       44     1.8
+##  5    89    28       43     1.8
+##  6    36    49       54     2.9
+##  7    46    42       50     2.2
+##  8    54    45       48     2.4
+##  9    26    52       62     2.9
+## 10    77    29       50     2.1
+## # ... with 36 more rows
+```
+
+     
+
+46 rows and 4 columns: satisfaction score (response), age, severity
+and anxiety (explanatory).
+
+There is a small question about what to call the data
+frame. Basically, anything other than `satis` will do, since
+there will be confusion if your data frame has the same name as one of
+its columns.
+ 
+
+(b)??part:scatmat?? Obtain scatterplots of the response variable
+`satis` against each of the other variables.
+ 
+Solution
+
+
+The obvious way is to do these one after the other:
+
+```r
+ggplot(satisf,aes(x=age,y=satis))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-166-1.png" width="384"  />
+
+```r
+ggplot(satisf,aes(x=severity,y=satis))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-166-2.png" width="384"  />
+
+```r
+ggplot(satisf,aes(x=anxiety,y=satis))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-166-3.png" width="384"  />
+
+       
+
+This is fine, but there is also a way of getting all three plots with
+*one* `ggplot`. This uses the `facet_wrap` trick,
+but to set *that* up, we have to have all the $x$-variables in
+*one* column, with an extra column labelling which $x$-variable
+that value was. This uses `gather`. The right way to do this is
+in a pipeline:
+
+
+```r
+satisf %>% gather(xname,x,age:anxiety) %>%
+ggplot(aes(x=x,y=satis))+geom_point()+
+facet_wrap(~xname,scales="free",ncol=2)
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-167-1.png" width="672"  />
+
+ 
+
+Steps: gather together the columns age through anxiety into one column
+called `x`, with a label in `xname`, then plot this new
+`x` against satisfaction score, with a separate facet for each
+different $x$ (in `xname`). 
+
+I showed you `facet_grid` in class. What's the difference
+between that and `facet_wrap`? The difference is that with
+`facet_wrap`, we are letting `ggplot` arrange the
+facets how it wants to. In this case, we didn't care which explanatory
+variable went on which facet, just as long as we saw all of them
+somewhere. Inside `facet_wrap` there are *no dots*: a
+squiggle, followed by the name(s) of the variable(s) that
+distinguish(es) the facets.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If there are more than one, they  should be separated by plus signs as in lm. Each facet then  has as many labels as variables. I haven't actually done this  myself, but from looking at examples, I think this is the way it  works.</span> 
+The only "design" decision I made here was that the facets
+should be arranged somehow in two columns, but I didn't care which
+ones should be where.
+
+In `facet_grid`, you have a variable that you want to be
+displayed in rows or in columns (not just in "different facets". 
+I'll show you how that works here. Since I am going to draw
+two plots, I should save the long data frame first and re-use it,
+rather than calculating it twice (so that I ought now to go back and
+do the other one using the saved data frame, really):
+
+
+```r
+satisf.long = satisf %>% gather(xname,x,age:anxiety)
+```
+
+ 
+
+If, at this or any stage, you get confused, the way to un-confuse
+yourself is to *fire up R Studio and do this yourself*. You have
+all the data and code you need. If you do it yourself, you can run
+pipes one line at a time, inspect things, and so on.
+
+First, making a *row* of plots, so that `xname` is the $x$
+of the facets:
+
+
+```r
+ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
+facet_grid(.~xname, scales="free")
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-169-1.png" width="672"  />
+
+ 
+
+I find these too tall and skinny to see the trends, as on the first
+`facet_wrap` plot.
+
+And now, making a *column* of plots, with `xname` as $y$:
+
+
+```r
+ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
+facet_grid(xname~., scales="free")
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-170-1.png" width="672"  />
+
+ 
+
+This one looks weird because the three $x$-variables are on different
+scales. The effect of the `scales="free"` is to allow the
+`satis` scale to vary, but the `x` scale cannot because
+the facets are all in a line. Compare this:
+
+
+```r
+ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
+facet_wrap(~xname,ncol=1,scales="free")
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
+
+ 
+
+This time, the $x$ scales came out different (and suitable), but I
+still like squarer plots better for judging relationships.
+ 
+
+(c) In your scatterplots of (??part:scatmat??), which
+relationship appears to be the strongest one?
+ 
+Solution
+
+
+All the trends appear to be downward ones, but
+I think `satis` and `age` is the strongest
+trend. The other ones look more scattered to me. 
+ 
+
+(d)??part:corrmat?? Create a correlation matrix for all four 
+variables. Does your strongest trend of the previous part have the
+strongest correlation?
+ 
+Solution
+
+
+This is a matter of running the whole data frame through `cor`:
+
+```r
+cor(satisf)
+```
+
+```
+##               satis        age   severity    anxiety
+## satis     1.0000000 -0.7867555 -0.6029417 -0.6445910
+## age      -0.7867555  1.0000000  0.5679505  0.5696775
+## severity -0.6029417  0.5679505  1.0000000  0.6705287
+## anxiety  -0.6445910  0.5696775  0.6705287  1.0000000
+```
+
+     
+
+Ignoring the correlations of variables with themselves, the
+correlation of `satisf` with `age`, the one I picked
+out, is the strongest (the most negative trend). If you picked one of
+the other trends as the strongest, you need to note how close it is to
+the maximum correlation: for example, if you picked `satis`
+and `severity`, that's the second highest correlation (in
+size).
+ 
+
+(e) Run a regression predicting satisfaction from the other
+three variables, and display the output.
+ 
+Solution
+
+
+
+```r
+satisf.1=lm(satis~age+severity+anxiety,data=satisf)
+summary(satisf.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = satis ~ age + severity + anxiety, data = satisf)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18.3524  -6.4230   0.5196   8.3715  17.1601 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 158.4913    18.1259   8.744 5.26e-11 ***
+## age          -1.1416     0.2148  -5.315 3.81e-06 ***
+## severity     -0.4420     0.4920  -0.898   0.3741    
+## anxiety     -13.4702     7.0997  -1.897   0.0647 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 10.06 on 42 degrees of freedom
+## Multiple R-squared:  0.6822,	Adjusted R-squared:  0.6595 
+## F-statistic: 30.05 on 3 and 42 DF,  p-value: 1.542e-10
+```
+
+     
+ 
+
+(f) Does the regression fit well overall? How can you tell?
+ 
+Solution
+
+
+For this, look at R-squared, which is 0.682 (68.2\%). This is one
+of those things to have an opinion about. I'd say this is good but
+not great. I would not call it "poor", since there definitely
+*is* a relationship, even if it's not a stupendously good one.
+ 
+
+(g) Test the null hypothesis that none of your explanatory
+variables help, against the alternative that one or more of them
+do. (You'll need an appropriate P-value. Which one is it?) What do
+you conclude?
+ 
+Solution
+
+
+This one is the (global) $F$-test, whose P-value is at the
+bottom. It translates to 0.000000000154, so this is
+*definitely* small, and we reject the null. Thus, one or more
+of `age`, `severity` and `anxiety` helps to
+predict satisfaction. (I would like to see this last sentence,
+rather than just "reject the null".)
+ 
+
+(h) The correlation between `severity` and
+`satis` is not small, but in my regression I found that
+`severity` was nowhere near significant. Why is this? Explain briefly.
+\clearpage
+ 
+Solution
+
+
+The key thing to observe is that the $t$-test in the regression
+says how important a variable is \emph{given the others that are
+already in the regression}, or, if you prefer, how much that
+variable *adds* to the regression, on top of the ones that
+are already there. So here, we are saying
+that `severity` has nothing to add, given that the
+regression already includes the others. (That is, high correlation
+and strong significance don't always go together.)
+For a little more insight, look at the correlation matrix of
+(??part:corrmat??) again. The strongest trend with
+`satis` is with `age`, and indeed `age` is
+the one obviously significant  variable in the regression. The
+trend of `severity` with `satis` is somewhat
+downward, and you might otherwise have guessed that this is strong
+enough to be significant. But see that `severity`
+*also* has a clear relationship with `age`. A patient
+with low severity of disease is probably also younger, and we know
+that younger patients are likely to be more satisfied. Thus
+severity has nothing (much) to add.
+The multiple regression is actually doing something clever
+here. Just looking at the correlations, it appears that all three
+variables are helpful, but the regression is saying that once you
+have looked at `age` ("controlled for age"),
+severity of illness does not have an impact: the correlation of
+`severity` with `satis` is as big as it is almost
+entirely because of `age`. 
+This gets into the      domain of "partial correlation". If you like videos, you can 
+see [link](https://www.youtube.com/watch?v=LF0WAVBIhNA) for
+this. I prefer regression, myself, since I find it clearer.
+`anxiety`
+tells a different story: this is close to significant (or
+*is* significant at the $\alpha=0.10$ level), so the
+regression is saying that `anxiety` *does* appear to
+have something to say about `satis` over and above
+`age`. This is rather odd, to my mind, since
+`anxiety` has only a slightly stronger correlation with
+`satis` and about the same with `age` as
+`severity` does. But the regression is telling the story to
+believe, because it handles all the inter-correlations, not just
+the ones between pairs of variables.
+I thought it would be rather interesting to do some predictions
+here. Let's predict satisfaction for all combinations of high and
+low age, severity and anxiety. I'll use the quartiles for high and
+low. There is a straightforward but ugly way:
+
+```r
+quartiles = satisf %>% summarize(age_q1=quantile(age,0.25),
+age_q3=quantile(age,0.75),
+severity_q1=quantile(severity,0.25),
+severity_q3=quantile(severity,0.75),
+anxiety_q1=quantile(anxiety,0.25),
+anxiety_q3=quantile(anxiety,0.75))
+```
+
+     
+
+This is ugly because of all the repetition (same quantiles of
+different variables), and the programmer in you should be offended by
+the ugliness. Anyway, it gives what we want:
+
+
+```r
+quartiles
+```
+
+```
+## # A tibble: 1 x 6
+##   age_q1 age_q3 severity_q1 severity_q3 anxiety_q1 anxiety_q3
+##    <dbl>  <dbl>       <dbl>       <dbl>      <dbl>      <dbl>
+## 1   31.2   44.8          48          53        2.1       2.48
+```
+
+ 
+You can copy the numbers from here to below, or you can do some
+cleverness to get them in the right places:
+
+```r
+quartiles %>% gather(var_q,quartile,everything()) %>%
+separate(var_q,c("var_name","quartile_name")) %>%
+spread(var_name,quartile)
+```
+
+```
+## Warning: attributes are not identical across measure variables;
+## they will be dropped
+```
+
+```
+## # A tibble: 2 x 4
+##   quartile_name   age anxiety severity
+##   <chr>         <dbl>   <dbl>    <dbl>
+## 1 q1             31.2    2.1        48
+## 2 q3             44.8    2.48       53
+```
+
+ 
+
+
+
+     
+
+This is what we want for below. Let's test it line by line to see exactly
+what it did:
+
+```r
+quartiles %>% gather(var_q,quartile,everything()) 
+```
+
+```
+## Warning: attributes are not identical across measure variables;
+## they will be dropped
+```
+
+```
+## # A tibble: 6 x 2
+##   var_q       quartile
+##   <chr>          <dbl>
+## 1 age_q1         31.2 
+## 2 age_q3         44.8 
+## 3 severity_q1    48   
+## 4 severity_q3    53   
+## 5 anxiety_q1      2.1 
+## 6 anxiety_q3      2.48
+```
+
+ 
+
+Making long format. `everything()` is a select-helper saying
+"gather up *all* the columns". This is where the (ignorable)
+warning comes from.
+
+
+```r
+quartiles %>% gather(var_q,quartile,everything()) %>%
+separate(var_q,c("var_name","quartile_name")) 
+```
+
+```
+## Warning: attributes are not identical across measure variables;
+## they will be dropped
+```
+
+```
+## # A tibble: 6 x 3
+##   var_name quartile_name quartile
+##   <chr>    <chr>            <dbl>
+## 1 age      q1               31.2 
+## 2 age      q3               44.8 
+## 3 severity q1               48   
+## 4 severity q3               53   
+## 5 anxiety  q1                2.1 
+## 6 anxiety  q3                2.48
+```
+
+ 
+
+The column `var_q` above encodes a variable *and* a
+quartile, so split them up. By default, `separate` splits at an
+underscore, which is why the things in `quartiles` were named
+with underscores.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.</span>
+
+
+```r
+qq = quartiles %>% gather(var_q,quartile,everything()) %>%
+separate(var_q,c("var_name","quartile_name")) %>%
+spread(var_name,quartile)
+```
+
+```
+## Warning: attributes are not identical across measure variables;
+## they will be dropped
+```
+
+```r
+qq
+```
+
+```
+## # A tibble: 2 x 4
+##   quartile_name   age anxiety severity
+##   <chr>         <dbl>   <dbl>    <dbl>
+## 1 q1             31.2    2.1        48
+## 2 q3             44.8    2.48       53
+```
+
+ 
+Last, I want the original variables in columns, so I un-gather to get
+them there. I spread `var_name`, carrying along the values in
+`quartile` (which means that the rows will get matched up by
+`quartile_name`). 
+
+Now, let's think about why we were doing that. We want to do
+predictions of all possible combinations of those values of age and
+anxiety and severity.
+Doing "all possible combinations" calls for `crossing`,
+which looks like this:
+
+
+```r
+satisf.new=with(qq,crossing(age,anxiety,severity))
+satisf.new
+```
+
+```
+## # A tibble: 8 x 3
+##     age anxiety severity
+##   <dbl>   <dbl>    <dbl>
+## 1  31.2    2.1        48
+## 2  31.2    2.1        53
+## 3  31.2    2.48       48
+## 4  31.2    2.48       53
+## 5  44.8    2.1        48
+## 6  44.8    2.1        53
+## 7  44.8    2.48       48
+## 8  44.8    2.48       53
+```
+
+ 
+
+There are two possibilities for each variable, so there are $2^3=8$
+"all possible combinations". You can check that `expand` got
+them all.
+
+This is a data frame containing all the values we want to predict for,
+with columns having names that are the same as the variables in the
+regression, so it's ready to go into `predict`. I'll do
+prediction intervals, just because:
+
+
+```r
+pp=predict(satisf.1,satisf.new,interval="p")
+cbind(satisf.new,pp)
+```
+
+```
+##     age anxiety severity      fit      lwr      upr
+## 1 31.25   2.100       48 73.31233 52.64296 93.98170
+## 2 31.25   2.100       53 71.10231 49.86836 92.33627
+## 3 31.25   2.475       48 68.26102 47.02617 89.49587
+## 4 31.25   2.475       53 66.05100 44.90355 87.19845
+## 5 44.75   2.100       48 57.90057 36.83964 78.96151
+## 6 44.75   2.100       53 55.69055 34.48912 76.89198
+## 7 44.75   2.475       48 52.84926 31.68774 74.01079
+## 8 44.75   2.475       53 50.63924 29.99014 71.28835
+```
+
+ 
+
+Looking at the predictions themselves (in `fit`), you can see
+that `age` has a huge effect. If you compare the 1st and 5nd
+lines (or the 2nd and 6th, 3rd and 7th, \ldots) you see that
+increasing age by 13.5 years, while leaving the other variables the
+same, decreases the satisfaction score by over 15 on
+average. Changing `severity`, while leaving everything else the
+same, has in comparison a tiny effect, just over 2 points. (Compare
+eg. 1st and 2nd lines.) Anxiety has an in-between effect: increasing
+anxiety from 2.1 to 2.475, leaving everything else fixed, decreases
+satisfaction by about 5 points on average.
+
+I chose the quartiles on purpose: to demonstrate the change in average
+satisfaction by changing the explanatory variable by an appreciable
+fraction of its range of values. That is, I changed `severity`
+by "a fair bit", and still the effect on satisfaction scores was small.
+
+Are any of these prediction intervals longer or shorter? We can calculate how
+long they are. Look at the predictions:
+
+
+```r
+pp
+```
+
+```
+##        fit      lwr      upr
+## 1 73.31233 52.64296 93.98170
+## 2 71.10231 49.86836 92.33627
+## 3 68.26102 47.02617 89.49587
+## 4 66.05100 44.90355 87.19845
+## 5 57.90057 36.83964 78.96151
+## 6 55.69055 34.48912 76.89198
+## 7 52.84926 31.68774 74.01079
+## 8 50.63924 29.99014 71.28835
+```
+
+ 
+
+This is unfortunately not a data frame:
+
+
+```r
+class(pp)
+```
+
+```
+## [1] "matrix"
+```
+
+ 
+
+so we make it one before calculating the lengths.
+We want `upr` minus `lwr`:
+
+
+```r
+pp %>% as_tibble() %>%
+transmute(pi.length=upr-lwr)
+```
+
+```
+## # A tibble: 8 x 1
+##   pi.length
+##       <dbl>
+## 1      41.3
+## 2      42.5
+## 3      42.5
+## 4      42.3
+## 5      42.1
+## 6      42.4
+## 7      42.3
+## 8      41.3
+```
+
+ 
+
+Now, I don't want to keep the other stuff from `pp`, so I used
+`transmute` instead of `mutate`; `transmute`
+keeps *only* the new variable(s) that I calculate and throws away
+the others.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Usually you want to keep the other variables around as  well, which is why you don't see transmute very often.</span>
+
+Then I put that side by side with the values being predicted for:
+
+
+```r
+pp %>% as_tibble() %>%
+transmute(pi.length=upr-lwr) %>%
+bind_cols(satisf.new)
+```
+
+```
+## # A tibble: 8 x 4
+##   pi.length   age anxiety severity
+##       <dbl> <dbl>   <dbl>    <dbl>
+## 1      41.3  31.2    2.1        48
+## 2      42.5  31.2    2.1        53
+## 3      42.5  31.2    2.48       48
+## 4      42.3  31.2    2.48       53
+## 5      42.1  44.8    2.1        48
+## 6      42.4  44.8    2.1        53
+## 7      42.3  44.8    2.48       48
+## 8      41.3  44.8    2.48       53
+```
+
+ 
+
+Two of these are noticeably shorter than the others: the first one and
+the last one. These are low-everything and high-everything. If you
+look back at the scatterplot matrix of (??part:scatmat??), you'll
+see that the explanatory variables have positive correlations with
+each other. This means that when one of them is low, the other ones
+will tend to be low as well (and correspondingly high with high). That
+is, most of the data is at or near the low-low-low end or the
+high-high-high end, and so those values will be easiest to predict for.
+
+I was actually expecting more of an effect, but what I expected is
+actually there.
+
+In the backward elimination part (coming up), I found that only
+`age` and `anxiety` had a significant impact on
+satisfaction, so I can plot these two explanatory variables against
+each other to see where most of the values are:
+
+
+```r
+ggplot(satisf,aes(x=age,y=anxiety))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-187-1.png" width="672"  />
+
+ 
+
+There is basically *no* data with low age and high anxiety, or
+with high age and low anxiety, so these combinations will be difficult
+to predict satisfaction for (and thus their prediction intervals will
+be longer).
+ 
+
+
+(i) Carry out a backward elimination to determine which of
+`age`, `severity` and `anxiety` are needed to
+predict satisfaction. What do you get?
+
+
+
+Solution
+
+
+This means starting with the regression containing all the explanatory
+variables, which is the one I called `satisf.1`:
+
+
+```r
+summary(satisf.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = satis ~ age + severity + anxiety, data = satisf)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18.3524  -6.4230   0.5196   8.3715  17.1601 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 158.4913    18.1259   8.744 5.26e-11 ***
+## age          -1.1416     0.2148  -5.315 3.81e-06 ***
+## severity     -0.4420     0.4920  -0.898   0.3741    
+## anxiety     -13.4702     7.0997  -1.897   0.0647 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 10.06 on 42 degrees of freedom
+## Multiple R-squared:  0.6822,	Adjusted R-squared:  0.6595 
+## F-statistic: 30.05 on 3 and 42 DF,  p-value: 1.542e-10
+```
+
+ 
+
+Pull out the least-significant (highest P-value) variable, which here
+is `severity`. We already decided that this had nothing to add:
+
+
+```r
+satisf.2=update(satisf.1,.~.-severity)
+summary(satisf.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = satis ~ age + anxiety, data = satisf)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -19.4453  -7.3285   0.6733   8.5126  18.0534 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 145.9412    11.5251  12.663 4.21e-16 ***
+## age          -1.2005     0.2041  -5.882 5.43e-07 ***
+## anxiety     -16.7421     6.0808  -2.753  0.00861 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 10.04 on 43 degrees of freedom
+## Multiple R-squared:  0.6761,	Adjusted R-squared:  0.661 
+## F-statistic: 44.88 on 2 and 43 DF,  p-value: 2.98e-11
+```
+
+ 
+
+If you like, copy and paste the first `lm`, edit it to get rid
+of `severity`, and run it again. But when I have a 
+"small change" to make to a model, I like to use `update`.
+
+Having taken `severity` out, `anxiety` has become
+strongly significant. Since all of the explanatory variables are now
+significant, this is where we stop. If we're predicting satisfaction,
+we need to know both a patient's age and their anxiety score: being
+older or more anxious is associated with a *decrease* in satisfaction.
+
+There is also a function `step` that will do this for you:
+
+
+```r
+step(satisf.1,direction="backward",test="F")
+```
+
+```
+## Start:  AIC=216.18
+## satis ~ age + severity + anxiety
+## 
+##            Df Sum of Sq    RSS    AIC F value   Pr(>F)    
+## - severity  1     81.66 4330.5 215.06  0.8072  0.37407    
+## <none>                  4248.8 216.19                     
+## - anxiety   1    364.16 4613.0 217.97  3.5997  0.06468 .  
+## - age       1   2857.55 7106.4 237.84 28.2471 3.81e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Step:  AIC=215.06
+## satis ~ age + anxiety
+## 
+##           Df Sum of Sq    RSS    AIC F value    Pr(>F)    
+## <none>                 4330.5 215.06                      
+## - anxiety  1     763.4 5093.9 220.53  7.5804   0.00861 ** 
+## - age      1    3483.9 7814.4 240.21 34.5935 5.434e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```
+## 
+## Call:
+## lm(formula = satis ~ age + anxiety, data = satisf)
+## 
+## Coefficients:
+## (Intercept)          age      anxiety  
+##      145.94        -1.20       -16.74
+```
+
+ 
+
+with the same result. This function doesn't actually use P-values;
+instead it uses a thing called AIC. At each step, the variable with
+the lowest AIC comes out, and when `<none>` bubbles up to the
+top, that's when you stop. The `test="F"` means 
+"include an $F$-test", but the procedure still uses AIC (it just shows you n
+$F$-test each time as well).  In this case, the other variables were
+in the same order throughout, but they don't have to be (in the same
+way that removing one variable from a multiple regression can
+dramatically change the P-values of the ones that remain). Here, at
+the first step, `<none>` and `anxiety` were pretty
+close, but when `severity` came out, taking out nothing was a
+*lot* better than taking out `anxiety`.
+
+The `test="F"` on the end gets you the P-values. Using the
+$F$-test is right for regressions; for things like logistic regression
+that we see later, `test="Chisq"` is the right one to 
+use.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is F in quotes, meaning F-test, not F without quotes, meaning FALSE.</span>
+
+
+
+
+
+
+
+
+
+ The data in
+[link](http://statweb.lsu.edu/EXSTWeb/StatLab/DataSets/NKNWData/CH06PR09.txt)
+are on shipments of chemicals in drums that arrive at a warehouse. In
+order, the variables are:
+
+
+* the number of minutes required to handle the shipment
+
+* the number of drums in the shipment
+
+* the total weight of the shipment, in hundreds of pounds.
+
+
+
+
+(a) The data set has two features: *no* column names, and
+data aligned in columns (that is, more than one space between data
+values). Read the data in, giving the columns suitable names. To do
+this, you may have to consult an appropriate help file, or do some
+searching, perhaps of one of the other questions on this assignment.
+
+
+Solution
+
+
+The alignment of columns means that we need to use
+`read_table`. Once you've figured *that* out, you can
+search for help by typing `?read_table` in the Console
+window (the help will appear bottom right), or you can put the
+same thing into an R Notebook code chunk, and when you run the
+chunk, the help will be displayed. (Press control-shift-1 to go
+back to the notebook.)
+Or you can Google it, of course.
+The key observation is that you need to supply some column names
+in `col_names`, like this:
+
+```r
+my_url="http://statweb.lsu.edu/EXSTWeb/StatLab/DataSets/NKNWData/CH06PR09.txt"
+cols=c("minutes","drums","weight")
+chemicals=read_table(my_url,col_names=cols)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   minutes = col_double(),
+##   drums = col_double(),
+##   weight = col_double()
+## )
+```
+
+```r
+chemicals
+```
+
+```
+## # A tibble: 20 x 3
+##    minutes drums weight
+##      <dbl> <dbl>  <dbl>
+##  1      58     7   5.11
+##  2     152    18  16.7 
+##  3      41     5   3.2 
+##  4      93    14   7.03
+##  5     101    11  11.0 
+##  6      38     5   4.04
+##  7     203    23  22.1 
+##  8      78     9   7.03
+##  9     117    16  10.6 
+## 10      44     5   4.76
+## 11     121    17  11.0 
+## 12     112    12   9.51
+## 13      50     6   3.79
+## 14      82    12   6.45
+## 15      48     8   4.6 
+## 16     127    15  13.9 
+## 17     140    17  13.0 
+## 18     155    21  15.2 
+## 19      39     6   3.64
+## 20      90    11   9.57
+```
+
+     
+
+I like to define my URL and column names up front. You can define
+either of them in the `read_table`, but it makes that line
+longer. Up to you.
+
+There is no `skip` here, because the data file starts right
+away with the data and we want to use all the values: we are
+*adding* names to what's in the data file. If you used
+`skip`, you will be one observation short all the way through,
+and your output will be slightly different from mine all the way
+through.
+
+Use any names you like, but they should resemble what the columns
+actually represent.
+    
+
+
+(b) Fit a regression predicting the number of minutes required
+to handle a shipment from the other two variables. Display the results.
+
+
+Solution
+
+
+
+```r
+minutes.1=lm(minutes~drums+weight,data=chemicals)
+summary(minutes.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = minutes ~ drums + weight, data = chemicals)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.8353 -3.5591 -0.0533  2.4018 15.1515 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.3243     3.1108   1.069      0.3    
+## drums         3.7681     0.6142   6.135 1.10e-05 ***
+## weight        5.0796     0.6655   7.632 6.89e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.618 on 17 degrees of freedom
+## Multiple R-squared:  0.9869,	Adjusted R-squared:  0.9854 
+## F-statistic: 641.6 on 2 and 17 DF,  p-value: < 2.2e-16
+```
+
+     
+    
+
+
+(c) Explain carefully but briefly what the slope coefficients
+for the two explanatory variables represent. Do their signs
+(positive or negative) make practical sense in the context of
+handling shipments of chemicals?
+
+
+Solution
+
+
+The slope coefficient for `drums` is 3.77; this means that
+a shipment with one extra drum (but the same total weight) would
+take on average 3.77 minutes longer to handle. Likewise, the slope
+coefficient for `weight` is 5.08, so a shipment that
+weighs 1 hundred more pounds but has the same number of drums
+will take 5.08 more minutes to handle.
+Or "each additional drum, all else equal, will take 3.77 more minutes to handle", or similar wording. You have to get at two
+things: a one-unit increase in the explanatory variable going with
+a certain increase in the response, and *also* the "all else    equal" part. How you say it is up to you, but you need to say it.
+That was two marks. The third one comes from noting that both
+slope coefficients are positive, so making a shipment either
+contain more drums or weigh more makes the handling time longer as
+well. This makes perfect sense, since either kind of increase
+would make the shipment more difficult to handle, and thus take
+longer. 
+I was *not* asking about P-values. There isn't really much to
+say about those: they're both significant, so the handling time
+depends on both the total weight and the number of drums. Removing
+either from the regression would be a mistake.
+    
+
+
+(d) Obtain plots of residuals against fitted values, residuals
+against explanatory variables, and a normal quantile plot of the residuals.
+
+
+Solution
+
+
+These are the standard plots from a multiple regression. The
+second one requires care, but the first and last should be straightforward.
+Residuals against fitted values:
+
+```r
+ggplot(minutes.1,aes(x=.fitted,y=.resid))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-193-1.png" width="672"  />
+
+     
+
+The tricky part about the second one is that the $x$-values and the
+residuals come from different data frames, which has to get expressed
+in the `ggplot`. The obvious way is to do the two plots (one
+for each explanatory variable) one at a time:
+
+
+```r
+ggplot(minutes.1,aes(x=chemicals$drums,y=.resid))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-194-1.png" width="672"  />
+
+ 
+
+and 
+
+
+```r
+ggplot(minutes.1,aes(x=chemicals$weight,y=.resid))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-195-1.png" width="672"  />
+$ %$
+
+What would also work is to make a data frame first with the things to plot:
+
+
+```r
+dd=tibble(weight=chemicals$weight,drums=chemicals$drums,res=resid(minutes.1))
+```
+
+ 
+
+and then:
+
+
+```r
+ggplot(dd,aes(x=weight,y=res))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
+
+ 
+
+and similarly for `drums`. The `resid` with the model
+name in brackets seems to be necessary.
+
+Another way to approach this is `augment` from
+`broom`. That does this:
+
+
+```r
+library(broom)
+d = minutes.1 %>% augment(chemicals)
+as_tibble(d)
+```
+
+```
+## # A tibble: 20 x 10
+##    minutes drums weight .fitted .se.fit  .resid   .hat .sigma .cooksd
+##  *   <dbl> <dbl>  <dbl>   <dbl>   <dbl>   <dbl>  <dbl>  <dbl>   <dbl>
+##  1      58     7   5.11    55.7    1.70   2.34  0.0913   5.76 6.41e-3
+##  2     152    18  16.7    156.     2.47  -4.08  0.194    5.68 5.24e-2
+##  3      41     5   3.2     38.4    2.03   2.58  0.131    5.75 1.22e-2
+##  4      93    14   7.03    91.8    2.91   1.21  0.268    5.78 7.79e-3
+##  5     101    11  11.0    101.     2.17   0.453 0.149    5.79 4.45e-4
+##  6      38     5   4.04    42.7    2.11  -4.69  0.141    5.65 4.41e-2
+##  7     203    23  22.1    202.     3.68   0.903 0.429    5.78 1.13e-2
+##  8      78     9   7.03    72.9    1.45   5.05  0.0665   5.64 2.06e-2
+##  9     117    16  10.6    118.     2.06  -0.559 0.135    5.79 5.93e-4
+## 10      44     5   4.76    46.3    2.28  -2.34  0.165    5.75 1.37e-2
+## 11     121    17  11.0    123.     2.37  -2.36  0.179    5.75 1.56e-2
+## 12     112    12   9.51    96.8    1.27  15.2   0.0514   4.29 1.38e-1
+## 13      50     6   3.79    45.2    1.87   4.82  0.110    5.65 3.41e-2
+## 14      82    12   6.45    81.3    2.22   0.695 0.156    5.79 1.12e-3
+## 15      48     8   4.6     56.8    1.73  -8.84  0.0954   5.30 9.61e-2
+## 16     127    15  13.9    130.     2.01  -3.25  0.128    5.72 1.88e-2
+## 17     140    17  13.0    134.     1.75   6.43  0.0970   5.54 5.20e-2
+## 18     155    21  15.2    160.     2.70  -4.72  0.230    5.63 9.14e-2
+## 19      39     6   3.64    44.4    1.88  -5.42  0.112    5.61 4.40e-2
+## 20      90    11   9.57    93.4    1.51  -3.39  0.0725   5.72 1.02e-2
+## # ... with 1 more variable: .std.resid <dbl>
+```
+
+ 
+
+and then you can use `d` as the "base" data frame from which
+everything comes:
+
+
+```r
+ggplot(d,aes(x=drums,y=.resid))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-199-1.png" width="672"  />
+
+ 
+
+and
+
+
+```r
+ggplot(d,aes(x=weight,y=.resid))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-200-1.png" width="672"  />
+
+ 
+
+or you can even do that trick to put the two plots on facets:
+
+
+```r
+d %>% gather(xname,x,drums:weight) %>%
+ggplot(aes(x=x,y=.resid))+geom_point()+
+facet_wrap(~xname)
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
+
+ 
+
+Last, the normal quantile plot:
+
+
+```r
+ggplot(minutes.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-202-1.png" width="672"  />
+
+ 
+
+As a check for the grader, there should be four plots, obtained
+somehow: residuals against fitted values, normal quantile plot of
+residuals, residuals against `drums`, residuals against  
+`weight`.
+
+
+
+(e) Do you have any concerns, looking at the residual plots?
+Explain briefly.
+
+
+Solution
+
+
+The (only) concern I have, looking at those four plots, is the one very
+positive residual, the one around 15. Take that away, and I think
+all of the plots are then acceptable. 
+Alternatively, I will take something like "I have no concerns    about the form of the relationship", saying that the *kind*
+of model being fitted here is OK (no evidence of non-linearity,
+fanning out, that kind of stuff). It's up to you to decide whether
+you think "concerns" extends to outliers, high-influence points,
+etc. 
+The normal quantile plot reveals that the most negative residual,
+the one around $-9$, is in fact almost exactly as negative as you
+would expect the most negative residual to be, so it is not an
+outlier at all. The residuals are almost exactly normally
+distributed, *except* for the most positive one.
+I don't think you can justify fanning-in, since the evidence for
+that is mostly from the single point on the right. The other
+points do not really have residuals closer to zero as you move
+left to right.
+
+Do *not* be tempted to pick out everything you can think of wrong
+with these plots. The grader can, and will, take away points if you
+start naming things that are not concerns.
+
+Extra: what else can I find out about that large-positive-residual
+point? This is where having the "augmented" data frame is a plus:
+
+
+```r
+d %>% filter(.resid>10)
+```
+
+```
+## # A tibble: 1 x 10
+##   minutes drums weight .fitted .se.fit .resid   .hat .sigma .cooksd
+##     <dbl> <dbl>  <dbl>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
+## 1     112    12   9.51    96.8    1.27   15.2 0.0514   4.29   0.138
+## # ... with 1 more variable: .std.resid <dbl>
+```
+
+ 
+
+As shown. The predicted number of minutes is 96.8, but the actual
+number of minutes it took is 112. Hence the residual of 15.2. 
+Can we find "similar" numbers of `drums` and
+`weight` and compare the `minutes`? Try this:
+
+
+```r
+chemicals %>% filter(between(weight,8,11),
+between(drums,10,14))
+```
+
+```
+## # A tibble: 3 x 3
+##   minutes drums weight
+##     <dbl> <dbl>  <dbl>
+## 1     101    11  11.0 
+## 2     112    12   9.51
+## 3      90    11   9.57
+```
+
+ 
+
+You might not have seen `between` before, but it works the way
+you'd expect.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">weight between 8 and 11, for example,  returning TRUE or FALSE.</span> Two other shipments with similar numbers of drums and
+total weight took around 90--100 minutes to handle, so the 112 does
+look about 15 minutes too long. This was actually an average-sized shipment:
+
+
+```r
+library(ggrepel)
+d %>% mutate(my_label=ifelse(.resid>10,"residual +","")) %>%
+ggplot(aes(x=drums,y=weight,colour=minutes,label=my_label))+
+geom_point()+geom_text_repel()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-205-1.png" width="672"  />
+
+ 
+
+so it's a bit of a mystery why it took so long to handle. 
+
+I had some fun with the graph: if you set `colour` equal to a
+continuous variable (as `minutes` is here), you get a
+continuous colour scale, by default from dark blue (small) to light
+blue (large). The number of minutes tends to get larger (lighter) as
+you go up and to the right with bigger shipments. The point labelled
+"residual +" is the one with the large residual; it is a
+noticeably lighter blue than the points around it, meaning that it
+took longer to handle than those points. I used the trick from C32 to
+label "some" (here one) of the points: create a new label variable
+with a `mutate` and an `ifelse`, leaving all of the
+other labels blank so you don't see them.
+
+The blue colour scheme is a little hard to judge values on. Here's
+another way to do that:
+
+
+```r
+d %>% mutate(my_label=ifelse(.resid>10,"residual +","")) %>%
+ggplot(aes(x=drums,y=weight,colour=minutes,label=my_label))+
+geom_point()+geom_text_repel()+
+scale_colour_gradient(low="red",high="blue")
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-206-1.png" width="672"  />
+
+ 
+
+The labelled point is a little more blue (purplish) than the more
+clearly red points near it.
+
+The other thing to see is that there is also a positive correlation
+between the number of drums and the total weight, which is what you'd
+expect. Unlike with some of our other examples, this wasn't strong
+enough to cause problems; the separate effects of `drums` and
+`weight` on `minutes` were distinguishable enough to
+allow both explanatory variables to have a strongly significant effect
+on `minutes`.
+
+Post scriptum: the "drums" here are not concert-band-type drums, but
+something like this:
+
+
+
+![](Chemical-Drums-200x200.png.png)
+  
+
+    
+
+
+
+
+
+
+##  Salaries of mathematicians
+
+
+ A researcher in a scientific
+foundation wanted to evaluate the relationship between annual salaries
+of mathematicians and three explanatory variables:
+
+
+* an index of work quality
+
+* number of years of experience
+
+* an index of publication success.
+
+
+The data can be found at
+[link](http://www.utsc.utoronto.ca/~butler/d29/mathsal.txt). Data from
+only a relatively small number of mathematicians were available.
+
+
+
+(a) Read in the data and check that you have a sensible number
+of rows and the right number of columns. (What does "a sensible  number of rows" mean here?)
+
+Solution
+
+
+This is a tricky one. There are aligned columns, but *the column headers are not aligned with them*. 
+Thus `read_table2` is what you need.
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/mathsal.txt"
+salaries=read_table2(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   salary = col_double(),
+##   workqual = col_double(),
+##   experience = col_double(),
+##   pubsucc = col_double()
+## )
+```
+
+```r
+salaries
+```
+
+```
+## # A tibble: 24 x 4
+##    salary workqual experience pubsucc
+##     <dbl>    <dbl>      <dbl>   <dbl>
+##  1   33.2      3.5          9     6.1
+##  2   40.3      5.3         20     6.4
+##  3   38.7      5.1         18     7.4
+##  4   46.8      5.8         33     6.7
+##  5   41.4      4.2         31     7.5
+##  6   37.5      6           13     5.9
+##  7   39        6.8         25     6  
+##  8   40.7      5.5         30     4  
+##  9   30.1      3.1          5     5.8
+## 10   52.9      7.2         47     8.3
+## # ... with 14 more rows
+```
+
+        
+
+24 observations ("only a relatively small number") and 4 columns,
+one for the response and one each for the explanatory variables.
+
+Or, if you like,
+
+
+```r
+dim(salaries)
+```
+
+```
+## [1] 24  4
+```
+
+ 
+
+for the second part: 24 rows and 4 columns again.
+I note, with only 24 observations, that we don't really have enough
+data to investigate the effects of three explanatory variables, but
+we'll do the best we can. If the pattern, whatever it is, is clear
+enough, we should be OK.
+ 
+
+(b) Make scatterplots of `salary` against each of the three explanatory variables. If you can, do this with *one* `ggplot`.
+
+Solution
+
+
+The obvious way to do this is as three separate scatterplots,
+and that will definitely work. But you can do it in one go if
+you think about facets, and about having all the $x$-values in
+one column (and the names of the $x$-variables in another
+column):
+
+```r
+salaries %>% gather(xname, x, -salary) %>%
+ggplot(aes(x=x, y=salary))+geom_point()+
+facet_wrap(~xname, ncol=2, scales="free")
+```
+
+<img src="12-regression_files/figure-html/ivybridge-1.png" width="672"  />
+
+       
+
+If you don't see how that works, run it yourself, one line at a time. 
+
+I was thinking ahead a bit while I was coding that: I wanted the three
+plots to come out about square, and I wanted the plots to have their
+own scales. The last thing in the `facet_wrap` does the latter,
+and arranging the plots in two columns (thinking of the plots as a set
+of four with one missing) gets them more or less square.
+
+If you don't think of those, try it without, and then fix up what you
+don't like.
+ 
+
+(c) Comment briefly on the direction and strength of each
+relationship with `salary`.
+
+Solution
+
+
+To my mind, all of the three relationships are going uphill (that's the "direction" part). `experience` is the
+strongest, and `pubsucc` looks the weakest (that's the
+"strength" part). If you want to say there is no relationship
+with `pubsucc`, that's fine too. This is a judgement
+call. 
+Note that all the relationships are more or less linear (no
+obvious curves here). We could also investigate the relationships
+among the explanatory variables:
+
+```r
+cor(salaries)
+```
+
+```
+##               salary  workqual experience   pubsucc
+## salary     1.0000000 0.6670958  0.8585582 0.5581960
+## workqual   0.6670958 1.0000000  0.4669511 0.3227612
+## experience 0.8585582 0.4669511  1.0000000 0.2537530
+## pubsucc    0.5581960 0.3227612  0.2537530 1.0000000
+```
+
+       
+Mentally cut off the first row and column (`salary` is the
+response). None of the remaining correlations are all that high, so we
+ought not to have any multicollinearity problems.
+ 
+
+(d)??regone?? Fit a regression predicting salary from the other three
+variables, and obtain a `summary` of the results.
+
+Solution
+
+
+
+```r
+salaries.1=lm(salary~workqual+experience+pubsucc,data=salaries)
+summary(salaries.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = salary ~ workqual + experience + pubsucc, data = salaries)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.2463 -0.9593  0.0377  1.1995  3.3089 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 17.84693    2.00188   8.915 2.10e-08 ***
+## workqual     1.10313    0.32957   3.347 0.003209 ** 
+## experience   0.32152    0.03711   8.664 3.33e-08 ***
+## pubsucc      1.28894    0.29848   4.318 0.000334 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.753 on 20 degrees of freedom
+## Multiple R-squared:  0.9109,	Adjusted R-squared:  0.8975 
+## F-statistic: 68.12 on 3 and 20 DF,  p-value: 1.124e-10
+```
+
+   
+ 
+
+(e) How can we justify the statement ``one or more of the
+explanatory variables helps to predict salary''? How is this
+consistent with the value of R-squared?
+
+Solution
+
+
+"One or more of the explanatory variables helps" is an
+invitation to consider the (global) $F$-test for the whole
+regression. This has the very small P-value of $1.124\times
+10^{-10}$ (from the bottom line of the output): very small, so
+one or more of the explanatory variables *does* help, and
+the statement is correct.
+The idea that something helps to predict salary suggests
+(especially with such a small number of observations) that we
+should have a high R-squared. In this case, R-squared is 0.9109,
+which is indeed high.
+ 
+
+(f) Would you consider removing any of the variables from this
+regression? Why, or why not?
+
+Solution
+
+
+Look at the P-values attached to each variable. These are all
+very small: 0.003, 0.00000003 and 0.0003, way smaller than
+0.05. So it would be a mistake to 
+take any, even one, of the variables out: doing so would make the
+regression much worse.
+If you need convincing of that, see what happens when we take
+the variable with the highest P-value out --- this is `workqual`:
+
+```r
+salaries.2=lm(salary~experience+pubsucc,data=salaries)
+summary(salaries.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = salary ~ experience + pubsucc, data = salaries)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.2723 -0.7865 -0.3983  1.7277  3.2060 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 21.02546    2.14819   9.788 2.82e-09 ***
+## experience   0.37376    0.04104   9.107 9.70e-09 ***
+## pubsucc      1.52753    0.35331   4.324    3e-04 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.137 on 21 degrees of freedom
+## Multiple R-squared:  0.8609,	Adjusted R-squared:  0.8477 
+## F-statistic:    65 on 2 and 21 DF,  p-value: 1.01e-09
+```
+
+       
+
+R-squared has gone down from 91\% to 86\%: maybe not so much in the
+grand scheme of things, but it is noticeably less. Perhaps better,
+since we are comparing models with different numbers of explanatory
+variables, is to compare the *adjusted* R-squared: this has gone
+down from 90\% to 85\%. The fact that this has gone down *at all*
+is enough to say that taking out `workqual` was a
+mistake.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Adjusted R-squareds are easier to compare in this  context, since you don't have to make a judgement about whether it has changed substantially, whatever you think substantially means.</span>
+
+Another way of seeing whether a variable has anything to add in a
+regression containing the others is a **partial regression  plot**. 
+We take the residuals from `salaries.2` above and plot
+them against the variable we removed, namely
+`workqual`.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The residuals have to be the ones from a  regression *not* including the $x$-variable you're testing.</span> If
+`workqual` has nothing to add, there will be no pattern; if it
+*does* have something to add, there will be a trend. Like
+this. I use `augment` from `broom`:
+
+
+```r
+library(broom)
+salaries.2 %>% augment(salaries) %>%
+ggplot(aes(x=workqual, y=.resid))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/dartington-1.png" width="672"  />
+
+ 
+
+This is a mostly straight upward trend. So we
+need to add a linear term in `workqual` to the
+regression.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Or not take it out in the first place.</span>
+ 
+
+(g) Do you think it would be a mistake to take *both* of
+`workqual` and `pubsucc` out of the regression? Do a
+suitable test. Was your guess right?
+
+Solution
+
+
+I think it would be a big mistake. Taking even one of these
+variables out of the regression is a bad idea (from the
+$t$-tests), so taking out more than one would be a *really* bad idea.
+To perform a test, fit the model without these two explanatory variables:
+
+```r
+salaries.3=lm(salary~experience,data=salaries)
+```
+
+     
+
+and then use `anova` to compare the two regressions, smaller
+model first:
+
+
+```r
+anova(salaries.3,salaries.1)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: salary ~ experience
+## Model 2: salary ~ workqual + experience + pubsucc
+##   Res.Df     RSS Df Sum of Sq      F    Pr(>F)    
+## 1     22 181.191                                  
+## 2     20  61.443  2    119.75 19.489 2.011e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+ 
+
+The P-value is extremely small, so the bigger model is definitely
+better than the smaller one: we really do need all three
+variables. Which is what we guessed.
+
+
+(h) Back in part~(??regone??), you fitted a regression with all
+three explanatory variables. By making suitable plots, assess
+whether there is any evidence that (i) that the linear model should
+be a curve, (ii) that the residuals are not normally 
+distributed, (iii) that there is "fan-out", where the residuals are getting
+bigger *in size* as the fitted values get bigger? Explain
+briefly how you came to your conclusions in each case.
+
+Solution
+
+
+I intended that (i) should just be a matter of looking at residuals
+vs.\ fitted values:
+
+```r
+ggplot(salaries.1, aes(x=.fitted, y=.resid))+geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-214-1.png" width="672"  />
+
+    
+
+There is no appreciable pattern on here, so no evidence of a curve (or
+apparently of any other problems).
+
+Extra: you might read this that we should check residuals against the
+$x$-variables as well, which is a similar trick to the above one for
+plotting response against each of the explanatories. There is one step
+first, though: use `augment` from `broom` first to get a
+dataframe with the original $x$-variables *and* the residuals in
+it. The following thus looks rather complicated, and if it confuses
+you, run the code a piece at a time to see what it's doing:
+
+
+```r
+salaries.1 %>% augment(salaries) %>%
+gather(xname, x, workqual:pubsucc) %>%
+ggplot(aes(x=x, y=.resid))+geom_point()+
+facet_wrap(~xname, scales="free", ncol=2)
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-215-1.png" width="672"  />
+
+ 
+
+These three residual plots are also pretty much textbook random, so no problems here either.
+
+For (ii), look at a normal quantile plot of the residuals, which is not as difficult as the plot I just did:
+
+
+```r
+ggplot(salaries.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-216-1.png" width="672"  />
+
+ 
+
+That is really pretty good. Maybe the *second* smallest point is
+a bit far off the line, but otherwise there's nothing to worry about. A
+quick place to look for problems is the extreme observations, and the
+largest and smallest residuals are almost exactly the size we'd expect
+them to be.
+
+Our graph for assessing fan-in or fan-out is to plot the *absolute* values of the residuals against the fitted values. The plot from (i) suggests that we won't have any problems here, but to investigate:
+
+
+```r
+ggplot(salaries.1, aes(x=.fitted, y=abs(.resid)))+geom_point()+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-217-1.png" width="672"  />
+
+ 
+
+This is pretty nearly straight across. You might think it increases a
+bit at the beginning, but most of the evidence for that comes from the
+one observation with fitted value near 30 that happens to have a
+residual near zero. Conclusions based on one observation are not to be
+trusted!
+In summary, I'm happy with this linear multiple regression, and I
+don't see any need to do anything more with it. I am, however, willing
+to have some sympathy with opinions that differ from mine, if they are
+supported by those graphs above.
+ 
+
+
+
+
+
+##  Predicting GPA of computer science students
+
+
+ The file
+[link](http://www.utsc.utoronto.ca/~butler/d29/gpa.txt) contains some
+measurements of academic achievement for a number of university
+students studying computer science:
+
+
+
+* High school grade point average
+
+* Math SAT score
+
+* Verbal SAT score
+
+* Computer Science grade point average
+
+* Overall university grade point average.
+
+
+
+
+(a) Read in the data and display it (or at least the first ten lines).
+
+
+Solution
+
+
+The usual:
+
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/gpa.txt"
+gpa=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   high_GPA = col_double(),
+##   math_SAT = col_integer(),
+##   verb_SAT = col_integer(),
+##   comp_GPA = col_double(),
+##   univ_GPA = col_double()
+## )
+```
+
+```r
+gpa
+```
+
+```
+## # A tibble: 105 x 5
+##    high_GPA math_SAT verb_SAT comp_GPA univ_GPA
+##       <dbl>    <int>    <int>    <dbl>    <dbl>
+##  1     3.45      643      589     3.76     3.52
+##  2     2.78      558      512     2.87     2.91
+##  3     2.52      583      503     2.54     2.4 
+##  4     3.67      685      602     3.83     3.47
+##  5     3.24      592      538     3.29     3.47
+##  6     2.1       562      486     2.64     2.37
+##  7     2.82      573      548     2.86     2.4 
+##  8     2.36      559      536     2.03     2.24
+##  9     2.42      552      583     2.81     3.02
+## 10     3.51      617      591     3.41     3.32
+## # ... with 95 more rows
+```
+
+ 
+
+Two SAT scores and three GPAs, as promised.
+
+
+
+(b) Make a scatterplot of high school GPA against university
+GPA. Which variable should be the response and which
+explanatory? Explain briefly. Add a smooth trend to your plot.
+
+
+Solution
+
+
+High school comes before university, so high school should be
+explanatory and university should be the response. (High school
+grades are used as an admission criterion to university, so we
+would hope they would have some predictive value.)
+
+```r
+ggplot(gpa,aes(x=high_GPA,y=univ_GPA))+geom_point()+
+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-219-1.png" width="672"  />
+
+   
+    
+
+
+(c) Describe any relationship on your scatterplot: its direction, its
+strength and its shape. Justify your description briefly.
+
+
+Solution
+
+
+Taking these points one at a time:
+
+
+* direction: upward (a higher high-school GPA generally goes
+with a higher university GPA as well. Or you can say that the
+lowest high-school GPAs go with the lowest university GPAs,
+and high with high, at least most of the time).
+
+* strength: something like moderately strong, since while
+the trend is upward, there is quite a lot of scatter. (This is
+a judgement call: something that indicates that you are basing
+your description on something reasonable is fine.)
+
+* shape: I'd call this "approximately linear" since there
+is no clear curve here. The smooth trend wiggles a bit, but
+not enough to make me doubt a straight line.
+
+Looking ahead, I also notice that when high-school GPA is high,
+university GPA is also consistently high, but when high-school
+GPA is low, the university GPA is sometimes low and sometimes
+high, a lot more variable. (This suggests problems with fan-in
+later.) In a practical sense, what this seems to show is that
+people who do well at university usually did well in high-school
+as well, but sometimes their high-school grades were not
+that good. This is especially true for people with university
+GPAs around 3.25.
+      
+
+
+(d)??part:highonly?? Fit a linear regression for predicting university GPA
+from high-school GPA and display the results.
+
+
+Solution
+
+
+Just this, therefore:
+
+```r
+gpa.1=lm(univ_GPA~high_GPA,data=gpa)
+summary(gpa.1)
+```
+
+```
+## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.69040 -0.11922  0.03274  0.17397  0.91278 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  1.09682    0.16663   6.583 1.98e-09 ***
+## high_GPA     0.67483    0.05342  12.632  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2814 on 103 degrees of freedom
+## Multiple R-squared:  0.6077,	Adjusted R-squared:  0.6039 
+## F-statistic: 159.6 on 1 and 103 DF,  p-value: < 2.2e-16
+```
+
+    
+
+Extra: this question goes on too long, so I didn't ask you to look at the
+residuals from this model, but my comments earlier suggested that we
+might have had some problems with fanning-in (the variability of
+predictions getting less as the high-school GPA increases). In case
+you are interested, I'll look at this here. First, residuals against
+fitted values:
+
+
+```r
+ggplot(gpa.1,aes(x=.fitted,y=.resid))+geom_point()+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-221-1.png" width="672"  />
+
+ 
+
+Is that evidence of a trend in the residuals? Dunno. I'm inclined to
+call this an "inconsequential wiggle" and say it's OK. Note that the
+grey envelope includes zero all the way across.
+
+Normal quantile plot of residuals:
+
+
+```r
+ggplot(gpa.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-222-1.png" width="672"  />
+
+ 
+
+A somewhat long-tailed distribution: compared to a normal
+distribution, the residuals are a bit too big in size, both on the
+positive and negative end.
+
+The problem I was really worried about was the potential of
+fanning-in, which we can assess by looking at the absolute residuals:
+
+
+```r
+ggplot(gpa.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-223-1.png" width="672"  />
+
+ 
+
+That is definitely a downward trend in the size of the residuals, and
+I think I was right to be worried before. The residuals should be of
+similar size all the way across.
+
+The usual problem of this kind is fanning-*out*, where the
+residuals get *bigger* in size as the fitted values increase. The
+bigger values equals more spread is the kind of thing that a
+transformation like taking logs will handle: the bigger values are all
+brought downwards, so they will be both smaller and less variable than
+they were. This one, though, goes the other way, so the only kind of
+transformation that might help is one at the other end of the scale
+(think of the Box-Cox lambda scale), something like maybe reciprocal,
+$\lambda=-1$ maybe.
+
+The other thought I had was that there is this kind of break around a
+high-school GPA of 3 (go back to the scatterplot of (b)): when the
+high-school GPA is higher than 3, the university GPA is very
+consistent (and shows a clear upward trend), but when the high-school
+GPA is less than 3, the university GPA is very variable and there
+doesn't seem to be any trend at all. So maybe two separate analyses
+would be the way to go.
+
+All right, how does Box-Cox work out here, if at all?
+
+
+```r
+library(MASS)
+```
+
+```
+## 
+## Attaching package: 'MASS'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     select
+```
+
+```r
+boxcox(univ_GPA~high_GPA,data=gpa)
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-224-1.png" width="672"  />
+
+ 
+
+It doesn't. All right, that answers *that* question. 
+
+When I loaded `MASS`, I also loaded its `select`
+function,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is what that masked message above was  about.</span> and I might want to use the 
+`tidyverse` `select`
+function later, and things could get confused. So let's "unload"
+`MASS` now:
+
+
+```r
+detach("package:MASS",unload=T)
+```
+
+ 
+        
+
+
+(e) Two students have been admitted to university. One has
+a high school GPA of 3.0 and the other a high school GPA of   
+3.5. Obtain suitable intervals that summarize the GPAs that each of these
+two students might obtain in university.
+
+
+Solution
+
+
+Since we are talking about individual students, rather than
+the  mean of *all* students with these GPAs, prediction
+intervals are called for. The first step is to make a data
+frame to predict from. This has to contain columns for all the
+explanatory variables, just `high_GPA` in this case:
+
+```r
+gpa.new=tibble(high_GPA=c(3,3.5))
+gpa.new
+```
+
+```
+## # A tibble: 2 x 1
+##   high_GPA
+##      <dbl>
+## 1      3  
+## 2      3.5
+```
+
+      
+
+and then feed that into `predict`:
+
+
+```r
+preds=predict(gpa.1,gpa.new,interval="p")
+preds
+```
+
+```
+##        fit      lwr      upr
+## 1 3.121313 2.560424 3.682202
+## 2 3.458728 2.896105 4.021351
+```
+
+ 
+
+and display that side by side with the values it was predicted from:
+
+
+```r
+cbind(gpa.new,preds)
+```
+
+```
+##   high_GPA      fit      lwr      upr
+## 1      3.0 3.121313 2.560424 3.682202
+## 2      3.5 3.458728 2.896105 4.021351
+```
+
+ 
+
+or this way, if you like it better:
+
+
+```r
+as_tibble(preds) %>% bind_cols(gpa.new) %>% select(high_GPA, everything())
+```
+
+```
+## # A tibble: 2 x 4
+##   high_GPA   fit   lwr   upr
+##      <dbl> <dbl> <dbl> <dbl>
+## 1      3    3.12  2.56  3.68
+## 2      3.5  3.46  2.90  4.02
+```
+
+ 
+
+Thus the predicted university GPA for the student with high school GPA
+3.0 is between 2.6 and 3.7, and for the student with high school GPA
+3.5 is between 2.9 and 4.0. (I think this is a good number of decimals
+to give, but in any case, you should actually *say* what the
+intervals are.)
+
+I observe that these intervals are almost exactly the same
+length. This surprises me a bit, since I would have said that 3.0 is
+close to the average high-school GPA and 3.5 is noticeably higher. If
+that's the case, the prediction interval for 3.5 should be longer
+(since there is less "nearby data"). Was I right about that?
+
+
+```r
+gpa %>% summarize( mean=mean(high_GPA),
+med=median(high_GPA),
+q1=quantile(high_GPA,0.25),
+q3=quantile(high_GPA,0.75))
+```
+
+```
+## # A tibble: 1 x 4
+##    mean   med    q1    q3
+##   <dbl> <dbl> <dbl> <dbl>
+## 1  3.08  3.17  2.67  3.48
+```
+
+ 
+
+More or less: the mean is close to 3, and 3.5 is close to the third
+quartile. So the thing about the length of the prediction interval is
+a bit of a mystery. Maybe it works better for the confidence interval
+for the mean:
+
+
+```r
+preds=predict(gpa.1,gpa.new,interval="c")
+cbind(gpa.new,preds)
+```
+
+```
+##   high_GPA      fit      lwr      upr
+## 1      3.0 3.121313 3.066243 3.176383
+## 2      3.5 3.458728 3.388147 3.529309
+```
+
+ 
+
+These intervals are a lot shorter, since we are talking about
+*all* students with the high-school GPAs in question, and we
+therefore no longer have to worry about variation from student to
+student (which is considerable). But my supposition about length is
+now correct: the interval for 3.5, which is further from the mean, is
+a little longer than the interval for 3.0. Thinking about it, it seems
+that the individual-to-individual variation, which is large, is
+dominating things for our prediction interval above.
+        
+
+
+(f)??part:all?? Now obtain a regression predicting university GPA from
+high-school GPA as well as the two SAT scores. Display your results.
+
+
+Solution
+
+
+Create a new regression with all the explanatory variables you want in it:
+
+
+```r
+gpa.2=lm(univ_GPA~high_GPA+math_SAT+verb_SAT,data=gpa)
+summary(gpa.2)
+```
+
+```
+## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + math_SAT + verb_SAT, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68186 -0.13189  0.01289  0.16186  0.93994 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 0.5793478  0.3422627   1.693   0.0936 .  
+## high_GPA    0.5454213  0.0850265   6.415  4.6e-09 ***
+## math_SAT    0.0004893  0.0010215   0.479   0.6330    
+## verb_SAT    0.0010202  0.0008123   1.256   0.2120    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2784 on 101 degrees of freedom
+## Multiple R-squared:  0.6236,	Adjusted R-squared:  0.6124 
+## F-statistic: 55.77 on 3 and 101 DF,  p-value: < 2.2e-16
+```
+
+ 
+        
+
+
+(g) Test whether adding the two SAT scores has improved the
+prediction of university GPA. What do you conclude?
+
+
+
+Solution
+
+
+Since we added *two* explanatory variables, the $t$-tests in
+`gpa.2` don't apply (they tell us whether we can take out
+*one* $x$-variable). We might have some suspicions, but that's
+all they are.  So we have to do `anova`:
+
+```r
+anova(gpa.1,gpa.2)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: univ_GPA ~ high_GPA
+## Model 2: univ_GPA ~ high_GPA + math_SAT + verb_SAT
+##   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+## 1    103 8.1587                           
+## 2    101 7.8288  2   0.32988 2.1279 0.1244
+```
+
+   
+
+If you put the models the other way around, you'll get a negative
+$F$-statistic and degrees of freedom, which doesn't make
+much sense (although the test will still work).
+
+The null hypothesis here is that the two models fit equally
+well. Since the P-value is not small, we do not reject that null
+hypothesis, and therefore we conclude that the two models *do*
+fit equally well, and therefore we prefer the smaller one, the one
+that predicts university GPA from just high-school GPA. (Or,
+equivalently, we conclude that those two SAT scores don't add anything
+to the prediction of how well a student will do at university, once
+you know their high-school GPA.)
+
+This might surprise you, given what the SATs are supposed to be
+*for*. But that's what the data say.
+  
+
+
+(h) Carry out a backward elimination starting out from your
+model in part (??part:all??). Which model do you end up with?
+Is it the same model as you fit in (??part:highonly??)?
+
+
+Solution
+
+
+In the model of (??part:all??), `math_SAT` was the
+least significant, so that comes out first. (I use
+`update` but I'm not insisting that you do:)
+
+```r
+gpa.3=update(gpa.2,.~.-math_SAT)
+summary(gpa.3)
+```
+
+```
+## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + verb_SAT, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68430 -0.11268  0.01802  0.14901  0.95239 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 0.6838723  0.2626724   2.604   0.0106 *  
+## high_GPA    0.5628331  0.0765729   7.350 5.07e-11 ***
+## verb_SAT    0.0012654  0.0006283   2.014   0.0466 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2774 on 102 degrees of freedom
+## Multiple R-squared:  0.6227,	Adjusted R-squared:  0.6153 
+## F-statistic: 84.18 on 2 and 102 DF,  p-value: < 2.2e-16
+```
+
+ 
+Here is where we have to stop, since both high-school GPA and
+verbal SAT score are significant, and so taking either of them
+out would be a bad idea. 
+This is a *different* model than the one of
+(??part:highonly??). This is the case, even though the model
+with high-school GPA only was not significantly worse than the
+model containing everything. (This goes to show that
+model-building doesn't always have nice clear answers.)
+In the model I called `gpa.2`, neither of the SAT
+scores were anywhere near significant (considered singly), but
+as soon as we took out one of the SAT scores (my model
+`gpa.3`), the other one became significant. This goes
+to show that you shouldn't take out more than one explanatory
+variable based on the results of the $t$-tests, and even if
+you test to see whether you should have taken out both of the SAT,
+you won't necessarily get consistent
+results. Admittedly, it's a close decision whether to
+keep or remove `verb_SAT`, since its P-value is
+close to 0.05.
+The other way of tackling this one is via `step`, which
+does the backward elimination for you (not that it was much
+work here):
+
+```r
+step(gpa.2,direction="backward",test="F")
+```
+
+```
+## Start:  AIC=-264.6
+## univ_GPA ~ high_GPA + math_SAT + verb_SAT
+## 
+##            Df Sum of Sq     RSS     AIC F value    Pr(>F)    
+## - math_SAT  1    0.0178  7.8466 -266.36  0.2294     0.633    
+## - verb_SAT  1    0.1223  7.9511 -264.97  1.5777     0.212    
+## <none>                   7.8288 -264.60                      
+## - high_GPA  1    3.1896 11.0184 -230.71 41.1486 4.601e-09 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Step:  AIC=-266.36
+## univ_GPA ~ high_GPA + verb_SAT
+## 
+##            Df Sum of Sq     RSS     AIC F value    Pr(>F)    
+## <none>                   7.8466 -266.36                      
+## - verb_SAT  1    0.3121  8.1587 -264.26  4.0571   0.04662 *  
+## - high_GPA  1    4.1562 12.0028 -223.73 54.0268 5.067e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```
+## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + verb_SAT, data = gpa)
+## 
+## Coefficients:
+## (Intercept)     high_GPA     verb_SAT  
+##    0.683872     0.562833     0.001265
+```
+
+         
+
+This gives the same result as we did from our backward
+elimination. The tables with AIC in them are each step of
+the elimination, and the variable at the top is the one that comes out
+next. (When `<none>` gets to the top, that's when you stop.)
+What happened is that the two SAT scores started off highest, but once
+we removed `math_SAT`, `verb_SAT` jumped below
+`<none>` and so the verbal SAT score had to stay.
+
+Both the P-value and the AIC say that the decision about keeping or
+removing `verb_SAT` is very close.
+        
+
+
+(i) These students were studying computer science at
+university. Do you find your backward-elimination result
+sensible or surprising, given this? Explain briefly.
+
+
+Solution
+
+
+I would expect computer science students to be strong students
+generally, good at math and possibly not so good with
+words. So it is not surprising that high-school GPA figures
+into the prediction, but I would expect math SAT score to have
+an impact also, and it does not. It is also rather surprising
+that verbal SAT score predicts success at university for these
+computer science students; you wouldn't think that having
+better skills with words would be helpful. So I'm surprised.
+Here, I'm looking for some kind of discussion about what's in
+the final backward-elimination model, and what you would
+expect to be true of computer science students. 
+Let's look at the final model from the backward elimination again:
+
+```r
+summary(gpa.3)
+```
+
+```
+## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + verb_SAT, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68430 -0.11268  0.01802  0.14901  0.95239 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 0.6838723  0.2626724   2.604   0.0106 *  
+## high_GPA    0.5628331  0.0765729   7.350 5.07e-11 ***
+## verb_SAT    0.0012654  0.0006283   2.014   0.0466 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2774 on 102 degrees of freedom
+## Multiple R-squared:  0.6227,	Adjusted R-squared:  0.6153 
+## F-statistic: 84.18 on 2 and 102 DF,  p-value: < 2.2e-16
+```
+
+         
+
+The two slope estimates are both positive, meaning that, all else
+equal, a higher value for each explanatory variable goes with a higher
+university GPA. This indicates that a higher verbal SAT score goes
+with a higher university GPA: this is across all the university
+courses that a student takes, which you would expect to be math and
+computer science courses for a Comp Sci student, but might include
+a few electives or writing courses. Maybe what is happening is that
+the math SAT score is telling the same story as the high-school GPA
+for these students, and the verbal SAT score is saying something
+different. (For example, prospective computer science students are
+mostly likely to have high math SAT scores, so there's not much
+information there.)
+
+I think I need to look at the correlations:
+
+
+```r
+cor(gpa)
+```
+
+```
+##           high_GPA  math_SAT  verb_SAT  comp_GPA  univ_GPA
+## high_GPA 1.0000000 0.7681423 0.7261478 0.7914721 0.7795631
+## math_SAT 0.7681423 1.0000000 0.8352272 0.6877209 0.6627837
+## verb_SAT 0.7261478 0.8352272 1.0000000 0.6387512 0.6503012
+## comp_GPA 0.7914721 0.6877209 0.6387512 1.0000000 0.9390459
+## univ_GPA 0.7795631 0.6627837 0.6503012 0.9390459 1.0000000
+```
+
+ 
+
+We'll ignore `comp_GPA` (i) because we haven't been thinking
+about it and (ii) because it's highly correlated with the university
+GPA anyway. (There isn't a sense that one of the two university GPAs
+is explanatory and the other is a response, since students are taking
+the courses that contribute to them at the same time.)
+
+The highest correlation with university GPA of what remains is
+high-school GPA, so it's not at all surprising that this features in
+all our regressions. The correlations between university GPA and the
+two SAT scores are about equal, so there appears to be no reason to
+favour one of the SAT scores over the other. But, the two SAT scores
+are highly correlated with *each other* (0.835), which suggests
+that if you have one, you don't need the other, because they are
+telling more or less the same story. 
+
+That makes me wonder how a regression with the SAT math score and
+*not* the SAT verbal score would look:
+
+
+```r
+gpa.4=lm(univ_GPA~high_GPA+math_SAT,data=gpa)
+summary(gpa.4)
+```
+
+```
+## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + math_SAT, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68079 -0.12264  0.00741  0.16579  0.90010 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 0.6072916  0.3425047   1.773   0.0792 .  
+## high_GPA    0.5710745  0.0827705   6.899  4.5e-10 ***
+## math_SAT    0.0012980  0.0007954   1.632   0.1058    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2792 on 102 degrees of freedom
+## Multiple R-squared:  0.6177,	Adjusted R-squared:  0.6102 
+## F-statistic:  82.4 on 2 and 102 DF,  p-value: < 2.2e-16
+```
+
+ 
+
+Math SAT does not quite significantly add anything to the prediction,
+which confirms that we do better to use the verbal SAT score
+(surprising though it seems). Though, the two regressions with the
+single SAT scores, `gpa.3` and `gpa.4`, have almost the
+same R-squared values. It's not clear-cut at all. In the end, you have
+to make a call and stand by it.
+        
 
 
 

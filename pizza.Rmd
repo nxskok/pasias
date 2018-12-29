@@ -1,0 +1,284 @@
+##  Calories and fat in pizza
+
+
+ 
+The file at
+[link](http://www.utsc.utoronto.ca/~butler/d29/Pizza.csv) 
+came from a spreadsheet of information about 24 brands
+of pizza: specifically, per 5-ounce serving, the number of calories,
+the grams of fat, and the cost (in US dollars). The names of the pizza
+brands are quite long. This file may open in a spreadsheet when you
+browse to the link, depending on your computer's setup.
+
+
+
+(a) Read in the data and display at least some of the data
+frame. Are the variables of the right types? (In particular, why is
+the number of calories labelled one way and the cost labelled a
+different way?)
+
+Solution
+
+
+`read_csv` is the thing this time:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/Pizza.csv"
+pizza=read_csv(my_url)
+pizza
+```
+
+    
+
+The four variables are: the brand of pizza, which got read in as text,
+the number of calories (an integer), and the fat and cost, which are
+both decimal numbers so they get labelled `num`.
+
+Anyway, these are apparently the right thing. The distinction between
+`calories` and `cost` is that the former is a whole
+number and the latter is a decimal number.
+
+Extra: I wanted to mention something else that I discovered
+yesterday.
+`r tufte::margin_note("R is like that: sometimes it seems as if it has  infinite depth.")` 
+There is a package called `rio` that will
+read (and write) data in a whole bunch of different formats in a
+unified way.\endnote{It does this by figuring what kind of thing you
+have, from the extension to its filename, and then calling an
+appropriate function to read in or write out the data. This is an
+excellent example of "standing on the shoulders of giants" to make
+our lives easier. The software does the hard work of figuring out
+what kind of thing you have and how to read it in; all we do is say `import`.} Anyway, the usual installation thing, done once:
+
+```{r eval=F}
+install.packages("rio")
+```
+
+ 
+
+which takes a moment since it probably has to install some other
+packages too, and then you read in a file like this:
+
+```{r }
+library(rio)
+pizza3=import(my_url)
+head(pizza3)
+```
+
+ 
+
+`import` figures that you have a `.csv` file, so it
+calls up `read_csv` or similar.
+
+Technical note: `rio` does not use the `read_`
+functions, so what it gives you is actually a `data.frame`
+rather than a `tibble`, so that when you display it, you get
+the whole thing even if it is long. Hence the `head` here and
+below to display the first six lines.
+
+I originally had the data as an Excel spreadsheet, but `import`
+will gobble up that pizza too:
+
+```{r }
+my_other_url="http://www.utsc.utoronto.ca/~butler/d29/Pizza_E29.xls"
+pizza4=import(my_other_url)
+head(pizza4)
+```
+
+ 
+
+The corresponding function for writing a data frame to a file in the
+right format is, predictably enough, called `export`.
+
+
+(b) Make a scatterplot for predicting calories from the number
+of grams of fat. Add a smooth trend. What kind of relationship do
+you see, if any?
+
+Solution
+
+
+All the variable names start with Capital Letters:
+```{r alskhslafkhlksfhsasvvvv}
+ggplot(pizza,aes(x=Fat,y=Calories))+geom_point()+
+geom_smooth()
+```
+
+       
+
+There is definitely an upward trend: the more fat, the more
+calories. The trend is more or less linear (or, a little bit curved:
+say what you like, as long as it's not obviously crazy). *I*
+think, with this much scatter, there's no real justification for
+fitting a curve.
+ 
+
+(c) Fit a straight-line relationship, and display the intercept,
+slope, R-squared, etc. Is there a real relationship between the two
+variables, or is any apparent trend just chance?
+
+Solution
+
+
+`lm`, with `summary`:
+```{r }
+pizza.1=lm(Calories~Fat,data=pizza)
+summary(pizza.1)
+```
+
+       
+
+To assess whether this trend is real or just chance, look at the
+P-value on the end of the `Fat` line, or on the bottom line
+where the $F$-statistic is (they are the same value of $1.73\times
+10^{-6}$ or 0.0000017, so you can pick either). This P-value is
+really small, so the slope is definitely *not* zero, and
+therefore there really is a relationship between the two variables.
+ 
+
+(d) Obtain a plot of the residuals against the fitted values
+for this regression. Does this indicate that there are any problems
+with this regression, or not? Explain briefly.
+
+Solution
+
+
+Use the regression object `pizza.1`:
+
+```{r }
+ggplot(pizza.1,aes(x=.fitted,y=.resid))+geom_point()+geom_smooth()
+```
+
+ 
+
+On my residual plot, I see a slight curve in the smooth trend,
+but I am not worried about that because the residuals on the plot are
+all over the place in a seemingly random pattern (the grey envelope is
+wide and that is pretty close to going straight across). So I think a
+straight line model is satisfactory. 
+
+That's all you needed, but it is also worth looking at a normal
+quantile plot of the residuals:
+
+```{r }
+ggplot(pizza.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+ 
+
+A bit skewed to the left (the low ones are too low).
+
+Also a plot of the absolute residuals, for assessing fan-out:
+
+```{r }
+ggplot(pizza.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
+```
+
+ 
+
+A tiny bit of fan-in (residuals getting *smaller* in size as the
+fitted value gets bigger), but nothing much, I think.
+
+Another way of assessing curvedness is to fit a squared term anyway,
+and see whether it is significant:
+
+```{r }
+pizza.2=update(pizza.1,.~.+I(Fat^2))
+summary(pizza.2)
+```
+
+ 
+
+The fat-squared term is not significant, so that curve on the smooth trend
+in the (first) residual plot was indeed nothing to get excited about.
+ 
+
+(e) The research assistant in this study returns with two
+new brands of pizza (ones that were not in the original data). The
+fat content of a 5-ounce serving was 12 grams for the first brand
+and 20 grams for the second brand. For each of these brands of
+pizza, obtain a suitable 95\% interval for the number of calories
+contained in a 5-ounce serving.
+
+Solution
+
+
+The suitable interval here is a prediction interval, because we
+are interested in each case in the calorie content of the
+*particular* pizza brands that the research assistant
+returned with (and not, for example, in the mean calorie content
+for *all* brands of pizza that have 12 grams of fat per
+serving). Thus:
+```{r }
+newfat=c(12,20)
+new=tibble(Fat=newfat)
+new
+preds=predict(pizza.1,new,interval="p")
+cbind(new,preds)
+```
+
+       
+
+Or, if you like:
+
+```{r }
+as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
+```
+
+ 
+
+For the pizza with 12 grams of fat, the predicted calories are between
+261 and 370 with 95\% confidence, and for the pizza with 20 grams of
+fat, the calories are predicted to be between 337 and 454. (You should
+write down what these intervals are, and not leave the reader to find
+them in the output.)
+
+(Remember the steps: create a new data frame containing the values to
+predict for, and then feed that into `predict` along with the
+model that you want to use to predict with. The variable in the data
+frame has to be called *precisely* `Fat` with a capital F,
+otherwise it won't work.)
+
+These intervals are both pretty awful: you get a very weak picture of
+how many calories per serving the pizza brands in question might
+contain. This is for two reasons: (i) there was a fair bit of scatter
+in the original relationship, R-squared being around 65\%, and (ii)
+even if we knew perfectly where the line went (which we don't),
+there's no guarantee that individual brands of pizza would be on it
+anyway. (Prediction intervals are always hit by this double whammy, in
+that individual observations suffer from variability in where the line
+goes *and* variability around whatever the line is.)
+
+I was expecting, when I put together this question, that the
+20-grams-of-fat interval would  be noticeably worse, because 20 is
+farther away from the mean fat content of all the brands. But there
+isn't much to choose. For the confidence intervals for the mean
+calories of *all* brands with these fat contents, the picture is clearer:
+
+```{r }
+preds=predict(pizza.1,new,interval="c")
+cbind(new,preds)
+```
+
+ 
+
+or, as before:
+
+```{r }
+as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
+```
+
+ 
+
+This time the fat-20 interval is noticeably longer than the fat-12
+one. And these are much shorter than the prediction intervals, as we
+would guess.
+
+This question is a fair bit of work for 3 points, so I'm not insisting that you explain
+your choice of a prediction interval over a confidence interval, but I
+think it is still a smart thing to do, even purely from a marks point
+of view, because if you get it wrong for a semi-plausible reason, you
+might pick up some partial credit. Not pulling out your prediction
+intervals from your output is a sure way to lose a point, however.
+ 
+
+

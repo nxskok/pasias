@@ -1,0 +1,281 @@
+
+
+ In city planning, one major issue is where to locate fire
+stations. If a city has too many fire stations, it will spend too much
+on running them, but if it has too few, there may be unnecessary fire
+damage because the fire trucks take too long to get to the fire.
+
+The first part of a study of this kind of issue is to understand the
+relationship between the distance from the fire station (measured in
+miles in our data set) and the amount of fire damage caused (measured
+in thousands of dollars). A city recorded the fire damage and distance
+from fire station for 15 residential fires (which you can take as a
+sample of "all possible residential fires in that city"). The data
+are in [link](http://www.utsc.utoronto.ca/~butler/d29/fire_damage.txt). 
+
+
+
+(a) Read in and display the data, verifying that you have the
+right number of rows and the right columns.
+
+
+Solution
+
+
+A quick check of the data reveals that the data values are
+separated by exactly  one space, so:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/fire_damage.txt"
+fire=read_delim(my_url," ")
+fire
+```
+
+   
+
+15 observations (rows), and promised, and a column each of distances
+and amounts of fire damage, also as promised.
+
+One mark for reading in the data, and one for saying something
+convincing about how you have the right thing.
+    
+
+
+(b)??part:ttest?? Obtain a 95\% confidence interval for the
+mean fire damage. (There is nothing here from STAD29, and your
+answer should have nothing to do with distance.)
+
+
+Solution
+
+
+I wanted to dissuade you  from thinking too hard here. It's just
+an ordinary one-sample $t$-test, extracting the interval from it:
+```{r }
+t.test(fire$damage)
+```
+
+     
+
+Or
+
+```{r }
+with(fire,t.test(damage))
+```
+
+ 
+
+Ignore the P-value (it's testing that the mean is the default
+*zero*, which makes no sense). The confidence interval either way
+goes from 21.9 to 30.9 (thousand dollars).
+    
+
+
+(c) Draw a scatterplot for predicting the amount of fire damage
+from the distance from the fire station. Add a smooth trend to your
+plot. 
+
+
+Solution
+
+
+We are predicting fire damage, so that goes on the $y$-axis:
+```{r }
+ggplot(fire,aes(x=distance,y=damage))+geom_point()+geom_smooth()
+```
+
+     
+
+
+
+(d)??part:howgood?? Is there a relationship between distance from fire station
+and fire damage? Is it linear or definitely curved? How strong is
+it? Explain briefly.
+
+
+Solution
+
+
+When the distance is larger, the fire damage is definitely larger,
+so there is clearly a relationship. I would call this one
+approximately linear: it wiggles a bit, but it is not to my mind
+obviously curved. I would also call it a strong relationship,
+since the points are close to the smooth trend.
+    
+
+
+(e) Fit a regression predicting fire damage from distance. How
+is the R-squared consistent (or inconsistent) with your answer from
+part~(??part:howgood??)?
+
+
+Solution
+
+
+The regression is an ordinary `lm`:
+```{r }
+damage.1=lm(damage~distance,data=fire)
+summary(damage.1)
+```
+
+     
+
+We need to display the results, since we need to see the R-squared in
+order to say something about it.
+
+R-squared is about 92\%, high, indicating a strong and linear
+relationship. Back in part~(??part:howgood??), I said that the
+relationship is linear and strong, which is entirely consistent with
+such an R-squared. (If you said something different previously, say
+how it does or doesn't square with this kind of R-squared value.)
+
+Points: one for fitting the regression, one for displaying it, and two
+(at the grader's discretion) for saying what the R-squared is and how
+it's consistent (or not) with part~(??part:howgood??).
+
+Extra: if you thought the trend was "definitely curved", you would
+find that a parabola (or some other kind of curve) was definitely
+better than a straight line. Here's the parabola:
+
+```{r }
+damage.2=lm(damage~distance+I(distance^2),data=fire)
+summary(damage.2)
+```
+
+ 
+
+There's no evidence here that a quadratic is better.
+
+Or you might even have thought from the wiggles that it was more like cubic:
+
+```{r }
+damage.3=update(damage.2,.~.+I(distance^3))
+summary(damage.3)
+```
+
+
+
+No evidence that a cubic is better; that increase in R-squared up to
+about 94\% is just chance (bearing in mind that adding *any* $x$,
+even a useless one, will increase R-squared).
+
+How bendy is the cubic?
+
+```{r }
+ggplot(fire,aes(x=distance,y=damage))+geom_point()+
+geom_smooth(method="lm")+
+geom_line(data=damage.3,aes(y=.fitted), colour="red")
+```
+
+ 
+
+The cubic, in red, does bend a little, but it doesn't do an obvious
+job of going through the points better than the straight line does. It
+seems to be mostly swayed by that one observation with damage over 40,
+and choosing a relationship by how well it fits one point is flimsy at
+the best of times.  So, by Occam's Razor, we go with the line rather
+than the cubic because it (i) fits equally well, (ii) is simpler.
+    
+
+
+(f)??part:cim?? Obtain a 95\% confidence interval for the mean fire damage
+\emph{for a residence that is 4 miles from the nearest fire
+station}. (Note the contrast with part~(??part:ttest??).)
+
+
+Solution
+
+
+This is a confidence interval for a mean response at a given value
+of the explanatory variable. This is as opposed to
+part~(??part:ttest??), which is averaged over *all* distances.
+So, follow the steps. Make a tiny data frame with this one value
+of `distance`:
+```{r }
+new=tibble(distance=4)
+```
+
+     
+
+and then feed it into `predict`:
+
+```{r }
+pp=predict(damage.1,new,interval="c")
+```
+
+ 
+
+and then put it side-by-side with the value it's a prediction for:
+
+```{r }
+cbind(new,pp)
+```
+
+ 
+
+28.5 to 31.4 (thousand dollars).
+
+
+
+(g) Compare the confidence intervals of parts
+(??part:ttest??) and (??part:cim??). Specifically, compare their
+centres and their lengths, and explain briefly why the results
+make sense.
+
+
+Solution
+
+
+Let me just put them side by side for ease of comparison:
+part~(??part:ttest??) is:
+```{r }
+t.test(fire$damage)
+```
+
+       
+
+and part~(??part:cim??)'s is
+
+```{r }
+pp
+```
+
+ 
+
+I printed them out like this since these give the centres of the
+intervals as well as the lower and upper limits.
+
+The centre of the interval is higher for the mean damage when the
+distance is 4. This is because the mean distance is a bit less than 4:
+
+```{r }
+fire %>% summarize(m=mean(distance))
+```
+
+ 
+
+We know it's an upward trend, so our best guess at the mean damage is
+higher if the mean distance is higher (in (??part:cim??), the
+distance is *always* 4: we're looking at the mean fire damage for
+*all* residences that are 4 miles from a fire station.)
+
+What about the lengths of the intervals? The one in (??part:ttest??)
+is about $30.9-21.9=9$ (thousand dollars) long, but the one in
+(??part:cim??) is only $31.4-28.5=2.9$ long, much shorter. This
+makes sense because the relationship is a strong one: knowing the
+distance from the fire station is very useful, because the bigger it
+is, the bigger the damage going to be, with near certainty. Said
+differently, if you know the distance, you can estimate the damage
+accurately.  If you don't know the distance (as is the case in
+(??part:ttest??)), you're averaging over a lot of different
+distances and thus there is a lot of uncertainty in the amount of fire
+damage also.
+
+If you have some reasonable discussion of the reason why the centres
+and lengths of the intervals differ, I'm happy. It doesn't have to be
+the same as mine.
+      
+
+
+
+
+

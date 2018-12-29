@@ -1,0 +1,152 @@
+##  Bell peppers and too much water
+
+
+ A pathogen called *Phytophthora capsici* causes bell
+peppers to wilt and die. It is thought that too much water aids in the
+spread of the pathogen. Two fields are under study, labelled
+`a` and `b`. The first step in the research project is
+to compare the mean soil  water content of the two fields.  There is
+a suspicion that field `a` will have a higher water content
+than field `b`. The data
+are in the
+file
+[link](http://www.utsc.utoronto.ca/~butler/d29/bellpepper.csv).
+
+
+(a) Read the file in using `read_csv`, and
+list the resulting data frame.
+ 
+Solution
+
+
+Reading directly from the URL is easiest:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/bellpepper.csv"
+pepper=read_csv(my_url)
+pepper
+```
+
+     
+
+If you like, find out how many observations you have from each field, thus:
+
+```{r }
+pepper %>% count(field)
+```
+
+ 
+
+Fourteen and sixteen.
+ 
+
+(b) Make side-by-side boxplots of the water content values for
+the two fields. How do the fields seem to compare?
+ 
+Solution
+
+
+This kind of thing:
+```{r dartmouth}
+ggplot(pepper,aes(x=field,y=water))+geom_boxplot()
+```
+
+     
+
+This one is rather interesting: the distribution of water contents for
+field `a` is generally higher than that for field `b`,
+but the median for `a` is actually *lower*.
+
+The other reasonable plot is a facetted histogram, something like this:
+
+```{r }
+ggplot(pepper,aes(x=water))+geom_histogram(bins=6)+
+facet_grid(field~.)
+```
+
+ 
+
+The distribution of water content in field `b` is actually
+bimodal, which is probably the explanation of the funny thing with the
+median. What actually seems to be happening (at least for these data)
+is that the water content in field B is either about the same as field
+A, or a lot less (nothing in between).  I can borrow an idea from
+earlier to find the five-number summaries for each field:
+
+```{r }
+pepper %>% nest(-field) %>%
+mutate(qq=map(data,~enframe(quantile(.$water)))) %>%
+unnest(qq) %>%
+mutate(pctile=parse_number(name)) %>%
+select(-name) %>%
+spread(pctile,value)
+```
+
+ 
+
+This is a weird one: all the quantiles are greater for field A
+*except* for the median.
+ 
+
+(c) Do a two-sample $t$-test to test whether there is evidence
+that the mean water
+content in field `a` is higher than that of field
+`b`. What do you conclude? Explain briefly. (You'll need to
+figure out a way of doing a one-sided test, or how to adapt the
+results from a two-sided test.)
+ 
+Solution
+
+
+```{r }
+t.test(water~field,alternative="greater", data=pepper)
+```
+
+     
+
+Note the use of `alternative` to specify that the first group
+mean (that of field `a`) is bigger than the second, field
+`b`, under the alternative hypothesis.
+
+The P-value, 0.0274, is less than 0.05, so we reject the null (equal
+means) in favour of the `a` mean being bigger than the
+`b` mean: field `a` really does have a higher mean water
+content. 
+
+Another way to tackle this is to do a two-sided test and adapt the P-value:
+
+```{r }
+t.test(water~field, data=pepper)
+```
+
+ 
+
+This time we do *not* go straight to the P-value. First we check
+that we are on the correct side, which we are since the sample mean
+for field `a` *is* bigger than for field `b`. Then we are
+entitled to take the two-sided P-value 0.0548 and *halve* it to
+get the same 0.0274 that we did before.
+ 
+
+(d) Is the result of your test consistent with the boxplot, or
+not? Explain briefly.
+ 
+Solution
+
+
+The test said that field `a` had a greater mean water
+content. Looking at the boxplot, this is consistent with where the
+boxes sit (`a`'s box is higher up than
+`b`'s). However, it is not consistent with the medians,
+where `b`'s median is actually *bigger*.
+You have two possible right answers here: comparing the boxes with
+the test result (they agree) or comparing the medians with the
+test result (they disagree). Either is good. If you like, you
+could also take the angle that the two boxes overlap a fair bit,
+so it is surprising that the test came out significant. (The
+resolution of this one is that we have 30 measurements altogether,
+14 and 16 in the two groups, so the sample size is not tiny. With
+smaller samples, having overlapping boxes would probably lead to a
+non-significant difference.) 
+ 
+
+

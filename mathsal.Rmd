@@ -1,0 +1,302 @@
+##  Salaries of mathematicians
+
+
+ A researcher in a scientific
+foundation wanted to evaluate the relationship between annual salaries
+of mathematicians and three explanatory variables:
+
+
+* an index of work quality
+
+* number of years of experience
+
+* an index of publication success.
+
+
+The data can be found at
+[link](http://www.utsc.utoronto.ca/~butler/d29/mathsal.txt). Data from
+only a relatively small number of mathematicians were available.
+
+
+
+(a) Read in the data and check that you have a sensible number
+of rows and the right number of columns. (What does "a sensible  number of rows" mean here?)
+
+Solution
+
+
+This is a tricky one. There are aligned columns, but *the column headers are not aligned with them*. 
+Thus `read_table2` is what you need.
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/mathsal.txt"
+salaries=read_table2(my_url)
+salaries
+```
+
+        
+
+24 observations ("only a relatively small number") and 4 columns,
+one for the response and one each for the explanatory variables.
+
+Or, if you like,
+
+```{r }
+dim(salaries)
+```
+
+ 
+
+for the second part: 24 rows and 4 columns again.
+I note, with only 24 observations, that we don't really have enough
+data to investigate the effects of three explanatory variables, but
+we'll do the best we can. If the pattern, whatever it is, is clear
+enough, we should be OK.
+ 
+
+(b) Make scatterplots of `salary` against each of the three explanatory variables. If you can, do this with *one* `ggplot`.
+
+Solution
+
+
+The obvious way to do this is as three separate scatterplots,
+and that will definitely work. But you can do it in one go if
+you think about facets, and about having all the $x$-values in
+one column (and the names of the $x$-variables in another
+column):
+```{r ivybridge}
+salaries %>% gather(xname, x, -salary) %>%
+ggplot(aes(x=x, y=salary))+geom_point()+
+facet_wrap(~xname, ncol=2, scales="free")
+```
+
+       
+
+If you don't see how that works, run it yourself, one line at a time. 
+
+I was thinking ahead a bit while I was coding that: I wanted the three
+plots to come out about square, and I wanted the plots to have their
+own scales. The last thing in the `facet_wrap` does the latter,
+and arranging the plots in two columns (thinking of the plots as a set
+of four with one missing) gets them more or less square.
+
+If you don't think of those, try it without, and then fix up what you
+don't like.
+ 
+
+(c) Comment briefly on the direction and strength of each
+relationship with `salary`.
+
+Solution
+
+
+To my mind, all of the three relationships are going uphill (that's the "direction" part). `experience` is the
+strongest, and `pubsucc` looks the weakest (that's the
+"strength" part). If you want to say there is no relationship
+with `pubsucc`, that's fine too. This is a judgement
+call. 
+Note that all the relationships are more or less linear (no
+obvious curves here). We could also investigate the relationships
+among the explanatory variables:
+```{r }
+cor(salaries)
+```
+
+       
+Mentally cut off the first row and column (`salary` is the
+response). None of the remaining correlations are all that high, so we
+ought not to have any multicollinearity problems.
+ 
+
+(d)??regone?? Fit a regression predicting salary from the other three
+variables, and obtain a `summary` of the results.
+
+Solution
+
+
+```{r }
+salaries.1=lm(salary~workqual+experience+pubsucc,data=salaries)
+summary(salaries.1)
+```
+
+   
+ 
+
+(e) How can we justify the statement ``one or more of the
+explanatory variables helps to predict salary''? How is this
+consistent with the value of R-squared?
+
+Solution
+
+
+"One or more of the explanatory variables helps" is an
+invitation to consider the (global) $F$-test for the whole
+regression. This has the very small P-value of $1.124\times
+10^{-10}$ (from the bottom line of the output): very small, so
+one or more of the explanatory variables *does* help, and
+the statement is correct.
+The idea that something helps to predict salary suggests
+(especially with such a small number of observations) that we
+should have a high R-squared. In this case, R-squared is 0.9109,
+which is indeed high.
+ 
+
+(f) Would you consider removing any of the variables from this
+regression? Why, or why not?
+
+Solution
+
+
+Look at the P-values attached to each variable. These are all
+very small: 0.003, 0.00000003 and 0.0003, way smaller than
+0.05. So it would be a mistake to 
+take any, even one, of the variables out: doing so would make the
+regression much worse.
+If you need convincing of that, see what happens when we take
+the variable with the highest P-value out --- this is `workqual`:
+```{r }
+salaries.2=lm(salary~experience+pubsucc,data=salaries)
+summary(salaries.2)
+```
+
+       
+
+R-squared has gone down from 91\% to 86\%: maybe not so much in the
+grand scheme of things, but it is noticeably less. Perhaps better,
+since we are comparing models with different numbers of explanatory
+variables, is to compare the *adjusted* R-squared: this has gone
+down from 90\% to 85\%. The fact that this has gone down *at all*
+is enough to say that taking out `workqual` was a
+mistake.
+`r tufte::margin_note("Adjusted R-squareds are easier to compare in this  context, since you don't have to make a judgement about whether it has changed substantially, whatever you think substantially means.")`
+
+Another way of seeing whether a variable has anything to add in a
+regression containing the others is a **partial regression  plot**. 
+We take the residuals from `salaries.2` above and plot
+them against the variable we removed, namely
+`workqual`.
+`r tufte::margin_note("The residuals have to be the ones from a  regression *not* including the $x$-variable you're testing.")` If
+`workqual` has nothing to add, there will be no pattern; if it
+*does* have something to add, there will be a trend. Like
+this. I use `augment` from `broom`:
+
+```{r dartington}
+library(broom)
+salaries.2 %>% augment(salaries) %>%
+ggplot(aes(x=workqual, y=.resid))+geom_point()
+```
+
+ 
+
+This is a mostly straight upward trend. So we
+need to add a linear term in `workqual` to the
+regression.
+`r tufte::margin_note("Or not take it out in the first place.")`
+ 
+
+(g) Do you think it would be a mistake to take *both* of
+`workqual` and `pubsucc` out of the regression? Do a
+suitable test. Was your guess right?
+
+Solution
+
+
+I think it would be a big mistake. Taking even one of these
+variables out of the regression is a bad idea (from the
+$t$-tests), so taking out more than one would be a *really* bad idea.
+To perform a test, fit the model without these two explanatory variables:
+```{r }
+salaries.3=lm(salary~experience,data=salaries)
+```
+
+     
+
+and then use `anova` to compare the two regressions, smaller
+model first:
+
+```{r }
+anova(salaries.3,salaries.1)
+```
+
+ 
+
+The P-value is extremely small, so the bigger model is definitely
+better than the smaller one: we really do need all three
+variables. Which is what we guessed.
+
+
+(h) Back in part~(??regone??), you fitted a regression with all
+three explanatory variables. By making suitable plots, assess
+whether there is any evidence that (i) that the linear model should
+be a curve, (ii) that the residuals are not normally 
+distributed, (iii) that there is "fan-out", where the residuals are getting
+bigger *in size* as the fitted values get bigger? Explain
+briefly how you came to your conclusions in each case.
+
+Solution
+
+
+I intended that (i) should just be a matter of looking at residuals
+vs.\ fitted values:
+```{r }
+ggplot(salaries.1, aes(x=.fitted, y=.resid))+geom_point()
+```
+
+    
+
+There is no appreciable pattern on here, so no evidence of a curve (or
+apparently of any other problems).
+
+Extra: you might read this that we should check residuals against the
+$x$-variables as well, which is a similar trick to the above one for
+plotting response against each of the explanatories. There is one step
+first, though: use `augment` from `broom` first to get a
+dataframe with the original $x$-variables *and* the residuals in
+it. The following thus looks rather complicated, and if it confuses
+you, run the code a piece at a time to see what it's doing:
+
+```{r }
+salaries.1 %>% augment(salaries) %>%
+gather(xname, x, workqual:pubsucc) %>%
+ggplot(aes(x=x, y=.resid))+geom_point()+
+facet_wrap(~xname, scales="free", ncol=2)
+```
+
+ 
+
+These three residual plots are also pretty much textbook random, so no problems here either.
+
+For (ii), look at a normal quantile plot of the residuals, which is not as difficult as the plot I just did:
+
+```{r }
+ggplot(salaries.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+ 
+
+That is really pretty good. Maybe the *second* smallest point is
+a bit far off the line, but otherwise there's nothing to worry about. A
+quick place to look for problems is the extreme observations, and the
+largest and smallest residuals are almost exactly the size we'd expect
+them to be.
+
+Our graph for assessing fan-in or fan-out is to plot the *absolute* values of the residuals against the fitted values. The plot from (i) suggests that we won't have any problems here, but to investigate:
+
+```{r }
+ggplot(salaries.1, aes(x=.fitted, y=abs(.resid)))+geom_point()+geom_smooth()
+```
+
+ 
+
+This is pretty nearly straight across. You might think it increases a
+bit at the beginning, but most of the evidence for that comes from the
+one observation with fitted value near 30 that happens to have a
+residual near zero. Conclusions based on one observation are not to be
+trusted!
+In summary, I'm happy with this linear multiple regression, and I
+don't see any need to do anything more with it. I am, however, willing
+to have some sympathy with opinions that differ from mine, if they are
+supported by those graphs above.
+ 
+
+
+

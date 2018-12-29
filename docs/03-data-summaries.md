@@ -11,7 +11,7 @@ library(tidyverse)
 
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
@@ -200,7 +200,7 @@ principle. That would give
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
  
 
@@ -214,7 +214,7 @@ you'll lose the shape:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
  
 
@@ -230,7 +230,7 @@ up and down:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -298,7 +298,7 @@ w
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -330,7 +330,7 @@ Another way to go is a "density plot". This is a smoothed-out version of a histo
 ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
  
 
@@ -364,7 +364,7 @@ quantitative variable. You can draw a boxplot for that, too, but the
 ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
  
 
@@ -415,7 +415,7 @@ ggplot(bw,aes(x=factor(`Premie?`),y=`Weeks Gestation`))+geom_boxplot()
 ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
 The warning is because the prematurity of one of the babies is not known.
 Or
@@ -429,7 +429,7 @@ ggplot(bw,aes(x=`Premie?`,y=`Weeks Gestation`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
 The same warning again, for the same reason.
 
@@ -560,7 +560,7 @@ ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
 You see a rather clear upward trend. Those very underweight babies
 came from very short pregnancies, but the vast majority of pregnancies
@@ -580,7 +580,7 @@ colour=`Premie?`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
 That was rather silly because `ggplot` treated prematureness as a *continuous* variable, and plotted the values on a dark blue-light blue scale. This is the same issue as on the boxplot above, and has the same solution:
 
@@ -594,7 +594,7 @@ colour=factor(`Premie?`)))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
 Better.
 
@@ -865,7 +865,7 @@ bin width, if you want to go that way:
 ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
 
        
 
@@ -885,7 +885,7 @@ We haven't done normal quantile plots yet, but looking ahead:
 ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
  
 
@@ -1068,7 +1068,7 @@ Solution
 ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
  
 This is actually a small-but-real downward trend, especially since
@@ -1091,7 +1091,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
  
 
@@ -1236,7 +1236,7 @@ Gender is categorical and CAS score is quantitative, so a boxplot would appear t
 ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
 The median for males is slightly higher, so male accountants are more anxious around computers than female accountants are.
 
@@ -1249,7 +1249,7 @@ ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
 facet_wrap(~gender,ncol=1)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
 If you go this way, you have to make a call about where the centres of the histograms are. I guess the male one is slightly further to the right, but it's not so easy to tell. (Make a call.)
     
@@ -1411,7 +1411,7 @@ You might be wondering whether the test scores are related. They are both quanti
 ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
 The two variables can be on either axis, since there is no obvious
 response or explanatory variable. A higher score on one scale goes
@@ -1425,7 +1425,7 @@ This plot mixes up the males and females, so you might like to distinguish them,
 ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
 
 There is a slight (but only slight) tendency for the males to be up
 and to the right, and for the females to be down and to the left. This
@@ -1435,6 +1435,577 @@ compared to the SD.
     
 
 
+
+
+
+
+##  Test scores in two classes
+
+
+  Open R Studio. Create a new Text File by selecting File, New File
+and Text File. You should see a new empty, untitled window appear at
+the top left. In that window, type or copy the data below (which are
+scores on a test for students in two different classes):
+
+```
+
+class score
+ken 78
+ken 62
+ken 59
+ken 69
+ken 81
+thomas 83
+thomas 77
+thomas 63
+thomas 61
+thomas 79
+thomas 72
+
+```
+
+Save the file, using a filename of your choice (with, perhaps, extension
+`.txt`). Or, if you prefer, use the one at
+[link](http://www.utsc.utoronto.ca/~butler/d29/marks.txt). 
+
+
+(a) Read the data into a data frame called `marks`, using
+`read_delim`, and list the data frame (by typing its name)
+to confirm that you read the data values properly. Note that the
+top line of the data file contains the names of the variables, as
+it ought to.
+
+
+Solution
+
+
+I was lazy and used the one on the web, the
+values being separated ("delimited") by exactly one space:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/marks.txt"
+marks=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   class = col_character(),
+##   score = col_integer()
+## )
+```
+
+```r
+marks
+```
+
+```
+## # A tibble: 11 x 2
+##    class  score
+##    <chr>  <int>
+##  1 ken       78
+##  2 ken       62
+##  3 ken       59
+##  4 ken       69
+##  5 ken       81
+##  6 thomas    83
+##  7 thomas    77
+##  8 thomas    63
+##  9 thomas    61
+## 10 thomas    79
+## 11 thomas    72
+```
+
+    
+
+If you copied and pasted, or typed in, the data values yourself, use the local file name (such as `marks.txt`) in place of the URL.
+
+Extra: in the old days, when we used `read.table` (which actually also
+works here), we needed to also say `header=T` to note that the
+top line of the data file was variable names. With
+`read_delim`, that's the default, and if the top line is
+*not* variable names, that's when you have to say so. If I cheat,
+by skipping the first line and saying that I then have no column names, I get:
+
+
+```r
+read_delim(my_url," ",col_names=F,skip=1)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   X1 = col_character(),
+##   X2 = col_integer()
+## )
+```
+
+```
+## # A tibble: 11 x 2
+##    X1        X2
+##    <chr>  <int>
+##  1 ken       78
+##  2 ken       62
+##  3 ken       59
+##  4 ken       69
+##  5 ken       81
+##  6 thomas    83
+##  7 thomas    77
+##  8 thomas    63
+##  9 thomas    61
+## 10 thomas    79
+## 11 thomas    72
+```
+
+ 
+
+Column names are supplied (`X1` and `X2`). I could also
+supply my own column names, in which case the file needs not to have
+any, so I need the `skip` again:
+
+
+```r
+read_delim(my_url," ",col_names=c("instructor","mark"),skip=1)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   instructor = col_character(),
+##   mark = col_integer()
+## )
+```
+
+```
+## # A tibble: 11 x 2
+##    instructor  mark
+##    <chr>      <int>
+##  1 ken           78
+##  2 ken           62
+##  3 ken           59
+##  4 ken           69
+##  5 ken           81
+##  6 thomas        83
+##  7 thomas        77
+##  8 thomas        63
+##  9 thomas        61
+## 10 thomas        79
+## 11 thomas        72
+```
+
+ 
+ 
+
+
+(b) Obtain side-by-side boxplots of the scores for each class.
+ 
+Solution
+
+
+
+```r
+library(tidyverse)
+ggplot(marks,aes(x=class,y=score))+geom_boxplot()
+```
+
+<img src="03-data-summaries_files/figure-html/paignton-1.png" width="672"  />
+
+       
+
+Remember: on a regular boxplot,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Boxplots can also go across the page, but for us, they don't.</span> the groups go across ($x$), the
+variable measured goes up ($y$).
+
+Extra: this might work:
+
+
+```r
+ggplot(marks,aes(x=class,y=score))+geom_boxplot()+
+coord_flip()
+```
+
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
+
+ 
+
+It does. That was a guess. So if you want sideways boxplots, this is
+how you can get them. (The `x` and `y` happen
+*before* the coordinate-flip, so they are the same as above, not
+the same way they come out.)
+ 
+
+(c) Do the two classes appear to have similar or different
+scores, on average? Explain briefly. 
+ 
+Solution
+
+
+The median for Thomas's class appears to be quite a bit higher
+than for Ken's class (the difference is actually about 6
+marks). It's up to you whether you think this is a big
+difference or not: I want you to have *an* opinion, but I
+don't mind so much what that opinion is.
+Having said that the medians are quite a bit different, note
+that the boxes overlap substantially, so that the
+*distributions* of scores are pretty similar (or, the
+quartiles of scores are similar, or, the IQR of scores is
+similar for the two groups). If you say that, it's good, but I'm
+not insisting that you do.
+ 
+
+(d) Obtain a boxplot of all the scores together, regardless
+of which class they came from. 
+
+
+Solution
+
+
+Replace your $x$-coordinate by some kind of dummy thing like
+`1` (`factor(1)` also works):
+
+```r
+ggplot(marks,aes(x=1,y=score))+geom_boxplot()
+```
+
+<img src="03-data-summaries_files/figure-html/torquay-1.png" width="672"  />
+
+       
+
+The $x$-axis is kind of dopey, so you just ignore it. 
+
+ 
+
+
+(e) Compute the median score (of all the scores
+together). Does this seem about right, looking at the boxplot?
+Explain briefly.
+
+
+Solution
+
+
+
+Three ways to get the median score. I like the first one best:
+
+
+```r
+marks %>% summarize(med=median(score))
+```
+
+```
+## # A tibble: 1 x 1
+##     med
+##   <int>
+## 1    72
+```
+
+```r
+with(marks,median(score))
+```
+
+```
+## [1] 72
+```
+
+```r
+median(marks$score)
+```
+
+```
+## [1] 72
+```
+
+ 
+`summarize` is the `tidyverse` "verb" that does what
+you want here. (The same idea gets the mean score for each class, below.)
+
+The other ways use the basic function `median`. To make that
+work, you need to say that the variable `score` whose median
+you want lives in the data frame `marks`. These are two ways to
+do that.
+
+Extra: if you wanted median by group, this is the approved
+(`tidyverse`) way:
+
+
+```r
+marks %>% group_by(class) %>%
+summarize(med=median(score))
+```
+
+```
+## # A tibble: 2 x 2
+##   class    med
+##   <chr>  <dbl>
+## 1 ken     69  
+## 2 thomas  74.5
+```
+
+ 
+
+To get something by group, the extra step is `group_by`, and
+then whatever you do after that is done for *each* group.
+
+You can now go back and compare these medians with the ones on the
+boxplots in (b). They should be the same. Or you can even do this:
+
+
+```r
+marks %>% group_by(class) %>%
+summarize(q1=quantile(score,0.25),
+med=median(score),
+q3=quantile(score,0.75)
+)
+```
+
+```
+## # A tibble: 2 x 4
+##   class     q1   med    q3
+##   <chr>  <dbl> <dbl> <dbl>
+## 1 ken     62    69    78  
+## 2 thomas  65.2  74.5  78.5
+```
+
+ 
+
+You can calculate as many summaries as you like. These ones should
+match up with the top and bottom of the boxes on the boxplots. The
+only restriction is that the things on the right side of the equals
+should return a *single* number. If you have a function like
+`quantile` without anything extra that returns more than one number:
+
+
+```r
+quantile(marks$score)
+```
+
+```
+##   0%  25%  50%  75% 100% 
+## 59.0 62.5 72.0 78.5 83.0
+```
+
+ 
+
+you're in trouble. Only read on if you *really* want to know how
+to handle this. Here's step 1:
+
+
+```r
+marks %>% 
+nest(-class) 
+```
+
+```
+## # A tibble: 2 x 2
+##   class  data            
+##   <chr>  <list>          
+## 1 ken    <tibble [5 × 1]>
+## 2 thomas <tibble [6 × 1]>
+```
+
+ 
+
+This is kind of a funky `group_by`. The things in the
+`data` column are the *whole* rest of the data frame:
+there were 5 students in Ken's class and 6 in Thomas's, and they each
+had a `score`, so 5 or 6 rows and 1 column. The column
+`data` is known in the trade as a "list-column".
+
+Now, for each of those mini-data-frames, we want to calculate the
+quantiles of `score`. 
+To do that, use `map`, which is the
+`tidyverse` version of "for each": for each of our
+mini-data-frames, calculate the five-number summary of the column called `score` in *it*:
+
+
+```r
+marks %>% 
+nest(-class) %>%
+mutate(qq=map(data,~quantile(.$score)))
+```
+
+```
+## # A tibble: 2 x 3
+##   class  data             qq       
+##   <chr>  <list>           <list>   
+## 1 ken    <tibble [5 × 1]> <dbl [5]>
+## 2 thomas <tibble [6 × 1]> <dbl [5]>
+```
+
+  
+
+I have to be a little bit careful about which data frame I want the
+`score` to come from: the ones hidden in `data`, which
+are the things we're for-eaching over.
+
+This obtains a new list-column called `qq`, with the
+five-number summary for each group.\endnote{It's actually a
+coincidence that the five-number summary and Ken's class both have
+five values in them.} 
+
+Now we want to display the quantiles. This is the easiest way:
+
+
+```r
+marks %>% 
+nest(-class) %>%
+mutate(qq=map(data,~quantile(.$score))) %>%
+unnest(qq)
+```
+
+```
+## # A tibble: 10 x 2
+##    class     qq
+##    <chr>  <dbl>
+##  1 ken     59  
+##  2 ken     62  
+##  3 ken     69  
+##  4 ken     78  
+##  5 ken     81  
+##  6 thomas  61  
+##  7 thomas  65.2
+##  8 thomas  74.5
+##  9 thomas  78.5
+## 10 thomas  83
+```
+
+  
+
+The `unnest` turns the list-column back into actual data, so we
+get the five quantiles for each class.
+
+The only thing this doesn't do is to show us which quantile is which
+(we know, of course, that the first one is the minimum, the last one
+is the max and the quartiles and median are in between). It would be
+nice to see which is which, though. A trick to do that is to use
+`enframe`, thus:
+
+
+```r
+quantile(marks$score) %>% enframe()
+```
+
+```
+## # A tibble: 5 x 2
+##   name  value
+##   <chr> <dbl>
+## 1 0%     59  
+## 2 25%    62.5
+## 3 50%    72  
+## 4 75%    78.5
+## 5 100%   83
+```
+
+ 
+
+or thus:
+
+
+```r
+enframe(quantile(marks$score))
+```
+
+```
+## # A tibble: 5 x 2
+##   name  value
+##   <chr> <dbl>
+## 1 0%     59  
+## 2 25%    62.5
+## 3 50%    72  
+## 4 75%    78.5
+## 5 100%   83
+```
+
+ 
+
+I don't normally like the second way with all the brackets, but we'll
+be using it later.
+
+The idea here is that the output from a quantile is a vector, but one
+with "names", namely the percentiles themselves. `enframe`
+makes a two-column data frame with the names and the values. (You can
+change the names of the columns it creates, but here we'll keep track
+of which is which.)
+
+So we have a *two*-column data frame with a column saying
+which quantile is which. So let's rewrite our code to use this:
+
+
+```r
+marks %>% 
+nest(-class) %>%
+mutate(qq=map(data,~enframe((quantile(.$score)))))
+```
+
+```
+## # A tibble: 2 x 3
+##   class  data             qq              
+##   <chr>  <list>           <list>          
+## 1 ken    <tibble [5 × 1]> <tibble [5 × 2]>
+## 2 thomas <tibble [6 × 1]> <tibble [5 × 2]>
+```
+
+ 
+
+Note that the `qq` data frames in the list-column now
+themselves have two columns.
+
+And finally `unnest` `qq`:
+
+
+```r
+marks %>% 
+nest(-class) %>%
+mutate(qq=map(data,~enframe((quantile(.$score))))) %>%
+unnest(qq)  
+```
+
+```
+## # A tibble: 10 x 3
+##    class  name  value
+##    <chr>  <chr> <dbl>
+##  1 ken    0%     59  
+##  2 ken    25%    62  
+##  3 ken    50%    69  
+##  4 ken    75%    78  
+##  5 ken    100%   81  
+##  6 thomas 0%     61  
+##  7 thomas 25%    65.2
+##  8 thomas 50%    74.5
+##  9 thomas 75%    78.5
+## 10 thomas 100%   83
+```
+
+ 
+
+Success! Or even:
+
+
+```r
+marks %>% 
+nest(-class) %>%
+mutate(qq=map(data,~enframe((quantile(.$score))))) %>%
+unnest(qq) %>%
+mutate(qn=parse_number(name)) %>%
+select(-name) %>%
+spread(qn, value)
+```
+
+```
+## # A tibble: 2 x 6
+##   class    `0`  `25`  `50`  `75` `100`
+##   <chr>  <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1 ken       59  62    69    78      81
+## 2 thomas    61  65.2  74.5  78.5    83
+```
+
+ 
+
+This deliberately untidies the final answer to make it nicer to look
+at. (The lines before that create a numeric quantile, so that it sorts
+into the right order, and then get rid of the original quantile
+percents. Investigate what happens if you do a similar `spread`
+without doing that.)
 
 
 

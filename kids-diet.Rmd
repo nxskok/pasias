@@ -1,0 +1,176 @@
+##  diet and growth in boys
+
+
+ A dietician is studying the effect of
+different diets on children's growth. In part of the study, the
+dietician is investigating two religious sects, labelled `a`
+and `b` in our data set. Both sects are vegetarian; the
+difference between them is that people in Sect A only eat vegetables
+from below the ground, and Sect B only eats vegetables from above the
+ground. The height and weight of the boys
+`r tufte::margin_note("This was not sexism, but a recognition that boys and girls will be of different heights for reasons unrelated to diet. Doing it this way makes the analysis simpler.")` are measured at regular
+intervals. The data in
+[link](http://www.utsc.utoronto.ca/~butler/d29/kids-diet.txt) are the
+heights of the boys at age 12.
+
+
+
+(a) Read in the data and find out how many observations you have
+and which variables.
+
+
+Solution
+
+
+The data values are separated by one space, so:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/kids-diet.txt"
+diet=read_delim(my_url," ")
+diet
+```
+
+     
+
+21 observations on two variables, `sect` and
+`height`. (You should state this; it is not enough to make the
+reader figure it out for themselves.)
+
+The heights are evidently in centimetres.
+
+You can call the data frame whatever you like.
+
+
+
+(b) Obtain side-by-side boxplots of the heights for boys from
+each sect. Does it look as if the heights of the boys in each sect
+are different? Comment briefly. 
+
+
+Solution
+
+
+The boxplot is the kind of thing we've seen before:
+
+```{r }
+ggplot(diet,aes(x=sect,y=height))+geom_boxplot()
+```
+
+ 
+
+It looks to me as if the boys in Sect B are taller on average.
+
+
+
+(c) Looking at your boxplots, do you see any problems with
+doing a two-sample $t$-test? Explain briefly.
+
+
+Solution
+
+
+The assumption is that the data in each group are 
+"approximately normal". Boxplots don't tell you about normality specifically,
+but they tell you whether there are any outliers (none here) and
+something about the shape (via the lengths of the whiskers). I'd
+say the Sect A values are as symmetric as we could hope for. For
+Sect B, you can say either that they're skewed to the left (and
+that therefore we have a problem), or that the heights are close
+enough to symmetric (and that therefore we don't). For me, either
+is good. 
+As ever, normal quantile plots can offer more insight. With
+data in this form, the
+two samples are mixed up, but using facets is the way to go. Philosophically, we draw a normal quantile plot of *all* the heights, and then say at the end that we would actually like a separate plot for each sect:
+```{r }
+diet %>% ggplot(aes(sample=height))+stat_qq()+stat_qq_line()+
+facet_wrap(~sect, ncol=1)
+```
+
+ 
+
+I decided that I wanted short squat plots rather than tall skinny ones.
+
+With the sizes of the samples, I really don't see any problems
+here. Most of the evidence for the left skewness in Sect B is actually coming
+from that largest value being too small. Sect A is as good as you
+could wish for. Having extreme values being *not extreme enough* is not a problem, since it won't be distorting the mean. 
+
+The other way of doing this is to use `filter` to pull out the
+rows you want and then feed that into the plot:
+
+```{r }
+secta=filter(diet,sect=="a") %>%
+ggplot(aes(sample=sect))+stat_qq()+stat_qq_line()
+```
+
+ 
+
+and the same for sect B. This is the usual `ggplot`-in-pipeline
+thing where you don't have a named data frame in the `ggplot`
+because it will use whatever came out of the previous step of the
+pipeline.
+    
+
+
+(d) Run a $t$-test to determine whether the mean heights differ
+significantly. What do you conclude? Explain briefly. (Run the
+$t$-test even if your previous work suggests that it is not the
+right thing to do.)
+
+
+Solution
+
+
+The wording states that a two-sided test is correct, which is the
+default, so you don't need anything special:
+
+```{r }
+t.test(height~sect,data=diet)
+```
+
+ 
+
+This is a two-sample test, so it takes a `data=`. 
+
+Our null hypothesis is that the two sects have equal mean height. The
+P-value of 0.103 is larger than 0.05, so we do not reject that null
+hypothesis. That is, there is no evidence that the sects differ in
+mean height. (That is, our earlier thought that the boys in Sect B were taller
+is explainable by chance.)
+
+You *must* end up with a statement about mean heights, and when
+you do a test, you must state the conclusion in the context of the
+problem, whether I ask you to or not. 
+"Don't reject the null hypothesis" 
+is a step on the way to an answer, not an answer in
+itself. If you think it's an answer in itself, you won't be of much
+use to the world as a statistician.
+
+C32 folks might have been thinking that Mood's median test was the
+thing, if you were worried about that skewness in Sect B. My guess is
+that the $t$-test is the right, so it will be the better test
+(and give the smaller P-value) here, but if you want to do it, you
+could do it this way:
+
+```{r }
+library(smmr)
+median_test(diet,height,sect)
+```
+
+ 
+
+My suspicion (that I wrote before doing the test) is correct: there is
+even less evidence of a difference in median height between the
+sects. The table shows that both sects are pretty close to 50--50
+above and below the overall median, and with sample sizes this small,
+they are certainly not significantly different from an even split. The
+small frequencies bring a warning about the chi-squared approximation
+possibly not working (that `smmr` suppresses). We had one like
+this in C32, but there the result was very significant, and this one
+is very non-significant. However, the implication is the same: even if
+the P-value is not very accurate (because the expected frequencies for
+sect B are both 4.5), the conclusion is unlikely to be wrong because
+the P-value is so far from 0.05.
+    
+
+
+

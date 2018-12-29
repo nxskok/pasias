@@ -1,0 +1,234 @@
+##  Running and blood sugar
+
+
+ A diabetic wants to know how aerobic exercise affects his
+blood sugar. When his blood sugar reaches 170 (mg/dl), he goes out for
+a run at a pace of 10 minutes per mile. He runs different distances on
+different days. Each time he runs, he measures his blood sugar after
+the run. (The preferred blood sugar level is between 80 and 120 on
+this scale.) The data are in the file
+[link](http://www.utsc.utoronto.ca/~butler/d29/runner.txt). Save the
+data somewhere that R can find it. Our aim is to predict blood sugar
+from distance.
+
+
+
+(a) Read in the data and display the data frame that you read
+in.
+ 
+Solution
+
+
+From the URL is easiest. These are delimited by one space, as
+you can tell by looking at the file:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/runner.txt"
+runs=read_delim(my_url," ")
+runs
+```
+
+     
+
+That looks like my data file.
+ 
+
+(b) Make a scatterplot and add a smooth trend to it.
+ 
+Solution
+
+
+```{r plymouth}
+ggplot(runs,aes(x=distance,y=blood_sugar))+geom_point()+
+geom_smooth()
+```
+
+     
+
+`blood_sugar` should be on the vertical axis, since this is
+what we are trying to predict. Getting the `x` and the
+`y` right is easy on these, because they are the $x$ and $y$
+for your plot.
+ 
+
+(c) Would you say that the relationship between blood sugar and
+running distance is approximately linear, or not? It is therefore
+reasonable to use a regression of blood sugar on distance? Explain briefly.
+ 
+Solution
+
+
+I'd say that this is about as linear as you could ever wish
+for. Neither the pattern of points nor the smooth trend have any
+kind of noticeable bend in them. (Observing a lack of curvature in
+either the points or the smooth trend is enough.) The trend
+is a linear one, so using a regression will be just fine. (If it
+weren't, the rest of the question would be kind of dumb.)
+ 
+
+(d) Fit a suitable regression, and obtain the regression output.
+ 
+Solution
+
+
+Two steps: `lm` and then `summary`:
+```{r }
+runs.1=lm(blood_sugar~distance,data=runs)
+summary(runs.1)
+```
+
+     
+ 
+
+(e) How would you *interpret* the slope? That is, what is
+the slope, and what does that mean about blood sugar and running distance?
+ 
+Solution
+
+
+The slope is $-25.37$. This means that for each additional mile run,
+the runner's blood sugar will decrease on average by about 25 units.
+
+You can check this from the scatterplot. For example, from 2 to 3
+miles, average blood sugar decreases from about 140 to about 115, a
+drop of 25.
+ 
+
+(f) Is there a (statistically) significant relationship between
+running distance and blood sugar? How do you know? Do you find this
+surprising? Explain briefly.
+ 
+Solution
+
+
+Look at the P-value either on the `distance` line (for its
+$t$-test) or for the $F$-statistic on the bottom line. These are
+the same: 0.000000023. (They will be the same any time there is
+one $x$-variable.) This P-value is *way* smaller than 0.05,
+so there *is* a significant relationship between running distance
+and blood sugar. This does not surprise me in the slightest,
+because the trend on the scatterplot is *so* clear, there's
+no way it could have happened by chance if in fact there were no
+relationship between running distance and blood sugar.
+ 
+
+(g) This diabetic is planning to go for a 3-mile run tomorrow
+and a 5-mile run the day after. Obtain suitable 95\% intervals that
+say what his blood sugar might be after each of these runs. 
+ 
+Solution
+
+
+This is a prediction interval, in each case, since we are talking about
+*individual* runs of 3 miles and 5 miles (not the mean blood
+sugar after *all* runs of 3 miles, which is what a confidence
+interval for the mean response would be).
+The procedure is to set up a data frame with the two
+`distance` values in it, and then feed that and the
+regression object into `predict`, coming up in a moment.
+```{r }
+dists=c(3,5)
+dist.new=tibble(distance=dists)
+dist.new
+```
+
+     
+The important thing is that the name of the column of the new data
+frame must be *exactly* the same as the name of the explanatory
+variable in the regression. If they don't match, `predict`
+won't work. At least, it won't work properly.
+`r tufte::margin_note("It won't give you an error, but it will go back to the *original* data frame to get distances to predict from, and you will get very confused.")`
+
+Then, `predict`:
+
+```{r }
+pp=predict(runs.1,dist.new,interval="p")
+pp
+```
+
+ 
+
+and display this with the distances by the side:
+
+```{r }
+cbind(dist.new,pp)
+```
+
+ 
+
+or
+
+```{r }
+data.frame(dist.new,pp)
+```
+
+ 
+Blood sugar after a 3-mile run is predicted to be between 104 and 127;
+after a 5-mile run it is predicted to be between 52 and 77.5.
+
+Extra: both `cbind` and `data.frame` are "base R" ways of
+combining a data frame with something else to make a new data
+frame. They are not from the `tidyverse`. The
+`tidyverse` way is via `tibble` or `bind_cols`,
+but they are a bit more particular about what they will take:
+`tibble` takes vectors (single variables) and
+`bind_cols` takes vectors or data frames. The problem here is
+that `pp` is not either of those:
+
+```{r }
+class(pp)
+```
+
+ 
+
+so that we have to use `as_tibble` first to turn it into a
+data frame, and thus:
+
+```{r }
+pp %>% as_tibble() %>% bind_cols(dist.new)
+```
+
+ 
+
+which puts things backwards, unless you do it like this:
+
+```{r }
+dist.new %>% bind_cols(as_tibble(pp))
+```
+
+ 
+
+which is a pretty result from very ugly code. 
+
+I also remembered that if you finish with a `select`, you get the columns in the order they were in the `select`:
+
+```{r }
+pp %>% as_tibble() %>% bind_cols(dist.new) %>%
+select(c(4,1:3))
+```
+
+ 
+
+using the numbers of the columns.
+ 
+
+(h) Which of your two intervals is longer? Does this make
+sense? Explain briefly.
+ 
+Solution
+
+
+The intervals are about 22.25 and 25.5 units long. The one for a
+5-mile run is a bit longer. I think this makes sense because 3
+miles is close to the average run distance, so there is a lot of
+"nearby" data. 5 miles is actually longer than any of the runs
+that were actually done (and therefore we are actually
+extrapolating), but the important point for the prediction
+interval is that there is less nearby data: those 2-mile runs
+don't help so much in predicting blood sugar after a 5-mile
+run. (They help *some*, because the trend is so linear. This
+is why the 5-mile interval is not *so* much longer. If the
+trend were less clear, the 5-mile interval would be more
+noticeably worse.)
+ 
+
+

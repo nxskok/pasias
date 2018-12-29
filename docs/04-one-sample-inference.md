@@ -11,7 +11,7 @@ library(tidyverse)
 
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
@@ -183,7 +183,7 @@ comes from Sturges' rule:
 ggplot(societies,aes(x=density))+geom_histogram(bins=5)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 Your conclusion might depend on how many bins you chose for your
 histogram. Here's 8 bins (which is really too many with only 13
 observations, but it actually shows the shape well): 
@@ -193,7 +193,7 @@ observations, but it actually shows the shape well):
 ggplot(societies,aes(x=density))+geom_histogram(bins=8)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
 or you can get a number of bins from one of the built-in functions,
 such as:
@@ -219,7 +219,7 @@ Other choices: a one-group boxplot:
 ggplot(societies,aes(x=1,y=density))+geom_boxplot()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
 This isn't the best for assessing normality as such, but it will tell
 you about lack of symmetry and outliers, which are the most important
@@ -231,7 +231,7 @@ ggplot(societies,aes(sample=density))+
 stat_qq()+stat_qq_line()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
 This is actually the best way to assess normality, but I'm not
 expecting you to use this plot here, because we may not have gotten to
@@ -256,6 +256,263 @@ test for the median, which I think is actually a better test here.
 
 
 
+
+
+
+##  Buses to Boulder
+
+
+ A bus line operates a route from Denver to Boulder (these
+places are in Colorado). The
+schedule says that the journey time should be 60 minutes. 11
+randomly chosen journey times were recorded, and these are in the
+file [link](http://www.utsc.utoronto.ca/~butler/d29/buses.txt), with
+journey times shown in minutes.
+
+
+(a) Read the data into R, and display the data frame that you
+read in.
+ 
+Solution
+
+
+Since you can read the data directly from the URL, do that (if
+you are online) rather than having to copy and paste and save,
+and then find the file you saved.
+Also, there is only one column, so you can pretend that there
+were multiple columns, separated by whatever you like. It's least
+typing to pretend that they were separated by commas like a
+`.csv` file:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/buses.txt"
+journey.times=read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   minutes = col_integer()
+## )
+```
+
+```r
+journey.times
+```
+
+```
+## # A tibble: 11 x 1
+##    minutes
+##      <int>
+##  1      58
+##  2      61
+##  3      69
+##  4      62
+##  5      81
+##  6      54
+##  7      72
+##  8      71
+##  9      53
+## 10      54
+## 11      66
+```
+
+       
+
+Using `read_delim` with any delimiter (such as `" "`)
+will also work, and is thus also good.
+
+Variable names in R can have a dot (or an underscore, but not a space)
+in them. I have grown accustomed to using dots to separate words. This
+works in R but not other languages, but is seen by some as
+old-fashioned, with underscores being the modern way.\endnote{In some
+languages, a dot is used to concatenate bits of text, or as a way of
+calling a method on an object. But in R, a dot has no special
+meaning, and is used in function names like `t.test`. Or
+`read.table`. } You can also use what is called "camel case" 
+by starting each "word" after the first with an uppercase
+letter like this:
+
+
+```r
+journeyTimes=read_csv(my_url)
+```
+
+ 
+
+You have to get the capitalization and punctuation right when you use your variables,
+no matter what they're called. In any of the cases above, there is no
+variable called `journeytimes`.  As Jenny Bryan (in
+[link](http://www.stat.ubc.ca/~jenny/STAT545A/block01_basicsWorkspaceWorkingDirProject.html)) 
+puts it, boldface in original:
+Implicit contract with the computer / scripting language: Computer
+will do tedious computation for you. In return, you will be
+completely precise in your instructions. Typos matter. Case
+matters. **Get better at typing.** 
+ 
+
+(b) Run a suitable test to see whether there is evidence that
+the mean journey time differs from 60 minutes. What do you
+conclude? (I want a conclusion that says something about journey
+times of buses.)
+ 
+Solution
+
+
+`t.test` doesn't take a `data=` to say which
+data frame to use. Wrap it in a `with`:
+
+```r
+with(journey.times,t.test(minutes,mu=60))
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  minutes
+## t = 1.382, df = 10, p-value = 0.1971
+## alternative hypothesis: true mean is not equal to 60
+## 95 percent confidence interval:
+##  57.71775 69.73680
+## sample estimates:
+## mean of x 
+##  63.72727
+```
+
+       
+
+We are testing that the mean journey time is 60 minutes, against the
+two-sided alternative (default) that the mean is not equal to 60 minutes. The
+P-value, 0.1971, is a lot bigger than the usual $\alpha$ of 0.05, so we cannot
+reject the null hypothesis. That is, there is no evidence that the
+mean journey time differs from 60 minutes.
+
+As you remember, we have not proved that the mean journey time
+*is* 60 minutes, which is what "accepting the null hypothesis"
+would be. We have only failed to reject it, in a shoulder-shrugging
+kind of way: "the mean journey time *could* be 60 minutes". The
+other acceptable word is "retain"; when you say "we retain the null hypothesis", you imply something 
+like "we act as if the mean is 60 minutes, at least until we find something better."
+ 
+
+(c) Give a 95\% confidence interval for the mean journey
+time. (No R code is needed here.)
+ 
+Solution
+
+
+Just read it off from the output: 57.72 to 69.74 minutes.
+ 
+
+(d) Do you draw consistent conclusions from your test and
+confidence interval? Explain briefly.
+ 
+Solution
+
+
+The test said that we should not reject a mean of 60
+minutes. The confidence interval says that 60 minutes is inside
+the interval of plausible values for the population mean, which
+is another way of saying the same thing. (If we had rejected 60
+as a mean, 60 would have been *outside* the confidence interval.)
+ 
+
+(e) Draw a boxplot of the journey times. Do you see a reason
+to doubt the test that you did above?
+ 
+Solution
+
+ The grouping variable is a
+"nothing" as in the Ken and Thomas question (part (d)):
+
+```r
+ggplot(journey.times,aes(x=1,y=minutes))+geom_boxplot()
+```
+
+<img src="04-one-sample-inference_files/figure-html/brixham-1.png" width="672"  />
+
+       
+
+The assumption behind the $t$-test is that the population from which
+the data come has a normal distribution: ie.\ symmetric with no
+outliers. A small sample (here we have 11 values) even from a normal
+distribution might look quite non-normal (as in Assignment 0 from last
+week), so I am not hugely concerned by this boxplot. However, it's
+perfectly all right to say that this distribution is skewed, and
+therefore we should doubt the $t$-test, because the upper whisker is
+longer than the lower one. In fact, the topmost value is very nearly
+an outlier:\endnote{Whether you think it is or not may depend on how
+many bins you have on your histogram. With 5 bins it looks like an
+outlier, but with 6 it does not. Try it and see.}
+
+
+```r
+ggplot(journey.times,aes(x=minutes))+geom_histogram(bins=5)
+```
+
+<img src="04-one-sample-inference_files/figure-html/babbacombe-1.png" width="672"  />
+
+ 
+
+and there might be skewness as well, so maybe I should have been concerned.
+
+I would be looking for some intelligent comment on the boxplot: what it
+looks like vs.\ what it ought to look like. I don't so much mind what
+that comment is, as long as it's intelligent enough.
+
+Perhaps I should draw a normal quantile plot:
+
+
+```r
+ggplot(journey.times, aes(sample=minutes))+stat_qq()+stat_qq_line()
+```
+
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+
+ 
+
+The normal quantile plot is saying that the problem is actually at the
+*bottom* of the distribution: the lowest value is not low enough,
+but the highest value is actually *not* too high. So this one
+seems to be on the edge between OK and being right-skewed (too bunched
+up at the bottom). My take is that with this small sample this is not
+too bad. But you are free to disagree.
+
+If you don't like the normality, you'd use a *sign test* and test
+that the *median* is not 60 minutes, which you would (at my
+guess) utterly fail to reject:
+
+
+```r
+library(smmr)
+sign_test(journey.times,minutes,60)
+```
+
+```
+## $above_below
+## below above 
+##     4     7 
+## 
+## $p_values
+##   alternative   p_value
+## 1       lower 0.8867187
+## 2       upper 0.2744141
+## 3   two-sided 0.5488281
+```
+
+```r
+ci_median(journey.times,minutes)
+```
+
+```
+## [1] 54.00195 71.99023
+```
+
+ 
+
+and so we do. The median could easily be 60 minutes.
+ 
 
 
 
@@ -467,7 +724,7 @@ but this is a matter of taste):
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
  
 
@@ -492,7 +749,7 @@ the idea in class. Here's the normal quantile plot for these data:
 ggplot(bw,aes(sample=`Weight (pounds)`))+stat_qq()+stat_qq_line()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
  
 
@@ -706,7 +963,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
  
 
@@ -738,7 +995,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+
 geom_smooth(method="lm")
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
  
 

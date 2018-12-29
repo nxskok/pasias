@@ -1,0 +1,533 @@
+##  Being satisfied with hospital
+
+
+ A hospital administrator collects data to study the
+effect, if any, of a patient's age, the severity of their
+illness, and their anxiety level, on the patient's satisfaction with
+their hospital experience. The data, in the file
+[link](http://www.utsc.utoronto.ca/~butler/d29/satisfaction.txt), are
+for 46 patients in a survey. The columns are: patient's satisfaction
+score `satis`, on a scale of 0 to 100; the patient's `age` (in
+years), the `severity` of the patient's illness (also on a
+0--100 scale), and the patient's `anxiety` score on a standard
+anxiety test (scale of 0--5). Higher scores mean greater satisfaction,
+increased severity of illness and more anxiety.
+
+
+
+(a) Read in the data and check that you have four columns in
+your data frame, one for each of your variables.   
+ 
+Solution
+
+ This one requires a little thought
+first. The data values are aligned in columns, and so are the
+column headers. Thus, `read_table` is what we need:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/satisfaction.txt"
+satisf=read_table(my_url)
+satisf
+```
+
+     
+
+46 rows and 4 columns: satisfaction score (response), age, severity
+and anxiety (explanatory).
+
+There is a small question about what to call the data
+frame. Basically, anything other than `satis` will do, since
+there will be confusion if your data frame has the same name as one of
+its columns.
+ 
+
+(b)??part:scatmat?? Obtain scatterplots of the response variable
+`satis` against each of the other variables.
+ 
+Solution
+
+
+The obvious way is to do these one after the other:
+```{r fig.height=3, fig.width=4}
+ggplot(satisf,aes(x=age,y=satis))+geom_point()
+ggplot(satisf,aes(x=severity,y=satis))+geom_point()
+ggplot(satisf,aes(x=anxiety,y=satis))+geom_point()
+```
+
+       
+
+This is fine, but there is also a way of getting all three plots with
+*one* `ggplot`. This uses the `facet_wrap` trick,
+but to set *that* up, we have to have all the $x$-variables in
+*one* column, with an extra column labelling which $x$-variable
+that value was. This uses `gather`. The right way to do this is
+in a pipeline:
+
+```{r }
+satisf %>% gather(xname,x,age:anxiety) %>%
+ggplot(aes(x=x,y=satis))+geom_point()+
+facet_wrap(~xname,scales="free",ncol=2)
+```
+
+ 
+
+Steps: gather together the columns age through anxiety into one column
+called `x`, with a label in `xname`, then plot this new
+`x` against satisfaction score, with a separate facet for each
+different $x$ (in `xname`). 
+
+I showed you `facet_grid` in class. What's the difference
+between that and `facet_wrap`? The difference is that with
+`facet_wrap`, we are letting `ggplot` arrange the
+facets how it wants to. In this case, we didn't care which explanatory
+variable went on which facet, just as long as we saw all of them
+somewhere. Inside `facet_wrap` there are *no dots*: a
+squiggle, followed by the name(s) of the variable(s) that
+distinguish(es) the facets.
+`r tufte::margin_note("If there are more than one, they  should be separated by plus signs as in lm. Each facet then  has as many labels as variables. I haven't actually done this  myself, but from looking at examples, I think this is the way it  works.")` 
+The only "design" decision I made here was that the facets
+should be arranged somehow in two columns, but I didn't care which
+ones should be where.
+
+In `facet_grid`, you have a variable that you want to be
+displayed in rows or in columns (not just in "different facets". 
+I'll show you how that works here. Since I am going to draw
+two plots, I should save the long data frame first and re-use it,
+rather than calculating it twice (so that I ought now to go back and
+do the other one using the saved data frame, really):
+
+```{r }
+satisf.long = satisf %>% gather(xname,x,age:anxiety)
+```
+
+ 
+
+If, at this or any stage, you get confused, the way to un-confuse
+yourself is to *fire up R Studio and do this yourself*. You have
+all the data and code you need. If you do it yourself, you can run
+pipes one line at a time, inspect things, and so on.
+
+First, making a *row* of plots, so that `xname` is the $x$
+of the facets:
+
+```{r }
+ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
+facet_grid(.~xname, scales="free")
+```
+
+ 
+
+I find these too tall and skinny to see the trends, as on the first
+`facet_wrap` plot.
+
+And now, making a *column* of plots, with `xname` as $y$:
+
+```{r }
+ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
+facet_grid(xname~., scales="free")
+```
+
+ 
+
+This one looks weird because the three $x$-variables are on different
+scales. The effect of the `scales="free"` is to allow the
+`satis` scale to vary, but the `x` scale cannot because
+the facets are all in a line. Compare this:
+
+```{r }
+ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
+facet_wrap(~xname,ncol=1,scales="free")
+```
+
+ 
+
+This time, the $x$ scales came out different (and suitable), but I
+still like squarer plots better for judging relationships.
+ 
+
+(c) In your scatterplots of (??part:scatmat??), which
+relationship appears to be the strongest one?
+ 
+Solution
+
+
+All the trends appear to be downward ones, but
+I think `satis` and `age` is the strongest
+trend. The other ones look more scattered to me. 
+ 
+
+(d)??part:corrmat?? Create a correlation matrix for all four 
+variables. Does your strongest trend of the previous part have the
+strongest correlation?
+ 
+Solution
+
+
+This is a matter of running the whole data frame through `cor`:
+```{r }
+cor(satisf)
+```
+
+     
+
+Ignoring the correlations of variables with themselves, the
+correlation of `satisf` with `age`, the one I picked
+out, is the strongest (the most negative trend). If you picked one of
+the other trends as the strongest, you need to note how close it is to
+the maximum correlation: for example, if you picked `satis`
+and `severity`, that's the second highest correlation (in
+size).
+ 
+
+(e) Run a regression predicting satisfaction from the other
+three variables, and display the output.
+ 
+Solution
+
+
+```{r }
+satisf.1=lm(satis~age+severity+anxiety,data=satisf)
+summary(satisf.1)
+```
+
+     
+ 
+
+(f) Does the regression fit well overall? How can you tell?
+ 
+Solution
+
+
+For this, look at R-squared, which is 0.682 (68.2\%). This is one
+of those things to have an opinion about. I'd say this is good but
+not great. I would not call it "poor", since there definitely
+*is* a relationship, even if it's not a stupendously good one.
+ 
+
+(g) Test the null hypothesis that none of your explanatory
+variables help, against the alternative that one or more of them
+do. (You'll need an appropriate P-value. Which one is it?) What do
+you conclude?
+ 
+Solution
+
+
+This one is the (global) $F$-test, whose P-value is at the
+bottom. It translates to 0.000000000154, so this is
+*definitely* small, and we reject the null. Thus, one or more
+of `age`, `severity` and `anxiety` helps to
+predict satisfaction. (I would like to see this last sentence,
+rather than just "reject the null".)
+ 
+
+(h) The correlation between `severity` and
+`satis` is not small, but in my regression I found that
+`severity` was nowhere near significant. Why is this? Explain briefly.
+\clearpage
+ 
+Solution
+
+
+The key thing to observe is that the $t$-test in the regression
+says how important a variable is \emph{given the others that are
+already in the regression}, or, if you prefer, how much that
+variable *adds* to the regression, on top of the ones that
+are already there. So here, we are saying
+that `severity` has nothing to add, given that the
+regression already includes the others. (That is, high correlation
+and strong significance don't always go together.)
+For a little more insight, look at the correlation matrix of
+(??part:corrmat??) again. The strongest trend with
+`satis` is with `age`, and indeed `age` is
+the one obviously significant  variable in the regression. The
+trend of `severity` with `satis` is somewhat
+downward, and you might otherwise have guessed that this is strong
+enough to be significant. But see that `severity`
+*also* has a clear relationship with `age`. A patient
+with low severity of disease is probably also younger, and we know
+that younger patients are likely to be more satisfied. Thus
+severity has nothing (much) to add.
+The multiple regression is actually doing something clever
+here. Just looking at the correlations, it appears that all three
+variables are helpful, but the regression is saying that once you
+have looked at `age` ("controlled for age"),
+severity of illness does not have an impact: the correlation of
+`severity` with `satis` is as big as it is almost
+entirely because of `age`. 
+This gets into the      domain of "partial correlation". If you like videos, you can 
+see [link](https://www.youtube.com/watch?v=LF0WAVBIhNA) for
+this. I prefer regression, myself, since I find it clearer.
+`anxiety`
+tells a different story: this is close to significant (or
+*is* significant at the $\alpha=0.10$ level), so the
+regression is saying that `anxiety` *does* appear to
+have something to say about `satis` over and above
+`age`. This is rather odd, to my mind, since
+`anxiety` has only a slightly stronger correlation with
+`satis` and about the same with `age` as
+`severity` does. But the regression is telling the story to
+believe, because it handles all the inter-correlations, not just
+the ones between pairs of variables.
+I thought it would be rather interesting to do some predictions
+here. Let's predict satisfaction for all combinations of high and
+low age, severity and anxiety. I'll use the quartiles for high and
+low. There is a straightforward but ugly way:
+```{r }
+quartiles = satisf %>% summarize(age_q1=quantile(age,0.25),
+age_q3=quantile(age,0.75),
+severity_q1=quantile(severity,0.25),
+severity_q3=quantile(severity,0.75),
+anxiety_q1=quantile(anxiety,0.25),
+anxiety_q3=quantile(anxiety,0.75))
+```
+
+     
+
+This is ugly because of all the repetition (same quantiles of
+different variables), and the programmer in you should be offended by
+the ugliness. Anyway, it gives what we want:
+
+```{r }
+quartiles
+```
+
+ 
+You can copy the numbers from here to below, or you can do some
+cleverness to get them in the right places:
+```{r }
+quartiles %>% gather(var_q,quartile,everything()) %>%
+separate(var_q,c("var_name","quartile_name")) %>%
+spread(var_name,quartile)
+```
+
+ 
+
+```{r }
+```
+
+     
+
+This is what we want for below. Let's test it line by line to see exactly
+what it did:
+```{r }
+quartiles %>% gather(var_q,quartile,everything()) 
+```
+
+ 
+
+Making long format. `everything()` is a select-helper saying
+"gather up *all* the columns". This is where the (ignorable)
+warning comes from.
+
+```{r }
+quartiles %>% gather(var_q,quartile,everything()) %>%
+separate(var_q,c("var_name","quartile_name")) 
+```
+
+ 
+
+The column `var_q` above encodes a variable *and* a
+quartile, so split them up. By default, `separate` splits at an
+underscore, which is why the things in `quartiles` were named
+with underscores.
+`r tufte::margin_note("I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.")`
+
+```{r }
+qq = quartiles %>% gather(var_q,quartile,everything()) %>%
+separate(var_q,c("var_name","quartile_name")) %>%
+spread(var_name,quartile)
+qq
+```
+
+ 
+Last, I want the original variables in columns, so I un-gather to get
+them there. I spread `var_name`, carrying along the values in
+`quartile` (which means that the rows will get matched up by
+`quartile_name`). 
+
+Now, let's think about why we were doing that. We want to do
+predictions of all possible combinations of those values of age and
+anxiety and severity.
+Doing "all possible combinations" calls for `crossing`,
+which looks like this:
+
+```{r }
+satisf.new=with(qq,crossing(age,anxiety,severity))
+satisf.new
+```
+
+ 
+
+There are two possibilities for each variable, so there are $2^3=8$
+"all possible combinations". You can check that `expand` got
+them all.
+
+This is a data frame containing all the values we want to predict for,
+with columns having names that are the same as the variables in the
+regression, so it's ready to go into `predict`. I'll do
+prediction intervals, just because:
+
+```{r }
+pp=predict(satisf.1,satisf.new,interval="p")
+cbind(satisf.new,pp)
+```
+
+ 
+
+Looking at the predictions themselves (in `fit`), you can see
+that `age` has a huge effect. If you compare the 1st and 5nd
+lines (or the 2nd and 6th, 3rd and 7th, \ldots) you see that
+increasing age by 13.5 years, while leaving the other variables the
+same, decreases the satisfaction score by over 15 on
+average. Changing `severity`, while leaving everything else the
+same, has in comparison a tiny effect, just over 2 points. (Compare
+eg. 1st and 2nd lines.) Anxiety has an in-between effect: increasing
+anxiety from 2.1 to 2.475, leaving everything else fixed, decreases
+satisfaction by about 5 points on average.
+
+I chose the quartiles on purpose: to demonstrate the change in average
+satisfaction by changing the explanatory variable by an appreciable
+fraction of its range of values. That is, I changed `severity`
+by "a fair bit", and still the effect on satisfaction scores was small.
+
+Are any of these prediction intervals longer or shorter? We can calculate how
+long they are. Look at the predictions:
+
+```{r }
+pp
+```
+
+ 
+
+This is unfortunately not a data frame:
+
+```{r }
+class(pp)
+```
+
+ 
+
+so we make it one before calculating the lengths.
+We want `upr` minus `lwr`:
+
+```{r }
+pp %>% as_tibble() %>%
+transmute(pi.length=upr-lwr)
+```
+
+ 
+
+Now, I don't want to keep the other stuff from `pp`, so I used
+`transmute` instead of `mutate`; `transmute`
+keeps *only* the new variable(s) that I calculate and throws away
+the others.
+`r tufte::margin_note("Usually you want to keep the other variables around as  well, which is why you don't see transmute very often.")`
+
+Then I put that side by side with the values being predicted for:
+
+```{r }
+pp %>% as_tibble() %>%
+transmute(pi.length=upr-lwr) %>%
+bind_cols(satisf.new)
+```
+
+ 
+
+Two of these are noticeably shorter than the others: the first one and
+the last one. These are low-everything and high-everything. If you
+look back at the scatterplot matrix of (??part:scatmat??), you'll
+see that the explanatory variables have positive correlations with
+each other. This means that when one of them is low, the other ones
+will tend to be low as well (and correspondingly high with high). That
+is, most of the data is at or near the low-low-low end or the
+high-high-high end, and so those values will be easiest to predict for.
+
+I was actually expecting more of an effect, but what I expected is
+actually there.
+
+In the backward elimination part (coming up), I found that only
+`age` and `anxiety` had a significant impact on
+satisfaction, so I can plot these two explanatory variables against
+each other to see where most of the values are:
+
+```{r }
+ggplot(satisf,aes(x=age,y=anxiety))+geom_point()
+```
+
+ 
+
+There is basically *no* data with low age and high anxiety, or
+with high age and low anxiety, so these combinations will be difficult
+to predict satisfaction for (and thus their prediction intervals will
+be longer).
+ 
+
+
+(i) Carry out a backward elimination to determine which of
+`age`, `severity` and `anxiety` are needed to
+predict satisfaction. What do you get?
+
+
+
+Solution
+
+
+This means starting with the regression containing all the explanatory
+variables, which is the one I called `satisf.1`:
+
+```{r }
+summary(satisf.1)
+```
+
+ 
+
+Pull out the least-significant (highest P-value) variable, which here
+is `severity`. We already decided that this had nothing to add:
+
+```{r }
+satisf.2=update(satisf.1,.~.-severity)
+summary(satisf.2)
+```
+
+ 
+
+If you like, copy and paste the first `lm`, edit it to get rid
+of `severity`, and run it again. But when I have a 
+"small change" to make to a model, I like to use `update`.
+
+Having taken `severity` out, `anxiety` has become
+strongly significant. Since all of the explanatory variables are now
+significant, this is where we stop. If we're predicting satisfaction,
+we need to know both a patient's age and their anxiety score: being
+older or more anxious is associated with a *decrease* in satisfaction.
+
+There is also a function `step` that will do this for you:
+
+```{r }
+step(satisf.1,direction="backward",test="F")
+```
+
+ 
+
+with the same result. This function doesn't actually use P-values;
+instead it uses a thing called AIC. At each step, the variable with
+the lowest AIC comes out, and when `<none>` bubbles up to the
+top, that's when you stop. The `test="F"` means 
+"include an $F$-test", but the procedure still uses AIC (it just shows you n
+$F$-test each time as well).  In this case, the other variables were
+in the same order throughout, but they don't have to be (in the same
+way that removing one variable from a multiple regression can
+dramatically change the P-values of the ones that remain). Here, at
+the first step, `<none>` and `anxiety` were pretty
+close, but when `severity` came out, taking out nothing was a
+*lot* better than taking out `anxiety`.
+
+The `test="F"` on the end gets you the P-values. Using the
+$F$-test is right for regressions; for things like logistic regression
+that we see later, `test="Chisq"` is the right one to 
+use.
+`r tufte::margin_note("This is F in quotes, meaning F-test, not F without quotes, meaning FALSE.")`
+
+
+
+
+
