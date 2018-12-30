@@ -1342,7 +1342,7 @@ The data can be found at
 
 
 
-(a)[2] Read the data into R, and display your data frame. Count the number of mice in each group. 
+(a) Read the data into R, and display your data frame. Count the number of mice in each group. 
 
 Solution
 
@@ -1411,7 +1411,7 @@ Seven in each.
  
 
 
-(b)[2] Draw side-by-side boxplots of time spent in darkness for each
+(b) Draw side-by-side boxplots of time spent in darkness for each
 group of mice.
 
 Solution
@@ -1431,7 +1431,7 @@ You did remember to put capital letters on the variable names, didn't you?
  
 
 
-(c)[2] Do the boxplots support the hypothesis about exercise and
+(c) Do the boxplots support the hypothesis about exercise and
 anxiety? Explain briefly.
 
 Solution
@@ -1457,7 +1457,7 @@ exercise corresponding with less anxiety.
  
 
 
-(d)[2] Carry out a $t$-test for comparing the mean time spent in
+(d) Carry out a $t$-test for comparing the mean time spent in
 darkness for the mice in the two groups. Think carefully about the
 details of the $t$-test (and what you need evidence in favour of).
 
@@ -1491,10 +1491,35 @@ with(mice,t.test(Time~Environment,alternative="less"))
 ```
 
      
+
+A common clue that you have the wrong alternative hypothesis is a P-value coming out close to *1*, which is what you would have gotten from something like this:
+
+
+```r
+with(mice,t.test(Time~Environment,alternative="greater"))
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  Time by Environment
+## t = -6.7966, df = 9.1146, p-value = 1
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  -262.7502       Inf
+## sample estimates:
+## mean in group Enriched mean in group Standard 
+##               231.7143               438.7143
+```
+
+     
+
+Here, we looked at the pictures and expected to find a difference, so we expected to find a P-value close to 0 rather than close to 1.
  
 
 
-(e)[2] What do you conclude, in terms of anxiety and exercise (at
+(e) What do you conclude, in terms of anxiety and exercise (at
 least for mice)? Explain  briefly.
 
 Solution
@@ -1517,7 +1542,7 @@ mean for `Enriched` might have been *more* than for
  
 
 
-(f)[2] Does anything in the previous parts suggest any problems with
+(f) Does anything in the previous parts suggest any problems with
 the analysis you just did? Explain briefly.
 
 Solution
@@ -1553,11 +1578,11 @@ ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
 facet_wrap(~Environment, scales="free")
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
      
 
-For the `Enhanced` group, the upper-end outlier shows up. In a
+For the `Enriched` group, the upper-end outlier shows up. In a
 way this plot is no more illuminating than the boxplot, because you
 still have to make a call about whether this is "too big". Bear in
 mind also that these facetted normal quantile plots, with two groups,
@@ -1575,17 +1600,20 @@ ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
 facet_wrap(~Environment, scales="free", ncol=1)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
      
 
-This makes the plots come out in one column, that is, short and squat. I'd still call the highest one in `Enhanced` an outlier, but the lowest value now looks pretty close to what you'd expect.
+This makes the plots come out in one column, that is, short and
+squat. I prefer these. I'd still call the highest value in
+`Enriched` an outlier, but the lowest value now looks pretty
+close to what you'd expect.
  
 
 
 
 
-##  diet and growth in boys
+##  Diet and growth in boys
 
 
  A dietician is studying the effect of
@@ -1672,7 +1700,7 @@ The boxplot is the kind of thing we've seen before:
 ggplot(diet,aes(x=sect,y=height))+geom_boxplot()
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
  
 
@@ -1705,7 +1733,7 @@ diet %>% ggplot(aes(sample=height))+stat_qq()+stat_qq_line()+
 facet_wrap(~sect, ncol=1)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 

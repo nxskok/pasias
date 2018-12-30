@@ -7,9 +7,8 @@ a run at a pace of 10 minutes per mile. He runs different distances on
 different days. Each time he runs, he measures his blood sugar after
 the run. (The preferred blood sugar level is between 80 and 120 on
 this scale.) The data are in the file
-[link](http://www.utsc.utoronto.ca/~butler/d29/runner.txt). Save the
-data somewhere that R can find it. Our aim is to predict blood sugar
-from distance.
+[link](http://www.utsc.utoronto.ca/~butler/d29/runner.txt).  Our aim is
+to predict blood sugar from distance.
 
 
 
@@ -95,7 +94,7 @@ drop of 25.
 
 (f) Is there a (statistically) significant relationship between
 running distance and blood sugar? How do you know? Do you find this
-surprising? Explain briefly.
+surprising, given what you have seen so far? Explain briefly.
  
 Solution
 
@@ -203,12 +202,14 @@ I also remembered that if you finish with a `select`, you get the columns in the
 
 ```{r }
 pp %>% as_tibble() %>% bind_cols(dist.new) %>%
-select(c(4,1:3))
+select(c(distance,everything()))
 ```
 
  
 
-using the numbers of the columns.
+`everything` is a so-called "select helper". It means 
+"everything except any columns you already named", so this whole thing has the effect of listing the columns 
+with `distance` first and all the other columns afterwards, in the order that they were in before.
  
 
 (h) Which of your two intervals is longer? Does this make

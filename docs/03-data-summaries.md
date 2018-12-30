@@ -1613,7 +1613,8 @@ ggplot(marks,aes(x=class,y=score))+geom_boxplot()
        
 
 Remember: on a regular boxplot,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Boxplots can also go across the page, but for us, they don't.</span> the groups go across ($x$), the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Boxplots can also go across the page, but for us, they don't.</span> 
+the groups go across ($x$), the
 variable measured goes up ($y$).
 
 Extra: this might work:
@@ -1629,7 +1630,8 @@ coord_flip()
  
 
 It does. That was a guess. So if you want sideways boxplots, this is
-how you can get them. (The `x` and `y` happen
+how you can get them. Long group names sometimes fit better on the $y$-axis, in which case flipping the axes will help.
+(The `x` and `y` happen
 *before* the coordinate-flip, so they are the same as above, not
 the same way they come out.)
  
@@ -1671,8 +1673,20 @@ ggplot(marks,aes(x=1,y=score))+geom_boxplot()
 
        
 
-The $x$-axis is kind of dopey, so you just ignore it. 
+The $x$-axis is kind of dopey, so you just ignore it. It is possible
+to remove it, but that is more work than it's worth, and I didn't get
+rid of the ticks below:
 
+
+```r
+ggplot(marks,aes(x=1,y=score))+geom_boxplot()+
+theme(axis.text.x=element_blank(),
+axis.title.x=element_blank())
+```
+
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
+
+       
  
 
 

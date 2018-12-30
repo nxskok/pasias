@@ -5015,9 +5015,8 @@ a run at a pace of 10 minutes per mile. He runs different distances on
 different days. Each time he runs, he measures his blood sugar after
 the run. (The preferred blood sugar level is between 80 and 120 on
 this scale.) The data are in the file
-[link](http://www.utsc.utoronto.ca/~butler/d29/runner.txt). Save the
-data somewhere that R can find it. Our aim is to predict blood sugar
-from distance.
+[link](http://www.utsc.utoronto.ca/~butler/d29/runner.txt).  Our aim is
+to predict blood sugar from distance.
 
 
 
@@ -5162,7 +5161,7 @@ drop of 25.
 
 (f) Is there a (statistically) significant relationship between
 running distance and blood sugar? How do you know? Do you find this
-surprising? Explain briefly.
+surprising, given what you have seen so far? Explain briefly.
  
 Solution
 
@@ -5324,7 +5323,7 @@ I also remembered that if you finish with a `select`, you get the columns in the
 
 ```r
 pp %>% as_tibble() %>% bind_cols(dist.new) %>%
-select(c(4,1:3))
+select(c(distance,everything()))
 ```
 
 ```
@@ -5337,7 +5336,9 @@ select(c(4,1:3))
 
  
 
-using the numbers of the columns.
+`everything` is a so-called "select helper". It means 
+"everything except any columns you already named", so this whole thing has the effect of listing the columns 
+with `distance` first and all the other columns afterwards, in the order that they were in before.
  
 
 (h) Which of your two intervals is longer? Does this make
@@ -5427,11 +5428,10 @@ pizza
 
 The four variables are: the brand of pizza, which got read in as text,
 the number of calories (an integer), and the fat and cost, which are
-both decimal numbers so they get labelled `num`.
+both decimal numbers so they get labelled `dbl`, which is short for 
+"double-precision floating point number". 
 
-Anyway, these are apparently the right thing. The distinction between
-`calories` and `cost` is that the former is a whole
-number and the latter is a decimal number.
+Anyway, these are apparently the right thing. 
 
 Extra: I wanted to mention something else that I discovered
 yesterday.
@@ -6419,7 +6419,7 @@ should be arranged somehow in two columns, but I didn't care which
 ones should be where.
 
 In `facet_grid`, you have a variable that you want to be
-displayed in rows or in columns (not just in "different facets". 
+displayed in rows or in columns (not just in "different facets"). 
 I'll show you how that works here. Since I am going to draw
 two plots, I should save the long data frame first and re-use it,
 rather than calculating it twice (so that I ought now to go back and
@@ -6821,7 +6821,7 @@ satisf.new
  
 
 There are two possibilities for each variable, so there are $2^3=8$
-"all possible combinations". You can check that `expand` got
+"all possible combinations". You can check that `crossing` got
 them all.
 
 This is a data frame containing all the values we want to predict for,
@@ -7120,7 +7120,7 @@ with the same result. This function doesn't actually use P-values;
 instead it uses a thing called AIC. At each step, the variable with
 the lowest AIC comes out, and when `<none>` bubbles up to the
 top, that's when you stop. The `test="F"` means 
-"include an $F$-test", but the procedure still uses AIC (it just shows you n
+"include an $F$-test", but the procedure still uses AIC (it just shows you an
 $F$-test each time as well).  In this case, the other variables were
 in the same order throughout, but they don't have to be (in the same
 way that removing one variable from a multiple regression can
