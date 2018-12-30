@@ -7809,8 +7809,8 @@ summary(salaries.1)
    
  
 
-(e) How can we justify the statement ``one or more of the
-explanatory variables helps to predict salary''? How is this
+(e) How can we justify the statement 
+"one or more of the explanatory variables helps to predict salary"? How is this
 consistent with the value of R-squared?
 
 Solution
@@ -7952,7 +7952,7 @@ better than the smaller one: we really do need all three
 variables. Which is what we guessed.
 
 
-(h) Back in part~(??regone??), you fitted a regression with all
+(h) Back in part (??regone??), you fitted a regression with all
 three explanatory variables. By making suitable plots, assess
 whether there is any evidence that (i) that the linear model should
 be a curve, (ii) that the residuals are not normally 
