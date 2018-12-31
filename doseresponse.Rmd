@@ -1,3 +1,4 @@
+##  The effects of Substance A
 
 
  In a dose-response experiment, animals (or
@@ -5,7 +6,7 @@ cell cultures or human subjects) are exposed to some toxic substance,
 and we observe how many of them show some sort of response. In this
 experiment, a mysterious Substance A is exposed at various doses to
 100 cells at each dose, and the number of cells at each dose that
-suffer damage is recorded. The doses were 10, 20, \ldots 70 (mg), and
+suffer damage is recorded. The doses were 10, 20, ... 70 (mg), and
 the number of damaged cells out of 100 were respectively 10, 28, 53,
 77, 91, 98, 99.
 
@@ -22,12 +23,28 @@ There's not much data here, so we don't need to create a file,
 although you can do so if you like (in the obvious way: type the
 doses and damaged cell numbers into a `.txt` file or
 spreadsheet and read in with the appropriate `read_`
-function). Or, make a data frame with the values typed in:
+function). 
+Or, use a `tribble`:
+```{r }
+dr=tribble(
+~dose, ~damaged,
+10, 10,
+20, 28,
+30, 53,
+40, 77,
+50, 91,
+60, 98,
+70, 99)
+dr
+```
+
+       
+Or, make a data frame with the values typed in:
 
 ```{r }
-dr=tibble(dose=seq(10,70,10),
+dr2=tibble(dose=seq(10,70,10),
 damaged=c(10, 28, 53, 77, 91, 98, 99))
-dr
+dr2
 ```
 
  
@@ -37,6 +54,9 @@ just list the doses.
 
 I like this better than making two columns *not* attached to a
 data frame, but that will work as well.
+
+For these, find a way you like, and stick with it.
+
     
 
 
@@ -80,9 +100,7 @@ dr
 
        
 
-The programmer in you is probably complaining ``but, 100 is a number
-and `damaged` is a vector of 7 numbers. How does R know to
-subtract *each one* from 100?'' Well, R has what's known as
+The programmer in you is probably complaining "but, 100 is a number and `damaged` is a vector of 7 numbers. How does R know to subtract *each one* from 100?" Well, R has what's known as
 "recycling rules": if you try to add or subtract (or elementwise
 multiply or divide) two vectors of different lengths, it recycles the
 smaller one by repeating it until it's as long as the longer one. So

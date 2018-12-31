@@ -1,3 +1,4 @@
+##  What makes an animal get infected?
 
 
  Some animals got infected with a parasite. We are interested
@@ -46,8 +47,9 @@ row, but not always. If it doesn't, you have some extra work to do to
 bash it into the right format.
 
 Extra: let's see whether we can come up with an example of that. I'll make a
-smaller example, and perhaps the place to start is ``all possible
-combinations'' of a few things. If you haven't seen `crossing`
+smaller example, and perhaps the place to start is 
+"all possible combinations" of a few things. 
+If you haven't seen `crossing`
 before, skip ahead to part (??part:crossing??):
 
 ```{r }
@@ -125,11 +127,10 @@ with(infect,table(sex,infected))
 
  
 
-Or, if you like the `tidyverse`, this is group-by and summarize:
+Or, if you like the `tidyverse`:
 
 ```{r }
-infect %>% group_by(sex,infected) %>%
-summarize(count=n())
+infect %>% count(sex,infected) 
 ```
 
  
@@ -213,9 +214,8 @@ This also shows that more of the females were infected than the males,
 but without getting sidetracked into the issue that there were more
 males to begin with.
 
-I wrote this question in early 2017. At that time, I wrote  
+I wrote this question in early 2017. At that time, I wrote  (quote):
 
-\begin{quote}
 I learned about this one approximately two hours ago. I just ordered
 Hadley Wickham's new book "R for Data Science" from Amazon, and it
 arrived today. It's in there. (A good read, by the way. I'm thinking
@@ -224,7 +224,8 @@ As is so often the way with `ggplot`, the final answer looks
 very simple, but there is a lot of thinking required to get there, and
 you end up having even more respect for Hadley Wickham for the clarity
 of thinking that enabled this to be specified in a simple way.  
-\end{quote}
+
+(end quote)
  
 
 (c) Which, if any, of your explanatory variables appear to be
@@ -375,7 +376,14 @@ These are predicted probabilities of infection. (When you have one
 observation per line, the predictions are of the *second* of the
 two levels of the response variable. When you make that two-column
 response, the predictions are of the probability of being in the
-*first* column. That's what it is. Don't ask me why.)
+*first* column. That's what it is. As the young people say, don't @ me.)
+
+The way I remember the one-column-response thing is that the first
+level is the baseline (as it is in a regression with a categorical
+explanatory variable), and the second level is the one whose
+probability is modelled (in the same way that the second, third etc.\
+levels of a categorical explanatory variable are the ones that appear
+in the `summary` table).
 
 Let's start with `sex`. The probabilities of a female being
 infected are all much higher than of a corresponding male (with the
@@ -392,34 +400,15 @@ as well. Compare, for example, lines 1 and 5 or lines 4 and 8. I think
 this is a less dramatic change than for the other variables, but
 that's a judgement call.
 
-I got this example from the Crawley book (that you might have used for
-STAC32). It starts on page 275 in my edition. He goes at the analysis
+I got this example from (horrible URL warning) here: [link](https://www.amazon.ca/Statistics-Introduction-Michael-J-Crawley/dp/0470022973/ref=pd_sbs_14_3?_encoding=UTF8&pd_rd_i=0470022973&pd_rd_r=97f19951-0ca9-11e9-9275-b3e00a75f9be&pd_rd_w=EfpAv&pd_rd_wg=2NMH8&pf_rd_p=d4c8ffae-b082-4374-b96d-0608daba52bb&pf_rd_r=HAKACF78DSNTGFPDW3YV&psc=1&refRID=HAKACF78DSNTGFPDW3YV)
+It starts on page 275 in my edition. He goes at the analysis
 a different way, but he finishes with 
 another issue that I want to show you. 
 
-Let's work out the residuals and plot them against our quantitative explanatory
-variables. There are two ways to do this. One is to grab the residuals
-as if we were going to do a normal quantile plot with them, and throw
-them into a `ggplot` with the original data:
-
-```{r salterton}
-r=resid(infect.1)
-ggplot(infect,aes(x=weight,y=r))+geom_point()+
-geom_smooth()
-```
-
- 
-
-The other is to create a data frame that has the original data in it
-*and* the stuff from the regression.  
-The advantage this has is
-cleanness: you feed the "augmented" model into `ggplot` and then
-you can plot whatever you like, residuals, fitted values, original
-variables, whatever.
-
-This is, if you remember from regression, `augment` from
-package `broom`:
-
+Let's work out the residuals and plot them against our quantitative
+explanatory variables. I think the best way to do this is
+`augment` from `broom`, to create a data frame
+containing the residuals alongside the original data:
 ```{r }
 library(broom)
 infect.1a = infect.1 %>% augment() 
@@ -546,8 +535,8 @@ This would also work:
 ```{r }
 pp %>% summarize(max.pred=max(pred))
 ```
-$
 
+ 
 but then you wouldn't see what contributed to that highest predicted
 probability. What you might do then is to say 
 "let's find all the predicted probabilities bigger than 0.8":

@@ -6,3 +6,5 @@ docs/index.html: index.Rmd
 	Rscript -e "bookdown::render_book('index.Rmd')"
 pasias.pdf: index.Rmd
 	Rscript -e "bookdown::render_book(\"index.Rmd\", output_format=\"bookdown::tufte_book2\")"
+docs/logistic-regression.html: index.Rmd
+	Rscript -e "bookdown::preview_chapter('15-logistic-regression.Rmd')"

@@ -32,20 +32,41 @@ not, as you wish. Demonstrate that you have the right data in R.
 Solution
 
 
-I would do it thus:
+There are a couple of ways. My current favourite is the `tidyverse`-approved 
+`tribble` method. A `tribble` is a "transposed `tibble`", in which you copy and paste the data, inserting column headings and commas in the right places:
+```{r }
+dead_bugs=tribble(
+~log_conc, ~exposed, ~killed,
+0.96           ,            50    ,          6    ,
+1.33           ,            48    ,          16   ,           
+1.63           ,            46    ,          24   ,           
+2.04           ,            49    ,          42   ,           
+2.32           ,            50    ,          44   )
+dead_bugs
+```
+
+    
+
+Note that the last data value has no comma after it, but instead has
+the closing bracket of `tribble`.  If you are clever in R
+Studio, you can insert a column of commas all at once (using
+"multiple cursors").
+I used to do it like this. I make vectors of each column using `c` and then glue the columns together into a data frame:
 ```{r }
 log_conc=c(0.96,1.33,1.63,2.04,2.32)
 exposed=c(50,48,46,49,50)
 killed=c(6,16,24,42,44)
-dead_bugs=tibble(log_conc,exposed,killed)
-dead_bugs
+dead_bugs2=tibble(log_conc,exposed,killed)
+dead_bugs2
 ```
 
      
 
 The values are correct --- I checked them.
 
-The obvious way to read the data values without typing them is to copy
+Now you see why `tribble` stands for "transposed tibble": if you want to construct a data frame by hand, you have to work with columns and then glue them together, but `tribble` allows you to work "row-wise" with the data as you would lay it out on the page.
+
+The other obvious way to read the data values without typing them is to copy
 them into a file and read *that*. The values as laid out are
 aligned in columns. They might be separated by tabs, but they are
 not. (It's hard to tell without investigating, though a tab is by
@@ -195,8 +216,8 @@ Just this (notice there are only *two* things going into
 prob=predict(bugs.1,type="response")
 cbind(dead_bugs$log_conc,prob)
 ```
-$ %$ %$ %$
 
+   
 or, if you frame everything in terms of the `tidyverse`, turn
 the predictions from a `matrix` into a `tibble` first,
 and then use `bind_cols` to glue them together:

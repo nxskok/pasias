@@ -428,14 +428,45 @@ not, as you wish. Demonstrate that you have the right data in R.
 Solution
 
 
-I would do it thus:
+There are a couple of ways. My current favourite is the `tidyverse`-approved 
+`tribble` method. A `tribble` is a "transposed `tibble`", in which you copy and paste the data, inserting column headings and commas in the right places:
+
+```r
+dead_bugs=tribble(
+~log_conc, ~exposed, ~killed,
+0.96           ,            50    ,          6    ,
+1.33           ,            48    ,          16   ,           
+1.63           ,            46    ,          24   ,           
+2.04           ,            49    ,          42   ,           
+2.32           ,            50    ,          44   )
+dead_bugs
+```
+
+```
+## # A tibble: 5 x 3
+##   log_conc exposed killed
+##      <dbl>   <dbl>  <dbl>
+## 1     0.96      50      6
+## 2     1.33      48     16
+## 3     1.63      46     24
+## 4     2.04      49     42
+## 5     2.32      50     44
+```
+
+    
+
+Note that the last data value has no comma after it, but instead has
+the closing bracket of `tribble`.  If you are clever in R
+Studio, you can insert a column of commas all at once (using
+"multiple cursors").
+I used to do it like this. I make vectors of each column using `c` and then glue the columns together into a data frame:
 
 ```r
 log_conc=c(0.96,1.33,1.63,2.04,2.32)
 exposed=c(50,48,46,49,50)
 killed=c(6,16,24,42,44)
-dead_bugs=tibble(log_conc,exposed,killed)
-dead_bugs
+dead_bugs2=tibble(log_conc,exposed,killed)
+dead_bugs2
 ```
 
 ```
@@ -453,7 +484,9 @@ dead_bugs
 
 The values are correct --- I checked them.
 
-The obvious way to read the data values without typing them is to copy
+Now you see why `tribble` stands for "transposed tibble": if you want to construct a data frame by hand, you have to work with columns and then glue them together, but `tribble` allows you to work "row-wise" with the data as you would lay it out on the page.
+
+The other obvious way to read the data values without typing them is to copy
 them into a file and read *that*. The values as laid out are
 aligned in columns. They might be separated by tabs, but they are
 not. (It's hard to tell without investigating, though a tab is by
@@ -708,8 +741,8 @@ cbind(dead_bugs$log_conc,prob)
 ## 4 2.04 0.8099321
 ## 5 2.32 0.9105221
 ```
-$ %$ %$ %$
 
+   
 or, if you frame everything in terms of the `tidyverse`, turn
 the predictions from a `matrix` into a `tibble` first,
 and then use `bind_cols` to glue them together:
@@ -804,6 +837,7 @@ I'm riding the bus as I type this, so I can't look it up right now.
 
 
 
+##  The effects of Substance A
 
 
  In a dose-response experiment, animals (or
@@ -811,7 +845,7 @@ cell cultures or human subjects) are exposed to some toxic substance,
 and we observe how many of them show some sort of response. In this
 experiment, a mysterious Substance A is exposed at various doses to
 100 cells at each dose, and the number of cells at each dose that
-suffer damage is recorded. The doses were 10, 20, \ldots 70 (mg), and
+suffer damage is recorded. The doses were 10, 20, ... 70 (mg), and
 the number of damaged cells out of 100 were respectively 10, 28, 53,
 77, 91, 98, 99.
 
@@ -828,13 +862,43 @@ There's not much data here, so we don't need to create a file,
 although you can do so if you like (in the obvious way: type the
 doses and damaged cell numbers into a `.txt` file or
 spreadsheet and read in with the appropriate `read_`
-function). Or, make a data frame with the values typed in:
+function). 
+Or, use a `tribble`:
+
+```r
+dr=tribble(
+~dose, ~damaged,
+10, 10,
+20, 28,
+30, 53,
+40, 77,
+50, 91,
+60, 98,
+70, 99)
+dr
+```
+
+```
+## # A tibble: 7 x 2
+##    dose damaged
+##   <dbl>   <dbl>
+## 1    10      10
+## 2    20      28
+## 3    30      53
+## 4    40      77
+## 5    50      91
+## 6    60      98
+## 7    70      99
+```
+
+       
+Or, make a data frame with the values typed in:
 
 
 ```r
-dr=tibble(dose=seq(10,70,10),
+dr2=tibble(dose=seq(10,70,10),
 damaged=c(10, 28, 53, 77, 91, 98, 99))
-dr
+dr2
 ```
 
 ```
@@ -857,6 +921,9 @@ just list the doses.
 
 I like this better than making two columns *not* attached to a
 data frame, but that will work as well.
+
+For these, find a way you like, and stick with it.
+
     
 
 
@@ -914,9 +981,7 @@ dr
 
        
 
-The programmer in you is probably complaining ``but, 100 is a number
-and `damaged` is a vector of 7 numbers. How does R know to
-subtract *each one* from 100?'' Well, R has what's known as
+The programmer in you is probably complaining "but, 100 is a number and `damaged` is a vector of 7 numbers. How does R know to subtract *each one* from 100?" Well, R has what's known as
 "recycling rules": if you try to add or subtract (or elementwise
 multiply or divide) two vectors of different lengths, it recycles the
 smaller one by repeating it until it's as long as the longer one. So
@@ -1135,6 +1200,7 @@ good. But, your call. I think your answer ought to contain
 
 
 
+##  What makes an animal get infected?
 
 
  Some animals got infected with a parasite. We are interested
@@ -1242,8 +1308,9 @@ row, but not always. If it doesn't, you have some extra work to do to
 bash it into the right format.
 
 Extra: let's see whether we can come up with an example of that. I'll make a
-smaller example, and perhaps the place to start is ``all possible
-combinations'' of a few things. If you haven't seen `crossing`
+smaller example, and perhaps the place to start is 
+"all possible combinations" of a few things. 
+If you haven't seen `crossing`
 before, skip ahead to part (??part:crossing??):
 
 
@@ -1378,18 +1445,16 @@ with(infect,table(sex,infected))
 
  
 
-Or, if you like the `tidyverse`, this is group-by and summarize:
+Or, if you like the `tidyverse`:
 
 
 ```r
-infect %>% group_by(sex,infected) %>%
-summarize(count=n())
+infect %>% count(sex,infected) 
 ```
 
 ```
 ## # A tibble: 4 x 3
-## # Groups:   sex [?]
-##   sex    infected count
+##   sex    infected     n
 ##   <chr>  <chr>    <int>
 ## 1 female absent      17
 ## 2 female present     11
@@ -1410,7 +1475,7 @@ so that the plot is just this:
 ggplot(infect,aes(x=sex))+geom_bar()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
  
 
@@ -1438,7 +1503,7 @@ variable, which is specified by `fill`. Here's the basic idea:
 ggplot(infect, aes(x=sex,fill=infected))+geom_bar()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
  
 
@@ -1456,7 +1521,7 @@ ggplot(infect, aes(x=sex,fill=infected))+
 geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
  
 
@@ -1482,7 +1547,7 @@ ggplot(infect, aes(x=sex,fill=infected))+
 geom_bar(position="fill")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
  
 
@@ -1490,9 +1555,8 @@ This also shows that more of the females were infected than the males,
 but without getting sidetracked into the issue that there were more
 males to begin with.
 
-I wrote this question in early 2017. At that time, I wrote  
+I wrote this question in early 2017. At that time, I wrote  (quote):
 
-\begin{quote}
 I learned about this one approximately two hours ago. I just ordered
 Hadley Wickham's new book "R for Data Science" from Amazon, and it
 arrived today. It's in there. (A good read, by the way. I'm thinking
@@ -1501,7 +1565,8 @@ As is so often the way with `ggplot`, the final answer looks
 very simple, but there is a lot of thinking required to get there, and
 you end up having even more respect for Hadley Wickham for the clarity
 of thinking that enabled this to be specified in a simple way.  
-\end{quote}
+
+(end quote)
  
 
 (c) Which, if any, of your explanatory variables appear to be
@@ -1743,7 +1808,14 @@ These are predicted probabilities of infection. (When you have one
 observation per line, the predictions are of the *second* of the
 two levels of the response variable. When you make that two-column
 response, the predictions are of the probability of being in the
-*first* column. That's what it is. Don't ask me why.)
+*first* column. That's what it is. As the young people say, don't @ me.)
+
+The way I remember the one-column-response thing is that the first
+level is the baseline (as it is in a regression with a categorical
+explanatory variable), and the second level is the one whose
+probability is modelled (in the same way that the second, third etc.\
+levels of a categorical explanatory variable are the ones that appear
+in the `summary` table).
 
 Let's start with `sex`. The probabilities of a female being
 infected are all much higher than of a corresponding male (with the
@@ -1760,41 +1832,15 @@ as well. Compare, for example, lines 1 and 5 or lines 4 and 8. I think
 this is a less dramatic change than for the other variables, but
 that's a judgement call.
 
-I got this example from the Crawley book (that you might have used for
-STAC32). It starts on page 275 in my edition. He goes at the analysis
+I got this example from (horrible URL warning) here: [link](https://www.amazon.ca/Statistics-Introduction-Michael-J-Crawley/dp/0470022973/ref=pd_sbs_14_3?_encoding=UTF8&pd_rd_i=0470022973&pd_rd_r=97f19951-0ca9-11e9-9275-b3e00a75f9be&pd_rd_w=EfpAv&pd_rd_wg=2NMH8&pf_rd_p=d4c8ffae-b082-4374-b96d-0608daba52bb&pf_rd_r=HAKACF78DSNTGFPDW3YV&psc=1&refRID=HAKACF78DSNTGFPDW3YV)
+It starts on page 275 in my edition. He goes at the analysis
 a different way, but he finishes with 
 another issue that I want to show you. 
 
-Let's work out the residuals and plot them against our quantitative explanatory
-variables. There are two ways to do this. One is to grab the residuals
-as if we were going to do a normal quantile plot with them, and throw
-them into a `ggplot` with the original data:
-
-
-```r
-r=resid(infect.1)
-ggplot(infect,aes(x=weight,y=r))+geom_point()+
-geom_smooth()
-```
-
-```
-## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
-```
-
-<img src="15-logistic-regression_files/figure-html/salterton-1.png" width="672"  />
-
- 
-
-The other is to create a data frame that has the original data in it
-*and* the stuff from the regression.  
-The advantage this has is
-cleanness: you feed the "augmented" model into `ggplot` and then
-you can plot whatever you like, residuals, fitted values, original
-variables, whatever.
-
-This is, if you remember from regression, `augment` from
-package `broom`:
-
+Let's work out the residuals and plot them against our quantitative
+explanatory variables. I think the best way to do this is
+`augment` from `broom`, to create a data frame
+containing the residuals alongside the original data:
 
 ```r
 library(broom)
@@ -1829,7 +1875,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -1852,7 +1898,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
  
 Crawley found the slightest suggestion of an up-and-down curve in
@@ -2054,8 +2100,8 @@ pp %>% summarize(max.pred=max(pred))
 ##    max.pred
 ## 1 0.8154681
 ```
-$
 
+ 
 but then you wouldn't see what contributed to that highest predicted
 probability. What you might do then is to say 
 "let's find all the predicted probabilities bigger than 0.8":
@@ -2101,6 +2147,7 @@ pp %>% arrange(desc(pred)) %>% slice(1:10)
 
 
 
+##  The brain of a cat
 
 
  A large number (315) of psychology students were asked to
@@ -2589,6 +2636,41 @@ anova(decide.2,decide.3,test="Chisq")
 The P-value is not less than 0.05, but it *is* less than 0.10,
 which is what I implied to assess it with, so the scenario does make some
 kind of difference.
+
+Extra: another way to do this, which I like better (but the
+`anova` way was what I asked in the original question), is to
+look at `decide.3` and ask "what can I get rid of", in such a
+way that categorical variables stay or go as a whole.  This is done
+using `drop1`. It's a little different from the corresponding
+thing in regression because the right way to do the test is not an F
+test, but now a chi-squared test (this is true for all generalized
+linear models of which logistic regression is one):
+
+
+```r
+drop1(decide.3, test="Chisq")
+```
+
+```
+## Single term deletions
+## 
+## Model:
+## factor(decision) ~ gender + idealism + relativism + scenario
+##            Df Deviance    AIC    LRT  Pr(>Chi)    
+## <none>          338.06 354.06                     
+## gender      1   359.61 373.61 21.546 3.454e-06 ***
+## idealism    1   384.40 398.40 46.340 9.943e-12 ***
+## relativism  1   344.97 358.97  6.911  0.008567 ** 
+## scenario    4   346.50 354.50  8.443  0.076630 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+ 
+
+The test for `scenario` has four degrees of freedom (since
+there are five scenarios), and is in fact exactly the same test as in
+`anova`, significant at $\alpha=0.10$.
    
 
 
@@ -2814,8 +2896,8 @@ cbind(new,p)
 ## 9       6.5        6.1   Male     theory 0.5237310
 ## 10      6.5        6.1   Male veterinary 0.4087458
 ```
-$ %$
 
+ 
 The probability of "stop" is a lot higher for females than for males
 (that is the strong `gender` effect we found earlier), but the
 *pattern* is about the same for males and females: the difference in
@@ -2878,15 +2960,15 @@ saying that the research should stop. The slope coefficient for
 `relativity` is negative, so it's the other way around: a
 higher relativity score goes with a *lower* chance of saying
 that the research should stop.
-That's all I needed, but we can look back at the description of
-these scales in the question. 
+That's all I needed, but as an extra, we can look back at the
+description of these scales in the question.
 The `relativism` one was that a person believed that the
 most moral action depends on the situation (as opposed to a person
 having something like religious faith that asserts universal moral
 principles that are always true. That would be a low score on the
 relativism scale). Somebody with a low score on this scale might
-believe something like ``it is always wrong to experiment on
-animals'', whereas somebody with a high relativism score  might
+believe something like 
+"it is always wrong to experiment on animals", whereas somebody with a high relativism score  might
 say that it was sometimes justified. Thus, other things being
 equal, a low relativism score would go with "stop" and a high
 relativism score would (or  might) go with "continue". This
@@ -3215,6 +3297,7 @@ remember all that for when I next drive in England!
 
 
 
+##  How not to get heart disease
 
 
  What is associated with heart disease? In a study, a large
@@ -3352,7 +3435,7 @@ Solution
 
 Each line of the data file is a single observation, not
 frequencies of yes and no (like the premature babies
-question was). The response variable is a factor, so the first level
+question, later, is). The response variable is a factor, so the first level
 is the baseline and the *second* level is the one
 predicted. R puts factor levels alphabetically, so `no` is
 first and `yes` is second. That is, a logistic regression
@@ -4308,7 +4391,8 @@ and the easiest way to add these to `heart.new` is this:
 ```r
 heart.new$pred=p
 ```
-$ %$ %$
+
+ 
 
 Or, if you like, with a `mutate` of this kind:
 
@@ -4330,14 +4414,14 @@ heart.new %>% sample_n(8)
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  typical          140        280    133     0   down…       1 fixed
-## 2 fema… nonangin…        120        213    133     0   flat        1 reve…
-## 3 fema… nonangin…        120        280    133     0   upsl…       0 reve…
-## 4 male  atypical         120        213    166     1.6 upsl…       1 fixed
-## 5 male  nonangin…        120        213    166     1.6 upsl…       0 fixed
-## 6 fema… typical          120        280    166     0   flat        0 fixed
-## 7 male  asymptom…        140        280    166     0   flat        0 fixed
-## 8 fema… nonangin…        120        213    166     0   flat        1 fixed
+## 1 fema… nonangin…        120        280    133     0   upsl…       1 fixed
+## 2 fema… atypical         120        280    133     1.6 flat        1 reve…
+## 3 male  nonangin…        120        280    133     0   upsl…       0 norm…
+## 4 male  nonangin…        140        213    133     1.6 upsl…       1 norm…
+## 5 male  asymptom…        120        280    166     0   upsl…       1 fixed
+## 6 male  nonangin…        120        280    133     1.6 upsl…       1 fixed
+## 7 fema… nonangin…        120        280    133     1.6 flat        1 fixed
+## 8 male  asymptom…        120        280    166     1.6 upsl…       0 reve…
 ## # ... with 1 more variable: pred <dbl>
 ```
 
@@ -4512,6 +4596,7 @@ disease if you are male (and the model shows that the risk is
 *much* greater). That is to say, it's being male that
 makes the difference, not the fact that any of the other
 variables are different for males.
+Perhaps, therefore, the easiest way to avoid a heart attack is to not be male!
         
 
 
@@ -4519,6 +4604,7 @@ variables are different for males.
 
 
 
+##  Successful breastfeeding
 
 
  A regular pregnancy lasts 40 weeks, and a
@@ -4869,7 +4955,7 @@ ggplot(aes(x=gest.age,y=obs))+
 geom_line(aes(y=pred))+geom_point(aes(size=total))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
 
  
 
@@ -4906,6 +4992,7 @@ close, which indicates that our model is doing a good job.
 
 
 
+##  Making it over the mountains
 
 
  In 1846, the Donner party (Donner and Reed
@@ -5012,7 +5099,7 @@ Starting with `age` vs. `gender`:
 ggplot(donner,aes(x=gender,y=age))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-124-1.png" width="672"  />
 
      
 
@@ -5023,7 +5110,7 @@ or:
 ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(gender~.)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
 
  
 
@@ -5066,7 +5153,7 @@ Age vs. `survived` is the same idea:
 ggplot(donner,aes(x=survived,y=age))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-128-1.png" width="672"  />
 
      
 
@@ -5077,7 +5164,7 @@ or:
 ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(survived~.)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-126-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-129-1.png" width="672"  />
 
  
 
@@ -5157,7 +5244,7 @@ For a graph, borrow the grouped bar-plot idea from the parasites question:
 ggplot(donner,aes(x=gender,fill=survived))+geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-131-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-134-1.png" width="672"  />
 
  
 
@@ -5250,7 +5337,8 @@ levels(factor(donner$survived))
 ```
 ## [1] "no"  "yes"
 ```
-$ %$ %$
+
+ 
 
 The baseline is the first of these, `no`, and the thing that is
 predicted is the probability of the second one, `yes` (that is,
@@ -5590,1310 +5678,7 @@ what the model is saying.
 
 
 
-
-
- What is associated with heart disease? In a study, a large
-number of variables were measured, as follows:
-
-
-
-* `age` (years)
-
-* `sex` male or female
-
-* `pain.type` Chest pain type (4 values: typical angina,
-atypical angina, non-anginal pain, asymptomatic)
-
-* `resting.bp` Resting blood pressure, on admission to hospital
-
-* `serum.chol` Serum cholesterol
-
-* `high.blood.sugar`: greater than 120, yes or no
-
-* `electro` resting electrocardiographic results (normal,
-having ST-T, hypertrophy)
-
-* `max.hr` Maximum heart rate
-
-* `angina` Exercise induced angina (yes or no)
-
-* `oldpeak` ST depression induced by exercise relative to
-rest. See [link](http://lifeinthefastlane.com/ecg-library/st-segment/).
-
-* `slope` Slope of peak exercise ST segment. Sloping up,
-flat or sloping down
-
-* `colored` number of major vessels (0--3) coloured by fluoroscopy
-
-* `thal` normal, fixed defect, reversible defect
-
-* `heart.disease` 1=absent, 2=present
-
-
-I don't know what most of those are, but we will not let that stand in
-our way. Our aim is to find out what variables are associated with
-heart disease, and what values of those variables give high
-probabilities of heart disease being present. The data are in
-[link](http://www.utsc.utoronto.ca/~butler/d29/heartf.csv).
-
-
-
-(a) Read in the data. Display the first few lines and convince
-yourself that those values are reasonable.
-
-
-Solution
-
-
-A `.csv` file, so:
-
-```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/heartf.csv"
-heart=read_csv(my_url)
-```
-
-```
-## Warning: Missing column names filled in: 'X1' [1]
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   X1 = col_integer(),
-##   age = col_integer(),
-##   sex = col_character(),
-##   pain.type = col_character(),
-##   resting.bp = col_integer(),
-##   serum.chol = col_integer(),
-##   high.blood.sugar = col_character(),
-##   electro = col_character(),
-##   max.hr = col_integer(),
-##   angina = col_character(),
-##   oldpeak = col_double(),
-##   slope = col_character(),
-##   colored = col_integer(),
-##   thal = col_character(),
-##   heart.disease = col_character()
-## )
-```
-
-```r
-heart
-```
-
-```
-## # A tibble: 270 x 15
-##       X1   age sex   pain.type resting.bp serum.chol high.blood.sugar
-##    <int> <int> <chr> <chr>          <int>      <int> <chr>           
-##  1     1    70 male  asymptom…        130        322 no              
-##  2     2    67 fema… nonangin…        115        564 no              
-##  3     3    57 male  atypical         124        261 no              
-##  4     4    64 male  asymptom…        128        263 no              
-##  5     5    74 fema… atypical         120        269 no              
-##  6     6    65 male  asymptom…        120        177 no              
-##  7     7    56 male  nonangin…        130        256 yes             
-##  8     8    59 male  asymptom…        110        239 no              
-##  9     9    60 male  asymptom…        140        293 no              
-## 10    10    63 fema… asymptom…        150        407 no              
-## # ... with 260 more rows, and 8 more variables: electro <chr>,
-## #   max.hr <int>, angina <chr>, oldpeak <dbl>, slope <chr>, colored <int>,
-## #   thal <chr>, heart.disease <chr>
-```
-
-     
-
-This display is kind of compressed. Every time you see a squiggle, as
-in `pain~`, that means there is actually more (not shown), so
-what you do is to check that what you see here matches at least the
-start of what is supposed to be there. 
-
-You should check that the variables that should be numbers actually
-are, that the variables that should be categorical have (as far as is
-shown) the right values as per my description above, and you should
-make some comment in that direction.
-
-My variables appear to be correct, apart possibly for that variable
-`X1` which is actually just the row number.
-    
-
-
-(b) In a logistic regression, what probability will be
-predicted here? Explain briefly but convincingly. (Is each line of
-the data file one observation or a summary of several?)
-
-
-Solution
-
-
-Each line of the data file is a single observation, not
-frequencies of yes and no (like the premature babies
-question was). The response variable is a factor, so the first level
-is the baseline and the *second* level is the one
-predicted. R puts factor levels alphabetically, so `no` is
-first and `yes` is second. That is, a logistic regression
-will predict the probability that a person *does* have heart disease.
-I want to see that logic (which is why I said "convincingly"):
-one observation per line, and therefore that the second level of
-the factor is predicted, which is `yes`. 
-    
-
-
-(c)??part:heart-first?? Fit a logistic regression predicting heart disease from
-everything else (if you have a column called `X` or
-`X1`, ignore that), and display the results.
-
-
-Solution
-
-
-A lot of typing, since there are so many variables. Don't forget
-that the response variable *must* be a factor:
-
-```r
-heart.1=glm(factor(heart.disease)~age+sex+pain.type+resting.bp+serum.chol+
-high.blood.sugar+electro+max.hr+angina+oldpeak+slope+colored+thal, 
-family="binomial",data=heart)
-```
-
- 
-
-You can split this over several lines (and probably should), but make
-sure to end each line in such a way that there is unambiguously more
-to come, for example with a plus or a comma (though probably the fact
-that you have an unclosed bracket will be enough). 
-
-The output is rather lengthy:
-
-
-```r
-summary(heart.1)
-```
-
-```
-## 
-## Call:
-## glm(formula = factor(heart.disease) ~ age + sex + pain.type + 
-##     resting.bp + serum.chol + high.blood.sugar + electro + max.hr + 
-##     angina + oldpeak + slope + colored + thal, family = "binomial", 
-##     data = heart)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -2.6431  -0.4754  -0.1465   0.3342   2.8100  
-## 
-## Coefficients:
-##                      Estimate Std. Error z value Pr(>|z|)    
-## (Intercept)         -3.973837   3.133311  -1.268 0.204707    
-## age                 -0.016007   0.026394  -0.606 0.544208    
-## sexmale              1.763012   0.580761   3.036 0.002400 ** 
-## pain.typeatypical   -0.997298   0.626233  -1.593 0.111264    
-## pain.typenonanginal -1.833394   0.520808  -3.520 0.000431 ***
-## pain.typetypical    -2.386128   0.756538  -3.154 0.001610 ** 
-## resting.bp           0.026004   0.012080   2.153 0.031346 *  
-## serum.chol           0.006621   0.004228   1.566 0.117322    
-## high.blood.sugaryes -0.370040   0.626396  -0.591 0.554692    
-## electronormal       -0.633593   0.412073  -1.538 0.124153    
-## electroSTT           0.013986   3.184512   0.004 0.996496    
-## max.hr              -0.019337   0.011486  -1.683 0.092278 .  
-## anginayes            0.596869   0.460540   1.296 0.194968    
-## oldpeak              0.449245   0.244631   1.836 0.066295 .  
-## slopeflat            0.827054   0.966139   0.856 0.391975    
-## slopeupsloping      -0.122787   1.041666  -0.118 0.906166    
-## colored              1.199839   0.280947   4.271 1.95e-05 ***
-## thalnormal           0.146197   0.845517   0.173 0.862723    
-## thalreversible       1.577988   0.838550   1.882 0.059863 .  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 370.96  on 269  degrees of freedom
-## Residual deviance: 168.90  on 251  degrees of freedom
-## AIC: 206.9
-## 
-## Number of Fisher Scoring iterations: 6
-```
-
- 
-
-I didn't ask you for further comment, but note that quite a lot of
-these variables are factors, so you get slopes for things like
-`pain.typeatypical`. When you have a factor in a model, there
-is a slope for each level except for the first, which is a baseline
-(and its slope is taken to be zero). That would be
-`asymptomatic` for `pain.type`. The $t$-tests for the
-other levels of `pain.type` say whether that level of pain
-type differs significantly (in terms of probability of heart disease)
-from the baseline level. Here, pain type `atypical` is not
-significantly different from the baseline, but the other two pain
-types, `nonanginal` and `typical`, *are*
-significantly different. If you think about this from an ANOVA-like
-point of view, the question about `pain.type`'s significance is
-really "is there at least one of the pain types that is different from the others", and if we're thinking about whether we should keep
-`pain.type` in the logistic regression, this is the kind of
-question we should be thinking about. 
-    
-
-
-(d) Quite a lot of our explanatory variables are factors. To
-assess whether the factor as a whole should stay or can be removed,
-looking at the slopes won't help us very much (since they tell us
-whether the other levels of the factor differ from the baseline,
-which may not be a sensible comparison to make). To assess which
-variables are candidates to be removed, factors included (properly),
-we can use `drop1`. Feed `drop1` a fitted model and
-the words `test="Chisq"` (take care of the capitalization!)
-and you'll get a list of P-values. Which variable is the one that
-you would remove first? Explain briefly.
-
-
-Solution
-
-
-Following the instructions:
-
-
-```r
-drop1(heart.1,test="Chisq")
-```
-
-```
-## Single term deletions
-## 
-## Model:
-## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
-##     serum.chol + high.blood.sugar + electro + max.hr + angina + 
-##     oldpeak + slope + colored + thal
-##                  Df Deviance    AIC     LRT  Pr(>Chi)    
-## <none>                168.90 206.90                      
-## age               1   169.27 205.27  0.3705 0.5427474    
-## sex               1   179.16 215.16 10.2684 0.0013533 ** 
-## pain.type         3   187.85 219.85 18.9557 0.0002792 ***
-## resting.bp        1   173.78 209.78  4.8793 0.0271810 *  
-## serum.chol        1   171.34 207.34  2.4484 0.1176468    
-## high.blood.sugar  1   169.25 205.25  0.3528 0.5525052    
-## electro           2   171.31 205.31  2.4119 0.2994126    
-## max.hr            1   171.84 207.84  2.9391 0.0864608 .  
-## angina            1   170.55 206.55  1.6562 0.1981121    
-## oldpeak           1   172.44 208.44  3.5449 0.0597303 .  
-## slope             2   172.98 206.98  4.0844 0.1297422    
-## colored           1   191.78 227.78 22.8878 1.717e-06 ***
-## thal              2   180.78 214.78 11.8809 0.0026308 ** 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
- 
-
-The highest P-value, 0.5525, goes with `high.blood.sugar`, so
-this one comes out first. (The P-value for `age` is almost as
-high, 0.5427, so you might guess that this will be next.)
-
-You might be curious about how these compare with the P-values on
-`summary`. These two P-values are almost the same as the ones
-on `summary`, because they are a two-level factor and a numeric
-variable respectively, and so the tests are equivalent in the two
-cases. (The P-values are not identical because the tests on
-`summary` and `drop1` are the kind of thing that would
-be identical on a regular regression but are only "asymptotically the same" 
-in logistic regression, so you'd expect them to be close
-without being the same, as here. "Asymptotically the same" means
-that if you had an infinitely large sample size, they'd be identical,
-but our sample size of 200-odd individuals is not infinitely large!
-Anyway, the largest P-value on the `summary` is 0.9965, which
-goes with `electroSTT`. `electro`, though, is a factor
-with three levels; this P-value says that `STT` is almost
-identical (in its effects on heart disease) with the baseline
-`hypertrophy`. But there is a third level, `normal`,
-which is a bit different from `hypertrophy`. So the factor
-`electro` overall has some effect on heart disease, which is
-reflected in the `drop1` P-value of 0.12: this might go later,
-but it has to stay for now because at least one of its levels is
-different from the others in its effect on heart disease. (In backward
-elimination, multi-level factors are removed in their entirety if
-*none* of their levels have a different effect from any of the
-others.) 
-
-The power just went out here, so I am using my laptop on battery on
-its own screen, rather than on the big screen I have in my office,
-which is much better.
-
-
-
-(e) I'm not going to make you do the whole backward elimination
-(I'm going to have you use `step` for that later), but do one
-step: that is, fit a model removing the variable you think should be
-removed, using `update`, and then run `drop1` again to
-see which variable will be removed next.
-
-
-Solution
-
-
-`update` is the obvious choice here, since we're making a
-small change to a *very* big model:
-
-```r
-heart.2=update(heart.1,.~.-high.blood.sugar)
-drop1(heart.2,test="Chisq")
-```
-
-```
-## Single term deletions
-## 
-## Model:
-## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
-##     serum.chol + electro + max.hr + angina + oldpeak + slope + 
-##     colored + thal
-##            Df Deviance    AIC     LRT  Pr(>Chi)    
-## <none>          169.25 205.25                      
-## age         1   169.66 203.66  0.4104  0.521756    
-## sex         1   179.27 213.27 10.0229  0.001546 ** 
-## pain.type   3   190.54 220.54 21.2943 9.145e-05 ***
-## resting.bp  1   173.84 207.84  4.5942  0.032080 *  
-## serum.chol  1   171.69 205.69  2.4458  0.117841    
-## electro     2   171.65 203.65  2.3963  0.301750    
-## max.hr      1   172.35 206.35  3.0969  0.078440 .  
-## angina      1   170.78 204.78  1.5323  0.215764    
-## oldpeak     1   173.26 207.26  4.0094  0.045248 *  
-## slope       2   173.18 205.18  3.9288  0.140240    
-## colored     1   191.87 225.87 22.6232 1.971e-06 ***
-## thal        2   181.61 213.61 12.3588  0.002072 ** 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-   
-
-The power is back. 
-
-The next variable to go is indeed `age`, with a P-value that
-has hardly changed: it is now 0.5218.
-    
-
-
-(f) Use `step` to do a backward elimination to find which
-variables have an effect on heart disease. Display your final model
-(which you can do by saving the output from `step` in a
-variable, and asking for the summary of that. In `step`,
-you'll need to specify a starting model (the one from part
-(??part:heart-first??)), the direction of elimination, and the test
-to base the elimination decision on (the same one as you used in
-`drop1`). 
-
-
-Solution
-
-
-The hints ought to lead you to this:
-
-```r
-heart.3=step(heart.1,direction="backward",test="Chisq")
-```
-
-```
-## Start:  AIC=206.9
-## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
-##     serum.chol + high.blood.sugar + electro + max.hr + angina + 
-##     oldpeak + slope + colored + thal
-## 
-##                    Df Deviance    AIC     LRT  Pr(>Chi)    
-## - high.blood.sugar  1   169.25 205.25  0.3528 0.5525052    
-## - age               1   169.27 205.27  0.3705 0.5427474    
-## - electro           2   171.31 205.31  2.4119 0.2994126    
-## - angina            1   170.55 206.55  1.6562 0.1981121    
-## <none>                  168.90 206.90                      
-## - slope             2   172.98 206.98  4.0844 0.1297422    
-## - serum.chol        1   171.34 207.34  2.4484 0.1176468    
-## - max.hr            1   171.84 207.84  2.9391 0.0864608 .  
-## - oldpeak           1   172.44 208.44  3.5449 0.0597303 .  
-## - resting.bp        1   173.78 209.78  4.8793 0.0271810 *  
-## - thal              2   180.78 214.78 11.8809 0.0026308 ** 
-## - sex               1   179.16 215.16 10.2684 0.0013533 ** 
-## - pain.type         3   187.85 219.85 18.9557 0.0002792 ***
-## - colored           1   191.78 227.78 22.8878 1.717e-06 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Step:  AIC=205.25
-## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
-##     serum.chol + electro + max.hr + angina + oldpeak + slope + 
-##     colored + thal
-## 
-##              Df Deviance    AIC     LRT  Pr(>Chi)    
-## - electro     2   171.65 203.65  2.3963  0.301750    
-## - age         1   169.66 203.66  0.4104  0.521756    
-## - angina      1   170.78 204.78  1.5323  0.215764    
-## - slope       2   173.18 205.18  3.9288  0.140240    
-## <none>            169.25 205.25                      
-## - serum.chol  1   171.69 205.69  2.4458  0.117841    
-## - max.hr      1   172.35 206.35  3.0969  0.078440 .  
-## - oldpeak     1   173.26 207.26  4.0094  0.045248 *  
-## - resting.bp  1   173.84 207.84  4.5942  0.032080 *  
-## - sex         1   179.27 213.27 10.0229  0.001546 ** 
-## - thal        2   181.61 213.61 12.3588  0.002072 ** 
-## - pain.type   3   190.54 220.54 21.2943 9.145e-05 ***
-## - colored     1   191.87 225.87 22.6232 1.971e-06 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Step:  AIC=203.65
-## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
-##     serum.chol + max.hr + angina + oldpeak + slope + colored + 
-##     thal
-## 
-##              Df Deviance    AIC     LRT  Pr(>Chi)    
-## - age         1   172.03 202.03  0.3894 0.5326108    
-## - angina      1   173.13 203.13  1.4843 0.2231042    
-## <none>            171.65 203.65                      
-## - slope       2   175.99 203.99  4.3442 0.1139366    
-## - max.hr      1   175.00 205.00  3.3560 0.0669599 .  
-## - serum.chol  1   175.11 205.11  3.4610 0.0628319 .  
-## - oldpeak     1   175.42 205.42  3.7710 0.0521485 .  
-## - resting.bp  1   176.61 206.61  4.9639 0.0258824 *  
-## - thal        2   182.91 210.91 11.2633 0.0035826 ** 
-## - sex         1   182.77 212.77 11.1221 0.0008531 ***
-## - pain.type   3   192.83 218.83 21.1859 9.632e-05 ***
-## - colored     1   194.90 224.90 23.2530 1.420e-06 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Step:  AIC=202.03
-## factor(heart.disease) ~ sex + pain.type + resting.bp + serum.chol + 
-##     max.hr + angina + oldpeak + slope + colored + thal
-## 
-##              Df Deviance    AIC     LRT  Pr(>Chi)    
-## - angina      1   173.57 201.57  1.5385 0.2148451    
-## <none>            172.03 202.03                      
-## - slope       2   176.33 202.33  4.2934 0.1168678    
-## - max.hr      1   175.00 203.00  2.9696 0.0848415 .  
-## - serum.chol  1   175.22 203.22  3.1865 0.0742492 .  
-## - oldpeak     1   175.92 203.92  3.8856 0.0487018 *  
-## - resting.bp  1   176.63 204.63  4.5911 0.0321391 *  
-## - thal        2   183.38 209.38 11.3500 0.0034306 ** 
-## - sex         1   183.97 211.97 11.9388 0.0005498 ***
-## - pain.type   3   193.71 217.71 21.6786 7.609e-05 ***
-## - colored     1   195.73 223.73 23.6997 1.126e-06 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Step:  AIC=201.57
-## factor(heart.disease) ~ sex + pain.type + resting.bp + serum.chol + 
-##     max.hr + oldpeak + slope + colored + thal
-## 
-##              Df Deviance    AIC     LRT  Pr(>Chi)    
-## <none>            173.57 201.57                      
-## - slope       2   178.44 202.44  4.8672 0.0877201 .  
-## - serum.chol  1   176.83 202.83  3.2557 0.0711768 .  
-## - max.hr      1   177.52 203.52  3.9442 0.0470322 *  
-## - oldpeak     1   177.79 203.79  4.2135 0.0401045 *  
-## - resting.bp  1   178.56 204.56  4.9828 0.0256006 *  
-## - thal        2   186.22 210.22 12.6423 0.0017978 ** 
-## - sex         1   185.88 211.88 12.3088 0.0004508 ***
-## - pain.type   3   200.68 222.68 27.1025 5.603e-06 ***
-## - colored     1   196.98 222.98 23.4109 1.308e-06 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-       
-
-The output is very long, and I made it tiny so that you would see all
-of it. In terms of AIC, which is what `step` uses, `age`
-hangs on for a bit, but eventually gets eliminated. 
-
-There are a lot of variables left.
-      
-
-
-(g)      Display the summary of the model that came out of `step`.
-
-
-Solution
-
-
-This:
-
-
-```r
-summary(heart.3)
-```
-
-```
-## 
-## Call:
-## glm(formula = factor(heart.disease) ~ sex + pain.type + resting.bp + 
-##     serum.chol + max.hr + oldpeak + slope + colored + thal, family = "binomial", 
-##     data = heart)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -2.7103  -0.4546  -0.1442   0.3864   2.7121  
-## 
-## Coefficients:
-##                      Estimate Std. Error z value Pr(>|z|)    
-## (Intercept)         -4.818418   2.550437  -1.889 0.058858 .  
-## sexmale              1.850559   0.561583   3.295 0.000983 ***
-## pain.typeatypical   -1.268233   0.604488  -2.098 0.035903 *  
-## pain.typenonanginal -2.086204   0.486591  -4.287 1.81e-05 ***
-## pain.typetypical    -2.532340   0.748941  -3.381 0.000722 ***
-## resting.bp           0.024125   0.011077   2.178 0.029410 *  
-## serum.chol           0.007142   0.003941   1.812 0.069966 .  
-## max.hr              -0.020373   0.010585  -1.925 0.054262 .  
-## oldpeak              0.467028   0.233280   2.002 0.045284 *  
-## slopeflat            0.859564   0.922749   0.932 0.351582    
-## slopeupsloping      -0.165832   0.991474  -0.167 0.867167    
-## colored              1.134561   0.261547   4.338 1.44e-05 ***
-## thalnormal           0.323543   0.813442   0.398 0.690818    
-## thalreversible       1.700314   0.805127   2.112 0.034699 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 370.96  on 269  degrees of freedom
-## Residual deviance: 173.57  on 256  degrees of freedom
-## AIC: 201.57
-## 
-## Number of Fisher Scoring iterations: 6
-```
-
- 
-
-Not all of the P-values in the `step` output wound up being
-less than 0.05, but they are all at least reasonably small. As
-discussed above, some of the P-values in the `summary` are
-definitely *not* small, but they go with factors where there are
-significant effects *somewhere*. For example, `thalnormal`
-is not significant (that is, `normal` is not significantly
-different from the baseline `fixed`), but the other level
-`reversible` *is* different from `fixed`. You might
-be wondering about `slope`: on the `summary` there is
-nothing close to significance, but on the `step` output,
-`slope` has at least a reasonably small P-value of 0.088. This
-is because the significant difference does not involve the baseline:
-it's actually between `flat` with a positive slope and
-`upsloping` with a negative one. 
-  
-
-
-(h) We are going to make a large number of predictions. Create
-a data frame that contains all combinations of representative
-values for all the variables in the model that came out of
-`step`. By "representative" I mean all the values for a
-categorical variable, and the first and third quartiles for a numeric
-variable.
-
-
-Solution
-
-
-Let's take a breath first.
-There are two pieces of stuff to do here: we need to get the
-quartiles of the quantitative variables, and we need all the
-different values of the categorical ones. There are several of
-each, so we want some kind of automated method.
-The easy way of getting the quartiles is via `summary`
-of the whole data frame:
-
-```r
-summary(heart)
-```
-
-```
-##        X1              age            sex             pain.type        
-##  Min.   :  1.00   Min.   :29.00   Length:270         Length:270        
-##  1st Qu.: 68.25   1st Qu.:48.00   Class :character   Class :character  
-##  Median :135.50   Median :55.00   Mode  :character   Mode  :character  
-##  Mean   :135.50   Mean   :54.43                                        
-##  3rd Qu.:202.75   3rd Qu.:61.00                                        
-##  Max.   :270.00   Max.   :77.00                                        
-##    resting.bp      serum.chol    high.blood.sugar     electro         
-##  Min.   : 94.0   Min.   :126.0   Length:270         Length:270        
-##  1st Qu.:120.0   1st Qu.:213.0   Class :character   Class :character  
-##  Median :130.0   Median :245.0   Mode  :character   Mode  :character  
-##  Mean   :131.3   Mean   :249.7                                        
-##  3rd Qu.:140.0   3rd Qu.:280.0                                        
-##  Max.   :200.0   Max.   :564.0                                        
-##      max.hr         angina             oldpeak        slope          
-##  Min.   : 71.0   Length:270         Min.   :0.00   Length:270        
-##  1st Qu.:133.0   Class :character   1st Qu.:0.00   Class :character  
-##  Median :153.5   Mode  :character   Median :0.80   Mode  :character  
-##  Mean   :149.7                      Mean   :1.05                     
-##  3rd Qu.:166.0                      3rd Qu.:1.60                     
-##  Max.   :202.0                      Max.   :6.20                     
-##     colored           thal           heart.disease     
-##  Min.   :0.0000   Length:270         Length:270        
-##  1st Qu.:0.0000   Class :character   Class :character  
-##  Median :0.0000   Mode  :character   Mode  :character  
-##  Mean   :0.6704                                        
-##  3rd Qu.:1.0000                                        
-##  Max.   :3.0000
-```
-
-         
-This is the old-fashioned "base R" way of doing it. The
-`tidyverse` way is to get the Q1 and Q3 of just the variables
-that are numeric. To that, we'll write little functions to get Q1 and
-Q3 of anything, and then use `summarize_if` to apply those to
-the quantitative variables:
-
-
-```r
-q1=function(x) quantile(x,0.25)
-q3=function(x) quantile(x,0.75)
-heart %>% summarize_if(is.numeric,funs(q1,q3))
-```
-
-```
-## # A tibble: 1 x 14
-##   X1_q1 age_q1 resting.bp_q1 serum.chol_q1 max.hr_q1 oldpeak_q1 colored_q1
-##   <dbl>  <dbl>         <dbl>         <dbl>     <dbl>      <dbl>      <dbl>
-## 1  68.2     48           120           213       133          0          0
-## # ... with 7 more variables: X1_q3 <dbl>, age_q3 <dbl>,
-## #   resting.bp_q3 <dbl>, serum.chol_q3 <dbl>, max.hr_q3 <dbl>,
-## #   oldpeak_q3 <dbl>, colored_q3 <dbl>
-```
-
- 
-
-These are actually all the Q1s followed by all the Q3s,  but it's hard
-to see that because the column names got truncated (every time you see
-a squiggle it means that there is more not shown). One way to see the
-results is to "transpose" the result with the variable-quartile
-combinations in a column and the actual quartile values in another:
-
-
-```r
-heart2 = heart %>% 
-summarize_if(is.numeric,funs(q1,q3)) %>%
-gather(vq,quartile,everything())  
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-```
-
-```r
-heart2
-```
-
-```
-## # A tibble: 14 x 2
-##    vq            quartile
-##    <chr>            <dbl>
-##  1 X1_q1             68.2
-##  2 age_q1            48  
-##  3 resting.bp_q1    120  
-##  4 serum.chol_q1    213  
-##  5 max.hr_q1        133  
-##  6 oldpeak_q1         0  
-##  7 colored_q1         0  
-##  8 X1_q3            203. 
-##  9 age_q3            61  
-## 10 resting.bp_q3    140  
-## 11 serum.chol_q3    280  
-## 12 max.hr_q3        166  
-## 13 oldpeak_q3         1.6
-## 14 colored_q3         1
-```
-
- 
-
-If you want to be really fancy:
-
-
-```r
-heart %>% 
-summarize_if(is.numeric,funs(q1,q3)) %>%
-gather(vq,quartile,everything()) %>%
-separate(vq,c("variable","q"),"_") %>%
-spread(q,quartile)
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-```
-
-```
-## # A tibble: 7 x 3
-##   variable      q1    q3
-##   <chr>      <dbl> <dbl>
-## 1 age         48    61  
-## 2 colored      0     1  
-## 3 max.hr     133   166  
-## 4 oldpeak      0     1.6
-## 5 resting.bp 120   140  
-## 6 serum.chol 213   280  
-## 7 X1          68.2 203.
-```
-
- 
-
-The logic is (beyond what we had above) splitting up `vq` into
-the two things it really is (I had to put in the `"_"` at the
-end because it would otherwise also split up at the dots), and then I
-deliberately untidy the column that contains `q1` and
-`q3` into two columns of those names.
-
-The categorical variables are a bit trickier, because they will have
-different numbers of possible values. Here's my idea:
-
-
-```r
-heart %>%
-select_if(is.character) %>%
-mutate_all(factor) %>%
-summary()
-```
-
-```
-##      sex             pain.type   high.blood.sugar        electro   
-##  female: 87   asymptomatic:129   no :230          hypertrophy:137  
-##  male  :183   atypical    : 42   yes: 40          normal     :131  
-##               nonanginal  : 79                    STT        :  2  
-##               typical     : 20                                     
-##  angina            slope             thal     heart.disease
-##  no :181   downsloping: 18   fixed     : 14   no :150      
-##  yes: 89   flat       :122   normal    :152   yes:120      
-##            upsloping  :130   reversible:104                
-## 
-```
-
- 
-
-My thought was that if you pass a genuine factor into `summary`
-(as opposed to a categorical variable that is text), it displays all
-its "levels" (different categories). So, to get to that point, I had
-to select all the categorical-as-text variables (which is actually all
-the ones that are not numeric), and then make a factor out of each of
-them. `mutate_all` does the same thing to all the columns: it
-runs `factor` on them, and saves the results back in variables
-of the same name as they were before. Using `summary` also
-shows how many observations we had in each category.
-
-What I would really like to do is to save these category names
-somewhere so I don't have to type them below when I make all possible
-combinations. My go at that:
-
-
-```r
-heart3 = heart %>%
-select_if(is.character) %>%
-gather(vname,value,everything()) %>%
-distinct() 
-heart3 %>% print(n=Inf)
-```
-
-```
-## # A tibble: 21 x 2
-##    vname            value       
-##    <chr>            <chr>       
-##  1 sex              male        
-##  2 sex              female      
-##  3 pain.type        asymptomatic
-##  4 pain.type        nonanginal  
-##  5 pain.type        atypical    
-##  6 pain.type        typical     
-##  7 high.blood.sugar no          
-##  8 high.blood.sugar yes         
-##  9 electro          hypertrophy 
-## 10 electro          normal      
-## 11 electro          STT         
-## 12 angina           no          
-## 13 angina           yes         
-## 14 slope            flat        
-## 15 slope            upsloping   
-## 16 slope            downsloping 
-## 17 thal             normal      
-## 18 thal             reversible  
-## 19 thal             fixed       
-## 20 heart.disease    yes         
-## 21 heart.disease    no
-```
-
- 
-
-Gosh, that was easier than I thought. A *lot* easier. The
-technique is a lot like that idea for making facetted plots of
-something against "all the $x$s": you gather everything up into one
-column containing a variable name and another column containing the
-variable value. This contains a lot of repeats; the `distinct`
-keeps one of each and throws away the rest.
-
-Hmm, another way would be to count everything:
-
-
-```r
-heart3 = heart %>%
-select_if(is.character) %>%
-gather(vname,value,everything()) %>%
-count(vname,value) 
-heart3 %>% print(n=Inf)
-```
-
-```
-## # A tibble: 21 x 3
-##    vname            value            n
-##    <chr>            <chr>        <int>
-##  1 angina           no             181
-##  2 angina           yes             89
-##  3 electro          hypertrophy    137
-##  4 electro          normal         131
-##  5 electro          STT              2
-##  6 heart.disease    no             150
-##  7 heart.disease    yes            120
-##  8 high.blood.sugar no             230
-##  9 high.blood.sugar yes             40
-## 10 pain.type        asymptomatic   129
-## 11 pain.type        atypical        42
-## 12 pain.type        nonanginal      79
-## 13 pain.type        typical         20
-## 14 sex              female          87
-## 15 sex              male           183
-## 16 slope            downsloping     18
-## 17 slope            flat           122
-## 18 slope            upsloping      130
-## 19 thal             fixed           14
-## 20 thal             normal         152
-## 21 thal             reversible     104
-```
-
- 
-
-That perhaps is more obvious in retrospect, because there are no new
-tools there.
-
-Now, we come to setting up the variables that we are going to make all
-combinations of. For a quantitative variable such as `age`, I
-need to go back to `heart2`:
-
-
-```r
-heart2
-```
-
-```
-## # A tibble: 14 x 2
-##    vq            quartile
-##    <chr>            <dbl>
-##  1 X1_q1             68.2
-##  2 age_q1            48  
-##  3 resting.bp_q1    120  
-##  4 serum.chol_q1    213  
-##  5 max.hr_q1        133  
-##  6 oldpeak_q1         0  
-##  7 colored_q1         0  
-##  8 X1_q3            203. 
-##  9 age_q3            61  
-## 10 resting.bp_q3    140  
-## 11 serum.chol_q3    280  
-## 12 max.hr_q3        166  
-## 13 oldpeak_q3         1.6
-## 14 colored_q3         1
-```
-
- 
-
-and pull out the rows whose names contain `age_`. This is done
-using `str_detect`
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you're selecting *columns*,  you can use select-helpers, but for rows, not.</span> from
-`stringr`.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which is loaded with the *tidyverse*  so you don't have to load it.</span> 
-Here's how it goes for `age`:
-
-
-```r
-heart2 %>%
-filter(str_detect(vq,"age_"))
-```
-
-```
-## # A tibble: 2 x 2
-##   vq     quartile
-##   <chr>     <dbl>
-## 1 age_q1       48
-## 2 age_q3       61
-```
-
- 
-
-and one more step to get just the quartiles:
-
-
-```r
-heart2 %>%
-filter(str_detect(vq,"age_")) %>%
-pull(quartile)  
-```
-
-```
-## [1] 48 61
-```
-
- 
-
-We'll be doing this a few times, so we should write a function to do it:
-
-
-```r
-get_quartiles=function(d,x) {
-d %>% 
-filter(str_detect(vq,x)) %>%
-pull(quartile)  
-}
-```
-
-
-
-and to test:
-
-
-```r
-get_quartiles(heart2,"age_")
-```
-
-```
-## [1] 48 61
-```
-
- 
-
-Yep. I put the underscore in so as to not catch other variables that
-have `age` inside them but not at the end.
-
-For the categorical variables, we need to look in `heart3`:
-
-
-```r
-heart3
-```
-
-```
-## # A tibble: 21 x 3
-##    vname            value            n
-##    <chr>            <chr>        <int>
-##  1 angina           no             181
-##  2 angina           yes             89
-##  3 electro          hypertrophy    137
-##  4 electro          normal         131
-##  5 electro          STT              2
-##  6 heart.disease    no             150
-##  7 heart.disease    yes            120
-##  8 high.blood.sugar no             230
-##  9 high.blood.sugar yes             40
-## 10 pain.type        asymptomatic   129
-## # ... with 11 more rows
-```
-
- 
-
-then choose the rows with the right thing in `vname`, and then
-pull just the `value` column. This is sufficiently like the
-previous one that I think we can write a function right away:
-
-
-```r
-get_categories=function(d,x) {
-d %>% filter(vname==x) %>%
-pull(value)  
-}
-get_categories(heart3, "electro")
-```
-
-```
-## [1] "hypertrophy" "normal"      "STT"
-```
-
- 
-All right, setup, using my usual habit of plural names, and using
-those functions we just wrote: 
-
-
-```r
-sexes=get_categories(heart3,"sex")
-pain.types=get_categories(heart3,"pain.type")
-resting.bps=get_quartiles(heart2,"resting.bp_")
-serum.chols=get_quartiles(heart2,"serum.chol_")
-max.hrs=get_quartiles(heart2,"max.hr_")
-oldpeaks=get_quartiles(heart2,"oldpeak_")
-slopes=get_categories(heart3,"slope")
-coloreds=get_quartiles(heart2,"colored_")
-thals=get_categories(heart3,"thal")
-```
-
- 
-
-All combos of all of those (and there will be a lot of those):
-
-
-```r
-heart.new=crossing(sex=sexes,pain.type=pain.types,resting.bp=resting.bps,
-serum.chol=serum.chols,max.hr=max.hrs,oldpeak=oldpeaks,slope=slopes,
-colored=coloreds,thal=thals)
-heart.new
-```
-
-```
-## # A tibble: 2,304 x 9
-##    sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal
-##    <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <ch>
-##  1 fema… asymptom…        120        213    133       0 down…       0 fix…
-##  2 fema… asymptom…        120        213    133       0 down…       0 nor…
-##  3 fema… asymptom…        120        213    133       0 down…       0 rev…
-##  4 fema… asymptom…        120        213    133       0 down…       1 fix…
-##  5 fema… asymptom…        120        213    133       0 down…       1 nor…
-##  6 fema… asymptom…        120        213    133       0 down…       1 rev…
-##  7 fema… asymptom…        120        213    133       0 flat        0 fix…
-##  8 fema… asymptom…        120        213    133       0 flat        0 nor…
-##  9 fema… asymptom…        120        213    133       0 flat        0 rev…
-## 10 fema… asymptom…        120        213    133       0 flat        1 fix…
-## # ... with 2,294 more rows
-```
-
- 
-
-Yeah, that's a lot. Fortunately, we won't have to look at them all.
-        
-
-
-(i) Obtain the predicted probabilities of heart disease for
-the data frame you constructed in the last part, using your
-model that came out of `step`. Add these predictions to
-the data frame from the previous part (as a column in that data
-frame). 
-
-
-Solution
-
-
-Get the predictions, which is less scary than it seems:
-
-```r
-p=predict(heart.3,heart.new,type="response")
-```
-
-         
-
-and the easiest way to add these to `heart.new` is this:
-
-
-```r
-heart.new$pred=p
-```
-$ %$ %$
-
-Or, if you like, with a `mutate` of this kind:
-
-
-```r
-heart.x = heart.new %>% mutate(prediction=p) 
-```
-
- 
-
-Let's take a look at a few of the predictions, by way of sanity-checking:
-
-
-```r
-heart.new %>% sample_n(8)
-```
-
-```
-## # A tibble: 8 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        120        280    133     0   down…       1 norm…
-## 2 fema… nonangin…        120        280    166     0   flat        1 fixed
-## 3 male  typical          140        280    166     0   upsl…       0 fixed
-## 4 fema… typical          140        213    133     0   flat        1 fixed
-## 5 male  typical          120        213    133     1.6 flat        0 reve…
-## 6 male  typical          120        213    133     0   down…       0 reve…
-## 7 fema… typical          120        280    133     1.6 down…       0 fixed
-## 8 fema… nonangin…        140        213    166     1.6 down…       1 norm…
-## # ... with 1 more variable: pred <dbl>
-```
-
- 
-
-This seems at least reasonably sane.
-        
-
-
-(j) Find the largest predicted probability (which is the
-predicted probability of heart disease) and display all the
-variables that it was a prediction for. 
-
-
-Solution
-
-
-This can be done in one step:
-
-```r
-heart.new %>% filter(pred==max(pred))
-```
-
-```
-## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
-## # ... with 1 more variable: pred <dbl>
-```
-
-         
-
-or if you didn't think of that, you can find the maximum first, and
-then display the rows with predictions close to it:
-
-
-```r
-heart.new %>% summarize(m=max(pred))
-```
-
-```
-## # A tibble: 1 x 1
-##       m
-##   <dbl>
-## 1 0.984
-```
-
-```r
-heart.new %>% filter(pred>0.98)
-```
-
-```
-## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
-## # ... with 1 more variable: pred <dbl>
-```
-
- 
-
-or even find *which* row has the maximum, and then display that row:
-
-
-```r
-heart.new %>% summarize(row=which.max(pred))
-```
-
-```
-## # A tibble: 1 x 1
-##     row
-##   <int>
-## 1  1398
-```
-
-```r
-heart.new %>% slice(1398)
-```
-
-```
-## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
-## # ... with 1 more variable: pred <dbl>
-```
-
- 
-
-or sort the rows by `pred`, descending, and display the top few:
-
-
-```r
-heart.new %>% arrange(desc(pred)) %>% print(n=8)
-```
-
-```
-## # A tibble: 2,304 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
-## 2 male  asymptom…        140        213    133     1.6 flat        1 reve…
-## 3 male  asymptom…        120        280    133     1.6 flat        1 reve…
-## 4 male  asymptom…        140        280    166     1.6 flat        1 reve…
-## 5 male  asymptom…        140        280    133     0   flat        1 reve…
-## 6 male  asymptom…        140        280    133     1.6 down…       1 reve…
-## 7 male  asymptom…        120        213    133     1.6 flat        1 reve…
-## 8 male  asymptom…        140        280    133     1.6 upsl…       1 reve…
-## # ... with 2,296 more rows, and 1 more variable: pred <dbl>
-```
-
- 
-        
-
-
-(k) Compare the `summary` of the final model from
-`step` with your highest predicted heart disease
-probability and the values of the other variables that make it
-up. Are they consistent?
-
-
-Solution
-
-
-Since we were predicting the probability of heart disease, a
-more positive slope in the model from `step` will be
-associated with a higher probability of heart disease. So,
-there, we are looking for a couple of things: if the variable
-is a factor, we're looking for the level with the most
-positive slope (bearing in mind that this might be the
-baseline), and for a numeric variable, if the slope is
-positive, a *high* value is associated with heart
-disease, and if negative, a low value.
-Bearing that in mind, we go back to my
-`summary(heart.3)` and we have:
-
-
-* `sex`: being male has the higher risk, by a lot
-
-* `pain`: all the slopes shown are negative, so the
-highest risk goes with the baseline one
-`asymptomatic`.
-
-* `resting.bp`: positive slope, so higher risk with
-higher value.
-
-* `serum.chol`: same.
-
-* `max.hr`: negative slope, so greatest risk with
-*smaller* value.
-
-* `oldpeak`: positive slope, greater risk with
-higher value again.
-
-* `slope`: `flat` has greatest risk.
-
-* `colored`: positive slope, so beware of higher
-value.
-
-* `thal`: `reversible` has greatest risk.
-
-Then we can do the same thing for the prediction. For the
-numerical variables, we may need to check back to the previous
-part to see whether the value shown was high or low. Once you
-have done that, you can see that the variable values for the
-highest predicted probability do indeed match the ones we
-thought should be the highest risk.
-The interesting thing about this is that after adjusting for
-all of the other variables, there is a greater risk of heart
-disease if you are male (and the model shows that the risk is
-*much* greater). That is to say, it's being male that
-makes the difference, not the fact that any of the other
-variables are different for males.
-        
-
-
-
-
-
-
+##  Who needs the most intensive care?
 
 
  The "APACHE II" is a scale for assessing patients who
@@ -6915,7 +5700,7 @@ score, and the number of patients with that score who died.
 
 
 
-(a)[2] Read in and display the data (however much of it
+(a) Read in and display the data (however much of it
 displays). Why are you convinced that have the right thing?
 
 Solution
@@ -6976,7 +5761,7 @@ has something to do with the data.
 have to be *very* ill to get a score anywhere near that high.
 
 
-(b)[2] Does each row of the data frame relate to one patient or
+(b) Does each row of the data frame relate to one patient or
 sometimes to more than one? Explain briefly.
 
 Solution
@@ -6993,7 +5778,7 @@ the data frame actually *do* refer to only one patient each
 than one patient.
 
 
-(c)[3] Explain why this is the kind of situation where you need a
+(c) Explain why this is the kind of situation where you need a
 two-column response, and create this response variable, bearing in
 mind that I will (later) want you to estimate the probability of
 dying, given the `apache` score.
@@ -7134,7 +5919,7 @@ good.
 I have no objection to your displaying the response matrix.
 
 
-(d)[3] Fit a logistic regression to estimate the probability of
+(d) Fit a logistic regression to estimate the probability of
 death from the `apache` score, and display the results.
 
 Solution
@@ -7178,7 +5963,7 @@ called `deaths.1` or something like that, but that would be a
 really depressing name.
 
 
-(e)[2] Is there a significant effect of `apache` score on the
+(e) Is there a significant effect of `apache` score on the
 probability of survival? Explain briefly.
 
 Solution
@@ -7189,7 +5974,7 @@ A gimme two points. The P-value for `apache` is $4.94
 has an effect on the probability of survival.
 
 
-(f)[2] Is the effect of a larger `apache` score to increase or to
+(f) Is the effect of a larger `apache` score to increase or to
 decrease the probability of death? Explain briefly.
 
 Solution
@@ -7206,7 +5991,7 @@ because this says that the probability of survival goes down as
 `apache` goes up.
 
 
-(g)[3] Obtain the predicted probability of death for each of the
+(g) Obtain the predicted probability of death for each of the
 `apache` scores that were in the data set. Display these predicted
 probabilities next to the `apache` values that they came
 from. (You can display all of them.)
@@ -7273,7 +6058,7 @@ The predicted probability (of dying) does indeed go up as
 `apache` goes up.
 
 
-(h)[4] Make a plot of predicted death probability against
+(h) Make a plot of predicted death probability against
 `apache` score (joined by lines) with, also on the plot, the
 observed proportion of deaths within each `apache` score,
 plotted against `apache` score. Does there seem to be good
@@ -7292,7 +6077,7 @@ ggplot(aes(x=apache,y=pred))+geom_line()+
 geom_point(aes(y=obs_prop))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-180-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-152-1.png" width="672"  />
 
      
 
@@ -7329,7 +6114,7 @@ ggplot(aes(x=apache,y=pred))+geom_line()+
 geom_point(aes(y=obs_prop,size=patients))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-181-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-153-1.png" width="672"  />
 
      
 The points that are far from the prediction are mostly based on a
@@ -7350,6 +6135,7 @@ geom_point(aes(y=obs_prop),size=5)
 
 
 
+##  Go away and don't come back!
 
 
  When a person has a heart attack and survives it, the major
@@ -7372,7 +6158,7 @@ score.
 
 
 
-(a)[2] Read in and display the data.
+(a) Read in and display the data.
 
 Solution
 
@@ -7428,7 +6214,7 @@ The anxiety scores are numbers; the other two variables are "yes"
 and "no", which makes perfect sense.
 
 
-(b)[3]??part:fit?? 
+(b)??part:fit?? 
 Fit a logistic regression predicting whether or not a heart attack
 survivor has a second heart attack, as it depends on anxiety score
 and whether or not the person took the anger management
@@ -7481,7 +6267,7 @@ categories (that needs to be turned into a `factor` for
 `glm`). 
 
 
-(c)[2] In the previous part, how can you tell that you were
+(c) In the previous part, how can you tell that you were
 predicting the probability of having a second heart attack (as
 opposed to the probability of not having one)?
 
@@ -7493,7 +6279,7 @@ The levels of a factor are taken in alphabetical order, with
 of the second one `y`.
 
 
-(d)[4]??part:preds??
+(d)??part:preds??
 For the two possible values `y` and `n` of
 `anger` and the anxiety scores 40, 50 and 60, make a data
 frame containing all six combinations, and use it to obtain
@@ -7572,7 +6358,7 @@ cbind(new,p)
  
 
 
-(e)[4] Use your predictions from the previous part to describe the
+(e) Use your predictions from the previous part to describe the
 effect of changes in `anxiety` and `anger` on the
 probability of a second heart attack.
 
@@ -7604,7 +6390,7 @@ kind of thing until we get to analysis of variance, so you don't
 need to worry about it yet.
 
 
-(f)[2] Are the effects you described in the previous part
+(f) Are the effects you described in the previous part
 consistent with the `summary` output from `glm` that
 you obtained in (??part:fit??)? Explain briefly how they are, or
 are not. (You need an explanation for each of `anxiety` and
@@ -7637,7 +6423,7 @@ enough even with this small data set. Here's a visual:
 ggplot(ha,aes(x=second,y=anxiety))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-189-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-161-1.png" width="672"  />
 
      
 
@@ -7664,7 +6450,7 @@ bar chart:
 ggplot(ha,aes(x=anger,fill=second))+geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-190-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-162-1.png" width="672"  />
 
  
 

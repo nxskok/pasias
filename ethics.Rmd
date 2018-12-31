@@ -1,3 +1,4 @@
+##  The brain of a cat
 
 
  A large number (315) of psychology students were asked to
@@ -324,6 +325,25 @@ anova(decide.2,decide.3,test="Chisq")
 The P-value is not less than 0.05, but it *is* less than 0.10,
 which is what I implied to assess it with, so the scenario does make some
 kind of difference.
+
+Extra: another way to do this, which I like better (but the
+`anova` way was what I asked in the original question), is to
+look at `decide.3` and ask "what can I get rid of", in such a
+way that categorical variables stay or go as a whole.  This is done
+using `drop1`. It's a little different from the corresponding
+thing in regression because the right way to do the test is not an F
+test, but now a chi-squared test (this is true for all generalized
+linear models of which logistic regression is one):
+
+```{r }
+drop1(decide.3, test="Chisq")
+```
+
+ 
+
+The test for `scenario` has four degrees of freedom (since
+there are five scenarios), and is in fact exactly the same test as in
+`anova`, significant at $\alpha=0.10$.
    
 
 
@@ -433,8 +453,8 @@ new
 p=predict(decide.4,new,type="response")
 cbind(new,p)
 ```
-$ %$
 
+ 
 The probability of "stop" is a lot higher for females than for males
 (that is the strong `gender` effect we found earlier), but the
 *pattern* is about the same for males and females: the difference in
@@ -482,15 +502,15 @@ saying that the research should stop. The slope coefficient for
 `relativity` is negative, so it's the other way around: a
 higher relativity score goes with a *lower* chance of saying
 that the research should stop.
-That's all I needed, but we can look back at the description of
-these scales in the question. 
+That's all I needed, but as an extra, we can look back at the
+description of these scales in the question.
 The `relativism` one was that a person believed that the
 most moral action depends on the situation (as opposed to a person
 having something like religious faith that asserts universal moral
 principles that are always true. That would be a low score on the
 relativism scale). Somebody with a low score on this scale might
-believe something like ``it is always wrong to experiment on
-animals'', whereas somebody with a high relativism score  might
+believe something like 
+"it is always wrong to experiment on animals", whereas somebody with a high relativism score  might
 say that it was sometimes justified. Thus, other things being
 equal, a low relativism score would go with "stop" and a high
 relativism score would (or  might) go with "continue". This
