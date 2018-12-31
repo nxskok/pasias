@@ -1,0 +1,238 @@
+
+
+ When a person has a heart attack and survives it, the major
+concern of health professionals is to prevent the person having a
+second heart attack. Two factors that are believed to be important are
+anger and anxiety; if a heart attack survivor tends to be angry or
+anxious, they are believed to put themselves at increased risk of a
+second heart attack.
+
+Twenty heart attack survivors took part in a study. Each one was given
+a test designed to assess their anxiety (a higher score on the test
+indicates higher anxiety), and some of the survivors took an anger
+management course. 
+The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/ha2.txt); `y` and
+`n` denote "yes" and "no" respectively. The columns denote
+(i) whether or not the person had a second heart attack, (ii) whether
+or not the person took the anger management class, (iii) the anxiety
+score. 
+
+
+
+(a)[2] Read in and display the data.
+
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/ha2.txt"
+ha=read_delim(my_url," ")
+ha
+```
+
+     
+
+The anxiety scores are numbers; the other two variables are "yes"
+and "no", which makes perfect sense.
+
+
+(b)[3]??part:fit?? 
+Fit a logistic regression predicting whether or not a heart attack
+survivor has a second heart attack, as it depends on anxiety score
+and whether or not the person took the anger management
+class. Display the results.
+
+Solution
+
+
+This:
+
+```{r }
+ha.1=glm(factor(second)~anger+anxiety, family="binomial",data=ha)
+summary(ha.1)
+```
+
+ 
+
+There's no need to worry about two-column responses here, because each
+row of the data frame refers to only one person, and the response
+variable `second` is already a categorical variable with two
+categories (that needs to be turned into a `factor` for
+`glm`). 
+
+
+(c)[2] In the previous part, how can you tell that you were
+predicting the probability of having a second heart attack (as
+opposed to the probability of not having one)?
+
+Solution
+
+
+The levels of a factor are taken in alphabetical order, with
+`n` as the baseline, so we are predicting the probability
+of the second one `y`.
+
+
+(d)[4]??part:preds??
+For the two possible values `y` and `n` of
+`anger` and the anxiety scores 40, 50 and 60, make a data
+frame containing all six combinations, and use it to obtain
+predicted probabilities of a second heart attack. Display your
+predicted probabilities side by side with what they are predictions
+for.
+
+Solution
+
+
+This time, I give you the values I want the predictions for (as
+opposed to calculating something like quartiles from the data), so
+we might as well just type them in.
+Step 1 is to save them (my preference is under plural names):
+```{r }
+anxieties=c(40,50,60)
+angers=c("y","n")
+```
+
+     
+
+Step 2 is to make a data frame of combinations using
+`crossing`. I'll call mine `new`:
+
+```{r }
+new=crossing(anxiety=anxieties, anger=angers)
+new
+```
+
+ 
+
+Step 3 is to do the predictions. Into `predict` go (in order)
+the fitted model, the new data frame that we just made, and something
+to make the predictions be probabilities:
+
+```{r }
+p=predict(ha.1,new,type="response")
+```
+
+ 
+
+Step 4 is to put these next to the data frame we
+created. `cbind` is easiest, since we don't know what kind of
+thing `p` might be, and `bind_cols` is pickier:
+
+```{r }
+cbind(new,p)
+```
+
+ 
+
+
+(e)[4] Use your predictions from the previous part to describe the
+effect of changes in `anxiety` and `anger` on the
+probability of a second heart attack.
+
+Solution
+
+
+The idea is to change one variable \emph{while leaving the other
+fixed}. (This is the common refrain of "all else equal".)
+Pick a level of `anger`, say `n` (it doesn't matter
+which) and look at the effect of `anxiety`. The probability
+of a second heart attack increases sharply from 0.17 to 0.40 to
+0.69. So an increased anxiety score is associated with an
+increased probability of second heart attack (all else equal).
+To assess the effect of taking the anger management course, pick
+an `anxiety` value, say 40, and compare the probabilities
+for `anger` `n` and `y`. For someone who has
+not taken the anger management course, the probability is 0.17,
+but for someone who has, it drops all the way to 0.07. (The
+pattern is the same at the other anxiety scores.)
+Extra: the reason it doesn't matter what value of the other
+variable you look at (as long as you keep it fixed) is that the
+model is "additive" with no interaction, so that the effect of
+one variable does not depend on the value of the other one. If we
+wanted to see whether the effect of anxiety was different
+according to whether or not the person had taken the anger
+management course, we would add an interaction between
+`anxiety` and `anger`. But we won't be doing this
+kind of thing until we get to analysis of variance, so you don't
+need to worry about it yet.
+
+
+(f)[2] Are the effects you described in the previous part
+consistent with the `summary` output from `glm` that
+you obtained in (??part:fit??)? Explain briefly how they are, or
+are not. (You need an explanation for each of `anxiety` and
+`anger`, and you will probably get confused if you look at
+the P-values, so don't.)
+
+Solution
+
+
+In the previous part, we found that increased anxiety went with an
+increased probability of second heart attack. Back in
+(??part:fit??), we found a positive slope of 0.11904 for anxiety,
+which also means that a higher anxiety score goes with a higher
+probability of second heart attack.
+That was not too hard. The other one is a little more work.
+`anger` is categorical with two categories `n` and
+`y`. The first one, `n`, is the baseline, so
+`angery` shows how `y` compares to `n`. The
+slope $-1.04211$ is negative, which means that someone who has
+taken the anger management course has a *lower* probability
+of a second heart attack than someone who hasn't (all else
+equal). This is the same story that we got from the predictions. 
+That's it for that, but I suppose I should talk about those
+P-values. 
+`anxiety` is significant, so it definitely has an effect on
+the probability of a second heart attack. The pattern is clear
+enough even with this small data set. Here's a visual:
+```{r }
+ggplot(ha,aes(x=second,y=anxiety))+geom_boxplot()
+```
+
+     
+
+This is the wrong way around in terms of cause and effect, but it
+shows pretty clearly that people who suffer a second heart attack have
+a higher level of anxiety than those who don't.
+
+That's clear enough, but what about `anger`? That is *not*
+significant, but there seems to be a visible effect of `anger`
+on the predicted probabilities of (??part:preds??): there we saw
+that if you had done the anger management course, your probability of
+a second heart attack was lower. But that's only the predicted
+probability, and there is also uncertainty about that, probably quite
+a lot because we don't have much data. So if we were to think about
+confidence intervals for the predicted probabilities, they would be
+wide, and for the two levels of `anger` at a fixed
+`anxiety` they would almost certainly overlap.
+
+Another way of seeing that is a visual, which would be a side-by-side
+bar chart:
+
+```{r }
+ggplot(ha,aes(x=anger,fill=second))+geom_bar(position="dodge")
+```
+
+ 
+
+A small majority of people who took the anger management did not have
+a second heart attack, while a small minority of those who did not,
+did.
+`r tufte::margin_note("Read that carefully.")` But with these small numbers, the
+difference, even though it points the way we would have guessed, is
+not large enough to be significant:
+
+```{r }
+with(ha,table(anger,second))
+```
+
+ 
+
+This is not nearly far enough from an equal split to be
+significant. (It's the same kind of idea as for Mood's median test in
+C32.)
+
+
+

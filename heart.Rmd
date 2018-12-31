@@ -1,0 +1,682 @@
+
+
+ What is associated with heart disease? In a study, a large
+number of variables were measured, as follows:
+
+
+
+* `age` (years)
+
+* `sex` male or female
+
+* `pain.type` Chest pain type (4 values: typical angina,
+atypical angina, non-anginal pain, asymptomatic)
+
+* `resting.bp` Resting blood pressure, on admission to hospital
+
+* `serum.chol` Serum cholesterol
+
+* `high.blood.sugar`: greater than 120, yes or no
+
+* `electro` resting electrocardiographic results (normal,
+having ST-T, hypertrophy)
+
+* `max.hr` Maximum heart rate
+
+* `angina` Exercise induced angina (yes or no)
+
+* `oldpeak` ST depression induced by exercise relative to
+rest. See [link](http://lifeinthefastlane.com/ecg-library/st-segment/).
+
+* `slope` Slope of peak exercise ST segment. Sloping up,
+flat or sloping down
+
+* `colored` number of major vessels (0--3) coloured by fluoroscopy
+
+* `thal` normal, fixed defect, reversible defect
+
+* `heart.disease` 1=absent, 2=present
+
+
+I don't know what most of those are, but we will not let that stand in
+our way. Our aim is to find out what variables are associated with
+heart disease, and what values of those variables give high
+probabilities of heart disease being present. The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/heartf.csv).
+
+
+
+(a) Read in the data. Display the first few lines and convince
+yourself that those values are reasonable.
+
+
+Solution
+
+
+A `.csv` file, so:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/heartf.csv"
+heart=read_csv(my_url)
+heart
+```
+
+     
+
+This display is kind of compressed. Every time you see a squiggle, as
+in `pain~`, that means there is actually more (not shown), so
+what you do is to check that what you see here matches at least the
+start of what is supposed to be there. 
+
+You should check that the variables that should be numbers actually
+are, that the variables that should be categorical have (as far as is
+shown) the right values as per my description above, and you should
+make some comment in that direction.
+
+My variables appear to be correct, apart possibly for that variable
+`X1` which is actually just the row number.
+    
+
+
+(b) In a logistic regression, what probability will be
+predicted here? Explain briefly but convincingly. (Is each line of
+the data file one observation or a summary of several?)
+
+
+Solution
+
+
+Each line of the data file is a single observation, not
+frequencies of yes and no (like the premature babies
+question was). The response variable is a factor, so the first level
+is the baseline and the *second* level is the one
+predicted. R puts factor levels alphabetically, so `no` is
+first and `yes` is second. That is, a logistic regression
+will predict the probability that a person *does* have heart disease.
+I want to see that logic (which is why I said "convincingly"):
+one observation per line, and therefore that the second level of
+the factor is predicted, which is `yes`. 
+    
+
+
+(c)??part:heart-first?? Fit a logistic regression predicting heart disease from
+everything else (if you have a column called `X` or
+`X1`, ignore that), and display the results.
+
+
+Solution
+
+
+A lot of typing, since there are so many variables. Don't forget
+that the response variable *must* be a factor:
+```{r }
+heart.1=glm(factor(heart.disease)~age+sex+pain.type+resting.bp+serum.chol+
+high.blood.sugar+electro+max.hr+angina+oldpeak+slope+colored+thal, 
+family="binomial",data=heart)
+```
+
+ 
+
+You can split this over several lines (and probably should), but make
+sure to end each line in such a way that there is unambiguously more
+to come, for example with a plus or a comma (though probably the fact
+that you have an unclosed bracket will be enough). 
+
+The output is rather lengthy:
+
+```{r }
+summary(heart.1)
+```
+
+ 
+
+I didn't ask you for further comment, but note that quite a lot of
+these variables are factors, so you get slopes for things like
+`pain.typeatypical`. When you have a factor in a model, there
+is a slope for each level except for the first, which is a baseline
+(and its slope is taken to be zero). That would be
+`asymptomatic` for `pain.type`. The $t$-tests for the
+other levels of `pain.type` say whether that level of pain
+type differs significantly (in terms of probability of heart disease)
+from the baseline level. Here, pain type `atypical` is not
+significantly different from the baseline, but the other two pain
+types, `nonanginal` and `typical`, *are*
+significantly different. If you think about this from an ANOVA-like
+point of view, the question about `pain.type`'s significance is
+really "is there at least one of the pain types that is different from the others", and if we're thinking about whether we should keep
+`pain.type` in the logistic regression, this is the kind of
+question we should be thinking about. 
+    
+
+
+(d) Quite a lot of our explanatory variables are factors. To
+assess whether the factor as a whole should stay or can be removed,
+looking at the slopes won't help us very much (since they tell us
+whether the other levels of the factor differ from the baseline,
+which may not be a sensible comparison to make). To assess which
+variables are candidates to be removed, factors included (properly),
+we can use `drop1`. Feed `drop1` a fitted model and
+the words `test="Chisq"` (take care of the capitalization!)
+and you'll get a list of P-values. Which variable is the one that
+you would remove first? Explain briefly.
+
+
+Solution
+
+
+Following the instructions:
+
+```{r }
+drop1(heart.1,test="Chisq")
+```
+
+ 
+
+The highest P-value, 0.5525, goes with `high.blood.sugar`, so
+this one comes out first. (The P-value for `age` is almost as
+high, 0.5427, so you might guess that this will be next.)
+
+You might be curious about how these compare with the P-values on
+`summary`. These two P-values are almost the same as the ones
+on `summary`, because they are a two-level factor and a numeric
+variable respectively, and so the tests are equivalent in the two
+cases. (The P-values are not identical because the tests on
+`summary` and `drop1` are the kind of thing that would
+be identical on a regular regression but are only "asymptotically the same" 
+in logistic regression, so you'd expect them to be close
+without being the same, as here. "Asymptotically the same" means
+that if you had an infinitely large sample size, they'd be identical,
+but our sample size of 200-odd individuals is not infinitely large!
+Anyway, the largest P-value on the `summary` is 0.9965, which
+goes with `electroSTT`. `electro`, though, is a factor
+with three levels; this P-value says that `STT` is almost
+identical (in its effects on heart disease) with the baseline
+`hypertrophy`. But there is a third level, `normal`,
+which is a bit different from `hypertrophy`. So the factor
+`electro` overall has some effect on heart disease, which is
+reflected in the `drop1` P-value of 0.12: this might go later,
+but it has to stay for now because at least one of its levels is
+different from the others in its effect on heart disease. (In backward
+elimination, multi-level factors are removed in their entirety if
+*none* of their levels have a different effect from any of the
+others.) 
+
+The power just went out here, so I am using my laptop on battery on
+its own screen, rather than on the big screen I have in my office,
+which is much better.
+
+
+
+(e) I'm not going to make you do the whole backward elimination
+(I'm going to have you use `step` for that later), but do one
+step: that is, fit a model removing the variable you think should be
+removed, using `update`, and then run `drop1` again to
+see which variable will be removed next.
+
+
+Solution
+
+
+`update` is the obvious choice here, since we're making a
+small change to a *very* big model:
+```{r }
+heart.2=update(heart.1,.~.-high.blood.sugar)
+drop1(heart.2,test="Chisq")
+```
+
+   
+
+The power is back. 
+
+The next variable to go is indeed `age`, with a P-value that
+has hardly changed: it is now 0.5218.
+    
+
+
+(f) Use `step` to do a backward elimination to find which
+variables have an effect on heart disease. Display your final model
+(which you can do by saving the output from `step` in a
+variable, and asking for the summary of that. In `step`,
+you'll need to specify a starting model (the one from part
+(??part:heart-first??)), the direction of elimination, and the test
+to base the elimination decision on (the same one as you used in
+`drop1`). 
+
+
+Solution
+
+
+The hints ought to lead you to this:
+```{r size="tiny"}
+heart.3=step(heart.1,direction="backward",test="Chisq")
+```
+
+       
+
+The output is very long, and I made it tiny so that you would see all
+of it. In terms of AIC, which is what `step` uses, `age`
+hangs on for a bit, but eventually gets eliminated. 
+
+There are a lot of variables left.
+      
+
+
+(g)      Display the summary of the model that came out of `step`.
+
+
+Solution
+
+
+This:
+
+```{r }
+summary(heart.3)
+```
+
+ 
+
+Not all of the P-values in the `step` output wound up being
+less than 0.05, but they are all at least reasonably small. As
+discussed above, some of the P-values in the `summary` are
+definitely *not* small, but they go with factors where there are
+significant effects *somewhere*. For example, `thalnormal`
+is not significant (that is, `normal` is not significantly
+different from the baseline `fixed`), but the other level
+`reversible` *is* different from `fixed`. You might
+be wondering about `slope`: on the `summary` there is
+nothing close to significance, but on the `step` output,
+`slope` has at least a reasonably small P-value of 0.088. This
+is because the significant difference does not involve the baseline:
+it's actually between `flat` with a positive slope and
+`upsloping` with a negative one. 
+  
+
+
+(h) We are going to make a large number of predictions. Create
+a data frame that contains all combinations of representative
+values for all the variables in the model that came out of
+`step`. By "representative" I mean all the values for a
+categorical variable, and the first and third quartiles for a numeric
+variable.
+
+
+Solution
+
+
+Let's take a breath first.
+There are two pieces of stuff to do here: we need to get the
+quartiles of the quantitative variables, and we need all the
+different values of the categorical ones. There are several of
+each, so we want some kind of automated method.
+The easy way of getting the quartiles is via `summary`
+of the whole data frame:
+```{r }
+summary(heart)
+```
+
+         
+This is the old-fashioned "base R" way of doing it. The
+`tidyverse` way is to get the Q1 and Q3 of just the variables
+that are numeric. To that, we'll write little functions to get Q1 and
+Q3 of anything, and then use `summarize_if` to apply those to
+the quantitative variables:
+
+```{r }
+q1=function(x) quantile(x,0.25)
+q3=function(x) quantile(x,0.75)
+heart %>% summarize_if(is.numeric,funs(q1,q3))
+```
+
+ 
+
+These are actually all the Q1s followed by all the Q3s,  but it's hard
+to see that because the column names got truncated (every time you see
+a squiggle it means that there is more not shown). One way to see the
+results is to "transpose" the result with the variable-quartile
+combinations in a column and the actual quartile values in another:
+
+```{r }
+heart2 = heart %>% 
+summarize_if(is.numeric,funs(q1,q3)) %>%
+gather(vq,quartile,everything())  
+heart2
+```
+
+ 
+
+If you want to be really fancy:
+
+```{r }
+heart %>% 
+summarize_if(is.numeric,funs(q1,q3)) %>%
+gather(vq,quartile,everything()) %>%
+separate(vq,c("variable","q"),"_") %>%
+spread(q,quartile)
+```
+
+ 
+
+The logic is (beyond what we had above) splitting up `vq` into
+the two things it really is (I had to put in the `"_"` at the
+end because it would otherwise also split up at the dots), and then I
+deliberately untidy the column that contains `q1` and
+`q3` into two columns of those names.
+
+The categorical variables are a bit trickier, because they will have
+different numbers of possible values. Here's my idea:
+
+```{r }
+heart %>%
+select_if(is.character) %>%
+mutate_all(factor) %>%
+summary()
+```
+
+ 
+
+My thought was that if you pass a genuine factor into `summary`
+(as opposed to a categorical variable that is text), it displays all
+its "levels" (different categories). So, to get to that point, I had
+to select all the categorical-as-text variables (which is actually all
+the ones that are not numeric), and then make a factor out of each of
+them. `mutate_all` does the same thing to all the columns: it
+runs `factor` on them, and saves the results back in variables
+of the same name as they were before. Using `summary` also
+shows how many observations we had in each category.
+
+What I would really like to do is to save these category names
+somewhere so I don't have to type them below when I make all possible
+combinations. My go at that:
+
+```{r }
+heart3 = heart %>%
+select_if(is.character) %>%
+gather(vname,value,everything()) %>%
+distinct() 
+heart3 %>% print(n=Inf)
+```
+
+ 
+
+Gosh, that was easier than I thought. A *lot* easier. The
+technique is a lot like that idea for making facetted plots of
+something against "all the $x$s": you gather everything up into one
+column containing a variable name and another column containing the
+variable value. This contains a lot of repeats; the `distinct`
+keeps one of each and throws away the rest.
+
+Hmm, another way would be to count everything:
+
+```{r }
+heart3 = heart %>%
+select_if(is.character) %>%
+gather(vname,value,everything()) %>%
+count(vname,value) 
+heart3 %>% print(n=Inf)
+```
+
+ 
+
+That perhaps is more obvious in retrospect, because there are no new
+tools there.
+
+Now, we come to setting up the variables that we are going to make all
+combinations of. For a quantitative variable such as `age`, I
+need to go back to `heart2`:
+
+```{r }
+heart2
+```
+
+ 
+
+and pull out the rows whose names contain `age_`. This is done
+using `str_detect`
+`r tufte::margin_note("If you're selecting *columns*,  you can use select-helpers, but for rows, not.")` from
+`stringr`.
+`r tufte::margin_note("Which is loaded with the *tidyverse*  so you don't have to load it.")` 
+Here's how it goes for `age`:
+
+```{r }
+heart2 %>%
+filter(str_detect(vq,"age_"))
+```
+
+ 
+
+and one more step to get just the quartiles:
+
+```{r }
+heart2 %>%
+filter(str_detect(vq,"age_")) %>%
+pull(quartile)  
+```
+
+ 
+
+We'll be doing this a few times, so we should write a function to do it:
+
+```{r }
+get_quartiles=function(d,x) {
+d %>% 
+filter(str_detect(vq,x)) %>%
+pull(quartile)  
+}
+```
+
+
+
+and to test:
+
+```{r }
+get_quartiles(heart2,"age_")
+```
+
+ 
+
+Yep. I put the underscore in so as to not catch other variables that
+have `age` inside them but not at the end.
+
+For the categorical variables, we need to look in `heart3`:
+
+```{r }
+heart3
+```
+
+ 
+
+then choose the rows with the right thing in `vname`, and then
+pull just the `value` column. This is sufficiently like the
+previous one that I think we can write a function right away:
+
+```{r }
+get_categories=function(d,x) {
+d %>% filter(vname==x) %>%
+pull(value)  
+}
+get_categories(heart3, "electro")
+```
+
+ 
+All right, setup, using my usual habit of plural names, and using
+those functions we just wrote: 
+
+```{r }
+sexes=get_categories(heart3,"sex")
+pain.types=get_categories(heart3,"pain.type")
+resting.bps=get_quartiles(heart2,"resting.bp_")
+serum.chols=get_quartiles(heart2,"serum.chol_")
+max.hrs=get_quartiles(heart2,"max.hr_")
+oldpeaks=get_quartiles(heart2,"oldpeak_")
+slopes=get_categories(heart3,"slope")
+coloreds=get_quartiles(heart2,"colored_")
+thals=get_categories(heart3,"thal")
+```
+
+ 
+
+All combos of all of those (and there will be a lot of those):
+
+```{r }
+heart.new=crossing(sex=sexes,pain.type=pain.types,resting.bp=resting.bps,
+serum.chol=serum.chols,max.hr=max.hrs,oldpeak=oldpeaks,slope=slopes,
+colored=coloreds,thal=thals)
+heart.new
+```
+
+ 
+
+Yeah, that's a lot. Fortunately, we won't have to look at them all.
+        
+
+
+(i) Obtain the predicted probabilities of heart disease for
+the data frame you constructed in the last part, using your
+model that came out of `step`. Add these predictions to
+the data frame from the previous part (as a column in that data
+frame). 
+
+
+Solution
+
+
+Get the predictions, which is less scary than it seems:
+```{r }
+p=predict(heart.3,heart.new,type="response")
+```
+
+         
+
+and the easiest way to add these to `heart.new` is this:
+
+```{r }
+heart.new$pred=p
+```
+$ %$ %$
+
+Or, if you like, with a `mutate` of this kind:
+
+```{r }
+heart.x = heart.new %>% mutate(prediction=p) 
+```
+
+ 
+
+Let's take a look at a few of the predictions, by way of sanity-checking:
+
+```{r }
+heart.new %>% sample_n(8)
+```
+
+ 
+
+This seems at least reasonably sane.
+        
+
+
+(j) Find the largest predicted probability (which is the
+predicted probability of heart disease) and display all the
+variables that it was a prediction for. 
+
+
+Solution
+
+
+This can be done in one step:
+```{r }
+heart.new %>% filter(pred==max(pred))
+```
+
+         
+
+or if you didn't think of that, you can find the maximum first, and
+then display the rows with predictions close to it:
+
+```{r }
+heart.new %>% summarize(m=max(pred))
+heart.new %>% filter(pred>0.98)
+```
+
+ 
+
+or even find *which* row has the maximum, and then display that row:
+
+```{r }
+heart.new %>% summarize(row=which.max(pred))
+heart.new %>% slice(1398)
+```
+
+ 
+
+or sort the rows by `pred`, descending, and display the top few:
+
+```{r }
+heart.new %>% arrange(desc(pred)) %>% print(n=8)
+```
+
+ 
+        
+
+
+(k) Compare the `summary` of the final model from
+`step` with your highest predicted heart disease
+probability and the values of the other variables that make it
+up. Are they consistent?
+
+
+Solution
+
+
+Since we were predicting the probability of heart disease, a
+more positive slope in the model from `step` will be
+associated with a higher probability of heart disease. So,
+there, we are looking for a couple of things: if the variable
+is a factor, we're looking for the level with the most
+positive slope (bearing in mind that this might be the
+baseline), and for a numeric variable, if the slope is
+positive, a *high* value is associated with heart
+disease, and if negative, a low value.
+Bearing that in mind, we go back to my
+`summary(heart.3)` and we have:
+
+
+* `sex`: being male has the higher risk, by a lot
+
+* `pain`: all the slopes shown are negative, so the
+highest risk goes with the baseline one
+`asymptomatic`.
+
+* `resting.bp`: positive slope, so higher risk with
+higher value.
+
+* `serum.chol`: same.
+
+* `max.hr`: negative slope, so greatest risk with
+*smaller* value.
+
+* `oldpeak`: positive slope, greater risk with
+higher value again.
+
+* `slope`: `flat` has greatest risk.
+
+* `colored`: positive slope, so beware of higher
+value.
+
+* `thal`: `reversible` has greatest risk.
+
+Then we can do the same thing for the prediction. For the
+numerical variables, we may need to check back to the previous
+part to see whether the value shown was high or low. Once you
+have done that, you can see that the variable values for the
+highest predicted probability do indeed match the ones we
+thought should be the highest risk.
+The interesting thing about this is that after adjusting for
+all of the other variables, there is a greater risk of heart
+disease if you are male (and the model shows that the risk is
+*much* greater). That is to say, it's being male that
+makes the difference, not the fact that any of the other
+variables are different for males.
+        
+
+
+
+

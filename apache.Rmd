@@ -1,0 +1,255 @@
+
+
+ The "APACHE II" is a scale for assessing patients who
+arrive in the intensive care unit (ICU) of a hospital. These are seriously
+ill patients who may die despite the ICU's best attempts. APACHE
+stands for "Acute Physiology And Chronic Health Evaluation".
+`r tufte::margin_note("As with many of these acronyms, you get the idea that the acronym came first and they devised some words to fit it.")`
+The scale score is calculated from several physiological measurements
+such as body temperature, heart rate and the Glasgow coma scale, as
+well as the patient's age. The final result is a score between 0 and
+71, with a higher score indicating more severe health issues. Is it
+true that a patient with a higher APACHE II score has a higher
+probability of dying?
+
+Data from one hospital are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/apache.txt). The columns
+are: the APACHE II score, the total number of patients who had that
+score, and the number of patients with that score who died.
+
+
+
+(a)[2] Read in and display the data (however much of it
+displays). Why are you convinced that have the right thing?
+
+Solution
+
+
+Data values separated by one space, so:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/apache.txt"
+icu=read_delim(my_url," ")
+icu
+```
+
+     
+
+I had to stop and think about what to call the data frame, since one
+of the columns is called `apache`.
+
+Anyway, I appear to have an `apache` score between 0 and something, a
+number of patients and a number of deaths (that is no bigger than the
+number of patients). If you check the original data, the `apache`
+scores go up to 41 and are all the values except for a few near the
+end, so it makes perfect sense that there would be 38 rows.
+
+Basically, any comment here is good, as long as you make one and it
+has something to do with the data.
+
+`apache` scores could be as high as 71, but I imagine a patient would
+have to be *very* ill to get a score anywhere near that high.
+
+
+(b)[2] Does each row of the data frame relate to one patient or
+sometimes to more than one? Explain briefly.
+
+Solution
+
+
+Sometimes to more than one. The number in the `patients`
+column says how many patients that line refers to: that is to say
+(for example) the row where `apache` equals 6 represents
+*all* the patients whose `apache` score was 6, however many
+of them there were (14 in this case).
+I had to be careful with the wording because the first two rows of
+the data frame actually *do* refer to only one patient each
+(who survived in both cases), but the later rows do refer to more
+than one patient.
+
+
+(c)[3] Explain why this is the kind of situation where you need a
+two-column response, and create this response variable, bearing in
+mind that I will (later) want you to estimate the probability of
+dying, given the `apache` score.
+
+Solution
+
+
+This needs a two-column response precisely *because* each row
+represents (or could represent) more than one observation.
+The two columns are the number of observations referring to the
+event of interest (dying), and the number of observations where
+that didn't happen (survived). We don't actually have the numbers
+of survivals, but we can calculate these by subtracting from the
+numbers of patients (since a patient must have either lived or
+died): 
+```{r }
+response = icu %>% mutate(survivals=patients-deaths) %>%
+select(deaths, survivals) %>% as.matrix()
+response
+```
+
+     
+
+noting that the deaths column has to come *first* since that's
+what we want the probability of. It has to be a `matrix`, so
+`as.matrix` is the final step. You can quickly check that the
+two numbers in each row add up to the number of `patients` for
+that row.
+
+Or do everything outside of the data
+frame: 
+
+```{r }
+survivals=with(icu,patients-deaths)
+resp=with(icu, cbind(deaths, survivals))
+resp
+class(resp)
+```
+
+ 
+
+Or use the dollar sign instead of the `with`s. Any of those is
+good. 
+
+I have no objection to your displaying the response matrix.
+
+
+(d)[3] Fit a logistic regression to estimate the probability of
+death from the `apache` score, and display the results.
+
+Solution
+
+
+```{r }
+apache.1=glm(response~apache,family="binomial",data=icu)
+summary(apache.1)
+```
+
+
+
+My naming convention has gotten messed up again. This should really be
+called `deaths.1` or something like that, but that would be a
+really depressing name.
+
+
+(e)[2] Is there a significant effect of `apache` score on the
+probability of survival? Explain briefly.
+
+Solution
+
+
+A gimme two points. The P-value for `apache` is $4.94
+\times 10^{-13}$, very small, so `apache` score definitely
+has an effect on the probability of survival.
+
+
+(f)[2] Is the effect of a larger `apache` score to increase or to
+decrease the probability of death? Explain briefly.
+
+Solution
+
+
+The slope coefficient for `apache` is 0.1156, positive, and
+since we are modelling the probability of death (the first column
+of the response matrix), this says that as `apache` goes
+up, the probability of death goes up as well.
+If you made your response matrix with the columns the wrong way
+around, the slope coefficient for `apache` should be
+$-0.1156$, but the explanation should come to the same place,
+because this says that the probability of survival goes down as
+`apache` goes up.
+
+
+(g)[3] Obtain the predicted probability of death for each of the
+`apache` scores that were in the data set. Display these predicted
+probabilities next to the `apache` values that they came
+from. (You can display all of them.)
+
+Solution
+
+
+This is the easier version of `predict` since we don't have
+to make a new data frame of values to predict from:
+```{r }
+p=predict(apache.1,type="response")
+cbind(icu,p)
+```
+
+     
+
+The `type="response"` is needed to make sure the predictions
+come out as probabilities. If you omit it, you get log-odds.
+
+The predicted probability (of dying) does indeed go up as
+`apache` goes up.
+
+
+(h)[4] Make a plot of predicted death probability against
+`apache` score (joined by lines) with, also on the plot, the
+observed proportion of deaths within each `apache` score,
+plotted against `apache` score. Does there seem to be good
+agreement between observation and prediction?
+
+Solution
+
+
+This means calculating the observed proportions first, adding the
+predicted probabilities, and then making the plot, like this:
+```{r }
+icu %>% mutate(obs_prop=deaths/patients) %>%
+mutate(pred=p) %>%
+ggplot(aes(x=apache,y=pred))+geom_line()+
+geom_point(aes(y=obs_prop))
+```
+
+     
+
+You don't need to make a column in the pipeline with the predictions
+in it; you can just use what I called `p` directly in the
+`aes`. 
+
+Note that you *do* need to have a new `aes` inside the
+`geom_point`, however, because the $y$ of the plot has
+changed: it needs to be the observed proportion now.
+
+What you actually have to do in this situation depends on what you
+have. In this case, we have the total number of patients at each
+`apache` score, but you might have the number of patients
+surviving in one column and dying in another, in which case you'd need
+to calculate the total first.
+
+I'd say the agreement is pretty good, except for the one patient with
+`apache` of 41 but who somehow survived.
+
+That's what I asked for, and is full marks if you got it. However, the
+points are not all based on the same number of observations. One way
+to show that on your plot is to vary the size of the plotted
+point
+`r tufte::margin_note("By size is meant the *area* of the circle,  which is what our brains perceive as the size of   two-dimensional, like the area of a slice in a pie chart. On the  plot, the radius of the circle for 20 is less than twice that of the circle for 10, because the area depends on the radius *squared*.")`
+according to the number of patients it was based on. This is not hard
+to do, since we have exactly that in `patients`:
+
+```{r }
+icu %>% mutate(obs_prop=deaths/patients) %>%
+mutate(pred=p) %>%
+ggplot(aes(x=apache,y=pred))+geom_line()+
+geom_point(aes(y=obs_prop,size=patients))
+```
+
+     
+The points that are far from the prediction are mostly based on a
+small number of patients, and the observed proportions for
+`apache` scores with a lot of patients are mostly close to the
+prediction. Note that the `size`, because it is based on one of
+the variables, goes *inside* the `aes`. If you wanted the
+points all to be of size 5, say, you'd do it this way:
+
+```{r eval=F}
+geom_point(aes(y=obs_prop),size=5)
+```
+
+ 
+
+
+

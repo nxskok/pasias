@@ -1,0 +1,230 @@
+##  Finding wolf spiders on the beach
+
+
+??q:wolfspider?? A team of Japanese researchers were investigating what would
+cause the burrowing wolf spider *Lycosa ishikariana* to be found
+on a beach. They hypothesized that it had to do with the size of the
+grains of sand on the beach. They went to 28 beaches in Japan,
+measured the average sand grain size (in millimetres), and observed
+the presence or absence of this particular spider on each beach. The
+data are in [link](http://www.utsc.utoronto.ca/~butler/d29/spiders.txt). 
+
+
+
+(a) Why would logistic regression be better than regular
+regression in this case?
+ 
+Solution
+
+
+Because the response variable, whether or not the spider is
+present, is a categorical yes/no success/failure kind of variable
+rather than a quantitative numerical one, and when you have this
+kind of response variable, this is when you want to use logistic
+regression. 
+ 
+
+(b) Read in the data and check that you have something
+sensible. (Look at the data file first: the columns are aligned but
+the headers are not aligned with them.)
+ 
+Solution
+
+
+The nature of the file means that you need `read_table2`:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/spiders.txt"
+spider=read_table2(my_url)
+spider
+```
+
+     
+
+We have a numerical sand grain size and a categorical variable
+`Spiders` that indicates whether the spider was present or
+absent. As we were expecting. (The categorical variable is actually
+text or `chr`, which will matter in a minute.)
+ 
+
+(c) Make a boxplot of sand grain size according to whether the
+spider is present or absent. Does this suggest that sand grain size
+has something to do with presence or absence of the spider?
+ 
+Solution
+
+
+```{r starcross}
+ggplot(spider,aes(x=Spiders,y=Grain.size))+geom_boxplot()
+```
+
+     
+
+The story seems to be that when spiders are present, the sand grain
+size tends to be larger. So we would expect to find some kind of
+useful relationship in the logistic regression.
+
+Note that we have reversed the cause and effect here: in the boxplot
+we are asking "given that the spider is present or absent, how big are the grains of sand?", 
+whereas the logistic regression is asking "given the size of the grains of sand, how likely is the spider to be present?". But if one variable has to do with the other, we would
+hope to see the link either way around.
+ 
+
+(d) Fit a logistic regression predicting the presence or
+absence of spiders from the grain size, and obtain its
+`summary`. Note that you will need to do something with the
+response variable first.
+ 
+Solution
+
+
+The presence or absence of spiders is our response. This is
+actually text at the moment:
+```{r }
+spider
+```
+
+     
+
+so we need to make a factor version of it first. I'm going to live on
+the edge and overwrite everything:
+
+```{r }
+spider = spider %>% mutate(Spiders=factor(Spiders))
+spider
+```
+
+ 
+
+`Spiders` is now a factor, correctly. (Sometimes a text
+variable gets treated as a factor, sometimes it needs to be an
+explicit `factor`. This is one of those times.)
+Now we go ahead and fit the model. I'm naming this as
+response-with-a-number, so I still have the Capital Letter. Any choice
+of name is good, though.
+
+```{r }
+Spiders.1=glm(Spiders~Grain.size,family="binomial",data=spider)
+summary(Spiders.1)
+```
+
+     
+ 
+
+(e) Is there a significant relationship between grain size and
+presence or absence of spiders at the $\alpha=0.10$ level? Explain briefly.
+ 
+Solution
+
+
+The P-value on the `Grain.size` line is *just* less
+than 0.10 (it is 0.088), so there is *just* a significant
+relationship. 
+It isn't a very strong significance, though. This
+might be because we don't have that much data: even though we have
+28 observations, which, on the face of it, is not a very small
+sample size, each observation doesn't tell us much: only whether
+the spider was found on that beach or not. Typical sample sizes in
+logistic regression are in the hundreds --- the same as for
+opinion polls, because you're dealing with the same kind of data.
+The weak significance here lends some kind of weak support to the
+researchers' hypothesis, but I'm sure they were hoping for
+something better.
+ 
+
+(f) We want to obtain predicted probabilities of spider presence
+for grain sizes of 0.2, 0.5, 0.8 and 1.1 millimetres. Do this by
+creating a new data frame with one column called `Grain.size`
+(watch the capital letter!) and those four values, and then feed
+this into `predict`. I only want predicted probabilities, not
+any kind of intervals.
+ 
+Solution
+
+
+Something like this. I like to save all the values first, and
+*then* make a data frame of them, but you can do it in one
+go if you prefer: 
+```{r }
+Grain.sizes=c(0.2,0.5,0.8,1.1)
+spider.new=tibble(Grain.size=Grain.sizes)
+spider.new
+pred.prob=predict(Spiders.1,spider.new,type="response")
+cbind(spider.new,pred.prob)
+```
+
+     
+
+(Second attempt: on my first, the `tibble` contained
+`Grain.Sizes`!) 
+
+This exemplifies my preferred technique in these things: I store the
+values to predict for in a vector with a *plural* name. The
+column names in the data frame I make have to have the same (singular)
+name as the original data, so the layout in making the data frame is
+"singular equals plural". You'll see a lot of this as we go through
+the course.
+
+I think the data frame of values to predict for is called
+`spider.new`  because the original one is called
+`spider`. I have to stop and think about my naming
+conventions. 
+
+The above is all I need. (The stuff below is my extra comments.)
+
+Note that the probabilities don't go up linearly. (If they did, they
+would soon get bigger than 1!). It's actually the *log-odds* that
+go up linearly. In fact, if you leave out the `type` on the
+`predict`, log-odds is what you get:
+
+```{r }
+pred.log.odds=predict(Spiders.1,spider.new)
+cbind(spider.new,pred.log.odds)
+```
+
+ 
+
+The meaning of that slope coefficient in the `summary`, which
+is about 5, is that if you increase grain size by 1, you increase the
+log-odds by 5. In the table above, we increased the grain size by 0.3
+each time, so we would expect to increase the log-odds by
+$(0.3)(5)=1.5$, which is (to this accuracy) what happened.
+
+Log-odds are hard to interpret. Odds are a bit easier, and to get
+them, we have to `exp` the log-odds:
+
+```{r }
+cbind(spider.new,odds=exp(pred.log.odds))
+```
+
+ 
+Thus, with each step of
+0.3 in grain size, we *multiply* the odds of finding a spider by
+about 
+
+```{r }
+exp(1.5)
+```
+
+ 
+
+or about 4.5 times. If you're a gambler, this might give you a feel
+for how large the effect of grain size is. Or, of course, you can just
+look at the probabilities.
+ 
+
+(g) Given your previous work in this question, does the trend
+you see in your predicted probabilities surprise you? Explain briefly.
+ 
+Solution
+
+
+My predicted probabilities go up as grain size goes up. This fails
+to surprise me for a couple of reasons: first, in my boxplots, I
+saw that grain size tended to be larger when spiders were present,
+and second, in my logistic regression `summary`, the slope
+was positive, so likewise spiders should be more likely as grain
+size goes up. Observing just one of these things is enough, though
+of course it's nice if you can spot both.
+ 
+
+

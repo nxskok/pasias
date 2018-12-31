@@ -1,0 +1,231 @@
+
+
+ In a dose-response experiment, animals (or
+cell cultures or human subjects) are exposed to some toxic substance,
+and we observe how many of them show some sort of response. In this
+experiment, a mysterious Substance A is exposed at various doses to
+100 cells at each dose, and the number of cells at each dose that
+suffer damage is recorded. The doses were 10, 20, \ldots 70 (mg), and
+the number of damaged cells out of 100 were respectively 10, 28, 53,
+77, 91, 98, 99.
+
+
+
+(a) Find a way to get these data into R, and show that you have
+managed to do so successfully.
+
+
+Solution
+
+
+There's not much data here, so we don't need to create a file,
+although you can do so if you like (in the obvious way: type the
+doses and damaged cell numbers into a `.txt` file or
+spreadsheet and read in with the appropriate `read_`
+function). Or, make a data frame with the values typed in:
+
+```{r }
+dr=tibble(dose=seq(10,70,10),
+damaged=c(10, 28, 53, 77, 91, 98, 99))
+dr
+```
+
+ 
+
+`seq` fills a sequence "10 to 70 in steps of 10", or you can
+just list the doses.
+
+I like this better than making two columns *not* attached to a
+data frame, but that will work as well.
+    
+
+
+(b) Would you expect to see a significant effect of dose for
+these data?
+Explain briefly.
+
+
+Solution
+
+
+The number of damaged cells goes up sharply as the dose goes up
+(from a very small number to almost all of them). So I'd expect
+to see a strongly significant effect of dose. This is far from
+something that would happen by chance.
+ 
+
+
+(c) Fit a logistic regression modelling the probability of a
+cell being damaged as it depends on dose. Display the
+results. (Comment on them is coming later.)
+
+
+Solution
+
+
+This has a bunch of observations at each dose (100 cells, in
+fact), so we need to do the two-column response thing: the
+successes in the first column and the failures in the
+second. This means that we first need to calculate the number of
+cells at each dose that were not damaged, by subtracting the
+number that *were* damaged from 100. R makes this easier
+than you'd think, as
+you see. A `mutate` is the way to
+go: create a new column in `dr` and save back in
+`dr` (because I like living on the edge):
+```{r }
+dr = dr %>% mutate(undamaged=100-damaged)
+dr
+```
+
+       
+
+The programmer in you is probably complaining ``but, 100 is a number
+and `damaged` is a vector of 7 numbers. How does R know to
+subtract *each one* from 100?'' Well, R has what's known as
+"recycling rules": if you try to add or subtract (or elementwise
+multiply or divide) two vectors of different lengths, it recycles the
+smaller one by repeating it until it's as long as the longer one. So
+rather than `100-damaged` giving an error, it does what you
+want.\endnote{The usual application of this is to combine a number
+with a vector. If you try to subtract a length-2 vector from a
+length-6 vector, R will repeat the shorter one three times and do
+the subtraction, but if you try to subtract a length-2 vector from a
+length-*7* vector, where you'd have to repeat the shorter one a
+fractional number of times, R will do it, but you'll get a warning,
+because this is probably *not* what you wanted. Try it and see.}
+
+I took the risk of saving the new data frame over the old one. If it
+had failed for some reason, I could have started again.
+
+Now we have to make our response "matrix" with two columns, using `cbind`:
+
+```{r }
+response=with(dr,cbind(damaged,undamaged))
+response
+```
+
+ 
+
+Note that each row adds up to 100, since there were 100 cells at each
+dose. This is actually trickier than it looks: the two things in
+`cbind` are columns (vectors), and `cbind` glues them
+together to make an R `matrix`:
+
+```{r }
+class(response)
+```
+
+ 
+
+which is what `glm` needs here, even though it looks a lot like
+a data frame (which wouldn't work here). This *would* be a data
+frame:
+
+```{r }
+dr %>% select(damaged, undamaged) %>% class()
+```
+
+ 
+
+and would therefore be the wrong thing to give `glm`. So I had
+to do it with `cbind`, or use some other trickery, like this:
+
+```{r }
+resp = dr %>% select(damaged, undamaged) %>%
+as.matrix()
+class(resp)
+```
+
+ 
+
+Now we fit our model:
+
+```{r }
+cells.1=glm(response~dose,family="binomial",data=dr)
+summary(cells.1)
+```
+
+ 
+    
+
+
+(d) Does your output indicate that the probability of damage
+really does *increase* with dose? (There are two things here:
+is there really an effect, and which way does it go?)
+
+
+Solution
+
+
+The slope of `dose` is significantly nonzero (P-value
+less than $2.2 \times 10^{-16}$, which is as small as it can
+be). The slope itself is *positive*, which means that as
+dose goes up, the probability of damage goes up. 
+That's all I needed, but if you want to press on: the slope is
+0.113, so an increase of 1 in dose goes with an increase of
+0.113 in the *log-odds* of damage. Or it multiplies the
+odds of damage by $\exp(0.113)$. Since 0.113 is small, this is
+about $1.113$ (mathematically, $e^x\simeq 1+x$ if $x$ is small),
+so that the increase is about 11\%. 
+If you like, you can get a rough CI for the slope by going up
+and down twice its standard error (this is the usual
+approximately-normal thing). Here that would be
+```{r }
+0.113323+c(-2,2)*0.008315
+```
+
+       
+
+I thought about doing that in my head, but thought better of it, since
+I have R just sitting here. The interval is short (we have lots of
+data) and definitely does not contain zero.
+    
+
+
+(e) Obtain predicted damage probabilities for the doses that
+were actually used in the experiment. (This is easier than some of
+our other predictions: if you are using the original data, you only
+need to feed in the fitted model object and not a data frame of new
+data.) Display your predicted probabilities next to the doses and
+the observed numbers of damaged cells.
+
+
+Solution
+
+
+The remaining care that this needs is to make sure that we do
+indeed get predicted probabilities, and then some
+`cbind`ing to get the right kind of display:
+```{r }
+p=predict(cells.1,type="response")
+with(dr,cbind(dose,damaged,p))
+```
+
+       
+
+If you forget the `type="response"` you'll get predicted
+log-odds, which are not nearly so easy to interpret.
+    
+
+
+(f) Looking at  the predicted probabilities, would you say that
+the model fits well? Explain briefly.
+
+
+Solution
+
+
+There were 100 cells tested at each dose, so that the predicted
+probabilities should be close to the observed numbers divided by
+100. They are in fact *very* close to this, so the model
+fits very well. 
+Your actual words are a judgement call, so precisely what you
+say doesn't matter so much, but *I* think this model fit is
+actually closer than you could even hope to expect, it's that
+good. But, your call. I think your answer ought to contain
+"close" or "fits well" at the very least. 
+     
+
+
+

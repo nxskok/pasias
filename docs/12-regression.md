@@ -6278,7 +6278,8 @@ the same as mine.
 
 
 
-There ought to be some multiple-regression questions here:
+These problems are about multiple regression (more than one $x$-variable):
+
 
 
 ##  Being satisfied with hospital

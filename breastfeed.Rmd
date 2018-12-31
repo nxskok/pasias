@@ -1,0 +1,274 @@
+
+
+ A regular pregnancy lasts 40 weeks, and a
+baby that is born at or before 33 weeks is called
+"premature". The number of weeks at which a baby is born is called
+its "gestational age". 
+Premature babies are usually smaller than normal and
+may require special care. It is a good sign if, when the mother and
+baby leave the hospital to go home, the baby is successfully breastfeeding.
+
+The data in
+[link](http://www.utsc.utoronto.ca/~butler/d29/breastfeed.csv) are from
+a study of 64 premature infants. There are three columns: the
+gestational age (a whole number of weeks), the number of babies of
+that gestational age that were successfully breastfeeding when they
+left the hospital, and the number that were not. (There were multiple
+babies of the same gestational age, so the 64 babies are summarized in
+6 rows of data.)
+
+
+
+(a) Read the data into R and display the data frame.
+
+
+Solution
+
+
+No great challenge here, I hope:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/breastfeed.csv"
+breastfeed=read_csv(my_url)
+breastfeed
+```
+
+     
+
+That looks reasonable.
+
+
+
+(b) Verify that there were indeed 64 infants, by having R do a
+suitable calculation on your data frame that gives the right answer
+for the right reason.
+
+
+Solution
+
+
+The second and third columns are all frequencies, so it's a
+question of adding them up. For example:
+
+```{r }
+breastfeed %>% summarize(total=sum(bf.yes)+sum(bf.no))
+```
+
+ 
+
+or if you want to go nuts (this one gathers all the frequencies
+together into one column and then adds them up):
+
+```{r }
+breastfeed %>% gather(yesno,freq,bf.yes:bf.no) %>%
+summarize(total=sum(freq))
+```
+
+ 
+
+Find a way to get it done. If it works and it does the right thing,
+it's good. 
+
+Do *not* copy the numbers out of your data frame, type them in
+again and use R to add them up. Do something with your data frame as
+you read it in.
+
+
+
+(c) Do you think, looking at the data, that there is a
+relationship between gestational age and whether or not the baby was
+successfully breastfeeding when it left the hospital? Explain briefly.
+
+
+Solution
+
+
+The babies with the youngest gestational age (the most premature)
+were mostly *not* breastfeeding when they left the
+hospital. Most of the 30- and 31-week babies were breastfeeding,
+and almost all of the 32- and 33-week babies were
+breastfeeding. So I think there will be a relationship: as
+gestational age increases, the probability that the baby will be
+breastfeeding will also increase. (This, looking ahead, suggests a
+positive slope in a logistic regression.)
+
+
+
+(d) Why is logistic regression a sensible technique to use
+here? Explain briefly.
+
+
+Solution
+
+
+The response variable is a yes/no: whether or not an infant is
+breastfeeding. We want to predict the probability of the response
+being in one or the other category. This is what logistic
+regression does. (The explanatory variable(s) are usually
+numerical, as here, but they could be factors as well, or a
+mixture. The key is the kind of response. The number of babies
+that are successfully breastfeeding at a certain gestational age
+is modelled as binomial with $n$ being the total number of babies
+of that gestational age, and $p$ being something that might
+depend, and here *does* depend, on gestational age.)
+    
+
+
+(e) Fit a logistic regression to predict the probability that
+an infant will be breastfeeding from its gestational age. Show the
+output from your logistic regression.
+
+
+Solution
+
+
+These are summarized data, rather than one infant per line, so
+what we have to do is to make a two-column response "matrix",
+successes in the first column and failures in the second, and then
+predict *that* from gestational age. (That's why this was
+three marks rather than two.)
+So, let's make the `response` first:
+```{r }
+response=with(breastfeed,cbind(bf.yes,bf.no))
+response
+```
+
+     
+
+or, more Tidyverse-like, but we have to remember to turn it into a
+`matrix`:
+
+```{r }
+response = breastfeed %>%
+select(starts_with("bf")) %>%
+as.matrix()
+response
+```
+
+ 
+
+I used a select-helper, because what immediately came to me was that
+the names of the columns I wanted started with `bf`, but
+whatever way you have that works is good.
+Now we fit the logistic regression:
+
+```{r }
+breastfeed.1=glm(response~gest.age,data=breastfeed,family="binomial")
+summary(breastfeed.1)
+```
+
+ 
+
+
+
+(f) Does the significance or non-significance of the slope of
+`gest.age` surprise you? Explain briefly.
+
+
+Solution
+
+
+The slope *is* significant (P-value 0.0035 is much less than
+0.05). We said above that we expected there to be a relationship
+between gestational age and whether or not the baby was
+breastfeeding, and this significant slope is confirming that there
+*is* a relationship. So this is exactly what we expected to
+see, and not a surprise at all.
+If you concluded above that you did *not* see a relationship,
+you should colour yourself surprised here. Consistency.
+
+
+
+(g) Is your slope (in the `Estimate` column) positive or
+negative? What does that mean, in terms of gestational ages and
+breastfeeding? Explain briefly.
+ 
+
+Solution
+
+
+My slope is 0.5769, positive. That means that as the explanatory
+variable, gestational age, increases, the probability of the event
+(that the baby is breastfeeding) also increases.
+This is also what I observed above: almost all of the near-term
+(large gestational age) babies were breastfeeding, whereas a fair
+few of the small-gestational-age (very premature) ones were not.
+
+
+
+(h) Obtain the predicted probabilities that an infant will
+successfully breastfeed for each of the gestational ages in the data
+set, and display them side by side with the observed data.
+
+
+Solution
+
+
+This is the easier version of `predict`, where you do not
+have to create a data frame of values to predict from (since you
+are using the original data). 
+Thus, you only need something like this:
+```{r }
+p=predict(breastfeed.1,type="response")
+cbind(breastfeed,p)
+```
+
+     
+
+You can see that the predicted probabilities go steadily up as the
+gestational age goes up, just as we would have expected.
+
+If you only wanted certain gestational ages, for example 25, 30 and
+35, you would do that like this:
+
+```{r }
+ages.new=data.frame(gest.age=c(25,30,35))
+p2=predict(breastfeed.1,ages.new,type="response")
+cbind(ages.new,p2)
+```
+
+ 
+
+Or, if you wanted to make a graph of the observed and predicted
+proportions/probabilities, you could do something like this:
+
+```{r }
+breastfeed %>% mutate( total=bf.yes+bf.no,
+obs=bf.yes/total) %>%
+mutate(pred=p) %>%
+ggplot(aes(x=gest.age,y=obs))+
+geom_line(aes(y=pred))+geom_point(aes(size=total))
+```
+
+ 
+
+What did I do there? I first created some new variables:
+`count` is the total number of babies of each gestational age,
+`obs` is the observed proportion of breastfeeding babies at
+each gestational age (number of yes divided by total), and
+`pred` which are the predictions we did above. Then I make a
+plot on which I plot the observed proportions against gestational age
+(as points), and then I want to plot the predictions joined by
+lines. To do *that*, I need to change which $y$-variable I am
+plotting (now `pred` rather than `obs`), and the way I
+do that is to put an `aes` inside the `geom_line` to
+say "use the $x$ I had before, but use this $y$ instead". I also
+wanted to draw attention to the gestational ages where more babies
+were observed; I did this by making the *size* of the plotted
+points proportional to how many babies there were at that gestational
+age (which was the quantity `total` I calculated above). This
+took a couple of attempts to get right: I put `size=` in the
+original `aes`, but I didn't realize that it controlled the
+line thickness as well (which looked really weird). So I moved the
+`geom_point` to the end and put the `size=` in there,
+to make sure that the size thing *only* applied to the
+points. The legend for `total` tells you what size point
+corresponds to how many total babies.
+
+The idea is that the observed and predicted should be reasonably
+close, or at least not grossly different, and I think they *are*
+close, which indicates that our model is doing a good job.
+    
+
+
+
+
