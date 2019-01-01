@@ -1,0 +1,498 @@
+
+
+ When you order a steak in a restaurant, the server will ask
+you how you would like it cooked, or to be precise, *how much*
+you would like it cooked: rare (hardly cooked at all), through medium
+rare, medium, medium well to well (which means "well done", so that
+the meat has only a little red to it). Could you guess how a person
+likes their steak cooked, from some other information about them? The
+website [link](fivethirtyeight.com) commissioned a survey where they
+asked a number of people how they preferred their steak, along with as
+many other things as they could think of to ask. (Many of the
+variables below are related to risk-taking, which was something the
+people designing the survey thought might have something to do with
+liking steak rare.) The variables of interest are all factors or true/false:
+
+
+
+* `respondent_ID`: a ten-digit number identifying each
+person who responded to the survey.
+
+* `lottery_a`: true if the respondent preferred lottery A
+with a small chance to win a lot of money, to lottery B, with a
+larger chance to win less money.
+
+* `smoke`: true if the respondent is currently a smoker
+
+* `alcohol`: true if the respondent at least occasionally
+drinks alcohol.
+
+* `gamble`: true if the respondent likes to gamble (eg.
+betting on horse racing or playing the lottery)
+
+* `skydiving`: true if the respondent has ever been
+skydiving.
+
+* `speed`: true if the respondent likes to drive fast
+
+* `cheated`: true if the respondent has ever cheated on a
+spouse or girlfriend/boyfriend
+
+* `steak`: true if the respondent likes to eat steak
+
+* `steak_prep` (response): how the respondent likes their
+steak cooked (factor, as described above, with 5 levels).
+
+* `female`: true if the respondent is female
+
+* `age`: age group, from 18--29 to 60+.
+
+* `hhold_income`: household income group, from \$0--24,999
+to \$150,000+.
+
+* `educ`: highest level of education attained, from 
+"less than high school" up to "graduate degree"
+
+* `region`: region (of the US)
+that the respondent lives in (five values).
+
+
+The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/steak1.csv). This is the
+cleaned-up data from a previous question, with the missing values removed.
+
+
+
+(a) Read in the data and display the first few lines.
+
+
+Solution
+
+
+The usual:
+
+```{r }
+steak=read_csv("steak1.csv")
+head(steak)
+```
+
+ 
+
+We should also (re-)load `MASS`, since we'll be needing it:
+
+```{r }
+library(MASS)
+```
+
+ 
+
+
+
+(b) We are going to predict `steak_prep` from some of
+the other variables. Why is the model-fitting function `polr`
+from package `MASS` the best choice for these data
+(alternatives being `glm` and `multinom` from package
+`nnet`)?
+
+
+Solution
+
+
+It all depends on the kind of response variable. We have a
+response variable with five ordered levels from Rare to
+Well. There are more than two levels (it is more than a
+"success" and "failure"), which rules out `glm`, and
+the levels are ordered, which rules out `multinom`. As we
+know, `polr` handles an ordered response, so it is the
+right choice.
+    
+
+
+(c) What are the levels of `steak_prep`, \emph{in the
+order that R thinks they are in?} If they are not in a sensible
+order, create an ordered factor where the levels are in a sensible order.
+
+
+Solution
+
+
+This is the most direct way to find out:
+```{r }
+preps = steak %>% distinct(steak_prep) %>% pull(steak_prep)
+preps
+```
+$ %$ %$ %$
+
+This is almost the right order (`distinct` uses the order in
+the data frame). We just need to switch the first two around, and then
+we'll be done:
+
+```{r }
+preps1=preps[c(2,1,3,4,5)]
+preps1             
+```
+
+ 
+
+If you used `count`, there's a bit more work to do:
+
+```{r }
+preps2 = steak %>% count (steak_prep) %>% pull(steak_prep)
+preps2
+```
+
+ 
+
+because `count` puts them in alphabetical order, so:
+
+```{r }
+preps3=preps2[c(4,2,1,3,5)]
+preps3
+```
+
+ 
+
+These use the idea in the
+attitudes-to-abortion question: create a vector of the levels in the
+*right* order, then create an ordered factor with
+`ordered()`. If you like, you can type the levels in the right
+order (I won't penalize you for that here), but it's really better to
+get the levels without typing or copying-pasting, so that you don't
+make any silly errors copying them (which will mess everything up
+later).
+
+So now I create my ordered response:
+
+```{r }
+steak = steak %>% mutate(steak_prep_ord=ordered(steak_prep,preps1))
+```
+
+ 
+or using one of the other `preps` vectors containing the levels
+in the correct order.
+$ %$ %$
+
+As far as `polr` is concerned,
+it doesn't matter whether I start at `Rare` and go "up", or
+start at `Well` and go "down". So if you do it the other way
+around, that's fine. As long as you get the levels in a sensible
+order, you're good.
+    
+
+
+(d) Fit a model predicting preferred steak preparation in an
+ordinal logistic regression from `educ`, `female` and
+`lottery_a`. This ought to be easy from your previous work,
+but you have to be careful about one thing. No need to print out the
+results. 
+
+
+Solution
+
+
+The thing you have to be careful about is that you use the
+*ordered* factor that you just created as the response:
+```{r finetti,cache=T}
+steak.1=polr(steak_prep_ord~educ+female+lottery_a,data=steak)
+```
+
+     
+    
+
+
+(e) Run `drop1` on your fitted model, with
+`test="Chisq"`. Which explanatory variable should be removed
+first, if any? Bear in mind that the variable with the
+*smallest* AIC should come out first, in case your table
+doesn't get printed in order.
+
+
+Solution
+
+
+This:
+
+```{r }
+drop1(steak.1,test="Chisq")
+```
+
+ 
+
+My table is indeed out of order (which is why I warned you about it,
+in case that happens to you as well). The smallest AIC goes with
+`female`, which also has a very non-significant P-value, so
+this one should come out first.
+    
+
+
+(f) Remove the variable that should come out first, using
+`update`. (If all the variables should stay, you can skip
+this part.)
+
+
+Solution
+
+
+You could type or copy-paste the whole model again, but
+`update` is quicker:
+```{r }
+steak.2=update(steak.1,.~.-female)
+```
+
+     
+
+That's all.
+
+I wanted to get some support for my `drop1` above (since I was
+a bit worried about those out-of-order rows). Now that we have fitted
+a model with `female` and one without, we can compare them
+using `anova`:
+
+```{r }
+anova(steak.2,steak.1,test="Chisq")
+```
+
+ 
+
+Don't get taken in by that "LR stat" on the end of the first row of
+the output table; the P-value wrapped onto the second line, and is in
+fact exactly the same as in the `drop1` output (it is doing
+exactly the same test). As non-significant as you could wish for.
+
+I was curious about whether either of the other $x$'s could come out now:
+
+```{r }
+drop1(steak.2,test="Chisq")
+```
+
+ 
+
+`lottery_a` should come out, but `educ` is edging
+towards significance.
+    
+
+
+(g) Using the best model that you have so far, predict the
+probabilities of preferring each different steak preparation (method
+of cooking) for each combination of the variables that
+remain. (Some of the variables are TRUE and FALSE rather than
+factors. Bear this in mind.)
+Describe the effects of each variable on the predicted
+probabilities, if any. Note that there is exactly one person in the
+study whose educational level is "less than high school".
+
+
+Solution
+
+
+Again, I'm leaving it to you to follow all the steps. My variables
+remaining are `educ` and `lottery_a`. The second of
+these is a logical, TRUE and FALSE, so I just filled in the two values:
+```{r }
+educs = steak %>% distinct(educ) %>% pull(educ)
+lottery_as=c(FALSE,TRUE)
+
+steak.new=crossing(educ=educs,lottery_a=lottery_as)
+steak.new
+```
+
+     
+
+My best model so far is the one I called `steak.2`, without
+`female`, so this. As before, if you forget what `type`
+should be, put in *something*, and it will tell you what your
+choices are:
+
+```{r }
+p=predict(steak.2,steak.new,type="probs")
+cbind(steak.new,p)
+```
+
+ 
+
+I find this hard to read, so I'm going to round off those
+predictions. Three or four decimals seems to be sensible:
+
+```{r }
+cbind(steak.new,round(p,3))
+```
+
+ 
+
+Say something about the effect of changing educational level on the
+predictions, and say something about the effect of favouring Lottery A
+vs.\ not. I don't much mind what: you can say that there is not much
+effect (of either variable), or you can say something like ``people
+with a graduate degree are slightly more likely to like their steak
+rare and less likely to like it well done'' (for education level) and
+``people who preferred Lottery A are slightly less likely to like
+their steak rare and slightly more likely to like it well done'' (for
+effect of Lottery A). You can see these by comparing the first five
+rows to assess the effect of education (or the last five rows, if you
+prefer), and you can compare eg. rows 1 and 6 to assess the effect of
+Lottery A (compare two lines with the *same* educational level
+but *different* preferences re Lottery A). 
+
+I would keep away from saying anything about education level 
+"less than high school", since this entire level is represented by exactly
+one person.
+    
+
+
+(h) Is it reasonable to remove *all* the remaining
+explanatory variables from your best model so far? Fit a model with no explanatory variables,
+and do a test. (In R, if the right side of the squiggle is a
+`1`, that means "just an intercept". Or you can remove
+whatever remains using `update`.) What do you conclude?
+Explain briefly.
+
+
+Solution
+
+
+The fitting part is the challenge, since the testing part is
+`anova` again. The direct fit is this:
+```{r fiorentina,cache=T}
+steak.3=polr(steak_prep_ord~1,data=steak)
+```
+
+     
+
+and the `update` version is this, about equally long, starting
+from `steak.2` since that is the best model so far:
+
+```{r }
+steak.3a=update(steak.2,.~.-educ-lottery_a)
+```
+
+ 
+
+You can use whichever you like. Either way, the second part is
+`anova`, and the two possible answers should be the same:
+
+```{r }
+anova(steak.3,steak.2,test="Chisq")
+```
+
+ 
+
+or
+
+```{r }
+anova(steak.3a,steak.2,test="Chisq")
+```
+
+ 
+
+At the 0.05 level, removing both of the remaining variables is fine:
+that is, nothing (out of these variables) has any impact on the
+probability that a diner will prefer their steak cooked a particular
+way. 
+
+However, with data like this and a rather exploratory analysis, I
+might think about using a larger $\alpha$ like 0.10, and at this
+level, taking out both these two variables is a bad idea. You could
+say that one or both of them is "potentially useful" or
+"provocative" or something like that.
+
+If you think that removing these two variables is questionable, you
+might like to go back to that `drop1` output I had above:
+
+```{r }
+drop1(steak.2,test="Chisq")
+```
+
+ 
+
+The smallest AIC goes with `lottery_a`, so that comes out (it
+is nowhere near significant):
+
+```{r }
+steak.4=update(steak.2,.~.-lottery_a)
+drop1(steak.4,test="Chisq")
+```
+
+ 
+
+and what you see is that educational level is right on the edge of
+significance, so that may or may not have any impact. Make a call. But
+if anything, it's educational level that makes a difference.
+    
+
+
+(i) In the article for which these data were collected,
+[link](https://fivethirtyeight.com/datalab/how-americans-like-their-steak/),
+does the author obtain consistent conclusions with yours? Explain
+briefly. (It's not a very long article, so it won't take you long to
+skim through, and the author's point is pretty clear.)
+
+
+
+Solution
+
+
+The article says that *nothing* has anything to do with steak
+preference. Whether you agree or not depends on what you thought
+above about dropping those last two variables. So say something
+consistent with what you said in the previous part. Two points for
+saying that the author said "nothing has any effect", and one
+point for how your findings square with that.
+Now that you have worked through this great long question, this is
+where I tell you that I simplified things a fair bit for you! There
+were lots of other variables that might have had an impact on how
+people like their steaks, and we didn't even consider those. Why did
+I choose what I did here? Well, I wanted to fit a regression predicting
+steak preference from everything else, do a big backward
+elimination, but:
+```{r udinese,cache=T, error=T}
+steak.5=polr(steak_prep_ord~.,data=steak)
+```
+
+   
+The `.` in place of explanatory
+variables means "all the other variables", including the nonsensical
+personal ID. That saved me having to type them all out. 
+
+Unfortunately, however, it didn't work. The problem is a numerical
+one. Regular regression has a well-defined procedure, where the computer follows
+through the steps and gets to the answer, every time. Once you go
+beyond regression, however, the answer is obtained by a step-by-step
+method: the computer makes an initial guess, tries to improve it, then
+tries to improve it again, until it can't improve things any more, at
+which point it calls it good. The problem here is that `polr`
+cannot even get the initial guess! (It apparently is known to suck at
+this, in problems as big and complicated as this one.)
+
+I don't normally recommend forward selection, but I wonder whether it
+works here:
+
+```{r juventus,cache=T}
+steak.5=polr(steak_prep_ord~1,data=steak)
+steak.6=step(steak.5,scope=.~lottery_a+smoke+alcohol+gamble+skydiving+
+speed+cheated+female+age+hhold_income+educ+region,
+direction="forward",test="Chisq",trace=0)
+drop1(steak.6,test="Chisq")
+```
+
+ 
+
+It does, and it says the *only* thing to add out of all the
+variables is education level. So, for you, I picked this along with a
+couple of other plausible-sounding variables and had you start from there.
+
+Forward selection starts from a model containing nothing and asks
+"what can we add?". This is a bit more complicated than backward
+elimination, because now you have to say what the candidate things to
+add *are*. That's the purpose of that `scope` piece, and
+there I had no alternative but to type the names of all the
+variables. Backward elimination is easier, because the candidate
+variables to remove are the ones in the model, and you don't need a
+`scope`. The `trace=0` says "don't give me any output"
+(you can change it to a different value if you want to see what that
+does), and last, the `drop1` looks at what is actually
+*in* the final model (with a view to asking what can be removed,
+but we don't care about *that* here). 
+  
+
+
+

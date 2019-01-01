@@ -1,0 +1,446 @@
+
+
+??q:abortion?? Abortion is a divisive issue in the United States,
+particularly among Christians, some of whom believe that abortion is
+absolutely forbidden by the Bible. Do attitudes towards abortion
+differ among Christian denominations? The data in
+[link](http://www.utsc.utoronto.ca/~butler/d29/abortion.txt) come from
+the American Social Survey for the years  1972--1974. The variables
+are:
+
+
+
+* `year`: year of survey, 1972, 1973 or 1974
+
+* `religion`: Christian denomination: Southern Protestant,
+other Protestant, Catholic.
+
+* `education`: years of education: low (0--8), medium
+(8--12), high (more than 12).
+
+* `attitude` towards abortion (response). There were three abortion
+questions in the survey, asking whether the respondent thought that
+abortion should  be legal in these three circumstances:
+
+
+* when there is a strong possibility of a birth defect
+
+* when the mother's health is threatened
+
+* when the pregnancy is the result of rape.
+
+A respondent who responded "yes" to all three questions was
+recorded as having a Positive attitude towards abortion; someone who
+responded "no" to all three was recorded as Negative, and anyone
+who gave a mixture of Yes and No responses was recorded as Mixed.
+
+* `frequency` The number of respondents falling into the
+given category combination.
+
+
+
+
+(a) Read in and display the data. Do you seem to have the right
+things?
+
+
+Solution
+
+
+The columns are aligned with each other but not with the headings,
+so `read_table2` it has to be:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/abortion.txt"
+abortion=read_table2(my_url)
+abortion
+```
+
+     
+
+This looks good. `religion, education, attitude` are correctly
+categorical with apparently the right levels, and `frequency`
+is a (whole) number.
+
+The only weirdness is that year got read in as a number, because it
+*was* a number. `read_table2` had no way of knowing that
+we might have wanted to treat this as categorical. But you don't need to
+observe that.
+
+
+
+(b) We have three choices for fitting logistic regressions:
+
+
+* `glm` with `family="binomial"`
+
+* `polr` (from package `MASS`)
+
+* `multinom` (from package `nnet`)
+
+Why should we be using `polr` for this analysis?
+Explain briefly.
+
+
+Solution
+
+
+It all comes down to what kind of response variable we have. Our
+response variable `attitude` has *three* categories that can
+be put in order: negative, mixed, positive (or the other way
+around). So we have an ordinal response, which calls for
+`polr`. You can eliminate the other possibilities, because
+`glm` requires a *two-*category response and
+`multinom` requires a nominal response whose categories do
+*not* have a natural order.
+In short, "because we have an ordered (ordinal) response". 
+
+
+
+(c) `attitude` is text, and needs to be an ordered factor,
+with the values in the right order.  Create a vector, using
+`c()` if you wish, that contains the factor levels in the
+right order, and then create a new `attitude` factor using
+the `ordered` function, feeding it first the variable as read
+from the file, and second the new ordered levels that you want it to
+have.
+
+
+Solution
+
+
+This is actually harder to describe than it is to do.
+First thing is to decide on the ordering you want. You can go
+low to high or high to low (it doesn't matter).\endnote{The
+results might look different which way you go, but it won't
+make any *material* difference.} I'm going negative to
+positive. Either way, you want `Mix` in the middle:
+```{r }
+lev=c("Neg","Mix","Pos")
+```
+
+       
+
+Then use the original `attitude` plus this `lev` as
+input to `ordered`:
+
+```{r }
+abortion = abortion %>%
+mutate(attitude.ord=ordered(attitude,lev))
+abortion
+```
+
+ 
+
+I printed out the result to convince myself that I had the right
+thing, but you don't have to. Note that `attitude.ord` has the
+same values as `attitude`, but is `ord` (that is, an
+ordered factor) rather than text.
+
+This is the easy way. To save yourself some typing, you can get the
+`attitude` levels from the data:
+
+```{r }
+lev = abortion %>% distinct(attitude) %>% pull(attitude)
+lev
+```
+
+ 
+
+or 
+
+```{r }
+lev2 = abortion %>% count(attitude) %>% pull(attitude)
+lev2
+```
+
+ 
+
+`distinct` arranges the values in the order it found them in
+the data, which is a sensible low-to-high here; `count`
+arranges the levels in alphabetical order, which is *not*
+sensible, so you'd need to rearrange them, like this:
+
+```{r }
+lev3=lev2[c(2,1,3)]
+lev3
+```
+
+ 
+
+or, if you like working with data frames better:
+
+```{r }
+lev4 = abortion %>% count(attitude) %>%
+slice(c(2,1,3)) %>% pull(attitude)
+lev4
+```
+
+ 
+
+where you'd have to go as far as `count` the first time to find
+what to slice, and then run the whole thing the second time.
+
+
+
+(d) Fit a model that will predict the correctly-ordered
+attitude towards abortion 
+from religious denomination and education. Don't forget that each
+row of the data file encodes a lot of people. You don't need to
+display the results.
+
+
+Solution
+
+
+This is a veiled hint to remember the `weights=`
+thing. Don't forget to use your `attitude` in the proper
+order that you went to such great pains to make in the last part!
+```{r }
+library(MASS)
+abortion.1=polr(attitude.ord~religion+education,
+data=abortion,weights=frequency)
+```
+
+       
+
+
+
+(e) Fit two more models, one containing `religion` only,
+and the other containing `education` only. Again, no need to
+look at the results.
+
+
+Solution
+
+
+This is a standard application of `update`. Note that
+this carries along the `data=`, and *also* the
+`weights=`, so you don't need either of them again; just
+make sure you say what *changes*, and everything else
+(including the form of the model) will stay the same:
+
+```{r }
+abortion.2=update(abortion.1,.~.-education)
+abortion.3=update(abortion.1,.~.-religion)
+```
+
+ 
+
+The syntax means ``take everything in the model in
+`abortion.1`, and then take out `education`'' for the first one.
+If you don't like `update`, you can also copy and paste and edit:
+
+```{r }
+abortion.2a=polr(attitude.ord~religion,
+data=abortion,weights=frequency)
+abortion.3a=polr(attitude.ord~education,
+data=abortion,weights=frequency)
+```
+
+       
+
+
+
+
+(f) Investigate whether each of `religion` and `education`
+should stay in the model, or whether they can be removed. Do this
+two ways, using `drop1` and using `anova`. What do you
+conclude? 
+
+
+Solution
+
+
+I think `drop1` is easier, so let's do that first:
+```{r dropping}
+drop1(abortion.1,test="Chisq")
+```
+
+       
+
+Dropping nothing is rather clearly the best thing to do. Note how easy
+that is, because you test both variables at once. If one of them had
+been removable, you would have removed it, and then done
+`drop1` again to see whether the other one could come out as well.
+
+The `anova` way is more complicated, but sometimes that's the
+only way that works. The idea is that you compare the fit of the model
+containing both variables with the model obtained by dropping one of
+the variables, and see whether you really need the bigger model. This
+has to be done twice, once for each explanatory variable you're testing.
+
+First, we test `religion`, by comparing the model with it (and
+`education`) and the model without it (with just
+`education`, but the other way around (since the smaller model
+goes first):
+```{r }
+anova(abortion.3,abortion.1)
+```
+
+       
+
+This P-value is small, so the bigger model is better:
+`religion` should stay. (To be sure that you did the right
+thing, look in the `anova` output at the two `Model`
+lines: the extra thing in the bigger model needs to be the thing
+you're testing for.)
+
+Now, we test `education` by comparing the model with both and
+the model without `education` (but with `religion` since
+that's important):
+
+```{r }
+anova(abortion.2,abortion.1)
+```
+
+       
+
+Same conclusion: `education` has to stay too.
+Note that the P-values in `drop1` and in `anova`, and
+also the test statistics (`LRT` and `LR stat.`) are the
+same, so it literally doesn't matter which way you do it.
+
+
+
+(g) Which of your fitted models is the best? Explain briefly.
+
+
+
+Solution
+
+
+We couldn't take either of the explanatory variables out, so the
+model with both variables is best, the one I called
+`abortion.1`. 
+
+
+
+(h)??part:preds?? 
+Obtain predicted probabilities for each attitude towards abortion
+for each combination of education level and religious
+denomination. To do that, (i) obtain those levels of education and
+religion, (ii) make a data frame out of all combinations of them,
+(iii) feed your best fitted model and that data frame into
+`predict` with any necessary options.
+
+
+Solution
+
+
+Use either `distinct` or `count` to get the levels of
+`education` and `religion`:
+```{r }
+educations = abortion %>% distinct(education) %>% pull(education)
+religions = abortion %>% distinct(religion) %>% pull(religion)
+new=crossing(education=educations,religion=religions)
+new
+pp=predict(abortion.1,new,type="p")
+cbind(new,pp)
+```
+
+       
+
+
+
+(i) Using your predictions from (??part:preds??), describe
+the effect of education. (This should be the same for all values of `religion`).
+
+
+Solution
+
+
+Pick a religious denomination, say `Cath` since that's
+the first one. Focus on the three rows with that
+`religion`, here rows 1, 4 and 7.  I'd say the striking
+thing is that people with `Low` education are most likely
+to have a negative attitude towards abortion. Or you could say
+that they are *least* likely to have a positive attitude
+towards abortion. That's equally good. Or you can turn it around
+and say that the `High` education people are *more*
+likely to be in favour of abortion (or less likely to be opposed
+to it).
+This holds true for all religious denominations, as you can check.
+This is one of those cases where I don't mind much what you say,
+as long as the data (here the predictions) support it.
+
+
+
+(j) Using your predictions from (??part:preds??), describe
+the effect of `religion`. (This should be the same for all
+levels of `education`.)
+
+
+Solution
+
+
+As in the previous part: pick a level of `education`, and
+then judge the effect of `religion`. 
+The `Low` level of education appeared to be the most
+opposed to abortion before, so the effects of `religion`
+might be the most noticeable there. For those, the Catholics are
+most likely to be negatively inclined towards abortion, and the
+least likely to be postively inclined. There is not much
+difference between the two flavours of Protestant.
+Some further thoughts:
+What actually surprises me is that you hear (in the media) about
+Christians being steadfastly opposed to abortion. This is
+something that these data do not support at all: an appreciable
+fraction of people from each of the denominations, especially
+with medium or high levels of education, are actually in favour
+of abortion in all three of the circumstances described in the question.
+The models we fitted assume an effect of `religion`
+regardless of education, and an effect of `education`
+regardless of religion. But it might be that the effect of
+education depends on which religious denomination you're looking
+at. The way to assess whether that is true is to add an
+*interaction*, as you would in analysis of variance. (We
+haven't talked about that in this course yet, which is why I
+didn't ask you to do it.) In R, `a:b` means ``the
+interaction between factors `a` and `b` and
+`a*b` means ``the main effects of `a` and
+`b` and their interaction''. In our case, therefore, we
+should add `education:religion` to our model and test it
+for significance:
+```{r }
+abortion.4=update(abortion.1,.~.+education:religion)
+anova(abortion.1,abortion.4)
+```
+
+       
+
+The interaction *is* significant, so it should stay. What effect
+does it have on the predictions? We've done all the setup earlier, so
+we just run `predict` again on the new model:
+
+```{r }
+pp=predict(abortion.4,new,type="p")
+cbind(new,pp)
+```
+
+ 
+
+For Southern Protestants and Other Protestants, the effect of
+education is as we described it before: the lower the amount of
+education, the less favourably inclined towards abortion (that is,
+`Neg` is more likely and `Pos` is less likely). This is
+still true for Catholics, but the effect of education is less
+noticeable: the probabilities of each response, over the levels of
+education, vary much less. This, I 
+think, is where the interaction comes from: for Catholics, education
+has a much smaller effect on attitudes towards abortion than it does
+for either of the Protestant denominations. 
+
+I would have liked to have you explore this, but the question was
+already too long, so I called a halt where I did.
+
+Again, we should tidy up after ourselves:
+
+```{r }
+detach("package:MASS", unload=T)
+```
+
+ 
+
+
+
+

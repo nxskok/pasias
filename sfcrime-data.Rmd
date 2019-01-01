@@ -1,0 +1,268 @@
+
+
+ The data in [link](http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv) is a huge dataset of crimes committed in San
+Francisco between 2003 and 2015. The variables are:
+
+
+
+* `Dates`: the date and time of the crime
+
+* `Category`: the category of crime, eg. "larceny" or
+"vandalism" (response).
+
+* `Descript`: detailed description of crime.
+
+* `DayOfWeek`: the day of the week of the crime.
+
+* `PdDistrict`: the name of the San Francisco Police
+Department district in which the crime took place.
+
+* `Resolution`: how the crime was resolved
+
+* `Address`: approximate street address of crime
+
+* `X`: longitude
+
+* `Y`: latitude
+
+
+Our aim is to see whether the category of crime depends on the day of
+the week and the district in which it occurred. However, there are a
+lot of crime categories, so we will focus on the top four
+"interesting" ones, which we will have to discover.
+
+
+
+(a) Read in the data and verify that you have these columns and a
+lot of rows. (The data may take a moment to read in. You will see why.)
+
+
+Solution
+
+
+```{r cache=T}
+my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv"
+sfcrime=read_csv(my_url)
+sfcrime
+```
+
+     
+
+Those columns indeed, and pushing a million rows! That's why it took
+so long!
+
+There are also 39 categories of crime, so we need to cut that down
+some. There are only ten districts, however, so we should be able to
+use that as is.
+    
+
+
+(b) How is the response variable here different to the one in
+the question about steak preferences (and therefore why would
+`multinom` from package `nnet` be the method of choice)?
+
+
+Solution
+
+
+Steak preferences have a natural order, while crime categories do
+not. Since they are unordered, `multinom` is better than
+`polr`. 
+    
+
+
+(c) Find out which crime categories there are, and 
+arrange them in order of how many crimes there were in each
+category. 
+
+
+Solution
+
+
+This can be the one you know, a group-by and summarize, followed
+by `arrange` to sort:
+
+```{r }
+sfcrime %>% group_by(Category) %>%
+summarize(count=n()) %>%
+arrange(desc(count))
+```
+
+ 
+
+or this one does the same thing and saves a step:
+
+```{r }
+sfcrime %>% count(Category) %>%
+arrange(desc(n))
+```
+
+ 
+
+For this one, do the `count` step first, to see what you
+get. It produces a two-column data frame with the column of counts
+called `n`. So now you know that the second line has to be
+`arrange(desc(n))`, whereas before you tried `count`,
+all you knew is that it was arrange-desc-something.
+
+You need to sort in descending order so that the categories you want
+to see actually do appear at the top.
+    
+
+
+(d) Which are the four most frequent "interesting" crime
+categories, that is to say, not including "other offenses" and
+"non-criminal"? Get them into a vector called
+`my.crimes`. See if you can find a way of doing this  that
+doesn't involve typing them in (for full marks).
+
+
+Solution
+
+
+The most frequent interesting ones are, in order, larceny-theft,
+assault, drug-narcotic and vehicle theft. 
+The fact that "other offenses" is so big indicates that there
+are a lot of possible crimes out there, and even 39 categories of
+crime isn't enough. "Non-criminal" means, I think, that the
+police were called, but on arriving at the scene, they found that
+no law had been broken.
+I think the easy way to get the "top four" crimes out is to pull
+them out of the data frame that `count` produces. They are
+rows 1, 4, 5 and 6, so add a `slice` to your chain:
+```{r }
+my.rows=c(1,4,5,6)
+my.crimes = sfcrime %>% count(Category) %>%
+arrange(desc(n)) %>%
+slice(my.rows) %>% pull(Category)
+my.crimes
+```
+$ %$ %$ %$
+
+I just want the `Category` column (as a vector), and
+`pull` is the way to get that. (If I don't do `pull`, I
+get a data frame.)
+
+If you can't think of anything, just type them into a vector with
+`c`, or better, copy-paste them from the console. But that's a
+last resort, and would cost you a point. If you do this, they have to
+match exactly, UPPERCASE and all.
+    
+
+
+(e) (Digression, but needed for the next part.) The R vector
+`letters` contains the lowercase letters from `a` to
+`z`. Consider the vector `('a','m',3,'Q')`. Some of
+these are found amongst the lowercase letters, and some not. Type
+these into a vector `v` and explain briefly why 
+`v %in% letters` produces what it does.
+
+
+
+Solution
+
+
+This is the ultimate "try it and see":
+```{r }
+v=c('a','m',3,'Q')
+v %in% letters
+```
+
+   
+
+The first two elements of the answer are `TRUE` because
+lowercase-a and lowercase-m can be found in the lowercase letters
+somewhere. The other two are false because the number 3 and the
+uppercase-Q cannot be found anywhere in the lowercase letters.
+
+The name is `%in%` because it's asking whether each element of
+the first vector (one at a time) is *in* the set defined by the
+second thing: "is `a` a lowercase letter? ... is ``Q" a lowercase letter?'' 
+and getting the answers "yes, yes, no, no".
+  
+
+
+(f) We are going to `filter` only the rows of our data frame that
+have one of the crimes in `my.crimes` as their
+`Category`. Also, `select` only the columns
+`Category`, `DayOfWeek` and `PdDistrict`. Save
+the resulting data frame and display its structure. (You should have a
+lot fewer rows than you did before.)
+
+
+
+Solution
+
+
+The hard part about this is to get the inputs to `%in%` the
+right way around. We are testing the things in `Category` one
+at a time for membership in the set in `my.crimes`, so this:
+```{r error=T}
+sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
+select(c(Category,DayOfWeek,PdDistrict)) 
+sfcrimea
+```
+
+   
+
+That didn't work. Remember what this was? This is because `MASS` is still loaded:
+
+```{r }
+search()
+```
+
+ 
+
+so we need to get rid of `MASS`:
+
+```{r error=T}
+detach("package:MASS", unload=T)
+```
+
+ 
+
+and try again:
+
+```{r error=T}
+sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
+select(c(Category,DayOfWeek,PdDistrict)) 
+sfcrimea
+```
+
+   
+I had trouble thinking of a good name for this one, so I put an "a"
+on the end. (I would have used a number, but I prefer those for
+models.) 
+
+Down to a "mere" 359,000 rows. Don't be stressed that the
+`Category` factor still has 39 levels (the original 39 crime
+categories); only four of them have any data in them:
+
+```{r }
+sfcrimea %>% count(Category)
+```
+
+ 
+
+So all of the crimes that are left are one of the four Categories we
+want to look at.
+  
+
+
+(g) Save these data in a file `sfcrime1.csv`.
+
+
+
+Solution
+
+
+This is `write_csv` again:
+```{r }
+write_csv(sfcrimea,"sfcrime1.csv")
+```
+
+   
+  
+
+
+

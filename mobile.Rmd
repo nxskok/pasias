@@ -1,0 +1,484 @@
+##  Do you like your mobile phone?
+
+
+ A phone company commissioned a survey of their customers'
+satisfaction with their mobile devices. The responses to the survey
+were on a so-called Likert scale of "very unsatisfied",
+"unsatisfied", "satisfied", "very satisfied". Also recorded were
+each customer's gender and age group (under 18, 18--24, 25--30, 31 or
+older). (A survey of this kind does not ask its respondents for their
+exact age, only which age group they fall in.) The data, as
+frequencies of people falling into each category combination, are in [link](http://www.utsc.utoronto.ca/~butler/d29/mobile.txt).
+
+
+
+(a)??part:gather?? Read in the data and take a look at the format. Use a tool
+that you know about to arrange the frequencies in *one* column,
+with other columns labelling the response categories that the
+frequencies belong to. Save the new data frame. (Take a look at it
+if you like.)
+ 
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/mobile.txt"
+mobile=read_delim(my_url," ")
+mobile
+```
+
+ 
+With multiple columns that are all frequencies, this is a job for
+`gather`:
+```{r }
+mobile.long = mobile %>% gather(satisfied,frequency,very.unsat:very.sat)
+mobile.long
+```
+
+     
+
+Yep, all good. See how `mobile.long` contains what it should?
+(For those keeping track, the original data frame had 8 rows and 4
+columns to gather, and the new one has $8\times 4=32$ rows.)
+ 
+
+
+(b) We are going to fit ordered logistic models below. To
+do that, we need our response variable to be a factor with its levels
+in the right order. By looking at the data frame
+you just created, determine what kind
+of thing your intended response variable currently is.
+
+
+
+Solution
+
+
+I looked at `mobile.long` in the previous part, but if you
+didn't, look at it here:
+
+```{r }
+mobile.long
+```
+
+     
+
+My intended response variable is what I called `satisfied`.
+This is `chr` or "text", not the `factor` that I
+want. 
+
+
+
+
+(c) If your intended response variable is not a factor, create a factor in your data frame with levels in the right order. Hint: look at the order your levels are *in the data*.
+
+
+
+Solution
+
+
+My intended response `satisfied` is text, not a factor, so
+I need to do this part.
+The hint is to look at the column `satisfied` in
+`mobile.long` and note that the satisfaction categories
+appear in the data *in the order that we want*. This is good
+news, because we can use `fct_inorder` like this:
+```{r }
+mobile.long %>%
+mutate(satis=fct_inorder(satisfied)) -> mobile.long
+```
+
+     
+
+If you check, by looking at the data frame, `satis` is 
+a `factor`, and you can also do this to verify that its levels
+are in the right order:
+
+```{r }
+with(mobile.long, levels(satis))
+```
+
+ 
+Success.
+
+Extra: so now you are asking, what if the levels are in the *wrong* order in the data? Well, below is what you used to have to do, and it will work for this as well.
+I'll first find what levels of satisfaction I have. This
+can be done by counting them, or by finding the distinct ones:
+```{r }
+mobile.long %>% count(satisfied)
+```
+
+     
+
+or
+
+```{r }
+mobile.long %>% distinct(satisfied)
+```
+
+ 
+
+If you count them, they come out in alphabetical order. If you ask for
+the distinct ones, they come out in the order they were in
+`mobile.long`, which is the order the *columns* of those
+names were in `mobile`, which is the order we want. 
+
+To actually grab those satisfaction levels as a vector (that we will
+need in a minute), use `pluck` to pull the column out of the
+data frame as a vector:
+
+```{r }
+v1 = mobile.long %>% 
+distinct(satisfied) %>%
+pluck("satisfied")
+v1
+```
+
+ 
+
+which is in the correct order, or
+
+```{r }
+v2 = mobile.long %>% 
+count(satisfied) %>%
+pluck("satisfied")  
+v2
+```
+
+ 
+
+which is in alphabetical order. The problem here is that we know the
+correct order, but there isn't a good way to code that, so we have to
+rearrange it ourselves. The correct order from `v2` is 4, 2, 1,
+3, so:
+
+```{r }
+v3=c(v2[4],v2[2],v2[1],v2[3])
+v3
+v4=v2[c(4,2,1,3)]
+v4
+```
+
+ 
+
+Either of these will work. The first one is more typing, but is
+perhaps more obvious. There is a third way, which is to keep things as
+a data frame until the end, and use `slice` to pick out the
+rows in the right order:
+
+```{r }
+v5 = mobile.long %>% 
+count(satisfied) %>%
+slice(c(4,2,1,3)) %>%  
+pluck("satisfied")  
+v5
+```
+
+ 
+
+If you don't see how that works, run it yourself, one line at a time.
+
+The other way of doing this is to physically type them into a vector,
+but this carries the usual warnings of requiring you to be very
+careful and that it won't be reproducible (eg. if you do another
+survey with different response categories). 
+
+So now create the proper response
+variable thus, using your vector of categories:
+
+```{r }
+mobile.long %>%
+mutate(satis=ordered(satisfied,v1)) -> mobile.long2
+mobile.long2
+```
+
+ 
+
+`satis` has the same values as `satisfied`, but its
+label `ord` means that it is an ordered factor, as we want.
+
+
+
+(d)??part:thefit??
+Fit ordered logistic models to predict satisfaction from (i) gender
+and age group, (ii) gender only, (iii) age group only. (You don't
+need to examine the models.) Don't forget a suitable
+`weights`!
+ 
+Solution
+
+
+(i):
+
+```{r }
+library(MASS)
+mobile.1=polr(satis~gender+age.group,weights=frequency,data=mobile.long)
+```
+
+ 
+
+For (ii) and (iii), `update` is the thing (it works for any
+kind of model):
+
+```{r }
+mobile.2=update(mobile.1,.~.-age.group)
+mobile.3=update(mobile.1,.~.-gender)
+```
+
+ 
+
+We're not going to look at these, because the output from
+`summary` is not very illuminating. What we do next is to try
+to figure out which (if either) of the explanatory variables
+`age.group` and `gender` we need.
+ 
+
+
+(e) Use `drop1` on your model containing both explanatory
+variables to determine whether you can remove either of them. Use
+`test="Chisq"` to obtain P-values.
+
+
+
+Solution
+
+
+`drop1` takes a fitted model, and tests each term in
+it in turn, and says which (if any) should be removed. Here's how it goes:
+
+```{r }
+drop1(mobile.1,test="Chisq")
+```
+
+ 
+
+The possibilities are to remove `gender`, to remove
+`age.group` or to remove nothing. 
+The best one is "remove nothing", because it's the one on the output with the smallest
+AIC. Both P-values are small, so it would be a mistake to remove
+either of the explanatory variables.
+
+
+
+(f) Use `anova` to decide whether we are justified in
+removing `gender` from a model containing both `gender`
+and `age.group`. Compare your P-value with the one from `drop1`.
+ 
+Solution
+
+
+This is a comparison of the model with both variables
+(`mobile.1`) and the model with `gender` removed
+(`mobile.3`). Use `anova` for this, smaller
+(fewer-$x$) model first:
+```{r }
+anova(mobile.3,mobile.1)
+```
+
+     
+
+The P-value is (just) less than 0.05, so the models are significantly
+different. That means that the model with both variables in fits
+significantly better than the model with only `age.group`, and
+therefore that taking `gender` out is a mistake.
+
+The P-value is identical to the one from `drop1` (because they
+are both doing the same test).
+ 
+
+(g) Use `anova` to see whether we are justified in removing
+`age.group` from a model  containing both `gender` and
+`age.group`. Compare your P-value with the one from
+`drop1` above.
+ 
+Solution
+
+
+Exactly the same idea as the last part. In my case, I'm comparing
+models `mobile.2` and `mobile.1`:
+```{r }
+anova(mobile.2,mobile.1)
+```
+
+    
+
+This one is definitely significant, so I need to keep
+`age.group` for sure. Again, the P-value is the same as the one
+in `drop1`.
+ 
+
+(h) Which of the models you have fit so far is the most
+appropriate one? Explain briefly.
+ 
+Solution
+
+
+I can't drop either of my variables, so I have to keep them both:
+`mobile.1`, with both `age.group` and `gender`.
+  
+
+(i) Obtain predicted probabilities of a
+customer falling in the various satisfaction categories, as it
+depends on gender and age group. To do that, you need to feed
+`predict` three things: the fitted model that contains both
+age group and gender, the data frame that you read in from the file
+back in part (??part:gather??) (which contains all the combinations of age group
+and gender), and an appropriate `type`.
+
+ 
+Solution
+
+
+My model containing both $x$s was `mobile.1`, the data frame
+read in from the file was called `mobile`, and I  need
+`type="p"` to get probabilities:
+```{r }
+probs=predict(mobile.1,mobile,type="p")
+mobile %>% select(gender, age.group) %>%
+cbind(probs)
+```
+
+   
+
+This worked for me, but this might happen to you, with the same commands as above:
+
+```{r error=T, echo=F}
+probs=predict(mobile.1,mobile,type="p")
+mobile %>% MASS::select(gender, age.group) %>%
+cbind(probs)
+```
+
+ 
+
+Oh, this didn't work. Why not? There don't seem to be any errors.
+
+This is the kind of thing that can bother you for *days*. The
+resolution (that it took me a long time to discover) is that you might
+have the `tidyverse` *and also* `MASS` loaded, in
+the wrong order, and `MASS` also has a `select` (that
+takes different inputs and does something different). If you look back
+at part (??part:thefit??), you might have seen a message there when you
+loaded `MASS` that `select` was "masked". When you
+have two packages that both contain a function with the same name, the
+one that you can see (and that will get used) is the one that was
+loaded *last*, which is the `MASS` select (not the one we
+actually wanted, which is the `tidyverse` select). There are a
+couple of ways around this. One is to un-load the package we no longer
+need (when we no longer need it). The mechanism for this is shown at
+the end of part (??part:unload??). The other is to say explicitly
+which package you want your function to come from, so that there is no
+doubt. The `tidyverse` is actually a collection of
+packages. The best way to find out which one our `select` comes
+from is to go to the Console window in R Studio and ask for the help
+for `select`. With both `tidyverse` and `MASS`
+loaded, the help window offers you a choice of both `select`s;
+the one we want is "select/rename variables by name", and the actual
+package it comes from is `dplyr`.
+
+With that in mind, we can get the right `select` like this:
+
+```{r }
+probs=predict(mobile.1,mobile,type="p")
+mobile %>% dplyr::select(gender, age.group) %>%
+cbind(probs)
+```
+
+   
+
+This gets the right `select` for sure: package name, two
+colons, function name means 
+"the function by that name that lives in that package".
+
+This is a non-standard use of `cbind` because I wanted to grab
+only the gender and age group columns from `mobile` first, and
+then `cbind` *that* to the predicted probabilities. The
+missing first input to `cbind` is 
+"whatever came out of the previous step", 
+that is, the first two columns of `mobile`.
+
+I only included the first two columns of `mobile` in the
+`cbind`, because the rest of the columns of `mobile`
+were frequencies, which I don't need to see. (Having said that, it
+would be interesting to make a *plot* using the observed
+proportions and predicted probabilities, but I didn't ask you for that.)
+
+This is an unusual `predict`, because we didn't have to make a
+data frame (with my usual name `new`) containing all the
+combinations of things to predict for. We were lucky enough to have
+those already in the original data frame `mobile`. 
+
+The usual way to do this is something like the trick that we did for
+getting the different satisfaction levels:
+
+```{r }
+genders = mobile.long %>% distinct(gender) %>% pluck("gender")
+age.groups = mobile.long %>% distinct(age.group) %>%
+pluck("age.group")
+```
+
+ 
+
+This is getting perilously close to deserving a function written to do
+it (strictly speaking, we should, since this is three times we've
+used this idea now).
+
+Then `crossing` to get the combinations, and then
+`predict`: 
+
+```{r }
+new=crossing(gender=genders,age.group=age.groups)
+new
+pp=predict(mobile.1,new,type="p")
+cbind(new,pp)
+```
+
+ 
+This method is fine if you want to do this
+question this way; the way I suggested first ought  to be easier, but 
+the nice thing about this is its mindlessness: you always do it about
+the same way.
+
+ 
+
+
+(j)??part:unload?? 
+Describe any patterns you see in the predictions, bearing in mind the
+significance or not of the explanatory variables.
+
+ 
+Solution
+
+
+I had both explanatory variables being significant, so I would
+expect to see both an age-group effect *and* a gender effect.
+For both males and females, there seems to be a decrease in
+satisfaction as the customers get older, at least until age 30 or
+so. I can see this because the predicted prob.\ of "very  satisfied" 
+decreases, and the predicted prob.
+of "very unsatisfied" increases. The 31+ age group are very
+similar to the 25--30 group for both males and females. So that's
+the age group effect.
+What about a gender effect? Well, for all the age groups, the males
+are more likely to be very satisfied than the females of the
+corresponding age group, and also less likely to to be very
+unsatisfied. So the gender effect is that males are more satisfied
+than females overall. (Or, the males are less discerning. Take your pick.)
+When we did the tests above, age group was very definitely
+significant, and gender less so (P-value around 0.03). This
+suggests that the effect of age group ought to be large, and the
+effect of gender not so large. This is about what we observed: the
+age group effect was pretty clear, and the gender effect was
+noticeable but small: the females were less satisfied than the
+males, but there wasn't all that much difference.
+Now we need to "unload" MASS, because, as we saw, *it* has a
+`select` that we don't want to have
+interfering with the `dplyr` one:
+```{r }
+detach("package:MASS",unload=T)
+```
+
+    
+ 
+
+
+

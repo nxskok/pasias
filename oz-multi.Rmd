@@ -1,0 +1,215 @@
+##  What sports do these athletes play?
+
+
+ The data at
+[link](http://www.utsc.utoronto.ca/~butler/c32/ais.txt) are physical
+and physiological measurements of 202 male and female Australian elite
+athletes. The data values are separated by *tabs*. We are going
+to see whether we can predict the sport an athlete plays from their
+height and weight.
+
+The sports, if you care, are respectively basketball, 
+"field athletics" (eg. shot put, javelin throw, long jump etc.),
+gymnastics, netball, rowing, swimming, 400m running, tennis, sprinting
+(100m or 200m running), water polo.
+
+
+
+(a)[2] Read in the data and display the first few rows.
+
+Solution
+
+
+The data values are separated by tabs, so `read_tsv` is
+the thing:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
+athletes
+```
+
+     
+
+If you didn't remember that, this also works:
+
+```{r }
+athletes=read_delim(my_url,"\t")
+```
+
+ 
+
+(this is the R way of expressing "tab".)
+
+
+(b)[2] Make a scatterplot of height vs.\ weight, with the points
+coloured by what sport the athlete plays. Put height on the $x$-axis
+and weight on the $y$-axis.
+
+Solution
+
+
+I'm doing this to give you a little intuition for later:
+```{r }
+ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport))+geom_point()
+```
+
+     
+
+The reason for giving you the axes to use is (i) neither variable is
+really a response, so it doesn't actually matter which one goes on
+which axis, and (ii) I wanted to give the grader something consistent
+to look at.
+
+
+(c)[2] Explain briefly why a multinomial model (`multinom`
+from `nnet`) would be the best thing to use to predict sport
+played from the other variables.
+
+Solution
+
+
+The categories of `Sport` are not in any kind of order, and
+there are more than two of them.
+That's really all you needed, for which two marks is kind of
+generous. 
+
+
+(d)[2] Fit a suitable model for predicting sport played from
+height and weight. (You don't need to look at the results.) 100
+steps isn't quite enough, so set `maxit` equal to a larger
+number to allow the estimation to finish.
+
+Solution
+
+
+200 steps is actually enough, but any number larger than 100 is
+fine.  Like this:
+
+```{r }
+library(nnet)
+sport.1=multinom(Sport~Ht+Wt,data=athletes,maxit=200)
+```
+
+ 
+
+As long as you see the word `converged` at the end, you're
+good. 
+
+
+(e)[3] Demonstrate using `anova` that `Wt` should
+not be removed from this model.
+
+Solution
+
+
+The idea is to fit a model without `Wt`, and then show that
+it fits significantly worse:
+```{r }
+sport.2=update(sport.1,.~.-Wt)
+anova(sport.2,sport.1,test="Chisq")
+```
+
+     
+
+The P-value is very small indeed, so the bigger model `sport.1`
+is definitely better (or the smaller model `sport.2` is
+significantly worse, however you want to say it). So taking
+`Wt` out is definitely a mistake. 
+
+This is what I would have guessed (I actually wrote the question in
+anticipation of this being the answer) because weight certainly seems
+to help in distinguishing the sports. For example, the field athletes
+seem to be heavy for their height compared to the other athletes (look
+back at the graph you made). 
+
+`drop1`, the obvious thing, doesn't work here. Does `step`?
+
+```{r }
+step(sport.1,direction="backward",test="Chisq")
+```
+
+ 
+
+Curiously enough, it does. The final model is the same as the initial
+one, telling us that neither variable should be removed.
+
+
+(f)[3] Make a data frame consisting of all combinations of
+`Ht` 160, 180 and 200 (cm), and `Wt` 50, 75, and 100
+(kg), and use it to obtain predicted probabilities of athletes of
+those heights and weights playing each of the sports. Display the
+results. You might have to display them smaller, or reduce the
+number of decimal places
+`r tufte::margin_note("For this, use *round*.")` 
+to fit them on the page.
+
+Solution
+
+
+This is (again) the easier way: fill vectors with the given
+values, use `crossing` to get the combinations, and feed
+that into `predict`, thus:
+```{r }
+Hts=c(160,180,200)
+Wts=c(50,75,100)
+new=crossing(Ht=Hts,Wt=Wts)
+new
+```
+
+  
+
+and then
+
+```{r size="scriptsize"}
+p=predict(sport.1,new,type="probs")
+cbind(new,p)
+```
+
+ 
+
+I'll take this, but read on for an improvement.
+
+This still spills onto a second line (even printed this small). Let's
+round the predicted probabilities to 2 decimals, which, with luck,
+will also kill the scientific notation:
+
+```{r }
+cbind(new,round(p,2))
+```
+
+ 
+Better. Much better.
+    
+
+(g)[2] For an athlete who is 180 cm tall and weighs 100 kg, what
+ sport would you guess they play? How sure are you that you are
+ right? Explain briefly.
+
+Solution
+
+
+Find this height and weight in your predictions (it's row 6). Look
+along the line for the highest probability, which is 0.85 for
+`Field` (that is, field athletics). All the other
+probabilities are much smaller (the biggest of the others is
+0.06). So this means we would guess the athlete to be a field
+athlete, and because the predicted probability is so big, we are
+very likely to be right.
+This kind of thought process is characteristic of discriminant
+analysis, which we'll see more of later in the course.
+Compare that with the scatterplot you drew earlier: the field
+athletes do seem to be distinct from the rest in terms of
+height-weight combination. 
+Some of the other height-weight combinations are almost equally
+obvious: for example, very tall people who are not very heavy are
+likely to play basketball. 400m runners are likely to be of
+moderate height but light weight. Some of the other sports, or
+height-weight combinations, are difficult to judge. Consider also
+that we have mixed up males and females in this data set. We might
+gain some clarity by including `Sex` in the model, and also
+in the predictions. But I wanted to keep this question relatively
+simple for you, and I wanted to stop from getting unreasonably
+long. (You can decide whether you think it's already too long.)
+ 
+
+

@@ -1,0 +1,382 @@
+
+
+ What do alligators most like to eat? 219 alligators were captured
+in four Florida lakes. Each alligator's stomach contents were
+observed, and the food that the alligator had eaten  was classified
+into one of five categories: fish, invertebrates (such as snails or
+insects), reptiles (such as turtles), birds, and "other" (such as
+amphibians, plants or rocks). The researcher noted for each alligator
+what that alligator had most of in its stomach, as well as the gender
+of each alligator and whether it was "large" or "small" (greater
+or less than 2.3 metres in length). The data can be found in
+[link](http://www.utsc.utoronto.ca/~butler/d29/alligator.txt). The
+numbers in the data set (apart from the first column) are all
+frequencies. (You can ignore that first column "profile".)
+
+Our aim is to predict food type from the other variables.
+
+
+
+(a) Read in the data and display the first few lines. Describe
+how the data are not "tidy".
+
+
+Solution
+
+
+Separated by exactly one space:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/alligator.txt"
+gators.orig=read_delim(my_url," ")
+gators.orig
+```
+
+       
+
+The last five columns are all frequencies. Or, one of the variables
+(food type) is spread over five columns instead of being contained in
+one. Either is good.
+
+My choice of "temporary" name reflects that I'm going to obtain a
+"tidy" data frame called `gators` in a moment.
+
+
+
+(b) Use `gather` to arrange the data
+suitably for analysis (which will be using
+`multinom`). Demonstrate (by looking at the first few rows
+of your new data frame) that you now have something tidy.
+
+
+Solution
+
+
+I'm creating my "official" data frame here:
+```{r }
+gators = gators.orig %>% gather(Food.type,Frequency,Fish:Other)
+gators
+```
+
+       
+
+The usual thing: data frame, what makes the columns (to be gathered)
+different, what makes them the same, columns to gather. I gave my
+column names Capital Letters to make them consistent with the others
+(and in an attempt to stop infesting my brain with annoying
+variable-name errors when I fit models later).
+
+Looking at the first few lines reveals that I now have a column of
+food types and one column of frequencies, both of which are what I
+wanted. I can check that I have all the different food types by
+finding the distinct ones:
+
+```{r }
+gators %>% distinct(Food.type)
+```
+
+ 
+
+(Think about why `count` would be confusing here.)
+
+Note that `Food.type` is text (`chr`) rather than being a
+factor. I'll hold my breath and see what happens when I fit a model
+where it is supposed to be a factor.
+
+
+
+(c) What is different about this problem, compared to
+Question~??q:abortion??, that would make 
+`multinom` the right tool to use?
+
+
+Solution
+
+
+Look at the response variable `Food.type` (or whatever
+you called it): this has multiple categories, but they are
+*not ordered* in any logical way. Thus, in short, a nominal
+response. 
+
+
+
+(d) Fit a suitable multinomial model predicting food type from  gender, size
+and lake. How you account for having `Frequency` as well?
+
+
+Solution
+
+
+The clue in the question is to remind you not to forget the
+`weights` piece, otherwise `multinom` will assume
+that you have *one* observation per line and not as many as
+the number in `Frequency`. 
+*That* is the
+reason that `count` earlier would have been confusing:
+it would have told you how many *rows* contained each
+food type, rather than how many *alligators*, and these
+would have been different:
+```{r }
+gators %>% count(Food.type)
+gators %>% count(Food.type,wt=Frequency)
+```
+
+         
+
+Each food type appears on 16 rows, but is the favoured diet of very
+different numbers of *alligators*. Note the use of `wt=`
+to specify a frequency variable.\endnote{Discovered by me two minutes
+ago.}
+
+You ought to understand *why* those are different.
+
+All right, back to modelling:
+
+```{r }
+library(nnet)
+gators.1=multinom(Food.type~Gender+Size+Lake,
+weights=Frequency,data=gators)
+```
+
+       
+
+This worked, even though `Food.type` was actually text. I guess
+it got converted to a factor. The ordering of the levels doesn't
+matter here anyway, since this is not an ordinal model.
+
+No need to look at it, since the output is kind of confusing anyway: 
+```{r }
+summary(gators.1)
+```
+
+ 
+
+You get one coefficient for each variable (along the top) and for each
+response group (down the side), using the first group as a baseline
+everywhere. These numbers are hard to interpret; doing predictions is
+much easier.
+
+
+
+(e) Do a test to see whether `Gender` should stay in
+the model. (This will entail fitting another model.) What do you conclude?
+
+
+Solution
+
+
+The other model to fit is the one *without* the variable
+you're testing:
+```{r }
+gators.2=update(gators.1,.~.-Gender)
+```
+
+       
+
+I did `update` here to show you that it works, but of course
+there's no problem in just writing out the whole model again and
+taking out `Gender`, preferably by copying and pasting:
+
+```{r }
+gators.2x=multinom(Food.type~Size+Lake,
+weights=Frequency,data=gators)
+```
+
+ 
+
+and then you compare the models with and without `Gender` using `anova`:
+
+```{r }
+anova(gators.2,gators.1)
+```
+
+ 
+
+The P-value is not small, so the two models fit equally well, and
+therefore we should go with the smaller, simpler one: that is, the one
+without `Gender`.
+
+Sometimes `drop1` works here too (and sometimes it doesn't, for
+reasons I haven't figured out):
+
+```{r error=T}
+drop1(gators.1,test="Chisq")
+```
+
+ 
+
+I don't even know what this error message means, never mind what to do
+about it.
+
+
+
+(f) Predict the probability that an alligator
+prefers each food type, given its size, gender (if necessary) and
+the lake it was found 
+in, using the more appropriate of the two models that you have
+fitted so far.  This means (i) obtaining all the sizes and lake
+names, (ii) 
+making a data frame for prediction, and (iii) obtaining and
+displaying the predicted probabilities.
+
+
+Solution
+
+
+To get the different categories, use `distinct` and `pull`:
+```{r }
+Lakes = gators %>% distinct(Lake) %>% pull(Lake)
+Lakes
+Sizes = gators %>% distinct(Size) %>% pull(Size)
+Sizes
+```
+
+    
+
+I didn't need to think about `Genders` because that's not in
+the better model. See below for what happens if you include it
+anyway. 
+
+I have persisted with the Capital Letters, for consistency.
+
+Next, a data frame for predicting from, using `crossing`,
+and called, as per my tradition, `new`:
+
+```{r }
+new=crossing(Lake=Lakes,Size=Sizes)
+new
+```
+
+ 
+
+and then, obtain the predictions and glue them onto the data frame of
+values for which they are predictions. Don't forget to use the second
+model, the one without `Gender`. If you do forget, you'll get
+an error anyway, because your data frame of values to predict from
+doesn't have any `Gender` in it:
+
+```{r size="footnotesize"}
+pp=predict(gators.2,new,type="p")
+preds1=cbind(new,pp)
+preds1
+```
+
+ 
+
+Success. You won't get this right the first time. I certainly didn't.
+Anyway, these are the correct predictions that I discuss later.
+
+If you thought that the better model was the one with `Gender`
+in it, or you otherwise forgot that you didn't need `Gender`
+then you needed to do something like this as well:
+
+```{r }
+Genders = gators %>% distinct(Gender) %>% pull(Gender)
+new=crossing(Lake=Lakes,Size=Sizes,Gender=Genders)
+new
+```
+$ %$
+If you predict this in the model *without* `Gender`, you'll get
+the following:
+
+```{r size="footnotesize"}
+pp=predict(gators.2,new,type="p")
+cbind(new,pp)
+```
+
+ 
+
+Here, the predictions for each gender are *exactly the same*,
+because not having `Gender` in the model means that we take its
+effect to be *exactly zero*.
+
+Alternatively, if you really thought the model with `Gender` was the
+better one, then you'd do this:
+
+```{r }
+pp=predict(gators.1,new,type="p")
+cbind(new,pp)
+```
+
+ 
+
+and this time there *is* an effect of gender, but it is
+smallish, as befits an effect that is not significant.\endnote{There were only
+216 alligators total, which is a small sample size for this kind of
+thing, especially with all those parameters to estimate.}
+    
+
+
+(g) What do you think is the most important way in which the
+lakes differ? (Hint: look at where the biggest predicted
+probabilities are.)
+
+
+Solution
+
+
+Here are the predictions again:
+```{r }
+preds1
+```
+
+       
+Following my own hint: the preferred diet in George and Hancock lakes
+is fish, but the preferred diet in Oklawaha and Trafford lakes is (at
+least sometimes) invertebrates. That is to say, the preferred diet in
+those last two lakes is less likely to be invertebrates than it is in
+the first two (comparing for alligators of the same size).  This is
+true for both large and small alligators, as it should be, since there
+is no interaction in the model.
+That will do, though you can also note that reptiles are more
+commonly found in the last two lakes, and birds sometimes appear
+in the diet in Hancock and Trafford but rarely in the other two
+lakes. 
+Another way to think about this is to hold size constant and
+compare lakes (and then check that it applies to the other size
+too). In this case, you'd find the biggest predictions among the
+first four rows, and then check that the pattern persists in the
+second four rows. (It does.)
+I think looking at predicted probabilities like this is the
+easiest way to see what the model is telling you. I also think
+that having a consistent recipe for doing predictions makes the
+process require a good deal less thought: get the values you
+want to predict for and store them in vectors with plural names;
+create a data frame for prediction using `crossing`,
+where the things inside are all "singular=plural"; run
+`predict` with model, new data and (if needed) type of
+value to predict, glue the predictions onto the new data.
+If you somehow mess up the creation of your new data frame (this
+typically happens by forgetting a variable that you should have
+included, or giving it the wrong name), `predict` will
+*silently* use the *original data* to predict
+from. Your only warning that this has happened is the size of
+the output; it should have as many rows as `new` did
+above, and the original data will typically have many
+more. (This happened to me just now. I recognized what the
+problem was, and how I would be able to fix it.)
+    
+
+
+(h) How would you describe the major difference between the
+diets of the small and large alligators?
+
+
+Solution
+
+
+Same idea: hold lake constant, and compare small and large, then
+check that your conclusion holds for the other lakes as it should.
+For example, in George Lake, the large alligators are more
+likely to eat fish, and less likely to eat invertebrates,
+compared to the small ones. The other food types are not that
+much different, though you might also note that birds appear
+more in the diets of large alligators than small ones. 
+Does that hold in the other lakes? I think so, though there is
+less difference for fish in Hancock lake than the others (where
+invertebrates are rare for both sizes). Birds don't commonly
+appear in any alligator's diets, but where they do, they are
+commoner for large alligators than small ones.
+    
+
+
+

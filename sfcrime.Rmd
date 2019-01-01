@@ -1,0 +1,384 @@
+
+
+ Hand this one in.
+The data in
+[link](http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv) is a subset
+of a huge
+dataset of crimes committed in San Francisco between 2003 and
+2015. The variables are:
+
+
+
+* `Dates`: the date and time of the crime
+
+* `Category`: the category of crime, eg. "larceny" or
+"vandalism" (response).
+
+* `Descript`: detailed description of crime.
+
+* `DayOfWeek`: the day of the week of the crime.
+
+* `PdDistrict`: the name of the San Francisco Police
+Department district in which the crime took place.
+
+* `Resolution`: how the crime was resolved
+
+* `Address`: approximate street address of crime
+
+* `X`: longitude
+
+* `Y`: latitude
+
+
+Our aim is to see whether the category of crime depends on the day of
+the week and the district in which it occurred. However, there are a
+lot of crime categories, so we will focus on the top four
+"interesting" ones, which are the ones included in this data file.
+
+Some of the model-fitting takes a while (you'll see why below). If
+you're using R Markdown, you can wait for the models to fit each time
+you re-run your document, or, edit the top line of a code chunk to say 
+
+$$
+````{r,cache=T}`
+$$
+
+What that does is to re-run that code chunk only if it changes; if it
+hasn't changed it will use the saved results from last time it was
+run. That can save you a lot of waiting around.
+
+
+
+(a) Read in the data and display the dataset (or, at least,
+part of it).
+
+
+Solution
+
+
+The usual:
+```{r napoli,cache=T}
+my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
+sfcrime=read_csv(my_url)
+sfcrime
+```
+
+     
+
+This is a tidied-up version of the data, with only the variables we'll
+look at, and only the observations from one of the "big four"
+crimes, a mere 300,000 of them. This is the data set we created earlier.
+    
+
+
+(b) Fit a multinomial logistic
+regression that predicts crime category from day of week and
+district. (You don't need to look at it.) The model-fitting produces
+some output. Hand that in too. (If you're using R Markdown, that will
+come with it.)
+
+
+
+Solution
+
+
+The modelling part is easy enough, as long as you can get the
+uppercase letters in the right places:
+
+```{r roma,cache=T}
+sfcrime.1=multinom(Category~DayOfWeek+PdDistrict,data=sfcrime)
+```
+
+ 
+  
+
+
+(c) Fit a model that predicts Category from only the
+district. Hand in the output from the fitting process as well. 
+
+
+
+Solution
+
+
+Same idea. Write it out, or use `update`:
+```{r }
+sfcrime.2=update(sfcrime.1,.~.-DayOfWeek)
+```
+
+   
+  
+
+
+(d) Use `anova` to compare the two models you just
+obtained. What does the `anova` tell you?
+
+
+
+Solution
+
+
+This:
+
+```{r }
+anova(sfcrime.2,sfcrime.1)
+```
+
+ 
+
+This is a very small P-value. The null hypothesis is that the two
+models are equally good, and this is clearly rejected. We need the
+bigger model: that is, we need to keep `DayOfWeek` in there,
+because the pattern of crimes (in each district) differs over day of
+week. 
+
+One reason the P-value came out so small is that we have a ton of
+data, so that even a very small difference between days of the week
+could come out very strongly significant. The Machine Learning people
+(this is a machine learning dataset) don't worry so much about tests
+for that reason: they are more concerned with predicting things well,
+so they just throw everything into the model and see what comes out.
+  
+
+
+(e) Using your preferred model, obtain predicted probabilities
+that a crime will be of each of these four categories for each day of
+the week in the `TENDERLOIN` district (the name is ALL
+CAPS). This will mean constructing a data frame to predict from,
+obtaining the predictions and then displaying them suitably.
+
+
+
+Solution
+
+
+I left this one fairly open, because you've done this kind of thing
+before, so what you need to do ought to be fairly clear:
+Construct the values to predict for with plural names:\endnote{You are
+almost certainly going to get the Capital Letters wrong in
+`DayOfWeek`, once, somewhere in the process. I did.}
+
+```{r }
+DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
+DayOfWeeks
+PdDistricts="TENDERLOIN"
+```
+
+ 
+
+The days of the week are in the order they came out in the data. I
+could fix this up, but the thing that matters for us is that Saturday
+and Sunday came out next to each other.
+
+Anyway, it's about right, even though only one of the variables is
+actually plural and the other plural came out wrong. 
+
+Then, make data frame of combinations. The nice thing is that if we
+had more than one district, we'd just define `PdDistricts`
+appropriately above and the rest of it would be the same:
+
+```{r }
+sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
+sfcrime.new
+```
+
+ 
+
+Then do the predictions:
+
+```{r }
+p=predict(sfcrime.1,sfcrime.new,type="probs")
+```
+
+ 
+
+I can never remember the `type` thing for these models, because
+they are *all different*. I just make a guess, and if I guess
+something that this version of `predict` doesn't know about,
+it'll tell me:
+
+```{r error=T}
+p=predict(sfcrime.1,sfcrime.new,type="bananas")
+```
+
+ 
+
+I can work out from this that `type` should be `probs`,
+since the other one makes the best guess at which category of response
+you'll get (the one with the highest probability). The predicted
+probabilities are more informative, since then you can see how they
+change, even if the predicted category stays the same.\endnote{This is
+something we'll see again in discriminant analysis.}
+
+Finally, display the results. I thought `cbind` wouldn't work
+here, because some of the variables are factors and some are numbers,
+but `cbind`  is smarter than that:
+
+```{r }
+cbind(sfcrime.new,p)
+```
+
+ 
+  
+
+
+(f) Describe briefly how the weekend days Saturday and Sunday
+differ from the rest.
+
+
+
+Solution
+
+
+The days ended up in some quasi-random order, but Saturday and Sunday are
+still together, so we can still easily compare them with the rest.
+My take is that the last two columns don't differ much between
+weekday and weekend, but the first two columns do: the probability
+of a crime being an assault is a bit higher on the weekend, and the
+probability of a crime being drug-related is a bit lower.
+I will accept anything reasonable supported by the predictions you got.
+We said there was a strongly significant day-of-week effect, but the
+changes from weekday to weekend are actually pretty small (but the
+changes from one weekday to another are even smaller). This supports
+what I guessed before, that with this much data even a small effect
+(the one shown here) is statistically
+significant.\endnote{Statistical significance as an idea grew up in
+the days before "big data".}
+I want to compare another district. What districts do we have?
+```{r }
+sfcrime %>% count(PdDistrict)
+```
+
+   
+
+This is the number of our "big four" crimes committed in each
+district. Let's look at the lowest-crime district `RICHMOND`. I
+copy and paste my code. Since I want to compare two districts, I
+include both:
+
+```{r echo=F}
+options(width=90)
+```
+
+ 
+
+```{r size="footnotesize"}
+DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
+PdDistricts=c("RICHMOND","TENDERLOIN")
+sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
+sfcrime.new
+p1=predict(sfcrime.1,sfcrime.new,type="probs")
+d1=cbind(sfcrime.new,p1) ; d1
+```
+
+ 
+
+Richmond is obviously not a drug-dealing kind of place; most of its
+crimes are theft of one kind or another. But the predicted effect of
+weekday vs.\ weekend is the same: Richmond doesn't have many assaults
+or drug crimes, but it also has more assaults and fewer drug crimes on
+the weekend than during the week. There is not much effect of day of
+the week on the other two crime types in either place.
+
+The consistency of *pattern*, even though the prevalence of the
+different crime types differs by location, is a feature of the model:
+we fitted an additive model, that says there is an effect of weekday,
+and *independently* there is an effect of location. The
+*pattern* over weekday is the same for each location, implied by
+the model. This may or may not be supported by the actual data.
+
+The way to assess this is to fit a model with interaction (we will see
+more of this when we revisit ANOVA later), and compare the fit:
+
+```{r model-three-one,cache=T} 
+sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict)
+# anova(sfcrime.1,sfcrime.3)
+```
+
+ 
+
+This one didn't actually complete the fitting process: it got to 100
+times around and stopped (since that's the default limit). We can make
+it go a bit further thus:
+
+```{r model-three-two,cache=T}
+sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict,maxit=300)
+anova(sfcrime.1,sfcrime.3)
+```
+
+ 
+
+This time, we got to the end. (The `maxit=300` gets passed on
+to `multinom`, and says "go around up to 300 times if needed".) 
+As you will see if you try it, this takes a bit of time to
+run. 
+
+This `anova` is also strongly significant, but in the light of
+the previous discussion, the differential effect of day of week in
+different districts might not be very big. We can even assess that; we
+have all the machinery for the predictions, and we just have to apply
+them to this model:
+
+```{r size="footnotesize"}
+p3=predict(sfcrime.3,sfcrime.new,type="probs")
+d3=cbind(sfcrime.new,p3) ; d3
+```
+
+ 
+
+It doesn't *look* much different. Maybe the Tenderloin has a
+larger weekend increase in assaults than Richmond does. I saved these
+predictions in data frames so that I could compare them. Columns 3
+through 6 contain the actual predictions;  let's take the difference
+between them, and glue it back onto the district and day of week. I
+rounded the prediction differences off to 4 decimals to make the
+largest ones easier to find:
+
+```{r size="footnotesize"}
+pdiff=round(p3-p1,4)
+cbind(sfcrime.new,pdiff)
+```
+
+ 
+
+None of the predicted probabilities differ by more than 0.04, which is
+consistent with the size of the interaction effect being small even
+though significant. Some of the differences largest in size are
+Drugs-Narcotics in Tenderloin, but even they are not big.
+
+The programmer in me wants to find a way to display the largest and
+smallest few differences. My idea is to use `gather` to make
+*one* column of differences and sort it, then 
+display the top and bottom few values. Note that
+I have to put those little "backticks" around `VEHICLE THEFT`
+since the variable name has a space in it. My code inefficiently sorts
+the differences twice:
+
+```{r }
+d1 = cbind(sfcrime.new,pdiff) %>% 
+gather(crimetype,difference,ASSAULT:`VEHICLE THEFT`)
+d1 %>% arrange(difference) %>% slice(1:6)
+d1 %>% arrange(desc(difference)) %>% slice(1:6)
+```
+
+ 
+
+I don't know what, if anything, you make of those.
+
+Extra: there is a better way of doing those in one go:
+
+```{r }
+d1 %>% top_n(6,difference)
+d1 %>% top_n(6,-difference)
+```
+
+ 
+
+that is just slicker. What it
+actually does is almost the same as my code, but it saves you worrying about
+the details. (It picks out the top 6, but without putting them in
+order.) 
+  
+
+
+

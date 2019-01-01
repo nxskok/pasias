@@ -1,0 +1,520 @@
+
+
+??part:prepare-next?? This is to prepare you for something in the next
+question. It's meant to be easy.
+
+In R, the code `NA` stands for "missing value" or
+"value not known". In R, `NA` should not have quotes around
+it. (It is a special code, not a piece of text.)
+
+
+(a) Create a vector `v` that contains some numbers and some
+missing values, using `c()`. Put those values into a
+one-column data frame.
+ 
+Solution
+
+
+Like this. The arrangement of numbers and missing values doesn't
+matter, as long as you have some of each:
+```{r }
+v=c(1,2,NA,4,5,6,9,NA,11)
+mydata=tibble(v)
+mydata
+```
+
+     
+
+This has one column called `v`.
+ 
+
+(b) Obtain a new column containing `is.na(v)`. When is this true and when is this false?
+ 
+Solution
+
+
+```{r }
+mydata = mydata %>% mutate(isna=is.na(v))
+mydata
+```
+
+     
+
+This is `TRUE` if the corresponding element of `v` is
+missing (in my case, the third value and the second-last one), and
+`FALSE` otherwise (when there is an actual value there).
+ 
+
+(c) The symbol `!` means "not" in R (and other
+programming languages). What does `!is.na(v)` do? Create a
+new column containing that.
+ 
+Solution
+
+
+Try it and see. Give it whatever name you like. My name reflects
+that I know what it's going to do:
+```{r }
+mydata = mydata %>% mutate(notisna=!is.na(v))
+mydata
+```
+
+     
+
+This is the logical opposite of `is.na`: it's true if there is
+a value, and false if it's missing.
+ 
+
+
+(d) Use `filter` to display just the
+rows of your data frame that have a non-missing value of `v`.
+
+ 
+Solution
+
+
+`filter` takes a column to say which rows to pick, in
+which case the column should contain something that either *is*
+`TRUE` or `FALSE`, or something that can be
+interpreted that way:
+```{r }
+mydata %>% filter(notisna)
+```
+
+   
+
+or you can provide `filter` something that can be calculated
+from what's in the data frame, and also returns something that is
+either true or false:
+
+```{r }
+mydata %>% filter(!is.na(v))
+```
+
+ 
+
+In either case, I only have non-missing values of `v`.
+ 
+
+
+
+ The European Social Survey is a giant survey carried out
+across Europe covering demographic information, attitudes to and
+amount of education, politics and so on. In this question, we will
+investigate what might make British people vote for a certain
+political party.
+
+The information for this question is in a (large) spreadsheet at
+[link](http://www.utsc.utoronto.ca/~butler/d29/ess.csv). There is also a
+"codebook" at
+[link](http://www.utsc.utoronto.ca/~butler/d29/ess-codebook.pdf) that
+tells you what all the variables are. The ones we will use are the
+last five columns of the spreadsheet, described on pages 11 onwards of
+the codebook. (I could have given you more, but I didn't want to make
+this any more complicated than it already was.)
+
+
+
+(e) Read in the `.csv` file, and verify that you have lots
+of rows and columns.
+ 
+Solution
+
+
+The obvious way. Printing it out will display some of the data
+and tell you how many rows and columns you have:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/ess.csv"
+ess=read_csv(my_url)
+ess
+```
+
+     
+
+2286 rows and 17 columns.
+ 
+
+(f)??part:whatvar?? Use the codebook to find out what the columns
+`prtvtgb`, `gndr`, `agea`, `eduyrs` and
+`inwtm` are.  What do the values 1 and 2 for `gndr`
+mean? (You don't, at this point, have to worry about the values for
+the other variables.)
+ 
+Solution
+
+
+Respectively, political party voted for at last election, gender
+(of respondent), age at interview, years of full-time education,
+length of interview (in minutes). For `gndr`, male  is 1
+and female is 2.
+ 
+
+(g) The three major political parties in Britain are the
+Conservative, Labour and Liberal Democrat. (These, for your
+information, correspond roughly to the Canadian Progressive
+Conservative, NDP and Liberal parties.) For the variable that
+corresponds to "political party voted for at the last election",
+which values correspond to these three parties?
+ 
+Solution
+
+
+1, 2 and 3 respectively. (That was easy!)
+ 
+
+(h) Normally, I would give you a tidied-up
+data set. But I figure you could use some practice tidying this one
+up. As the codebook shows, there are some numerical codes for
+missing values, and we want to omit those.
+We want just the columns `prtvtgb` through `inwtm`
+from the right side of the spreadsheet.  Use `dplyr` or
+`tidyr` tools to (i) select only these columns, (ii) include
+the rows that correspond to people who voted for one of the three
+major parties, (iii) include the rows that have an age at interview
+less than 999, (iv) include the rows that have less than 40 years of
+education, (v) include the rows that are not missing on
+`inwtm` (use the idea from Question~??part:prepare-next??
+for (v)).  The last four of those (the inclusion of rows) can be
+done in one go.
+ 
+Solution
+
+
+This seems to call for a chain. The major parties are numbered 1,
+2 and 3, so we can select the ones less than 4 (or
+`<=3`). The reference back to the last question is a hint
+to use `!is.na()`.
+```{r }
+ess.major = ess %>% select(prtvtgb:inwtm) %>% 
+filter(prtvtgb<4,agea<999,eduyrs<40,!is.na(inwtm)) 
+```
+
+     
+You might get a weird error in `select`, something about
+"unused argument". If this happens to you, it's *not* because
+you used `select` wrong, it's because you used the wrong
+`select`! There is one in `MASS`, and you need to make
+sure that this package is "detached" so that you use the
+`select` you want, namely the one in `dplyr`, loaded
+with the `tidyverse`.  Use the instructions at the end of the
+mobile phones question or the abortion question to do this.
+
+The other way around this is to say, instead of `select`,
+`dplyr::select` with two colons. This means ``the
+`select` that lives in `dplyr`, no other'', and is what
+Wikipedia calls "disambiguation": out of several things with the
+same name, you say which one you mean.
+
+If you do the pipeline, you will probably *not* get it right the
+first time. (I didn't.) For debugging, try out one step at a time, and
+summarize what you have so far, so that you can check it for
+correctness. A handy trick for that is to make the last piece of your
+pipeline `summary()`, which produces a summary of the columns of
+the resulting data frame. For example, I first did this (note that my
+`filter` is a lot simpler than the one above):
+
+```{r }
+ess %>% select(prtvtgb:inwtm) %>% 
+filter(prtvtgb<4,!is.na(inwtm)) %>%
+summary()
+```
+
+ 
+
+The mean of a categorical variable like party voted for or gender
+doesn't make much sense, but it looks as if all the values are sensible
+ones (1 to 3 and 1, 2 respectively). However, the maximum values of
+age and years of education look like missing value codes, hence the
+other requirements I put in the question.\endnote{If you don't take
+out the `NA` values, they are shown separately on the end of
+the `summary` for that column.}
+
+`Print`ing as the last step of your pipeline also works, but the
+advantage of `summary` is that you get to see whether there are
+any unusual values, in this case unusually *large* values that
+are missing value codes.
+ 
+
+(i) Why is my response variable nominal rather than  ordinal? How can I tell?
+Which R function should I use, therefore, to fit my model?
+ 
+Solution
+
+
+The response variable is political party voted for. There is no
+(obvious) ordering to this (unless you want to try to place the parties
+on a left-right spectrum), so this is nominal, and you'll need
+`multinom` from package `nnet`.
+If I had included the minor parties and you were working on a
+left-right spectrum, you would have had to decide where to put the
+somewhat libertarian Greens or the parties that exist only in Northern Ireland.
+ 
+
+(j)??part:full?? Take the political party voted for, and turn it into a
+factor, by feeding it into `factor`.
+Fit an appropriate model to predict political party voted
+for at the last election (as a factor) from all the other
+variables. Gender is really a categorical variable too, but since
+there are only two possible values it can be treated as a number.
+ 
+Solution
+
+
+This, or something like it. `multinom` lives in package
+`nnet`, which you'll have to install first if you haven't already:
+```{r }
+library(nnet)
+ess.1=multinom(factor(prtvtgb)~gndr+agea+eduyrs+inwtm,data=ess.major)
+```
+
+     
+
+Or create a factor version of your response in the data frame first:
+
+```{r }
+ess.major = ess.major %>% mutate(party=factor(prtvtgb))
+```
+
+ 
+
+and then:
+
+```{r }
+ess.1a=multinom(party~gndr+agea+eduyrs+inwtm,data=ess.major)
+```
+
+ 
+
+ 
+
+
+(k) We have a lot of explanatory variables. The standard way to
+test whether we need all of them is to take one of them out at a time,
+and test which ones we can remove. This is a lot of work. We won't do
+that. Instead,
+the R function `step` does what you want. You feed `step`
+two things: a fitted model object, and the option `trace=0`
+(otherwise you get a lot of output). The final part of the output from
+`step` tells you which explanatory variables you need to keep.
+
+Run `step` on your fitted model. Which explanatory variables
+need to stay in the model here?
+
+ 
+Solution
+
+
+I tried to give you lots of hints here:
+```{r }
+step(ess.1,trace=0)
+```
+
+   
+
+The end of the output gives us coefficients for (and thus tells us we
+need to keep)  age, years of education and interview length.  
+
+The actual numbers don't mean much; it's the indication that the
+variable has stayed in the model that makes a
+difference.\endnote{There are three political parties; using the first
+as a baseline, there are therefore $3-1=2$ coefficients for each variable.}
+
+If you're wondering about the process: first `step` tries to
+take out each explanatory variable, one at a time, from the starting
+model (the one that contains all the variables). Then it finds the
+best model out of those and fits it. (It doesn't tell us which model
+this is, but evidently it's the one without gender.) Then it takes
+*that* model and tries to remove its explanatory variables one at
+a time (there are only three of them left). Having decided it cannot
+remove any of them, it stops, and shows us what's left.
+
+Leaving out the `trace=0` shows more output and more detail on
+the process, but I figured this was enough (and this way, you don't
+have to wade through all of that output). Try values like 1 or 2 for
+`trace` and see what you get.
+
+ 
+
+
+(l) Fit the model indicated by `step` (in the last part).
+
+ 
+Solution
+
+
+Copy and paste, and take out the variables you don't need. I found
+that gender needed to be removed, but if yours is different, follow
+through with whatever your `step` said to do.
+```{r }
+ess.2=multinom(party~agea+eduyrs+inwtm,data=ess.major)
+```
+
+   
+ 
+
+
+(m) I didn't think that interview length could possibly be
+relevant to which party a person voted for. Test whether interview
+length can be removed from your model of the last part. What do you
+conclude? (Note that `step` and this test may disagree.)
+
+ 
+Solution
+
+
+Fit the model without `inwtm`:
+```{r }
+ess.3=multinom(party~agea+eduyrs,data=ess.major)
+```
+
+   
+
+and then use `anova` to compare them:
+
+```{r }
+anova(ess.3,ess.2)
+```
+
+ 
+
+The P-value, 0.1149, is not small, which says that the smaller model
+is good, ie.\ the one *without* interview length.
+
+I thought `drop1` would also work here, but it appears not to:
+
+```{r error=T}
+drop1(ess.1,test="Chisq")
+```
+
+ 
+
+I think that's a bug in `multinom`, since normally if
+`step` works, then `drop1` will work too (normally
+`step` *uses* `drop1`).
+
+The reason for the disagreement between `step` and
+`anova` is that `step` will tend to
+keep marginal explanatory variables, that is, ones that are
+"potentially interesting" but whose P-values might not be less than
+0.05. There is still no substitute for your judgement in figuring out
+what to do! `step` uses a thing called AIC to decide what to
+do, rather than actually doing a test. If you know about 
+"adjusted R-squared" in choosing explanatory variables for a 
+regression, it's the same idea: a variable can be not quite
+significant but still make the adjusted R-squared go up (typically
+only a little).
+ 
+
+(n) Use your best model to obtain predictions from some
+suitably chosen combinations of values of the explanatory variables
+that remain. (If you have quantitative explanatory variables left,
+you could use their first and third quartiles as values to predict
+from. Running `summary` on the data frame will get summaries
+of all the variables.)
+ 
+Solution
+
+
+First make our new data frame of values to predict
+from. `crossing` is our friend. You can use
+`quantile` or `summary` to find the quartiles. I
+only had `agea` and `eduyrs` left, having decided
+that interview time really ought to come out:
+
+```{r }
+summary(ess.major)
+```
+
+     
+
+Quartiles for age are 44 and 71, and for years of education are 11 and 16:
+
+```{r }
+new=crossing(agea=c(44,71),eduyrs=c(11,16))
+new
+```
+
+     
+
+Now we feed this into `predict`. An annoying feature of this
+kind of prediction is that `type` may not be what you
+expect. The best model is the one I called `ess.3`:
+
+```{r } 
+pp=predict(ess.3,new,type="probs")
+cbind(new,pp)
+```
+
+ 
+ 
+
+(o) What is the effect of increasing age? What is the effect of
+an increase in years of education?
+ 
+Solution
+
+
+To assess the effect of age, hold years of education
+constant. Thus, compare lines 1 and 3 (or 2 and 4):
+increasing age tends to increase the chance that a person will
+vote Conservative (party 1), and decrease the chance that a person
+will vote Labour (party 2). There doesn't seem to be much effect
+of age on the chance that a person will vote Liberal Democrat.
+To assess education, hold age constant, and thus compare rows 1
+and 2 (or rows 3 and 4). This time, there isn't much effect on the
+chances of voting Conservative, but as education increases, the
+chance of voting Labour goes down, and the chance of voting
+Liberal Democrat goes up.
+A little history: back 150 or so years ago, Britain had two
+political parties, the Tories and the Whigs. The Tories became the
+Conservative party (and hence, in Britain and in Canada, the
+Conservatives are nicknamed Tories\endnote{It amuses me that
+Toronto's current mayor is politically a Tory.}). The Whigs became Liberals. At
+about the same time as 
+working people got to vote (not women, yet, but working men) the
+Labour Party came into existence. The Labour Party has always been
+affiliated with working people and trades unions, like the NDP
+here. But power has typically alternated between Conservative and
+Labour goverments, with the Liberals as a third party. In the
+1980s a new party called the Social Democrats came onto the scene,
+but on realizing that they couldn't make much of a dent by
+themselves, they merged with the Liberals to form the Liberal
+Democrats, which became a slightly stronger third party.
+I was curious about what the effect of interview length would
+be. Presumably, the effect is small, but I have no idea which way
+it would be. To assess this, it's the same idea over again: create
+a new data frame with all combinations of `agea`,
+`eduyrs` *and* `inwtm`. I need the quartiles of
+interview time first:
+```{r }
+quantile(ess.major$inwtm)
+```
+
+     
+
+and then
+
+```{r }
+ess.new=crossing(agea=c(44,71),eduyrs=c(11,16),inwtm=c(35,50))
+ess.new
+```
+
+ 
+
+and then predict *using the model that contained interview time*:
+
+```{r }
+pp=predict(ess.2,ess.new,type="probs")
+cbind(ess.new,pp)
+```
+
+ 
+
+The effects of age and education are as they were before. A longer
+interview time is associated with a slightly decreased chance of
+voting Conservative and a slightly increased chance of voting
+Labour. Compare, for example, lines 1 and 2. But, as we 
+suspected, the effect is small and not really worth worrying about.
+ 
+
+
