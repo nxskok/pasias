@@ -279,10 +279,10 @@ v2
 
  
 
-which is in alphabetical order. The problem here is that we know the
-correct order, but there isn't a good way to code that, so we have to
-rearrange it ourselves. The correct order from `v2` is 4, 2, 1,
-3, so:
+which is in alphabetical order. The problem with the second one is
+that we know the correct order, but there isn't a good way to code
+that, so we have to rearrange it ourselves. The correct order from
+`v2` is 4, 2, 1, 3, so:
 
 
 ```r
@@ -747,6 +747,7 @@ detach("package:MASS",unload=T)
 
 
 
+##  Attitudes towards abortion
 
 
 ??q:abortion?? Abortion is a divisive issue in the United States,
@@ -1062,8 +1063,7 @@ abortion.3=update(abortion.1,.~.-religion)
 
  
 
-The syntax means ``take everything in the model in
-`abortion.1`, and then take out `education`'' for the first one.
+The syntax means "take everything in the model abortion.1, and then take out education" for the first one.
 If you don't like `update`, you can also copy and paste and edit:
 
 
@@ -1301,10 +1301,10 @@ education depends on which religious denomination you're looking
 at. The way to assess whether that is true is to add an
 *interaction*, as you would in analysis of variance. (We
 haven't talked about that in this course yet, which is why I
-didn't ask you to do it.) In R, `a:b` means ``the
-interaction between factors `a` and `b` and
-`a*b` means ``the main effects of `a` and
-`b` and their interaction''. In our case, therefore, we
+didn't ask you to do it.) In R, `a:b` means 
+"the interaction between factors `a` and `b`" and
+`a*b` means 
+"the main effects of `a` and `b` and their interaction". In our case, therefore, we
 should add `education:religion` to our model and test it
 for significance:
 
@@ -1380,180 +1380,7 @@ detach("package:MASS", unload=T)
 
 
 
-
-
-??part:prepare-next?? This is to prepare you for something in the next
-question. It's meant to be easy.
-
-In R, the code `NA` stands for "missing value" or
-"value not known". In R, `NA` should not have quotes around
-it. (It is a special code, not a piece of text.)
-
-
-(a) Create a vector `v` that contains some numbers and some
-missing values, using `c()`. Put those values into a
-one-column data frame.
- 
-Solution
-
-
-Like this. The arrangement of numbers and missing values doesn't
-matter, as long as you have some of each:
-
-```r
-v=c(1,2,NA,4,5,6,9,NA,11)
-mydata=tibble(v)
-mydata
-```
-
-```
-## # A tibble: 9 x 1
-##       v
-##   <dbl>
-## 1     1
-## 2     2
-## 3    NA
-## 4     4
-## 5     5
-## 6     6
-## 7     9
-## 8    NA
-## 9    11
-```
-
-     
-
-This has one column called `v`.
- 
-
-(b) Obtain a new column containing `is.na(v)`. When is this true and when is this false?
- 
-Solution
-
-
-
-```r
-mydata = mydata %>% mutate(isna=is.na(v))
-mydata
-```
-
-```
-## # A tibble: 9 x 2
-##       v isna 
-##   <dbl> <lgl>
-## 1     1 FALSE
-## 2     2 FALSE
-## 3    NA TRUE 
-## 4     4 FALSE
-## 5     5 FALSE
-## 6     6 FALSE
-## 7     9 FALSE
-## 8    NA TRUE 
-## 9    11 FALSE
-```
-
-     
-
-This is `TRUE` if the corresponding element of `v` is
-missing (in my case, the third value and the second-last one), and
-`FALSE` otherwise (when there is an actual value there).
- 
-
-(c) The symbol `!` means "not" in R (and other
-programming languages). What does `!is.na(v)` do? Create a
-new column containing that.
- 
-Solution
-
-
-Try it and see. Give it whatever name you like. My name reflects
-that I know what it's going to do:
-
-```r
-mydata = mydata %>% mutate(notisna=!is.na(v))
-mydata
-```
-
-```
-## # A tibble: 9 x 3
-##       v isna  notisna
-##   <dbl> <lgl> <lgl>  
-## 1     1 FALSE TRUE   
-## 2     2 FALSE TRUE   
-## 3    NA TRUE  FALSE  
-## 4     4 FALSE TRUE   
-## 5     5 FALSE TRUE   
-## 6     6 FALSE TRUE   
-## 7     9 FALSE TRUE   
-## 8    NA TRUE  FALSE  
-## 9    11 FALSE TRUE
-```
-
-     
-
-This is the logical opposite of `is.na`: it's true if there is
-a value, and false if it's missing.
- 
-
-
-(d) Use `filter` to display just the
-rows of your data frame that have a non-missing value of `v`.
-
- 
-Solution
-
-
-`filter` takes a column to say which rows to pick, in
-which case the column should contain something that either *is*
-`TRUE` or `FALSE`, or something that can be
-interpreted that way:
-
-```r
-mydata %>% filter(notisna)
-```
-
-```
-## # A tibble: 7 x 3
-##       v isna  notisna
-##   <dbl> <lgl> <lgl>  
-## 1     1 FALSE TRUE   
-## 2     2 FALSE TRUE   
-## 3     4 FALSE TRUE   
-## 4     5 FALSE TRUE   
-## 5     6 FALSE TRUE   
-## 6     9 FALSE TRUE   
-## 7    11 FALSE TRUE
-```
-
-   
-
-or you can provide `filter` something that can be calculated
-from what's in the data frame, and also returns something that is
-either true or false:
-
-
-```r
-mydata %>% filter(!is.na(v))
-```
-
-```
-## # A tibble: 7 x 3
-##       v isna  notisna
-##   <dbl> <lgl> <lgl>  
-## 1     1 FALSE TRUE   
-## 2     2 FALSE TRUE   
-## 3     4 FALSE TRUE   
-## 4     5 FALSE TRUE   
-## 5     6 FALSE TRUE   
-## 6     9 FALSE TRUE   
-## 7    11 FALSE TRUE
-```
-
- 
-
-In either case, I only have non-missing values of `v`.
- 
-
+##  European Social Survey and voting
 
 
  The European Social Survey is a giant survey carried out
@@ -1573,7 +1400,7 @@ this any more complicated than it already was.)
 
 
 
-(e) Read in the `.csv` file, and verify that you have lots
+(a) Read in the `.csv` file, and verify that you have lots
 of rows and columns.
  
 Solution
@@ -1638,7 +1465,7 @@ ess
 2286 rows and 17 columns.
  
 
-(f)??part:whatvar?? Use the codebook to find out what the columns
+(b)??part:whatvar?? Use the codebook to find out what the columns
 `prtvtgb`, `gndr`, `agea`, `eduyrs` and
 `inwtm` are.  What do the values 1 and 2 for `gndr`
 mean? (You don't, at this point, have to worry about the values for
@@ -1653,7 +1480,7 @@ length of interview (in minutes). For `gndr`, male  is 1
 and female is 2.
  
 
-(g) The three major political parties in Britain are the
+(c) The three major political parties in Britain are the
 Conservative, Labour and Liberal Democrat. (These, for your
 information, correspond roughly to the Canadian Progressive
 Conservative, NDP and Liberal parties.) For the variable that
@@ -1666,7 +1493,7 @@ Solution
 1, 2 and 3 respectively. (That was easy!)
  
 
-(h) Normally, I would give you a tidied-up
+(d) Normally, I would give you a tidied-up
 data set. But I figure you could use some practice tidying this one
 up. As the codebook shows, there are some numerical codes for
 missing values, and we want to omit those.
@@ -1705,8 +1532,8 @@ with the `tidyverse`.  Use the instructions at the end of the
 mobile phones question or the abortion question to do this.
 
 The other way around this is to say, instead of `select`,
-`dplyr::select` with two colons. This means ``the
-`select` that lives in `dplyr`, no other'', and is what
+`dplyr::select` with two colons. This means 
+"the `select` that lives in `dplyr`, no other", and is what
 Wikipedia calls "disambiguation": out of several things with the
 same name, you say which one you mean.
 
@@ -1758,7 +1585,7 @@ any unusual values, in this case unusually *large* values that
 are missing value codes.
  
 
-(i) Why is my response variable nominal rather than  ordinal? How can I tell?
+(e) Why is my response variable nominal rather than  ordinal? How can I tell?
 Which R function should I use, therefore, to fit my model?
  
 Solution
@@ -1773,7 +1600,7 @@ left-right spectrum, you would have had to decide where to put the
 somewhat libertarian Greens or the parties that exist only in Northern Ireland.
  
 
-(j)??part:full?? Take the political party voted for, and turn it into a
+(f)??part:full?? Take the political party voted for, and turn it into a
 factor, by feeding it into `factor`.
 Fit an appropriate model to predict political party voted
 for at the last election (as a factor) from all the other
@@ -1830,7 +1657,7 @@ ess.1a=multinom(party~gndr+agea+eduyrs+inwtm,data=ess.major)
  
 
 
-(k) We have a lot of explanatory variables. The standard way to
+(g) We have a lot of explanatory variables. The standard way to
 test whether we need all of them is to take one of them out at a time,
 and test which ones we can remove. This is a lot of work. We won't do
 that. Instead,
@@ -1907,7 +1734,7 @@ have to wade through all of that output). Try values like 1 or 2 for
  
 
 
-(l) Fit the model indicated by `step` (in the last part).
+(h) Fit the model indicated by `step` (in the last part).
 
  
 Solution
@@ -1933,7 +1760,7 @@ ess.2=multinom(party~agea+eduyrs+inwtm,data=ess.major)
  
 
 
-(m) I didn't think that interview length could possibly be
+(i) I didn't think that interview length could possibly be
 relevant to which party a person voted for. Test whether interview
 length can be removed from your model of the last part. What do you
 conclude? (Note that `step` and this test may disagree.)
@@ -2016,7 +1843,7 @@ significant but still make the adjusted R-squared go up (typically
 only a little).
  
 
-(n) Use your best model to obtain predictions from some
+(j) Use your best model to obtain predictions from some
 suitably chosen combinations of values of the explanatory variables
 that remain. (If you have quantitative explanatory variables left,
 you could use their first and third quartiles as values to predict
@@ -2097,7 +1924,7 @@ cbind(new,pp)
  
  
 
-(o) What is the effect of increasing age? What is the effect of
+(k) What is the effect of increasing age? What is the effect of
 an increase in years of education?
  
 Solution
@@ -2203,6 +2030,7 @@ suspected, the effect is small and not really worth worrying about.
 
 
 
+##  Alligator food
 
 
  What do alligators most like to eat? 219 alligators were captured
@@ -2922,6 +2750,7 @@ commoner for large alligators than small ones.
 
 
 
+##  How do you like your steak -- the data
 
 
 ??q:steak-data?? This question takes you through the data preparation for one
@@ -2978,8 +2807,9 @@ steak cooked (factor, as described above, with 5 levels).
 * `hhold_income`: household income group, from \$0--24,999
 to \$150,000+.
 
-* `educ`: highest level of education attained, from ``less
-than high school'' up to "graduate degree"
+* `educ`: highest level of education attained, from 
+"less  than high school" 
+up to "graduate degree"
 
 * `region`: region (of the US)
 that the respondent lives in (five values).
@@ -3431,6 +3261,7 @@ all the right columns, and, scrolling down, no visible missing values.
 
 
 
+##  Crimes in San Francisco -- the data
 
 
  The data in [link](http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv) is a huge dataset of crimes committed in San
@@ -3635,7 +3466,7 @@ police were called, but on arriving at the scene, they found that
 no law had been broken.
 I think the easy way to get the "top four" crimes out is to pull
 them out of the data frame that `count` produces. They are
-rows 1, 4, 5 and 6, so add a `slice` to your chain:
+rows 1, 4, 5 and 6, so add a `slice` to your pipeline:
 
 ```r
 my.rows=c(1,4,5,6)
@@ -3648,7 +3479,8 @@ my.crimes
 ```
 ## [1] "LARCENY/THEFT" "ASSAULT"       "DRUG/NARCOTIC" "VEHICLE THEFT"
 ```
-$ %$ %$ %$
+
+     
 
 I just want the `Category` column (as a vector), and
 `pull` is the way to get that. (If I don't do `pull`, I
@@ -3693,7 +3525,8 @@ uppercase-Q cannot be found anywhere in the lowercase letters.
 
 The name is `%in%` because it's asking whether each element of
 the first vector (one at a time) is *in* the set defined by the
-second thing: "is `a` a lowercase letter? ... is ``Q" a lowercase letter?'' 
+second thing: "is `a` a lowercase letter?" ... 
+is "`Q` a lowercase letter?" 
 and getting the answers "yes, yes, no, no".
   
 
@@ -3848,6 +3681,7 @@ write_csv(sfcrimea,"sfcrime1.csv")
 
 
 
+##  How do you like your steak?
 
 
  When you order a steak in a restaurant, the server will ask
@@ -4357,11 +4191,8 @@ cbind(steak.new,round(p,3))
 Say something about the effect of changing educational level on the
 predictions, and say something about the effect of favouring Lottery A
 vs.\ not. I don't much mind what: you can say that there is not much
-effect (of either variable), or you can say something like ``people
-with a graduate degree are slightly more likely to like their steak
-rare and less likely to like it well done'' (for education level) and
-``people who preferred Lottery A are slightly less likely to like
-their steak rare and slightly more likely to like it well done'' (for
+effect (of either variable), or you can say something like "people with a graduate degree are slightly more likely to like their steak rare and less likely to like it well done" (for education level) and
+"people who preferred Lottery A are slightly less likely to like their steak rare and slightly more likely to like it well done" (for
 effect of Lottery A). You can see these by comparing the first five
 rows to assess the effect of education (or the last five rows, if you
 prefer), and you can compare eg. rows 1 and 6 to assess the effect of
@@ -4604,9 +4435,10 @@ but we don't care about *that* here).
 
 
 
+##  Crimes in San Francisco
 
 
- Hand this one in.
+
 The data in
 [link](http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv) is a subset
 of a huge
@@ -5302,6 +5134,7 @@ order.)
 
 
 
+##  High School and Beyond
 
 
  A survey called High School and Beyond was given to a large
@@ -5673,8 +5506,8 @@ the `test=` there as well}.
 
 
 
-(e) The quartiles of the `science` test score are 44 and
-58. The quartiles of the `socst` test score are 46 and 61. Make
+(e) The quartiles of the `science` test score are 44 
+and 58. The quartiles of the `socst` test score are 46 and 61. Make
 a data frame that has all combinations of those quartiles. If your best
 regression had any other explanatory variables in it, also put the
 *medians* of those variables into this data frame.
@@ -5838,7 +5671,7 @@ gymnastics, netball, rowing, swimming, 400m running, tennis, sprinting
 
 
 
-(a)[2] Read in the data and display the first few rows.
+(a) Read in the data and display the first few rows.
 
 Solution
 
@@ -5924,7 +5757,7 @@ athletes=read_delim(my_url,"\t")
 (this is the R way of expressing "tab".)
 
 
-(b)[2] Make a scatterplot of height vs.\ weight, with the points
+(b) Make a scatterplot of height vs.\ weight, with the points
 coloured by what sport the athlete plays. Put height on the $x$-axis
 and weight on the $y$-axis.
 
@@ -5937,7 +5770,7 @@ I'm doing this to give you a little intuition for later:
 ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport))+geom_point()
 ```
 
-<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
+<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-141-1.png" width="672"  />
 
      
 
@@ -5947,7 +5780,7 @@ which axis, and (ii) I wanted to give the grader something consistent
 to look at.
 
 
-(c)[2] Explain briefly why a multinomial model (`multinom`
+(c) Explain briefly why a multinomial model (`multinom`
 from `nnet`) would be the best thing to use to predict sport
 played from the other variables.
 
@@ -5960,7 +5793,7 @@ That's really all you needed, for which two marks is kind of
 generous. 
 
 
-(d)[2] Fit a suitable model for predicting sport played from
+(d) Fit a suitable model for predicting sport played from
 height and weight. (You don't need to look at the results.) 100
 steps isn't quite enough, so set `maxit` equal to a larger
 number to allow the estimation to finish.
@@ -5968,8 +5801,8 @@ number to allow the estimation to finish.
 Solution
 
 
-200 steps is actually enough, but any number larger than 100 is
-fine.  Like this:
+120 steps is actually enough, but any number larger than 110 is
+fine. It doesn't matter if your guess is way too high. Like this:
 
 
 ```r
@@ -6001,7 +5834,7 @@ As long as you see the word `converged` at the end, you're
 good. 
 
 
-(e)[3] Demonstrate using `anova` that `Wt` should
+(e) Demonstrate using `anova` that `Wt` should
 not be removed from this model.
 
 Solution
@@ -6053,7 +5886,25 @@ to help in distinguishing the sports. For example, the field athletes
 seem to be heavy for their height compared to the other athletes (look
 back at the graph you made). 
 
-`drop1`, the obvious thing, doesn't work here. Does `step`?
+`drop1`, the obvious thing, doesn't work here:
+
+
+```r
+drop1(sport.1, test="Chisq", trace=T)
+```
+
+```
+## trying - Ht
+```
+
+```
+## Error in if (trace) {: argument is not interpretable as logical
+```
+
+ 
+
+I gotta figure out what that error is.
+Does `step`?
 
 
 ```r
@@ -6115,7 +5966,7 @@ Curiously enough, it does. The final model is the same as the initial
 one, telling us that neither variable should be removed.
 
 
-(f)[3] Make a data frame consisting of all combinations of
+(f) Make a data frame consisting of all combinations of
 `Ht` 160, 180 and 200 (cm), and `Wt` 50, 75, and 100
 (kg), and use it to obtain predicted probabilities of athletes of
 those heights and weights playing each of the sports. Display the
@@ -6216,7 +6067,7 @@ cbind(new,round(p,2))
 Better. Much better.
     
 
-(g)[2] For an athlete who is 180 cm tall and weighs 100 kg, what
+(g) For an athlete who is 180 cm tall and weighs 100 kg, what
  sport would you guess they play? How sure are you that you are
  right? Explain briefly.
 

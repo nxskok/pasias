@@ -1,3 +1,4 @@
+##  Crimes in San Francisco -- the data
 
 
  The data in [link](http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv) is a huge dataset of crimes committed in San
@@ -129,7 +130,7 @@ police were called, but on arriving at the scene, they found that
 no law had been broken.
 I think the easy way to get the "top four" crimes out is to pull
 them out of the data frame that `count` produces. They are
-rows 1, 4, 5 and 6, so add a `slice` to your chain:
+rows 1, 4, 5 and 6, so add a `slice` to your pipeline:
 ```{r }
 my.rows=c(1,4,5,6)
 my.crimes = sfcrime %>% count(Category) %>%
@@ -137,7 +138,8 @@ arrange(desc(n)) %>%
 slice(my.rows) %>% pull(Category)
 my.crimes
 ```
-$ %$ %$ %$
+
+     
 
 I just want the `Category` column (as a vector), and
 `pull` is the way to get that. (If I don't do `pull`, I
@@ -177,7 +179,8 @@ uppercase-Q cannot be found anywhere in the lowercase letters.
 
 The name is `%in%` because it's asking whether each element of
 the first vector (one at a time) is *in* the set defined by the
-second thing: "is `a` a lowercase letter? ... is ``Q" a lowercase letter?'' 
+second thing: "is `a` a lowercase letter?" ... 
+is "`Q` a lowercase letter?" 
 and getting the answers "yes, yes, no, no".
   
 

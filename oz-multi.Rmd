@@ -15,7 +15,7 @@ gymnastics, netball, rowing, swimming, 400m running, tennis, sprinting
 
 
 
-(a)[2] Read in the data and display the first few rows.
+(a) Read in the data and display the first few rows.
 
 Solution
 
@@ -41,7 +41,7 @@ athletes=read_delim(my_url,"\t")
 (this is the R way of expressing "tab".)
 
 
-(b)[2] Make a scatterplot of height vs.\ weight, with the points
+(b) Make a scatterplot of height vs.\ weight, with the points
 coloured by what sport the athlete plays. Put height on the $x$-axis
 and weight on the $y$-axis.
 
@@ -61,7 +61,7 @@ which axis, and (ii) I wanted to give the grader something consistent
 to look at.
 
 
-(c)[2] Explain briefly why a multinomial model (`multinom`
+(c) Explain briefly why a multinomial model (`multinom`
 from `nnet`) would be the best thing to use to predict sport
 played from the other variables.
 
@@ -74,7 +74,7 @@ That's really all you needed, for which two marks is kind of
 generous. 
 
 
-(d)[2] Fit a suitable model for predicting sport played from
+(d) Fit a suitable model for predicting sport played from
 height and weight. (You don't need to look at the results.) 100
 steps isn't quite enough, so set `maxit` equal to a larger
 number to allow the estimation to finish.
@@ -82,8 +82,8 @@ number to allow the estimation to finish.
 Solution
 
 
-200 steps is actually enough, but any number larger than 100 is
-fine.  Like this:
+120 steps is actually enough, but any number larger than 110 is
+fine. It doesn't matter if your guess is way too high. Like this:
 
 ```{r }
 library(nnet)
@@ -96,7 +96,7 @@ As long as you see the word `converged` at the end, you're
 good. 
 
 
-(e)[3] Demonstrate using `anova` that `Wt` should
+(e) Demonstrate using `anova` that `Wt` should
 not be removed from this model.
 
 Solution
@@ -122,7 +122,16 @@ to help in distinguishing the sports. For example, the field athletes
 seem to be heavy for their height compared to the other athletes (look
 back at the graph you made). 
 
-`drop1`, the obvious thing, doesn't work here. Does `step`?
+`drop1`, the obvious thing, doesn't work here:
+
+```{r error=T}
+drop1(sport.1, test="Chisq", trace=T)
+```
+
+ 
+
+I gotta figure out what that error is.
+Does `step`?
 
 ```{r }
 step(sport.1,direction="backward",test="Chisq")
@@ -134,7 +143,7 @@ Curiously enough, it does. The final model is the same as the initial
 one, telling us that neither variable should be removed.
 
 
-(f)[3] Make a data frame consisting of all combinations of
+(f) Make a data frame consisting of all combinations of
 `Ht` 160, 180 and 200 (cm), and `Wt` 50, 75, and 100
 (kg), and use it to obtain predicted probabilities of athletes of
 those heights and weights playing each of the sports. Display the
@@ -181,7 +190,7 @@ cbind(new,round(p,2))
 Better. Much better.
     
 
-(g)[2] For an athlete who is 180 cm tall and weighs 100 kg, what
+(g) For an athlete who is 180 cm tall and weighs 100 kg, what
  sport would you guess they play? How sure are you that you are
  right? Explain briefly.
 
