@@ -13,11 +13,11 @@
 <meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
 
 <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-<meta name="github-repo" content="nxskok/pasias" />
+
 
 <meta name="author" content="Ken Butler" />
 
-<meta name="date" content="2018-10-09" />
+<meta name="date" content="2019-01-03" />
 
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
@@ -44,7 +44,11 @@
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a><ul>
+<li><a href="#how-you-can-help"><span class="toc-section-number">1.1</span> How you can help</a></li>
+<li><a href="#background-for-these-problems"><span class="toc-section-number">1.2</span> Background for these problems</a></li>
+<li><a href="#my-checklist"><span class="toc-section-number">1.3</span> My checklist</a></li>
+</ul></li>
 </ul>
 </div>
 </div>
@@ -54,17 +58,91 @@
 <div id="header">
 <h1 class="title">Problems and Solutions in Applied Statistics</h1>
 <h4 class="author"><em>Ken Butler</em></h4>
-<h4 class="date"><em>2018-10-09</em></h4>
+<h4 class="date"><em>2019-01-03</em></h4>
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>This book will hold a collection of problems, and my solutions to them, in applied statistics with R. These come from my courses STAC32 and STAD29 at the University of Toronto Scarborough.</p>
-<p>The problems were originally written in Sweave (that is, LaTeX with R code chunks), using the <code>exam</code> document class. I wrote <a href="https://raw.githubusercontent.com/nxskok/pasias/master/convert.pl">a Perl program</a> to strip out the LaTeX and turn each problem into R Markdown for this book. You will undoubtedly see bits of LaTeX still embedded in the text. I am trying to update my program to catch them, but I am sure to miss some. If you see anything, <a href="https://github.com/nxskok/pasias/issues">file an issue</a> on the Github page for now. I want to fix problems programmatically at first, but when the majority of the problems have been caught, I will certainly take pull requests. I will acknowledge all the people who catch things.</p>
-<p>It looks as if everything compiles, but how does it look?</p>
-<p>The next thing to nail down is converting LaTeX cross-references to R Markdown ones. Some reading required first. (I refer to other parts in the questions from time to time, and I want to do that properly in case I add new parts.) I am stuck as to how to do that. I can translate a <code>\label</code> into HTML as <code>&lt;a name=&quot;thing&quot;&gt;&lt;/a&gt;</code>, and I can refer to it with <code>[my_thing](#thing)</code>, and it works, but <code>\ref{part:this}</code> is trickier, because I need not just the <code>part:this</code> (which gains a <code>#</code> on the front and goes in the <code>()</code> brackets), but I need something like <code>(c)</code> to go into the <code>my_thing</code> slot, and I don’t know how to get that programmatically, since that seems internal to LaTeX.</p>
-<p>I don’t think <code>pandoc</code> can help me here, because I can’t even get it to convert the output of Sweave (a <code>.tex</code> file) into Markdown.</p>
-<p>I have an extremely hacky “solution” to this for now: replace any <code>\ref{}</code> I find with <code>????</code> in the R Markdown, so that when I see it, I can hand-convert it. Ugh.</p>
-<p>&lt;= a7 done. There don’t seem to be many ordinary regressions yet (most of them are tied up into writing reports).</p>
+<p><a href="http://ritsokiguess.site/pasias/">This book</a> will hold a collection
+of problems, and my solutions to them, in applied statistics with
+R. These come from my courses STAC32 and STAD29 at the University of
+Toronto Scarborough. I am in the process of adding the latter.</p>
+<p>The problems were originally written in Sweave (that is, LaTeX with R
+code chunks), using the <code>exam</code> document class, using data sets stolen
+from numerous places (textbooks, websites etc). I wrote <a href="https://raw.githubusercontent.com/nxskok/pasias/master/convert.pl">a Perl
+program</a>
+to strip out the LaTeX and turn each problem into R Markdown for this
+book. You will undoubtedly see bits of LaTeX still embedded in the
+text. I am trying to update my program to catch them, but I am sure to
+miss some.</p>
+<p>I just figured out that you can convert LaTeX “label” and “ref” pairs
+into HTML “a name” and “a href=‘#’”, which R Markdown can handle. I am
+ludicrously pleased with myself. To that effect, you will occasionally
+see question parts beginning with a *; this means that other question
+parts refer back to this one. (One of my favourite question strategies
+is to ask how two different approaches lead to the same answer, or
+more generally to demonstrate that there are different ways to see the
+same thing.)</p>
+<div id="how-you-can-help" class="section level2">
+<h2><span class="header-section-number">1.1</span> How you can help</h2>
+<p>If you see anything, <a href="https://github.com/nxskok/pasias/issues">file an
+issue</a> on the Github page for
+now. I want to fix problems programmatically at first, but when the
+majority of the problems have been caught, I will certainly take pull
+requests. I will acknowledge all the people who catch things. Likely
+problems include:</p>
+<ul>
+<li>some LaTeX construction that I didn’t catch (eg. block quotes)</li>
+<li>disappeared footnotes (that will show up as an apparently missing sentence in the text)</li>
+<li>references to “in class” or a lecture or a course by course number, which need to be eliminated (in favour of wording like “a previous course”)</li>
+<li>references to other questions or question parts that are <em>wrong</em> (likely caused by <em>not</em> being “labels” or “refs” in the original LaTeX)</li>
+<li>my contorted English that is difficult to understand.</li>
+</ul>
+</div>
+<div id="background-for-these-problems" class="section level2">
+<h2><span class="header-section-number">1.2</span> Background for these problems</h2>
+<p>As I read through looking for problems like these, I realize that
+there ought to be a textbook that reflects my way of doing
+things. There isn’t one (yet), though there are lecture
+notes. Reasonably recent versions of these are at:</p>
+<ul>
+<li><a href="http://www.utsc.utoronto.ca/~butler/c32/notes/slides.pdf">the STAC32 website</a></li>
+<li><a href="https://www.utsc.utoronto.ca/~butler/d29/slides-sw.pdf">the STAD29 website</a></li>
+</ul>
+<p>A little background:</p>
+<p>STAC32 is an introduction to R (and also SAS) as
+applied to statistical methods that have (mostly) been learned in
+previous courses. This could be a mathematical statistics course like
+<a href="https://utsc.calendar.utoronto.ca/course/stab57h3">this</a>, or a
+non-mathematical applied course like
+<a href="https://utsc.calendar.utoronto.ca/course/stab27h3">this</a>. The idea is
+that students have already seen a little of regression and analysis of
+variance (and the things that precede them), and need only an
+introduction of how to run them in R.</p>
+<p>STAD29 is an overview of a number of advanced statistical methods. I
+start from regression and proceed to some regression-like methods
+(logistic regression, survival analysis, log-linear frequency table
+analysis), then I go a little further with analysis of variance and
+proceed with MANOVA and repeated measures. I finish with a look at
+classical multivariate methods such as discriminant analysis, cluster
+analysis, principal components and factor analysis. I cover a number
+of methods in no great depth; my aim is to convey an understanding of
+what these methods are for, how to run them and how to interpret the
+results. Statistics majors and specialists cannot take this course for
+credit (they have separate courses covering this material with the
+proper mathematical background). D29 is intended for students in other
+disciplines who find themselves wanting to learn more statistics; we
+have an <a href="https://utsc.calendar.utoronto.ca/minor-program-applied-statistics-science">Applied Statistics Minor
+program</a>
+for which C32 and D29 are two of the last courses.</p>
+</div>
+<div id="my-checklist" class="section level2">
+<h2><span class="header-section-number">1.3</span> My checklist</h2>
+<ul>
+<li>bring in the D29 questions</li>
+<li>working on A4 D29</li>
+<li>look for multiple regression Qs in A6 or wherever</li>
+</ul>
+</div>
 </div>
 <p style="text-align: center;">
 </p>
