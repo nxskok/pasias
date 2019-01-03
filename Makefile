@@ -9,7 +9,9 @@ rmds: carp.Rmd socwork.Rmd pinetrees.Rmd jays-dplyr.Rmd tomatoes.Rmd migraine.Rm
     wolfspider.Rmd aphids.Rmd doseresponse.Rmd parasite.Rmd ethics.Rmd heart.Rmd breastfeed.Rmd donner.Rmd heart.Rmd\
     apache.Rmd ha2.Rmd mobile.Rmd abortion.Rmd ess.Rmd alligator.Rmd steak-data.Rmd sfcrime-data.Rmd steak.Rmd sfcrime.Rmd\
     hsb.Rmd oz-multi.Rmd nonmissing.Rmd worcester.Rmd drug-treatment.Rmd myeloma.Rmd\
-    catbrain-b.Rmd ovarian.Rmd
+    catbrain-b.Rmd ovarian.Rmd caffeine-contrast.Rmd studyhours.Rmd\
+    mental-context.Rmd shirts.Rmd productivity.Rmd leprosy.Rmd urine.Rmd\
+    hayfever.Rmd acidrain.Rmd
 %.Rmd: ~/teaching/d29/exams/%.Rnw convert.pl
 	perl convert.pl $< > $@
 docs/index.html: index.Rmd
@@ -20,3 +22,5 @@ docs/ordinal-nominal-response.html: index.Rmd
 	Rscript -e "bookdown::preview_chapter('16-ordinal-nominal-response.Rmd')"
 docs/survival-analysis.html: index.Rmd
 	Rscript -e "bookdown::preview_chapter('17-survival-analysis.Rmd')"
+ch18: index.Rmd
+	Rscript -e "bookdown::preview_chapter('18-anova-revisited.Rmd')"

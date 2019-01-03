@@ -1,0 +1,150 @@
+
+
+ One of the first noticeable effects of climate change was
+"acid rain". This is formed by the water vapour in clouds combining
+with nitrous oxide and sulfur dioxide, which come from coal and oil
+production. How does the acidity of rain affect the acidity of the
+soil on which it falls? (This will have an effect on the kind of
+plants that can be grown in that soil.) Acidity is measured using the
+pH scale, where a pH of 7 is chemically neutral, a number less than 7
+is acidic, and a number greater than 7 is alkaline.
+
+An experiment was conducted at the Florida Institute of Food and
+Agricultural Sciences, to determine how acidity of rain affects soil
+acidity. Experimental plots were irrigated with rainwater that was
+prepared to have one of two different pH levels, 3.7 and 4.5. The
+acidity of the soil was then measured at three different depths,
+0--15, 15--30, and 30--46 centimetres. This was done on three
+different dates, in April and June 1991. The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv).
+
+
+
+(a)[2] Read in and display the data.
+
+Solution
+
+
+This time, it's a `.csv`:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
+acidrain=read_csv(my_url)
+acidrain
+```
+
+ 
+
+There are 4 columns, soil depth, date, pH of the rain that was
+applied (all explanatory) and soil acidity, the response. You'll note
+that we have one soil acidity value per combination of the other
+things (it was a designed experiment).
+
+We're going to ignore the date for now, treating the observations on
+different dates as replicates.
+
+
+(b)[3] Draw a grouped boxplot to show how soil acidity depends on
+the pH of the rain and the soil depth. (The first time you do this
+you might not get the boxplot you want. How can you fix that?)
+
+Solution
+
+
+The problem is likely to be that either your `x` or your
+`fill` for your boxplot is numerical (`rain_pH` is
+`dbl`) rather than the categorical variable you need.
+Try to use one of the explanatory variables as `x` and the other
+one as `fill` (or `colour`):
+```{r }
+ggplot(acidrain,aes(x=rain_pH,y=soil_acidity,fill=soil_depth))+
+geom_boxplot()
+```
+
+     
+
+That looks as if it worked, but it didn't. See the boxplot below for
+how it's supposed to be.  I need `x` for the boxplot needs to
+be categorical. The easiest way to make it such is to wrap it in
+`factor`:
+
+```{r }
+ggplot(acidrain,aes(x=factor(rain_pH),y=soil_acidity,fill=soil_depth))+
+geom_boxplot()
+```
+
+     
+
+Even though `soil_depth` looks like numbers, the printout of
+the data frame reveals that it is text, so that is OK.
+
+If you prefer, exchange `x` and `fill`:
+
+```{r }
+ggplot(acidrain,aes(fill=factor(rain_pH),y=soil_acidity,x=soil_depth))+
+geom_boxplot()
+```
+
+     
+
+
+(c)[2] What does your grouped boxplot say about likely
+interactions? Explain briefly.
+
+Solution
+
+
+Think about the effect of one of your explanatory variables, for
+each level of the other. For example, in the last plot, the effect
+of the rain pH pm on the soil acidity is very small at the largest
+and smallest depths, but at the middle soil depth 15--30, the
+average (median) soil acidity is a lot less when the rain pH is
+*higher* (which seems odd to me). The effect of rain pH being
+different according to soil pH is what suggests an interaction
+effect. 
+Another way of thinking about this is imagining what an
+interaction plot would look like. This would be a trace going
+through the middle (strictly, mean rather than median) of each set
+of boxplots of one colour. In the last boxplot, the red trace
+would go close to straight across, while the blue one would dip in
+the middle. Not parallel, so suggesting an interaction.
+Either approach is good.
+
+
+(d)[3] Fit an ANOVA with interaction. What do you conclude from
+it? You may want to create a column that is the factor version of
+`rain_pH` first.
+
+Solution
+
+
+Following my own hint:
+```{r }
+acidrain = acidrain %>% mutate(frph=factor(rain_pH))
+soil.1=aov(soil_acidity~frph*soil_depth,data=acidrain)
+summary(soil.1)
+```
+
+ 
+
+The interaction is nowhere near significant, perhaps surprisingly. But
+bear in mind that there are only 18 observations in total, so each box
+on the boxplot is based on *three* observations only. So the
+interaction would have to be a lot bigger to be significant.
+
+The usual procedure after finding a significant interaction is to take
+it out:
+
+```{r }
+soil.2=update(soil.1, .~.-frph:soil_depth)
+summary(soil.2)
+```
+
+ 
+
+The P-values have come down a bit (the result of gaining two df for
+error while the error SS only got a tiny bit bigger), but not nearly
+enough to be significant.
+
+
+

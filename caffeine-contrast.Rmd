@@ -1,0 +1,388 @@
+
+
+ Let's look again at the caffeine data, but this time look at
+contrasts. Suppose I knew ahead of time
+that I wanted to compare moderate caffeine with high, and any
+caffeine with none. (In the latter case, we're comparing ``no
+caffeine'' against the average of the other two groups.)
+
+In the previous go-through of the caffeine data, we discovered that
+`amount` was actually text rather than a factor, but we also
+discovered that it *didn't matter*. Here it does matter, so the
+first thing we have to do is to re-do the `gather`, creating a
+factor version of `amount`.
+
+
+
+(a) Read in the data again, from
+[link](http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv), and
+display it. This is the untidy format, so name it appropriately:
+
+
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv"
+caffeine.untidy=read_csv(my_url)
+caffeine.untidy
+```
+
+ 
+
+One caffeine level per column, rather than a column of caffeine
+levels, so untidy.
+
+
+
+(b) Copy your `gather` from before, only this time add
+`factor_key=T` to the end of it. Take a look at the
+results. What has changed from before?
+
+
+Solution
+
+
+We'll save into `caffeine` again:
+
+```{r }
+caffeine = caffeine.untidy %>% 
+gather(amount,score,High:None,factor_key=T)
+caffeine
+```
+
+ 
+
+The variable created for "how are the columns different" is now a
+`factor`: it was text before. Maybe we should have made it a
+factor before (it wouldn't have done any harm), but we got away with
+not doing so.
+
+
+
+(c) Using the newly tidied caffeine data, run the ANOVA \emph{as a
+regression} (that is, using `lm`). Look at the `summary`
+of the output. What do you see?
+
+
+Solution
+
+
+```{r }
+caffeine.2=lm(score~amount,data=caffeine)
+summary(caffeine.2)
+```
+
+       
+Look at the slopes. They are `amount` followed by one of the
+amounts of caffeine. R is using "high" as a baseline  (that's the
+first level alphabetically), so the
+`amountModerate` line is testing high vs.\ moderate: high is
+*not* significantly higher, in terms of test scores, than
+moderate. That's one of the things I wanted to test. What about the
+coefficient for `amountNone`? That's none vs.\ *high*,
+since high was the baseline. This is, as we saw from Tukey,
+significant. But it is not what I said we wanted to test. 
+
+In case you're curious, you can also get the regular analysis of
+variance table as below. `anova` is multi-talented:
+
+```{r }
+anova(caffeine.2)
+```
+
+ 
+
+The problem is that you can't naturally do Tukey this way, which is
+often what you want to do next. That's why we used `aov` before.
+
+Since we have a regression model (albeit a peculiar one), we can test
+whether we should remove `amount` (that is, whether it has any
+impact on test scores) this way too:
+
+```{r }
+drop1(caffeine.2,test="F")
+```
+
+ 
+
+Same conclusion: there is some effect of caffeine level on test score.
+
+
+
+(d) Obtain the different values of `amount`, in the order
+that R has them.
+
+
+Solution
+
+
+Count them, or find the distinct ones:
+
+```{r }
+caffeine %>% group_by(amount) %>% summarize(count=n())
+```
+
+ 
+
+or there is this shortcut to the above:
+
+```{r }
+caffeine %>% count(amount)
+```
+
+ 
+
+Or
+
+```{r }
+caffeine %>% distinct(amount)
+```
+
+ 
+
+since we didn't really need to know how many of each there were.
+
+These would all have worked if `amount` had been text rather a
+factor. If you have a genuine `factor`, you can also ask for
+its `levels`:
+
+```{r }
+with(caffeine, levels(amount))
+```
+
+ 
+
+or `summary` will count them up and list them:
+
+```{r }
+caffeine %>% select(amount) %>% summary()
+```
+
+ 
+
+This last won't work if you have a categorical-variable-as-text. It
+has to be a genuine factor for it to work.
+
+The categories are High, Moderate and None in that order.  For working
+with contrasts, we need to have the thing we're making contrasts for
+(see below) as a `factor`, otherwise it won't work.
+
+
+
+(e) Create a contrast that compares High with Moderate, ignoring
+None. That is, create a vector whose length is the same as the
+number of levels of `amount`, and which has a 1 to represent
+High and a $-1$ to represent Moderate. 
+
+
+Solution
+
+
+Put a 0 in for None:
+```{r }
+c.hm=c(1,-1,0)
+```
+
+       
+
+Having the 1 and the $-1$ the other way around is also fine.
+
+
+
+(f) Create a contrast that compares "any caffeine" against
+"none" by comparing None against the average of Moderate and High.
+
+
+Solution
+
+
+```{r }
+c.any=c(-0.5,-0.5,1)
+```
+
+ 
+Note that both our contrasts have coefficients that add up to zero, as
+they must:
+
+```{r }
+sum(c.hm)
+sum(c.any)
+```
+
+ 
+
+
+
+(g) Verify that your two contrasts are orthogonal.
+
+
+Solution
+
+
+Multiply them together and check that what you get adds up to zero:
+```{r }
+sum(c.hm*c.any)
+```
+
+ 
+
+Zero, so orthogonal. You can check that writing `c.any` as
+`c(-1,-1,2)` would also work (and still be orthogonal with
+`c.hm`), and so would writing it as `c(1,1,-2)`. 
+
+
+
+(h) Arrange your contrasts as columns of a matrix (using
+`cbind`), and say that you want to use these as contrasts for
+`amount` (in data frame `caffeine` or whatever you
+called it).
+
+
+Solution
+
+
+```{r }
+m=cbind(c.hm,c.any)
+contrasts(caffeine$amount)=m
+```
+
+ 
+
+
+
+(i) Fit the ANOVA as an `lm`, and look at the
+`summary`. What do you conclude about your contrasts?
+
+
+Solution
+
+
+```{r }
+caff.3=lm(score~amount,data=caffeine)
+summary(caff.3)
+```
+
+ 
+
+`c.hm` was the contrast between high and moderate
+caffeine. This is not significant (P-value 0.142), which is the same
+conclusion as Tukey, but the P-value here is quite a bit lower (and
+thus closer to being significant). There's a reason for that: here we
+are focusing in on the two contrasts that we really wanted to test,
+and ignoring the $F$-test and the Tukey that tell us stuff that we
+don't care about. By focusing our comparison, we get a better
+(smaller) P-value.
+
+`c.any` was none vs.\ average of any
+caffeine. This one is significant, with a P-value of 0.023. So this
+contrast tells us that having any caffeine is better than having none.
+
+
+
+(j) What happens if you try to use high caffeine vs.\ moderate
+caffeine and moderate vs.\ none as your two contrasts?
+
+
+Solution
+
+
+```{r }
+c.hm=c(1,-1,0)
+c.mn=c(0,1,-1)
+```
+
+ 
+
+So far so good: the coefficients add up to zero and they reflect the
+right comparisons. But now:
+
+```{r }
+sum(c.hm*c.mn)
+```
+
+ 
+
+This does *not* add up to zero, so these two contrasts are not
+orthogonal, and we can't do what we just did. R will give us an answer
+if we try it, but it'll be the *wrong* answer.\endnote{SAS, for example,
+has a way of making non-orthogonal contrasts orthogonal in a way that
+the user doesn't have to worry about, but in R, you are ``closer to
+the ground'' and you have to make it happen yourself.}
+
+The best
+description I have seen of what to do here is by David Howell\endnote{the author of a famous
+text on Statistics in Psychology.}, at
+[link](https://www.uvm.edu/~dhowell/StatPages/More_Stuff/R/AnovaOneway.html)
+(at the bottom).
+Let
+me try to follow his method. 
+
+First we need a vector that is all 1's, which I have called
+`c0` below. Since each of our contrasts `c.hm` and
+`c.mn` have 3 things in them (3 groups), we need to add a
+"dummy" 3rd contrast to give us a $3\times 3$ array of numbers:
+`r tufte::margin_note("which we are going to invert, as a matrix. But I get ahead of myself.")`
+
+```{r }
+c0=rep(1,3)
+m=cbind(c0,c.hm,c.mn)
+m
+```
+
+ 
+
+This is what Howell calls an "augmented" matrix of contrasts, since
+it has our two contrasts as the second and third columns, plus
+the extra dummy one. Next we invert this matrix of contrasts,
+which we can do because it's square. `t(m)` means ``take the
+matrix transpose of `m`'', if you're trying to keep up at the
+back, and `solve` finds a matrix inverse:
+
+```{r }
+minv=solve(t(m))
+```
+
+ 
+
+and then we remove the first column, which represents the contrast
+that we didn't want anyway (what Howell calls "deaugmenting"):
+
+```{r }
+m.contr=minv[,-1]
+m.contr
+contrasts(caffeine$amount)=m.contr
+```
+
+ 
+
+The columns of `m.contr` are our new 
+contrasts. Note that they appear to be something else: high vs.\ the
+average of moderate and none, and none vs.\ the average of moderate
+and high. Note that they are actually
+*not* orthogonal, but if Howell is to be trusted, they can be
+used to test what we want. I think Howell is famous enough to be
+trusted. 
+Now fit the model again:
+
+```{r }
+caff.4=lm(score~amount,data=caffeine)
+summary(caff.4)
+```
+
+ 
+
+The rows `amountc.hm` and `amountc.mn` are the proper tests
+for our contrasts `c.hm` and `c.mn`. 
+`c.hm` is not significant (P-value 0.14) and
+`c.mn` is not significant either
+(P-value 0.20). This is the same significance as from Tukey, but note
+that the P-values for the non-significant tests are much lower than
+the corresponding ones from Tukey, once again because we have focused
+on just these comparisons, and not on any others. We decided ahead of
+time to test just these, and gave ourselves the best chance of finding
+significance that we could.
+
+
+
+

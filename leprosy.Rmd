@@ -1,0 +1,374 @@
+
+
+ Two drugs are being tested in the treatment of
+leprosy. These are labelled A and D. There is also a control drug,
+labelled F. The response variable is a post-treatment score of leprosy
+bacilli (measured at six different sites on each patient). A lower
+score is better.
+
+Thus far, we have a standard one-way analysis of variance. But the
+researchers wanted greater precision in assessing the effects (if any)
+of the drugs, so they also measured a pre-treatment score of leprosy
+bacilli. The data are in the file
+[link](http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt). The
+pre-treatment and post-treatment scores are labelled `pre` and
+`post` respectively.
+
+
+
+(a) Read in the data and check that you have apparently the
+right thing.
+```{r }
+```
+
+   
+ 
+Solution
+
+
+Take a look at the data file. The values have multiple spaces
+between them, but they are aligned with each other and the
+column headings, so `read_table` is the thing:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt"
+lepro=read_table(my_url)
+lepro
+```
+
+ 
+
+Call it what you like.
+
+That looks good, with variables of the right names. 
+ 
+
+(b)<a name="part:lepro-scatter">*</a> Make a scatterplot of post-treatment score against
+pre-treatment score, with the points for each drug drawn in a
+different colour. 
+ 
+Solution
+
+
+This is the kind of thing that `ggplot` does without
+batting an eyelid:
+```{r }
+ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()
+```
+
+       
+ 
+
+(c) Does it appear that including the pre-treatment score was a
+good idea? Explain briefly.
+ 
+Solution
+
+
+The overall trend on the scatterplot is that a higher `pre`
+tends to go with a higher `post`, regardless of drug, so
+including this information appears to be informative.
+I personally suspect that there's some fan-out happening on the
+pre-post relationship, but I'm not planning to make you explore that.
+ 
+
+(d) What about this dataset suggests that analysis of
+covariance is a method worth trying?
+ 
+Solution
+
+
+The key is a mixture of categorical and quantitative explanatory
+variables. Here we have a categorical variable `drug` and a
+quantitative one `pre`. 
+If we had only one type of explanatory variable, we could do a
+regression or an ANOVA as appropriate. But we don't. In some ways,
+it's not worth making a fuss about the distinction, because
+regressions and ANOVAs are all linear models anyway. But you may
+see the term "analysis of covariance", so it's worth your while
+to know what it's about. 
+ 
+
+(e) Fit an analysis of covariance model to predict
+post-treatment score. Include an interaction between your
+explanatory variables. (You don't need to look at the output from
+the model.)
+ 
+Solution
+
+
+This is what you'd guess. `lm` handles the interaction
+properly, even though `pre` is a  quantitative variable.
+
+```{r }
+lepro.1=lm(post~pre*drug,data=lepro)
+```
+
+     
+
+I wanted to take a look, so I did:
+
+```{r }
+summary(lepro.1)
+```
+
+ 
+
+For testing the interaction, there are *two* slope coefficients
+that should be zero if there is no interaction. So we have to test
+this with `anova`, which is next.
+ 
+
+(f) Pass your fitted model of the last part into
+`anova`. This gives you an overall test for each effect. Is
+the interaction term significant?
+
+
+Solution
+
+
+Just this:
+```{r }
+anova(lepro.1)
+```
+
+       
+
+The P-value for the interaction is very large (0.5606) so it is
+nowhere near significant. We can drop the interaction.
+
+Another, perhaps easier, way to do this is with `drop1`:
+
+```{r }
+drop1(lepro.1,test="F")
+```
+
+ 
+
+
+
+(g) Fit a model without the interaction. Is this a sensible thing to
+do (in addition, that is, to the fact that I just asked you to do it)?
+
+
+Solution
+
+
+Change the `*` to a `+`:
+```{r }
+lepro.2=lm(post~pre+drug,data=lepro)
+```
+
+     
+
+Or use `update` (not much in it, here):
+
+```{r }
+lepro.2a=update(lepro.1,.~.-pre:drug)
+```
+
+ 
+
+We just said that the interaction could come out, since it wasn't
+significant, so this is exactly the model that we should be fitting.
+
+
+
+(h) Take a look at the `summary` of your preferred
+model. Is there a significant effect of pre-treatment score?
+Describe the effects of the different drugs on the post-treatment
+score. (Don't do any tests for `drug`.) Does your comparison
+of drugs make sense?
+ 
+Solution
+
+
+Mine was the no-interaction model `lepro.2`:
+```{r }
+summary(lepro.2)
+```
+
+     
+
+The pre-treatment term is definitely significant, with a P-value of
+0.0000025. So pre-treatment score definitely has an impact on
+post-treatment score.
+
+I didn't ask you to test for significance of drugs. I just wanted you
+to assess their coefficients. Drug A is being used as the baseline, so
+its coefficient is zero. Drug D has a slightly positive coefficient
+(0.109) so its average bacilli score is slightly higher (for any
+pre-treatment score) than for drug A. Drug F, which was the placebo,
+has a slope of 3.446, so its average bacilli score is a fair bit
+higher than for either of the other drugs. This makes sense because a
+higher score is worse, and the two "real" drugs are both better than
+the fake one.
+
+Whether there is a real drug difference, I didn't ask you to assess,
+but you could do it by `anova` again, this way:
+```{r }
+anova(lepro.2)
+```
+
+ 
+
+This is actually not significant.\endnote{This is why I didn't ask you to
+test this, since it would have confused the story.}
+
+Or you could do it this way:
+
+```{r }
+drop1(lepro.2,test="F")
+```
+
+ 
+
+This is one of those cases where the non-significant `drug` has
+a slightly *bigger* AIC than `<none>`, so `drop1`
+considers it best to leave it in the model.
+ 
+
+(i) Obtain predicted values for `post` for each of the
+three drugs at `pre` scores 5, 12 and 20. To do this, obtain
+a new data frame that has all 9 combinations of drugs and
+`pre` scores, and then feed this into `predict` using
+your preferred model.\endnote{Analysis of covariance is just a linear
+model, so `predict` works the same here as in regression.}
+ 
+Solution
+
+
+First, make the new data frame for predicting from, using
+`crossing`. I'm doing this in small steps for clarity:
+first, I define all the drugs and `pre` values, and then I
+feed them into `crossing`:
+```{r }
+drugs=levels(factor(lepro$drug))
+drugs
+pres=c(5,12,20)
+lepro.new=crossing(drug=drugs,pre=pres)
+lepro.new
+```
+
+     
+
+That was rather an around-the-houses way of getting the names of the
+drugs without typing them: turn `drug` from text into a factor,
+then pull out its levels. 
+
+Of course, this is probably quicker and certainly easier:
+
+```{r }
+drugs=c("A","D","F")
+```
+
+ 
+
+I got the possible drugs by using `levels` of the variable
+`drug` in the data frame `lepro`, which, with great
+discipline, I attached first and detached after. (I might have been
+getting the values from `pres` from the data frame too, but
+didn't in this case.)
+
+The names of the columns in the new data frame have to be
+*exactly* `drug` and `pre`. Anything else, and
+`predict` won't work.
+
+Now I obtain the predictions, from my best model `lepro.2`. I
+don't need intervals or anything like that:
+
+```{r }
+preds=predict(lepro.2,lepro.new)
+preds
+```
+
+ 
+
+only it would be easier to see the predictions side by side with the
+values they are predictions for:
+
+```{r }
+allpreds=cbind(lepro.new,preds)
+allpreds
+```
+
+ 
+
+I gave this a name in case I feel like using it again later.
+ 
+
+(j) Now, plot the data with the fitted lines on. You'll need to do
+the trick of using the original data frame (and plot the points),
+and the data frame of predictions (and join those points with lines).
+ 
+Solution
+
+
+
+```{r }
+ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()+
+geom_line(data=allpreds,aes(y=preds,linetype=drug))
+```
+
+ 
+
+Inside the `aes` for the `geom_line`, I only have to
+specify the things that have changed, so that the `x`
+(`pre`) and the `colour` (`drug`) are
+"inherited" unchanged from the first `aes`.
+
+`geom_line` has the `aes` as its default first argument,
+so I have to specify `data=` by name.
+
+The `linetype=` is really overkill, but I just wanted to show
+you that you can distinguish the drugs by line type as
+well.\endnote{The line types show up in the legend too, though they're
+not so easy to see.}
+ 
+
+(k) Are the lines on your plot parallel, with the same slopes? Is this what you would
+expect? Explain briefly.
+ 
+Solution
+
+
+My lines are parallel. This is exactly what I would expect, since
+my best model has no interaction, and the interaction is what
+would make the lines *not* be parallel. 
+If your best model
+*did* have the interaction term still in it, your predictions
+would have been these:
+```{r }
+preds=predict(lepro.1,lepro.new)
+cbind(lepro.new,preds)
+```
+
+     
+
+The slopes for each drug are no longer the same (because nothing is
+forcing them to be the same). For example, if you compare drug A at
+pre score 5 and 12, it goes up by 5.2, while drug D at the same pre
+scores goes up by 7.5.
+
+The `ggplot` in this case is actually a lot easier than the
+other `ggplot`, because the lines are now just the regression
+lines for each group.  So `geom_smooth` will get them:
+
+```{r }
+ggplot(lepro,aes(x=pre,y=post,colour=drug))+
+geom_point()+geom_smooth(method="lm")
+```
+
+ 
+
+The grey intervals are a bit confusing.\endnote{You can get rid of them
+by saying `se=F` inside the `geom_smooth`.} They are
+confidence intervals for the mean `post` score (as we did for regression
+early on in the course). But I left them there to show that they
+overlap substantially and thus that those slopes are not ``really
+different''. That's the lack of interaction. There is, as you see, a
+substantial scatter in the points that would make it very difficult to
+prove that those three slopes are really different. 
+ 
+
+
+

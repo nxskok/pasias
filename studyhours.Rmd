@@ -1,0 +1,325 @@
+ 
+
+ A social scientist wanted to see how many hours students
+ studied outside of class. She took a random sample of 75 students
+ from three different majors: math, social science and English, and
+ recorded the number of weekly outside-class study hours for each
+ student. The data can be found at
+ [link](http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt). The
+ social scientist had two research questions: whether math students study
+ more outside of class than the other students, and whether English and
+ social science students study different amounts of time outside class.
+
+
+(a) Explain briefly why contrasts would be a better idea here
+than ANOVA with Tukey.
+
+
+Solution
+
+
+The researcher is not interested in all the comparisons between
+the groups, but rather in two specific ones (as detailed in the
+question). So we should focus our attention on those
+comparisons. This is what contrasts are for.
+
+
+
+(b) Read in the data and make side-by-side boxplots of study
+hours by major. What do the boxplots suggest about the comparisons
+that the researcher wants to make?
+
+
+Solution
+
+
+Separated by one space. There appear to be some strange quotes
+in there, but we'll ignore those and see whether they cause any
+trouble: 
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt"
+studyhours=read_delim(my_url," ")
+studyhours
+```
+
+        
+
+So far so good. 75 students, in tidy format.
+
+```{r }
+ggplot(studyhours,aes(x=major,y=hours))+geom_boxplot()
+```
+
+ 
+
+This suggests that the math students study more than the others, but
+the English and social science students study about the same amount.
+
+I see some rather consistent right-skewness here (but no outliers). We
+have 25 observations in each group, a decent amount of data, so I'm
+not too worried, but a transformation could be a good idea, something
+like square root, perhaps. The spreads are not that unequal, but it
+*is* true that the Math students have both the largest median
+*and* the largest spread, and the social science students are the
+lowest on both.
+
+Box-Cox also works on ANOVA-type data, since that is an `lm`
+kind of model:
+
+```{r }
+boxcox(hours~major,data=studyhours)
+```
+
+ 
+
+This suggests that some kind of transformation would be a good idea
+(no transformation, power 1, is not supported by the data). My guess
+of 0.5 is not bad; that, or something a bit less like 0.25 (fourth
+root) would be good. Even log is supportable. But we'll proceed
+without transformation in this question to give you some practice with
+contrasts. Despite appearances, I do (sometimes) like to make things
+not so complicated!
+
+
+
+(c) Set up contrasts for each of the researcher's research
+questions, bearing in mind the levels of `major` and the
+order in which they come. (For the `Math` contrast, you want
+Math against the average of the other two.)
+
+
+Solution
+
+
+We need to know what the categories of `major` are, so that
+we can set up the contrasts correctly, so let's start with that:
+```{r }
+studyhours %>% select(major) %>% summary()
+```
+
+ 
+
+Oh. Yeah. We never turned `major` into a factor. We'd better do
+that, and then try again:
+
+```{r }
+studyhours = studyhours %>% mutate(major=factor(major))
+studyhours %>% select(major) %>% summary()
+```
+
+ 
+
+In alphabetical order.
+
+All right, contrasts. The English vs.\ social science one is easier,
+so we'll do that first. Just set it up with a 1 for one of them and a
+$-1$ for the other and 0 for math, in the right order according to
+what the levels are, viz:
+
+```{r }
+c.eng.socsci=c(1,0,-1)
+```
+
+ 
+
+Or `c(-1,0,1)` would be just as good.
+
+The other one is a bit trickier, because you want math against the
+average of the others, like
+$$\mbox{math}-(\mbox{English}+\mbox{socsci})/2.$$ 
+This translates into contrast-ese like this, making sure to get Math
+in the middle where it belongs:
+`r tufte::margin_note("As I failed to do the first time.")`
+
+```{r }
+c.math.others=c(-0.5,1,-0.5)
+```
+
+ 
+
+The coefficients have to add up to zero, so I have to have two halves
+to balance my one 1. Or I can use two $-1$s and a 2.
+
+
+
+(d) Verify that your two contrasts are orthogonal.
+
+
+Solution
+
+
+Multiply them together (elementwise, which is how R does it)
+and show that what you get adds up to zero:
+```{r }
+sum(c.eng.socsci*c.math.others)
+```
+
+ 
+
+Zero. Orthogonal.
+
+So we are safely in "familiar" territory, not in the
+here-be-dragons\endnote{On ancient maps, people didn't know what was
+in certain parts of the world, because no-one had ever explored
+them, so they wrote on the map "here be dragons".} land of
+non-orthogonal contrasts.
+
+
+
+(e) Create a matrix of contrasts (using `cbind`) and let
+`lm` know that these are contrasts for `major`, in
+data frame `studyhours` (or whatever you called it).
+
+
+Solution
+
+
+So, like the example in class (where the
+`contrasts(model)` was admittedly rather confusing):
+```{r }
+m=cbind(c.math.others,c.eng.socsci)
+m
+contrasts(studyhours$major)=m
+```
+
+        
+
+
+
+(f) Fit the model using `lm`. What do you conclude about
+your contrasts?
+
+
+Solution
+
+
+Pretend the ANOVA is a regression (though you can fit ANOVAs
+either way: we just used `aov` before because we were
+going to follow up with Tukey):
+```{r }
+studyhours.1=lm(hours~major,data=studyhours)
+summary(studyhours.1)
+```
+
+        
+
+There is a seriously significant difference between the math students
+and the others. There is not, however, any kind of difference between
+the mean study hours of the English and social science students. 
+
+
+
+(g) Are you surprised by the significance or non-significance you
+found in the previous part? Explain briefly.
+
+
+Solution
+
+
+Go back and compare with the  boxplots. The math students
+studied noticeably more than the others, so it is not
+surprising that this difference came out significant. The
+median study times for the English and social science students
+were similar, so it is not at all surprising that this difference
+failed to be significant.
+When you set up contrasts, *these* are the tests you are
+interested in, so there is no reason for following up with
+Tukey or anything else. But you have to be able to say ahead of
+time which contrasts you want to test. This is in
+contrast
+`r tufte::margin_note("Hah!")` to Tukey, where you don't have to decide
+which comparisons interest you until right at the end.
+Another question you might have had is ``how many contrasts can
+I do''? To answer this, go back and look at the ANOVA table. If
+you run an ANOVA using `lm`, you get the ANOVA table by
+passing the fitted model object into `anova` rather than
+`summary`:
+`r tufte::margin_note("texttt{anova")` is one of R's
+multi-purpose tools; what it does depends on what you feed it.}
+```{r }
+anova(studyhours.1)
+```
+
+        
+
+Two degrees of freedom for `major`, so we can do 2
+contrasts. (The example in class had four models of chainsaw, so 3 df
+for model, so 3 contrasts possible.) What if we don't use all those
+contrasts up? Try it and see:
+
+```{r }
+m=cbind(c.math.others)
+m
+contrasts(studyhours$major)=m
+studyhours.2=lm(hours~major,data=studyhours)
+summary(studyhours.2)
+```
+
+
+
+The two P-values are identical, but the second one is not now
+identified with any contrast (so we just ignore it). If we were only
+interested in how math students compared with the rest, we could test
+it this way.
+
+Or, we could relabel the students as "math" and "other" and just
+do a two-sample $t$-test. To do this, we need to delve into
+`forcats` (which is a part of the `tidyverse`). It deals
+with categorical variables which are genuine factors, which we haven't
+had much cause to do so far. But now we do. What we want to do is to
+*recode* the levels of `major`, which is done by
+`fct_recode`:
+
+```{r }
+studyhoursx = studyhours %>%
+mutate(mathrest=fct_recode(major,
+"rest" = "english",
+"rest" = "socsci"))
+studyhoursx %>% count(mathrest)
+```
+
+ 
+
+The way `fct_recode` works is that you first give a factor,
+here `major`, then you define a list of new levels in terms of
+the old ones. We want a student whose major is either English or
+Social Science to end up in the new not-math group that we'll call
+`rest`, so we need two lines inside `fct_recode`, one
+that says that the new `rest` group includes the old
+`english` majors, and another that says that `rest` also
+includes the old `socsci` majors. Any levels not mentioned
+(here `math`) are left unchanged.
+
+I did this wrong the first time: I got the things before and after the
+`=` in `fct_recode` the wrong way around.
+
+The last line is to check that the result makes sense. I previously
+had 25 students in each major. Now I have 25 students for whom
+`mathrest` is `math` (the math majors) and 50 ($25+25$)
+students for whom `mathrest` is `rest` (everyone else). 
+
+Now, the $t$-test.
+
+```{r }
+t.test(hours~mathrest,data=studyhoursx,var.equal=T)
+```
+
+ 
+
+This is very close to, but not the same as, the test with the contrasts,
+because we are not quite testing the same thing. Here, we are
+comparing the mean of the math students to the mean of everyone else,
+thrown together into one big bag, but with the contrasts, we are
+comparing the mean of the math students with the \emph{average of the
+means} of the other two groups, treating them as different. (Not
+clear? Well, it's not that clear to me either.)
+
+That business with the `var.equal=T`? This is doing a pooled
+$t$-test. I did that here because the ANOVA is assuming equal spreads
+within the groups (which is what a pooled $t$-test does) and I thought
+I should do my best to be consistent. A pooled $t$-test is really a
+two-group one-way ANOVA, or at least it is if it is done two-sided.
+
+
+ 
+

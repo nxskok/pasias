@@ -1,13 +1,10 @@
 ---
 title: "Problems and Solutions in Applied Statistics"
 author: "Ken Butler"
-date: "`r format(Sys.Date())`"
+date: January 3, 2019
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## Introduction
 
@@ -38,10 +35,8 @@ same thing.)
 ## How you can help
 
 If you see anything, [file an
-issue](https://github.com/nxskok/pasias/issues) on the Github page for
-now. I want to fix problems programmatically at first, but when the
-majority of the problems have been caught, I will certainly take pull
-requests. I will acknowledge all the people who catch things. Likely
+issue](https://github.com/nxskok/pasias/issues) on the Github page. (These problems have Sweave source code, not in this repo, that I want to be editing.)
+I will acknowledge all the people who catch things. Likely
 problems include:
 
 - some LaTeX construction that I didn't catch (eg. block quotes)

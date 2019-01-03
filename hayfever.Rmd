@@ -1,0 +1,58 @@
+
+
+ A research lab is developing a new compound to relieve
+severe cases of hay fever. There were two active ingredients, labelled
+A and B, with each one having three levels, low, medium and
+high. There were thus $3\times 3=9$ treatment combinations. 36
+subjects were available, and these were randomly assigned to
+combinations of levels of factor A and factor B, so that each
+combination was tested on 4 people. The response variable was the
+number of hours of pain relief (so a higher value is better). The data
+are in ****.
+
+
+
+(a)[2] Read the data and display its structure. Verify that you
+have what you were expecting.
+
+Solution
+
+
+```{r }
+hayfever=read.table("hayfever.txt",header=T)
+hayfever
+```
+
+     
+
+
+(b)[2] interaction plot
+
+Solution
+
+
+```{r }
+hayfever %>% group_by(a,b) %>%
+ summarize(relief.mean=mean(relief)) %>%
+ ggplot(aes(x=a,y=relief.mean,colour=b,group=b))+
+geom_point()+geom_line()
+```
+
+     
+
+
+(c)[2] Run an analysis of variance with interaction.
+
+Solution
+
+
+```{r }
+hayfever.1=aov(relief~a*b,data=hayfever)
+summary(hayfever.1)
+```
+
+     
+
+
+(d)[2] simple effects
+

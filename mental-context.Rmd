@@ -1,0 +1,383 @@
+
+
+ It is believed that being in the same mental context for
+learning and for testing leads to better test scores. An experiment
+was carried out to test this. During the learning phase, subjects
+learned a list of 80 words in a room painted orange and decorated with
+posters, paintings and other paraphernalia.\endnote{This is a fancy
+word for "stuff".} A memory test was given to all subjects
+immediately after they had learned the words, to give the impression
+that the experiment was over. (The results of this test were
+discarded.) One day later, subjects were unexpectedly re-tested under
+different experimental conditions and asked to write down all the
+words of the original list that they could remember. The re-test took
+place in five different conditions, which subjects were randomly
+allocated to one of:
+
+
+
+* Same context: in the original orange-painted room.
+
+* Different context: in a very different room, painted grey and
+located in a different part of campus.
+
+* Imaginary context: in the grey room, but subjects are asked to
+remember the orange room in which they took the original test. To
+help them with this, the experimenter begins by asking them several
+questions about the orange room and the objects in it.
+
+* Photographed context: in the grey room, but subjects are shown
+photographs of the orange room.
+
+* Placebo context: in the grey room, with subjects first being
+asked to recall their living room.
+
+
+In each case, the response variable was the number of words on the
+original list successfully recalled by each subject.
+
+50 subjects in total completed the experiment, 10 under each of the 5
+conditions. 
+
+The researchers had four research hypotheses to test with the data:
+
+
+
+* Groups where the context matches (is the same, or is simulated
+by imagining or photograph) will perform better than groups with
+different or placebo contexts.
+
+* The group with the same context will differ from the group with
+imaginary or photographed contexts.
+
+
+* The imaginary-context group will differ from the
+photographed-context group.
+
+* The different-context group will differ from the placebo-context group.
+
+
+The research hypotheses are (as is usual) written as
+*alternative* hypotheses. We can rewrite them as null
+hypotheses, with some extra wording to facilitate converting them
+into contrasts, like this:
+
+
+* The mean of the `same`, `imaginary` and
+`photograph` groups (group means) is equal to the mean of the
+`different` and `placebo` groups (group means).
+
+* The mean of the `imaginary` and `photograph`
+groups is equal to the (mean of the) `same` group.
+
+* The `imaginary` and the `photograph` groups will
+have the same mean.
+
+* The `different` and the `placebo` groups will
+have the same mean.
+
+The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/smith.txt) (the
+original researcher's name was Smith). 
+
+
+(a) Read in the data and verify that you have a column called
+`context` that is text and a column called
+`words` that is a (whole) number.
+
+
+Solution
+
+
+The usual thing --- read in the data appropriately and look at the
+data frame you got:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/smith.txt"
+smith=read_delim(my_url," ")
+smith
+```
+
+       
+
+`int` means "whole number", so we are good.
+      
+
+
+(b) Turn `context` into a `factor`, within the
+data frame. (We are going to be doing contrasts). Display how the
+data frame now looks.
+
+
+Solution
+
+
+Use `mutate` and assign everything back to what it was
+before:
+```{r }
+smith = smith %>% mutate(context=factor(context))
+smith
+```
+
+    
+
+Note that `context` is now labelled as the factor that we made.
+
+
+
+(c) What are the names of the five contexts in the data set
+(just display them),
+and what order are they in?
+
+
+Solution
+
+
+You have lots of choices now, since `context` is a factor
+(and can also be treated as text). 
+The most obvious factor-based way is this:
+```{r }
+levels(smith$context)
+```
+
+       
+
+or use `summary`:
+
+```{r }
+smith %>% select(context) %>% summary()
+```
+
+ 
+
+Or treat `context` as text, such as this way:
+```{r }
+smith %>% count(context)
+```
+
+       
+
+These all display the contexts in alphabetical order.
+
+Or display the distinct values:
+
+```{r }
+smith %>% distinct(context)
+```
+
+ 
+
+or, without using the `tidyverse`,
+
+```{r }
+unique(smith$context)
+```
+$ %$ %$ %$
+
+These two *don't* display things in alphabetical order, because
+they display things as they appear in the file. This is not the order
+we want, though the second way *does* display the `Levels`
+in the right order.
+      
+
+
+(d) Write each of the four research hypotheses (in the
+null-hypothesis versions) as R vectors that can be used to make
+contrasts. (This will mean getting the contexts in the right
+order. If you get stuck, do the last two first, since they're
+easiest. The first one is actually the hardest.)
+
+
+Solution
+
+
+All right, let's go from the bottom:
+
+
+* Different and placebo have same means. These are 1st and 4th.
+```{r }
+c4=c(1,0,0,-1,0)
+```
+
+         
+
+* Imaginary and photograph have same means. 2nd and 3rd:
+```{r }
+c3=c(0,1,-1,0,0)
+```
+
+   
+
+
+* Imaginary and photograph together same as `same`. This
+time we have two means being compared with one, so we need to give
+the two means half weight. 2nd and 3rd against 5th:
+```{r }
+c2=c(0,1/2,1/2,0,-1)
+```
+
+   
+
+
+* (Same and imaginary and photograph) vs.\ (different or placebo):
+2nd, 3rd and 5th with weight $1/3$ (three of them) against 1st and
+4th with weight $1/2$ (2 of them):
+```{r }
+c1=c(-1/2,1/3,1/3,-1/2,1/3)
+```
+
+   
+
+Variations: you can switch the sign on everything within a
+contrast (since it doesn't matter which is plus and which is
+minus). You can also multiply through by anything to get rid of
+the fractions, for example these:
+```{r eval=F}
+c2=c(0,1,1,0,-2)
+c1=c(-3,2,2,-3,2)
+```
+
+       
+
+All that matters is that the coefficients add up to zero.
+      
+
+
+(e) Pick two of your contrasts (doesn't matter which two) and
+demonstrate that they are orthogonal.
+
+
+Solution
+
+
+Multiply your chosen contrasts together elementwise, and show
+that the results add to zero, eg. by showing the whole thing:
+```{r }
+c1*c2
+```
+
+    
+which adds to zero because it is $2/6$ minus $1/3$,
+or by explicitly summing the elementwise product:
+
+```{r }
+sum(c1*c3)
+```
+
+ 
+
+Any pair is good.
+      
+
+
+(f) Collect your contrasts together into a matrix, and
+tell `lm` that these are the contrasts for `context`.
+
+
+Solution
+
+
+This:
+```{r }
+m=cbind(c1,c2,c3,c4)
+contrasts(smith$context)=m
+```
+
+       
+
+Slipping off into another aside, you might have been wondering whether
+there was a way to test 
+*all* the contrasts for orthogonality at once. There is, and it
+depends on the rules for matrix multiplication. We want to test all
+the *columns* of `m` for orthogonality, but matrix
+multiplication works by combining a *row* with a column. No
+matter, *transposing* a matrix interchanges rows and columns, so
+that in math, we want to look at the matrix $M^T M$. In R,
+`%*%` means "matrix multiply".\endnote{In R, the percents
+around something mean "special version of", thus this notation for
+"matrix multiply" and the pipe symbol. A regular * when used for
+multiplying matrices in R will multiply them element by element.} Thus,
+
+```{r }
+t(m) %*% m
+```
+
+ 
+This matrix-multiplies the transpose of `m` by `m`
+itself. There are numbers down the top-left to bottom-right diagonal,
+but don't worry about these, since a contrast doesn't have to be
+orthogonal with itself. The thing to note is that \emph{all the other
+elements} of this matrix are *zero*: that means that each of
+the four contrasts is orthogonal to each of the other three.
+      
+
+
+(g) Fit a model with `lm`, and display the results.
+
+
+Solution
+
+
+We're past the hard part:
+```{r }
+smith.1=lm(words~context,data=smith)
+summary(smith.1)
+```
+
+       
+      
+
+
+(h) For each of the original research hypotheses, what do you
+infer about them?
+
+
+Solution
+
+
+Even though I generated the contrasts backwards, I maintained
+the numbering so that they refer to the original numbered
+hypotheses. You might have named them something more mnemonic;
+that works too, and is quite possibly better.
+Anyway:
+
+
+* Matching context better than non-matching context:
+strongly significant (P-value 0.000085). (Strictly, this is a
+two-sided test, but the way I constructed the contrast, this
+should be significantly *positive* if the research
+hypothesis is true, and it is.)
+
+* Same context *not* different from
+imaginary/photographed context (P-value 0.823)
+
+* Imaginary context *not* different from photographed context (P-value 0.938).
+
+* Different context *not* different from placebo
+context (P-value 0.699). 
+
+I wanted you to match up the research hypotheses with the
+P-values, as above, and state a conclusion about each one. If
+you do that, I am happy.
+Taking this back to the original research, I think the
+first hypothesis was the most immediately important of the four:
+we were able to show that having (or faking up) the original
+room helped with recall. After that, it didn't matter how it was
+done: being in the original room was not different from
+imagining the original room (by thinking about it or seeing a
+photo of it). Failing to recall the original room was equally
+bad, whether the subjects were in a different room and not asked
+to think about the original orange room, or whether they were
+literally asked to think about another room entirely.
+Contrasts enabled us to tackle this problem and gain a very clear
+conclusion: recalling the original orange room is helpful, but
+it doesn't matter how you do it.
+How big of a difference does thinking about the orange room
+make? You can use the 2 SE thing to get a 95\% confidence interval:
+the difference in the (mean of the) recall-orange-room means and
+the (mean of the) don't-recall means is between about 4.6 and
+12.6 words (out of 80). I leave it for you to decide whether
+that is practically important as well as being statistically significant.
+      
+
+
+

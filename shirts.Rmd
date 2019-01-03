@@ -1,0 +1,325 @@
+
+
+ Does it make a difference if you see somebody else trying on
+a shirt before you do, and if so, does it matter what kind of person
+it is? 
+
+An experiment was carried out in a university bookstore, with
+students who wanted to try on a shirt serving as (unsuspecting)
+experimental subjects. When a student wanted to try on a shirt, the
+sales associate told them that there was only one shirt left, and it
+was being tried on by an "other customer". This "other customer"
+was actually a "confederate" of the experimenter (that means, they
+were pretending to be a real customer but were actually part of the
+experiment). The "other customer" was always female: either an
+attractive well-dressed model, or an average-looking student wearing
+jeans. The "other customer" would come out of the
+dressing room and hand the shirt to the sales associate, who would
+give it to the student who wanted to try it on. When the student had
+tried on the shirt, they were asked to rate it on a 7-point scale (on
+five different dimensions, and those five scores were then
+averaged). Does a student's evaluation depend on whether the student
+was male or female, and whether the "other customer" was a model or
+a student? There was also a control group, where the student was
+handed the shirt directly  by the sales associate, without the ``other
+customer'' being involved at all. There were thus five treatments:
+male students who saw a model, male students who saw a student, female
+students who saw a model, female students who saw a student, and the
+control group. There were 25 students in each treatment group.
+
+The data from this experiment can be found at
+[link](http://www.utsc.utoronto.ca/~butler/d29/shirts.csv).
+
+
+
+(a)[2] Read in and display the data. How many observations do you
+have, and is that what you should have?
+
+Solution
+
+
+`read_csv`:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/shirts.csv"
+shirts=read_csv(my_url)
+shirts
+```
+
+     
+
+There were 5 treatment groups with 25 students in each, so there
+should be, and are, $5 \times 25=125$ observations.
+
+
+(b)[2] Turn `treatment` into a `factor` in your data
+frame. (You can use the same name as the text `treatment`
+that you read in from the file.)
+
+Solution
+
+
+Thus:
+```{r }
+shirts = shirts %>% mutate(treatment=factor(treatment))
+```
+
+     
+
+and for checking:
+
+```{r }
+shirts
+```
+
+ 
+
+see that `treatment` is now definitely a factor rather than a
+categorical variable represented as a piece of text.
+
+
+(c)[2] List the treatments in the order that they are in within
+your `factor`. (There are lots of ways to do this; any one of
+them except for `distinct` is good.)
+
+Solution
+
+
+This is the most direct:
+```{r }
+levels(shirts$treatment)
+```
+$ %$ %$ %$
+
+or you can do one of the `tidyverse`-style ways, such as
+
+```{r }
+shirts %>% count(treatment)
+```
+
+ 
+
+or
+
+```{r }
+shirts %>% distinct(treatment)
+```
+
+ 
+
+except that `distinct` shows you the values in the order that
+they appear in the data file, which is *not* the order that they
+appear in the factor. So that's why I asked you not to do it that way.
+
+Alphabetical order,  is the moral of the story.
+
+
+(d)[2]<a name="part:mean-eval">*</a> 
+Obtain a table of mean evaluation scores for each treatment group.
+  
+
+Solution
+
+
+We will use this later when assessing the significance of the
+contrasts. It's the usual group-by and summarize:
+```{r }
+shirts %>% group_by(treatment) %>%
+summarize(m=mean(score))
+```
+  
+
+(e)[3] The experimenters wanted to compare four specific things in
+their analysis:
+
+
+* evaluation scores between male students who saw a (female) model and
+male students who saw a (female) student
+
+* evaluation scores between female students who saw a (female)
+model and female students who saw a (female) student
+
+* evaluation scores for male and for female students (overall)
+
+* evaluation scores for the (average of the) four genuine
+treatments and for the control group
+
+Create contrasts, with suitable names, using vectors with
+appropriate values.
+  
+
+Solution
+
+
+These, in that order, are comparisons of treatments 4 and 5:
+```{r }
+c_mms=c(0,0,0,1,-1)
+```
+
+   
+
+treatments 2 and 3:
+
+```{r }
+c_fms=c(0,1,-1,0,0)
+```
+
+ 
+
+(in these two the 1 and $-1$ can also be the other way around)
+
+the average of 2 and 3 vs.\ the average of 4 and 5:
+
+```{r }
+c_mf=c(0,0.5,0.5,-0.5,-0.5)
+```
+
+ 
+
+or you can use 1 and $-1$ instead of the 0.5s, or you can switch the
+signs around. I like the 0.5 values to remind me it's an average of
+two means.
+
+Finally
+
+```{r }
+c_tc=c(1,-0.25,-0.25,-0.25,-0.25)
+```
+
+ 
+
+or multiply through by 4 to get rid of the fractions, or have the
+negative sign on the first one and positive signs on the others.
+
+I tried to give the contrasts mnemonic but short names, so that I
+would remember which was which.
+  
+
+(f)[2] Pick two of your contrasts (doesn't matter which two) and
+demonstrate that they are orthogonal.
+  
+
+Solution
+
+
+Multiply them together (elementwise, which is what `*`
+does) and add them up, showing that you get zero, for example:
+```{r }
+sum(c_mf*c_tc)
+```
+
+     
+
+Check (mops brow).
+  
+
+(g)[2] Collect all your contrasts together into a matrix and
+declare that they are contrasts for `treatment` within your
+data frame (whatever you called it).
+  
+
+Solution
+
+
+I called my data frame `shirts`, so I need to do this:
+```{r }
+m=cbind(c_mms, c_fms, c_mf, c_tc)
+contrasts(shirts$treatment)=m
+```
+
+       
+
+There's no output here; we'll see in a moment whether it worked.
+  
+
+(h)[2] Predict evaluation score from treatment \emph{as a
+regression}, and display the results.
+  
+
+Solution
+
+
+Once you have everything set up, it's just a matter of going
+through the process:
+```{r }
+score.1=lm(score~treatment,data=shirts)
+summary(score.1)
+```
+
+       
+
+Note how the contrasts have appeared as "slopes" in our
+regression. (If this didn't happen for you, go back and check what you
+did. Probably something gave you an error before, in that case.)
+
+Your slopes can differ in terms of sign and possibly value from mine,
+but the $t$-statistics and P-values should be the same as mine.
+  
+
+(i)[4] For each of your contrasts, assess whether or not it is
+significant, and explain briefly what that means in the context of the
+data. If a contrast is significant, use your answer to
+part~(<a href="#part:mean-eval">here</a>) to help in your interpretation. 
+    
+
+Solution
+
+
+I'll take my four contrasts as they appear in the output from `lm`:
+
+
+* Comparing the male students who saw the model with those
+who saw the student: this is strongly significant, and the
+table of means shows that the males who saw the model rated
+the shirt significantly *higher* than those who saw the
+"average-looking" female student.
+
+* Comparing the female students who saw the model with
+those who saw the student: this difference is not quite
+significant, so we conclude that it didn't matter who the
+female students saw coming out of the dressing room.
+
+* There is a significant difference between the average
+evaluation score that males gave to the shirt and that
+females did. The table of means reveals that the male
+average was higher, mostly because males *really* liked
+the shirt when they thought the model had been wearing it!
+
+* There is no significant difference overall between
+treatment and control groups in terms of average
+score. (This is mostly because the treatment groups differ
+among themselves, with the scores for students who saw the
+model being higher and those for students who saw the female
+student being lower than for the control group.)
+
+It is enough, on the non-significant ones, to say what it is
+that the contrast is testing, and then to note that it is not
+significant. On the significant ones, I want you to say what
+is higher than what.
+You can also get these conclusions from the `lm`
+output, but it requires a bit more care:
+
+
+* I set up `c_mms` with the score for the students
+who had seen the model as plus and those who saw the student
+as minus. My slope here is positive, so the score for
+male students who saw the model is higher.
+
+* My slope for `c_fms` is also positive, and I set
+this one up the same way with model as positive and student
+as negative, so the female students rated the shirt higher
+(but not significantly higher) when they saw the model.
+
+* My `c_mf` slope is significantly negative. I set
+up this contrast with females as plus and males as minus, so
+this means males gave a significantly *higher* score on
+average (for reasons discussed above).
+
+* The last slope is very close to 0, consistent with there
+being no difference (on average) between treatment and control.
+
+Perhaps the story to get from this analysis is that male
+students are *such* suckers!
+    
+
+
+
