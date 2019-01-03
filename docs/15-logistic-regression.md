@@ -26,7 +26,7 @@ library(tidyverse)
 ##  Finding wolf spiders on the beach
 
 
-??q:wolfspider?? A team of Japanese researchers were investigating what would
+<a name="q:wolfspider">*</a> A team of Japanese researchers were investigating what would
 cause the burrowing wolf spider *Lycosa ishikariana* to be found
 on a beach. They hypothesized that it had to do with the size of the
 grains of sand on the beach. They went to 28 beaches in Japan,
@@ -579,7 +579,7 @@ different forms, and you need to be able to handle whatever you
 receive so that you can do some analysis with it.
  
 
-(b)??part:expo?? Looking at the data, would you expect there to be a
+(b)<a name="part:expo">*</a> Looking at the data, would you expect there to be a
 significant effect of log-concentration? Explain briefly.
  
 Solution
@@ -701,7 +701,7 @@ summary(bugs.1)
  
 
 
-(e) Does your analysis support your answer to (??part:expo??)?
+(e) Does your analysis support your answer to (<a href="#part:expo">here</a>)?
 Explain briefly.
 
  
@@ -711,7 +711,7 @@ Solution
 That's a *very* small P-value, $1.1\times 10^{-15}$, on
 `log_conc`, so there is no doubt that concentration has an
 effect on an insect's chances of being killed. This is exactly what
-I guessed in (??part:expo??), which I did before looking at the
+I guessed in (<a href="#part:expo">here</a>), which I did before looking at the
 results, honest!
  
 
@@ -1311,7 +1311,7 @@ Extra: let's see whether we can come up with an example of that. I'll make a
 smaller example, and perhaps the place to start is 
 "all possible combinations" of a few things. 
 If you haven't seen `crossing`
-before, skip ahead to part (??part:crossing??):
+before, skip ahead to part (<a href="#part:crossing">here</a>):
 
 
 ```r
@@ -1397,12 +1397,12 @@ of the *response* variable in separate columns.
 Back to where we were the rest of the way.
  
 
-(b)??part:plot?? Make suitable plots or summaries of `infected` against
+(b)<a name="part:plot">*</a> Make suitable plots or summaries of `infected` against
 each of the other variables. (You'll have to think about
 `sex`, um, you'll have to think about the `sex`
 variable, because it too is categorical.) Anything sensible is OK
 here. You might like to think back to what we did in
-Question~??q:wolfspider?? for inspiration. (You can also
+Question~<a href="#q:wolfspider">here</a> for inspiration. (You can also
 investigate `table`, which does cross-tabulations.)
  
 Solution
@@ -1575,7 +1575,7 @@ related to `infected`? Explain briefly.
 Solution
 
 
-Let's go through our output from (??part:plot??). In terms of
+Let's go through our output from (<a href="#part:plot">here</a>). In terms of
 `age`, when infection is present, animals are (slightly)
 older. So there might be a small age effect. Next, when infection
 is present, weight is typically a *lot* less. So there ought
@@ -1697,7 +1697,7 @@ needed because `glm` requires a model formula first rather than
 a data frame (if the data were first, you could just omit it). 
  
 
-(e)??part:remove?? Which variables, if any, would you consider removing from
+(e)<a name="part:remove">*</a> Which variables, if any, would you consider removing from
 the model? Explain briefly.
  
 Solution
@@ -1716,8 +1716,8 @@ should stay. That's fine, but then you need to be consistent in
 the next part.
  
 
-(f) Are the conclusions you drew in (??part:plot??) and
-(??part:remove??) consistent, or not? Explain briefly.
+(f) Are the conclusions you drew in (<a href="#part:plot">here</a>) and
+(<a href="#part:remove">here</a>) consistent, or not? Explain briefly.
  
 Solution
 
@@ -1731,7 +1731,7 @@ P-value definitely larger than for the other variables, so that
 the evidence of its usefulness was weaker).
  
 
-(g)??part:crossing??
+(g)<a name="part:crossing">*</a>
 The first and third quartiles of `age` are 26 and 130;
 the first and third quartiles of `weight` are 9 and
 16. Obtain predicted probabilities for all combinations of these and
@@ -2429,7 +2429,7 @@ putting a `.` there, but that doesn't work since there is no
     
 
 
-(d)??part:whichprob?? Is your slope for `gender` in the previous logistic
+(d)<a name="part:whichprob">*</a> Is your slope for `gender` in the previous logistic
 regression positive or negative? Is it applying to males or to females?
 Looking at the conclusions from your 
 contingency table, what probability does that mean your logistic
@@ -2728,7 +2728,7 @@ summary(decide.3)
 The most positive coefficient is for `theory` and the most
 negative one is for `medical`. (The zero coefficient is in the
 middle.) Since we are modelling the probability of saying that the
-research should *stop* (part (??part:whichprob??)), this means that:
+research should *stop* (part (<a href="#part:whichprob">here</a>)), this means that:
 
 
 
@@ -3446,7 +3446,7 @@ the factor is predicted, which is `yes`.
     
 
 
-(c)??part:heart-first?? Fit a logistic regression predicting heart disease from
+(c)<a name="part:heart-first">*</a> Fit a logistic regression predicting heart disease from
 everything else (if you have a column called `X` or
 `X1`, ignore that), and display the results.
 
@@ -3685,7 +3685,7 @@ variables have an effect on heart disease. Display your final model
 (which you can do by saving the output from `step` in a
 variable, and asking for the summary of that. In `step`,
 you'll need to specify a starting model (the one from part
-(??part:heart-first??)), the direction of elimination, and the test
+(<a href="#part:heart-first">here</a>)), the direction of elimination, and the test
 to base the elimination decision on (the same one as you used in
 `drop1`). 
 
@@ -4414,14 +4414,14 @@ heart.new %>% sample_n(8)
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  typical          140        280    133     1.6 down…       0 norm…
-## 2 male  atypical         140        213    133     0   flat        1 reve…
-## 3 fema… typical          140        280    166     0   flat        1 norm…
-## 4 male  asymptom…        120        280    133     1.6 flat        0 norm…
-## 5 male  atypical         140        213    133     0   down…       0 reve…
-## 6 fema… typical          140        213    133     1.6 upsl…       0 norm…
-## 7 male  nonangin…        140        280    166     1.6 down…       0 norm…
-## 8 fema… nonangin…        140        280    166     0   flat        0 norm…
+## 1 male  asymptom…        140        280    166     0   down…       1 fixed
+## 2 fema… atypical         120        213    166     0   down…       0 fixed
+## 3 fema… typical          140        213    133     1.6 down…       1 norm…
+## 4 male  atypical         120        280    133     0   upsl…       0 norm…
+## 5 fema… asymptom…        140        213    166     0   upsl…       0 norm…
+## 6 male  asymptom…        140        280    133     0   down…       1 reve…
+## 7 male  atypical         120        280    133     1.6 down…       0 norm…
+## 8 male  atypical         120        280    166     1.6 down…       1 norm…
 ## # ... with 1 more variable: pred <dbl>
 ```
 
@@ -6214,7 +6214,7 @@ The anxiety scores are numbers; the other two variables are "yes"
 and "no", which makes perfect sense.
 
 
-(b)??part:fit?? 
+(b)<a name="part:fit">*</a> 
 Fit a logistic regression predicting whether or not a heart attack
 survivor has a second heart attack, as it depends on anxiety score
 and whether or not the person took the anger management
@@ -6279,7 +6279,7 @@ The levels of a factor are taken in alphabetical order, with
 of the second one `y`.
 
 
-(d)??part:preds??
+(d)<a name="part:preds">*</a>
 For the two possible values `y` and `n` of
 `anger` and the anxiety scores 40, 50 and 60, make a data
 frame containing all six combinations, and use it to obtain
@@ -6392,7 +6392,7 @@ need to worry about it yet.
 
 (f) Are the effects you described in the previous part
 consistent with the `summary` output from `glm` that
-you obtained in (??part:fit??)? Explain briefly how they are, or
+you obtained in (<a href="#part:fit">here</a>)? Explain briefly how they are, or
 are not. (You need an explanation for each of `anxiety` and
 `anger`, and you will probably get confused if you look at
 the P-values, so don't.)
@@ -6402,7 +6402,7 @@ Solution
 
 In the previous part, we found that increased anxiety went with an
 increased probability of second heart attack. Back in
-(??part:fit??), we found a positive slope of 0.11904 for anxiety,
+(<a href="#part:fit">here</a>), we found a positive slope of 0.11904 for anxiety,
 which also means that a higher anxiety score goes with a higher
 probability of second heart attack.
 That was not too hard. The other one is a little more work.
@@ -6433,7 +6433,7 @@ a higher level of anxiety than those who don't.
 
 That's clear enough, but what about `anger`? That is *not*
 significant, but there seems to be a visible effect of `anger`
-on the predicted probabilities of (??part:preds??): there we saw
+on the predicted probabilities of (<a href="#part:preds">here</a>): there we saw
 that if you had done the anger management course, your probability of
 a second heart attack was lower. But that's only the predicted
 probability, and there is also uncertainty about that, probably quite

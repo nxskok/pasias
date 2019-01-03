@@ -26,7 +26,11 @@ program](https://raw.githubusercontent.com/nxskok/pasias/master/convert.pl)
 to strip out the LaTeX and turn each problem into R Markdown for this
 book. You will undoubtedly see bits of LaTeX still embedded in the
 text. I am trying to update my program to catch them, but I am sure to
-miss some. If you see anything, [file an
+miss some. 
+
+I just figured out that you can convert LaTeX \label and \ref pairs into HTML "a name" and "a href='#'", which R Markdown can handle. I am ludicrously pleased with myself.
+
+If you see anything, [file an
 issue](https://github.com/nxskok/pasias/issues) on the Github page for
 now. I want to fix problems programmatically at first, but when the
 majority of the problems have been caught, I will certainly take pull
@@ -35,5 +39,5 @@ requests. I will acknowledge all the people who catch things.
 My checklist:
 
 - bring in the D29 questions
-- working on A1 D29
+- working on A4 D29
 - look for multiple regression Qs in A6 or wherever

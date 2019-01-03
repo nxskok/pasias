@@ -1,0 +1,531 @@
+##  Drug treatment programs
+
+
+ One of the goals of drug treatment programs is to lengthen
+the time until the patient returns to using drugs. (It is not
+generally possible to prevent patients from *ever* using drugs
+again.) In one study, over 600 former drug users took part. Two
+different programs, a short program and a long program, were offered
+at two different sites, labelled A and B. The data can be found in
+[link](http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt). The
+variables are these:
+
+
+
+* `ID`: patient ID number
+
+* `age`: patient age at enrollment into the study
+
+* `ndrugtx`: number of previous drug treatments
+
+* `treat`: 0 for short treatment program, 1 for long program
+
+* `site`: 0 for site A, 1 for site B
+
+* `time`: time until return to drug use
+
+* `censor`: whether the subject returned to drug use (1) or
+not (0) during the follow-up period
+
+* `herco`: whether subject used heroine or cocaine in the
+last 3 months: 1 is both, 2 is one (either heroine or cocaine), 3 is neither.
+
+
+
+(a) Read in the data and check in one way or another that you
+have what was promised above.
+
+
+Solution
+
+
+This:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt"
+drugusers=read_delim(my_url," ")
+drugusers
+```
+
+ 
+
+This shows that you have over 600 rows and the variables described.
+    
+
+
+(b) There are some missing values in the dataframe. Demonstrate
+this using `summary`. Pipe the dataframe into
+`drop_na` and show that they have gone. (`drop_na`
+removes all rows that have missing values in them.)
+
+
+Solution
+
+
+First off, `summary` is a quick way to show how many missing values there are:
+
+```{r }
+summary(drugusers)
+```
+
+ 
+
+Age has five missing values and "number of previous drug treatments"
+has seventeen.
+
+Following the instructions, and saving back into the original dataframe:
+
+```{r }
+drugusers %>% drop_na() -> drugusers
+```
+
+ 
+and then
+
+```{r }
+summary(drugusers)
+```
+
+ 
+
+No NA left. Gosh, as they say, that was easy.
+
+Extra: how many rows did we lose:
+
+```{r }
+nrow(drugusers)
+```
+
+ 
+
+There were 628 rows before, so we lost 18. (There were 22 missing
+values, but some of them were two on one row, so we only lost 18
+rows.)
+
+This is a very unsophisticated way of dealing with missing
+values. Another way is to "impute" them, that is, to guess what they
+would have been, and then fill in the guessed values and use them as
+if they were the truth.
+
+
+
+(c) Some of these variables are recorded as numbers but are
+actually categorical. Which ones? Re-define these variables in your
+data frame so that they have sensible (text) values.
+
+
+Solution
+
+
+These variables are actually categorical rather than quantitative:
+
+
+* `treat`
+
+* `site`
+
+* `censor`
+
+* `herco`
+
+Most of them have only two levels, so it doesn't matter whether we make them categorical or leave them as numbers, but for `herco` it matters. Let's give them all sensible values, mostly with `ifelse`, thus:
+```{r }
+drugusers %>% mutate(
+treat=ifelse(treat==0, "short", "long"),
+site=ifelse(site==0, "A", "B"),
+censor=ifelse(censor==1, "returned", "no-return"),
+herco=case_when(
+herco==1 ~ "both",
+herco==2 ~ "one",
+herco==3 ~ "neither")
+) -> drugusers
+```
+
+       
+
+I'm living on the edge and overwriting everything:
+
+```{r }
+drugusers
+```
+
+ 
+
+
+
+(d) Create a suitable reponse variable for a Cox proportional
+hazards regression that predicts time until return to drug use from
+the other variables.
+This requires some care, because you need to be sure about what the
+censoring variable actually represents and what you need it to represent.
+
+
+Solution
+
+
+This is `Surv` in package `survival`. The response
+variable needs to encode two things: the time until the event of
+interest (return to drug use) and whether or not that event
+happened for each patient. In this case, that is
+`censor="returned"`. 
+```{r }
+y=with(drugusers,Surv(time,censor=="returned"))
+```
+
+       
+
+Use whatever name you gave to the level of `censor` that means "returned to drug use". 
+    
+
+
+(e) Look at the first few values of your response variable. Why
+is the fifth one marked with a `+`? Explain briefly.
+
+
+Solution
+
+
+`head` works as well with a vector (displaying the first
+six values) as it does with a data frame:
+```{r }
+head(y)
+```
+
+      
+
+The fifth value is marked with a `+` because it is a censored
+value: this is a patient who was never observed to go back to drug
+use. You can tell this by looking at the `head` of the entire
+data frame:
+
+```{r }
+head(drugusers)
+```
+
+ 
+
+since this patient has `censor="no-return"`. The other ones have
+`censor="returned"`; these are all "uncensored" in the jargon.
+
+Typically, censored values will be bigger than uncensored ones,
+because (in general) the individual will be observed until the study
+ends, and studies of this kind carry on for years:
+
+```{r }
+ggplot(drugusers,aes(x=censor,y=time))+geom_boxplot()
+```
+
+ 
+Yep. The smallest time for a censored observation would be an upper outlier
+if it were observed for an uncensored observation.
+
+One nice side-effect of turning `censor` into a categorical variable is that it can now
+distinguish groups as a boxplot requires.
+
+I discovered something rather amusing when I originally wrote this (a
+year ago). Suppose you want to compare times for the two treatment
+groups, and you *also* want to distinguish censored from
+non-censored observations. Then, this works:
+
+```{r }
+ggplot(drugusers,aes(x=treat,y=time,colour=censor))+
+geom_boxplot()
+```
+
+ 
+
+For each treatment, you get side-by-side boxplots of the times for
+censored (red) and uncensored (blue) observations, and so you see for
+both treatments (short and long) the censored times are typically
+longer than the uncensored ones.
+
+(This you may recognize as a "grouped boxplot", for when we have two
+categorical variables and one quantitative one.)
+
+I borrow this idea for two-way ANOVA (coming up later).
+    
+
+
+(f) Fit a Cox proportional hazards model, predicting from all
+the other variables (except for `row` and `ID`) that you haven't used
+yet. Display the results.
+
+
+Solution
+
+
+```{r }
+drugusers.1=coxph(y~age+ndrugtx+treat+site+herco,data=drugusers)
+summary(drugusers.1)
+```
+
+   
+
+Another way to handle 
+"all the other $x$'s except `row`, `ID`, `time` and `censor`" is this:
+
+```{r }
+drugusers.1a=coxph(y~.-row-ID-time-censor,data=drugusers)
+broom::tidy(drugusers.1a)
+```
+
+ 
+
+Same. I used `tidy` from `broom` to shorten the output a bit.
+    
+
+
+(g) Find which explanatory variables can be removed at $\alpha=0.05$
+(there should be two of them). Bear in mind that we have categorical variables, so that looking at the output from `summary` is not enough.
+
+
+Solution
+
+
+The hint is meant to suggest to you that looking at `drop1` is the right way to go:
+```{r error=T}
+drop1(drugusers.1, test="Chisq")
+```
+
+       
+
+Note that `herco`, a categorical variable with three levels,
+has 2 degrees of freedom here, since a test of 
+"no effect of `herco`" is testing that survival is the same at 
+*all three* levels of `herco`.
+
+
+
+(h) Remove *all* the non-significant explanatory variables
+and re-fit your model. By carrying out a suitable test demonstrate
+that your smaller model is the better one.
+
+
+Solution
+
+
+`site` and `herco` are the two variables to come
+out.\endnote{The researchers were probably relieved that there
+was not quite a significant effect of `site`.} I like
+`update`, but there is no
+problem about copying-pasting your `coxph` and taking out
+what you no longer need.
+```{r }
+drugusers.2=update(drugusers.1,.~.-site-herco)
+```
+
+ 
+
+Having fit two models, we can use `anova` to compare them. The
+right test gets done, so no need for `test=`:
+
+```{r }
+anova(drugusers.2,drugusers.1)
+```
+
+ 
+
+There is no significant difference between these two 
+models,
+`r tufte::margin_note("not at the 0.05 level, anyway.")` so we can go with the 
+smaller, simpler one
+(with just `age`, `ndrugtx` and `treat`).
+    
+
+
+(i)<a name="part:posneg">*</a> Display your better model. Are all of the
+explanatory variables significant? Do their slope coefficients have
+sensible signs (plus or minus), based on what you know or can guess
+about drug treatments? Explain briefly.
+
+
+Solution
+
+
+```{r }
+summary(drugusers.2)
+```
+
+       
+
+The three remaining explanatory variables are all clearly significant:
+the patient's age, the number of previous drug treatments, and whether
+the treatment was short or long. This is legit (we don't need to run
+`drop1` again) because the remaining explanatory variables are
+all quantitative or have only two levels, so that the single-df tests
+in `summary` are what we need.
+
+Do their slope coefficients have sensible signs? Well, this requires
+careful thought. A positive coefficient means that increasing that
+variable *increases the hazard of the event*: ie., it makes the
+event likelier to happen sooner. Here, the "event" is 
+"return to drug use":
+
+
+
+* Age has a negative coefficient, so an older person is likely to take
+*longer* to return to drug use, other things being equal. This
+makes some kind of sense, if you imagine drug use as being related to
+maturity, or an older drug user as being more strongly committed to
+"turning their life around", so that a drug treatment of any kind is
+going to be more effective on an older patient.
+
+* The number of previous treatments has a positive coefficient, so that a
+patient who has had a lot of previous treatments is likely to go back
+to drugs sooner. Such a person might be an "addict" for whom
+treatments really do not work, or might not be committed to giving up drugs.
+
+
+* `treatshort` has a positive coefficient.  This says that
+if you give a patient a short treatment, they are more likely (other
+things being equal) to go back to drugs sooner, as compared to the
+baseline long treatment.  That is, a longer treatment is more
+effective than a shorter one. Given a significant effect of
+treatment length, this is the way around you would expect it to be.
+
+
+    
+
+
+(j) We have three variables left in our model, `age`,
+`ndrugtx` and `treat`. The quartiles of age are 27 and
+37, the quartiles of `ndrugtx` are 1 and 6, and the two
+possible values of `treat` are `short` and `long`. Create a data frame
+with variables of these names and all possible combinations of their
+values (so there should be 8 rows in the resulting data
+frame). Display the resulting data frame.
+
+
+Solution
+
+
+This data frame is going to be used for prediction, so I will
+call it `new` and construct it in pieces as I did before
+(thus meaning that I don't have to think too hard about what I'm doing):
+```{r }
+ages=c(27,37)
+ndrugtxs=c(1,6)
+treats=c("short","long")
+new=crossing(age=ages,ndrugtx=ndrugtxs,treat=treats)
+new
+```
+
+       
+
+8 rows as promised.
+    
+
+
+(k) Obtain predicted survival probabilities for each of the
+values of `age`, `ndrugtx` and `treat` used in
+the previous part. You don't need to display it (we are going to
+plot it shortly). 
+
+Solution
+
+
+`survfit` is the survival analysis version of
+`predict` and works the same way, so this is all you need:
+```{r }
+pp=survfit(drugusers.2,new,data=drugusers)
+```
+
+       
+
+Make sure that you use your best model, ie.\ the second one. The
+`data=` is needed for the plot below, not in itself for the
+prediction. 
+
+
+(l) Plot your predicted survival curves. 
+
+
+Solution
+
+
+This:
+```{r }
+ggsurvplot(pp, conf.int=F)
+```
+
+   
+
+The only thing to remember is that you plot your *predictions*,
+not the model from which they came.
+
+If your plot didn't come out, you may have to go back and re-do the
+`survfit` with the `data=` at the end.
+
+For reference in a minute:
+
+```{r }
+new
+```
+
+ 
+
+
+(m) Which of your combinations of values is predicted to take
+the longest to return to drug use? Which is predicted to take the
+shortest time? Explain briefly.
+
+
+Solution
+
+
+Remember that "up and to the right" is the best survival
+curve: that is, the people on this survival curve are predicted
+to take the longest to return to drug use. On my plot, this is
+the pale blue survival curve, stratum 5. Going back to my
+combinations data frame, this is 37-year-olds with only one
+previous drug treatment and the longer drug treatment this time.
+
+The worst is my green survival curve, stratum 4, which is
+the exact opposite of this: 27-year-olds, 6 previous drug
+treatments, shorter treatment this time.
+
+"Returning to drug use" is like "death" in that you want it
+to be a long time before it happens, so "best" is top right on
+the plot of survival curves. In other curcumstances, you might
+want the event to happen *sooner*, in which case the
+lower-left survival curve would be the "best" one.
+    
+
+
+(n) Are your survival curve plot and your conclusions from part
+(<a href="#part:posneg">here</a>) consistent, or not? Explain briefly.
+
+
+Solution
+
+
+The survival curves say that being older, having fewer previous
+treatments and being on the long treatment are better in terms
+of taking longer to return to drug use. Our analysis of whether
+the slope coefficients in `drugusers.2` were positive or
+negative came to exactly the same conclusion. So the survival
+curves and part (<a href="#part:posneg">here</a>) are entirely consistent.
+
+On my plot with the legend, you can assess the effects of the
+individual variables: for example, to assess the effect of age,
+find two combos that differ only in age, say strata 1 and 5, the
+red and light blue ones. Of these, the light blue survival curve is
+higher, so age 37 is better in terms of survival than age
+27. This will work whichever such pair you pick: for example,
+strata 3 and 7, the olive green and purple curves, compare
+the same way. 
+
+More comparison for you to do: to assess the effect of number of
+previous treatments, compare eg. strata 1 and 3, red and olive
+green, and to assess the effect of treatment length, compare
+eg. strata 5 and 6, light blue and darker blue.
+
+All this struggling to identify colours makes me think of
+[link](https://blog.xkcd.com/2010/05/03/color-survey-results/), in
+which the guy behind the webcomic XKCD did a survey where he
+showed people a whole bunch of different colours and asked the
+people to name the colours.
+    
+
+
+
+

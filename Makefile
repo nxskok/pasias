@@ -8,7 +8,8 @@ rmds: carp.Rmd socwork.Rmd pinetrees.Rmd jays-dplyr.Rmd tomatoes.Rmd migraine.Rm
     diabetic.Rmd tortoise.Rmd pizza.Rmd hospital.Rmd mathsal.Rmd kids-diet.Rmd gpa.Rmd fire_damage.Rmd chemical.Rmd\
     wolfspider.Rmd aphids.Rmd doseresponse.Rmd parasite.Rmd ethics.Rmd heart.Rmd breastfeed.Rmd donner.Rmd heart.Rmd\
     apache.Rmd ha2.Rmd mobile.Rmd abortion.Rmd ess.Rmd alligator.Rmd steak-data.Rmd sfcrime-data.Rmd steak.Rmd sfcrime.Rmd\
-    hsb.Rmd oz-multi.Rmd nonmissing.Rmd
+    hsb.Rmd oz-multi.Rmd nonmissing.Rmd worcester.Rmd drug-treatment.Rmd myeloma.Rmd\
+    catbrain-b.Rmd ovarian.Rmd
 %.Rmd: ~/teaching/d29/exams/%.Rnw convert.pl
 	perl convert.pl $< > $@
 docs/index.html: index.Rmd
@@ -17,3 +18,5 @@ pasias.pdf: index.Rmd
 	Rscript -e "bookdown::render_book(\"index.Rmd\", output_format=\"bookdown::tufte_book2\")"
 docs/ordinal-nominal-response.html: index.Rmd
 	Rscript -e "bookdown::preview_chapter('16-ordinal-nominal-response.Rmd')"
+docs/survival-analysis.html: index.Rmd
+	Rscript -e "bookdown::preview_chapter('17-survival-analysis.Rmd')"

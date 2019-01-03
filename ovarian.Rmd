@@ -1,0 +1,474 @@
+##  Ovarian cancer
+
+
+ R's `survival` package contains several data
+sets. One of these is called `ovarian`; it comes from a study
+of 26 ovarian cancer patients. The major purpose of this study was to
+compare the effects of two treatments on survival time.
+
+
+
+(a) Obtain and display (all of) the data set. This is as simple as
+loading the package and typing the data set's name.
+
+Solution
+
+
+Thus. You may need to start with `library(survival)`:
+
+```{r }
+ovarian
+```
+
+ 
+
+There are indeed 26 rows. This is a `data.frame` rather than a
+`tibble`, so you see the whole thing, in case you were
+expecting something like this:
+
+```{r }
+ovarian %>% as.tibble()
+```
+
+ 
+
+which doesn't change anything in `ovarian`, but changes what
+kind of thing it is (and thus how it displays). Usually when you read
+something in from a file, you use something like `read_delim`
+that makes a `tibble`, but this one wasn't read in from a
+file. It was stored in the package as an old-fashioned
+`data.frame`, and so that's how it stays.
+
+
+(b) The columns of interest to us are:
+
+
+* `futime`: the time for which a patient was followed-up:
+the number of days until either they died or the study ended (or
+they withdrew from the study for some other reason).
+
+* `fustat`: follow-up status: 1 if the patient died of
+ovarian cancer, 0 if they were still alive when the study ended.
+
+* `age`: of patient, at diagnosis, in years
+
+* `rx`: treatment, numbered 1 or 2, but really labels for
+the two treatments.
+
+Create and display a suitable response variable `y` for a Cox
+proportional-hazards model.
+
+Solution
+
+
+The idea is to use the appropriate one(s) of these columns in
+`Surv`. Remember that the response variable in a survival
+model encodes two things: the survival time, and whether or not
+the event (here death) actually happened to that patient or not.
+I always forget whether the second thing in `Surv` has to
+be 1 or 0 if the event happened. The help says that it needs to be
+1 or `TRUE` if the event (death) happened, which is what
+`fustat` is, so we can use it as it is:
+```{r }
+y=with(ovarian,Surv(futime,fustat))
+y
+```
+
+     
+
+This creates a separate variable `y` outside of any data
+frame. This is how it has to be done, because although `y`
+looks as if it is 26 long (one per patient), it's actually more
+complicated than that:
+
+```{r error=T}
+ov2 = ovarian %>% mutate(y=Surv(futime,fustat))
+```
+
+ 
+
+This doesn't work, because internally `y` is a `matrix` with two columns:
+
+```{r }
+print.default(y)
+```
+
+ 
+
+The way R works out the length of something is its total number of
+entries, which for this matrix is $26 \times 2=52$. The only things
+you can add via `mutate` to a data frame with 26 rows have
+length 26 (since everything in a data frame has to be the same length)
+or length 1 (in which case it is repeated 26 times).
+
+With some cajoling, you can get this into a data frame, but with more
+cajoling than seems necessary. It's much easier to leave it as a
+separate thing outside a data frame.\endnote{In some respects, it's
+like that two-column response in logistic regression, where each row
+of the data frame represents several observations pooled together.}
+
+I gave `ov2` a "temporary" name because I am not going to use
+it again.
+
+
+(c) In the display of your response variable, some values are
+marked with a `+`. Why is that? Explain briefly. (If you use
+a technical term, you should explain what it means.)
+
+Solution
+
+
+These are the censored observations. You can say this, but you
+also need to say what that means (this is the "technical term"
+referred to in the question). The observations with a `+`
+are individuals who were never observed to die, or who were still
+alive at the end of the study.
+I want you to demonstrate that you know what censored
+*means*, not just that you know when you have a censored
+observation.
+Extra: in a study like this, patients are typically "recruited"
+into the study at various different times. Patients who happened
+to be in the study near the beginning and who survived can have a
+large (censored) value of `y` (like those values over 1000
+days). But a patient might join the study later on; if they
+survive, they might produce a censored observation with a small
+survival time, like the last value 377. I'm sure the doctor would
+have liked to follow them for longer, but the funding ran out, and
+the doctor had a paper to write. (There is *some* information
+in these small censored values, but not much, because most of the
+patients, even the ones who eventually died, survived for longer
+than 377 days.)
+The other thing that might have happened is that a patient with
+the 377-censored value died *from something else* unrelated
+to ovarian cancer. The study is only concerned with deaths from
+ovarian cancer, so such a patient is treated as censored at their
+death time. After this point we cannot assess how long
+this patient survived *ovarian cancer*.
+
+
+(d) Fit a Cox proportional-hazards model for predicting
+survival time from age and treatment. Note that the numeric values
+for treatment make sense only as labels for the two treatments, so
+in your model formula make treatment into a factor. Display the
+results. 
+
+Solution
+
+
+The hint suggests something like this:
+```{r }
+time.1=coxph(y~age+factor(rx),data=ovarian)
+summary(time.1)
+```
+
+     
+
+Alternatively, define the factor version of `rx` in the data
+frame first. This is the slick way to do that:
+
+```{r }
+time.1a = ovarian %>% mutate(rxf=factor(rx)) %>%
+coxph(y~age+rxf,data=.)
+summary(time.1a)
+```
+
+ 
+
+The answer is the same either way. 
+The `data=.` means "use the data frame that came out of the previous step, the one with `rxf` in it."
+
+
+(e) Is there a significant difference between the treatments in
+terms of their effects on survival (from ovarian cancer)?
+
+Solution
+
+
+Look at the P-value for my `factor(rx)2`, 0.203. This is
+not small, so there is no evidence of a difference between
+treatments. 
+Extra: the reason for the odd label is that we have turned
+treatment into a categorical variable; treatment 1 is used as the
+baseline, and the negative slope says that the "hazard of death"
+is lower for treatment 2 than for treatment 1: that is, people
+survive longer on treatment 2, but the difference is not big
+enough to be significant (we also have a smallish sample size).
+Since there are only two treatments, it would in fact have been OK
+to leave them as numbers (with two numbers one unit apart, the
+slope would have been the same size as here), but I think it's a
+good idea to treat categorical variables as categorical. My own habit
+is to use letters or something non-numerical to distinguish
+categories. I might have used `t1` and `t2` in this
+case, or the names of the different treatments.
+
+
+(f) Is there a significant effect of age? If there is, describe
+the effect that age has on survival.
+
+Solution
+
+
+The P-value for age is 0.0014, small, so age definitely has a
+significant effect on survival. As to what kind of effect, look at
+the slope coefficient, 0.15, positive, which means that increased
+age-at-diagnosis goes with an *increased* hazard of death, or
+that older patients do not survive as long.
+I would like you to get to the plain-English words at the
+end. Part of your job as a statistician is explaining what you got
+to people who are doctors, managers, etc., who won't
+understand the terminology. 
+Thus, one mark for assessing significance
+via P-value, one for looking at the slope coefficient and noting
+that it is positive, and one for getting to "older patients do     not survive as long", or 
+"older patients have a larger chance of dying sooner". 
+(Strictly, this is also "all else equal" as usual,
+since survival time might also have depended on treatment, but the
+point of this question is for you to get to "older patients do not survive as long".) 
+(The interpretation of the slope may seem backwards: a positive
+slope means a *shorter* survival time for a larger age. This
+is why I talk about "hazard of death", since that guides us to
+the correct interpretation.)
+Extra: I was curious about what would happen if I just included
+`rx` in the model:
+```{r }
+time.2=update(time.1,.~.-age)
+summary(time.2)
+```
+
+     
+
+Still not significant, but this model is a *lot worse* because I
+took out the significant `age`. What this is doing is mixing up
+all the people of different ages (and we know that age has an effect
+on survival) and trying (and failing) to discern an effect of
+treatment. 
+
+We could have been badly misled by this model if one of the treatments
+had predominantly older patients. We know that older patients have
+worse survival, so the treatment with older patients would have looked
+worse, even if it actually wasn't. The model `time.1` which
+contained `age` properly adjusted for the effect of age, so
+that was the best way to see whether there was a difference between
+treatments. 
+
+What you often see early on in a paper on this kind of stuff is a
+graph showing that the treatment groups are similar in terms of
+important things like `age`. Here, that could be a boxplot:
+
+```{r }
+ggplot(ovarian, aes(x=factor(rx),y=age))+geom_boxplot()
+```
+
+ 
+
+I needed to do `factor(rx)` because `geom_boxplot`
+needs a genuine categorical variable, not just a numerical variable
+masquerading as one. If you just leave it as `rx`, as I
+discovered, you get *one* boxplot of all the ages together
+regardless of treatment. The key, for you as user of software, is not
+(necessarily) to get it right the first time, but to know what to do
+to fix up the errors you will inevitably get. If you have worked
+through the boxplot examples in C32 and D29, you will have enough
+experience to remember that a boxplot has to have a categorical `x`
+(text will do, but definitely not numbers). This is why I give you so
+many things to work through: so that you gain the experience to know
+how to fix up problems.
+
+Treatment 1 has a larger spread of ages and treatment 2 has a low
+outlier age, but the median ages are very similar.
+
+
+(g) Make a martingale residual plot for this model. Do you see
+any problems? Explain briefly.
+
+Solution
+
+
+The plot is just the same idea as the one in the notes. Make sure
+you have `survminer` installed and loaded:
+```{r }
+ggcoxdiagnostics(time.1)+geom_smooth()
+```
+
+     
+
+Make a call about whether you think the smooth trend deviates too much
+from the red dotted line going across at zero. Martingale residuals
+can get very negative (and that is OK), so that residual of $-2$ is
+not a problem, and this is pulling the smooth trend down a bit (it's
+the reason for the dip on the right side of the smooth trend). So I'd
+call this OK, but you can make whatever call you like as long as it's
+supported by what you see here.
+
+I observe that the obvious fixable thing is where you have a curve
+here, one that looks like a parabola (at which point you add squared
+terms to your explanatory variables and see if that helps, as for
+`bmi` in one of the other problems). This one
+is too wiggly to be a parabola (it bends *twice*), and so is more
+like a cubic than anything.
+
+The other thing you can note is that the grey envelope is 
+"not significantly different from zero", since 0 is clearly within the grey
+envelope all the way across.
+
+
+
+
+(h) Find the quartiles of `age`, and make a data frame
+containing all combinations of those two ages and the two
+treatments. Display what you have. (Feel free to copy the values by
+hand, rather than trying to save them and use them.)
+
+
+Solution
+
+
+I imagine you can guess what we are going to be doing with these:
+predictions, so we'll call the data frame `new` when we get
+there. 
+Quartiles first:
+```{r }
+quantile(ovarian$age)
+```
+
+   
+
+or, if you prefer,
+
+```{r }
+ovarian %>% 
+summarize(q1=quantile(age,0.25),
+q3=quantile(age,0.75))
+```
+
+ 
+
+The quartiles are 50.17 and 62.38 (rounding slightly).
+
+Either way is good. 
+
+Then follow my standard procedure (or one of your own devising),
+remembering that "treatment" is called `rx` here:
+
+```{r }
+ages=c(50.17, 62.38)
+rxs=c(1, 2)
+new=crossing(age=ages,rx=rxs)
+new
+```
+
+ 
+
+
+
+(i) Obtain predicted survival probabilities for each of your
+age-treatment combinations, for each of a variety of survival
+times. (This is only one thing, despite it sounding like a lot.)
+
+
+Solution
+
+
+The magic word here is `survfit`. The structure is the same
+as for `predict`:
+```{r }
+s=survfit(time.1,new,data=ovarian)
+summary(s)
+```
+
+   
+
+I didn't ask you to display it, so doing so is optional. Also, you
+don't need (here) that `data=ovarian` (the predictions will
+work just fine without it), but the plot coming up *will not*. So
+my recommendation is to put it in.
+
+Extra: The four columns `survival1` through `survival4` are the
+survival probabilities for the times shown in the left-hand column
+(these are numbers of days), for the four *rows* of my
+`new`, in the same order.
+
+There are only a few different times, because these are the numbers of
+days at which somebody in the data set died, and the estimated
+survival probability does not change at the times in between
+these. (You'll see this on a plot in a minute.)
+
+These survival probabilities are pretty easy to eyeball: the best
+survival is in stratum 2, which is the younger patients in treatment
+2. This we'll come back to.
+
+
+
+(j) Draw a plot that compares the survival probabilities at the
+different times.
+
+
+Solution
+
+
+Thus. The `conf.int=F` means to skip the confidence interval
+"envelopes" that I find make the plot rather messy:
+```{r }
+ggsurvplot(s,conf.int=F)
+```
+
+   
+
+
+(k) According to your plot, how would you describe the effects of
+treatment and of age?
+
+
+Solution
+
+
+The best survival curve, in terms of surviving longest, is up and to
+the right, so the green one is best and the blue one is
+worst.\endnote{In other cases, having the event happen sooner is
+better. For example, you might be poisoning rats, in which case
+you want them to die quicker. Or the event might be something
+desirable like becoming qualified to fly an airplane. In those
+cases, down and to the left is better.} To figure out which those
+are, we have to go back to the data frame we created:
+```{r }
+new
+```
+
+  
+
+To see the effect of age, compare strata 1 and 3 (or 2 and 4). This
+means comparing the red and blue curves; the red one is clearly better
+(in the sense of longer survival time), which means that age has a big
+effect on survival, with younger people living longer, other things
+being equal (that we saw earlier was significant). You could
+equally well compare the green and purple survival curves and come to
+the same conclusion.
+
+To assess the effect of treatment, compare strata 1 and 2 (red and
+green), or strata 3 and 4 (blue and purple). In both cases, the
+stratum corresponding to treatment 2 has slightly better survival (has
+a higher chance of living for longer), but there is not as big an
+effect as for age. (You'll recall that the treatment difference was
+not significant).
+
+One point for stating or implying that you know which stratum is
+which, and one each for saying something about the effects of age and
+of treatment, including which one is better.
+
+Extra: recall the output from the Cox model:
+
+```{r }
+summary(time.1)
+```
+
+ 
+
+The slope coefficient for treatment 2 (as compared to the baseline
+treatment 1) was $-0.83097$, *negative*, which meant that patients on
+treatment 2 had a *lower* hazard of death than patients on
+treatment 1: that is, that treatment 2 was better for survival than
+treatment 1. That is what the plot said also (and the relatively small
+difference is consistent with that difference not being significant). 
+
+
+

@@ -40,7 +40,7 @@ frequencies of people falling into each category combination, are in [link](http
 
 
 
-(a)??part:gather?? Read in the data and take a look at the format. Use a tool
+(a)<a name="part:gather">*</a> Read in the data and take a look at the format. Use a tool
 that you know about to arrange the frequencies in *one* column,
 with other columns labelling the response categories that the
 frequencies belong to. Save the new data frame. (Take a look at it
@@ -366,7 +366,7 @@ label `ord` means that it is an ordered factor, as we want.
 
 
 
-(d)??part:thefit??
+(d)<a name="part:thefit">*</a>
 Fit ordered logistic models to predict satisfaction from (i) gender
 and age group, (ii) gender only, (iii) age group only. (You don't
 need to examine the models.) Don't forget a suitable
@@ -528,7 +528,7 @@ customer falling in the various satisfaction categories, as it
 depends on gender and age group. To do that, you need to feed
 `predict` three things: the fitted model that contains both
 age group and gender, the data frame that you read in from the file
-back in part (??part:gather??) (which contains all the combinations of age group
+back in part (<a href="#part:gather">here</a>) (which contains all the combinations of age group
 and gender), and an appropriate `type`.
 
  
@@ -575,7 +575,7 @@ resolution (that it took me a long time to discover) is that you might
 have the `tidyverse` *and also* `MASS` loaded, in
 the wrong order, and `MASS` also has a `select` (that
 takes different inputs and does something different). If you look back
-at part (??part:thefit??), you might have seen a message there when you
+at part (<a href="#part:thefit">here</a>), you might have seen a message there when you
 loaded `MASS` that `select` was "masked". When you
 have two packages that both contain a function with the same name, the
 one that you can see (and that will get used) is the one that was
@@ -583,7 +583,7 @@ loaded *last*, which is the `MASS` select (not the one we
 actually wanted, which is the `tidyverse` select). There are a
 couple of ways around this. One is to un-load the package we no longer
 need (when we no longer need it). The mechanism for this is shown at
-the end of part (??part:unload??). The other is to say explicitly
+the end of part (<a href="#part:unload">here</a>). The other is to say explicitly
 which package you want your function to come from, so that there is no
 doubt. The `tidyverse` is actually a collection of
 packages. The best way to find out which one our `select` comes
@@ -703,7 +703,7 @@ the same way.
  
 
 
-(j)??part:unload?? 
+(j)<a name="part:unload">*</a> 
 Describe any patterns you see in the predictions, bearing in mind the
 significance or not of the explanatory variables.
 
@@ -750,7 +750,7 @@ detach("package:MASS",unload=T)
 ##  Attitudes towards abortion
 
 
-??q:abortion?? Abortion is a divisive issue in the United States,
+<a name="q:abortion">*</a> Abortion is a divisive issue in the United States,
 particularly among Christians, some of whom believe that abortion is
 absolutely forbidden by the Bible. Do attitudes towards abortion
 differ among Christian denominations? The data in
@@ -1189,7 +1189,7 @@ model with both variables is best, the one I called
 
 
 
-(h)??part:preds?? 
+(h)<a name="part:preds">*</a> 
 Obtain predicted probabilities for each attitude towards abortion
 for each combination of education level and religious
 denomination. To do that, (i) obtain those levels of education and
@@ -1248,7 +1248,7 @@ cbind(new,pp)
 
 
 
-(i) Using your predictions from (??part:preds??), describe
+(i) Using your predictions from (<a href="#part:preds">here</a>), describe
 the effect of education. (This should be the same for all values of `religion`).
 
 
@@ -1271,7 +1271,7 @@ as long as the data (here the predictions) support it.
 
 
 
-(j) Using your predictions from (??part:preds??), describe
+(j) Using your predictions from (<a href="#part:preds">here</a>), describe
 the effect of `religion`. (This should be the same for all
 levels of `education`.)
 
@@ -1380,6 +1380,185 @@ detach("package:MASS", unload=T)
 
 
 
+##  Finding non-missing values
+
+
+<a name="part:prepare-next">*</a> This is to prepare you for something in the next
+question. It's meant to be easy.
+
+In R, the code `NA` stands for "missing value" or
+"value not known". In R, `NA` should not have quotes around
+it. (It is a special code, not a piece of text.)
+
+
+(a) Create a vector `v` that contains some numbers and some
+missing values, using `c()`. Put those values into a
+one-column data frame.
+ 
+Solution
+
+
+Like this. The arrangement of numbers and missing values doesn't
+matter, as long as you have some of each:
+
+```r
+v=c(1,2,NA,4,5,6,9,NA,11)
+mydata=tibble(v)
+mydata
+```
+
+```
+## # A tibble: 9 x 1
+##       v
+##   <dbl>
+## 1     1
+## 2     2
+## 3    NA
+## 4     4
+## 5     5
+## 6     6
+## 7     9
+## 8    NA
+## 9    11
+```
+
+     
+
+This has one column called `v`.
+ 
+
+(b) Obtain a new column containing `is.na(v)`. When is this true and when is this false?
+ 
+Solution
+
+
+
+```r
+mydata = mydata %>% mutate(isna=is.na(v))
+mydata
+```
+
+```
+## # A tibble: 9 x 2
+##       v isna 
+##   <dbl> <lgl>
+## 1     1 FALSE
+## 2     2 FALSE
+## 3    NA TRUE 
+## 4     4 FALSE
+## 5     5 FALSE
+## 6     6 FALSE
+## 7     9 FALSE
+## 8    NA TRUE 
+## 9    11 FALSE
+```
+
+     
+
+This is `TRUE` if the corresponding element of `v` is
+missing (in my case, the third value and the second-last one), and
+`FALSE` otherwise (when there is an actual value there).
+ 
+
+(c) The symbol `!` means "not" in R (and other
+programming languages). What does `!is.na(v)` do? Create a
+new column containing that.
+ 
+Solution
+
+
+Try it and see. Give it whatever name you like. My name reflects
+that I know what it's going to do:
+
+```r
+mydata = mydata %>% mutate(notisna=!is.na(v))
+mydata
+```
+
+```
+## # A tibble: 9 x 3
+##       v isna  notisna
+##   <dbl> <lgl> <lgl>  
+## 1     1 FALSE TRUE   
+## 2     2 FALSE TRUE   
+## 3    NA TRUE  FALSE  
+## 4     4 FALSE TRUE   
+## 5     5 FALSE TRUE   
+## 6     6 FALSE TRUE   
+## 7     9 FALSE TRUE   
+## 8    NA TRUE  FALSE  
+## 9    11 FALSE TRUE
+```
+
+     
+
+This is the logical opposite of `is.na`: it's true if there is
+a value, and false if it's missing.
+ 
+
+
+(d) Use `filter` to display just the
+rows of your data frame that have a non-missing value of `v`.
+
+ 
+Solution
+
+
+`filter` takes a column to say which rows to pick, in
+which case the column should contain something that either *is*
+`TRUE` or `FALSE`, or something that can be
+interpreted that way:
+
+```r
+mydata %>% filter(notisna)
+```
+
+```
+## # A tibble: 7 x 3
+##       v isna  notisna
+##   <dbl> <lgl> <lgl>  
+## 1     1 FALSE TRUE   
+## 2     2 FALSE TRUE   
+## 3     4 FALSE TRUE   
+## 4     5 FALSE TRUE   
+## 5     6 FALSE TRUE   
+## 6     9 FALSE TRUE   
+## 7    11 FALSE TRUE
+```
+
+   
+
+or you can provide `filter` something that can be calculated
+from what's in the data frame, and also returns something that is
+either true or false:
+
+
+```r
+mydata %>% filter(!is.na(v))
+```
+
+```
+## # A tibble: 7 x 3
+##       v isna  notisna
+##   <dbl> <lgl> <lgl>  
+## 1     1 FALSE TRUE   
+## 2     2 FALSE TRUE   
+## 3     4 FALSE TRUE   
+## 4     5 FALSE TRUE   
+## 5     6 FALSE TRUE   
+## 6     9 FALSE TRUE   
+## 7    11 FALSE TRUE
+```
+
+ 
+
+In either case, I only have non-missing values of `v`.
+ 
+
+
+
+
+
 ##  European Social Survey and voting
 
 
@@ -1465,7 +1644,7 @@ ess
 2286 rows and 17 columns.
  
 
-(b)??part:whatvar?? Use the codebook to find out what the columns
+(b)<a name="part:whatvar">*</a> Use the codebook to find out what the columns
 `prtvtgb`, `gndr`, `agea`, `eduyrs` and
 `inwtm` are.  What do the values 1 and 2 for `gndr`
 mean? (You don't, at this point, have to worry about the values for
@@ -1504,7 +1683,7 @@ the rows that correspond to people who voted for one of the three
 major parties, (iii) include the rows that have an age at interview
 less than 999, (iv) include the rows that have less than 40 years of
 education, (v) include the rows that are not missing on
-`inwtm` (use the idea from Question~??part:prepare-next??
+`inwtm` (use the idea from Question~<a href="#part:prepare-next">here</a>
 for (v)).  The last four of those (the inclusion of rows) can be
 done in one go.
  
@@ -1600,7 +1779,7 @@ left-right spectrum, you would have had to decide where to put the
 somewhat libertarian Greens or the parties that exist only in Northern Ireland.
  
 
-(f)??part:full?? Take the political party voted for, and turn it into a
+(f)<a name="part:full">*</a> Take the political party voted for, and turn it into a
 factor, by feeding it into `factor`.
 Fit an appropriate model to predict political party voted
 for at the last election (as a factor) from all the other
@@ -2189,7 +2368,7 @@ where it is supposed to be a factor.
 
 
 (c) What is different about this problem, compared to
-Question~??q:abortion??, that would make 
+Question~<a href="#q:abortion">here</a>, that would make 
 `multinom` the right tool to use?
 
 
@@ -2753,7 +2932,7 @@ commoner for large alligators than small ones.
 ##  How do you like your steak -- the data
 
 
-??q:steak-data?? This question takes you through the data preparation for one
+<a name="q:steak-data">*</a> This question takes you through the data preparation for one
 of the other questions. You don't have to do *this*
 question, but you may find it interesting or useful.
 
@@ -5770,7 +5949,7 @@ I'm doing this to give you a little intuition for later:
 ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport))+geom_point()
 ```
 
-<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-141-1.png" width="672"  />
+<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
 
      
 

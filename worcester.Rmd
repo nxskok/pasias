@@ -1,0 +1,476 @@
+##  The Worcester survey
+
+
+ The Worcester survey was a long-term study of
+all myocardial-infarction
+`r tufte::margin_note("Heart attack.")` victims admitted to hospitals in the
+Worcester, Massachusetts area.
+`r tufte::margin_note("Worcester is pronounced, by locals, *Woo-stuh*.")` 
+The data have been well studied, and can be found in
+the file [link](http://www.utsc.utoronto.ca/~butler/d29/whas100.csv).
+
+
+
+(a) Read the data and
+ display the first few rows of the data frame. You might get an extra
+ column, which you can ignore.
+For your information, the variables are:
+
+
+* patient ID code
+
+* admission date
+
+* date of last followup (this is the date of death if the
+patient died)
+
+* length of hospital stay (days)
+
+* followup time (days) (time between admission and last followup)
+
+* followup status: 1=dead, 0=alive
+
+* Age in years (at admission)
+
+* gender (0=male, 1=female)
+
+* body mass index (kg/m$^2$)
+
+ 
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/whas100.csv"
+whas100=read_csv(my_url)
+whas100
+```
+
+     
+
+I seem to have an extra column called `X1`. This is because I
+saved my version of the data using the old `write.csv`, which
+comes with row names, and I forgot to
+get rid of them. These came back as an extra unnamed variable to which
+`read_delim` gave the name `X1`.
+ 
+
+(b) Create a suitable response variable for a Cox proportional
+hazards model for time of survival, using the followup time and
+followup status.
+ 
+Solution
+
+
+`Surv`. The event here is death, so the two parts of the
+response variable are followup time `lenfol` and followup
+status, 1 being "dead", `fstat`:
+```{r }
+y=with(whas100,Surv(lenfol,fstat==1))
+y
+```
+
+     
+
+Just using `fstat` alone as the second thing in `Surv`
+also works, because anything that gives `TRUE` or 1 when the
+event (death) occurs is equally good. (In R, `TRUE` as a number
+is 1 and `FALSE` as a number is 0.) 
+
+I listed the values by way of checking. The ones with a `+` are
+censored: that is, the patient was still alive the last time the
+doctor saw them. Most of the censored values are longer times. Usually
+this happens because the patient was still alive at the end of the study.
+ 
+
+
+(c) Fit a Cox proportional hazards model predicting survival time
+from age, gender and BMI. Obtain the `summary` (but you don't
+need to comment on it yet).
+
+ 
+Solution
+
+
+This, using the response variable that we just created:
+```{r }
+whas100.1=coxph(y~age+gender+bmi,data=whas100)
+summary(whas100.1)
+```
+
+   
+ 
+
+(d) Test the overall fit of the model. What does the result mean?
+ 
+Solution
+
+
+Look at those three P-values at the bottom.  They are all small,
+so something in the model is helping to predict survival. As to
+what? Well, that's the next part.
+ 
+
+(e) Can any of your explanatory variables be removed from the
+model? Explain briefly.
+ 
+Solution
+
+
+`gender` has a (very) large P-value, so that can be taken
+out of the model. The other two variables have small P-values
+(`bmi` only just under 0.05), so they need to stay.
+The other way to think about this is `step`, or `drop1`:
+```{r }
+drop1(whas100.1, test="Chisq")
+```
+
+     
+
+This is here the same as the output from `summary`, but where it scores is if you have a categorical explanatory variable like "treatment" with more than two levels: `drop1` will tell you about keeping or dropping it as a 
+whole.
+`r tufte::margin_note("Our categorical variable *gender* has only two levels.")`
+If you prefer:
+
+```{r }
+whas100.step=step(whas100.1,trace=0)
+summary(whas100.step)
+```
+
+     
+
+`gender` comes out, but the others stay. As usual, put
+`trace=1` or `trace=2` to get more output, which will
+look like a sequence of `drop1`'s one after the other.
+ 
+
+(f) Remove your most non-significant explanatory variable from
+the model and fit again. Take a look at the results. Are all your
+remaining explanatory variables significant? (If all your
+explanatory variables were previously significant, you can skip this part.)
+ 
+Solution
+
+
+So, take out `gender`:
+```{r }
+whas100.2=update(whas100.1,.~.-gender)
+summary(whas100.2)
+```
+
+     
+
+Both explanatory variables are significant: `age` definitely,
+`bmi` only just. This is the same model as `step` gave me.
+ 
+
+(g) Calculate the 1st quartile, median, and 3rd quartiles of
+age and BMI. (`quantile`.) Round these off to the
+nearest whole number. (Do the rounding off yourself, though R has a
+function `round` that does this, which you can investigate if
+you want.) As an alternative, you can get these by passing the whole
+data frame into `summary`.
+ 
+Solution
+
+
+```{r }
+quantile(whas100$age)
+quantile(whas100$bmi)
+```
+
+ 
+
+or
+
+```{r }
+with(whas100, {
+print(quantile(age))
+print(quantile(bmi))
+})
+```
+
+ 
+
+(since there are two things in the `with`, you need the curly
+brackets, and since there are curly brackets you need to explicitly
+`print` the things you want to display.)
+Or, tidyverse-style:
+
+```{r }
+whas100 %>% select(age,bmi) %>% 
+summarize(ageq=list(quantile(age)),
+bmiq=list(quantile(bmi)))
+```
+
+ 
+
+These are list-columns containing the five quantiles for each
+variable, which we then have to pull apart:
+
+```{r }
+whas100 %>% select(age,bmi) %>% 
+summarize(ageq=list(quantile(age)),
+bmiq=list(quantile(bmi))) %>%
+unnest()
+```
+
+ 
+
+The reason for the `list` and the list-columns and the
+`unnest` is that `quantile` returns the five numbers of
+the five-number summary, rather than just one number (in which case it
+would be a regular `summarize`).
+This might strike you as a bit repetitive. There is also a `summarize_all`, which summarizes all the columns (after you've done the `select`). 
+This requires a function to summarize with, which we need to write first:
+
+```{r }
+lq=function(x) {
+list(quantile(x))
+}
+whas100 %>% select(age, bmi) %>%
+summarize_all(lq) %>%
+unnest()
+```
+
+ 
+The `summary` approach is simply this (which I think I now like
+best of all):
+
+```{r }
+summary(whas100)
+```
+
+ 
+
+or, if you want just the summaries of `age` and `bmi`,
+you select those columns first before passing the data frame into
+`summary`: 
+
+```{r }
+whas100 %>% select(age,bmi) %>% summary()
+```
+
+ 
+
+Think small tools, combined.
+
+Whichever of this multitude of ways appeals to you:
+
+60, 71 and 80 for age, 24, 27 and 30 for BMI. 
+ 
+
+(h) Make a data frame out of all the combinations of
+age and BMI values (that you obtained in the previous part) suitable for predicting
+with. 
+ 
+Solution
+
+
+The inevitable `crossing`:
+```{r }
+whas100.new=crossing(age=c(60,71,80),bmi=c(24,27,30))
+whas100.new
+```
+
+     
+
+Or, with some setup beforehand to make the `crossing`
+clearer. This is my no-think approach:
+
+```{r }
+ages=c(60,71,80)
+bmis=c(24,27,30)
+whas100.new=crossing(age=ages,bmi=bmis)
+whas100.new
+```
+
+ 
+ 
+
+(i) Obtain predicted survival probabilities for each of the values
+in your new data frame. Use your best model. (You don't need to look
+at the results, though you can if you want to.)
+ 
+Solution
+
+
+The magic word is `survfit` (which plays the role of
+`predict` here). The best model is `whas100.2`,
+with the non-significant `gender` removed:
+```{r }
+pp2=survfit(whas100.2,whas100.new,data=whas100)
+```
+
+      
+
+This doesn't need the `data=` at the end (it works perfectly
+well without), but the plot (later) seems to need it to be there. I
+think the plot needs the information from the original data to be in
+the predictions somewhere.
+
+This is kind of long to look at (`summary(pp2)` would be the
+thing), so we will need to make a graph of it. I gave it a name, since
+I want to use it again later.
+ 
+
+(j) Make a graph depicting the survival curves from
+`survfit` with different colours distinguishing the different
+survival curves.
+ 
+Solution
+
+
+This is actually easy once you work out what to do:
+
+```{r }
+ggsurvplot(pp2, conf.int=F)
+```
+
+ 
+
+Without the `conf.int` thing, you get confidence intervals for
+each survival curve, which overlap each other and generally make the
+plot look messy.
+
+The "strata" are the different age-BMI combinations that you
+predicted for, so it's usually a good idea to list the "new"
+prediction data frame, either here or when you assess the effects of
+the variables (next part) so that you can see which is which:
+
+```{r }
+whas100.new
+```
+
+ 
+ 
+
+(k) What is the effect of age on survival? What is the effect
+of BMI on survival? Explain briefly. (You will have to disentangle
+the meaning of the different coloured lines on the plot to do this.)
+ 
+Solution
+
+
+Bear in mind that up-and-to-the-right is best for a survival
+curve, since that means that people in the upper-right group have
+a higher chance of surviving for longer.   
+
+The best survival curve is therefore the olive-green one. According
+to the legend, this goes with stratum 3, which is (according to
+the listing of `whas100.new`) age 60 (the youngest) and BMI
+30 (the highest). So it looks as if the best survival goes with a
+lower age (not surprising) and a higher BMI (surprising; see
+discussion about BMI below).  
+
+You can also leave one variable constant and see the effects of
+changing the other one. Let's pick the oldest age 80: the BMI
+values are 24 (stratum 7, blue), 27 (stratum 8, purple), 30
+(stratum 9, pink). These survival curves are the bottom one, the
+second bottom one, and the fourth bottom one. At this age,
+survival chances are not great, but having a higher BMI goes with
+a greater chance of surviving longer.  
+
+Or pick a BMI, say 30. These are strata 3 (olive green), 6 (light blue)
+and 9 (pink) respectively for ages 60, 71 and 80. These are the
+best, 3rd best and 5th best survival curves; that is, as age
+increases, the chance of surviving a long time decreases.  
+
+The effect of BMI, though, seems backwards: a higher BMI is
+associated with a *higher* chance of survival.   
+
+That's the end of what I wanted you to do, but:
+
+A higher BMI is usually associated with being obese (and therefore
+unhealthy), so you'd expect the effect of BMI to be the other way
+around. According to Wikipedia
+([link](http://en.wikipedia.org/wiki/Body_mass_index)), the BMI values
+here are "overweight" or close to it. Maybe being heavier helps
+the body recover from a heart attack. 
+
+Let's start with the martingale residual plot:
+```{r }
+ggcoxdiagnostics(whas100.2)+geom_smooth()
+```
+
+     
+
+There is a suspicion of bendiness here, though the left side of the
+curve is entirely because of that one positive residual on the
+left. In any case, this suggests that nonlinearity (evidently in terms
+of BMI, since that's the relationship that currently makes no sense)
+would be worth exploring. 
+
+Thus:
+
+```{r }
+whas100.3=update(whas100.2,.~.+I(bmi^2))
+summary(whas100.3)
+```
+
+     
+
+Ah, that seems to be it. The significant positive coefficient on
+`bmi`-squared 
+means that the "hazard of dying" increases faster with increasing
+`bmi`, so there ought to be an optimal BMI beyond which
+survival chances decrease again. Let's explore that on a graph.
+
+I'm going to focus on a close-to-median age of 70, since, in this
+model, the effect of BMI is the same for all ages (to make it
+different, we would need an interaction term, ANOVA-style). 
+
+First we create a data frame with a bunch of different BMIs in, and
+one age 70:
+
+```{r }
+bmis=seq(20,36,4)
+ages=70
+whas100.new.2=crossing(bmi=bmis,age=ages)
+whas100.new.2
+```
+
+ 
+
+It is rather absurd to have a plural `ages` with only one age
+in it, but that's the way it goes, if you're me and trying to avoid thinking.
+
+Predictions, using the model with the squared term in it:
+
+```{r }
+pp3=survfit(whas100.3,whas100.new.2,data=whas100)
+```
+
+ 
+
+And then the plot:
+
+```{r }
+ggsurvplot(pp3, conf.int=F)
+```
+
+ 
+
+and the customary reminder of which stratum is which, with its rather
+ungainly name:
+
+```{r }
+whas100.new.2
+```
+
+ 
+
+This time, the green survival curve is best, stratum 3, which means that
+survival is best at BMI 28, and worse for both higher BMIs and lower
+BMIs. You can follow the sequence of colours: red, olive-green, green,
+blue, pink, that goes up and then down again. But it's still true
+that having a very *low* BMI is worst, which is why our (linear)
+model said that having a higher BMI was better.
+
+It would have been better to have you put a squared term in the model,
+but the question was already long and complicated enough, and I
+didn't want to make your lives more of a nightmare than they are
+already becoming!
+ 
+
+

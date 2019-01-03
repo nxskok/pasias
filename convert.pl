@@ -27,13 +27,15 @@ sub main {
     $content=~s/\\end\{enumerate\}//g;
     $content=~s/\\item\s(.*)/\n* $1/g;
     $content=~s/\\endnote\{(.*)\}/\n`r tufte::margin_note(\"$1\")`/g;
-    # alert me to the need to fix up references
-    $content=~s/\\label\{(.*?)\}/??$1??/g;
-    $content=~s/\\ref\{(.*?)\}/??$1??/g;
+    # alert me to the need to fix up references (HTML seems to work if done properly)
+    $content=~s/\\label\{(.*?)\}/<a name=\"$1\">*<\/a>/g;
+    $content=~s/\\ref\{(.*?)\}/<a href=\"\#$1\">here<\/a>/g;
+    
     # quotes
 
     $content=~s/``(.*?)''/"$1"/g; # in the original, all on one line
 	
+	  # block quotes?
     
     $content=~s/\\part/\nNextyy part/g;
     $content=~s/\\begin\{solution\}/\nSolution\n\n/g;

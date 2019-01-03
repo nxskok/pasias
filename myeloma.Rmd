@@ -1,0 +1,495 @@
+##  Multiple myeloma
+
+
+ Multiple myeloma is a kind of cancer. It
+forms in a plasma cell (which is a type of white blood cell). It
+causes cancer cells to accumulate in the bone marrow, where they crowd
+out healthy blood cells. Plasma cells make antibodies (to help fight
+infections), while the cancer cells don't: they produce abnormal
+proteins that can cause kidney problems. (This adapted from
+[link](http://www.mayoclinic.org/diseases-conditions/multiple-myeloma/basics/definition/con-20026607).)
+The variables are:
+
+
+
+* `time`: survival time from diagnosis (months)
+
+* `vstatus`: 0=alive, 1=dead at end of study
+
+* `logbun`: log of BUN test score (BUN test is a test of
+kidney function, not to be confused with cha siu
+bao\endnote{Barbecued pork in a bun. A staple of Chinese dim sum and
+Chinese bakeries, such as Ding Dong bakery on Spadina.}).
+
+* `hgb`: hemoglobin (at diagnosis).
+
+* `platelet`: platelets: 1=normal, 0=abnormal (at
+diagnosis).
+
+* `age` at diagnosis, in years
+
+* `logwbc`: log of WBC (white blood cell count, at
+diagnosis)
+
+* `frac`: fractures at diagnosis (0=absent, 1=present)
+
+* `logpbm`: log of percent of plasma cells in bone marrow
+
+* `protein`: proteinuria (protein in urine) at
+diagnosis. Most people have very little, so a larger than normal
+amount indicates illness of some kind.
+
+* `scalc`: serum calcium at diagnosis.
+
+
+The data, on 65 patients with multiple myeloma, are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv). Some of the
+variables are logs because they could take very large values.
+
+There are a lot of parts here, but each part is supposed to be short.
+
+
+
+(a) Read in the data and display (some of) the values. Confirm that
+you have the right number of observations and the right variables.
+
+
+Solution
+
+
+The usual:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv"
+myeloma=read_csv(my_url)
+myeloma
+```
+
+     
+
+65 observations, and all the variables listed. If you want to go
+further (not necessary here), you can check that the variables
+`vstatus`, `platelet` and `frac` that should be
+zero and one actually *are* zero and one, at least for the values
+shown (they are), and the ages look like ages (they do).
+
+The tidyverse also offers:
+
+```{r }
+glimpse(myeloma)
+```
+
+ 
+
+which gives a bit more of a picture of the values.\endnote{Don't
+confuse this with `glance` from `broom`, which gives a
+one-line summary of a *model*, containing things like R-squared
+and a test for the overall model significance.} 
+Or if you were
+serious about checking, you could do
+
+```{r }
+summary(myeloma)
+```
+
+ 
+
+which gives means and five-number summaries for each of the variables
+(the numeric ones, but they all are here, even the ones coded as 0 or
+1 that are really categorical).
+    
+
+
+(b) Create a suitable response variable for a Cox
+proportional-hazards survival model, bearing in mind that the
+"event" here is death. Display your response variable, and explain
+briefly what the `+` signs attached to some of the variables
+mean, without using a technical term.
+
+
+Solution
+
+
+I seem to call my response variables `y`, but you can call
+yours whatever you like. Two things: the survival times, here
+`time`, and the indicator of the event, here
+`vstatus` being 1:
+```{r }
+y=with(myeloma,Surv(time, vstatus==1))
+y
+```
+
+
+
+Or use
+`myeloma$` (twice) before the variable names.
+
+The values of `y` that have a `+` by them go with
+patients who were never observed to die (or were still alive at the
+end of the study). There were 17 of these, listed at the end of the
+data frame. Usually, these values of the response will be higher than
+the others, but they weren't here. (Maybe some of these patients were
+withdrawn from the study, or they joined it late.) 
+    
+
+
+(c) What is the technical term for those patients that have a
+`+` by their values for the response variable?
+
+
+Solution
+
+
+Censored. A quick one mark.
+I was trying to dissuade you from using the word "censored" in
+the previous part, since I wanted you to demonstrate that you
+understood what it *meant*. But you should know the technical
+term as well, which is why I asked you for it here.
+Grading note: if this part and the previous one contain,
+somewhere, the word "censored" *and* a clear explanation of
+what "censored" means, then I don't mind what is where.
+    
+
+
+(d) Fit a Cox proportional-hazards survival model predicting
+your response variable from all the other variables (except for the
+ones that you used to make the response variable). Display the
+`summary` of your model.
+
+
+Solution
+
+
+The obvious way to do this is to list all the other variables on
+the right side of the squiggle, but a faster way is this:
+```{r }
+y.1=coxph(y~.-time-vstatus,data=myeloma)
+summary(y.1)
+```
+
+     
+
+The `.` in this model formula means 
+"all the columns in the data frame" 
+(except for the response variable if it was in the data
+frame, which here it was not). I used `time` and
+`vstatus` to make `y`, so I had to exclude them explicitly.
+
+If you forget to exclude `time` and `vstatus`, you are
+in danger of having a model that fits perfectly:
+
+```{r }
+y.00=coxph(y~.,data=myeloma)
+summary(y.00)
+```
+
+ 
+
+The warning at the top is your clue that something has gone
+wrong. This kind of warning *can* happen with real data, but not
+often: it is usually an indication that something is wrong with the
+way you specified the model. If you look at the output, you'll realize
+that predicting survival time from survival time makes no sense at all.
+
+There is of course nothing wrong with typing out all the variable
+names, except that the first time you type them out, you will likely
+make a typo (unless you are more careful than I usually am). 
+    
+
+
+(e) In your model, which explanatory variables have a P-value less than
+0.10? Fit a model containing only those and display the results.
+
+
+Solution
+
+
+Only `logbun` and `hgb`; the other P-values are
+larger, usually much larger.
+Because there are so many variables to remove, I am frightened
+away from `update` here (which I would normally try to use
+in this situation). I'm going to copy-and-paste my code for
+`y.1` and edit it:
+```{r }
+y.2=coxph(y~logbun+hgb,data=myeloma)
+summary(y.2)
+```
+
+     
+
+That's all I wanted, but you can note that `hgb` has become
+significant at $\alpha=0.05$. I suspect it was somewhat correlated
+with a variable that we removed, so that its value to the regression
+has become clearer.
+    
+
+
+(f) Do a test to compare the two models that you fit. Why do 
+you prefer the second model? Explain briefly.
+
+
+Solution
+
+
+Comparing two models is `anova`, which also works here. The
+right `test` is `Chisq`:
+```{r }
+anova(y.2,y.1,test="Chisq")
+```
+
+     
+
+The usual logic here: this is far from significant, so the null
+hypothesis (that the two models are equally good) is not rejected, so
+we prefer the smaller model `y.2` because it is simpler.
+
+I wasn't sure about the `Model 2` line of my `anova`
+output (what are `time` and `vstatus` doing there?), but
+the test has 7 degrees of freedom, which is correct since we started with 9
+explanatory variables and finished with 2, so that we took out 7 of
+them. I checked what went off the right side of the page: there is a
+`-time-vstatus` on the end, so that it is correct. What
+happened is that the `.` got expanded out into all the
+variables separated by `+`, and then whatever else (the
+"minus" variables) were on the end.
+
+In case you are curious, `step` also works on models like these:
+
+```{r }
+y.3=step(y.1,direction="backward",trace=0)
+summary(y.3)
+```
+
+
+
+The same model as the one we found by brute force. You can change the
+value of `trace` to see the progress, but in this case it's not
+very illuminating, since `<none>` and the variables we end up
+keeping are always at the bottom of the list to remove.
+
+`step` is built on `add1` and `drop1`. In this
+case, `drop1` is run repeatedly and the variable with lowest
+AIC is removed. We had all numeric variables in this one, but if our
+model had something categorical like `treatment` with, let's
+say, 4 levels, `drop1` would contemplate dropping all four of
+these in one shot, the same way it works with a categorical variable
+in a regression of any other kind.
+
+    
+
+
+(g) There should be two explanatory variables left in your
+model. These are both numerical variables. Find their first and
+third quartiles, any way you like.
+
+
+Solution
+
+
+The obvious way is probably this:
+```{r }
+quantile(myeloma$logbun)
+quantile(myeloma$hgb)
+```
+
+     
+
+So the quartiles are 1.15 and 1.57 for `logbun`, and 8.8 and
+12.0 for `hgb`.
+
+There are (at least) three other ways to do it. This is the easiest:
+
+```{r }
+summary(myeloma)
+```
+
+ 
+
+from which you pick out the ones you need. Or, you `select` the
+ones you need first:
+
+```{r }
+myeloma %>% select(logbun,hgb) %>% summary()
+```
+
+ 
+The `with` method
+is a bit hairy because there are two things to calculate inside, so
+you have to do it like this:
+
+```{r }
+with(myeloma, {
+print(quantile(logbun))
+print(quantile(hgb))
+})
+```
+
+
+
+with the same result. Note that the multiple things to do are
+surrounded by curly brackets, and to display something within curly
+brackets you have to explicitly `print` it.
+
+The `tidyverse` way is actually a bit
+inelegant, because you have to calculate two things for two variables
+(`summarize` will only allow you to have a single-number
+answer): 
+
+```{r }
+myeloma %>% summarize(logbun.q1=quantile(logbun,0.25),
+logbun.q3=quantile(logbun,0.75),
+hgb.q1=quantile(hgb,0.25),
+hgb.q3=quantile(hgb,0.75))
+```
+
+ 
+
+There is a `tidyverse` way to obtain the quartiles of
+*all* the columns. It lives in package `purrr`, which gets
+loaded with the `tidyverse`:
+
+```{r }
+map_dbl(myeloma,quantile,0.25)
+map_dbl(myeloma,quantile,0.75)
+```
+
+ 
+
+So what you do is a `select` to get just `logbun` and
+`hgb`, first, and then, for example:
+
+```{r }
+myeloma %>% select(logbun,hgb) %>% map_dbl(quantile,0.25)
+```
+
+ 
+
+Can we get them both in one shot? Let's see what this does:
+
+```{r }
+myeloma %>% select(logbun,hgb) %>% 
+map(quantile, c(0.25,0.75))
+```
+
+ 
+
+This is what R calls a `list`. It would look nicer as a data
+frame. There is a way to get that:
+
+```{r }
+myeloma %>% select(logbun,hgb) %>% 
+map_df(quantile, c(0.25,0.75))
+```
+
+ 
+
+The `25%` and `75%` have gone missing. They were
+actually the `names` of each of the components of the list,
+which I don't think we easily have access to.\endnote{The way, as we
+have seen elsewhere, is to use `tidy(quantile)`, which
+produces a two-column data frame with the percentiles shown.}
+    
+
+
+(h) Create a data frame containing all possible combinations
+of the two quartiles for each of the two variables, and display the result.
+
+
+Solution
+
+
+The usual `crossing`:
+
+```{r }
+logbuns=c(1.1461,1.5682)
+hgbs=c(8.8,12)
+new=crossing(logbun=logbuns,hgb=hgbs)
+new
+```
+
+ 
+
+Or anything equivalent to that. This is my procedure, but you are free
+to shorten it if it will still work. The place you have to get to in
+the end is a data frame with columns called `logbun` and
+`hgb`, and the right four combinations of values. If you want
+to round them off, that's fine; it won't affect the graph that's
+coming up.
+    
+
+
+(i) Obtain predicted survival probabilities for each of the
+combinations of variables you created above. You don't need to look
+at the results (they are rather long).
+
+
+Solution
+
+
+This seems as if it ought to be `predict`, but the
+`survival` version of it is called `survfit`:
+```{r }
+s=survfit(y.2,new,data=myeloma)
+```
+
+     
+
+It works the same as `predict`: a fitted model object (your
+smaller survival model), and a data frame of values to predict
+for. The `data=` is not strictly needed here, but if you want
+`ggsurvplot` to work right, you *do* need it to be here.
+    
+
+
+(j) Obtain a graph of the predicted survival curves for each
+combination of your variables.
+
+
+Solution
+
+
+This is easier than you think: it's just `ggsurvplot` from `survminer`:
+```{r }
+ggsurvplot(s,conf.int=F)
+```
+
+     
+    
+
+
+(k) Is it better to have high or low values for each of the
+variables in your prediction? Explain briefly.
+
+
+Solution
+
+
+Those four "strata" are the four rows in your prediction data
+frame (the four combinations). They are in the same order that
+they were in `new` (or whatever name you used):
+```{r }
+new
+```
+
+  
+
+The best survival curve is the top-right green one. This is
+stratum\endnote{Strata is plural; the singular is "stratum". Like
+data and datum.} 2, from the legend at the top. In `new`,
+this goes with a low value of `logbun` and a *high* value
+of `hgb`. 
+
+You can check this by looking at the *worst* survival curve,
+which should be diametrically opposed. This is the blue one, stratum
+3, which is *high* `logbun` and *low* `hgb`,
+indeed exactly the opposite of the best one.
+
+Things that are tests, like `logbun`, are often set up so that
+a high value is the abnormal one (so that an abnormal one will be easy
+to spot). Things that are measurements, like `hgb`, might have
+an ideal range, but the better value could be high or low, depending
+on what is being measured.
+    
+
+
+
+

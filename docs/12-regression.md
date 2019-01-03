@@ -5891,7 +5891,7 @@ convincing about how you have the right thing.
     
 
 
-(b)??part:ttest?? Obtain a 95\% confidence interval for the
+(b)<a name="part:ttest">*</a> Obtain a 95\% confidence interval for the
 mean fire damage. (There is nothing here from STAD29, and your
 answer should have nothing to do with distance.)
 
@@ -5975,7 +5975,7 @@ ggplot(fire,aes(x=distance,y=damage))+geom_point()+geom_smooth()
 
 
 
-(d)??part:howgood?? Is there a relationship between distance from fire station
+(d)<a name="part:howgood">*</a> Is there a relationship between distance from fire station
 and fire damage? Is it linear or definitely curved? How strong is
 it? Explain briefly.
 
@@ -5993,7 +5993,7 @@ since the points are close to the smooth trend.
 
 (e) Fit a regression predicting fire damage from distance. How
 is the R-squared consistent (or inconsistent) with your answer from
-part~(??part:howgood??)?
+part~(<a href="#part:howgood">here</a>)?
 
 
 Solution
@@ -6033,14 +6033,14 @@ We need to display the results, since we need to see the R-squared in
 order to say something about it.
 
 R-squared is about 92\%, high, indicating a strong and linear
-relationship. Back in part~(??part:howgood??), I said that the
+relationship. Back in part~(<a href="#part:howgood">here</a>), I said that the
 relationship is linear and strong, which is entirely consistent with
 such an R-squared. (If you said something different previously, say
 how it does or doesn't square with this kind of R-squared value.)
 
 Points: one for fitting the regression, one for displaying it, and two
 (at the grader's discretion) for saying what the R-squared is and how
-it's consistent (or not) with part~(??part:howgood??).
+it's consistent (or not) with part~(<a href="#part:howgood">here</a>).
 
 Extra: if you thought the trend was "definitely curved", you would
 find that a parabola (or some other kind of curve) was definitely
@@ -6138,9 +6138,9 @@ than the cubic because it (i) fits equally well, (ii) is simpler.
     
 
 
-(f)??part:cim?? Obtain a 95\% confidence interval for the mean fire damage
+(f)<a name="part:cim">*</a> Obtain a 95\% confidence interval for the mean fire damage
 \emph{for a residence that is 4 miles from the nearest fire
-station}. (Note the contrast with part~(??part:ttest??).)
+station}. (Note the contrast with part~(<a href="#part:ttest">here</a>).)
 
 
 Solution
@@ -6148,7 +6148,7 @@ Solution
 
 This is a confidence interval for a mean response at a given value
 of the explanatory variable. This is as opposed to
-part~(??part:ttest??), which is averaged over *all* distances.
+part~(<a href="#part:ttest">here</a>), which is averaged over *all* distances.
 So, follow the steps. Make a tiny data frame with this one value
 of `distance`:
 
@@ -6186,7 +6186,7 @@ cbind(new,pp)
 
 
 (g) Compare the confidence intervals of parts
-(??part:ttest??) and (??part:cim??). Specifically, compare their
+(<a href="#part:ttest">here</a>) and (<a href="#part:cim">here</a>). Specifically, compare their
 centres and their lengths, and explain briefly why the results
 make sense.
 
@@ -6195,7 +6195,7 @@ Solution
 
 
 Let me just put them side by side for ease of comparison:
-part~(??part:ttest??) is:
+part~(<a href="#part:ttest">here</a>) is:
 
 ```r
 t.test(fire$damage)
@@ -6217,7 +6217,7 @@ t.test(fire$damage)
 
        
 
-and part~(??part:cim??)'s is
+and part~(<a href="#part:cim">here</a>)'s is
 
 
 ```r
@@ -6252,19 +6252,19 @@ fire %>% summarize(m=mean(distance))
  
 
 We know it's an upward trend, so our best guess at the mean damage is
-higher if the mean distance is higher (in (??part:cim??), the
+higher if the mean distance is higher (in (<a href="#part:cim">here</a>), the
 distance is *always* 4: we're looking at the mean fire damage for
 *all* residences that are 4 miles from a fire station.)
 
-What about the lengths of the intervals? The one in (??part:ttest??)
+What about the lengths of the intervals? The one in (<a href="#part:ttest">here</a>)
 is about $30.9-21.9=9$ (thousand dollars) long, but the one in
-(??part:cim??) is only $31.4-28.5=2.9$ long, much shorter. This
+(<a href="#part:cim">here</a>) is only $31.4-28.5=2.9$ long, much shorter. This
 makes sense because the relationship is a strong one: knowing the
 distance from the fire station is very useful, because the bigger it
 is, the bigger the damage going to be, with near certainty. Said
 differently, if you know the distance, you can estimate the damage
 accurately.  If you don't know the distance (as is the case in
-(??part:ttest??)), you're averaging over a lot of different
+(<a href="#part:ttest">here</a>)), you're averaging over a lot of different
 distances and thus there is a lot of uncertainty in the amount of fire
 damage also.
 
@@ -6355,7 +6355,7 @@ there will be confusion if your data frame has the same name as one of
 its columns.
  
 
-(b)??part:scatmat?? Obtain scatterplots of the response variable
+(b)<a name="part:scatmat">*</a> Obtain scatterplots of the response variable
 `satis` against each of the other variables.
  
 Solution
@@ -6485,7 +6485,7 @@ This time, the $x$ scales came out different (and suitable), but I
 still like squarer plots better for judging relationships.
  
 
-(c) In your scatterplots of (??part:scatmat??), which
+(c) In your scatterplots of (<a href="#part:scatmat">here</a>), which
 relationship appears to be the strongest one?
  
 Solution
@@ -6496,7 +6496,7 @@ I think `satis` and `age` is the strongest
 trend. The other ones look more scattered to me. 
  
 
-(d)??part:corrmat?? Create a correlation matrix for all four 
+(d)<a name="part:corrmat">*</a> Create a correlation matrix for all four 
 variables. Does your strongest trend of the previous part have the
 strongest correlation?
  
@@ -6610,7 +6610,7 @@ that `severity` has nothing to add, given that the
 regression already includes the others. (That is, high correlation
 and strong significance don't always go together.)
 For a little more insight, look at the correlation matrix of
-(??part:corrmat??) again. The strongest trend with
+(<a href="#part:corrmat">here</a>) again. The strongest trend with
 `satis` is with `age`, and indeed `age` is
 the one obviously significant  variable in the regression. The
 trend of `severity` with `satis` is somewhat
@@ -6959,7 +6959,7 @@ bind_cols(satisf.new)
 
 Two of these are noticeably shorter than the others: the first one and
 the last one. These are low-everything and high-everything. If you
-look back at the scatterplot matrix of (??part:scatmat??), you'll
+look back at the scatterplot matrix of (<a href="#part:scatmat">here</a>), you'll
 see that the explanatory variables have positive correlations with
 each other. This means that when one of them is low, the other ones
 will tend to be low as well (and correspondingly high with high). That
@@ -7772,7 +7772,7 @@ response). None of the remaining correlations are all that high, so we
 ought not to have any multicollinearity problems.
  
 
-(d)??regone?? Fit a regression predicting salary from the other three
+(d)<a name="regone">*</a> Fit a regression predicting salary from the other three
 variables, and obtain a `summary` of the results.
 
 Solution
@@ -7953,7 +7953,7 @@ better than the smaller one: we really do need all three
 variables. Which is what we guessed.
 
 
-(h) Back in part (??regone??), you fitted a regression with all
+(h) Back in part (<a href="#regone">here</a>), you fitted a regression with all
 three explanatory variables. By making suitable plots, assess
 whether there is any evidence that (i) that the linear model should
 be a curve, (ii) that the residuals are not normally 
@@ -8122,7 +8122,7 @@ Two SAT scores and three GPAs, as promised.
 
 
 
-(b) Make a scatterplot of high school GPA against university
+(b)<a name="part:hsu-scatter">*</a> Make a scatterplot of high school GPA against university
 GPA. Which variable should be the response and which
 explanatory? Explain briefly. Add a smooth trend to your plot.
 
@@ -8186,7 +8186,7 @@ GPAs around 3.25.
       
 
 
-(d)??part:highonly?? Fit a linear regression for predicting university GPA
+(d)<a name="part:highonly">*</a> Fit a linear regression for predicting university GPA
 from high-school GPA and display the results.
 
 
@@ -8293,7 +8293,7 @@ transformation that might help is one at the other end of the scale
 $\lambda=-1$ maybe.
 
 The other thought I had was that there is this kind of break around a
-high-school GPA of 3 (go back to the scatterplot of (b)): when the
+high-school GPA of 3 (go back to the scatterplot of (<a href="#part:hsu-scatter">here</a>)): when the
 high-school GPA is higher than 3, the university GPA is very
 consistent (and shows a clear upward trend), but when the high-school
 GPA is less than 3, the university GPA is very variable and there
@@ -8481,7 +8481,7 @@ dominating things for our prediction interval above.
         
 
 
-(f)??part:all?? Now obtain a regression predicting university GPA from
+(f)<a name="part:all">*</a> Now obtain a regression predicting university GPA from
 high-school GPA as well as the two SAT scores. Display your results.
 
 
@@ -8571,14 +8571,14 @@ This might surprise you, given what the SATs are supposed to be
 
 
 (h) Carry out a backward elimination starting out from your
-model in part (??part:all??). Which model do you end up with?
-Is it the same model as you fit in (??part:highonly??)?
+model in part (<a href="#part:all">here</a>). Which model do you end up with?
+Is it the same model as you fit in (<a href="#part:highonly">here</a>)?
 
 
 Solution
 
 
-In the model of (??part:all??), `math_SAT` was the
+In the model of (<a href="#part:all">here</a>), `math_SAT` was the
 least significant, so that comes out first. (I use
 `update` but I'm not insisting that you do:)
 
@@ -8614,7 +8614,7 @@ Here is where we have to stop, since both high-school GPA and
 verbal SAT score are significant, and so taking either of them
 out would be a bad idea. 
 This is a *different* model than the one of
-(??part:highonly??). This is the case, even though the model
+(<a href="#part:highonly">here</a>). This is the case, even though the model
 with high-school GPA only was not significantly worse than the
 model containing everything. (This goes to show that
 model-building doesn't always have nice clear answers.)
