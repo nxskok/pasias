@@ -9,20 +9,20 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## -- Attaching packages ---- tidyverse 1.2.1 --
 ```
 
 ```
-## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## v ggplot2 3.1.0     v purrr   0.2.5
+## v tibble  1.4.2     v dplyr   0.7.8
+## v tidyr   0.8.1     v stringr 1.3.1
+## v readr   1.1.1     v forcats 0.3.0
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## -- Conflicts ------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
 ```
 
 and so to the problems:
@@ -287,19 +287,21 @@ mtcars
 
 ```
 ## # A tibble: 32 x 11
-##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
-##  * <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
-##  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
-##  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
-##  4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
-##  5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
-##  6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
-##  7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
-##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
-##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
-## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # ... with 22 more rows
+##      mpg   cyl  disp    hp  drat    wt  qsec
+##  * <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1  21       6  160    110  3.9   2.62  16.5
+##  2  21       6  160    110  3.9   2.88  17.0
+##  3  22.8     4  108     93  3.85  2.32  18.6
+##  4  21.4     6  258    110  3.08  3.22  19.4
+##  5  18.7     8  360    175  3.15  3.44  17.0
+##  6  18.1     6  225    105  2.76  3.46  20.2
+##  7  14.3     8  360    245  3.21  3.57  15.8
+##  8  24.4     4  147.    62  3.69  3.19  20  
+##  9  22.8     4  141.    95  3.92  3.15  22.9
+## 10  19.2     6  168.   123  3.92  3.44  18.3
+## # ... with 22 more rows, and 4 more
+## #   variables: vs <dbl>, am <dbl>,
+## #   gear <dbl>, carb <dbl>
 ```
 
 The top bit is the code, the bottom bit with the `##` the
@@ -345,27 +347,48 @@ summary(mtcars)
 ```
 
 ```
-##       mpg             cyl             disp             hp       
-##  Min.   :10.40   Min.   :4.000   Min.   : 71.1   Min.   : 52.0  
-##  1st Qu.:15.43   1st Qu.:4.000   1st Qu.:120.8   1st Qu.: 96.5  
-##  Median :19.20   Median :6.000   Median :196.3   Median :123.0  
-##  Mean   :20.09   Mean   :6.188   Mean   :230.7   Mean   :146.7  
-##  3rd Qu.:22.80   3rd Qu.:8.000   3rd Qu.:326.0   3rd Qu.:180.0  
-##  Max.   :33.90   Max.   :8.000   Max.   :472.0   Max.   :335.0  
-##       drat             wt             qsec             vs        
-##  Min.   :2.760   Min.   :1.513   Min.   :14.50   Min.   :0.0000  
-##  1st Qu.:3.080   1st Qu.:2.581   1st Qu.:16.89   1st Qu.:0.0000  
-##  Median :3.695   Median :3.325   Median :17.71   Median :0.0000  
-##  Mean   :3.597   Mean   :3.217   Mean   :17.85   Mean   :0.4375  
-##  3rd Qu.:3.920   3rd Qu.:3.610   3rd Qu.:18.90   3rd Qu.:1.0000  
-##  Max.   :4.930   Max.   :5.424   Max.   :22.90   Max.   :1.0000  
-##        am              gear            carb      
-##  Min.   :0.0000   Min.   :3.000   Min.   :1.000  
-##  1st Qu.:0.0000   1st Qu.:3.000   1st Qu.:2.000  
-##  Median :0.0000   Median :4.000   Median :2.000  
-##  Mean   :0.4062   Mean   :3.688   Mean   :2.812  
-##  3rd Qu.:1.0000   3rd Qu.:4.000   3rd Qu.:4.000  
-##  Max.   :1.0000   Max.   :5.000   Max.   :8.000
+##       mpg             cyl       
+##  Min.   :10.40   Min.   :4.000  
+##  1st Qu.:15.43   1st Qu.:4.000  
+##  Median :19.20   Median :6.000  
+##  Mean   :20.09   Mean   :6.188  
+##  3rd Qu.:22.80   3rd Qu.:8.000  
+##  Max.   :33.90   Max.   :8.000  
+##       disp             hp       
+##  Min.   : 71.1   Min.   : 52.0  
+##  1st Qu.:120.8   1st Qu.: 96.5  
+##  Median :196.3   Median :123.0  
+##  Mean   :230.7   Mean   :146.7  
+##  3rd Qu.:326.0   3rd Qu.:180.0  
+##  Max.   :472.0   Max.   :335.0  
+##       drat             wt       
+##  Min.   :2.760   Min.   :1.513  
+##  1st Qu.:3.080   1st Qu.:2.581  
+##  Median :3.695   Median :3.325  
+##  Mean   :3.597   Mean   :3.217  
+##  3rd Qu.:3.920   3rd Qu.:3.610  
+##  Max.   :4.930   Max.   :5.424  
+##       qsec             vs        
+##  Min.   :14.50   Min.   :0.0000  
+##  1st Qu.:16.89   1st Qu.:0.0000  
+##  Median :17.71   Median :0.0000  
+##  Mean   :17.85   Mean   :0.4375  
+##  3rd Qu.:18.90   3rd Qu.:1.0000  
+##  Max.   :22.90   Max.   :1.0000  
+##        am              gear      
+##  Min.   :0.0000   Min.   :3.000  
+##  1st Qu.:0.0000   1st Qu.:3.000  
+##  Median :0.0000   Median :4.000  
+##  Mean   :0.4062   Mean   :3.688  
+##  3rd Qu.:1.0000   3rd Qu.:4.000  
+##  Max.   :1.0000   Max.   :5.000  
+##       carb      
+##  Min.   :1.000  
+##  1st Qu.:2.000  
+##  Median :2.000  
+##  Mean   :2.812  
+##  3rd Qu.:4.000  
+##  Max.   :8.000
 ```
 
 For the gas mileage column `mpg`, the mean is bigger than the
@@ -395,7 +418,8 @@ This is what you should see:
 boxplot(mtcars$mpg)
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+
+\includegraphics{01-getting-used_files/figure-latex/unnamed-chunk-8-1} 
 
 The long upper whisker supports our guess from before that the
 distribution is right-skewed.
@@ -526,10 +550,11 @@ That goes like this. I'll explain the steps below.
 
 ```r
 library(tidyverse)
-ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()
+ggplot(mtcars, aes(x = hp, y = mpg)) + geom_point()
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+
+\includegraphics{01-getting-used_files/figure-latex/unnamed-chunk-9-1} 
 $ %$ %$ 
 
 This shows a somewhat downward trend, which is what you'd expect,
@@ -550,10 +575,12 @@ of adding this to the end of the plotting command:
 
 
 ```r
-ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()+geom_smooth(method="lm")
+ggplot(mtcars, aes(x = hp, y = mpg)) + geom_point() + 
+    geom_smooth(method = "lm")
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+
+\includegraphics{01-getting-used_files/figure-latex/unnamed-chunk-10-1} 
 
 The line definitely goes downhill. Decide for yourself how well you
 think a line fits these data.
@@ -614,8 +641,8 @@ Solution
 Like this:
 
 ```r
-my_url="https://www.utsc.utoronto.ca/~butler/c32/jumping.txt"
-rats=read_delim(my_url," ")
+my_url = "https://www.utsc.utoronto.ca/~butler/c32/jumping.txt"
+rats = read_delim(my_url, " ")
 ```
 
 ```
@@ -673,8 +700,7 @@ percent signs (called the "pipe symbol"), type control-shift-M (or
 equivalent on a Mac):
 
 ```r
-rats %>% group_by(group) %>%
-summarize(m=mean(density))
+rats %>% group_by(group) %>% summarize(m = mean(density))
 ```
 
 ```
@@ -699,10 +725,11 @@ On a boxplot, the groups go across and the values go up and down,
 so the right syntax is this:
 
 ```r
-ggplot(rats,aes(x=group, y=density))+geom_boxplot()
+ggplot(rats, aes(x = group, y = density)) + geom_boxplot()
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+
+\includegraphics{01-getting-used_files/figure-latex/unnamed-chunk-14-1} 
 
 Given the amount of variability, the control and low-jump groups are
 very similar (with the control group having a couple of outliers), but
