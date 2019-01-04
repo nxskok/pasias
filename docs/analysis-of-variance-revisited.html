@@ -566,9 +566,11 @@ right comparisons. But now:</p>
 <pre><code>## [1] -1</code></pre>
 <p>This does <em>not</em> add up to zero, so these two contrasts are not
 orthogonal, and we can’t do what we just did. R will give us an answer
-if we try it, but it’ll be the <em>wrong</em> answer.</p>
+if we try it, but it’ll be the <em>wrong</em> answer.
+<label for="tufte-mn-165" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-165" class="margin-toggle"><span class="marginnote">SAS, for example, has a way of making non-orthogonal contrasts orthogonal in a way that the user doesn’t have to worry about, but in R, you are closer to the ground, so to speak, and you have to make it happen yourself.</span></p>
 <p>The best
-description I have seen of what to do here is by David Howell, at
+description I have seen of what to do here is by David Howell
+<label for="tufte-mn-166" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-166" class="margin-toggle"><span class="marginnote">the author of a famous text on Statistics in Psychology.</span>, at
 <a href="https://www.uvm.edu/~dhowell/StatPages/More_Stuff/R/AnovaOneway.html">link</a>
 (at the bottom).
 Let
@@ -577,7 +579,7 @@ me try to follow his method.</p>
 <code>c0</code> below. Since each of our contrasts <code>c.hm</code> and
 <code>c.mn</code> have 3 things in them (3 groups), we need to add a
 “dummy” 3rd contrast to give us a <span class="math inline">\(3\times 3\)</span> array of numbers:
-<label for="tufte-mn-133" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-133" class="margin-toggle"><span class="marginnote">which we are going to invert, as a matrix. But I get ahead of myself.</span></p>
+<label for="tufte-mn-167" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-167" class="margin-toggle"><span class="marginnote">which we are going to invert, as a matrix. But I get ahead of myself.</span></p>
 <div class="sourceCode" id="cb2766"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2766-1" data-line-number="1">c0=<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">3</span>)</a>
 <a class="sourceLine" id="cb2766-2" data-line-number="2">m=<span class="kw">cbind</span>(c0,c.hm,c.mn)</a>
 <a class="sourceLine" id="cb2766-3" data-line-number="3">m</a></code></pre></div>
@@ -750,7 +752,7 @@ average of the others, like
 <span class="math display">\[\mbox{math}-(\mbox{English}+\mbox{socsci})/2.\]</span>
 This translates into contrast-ese like this, making sure to get Math
 in the middle where it belongs:
-<label for="tufte-mn-134" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-134" class="margin-toggle"><span class="marginnote">As I failed to do the first time.</span></p>
+<label for="tufte-mn-168" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-168" class="margin-toggle"><span class="marginnote">As I failed to do the first time.</span></p>
 <div class="sourceCode" id="cb2785"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2785-1" data-line-number="1">c.math.others=<span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>,<span class="dv">1</span>,<span class="op">-</span><span class="fl">0.5</span>)</a></code></pre></div>
 <p>The coefficients have to add up to zero, so I have to have two halves
 to balance my one 1. Or I can use two <span class="math inline">\(-1\)</span>s and a 2.</p>
@@ -765,7 +767,7 @@ and show that what you get adds up to zero:</p>
 <p>Zero. Orthogonal.</p>
 <p>So we are safely in “familiar” territory, not in the
 here-be-dragons
-<label for="tufte-mn-135" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-135" class="margin-toggle"><span class="marginnote">On ancient maps, people didn’t know what was in certain parts of the world, because no-one had ever explored them, so they wrote on the map <em>here be dragons</em>.</span> land of
+<label for="tufte-mn-169" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-169" class="margin-toggle"><span class="marginnote">On ancient maps, people didn’t know what was in certain parts of the world, because no-one had ever explored them, so they wrote on the map <em>here be dragons</em>.</span> land of
 non-orthogonal contrasts.</p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Create a matrix of contrasts (using <code>cbind</code>) and let
@@ -830,14 +832,14 @@ interested in, so there is no reason for following up with
 Tukey or anything else. But you have to be able to say ahead of
 time which contrasts you want to test. This is in
 contrast
-<label for="tufte-mn-136" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-136" class="margin-toggle"><span class="marginnote">In contrast. Get it? No? Well, never mind then.</span> to Tukey, where you don’t have to decide
+<label for="tufte-mn-170" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-170" class="margin-toggle"><span class="marginnote">In contrast. Get it? No? Well, never mind then.</span> to Tukey, where you don’t have to decide
 which comparisons interest you until right at the end.</p>
 <p>Another question you might have had is
 “how many contrasts can I do”? To answer this, go back and look at the ANOVA table. If
 you run an ANOVA using <code>lm</code>, you get the ANOVA table by
 passing the fitted model object into <code>anova</code> rather than
 <code>summary</code>:
-<label for="tufte-mn-137" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-137" class="margin-toggle"><span class="marginnote"><em>anova</em> is one of R’s multi-purpose tools; what it does depends on what you feed it.</span></p>
+<label for="tufte-mn-171" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-171" class="margin-toggle"><span class="marginnote"><em>anova</em> is one of R’s multi-purpose tools; what it does depends on what you feed it.</span></p>
 <div class="sourceCode" id="cb2793"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2793-1" data-line-number="1"><span class="kw">anova</span>(studyhours<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
@@ -946,7 +948,8 @@ two-group one-way ANOVA, or at least it is if it is done two-sided.</p>
 learning and for testing leads to better test scores. An experiment
 was carried out to test this. During the learning phase, subjects
 learned a list of 80 words in a room painted orange and decorated with
-posters, paintings and other paraphernalia. A memory test was given to all subjects
+posters, paintings and other paraphernalia.
+<label for="tufte-mn-172" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-172" class="margin-toggle"><span class="marginnote">This is a fancy word for <em>stuff</em>.</span> A memory test was given to all subjects
 immediately after they had learned the words, to give the impression
 that the experiment was over. (The results of this test were
 discarded.) One day later, subjects were unexpectedly re-tested under
@@ -1171,7 +1174,8 @@ the <em>columns</em> of <code>m</code> for orthogonality, but matrix
 multiplication works by combining a <em>row</em> with a column. No
 matter, <em>transposing</em> a matrix interchanges rows and columns, so
 that in math, we want to look at the matrix <span class="math inline">\(M^T M\)</span>. In R,
-<code>%*%</code> means “matrix multiply”. Thus,</p>
+<code>%*%</code> means “matrix multiply”.
+<label for="tufte-mn-173" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-173" class="margin-toggle"><span class="marginnote">In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.</span> Thus,</p>
 <div class="sourceCode" id="cb2829"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2829-1" data-line-number="1"><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</a></code></pre></div>
 <pre><code>##           c1  c2 c3 c4
 ## c1 0.8333333 0.0  0  0
@@ -1495,7 +1499,7 @@ each other contrast.</p>
 <pre><code>## [1] TRUE</code></pre>
 <p>That says (a little breathlessly) that it is true that all the
 elements of <span class="math inline">\(M^TM\)</span> that are off the diagonal are zero.
-<label for="tufte-mn-138" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-138" class="margin-toggle"><span class="marginnote">The thing inside the square brackets says only to look at the elements of <span class="math inline">\(M^TM\)</span> whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the <em>same</em> are <em>on</em> the diagonal, for example the element in row 2, column 2.</span></p>
+<label for="tufte-mn-174" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-174" class="margin-toggle"><span class="marginnote">The thing inside the square brackets says only to look at the elements of <span class="math inline">\(M^TM\)</span> whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the <em>same</em> are <em>on</em> the diagonal, for example the element in row 2, column 2.</span></p>
 <ol start="8" style="list-style-type: lower-alpha">
 <li>Predict evaluation score from
 treatment <em>as a regression</em>, and display the results.</li>
@@ -1876,7 +1880,7 @@ things:</p>
 ## 8    11 low        
 ## 9    11 moderate</code></pre>
 <p>(oh, how I wish I’d given those variables shorter names),
-<label for="tufte-mn-139" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-139" class="margin-toggle"><span class="marginnote">The expenditure levels have come out in alphabetical order again.</span> and then:</p>
+<label for="tufte-mn-175" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-175" class="margin-toggle"><span class="marginnote">The expenditure levels have come out in alphabetical order again.</span> and then:</p>
 <div class="sourceCode" id="cb2881"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2881-1" data-line-number="1">p=<span class="kw">predict</span>(improvement<span class="fl">.2</span>,new)</a>
 <a class="sourceLine" id="cb2881-2" data-line-number="2"><span class="kw">cbind</span>(new,p)</a></code></pre></div>
 <pre><code>##   last expenditure         p
@@ -2104,7 +2108,7 @@ but you could do it by <code>drop1</code> again, this way:</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>This is actually not significant.
-<label for="tufte-mn-140" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-140" class="margin-toggle"><span class="marginnote">This is why I didn’t ask you to test this, since it would have confused the story.</span>
+<label for="tufte-mn-176" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-176" class="margin-toggle"><span class="marginnote">This is why I didn’t ask you to test this, since it would have confused the story.</span>
 This is one of those cases where the non-significant <code>drug</code> has
 a slightly <em>bigger</em> AIC than <code>&lt;none&gt;</code>, so <code>drop1</code>
 considers it best to leave it in the model.</p>
@@ -2113,7 +2117,8 @@ considers it best to leave it in the model.</p>
 three drugs at <code>pre</code> scores 5, 12 and 20. To do this, obtain
 a new data frame that has all 9 combinations of drugs and
 <code>pre</code> scores, and then feed this into <code>predict</code> using
-your preferred model.</li>
+your preferred model.
+<label for="tufte-mn-177" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-177" class="margin-toggle"><span class="marginnote">Analysis of covariance is just a linear model, so <em>predict</em> works the same here as in regression.</span></li>
 </ol>
 <p>Solution</p>
 <p>First, make the new data frame for predicting from, using
@@ -2179,7 +2184,8 @@ specify the things that have changed, so that the <code>x</code>
 so I have to specify <code>data=</code> by name.</p>
 <p>The <code>linetype=</code> is really overkill, but I just wanted to show
 you that you can distinguish the drugs by line type as
-well.</p>
+well.
+<label for="tufte-mn-178" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-178" class="margin-toggle"><span class="marginnote">The line types show up in the legend too, though they’re not so easy to see.</span></p>
 <ol start="11" style="list-style-type: lower-alpha">
 <li>Are the lines on your plot parallel, with the same slopes? Is this what you would
 expect? Explain briefly.</li>
@@ -2213,7 +2219,8 @@ lines for each group. So <code>geom_smooth</code> will get them:</p>
 <div class="sourceCode" id="cb2908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2908-1" data-line-number="1"><span class="kw">ggplot</span>(lepro,<span class="kw">aes</span>(<span class="dt">x=</span>pre,<span class="dt">y=</span>post,<span class="dt">colour=</span>drug))<span class="op">+</span></a>
 <a class="sourceLine" id="cb2908-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-97-1.png" width="672"  /></p>
-<p>The grey intervals are a bit confusing. They are
+<p>The grey intervals are a bit confusing.
+<label for="tufte-mn-179" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-179" class="margin-toggle"><span class="marginnote">You can get rid of them by saying <em>se=F</em> inside the <em>geom_smooth</em>, as normal.</span> They are
 confidence intervals for the mean <code>post</code> score (as we did for regression
 early on in the course). But I left them there to show that they
 overlap substantially and thus that those slopes are not
@@ -2282,7 +2289,8 @@ first rather than the <span class="math inline">\(x\)</span>s:</p>
 <code>scales=&quot;free&quot;</code> thing since the <span class="math inline">\(y\)</span>-variables (this time) are
 on different scales, and second, the <code>ncol=2</code> to arrange the
 facets in (3 cells of) a <span class="math inline">\(2\times 2\)</span> grid, rather than having them
-come out tall and skinny. It’s unusual to have faceted boxplots, but this is one
+come out tall and skinny.
+<label for="tufte-mn-180" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-180" class="margin-toggle"><span class="marginnote">Like one of those crazy drinks at Starbucks.</span> It’s unusual to have faceted boxplots, but this is one
 of those cases where it makes sense. (The key is different <span class="math inline">\(y\)</span>’s but
 the same <span class="math inline">\(x\)</span>, I think.)</p>
 <p>The conclusions about the boxplots are, of course, the same. I think

@@ -3811,9 +3811,8 @@ I have to be a little bit careful about which data frame I want the
 the things we're for-eaching over.
 
 This obtains a new list-column called \texttt{qq}, with the five-number
-summary for each group.\endnote{It's actually a
-coincidence that the five-number summary and Ken's class both have
-five values in them.}
+summary for each group.
+\marginnote{It's actually a  coincidence that the five-number summary and Ken's class both have  five values in them.}
 
 Now we want to display the quantiles. This is the easiest way:
 
@@ -8869,9 +8868,9 @@ we use \texttt{rnorm} with this mean and SD, obtaining 10 values:
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] 39.63118 47.38885 53.67094 71.57968
-##  [5] 55.65140 56.14313 40.05510 26.72046
-##  [9] 47.50062 59.91521
+##  [1] 29.08337 47.32746 54.67522 18.95798
+##  [5] 44.17037 57.66124 69.44899 34.01049
+##  [9] 71.97635 57.97495
 \end{verbatim}
 
 \begin{enumerate}
@@ -8897,8 +8896,8 @@ The way we know this is to put \texttt{x} into a data frame first:
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        8
-## 2 TRUE         2
+## 1 FALSE        7
+## 2 TRUE         3
 \end{verbatim}
 
 2 values less (and 8 greater-or-equal).
@@ -8932,7 +8931,7 @@ minimum value you want. I add to my pipeline:
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       2 FALSE
+## 1       3 FALSE
 \end{verbatim}
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -8953,7 +8952,7 @@ not reject. The fix is
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       2 FALSE
+## 1       3 FALSE
 \end{verbatim}
 
 The above is almost the right thing, but not quite: we only want that
@@ -37330,14 +37329,14 @@ sanity-checking:
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol
 ##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  typical          120        280
-## 2 male  typical          120        280
-## 3 fema~ typical          120        213
-## 4 male  asymptom~        140        280
-## 5 male  atypical         140        213
-## 6 male  nonangin~        120        213
-## 7 fema~ nonangin~        140        280
-## 8 male  asymptom~        120        213
+## 1 fema~ atypical         140        213
+## 2 fema~ nonangin~        120        280
+## 3 male  atypical         120        213
+## 4 fema~ asymptom~        140        213
+## 5 male  atypical         140        280
+## 6 male  asymptom~        140        213
+## 7 fema~ asymptom~        140        280
+## 8 male  atypical         140        213
 ## # ... with 6 more variables: max.hr <dbl>,
 ## #   oldpeak <dbl>, slope <chr>,
 ## #   colored <dbl>, thal <chr>, pred <dbl>
@@ -43434,25 +43433,21 @@ a time for membership in the set in \texttt{my.crimes}, so this:
 \begin{Highlighting}[]
 \NormalTok{sfcrimea =}\StringTok{ }\NormalTok{sfcrime }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Category }\OperatorTok{%in%}\StringTok{ }\NormalTok{my.crimes) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{select}\NormalTok{(}\KeywordTok{c}\NormalTok{(Category, DayOfWeek, PdDistrict))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Error in select(., c(Category, DayOfWeek, PdDistrict)): unused argument (c(Category, DayOfWeek, PdDistrict))
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{sfcrimea}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 359,528 x 3
-##    Category      DayOfWeek PdDistrict
-##    <chr>         <chr>     <chr>     
-##  1 LARCENY/THEFT Wednesday NORTHERN  
-##  2 LARCENY/THEFT Wednesday PARK      
-##  3 LARCENY/THEFT Wednesday INGLESIDE 
-##  4 VEHICLE THEFT Wednesday INGLESIDE 
-##  5 VEHICLE THEFT Wednesday BAYVIEW   
-##  6 LARCENY/THEFT Wednesday RICHMOND  
-##  7 LARCENY/THEFT Wednesday CENTRAL   
-##  8 LARCENY/THEFT Wednesday CENTRAL   
-##  9 LARCENY/THEFT Wednesday NORTHERN  
-## 10 ASSAULT       Wednesday INGLESIDE 
-## # ... with 359,518 more rows
+## Error in eval(expr, envir, enclos): object 'sfcrimea' not found
 \end{verbatim}
 
 That didn't work. Remember what this was? This is because \texttt{MASS}
@@ -43465,16 +43460,17 @@ is still loaded:
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] ".GlobalEnv"        "package:bindrcpp" 
-##  [3] "package:forcats"   "package:stringr"  
-##  [5] "package:dplyr"     "package:purrr"    
-##  [7] "package:readr"     "package:tidyr"    
-##  [9] "package:tibble"    "package:ggplot2"  
-## [11] "package:tidyverse" "package:nnet"     
-## [13] "package:stats"     "package:graphics" 
-## [15] "package:grDevices" "package:utils"    
-## [17] "package:datasets"  "package:methods"  
-## [19] "Autoloads"         "package:base"
+##  [1] ".GlobalEnv"        "package:MASS"     
+##  [3] "package:bindrcpp"  "package:forcats"  
+##  [5] "package:stringr"   "package:dplyr"    
+##  [7] "package:purrr"     "package:readr"    
+##  [9] "package:tidyr"     "package:tibble"   
+## [11] "package:ggplot2"   "package:tidyverse"
+## [13] "package:nnet"      "package:stats"    
+## [15] "package:graphics"  "package:grDevices"
+## [17] "package:utils"     "package:datasets" 
+## [19] "package:methods"   "Autoloads"        
+## [21] "package:base"
 \end{verbatim}
 
 so we need to get rid of \texttt{MASS}:
@@ -43484,10 +43480,6 @@ so we need to get rid of \texttt{MASS}:
 \KeywordTok{detach}\NormalTok{(}\StringTok{"package:MASS"}\NormalTok{, }\DataTypeTok{unload =}\NormalTok{ T)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## Error in detach("package:MASS", unload = T): invalid 'name' argument
-\end{verbatim}
 
 and try again:
 

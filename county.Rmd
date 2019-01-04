@@ -102,11 +102,16 @@ proc print data=county (obs=10);
 \Listing[store=sa, fontsize=footnotesize]{saa}
 This displays all the many variables for the first 10
 observations. Now, because I named the "percent" variables
-beginning with `pct`, I can easily check that the
-percentage of people: aged 18--34, aged over 65, completing high
-school, with a bachelor's degree, in poverty and unemployed,
+beginning with `pct`, I can easily check that these
+percentages of people: aged 18--34, aged over 65, completing high
+school, with a bachelor's degree, in poverty, and unemployed
 look like percentages, and these are the only ones that do. (You
 should be checking six variables altogether.)
+I thought you could do this by using a `where` line with
+`_N_` in it to pick out the rows you want, but it doesn't
+work. You can use `_N_` when creating a new data set with
+`data` and `set`, but not otherwise. That seems
+like way too much trouble here.
 
 
 
@@ -260,9 +265,17 @@ parameters to be estimated (which is done by maximum likelihood or
 least squares). Another way to look at this, because of properties of
 the normal distribution, is that the $y_i$ have independent normal
 distributions with mean $\alpha+\beta x_i$ and constant variance
-$\sigma^2$. (If you didn't have a normal distribution, this wouldn't
-work.) I actually like this way better, because it transfers over to
-generalized linear models, which you might see later.
+$\sigma^2$. I actually like this way better, because it transfers over
+to generalized linear models, which you might see later. Generalized
+linear models don't have "errors" in the same sense; they have a
+distribution for the response, with a mean that depends on the $x$ and
+a variance that might depend on the distribution. For example,
+logistic regression says that $y_i$ has a binomial distribution with a
+success probability $p_i$ that depends on the $x_i$. In a typical
+application, $x$ might be the dose of some poison and $y$ might be
+whether an animal lives or dies. In a binomial distribution, the mean
+and the variance both depend on $p$, so once you know the mean, you
+also know the variance.
 
 As I said, you never actually observe the $e_i$; the best you
 can do is *estimate* them, using the residuals. The independence
@@ -329,13 +342,17 @@ Here is that array of graphs:
 \Graphic[store=fehig, scale=0.7]{fehigh}
 
 Residuals vs.\ fitted values top left looks pretty much like a random
-cloud (a couple of outliers); normal quantile plot looks pretty
-straight, with maybe a few outliers at the top; residuals against
-log-area (on the right) a nice random scatter; residuals vs.\
+cloud (a couple of outliers). You might see some fanning in, but on
+the other hand this might be driven by the few counties that happen to
+have a small predicted value and a large-in-size residual. When you
+have a lot of data, it's important to beware of problems that are
+really only caused by a few points.  The normal quantile plot looks
+pretty straight, with maybe a few outliers at the top; residuals
+against log-area (on the right) a nice random scatter; residuals vs.\
 log-population has some fanning in. This might be because even the
 distribution of log-population was still skewed and we ought to have
 gone further in our transformation (something like reciprocal, maybe,
-instead of log). 
+instead of log).
 
 I might think about some other way of transforming population, but
 overall I think this is not too bad.

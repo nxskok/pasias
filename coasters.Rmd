@@ -144,31 +144,36 @@ that the roller-coasters further from the line come out first. This
 identifies the three that we found above. The fourth one, "Ghost Rider", 
 is like Nitro in that it takes a (relatively) long time to
 fall not very far.
-You can also put `augment` in the *middle* of a pipe, but then
-you seem to lose things that were not in the regression:
+You can also put `augment` in the *middle* of a pipe. What
+you may have to do then is supply the *original* data frame name
+to `augment` so that you have everything:
 
 ```{r }
 coasters %>%
 lm(duration~drop, data=.) %>%
-augment() %>%
+augment(coasters) %>%
 arrange(desc(abs(.resid)))
 ```
 
  
 
-I wanted to hang on to the roller-coaster names, so I went the other
-way. The advantage of this way is less typing. You have to specify the
-`data=.` thing in the regression because the data frame is
-*not* the first input to `lm` (the model is), but you have
-a much simpler `augment` because its first input is the model
-that came out of the previous step. If the second input to
-`augment` is missing, as it is here, it "attempts to reconstruct the data from the model"
-`r tufte::margin_note("A quote from the package vignette.")` 
-which I think means that things like the coaster names that
-were not part of the regression won't be part of `augment`'s
-output either. That's my understanding. My first way explicitly
-supplies the original data frame to `augment` so there is no
-question about what it is using.
+I wanted to hang on to the roller-coaster names, so I added the data
+frame name to `augment`. If you don't (that is, you just put
+`augment()` in the middle of a pipe), then `augment`
+"attempts to reconstruct the data from the model".
+`r tufte::margin_note("A quote  from the package vignette.")` That means you wouldn't get
+*everything* from the original data frame; you would just get the
+things that were in the regression. In this case, that means you would lose
+the coaster names.
+
+A technicality (but one that you should probably care about):
+`augment` takes up to *two* inputs: a fitted model object
+like my `duration.1`, and an optional data frame to include
+other things from, like the coaster names. I had only one input to it
+in the pipe because the implied first input was the output from the
+`lm`, which doesn't have a name; the input `coasters` in
+the pipe was what would normally be the *second* input to
+`augment`.
 
 
 

@@ -26,12 +26,12 @@ I wanted some data with variables of different types, and this one was handy.
 
 
 
-(b) In this part and the next, a normal quantile
+(b) A normal quantile
 plot, `ggplot`-style. There are two parts to the process: in
 the `aes` goes `sample=` (on the right side of the
 equals goes the data), and instead of a `geom` goes
-`stat_qq`. Make a normal quantile plot of the
-`relativism` scores. What is missing?
+`stat_qq` and `stat_qq_line` Make a normal quantile plot of the
+`relativism` scores, with a line as well. Comment on what you see.
 
 
 Solution
@@ -39,157 +39,10 @@ Solution
 
 According to the hints, it looks like this:
 ```{r }
-ggplot(decide,aes(sample=relativism))+stat_qq()
+ggplot(decide,aes(sample=relativism))+stat_qq()+stat_qq_line()
 ```
 
        
-
-Oh! It's missing the line, that `qqline` would have produced.
-
-
-
-(c) Now we'll add the missing line that makes interpretation
-easier. This is a bit fiddly. The idea is that the line goes through
-the quartiles of the data.\endnote{STAC32 folks will remember the fun and
-games we had with lines on normal quantile plots in SAS. It's the
-same kind of idea.} Where we're going is that `ggplot` has a
-`geom_abline` that works like `abline` in regular
-graphics: you give it an intercept and a slope, and it plots a line
-with that intercept and slope. But first, we have to find the
-intercept and slope, like this: (i) find the quartiles of the data
-(this is $y$ on this graph), (ii) find the quartiles of the standard
-normal distribution ($x$ on this graph), (iii) find the slope and intercept of the line
-joining those points, (iv) add it to the graph using
-`geom_abline` (you'll have to redraw the graph first).
-
-
-
-Solution
-
-
-That was a lot of introductory chat. Let's see if we can make this happen.
-I'm going to setup by creating a vector containing ${1\over4}$ and
-${3\over 4}$, since we'll be using those a couple of times:
-```{r }
-q=c(1/4,3/4)
-q
-```
-
-
-
-We can get just the quartiles of the data by feeding two things into
-`quantile`: the data and the quantiles (percentiles, or
-strictly "fractiles") that we want. This says
-"gimme just the quartiles, not the whole five-number summary":
-
-```{r }
-y=quantile(decide$relativism,q)
-y
-```
-
-
-
-Or,
-
-```{r }
-decide %>% summarize(q1=quantile(relativism,0.25),
-q3=quantile(relativism,0.75))
-```
-
- 
-
-This one is a bit more fiddly because above, we got both quartiles at
-once, but in `summarize`, we have to get them one at a
-time. And then we have to pull out the two quartiles and put them
-together into `y`. The `tidyverse` is nice, but it's not all-conquering!
-
-I called it `y` because it's on the $y$-scale of the normal
-quantile plot. Next, we need the theoretical quartiles, that is, those
-of the standard  normal. R's function `qnorm` does precisely this:
-
-```{r }
-x=qnorm(q)
-x
-```
-
- 
-
-Now we need the slope and intercept of the line joining these. For the
-slope, remember "rise over run"?
-
-```{r }
-b=(y[2]-y[1])/(x[2]-x[1])
-b
-```
-
- 
-
-Now, for the intercept, a teeny bit of algebra. The line is $y=a+bx$;
-we know $b$ (the slope we just found) and some values for $x$ and $y$,
-and we want to find $a$, so subtract $bx$ from both sides to get
-$a=y-bx$. What values of $x$ and $y$ do we use? Either one of our
-`x` and `y` values; it doesn't matter which (as long as
-you stick with the $x$'s and $y$'s that go together):
-
-```{r }
-y[2]-b*x[2]
-y[1]-b*x[1]
-a=y[1]-b*x[1]
-```
-
- 
-
-Now we can re-make the plot with the line attached. Copy all the code
-from the last plot, and then add a `geom_abline`. This needs two
-things: an `intercept` and a `slope`, which we just
-figured out:
-
-```{r }
-ggplot(decide,aes(sample=relativism))+
-stat_qq()+geom_abline(intercept=a,slope=b)
-```
-
- 
-
-It works! But before I comment on it, I'm thinking that this should be
-abstracted away into a function that does all these calculations for
-you, so that when you have to tackle this another time, you can just
-run the function:
-
-```{r }
-ggqq=function(v,dist=qnorm) {
-q=c(1/4,3/4)
-y=quantile(v,q)
-x=dist(q)
-b=(y[2]-y[1])/(x[2]-x[1])
-a=y[1]-b*x[1]
-xdf=data.frame(v=v)
-ggplot(xdf,aes(sample=v))+
-stat_qq()+geom_abline(intercept=a,slope=b)
-}
-```
-
- 
-
-I've called my input data `v`, and for generality I've allowed
-you to test the data against any distribution: you can feed in the
-quantile function\endnote{Given a proportion $p$, the value $x$ such
-that the proportion of the distribution less than $x$ is $p$.} of any
-distribution, but if you don't, it defaults to normal. I've basically
-copied the code I used before, changing some names. The only extra
-thing I had to add was: `ggplot` needs its data to be in a data
-frame, so I had to create one (containing only the input variable
-`v`). All right, let's see if *this* works:
-
-```{r }
-ggqq(decide$relativism)
-```
-$ %$
-
-It does, but this was my third attempt: I originally called my input
-data `x` as well (so that I had two *different* things
-called `x`), and then my line went missing, because I was still
-feeding `x` into `quantile` instead of `v`.
 
 So what is this telling us? If you ignore the very lowest values of
 `relativism`, the points form a curve, which indicates
@@ -199,79 +52,7 @@ means skewed to the left. But the very lowest ones are all bunched up,
 as if 3 is a lower limit, which is exactly *not* what you'd
 expect with left skewness.
 
-Now that we have a function that works, it's as easy as pie\endnote{As
-easy as a very easy thing.} to check
-out `idealism` for normality:
-
-```{r }
-ggqq(decide$idealism)
-```
-
- 
-
-This one is skewed left, because the upper tail is too bunched
-up. (The lower tail is OK.) 
-
-
-
-
-(d) Type in that function, and run it. Find some other data, and
-test it for normality.
-
-
-
-Solution
-
-
-I feel like generating some random data from some other
-distributions, and seeing what goes wrong with it. For example,
-chi-squared with a small number of degrees of freedom is skewed right:
-```{r }
-set.seed(457299)
-x=rchisq(100,3)
-ggplot(data.frame(x),aes(x=x))+geom_histogram(bins=10)
-ggqq(x)
-```
-
-     
-
-The high values are too high, and the low values are not low enough:
-very much skewed right.
-
-A $t$ distribution with small degrees of freedom looks pretty normal:
-
-```{r }
-x=rt(100,3)
-ggplot(data.frame(x),aes(x=x))+geom_histogram(bins=10)
-```
-
- 
-
-Apart, perhaps, from the outlier.
-
-The normal quantile plot:
-
-```{r }
-ggqq(x)
-```
-
- 
-
-This shows the high-end outlier, but it also shows that some other
-values at the high end are suspiciously high for a normal, and even at
-the low end, where nothing appeared grossly wrong, the low values are a
-bit too low. That is, the normal quantile plot is showing the
-potential for long tails even aside from the outlier, something that
-doesn't really show up on the histogram.
-
-If you think
-about where a $t$ commonly comes from: 
-$$t={\bar{x}-\mu \over s/\sqrt{n}},$$
-if the sample SD happens to come out really *small*, it doesn't
-take a very unusual sample mean to make $t$ come out very *big*
-in size, either plus or minus. This is very unlikely to happen if you
-have a decent-sized sample, but when you have a very small one, you
-could easily be lucky (or unlucky, depending on your point of view). 
+Now try it with `idealism`, and comment on its normality or lack thereof. 
 
 
 
