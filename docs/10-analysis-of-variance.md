@@ -2182,3 +2182,298 @@ detach(package:car,unload=T)
 
 
 
+
+
+##  Can caffeine improve your performance on a test?
+
+
+ 
+Does caffeine help students do better on a certain test? To
+find out, 36 students were randomly allocated to three groups (12 in
+each group).  Each student received a fixed number of cups of coffee
+while they were studying, but the students didn't know whether they
+were receiving all full-strength coffee ("high"), all decaf coffee
+("low") or a 50-50 mixture of the two ("moderate"). For each
+subject, their group was recorded as well as their score on the
+test. The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv), as a
+`.csv` file.
+
+
+
+(a) Read in and examine the data. How are the values laid out?
+
+
+Solution
+
+
+`read_csv` because it's a `.csv` file:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv"
+caffeine.untidy=read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   Sub = col_integer(),
+##   High = col_integer(),
+##   Moderate = col_integer(),
+##   None = col_integer()
+## )
+```
+
+```r
+caffeine.untidy
+```
+
+```
+## # A tibble: 12 x 4
+##      Sub  High Moderate  None
+##    <int> <int>    <int> <int>
+##  1     1    72       68    68
+##  2     2    65       80    74
+##  3     3    68       64    59
+##  4     4    83       65    61
+##  5     5    79       69    65
+##  6     6    92       79    72
+##  7     7    69       80    80
+##  8     8    74       63    58
+##  9     9    78       69    65
+## 10    10    83       70    60
+## 11    11    88       83    78
+## 12    12    71       75    75
+```
+
+     
+
+The first column is the number of the subject (actually within each
+group, since each student only tried one amount of caffeine). Then
+follow the test scores for the students in each group, one group per column.
+
+I gave the data frame a kind of dumb name, since (looking ahead) I
+could see that I would need a less-dumb name for the tidied-up data,
+and it seemed sensible to keep `caffeine` for that.
+
+
+
+(b) Explain briefly how the data are not "tidy".
+
+
+Solution
+
+
+The last three columns are all scores on the test: that is, they
+all measure the same thing, so they should all be in the same column.
+Or, there should be a column of scores, and a separate column
+naming the groups. Or, there were 36 observations in the data, so
+there should be 36 rows. You always have a variety of ways to
+answer these, any of which will do.
+
+
+
+(c) Use a suitable tool from the `tidyverse` to create one
+column of test scores and and one column of group labels. Call your
+column of group labels `amount`. Is it a `factor`?
+
+
+Solution
+
+
+We are combining several columns into one, so this is `gather`:
+
+```r
+caffeine = caffeine.untidy %>% 
+gather(amount,score,c(High:None))
+```
+
+     
+
+I didn't ask you to list the resulting data frame, but it is smart to
+at least look for yourself, to make sure `gather` has done
+what you expected.
+
+
+```r
+caffeine
+```
+
+```
+## # A tibble: 36 x 3
+##      Sub amount score
+##    <int> <chr>  <int>
+##  1     1 High      72
+##  2     2 High      65
+##  3     3 High      68
+##  4     4 High      83
+##  5     5 High      79
+##  6     6 High      92
+##  7     7 High      69
+##  8     8 High      74
+##  9     9 High      78
+## 10    10 High      83
+## # ... with 26 more rows
+```
+
+ 
+
+A column of amounts of caffeine, and a column of test scores. This is
+what we expected. There should be 12 each of the `amount`s,
+which you can check if you like:
+
+
+```r
+caffeine %>% count(amount)
+```
+
+```
+## # A tibble: 3 x 2
+##   amount       n
+##   <chr>    <int>
+## 1 High        12
+## 2 Moderate    12
+## 3 None        12
+```
+
+ 
+
+Indeed.
+
+Note that `amount` is text, not a factor. Does this matter? We'll see.
+
+This is entirely the kind of situation where you need `gather`,
+so get used to seeing where it will be useful.
+
+
+
+(d) Obtain side-by-side boxplots of test scores by amount of caffeine.
+
+
+Solution
+
+
+
+
+```r
+ggplot(caffeine,aes(x=amount,y=score))+geom_boxplot()
+```
+
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
+
+ 
+
+
+
+(e) Does caffeine amount seem to have an effect? If so, what
+kind of effect?
+
+
+Solution
+
+
+On average, exam scores seem to be higher when the amount of
+caffeine is higher (with
+the effect being particularly pronounced for High caffeine). 
+If you want to, you can also say the the effect of caffeine seems
+to be small, relative to the amount of variability there is (there
+is a lot). The point is that you say *something* supported by
+the boxplot.
+
+
+
+(f) Run a suitable analysis of variance to determine whether
+the mean test score is equal or unequal for the three groups. What
+do you conclude?
+
+
+Solution
+
+
+Something like this:
+
+```r
+caff.1=aov(score~amount,data=caffeine)
+summary(caff.1)
+```
+
+```
+##             Df Sum Sq Mean Sq F value Pr(>F)  
+## amount       2  477.7  238.86   3.986 0.0281 *
+## Residuals   33 1977.5   59.92                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+     
+
+The P-value on the $F$-test is less than 0.05, so we reject the null
+hypothesis (which says that all the groups have equal means) in favour
+of the alternative: the group means are not all the same (one or more
+of them is different from the others).
+
+Notice that the boxplot and the `aov` are quite happy for
+`amount` to be text rather than a factor (they actually do want
+a factor, but if the input is text, they'll create one).
+
+
+
+(g) Why is it a good idea to run Tukey's method here?
+ 
+
+Solution
+
+
+The analysis of variance $F$-test is significant, so that the
+groups are not all the same. Tukey's method will tell us which
+group(s) differ(s) from the others. There are three groups, so
+there are differences to find that we don't know about yet.
+
+
+
+(h) Run Tukey's method. What do you conclude?
+
+
+Solution
+
+
+This kind of thing:
+
+
+```r
+caff.3=TukeyHSD(caff.1)
+caff.3
+```
+
+```
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = score ~ amount, data = caffeine)
+## 
+## $amount
+##                    diff       lwr       upr     p adj
+## Moderate-High -4.750000 -12.50468  3.004679 0.3025693
+## None-High     -8.916667 -16.67135 -1.161987 0.0213422
+## None-Moderate -4.166667 -11.92135  3.588013 0.3952176
+```
+
+ 
+
+The high-caffeine group definitely has a higher mean test score than
+the no-caffeine group. (The Moderate group is not significantly
+different from either of the other groups.)
+Both the
+comparisons involving Moderate could go either way (the interval for
+the difference in means includes zero). The None-High comparison, 
+however, is away from zero, so this is the significant one. As is
+usual, we are pretty sure that the difference in means (this way
+around) is negative, but we are not at all clear about how big it is,
+because the confidence interval is rather long.\endnote{We'd need a
+lot more students to make it narrower, but this is not surprising
+since students vary in a lot of other ways that were not measured here.}
+
+
+
+
+

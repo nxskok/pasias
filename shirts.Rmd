@@ -1,3 +1,4 @@
+##  Trying on shirts
 
 
  Does it make a difference if you see somebody else trying on
@@ -21,8 +22,10 @@ five different dimensions, and those five scores were then
 averaged). Does a student's evaluation depend on whether the student
 was male or female, and whether the "other customer" was a model or
 a student? There was also a control group, where the student was
-handed the shirt directly  by the sales associate, without the ``other
-customer'' being involved at all. There were thus five treatments:
+handed the shirt directly  by the sales associate, without the 
+"other customer" being involved at all. 
+
+There were thus five treatments:
 male students who saw a model, male students who saw a student, female
 students who saw a model, female students who saw a student, and the
 control group. There were 25 students in each treatment group.
@@ -32,7 +35,7 @@ The data from this experiment can be found at
 
 
 
-(a)[2] Read in and display the data. How many observations do you
+(a) Read in and display the data. How many observations do you
 have, and is that what you should have?
 
 Solution
@@ -51,7 +54,7 @@ There were 5 treatment groups with 25 students in each, so there
 should be, and are, $5 \times 25=125$ observations.
 
 
-(b)[2] Turn `treatment` into a `factor` in your data
+(b) Turn `treatment` into a `factor` in your data
 frame. (You can use the same name as the text `treatment`
 that you read in from the file.)
 
@@ -77,7 +80,7 @@ see that `treatment` is now definitely a factor rather than a
 categorical variable represented as a piece of text.
 
 
-(c)[2] List the treatments in the order that they are in within
+(c) List the treatments in the order that they are in within
 your `factor`. (There are lots of ways to do this; any one of
 them except for `distinct` is good.)
 
@@ -88,7 +91,8 @@ This is the most direct:
 ```{r }
 levels(shirts$treatment)
 ```
-$ %$ %$ %$
+
+     
 
 or you can do one of the `tidyverse`-style ways, such as
 
@@ -112,8 +116,24 @@ appear in the factor. So that's why I asked you not to do it that way.
 
 Alphabetical order,  is the moral of the story.
 
+Extra: you can make them appear in the order they appear in the data,
+if you want to (and if you know what you are doing):
 
-(d)[2]<a name="part:mean-eval">*</a> 
+```{r }
+shirts %>% mutate(trt2=fct_inorder(treatment)) -> d
+levels(d$trt2)
+```
+
+ 
+
+`fct_inorder` *creates* a factor whose levels are in the
+order that they appeared in the data. If this is what you want, you
+can go ahead and do this, and use this order when you create your
+contrasts. It will work, and it will be good even though your
+contrasts will look different from mine.
+
+
+(d)<a name="part:mean-eval">*</a> 
 Obtain a table of mean evaluation scores for each treatment group.
   
 
@@ -126,9 +146,30 @@ contrasts. It's the usual group-by and summarize:
 shirts %>% group_by(treatment) %>%
 summarize(m=mean(score))
 ```
+
+     
+
+Extra: how does this come out if you have your factor levels in a
+non-alphabetical order?
+
+```{r }
+d %>% group_by(trt2) %>% summarize(m=mean(score))
+```
+
+ 
+
+Ah, it respects the order of the levels of the factor: that is to say,
+the treatment groups appear here in the order that they were in the
+data, because the factor `trt2` was created to make that
+happen.
+
+`forcats` has other tools to re-order the levels of a factor,
+lump factor levels together to make a category "other", and so
+on. These also work if you start with a categorical variable as text:
+it *creates* a factor with those properties.
   
 
-(e)[3] The experimenters wanted to compare four specific things in
+(e) The experimenters wanted to compare four specific things in
 their analysis:
 
 
@@ -194,7 +235,7 @@ I tried to give the contrasts mnemonic but short names, so that I
 would remember which was which.
   
 
-(f)[2] Pick two of your contrasts (doesn't matter which two) and
+(f) Pick two of your contrasts (doesn't matter which two) and
 demonstrate that they are orthogonal.
   
 
@@ -212,7 +253,7 @@ sum(c_mf*c_tc)
 Check (mops brow).
   
 
-(g)[2] Collect all your contrasts together into a matrix and
+(g) Collect all your contrasts together into a matrix and
 declare that they are contrasts for `treatment` within your
 data frame (whatever you called it).
   
@@ -229,10 +270,39 @@ contrasts(shirts$treatment)=m
        
 
 There's no output here; we'll see in a moment whether it worked.
+
+Extra: once you've created the matrix `m`, it gives you a
+second way to test the contrasts for orthogonality, all at once:
+
+```{r }
+t(m) %*% m
+```
+
+ 
+
+This matrix-multiplies the transpose of `m` by `m`, so
+it's testing each column of `m` to see whether it's orthogonal
+to each other column. The columns don't have to be orthogonal to
+themselves, hence the non-zeros down the diagonal, but all the
+off-diagonal entries are zero. Hence each contrast is orthogonal to
+each other contrast.
+
+Or even:
+
+```{r }
+z=t(m) %*% m
+all(z[row(z)!=col(z)]==0)
+```
+
+ 
+
+That says (a little breathlessly) that it is true that all the
+elements of $M^TM$ that are off the diagonal are zero.
+`r tufte::margin_note("The thing inside the square brackets says only to look at the elements of $M^TM$ whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the *same* are *on* the diagonal, for example the element in row 2, column 2.")`
   
 
-(h)[2] Predict evaluation score from treatment \emph{as a
-regression}, and display the results.
+(h) Predict evaluation score from 
+treatment *as a  regression*, and display the results.
   
 
 Solution
@@ -255,10 +325,10 @@ Your slopes can differ in terms of sign and possibly value from mine,
 but the $t$-statistics and P-values should be the same as mine.
   
 
-(i)[4] For each of your contrasts, assess whether or not it is
+(i) For each of your contrasts, assess whether or not it is
 significant, and explain briefly what that means in the context of the
 data. If a contrast is significant, use your answer to
-part~(<a href="#part:mean-eval">here</a>) to help in your interpretation. 
+part (<a href="#part:mean-eval">here</a>) to help in your interpretation. 
     
 
 Solution

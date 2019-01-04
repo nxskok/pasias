@@ -176,6 +176,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">11.2</span> Deer and how much they eat</a></li>
 <li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">11.3</span> Movie ratings again</a></li>
 <li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">11.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">11.5</span> Can caffeine improve your performance on a test?</a></li>
 </ul></li>
 <li class="has-sub"><a href="tidying-and-selecting-data.html#tidying-and-selecting-data"><span class="toc-section-number">12</span> Tidying and selecting data</a><ul>
 <li><a href="tidying-and-selecting-data.html#tidying-the-jays-data"><span class="toc-section-number">12.1</span> Tidying the Jays data</a></li>
@@ -251,6 +252,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">18.3</span> Multiple myeloma</a></li>
 <li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">18.4</span> Ovarian cancer</a></li>
 </ul></li>
+<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">19</span> Analysis of Variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">19.1</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">19.2</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">19.3</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">19.4</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">19.5</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">19.6</span> Treating leprosy</a></li>
+</ul></li>
 </ul>
 </div>
 </div>
@@ -264,9 +273,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>This book will hold a collection of problems, and my solutions to
-them, in applied statistics with R. These come from my courses STAC32
-and STAD29 (to add) at the University of Toronto Scarborough.</p>
+<p><a href="http://ritsokiguess.site/pasias/">This book</a> will hold a collection
+of problems, and my solutions to them, in applied statistics with
+R. These come from my courses STAC32 and STAD29 at the University of
+Toronto Scarborough. I am in the process of adding the latter.</p>
 <p>The problems were originally written in Sweave (that is, LaTeX with R
 code chunks), using the <code>exam</code> document class, using data sets stolen
 from numerous places (textbooks, websites etc). I wrote <a href="https://raw.githubusercontent.com/nxskok/pasias/master/convert.pl">a Perl
@@ -275,17 +285,67 @@ to strip out the LaTeX and turn each problem into R Markdown for this
 book. You will undoubtedly see bits of LaTeX still embedded in the
 text. I am trying to update my program to catch them, but I am sure to
 miss some.</p>
-<p>I just figured out that you can convert LaTeX and pairs into HTML “a name” and “a href=‘#’”, which R Markdown can handle. I am ludicrously pleased with myself.</p>
+<p>I just figured out that you can convert LaTeX “label” and “ref” pairs
+into HTML “a name” and “a href=‘#’”, which R Markdown can handle. I am
+ludicrously pleased with myself. To that effect, you will occasionally
+see question parts beginning with a *; this means that other question
+parts refer back to this one. (One of my favourite question strategies
+is to ask how two different approaches lead to the same answer, or
+more generally to demonstrate that there are different ways to see the
+same thing.)</p>
 <p>If you see anything, <a href="https://github.com/nxskok/pasias/issues">file an
 issue</a> on the Github page for
 now. I want to fix problems programmatically at first, but when the
 majority of the problems have been caught, I will certainly take pull
-requests. I will acknowledge all the people who catch things.</p>
+requests. I will acknowledge all the people who catch things. Likely
+problems include:</p>
+<ul>
+<li>some LaTeX construction that I didn’t catch (eg. block quotes)</li>
+<li>disappeared footnotes (that will show up as an apparently missing sentence in the text)</li>
+<li>references to “in class” or a lecture or a course by course number, which need to be eliminated (in favour of wording like “a previous course”)</li>
+<li>references to other questions or question parts that are <em>wrong</em> (likely caused by <em>not</em> being “labels” or “refs” in the original LaTeX)</li>
+<li>my contorted English that is difficult to understand.</li>
+</ul>
+<p>As I read through looking for problems like these, I realize that
+there ought to be a textbook that reflects my way of doing
+things. There isn’t one (yet), though there are lecture
+notes. Reasonably recent versions of these are at:</p>
+<ul>
+<li><a href="http://www.utsc.utoronto.ca/~butler/c32/notes/slides.pdf">the STAC32 website</a></li>
+<li><a href="https://www.utsc.utoronto.ca/~butler/d29/slides-sw.pdf">the STAD29 website</a></li>
+</ul>
+<p>A little background:</p>
+<p>STAC32 is an introduction to R (and also SAS) as
+applied to statistical methods that have (mostly) been learned in
+previous courses. This could be a mathematical statistics course like
+<a href="https://utsc.calendar.utoronto.ca/course/stab57h3">this</a>, or a
+non-mathematical applied course like
+<a href="https://utsc.calendar.utoronto.ca/course/stab27h3">this</a>. The idea is
+that students have already seen a little of regression and analysis of
+variance (and the things that precede them), and need only an
+introduction of how to run them in R.</p>
+<p>STAD29 is an overview of a number of advanced statistical methods. I
+start from regression and proceed to some regression-like methods
+(logistic regression, survival analysis, log-linear frequency table
+analysis), then I go a little further with analysis of variance and
+proceed with MANOVA and repeated measures. I finish with a look at
+classical multivariate methods such as discriminant analysis, cluster
+analysis, principal components and factor analysis. I cover a number
+of methods in no great depth; my aim is to convey an understanding of
+what these methods are for, how to run them and how to interpret the
+results. Statistics majors and specialists cannot take this course for
+credit (they have separate courses covering this material with the
+proper mathematical background). D29 is intended for students in other
+disciplines who find themselves wanting to learn more statistics; we
+have an <a href="https://utsc.calendar.utoronto.ca/minor-program-applied-statistics-science">Applied Statistics Minor
+program</a>
+for which C32 and D29 are two of the last courses.</p>
 <p>My checklist:</p>
 <ul>
 <li>bring in the D29 questions</li>
-<li>working on A4 D29</li>
+<li>working on A5 D29</li>
 <li>look for multiple regression Qs in A6 or wherever</li>
+<li>*** puts a vertical line across. Put that above and below each question part, somehow.</li>
 </ul>
 
 </div>

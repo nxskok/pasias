@@ -1,3 +1,4 @@
+##  Treating leprosy
 
 
  Two drugs are being tested in the treatment of
@@ -115,11 +116,11 @@ summary(lepro.1)
 
 For testing the interaction, there are *two* slope coefficients
 that should be zero if there is no interaction. So we have to test
-this with `anova`, which is next.
+this with `drop1`, which is next.
  
 
 (f) Pass your fitted model of the last part into
-`anova`. This gives you an overall test for each effect. Is
+`drop1`. Is
 the interaction term significant?
 
 
@@ -128,21 +129,15 @@ Solution
 
 Just this:
 ```{r }
-anova(lepro.1)
+drop1(lepro.1, test="F")
 ```
 
        
 
+There is only a test for the interaction term because you can't take out the main effects until you've taken out the interaction.
+
 The P-value for the interaction is very large (0.5606) so it is
 nowhere near significant. We can drop the interaction.
-
-Another, perhaps easier, way to do this is with `drop1`:
-
-```{r }
-drop1(lepro.1,test="F")
-```
-
- 
 
 
 
@@ -204,24 +199,15 @@ higher score is worse, and the two "real" drugs are both better than
 the fake one.
 
 Whether there is a real drug difference, I didn't ask you to assess,
-but you could do it by `anova` again, this way:
+but you could do it by `drop1` again, this way:
 ```{r }
-anova(lepro.2)
+drop1(lepro.2, test="F")
 ```
 
  
 
-This is actually not significant.\endnote{This is why I didn't ask you to
-test this, since it would have confused the story.}
-
-Or you could do it this way:
-
-```{r }
-drop1(lepro.2,test="F")
-```
-
- 
-
+This is actually not significant.
+`r tufte::margin_note("This is why I didn't ask you to test this, since it would have confused the story.")`
 This is one of those cases where the non-significant `drug` has
 a slightly *bigger* AIC than `<none>`, so `drop1`
 considers it best to leave it in the model.
@@ -242,32 +228,13 @@ First, make the new data frame for predicting from, using
 first, I define all the drugs and `pre` values, and then I
 feed them into `crossing`:
 ```{r }
-drugs=levels(factor(lepro$drug))
-drugs
+drugs=c("A","D","F")
 pres=c(5,12,20)
 lepro.new=crossing(drug=drugs,pre=pres)
 lepro.new
 ```
 
      
-
-That was rather an around-the-houses way of getting the names of the
-drugs without typing them: turn `drug` from text into a factor,
-then pull out its levels. 
-
-Of course, this is probably quicker and certainly easier:
-
-```{r }
-drugs=c("A","D","F")
-```
-
- 
-
-I got the possible drugs by using `levels` of the variable
-`drug` in the data frame `lepro`, which, with great
-discipline, I attached first and detached after. (I might have been
-getting the values from `pres` from the data frame too, but
-didn't in this case.)
 
 The names of the columns in the new data frame have to be
 *exactly* `drug` and `pre`. Anything else, and
@@ -364,8 +331,8 @@ The grey intervals are a bit confusing.\endnote{You can get rid of them
 by saying `se=F` inside the `geom_smooth`.} They are
 confidence intervals for the mean `post` score (as we did for regression
 early on in the course). But I left them there to show that they
-overlap substantially and thus that those slopes are not ``really
-different''. That's the lack of interaction. There is, as you see, a
+overlap substantially and thus that those slopes are not 
+"really different". That's the lack of interaction. There is, as you see, a
 substantial scatter in the points that would make it very difficult to
 prove that those three slopes are really different. 
  

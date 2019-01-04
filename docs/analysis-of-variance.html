@@ -176,6 +176,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">11.2</span> Deer and how much they eat</a></li>
 <li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">11.3</span> Movie ratings again</a></li>
 <li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">11.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">11.5</span> Can caffeine improve your performance on a test?</a></li>
 </ul></li>
 <li class="has-sub"><a href="tidying-and-selecting-data.html#tidying-and-selecting-data"><span class="toc-section-number">12</span> Tidying and selecting data</a><ul>
 <li><a href="tidying-and-selecting-data.html#tidying-the-jays-data"><span class="toc-section-number">12.1</span> Tidying the Jays data</a></li>
@@ -250,6 +251,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">18.2</span> Drug treatment programs</a></li>
 <li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">18.3</span> Multiple myeloma</a></li>
 <li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">18.4</span> Ovarian cancer</a></li>
+</ul></li>
+<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">19</span> Analysis of Variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">19.1</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">19.2</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">19.3</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">19.4</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">19.5</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">19.6</span> Treating leprosy</a></li>
 </ul></li>
 </ul>
 </div>
@@ -1632,6 +1641,180 @@ picture and make a call about which test is appropriate.
 I loaded package <code>car</code> above; I’d better be tidy and
 unload it before I go on:</p>
 <div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb839-1" data-line-number="1"><span class="kw">detach</span>(package<span class="op">:</span>car,<span class="dt">unload=</span>T)</a></code></pre></div>
+</div>
+<div id="can-caffeine-improve-your-performance-on-a-test" class="section level2">
+<h2><span class="header-section-number">11.5</span> Can caffeine improve your performance on a test?</h2>
+<p>Does caffeine help students do better on a certain test? To
+find out, 36 students were randomly allocated to three groups (12 in
+each group). Each student received a fixed number of cups of coffee
+while they were studying, but the students didn’t know whether they
+were receiving all full-strength coffee (“high”), all decaf coffee
+(“low”) or a 50-50 mixture of the two (“moderate”). For each
+subject, their group was recorded as well as their score on the
+test. The data are in
+<a href="http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv">link</a>, as a
+<code>.csv</code> file.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in and examine the data. How are the values laid out?</li>
+</ol>
+<p>Solution</p>
+<p><code>read_csv</code> because it’s a <code>.csv</code> file:</p>
+<div class="sourceCode" id="cb840"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb840-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv&quot;</span></a>
+<a class="sourceLine" id="cb840-2" data-line-number="2">caffeine.untidy=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Sub = col_integer(),
+##   High = col_integer(),
+##   Moderate = col_integer(),
+##   None = col_integer()
+## )</code></pre>
+<div class="sourceCode" id="cb842"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb842-1" data-line-number="1">caffeine.untidy</a></code></pre></div>
+<pre><code>## # A tibble: 12 x 4
+##      Sub  High Moderate  None
+##    &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+##  1     1    72       68    68
+##  2     2    65       80    74
+##  3     3    68       64    59
+##  4     4    83       65    61
+##  5     5    79       69    65
+##  6     6    92       79    72
+##  7     7    69       80    80
+##  8     8    74       63    58
+##  9     9    78       69    65
+## 10    10    83       70    60
+## 11    11    88       83    78
+## 12    12    71       75    75</code></pre>
+<p>The first column is the number of the subject (actually within each
+group, since each student only tried one amount of caffeine). Then
+follow the test scores for the students in each group, one group per column.</p>
+<p>I gave the data frame a kind of dumb name, since (looking ahead) I
+could see that I would need a less-dumb name for the tidied-up data,
+and it seemed sensible to keep <code>caffeine</code> for that.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Explain briefly how the data are not “tidy”.</li>
+</ol>
+<p>Solution</p>
+<p>The last three columns are all scores on the test: that is, they
+all measure the same thing, so they should all be in the same column.
+Or, there should be a column of scores, and a separate column
+naming the groups. Or, there were 36 observations in the data, so
+there should be 36 rows. You always have a variety of ways to
+answer these, any of which will do.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Use a suitable tool from the <code>tidyverse</code> to create one
+column of test scores and and one column of group labels. Call your
+column of group labels <code>amount</code>. Is it a <code>factor</code>?</li>
+</ol>
+<p>Solution</p>
+<p>We are combining several columns into one, so this is <code>gather</code>:</p>
+<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb844-1" data-line-number="1">caffeine =<span class="st"> </span>caffeine.untidy <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb844-2" data-line-number="2"><span class="kw">gather</span>(amount,score,<span class="kw">c</span>(High<span class="op">:</span>None))</a></code></pre></div>
+<p>I didn’t ask you to list the resulting data frame, but it is smart to
+at least look for yourself, to make sure <code>gather</code> has done
+what you expected.</p>
+<div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb845-1" data-line-number="1">caffeine</a></code></pre></div>
+<pre><code>## # A tibble: 36 x 3
+##      Sub amount score
+##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt;
+##  1     1 High      72
+##  2     2 High      65
+##  3     3 High      68
+##  4     4 High      83
+##  5     5 High      79
+##  6     6 High      92
+##  7     7 High      69
+##  8     8 High      74
+##  9     9 High      78
+## 10    10 High      83
+## # ... with 26 more rows</code></pre>
+<p>A column of amounts of caffeine, and a column of test scores. This is
+what we expected. There should be 12 each of the <code>amount</code>s,
+which you can check if you like:</p>
+<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb847-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 2
+##   amount       n
+##   &lt;chr&gt;    &lt;int&gt;
+## 1 High        12
+## 2 Moderate    12
+## 3 None        12</code></pre>
+<p>Indeed.</p>
+<p>Note that <code>amount</code> is text, not a factor. Does this matter? We’ll see.</p>
+<p>This is entirely the kind of situation where you need <code>gather</code>,
+so get used to seeing where it will be useful.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Obtain side-by-side boxplots of test scores by amount of caffeine.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb849-1" data-line-number="1"><span class="kw">ggplot</span>(caffeine,<span class="kw">aes</span>(<span class="dt">x=</span>amount,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-65-1.png" width="672"  /></p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Does caffeine amount seem to have an effect? If so, what
+kind of effect?</li>
+</ol>
+<p>Solution</p>
+<p>On average, exam scores seem to be higher when the amount of
+caffeine is higher (with
+the effect being particularly pronounced for High caffeine).
+If you want to, you can also say the the effect of caffeine seems
+to be small, relative to the amount of variability there is (there
+is a lot). The point is that you say <em>something</em> supported by
+the boxplot.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Run a suitable analysis of variance to determine whether
+the mean test score is equal or unequal for the three groups. What
+do you conclude?</li>
+</ol>
+<p>Solution</p>
+<p>Something like this:</p>
+<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb850-1" data-line-number="1">caff<span class="fl">.1</span>=<span class="kw">aov</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
+<a class="sourceLine" id="cb850-2" data-line-number="2"><span class="kw">summary</span>(caff<span class="fl">.1</span>)</a></code></pre></div>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## amount       2  477.7  238.86   3.986 0.0281 *
+## Residuals   33 1977.5   59.92                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The P-value on the <span class="math inline">\(F\)</span>-test is less than 0.05, so we reject the null
+hypothesis (which says that all the groups have equal means) in favour
+of the alternative: the group means are not all the same (one or more
+of them is different from the others).</p>
+<p>Notice that the boxplot and the <code>aov</code> are quite happy for
+<code>amount</code> to be text rather than a factor (they actually do want
+a factor, but if the input is text, they’ll create one).</p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Why is it a good idea to run Tukey’s method here?</li>
+</ol>
+<p>Solution</p>
+<p>The analysis of variance <span class="math inline">\(F\)</span>-test is significant, so that the
+groups are not all the same. Tukey’s method will tell us which
+group(s) differ(s) from the others. There are three groups, so
+there are differences to find that we don’t know about yet.</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>Run Tukey’s method. What do you conclude?</li>
+</ol>
+<p>Solution</p>
+<p>This kind of thing:</p>
+<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb852-1" data-line-number="1">caff<span class="fl">.3</span>=<span class="kw">TukeyHSD</span>(caff<span class="fl">.1</span>)</a>
+<a class="sourceLine" id="cb852-2" data-line-number="2">caff<span class="fl">.3</span></a></code></pre></div>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = score ~ amount, data = caffeine)
+## 
+## $amount
+##                    diff       lwr       upr     p adj
+## Moderate-High -4.750000 -12.50468  3.004679 0.3025693
+## None-High     -8.916667 -16.67135 -1.161987 0.0213422
+## None-Moderate -4.166667 -11.92135  3.588013 0.3952176</code></pre>
+<p>The high-caffeine group definitely has a higher mean test score than
+the no-caffeine group. (The Moderate group is not significantly
+different from either of the other groups.)
+Both the
+comparisons involving Moderate could go either way (the interval for
+the difference in means includes zero). The None-High comparison,
+however, is away from zero, so this is the significant one. As is
+usual, we are pretty sure that the difference in means (this way
+around) is negative, but we are not at all clear about how big it is,
+because the confidence interval is rather long.</p>
 
 </div>
 </div>

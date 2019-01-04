@@ -1,3 +1,4 @@
+##  Productivity and research-and-development
 
 
  An economist compiled data on productivity improvements for
@@ -12,12 +13,12 @@ recorded this as well.
 The data set can be found at
 [link](http://www.utsc.utoronto.ca/~butler/d29/productivity.txt). 
 
-Feel free to use "R\&D" as an abbreviation for ``research and
-development'' in your answers below.
+Feel free to use "R\&D" as an abbreviation for 
+"research and development" in your answers below.
 
 
 
-(a)[2] Read in and display at least some of the data.
+(a) Read in and display at least some of the data.
 
 Solution
 
@@ -41,8 +42,24 @@ good.
 You are free to give the data frame a shorter name to make it easier
 to keep typing it!
 
+Extra: those expenditure levels (that are currently text) will get
+sorted into alphabetical order unless we stop them. They are actually
+in the right order in the data file, so maybe we should turn them into
+a factor (with the levels in the right order) now:
 
-(b)[3] Plot productivity improvement for this year against last
+```{r }
+productivity %>%
+mutate(expenditure=fct_inorder(expenditure)) -> productivity
+```
+
+ 
+
+If you don't do this, your answers below will be different from
+mine. Probably not in any kind of consequential way, but different
+nonetheless.
+
+
+(b) Plot productivity improvement for this year against last
 year, identifying the points by the level of
 research-and-development expenditure. On your plot, add regression
 lines for each expenditure group.
@@ -65,7 +82,7 @@ you miss it out, you'll get those CI-of-mean-response grey envelopes
 around each line.)
 
 
-(c)[3]<a name="part:graph-comment">*</a> 
+(c)<a name="part:graph-comment">*</a> 
 Look at your graph of the previous part. Do you think that (i)
 knowing last year's productivity improvement tells you something
 about this year's, (ii) the level of expenditure on
@@ -91,7 +108,7 @@ lines are definitely not "approximately parallel" and therefore
 there is an interaction, that's OK too).
 
 
-(d)[3] Fit an analysis of covariance model without interaction. Run
+(d) Fit an analysis of covariance model without interaction. Run
 the results through `drop1` with `test="F"` (the
 `F` must be in quotes). What do you conclude?
 
@@ -112,7 +129,7 @@ on this year's productivity increase of last year's productivity
 increase and the level of R\&D expenditure. 
 
 
-(e)[3] Now look at the `summary` of your analysis of
+(e) Now look at the `summary` of your analysis of
 covariance model. Explain briefly how each of the *last three*
 numbers in the `Estimate` column are consistent with your graph.
 
@@ -138,13 +155,13 @@ the upward trends within each `expenditure` group on the
 graph.
 
 * `expenditure` is categorical, so everything is measured
-relative to the baseline `high`. 
+relative to the baseline. Mine is `low`, but yours is probably `high`. 
 
-* The two estimates for `expenditure` `low` and
-`moderate` are both positive, so when expenditure on R\&D is
-low or moderate, the productivity increase will be higher this year
+* My two estimates for `expenditure` `high` and
+`moderate` are both negative, so when expenditure on R\&D is
+high or moderate, the productivity increase will be lower this year
 (for the same productivity increase last year). Going back to the
-graph, if you extend the lines for `low` and `high` to
+graph, if you extend the lines for `moderate` and `high` to
 a middling `last` value of something like 10, the
 productivity increase this year will be higher when
 `expenditure` is low or moderate then when it is high, which
@@ -168,7 +185,7 @@ others *at the same value of `last`* that matters.
 Extra extra: I asked you to do the test from `drop1` because
 there are three levels of `expenditure` (rather than just two),
 and the `summary` output only gives you a comparison with the
-baseline level `high`, rather than comparing all three
+baseline level, rather than comparing all three
 levels. I prefer to do the right test (using `drop1`) first,
 and then use `summary` to interpret what I have, or at least
 the parts of it that are significant.
@@ -179,7 +196,7 @@ but that's not how it worked out. This is one of those cases where all
 else isn't really equal.
 
 
-(f)[3] Add an interaction between `last` and
+(f) Add an interaction between `last` and
 `expenditure` to your analysis of covariance model. Test it
 for significance using `drop1`. In the light of what you
 have seen, does this surprise you? Explain briefly why you are or
@@ -228,18 +245,18 @@ summary(improvement.2)
  
 
 The last two Estimates, the ones beginning with `last:`, came
-from the interaction. Once again `high` is the baseline. These
+from the interaction. Once again `low` is my baseline. These
 say how the *slopes* for `last` for the other groups
-differ from the slopes for `last` for `high`
+differ from the slopes for `last` for `low`
 expenditure. (Yes, this is confusing. Read it again until you get it.)
 
-The biggest-size difference in slopes, about $-0.40$, is between low
-expenditure and high expenditure. This says that the line for low
-expenditure is this much less steep than the line for high
+The biggest-size difference in slopes, about $0.40$, is between low
+expenditure and high expenditure. This says that the line for high
+expenditure is this much more steep than the line for low
 expenditure. That's where the non-parallelism is on the graph, such as
 it is. A small but significant difference in slopes. You can tell that
 the effect is small by looking in the Estimate column; those changes
-in slopes, $-0.40$ and $-0.09$, are the smallest things in size out of
+in slopes, $0.40$ and $0.32$, are the smallest things in size out of
 everything in that column.
 
 Having seen this, you now realize that I did this question wrong (or,
@@ -257,7 +274,8 @@ new
 
  
 
-(oh, how I wish I'd given those variables shorter names), and then:
+(oh, how I wish I'd given those variables shorter names),
+`r tufte::margin_note("The expenditure levels have come out in alphabetical order again.")` and then:
 
 ```{r }
 p=predict(improvement.2,new)

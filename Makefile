@@ -11,12 +11,12 @@ rmds: carp.Rmd socwork.Rmd pinetrees.Rmd jays-dplyr.Rmd tomatoes.Rmd migraine.Rm
     hsb.Rmd oz-multi.Rmd nonmissing.Rmd worcester.Rmd drug-treatment.Rmd myeloma.Rmd\
     catbrain-b.Rmd ovarian.Rmd caffeine-contrast.Rmd studyhours.Rmd\
     mental-context.Rmd shirts.Rmd productivity.Rmd leprosy.Rmd urine.Rmd\
-    hayfever.Rmd acidrain.Rmd
+    hayfever.Rmd acidrain.Rmd caffeine.Rmd
 %.Rmd: ~/teaching/d29/exams/%.Rnw convert.pl
 	perl convert.pl $< > $@
-docs/index.html: index.Rmd
+all: index.Rmd
 	Rscript -e "bookdown::render_book('index.Rmd')"
-pasias.pdf: index.Rmd
+pdf: index.Rmd
 	Rscript -e "bookdown::render_book(\"index.Rmd\", output_format=\"bookdown::tufte_book2\")"
 docs/ordinal-nominal-response.html: index.Rmd
 	Rscript -e "bookdown::preview_chapter('16-ordinal-nominal-response.Rmd')"
@@ -24,3 +24,5 @@ docs/survival-analysis.html: index.Rmd
 	Rscript -e "bookdown::preview_chapter('17-survival-analysis.Rmd')"
 ch18: index.Rmd
 	Rscript -e "bookdown::preview_chapter('18-anova-revisited.Rmd')"
+ch10: index.Rmd
+	Rscript -e "bookdown::preview_chapter('10-analysis-of-variance.Rmd')"
