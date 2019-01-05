@@ -1,0 +1,502 @@
+
+
+ A graduate student wrote a thesis comparing different
+treatments for increasing social interaction among geriatric
+patients. He recruited 21 patients at a state mental hospital and
+randomly assigned them to treatments: Reality Orientation
+(`ro`), Behavior Therapy (`bt`) or no treatment
+(`ctrl`). Each subject was observed at four times, labelled
+`t1` through `t4` in the data file
+[link](http://www.utsc.utoronto.ca/~butler/d29/geriatrics.txt). The
+response variable was the percentage of time that the subject was
+"engaging in the relevant social interaction", so that a higher
+value is better.
+
+The principal aim of the study was to see whether there were
+differences among the treatments (one would hope that the real
+treatments were better than the control one), and whether there were
+any patterns over time.
+
+
+
+(a) Read in the data and display at least some of it.
+
+
+Solution
+
+
+The usual, separated by a single space:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/geriatrics.txt"
+geriatrics=read_delim(my_url," ")
+geriatrics
+```
+
+ 
+
+Correctly 21 observations measured at 4 different times. We also have
+subject numbers, which might be useful later.
+
+
+
+(b) Create a response variable and fit a suitable `lm`
+as the first stage of the repeated-measures analysis.
+
+
+Solution
+
+
+This:
+```{r }
+response=with(geriatrics,cbind(t1,t2,t3,t4))
+geriatrics.1=lm(response~treatment,data=geriatrics)
+```
+
+     
+
+There is no need to look at this, since we are going to feed it into
+`Manova` in a moment, but in case you're curious, you see (in `summary`) a
+regression of each of the four columns in `response` on
+`treatment`, one by one. 
+    
+
+
+(c) Run a suitable `Manova`. There is some setup
+first. Make sure you do that.
+
+
+Solution
+
+
+Make sure `car` is loaded, and do the `idata` and
+`idesign` thing:
+```{r }
+times=colnames(response)
+times.df=data.frame(times)
+geriatrics.2=Manova(geriatrics.1,idata=times.df,idesign=~times)
+```
+
+     
+
+In case you're curious, `response` is an R `matrix`:
+
+```{r }
+class(response)
+```
+
+ 
+
+and
+not a data frame (because it was created by `cbind` which makes
+a matrix out of vectors). So, to pull the names off the top, we really
+do need `colnames` (applied to a matrix) rather than just
+`names` (which applies to a data frame). 
+    
+
+
+(d) Display the results of your repeated-measures
+analysis. What do you conclude? Explain briefly.
+
+
+Solution
+
+
+Just "printing" it will get you what you want:
+```{r }
+geriatrics.2
+```
+
+     
+
+The interaction is significant, so the effects of the treatments are
+different at different times. (It makes most sense to say it this way
+around, since treatment is something that was controlled and time was not.)
+
+You, I hope, know better than to look at the main effects when there
+is a significant interaction!
+    
+
+
+(e) To understand the results that you got from the repeated
+measures analysis, you are going to draw a picture (or two). To do
+*that*, we are going to need the data in "long" format with
+one response value per line (instead of four). Use `gather`
+suitably to get the data in that format, and demonstrate that you
+have done so.
+
+
+Solution
+
+
+The usual layout for `gather`:
+```{r }
+geriatrics.long = geriatrics %>% 
+gather(time,intpct,t1:t4) 
+geriatrics.long
+```
+
+     
+
+I had to think a bit about ``what makes the gathered columns the
+same''. They are all percentages of interactions of a specific type,
+so you could as well (or better) call them "percent". 
+
+Anyway, I have *one* column of interaction percents, and
+*one* column of times. If you check the whole thing, you'll see
+that you get all the time-1 measurements first, then all the time-2
+measurements, and so on, so that the subject number loops through the
+21 subjects four times.
+
+The long data frame is, well, long.
+
+It's not necessary to pull out the numeric time values, though you
+could if you wanted to, via `separate` or by using
+`parse_number`.
+    
+
+
+(f) Calculate and save the mean interaction percents for each
+time-treatment combination.
+
+
+Solution
+
+
+`group_by` followed by `summarize`, as ever:
+```{r }
+geriatrics.long %>% group_by(treatment,time) %>%
+summarize(mean=mean(intpct)) -> means
+means
+```
+
+       
+
+
+
+(g) Make an interaction plot. Arrange things so that time goes
+across the page. Use your data frame of means that you just calculated.
+
+
+Solution
+
+
+Once you have the means, this is not too bad:
+
+```{r }
+ggplot(means,aes(x=time,y=mean,group=treatment,colour=treatment))+
+geom_point()+geom_line()
+```
+
+ 
+
+The "second factor" `treatment` appears as both
+`group` and `colour`.
+    
+
+
+(h) Describe what you see on your interaction plot, and what it
+says about why your repeated-measures analysis came out as it did.
+
+
+Solution
+
+
+The two "real" treatments `bt` and `ro` both go up
+sharply between time 1 and time 2, and then come back down so that
+by time 4 they are about where they started. The control group
+basically didn't change at all, and if anything went *down*
+between times 1 and 2, a completely different pattern to the others.
+The two treatments `bt` and `ro` are not exactly
+parallel, but they do at least  have qualitatively the same
+pattern.
+`r tufte::margin_note("That is to say, it's the same kind of shape.")` It
+is, I think, the fact that the control group has a
+*completely* different pattern over time that makes the
+interaction come out significant.
+`r tufte::margin_note("I am kind of wrong about    that, as we see.")`
+I'm going to explore that some more later, but first I want to get
+you to draw a spaghetti plot.
+    
+
+
+(i) Draw a spaghetti plot of these data. That is, use
+`ggplot` to plot the interaction percent against time for
+each subject,
+joining the points for the *same subject* by lines whose colour
+shows what treatment they were on. Use the "long" data frame for
+this (not the data frame of means).
+
+
+Solution
+
+
+This is almost easier to do than it is to ask you to do:
+```{r }
+ggplot(geriatrics.long,aes(x=time,y=intpct,colour=treatment,group=subject))+
+geom_line()
+```
+
+     
+
+The basic difficulty here is to get all the parts. We need both a
+`colour` and a `group`; the latter controls the joining
+of points by lines (if you have both). Fortunately we already had
+subject numbers in the original data; if we had not had them, we would
+have had to create them. `dplyr` has a function
+`row_number` that we could have used for that; we'd apply the row
+numbers to the original wide data frame, before we made it long, so
+that the correct subject numbers would get carried along.
+
+Whether you add a `geom_point()` to plot the data points, or not,
+is up to you. Logically, it makes sense to include the actual data,
+but aesthetically, it looks more like spaghetti if you leave the
+points out. Either way is good, as far as I'm concerned.
+
+I didn't ask you to comment on the spaghetti plot, because the story
+is much  the same as the interaction plot. There is a lot of
+variability, but the story within each group is basically what we
+already said: the red lines go sharply up and almost as sharply back
+down again, the blue lines do something similar, only not as sharply
+up and down, and the green lines do basically nothing.
+
+I said that the control subjects' time pattern was noticeably
+different from the others. Which made me think: what if we remove the
+control subjects? Would there still be an interaction?
+`r tufte::margin_note("This is rather like removing time zero in the example in class.")`
+
+All right, we need to start with the original wide data frame, and
+from *that* select everything but `ctrl`:
+
+```{r }
+gg = geriatrics %>% filter(treatment!="ctrl") 
+gg
+```
+
+ 
+
+So now there are two treatments left, seven people on
+each:
+`r tufte::margin_note("The factor *treatment* still has three levels,  but only two of them have any remaining data.")` 
+
+```{r }
+gg %>% count(treatment)
+```
+
+ 
+
+Then we do
+the same stuff over again: construct the response, run the
+`lm`, create the stuff for `idata` and `idesign`,
+and run the `Manova`. There's really nothing new here:
+
+```{r }
+attach(gg)
+response=cbind(t1,t2,t3,t4)
+gg.1=lm(response~treatment)
+times=colnames(response)
+times.df=data.frame(times)
+gg.2=Manova(gg.1,idata=times.df,idesign=~times)
+gg.2
+detach(gg)
+```
+
+ 
+
+There is still an interaction, but it's not as significant as it was
+before. I think it is still significant because the shape of the two
+time trends is not the same: the red `bt` group goes up further
+and down further. I was musing that the higher values are also more
+variable, which would suggest a transformation, but I haven't explored that.
+
+If the interaction had turned out to be nonsignificant this way? You
+might think about trying to remove it from the model, except that in
+this kind of model, `treatment` is a ``between-subjects
+factor'' and `times` is a "within-subjects factor", so they
+are different kinds of things. What you do in that case is to ignore
+the non-significant interaction and interpret the main effects: there
+is no way to "gain df for error" like we did in two-way
+ANOVA. Supposing, in this case, that we were using $\alpha=0.01$, we
+would say that the interaction is not significant. Then we look at the
+main effects: there is no effect of treatment, but there is an effect
+of time. Or, to put it another way, once you allow for an effect of
+time, there is no difference between the two remaining
+treatments.
+`r tufte::margin_note("There is often an effect of time, which is why you would be taking multiple time measurements, but the issue is when you take that into account, you are giving yourself an improved chance, in general, to find a treatment effect. This is exactly the same idea as using a matched pairs design to give yourself an improved chance of finding a treatment effect, even though the subjects might be quite different from each other. In fact, repeated measures *is* matched pairs with more than two measurements on each person. Which makes me think, I should have you do a matched pairs as repeated measures.")`
+
+Thinking back to our spaghetti plot, we are now comparing the red and
+blue treatments. They both go up at time 2 and down afterwards, which
+is the time effect, but even once you allow for this time trend, there is
+too much scatter to be able to infer a difference between the treatments.
+
+I was thinking that this is not terribly clear, so I thought I would
+fake up some data where there is a treatment effect and a time effect
+(but no interaction), and draw a spaghetti plot, so you can see the
+difference, idealized somewhat of course. Let's try to come up with
+something with the same kind of time effect, up at time 2 and then
+down afterwards, that is the same for two drugs A and B. Here's what I
+came up with:
+
+```{r }
+fake=read.csv("fake.csv",header=T)
+fake
+```
+
+ 
+
+You can kind of get the idea that the pattern over time is up and then
+down, so that it finishes about where it starts, but the numbers for
+drug A are usually bigger than the  ones for drug B, consistently over
+time. So there ought not to be an interaction, but there ought to be
+both a time effect and a drug effect.
+
+Let's see whether we can demonstrate that. First, a spaghetti plot,
+which involves getting the data in long format first. I'm saving the
+long format to use again later.
+
+```{r }
+fake %>% gather(times,score,t1:t4) -> fake.long
+fake.long %>%
+ggplot(aes(x=times,y=score,colour=drug,group=subject))+
+geom_point()+geom_line()
+```
+
+ 
+
+The reds are consistently higher than the blues (drug effect), the
+pattern over time goes up and then down (time effect), but the time
+effect is basically the same for both drugs (no interaction).
+
+I got the plot wrong the first time, because I forgot whether I was
+doing an interaction plot (where `group=` and `colour=`
+are the same) or a spaghetti plot (where `group` has to be
+`subject` and the colour represents the treatment, usually). 
+
+Let's do the repeated-measures ANOVA and see whether my guess above is right:
+
+```{r }
+response=with(fake,cbind(t1,t2,t3,t4))
+fake.1=lm(response~drug,data=fake)
+times=colnames(response)
+times.df=data.frame(times)
+fake.2=Manova(fake.1,idata=times.df,idesign=~times)
+```
+
+ 
+
+After typing this kind of stuff out a few too many times, I hope
+you're getting the idea "function". Also, the construction of the
+response is kind of annoying, where you have to list all the time
+columns. The trouble is, `response` has to be a `matrix`,
+which it is:
+
+```{r }
+class(response)
+```
+
+ 
+
+but if you do the obvious thing of selecting the columns of the data
+frame that you want:
+
+```{r }
+fake %>% select(t1:t4) -> r
+class(r)
+```
+
+ 
+
+you get a data frame instead. I think this would work:
+
+```{r }
+r = fake %>% select(t1:t4) %>% as.matrix()
+class(r)
+```
+
+ 
+
+The idea is that you select the columns you want as a data frame first
+(with `select`), and then turn it into a `matrix` at the
+end. 
+
+This is the kind of thing you'd have to do in a function, I think,
+since you'd have to have some way of telling the function which are
+the "time" columns. Anyway, hope you haven't forgotten what we were
+doing:
+`r tufte::margin_note("I got sidetracked, surprise surprise.")`
+
+```{r }
+fake.2
+```
+
+ 
+
+The drug-by-time interaction is not (quite) significant, so working at
+$\alpha=0.05$ (since that will help me make my point), we go ahead and
+interpret the main effects: there is a time effect (the increase at
+time 2 that I put in on purpose), and, allowing for the time effect,
+there is also a difference between the drugs (because the drug A
+scores are a bit higher than the drug B scores).
+
+What if we ignored the time effect? You'd think we could do something
+like this, treating the measurements at different times as replicates:
+
+```{r }
+head(fake.long)
+fake.3=aov(score~drug,data=fake.long)
+summary(fake.3)
+```
+
+ 
+
+but this would be *wrong*, because we are acting as if we have 40
+independent observations, which we don't (this is the point of doing
+repeated measures in the first place). It looks as if we have achieved
+something by getting a lower P-value for `drug`, but we
+haven't really, because we have done so by cheating.
+
+What we could do instead is to average the scores for each subject
+over all the times,
+`r tufte::margin_note("This would be allowable, since we are  averaging *over* the time-dependence; we are creating 10  independent averages, from the 10 subjects. People do this kind of  thing, instead of having to deal with the repeated measures.")` for
+which we go back to the original data frame:
+
+```{r }
+fake
+fake %>% mutate(avg.score=(t1+t2+t3+t4)/4) %>%
+aov(avg.score~drug,data=.) %>% summary()
+```
+
+ 
+
+Ah, now, this is very interesting. I was hoping that by throwing away
+the time information (which is useful), we would have diminished
+the significance of the drug effect. By failing to include the
+time-dependence in our model, we ought to have introduced some extra
+variability, which ought to weaken our test. But this test gives
+*exactly the same* P-value as the one in the MANOVA, and it looks
+like exactly the same test (the $F$-value is the same too). So it
+looks as if this is what the MANOVA is doing, to assess the
+`drug` effect: it's averaging over the times. Since the same
+four (here) time points are being used to compute the average for each
+subject, we are comparing like with like at least, and even if there
+is a large time effect, I suppose it's going to have the same effect
+on each average. For example, if as here the scores at time 2 are
+typically highest, all the averages are going to be composed of one
+high score and three lower ones. So maybe I have to go back and dilute
+my conclusions about the significance of treatments earlier: it's actually
+saying that there is a difference between the two remaining treatments
+*averaged over time* rather than *allowing for time* as I
+said earlier.
+ su vs. su -
+ When becoming another user you generally want to use su - user2. The dash will force user2's .bash_profile to get sourced.
+ 
+ xhost
+ Additionally you'll need to grant users access to your display. This is governed by X. You can use the command xhost + to allow other users permission to display GUI's to user1's desktop.
+ 
+ NOTE: When running xhost + you'll want to run this while still in a shell that belongs to user1.
+ 
+ $DISPLAY
+ When you become user2 you may need to set the environment variable $DISPLAY.
+ 
+ $ export DISPLAY=:0.0
+

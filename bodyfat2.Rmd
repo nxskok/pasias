@@ -1,0 +1,171 @@
+
+
+ This one is also stolen from STAC32. Athletes are concerned
+with measuring their body fat percentage. Two different methods are
+available: one using ultrasound, and the other using X-ray
+technology. We are interested in whether there is a difference in the
+mean body fat percentage as measured by these two methods, and if so,
+how big that difference is. Data on 16 athletes are at
+[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt).
+
+
+
+(a) Read in the data and check that you have a sensible number of
+rows and columns.
+
+
+
+Solution
+
+
+This kind of thing:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat=read_delim(my_url," ")
+bodyfat
+```
+
+ 
+
+16 rows (athletes) and 3 columns, one for each measurement
+method and one labelling the athletes. All good.
+
+
+
+
+
+(b) Carry out a suitable (matched-pairs) $t$-test to determine
+whether the means are the same or different. 
+
+
+
+Solution
+
+
+Feed the two columns into `t.test` along with
+`paired=T`. Remember that this is (in effect) a one-sample
+$t$-test, so that you can't use a `data=`. You therefore have
+to wrap everything in a `with`:
+```{r }
+with(bodyfat,t.test(xray,ultrasound,paired=T))
+```
+
+ 
+
+The test we want is two-sided, so we didn't have to take any special
+steps to get that.
+
+
+
+
+
+(c) What do you conclude from the test?
+
+
+
+Solution
+
+
+The P-value of 0.7623 is not at all small, so there is no way we can
+reject the null hypothesis.
+`r tufte::margin_note("My hat stays on my head.")` There
+is no evidence of a difference in means; we can act as if the two
+methods produce the same mean body fat percentage. 
+That is to say, on this evidence we can use either method, whichever
+one is cheaper or more convenient.
+
+ 
+
+
+(d) Run a repeated-measures analysis of variance, treating the two
+methods of measuring body fat as the repeated measures (ie., playing
+the role of "time" that you have seen in most of the other repeated
+measures analyses). There is no "treatment" here, so there is
+nothing to go on the right side of the squiggle. Insert a `1`
+there to mean "just an intercept". Display the results.
+
+
+
+Solution
+
+
+Construct the response variable, run `lm`, construct the
+within-subjects part of the design, run `Manova`:
+
+```{r }
+bodyfat %>% select(xray:ultrasound) %>%
+as.matrix() -> response
+bodyfat.1=lm(response~1)
+methods=colnames(response)
+methods.df=data.frame(methods)
+bodyfat.2=Manova(bodyfat.1,idata=methods.df,idesign=~methods)
+bodyfat.2
+```
+
+ 
+
+
+
+
+(e) Compare your repeated-measures analysis to your matched-pairs
+one. Do you draw the same conclusions?
+
+
+
+Solution
+
+
+The P-value for `methods`, which is testing the same thing
+as the matched pairs, is 0.7623, which is actually
+*identical* to the matched pairs $t$-test, and so the
+conclusion is identical also. That is, there is no difference
+between the two methods for measuring body fat. 
+This goes to show that repeated measures gives the same answer as
+a matched-pairs $t$-test in the situation where they both
+apply. But repeated measures is, as we have seen, a lot more general.
+Since this really is repeated measures, we ought to be able to use
+a mixed model here too. We need "long" or "tidy" format, which
+we don't have yet. One pipe to save them all, to paraphrase Lord
+of the Rings
+`r tufte::margin_note("The movies of Lord of the Rings were filmed      in New Zealand, which is also the country in which R was first      designed.")` --- put all the fat measurements in one column with a
+label saying which `method` they were obtained with; create
+a column which is the athlete number as a factor; fit the linear
+mixed model; see what we can drop from it:
+```{r }
+bodyfat
+bodyfat %>% gather(method,fat,xray:ultrasound) %>%
+mutate(fathlete=factor(athlete)) %>%
+lmer(fat~method+(1|fathlete),data=.) %>%
+drop1(test="Chisq")
+```
+
+     
+
+Once again, there is no difference between methods, and though the
+P-value is different from the matched pairs or profile analysis, it is
+very close to those.
+
+If you're not clear about the tidy data frame used for input to
+`lmer`, pull the top two lines off the chain and see what they produce:
+
+```{r }
+bodyfat %>% gather(method,fat,xray:ultrasound) %>%
+mutate(fathlete=factor(athlete)) 
+```
+
+ 
+
+Each athlete now appears twice: once with their `fat` measured
+by `xray`, and again with it measured by
+`ultrasound`. The column `fathlete` is a factor.
+
+The mixed model took me two goes to get right: I forgot that I needed the
+`data=.` in `lmer`, because it works like `lm`
+with the model formula first, not the input data. If the chain is
+going too fast for you, create the tidy data frame and save it, then
+use the saved data frame as input to `lmer`.
+
+
+
+
+

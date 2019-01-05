@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2018-10-09" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a><ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+</ul></li>
+<li class="has-sub"><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">4.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">4.5</span> Test scores in two classes</a></li>
+</ul></li>
+<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">5</span> One-sample inference</a><ul>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">5.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">5.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">5.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">5.4</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">6</span> Two-sample inference</a><ul>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">6.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">6.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">6.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">6.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">6.5</span> Diet and growth in boys</a></li>
+</ul></li>
+<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">7</span> Power and sample size</a><ul>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">7.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">7.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">7.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li class="has-sub"><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">8</span> The sign test and Mood’s median test</a><ul>
+<li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">8.1</span> Running a maze</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">8.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">8.3</span> The power of the sign test</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">8.4</span> Sugar in breakfast cereals</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">8.5</span> Fear of math</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">8.6</span> Medical instructions</a></li>
+</ul></li>
+<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a><ul>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">9.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">9.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">9.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">9.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">9.5</span> Body fat revisited</a></li>
+</ul></li>
+<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a><ul>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">10.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">10.2</span> Ferritin and normality</a></li>
+</ul></li>
+<li class="has-sub"><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">11</span> Analysis of variance</a><ul>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">11.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">11.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">11.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">11.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">11.5</span> Can caffeine improve your performance on a test?</a></li>
+</ul></li>
+<li class="has-sub"><a href="tidying-and-selecting-data.html#tidying-and-selecting-data"><span class="toc-section-number">12</span> Tidying and selecting data</a><ul>
+<li><a href="tidying-and-selecting-data.html#tidying-the-jays-data"><span class="toc-section-number">12.1</span> Tidying the Jays data</a></li>
+<li><a href="tidying-and-selecting-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">12.2</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-and-selecting-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">12.3</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-and-selecting-data.html#growth-of-tomatoes"><span class="toc-section-number">12.4</span> Growth of tomatoes</a></li>
+<li><a href="tidying-and-selecting-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">12.5</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-and-selecting-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">12.6</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-and-selecting-data.html#mating-songs-in-crickets"><span class="toc-section-number">12.7</span> Mating songs in crickets</a></li>
+<li><a href="tidying-and-selecting-data.html#cars"><span class="toc-section-number">12.8</span> Cars</a></li>
+<li><a href="tidying-and-selecting-data.html#number-1-songs"><span class="toc-section-number">12.9</span> Number 1 songs</a></li>
+<li><a href="tidying-and-selecting-data.html#bikes-on-college"><span class="toc-section-number">12.10</span> Bikes on College</a></li>
+<li><a href="tidying-and-selecting-data.html#feeling-the-heat"><span class="toc-section-number">12.11</span> Feeling the heat</a></li>
+</ul></li>
+<li class="has-sub"><a href="regression.html#regression"><span class="toc-section-number">13</span> Regression</a><ul>
+<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">13.1</span> Rainfall in California</a></li>
+<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">13.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">13.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">13.4</span> Facebook friends and grey matter</a></li>
+<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">13.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="regression.html#sparrowhawks"><span class="toc-section-number">13.6</span> Sparrowhawks</a></li>
+<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">13.7</span> Salaries of social workers</a></li>
+<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">13.8</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">13.9</span> Tortoise shells and eggs</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">13.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">13.11</span> Roller coasters</a></li>
+<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">13.12</span> Running and blood sugar</a></li>
+<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">13.13</span> Calories and fat in pizza</a></li>
+<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">13.14</span> Where should the fire stations be?</a></li>
+<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">13.15</span> Being satisfied with hospital</a></li>
+<li><a href="regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">13.16</span> Handling shipments of chemicals</a></li>
+<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">13.17</span> Salaries of mathematicians</a></li>
+<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">13.18</span> Predicting GPA of computer science students</a></li>
+</ul></li>
+<li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">14</span> Dates and times</a><ul>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">14.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">14.2</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">14.3</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">14.4</span> Wolves and caribou</a></li>
+</ul></li>
+<li class="has-sub"><a href="functions.html#functions"><span class="toc-section-number">15</span> Functions</a><ul>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">15.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">15.2</span> The Collatz sequence</a></li>
+</ul></li>
+<li class="has-sub"><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">16</span> Logistic regression</a><ul>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">16.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">16.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">16.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">16.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">16.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">16.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">16.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">16.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">16.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">16.10</span> Go away and don’t come back!</a></li>
+</ul></li>
+<li class="has-sub"><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">17</span> Logistic regression with ordinal or nominal response</a><ul>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">17.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">17.2</span> Attitudes towards abortion</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">17.3</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">17.4</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">17.5</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">17.6</span> How do you like your steak – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">17.7</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">17.8</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">17.9</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">17.10</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">17.11</span> What sports do these athletes play?</a></li>
+</ul></li>
+<li class="has-sub"><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">18</span> Survival analysis</a><ul>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">18.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">18.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">18.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">18.4</span> Ovarian cancer</a></li>
+</ul></li>
+<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">19</span> Analysis of Variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">19.1</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">19.2</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">19.3</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">19.4</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">19.5</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">19.6</span> Treating leprosy</a></li>
+</ul></li>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">20</span> Multivariate analysis of variance</a></li>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">21</span> Repeated measures</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="multivariate-analysis-of-variance" class="section level1">
+<h1><span class="header-section-number">Chapter 20</span> Multivariate analysis of variance</h1>
+<p>Packages for this chapter:</p>
+<div class="sourceCode" id="cb2937"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2937-1" data-line-number="1"><span class="kw">library</span>(car)</a></code></pre></div>
+<pre><code>## Loading required package: carData</code></pre>
+<div class="sourceCode" id="cb2939"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2939-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ✖ dplyr::recode() masks car::recode()
+## ✖ purrr::some()   masks car::some()</code></pre>
+<p>The data in
+<a href="http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt">link</a>
+(probably made up) are measurements of two
+variables <code>y1</code> and <code>y2</code> on three groups, labelled
+<code>a</code>, <code>b</code> and <code>c</code>. We want to see whether
+<code>y1</code> or <code>y2</code> or some combination of them differ among
+the groups.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and check that you have 12 observations on
+2 numeric variables from 3 different groups.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb2943"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2943-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt&quot;</span></a>
+<a class="sourceLine" id="cb2943-2" data-line-number="2">simple=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   group = col_character(),
+##   y1 = col_integer(),
+##   y2 = col_integer()
+## )</code></pre>
+<div class="sourceCode" id="cb2945"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2945-1" data-line-number="1">simple</a></code></pre></div>
+<pre><code>## # A tibble: 12 x 3
+##    group    y1    y2
+##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
+##  1 a         2     3
+##  2 a         3     4
+##  3 a         5     4
+##  4 a         2     5
+##  5 b         4     8
+##  6 b         5     6
+##  7 b         5     7
+##  8 c         7     6
+##  9 c         8     7
+## 10 c        10     8
+## 11 c         9     5
+## 12 c         7     6</code></pre>
+<p>As promised: 12 observations, 2 numeric variables <code>y1</code> and
+<code>y2</code>, and one categorical variable (as text) containing three
+groups <code>a,b,c</code>.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Run a one-way ANOVA predicting <code>y1</code> from
+<code>group</code>. Are there any significant differences in <code>y1</code>
+among the groups? If necessary, run Tukey. What do you conclude?</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb2947"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2947-1" data-line-number="1">simple<span class="fl">.1</span>=<span class="kw">aov</span>(y1<span class="op">~</span>group,<span class="dt">data=</span>simple)</a>
+<a class="sourceLine" id="cb2947-2" data-line-number="2"><span class="kw">summary</span>(simple<span class="fl">.1</span>)</a></code></pre></div>
+<pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## group        2  63.45   31.72    21.2 0.000393 ***
+## Residuals    9  13.47    1.50                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb2949"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2949-1" data-line-number="1"><span class="kw">TukeyHSD</span>(simple<span class="fl">.1</span>)</a></code></pre></div>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = y1 ~ group, data = simple)
+## 
+## $group
+##         diff        lwr      upr     p adj
+## b-a 1.666667 -0.9417891 4.275122 0.2289181
+## c-a 5.200000  2.9089670 7.491033 0.0003548
+## c-b 3.533333  1.0391725 6.027494 0.0083999</code></pre>
+<p>The <span class="math inline">\(F\)</span>-test said that there were differences among the groups, so I
+ran Tukey and found that group <code>c</code> is significantly bigger on
+<code>y1</code> than the other two groups.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Repeat all the previous part for <code>y2</code>.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb2951"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2951-1" data-line-number="1">simple<span class="fl">.2</span>=<span class="kw">aov</span>(y2<span class="op">~</span>group,<span class="dt">data=</span>simple)</a>
+<a class="sourceLine" id="cb2951-2" data-line-number="2"><span class="kw">summary</span>(simple<span class="fl">.2</span>)</a></code></pre></div>
+<pre><code>##             Df Sum Sq Mean Sq F value  Pr(&gt;F)   
+## group        2  19.05   9.525   9.318 0.00642 **
+## Residuals    9   9.20   1.022                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb2953"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2953-1" data-line-number="1"><span class="kw">TukeyHSD</span>(simple<span class="fl">.2</span>)</a></code></pre></div>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = y2 ~ group, data = simple)
+## 
+## $group
+##     diff        lwr      upr     p adj
+## b-a  3.0  0.8440070 5.155993 0.0093251
+## c-a  2.4  0.5063697 4.293630 0.0157279
+## c-b -0.6 -2.6615236 1.461524 0.7050026</code></pre>
+<p>Same idea: there is a difference, and Tukey reveals that this time
+group <code>a</code> is significantly <em>smaller</em> than the other groups
+on <code>y2</code>.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Make a plot of <code>y1</code> against <code>y2</code>, with the
+points distinguished by which group they are from.</li>
+</ol>
+<p>Solution</p>
+<p><code>y1</code> and <code>y2</code> can be either way around, since
+they are both response variables (!):</p>
+<div class="sourceCode" id="cb2955"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2955-1" data-line-number="1"><span class="kw">ggplot</span>(simple,<span class="kw">aes</span>(<span class="dt">x=</span>y1,<span class="dt">y=</span>y2,<span class="dt">colour=</span>group))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="19-manova_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+$</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>How is it that group <code>b</code> is not distinguishable on
+either <code>y1</code> or <code>y2</code> individually (from the ANOVAs),
+but <em>is</em> distinguishable on your graph? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>Group <code>b</code> has the same kind of <code>y1</code> values as group
+<code>a</code> and the same kind of <code>y2</code> values as group
+<code>c</code>. This means looking at either variable singly is not
+enough to distinguish group <code>b</code>. But group <code>b</code>
+stands out on the graph as being “top left” of the picture. That
+means that <code>y1</code> has to be low <em>and</em> <code>y2</code> has to
+be high, both together, to pick out group <code>b</code>.
+That seems like a lot of work for two marks, but the important point
+that I want you to raise is that the points in group <code>b</code>
+are distinguished by a particular <em>combination</em> of values of
+<code>y1</code> and <code>y2</code>.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Run a one-way multivariate analysis of variance, obtaining
+a P-value. Note the very small P-value.</li>
+</ol>
+<p>Solution</p>
+<p>This is just like the seed weight and yield example in class
+(deliberately so):</p>
+<div class="sourceCode" id="cb2956"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2956-1" data-line-number="1">response=<span class="kw">with</span>(simple,<span class="kw">cbind</span>(y1,y2))</a>
+<a class="sourceLine" id="cb2956-2" data-line-number="2">simple<span class="fl">.3</span>=<span class="kw">manova</span>(response<span class="op">~</span>group,<span class="dt">data=</span>simple)</a>
+<a class="sourceLine" id="cb2956-3" data-line-number="3"><span class="kw">summary</span>(simple<span class="fl">.3</span>)</a></code></pre></div>
+<pre><code>##           Df Pillai approx F num Df den Df    Pr(&gt;F)    
+## group      2 1.3534   9.4196      4     18 0.0002735 ***
+## Residuals  9                                            
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The P-value here, 0.00027, is smaller than either of the P-values for
+the one-variable ANOVAs. This expresses the idea that the group
+difference is essentially multivariate (it depends on the
+<em>combination</em> of <code>y1</code> and <code>y2</code> values). I only
+wanted you to note that it is smaller than either of the other
+ANOVAs; you don’t need to say anything about why.</p>
+<p>We were in the fortunate position of being able to draw a picture,
+because we had only two response variables, and we could plot them
+against each other with the groups labelled. (If we had three response
+variables, like the peanuts example, we wouldn’t be able to do this,
+barring some kind of 3D-plotting procedure.)</p>
+<p>A study was made of the characteristics of urine of young
+men. The men were classified into four groups based on their degree of
+obesity. (The groups are labelled <code>a, b, c, d</code>.) Four variables
+were measured, <code>x</code> (which you can ignore), pigment creatinine,
+chloride and chlorine. The data are in
+<a href="http://www.utsc.utoronto.ca/~butler/d29/urine.csv">link</a> as a
+<code>.csv</code> file. There are 45 men altogether.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and check that you have the right number
+of observations and the right variables.</li>
+</ol>
+<p>Solution</p>
+<p><code>read_csv</code>:</p>
+<div class="sourceCode" id="cb2958"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2958-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/urine.csv&quot;</span></a>
+<a class="sourceLine" id="cb2958-2" data-line-number="2">urine=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   obesity = col_character(),
+##   x = col_integer(),
+##   creatinine = col_double(),
+##   chloride = col_double(),
+##   chlorine = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb2960"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2960-1" data-line-number="1">urine</a></code></pre></div>
+<pre><code>## # A tibble: 45 x 5
+##    obesity     x creatinine chloride chlorine
+##    &lt;chr&gt;   &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 a          24       17.6     5.15      7.5
+##  2 a          32       13.4     5.75      7.1
+##  3 a          17       20.3     4.35      2.3
+##  4 a          30       22.3     7.55      4  
+##  5 a          30       20.5     8.5       2  
+##  6 a          27       18.5    10.2       2  
+##  7 a          25       12.1     5.95     16.8
+##  8 a          30       12       6.3      14.5
+##  9 a          28       10.1     5.45      0.9
+## 10 a          24       14.7     3.75      2  
+## # ... with 35 more rows</code></pre>
+<p>The variables are as promised, and we do indeed have 45 rows.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Make boxplots of each of the three variables of interest
+against obesity group.</li>
+</ol>
+<p>Solution</p>
+<p>Just churn through it:</p>
+<div class="sourceCode" id="cb2962"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2962-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>creatinine))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="19-manova_files/figure-html/peppercorn-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb2963"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2963-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>chlorine))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="19-manova_files/figure-html/peppercorn-2.png" width="672"  /></p>
+<div class="sourceCode" id="cb2964"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2964-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>chloride))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="19-manova_files/figure-html/peppercorn-3.png" width="672"  /></p>
+<p>This also works with facets, though it is different from the other
+ones we’ve done, in that we have to collect together the <span class="math inline">\(y\)</span>-variables
+first rather than the <span class="math inline">\(x\)</span>s:</p>
+<div class="sourceCode" id="cb2965"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2965-1" data-line-number="1">urine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(yname,y,creatinine<span class="op">:</span>chlorine) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2965-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>y))<span class="op">+</span><span class="kw">geom_boxplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb2965-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>yname,<span class="dt">scales=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="19-manova_files/figure-html/unnamed-chunk-8-1.png" width="672"  /></p>
+<p>I decided to throw a couple of things in here: first, the
+<code>scales=&quot;free&quot;</code> thing since the <span class="math inline">\(y\)</span>-variables (this time) are
+on different scales, and second, the <code>ncol=2</code> to arrange the
+facets in (3 cells of) a <span class="math inline">\(2\times 2\)</span> grid, rather than having them
+come out tall and skinny.
+<label for="tufte-mn-181" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-181" class="margin-toggle"><span class="marginnote">Like one of those crazy drinks at Starbucks.</span> It’s unusual to have faceted boxplots, but this is one
+of those cases where it makes sense. (The key is different <span class="math inline">\(y\)</span>’s but
+the same <span class="math inline">\(x\)</span>, I think.)</p>
+<p>The conclusions about the boxplots are, of course, the same. I think
+it makes it easier to have the three boxplots side by side, but it’s
+up to you whether you think that gain is worth the extra coding.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>How, if at all, do the groups differ on the variables of interest?</li>
+</ol>
+<p>Solution</p>
+<p>Any sensible comment here is good. You can take the approach that
+group D is lowest on creatinine and chloride, but there is not
+much to choose (given the amount of variability) on chlorine. Or
+you can say that groups B and C are generally highest, except for
+chloride where A is higher. Anything of this general kind is fine.
+The point here is that some of the groups appear to be different
+on some of the variables, which would make a multivariate analysis
+of variance (in a moment) come out significant.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Run a multivariate analysis of variance, using the three
+variables of interest as response variables, and the obesity group
+as explanatory. (This is a so-called one-way MANOVA.)</li>
+</ol>
+<p>Solution</p>
+<p>Create the response variable and run <code>manova</code>:</p>
+<div class="sourceCode" id="cb2966"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2966-1" data-line-number="1">response=<span class="kw">with</span>(urine,<span class="kw">cbind</span>(creatinine,chlorine,chloride))</a>
+<a class="sourceLine" id="cb2966-2" data-line-number="2">urine<span class="fl">.1</span>=<span class="kw">manova</span>(response<span class="op">~</span>obesity,<span class="dt">data=</span>urine)</a>
+<a class="sourceLine" id="cb2966-3" data-line-number="3"><span class="kw">summary</span>(urine<span class="fl">.1</span>)</a></code></pre></div>
+<pre><code>##           Df  Pillai approx F num Df den Df  Pr(&gt;F)  
+## obesity    3 0.43144   2.2956      9    123 0.02034 *
+## Residuals 41                                         
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>What do you conclude? Is this in line with what your
+boxplots said? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The null hypothesis (that each of the variables have the same mean
+for each of the groups) is rejected: that is, not all of the
+groups have the same mean on all of the variables.
+Based on the idea that there seemed to be differences between the
+groups in the boxplots, this makes sense. (That’s what I saw,
+anyway. There was a lot of variability within the groups, which is
+why the P-value didn’t come out smaller.)
+The other way of doing this is the following, using
+<code>Manova</code> from <code>car</code>:</p>
+<div class="sourceCode" id="cb2968"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2968-1" data-line-number="1">response<span class="fl">.1</span>=<span class="kw">lm</span>(response<span class="op">~</span>obesity,<span class="dt">data=</span>urine)</a>
+<a class="sourceLine" id="cb2968-2" data-line-number="2"><span class="kw">Manova</span>(response<span class="fl">.1</span>)</a></code></pre></div>
+<pre><code>## 
+## Type II MANOVA Tests: Pillai test statistic
+##         Df test stat approx F num Df den Df  Pr(&gt;F)  
+## obesity  3   0.43144   2.2956      9    123 0.02034 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The result is the same. You don’t need do this one here (though you
+can as an alternative), but when you come to repeated measures you
+<em>will</em> need to be able to use <code>Manova</code>.</p>
+<p>To understand the differences in the variables due to the groups, we
+need to run a discriminant analysis (coming up later).</p>
+<p><code>{ r athletes-manova, child=&quot;athletes-manova.Rnw&quot;}</code></p>
+
+</div>
+<p style="text-align: center;">
+<a href="analysis-of-variance-revisited.html"><button class="btn btn-default">Previous</button></a>
+<a href="repeated-measures.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+
+
+ A researcher named King was investigating
+the effect of the drug midazolam on motor activity in rats. Typically,
+the first time the drug is injected, a rat's motor activity decreases
+substantially, but rats typically develop a "tolerance", so that
+further injections of the drug have less impact on the rat's motor
+activity.
+
+The data shown in
+[link](http://www.utsc.utoronto.ca/~butler/d29/king.csv) were all taken
+in one day, called the "experiment day" below. 24 different rats
+were used. Each rat, on the experiment day, was injected with a fixed
+amount of midazolam, and at each of six five-minute intervals after
+being injected, the rat's motor activity was measured (these are
+labelled `i1` through `i6` in the data). The rats
+differed in how they had been treated before the experiment day. The
+control group of rats had previously been injected repeatedly with a
+saline solution (no active ingredient), so the experiment day was the
+first time this group of rats had received midazolam. The other two
+groups of rats had both received midazolam repeatedly before the
+experiment day: the "same" group was injected on experiment day in
+the same environment that the previous injections had taken place (this
+is known in psychology as a "conditioned tolerance"), but the
+"different" group had the previous injections in a different
+environment than on experiment day.
+
+The column `id` identifies the rat from which each sequence of
+values was obtained.
+
+
+
+(a) Explain briefly why we need to use a repeated measures
+analysis for these data.
+
+
+Solution
+
+
+Each rat is measured at six different times (`i1` through
+`i6`): that is to say, each row of the data set consists of
+repeated measurements on the *same* rat. (If each row had
+used six *different* rats to obtain the six measurements, we
+would have been back in familiar territory and could have used a
+regular analysis of variance.)
+    
+
+
+(b) Read in the data and note that you have what was promised
+in the question.
+
+
+Solution
+
+
+The usual:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/king.csv"
+king=read_csv(my_url)
+king
+```
+
+     
+
+There are 24 rats (rows). The columns label the rat (`id`) and
+the times at which motor activity was measured (`i1` through
+`i6`). The remaining column, `context`, describes how
+the rats were treated before experiment day, with the levels being the
+same ones given in the question.
+    
+
+
+(c) We are going to do a repeated-measures analysis using the
+"profile" method shown in class. Create a suitable response
+variable for this method.
+
+
+Solution
+
+
+`cbind` the appropriate columns together, to make a matrix:
+```{r }
+response=with(king,cbind(i1,i2,i3,i4,i5,i6))
+```
+
+     
+
+This is the "simple" but tedious way, and produces a matrix because
+the `i1` through `i6` are vectors (single columns):
+
+```{r }
+class(response)
+```
+
+ 
+
+`i1:i6` does not work here, because we are outside of the
+`tidyverse`, and in that world, `:` only means
+"through" (as in "this through that") when the things on either
+side of it are or represent numbers.
+
+The clever way to get the response is to `select` the columns
+and then turn them into a matrix. This *does* permit the colon
+because we are now in the `tidyverse`:
+
+```{r }
+response = king %>% 
+select(i1:i6) %>%
+as.matrix() 
+class(response)  
+```
+
+ 
+It is indeed a matrix.
+
+I tried to be extra-clever and use `starts_with`, but I have
+another column `id` that starts with `i` that I do
+*not* want to be part of the response. So I had to abandon that
+idea, but not before trying this:
+
+```{r }
+response = king %>%
+select(matches("i[0-9]")) %>%
+as.matrix()
+head(response)
+```
+
+ 
+
+`head` displays the first six lines (of anything). We don't
+normally need it because we are typically dealing with
+`tibble`-like data frames that display only ten rows of
+themselves by default. But this worked. The `matches` part
+takes a so-called "regular expression" which is a very flexible way
+of matching anything: in this case, a column whose name starts with
+`i` followed by exactly one digit (something between 0 and 9
+inclusive). 
+    
+
+
+(d) Set up the "within-subjects" part of the analysis. That
+means getting hold of the names of the columns that hold the
+different times, saving them, and also making a data frame out of them:
+
+
+Solution
+
+
+```{r }
+times=colnames(response)
+times.df=data.frame(times)
+```
+
+   
+    
+
+
+(e) Fit the repeated-measures ANOVA. This will involve fitting
+an `lm` first, if you have not already done so.
+
+
+Solution
+
+
+Fit the `lm` first, and then pass that into `Manova`
+from `car`:
+```{r }
+king.1=lm(response~context,data=king)
+king.2=Manova(king.1,idata=times.df,idesign=~times)
+king.2
+```
+
+     
+    
+
+
+(f) What do you conclude from your repeated-measures ANOVA?
+Explain briefly, in the context of the data.
+
+
+Solution
+
+
+The interaction term is significant, with a P-value less than
+0.05. This is where we start and stop looking.
+This means that the effect of time on motor activity (that is, the
+way the motor activity depends on time) is different for each
+`context`. That's all we can say now.
+Grading note: as long as the setup and MANOVA are done somewhere,
+I don't mind which part they are labelled with. But you need to do
+the setup, initial `lm` and `Manova`
+*somewhere* so that everything comes out right in the end.
+    
+
+
+(g) To understand the results of the previous part, we are going
+to make a spaghetti plot. In preparation for that, we need to save
+the data in "long format" with one observation on *one* time
+point in each row. Arrange that, and show by displaying (some of)
+the data that you have done so.
+
+
+Solution
+
+
+This is `gather` yet again: gather up columns `i1`
+through `i6` and call them something like `activity`:
+```{r }
+king.long = king %>% gather(time,activity,i1:i6)
+king.long
+```
+
+     
+
+Displaying the resulting data frame is a good way to display ``some
+of'' it. You can always look at more if you like. There are more rows
+and fewer columns than there were before, which is
+encouraging. `gather` works columnwise: it gathers up all the
+values in the first time column `i1` first, then `i2`,
+and so on.
+    
+
+
+(h) Make a spaghetti plot: that is, plot motor activity against
+the time points, joining the points for each *rat* by lines,
+and colouring the points and lines according to the *context*.
+
+
+Solution
+
+
+That means this, using `group` to indicate which points to
+join by lines, since it's different from the `colour`: 
+```{r }
+ggplot(king.long,aes(x=time,y=activity,colour=context,group=id))+
+geom_point()+geom_line()
+```
+
+     
+
+I'd say the `geom_point` is optional, so that this is also
+good, perhaps better even:
+
+```{r }
+ggplot(king.long,aes(x=time,y=activity,colour=context,group=id))+
+geom_line()
+```
+
+ 
+    
+
+
+(i) Looking at your spaghetti plot, why do you think your
+repeated-measures ANOVA came out as it did? Explain briefly.
+
+
+
+Solution
+
+
+What you're after is an explanation of how the *patterns* over
+time are different for the three `context`s. If you can find
+something that says that, I'm good. For example, even though all of
+the rats experienced a decrease in motor activity between times 1
+and 2, the rats in the `same` group didn't decrease as
+much. Or, the rats in the `same` group continued to decrease
+beyond time 2, whereas the rats in the `control` and
+`different` groups tended to level off after time 2, not
+decreasing so much after that.
+If you like, you can draw an interaction plot by working out the
+means for each `context`-`time` group first:
+```{r }
+king.long %>% group_by(context,time) %>%
+summarize(m=mean(activity)) %>%
+ggplot(aes(x=time,y=m,colour=context,group=context))+
+geom_point()+geom_line()
+```
+
+   
+
+This seems to illustrate the same things as I found on the spaghetti
+plot. It gains in clarity by only looking at means, but loses by not
+considering the variability. Your call.
+
+This kind of thing also runs with `lmer` from package
+`lme4`. It uses the long data frame, thus, treating `id`
+(identifying the rats) as a random effect:
+
+```{r }
+king.3=lmer(activity~context*time+(1|id),data=king.long)
+```
+
+ 
+
+What can we drop? The only thing under consideration is the interaction:
+
+```{r }
+drop1(king.3,test="Chisq")
+```
+
+ 
+
+and we get the same conclusion as before, but with a much smaller P-value.
+
+With this kind of modelling, there is no distinction between
+"within" and "between", so that even though `time` is a
+within-subjects factor and `context` is between subjects, if
+the interaction had not been significant, we could have dropped it
+from the model, and then we would have had an effect of `time`
+and an effect of `context`, independent of each other. I was
+actually looking for an example with a non-significant interaction,
+but I couldn't find one. 
+  
+
+
+

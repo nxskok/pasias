@@ -1,0 +1,297 @@
+
+
+ \citet{box50} gives data on the weights of three groups of
+rats. One group was given thyroxin in their drinking water, one group
+thiouracil, and the third group was a control. (This description comes
+from \citet{christensen01}.)
+Weights are measured in
+grams at weekly intervals (over a 4-week period, so that each rat is
+measured 5 times). The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/ratweight.csv) as a
+`.csv` file.
+
+
+
+(a) Read in the data and check that you have a column of
+`drug` and five columns of rat weights at different times.
+ 
+Solution
+
+
+A `.csv` file, so `read_csv`. (I typed the data from
+\citet{christensen01} into a spreadsheet.)
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/ratweight.csv"
+weights=read_csv(my_url)
+weights
+```
+
+   
+
+There are 27 rats altogether, each measured five times (labelled time
+0 through 4). 
+ 
+
+(b) Why would it be *wrong* to use something like
+`gather` to create one column of weights, and separate
+columns of drug and time, and then to run a two-way ANOVA? Explain briefly.
+ 
+Solution
+
+
+Such a solution would assume that we have measurements on
+*different* rats, one for each drug-time combination. But we
+have sets of five measurements all on the *same* rat: that is
+to say, we have repeated measures, and the proper analysis will
+take that into account.
+ 
+
+(c) Create a suitable response variable and fit a suitable
+`lm` as the first step of the repeated-measures analysis.
+ 
+Solution
+
+
+The response variable is the same idea as for any MANOVA: just
+glue the columns together:
+```{r }
+response=with(weights,cbind(Time0,Time1,Time2,Time3,Time4))
+weights.1=lm(response~drug,data=weights)
+```
+
+     
+
+Now, we *don't* look at `weights.1`, but we *do* use
+it as input to `Manova` in a moment.
+ 
+
+(d) Load the package `car` and run a suitable
+`Manova`. To do this, you will need to set up the right thing
+for `idata` and `idesign`.
+ 
+Solution
+
+
+Something like this:
+```{r }
+times=colnames(response)
+times.df=data.frame(times)
+weights.2=Manova(weights.1,idata=times.df,idesign=~times)
+```
+
+     
+
+The thought process is that the columns of the response
+(`Time.0` through `Time.4`) are all times. This is the
+"within-subject design" part of it: within a rat, the different
+response values are at different times. That's the only part of it
+that is within subjects. The different drugs are a
+"between-subjects" factor: each rat only gets one of the
+drugs. (Things would be a lot more complicated if each rat got a
+different drug at a different time! But the rats each got one drug
+*once*, at the beginning, and the issue was the effect of that
+drug on all the growth that followed.)
+ 
+
+(e) Take a look at the output from the MANOVA. Is there a
+significant interaction? What does its significance (or lack
+thereof) mean?
+ 
+Solution
+
+
+```{r }
+weights.2
+```
+
+     
+
+The interaction is definitely significant, with a P-value of
+0.00069. This means that the effect of time on growth is different for
+the different drugs: that is, the effect of drug is over the whole
+time profile, not just something like ``a rat on Thyroxin is on
+average 10 grams heavier than a control rat, over all times''.
+
+Since the interaction is significant, that's where we stop, as far as
+interpretation is concerned.
+ 
+
+(f) We are going to draw an interaction plot in a moment. To
+set that up, use `gather` as in the lecture notes to create
+one column of weights and and second column of times. (You don't
+need to do the `separate` thing that I did in class, though
+if you want to try it, go ahead.)
+ 
+Solution
+
+
+```{r }
+weights.long = weights %>% 
+gather(time,weight,Time0:Time4) 
+weights.long
+```
+
+     
+
+My data frame was called `weights`, so I was OK with having a
+variable called `weight`. Watch out for that if you call the
+data frame `weight`, though.
+
+If you want to try the `separate` thing, that goes something
+like this:
+
+```{r }
+weights %>% gather(timex,weight,Time0:Time4) %>%
+separate(timex,into=c("junk","time"),sep=4) -> weights2.long
+weights2.long %>% sample_n(20)
+```
+
+ 
+
+Separate after the fourth character (`sep=4`), which will put
+`Time` into `junk` and the actual time into
+`time`. I could also have organized the data file so that the
+word `Time` and the number were separated by some character,
+like an underscore, and you could have separated at that.
+Since the piece of the time we want is the number,
+`parse_number` (from `readr`, part of the
+`tidyverse`) should also work:
+
+```{r }
+weights2.long = weights %>% 
+gather(timex,weight,Time0:Time4) %>%
+mutate(time=parse_number(timex))
+weights2.long %>% sample_n(20)
+```
+
+ 
+
+I decided to show you a random collection of rows, so that you can see
+that `parse_number` worked for various different times. 
+ 
+
+(g) Obtain an interaction plot. Putting `time` as the
+`x` will put time along the horizontal axis, which is the
+way we're used to seeing such things. Begin by calculating the mean
+`weight` for each `time`-`drug` combination.
+ 
+Solution
+
+
+`group_by`, `summarize` and `ggplot`, the
+latter using the data frame that came out of the
+`summarize`. The second factor `drug` goes as the
+`colour` and `group` both, since `time` has
+grabbed the `x` spot:
+```{r }
+weights.long %>% group_by(time,drug) %>%
+summarize(mean.weight=mean(weight)) %>%
+ggplot(aes(x=time,y=mean.weight,colour=drug,group=drug))+
+geom_point()+geom_line()
+```
+
+       
+ 
+
+(h) How does this plot show why the interaction was
+significant? Explain briefly.
+ 
+Solution
+
+
+At the beginning, all the rats have the same average growth, but
+from time 2 (or maybe even 1) or so, the rats on thiouracil
+grew more slowly. The idea is not just that thiouracil has a
+*constant* effect over all times, but that the *pattern*
+of growth is different for the different drugs: whether or not
+thiouracil inhibits growth, and, if so, by how much, depends on
+what time point you are looking at.
+Rats on thyroxin or the control drug grew at pretty much the same
+rate over all times, so I wouldn't concern myself with any
+differences there.
+What I thought would be interesting is to plot the growth curves
+for *all* the rats individually, colour-coded by which drug
+the rat was on.  In other words, a "spaghetti plot".
+This goes rather nicely with `ggplot2`.
+Unfortunately, there's a bit of data awkwardness, because we need
+to know which rat is which when we plot them. To do that, we need
+to go all the way back to `weights` and introduce a
+subject-number variable. This suggests a chain of
+things. There are 27 rats altogether. First we take the original
+data frame `weights` with each row being one rat, and we
+add a variable `subject` which is 1 through 27. Then we
+gather together the columns `Time0` through
+`Time4` that are different `time`s but all
+`weight`s, like we did before. Optionally, we can also
+`separate` `Time.x` into the `Time` part and
+the `x` part (`x` being 0, 1, 2, 3, 4), but I won't
+do that here. Then we save the result into a new data frame
+`wt`, and take a look at the first few lines:
+```{r }
+wt = weights %>% mutate(subject=1:27) %>% 
+gather(time,weight,Time0:Time4)  
+wt
+```
+
+     
+
+Each rat is identified by `subject`, which repeats 5 times,
+once for each value of `time`.
+
+After going through that, the logic of the actual plotting part is
+pretty straightforward. In the data frame `wt`, we plot
+`time` ($x$) against `weight` ($y$), grouping the points
+according to subject and colouring them according to
+`drug`. 
+```{r mantequilla,fig.width=6,fig.height=6}
+library(ggplot2)
+ggplot(wt,aes(time,weight,group=subject,colour=drug))+geom_line()
+```
+
+ 
+
+This is often called, rather aptly, a "spaghetti plot".
+
+I like this plot because, unlike the interaction plot, which shows
+only means, this gives a sense of variability as well. The blue and
+red lines (thyroxin and control) are all intermingled and they go
+straight up. So there is nothing to choose between these. The green
+lines, though, start off mixed up with the red and blue ones but
+finish up at the bottom: the *pattern* of growth of the
+thiouracil rats is different from the others, which is why we had a
+significant interaction between drug and time.
+
+`drug` is categorical, so `ggplot`
+uses a set of distinguishable colours to mark the levels. If our
+colour had been a numerical variable, `ggplot` would have used
+a range of colours like light blue to dark blue, with lighter being
+higher, for example.
+
+What, you want to see that? All right. This one is kind of silly, but
+you see the point:
+
+```{r alphington,fig.width=6,fig.height=6}
+ggplot(wt,aes(time,weight,group=subject,colour=weight))+geom_line()
+```
+
+ 
+
+The line segments get lighter as you go up the page.
+
+Since we went to the trouble of making the "long" data frame
+`wt`, we can also run a repeated measures analysis using the
+mixed-model idea (described elsewhere in this assignment):
+
+```{r }
+wt.1=lmer(weight~drug*time+(1|subject),data=wt)
+drop1(wt.1,test="Chisq")
+```
+
+ 
+
+The drug-by-time interaction is even more strongly significant than in
+the profile analysis. (The output from `drop1` reminds us that
+the only thing we should be thinking about now is that interaction.)
+ 
+
+
