@@ -16,22 +16,22 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## -- Attaching packages ---- tidyverse 1.2.1 --
 ```
 
 ```
-## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## v ggplot2 3.1.0     v purrr   0.2.5
+## v tibble  1.4.2     v dplyr   0.7.8
+## v tidyr   0.8.1     v stringr 1.3.1
+## v readr   1.1.1     v forcats 0.3.0
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ✖ dplyr::recode() masks car::recode()
-## ✖ purrr::some()   masks car::some()
+## -- Conflicts ------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## x dplyr::recode() masks car::recode()
+## x purrr::some()   masks car::some()
 ```
 
 
@@ -56,8 +56,8 @@ Solution
 
 
 ```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
-simple=read_delim(my_url," ")
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
+simple = read_delim(my_url, " ")
 ```
 
 ```
@@ -109,16 +109,20 @@ Solution
 
 
 ```r
-simple.1=aov(y1~group,data=simple)
+simple.1 = aov(y1 ~ group, data = simple)
 summary(simple.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value   Pr(>F)    
-## group        2  63.45   31.72    21.2 0.000393 ***
-## Residuals    9  13.47    1.50                     
+##             Df Sum Sq Mean Sq F value
+## group        2  63.45   31.72    21.2
+## Residuals    9  13.47    1.50        
+##               Pr(>F)    
+## group       0.000393 ***
+## Residuals               
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
 ```r
@@ -154,16 +158,20 @@ Solution
 
 
 ```r
-simple.2=aov(y2~group,data=simple)
+simple.2 = aov(y2 ~ group, data = simple)
 summary(simple.2)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value  Pr(>F)   
-## group        2  19.05   9.525   9.318 0.00642 **
-## Residuals    9   9.20   1.022                   
+##             Df Sum Sq Mean Sq F value
+## group        2  19.05   9.525   9.318
+## Residuals    9   9.20   1.022        
+##              Pr(>F)   
+## group       0.00642 **
+## Residuals             
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
 ```r
@@ -203,10 +211,12 @@ they are both response variables (!):
 
 
 ```r
-ggplot(simple,aes(x=y1,y=y2,colour=group))+geom_point()
+ggplot(simple, aes(x = y1, y = y2, colour = group)) + 
+    geom_point()
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-5-1} 
 $ 
 
 (e) How is it that group `b` is not distinguishable on
@@ -242,17 +252,21 @@ This is just like the seed weight and yield example in class
 (deliberately so):
 
 ```r
-response=with(simple,cbind(y1,y2))
-simple.3=manova(response~group,data=simple)
+response = with(simple, cbind(y1, y2))
+simple.3 = manova(response ~ group, data = simple)
 summary(simple.3)
 ```
 
 ```
-##           Df Pillai approx F num Df den Df    Pr(>F)    
-## group      2 1.3534   9.4196      4     18 0.0002735 ***
-## Residuals  9                                            
+##           Df Pillai approx F num Df den Df
+## group      2 1.3534   9.4196      4     18
+## Residuals  9                              
+##              Pr(>F)    
+## group     0.0002735 ***
+## Residuals              
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -296,8 +310,8 @@ Solution
 `read_csv`:
 
 ```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
-urine=read_csv(my_url)
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
+urine = read_csv(my_url)
 ```
 
 ```
@@ -346,22 +360,28 @@ Solution
 Just churn through it:
 
 ```r
-ggplot(urine,aes(x=obesity,y=creatinine))+geom_boxplot()
+ggplot(urine, aes(x = obesity, y = creatinine)) + 
+    geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-1} 
 
 ```r
-ggplot(urine,aes(x=obesity,y=chlorine))+geom_boxplot()
+ggplot(urine, aes(x = obesity, y = chlorine)) + 
+    geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-2.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-2} 
 
 ```r
-ggplot(urine,aes(x=obesity,y=chloride))+geom_boxplot()
+ggplot(urine, aes(x = obesity, y = chloride)) + 
+    geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-3.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-3} 
 
      
 
@@ -371,12 +391,13 @@ first rather than the $x$s:
 
 
 ```r
-urine %>% gather(yname,y,creatinine:chlorine) %>%
-ggplot(aes(x=obesity,y=y))+geom_boxplot()+
-facet_wrap(~yname,scales="free",ncol=2)
+urine %>% gather(yname, y, creatinine:chlorine) %>% 
+    ggplot(aes(x = obesity, y = y)) + geom_boxplot() + 
+    facet_wrap(~yname, scales = "free", ncol = 2)
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-8-1} 
 
  
 
@@ -385,7 +406,7 @@ I decided to throw a couple of things in here: first, the
 on different scales, and second, the `ncol=2` to arrange the
 facets in (3 cells of) a $2\times 2$ grid, rather than having them
 come out tall and skinny.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Like one of those crazy drinks at  Starbucks.</span> It's unusual to have faceted boxplots, but this is one
+\marginnote{Like one of those crazy drinks at  Starbucks.} It's unusual to have faceted boxplots, but this is one
 of those cases where it makes sense. (The key is different $y$'s but
 the same $x$, I think.)
 
@@ -419,17 +440,22 @@ Solution
 Create the response variable and run `manova`:
 
 ```r
-response=with(urine,cbind(creatinine,chlorine,chloride))
-urine.1=manova(response~obesity,data=urine)
+response = with(urine, cbind(creatinine, chlorine, 
+    chloride))
+urine.1 = manova(response ~ obesity, data = urine)
 summary(urine.1)
 ```
 
 ```
-##           Df  Pillai approx F num Df den Df  Pr(>F)  
-## obesity    3 0.43144   2.2956      9    123 0.02034 *
-## Residuals 41                                         
+##           Df  Pillai approx F num Df den Df
+## obesity    3 0.43144   2.2956      9    123
+## Residuals 41                               
+##            Pr(>F)  
+## obesity   0.02034 *
+## Residuals          
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -452,17 +478,20 @@ The other way of doing this is the following, using
 `Manova` from `car`:
 
 ```r
-response.1=lm(response~obesity,data=urine)
+response.1 = lm(response ~ obesity, data = urine)
 Manova(response.1)
 ```
 
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##         Df test stat approx F num Df den Df  Pr(>F)  
-## obesity  3   0.43144   2.2956      9    123 0.02034 *
+##         Df test stat approx F num Df den Df
+## obesity  3   0.43144   2.2956      9    123
+##          Pr(>F)  
+## obesity 0.02034 *
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
