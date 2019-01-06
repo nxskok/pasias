@@ -1,0 +1,344 @@
+##  Understanding a MANOVA
+
+
+ One use of discriminant analysis is to
+understand the results of a MANOVA. This question is a followup to a
+previous MANOVA that we did, the one with two variables `y1`
+and `y2` and three groups `a` through `c`. The
+data were in [link](http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt).
+
+
+
+(a) Read the data in again and run the MANOVA that you did
+before. (This is an easy two points since you can copy what you did,
+or 
+my solutions from last time!)
+
+
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
+simple=read_delim(my_url," ")
+simple
+response=with(simple,cbind(y1,y2))
+simple.3=manova(response~group,data=simple)
+summary(simple.3)
+```
+
+     
+
+This P-value is small, so there is some way in which some of the
+groups differ on some of the variables.\endnote{That sounds like the
+ultimate in evasiveness!}
+    
+
+
+(b) Run a discriminant analysis "predicting" group from the
+two response variables. You don't need to look at the output yet.
+
+
+Solution
+
+
+Just this:
+```{r }
+library(MASS)
+simple.4=lda(group~y1+y2,data=simple)
+```
+
+     
+
+Note that this is the other way around from MANOVA: here, we are
+"predicting the group" from the response variables, in the same
+manner as one of the flavours of logistic regression: ``what makes the
+groups different, in terms of those response variables?''.
+
+    
+
+
+(c) <a name="part:output">*</a> Obtain the output from the discriminant analysis. Why are
+there exactly two linear discriminants `LD1` and `LD2`? 
+
+
+
+Solution
+
+
+This:
+```{r }
+simple.4
+```
+
+   
+
+There are two linear discriminants because there are 3 groups and two
+variables, so there are the smaller of $3-1$ and 2 discriminants.
+  
+
+
+(d) <a name="part:svd">*</a> From the output in the last part, how would you say that the
+first linear discriminant `LD1` compares in importance to the
+second one `LD2`: much more important, more important, equally
+important, less important, much less important? Explain briefly.
+
+
+
+Solution
+
+
+Look at the `trace` at the bottom of the output, or at this:
+```{r }
+simple.4$svd
+```
+
+   
+
+The first number is much bigger than the second, so the first linear
+discriminant is much more important than the second. (I care about
+your reason; you can say it's "more important" rather than ``much
+more important'' and I'm good with that.)
+  
+
+
+(e) Obtain a plot of the
+discriminant scores.
+
+
+
+Solution
+
+
+This is the old-fashioned way:
+
+```{r }
+plot(simple.4)
+```
+
+   
+
+It needs cajoling to produce colours, but we can do better. The first
+thing is to obtain the predictions (which we'll use again later):
+
+```{r }
+simple.pred=predict(simple.4)
+```
+
+ 
+
+Then we make a data frame out of the discriminant scores and the true
+groups, using `data.frame` or like this:
+
+```{r }
+xx=as_tibble(simple.pred$x)
+d=bind_cols(group=simple$group,xx)
+d
+```
+
+ 
+
+After that, we plot the first one against the second one, colouring by
+true groups:
+
+```{r }
+ggplot(d,aes(x=LD1,y=LD2,colour=group))+geom_point()
+```
+
+ 
+
+I wanted to compare this plot with the original plot of `y1`
+vs.\ `y2`, coloured by groups:
+
+```{r }
+ggplot(simple,aes(x=y1,y=y2,colour=group))+geom_point()
+```
+
+ 
+
+The difference between this plot and the one of `LD1` vs.\
+`LD2` is that things have been rotated a bit so that most of
+the separation of groups is done by `LD1`. This is reflected in
+the fact that `LD1` is quite a bit more important than
+`LD2`: the latter doesn't help much in separating the groups.
+
+With that in mind, we could also plot just `LD1`, presumably
+against groups via boxplot:
+
+```{r }
+ggplot(d,aes(x=group,y=LD1))+geom_boxplot()
+```
+
+ 
+
+This shows that LD1 does a pretty fine job of separating the groups,
+and `LD2` doesn't really add much to the picture. 
+
+  
+
+
+(f) Describe briefly how `LD1` and/or `LD2`
+separate the groups. Does your picture confirm the relative importance
+of `LD1` and `LD2` that you found  back in part (<a href="#part:svd">here</a>)? Explain briefly.
+
+
+
+Solution
+
+
+`LD1` separates the groups left to right: group `a` is
+low on `LD1`, `b` is in the middle and `c` is
+high on `LD1`. (There is no intermingling of the groups on
+`LD1`, so it separates the groups perfectly.)
+As for `LD2`, all it does (possibly) is to distinguish
+`b` (low) from `a` and `c` (high). Or you can,
+just as reasonably, take the view that it doesn't really separate
+any of the groups.
+Back in part (<a href="#part:svd">here</a>), you said (I hope) that `LD1`
+was (very) important compared to `LD2`. This shows up here in
+that `LD1` does a very good job of distinguishing the groups,
+while `LD2` does a poor to non-existent job of separating any
+groups. (If you didn't
+say that before, here is an invitation to reconsider what you
+*did* say there.)
+  
+
+
+(g) What makes group `a` have a low score on `LD1`?
+There are two steps that you need to make: consider the means of group
+`a` on variables `y1` and `y2` and how they
+compare to the other groups, and consider how
+`y1` and `y2` play into the score on `LD1`.
+
+
+
+Solution
+
+
+The information you need is in the output in part
+(<a href="#part:output">here</a>). 
+The means of `y1` and `y2` for group `a` are 3
+and 4 respectively, which are the lowest of all the groups. That's
+the first thing. 
+The second thing is the coefficients of
+`LD1` in terms of `y1` and `y2`, which are both
+*positive*. That means, for any observation, if its `y1`
+and `y2` values are *large*, that observation's score on
+`LD1` will be large as well. Conversely, if its values are
+*small*, as the ones in group `a` are, its score on
+`LD1` will be small. You need these two things.
+This explains why the group `a` observations are on the left
+of the plot. It also explains why the group `c` observations
+are on the right: they are *large* on both `y1` and
+`y2`, and so large on `LD1`.
+What about `LD2`? This is a little more confusing (and thus I
+didn't ask you about that). Its ``coefficients of linear
+discriminant'' are positive on `y1` and negative on
+`y2`, with the latter being bigger in size. Group `b`
+is about average on `y1` and distinctly *high* on
+`y2`; the second of these coupled with the negative
+coefficient on `y2` means that the `LD2` score for
+observations in group `b` will be *negative*.
+For `LD2`, group `a` has a low mean on both variables
+and group `c` has a high mean, so for both groups there is a
+kind of cancelling-out happening, and neither group `a` nor
+group `c` will be especially remarkable on `LD2`.
+  
+
+
+(h) Obtain predictions for the group memberships of each
+observation, and make a table of the actual group memberships against
+the predicted ones. How many of the observations were wrongly classified?
+
+
+
+Solution
+
+
+Use the
+`simple.pred` that you got earlier. This is the
+`table` way:
+```{r }
+table(obs=simple$group,pred=simple.pred$class)
+```
+
+   
+
+Every single one of the 12 observations has been classified into its
+correct group. (There is nothing off the diagonal of this table.) 
+
+The alternative to `table` is the `tidyverse` way, with the
+first line being as shown or an `as_tibble` followed by a
+`bind_cols`: 
+
+```{r }
+data.frame(obs=simple$group,pred=simple.pred$class) %>%
+group_by(obs) %>%
+count(pred) %>%
+mutate(frac=n/sum(n))
+```
+
+ 
+
+All the `a`s got classified as `a`, and so on. The
+`frac` column shows that 100\% of the observations in each
+group got classified correctly. The overall misclassification rate is
+of course zero, which you could demonstrate by taking out the
+`group_by` and counting the right thing:
+
+```{r }
+data.frame(obs=simple$group,pred=simple.pred$class) %>%
+count(obs==pred) %>%
+mutate(frac=n/sum(n))
+```
+
+ 
+
+That's the end of what I asked you to do, but as ever I wanted to
+press on. The next question to ask after getting the predicted groups
+is ``what are the posterior probabilities of being in each group for
+each observation'': that is, not just which group do I think it
+belongs in, but how sure am I about that call? The magic name for the
+posterior probabilities is `posterior` in
+`simple.pred`. These have a ton of decimal places which I like to
+round off first before I display them, eg. to 3 decimals here:
+
+```{r }
+ppr=round(simple.pred$posterior,3)
+cbind(simple,ppr)
+```
+
+ 
+
+You see that the posterior probability of an observation being in the
+group it actually *was* in is close to 1 all the way down. The
+only one with any doubt at all is observation \#6, which is actually
+in group `b`, but has "only" probability 0.814 of being a
+`b` based on its `y1` and `y2` values. What else
+could it be? Well, it's about equally split between being `a`
+and `c`. Let me see if I can display this observation on the
+plot in a different way. First I need to make a new column picking out
+observation 6, and then I use this new variable as the `shape`
+(plotting character) for my plot:
+
+```{r }
+simple %>% mutate(is6=(row_number()==6)) %>%
+ggplot(aes(x=y1,y=y2,colour=group,shape=is6))+
+geom_point()
+```
+
+ 
+
+As the legend indicates, observation \#6 is plotted as a triangle,
+with the rest being plotted as circles as usual. Since observation \#6
+is in group `b`, it appears as a green triangle. What makes it
+least like a `b`? Well, it has the smallest `y2` value
+of any of the `b`'s (which makes it most like an `a` of
+any of the `b`'s), and it has the largest `y1` value (which makes it
+most like a `c` of any of the `b`'s). But still, it's nearer the
+greens than anything else, so it's still more like a `b` than
+it is like any of the other groups. 
+  
+
+
+

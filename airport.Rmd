@@ -1,3 +1,4 @@
+##  Children's stress levels and airports
 
 
  If you did STAC32, you might remember this question, which
@@ -332,7 +333,7 @@ there to be no pattern over time. So a significant difference shows up
 as an *interaction*, which is messier to interpret than you would
 like. 
 
-The other way to analyze repeated measures data (that we, well, you, do not look
+Extra: the other way to analyze repeated measures data (that we, well, you, do not look
 at in this course)
 `r tufte::margin_note("This is something *I* want to  understand, so I will share my findings with you. You can read them  or not, as you choose.")` is to treat them as "mixed models", which
 requires a different kind of analysis using the `lme4`
@@ -374,8 +375,8 @@ see in the ANOVA table are the fixed effects. These are testable. The
 easiest way to see what you can get rid of is `drop1`; the
 chi-squared test appears to be the right one (more on that
 below). This says that the interaction is strongly significant, and we
-should not consider removing it, the same conclusion as our ``profile
-analysis'' before.
+should not consider removing it, the same conclusion as our 
+"profile analysis" before.
 The other choice for
 testing is to fit a model without what you
 are testing and use `anova` to compare the two models:
@@ -388,8 +389,8 @@ anova(airport.4,airport.3)
  
 
 There are technical considerations involved in comparing the fit of
-two models (which is the reason for the ``refitting models
-with\ldots''): there is one method for estimating and a different
+two models (which is the reason for the 
+"refitting models with..."): there is one method for estimating and a different
 method for testing. The test is based on "likelihood ratio", which
 means that the right test for the `drop1` above is
 `Chisq`. 
@@ -400,7 +401,8 @@ case, `<none>` has a much smaller AIC than the interaction
 (smaller by over 50), so there's no way we should entertain taking out
 the interaction. However, if it had not been significant, we would
 just take it out by fitting a model like `airport4`: there is
-no distinction here between "within-subject" and "between-subject"
+no distinction here between "within-subject" and 
+"between-subject"
 factors that prevented us from taking the interaction out in profile
 analysis. 
 
@@ -615,8 +617,8 @@ in this kind of analysis, the actual model statement is brief:
 response depends on fixed effects plus random effects with the
 brackets and vertical bar. I always find the `lmer` models look
 very simple once you have figured them out (like `ggplot` in
-that regard). I also like the fact that `lmer` uses ``tidy
-data'', so that you can make graphs and do this flavour of analysis
+that regard). I also like the fact that `lmer` uses "tidy data", 
+so that you can make graphs and do this flavour of analysis
 with the same data frame. Having gotten my head around getting my data
 tidy, it seems odd to me that profile analysis requires the data to be
 untidy, although it does so for a good reason: if you were genuinely
@@ -658,8 +660,8 @@ then you would test whether a random effect exists or not by testing
 whether the variance of that random effect is zero (does not exist) or
 is greater than zero. Zero is the smallest a variance (or SD) can be,
 which means that testing for it has always been kind of flakey and the
-standard theory doesn't work for it (the technical term is ``on the
-boundary of the parameter space'', and the theory applies when the
+standard theory doesn't work for it (the technical term is 
+"on the boundary of the parameter space", and the theory applies when the
 null-hypothesis value is strictly *inside* the set of possible
 values the parameter can take). Back when we did this stuff by
 hand,
@@ -670,9 +672,9 @@ right. Anyway, that is all considered rather old-fashioned now, and
 mixed models are where it is at. In these, you typically *only*
 test the fixed effects, while estimating the size of the random
 effects, taking it for granted that they exist. This is an active area
-of research; the things that `lmer` fits are called ``linear
-mixed models'', and there are also now ``generalized linear mixed
-models'', things like logistic regression with random effects.
+of research; the things that `lmer` fits are called 
+"linear mixed models", and there are also now 
+"generalized linear mixed models", things like logistic regression with random effects.
 
 We haven't had to worry about this up to now because in most of the
 experimental designs we have used, each subject only contributes

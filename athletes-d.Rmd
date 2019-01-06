@@ -1,0 +1,632 @@
+##  Understanding athletes' height, weight, sport and gender
+
+
+ On a previous assignment, we used MANOVA on the athletes
+data to demonstrate that there was a significant relationship between
+the combination of the athletes' height and weight, with the sport they
+play and the athlete's gender. The problem with MANOVA is that it
+doesn't give any information about the *kind* of relationship. To
+understand that, we need to do discriminant analysis, which is the
+purpose of this question.
+
+The data can be found at
+[link](http://www.utsc.utoronto.ca/~butler/c32/ais.txt). 
+
+
+
+(a) Once again, read in and display (some of) the data, bearing
+in mind that the data values are separated by *tabs*. (This
+ought to be a free two marks.)
+
+Solution
+
+
+Nothing new here:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
+athletes
+```
+
+ 
+
+
+(b) Use `unite` to make a new column in your data frame
+which contains the sport-gender *combination*. Display it. (You
+might like to display only a few columns so that it is clear that
+you did the right thing.) Hint: you've seen `unite` in the
+peanuts example in class.
+
+Solution
+
+
+The columns to combine are called `Sport` and `Sex`,
+with Capital Letters. The syntax for `unite` is that you
+give the name of the new combo column first, and then the names of
+the columns you want to combine, either by listing them or by
+using a select-helper. They will be separated by an underscore by
+default, which is usually easiest to handle.\endnote{The opposite
+of `unite` is `separate`, which splits a combined
+column like my `combo` into separate columns; it too uses
+underscore as the default separator.} In `unite`, you can
+group the columns to "unite" with `c()`, as in class, or
+not, as here. Either way is good.\endnote{You used to have to group
+them, but you don't any more. Hence my old code has them grouped,
+but my new code does not.}
+We'll be using height and weight in the
+analysis to come, so I decided to display just those:
+```{r }
+athletesc = athletes %>%
+unite(combo,Sport,Sex)
+athletesc %>% select(combo,Ht,Wt)
+```
+
+     
+
+I gave the data frame a new name, since I might want to come back to
+the original later. Also, displaying only those columns gives more
+width for the display of my `combo`, so that I can be sure I
+got it right.
+
+Extra: there is another column, `SSF`, that begins with S, so the
+select-helper thing is not so obviously helpful here. But the two
+columns we want start with S followed by either e or p, so we could do this:
+
+```{r }
+athletes %>%
+unite(combo,matches("^S(e|p)")) %>%
+select(combo,Ht,Wt)
+```
+
+ 
+
+The `matches` takes a so-called regular expression. This one
+says ``starting at the beginning of the column name, find an uppercase
+S followed by either a lowercase e or a lowercase p''. This picks out
+the columns and only the columns we want. In the opposite order,
+though (either order is fine).
+
+I have a feeling we can also take advantage of the fact that the two
+columns we want to `unite` are the only two text ones:
+
+```{r error=T}
+athletes %>% 
+unite(combo,select_if(is.character)) %>%
+select(combo,Ht,Wt)
+```
+
+ 
+
+Not this, but there must be something like this.
+
+(later)
+
+I posted a question on the R Studio community site:
+[link](https://community.rstudio.com/t/combining-unite-and-select-if/6033/2)
+and got an answer! This is how it goes:
+
+```{r }
+athletes %>%
+unite(combo,names(select_if(.,is.character))) %>%
+select(combo,Ht,Wt)
+```
+
+ 
+
+The key was the `names`, and the extra dot (``output from
+previous step'') in `select_if`.
+
+
+(c) Run a discriminant analysis "predicting" sport-gender
+combo from height and weight. Display the results. (No comment
+needed yet.)
+
+Solution
+
+
+That would be this. I'm having my familiar trouble with names:
+```{r }
+combo.1=lda(combo~Ht+Wt,data=athletesc)
+```
+
+     
+
+If you used a new name for the data frame with the sport-gender
+combinations in it, use that new name here.
+
+The output:
+
+```{r }
+combo.1
+```
+
+ 
+
+I comment here that there are two linear discriminants because there
+are two variables (height and weight) and actually 17 groups (not
+quite $2\times 10$ because some sports are played by athletes of only
+one gender). The smaller of 2 and $17-1$ is 2. (I often ask about
+this, but am choosing not to here.)
+
+
+(d) What kind of height and weight would make an athlete have a
+large (positive) score on `LD1`? Explain briefly.
+
+Solution
+
+
+The Coefficients of Linear Discriminants for `LD1` are both
+positive, so an athlete with a large positive score on
+`LD1` has a large height and weight: that is to say, they
+are tall and heavy.
+
+
+(e) Make a guess at the sport-gender combination that has the
+*highest* score on LD1. Why did you choose the combination you did?
+
+Solution
+
+
+I could have made you guess the *smallest* score on LD1, but
+that would have been too easy (female gymnasts). 
+For this one, you want a sport-gender combination that is typically
+tall and heavy, and you can look in the table of Group Means to
+help you find a candidate group.
+I think the two best guesses are male basketball players (tallest
+and nearly the heaviest) and male field athletes (heaviest and
+among the group of athletes that are second-tallest behind the
+male basketball players). I don't so much mind what you guess, as
+long as you make a sensible call about a group that is reasonably
+tall and reasonably heavy (or, I suppose, that matches with what
+you said in the previous part, whatever that was).
+
+
+(f) <a name="part:ld2">*</a> 
+What combination of height and weight would make an athlete have a
+*small* (that is, very negative) score on LD2? Explain briefly.
+
+Solution
+
+
+Going back to the Coefficients of Linear Discriminants, the
+coefficient for Height is negative, and the one for Weight is
+positive. What will make an athlete come out small (very
+negative) on this is if they have a *large* height and a
+*small* weight. 
+To clarify your thinking on this, think of
+the heights and weights as being standardized, so that a big one
+will be positive and a small one will be negative. To make
+`LD2` very negative, you want a "plus" height to multiply
+the minus sign, and a "minus" weight multiplying the plus sign.
+Extra: what is happening here is that `LD1` gives the most
+important way in which the groups differ, and `LD2` the
+next-most important. There is generally a positive correlation
+between height and weight (taller athletes are generally heavier),
+so the most important "dimension" is the big-small one with tall
+heavy athletes at one end and short light athletes at the other.
+The `Proportion of trace` in the output says that
+`LD1` is definitely more important, in terms of separating
+the groups, than `LD2` is, but the latter still has
+*some* value.
+
+
+(g) Obtain predictions for the discriminant analysis, and use
+these to make a plot of `LD1` score against `LD2`
+score, with the individual athletes distinguished by what sport they play
+and gender they are. (You can use colour to distinguish them, or you
+can use shapes. If you want to go the latter way, there are clues in
+my solutions to the MANOVA question about these athletes.)
+
+Solution
+
+
+The prediction part is only one step:
+```{r }
+p=predict(combo.1)
+```
+
+     
+
+One point for this.
+
+This, in case you are wondering, is obtaining predicted group
+membership and LD scores for the original data, that is, for our 202
+athletes. 
+
+I prefer (no obligation) to take a look at what I have. My `p`
+is actually a `list`:
+```{r }
+class(p)
+glimpse(p)
+```
+
+ 
+
+This is still kind of messy, so let's look at the top of the pieces:
+
+```{r }
+head(p$class)
+```
+
+ 
+
+These are the predicted sport-gender combinations (from the height and weight).
+
+```{r }
+head(p$posterior)
+```
+
+ 
+
+These are the posterior probabilities of being in each sport-gender
+combination, based on height and weight. There are seventeen columns
+for each athlete, so this is rather hard to inspect.
+
+```{r }
+class(p$x)
+head(p$x)
+```
+
+ 
+
+These are the LD1 and LD2 scores for each athlete, that we will need
+for the plot.
+
+So our first step is to make a data frame containing the things we
+want to plot:
+
+```{r }
+d=data.frame(combo=athletesc$combo,p$x)
+head(d)
+```
+
+ 
+
+There's a couple of subtleties here:
+
+
+
+* The LD scores are actually a matrix, so if you try to use
+`tibble` to combine the actual sport-gender combinations with
+the LD scores, you'll get an error (`data.frame` is rather
+more forgiving about the kinds of things it will let you combine).
+
+* If you *don't* give `p$x` a name, it will
+"inherit" the names `LD1` and `LD2`, which is
+probably what you want. If you call it, say, `x`, the names
+end up being `x.LD1` and `x.LD2`, which is perfectly
+fine but looks a bit odd.
+
+
+And so, to the graph, which is easy now:
+
+```{r }
+ggplot(d,aes(x=LD1,y=LD2,colour=combo))+geom_point()
+```
+
+ 
+
+If you can distinguish seventeen different colours, your eyes are
+better than mine! You might prefer to use seventeen different shapes,
+although I wonder how much better that will be:
+
+```{r }
+ggplot(d,aes(x=LD1,y=LD2,shape=combo))+geom_point()+
+scale_shape_manual(values=1:17)
+```
+
+     
+
+You have to do something special to get as many as seventeen
+shapes. This idea came from the MANOVA question in the last
+assignment. 
+
+Or even this:
+
+```{r }
+ggplot(d,aes(x=LD1,y=LD2,shape=combo,colour=combo))+geom_point()+
+scale_shape_manual(values=1:17)
+```
+
+ 
+
+Perhaps having colours *and* shapes makes the combos easier to
+distinguish. We're beginning to stray onto the boundary between
+statistics and aesthetics here!
+
+Extra: earlier, I asked you to guess which group(s) of athletes had a
+high (positive) score on LD1. These are the ones on the right side of
+this plot: male basketball players bottom right and male field
+athletes top right. Was that what you guessed? What about the other
+guesses you might have made?
+
+
+(h) Look on your graph for the four athletes with the smallest
+(most negative) scores on `LD2`. What do they have in common?
+Does this make sense, given your answer to part (<a href="#part:ld2">here</a>)?
+Explain briefly.
+
+Solution
+
+
+These are the four athletes at the bottom of the plot. If you can
+distinguish the colours, two of these are red and two of them are
+orange, so they are all basketball players (two male and two
+female). If you plotted the shapes, and you used the same shapes I
+did, two of them are circles and the other two are upward-facing
+triangles, leading you to the same conclusion. (You could also
+denote each combo by a letter and plot with those letters, as per
+the solutions to the last assignment.)
+Back in part (<a href="#part:ld2">here</a>), I said that what would make an
+athlete come out very negative on `LD2` is if they were
+*tall* and *not heavy*. This is the stereotypical
+description of a basketball player, so it makes perfect sense to
+me. 
+Extra: some basketball players are tall and *heavier*; these
+are the ones on the right of the plot, with a larger `LD1`
+score, to reflect that they are both tall and heavy, but with an
+`LD2` score closer to zero, reflecting that, given how tall
+they are, their weight is about what you'd expect. LD2 is really
+saying something like "weight relative to height", with someone
+at the top of the picture being unusually heavy and someone at the
+bottom unusually light.
+
+
+(i) Obtain a (very large) square table, or a (very long) table
+with frequencies, of actual and predicted sport-gender
+combinations. You will probably have to make the square table very
+small to fit it on the page. For that, displaying the columns in two
+or more sets is OK (for example, six columns and all the rows, six
+more columns and all the rows, then the last five columns for all
+the rows).  Are there any sport-gender combinations that
+seem relatively easy to classify correctly?  Explain briefly.
+
+Solution
+
+
+Let's make this as tiny as we can (since it's a $17 \times 17$
+table). My `options` line is to see how many columns it
+will print out in one go; you don't need that.
+```{r size="scriptsize"}
+options(width=130)
+table(combo=athletesc$combo,pred=p$class)
+```
+
+     
+
+I can either have it smaller and fitting in the box, or larger (so
+that I can read it) and spilling out of the box. I went the latter way.
+
+For combos that are easy to classify, you're looking for a largish
+number on the diagonal of the table (classified correctly) and (much)
+smaller numbers in the rest of the row and column. I don't mind which
+ones you pick out, but see if you can find a few:
+
+
+
+* Male basketball players (9 out of 12 classified correctly)
+
+* Male field athletes (7 out of 10 classified correctly)
+
+* Female netball players (13 out of about 23)
+
+* Female rowers (10 out of about 22)
+
+
+A `table` behaves like an R `matrix`, so you can ask for
+columns by number using square brackets, eg:
+
+```{r size="small"}
+tab=table(combo=athletesc$combo,pred=p$class)
+tab[,1:5]
+```
+
+ 
+
+The "blank" number before the comma means "all the rows". 
+
+Or you can turn it into a tibble:
+
+```{r }
+tab %>% as_tibble() 
+#%>% select(BBall_female:Gym_female)
+```
+
+ 
+
+This makes the `tidyverse` output, with frequencies. You
+probably want to omit the zero ones and display (small) all the rows
+that remain:
+
+```{r size="tiny"}
+tab %>% as_tibble() %>% filter(n>0) %>% print(n=Inf)
+```
+
+ 
+
+This is the same output as below. See there for comments.
+
+The other, perhaps easier, way to tackle this one is the
+`tidyverse` way, making a "long" table of frequencies. Once
+again, I have to print it out small so that you can see all of it:
+
+```{r size="scriptsize"}
+d=tibble(combo=athletesc$combo, pred=p$class)
+d %>% count(combo,pred) %>% print(n=70)
+```
+
+ 
+
+The `combo` column is the truth, and the `pred` column
+is the prediction. Again, you can see where the big frequencies are; a
+lot of the female netball players were gotten right, but there were a
+lot of them to begin with.
+
+Extra: let's see if we can work out *proportions* correct. I've
+changed my mind from how I originally wrote this. I still use
+`count`, but I start with the overall misclassification. Let's
+take it in steps:
+
+```{r }
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong"))
+```
+
+ 
+
+That makes a new column `stat` that contains whether the
+predicted sport-gender combination was correct or wrong. For an
+overall misclassification rate we have to count these, but *not*
+simply counting the number of rows; rather, we need to total up the
+things in the `n` column:
+
+```{r }
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n)
+```
+
+ 
+
+This tells us how many predictions overall were right and how many
+wrong. We already had a column `n` so we now have a column
+`nn` with the second round of `count`s.
+
+To make those into proportions, another `mutate`, dividing by
+the total of `nn`:
+
+```{r }
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn))
+```
+
+ 
+
+65\% of the sport-gender combinations were misclassified. This is
+awful, but is a lot better than guessing (we'd then get about 5\% of
+them right and about 95\% wrong).
+
+There's a subtlety here that will make sense when we do the
+corresponding calculation by sport-gender combination. To do
+*that*, we put a `group_by(combo)` either before or after
+we define `stat` (it doesn't matter which way):
+
+```{r }
+d %>% count(combo,pred) %>% 
+group_by(combo) %>%
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn))
+```
+
+ 
+
+That last `sum(nn)`: what is it summing over? The answer is
+"within `combo`", since that is the `group_by`. You
+see that the two `proportion` values within, say,
+`BBall_female`, add up to 1.
+
+We don't actually see all the answers, because there are too many of
+them. Let's try to get the proportion correct and wrong in their own
+columns. This almost works:
+
+```{r }
+d %>% count(combo,pred) %>% 
+group_by(combo) %>%
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+spread(stat, proportion)
+```
+
+ 
+
+This doesn't work because everything outside of the `spread` is
+tested for uniqueness; if it's unique, it gets its own row. Thus,
+`BBall_male` and 3 is different from `BBall_male` and
+9. But we only want one row of `BBall_male`. I think the
+easiest way around this is to get rid of `nn`, since it has
+served its purpose:
+
+```{r }
+d %>% count(combo,pred) %>% 
+group_by(combo) %>%
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+select(-nn) %>%
+spread(stat, proportion)
+```
+
+ 
+
+Those NAs are really zeros. While we're about it, let's arrange in
+order of misclassification probability:
+
+```{r }
+d %>% count(combo,pred) %>% 
+group_by(combo) %>%
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+select(-nn) %>%
+spread(stat, proportion) %>%
+replace_na(list(correct=0,wrong=0)) %>%
+arrange(wrong)
+```
+
+ 
+
+The most distinctive athletes were the female gymnasts (tiny!),
+followed by the male basketball players (tall) and the female field
+athletes (heavy). These were easiest to predict from their height and
+weight. The ones at the bottom of the list were very confusible since
+the discriminant analysis guessed them all wrong!
+So what were the most common *misclassifications*? Let's go back
+to this:
+
+```{r }
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong"))
+```
+
+ 
+
+We want to express those `n` values as proportions out of their
+actual sport-gender combo, so we group by `combo` before
+defining the proportions:
+
+```{r }
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+group_by(combo) %>%
+mutate(proportion=n/sum(n))
+```
+
+ 
+
+Only pick out the ones that were gotten wrong, and arrange the remaining
+proportions in descending order:
+
+```{r }
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+group_by(combo) %>%
+mutate(proportion=n/sum(n)) %>%
+filter(stat=="wrong") %>%
+arrange(desc(proportion))
+```
+
+ 
+
+The embarrassment champion is the three male tennis players that were
+taken to be --- female rowers! Most of the other mistakes are more
+forgivable: the male rowers being taken for male waterpolo players,
+for example. 
+
+
+
+

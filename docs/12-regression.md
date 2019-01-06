@@ -6192,7 +6192,7 @@ convincing about how you have the right thing.
     
 
 
-(b)<a name="part:ttest">*</a> Obtain a 95\% confidence interval for the
+(b) <a name="part:ttest">*</a> Obtain a 95\% confidence interval for the
 mean fire damage. (There is nothing here from STAD29, and your
 answer should have nothing to do with distance.)
 
@@ -6280,7 +6280,7 @@ ggplot(fire, aes(x = distance, y = damage)) +
 
 
 
-(d)<a name="part:howgood">*</a> Is there a relationship between distance from fire station
+(d) <a name="part:howgood">*</a> Is there a relationship between distance from fire station
 and fire damage? Is it linear or definitely curved? How strong is
 it? Explain briefly.
 
@@ -6461,7 +6461,7 @@ than the cubic because it (i) fits equally well, (ii) is simpler.
     
 
 
-(f)<a name="part:cim">*</a> Obtain a 95\% confidence interval for the mean fire damage
+(f) <a name="part:cim">*</a> Obtain a 95\% confidence interval for the mean fire damage
 \emph{for a residence that is 4 miles from the nearest fire
 station}. (Note the contrast with part~(<a href="#part:ttest">here</a>).)
 
@@ -6679,7 +6679,7 @@ there will be confusion if your data frame has the same name as one of
 its columns.
  
 
-(b)<a name="part:scatmat">*</a> Obtain scatterplots of the response variable
+(b) <a name="part:scatmat">*</a> Obtain scatterplots of the response variable
 `satis` against each of the other variables.
  
 Solution
@@ -6829,7 +6829,7 @@ I think `satis` and `age` is the strongest
 trend. The other ones look more scattered to me. 
  
 
-(d)<a name="part:corrmat">*</a> Create a correlation matrix for all four 
+(d) <a name="part:corrmat">*</a> Create a correlation matrix for all four 
 variables. Does your strongest trend of the previous part have the
 strongest correlation?
  
@@ -8180,7 +8180,7 @@ response). None of the remaining correlations are all that high, so we
 ought not to have any multicollinearity problems.
  
 
-(d)<a name="regone">*</a> Fit a regression predicting salary from the other three
+(d) <a name="regone">*</a> Fit a regression predicting salary from the other three
 variables, and obtain a `summary` of the results.
 
 Solution
@@ -8556,7 +8556,7 @@ Two SAT scores and three GPAs, as promised.
 
 
 
-(b)<a name="part:hsu-scatter">*</a> Make a scatterplot of high school GPA against university
+(b) <a name="part:hsu-scatter">*</a> Make a scatterplot of high school GPA against university
 GPA. Which variable should be the response and which
 explanatory? Explain briefly. Add a smooth trend to your plot.
 
@@ -8621,7 +8621,7 @@ GPAs around 3.25.
       
 
 
-(d)<a name="part:highonly">*</a> Fit a linear regression for predicting university GPA
+(d) <a name="part:highonly">*</a> Fit a linear regression for predicting university GPA
 from high-school GPA and display the results.
 
 
@@ -8927,7 +8927,7 @@ dominating things for our prediction interval above.
         
 
 
-(f)<a name="part:all">*</a> Now obtain a regression predicting university GPA from
+(f) <a name="part:all">*</a> Now obtain a regression predicting university GPA from
 high-school GPA as well as the two SAT scores. Display your results.
 
 

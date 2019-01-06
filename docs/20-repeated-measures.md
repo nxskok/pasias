@@ -44,12 +44,13 @@ library(tidyverse)
 ```
 
 
+##  Effect of drug on rat weight
 
 
- \citet{box50} gives data on the weights of three groups of
+ Box (1950) gives data on the weights of three groups of
 rats. One group was given thyroxin in their drinking water, one group
 thiouracil, and the third group was a control. (This description comes
-from \citet{christensen01}.)
+from Christensen (2001).)
 Weights are measured in
 grams at weekly intervals (over a 4-week period, so that each rat is
 measured 5 times). The data are in
@@ -211,8 +212,8 @@ weights.2
 The interaction is definitely significant, with a P-value of
 0.00069. This means that the effect of time on growth is different for
 the different drugs: that is, the effect of drug is over the whole
-time profile, not just something like ``a rat on Thyroxin is on
-average 10 grams heavier than a control rat, over all times''.
+time profile, not just something like 
+"a rat on Thyroxin is on average 10 grams heavier than a control rat, over all times".
 
 Since the interaction is significant, that's where we stop, as far as
 interpretation is concerned.
@@ -272,26 +273,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 4
 ##    drug       junk  time  weight
 ##    <chr>      <chr> <chr>  <int>
-##  1 thiouracil Time  0         56
-##  2 thyroxin   Time  4        138
-##  3 thiouracil Time  0         59
-##  4 thiouracil Time  1         86
-##  5 thyroxin   Time  2        121
-##  6 control    Time  1         86
-##  7 thiouracil Time  3        106
-##  8 thiouracil Time  0         51
-##  9 thyroxin   Time  0         56
-## 10 thyroxin   Time  3        110
-## 11 control    Time  4        140
-## 12 thyroxin   Time  1         85
-## 13 control    Time  3        146
-## 14 control    Time  0         46
-## 15 thiouracil Time  2        100
-## 16 thyroxin   Time  4        171
-## 17 thiouracil Time  4        122
-## 18 control    Time  1         71
-## 19 control    Time  2        100
-## 20 thiouracil Time  0         53
+##  1 control    Time  3        146
+##  2 thiouracil Time  0         61
+##  3 control    Time  2        123
+##  4 control    Time  4        141
+##  5 thiouracil Time  2        109
+##  6 control    Time  3        130
+##  7 control    Time  2        104
+##  8 control    Time  1         71
+##  9 control    Time  0         49
+## 10 control    Time  0         57
+## 11 control    Time  1         77
+## 12 control    Time  2        114
+## 13 thyroxin   Time  2         97
+## 14 thiouracil Time  2        100
+## 15 control    Time  4        164
+## 16 control    Time  0         57
+## 17 control    Time  3        129
+## 18 control    Time  0         63
+## 19 control    Time  4        140
+## 20 control    Time  2        110
 ```
 
  
@@ -316,26 +317,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 4
 ##    drug       timex weight  time
 ##    <chr>      <chr>  <int> <dbl>
-##  1 control    Time4    169     4
-##  2 control    Time0     49     0
-##  3 thiouracil Time2     95     2
-##  4 thiouracil Time0     53     0
-##  5 control    Time2     94     2
-##  6 control    Time0     51     0
-##  7 thiouracil Time3    103     3
-##  8 thyroxin   Time3    110     3
-##  9 thyroxin   Time0     57     0
-## 10 thiouracil Time2     78     2
-## 11 control    Time2    114     2
+##  1 control    Time1     93     1
+##  2 thyroxin   Time1     85     1
+##  3 control    Time1     70     1
+##  4 thiouracil Time3    111     3
+##  5 thiouracil Time3    104     3
+##  6 thyroxin   Time3    110     3
+##  7 control    Time1     67     1
+##  8 control    Time3    129     3
+##  9 control    Time4    140     4
+## 10 thiouracil Time2    101     2
+## 11 control    Time4    154     4
 ## 12 control    Time0     60     0
-## 13 thyroxin   Time2    108     2
-## 14 thiouracil Time0     51     0
-## 15 thyroxin   Time2     90     2
-## 16 control    Time3    139     3
-## 17 control    Time2    102     2
-## 18 control    Time3    146     3
-## 19 control    Time4    185     4
-## 20 thiouracil Time1     72     1
+## 13 thyroxin   Time2     90     2
+## 14 thiouracil Time4    140     4
+## 15 thiouracil Time4    133     4
+## 16 thiouracil Time0     61     0
+## 17 thiouracil Time0     46     0
+## 18 thiouracil Time0     51     0
+## 19 control    Time4    153     4
+## 20 thyroxin   Time0     59     0
 ```
 
  
@@ -517,6 +518,8 @@ the only thing we should be thinking about now is that interaction.)
 
 
 
+
+##  Social interaction among old people
 
 
  A graduate student wrote a thesis comparing different
@@ -736,8 +739,8 @@ geriatrics.long
 
      
 
-I had to think a bit about ``what makes the gathered columns the
-same''. They are all percentages of interactions of a specific type,
+I had to think a bit about "what makes the gathered columns the same". 
+They are all percentages of interactions of a specific type,
 so you could as well (or better) call them "percent". 
 
 Anyway, I have *one* column of interaction percents, and
@@ -1007,7 +1010,7 @@ blue treatments. They both go up at time 2 and down afterwards, which
 is the time effect, but even once you allow for this time trend, there is
 too much scatter to be able to infer a difference between the treatments.
 
-I was thinking that this is not terribly clear, so I thought I would
+Extra (maybe branch off into another question?) I was thinking that this is not terribly clear, so I thought I would
 fake up some data where there is a treatment effect and a time effect
 (but no interaction), and draw a spaghetti plot, so you can see the
 difference, idealized somewhat of course. Let's try to come up with
@@ -1275,21 +1278,13 @@ my conclusions about the significance of treatments earlier: it's actually
 saying that there is a difference between the two remaining treatments
 *averaged over time* rather than *allowing for time* as I
 said earlier.
- su vs. su -
- When becoming another user you generally want to use su - user2. The dash will force user2's .bash_profile to get sourced.
- 
- xhost
- Additionally you'll need to grant users access to your display. This is governed by X. You can use the command xhost + to allow other users permission to display GUI's to user1's desktop.
- 
- NOTE: When running xhost + you'll want to run this while still in a shell that belongs to user1.
- 
- $DISPLAY
- When you become user2 you may need to set the environment variable $DISPLAY.
- 
- $ export DISPLAY=:0.0
+    
 
 
 
+
+
+##  Children's stress levels and airports
 
 
  If you did STAC32, you might remember this question, which
@@ -1744,7 +1739,7 @@ there to be no pattern over time. So a significant difference shows up
 as an *interaction*, which is messier to interpret than you would
 like. 
 
-The other way to analyze repeated measures data (that we, well, you, do not look
+Extra: the other way to analyze repeated measures data (that we, well, you, do not look
 at in this course)
 \marginnote{This is something *I* want to  understand, so I will share my findings with you. You can read them  or not, as you choose.} is to treat them as "mixed models", which
 requires a different kind of analysis using the `lme4`
@@ -1814,8 +1809,8 @@ see in the ANOVA table are the fixed effects. These are testable. The
 easiest way to see what you can get rid of is `drop1`; the
 chi-squared test appears to be the right one (more on that
 below). This says that the interaction is strongly significant, and we
-should not consider removing it, the same conclusion as our ``profile
-analysis'' before.
+should not consider removing it, the same conclusion as our 
+"profile analysis" before.
 The other choice for
 testing is to fit a model without what you
 are testing and use `anova` to compare the two models:
@@ -1849,8 +1844,8 @@ anova(airport.4, airport.3)
  
 
 There are technical considerations involved in comparing the fit of
-two models (which is the reason for the ``refitting models
-with\ldots''): there is one method for estimating and a different
+two models (which is the reason for the 
+"refitting models with..."): there is one method for estimating and a different
 method for testing. The test is based on "likelihood ratio", which
 means that the right test for the `drop1` above is
 `Chisq`. 
@@ -1861,7 +1856,8 @@ case, `<none>` has a much smaller AIC than the interaction
 (smaller by over 50), so there's no way we should entertain taking out
 the interaction. However, if it had not been significant, we would
 just take it out by fitting a model like `airport4`: there is
-no distinction here between "within-subject" and "between-subject"
+no distinction here between "within-subject" and 
+"between-subject"
 factors that prevented us from taking the interaction out in profile
 analysis. 
 
@@ -2196,8 +2192,8 @@ in this kind of analysis, the actual model statement is brief:
 response depends on fixed effects plus random effects with the
 brackets and vertical bar. I always find the `lmer` models look
 very simple once you have figured them out (like `ggplot` in
-that regard). I also like the fact that `lmer` uses ``tidy
-data'', so that you can make graphs and do this flavour of analysis
+that regard). I also like the fact that `lmer` uses "tidy data", 
+so that you can make graphs and do this flavour of analysis
 with the same data frame. Having gotten my head around getting my data
 tidy, it seems odd to me that profile analysis requires the data to be
 untidy, although it does so for a good reason: if you were genuinely
@@ -2239,8 +2235,8 @@ then you would test whether a random effect exists or not by testing
 whether the variance of that random effect is zero (does not exist) or
 is greater than zero. Zero is the smallest a variance (or SD) can be,
 which means that testing for it has always been kind of flakey and the
-standard theory doesn't work for it (the technical term is ``on the
-boundary of the parameter space'', and the theory applies when the
+standard theory doesn't work for it (the technical term is 
+"on the boundary of the parameter space", and the theory applies when the
 null-hypothesis value is strictly *inside* the set of possible
 values the parameter can take). Back when we did this stuff by
 hand,
@@ -2251,9 +2247,9 @@ right. Anyway, that is all considered rather old-fashioned now, and
 mixed models are where it is at. In these, you typically *only*
 test the fixed effects, while estimating the size of the random
 effects, taking it for granted that they exist. This is an active area
-of research; the things that `lmer` fits are called ``linear
-mixed models'', and there are also now ``generalized linear mixed
-models'', things like logistic regression with random effects.
+of research; the things that `lmer` fits are called 
+"linear mixed models", and there are also now 
+"generalized linear mixed models", things like logistic regression with random effects.
 
 We haven't had to worry about this up to now because in most of the
 experimental designs we have used, each subject only contributes
@@ -2583,6 +2579,7 @@ use the saved data frame as input to `lmer`.
 
 
 
+##  Investigating motor activity in rats
 
 
  A researcher named King was investigating
@@ -3023,6 +3020,7 @@ but I couldn't find one.
 
 
 
+##  Repeated measures with no background
 
 
  Nine people are randomly chosen to receive one of three
@@ -3035,7 +3033,7 @@ The data are in [link](http://www.utsc.utoronto.ca/~butler/d29/rm.txt).
 
 
 
-(a)[2] There are $9 \times 3=27$ observations  of `y` in
+(a) There are $9 \times 3=27$ observations  of `y` in
 this study. Why would it be wrong to treat these as 27 independent
 observations? Explain briefly.
 
@@ -3058,7 +3056,7 @@ individuals, but because you are pretty sure they'll be there and
 you want to account for them.
 
 
-(b)[3] Read in the data values. Are they tidy or untidy?  Explain
+(b) Read in the data values. Are they tidy or untidy?  Explain
 briefly. (The data values are separated by *tabs*, like the
 Australian athlete data.)
 
@@ -3116,7 +3114,7 @@ so good for our MANOVA way of doing a repeated measures
 analysis. That we will have to prepare for.
 
 
-(c)[3] Make a spaghetti plot: that is, a plot of `y`
+(c) Make a spaghetti plot: that is, a plot of `y`
 against time, with the observations for the same individual joined
 by lines which are coloured according to the treatment that
 individual received.
@@ -3141,7 +3139,7 @@ I'm going to be all smug and tell you that I got this right first
 time. (I'm telling you this because it doesn't happen often.)
 
 
-(d)[2] On your spaghetti plot, how do the values of `y` for
+(d) On your spaghetti plot, how do the values of `y` for
 the treatments compare over time?
 
 Solution
@@ -3174,7 +3172,7 @@ well as a treatment effect (the latter because treatment C appears
 better than the rest). 
 
 
-(e)[3] Explain briefly how the data are in the wrong format for a
+(e) Explain briefly how the data are in the wrong format for a
 repeated-measures ANOVA (done using MANOVA, as in class), and use
 `spread` to get the data set into the right format. (Hint:
 there is an example of `spread` in assignment 2.)
@@ -3225,7 +3223,7 @@ the nine rows of the new "wide" data set, which is in the format we
 want.
 
 
-(f)[4] Run a repeated-measures ANOVA the `Manova` way. What do you
+(f) Run a repeated-measures ANOVA the `Manova` way. What do you
 conclude from it?
 
 Solution
@@ -3373,11 +3371,11 @@ testing the interaction are 0.008 and 0.006, which are a bit bigger
 than before, but still definitely significant. So, whether we believe
 sphericity or not, there is an interaction between treatment and
 time. If this is your analysis, you make impressive-sounding
-pronouncements like ``the significance of the interaction is robust to
-sphericity''. 
+pronouncements like 
+"the significance of the interaction is robust to sphericity". 
 
 
-(g)[2] How is your conclusion from the previous part consistent
+(g) How is your conclusion from the previous part consistent
 with your spaghetti plot? Explain briefly.
 
 Solution
@@ -3390,9 +3388,11 @@ beginning, but clearly better than the others at the later
 times. That is to say, you can't talk about "an" effect of
 treatment, because whether or not treatment C is better than the
 others depends on which time you're looking at.
+
 Extra: we used the MANOVA way of doing the repeated-measures
 analysis. There is another way, "mixed models", which is in some
 ways less familiar and in some ways more. 
+
 In any analysis of variance, there are two kinds of effects of
 things you may care about: fixed effects and random effects. Fixed
 effects are things like the treatment and time here, where the
@@ -3414,7 +3414,9 @@ doesn't matter how you treat (statistically) the subjects, but
 when each subject gives *more* than one measurement, it does
 matter. Which is why we have to do the `idesign` stuff in
 the MANOVA, or what you will see below.
+
 A model with both fixed and random effects is called a mixed model.
+
 We're going to make the assumption that the effect of being one
 subject rather than another is to move the value of `y` up
 or down by a fixed amount regardless of treatment or time, on

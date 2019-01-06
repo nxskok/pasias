@@ -1,0 +1,493 @@
+##  Growing corn
+
+
+ A new type of corn seed has been developed.
+The people developing it want to know if the type of soil the seed
+is planted in has an impact on how well the seed performs, and if so,
+what kind of impact. Three
+outcome measures were used: the yield of corn produced (from a fixed
+amount of seed), the amount of water needed, and the amount of
+herbicide needed. The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/cornseed.csv). 32 fields
+were planted with the seed, 8 fields with each soil type.
+
+
+
+(a) Read in the data and verify that you have 32 observations
+with the correct variables.
+
+
+Solution
+
+
+The usual:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/cornseed.csv"
+cornseed=read_csv(my_url)
+cornseed
+```
+
+     
+
+We have 32 rows; we have a categorical soil type, three
+numerical columns containing the yield, water and herbicide values,
+and we also have a label for each of the 32 fields (which is actually
+a number, but we don't have to worry about that, since we won't be
+using `field` for anything).
+    
+
+
+(b) Run a multivariate analysis of variance to see whether
+the type of soil has any effect on any of the variables. What do you
+conclude from it?
+
+
+Solution
+
+
+The usual thing: create the response, use `manova` (or
+`Manova` from `car` if you like, but it's not necessary):
+```{r }
+response=with(cornseed,cbind(yield,water,herbicide))
+cornseed.1=manova(response~soil,data=cornseed)
+summary(cornseed.1)
+```
+
+     
+
+With a P-value (just) less than 0.05, soil type has some effect on the
+response variables: that is, it affects one or more of the three
+responses, or some combination of them. ANOVA conclusions are usually
+vague, and MANOVA conclusions are vaguer than most. We will try to
+improve on this. But with an only-just-significant P-value, we should
+not be expecting miracles.
+
+Here and below, `field` is neither a response variable nor an
+explanatory variable; it is an experimental unit, so `field`
+acts as an ID rather than anything else. So `field` should not
+be part of any of the analyses; if it did appear, the only way it
+could is as a factor, for example if this was somehow a repeated
+measures analysis over the three response variables. In that case,
+`lmer`, if you were going that way, would use `field` as
+a random effect.
+
+The variables to include are the
+yield, water and herbicide as measured response variables, and soil
+type, as the categorical explanatory variable. (For the discriminant
+analysis, these get turned around: the grouping variable `soil`
+acts like a response and the others act as explanatory.)
+    
+
+
+(c) Run a discriminant analysis on these data, "predicting"
+soil type from the three response variables. You don't need to look
+at the results yet.
+
+
+Solution
+
+
+Loading library `MASS` first. I'm displaying all my
+results, but I didn't ask you to:
+```{r }
+cornseed.2=lda(soil~yield+water+herbicide,data=cornseed)
+cornseed.2
+```
+
+     
+
+No `field` in here, for reasons discussed above. (I'm not even
+sure how you *can* run a discriminant analysis with a factor
+variable on the right of the squiggle.) The fields were numbered by
+soil type:
+
+```{r }
+cornseed %>% select(field,soil)
+```
+
+ 
+
+so evidently if you know the field number you can guess the field
+type, but we didn't care about that: we cared about whether you can
+distinguish the fields by yield, water, herbicide or combination
+thereof. 
+    
+
+
+(d) <a name="part:corn-svd">*</a> Obtain something from your output that displays the
+relative importance of your linear discriminants. Which one(s) seem
+to be worth paying attention to?
+Why did you get
+three linear discriminants? Explain briefly.
+
+
+Solution
+
+
+Either display the whole output and pick out ``proportion of
+trace'', or do this (either is good):
+```{r }
+cornseed.2$svd
+```
+
+     
+
+The first one is *way* bigger than the others, which says that
+the first linear discriminant is way more important (at separating the
+groups) than either of the other two.
+
+As to why we got three: there are 3 variables and 4 groups (soil
+types), and the smaller of 3 and $4-1$ is 3.
+    
+
+
+(e) Which response variables do the important linear
+discriminants depend on? Answer this by extracting something from
+your discriminant analysis output.
+
+
+Solution
+
+
+`scaling` is the thing, or the table ``coefficients of
+linear discriminants'' (same):
+```{r }
+cornseed.2$scaling
+```
+$ %$ %$
+
+We said earlier that the only important discriminant is
+`LD1`. On that, the only notably non-zero coefficient is for
+`herbicide`; the ones for `yield` and `water` are
+close to zero. That is to say, the effects of the soil types play out
+through herbicide and not either of the other two variables.
+
+I didn't ask you to, but you could check this by seeing how
+`herbicide` differs according to soil type:
+
+```{r }
+ggplot(cornseed,aes(x=soil,y=herbicide))+geom_boxplot()
+```
+
+
+
+The fields in `loam` soil needed more herbicide than the others.
+
+Or by `water`:
+
+```{r }
+ggplot(cornseed,aes(x=soil,y=water))+geom_boxplot()
+```
+
+ 
+
+There isn't much difference in the amount of water needed between any
+of the fields, no matter what soil type. 
+
+This confirms that `water` is not distinguished by soil type,
+while `herbicide` is (at least to some extent).
+    
+
+
+(f) Obtain predictions for the discriminant analysis. (You
+don't need to do anything with them yet.)
+
+
+Solution
+
+
+Just this, therefore:
+```{r }
+cornseed.pred=predict(cornseed.2)
+```
+
+     
+    
+
+
+(g) Plot the first two discriminant scores against each other,
+coloured by soil type. You'll have to start by making a data frame
+containing what you need.
+
+
+Solution
+
+
+We need the `soil` out of `cornseed` and the thing
+called `x` out of `cornseed.pred`:
+```{r }
+d=data.frame(soil=cornseed$soil,cornseed.pred$x)
+head(d)
+```
+
+     
+
+The name thing again: `soil` was only one column, so we gave it
+a name, while `x` had three columns, all with their own names
+that we wanted to keep, so we didn't give them names.
+
+Then we use this as input to `ggplot`:
+
+```{r }
+ggplot(d,aes(x=LD1,y=LD2,colour=soil))+geom_point()
+```
+
+ 
+    
+
+
+(h) On your plot that you just made, explain briefly how `LD1`
+distinguishes at least one of the soil types.
+
+
+
+Solution
+
+
+Find a soil type that is typically high (or low or average) on
+LD1. Any one or more of these will do: loam soils are typically high on LD1,
+clay soils or salty soils are typically low on LD1; sandy soils are
+typically average on LD1. (There are exceptions, but I'm looking for
+"typically".)
+  
+
+
+(i) On your plot, does `LD2` appear to do anything to
+separate the groups? Is this surprising given your earlier findings?
+Explain briefly.
+
+
+
+Solution
+
+
+All the soil groups appear go to about the full height of the plot:
+that is to say, none of the groups appear to be especially at the
+top or the bottom. That means that `LD2` does not separate
+the groups at all. Back in part (<a href="#part:corn-svd">here</a>), we said that
+the first linear discriminant is way more important than either of
+the other two, and here we see what that means: `LD2` does nothing to
+separate the groups. So it's not a surprising finding at all.
+I thought earlier about asking you to plot only the first linear
+discriminant, and now we see  why: only the first one separates the
+groups. If you wanted to do that, you could  make a boxplot of the
+discriminant scores by `soil` group, thus:
+```{r }
+ggplot(d,aes(x=soil,y=LD1))+geom_boxplot()
+```
+
+   
+
+This says more or less the same thing as your plot of `LD1` and
+`LD2`: `loam` has the highest `LD1` score,
+`sandy` is about in the middle, and `clay` and
+`salty` have typically negative `LD1` scores, similar to
+each other, though there is one outlying `salty` that looks a
+lot more like a \textrm{loam}.
+  
+
+
+(j) Make a table of actual and predicted `soil`
+group. Which soil type was classified correctly the most often? 
+
+
+
+Solution
+
+
+This is a matter of grabbing the things you want from where they
+live, and giving them short names:
+```{r }
+table(obs=cornseed$soil,pred=cornseed.pred$class)
+```
+
+   
+
+Or, the `tidyverse` way, which is below.
+
+There were 8 fields of each soil type. The soil type that has the most
+of its fields classified correctly (based on the values of the
+response variables) has the biggest number down the diagonal of the
+table: looking at 3, 6, 5 and 4, we see that the `loam` soil
+type had the most of its fields classified correctly, so this was the
+most distinct from the others. (We also saw this on the plot of
+`LD1` vs. `LD2`: the `loam` fields were all over
+on the right.)
+
+This was easier because we had the same number of fields of each
+type. If we didn't have that, the right way to go then would be to work out
+*row* percentages: ``out of the fields that were actually sandy,
+what percent of them got classified as sandy'', and so on.
+
+This is not a perfect classification, though, which is about what you
+would expect from the soil types being intermingled on the plot of
+`LD1` vs. `LD2`. If you look at the table,
+`salty` and `sandy` are fairly distinct also, but
+`clay` is often confused with both of them. On the plot of
+`LD1` and `LD2`, `salty` is generally to the left
+of `sandy`, but `clay` is mixed up with them both.
+
+The `dplyr` way of doing this is equally good:
+
+```{r }
+data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
+count(obs,pred)
+```
+
+ 
+
+Six out of eight `loam`s were correctly classified, which is
+better than anything else.
+
+Extra: we can calculate misclassification rates, first overall, which is easier:
+
+```{r }
+data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
+mutate(soil_stat=ifelse(obs==pred,"correct","wrong")) %>%
+count(soil_stat) %>%
+mutate(prop=n/sum(n))
+```
+
+ 
+
+This shows that 44\% of the soil types were misclassified, which
+sounds awful, but is actually not so bad, considering. Bear in mind
+that if you were just guessing, you'd get 75\% of them wrong, so
+getting 44\% wrong is quite a bit better than that. The variables
+(especially `herbicide`) are at least somewhat informative
+about soil type; it's better to know them than not to.
+
+Or do it by actual soil type:
+
+```{r }
+data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
+group_by(obs) %>%
+mutate(soil_stat=ifelse(obs==pred,"correct","wrong")) %>%
+count(soil_stat) %>%
+mutate(prop=n/sum(n)) %>%
+select(-n) %>%
+spread(soil_stat,prop)
+```
+
+ 
+
+Loam soil was the easiest to get right, and clay was easiest to get
+wrong. However, these proportions were each based on only eight
+observations, so it's probably wise *not* to say that loam is
+*always* easiest to get right.
+
+I didn't have you look at posterior probabilities here.\endnote{Rest assured
+that I will on the final exam!} With 32 fields, this is rather a lot
+to list them all, but what we can do is to look at the ones that were
+misclassified (the true soil type differs from the predicted soil
+type). Before that, though, we need to make a data frame with the stuff in
+it that we want to look at. And before *that*, I want to round
+the posterior probabilities to a small number of decimals.
+
+Then, we can fire away with this:
+
+```{r }
+pr=round(cornseed.pred$posterior,3)
+data.frame(cornseed,pred=cornseed.pred$class,pr) %>%
+filter(soil!=pred)
+```
+
+ 
+
+Most of the posterior probabilities are neither especially small nor
+especially large, which adds to the impression that things are really
+rather uncertain. For example, field 8 could have been either loam
+(0.352) or sandy (0.373). There was one field that was actually salty
+but looked like a loam one (with `LD1` score around 2); this is
+field 20, that needed a lot of herbicide; it was rated to have an 82\%
+chance of being loam and only 1\% chance of salty.
+
+Let's remind ourselves of why we were doing this: the MANOVA was
+significant, so at least some of the fields were different on some of
+the variables from some of the others. What we found by doing the
+discriminant analysis was that only the first discriminant was of any
+value in distinguishing the soil types by the variables we measured,
+and *that* was mostly `herbicide`. So the major effect
+that soil type had was on the amount of herbicide needed, with the
+loam soils needing most.
+
+I wanted to finish with one more thing, which was to look again at the
+soils that were actually loam. This is a small edit:
+
+```{r }
+data.frame(cornseed,pred=cornseed.pred$class,pr) %>%
+filter(soil=="loam")
+```
+$ %$ %$ %$
+
+Fields 7 and 8 could have been pretty much any type of soil;
+`sandy` came out with the highest posterior probability, so
+that's what they were predicted (wrongly) to be. Some of the fields,
+1, 3 and 5, were clearly (and correctly) loam. For 1 and 5, you can clearly
+see that this is because `herbicide` was high, but field 3 is
+more of a mystery. For this field, `herbicide` is *not*
+high, so one or more of the other variables must be pointing towards
+`loam`. 
+
+We can obtain predicted
+`LD1` scores for various combinations of "typical" values of
+the response variables and see what has what effect on `LD1`:
+
+```{r }
+summary(cornseed)
+```
+$ %$ %$
+
+The problem is that the variables have different spreads. Let's do
+some predictions (ie.\ calculations) of LD1 score for combinations of
+quartiles of our response variables. I like quartiles because these
+are "representative" values of the variables, typical of how far up
+and down they go. This process is one you've seen before:
+
+```{r }
+yields=c(51,67)
+waters=c(26,37)
+herbicides=c(3,6)
+new=crossing(yield=yields,water=waters,herbicide=herbicides)
+pred=predict(cornseed.2,new)
+cbind(new,pred$x) %>% arrange(desc(LD1))
+```
+
+ 
+
+I arranged the predicted LD1 scores in descending order, so the most
+loam-like combinations are at the top. The top two combinations look
+like loam; they both have high `herbicide`, as we figured
+before. But they also have high `yield`. That might go some way
+towards explaining why field 3, with its non-high `herbicide`,
+was confidently predicted to be `loam`:
+
+```{r }
+cornseed %>% filter(field==3)
+```
+
+ 
+
+This has a very high `yield`, and *that* is what is making
+us (correctly) think it is `loam`.
+
+I suddenly remembered that I hadn't done a biplot of this one, which I
+could, since it's a discriminant analysis:
+
+```{r }
+ggbiplot(cornseed.2,groups=cornseed$soil)
+```
+$ %$ %$
+
+This shows the dominant influence of `herbicide` on LD1 score
+(more herbicide is more positive), and that `water` has nothing
+to say (in terms of distinguishing soil types) and `yield` has
+not much to say, their arrows being short. That observation with a
+non-high `herbicide` that was predicted to be \textrm{loam} had
+the highest `yield` of all, so even the small influence of
+`yield` on `LD1` made a big difference here.
+  
+
+
+
+

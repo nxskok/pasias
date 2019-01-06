@@ -1,0 +1,355 @@
+##  Telling whether a banknote is real or counterfeit
+
+
+ <a name="sec:swiss-money">*</a> A Swiss bank collected  a number of known counterfeit
+(fake) 
+bills over time, and sampled a number of known genuine bills of the
+same denomination.
+Is it possible to tell, from measurements taken from a bill, whether
+it is genuine or not? We will explore that issue here. The variables
+measured were:
+
+
+* length
+
+* right-hand width
+
+* left-hand width
+
+* top margin
+
+* bottom margin
+
+* diagonal
+
+
+
+(a) Read in the data from
+[link](http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt), and
+check that you have 200 rows and 7 columns altogether.
+ 
+Solution
+
+
+Check the data file first. It's aligned in columns, thus:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
+swiss=read_table(my_url)
+swiss
+```
+
+       
+
+Yep, 200 rows and 7 columns.
+ 
+
+(b) Run a multivariate analysis of variance. What do you
+conclude? Is it worth running a discriminant analysis? (This is
+the same procedure as with basic MANOVAs before.) 
+ 
+Solution
+
+
+Small-m `manova` will do here:
+```{r }
+response=with(swiss,cbind(length,left,right,bottom,top,diag))
+swiss.1=manova(response~status,data=swiss)
+summary(swiss.1)
+```
+
+       
+
+You might be wondering whether you had to go to all that trouble to
+make the response variable. Would this work?
+
+```{r error=T}
+response2 = swiss %>% select(length:diag)
+swiss.1a=manova(response2~status,data=swiss)
+```
+
+ 
+
+No, because `response2` needs to be an R `matrix`, and it isn't:
+
+```{r }
+class(response2)
+```
+
+ 
+
+The error message was a bit cryptic (nothing unusual there), but a
+data frame (to R) is a special kind of `list`, so that R didn't
+like `response2` being a data frame, which it
+thought was a list.
+
+This, however, works, since it turns the data frame into a matrix:
+
+```{r }
+response4 = swiss %>% select(length:diag) %>% as.matrix() 
+swiss.2a=manova(response4~status,data=swiss)
+summary(swiss.2a)
+```
+
+ 
+Anyway, the conclusion: the status of a bill (genuine or counterfeit)
+definitely has an influence on some or all of those other variables,
+since the P-value $2.2 \times 10^{-16}$ (or less) is really small. So
+it is worth running a discriminant analysis to figure out where the
+differences lie.
+
+As a piece of strategy, for creating the response matrix, you can
+always either use `cbind`, which creates a `matrix`
+directly, or you can use `select`, which is often easier but
+creates a data frame, and then turn *that* into a `matrix`
+using `as.matrix`. As long as you end up with a
+`matrix`, it's all good.
+ 
+
+(c) Run a discriminant analysis. (You can look at the results
+now, or, later, grab the bits that you need.)
+ 
+Solution
+
+
+```{r }
+swiss.3=lda(status~length+left+right+bottom+top+diag,data=swiss)
+```
+
+       
+
+You can display all the results now and refer back to them:
+
+```{r }
+swiss.3
+```
+
+ 
+ 
+
+(d) Show the relationship between the linear
+discriminant(s) (you don't need to comment on that yet) and the
+measured variables. How many linear 
+discriminants did you get? Is that making sense? Explain briefly.
+ 
+Solution
+
+
+```{r }
+swiss.3$scaling
+```
+$
+
+This is the same as the \texttt{coefficients of linear
+discriminants} on the big output.
+
+I got one discriminant, which makes sense because there are two
+groups, and the smaller of 6 (variables, not counting the grouping
+one) and $2-1$ is 1. 
+ 
+
+(e) <a name="part:big">*</a> Using the output of the last part, describe how each of
+the linear discriminants that you got is related to your original
+variables. (This can, maybe even should, be done crudely: ``does
+each variable feature in each linear discriminant: yes or no?''.)
+ 
+Solution
+
+
+This one is a judgement call: either you can say that LD1
+depends mainly on `diag` (treating the other coefficients
+as "small" or close to zero), or you can say that `LD1`
+depends on everything except `length`.
+ 
+
+(f) What values of your variable(s) would make `LD1`
+large and positive?
+ 
+Solution
+
+
+Depending on your answer to the previous part: 
+If you said that only `diag` was important, `diag`
+being large would make `LD1` large and positive.
+If you said that everything but `length` was important,
+then it's a bit more complicated: `left` and
+`diag` large, `right`, `bottom` and
+`top` small (since their coefficients are negative). 
+ 
+
+(g) <a name="part:means">*</a> Find the means of each variable for each group (genuine
+and counterfeit bills). You can get this from your fitted linear
+discriminant object.
+ 
+Solution
+
+
+```{r }
+swiss.3$means
+```
+
+ 
+ 
+
+(h) Plot your linear discriminant(s), however you like. Bear in
+mind that there is only one linear discriminant.
+ 
+Solution
+
+
+With only one linear discriminant, we can plot `LD1` on
+the $y$-axis and the grouping variable on the $x$-axis. How
+you do that is up to you. 
+Before we start, though, we need the predictions. The
+discriminant scores are in the thing named `x` in
+there. We take these and make a data frame with all the things
+in the original data:
+```{r }
+swiss.pred=predict(swiss.3)
+d=data.frame(swiss,swiss.pred$x)
+head(d)
+```
+
+         
+I did a boxplot in class:
+```{r antioch}
+ggplot(d,aes(x=status,y=LD1))+geom_boxplot()
+```
+
+       
+
+This shows that positive LD1 scores go (almost without exception) with
+genuine bills, and negative ones with counterfeit bills.
+It also shows that there are three outlier bills, two counterfeit ones
+with unusually high LD1 score, and one genuine one with unusually
+*low* LD1 score, at least for a genuine bill.
+
+Or you could do faceted histograms of `LD1` by `status`:
+
+```{r }
+ggplot(d,aes(x=LD1))+geom_histogram(bins=10)+facet_grid(status~.)
+```
+
+ 
+
+This shows much the same thing as `plot(swiss.3)` does (try it).
+ 
+
+(i) What kind of score on `LD1` do genuine bills
+typically have? What kind of score do counterfeit bills typically
+have? What characteristics of a bill, therefore, would you look at
+to determine if a bill is genuine or counterfeit?
+ 
+Solution
+
+
+The genuine bills almost all have a *positive* score on
+LD1, while the counterfeit ones all have a *negative* one. 
+This means that the genuine bills (depending on your answer to
+(<a href="#part:big">here</a>)) have a large `diag`, or they have a
+large `left` and `diag`, and a small
+`right`, `bottom` and `top`.
+If you look at your table of means in (<a href="#part:means">here</a>), you'll
+see that the genuine bills do indeed have a large `diag`,
+or, depending on your earlier answer, a small `right`,
+`bottom` and `top`, but not actually a small
+`left` (the `left` values are very close for the
+genuine and counterfeit coins).
+As to that last point, this is easy enough to think about. A
+boxplot seems a nice way to display it:
+```{r gtabita}
+ggplot(d,aes(y=left,x=status))+geom_boxplot()
+```
+
+      
+
+There is a fair bit of overlap: the median is higher for the
+counterfeit bills, but the highest value actually belongs to a genuine one.
+
+Compare that to `diag`:
+
+```{r iggle}
+ggplot(d,aes(y=diag,x=status))+geom_boxplot()
+```
+
+ 
+
+Here, there is an almost complete separation of the genuine and
+counterfeit bills, with just one low outlier amongst the genuine bills
+spoiling the pattern.
+
+I didn't look at the predictions (beyond the discriminant scores),
+since this question (as set on an assignment a couple of years ago)
+was already too long, but there is no difficulty in doing so, as long
+as you keep track of what comes from which data frame:
+
+```{r }
+tab=table(obs=swiss$status,pred=swiss.pred$class)
+tab
+```
+
+ 
+
+The `tidyverse` way is to make a data frame out of the actual
+and predicted statuses, and then `count` what's in there:
+
+```{r }
+d=tibble(obs=swiss$status,pred=swiss.pred$class)
+d %>% count(obs,pred)
+```
+
+ 
+
+This gives a "long" table, with frequencies for each of the
+combinations for which anything was observed.
+
+One of the genuine bills is incorrectly classified as a counterfeit
+one (evidently that low outlier on LD1), but every single one of the
+counterfeit bills is classified correctly.
+
+It would be interesting to see what the posterior probabilities look
+like for that misclassified bill. Let's make a data frame with the
+original data and all the posterior probabilities, and then pick out
+some interesting observations. I'm using `data.frame` rather
+than `tibble` (or `bind_cols`) because the posterior
+probabilities are a matrix, and the others are more particular
+about what it will let you combine into a data
+frame. (`data.frame` turns things that are not vectors or data
+frames into those first before combining them.)
+
+```{r size="small"}
+d=data.frame(swiss,class=swiss.pred$class,swiss.pred$posterior)
+head(d)
+```
+
+ 
+
+I used `head` because `d` is an old-fashioned data frame
+rather than a tibble, so if you display it, you'll get all of it.
+
+How about, all the bills where the maximum posterior probability is
+less than 0.99?
+
+```{r }
+d %>% mutate(max.post=pmax(counterfeit,genuine)) %>%
+filter(max.post<0.99) %>% dplyr::select(-c(length:diag))
+```
+
+ 
+
+This is the bill that was misclassified: it was actually genuine, but
+was classified as counterfeit. The posterior probabilities say that it
+was pretty unlikely to be genuine, but it was the only bill for which
+there was any noticeable doubt at all.
+
+I had to use `pmax` rather than `max` there, because I
+wanted `max.post` to contain the larger of the two
+corresponding entries: that is, the first entry in `max.post`
+is the larger of the first entry of `counterfeit` and the first
+entry in `genuine`. If I used `max` instead, I'd get the
+largest of *all* the entries in `counterfeit` and
+*all* the entries in `genuine`, repeated 200 times. (Try
+it and see.) `pmax` stands for "parallel maximum", that is,
+for each row separately.
+ 
+
+

@@ -1029,9 +1029,9 @@ x
 ```
 
 ```
-##  [1] 50.58533 48.48241 66.78087 51.57850
-##  [5] 44.94066 48.98244 46.29741 37.50350
-##  [9] 63.36879 48.39115
+##  [1] 48.73289 31.01454 74.24493 52.03144
+##  [5] 43.58117 64.07698 54.97719 64.94259
+##  [9] 30.99053 30.96452
 ```
 
 
@@ -1055,8 +1055,8 @@ tibble(x) %>% count(x < 40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        9
-## 2 TRUE         1
+## 1 FALSE        7
+## 2 TRUE         3
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1089,7 +1089,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       1 TRUE
+## 1       3 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1109,7 +1109,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       1 TRUE
+## 1       3 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1124,7 +1124,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ```
 
 ```
-## [1] TRUE
+## [1] FALSE
 ```
 
 You might be wondering where the "1 or less" came from. Getting a

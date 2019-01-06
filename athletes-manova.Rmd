@@ -1,3 +1,4 @@
+##  How do height and weight depend on sport played by elite athletes?
 
 
  This question uses the data on Australian elite athletes,
@@ -11,7 +12,7 @@ read them in.
 
 
 
-(a)[2] Read in the data and verify that you have 202 rows and 13
+(a) Read in the data and verify that you have 202 rows and 13
 columns. 
 
 Solution
@@ -29,7 +30,7 @@ athletes
 202 rows and 13 columns indeed.
 
 
-(b)[2] We are going to see whether the height-weight combination
+(b) We are going to see whether the height-weight combination
 of an athlete depends significantly on which sport they play and which gender
 they are. Explain (very) briefly why a multivariate analysis of
 variance will be necessary to do this.
@@ -47,7 +48,7 @@ been quantitative, we would have needed to do a multivariate
 regression, which is beyond the scope of what we do in this course.
 
 
-(c)[2] Create a response variable for a MANOVA. (You don't need to
+(c) Create a response variable for a MANOVA. (You don't need to
 show what you got, since it is rather big.) The columns you want are
 called `Ht` and `Wt`.
 
@@ -72,7 +73,7 @@ response_a=cbind(athletes$Ht,athletes$Wt)
  
 
 
-(d)[3] Run a multivariate analysis of variance to see whether the
+(d) Run a multivariate analysis of variance to see whether the
 height-weight combination depends significantly on gender, sport or the
 combination of both. Display the results. Use the small-m
 `manova` way to do this one.
@@ -97,7 +98,7 @@ first with the same model formula as above, and then pass *that*
 into `Manova`. This way, you just "print" the final result,
 rather than passing it into `summary`:
 
-```{r }
+```{r error=T}
 htwt.2=lm(response~Sex*Sport,data=athletes)
 htwt.3=Manova(htwt.2)
 ```
@@ -109,7 +110,7 @@ understand. `htwt.2` is fine; it's the `Manova` that is
 not working.
 
 
-(e)[3] Briefly justify removing the interaction term from your
+(e) Briefly justify removing the interaction term from your
 previous model, and fit a model without it. You can use either
 `manova` or `Manova` for this; they should both
 work. (You only need to use one of them.)  Display your results.
@@ -130,7 +131,7 @@ summary(htwt.4)
 
 or
 
-```{r }
+```{r error=T}
 htwt.5=update(htwt.1,.~.-Sex:Sport)
 ```
 
@@ -139,7 +140,7 @@ htwt.5=update(htwt.1,.~.-Sex:Sport)
 It seems that `manova` things don't like `update`. If
 that happened to you, try it another way.
 
-or, with \textrm{Manova}, the same two ways:
+or, with `Manova`, the same two ways:
 
 ```{r }
 htwt.6=lm(response~Sex+Sport,data=athletes)
@@ -187,7 +188,7 @@ I am in danger of running out of numbers for my fitted models (and am
 definitely in danger of forgetting which one is which)!
 
 
-(f)[3] See if you can make a graph that shows what's going on
+(f) See if you can make a graph that shows what's going on
 here. Bear in mind that you have two quantitative variables and
 *two* categorical ones, so you will need to find a way to
 display everything. Hint: what would you do with two quantitative

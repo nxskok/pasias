@@ -91,6 +91,6 @@ for which C32 and D29 are two of the last courses.
 My checklist:
 
 - bring in the D29 questions
-- working on A5 D29
+- working on A6 D29
 - look for multiple regression Qs in A6 or wherever
 - *** puts a vertical line across. Put that above and below each question part, somehow.

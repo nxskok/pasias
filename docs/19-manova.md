@@ -35,6 +35,7 @@ library(tidyverse)
 ```
 
 
+##  Fabricated data
 
 
  The data in
@@ -289,6 +290,7 @@ barring some kind of 3D-plotting procedure.)
 
 
 
+##  Do characteristics of urine depend on obesity?
 
 
  A study was made of the characteristics of urine of young
@@ -508,6 +510,599 @@ need to run a discriminant analysis (coming up later).
 
 
 
-```{ r athletes-manova, child="athletes-manova.Rnw"}
+
+##  How do height and weight depend on sport played by elite athletes?
+
+
+ This question uses the data on Australian elite athletes,
+which can be found at
+[link](http://www.utsc.utoronto.ca/~butler/c32/ais.txt). 202 elite
+athletes had various physical and physiological measurements taken,
+and for each athlete, their gender (in the column `Sex`) and
+the sport they play (`Sport`) was also noted. The data values
+are separated by *tabs*, meaning that `read_tsv` will
+read them in.
+
+
+
+(a) Read in the data and verify that you have 202 rows and 13
+columns. 
+
+Solution
+
+
+As in the hint:
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes = read_tsv(my_url)
 ```
+
+```
+## Parsed with column specification:
+## cols(
+##   Sex = col_character(),
+##   Sport = col_character(),
+##   RCC = col_double(),
+##   WCC = col_double(),
+##   Hc = col_double(),
+##   Hg = col_double(),
+##   Ferr = col_integer(),
+##   BMI = col_double(),
+##   SSF = col_double(),
+##   `%Bfat` = col_double(),
+##   LBM = col_double(),
+##   Ht = col_double(),
+##   Wt = col_double()
+## )
+```
+
+```r
+athletes
+```
+
+```
+## # A tibble: 202 x 13
+##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr
+##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <int>
+##  1 fema~ Netb~  4.56  13.3  42.2  13.6    20
+##  2 fema~ Netb~  4.15   6    38    12.7    59
+##  3 fema~ Netb~  4.16   7.6  37.5  12.3    22
+##  4 fema~ Netb~  4.32   6.4  37.7  12.3    30
+##  5 fema~ Netb~  4.06   5.8  38.7  12.8    78
+##  6 fema~ Netb~  4.12   6.1  36.6  11.8    21
+##  7 fema~ Netb~  4.17   5    37.4  12.7   109
+##  8 fema~ Netb~  3.8    6.6  36.5  12.4   102
+##  9 fema~ Netb~  3.96   5.5  36.3  12.4    71
+## 10 fema~ Netb~  4.44   9.7  41.4  14.1    64
+## # ... with 192 more rows, and 6 more
+## #   variables: BMI <dbl>, SSF <dbl>,
+## #   `%Bfat` <dbl>, LBM <dbl>, Ht <dbl>,
+## #   Wt <dbl>
+```
+
+     
+
+202 rows and 13 columns indeed.
+
+
+(b) We are going to see whether the height-weight combination
+of an athlete depends significantly on which sport they play and which gender
+they are. Explain (very) briefly why a multivariate analysis of
+variance will be necessary to do this.
+
+Solution
+
+
+We now have *two* response variables, height and weight,
+rather than just one. In order to do a test with more than one
+response variable, we need to use multivariate ANOVA rather than
+regular ANOVA. (The first sentence is enough.)
+Extra: the explanatory variables, sport and gender, are both
+categorical here, which makes a MANOVA work. If either of them had
+been quantitative, we would have needed to do a multivariate
+regression, which is beyond the scope of what we do in this course.
+
+
+(c) Create a response variable for a MANOVA. (You don't need to
+show what you got, since it is rather big.) The columns you want are
+called `Ht` and `Wt`.
+
+Solution
+
+
+Use `cbind` to glue the two columns together:
+
+```r
+response = with(athletes, cbind(Ht, Wt))
+```
+
+     
+
+Either way around, height or weight first, is good. Also good is the
+dollar sign, which you'll need to do twice (and thus the `with`
+way is more elegant):
+
+
+```r
+response_a = cbind(athletes$Ht, athletes$Wt)
+```
+
+ 
+
+
+(d) Run a multivariate analysis of variance to see whether the
+height-weight combination depends significantly on gender, sport or the
+combination of both. Display the results. Use the small-m
+`manova` way to do this one.
+
+Solution
+
+
+The straightforward way is small-m `manova`. I don't know
+what I should be calling my fitted model object, so I'm making
+something up. Don't forget to use the right names for the
+variables, and to include an interaction:
+
+```r
+htwt.1 = manova(response ~ Sex * Sport, data = athletes)
+summary(htwt.1)
+```
+
+```
+##            Df  Pillai approx F num Df den Df
+## Sex         1 0.52412  101.325      2    184
+## Sport       9 0.87914   16.123     18    370
+## Sex:Sport   6 0.04105    0.646     12    370
+## Residuals 185                               
+##           Pr(>F)    
+## Sex       <2e-16 ***
+## Sport     <2e-16 ***
+## Sex:Sport 0.8023    
+## Residuals           
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+     
+
+The other way is apparently to use large-M `Manova` from package
+`car`. This goes as a two-stage process: fit an `lm`
+first with the same model formula as above, and then pass *that*
+into `Manova`. This way, you just "print" the final result,
+rather than passing it into `summary`:
+
+
+```r
+htwt.2 = lm(response ~ Sex * Sport, data = athletes)
+htwt.3 = Manova(htwt.2)
+```
+
+```
+## Error in solve.default(wcrossprod(model.matrix(mod), w = wts)): Lapack routine dgesv: system is exactly singular: U[13,13] = 0
+```
+
+ 
+
+Except that this doesn't work, for reasons that I don't
+understand. `htwt.2` is fine; it's the `Manova` that is
+not working.
+
+
+(e) Briefly justify removing the interaction term from your
+previous model, and fit a model without it. You can use either
+`manova` or `Manova` for this; they should both
+work. (You only need to use one of them.)  Display your results.
+
+Solution
+
+
+The interaction should come out, since it is not
+significant. (This is what I meant by "briefly.")
+To do that, in each case, replace the `*` with a `+`, or use
+`update`. Most of those work:
+
+```r
+htwt.4 = manova(response ~ Sex + Sport, data = athletes)
+summary(htwt.4)
+```
+
+```
+##            Df  Pillai approx F num Df den Df
+## Sex         1 0.51888  102.454      2    190
+## Sport       9 0.86923   16.314     18    382
+## Residuals 191                               
+##              Pr(>F)    
+## Sex       < 2.2e-16 ***
+## Sport     < 2.2e-16 ***
+## Residuals              
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+   
+
+or
+
+
+```r
+htwt.5 = update(htwt.1, . ~ . - Sex:Sport)
+```
+
+```
+## Warning in if (projections) qr <- lmcall$qr
+## <- TRUE: the condition has length > 1 and
+## only the first element will be used
+```
+
+```
+## Error in if (projections) qr <- lmcall$qr <- TRUE: argument is not interpretable as logical
+```
+
+ 
+
+It seems that `manova` things don't like `update`. If
+that happened to you, try it another way.
+
+or, with `Manova`, the same two ways:
+
+
+```r
+htwt.6 = lm(response ~ Sex + Sport, data = athletes)
+htwt.7 = Manova(htwt.6)
+htwt.7
+```
+
+```
+## 
+## Type II MANOVA Tests: Pillai test statistic
+##       Df test stat approx F num Df den Df
+## Sex    1   0.44278   75.489      2    190
+## Sport  9   0.86923   16.314     18    382
+##          Pr(>F)    
+## Sex   < 2.2e-16 ***
+## Sport < 2.2e-16 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+ 
+
+or
+
+
+```r
+htwt.8 = update(htwt.2, . ~ . - Sex:Sport)
+htwt.9 = Manova(htwt.8)
+htwt.9
+```
+
+```
+## 
+## Type II MANOVA Tests: Pillai test statistic
+##       Df test stat approx F num Df den Df
+## Sex    1   0.44278   75.489      2    190
+## Sport  9   0.86923   16.314     18    382
+##          Pr(>F)    
+## Sex   < 2.2e-16 ***
+## Sport < 2.2e-16 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+ 
+
+These both work, and give the same answer. I think this is because the
+thing being `update`d is a regular `lm`; the
+`Manova` bit comes after, and is calculated from the
+`lm` fit.
+
+Any of these is good, and gets you the same answer.
+
+Extra: it you run `summary` on the output from `Manova`,
+you get more detail:
+
+
+```r
+summary(htwt.9)
+```
+
+```
+## 
+## Type II MANOVA Tests:
+## 
+## Sum of squares and products for error:
+##          Ht        Wt
+## Ht 6871.978  5842.771
+## Wt 5842.771 13613.021
+## 
+## ------------------------------------------
+##  
+## Term: Sex 
+## 
+## Sum of squares and products for the hypothesis:
+##          Ht       Wt
+## Ht 4582.744 6146.078
+## Wt 6146.078 8242.718
+## 
+## Multivariate Tests: Sex
+##                  Df test stat approx F
+## Pillai            1 0.4427781 75.48862
+## Wilks             1 0.5572219 75.48862
+## Hotelling-Lawley  1 0.7946171 75.48862
+## Roy               1 0.7946171 75.48862
+##                  num Df den Df     Pr(>F)
+## Pillai                2    190 < 2.22e-16
+## Wilks                 2    190 < 2.22e-16
+## Hotelling-Lawley      2    190 < 2.22e-16
+## Roy                   2    190 < 2.22e-16
+##                     
+## Pillai           ***
+## Wilks            ***
+## Hotelling-Lawley ***
+## Roy              ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## 
+## ------------------------------------------
+##  
+## Term: Sport 
+## 
+## Sum of squares and products for the hypothesis:
+##          Ht        Wt
+## Ht 6162.455  7070.085
+## Wt 7070.085 13727.950
+## 
+## Multivariate Tests: Sport
+##                  Df test stat approx F
+## Pillai            9 0.8692278 16.31358
+## Wilks             9 0.3132928 16.60578
+## Hotelling-Lawley  9 1.6093145 16.89780
+## Roy               9 1.0593835 22.48247
+##                  num Df den Df     Pr(>F)
+## Pillai               18    382 < 2.22e-16
+## Wilks                18    380 < 2.22e-16
+## Hotelling-Lawley     18    378 < 2.22e-16
+## Roy                   9    191 < 2.22e-16
+##                     
+## Pillai           ***
+## Wilks            ***
+## Hotelling-Lawley ***
+## Roy              ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+ 
+
+There are actually *four* competing tests that generalize the
+one-response-variable $F$ statistic in different ways. The one we've
+been using is called Pillai's Trace, but if you go looking in a text
+on multivariate analysis, you'll also see the others, especially
+Wilks's $\Lambda$ (that's a capital lambda). They will generally agree
+in terms of conclusion, so you can look at them all if you like, but
+it doesn't hurt much to look at only one.
+
+I am in danger of running out of numbers for my fitted models (and am
+definitely in danger of forgetting which one is which)!
+
+
+(f) See if you can make a graph that shows what's going on
+here. Bear in mind that you have two quantitative variables and
+*two* categorical ones, so you will need to find a way to
+display everything. Hint: what would you do with two quantitative
+variables and *one* categorical one? Can you find a way to
+generalize that idea by displaying the other categorical variable
+differently? I think we have seen a couple of ideas that will work,
+somewhere in the lecture notes (but in a different context). Or you
+can search for ideas, of course.
+For full marks, obtain a plot which does not give you any
+warnings. (The grader will know which of the possible plots give
+warnings, and will deduct extra marks if you assert that a plot
+gives no warnings when in fact it does. That is to say, if you get
+any warnings, *you need to include those in what you hand in*).
+
+Solution
+
+
+This will probably involve a bit of digging.
+The starting point would be a scatterplot (the two quantitative
+variables) with the points distinguished by colour (one of the
+categorical variables). What other options do we have? 
+If you look eg. at the navigation on the left of
+[link](http://sape.inf.usi.ch/quick-reference/ggplot2/size), you'll
+see that there are two likely possibilities: `shape` and
+`size`. `shape` uses a different plotting symbol for
+each value of a categorical variable; `size` draws the
+plotting symbol bigger or smaller according to the value of a
+categorical variable. 
+The remaining question is the one of which aesthetic to "map" to
+which variable? To guide you in this, note that we have ten
+different sports and two different genders. In my opinion, colours
+are the easiest to distinguish a lot of, though even then 10 is
+pushing it, then plotting symbols. Symbol sizes are hard to
+distinguish a lot of, so it's best to limit this (if you use it at
+all) to gender.
+With that in mind, I would go for this one:
+
+```r
+ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, 
+    shape = Sex)) + geom_point()
+```
+
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-21-1} 
+
+     
+
+If you investigate, you'll find that `ggplot` can handle about
+six different shapes (and we have ten sports), and it doesn't care for
+using `size` to distinguish values of a categorical
+variable. It will try to draw the graph, but will give you a warning,
+such as these:
+
+
+```r
+ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, 
+    size = Sex)) + geom_point()
+```
+
+```
+## Warning: Using size for a discrete variable
+## is not advised.
+```
+
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-22-1} 
+
+     
+
+
+```r
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
+    size = Sex)) + geom_point()
+```
+
+```
+## Warning: Using size for a discrete variable
+## is not advised.
+```
+
+```
+## Warning: The shape palette can deal with a
+## maximum of 6 discrete values because
+## more than 6 becomes difficult to
+## discriminate; you have 10. Consider
+## specifying shapes manually if you must
+## have them.
+```
+
+```
+## Warning: Removed 72 rows containing missing values
+## (geom_point).
+```
+
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-23-1} 
+
+     
+
+
+```r
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
+    colour = Sex)) + geom_point()
+```
+
+```
+## Warning: The shape palette can deal with a
+## maximum of 6 discrete values because
+## more than 6 becomes difficult to
+## discriminate; you have 10. Consider
+## specifying shapes manually if you must
+## have them.
+```
+
+```
+## Warning: Removed 72 rows containing missing values
+## (geom_point).
+```
+
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-24-1} 
+
+     
+
+Whatever plot you come up with, you can put height and weight on the
+other axes, since neither one of them is uniquely a response variable.
+
+Any of these graphs with warnings do the job, kind of, so they get 2 points.
+
+One of the many well-thought-out things about `ggplot2` is that
+making this graph was actually not difficult once you had figured out
+that you also had `shape` and `size` at your
+disposal. (In addition, `ggplot2` will help you make some
+aesthetic decisions about which variable is distinguished by what kind
+of thing. This will help you work towards a plot that doesn't have any
+warnings. These warnings are pretty clear about what not to do, and by
+implication what you need to do instead. Colour, for example, is
+always safe warning-wise.)
+
+The model for this kind of graph that we saw is the plot of
+probability (of preferring different brands of a product) as it depended
+on age (two quantitative variables) for each brand and gender (two
+categorical variables). I had three brands and two genders there, so I
+used colour for brand and shape for gender, but it would have worked
+about as well if I'd used shape for brand and colour for gender.
+
+The warning message for `shape` contains the words ``specify
+shapes manually if you must have them''. I was wondering how you can
+avoid that. Here's how:
+
+
+```r
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
+    colour = Sex)) + geom_point() + scale_shape_manual(values = 1:10)
+```
+
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-25-1} 
+
+     
+
+I agree with `ggplot2` that this many shapes are hard to tell
+apart,
+\marginnote{Having said that, the shapes are less anbiguous than  the colours, because if you're willing to study the legend, you can  work out exactly which sport a shape belongs to, whereas the colours  might be hard to tell apart at all.} but if you can figure this out,
+you achieve the goal of producing a plot with no warnings, so you get
+full marks. (We need 10 shapes because there are 10 different sports,
+so we have to specify 10 different values in `values=`: any 10
+different values will do. A list of the possible shapes is in
+[link](https://stackoverflow.com/questions/16813278/cycling-through-point-shapes-when-more-than-6-factor-levels),
+at the bottom. You can even use regular letters, but you have to refer
+to them by numeric code:
+
+
+```r
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
+    colour = Sex)) + geom_point() + scale_shape_manual(values = c(66, 
+    70, 71, 78, 82, 83, 52, 84, 3, 87))
+```
+
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-26-1} 
+
+     
+
+I had to find something for `TSprnt`, since all the letters
+appeared to be taken.
+
+On consideration, I like this last graph the best, because the letters
+are more or less reminders of which sport each point is (they are
+"mnemonic", so you don't have to look them up all the time, as with
+colours or shapes: you can eventually remember which is which). 
+
+Whatever you come up with, expect: 3 marks if you get a plot with no
+warnings, 2 marks if you get a plot with warnings, 1 mark if you get a
+plot that would produce warnings but you don't indicate that there are
+warnings, either by saying so or by including the warnings in what you
+hand in.
+
+I didn't ask you to interpret your plot (just getting it was enough
+work), but there seems to be a common theme that, for sports played by
+both genders, that the athletes are in about the same place relative
+to the other ones in their gender (eg., the basketball players are
+tall and heavy, the field athletes are really heavy but not very
+tall), but male athletes are both taller and heavier than female
+athletes playing the same sport. This consistency of pattern was
+probably why the interaction was nowhere near significant: there are
+additive separate effects of sport and of gender on the height-weight
+combination. 
+
+
+
 

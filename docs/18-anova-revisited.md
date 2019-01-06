@@ -1963,7 +1963,7 @@ contrasts. It will work, and it will be good even though your
 contrasts will look different from mine.
 
 
-(d)<a name="part:mean-eval">*</a> 
+(d) <a name="part:mean-eval">*</a> 
 Obtain a table of mean evaluation scores for each treatment group.
   
 
@@ -2423,7 +2423,7 @@ you miss it out, you'll get those CI-of-mean-response grey envelopes
 around each line.)
 
 
-(c)<a name="part:graph-comment">*</a> 
+(c) <a name="part:graph-comment">*</a> 
 Look at your graph of the previous part. Do you think that (i)
 knowing last year's productivity improvement tells you something
 about this year's, (ii) the level of expenditure on
@@ -2857,7 +2857,7 @@ Call it what you like.
 That looks good, with variables of the right names. 
  
 
-(b)<a name="part:lepro-scatter">*</a> Make a scatterplot of post-treatment score against
+(b) <a name="part:lepro-scatter">*</a> Make a scatterplot of post-treatment score against
 pre-treatment score, with the points for each drug drawn in a
 different colour. 
  
@@ -3323,6 +3323,7 @@ prove that those three slopes are really different.
 
 
 
+##  Do characteristics of urine depend on obesity?
 
 
  A study was made of the characteristics of urine of young

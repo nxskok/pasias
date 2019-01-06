@@ -12,7 +12,8 @@ rmds: carp.Rmd socwork.Rmd pinetrees.Rmd jays-dplyr.Rmd tomatoes.Rmd migraine.Rm
     catbrain-b.Rmd ovarian.Rmd caffeine-contrast.Rmd studyhours.Rmd\
     mental-context.Rmd shirts.Rmd productivity.Rmd leprosy.Rmd urine.Rmd\
     hayfever.Rmd acidrain.Rmd caffeine.Rmd ratweight.Rmd geriatrics.Rmd airport.Rmd bodyfat2.Rmd king.Rmd rm.Rmd\
-    manova1.Rmd urine.Rmd athletes-manova.Rmd
+    manova1.Rmd urine.Rmd athletes-manova.Rmd swiss-money.Rmd urine2.Rmd manova1a.Rmd jobs.Rmd adhd.Rmd\
+    cornseed.Rmd athletes-d.Rmd
 %.Rmd: ~/teaching/d29/exams/%.Rnw convert.pl
 	perl convert.pl $< > $@
 all: index.Rmd
@@ -33,4 +34,6 @@ ch19: index.Rmd
 	Rscript -e "bookdown::preview_chapter('19-manova.Rmd')"
 ch20: index.Rmd
 	Rscript -e "bookdown::preview_chapter('20-repeated-measures.Rmd')"
+ch21: index.Rmd
+	Rscript -e "bookdown::preview_chapter('21-discriminant-analysis.Rmd')"
 

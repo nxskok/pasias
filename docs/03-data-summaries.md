@@ -1638,7 +1638,7 @@ read_delim(my_url, " ", col_names = c("instructor",
  
 
 
-(b)<a name="part:sbsbox">*</a> Obtain side-by-side boxplots of the scores for each class.
+(b) <a name="part:sbsbox">*</a> Obtain side-by-side boxplots of the scores for each class.
  
 Solution
 

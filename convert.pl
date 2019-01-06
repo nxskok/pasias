@@ -28,7 +28,7 @@ sub main {
     $content=~s/\\item\s(.*)/\n* $1/g;
     $content=~s/\\endnote\{(.*)\}/\n`r tufte::margin_note(\"$1\")`/g;
     # alert me to the need to fix up references (HTML seems to work if done properly)
-    $content=~s/\\label\{(.*?)\}/<a name=\"$1\">*<\/a>/g;
+    $content=~s/\\label\{(.*?)\}/ <a name=\"$1\">*<\/a>/g;
     $content=~s/\\ref\{(.*?)\}/<a href=\"\#$1\">here<\/a>/g;
     
     # quotes

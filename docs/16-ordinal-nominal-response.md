@@ -40,7 +40,7 @@ frequencies of people falling into each category combination, are in [link](http
 
 
 
-(a)<a name="part:gather">*</a> Read in the data and take a look at the format. Use a tool
+(a) <a name="part:gather">*</a> Read in the data and take a look at the format. Use a tool
 that you know about to arrange the frequencies in *one* column,
 with other columns labelling the response categories that the
 frequencies belong to. Save the new data frame. (Take a look at it
@@ -367,7 +367,7 @@ label `ord` means that it is an ordered factor, as we want.
 
 
 
-(d)<a name="part:thefit">*</a>
+(d) <a name="part:thefit">*</a>
 Fit ordered logistic models to predict satisfaction from (i) gender
 and age group, (ii) gender only, (iii) age group only. (You don't
 need to examine the models.) Don't forget a suitable
@@ -736,7 +736,7 @@ the same way.
  
 
 
-(j)<a name="part:unload">*</a> 
+(j) <a name="part:unload">*</a> 
 Describe any patterns you see in the predictions, bearing in mind the
 significance or not of the explanatory variables.
 
@@ -783,7 +783,7 @@ detach("package:MASS", unload = T)
 ##  Attitudes towards abortion
 
 
-<a name="q:abortion">*</a> Abortion is a divisive issue in the United States,
+ <a name="q:abortion">*</a> Abortion is a divisive issue in the United States,
 particularly among Christians, some of whom believe that abortion is
 absolutely forbidden by the Bible. Do attitudes towards abortion
 differ among Christian denominations? The data in
@@ -1228,7 +1228,7 @@ model with both variables is best, the one I called
 
 
 
-(h)<a name="part:preds">*</a> 
+(h) <a name="part:preds">*</a> 
 Obtain predicted probabilities for each attitude towards abortion
 for each combination of education level and religious
 denomination. To do that, (i) obtain those levels of education and
@@ -1447,7 +1447,7 @@ detach("package:MASS", unload = T)
 ##  Finding non-missing values
 
 
-<a name="part:prepare-next">*</a> This is to prepare you for something in the next
+ <a name="part:prepare-next">*</a> This is to prepare you for something in the next
 question. It's meant to be easy.
 
 In R, the code `NA` stands for "missing value" or
@@ -1712,7 +1712,7 @@ ess
 2286 rows and 17 columns.
  
 
-(b)<a name="part:whatvar">*</a> Use the codebook to find out what the columns
+(b) <a name="part:whatvar">*</a> Use the codebook to find out what the columns
 `prtvtgb`, `gndr`, `agea`, `eduyrs` and
 `inwtm` are.  What do the values 1 and 2 for `gndr`
 mean? (You don't, at this point, have to worry about the values for
@@ -1853,7 +1853,7 @@ left-right spectrum, you would have had to decide where to put the
 somewhat libertarian Greens or the parties that exist only in Northern Ireland.
  
 
-(f)<a name="part:full">*</a> Take the political party voted for, and turn it into a
+(f) <a name="part:full">*</a> Take the political party voted for, and turn it into a
 factor, by feeding it into `factor`.
 Fit an appropriate model to predict political party voted
 for at the last election (as a factor) from all the other
@@ -3097,7 +3097,7 @@ commoner for large alligators than small ones.
 ##  How do you like your steak -- the data
 
 
-<a name="q:steak-data">*</a> This question takes you through the data preparation for one
+ <a name="q:steak-data">*</a> This question takes you through the data preparation for one
 of the other questions. You don't have to do *this*
 question, but you may find it interesting or useful.
 

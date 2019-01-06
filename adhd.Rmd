@@ -1,0 +1,323 @@
+##  Observing children with ADHD
+
+
+ A number of children with ADHD were observed by their mother
+or their father (only one parent observed each child). Each parent was
+asked to rate occurrences of behaviours of four different types,
+labelled `q1` through `q4` in the data set. Also
+recorded was the identity of the parent doing the observation for each
+child: 1 is father, 2 is mother.
+
+Can we tell (without looking at the `parent` column) which
+parent is doing the observation? Research suggests that rating the
+degree of impairment in different categories depends on who is doing
+the rating: for example, mothers may feel that a  child has difficulty
+sitting still, while fathers, who might do more observing of a child
+at play, might think of such a child as simply being "active" or
+"just being a kid". The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/adhd-parents.txt). 
+
+
+
+(a) Read in the data and confirm that you have four ratings and
+a column labelling the parent who made each observation.
+
+
+Solution
+
+
+As ever:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/adhd-parents.txt"
+adhd=read_delim(my_url," ")
+adhd
+```
+
+     
+
+Yes, exactly that.
+    
+
+
+(b) Run a suitable discriminant analysis and display the output.
+
+
+Solution
+
+
+This is as before:
+```{r }
+adhd.1=lda(parent~q1+q2+q3+q4,data=adhd)
+adhd.1
+```
+
+     
+    
+
+
+(c) Which behaviour item or items seem to be most helpful at
+distinguishing the parent making the observations? Explain briefly.
+
+
+Solution
+
+
+Look at the Coefficients of Linear Discriminants. The coefficient
+of `q2`, 2.32, is much larger in size than the others, so
+it's really `q2` that distinguishes mothers and fathers.
+Note also that the group means for fathers and mothers are fairly
+close on all the items except for `q2`, which are a long
+way apart. So that's another hint that it might be `q2`
+that makes the difference. But that might be deceiving: one of the
+other `q`s, even though the means are close for mothers and
+fathers, might actually do a good job of distinguishing mothers
+from fathers, because it has a small SD overall.
+    
+
+
+(d) Obtain the predictions from the `lda`, and make a
+suitable plot of the discriminant scores, bearing in mind that you
+only have one `LD`.  Do you think there will be any
+misclassifications? Explain briefly.
+
+
+Solution
+
+
+The prediction is the obvious thing. I take a quick look at it
+(using `glimpse`), but only because I feel like it:
+```{r }
+adhd.2=predict(adhd.1)
+glimpse(adhd.2)
+```
+
+     
+
+The discriminant scores are in the thing called `x` in
+there. There is only `LD1` (only two groups, mothers and
+fathers), so the right way to plot it is against the true groups, eg.
+by a boxplot, first making a data frame, using `data.frame`,
+containing what you need:
+
+```{r }
+data.frame(parent=adhd$parent,adhd.2$x) %>%
+ggplot(aes(x=parent,y=LD1))+geom_boxplot()
+```
+
+ 
+The fathers look to be a very compact group with `LD1` score
+around $-3$, so I don't foresee any problems there. The mothers, on
+the other hand, have outliers: there is one with `LD1` score
+beyond $-3$ that will certainly be mistaken for a father. There are a
+couple of other unusual `LD1` scores among the mothers, but a
+rule like ``anything above $-2$ is called a mother, anything below is
+called a father'' will get these two right. So I expect that the one
+very low mother will get misclassified, but that's the only one.
+    
+
+
+(e) Obtain the predicted group memberships and make a table of
+actual vs.\ predicted. Were there any misclassifications? Explain
+briefly. 
+
+
+Solution
+
+
+Use the predictions from the previous part, and the observed
+`parent` values from the original data frame. Then use
+either `table` or `tidyverse` to summarize.
+```{r }
+table(obs=adhd$parent,pred=adhd.2$class)
+```
+$
+
+Or,
+
+```{r }
+d=data.frame(obs=adhd$parent,pred=adhd.2$class) 
+d %>% count(obs,pred)
+```
+
+ 
+One of the mothers got classified as a father (evidently that one with
+a very negative `LD1` score), but everything else is correct.
+
+This time, by "explain briefly" I mean something like ``tell me how
+you know there are or are not misclassifications'', or ``describe any
+misclassifications that occur'' or something like that. 
+
+Extra: I was curious --- what is it about that one mother that caused
+her to get misclassified? (I didn't ask you to think further about
+this, but in case you are curious as well.) 
+
+First, which mother *was* it? Let's begin by adding the predicted
+classification to the data frame, and then we can query it by asking
+to see only the rows where the actual parent and the predicted parent
+were different. I'm also going to create a column `id` that
+will give us the row of the *original* data frame:
+
+```{r }
+adhd %>%
+mutate(pred=adhd.2$class,id=row_number()) %>%
+filter(parent!=pred)
+```
+$
+
+It was the original row 17. So what was unusual about this? We know
+from earlier
+that behaviour `q2` was the one that generally distinguished
+mothers from fathers, so maybe we should find the mean and SD of scores for
+mothers and fathers on `q2`:
+
+```{r }
+adhd %>% group_by(parent) %>% summarize(m2=mean(q2),s2=sd(q2))
+```
+
+ 
+
+The fathers' scores on `q2` were *all* 1, but the mothers'
+scores on `q2` were on average much higher. So it's not really
+a surprise  that this mother was mistaken for a father.
+    
+
+
+(f) Re-run the discriminant analysis using cross-validation,
+and again obtain a table of actual and predicted parents. Is the
+pattern of misclassification different from before? Hints: (i) Bear in mind
+that there is no `predict` step this time, because the
+cross-validation output includes predictions; (ii) use a different name
+for the predictions this time because we are going to do a
+comparison in a moment.
+
+
+Solution
+
+
+So, this, with different name:
+```{r }
+adhd.3=lda(parent~q1+q2+q3+q4,data=adhd,CV=T)
+table(obs=adhd$parent,pred=adhd.3$class)
+```
+
+     
+
+It's exactly the same pattern of misclassification. (In fact, it's
+exactly the same mother being misclassified as a father.)
+
+This one is the same *not* because of having lots of data. In
+fact, as you see below, having a small data set makes quite a bit of
+difference to the posterior probabilities (where they are not close to
+1 or 0), but the decisions about whether the parents are a mother or a
+father are clear-cut enough that none of *those* change. Even
+though (some of) the posterior probabilities are noticeably changed,
+which one is the bigger has not changed at all.
+    
+
+
+(g) Display the original data (that you read in from the data
+file) side by side with two sets of posterior probabilities: the
+ones that you obtained with `predict` before, and the ones
+from the cross-validated analysis. Comment briefly on whether the
+two sets of posterior probabilities are similar. Hints: (i) use
+`data.frame` rather than `cbind`, for reasons that I
+explain elsewhere; (ii) round the posterior probabilities to 3
+decimals before you display them.
+There are only 29 rows, so display them all. I am going to add the
+`LD1` scores to my output and sort by that, but you don't
+need to. (This is for something I am going to add later.)
+
+
+Solution
+
+
+Something like this:
+```{r }
+pr.lda=round(adhd.2$posterior,3)
+pr.cv=round(adhd.3$posterior,3)
+data.frame(adhd,adhd.2$x,pr.lda,pr.cv) %>% arrange(LD1)
+```
+
+   
+
+The last four columns are: the posterior probabilities from before,
+for father and for mother (two columns), and the posterior
+probabilities from cross-validation for father and for mother (two
+more columns). You might have these the other way around, but in any
+case you ought to make it clear which is which. I included the
+`LD1` scores for my discussion below; you don't need to.
+
+Are the two sets of posterior probabilities similar? Only kinda. The
+ones at the top and bottom of the list are without doubt fathers at
+the top of the list (top 5 rows on my sorted output, only one of those
+is actually a mother), or mothers at the bottom, from row 10 down. But
+for rows 6 through 9, the posterior probabilities are not that similar.
+The most dissimilar ones are in row 4, where the regular
+`lda` gives a posterior probability of 0.050 that the parent is
+a father, but under cross-validation that goes all the way up to
+0.236. I think this is one of those mothers that is a bit like a
+father: her score on `q2` was only 2, compared to 3 for most of
+the mothers. If you take out this mother, as cross-validation does,
+there are noticeably fewer `q2=2` mothers left, so the
+observation looks more like a father than it would otherwise.
+    
+
+
+(h) Row 17 of your (original) data frame above, row 5 of the
+output in the previous part, is the mother that was
+misclassified as a father. Why is it that the cross-validated
+posterior probabilities are 1 and 0, while the previous posterior
+probabilities are a bit less than 1 and a bit more than 0?
+
+
+Solution
+
+
+In making the classification, the non-cross-validated procedure
+uses all the data, so that parent \#17 suggests that the mothers are
+very variable on `q2`, so it is conceivable (though still
+unlikely) that this parent actually is a mother. 
+Under cross-validation, however, parent \#17 is
+*omitted*. This mother is nothing like any of the other
+mothers, or, to put it another way, the remaining mothers as a
+group are very far away from this one, so \#17 doesn't look like a
+mother *at all*.
+    
+
+
+(i) Find the parents where the cross-validated posterior
+probability of being a father is "non-trivial": that is, not
+close to zero and not close to 1. (You will have to make a judgement
+about what "close to zero or 1" means for you.) What do these
+parents have in common, all of them or most of them?
+
+
+Solution
+
+
+To my mind, the "non-trivial" posterior probabilities are in
+rows 4 and 23, and maybe rows 13 and 16 as well. These are the
+ones where there was some doubt, though maybe only a little, about
+which parent actually gave the ratings. For three of these, rows
+4, 13 and 23, the parent (that was actually a mother) gave a
+rating of 2 on `q2`. These were the only 2's on
+`q2`. The others were easy to call: "mother" if 3 and
+"father" if 1, and you'd get them all right except for that
+outlying mother. 
+The clue in looking at `q2` was that we found earlier that
+`LD1` contained mostly `q2`, so that it was mainly
+`q2` that separated the fathers and mothers. If you found
+something else that the "non-trivial" rows had in common, that
+is good too, but I think looking at `q2` is your quickest
+route to an answer.
+This is really the same kind of issue as we discussed when
+comparing the posterior probabilities for `lda` and
+cross-validation above: there were only a few parents with
+`q2=2`, so the effect there is that under cross-validation,
+there are even fewer when you take one of them out.
+    
+
+
+
+
+

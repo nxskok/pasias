@@ -26,7 +26,7 @@ library(tidyverse)
 ##  Finding wolf spiders on the beach
 
 
-<a name="q:wolfspider">*</a> A team of Japanese researchers were investigating what would
+ <a name="q:wolfspider">*</a> A team of Japanese researchers were investigating what would
 cause the burrowing wolf spider *Lycosa ishikariana* to be found
 on a beach. They hypothesized that it had to do with the size of the
 grains of sand on the beach. They went to 28 beaches in Japan,
@@ -585,7 +585,7 @@ different forms, and you need to be able to handle whatever you
 receive so that you can do some analysis with it.
  
 
-(b)<a name="part:expo">*</a> Looking at the data, would you expect there to be a
+(b) <a name="part:expo">*</a> Looking at the data, would you expect there to be a
 significant effect of log-concentration? Explain briefly.
  
 Solution
@@ -1402,7 +1402,7 @@ of the *response* variable in separate columns.
 Back to where we were the rest of the way.
  
 
-(b)<a name="part:plot">*</a> Make suitable plots or summaries of `infected` against
+(b) <a name="part:plot">*</a> Make suitable plots or summaries of `infected` against
 each of the other variables. (You'll have to think about
 `sex`, um, you'll have to think about the `sex`
 variable, because it too is categorical.) Anything sensible is OK
@@ -1725,7 +1725,7 @@ needed because `glm` requires a model formula first rather than
 a data frame (if the data were first, you could just omit it). 
  
 
-(e)<a name="part:remove">*</a> Which variables, if any, would you consider removing from
+(e) <a name="part:remove">*</a> Which variables, if any, would you consider removing from
 the model? Explain briefly.
  
 Solution
@@ -1759,7 +1759,7 @@ P-value definitely larger than for the other variables, so that
 the evidence of its usefulness was weaker).
  
 
-(g)<a name="part:crossing">*</a>
+(g) <a name="part:crossing">*</a>
 The first and third quartiles of `age` are 26 and 130;
 the first and third quartiles of `weight` are 9 and
 16. Obtain predicted probabilities for all combinations of these and
@@ -2478,7 +2478,7 @@ putting a `.` there, but that doesn't work since there is no
     
 
 
-(d)<a name="part:whichprob">*</a> Is your slope for `gender` in the previous logistic
+(d) <a name="part:whichprob">*</a> Is your slope for `gender` in the previous logistic
 regression positive or negative? Is it applying to males or to females?
 Looking at the conclusions from your 
 contingency table, what probability does that mean your logistic
@@ -3564,7 +3564,7 @@ the factor is predicted, which is `yes`.
     
 
 
-(c)<a name="part:heart-first">*</a> Fit a logistic regression predicting heart disease from
+(c) <a name="part:heart-first">*</a> Fit a logistic regression predicting heart disease from
 everything else (if you have a column called `X` or
 `X1`, ignore that), and display the results.
 
@@ -4703,14 +4703,14 @@ heart.new %>% sample_n(8)
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol
 ##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  nonangin~        120        280
-## 2 male  typical          140        213
-## 3 male  nonangin~        140        213
-## 4 male  nonangin~        140        280
-## 5 fema~ asymptom~        120        280
-## 6 male  typical          140        213
-## 7 fema~ atypical         140        280
-## 8 fema~ atypical         120        280
+## 1 fema~ nonangin~        140        280
+## 2 male  nonangin~        140        213
+## 3 male  asymptom~        140        280
+## 4 male  typical          120        280
+## 5 fema~ typical          140        280
+## 6 fema~ atypical         140        280
+## 7 fema~ atypical         120        213
+## 8 fema~ nonangin~        120        280
 ## # ... with 6 more variables: max.hr <dbl>,
 ## #   oldpeak <dbl>, slope <chr>,
 ## #   colored <dbl>, thal <chr>, pred <dbl>
@@ -6534,7 +6534,7 @@ The anxiety scores are numbers; the other two variables are "yes"
 and "no", which makes perfect sense.
 
 
-(b)<a name="part:fit">*</a> 
+(b) <a name="part:fit">*</a> 
 Fit a logistic regression predicting whether or not a heart attack
 survivor has a second heart attack, as it depends on anxiety score
 and whether or not the person took the anger management
@@ -6607,7 +6607,7 @@ The levels of a factor are taken in alphabetical order, with
 of the second one `y`.
 
 
-(d)<a name="part:preds">*</a>
+(d) <a name="part:preds">*</a>
 For the two possible values `y` and `n` of
 `anger` and the anxiety scores 40, 50 and 60, make a data
 frame containing all six combinations, and use it to obtain
