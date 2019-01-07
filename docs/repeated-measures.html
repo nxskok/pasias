@@ -282,6 +282,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">22.6</span> Growing corn</a></li>
 <li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">22.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
 </ul></li>
+<li class="has-sub"><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">23</span> Cluster analysis</a><ul>
+<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">23.1</span> Dissimilarities between fruits</a></li>
+<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">23.2</span> Similarity of species</a></li>
+<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">23.3</span> Rating beer</a></li>
+<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">23.4</span> Sites on the sea bed</a></li>
+<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">23.5</span> CLustering the Swiss bills</a></li>
+<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">23.6</span> Grouping similar cars</a></li>
+<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">23.7</span> Running, jumping, and throwing</a></li>
+<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">23.8</span> Bridges in Pittsburgh</a></li>
+</ul></li>
 </ul>
 </div>
 </div>
@@ -454,26 +464,26 @@ like this:</p>
 <pre><code>## # A tibble: 20 x 4
 ##    drug       junk  time  weight
 ##    &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;
-##  1 control    Time  3        129
-##  2 thiouracil Time  0         46
-##  3 thiouracil Time  1         75
-##  4 control    Time  1         77
-##  5 control    Time  1         93
-##  6 control    Time  4        154
-##  7 thyroxin   Time  4        144
-##  8 thiouracil Time  3        111
-##  9 thiouracil Time  1         61
-## 10 control    Time  4        141
-## 11 thiouracil Time  3        103
-## 12 thiouracil Time  2        100
-## 13 thiouracil Time  2        101
-## 14 control    Time  4        153
-## 15 thyroxin   Time  2         90
-## 16 thyroxin   Time  0         59
-## 17 thiouracil Time  2        101
-## 18 control    Time  0         56
-## 19 thyroxin   Time  4        140
-## 20 thiouracil Time  4        133</code></pre>
+##  1 thiouracil Time  1         79
+##  2 control    Time  0         57
+##  3 control    Time  4        140
+##  4 control    Time  1         81
+##  5 thiouracil Time  2         95
+##  6 thyroxin   Time  0         52
+##  7 control    Time  2        114
+##  8 thiouracil Time  2        109
+##  9 control    Time  3        130
+## 10 control    Time  1         93
+## 11 thiouracil Time  1         80
+## 12 control    Time  4        141
+## 13 control    Time  4        172
+## 14 thyroxin   Time  4        144
+## 15 thiouracil Time  0         59
+## 16 thyroxin   Time  0         54
+## 17 control    Time  2        110
+## 18 thiouracil Time  0         51
+## 19 control    Time  2         94
+## 20 thiouracil Time  3        111</code></pre>
 <p>Separate after the fourth character (<code>sep=4</code>), which will put
 <code>Time</code> into <code>junk</code> and the actual time into
 <code>time</code>. I could also have organized the data file so that the
@@ -489,26 +499,26 @@ Since the piece of the time we want is the number,
 <pre><code>## # A tibble: 20 x 4
 ##    drug       timex weight  time
 ##    &lt;chr&gt;      &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt;
-##  1 thyroxin   Time1     85     1
-##  2 thyroxin   Time2    116     2
-##  3 control    Time3    146     3
-##  4 thiouracil Time3    111     3
-##  5 thyroxin   Time1     75     1
-##  6 thiouracil Time0     53     0
-##  7 thyroxin   Time4    138     4
-##  8 thiouracil Time2     93     2
-##  9 control    Time3    110     3
-## 10 thyroxin   Time0     57     0
-## 11 thiouracil Time4    133     4
-## 12 control    Time0     51     0
-## 13 control    Time1     70     1
-## 14 control    Time4    154     4
-## 15 control    Time3    139     3
-## 16 thyroxin   Time1     85     1
+##  1 thyroxin   Time2    105     2
+##  2 control    Time0     56     0
+##  3 thiouracil Time1     61     1
+##  4 control    Time1     67     1
+##  5 thiouracil Time1     78     1
+##  6 control    Time3    139     3
+##  7 thiouracil Time1     80     1
+##  8 thyroxin   Time0     57     0
+##  9 thiouracil Time3    111     3
+## 10 control    Time0     49     0
+## 11 thiouracil Time3    120     3
+## 12 thiouracil Time2    100     2
+## 13 thyroxin   Time4    138     4
+## 14 control    Time3    129     3
+## 15 control    Time2    102     2
+## 16 thyroxin   Time3    120     3
 ## 17 thyroxin   Time3    148     3
-## 18 control    Time0     57     0
-## 19 thyroxin   Time3    138     3
-## 20 thiouracil Time1     78     1</code></pre>
+## 18 thiouracil Time2    109     2
+## 19 control    Time1     82     1
+## 20 thyroxin   Time0     59     0</code></pre>
 <p>I decided to show you a random collection of rows, so that you can see
 that <code>parse_number</code> worked for various different times.</p>
 <ol start="7" style="list-style-type: lower-alpha">
