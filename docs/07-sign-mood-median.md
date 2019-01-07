@@ -1029,9 +1029,9 @@ x
 ```
 
 ```
-##  [1] 40.82589 53.45016 42.32461 40.73938
-##  [5] 52.06031 79.55008 66.27728 72.57998
-##  [9] 54.08831 41.06385
+##  [1] 44.99585 16.14997 73.14971 48.84367
+##  [5] 54.15522 53.47164 56.36345 81.22766
+##  [9] 41.32383 48.37587
 ```
 
 
@@ -1052,10 +1052,11 @@ tibble(x) %>% count(x < 40)
 ```
 
 ```
-## # A tibble: 1 x 2
+## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE       10
+## 1 FALSE        9
+## 2 TRUE         1
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1088,7 +1089,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1      10 FALSE
+## 1       1 TRUE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1108,7 +1109,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1      10 TRUE
+## 1       1 TRUE
 ```
 
 The above is almost the right thing, but not quite: we only want that value

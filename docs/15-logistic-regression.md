@@ -4703,14 +4703,14 @@ heart.new %>% sample_n(8)
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol
 ##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  nonangin~        120        213
-## 2 male  nonangin~        140        213
-## 3 fema~ asymptom~        120        280
-## 4 fema~ typical          140        213
-## 5 male  nonangin~        140        213
-## 6 fema~ typical          120        280
-## 7 fema~ nonangin~        120        213
-## 8 male  asymptom~        120        280
+## 1 male  asymptom~        140        213
+## 2 fema~ typical          120        213
+## 3 fema~ nonangin~        140        213
+## 4 male  nonangin~        120        280
+## 5 fema~ nonangin~        120        213
+## 6 fema~ asymptom~        140        213
+## 7 male  nonangin~        120        213
+## 8 male  nonangin~        140        213
 ## # ... with 6 more variables: max.hr <dbl>,
 ## #   oldpeak <dbl>, slope <chr>,
 ## #   colored <dbl>, thal <chr>, pred <dbl>
