@@ -1,0 +1,236 @@
+##  CLustering the Swiss bills
+
+
+ This question is about the Swiss bank counterfeit bills
+again. This time we're going to ignore whether each bill is
+counterfeit or not, and see what groups they break into. Then, at
+the end, we'll see whether cluster analysis was able to pick out the
+counterfeit ones or not.
+
+
+(a) Read the data in again (just like last time), and look at
+the first few rows. This is just the same as before.
+ 
+Solution
+
+
+The data file was aligned in columns, so:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
+swiss=read_table(my_url)
+swiss
+```
+
+       
+ 
+
+(b) The variables in this data frame are on different
+scales. Standardize them so that they all have mean 0 and standard
+deviation 1. (Don't try to standardize the `status` column!)
+ 
+Solution
+
+
+```{r }
+swiss.s = swiss %>% select(-status) %>%
+scale()
+```
+
+    
+
+What kind of thing do we have?
+
+```{r }
+class(swiss.s)
+```
+
+ 
+
+so something like this is needed to display some of it (rather than
+all of it):
+
+```{r }
+head(swiss.s)
+```
+
+ 
+ 
+
+(c) We are going to make a scree plot: First, calculate the total within-cluster SS for
+each number of clusters from 2 to 10.
+ 
+Solution
+
+
+This is (perhaps most easily) a loop:
+```{r }
+clus=2:10
+wss.1=numeric(0)
+for (i in clus)
+{
+wss.1[i]=kmeans(swiss.s,i,nstart=20)$tot.withinss
+}
+wss.1
+```
+$ %$ %$
+
+Note that there are 10 `wss` values, but the first one is
+missing, since we didn't do one cluster.
+`r tufte::margin_note("R vectors start from  1, unlike C arrays or Python lists, which start from 0.")`
+
+The `numeric(0)` says ```wss` has nothing in it, but if
+it had anything, it would be numbers''. Or, you can initialize
+`wss` to however long it's going to be (here 10), which is
+actually more efficient (R doesn't have to keep making it ``a bit
+longer''). If you initialize it to length 10, the 10 values will have
+`NA`s in them when you start.
+
+It doesn't matter what `nstart` is: Ideally, big enough to have a decent
+chance of finding the best clustering, but small enough that it
+doesn't take too long to run.
+
+A perhaps more R way of doing this is to first make a function that
+calculates the total within-group sum of squares for one number of
+clusters, like this:
+
+```{r }
+wssf=function(i,data,nstart=20)
+{
+kmeans(data,i,nstart=nstart)$tot.withinss
+}
+```
+$ %$
+
+This takes the number of clusters as the *first* thing
+(important, as we see later), then anything else we need: some data,
+and the value for `nstart`, which defaults to 20.
+
+Then we apply this function to all the numbers of clusters we
+want. To do this, make a data frame with the numbers of clusters we want:
+
+```{r }
+w = tibble(clusters=2:10)
+w
+```
+
+
+
+Our function returns a decimal number (a `dbl`), so now we make
+a new column by running the function "for each" number of clusters:
+
+```{r }
+w = w %>% mutate(wss=map_dbl(clusters,wssf,swiss.s))
+w
+```
+
+ 
+
+We can use this easily for the scree plot in the next part.
+ 
+
+(d) <a name="part:howmany">*</a> Make a scree plot (creating a data frame
+first if you need). How many clusters do you think you
+should use?
+ 
+Solution
+
+
+The easiest is to use the output from the `map_dbl`,
+which I called `wss`:
+```{r }
+ggplot(w,aes(x=clusters,y=wss))+geom_point()+geom_line()
+```
+
+         
+If you did it the loop way, you'll have to make a data frame
+first, which you can then pipe into `ggplot`:
+
+```{r sasjhgajs,fig.height=6,fig.width=6}
+tibble(clusters=1:10,wss=wss.1) %>%
+ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
+```
+
+       
+
+If you started at 2 clusters, your `wss` will start at 2
+clusters also, and you'll need to be careful to have something like
+`clusters=2:10` (not `1:10`) in the definition of your
+data frame. 
+
+Interpretation: I see a small elbow at 4 clusters, so that's how many I think we
+should use. Any place you can reasonably see an elbow is good.
+
+The warning is about the missing within-cluster total sum of squares
+for one cluster, since the loop way didn't supply a total
+within-cluster sum of squares for one cluster.
+ 
+
+(e) Run K-means with the number of clusters that you found in
+(<a href="#part:howmany">here</a>). How many bills are in each cluster?
+ 
+Solution
+
+
+
+I'm going to start by setting the random number seed (so that my results don't change every time I run this). You don't need to do that, though you might want to in something like R Markdown code:
+
+```{r }
+set.seed(457299)
+```
+
+
+
+Now, down to business:
+```{r }
+swiss.7=kmeans(swiss.s,4,nstart=20)
+swiss.7$size
+```
+$ %$
+
+This many. Note that my clusters 1 and 4 (and also 2 and 3) add up to
+100 bills. There were 100 genuine and 100 counterfeit bills in the
+original data set.
+I don't know why "7". I just felt like it.
+ 
+
+(f) Make a table showing cluster membership against actual
+status (counterfeit or genuine). Are the counterfeit bills mostly
+in certain clusters?
+ 
+Solution
+
+
+`table`. `swiss.7$cluster` shows the actual
+cluster numbers:
+```{r }
+table(swiss$status,swiss.7$cluster)
+```
+
+       
+
+Or, if you prefer,
+
+```{r }
+tibble(obs=swiss$status,pred=swiss.7$cluster) %>%
+count(obs,pred)
+```
+
+ 
+
+In my case (yours might be different), 99 of the 100 counterfeit bills
+are in clusters 1 and 4, and 99 of the 100 genuine bills are in
+clusters 2 and 3.
+`r tufte::margin_note("This is again where *set.seed* is  valuable: write this text once and it never needs to change.")` So the
+clustering has done a very good job of distinguishing the genuine
+bills from the counterfeit ones. (You could imagine, if you were an
+employee at the bank, saying that a bill in cluster 1 or 4 is
+counterfeit, and being right 99\% of the time.) This is kind of a
+by-product of the clustering, though: we weren't *trying* to
+distinguish counterfeit bills (that would have been the discriminant
+analysis that we did before); we were just trying to divide them into
+groups of different ones, and part of what made them different was
+that some of them were genuine bills and some of them were
+counterfeit.
+ 
+
+

@@ -1,0 +1,365 @@
+##  Dissimilarities between fruits
+
+
+ Consider the fruits apple, orange, banana, pear,
+strawberry, blueberry. We are going to work with these four
+properties of fruits:
+
+
+* has a round shape
+
+* Is sweet
+
+* Is crunchy
+
+* Is a berry
+
+
+
+(a)  Make a table with fruits as columns, and with
+rows "round shape", "sweet", "crunchy", "berry". In each cell
+of the table, put a 1 if the fruit has the property named in the
+row, and a 0 if it does not. (This is your opinion, and may not
+agree with mine. That doesn't matter, as long as you follow through
+with whatever your choices were.)
+ 
+Solution
+
+
+Something akin to this:
+
+
+```
+
+Fruit        Apple Orange Banana Pear Strawberry Blueberry
+Round shape    1      1      0     0       0         1
+Sweet          1      1      0     0       1         0
+Crunchy        1      0      0     1       0         0
+Berry          0      0      0     0       1         1
+
+```
+
+You'll have to make a choice about "crunchy". I usually eat
+pears before they're fully ripe, so to me, they're crunchy.
+ 
+
+(b) We'll define the dissimilarity between two fruits to be the
+number of qualities they *disagree* on. Thus, for example, the
+dissimilarity between Apple and Orange is 1 (an apple is crunchy and
+an orange is not, but they agree on everything else). Calculate the
+dissimilarity between each pair of fruits, and make a square table
+that summarizes the results. (To save yourself some work, note that
+the dissimilarity between a fruit and itself must be zero, and the
+dissimilarity between fruits A and B is the same as that between B
+and A.) Save your table of dissimilarities into a file for the next part.
+ 
+Solution
+
+
+I got this, by counting them:
+
+```
+ 
+Fruit         Apple  Orange   Banana   Pear  Strawberry  Blueberry
+Apple           0       1       3       2        3          3
+Orange          1       0       2       3        2          2
+Banana          3       2       0       1        2          2
+Pear            2       3       1       0        3          3
+Strawberry      3       2       2       3        0          2
+Blueberry       3       2       2       3        2          0
+
+```
+
+I copied this into a file `fruits.txt`. Note that (i) I
+have aligned my columns, so that I will be able to use
+`read_table` later, and (ii) I have given the first column
+a name, since `read_table` wants the same number of column
+names as columns.
+
+Extra: yes, you can do this in R too. We've seen some of the tricks
+before. 
+
+Let's start by reading in my table of fruits and properties, which
+I saved in
+[link](http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt):
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt"
+fruit1=read_table(my_url)
+fruit1 
+```
+
+     
+
+We don't need the first column, so we'll get rid of it:
+
+```{r error=T}
+fruit2 = fruit1 %>% select(-Property)
+fruit2
+```
+
+ 
+
+The loop way is the most direct. We're going to be looking at
+combinations of fruits and other fruits, so we'll need two loops one
+inside the other. It's easier for this to work with column numbers,
+which here are 1 through 6, and we'll make a matrix `m` with
+the dissimilarities in it, which we have to initialize first. I'll
+initialize it to a $6\times 6$ matrix of `-1`, since the final
+dissimilarities are 0 or bigger, and this way I'll know if I forgot
+anything.
+
+Here's where we are at so far:
+
+```{r eval=F}
+fruit_m=matrix(-1,6,6)
+for (i in 1:6) {
+for (j in 1:6) {
+fruit_m[i,j]=3 # dissim between fruit i and fruit j
+}
+}
+```
+
+ 
+
+This, of course, doesn't run yet. The sticking point is how to
+calculate the dissimilarity between two columns. I think that is a
+separate thought process that should be in a function of its own. The
+inputs are the two column numbers, and a data frame to get those
+columns from:
+
+```{r }
+dissim=function(i,j,d) {
+x = d %>% select(i)
+y = d %>% select(j)
+sum(x!=y)
+}
+dissim(1,2,fruit2)
+```
+
+ 
+
+Apple and orange differ by one (not being crunchy). The process is:
+grab the $i$-th column and call it `x`, grab the $j$-th column
+and call it `y`. These are two one-column data frames with four
+rows each (the four properties). `x!=y` goes down the rows, and
+for each one gives a `TRUE` if they're different and a
+`FALSE` if they're the same. So `x!=y` is a collection
+of four T-or-F values. This seems backwards, but I was thinking of
+what we want to do: we want to count the number of different
+ones. Numerically, `TRUE` counts as 1 and `FALSE` as 0,
+so we should make the thing we're counting (the different ones) come
+out as `TRUE`. To count the number of `TRUE`s (1s), add
+them up. 
+
+That was a complicated thought process, so it was probably wise to
+write a function to do it. Now, in our loop, we only have to call the
+function (having put some thought into getting it right):
+
+```{r }
+fruit_m=matrix(-1,6,6)
+for (i in 1:6) {
+for (j in 1:6) {
+fruit_m[i,j]=dissim(i,j,fruit2)
+}
+}
+fruit_m
+```
+
+ 
+
+The last step is re-associate the fruit names with this matrix. This
+is a `matrix` so it has a `rownames` and a
+`colnames`. We set both of those, but first we have to get the
+fruit names from `fruit2`:
+
+```{r }
+fruit_names=names(fruit2)
+rownames(fruit_m)=fruit_names
+colnames(fruit_m)=fruit_names
+fruit_m
+```
+
+ 
+
+This is good to go into the cluster analysis (happening later).
+
+There is a `tidyverse` way to do this also. It's actually a lot
+like the loop way in its conception, but the coding looks
+different. We start by making all combinations of the fruit names with
+each other, which is `crossing`:
+
+```{r }
+combos=crossing(fruit=fruit_names,other=fruit_names)
+combos
+```
+
+ 
+
+Now, we want a function that, given any two fruit *names*, works
+out the dissimilarity between them. A happy coincidence is that we can
+use the function we had before, *unmodified*! How? Take a look: 
+
+```{r }
+dissim=function(i,j,d) {
+x = d %>% select(i)
+y = d %>% select(j)
+sum(x!=y)
+}
+dissim("Apple","Orange",fruit2)
+```
+
+ 
+
+`select` can take a column number *or a column name*, so
+that running it with column names gives the right answer.
+
+Now, we want to run this function for each of the pairs in
+`combos`. The "for each" is `fruit` and `other`
+in parallel, so it's `map2` rather than `map`. Also, the
+dissimilarity is a whole number each time, so we need
+`map2_int`. So we can do this:
+
+```{r }
+combos %>% mutate(dissim=map2_int(fruit,other,dissim,fruit2))
+```
+
+ 
+
+This would work just as well using `fruit1` rather than
+`fruit`, since we are picking out the columns by name rather
+than number.
+
+To make this into something we can turn into a `dist` object
+later, we need to `spread` the column `other` to make a
+square array:
+
+```{r }
+fruit_spread = combos %>% 
+mutate(dissim=map2_int(fruit,other,dissim,fruit2)) %>%
+spread(other,dissim)
+fruit_spread
+```
+
+ 
+
+Done!
+ 
+
+(c) Do a hierarchical cluster analysis using complete
+linkage. Display your dendrogram.
+ 
+Solution
+
+
+First, we need to take one of our matrices of dissimilarities
+and turn it into a `dist` object. Since I asked you to
+save yours into a file, let's start from there. Mine is aligned
+columns: 
+```{r }
+dissims=read_table("fruits.txt")
+dissims
+```
+
+      
+
+Then turn it into a `dist` object. The first step is to take
+off the first column, since `as.dist` can get the names from
+the columns:
+
+```{r }
+d = dissims %>% select(-fruit) %>%
+as.dist()
+d
+```
+
+
+
+If you forget to take off the first column, this happens:
+
+```{r error=T}
+as.dist(dissims)
+```
+
+ 
+
+The key thing here is "non-square matrix": you have one more column
+than you have rows, since you have a column of fruit names.
+
+This one is `as.dist` since you already have dissimilarities
+and you want to arrange them into the right type of
+thing. `dist` is for *calculating* dissimilarities, which
+we did before, so we don't want to do that now.
+
+Now, after all that work, the actual cluster analysis and dendrogram:
+```{r hkadh}
+fruits.1=hclust(d,method="complete")
+plot(fruits.1)
+```
+
+     
+ 
+
+(d) How many clusters, of what fruits, do you seem to have?
+Explain briefly.
+ 
+Solution
+
+
+I reckon I have three clusters: strawberry and blueberry in one,
+apple and orange in the second, and banana and pear in the
+third. (If your dissimilarities were different from mine, your
+dendrogram will be different also.)
+ 
+
+(e) Pick a pair of clusters (with at least 2 fruits in each)
+from your dendrogram. Verify that 
+the complete-linkage distance on your dendrogram is correct.
+ 
+Solution
+
+
+I'll pick strawberry-blueberry and and apple-orange. I'll arrange
+the dissimilarities like this:
+
+```
+
+apple   orange
+strawberry    3       2
+blueberry     3       2
+
+```
+
+The largest of those is 3, so that's the complete-linkage
+distance. That's also what the dendrogram says.
+(Likewise, the smallest of those is 2, so 2 is the
+single-linkage distance.) That is to say, the largest distance or
+dissimilarity 
+from anything in one cluster to anything in the other is 3, and
+the smallest is 2.
+I don't mind which pair of clusters you take, as long as you spell
+out the dissimilarity (distance) between each fruit in each
+cluster, and take the maximum of those. Besides, if your
+dissimilarities are different from mine, your complete-linkage
+distance could be different from mine also. The grader will have
+to use her judgement!
+`r tufte::margin_note("That's two cups of coffee I owe the      grader now.")`  
+The important point is that you assess the dissimilarities between
+fruits in one cluster and fruits in the other. The dissimilarities
+between fruits in the same cluster don't enter into it.
+`r tufte::margin_note("I      now have a mental image of John Cleese saying *it don't enter      into it* in the infamous Dead Parrot sketch,      https://www.youtube.com/watch?v=4vuW6tQ0218}. Not to      mention       *Ow to defend yourself against an assailant armed with fresh      fruit*, https://www.youtube.com/watch?v=piWCBOsJr-w}.    ")`
+As it happens, all my complete-linkage distances between clusters
+(of at least 2 fruits) are 3. The single-linkage ones are
+different, though:
+```{r lhsdjhad}
+fruits.2=hclust(d,method="single")
+plot(fruits.2)
+```
+
+     
+
+All the single-linkage cluster distances are 2. (OK, so this wasn't a
+very interesting example, but I wanted to give you one where you could
+calculate what was going on.)
+ 
+
+

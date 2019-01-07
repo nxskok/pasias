@@ -1,0 +1,599 @@
+##  Grouping similar cars
+
+
+ The file
+[link](http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv) contains
+information on seven variables 
+for 32 different cars. The variables are:
+
+
+
+* `Carname`: name of the car (duh!)
+
+* `mpg`: gas consumption in miles per US gallon (higher means the car uses less gas)
+
+* `disp`: engine displacement (total volume of cylinders in engine): higher is more powerful
+
+* `hp`: engine horsepower (higher means a more powerful engine)
+
+* `drat`: rear axle ratio (higher means more powerful but worse gas mileage)
+
+* `wt`: car weight in US tons
+
+* `qsec`: time needed for the car to cover a quarter mile (lower means faster)
+
+
+
+
+(a) Read in the data and display its structure. Do you have the
+right number of cars and variables?
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv"
+cars=read_csv(my_url)
+cars
+```
+
+   
+
+Check, both on number of cars and number of variables.
+
+
+(b) The variables are all measured on different scales. Use
+`scale` to produce a matrix of standardized ($z$-score) values
+for the columns of your data that are numbers.
+
+
+
+Solution
+
+
+All but the first column needs to be scaled, so:
+```{r }
+cars.s = cars %>% select(-Carname) %>% scale()
+```
+
+   
+
+This is a `matrix`, as we've seen before.
+
+Another way is like this:
+
+```{r }
+h = cars %>% select_if(is.numeric) %>% scale()
+```
+
+ 
+
+I would prefer to have a look at my result, so that I can see that it
+has sane things in it:
+
+```{r }
+head(cars.s)
+```
+
+ 
+
+or, 
+
+```{r }
+head(h)
+```
+
+ 
+
+These look right. Or, perhaps better, this:
+
+```{r }
+summary(cars.s)
+```
+
+ 
+The mean is exactly zero, for all variables, which is as it should
+be. Also, the standardized values look about as they should; even the
+extreme ones don't go beyond $\pm 3$. 
+
+This doesn't show the standard deviation of each variable, though,
+which should be exactly 1 (since that's what "standardizing"
+means). To get *that*, *this*:
+
+```{r }
+as_tibble(cars.s) %>%
+map_dbl(sd)
+```
+
+ 
+
+The idea here is ``take the matrix `cars.s`, turn it into a
+data frame, and for each *column* (a data frame is a ``list of
+columns''), calculate the SD.
+`r tufte::margin_note("The *scale* function can take  a data frame, as here, but always produces a matrix. That's why we  had to turn it back into a data frame to run *map_dbl* on  it.")`
+
+As you realize now, the same idea will get the mean of each column too:
+
+```{r }
+as_tibble(cars.s) %>%
+map_dbl(mean)
+```
+
+ 
+
+and we see that the means are all zero, to about 15 decimals, anyway.
+
+Technically, the output from these is a "named vector": a single
+collection of numbers, each of which has a name. As run this way, they
+are *not* single-row data frames, of the sort you might get from
+`summarize`. 
+
+  
+
+
+(c) Run a K-means cluster analysis for these data, obtaining 3
+clusters, and display the results. Take whatever action you need to
+obtain the best (random) result from a number of runs.
+
+
+
+Solution
+
+
+The hint at the end says "use `nstart`", so something like this:
+```{r }
+set.seed(457299)
+cars.1=kmeans(cars.s,3,nstart=20)
+cars.1
+```
+
+   
+
+You don't need the `set.seed`, but if you run again, you'll get
+a different answer. With the `nstart`, you'll probably get the
+same clustering every time you run, but the clusters might have
+different numbers, so that when you talk about "cluster 1" and then
+re-run, what you were talking about might have moved to cluster 3, say.
+
+If you are using R Markdown, for this reason, having a
+`set.seed` before anything involving random number generation
+is a smart move.
+`r tufte::margin_note("I forgot this, and then realized that I would have to rewrite a whole paragraph. In case you think I remember everything the first time.")`
+  
+
+
+(d) Display the car names together with which cluster they are
+in. If you display them all at once, sort by cluster so that it's
+easier to see which clusters contain which cars. (You may have to make
+a data frame first.)
+
+
+
+Solution
+
+
+As below. The car names are in the `Carname` column of the
+original `cars` data frame, and the cluster numbers are in
+the `cluster` part of the output from `kmeans`. You'll
+need to take some action to display everything (there are only 32
+cars, so it's perfectly all right to display all of them):
+```{r }
+tibble(car=cars$Carname,cluster=cars.1$cluster) %>% 
+arrange(cluster) %>%
+print(n=Inf)
+```
+
+   
+
+Or start from the original data frame as read in from the file and
+grab only what you want:
+
+```{r }
+cars %>% select(Carname) %>% mutate(cluster=cars.1$cluster) %>%
+arrange(cluster) %>%
+print(n=Inf)
+```
+$
+
+This time we want to *keep* the car names and throw away
+everything else.
+  
+
+
+(e) I have no idea whether 3 is a sensible number of clusters. To
+find out, we will draw a scree plot (in a moment). Write a function
+that accepts the number of clusters and the (scaled) data,
+and returns the total within-cluster sum of squares.
+
+
+
+Solution
+
+
+I failed to guess (in conversation with students, back when this was
+a question to be handed in) what you might
+do. There are two equally good ways to tackle this part and the next:
+
+
+* Write a function to calculate the total within-cluster  sum
+of squares (in this part) and somehow use it in the next part,
+eg. via `map_dbl` or a loop, to get the total
+within-cluster sum of squares for *each* number of clusters.
+
+* Skip the function-writing part and go directly to a loop in
+the next part.
+
+I'm good with either approach: as long as you obtain, somehow, the
+total within-cluster sum of squares for each number of clusters, and
+use them for making a scree plot, I think you should get the 
+points for this part and the next.
+I'll talk about the function way here and the loop way in the next part.
+
+The function way is just like the one in the previous question:
+
+```{r }
+wss=function(howmany,data,nstart=20) {
+kmeans(data,howmany,nstart=20)$tot.withinss
+}
+```
+
+ 
+
+The data and number of clusters can have any names, as long as you use
+whatever input names you chose within the function.
+
+I should probably check that this works, at least on 3
+clusters. Before we had
+
+```{r }
+cars.1$tot.withinss
+```
+
+ 
+
+and the function gives
+
+```{r }
+wss(3,cars.s)
+```
+
+ 
+
+Check.
+I need to make sure that I used my scaled `cars` data, but I
+don't need to say anything about `nstart`, since that defaults
+to the perfectly suitable 20.
+  
+
+
+(f) Calculate the total within-group sum of squares for each
+number of clusters from 2 to 10, using the function you just wrote.
+
+
+
+Solution
+
+
+The loop way. I like to define my possible numbers of clusters into
+a vector first:
+```{r }
+w=numeric(0)
+nclus=2:10
+for (i in nclus) {
+w[i]=wss(i,cars.s)
+}
+w
+```
+
+
+Now that I look at this again, it occurs to me that there is no great
+need to write a function to do this: you can just do what you need to
+do within the loop, like this:
+
+```{r }
+w=numeric(0)
+nclus=2:10
+for (i in nclus) {
+w[i]=kmeans(cars.s,i,nstart=20)$tot.withinss
+}
+w
+```
+
+ 
+
+You ought to have an `nstart` somewhere to make sure that
+`kmeans` gets run a number of times and the best result taken. 
+
+If you initialize your `w` with `numeric(10)` rather
+than `numeric(0)`, it apparently gets filled with zeroes rather
+than `NA` values. This means, later, when you come to plot your
+`w`-values, the within-cluster total sum of squares will appear
+to be zero, a legitimate value, for one cluster, even though it is
+definitely not. (Or, I suppose, you could start your loop at 1
+cluster, and get a legitimate, though very big, value for it.)
+In both of the above cases, the curly brackets are optional because
+there is only one line within the loop.
+`r tufte::margin_note("I am m accustomed to  using the curly brackets all the time, partly because my single-line loops have a habit of expanding to more than one line as I embellish what they do, and partly because I'm used to the programming language Perl where the curly brackets are obligatory even with only one line. Curly brackets in Perl serve the same purpose as indentation serves in Python: figuring out what is inside a loop or an *if* and what is outside.")`
+
+What is *actually* happening here is an implicit
+loop-within-a-loop. There is a loop over `i` that goes over all
+clusters, and then there is a loop over another variable, `j`
+say, that loops over the `nstart` runs that we're doing for
+`i` clusters, where we find the `tot.withinss` for
+`i` clusters on the `j`th run, and if it's the best one
+so far for `i` clusters, we save it. Or, at least,
+`kmeans` saves it.
+
+Or, using `map_dbl`, which I like better (perhaps because I
+have mastered how it works):
+
+```{r }
+wwx = tibble(clusters=2:10) %>%
+mutate(wss=map_dbl(clusters,wss,cars.s))
+wwx
+```
+
+ 
+
+Note that `w` starts at 1, but `wwx` starts at 2. For
+this way, you *have* to define a function first to calculate the
+total within-cluster sum of squares for a given number of clusters. If
+you must, you can define the function within the `map_dbl`,
+but I find that very confusing to read, so I'd rather define the
+function first, and then use it later. 
+
+This one is just about simple enough to define the function within the `map_dbl`:
+
+```{r }
+wwx = tibble(clusters=2:10) %>%
+mutate(wss=map_dbl(clusters,~kmeans(cars.s,.,nstart=20)$tot.withinss))
+wwx
+```
+$ %$ %$
+
+Instead of having a function name as the second thing in the
+`map_dbl`, I have a so-called "one-sided model formula" that
+begins with a squiggle, and then the definition of what I want. The
+for-each part finds its way into here as a dot (the number of
+clusters, here); this is the equivalent of the `i` in the loop.
+
+The upshot of all of this is that if you had obtained a total
+within-cluster sum of squares for each number of clusters,
+*somehow*, and it's correct, you should have gotten the
+points
+`r tufte::margin_note("When this was a question to hand in, which it is not any  more.")` for this part and the last part. This is a common principle
+of mine, and works on exams as well as assignments; it goes back to
+the idea of "get the job done" that you first saw in C32.
+
+  
+
+
+(g) Make a scree plot, using the total within-cluster sums of
+squares values that you calculated in the previous part. 
+
+
+
+Solution
+
+
+If you did this the loop way, it's tempting to leap into this:
+```{r error=T}
+d=data.frame(clusters=nclus,wss=w)
+```
+
+   
+
+and then wonder why it doesn't work. The problem is that `w`
+has 10 things in it, including an `NA` at the front (as a
+placeholder for 1 cluster):
+
+```{r }
+w
+nclus
+```
+
+
+
+while `nclus` only has 9. So do something like this instead:
+
+```{r }
+tibble(clusters=1:10,wss=w) %>%
+ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
+```
+
+ 
+
+This gives a warning because there is no 1-cluster `w`-value,
+but the point is properly omitted from the plot, so the plot you get
+is fine.
+
+Or plot the output from `map_dbl`, which is easier since it's
+already a data frame:
+
+```{r }
+wwx %>% ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
+```
+
+ 
+
+  
+
+
+(h) What is a suitable number of clusters for K-means, based on
+your scree plot?
+
+
+
+Solution
+
+
+That seems to me to have a clear elbow at 6, suggesting six
+clusters.
+`r tufte::margin_note("We do something similar on scree plots for principal components later, but then, for reasons that will become clear then, we take elbow *minus 1*.")` Look for where the plot 
+"turns the corner" from going down to going out, or the point that is the 
+"last  one on the mountain and the first one on the scree". This
+mountainside goes down to 6, and from there it seems to turn the
+corner and go out after that. 
+
+This is a judgement call, but this particular one is about as clear as
+you can expect to see.
+
+I wanted a picture of some real scree. This one shows what I mean:
+
+
+![](scree.png)
+
+
+Note the rock face and
+the loose rock below, which is the scree. Imagine looking at the rock
+face and scree from side-on. This is in north Wales, the
+other end of Wales from Llanederyn/Llanedeyrn and Caldicot.
+
+The above photo is from [link](http://www.geograph.org.uk/photo/159935).
+  
+
+
+(i) Run a K-means analysis using the number of clusters suggested
+by your scree plot, and list the car names together with the clusters
+they belong to, *sorted by cluster*.
+
+
+
+Solution
+
+
+This is the same idea as above. The `arrange` idea from above
+seems to be the cleanest way to arrange the output:
+The K-means analysis is thus:
+```{r }
+cars.2=kmeans(cars.s,6,nstart=20)
+```
+
+  
+
+or use whatever number of clusters you thought was good from your
+scree plot.
+
+Then display them:
+
+```{r }
+cars %>% select(Carname) %>%
+mutate(cluster=cars.2$cluster) %>%
+arrange(cluster) %>%
+print(n=Inf)
+```
+
+ 
+
+The logic to this is the same as above.
+I don't have a good feeling for what the cars within a cluster have in
+common, by eyeballing the names, except for possibly a couple of
+things: my cluster 1 seems to be mostly family cars, and my cluster 3
+appears to contain "boats" (large cars that consume a lot of
+gas). Your clusters ought to be about the same in terms of membership,
+but might be numbered differently.
+
+To understand these clusters further, we can use them as input to a
+discriminant analysis. There isn't any real need to run a MANOVA
+first, since we kind of know that these groups will be different
+(that's why we ran a cluster analysis).
+
+So, first we'll make a data frame with the whole original data set
+plus the clusters that came out of the K-means. We are adding the
+clusters to `cars`, so it makes sense to use the same ideas as I used
+above (without the `arrange`, that being only for looking at,
+and without the `select`, since this time I want all the
+variables that were in `cars`):
+
+```{r }
+carsx = cars %>% mutate(cluster=cars.2$cluster) 
+```
+
+ 
+Now we fire away:
+
+```{r }
+carsx.1=lda(cluster~mpg+disp+hp+drat+wt+qsec,data=carsx)
+carsx.1
+```
+
+ 
+
+At the bottom (in `trace`) you see that `LD1` is clearly
+the most important thing for splitting into groups, `LD2` might
+be slightly relevant, and the other `LD`s are basically
+meaningless. So a plot of the first two `LD`s should tell the story.
+
+Before we get to that, however, we can take a look at the Coefficients
+of Linear Discriminants, for `LD1` and `LD2`
+anyway. `LD1` depends principally on `drat`, `wt`
+and `qsec` (positively) and maybe negatively on
+`mpg`. That means `LD1` will be large if the car is
+powerful, heavy, *slow* (since a larger `qsec` means the
+car takes longer to go a quarter mile) and consumes a lot of gas. I
+think I can summarize this as "powerful". 
+
+`LD2` also depends on `drat` and `wt`,
+but note the signs: it is contrasting `drat` (displacement
+ratio) with `wt` (weight), so that a car with a large
+displacement ratio relative to its weight would be large (plus) on
+`LD2`. That is, `LD2` is "powerful for its weight".
+
+All right, now for a plot, with the points colour-coded by
+cluster. There are two ways to do this; the easy one is
+`ggbiplot`. The only weirdness here is that the
+`cluster`s are numbered, so you have to turn that into a factor
+first (unless you like shades of blue). I didn't load the package
+first, so I call it here with the package name and the two colons:
+
+```{r }
+ggbiplot::ggbiplot(carsx.1,groups=factor(carsx$cluster))
+```
+$ %$ %$ %$
+
+Or you can do the predictions, then plot `LD1` against
+`LD2`, coloured by cluster:
+
+```{r }
+p=predict(carsx.1)
+data.frame(p$x,cluster=factor(carsx$cluster)) %>%
+ggplot(aes(x=LD1,y=LD2,colour=cluster))+geom_point()+
+coord_fixed()
+```
+
+ 
+
+The pattern of coloured points is the same. The advantage to the
+biplot is that you see which original variables contribute to the
+`LD` scores and thus distinguish the clusters; on the second
+plot, you have to figure out for yourself which original variables
+contribute, and how, to the `LD` scores.
+
+You should include `coord_fixed` to make the axis scales the
+same, since allowing them to be different will distort the picture
+(the picture should come out square). You do the same thing in
+multidimensional scaling.
+
+As you see, `LD1` is doing the best job of separating the
+clusters, but `LD2` is also doing something: separating
+clusters 1 and 5, and also 2 and 4 (though 4 is a bit bigger than 2 on
+`LD1` also). 
+
+I suggested above that `LD1` seems to be "powerful"
+(on the right) vs.\ not (on the left). The displacement ratio is a
+measure of the power of an engine, so a car
+that is large on `LD2` is powerful for  its weight.
+
+Let's find the clusters I mentioned before. Cluster 3 was the
+"boats": big engines and heavy cars, but not fast. So they
+should be large `LD1` and small (negative)
+`LD2`. Cluster 1 I called "family cars": they are not
+powerful, but have moderate-to-good power for their weight.
+
+With that in mind, we can have a crack at the other clusters. Cluster
+2 is neither powerful nor powerful-for-weight  (I don't know these
+cars, so can't 
+comment further) while cluster 5 is powerful and also powerful for
+their weight, so these
+might be sports cars. Clusters 6 and 4 are less and more
+powerful, both averagely powerful for their size.
+  
+
+
+

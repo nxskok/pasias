@@ -91,7 +91,7 @@ for which C32 and D29 are two of the last courses.
 My checklist:
 
 - bring in the D29 questions
-- working on A6 D29
+- working on A8 D29
 - look for multiple regression Qs in A6 or wherever
 - *** puts a vertical line across. Put that above and below each question part, somehow.
 
@@ -8689,9 +8689,9 @@ x
 ```
 
 ```
-##  [1] 48.73289 31.01454 74.24493 52.03144
-##  [5] 43.58117 64.07698 54.97719 64.94259
-##  [9] 30.99053 30.96452
+##  [1] 46.14316 38.81008 26.81633 35.15906
+##  [5] 38.97132 24.02401 25.54013 69.96021
+##  [9] 58.06498 58.62657
 ```
 
 
@@ -8715,8 +8715,8 @@ tibble(x) %>% count(x < 40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        7
-## 2 TRUE         3
+## 1 FALSE        4
+## 2 TRUE         6
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -8749,7 +8749,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       3 FALSE
+## 1       4 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -8769,7 +8769,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       3 FALSE
+## 1       4 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -37479,14 +37479,14 @@ heart.new %>% sample_n(8)
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol
 ##   <chr> <chr>          <dbl>      <dbl>
-## 1 fema~ nonangin~        140        280
-## 2 male  nonangin~        140        213
-## 3 male  asymptom~        140        280
-## 4 male  typical          120        280
-## 5 fema~ typical          140        280
-## 6 fema~ atypical         140        280
-## 7 fema~ atypical         120        213
-## 8 fema~ nonangin~        120        280
+## 1 fema~ atypical         140        213
+## 2 fema~ asymptom~        140        280
+## 3 male  typical          120        280
+## 4 male  atypical         120        280
+## 5 male  asymptom~        140        213
+## 6 male  atypical         120        280
+## 7 fema~ typical          140        280
+## 8 fema~ atypical         140        280
 ## # ... with 6 more variables: max.hr <dbl>,
 ## #   oldpeak <dbl>, slope <chr>,
 ## #   colored <dbl>, thal <chr>, pred <dbl>
@@ -39600,21 +39600,21 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-## x dplyr::select() masks MASS::select()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ✖ dplyr::select() masks MASS::select()
 ```
 
 
@@ -39643,8 +39643,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/mobile.txt"
-mobile = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/mobile.txt"
+mobile=read_delim(my_url," ")
 ```
 
 ```
@@ -39665,17 +39665,16 @@ mobile
 
 ```
 ## # A tibble: 8 x 6
-##   gender age.group very.unsat unsat   sat
-##   <chr>  <chr>          <int> <int> <int>
-## 1 male   0-17               3     9    18
-## 2 male   18-24              6    13    16
-## 3 male   25-30              9    13    17
-## 4 male   31+                5     7    16
-## 5 female 0-17               4     8    11
-## 6 female 18-24              8    14    20
-## 7 female 25-30             10    15    16
-## 8 female 31+                5    14    12
-## # ... with 1 more variable: very.sat <int>
+##   gender age.group very.unsat unsat   sat very.sat
+##   <chr>  <chr>          <int> <int> <int>    <int>
+## 1 male   0-17               3     9    18       24
+## 2 male   18-24              6    13    16       28
+## 3 male   25-30              9    13    17       20
+## 4 male   31+                5     7    16       16
+## 5 female 0-17               4     8    11       25
+## 6 female 18-24              8    14    20       18
+## 7 female 25-30             10    15    16       12
+## 8 female 31+                5    14    12        8
 ```
 
  
@@ -39683,8 +39682,7 @@ With multiple columns that are all frequencies, this is a job for
 `gather`:
 
 ```r
-mobile.long = mobile %>% gather(satisfied, frequency, 
-    very.unsat:very.sat)
+mobile.long = mobile %>% gather(satisfied,frequency,very.unsat:very.sat)
 mobile.long
 ```
 
@@ -39773,7 +39771,8 @@ appear in the data *in the order that we want*. This is good
 news, because we can use `fct_inorder` like this:
 
 ```r
-mobile.long <- mobile.long %>% mutate(satis = fct_inorder(satisfied))
+mobile.long %>%
+mutate(satis=fct_inorder(satisfied)) -> mobile.long
 ```
 
      
@@ -39788,8 +39787,7 @@ with(mobile.long, levels(satis))
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
  
@@ -39845,13 +39843,14 @@ data frame as a vector:
 
 
 ```r
-v1 = mobile.long %>% distinct(satisfied) %>% pluck("satisfied")
+v1 = mobile.long %>% 
+distinct(satisfied) %>%
+pluck("satisfied")
 v1
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
  
@@ -39860,13 +39859,14 @@ which is in the correct order, or
 
 
 ```r
-v2 = mobile.long %>% count(satisfied) %>% pluck("satisfied")
+v2 = mobile.long %>% 
+count(satisfied) %>%
+pluck("satisfied")  
 v2
 ```
 
 ```
-## [1] "sat"        "unsat"      "very.sat"  
-## [4] "very.unsat"
+## [1] "sat"        "unsat"      "very.sat"   "very.unsat"
 ```
 
  
@@ -39878,23 +39878,21 @@ that, so we have to rearrange it ourselves. The correct order from
 
 
 ```r
-v3 = c(v2[4], v2[2], v2[1], v2[3])
+v3=c(v2[4],v2[2],v2[1],v2[3])
 v3
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
 ```r
-v4 = v2[c(4, 2, 1, 3)]
+v4=v2[c(4,2,1,3)]
 v4
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
  
@@ -39906,14 +39904,15 @@ rows in the right order:
 
 
 ```r
-v5 = mobile.long %>% count(satisfied) %>% slice(c(4, 
-    2, 1, 3)) %>% pluck("satisfied")
+v5 = mobile.long %>% 
+count(satisfied) %>%
+slice(c(4,2,1,3)) %>%  
+pluck("satisfied")  
 v5
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
  
@@ -39930,25 +39929,25 @@ variable thus, using your vector of categories:
 
 
 ```r
-mobile.long2 <- mobile.long %>% mutate(satis = ordered(satisfied, 
-    v1))
+mobile.long %>%
+mutate(satis=ordered(satisfied,v1)) -> mobile.long2
 mobile.long2
 ```
 
 ```
 ## # A tibble: 32 x 5
-##    gender age.group satisfied frequency sat~
-##    <chr>  <chr>     <chr>         <int> <or>
-##  1 male   0-17      very.uns~         3 ver~
-##  2 male   18-24     very.uns~         6 ver~
-##  3 male   25-30     very.uns~         9 ver~
-##  4 male   31+       very.uns~         5 ver~
-##  5 female 0-17      very.uns~         4 ver~
-##  6 female 18-24     very.uns~         8 ver~
-##  7 female 25-30     very.uns~        10 ver~
-##  8 female 31+       very.uns~         5 ver~
-##  9 male   0-17      unsat             9 uns~
-## 10 male   18-24     unsat            13 uns~
+##    gender age.group satisfied  frequency satis     
+##    <chr>  <chr>     <chr>          <int> <ord>     
+##  1 male   0-17      very.unsat         3 very.unsat
+##  2 male   18-24     very.unsat         6 very.unsat
+##  3 male   25-30     very.unsat         9 very.unsat
+##  4 male   31+       very.unsat         5 very.unsat
+##  5 female 0-17      very.unsat         4 very.unsat
+##  6 female 18-24     very.unsat         8 very.unsat
+##  7 female 25-30     very.unsat        10 very.unsat
+##  8 female 31+       very.unsat         5 very.unsat
+##  9 male   0-17      unsat              9 unsat     
+## 10 male   18-24     unsat             13 unsat     
 ## # ... with 22 more rows
 ```
 
@@ -39973,8 +39972,7 @@ Solution
 
 ```r
 library(MASS)
-mobile.1 = polr(satis ~ gender + age.group, weights = frequency, 
-    data = mobile.long)
+mobile.1=polr(satis~gender+age.group,weights=frequency,data=mobile.long)
 ```
 
  
@@ -39984,8 +39982,8 @@ kind of model):
 
 
 ```r
-mobile.2 = update(mobile.1, . ~ . - age.group)
-mobile.3 = update(mobile.1, . ~ . - gender)
+mobile.2=update(mobile.1,.~.-age.group)
+mobile.3=update(mobile.1,.~.-gender)
 ```
 
  
@@ -40011,7 +40009,7 @@ it in turn, and says which (if any) should be removed. Here's how it goes:
 
 
 ```r
-drop1(mobile.1, test = "Chisq")
+drop1(mobile.1,test="Chisq")
 ```
 
 ```
@@ -40024,8 +40022,7 @@ drop1(mobile.1, test = "Chisq")
 ## gender     1 1104.2  4.4089 0.035751 * 
 ## age.group  3 1109.0 13.1641 0.004295 **
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -40051,19 +40048,16 @@ This is a comparison of the model with both variables
 (fewer-$x$) model first:
 
 ```r
-anova(mobile.3, mobile.1)
+anova(mobile.3,mobile.1)
 ```
 
 ```
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: satis
-##                Model Resid. df Resid. Dev
-## 1          age.group       414   1092.213
-## 2 gender + age.group       413   1087.804
-##     Test    Df LR stat.    Pr(Chi)
-## 1                                 
-## 2 1 vs 2     1  4.40892 0.03575146
+##                Model Resid. df Resid. Dev   Test    Df LR stat.    Pr(Chi)
+## 1          age.group       414   1092.213                                 
+## 2 gender + age.group       413   1087.804 1 vs 2     1  4.40892 0.03575146
 ```
 
      
@@ -40089,19 +40083,19 @@ Exactly the same idea as the last part. In my case, I'm comparing
 models `mobile.2` and `mobile.1`:
 
 ```r
-anova(mobile.2, mobile.1)
+anova(mobile.2,mobile.1)
 ```
 
 ```
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: satis
-##                Model Resid. df Resid. Dev
-## 1             gender       416   1100.968
-## 2 gender + age.group       413   1087.804
-##     Test    Df LR stat.     Pr(Chi)
-## 1                                  
-## 2 1 vs 2     3 13.16411 0.004294811
+##                Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1             gender       416   1100.968                      
+## 2 gender + age.group       413   1087.804 1 vs 2     3 13.16411
+##       Pr(Chi)
+## 1            
+## 2 0.004294811
 ```
 
     
@@ -40138,29 +40132,21 @@ read in from the file was called `mobile`, and I  need
 `type="p"` to get probabilities:
 
 ```r
-probs = predict(mobile.1, mobile, type = "p")
-mobile %>% select(gender, age.group) %>% cbind(probs)
+probs=predict(mobile.1,mobile,type="p")
+mobile %>% select(gender, age.group) %>%
+cbind(probs)
 ```
 
 ```
-##   gender age.group very.unsat     unsat
-## 1   male      0-17 0.06070852 0.1420302
-## 2   male     18-24 0.09212869 0.1932086
-## 3   male     25-30 0.13341018 0.2438110
-## 4   male       31+ 0.11667551 0.2252966
-## 5 female      0-17 0.08590744 0.1840411
-## 6 female     18-24 0.12858414 0.2387296
-## 7 female     25-30 0.18290971 0.2853880
-## 8 female       31+ 0.16112036 0.2692996
-##         sat  very.sat
-## 1 0.2752896 0.5219716
-## 2 0.3044732 0.4101894
-## 3 0.3084506 0.3143282
-## 4 0.3097920 0.3482359
-## 5 0.3011751 0.4288763
-## 6 0.3091489 0.3235374
-## 7 0.2920053 0.2396970
-## 8 0.3008711 0.2687089
+##   gender age.group very.unsat     unsat       sat  very.sat
+## 1   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
+## 2   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
+## 3   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
+## 4   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
+## 5 female      0-17 0.08590744 0.1840411 0.3011751 0.4288763
+## 6 female     18-24 0.12858414 0.2387296 0.3091489 0.3235374
+## 7 female     25-30 0.18290971 0.2853880 0.2920053 0.2396970
+## 8 female       31+ 0.16112036 0.2692996 0.3008711 0.2687089
 ```
 
    
@@ -40203,30 +40189,21 @@ With that in mind, we can get the right `select` like this:
 
 
 ```r
-probs = predict(mobile.1, mobile, type = "p")
-mobile %>% dplyr::select(gender, age.group) %>% 
-    cbind(probs)
+probs=predict(mobile.1,mobile,type="p")
+mobile %>% dplyr::select(gender, age.group) %>%
+cbind(probs)
 ```
 
 ```
-##   gender age.group very.unsat     unsat
-## 1   male      0-17 0.06070852 0.1420302
-## 2   male     18-24 0.09212869 0.1932086
-## 3   male     25-30 0.13341018 0.2438110
-## 4   male       31+ 0.11667551 0.2252966
-## 5 female      0-17 0.08590744 0.1840411
-## 6 female     18-24 0.12858414 0.2387296
-## 7 female     25-30 0.18290971 0.2853880
-## 8 female       31+ 0.16112036 0.2692996
-##         sat  very.sat
-## 1 0.2752896 0.5219716
-## 2 0.3044732 0.4101894
-## 3 0.3084506 0.3143282
-## 4 0.3097920 0.3482359
-## 5 0.3011751 0.4288763
-## 6 0.3091489 0.3235374
-## 7 0.2920053 0.2396970
-## 8 0.3008711 0.2687089
+##   gender age.group very.unsat     unsat       sat  very.sat
+## 1   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
+## 2   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
+## 3   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
+## 4   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
+## 5 female      0-17 0.08590744 0.1840411 0.3011751 0.4288763
+## 6 female     18-24 0.12858414 0.2387296 0.3091489 0.3235374
+## 7 female     25-30 0.18290971 0.2853880 0.2920053 0.2396970
+## 8 female       31+ 0.16112036 0.2692996 0.3008711 0.2687089
 ```
 
    
@@ -40258,10 +40235,9 @@ getting the different satisfaction levels:
 
 
 ```r
-genders = mobile.long %>% distinct(gender) %>% 
-    pluck("gender")
-age.groups = mobile.long %>% distinct(age.group) %>% 
-    pluck("age.group")
+genders = mobile.long %>% distinct(gender) %>% pluck("gender")
+age.groups = mobile.long %>% distinct(age.group) %>%
+pluck("age.group")
 ```
 
  
@@ -40275,7 +40251,7 @@ Then `crossing` to get the combinations, and then
 
 
 ```r
-new = crossing(gender = genders, age.group = age.groups)
+new=crossing(gender=genders,age.group=age.groups)
 new
 ```
 
@@ -40294,29 +40270,20 @@ new
 ```
 
 ```r
-pp = predict(mobile.1, new, type = "p")
-cbind(new, pp)
+pp=predict(mobile.1,new,type="p")
+cbind(new,pp)
 ```
 
 ```
-##   gender age.group very.unsat     unsat
-## 1 female      0-17 0.08590744 0.1840411
-## 2 female     18-24 0.12858414 0.2387296
-## 3 female     25-30 0.18290971 0.2853880
-## 4 female       31+ 0.16112036 0.2692996
-## 5   male      0-17 0.06070852 0.1420302
-## 6   male     18-24 0.09212869 0.1932086
-## 7   male     25-30 0.13341018 0.2438110
-## 8   male       31+ 0.11667551 0.2252966
-##         sat  very.sat
-## 1 0.3011751 0.4288763
-## 2 0.3091489 0.3235374
-## 3 0.2920053 0.2396970
-## 4 0.3008711 0.2687089
-## 5 0.2752896 0.5219716
-## 6 0.3044732 0.4101894
-## 7 0.3084506 0.3143282
-## 8 0.3097920 0.3482359
+##   gender age.group very.unsat     unsat       sat  very.sat
+## 1 female      0-17 0.08590744 0.1840411 0.3011751 0.4288763
+## 2 female     18-24 0.12858414 0.2387296 0.3091489 0.3235374
+## 3 female     25-30 0.18290971 0.2853880 0.2920053 0.2396970
+## 4 female       31+ 0.16112036 0.2692996 0.3008711 0.2687089
+## 5   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
+## 6   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
+## 7   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
+## 8   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
 ```
 
  
@@ -40362,7 +40329,7 @@ Now we need to "unload" MASS, because, as we saw, *it* has a
 interfering with the `dplyr` one:
 
 ```r
-detach("package:MASS", unload = T)
+detach("package:MASS",unload=T)
 ```
 
     
@@ -40426,8 +40393,8 @@ The columns are aligned with each other but not with the headings,
 so `read_table2` it has to be:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/abortion.txt"
-abortion = read_table2(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/abortion.txt"
+abortion=read_table2(my_url)
 ```
 
 ```
@@ -40447,20 +40414,19 @@ abortion
 
 ```
 ## # A tibble: 81 x 5
-##     year religion education attitude
-##    <int> <chr>    <chr>     <chr>   
-##  1  1972 Prot     Low       Neg     
-##  2  1972 Prot     Low       Mix     
-##  3  1972 Prot     Low       Pos     
-##  4  1972 Prot     Med       Neg     
-##  5  1972 Prot     Med       Mix     
-##  6  1972 Prot     Med       Pos     
-##  7  1972 Prot     High      Neg     
-##  8  1972 Prot     High      Mix     
-##  9  1972 Prot     High      Pos     
-## 10  1972 SProt    Low       Neg     
-## # ... with 71 more rows, and 1 more
-## #   variable: frequency <int>
+##     year religion education attitude frequency
+##    <int> <chr>    <chr>     <chr>        <int>
+##  1  1972 Prot     Low       Neg              9
+##  2  1972 Prot     Low       Mix             12
+##  3  1972 Prot     Low       Pos             48
+##  4  1972 Prot     Med       Neg             13
+##  5  1972 Prot     Med       Mix             43
+##  6  1972 Prot     Med       Pos            197
+##  7  1972 Prot     High      Neg              4
+##  8  1972 Prot     High      Mix              9
+##  9  1972 Prot     High      Pos            139
+## 10  1972 SProt    Low       Neg              9
+## # ... with 71 more rows
 ```
 
      
@@ -40519,11 +40485,11 @@ Solution
 This is actually harder to describe than it is to do.
 First thing is to decide on the ordering you want. You can go
 low to high or high to low (it doesn't matter).
-\marginnote{The        results might look different which way you go, but it won't        make any *material* difference.} I'm going negative to
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The        results might look different which way you go, but it won't        make any *material* difference.</span> I'm going negative to
 positive. Either way, you want `Mix` in the middle:
 
 ```r
-lev = c("Neg", "Mix", "Pos")
+lev=c("Neg","Mix","Pos")
 ```
 
        
@@ -40533,28 +40499,26 @@ input to `ordered`:
 
 
 ```r
-abortion = abortion %>% mutate(attitude.ord = ordered(attitude, 
-    lev))
+abortion = abortion %>%
+mutate(attitude.ord=ordered(attitude,lev))
 abortion
 ```
 
 ```
 ## # A tibble: 81 x 6
-##     year religion education attitude
-##    <int> <chr>    <chr>     <chr>   
-##  1  1972 Prot     Low       Neg     
-##  2  1972 Prot     Low       Mix     
-##  3  1972 Prot     Low       Pos     
-##  4  1972 Prot     Med       Neg     
-##  5  1972 Prot     Med       Mix     
-##  6  1972 Prot     Med       Pos     
-##  7  1972 Prot     High      Neg     
-##  8  1972 Prot     High      Mix     
-##  9  1972 Prot     High      Pos     
-## 10  1972 SProt    Low       Neg     
-## # ... with 71 more rows, and 2 more
-## #   variables: frequency <int>,
-## #   attitude.ord <ord>
+##     year religion education attitude frequency attitude.ord
+##    <int> <chr>    <chr>     <chr>        <int> <ord>       
+##  1  1972 Prot     Low       Neg              9 Neg         
+##  2  1972 Prot     Low       Mix             12 Mix         
+##  3  1972 Prot     Low       Pos             48 Pos         
+##  4  1972 Prot     Med       Neg             13 Neg         
+##  5  1972 Prot     Med       Mix             43 Mix         
+##  6  1972 Prot     Med       Pos            197 Pos         
+##  7  1972 Prot     High      Neg              4 Neg         
+##  8  1972 Prot     High      Mix              9 Mix         
+##  9  1972 Prot     High      Pos            139 Pos         
+## 10  1972 SProt    Low       Neg              9 Neg         
+## # ... with 71 more rows
 ```
 
  
@@ -40600,7 +40564,7 @@ sensible, so you'd need to rearrange them, like this:
 
 
 ```r
-lev3 = lev2[c(2, 1, 3)]
+lev3=lev2[c(2,1,3)]
 lev3
 ```
 
@@ -40614,8 +40578,8 @@ or, if you like working with data frames better:
 
 
 ```r
-lev4 = abortion %>% count(attitude) %>% slice(c(2, 
-    1, 3)) %>% pull(attitude)
+lev4 = abortion %>% count(attitude) %>%
+slice(c(2,1,3)) %>% pull(attitude)
 lev4
 ```
 
@@ -40660,8 +40624,8 @@ library(MASS)
 ```
 
 ```r
-abortion.1 = polr(attitude.ord ~ religion + education, 
-    data = abortion, weights = frequency)
+abortion.1=polr(attitude.ord~religion+education,
+data=abortion,weights=frequency)
 ```
 
        
@@ -40684,8 +40648,8 @@ make sure you say what *changes*, and everything else
 
 
 ```r
-abortion.2 = update(abortion.1, . ~ . - education)
-abortion.3 = update(abortion.1, . ~ . - religion)
+abortion.2=update(abortion.1,.~.-education)
+abortion.3=update(abortion.1,.~.-religion)
 ```
 
  
@@ -40695,10 +40659,10 @@ If you don't like `update`, you can also copy and paste and edit:
 
 
 ```r
-abortion.2a = polr(attitude.ord ~ religion, data = abortion, 
-    weights = frequency)
-abortion.3a = polr(attitude.ord ~ education, data = abortion, 
-    weights = frequency)
+abortion.2a=polr(attitude.ord~religion,
+data=abortion,weights=frequency)
+abortion.3a=polr(attitude.ord~education,
+data=abortion,weights=frequency)
 ```
 
        
@@ -40718,7 +40682,7 @@ Solution
 I think `drop1` is easier, so let's do that first:
 
 ```r
-drop1(abortion.1, test = "Chisq")
+drop1(abortion.1,test="Chisq")
 ```
 
 ```
@@ -40731,8 +40695,7 @@ drop1(abortion.1, test = "Chisq")
 ## religion   2 4139.2 65.635 5.592e-15 ***
 ## education  2 4152.6 79.104 < 2.2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -40754,19 +40717,19 @@ First, we test `religion`, by comparing the model with it (and
 goes first):
 
 ```r
-anova(abortion.3, abortion.1)
+anova(abortion.3,abortion.1)
 ```
 
 ```
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: attitude.ord
-##                  Model Resid. df Resid. Dev
-## 1            education      3233   4131.176
-## 2 religion + education      3231   4065.541
-##     Test    Df LR stat.      Pr(Chi)
-## 1                                   
-## 2 1 vs 2     2 65.63505 5.551115e-15
+##                  Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1            education      3233   4131.176                      
+## 2 religion + education      3231   4065.541 1 vs 2     2 65.63505
+##        Pr(Chi)
+## 1             
+## 2 5.551115e-15
 ```
 
        
@@ -40783,19 +40746,16 @@ that's important):
 
 
 ```r
-anova(abortion.2, abortion.1)
+anova(abortion.2,abortion.1)
 ```
 
 ```
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: attitude.ord
-##                  Model Resid. df Resid. Dev
-## 1             religion      3233   4144.645
-## 2 religion + education      3231   4065.541
-##     Test    Df LR stat. Pr(Chi)
-## 1                              
-## 2 1 vs 2     2 79.10415       0
+##                  Model Resid. df Resid. Dev   Test    Df LR stat. Pr(Chi)
+## 1             religion      3233   4144.645                              
+## 2 religion + education      3231   4065.541 1 vs 2     2 79.10415       0
 ```
 
        
@@ -40836,11 +40796,9 @@ Use either `distinct` or `count` to get the levels of
 `education` and `religion`:
 
 ```r
-educations = abortion %>% distinct(education) %>% 
-    pull(education)
-religions = abortion %>% distinct(religion) %>% 
-    pull(religion)
-new = crossing(education = educations, religion = religions)
+educations = abortion %>% distinct(education) %>% pull(education)
+religions = abortion %>% distinct(religion) %>% pull(religion)
+new=crossing(education=educations,religion=religions)
 new
 ```
 
@@ -40860,31 +40818,21 @@ new
 ```
 
 ```r
-pp = predict(abortion.1, new, type = "p")
-cbind(new, pp)
+pp=predict(abortion.1,new,type="p")
+cbind(new,pp)
 ```
 
 ```
-##   education religion        Neg        Mix
-## 1      High     Cath 0.05681385 0.16191372
-## 2      High     Prot 0.02649659 0.08579955
-## 3      High    SProt 0.03342471 0.10504280
-## 4       Low     Cath 0.15709933 0.30706616
-## 5       Low     Prot 0.07767439 0.20363294
-## 6       Low    SProt 0.09665550 0.23547512
-## 7       Med     Cath 0.08336876 0.21375231
-## 8       Med     Prot 0.03947421 0.12089996
-## 9       Med    SProt 0.04962265 0.14566284
-##         Pos
-## 1 0.7812724
-## 2 0.8877039
-## 3 0.8615325
-## 4 0.5358345
-## 5 0.7186927
-## 6 0.6678694
-## 7 0.7028789
-## 8 0.8396258
-## 9 0.8047145
+##   education religion        Neg        Mix       Pos
+## 1      High     Cath 0.05681385 0.16191372 0.7812724
+## 2      High     Prot 0.02649659 0.08579955 0.8877039
+## 3      High    SProt 0.03342471 0.10504280 0.8615325
+## 4       Low     Cath 0.15709933 0.30706616 0.5358345
+## 5       Low     Prot 0.07767439 0.20363294 0.7186927
+## 6       Low    SProt 0.09665550 0.23547512 0.6678694
+## 7       Med     Cath 0.08336876 0.21375231 0.7028789
+## 8       Med     Prot 0.03947421 0.12089996 0.8396258
+## 9       Med    SProt 0.04962265 0.14566284 0.8047145
 ```
 
        
@@ -40952,23 +40900,20 @@ should add `education:religion` to our model and test it
 for significance:
 
 ```r
-abortion.4 = update(abortion.1, . ~ . + education:religion)
-anova(abortion.1, abortion.4)
+abortion.4=update(abortion.1,.~.+education:religion)
+anova(abortion.1,abortion.4)
 ```
 
 ```
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: attitude.ord
-##                                       Model
-## 1                      religion + education
-## 2 religion + education + religion:education
-##   Resid. df Resid. Dev   Test    Df LR stat.
-## 1      3231   4065.541                      
-## 2      3227   4047.041 1 vs 2     4 18.49958
-##        Pr(Chi)
-## 1             
-## 2 0.0009853301
+##                                       Model Resid. df Resid. Dev   Test
+## 1                      religion + education      3231   4065.541       
+## 2 religion + education + religion:education      3227   4047.041 1 vs 2
+##      Df LR stat.      Pr(Chi)
+## 1                            
+## 2     4 18.49958 0.0009853301
 ```
 
        
@@ -40979,31 +40924,21 @@ we just run `predict` again on the new model:
 
 
 ```r
-pp = predict(abortion.4, new, type = "p")
-cbind(new, pp)
+pp=predict(abortion.4,new,type="p")
+cbind(new,pp)
 ```
 
 ```
-##   education religion        Neg        Mix
-## 1      High     Cath 0.07624521 0.20160124
-## 2      High     Prot 0.02248256 0.07434749
-## 3      High    SProt 0.02363341 0.07775848
-## 4       Low     Cath 0.11358676 0.26036670
-## 5       Low     Prot 0.08192969 0.21185155
-## 6       Low    SProt 0.12342416 0.27283576
-## 7       Med     Cath 0.08153700 0.21115988
-## 8       Med     Prot 0.04087702 0.12486250
-## 9       Med    SProt 0.04858716 0.14369236
-##         Pos
-## 1 0.7221536
-## 2 0.9031699
-## 3 0.8986081
-## 4 0.6260465
-## 5 0.7062188
-## 6 0.6037401
-## 7 0.7073031
-## 8 0.8342605
-## 9 0.8077205
+##   education religion        Neg        Mix       Pos
+## 1      High     Cath 0.07624521 0.20160124 0.7221536
+## 2      High     Prot 0.02248256 0.07434749 0.9031699
+## 3      High    SProt 0.02363341 0.07775848 0.8986081
+## 4       Low     Cath 0.11358676 0.26036670 0.6260465
+## 5       Low     Prot 0.08192969 0.21185155 0.7062188
+## 6       Low    SProt 0.12342416 0.27283576 0.6037401
+## 7       Med     Cath 0.08153700 0.21115988 0.7073031
+## 8       Med     Prot 0.04087702 0.12486250 0.8342605
+## 9       Med    SProt 0.04858716 0.14369236 0.8077205
 ```
 
  
@@ -41026,7 +40961,7 @@ Again, we should tidy up after ourselves:
 
 
 ```r
-detach("package:MASS", unload = T)
+detach("package:MASS", unload=T)
 ```
 
  
@@ -41058,8 +40993,8 @@ Like this. The arrangement of numbers and missing values doesn't
 matter, as long as you have some of each:
 
 ```r
-v = c(1, 2, NA, 4, 5, 6, 9, NA, 11)
-mydata = tibble(v)
+v=c(1,2,NA,4,5,6,9,NA,11)
+mydata=tibble(v)
 mydata
 ```
 
@@ -41090,7 +41025,7 @@ Solution
 
 
 ```r
-mydata = mydata %>% mutate(isna = is.na(v))
+mydata = mydata %>% mutate(isna=is.na(v))
 mydata
 ```
 
@@ -41127,7 +41062,7 @@ Try it and see. Give it whatever name you like. My name reflects
 that I know what it's going to do:
 
 ```r
-mydata = mydata %>% mutate(notisna = !is.na(v))
+mydata = mydata %>% mutate(notisna=!is.na(v))
 mydata
 ```
 
@@ -41245,8 +41180,8 @@ The obvious way. Printing it out will display some of the data
 and tell you how many rows and columns you have:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/ess.csv"
-ess = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/ess.csv"
+ess=read_csv(my_url)
 ```
 
 ```
@@ -41278,25 +41213,21 @@ ess
 
 ```
 ## # A tibble: 2,286 x 17
-##    cntry cname cedition cproddat cseqno name 
-##    <chr> <chr>    <int> <chr>     <int> <chr>
-##  1 GB    ESS1~        1 26.11.2~ 134168 ESS6~
-##  2 GB    ESS1~        1 26.11.2~ 134169 ESS6~
-##  3 GB    ESS1~        1 26.11.2~ 134170 ESS6~
-##  4 GB    ESS1~        1 26.11.2~ 134171 ESS6~
-##  5 GB    ESS1~        1 26.11.2~ 134172 ESS6~
-##  6 GB    ESS1~        1 26.11.2~ 134173 ESS6~
-##  7 GB    ESS1~        1 26.11.2~ 134174 ESS6~
-##  8 GB    ESS1~        1 26.11.2~ 134175 ESS6~
-##  9 GB    ESS1~        1 26.11.2~ 134176 ESS6~
-## 10 GB    ESS1~        1 26.11.2~ 134177 ESS6~
-## # ... with 2,276 more rows, and 11 more
-## #   variables: essround <int>,
-## #   edition <dbl>, idno <int>,
-## #   dweight <dbl>, pspwght <dbl>,
-## #   pweight <dbl>, prtvtgb <int>,
-## #   gndr <int>, agea <int>, eduyrs <int>,
-## #   inwtm <int>
+##    cntry cname cedition cproddat cseqno name  essround edition   idno
+##    <chr> <chr>    <int> <chr>     <int> <chr>    <int>   <dbl>  <int>
+##  1 GB    ESS1…        1 26.11.2… 134168 ESS6…        6     2.1 101014
+##  2 GB    ESS1…        1 26.11.2… 134169 ESS6…        6     2.1 101048
+##  3 GB    ESS1…        1 26.11.2… 134170 ESS6…        6     2.1 101055
+##  4 GB    ESS1…        1 26.11.2… 134171 ESS6…        6     2.1 101089
+##  5 GB    ESS1…        1 26.11.2… 134172 ESS6…        6     2.1 101097
+##  6 GB    ESS1…        1 26.11.2… 134173 ESS6…        6     2.1 101113
+##  7 GB    ESS1…        1 26.11.2… 134174 ESS6…        6     2.1 101121
+##  8 GB    ESS1…        1 26.11.2… 134175 ESS6…        6     2.1 101139
+##  9 GB    ESS1…        1 26.11.2… 134176 ESS6…        6     2.1 101154
+## 10 GB    ESS1…        1 26.11.2… 134177 ESS6…        6     2.1 101170
+## # ... with 2,276 more rows, and 8 more variables: dweight <dbl>,
+## #   pspwght <dbl>, pweight <dbl>, prtvtgb <int>, gndr <int>, agea <int>,
+## #   eduyrs <int>, inwtm <int>
 ```
 
      
@@ -41357,8 +41288,7 @@ to use `!is.na()`.
 
 ```r
 ess.major = ess %>% select(prtvtgb:inwtm) %>% 
-    filter(prtvtgb < 4, agea < 999, eduyrs < 40, 
-        !is.na(inwtm))
+filter(prtvtgb<4,agea<999,eduyrs<40,!is.na(inwtm)) 
 ```
 
      
@@ -41387,25 +41317,19 @@ the resulting data frame. For example, I first did this (note that my
 
 
 ```r
-ess %>% select(prtvtgb:inwtm) %>% filter(prtvtgb < 
-    4, !is.na(inwtm)) %>% summary()
+ess %>% select(prtvtgb:inwtm) %>% 
+filter(prtvtgb<4,!is.na(inwtm)) %>%
+summary()
 ```
 
 ```
-##     prtvtgb           gndr      
-##  Min.   :1.000   Min.   :1.000  
-##  1st Qu.:1.000   1st Qu.:1.000  
-##  Median :2.000   Median :2.000  
-##  Mean   :1.803   Mean   :1.572  
-##  3rd Qu.:2.000   3rd Qu.:2.000  
-##  Max.   :3.000   Max.   :2.000  
-##       agea            eduyrs     
-##  Min.   : 18.00   Min.   : 0.00  
-##  1st Qu.: 44.00   1st Qu.:11.00  
-##  Median : 58.00   Median :13.00  
-##  Mean   : 61.74   Mean   :14.23  
-##  3rd Qu.: 71.00   3rd Qu.:16.00  
-##  Max.   :999.00   Max.   :88.00  
+##     prtvtgb           gndr            agea            eduyrs     
+##  Min.   :1.000   Min.   :1.000   Min.   : 18.00   Min.   : 0.00  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.: 44.00   1st Qu.:11.00  
+##  Median :2.000   Median :2.000   Median : 58.00   Median :13.00  
+##  Mean   :1.803   Mean   :1.572   Mean   : 61.74   Mean   :14.23  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.: 71.00   3rd Qu.:16.00  
+##  Max.   :3.000   Max.   :2.000   Max.   :999.00   Max.   :88.00  
 ##      inwtm       
 ##  Min.   :  7.00  
 ##  1st Qu.: 35.00  
@@ -41422,7 +41346,7 @@ doesn't make much sense, but it looks as if all the values are sensible
 ones (1 to 3 and 1, 2 respectively). However, the maximum values of
 age and years of education look like missing value codes, hence the
 other requirements I put in the question.
-\marginnote{If you do not take  out the *NA* values, they are shown separately on the end of  the *summary* for that column.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you do not take  out the *NA* values, they are shown separately on the end of  the *summary* for that column.</span>
 
 `Print`ing as the last step of your pipeline also works, but the
 advantage of `summary` is that you get to see whether there are
@@ -41460,8 +41384,7 @@ This, or something like it. `multinom` lives in package
 
 ```r
 library(nnet)
-ess.1 = multinom(factor(prtvtgb) ~ gndr + agea + 
-    eduyrs + inwtm, data = ess.major)
+ess.1=multinom(factor(prtvtgb)~gndr+agea+eduyrs+inwtm,data=ess.major)
 ```
 
 ```
@@ -41478,7 +41401,7 @@ Or create a factor version of your response in the data frame first:
 
 
 ```r
-ess.major = ess.major %>% mutate(party = factor(prtvtgb))
+ess.major = ess.major %>% mutate(party=factor(prtvtgb))
 ```
 
  
@@ -41487,8 +41410,7 @@ and then:
 
 
 ```r
-ess.1a = multinom(party ~ gndr + agea + eduyrs + 
-    inwtm, data = ess.major)
+ess.1a=multinom(party~gndr+agea+eduyrs+inwtm,data=ess.major)
 ```
 
 ```
@@ -41523,7 +41445,7 @@ Solution
 I tried to give you lots of hints here:
 
 ```r
-step(ess.1, trace = 0)
+step(ess.1,trace=0)
 ```
 
 ```
@@ -41546,12 +41468,9 @@ step(ess.1, trace = 0)
 ## multinom(formula = factor(prtvtgb) ~ agea + eduyrs + inwtm, data = ess.major)
 ## 
 ## Coefficients:
-##   (Intercept)        agea     eduyrs
-## 2    1.632266 -0.02153694 -0.0593757
-## 3   -1.281031 -0.01869263  0.0886487
-##         inwtm
-## 2 0.009615167
-## 3 0.009337084
+##   (Intercept)        agea     eduyrs       inwtm
+## 2    1.632266 -0.02153694 -0.0593757 0.009615167
+## 3   -1.281031 -0.01869263  0.0886487 0.009337084
 ## 
 ## Residual Deviance: 2496.507 
 ## AIC: 2512.507
@@ -41565,7 +41484,7 @@ need to keep)  age, years of education and interview length.
 The actual numbers don't mean much; it's the indication that the
 variable has stayed in the model that makes a
 difference.
-\marginnote{There are three political parties; using the first  as a baseline, there are therefore $3-1=2$ coefficients for each variable.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are three political parties; using the first  as a baseline, there are therefore $3-1=2$ coefficients for each variable.</span>
 
 If you're wondering about the process: first `step` tries to
 take out each explanatory variable, one at a time, from the starting
@@ -41595,8 +41514,7 @@ that gender needed to be removed, but if yours is different, follow
 through with whatever your `step` said to do.
 
 ```r
-ess.2 = multinom(party ~ agea + eduyrs + inwtm, 
-    data = ess.major)
+ess.2=multinom(party~agea+eduyrs+inwtm,data=ess.major)
 ```
 
 ```
@@ -41623,7 +41541,7 @@ Solution
 Fit the model without `inwtm`:
 
 ```r
-ess.3 = multinom(party ~ agea + eduyrs, data = ess.major)
+ess.3=multinom(party~agea+eduyrs,data=ess.major)
 ```
 
 ```
@@ -41640,19 +41558,19 @@ and then use `anova` to compare them:
 
 
 ```r
-anova(ess.3, ess.2)
+anova(ess.3,ess.2)
 ```
 
 ```
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: party
-##                   Model Resid. df Resid. Dev
-## 1         agea + eduyrs      2440   2500.835
-## 2 agea + eduyrs + inwtm      2438   2496.507
-##     Test    Df LR stat.   Pr(Chi)
-## 1                                
-## 2 1 vs 2     2 4.327917 0.1148695
+##                   Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1         agea + eduyrs      2440   2500.835                      
+## 2 agea + eduyrs + inwtm      2438   2496.507 1 vs 2     2 4.327917
+##     Pr(Chi)
+## 1          
+## 2 0.1148695
 ```
 
  
@@ -41664,7 +41582,7 @@ I thought `drop1` would also work here, but it appears not to:
 
 
 ```r
-drop1(ess.1, test = "Chisq")
+drop1(ess.1,test="Chisq")
 ```
 
 ```
@@ -41716,20 +41634,13 @@ summary(ess.major)
 ```
 
 ```
-##     prtvtgb           gndr      
-##  Min.   :1.000   Min.   :1.000  
-##  1st Qu.:1.000   1st Qu.:1.000  
-##  Median :2.000   Median :2.000  
-##  Mean   :1.803   Mean   :1.574  
-##  3rd Qu.:2.000   3rd Qu.:2.000  
-##  Max.   :3.000   Max.   :2.000  
-##       agea           eduyrs     
-##  Min.   :18.00   Min.   : 0.00  
-##  1st Qu.:44.00   1st Qu.:11.00  
-##  Median :58.00   Median :13.00  
-##  Mean   :57.19   Mean   :13.45  
-##  3rd Qu.:71.00   3rd Qu.:16.00  
-##  Max.   :94.00   Max.   :33.00  
+##     prtvtgb           gndr            agea           eduyrs     
+##  Min.   :1.000   Min.   :1.000   Min.   :18.00   Min.   : 0.00  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:44.00   1st Qu.:11.00  
+##  Median :2.000   Median :2.000   Median :58.00   Median :13.00  
+##  Mean   :1.803   Mean   :1.574   Mean   :57.19   Mean   :13.45  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:71.00   3rd Qu.:16.00  
+##  Max.   :3.000   Max.   :2.000   Max.   :94.00   Max.   :33.00  
 ##      inwtm       party  
 ##  Min.   :  7.0   1:484  
 ##  1st Qu.: 35.0   2:496  
@@ -41745,8 +41656,7 @@ Quartiles for age are 44 and 71, and for years of education are 11 and 16:
 
 
 ```r
-new = crossing(agea = c(44, 71), eduyrs = c(11, 
-    16))
+new=crossing(agea=c(44,71),eduyrs=c(11,16))
 new
 ```
 
@@ -41768,8 +41678,8 @@ expect. The best model is the one I called `ess.3`:
 
 
 ```r
-pp = predict(ess.3, new, type = "probs")
-cbind(new, pp)
+pp=predict(ess.3,new,type="probs")
+cbind(new,pp)
 ```
 
 ```
@@ -41804,7 +41714,7 @@ A little history: back 150 or so years ago, Britain had two
 political parties, the Tories and the Whigs. The Tories became the
 Conservative party (and hence, in Britain and in Canada, the
 Conservatives are nicknamed Tories
-\marginnote{It amuses me that      Toronto's current (2018) mayor is politically a Tory.}). The Whigs became Liberals. At
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It amuses me that      Toronto's current (2018) mayor is politically a Tory.</span>). The Whigs became Liberals. At
 about the same time as 
 working people got to vote (not women, yet, but working men) the
 Labour Party came into existence. The Labour Party has always been
@@ -41837,8 +41747,7 @@ and then
 
 
 ```r
-ess.new = crossing(agea = c(44, 71), eduyrs = c(11, 
-    16), inwtm = c(35, 50))
+ess.new=crossing(agea=c(44,71),eduyrs=c(11,16),inwtm=c(35,50))
 ess.new
 ```
 
@@ -41862,29 +41771,20 @@ and then predict *using the model that contained interview time*:
 
 
 ```r
-pp = predict(ess.2, ess.new, type = "probs")
-cbind(ess.new, pp)
+pp=predict(ess.2,ess.new,type="probs")
+cbind(ess.new,pp)
 ```
 
 ```
-##   agea eduyrs inwtm         1         2
-## 1   44     11    35 0.3455998 0.4993563
-## 2   44     11    50 0.3139582 0.5240179
-## 3   44     16    35 0.3606728 0.3872735
-## 4   44     16    50 0.3284883 0.4074380
-## 5   71     11    35 0.4810901 0.3886175
-## 6   71     11    50 0.4455030 0.4157036
-## 7   71     16    35 0.4945171 0.2968551
-## 8   71     16    50 0.4589823 0.3182705
-##           3
-## 1 0.1550439
-## 2 0.1620238
-## 3 0.2520536
-## 4 0.2640737
-## 5 0.1302924
-## 6 0.1387934
-## 7 0.2086277
-## 8 0.2227472
+##   agea eduyrs inwtm         1         2         3
+## 1   44     11    35 0.3455998 0.4993563 0.1550439
+## 2   44     11    50 0.3139582 0.5240179 0.1620238
+## 3   44     16    35 0.3606728 0.3872735 0.2520536
+## 4   44     16    50 0.3284883 0.4074380 0.2640737
+## 5   71     11    35 0.4810901 0.3886175 0.1302924
+## 6   71     11    50 0.4455030 0.4157036 0.1387934
+## 7   71     16    35 0.4945171 0.2968551 0.2086277
+## 8   71     16    50 0.4589823 0.3182705 0.2227472
 ```
 
  
@@ -41929,8 +41829,8 @@ Solution
 Separated by exactly one space:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/alligator.txt"
-gators.orig = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/alligator.txt"
+gators.orig=read_delim(my_url," ")
 ```
 
 ```
@@ -41954,27 +41854,24 @@ gators.orig
 
 ```
 ## # A tibble: 16 x 9
-##    profile Gender Size  Lake   Fish
-##      <int> <chr>  <chr> <chr> <int>
-##  1       1 f      <2.3  geor~     3
-##  2       2 m      <2.3  geor~    13
-##  3       3 f      >2.3  geor~     8
-##  4       4 m      >2.3  geor~     9
-##  5       5 f      <2.3  hanc~    16
-##  6       6 m      <2.3  hanc~     7
-##  7       7 f      >2.3  hanc~     3
-##  8       8 m      >2.3  hanc~     4
-##  9       9 f      <2.3  okla~     3
-## 10      10 m      <2.3  okla~     2
-## 11      11 f      >2.3  okla~     0
-## 12      12 m      >2.3  okla~    13
-## 13      13 f      <2.3  traf~     2
-## 14      14 m      <2.3  traf~     3
-## 15      15 f      >2.3  traf~     0
-## 16      16 m      >2.3  traf~     8
-## # ... with 4 more variables:
-## #   Invertebrate <int>, Reptile <int>,
-## #   Bird <int>, Other <int>
+##    profile Gender Size  Lake      Fish Invertebrate Reptile  Bird Other
+##      <int> <chr>  <chr> <chr>    <int>        <int>   <int> <int> <int>
+##  1       1 f      <2.3  george       3            9       1     0     1
+##  2       2 m      <2.3  george      13           10       0     2     2
+##  3       3 f      >2.3  george       8            1       0     0     1
+##  4       4 m      >2.3  george       9            0       0     1     2
+##  5       5 f      <2.3  hancock     16            3       2     2     3
+##  6       6 m      <2.3  hancock      7            1       0     0     5
+##  7       7 f      >2.3  hancock      3            0       1     2     3
+##  8       8 m      >2.3  hancock      4            0       0     1     2
+##  9       9 f      <2.3  oklawaha     3            9       1     0     2
+## 10      10 m      <2.3  oklawaha     2            2       0     0     1
+## 11      11 f      >2.3  oklawaha     0            1       0     1     0
+## 12      12 m      >2.3  oklawaha    13            7       6     0     0
+## 13      13 f      <2.3  trafford     2            4       1     1     4
+## 14      14 m      <2.3  trafford     3            7       1     0     1
+## 15      15 f      >2.3  trafford     0            1       0     0     0
+## 16      16 m      >2.3  trafford     8            6       6     3     5
 ```
 
        
@@ -42000,27 +41897,25 @@ Solution
 I'm creating my "official" data frame here:
 
 ```r
-gators = gators.orig %>% gather(Food.type, Frequency, 
-    Fish:Other)
+gators = gators.orig %>% gather(Food.type,Frequency,Fish:Other)
 gators
 ```
 
 ```
 ## # A tibble: 80 x 6
-##    profile Gender Size  Lake  Food.type
-##      <int> <chr>  <chr> <chr> <chr>    
-##  1       1 f      <2.3  geor~ Fish     
-##  2       2 m      <2.3  geor~ Fish     
-##  3       3 f      >2.3  geor~ Fish     
-##  4       4 m      >2.3  geor~ Fish     
-##  5       5 f      <2.3  hanc~ Fish     
-##  6       6 m      <2.3  hanc~ Fish     
-##  7       7 f      >2.3  hanc~ Fish     
-##  8       8 m      >2.3  hanc~ Fish     
-##  9       9 f      <2.3  okla~ Fish     
-## 10      10 m      <2.3  okla~ Fish     
-## # ... with 70 more rows, and 1 more
-## #   variable: Frequency <int>
+##    profile Gender Size  Lake     Food.type Frequency
+##      <int> <chr>  <chr> <chr>    <chr>         <int>
+##  1       1 f      <2.3  george   Fish              3
+##  2       2 m      <2.3  george   Fish             13
+##  3       3 f      >2.3  george   Fish              8
+##  4       4 m      >2.3  george   Fish              9
+##  5       5 f      <2.3  hancock  Fish             16
+##  6       6 m      <2.3  hancock  Fish              7
+##  7       7 f      >2.3  hancock  Fish              3
+##  8       8 m      >2.3  hancock  Fish              4
+##  9       9 f      <2.3  oklawaha Fish              3
+## 10      10 m      <2.3  oklawaha Fish              2
+## # ... with 70 more rows
 ```
 
        
@@ -42110,7 +42005,7 @@ gators %>% count(Food.type)
 ```
 
 ```r
-gators %>% count(Food.type, wt = Frequency)
+gators %>% count(Food.type,wt=Frequency)
 ```
 
 ```
@@ -42129,7 +42024,7 @@ gators %>% count(Food.type, wt = Frequency)
 Each food type appears on 16 rows, but is the favoured diet of very
 different numbers of *alligators*. Note the use of `wt=`
 to specify a frequency variable.
-\marginnote{Discovered by me two minutes  ago.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Discovered by me two minutes  ago.</span>
 
 You ought to understand *why* those are different.
 
@@ -42138,8 +42033,8 @@ All right, back to modelling:
 
 ```r
 library(nnet)
-gators.1 = multinom(Food.type ~ Gender + Size + 
-    Lake, weights = Frequency, data = gators)
+gators.1=multinom(Food.type~Gender+Size+Lake,
+weights=Frequency,data=gators)
 ```
 
 ```
@@ -42169,33 +42064,23 @@ summary(gators.1)
 ##     weights = Frequency)
 ## 
 ## Coefficients:
-##              (Intercept)     Genderm
-## Fish           2.4322304  0.60674971
-## Invertebrate   2.6012531  0.14378459
-## Other          1.0014505  0.35423803
-## Reptile       -0.9829064 -0.02053375
-##                Size>2.3 Lakehancock
-## Fish         -0.7308535  -0.5751295
-## Invertebrate -2.0671545  -2.3557377
-## Other        -1.0214847   0.1914537
-## Reptile      -0.1741207   0.5534169
-##              Lakeoklawaha Laketrafford
-## Fish            0.5513785  -1.23681053
-## Invertebrate    1.4645820  -0.08096493
-## Other           0.5775317   0.32097943
-## Reptile         3.0807416   1.82333205
+##              (Intercept)     Genderm   Size>2.3 Lakehancock Lakeoklawaha
+## Fish           2.4322304  0.60674971 -0.7308535  -0.5751295    0.5513785
+## Invertebrate   2.6012531  0.14378459 -2.0671545  -2.3557377    1.4645820
+## Other          1.0014505  0.35423803 -1.0214847   0.1914537    0.5775317
+## Reptile       -0.9829064 -0.02053375 -0.1741207   0.5534169    3.0807416
+##              Laketrafford
+## Fish          -1.23681053
+## Invertebrate  -0.08096493
+## Other          0.32097943
+## Reptile        1.82333205
 ## 
 ## Std. Errors:
-##              (Intercept)   Genderm  Size>2.3
-## Fish           0.7706940 0.6888904 0.6523273
-## Invertebrate   0.7917210 0.7292510 0.7084028
-## Other          0.8747773 0.7623738 0.7250455
-## Reptile        1.2827234 0.9088217 0.8555051
-##              Lakehancock Lakeoklawaha
-## Fish           0.7952147     1.210229
-## Invertebrate   0.9463640     1.232835
-## Other          0.9072182     1.374545
-## Reptile        1.3797755     1.591542
+##              (Intercept)   Genderm  Size>2.3 Lakehancock Lakeoklawaha
+## Fish           0.7706940 0.6888904 0.6523273   0.7952147     1.210229
+## Invertebrate   0.7917210 0.7292510 0.7084028   0.9463640     1.232835
+## Other          0.8747773 0.7623738 0.7250455   0.9072182     1.374545
+## Reptile        1.2827234 0.9088217 0.8555051   1.3797755     1.591542
 ##              Laketrafford
 ## Fish            0.8661187
 ## Invertebrate    0.8814625
@@ -42226,7 +42111,7 @@ The other model to fit is the one *without* the variable
 you're testing:
 
 ```r
-gators.2 = update(gators.1, . ~ . - Gender)
+gators.2=update(gators.1,.~.-Gender)
 ```
 
 ```
@@ -42246,8 +42131,8 @@ taking out `Gender`, preferably by copying and pasting:
 
 
 ```r
-gators.2x = multinom(Food.type ~ Size + Lake, 
-    weights = Frequency, data = gators)
+gators.2x=multinom(Food.type~Size+Lake,
+weights=Frequency,data=gators)
 ```
 
 ```
@@ -42265,19 +42150,19 @@ and then you compare the models with and without `Gender` using `anova`:
 
 
 ```r
-anova(gators.2, gators.1)
+anova(gators.2,gators.1)
 ```
 
 ```
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Food.type
-##                  Model Resid. df Resid. Dev
-## 1          Size + Lake       300   540.0803
-## 2 Gender + Size + Lake       296   537.8655
-##     Test    Df LR stat.   Pr(Chi)
-## 1                                
-## 2 1 vs 2     4 2.214796 0.6963214
+##                  Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1          Size + Lake       300   540.0803                      
+## 2 Gender + Size + Lake       296   537.8655 1 vs 2     4 2.214796
+##     Pr(Chi)
+## 1          
+## 2 0.6963214
 ```
 
  
@@ -42291,7 +42176,7 @@ reasons I haven't figured out):
 
 
 ```r
-drop1(gators.1, test = "Chisq")
+drop1(gators.1,test="Chisq")
 ```
 
 ```
@@ -42330,8 +42215,7 @@ Lakes
 ```
 
 ```
-## [1] "george"   "hancock"  "oklawaha"
-## [4] "trafford"
+## [1] "george"   "hancock"  "oklawaha" "trafford"
 ```
 
 ```r
@@ -42356,7 +42240,7 @@ and called, as per my tradition, `new`:
 
 
 ```r
-new = crossing(Lake = Lakes, Size = Sizes)
+new=crossing(Lake=Lakes,Size=Sizes)
 new
 ```
 
@@ -42384,30 +42268,21 @@ doesn't have any `Gender` in it:
 
 
 ```r
-pp = predict(gators.2, new, type = "p")
-preds1 = cbind(new, pp)
+pp=predict(gators.2,new,type="p")
+preds1=cbind(new,pp)
 preds1
 ```
 
 ```
-##       Lake Size        Bird      Fish
-## 1   george <2.3 0.029671502 0.4521032
-## 2   george >2.3 0.081071082 0.6574394
-## 3  hancock <2.3 0.070400215 0.5353040
-## 4  hancock >2.3 0.140898571 0.5701968
-## 5 oklawaha <2.3 0.008818267 0.2581872
-## 6 oklawaha >2.3 0.029419560 0.4584368
-## 7 trafford <2.3 0.035892547 0.1842997
-## 8 trafford >2.3 0.108222209 0.2957526
-##   Invertebrate      Other    Reptile
-## 1   0.41285699 0.09380190 0.01156641
-## 2   0.13967877 0.09791193 0.02389880
-## 3   0.09309885 0.25374163 0.04745531
-## 4   0.02307179 0.19400899 0.07182382
-## 5   0.60189518 0.05387241 0.07722691
-## 6   0.24864408 0.06866206 0.19483754
-## 7   0.51683770 0.17420330 0.08876673
-## 8   0.19296148 0.20066241 0.20240133
+##       Lake Size        Bird      Fish Invertebrate      Other    Reptile
+## 1   george <2.3 0.029671502 0.4521032   0.41285699 0.09380190 0.01156641
+## 2   george >2.3 0.081071082 0.6574394   0.13967877 0.09791193 0.02389880
+## 3  hancock <2.3 0.070400215 0.5353040   0.09309885 0.25374163 0.04745531
+## 4  hancock >2.3 0.140898571 0.5701968   0.02307179 0.19400899 0.07182382
+## 5 oklawaha <2.3 0.008818267 0.2581872   0.60189518 0.05387241 0.07722691
+## 6 oklawaha >2.3 0.029419560 0.4584368   0.24864408 0.06866206 0.19483754
+## 7 trafford <2.3 0.035892547 0.1842997   0.51683770 0.17420330 0.08876673
+## 8 trafford >2.3 0.108222209 0.2957526   0.19296148 0.20066241 0.20240133
 ```
 
  
@@ -42422,7 +42297,7 @@ then you needed to do something like this as well:
 
 ```r
 Genders = gators %>% distinct(Gender) %>% pull(Gender)
-new = crossing(Lake = Lakes, Size = Sizes, Gender = Genders)
+new=crossing(Lake=Lakes,Size=Sizes,Gender=Genders)
 new
 ```
 
@@ -42453,45 +42328,28 @@ the following:
 
 
 ```r
-pp = predict(gators.2, new, type = "p")
-cbind(new, pp)
+pp=predict(gators.2,new,type="p")
+cbind(new,pp)
 ```
 
 ```
-##        Lake Size Gender        Bird
-## 1    george <2.3      f 0.029671502
-## 2    george <2.3      m 0.029671502
-## 3    george >2.3      f 0.081071082
-## 4    george >2.3      m 0.081071082
-## 5   hancock <2.3      f 0.070400215
-## 6   hancock <2.3      m 0.070400215
-## 7   hancock >2.3      f 0.140898571
-## 8   hancock >2.3      m 0.140898571
-## 9  oklawaha <2.3      f 0.008818267
-## 10 oklawaha <2.3      m 0.008818267
-## 11 oklawaha >2.3      f 0.029419560
-## 12 oklawaha >2.3      m 0.029419560
-## 13 trafford <2.3      f 0.035892547
-## 14 trafford <2.3      m 0.035892547
-## 15 trafford >2.3      f 0.108222209
-## 16 trafford >2.3      m 0.108222209
-##         Fish Invertebrate      Other
-## 1  0.4521032   0.41285699 0.09380190
-## 2  0.4521032   0.41285699 0.09380190
-## 3  0.6574394   0.13967877 0.09791193
-## 4  0.6574394   0.13967877 0.09791193
-## 5  0.5353040   0.09309885 0.25374163
-## 6  0.5353040   0.09309885 0.25374163
-## 7  0.5701968   0.02307179 0.19400899
-## 8  0.5701968   0.02307179 0.19400899
-## 9  0.2581872   0.60189518 0.05387241
-## 10 0.2581872   0.60189518 0.05387241
-## 11 0.4584368   0.24864408 0.06866206
-## 12 0.4584368   0.24864408 0.06866206
-## 13 0.1842997   0.51683770 0.17420330
-## 14 0.1842997   0.51683770 0.17420330
-## 15 0.2957526   0.19296148 0.20066241
-## 16 0.2957526   0.19296148 0.20066241
+##        Lake Size Gender        Bird      Fish Invertebrate      Other
+## 1    george <2.3      f 0.029671502 0.4521032   0.41285699 0.09380190
+## 2    george <2.3      m 0.029671502 0.4521032   0.41285699 0.09380190
+## 3    george >2.3      f 0.081071082 0.6574394   0.13967877 0.09791193
+## 4    george >2.3      m 0.081071082 0.6574394   0.13967877 0.09791193
+## 5   hancock <2.3      f 0.070400215 0.5353040   0.09309885 0.25374163
+## 6   hancock <2.3      m 0.070400215 0.5353040   0.09309885 0.25374163
+## 7   hancock >2.3      f 0.140898571 0.5701968   0.02307179 0.19400899
+## 8   hancock >2.3      m 0.140898571 0.5701968   0.02307179 0.19400899
+## 9  oklawaha <2.3      f 0.008818267 0.2581872   0.60189518 0.05387241
+## 10 oklawaha <2.3      m 0.008818267 0.2581872   0.60189518 0.05387241
+## 11 oklawaha >2.3      f 0.029419560 0.4584368   0.24864408 0.06866206
+## 12 oklawaha >2.3      m 0.029419560 0.4584368   0.24864408 0.06866206
+## 13 trafford <2.3      f 0.035892547 0.1842997   0.51683770 0.17420330
+## 14 trafford <2.3      m 0.035892547 0.1842997   0.51683770 0.17420330
+## 15 trafford >2.3      f 0.108222209 0.2957526   0.19296148 0.20066241
+## 16 trafford >2.3      m 0.108222209 0.2957526   0.19296148 0.20066241
 ##       Reptile
 ## 1  0.01156641
 ## 2  0.01156641
@@ -42522,45 +42380,28 @@ better one, then you'd do this:
 
 
 ```r
-pp = predict(gators.1, new, type = "p")
-cbind(new, pp)
+pp=predict(gators.1,new,type="p")
+cbind(new,pp)
 ```
 
 ```
-##        Lake Size Gender        Bird
-## 1    george <2.3      f 0.034528820
-## 2    george <2.3      m 0.023983587
-## 3    george >2.3      f 0.105463159
-## 4    george >2.3      m 0.067888065
-## 5   hancock <2.3      f 0.079170901
-## 6   hancock <2.3      m 0.051120681
-## 7   hancock >2.3      f 0.167234031
-## 8   hancock >2.3      m 0.110233536
-## 9  oklawaha <2.3      f 0.010861171
-## 10 oklawaha <2.3      m 0.008370118
-## 11 oklawaha >2.3      f 0.037755986
-## 12 oklawaha >2.3      m 0.027647882
-## 13 trafford <2.3      f 0.043846177
-## 14 trafford <2.3      m 0.034440739
-## 15 trafford >2.3      f 0.133999340
-## 16 trafford >2.3      m 0.104507582
-##         Fish Invertebrate      Other
-## 1  0.3930846   0.46546988 0.09399531
-## 2  0.5008716   0.37330933 0.09304268
-## 3  0.5780952   0.17991064 0.10337131
-## 4  0.6826531   0.13371938 0.09482794
-## 5  0.5071007   0.10120258 0.26099808
-## 6  0.6006664   0.07545143 0.24016625
-## 7  0.5157600   0.02705184 0.19850489
-## 8  0.6236556   0.02058879 0.18646783
-## 9  0.2146058   0.63335376 0.05267686
-## 10 0.3033923   0.56356778 0.05785201
-## 11 0.3592072   0.27861325 0.06593316
-## 12 0.4825354   0.23557146 0.06880557
-## 13 0.1449092   0.54510349 0.16453404
-## 14 0.2088069   0.49438416 0.18417900
-## 15 0.2132364   0.21081238 0.18105124
-## 16 0.3050805   0.18983929 0.20122886
+##        Lake Size Gender        Bird      Fish Invertebrate      Other
+## 1    george <2.3      f 0.034528820 0.3930846   0.46546988 0.09399531
+## 2    george <2.3      m 0.023983587 0.5008716   0.37330933 0.09304268
+## 3    george >2.3      f 0.105463159 0.5780952   0.17991064 0.10337131
+## 4    george >2.3      m 0.067888065 0.6826531   0.13371938 0.09482794
+## 5   hancock <2.3      f 0.079170901 0.5071007   0.10120258 0.26099808
+## 6   hancock <2.3      m 0.051120681 0.6006664   0.07545143 0.24016625
+## 7   hancock >2.3      f 0.167234031 0.5157600   0.02705184 0.19850489
+## 8   hancock >2.3      m 0.110233536 0.6236556   0.02058879 0.18646783
+## 9  oklawaha <2.3      f 0.010861171 0.2146058   0.63335376 0.05267686
+## 10 oklawaha <2.3      m 0.008370118 0.3033923   0.56356778 0.05785201
+## 11 oklawaha >2.3      f 0.037755986 0.3592072   0.27861325 0.06593316
+## 12 oklawaha >2.3      m 0.027647882 0.4825354   0.23557146 0.06880557
+## 13 trafford <2.3      f 0.043846177 0.1449092   0.54510349 0.16453404
+## 14 trafford <2.3      m 0.034440739 0.2088069   0.49438416 0.18417900
+## 15 trafford >2.3      f 0.133999340 0.2132364   0.21081238 0.18105124
+## 16 trafford >2.3      m 0.104507582 0.3050805   0.18983929 0.20122886
 ##        Reptile
 ## 1  0.012921439
 ## 2  0.008792768
@@ -42584,7 +42425,7 @@ cbind(new, pp)
 
 and this time there *is* an effect of gender, but it is
 smallish, as befits an effect that is not significant.
-\marginnote{There were only 216 alligators total, which is a small sample size for this kind of thing, especially with all those parameters to estimate.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There were only 216 alligators total, which is a small sample size for this kind of thing, especially with all those parameters to estimate.</span>
     
 
 
@@ -42603,24 +42444,15 @@ preds1
 ```
 
 ```
-##       Lake Size        Bird      Fish
-## 1   george <2.3 0.029671502 0.4521032
-## 2   george >2.3 0.081071082 0.6574394
-## 3  hancock <2.3 0.070400215 0.5353040
-## 4  hancock >2.3 0.140898571 0.5701968
-## 5 oklawaha <2.3 0.008818267 0.2581872
-## 6 oklawaha >2.3 0.029419560 0.4584368
-## 7 trafford <2.3 0.035892547 0.1842997
-## 8 trafford >2.3 0.108222209 0.2957526
-##   Invertebrate      Other    Reptile
-## 1   0.41285699 0.09380190 0.01156641
-## 2   0.13967877 0.09791193 0.02389880
-## 3   0.09309885 0.25374163 0.04745531
-## 4   0.02307179 0.19400899 0.07182382
-## 5   0.60189518 0.05387241 0.07722691
-## 6   0.24864408 0.06866206 0.19483754
-## 7   0.51683770 0.17420330 0.08876673
-## 8   0.19296148 0.20066241 0.20240133
+##       Lake Size        Bird      Fish Invertebrate      Other    Reptile
+## 1   george <2.3 0.029671502 0.4521032   0.41285699 0.09380190 0.01156641
+## 2   george >2.3 0.081071082 0.6574394   0.13967877 0.09791193 0.02389880
+## 3  hancock <2.3 0.070400215 0.5353040   0.09309885 0.25374163 0.04745531
+## 4  hancock >2.3 0.140898571 0.5701968   0.02307179 0.19400899 0.07182382
+## 5 oklawaha <2.3 0.008818267 0.2581872   0.60189518 0.05387241 0.07722691
+## 6 oklawaha >2.3 0.029419560 0.4584368   0.24864408 0.06866206 0.19483754
+## 7 trafford <2.3 0.035892547 0.1842997   0.51683770 0.17420330 0.08876673
+## 8 trafford >2.3 0.108222209 0.2957526   0.19296148 0.20066241 0.20240133
 ```
 
        
@@ -42766,8 +42598,8 @@ The usual:
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/steak.csv"
-steak = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/steak.csv"
+steak=read_csv(my_url)
 ```
 
 ```
@@ -42797,24 +42629,20 @@ steak
 
 ```
 ## # A tibble: 550 x 15
-##    respondent_id lottery_a smoke alcohol
-##            <dbl> <lgl>     <lgl> <lgl>  
-##  1    3237565956 FALSE     NA    NA     
-##  2    3234982343 TRUE      FALSE TRUE   
-##  3    3234973379 TRUE      FALSE TRUE   
-##  4    3234972383 FALSE     TRUE  TRUE   
-##  5    3234958833 FALSE     FALSE TRUE   
-##  6    3234955240 TRUE      FALSE FALSE  
-##  7    3234955097 TRUE      FALSE TRUE   
-##  8    3234955010 TRUE      FALSE TRUE   
-##  9    3234953052 TRUE      TRUE  TRUE   
-## 10    3234951249 FALSE     FALSE TRUE   
-## # ... with 540 more rows, and 11 more
-## #   variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>, steak <lgl>,
-## #   steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>,
+##    respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##            <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+##  1    3237565956 FALSE     NA    NA      NA     NA        NA    NA     
+##  2    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
+##  3    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
+##  4    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
+##  5    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
+##  6    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+##  7    3234955097 TRUE      FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
+##  8    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
+##  9    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE  
+## 10    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE  
+## # ... with 540 more rows, and 7 more variables: steak <lgl>,
+## #   steak_prep <chr>, female <lgl>, age <chr>, hhold_income <chr>,
 ## #   educ <chr>, region <chr>
 ```
 
@@ -42836,102 +42664,60 @@ If you don't believe the whole output is long, well, here it is:
 
 
 ```r
-complete.cases(steak)
+complete.cases(steak) 
 ```
 
 ```
-##   [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-##   [7] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-##  [13]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-##  [19]  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-##  [25]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-##  [31]  TRUE FALSE FALSE  TRUE FALSE FALSE
-##  [37]  TRUE FALSE FALSE FALSE FALSE  TRUE
-##  [43] FALSE  TRUE FALSE  TRUE  TRUE  TRUE
-##  [49]  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-##  [55] FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-##  [61] FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-##  [67] FALSE FALSE FALSE  TRUE FALSE FALSE
-##  [73] FALSE  TRUE  TRUE FALSE FALSE FALSE
-##  [79]  TRUE FALSE FALSE  TRUE FALSE FALSE
-##  [85] FALSE  TRUE  TRUE  TRUE FALSE FALSE
-##  [91]  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-##  [97]  TRUE  TRUE FALSE  TRUE FALSE  TRUE
-## [103] FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-## [109] FALSE  TRUE  TRUE FALSE FALSE  TRUE
-## [115] FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [121]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
-## [127] FALSE FALSE FALSE  TRUE  TRUE  TRUE
-## [133] FALSE FALSE  TRUE FALSE FALSE FALSE
-## [139]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [145]  TRUE FALSE  TRUE  TRUE  TRUE FALSE
-## [151]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [157]  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-## [163]  TRUE FALSE FALSE FALSE FALSE FALSE
-## [169]  TRUE FALSE  TRUE FALSE  TRUE  TRUE
-## [175] FALSE FALSE  TRUE  TRUE  TRUE FALSE
-## [181] FALSE  TRUE FALSE FALSE  TRUE FALSE
-## [187]  TRUE FALSE  TRUE  TRUE FALSE FALSE
-## [193]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [199] FALSE  TRUE FALSE FALSE FALSE  TRUE
-## [205]  TRUE FALSE  TRUE FALSE FALSE FALSE
-## [211] FALSE FALSE  TRUE  TRUE  TRUE  TRUE
-## [217] FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-## [223] FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-## [229]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
-## [235]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [241]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-## [247] FALSE  TRUE FALSE  TRUE FALSE  TRUE
-## [253] FALSE  TRUE FALSE  TRUE  TRUE  TRUE
-## [259]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
-## [265] FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-## [271]  TRUE  TRUE FALSE  TRUE FALSE FALSE
-## [277]  TRUE FALSE  TRUE FALSE FALSE FALSE
-## [283]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [289]  TRUE FALSE FALSE FALSE FALSE  TRUE
-## [295]  TRUE  TRUE FALSE  TRUE FALSE  TRUE
-## [301] FALSE  TRUE  TRUE  TRUE FALSE FALSE
-## [307]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
-## [313]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
-## [319] FALSE  TRUE FALSE  TRUE FALSE  TRUE
-## [325] FALSE FALSE  TRUE  TRUE FALSE  TRUE
-## [331]  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-## [337]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-## [343] FALSE  TRUE FALSE FALSE  TRUE FALSE
-## [349] FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-## [355]  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [361] FALSE  TRUE FALSE  TRUE  TRUE FALSE
-## [367] FALSE  TRUE  TRUE  TRUE  TRUE FALSE
-## [373] FALSE FALSE  TRUE FALSE FALSE  TRUE
-## [379]  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-## [385]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-## [391] FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [397]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [403]  TRUE FALSE  TRUE  TRUE  TRUE FALSE
-## [409]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [415] FALSE  TRUE FALSE  TRUE FALSE FALSE
-## [421]  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [427] FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [433]  TRUE FALSE FALSE  TRUE  TRUE FALSE
-## [439]  TRUE  TRUE FALSE FALSE  TRUE FALSE
-## [445]  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-## [451]  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-## [457]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [463]  TRUE FALSE  TRUE  TRUE  TRUE FALSE
-## [469]  TRUE  TRUE FALSE  TRUE FALSE FALSE
-## [475]  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [481] FALSE FALSE  TRUE  TRUE  TRUE  TRUE
-## [487]  TRUE FALSE  TRUE FALSE  TRUE FALSE
-## [493] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [499] FALSE  TRUE FALSE FALSE  TRUE FALSE
-## [505]  TRUE FALSE FALSE  TRUE FALSE  TRUE
-## [511] FALSE  TRUE FALSE  TRUE  TRUE FALSE
-## [517]  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [523] FALSE FALSE  TRUE  TRUE  TRUE FALSE
-## [529] FALSE FALSE  TRUE FALSE FALSE  TRUE
-## [535]  TRUE FALSE FALSE  TRUE  TRUE FALSE
-## [541] FALSE FALSE  TRUE  TRUE  TRUE  TRUE
-## [547] FALSE  TRUE FALSE FALSE
+##   [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
+##  [12]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE
+##  [23] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE
+##  [34]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE
+##  [45] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE
+##  [56]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE
+##  [67] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE
+##  [78] FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
+##  [89] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+## [100]  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE
+## [111]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
+## [122]  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
+## [133] FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
+## [144]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
+## [155] FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE
+## [166] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE
+## [177]  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE
+## [188] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [199] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE
+## [210] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE
+## [221]  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [232] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+## [243]  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
+## [254]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
+## [265] FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
+## [276] FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE
+## [287]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+## [298]  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [309] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
+## [320]  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE
+## [331]  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [342] FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
+## [353] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
+## [364]  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE
+## [375]  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [386]  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+## [397]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+## [408] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+## [419] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
+## [430] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE
+## [441] FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [452] FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [463]  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE
+## [474] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [485]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+## [496]  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE
+## [507] FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
+## [518]  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+## [529] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [540] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE
 ```
 
  
@@ -42944,7 +42730,7 @@ use `slice` to display the rows with these numbers:
 
 
 ```r
-rows = c(496, 497, 498, 540, 541, 542)
+rows=c(496,497,498,540,541,542)
 rows
 ```
 
@@ -42963,20 +42749,16 @@ steak %>% slice(rows)
 
 ```
 ## # A tibble: 6 x 15
-##   respondent_id lottery_a smoke alcohol
-##           <dbl> <lgl>     <lgl> <lgl>  
-## 1    3234776895 FALSE     FALSE FALSE  
-## 2    3234776815 TRUE      TRUE  TRUE   
-## 3    3234776702 FALSE     FALSE FALSE  
-## 4    3234763650 TRUE      FALSE FALSE  
-## 5    3234763171 TRUE      FALSE TRUE   
-## 6    3234762715 FALSE     FALSE FALSE  
-## # ... with 11 more variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>, steak <lgl>,
-## #   steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>,
-## #   educ <chr>, region <chr>
+##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+## 1    3234776895 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
+## 2    3234776815 TRUE      TRUE  TRUE    FALSE  FALSE     TRUE  FALSE  
+## 3    3234776702 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
+## 4    3234763650 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+## 5    3234763171 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  FALSE  
+## 6    3234762715 FALSE     FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+## # ... with 7 more variables: steak <lgl>, steak_prep <chr>, female <lgl>,
+## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
 ```
 
  
@@ -42999,75 +42781,43 @@ text variables might have missing values in them, and they won't
 show up unless we turn them into a factor first:
 
 ```r
-steak %>% mutate_if(is.character, factor) %>% 
-    summary()
+steak %>% mutate_if(is.character,factor) %>% 
+summary()
 ```
 
 ```
-##  respondent_id       lottery_a      
-##  Min.   :3.235e+09   Mode :logical  
-##  1st Qu.:3.235e+09   FALSE:279      
-##  Median :3.235e+09   TRUE :267      
-##  Mean   :3.235e+09   NA's :4        
-##  3rd Qu.:3.235e+09                  
-##  Max.   :3.238e+09                  
-##                                     
-##    smoke          alcohol       
-##  Mode :logical   Mode :logical  
-##  FALSE:453       FALSE:125      
-##  TRUE :84        TRUE :416      
-##  NA's :13        NA's :9        
-##                                 
-##                                 
-##                                 
-##    gamble        skydiving      
-##  Mode :logical   Mode :logical  
-##  FALSE:280       FALSE:502      
-##  TRUE :257       TRUE :36       
-##  NA's :13        NA's :12       
-##                                 
-##                                 
-##                                 
-##    speed          cheated       
-##  Mode :logical   Mode :logical  
-##  FALSE:59        FALSE:447      
-##  TRUE :480       TRUE :92       
-##  NA's :11        NA's :11       
-##                                 
-##                                 
-##                                 
-##    steak               steak_prep 
-##  Mode :logical   Medium     :132  
-##  FALSE:109       Medium rare:166  
-##  TRUE :430       Medium Well: 75  
-##  NA's :11        Rare       : 23  
-##                  Well       : 36  
-##                  NA's       :118  
-##                                   
-##    female           age     
-##  Mode :logical   18-29:110  
-##  FALSE:246       30-44:133  
-##  TRUE :268       45-60:140  
-##  NA's :36        >60  :131  
-##                  NA's : 36  
-##                             
-##                             
-##               hhold_income
-##  $0 - $24,999       : 51  
-##  $100,000 - $149,999: 76  
-##  $150,000+          : 54  
-##  $25,000 - $49,999  : 77  
-##  $50,000 - $99,999  :172  
-##  NA's               :120  
-##                           
-##                                educ    
-##  Bachelor degree                 :174  
-##  Graduate degree                 :133  
-##  High school degree              : 39  
-##  Less than high school degree    :  2  
-##  Some college or Associate degree:164  
-##  NA's                            : 38  
-##                                        
+##  respondent_id       lottery_a         smoke          alcohol       
+##  Min.   :3.235e+09   Mode :logical   Mode :logical   Mode :logical  
+##  1st Qu.:3.235e+09   FALSE:279       FALSE:453       FALSE:125      
+##  Median :3.235e+09   TRUE :267       TRUE :84        TRUE :416      
+##  Mean   :3.235e+09   NA's :4         NA's :13        NA's :9        
+##  3rd Qu.:3.235e+09                                                  
+##  Max.   :3.238e+09                                                  
+##                                                                     
+##    gamble        skydiving         speed          cheated       
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
+##  FALSE:280       FALSE:502       FALSE:59        FALSE:447      
+##  TRUE :257       TRUE :36        TRUE :480       TRUE :92       
+##  NA's :13        NA's :12        NA's :11        NA's :11       
+##                                                                 
+##                                                                 
+##                                                                 
+##    steak               steak_prep    female           age     
+##  Mode :logical   Medium     :132   Mode :logical   18-29:110  
+##  FALSE:109       Medium rare:166   FALSE:246       30-44:133  
+##  TRUE :430       Medium Well: 75   TRUE :268       45-60:140  
+##  NA's :11        Rare       : 23   NA's :36        >60  :131  
+##                  Well       : 36                   NA's : 36  
+##                  NA's       :118                              
+##                                                               
+##               hhold_income                               educ    
+##  $0 - $24,999       : 51   Bachelor degree                 :174  
+##  $100,000 - $149,999: 76   Graduate degree                 :133  
+##  $150,000+          : 54   High school degree              : 39  
+##  $25,000 - $49,999  : 77   Less than high school degree    :  2  
+##  $50,000 - $99,999  :172   Some college or Associate degree:164  
+##  NA's               :120   NA's                            : 38  
+##                                                                  
 ##                 region   
 ##  Pacific           : 91  
 ##  South Atlantic    : 88  
@@ -43099,17 +42849,14 @@ steak %>% select(1:8) %>% slice(rows)
 
 ```
 ## # A tibble: 6 x 8
-##   respondent_id lottery_a smoke alcohol
-##           <dbl> <lgl>     <lgl> <lgl>  
-## 1    3234776895 FALSE     FALSE FALSE  
-## 2    3234776815 TRUE      TRUE  TRUE   
-## 3    3234776702 FALSE     FALSE FALSE  
-## 4    3234763650 TRUE      FALSE FALSE  
-## 5    3234763171 TRUE      FALSE TRUE   
-## 6    3234762715 FALSE     FALSE FALSE  
-## # ... with 4 more variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>
+##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+## 1    3234776895 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
+## 2    3234776815 TRUE      TRUE  TRUE    FALSE  FALSE     TRUE  FALSE  
+## 3    3234776702 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
+## 4    3234763650 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+## 5    3234763171 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  FALSE  
+## 6    3234762715 FALSE     FALSE FALSE   FALSE  FALSE     TRUE  FALSE
 ```
 
  
@@ -43123,16 +42870,14 @@ steak %>% select(9:15) %>% slice(rows)
 
 ```
 ## # A tibble: 6 x 7
-##   steak steak_prep female age   hhold_income
-##   <lgl> <chr>      <lgl>  <chr> <chr>       
-## 1 TRUE  Medium ra~ TRUE   45-60 $0 - $24,999
-## 2 TRUE  Medium     TRUE   45-60 $150,000+   
-## 3 TRUE  Medium ra~ TRUE   >60   $50,000 - $~
-## 4 FALSE <NA>       FALSE  45-60 $100,000 - ~
-## 5 TRUE  Medium     FALSE  >60   <NA>        
-## 6 FALSE <NA>       FALSE  18-29 $50,000 - $~
-## # ... with 2 more variables: educ <chr>,
-## #   region <chr>
+##   steak steak_prep  female age   hhold_income    educ           region    
+##   <lgl> <chr>       <lgl>  <chr> <chr>           <chr>          <chr>     
+## 1 TRUE  Medium rare TRUE   45-60 $0 - $24,999    Some college … West Sout…
+## 2 TRUE  Medium      TRUE   45-60 $150,000+       Bachelor degr… New Engla…
+## 3 TRUE  Medium rare TRUE   >60   $50,000 - $99,… Graduate degr… Mountain  
+## 4 FALSE <NA>        FALSE  45-60 $100,000 - $14… Some college … South Atl…
+## 5 TRUE  Medium      FALSE  >60   <NA>            Graduate degr… Pacific   
+## 6 FALSE <NA>        FALSE  18-29 $50,000 - $99,… Some college … West Nort…
 ```
 
  
@@ -43162,8 +42907,8 @@ results of `complete.cases` first, then use it in the
 `filter`: 
 
 ```r
-cc = complete.cases(steak)
-steak.complete = steak %>% filter(cc)
+cc=complete.cases(steak)
+steak.complete = steak %>% filter(cc) 
 ```
 
      
@@ -43177,24 +42922,20 @@ steak.complete
 
 ```
 ## # A tibble: 331 x 15
-##    respondent_id lottery_a smoke alcohol
-##            <dbl> <lgl>     <lgl> <lgl>  
-##  1    3234982343 TRUE      FALSE TRUE   
-##  2    3234973379 TRUE      FALSE TRUE   
-##  3    3234972383 FALSE     TRUE  TRUE   
-##  4    3234958833 FALSE     FALSE TRUE   
-##  5    3234955240 TRUE      FALSE FALSE  
-##  6    3234955010 TRUE      FALSE TRUE   
-##  7    3234953052 TRUE      TRUE  TRUE   
-##  8    3234951249 FALSE     FALSE TRUE   
-##  9    3234948883 FALSE     FALSE TRUE   
-## 10    3234948197 TRUE      FALSE FALSE  
-## # ... with 321 more rows, and 11 more
-## #   variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>, steak <lgl>,
-## #   steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>,
+##    respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##            <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+##  1    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
+##  2    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
+##  3    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
+##  4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
+##  5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+##  6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
+##  7    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE  
+##  8    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE  
+##  9    3234948883 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  FALSE  
+## 10    3234948197 TRUE      FALSE FALSE   TRUE   FALSE     TRUE  FALSE  
+## # ... with 321 more rows, and 7 more variables: steak <lgl>,
+## #   steak_prep <chr>, female <lgl>, age <chr>, hhold_income <chr>,
 ## #   educ <chr>, region <chr>
 ```
 
@@ -43208,75 +42949,43 @@ For proof, this is the easiest way I know:
 
 
 ```r
-steak.complete %>% mutate_if(is.character, factor) %>% 
-    summary()
+steak.complete %>% mutate_if(is.character,factor) %>%
+summary()
 ```
 
 ```
-##  respondent_id       lottery_a      
-##  Min.   :3.235e+09   Mode :logical  
-##  1st Qu.:3.235e+09   FALSE:171      
-##  Median :3.235e+09   TRUE :160      
-##  Mean   :3.235e+09                  
-##  3rd Qu.:3.235e+09                  
-##  Max.   :3.235e+09                  
-##                                     
-##    smoke          alcohol       
-##  Mode :logical   Mode :logical  
-##  FALSE:274       FALSE:65       
-##  TRUE :57        TRUE :266      
-##                                 
-##                                 
-##                                 
-##                                 
-##    gamble        skydiving      
-##  Mode :logical   Mode :logical  
-##  FALSE:158       FALSE:308      
-##  TRUE :173       TRUE :23       
-##                                 
-##                                 
-##                                 
-##                                 
-##    speed          cheated       
-##  Mode :logical   Mode :logical  
-##  FALSE:28        FALSE:274      
-##  TRUE :303       TRUE :57       
-##                                 
-##                                 
-##                                 
-##                                 
-##   steak               steak_prep 
-##  Mode:logical   Medium     :109  
-##  TRUE:331       Medium rare:128  
-##                 Medium Well: 56  
-##                 Rare       : 18  
-##                 Well       : 20  
-##                                  
-##                                  
-##    female           age    
-##  Mode :logical   18-29:70  
-##  FALSE:174       30-44:93  
-##  TRUE :157       45-60:86  
-##                  >60  :82  
-##                            
-##                            
-##                            
-##               hhold_income
-##  $0 - $24,999       : 37  
-##  $100,000 - $149,999: 66  
-##  $150,000+          : 39  
-##  $25,000 - $49,999  : 55  
-##  $50,000 - $99,999  :134  
-##                           
-##                           
-##                                educ    
-##  Bachelor degree                 :120  
-##  Graduate degree                 : 86  
-##  High school degree              : 20  
-##  Less than high school degree    :  1  
-##  Some college or Associate degree:104  
-##                                        
-##                                        
+##  respondent_id       lottery_a         smoke          alcohol       
+##  Min.   :3.235e+09   Mode :logical   Mode :logical   Mode :logical  
+##  1st Qu.:3.235e+09   FALSE:171       FALSE:274       FALSE:65       
+##  Median :3.235e+09   TRUE :160       TRUE :57        TRUE :266      
+##  Mean   :3.235e+09                                                  
+##  3rd Qu.:3.235e+09                                                  
+##  Max.   :3.235e+09                                                  
+##                                                                     
+##    gamble        skydiving         speed          cheated       
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
+##  FALSE:158       FALSE:308       FALSE:28        FALSE:274      
+##  TRUE :173       TRUE :23        TRUE :303       TRUE :57       
+##                                                                 
+##                                                                 
+##                                                                 
+##                                                                 
+##   steak               steak_prep    female           age    
+##  Mode:logical   Medium     :109   Mode :logical   18-29:70  
+##  TRUE:331       Medium rare:128   FALSE:174       30-44:93  
+##                 Medium Well: 56   TRUE :157       45-60:86  
+##                 Rare       : 18                   >60  :82  
+##                 Well       : 20                             
+##                                                             
+##                                                             
+##               hhold_income                               educ    
+##  $0 - $24,999       : 37   Bachelor degree                 :120  
+##  $100,000 - $149,999: 66   Graduate degree                 : 86  
+##  $150,000+          : 39   High school degree              : 20  
+##  $25,000 - $49,999  : 55   Less than high school degree    :  1  
+##  $50,000 - $99,999  :134   Some college or Associate degree:104  
+##                                                                  
+##                                                                  
 ##                 region  
 ##  South Atlantic    :68  
 ##  Pacific           :57  
@@ -43306,7 +43015,7 @@ Solution
 This is `write_csv`:
 
 ```r
-write_csv(steak.complete, "steak1.csv")
+write_csv(steak.complete,"steak1.csv")
 ```
 
      
@@ -43365,8 +43074,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv"
-sfcrime = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv"
+sfcrime=read_csv(my_url)
 ```
 
 ```
@@ -43390,22 +43099,20 @@ sfcrime
 
 ```
 ## # A tibble: 878,049 x 9
-##    Dates               Category Descript
-##    <dttm>              <chr>    <chr>   
-##  1 2015-05-13 23:53:00 WARRANTS WARRANT~
-##  2 2015-05-13 23:53:00 OTHER O~ TRAFFIC~
-##  3 2015-05-13 23:33:00 OTHER O~ TRAFFIC~
-##  4 2015-05-13 23:30:00 LARCENY~ GRAND T~
-##  5 2015-05-13 23:30:00 LARCENY~ GRAND T~
-##  6 2015-05-13 23:30:00 LARCENY~ GRAND T~
-##  7 2015-05-13 23:30:00 VEHICLE~ STOLEN ~
-##  8 2015-05-13 23:30:00 VEHICLE~ STOLEN ~
-##  9 2015-05-13 23:00:00 LARCENY~ GRAND T~
-## 10 2015-05-13 23:00:00 LARCENY~ GRAND T~
-## # ... with 878,039 more rows, and 6 more
-## #   variables: DayOfWeek <chr>,
-## #   PdDistrict <chr>, Resolution <chr>,
-## #   Address <chr>, X <dbl>, Y <dbl>
+##    Dates               Category Descript DayOfWeek PdDistrict Resolution
+##    <dttm>              <chr>    <chr>    <chr>     <chr>      <chr>     
+##  1 2015-05-13 23:53:00 WARRANTS WARRANT… Wednesday NORTHERN   ARREST, B…
+##  2 2015-05-13 23:53:00 OTHER O… TRAFFIC… Wednesday NORTHERN   ARREST, B…
+##  3 2015-05-13 23:33:00 OTHER O… TRAFFIC… Wednesday NORTHERN   ARREST, B…
+##  4 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday NORTHERN   NONE      
+##  5 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday PARK       NONE      
+##  6 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday INGLESIDE  NONE      
+##  7 2015-05-13 23:30:00 VEHICLE… STOLEN … Wednesday INGLESIDE  NONE      
+##  8 2015-05-13 23:30:00 VEHICLE… STOLEN … Wednesday BAYVIEW    NONE      
+##  9 2015-05-13 23:00:00 LARCENY… GRAND T… Wednesday RICHMOND   NONE      
+## 10 2015-05-13 23:00:00 LARCENY… GRAND T… Wednesday CENTRAL    NONE      
+## # ... with 878,039 more rows, and 3 more variables: Address <chr>,
+## #   X <dbl>, Y <dbl>
 ```
 
      
@@ -43446,8 +43153,9 @@ by `arrange` to sort:
 
 
 ```r
-sfcrime %>% group_by(Category) %>% summarize(count = n()) %>% 
-    arrange(desc(count))
+sfcrime %>% group_by(Category) %>%
+summarize(count=n()) %>%
+arrange(desc(count))
 ```
 
 ```
@@ -43473,7 +43181,8 @@ or this one does the same thing and saves a step:
 
 
 ```r
-sfcrime %>% count(Category) %>% arrange(desc(n))
+sfcrime %>% count(Category) %>%
+arrange(desc(n))
 ```
 
 ```
@@ -43528,15 +43237,15 @@ them out of the data frame that `count` produces. They are
 rows 1, 4, 5 and 6, so add a `slice` to your pipeline:
 
 ```r
-my.rows = c(1, 4, 5, 6)
-my.crimes = sfcrime %>% count(Category) %>% arrange(desc(n)) %>% 
-    slice(my.rows) %>% pull(Category)
+my.rows=c(1,4,5,6)
+my.crimes = sfcrime %>% count(Category) %>%
+arrange(desc(n)) %>%
+slice(my.rows) %>% pull(Category)
 my.crimes
 ```
 
 ```
-## [1] "LARCENY/THEFT" "ASSAULT"      
-## [3] "DRUG/NARCOTIC" "VEHICLE THEFT"
+## [1] "LARCENY/THEFT" "ASSAULT"       "DRUG/NARCOTIC" "VEHICLE THEFT"
 ```
 
      
@@ -43567,7 +43276,7 @@ Solution
 This is the ultimate "try it and see":
 
 ```r
-v = c("a", "m", 3, "Q")
+v=c('a','m',3,'Q')
 v %in% letters
 ```
 
@@ -43607,8 +43316,8 @@ right way around. We are testing the things in `Category` one
 at a time for membership in the set in `my.crimes`, so this:
 
 ```r
-sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>% 
-    select(c(Category, DayOfWeek, PdDistrict))
+sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
+select(c(Category,DayOfWeek,PdDistrict)) 
 sfcrimea
 ```
 
@@ -43639,15 +43348,12 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:bindrcpp" 
-##  [3] "package:forcats"   "package:stringr"  
-##  [5] "package:dplyr"     "package:purrr"    
-##  [7] "package:readr"     "package:tidyr"    
-##  [9] "package:tibble"    "package:ggplot2"  
-## [11] "package:tidyverse" "package:nnet"     
-## [13] "package:stats"     "package:graphics" 
-## [15] "package:grDevices" "package:utils"    
-## [17] "package:datasets"  "package:methods"  
+##  [1] ".GlobalEnv"        "package:bindrcpp"  "package:forcats"  
+##  [4] "package:stringr"   "package:dplyr"     "package:purrr"    
+##  [7] "package:readr"     "package:tidyr"     "package:tibble"   
+## [10] "package:ggplot2"   "package:tidyverse" "package:nnet"     
+## [13] "package:stats"     "package:graphics"  "package:grDevices"
+## [16] "package:utils"     "package:datasets"  "package:methods"  
 ## [19] "Autoloads"         "package:base"
 ```
 
@@ -43657,7 +43363,7 @@ so we need to get rid of `MASS`:
 
 
 ```r
-detach("package:MASS", unload = T)
+detach("package:MASS", unload=T)
 ```
 
 ```
@@ -43670,8 +43376,8 @@ and try again:
 
 
 ```r
-sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>% 
-    select(c(Category, DayOfWeek, PdDistrict))
+sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
+select(c(Category,DayOfWeek,PdDistrict)) 
 sfcrimea
 ```
 
@@ -43733,7 +43439,7 @@ Solution
 This is `write_csv` again:
 
 ```r
-write_csv(sfcrimea, "sfcrime1.csv")
+write_csv(sfcrimea,"sfcrime1.csv")
 ```
 
    
@@ -43819,7 +43525,7 @@ The usual:
 
 
 ```r
-steak = read_csv("steak1.csv")
+steak=read_csv("steak1.csv")
 ```
 
 ```
@@ -43849,20 +43555,16 @@ head(steak)
 
 ```
 ## # A tibble: 6 x 15
-##   respondent_id lottery_a smoke alcohol
-##           <dbl> <lgl>     <lgl> <lgl>  
-## 1    3234982343 TRUE      FALSE TRUE   
-## 2    3234973379 TRUE      FALSE TRUE   
-## 3    3234972383 FALSE     TRUE  TRUE   
-## 4    3234958833 FALSE     FALSE TRUE   
-## 5    3234955240 TRUE      FALSE FALSE  
-## 6    3234955010 TRUE      FALSE TRUE   
-## # ... with 11 more variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>, steak <lgl>,
-## #   steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>,
-## #   educ <chr>, region <chr>
+##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+## 1    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
+## 2    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
+## 3    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
+## 4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
+## 5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+## 6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
+## # ... with 7 more variables: steak <lgl>, steak_prep <chr>, female <lgl>,
+## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
 ```
 
  
@@ -43925,8 +43627,7 @@ preps
 ```
 
 ```
-## [1] "Medium rare" "Rare"        "Medium"     
-## [4] "Medium Well" "Well"
+## [1] "Medium rare" "Rare"        "Medium"      "Medium Well" "Well"
 ```
 $ %$ %$ %$
 
@@ -43936,13 +43637,12 @@ we'll be done:
 
 
 ```r
-preps1 = preps[c(2, 1, 3, 4, 5)]
-preps1
+preps1=preps[c(2,1,3,4,5)]
+preps1             
 ```
 
 ```
-## [1] "Rare"        "Medium rare" "Medium"     
-## [4] "Medium Well" "Well"
+## [1] "Rare"        "Medium rare" "Medium"      "Medium Well" "Well"
 ```
 
  
@@ -43951,13 +43651,12 @@ If you used `count`, there's a bit more work to do:
 
 
 ```r
-preps2 = steak %>% count(steak_prep) %>% pull(steak_prep)
+preps2 = steak %>% count (steak_prep) %>% pull(steak_prep)
 preps2
 ```
 
 ```
-## [1] "Medium"      "Medium rare" "Medium Well"
-## [4] "Rare"        "Well"
+## [1] "Medium"      "Medium rare" "Medium Well" "Rare"        "Well"
 ```
 
  
@@ -43966,13 +43665,12 @@ because `count` puts them in alphabetical order, so:
 
 
 ```r
-preps3 = preps2[c(4, 2, 1, 3, 5)]
+preps3=preps2[c(4,2,1,3,5)]
 preps3
 ```
 
 ```
-## [1] "Rare"        "Medium rare" "Medium"     
-## [4] "Medium Well" "Well"
+## [1] "Rare"        "Medium rare" "Medium"      "Medium Well" "Well"
 ```
 
  
@@ -43990,8 +43688,7 @@ So now I create my ordered response:
 
 
 ```r
-steak = steak %>% mutate(steak_prep_ord = ordered(steak_prep, 
-    preps1))
+steak = steak %>% mutate(steak_prep_ord=ordered(steak_prep,preps1))
 ```
 
  
@@ -44021,8 +43718,7 @@ The thing you have to be careful about is that you use the
 *ordered* factor that you just created as the response:
 
 ```r
-steak.1 = polr(steak_prep_ord ~ educ + female + 
-    lottery_a, data = steak)
+steak.1=polr(steak_prep_ord~educ+female+lottery_a,data=steak)
 ```
 
      
@@ -44043,7 +43739,7 @@ This:
 
 
 ```r
-drop1(steak.1, test = "Chisq")
+drop1(steak.1,test="Chisq")
 ```
 
 ```
@@ -44057,8 +43753,7 @@ drop1(steak.1, test = "Chisq")
 ## female     1 908.70 0.0108  0.91715  
 ## lottery_a  1 909.93 1.2425  0.26498  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -44082,7 +43777,7 @@ You could type or copy-paste the whole model again, but
 `update` is quicker:
 
 ```r
-steak.2 = update(steak.1, . ~ . - female)
+steak.2=update(steak.1,.~.-female)
 ```
 
      
@@ -44096,19 +43791,16 @@ using `anova`:
 
 
 ```r
-anova(steak.2, steak.1, test = "Chisq")
+anova(steak.2,steak.1,test="Chisq")
 ```
 
 ```
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
-##                       Model Resid. df
-## 1          educ + lottery_a       322
-## 2 educ + female + lottery_a       321
-##   Resid. Dev   Test    Df  LR stat.
-## 1   890.7028                       
-## 2   890.6920 1 vs 2     1 0.0108221
+##                       Model Resid. df Resid. Dev   Test    Df  LR stat.
+## 1          educ + lottery_a       322   890.7028                       
+## 2 educ + female + lottery_a       321   890.6920 1 vs 2     1 0.0108221
 ##     Pr(Chi)
 ## 1          
 ## 2 0.9171461
@@ -44125,7 +43817,7 @@ I was curious about whether either of the other $x$'s could come out now:
 
 
 ```r
-drop1(steak.2, test = "Chisq")
+drop1(steak.2,test="Chisq")
 ```
 
 ```
@@ -44138,8 +43830,7 @@ drop1(steak.2, test = "Chisq")
 ## educ       4 910.13 9.4299  0.05121 .
 ## lottery_a  1 907.96 1.2599  0.26167  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -44168,9 +43859,9 @@ these is a logical, TRUE and FALSE, so I just filled in the two values:
 
 ```r
 educs = steak %>% distinct(educ) %>% pull(educ)
-lottery_as = c(FALSE, TRUE)
+lottery_as=c(FALSE,TRUE)
 
-steak.new = crossing(educ = educs, lottery_a = lottery_as)
+steak.new=crossing(educ=educs,lottery_a=lottery_as)
 steak.new
 ```
 
@@ -44199,33 +43890,22 @@ choices are:
 
 
 ```r
-p = predict(steak.2, steak.new, type = "probs")
-cbind(steak.new, p)
+p=predict(steak.2,steak.new,type="probs")
+cbind(steak.new,p)
 ```
 
 ```
-##                                educ
-## 1                   Bachelor degree
-## 2                   Bachelor degree
-## 3                   Graduate degree
-## 4                   Graduate degree
-## 5                High school degree
-## 6                High school degree
-## 7      Less than high school degree
-## 8      Less than high school degree
-## 9  Some college or Associate degree
-## 10 Some college or Associate degree
-##    lottery_a         Rare  Medium rare
-## 1      FALSE 5.191314e-02 3.832425e-01
-## 2       TRUE 4.181795e-02 3.386213e-01
-## 3      FALSE 7.954891e-02 4.691799e-01
-## 4       TRUE 6.444488e-02 4.277303e-01
-## 5      FALSE 5.280801e-02 3.867857e-01
-## 6       TRUE 4.254661e-02 3.421527e-01
-## 7      FALSE 8.507263e-08 1.111878e-06
-## 8       TRUE 6.780714e-08 8.862222e-07
-## 9      FALSE 5.499694e-02 3.951981e-01
-## 10      TRUE 4.433010e-02 3.505796e-01
+##                                educ lottery_a         Rare  Medium rare
+## 1                   Bachelor degree     FALSE 5.191314e-02 3.832425e-01
+## 2                   Bachelor degree      TRUE 4.181795e-02 3.386213e-01
+## 3                   Graduate degree     FALSE 7.954891e-02 4.691799e-01
+## 4                   Graduate degree      TRUE 6.444488e-02 4.277303e-01
+## 5                High school degree     FALSE 5.280801e-02 3.867857e-01
+## 6                High school degree      TRUE 4.254661e-02 3.421527e-01
+## 7      Less than high school degree     FALSE 8.507263e-08 1.111878e-06
+## 8      Less than high school degree      TRUE 6.780714e-08 8.862222e-07
+## 9  Some college or Associate degree     FALSE 5.499694e-02 3.951981e-01
+## 10 Some college or Associate degree      TRUE 4.433010e-02 3.505796e-01
 ##          Medium  Medium Well       Well
 ## 1  3.347391e-01 1.719854e-01 0.05811984
 ## 2  3.468434e-01 2.008621e-01 0.07185531
@@ -44246,32 +43926,21 @@ predictions. Three or four decimals seems to be sensible:
 
 
 ```r
-cbind(steak.new, round(p, 3))
+cbind(steak.new,round(p,3))
 ```
 
 ```
-##                                educ
-## 1                   Bachelor degree
-## 2                   Bachelor degree
-## 3                   Graduate degree
-## 4                   Graduate degree
-## 5                High school degree
-## 6                High school degree
-## 7      Less than high school degree
-## 8      Less than high school degree
-## 9  Some college or Associate degree
-## 10 Some college or Associate degree
-##    lottery_a  Rare Medium rare Medium
-## 1      FALSE 0.052       0.383  0.335
-## 2       TRUE 0.042       0.339  0.347
-## 3      FALSE 0.080       0.469  0.292
-## 4       TRUE 0.064       0.428  0.316
-## 5      FALSE 0.053       0.387  0.333
-## 6       TRUE 0.043       0.342  0.346
-## 7      FALSE 0.000       0.000  0.000
-## 8       TRUE 0.000       0.000  0.000
-## 9      FALSE 0.055       0.395  0.330
-## 10      TRUE 0.044       0.351  0.344
+##                                educ lottery_a  Rare Medium rare Medium
+## 1                   Bachelor degree     FALSE 0.052       0.383  0.335
+## 2                   Bachelor degree      TRUE 0.042       0.339  0.347
+## 3                   Graduate degree     FALSE 0.080       0.469  0.292
+## 4                   Graduate degree      TRUE 0.064       0.428  0.316
+## 5                High school degree     FALSE 0.053       0.387  0.333
+## 6                High school degree      TRUE 0.043       0.342  0.346
+## 7      Less than high school degree     FALSE 0.000       0.000  0.000
+## 8      Less than high school degree      TRUE 0.000       0.000  0.000
+## 9  Some college or Associate degree     FALSE 0.055       0.395  0.330
+## 10 Some college or Associate degree      TRUE 0.044       0.351  0.344
 ##    Medium Well  Well
 ## 1        0.172 0.058
 ## 2        0.201 0.072
@@ -44319,7 +43988,7 @@ The fitting part is the challenge, since the testing part is
 `anova` again. The direct fit is this:
 
 ```r
-steak.3 = polr(steak_prep_ord ~ 1, data = steak)
+steak.3=polr(steak_prep_ord~1,data=steak)
 ```
 
      
@@ -44329,7 +43998,7 @@ from `steak.2` since that is the best model so far:
 
 
 ```r
-steak.3a = update(steak.2, . ~ . - educ - lottery_a)
+steak.3a=update(steak.2,.~.-educ-lottery_a)
 ```
 
  
@@ -44339,19 +44008,16 @@ You can use whichever you like. Either way, the second part is
 
 
 ```r
-anova(steak.3, steak.2, test = "Chisq")
+anova(steak.3,steak.2,test="Chisq")
 ```
 
 ```
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
-##              Model Resid. df Resid. Dev
-## 1                1       327   901.4467
-## 2 educ + lottery_a       322   890.7028
-##     Test    Df LR stat.    Pr(Chi)
-## 1                                 
-## 2 1 vs 2     5 10.74387 0.05670146
+##              Model Resid. df Resid. Dev   Test    Df LR stat.    Pr(Chi)
+## 1                1       327   901.4467                                 
+## 2 educ + lottery_a       322   890.7028 1 vs 2     5 10.74387 0.05670146
 ```
 
  
@@ -44360,19 +44026,16 @@ or
 
 
 ```r
-anova(steak.3a, steak.2, test = "Chisq")
+anova(steak.3a,steak.2,test="Chisq")
 ```
 
 ```
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
-##              Model Resid. df Resid. Dev
-## 1                1       327   901.4467
-## 2 educ + lottery_a       322   890.7028
-##     Test    Df LR stat.    Pr(Chi)
-## 1                                 
-## 2 1 vs 2     5 10.74387 0.05670146
+##              Model Resid. df Resid. Dev   Test    Df LR stat.    Pr(Chi)
+## 1                1       327   901.4467                                 
+## 2 educ + lottery_a       322   890.7028 1 vs 2     5 10.74387 0.05670146
 ```
 
  
@@ -44393,7 +44056,7 @@ might like to go back to that `drop1` output I had above:
 
 
 ```r
-drop1(steak.2, test = "Chisq")
+drop1(steak.2,test="Chisq")
 ```
 
 ```
@@ -44406,8 +44069,7 @@ drop1(steak.2, test = "Chisq")
 ## educ       4 910.13 9.4299  0.05121 .
 ## lottery_a  1 907.96 1.2599  0.26167  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -44417,8 +44079,8 @@ is nowhere near significant):
 
 
 ```r
-steak.4 = update(steak.2, . ~ . - lottery_a)
-drop1(steak.4, test = "Chisq")
+steak.4=update(steak.2,.~.-lottery_a)
+drop1(steak.4,test="Chisq")
 ```
 
 ```
@@ -44430,8 +44092,7 @@ drop1(steak.4, test = "Chisq")
 ## <none>    907.96                 
 ## educ    4 909.45 9.484  0.05008 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -44468,7 +44129,7 @@ steak preference from everything else, do a big backward
 elimination, but:
 
 ```r
-steak.5 = polr(steak_prep_ord ~ ., data = steak)
+steak.5=polr(steak_prep_ord~.,data=steak)
 ```
 
 ```
@@ -44499,13 +44160,11 @@ works here:
 
 
 ```r
-steak.5 = polr(steak_prep_ord ~ 1, data = steak)
-steak.6 = step(steak.5, scope = . ~ lottery_a + 
-    smoke + alcohol + gamble + skydiving + speed + 
-    cheated + female + age + hhold_income + educ + 
-    region, direction = "forward", test = "Chisq", 
-    trace = 0)
-drop1(steak.6, test = "Chisq")
+steak.5=polr(steak_prep_ord~1,data=steak)
+steak.6=step(steak.5,scope=.~lottery_a+smoke+alcohol+gamble+skydiving+
+speed+cheated+female+age+hhold_income+educ+region,
+direction="forward",test="Chisq",trace=0)
+drop1(steak.6,test="Chisq")
 ```
 
 ```
@@ -44517,8 +44176,7 @@ drop1(steak.6, test = "Chisq")
 ## <none>    907.96                 
 ## educ    4 909.45 9.484  0.05008 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -44607,8 +44265,8 @@ Solution
 The usual:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
-sfcrime = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
+sfcrime=read_csv(my_url)
 ```
 
 ```
@@ -44665,8 +44323,7 @@ uppercase letters in the right places:
 
 
 ```r
-sfcrime.1 = multinom(Category ~ DayOfWeek + PdDistrict, 
-    data = sfcrime)
+sfcrime.1=multinom(Category~DayOfWeek+PdDistrict,data=sfcrime)
 ```
 
 ```
@@ -44696,7 +44353,7 @@ Solution
 Same idea. Write it out, or use `update`:
 
 ```r
-sfcrime.2 = update(sfcrime.1, . ~ . - DayOfWeek)
+sfcrime.2=update(sfcrime.1,.~.-DayOfWeek)
 ```
 
 ```
@@ -44725,19 +44382,19 @@ This:
 
 
 ```r
-anova(sfcrime.2, sfcrime.1)
+anova(sfcrime.2,sfcrime.1)
 ```
 
 ```
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Category
-##                    Model Resid. df
-## 1             PdDistrict   1078554
-## 2 DayOfWeek + PdDistrict   1078536
-##   Resid. Dev   Test    Df LR stat. Pr(Chi)
-## 1   837716.5                              
-## 2   836300.0 1 vs 2    18 1416.511       0
+##                    Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1             PdDistrict   1078554   837716.5                      
+## 2 DayOfWeek + PdDistrict   1078536   836300.0 1 vs 2    18 1416.511
+##   Pr(Chi)
+## 1        
+## 2       0
 ```
 
  
@@ -44771,23 +44428,21 @@ Solution
 I left this one fairly open, because you've done this kind of thing
 before, so what you need to do ought to be fairly clear:
 Construct the values to predict for with plural names:
-\marginnote{You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.</span>
 
 
 ```r
-DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% 
-    pull(DayOfWeek)
+DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
 DayOfWeeks
 ```
 
 ```
-## [1] "Wednesday" "Tuesday"   "Monday"   
-## [4] "Sunday"    "Saturday"  "Friday"   
+## [1] "Wednesday" "Tuesday"   "Monday"    "Sunday"    "Saturday"  "Friday"   
 ## [7] "Thursday"
 ```
 
 ```r
-PdDistricts = "TENDERLOIN"
+PdDistricts="TENDERLOIN"
 ```
 
  
@@ -44805,8 +44460,7 @@ appropriately above and the rest of it would be the same:
 
 
 ```r
-sfcrime.new = crossing(DayOfWeek = DayOfWeeks, 
-    PdDistrict = PdDistricts)
+sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
 ```
 
@@ -44829,7 +44483,7 @@ Then do the predictions:
 
 
 ```r
-p = predict(sfcrime.1, sfcrime.new, type = "probs")
+p=predict(sfcrime.1,sfcrime.new,type="probs")
 ```
 
  
@@ -44841,7 +44495,7 @@ it'll tell me:
 
 
 ```r
-p = predict(sfcrime.1, sfcrime.new, type = "bananas")
+p=predict(sfcrime.1,sfcrime.new,type="bananas")
 ```
 
 ```
@@ -44855,7 +44509,7 @@ since the other one makes the best guess at which category of response
 you'll get (the one with the highest probability). The predicted
 probabilities are more informative, since then you can see how they
 change, even if the predicted category stays the same.
-\marginnote{This is something we'll see again in discriminant analysis.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is something we'll see again in discriminant analysis.</span>
 
 Finally, display the results. I thought `cbind` wouldn't work
 here, because some of the variables are factors and some are numbers,
@@ -44863,26 +44517,18 @@ but `cbind`  is smarter than that:
 
 
 ```r
-cbind(sfcrime.new, p)
+cbind(sfcrime.new,p)
 ```
 
 ```
-##   DayOfWeek PdDistrict   ASSAULT
-## 1    Friday TENDERLOIN 0.2125997
-## 2    Monday TENDERLOIN 0.2072430
-## 3  Saturday TENDERLOIN 0.2425998
-## 4    Sunday TENDERLOIN 0.2548597
-## 5  Thursday TENDERLOIN 0.1938754
-## 6   Tuesday TENDERLOIN 0.1942447
-## 7 Wednesday TENDERLOIN 0.1874867
-##   DRUG/NARCOTIC LARCENY/THEFT VEHICLE THEFT
-## 1     0.4658122     0.2907793    0.03080879
-## 2     0.5001466     0.2656069    0.02700348
-## 3     0.4200751     0.3060611    0.03126405
-## 4     0.4287291     0.2868682    0.02954299
-## 5     0.5179500     0.2617658    0.02640888
-## 6     0.5208668     0.2593331    0.02555535
-## 7     0.5400287     0.2479498    0.02453490
+##   DayOfWeek PdDistrict   ASSAULT DRUG/NARCOTIC LARCENY/THEFT VEHICLE THEFT
+## 1    Friday TENDERLOIN 0.2125997     0.4658122     0.2907793    0.03080879
+## 2    Monday TENDERLOIN 0.2072430     0.5001466     0.2656069    0.02700348
+## 3  Saturday TENDERLOIN 0.2425998     0.4200751     0.3060611    0.03126405
+## 4    Sunday TENDERLOIN 0.2548597     0.4287291     0.2868682    0.02954299
+## 5  Thursday TENDERLOIN 0.1938754     0.5179500     0.2617658    0.02640888
+## 6   Tuesday TENDERLOIN 0.1942447     0.5208668     0.2593331    0.02555535
+## 7 Wednesday TENDERLOIN 0.1874867     0.5400287     0.2479498    0.02453490
 ```
 
  
@@ -44910,7 +44556,7 @@ changes from one weekday to another are even smaller). This supports
 what I guessed before, that with this much data even a small effect
 (the one shown here) is statistically
 significant.
-\marginnote{Statistical significance as an idea grew up in    the days before *big data*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Statistical significance as an idea grew up in    the days before *big data*.</span>
 I want to compare another district. What districts do we have?
 
 ```r
@@ -44947,8 +44593,8 @@ include both:
 
 ```r
 DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
-PdDistricts = c("RICHMOND", "TENDERLOIN")
-sfcrime.new = crossing(DayOfWeek = DayOfWeeks, PdDistrict = PdDistricts)
+PdDistricts=c("RICHMOND","TENDERLOIN")
+sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
 ```
 
@@ -44973,9 +44619,8 @@ sfcrime.new
 ```
 
 ```r
-p1 = predict(sfcrime.1, sfcrime.new, type = "probs")
-d1 = cbind(sfcrime.new, p1)
-d1
+p1=predict(sfcrime.1,sfcrime.new,type="probs")
+d1=cbind(sfcrime.new,p1) ; d1
 ```
 
 ```
@@ -45017,7 +44662,7 @@ more of this when we revisit ANOVA later), and compare the fit:
 
 
 ```r
-sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict)
+sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict)
 ```
 
 ```
@@ -45049,7 +44694,7 @@ it go a bit further thus:
 
 
 ```r
-sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict, maxit = 300)
+sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict,maxit=300)
 ```
 
 ```
@@ -45077,7 +44722,7 @@ sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict, maxit = 300)
 ```
 
 ```r
-anova(sfcrime.1, sfcrime.3)
+anova(sfcrime.1,sfcrime.3)
 ```
 
 ```
@@ -45107,9 +44752,8 @@ them to this model:
 
 
 ```r
-p3 = predict(sfcrime.3, sfcrime.new, type = "probs")
-d3 = cbind(sfcrime.new, p3)
-d3
+p3=predict(sfcrime.3,sfcrime.new,type="probs")
+d3=cbind(sfcrime.new,p3) ; d3
 ```
 
 ```
@@ -45142,8 +44786,8 @@ largest ones easier to find:
 
 
 ```r
-pdiff = round(p3 - p1, 4)
-cbind(sfcrime.new, pdiff)
+pdiff=round(p3-p1,4)
+cbind(sfcrime.new,pdiff)
 ```
 
 ```
@@ -45181,7 +44825,8 @@ the differences twice:
 
 
 ```r
-d1 = cbind(sfcrime.new, pdiff) %>% gather(crimetype, difference, ASSAULT:`VEHICLE THEFT`)
+d1 = cbind(sfcrime.new,pdiff) %>% 
+gather(crimetype,difference,ASSAULT:`VEHICLE THEFT`)
 d1 %>% arrange(difference) %>% slice(1:6)
 ```
 
@@ -45217,7 +44862,7 @@ Extra: there is a better way of doing those in one go:
 
 
 ```r
-d1 %>% top_n(6, difference)
+d1 %>% top_n(6,difference)
 ```
 
 ```
@@ -45231,7 +44876,7 @@ d1 %>% top_n(6, difference)
 ```
 
 ```r
-d1 %>% top_n(6, -difference)
+d1 %>% top_n(6,-difference)
 ```
 
 ```
@@ -45273,7 +44918,7 @@ The variables collected are:
 
 * `race`: the student's race (African-American,
 Asian,
-\marginnote{I'm always amused at how Americans put all Asians    into one group.}  Hispanic, White).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I'm always amused at how Americans put all Asians    into one group.</span>  Hispanic, White).
 
 * `ses`: Socio-economic status of student's family (low,
 middle, or high)
@@ -45308,8 +44953,8 @@ Solution
 This is a `.csv` file (I tried to make it easy for you):
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/hsb.csv"
-hsb = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/hsb.csv"
+hsb=read_csv(my_url)
 ```
 
 ```
@@ -45377,8 +45022,8 @@ It has to be an `ordered` factor, which you can create in
 the data frame (or outside, if you prefer):
 
 ```r
-hsb = hsb %>% mutate(ses = ordered(ses, c("low", "middle", "high")))
-hsb
+hsb = hsb %>% mutate(ses=ordered(ses,c("low","middle","high")))
+hsb                     
 ```
 
 ```
@@ -45404,7 +45049,7 @@ hsb
 
 
 ```r
-ses.1 = polr(ses ~ read + write + math + science + socst, data = hsb)
+ses.1=polr(ses~read+write+math+science+socst,data=hsb)
 ```
 
        
@@ -45420,7 +45065,7 @@ Solution
 
 
 ```r
-drop1(ses.1, test = "Chisq")
+drop1(ses.1,test="Chisq")
 ```
 
 ```
@@ -45447,8 +45092,8 @@ doesn't. Never mind. Scan for the largest P-value, which belongs to
 
 
 ```r
-ses.2 = update(ses.1, . ~ . - read)
-drop1(ses.2, test = "Chisq")
+ses.2=update(ses.1,.~.-read)
+drop1(ses.2,test="Chisq")
 ```
 
 ```
@@ -45475,8 +45120,8 @@ doesn't take long to type:
 
 
 ```r
-ses.3 = update(ses.2, . ~ . - math)
-drop1(ses.3, test = "Chisq")
+ses.3=update(ses.2,.~.-math)
+drop1(ses.3,test="Chisq")
 ```
 
 ```
@@ -45506,8 +45151,8 @@ and the other two variables will stay, so that'll be where we stop:
 
 
 ```r
-ses.4 = update(ses.3, . ~ . - write)
-drop1(ses.4, test = "Chisq")
+ses.4=update(ses.3,.~.-write)
+drop1(ses.4,test="Chisq")
 ```
 
 ```
@@ -45570,7 +45215,7 @@ variable-elimination task as well:
 
 
 ```r
-ses.5 = step(ses.1, direction = "backward", test = "Chisq")
+ses.5=step(ses.1,direction="backward",test="Chisq")
 ```
 
 ```
@@ -45641,9 +45286,9 @@ Solution
 Thus, most obviously:
 
 ```r
-sciences = c(44, 58)
-socsts = c(46, 61)
-new = crossing(science = sciences, socst = socsts)
+sciences=c(44,58)
+socsts=c(46,61)
+new=crossing(science=sciences, socst=socsts)
 new
 ```
 
@@ -45667,11 +45312,11 @@ should have remained in your regression. If that was not what you got,
 find the median of any other variables you had, and put that into your
 `new`. For example, if you still had `math`, you'd do
 this:
-\marginnote{That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.</span>
 
 
 ```r
-hsb %>% summarize(m = median(math))
+hsb %>% summarize(m=median(math))
 ```
 
 ```
@@ -45682,8 +45327,8 @@ hsb %>% summarize(m = median(math))
 ```
 
 ```r
-maths = 52
-new2 = crossing(science = sciences, socst = socsts, math = maths)
+maths=52
+new2=crossing(science=sciences,socst=socsts,math=maths)
 new2
 ```
 
@@ -45713,8 +45358,8 @@ This is `predict`, and we've done the setup. My best model
 was called `ses.4`:
 
 ```r
-p = predict(ses.4, new, type = "probs")
-cbind(new, p)
+p=predict(ses.4,new,type="probs")
+cbind(new,p) 
 ```
 
 ```
@@ -45802,8 +45447,8 @@ The data values are separated by tabs, so `read_tsv` is
 the thing:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
-athletes = read_tsv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
 ```
 
 ```
@@ -45852,7 +45497,7 @@ If you didn't remember that, this also works:
 
 
 ```r
-athletes = read_delim(my_url, "\t")
+athletes=read_delim(my_url,"\t")
 ```
 
 ```
@@ -45889,11 +45534,10 @@ Solution
 I'm doing this to give you a little intuition for later:
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport)) + geom_point()
+ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport))+geom_point()
 ```
 
-
-\includegraphics{16-ordinal-nominal-response_files/figure-latex/unnamed-chunk-146-1} 
+<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
 
      
 
@@ -45930,7 +45574,7 @@ fine. It doesn't matter if your guess is way too high. Like this:
 
 ```r
 library(nnet)
-sport.1 = multinom(Sport ~ Ht + Wt, data = athletes, maxit = 200)
+sport.1=multinom(Sport~Ht+Wt,data=athletes,maxit=200)
 ```
 
 ```
@@ -45967,7 +45611,7 @@ The idea is to fit a model without `Wt`, and then show that
 it fits significantly worse:
 
 ```r
-sport.2 = update(sport.1, . ~ . - Wt)
+sport.2=update(sport.1,.~.-Wt)
 ```
 
 ```
@@ -45984,7 +45628,7 @@ sport.2 = update(sport.1, . ~ . - Wt)
 ```
 
 ```r
-anova(sport.2, sport.1, test = "Chisq")
+anova(sport.2,sport.1,test="Chisq")
 ```
 
 ```
@@ -46013,7 +45657,7 @@ back at the graph you made).
 
 
 ```r
-drop1(sport.1, test = "Chisq", trace = T)
+drop1(sport.1, test="Chisq", trace=T)
 ```
 
 ```
@@ -46031,7 +45675,7 @@ Does `step`?
 
 
 ```r
-step(sport.1, direction = "backward", test = "Chisq")
+step(sport.1,direction="backward",test="Chisq")
 ```
 
 ```
@@ -46095,7 +45739,7 @@ one, telling us that neither variable should be removed.
 those heights and weights playing each of the sports. Display the
 results. You might have to display them smaller, or reduce the
 number of decimal places
-\marginnote{For this, use *round*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">For this, use *round*.</span> 
 to fit them on the page.
 
 Solution
@@ -46106,9 +45750,9 @@ values, use `crossing` to get the combinations, and feed
 that into `predict`, thus:
 
 ```r
-Hts = c(160, 180, 200)
-Wts = c(50, 75, 100)
-new = crossing(Ht = Hts, Wt = Wts)
+Hts=c(160,180,200)
+Wts=c(50,75,100)
+new=crossing(Ht=Hts,Wt=Wts)
 new
 ```
 
@@ -46133,8 +45777,8 @@ and then
 
 
 ```r
-p = predict(sport.1, new, type = "probs")
-cbind(new, p)
+p=predict(sport.1,new,type="probs")
+cbind(new,p)
 ```
 
 ```
@@ -46170,7 +45814,7 @@ will also kill the scientific notation:
 
 
 ```r
-cbind(new, round(p, 2))
+cbind(new,round(p,2))
 ```
 
 ```
@@ -46235,20 +45879,20 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 ```r
@@ -46286,9 +45930,9 @@ library(survminer)
 
  The Worcester survey was a long-term study of
 all myocardial-infarction
-\marginnote{Heart attack.} victims admitted to hospitals in the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Heart attack.</span> victims admitted to hospitals in the
 Worcester, Massachusetts area.
-\marginnote{Worcester is pronounced, by locals, *Woo-stuh*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Worcester is pronounced, by locals, *Woo-stuh*.</span> 
 The data have been well studied, and can be found in
 the file [link](http://www.utsc.utoronto.ca/~butler/d29/whas100.csv).
 
@@ -46325,13 +45969,12 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/whas100.csv"
-whas100 = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/whas100.csv"
+whas100=read_csv(my_url)
 ```
 
 ```
-## Warning: Missing column names filled in:
-## 'X1' [1]
+## Warning: Missing column names filled in: 'X1' [1]
 ```
 
 ```
@@ -46356,21 +45999,19 @@ whas100
 
 ```
 ## # A tibble: 100 x 10
-##       X1    id admitdate foldate   los lenfol
-##    <int> <int> <chr>     <chr>   <int>  <int>
-##  1     1     1 3/13/1995 3/19/1~     4      6
-##  2     2     2 1/14/1995 1/23/1~     5    374
-##  3     3     3 2/17/1995 10/4/2~     5   2421
-##  4     4     4 4/7/1995  7/14/1~     9     98
-##  5     5     5 2/9/1995  5/29/1~     4   1205
-##  6     6     6 1/16/1995 9/11/2~     7   2065
-##  7     7     7 1/17/1995 10/15/~     3   1002
-##  8     8     8 11/15/19~ 11/24/~    56   2201
-##  9     9     9 8/18/1995 2/23/1~     5    189
-## 10    10    10 7/22/1995 12/31/~     9   2719
-## # ... with 90 more rows, and 4 more
-## #   variables: fstat <int>, age <int>,
-## #   gender <int>, bmi <dbl>
+##       X1    id admitdate  foldate      los lenfol fstat   age gender   bmi
+##    <int> <int> <chr>      <chr>      <int>  <int> <int> <int>  <int> <dbl>
+##  1     1     1 3/13/1995  3/19/1995      4      6     1    65      0  31.4
+##  2     2     2 1/14/1995  1/23/1996      5    374     1    88      1  22.7
+##  3     3     3 2/17/1995  10/4/2001      5   2421     1    77      0  27.9
+##  4     4     4 4/7/1995   7/14/1995      9     98     1    81      1  21.5
+##  5     5     5 2/9/1995   5/29/1998      4   1205     1    78      0  30.7
+##  6     6     6 1/16/1995  9/11/2000      7   2065     1    82      1  26.5
+##  7     7     7 1/17/1995  10/15/1997     3   1002     1    66      1  35.7
+##  8     8     8 11/15/1994 11/24/2000    56   2201     1    81      1  28.3
+##  9     9     9 8/18/1995  2/23/1996      5    189     1    76      0  27.1
+## 10    10    10 7/22/1995  12/31/2002     9   2719     0    40      0  21.8
+## # ... with 90 more rows
 ```
 
      
@@ -46394,28 +46035,21 @@ response variable are followup time `lenfol` and followup
 status, 1 being "dead", `fstat`:
 
 ```r
-y = with(whas100, Surv(lenfol, fstat == 1))
+y=with(whas100,Surv(lenfol,fstat==1))
 y
 ```
 
 ```
-##   [1]    6   374  2421    98  1205  2065 
-##   [7] 1002  2201   189  2719+ 2638+  492 
-##  [13]  302  2574+ 2610+ 2641+ 1669  2624 
-##  [19] 2578+ 2595+  123  2613+  774  2012 
-##  [25] 2573+ 1874  2631+ 1907   538   104 
-##  [31]    6  1401  2710   841   148  2137+
-##  [37] 2190+ 2173+  461  2114+ 2157+ 2054+
-##  [43] 2124+ 2137+ 2031  2003+ 2074+  274 
-##  [49] 1984+ 1993+ 1939+ 1172    89   128 
-##  [55] 1939+   14  1011  1497  1929+ 2084+
-##  [61]  107   451  2183+ 1876+  936   363 
-##  [67] 1048  1889+ 2072+ 1879+ 1870+ 1859+
-##  [73] 2052+ 1846+ 2061+ 1912+ 1836+  114 
-##  [79] 1557  1278  1836+ 1916+ 1934+ 1923+
-##  [85]   44  1922+  274  1860+ 1806  2145+
-##  [91]  182  2013+ 2174+ 1624   187  1883+
-##  [97] 1577    62  1969+ 1054
+##   [1]    6   374  2421    98  1205  2065  1002  2201   189  2719+ 2638+
+##  [12]  492   302  2574+ 2610+ 2641+ 1669  2624  2578+ 2595+  123  2613+
+##  [23]  774  2012  2573+ 1874  2631+ 1907   538   104     6  1401  2710 
+##  [34]  841   148  2137+ 2190+ 2173+  461  2114+ 2157+ 2054+ 2124+ 2137+
+##  [45] 2031  2003+ 2074+  274  1984+ 1993+ 1939+ 1172    89   128  1939+
+##  [56]   14  1011  1497  1929+ 2084+  107   451  2183+ 1876+  936   363 
+##  [67] 1048  1889+ 2072+ 1879+ 1870+ 1859+ 2052+ 1846+ 2061+ 1912+ 1836+
+##  [78]  114  1557  1278  1836+ 1916+ 1934+ 1923+   44  1922+  274  1860+
+##  [89] 1806  2145+  182  2013+ 2174+ 1624   187  1883+ 1577    62  1969+
+## [100] 1054
 ```
 
      
@@ -46443,7 +46077,7 @@ Solution
 This, using the response variable that we just created:
 
 ```r
-whas100.1 = coxph(y ~ age + gender + bmi, data = whas100)
+whas100.1=coxph(y~age+gender+bmi,data=whas100)
 summary(whas100.1)
 ```
 
@@ -46453,26 +46087,17 @@ summary(whas100.1)
 ## 
 ##   n= 100, number of events= 51 
 ## 
-##            coef exp(coef) se(coef)      z
-## age     0.03713   1.03783  0.01272  2.918
-## gender  0.14325   1.15402  0.30604  0.468
-## bmi    -0.07083   0.93162  0.03607 -1.964
-##        Pr(>|z|)   
-## age     0.00352 **
-## gender  0.63973   
-## bmi     0.04956 * 
+##            coef exp(coef) se(coef)      z Pr(>|z|)   
+## age     0.03713   1.03783  0.01272  2.918  0.00352 **
+## gender  0.14325   1.15402  0.30604  0.468  0.63973   
+## bmi    -0.07083   0.93162  0.03607 -1.964  0.04956 * 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##        exp(coef) exp(-coef) lower .95
-## age       1.0378     0.9636    1.0123
-## gender    1.1540     0.8665    0.6334
-## bmi       0.9316     1.0734    0.8680
-##        upper .95
-## age       1.0640
-## gender    2.1024
-## bmi       0.9999
+##        exp(coef) exp(-coef) lower .95 upper .95
+## age       1.0378     0.9636    1.0123    1.0640
+## gender    1.1540     0.8665    0.6334    2.1024
+## bmi       0.9316     1.0734    0.8680    0.9999
 ## 
 ## Concordance= 0.683  (se = 0.037 )
 ## Rsquare= 0.194   (max possible= 0.985 )
@@ -46506,7 +46131,7 @@ out of the model. The other two variables have small P-values
 The other way to think about this is `step`, or `drop1`:
 
 ```r
-drop1(whas100.1, test = "Chisq")
+drop1(whas100.1, test="Chisq")
 ```
 
 ```
@@ -46520,20 +46145,19 @@ drop1(whas100.1, test = "Chisq")
 ## gender  1 400.87 0.2185 0.640218   
 ## bmi     1 404.60 3.9389 0.047182 * 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
 
 This is here the same as the output from `summary`, but where it scores is if you have a categorical explanatory variable like "treatment" with more than two levels: `drop1` will tell you about keeping or dropping it as a 
 whole.
-\marginnote{Our categorical variable *gender* has only two levels.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Our categorical variable *gender* has only two levels.</span>
 If you prefer:
 
 
 ```r
-whas100.step = step(whas100.1, trace = 0)
+whas100.step=step(whas100.1,trace=0)
 summary(whas100.step)
 ```
 
@@ -46543,15 +46167,11 @@ summary(whas100.step)
 ## 
 ##   n= 100, number of events= 51 
 ## 
-##         coef exp(coef) se(coef)      z
-## age  0.03927   1.04005  0.01187  3.309
-## bmi -0.07116   0.93131  0.03614 -1.969
-##     Pr(>|z|)    
-## age 0.000938 ***
-## bmi 0.048952 *  
+##         coef exp(coef) se(coef)      z Pr(>|z|)    
+## age  0.03927   1.04005  0.01187  3.309 0.000938 ***
+## bmi -0.07116   0.93131  0.03614 -1.969 0.048952 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ##     exp(coef) exp(-coef) lower .95 upper .95
 ## age    1.0401     0.9615    1.0161    1.0645
@@ -46582,7 +46202,7 @@ Solution
 So, take out `gender`:
 
 ```r
-whas100.2 = update(whas100.1, . ~ . - gender)
+whas100.2=update(whas100.1,.~.-gender)
 summary(whas100.2)
 ```
 
@@ -46592,15 +46212,11 @@ summary(whas100.2)
 ## 
 ##   n= 100, number of events= 51 
 ## 
-##         coef exp(coef) se(coef)      z
-## age  0.03927   1.04005  0.01187  3.309
-## bmi -0.07116   0.93131  0.03614 -1.969
-##     Pr(>|z|)    
-## age 0.000938 ***
-## bmi 0.048952 *  
+##         coef exp(coef) se(coef)      z Pr(>|z|)    
+## age  0.03927   1.04005  0.01187  3.309 0.000938 ***
+## bmi -0.07116   0.93131  0.03614 -1.969 0.048952 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ##     exp(coef) exp(-coef) lower .95 upper .95
 ## age    1.0401     0.9615    1.0161    1.0645
@@ -46655,8 +46271,8 @@ or
 
 ```r
 with(whas100, {
-    print(quantile(age))
-    print(quantile(bmi))
+print(quantile(age))
+print(quantile(bmi))
 })
 ```
 
@@ -46676,8 +46292,9 @@ Or, tidyverse-style:
 
 
 ```r
-whas100 %>% select(age, bmi) %>% summarize(ageq = list(quantile(age)), 
-    bmiq = list(quantile(bmi)))
+whas100 %>% select(age,bmi) %>% 
+summarize(ageq=list(quantile(age)),
+bmiq=list(quantile(bmi)))
 ```
 
 ```
@@ -46694,8 +46311,10 @@ variable, which we then have to pull apart:
 
 
 ```r
-whas100 %>% select(age, bmi) %>% summarize(ageq = list(quantile(age)), 
-    bmiq = list(quantile(bmi))) %>% unnest()
+whas100 %>% select(age,bmi) %>% 
+summarize(ageq=list(quantile(age)),
+bmiq=list(quantile(bmi))) %>%
+unnest()
 ```
 
 ```
@@ -46720,11 +46339,12 @@ This requires a function to summarize with, which we need to write first:
 
 
 ```r
-lq = function(x) {
-    list(quantile(x))
+lq=function(x) {
+list(quantile(x))
 }
-whas100 %>% select(age, bmi) %>% summarize_all(lq) %>% 
-    unnest()
+whas100 %>% select(age, bmi) %>%
+summarize_all(lq) %>%
+unnest()
 ```
 
 ```
@@ -46748,34 +46368,20 @@ summary(whas100)
 ```
 
 ```
-##        X1               id        
-##  Min.   :  1.00   Min.   :  1.00  
-##  1st Qu.: 25.75   1st Qu.: 25.75  
-##  Median : 50.50   Median : 50.50  
-##  Mean   : 50.50   Mean   : 50.50  
-##  3rd Qu.: 75.25   3rd Qu.: 75.25  
-##  Max.   :100.00   Max.   :100.00  
-##   admitdate           foldate         
-##  Length:100         Length:100        
-##  Class :character   Class :character  
-##  Mode  :character   Mode  :character  
-##                                       
-##                                       
-##                                       
-##       los            lenfol    
-##  Min.   : 1.00   Min.   :   6  
-##  1st Qu.: 4.00   1st Qu.: 715  
-##  Median : 5.00   Median :1878  
-##  Mean   : 6.84   Mean   :1505  
-##  3rd Qu.: 7.00   3rd Qu.:2076  
-##  Max.   :56.00   Max.   :2719  
-##      fstat           age       
-##  Min.   :0.00   Min.   :32.00  
-##  1st Qu.:0.00   1st Qu.:59.75  
-##  Median :1.00   Median :71.00  
-##  Mean   :0.51   Mean   :68.25  
-##  3rd Qu.:1.00   3rd Qu.:80.25  
-##  Max.   :1.00   Max.   :92.00  
+##        X1               id          admitdate           foldate         
+##  Min.   :  1.00   Min.   :  1.00   Length:100         Length:100        
+##  1st Qu.: 25.75   1st Qu.: 25.75   Class :character   Class :character  
+##  Median : 50.50   Median : 50.50   Mode  :character   Mode  :character  
+##  Mean   : 50.50   Mean   : 50.50                                        
+##  3rd Qu.: 75.25   3rd Qu.: 75.25                                        
+##  Max.   :100.00   Max.   :100.00                                        
+##       los            lenfol         fstat           age       
+##  Min.   : 1.00   Min.   :   6   Min.   :0.00   Min.   :32.00  
+##  1st Qu.: 4.00   1st Qu.: 715   1st Qu.:0.00   1st Qu.:59.75  
+##  Median : 5.00   Median :1878   Median :1.00   Median :71.00  
+##  Mean   : 6.84   Mean   :1505   Mean   :0.51   Mean   :68.25  
+##  3rd Qu.: 7.00   3rd Qu.:2076   3rd Qu.:1.00   3rd Qu.:80.25  
+##  Max.   :56.00   Max.   :2719   Max.   :1.00   Max.   :92.00  
 ##      gender          bmi       
 ##  Min.   :0.00   Min.   :14.92  
 ##  1st Qu.:0.00   1st Qu.:23.54  
@@ -46793,7 +46399,7 @@ you select those columns first before passing the data frame into
 
 
 ```r
-whas100 %>% select(age, bmi) %>% summary()
+whas100 %>% select(age,bmi) %>% summary()
 ```
 
 ```
@@ -46825,8 +46431,7 @@ Solution
 The inevitable `crossing`:
 
 ```r
-whas100.new = crossing(age = c(60, 71, 80), bmi = c(24, 
-    27, 30))
+whas100.new=crossing(age=c(60,71,80),bmi=c(24,27,30))
 whas100.new
 ```
 
@@ -46852,9 +46457,9 @@ clearer. This is my no-think approach:
 
 
 ```r
-ages = c(60, 71, 80)
-bmis = c(24, 27, 30)
-whas100.new = crossing(age = ages, bmi = bmis)
+ages=c(60,71,80)
+bmis=c(24,27,30)
+whas100.new=crossing(age=ages,bmi=bmis)
 whas100.new
 ```
 
@@ -46888,7 +46493,7 @@ The magic word is `survfit` (which plays the role of
 with the non-significant `gender` removed:
 
 ```r
-pp2 = survfit(whas100.2, whas100.new, data = whas100)
+pp2=survfit(whas100.2,whas100.new,data=whas100)
 ```
 
       
@@ -46914,11 +46519,10 @@ This is actually easy once you work out what to do:
 
 
 ```r
-ggsurvplot(pp2, conf.int = F)
+ggsurvplot(pp2, conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-18-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
  
 
@@ -47000,15 +46604,14 @@ the body recover from a heart attack.
 Let's start with the martingale residual plot:
 
 ```r
-ggcoxdiagnostics(whas100.2) + geom_smooth()
+ggcoxdiagnostics(whas100.2)+geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-20-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
      
 
@@ -47022,7 +46625,7 @@ Thus:
 
 
 ```r
-whas100.3 = update(whas100.2, . ~ . + I(bmi^2))
+whas100.3=update(whas100.2,.~.+I(bmi^2))
 summary(whas100.3)
 ```
 
@@ -47032,26 +46635,17 @@ summary(whas100.3)
 ## 
 ##   n= 100, number of events= 51 
 ## 
-##               coef exp(coef)  se(coef)
-## age       0.040542  1.041375  0.012035
-## bmi      -0.848949  0.427864  0.231562
-## I(bmi^2)  0.014500  1.014606  0.004227
-##               z Pr(>|z|)    
-## age       3.369 0.000755 ***
-## bmi      -3.666 0.000246 ***
-## I(bmi^2)  3.430 0.000603 ***
+##               coef exp(coef)  se(coef)      z Pr(>|z|)    
+## age       0.040542  1.041375  0.012035  3.369 0.000755 ***
+## bmi      -0.848949  0.427864  0.231562 -3.666 0.000246 ***
+## I(bmi^2)  0.014500  1.014606  0.004227  3.430 0.000603 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##          exp(coef) exp(-coef) lower .95
-## age         1.0414     0.9603    1.0171
-## bmi         0.4279     2.3372    0.2718
-## I(bmi^2)    1.0146     0.9856    1.0062
-##          upper .95
-## age         1.0662
-## bmi         0.6736
-## I(bmi^2)    1.0230
+##          exp(coef) exp(-coef) lower .95 upper .95
+## age         1.0414     0.9603    1.0171    1.0662
+## bmi         0.4279     2.3372    0.2718    0.6736
+## I(bmi^2)    1.0146     0.9856    1.0062    1.0230
 ## 
 ## Concordance= 0.693  (se = 0.04 )
 ## Rsquare= 0.264   (max possible= 0.985 )
@@ -47077,9 +46671,9 @@ one age 70:
 
 
 ```r
-bmis = seq(20, 36, 4)
-ages = 70
-whas100.new.2 = crossing(bmi = bmis, age = ages)
+bmis=seq(20,36,4)
+ages=70
+whas100.new.2=crossing(bmi=bmis,age=ages)
 whas100.new.2
 ```
 
@@ -47103,7 +46697,7 @@ Predictions, using the model with the squared term in it:
 
 
 ```r
-pp3 = survfit(whas100.3, whas100.new.2, data = whas100)
+pp3=survfit(whas100.3,whas100.new.2,data=whas100)
 ```
 
  
@@ -47112,11 +46706,10 @@ And then the plot:
 
 
 ```r
-ggsurvplot(pp3, conf.int = F)
+ggsurvplot(pp3, conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-24-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
  
 
@@ -47201,8 +46794,8 @@ Solution
 This:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt"
-drugusers = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt"
+drugusers=read_delim(my_url," ")
 ```
 
 ```
@@ -47226,21 +46819,19 @@ drugusers
 
 ```
 ## # A tibble: 628 x 9
-##      row    ID   age ndrugtx treat  site
-##    <int> <int> <int>   <int> <int> <int>
-##  1     1     1    39       1     1     0
-##  2     2     2    33       8     1     0
-##  3     3     3    33       3     1     0
-##  4     4     4    32       1     0     0
-##  5     5     5    24       5     1     0
-##  6     6     6    30       1     1     0
-##  7     7     7    39      34     1     0
-##  8     8     8    27       2     1     0
-##  9     9     9    40       3     1     0
-## 10    10    10    36       7     1     0
-## # ... with 618 more rows, and 3 more
-## #   variables: time <int>, censor <int>,
-## #   herco <int>
+##      row    ID   age ndrugtx treat  site  time censor herco
+##    <int> <int> <int>   <int> <int> <int> <int>  <int> <int>
+##  1     1     1    39       1     1     0   188      1     3
+##  2     2     2    33       8     1     0    26      1     3
+##  3     3     3    33       3     1     0   207      1     2
+##  4     4     4    32       1     0     0   144      1     3
+##  5     5     5    24       5     1     0   551      0     2
+##  6     6     6    30       1     1     0    32      1     1
+##  7     7     7    39      34     1     0   459      1     3
+##  8     8     8    27       2     1     0    22      1     3
+##  9     9     9    40       3     1     0   210      1     2
+## 10    10    10    36       7     1     0   184      1     2
+## # ... with 618 more rows
 ```
 
  
@@ -47266,38 +46857,22 @@ summary(drugusers)
 ```
 
 ```
-##       row              ID       
-##  Min.   :  1.0   Min.   :  1.0  
-##  1st Qu.:157.8   1st Qu.:157.8  
-##  Median :314.5   Median :314.5  
-##  Mean   :314.5   Mean   :314.5  
-##  3rd Qu.:471.2   3rd Qu.:471.2  
-##  Max.   :628.0   Max.   :628.0  
-##                                 
-##       age           ndrugtx      
-##  Min.   :20.00   Min.   : 0.000  
-##  1st Qu.:27.00   1st Qu.: 1.000  
-##  Median :32.00   Median : 3.000  
-##  Mean   :32.37   Mean   : 4.574  
-##  3rd Qu.:37.00   3rd Qu.: 6.000  
-##  Max.   :56.00   Max.   :40.000  
-##  NA's   :5       NA's   :17      
-##      treat             site      
-##  Min.   :0.0000   Min.   :0.000  
-##  1st Qu.:0.0000   1st Qu.:0.000  
-##  Median :0.0000   Median :0.000  
-##  Mean   :0.4904   Mean   :0.293  
-##  3rd Qu.:1.0000   3rd Qu.:1.000  
-##  Max.   :1.0000   Max.   :1.000  
-##                                  
-##       time            censor      
-##  Min.   :   2.0   Min.   :0.0000  
-##  1st Qu.:  79.0   1st Qu.:1.0000  
-##  Median : 166.0   Median :1.0000  
-##  Mean   : 234.7   Mean   :0.8089  
-##  3rd Qu.: 365.2   3rd Qu.:1.0000  
-##  Max.   :1172.0   Max.   :1.0000  
-##                                   
+##       row              ID             age           ndrugtx      
+##  Min.   :  1.0   Min.   :  1.0   Min.   :20.00   Min.   : 0.000  
+##  1st Qu.:157.8   1st Qu.:157.8   1st Qu.:27.00   1st Qu.: 1.000  
+##  Median :314.5   Median :314.5   Median :32.00   Median : 3.000  
+##  Mean   :314.5   Mean   :314.5   Mean   :32.37   Mean   : 4.574  
+##  3rd Qu.:471.2   3rd Qu.:471.2   3rd Qu.:37.00   3rd Qu.: 6.000  
+##  Max.   :628.0   Max.   :628.0   Max.   :56.00   Max.   :40.000  
+##                                  NA's   :5       NA's   :17      
+##      treat             site            time            censor      
+##  Min.   :0.0000   Min.   :0.000   Min.   :   2.0   Min.   :0.0000  
+##  1st Qu.:0.0000   1st Qu.:0.000   1st Qu.:  79.0   1st Qu.:1.0000  
+##  Median :0.0000   Median :0.000   Median : 166.0   Median :1.0000  
+##  Mean   :0.4904   Mean   :0.293   Mean   : 234.7   Mean   :0.8089  
+##  3rd Qu.:1.0000   3rd Qu.:1.000   3rd Qu.: 365.2   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :1.000   Max.   :1172.0   Max.   :1.0000  
+##                                                                    
 ##      herco      
 ##  Min.   :1.000  
 ##  1st Qu.:1.000  
@@ -47317,7 +46892,7 @@ Following the instructions, and saving back into the original dataframe:
 
 
 ```r
-drugusers <- drugusers %>% drop_na()
+drugusers %>% drop_na() -> drugusers
 ```
 
  
@@ -47329,34 +46904,20 @@ summary(drugusers)
 ```
 
 ```
-##       row              ID       
-##  Min.   :  1.0   Min.   :  1.0  
-##  1st Qu.:155.2   1st Qu.:155.2  
-##  Median :312.5   Median :312.5  
-##  Mean   :313.8   Mean   :313.8  
-##  3rd Qu.:473.8   3rd Qu.:473.8  
-##  Max.   :628.0   Max.   :628.0  
-##       age           ndrugtx      
-##  Min.   :20.00   Min.   : 0.000  
-##  1st Qu.:27.00   1st Qu.: 1.000  
-##  Median :32.00   Median : 3.000  
-##  Mean   :32.39   Mean   : 4.579  
-##  3rd Qu.:37.00   3rd Qu.: 6.000  
-##  Max.   :56.00   Max.   :40.000  
-##      treat             site       
-##  Min.   :0.0000   Min.   :0.0000  
-##  1st Qu.:0.0000   1st Qu.:0.0000  
-##  Median :0.0000   Median :0.0000  
-##  Mean   :0.4918   Mean   :0.2984  
-##  3rd Qu.:1.0000   3rd Qu.:1.0000  
-##  Max.   :1.0000   Max.   :1.0000  
-##       time            censor      
-##  Min.   :   2.0   Min.   :0.0000  
-##  1st Qu.:  79.0   1st Qu.:1.0000  
-##  Median : 166.0   Median :1.0000  
-##  Mean   : 234.4   Mean   :0.8115  
-##  3rd Qu.: 361.8   3rd Qu.:1.0000  
-##  Max.   :1172.0   Max.   :1.0000  
+##       row              ID             age           ndrugtx      
+##  Min.   :  1.0   Min.   :  1.0   Min.   :20.00   Min.   : 0.000  
+##  1st Qu.:155.2   1st Qu.:155.2   1st Qu.:27.00   1st Qu.: 1.000  
+##  Median :312.5   Median :312.5   Median :32.00   Median : 3.000  
+##  Mean   :313.8   Mean   :313.8   Mean   :32.39   Mean   : 4.579  
+##  3rd Qu.:473.8   3rd Qu.:473.8   3rd Qu.:37.00   3rd Qu.: 6.000  
+##  Max.   :628.0   Max.   :628.0   Max.   :56.00   Max.   :40.000  
+##      treat             site             time            censor      
+##  Min.   :0.0000   Min.   :0.0000   Min.   :   2.0   Min.   :0.0000  
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:  79.0   1st Qu.:1.0000  
+##  Median :0.0000   Median :0.0000   Median : 166.0   Median :1.0000  
+##  Mean   :0.4918   Mean   :0.2984   Mean   : 234.4   Mean   :0.8115  
+##  3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.: 361.8   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1172.0   Max.   :1.0000  
 ##      herco     
 ##  Min.   :1.00  
 ##  1st Qu.:1.00  
@@ -47416,12 +46977,15 @@ These variables are actually categorical rather than quantitative:
 Most of them have only two levels, so it doesn't matter whether we make them categorical or leave them as numbers, but for `herco` it matters. Let's give them all sensible values, mostly with `ifelse`, thus:
 
 ```r
-drugusers <- drugusers %>% mutate(treat = ifelse(treat == 
-    0, "short", "long"), site = ifelse(site == 
-    0, "A", "B"), censor = ifelse(censor == 1, 
-    "returned", "no-return"), herco = case_when(herco == 
-    1 ~ "both", herco == 2 ~ "one", herco == 3 ~ 
-    "neither"))
+drugusers %>% mutate(
+treat=ifelse(treat==0, "short", "long"),
+site=ifelse(site==0, "A", "B"),
+censor=ifelse(censor==1, "returned", "no-return"),
+herco=case_when(
+herco==1 ~ "both",
+herco==2 ~ "one",
+herco==3 ~ "neither")
+) -> drugusers
 ```
 
        
@@ -47435,21 +46999,19 @@ drugusers
 
 ```
 ## # A tibble: 610 x 9
-##      row    ID   age ndrugtx treat site 
-##    <int> <int> <int>   <int> <chr> <chr>
-##  1     1     1    39       1 long  A    
-##  2     2     2    33       8 long  A    
-##  3     3     3    33       3 long  A    
-##  4     4     4    32       1 short A    
-##  5     5     5    24       5 long  A    
-##  6     6     6    30       1 long  A    
-##  7     7     7    39      34 long  A    
-##  8     8     8    27       2 long  A    
-##  9     9     9    40       3 long  A    
-## 10    10    10    36       7 long  A    
-## # ... with 600 more rows, and 3 more
-## #   variables: time <int>, censor <chr>,
-## #   herco <chr>
+##      row    ID   age ndrugtx treat site   time censor    herco  
+##    <int> <int> <int>   <int> <chr> <chr> <int> <chr>     <chr>  
+##  1     1     1    39       1 long  A       188 returned  neither
+##  2     2     2    33       8 long  A        26 returned  neither
+##  3     3     3    33       3 long  A       207 returned  one    
+##  4     4     4    32       1 short A       144 returned  neither
+##  5     5     5    24       5 long  A       551 no-return one    
+##  6     6     6    30       1 long  A        32 returned  both   
+##  7     7     7    39      34 long  A       459 returned  neither
+##  8     8     8    27       2 long  A        22 returned  neither
+##  9     9     9    40       3 long  A       210 returned  one    
+## 10    10    10    36       7 long  A       184 returned  one    
+## # ... with 600 more rows
 ```
 
  
@@ -47473,7 +47035,7 @@ happened for each patient. In this case, that is
 `censor="returned"`. 
 
 ```r
-y = with(drugusers, Surv(time, censor == "returned"))
+y=with(drugusers,Surv(time,censor=="returned"))
 ```
 
        
@@ -47514,16 +47076,14 @@ head(drugusers)
 
 ```
 ## # A tibble: 6 x 9
-##     row    ID   age ndrugtx treat site   time
-##   <int> <int> <int>   <int> <chr> <chr> <int>
-## 1     1     1    39       1 long  A       188
-## 2     2     2    33       8 long  A        26
-## 3     3     3    33       3 long  A       207
-## 4     4     4    32       1 short A       144
-## 5     5     5    24       5 long  A       551
-## 6     6     6    30       1 long  A        32
-## # ... with 2 more variables: censor <chr>,
-## #   herco <chr>
+##     row    ID   age ndrugtx treat site   time censor    herco  
+##   <int> <int> <int>   <int> <chr> <chr> <int> <chr>     <chr>  
+## 1     1     1    39       1 long  A       188 returned  neither
+## 2     2     2    33       8 long  A        26 returned  neither
+## 3     3     3    33       3 long  A       207 returned  one    
+## 4     4     4    32       1 short A       144 returned  neither
+## 5     5     5    24       5 long  A       551 no-return one    
+## 6     6     6    30       1 long  A        32 returned  both
 ```
 
  
@@ -47537,12 +47097,10 @@ ends, and studies of this kind carry on for years:
 
 
 ```r
-ggplot(drugusers, aes(x = censor, y = time)) + 
-    geom_boxplot()
+ggplot(drugusers,aes(x=censor,y=time))+geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-36-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
  
 Yep. The smallest time for a censored observation would be an upper outlier
@@ -47558,12 +47116,11 @@ non-censored observations. Then, this works:
 
 
 ```r
-ggplot(drugusers, aes(x = treat, y = time, colour = censor)) + 
-    geom_boxplot()
+ggplot(drugusers,aes(x=treat,y=time,colour=censor))+
+geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-37-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
  
 
@@ -47589,8 +47146,7 @@ Solution
 
 
 ```r
-drugusers.1 = coxph(y ~ age + ndrugtx + treat + 
-    site + herco, data = drugusers)
+drugusers.1=coxph(y~age+ndrugtx+treat+site+herco,data=drugusers)
 summary(drugusers.1)
 ```
 
@@ -47600,38 +47156,23 @@ summary(drugusers.1)
 ## 
 ##   n= 610, number of events= 495 
 ## 
-##                   coef exp(coef)  se(coef)
-## age          -0.023798  0.976483  0.007561
-## ndrugtx       0.034815  1.035429  0.007755
-## treatshort    0.254606  1.289953  0.091006
-## siteB        -0.173021  0.841120  0.102105
-## herconeither  0.125779  1.134032  0.103075
-## hercoone      0.247318  1.280586  0.122759
-##                   z Pr(>|z|)    
-## age          -3.148  0.00165 ** 
-## ndrugtx       4.490 7.14e-06 ***
-## treatshort    2.798  0.00515 ** 
-## siteB        -1.695  0.09016 .  
-## herconeither  1.220  0.22236    
-## hercoone      2.015  0.04394 *  
+##                   coef exp(coef)  se(coef)      z Pr(>|z|)    
+## age          -0.023798  0.976483  0.007561 -3.148  0.00165 ** 
+## ndrugtx       0.034815  1.035429  0.007755  4.490 7.14e-06 ***
+## treatshort    0.254606  1.289953  0.091006  2.798  0.00515 ** 
+## siteB        -0.173021  0.841120  0.102105 -1.695  0.09016 .  
+## herconeither  0.125779  1.134032  0.103075  1.220  0.22236    
+## hercoone      0.247318  1.280586  0.122759  2.015  0.04394 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##              exp(coef) exp(-coef) lower .95
-## age             0.9765     1.0241    0.9621
-## ndrugtx         1.0354     0.9658    1.0198
-## treatshort      1.2900     0.7752    1.0792
-## siteB           0.8411     1.1889    0.6886
-## herconeither    1.1340     0.8818    0.9266
-## hercoone        1.2806     0.7809    1.0067
-##              upper .95
-## age             0.9911
-## ndrugtx         1.0513
-## treatshort      1.5418
-## siteB           1.0275
-## herconeither    1.3879
-## hercoone        1.6289
+##              exp(coef) exp(-coef) lower .95 upper .95
+## age             0.9765     1.0241    0.9621    0.9911
+## ndrugtx         1.0354     0.9658    1.0198    1.0513
+## treatshort      1.2900     0.7752    1.0792    1.5418
+## siteB           0.8411     1.1889    0.6886    1.0275
+## herconeither    1.1340     0.8818    0.9266    1.3879
+## hercoone        1.2806     0.7809    1.0067    1.6289
 ## 
 ## Concordance= 0.581  (se = 0.014 )
 ## Rsquare= 0.056   (max possible= 1 )
@@ -47647,23 +47188,20 @@ Another way to handle
 
 
 ```r
-drugusers.1a = coxph(y ~ . - row - ID - time - 
-    censor, data = drugusers)
+drugusers.1a=coxph(y~.-row-ID-time-censor,data=drugusers)
 broom::tidy(drugusers.1a)
 ```
 
 ```
 ## # A tibble: 6 x 7
-##   term  estimate std.error statistic p.value
-##   <chr>    <dbl>     <dbl>     <dbl>   <dbl>
-## 1 age    -0.0238   0.00756     -3.15 1.65e-3
-## 2 ndru~   0.0348   0.00775      4.49 7.14e-6
-## 3 trea~   0.255    0.0910       2.80 5.15e-3
-## 4 siteB  -0.173    0.102       -1.69 9.02e-2
-## 5 herc~   0.126    0.103        1.22 2.22e-1
-## 6 herc~   0.247    0.123        2.01 4.39e-2
-## # ... with 2 more variables: conf.low <dbl>,
-## #   conf.high <dbl>
+##   term         estimate std.error statistic    p.value conf.low conf.high
+##   <chr>           <dbl>     <dbl>     <dbl>      <dbl>    <dbl>     <dbl>
+## 1 age           -0.0238   0.00756     -3.15 0.00165    -0.0386   -0.00898
+## 2 ndrugtx        0.0348   0.00775      4.49 0.00000714  0.0196    0.0500 
+## 3 treatshort     0.255    0.0910       2.80 0.00515     0.0762    0.433  
+## 4 siteB         -0.173    0.102       -1.69 0.0902     -0.373     0.0271 
+## 5 herconeither   0.126    0.103        1.22 0.222      -0.0762    0.328  
+## 6 hercoone       0.247    0.123        2.01 0.0439      0.00671   0.488
 ```
 
  
@@ -47682,7 +47220,7 @@ Solution
 The hint is meant to suggest to you that looking at `drop1` is the right way to go:
 
 ```r
-drop1(drugusers.1, test = "Chisq")
+drop1(drugusers.1, test="Chisq")
 ```
 
 ```
@@ -47698,8 +47236,7 @@ drop1(drugusers.1, test = "Chisq")
 ## site     1 5713.1  2.9335  0.086760 .  
 ## herco    2 5712.5  4.3182  0.115427    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -47721,14 +47258,13 @@ Solution
 
 `site` and `herco` are the two variables to come
 out.
-\marginnote{The researchers were probably relieved that there        was not quite a significant effect of *site*.} I like
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The researchers were probably relieved that there        was not quite a significant effect of *site*.</span> I like
 `update`, but there is no
 problem about copying-pasting your `coxph` and taking out
 what you no longer need.
 
 ```r
-drugusers.2 = update(drugusers.1, . ~ . - site - 
-    herco)
+drugusers.2=update(drugusers.1,.~.-site-herco)
 ```
 
  
@@ -47738,7 +47274,7 @@ right test gets done, so no need for `test=`:
 
 
 ```r
-anova(drugusers.2, drugusers.1)
+anova(drugusers.2,drugusers.1)
 ```
 
 ```
@@ -47750,15 +47286,14 @@ anova(drugusers.2, drugusers.1)
 ## 1 -2853.7                      
 ## 2 -2850.1 7.2117  3   0.06545 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
 
 There is no significant difference between these two 
 models,
-\marginnote{Not at the 0.05 level, anyway.} so we can go with the 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not at the 0.05 level, anyway.</span> so we can go with the 
 smaller, simpler one
 (with just `age`, `ndrugtx` and `treat`).
     
@@ -47784,26 +47319,17 @@ summary(drugusers.2)
 ## 
 ##   n= 610, number of events= 495 
 ## 
-##                 coef exp(coef)  se(coef)
-## age        -0.020801  0.979414  0.007419
-## ndrugtx     0.035567  1.036207  0.007621
-## treatshort  0.231055  1.259929  0.090175
-##                 z Pr(>|z|)    
-## age        -2.804  0.00505 ** 
-## ndrugtx     4.667 3.05e-06 ***
-## treatshort  2.562  0.01040 *  
+##                 coef exp(coef)  se(coef)      z Pr(>|z|)    
+## age        -0.020801  0.979414  0.007419 -2.804  0.00505 ** 
+## ndrugtx     0.035567  1.036207  0.007621  4.667 3.05e-06 ***
+## treatshort  0.231055  1.259929  0.090175  2.562  0.01040 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##            exp(coef) exp(-coef) lower .95
-## age           0.9794     1.0210    0.9653
-## ndrugtx       1.0362     0.9651    1.0208
-## treatshort    1.2599     0.7937    1.0558
-##            upper .95
-## age           0.9938
-## ndrugtx       1.0518
-## treatshort    1.5035
+##            exp(coef) exp(-coef) lower .95 upper .95
+## age           0.9794     1.0210    0.9653    0.9938
+## ndrugtx       1.0362     0.9651    1.0208    1.0518
+## treatshort    1.2599     0.7937    1.0558    1.5035
 ## 
 ## Concordance= 0.572  (se = 0.014 )
 ## Rsquare= 0.045   (max possible= 1 )
@@ -47870,11 +47396,10 @@ call it `new` and construct it in pieces as I did before
 (thus meaning that I don't have to think too hard about what I'm doing):
 
 ```r
-ages = c(27, 37)
-ndrugtxs = c(1, 6)
-treats = c("short", "long")
-new = crossing(age = ages, ndrugtx = ndrugtxs, 
-    treat = treats)
+ages=c(27,37)
+ndrugtxs=c(1,6)
+treats=c("short","long")
+new=crossing(age=ages,ndrugtx=ndrugtxs,treat=treats)
 new
 ```
 
@@ -47910,7 +47435,7 @@ Solution
 `predict` and works the same way, so this is all you need:
 
 ```r
-pp = survfit(drugusers.2, new, data = drugusers)
+pp=survfit(drugusers.2,new,data=drugusers)
 ```
 
        
@@ -47929,11 +47454,10 @@ Solution
 This:
 
 ```r
-ggsurvplot(pp, conf.int = F)
+ggsurvplot(pp, conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-46-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
    
 
@@ -48055,7 +47579,7 @@ The variables are:
 * `logbun`: log of BUN test score (BUN test is a test of
 kidney function, not to be confused with cha siu
 bao
-\marginnote{Barbecued pork in a bun. A staple of Chinese dim sum and  Chinese bakeries, such as Ding Dong bakery on Spadina.}).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Barbecued pork in a bun. A staple of Chinese dim sum and  Chinese bakeries, such as Ding Dong bakery on Spadina.</span>).
 
 * `hgb`: hemoglobin (at diagnosis).
 
@@ -48096,8 +47620,8 @@ Solution
 The usual:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv"
-myeloma = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv"
+myeloma=read_csv(my_url)
 ```
 
 ```
@@ -48123,21 +47647,19 @@ myeloma
 
 ```
 ## # A tibble: 65 x 11
-##     time vstatus logbun   hgb platelet   age
-##    <dbl>   <dbl>  <dbl> <dbl>    <dbl> <dbl>
-##  1  1.25       1   2.22   9.4        1    67
-##  2  1.25       1   1.94  12          1    38
-##  3  2          1   1.52   9.8        1    81
-##  4  2          1   1.75  11.3        0    75
-##  5  2          1   1.30   5.1        0    57
-##  6  3          1   1.54   6.7        1    46
-##  7  5          1   2.24  10.1        1    50
-##  8  5          1   1.68   6.5        1    74
-##  9  6          1   1.36   9          1    77
-## 10  6          1   2.11  10.2        0    70
-## # ... with 55 more rows, and 5 more
-## #   variables: logwbc <dbl>, frac <dbl>,
-## #   logpbm <dbl>, protein <dbl>, scalc <dbl>
+##     time vstatus logbun   hgb platelet   age logwbc  frac logpbm protein
+##    <dbl>   <dbl>  <dbl> <dbl>    <dbl> <dbl>  <dbl> <dbl>  <dbl>   <dbl>
+##  1  1.25       1   2.22   9.4        1    67   3.66     1   1.95      12
+##  2  1.25       1   1.94  12          1    38   3.99     1   1.95      20
+##  3  2          1   1.52   9.8        1    81   3.88     1   2          2
+##  4  2          1   1.75  11.3        0    75   3.81     1   1.26       0
+##  5  2          1   1.30   5.1        0    57   3.72     1   2          3
+##  6  3          1   1.54   6.7        1    46   4.48     0   1.93      12
+##  7  5          1   2.24  10.1        1    50   4.95     1   1.66       4
+##  8  5          1   1.68   6.5        1    74   3.73     0   1.73       5
+##  9  6          1   1.36   9          1    77   3.54     0   1.46       1
+## 10  6          1   2.11  10.2        0    70   3.54     1   1.36       1
+## # ... with 55 more rows, and 1 more variable: scalc <dbl>
 ```
 
      
@@ -48158,23 +47680,23 @@ glimpse(myeloma)
 ```
 ## Observations: 65
 ## Variables: 11
-## $ time     <dbl> 1.25, 1.25, 2.00, 2.00,...
-## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1,...
-## $ logbun   <dbl> 2.2175, 1.9395, 1.5185,...
-## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5...
-## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1,...
-## $ age      <dbl> 67, 38, 81, 75, 57, 46,...
-## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751,...
-## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0,...
-## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000,...
-## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4,...
-## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, ...
+## $ time     <dbl> 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00,...
+## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ logbun   <dbl> 2.2175, 1.9395, 1.5185, 1.7482, 1.3010, 1.5441, 2.235...
+## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5.1, 6.7, 10.1, 6.5, 9.0, 10.2,...
+## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1,...
+## $ age      <dbl> 67, 38, 81, 75, 57, 46, 50, 74, 77, 70, 60, 67, 48, 6...
+## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751, 3.8062, 3.7243, 4.4757, 4.954...
+## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000, 1.2553, 2.0000, 1.9345, 1.662...
+## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0,...
+## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13,...
 ```
 
  
 
 which gives a bit more of a picture of the values.
-\marginnote{Don't  confuse this with *glance* from *broom*, which gives a one-line summary of a *model*, containing things like R-squared and a test for the overall model significance.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Don't  confuse this with *glance* from *broom*, which gives a one-line summary of a *model*, containing things like R-squared and a test for the overall model significance.</span> 
 Or if you were
 serious about checking, you could do
 
@@ -48184,48 +47706,27 @@ summary(myeloma)
 ```
 
 ```
-##       time          vstatus      
-##  Min.   : 1.25   Min.   :0.0000  
-##  1st Qu.: 7.00   1st Qu.:0.0000  
-##  Median :15.00   Median :1.0000  
-##  Mean   :24.01   Mean   :0.7385  
-##  3rd Qu.:35.00   3rd Qu.:1.0000  
-##  Max.   :92.00   Max.   :1.0000  
-##      logbun            hgb      
-##  Min.   :0.7782   Min.   : 4.9  
-##  1st Qu.:1.1461   1st Qu.: 8.8  
-##  Median :1.3222   Median :10.2  
-##  Mean   :1.3929   Mean   :10.2  
-##  3rd Qu.:1.5682   3rd Qu.:12.0  
-##  Max.   :2.2355   Max.   :14.6  
-##     platelet           age       
-##  Min.   :0.0000   Min.   :38.00  
-##  1st Qu.:1.0000   1st Qu.:51.00  
-##  Median :1.0000   Median :60.00  
-##  Mean   :0.8615   Mean   :60.15  
-##  3rd Qu.:1.0000   3rd Qu.:67.00  
-##  Max.   :1.0000   Max.   :82.00  
-##      logwbc           frac       
-##  Min.   :3.362   Min.   :0.0000  
-##  1st Qu.:3.643   1st Qu.:1.0000  
-##  Median :3.732   Median :1.0000  
-##  Mean   :3.769   Mean   :0.7538  
-##  3rd Qu.:3.875   3rd Qu.:1.0000  
-##  Max.   :4.954   Max.   :1.0000  
-##      logpbm          protein      
-##  Min.   :0.4771   Min.   : 0.000  
-##  1st Qu.:1.3617   1st Qu.: 0.000  
-##  Median :1.6232   Median : 1.000  
-##  Mean   :1.5497   Mean   : 3.615  
-##  3rd Qu.:1.8451   3rd Qu.: 4.000  
-##  Max.   :2.0000   Max.   :27.000  
-##      scalc      
-##  Min.   : 7.00  
-##  1st Qu.: 9.00  
-##  Median :10.00  
-##  Mean   :10.12  
-##  3rd Qu.:10.00  
-##  Max.   :18.00
+##       time          vstatus           logbun            hgb      
+##  Min.   : 1.25   Min.   :0.0000   Min.   :0.7782   Min.   : 4.9  
+##  1st Qu.: 7.00   1st Qu.:0.0000   1st Qu.:1.1461   1st Qu.: 8.8  
+##  Median :15.00   Median :1.0000   Median :1.3222   Median :10.2  
+##  Mean   :24.01   Mean   :0.7385   Mean   :1.3929   Mean   :10.2  
+##  3rd Qu.:35.00   3rd Qu.:1.0000   3rd Qu.:1.5682   3rd Qu.:12.0  
+##  Max.   :92.00   Max.   :1.0000   Max.   :2.2355   Max.   :14.6  
+##     platelet           age            logwbc           frac       
+##  Min.   :0.0000   Min.   :38.00   Min.   :3.362   Min.   :0.0000  
+##  1st Qu.:1.0000   1st Qu.:51.00   1st Qu.:3.643   1st Qu.:1.0000  
+##  Median :1.0000   Median :60.00   Median :3.732   Median :1.0000  
+##  Mean   :0.8615   Mean   :60.15   Mean   :3.769   Mean   :0.7538  
+##  3rd Qu.:1.0000   3rd Qu.:67.00   3rd Qu.:3.875   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :82.00   Max.   :4.954   Max.   :1.0000  
+##      logpbm          protein           scalc      
+##  Min.   :0.4771   Min.   : 0.000   Min.   : 7.00  
+##  1st Qu.:1.3617   1st Qu.: 0.000   1st Qu.: 9.00  
+##  Median :1.6232   Median : 1.000   Median :10.00  
+##  Mean   :1.5497   Mean   : 3.615   Mean   :10.12  
+##  3rd Qu.:1.8451   3rd Qu.: 4.000   3rd Qu.:10.00  
+##  Max.   :2.0000   Max.   :27.000   Max.   :18.00
 ```
 
  
@@ -48252,23 +47753,17 @@ yours whatever you like. Two things: the survival times, here
 `vstatus` being 1:
 
 ```r
-y = with(myeloma, Surv(time, vstatus == 1))
+y=with(myeloma,Surv(time, vstatus==1))
 y
 ```
 
 ```
-##  [1]  1.25   1.25   2.00   2.00   2.00 
-##  [6]  3.00   5.00   5.00   6.00   6.00 
-## [11]  6.00   6.00   7.00   7.00   7.00 
-## [16]  9.00  11.00  11.00  11.00  11.00 
-## [21] 11.00  13.00  14.00  15.00  16.00 
-## [26] 16.00  17.00  17.00  18.00  19.00 
-## [31] 19.00  24.00  25.00  26.00  32.00 
-## [36] 35.00  37.00  41.00  41.00  51.00 
-## [41] 52.00  54.00  58.00  66.00  67.00 
-## [46] 88.00  89.00  92.00   4.00+  4.00+
-## [51]  7.00+  7.00+  8.00+ 12.00+ 11.00+
-## [56] 12.00+ 13.00+ 16.00+ 19.00+ 19.00+
+##  [1]  1.25   1.25   2.00   2.00   2.00   3.00   5.00   5.00   6.00   6.00 
+## [11]  6.00   6.00   7.00   7.00   7.00   9.00  11.00  11.00  11.00  11.00 
+## [21] 11.00  13.00  14.00  15.00  16.00  16.00  17.00  17.00  18.00  19.00 
+## [31] 19.00  24.00  25.00  26.00  32.00  35.00  37.00  41.00  41.00  51.00 
+## [41] 52.00  54.00  58.00  66.00  67.00  88.00  89.00  92.00   4.00+  4.00+
+## [51]  7.00+  7.00+  8.00+ 12.00+ 11.00+ 12.00+ 13.00+ 16.00+ 19.00+ 19.00+
 ## [61] 28.00+ 41.00+ 53.00+ 57.00+ 77.00+
 ```
 
@@ -48317,7 +47812,7 @@ The obvious way to do this is to list all the other variables on
 the right side of the squiggle, but a faster way is this:
 
 ```r
-y.1 = coxph(y ~ . - time - vstatus, data = myeloma)
+y.1=coxph(y~.-time-vstatus,data=myeloma)
 summary(y.1)
 ```
 
@@ -48327,50 +47822,29 @@ summary(y.1)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##              coef exp(coef) se(coef)      z
-## logbun    1.85557   6.39536  0.65628  2.827
-## hgb      -0.12629   0.88136  0.07212 -1.751
-## platelet -0.25488   0.77501  0.51194 -0.498
-## age      -0.01306   0.98702  0.01957 -0.668
-## logwbc    0.35389   1.42460  0.71576  0.494
-## frac      0.34232   1.40821  0.40725  0.841
-## logpbm    0.38165   1.46470  0.48743  0.783
-## protein   0.01302   1.01311  0.02612  0.498
-## scalc     0.12976   1.13856  0.10502  1.236
-##          Pr(>|z|)   
-## logbun    0.00469 **
-## hgb       0.07994 . 
-## platelet  0.61858   
-## age       0.50439   
-## logwbc    0.62101   
-## frac      0.40059   
-## logpbm    0.43364   
-## protein   0.61817   
-## scalc     0.21659   
+##              coef exp(coef) se(coef)      z Pr(>|z|)   
+## logbun    1.85557   6.39536  0.65628  2.827  0.00469 **
+## hgb      -0.12629   0.88136  0.07212 -1.751  0.07994 . 
+## platelet -0.25488   0.77501  0.51194 -0.498  0.61858   
+## age      -0.01306   0.98702  0.01957 -0.668  0.50439   
+## logwbc    0.35389   1.42460  0.71576  0.494  0.62101   
+## frac      0.34232   1.40821  0.40725  0.841  0.40059   
+## logpbm    0.38165   1.46470  0.48743  0.783  0.43364   
+## protein   0.01302   1.01311  0.02612  0.498  0.61817   
+## scalc     0.12976   1.13856  0.10502  1.236  0.21659   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##          exp(coef) exp(-coef) lower .95
-## logbun      6.3954     0.1564    1.7670
-## hgb         0.8814     1.1346    0.7652
-## platelet    0.7750     1.2903    0.2841
-## age         0.9870     1.0131    0.9499
-## logwbc      1.4246     0.7020    0.3503
-## frac        1.4082     0.7101    0.6339
-## logpbm      1.4647     0.6827    0.5634
-## protein     1.0131     0.9871    0.9625
-## scalc       1.1386     0.8783    0.9268
-##          upper .95
-## logbun      23.147
-## hgb          1.015
-## platelet     2.114
-## age          1.026
-## logwbc       5.794
-## frac         3.128
-## logpbm       3.808
-## protein      1.066
-## scalc        1.399
+##          exp(coef) exp(-coef) lower .95 upper .95
+## logbun      6.3954     0.1564    1.7670    23.147
+## hgb         0.8814     1.1346    0.7652     1.015
+## platelet    0.7750     1.2903    0.2841     2.114
+## age         0.9870     1.0131    0.9499     1.026
+## logwbc      1.4246     0.7020    0.3503     5.794
+## frac        1.4082     0.7101    0.6339     3.128
+## logpbm      1.4647     0.6827    0.5634     3.808
+## protein     1.0131     0.9871    0.9625     1.066
+## scalc       1.1386     0.8783    0.9268     1.399
 ## 
 ## Concordance= 0.675  (se = 0.051 )
 ## Rsquare= 0.237   (max possible= 0.991 )
@@ -48392,14 +47866,12 @@ in danger of having a model that fits perfectly:
 
 
 ```r
-y.00 = coxph(y ~ ., data = myeloma)
+y.00=coxph(y~.,data=myeloma)
 ```
 
 ```
-## Warning in fitter(X, Y, strats, offset,
-## init, control, weights = weights, :
-## Loglik converged before variable
-## 1,2,3,4,5,6,7,8,9,10,11 ; beta may be
+## Warning in fitter(X, Y, strats, offset, init, control, weights = weights, :
+## Loglik converged before variable 1,2,3,4,5,6,7,8,9,10,11 ; beta may be
 ## infinite.
 ```
 
@@ -48413,55 +47885,31 @@ summary(y.00)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##                coef  exp(coef)   se(coef)
-## time     -9.889e+00  5.071e-05  1.824e+01
-## vstatus   1.439e+01  1.775e+06  3.703e+02
-## logbun    4.864e-04  1.000e+00  8.626e-01
-## hgb       2.776e-05  1.000e+00  1.417e-01
-## platelet  2.287e-04  1.000e+00  7.862e-01
-## age      -1.144e-05  1.000e+00  2.834e-02
-## logwbc   -6.984e-06  1.000e+00  1.121e+00
-## frac     -1.930e-04  9.998e-01  9.787e-01
-## logpbm    8.106e-04  1.001e+00  9.518e-01
-## protein   1.018e-04  1.000e+00  8.550e-02
-## scalc    -4.515e-05  1.000e+00  1.639e-01
-##               z Pr(>|z|)
-## time     -0.542    0.588
-## vstatus   0.039    0.969
-## logbun    0.001    1.000
-## hgb       0.000    1.000
-## platelet  0.000    1.000
-## age       0.000    1.000
-## logwbc    0.000    1.000
-## frac      0.000    1.000
-## logpbm    0.001    0.999
-## protein   0.001    0.999
-## scalc     0.000    1.000
+##                coef  exp(coef)   se(coef)      z Pr(>|z|)
+## time     -9.889e+00  5.071e-05  1.824e+01 -0.542    0.588
+## vstatus   1.439e+01  1.775e+06  3.703e+02  0.039    0.969
+## logbun    4.864e-04  1.000e+00  8.626e-01  0.001    1.000
+## hgb       2.776e-05  1.000e+00  1.417e-01  0.000    1.000
+## platelet  2.287e-04  1.000e+00  7.862e-01  0.000    1.000
+## age      -1.144e-05  1.000e+00  2.834e-02  0.000    1.000
+## logwbc   -6.984e-06  1.000e+00  1.121e+00  0.000    1.000
+## frac     -1.930e-04  9.998e-01  9.787e-01  0.000    1.000
+## logpbm    8.106e-04  1.001e+00  9.518e-01  0.001    0.999
+## protein   1.018e-04  1.000e+00  8.550e-02  0.001    0.999
+## scalc    -4.515e-05  1.000e+00  1.639e-01  0.000    1.000
 ## 
-##          exp(coef) exp(-coef)  lower .95
-## time     5.071e-05  1.972e+04  1.500e-20
-## vstatus  1.775e+06  5.632e-07 1.209e-309
-## logbun   1.000e+00  9.995e-01  1.845e-01
-## hgb      1.000e+00  1.000e+00  7.576e-01
-## platelet 1.000e+00  9.998e-01  2.142e-01
-## age      1.000e+00  1.000e+00  9.460e-01
-## logwbc   1.000e+00  1.000e+00  1.111e-01
-## frac     9.998e-01  1.000e+00  1.468e-01
-## logpbm   1.001e+00  9.992e-01  1.550e-01
-## protein  1.000e+00  9.999e-01  8.458e-01
-## scalc    1.000e+00  1.000e+00  7.252e-01
-##          upper .95
-## time     1.714e+11
-## vstatus        Inf
-## logbun   5.425e+00
-## hgb      1.320e+00
-## platelet 4.670e+00
-## age      1.057e+00
-## logwbc   8.997e+00
-## frac     6.808e+00
-## logpbm   6.464e+00
-## protein  1.183e+00
-## scalc    1.379e+00
+##          exp(coef) exp(-coef)  lower .95 upper .95
+## time     5.071e-05  1.972e+04  1.500e-20 1.714e+11
+## vstatus  1.775e+06  5.632e-07 1.209e-309       Inf
+## logbun   1.000e+00  9.995e-01  1.845e-01 5.425e+00
+## hgb      1.000e+00  1.000e+00  7.576e-01 1.320e+00
+## platelet 1.000e+00  9.998e-01  2.142e-01 4.670e+00
+## age      1.000e+00  1.000e+00  9.460e-01 1.057e+00
+## logwbc   1.000e+00  1.000e+00  1.111e-01 8.997e+00
+## frac     9.998e-01  1.000e+00  1.468e-01 6.808e+00
+## logpbm   1.001e+00  9.992e-01  1.550e-01 6.464e+00
+## protein  1.000e+00  9.999e-01  8.458e-01 1.183e+00
+## scalc    1.000e+00  1.000e+00  7.252e-01 1.379e+00
 ## 
 ## Concordance= 1  (se = 0 )
 ## Rsquare= 0.986   (max possible= 0.991 )
@@ -48499,7 +47947,7 @@ in this situation). I'm going to copy-and-paste my code for
 `y.1` and edit it:
 
 ```r
-y.2 = coxph(y ~ logbun + hgb, data = myeloma)
+y.2=coxph(y~logbun+hgb,data=myeloma)
 summary(y.2)
 ```
 
@@ -48509,22 +47957,15 @@ summary(y.2)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##            coef exp(coef) se(coef)      z
-## logbun  1.71597   5.56209  0.61855  2.774
-## hgb    -0.11966   0.88722  0.05742 -2.084
-##        Pr(>|z|)   
-## logbun  0.00553 **
-## hgb     0.03717 * 
+##            coef exp(coef) se(coef)      z Pr(>|z|)   
+## logbun  1.71597   5.56209  0.61855  2.774  0.00553 **
+## hgb    -0.11966   0.88722  0.05742 -2.084  0.03717 * 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##        exp(coef) exp(-coef) lower .95
-## logbun    5.5621     0.1798    1.6547
-## hgb       0.8872     1.1271    0.7928
-##        upper .95
-## logbun   18.6961
-## hgb       0.9929
+##        exp(coef) exp(-coef) lower .95 upper .95
+## logbun    5.5621     0.1798    1.6547   18.6961
+## hgb       0.8872     1.1271    0.7928    0.9929
 ## 
 ## Concordance= 0.675  (se = 0.043 )
 ## Rsquare= 0.172   (max possible= 0.991 )
@@ -48553,7 +47994,7 @@ Comparing two models is `anova`, which also works here. The
 right `test` is `Chisq`:
 
 ```r
-anova(y.2, y.1, test = "Chisq")
+anova(y.2,y.1,test="Chisq")
 ```
 
 ```
@@ -48586,7 +48027,7 @@ In case you are curious, `step` also works on models like these:
 
 
 ```r
-y.3 = step(y.1, direction = "backward", trace = 0)
+y.3=step(y.1,direction="backward",trace=0)
 summary(y.3)
 ```
 
@@ -48596,22 +48037,15 @@ summary(y.3)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##            coef exp(coef) se(coef)      z
-## logbun  1.71597   5.56209  0.61855  2.774
-## hgb    -0.11966   0.88722  0.05742 -2.084
-##        Pr(>|z|)   
-## logbun  0.00553 **
-## hgb     0.03717 * 
+##            coef exp(coef) se(coef)      z Pr(>|z|)   
+## logbun  1.71597   5.56209  0.61855  2.774  0.00553 **
+## hgb    -0.11966   0.88722  0.05742 -2.084  0.03717 * 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##        exp(coef) exp(-coef) lower .95
-## logbun    5.5621     0.1798    1.6547
-## hgb       0.8872     1.1271    0.7928
-##        upper .95
-## logbun   18.6961
-## hgb       0.9929
+##        exp(coef) exp(-coef) lower .95 upper .95
+## logbun    5.5621     0.1798    1.6547   18.6961
+## hgb       0.8872     1.1271    0.7928    0.9929
 ## 
 ## Concordance= 0.675  (se = 0.043 )
 ## Rsquare= 0.172   (max possible= 0.991 )
@@ -48679,48 +48113,27 @@ summary(myeloma)
 ```
 
 ```
-##       time          vstatus      
-##  Min.   : 1.25   Min.   :0.0000  
-##  1st Qu.: 7.00   1st Qu.:0.0000  
-##  Median :15.00   Median :1.0000  
-##  Mean   :24.01   Mean   :0.7385  
-##  3rd Qu.:35.00   3rd Qu.:1.0000  
-##  Max.   :92.00   Max.   :1.0000  
-##      logbun            hgb      
-##  Min.   :0.7782   Min.   : 4.9  
-##  1st Qu.:1.1461   1st Qu.: 8.8  
-##  Median :1.3222   Median :10.2  
-##  Mean   :1.3929   Mean   :10.2  
-##  3rd Qu.:1.5682   3rd Qu.:12.0  
-##  Max.   :2.2355   Max.   :14.6  
-##     platelet           age       
-##  Min.   :0.0000   Min.   :38.00  
-##  1st Qu.:1.0000   1st Qu.:51.00  
-##  Median :1.0000   Median :60.00  
-##  Mean   :0.8615   Mean   :60.15  
-##  3rd Qu.:1.0000   3rd Qu.:67.00  
-##  Max.   :1.0000   Max.   :82.00  
-##      logwbc           frac       
-##  Min.   :3.362   Min.   :0.0000  
-##  1st Qu.:3.643   1st Qu.:1.0000  
-##  Median :3.732   Median :1.0000  
-##  Mean   :3.769   Mean   :0.7538  
-##  3rd Qu.:3.875   3rd Qu.:1.0000  
-##  Max.   :4.954   Max.   :1.0000  
-##      logpbm          protein      
-##  Min.   :0.4771   Min.   : 0.000  
-##  1st Qu.:1.3617   1st Qu.: 0.000  
-##  Median :1.6232   Median : 1.000  
-##  Mean   :1.5497   Mean   : 3.615  
-##  3rd Qu.:1.8451   3rd Qu.: 4.000  
-##  Max.   :2.0000   Max.   :27.000  
-##      scalc      
-##  Min.   : 7.00  
-##  1st Qu.: 9.00  
-##  Median :10.00  
-##  Mean   :10.12  
-##  3rd Qu.:10.00  
-##  Max.   :18.00
+##       time          vstatus           logbun            hgb      
+##  Min.   : 1.25   Min.   :0.0000   Min.   :0.7782   Min.   : 4.9  
+##  1st Qu.: 7.00   1st Qu.:0.0000   1st Qu.:1.1461   1st Qu.: 8.8  
+##  Median :15.00   Median :1.0000   Median :1.3222   Median :10.2  
+##  Mean   :24.01   Mean   :0.7385   Mean   :1.3929   Mean   :10.2  
+##  3rd Qu.:35.00   3rd Qu.:1.0000   3rd Qu.:1.5682   3rd Qu.:12.0  
+##  Max.   :92.00   Max.   :1.0000   Max.   :2.2355   Max.   :14.6  
+##     platelet           age            logwbc           frac       
+##  Min.   :0.0000   Min.   :38.00   Min.   :3.362   Min.   :0.0000  
+##  1st Qu.:1.0000   1st Qu.:51.00   1st Qu.:3.643   1st Qu.:1.0000  
+##  Median :1.0000   Median :60.00   Median :3.732   Median :1.0000  
+##  Mean   :0.8615   Mean   :60.15   Mean   :3.769   Mean   :0.7538  
+##  3rd Qu.:1.0000   3rd Qu.:67.00   3rd Qu.:3.875   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :82.00   Max.   :4.954   Max.   :1.0000  
+##      logpbm          protein           scalc      
+##  Min.   :0.4771   Min.   : 0.000   Min.   : 7.00  
+##  1st Qu.:1.3617   1st Qu.: 0.000   1st Qu.: 9.00  
+##  Median :1.6232   Median : 1.000   Median :10.00  
+##  Mean   :1.5497   Mean   : 3.615   Mean   :10.12  
+##  3rd Qu.:1.8451   3rd Qu.: 4.000   3rd Qu.:10.00  
+##  Max.   :2.0000   Max.   :27.000   Max.   :18.00
 ```
 
  
@@ -48730,7 +48143,7 @@ ones you need first:
 
 
 ```r
-myeloma %>% select(logbun, hgb) %>% summary()
+myeloma %>% select(logbun,hgb) %>% summary()
 ```
 
 ```
@@ -48751,8 +48164,8 @@ you have to do it like this:
 
 ```r
 with(myeloma, {
-    print(quantile(logbun))
-    print(quantile(hgb))
+print(quantile(logbun))
+print(quantile(hgb))
 })
 ```
 
@@ -48776,10 +48189,10 @@ answer):
 
 
 ```r
-myeloma %>% summarize(logbun.q1 = quantile(logbun, 
-    0.25), logbun.q3 = quantile(logbun, 0.75), 
-    hgb.q1 = quantile(hgb, 0.25), hgb.q3 = quantile(hgb, 
-        0.75))
+myeloma %>% summarize(logbun.q1=quantile(logbun,0.25),
+logbun.q3=quantile(logbun,0.75),
+hgb.q1=quantile(hgb,0.25),
+hgb.q3=quantile(hgb,0.75))
 ```
 
 ```
@@ -48797,29 +48210,25 @@ loaded with the `tidyverse`:
 
 
 ```r
-map_dbl(myeloma, quantile, 0.25)
+map_dbl(myeloma,quantile,0.25)
 ```
 
 ```
-##     time  vstatus   logbun      hgb platelet 
-##   7.0000   0.0000   1.1461   8.8000   1.0000 
-##      age   logwbc     frac   logpbm  protein 
-##  51.0000   3.6435   1.0000   1.3617   0.0000 
-##    scalc 
-##   9.0000
+##     time  vstatus   logbun      hgb platelet      age   logwbc     frac 
+##   7.0000   0.0000   1.1461   8.8000   1.0000  51.0000   3.6435   1.0000 
+##   logpbm  protein    scalc 
+##   1.3617   0.0000   9.0000
 ```
 
 ```r
-map_dbl(myeloma, quantile, 0.75)
+map_dbl(myeloma,quantile,0.75)
 ```
 
 ```
-##     time  vstatus   logbun      hgb platelet 
-##  35.0000   1.0000   1.5682  12.0000   1.0000 
-##      age   logwbc     frac   logpbm  protein 
-##  67.0000   3.8751   1.0000   1.8451   4.0000 
-##    scalc 
-##  10.0000
+##     time  vstatus   logbun      hgb platelet      age   logwbc     frac 
+##  35.0000   1.0000   1.5682  12.0000   1.0000  67.0000   3.8751   1.0000 
+##   logpbm  protein    scalc 
+##   1.8451   4.0000  10.0000
 ```
 
  
@@ -48829,8 +48238,7 @@ So what you do is a `select` to get just `logbun` and
 
 
 ```r
-myeloma %>% select(logbun, hgb) %>% map_dbl(quantile, 
-    0.25)
+myeloma %>% select(logbun,hgb) %>% map_dbl(quantile,0.25)
 ```
 
 ```
@@ -48844,8 +48252,8 @@ Can we get them both in one shot? Let's see what this does:
 
 
 ```r
-myeloma %>% select(logbun, hgb) %>% map(quantile, 
-    c(0.25, 0.75))
+myeloma %>% select(logbun,hgb) %>% 
+map(quantile, c(0.25,0.75))
 ```
 
 ```
@@ -48865,8 +48273,8 @@ frame. There is a way to get that:
 
 
 ```r
-myeloma %>% select(logbun, hgb) %>% map_df(quantile, 
-    c(0.25, 0.75))
+myeloma %>% select(logbun,hgb) %>% 
+map_df(quantile, c(0.25,0.75))
 ```
 
 ```
@@ -48882,7 +48290,7 @@ myeloma %>% select(logbun, hgb) %>% map_df(quantile,
 The `25%` and `75%` have gone missing. They were
 actually the `names` of each of the components of the list,
 which I don't think we easily have access to.
-\marginnote{The way, as we  have seen elsewhere, is to use *tidy(quantile)* or *enframe(quantile)*, which  produce a two-column data frame with the percentiles shown.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The way, as we  have seen elsewhere, is to use *tidy(quantile)* or *enframe(quantile)*, which  produce a two-column data frame with the percentiles shown.</span>
     
 
 
@@ -48897,9 +48305,9 @@ The usual `crossing`:
 
 
 ```r
-logbuns = c(1.1461, 1.5682)
-hgbs = c(8.8, 12)
-new = crossing(logbun = logbuns, hgb = hgbs)
+logbuns=c(1.1461,1.5682)
+hgbs=c(8.8,12)
+new=crossing(logbun=logbuns,hgb=hgbs)
 new
 ```
 
@@ -48936,7 +48344,7 @@ This seems as if it ought to be `predict`, but the
 `survival` version of it is called `survfit`:
 
 ```r
-s = survfit(y.2, new, data = myeloma)
+s=survfit(y.2,new,data=myeloma)
 ```
 
      
@@ -48958,11 +48366,10 @@ Solution
 This is easier than you think: it's just `ggsurvplot` from `survminer`:
 
 ```r
-ggsurvplot(s, conf.int = F)
+ggsurvplot(s,conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-68-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
      
     
@@ -48997,7 +48404,7 @@ new
 
 The best survival curve is the top-right green one. This is
 stratum
-\marginnote{Strata is plural; the singular is *stratum*. Like  data and datum.} 2, from the legend at the top. In texttt{new},
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Strata is plural; the singular is *stratum*. Like  data and datum.} 2, from the legend at the top. In texttt{new</span>,
 this goes with a low value of `logbun` and a *high* value
 of `hgb`. 
 
@@ -49140,16 +48547,14 @@ be 1 or 0 if the event happened. The help says that it needs to be
 `fustat` is, so we can use it as it is:
 
 ```r
-y = with(ovarian, Surv(futime, fustat))
+y=with(ovarian,Surv(futime,fustat))
 y
 ```
 
 ```
-##  [1]   59   115   156   421+  431   448+
-##  [7]  464   475   477+  563   638   744+
-## [13]  769+  770+  803+  855+ 1040+ 1106+
-## [19] 1129+ 1206+ 1227+  268   329   353 
-## [25]  365   377+
+##  [1]   59   115   156   421+  431   448+  464   475   477+  563   638 
+## [12]  744+  769+  770+  803+  855+ 1040+ 1106+ 1129+ 1206+ 1227+  268 
+## [23]  329   353   365   377+
 ```
 
      
@@ -49161,7 +48566,7 @@ complicated than that:
 
 
 ```r
-ov2 = ovarian %>% mutate(y = Surv(futime, fustat))
+ov2 = ovarian %>% mutate(y=Surv(futime,fustat))
 ```
 
 ```
@@ -49222,7 +48627,7 @@ or length 1 (in which case it is repeated 26 times).
 With some cajoling, you can get this into a data frame, but with more
 cajoling than seems necessary. It's much easier to leave it as a
 separate thing outside a data frame.
-\marginnote{In some respects, it's  like that two-column response in logistic regression, where each row of the data frame represents several observations pooled together.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In some respects, it's  like that two-column response in logistic regression, where each row of the data frame represents several observations pooled together.</span>
 
 I gave `ov2` a "temporary" name because I am not going to use
 it again.
@@ -49275,7 +48680,7 @@ Solution
 The hint suggests something like this:
 
 ```r
-time.1 = coxph(y ~ age + factor(rx), data = ovarian)
+time.1=coxph(y~age+factor(rx),data=ovarian)
 summary(time.1)
 ```
 
@@ -49285,22 +48690,15 @@ summary(time.1)
 ## 
 ##   n= 26, number of events= 12 
 ## 
-##                 coef exp(coef) se(coef)
-## age          0.14733   1.15873  0.04615
-## factor(rx)2 -0.80397   0.44755  0.63205
-##                  z Pr(>|z|)   
-## age          3.193  0.00141 **
-## factor(rx)2 -1.272  0.20337   
+##                 coef exp(coef) se(coef)      z Pr(>|z|)   
+## age          0.14733   1.15873  0.04615  3.193  0.00141 **
+## factor(rx)2 -0.80397   0.44755  0.63205 -1.272  0.20337   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##             exp(coef) exp(-coef) lower .95
-## age            1.1587      0.863    1.0585
-## factor(rx)2    0.4475      2.234    0.1297
-##             upper .95
-## age             1.268
-## factor(rx)2     1.545
+##             exp(coef) exp(-coef) lower .95 upper .95
+## age            1.1587      0.863    1.0585     1.268
+## factor(rx)2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
 ## Rsquare= 0.457   (max possible= 0.932 )
@@ -49316,8 +48714,8 @@ frame first. This is the slick way to do that:
 
 
 ```r
-time.1a = ovarian %>% mutate(rxf = factor(rx)) %>% 
-    coxph(y ~ age + rxf, data = .)
+time.1a = ovarian %>% mutate(rxf=factor(rx)) %>%
+coxph(y~age+rxf,data=.)
 summary(time.1a)
 ```
 
@@ -49327,22 +48725,15 @@ summary(time.1a)
 ## 
 ##   n= 26, number of events= 12 
 ## 
-##          coef exp(coef) se(coef)      z
-## age   0.14733   1.15873  0.04615  3.193
-## rxf2 -0.80397   0.44755  0.63205 -1.272
-##      Pr(>|z|)   
-## age   0.00141 **
-## rxf2  0.20337   
+##          coef exp(coef) se(coef)      z Pr(>|z|)   
+## age   0.14733   1.15873  0.04615  3.193  0.00141 **
+## rxf2 -0.80397   0.44755  0.63205 -1.272  0.20337   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##      exp(coef) exp(-coef) lower .95
-## age     1.1587      0.863    1.0585
-## rxf2    0.4475      2.234    0.1297
-##      upper .95
-## age      1.268
-## rxf2     1.545
+##      exp(coef) exp(-coef) lower .95 upper .95
+## age     1.1587      0.863    1.0585     1.268
+## rxf2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
 ## Rsquare= 0.457   (max possible= 0.932 )
@@ -49411,7 +48802,7 @@ Extra: I was curious about what would happen if I just included
 `rx` in the model:
 
 ```r
-time.2 = update(time.1, . ~ . - age)
+time.2=update(time.1,.~.-age)
 summary(time.2)
 ```
 
@@ -49421,15 +48812,11 @@ summary(time.2)
 ## 
 ##   n= 26, number of events= 12 
 ## 
-##                coef exp(coef) se(coef)
-## factor(rx)2 -0.5964    0.5508   0.5870
-##                  z Pr(>|z|)
-## factor(rx)2 -1.016     0.31
+##                coef exp(coef) se(coef)      z Pr(>|z|)
+## factor(rx)2 -0.5964    0.5508   0.5870 -1.016     0.31
 ## 
-##             exp(coef) exp(-coef) lower .95
-## factor(rx)2    0.5508      1.816    0.1743
-##             upper .95
-## factor(rx)2      1.74
+##             exp(coef) exp(-coef) lower .95 upper .95
+## factor(rx)2    0.5508      1.816    0.1743      1.74
 ## 
 ## Concordance= 0.608  (se = 0.07 )
 ## Rsquare= 0.04   (max possible= 0.932 )
@@ -49460,12 +48847,10 @@ important things like `age`. Here, that could be a boxplot:
 
 
 ```r
-ggplot(ovarian, aes(x = factor(rx), y = age)) + 
-    geom_boxplot()
+ggplot(ovarian, aes(x=factor(rx),y=age))+geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-78-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-78-1.png" width="672"  />
 
  
 
@@ -49496,15 +48881,14 @@ The plot is just the same idea as the one in the notes. Make sure
 you have `survminer` installed and loaded:
 
 ```r
-ggcoxdiagnostics(time.1) + geom_smooth()
+ggcoxdiagnostics(time.1)+geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-79-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-79-1.png" width="672"  />
 
      
 
@@ -49559,8 +48943,9 @@ or, if you prefer,
 
 
 ```r
-ovarian %>% summarize(q1 = quantile(age, 0.25), 
-    q3 = quantile(age, 0.75))
+ovarian %>% 
+summarize(q1=quantile(age,0.25),
+q3=quantile(age,0.75))
 ```
 
 ```
@@ -49579,9 +48964,9 @@ remembering that "treatment" is called `rx` here:
 
 
 ```r
-ages = c(50.17, 62.38)
-rxs = c(1, 2)
-new = crossing(age = ages, rx = rxs)
+ages=c(50.17, 62.38)
+rxs=c(1, 2)
+new=crossing(age=ages,rx=rxs)
 new
 ```
 
@@ -49611,39 +48996,26 @@ The magic word here is `survfit`. The structure is the same
 as for `predict`:
 
 ```r
-s = survfit(time.1, new, data = ovarian)
+s=survfit(time.1,new,data=ovarian)
 summary(s)
 ```
 
 ```
 ## Call: survfit(formula = time.1, newdata = new, data = ovarian)
 ## 
-##  time n.risk n.event survival1 survival2
-##    59     26       1     0.993     0.997
-##   115     25       1     0.985     0.993
-##   156     24       1     0.973     0.988
-##   268     23       1     0.959     0.981
-##   329     22       1     0.932     0.969
-##   353     21       1     0.905     0.956
-##   365     20       1     0.877     0.943
-##   431     17       1     0.843     0.926
-##   464     15       1     0.805     0.908
-##   475     14       1     0.768     0.888
-##   563     12       1     0.701     0.853
-##   638     11       1     0.634     0.816
-##  survival3 survival4
-##      0.959     0.981
-##      0.911     0.959
-##      0.846     0.928
-##      0.777     0.893
-##      0.653     0.826
-##      0.548     0.764
-##      0.452     0.701
-##      0.356     0.630
-##      0.271     0.557
-##      0.202     0.489
-##      0.117     0.382
-##      0.064     0.292
+##  time n.risk n.event survival1 survival2 survival3 survival4
+##    59     26       1     0.993     0.997     0.959     0.981
+##   115     25       1     0.985     0.993     0.911     0.959
+##   156     24       1     0.973     0.988     0.846     0.928
+##   268     23       1     0.959     0.981     0.777     0.893
+##   329     22       1     0.932     0.969     0.653     0.826
+##   353     21       1     0.905     0.956     0.548     0.764
+##   365     20       1     0.877     0.943     0.452     0.701
+##   431     17       1     0.843     0.926     0.356     0.630
+##   464     15       1     0.805     0.908     0.271     0.557
+##   475     14       1     0.768     0.888     0.202     0.489
+##   563     12       1     0.701     0.853     0.117     0.382
+##   638     11       1     0.634     0.816     0.064     0.292
 ```
 
    
@@ -49680,11 +49052,10 @@ Thus. The `conf.int=F` means to skip the confidence interval
 "envelopes" that I find make the plot rather messy:
 
 ```r
-ggsurvplot(s, conf.int = F)
+ggsurvplot(s,conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-84-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-84-1.png" width="672"  />
 
    
 
@@ -49699,7 +49070,7 @@ Solution
 The best survival curve, in terms of surviving longest, is up and to
 the right, so the green one is best and the blue one is
 worst.
-\marginnote{In other cases, having the event happen sooner is    better. For example, you might be poisoning rats, in which case    you want them to die quicker. Or the event might be something    desirable like becoming qualified to fly an airplane. In those    cases, down and to the left is better.} To figure out which those
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In other cases, having the event happen sooner is    better. For example, you might be poisoning rats, in which case    you want them to die quicker. Or the event might be something    desirable like becoming qualified to fly an airplane. In those    cases, down and to the left is better.</span> To figure out which those
 are, we have to go back to the data frame we created:
 
 ```r
@@ -49750,22 +49121,15 @@ summary(time.1)
 ## 
 ##   n= 26, number of events= 12 
 ## 
-##                 coef exp(coef) se(coef)
-## age          0.14733   1.15873  0.04615
-## factor(rx)2 -0.80397   0.44755  0.63205
-##                  z Pr(>|z|)   
-## age          3.193  0.00141 **
-## factor(rx)2 -1.272  0.20337   
+##                 coef exp(coef) se(coef)      z Pr(>|z|)   
+## age          0.14733   1.15873  0.04615  3.193  0.00141 **
+## factor(rx)2 -0.80397   0.44755  0.63205 -1.272  0.20337   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##             exp(coef) exp(-coef) lower .95
-## age            1.1587      0.863    1.0585
-## factor(rx)2    0.4475      2.234    0.1297
-##             upper .95
-## age             1.268
-## factor(rx)2     1.545
+##             exp(coef) exp(-coef) lower .95 upper .95
+## age            1.1587      0.863    1.0585     1.268
+## factor(rx)2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
 ## Rsquare= 0.457   (max possible= 0.932 )
@@ -49808,23 +49172,23 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-## x dplyr::recode() masks car::recode()
-## x dplyr::select() masks MASS::select()
-## x purrr::some()   masks car::some()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ✖ dplyr::recode() masks car::recode()
+## ✖ dplyr::select() masks MASS::select()
+## ✖ purrr::some()   masks car::some()
 ```
 
 
@@ -49867,8 +49231,8 @@ Solution
 
 
 ```r
-my_url = "http://individual.utoronto.ca/kbutler/stad29/caffeine.csv"
-caffeine.untidy = read_csv(my_url)
+my_url="http://individual.utoronto.ca/kbutler/stad29/caffeine.csv"
+caffeine.untidy=read_csv(my_url)
 ```
 
 ```
@@ -49922,8 +49286,8 @@ We'll save into `caffeine` again:
 
 
 ```r
-caffeine = caffeine.untidy %>% gather(amount, 
-    score, High:None, factor_key = T)
+caffeine = caffeine.untidy %>% 
+gather(amount,score,High:None,factor_key=T)
 caffeine
 ```
 
@@ -49963,7 +49327,7 @@ Solution
 
 
 ```r
-caffeine.2 = lm(score ~ amount, data = caffeine)
+caffeine.2=lm(score~amount,data=caffeine)
 summary(caffeine.2)
 ```
 
@@ -49977,17 +49341,12 @@ summary(caffeine.2)
 ## -11.833  -6.958  -2.458   6.354  15.167 
 ## 
 ## Coefficients:
-##                Estimate Std. Error t value
-## (Intercept)      76.833      2.235  34.383
-## amountModerate   -4.750      3.160  -1.503
-## amountNone       -8.917      3.160  -2.821
-##                Pr(>|t|)    
-## (Intercept)     < 2e-16 ***
-## amountModerate  0.14234    
-## amountNone      0.00803 ** 
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)      76.833      2.235  34.383  < 2e-16 ***
+## amountModerate   -4.750      3.160  -1.503  0.14234    
+## amountNone       -8.917      3.160  -2.821  0.00803 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 7.741 on 33 degrees of freedom
 ## Multiple R-squared:  0.1946,	Adjusted R-squared:  0.1458 
@@ -50017,15 +49376,11 @@ anova(caffeine.2)
 ## Analysis of Variance Table
 ## 
 ## Response: score
-##           Df  Sum Sq Mean Sq F value  Pr(>F)
-## amount     2  477.72 238.861  3.9861 0.02815
-## Residuals 33 1977.50  59.924                
-##            
-## amount    *
-## Residuals  
+##           Df  Sum Sq Mean Sq F value  Pr(>F)  
+## amount     2  477.72 238.861  3.9861 0.02815 *
+## Residuals 33 1977.50  59.924                  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -50039,7 +49394,7 @@ impact on test scores) this way too:
 
 
 ```r
-drop1(caffeine.2, test = "F")
+drop1(caffeine.2,test="F")
 ```
 
 ```
@@ -50047,15 +49402,11 @@ drop1(caffeine.2, test = "F")
 ## 
 ## Model:
 ## score ~ amount
-##        Df Sum of Sq    RSS    AIC F value
-## <none>              1977.5 150.22        
-## amount  2    477.72 2455.2 154.01  3.9861
-##         Pr(>F)  
-## <none>          
-## amount 0.02815 *
+##        Df Sum of Sq    RSS    AIC F value  Pr(>F)  
+## <none>              1977.5 150.22                  
+## amount  2    477.72 2455.2 154.01  3.9861 0.02815 *
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -50075,7 +49426,7 @@ Count them, or find the distinct ones:
 
 
 ```r
-caffeine %>% group_by(amount) %>% summarize(count = n())
+caffeine %>% group_by(amount) %>% summarize(count=n())
 ```
 
 ```
@@ -50179,7 +49530,7 @@ Solution
 Put a 0 in for None:
 
 ```r
-c.hm = c(1, -1, 0)
+c.hm=c(1,-1,0)
 ```
 
        
@@ -50197,7 +49548,7 @@ Solution
 
 
 ```r
-c.any = c(-0.5, -0.5, 1)
+c.any=c(-0.5,-0.5,1)
 ```
 
  
@@ -50234,7 +49585,7 @@ Solution
 Multiply them together and check that what you get adds up to zero:
 
 ```r
-sum(c.hm * c.any)
+sum(c.hm*c.any)
 ```
 
 ```
@@ -50260,8 +49611,8 @@ Solution
 
 
 ```r
-m = cbind(c.hm, c.any)
-contrasts(caffeine$amount) = m
+m=cbind(c.hm,c.any)
+contrasts(caffeine$amount)=m
 ```
 
  
@@ -50277,7 +49628,7 @@ Solution
 
 
 ```r
-caff.3 = lm(score ~ amount, data = caffeine)
+caff.3=lm(score~amount,data=caffeine)
 summary(caff.3)
 ```
 
@@ -50291,17 +49642,12 @@ summary(caff.3)
 ## -11.833  -6.958  -2.458   6.354  15.167 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)   72.278      1.290  56.022
-## amountc.hm     2.375      1.580   1.503
-## amountc.any   -4.361      1.825  -2.390
-##             Pr(>|t|)    
-## (Intercept)   <2e-16 ***
-## amountc.hm    0.1423    
-## amountc.any   0.0227 *  
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   72.278      1.290  56.022   <2e-16 ***
+## amountc.hm     2.375      1.580   1.503   0.1423    
+## amountc.any   -4.361      1.825  -2.390   0.0227 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 7.741 on 33 degrees of freedom
 ## Multiple R-squared:  0.1946,	Adjusted R-squared:  0.1458 
@@ -50334,8 +49680,8 @@ Solution
 
 
 ```r
-c.hm = c(1, -1, 0)
-c.mn = c(0, 1, -1)
+c.hm=c(1,-1,0)
+c.mn=c(0,1,-1)
 ```
 
  
@@ -50345,7 +49691,7 @@ right comparisons. But now:
 
 
 ```r
-sum(c.hm * c.mn)
+sum(c.hm*c.mn)
 ```
 
 ```
@@ -50357,11 +49703,11 @@ sum(c.hm * c.mn)
 This does *not* add up to zero, so these two contrasts are not
 orthogonal, and we can't do what we just did. R will give us an answer
 if we try it, but it'll be the *wrong* answer.
-\marginnote{SAS, for example, has a way of making non-orthogonal contrasts orthogonal in a way that the user doesn't have to worry about, but in R, you are closer to the ground, so to speak, and you have to make it happen yourself.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">SAS, for example, has a way of making non-orthogonal contrasts orthogonal in a way that the user doesn't have to worry about, but in R, you are closer to the ground, so to speak, and you have to make it happen yourself.</span>
 
 The best
 description I have seen of what to do here is by David Howell
-\marginnote{the author of a famous text on Statistics in Psychology.}, at
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">the author of a famous text on Statistics in Psychology.</span>, at
 [link](https://www.uvm.edu/~dhowell/StatPages/More_Stuff/R/AnovaOneway.html)
 (at the bottom).
 Let
@@ -50371,12 +49717,12 @@ First we need a vector that is all 1's, which I have called
 `c0` below. Since each of our contrasts `c.hm` and
 `c.mn` have 3 things in them (3 groups), we need to add a
 "dummy" 3rd contrast to give us a $3\times 3$ array of numbers:
-\marginnote{which we are going to invert, as a matrix. But I get ahead of myself.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">which we are going to invert, as a matrix. But I get ahead of myself.</span>
 
 
 ```r
-c0 = rep(1, 3)
-m = cbind(c0, c.hm, c.mn)
+c0=rep(1,3)
+m=cbind(c0,c.hm,c.mn)
 m
 ```
 
@@ -50398,7 +49744,7 @@ back, and `solve` finds a matrix inverse:
 
 
 ```r
-minv = solve(t(m))
+minv=solve(t(m))
 ```
 
  
@@ -50408,7 +49754,7 @@ that we didn't want anyway (what Howell calls "deaugmenting"):
 
 
 ```r
-m.contr = minv[, -1]
+m.contr=minv[,-1]
 m.contr
 ```
 
@@ -50420,7 +49766,7 @@ m.contr
 ```
 
 ```r
-contrasts(caffeine$amount) = m.contr
+contrasts(caffeine$amount)=m.contr
 ```
 
  
@@ -50436,7 +49782,7 @@ Now fit the model again:
 
 
 ```r
-caff.4 = lm(score ~ amount, data = caffeine)
+caff.4=lm(score~amount,data=caffeine)
 summary(caff.4)
 ```
 
@@ -50450,17 +49796,12 @@ summary(caff.4)
 ## -11.833  -6.958  -2.458   6.354  15.167 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)   72.278      1.290  56.022
-## amountc.hm     4.750      3.160   1.503
-## amountc.mn     4.167      3.160   1.318
-##             Pr(>|t|)    
-## (Intercept)   <2e-16 ***
-## amountc.hm     0.142    
-## amountc.mn     0.196    
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   72.278      1.290  56.022   <2e-16 ***
+## amountc.hm     4.750      3.160   1.503    0.142    
+## amountc.mn     4.167      3.160   1.318    0.196    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 7.741 on 33 degrees of freedom
 ## Multiple R-squared:  0.1946,	Adjusted R-squared:  0.1458 
@@ -50526,8 +49867,8 @@ in there, but we'll ignore those and see whether they cause any
 trouble: 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt"
-studyhours = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt"
+studyhours=read_delim(my_url," ")
 ```
 
 ```
@@ -50566,12 +49907,10 @@ So far so good. 75 students, in tidy format.
 
 
 ```r
-ggplot(studyhours, aes(x = major, y = hours)) + 
-    geom_boxplot()
+ggplot(studyhours,aes(x=major,y=hours))+geom_boxplot()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-25-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
  
 
@@ -50591,11 +49930,10 @@ kind of model:
 
 
 ```r
-boxcox(hours ~ major, data = studyhours)
+boxcox(hours~major,data=studyhours)
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-26-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -50639,7 +49977,7 @@ that, and then try again:
 
 
 ```r
-studyhours = studyhours %>% mutate(major = factor(major))
+studyhours = studyhours %>% mutate(major=factor(major))
 studyhours %>% select(major) %>% summary()
 ```
 
@@ -50661,7 +49999,7 @@ what the levels are, viz:
 
 
 ```r
-c.eng.socsci = c(1, 0, -1)
+c.eng.socsci=c(1,0,-1)
 ```
 
  
@@ -50673,11 +50011,11 @@ average of the others, like
 $$\mbox{math}-(\mbox{English}+\mbox{socsci})/2.$$ 
 This translates into contrast-ese like this, making sure to get Math
 in the middle where it belongs:
-\marginnote{As I failed to do the first time.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As I failed to do the first time.</span>
 
 
 ```r
-c.math.others = c(-0.5, 1, -0.5)
+c.math.others=c(-0.5,1,-0.5)
 ```
 
  
@@ -50697,7 +50035,7 @@ Multiply them together (elementwise, which is how R does it)
 and show that what you get adds up to zero:
 
 ```r
-sum(c.eng.socsci * c.math.others)
+sum(c.eng.socsci*c.math.others)
 ```
 
 ```
@@ -50710,7 +50048,7 @@ Zero. Orthogonal.
 
 So we are safely in "familiar" territory, not in the 
 here-be-dragons
-\marginnote{On ancient maps, people didn't know what was  in certain parts of the world, because no-one had ever explored  them, so they wrote on the map *here be dragons*.} land of
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">On ancient maps, people didn't know what was  in certain parts of the world, because no-one had ever explored  them, so they wrote on the map *here be dragons*.</span> land of
 non-orthogonal contrasts.
 
 
@@ -50727,7 +50065,7 @@ So, like the example in class (where the
 `contrasts(model)` was admittedly rather confusing):
 
 ```r
-m = cbind(c.math.others, c.eng.socsci)
+m=cbind(c.math.others,c.eng.socsci)
 m
 ```
 
@@ -50739,7 +50077,7 @@ m
 ```
 
 ```r
-contrasts(studyhours$major) = m
+contrasts(studyhours$major)=m
 ```
 
         
@@ -50758,7 +50096,7 @@ either way: we just used `aov` before because we were
 going to follow up with Tukey):
 
 ```r
-studyhours.1 = lm(hours ~ major, data = studyhours)
+studyhours.1=lm(hours~major,data=studyhours)
 summary(studyhours.1)
 ```
 
@@ -50772,17 +50110,12 @@ summary(studyhours.1)
 ##  -6.44  -2.48  -0.48   2.52  10.56 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error
-## (Intercept)          7.3200     0.3980
-## majorc.math.others   2.1200     0.5628
-## majorc.eng.socsci    0.7800     0.4874
-##                    t value Pr(>|t|)    
-## (Intercept)         18.392  < 2e-16 ***
-## majorc.math.others   3.767 0.000335 ***
-## majorc.eng.socsci    1.600 0.113936    
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)          7.3200     0.3980  18.392  < 2e-16 ***
+## majorc.math.others   2.1200     0.5628   3.767 0.000335 ***
+## majorc.eng.socsci    0.7800     0.4874   1.600 0.113936    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 3.447 on 72 degrees of freedom
 ## Multiple R-squared:  0.1887,	Adjusted R-squared:  0.1662 
@@ -50816,7 +50149,7 @@ interested in, so there is no reason for following up with
 Tukey or anything else. But you have to be able to say ahead of
 time which contrasts you want to test. This is in
 contrast
-\marginnote{In contrast. Get it? No? Well, never mind then.} to Tukey, where you don't have to decide
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In contrast. Get it? No? Well, never mind then.</span> to Tukey, where you don't have to decide
 which comparisons interest you until right at the end.
 
 Another question you might have had is 
@@ -50824,7 +50157,7 @@ Another question you might have had is
 you run an ANOVA using `lm`, you get the ANOVA table by
 passing the fitted model object into `anova` rather than
 `summary`:
-\marginnote{*anova* is one of R's  multi-purpose tools; what it does depends on what you feed it.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">*anova* is one of R's  multi-purpose tools; what it does depends on what you feed it.</span>
 
 ```r
 anova(studyhours.1)
@@ -50834,15 +50167,11 @@ anova(studyhours.1)
 ## Analysis of Variance Table
 ## 
 ## Response: hours
-##           Df Sum Sq Mean Sq F value
-## major      2 198.96   99.48  8.3737
-## Residuals 72 855.36   11.88        
-##              Pr(>F)    
-## major     0.0005375 ***
-## Residuals              
+##           Df Sum Sq Mean Sq F value    Pr(>F)    
+## major      2 198.96   99.48  8.3737 0.0005375 ***
+## Residuals 72 855.36   11.88                      
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
         
@@ -50854,7 +50183,7 @@ contrasts up? Try it and see:
 
 
 ```r
-m = cbind(c.math.others)
+m=cbind(c.math.others)
 m
 ```
 
@@ -50866,8 +50195,8 @@ m
 ```
 
 ```r
-contrasts(studyhours$major) = m
-studyhours.2 = lm(hours ~ major, data = studyhours)
+contrasts(studyhours$major)=m
+studyhours.2=lm(hours~major,data=studyhours)
 summary(studyhours.2)
 ```
 
@@ -50881,17 +50210,12 @@ summary(studyhours.2)
 ##  -6.44  -2.48  -0.48   2.52  10.56 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error
-## (Intercept)          7.3200     0.3980
-## majorc.math.others   2.1200     0.5628
-## major               -1.1031     0.6893
-##                    t value Pr(>|t|)    
-## (Intercept)         18.392  < 2e-16 ***
-## majorc.math.others   3.767 0.000335 ***
-## major               -1.600 0.113936    
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)          7.3200     0.3980  18.392  < 2e-16 ***
+## majorc.math.others   2.1200     0.5628   3.767 0.000335 ***
+## major               -1.1031     0.6893  -1.600 0.113936    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 3.447 on 72 degrees of freedom
 ## Multiple R-squared:  0.1887,	Adjusted R-squared:  0.1662 
@@ -50915,8 +50239,10 @@ had much cause to do so far. But now we do. What we want to do is to
 
 
 ```r
-studyhoursx = studyhours %>% mutate(mathrest = fct_recode(major, 
-    rest = "english", rest = "socsci"))
+studyhoursx = studyhours %>%
+mutate(mathrest=fct_recode(major,
+"rest" = "english",
+"rest" = "socsci"))
 studyhoursx %>% count(mathrest)
 ```
 
@@ -50952,7 +50278,7 @@ Now, the $t$-test.
 
 
 ```r
-t.test(hours ~ mathrest, data = studyhoursx, var.equal = T)
+t.test(hours~mathrest,data=studyhoursx,var.equal=T)
 ```
 
 ```
@@ -50960,8 +50286,7 @@ t.test(hours ~ mathrest, data = studyhoursx, var.equal = T)
 ## 	Two Sample t-test
 ## 
 ## data:  hours by mathrest
-## t = -3.7269, df = 73, p-value =
-## 0.0003796
+## t = -3.7269, df = 73, p-value = 0.0003796
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  -4.880528 -1.479472
@@ -50999,7 +50324,7 @@ learning and for testing leads to better test scores. An experiment
 was carried out to test this. During the learning phase, subjects
 learned a list of 80 words in a room painted orange and decorated with
 posters, paintings and other paraphernalia.
-\marginnote{This is a fancy  word for *stuff*.} A memory test was given to all subjects
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is a fancy  word for *stuff*.</span> A memory test was given to all subjects
 immediately after they had learned the words, to give the impression
 that the experiment was over. (The results of this test were
 discarded.) One day later, subjects were unexpectedly re-tested under
@@ -51087,8 +50412,8 @@ The usual thing --- read in the data appropriately and look at the
 data frame you got:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/smith.txt"
-smith = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/smith.txt"
+smith=read_delim(my_url," ")
 ```
 
 ```
@@ -51139,7 +50464,7 @@ Use `mutate` and assign everything back to what it was
 before:
 
 ```r
-smith = smith %>% mutate(context = factor(context))
+smith = smith %>% mutate(context=factor(context))
 smith
 ```
 
@@ -51183,8 +50508,7 @@ levels(smith$context)
 ```
 
 ```
-## [1] "different"  "imaginary"  "photograph"
-## [4] "placebo"    "same"
+## [1] "different"  "imaginary"  "photograph" "placebo"    "same"
 ```
 
        
@@ -51256,9 +50580,8 @@ unique(smith$context)
 ```
 
 ```
-## [1] same       different  imaginary 
-## [4] photograph placebo   
-## 5 Levels: different ... same
+## [1] same       different  imaginary  photograph placebo   
+## Levels: different imaginary photograph placebo same
 ```
 
  
@@ -51285,7 +50608,7 @@ All right, let's go from the bottom:
 * Different and placebo have same means. These are 1st and 4th.
 
 ```r
-c4 = c(1, 0, 0, -1, 0)
+c4=c(1,0,0,-1,0)
 ```
 
          
@@ -51293,7 +50616,7 @@ c4 = c(1, 0, 0, -1, 0)
 * Imaginary and photograph have same means. 2nd and 3rd:
 
 ```r
-c3 = c(0, 1, -1, 0, 0)
+c3=c(0,1,-1,0,0)
 ```
 
    
@@ -51304,7 +50627,7 @@ time we have two means being compared with one, so we need to give
 the two means half weight. 2nd and 3rd against 5th:
 
 ```r
-c2 = c(0, 1/2, 1/2, 0, -1)
+c2=c(0,1/2,1/2,0,-1)
 ```
 
    
@@ -51315,7 +50638,7 @@ c2 = c(0, 1/2, 1/2, 0, -1)
 4th with weight $1/2$ (2 of them):
 
 ```r
-c1 = c(-1/2, 1/3, 1/3, -1/2, 1/3)
+c1=c(-1/2,1/3,1/3,-1/2,1/3)
 ```
 
    
@@ -51326,8 +50649,8 @@ minus). You can also multiply through by anything to get rid of
 the fractions, for example these:
 
 ```r
-c2 = c(0, 1, 1, 0, -2)
-c1 = c(-3, 2, 2, -3, 2)
+c2=c(0,1,1,0,-2)
+c1=c(-3,2,2,-3,2)
 ```
 
        
@@ -51347,12 +50670,11 @@ Multiply your chosen contrasts together elementwise, and show
 that the results add to zero, eg. by showing the whole thing:
 
 ```r
-c1 * c2
+c1*c2
 ```
 
 ```
-## [1]  0.0000000  0.1666667  0.1666667
-## [4]  0.0000000 -0.3333333
+## [1]  0.0000000  0.1666667  0.1666667  0.0000000 -0.3333333
 ```
 
     
@@ -51361,7 +50683,7 @@ or by explicitly summing the elementwise product:
 
 
 ```r
-sum(c1 * c3)
+sum(c1*c3)
 ```
 
 ```
@@ -51384,8 +50706,8 @@ Solution
 This:
 
 ```r
-m = cbind(c1, c2, c3, c4)
-contrasts(smith$context) = m
+m=cbind(c1,c2,c3,c4)
+contrasts(smith$context)=m
 ```
 
        
@@ -51399,7 +50721,7 @@ multiplication works by combining a *row* with a column. No
 matter, *transposing* a matrix interchanges rows and columns, so
 that in math, we want to look at the matrix $M^T M$. In R,
 `%*%` means "matrix multiply".
-\marginnote{In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.} Thus,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.</span> Thus,
 
 
 ```r
@@ -51434,7 +50756,7 @@ Solution
 We're past the hard part:
 
 ```r
-smith.1 = lm(words ~ context, data = smith)
+smith.1=lm(words~context,data=smith)
 summary(smith.1)
 ```
 
@@ -51448,21 +50770,14 @@ summary(smith.1)
 ##   -9.0   -4.0   -1.5    4.6   11.6 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  14.8000     0.8129  18.207
-## contextc1     8.6000     1.9912   4.319
-## contextc2    -0.3333     1.4841  -0.225
-## contextc3    -0.1000     1.2853  -0.078
-## contextc4     0.5000     1.2853   0.389
-##             Pr(>|t|)    
-## (Intercept)  < 2e-16 ***
-## contextc1   8.52e-05 ***
-## contextc2      0.823    
-## contextc3      0.938    
-## contextc4      0.699    
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  14.8000     0.8129  18.207  < 2e-16 ***
+## contextc1     8.6000     1.9912   4.319 8.52e-05 ***
+## contextc2    -0.3333     1.4841  -0.225    0.823    
+## contextc3    -0.1000     1.2853  -0.078    0.938    
+## contextc4     0.5000     1.2853   0.389    0.699    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 5.748 on 45 degrees of freedom
 ## Multiple R-squared:  0.2954,	Adjusted R-squared:  0.2327 
@@ -51575,8 +50890,8 @@ Solution
 `read_csv`:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/shirts.csv"
-shirts = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/shirts.csv"
+shirts=read_csv(my_url)
 ```
 
 ```
@@ -51624,7 +50939,7 @@ Solution
 Thus:
 
 ```r
-shirts = shirts %>% mutate(treatment = factor(treatment))
+shirts = shirts %>% mutate(treatment=factor(treatment))
 ```
 
      
@@ -51673,11 +50988,8 @@ levels(shirts$treatment)
 ```
 
 ```
-## [1] "control"              
-## [2] "female_seeing_model"  
-## [3] "female_seeing_student"
-## [4] "male_seeing_model"    
-## [5] "male_seeing_student"
+## [1] "control"               "female_seeing_model"   "female_seeing_student"
+## [4] "male_seeing_model"     "male_seeing_student"
 ```
 
      
@@ -51733,16 +51045,13 @@ if you want to (and if you know what you are doing):
 
 
 ```r
-d <- shirts %>% mutate(trt2 = fct_inorder(treatment))
+shirts %>% mutate(trt2=fct_inorder(treatment)) -> d
 levels(d$trt2)
 ```
 
 ```
-## [1] "male_seeing_model"    
-## [2] "male_seeing_student"  
-## [3] "female_seeing_model"  
-## [4] "female_seeing_student"
-## [5] "control"
+## [1] "male_seeing_model"     "male_seeing_student"   "female_seeing_model"  
+## [4] "female_seeing_student" "control"
 ```
 
  
@@ -51765,7 +51074,8 @@ We will use this later when assessing the significance of the
 contrasts. It's the usual group-by and summarize:
 
 ```r
-shirts %>% group_by(treatment) %>% summarize(m = mean(score))
+shirts %>% group_by(treatment) %>%
+summarize(m=mean(score))
 ```
 
 ```
@@ -51786,7 +51096,7 @@ non-alphabetical order?
 
 
 ```r
-d %>% group_by(trt2) %>% summarize(m = mean(score))
+d %>% group_by(trt2) %>% summarize(m=mean(score))
 ```
 
 ```
@@ -51838,7 +51148,7 @@ Solution
 These, in that order, are comparisons of treatments 4 and 5:
 
 ```r
-c_mms = c(0, 0, 0, 1, -1)
+c_mms=c(0,0,0,1,-1)
 ```
 
    
@@ -51847,7 +51157,7 @@ treatments 2 and 3:
 
 
 ```r
-c_fms = c(0, 1, -1, 0, 0)
+c_fms=c(0,1,-1,0,0)
 ```
 
  
@@ -51858,7 +51168,7 @@ the average of 2 and 3 vs.\ the average of 4 and 5:
 
 
 ```r
-c_mf = c(0, 0.5, 0.5, -0.5, -0.5)
+c_mf=c(0,0.5,0.5,-0.5,-0.5)
 ```
 
  
@@ -51871,7 +51181,7 @@ Finally
 
 
 ```r
-c_tc = c(1, -0.25, -0.25, -0.25, -0.25)
+c_tc=c(1,-0.25,-0.25,-0.25,-0.25)
 ```
 
  
@@ -51894,7 +51204,7 @@ Multiply them together (elementwise, which is what `*`
 does) and add them up, showing that you get zero, for example:
 
 ```r
-sum(c_mf * c_tc)
+sum(c_mf*c_tc)
 ```
 
 ```
@@ -51917,8 +51227,8 @@ Solution
 I called my data frame `shirts`, so I need to do this:
 
 ```r
-m = cbind(c_mms, c_fms, c_mf, c_tc)
-contrasts(shirts$treatment) = m
+m=cbind(c_mms, c_fms, c_mf, c_tc)
+contrasts(shirts$treatment)=m
 ```
 
        
@@ -51954,8 +51264,8 @@ Or even:
 
 
 ```r
-z = t(m) %*% m
-all(z[row(z) != col(z)] == 0)
+z=t(m) %*% m
+all(z[row(z)!=col(z)]==0)
 ```
 
 ```
@@ -51966,7 +51276,7 @@ all(z[row(z) != col(z)] == 0)
 
 That says (a little breathlessly) that it is true that all the
 elements of $M^TM$ that are off the diagonal are zero.
-\marginnote{The thing inside the square brackets says only to look at the elements of $M^TM$ whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the *same* are *on* the diagonal, for example the element in row 2, column 2.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The thing inside the square brackets says only to look at the elements of $M^TM$ whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the *same* are *on* the diagonal, for example the element in row 2, column 2.</span>
   
 
 (h) Predict evaluation score from 
@@ -51980,7 +51290,7 @@ Once you have everything set up, it's just a matter of going
 through the process:
 
 ```r
-score.1 = lm(score ~ treatment, data = shirts)
+score.1=lm(score~treatment,data=shirts)
 summary(score.1)
 ```
 
@@ -51994,21 +51304,14 @@ summary(score.1)
 ## -3.860 -0.760  0.032  0.840  3.640 
 ## 
 ## Coefficients:
-##                Estimate Std. Error t value
-## (Intercept)      4.0256     0.1231  32.705
-## treatmentc_mms   1.0820     0.1946   5.560
-## treatmentc_fms   0.3540     0.1946   1.819
-## treatmentc_mf   -0.6200     0.2752  -2.253
-## treatmentc_tc    0.0064     0.2462   0.026
-##                Pr(>|t|)    
-## (Intercept)     < 2e-16 ***
-## treatmentc_mms 1.66e-07 ***
-## treatmentc_fms   0.0714 .  
-## treatmentc_mf    0.0261 *  
-## treatmentc_tc    0.9793    
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)      4.0256     0.1231  32.705  < 2e-16 ***
+## treatmentc_mms   1.0820     0.1946   5.560 1.66e-07 ***
+## treatmentc_fms   0.3540     0.1946   1.819   0.0714 .  
+## treatmentc_mf   -0.6200     0.2752  -2.253   0.0261 *  
+## treatmentc_tc    0.0064     0.2462   0.026   0.9793    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 1.376 on 120 degrees of freedom
 ## Multiple R-squared:  0.2467,	Adjusted R-squared:  0.2216 
@@ -52125,8 +51428,8 @@ The data values are separated by one space, so let's use
 first ten lines):
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/productivity.txt"
-productivity = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/productivity.txt"
+productivity=read_delim(my_url," ")
 ```
 
 ```
@@ -52176,7 +51479,8 @@ a factor (with the levels in the right order) now:
 
 
 ```r
-productivity <- productivity %>% mutate(expenditure = fct_inorder(expenditure))
+productivity %>%
+mutate(expenditure=fct_inorder(expenditure)) -> productivity
 ```
 
  
@@ -52199,13 +51503,11 @@ categorical variable using colour (or `shape` etc., if you
 know about that, but colour is the most obvious thing):
 
 ```r
-ggplot(productivity, aes(x = last, y = improvement, 
-    colour = expenditure)) + geom_point() + geom_smooth(method = "lm", 
-    se = F)
+ggplot(productivity,aes(x=last,y=improvement,colour=expenditure))+
+geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-75-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
 
      
 
@@ -52251,9 +51553,8 @@ This looks exactly like a regression with a categorical variable,
 and is. Just the two main effects, thus:
 
 ```r
-improvement.1 = lm(improvement ~ last + expenditure, 
-    data = productivity)
-drop1(improvement.1, test = "F")
+improvement.1=lm(improvement~last+expenditure,data=productivity)
+drop1(improvement.1,test="F")
 ```
 
 ```
@@ -52261,17 +51562,12 @@ drop1(improvement.1, test = "F")
 ## 
 ## Model:
 ## improvement ~ last + expenditure
-##             Df Sum of Sq     RSS     AIC
-## <none>                    1.3175 -73.542
-## last         1   14.0447 15.3622  -9.226
-## expenditure  2    4.1958  5.5134 -38.894
-##             F value    Pr(>F)    
-## <none>                           
-## last        245.176 9.274e-14 ***
-## expenditure  36.623 7.095e-08 ***
+##             Df Sum of Sq     RSS     AIC F value    Pr(>F)    
+## <none>                    1.3175 -73.542                      
+## last         1   14.0447 15.3622  -9.226 245.176 9.274e-14 ***
+## expenditure  2    4.1958  5.5134 -38.894  36.623 7.095e-08 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -52304,19 +51600,13 @@ summary(improvement.1)
 ## -0.52812 -0.16385 -0.00046  0.08379  0.45730 
 ## 
 ## Coefficients:
-##                     Estimate Std. Error
-## (Intercept)         -1.00804    0.50991
-## last                 1.11417    0.07116
-## expendituremoderate -1.83316    0.22372
-## expenditurehigh     -3.14338    0.37115
-##                     t value Pr(>|t|)    
-## (Intercept)          -1.977   0.0602 .  
-## last                 15.658 9.27e-14 ***
-## expendituremoderate  -8.194 2.84e-08 ***
-## expenditurehigh      -8.469 1.59e-08 ***
+##                     Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)         -1.00804    0.50991  -1.977   0.0602 .  
+## last                 1.11417    0.07116  15.658 9.27e-14 ***
+## expendituremoderate -1.83316    0.22372  -8.194 2.84e-08 ***
+## expenditurehigh     -3.14338    0.37115  -8.469 1.59e-08 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.2393 on 23 degrees of freedom
 ## Multiple R-squared:  0.9629,	Adjusted R-squared:  0.958 
@@ -52391,9 +51681,8 @@ I like `update` for this (writing out the whole model is an
 alternative):
 
 ```r
-improvement.2 = update(improvement.1, . ~ . + 
-    last:expenditure)
-drop1(improvement.2, test = "F")
+improvement.2=update(improvement.1,.~.+last:expenditure)
+drop1(improvement.2,test="F")
 ```
 
 ```
@@ -52401,15 +51690,11 @@ drop1(improvement.2, test = "F")
 ## 
 ## Model:
 ## improvement ~ last + expenditure + last:expenditure
-##                  Df Sum of Sq     RSS
-## <none>                        0.95718
-## last:expenditure  2   0.36035 1.31753
-##                      AIC F value  Pr(>F)  
-## <none>           -78.169                  
-## last:expenditure -73.542   3.953 0.03491 *
+##                  Df Sum of Sq     RSS     AIC F value  Pr(>F)  
+## <none>                        0.95718 -78.169                  
+## last:expenditure  2   0.36035 1.31753 -73.542   3.953 0.03491 *
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -52454,30 +51739,15 @@ summary(improvement.2)
 ## -0.32417 -0.14885 -0.02465  0.13739  0.55556 
 ## 
 ## Coefficients:
-##                          Estimate Std. Error
-## (Intercept)               0.27827    0.64967
-## last                      0.93243    0.09124
-## expendituremoderate      -4.50268    1.25959
-## expenditurehigh          -7.14795    1.91223
-## last:expendituremoderate  0.32217    0.14243
-## last:expenditurehigh      0.40858    0.17549
-##                          t value Pr(>|t|)
-## (Intercept)                0.428  0.67278
-## last                      10.220 1.32e-09
-## expendituremoderate       -3.575  0.00179
-## expenditurehigh           -3.738  0.00121
-## last:expendituremoderate   2.262  0.03444
-## last:expenditurehigh       2.328  0.02997
-##                             
-## (Intercept)                 
-## last                     ***
-## expendituremoderate      ** 
-## expenditurehigh          ** 
-## last:expendituremoderate *  
-## last:expenditurehigh     *  
+##                          Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)               0.27827    0.64967   0.428  0.67278    
+## last                      0.93243    0.09124  10.220 1.32e-09 ***
+## expendituremoderate      -4.50268    1.25959  -3.575  0.00179 ** 
+## expenditurehigh          -7.14795    1.91223  -3.738  0.00121 ** 
+## last:expendituremoderate  0.32217    0.14243   2.262  0.03444 *  
+## last:expenditurehigh      0.40858    0.17549   2.328  0.02997 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.2135 on 21 degrees of freedom
 ## Multiple R-squared:  0.973,	Adjusted R-squared:  0.9666 
@@ -52509,9 +51779,9 @@ things:
 
 
 ```r
-lasts = c(7, 9, 11)
-expenditures = c("low", "moderate", "high")
-new = crossing(last = lasts, expenditure = expenditures)
+lasts=c(7,9,11)
+expenditures=c("low","moderate","high")
+new=crossing(last=lasts,expenditure=expenditures)
 new
 ```
 
@@ -52533,12 +51803,12 @@ new
  
 
 (oh, how I wish I'd given those variables shorter names),
-\marginnote{The expenditure levels have come out in alphabetical order again.} and then:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The expenditure levels have come out in alphabetical order again.</span> and then:
 
 
 ```r
-p = predict(improvement.2, new)
-cbind(new, p)
+p=predict(improvement.2,new)
+cbind(new,p)
 ```
 
 ```
@@ -52607,8 +51877,8 @@ between them, but they are aligned with each other and the
 column headings, so `read_table` is the thing:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt"
-lepro = read_table(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt"
+lepro=read_table(my_url)
 ```
 
 ```
@@ -52659,12 +51929,10 @@ This is the kind of thing that `ggplot` does without
 batting an eyelid:
 
 ```r
-ggplot(lepro, aes(x = pre, y = post, colour = drug)) + 
-    geom_point()
+ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-84-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-84-1.png" width="672"  />
 
        
  
@@ -52712,7 +51980,7 @@ properly, even though `pre` is a  quantitative variable.
 
 
 ```r
-lepro.1 = lm(post ~ pre * drug, data = lepro)
+lepro.1=lm(post~pre*drug,data=lepro)
 ```
 
      
@@ -52734,23 +52002,15 @@ summary(lepro.1)
 ## -6.225 -2.437 -0.586  1.126  8.775 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  -1.6306     2.9455  -0.554
-## pre           0.7452     0.2849   2.616
-## drugD        -2.9549     4.1246  -0.716
-## drugF        -1.4780     5.4678  -0.270
-## pre:drugD     0.3233     0.3846   0.841
-## pre:drugF     0.4492     0.4458   1.008
-##             Pr(>|t|)  
-## (Intercept)   0.5850  
-## pre           0.0152 *
-## drugD         0.4806  
-## drugF         0.7892  
-## pre:drugD     0.4089  
-## pre:drugF     0.3236  
+##             Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)  -1.6306     2.9455  -0.554   0.5850  
+## pre           0.7452     0.2849   2.616   0.0152 *
+## drugD        -2.9549     4.1246  -0.716   0.4806  
+## drugF        -1.4780     5.4678  -0.270   0.7892  
+## pre:drugD     0.3233     0.3846   0.841   0.4089  
+## pre:drugF     0.4492     0.4458   1.008   0.3236  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 4.07 on 24 degrees of freedom
 ## Multiple R-squared:  0.6915,	Adjusted R-squared:  0.6272 
@@ -52775,7 +52035,7 @@ Solution
 Just this:
 
 ```r
-drop1(lepro.1, test = "F")
+drop1(lepro.1, test="F")
 ```
 
 ```
@@ -52783,12 +52043,9 @@ drop1(lepro.1, test = "F")
 ## 
 ## Model:
 ## post ~ pre * drug
-##          Df Sum of Sq    RSS    AIC F value
-## <none>                397.56 89.524        
-## pre:drug  2    19.645 417.20 86.971   0.593
-##          Pr(>F)
-## <none>         
-## pre:drug 0.5606
+##          Df Sum of Sq    RSS    AIC F value Pr(>F)
+## <none>                397.56 89.524               
+## pre:drug  2    19.645 417.20 86.971   0.593 0.5606
 ```
 
        
@@ -52810,7 +52067,7 @@ Solution
 Change the `*` to a `+`:
 
 ```r
-lepro.2 = lm(post ~ pre + drug, data = lepro)
+lepro.2=lm(post~pre+drug,data=lepro)
 ```
 
      
@@ -52819,7 +52076,7 @@ Or use `update` (not much in it, here):
 
 
 ```r
-lepro.2a = update(lepro.1, . ~ . - pre:drug)
+lepro.2a=update(lepro.1,.~.-pre:drug)
 ```
 
  
@@ -52854,19 +52111,13 @@ summary(lepro.2)
 ## -6.4115 -2.3891 -0.5711  1.7237  8.5885 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  -3.8808     1.9862  -1.954
-## pre           0.9872     0.1645   6.001
-## drugD         0.1090     1.7951   0.061
-## drugF         3.4461     1.8868   1.826
-##             Pr(>|t|)    
-## (Intercept)   0.0616 .  
-## pre         2.45e-06 ***
-## drugD         0.9521    
-## drugF         0.0793 .  
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  -3.8808     1.9862  -1.954   0.0616 .  
+## pre           0.9872     0.1645   6.001 2.45e-06 ***
+## drugD         0.1090     1.7951   0.061   0.9521    
+## drugF         3.4461     1.8868   1.826   0.0793 .  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 4.006 on 26 degrees of freedom
 ## Multiple R-squared:  0.6763,	Adjusted R-squared:  0.6389 
@@ -52893,7 +52144,7 @@ Whether there is a real drug difference, I didn't ask you to assess,
 but you could do it by `drop1` again, this way:
 
 ```r
-drop1(lepro.2, test = "F")
+drop1(lepro.2, test="F")
 ```
 
 ```
@@ -52901,23 +52152,18 @@ drop1(lepro.2, test = "F")
 ## 
 ## Model:
 ## post ~ pre + drug
-##        Df Sum of Sq    RSS     AIC F value
-## <none>              417.20  86.971        
-## pre     1    577.90 995.10 111.049 36.0145
-## drug    2     68.55 485.76  87.535  2.1361
-##           Pr(>F)    
-## <none>              
-## pre    2.454e-06 ***
-## drug      0.1384    
+##        Df Sum of Sq    RSS     AIC F value    Pr(>F)    
+## <none>              417.20  86.971                      
+## pre     1    577.90 995.10 111.049 36.0145 2.454e-06 ***
+## drug    2     68.55 485.76  87.535  2.1361    0.1384    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
 
 This is actually not significant.
-\marginnote{This is why I didn't ask you to test this, since it would have confused the story.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is why I didn't ask you to test this, since it would have confused the story.</span>
 This is one of those cases where the non-significant `drug` has
 a slightly *bigger* AIC than `<none>`, so `drop1`
 considers it best to leave it in the model.
@@ -52928,7 +52174,7 @@ three drugs at `pre` scores 5, 12 and 20. To do this, obtain
 a new data frame that has all 9 combinations of drugs and
 `pre` scores, and then feed this into `predict` using
 your preferred model.
-\marginnote{Analysis of covariance is just a linear  model, so *predict* works the same here as in regression.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Analysis of covariance is just a linear  model, so *predict* works the same here as in regression.</span>
  
 Solution
 
@@ -52939,9 +52185,9 @@ first, I define all the drugs and `pre` values, and then I
 feed them into `crossing`:
 
 ```r
-drugs = c("A", "D", "F")
-pres = c(5, 12, 20)
-lepro.new = crossing(drug = drugs, pre = pres)
+drugs=c("A","D","F")
+pres=c(5,12,20)
+lepro.new=crossing(drug=drugs,pre=pres)
 lepro.new
 ```
 
@@ -52971,17 +52217,15 @@ don't need intervals or anything like that:
 
 
 ```r
-preds = predict(lepro.2, lepro.new)
+preds=predict(lepro.2,lepro.new)
 preds
 ```
 
 ```
-##         1         2         3         4 
-##  1.055110  7.965396 15.862867  1.164081 
-##         5         6         7         8 
-##  8.074368 15.971838  4.501248 11.411535 
-##         9 
-## 19.309005
+##         1         2         3         4         5         6         7 
+##  1.055110  7.965396 15.862867  1.164081  8.074368 15.971838  4.501248 
+##         8         9 
+## 11.411535 19.309005
 ```
 
  
@@ -52991,7 +52235,7 @@ values they are predictions for:
 
 
 ```r
-allpreds = cbind(lepro.new, preds)
+allpreds=cbind(lepro.new,preds)
 allpreds
 ```
 
@@ -53023,13 +52267,11 @@ Solution
 
 
 ```r
-ggplot(lepro, aes(x = pre, y = post, colour = drug)) + 
-    geom_point() + geom_line(data = allpreds, 
-    aes(y = preds, linetype = drug))
+ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()+
+geom_line(data=allpreds,aes(y=preds,linetype=drug))
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-95-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
 
  
 
@@ -53044,7 +52286,7 @@ so I have to specify `data=` by name.
 The `linetype=` is really overkill, but I just wanted to show
 you that you can distinguish the drugs by line type as
 well.
-\marginnote{The line types show up in the legend too, though they're not so easy to see.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The line types show up in the legend too, though they're not so easy to see.</span>
  
 
 (k) Are the lines on your plot parallel, with the same slopes? Is this what you would
@@ -53061,8 +52303,8 @@ If your best model
 would have been these:
 
 ```r
-preds = predict(lepro.1, lepro.new)
-cbind(lepro.new, preds)
+preds=predict(lepro.1,lepro.new)
+cbind(lepro.new,preds)
 ```
 
 ```
@@ -53091,17 +52333,16 @@ lines for each group.  So `geom_smooth` will get them:
 
 
 ```r
-ggplot(lepro, aes(x = pre, y = post, colour = drug)) + 
-    geom_point() + geom_smooth(method = "lm")
+ggplot(lepro,aes(x=pre,y=post,colour=drug))+
+geom_point()+geom_smooth(method="lm")
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-97-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-97-1.png" width="672"  />
 
  
 
 The grey intervals are a bit confusing.
-\marginnote{You can get rid of them by saying *se=F* inside the geom-smooth, as normal.} They are
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You can get rid of them by saying *se=F* inside the geom-smooth, as normal.</span> They are
 confidence intervals for the mean `post` score (as we did for regression
 early on in the course). But I left them there to show that they
 overlap substantially and thus that those slopes are not 
@@ -53136,8 +52377,8 @@ Solution
 `read_csv`:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
-urine = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
+urine=read_csv(my_url)
 ```
 
 ```
@@ -53186,28 +52427,22 @@ Solution
 Just churn through it:
 
 ```r
-ggplot(urine, aes(x = obesity, y = creatinine)) + 
-    geom_boxplot()
+ggplot(urine,aes(x=obesity,y=creatinine))+geom_boxplot()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/peppercorn-1} 
+<img src="18-anova-revisited_files/figure-html/peppercorn-1.png" width="672"  />
 
 ```r
-ggplot(urine, aes(x = obesity, y = chlorine)) + 
-    geom_boxplot()
+ggplot(urine,aes(x=obesity,y=chlorine))+geom_boxplot()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/peppercorn-2} 
+<img src="18-anova-revisited_files/figure-html/peppercorn-2.png" width="672"  />
 
 ```r
-ggplot(urine, aes(x = obesity, y = chloride)) + 
-    geom_boxplot()
+ggplot(urine,aes(x=obesity,y=chloride))+geom_boxplot()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/peppercorn-3} 
+<img src="18-anova-revisited_files/figure-html/peppercorn-3.png" width="672"  />
 
      
 
@@ -53217,13 +52452,12 @@ first rather than the $x$s:
 
 
 ```r
-urine %>% gather(yname, y, creatinine:chlorine) %>% 
-    ggplot(aes(x = obesity, y = y)) + geom_boxplot() + 
-    facet_wrap(~yname, scales = "free", ncol = 2)
+urine %>% gather(yname,y,creatinine:chlorine) %>%
+ggplot(aes(x=obesity,y=y))+geom_boxplot()+
+facet_wrap(~yname,scales="free",ncol=2)
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-99-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-99-1.png" width="672"  />
 
  
 
@@ -53232,7 +52466,7 @@ I decided to throw a couple of things in here: first, the
 on different scales, and second, the `ncol=2` to arrange the
 facets in (3 cells of) a $2\times 2$ grid, rather than having them
 come out tall and skinny.
-\marginnote{Like one of those crazy drinks at  Starbucks.} It's unusual to have faceted boxplots, but this is one
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Like one of those crazy drinks at  Starbucks.</span> It's unusual to have faceted boxplots, but this is one
 of those cases where it makes sense. (The key is different $y$'s but
 the same $x$, I think.)
 
@@ -53266,22 +52500,17 @@ Solution
 Create the response variable and run `manova`:
 
 ```r
-response = with(urine, cbind(creatinine, chlorine, 
-    chloride))
-urine.1 = manova(response ~ obesity, data = urine)
+response=with(urine,cbind(creatinine,chlorine,chloride))
+urine.1=manova(response~obesity,data=urine)
 summary(urine.1)
 ```
 
 ```
-##           Df  Pillai approx F num Df den Df
-## obesity    3 0.43144   2.2956      9    123
-## Residuals 41                               
-##            Pr(>F)  
-## obesity   0.02034 *
-## Residuals          
+##           Df  Pillai approx F num Df den Df  Pr(>F)  
+## obesity    3 0.43144   2.2956      9    123 0.02034 *
+## Residuals 41                                         
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -53304,20 +52533,17 @@ The other way of doing this is the following, using
 `Manova` from `car`:
 
 ```r
-response.1 = lm(response ~ obesity, data = urine)
+response.1=lm(response~obesity,data=urine)
 Manova(response.1)
 ```
 
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##         Df test stat approx F num Df den Df
-## obesity  3   0.43144   2.2956      9    123
-##          Pr(>F)  
-## obesity 0.02034 *
+##         Df test stat approx F num Df den Df  Pr(>F)  
+## obesity  3   0.43144   2.2956      9    123 0.02034 *
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -53359,8 +52585,8 @@ Solution
 
 
 ```r
-my_url = "http://individual.utoronto.ca/kbutler/stad29/hayfever.txt"
-hayfever = read.table(my_url, header = T)
+my_url="http://individual.utoronto.ca/kbutler/stad29/hayfever.txt"
+hayfever=read.table(my_url,header=T)
 hayfever
 ```
 
@@ -53414,13 +52640,13 @@ Solution
 
 
 ```r
-hayfever %>% group_by(a, b) %>% summarize(relief.mean = mean(relief)) %>% 
-    ggplot(aes(x = a, y = relief.mean, colour = b, 
-        group = b)) + geom_point() + geom_line()
+hayfever %>% group_by(a,b) %>%
+ summarize(relief.mean=mean(relief)) %>%
+ ggplot(aes(x=a,y=relief.mean,colour=b,group=b))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-103-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
 
      
 
@@ -53432,24 +52658,18 @@ Solution
 
 
 ```r
-hayfever.1 = aov(relief ~ a * b, data = hayfever)
+hayfever.1=aov(relief~a*b,data=hayfever)
 summary(hayfever.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value Pr(>F)
-## a            2 220.02  110.01  1827.9 <2e-16
-## b            2 123.66   61.83  1027.3 <2e-16
-## a:b          4  29.42    7.36   122.2 <2e-16
-## Residuals   27   1.63    0.06               
-##                
-## a           ***
-## b           ***
-## a:b         ***
-## Residuals      
+##             Df Sum Sq Mean Sq F value Pr(>F)    
+## a            2 220.02  110.01  1827.9 <2e-16 ***
+## b            2 123.66   61.83  1027.3 <2e-16 ***
+## a:b          4  29.42    7.36   122.2 <2e-16 ***
+## Residuals   27   1.63    0.06                   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -53491,8 +52711,8 @@ This time, it's a `.csv`:
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
-acidrain = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
+acidrain=read_csv(my_url)
 ```
 
 ```
@@ -53558,12 +52778,11 @@ Try to use one of the explanatory variables as `x` and the other
 one as `fill` (or `colour`):
 
 ```r
-ggplot(acidrain, aes(x = rain_pH, y = soil_acidity, 
-    fill = soil_depth)) + geom_boxplot()
+ggplot(acidrain,aes(x=rain_pH,y=soil_acidity,fill=soil_depth))+
+geom_boxplot()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-106-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
 
      
 
@@ -53574,12 +52793,11 @@ be categorical. The easiest way to make it such is to wrap it in
 
 
 ```r
-ggplot(acidrain, aes(x = factor(rain_pH), y = soil_acidity, 
-    fill = soil_depth)) + geom_boxplot()
+ggplot(acidrain,aes(x=factor(rain_pH),y=soil_acidity,fill=soil_depth))+
+geom_boxplot()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-107-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
 
      
 
@@ -53590,12 +52808,11 @@ If you prefer, exchange `x` and `fill`:
 
 
 ```r
-ggplot(acidrain, aes(fill = factor(rain_pH), y = soil_acidity, 
-    x = soil_depth)) + geom_boxplot()
+ggplot(acidrain,aes(fill=factor(rain_pH),y=soil_acidity,x=soil_depth))+
+geom_boxplot()
 ```
 
-
-\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-108-1} 
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
 
      
 
@@ -53633,23 +52850,17 @@ Solution
 Following my own hint:
 
 ```r
-acidrain = acidrain %>% mutate(frph = factor(rain_pH))
-soil.1 = aov(soil_acidity ~ frph * soil_depth, 
-    data = acidrain)
+acidrain = acidrain %>% mutate(frph=factor(rain_pH))
+soil.1=aov(soil_acidity~frph*soil_depth,data=acidrain)
 summary(soil.1)
 ```
 
 ```
-##                 Df Sum Sq Mean Sq F value
-## frph             1 0.0304 0.03042   0.759
-## soil_depth       2 0.0671 0.03357   0.838
-## frph:soil_depth  2 0.0078 0.00391   0.097
-## Residuals       12 0.4810 0.04008        
-##                 Pr(>F)
-## frph             0.401
-## soil_depth       0.457
-## frph:soil_depth  0.908
-## Residuals
+##                 Df Sum Sq Mean Sq F value Pr(>F)
+## frph             1 0.0304 0.03042   0.759  0.401
+## soil_depth       2 0.0671 0.03357   0.838  0.457
+## frph:soil_depth  2 0.0078 0.00391   0.097  0.908
+## Residuals       12 0.4810 0.04008
 ```
 
  
@@ -53664,7 +52875,7 @@ it out:
 
 
 ```r
-soil.2 = update(soil.1, . ~ . - frph:soil_depth)
+soil.2=update(soil.1, .~.-frph:soil_depth)
 summary(soil.2)
 ```
 
@@ -53706,22 +52917,22 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-## x dplyr::recode() masks car::recode()
-## x purrr::some()   masks car::some()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ✖ dplyr::recode() masks car::recode()
+## ✖ purrr::some()   masks car::some()
 ```
 
 
@@ -53747,8 +52958,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
-simple = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
+simple=read_delim(my_url," ")
 ```
 
 ```
@@ -53800,20 +53011,16 @@ Solution
 
 
 ```r
-simple.1 = aov(y1 ~ group, data = simple)
+simple.1=aov(y1~group,data=simple)
 summary(simple.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## group        2  63.45   31.72    21.2
-## Residuals    9  13.47    1.50        
-##               Pr(>F)    
-## group       0.000393 ***
-## Residuals               
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## group        2  63.45   31.72    21.2 0.000393 ***
+## Residuals    9  13.47    1.50                     
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```r
@@ -53849,20 +53056,16 @@ Solution
 
 
 ```r
-simple.2 = aov(y2 ~ group, data = simple)
+simple.2=aov(y2~group,data=simple)
 summary(simple.2)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## group        2  19.05   9.525   9.318
-## Residuals    9   9.20   1.022        
-##              Pr(>F)   
-## group       0.00642 **
-## Residuals             
+##             Df Sum Sq Mean Sq F value  Pr(>F)   
+## group        2  19.05   9.525   9.318 0.00642 **
+## Residuals    9   9.20   1.022                   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```r
@@ -53902,12 +53105,10 @@ they are both response variables (!):
 
 
 ```r
-ggplot(simple, aes(x = y1, y = y2, colour = group)) + 
-    geom_point()
+ggplot(simple,aes(x=y1,y=y2,colour=group))+geom_point()
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-5-1} 
+<img src="19-manova_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
 $ 
 
 (e) How is it that group `b` is not distinguishable on
@@ -53943,21 +53144,17 @@ This is just like the seed weight and yield example in class
 (deliberately so):
 
 ```r
-response = with(simple, cbind(y1, y2))
-simple.3 = manova(response ~ group, data = simple)
+response=with(simple,cbind(y1,y2))
+simple.3=manova(response~group,data=simple)
 summary(simple.3)
 ```
 
 ```
-##           Df Pillai approx F num Df den Df
-## group      2 1.3534   9.4196      4     18
-## Residuals  9                              
-##              Pr(>F)    
-## group     0.0002735 ***
-## Residuals              
+##           Df Pillai approx F num Df den Df    Pr(>F)    
+## group      2 1.3534   9.4196      4     18 0.0002735 ***
+## Residuals  9                                            
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -54002,8 +53199,8 @@ Solution
 `read_csv`:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
-urine = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
+urine=read_csv(my_url)
 ```
 
 ```
@@ -54052,28 +53249,22 @@ Solution
 Just churn through it:
 
 ```r
-ggplot(urine, aes(x = obesity, y = creatinine)) + 
-    geom_boxplot()
+ggplot(urine,aes(x=obesity,y=creatinine))+geom_boxplot()
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/peppercorn-1} 
+<img src="19-manova_files/figure-html/peppercorn-1.png" width="672"  />
 
 ```r
-ggplot(urine, aes(x = obesity, y = chlorine)) + 
-    geom_boxplot()
+ggplot(urine,aes(x=obesity,y=chlorine))+geom_boxplot()
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/peppercorn-2} 
+<img src="19-manova_files/figure-html/peppercorn-2.png" width="672"  />
 
 ```r
-ggplot(urine, aes(x = obesity, y = chloride)) + 
-    geom_boxplot()
+ggplot(urine,aes(x=obesity,y=chloride))+geom_boxplot()
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/peppercorn-3} 
+<img src="19-manova_files/figure-html/peppercorn-3.png" width="672"  />
 
      
 
@@ -54083,13 +53274,12 @@ first rather than the $x$s:
 
 
 ```r
-urine %>% gather(yname, y, creatinine:chlorine) %>% 
-    ggplot(aes(x = obesity, y = y)) + geom_boxplot() + 
-    facet_wrap(~yname, scales = "free", ncol = 2)
+urine %>% gather(yname,y,creatinine:chlorine) %>%
+ggplot(aes(x=obesity,y=y))+geom_boxplot()+
+facet_wrap(~yname,scales="free",ncol=2)
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-8-1} 
+<img src="19-manova_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
  
 
@@ -54098,7 +53288,7 @@ I decided to throw a couple of things in here: first, the
 on different scales, and second, the `ncol=2` to arrange the
 facets in (3 cells of) a $2\times 2$ grid, rather than having them
 come out tall and skinny.
-\marginnote{Like one of those crazy drinks at  Starbucks.} It's unusual to have faceted boxplots, but this is one
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Like one of those crazy drinks at  Starbucks.</span> It's unusual to have faceted boxplots, but this is one
 of those cases where it makes sense. (The key is different $y$'s but
 the same $x$, I think.)
 
@@ -54132,22 +53322,17 @@ Solution
 Create the response variable and run `manova`:
 
 ```r
-response = with(urine, cbind(creatinine, chlorine, 
-    chloride))
-urine.1 = manova(response ~ obesity, data = urine)
+response=with(urine,cbind(creatinine,chlorine,chloride))
+urine.1=manova(response~obesity,data=urine)
 summary(urine.1)
 ```
 
 ```
-##           Df  Pillai approx F num Df den Df
-## obesity    3 0.43144   2.2956      9    123
-## Residuals 41                               
-##            Pr(>F)  
-## obesity   0.02034 *
-## Residuals          
+##           Df  Pillai approx F num Df den Df  Pr(>F)  
+## obesity    3 0.43144   2.2956      9    123 0.02034 *
+## Residuals 41                                         
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -54170,20 +53355,17 @@ The other way of doing this is the following, using
 `Manova` from `car`:
 
 ```r
-response.1 = lm(response ~ obesity, data = urine)
+response.1=lm(response~obesity,data=urine)
 Manova(response.1)
 ```
 
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##         Df test stat approx F num Df den Df
-## obesity  3   0.43144   2.2956      9    123
-##          Pr(>F)  
-## obesity 0.02034 *
+##         Df test stat approx F num Df den Df  Pr(>F)  
+## obesity  3   0.43144   2.2956      9    123 0.02034 *
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -54224,8 +53406,8 @@ Solution
 As in the hint:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
-athletes = read_tsv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
 ```
 
 ```
@@ -54253,22 +53435,19 @@ athletes
 
 ```
 ## # A tibble: 202 x 13
-##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <int>
-##  1 fema~ Netb~  4.56  13.3  42.2  13.6    20
-##  2 fema~ Netb~  4.15   6    38    12.7    59
-##  3 fema~ Netb~  4.16   7.6  37.5  12.3    22
-##  4 fema~ Netb~  4.32   6.4  37.7  12.3    30
-##  5 fema~ Netb~  4.06   5.8  38.7  12.8    78
-##  6 fema~ Netb~  4.12   6.1  36.6  11.8    21
-##  7 fema~ Netb~  4.17   5    37.4  12.7   109
-##  8 fema~ Netb~  3.8    6.6  36.5  12.4   102
-##  9 fema~ Netb~  3.96   5.5  36.3  12.4    71
-## 10 fema~ Netb~  4.44   9.7  41.4  14.1    64
-## # ... with 192 more rows, and 6 more
-## #   variables: BMI <dbl>, SSF <dbl>,
-## #   `%Bfat` <dbl>, LBM <dbl>, Ht <dbl>,
-## #   Wt <dbl>
+##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
+##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <int> <dbl> <dbl>   <dbl> <dbl>
+##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
+##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
+##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
+##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
+##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
+##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
+##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
+##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
+##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
+## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
+## # ... with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
 ```
 
      
@@ -54304,7 +53483,7 @@ Solution
 Use `cbind` to glue the two columns together:
 
 ```r
-response = with(athletes, cbind(Ht, Wt))
+response=with(athletes,cbind(Ht,Wt))
 ```
 
      
@@ -54315,7 +53494,7 @@ way is more elegant):
 
 
 ```r
-response_a = cbind(athletes$Ht, athletes$Wt)
+response_a=cbind(athletes$Ht,athletes$Wt)
 ```
 
  
@@ -54335,24 +53514,18 @@ something up. Don't forget to use the right names for the
 variables, and to include an interaction:
 
 ```r
-htwt.1 = manova(response ~ Sex * Sport, data = athletes)
+htwt.1=manova(response~Sex*Sport,data=athletes)
 summary(htwt.1)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df
-## Sex         1 0.52412  101.325      2    184
-## Sport       9 0.87914   16.123     18    370
-## Sex:Sport   6 0.04105    0.646     12    370
-## Residuals 185                               
-##           Pr(>F)    
-## Sex       <2e-16 ***
-## Sport     <2e-16 ***
-## Sex:Sport 0.8023    
-## Residuals           
+##            Df  Pillai approx F num Df den Df Pr(>F)    
+## Sex         1 0.52412  101.325      2    184 <2e-16 ***
+## Sport       9 0.87914   16.123     18    370 <2e-16 ***
+## Sex:Sport   6 0.04105    0.646     12    370 0.8023    
+## Residuals 185                                          
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -54365,8 +53538,8 @@ rather than passing it into `summary`:
 
 
 ```r
-htwt.2 = lm(response ~ Sex * Sport, data = athletes)
-htwt.3 = Manova(htwt.2)
+htwt.2=lm(response~Sex*Sport,data=athletes)
+htwt.3=Manova(htwt.2)
 ```
 
 ```
@@ -54394,22 +53567,17 @@ To do that, in each case, replace the `*` with a `+`, or use
 `update`. Most of those work:
 
 ```r
-htwt.4 = manova(response ~ Sex + Sport, data = athletes)
+htwt.4=manova(response~Sex+Sport,data=athletes)
 summary(htwt.4)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df
-## Sex         1 0.51888  102.454      2    190
-## Sport       9 0.86923   16.314     18    382
-## Residuals 191                               
-##              Pr(>F)    
-## Sex       < 2.2e-16 ***
-## Sport     < 2.2e-16 ***
-## Residuals              
+##            Df  Pillai approx F num Df den Df    Pr(>F)    
+## Sex         1 0.51888  102.454      2    190 < 2.2e-16 ***
+## Sport       9 0.86923   16.314     18    382 < 2.2e-16 ***
+## Residuals 191                                             
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
    
@@ -54418,13 +53586,12 @@ or
 
 
 ```r
-htwt.5 = update(htwt.1, . ~ . - Sex:Sport)
+htwt.5=update(htwt.1,.~.-Sex:Sport)
 ```
 
 ```
-## Warning in if (projections) qr <- lmcall$qr
-## <- TRUE: the condition has length > 1 and
-## only the first element will be used
+## Warning in if (projections) qr <- lmcall$qr <- TRUE: the condition has
+## length > 1 and only the first element will be used
 ```
 
 ```
@@ -54440,23 +53607,19 @@ or, with `Manova`, the same two ways:
 
 
 ```r
-htwt.6 = lm(response ~ Sex + Sport, data = athletes)
-htwt.7 = Manova(htwt.6)
+htwt.6=lm(response~Sex+Sport,data=athletes)
+htwt.7=Manova(htwt.6)
 htwt.7
 ```
 
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##       Df test stat approx F num Df den Df
-## Sex    1   0.44278   75.489      2    190
-## Sport  9   0.86923   16.314     18    382
-##          Pr(>F)    
-## Sex   < 2.2e-16 ***
-## Sport < 2.2e-16 ***
+##       Df test stat approx F num Df den Df    Pr(>F)    
+## Sex    1   0.44278   75.489      2    190 < 2.2e-16 ***
+## Sport  9   0.86923   16.314     18    382 < 2.2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -54465,23 +53628,19 @@ or
 
 
 ```r
-htwt.8 = update(htwt.2, . ~ . - Sex:Sport)
-htwt.9 = Manova(htwt.8)
+htwt.8=update(htwt.2,.~.-Sex:Sport)
+htwt.9=Manova(htwt.8)
 htwt.9
 ```
 
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##       Df test stat approx F num Df den Df
-## Sex    1   0.44278   75.489      2    190
-## Sport  9   0.86923   16.314     18    382
-##          Pr(>F)    
-## Sex   < 2.2e-16 ***
-## Sport < 2.2e-16 ***
+##       Df test stat approx F num Df den Df    Pr(>F)    
+## Sex    1   0.44278   75.489      2    190 < 2.2e-16 ***
+## Sport  9   0.86923   16.314     18    382 < 2.2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -54520,24 +53679,13 @@ summary(htwt.9)
 ## Wt 6146.078 8242.718
 ## 
 ## Multivariate Tests: Sex
-##                  Df test stat approx F
-## Pillai            1 0.4427781 75.48862
-## Wilks             1 0.5572219 75.48862
-## Hotelling-Lawley  1 0.7946171 75.48862
-## Roy               1 0.7946171 75.48862
-##                  num Df den Df     Pr(>F)
-## Pillai                2    190 < 2.22e-16
-## Wilks                 2    190 < 2.22e-16
-## Hotelling-Lawley      2    190 < 2.22e-16
-## Roy                   2    190 < 2.22e-16
-##                     
-## Pillai           ***
-## Wilks            ***
-## Hotelling-Lawley ***
-## Roy              ***
+##                  Df test stat approx F num Df den Df     Pr(>F)    
+## Pillai            1 0.4427781 75.48862      2    190 < 2.22e-16 ***
+## Wilks             1 0.5572219 75.48862      2    190 < 2.22e-16 ***
+## Hotelling-Lawley  1 0.7946171 75.48862      2    190 < 2.22e-16 ***
+## Roy               1 0.7946171 75.48862      2    190 < 2.22e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## ------------------------------------------
 ##  
@@ -54549,24 +53697,13 @@ summary(htwt.9)
 ## Wt 7070.085 13727.950
 ## 
 ## Multivariate Tests: Sport
-##                  Df test stat approx F
-## Pillai            9 0.8692278 16.31358
-## Wilks             9 0.3132928 16.60578
-## Hotelling-Lawley  9 1.6093145 16.89780
-## Roy               9 1.0593835 22.48247
-##                  num Df den Df     Pr(>F)
-## Pillai               18    382 < 2.22e-16
-## Wilks                18    380 < 2.22e-16
-## Hotelling-Lawley     18    378 < 2.22e-16
-## Roy                   9    191 < 2.22e-16
-##                     
-## Pillai           ***
-## Wilks            ***
-## Hotelling-Lawley ***
-## Roy              ***
+##                  Df test stat approx F num Df den Df     Pr(>F)    
+## Pillai            9 0.8692278 16.31358     18    382 < 2.22e-16 ***
+## Wilks             9 0.3132928 16.60578     18    380 < 2.22e-16 ***
+## Hotelling-Lawley  9 1.6093145 16.89780     18    378 < 2.22e-16 ***
+## Roy               9 1.0593835 22.48247      9    191 < 2.22e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -54622,12 +53759,10 @@ all) to gender.
 With that in mind, I would go for this one:
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, 
-    shape = Sex)) + geom_point()
+ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport,shape=Sex))+geom_point()
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-21-1} 
+<img src="19-manova_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
      
 
@@ -54639,72 +53774,56 @@ such as these:
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, 
-    size = Sex)) + geom_point()
+ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport,size=Sex))+geom_point()
 ```
 
 ```
-## Warning: Using size for a discrete variable
-## is not advised.
+## Warning: Using size for a discrete variable is not advised.
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-22-1} 
+<img src="19-manova_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
      
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
-    size = Sex)) + geom_point()
+ggplot(athletes,aes(x=Ht,y=Wt,shape=Sport,size=Sex))+geom_point()
 ```
 
 ```
-## Warning: Using size for a discrete variable
-## is not advised.
+## Warning: Using size for a discrete variable is not advised.
 ```
 
 ```
-## Warning: The shape palette can deal with a
-## maximum of 6 discrete values because
-## more than 6 becomes difficult to
-## discriminate; you have 10. Consider
-## specifying shapes manually if you must
-## have them.
+## Warning: The shape palette can deal with a maximum of 6 discrete values
+## because more than 6 becomes difficult to discriminate; you have
+## 10. Consider specifying shapes manually if you must have them.
 ```
 
 ```
-## Warning: Removed 72 rows containing missing values
-## (geom_point).
+## Warning: Removed 72 rows containing missing values (geom_point).
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-23-1} 
+<img src="19-manova_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
      
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
-    colour = Sex)) + geom_point()
+ggplot(athletes,aes(x=Ht,y=Wt,shape=Sport,colour=Sex))+geom_point()
 ```
 
 ```
-## Warning: The shape palette can deal with a
-## maximum of 6 discrete values because
-## more than 6 becomes difficult to
-## discriminate; you have 10. Consider
-## specifying shapes manually if you must
-## have them.
+## Warning: The shape palette can deal with a maximum of 6 discrete values
+## because more than 6 becomes difficult to discriminate; you have
+## 10. Consider specifying shapes manually if you must have them.
 ```
 
 ```
-## Warning: Removed 72 rows containing missing values
-## (geom_point).
+## Warning: Removed 72 rows containing missing values (geom_point).
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-24-1} 
+<img src="19-manova_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
      
 
@@ -54736,18 +53855,17 @@ avoid that. Here's how:
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
-    colour = Sex)) + geom_point() + scale_shape_manual(values = 1:10)
+ggplot(athletes,aes(x=Ht,y=Wt,shape=Sport,colour=Sex))+geom_point()+
+scale_shape_manual(values=1:10)
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-25-1} 
+<img src="19-manova_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
      
 
 I agree with `ggplot2` that this many shapes are hard to tell
 apart,
-\marginnote{Having said that, the shapes are less anbiguous than  the colours, because if you're willing to study the legend, you can  work out exactly which sport a shape belongs to, whereas the colours  might be hard to tell apart at all.} but if you can figure this out,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Having said that, the shapes are less anbiguous than  the colours, because if you're willing to study the legend, you can  work out exactly which sport a shape belongs to, whereas the colours  might be hard to tell apart at all.</span> but if you can figure this out,
 you achieve the goal of producing a plot with no warnings, so you get
 full marks. (We need 10 shapes because there are 10 different sports,
 so we have to specify 10 different values in `values=`: any 10
@@ -54758,13 +53876,11 @@ to them by numeric code:
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
-    colour = Sex)) + geom_point() + scale_shape_manual(values = c(66, 
-    70, 71, 78, 82, 83, 52, 84, 3, 87))
+ggplot(athletes,aes(x=Ht,y=Wt,shape=Sport,colour=Sex))+geom_point()+
+scale_shape_manual(values=c(66,70,71,78,82,83,52,84,3,87))
 ```
 
-
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-26-1} 
+<img src="19-manova_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
      
 
@@ -55074,26 +54190,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 4
 ##    drug       junk  time  weight
 ##    <chr>      <chr> <chr>  <int>
-##  1 control    Time  3        146
-##  2 thiouracil Time  0         61
-##  3 control    Time  2        123
-##  4 control    Time  4        141
-##  5 thiouracil Time  2        109
-##  6 control    Time  3        130
-##  7 control    Time  2        104
-##  8 control    Time  1         71
-##  9 control    Time  0         49
-## 10 control    Time  0         57
-## 11 control    Time  1         77
-## 12 control    Time  2        114
-## 13 thyroxin   Time  2         97
-## 14 thiouracil Time  2        100
-## 15 control    Time  4        164
-## 16 control    Time  0         57
-## 17 control    Time  3        129
-## 18 control    Time  0         63
-## 19 control    Time  4        140
-## 20 control    Time  2        110
+##  1 thiouracil Time  3        100
+##  2 control    Time  2        110
+##  3 control    Time  4        169
+##  4 thiouracil Time  1         75
+##  5 thiouracil Time  3        114
+##  6 thyroxin   Time  3        138
+##  7 thyroxin   Time  1         85
+##  8 thiouracil Time  1         79
+##  9 thiouracil Time  1         78
+## 10 thiouracil Time  2        100
+## 11 thiouracil Time  4        122
+## 12 control    Time  4        141
+## 13 control    Time  1         93
+## 14 thyroxin   Time  4        177
+## 15 thyroxin   Time  0         59
+## 16 thiouracil Time  2        100
+## 17 control    Time  4        185
+## 18 thyroxin   Time  0         56
+## 19 thiouracil Time  0         46
+## 20 thiouracil Time  4        140
 ```
 
  
@@ -55118,26 +54234,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 4
 ##    drug       timex weight  time
 ##    <chr>      <chr>  <int> <dbl>
-##  1 control    Time1     93     1
-##  2 thyroxin   Time1     85     1
-##  3 control    Time1     70     1
-##  4 thiouracil Time3    111     3
-##  5 thiouracil Time3    104     3
-##  6 thyroxin   Time3    110     3
-##  7 control    Time1     67     1
-##  8 control    Time3    129     3
-##  9 control    Time4    140     4
-## 10 thiouracil Time2    101     2
-## 11 control    Time4    154     4
-## 12 control    Time0     60     0
-## 13 thyroxin   Time2     90     2
-## 14 thiouracil Time4    140     4
-## 15 thiouracil Time4    133     4
-## 16 thiouracil Time0     61     0
-## 17 thiouracil Time0     46     0
-## 18 thiouracil Time0     51     0
-## 19 control    Time4    153     4
-## 20 thyroxin   Time0     59     0
+##  1 control    Time1     71     1
+##  2 thiouracil Time4    140     4
+##  3 thiouracil Time1     75     1
+##  4 thyroxin   Time3    110     3
+##  5 control    Time4    185     4
+##  6 control    Time1     67     1
+##  7 thiouracil Time1     61     1
+##  8 control    Time1     86     1
+##  9 thyroxin   Time1     75     1
+## 10 thiouracil Time1     69     1
+## 11 thiouracil Time0     58     0
+## 12 control    Time2    104     2
+## 13 thiouracil Time2    100     2
+## 14 thiouracil Time3    114     3
+## 15 thyroxin   Time0     56     0
+## 16 thyroxin   Time3    116     3
+## 17 control    Time0     46     0
+## 18 control    Time1     81     1
+## 19 thyroxin   Time4    138     4
+## 20 thiouracil Time3    106     3
 ```
 
  
@@ -58270,7 +57386,6 @@ grabs, in this case the interaction, which is strongly significant.
 
 <!--chapter:end:20-repeated-measures.Rmd-->
 
-
 # Discriminant analysis
 
 Packages for this chapter:
@@ -59603,8 +58718,8 @@ summary(simple.3)
      
 
 This P-value is small, so there is some way in which some of the
-groups differ on some of the variables.\endnote{That sounds like the
-ultimate in evasiveness!}
+groups differ on some of the variables.
+\marginnote{That sounds like the  ultimate in evasiveness!}
     
 
 
@@ -60161,12 +59276,8 @@ than the underlying numeric values by which they are stored.
 All is good here. If you forget the `labels` thing, you'll get
 a factor, but its levels will be 1, 2, and 3, and you will have to
 remember which jobs they go with. I'm a fan of giving factors named
-levels, so that you can remember what stands for what.\endnote{When
-you're *recording* the data, you may find it convenient to use
-short codes to represent the possibly long factor levels, but in
-that case you should also use a "codebook" so that you know what
-the codes represent. When I read the data into R, I would create a
-factor with named levels, like I did here, if I don't already have one.}
+levels, so that you can remember what stands for what.
+\marginnote{When  you're *recording* the data, you may find it convenient to use  short codes to represent the possibly long factor levels, but in  that case you should also use a *codebook* so that you know what  the codes represent. When I read the data into R, I would create a  factor with named levels, like I did here, if I don't already have one.}
 
 
 
@@ -60699,9 +59810,8 @@ The `class` thing gives our predicted job, and the
 `posterior` probabilities say how sure we are about that.
 So we reckon there's a 78\% chance that this person is a mechanic;
 they might be a dispatcher but they are unlikely to be in customer
-service. Our best guess is that they are a mechanic.\endnote{I
-discovered that I used "pp" twice, and I want to use the first one
-again later, so I had to rename this one.}
+service. Our best guess is that they are a mechanic.
+\marginnote{I  discovered that I used *pp* twice, and I want to use the first one again later, so I had to rename this one.}
 
 Does this pass the sanity-check test? First figure out where our new
 employee stands compared to the others:
@@ -60906,8 +60016,8 @@ a lot of posterior probabilities to look at!
 This is another way of saying that with small data sets, your
 conclusions are more "fragile" or less likely to be
 generalizable. With a larger data set like this one, cross-validation,
-which is the right thing to do, makes almost no difference.\endnote{So
-we should do it, when assessing how good the classification is.}
+which is the right thing to do, makes almost no difference.
+\marginnote{So we should do it, when assessing how good the classification is.}
 All right, I suppose I do want to investigate the individuals whose
 predicted jobs changed, and look at their posterior probabilities. I
 think I have the machinery to do that. The key is that `job.2` and
@@ -62195,8 +61305,8 @@ wrong. However, these proportions were each based on only eight
 observations, so it's probably wise *not* to say that loam is
 *always* easiest to get right.
 
-I didn't have you look at posterior probabilities here.\endnote{Rest assured
-that I will on the final exam!} With 32 fields, this is rather a lot
+I didn't have you look at posterior probabilities here.
+\marginnote{Rest assured that I will on the final exam!} With 32 fields, this is rather a lot
 to list them all, but what we can do is to look at the ones that were
 misclassified (the true soil type differs from the predicted soil
 type). Before that, though, we need to make a data frame with the stuff in
@@ -62519,14 +61629,11 @@ with Capital Letters. The syntax for `unite` is that you
 give the name of the new combo column first, and then the names of
 the columns you want to combine, either by listing them or by
 using a select-helper. They will be separated by an underscore by
-default, which is usually easiest to handle.\endnote{The opposite
-of `unite` is `separate`, which splits a combined
-column like my `combo` into separate columns; it too uses
-underscore as the default separator.} In `unite`, you can
+default, which is usually easiest to handle.
+\marginnote{The opposite      of *unite* is *separate*, which splits a combined      column like my *combo* into separate columns; it too uses    underscore as the default separator.} In texttt{unite}, you can
 group the columns to "unite" with `c()`, as in class, or
-not, as here. Either way is good.\endnote{You used to have to group
-them, but you don't any more. Hence my old code has them grouped,
-but my new code does not.}
+not, as here. Either way is good.
+\marginnote{You used to have to group    them, but you don't any more. Hence my old code has them grouped,    but my new code does not.}
 We'll be using height and weight in the
 analysis to come, so I decided to display just those:
 
@@ -63715,4 +62822,5957 @@ for example.
 
 
 <!--chapter:end:21-discriminant-analysis.Rmd-->
+
+# Cluster analysis
+
+Packages for this chapter:
+
+
+```r
+library(MASS)
+library(tidyverse)
+```
+
+```
+## -- Attaching packages ---- tidyverse 1.2.1 --
+```
+
+```
+## v ggplot2 3.1.0     v purrr   0.2.5
+## v tibble  1.4.2     v dplyr   0.7.8
+## v tidyr   0.8.1     v stringr 1.3.1
+## v readr   1.1.1     v forcats 0.3.0
+```
+
+```
+## -- Conflicts ------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## x dplyr::select() masks MASS::select()
+```
+
+
+##  Dissimilarities between fruits
+
+
+ Consider the fruits apple, orange, banana, pear,
+strawberry, blueberry. We are going to work with these four
+properties of fruits:
+
+
+* has a round shape
+
+* Is sweet
+
+* Is crunchy
+
+* Is a berry
+
+
+
+(a)  Make a table with fruits as columns, and with
+rows "round shape", "sweet", "crunchy", "berry". In each cell
+of the table, put a 1 if the fruit has the property named in the
+row, and a 0 if it does not. (This is your opinion, and may not
+agree with mine. That doesn't matter, as long as you follow through
+with whatever your choices were.)
+ 
+Solution
+
+
+Something akin to this:
+
+
+```
+
+Fruit        Apple Orange Banana Pear Strawberry Blueberry
+Round shape    1      1      0     0       0         1
+Sweet          1      1      0     0       1         0
+Crunchy        1      0      0     1       0         0
+Berry          0      0      0     0       1         1
+
+```
+
+You'll have to make a choice about "crunchy". I usually eat
+pears before they're fully ripe, so to me, they're crunchy.
+ 
+
+(b) We'll define the dissimilarity between two fruits to be the
+number of qualities they *disagree* on. Thus, for example, the
+dissimilarity between Apple and Orange is 1 (an apple is crunchy and
+an orange is not, but they agree on everything else). Calculate the
+dissimilarity between each pair of fruits, and make a square table
+that summarizes the results. (To save yourself some work, note that
+the dissimilarity between a fruit and itself must be zero, and the
+dissimilarity between fruits A and B is the same as that between B
+and A.) Save your table of dissimilarities into a file for the next part.
+ 
+Solution
+
+
+I got this, by counting them:
+
+```
+ 
+Fruit         Apple  Orange   Banana   Pear  Strawberry  Blueberry
+Apple           0       1       3       2        3          3
+Orange          1       0       2       3        2          2
+Banana          3       2       0       1        2          2
+Pear            2       3       1       0        3          3
+Strawberry      3       2       2       3        0          2
+Blueberry       3       2       2       3        2          0
+
+```
+
+I copied this into a file `fruits.txt`. Note that (i) I
+have aligned my columns, so that I will be able to use
+`read_table` later, and (ii) I have given the first column
+a name, since `read_table` wants the same number of column
+names as columns.
+
+Extra: yes, you can do this in R too. We've seen some of the tricks
+before. 
+
+Let's start by reading in my table of fruits and properties, which
+I saved in
+[link](http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt):
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt"
+fruit1 = read_table(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   Property = col_character(),
+##   Apple = col_integer(),
+##   Orange = col_integer(),
+##   Banana = col_integer(),
+##   Pear = col_integer(),
+##   Strawberry = col_integer(),
+##   Blueberry = col_integer()
+## )
+```
+
+```r
+fruit1
+```
+
+```
+## # A tibble: 4 x 7
+##   Property Apple Orange Banana  Pear
+##   <chr>    <int>  <int>  <int> <int>
+## 1 Round.s~     1      1      0     0
+## 2 Sweet        1      1      0     0
+## 3 Crunchy      1      0      0     1
+## 4 Berry        0      0      0     0
+## # ... with 2 more variables:
+## #   Strawberry <int>, Blueberry <int>
+```
+
+     
+
+We don't need the first column, so we'll get rid of it:
+
+
+```r
+fruit2 = fruit1 %>% select(-Property)
+fruit2
+```
+
+```
+## # A tibble: 4 x 6
+##   Apple Orange Banana  Pear Strawberry
+##   <int>  <int>  <int> <int>      <int>
+## 1     1      1      0     0          0
+## 2     1      1      0     0          1
+## 3     1      0      0     1          0
+## 4     0      0      0     0          1
+## # ... with 1 more variable: Blueberry <int>
+```
+
+ 
+
+The loop way is the most direct. We're going to be looking at
+combinations of fruits and other fruits, so we'll need two loops one
+inside the other. It's easier for this to work with column numbers,
+which here are 1 through 6, and we'll make a matrix `m` with
+the dissimilarities in it, which we have to initialize first. I'll
+initialize it to a $6\times 6$ matrix of `-1`, since the final
+dissimilarities are 0 or bigger, and this way I'll know if I forgot
+anything.
+
+Here's where we are at so far:
+
+
+```r
+fruit_m = matrix(-1, 6, 6)
+for (i in 1:6) {
+    for (j in 1:6) {
+        fruit_m[i, j] = 3  # dissim between fruit i and fruit j
+    }
+}
+```
+
+ 
+
+This, of course, doesn't run yet. The sticking point is how to
+calculate the dissimilarity between two columns. I think that is a
+separate thought process that should be in a function of its own. The
+inputs are the two column numbers, and a data frame to get those
+columns from:
+
+
+```r
+dissim = function(i, j, d) {
+    x = d %>% select(i)
+    y = d %>% select(j)
+    sum(x != y)
+}
+dissim(1, 2, fruit2)
+```
+
+```
+## [1] 1
+```
+
+ 
+
+Apple and orange differ by one (not being crunchy). The process is:
+grab the $i$-th column and call it `x`, grab the $j$-th column
+and call it `y`. These are two one-column data frames with four
+rows each (the four properties). `x!=y` goes down the rows, and
+for each one gives a `TRUE` if they're different and a
+`FALSE` if they're the same. So `x!=y` is a collection
+of four T-or-F values. This seems backwards, but I was thinking of
+what we want to do: we want to count the number of different
+ones. Numerically, `TRUE` counts as 1 and `FALSE` as 0,
+so we should make the thing we're counting (the different ones) come
+out as `TRUE`. To count the number of `TRUE`s (1s), add
+them up. 
+
+That was a complicated thought process, so it was probably wise to
+write a function to do it. Now, in our loop, we only have to call the
+function (having put some thought into getting it right):
+
+
+```r
+fruit_m = matrix(-1, 6, 6)
+for (i in 1:6) {
+    for (j in 1:6) {
+        fruit_m[i, j] = dissim(i, j, fruit2)
+    }
+}
+fruit_m
+```
+
+```
+##      [,1] [,2] [,3] [,4] [,5] [,6]
+## [1,]    0    1    3    2    3    3
+## [2,]    1    0    2    3    2    2
+## [3,]    3    2    0    1    2    2
+## [4,]    2    3    1    0    3    3
+## [5,]    3    2    2    3    0    2
+## [6,]    3    2    2    3    2    0
+```
+
+ 
+
+The last step is re-associate the fruit names with this matrix. This
+is a `matrix` so it has a `rownames` and a
+`colnames`. We set both of those, but first we have to get the
+fruit names from `fruit2`:
+
+
+```r
+fruit_names = names(fruit2)
+rownames(fruit_m) = fruit_names
+colnames(fruit_m) = fruit_names
+fruit_m
+```
+
+```
+##            Apple Orange Banana Pear
+## Apple          0      1      3    2
+## Orange         1      0      2    3
+## Banana         3      2      0    1
+## Pear           2      3      1    0
+## Strawberry     3      2      2    3
+## Blueberry      3      2      2    3
+##            Strawberry Blueberry
+## Apple               3         3
+## Orange              2         2
+## Banana              2         2
+## Pear                3         3
+## Strawberry          0         2
+## Blueberry           2         0
+```
+
+ 
+
+This is good to go into the cluster analysis (happening later).
+
+There is a `tidyverse` way to do this also. It's actually a lot
+like the loop way in its conception, but the coding looks
+different. We start by making all combinations of the fruit names with
+each other, which is `crossing`:
+
+
+```r
+combos = crossing(fruit = fruit_names, other = fruit_names)
+combos
+```
+
+```
+## # A tibble: 36 x 2
+##    fruit  other     
+##    <chr>  <chr>     
+##  1 Apple  Apple     
+##  2 Apple  Banana    
+##  3 Apple  Blueberry 
+##  4 Apple  Orange    
+##  5 Apple  Pear      
+##  6 Apple  Strawberry
+##  7 Banana Apple     
+##  8 Banana Banana    
+##  9 Banana Blueberry 
+## 10 Banana Orange    
+## # ... with 26 more rows
+```
+
+ 
+
+Now, we want a function that, given any two fruit *names*, works
+out the dissimilarity between them. A happy coincidence is that we can
+use the function we had before, *unmodified*! How? Take a look: 
+
+
+```r
+dissim = function(i, j, d) {
+    x = d %>% select(i)
+    y = d %>% select(j)
+    sum(x != y)
+}
+dissim("Apple", "Orange", fruit2)
+```
+
+```
+## [1] 1
+```
+
+ 
+
+`select` can take a column number *or a column name*, so
+that running it with column names gives the right answer.
+
+Now, we want to run this function for each of the pairs in
+`combos`. The "for each" is `fruit` and `other`
+in parallel, so it's `map2` rather than `map`. Also, the
+dissimilarity is a whole number each time, so we need
+`map2_int`. So we can do this:
+
+
+```r
+combos %>% mutate(dissim = map2_int(fruit, other, 
+    dissim, fruit2))
+```
+
+```
+## # A tibble: 36 x 3
+##    fruit  other      dissim
+##    <chr>  <chr>       <int>
+##  1 Apple  Apple           0
+##  2 Apple  Banana          3
+##  3 Apple  Blueberry       3
+##  4 Apple  Orange          1
+##  5 Apple  Pear            2
+##  6 Apple  Strawberry      3
+##  7 Banana Apple           3
+##  8 Banana Banana          0
+##  9 Banana Blueberry       2
+## 10 Banana Orange          2
+## # ... with 26 more rows
+```
+
+ 
+
+This would work just as well using `fruit1` rather than
+`fruit`, since we are picking out the columns by name rather
+than number.
+
+To make this into something we can turn into a `dist` object
+later, we need to `spread` the column `other` to make a
+square array:
+
+
+```r
+fruit_spread = combos %>% mutate(dissim = map2_int(fruit, 
+    other, dissim, fruit2)) %>% spread(other, 
+    dissim)
+fruit_spread
+```
+
+```
+## # A tibble: 6 x 7
+##   fruit Apple Banana Blueberry Orange  Pear
+##   <chr> <int>  <int>     <int>  <int> <int>
+## 1 Apple     0      3         3      1     2
+## 2 Bana~     3      0         2      2     1
+## 3 Blue~     3      2         0      2     3
+## 4 Oran~     1      2         2      0     3
+## 5 Pear      2      1         3      3     0
+## 6 Stra~     3      2         2      2     3
+## # ... with 1 more variable: Strawberry <int>
+```
+
+ 
+
+Done!
+ 
+
+(c) Do a hierarchical cluster analysis using complete
+linkage. Display your dendrogram.
+ 
+Solution
+
+
+First, we need to take one of our matrices of dissimilarities
+and turn it into a `dist` object. Since I asked you to
+save yours into a file, let's start from there. Mine is aligned
+columns: 
+
+```r
+dissims = read_table("fruits.txt")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   fruit = col_character(),
+##   Apple = col_integer(),
+##   Orange = col_integer(),
+##   Banana = col_integer(),
+##   Pear = col_integer(),
+##   Strawberry = col_integer(),
+##   Blueberry = col_integer()
+## )
+```
+
+```r
+dissims
+```
+
+```
+## # A tibble: 6 x 7
+##   fruit Apple Orange Banana  Pear Strawberry
+##   <chr> <int>  <int>  <int> <int>      <int>
+## 1 Apple     0      1      3     2          3
+## 2 Oran~     1      0      2     3          2
+## 3 Bana~     3      2      0     1          2
+## 4 Pear      2      3      1     0          3
+## 5 Stra~     3      2      2     3          0
+## 6 Blue~     3      2      2     3          2
+## # ... with 1 more variable: Blueberry <int>
+```
+
+      
+
+Then turn it into a `dist` object. The first step is to take
+off the first column, since `as.dist` can get the names from
+the columns:
+
+
+```r
+d = dissims %>% select(-fruit) %>% as.dist()
+d
+```
+
+```
+##            Apple Orange Banana Pear
+## Orange         1                   
+## Banana         3      2            
+## Pear           2      3      1     
+## Strawberry     3      2      2    3
+## Blueberry      3      2      2    3
+##            Strawberry
+## Orange               
+## Banana               
+## Pear                 
+## Strawberry           
+## Blueberry           2
+```
+
+
+
+If you forget to take off the first column, this happens:
+
+
+```r
+as.dist(dissims)
+```
+
+```
+## Warning in storage.mode(m) <- "numeric": NAs
+## introduced by coercion
+```
+
+```
+## Warning in as.dist.default(dissims): non-
+## square matrix
+```
+
+```
+## Error in dimnames(df) <- if (is.null(labels)) list(seq_len(size), seq_len(size)) else list(labels, : length of 'dimnames' [1] not equal to array extent
+```
+
+ 
+
+The key thing here is "non-square matrix": you have one more column
+than you have rows, since you have a column of fruit names.
+
+This one is `as.dist` since you already have dissimilarities
+and you want to arrange them into the right type of
+thing. `dist` is for *calculating* dissimilarities, which
+we did before, so we don't want to do that now.
+
+Now, after all that work, the actual cluster analysis and dendrogram:
+
+```r
+fruits.1 = hclust(d, method = "complete")
+plot(fruits.1)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/hkadh-1} 
+
+     
+ 
+
+(d) How many clusters, of what fruits, do you seem to have?
+Explain briefly.
+ 
+Solution
+
+
+I reckon I have three clusters: strawberry and blueberry in one,
+apple and orange in the second, and banana and pear in the
+third. (If your dissimilarities were different from mine, your
+dendrogram will be different also.)
+ 
+
+(e) Pick a pair of clusters (with at least 2 fruits in each)
+from your dendrogram. Verify that 
+the complete-linkage distance on your dendrogram is correct.
+ 
+Solution
+
+
+I'll pick strawberry-blueberry and and apple-orange. I'll arrange
+the dissimilarities like this:
+
+```
+
+apple   orange
+strawberry    3       2
+blueberry     3       2
+
+```
+
+The largest of those is 3, so that's the complete-linkage
+distance. That's also what the dendrogram says.
+(Likewise, the smallest of those is 2, so 2 is the
+single-linkage distance.) That is to say, the largest distance or
+dissimilarity 
+from anything in one cluster to anything in the other is 3, and
+the smallest is 2.
+I don't mind which pair of clusters you take, as long as you spell
+out the dissimilarity (distance) between each fruit in each
+cluster, and take the maximum of those. Besides, if your
+dissimilarities are different from mine, your complete-linkage
+distance could be different from mine also. The grader will have
+to use her judgement!
+\marginnote{That's two cups of coffee I owe the      grader now.}  
+The important point is that you assess the dissimilarities between
+fruits in one cluster and fruits in the other. The dissimilarities
+between fruits in the same cluster don't enter into it.
+\marginnote{I      now have a mental image of John Cleese saying *it don't enter      into it* in the infamous Dead Parrot sketch,      https://www.youtube.com/watch?v=4vuW6tQ0218}. Not to      mention       *Ow to defend yourself against an assailant armed with fresh      fruit*, https://www.youtube.com/watch?v=piWCBOsJr-w}.    }
+As it happens, all my complete-linkage distances between clusters
+(of at least 2 fruits) are 3. The single-linkage ones are
+different, though:
+
+```r
+fruits.2 = hclust(d, method = "single")
+plot(fruits.2)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/lhsdjhad-1} 
+
+     
+
+All the single-linkage cluster distances are 2. (OK, so this wasn't a
+very interesting example, but I wanted to give you one where you could
+calculate what was going on.)
+ 
+
+
+
+
+##  Similarity of species 
+
+
+ Two scientists assessed the dissimilarity
+between a number 
+of species by recording the number of positions in the protein
+molecule cytochrome-$c$ where the two species being compared have
+different amino acids. The dissimilarities that they recorded are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/species.txt).
+
+
+
+(a) Read the data into a data frame and take a look at it.
+
+
+Solution
+
+
+Nothing much new here:
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/species.txt"
+species = read_delim(my_url, " ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   what = col_character(),
+##   Man = col_integer(),
+##   Monkey = col_integer(),
+##   Horse = col_integer(),
+##   Pig = col_integer(),
+##   Pigeon = col_integer(),
+##   Tuna = col_integer(),
+##   Mould = col_integer(),
+##   Fungus = col_integer()
+## )
+```
+
+```r
+species
+```
+
+```
+## # A tibble: 8 x 9
+##   what   Man Monkey Horse   Pig Pigeon  Tuna
+##   <ch> <int>  <int> <int> <int>  <int> <int>
+## 1 Man      0      1    17    13     16    31
+## 2 Mon~     1      0    16    12     15    32
+## 3 Hor~    17     16     0     5     16    27
+## 4 Pig     13     12     5     0     13    25
+## 5 Pig~    16     15    16    13      0    27
+## 6 Tuna    31     32    27    25     27     0
+## 7 Mou~    63     62    64    64     59    72
+## 8 Fun~    66     65    68    67     66    69
+## # ... with 2 more variables: Mould <int>,
+## #   Fungus <int>
+```
+
+     
+
+This is a square array of dissimilarities between the eight species.
+
+The data set came from the 1960s, hence the use of "Man" rather than
+"human". It probably also came from the UK, judging by the spelling
+of `Mould`.
+
+(I gave the first column the name `what` so that you could
+safely use `species` for the whole data frame.)
+    
+
+
+(b) Bearing in mind that the values you read in are
+*already* dissimilarities, convert them into a `dist`
+object suitable for running a cluster analysis on, and display the
+results. (Note that you need to get rid of any columns that don't
+contain numbers.)
+
+
+Solution
+
+
+The point here is that the values you have are *already*
+dissimilarities, so no conversion of the numbers is required. Thus
+this is a job for `as.dist`, which merely changes how it
+looks. Use a pipeline to get rid of the first column first:
+
+```r
+d = species %>% select(-what) %>% as.dist()
+d
+```
+
+```
+##        Man Monkey Horse Pig Pigeon Tuna
+## Monkey   1                             
+## Horse   17     16                      
+## Pig     13     12     5                
+## Pigeon  16     15    16  13            
+## Tuna    31     32    27  25     27     
+## Mould   63     62    64  64     59   72
+## Fungus  66     65    68  67     66   69
+##        Mould
+## Monkey      
+## Horse       
+## Pig         
+## Pigeon      
+## Tuna        
+## Mould       
+## Fungus    61
+```
+
+
+
+This doesn't display anything that it doesn't need to: we know that the
+dissimilarity between a species and itself is zero (no need to show
+that), and that the dissimilarity between B and A is the same as
+between A and B, so no need to show everything twice. It might look as
+if you are missing a row and a column, but one of the species (Fungus)
+appears only in a row and one of them (Man) only in a column.
+
+This also works, to select only the numerical columns:
+
+
+```r
+species %>% select_if(is.numeric) %>% as.dist()
+```
+
+```
+##        Man Monkey Horse Pig Pigeon Tuna
+## Monkey   1                             
+## Horse   17     16                      
+## Pig     13     12     5                
+## Pigeon  16     15    16  13            
+## Tuna    31     32    27  25     27     
+## Mould   63     62    64  64     59   72
+## Fungus  66     65    68  67     66   69
+##        Mould
+## Monkey      
+## Horse       
+## Pig         
+## Pigeon      
+## Tuna        
+## Mould       
+## Fungus    61
+```
+
+ 
+
+Extra: data frames officially have an attribute called "row names",
+that is displayed where the row numbers display, but which isn't
+actually a column of the data frame. In the past, when we used
+`read.table` with a dot, the first column of data read in from
+the file could be nameless (that is, you could have one more column of
+data than you had column names) and the first column would be treated
+as row names. People used row names for things like identifier
+variables. But row names have this sort of half-existence, and when
+Hadley Wickham designed the `tidyverse`, he decided not to use
+row names, taking the attitude that if it's part of the data, it
+should be in the data frame as a genuine column. This means that when
+you use a `read_` function, you have to have exactly as many
+column names as columns. 
+
+For these data, I previously had the column here called
+`what` as row names, and `as.dist` automatically got rid
+of the row names when formatting the distances. Now, it's a
+genuine column, so I have to get rid of it before running
+`as.dist`. This is more work, but it's also more honest, and
+doesn't involve thinking about row names at all. So, on balance, I
+think it's a win.
+  
+
+
+(c) Run a cluster analysis using single-linkage and obtain a dendrogram.
+
+
+Solution
+
+
+Something like this:
+
+```r
+species.1 = hclust(d, method = "single")
+plot(species.1)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-18-1} 
+
+     
+    
+
+
+(d) Run a cluster analysis using Ward's method and obtain a dendrogram.
+
+
+Solution
+
+
+Not much changes  here in the code, but the result is noticeably
+different:
+
+```r
+species.2 = hclust(d, method = "ward.D")
+plot(species.2)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-19-1} 
+
+  
+
+Fewer points this time since you're doing much of the same stuff over again.
+
+Don't forget to take care with the `method`: it has to be
+`ward` in lowercase (even though it's someone's name) followed
+by a D in uppercase.
+
+    
+
+
+(e) Describe how the two dendrograms from the last two parts
+look different.
+
+
+Solution
+
+
+This is (as ever with this kind of thing) a judgement call. Your
+job is to come up with something reasonable.
+For myself, I was thinking about how single-linkage tends to
+produce "stringy" clusters that join single objects (species)
+onto already-formed clusters. Is that happening here? Apart from
+the first two clusters, man and monkey, horse and pig,
+*everything* that gets joined on is a single species joined
+on to a bigger cluster, including mould and fungus right at the
+end. Contrast that with the output from Ward's method, where, for
+the most part, groups are formed first and then joined onto other
+groups. For example, in Ward's method, mould and fungus are joined
+earlier, and also the man-monkey group is joined to the
+pigeon-horse-pig group.
+\marginnote{Tuna is an exception, but usually Ward    tends to join fairly dissimilar things that are nonetheless more    similar to each other than to anything else. This is like    Hungarian and Finnish in the example in class: they are very    dissimilar languages, but they are more similar to each other than    to anything else.}
+You might prefer to look at the specifics of what gets joined. I
+think the principal difference from this angle is that mould and
+fungus get joined together (much) earlier in Ward. Also, pigeon
+gets joined to horse and pig first under Ward, but *after*
+those have been joined to man and monkey under
+single-linkage. This is also a reasonable kind of observation.
+    
+
+
+(f) Looking at your clustering for Ward's method, what seems to
+be a sensible number of clusters? Draw boxes around those clusters.
+
+
+Solution
+
+
+Pretty much any number of clusters bigger than 1 and smaller than
+8 is ok here, but I would prefer to see something between 2 and
+5, because a number of clusters of that sort offers (i) some
+insight ("these things are like these other things") and (ii) a
+number of clusters of that sort is supported by the data.
+To draw those clusters, you need `rect.hclust`, and
+before that you'll need to plot the cluster object again. For 2
+clusters, that would look like this:
+
+```r
+plot(species.2)
+rect.hclust(species.2, 2)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-20-1} 
+
+ 
+
+This one is "mould and fungus vs.\ everything else". (My red boxes
+seem to have gone off the side, sorry.)
+
+Or we could go to the other end of the scale:
+
+
+```r
+plot(species.2)
+rect.hclust(species.2, 5)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-21-1} 
+
+ 
+
+Five is not really an insightful number of clusters with 8 species,
+but it seems to correspond (for me at least) with a reasonable
+division of these species into "kinds of living things". That is, I
+am bringing some outside knowledge into my number-of-clusters division.
+    
+
+
+(g) List which cluster each species is in, for your preferred
+number of clusters (from Ward's method).
+
+
+Solution
+
+
+This is `cutree`. For 2 clusters it would be this:
+
+```r
+cutree(species.2, 2)
+```
+
+```
+##    Man Monkey  Horse    Pig Pigeon   Tuna 
+##      1      1      1      1      1      1 
+##  Mould Fungus 
+##      2      2
+```
+
+     
+
+For 5 it would be this:
+
+
+```r
+cutree(species.2, 5)
+```
+
+```
+##    Man Monkey  Horse    Pig Pigeon   Tuna 
+##      1      1      2      2      2      3 
+##  Mould Fungus 
+##      4      5
+```
+
+ 
+
+and anything in between is in between. 
+
+These ones came out sorted, so there is no need to sort them (so you
+don't need the methods of the next question).
+    
+
+
+
+
+
+
+##  Rating beer
+
+
+ Thirty-two students each rated 10 brands of beer:
+
+
+* Anchor Steam
+
+* Bass
+
+* Beck's
+
+* Corona
+
+* Gordon Biersch
+
+* Guinness
+
+* Heineken
+
+* Pete's Wicked Ale
+
+* Sam Adams
+
+* Sierra Nevada
+
+The ratings are on a scale of 1 to 9, with a higher
+rating being better.
+The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/beer.txt).  I
+abbreviated the beer names for the data file. I hope you can figure
+out which is which.
+
+
+(a) Read in the data, and look at the first few rows.
+ 
+Solution
+
+
+Data values are aligned in columns, but the column headers are
+not aligned with them, so `read_table2`:
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
+beer = read_table2(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   student = col_character(),
+##   AnchorS = col_integer(),
+##   Bass = col_integer(),
+##   Becks = col_integer(),
+##   Corona = col_integer(),
+##   GordonB = col_integer(),
+##   Guinness = col_integer(),
+##   Heineken = col_integer(),
+##   PetesW = col_integer(),
+##   SamAdams = col_integer(),
+##   SierraN = col_integer()
+## )
+```
+
+```r
+beer
+```
+
+```
+## # A tibble: 32 x 11
+##    student AnchorS  Bass Becks Corona GordonB
+##    <chr>     <int> <int> <int>  <int>   <int>
+##  1 S001          5     9     7      1       7
+##  2 S008          7     5     6      8       8
+##  3 S015          7     7     5      6       6
+##  4 S022          7     7     5      2       5
+##  5 S029          9     7     3      1       6
+##  6 S036          7     6     4      3       7
+##  7 S043          5     5     5      6       6
+##  8 S050          5     3     1      5       5
+##  9 S057          9     3     2      6       4
+## 10 S064          2     6     6      5       6
+## # ... with 22 more rows, and 5 more
+## #   variables: Guinness <int>,
+## #   Heineken <int>, PetesW <int>,
+## #   SamAdams <int>, SierraN <int>
+```
+
+       
+
+32 rows (students), 11 columns (10 beers, plus a column of student IDs).
+All seems to be kosher. If beer can be kosher.
+ 
+
+(b) The researcher who collected the data wants to see which
+beers are rated similarly to which other beers. Try to create a
+distance matrix from these data and explain why it didn't do what
+you wanted. (Remember to get rid of the `student` column
+first.) 
+ 
+Solution
+
+
+The obvious thing is to feed these ratings into `dist`
+(we are *creating* distances rather than re-formatting
+things that are already distances). We need to skip the first
+column, since those are student identifiers:
+
+```r
+d = beer %>% select(-student) %>% dist()
+glimpse(d)
+```
+
+```
+##  'dist' num [1:496] 9.8 8.49 6.56 8.89 8.19 ...
+##  - attr(*, "Size")= int 32
+##  - attr(*, "Diag")= logi FALSE
+##  - attr(*, "Upper")= logi FALSE
+##  - attr(*, "method")= chr "euclidean"
+##  - attr(*, "call")= language dist(x = .)
+```
+
+     
+
+Feel free to be offended by my choice of the letter `d` to
+denote both data frames (that I didn't want to give a better name to)
+and dissimilarities in `dist` objects.
+
+You can look at the whole thing if you like, though it is rather
+large. A `dist` object is stored internally as a long vector
+(here of 496 values); it's displayed as a nice triangle. The clue here
+is the thing called `Size`, which indicates that we have a
+$32\times 32$ matrix of distances *between the 32 students*, so
+that if we were to go on and do a cluster analysis based on this
+`d`, we'd get a clustering of the *students* rather than
+of the *beers*, as we want. (If you just print out `d`,
+you'll see that is of distances between 32 (unlabelled) objects, which
+by inference must be the 32 students.)
+
+It might be interesting to do a cluster analysis of the 32 students
+(it would tell you which of the students have similar taste in beer),
+but that's not what we have in mind here.
+ 
+
+(c) The R function `t()` *transposes* a matrix: that
+is, it interchanges rows and columns. Feed the transpose of your
+read-in beer ratings into `dist`. Does this now give
+distances between beers?
+ 
+Solution
+
+
+Again, omit the first column. The pipeline code looks a bit weird:
+
+```r
+d = beer %>% select(-student) %>% t() %>% dist()
+```
+
+   
+
+so you should feel free to do it in a couple of steps. This way shows
+that you can also refer to columns by number:
+
+
+```r
+beer2 = beer %>% select(-1)
+d = dist(t(beer2))
+```
+
+ 
+
+Either way gets you to the same place:
+
+
+```r
+d
+```
+
+```
+##           AnchorS     Bass    Becks   Corona
+## Bass     15.19868                           
+## Becks    16.09348 13.63818                  
+## Corona   20.02498 17.83255 17.54993         
+## GordonB  13.96424 11.57584 14.42221 13.34166
+## Guinness 14.93318 13.49074 16.85230 20.59126
+## Heineken 20.66398 15.09967 13.78405 14.89966
+## PetesW   11.78983 14.00000 16.37071 17.72005
+## SamAdams 14.62874 11.61895 14.73092 14.93318
+## SierraN  12.60952 15.09967 17.94436 16.97056
+##           GordonB Guinness Heineken   PetesW
+## Bass                                        
+## Becks                                       
+## Corona                                      
+## GordonB                                     
+## Guinness 14.76482                           
+## Heineken 14.07125 18.54724                  
+## PetesW   11.57584 14.28286 19.49359         
+## SamAdams 10.90871 15.90597 14.52584 14.45683
+## SierraN  11.74734 13.34166 19.07878 13.41641
+##          SamAdams
+## Bass             
+## Becks            
+## Corona           
+## GordonB          
+## Guinness         
+## Heineken         
+## PetesW           
+## SamAdams         
+## SierraN  12.12436
+```
+
+ 
+
+There are 10 beers with these names, so this is good.
+ 
+
+(d) Try to explain briefly why I used `as.dist` in the
+class example (the languages one) but `dist` here. (Think
+about the form of the input to each function.)
+ 
+Solution
+
+
+`as.dist` is used if you *already* have
+dissimilarities (and you just want to format them right), but
+`dist` is used if you have 
+*data on variables* and you want to *calculate*
+dissimilarities. 
+ 
+
+(e) <a name="part:beer-dendro">*</a> Obtain a clustering of the beers, using Ward's method. Show
+the dendrogram.
+ 
+Solution
+
+
+This:
+
+```r
+beer.1 = hclust(d, method = "ward.D")
+plot(beer.1)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/khas-1} 
+
+       
+ 
+
+(f) What seems to be a sensible number of clusters? Which
+beers are in which cluster?
+ 
+Solution
+
+
+This is a judgement call. Almost anything sensible is
+reasonable. I personally think that two clusters is good, beers
+Anchor Steam, Pete's Wicked Ale, Guinness and Sierra Nevada in
+the first, and Bass, Gordon Biersch, Sam Adams, Corona, Beck's,
+and Heineken in the second.
+You could make a case for three clusters, splitting off
+Corona, Beck's and Heineken  into their own cluster, or even
+about 5 clusters as 
+Anchor Steam, Pete's Wicked Ale; Guinness, Sierra Nevada; Bass,
+Gordon Biersch, Sam Adams; Corona; Beck's, Heineken.
+The idea is to have a number of clusters sensibly smaller than
+the 10 observations, so that you are getting some actual
+insight. Having 8 clusters for 10 beers wouldn't be very
+informative! (This is where you use your own knowledge about
+beer to help you rationalize your choice of number of clusters.) 
+Extra: as to why the clusters split up like this, I think the four
+beers on the left of my dendrogram are "dark" and the six on
+the right are "light" (in colour), and I would expect the
+students to tend to like all the beers of one type and not so
+much all the beers of the other type.
+You knew I would have to investigate this, didn't you? Let's aim
+for a scatterplot of all the ratings for the dark  beers,
+against the ones for the light beers. 
+Start with the data frame read in from the file:
+
+```r
+beer
+```
+
+```
+## # A tibble: 32 x 11
+##    student AnchorS  Bass Becks Corona GordonB
+##    <chr>     <int> <int> <int>  <int>   <int>
+##  1 S001          5     9     7      1       7
+##  2 S008          7     5     6      8       8
+##  3 S015          7     7     5      6       6
+##  4 S022          7     7     5      2       5
+##  5 S029          9     7     3      1       6
+##  6 S036          7     6     4      3       7
+##  7 S043          5     5     5      6       6
+##  8 S050          5     3     1      5       5
+##  9 S057          9     3     2      6       4
+## 10 S064          2     6     6      5       6
+## # ... with 22 more rows, and 5 more
+## #   variables: Guinness <int>,
+## #   Heineken <int>, PetesW <int>,
+## #   SamAdams <int>, SierraN <int>
+```
+
+       
+
+The aim is to find the average rating for a dark beer and a light beer
+for each student, and then plot them against each other. Does a
+student who likes dark beer tend not to like light beer, and vice versa?
+
+We need to: `gather` all the rating columns into one, labelled
+by `name` of beer. Then create a variable that is `dark`
+if we're looking at one of the dark beers and `light`
+otherwise. `ifelse` works like "if" in a spreadsheet: a
+logical thing that is either true or false, followed by a value if
+true and a value if false. There is a nice R command `%in%`
+which is `TRUE` if the thing in the first variable is to be
+found somewhere in the list of things given next (here, one of the
+apparently dark beers). (Another way to do this, which will appeal to
+you more if you like databases, is to create a second data frame with
+two columns, the first being the beer names, and the second being
+`dark` or `light` as appropriate for that beer. Then you
+use a "left join" to look up beer type from beer name.)
+
+Next, group by beer type within student. Giving two things to
+`group_by` does it this way: the second thing within (or ``for
+each of'') the first. 
+
+Then calculate the mean
+rating within each group. This gives one column of students, one
+column of beer types, 
+and one column of rating means. 
+
+Then we need to `spread` beer type
+into two columns so that we can make a scatterplot of the mean ratings
+for light and dark against
+each other. 
+
+Finally, we make a scatterplot. 
+
+You'll see the final version of this that worked, but rest assured
+that there were many intervening versions of this that didn't!
+
+I urge you to examine the chain one line at a time and see what each
+line does. That was how I debugged it.
+
+Off we go:
+
+
+```r
+beer %>% gather(name, rating, AnchorS:SierraN) %>% 
+    mutate(beer.type = ifelse(name %in% c("AnchorS", 
+        "PetesW", "Guinness", "SierraN"), "dark", 
+        "light")) %>% group_by(student, beer.type) %>% 
+    summarize(mean.rat = mean(rating)) %>% spread(beer.type, 
+    mean.rat) %>% ggplot(aes(x = dark, y = light)) + 
+    geom_point()
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/iyrpoydf-1} 
+
+ 
+
+After all that work, not really. There are some students who like
+light beer but not dark beer (top left), there is a sort of vague
+straggle down to the bottom right, where some students like dark beer
+but not light beer, but there are definitely students at the top
+right, who just like beer! 
+
+The only really empty part of this plot is
+the bottom left, which says that these students don't hate both kinds
+of beer; they like either dark beer, or light beer, or both.
+
+The reason a `ggplot` fits into this "workflow" is that the
+first thing you feed into `ggplot` is a data frame, the one
+created by the chain here. Because it's in a chain, you don't have the
+first thing on `ggplot`, so you can concentrate on the
+`aes` ("what to plot") and then the "how to plot it". 
+Now back to your regularly-scheduled programming.
+ 
+
+(g) Re-draw your dendrogram with your clusters indicated.
+ 
+Solution
+
+
+`rect.hclust`, with your chosen number  of clusters:
+
+```r
+plot(beer.1)
+rect.hclust(beer.1, 2)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/sdkjdh-1} 
+
+       
+
+Or if you prefer 5 clusters, like this:
+
+
+```r
+plot(beer.1)
+rect.hclust(beer.1, 5)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/ljashkjsdah-1} 
+
+ 
+
+Same idea with any other number of clusters. If you follow through
+with your preferred number of clusters from the previous part, I'm good.
+ 
+
+(h) Obtain a K-means
+clustering
+\marginnote{If we haven't done this in class yet, skip the      rest of the question, and the following question, for now and      come back to it next week.} with 2 clusters. 
+Note that you will need to use the (transposed) 
+*original  data*, not the distances. Use a suitably large value of
+`nstart`. (The data are ratings all on the same scale, so
+there is no need for `scale` here. In case you were
+wondering.) 
+ 
+Solution
+
+
+
+
+       
+I used 20 for `nstart`. This is the pipe way:
+
+```r
+beer.2 = beer %>% select(-1) %>% t() %>% kmeans(2, 
+    nstart = 20)
+```
+
+       
+
+Not everyone (probably) will get the same answer, because of the
+random nature of the procedure, but the above code should be good
+whatever output it produces.
+ 
+
+(i) How many beers are in each cluster?
+ 
+Solution
+
+
+On mine:
+
+```r
+beer.2$size
+```
+
+```
+## [1] 4 6
+```
+
+       
+
+You might get the same numbers the other way around.
+ 
+
+(j) *Which* beers are in each cluster? You can do this
+simply by obtaining the cluster memberships and using
+`sort` as in the last question, or you can do it as I did
+in class by obtaining the 
+names of the things to be clustered and picking out the ones of
+them that are in cluster 1, 2, 3, \ldots .)
+ 
+Solution
+
+
+The cluster numbers of each beer are these:
+
+
+```r
+clus = beer.2$cluster
+clus
+```
+
+```
+##  AnchorS     Bass    Becks   Corona  GordonB 
+##        1        2        2        2        2 
+## Guinness Heineken   PetesW SamAdams  SierraN 
+##        1        2        1        2        1
+```
+
+  
+This is almost what you want. In fact, this will do it without digging
+out the beer names:
+
+
+```r
+sort(clus)
+```
+
+```
+##  AnchorS Guinness   PetesW  SierraN     Bass 
+##        1        1        1        1        2 
+##    Becks   Corona  GordonB Heineken SamAdams 
+##        2        2        2        2        2
+```
+
+ 
+
+Or, make a data frame:
+
+
+```r
+dd = tibble(cluster = beer.2$cluster, beer = names(beer.2$cluster)) %>% 
+    arrange(cluster)
+dd
+```
+
+```
+## # A tibble: 10 x 2
+##    cluster beer    
+##      <int> <chr>   
+##  1       1 AnchorS 
+##  2       1 Guinness
+##  3       1 PetesW  
+##  4       1 SierraN 
+##  5       2 Bass    
+##  6       2 Becks   
+##  7       2 Corona  
+##  8       2 GordonB 
+##  9       2 Heineken
+## 10       2 SamAdams
+```
+
+ 
+
+These happen to be the same clusters as in my 2-cluster solution using
+Ward's method.
+
+The thing I called `clus` up above is actually just a vector,
+but a vector with a "names" attribute. The actual values are the
+cluster numbers, but they come with a name attached (the name of a
+beer). These display when the vector is "printed".  To get those
+into a data frame that we can deal with, we have to use `names`
+to get the names and put them into a second column of the data frame.
+ 
+
+
+
+
+
+##  Sites on the sea bed
+
+
+ Biologists investigate the prevalence of
+species of organism by sampling sites where the organisms might be,
+taking a "grab" from the site, and sending the grabs to a laboratory
+for analysis. The data in this question come from the sea bed. There
+were 30 sites, labelled `s1` through `s30`. At each
+site, five species of organism, labelled `a` through
+`e`, were of interest; the data shown in those columns of the
+data set were the number of organisms of that species identified in
+the grab from that site. There are some other columns in the
+(original) data set that will not concern us. Our interest is in
+seeing which sites are similar to which other sites, so that a cluster
+analysis will be suitable.
+
+When the data are counts of different species, as they are here,
+biologists often measure the dissimilarity in species prevalence
+profiles between two sites using something called the Bray-Curtis
+dissimilarity. It is not important to understand this for this
+question (though I explain it in my solutions). I calculated the
+Bray-Curtis dissimilarity between each pair of sites and stored the
+results in [link](http://www.utsc.utoronto.ca/~butler/d29/seabed1.csv). 
+
+
+
+(a) Read in the dissimilarity data and check that you have 30
+rows and 30 columns of dissimilarities.
+
+
+Solution
+
+
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/seabed1.csv"
+seabed = read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   .default = col_double()
+## )
+```
+
+```
+## See spec(...) for full column specifications.
+```
+
+```r
+seabed
+```
+
+```
+## # A tibble: 30 x 30
+##       s1    s2    s3    s4    s5    s6    s7
+##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 0     0.457 0.296 0.467 0.477 0.522 0.455
+##  2 0.457 0     0.481 0.556 0.348 0.229 0.415
+##  3 0.296 0.481 0     0.467 0.508 0.522 0.491
+##  4 0.467 0.556 0.467 0     0.786 0.692 0.870
+##  5 0.477 0.348 0.508 0.786 0     0.419 0.212
+##  6 0.522 0.229 0.522 0.692 0.419 0     0.509
+##  7 0.455 0.415 0.491 0.870 0.212 0.509 0    
+##  8 0.933 0.930 1     1     0.854 0.933 0.806
+##  9 0.333 0.222 0.407 0.639 0.196 0.243 0.317
+## 10 0.403 0.447 0.343 0.379 0.564 0.571 0.588
+## # ... with 20 more rows, and 23 more
+## #   variables: s8 <dbl>, s9 <dbl>,
+## #   s10 <dbl>, s11 <dbl>, s12 <dbl>,
+## #   s13 <dbl>, s14 <dbl>, s15 <dbl>,
+## #   s16 <dbl>, s17 <dbl>, s18 <dbl>,
+## #   s19 <dbl>, s20 <dbl>, s21 <dbl>,
+## #   s22 <dbl>, s23 <dbl>, s24 <dbl>,
+## #   s25 <dbl>, s26 <dbl>, s27 <dbl>,
+## #   s28 <dbl>, s29 <dbl>, s30 <dbl>
+```
+
+     
+
+Check. The columns are labelled with
+the site names. (As I originally set this question, the data file was
+read in with `read.csv` instead, and the site names were read
+in as row names as well: see discussion elsewhere about row names. But
+in the `tidyverse` we don't have row names.)
+    
+
+
+(b) Create a distance object out of your dissimilarities,
+bearing in mind that the values are distances (well,
+dissimilarities) already.
+
+
+Solution
+
+
+This one needs `as.dist` to convert already-distances into
+a `dist` object. (`dist` would have
+*calculated* distances from things that were not
+distances/dissimilarities yet.)
+
+```r
+d = as.dist(seabed)
+```
+
+     
+
+If you check, you'll see that the site names are being used to label
+rows *and* columns of the dissimilarity matrix as displayed. The
+lack of row names is not hurting us.
+    
+
+
+(c) Fit a cluster analysis using single-linkage, and display a
+dendrogram of the results.
+
+
+Solution
+
+
+This:
+
+```r
+d.1 = hclust(d, method = "single")
+plot(d.1)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-38-1} 
+
+     
+
+This is a base-graphics plot, it not having any of the nice
+`ggplot` things. But it does the job.
+
+Single-linkage tends to produce "stringy" clusters, since the
+individual being added to a cluster only needs to be close to one
+thing in the cluster. Here, that manifests itself in sites getting
+added to clusters one at a time: for example, sites 25 and 26 get
+joined together into a cluster, and then in sequence sites 6, 16, 27,
+30 and 22 get joined on to it (rather than any of those sites being
+formed into clusters first). 
+
+You might
+\marginnote{Conceivably.} be wondering what else is in that
+`hclust` object, and what it's good for. Let's take a look:
+
+
+```r
+glimpse(d.1)
+```
+
+```
+## List of 7
+##  $ merge      : int [1:29, 1:2] -3 -25 -6 -9 -28 -16 -27 -1 -30 -24 ...
+##  $ height     : num [1:29] 0.1 0.137 0.152 0.159 0.159 ...
+##  $ order      : int [1:30] 21 14 29 23 15 1 19 18 2 7 ...
+##  $ labels     : chr [1:30] "s1" "s2" "s3" "s4" ...
+##  $ method     : chr "single"
+##  $ call       : language hclust(d = d, method = "single")
+##  $ dist.method: NULL
+##  - attr(*, "class")= chr "hclust"
+```
+
+ 
+
+You might guess that `labels` contains the names of the sites,
+and you'd be correct. Of the other things, the most interesting are
+`merge` and `height`. Let's display them side by side:
+
+
+```r
+with(d.1, cbind(height, merge))
+```
+
+```
+##          height        
+##  [1,] 0.1000000  -3 -20
+##  [2,] 0.1369863 -25 -26
+##  [3,] 0.1523179  -6   2
+##  [4,] 0.1588785  -9 -12
+##  [5,] 0.1588785 -28   4
+##  [6,] 0.1617647 -16   3
+##  [7,] 0.1633987 -27   6
+##  [8,] 0.1692308  -1 -19
+##  [9,] 0.1807229 -30   7
+## [10,] 0.1818182 -24   5
+## [11,] 0.1956522  -5  10
+## [12,] 0.2075472 -15   8
+## [13,] 0.2083333 -14 -29
+## [14,] 0.2121212  -7  11
+## [15,] 0.2142857 -11   1
+## [16,] 0.2149533  -2  14
+## [17,] 0.2191781 -18  16
+## [18,] 0.2205882 -22   9
+## [19,] 0.2285714  17  18
+## [20,] 0.2307692  12  19
+## [21,] 0.2328767 -10  15
+## [22,] 0.2558140  20  21
+## [23,] 0.2658228 -23  22
+## [24,] 0.2666667  13  23
+## [25,] 0.3023256  -4 -13
+## [26,] 0.3333333  24  25
+## [27,] 0.3571429 -21  26
+## [28,] 0.4285714  -8 -17
+## [29,] 0.6363636  27  28
+```
+
+ 
+
+`height` is the vertical scale of the dendrogram. The first
+height is 0.1, and if you look at the bottom of the dendrogram, the
+first sites to be joined together are sites 3 and 20 at height 0.1
+(the horizontal bar joining sites 3 and 20 is what you are looking
+for). In the last two columns, which came from `merge`, you see
+what got joined together, with negative numbers meaning individuals
+(individual sites), and positive numbers meaning clusters formed
+earlier. So, if you look at the third line, at height 0.152, site 6
+gets joined to the cluster formed on line 2, which (looking back) we
+see consists of sites 25 and 26. Go back now to the dendrogram; about
+${3\over 4}$ of the way across, you'll see sites 25 and 26 joined
+together into a cluster, and a little higher up the page, site 6 joins
+that cluster.
+
+I said that single linkage produces stringy clusters, and the way that
+shows up in `merge` is that you often get an individual site
+(negative number) joined onto a previously-formed cluster (positive
+number). This is in contrast to Ward's method, below.
+    
+
+
+(d) Now fit a cluster analysis using Ward's method, and display
+a dendrogram of the results.
+
+
+Solution
+
+
+Same thing, with small changes. The hard part is getting the name 
+of the `method` right:
+
+```r
+d.2 = hclust(d, method = "ward.D")
+plot(d.2, cex = 0.7)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-41-1} 
+
+     
+
+The site numbers were a bit close together, so I printed them out
+smaller than usual size (which is what the `cex` and a number
+less than 1 is doing: 70\% of normal size).
+
+This time, there is a greater tendency for sites to be joined into
+small clusters first, then these small clusters are joined
+together. It's not perfect, but there is a greater tendency for it to
+happen here.
+
+This shows up in `merge` too:
+
+
+```r
+d.2$merge
+```
+
+```
+##       [,1] [,2]
+##  [1,]   -3  -20
+##  [2,]  -25  -26
+##  [3,]   -9  -12
+##  [4,]  -28    3
+##  [5,]   -1  -19
+##  [6,]   -6    2
+##  [7,]  -14  -29
+##  [8,]   -5   -7
+##  [9,]  -18  -24
+## [10,]  -27    6
+## [11,]  -16  -22
+## [12,]   -2    4
+## [13,]  -30   10
+## [14,]  -15    5
+## [15,]  -23    8
+## [16,]   -4  -13
+## [17,]  -11    1
+## [18,]    9   12
+## [19,]  -10   17
+## [20,]   -8  -17
+## [21,]   11   13
+## [22,]  -21   15
+## [23,]    7   22
+## [24,]   14   19
+## [25,]   16   24
+## [26,]   18   21
+## [27,]   20   23
+## [28,]   26   27
+## [29,]   25   28
+```
+
+ 
+
+There are relatively few instances of a site being joined to a cluster
+of sites. Usually, individual sites get joined together (negative with
+a negative, mainly at the top of the list), or clusters get joined to
+clusters (positive with positive, mainly lower down the list).
+    
+
+
+(e) <a name="part:prefclust">*</a> On the Ward's method clustering, how many clusters would you
+choose to divide the sites into? Draw rectangles around those clusters.
+
+
+
+Solution
+
+
+You may need to draw the plot again. In any case, a second line of
+code draws the rectangles. I think three clusters is good, but you
+can have a few more than that if you like:
+
+```r
+plot(d.2, cex = 0.7)
+rect.hclust(d.2, 3)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-43-1} 
+
+   
+
+What I want to see is a not-unreasonable choice of number of clusters
+(I think you could go up to about six), and then a depiction of that
+number of clusters on the plot. This is six clusters:
+
+
+```r
+plot(d.2, cex = 0.7)
+rect.hclust(d.2, 6)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-44-1} 
+
+   
+
+In all your plots, the `cex` is optional, but you can compare
+the plots with it and without it and see which you prefer.
+
+Looking at this, even seven clusters might work, but I doubt you'd
+want to go beyond that. The choice of the number of clusters is mainly
+an aesthetic
+\marginnote{This, I think, is the British spelling, with the  North American one being *esthetic*. My spelling is where the  *aes* in a *ggplot* comes from.} decision. 
+
+  
+
+
+(f) <a name="part:original">*</a> The original data is in
+[link](http://www.utsc.utoronto.ca/~butler/d29/seabed.csv). Read in the
+original data and verify that you again have 30 sites, variables
+called `a` through `e` and some others.
+
+
+
+Solution
+
+
+This is really a very cheap two points:
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/seabed.csv"
+seabed.z = read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   site = col_character(),
+##   a = col_integer(),
+##   b = col_integer(),
+##   c = col_integer(),
+##   d = col_integer(),
+##   e = col_integer(),
+##   depth = col_integer(),
+##   pollution = col_double(),
+##   temp = col_double(),
+##   sediment = col_character()
+## )
+```
+
+```r
+seabed.z
+```
+
+```
+## # A tibble: 30 x 10
+##    site      a     b     c     d     e depth
+##    <chr> <int> <int> <int> <int> <int> <int>
+##  1 s1        0     2     9    14     2    72
+##  2 s2       26     4    13    11     0    75
+##  3 s3        0    10     9     8     0    59
+##  4 s4        0     0    15     3     0    64
+##  5 s5       13     5     3    10     7    61
+##  6 s6       31    21    13    16     5    94
+##  7 s7        9     6     0    11     2    53
+##  8 s8        2     0     0     0     1    61
+##  9 s9       17     7    10    14     6    68
+## 10 s10       0     5    26     9     0    69
+## # ... with 20 more rows, and 3 more
+## #   variables: pollution <dbl>, temp <dbl>,
+## #   sediment <chr>
+```
+
+   
+
+30 observations of 10 variables, including `a` through
+`e`. Check.
+
+I gave this a weird name so that it didn't overwrite my original
+`seabed`, the one I turned into a distance object, though I
+don't think I really needed to worry.
+
+These data came from
+[link](http://www.fbbva.es/TLFU/dat/DE_2013_multivariate.pdf),
+\marginnote{If  you are a soccer fan, you might recognize BBVA as a former sponsor  of the top Spanish soccer league, *La Liga BBVA* (as it was). BBVA  is a Spanish bank that also has a Foundation that published this  book.} from which I also got the definition of the Bray-Curtis
+dissimilarity that I calculated for you. The data are in Exhibit 1.1
+of that book.
+
+  
+
+
+(g) Go back to your Ward method dendrogram with the red
+rectangles and find two sites in the same cluster. Display the
+original data for your two sites and see if you can explain why they
+are in the same cluster. It doesn't matter which two sites you choose;
+the grader will merely check that your results look reasonable.
+
+
+
+Solution
+
+
+I want my two sites to be very similar, so I'm looking at two sites
+that were joined into a cluster very early on, sites `s3` and
+`s20`. As I said, I don't mind which ones you pick, but being
+in the same cluster will be easiest to justify if you pick sites
+that were joined together early.
+Then you need to display just those rows of the original data (that
+you just read in), which is a `filter` with an "or" in it:
+
+```r
+seabed.z %>% filter(site == "s3" | site == "s20")
+```
+
+```
+## # A tibble: 2 x 10
+##   site      a     b     c     d     e depth
+##   <chr> <int> <int> <int> <int> <int> <int>
+## 1 s3        0    10     9     8     0    59
+## 2 s20       0    10    14     9     0    73
+## # ... with 3 more variables:
+## #   pollution <dbl>, temp <dbl>,
+## #   sediment <chr>
+```
+
+   
+
+I think this odd-looking thing also works:
+
+
+```r
+seabed.z %>% filter(site %in% c("s3", "s20"))
+```
+
+```
+## # A tibble: 2 x 10
+##   site      a     b     c     d     e depth
+##   <chr> <int> <int> <int> <int> <int> <int>
+## 1 s3        0    10     9     8     0    59
+## 2 s20       0    10    14     9     0    73
+## # ... with 3 more variables:
+## #   pollution <dbl>, temp <dbl>,
+## #   sediment <chr>
+```
+
+ 
+
+I'll also take displaying the lines one at a time, though it is easier
+to compare them if they are next to each other.
+
+Why are they in the same cluster? To be similar (that is, have a low
+dissimilarity), the values of `a` through `e` should be
+close together. Here, they certainly are: `a` and `e`
+are both zero for both sites, and `b`, `c` and
+`d` are around 10 for both sites. So I'd call that similar. 
+
+You will probably pick a different pair of sites, and thus your
+detailed discussion will differ from mine, but the general point of it
+should be the same: pick a pair of sites in the same cluster (1 mark),
+display those two rows of the original data (1 mark), some sensible
+discussion of how the sites are similar (1 mark). As long as you pick
+two sites in the same one of your clusters, I don't mind which ones
+you pick. The grader will check that your two sites were indeed in the
+same one of your clusters, then will check that you do indeed display
+those two sites from the original data.
+
+What happens if you pick sites from different clusters? Let's pick two
+very dissimilar ones, sites 4 and 7 from opposite ends of my dendrogram:
+
+
+```r
+seabed.z %>% filter(site == "s4" | site == "s7")
+```
+
+```
+## # A tibble: 2 x 10
+##   site      a     b     c     d     e depth
+##   <chr> <int> <int> <int> <int> <int> <int>
+## 1 s4        0     0    15     3     0    64
+## 2 s7        9     6     0    11     2    53
+## # ... with 3 more variables:
+## #   pollution <dbl>, temp <dbl>,
+## #   sediment <chr>
+```
+
+ 
+
+Site `s4` has no `a` or `b` at all, and site
+`s7` has quite a few; site `s7` has no `c` at
+all, while site `s4` has a lot. These are very different sites.
+
+Now that you've seen what the original data look like, I should
+explain how I got the Bray-Curtis dissimilarities. As I said, only the
+counts of species `a` through `e` enter into the
+calculation; the other variables have nothing to do with it.
+
+Let's simplify matters by pretending that we have only two species (we
+can call them A and B), and a vector like this:
+
+
+```r
+v1 = c(10, 3)
+```
+
+ 
+
+which says that we have 10 organisms of species A and 3 of species B
+at a site. This is rather similar to this site:
+
+
+```r
+v2 = c(8, 4)
+```
+
+ 
+
+but very different from this site:
+
+
+```r
+v3 = c(0, 7)
+```
+
+ 
+
+The way you calculate the Bray-Curtis dissimilarity is to take the
+absolute difference of counts of organisms of each species:
+
+
+```r
+abs(v1 - v2)
+```
+
+```
+## [1] 2 1
+```
+
+ 
+
+and add those up:
+
+
+```r
+sum(abs(v1 - v2))
+```
+
+```
+## [1] 3
+```
+
+ 
+
+and then divide by the total of all the frequencies:
+
+
+```r
+sum(abs(v1 - v2))/sum(v1 + v2)
+```
+
+```
+## [1] 0.12
+```
+
+ 
+
+The smaller this number is, the more similar the sites are. So you
+might imagine that `v1` and `v3` would be more dissimilar:
+
+
+```r
+sum(abs(v1 - v3))/sum(v1 + v3)
+```
+
+```
+## [1] 0.7
+```
+
+ 
+
+and so it is. The scaling of the Bray-Curtis dissimilarity is that the
+smallest it can be is 0, if the frequencies of each of the species are
+exactly the same at the two sites, and the largest it can be is 1, if
+one site has only species A and the other has only species B. (I'll
+demonstrate that in a moment.)
+
+You might imagine that we'll be doing this calculation a lot, and so
+we should define a function to automate it. Hadley Wickham (in ``R for
+Data Science'') says that you should copy and paste some code (as
+I did above) no more than twice; if you need to do it again, you
+should write a function instead. The thinking behind this is if you
+copy and paste and change something (like a variable name), you'll
+need to make the change *everywhere*, and it's so easy to miss
+one. 
+
+So, my function is (copying and pasting my code from above into the
+body of the function, which is Wickham-approved since it's only my
+second time):
+
+
+```r
+braycurtis = function(v1, v2) {
+    sum(abs(v1 - v2))/sum(v1 + v2)
+}
+```
+
+ 
+
+Let's test it on my made-up sites, making up one more:
+
+
+```r
+braycurtis(v1, v2)
+```
+
+```
+## [1] 0.12
+```
+
+```r
+braycurtis(v1, v3)
+```
+
+```
+## [1] 0.7
+```
+
+```r
+braycurtis(v2, v2)
+```
+
+```
+## [1] 0
+```
+
+```r
+v4 = c(4, 0)
+braycurtis(v3, v4)
+```
+
+```
+## [1] 1
+```
+
+ 
+
+These all check out. The first two are repeats of the ones we did
+before. The third one says that if you calculate Bray-Curtis for two
+sites with the exact same frequencies all the way along, you get the
+minimum value of 0; the fourth one says that when site `v3`
+only has species B and site `v4` only has species A, you get
+the maximum value of 1.
+
+But note this:
+
+
+```r
+v2
+```
+
+```
+## [1] 8 4
+```
+
+```r
+2 * v2
+```
+
+```
+## [1] 16  8
+```
+
+```r
+braycurtis(v2, 2 * v2)
+```
+
+```
+## [1] 0.3333333
+```
+
+ 
+
+You might say that `v2` and `2*v2` are the same
+distribution, and so they are, proportionately. But Bray-Curtis is
+assessing whether the frequencies are *the same* (as opposed to
+something like a chi-squared test that is assessing
+proportionality).
+\marginnote{You could make a table out of the sites and  species, and use the test statistic from a chi-squared test as a  measure of dissimilarity: the smallest it can be is zero, if the  species counts are exactly proportional at the two sites. It doesn't have an upper limit.}
+
+So far so good. Now we have to do this for the actual data. The first
+issue
+\marginnote{There are more.}  is that the data is some of the row of
+the original data frame; specifically, it's columns 2 through 6. For
+example, rows 3 and 20 of the original data frame look like this:
+
+
+```r
+seabed.z %>% slice(c(3, 20))
+```
+
+```
+## # A tibble: 2 x 10
+##   site      a     b     c     d     e depth
+##   <chr> <int> <int> <int> <int> <int> <int>
+## 1 s3        0    10     9     8     0    59
+## 2 s20       0    10    14     9     0    73
+## # ... with 3 more variables:
+## #   pollution <dbl>, temp <dbl>,
+## #   sediment <chr>
+```
+
+ 
+
+and we don't want to feed the whole of those into `braycurtis`,
+just the second through sixth elements of them. So let's write another
+function that extracts the second through sixth columns of its
+inputs for given rows, and passes those on to the `braycurtis`
+that we wrote before. This is a little fiddly, but bear with me. The
+input to the function is the two row numbers that we want, and the
+data frame. It seems more logical to have the data frame first, but I
+have my reasons (that you will see later):
+
+
+```r
+braycurtis.spec = function(i, j, d) {
+    x = d %>% select(2:6) %>% slice(i) %>% unlist()
+    y = d %>% select(2:6) %>% slice(j) %>% unlist()
+    braycurtis(x, y)
+}
+```
+
+ 
+
+The first two lines pull out columns 2 through 6 of (respectively)
+rows `i` and `j`, then turn them into vectors (which is
+what `braycurtis` wants). This last requires an extra step
+because the outputs of the two `slice` lines are both one-row
+data frames. If they had been columns, we could have said
+`pull`, but since they're rows, we can't. Remembering (however
+vaguely) that a data frame is a special kind of `list`, what
+`unlist` does is to remove any special properties the thing
+has, and turn it into a vector (which is R's "basic thing"). 
+
+If I were going to create more than two things like `x` and
+`y` (notice all the repetition!), I would have hived that off
+into a separate function as well, but I didn't.
+
+Sites 3 and 20 were the two sites I chose before as being similar ones (in the
+same cluster). So the dissimilarity should be small:
+
+
+```r
+braycurtis.spec(3, 20, seabed.z)
+```
+
+```
+## [1] 0.1
+```
+
+ 
+
+and so it is. Is it about right? The `c` differ by 5, the
+`d` differ by one, and the total frequency in both rows is
+about 60, so the dissimilarity should be about $6/60=0.1$, as it is
+(exactly, in fact). 
+
+This is the cleaned-up version of my function. When I first wrote it,
+I `print`ed out `x` and `y`, so that I could
+check that they were what I was expecting (they were).
+\marginnote{I am a  paid-up member of the *print all the things* school of  debugging. You probably know how to do this better.}
+
+We have almost all the machinery we need. Now what we have to do is to
+compare every site with every other site and compute the dissimilarity
+between them. If you're used to Python or another similar language,
+you'll recognize this as two loops, one inside the other, and this is
+also the easiest conceptual way to do this in R. My first step is to
+initialize a matrix `m` of the right size, but filled with $-1$
+values. I did this as a check: I know my final answers are all going
+to be between 0 and 1, so if any negative numbers are left at the end,
+I know I made a mistake in my coding:
+
+
+```r
+m = matrix(-1, 30, 30)
+for (i in 1:30) {
+    for (j in 1:30) {
+        m[i, j] = braycurtis.spec(i, j, seabed.z)
+    }
+}
+summary(as.vector(m))
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu. 
+##  0.0000  0.3571  0.5023  0.5235  0.6731 
+##    Max. 
+##  1.0000
+```
+
+ 
+
+The last line "un-matrixifies" `m` (it makes a long vector
+out of all the $30 \times 30 =900$ values in it), from which we see that all the
+dissimilarities are correctly between 0 and 1. We can also check the
+one we did before:
+
+
+```r
+m[3, 20]
+```
+
+```
+## [1] 0.1
+```
+
+ 
+
+I then turned this into a data frame (by passing it into
+`as.data.frame`) and saved it into the file
+`seabed1.csv` using `write.csv`, and that was the file
+you read in at the beginning.
+
+*Of course* there is a `tidyverse` way to do
+this. Conceptually, it's not all that different from the loop here,
+but there is less housekeeping to do. The first thing we need is a
+data frame that has all combinations of 1 through 30 with each other,
+which you know how to do:
+
+
+```r
+ddd = crossing(i = 1:30, j = 1:30)
+ddd
+```
+
+```
+## # A tibble: 900 x 2
+##        i     j
+##    <int> <int>
+##  1     1     1
+##  2     1     2
+##  3     1     3
+##  4     1     4
+##  5     1     5
+##  6     1     6
+##  7     1     7
+##  8     1     8
+##  9     1     9
+## 10     1    10
+## # ... with 890 more rows
+```
+
+ 
+
+Now we have to run `braycurtis.spec` for each of those
+`i`, `j` combinations and create a new column with the
+appropriate Bray-Curtis distances in it. "For each" ought to remind
+you of `map`; this is for-eaching both `i` and
+`j` in parallel, so it'll be a `map2` (two things), and
+`braycurtis.spec` produces a decimal number, so it'll be
+`map2_dbl`: 
+
+
+```r
+ddd = ddd %>% mutate(bc = map2_dbl(i, j, braycurtis.spec, 
+    seabed.z))
+```
+
+ 
+
+Now we finally see why I wrote `braycurtis.spec` the way I did:
+the "for each" things, the `i` and `j` go first in the
+`map`, then the function that is run for-each, and finally any
+extra input to the function that is the same every time (the data
+frame, here). 
+
+
+```r
+ddd
+```
+
+```
+## # A tibble: 900 x 3
+##        i     j    bc
+##    <int> <int> <dbl>
+##  1     1     1 0    
+##  2     1     2 0.457
+##  3     1     3 0.296
+##  4     1     4 0.467
+##  5     1     5 0.477
+##  6     1     6 0.522
+##  7     1     7 0.455
+##  8     1     8 0.933
+##  9     1     9 0.333
+## 10     1    10 0.403
+## # ... with 890 more rows
+```
+
+ 
+
+That looks plausible. Did it give the right result for the one we checked?
+
+
+```r
+ddd %>% filter(i == 3, j == 20)
+```
+
+```
+## # A tibble: 1 x 3
+##       i     j    bc
+##   <int> <int> <dbl>
+## 1     3    20   0.1
+```
+
+ 
+
+Check.
+
+This, you'll notice, is "long format", but we want a $30\times 30$
+matrix of dissimilarities rather a 900-long data frame. This means
+making it wide:
+
+
+```r
+ddd %>% spread(j, bc)
+```
+
+```
+## # A tibble: 30 x 31
+##        i   `1`   `2`   `3`   `4`   `5`   `6`
+##    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1     1 0     0.457 0.296 0.467 0.477 0.522
+##  2     2 0.457 0     0.481 0.556 0.348 0.229
+##  3     3 0.296 0.481 0     0.467 0.508 0.522
+##  4     4 0.467 0.556 0.467 0     0.786 0.692
+##  5     5 0.477 0.348 0.508 0.786 0     0.419
+##  6     6 0.522 0.229 0.522 0.692 0.419 0    
+##  7     7 0.455 0.415 0.491 0.870 0.212 0.509
+##  8     8 0.933 0.930 1     1     0.854 0.933
+##  9     9 0.333 0.222 0.407 0.639 0.196 0.243
+## 10    10 0.403 0.447 0.343 0.379 0.564 0.571
+## # ... with 20 more rows, and 24 more
+## #   variables: `7` <dbl>, `8` <dbl>,
+## #   `9` <dbl>, `10` <dbl>, `11` <dbl>,
+## #   `12` <dbl>, `13` <dbl>, `14` <dbl>,
+## #   `15` <dbl>, `16` <dbl>, `17` <dbl>,
+## #   `18` <dbl>, `19` <dbl>, `20` <dbl>,
+## #   `21` <dbl>, `22` <dbl>, `23` <dbl>,
+## #   `24` <dbl>, `25` <dbl>, `26` <dbl>,
+## #   `27` <dbl>, `28` <dbl>, `29` <dbl>,
+## #   `30` <dbl>
+```
+
+ 
+
+That's basically the data frame you read in at the beginning. The only
+thing I didn't do here was to make the column names the site names.
+
+  
+
+
+(h) Obtain the cluster memberships for each site, for your
+preferred number of clusters from part (<a href="#part:prefclust">here</a>). Add a
+column to the original data that you read in in part
+(<a href="#part:original">here</a>) containing those cluster memberships, \emph{as a
+factor}.  Obtain a plot that will enable you to assess the
+relationship between those clusters and `pollution`. (Once you
+have the cluster memberships, you can add them to the data frame and
+make the graph using a pipe.)  What do you see?
+
+
+
+Solution
+
+
+Start by getting the clusters with `cutree`. I'm going with 3
+clusters, though you can use the number of clusters you chose
+before. (This is again making the grader's life a misery, but her
+instructions from me are to check that you have done something
+reasonable, with the actual answer being less important.) 
+
+
+```r
+cluster = cutree(d.2, 3)
+cluster
+```
+
+```
+##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 
+##   1   2   1   1   3   2   3   3   2   1   1 
+## s12 s13 s14 s15 s16 s17 s18 s19 s20 s21 s22 
+##   2   1   3   1   2   3   2   1   1   3   2 
+## s23 s24 s25 s26 s27 s28 s29 s30 
+##   3   2   2   2   2   2   3   2
+```
+
+ 
+
+Now, we add that to the original data, the data frame I called
+`seabed.z`, and make a plot. The best one is a boxplot:
+
+
+```r
+seabed.z %>% mutate(cluster = factor(cluster)) %>% 
+    ggplot(aes(x = cluster, y = pollution)) + 
+    geom_boxplot()
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-70-1} 
+
+ 
+
+The clusters differ substantially in terms of the amount of pollution,
+with my cluster 1 being highest and my cluster 2 being
+lowest. (Cluster 3 has a low outlier.)
+
+Any sensible plot will do here. I think boxplots are the best, but you
+could also do something like vertically-faceted histograms:
+
+
+```r
+seabed.z %>% mutate(cluster = factor(cluster)) %>% 
+    ggplot(aes(x = pollution)) + geom_histogram(bins = 8) + 
+    facet_grid(cluster ~ .)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-71-1} 
+
+ 
+
+which to my mind doesn't show the differences as dramatically. (The bins are
+determined from all the data together, so that each facet actually has
+fewer than 8 bins. You can see where the bins would be if they had any
+data in them.)
+
+Here's how 5 clusters looks:
+
+
+```r
+cluster = cutree(d.2, 5)
+cluster
+```
+
+```
+##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 
+##   1   2   1   1   3   4   3   5   2   1   1 
+## s12 s13 s14 s15 s16 s17 s18 s19 s20 s21 s22 
+##   2   1   3   1   4   5   2   1   1   3   4 
+## s23 s24 s25 s26 s27 s28 s29 s30 
+##   3   2   4   4   4   2   3   4
+```
+
+```r
+seabed.z %>% mutate(cluster = factor(cluster)) %>% 
+    ggplot(aes(x = cluster, y = pollution)) + 
+    geom_boxplot()
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-72-1} 
+
+ 
+
+This time, the picture isn't quite so clear-cut, but clusters 1 and 5
+are the highest in terms of pollution and cluster 4 is the lowest. I'm
+guessing that whatever number of clusters you choose, you'll see some
+differences in terms of pollution.
+What is interesting is that `pollution` had *nothing* to
+do with the original formation of the clusters: that was based only on
+which species were found at each site. So, what we have shown here is that
+the amount of pollution has some association with what species are found at a
+site. 
+
+A way to go on with this is to use the clusters as "known groups"
+and predict the cluster membership from `depth`,
+`pollution` and `temp` using a discriminant
+analysis. Then you could plot the sites, colour-coded by what cluster
+they were in, and even though you had three variables, you could plot
+it in two dimensions (or maybe even one dimension, depending how many
+LD's were important). 
+
+  
+
+
+
+
+
+
+
+##  CLustering the Swiss bills
+
+
+ This question is about the Swiss bank counterfeit bills
+again. This time we're going to ignore whether each bill is
+counterfeit or not, and see what groups they break into. Then, at
+the end, we'll see whether cluster analysis was able to pick out the
+counterfeit ones or not.
+
+
+(a) Read the data in again (just like last time), and look at
+the first few rows. This is just the same as before.
+ 
+Solution
+
+
+The data file was aligned in columns, so:
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
+swiss = read_table(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   length = col_double(),
+##   left = col_double(),
+##   right = col_double(),
+##   bottom = col_double(),
+##   top = col_double(),
+##   diag = col_double(),
+##   status = col_character()
+## )
+```
+
+```r
+swiss
+```
+
+```
+## # A tibble: 200 x 7
+##    length  left right bottom   top  diag
+##     <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>
+##  1   215.  131   131.    9     9.7  141 
+##  2   215.  130.  130.    8.1   9.5  142.
+##  3   215.  130.  130.    8.7   9.6  142.
+##  4   215.  130.  130.    7.5  10.4  142 
+##  5   215   130.  130.   10.4   7.7  142.
+##  6   216.  131.  130.    9    10.1  141.
+##  7   216.  130.  130.    7.9   9.6  142.
+##  8   214.  130.  129.    7.2  10.7  142.
+##  9   215.  129.  130.    8.2  11    142.
+## 10   215.  130.  130.    9.2  10    141.
+## # ... with 190 more rows, and 1 more
+## #   variable: status <chr>
+```
+
+       
+ 
+
+(b) The variables in this data frame are on different
+scales. Standardize them so that they all have mean 0 and standard
+deviation 1. (Don't try to standardize the `status` column!)
+ 
+Solution
+
+
+
+```r
+swiss.s = swiss %>% select(-status) %>% scale()
+```
+
+    
+
+What kind of thing do we have?
+
+
+```r
+class(swiss.s)
+```
+
+```
+## [1] "matrix"
+```
+
+ 
+
+so something like this is needed to display some of it (rather than
+all of it):
+
+
+```r
+head(swiss.s)
+```
+
+```
+##          length      left      right
+## [1,] -0.2549435  2.433346  2.8299417
+## [2,] -0.7860757 -1.167507 -0.6347880
+## [3,] -0.2549435 -1.167507 -0.6347880
+## [4,] -0.2549435 -1.167507 -0.8822687
+## [5,]  0.2761888 -1.444496 -0.6347880
+## [6,]  2.1351516  1.879368  1.3450576
+##          bottom        top      diag
+## [1,] -0.2890067 -1.1837648 0.4482473
+## [2,] -0.9120152 -1.4328473 1.0557460
+## [3,] -0.4966762 -1.3083061 1.4896737
+## [4,] -1.3273542 -0.3119759 1.3161027
+## [5,]  0.6801176 -3.6745902 1.1425316
+## [6,] -0.2890067 -0.6855997 0.7953894
+```
+
+ 
+ 
+
+(c) We are going to make a scree plot: First, calculate the total within-cluster SS for
+each number of clusters from 2 to 10.
+ 
+Solution
+
+
+This is (perhaps most easily) a loop:
+
+```r
+clus = 2:10
+wss.1 = numeric(0)
+for (i in clus) {
+    wss.1[i] = kmeans(swiss.s, i, nstart = 20)$tot.withinss
+}
+wss.1
+```
+
+```
+##  [1]       NA 701.2054 576.1284 491.7085
+##  [5] 449.3900 413.0068 381.6123 354.8694
+##  [9] 333.6222 312.5101
+```
+$ %$ %$
+
+Note that there are 10 `wss` values, but the first one is
+missing, since we didn't do one cluster.
+\marginnote{R vectors start from  1, unlike C arrays or Python lists, which start from 0.}
+
+The `numeric(0)` says ```wss` has nothing in it, but if
+it had anything, it would be numbers''. Or, you can initialize
+`wss` to however long it's going to be (here 10), which is
+actually more efficient (R doesn't have to keep making it ``a bit
+longer''). If you initialize it to length 10, the 10 values will have
+`NA`s in them when you start.
+
+It doesn't matter what `nstart` is: Ideally, big enough to have a decent
+chance of finding the best clustering, but small enough that it
+doesn't take too long to run.
+
+A perhaps more R way of doing this is to first make a function that
+calculates the total within-group sum of squares for one number of
+clusters, like this:
+
+
+```r
+wssf = function(i, data, nstart = 20) {
+    kmeans(data, i, nstart = nstart)$tot.withinss
+}
+```
+$ %$
+
+This takes the number of clusters as the *first* thing
+(important, as we see later), then anything else we need: some data,
+and the value for `nstart`, which defaults to 20.
+
+Then we apply this function to all the numbers of clusters we
+want. To do this, make a data frame with the numbers of clusters we want:
+
+
+```r
+w = tibble(clusters = 2:10)
+w
+```
+
+```
+## # A tibble: 9 x 1
+##   clusters
+##      <int>
+## 1        2
+## 2        3
+## 3        4
+## 4        5
+## 5        6
+## 6        7
+## 7        8
+## 8        9
+## 9       10
+```
+
+
+
+Our function returns a decimal number (a `dbl`), so now we make
+a new column by running the function "for each" number of clusters:
+
+
+```r
+w = w %>% mutate(wss = map_dbl(clusters, wssf, 
+    swiss.s))
+w
+```
+
+```
+## # A tibble: 9 x 2
+##   clusters   wss
+##      <int> <dbl>
+## 1        2  701.
+## 2        3  576.
+## 3        4  492.
+## 4        5  449.
+## 5        6  414.
+## 6        7  382.
+## 7        8  355.
+## 8        9  334.
+## 9       10  313.
+```
+
+ 
+
+We can use this easily for the scree plot in the next part.
+ 
+
+(d) <a name="part:howmany">*</a> Make a scree plot (creating a data frame
+first if you need). How many clusters do you think you
+should use?
+ 
+Solution
+
+
+The easiest is to use the output from the `map_dbl`,
+which I called `wss`:
+
+```r
+ggplot(w, aes(x = clusters, y = wss)) + geom_point() + 
+    geom_line()
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-81-1} 
+
+         
+If you did it the loop way, you'll have to make a data frame
+first, which you can then pipe into `ggplot`:
+
+
+```r
+tibble(clusters = 1:10, wss = wss.1) %>% ggplot(aes(x = clusters, 
+    y = wss)) + geom_point() + geom_line()
+```
+
+```
+## Warning: Removed 1 rows containing missing values
+## (geom_point).
+```
+
+```
+## Warning: Removed 1 rows containing missing
+## values (geom_path).
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/sasjhgajs-1} 
+
+       
+
+If you started at 2 clusters, your `wss` will start at 2
+clusters also, and you'll need to be careful to have something like
+`clusters=2:10` (not `1:10`) in the definition of your
+data frame. 
+
+Interpretation: I see a small elbow at 4 clusters, so that's how many I think we
+should use. Any place you can reasonably see an elbow is good.
+
+The warning is about the missing within-cluster total sum of squares
+for one cluster, since the loop way didn't supply a total
+within-cluster sum of squares for one cluster.
+ 
+
+(e) Run K-means with the number of clusters that you found in
+(<a href="#part:howmany">here</a>). How many bills are in each cluster?
+ 
+Solution
+
+
+
+I'm going to start by setting the random number seed (so that my results don't change every time I run this). You don't need to do that, though you might want to in something like R Markdown code:
+
+
+```r
+set.seed(457299)
+```
+
+
+
+Now, down to business:
+
+```r
+swiss.7 = kmeans(swiss.s, 4, nstart = 20)
+swiss.7$size
+```
+
+```
+## [1] 50 32 68 50
+```
+$ %$
+
+This many. Note that my clusters 1 and 4 (and also 2 and 3) add up to
+100 bills. There were 100 genuine and 100 counterfeit bills in the
+original data set.
+I don't know why "7". I just felt like it.
+ 
+
+(f) Make a table showing cluster membership against actual
+status (counterfeit or genuine). Are the counterfeit bills mostly
+in certain clusters?
+ 
+Solution
+
+
+`table`. `swiss.7$cluster` shows the actual
+cluster numbers:
+
+```r
+table(swiss$status, swiss.7$cluster)
+```
+
+```
+##              
+##                1  2  3  4
+##   counterfeit 50  1  0 49
+##   genuine      0 31 68  1
+```
+
+       
+
+Or, if you prefer,
+
+
+```r
+tibble(obs = swiss$status, pred = swiss.7$cluster) %>% 
+    count(obs, pred)
+```
+
+```
+## # A tibble: 6 x 3
+##   obs          pred     n
+##   <chr>       <int> <int>
+## 1 counterfeit     1    50
+## 2 counterfeit     2     1
+## 3 counterfeit     4    49
+## 4 genuine         2    31
+## 5 genuine         3    68
+## 6 genuine         4     1
+```
+
+ 
+
+In my case (yours might be different), 99 of the 100 counterfeit bills
+are in clusters 1 and 4, and 99 of the 100 genuine bills are in
+clusters 2 and 3.
+\marginnote{This is again where *set.seed* is  valuable: write this text once and it never needs to change.} So the
+clustering has done a very good job of distinguishing the genuine
+bills from the counterfeit ones. (You could imagine, if you were an
+employee at the bank, saying that a bill in cluster 1 or 4 is
+counterfeit, and being right 99\% of the time.) This is kind of a
+by-product of the clustering, though: we weren't *trying* to
+distinguish counterfeit bills (that would have been the discriminant
+analysis that we did before); we were just trying to divide them into
+groups of different ones, and part of what made them different was
+that some of them were genuine bills and some of them were
+counterfeit.
+ 
+
+
+
+
+##  Grouping similar cars
+
+
+ The file
+[link](http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv) contains
+information on seven variables 
+for 32 different cars. The variables are:
+
+
+
+* `Carname`: name of the car (duh!)
+
+* `mpg`: gas consumption in miles per US gallon (higher means the car uses less gas)
+
+* `disp`: engine displacement (total volume of cylinders in engine): higher is more powerful
+
+* `hp`: engine horsepower (higher means a more powerful engine)
+
+* `drat`: rear axle ratio (higher means more powerful but worse gas mileage)
+
+* `wt`: car weight in US tons
+
+* `qsec`: time needed for the car to cover a quarter mile (lower means faster)
+
+
+
+
+(a) Read in the data and display its structure. Do you have the
+right number of cars and variables?
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv"
+cars = read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   Carname = col_character(),
+##   mpg = col_double(),
+##   disp = col_double(),
+##   hp = col_integer(),
+##   drat = col_double(),
+##   wt = col_double(),
+##   qsec = col_double()
+## )
+```
+
+```r
+cars
+```
+
+```
+## # A tibble: 32 x 7
+##    Carname   mpg  disp    hp  drat    wt
+##    <chr>   <dbl> <dbl> <int> <dbl> <dbl>
+##  1 Mazda ~  21    160    110  3.9   2.62
+##  2 Mazda ~  21    160    110  3.9   2.88
+##  3 Datsun~  22.8  108     93  3.85  2.32
+##  4 Hornet~  21.4  258    110  3.08  3.22
+##  5 Hornet~  18.7  360    175  3.15  3.44
+##  6 Valiant  18.1  225    105  2.76  3.46
+##  7 Duster~  14.3  360    245  3.21  3.57
+##  8 Merc 2~  24.4  147.    62  3.69  3.19
+##  9 Merc 2~  22.8  141.    95  3.92  3.15
+## 10 Merc 2~  19.2  168.   123  3.92  3.44
+## # ... with 22 more rows, and 1 more
+## #   variable: qsec <dbl>
+```
+
+   
+
+Check, both on number of cars and number of variables.
+
+
+(b) The variables are all measured on different scales. Use
+`scale` to produce a matrix of standardized ($z$-score) values
+for the columns of your data that are numbers.
+
+
+
+Solution
+
+
+All but the first column needs to be scaled, so:
+
+```r
+cars.s = cars %>% select(-Carname) %>% scale()
+```
+
+   
+
+This is a `matrix`, as we've seen before.
+
+Another way is like this:
+
+
+```r
+h = cars %>% select_if(is.numeric) %>% scale()
+```
+
+ 
+
+I would prefer to have a look at my result, so that I can see that it
+has sane things in it:
+
+
+```r
+head(cars.s)
+```
+
+```
+##             mpg        disp         hp
+## [1,]  0.1508848 -0.57061982 -0.5350928
+## [2,]  0.1508848 -0.57061982 -0.5350928
+## [3,]  0.4495434 -0.99018209 -0.7830405
+## [4,]  0.2172534  0.22009369 -0.5350928
+## [5,] -0.2307345  1.04308123  0.4129422
+## [6,] -0.3302874 -0.04616698 -0.6080186
+##            drat           wt       qsec
+## [1,]  0.5675137 -0.610399567 -0.7771651
+## [2,]  0.5675137 -0.349785269 -0.4637808
+## [3,]  0.4739996 -0.917004624  0.4260068
+## [4,] -0.9661175 -0.002299538  0.8904872
+## [5,] -0.8351978  0.227654255 -0.4637808
+## [6,] -1.5646078  0.248094592  1.3269868
+```
+
+ 
+
+or, 
+
+
+```r
+head(h)
+```
+
+```
+##             mpg        disp         hp
+## [1,]  0.1508848 -0.57061982 -0.5350928
+## [2,]  0.1508848 -0.57061982 -0.5350928
+## [3,]  0.4495434 -0.99018209 -0.7830405
+## [4,]  0.2172534  0.22009369 -0.5350928
+## [5,] -0.2307345  1.04308123  0.4129422
+## [6,] -0.3302874 -0.04616698 -0.6080186
+##            drat           wt       qsec
+## [1,]  0.5675137 -0.610399567 -0.7771651
+## [2,]  0.5675137 -0.349785269 -0.4637808
+## [3,]  0.4739996 -0.917004624  0.4260068
+## [4,] -0.9661175 -0.002299538  0.8904872
+## [5,] -0.8351978  0.227654255 -0.4637808
+## [6,] -1.5646078  0.248094592  1.3269868
+```
+
+ 
+
+These look right. Or, perhaps better, this:
+
+
+```r
+summary(cars.s)
+```
+
+```
+##       mpg               disp        
+##  Min.   :-1.6079   Min.   :-1.2879  
+##  1st Qu.:-0.7741   1st Qu.:-0.8867  
+##  Median :-0.1478   Median :-0.2777  
+##  Mean   : 0.0000   Mean   : 0.0000  
+##  3rd Qu.: 0.4495   3rd Qu.: 0.7688  
+##  Max.   : 2.2913   Max.   : 1.9468  
+##        hp               drat        
+##  Min.   :-1.3810   Min.   :-1.5646  
+##  1st Qu.:-0.7320   1st Qu.:-0.9661  
+##  Median :-0.3455   Median : 0.1841  
+##  Mean   : 0.0000   Mean   : 0.0000  
+##  3rd Qu.: 0.4859   3rd Qu.: 0.6049  
+##  Max.   : 2.7466   Max.   : 2.4939  
+##        wt               qsec         
+##  Min.   :-1.7418   Min.   :-1.87401  
+##  1st Qu.:-0.6500   1st Qu.:-0.53513  
+##  Median : 0.1101   Median :-0.07765  
+##  Mean   : 0.0000   Mean   : 0.00000  
+##  3rd Qu.: 0.4014   3rd Qu.: 0.58830  
+##  Max.   : 2.2553   Max.   : 2.82675
+```
+
+ 
+The mean is exactly zero, for all variables, which is as it should
+be. Also, the standardized values look about as they should; even the
+extreme ones don't go beyond $\pm 3$. 
+
+This doesn't show the standard deviation of each variable, though,
+which should be exactly 1 (since that's what "standardizing"
+means). To get *that*, *this*:
+
+
+```r
+as_tibble(cars.s) %>% map_dbl(sd)
+```
+
+```
+##  mpg disp   hp drat   wt qsec 
+##    1    1    1    1    1    1
+```
+
+ 
+
+The idea here is ``take the matrix `cars.s`, turn it into a
+data frame, and for each *column* (a data frame is a ``list of
+columns''), calculate the SD.
+\marginnote{The *scale* function can take  a data frame, as here, but always produces a matrix. That's why we  had to turn it back into a data frame to run *map_dbl* on  it.}
+
+As you realize now, the same idea will get the mean of each column too:
+
+
+```r
+as_tibble(cars.s) %>% map_dbl(mean)
+```
+
+```
+##           mpg          disp            hp 
+##  7.112366e-17 -9.084937e-17  1.040834e-17 
+##          drat            wt          qsec 
+## -2.918672e-16  4.681043e-17  5.299580e-16
+```
+
+ 
+
+and we see that the means are all zero, to about 15 decimals, anyway.
+
+Technically, the output from these is a "named vector": a single
+collection of numbers, each of which has a name. As run this way, they
+are *not* single-row data frames, of the sort you might get from
+`summarize`. 
+
+  
+
+
+(c) Run a K-means cluster analysis for these data, obtaining 3
+clusters, and display the results. Take whatever action you need to
+obtain the best (random) result from a number of runs.
+
+
+
+Solution
+
+
+The hint at the end says "use `nstart`", so something like this:
+
+```r
+set.seed(457299)
+cars.1 = kmeans(cars.s, 3, nstart = 20)
+cars.1
+```
+
+```
+## K-means clustering with 3 clusters of sizes 6, 14, 12
+## 
+## Cluster means:
+##          mpg       disp         hp
+## 1  1.6552394 -1.1624447 -1.0382807
+## 2 -0.8280518  0.9874085  0.9119628
+## 3  0.1384407 -0.5707543 -0.5448163
+##         drat         wt       qsec
+## 1  1.2252295 -1.3738462  0.3075550
+## 2 -0.6869112  0.7991807 -0.6024854
+## 3  0.1887816 -0.2454544  0.5491221
+## 
+## Clustering vector:
+##  [1] 3 3 3 3 2 3 2 3 3 3 3 2 2 2 2 2 2 1 1 1
+## [21] 3 2 2 2 2 1 1 1 2 3 2 3
+## 
+## Within cluster sum of squares by cluster:
+## [1]  7.76019 33.37849 24.95528
+##  (between_SS / total_SS =  64.5 %)
+## 
+## Available components:
+## 
+## [1] "cluster"      "centers"     
+## [3] "totss"        "withinss"    
+## [5] "tot.withinss" "betweenss"   
+## [7] "size"         "iter"        
+## [9] "ifault"
+```
+
+   
+
+You don't need the `set.seed`, but if you run again, you'll get
+a different answer. With the `nstart`, you'll probably get the
+same clustering every time you run, but the clusters might have
+different numbers, so that when you talk about "cluster 1" and then
+re-run, what you were talking about might have moved to cluster 3, say.
+
+If you are using R Markdown, for this reason, having a
+`set.seed` before anything involving random number generation
+is a smart move.
+\marginnote{I forgot this, and then realized that I would have to rewrite a whole paragraph. In case you think I remember everything the first time.}
+  
+
+
+(d) Display the car names together with which cluster they are
+in. If you display them all at once, sort by cluster so that it's
+easier to see which clusters contain which cars. (You may have to make
+a data frame first.)
+
+
+
+Solution
+
+
+As below. The car names are in the `Carname` column of the
+original `cars` data frame, and the cluster numbers are in
+the `cluster` part of the output from `kmeans`. You'll
+need to take some action to display everything (there are only 32
+cars, so it's perfectly all right to display all of them):
+
+```r
+tibble(car = cars$Carname, cluster = cars.1$cluster) %>% 
+    arrange(cluster) %>% print(n = Inf)
+```
+
+```
+## # A tibble: 32 x 2
+##    car                 cluster
+##    <chr>                 <int>
+##  1 Fiat 128                  1
+##  2 Honda Civic               1
+##  3 Toyota Corolla            1
+##  4 Fiat X1-9                 1
+##  5 Porsche 914-2             1
+##  6 Lotus Europa              1
+##  7 Hornet Sportabout         2
+##  8 Duster 360                2
+##  9 Merc 450SE                2
+## 10 Merc 450SL                2
+## 11 Merc 450SLC               2
+## 12 Cadillac Fleetwood        2
+## 13 Lincoln Continental       2
+## 14 Chrysler Imperial         2
+## 15 Dodge Challenger          2
+## 16 AMC Javelin               2
+## 17 Camaro Z28                2
+## 18 Pontiac Firebird          2
+## 19 Ford Pantera L            2
+## 20 Maserati Bora             2
+## 21 Mazda RX4                 3
+## 22 Mazda RX4 Wag             3
+## 23 Datsun 710                3
+## 24 Hornet 4 Drive            3
+## 25 Valiant                   3
+## 26 Merc 240D                 3
+## 27 Merc 230                  3
+## 28 Merc 280                  3
+## 29 Merc 280C                 3
+## 30 Toyota Corona             3
+## 31 Ferrari Dino              3
+## 32 Volvo 142E                3
+```
+
+   
+
+Or start from the original data frame as read in from the file and
+grab only what you want:
+
+
+```r
+cars %>% select(Carname) %>% mutate(cluster = cars.1$cluster) %>% 
+    arrange(cluster) %>% print(n = Inf)
+```
+
+```
+## # A tibble: 32 x 2
+##    Carname             cluster
+##    <chr>                 <int>
+##  1 Fiat 128                  1
+##  2 Honda Civic               1
+##  3 Toyota Corolla            1
+##  4 Fiat X1-9                 1
+##  5 Porsche 914-2             1
+##  6 Lotus Europa              1
+##  7 Hornet Sportabout         2
+##  8 Duster 360                2
+##  9 Merc 450SE                2
+## 10 Merc 450SL                2
+## 11 Merc 450SLC               2
+## 12 Cadillac Fleetwood        2
+## 13 Lincoln Continental       2
+## 14 Chrysler Imperial         2
+## 15 Dodge Challenger          2
+## 16 AMC Javelin               2
+## 17 Camaro Z28                2
+## 18 Pontiac Firebird          2
+## 19 Ford Pantera L            2
+## 20 Maserati Bora             2
+## 21 Mazda RX4                 3
+## 22 Mazda RX4 Wag             3
+## 23 Datsun 710                3
+## 24 Hornet 4 Drive            3
+## 25 Valiant                   3
+## 26 Merc 240D                 3
+## 27 Merc 230                  3
+## 28 Merc 280                  3
+## 29 Merc 280C                 3
+## 30 Toyota Corona             3
+## 31 Ferrari Dino              3
+## 32 Volvo 142E                3
+```
+$
+
+This time we want to *keep* the car names and throw away
+everything else.
+  
+
+
+(e) I have no idea whether 3 is a sensible number of clusters. To
+find out, we will draw a scree plot (in a moment). Write a function
+that accepts the number of clusters and the (scaled) data,
+and returns the total within-cluster sum of squares.
+
+
+
+Solution
+
+
+I failed to guess (in conversation with students, back when this was
+a question to be handed in) what you might
+do. There are two equally good ways to tackle this part and the next:
+
+
+* Write a function to calculate the total within-cluster  sum
+of squares (in this part) and somehow use it in the next part,
+eg. via `map_dbl` or a loop, to get the total
+within-cluster sum of squares for *each* number of clusters.
+
+* Skip the function-writing part and go directly to a loop in
+the next part.
+
+I'm good with either approach: as long as you obtain, somehow, the
+total within-cluster sum of squares for each number of clusters, and
+use them for making a scree plot, I think you should get the 
+points for this part and the next.
+I'll talk about the function way here and the loop way in the next part.
+
+The function way is just like the one in the previous question:
+
+
+```r
+wss = function(howmany, data, nstart = 20) {
+    kmeans(data, howmany, nstart = 20)$tot.withinss
+}
+```
+
+ 
+
+The data and number of clusters can have any names, as long as you use
+whatever input names you chose within the function.
+
+I should probably check that this works, at least on 3
+clusters. Before we had
+
+
+```r
+cars.1$tot.withinss
+```
+
+```
+## [1] 66.09396
+```
+
+ 
+
+and the function gives
+
+
+```r
+wss(3, cars.s)
+```
+
+```
+## [1] 66.09396
+```
+
+ 
+
+Check.
+I need to make sure that I used my scaled `cars` data, but I
+don't need to say anything about `nstart`, since that defaults
+to the perfectly suitable 20.
+  
+
+
+(f) Calculate the total within-group sum of squares for each
+number of clusters from 2 to 10, using the function you just wrote.
+
+
+
+Solution
+
+
+The loop way. I like to define my possible numbers of clusters into
+a vector first:
+
+```r
+w = numeric(0)
+nclus = 2:10
+for (i in nclus) {
+    w[i] = wss(i, cars.s)
+}
+w
+```
+
+```
+##  [1]       NA 87.29448 66.09396 50.94273
+##  [5] 38.22004 29.28816 24.23138 20.76061
+##  [9] 17.58753 15.19850
+```
+
+
+Now that I look at this again, it occurs to me that there is no great
+need to write a function to do this: you can just do what you need to
+do within the loop, like this:
+
+
+```r
+w = numeric(0)
+nclus = 2:10
+for (i in nclus) {
+    w[i] = kmeans(cars.s, i, nstart = 20)$tot.withinss
+}
+w
+```
+
+```
+##  [1]       NA 87.29448 66.09396 50.94273
+##  [5] 38.22004 29.28816 24.23138 20.76061
+##  [9] 18.22591 15.51232
+```
+
+ 
+
+You ought to have an `nstart` somewhere to make sure that
+`kmeans` gets run a number of times and the best result taken. 
+
+If you initialize your `w` with `numeric(10)` rather
+than `numeric(0)`, it apparently gets filled with zeroes rather
+than `NA` values. This means, later, when you come to plot your
+`w`-values, the within-cluster total sum of squares will appear
+to be zero, a legitimate value, for one cluster, even though it is
+definitely not. (Or, I suppose, you could start your loop at 1
+cluster, and get a legitimate, though very big, value for it.)
+In both of the above cases, the curly brackets are optional because
+there is only one line within the loop.
+\marginnote{I am m accustomed to  using the curly brackets all the time, partly because my single-line loops have a habit of expanding to more than one line as I embellish what they do, and partly because I'm used to the programming language Perl where the curly brackets are obligatory even with only one line. Curly brackets in Perl serve the same purpose as indentation serves in Python: figuring out what is inside a loop or an *if* and what is outside.}
+
+What is *actually* happening here is an implicit
+loop-within-a-loop. There is a loop over `i` that goes over all
+clusters, and then there is a loop over another variable, `j`
+say, that loops over the `nstart` runs that we're doing for
+`i` clusters, where we find the `tot.withinss` for
+`i` clusters on the `j`th run, and if it's the best one
+so far for `i` clusters, we save it. Or, at least,
+`kmeans` saves it.
+
+Or, using `map_dbl`, which I like better (perhaps because I
+have mastered how it works):
+
+
+```r
+wwx = tibble(clusters = 2:10) %>% mutate(wss = map_dbl(clusters, 
+    wss, cars.s))
+wwx
+```
+
+```
+## # A tibble: 9 x 2
+##   clusters   wss
+##      <int> <dbl>
+## 1        2  87.3
+## 2        3  66.1
+## 3        4  50.9
+## 4        5  38.2
+## 5        6  29.3
+## 6        7  24.9
+## 7        8  20.8
+## 8        9  17.3
+## 9       10  15.2
+```
+
+ 
+
+Note that `w` starts at 1, but `wwx` starts at 2. For
+this way, you *have* to define a function first to calculate the
+total within-cluster sum of squares for a given number of clusters. If
+you must, you can define the function within the `map_dbl`,
+but I find that very confusing to read, so I'd rather define the
+function first, and then use it later. 
+
+This one is just about simple enough to define the function within the `map_dbl`:
+
+
+```r
+wwx = tibble(clusters = 2:10) %>% mutate(wss = map_dbl(clusters, 
+    ~kmeans(cars.s, ., nstart = 20)$tot.withinss))
+wwx
+```
+
+```
+## # A tibble: 9 x 2
+##   clusters   wss
+##      <int> <dbl>
+## 1        2  87.3
+## 2        3  66.1
+## 3        4  50.9
+## 4        5  38.2
+## 5        6  29.3
+## 6        7  24.2
+## 7        8  20.8
+## 8        9  17.3
+## 9       10  15.2
+```
+$ %$ %$
+
+Instead of having a function name as the second thing in the
+`map_dbl`, I have a so-called "one-sided model formula" that
+begins with a squiggle, and then the definition of what I want. The
+for-each part finds its way into here as a dot (the number of
+clusters, here); this is the equivalent of the `i` in the loop.
+
+The upshot of all of this is that if you had obtained a total
+within-cluster sum of squares for each number of clusters,
+*somehow*, and it's correct, you should have gotten the
+points
+\marginnote{When this was a question to hand in, which it is not any  more.} for this part and the last part. This is a common principle
+of mine, and works on exams as well as assignments; it goes back to
+the idea of "get the job done" that you first saw in C32.
+
+  
+
+
+(g) Make a scree plot, using the total within-cluster sums of
+squares values that you calculated in the previous part. 
+
+
+
+Solution
+
+
+If you did this the loop way, it's tempting to leap into this:
+
+```r
+d = data.frame(clusters = nclus, wss = w)
+```
+
+```
+## Error in data.frame(clusters = nclus, wss = w): arguments imply differing number of rows: 9, 10
+```
+
+   
+
+and then wonder why it doesn't work. The problem is that `w`
+has 10 things in it, including an `NA` at the front (as a
+placeholder for 1 cluster):
+
+
+```r
+w
+```
+
+```
+##  [1]       NA 87.29448 66.09396 50.94273
+##  [5] 38.22004 29.28816 24.23138 20.76061
+##  [9] 18.22591 15.51232
+```
+
+```r
+nclus
+```
+
+```
+## [1]  2  3  4  5  6  7  8  9 10
+```
+
+
+
+while `nclus` only has 9. So do something like this instead:
+
+
+```r
+tibble(clusters = 1:10, wss = w) %>% ggplot(aes(x = clusters, 
+    y = wss)) + geom_point() + geom_line()
+```
+
+```
+## Warning: Removed 1 rows containing missing values
+## (geom_point).
+```
+
+```
+## Warning: Removed 1 rows containing missing
+## values (geom_path).
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-106-1} 
+
+ 
+
+This gives a warning because there is no 1-cluster `w`-value,
+but the point is properly omitted from the plot, so the plot you get
+is fine.
+
+Or plot the output from `map_dbl`, which is easier since it's
+already a data frame:
+
+
+```r
+wwx %>% ggplot(aes(x = clusters, y = wss)) + geom_point() + 
+    geom_line()
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-107-1} 
+
+ 
+
+  
+
+
+(h) What is a suitable number of clusters for K-means, based on
+your scree plot?
+
+
+
+Solution
+
+
+That seems to me to have a clear elbow at 6, suggesting six
+clusters.
+\marginnote{We do something similar on scree plots for principal components later, but then, for reasons that will become clear then, we take elbow *minus 1*.} Look for where the plot 
+"turns the corner" from going down to going out, or the point that is the 
+"last  one on the mountain and the first one on the scree". This
+mountainside goes down to 6, and from there it seems to turn the
+corner and go out after that. 
+
+This is a judgement call, but this particular one is about as clear as
+you can expect to see.
+
+I wanted a picture of some real scree. This one shows what I mean:
+
+
+![](scree.png)
+
+
+Note the rock face and
+the loose rock below, which is the scree. Imagine looking at the rock
+face and scree from side-on. This is in north Wales, the
+other end of Wales from Llanederyn/Llanedeyrn and Caldicot.
+
+The above photo is from [link](http://www.geograph.org.uk/photo/159935).
+  
+
+
+(i) Run a K-means analysis using the number of clusters suggested
+by your scree plot, and list the car names together with the clusters
+they belong to, *sorted by cluster*.
+
+
+
+Solution
+
+
+This is the same idea as above. The `arrange` idea from above
+seems to be the cleanest way to arrange the output:
+The K-means analysis is thus:
+
+```r
+cars.2 = kmeans(cars.s, 6, nstart = 20)
+```
+
+  
+
+or use whatever number of clusters you thought was good from your
+scree plot.
+
+Then display them:
+
+
+```r
+cars %>% select(Carname) %>% mutate(cluster = cars.2$cluster) %>% 
+    arrange(cluster) %>% print(n = Inf)
+```
+
+```
+## # A tibble: 32 x 2
+##    Carname             cluster
+##    <chr>                 <int>
+##  1 Fiat 128                  1
+##  2 Honda Civic               1
+##  3 Toyota Corolla            1
+##  4 Fiat X1-9                 1
+##  5 Porsche 914-2             1
+##  6 Lotus Europa              1
+##  7 Hornet 4 Drive            2
+##  8 Valiant                   2
+##  9 Merc 240D                 2
+## 10 Merc 230                  2
+## 11 Toyota Corona             2
+## 12 Cadillac Fleetwood        3
+## 13 Lincoln Continental       3
+## 14 Chrysler Imperial         3
+## 15 Hornet Sportabout         4
+## 16 Merc 450SE                4
+## 17 Merc 450SL                4
+## 18 Merc 450SLC               4
+## 19 Dodge Challenger          4
+## 20 AMC Javelin               4
+## 21 Pontiac Firebird          4
+## 22 Duster 360                5
+## 23 Camaro Z28                5
+## 24 Ford Pantera L            5
+## 25 Maserati Bora             5
+## 26 Mazda RX4                 6
+## 27 Mazda RX4 Wag             6
+## 28 Datsun 710                6
+## 29 Merc 280                  6
+## 30 Merc 280C                 6
+## 31 Ferrari Dino              6
+## 32 Volvo 142E                6
+```
+
+ 
+
+The logic to this is the same as above.
+I don't have a good feeling for what the cars within a cluster have in
+common, by eyeballing the names, except for possibly a couple of
+things: my cluster 1 seems to be mostly family cars, and my cluster 3
+appears to contain "boats" (large cars that consume a lot of
+gas). Your clusters ought to be about the same in terms of membership,
+but might be numbered differently.
+
+To understand these clusters further, we can use them as input to a
+discriminant analysis. There isn't any real need to run a MANOVA
+first, since we kind of know that these groups will be different
+(that's why we ran a cluster analysis).
+
+So, first we'll make a data frame with the whole original data set
+plus the clusters that came out of the K-means. We are adding the
+clusters to `cars`, so it makes sense to use the same ideas as I used
+above (without the `arrange`, that being only for looking at,
+and without the `select`, since this time I want all the
+variables that were in `cars`):
+
+
+```r
+carsx = cars %>% mutate(cluster = cars.2$cluster)
+```
+
+ 
+Now we fire away:
+
+
+```r
+carsx.1 = lda(cluster ~ mpg + disp + hp + drat + 
+    wt + qsec, data = carsx)
+carsx.1
+```
+
+```
+## Call:
+## lda(cluster ~ mpg + disp + hp + drat + wt + qsec, data = carsx)
+## 
+## Prior probabilities of groups:
+##       1       2       3       4       5 
+## 0.18750 0.15625 0.09375 0.21875 0.12500 
+##       6 
+## 0.21875 
+## 
+## Group means:
+##        mpg     disp       hp     drat
+## 1 30.06667  86.6500  75.5000 4.251667
+## 2 21.64000 178.1200  93.8000 3.430000
+## 3 11.83333 457.3333 216.6667 3.053333
+## 4 16.78571 315.6286 170.0000 3.050000
+## 5 14.60000 340.5000 272.2500 3.675000
+## 6 20.41429 147.0286 120.4286 3.888571
+##         wt     qsec
+## 1 1.873000 18.39833
+## 2 3.096000 20.51400
+## 3 5.339667 17.74000
+## 4 3.688571 17.32000
+## 5 3.537500 15.08750
+## 6 2.892143 17.62714
+## 
+## Coefficients of linear discriminants:
+##              LD1           LD2         LD3
+## mpg  -0.19737944 -0.0155769096 -0.27978549
+## disp  0.01950855 -0.0001094137 -0.02090998
+## hp    0.02804348  0.0251253160 -0.01727355
+## drat  0.94348424  1.8928372037  0.56645563
+## wt    0.39068831 -1.3973097325  1.84808828
+## qsec  0.33992344 -0.3010056176 -0.66690927
+##               LD4          LD5
+## mpg   0.353766928  0.035582922
+## disp  0.001034719  0.001680201
+## hp   -0.015955928 -0.017220548
+## drat  1.264185553 -2.015644662
+## wt    2.963377419 -0.300573153
+## qsec -0.755053279 -0.738889640
+## 
+## Proportion of trace:
+##    LD1    LD2    LD3    LD4    LD5 
+## 0.7977 0.1234 0.0368 0.0299 0.0122
+```
+
+ 
+
+At the bottom (in `trace`) you see that `LD1` is clearly
+the most important thing for splitting into groups, `LD2` might
+be slightly relevant, and the other `LD`s are basically
+meaningless. So a plot of the first two `LD`s should tell the story.
+
+Before we get to that, however, we can take a look at the Coefficients
+of Linear Discriminants, for `LD1` and `LD2`
+anyway. `LD1` depends principally on `drat`, `wt`
+and `qsec` (positively) and maybe negatively on
+`mpg`. That means `LD1` will be large if the car is
+powerful, heavy, *slow* (since a larger `qsec` means the
+car takes longer to go a quarter mile) and consumes a lot of gas. I
+think I can summarize this as "powerful". 
+
+`LD2` also depends on `drat` and `wt`,
+but note the signs: it is contrasting `drat` (displacement
+ratio) with `wt` (weight), so that a car with a large
+displacement ratio relative to its weight would be large (plus) on
+`LD2`. That is, `LD2` is "powerful for its weight".
+
+All right, now for a plot, with the points colour-coded by
+cluster. There are two ways to do this; the easy one is
+`ggbiplot`. The only weirdness here is that the
+`cluster`s are numbered, so you have to turn that into a factor
+first (unless you like shades of blue). I didn't load the package
+first, so I call it here with the package name and the two colons:
+
+
+```r
+ggbiplot::ggbiplot(carsx.1, groups = factor(carsx$cluster))
+```
+
+```
+## -------------------------------------------
+```
+
+```
+## You have loaded plyr after dplyr - this is likely to cause problems.
+## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+## library(plyr); library(dplyr)
+```
+
+```
+## -------------------------------------------
+```
+
+```
+## 
+## Attaching package: 'plyr'
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     arrange, count, desc, failwith, id,
+##     mutate, rename, summarise,
+##     summarize
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     compact
+```
+
+```
+## 
+## Attaching package: 'scales'
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     discard
+```
+
+```
+## The following object is masked from 'package:readr':
+## 
+##     col_factor
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-112-1} 
+$ %$ %$ %$
+
+Or you can do the predictions, then plot `LD1` against
+`LD2`, coloured by cluster:
+
+
+```r
+p = predict(carsx.1)
+data.frame(p$x, cluster = factor(carsx$cluster)) %>% 
+    ggplot(aes(x = LD1, y = LD2, colour = cluster)) + 
+    geom_point() + coord_fixed()
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-113-1} 
+
+ 
+
+The pattern of coloured points is the same. The advantage to the
+biplot is that you see which original variables contribute to the
+`LD` scores and thus distinguish the clusters; on the second
+plot, you have to figure out for yourself which original variables
+contribute, and how, to the `LD` scores.
+
+You should include `coord_fixed` to make the axis scales the
+same, since allowing them to be different will distort the picture
+(the picture should come out square). You do the same thing in
+multidimensional scaling.
+
+As you see, `LD1` is doing the best job of separating the
+clusters, but `LD2` is also doing something: separating
+clusters 1 and 5, and also 2 and 4 (though 4 is a bit bigger than 2 on
+`LD1` also). 
+
+I suggested above that `LD1` seems to be "powerful"
+(on the right) vs.\ not (on the left). The displacement ratio is a
+measure of the power of an engine, so a car
+that is large on `LD2` is powerful for  its weight.
+
+Let's find the clusters I mentioned before. Cluster 3 was the
+"boats": big engines and heavy cars, but not fast. So they
+should be large `LD1` and small (negative)
+`LD2`. Cluster 1 I called "family cars": they are not
+powerful, but have moderate-to-good power for their weight.
+
+With that in mind, we can have a crack at the other clusters. Cluster
+2 is neither powerful nor powerful-for-weight  (I don't know these
+cars, so can't 
+comment further) while cluster 5 is powerful and also powerful for
+their weight, so these
+might be sports cars. Clusters 6 and 4 are less and more
+powerful, both averagely powerful for their size.
+  
+
+
+
+
+
+##  Running, jumping, and throwing
+
+
+ The decathlon is a men's
+\marginnote{Women  compete in a similar competition called the *heptathlon* with seven  events.} track-and-field competition in which competitors complete 10
+events over two days as follows, requiring the skills shown:
+
+
+\begin{tabular}{ll}
+Event & Skills \\
+\hline
+100m & Running, speed\\
+Long jump & Jumping, speed \\
+Shot put & Throwing, strength\\
+High jump & Jumping, agility\\ 
+400m & Running, speed\\
+110m hurdles & Running, jumping, speed\\
+Discus & Throwing, agility (and maybe strength)\\
+Pole vault & Jumping, agility\\
+Javelin & Throwing, agility\\
+1500m & Running, endurance\\
+\hline
+\end{tabular}
+
+
+These are a mixture of running, jumping and throwing disciplines. The
+performance (time, distance or height) achieved in each event is
+converted to a number of points using standard tables,
+\marginnote{How I  understand it works is that  a *good* performance in an event is  worth 1000 points, and then, according to the event, each second or  centimetre better or worse than this is worth a certain number of  points up or down from 1000. At this level, the winner of the whole  decathlon will get somewhere near 10,000 points. A look at the  Wikipedia article reveals that it is not quite as simple as this,  but this is the idea.} and the winner of the entire decathlon is the
+competitor with the largest total of points. (A good decathlete has to
+be at least reasonably good at all the disciplines.)
+
+For the decathlon competition at the 2013 Track and Field World
+Championship, a record was kept of each competitor's performance in
+each event (for the competitors that competed in all ten
+events). These values are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/dec2013.txt). 
+
+
+
+(a) Read in the data and verify that you have the right number
+of variables. 
+
+
+Solution
+
+
+Checking the file, this is delimited by single spaces. You might
+be concerned by the quotes; we'll read them in and see what
+happens to them.
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/dec2013.txt"
+decathlon0 = read_delim(my_url, " ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   name = col_character(),
+##   x100m = col_double(),
+##   long.jump = col_double(),
+##   shot.put = col_double(),
+##   high.jump = col_double(),
+##   x400m = col_double(),
+##   x110mh = col_double(),
+##   discus = col_double(),
+##   pole.vault = col_double(),
+##   javelin = col_double(),
+##   x1500m = col_double()
+## )
+```
+
+```r
+decathlon0
+```
+
+```
+## # A tibble: 24 x 11
+##    name  x100m long.jump shot.put high.jump
+##    <chr> <dbl>     <dbl>    <dbl>     <dbl>
+##  1 Asht~  10.4      7.73     14.4      1.93
+##  2 Dami~  10.4      7.39     14.2      2.05
+##  3 Rico~  10.6      7.22     14.8      1.99
+##  4 Miha~  10.7      7.51     13.4      1.96
+##  5 Mich~  10.7      7.85     14.6      1.99
+##  6 Carl~  10.8      7.54     14.5      1.96
+##  7 Gunn~  10.8      7.8      14.7      2.14
+##  8 Eelc~  10.8      7.65     14.1      2.02
+##  9 Pasc~  11.0      7.19     15.9      1.99
+## 10 Will~  11.0      7.44     13.9      2.05
+## # ... with 14 more rows, and 6 more
+## #   variables: x400m <dbl>, x110mh <dbl>,
+## #   discus <dbl>, pole.vault <dbl>,
+## #   javelin <dbl>, x1500m <dbl>
+```
+
+     
+
+The names got shortened for display, but the quotes seem to have
+properly disappeared.
+
+Note that the columns that would otherwise start with digits have
+`x` on the front of their names, so as to guarantee that the
+column names are legal variable names (and thus won't require any
+special treatment later).
+    
+
+
+(b) Some of the performances are times in seconds, and some of
+them are distances (or heights) in metres. Also, some of the columns
+are more variable than others. Produce a matrix of standardized
+performances in each event, making sure not to try to standardize
+the names!
+
+
+Solution
+
+
+`scale` is what I am trying to hint towards. Leave off the
+first column, which I would rather specify by name. (People have
+an annoying habit of changing the order of columns, but it's more
+work and less likely that the column *name* will change.)
+
+
+     
+
+```r
+decathlon = decathlon0 %>% select(-name) %>% scale()
+round(decathlon, 2)
+```
+
+```
+##       x100m long.jump shot.put high.jump x400m x110mh discus pole.vault javelin x1500m
+##  [1,] -2.21      1.24     0.29     -0.95 -2.43  -1.77   0.27       1.10    0.55  -0.49
+##  [2,] -1.92      0.16     0.03      0.74 -0.46  -1.23  -0.06      -0.39    0.52  -0.46
+##  [3,] -1.33     -0.38     0.96     -0.11 -0.75  -1.37   1.71      -0.02   -1.17   0.63
+##  [4,] -1.08      0.54    -1.24     -0.53 -1.02   0.17  -0.09      -0.02   -0.60  -0.93
+##  [5,] -0.87      1.62     0.57     -0.11 -1.08  -0.50   0.82       0.36    0.72  -1.10
+##  [6,] -0.69      0.64     0.46     -0.53 -0.13  -1.03   0.59       0.73   -0.42   0.37
+##  [7,] -0.48      1.46     0.77      2.01 -0.33   0.13  -0.73      -1.14   -0.82   0.35
+##  [8,] -0.45      0.99    -0.21      0.32 -0.59  -0.74  -1.95       1.48   -1.06  -1.20
+##  [9,] -0.10     -0.47     2.68     -0.11 -0.46  -0.12   0.53      -0.76    1.00   0.54
+## [10,] -0.10      0.32    -0.54      0.74 -0.53  -0.47  -0.40      -1.51    1.45  -1.21
+## [11,] -0.02      0.03    -0.54      0.74 -0.47  -0.39  -0.09       1.85   -0.52   0.50
+## [12,] -0.02      0.26    -0.10     -0.53 -0.13   0.69   1.42      -1.14   -2.26   0.06
+## [13,]  0.01     -0.12    -0.02     -1.37  1.80   1.60   0.37      -1.51    1.46   1.82
+## [14,]  0.33     -0.03    -0.02     -1.37 -0.62   0.24   0.81      -0.02    1.30  -1.31
+## [15,]  0.40      0.95    -1.04      0.74  0.03   0.33  -1.20       0.73    0.65   0.64
+## [16,]  0.47     -0.79     0.36     -0.11  0.04  -0.68  -0.09       0.36   -0.05  -0.05
+## [17,]  0.57     -0.19    -0.60      0.32  1.07   1.51  -0.69      -1.51   -0.95   0.72
+## [18,]  0.61     -2.09    -1.63     -1.37 -0.24  -0.32  -2.39       0.73    0.46   0.36
+## [19,]  0.75      0.16     1.03      1.59  0.57  -0.16   0.70       0.73   -0.42   0.88
+## [20,]  0.82     -0.25    -0.86      1.59  1.36   1.74  -0.94      -0.02   -0.49   2.07
+## [21,]  0.89      0.51    -0.73      0.74  0.47  -0.68   0.41       1.10    0.80  -1.14
+## [22,]  1.24     -0.69     1.07     -0.11  0.73   0.06   1.26       0.36    0.16  -0.02
+## [23,]  1.56     -2.28     0.98     -1.80  1.32   1.18  -0.69      -1.51   -1.44  -1.83
+## [24,]  1.63     -1.58    -1.69     -0.53  1.85   1.80   0.39      -0.02    1.11   0.78
+## attr(,"scaled:center")
+##      x100m  long.jump   shot.put  high.jump      x400m     x110mh     discus pole.vault 
+##  10.977083   7.339167  14.209583   1.997500  48.960000  14.512500  44.288333   4.904167 
+##    javelin     x1500m 
+##  62.069583 273.306667 
+## attr(,"scaled:scale")
+##      x100m  long.jump   shot.put  high.jump      x400m     x110mh     discus pole.vault 
+## 0.28433720 0.31549708 0.61480629 0.07091023 1.20878667 0.44795429 2.60828224 0.26780779 
+##    javelin     x1500m 
+## 5.01529875 7.22352899
+```
+$ %$ %$
+
+I think the matrix of standardized values is small enough to look at
+all  of, particularly if I round off the values to a small number of
+decimals, and, as I did, shrink it a bit. (Note that the means and SDs
+appear at the bottom as "attributes".)
+    
+
+
+
+   
+
+(c) We are going to make a scree plot to decide on the number
+of clusters our K-means clustering should use. Using a loop, or
+otherwise,
+\marginnote{I grew up in the UK, and when I saw that in an    exam, it was code for *the way they say is obvious but long, and    the otherwise-way is clever but short*. I think this is one of    those.} obtain the total within-cluster sum of squares for these
+data for each number of clusters for 2 up to 20.
+
+
+Solution
+
+
+Having kind of given the game away in the footnote, I guess I now
+have to keep up my end of the deal and show you the obvious way
+and the clever way.
+The obvious way is to do a Python-style loop, thus:
+
+```r
+maxclust
+```
+
+```
+## [1] 20
+```
+
+```r
+w = numeric(0)
+for (i in 2:maxclust) {
+    sol = kmeans(decathlon, i, nstart = 20)
+    w[i] = sol$tot.withinss
+}
+w
+```
+
+```
+##  [1]        NA 175.03246 151.08750 131.30247 113.59681 102.61744  89.64931  78.89089
+##  [9]  68.99662  60.77665  54.29991  47.64227  41.40352  35.39181  29.52008  25.05344
+## [17]  21.02841  17.28444  13.80627  10.44197
+```
+$ %$ %$
+
+I defined `maxclust` earlier, surreptitiously. (Actually, what
+happened was that I changed my mind about how many clusters I wanted
+you to go up to, so that instead of hard-coding the maximum number of
+clusters, I decided to put it in a variable so that I only had to
+change it once if I changed my mind again.)
+
+This is the same as the lecture notes, substituting some names, only I
+split the stuff within the loop into two lines, first getting the
+$i$-cluster solution, and then pulling out the total within-cluster
+sum of squares from it and saving it in the right place in
+`w`. You can do it in one step or two; I don't mind.
+
+The first value in `w` is missing, because we didn't calculate
+a value for 1 cluster (so that this `w` has 20 values, one of
+which is missing).
+
+Not that there's anything wrong with this,
+\marginnote{I have to sneak a  Seinfeld quote in there somewhere.} and if it works, it's good, but the
+True R Way
+\marginnote{Like Buddhism. I keep feeling that R should have  something called the Eight Noble Truths or similar.} is not to use a
+loop, but get the whole thing in one shot. In preparation for this,
+you write a function that does it for *one* number of clusters
+that is the first thing fed in, thus:
+
+
+```r
+wss = function(i, x) {
+    sol = kmeans(x, i, nstart = 20)  # or some suitable nstart
+    sol$tot.withinss
+}
+```
+
+ 
+
+Or you can steal the one from the lecture notes. In this one,
+`x` is the data matrix, and `i` is the number of
+clusters, but you can call them what you like.
+
+The second stage is to run this function for each desired number of
+clusters, without using a loop. This uses a package called
+`purrr` that is part of the `tidyverse` (check the
+beginning of this assignment to see that it got loaded when I loaded
+the `tidyverse`), and it contains a family of functions whose
+names start with `map` that do this. To figure out which one to
+use, take a look at your function: ours returns a single number, a
+`double` in the jargon (decimal number), so the `map`
+function we need is called `map_dbl`, and it goes like
+this. You can do it inside or outside a data frame, but I prefer to do
+it inside with a `mutate`:
+
+
+```r
+ww = tibble(clusters = 2:maxclust) %>% mutate(wss = map_dbl(clusters, wss, decathlon))
+ww
+```
+
+```
+## # A tibble: 19 x 2
+##    clusters   wss
+##       <int> <dbl>
+##  1        2 175. 
+##  2        3 151. 
+##  3        4 131. 
+##  4        5 114. 
+##  5        6 100. 
+##  6        7  89.5
+##  7        8  78.8
+##  8        9  69.0
+##  9       10  60.8
+## 10       11  54.1
+## 11       12  48.1
+## 12       13  41.4
+## 13       14  35.4
+## 14       15  29.5
+## 15       16  25.1
+## 16       17  21.0
+## 17       18  17.3
+## 18       19  13.9
+## 19       20  10.4
+```
+
+ 
+
+I have to say that I got this right the first time, but I think I
+benefitted greatly in that regard by writing out that explanation for
+you first. `wss` in `ww` has the same values as
+`w`, but without the missing one.
+
+The way to remember the bits in `map_dbl` (or any `map`) is
+that the thing that varies goes first (the numbers of clusters), then
+the function to run "for each of the first thing", and then any
+constant stuff after that (in this case, the data matrix to run
+`kmeans` on, every time).
+
+There is also a function `sapply` that does the same thing, but
+the `map` functions work a bit more uniformly. I learned
+`sapply` and friends a long time ago, and now, with the arrival
+of `purrr`, I think I need to unlearn them.
+
+If the thing in the "for each" slot of a `map` is a data
+frame, then the function is applied to every column of that data
+frame, so that if I go back to `decathlon0`, which was a data
+frame, and do this:
+
+
+ 
+
+
+```r
+decathlon.tmp = decathlon0 %>% select(-name)
+map_dbl(decathlon.tmp, mean)
+```
+
+```
+##      x100m  long.jump   shot.put  high.jump      x400m     x110mh 
+##  10.977083   7.339167  14.209583   1.997500  48.960000  14.512500 
+##     discus pole.vault    javelin     x1500m 
+##  44.288333   4.904167  62.069583 273.306667
+```
+
+ 
+
+then what I get is the mean of each (numeric) column. I first get rid
+of the name column, and save the result in a new temporary data frame
+`decathlon.tmp`;
+the `name` column would be a
+pretty silly thing to take the mean of.
+
+What happens, I hear you asking, if the function returns more than one
+thing, like for example `quantile`, which returns a vector
+containing the five-number summary? Well, then you use `map_df`
+and you get this:
+
+
+```r
+map_df(decathlon.tmp, quantile)
+```
+
+```
+## # A tibble: 5 x 10
+##   x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
+##   <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
+## 1  10.4      6.62     13.2      1.87  46.0   13.7   38.1       4.5 
+## 2  10.8      7.21     13.8      1.96  48.3   14.2   42.5       4.68
+## 3  11.0      7.37     14.2      1.99  48.7   14.4   44.6       4.9 
+## 4  11.2      7.52     14.6      2.05  49.7   14.7   45.9       5.1 
+## 5  11.4      7.85     15.9      2.14  51.2   15.3   48.7       5.4 
+## # ... with 2 more variables: javelin <dbl>, x1500m <dbl>
+```
+
+ 
+
+The idea is that `quantile` returns something that can be
+treated as a one-column data frame, and `map_df` says
+"`quantile` returns a data frame rather than just a number."
+The only downside is that `quantile` actually (for each
+variable) returns a vector with a name attribute (the names of the
+five percentiles that were calculated), and the `tidyverse`
+treats those like row names and discards them.
+
+    
+
+
+(d) Using what you calculated in the previous part, draw a scree
+plot. (You may have to create a data frame first.) How does your
+scree plot tell you that 5 is a possible number of clusters? Explain
+briefly.
+
+
+
+Solution
+
+
+This requires a teeny bit of care. If you went the loop way, what I
+called `w` has a missing value first (unless you were
+especially careful), so you have to plot it against *1* through 20:
+
+```r
+tibble(clusters = 1:maxclust, wss = w) %>% ggplot(aes(x = clusters, y = wss)) + 
+    geom_point() + geom_line()
+```
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+```
+## Warning: Removed 1 rows containing missing values (geom_path).
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/freddo-1} 
+
+   
+
+The warning message is to say that you don't have a total
+within-cluster sum of squares for 1 cluster, which you knew already.
+
+Or you can save the data frame first and then feed it into
+`ggplot`. 
+
+If you went the `map` way, you will have the `wss`
+values for 2 through 20 clusters already in a data
+frame, so it is a fair bit simpler:
+
+
+```r
+ww %>% ggplot(aes(x = clusters, y = wss)) + geom_point() + geom_line()
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/bilharzia-1} 
+
+ 
+
+There is, I suppose, the tiniest elbow at 5 clusters. It's not very
+clear, though. I would have liked it to be clearer.
+  
+
+
+(e) Run K-means with 5 clusters. Produce an output that shows
+which competitors are in which cluster.
+
+
+
+Solution
+
+
+If you're using R Markdown, you might like to start with this:
+
+```r
+set.seed(457299)
+```
+
+ 
+
+or some other random number seed of your choice. Using
+`nstart=20` or similar will give you the same *clustering*,
+but which cluster is cluster 1 might vary between runs. So if you talk
+about cluster 1 (below), and re-knit the document, you might otherwise
+find that cluster 1 has changed identity since the last time you
+knitted it. (I just remembered that for these solutions.)
+Running the `kmeans` itself is a piece of cake, since you have
+done it a bunch of times already (in your loop or `map`):
+
+```r
+decathlon.1 = kmeans(decathlon, 5, nstart = 20)
+decathlon.1
+```
+
+```
+## K-means clustering with 5 clusters of sizes 6, 5, 8, 1, 4
+## 
+## Cluster means:
+##         x100m   long.jump   shot.put     high.jump      x400m
+## 1 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
+## 2  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
+## 3 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
+## 4  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
+## 5  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+##       x110mh     discus  pole.vault     javelin     x1500m
+## 1 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
+## 2 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
+## 3 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
+## 4  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
+## 5  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+## 
+## Clustering vector:
+##  [1] 1 1 3 1 1 3 3 2 3 1 2 3 5 1 2 3 5 2 3 5 2 3 4 5
+## 
+## Within cluster sum of squares by cluster:
+## [1] 27.08131 26.24500 41.40072  0.00000 18.86978
+##  (between_SS / total_SS =  50.6 %)
+## 
+## Available components:
+## 
+## [1] "cluster"      "centers"      "totss"        "withinss"    
+## [5] "tot.withinss" "betweenss"    "size"         "iter"        
+## [9] "ifault"
+```
+
+   
+
+I displayed the result, so that I would know which of the things I
+needed later. The `Available components` at the bottom is a big
+hint with this.
+
+To display who is in which cluster, it's easiest to
+make a data frame of names and clusters and sort it:
+
+
+```r
+tibble(name = decathlon0$name, cluster = decathlon.1$cluster) %>% arrange(cluster) %>% 
+    print(n = Inf)
+```
+
+```
+## # A tibble: 24 x 2
+##    name                    cluster
+##    <chr>                     <int>
+##  1 Ashton Eaton                  1
+##  2 Damian Warner                 1
+##  3 Mihail Dudas                  1
+##  4 Michael Schrader              1
+##  5 Willem Coertzen               1
+##  6 Leonel Suarez                 1
+##  7 Eelco Sintnicolaas            2
+##  8 Ilya Shkurenyov               2
+##  9 Thomas van der Plaetsen       2
+## 10 Pelle Rietveld                2
+## 11 Kevin Mayer                   2
+## 12 Rico Freimuth                 3
+## 13 Carlos Chinin                 3
+## 14 Gunnar Nixon                  3
+## 15 Pascal Behrenbruch            3
+## 16 Eduard Mikhan                 3
+## 17 Artem Lukyanenko              3
+## 18 Andrei Krauchanka             3
+## 19 Mikk Pahapill                 3
+## 20 Marcus Nilsson                4
+## 21 Sergey Sviridov               5
+## 22 Brent Newdick                 5
+## 23 Maicel Uibo                   5
+## 24 Keisuke Ushiro                5
+```
+
+ 
+  
+
+
+(f) Display the cluster means for all of the events. (This has
+already been calculated; you just have to display it.) Find the
+cluster mean, looking at all of the events, that is farthest from
+zero, and see if you can describe the strengths and weaknesses of the
+athletes in that cluster (look at all the events for the cluster that
+has that extreme mean). Bear in mind (i) that these are the original
+performances standardized, and (ii) for a running event, a
+*smaller* value is better.
+
+
+
+Solution
+
+
+This is the thing called `centers`:
+\marginnote{We are no longer    in the *tidyverse*, so you no longer have the option of    using British or American spelling.}
+
+```r
+decathlon.1$centers
+```
+
+```
+##         x100m   long.jump   shot.put     high.jump      x400m
+## 1 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
+## 2  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
+## 3 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
+## 4  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
+## 5  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+##       x110mh     discus  pole.vault     javelin     x1500m
+## 1 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
+## 2 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
+## 3 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
+## 4  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
+## 5  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+```
+
+   
+
+My most extreme value is the $-2.28$ in the long jump column, cluster
+4. Yours may well be different, since the formation of clusters is
+random: it will probably not be the same number cluster, and it might
+not even be the same value. Use whatever you have. (I asked you to
+find the most extreme one so that the other events in the same cluster
+are likely to be extreme as well and you have something to say.)
+
+So I have to look along my cluster 4 row. I see:
+
+
+
+* 100m run high (bad)
+
+* long jump low (bad)
+
+* shot put high (good)
+
+* high jump low (bad)
+
+* 400m run high (bad)
+
+* 110m hurdles run high (bad)
+
+* discus lowish (bad)
+
+* pole vault low (bad)
+
+* javelin low (bad)
+
+* 1500m low (good)
+
+
+The only two good events here are shot put (throwing a heavy ball) and
+1500m (a long run). So what these athletes have in common is good strength
+and endurance, and bad speed and agility. (You can use my ``skills
+required'' in the table at the top of the question as a guide.)
+
+I said "these athletes". I actually meant "this athlete", since
+this is the cluster with just Marcus Nilsson in it. I ought to have
+checked that we were looking at a cluster with several athletes in it,
+and then this question would have made more sense, but the thought
+process is the same, so it doesn't matter so much.
+
+Your cluster may well be different; I'm looking for some sensible
+discussion based on the values you have. I'm hoping that the athletes
+in your cluster will tend to be good at something and bad at something
+else, and the things they are good at (or bad at) will have something
+in common.
+
+What would have made more sense would have been to take the
+*biggest* cluster:
+
+
+```r
+decathlon.1$size
+```
+
+```
+## [1] 6 5 8 1 4
+```
+
+ 
+
+which in this case is cluster 3, and then
+
+
+```r
+decathlon.1$centers
+```
+
+```
+##         x100m   long.jump   shot.put     high.jump      x400m
+## 1 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
+## 2  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
+## 3 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
+## 4  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
+## 5  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+##       x110mh     discus  pole.vault     javelin     x1500m
+## 1 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
+## 2 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
+## 3 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
+## 4  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
+## 5  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+```
+
+ 
+
+which says that the eight athletes in cluster 3 are a bit above
+average for shot put and discus, and below average for javelin, and,
+taking a decision, about average for everything else. This is kind of
+odd, since these are all throwing events, but the javelin is propelled
+a long way by running fast, and the other two are propelled mainly
+using strength rather than speed, so it makes some kind of sense
+(after the fact, at least).
+
+My guess is that someone good at javelin is likely to be good at
+sprint running and possibly also the long jump, since that depends
+primarily on speed, once you have enough technique. Well, one way to
+figure out whether I was right:
+
+
+```r
+cor(decathlon)
+```
+
+```
+##                  x100m   long.jump    shot.put   high.jump
+## x100m       1.00000000 -0.61351932 -0.17373396 -0.03703619
+## long.jump  -0.61351932  1.00000000  0.08369570  0.46379852
+## shot.put   -0.17373396  0.08369570  1.00000000  0.02012049
+## high.jump  -0.03703619  0.46379852  0.02012049  1.00000000
+## x400m       0.78909124 -0.54819716 -0.17251605  0.01521720
+## x110mh      0.67372152 -0.39484085 -0.28310469 -0.08356323
+## discus     -0.14989960  0.12891051  0.46449586 -0.11770266
+## pole.vault -0.12087966  0.21976890 -0.19328449  0.13565269
+## javelin     0.02363715  0.01969302 -0.11313467 -0.12454417
+## x1500m      0.14913949 -0.11672283 -0.06156793  0.27779220
+##                   x400m      x110mh      discus  pole.vault
+## x100m       0.789091241  0.67372152 -0.14989960 -0.12087966
+## long.jump  -0.548197160 -0.39484085  0.12891051  0.21976890
+## shot.put   -0.172516054 -0.28310469  0.46449586 -0.19328449
+## high.jump   0.015217204 -0.08356323 -0.11770266  0.13565269
+## x400m       1.000000000  0.80285420 -0.06877820 -0.36182359
+## x110mh      0.802854203  1.00000000 -0.13777771 -0.51871733
+## discus     -0.068778203 -0.13777771  1.00000000 -0.10045072
+## pole.vault -0.361823592 -0.51871733 -0.10045072  1.00000000
+## javelin    -0.005823468 -0.05246857  0.02097743  0.05237715
+## x1500m      0.446949386  0.39800522  0.01989086 -0.05988836
+##                 javelin       x1500m
+## x100m       0.023637150  0.149139491
+## long.jump   0.019693022 -0.116722829
+## shot.put   -0.113134672 -0.061567926
+## high.jump  -0.124544175  0.277792195
+## x400m      -0.005823468  0.446949386
+## x110mh     -0.052468568  0.398005215
+## discus      0.020977427  0.019890861
+## pole.vault  0.052377148 -0.059888360
+## javelin     1.000000000 -0.008858031
+## x1500m     -0.008858031  1.000000000
+```
+
+ 
+There are actually only a few high correlations:
+
+
+
+* 100m with long jump, 400m and 110m hurdles
+
+* long jump with 100m, high jump and 400m
+
+* shot put with discus
+
+* high jump with long jump
+
+* 400m with all the other running events plus long jump
+
+* 110m hurdles with the other running events plus pole vault
+
+* discus with shot put
+
+* pole vault with 110m hurdles and maybe 400m
+
+* javelin with *nothing*
+
+* 1500m with 400m
+
+
+Some of the correlations are negative as expected, since they are
+between a running event and a jumping/throwing event.
+
+I was wrong about javelin. It seems to be a unique skill in the
+decathlon, which is presumably why it's there: you want 10 events that
+are as disparate as possible, rather than things that are highly
+correlated. 
+  
+
+
+
+
+
+##  Bridges in Pittsburgh
+
+
+ The city of Pittsburgh, Pennsylvania, lies where three
+rivers, the Allegheny, Monongahela, and Ohio, 
+meet.
+\marginnote{For a long  time, the Pittsburgh Steelers football team played at the Three  Rivers Stadium.} 
+It has long been important to build bridges there,
+to enable its residents to cross the rivers safely. See
+[link](https://en.wikipedia.org/wiki/List_of_bridges_of_Pittsburgh) for
+a listing (with pictures) of the bridges. The data at
+[link](http://www.utsc.utoronto.ca/~butler/d29/bridges.csv) contains
+detail for a large number of past and present bridges in
+Pittsburgh. All the variables we will use are categorical. Here they
+are:
+
+
+
+* `id` identifying the bridge (we ignore)
+
+* `river`: initial letter of river that the bridge crosses
+
+* `location`: a numerical code indicating the location
+within Pittsburgh (we ignore)
+
+* `erected`: time period in which the bridge was built (a
+name, from `CRAFTS`, earliest, to `MODERN`, most
+recent.
+
+* `purpose`: what the bridge carries: foot traffic
+("walk"), water (aqueduct), road or railroad.
+
+* `length` categorized as long, medium or short.
+
+* `lanes` of traffic (or number of railroad tracks): a
+number, 1, 2, 4 or 6, that we will count as categorical.
+
+* `clear_g`: whether a vertical navigation requirement was
+included in the bridge design (that is, ships of a certain height
+had to be able to get under the bridge). I think `G` means
+"yes". 
+
+* `t_d`: method of construction. `DECK` means the
+bridge deck is on top of the construction, `THROUGH` means
+that when you cross the bridge, some of the bridge supports are next
+to you or above you. 
+
+* `material` the bridge is made of: iron, steel or wood.
+
+* `span`: whether the bridge covers a short, medium or long
+distance. 
+
+* `rel_l`: Relative length of the main span of the
+bridge (between the two central piers) to the total crossing length.
+The categories are `S`, `S-F` and `F`. I don't
+know what these mean.
+
+* `type` of bridge: wood, suspension, arch and three types
+of truss bridge: cantilever, continuous and simple.
+
+
+The website [link](https://www.steelconstruction.info/Bridges) is an
+excellent source of information about bridges. (That's where I learned
+the difference between `THROUGH` and `DECK`.) Wikipedia
+also has a good article at
+[link](https://en.wikipedia.org/wiki/Bridge). I also found
+[link](http://www.metaeventos.net/inscricoes/formularios_off/resumo_preenchido/DINCON/Pina-A_Colimodio-V_Silva-A_PinaFilho-A.pdf)
+which is the best description I've seen of the variables.
+
+
+
+(a) The bridges are stored in CSV format. Some of the
+information is not known and was recorded in the spreadsheet as
+`?`. Turn these into genuine missing values by adding
+`na="?"` to your file-reading command. Display some of your
+data, enough to see that you have some missing data.
+
+Solution
+
+
+This sort of thing:
+
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/bridges.csv"
+bridges0 = read_csv(my_url, na = "?")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   id = col_character(),
+##   river = col_character(),
+##   location = col_double(),
+##   erected = col_character(),
+##   purpose = col_character(),
+##   length = col_character(),
+##   lanes = col_integer(),
+##   clear_g = col_character(),
+##   t_d = col_character(),
+##   material = col_character(),
+##   span = col_character(),
+##   rel_l = col_character(),
+##   type = col_character()
+## )
+```
+
+```r
+bridges0
+```
+
+```
+## # A tibble: 108 x 13
+##    id    river location erected purpose length lanes clear_g t_d  
+##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>
+##  1 E1    M            3 CRAFTS  HIGHWAY <NA>       2 N       THRO~
+##  2 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  3 E3    A           39 CRAFTS  AQUEDU~ <NA>       1 N       THRO~
+##  4 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  5 E6    M           23 CRAFTS  HIGHWAY <NA>       2 N       THRO~
+##  6 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO~
+##  7 E8    A           28 CRAFTS  AQUEDU~ MEDIUM     1 N       THRO~
+##  8 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  9 E10   A           39 CRAFTS  AQUEDU~ <NA>       1 N       DECK 
+## 10 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+## # ... with 98 more rows, and 4 more variables: material <chr>,
+## #   span <chr>, rel_l <chr>, type <chr>
+```
+
+ 
+
+I have some missing values in the `length` column. (You
+sometimes see `<NA>` instead of `NA`, as you do here;
+this means the missing value is a missing piece of text rather than a
+missing number.)
+\marginnote{Sometimes it's necessary to distinguish  between the different types of missing value; if that's the case,  you can use eg. *NA-real-* and *NA-character-* to distinguish missing decimal numbers from missing text. Those dashes should actually be underscores.}
+
+There are 108 bridges in the data set.
+
+I'm saving the name `bridges` for my final data set, after I'm
+finished organizing it.
+
+
+(b) The R function `complete.cases` takes a data frame
+as input and returns a vector of TRUE or FALSE values. Each row of
+the data frame is checked to see whether it is "complete" (has no
+missing values), in which case the result is TRUE, or not (has one
+or more missing values), in which case the result is FALSE. Add a
+new column called `is_complete` to your data frame that
+indicates whether each row is complete. Save the
+result, and then display (some of) your `length` column along
+with your new column. Do the results make sense?
+
+Solution
+
+
+This sounds like a lot to do, but is actually only this:
+
+```r
+bridges1 = bridges0 %>% mutate(is_complete = complete.cases(bridges0))
+bridges1 %>% select(length, is_complete)
+```
+
+```
+## # A tibble: 108 x 2
+##    length is_complete
+##    <chr>  <lgl>      
+##  1 <NA>   FALSE      
+##  2 MEDIUM TRUE       
+##  3 <NA>   FALSE      
+##  4 MEDIUM TRUE       
+##  5 <NA>   FALSE      
+##  6 SHORT  TRUE       
+##  7 MEDIUM TRUE       
+##  8 MEDIUM TRUE       
+##  9 <NA>   FALSE      
+## 10 MEDIUM TRUE       
+## # ... with 98 more rows
+```
+
+     
+
+This makes sense, because there is a perfect match between whether or
+not there is a value for `length` and whether
+`is_complete` is TRUE or FALSE (abbreviated). If there were no
+missing values anywhere else other than in `length`, this is
+what we'd see, but there might be some missing values on other
+variables on later bridges, in which case `length` would have a
+value, but `is_complete` would be `FALSE`.
+\marginnote{This  is where I talk about necessary and sufficient conditions:  *length* being missing is sufficient for  *is_complete* to be *FALSE*, since nothing else is  needed then, but it is not necessary, since some other variable  could be missing.}
+
+Extra: `summary` is a handy way to show which columns the missing
+values are in, but the columns have to be something other than text. I
+explain this trick below:
+
+
+```r
+bridges0 %>% mutate_if(is.character, factor) %>% summary()
+```
+
+```
+##        id      river     location         erected       purpose  
+##  E1     :  1   A:49   Min.   : 1.00   CRAFTS  :18   AQUEDUCT: 4  
+##  E10    :  1   M:41   1st Qu.:15.50   EMERGING:15   HIGHWAY :71  
+##  E100   :  1   O:15   Median :27.00   MATURE  :54   RR      :32  
+##  E101   :  1   Y: 3   Mean   :25.98   MODERN  :21   WALK    : 1  
+##  E102   :  1          3rd Qu.:37.50                              
+##  E103   :  1          Max.   :52.00                              
+##  (Other):102          NA's   :1                                  
+##     length       lanes      clear_g        t_d      material 
+##  LONG  :21   Min.   :1.00   G   :80   DECK   :15   IRON :11  
+##  MEDIUM:48   1st Qu.:2.00   N   :26   THROUGH:87   STEEL:79  
+##  SHORT :12   Median :2.00   NA's: 2   NA's   : 6   WOOD :16  
+##  NA's  :27   Mean   :2.63                          NA's : 2  
+##              3rd Qu.:4.00                                    
+##              Max.   :6.00                                    
+##              NA's   :16                                      
+##      span     rel_l          type   
+##  LONG  :30   F   :58   SIMPLE-T:44  
+##  MEDIUM:53   S   :30   WOOD    :16  
+##  SHORT : 9   S-F :15   ARCH    :13  
+##  NA's  :16   NA's: 5   CANTILEV:11  
+##                        SUSPEN  :11  
+##                        (Other) :11  
+##                        NA's    : 2
+```
+
+ 
+
+There are missing values all over the place. `length` has the
+most, but `lanes` and `span` also have a fair few.
+
+What `mutate_if` does is to create new columns (and, by
+default, give them the same names they had before), but only if
+something is true about the columns: in this case, we pick out the
+ones that are text (for which `is.character` is true) and then
+run `factor` on them to turn them into `factor`s. Then
+we run `summary` on the resulting data frame, and it counts up
+the number of different categories and the number of `NA`s for
+each of the now-factor columns. (Try running `summary` on the
+original data frame, the one with text columns, and see the difference.)
+
+`summary` is one of R's oldest multi-coloured functions. When
+you feed it a fitted model object like a regression, it shows you the
+intercept and slopes, R-squared and stuff like that; when you feed it
+a data frame, it summarizes each column.
+
+I think the reason it doesn't handle text stuff very well is that,
+originally, text columns that were read in from files \emph{got turned
+into} factors, and if you didn't want that to happen, you had to
+explicitly stop it yourself. Try mentioning
+`stringsAsFactors=F` to a veteran R user, and watch their
+reaction, or try it yourself by reading in a data file with text
+columns using `read.table` instead of
+`read_delim`. (This will read in an old-fashioned data frame,
+so pipe it through `as_tibble` to see what the columns are.)
+
+When Hadley Wickham designed `readr`, the corner of the
+`tidyverse` where the `read_` functions live, he
+deliberately chose to keep text as text (on the basis of being honest
+about what kind of thing we have), with the result that we sometimes
+have to create factors when what we are using requires them rather
+than text.
+
+
+(c) Create the data frame that will be used for the analysis by
+picking out only those rows that have no missing values. (Use what
+you have done so far to help you.)
+
+Solution
+
+
+We need to pick out only those rows for which
+`is_complete` is `TRUE`; picking out rows is
+`filter`: 
+
+```r
+bridges = bridges1 %>% filter(is_complete)
+bridges
+```
+
+```
+## # A tibble: 70 x 14
+##    id    river location erected purpose length lanes clear_g t_d  
+##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>
+##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO~
+##  4 E8    A           28 CRAFTS  AQUEDU~ MEDIUM     1 N       THRO~
+##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO~
+## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+## # ... with 60 more rows, and 5 more variables: material <chr>,
+## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
+```
+
+     
+
+This also works:
+
+
+```r
+bridges = bridges1 %>% filter(is_complete == TRUE)
+bridges
+```
+
+```
+## # A tibble: 70 x 14
+##    id    river location erected purpose length lanes clear_g t_d  
+##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>
+##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO~
+##  4 E8    A           28 CRAFTS  AQUEDU~ MEDIUM     1 N       THRO~
+##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO~
+## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+## # ... with 60 more rows, and 5 more variables: material <chr>,
+## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
+```
+
+ 
+
+If the thing inside `filter` already *is* true or false,
+it can be in the `filter` by itself. To the trained eye, it
+looks weird to have `==TRUE` on the end, but it works either
+way.
+
+
+(d) We are going to assess the dissimilarity between two bridges
+by the number of the categorical variables they *disagree*
+on. This is called a "simple matching coefficient", and is the
+same thing we did in the question about clustering fruits based on
+their properties. This time, though, we want to count matches in
+things that are *rows* of our data frame (properties of two
+different bridges), so we will need to use a strategy like the one I
+used in calculating the Bray-Curtis distances.
+First, write a function that takes as input two vectors `v`
+and `w` and counts the number of their entries that differ
+(comparing the first with the first, the second with the second,
+\ldots, the last with the last. I can think of a quick way and a
+slow way, but either way is good.) To test your function, create two
+vectors (using `c`) of the same length, and see whether it
+correctly counts the number of corresponding values that are
+different. 
+
+Solution
+
+
+The slow way is to loop through the elements of each vector, using
+square brackets to pull out the ones you want, checking them for
+differentness, then updating a counter which gets returned at the
+end. If you've done Python, this is exactly the strategy you'd
+use there:
+
+```r
+count_diff = function(v, w) {
+    n = length(v)
+    stopifnot(length(v) == length(w))  # I explain this below
+    count = 0
+    for (i in 1:n) {
+        if (v[i] != w[i]) 
+            count = count + 1
+    }
+    count
+}
+```
+
+     
+
+This function makes no sense if `v` and `w` are of
+different lengths, since we're comparing *corresponding* elements
+of them. The `stopifnot` line checks to see whether `v`
+and `w` have the same number of things in them, and stops with
+an informative error if they are of different lengths. (The thing
+inside the `stopifnot` is what has to be *true*.)
+
+Does it work?
+
+
+```r
+v = c(1, 1, 0, 0, 0)
+w = c(1, 2, 0, 2, 0)
+count_diff(v, w)
+```
+
+```
+## [1] 2
+```
+
+ 
+
+Three of the values are the same and two are different, so this is right.
+
+What happens if my two vectors are of different lengths?
+
+
+```r
+v1 = c(1, 1, 0, 0)
+w = c(1, 2, 0, 2, 0)
+count_diff(v1, w)
+```
+
+```
+## Error in count_diff(v1, w): length(v) == length(w) is not TRUE
+```
+
+ 
+
+Error, as produced by `stopifnot`. See how it's perfectly clear
+what went wrong?
+
+R, though, is a "vectorized" language: it's possible to work with
+whole vectors at once, rather than pulling things out of them one at a
+time. Check out this (which is like what I did with the fruits):
+
+
+```r
+v != w
+```
+
+```
+## [1] FALSE  TRUE FALSE  TRUE FALSE
+```
+
+ 
+
+The second and fourth values are different, and the others are the
+same. But we can go one step further:
+
+
+```r
+sum(v != w)
+```
+
+```
+## [1] 2
+```
+
+ 
+
+The true values count as 1 and the false ones as zero, so the sum is
+counting up how many values are different, exactly what we want. So
+the function can be as simple as:
+
+
+```r
+count_diff = function(v, w) {
+    sum(v != w)
+}
+```
+
+ 
+
+I still think it's worth writing a function do this, though, since
+`count_diff` tells you what it does and `sum(v!=w)`
+doesn't. 
+
+
+(e) Write a function that has as input two row numbers and a
+data frame to take those rows from. The function needs to select all
+the columns except for `id`, `location` and
+`is_complete`, select the rows required one at a time, and
+turn them into vectors. (There may be some repetitiousness
+here. That's OK.)  Then those two vectors are passed into the
+function you wrote in the previous part, and the count of the number
+of differences is returned. This is like the code in the Bray-Curtis
+problem. Test your function on rows 3 and 4 of your bridges
+data set (with the missings removed). There should be six variables
+that are different.
+
+Solution
+
+
+This is just like my function `braycurtis.spec`, except that
+instead of calling `braycurtis` at the end, I call
+`count_diff`: 
+
+
+```r
+row_diff = function(i, j, d) {
+    d1 = d %>% select(-id, -location, -is_complete)
+    x = d1 %>% slice(i) %>% unlist()
+    y = d1 %>% slice(j) %>% unlist()
+    count_diff(x, y)
+}
+row_diff(3, 4, bridges)
+```
+
+```
+## [1] 6
+```
+
+ 
+
+That's what I said.
+
+Extra: is that right, though? Let's print out those rows and count:
+
+
+```r
+bridges %>% slice(c(3, 4)) %>% print(width = Inf)
+```
+
+```
+## # A tibble: 2 x 14
+##   id    river location erected purpose  length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <int> <chr>   <chr>  
+## 1 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
+## 2 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
+##   material span   rel_l type   is_complete
+##   <chr>    <chr>  <chr> <chr>  <lgl>      
+## 1 WOOD     MEDIUM S     WOOD   TRUE       
+## 2 IRON     SHORT  S     SUSPEN TRUE
+```
+
+ 
+
+Out of the ones we're counting, I see differences in purpose, length,
+lanes, material, span and type. Six.
+
+I actually think the `unlist` is not needed:
+
+
+```r
+row_diff2 = function(i, j, d) {
+    d1 = d %>% select(-id, -location, -is_complete)
+    x = d1 %>% slice(i)
+    y = d1 %>% slice(j)
+    count_diff(x, y)
+}
+row_diff2(3, 4, bridges)
+```
+
+```
+## [1] 6
+```
+
+ 
+
+Here, `x` and `y` are one-row data frames, but R (via
+`count_diff`) is sufficiently flexible to be able to cope with
+these rather than vectors (it checks "corresponding elements" of
+`x` and `y` for differentness). To my mind, though,
+having the `unlist` in is clearer, since it makes it
+unambiguous that `x` and `y` are vectors, and we know
+that `count_diff` works for vectors since that's what we
+tested it with.
+
+
+(f) Create a matrix or data frame of pairwise dissimilarities
+between each pair of bridges (using only the ones with no missing
+values). Use loops, or `crossing` and `map2_int`, as
+you prefer. Display the first six rows of
+your matrix (using `head`) or the first few rows of your data
+frame. (The whole thing is big, so don't display it all.)
+
+Solution
+
+
+First thing, either way, is to find out how many bridges we have left:
+
+```r
+bridges
+```
+
+```
+## # A tibble: 70 x 14
+##    id    river location erected purpose length lanes clear_g t_d  
+##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>
+##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO~
+##  4 E8    A           28 CRAFTS  AQUEDU~ MEDIUM     1 N       THRO~
+##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO~
+## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
+## # ... with 60 more rows, and 5 more variables: material <chr>,
+## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
+```
+
+     
+
+70. So the loops (and the `crossing`) will go up to 70. Loops first:
+
+
+```r
+m = matrix(-1, 70, 70)
+for (i in 1:70) {
+    for (j in 1:70) {
+        m[i, j] = row_diff(i, j, bridges)
+    }
+}
+```
+
+ 
+
+Even just the top six rows (of all 70 columns) takes up a lot of
+space. The grader will only check that it looks about right:
+
+
+```r
+head(m)
+```
+
+```
+##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
+## [1,]    0    0    2    4    3    1    2    4    3     1     2     3
+## [2,]    0    0    2    4    3    1    2    4    3     1     2     3
+## [3,]    2    2    0    6    5    1    2    4    5     1     2     5
+## [4,]    4    4    6    0    3    5    6    4    3     5     6     6
+## [5,]    3    3    5    3    0    4    3    3    3     4     5     6
+## [6,]    1    1    1    5    4    0    1    3    4     0     1     4
+##      [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22]
+## [1,]     7     6     7     9     6     7     3     8     7     9
+## [2,]     7     6     7     9     6     7     3     8     7     9
+## [3,]     7     6     7     9     6     7     5     8     8     9
+## [4,]     8     8     8    10     8     8     3    10     9    10
+## [5,]     6     5     6     9     7     6     6     7     6    10
+## [6,]     6     5     6     9     5     6     4     8     7     9
+##      [,23] [,24] [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32]
+## [1,]     8     6     7     6     7     7     8     8     9     6
+## [2,]     8     6     7     6     7     7     8     8     9     6
+## [3,]     7     6     6     6     7     6     8     8     7     7
+## [4,]     9     8     9     8     8     8     9     9     9     8
+## [5,]     7     7     8     7     6     8     7     7    10     7
+## [6,]     7     5     6     5     6     6     7     7     8     6
+##      [,33] [,34] [,35] [,36] [,37] [,38] [,39] [,40] [,41] [,42]
+## [1,]     8     7     9     7     8     8     8     7     8     8
+## [2,]     8     7     9     7     8     8     8     7     8     8
+## [3,]     9     8     9     8     8     7     6     6     6     6
+## [4,]     9     9    10     8     9     9     9     8     8     8
+## [5,]     8     7     9     8     9     9     9     8     8     8
+## [6,]     8     7     9     7     8     7     7     6     7     7
+##      [,43] [,44] [,45] [,46] [,47] [,48] [,49] [,50] [,51] [,52]
+## [1,]     7     9     8     9     9     8     7     8     7     8
+## [2,]     7     9     8     9     9     8     7     8     7     8
+## [3,]     8     8     9     8     8     6     6     9     8     9
+## [4,]     9    10     9    10    11     8     9     9     8     8
+## [5,]     7     8     7    10     8     8     6     8     7     6
+## [6,]     7     8     8     8     8     7     6     8     7     8
+##      [,53] [,54] [,55] [,56] [,57] [,58] [,59] [,60] [,61] [,62]
+## [1,]     8     8     8     8     6     8     7     9    10     8
+## [2,]     8     8     8     8     6     8     7     9    10     8
+## [3,]     9     8     8     6     6     8     7     7    10     9
+## [4,]     9     9     9     9     8    10     9    10    11     9
+## [5,]     7     9     9     9     7     8     6     8     9     7
+## [6,]     8     7     7     7     5     8     6     8    10     8
+##      [,63] [,64] [,65] [,66] [,67] [,68] [,69] [,70]
+## [1,]     8     7     8     9    10     8     9     9
+## [2,]     8     7     8     9    10     8     9     9
+## [3,]     8     8     9     7    10     6     9     8
+## [4,]     9     9     9    10    11     9    10    10
+## [5,]     9     7     7    10     9     9     9     8
+## [6,]     8     7     8     8    10     7     9     9
+```
+
+ 
+
+A cursory glance at this shows that the bridges in the small-numbered
+rows of the data frame are similar to each other and different from
+the others. This suggests that these small-numbered bridges will end
+up in the same cluster (later).
+
+The `tidyverse` way is really similar in conception. First use
+`crossing` to create all combinations of `i` and `j`:
+
+
+```r
+mm = crossing(i = 1:70, j = 1:70)
+```
+
+ 
+
+and then use `map2_int` (since our dissimilarity function
+returns a whole number):
+
+
+```r
+mm = mm %>% mutate(diff = map2_int(i, j, row_diff, bridges))
+mm
+```
+
+```
+## # A tibble: 4,900 x 3
+##        i     j  diff
+##    <int> <int> <int>
+##  1     1     1     0
+##  2     1     2     0
+##  3     1     3     2
+##  4     1     4     4
+##  5     1     5     3
+##  6     1     6     1
+##  7     1     7     2
+##  8     1     8     4
+##  9     1     9     3
+## 10     1    10     1
+## # ... with 4,890 more rows
+```
+
+ 
+
+This is long format, though, so we need to `spread` the
+`j` column to get a square array of dissimilarities:
+
+
+```r
+mm = mm %>% spread(j, diff)
+mm
+```
+
+```
+## # A tibble: 70 x 71
+##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`
+##    <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int>
+##  1     1     0     0     2     4     3     1     2     4     3     1
+##  2     2     0     0     2     4     3     1     2     4     3     1
+##  3     3     2     2     0     6     5     1     2     4     5     1
+##  4     4     4     4     6     0     3     5     6     4     3     5
+##  5     5     3     3     5     3     0     4     3     3     3     4
+##  6     6     1     1     1     5     4     0     1     3     4     0
+##  7     7     2     2     2     6     3     1     0     4     5     1
+##  8     8     4     4     4     4     3     3     4     0     4     3
+##  9     9     3     3     5     3     3     4     5     4     0     4
+## 10    10     1     1     1     5     4     0     1     3     4     0
+## # ... with 60 more rows, and 60 more variables: `11` <int>,
+## #   `12` <int>, `13` <int>, `14` <int>, `15` <int>, `16` <int>,
+## #   `17` <int>, `18` <int>, `19` <int>, `20` <int>, `21` <int>,
+## #   `22` <int>, `23` <int>, `24` <int>, `25` <int>, `26` <int>,
+## #   `27` <int>, `28` <int>, `29` <int>, `30` <int>, `31` <int>,
+## #   `32` <int>, `33` <int>, `34` <int>, `35` <int>, `36` <int>,
+## #   `37` <int>, `38` <int>, `39` <int>, `40` <int>, `41` <int>,
+## #   `42` <int>, `43` <int>, `44` <int>, `45` <int>, `46` <int>,
+## #   `47` <int>, `48` <int>, `49` <int>, `50` <int>, `51` <int>,
+## #   `52` <int>, `53` <int>, `54` <int>, `55` <int>, `56` <int>,
+## #   `57` <int>, `58` <int>, `59` <int>, `60` <int>, `61` <int>,
+## #   `62` <int>, `63` <int>, `64` <int>, `65` <int>, `66` <int>,
+## #   `67` <int>, `68` <int>, `69` <int>, `70` <int>
+```
+
+ 
+
+This shows what we found before, that bridges 3 and 4 differ on 6
+variables. 
+
+
+(g) Turn your matrix or data frame into a `dist`
+object. (If you couldn't create a matrix or data frame of
+dissimilarities, read them in from
+[link](http://www.utsc.utoronto.ca/~butler/d29/mm.csv).) Do not
+display your distance object.
+
+Solution
+
+
+The only tricky thing is that the data frame that I called
+`mm` has an extra column called `i` that needs to be
+removed first. This also applies if you need to read it in from
+the file. Thus:
+
+```r
+d1 = as.dist(m)
+```
+
+     
+
+or 
+
+
+```r
+d2 = mm %>% select(-i) %>% as.dist()
+```
+
+ 
+
+or, if you got stuck,
+
+
+```r
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/mm.csv"
+mmm = read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   .default = col_integer()
+## )
+```
+
+```
+## See spec(...) for full column specifications.
+```
+
+```r
+mmm
+```
+
+```
+## # A tibble: 70 x 71
+##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`
+##    <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int>
+##  1     1     0     0     2     4     3     1     2     4     3     1
+##  2     2     0     0     2     4     3     1     2     4     3     1
+##  3     3     2     2     0     6     5     1     2     4     5     1
+##  4     4     4     4     6     0     3     5     6     4     3     5
+##  5     5     3     3     5     3     0     4     3     3     3     4
+##  6     6     1     1     1     5     4     0     1     3     4     0
+##  7     7     2     2     2     6     3     1     0     4     5     1
+##  8     8     4     4     4     4     3     3     4     0     4     3
+##  9     9     3     3     5     3     3     4     5     4     0     4
+## 10    10     1     1     1     5     4     0     1     3     4     0
+## # ... with 60 more rows, and 60 more variables: `11` <int>,
+## #   `12` <int>, `13` <int>, `14` <int>, `15` <int>, `16` <int>,
+## #   `17` <int>, `18` <int>, `19` <int>, `20` <int>, `21` <int>,
+## #   `22` <int>, `23` <int>, `24` <int>, `25` <int>, `26` <int>,
+## #   `27` <int>, `28` <int>, `29` <int>, `30` <int>, `31` <int>,
+## #   `32` <int>, `33` <int>, `34` <int>, `35` <int>, `36` <int>,
+## #   `37` <int>, `38` <int>, `39` <int>, `40` <int>, `41` <int>,
+## #   `42` <int>, `43` <int>, `44` <int>, `45` <int>, `46` <int>,
+## #   `47` <int>, `48` <int>, `49` <int>, `50` <int>, `51` <int>,
+## #   `52` <int>, `53` <int>, `54` <int>, `55` <int>, `56` <int>,
+## #   `57` <int>, `58` <int>, `59` <int>, `60` <int>, `61` <int>,
+## #   `62` <int>, `63` <int>, `64` <int>, `65` <int>, `66` <int>,
+## #   `67` <int>, `68` <int>, `69` <int>, `70` <int>
+```
+
+```r
+d3 = mmm %>% select(-i) %>% as.dist()
+```
+
+ 
+
+
+(h) Run a cluster analysis using Ward's method, and display a
+dendrogram. The labels for the bridges (rows of the data frame) may
+come out too big; experiment with a `cex` less than 1 on the
+plot so that you can see them.
+
+Solution
+
+
+Home stretch now. I found that `cex=0.3` was good for me:
+
+```r
+bridges.1 = hclust(d1, method = "ward.D")
+plot(bridges.1, cex = 0.3)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-154-1} 
+
+     
+
+`cex` stands for "character expansion". This is one of the
+myriad of things you could adjust on the old base graphics (of which
+this is an example). If you wanted to make text *bigger*, you'd
+set `cex` to a value bigger than 1.
+
+
+(i) How many clusters do you think is reasonable for these
+data? Draw them on your plot.
+
+Solution
+
+
+I think you could go with any number from about 3 to something
+like 15, but my choice is 5. What you want is for the bridges
+within a cluster to be similar and bridges in different clusters
+to be different, however you judge that.
+
+```r
+plot(bridges.1, cex = 0.3)
+rect.hclust(bridges.1, 5)
+```
+
+
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-155-1} 
+
+     
+
+Whatever number of clusters you go with, draw a corresponding number
+of red rectangles.
+
+Note that the low-numbered bridges are all in my first cluster, as I
+suspected they would be.
+
+
+(j) Pick three bridges in the same one of your clusters (it
+doesn't matter which three bridges or which cluster). Display the
+data for these bridges. Does it make sense that these three bridges
+ended up in the same cluster? Explain briefly.
+
+Solution
+
+
+What I want you to do is to display the data for your chosen three
+bridges and make the case that they are "similar". I'm picking
+41, 42 and 48 from my third cluster. Use `print` with
+`width=Inf` to display all the columns:
+
+```r
+bridges %>% slice(c(41, 42, 48)) %>% print(width = Inf)
+```
+
+```
+## # A tibble: 3 x 14
+##   id    river location erected purpose length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>  
+## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THROUGH
+## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THROUGH
+## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THROUGH
+##   material span   rel_l type   is_complete
+##   <chr>    <chr>  <chr> <chr>  <lgl>      
+## 1 STEEL    MEDIUM S-F   SUSPEN TRUE       
+## 2 STEEL    MEDIUM S-F   SUSPEN TRUE       
+## 3 STEEL    MEDIUM S-F   SUSPEN TRUE
+```
+
+     
+
+These bridges are identical on everything except location (which we
+weren't considering anyway). So it makes perfect sense that they would
+be in the same cluster.
+
+You might not have been so lucky, for example, 10, 12 and 19, which
+got joined together further up:
+
+
+```r
+bridges %>% slice(c(10, 12, 19)) %>% print(width = Inf)
+```
+
+```
+## # A tibble: 3 x 14
+##   id    river location erected  purpose  length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>    <chr>    <chr>  <int> <chr>   <chr>  
+## 1 E19   A           29 CRAFTS   HIGHWAY  MEDIUM     2 N       THROUGH
+## 2 E22   A           24 EMERGING HIGHWAY  MEDIUM     4 G       THROUGH
+## 3 E4    A           27 MATURE   AQUEDUCT MEDIUM     1 N       THROUGH
+##   material span   rel_l type  is_complete
+##   <chr>    <chr>  <chr> <chr> <lgl>      
+## 1 WOOD     MEDIUM S     WOOD  TRUE       
+## 2 WOOD     SHORT  S     WOOD  TRUE       
+## 3 WOOD     SHORT  S     WOOD  TRUE
+```
+
+     
+
+These differ on 3 or 4 variables and are the same on all the others,
+so you can certainly say that they are more alike than different.
+
+Extra: to get a feel for how different they might be, let's compare
+three bridges in different clusters:
+
+
+```r
+bridges %>% slice(c(8, 24, 52)) %>% print(width = Inf)
+```
+
+```
+## # A tibble: 3 x 14
+##   id    river location erected purpose length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>  
+## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THROUGH
+## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THROUGH
+## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THROUGH
+##   material span   rel_l type     is_complete
+##   <chr>    <chr>  <chr> <chr>    <lgl>      
+## 1 IRON     MEDIUM S-F   SUSPEN   TRUE       
+## 2 STEEL    MEDIUM F     SIMPLE-T TRUE       
+## 3 STEEL    LONG   F     SUSPEN   TRUE
+```
+
+ 
+
+These are not as different as I was expecting, but they are indeed
+different on more of the variables.
+
+It would be interesting to plot these bridges on a map of Pittsburgh,
+colour-coded by which cluster they are in. This might give us some
+insight about how bridges are alike or different. 
+
+I also remark that the discriminant analysis idea, using the clusters
+as known groups, would not work here because we don't have any
+quantitative variables to use for the discriminant analysis. 
+
+The most interesting way I can think of is to cross-classify the
+bridges by cluster and values of the other variables. These would be
+complicated multi-way tables, though, which makes me wonder whether a
+"classification tree" like `rpart` would be worth thinking
+about. 
+
+I am curious enough to have a crack at this. First we need a data set
+with the clusters in it. I'm going with my 5 clusters:
+
+
+```r
+bridges.rpart = bridges %>% mutate(cluster = cutree(bridges.1, 5))
+```
+
+ 
+
+and then
+
+
+```r
+library(rpart)
+bridges.tree = rpart(factor(cluster) ~ river + erected + purpose + length + 
+    lanes + clear_g + t_d + material + span + rel_l + type, data = bridges.rpart, 
+    method = "class")
+print(bridges.tree)
+```
+
+```
+## n= 70 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##  1) root 70 47 3 (0.19 0.16 0.33 0.2 0.13)  
+##    2) span=MEDIUM,SHORT 45 31 4 (0.29 0.24 0.044 0.31 0.11)  
+##      4) material=IRON,WOOD 13  0 1 (1 0 0 0 0) *
+##      5) material=STEEL 32 18 4 (0 0.34 0.062 0.44 0.16)  
+##       10) river=M 13  3 2 (0 0.77 0.077 0 0.15) *
+##       11) river=A 19  5 4 (0 0.053 0.053 0.74 0.16) *
+##    3) span=LONG 25  4 3 (0 0 0.84 0 0.16)  
+##      6) type=ARCH,CANTILEV,SIMPLE-T 18  0 3 (0 0 1 0 0) *
+##      7) type=CONT-T,SUSPEN 7  3 5 (0 0 0.43 0 0.57) *
+```
+
+ 
+
+This takes some making sense of, so let's grab a couple of bridges to
+predict the cluster of:
+
+
+```r
+bridges.rpart %>% slice(c(20, 29)) %>% print(width = Inf)
+```
+
+```
+## # A tibble: 2 x 15
+##   id    river location erected purpose length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>  
+## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THROUGH
+## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THROUGH
+##   material span   rel_l type     is_complete cluster
+##   <chr>    <chr>  <chr> <chr>    <lgl>         <int>
+## 1 STEEL    LONG   F     SIMPLE-T TRUE              3
+## 2 STEEL    MEDIUM F     SIMPLE-T TRUE              2
+```
+
+ 
+
+Let's start with bridge 20 (with ID E42). The line in the printed
+output marked 1 and "root" says that there are 70 bridges
+altogether, and the best guess (if you know nothing) is to guess
+cluster 3, which would guess 47 of the bridges wrong. The five numbers
+in the brackets are the proportions of bridges in each cluster at this
+point. But we *do* know more about bridge E42. We go to number 2,
+which says to look at the `span`. For this bridge it is
+`LONG`, so we go down to number 3. Under 3 are 6 and 7, which
+say to look at `type`. Bridge E42 is of type `SIMPLE-T`,
+so we go to 6. There is nothing under this (lower down in the tree),
+and the line ends with a `*`, so we are ready to guess the
+cluster. There are 18 bridges with this `span` and one of these
+`type`s, and they are *all* in cluster 3, no
+errors. Cluster 3 contains long-span bridges of one of those types.
+
+Bridge 29, with ID E51, now. The first thing to look at is
+\textrm{span} again; this one is `medium`, so we are at
+2. Under 2 is 4 and 5; we are invited to look at `material`,
+which is `STEEL`, number 5. We have another thing to look at,
+10 and 11, which is `river`; in this case, `river` is
+`M`, number 10. We are now at the end, guessing cluster 2
+(which is also correct); there are 13 bridges of this `span`,
+`material` and `river` and only 3 of them were in some
+cluster other than 2.
+
+By looking at the tree output, we can describe what makes a bridge be
+predicted to land up in each cluster:
+
+
+
+* Span is medium or short, material is iron or wood. (This
+suggests old bridges.)
+
+* Span is medium or short, material is steel, river is M.
+
+* Span is long, type is arch, cantilever or simple-truss
+
+* Span is medium or short, material is steel, river is A.
+
+* Span is long, type is continuous-truss or suspension.
+
+
+This story is telling us that the clusters are determined by only a
+few of our variables. `span` seems to be the most important,
+then either type (if the span is long) or material and maybe river
+(otherwise). 
+
+This is an example of a "classification tree" which is a nice
+easy-to-follow version of logistic regression.
+
+
+
+
+
+<!--chapter:end:22-thingy.Rmd-->
 

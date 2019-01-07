@@ -1,0 +1,691 @@
+##  Bridges in Pittsburgh
+
+
+ The city of Pittsburgh, Pennsylvania, lies where three
+rivers, the Allegheny, Monongahela, and Ohio, 
+meet.
+`r tufte::margin_note("For a long  time, the Pittsburgh Steelers football team played at the Three  Rivers Stadium.")` 
+It has long been important to build bridges there,
+to enable its residents to cross the rivers safely. See
+[link](https://en.wikipedia.org/wiki/List_of_bridges_of_Pittsburgh) for
+a listing (with pictures) of the bridges. The data at
+[link](http://www.utsc.utoronto.ca/~butler/d29/bridges.csv) contains
+detail for a large number of past and present bridges in
+Pittsburgh. All the variables we will use are categorical. Here they
+are:
+
+
+
+* `id` identifying the bridge (we ignore)
+
+* `river`: initial letter of river that the bridge crosses
+
+* `location`: a numerical code indicating the location
+within Pittsburgh (we ignore)
+
+* `erected`: time period in which the bridge was built (a
+name, from `CRAFTS`, earliest, to `MODERN`, most
+recent.
+
+* `purpose`: what the bridge carries: foot traffic
+("walk"), water (aqueduct), road or railroad.
+
+* `length` categorized as long, medium or short.
+
+* `lanes` of traffic (or number of railroad tracks): a
+number, 1, 2, 4 or 6, that we will count as categorical.
+
+* `clear_g`: whether a vertical navigation requirement was
+included in the bridge design (that is, ships of a certain height
+had to be able to get under the bridge). I think `G` means
+"yes". 
+
+* `t_d`: method of construction. `DECK` means the
+bridge deck is on top of the construction, `THROUGH` means
+that when you cross the bridge, some of the bridge supports are next
+to you or above you. 
+
+* `material` the bridge is made of: iron, steel or wood.
+
+* `span`: whether the bridge covers a short, medium or long
+distance. 
+
+* `rel_l`: Relative length of the main span of the
+bridge (between the two central piers) to the total crossing length.
+The categories are `S`, `S-F` and `F`. I don't
+know what these mean.
+
+* `type` of bridge: wood, suspension, arch and three types
+of truss bridge: cantilever, continuous and simple.
+
+
+The website [link](https://www.steelconstruction.info/Bridges) is an
+excellent source of information about bridges. (That's where I learned
+the difference between `THROUGH` and `DECK`.) Wikipedia
+also has a good article at
+[link](https://en.wikipedia.org/wiki/Bridge). I also found
+[link](http://www.metaeventos.net/inscricoes/formularios_off/resumo_preenchido/DINCON/Pina-A_Colimodio-V_Silva-A_PinaFilho-A.pdf)
+which is the best description I've seen of the variables.
+
+
+
+(a) The bridges are stored in CSV format. Some of the
+information is not known and was recorded in the spreadsheet as
+`?`. Turn these into genuine missing values by adding
+`na="?"` to your file-reading command. Display some of your
+data, enough to see that you have some missing data.
+
+Solution
+
+
+This sort of thing:
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/bridges.csv"
+bridges0=read_csv(my_url,na="?")
+bridges0
+```
+
+ 
+
+I have some missing values in the `length` column. (You
+sometimes see `<NA>` instead of `NA`, as you do here;
+this means the missing value is a missing piece of text rather than a
+missing number.)
+`r tufte::margin_note("Sometimes it's necessary to distinguish  between the different types of missing value; if that's the case,  you can use eg. *NA-real-* and *NA-character-* to distinguish missing decimal numbers from missing text. Those dashes should actually be underscores.")`
+
+There are 108 bridges in the data set.
+
+I'm saving the name `bridges` for my final data set, after I'm
+finished organizing it.
+
+
+(b) The R function `complete.cases` takes a data frame
+as input and returns a vector of TRUE or FALSE values. Each row of
+the data frame is checked to see whether it is "complete" (has no
+missing values), in which case the result is TRUE, or not (has one
+or more missing values), in which case the result is FALSE. Add a
+new column called `is_complete` to your data frame that
+indicates whether each row is complete. Save the
+result, and then display (some of) your `length` column along
+with your new column. Do the results make sense?
+
+Solution
+
+
+This sounds like a lot to do, but is actually only this:
+```{r }
+bridges1 = bridges0 %>% mutate(is_complete=complete.cases(bridges0))
+bridges1 %>% select(length,is_complete)
+```
+
+     
+
+This makes sense, because there is a perfect match between whether or
+not there is a value for `length` and whether
+`is_complete` is TRUE or FALSE (abbreviated). If there were no
+missing values anywhere else other than in `length`, this is
+what we'd see, but there might be some missing values on other
+variables on later bridges, in which case `length` would have a
+value, but `is_complete` would be `FALSE`.
+`r tufte::margin_note("This  is where I talk about necessary and sufficient conditions:  *length* being missing is sufficient for  *is_complete* to be *FALSE*, since nothing else is  needed then, but it is not necessary, since some other variable  could be missing.")`
+
+Extra: `summary` is a handy way to show which columns the missing
+values are in, but the columns have to be something other than text. I
+explain this trick below:
+
+```{r }
+bridges0 %>% 
+mutate_if(is.character,factor) %>%
+summary()
+```
+
+ 
+
+There are missing values all over the place. `length` has the
+most, but `lanes` and `span` also have a fair few.
+
+What `mutate_if` does is to create new columns (and, by
+default, give them the same names they had before), but only if
+something is true about the columns: in this case, we pick out the
+ones that are text (for which `is.character` is true) and then
+run `factor` on them to turn them into `factor`s. Then
+we run `summary` on the resulting data frame, and it counts up
+the number of different categories and the number of `NA`s for
+each of the now-factor columns. (Try running `summary` on the
+original data frame, the one with text columns, and see the difference.)
+
+`summary` is one of R's oldest multi-coloured functions. When
+you feed it a fitted model object like a regression, it shows you the
+intercept and slopes, R-squared and stuff like that; when you feed it
+a data frame, it summarizes each column.
+
+I think the reason it doesn't handle text stuff very well is that,
+originally, text columns that were read in from files \emph{got turned
+into} factors, and if you didn't want that to happen, you had to
+explicitly stop it yourself. Try mentioning
+`stringsAsFactors=F` to a veteran R user, and watch their
+reaction, or try it yourself by reading in a data file with text
+columns using `read.table` instead of
+`read_delim`. (This will read in an old-fashioned data frame,
+so pipe it through `as_tibble` to see what the columns are.)
+
+When Hadley Wickham designed `readr`, the corner of the
+`tidyverse` where the `read_` functions live, he
+deliberately chose to keep text as text (on the basis of being honest
+about what kind of thing we have), with the result that we sometimes
+have to create factors when what we are using requires them rather
+than text.
+
+
+(c) Create the data frame that will be used for the analysis by
+picking out only those rows that have no missing values. (Use what
+you have done so far to help you.)
+
+Solution
+
+
+We need to pick out only those rows for which
+`is_complete` is `TRUE`; picking out rows is
+`filter`: 
+```{r }
+bridges = bridges1 %>% filter(is_complete)
+bridges
+```
+
+     
+
+This also works:
+
+```{r }
+bridges = bridges1 %>% filter(is_complete==TRUE)
+bridges
+```
+
+ 
+
+If the thing inside `filter` already *is* true or false,
+it can be in the `filter` by itself. To the trained eye, it
+looks weird to have `==TRUE` on the end, but it works either
+way.
+
+
+(d) We are going to assess the dissimilarity between two bridges
+by the number of the categorical variables they *disagree*
+on. This is called a "simple matching coefficient", and is the
+same thing we did in the question about clustering fruits based on
+their properties. This time, though, we want to count matches in
+things that are *rows* of our data frame (properties of two
+different bridges), so we will need to use a strategy like the one I
+used in calculating the Bray-Curtis distances.
+First, write a function that takes as input two vectors `v`
+and `w` and counts the number of their entries that differ
+(comparing the first with the first, the second with the second,
+\ldots, the last with the last. I can think of a quick way and a
+slow way, but either way is good.) To test your function, create two
+vectors (using `c`) of the same length, and see whether it
+correctly counts the number of corresponding values that are
+different. 
+
+Solution
+
+
+The slow way is to loop through the elements of each vector, using
+square brackets to pull out the ones you want, checking them for
+differentness, then updating a counter which gets returned at the
+end. If you've done Python, this is exactly the strategy you'd
+use there:
+```{r }
+count_diff=function(v,w) {
+n=length(v)
+stopifnot(length(v)==length(w)) # I explain this below
+count=0
+for (i in 1:n) {
+if (v[i]!=w[i]) count=count+1
+}
+count
+}
+```
+
+     
+
+This function makes no sense if `v` and `w` are of
+different lengths, since we're comparing *corresponding* elements
+of them. The `stopifnot` line checks to see whether `v`
+and `w` have the same number of things in them, and stops with
+an informative error if they are of different lengths. (The thing
+inside the `stopifnot` is what has to be *true*.)
+
+Does it work?
+
+```{r }
+v=c(1,1,0,0,0)
+w=c(1,2,0,2,0)
+count_diff(v,w)
+```
+
+ 
+
+Three of the values are the same and two are different, so this is right.
+
+What happens if my two vectors are of different lengths?
+
+```{r error=T}
+v1=c(1,1,0,0)
+w=c(1,2,0,2,0)
+count_diff(v1,w)
+```
+
+ 
+
+Error, as produced by `stopifnot`. See how it's perfectly clear
+what went wrong?
+
+R, though, is a "vectorized" language: it's possible to work with
+whole vectors at once, rather than pulling things out of them one at a
+time. Check out this (which is like what I did with the fruits):
+
+```{r }
+v!=w
+```
+
+ 
+
+The second and fourth values are different, and the others are the
+same. But we can go one step further:
+
+```{r }
+sum(v!=w)
+```
+
+ 
+
+The true values count as 1 and the false ones as zero, so the sum is
+counting up how many values are different, exactly what we want. So
+the function can be as simple as:
+
+```{r }
+count_diff=function(v,w) {
+sum(v!=w)
+}
+```
+
+ 
+
+I still think it's worth writing a function do this, though, since
+`count_diff` tells you what it does and `sum(v!=w)`
+doesn't. 
+
+
+(e) Write a function that has as input two row numbers and a
+data frame to take those rows from. The function needs to select all
+the columns except for `id`, `location` and
+`is_complete`, select the rows required one at a time, and
+turn them into vectors. (There may be some repetitiousness
+here. That's OK.)  Then those two vectors are passed into the
+function you wrote in the previous part, and the count of the number
+of differences is returned. This is like the code in the Bray-Curtis
+problem. Test your function on rows 3 and 4 of your bridges
+data set (with the missings removed). There should be six variables
+that are different.
+
+Solution
+
+
+This is just like my function `braycurtis.spec`, except that
+instead of calling `braycurtis` at the end, I call
+`count_diff`: 
+
+```{r }
+row_diff=function(i,j,d) {
+d1 = d %>% select(-id, -location, -is_complete)
+x = d1 %>% slice(i) %>% unlist()
+y = d1 %>% slice(j) %>% unlist()
+count_diff(x,y)
+}
+row_diff(3,4,bridges)
+```
+
+ 
+
+That's what I said.
+
+Extra: is that right, though? Let's print out those rows and count:
+
+```{r }
+bridges %>% slice(c(3,4)) %>% print(width=Inf)
+```
+
+ 
+
+Out of the ones we're counting, I see differences in purpose, length,
+lanes, material, span and type. Six.
+
+I actually think the `unlist` is not needed:
+
+```{r }
+row_diff2=function(i,j,d) {
+d1 = d %>% select(-id, -location, -is_complete)
+x = d1 %>% slice(i) 
+y = d1 %>% slice(j) 
+count_diff(x,y)
+}
+row_diff2(3,4,bridges)
+```
+
+ 
+
+Here, `x` and `y` are one-row data frames, but R (via
+`count_diff`) is sufficiently flexible to be able to cope with
+these rather than vectors (it checks "corresponding elements" of
+`x` and `y` for differentness). To my mind, though,
+having the `unlist` in is clearer, since it makes it
+unambiguous that `x` and `y` are vectors, and we know
+that `count_diff` works for vectors since that's what we
+tested it with.
+
+
+(f) Create a matrix or data frame of pairwise dissimilarities
+between each pair of bridges (using only the ones with no missing
+values). Use loops, or `crossing` and `map2_int`, as
+you prefer. Display the first six rows of
+your matrix (using `head`) or the first few rows of your data
+frame. (The whole thing is big, so don't display it all.)
+
+Solution
+
+
+First thing, either way, is to find out how many bridges we have left:
+```{r }
+bridges
+```
+
+     
+
+70. So the loops (and the `crossing`) will go up to 70. Loops first:
+
+```{r cache=T}
+m=matrix(-1,70,70)
+for (i in 1:70) {
+for (j in 1:70) {
+m[i,j]=row_diff(i,j,bridges)
+}
+}
+```
+
+ 
+
+Even just the top six rows (of all 70 columns) takes up a lot of
+space. The grader will only check that it looks about right:
+
+```{r size="scriptsize"}
+head(m)
+```
+
+ 
+
+A cursory glance at this shows that the bridges in the small-numbered
+rows of the data frame are similar to each other and different from
+the others. This suggests that these small-numbered bridges will end
+up in the same cluster (later).
+
+The `tidyverse` way is really similar in conception. First use
+`crossing` to create all combinations of `i` and `j`:
+
+```{r }
+mm=crossing(i=1:70,j=1:70)
+```
+
+ 
+
+and then use `map2_int` (since our dissimilarity function
+returns a whole number):
+
+```{r cache=T}
+mm = mm %>% mutate(diff=map2_int(i,j,row_diff,bridges))
+mm
+```
+
+ 
+
+This is long format, though, so we need to `spread` the
+`j` column to get a square array of dissimilarities:
+
+```{r }
+mm = mm %>% spread(j,diff)
+mm
+```
+
+ 
+
+This shows what we found before, that bridges 3 and 4 differ on 6
+variables. 
+
+
+(g) Turn your matrix or data frame into a `dist`
+object. (If you couldn't create a matrix or data frame of
+dissimilarities, read them in from
+[link](http://www.utsc.utoronto.ca/~butler/d29/mm.csv).) Do not
+display your distance object.
+
+Solution
+
+
+The only tricky thing is that the data frame that I called
+`mm` has an extra column called `i` that needs to be
+removed first. This also applies if you need to read it in from
+the file. Thus:
+```{r }
+d1=as.dist(m)
+```
+
+     
+
+or 
+
+```{r }
+d2 = mm %>% select(-i) %>% as.dist()
+```
+
+ 
+
+or, if you got stuck,
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/mm.csv"
+mmm=read_csv(my_url)
+mmm
+d3 = mmm %>% select(-i) %>% as.dist()
+```
+
+ 
+
+
+(h) Run a cluster analysis using Ward's method, and display a
+dendrogram. The labels for the bridges (rows of the data frame) may
+come out too big; experiment with a `cex` less than 1 on the
+plot so that you can see them.
+
+Solution
+
+
+Home stretch now. I found that `cex=0.3` was good for me:
+```{r }
+bridges.1=hclust(d1,method="ward.D")
+plot(bridges.1,cex=0.3)
+```
+
+     
+
+`cex` stands for "character expansion". This is one of the
+myriad of things you could adjust on the old base graphics (of which
+this is an example). If you wanted to make text *bigger*, you'd
+set `cex` to a value bigger than 1.
+
+
+(i) How many clusters do you think is reasonable for these
+data? Draw them on your plot.
+
+Solution
+
+
+I think you could go with any number from about 3 to something
+like 15, but my choice is 5. What you want is for the bridges
+within a cluster to be similar and bridges in different clusters
+to be different, however you judge that.
+```{r }
+plot(bridges.1,cex=0.3)
+rect.hclust(bridges.1,5)
+```
+
+     
+
+Whatever number of clusters you go with, draw a corresponding number
+of red rectangles.
+
+Note that the low-numbered bridges are all in my first cluster, as I
+suspected they would be.
+
+
+(j) Pick three bridges in the same one of your clusters (it
+doesn't matter which three bridges or which cluster). Display the
+data for these bridges. Does it make sense that these three bridges
+ended up in the same cluster? Explain briefly.
+
+Solution
+
+
+What I want you to do is to display the data for your chosen three
+bridges and make the case that they are "similar". I'm picking
+41, 42 and 48 from my third cluster. Use `print` with
+`width=Inf` to display all the columns:
+```{r }
+bridges %>% slice(c(41,42,48)) %>% print(width=Inf)
+```
+
+     
+
+These bridges are identical on everything except location (which we
+weren't considering anyway). So it makes perfect sense that they would
+be in the same cluster.
+
+You might not have been so lucky, for example, 10, 12 and 19, which
+got joined together further up:
+
+```{r }
+bridges %>% slice(c(10,12,19)) %>% print(width=Inf)
+```
+
+     
+
+These differ on 3 or 4 variables and are the same on all the others,
+so you can certainly say that they are more alike than different.
+
+Extra: to get a feel for how different they might be, let's compare
+three bridges in different clusters:
+
+```{r }
+bridges %>% slice(c(8,24,52)) %>% print(width=Inf)
+```
+
+ 
+
+These are not as different as I was expecting, but they are indeed
+different on more of the variables.
+
+It would be interesting to plot these bridges on a map of Pittsburgh,
+colour-coded by which cluster they are in. This might give us some
+insight about how bridges are alike or different. 
+
+I also remark that the discriminant analysis idea, using the clusters
+as known groups, would not work here because we don't have any
+quantitative variables to use for the discriminant analysis. 
+
+The most interesting way I can think of is to cross-classify the
+bridges by cluster and values of the other variables. These would be
+complicated multi-way tables, though, which makes me wonder whether a
+"classification tree" like `rpart` would be worth thinking
+about. 
+
+I am curious enough to have a crack at this. First we need a data set
+with the clusters in it. I'm going with my 5 clusters:
+
+```{r }
+bridges.rpart = bridges %>% mutate(cluster=cutree(bridges.1,5))
+```
+
+ 
+
+and then
+
+```{r }
+library(rpart)
+bridges.tree=rpart(factor(cluster)~river+erected+purpose+length+lanes+clear_g+
+t_d+material+span+rel_l+type,data=bridges.rpart,method="class")
+print(bridges.tree)
+```
+
+ 
+
+This takes some making sense of, so let's grab a couple of bridges to
+predict the cluster of:
+
+```{r }
+bridges.rpart %>% slice(c(20,29)) %>% print(width=Inf)
+```
+
+ 
+
+Let's start with bridge 20 (with ID E42). The line in the printed
+output marked 1 and "root" says that there are 70 bridges
+altogether, and the best guess (if you know nothing) is to guess
+cluster 3, which would guess 47 of the bridges wrong. The five numbers
+in the brackets are the proportions of bridges in each cluster at this
+point. But we *do* know more about bridge E42. We go to number 2,
+which says to look at the `span`. For this bridge it is
+`LONG`, so we go down to number 3. Under 3 are 6 and 7, which
+say to look at `type`. Bridge E42 is of type `SIMPLE-T`,
+so we go to 6. There is nothing under this (lower down in the tree),
+and the line ends with a `*`, so we are ready to guess the
+cluster. There are 18 bridges with this `span` and one of these
+`type`s, and they are *all* in cluster 3, no
+errors. Cluster 3 contains long-span bridges of one of those types.
+
+Bridge 29, with ID E51, now. The first thing to look at is
+\textrm{span} again; this one is `medium`, so we are at
+2. Under 2 is 4 and 5; we are invited to look at `material`,
+which is `STEEL`, number 5. We have another thing to look at,
+10 and 11, which is `river`; in this case, `river` is
+`M`, number 10. We are now at the end, guessing cluster 2
+(which is also correct); there are 13 bridges of this `span`,
+`material` and `river` and only 3 of them were in some
+cluster other than 2.
+
+By looking at the tree output, we can describe what makes a bridge be
+predicted to land up in each cluster:
+
+
+
+* Span is medium or short, material is iron or wood. (This
+suggests old bridges.)
+
+* Span is medium or short, material is steel, river is M.
+
+* Span is long, type is arch, cantilever or simple-truss
+
+* Span is medium or short, material is steel, river is A.
+
+* Span is long, type is continuous-truss or suspension.
+
+
+This story is telling us that the clusters are determined by only a
+few of our variables. `span` seems to be the most important,
+then either type (if the span is long) or material and maybe river
+(otherwise). 
+
+This is an example of a "classification tree" which is a nice
+easy-to-follow version of logistic regression.
+
+
+
+

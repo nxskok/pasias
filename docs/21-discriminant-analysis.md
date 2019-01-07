@@ -1,4 +1,3 @@
-
 # Discriminant analysis
 
 Packages for this chapter:
@@ -30,32 +29,32 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v tibble  1.4.2     v purrr   0.2.5
-## v tidyr   0.8.1     v dplyr   0.7.8
-## v readr   1.1.1     v stringr 1.3.1
-## v tibble  1.4.2     v forcats 0.3.0
+## ✔ tibble  1.4.2     ✔ purrr   0.2.5
+## ✔ tidyr   0.8.1     ✔ dplyr   0.7.8
+## ✔ readr   1.1.1     ✔ stringr 1.3.1
+## ✔ tibble  1.4.2     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::arrange()    masks plyr::arrange()
-## x readr::col_factor() masks scales::col_factor()
-## x purrr::compact()    masks plyr::compact()
-## x dplyr::count()      masks plyr::count()
-## x purrr::discard()    masks scales::discard()
-## x dplyr::failwith()   masks plyr::failwith()
-## x dplyr::filter()     masks stats::filter()
-## x dplyr::id()         masks plyr::id()
-## x dplyr::lag()        masks stats::lag()
-## x dplyr::mutate()     masks plyr::mutate()
-## x dplyr::rename()     masks plyr::rename()
-## x dplyr::select()     masks MASS::select()
-## x dplyr::summarise()  masks plyr::summarise()
-## x dplyr::summarize()  masks plyr::summarize()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::arrange()    masks plyr::arrange()
+## ✖ readr::col_factor() masks scales::col_factor()
+## ✖ purrr::compact()    masks plyr::compact()
+## ✖ dplyr::count()      masks plyr::count()
+## ✖ purrr::discard()    masks scales::discard()
+## ✖ dplyr::failwith()   masks plyr::failwith()
+## ✖ dplyr::filter()     masks stats::filter()
+## ✖ dplyr::id()         masks plyr::id()
+## ✖ dplyr::lag()        masks stats::lag()
+## ✖ dplyr::mutate()     masks plyr::mutate()
+## ✖ dplyr::rename()     masks plyr::rename()
+## ✖ dplyr::select()     masks MASS::select()
+## ✖ dplyr::summarise()  masks plyr::summarise()
+## ✖ dplyr::summarize()  masks plyr::summarize()
 ```
 
 ```r
@@ -120,8 +119,8 @@ Solution
 Check the data file first. It's aligned in columns, thus:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
-swiss = read_table(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
+swiss=read_table(my_url)
 ```
 
 ```
@@ -143,20 +142,19 @@ swiss
 
 ```
 ## # A tibble: 200 x 7
-##    length  left right bottom   top  diag
-##     <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>
-##  1   215.  131   131.    9     9.7  141 
-##  2   215.  130.  130.    8.1   9.5  142.
-##  3   215.  130.  130.    8.7   9.6  142.
-##  4   215.  130.  130.    7.5  10.4  142 
-##  5   215   130.  130.   10.4   7.7  142.
-##  6   216.  131.  130.    9    10.1  141.
-##  7   216.  130.  130.    7.9   9.6  142.
-##  8   214.  130.  129.    7.2  10.7  142.
-##  9   215.  129.  130.    8.2  11    142.
-## 10   215.  130.  130.    9.2  10    141.
-## # ... with 190 more rows, and 1 more
-## #   variable: status <chr>
+##    length  left right bottom   top  diag status 
+##     <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl> <chr>  
+##  1   215.  131   131.    9     9.7  141  genuine
+##  2   215.  130.  130.    8.1   9.5  142. genuine
+##  3   215.  130.  130.    8.7   9.6  142. genuine
+##  4   215.  130.  130.    7.5  10.4  142  genuine
+##  5   215   130.  130.   10.4   7.7  142. genuine
+##  6   216.  131.  130.    9    10.1  141. genuine
+##  7   216.  130.  130.    7.9   9.6  142. genuine
+##  8   214.  130.  129.    7.2  10.7  142. genuine
+##  9   215.  129.  130.    8.2  11    142. genuine
+## 10   215.  130.  130.    9.2  10    141. genuine
+## # ... with 190 more rows
 ```
 
        
@@ -174,22 +172,17 @@ Solution
 Small-m `manova` will do here:
 
 ```r
-response = with(swiss, cbind(length, left, right, 
-    bottom, top, diag))
-swiss.1 = manova(response ~ status, data = swiss)
+response=with(swiss,cbind(length,left,right,bottom,top,diag))
+swiss.1=manova(response~status,data=swiss)
 summary(swiss.1)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df
-## status      1 0.92415   391.92      6    193
-## Residuals 198                               
-##              Pr(>F)    
-## status    < 2.2e-16 ***
-## Residuals              
+##            Df  Pillai approx F num Df den Df    Pr(>F)    
+## status      1 0.92415   391.92      6    193 < 2.2e-16 ***
+## Residuals 198                                             
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -200,7 +193,7 @@ make the response variable. Would this work?
 
 ```r
 response2 = swiss %>% select(length:diag)
-swiss.1a = manova(response2 ~ status, data = swiss)
+swiss.1a=manova(response2~status,data=swiss)
 ```
 
 ```
@@ -231,22 +224,17 @@ This, however, works, since it turns the data frame into a matrix:
 
 
 ```r
-response4 = swiss %>% select(length:diag) %>% 
-    as.matrix()
-swiss.2a = manova(response4 ~ status, data = swiss)
+response4 = swiss %>% select(length:diag) %>% as.matrix() 
+swiss.2a=manova(response4~status,data=swiss)
 summary(swiss.2a)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df
-## status      1 0.92415   391.92      6    193
-## Residuals 198                               
-##              Pr(>F)    
-## status    < 2.2e-16 ***
-## Residuals              
+##            Df  Pillai approx F num Df den Df    Pr(>F)    
+## status      1 0.92415   391.92      6    193 < 2.2e-16 ***
+## Residuals 198                                             
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -272,8 +260,7 @@ Solution
 
 
 ```r
-swiss.3 = lda(status ~ length + left + right + 
-    bottom + top + diag, data = swiss)
+swiss.3=lda(status~length+left+right+bottom+top+diag,data=swiss)
 ```
 
        
@@ -294,12 +281,9 @@ swiss.3
 ##         0.5         0.5 
 ## 
 ## Group means:
-##              length    left   right bottom
-## counterfeit 214.823 130.300 130.193 10.530
-## genuine     214.969 129.943 129.720  8.305
-##                top    diag
-## counterfeit 11.133 139.450
-## genuine     10.168 141.517
+##              length    left   right bottom    top    diag
+## counterfeit 214.823 130.300 130.193 10.530 11.133 139.450
+## genuine     214.969 129.943 129.720  8.305 10.168 141.517
 ## 
 ## Coefficients of linear discriminants:
 ##                 LD1
@@ -388,12 +372,9 @@ swiss.3$means
 ```
 
 ```
-##              length    left   right bottom
-## counterfeit 214.823 130.300 130.193 10.530
-## genuine     214.969 129.943 129.720  8.305
-##                top    diag
-## counterfeit 11.133 139.450
-## genuine     10.168 141.517
+##              length    left   right bottom    top    diag
+## counterfeit 214.823 130.300 130.193 10.530 11.133 139.450
+## genuine     214.969 129.943 129.720  8.305 10.168 141.517
 ```
 
  
@@ -414,37 +395,29 @@ there. We take these and make a data frame with all the things
 in the original data:
 
 ```r
-swiss.pred = predict(swiss.3)
-d = data.frame(swiss, swiss.pred$x)
+swiss.pred=predict(swiss.3)
+d=data.frame(swiss,swiss.pred$x)
 head(d)
 ```
 
 ```
-##   length  left right bottom  top  diag
-## 1  214.8 131.0 131.1    9.0  9.7 141.0
-## 2  214.6 129.7 129.7    8.1  9.5 141.7
-## 3  214.8 129.7 129.7    8.7  9.6 142.2
-## 4  214.8 129.7 129.6    7.5 10.4 142.0
-## 5  215.0 129.6 129.7   10.4  7.7 141.8
-## 6  215.7 130.8 130.5    9.0 10.1 141.4
-##    status      LD1
-## 1 genuine 2.150948
-## 2 genuine 4.587317
-## 3 genuine 4.578290
-## 4 genuine 4.749580
-## 5 genuine 4.213851
-## 6 genuine 2.649422
+##   length  left right bottom  top  diag  status      LD1
+## 1  214.8 131.0 131.1    9.0  9.7 141.0 genuine 2.150948
+## 2  214.6 129.7 129.7    8.1  9.5 141.7 genuine 4.587317
+## 3  214.8 129.7 129.7    8.7  9.6 142.2 genuine 4.578290
+## 4  214.8 129.7 129.6    7.5 10.4 142.0 genuine 4.749580
+## 5  215.0 129.6 129.7   10.4  7.7 141.8 genuine 4.213851
+## 6  215.7 130.8 130.5    9.0 10.1 141.4 genuine 2.649422
 ```
 
          
 I did a boxplot in class:
 
 ```r
-ggplot(d, aes(x = status, y = LD1)) + geom_boxplot()
+ggplot(d,aes(x=status,y=LD1))+geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/antioch-1} 
+<img src="21-discriminant-analysis_files/figure-html/antioch-1.png" width="672"  />
 
        
 
@@ -458,12 +431,10 @@ Or you could do faceted histograms of `LD1` by `status`:
 
 
 ```r
-ggplot(d, aes(x = LD1)) + geom_histogram(bins = 10) + 
-    facet_grid(status ~ .)
+ggplot(d,aes(x=LD1))+geom_histogram(bins=10)+facet_grid(status~.)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-12-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -494,11 +465,10 @@ As to that last point, this is easy enough to think about. A
 boxplot seems a nice way to display it:
 
 ```r
-ggplot(d, aes(y = left, x = status)) + geom_boxplot()
+ggplot(d,aes(y=left,x=status))+geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/gtabita-1} 
+<img src="21-discriminant-analysis_files/figure-html/gtabita-1.png" width="672"  />
 
       
 
@@ -509,11 +479,10 @@ Compare that to `diag`:
 
 
 ```r
-ggplot(d, aes(y = diag, x = status)) + geom_boxplot()
+ggplot(d,aes(y=diag,x=status))+geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/iggle-1} 
+<img src="21-discriminant-analysis_files/figure-html/iggle-1.png" width="672"  />
 
  
 
@@ -528,7 +497,7 @@ as you keep track of what comes from which data frame:
 
 
 ```r
-tab = table(obs = swiss$status, pred = swiss.pred$class)
+tab=table(obs=swiss$status,pred=swiss.pred$class)
 tab
 ```
 
@@ -546,8 +515,8 @@ and predicted statuses, and then `count` what's in there:
 
 
 ```r
-d = tibble(obs = swiss$status, pred = swiss.pred$class)
-d %>% count(obs, pred)
+d=tibble(obs=swiss$status,pred=swiss.pred$class)
+d %>% count(obs,pred)
 ```
 
 ```
@@ -580,26 +549,25 @@ frames into those first before combining them.)
 
 
 ```r
-d = data.frame(swiss, class = swiss.pred$class, 
-    swiss.pred$posterior)
+d=data.frame(swiss,class=swiss.pred$class,swiss.pred$posterior)
 head(d)
 ```
 
 ```
-##   length  left right bottom  top  diag
-## 1  214.8 131.0 131.1    9.0  9.7 141.0
-## 2  214.6 129.7 129.7    8.1  9.5 141.7
-## 3  214.8 129.7 129.7    8.7  9.6 142.2
-## 4  214.8 129.7 129.6    7.5 10.4 142.0
-## 5  215.0 129.6 129.7   10.4  7.7 141.8
-## 6  215.7 130.8 130.5    9.0 10.1 141.4
-##    status   class  counterfeit   genuine
-## 1 genuine genuine 3.245560e-07 0.9999997
-## 2 genuine genuine 1.450624e-14 1.0000000
-## 3 genuine genuine 1.544496e-14 1.0000000
-## 4 genuine genuine 4.699587e-15 1.0000000
-## 5 genuine genuine 1.941700e-13 1.0000000
-## 6 genuine genuine 1.017550e-08 1.0000000
+##   length  left right bottom  top  diag  status   class  counterfeit
+## 1  214.8 131.0 131.1    9.0  9.7 141.0 genuine genuine 3.245560e-07
+## 2  214.6 129.7 129.7    8.1  9.5 141.7 genuine genuine 1.450624e-14
+## 3  214.8 129.7 129.7    8.7  9.6 142.2 genuine genuine 1.544496e-14
+## 4  214.8 129.7 129.6    7.5 10.4 142.0 genuine genuine 4.699587e-15
+## 5  215.0 129.6 129.7   10.4  7.7 141.8 genuine genuine 1.941700e-13
+## 6  215.7 130.8 130.5    9.0 10.1 141.4 genuine genuine 1.017550e-08
+##     genuine
+## 1 0.9999997
+## 2 1.0000000
+## 3 1.0000000
+## 4 1.0000000
+## 5 1.0000000
+## 6 1.0000000
 ```
 
  
@@ -612,15 +580,13 @@ less than 0.99?
 
 
 ```r
-d %>% mutate(max.post = pmax(counterfeit, genuine)) %>% 
-    filter(max.post < 0.99) %>% dplyr::select(-c(length:diag))
+d %>% mutate(max.post=pmax(counterfeit,genuine)) %>%
+filter(max.post<0.99) %>% dplyr::select(-c(length:diag))
 ```
 
 ```
-##    status       class counterfeit    genuine
-## 1 genuine counterfeit   0.9825773 0.01742267
-##    max.post
-## 1 0.9825773
+##    status       class counterfeit    genuine  max.post
+## 1 genuine counterfeit   0.9825773 0.01742267 0.9825773
 ```
 
  
@@ -659,8 +625,8 @@ Yes, you saw this one before. What you found was something like this:
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
-urine = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
+urine=read_csv(my_url)
 ```
 
 ```
@@ -675,22 +641,17 @@ urine = read_csv(my_url)
 ```
 
 ```r
-response = with(urine, cbind(creatinine, chlorine, 
-    chloride))
-urine.1 = manova(response ~ obesity, data = urine)
+response=with(urine,cbind(creatinine,chlorine,chloride))
+urine.1=manova(response~obesity,data=urine)
 summary(urine.1)
 ```
 
 ```
-##           Df  Pillai approx F num Df den Df
-## obesity    3 0.43144   2.2956      9    123
-## Residuals 41                               
-##            Pr(>F)  
-## obesity   0.02034 *
-## Residuals          
+##           Df  Pillai approx F num Df den Df  Pr(>F)  
+## obesity    3 0.43144   2.2956      9    123 0.02034 *
+## Residuals 41                                         
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -709,8 +670,7 @@ As above, plus:
 
 
 ```r
-urine.1 = lda(obesity ~ creatinine + chlorine + 
-    chloride, data = urine)
+urine.1=lda(obesity~creatinine+chlorine+chloride,data=urine)
 ```
 
      
@@ -738,14 +698,10 @@ urine.1
 ## d   11.91250 9.675000 3.981250
 ## 
 ## Coefficients of linear discriminants:
-##                    LD1        LD2
-## creatinine  0.24429462 -0.1700525
-## chlorine   -0.02167823 -0.1353051
-## chloride    0.23805588  0.3590364
-##                    LD3
-## creatinine -0.02623962
-## chlorine    0.11524045
-## chloride    0.30564592
+##                    LD1        LD2         LD3
+## creatinine  0.24429462 -0.1700525 -0.02623962
+## chlorine   -0.02167823 -0.1353051  0.11524045
+## chloride    0.23805588  0.3590364  0.30564592
 ## 
 ## Proportion of trace:
 ##    LD1    LD2    LD3 
@@ -779,14 +735,10 @@ urine.1$scaling
 ```
 
 ```
-##                    LD1        LD2
-## creatinine  0.24429462 -0.1700525
-## chlorine   -0.02167823 -0.1353051
-## chloride    0.23805588  0.3590364
-##                    LD3
-## creatinine -0.02623962
-## chlorine    0.11524045
-## chloride    0.30564592
+##                    LD1        LD2         LD3
+## creatinine  0.24429462 -0.1700525 -0.02623962
+## chlorine   -0.02167823 -0.1353051  0.11524045
+## chloride    0.23805588  0.3590364  0.30564592
 ```
 
        
@@ -831,26 +783,19 @@ predictions. I'm again using `data.frame` because
 `x` is a matrix:
 
 ```r
-urine.pred = predict(urine.1)
-d = data.frame(urine, urine.pred$x)
+urine.pred=predict(urine.1)
+d=data.frame(urine,urine.pred$x)
 head(d)
 ```
 
 ```
-##   obesity  x creatinine chloride chlorine
-## 1       a 24       17.6     5.15      7.5
-## 2       a 32       13.4     5.75      7.1
-## 3       a 17       20.3     4.35      2.3
-## 4       a 30       22.3     7.55      4.0
-## 5       a 30       20.5     8.50      2.0
-## 6       a 27       18.5    10.25      2.0
-##          LD1        LD2        LD3
-## 1  0.3926519 -0.3290621 -0.0704284
-## 2 -0.4818807  0.6547023  0.1770694
-## 3  0.9745295 -0.3718462 -0.9850425
-## 4  2.1880446  0.2069465  0.1364540
-## 5  2.0178238  1.1247359  0.2435680
-## 6  1.9458323  2.0931546  0.8309276
+##   obesity  x creatinine chloride chlorine        LD1        LD2        LD3
+## 1       a 24       17.6     5.15      7.5  0.3926519 -0.3290621 -0.0704284
+## 2       a 32       13.4     5.75      7.1 -0.4818807  0.6547023  0.1770694
+## 3       a 17       20.3     4.35      2.3  0.9745295 -0.3718462 -0.9850425
+## 4       a 30       22.3     7.55      4.0  2.1880446  0.2069465  0.1364540
+## 5       a 30       20.5     8.50      2.0  2.0178238  1.1247359  0.2435680
+## 6       a 27       18.5    10.25      2.0  1.9458323  2.0931546  0.8309276
 ```
 
              
@@ -863,28 +808,26 @@ itself. I think you can use either `as_tibble` or
 
 
 ```r
-xx = as_tibble(urine.pred$x)
-d2 = bind_cols(urine, xx)
+xx=as_tibble(urine.pred$x)
+d2=bind_cols(urine,xx)
 d2
 ```
 
 ```
 ## # A tibble: 45 x 8
-##    obesity     x creatinine chloride chlorine
-##    <chr>   <int>      <dbl>    <dbl>    <dbl>
-##  1 a          24       17.6     5.15      7.5
-##  2 a          32       13.4     5.75      7.1
-##  3 a          17       20.3     4.35      2.3
-##  4 a          30       22.3     7.55      4  
-##  5 a          30       20.5     8.5       2  
-##  6 a          27       18.5    10.2       2  
-##  7 a          25       12.1     5.95     16.8
-##  8 a          30       12       6.3      14.5
-##  9 a          28       10.1     5.45      0.9
-## 10 a          24       14.7     3.75      2  
-## # ... with 35 more rows, and 3 more
-## #   variables: LD1 <dbl>, LD2 <dbl>,
-## #   LD3 <dbl>
+##    obesity     x creatinine chloride chlorine    LD1     LD2     LD3
+##    <chr>   <int>      <dbl>    <dbl>    <dbl>  <dbl>   <dbl>   <dbl>
+##  1 a          24       17.6     5.15      7.5  0.393 -0.329  -0.0704
+##  2 a          32       13.4     5.75      7.1 -0.482  0.655   0.177 
+##  3 a          17       20.3     4.35      2.3  0.975 -0.372  -0.985 
+##  4 a          30       22.3     7.55      4    2.19   0.207   0.136 
+##  5 a          30       20.5     8.5       2    2.02   1.12    0.244 
+##  6 a          27       18.5    10.2       2    1.95   2.09    0.831 
+##  7 a          25       12.1     5.95     16.8 -0.962 -0.365   1.39  
+##  8 a          30       12       6.3      14.5 -0.853  0.0890  1.23  
+##  9 a          28       10.1     5.45      0.9 -1.23   1.95   -0.543 
+## 10 a          24       14.7     3.75      2   -0.530  0.406  -1.06  
+## # ... with 35 more rows
 ```
 
  
@@ -901,12 +844,10 @@ Now make the plot:
 
 
 ```r
-ggplot(d, aes(x = LD1, y = LD2, colour = obesity)) + 
-    geom_point()
+ggplot(d,aes(x=LD1,y=LD2,colour=obesity))+geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-24-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
  
  
@@ -985,8 +926,7 @@ you get this:
 plot(urine.1)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-26-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -995,11 +935,10 @@ one. You can plot just the first two, like this:
 
 
 ```r
-plot(urine.1, dimen = 2)
+plot(urine.1,dimen=2)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-27-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
  
 
@@ -1019,7 +958,7 @@ Solution
 Following the idea from class:
 
 ```r
-tab = table(urine$obesity, urine.pred$class)
+tab=table(urine$obesity,urine.pred$class)
 tab
 ```
 
@@ -1041,8 +980,8 @@ later:
 
 
 ```r
-tab = tibble(obesity = urine$obesity, predicted = urine.pred$class) %>% 
-    count(obesity, predicted)
+tab = tibble(obesity=urine$obesity,predicted=urine.pred$class) %>%
+count(obesity,predicted)
 tab
 ```
 
@@ -1090,8 +1029,7 @@ easily from the "tidy" table:
 
 
 ```r
-tab %>% count(correct = (obesity == predicted), 
-    wt = n)
+tab %>% count(correct=(obesity==predicted),wt=n) 
 ```
 
 ```
@@ -1120,8 +1058,8 @@ wrong. We can find the proportions correct and wrong:
 
 
 ```r
-tab %>% count(correct = (obesity == predicted), 
-    wt = n) %>% mutate(proportion = nn/sum(nn))
+tab %>% count(correct=(obesity==predicted),wt=n) %>%
+mutate(proportion=nn/sum(nn))
 ```
 
 ```
@@ -1146,8 +1084,10 @@ do any summarizing:
 
 
 ```r
-tab %>% group_by(obesity) %>% count(correct = (obesity == 
-    predicted), wt = n) %>% mutate(proportion = nn/sum(nn))
+tab %>%
+group_by(obesity) %>%
+count(correct=(obesity==predicted),wt=n) %>%
+mutate(proportion=nn/sum(nn))
 ```
 
 ```
@@ -1173,9 +1113,12 @@ read, a kind of "untidying":
 
 
 ```r
-tab %>% group_by(obesity) %>% count(correct = (obesity == 
-    predicted), wt = n) %>% mutate(proportion = nn/sum(nn)) %>% 
-    select(-nn) %>% spread(correct, proportion)
+tab %>%
+group_by(obesity) %>%
+count(correct=(obesity==predicted),wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+select(-nn) %>%
+spread(correct,proportion)
 ```
 
 ```
@@ -1204,10 +1147,13 @@ values than TRUE and FALSE:
 
 
 ```r
-tab %>% group_by(obesity) %>% mutate(prediction_stat = ifelse(obesity == 
-    predicted, "correct", "wrong")) %>% count(prediction_stat, 
-    wt = n) %>% mutate(proportion = nn/sum(nn)) %>% 
-    select(-nn) %>% spread(prediction_stat, proportion)
+tab %>%
+group_by(obesity) %>%
+mutate(prediction_stat=ifelse(obesity==predicted,"correct","wrong")) %>%
+count(prediction_stat,wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+select(-nn) %>%
+spread(prediction_stat,proportion)
 ```
 
 ```
@@ -1275,8 +1221,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
-simple = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
+simple=read_delim(my_url," ")
 ```
 
 ```
@@ -1311,28 +1257,24 @@ simple
 ```
 
 ```r
-response = with(simple, cbind(y1, y2))
-simple.3 = manova(response ~ group, data = simple)
+response=with(simple,cbind(y1,y2))
+simple.3=manova(response~group,data=simple)
 summary(simple.3)
 ```
 
 ```
-##           Df Pillai approx F num Df den Df
-## group      2 1.3534   9.4196      4     18
-## Residuals  9                              
-##              Pr(>F)    
-## group     0.0002735 ***
-## Residuals              
+##           Df Pillai approx F num Df den Df    Pr(>F)    
+## group      2 1.3534   9.4196      4     18 0.0002735 ***
+## Residuals  9                                            
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
 
 This P-value is small, so there is some way in which some of the
-groups differ on some of the variables.\endnote{That sounds like the
-ultimate in evasiveness!}
+groups differ on some of the variables.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That sounds like the  ultimate in evasiveness!</span>
     
 
 
@@ -1347,7 +1289,7 @@ Just this:
 
 ```r
 library(MASS)
-simple.4 = lda(group ~ y1 + y2, data = simple)
+simple.4=lda(group~y1+y2,data=simple)
 ```
 
      
@@ -1449,8 +1391,7 @@ This is the old-fashioned way:
 plot(simple.4)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-39-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
    
 
@@ -1459,7 +1400,7 @@ thing is to obtain the predictions (which we'll use again later):
 
 
 ```r
-simple.pred = predict(simple.4)
+simple.pred=predict(simple.4)
 ```
 
  
@@ -1469,8 +1410,8 @@ groups, using `data.frame` or like this:
 
 
 ```r
-xx = as_tibble(simple.pred$x)
-d = bind_cols(group = simple$group, xx)
+xx=as_tibble(simple.pred$x)
+d=bind_cols(group=simple$group,xx)
 d
 ```
 
@@ -1499,12 +1440,10 @@ true groups:
 
 
 ```r
-ggplot(d, aes(x = LD1, y = LD2, colour = group)) + 
-    geom_point()
+ggplot(d,aes(x=LD1,y=LD2,colour=group))+geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-42-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 
@@ -1513,12 +1452,10 @@ vs.\ `y2`, coloured by groups:
 
 
 ```r
-ggplot(simple, aes(x = y1, y = y2, colour = group)) + 
-    geom_point()
+ggplot(simple,aes(x=y1,y=y2,colour=group))+geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-43-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
  
 
@@ -1533,11 +1470,10 @@ against groups via boxplot:
 
 
 ```r
-ggplot(d, aes(x = group, y = LD1)) + geom_boxplot()
+ggplot(d,aes(x=group,y=LD1))+geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-44-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
  
 
@@ -1630,7 +1566,7 @@ Use the
 `table` way:
 
 ```r
-table(obs = simple$group, pred = simple.pred$class)
+table(obs=simple$group,pred=simple.pred$class)
 ```
 
 ```
@@ -1652,8 +1588,10 @@ first line being as shown or an `as_tibble` followed by a
 
 
 ```r
-data.frame(obs = simple$group, pred = simple.pred$class) %>% 
-    group_by(obs) %>% count(pred) %>% mutate(frac = n/sum(n))
+data.frame(obs=simple$group,pred=simple.pred$class) %>%
+group_by(obs) %>%
+count(pred) %>%
+mutate(frac=n/sum(n))
 ```
 
 ```
@@ -1676,8 +1614,9 @@ of course zero, which you could demonstrate by taking out the
 
 
 ```r
-data.frame(obs = simple$group, pred = simple.pred$class) %>% 
-    count(obs == pred) %>% mutate(frac = n/sum(n))
+data.frame(obs=simple$group,pred=simple.pred$class) %>%
+count(obs==pred) %>%
+mutate(frac=n/sum(n))
 ```
 
 ```
@@ -1700,8 +1639,8 @@ round off first before I display them, eg. to 3 decimals here:
 
 
 ```r
-ppr = round(simple.pred$posterior, 3)
-cbind(simple, ppr)
+ppr=round(simple.pred$posterior,3)
+cbind(simple,ppr)
 ```
 
 ```
@@ -1735,13 +1674,12 @@ observation 6, and then I use this new variable as the `shape`
 
 
 ```r
-simple %>% mutate(is6 = (row_number() == 6)) %>% 
-    ggplot(aes(x = y1, y = y2, colour = group, 
-        shape = is6)) + geom_point()
+simple %>% mutate(is6=(row_number()==6)) %>%
+ggplot(aes(x=y1,y=y2,colour=group,shape=is6))+
+geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-49-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 
@@ -1764,7 +1702,7 @@ it is like any of the other groups.
 
 
  244
-\marginnote{Grammatically, I am supposed to write this as  *two hundred and forty-four* in words, since I am not supposed to  start a sentence with a number. But, I say, deal with it. Or, I  suppose, *there are 244 people who work...*.} people work at a
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Grammatically, I am supposed to write this as  *two hundred and forty-four* in words, since I am not supposed to  start a sentence with a number. But, I say, deal with it. Or, I  suppose, *there are 244 people who work...*.</span> people work at a
 certain company. 
 They each have one of three jobs: customer service, mechanic,
 dispatcher. In the data set, these are labelled 1, 2 and 3
@@ -1789,8 +1727,8 @@ I'm using a "temporary" name for my read-in data
 frame, since I'm going to create the proper one in a moment.
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/jobs.txt"
-jobs0 = read_table(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/jobs.txt"
+jobs0=read_table(my_url)
 ```
 
 ```
@@ -1829,7 +1767,7 @@ jobs0
 
 We got all that was promised, plus a label `id` for each
 employee, which we will from here on ignore.
-\marginnote{Until much later.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Until much later.</span>
     
 
 
@@ -1850,8 +1788,9 @@ we save the new data frame into one called `jobs` that we
 actually use for the analysis below:
 
 ```r
-job_labels = c("custserv", "mechanic", "dispatcher")
-jobs = jobs0 %>% mutate(job = factor(job, labels = job_labels))
+job_labels=c("custserv","mechanic","dispatcher")
+jobs = jobs0 %>% 
+mutate(job=factor(job,labels=job_labels)) 
 ```
 
        
@@ -1889,12 +1828,8 @@ than the underlying numeric values by which they are stored.
 All is good here. If you forget the `labels` thing, you'll get
 a factor, but its levels will be 1, 2, and 3, and you will have to
 remember which jobs they go with. I'm a fan of giving factors named
-levels, so that you can remember what stands for what.\endnote{When
-you're *recording* the data, you may find it convenient to use
-short codes to represent the possibly long factor levels, but in
-that case you should also use a "codebook" so that you know what
-the codes represent. When I read the data into R, I would create a
-factor with named levels, like I did here, if I don't already have one.}
+levels, so that you can remember what stands for what.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When  you're *recording* the data, you may find it convenient to use  short codes to represent the possibly long factor levels, but in  that case you should also use a *codebook* so that you know what  the codes represent. When I read the data into R, I would create a  factor with named levels, like I did here, if I don't already have one.</span>
 
 
 
@@ -1908,21 +1843,17 @@ Solution
 You know how to do this, right? This one is the easy way:
 
 ```r
-response = with(jobs, cbind(social, outdoor, conservative))
-response.1 = manova(response ~ job, data = jobs)
+response=with(jobs,cbind(social,outdoor,conservative))
+response.1=manova(response~job,data=jobs)
 summary(response.1)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df
-## job         2 0.76207   49.248      6    480
-## Residuals 241                               
-##              Pr(>F)    
-## job       < 2.2e-16 ***
-## Residuals              
+##            Df  Pillai approx F num Df den Df    Pr(>F)    
+## job         2 0.76207   49.248      6    480 < 2.2e-16 ***
+## Residuals 241                                             
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -1933,20 +1864,17 @@ since there is no reason to make things difficult for yourself:
 
 ```r
 library(car)
-response.2 = lm(response ~ job, data = jobs)
+response.2=lm(response~job,data=jobs)
 Manova(response.2)
 ```
 
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##     Df test stat approx F num Df den Df
-## job  2   0.76207   49.248      6    480
-##        Pr(>F)    
-## job < 2.2e-16 ***
+##     Df test stat approx F num Df den Df    Pr(>F)    
+## job  2   0.76207   49.248      6    480 < 2.2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1964,7 +1892,7 @@ should "unload" it:
 
 
 ```r
-detach("package:car", unload = T)
+detach("package:car",unload=T)
 Manova(response.2)
 ```
 
@@ -1997,8 +1925,7 @@ My numbering scheme has gotten messed up, since now `job`
 is the "response":
 
 ```r
-job.1 = lda(job ~ social + outdoor + conservative, 
-    data = jobs)
+job.1=lda(job~social+outdoor+conservative,data=jobs)
 job.1
 ```
 
@@ -2112,8 +2039,8 @@ from `jobs` and the discriminant scores in `x`
 from the predictions:
 
 ```r
-job.2 = predict(job.1)
-d = data.frame(job = jobs$job, job.2$x)
+job.2=predict(job.1)
+d=data.frame(job=jobs$job,job.2$x)
 ```
 
        
@@ -2127,12 +2054,10 @@ Following my suggestion, plot these the standard way with
 
 
 ```r
-ggplot(d, aes(x = LD1, y = LD2, colour = job)) + 
-    geom_point()
+ggplot(d,aes(x=LD1,y=LD2,colour=job))+geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-55-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
 
  
 
@@ -2167,7 +2092,7 @@ Solution
 Use the predictions that you got before and saved in `job.2`:
 
 ```r
-table(obs = jobs$job, pred = job.2$class)
+table(obs=jobs$job,pred=job.2$class)
 ```
 
 ```
@@ -2184,8 +2109,8 @@ Or, the `tidyverse` way:
 
 
 ```r
-d = data.frame(job = jobs$job, pred = job.2$class)
-d %>% count(job, pred)
+d=data.frame(job=jobs$job,pred=job.2$class)
+d %>% count(job,pred)
 ```
 
 ```
@@ -2232,8 +2157,8 @@ the correct or wrong classification:
 
 
 ```r
-d %>% count(job, pred) %>% mutate(job_stat = ifelse(job == 
-    pred, "correct", "wrong"))
+d %>% count(job,pred) %>%
+mutate(job_stat=ifelse(job==pred,"correct","wrong"))
 ```
 
 ```
@@ -2259,9 +2184,9 @@ count the number of rows:
 
 
 ```r
-d %>% count(job, pred) %>% mutate(job_stat = ifelse(job == 
-    pred, "correct", "wrong")) %>% count(job_stat, 
-    wt = n)
+d %>% count(job,pred) %>%
+mutate(job_stat=ifelse(job==pred,"correct","wrong")) %>%
+count(job_stat,wt=n)
 ```
 
 ```
@@ -2278,9 +2203,10 @@ and turn these into proportions:
 
 
 ```r
-d %>% count(job, pred) %>% mutate(job_stat = ifelse(job == 
-    pred, "correct", "wrong")) %>% count(job_stat, 
-    wt = n) %>% mutate(proportion = nn/sum(nn))
+d %>% count(job,pred) %>%
+mutate(job_stat=ifelse(job==pred,"correct","wrong")) %>%
+count(job_stat,wt=n) %>%
+mutate(proportion=nn/sum(nn))
 ```
 
 ```
@@ -2309,9 +2235,11 @@ proportions for each (true) job:
 
 
 ```r
-d %>% count(job, pred) %>% mutate(job_stat = ifelse(job == 
-    pred, "correct", "wrong")) %>% group_by(job) %>% 
-    count(job_stat, wt = n) %>% mutate(proportion = nn/sum(nn))
+d %>% count(job,pred) %>%
+mutate(job_stat=ifelse(job==pred,"correct","wrong")) %>%
+group_by(job) %>%
+count(job_stat,wt=n) %>%
+mutate(proportion=nn/sum(nn))
 ```
 
 ```
@@ -2333,10 +2261,13 @@ or even split out the correct and wrong ones into their own columns:
 
 
 ```r
-d %>% count(job, pred) %>% mutate(job_stat = ifelse(job == 
-    pred, "correct", "wrong")) %>% group_by(job) %>% 
-    count(job_stat, wt = n) %>% mutate(proportion = nn/sum(nn)) %>% 
-    select(-nn) %>% spread(job_stat, proportion)
+d %>% count(job,pred) %>%
+mutate(job_stat=ifelse(job==pred,"correct","wrong")) %>%
+group_by(job) %>%
+count(job_stat,wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+select(-nn) %>%
+spread(job_stat,proportion)
 ```
 
 ```
@@ -2380,7 +2311,7 @@ This is in fact exactly the same idea as the data frame that I
 generally called `new` when doing predictions for other models:
 
 ```r
-new = tibble(outdoor = 20, social = 17, conservative = 8)
+new=tibble(outdoor=20,social=17,conservative=8)
 new
 ```
 
@@ -2400,7 +2331,7 @@ Then feed this into `predict` as the *second* thing:
 
 
 ```r
-pp1 = predict(job.1, new)
+pp1=predict(job.1,new)
 ```
 
  
@@ -2409,16 +2340,14 @@ Our predictions are these:
 
 
 ```r
-cbind(new, pp1)
+cbind(new,pp1)
 ```
 
 ```
-##   outdoor social conservative    class
-## 1      20     17            8 mechanic
-##   posterior.custserv posterior.mechanic
-## 1         0.05114665          0.7800624
-##   posterior.dispatcher     x.LD1     x.LD2
-## 1            0.1687909 0.7138376 -1.024436
+##   outdoor social conservative    class posterior.custserv
+## 1      20     17            8 mechanic         0.05114665
+##   posterior.mechanic posterior.dispatcher     x.LD1     x.LD2
+## 1          0.7800624            0.1687909 0.7138376 -1.024436
 ```
 
  
@@ -2427,9 +2356,8 @@ The `class` thing gives our predicted job, and the
 `posterior` probabilities say how sure we are about that.
 So we reckon there's a 78\% chance that this person is a mechanic;
 they might be a dispatcher but they are unlikely to be in customer
-service. Our best guess is that they are a mechanic.\endnote{I
-discovered that I used "pp" twice, and I want to use the first one
-again later, so I had to rename this one.}
+service. Our best guess is that they are a mechanic.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I  discovered that I used *pp* twice, and I want to use the first one again later, so I had to rename this one.</span>
 
 Does this pass the sanity-check test? First figure out where our new
 employee stands compared to the others:
@@ -2440,20 +2368,13 @@ summary(jobs)
 ```
 
 ```
-##     outdoor          social     
-##  Min.   : 0.00   Min.   : 7.00  
-##  1st Qu.:13.00   1st Qu.:17.00  
-##  Median :16.00   Median :21.00  
-##  Mean   :15.64   Mean   :20.68  
-##  3rd Qu.:19.00   3rd Qu.:25.00  
-##  Max.   :28.00   Max.   :35.00  
-##   conservative           job    
-##  Min.   : 0.00   custserv  :85  
-##  1st Qu.: 8.00   mechanic  :93  
-##  Median :11.00   dispatcher:66  
-##  Mean   :10.59                  
-##  3rd Qu.:13.00                  
-##  Max.   :20.00                  
+##     outdoor          social       conservative           job    
+##  Min.   : 0.00   Min.   : 7.00   Min.   : 0.00   custserv  :85  
+##  1st Qu.:13.00   1st Qu.:17.00   1st Qu.: 8.00   mechanic  :93  
+##  Median :16.00   Median :21.00   Median :11.00   dispatcher:66  
+##  Mean   :15.64   Mean   :20.68   Mean   :10.59                  
+##  3rd Qu.:19.00   3rd Qu.:25.00   3rd Qu.:13.00                  
+##  Max.   :28.00   Max.   :35.00   Max.   :20.00                  
 ##        id       
 ##  Min.   : 1.00  
 ##  1st Qu.:21.00  
@@ -2492,9 +2413,9 @@ in my usual fashion:
 
 
 ```r
-outdoors = c(13, 19)
-socials = c(17, 25)
-conservatives = c(8, 13)
+outdoors=c(13,19)
+socials=c(17,25)
+conservatives=c(8,13)
 ```
 
  
@@ -2505,32 +2426,23 @@ discriminants'' above:
 
 
 ```r
-new = crossing(outdoor = outdoors, social = socials, 
-    conservative = conservatives)
-pp2 = predict(job.1, new)
-px = round(pp2$x, 2)
-cbind(new, pp2$class, px)
+new=crossing(outdoor=outdoors,social=socials,
+conservative=conservatives)
+pp2=predict(job.1,new)
+px=round(pp2$x,2)
+cbind(new,pp2$class,px)
 ```
 
 ```
-##   outdoor social conservative  pp2$class
-## 1      13     17            8   mechanic
-## 2      13     17           13 dispatcher
-## 3      13     25            8   custserv
-## 4      13     25           13   custserv
-## 5      19     17            8   mechanic
-## 6      19     17           13 dispatcher
-## 7      19     25            8   mechanic
-## 8      19     25           13   mechanic
-##     LD1   LD2
-## 1  0.07  0.55
-## 2  0.84  0.99
-## 3 -1.48  0.15
-## 4 -0.71  0.59
-## 5  0.62 -0.80
-## 6  1.40 -0.36
-## 7 -0.93 -1.20
-## 8 -0.16 -0.76
+##   outdoor social conservative  pp2$class   LD1   LD2
+## 1      13     17            8   mechanic  0.07  0.55
+## 2      13     17           13 dispatcher  0.84  0.99
+## 3      13     25            8   custserv -1.48  0.15
+## 4      13     25           13   custserv -0.71  0.59
+## 5      19     17            8   mechanic  0.62 -0.80
+## 6      19     17           13 dispatcher  1.40 -0.36
+## 7      19     25            8   mechanic -0.93 -1.20
+## 8      19     25           13   mechanic -0.16 -0.76
 ```
 
  
@@ -2593,8 +2505,7 @@ Solution
 Stick a `CV=T` in the `lda`:
 
 ```r
-job.3 = lda(job ~ social + outdoor + conservative, 
-    data = jobs, CV = T)
+job.3=lda(job~social+outdoor+conservative,data=jobs,CV=T)
 ```
 
        
@@ -2604,7 +2515,7 @@ This directly contains a `class` (no need for a
 
 
 ```r
-table(obs = jobs$job, pred = job.3$class)
+table(obs=jobs$job,pred=job.3$class)
 ```
 
 ```
@@ -2634,8 +2545,8 @@ a lot of posterior probabilities to look at!
 This is another way of saying that with small data sets, your
 conclusions are more "fragile" or less likely to be
 generalizable. With a larger data set like this one, cross-validation,
-which is the right thing to do, makes almost no difference.\endnote{So
-we should do it, when assessing how good the classification is.}
+which is the right thing to do, makes almost no difference.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">So we should do it, when assessing how good the classification is.</span>
 All right, I suppose I do want to investigate the individuals whose
 predicted jobs changed, and look at their posterior probabilities. I
 think I have the machinery to do that. The key is that `job.2` and
@@ -2644,7 +2555,7 @@ and the cross-validation, so I can compare them directly:
 
 
 ```r
-diff = (job.3$class != job.2$class)
+diff=(job.3$class!=job.2$class)
 str(diff)
 ```
 
@@ -2672,8 +2583,7 @@ predicted jobs by regular discriminant analysis and by cross-validation:
 
 
 ```r
-d = data.frame(id = jobs$id, job = jobs$job, p.lda = job.2$class, 
-    p.cv = job.3$class)
+d=data.frame(id=jobs$id,job=jobs$job,p.lda=job.2$class,p.cv=job.3$class) 
 ```
 
  
@@ -2684,7 +2594,7 @@ Now we can find out which ones had their job predictions disagree:
 
 
 ```r
-d %>% filter(p.lda != p.cv)
+d %>% filter(p.lda!=p.cv)
 ```
 
 ```
@@ -2702,24 +2612,20 @@ reason, we'd better abbreviate the job names as well:
 
 
 ```r
-j.lda.post = round(job.2$posterior, 3)
-j.cv.post = round(job.3$posterior, 3)
-colnames(j.cv.post) = abbreviate(colnames(j.cv.post), 
-    5)
-colnames(j.lda.post) = abbreviate(colnames(j.lda.post), 
-    5)
-data.frame(id = jobs$id, job = jobs$job, p.lda = job.2$class, 
-    p.cv = job.3$class, j.lda.post, j.cv.post) %>% 
-    filter(p.lda != p.cv) %>% dplyr::select(-(p.lda:p.cv))
+j.lda.post=round(job.2$posterior,3)
+j.cv.post=round(job.3$posterior,3)
+colnames(j.cv.post)=abbreviate(colnames(j.cv.post),5)
+colnames(j.lda.post)=abbreviate(colnames(j.lda.post),5)
+data.frame(id=jobs$id,job=jobs$job,p.lda=job.2$class,
+p.cv=job.3$class,j.lda.post,j.cv.post) %>% 
+filter(p.lda!=p.cv) %>%
+dplyr::select(-(p.lda:p.cv))
 ```
 
 ```
-##   id        job cstsr mchnc dsptc cstsr.1
-## 1 11   custserv 0.495 0.491 0.013   0.490
-## 2 42 dispatcher 0.056 0.472 0.472   0.057
-##   mchnc.1 dsptc.1
-## 1   0.496   0.014
-## 2   0.479   0.464
+##   id        job cstsr mchnc dsptc cstsr.1 mchnc.1 dsptc.1
+## 1 11   custserv 0.495 0.491 0.013   0.490   0.496   0.014
+## 2 42 dispatcher 0.056 0.472 0.472   0.057   0.479   0.464
 ```
 
  
@@ -2756,11 +2662,11 @@ are likely to need:
 
 
 ```r
-post = round(job.2$posterior, 3)
-d = data.frame(id = jobs$id, obs = jobs$job, pred = job.2$class, 
-    post)
-d %>% mutate(correct = (obs == pred)) %>% group_by(correct) %>% 
-    summarize(count = n())
+post=round(job.2$posterior,3)
+d=data.frame(id=jobs$id,obs=jobs$job,pred=job.2$class,post)
+d %>% mutate(correct=(obs==pred)) %>%
+group_by(correct) %>%
+summarize(count=n())
 ```
 
 ```
@@ -2780,32 +2686,22 @@ take a random sample of 10 of them:
 
 ```r
 set.seed(457299)
-d %>% filter(obs != pred) %>% sample_n(10)
+d %>% filter(obs!=pred) %>%
+sample_n(10)
 ```
 
 ```
-##    id        obs       pred custserv
-## 56 54 dispatcher   mechanic    0.135
-## 8  49   custserv   mechanic    0.377
-## 13 61   custserv dispatcher    0.438
-## 32 39   mechanic dispatcher    0.141
-## 22  8   mechanic   custserv    0.507
-## 41 83   mechanic   custserv    0.753
-## 57 56 dispatcher   mechanic    0.140
-## 12 57   custserv   mechanic    0.305
-## 30 34   mechanic   custserv    0.505
-## 42 86   mechanic   custserv    0.529
-##    mechanic dispatcher
-## 56    0.623      0.242
-## 8     0.500      0.123
-## 13    0.109      0.453
-## 32    0.300      0.559
-## 22    0.442      0.051
-## 41    0.246      0.000
-## 57    0.641      0.219
-## 12    0.623      0.072
-## 30    0.471      0.024
-## 42    0.464      0.007
+##    id        obs       pred custserv mechanic dispatcher
+## 56 54 dispatcher   mechanic    0.135    0.623      0.242
+## 8  49   custserv   mechanic    0.377    0.500      0.123
+## 13 61   custserv dispatcher    0.438    0.109      0.453
+## 32 39   mechanic dispatcher    0.141    0.300      0.559
+## 22  8   mechanic   custserv    0.507    0.442      0.051
+## 41 83   mechanic   custserv    0.753    0.246      0.000
+## 57 56 dispatcher   mechanic    0.140    0.641      0.219
+## 12 57   custserv   mechanic    0.305    0.623      0.072
+## 30 34   mechanic   custserv    0.505    0.471      0.024
+## 42 86   mechanic   custserv    0.529    0.464      0.007
 ```
 
  
@@ -2879,8 +2775,8 @@ Solution
 As ever:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/adhd-parents.txt"
-adhd = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/adhd-parents.txt"
+adhd=read_delim(my_url," ")
 ```
 
 ```
@@ -2930,7 +2826,7 @@ Solution
 This is as before:
 
 ```r
-adhd.1 = lda(parent ~ q1 + q2 + q3 + q4, data = adhd)
+adhd.1=lda(parent~q1+q2+q3+q4,data=adhd)
 adhd.1
 ```
 
@@ -2992,7 +2888,7 @@ The prediction is the obvious thing. I take a quick look at it
 (using `glimpse`), but only because I feel like it:
 
 ```r
-adhd.2 = predict(adhd.1)
+adhd.2=predict(adhd.1)
 glimpse(adhd.2)
 ```
 
@@ -3019,12 +2915,11 @@ containing what you need:
 
 
 ```r
-data.frame(parent = adhd$parent, adhd.2$x) %>% 
-    ggplot(aes(x = parent, y = LD1)) + geom_boxplot()
+data.frame(parent=adhd$parent,adhd.2$x) %>%
+ggplot(aes(x=parent,y=LD1))+geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-78-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-78-1.png" width="672"  />
 
  
 The fathers look to be a very compact group with `LD1` score
@@ -3051,7 +2946,7 @@ Use the predictions from the previous part, and the observed
 either `table` or `tidyverse` to summarize.
 
 ```r
-table(obs = adhd$parent, pred = adhd.2$class)
+table(obs=adhd$parent,pred=adhd.2$class)
 ```
 
 ```
@@ -3066,8 +2961,8 @@ Or,
 
 
 ```r
-d = data.frame(obs = adhd$parent, pred = adhd.2$class)
-d %>% count(obs, pred)
+d=data.frame(obs=adhd$parent,pred=adhd.2$class) 
+d %>% count(obs,pred)
 ```
 
 ```
@@ -3099,8 +2994,9 @@ will give us the row of the *original* data frame:
 
 
 ```r
-adhd %>% mutate(pred = adhd.2$class, id = row_number()) %>% 
-    filter(parent != pred)
+adhd %>%
+mutate(pred=adhd.2$class,id=row_number()) %>%
+filter(parent!=pred)
 ```
 
 ```
@@ -3119,8 +3015,7 @@ mothers and fathers on `q2`:
 
 
 ```r
-adhd %>% group_by(parent) %>% summarize(m2 = mean(q2), 
-    s2 = sd(q2))
+adhd %>% group_by(parent) %>% summarize(m2=mean(q2),s2=sd(q2))
 ```
 
 ```
@@ -3154,9 +3049,8 @@ Solution
 So, this, with different name:
 
 ```r
-adhd.3 = lda(parent ~ q1 + q2 + q3 + q4, data = adhd, 
-    CV = T)
-table(obs = adhd$parent, pred = adhd.3$class)
+adhd.3=lda(parent~q1+q2+q3+q4,data=adhd,CV=T)
+table(obs=adhd$parent,pred=adhd.3$class)
 ```
 
 ```
@@ -3200,73 +3094,42 @@ Solution
 Something like this:
 
 ```r
-pr.lda = round(adhd.2$posterior, 3)
-pr.cv = round(adhd.3$posterior, 3)
-data.frame(adhd, adhd.2$x, pr.lda, pr.cv) %>% 
-    arrange(LD1)
+pr.lda=round(adhd.2$posterior,3)
+pr.cv=round(adhd.3$posterior,3)
+data.frame(adhd,adhd.2$x,pr.lda,pr.cv) %>% arrange(LD1)
 ```
 
 ```
-##    parent q1 q2 q3 q4        LD1 father
-## 1  father  2  1  1  1 -3.6088379  0.999
-## 2  father  2  1  3  1 -3.3265660  0.998
-## 3  father  2  1  3  1 -3.3265660  0.998
-## 4  father  2  1  1  3 -3.2319152  0.998
-## 5  mother  1  1  2  1 -3.1453565  0.997
-## 6  father  1  1  1  3 -2.9095698  0.992
-## 7  mother  3  2  3  3 -0.9500439  0.050
-## 8  mother  2  2  1  3 -0.9099704  0.043
-## 9  mother  1  2  2  2 -0.6349504  0.015
-## 10 mother  3  3  1  1  0.7127063  0.000
-## 11 mother  3  3  1  1  0.7127063  0.000
-## 12 mother  3  3  1  1  0.7127063  0.000
-## 13 mother  3  3  2  1  0.8538422  0.000
-## 14 mother  3  3  2  1  0.8538422  0.000
-## 15 mother  3  3  1  2  0.9011676  0.000
-## 16 mother  3  3  3  1  0.9949782  0.000
-## 17 mother  3  3  3  1  0.9949782  0.000
-## 18 mother  3  3  3  1  0.9949782  0.000
-## 19 mother  3  3  3  1  0.9949782  0.000
-## 20 mother  2  3  1  1  1.0350517  0.000
-## 21 mother  2  3  1  1  1.0350517  0.000
-## 22 mother  3  3  2  3  1.2307649  0.000
-## 23 mother  3  3  2  3  1.2307649  0.000
-## 24 mother  3  3  2  3  1.2307649  0.000
-## 25 mother  1  3  1  1  1.3573971  0.000
-## 26 mother  3  3  3  3  1.3719009  0.000
-## 27 mother  1  3  1  2  1.5458584  0.000
-## 28 mother  1  3  3  1  1.6396690  0.000
-## 29 mother  1  3  3  1  1.6396690  0.000
-##    mother father.1 mother.1
-## 1   0.001    0.999    0.001
-## 2   0.002    0.996    0.004
-## 3   0.002    0.996    0.004
-## 4   0.002    0.994    0.006
-## 5   0.003    1.000    0.000
-## 6   0.008    0.958    0.042
-## 7   0.950    0.236    0.764
-## 8   0.957    0.107    0.893
-## 9   0.985    0.030    0.970
-## 10  1.000    0.000    1.000
-## 11  1.000    0.000    1.000
-## 12  1.000    0.000    1.000
-## 13  1.000    0.000    1.000
-## 14  1.000    0.000    1.000
-## 15  1.000    0.000    1.000
-## 16  1.000    0.000    1.000
-## 17  1.000    0.000    1.000
-## 18  1.000    0.000    1.000
-## 19  1.000    0.000    1.000
-## 20  1.000    0.000    1.000
-## 21  1.000    0.000    1.000
-## 22  1.000    0.000    1.000
-## 23  1.000    0.000    1.000
-## 24  1.000    0.000    1.000
-## 25  1.000    0.000    1.000
-## 26  1.000    0.000    1.000
-## 27  1.000    0.000    1.000
-## 28  1.000    0.000    1.000
-## 29  1.000    0.000    1.000
+##    parent q1 q2 q3 q4        LD1 father mother father.1 mother.1
+## 1  father  2  1  1  1 -3.6088379  0.999  0.001    0.999    0.001
+## 2  father  2  1  3  1 -3.3265660  0.998  0.002    0.996    0.004
+## 3  father  2  1  3  1 -3.3265660  0.998  0.002    0.996    0.004
+## 4  father  2  1  1  3 -3.2319152  0.998  0.002    0.994    0.006
+## 5  mother  1  1  2  1 -3.1453565  0.997  0.003    1.000    0.000
+## 6  father  1  1  1  3 -2.9095698  0.992  0.008    0.958    0.042
+## 7  mother  3  2  3  3 -0.9500439  0.050  0.950    0.236    0.764
+## 8  mother  2  2  1  3 -0.9099704  0.043  0.957    0.107    0.893
+## 9  mother  1  2  2  2 -0.6349504  0.015  0.985    0.030    0.970
+## 10 mother  3  3  1  1  0.7127063  0.000  1.000    0.000    1.000
+## 11 mother  3  3  1  1  0.7127063  0.000  1.000    0.000    1.000
+## 12 mother  3  3  1  1  0.7127063  0.000  1.000    0.000    1.000
+## 13 mother  3  3  2  1  0.8538422  0.000  1.000    0.000    1.000
+## 14 mother  3  3  2  1  0.8538422  0.000  1.000    0.000    1.000
+## 15 mother  3  3  1  2  0.9011676  0.000  1.000    0.000    1.000
+## 16 mother  3  3  3  1  0.9949782  0.000  1.000    0.000    1.000
+## 17 mother  3  3  3  1  0.9949782  0.000  1.000    0.000    1.000
+## 18 mother  3  3  3  1  0.9949782  0.000  1.000    0.000    1.000
+## 19 mother  3  3  3  1  0.9949782  0.000  1.000    0.000    1.000
+## 20 mother  2  3  1  1  1.0350517  0.000  1.000    0.000    1.000
+## 21 mother  2  3  1  1  1.0350517  0.000  1.000    0.000    1.000
+## 22 mother  3  3  2  3  1.2307649  0.000  1.000    0.000    1.000
+## 23 mother  3  3  2  3  1.2307649  0.000  1.000    0.000    1.000
+## 24 mother  3  3  2  3  1.2307649  0.000  1.000    0.000    1.000
+## 25 mother  1  3  1  1  1.3573971  0.000  1.000    0.000    1.000
+## 26 mother  3  3  3  3  1.3719009  0.000  1.000    0.000    1.000
+## 27 mother  1  3  1  2  1.5458584  0.000  1.000    0.000    1.000
+## 28 mother  1  3  3  1  1.6396690  0.000  1.000    0.000    1.000
+## 29 mother  1  3  3  1  1.6396690  0.000  1.000    0.000    1.000
 ```
 
    
@@ -3379,8 +3242,8 @@ Solution
 The usual:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/cornseed.csv"
-cornseed = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/cornseed.csv"
+cornseed=read_csv(my_url)
 ```
 
 ```
@@ -3437,22 +3300,17 @@ The usual thing: create the response, use `manova` (or
 `Manova` from `car` if you like, but it's not necessary):
 
 ```r
-response = with(cornseed, cbind(yield, water, 
-    herbicide))
-cornseed.1 = manova(response ~ soil, data = cornseed)
+response=with(cornseed,cbind(yield,water,herbicide))
+cornseed.1=manova(response~soil,data=cornseed)
 summary(cornseed.1)
 ```
 
 ```
-##           Df Pillai approx F num Df den Df
-## soil       3 0.5345   2.0234      9     84
-## Residuals 28                              
-##            Pr(>F)  
-## soil      0.04641 *
-## Residuals          
+##           Df Pillai approx F num Df den Df  Pr(>F)  
+## soil       3 0.5345   2.0234      9     84 0.04641 *
+## Residuals 28                                        
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -3493,8 +3351,7 @@ Loading library `MASS` first. I'm displaying all my
 results, but I didn't ask you to:
 
 ```r
-cornseed.2 = lda(soil ~ yield + water + herbicide, 
-    data = cornseed)
+cornseed.2=lda(soil~yield+water+herbicide,data=cornseed)
 cornseed.2
 ```
 
@@ -3514,14 +3371,10 @@ cornseed.2
 ## sandy 62.5750 28.2000    4.3500
 ## 
 ## Coefficients of linear discriminants:
-##                   LD1         LD2
-## yield      0.08074845  0.02081174
-## water     -0.03759961 -0.09598577
-## herbicide  0.50654017 -0.06979662
-##                   LD3
-## yield     -0.04822432
-## water     -0.03231897
-## herbicide  0.27281743
+##                   LD1         LD2         LD3
+## yield      0.08074845  0.02081174 -0.04822432
+## water     -0.03759961 -0.09598577 -0.03231897
+## herbicide  0.50654017 -0.06979662  0.27281743
 ## 
 ## Proportion of trace:
 ##    LD1    LD2    LD3 
@@ -3537,7 +3390,7 @@ soil type:
 
 
 ```r
-cornseed %>% select(field, soil)
+cornseed %>% select(field,soil)
 ```
 
 ```
@@ -3614,14 +3467,10 @@ cornseed.2$scaling
 ```
 
 ```
-##                   LD1         LD2
-## yield      0.08074845  0.02081174
-## water     -0.03759961 -0.09598577
-## herbicide  0.50654017 -0.06979662
-##                   LD3
-## yield     -0.04822432
-## water     -0.03231897
-## herbicide  0.27281743
+##                   LD1         LD2         LD3
+## yield      0.08074845  0.02081174 -0.04822432
+## water     -0.03759961 -0.09598577 -0.03231897
+## herbicide  0.50654017 -0.06979662  0.27281743
 ```
 $ %$ %$
 
@@ -3636,12 +3485,10 @@ I didn't ask you to, but you could check this by seeing how
 
 
 ```r
-ggplot(cornseed, aes(x = soil, y = herbicide)) + 
-    geom_boxplot()
+ggplot(cornseed,aes(x=soil,y=herbicide))+geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-91-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-91-1.png" width="672"  />
 
 
 
@@ -3651,11 +3498,10 @@ Or by `water`:
 
 
 ```r
-ggplot(cornseed, aes(x = soil, y = water)) + geom_boxplot()
+ggplot(cornseed,aes(x=soil,y=water))+geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-92-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
 
  
 
@@ -3677,7 +3523,7 @@ Solution
 Just this, therefore:
 
 ```r
-cornseed.pred = predict(cornseed.2)
+cornseed.pred=predict(cornseed.2)
 ```
 
      
@@ -3696,7 +3542,7 @@ We need the `soil` out of `cornseed` and the thing
 called `x` out of `cornseed.pred`:
 
 ```r
-d = data.frame(soil = cornseed$soil, cornseed.pred$x)
+d=data.frame(soil=cornseed$soil,cornseed.pred$x)
 head(d)
 ```
 
@@ -3720,12 +3566,10 @@ Then we use this as input to `ggplot`:
 
 
 ```r
-ggplot(d, aes(x = LD1, y = LD2, colour = soil)) + 
-    geom_point()
+ggplot(d,aes(x=LD1,y=LD2,colour=soil))+geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-95-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
 
  
     
@@ -3769,11 +3613,10 @@ groups. If you wanted to do that, you could  make a boxplot of the
 discriminant scores by `soil` group, thus:
 
 ```r
-ggplot(d, aes(x = soil, y = LD1)) + geom_boxplot()
+ggplot(d,aes(x=soil,y=LD1))+geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-96-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-96-1.png" width="672"  />
 
    
 
@@ -3798,7 +3641,7 @@ This is a matter of grabbing the things you want from where they
 live, and giving them short names:
 
 ```r
-table(obs = cornseed$soil, pred = cornseed.pred$class)
+table(obs=cornseed$soil,pred=cornseed.pred$class)
 ```
 
 ```
@@ -3840,8 +3683,8 @@ The `dplyr` way of doing this is equally good:
 
 
 ```r
-data.frame(obs = cornseed$soil, pred = cornseed.pred$class) %>% 
-    count(obs, pred)
+data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
+count(obs,pred)
 ```
 
 ```
@@ -3872,9 +3715,10 @@ Extra: we can calculate misclassification rates, first overall, which is easier:
 
 
 ```r
-data.frame(obs = cornseed$soil, pred = cornseed.pred$class) %>% 
-    mutate(soil_stat = ifelse(obs == pred, "correct", 
-        "wrong")) %>% count(soil_stat) %>% mutate(prop = n/sum(n))
+data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
+mutate(soil_stat=ifelse(obs==pred,"correct","wrong")) %>%
+count(soil_stat) %>%
+mutate(prop=n/sum(n))
 ```
 
 ```
@@ -3898,11 +3742,13 @@ Or do it by actual soil type:
 
 
 ```r
-data.frame(obs = cornseed$soil, pred = cornseed.pred$class) %>% 
-    group_by(obs) %>% mutate(soil_stat = ifelse(obs == 
-    pred, "correct", "wrong")) %>% count(soil_stat) %>% 
-    mutate(prop = n/sum(n)) %>% select(-n) %>% 
-    spread(soil_stat, prop)
+data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
+group_by(obs) %>%
+mutate(soil_stat=ifelse(obs==pred,"correct","wrong")) %>%
+count(soil_stat) %>%
+mutate(prop=n/sum(n)) %>%
+select(-n) %>%
+spread(soil_stat,prop)
 ```
 
 ```
@@ -3923,8 +3769,8 @@ wrong. However, these proportions were each based on only eight
 observations, so it's probably wise *not* to say that loam is
 *always* easiest to get right.
 
-I didn't have you look at posterior probabilities here.\endnote{Rest assured
-that I will on the final exam!} With 32 fields, this is rather a lot
+I didn't have you look at posterior probabilities here.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Rest assured that I will on the final exam!</span> With 32 fields, this is rather a lot
 to list them all, but what we can do is to look at the ones that were
 misclassified (the true soil type differs from the predicted soil
 type). Before that, though, we need to make a data frame with the stuff in
@@ -3935,42 +3781,27 @@ Then, we can fire away with this:
 
 
 ```r
-pr = round(cornseed.pred$posterior, 3)
-data.frame(cornseed, pred = cornseed.pred$class, 
-    pr) %>% filter(soil != pred)
+pr=round(cornseed.pred$posterior,3)
+data.frame(cornseed,pred=cornseed.pred$class,pr) %>%
+filter(soil!=pred)
 ```
 
 ```
-##    field  soil yield water herbicide  pred
-## 1      7  loam  65.4  21.6       4.3 sandy
-## 2      8  loam  65.7  27.7       5.3 sandy
-## 3      9 sandy  67.3  48.3       5.5  clay
-## 4     10 sandy  61.3  28.9       6.9  loam
-## 5     11 sandy  58.2  42.5       4.8  clay
-## 6     13 sandy  66.9  23.9       1.1 salty
-## 7     17 salty  62.8  25.9       2.9 sandy
-## 8     20 salty  75.6  27.7       6.3  loam
-## 9     24 salty  68.4  35.3       1.9  clay
-## 10    25  clay  52.5  39.0       3.1 salty
-## 11    28  clay  63.5  25.6       3.0 sandy
-## 12    30  clay  61.5  16.8       1.9 sandy
-## 13    31  clay  62.9  25.8       2.4 salty
-## 14    32  clay  49.3  39.4       5.2 salty
-##     clay  loam salty sandy
-## 1  0.174 0.214 0.147 0.465
-## 2  0.163 0.352 0.113 0.373
-## 3  0.384 0.206 0.195 0.215
-## 4  0.106 0.553 0.069 0.272
-## 5  0.436 0.043 0.339 0.182
-## 6  0.317 0.013 0.362 0.307
-## 7  0.308 0.038 0.315 0.340
-## 8  0.026 0.819 0.012 0.143
-## 9  0.403 0.018 0.351 0.227
-## 10 0.414 0.004 0.484 0.098
-## 11 0.298 0.047 0.295 0.360
-## 12 0.255 0.020 0.338 0.388
-## 13 0.320 0.024 0.346 0.310
-## 14 0.416 0.019 0.418 0.146
+##    field  soil yield water herbicide  pred  clay  loam salty sandy
+## 1      7  loam  65.4  21.6       4.3 sandy 0.174 0.214 0.147 0.465
+## 2      8  loam  65.7  27.7       5.3 sandy 0.163 0.352 0.113 0.373
+## 3      9 sandy  67.3  48.3       5.5  clay 0.384 0.206 0.195 0.215
+## 4     10 sandy  61.3  28.9       6.9  loam 0.106 0.553 0.069 0.272
+## 5     11 sandy  58.2  42.5       4.8  clay 0.436 0.043 0.339 0.182
+## 6     13 sandy  66.9  23.9       1.1 salty 0.317 0.013 0.362 0.307
+## 7     17 salty  62.8  25.9       2.9 sandy 0.308 0.038 0.315 0.340
+## 8     20 salty  75.6  27.7       6.3  loam 0.026 0.819 0.012 0.143
+## 9     24 salty  68.4  35.3       1.9  clay 0.403 0.018 0.351 0.227
+## 10    25  clay  52.5  39.0       3.1 salty 0.414 0.004 0.484 0.098
+## 11    28  clay  63.5  25.6       3.0 sandy 0.298 0.047 0.295 0.360
+## 12    30  clay  61.5  16.8       1.9 sandy 0.255 0.020 0.338 0.388
+## 13    31  clay  62.9  25.8       2.4 salty 0.320 0.024 0.346 0.310
+## 14    32  clay  49.3  39.4       5.2 salty 0.416 0.019 0.418 0.146
 ```
 
  
@@ -3997,29 +3828,20 @@ soils that were actually loam. This is a small edit:
 
 
 ```r
-data.frame(cornseed, pred = cornseed.pred$class, 
-    pr) %>% filter(soil == "loam")
+data.frame(cornseed,pred=cornseed.pred$class,pr) %>%
+filter(soil=="loam")
 ```
 
 ```
-##   field soil yield water herbicide  pred
-## 1     1 loam  76.7  29.5       7.5  loam
-## 2     2 loam  60.5  32.1       6.3  loam
-## 3     3 loam  96.1  40.7       4.2  loam
-## 4     4 loam  88.1  45.1       4.9  loam
-## 5     5 loam  50.2  34.1      11.7  loam
-## 6     6 loam  55.0  31.1       6.9  loam
-## 7     7 loam  65.4  21.6       4.3 sandy
-## 8     8 loam  65.7  27.7       5.3 sandy
-##    clay  loam salty sandy
-## 1 0.008 0.930 0.003 0.058
-## 2 0.196 0.354 0.134 0.316
-## 3 0.030 0.853 0.008 0.109
-## 4 0.069 0.770 0.021 0.140
-## 5 0.011 0.946 0.005 0.039
-## 6 0.208 0.319 0.159 0.313
-## 7 0.174 0.214 0.147 0.465
-## 8 0.163 0.352 0.113 0.373
+##   field soil yield water herbicide  pred  clay  loam salty sandy
+## 1     1 loam  76.7  29.5       7.5  loam 0.008 0.930 0.003 0.058
+## 2     2 loam  60.5  32.1       6.3  loam 0.196 0.354 0.134 0.316
+## 3     3 loam  96.1  40.7       4.2  loam 0.030 0.853 0.008 0.109
+## 4     4 loam  88.1  45.1       4.9  loam 0.069 0.770 0.021 0.140
+## 5     5 loam  50.2  34.1      11.7  loam 0.011 0.946 0.005 0.039
+## 6     6 loam  55.0  31.1       6.9  loam 0.208 0.319 0.159 0.313
+## 7     7 loam  65.4  21.6       4.3 sandy 0.174 0.214 0.147 0.465
+## 8     8 loam  65.7  27.7       5.3 sandy 0.163 0.352 0.113 0.373
 ```
 $ %$ %$ %$
 
@@ -4042,20 +3864,13 @@ summary(cornseed)
 ```
 
 ```
-##      field           soil          
-##  Min.   : 1.00   Length:32         
-##  1st Qu.: 8.75   Class :character  
-##  Median :16.50   Mode  :character  
-##  Mean   :16.50                     
-##  3rd Qu.:24.25                     
-##  Max.   :32.00                     
-##      yield           water      
-##  Min.   :45.00   Min.   :14.50  
-##  1st Qu.:50.58   1st Qu.:25.75  
-##  Median :61.40   Median :29.60  
-##  Mean   :61.61   Mean   :31.17  
-##  3rd Qu.:67.00   3rd Qu.:36.83  
-##  Max.   :96.10   Max.   :54.20  
+##      field           soil               yield           water      
+##  Min.   : 1.00   Length:32          Min.   :45.00   Min.   :14.50  
+##  1st Qu.: 8.75   Class :character   1st Qu.:50.58   1st Qu.:25.75  
+##  Median :16.50   Mode  :character   Median :61.40   Median :29.60  
+##  Mean   :16.50                      Mean   :61.61   Mean   :31.17  
+##  3rd Qu.:24.25                      3rd Qu.:67.00   3rd Qu.:36.83  
+##  Max.   :32.00                      Max.   :96.10   Max.   :54.20  
 ##    herbicide     
 ##  Min.   : 1.100  
 ##  1st Qu.: 3.075  
@@ -4074,34 +3889,24 @@ and down they go. This process is one you've seen before:
 
 
 ```r
-yields = c(51, 67)
-waters = c(26, 37)
-herbicides = c(3, 6)
-new = crossing(yield = yields, water = waters, 
-    herbicide = herbicides)
-pred = predict(cornseed.2, new)
-cbind(new, pred$x) %>% arrange(desc(LD1))
+yields=c(51,67)
+waters=c(26,37)
+herbicides=c(3,6)
+new=crossing(yield=yields,water=waters,herbicide=herbicides)
+pred=predict(cornseed.2,new)
+cbind(new,pred$x) %>% arrange(desc(LD1))
 ```
 
 ```
-##   yield water herbicide         LD1
-## 1    67    26         6  1.30225880
-## 2    67    37         6  0.88866305
-## 3    51    26         6  0.01028356
-## 4    67    26         3 -0.21736172
-## 5    51    37         6 -0.40331219
-## 6    67    37         3 -0.63095747
-## 7    51    26         3 -1.50933696
-## 8    51    37         3 -1.92293271
-##          LD2         LD3
-## 1  0.5153162  0.26932408
-## 2 -0.5405273 -0.08618456
-## 3  0.1823283  1.04091323
-## 4  0.7247060 -0.54912820
-## 5 -0.8735152  0.68540458
-## 6 -0.3311374 -0.90463685
-## 7  0.3917181  0.22246094
-## 8 -0.6641254 -0.13304771
+##   yield water herbicide         LD1        LD2         LD3
+## 1    67    26         6  1.30225880  0.5153162  0.26932408
+## 2    67    37         6  0.88866305 -0.5405273 -0.08618456
+## 3    51    26         6  0.01028356  0.1823283  1.04091323
+## 4    67    26         3 -0.21736172  0.7247060 -0.54912820
+## 5    51    37         6 -0.40331219 -0.8735152  0.68540458
+## 6    67    37         3 -0.63095747 -0.3311374 -0.90463685
+## 7    51    26         3 -1.50933696  0.3917181  0.22246094
+## 8    51    37         3 -1.92293271 -0.6641254 -0.13304771
 ```
 
  
@@ -4115,7 +3920,7 @@ was confidently predicted to be `loam`:
 
 
 ```r
-cornseed %>% filter(field == 3)
+cornseed %>% filter(field==3)
 ```
 
 ```
@@ -4135,11 +3940,10 @@ could, since it's a discriminant analysis:
 
 
 ```r
-ggbiplot(cornseed.2, groups = cornseed$soil)
+ggbiplot(cornseed.2,groups=cornseed$soil)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-106-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
 $ %$ %$
 
 This shows the dominant influence of `herbicide` on LD1 score
@@ -4183,8 +3987,8 @@ Nothing new here:
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
-athletes = read_tsv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
 ```
 
 ```
@@ -4212,22 +4016,19 @@ athletes
 
 ```
 ## # A tibble: 202 x 13
-##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <int>
-##  1 fema~ Netb~  4.56  13.3  42.2  13.6    20
-##  2 fema~ Netb~  4.15   6    38    12.7    59
-##  3 fema~ Netb~  4.16   7.6  37.5  12.3    22
-##  4 fema~ Netb~  4.32   6.4  37.7  12.3    30
-##  5 fema~ Netb~  4.06   5.8  38.7  12.8    78
-##  6 fema~ Netb~  4.12   6.1  36.6  11.8    21
-##  7 fema~ Netb~  4.17   5    37.4  12.7   109
-##  8 fema~ Netb~  3.8    6.6  36.5  12.4   102
-##  9 fema~ Netb~  3.96   5.5  36.3  12.4    71
-## 10 fema~ Netb~  4.44   9.7  41.4  14.1    64
-## # ... with 192 more rows, and 6 more
-## #   variables: BMI <dbl>, SSF <dbl>,
-## #   `%Bfat` <dbl>, LBM <dbl>, Ht <dbl>,
-## #   Wt <dbl>
+##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
+##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <int> <dbl> <dbl>   <dbl> <dbl>
+##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
+##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
+##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
+##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
+##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
+##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
+##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
+##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
+##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
+## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
+## # ... with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
 ```
 
  
@@ -4247,20 +4048,18 @@ with Capital Letters. The syntax for `unite` is that you
 give the name of the new combo column first, and then the names of
 the columns you want to combine, either by listing them or by
 using a select-helper. They will be separated by an underscore by
-default, which is usually easiest to handle.\endnote{The opposite
-of `unite` is `separate`, which splits a combined
-column like my `combo` into separate columns; it too uses
-underscore as the default separator.} In `unite`, you can
+default, which is usually easiest to handle.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The opposite      of *unite* is *separate*, which splits a combined      column like my *combo* into separate columns; it too uses    underscore as the default separator.} In texttt{unite</span>, you can
 group the columns to "unite" with `c()`, as in class, or
-not, as here. Either way is good.\endnote{You used to have to group
-them, but you don't any more. Hence my old code has them grouped,
-but my new code does not.}
+not, as here. Either way is good.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You used to have to group    them, but you don't any more. Hence my old code has them grouped,    but my new code does not.</span>
 We'll be using height and weight in the
 analysis to come, so I decided to display just those:
 
 ```r
-athletesc = athletes %>% unite(combo, Sport, Sex)
-athletesc %>% select(combo, Ht, Wt)
+athletesc = athletes %>%
+unite(combo,Sport,Sex)
+athletesc %>% select(combo,Ht,Wt)
 ```
 
 ```
@@ -4293,8 +4092,9 @@ columns we want start with S followed by either e or p, so we could do this:
 
 
 ```r
-athletes %>% unite(combo, matches("^S(e|p)")) %>% 
-    select(combo, Ht, Wt)
+athletes %>%
+unite(combo,matches("^S(e|p)")) %>%
+select(combo,Ht,Wt)
 ```
 
 ```
@@ -4327,8 +4127,9 @@ columns we want to `unite` are the only two text ones:
 
 
 ```r
-athletes %>% unite(combo, select_if(is.character)) %>% 
-    select(combo, Ht, Wt)
+athletes %>% 
+unite(combo,select_if(is.character)) %>%
+select(combo,Ht,Wt)
 ```
 
 ```
@@ -4347,8 +4148,9 @@ and got an answer! This is how it goes:
 
 
 ```r
-athletes %>% unite(combo, names(select_if(., is.character))) %>% 
-    select(combo, Ht, Wt)
+athletes %>%
+unite(combo,names(select_if(.,is.character))) %>%
+select(combo,Ht,Wt)
 ```
 
 ```
@@ -4384,7 +4186,7 @@ Solution
 That would be this. I'm having my familiar trouble with names:
 
 ```r
-combo.1 = lda(combo ~ Ht + Wt, data = athletesc)
+combo.1=lda(combo~Ht+Wt,data=athletesc)
 ```
 
      
@@ -4404,16 +4206,12 @@ combo.1
 ## lda(combo ~ Ht + Wt, data = athletesc)
 ## 
 ## Prior probabilities of groups:
-##   BBall_female     BBall_male   Field_female 
-##     0.06435644     0.05940594     0.03465347 
-##     Field_male     Gym_female Netball_female 
-##     0.05940594     0.01980198     0.11386139 
-##     Row_female       Row_male    Swim_female 
-##     0.10891089     0.07425743     0.04455446 
-##      Swim_male   T400m_female     T400m_male 
-##     0.06435644     0.05445545     0.08910891 
-##  Tennis_female    Tennis_male  TSprnt_female 
-##     0.03465347     0.01980198     0.01980198 
+##   BBall_female     BBall_male   Field_female     Field_male     Gym_female 
+##     0.06435644     0.05940594     0.03465347     0.05940594     0.01980198 
+## Netball_female     Row_female       Row_male    Swim_female      Swim_male 
+##     0.11386139     0.10891089     0.07425743     0.04455446     0.06435644 
+##   T400m_female     T400m_male  Tennis_female    Tennis_male  TSprnt_female 
+##     0.05445545     0.08910891     0.03465347     0.01980198     0.01980198 
 ##    TSprnt_male     WPolo_male 
 ##     0.05445545     0.08415842 
 ## 
@@ -4530,7 +4328,7 @@ Solution
 The prediction part is only one step:
 
 ```r
-p = predict(combo.1)
+p=predict(combo.1)
 ```
 
      
@@ -4579,10 +4377,9 @@ head(p$class)
 ```
 
 ```
-## [1] T400m_male     Netball_female
-## [3] Netball_female Netball_female
+## [1] T400m_male     Netball_female Netball_female Netball_female
 ## [5] Row_female     Netball_female
-## 17 Levels: BBall_female ... WPolo_male
+## 17 Levels: BBall_female BBall_male Field_female Field_male ... WPolo_male
 ```
 
  
@@ -4595,41 +4392,27 @@ head(p$posterior)
 ```
 
 ```
-##   BBall_female   BBall_male Field_female
-## 1   0.12348360 3.479619e-04 0.0002835604
-## 2   0.04927852 7.263143e-05 0.0041253799
-## 3   0.08402197 4.567927e-04 0.0032633771
-## 4   0.02820743 1.539520e-05 0.0048909758
-## 5   0.15383834 1.197089e-02 0.0011443415
-## 6   0.11219817 1.320889e-03 0.0021761290
-##     Field_male   Gym_female Netball_female
-## 1 1.460578e-05 4.206308e-05      0.1699941
-## 2 9.838207e-05 3.101597e-04      0.2333569
-## 3 2.676308e-04 3.414854e-05      0.2291353
-## 4 4.524089e-05 1.531681e-03      0.2122221
-## 5 1.169322e-03 2.247239e-07      0.1326885
-## 6 3.751161e-04 8.019783e-06      0.2054332
-##   Row_female     Row_male Swim_female
-## 1  0.1241779 0.0023825007  0.07434038
-## 2  0.1414225 0.0025370630  0.11730520
-## 3  0.1816810 0.0077872436  0.08659049
-## 4  0.1045723 0.0009826883  0.13254329
-## 5  0.1822427 0.0456717871  0.02802782
-## 6  0.1917380 0.0133925352  0.06557996
-##     Swim_male T400m_female T400m_male
-## 1 0.011678465  0.103051973 0.25594274
-## 2 0.009274681  0.119270442 0.13618567
-## 3 0.023136399  0.058696177 0.17305732
-## 4 0.004132741  0.179336337 0.09812128
-## 5 0.089868173  0.008428382 0.17333438
-## 6 0.036249576  0.036328215 0.19213811
-##   Tennis_female Tennis_male TSprnt_female
-## 1   0.047204095 0.017883433   0.040192120
-## 2   0.075858992 0.008601514   0.050772549
-## 3   0.035224944 0.017564554   0.028170015
-## 4   0.120824963 0.004345342   0.070141970
-## 5   0.004456769 0.046106286   0.005144923
-## 6   0.020599135 0.025565109   0.018513425
+##   BBall_female   BBall_male Field_female   Field_male   Gym_female
+## 1   0.12348360 3.479619e-04 0.0002835604 1.460578e-05 4.206308e-05
+## 2   0.04927852 7.263143e-05 0.0041253799 9.838207e-05 3.101597e-04
+## 3   0.08402197 4.567927e-04 0.0032633771 2.676308e-04 3.414854e-05
+## 4   0.02820743 1.539520e-05 0.0048909758 4.524089e-05 1.531681e-03
+## 5   0.15383834 1.197089e-02 0.0011443415 1.169322e-03 2.247239e-07
+## 6   0.11219817 1.320889e-03 0.0021761290 3.751161e-04 8.019783e-06
+##   Netball_female Row_female     Row_male Swim_female   Swim_male
+## 1      0.1699941  0.1241779 0.0023825007  0.07434038 0.011678465
+## 2      0.2333569  0.1414225 0.0025370630  0.11730520 0.009274681
+## 3      0.2291353  0.1816810 0.0077872436  0.08659049 0.023136399
+## 4      0.2122221  0.1045723 0.0009826883  0.13254329 0.004132741
+## 5      0.1326885  0.1822427 0.0456717871  0.02802782 0.089868173
+## 6      0.2054332  0.1917380 0.0133925352  0.06557996 0.036249576
+##   T400m_female T400m_male Tennis_female Tennis_male TSprnt_female
+## 1  0.103051973 0.25594274   0.047204095 0.017883433   0.040192120
+## 2  0.119270442 0.13618567   0.075858992 0.008601514   0.050772549
+## 3  0.058696177 0.17305732   0.035224944 0.017564554   0.028170015
+## 4  0.179336337 0.09812128   0.120824963 0.004345342   0.070141970
+## 5  0.008428382 0.17333438   0.004456769 0.046106286   0.005144923
+## 6  0.036328215 0.19213811   0.020599135 0.025565109   0.018513425
 ##   TSprnt_male   WPolo_male
 ## 1  0.02616911 0.0028113441
 ## 2  0.04902216 0.0025072687
@@ -4678,7 +4461,7 @@ want to plot:
 
 
 ```r
-d = data.frame(combo = athletesc$combo, p$x)
+d=data.frame(combo=athletesc$combo,p$x)
 head(d)
 ```
 
@@ -4714,12 +4497,10 @@ And so, to the graph, which is easy now:
 
 
 ```r
-ggplot(d, aes(x = LD1, y = LD2, colour = combo)) + 
-    geom_point()
+ggplot(d,aes(x=LD1,y=LD2,colour=combo))+geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-120-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
 
  
 
@@ -4729,12 +4510,11 @@ although I wonder how much better that will be:
 
 
 ```r
-ggplot(d, aes(x = LD1, y = LD2, shape = combo)) + 
-    geom_point() + scale_shape_manual(values = 1:17)
+ggplot(d,aes(x=LD1,y=LD2,shape=combo))+geom_point()+
+scale_shape_manual(values=1:17)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-121-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
 
      
 
@@ -4746,12 +4526,11 @@ Or even this:
 
 
 ```r
-ggplot(d, aes(x = LD1, y = LD2, shape = combo, 
-    colour = combo)) + geom_point() + scale_shape_manual(values = 1:17)
+ggplot(d,aes(x=LD1,y=LD2,shape=combo,colour=combo))+geom_point()+
+scale_shape_manual(values=1:17)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-122-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
 
  
 
@@ -4814,8 +4593,8 @@ table). My `options` line is to see how many columns it
 will print out in one go; you don't need that.
 
 ```r
-options(width = 130)
-table(combo = athletesc$combo, pred = p$class)
+options(width=130)
+table(combo=athletesc$combo,pred=p$class)
 ```
 
 ```
@@ -4885,8 +4664,8 @@ columns by number using square brackets, eg:
 
 
 ```r
-tab = table(combo = athletesc$combo, pred = p$class)
-tab[, 1:5]
+tab=table(combo=athletesc$combo,pred=p$class)
+tab[,1:5]
 ```
 
 ```
@@ -4919,7 +4698,7 @@ Or you can turn it into a tibble:
 
 
 ```r
-tab %>% as_tibble()
+tab %>% as_tibble() 
 ```
 
 ```
@@ -4940,7 +4719,7 @@ tab %>% as_tibble()
 ```
 
 ```r
-# %>% select(BBall_female:Gym_female)
+#%>% select(BBall_female:Gym_female)
 ```
 
  
@@ -4951,7 +4730,7 @@ that remain:
 
 
 ```r
-tab %>% as_tibble() %>% filter(n > 0) %>% print(n = Inf)
+tab %>% as_tibble() %>% filter(n>0) %>% print(n=Inf)
 ```
 
 ```
@@ -5040,8 +4819,8 @@ again, I have to print it out small so that you can see all of it:
 
 
 ```r
-d = tibble(combo = athletesc$combo, pred = p$class)
-d %>% count(combo, pred) %>% print(n = 70)
+d=tibble(combo=athletesc$combo, pred=p$class)
+d %>% count(combo,pred) %>% print(n=70)
 ```
 
 ```
@@ -5134,7 +4913,8 @@ take it in steps:
 
 
 ```r
-d %>% count(combo, pred) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong"))
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong"))
 ```
 
 ```
@@ -5164,7 +4944,9 @@ things in the `n` column:
 
 
 ```r
-d %>% count(combo, pred) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong")) %>% count(stat, wt = n)
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n)
 ```
 
 ```
@@ -5186,7 +4968,10 @@ the total of `nn`:
 
 
 ```r
-d %>% count(combo, pred) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong")) %>% count(stat, wt = n) %>% mutate(proportion = nn/sum(nn))
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn))
 ```
 
 ```
@@ -5210,8 +4995,11 @@ we define `stat` (it doesn't matter which way):
 
 
 ```r
-d %>% count(combo, pred) %>% group_by(combo) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong")) %>% count(stat, wt = n) %>% 
-    mutate(proportion = nn/sum(nn))
+d %>% count(combo,pred) %>% 
+group_by(combo) %>%
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn))
 ```
 
 ```
@@ -5245,8 +5033,12 @@ columns. This almost works:
 
 
 ```r
-d %>% count(combo, pred) %>% group_by(combo) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong")) %>% count(stat, wt = n) %>% 
-    mutate(proportion = nn/sum(nn)) %>% spread(stat, proportion)
+d %>% count(combo,pred) %>% 
+group_by(combo) %>%
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+spread(stat, proportion)
 ```
 
 ```
@@ -5278,8 +5070,13 @@ served its purpose:
 
 
 ```r
-d %>% count(combo, pred) %>% group_by(combo) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong")) %>% count(stat, wt = n) %>% 
-    mutate(proportion = nn/sum(nn)) %>% select(-nn) %>% spread(stat, proportion)
+d %>% count(combo,pred) %>% 
+group_by(combo) %>%
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+select(-nn) %>%
+spread(stat, proportion)
 ```
 
 ```
@@ -5313,8 +5110,15 @@ order of misclassification probability:
 
 
 ```r
-d %>% count(combo, pred) %>% group_by(combo) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong")) %>% count(stat, wt = n) %>% 
-    mutate(proportion = nn/sum(nn)) %>% select(-nn) %>% spread(stat, proportion) %>% replace_na(list(correct = 0, wrong = 0)) %>% arrange(wrong)
+d %>% count(combo,pred) %>% 
+group_by(combo) %>%
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+count(stat,wt=n) %>%
+mutate(proportion=nn/sum(nn)) %>%
+select(-nn) %>%
+spread(stat, proportion) %>%
+replace_na(list(correct=0,wrong=0)) %>%
+arrange(wrong)
 ```
 
 ```
@@ -5353,7 +5157,8 @@ to this:
 
 
 ```r
-d %>% count(combo, pred) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong"))
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong"))
 ```
 
 ```
@@ -5381,7 +5186,10 @@ defining the proportions:
 
 
 ```r
-d %>% count(combo, pred) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong")) %>% group_by(combo) %>% mutate(proportion = n/sum(n))
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+group_by(combo) %>%
+mutate(proportion=n/sum(n))
 ```
 
 ```
@@ -5409,8 +5217,12 @@ proportions in descending order:
 
 
 ```r
-d %>% count(combo, pred) %>% mutate(stat = ifelse(combo == pred, "correct", "wrong")) %>% group_by(combo) %>% mutate(proportion = n/sum(n)) %>% 
-    filter(stat == "wrong") %>% arrange(desc(proportion))
+d %>% count(combo,pred) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+group_by(combo) %>%
+mutate(proportion=n/sum(n)) %>%
+filter(stat=="wrong") %>%
+arrange(desc(proportion))
 ```
 
 ```

@@ -1,0 +1,706 @@
+##  Sites on the sea bed
+
+
+ Biologists investigate the prevalence of
+species of organism by sampling sites where the organisms might be,
+taking a "grab" from the site, and sending the grabs to a laboratory
+for analysis. The data in this question come from the sea bed. There
+were 30 sites, labelled `s1` through `s30`. At each
+site, five species of organism, labelled `a` through
+`e`, were of interest; the data shown in those columns of the
+data set were the number of organisms of that species identified in
+the grab from that site. There are some other columns in the
+(original) data set that will not concern us. Our interest is in
+seeing which sites are similar to which other sites, so that a cluster
+analysis will be suitable.
+
+When the data are counts of different species, as they are here,
+biologists often measure the dissimilarity in species prevalence
+profiles between two sites using something called the Bray-Curtis
+dissimilarity. It is not important to understand this for this
+question (though I explain it in my solutions). I calculated the
+Bray-Curtis dissimilarity between each pair of sites and stored the
+results in [link](http://www.utsc.utoronto.ca/~butler/d29/seabed1.csv). 
+
+
+
+(a) Read in the dissimilarity data and check that you have 30
+rows and 30 columns of dissimilarities.
+
+
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/seabed1.csv"
+seabed=read_csv(my_url)
+seabed
+```
+
+     
+
+Check. The columns are labelled with
+the site names. (As I originally set this question, the data file was
+read in with `read.csv` instead, and the site names were read
+in as row names as well: see discussion elsewhere about row names. But
+in the `tidyverse` we don't have row names.)
+    
+
+
+(b) Create a distance object out of your dissimilarities,
+bearing in mind that the values are distances (well,
+dissimilarities) already.
+
+
+Solution
+
+
+This one needs `as.dist` to convert already-distances into
+a `dist` object. (`dist` would have
+*calculated* distances from things that were not
+distances/dissimilarities yet.)
+```{r }
+d=as.dist(seabed)
+```
+
+     
+
+If you check, you'll see that the site names are being used to label
+rows *and* columns of the dissimilarity matrix as displayed. The
+lack of row names is not hurting us.
+    
+
+
+(c) Fit a cluster analysis using single-linkage, and display a
+dendrogram of the results.
+
+
+Solution
+
+
+This:
+```{r }
+d.1=hclust(d,method="single")
+plot(d.1)
+```
+
+     
+
+This is a base-graphics plot, it not having any of the nice
+`ggplot` things. But it does the job.
+
+Single-linkage tends to produce "stringy" clusters, since the
+individual being added to a cluster only needs to be close to one
+thing in the cluster. Here, that manifests itself in sites getting
+added to clusters one at a time: for example, sites 25 and 26 get
+joined together into a cluster, and then in sequence sites 6, 16, 27,
+30 and 22 get joined on to it (rather than any of those sites being
+formed into clusters first). 
+
+You might
+`r tufte::margin_note("Conceivably.")` be wondering what else is in that
+`hclust` object, and what it's good for. Let's take a look:
+
+```{r }
+glimpse(d.1)
+```
+
+ 
+
+You might guess that `labels` contains the names of the sites,
+and you'd be correct. Of the other things, the most interesting are
+`merge` and `height`. Let's display them side by side:
+
+```{r }
+with(d.1,cbind(height,merge))
+```
+
+ 
+
+`height` is the vertical scale of the dendrogram. The first
+height is 0.1, and if you look at the bottom of the dendrogram, the
+first sites to be joined together are sites 3 and 20 at height 0.1
+(the horizontal bar joining sites 3 and 20 is what you are looking
+for). In the last two columns, which came from `merge`, you see
+what got joined together, with negative numbers meaning individuals
+(individual sites), and positive numbers meaning clusters formed
+earlier. So, if you look at the third line, at height 0.152, site 6
+gets joined to the cluster formed on line 2, which (looking back) we
+see consists of sites 25 and 26. Go back now to the dendrogram; about
+${3\over 4}$ of the way across, you'll see sites 25 and 26 joined
+together into a cluster, and a little higher up the page, site 6 joins
+that cluster.
+
+I said that single linkage produces stringy clusters, and the way that
+shows up in `merge` is that you often get an individual site
+(negative number) joined onto a previously-formed cluster (positive
+number). This is in contrast to Ward's method, below.
+    
+
+
+(d) Now fit a cluster analysis using Ward's method, and display
+a dendrogram of the results.
+
+
+Solution
+
+
+Same thing, with small changes. The hard part is getting the name 
+of the `method` right:
+```{r }
+d.2=hclust(d,method="ward.D")
+plot(d.2,cex=0.7)
+```
+
+     
+
+The site numbers were a bit close together, so I printed them out
+smaller than usual size (which is what the `cex` and a number
+less than 1 is doing: 70\% of normal size).
+
+This time, there is a greater tendency for sites to be joined into
+small clusters first, then these small clusters are joined
+together. It's not perfect, but there is a greater tendency for it to
+happen here.
+
+This shows up in `merge` too:
+
+```{r }
+d.2$merge
+```
+
+ 
+
+There are relatively few instances of a site being joined to a cluster
+of sites. Usually, individual sites get joined together (negative with
+a negative, mainly at the top of the list), or clusters get joined to
+clusters (positive with positive, mainly lower down the list).
+    
+
+
+(e) <a name="part:prefclust">*</a> On the Ward's method clustering, how many clusters would you
+choose to divide the sites into? Draw rectangles around those clusters.
+
+
+
+Solution
+
+
+You may need to draw the plot again. In any case, a second line of
+code draws the rectangles. I think three clusters is good, but you
+can have a few more than that if you like:
+```{r }
+plot(d.2,cex=0.7)
+rect.hclust(d.2,3)
+```
+
+   
+
+What I want to see is a not-unreasonable choice of number of clusters
+(I think you could go up to about six), and then a depiction of that
+number of clusters on the plot. This is six clusters:
+
+```{r }
+plot(d.2,cex=0.7)
+rect.hclust(d.2,6)
+```
+
+   
+
+In all your plots, the `cex` is optional, but you can compare
+the plots with it and without it and see which you prefer.
+
+Looking at this, even seven clusters might work, but I doubt you'd
+want to go beyond that. The choice of the number of clusters is mainly
+an aesthetic
+`r tufte::margin_note("This, I think, is the British spelling, with the  North American one being *esthetic*. My spelling is where the  *aes* in a *ggplot* comes from.")` decision. 
+
+  
+
+
+(f) <a name="part:original">*</a> The original data is in
+[link](http://www.utsc.utoronto.ca/~butler/d29/seabed.csv). Read in the
+original data and verify that you again have 30 sites, variables
+called `a` through `e` and some others.
+
+
+
+Solution
+
+
+This is really a very cheap two points:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/seabed.csv"
+seabed.z=read_csv(my_url)
+seabed.z
+```
+
+   
+
+30 observations of 10 variables, including `a` through
+`e`. Check.
+
+I gave this a weird name so that it didn't overwrite my original
+`seabed`, the one I turned into a distance object, though I
+don't think I really needed to worry.
+
+These data came from
+[link](http://www.fbbva.es/TLFU/dat/DE_2013_multivariate.pdf),
+`r tufte::margin_note("If  you are a soccer fan, you might recognize BBVA as a former sponsor  of the top Spanish soccer league, *La Liga BBVA* (as it was). BBVA  is a Spanish bank that also has a Foundation that published this  book.")` from which I also got the definition of the Bray-Curtis
+dissimilarity that I calculated for you. The data are in Exhibit 1.1
+of that book.
+
+  
+
+
+(g) Go back to your Ward method dendrogram with the red
+rectangles and find two sites in the same cluster. Display the
+original data for your two sites and see if you can explain why they
+are in the same cluster. It doesn't matter which two sites you choose;
+the grader will merely check that your results look reasonable.
+
+
+
+Solution
+
+
+I want my two sites to be very similar, so I'm looking at two sites
+that were joined into a cluster very early on, sites `s3` and
+`s20`. As I said, I don't mind which ones you pick, but being
+in the same cluster will be easiest to justify if you pick sites
+that were joined together early.
+Then you need to display just those rows of the original data (that
+you just read in), which is a `filter` with an "or" in it:
+```{r }
+seabed.z %>% filter(site=="s3" | site=="s20")
+```
+
+   
+
+I think this odd-looking thing also works:
+
+```{r }
+seabed.z %>% filter(site %in% c("s3", "s20"))
+```
+
+ 
+
+I'll also take displaying the lines one at a time, though it is easier
+to compare them if they are next to each other.
+
+Why are they in the same cluster? To be similar (that is, have a low
+dissimilarity), the values of `a` through `e` should be
+close together. Here, they certainly are: `a` and `e`
+are both zero for both sites, and `b`, `c` and
+`d` are around 10 for both sites. So I'd call that similar. 
+
+You will probably pick a different pair of sites, and thus your
+detailed discussion will differ from mine, but the general point of it
+should be the same: pick a pair of sites in the same cluster (1 mark),
+display those two rows of the original data (1 mark), some sensible
+discussion of how the sites are similar (1 mark). As long as you pick
+two sites in the same one of your clusters, I don't mind which ones
+you pick. The grader will check that your two sites were indeed in the
+same one of your clusters, then will check that you do indeed display
+those two sites from the original data.
+
+What happens if you pick sites from different clusters? Let's pick two
+very dissimilar ones, sites 4 and 7 from opposite ends of my dendrogram:
+
+```{r }
+seabed.z %>% filter(site=="s4" | site=="s7")
+```
+
+ 
+
+Site `s4` has no `a` or `b` at all, and site
+`s7` has quite a few; site `s7` has no `c` at
+all, while site `s4` has a lot. These are very different sites.
+
+Now that you've seen what the original data look like, I should
+explain how I got the Bray-Curtis dissimilarities. As I said, only the
+counts of species `a` through `e` enter into the
+calculation; the other variables have nothing to do with it.
+
+Let's simplify matters by pretending that we have only two species (we
+can call them A and B), and a vector like this:
+
+```{r }
+v1=c(10,3)
+```
+
+ 
+
+which says that we have 10 organisms of species A and 3 of species B
+at a site. This is rather similar to this site:
+
+```{r }
+v2=c(8,4)
+```
+
+ 
+
+but very different from this site:
+
+```{r }
+v3=c(0,7)
+```
+
+ 
+
+The way you calculate the Bray-Curtis dissimilarity is to take the
+absolute difference of counts of organisms of each species:
+
+```{r }
+abs(v1-v2)
+```
+
+ 
+
+and add those up:
+
+```{r }
+sum(abs(v1-v2))
+```
+
+ 
+
+and then divide by the total of all the frequencies:
+
+```{r }
+sum(abs(v1-v2))/sum(v1+v2)
+```
+
+ 
+
+The smaller this number is, the more similar the sites are. So you
+might imagine that `v1` and `v3` would be more dissimilar:
+
+```{r }
+sum(abs(v1-v3))/sum(v1+v3)
+```
+
+ 
+
+and so it is. The scaling of the Bray-Curtis dissimilarity is that the
+smallest it can be is 0, if the frequencies of each of the species are
+exactly the same at the two sites, and the largest it can be is 1, if
+one site has only species A and the other has only species B. (I'll
+demonstrate that in a moment.)
+
+You might imagine that we'll be doing this calculation a lot, and so
+we should define a function to automate it. Hadley Wickham (in ``R for
+Data Science'') says that you should copy and paste some code (as
+I did above) no more than twice; if you need to do it again, you
+should write a function instead. The thinking behind this is if you
+copy and paste and change something (like a variable name), you'll
+need to make the change *everywhere*, and it's so easy to miss
+one. 
+
+So, my function is (copying and pasting my code from above into the
+body of the function, which is Wickham-approved since it's only my
+second time):
+
+```{r }
+braycurtis=function(v1,v2) {
+sum(abs(v1-v2))/sum(v1+v2)
+}
+```
+
+ 
+
+Let's test it on my made-up sites, making up one more:
+
+```{r }
+braycurtis(v1,v2)
+braycurtis(v1,v3)
+braycurtis(v2,v2)
+v4=c(4,0)
+braycurtis(v3,v4)
+```
+
+ 
+
+These all check out. The first two are repeats of the ones we did
+before. The third one says that if you calculate Bray-Curtis for two
+sites with the exact same frequencies all the way along, you get the
+minimum value of 0; the fourth one says that when site `v3`
+only has species B and site `v4` only has species A, you get
+the maximum value of 1.
+
+But note this:
+
+```{r }
+v2
+2*v2
+braycurtis(v2,2*v2)
+```
+
+ 
+
+You might say that `v2` and `2*v2` are the same
+distribution, and so they are, proportionately. But Bray-Curtis is
+assessing whether the frequencies are *the same* (as opposed to
+something like a chi-squared test that is assessing
+proportionality).
+`r tufte::margin_note("You could make a table out of the sites and  species, and use the test statistic from a chi-squared test as a  measure of dissimilarity: the smallest it can be is zero, if the  species counts are exactly proportional at the two sites. It doesn't have an upper limit.")`
+
+So far so good. Now we have to do this for the actual data. The first
+issue
+`r tufte::margin_note("There are more.")`  is that the data is some of the row of
+the original data frame; specifically, it's columns 2 through 6. For
+example, rows 3 and 20 of the original data frame look like this:
+
+```{r }
+seabed.z %>% slice(c(3,20))
+```
+
+ 
+
+and we don't want to feed the whole of those into `braycurtis`,
+just the second through sixth elements of them. So let's write another
+function that extracts the second through sixth columns of its
+inputs for given rows, and passes those on to the `braycurtis`
+that we wrote before. This is a little fiddly, but bear with me. The
+input to the function is the two row numbers that we want, and the
+data frame. It seems more logical to have the data frame first, but I
+have my reasons (that you will see later):
+
+```{r }
+braycurtis.spec=function(i,j,d) {
+x = d %>% select(2:6) %>% slice(i) %>% unlist()
+y = d %>% select(2:6) %>% slice(j) %>% unlist()
+braycurtis(x,y)
+}
+```
+
+ 
+
+The first two lines pull out columns 2 through 6 of (respectively)
+rows `i` and `j`, then turn them into vectors (which is
+what `braycurtis` wants). This last requires an extra step
+because the outputs of the two `slice` lines are both one-row
+data frames. If they had been columns, we could have said
+`pull`, but since they're rows, we can't. Remembering (however
+vaguely) that a data frame is a special kind of `list`, what
+`unlist` does is to remove any special properties the thing
+has, and turn it into a vector (which is R's "basic thing"). 
+
+If I were going to create more than two things like `x` and
+`y` (notice all the repetition!), I would have hived that off
+into a separate function as well, but I didn't.
+
+Sites 3 and 20 were the two sites I chose before as being similar ones (in the
+same cluster). So the dissimilarity should be small:
+
+```{r }
+braycurtis.spec(3,20,seabed.z)
+```
+
+ 
+
+and so it is. Is it about right? The `c` differ by 5, the
+`d` differ by one, and the total frequency in both rows is
+about 60, so the dissimilarity should be about $6/60=0.1$, as it is
+(exactly, in fact). 
+
+This is the cleaned-up version of my function. When I first wrote it,
+I `print`ed out `x` and `y`, so that I could
+check that they were what I was expecting (they were).
+`r tufte::margin_note("I am a  paid-up member of the *print all the things* school of  debugging. You probably know how to do this better.")`
+
+We have almost all the machinery we need. Now what we have to do is to
+compare every site with every other site and compute the dissimilarity
+between them. If you're used to Python or another similar language,
+you'll recognize this as two loops, one inside the other, and this is
+also the easiest conceptual way to do this in R. My first step is to
+initialize a matrix `m` of the right size, but filled with $-1$
+values. I did this as a check: I know my final answers are all going
+to be between 0 and 1, so if any negative numbers are left at the end,
+I know I made a mistake in my coding:
+
+```{r }
+m=matrix(-1,30,30)
+for (i in 1:30) {
+for (j in 1:30) {
+m[i,j]=braycurtis.spec(i,j,seabed.z)
+}
+}
+summary(as.vector(m))
+```
+
+ 
+
+The last line "un-matrixifies" `m` (it makes a long vector
+out of all the $30 \times 30 =900$ values in it), from which we see that all the
+dissimilarities are correctly between 0 and 1. We can also check the
+one we did before:
+
+```{r }
+m[3,20]
+```
+
+ 
+
+I then turned this into a data frame (by passing it into
+`as.data.frame`) and saved it into the file
+`seabed1.csv` using `write.csv`, and that was the file
+you read in at the beginning.
+
+*Of course* there is a `tidyverse` way to do
+this. Conceptually, it's not all that different from the loop here,
+but there is less housekeeping to do. The first thing we need is a
+data frame that has all combinations of 1 through 30 with each other,
+which you know how to do:
+
+```{r }
+ddd=crossing(i=1:30,j=1:30)
+ddd
+```
+
+ 
+
+Now we have to run `braycurtis.spec` for each of those
+`i`, `j` combinations and create a new column with the
+appropriate Bray-Curtis distances in it. "For each" ought to remind
+you of `map`; this is for-eaching both `i` and
+`j` in parallel, so it'll be a `map2` (two things), and
+`braycurtis.spec` produces a decimal number, so it'll be
+`map2_dbl`: 
+
+```{r }
+ddd = ddd %>% mutate(bc=map2_dbl(i,j,braycurtis.spec,seabed.z))
+```
+
+ 
+
+Now we finally see why I wrote `braycurtis.spec` the way I did:
+the "for each" things, the `i` and `j` go first in the
+`map`, then the function that is run for-each, and finally any
+extra input to the function that is the same every time (the data
+frame, here). 
+
+```{r }
+ddd
+```
+
+ 
+
+That looks plausible. Did it give the right result for the one we checked?
+
+```{r }
+ddd %>% filter(i==3, j==20)
+```
+
+ 
+
+Check.
+
+This, you'll notice, is "long format", but we want a $30\times 30$
+matrix of dissimilarities rather a 900-long data frame. This means
+making it wide:
+
+```{r }
+ddd %>% spread(j,bc)
+```
+
+ 
+
+That's basically the data frame you read in at the beginning. The only
+thing I didn't do here was to make the column names the site names.
+
+  
+
+
+(h) Obtain the cluster memberships for each site, for your
+preferred number of clusters from part (<a href="#part:prefclust">here</a>). Add a
+column to the original data that you read in in part
+(<a href="#part:original">here</a>) containing those cluster memberships, \emph{as a
+factor}.  Obtain a plot that will enable you to assess the
+relationship between those clusters and `pollution`. (Once you
+have the cluster memberships, you can add them to the data frame and
+make the graph using a pipe.)  What do you see?
+
+
+
+Solution
+
+
+Start by getting the clusters with `cutree`. I'm going with 3
+clusters, though you can use the number of clusters you chose
+before. (This is again making the grader's life a misery, but her
+instructions from me are to check that you have done something
+reasonable, with the actual answer being less important.) 
+
+```{r }
+cluster=cutree(d.2,3)
+cluster
+```
+
+ 
+
+Now, we add that to the original data, the data frame I called
+`seabed.z`, and make a plot. The best one is a boxplot:
+
+```{r }
+seabed.z %>% mutate(cluster=factor(cluster)) %>%
+ggplot(aes(x=cluster,y=pollution))+geom_boxplot()
+```
+
+ 
+
+The clusters differ substantially in terms of the amount of pollution,
+with my cluster 1 being highest and my cluster 2 being
+lowest. (Cluster 3 has a low outlier.)
+
+Any sensible plot will do here. I think boxplots are the best, but you
+could also do something like vertically-faceted histograms:
+
+```{r }
+seabed.z %>% mutate(cluster=factor(cluster)) %>%
+ggplot(aes(x=pollution))+geom_histogram(bins=8)+
+facet_grid(cluster~.)  
+```
+
+ 
+
+which to my mind doesn't show the differences as dramatically. (The bins are
+determined from all the data together, so that each facet actually has
+fewer than 8 bins. You can see where the bins would be if they had any
+data in them.)
+
+Here's how 5 clusters looks:
+
+```{r }
+cluster=cutree(d.2,5)
+cluster
+seabed.z %>% mutate(cluster=factor(cluster)) %>%
+ggplot(aes(x=cluster,y=pollution))+geom_boxplot()
+```
+
+ 
+
+This time, the picture isn't quite so clear-cut, but clusters 1 and 5
+are the highest in terms of pollution and cluster 4 is the lowest. I'm
+guessing that whatever number of clusters you choose, you'll see some
+differences in terms of pollution.
+What is interesting is that `pollution` had *nothing* to
+do with the original formation of the clusters: that was based only on
+which species were found at each site. So, what we have shown here is that
+the amount of pollution has some association with what species are found at a
+site. 
+
+A way to go on with this is to use the clusters as "known groups"
+and predict the cluster membership from `depth`,
+`pollution` and `temp` using a discriminant
+analysis. Then you could plot the sites, colour-coded by what cluster
+they were in, and even though you had three variables, you could plot
+it in two dimensions (or maybe even one dimension, depending how many
+LD's were important). 
+
+  
+
+
+
+
+

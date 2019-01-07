@@ -1,0 +1,243 @@
+##  Similarity of species 
+
+
+ Two scientists assessed the dissimilarity
+between a number 
+of species by recording the number of positions in the protein
+molecule cytochrome-$c$ where the two species being compared have
+different amino acids. The dissimilarities that they recorded are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/species.txt).
+
+
+
+(a) Read the data into a data frame and take a look at it.
+
+
+Solution
+
+
+Nothing much new here:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/species.txt"
+species=read_delim(my_url," ")
+species
+```
+
+     
+
+This is a square array of dissimilarities between the eight species.
+
+The data set came from the 1960s, hence the use of "Man" rather than
+"human". It probably also came from the UK, judging by the spelling
+of `Mould`.
+
+(I gave the first column the name `what` so that you could
+safely use `species` for the whole data frame.)
+    
+
+
+(b) Bearing in mind that the values you read in are
+*already* dissimilarities, convert them into a `dist`
+object suitable for running a cluster analysis on, and display the
+results. (Note that you need to get rid of any columns that don't
+contain numbers.)
+
+
+Solution
+
+
+The point here is that the values you have are *already*
+dissimilarities, so no conversion of the numbers is required. Thus
+this is a job for `as.dist`, which merely changes how it
+looks. Use a pipeline to get rid of the first column first:
+```{r }
+d = species %>%
+select(-what) %>% 
+as.dist()
+d
+```
+
+
+
+This doesn't display anything that it doesn't need to: we know that the
+dissimilarity between a species and itself is zero (no need to show
+that), and that the dissimilarity between B and A is the same as
+between A and B, so no need to show everything twice. It might look as
+if you are missing a row and a column, but one of the species (Fungus)
+appears only in a row and one of them (Man) only in a column.
+
+This also works, to select only the numerical columns:
+
+```{r }
+species %>%
+select_if(is.numeric) %>%
+as.dist()
+```
+
+ 
+
+Extra: data frames officially have an attribute called "row names",
+that is displayed where the row numbers display, but which isn't
+actually a column of the data frame. In the past, when we used
+`read.table` with a dot, the first column of data read in from
+the file could be nameless (that is, you could have one more column of
+data than you had column names) and the first column would be treated
+as row names. People used row names for things like identifier
+variables. But row names have this sort of half-existence, and when
+Hadley Wickham designed the `tidyverse`, he decided not to use
+row names, taking the attitude that if it's part of the data, it
+should be in the data frame as a genuine column. This means that when
+you use a `read_` function, you have to have exactly as many
+column names as columns. 
+
+For these data, I previously had the column here called
+`what` as row names, and `as.dist` automatically got rid
+of the row names when formatting the distances. Now, it's a
+genuine column, so I have to get rid of it before running
+`as.dist`. This is more work, but it's also more honest, and
+doesn't involve thinking about row names at all. So, on balance, I
+think it's a win.
+  
+
+
+(c) Run a cluster analysis using single-linkage and obtain a dendrogram.
+
+
+Solution
+
+
+Something like this:
+```{r }
+species.1=hclust(d,method="single")
+plot(species.1)
+```
+
+     
+    
+
+
+(d) Run a cluster analysis using Ward's method and obtain a dendrogram.
+
+
+Solution
+
+
+Not much changes  here in the code, but the result is noticeably
+different:
+```{r }
+species.2=hclust(d,method="ward.D")
+plot(species.2)
+```
+
+  
+
+Fewer points this time since you're doing much of the same stuff over again.
+
+Don't forget to take care with the `method`: it has to be
+`ward` in lowercase (even though it's someone's name) followed
+by a D in uppercase.
+
+    
+
+
+(e) Describe how the two dendrograms from the last two parts
+look different.
+
+
+Solution
+
+
+This is (as ever with this kind of thing) a judgement call. Your
+job is to come up with something reasonable.
+For myself, I was thinking about how single-linkage tends to
+produce "stringy" clusters that join single objects (species)
+onto already-formed clusters. Is that happening here? Apart from
+the first two clusters, man and monkey, horse and pig,
+*everything* that gets joined on is a single species joined
+on to a bigger cluster, including mould and fungus right at the
+end. Contrast that with the output from Ward's method, where, for
+the most part, groups are formed first and then joined onto other
+groups. For example, in Ward's method, mould and fungus are joined
+earlier, and also the man-monkey group is joined to the
+pigeon-horse-pig group.
+`r tufte::margin_note("Tuna is an exception, but usually Ward    tends to join fairly dissimilar things that are nonetheless more    similar to each other than to anything else. This is like    Hungarian and Finnish in the example in class: they are very    dissimilar languages, but they are more similar to each other than    to anything else.")`
+You might prefer to look at the specifics of what gets joined. I
+think the principal difference from this angle is that mould and
+fungus get joined together (much) earlier in Ward. Also, pigeon
+gets joined to horse and pig first under Ward, but *after*
+those have been joined to man and monkey under
+single-linkage. This is also a reasonable kind of observation.
+    
+
+
+(f) Looking at your clustering for Ward's method, what seems to
+be a sensible number of clusters? Draw boxes around those clusters.
+
+
+Solution
+
+
+Pretty much any number of clusters bigger than 1 and smaller than
+8 is ok here, but I would prefer to see something between 2 and
+5, because a number of clusters of that sort offers (i) some
+insight ("these things are like these other things") and (ii) a
+number of clusters of that sort is supported by the data.
+To draw those clusters, you need `rect.hclust`, and
+before that you'll need to plot the cluster object again. For 2
+clusters, that would look like this:
+```{r }
+plot(species.2)
+rect.hclust(species.2,2)
+```
+
+ 
+
+This one is "mould and fungus vs.\ everything else". (My red boxes
+seem to have gone off the side, sorry.)
+
+Or we could go to the other end of the scale:
+
+```{r }
+plot(species.2)
+rect.hclust(species.2,5)
+```
+
+ 
+
+Five is not really an insightful number of clusters with 8 species,
+but it seems to correspond (for me at least) with a reasonable
+division of these species into "kinds of living things". That is, I
+am bringing some outside knowledge into my number-of-clusters division.
+    
+
+
+(g) List which cluster each species is in, for your preferred
+number of clusters (from Ward's method).
+
+
+Solution
+
+
+This is `cutree`. For 2 clusters it would be this:
+```{r }
+cutree(species.2,2)
+```
+
+     
+
+For 5 it would be this:
+
+```{r }
+cutree(species.2,5)
+```
+
+ 
+
+and anything in between is in between. 
+
+These ones came out sorted, so there is no need to sort them (so you
+don't need the methods of the next question).
+    
+
+
+

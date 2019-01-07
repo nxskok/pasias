@@ -1,0 +1,482 @@
+##  Running, jumping, and throwing
+
+
+ The decathlon is a men's
+`r tufte::margin_note("Women  compete in a similar competition called the *heptathlon* with seven  events.")` track-and-field competition in which competitors complete 10
+events over two days as follows, requiring the skills shown:
+
+
+\begin{tabular}{ll}
+Event & Skills \\
+\hline
+100m & Running, speed\\
+Long jump & Jumping, speed \\
+Shot put & Throwing, strength\\
+High jump & Jumping, agility\\ 
+400m & Running, speed\\
+110m hurdles & Running, jumping, speed\\
+Discus & Throwing, agility (and maybe strength)\\
+Pole vault & Jumping, agility\\
+Javelin & Throwing, agility\\
+1500m & Running, endurance\\
+\hline
+\end{tabular}
+
+
+These are a mixture of running, jumping and throwing disciplines. The
+performance (time, distance or height) achieved in each event is
+converted to a number of points using standard tables,
+`r tufte::margin_note("How I  understand it works is that  a *good* performance in an event is  worth 1000 points, and then, according to the event, each second or  centimetre better or worse than this is worth a certain number of  points up or down from 1000. At this level, the winner of the whole  decathlon will get somewhere near 10,000 points. A look at the  Wikipedia article reveals that it is not quite as simple as this,  but this is the idea.")` and the winner of the entire decathlon is the
+competitor with the largest total of points. (A good decathlete has to
+be at least reasonably good at all the disciplines.)
+
+For the decathlon competition at the 2013 Track and Field World
+Championship, a record was kept of each competitor's performance in
+each event (for the competitors that competed in all ten
+events). These values are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/dec2013.txt). 
+
+
+
+(a) Read in the data and verify that you have the right number
+of variables. 
+
+
+Solution
+
+
+Checking the file, this is delimited by single spaces. You might
+be concerned by the quotes; we'll read them in and see what
+happens to them.
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/dec2013.txt"
+decathlon0=read_delim(my_url," ")
+decathlon0
+```
+
+     
+
+The names got shortened for display, but the quotes seem to have
+properly disappeared.
+
+Note that the columns that would otherwise start with digits have
+`x` on the front of their names, so as to guarantee that the
+column names are legal variable names (and thus won't require any
+special treatment later).
+    
+
+
+(b) Some of the performances are times in seconds, and some of
+them are distances (or heights) in metres. Also, some of the columns
+are more variable than others. Produce a matrix of standardized
+performances in each event, making sure not to try to standardize
+the names!
+
+
+Solution
+
+
+`scale` is what I am trying to hint towards. Leave off the
+first column, which I would rather specify by name. (People have
+an annoying habit of changing the order of columns, but it's more
+work and less likely that the column *name* will change.)
+```{r echo=F}
+options(width=90)
+```
+
+     
+```{r size="footnotesize"}
+decathlon = decathlon0 %>%
+select(-name) %>%
+scale()
+round(decathlon,2)
+```
+$ %$ %$
+
+I think the matrix of standardized values is small enough to look at
+all  of, particularly if I round off the values to a small number of
+decimals, and, as I did, shrink it a bit. (Note that the means and SDs
+appear at the bottom as "attributes".)
+    
+
+```{r echo=F}
+maxclust=20
+```
+
+   
+
+(c) We are going to make a scree plot to decide on the number
+of clusters our K-means clustering should use. Using a loop, or
+otherwise,
+`r tufte::margin_note("I grew up in the UK, and when I saw that in an    exam, it was code for *the way they say is obvious but long, and    the otherwise-way is clever but short*. I think this is one of    those.")` obtain the total within-cluster sum of squares for these
+data for each number of clusters for 2 up to `r maxclust`.
+
+
+Solution
+
+
+Having kind of given the game away in the footnote, I guess I now
+have to keep up my end of the deal and show you the obvious way
+and the clever way.
+The obvious way is to do a Python-style loop, thus:
+```{r }
+maxclust
+w=numeric(0)
+for (i in 2:maxclust) {
+sol=kmeans(decathlon,i,nstart=20)
+w[i]=sol$tot.withinss
+}
+w
+```
+$ %$ %$
+
+I defined `maxclust` earlier, surreptitiously. (Actually, what
+happened was that I changed my mind about how many clusters I wanted
+you to go up to, so that instead of hard-coding the maximum number of
+clusters, I decided to put it in a variable so that I only had to
+change it once if I changed my mind again.)
+
+This is the same as the lecture notes, substituting some names, only I
+split the stuff within the loop into two lines, first getting the
+$i$-cluster solution, and then pulling out the total within-cluster
+sum of squares from it and saving it in the right place in
+`w`. You can do it in one step or two; I don't mind.
+
+The first value in `w` is missing, because we didn't calculate
+a value for 1 cluster (so that this `w` has `r maxclust` values, one of
+which is missing).
+
+Not that there's anything wrong with this,
+`r tufte::margin_note("I have to sneak a  Seinfeld quote in there somewhere.")` and if it works, it's good, but the
+True R Way
+`r tufte::margin_note("Like Buddhism. I keep feeling that R should have  something called the Eight Noble Truths or similar.")` is not to use a
+loop, but get the whole thing in one shot. In preparation for this,
+you write a function that does it for *one* number of clusters
+that is the first thing fed in, thus:
+
+```{r }
+wss=function(i,x) {
+sol=kmeans(x,i,nstart=20) # or some suitable nstart
+sol$tot.withinss
+}
+```
+
+ 
+
+Or you can steal the one from the lecture notes. In this one,
+`x` is the data matrix, and `i` is the number of
+clusters, but you can call them what you like.
+
+The second stage is to run this function for each desired number of
+clusters, without using a loop. This uses a package called
+`purrr` that is part of the `tidyverse` (check the
+beginning of this assignment to see that it got loaded when I loaded
+the `tidyverse`), and it contains a family of functions whose
+names start with `map` that do this. To figure out which one to
+use, take a look at your function: ours returns a single number, a
+`double` in the jargon (decimal number), so the `map`
+function we need is called `map_dbl`, and it goes like
+this. You can do it inside or outside a data frame, but I prefer to do
+it inside with a `mutate`:
+
+```{r }
+ww = tibble(clusters=2:maxclust) %>%
+mutate(wss=map_dbl(clusters,wss,decathlon))
+ww
+```
+
+ 
+
+I have to say that I got this right the first time, but I think I
+benefitted greatly in that regard by writing out that explanation for
+you first. `wss` in `ww` has the same values as
+`w`, but without the missing one.
+
+The way to remember the bits in `map_dbl` (or any `map`) is
+that the thing that varies goes first (the numbers of clusters), then
+the function to run "for each of the first thing", and then any
+constant stuff after that (in this case, the data matrix to run
+`kmeans` on, every time).
+
+There is also a function `sapply` that does the same thing, but
+the `map` functions work a bit more uniformly. I learned
+`sapply` and friends a long time ago, and now, with the arrival
+of `purrr`, I think I need to unlearn them.
+
+If the thing in the "for each" slot of a `map` is a data
+frame, then the function is applied to every column of that data
+frame, so that if I go back to `decathlon0`, which was a data
+frame, and do this:
+```{r echo=F}
+options(width=70)
+```
+
+ 
+
+```{r }
+decathlon.tmp = decathlon0 %>% select(-name) 
+map_dbl(decathlon.tmp,mean)
+```
+
+ 
+
+then what I get is the mean of each (numeric) column. I first get rid
+of the name column, and save the result in a new temporary data frame
+`decathlon.tmp`;
+the `name` column would be a
+pretty silly thing to take the mean of.
+
+What happens, I hear you asking, if the function returns more than one
+thing, like for example `quantile`, which returns a vector
+containing the five-number summary? Well, then you use `map_df`
+and you get this:
+
+```{r }
+map_df(decathlon.tmp,quantile)
+```
+
+ 
+
+The idea is that `quantile` returns something that can be
+treated as a one-column data frame, and `map_df` says
+"`quantile` returns a data frame rather than just a number."
+The only downside is that `quantile` actually (for each
+variable) returns a vector with a name attribute (the names of the
+five percentiles that were calculated), and the `tidyverse`
+treats those like row names and discards them.
+
+    
+
+
+(d) Using what you calculated in the previous part, draw a scree
+plot. (You may have to create a data frame first.) How does your
+scree plot tell you that 5 is a possible number of clusters? Explain
+briefly.
+
+
+
+Solution
+
+
+This requires a teeny bit of care. If you went the loop way, what I
+called `w` has a missing value first (unless you were
+especially careful), so you have to plot it against *1* through `r maxclust`:
+```{r freddo}
+tibble(clusters=1:maxclust,wss=w) %>%
+ggplot(aes(x=clusters,y=wss)) +
+geom_point()+geom_line()
+```
+
+   
+
+The warning message is to say that you don't have a total
+within-cluster sum of squares for 1 cluster, which you knew already.
+
+Or you can save the data frame first and then feed it into
+`ggplot`. 
+
+If you went the `map` way, you will have the `wss`
+values for 2 through `r maxclust` clusters already in a data
+frame, so it is a fair bit simpler:
+
+```{r bilharzia}
+ww %>% ggplot(aes(x=clusters,y=wss))+
+geom_point()+geom_line()
+```
+
+ 
+
+There is, I suppose, the tiniest elbow at 5 clusters. It's not very
+clear, though. I would have liked it to be clearer.
+  
+
+
+(e) Run K-means with 5 clusters. Produce an output that shows
+which competitors are in which cluster.
+
+
+
+Solution
+
+
+If you're using R Markdown, you might like to start with this:
+```{r }
+set.seed(457299)
+```
+
+ 
+
+or some other random number seed of your choice. Using
+`nstart=20` or similar will give you the same *clustering*,
+but which cluster is cluster 1 might vary between runs. So if you talk
+about cluster 1 (below), and re-knit the document, you might otherwise
+find that cluster 1 has changed identity since the last time you
+knitted it. (I just remembered that for these solutions.)
+Running the `kmeans` itself is a piece of cake, since you have
+done it a bunch of times already (in your loop or `map`):
+```{r }
+decathlon.1=kmeans(decathlon, 5, nstart=20)
+decathlon.1
+```
+
+   
+
+I displayed the result, so that I would know which of the things I
+needed later. The `Available components` at the bottom is a big
+hint with this.
+
+To display who is in which cluster, it's easiest to
+make a data frame of names and clusters and sort it:
+
+```{r }
+tibble(name=decathlon0$name,cluster=decathlon.1$cluster) %>%
+arrange(cluster) %>%
+print(n=Inf)
+```
+
+ 
+  
+
+
+(f) Display the cluster means for all of the events. (This has
+already been calculated; you just have to display it.) Find the
+cluster mean, looking at all of the events, that is farthest from
+zero, and see if you can describe the strengths and weaknesses of the
+athletes in that cluster (look at all the events for the cluster that
+has that extreme mean). Bear in mind (i) that these are the original
+performances standardized, and (ii) for a running event, a
+*smaller* value is better.
+
+
+
+Solution
+
+
+This is the thing called `centers`:
+`r tufte::margin_note("We are no longer    in the *tidyverse*, so you no longer have the option of    using British or American spelling.")`
+```{r }
+decathlon.1$centers
+```
+
+   
+
+My most extreme value is the $-2.28$ in the long jump column, cluster
+4. Yours may well be different, since the formation of clusters is
+random: it will probably not be the same number cluster, and it might
+not even be the same value. Use whatever you have. (I asked you to
+find the most extreme one so that the other events in the same cluster
+are likely to be extreme as well and you have something to say.)
+
+So I have to look along my cluster 4 row. I see:
+
+
+
+* 100m run high (bad)
+
+* long jump low (bad)
+
+* shot put high (good)
+
+* high jump low (bad)
+
+* 400m run high (bad)
+
+* 110m hurdles run high (bad)
+
+* discus lowish (bad)
+
+* pole vault low (bad)
+
+* javelin low (bad)
+
+* 1500m low (good)
+
+
+The only two good events here are shot put (throwing a heavy ball) and
+1500m (a long run). So what these athletes have in common is good strength
+and endurance, and bad speed and agility. (You can use my ``skills
+required'' in the table at the top of the question as a guide.)
+
+I said "these athletes". I actually meant "this athlete", since
+this is the cluster with just Marcus Nilsson in it. I ought to have
+checked that we were looking at a cluster with several athletes in it,
+and then this question would have made more sense, but the thought
+process is the same, so it doesn't matter so much.
+
+Your cluster may well be different; I'm looking for some sensible
+discussion based on the values you have. I'm hoping that the athletes
+in your cluster will tend to be good at something and bad at something
+else, and the things they are good at (or bad at) will have something
+in common.
+
+What would have made more sense would have been to take the
+*biggest* cluster:
+
+```{r }
+decathlon.1$size
+```
+
+ 
+
+which in this case is cluster 3, and then
+
+```{r }
+decathlon.1$centers
+```
+
+ 
+
+which says that the eight athletes in cluster 3 are a bit above
+average for shot put and discus, and below average for javelin, and,
+taking a decision, about average for everything else. This is kind of
+odd, since these are all throwing events, but the javelin is propelled
+a long way by running fast, and the other two are propelled mainly
+using strength rather than speed, so it makes some kind of sense
+(after the fact, at least).
+
+My guess is that someone good at javelin is likely to be good at
+sprint running and possibly also the long jump, since that depends
+primarily on speed, once you have enough technique. Well, one way to
+figure out whether I was right:
+
+```{r }
+cor(decathlon)
+```
+
+ 
+There are actually only a few high correlations:
+
+
+
+* 100m with long jump, 400m and 110m hurdles
+
+* long jump with 100m, high jump and 400m
+
+* shot put with discus
+
+* high jump with long jump
+
+* 400m with all the other running events plus long jump
+
+* 110m hurdles with the other running events plus pole vault
+
+* discus with shot put
+
+* pole vault with 110m hurdles and maybe 400m
+
+* javelin with *nothing*
+
+* 1500m with 400m
+
+
+Some of the correlations are negative as expected, since they are
+between a running event and a jumping/throwing event.
+
+I was wrong about javelin. It seems to be a unique skill in the
+decathlon, which is presumably why it's there: you want 10 events that
+are as disparate as possible, rather than things that are highly
+correlated. 
+  
+
+
+
