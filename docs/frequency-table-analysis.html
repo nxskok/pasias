@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2019-01-07" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a><ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+</ul></li>
+<li class="has-sub"><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">4.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">4.5</span> Test scores in two classes</a></li>
+</ul></li>
+<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">5</span> One-sample inference</a><ul>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">5.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">5.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">5.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">5.4</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">6</span> Two-sample inference</a><ul>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">6.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">6.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">6.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">6.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">6.5</span> Diet and growth in boys</a></li>
+</ul></li>
+<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">7</span> Power and sample size</a><ul>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">7.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">7.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">7.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li class="has-sub"><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">8</span> The sign test and Mood’s median test</a><ul>
+<li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">8.1</span> Running a maze</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">8.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">8.3</span> The power of the sign test</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">8.4</span> Sugar in breakfast cereals</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">8.5</span> Fear of math</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">8.6</span> Medical instructions</a></li>
+</ul></li>
+<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">9</span> Matched pairs t and sign test</a><ul>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">9.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">9.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">9.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">9.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">9.5</span> Body fat revisited</a></li>
+</ul></li>
+<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">10</span> Normal quantile plots</a><ul>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">10.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">10.2</span> Ferritin and normality</a></li>
+</ul></li>
+<li class="has-sub"><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">11</span> Analysis of variance</a><ul>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">11.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">11.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">11.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">11.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">11.5</span> Can caffeine improve your performance on a test?</a></li>
+</ul></li>
+<li class="has-sub"><a href="tidying-and-selecting-data.html#tidying-and-selecting-data"><span class="toc-section-number">12</span> Tidying and selecting data</a><ul>
+<li><a href="tidying-and-selecting-data.html#tidying-the-jays-data"><span class="toc-section-number">12.1</span> Tidying the Jays data</a></li>
+<li><a href="tidying-and-selecting-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">12.2</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-and-selecting-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">12.3</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-and-selecting-data.html#growth-of-tomatoes"><span class="toc-section-number">12.4</span> Growth of tomatoes</a></li>
+<li><a href="tidying-and-selecting-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">12.5</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-and-selecting-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">12.6</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-and-selecting-data.html#mating-songs-in-crickets"><span class="toc-section-number">12.7</span> Mating songs in crickets</a></li>
+<li><a href="tidying-and-selecting-data.html#cars"><span class="toc-section-number">12.8</span> Cars</a></li>
+<li><a href="tidying-and-selecting-data.html#number-1-songs"><span class="toc-section-number">12.9</span> Number 1 songs</a></li>
+<li><a href="tidying-and-selecting-data.html#bikes-on-college"><span class="toc-section-number">12.10</span> Bikes on College</a></li>
+<li><a href="tidying-and-selecting-data.html#feeling-the-heat"><span class="toc-section-number">12.11</span> Feeling the heat</a></li>
+</ul></li>
+<li class="has-sub"><a href="regression.html#regression"><span class="toc-section-number">13</span> Regression</a><ul>
+<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">13.1</span> Rainfall in California</a></li>
+<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">13.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">13.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">13.4</span> Facebook friends and grey matter</a></li>
+<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">13.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="regression.html#sparrowhawks"><span class="toc-section-number">13.6</span> Sparrowhawks</a></li>
+<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">13.7</span> Salaries of social workers</a></li>
+<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">13.8</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">13.9</span> Tortoise shells and eggs</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">13.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">13.11</span> Roller coasters</a></li>
+<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">13.12</span> Running and blood sugar</a></li>
+<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">13.13</span> Calories and fat in pizza</a></li>
+<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">13.14</span> Where should the fire stations be?</a></li>
+<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">13.15</span> Being satisfied with hospital</a></li>
+<li><a href="regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">13.16</span> Handling shipments of chemicals</a></li>
+<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">13.17</span> Salaries of mathematicians</a></li>
+<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">13.18</span> Predicting GPA of computer science students</a></li>
+</ul></li>
+<li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">14</span> Dates and times</a><ul>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">14.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">14.2</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">14.3</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">14.4</span> Wolves and caribou</a></li>
+</ul></li>
+<li class="has-sub"><a href="functions.html#functions"><span class="toc-section-number">15</span> Functions</a><ul>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">15.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">15.2</span> The Collatz sequence</a></li>
+</ul></li>
+<li class="has-sub"><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">16</span> Logistic regression</a><ul>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">16.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">16.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">16.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">16.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">16.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">16.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">16.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">16.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">16.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">16.10</span> Go away and don’t come back!</a></li>
+</ul></li>
+<li class="has-sub"><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">17</span> Logistic regression with ordinal or nominal response</a><ul>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">17.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">17.2</span> Attitudes towards abortion</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">17.3</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">17.4</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">17.5</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">17.6</span> How do you like your steak – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">17.7</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">17.8</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">17.9</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">17.10</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">17.11</span> What sports do these athletes play?</a></li>
+</ul></li>
+<li class="has-sub"><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">18</span> Survival analysis</a><ul>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">18.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">18.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">18.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">18.4</span> Ovarian cancer</a></li>
+</ul></li>
+<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">19</span> Analysis of Variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">19.1</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">19.2</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">19.3</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">19.4</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">19.5</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">19.6</span> Treating leprosy</a></li>
+<li><a href="analysis-of-variance-revisited.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">19.7</span> Do characteristics of urine depend on obesity?</a></li>
+</ul></li>
+<li class="has-sub"><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">20</span> Multivariate analysis of variance</a><ul>
+<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">20.1</span> Fabricated data</a></li>
+<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity-1"><span class="toc-section-number">20.2</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">20.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
+</ul></li>
+<li class="has-sub"><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">21</span> Repeated measures</a><ul>
+<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">21.1</span> Effect of drug on rat weight</a></li>
+<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">21.2</span> Social interaction among old people</a></li>
+<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">21.3</span> Children’s stress levels and airports</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">21.4</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">21.5</span> Repeated measures with no background</a></li>
+</ul></li>
+<li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">22</span> Discriminant analysis</a><ul>
+<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">22.1</span> Telling whether a banknote is real or counterfeit</a></li>
+<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">22.2</span> Urine and obesity: what makes a difference?</a></li>
+<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">22.3</span> Understanding a MANOVA</a></li>
+<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">22.4</span> What distinguishes people who do different jobs?</a></li>
+<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">22.5</span> Observing children with ADHD</a></li>
+<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">22.6</span> Growing corn</a></li>
+<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">22.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
+</ul></li>
+<li class="has-sub"><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">23</span> Cluster analysis</a><ul>
+<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">23.1</span> Dissimilarities between fruits</a></li>
+<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">23.2</span> Similarity of species</a></li>
+<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">23.3</span> Rating beer</a></li>
+<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">23.4</span> Sites on the sea bed</a></li>
+<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">23.5</span> Clustering the Swiss bills</a></li>
+<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">23.6</span> Grouping similar cars</a></li>
+<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">23.7</span> Running, jumping, and throwing</a></li>
+<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">23.8</span> Bridges in Pittsburgh</a></li>
+</ul></li>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">24</span> Multidimensional Scaling</a></li>
+<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">25</span> Principal Components and Factor Analysis</a></li>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">26</span> Frequency table analysis</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="frequency-table-analysis" class="section level1">
+<h1><span class="header-section-number">Chapter 26</span> Frequency table analysis</h1>
+<p>Packages for this chapter:</p>
+<div class="sourceCode" id="cb4208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4208-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<p>5199 male high school seniors in Wisconsin were classified by
+socio-economic status (low, lower-middle, upper-middle, high), by
+the degree that their parents encouraged them in their education (low
+or high),
+and whether or not they had plans to go to college (yes or no). How,
+if at all, are these categorical variables related? The data can be
+found at
+<a href="http://www.utsc.utoronto.ca/~butler/d29/college-plans.txt">link</a>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and check that you have a column for each
+variable and a column of frequencies.</li>
+</ol>
+<p>Solution</p>
+<p>Delimited by one space:</p>
+<div class="sourceCode" id="cb4212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4212-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/college-plans.txt&quot;</span></a>
+<a class="sourceLine" id="cb4212-2" data-line-number="2">wisc=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   social.stratum = col_character(),
+##   encouragement = col_character(),
+##   college.plans = col_character(),
+##   frequency = col_integer()
+## )</code></pre>
+<div class="sourceCode" id="cb4214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4214-1" data-line-number="1">wisc</a></code></pre></div>
+<pre><code>## # A tibble: 16 x 4
+##    social.stratum encouragement college.plans frequency
+##    &lt;chr&gt;          &lt;chr&gt;         &lt;chr&gt;             &lt;int&gt;
+##  1 lower          low           no                  749
+##  2 lower          low           yes                  35
+##  3 lower          high          no                  233
+##  4 lower          high          yes                 133
+##  5 lowermiddle    low           no                  627
+##  6 lowermiddle    low           yes                  38
+##  7 lowermiddle    high          no                  330
+##  8 lowermiddle    low           no                  303
+##  9 uppermiddle    low           no                  627
+## 10 uppermiddle    low           yes                  38
+## 11 uppermiddle    high          no                  374
+## 12 uppermiddle    high          yes                 467
+## 13 higher         low           no                  153
+## 14 higher         low           yes                  26
+## 15 higher         high          no                  266
+## 16 higher         high          yes                 800</code></pre>
+<p>As promised. We only have 16 observations, because we have all
+possible combinations of categorical variable combinations, 4 social
+strata, times 2 levels of encouragement, times 2 levels of college
+plans.</p>
+<p>Each line of the data file summarizes a number of students, not just
+one. For example, the first line says that 749 students were in the
+lower social stratum, received low encouragement and have no college
+plans. If we sum up the frequencies, we should get 5199 because there
+were that many students altogether:</p>
+<div class="sourceCode" id="cb4216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4216-1" data-line-number="1">wisc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">tot=</span><span class="kw">sum</span>(frequency))</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##     tot
+##   &lt;int&gt;
+## 1  5199</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Fit a log-linear model containing all possible
+interactions. You don’t need to examine it yet.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb4218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4218-1" data-line-number="1">wisc<span class="fl">.1</span>=<span class="kw">glm</span>(frequency<span class="op">~</span>social.stratum<span class="op">*</span>encouragement<span class="op">*</span>college.plans,</a>
+<a class="sourceLine" id="cb4218-2" data-line-number="2"><span class="dt">data=</span>wisc,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a></code></pre></div>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Find out which terms (interactions) could be removed. Do you
+think removing any of them is a good idea?</li>
+</ol>
+<p>Solution</p>
+<p>This is <code>drop1</code>. If you forget the <code>test=</code>, you won’t
+get any P-values:</p>
+<div class="sourceCode" id="cb4219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4219-1" data-line-number="1"><span class="kw">drop1</span>(wisc<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## frequency ~ social.stratum * encouragement * college.plans
+##                                            Df Deviance    AIC   LRT
+## &lt;none&gt;                                          115.28 259.52      
+## social.stratum:encouragement:college.plans  2   118.98 259.22 3.697
+##                                            Pr(&gt;Chi)
+## &lt;none&gt;                                             
+## social.stratum:encouragement:college.plans   0.1575</code></pre>
+<p>This P-value is not small, so the three-way interaction can be removed.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Remove anything you can, and fit again. Hint: <code>update</code>.</li>
+</ol>
+<p>Solution</p>
+<p>In this kind of modelling, it’s easier to describe what changes
+should be made to get from one model to another, rather than
+writing out the whole thing from scratch again.
+Anyway, the three-way interaction can come out:</p>
+<div class="sourceCode" id="cb4221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4221-1" data-line-number="1">wisc<span class="fl">.2</span>=<span class="kw">update</span>(wisc<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>social.stratum<span class="op">:</span>encouragement<span class="op">:</span>college.plans)</a></code></pre></div>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Continue to examine what can be removed, and if reasonable,
+remove it, until you need to stop. Which terms are left in your final model?</li>
+</ol>
+<p>Solution</p>
+<p>Start with <code>drop1</code>:</p>
+<div class="sourceCode" id="cb4222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4222-1" data-line-number="1"><span class="kw">drop1</span>(wisc<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## frequency ~ social.stratum + encouragement + college.plans + 
+##     social.stratum:encouragement + social.stratum:college.plans + 
+##     encouragement:college.plans
+##                              Df Deviance     AIC    LRT  Pr(&gt;Chi)    
+## &lt;none&gt;                            118.98  259.22                     
+## social.stratum:encouragement  3   379.18  513.42 260.20 &lt; 2.2e-16 ***
+## social.stratum:college.plans  3   331.86  466.10 212.88 &lt; 2.2e-16 ***
+## encouragement:college.plans   1  1024.69 1162.94 905.72 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>These are all strongly significant, so they have to stay. There is
+nothing else we can remove. All the two-way interactions have to stay
+in the model.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Make two-way tables of any remaining two-way interactions, and
+describe any relationships that you see.</li>
+</ol>
+<p>Solution</p>
+<p>We have three two-way tables to make:</p>
+<div class="sourceCode" id="cb4224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4224-1" data-line-number="1"><span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>encouragement,<span class="dt">data=</span>wisc)</a></code></pre></div>
+<pre><code>##               encouragement
+## social.stratum high  low
+##    higher      1066  179
+##    lower        366  784
+##    lowermiddle  330  968
+##    uppermiddle  841  665</code></pre>
+<p>This says that there tends to be more parental encouragement, the
+higher the social stratum. <code>prop.table</code> would be good here,
+because it’s easier to judge proportions than actual frequencies:</p>
+<div class="sourceCode" id="cb4226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4226-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>encouragement,<span class="dt">data=</span>wisc)</a>
+<a class="sourceLine" id="cb4226-2" data-line-number="2"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
+<pre><code>##               encouragement
+## social.stratum      high       low
+##    higher      0.8562249 0.1437751
+##    lower       0.3182609 0.6817391
+##    lowermiddle 0.2542373 0.7457627
+##    uppermiddle 0.5584329 0.4415671</code></pre>
+<p>The idea here is to save the result of <code>xtabs</code>, and then feed
+that into <code>prop.table</code>. The second number in
+<code>prop.table</code> is the “dimension to make sum to 1”, 1 being
+rows, 2 being columns (and 3 being layers, if your table goes that
+far). In this case, you might think of encouragement as being a
+response to social stratum, and so you want to sum over what is
+<em>not</em> a response, namely <code>social.stratum</code>, that is,
+rows, or 1. That makes it very clear that the higher the social
+stratum, the more encouragement.</p>
+<p>Next, this:</p>
+<div class="sourceCode" id="cb4228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4228-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>college.plans,<span class="dt">data=</span>wisc)</a>
+<a class="sourceLine" id="cb4228-2" data-line-number="2">xt</a></code></pre></div>
+<pre><code>##               college.plans
+## social.stratum   no  yes
+##    higher       419  826
+##    lower        982  168
+##    lowermiddle 1260   38
+##    uppermiddle 1001  505</code></pre>
+<div class="sourceCode" id="cb4230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4230-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
+<pre><code>##               college.plans
+## social.stratum         no        yes
+##    higher      0.33654618 0.66345382
+##    lower       0.85391304 0.14608696
+##    lowermiddle 0.97072419 0.02927581
+##    uppermiddle 0.66467463 0.33532537</code></pre>
+<p>In this one (and the next), <code>college.plans</code> is the response, in
+columns, so we want to have the <em>rows</em> adding up to 1.</p>
+<p>The higher the social stratum, the more likely is a male
+high school senior to have plans to go to college. (The social stratum
+is not in order, so you’ll have to jump from the second row to the
+third to the fourth to the first to assess this. Lower and lower
+middle are not in order, but the others are.)</p>
+<p>Finally, this:</p>
+<div class="sourceCode" id="cb4232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4232-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>encouragement<span class="op">+</span>college.plans,<span class="dt">data=</span>wisc)</a>
+<a class="sourceLine" id="cb4232-2" data-line-number="2">xt</a></code></pre></div>
+<pre><code>##              college.plans
+## encouragement   no  yes
+##          high 1203 1400
+##          low  2459  137</code></pre>
+<div class="sourceCode" id="cb4234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4234-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
+<pre><code>##              college.plans
+## encouragement        no       yes
+##          high 0.4621590 0.5378410
+##          low  0.9472265 0.0527735</code></pre>
+<p>And here you see an <em>enormous</em> effect of parental encouragement
+on college plans: if it is low, the high-school senior is very
+unlikely to be considering college.</p>
+<p>Nothing, in all honesty, that is very surprising here. But the two-way
+interactions are easier to interpret than a three-way one would have
+been.</p>
+<p>Here, we think of college plans as being a response, and this
+analysis has shown that whether or not a student has plans to go to
+college depends separately on the socio-economic status and the level
+of parental encouragement (rather than on the combination of both, as
+would have been the case had the three-way interaction been
+significant).</p>
+<p>1257 British voters were classified according
+to their social class, age (categorized), sex and the political party
+they voted for (Labour or Conservative). Which, if any, of these
+factors influences the party that someone votes for? The data are in
+<a href="http://www.utsc.utoronto.ca/~butler/d29/voting.txt">link</a>, one voter
+per line.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and display (some of) the data frame.</li>
+</ol>
+<p>Solution</p>
+<p>Space-delimited:</p>
+<div class="sourceCode" id="cb4236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4236-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/voting.txt&quot;</span></a>
+<a class="sourceLine" id="cb4236-2" data-line-number="2">vote0=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   id = col_integer(),
+##   class = col_character(),
+##   age = col_character(),
+##   sex = col_character(),
+##   vote = col_character()
+## )</code></pre>
+<div class="sourceCode" id="cb4238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4238-1" data-line-number="1">vote0</a></code></pre></div>
+<pre><code>## # A tibble: 1,257 x 5
+##       id class        age   sex    vote        
+##    &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;       
+##  1     1 upper middle &gt;75   male   conservative
+##  2     2 upper middle &gt;75   male   conservative
+##  3     3 upper middle &gt;75   male   conservative
+##  4     4 upper middle &gt;75   male   conservative
+##  5     5 upper middle &gt;75   female conservative
+##  6     6 upper middle &gt;75   female conservative
+##  7     7 upper middle &gt;75   female conservative
+##  8     8 upper middle &gt;75   female conservative
+##  9     9 upper middle &gt;75   female conservative
+## 10    10 upper middle &gt;75   female conservative
+## # ... with 1,247 more rows</code></pre>
+<p>I gave it a “disposable” name, since we make the “real” data set
+shortly.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>There is no frequency column here, because each row of the
+data frame only represents one voter. Count up the frequencies for
+each combo of the categorical variables, and save it (this is the
+data frame that we will use for the analysis).
+Display the first few rows of the result. Do you now
+have something that you need?</li>
+</ol>
+<p>Solution</p>
+<p>I changed my mind about how to do this from last year. Using
+<code>count</code> is alarmingly more direct than the method I had before:</p>
+<div class="sourceCode" id="cb4240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4240-1" data-line-number="1">votes =<span class="st"> </span>vote0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(class,age,sex,vote)</a>
+<a class="sourceLine" id="cb4240-2" data-line-number="2">votes</a></code></pre></div>
+<pre><code>## # A tibble: 58 x 5
+##    class        age   sex    vote             n
+##    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;int&gt;
+##  1 lower middle &lt;26   female conservative    13
+##  2 lower middle &lt;26   female labour           7
+##  3 lower middle &lt;26   male   conservative     9
+##  4 lower middle &lt;26   male   labour           9
+##  5 lower middle 26-40 female conservative    17
+##  6 lower middle 26-40 female labour          13
+##  7 lower middle 26-40 male   conservative    14
+##  8 lower middle 26-40 male   labour          15
+##  9 lower middle 41-50 female conservative    29
+## 10 lower middle 41-50 female labour           4
+## # ... with 48 more rows</code></pre>
+<p>Exactly the right thing now: note the new column <code>n</code> with
+frequencies in it. (Without a column of frequencies we can’t fit a
+log-linear model.) There are now only 58 combinations of the four
+categorical variables, as opposed to 1247 rows in the original data
+set (with, inevitably, a lot of repeats).</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Fit a log-linear model with the appropriate interaction (as a
+starting point).</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb4242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4242-1" data-line-number="1">vote<span class="fl">.1</span>=<span class="kw">glm</span>(n<span class="op">~</span>class<span class="op">*</span>age<span class="op">*</span>sex<span class="op">*</span>vote,<span class="dt">data=</span>votes,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a></code></pre></div>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Refine your model by taking out suitable non-significant
+terms, in multiple steps. What model do you finish with?</li>
+</ol>
+<p>Solution</p>
+<p>Alternating <code>drop1</code> and <code>update</code> until everything
+remaining is significant:</p>
+<div class="sourceCode" id="cb4243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4243-1" data-line-number="1"><span class="kw">drop1</span>(vote<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## n ~ class * age * sex * vote
+##                    Df Deviance    AIC   LRT Pr(&gt;Chi)
+## &lt;none&gt;                   0.000 381.49               
+## class:age:sex:vote  7    8.086 375.58 8.086   0.3251</code></pre>
+<p>Not anywhere near significant, so out it comes:</p>
+<div class="sourceCode" id="cb4245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4245-1" data-line-number="1">vote<span class="fl">.2</span>=<span class="kw">update</span>(vote<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>age<span class="op">:</span>sex<span class="op">:</span>vote)</a>
+<a class="sourceLine" id="cb4245-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## n ~ class + age + sex + vote + class:age + class:sex + age:sex + 
+##     class:vote + age:vote + sex:vote + class:age:sex + class:age:vote + 
+##     class:sex:vote + age:sex:vote
+##                Df Deviance    AIC     LRT Pr(&gt;Chi)  
+## &lt;none&gt;               8.086 375.58                   
+## class:age:sex   8   11.244 362.74  3.1583  0.92404  
+## class:age:vote  7   21.962 375.46 13.8759  0.05343 .
+## class:sex:vote  2   10.142 373.64  2.0564  0.35765  
+## age:sex:vote    4   14.239 373.73  6.1528  0.18802  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Take out the first one, since it has the highest P-value:</p>
+<div class="sourceCode" id="cb4247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4247-1" data-line-number="1">vote<span class="fl">.3</span>=<span class="kw">update</span>(vote<span class="fl">.2</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>age<span class="op">:</span>sex)</a>
+<a class="sourceLine" id="cb4247-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.3</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## n ~ class + age + sex + vote + class:age + class:sex + age:sex + 
+##     class:vote + age:vote + sex:vote + class:age:vote + class:sex:vote + 
+##     age:sex:vote
+##                Df Deviance    AIC     LRT Pr(&gt;Chi)  
+## &lt;none&gt;              11.244 362.74                   
+## class:age:vote  7   25.171 362.66 13.9262  0.05251 .
+## class:sex:vote  2   12.794 360.29  1.5498  0.46074  
+## age:sex:vote    4   19.248 362.74  8.0041  0.09143 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><code>class:sex:vote</code>:</p>
+<div class="sourceCode" id="cb4249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4249-1" data-line-number="1">vote<span class="fl">.4</span>=<span class="kw">update</span>(vote<span class="fl">.3</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>sex<span class="op">:</span>vote)</a>
+<a class="sourceLine" id="cb4249-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.4</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## n ~ class + age + sex + vote + class:age + class:sex + age:sex + 
+##     class:vote + age:vote + sex:vote + class:age:vote + age:sex:vote
+##                Df Deviance    AIC     LRT Pr(&gt;Chi)  
+## &lt;none&gt;              12.794 360.29                   
+## class:sex       2   13.477 356.97  0.6830  0.71070  
+## class:age:vote  7   26.698 360.19 13.9036  0.05292 .
+## age:sex:vote    4   21.211 360.71  8.4172  0.07744 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><code>class:sex</code>:</p>
+<div class="sourceCode" id="cb4251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4251-1" data-line-number="1">vote<span class="fl">.5</span>=<span class="kw">update</span>(vote<span class="fl">.4</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>sex)</a>
+<a class="sourceLine" id="cb4251-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.5</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## n ~ class + age + sex + vote + class:age + age:sex + class:vote + 
+##     age:vote + sex:vote + class:age:vote + age:sex:vote
+##                Df Deviance    AIC     LRT Pr(&gt;Chi)  
+## &lt;none&gt;              13.477 356.97                   
+## class:age:vote  7   27.633 357.13 14.1555  0.04848 *
+## age:sex:vote    4   22.081 357.57  8.6037  0.07181 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>I don’t like having three-way interactions, so I’m going to yank
+<code>age:sex:vote</code> now, even though its P-value is smallish:</p>
+<div class="sourceCode" id="cb4253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4253-1" data-line-number="1">vote<span class="fl">.6</span>=<span class="kw">update</span>(vote<span class="fl">.5</span>,.<span class="op">~</span>.<span class="op">-</span>age<span class="op">:</span>sex<span class="op">:</span>vote)</a>
+<a class="sourceLine" id="cb4253-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.6</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## n ~ class + age + sex + vote + class:age + age:sex + class:vote + 
+##     age:vote + sex:vote + class:age:vote
+##                Df Deviance    AIC     LRT  Pr(&gt;Chi)    
+## &lt;none&gt;              22.081 357.57                      
+## age:sex         4   22.918 350.41  0.8372 0.9333914    
+## sex:vote        1   33.018 366.51 10.9376 0.0009423 ***
+## class:age:vote  7   36.236 357.73 14.1555 0.0484843 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The age-sex interaction can go, but we must be near the end now:</p>
+<div class="sourceCode" id="cb4255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4255-1" data-line-number="1">vote<span class="fl">.7</span>=<span class="kw">update</span>(vote<span class="fl">.6</span>,.<span class="op">~</span>.<span class="op">-</span>age<span class="op">:</span>sex)</a>
+<a class="sourceLine" id="cb4255-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.7</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## n ~ class + age + sex + vote + class:age + class:vote + age:vote + 
+##     sex:vote + class:age:vote
+##                Df Deviance    AIC    LRT  Pr(&gt;Chi)    
+## &lt;none&gt;              22.918 350.41                     
+## sex:vote        1   33.808 359.30 10.890 0.0009667 ***
+## class:age:vote  7   37.073 350.57 14.155 0.0484843 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>And that’s it. The age and sex main effects are not included in the
+list of droppable things because
+both variables are part of higher-order interactions that are still in
+the model.</p>
+<p>If you want to, you can look at the <code>summary</code> of your final model:</p>
+<div class="sourceCode" id="cb4257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4257-1" data-line-number="1"><span class="kw">summary</span>(vote<span class="fl">.7</span>)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = n ~ class + age + sex + vote + class:age + class:vote + 
+##     age:vote + sex:vote + class:age:vote, family = &quot;poisson&quot;, 
+##     data = votes)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -1.82417  -0.39708  -0.00015   0.41445   1.41435  
+## 
+## Coefficients: (1 not defined because of singularities)
+##                                       Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                            2.50737    0.21613  11.601  &lt; 2e-16 ***
+## classupper middle                     -0.45199    0.34188  -1.322 0.186151    
+## classworking                           0.37469    0.27696   1.353 0.176088    
+## age26-40                               0.34294    0.27877   1.230 0.218619    
+## age41-50                               0.93431    0.25162   3.713 0.000205 ***
+## age51-75                               0.89794    0.25293   3.550 0.000385 ***
+## age&gt;75                                -0.25783    0.32292  -0.798 0.424622    
+## sexmale                               -0.23242    0.08016  -2.900 0.003737 ** 
+## votelabour                            -0.50081    0.33324  -1.503 0.132882    
+## classupper middle:age26-40             0.82466    0.41396   1.992 0.046358 *  
+## classworking:age26-40                  0.41083    0.35167   1.168 0.242713    
+## classupper middle:age41-50             0.37788    0.39239   0.963 0.335542    
+## classworking:age41-50                 -0.28917    0.33310  -0.868 0.385327    
+## classupper middle:age51-75             0.43329    0.39277   1.103 0.269954    
+## classworking:age51-75                  0.10223    0.32668   0.313 0.754325    
+## classupper middle:age&gt;75               0.25783    0.49713   0.519 0.604013    
+## classworking:age&gt;75                    0.01097    0.41896   0.026 0.979113    
+## classupper middle:votelabour          -0.12338    0.53898  -0.229 0.818936    
+## classworking:votelabour                1.05741    0.39259   2.693 0.007073 ** 
+## age26-40:votelabour                    0.21667    0.41944   0.517 0.605452    
+## age41-50:votelabour                   -0.93431    0.43395  -2.153 0.031315 *  
+## age51-75:votelabour                   -0.62601    0.41724  -1.500 0.133526    
+## age&gt;75:votelabour                     -0.72300    0.57745  -1.252 0.210547    
+## sexmale:votelabour                     0.37323    0.11334   3.293 0.000992 ***
+## classupper middle:age26-40:votelabour -0.53698    0.65445  -0.821 0.411931    
+## classworking:age26-40:votelabour      -0.28479    0.49429  -0.576 0.564516    
+## classupper middle:age41-50:votelabour -0.01015    0.68338  -0.015 0.988147    
+## classworking:age41-50:votelabour       1.06121    0.50772   2.090 0.036603 *  
+## classupper middle:age51-75:votelabour -0.06924    0.65903  -0.105 0.916328    
+## classworking:age51-75:votelabour       0.16608    0.49036   0.339 0.734853    
+## classupper middle:age&gt;75:votelabour         NA         NA      NA       NA    
+## classworking:age&gt;75:votelabour        -0.29039    0.68720  -0.423 0.672607    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 797.594  on 57  degrees of freedom
+## Residual deviance:  22.918  on 27  degrees of freedom
+## AIC: 350.41
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>These tend to be rather unwieldy, and we’ll see a better way of
+understanding the results below, but you can look for the very
+significant results, bearing in mind that the first category is the
+baseline, for example, more of the males in the survey voted Labour
+(than Conservative).</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>If we think of the party someone votes for as the final
+outcome (that depends on all the other things), what does our final
+model say that someone’s vote depends on?</li>
+</ol>
+<p>Solution</p>
+<p>Find out which of the surviving terms are interactions with
+<code>vote</code>. Here, there are two things, that <code>vote</code>
+depends on separately:</p>
+<ul>
+<li><p><code>sex</code></p></li>
+<li><p>The <code>age</code>-<code>class</code> interaction.</p></li>
+</ul>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Obtain sub-tables that explain how <code>vote</code> depends on
+any of the things it’s related to.</li>
+</ol>
+<p>Solution</p>
+<p>This is <code>xtabs</code> again. The 3-way interaction is a bit
+tricky, so we’ll do the simple one first:</p>
+<div class="sourceCode" id="cb4259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4259-1" data-line-number="1">xt=<span class="kw">xtabs</span>(n<span class="op">~</span>vote<span class="op">+</span>sex,<span class="dt">data=</span>votes)</a>
+<a class="sourceLine" id="cb4259-2" data-line-number="2">xt</a></code></pre></div>
+<pre><code>##               sex
+## vote           female male
+##   conservative    352  279
+##   labour          291  335</code></pre>
+<p>The female voters slightly preferred to vote Conservative and the male
+voters slightly preferred to vote Labour. This is a small effect, but
+I guess the large number of voters made it big enough to be significant.</p>
+<p>I took it this way around because <code>vote</code> is the outcome, and
+therefore I want to address things like <code>if a voter is female, how likely are they to vote Labour'', rather than conditioning the other way around (which would be</code>if a voter voted Labour, how likely are
+they to be female’’, which doesn’t make nearly so much sense).</p>
+<p>You
+can do a <code>prop.table</code> here if you like, summing over <em>columns</em>:</p>
+<div class="sourceCode" id="cb4261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4261-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">2</span>)</a></code></pre></div>
+<pre><code>##               sex
+## vote              female      male
+##   conservative 0.5474339 0.4543974
+##   labour       0.4525661 0.5456026</code></pre>
+<p>Since the numbers of males and females were about the same, this
+doesn’t really tell us anything that the previous table didn’t tell us.</p>
+<p>Then the tricky one:</p>
+<div class="sourceCode" id="cb4263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4263-1" data-line-number="1">xt=<span class="kw">xtabs</span>(n<span class="op">~</span>vote<span class="op">+</span>age<span class="op">+</span>class,<span class="dt">data=</span>votes)</a>
+<a class="sourceLine" id="cb4263-2" data-line-number="2">xt</a></code></pre></div>
+<pre><code>## , , class = lower middle
+## 
+##               age
+## vote           &lt;26 26-40 41-50 51-75 &gt;75
+##   conservative  22    31    56    54  17
+##   labour        16    28    16    21   6
+## 
+## , , class = upper middle
+## 
+##               age
+## vote           &lt;26 26-40 41-50 51-75 &gt;75
+##   conservative  14    45    52    53  14
+##   labour         9    21    13    17   0
+## 
+## , , class = working
+## 
+##               age
+## vote           &lt;26 26-40 41-50 51-75 &gt;75
+##   conservative  32    68    61    87  25
+##   labour        67   133   145   115  19</code></pre>
+<p>Doing it this way has produced different subtables for each
+<code>class</code>. This is actually OK, because we can say ``if a voter
+was of lower middle class’’ and then talk about the relationship
+between age and vote, as if we were looking at a simple effect:</p>
+<ul>
+<li><p>If a voter was of lower-middle-class, they strongly favour voting
+Conservative in all age groups except for <code>&lt;26</code> and 26–40.</p></li>
+<li><p>If a voter was of upper-middle-class, they even more strongly favour
+voting Conservative in all age groups except for “under 26” and
+maybe 26–40.</p></li>
+<li><p>If a voter was of Working class, they strongly favour voting
+Labour, except in the
+“over 75” age group (and maybe 51–75 as well).</p></li>
+</ul>
+<p>If the anomalous age group(s) had been the same one every time, there
+would no longer have been an interaction between age and class in
+their effect on <code>vote</code>. But the anomalous age groups were
+different for each class (“different pattern”), and that explains
+why there was a <code>vote:age:class</code> interaction: `` the way
+someone votes depends on the <em>combination</em> of age and social
+class’’.</p>
+<p>For <code>prop.table</code> in three dimensions, as we have here, we have to be a little
+more careful about what to make add up to 1. For example, to make the
+social classes each add up to 1, which is the third dimension:</p>
+<div class="sourceCode" id="cb4265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4265-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">3</span>)</a></code></pre></div>
+<pre><code>## , , class = lower middle
+## 
+##               age
+## vote                  &lt;26      26-40      41-50      51-75        &gt;75
+##   conservative 0.08239700 0.11610487 0.20973783 0.20224719 0.06367041
+##   labour       0.05992509 0.10486891 0.05992509 0.07865169 0.02247191
+## 
+## , , class = upper middle
+## 
+##               age
+## vote                  &lt;26      26-40      41-50      51-75        &gt;75
+##   conservative 0.05882353 0.18907563 0.21848739 0.22268908 0.05882353
+##   labour       0.03781513 0.08823529 0.05462185 0.07142857 0.00000000
+## 
+## , , class = working
+## 
+##               age
+## vote                  &lt;26      26-40      41-50      51-75        &gt;75
+##   conservative 0.04255319 0.09042553 0.08111702 0.11569149 0.03324468
+##   labour       0.08909574 0.17686170 0.19281915 0.15292553 0.02526596</code></pre>
+<p>What happened here is that each of the three subtables adds up to 1,
+so that we have a “joint distribution” in each table. We can put
+<em>two</em> variables into <code>prop.table</code>, and see what happens then:</p>
+<div class="sourceCode" id="cb4267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4267-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</a></code></pre></div>
+<pre><code>## , , class = lower middle
+## 
+##               age
+## vote                 &lt;26     26-40     41-50     51-75       &gt;75
+##   conservative 0.5789474 0.5254237 0.7777778 0.7200000 0.7391304
+##   labour       0.4210526 0.4745763 0.2222222 0.2800000 0.2608696
+## 
+## , , class = upper middle
+## 
+##               age
+## vote                 &lt;26     26-40     41-50     51-75       &gt;75
+##   conservative 0.6086957 0.6818182 0.8000000 0.7571429 1.0000000
+##   labour       0.3913043 0.3181818 0.2000000 0.2428571 0.0000000
+## 
+## , , class = working
+## 
+##               age
+## vote                 &lt;26     26-40     41-50     51-75       &gt;75
+##   conservative 0.3232323 0.3383085 0.2961165 0.4306931 0.5681818
+##   labour       0.6767677 0.6616915 0.7038835 0.5693069 0.4318182</code></pre>
+<p>This is making each <code>class</code>-<code>age</code> combination add up to
+1, so that we can clearly see what fraction of voters voted for each
+party in each case.
+In the first two subtables, the two youngest
+subgroups are clearly different from the others, with a smaller
+proportion of people voting Conservative rather than Labour than for
+the older subgroups. If that same pattern persisted for the third
+subtable, with the two youngest age groups being different from the
+three older ones, then we would have an age by vote interaction rather
+than the age by class by vote interaction that we actually have. So
+the third <code>class</code> group should be different. It is: it seems
+that the first <em>three</em> age groups are different from the other
+two, with ages 41–50 being more inclined to vote Labour, like the
+younger groups. That’s where the interaction came from.</p>
+<p>The Labour Party in the UK is like the NDP here, in that it has strong
+ties with “working people”, trades unions in particular. The
+Conservatives are like the Conservatives here (indeed, the nickname
+“Tories” comes from the UK; the Conservatives there were officially
+known as the Tories many years ago). Many people are lifelong voters
+for their party, and would never think of voting for the ``other
+side’‘, in the same way that many Americans vote either Democrat or
+Republican without thinking about it too much. Our parliamentary
+system comes from the UK system (vote for a candidate in a riding, the
+leader of the party with the most elected candidates becomes Prime
+Minister), and a “landslide” victory often comes from persuading
+enough of the voters open to persuasion to switch sides. In the UK, as
+here, the parties’ share of the popular vote doesn’t change all that
+much from election to election, even though the number of seats in
+Parliament might change quite a lot.</p>
+
+</div>
+<p style="text-align: center;">
+<a href="principal-components-and-factor-analysis.html"><button class="btn btn-default">Previous</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

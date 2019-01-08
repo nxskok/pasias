@@ -1,0 +1,548 @@
+
+
+ The file
+[link](http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt) contains
+the road distances (in miles) between 12 cities in Wisconsin and
+neighbouring states. We are going to try to reproduce a map of the
+area using multidimensional scaling.
+
+
+(a) Read in the data and create a `dist` object,
+bearing in mind that the data in the file are already
+distances. Display your `dist` object. Probably, displaying
+the data that you read in is a good idea also.
+ 
+Solution
+
+
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt"
+wisc=read_table(my_url)
+wisc
+```
+
+       
+
+The first time I did this, I had a blank line on the end of the data
+file, so I had a blank `location` and missing values for all
+the distances for it. I tidied that up before sharing the file with
+you, though.
+
+So, the first column is the names of the places, which we should get
+rid of before we make a `dist` object using `as.dist`
+(since what we read in is already distances). The columns are also the
+names  of the places, so we won't lose anything by getting rid of the
+`location` column:
+
+```{r }
+d = wisc %>% select(-location) %>%
+as.dist()
+d
+```
+
+ 
+ 
+
+(b) Obtain a vector containing the city names. (This is easy,
+and not really necessary, but it was here before when I did things
+a different way.)
+ 
+Solution
+
+
+The `location` column of the data frame you read in
+from the file:
+```{r }
+cities=wisc$location
+cities
+```
+$ %$ %$ 
+ 
+
+(c) Run a (metric) multidimensional scaling on the data, to
+obtain a two-dimensional representation of the cities. (You
+don't need to look at the results yet.)
+ 
+Solution
+
+
+```{r }
+wisc.1=cmdscale(d)
+```
+
+       
+ 
+
+(d) Plot the results of the multidimensional scaling,
+labelling the cities with their names. Use your judgement to
+decide where to place the city names, and how to  make sure the
+whole city names are shown on the map.
+ 
+Solution
+
+
+Let's see what `wisc.1` has in it, and make a data
+frame of the right thing:
+```{r }
+head(wisc.1)
+```
+
+         
+Two unnamed columns (the display indicates that it's a `matrix`
+rather than a data frame). As we saw in class, if we make a data frame
+out of this, the columns will get names `X1` and
+`X2`. Those are perfectly good names for coordinates. The city
+names on the left of `wisc.1` are actually row names rather
+than an actual genuine column. It's probably best *not* to assume
+that they will make it through the transition to a data frame, so
+we'll explicitly create a column called `city` with the city
+names (that we saved before):
+
+```{r }
+dd=data.frame(wisc.1,city=cities)
+dd
+```
+
+ 
+
+There are only 12 rows, so it's fine to display them all.
+
+I'm calling this one `dd` since I have another `d`
+elsewhere that I want to keep. I should use better names.
+
+I think the best use of your judgement is to go straight to
+`geom_text_repel` from package `ggrepel`:
+
+```{r }
+ggplot(dd,aes(x=X1,y=X2,label=city))+
+geom_point()+
+geom_text_repel()+
+coord_fixed()
+```
+
+ 
+
+Your map may come out different from mine, but subject to the usual
+stuff about rotation and reflection it should be equivalent to
+mine. You should include the `coord_fixed` to get the scales
+the same (a corresponding distance on the two scales should take the
+same space). This one didn't come out quite square because the MDS
+says the points should be in a rectangle (stretching further one way
+than the other). 
+ 
+
+(e) Are cities close together on your map also close together
+in real life? Give an example or two.
+ 
+Solution
+
+
+On the map, the trio of cities Madison, Beloit and Fort Atkinson
+are closest together. How far apart are they actually? Well, you
+can go back to the original file (or display of what I called
+`d`) and find them, or you can do this:
+```{r }
+cities
+```
+
+     
+
+Cities 2, 3 and 4, so:
+
+```{r }
+wisc %>% slice(2:4) %>% select(c(1,3:5))
+```
+
+ 
+
+The column numbers are off by one, since the first column is the names
+of the cities, which I decided to display here. It came out right, anyway.
+
+These are all less than 50 miles or less apart. There are some others
+this close in the original data: Monroe and Madison are 47 miles
+apart, Wausau and Marshfield are 45 miles apart, but these appear
+further apart on the map.
+Extra: the slice-select thing doesn't work on `d` because that is not
+a data frame. It is actually stored internally as a
+*one*-dimensional vector that displays nicely, but if you want to
+pull things out of it you have to figure out where in the vector they are:
+
+```{r }
+print.default(d)
+```
+
+ 
+
+If you compare that with the usual display of `d`, this way
+goes all the way down the first column ending at 130, then all the way
+down the second column (which has one fewer entry), ending at 467, and
+so on. Thus the three entries we picked out are at $11+1=12$,
+$11+2=13$, and $11+10+1=22$:
+
+```{r }
+d[12]
+d[13]
+d[22]
+```
+
+ 
+
+It's very easy to be off by one in this sort of calculation. There are
+12 cities altogether, so *11* distances in the first column, 10
+in the second, and so on. This was about my third attempt.
+
+I don't much care which cities you look at. Finding some cities that
+are reasonably close on the map and doing some kind of critical
+ assessment of their actual distances apart is all I want. 
+ 
+
+
+(f) Obtain a Google (or other) map of the area containing these
+twelve cities. (The way I expected you to do this when this was a
+hand-in problem was to take a screenshot or similar and include that
+in your document.)
+
+ 
+Solution
+
+
+Since I like to show off, let me show you how you can do this in R,
+using the package `ggmap`. (Of course, you can just open the
+appropriate map in your browser and copy-paste it, taking a
+screenshot if necessary):
+```{r laskhsal,cache=TRUE,fig.width=6,fig.height=6, eval=F}
+library(ggmap)
+wisc.map=get_map(location="Milwaukee, WI",zoom=6)
+ggmap(wisc.map)
+```
+
+   
+
+I centred this map around Milwaukee (a guess), which is not quite
+where the centre should be, since Milwaukee is in southeastern
+Wisconsin. The `zoom` option is how zoomed-in the map should be
+(a higher number is more zoomed-in). Likewise, 6 was a guess, and it
+seems that I need to zoom in a bit more.
+
+The other way of specifying a location, instead of the name or
+lat-long of the centre of the map, is to specify the **corners**
+of the map in degrees of latitude or longitude. We have to give four
+numbers: lower left longitude and latitude, upper right longitude and
+latitude. (Degrees west are *negative*, as you see on the
+`lon` scale of the above map.) This comes out as west, south,
+east and north limits of the map.
+Where are the 12 points we want to put on the map? We can get their
+latitudes and longitudes, which is called "geocoding", and a
+function `geocode` is included in `ggmap`.
+
+First add the state names to the cities, to make sure Google Maps
+looks up the right ones. All of them are in Wisconsin, except for the
+last three: Dubuque is in Iowa, St.\ Paul is in Minnesota and Chicago
+is in Illinois. I am first making a vector with 12 copies of the
+abbreviation for Wisconsin, and then overwriting the last three with
+the states they are actually in:
+
+```{r }
+states=rep("WI",12)
+states[10]="IA"
+states[11]="MN" 
+states[12]="IL"
+cst=str_c(cities," ",states)
+cst
+```
+
+ 
+
+And then I look them up. I don't want Google to tell me that I have
+done too many lookups, so I look them up first and save the results,
+like this:\endnote{I actually had to do some further processing, not
+shown, because Google would fail to look up some of the places on
+one run, and then fail to look up *different* ones the next
+time I tried. So I saved two runs that together looked up all the
+places at least once, and then made a pipeline to put these together
+into one complete data frame.}
+```{r eval=F} 
+g = tibble(cst) %>% 
+ggmap::mutate_geocode(cst)
+saveRDS(g,"gg.rds")
+```
+
+ 
+Then I skip that on future runs, and get the values from the file:
+
+```{r }
+g=readRDS("gg.rds")
+g
+```
+
+ 
+
+`saveRDS` and `readRDS` are a mechanism for saving any R
+objects in files so that you can share them between sessions. There is
+a school of thought that says that when you have an R script or
+notebook, you don't save anything at the end, but instead have the
+script read in or re-create everything it needs. This should mean that
+anyone else can run the script and reproduce your results, without any
+reliance on other things that you might have lying around. A good
+mechanism to avoid recreating things that take a long time to get,
+like geocoding locations, is to do it once, save it using
+`saveRDS`, and then forever after read it in from the file.  
+
+What are the extreme corners of these?
+
+```{r }
+range(g$lon)
+range(g$lat)
+```
+
+ 
+
+or even
+
+```{r }
+g %>% select(lat,lon) %>%
+map_df(range)
+```
+
+ 
+
+(`range` in R produces the two extreme values, not the
+difference between the highest and lowest, which is what you might
+think of as a "range".)
+
+We don't
+get exactly the corners we ask for, since the map always comes out in the same
+proportions (we could ask for a long skinny map, but we'll always get
+a rectangular one that fills the page), and also Google Maps converts
+the corners into a centre and zoom. I had to tinker with the numbers
+below, since on my first attempt the map zoomed in too much.
+I also asked for a "roadmap" to maximize the number of places marked
+on there.
+
+So:
+
+```{r lhsdljhadkfj,fig.width=6,fig.height=6,cache=T,message=F, eval=F}
+library(ggmap)
+wisc.map.2=get_map(location=c(-94,41.8,-87,46.8),maptype="roadmap")
+ggmap(wisc.map.2)
+```
+
+ 
+
+This came out about right. 
+
+Now we need to mark our 12 cities on the map. This is a
+`ggplot` map, so the right syntax is as below.
+
+```{r sldkhdlf,echo=-1,message=F, eval=F}
+library(ggmap)
+ggmap(wisc.map.2)+geom_point(aes(x=lon,y=lat),data=g)
+```
+
+ 
+
+There's a slight weirdness in that `ggmap` only takes a map,
+not a data frame or an `aes`, so those go in
+`geom_point` or whatever you're using.
+
+We *just* squeezed all our cities onto the map. The city
+southwest of Wausau is Marshfield, the one between Madison and
+Milwaukee is Fort Atkinson, and the two east of Dubuque along the
+southern border of Wisconsin are Monroe and Beloit. The one *way*
+up at the top is Superior.
+
+After that long diversion, we come to:
+
+ 
+
+
+(g) Discuss how the map that came out of the multidimensional
+scaling corresponds to the actual (Google) map.
+
+ 
+Solution
+
+
+Let's pick a few places from the actual map, and make a table of
+where they are on the actual map and the `cmdscale` map:
+
+\begin{tabular}{lll}
+\hline
+ Place     &  Real           &  Cmdscale       \\
+ \hline
+ Superior  &  northwest      &  central east   \\
+ St. Paul  &  central west   &  southeast      \\
+ Dubuque   &  central south  &  central south  \\
+ Chicago   &  southeast      &  central west   \\
+ Appleton  &  central east   &  central north  \\
+ \hline
+\end{tabular}
+
+
+This is a bit tricky. Dubuque is the only one in the right place, and
+the others that were west have become east and vice versa. So I think
+there is a flipping across a line going through Dubuque. That seems to
+be the most important thing; if you imagine the other points being
+flipped across a line going north-south through Dubuque, they all end
+up in about the right place. There might be a little rotation as well,
+but I'll call that close enough.
+
+(For you, any comment along the lines of "flipped around this line"
+or "rotated about this much" that seems to describe what has happened, is
+fine.)
+ This one calls for a Procrustes rotation, which I can do since I have
+ longitudes and latitudes for my 12 cities. It goes like the one
+ in class. Let's start with `ll`:
+ 
+ 
+ <<>>=
+ ll
+ @ 
+ 
+ We have to begin by making these into true coordinates by multiplying
+ the longitudes by the cosine of the mean latitude:
+ 
+ <<>>=
+ meanlat=mean(ll$lat)
+ mult=cos(meanlat*pi/180)
+ truecoord=with(ll,data.frame(x=lon*mult,y=lat))
+ truecoord
+ @ 
+ 
+ %$ %$ %$
+ 
+ `procOPA` needs matrices rather than data frames.
+ `wisc.1` contained the coordinates for our
+ two-dimensional solution:
+ 
+ <<>>=
+ wisc.pro=procOPA(as.matrix(truecoord),wisc.1,reflect=T)
+ @ 
+ 
+ I discuss `reflect=T` below.
+ 
+ %$ %$ %$ %$
+ 
+ Now, we need to plot these. I'm following the procedure from class, to
+ cut down on the amount of my thinking required.
+ 
+ <<>>=
+ A=with(wisc.pro,data.frame(x=Ahat[,1],y=Ahat[,2],which="actual",city=cities))
+ B=with(wisc.pro,data.frame(x=Bhat[,1],y=Bhat[,2],which="MDS",city=cities))
+ dp=bind_rows(A,B)
+ @ 
+ 
+ The warning is that `which`, which it's trying to treat as a
+ factor, has different "levels": all the rows of `A` say
+ `actual` and all the rows of `B` say `MDS`.  But
+ it does the right thing (despite the warning).
+ 
+ Here's what we have so far:
+ 
+ <<>>=
+ dp
+ @ 
+ 
+ Now we plot these: the points, joining the two points for the same
+ city by a line (coloured dark green), colouring the points and city
+ names by whether they came from the actual coordinates or the scaling,
+ labelling the points with small text, and using the same scaling on
+ both axes:
+ 
+ <<>>=
+ ggplot(dp,aes(x=x,y=y,colour=which,label=city))+
+   geom_point()+
+   geom_line(aes(group=city),colour="darkgreen")+
+   geom_text_repel(size=2)+
+   coord_fixed()
+ @ 
+ 
+ The lines joining the two sets of coordinates for each city are dark
+ green this time, just because. But mostly you don't see them because
+ they are very short. It's really only in the top left corner that you
+ see coordinates that differ to any significant degree.
+ 
+ This is pretty good.
+ What does it think is the right transformation to get
+ from MDS coordinates to real ones?
+ 
+ <<>>=
+ wisc.pro$R
+ @ 
+ 
+ %$
+ 
+ This time, the diagonal elements differ in sign (indicating that a
+ reflection was performed to make the points line up). Indeed, I
+ allowed `procOPA` to use a reflection if it needed to by means
+ of `reflect=T` above.
+ 
+ According to Wikipedia
+ ([link](http://en.wikipedia.org/wiki/Coordinate_rotations_and_reflections)),
+ our `R` corresponds to a reflection about a line making angle
+ $\theta$ with the $x$-axis, where $\cos 2\theta=-0.5944$ and $\sin
+ 2\theta=0.8041$. This means that $2\theta=126$ degrees, or
+ $\theta=63$ degrees. That is to say, we draw a line that makes an
+ angle of this much with the $x$-axis of our `cmdscale` map, and
+ then reflect the cities in that. For example, a line through Dubuque
+ and Marshfield on the `cmdscale` map makes about the right
+ angle, and then reflect all the cities in that. 
+ 
+
+
+(h) Calculate something that demonstrates that a one-dimensional
+map of the cities is a much worse representation than the
+two-dimensional one that we made before. (I'm planning to get to this
+in class, but if we skip it, don't worry about this part.)
+
+ 
+Solution
+
+
+Run again with `eig=T` and take a look at `GOF` (uppercase):
+```{r }
+cmdscale(d,2,eig=T)$GOF
+cmdscale(d,1,eig=T)$GOF
+```
+
+   
+
+The goodness-of-fit of the two-dimensional solution is pretty
+good,\endnote{As it ought to be, since there is a "real answer"
+here: the cities *do* exist as locations in two dimensions, if
+you ignore the curvature of the earth. The goodness of fit isn't
+100\% because the roads bend a bit.}
+but that of the one-dimensional solution (which arranges all the
+cities along a line) is pretty awful in comparison.
+
+How awful? Let's find out. I should have saved it from just above, but
+now I have to do it again. For the plot, `ones` is a string of
+ones, as many as there are cities.
+
+```{r kashklsahl0}
+ones=rep(1,12)
+v=cmdscale(d,1,eig=T)
+ddd = as_tibble(v$points) %>%
+mutate(one=ones, city=cities)
+ddd
+```
+
+ 
+
+(the one-column matrix of points didn't have a name, so it acquired
+the name `V1`), and the plot:
+
+```{r }
+ggplot(ddd,aes(x=one,y=V1,label=city))+
+geom_point()+geom_text_repel()
+```
+
+ 
+
+The cities get mapped onto a line that goes northwest (top) to
+southeast (bottom). This is not completely terrible, since there
+aren't really any cities in the northeast of the state, but it *is*
+pretty awful.
+ 
+
+

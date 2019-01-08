@@ -14,7 +14,9 @@ rmds: carp.Rmd socwork.Rmd pinetrees.Rmd jays-dplyr.Rmd tomatoes.Rmd migraine.Rm
     hayfever.Rmd acidrain.Rmd caffeine.Rmd ratweight.Rmd geriatrics.Rmd airport.Rmd bodyfat2.Rmd king.Rmd rm.Rmd\
     manova1.Rmd urine.Rmd athletes-manova.Rmd swiss-money.Rmd urine2.Rmd manova1a.Rmd jobs.Rmd adhd.Rmd\
     cornseed.Rmd athletes-d.Rmd fruits.Rmd species.Rmd beer.Rmd seabed.Rmd\
-    swiss-cluster.Rmd carc.Rmd decathlon.Rmd pittsburgh.Rmd
+    swiss-cluster.Rmd carc.Rmd decathlon.Rmd pittsburgh.Rmd college-plans.Rmd\
+    vote.Rmd airpollution.Rmd weather_2014.Rmd corrmat.Rmd ipip.Rmd\
+    wisconsin.Rmd stimuli.Rmd letterrec.Rmd beermds.Rmd stimuli2.Rmd ais-km.Rmd
 %.Rmd: ~/teaching/d29/exams/%.Rnw convert.pl
 	perl convert.pl $< > $@
 all: index.Rmd
@@ -39,4 +41,10 @@ ch21: index.Rmd
 	Rscript -e "bookdown::preview_chapter('21-discriminant-analysis.Rmd')"
 ch22: index.Rmd
 	Rscript -e "bookdown::preview_chapter('22-thingy.Rmd')"
+ch23: index.Rmd
+	Rscript -e "bookdown::preview_chapter('23-mds.Rmd')"
+ch24: index.Rmd
+	Rscript -e "bookdown::preview_chapter('24-pcfa.Rmd')"
+ch25: index.Rmd
+	Rscript -e "bookdown::preview_chapter('25-loglin.Rmd')"
 

@@ -94,7 +94,6 @@ for which C32 and D29 are two of the last courses.
 
 My checklist:
 
-- bring in the D29 questions
-- working on A8 D29
-- look for multiple regression Qs in A6 or wherever
-- *** puts a vertical line across. Put that above and below each question part, somehow.
+- I think I have all the D29 questions I want. Now to edit them!
+- look for multiple regression Qs in C32 A6 or wherever
+- *** puts a vertical line across in Markdown. Put that above and below each question part, somehow. (Programmatically?)

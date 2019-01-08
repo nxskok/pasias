@@ -1,0 +1,465 @@
+
+
+ Which objects feel similar to one another and which ones
+feel different? Can we draw them on a "map"? 30
+subjects\endnote{Probably students in a psychology course. You know
+how it goes.} were each
+given 17 different objects to feel, for example ``inner surface of
+pine  bark'', "rubber eraser" and "nylon scouring pad". The
+subjects had to group the objects into a maximum of 8 groups such that
+the objects within a group felt similar, and the ones in different
+groups felt different.\endnote{The maximum number of groups was to
+ensure that each subject actually *did* group some objects
+together, rather than saying "they all feel different".} A
+dissimilarity matrix was formed by counting how many subjects put each
+pair of objects into *different* groups, so that the
+dissimilarity ranged from 0 (the objects were always put together in
+the same group) to 30 (the objects were not put together into the same
+group by any of the subjects). 
+
+The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt). 
+
+
+
+(a) Look at the data, and read in the file appropriately. Do you
+have something square in shape, apart from any columns of object
+names?  Do your columns have the same names as the objects?
+
+
+Solution
+
+
+Looking at the file first, there are *no column names*. So we
+have to tell `read_delim` that:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt"
+stimuli=read_delim(my_url," ",col_names=F)
+stimuli
+```
+
+     
+
+I have 17 rows and 18 columns, but one of the columns is the column of
+object names. So I really do have the same number of rows and columns
+of dissimilarities: that is, it *is* square in shape apart from
+the names.
+
+The columns *do not* have the same names as the
+objects; R has used the `X1, X2, ...` names that it uses when
+you do not have column headers.
+
+I could have supplied the object names to `col_names`, but
+that is a lot more work than what we do below.
+    
+
+
+(b) Obtain the names of the objects. Note that they are rather
+long. 
+
+
+Solution
+
+
+The object names are in the first column, `X1`, of the data frame:
+```{r }
+objects=stimuli$X1
+objects
+```
+
+     
+
+I'm saving these for later.
+    
+
+
+(c) Set the column names of your data frame to be your object
+names, using `names`. Before you rush to do that, figure out
+how many column names you need, and supply values for any extra
+ones. Check that your data frame now has the right column names.
+
+
+Solution
+
+
+I have 18 columns to name (including the column of object names),
+but only 17 names, so I need to supply an extra one:
+```{r }
+names(stimuli)=c("object",objects)
+stimuli
+```
+
+     
+    
+
+
+(d) <a name="part:distances">*</a>  
+Convert your data frame into a distance object. Take a look at the
+(rather long) result.
+
+
+Solution
+
+
+This is `as.dist`, since we have distances
+(dissimilarities) already. Don't forget to take off the first column!
+```{r }
+d = stimuli %>% select(-1) %>% as.dist()
+```
+
+     
+
+I can try and show it all here, tiny, but even then it's long because
+the column names are long:
+
+```{r size="tiny"}
+w=getOption("width")
+options(width=132)
+d
+options(width=w)
+```
+
+ 
+
+The stuff with `width` was to make it display lots of columns,
+and then setting it back afterwards so as not to mess things up later.
+If
+you try and take `head` of this, you'll lose the structure. I
+don't know of a good way to display part of one of these.
+    
+
+
+(e) Obtain and plot a  (metric) multidimensional scaling map of
+these data.  Label the points with the name of the
+object they represent. (Note that
+`geom_text_repel` has an option `size` that controls
+the size of the text.)
+
+
+Solution
+
+
+This is the procedure. Talking about it is coming in a minute.
+```{r }
+d.1=cmdscale(d,2)
+data.frame(d.1,stim=objects) %>%
+ggplot(aes(x=X1,y=X2,label=stim))+geom_point()+
+geom_text_repel(size=2)
+```
+
+     
+
+`cmdscale` gets the coordinates to plot, then we plot them, and
+then we place the object names next to the points. I'm not
+quite sure what the scale is for `size`, but `size=2`
+worked for me here, making the text a bit smaller (so that the labels
+don't overlap), but not so small that you can't read it. You'll
+probably have to experiment to find a `size` that you like.
+
+If you forget the `2` after the distance matrix in
+`cmdscale`, you'll get a two-dimensional solution anyway (since
+two dimensions is the default). The output is an array of coordinates
+in two dimensions:
+
+```{r }
+d.1
+```
+
+ 
+I note that any map that is the same as this apart from rotation and
+reflection is also fine (since the distances will be the same). I saw
+a lot of maps that were like mine but upside down (with `cork`
+at the top).
+`r tufte::margin_note("I lie. Last year, emph{I")` got cork at the top,
+and a lot of other people got cork at the bottom as you see here.} No problem there.
+    
+
+
+(f) Find a pair of objects that are close together on your
+plot. Look back at your answer to part~(<a href="#part:distances">here</a>): is
+the distance between those objects small? Explain briefly.
+
+
+Solution
+
+
+I don't mind (much) which objects you pick (as long as they are
+reasonably close together). Find the actual distance between them
+from what I called `d` in part~(<a href="#part:distances">here</a>). Some
+possibilities:
+
+
+* Felt and velvet, Distance 4.
+
+* Block of styrofoam and rubber eraser. Distance 19 (not that
+small, but one of the smaller ones).
+
+* Rigid plastic sheet and
+wax paper. Distance 12. Smallish.
+
+* unglazed ceramic
+tile\endnote{The first association that "unglazed" made for me
+was "donut"!} and very fine sandpaper. Distance 12. Smallish.
+
+There won't be a perfect relationship between distance in the
+distance matrix and on the map. In this case, there is an upper
+limit on distance (30, because 30 people rated the objects for
+similarity) and that upper limit is approached by many of the
+distances. (This suggests that non-metric multidimensional
+scaling, that just reproduces the order of the distances, might be
+a better idea for these data.) If objects A and B, and also B and
+C, are each close to 30 apart, then objects A and C will also be
+close to 30 apart, and that constrains them to be nearly in a
+triangle on the map. 
+There are some 10s in the distance matrix,
+for example between block of styrofoam and cork, and also
+between unglazed ceramic tile and brick; these are a bit
+further apart on the map, but still close.
+    
+
+
+(g) Obtain a measure of goodness of fit for this
+multidimensional scaling map.
+
+
+Solution
+
+
+This means fitting again, but this time with `eig=T`, and
+pulling out the thing called `GOF`. You can omit the 2,
+since that's the default 2 dimensions:
+```{r }
+d.2=cmdscale(d,2,eig=T)
+d.2$GOF
+```
+$
+
+I didn't ask you to comment on this, but the adjective that came to my
+mind was "disappointing". I think that's to do with the
+upper-limit-30 thing again. Also, this time (unlike with Wisconsin)
+there was no "right answer", so maybe it just isn't going to be very
+good. If you looked at several pairs of points above, you might have
+noticed that the correspondence between map distance and actual
+distance isn't very good; this is the same issue.
+
+I was curious about whether 3 dimensions would be any better:
+
+```{r }
+d.2a=cmdscale(d,3,eig=T)
+d.2a$GOF
+```
+$
+
+That is quite a bit better. The problem with this, though, is that we
+need something like `rgl` to explore it with.
+
+
+
+(h) Obtain a cluster analysis for the same data, using Ward's
+method. Obtain a dendrogram. What seems to be an appropriate number
+of clusters?  Mark them on your dendrogram too.
+
+
+Solution
+
+
+This seems to be a throwback to last week, but I have my reasons,
+which you'll see in a moment:
+```{r }
+d.3=hclust(d,method="ward.D")
+plot(d.3)
+```
+
+     
+
+That looks like 5 clusters to me (chopping the tree at a height of
+30). Drawing them:
+
+```{r }
+plot(d.3)
+rect.hclust(d.3,5)
+```
+
+ 
+    
+
+
+(i) Discuss as briefly as seems reasonable whether your
+clusters tell the same story as the map that came from
+multidimensional scaling. (There were only three marks for this, so you
+don't need to go overboard.) Optionally, think about creating a plot
+that will make it easier to see the correspondence between your
+clusters and the MDS map.
+
+
+Solution
+
+
+I would take my clusters and think about whether the objects in
+them are (a) close together on the map and (b) distinct from other
+objects on the map. Working from left to right of my dendrogram:
+
+
+* Together at the bottom of the plot.
+
+* Together at the top left.
+
+* Together at the top left, but rather mixed up with the
+previous cluster (in particular, `nylonscouringpad` looks as if it
+belongs in the previous cluster).
+
+* Together at the top of the plot.
+
+* Together at the top right.
+
+If you had a different number of clusters, work with what you
+have, and if you have done that, you'll be good. My general
+conclusion from the above is that my five clusters are mostly
+distinct from each other, but the MDS map really only has
+four. (If you look at the dendrogram, the two clusters that are
+not really distinct from each other were the last ones to be split.)
+This is a lot more detail than you need. What I want to see is
+some kind of association of clusters with (hopefully) nearby
+points on the map, some kind of discussion of whether the clusters
+are really distinct groupings on the map, and a sense of whether
+you feel the clusters are consistent with what appears on the map.
+Extra: this is where I have to say I cheated. I thought this would be
+hard to do by trying to match  those names in the clusters
+with the ones on the MDS map. So I put myself through some
+short-term R coding pain for some substantial long-term gain.
+I was thinking, ``can I extract the clusters from this
+analysis, and plot them on the MDS map in different colours?'' That
+would go like this:
+```{r }
+clusters=cutree(d.3,5)
+data.frame(d.1,names=stimuli[,1],cluster=factor(clusters)) %>%
+ggplot(aes(x=X1,y=X2,label=objects,colour=cluster))+
+geom_point()+
+geom_text_repel(size=2)
+```
+
+     
+
+The first line obtains the clusters as numbers, which I then had to
+turn into a factor (to make the plot different colours). 
+I copied the rest from
+above, and then I added to them, colouring the points according to
+what cluster they belonged to. Three of my "rough" objects have
+broken off into a cluster of their own; they are, kind of, in their
+own little area on the map.
+
+Another, non-graphical, way of doing this is to list the MDS coordinates
+along with the clusters, probably sorted by cluster:
+
+```{r }
+data.frame(d.1,object=stimuli[,1],clusters) %>% arrange(clusters)
+```
+
+ 
+
+Then you can think about what makes the clusters different in terms of
+`X1` and `X2`. For me, clusters 1 and 2 are kind of
+mixed up, with `X1` and (usually) `X2` negative; cluster
+3 has strongly positive `X2`; cluster 4 has very
+*negative* `X2`;\endnote{Oxford semicolon, for the grammar
+mavens among you.} and cluster 5 has strongly positive `X1`.
+
+I wonder whether our three-dimensional solution distinguishes clusters
+1 and 2 at all? Same approach again:
+
+```{r }
+save.3d = data.frame(d.2a$points,objects,clusters) %>% 
+arrange(clusters) 
+save.3d  
+```
+$
+
+It looks as if the combo of negative `X1` and positive
+`X3` distinguishes cluster 2 from cluster 1.
+
+As I was writing this, I was thinking that we should throw the
+coordinates and the `clusters` into a
+*discriminant analysis*, to find out what distinguishes the
+clusters. Which is way too weird, and therefore deserves to be
+explored (with the three-dimensional solution, for example):
+
+```{r }
+library(MASS)
+save.3d.lda=lda(clusters~X1+X2+X3,data=save.3d)
+ppp=predict(save.3d.lda)
+```
+
+ 
+
+I snuck a look at the output and
+found that `LD3` is basically worthless, so I can plot
+`LD1` against `LD2`, coloured by cluster:
+
+```{r }
+data.frame(ppp$x,cluster=factor(save.3d$clusters)) %>%
+ggplot(aes(x=LD1,y=LD2,colour=cluster))+
+geom_point()
+```
+$
+
+This says that the three-dimensional MDS *has* separated clusters
+1 and 2, and if we were to plot `d.2a` in `rgl` and
+rotate it the right way, we *would* be able to see a difference
+between those two clusters as well. (They wouldn't look mixed up as
+they do on the two-dimensional map.)
+
+So we can look at the three-dimensional map coordinates and the
+discriminant analysis and ask ``what distinguishes the
+clusters?''. Map coordinates first. I need `points` since I ran
+the scaling with `eig=T`:
+
+```{r }
+save.3d
+```
+
+ 
+
+and the business end of the LDA output:
+
+```{r }
+save.3d.lda$svd
+save.3d.lda$scaling
+```
+
+ 
+
+The plot said that cluster 2 was lowest of all on `LD1`, a  bit
+lower than cluster 1. What would make `LD1` small (negative)
+would be if `X1` was small and `X2` and `X3` were
+large. The cluster 2 observations are the smallest on `X1`
+(smaller than cluster 1) and larger on `X3` than cluster 1. So
+we *can* enumerate what makes clusters 1 and 2 different. The
+plot of the first two `LD`s says, in fact, that under the
+3-dimensional multidimensional scaling, all five groups are distinct.
+
+A biplot would be another way to look at that:
+
+```{r }
+ggbiplot(save.3d.lda,groups=factor(save.3d$clusters))
+```
+$ %$ %$
+
+Points on the right have `X1` and `X2` large, and
+`X3` small (cluster 4, and to a lesser extent, cluster
+5). Points on the left are the other way around. None of the arrows
+point up or down really, but `X1` points up a bit and
+`X2` down a bit, so points at the top of the plot are likely to
+be high on `X1` and low on `X2`, like cluster 5.
+
+Was that all confusing enough for you?
+
+Anyway, the key to gaining some insight here is to find a way to
+*combine* the 
+output from the cluster analysis and the multidimensional
+scaling. That way you can see both in the same place, and see how they
+compare. 
+    
+
+
+
+

@@ -1,0 +1,308 @@
+
+
+ 1257 British voters were classified according
+to their social class, age (categorized), sex and the political party
+they voted for (Labour or Conservative). Which, if any, of these
+factors influences the party that someone votes for? The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/voting.txt), one voter
+per line.
+
+
+
+(a) Read in the data and display (some of) the data frame.
+
+Solution
+
+
+Space-delimited:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/voting.txt"
+vote0=read_delim(my_url," ")
+vote0
+```
+
+     
+
+I gave it a "disposable" name, since we make the "real" data set
+shortly. 
+
+
+(b) There is no frequency column here, because each row of the
+data frame only represents one voter. Count up the frequencies for
+each combo of the categorical variables, and save it (this is the
+data frame that we will use for the analysis).
+Display the first few rows of the result. Do you now
+have something that you need?
+
+Solution
+
+
+I changed my mind about how to do this from last year. Using
+`count` is alarmingly more direct than the method I had before:
+```{r }
+votes = vote0 %>% count(class,age,sex,vote)
+votes
+```
+
+     
+
+Exactly the right thing now: note the new column `n` with
+frequencies in it. (Without a column of frequencies we can't fit a
+log-linear model.) There are now only 58 combinations of the four
+categorical variables, as opposed to 1247 rows in the original data
+set (with, inevitably, a lot of repeats).
+
+
+(c) Fit a log-linear model with the appropriate interaction (as a
+starting point).
+
+Solution
+
+
+```{r }
+vote.1=glm(n~class*age*sex*vote,data=votes,family="poisson")
+```
+
+     
+
+
+(d) Refine your model by taking out suitable non-significant
+terms, in multiple steps. What model do you finish with?
+
+Solution
+
+
+Alternating `drop1` and `update` until everything
+remaining is significant:
+```{r }
+drop1(vote.1,test="Chisq")
+```
+
+     
+
+Not anywhere near significant, so out it comes:
+
+```{r }
+vote.2=update(vote.1,.~.-class:age:sex:vote)
+drop1(vote.2,test="Chisq")
+```
+
+ 
+
+Take out the first one, since it has the highest P-value:
+
+```{r }
+vote.3=update(vote.2,.~.-class:age:sex)
+drop1(vote.3,test="Chisq")
+```
+
+ 
+
+`class:sex:vote`:
+
+```{r }
+vote.4=update(vote.3,.~.-class:sex:vote)
+drop1(vote.4,test="Chisq")
+```
+
+ 
+
+`class:sex`:
+
+```{r }
+vote.5=update(vote.4,.~.-class:sex)
+drop1(vote.5,test="Chisq")
+```
+
+ 
+
+I don't like having three-way interactions, so I'm going to yank
+`age:sex:vote` now, even though its P-value is smallish:
+
+```{r }
+vote.6=update(vote.5,.~.-age:sex:vote)
+drop1(vote.6,test="Chisq")
+```
+
+ 
+
+The age-sex interaction can go, but we must be near the end now:
+
+```{r }
+vote.7=update(vote.6,.~.-age:sex)
+drop1(vote.7,test="Chisq")
+```
+
+ 
+
+And that's it. The age and sex main effects are not included in the
+list of droppable things because
+both variables are part of higher-order interactions that are still in
+the model.
+
+If you want to, you can look at the `summary` of your final model:
+
+```{r echo=F}
+options(width=90)
+```
+
+ 
+
+```{r size="footnotesize"}
+summary(vote.7)
+```
+
+ 
+
+These tend to be rather unwieldy, and we'll see a better way of
+understanding the results below, but you can look for the very
+significant results, bearing in mind that the first category is the
+baseline, for example, more of the males in the survey voted Labour
+(than Conservative).
+
+
+(e) If we think of the party someone votes for as the final
+outcome (that depends on all the other things), what does our final
+model say that someone's vote depends on?
+
+Solution
+
+
+Find out which of the surviving terms are interactions with
+`vote`. Here, there are two things, that `vote`
+depends on separately:
+
+
+* `sex`
+
+* The `age`-`class` interaction.
+
+
+
+(f) Obtain sub-tables that explain how `vote` depends on
+any of the things it's related to.
+
+Solution
+
+
+This is `xtabs` again. The 3-way interaction is a bit
+tricky, so we'll do the simple one first:
+```{r }
+xt=xtabs(n~vote+sex,data=votes)
+xt
+```
+
+     
+
+The female voters slightly preferred to vote Conservative and the male
+voters slightly preferred to vote Labour. This is a small effect, but
+I guess the large number of voters made it big enough to be significant.
+
+I took it this way around because `vote` is the outcome, and
+therefore I want to address things like ``if a voter is female, how
+likely are they to vote Labour'', rather than conditioning the other
+way around (which would be ``if a voter voted Labour, how likely are
+they to be female'', which doesn't make nearly so much sense). 
+
+You
+can do a `prop.table` here if you like, summing over *columns*:
+
+```{r }
+prop.table(xt,2)
+```
+
+ 
+
+Since the numbers of males and females were about the same, this
+doesn't really tell us anything that the previous table didn't tell us.
+
+Then the tricky one:
+
+```{r }
+xt=xtabs(n~vote+age+class,data=votes)
+xt
+```
+
+ 
+
+Doing it this way has produced different subtables for each
+`class`. This is actually OK, because we can say ``if a voter
+was of lower middle class'' and then talk about the relationship
+between age and vote, as if we were looking at a simple effect:
+
+
+
+* If a voter was of lower-middle-class, they strongly favour voting
+Conservative in all age groups except for `<26` and 26--40.
+
+* If a voter was of upper-middle-class, they even more strongly favour
+voting Conservative in all age groups except for "under 26" and
+maybe 26--40.
+
+* If a voter was of Working class, they strongly favour voting
+Labour, except in the 
+"over 75" age group (and maybe 51--75 as well).
+
+
+If the anomalous age group(s) had been the same one every time, there
+would no longer have been an interaction between age and class in
+their effect on `vote`. But the anomalous age groups were
+different for each class ("different pattern"), and that explains
+why there was a `vote:age:class` interaction: `` the way
+someone votes depends on the *combination* of age and social
+class''. 
+
+For `prop.table` in three dimensions, as we have here, we have to be a little
+more careful about what to make add up to 1. For example, to make the
+social classes each add up to 1, which is the third dimension:
+
+```{r }
+prop.table(xt,3)
+```
+
+ 
+
+What happened here is that each of the three subtables adds up to 1,
+so that we have a "joint distribution" in each table. We can put
+*two* variables into `prop.table`, and see what happens then:
+
+```{r }
+prop.table(xt,c(2,3))
+```
+
+ 
+
+This is making each `class`-`age` combination add up to
+1, so that we can clearly see what fraction of voters voted for each
+party in each case.\endnote{The reason I thought of doing this is that
+these two are "all the variables except response".}
+In the first two subtables, the two youngest
+subgroups are clearly different from the others, with a smaller
+proportion of people voting Conservative rather than Labour than for
+the older subgroups. If that same pattern persisted for the third
+subtable, with the two youngest age groups being different from the
+three older ones, then we would have an age by vote interaction rather
+than the age by class by vote interaction that we actually have. So
+the third `class` group should be different. It is: it seems
+that the first *three* age groups are different from the other
+two, with ages 41--50 being more inclined to vote Labour, like the
+younger groups. That's where the interaction came from.
+
+The Labour Party in the UK is like the NDP here, in that it has strong
+ties with "working people", trades unions in particular. The
+Conservatives are like the Conservatives here (indeed, the nickname
+"Tories" comes from the UK; the Conservatives there were officially
+known as the Tories many years ago). Many people are lifelong voters
+for their party, and would never think of voting for the ``other
+side'', in the same way that many Americans vote either Democrat or
+Republican without thinking about it too much. Our parliamentary
+system comes from the UK system (vote for a candidate in a riding, the
+leader of the party with the most elected candidates becomes Prime
+Minister), and a "landslide" victory often comes from persuading
+enough of the voters open to persuasion to switch sides. In the UK, as
+here, the parties' share of the popular vote doesn't change all that
+much from election to election, even though the number of seats in
+Parliament might change quite a lot.
+
+
+

@@ -1,0 +1,547 @@
+
+
+ The data in
+[link](http://www.utsc.utoronto.ca/~butler/d29/airpollution.csv) are
+measurements of air-pollution variables recorded at 12 noon on 42
+different days at a location in Los Angeles. The file is in
+`.csv` format, since it came from a spreadsheet.  Specifically,
+the variables (in suitable units), in the same order as in the data
+file, are:
+
+
+
+* wind speed
+
+* solar radiation
+
+* carbon monoxide
+
+* Nitric oxide (also known as nitrogen monoxide)
+
+* Nitrogen dioxide
+
+* Ozone
+
+* Hydrocarbons
+
+
+The aim is to describe pollution using fewer than these seven variables.
+
+
+
+(a) Read in the data and demonstrate that you have the right
+number of rows and columns in your data frame.
+
+
+Solution
+
+
+This is a `.csv` file, so:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/airpollution.csv"
+air=read_csv(my_url)
+air
+```
+
+     
+
+There should  be 42 rows (for the 42 days), and 7 columns (for the 7
+variables), and there are. 
+    
+
+
+(b) <a name="part:fivenum">*</a> 
+Obtain a five-number summary for each variable. You can do this in
+one go for all seven variables.
+
+
+Solution
+
+
+Like this:
+```{r }
+map_df(air, quantile) 
+```
+
+     
+
+using `map` from `purrr`. I have to figure out how to
+identify which number from the five number summary each of these is,
+but in this case you can easily figure it out since the min is the
+smallest and the max has to be the biggest in each column.
+    
+
+
+(c) Obtain a principal components analysis. Do it on the
+correlation matrix, since the variables are measured on different
+scales. You don't need to look at the results yet.
+
+
+Solution
+
+
+This is all rather like the previous question:
+```{r }
+air.1=princomp(air, cor=T)
+```
+
+     
+    
+
+
+(d) Obtain a scree plot. How many principal components might be
+worth looking at? Explain briefly. (There might be more than one
+possibility. If so, discuss them all.)
+
+
+Solution
+
+
+`ggscreeplot` the thing you just obtained, having loaded
+package `ggbiplot`: 
+```{r }
+ggscreeplot(air.1)
+```
+
+     
+
+There is a technicality here, which is
+that `ggbiplot`, the package, loads `plyr`, which
+contains a lot of the same things as `dplyr` (the latter is a
+cut-down version of the former). If you load `dplyr` and
+*then* `plyr` (that is to say, if you load the
+`tidyverse` first and then `ggbiplot`), you will end up
+with trouble, and probably the wrong version of a lot of functions. To
+avoid this, load `ggbiplot` *first*, and then you'll be
+OK. 
+
+Now, finally, we might diverge from the last question. There are
+actually *two* elbows on this plot, at 2 and at 4, which means
+that we should entertain the idea of either 1 or 3 components. I would
+be inclined to say that the elbow at 2 is still "too high up" the
+mountain --- there is still some more mountain below it.
+
+The points at 3 and 6 components look like elbows too, but they are
+*pointing the wrong way*. What you are looking for when you
+search for elbows are points that are the end of the mountain and the
+start of the scree. The elbows at 2 (maybe) and 4 (definitely) are
+this kind of thing, but the elbows at 3 and at 6 are not.
+    
+
+
+(e) Look at the `summary` of the principal components
+object. What light does this shed on the choice of number of
+components? Explain briefly.
+
+
+Solution
+
+
+```{r }
+summary(air.1)
+```
+
+     
+
+The first component only explains 33\% of the variability, not very
+much, but the first *three* components together explain 70\%,
+which is much more satisfactory. So I would go with 3 components.
+
+There are two things here: finding an elbow, *and* explaining a
+sensible fraction of the variability. You could explain more of the
+variability by taking more components, but if you are not careful you
+end up explaining seven variables with, um, seven variables.
+
+If you go back and look at the scree plot, you'll see that the first
+elbow is really rather high up the mountain, and it's really the
+*second* elbow that is the start of the scree.
+
+If this part doesn't persuade you that three components is better than
+one, you need to pick a number of components to use for the rest of
+the question, and stick to it all the way through.
+    
+
+
+(f) <a name="part:preferred">*</a> How do each of your preferred number of components depend
+on the variables that were measured? Explain briefly.
+
+
+Solution
+
+
+When this was a hand-in question, there were three marks for it,
+which was  a bit of a giveaway!
+Off we go:
+```{r }
+air.1$loadings
+```
+$
+
+You'll have to decide where to draw the line between "zero" and
+"nonzero". It doesn't matter so much where you put the line, so your
+answers can differ from mine and still be correct.
+
+We need to pick the loadings that are "nonzero", however we define
+that, for example:
+
+
+
+* component 1 depends (negatively) on carbon monoxide and nitrogen dioxide.
+
+* component 2 depends (negatively) on solar radiation and ozone
+and possibly positively on nitric oxide.
+
+* component 3 depends (positively) on wind and hydrocarbons.
+
+
+It is a good idea to translate the variable names (which are
+abbreviated) back into the long forms.
+    
+
+
+(g) Display all the scores on component 1 (just the scores on
+component 1, not the other scores, and not the other  variables in
+the original data). Which one is the smallest (most negative)?
+
+
+Solution
+
+
+If you like handling matrices using square brackets, this will work:
+```{r }
+v=air.1$scores[,1]
+v
+```
+
+   
+
+In the more likely event that you don't, turn it into a data frame
+first, and then display its first column:
+
+```{r }
+as_tibble(air.1$scores) %>% select(1) %>% print(n=Inf)
+```
+$ %$ %$
+
+You'll need the last step, or else you'll only get the first ten rows
+(it's a tibble-type data frame). Print a number of rows, or this,
+which is "all of them, no matter how many".
+
+These will display only the 42 values for the first score, and not
+anything else. You don't need to save them in a  variable; just
+displaying the values is enough.
+
+To find the most negative one, you can eyeball the values and see that
+the most negative one is $-3.98$, which is the 8th one. (In the first
+output, the first one
+on the second row is number 6, as shown by the `[6]`.) 
+
+Or you can be lazy like me and get R to do the work for you. This
+applies to the matrix way.  This tells you how small the smallest
+value is:
+
+```{r }
+min(v)
+```
+
+ 
+
+only that is not quite what we wanted, since we wanted to know
+*which one* it was. This is a common thing to ask, so it has its
+own function:
+
+```{r }
+which.min(v)
+```
+
+ 
+
+The 8th one.
+
+If you did this the `tidyverse` way:
+
+```{r }
+as_tibble(air.1$scores) %>% select(1) %>% 
+mutate(row=row_number()) %>%
+filter(Comp.1==min(Comp.1))
+```
+$ %$ %$
+
+I did two more steps: created a column of row numbers, so I'd know
+*which one* was the smallest, then I displayed all rows for which
+`Comp.1` was equal to the smallest one (this displays all  of
+the "minimum" rows if there are more than one).
+`tidyverse` tools aren't *always* better, so it's worth also
+knowing about the square-bracket way to get rows and columns, as well
+as `min` and `max` and `which.min` and
+`which.max`. Having extra choices makes you a better data
+analyst. 
+    
+
+
+(h) Display the original data for the observation with the most
+negative score on component 1. What is it about the data for this
+observation that makes the component 1 score come out so negative?
+(Refer back to part (<a href="#part:fivenum">here</a>) as you need.)
+
+
+Solution
+
+
+```{r }
+air %>% slice(8)
+```
+
+ 
+
+Or, you can display the rows of the original data frame that go with
+the minimum score on component 1 like this:
+
+Or, the square-bracket way (the 8th row and all the columns):
+```{r }
+air[8,]
+```
+
+     
+
+Let me also display the five-number summary again (copying my code
+from part (<a href="#part:fivenum">here</a>)):
+
+```{r }
+map_df(air,quantile) 
+```
+
+ 
+
+Looking back to part (<a href="#part:preferred">here</a>), component 1 depended
+negatively mainly on carbon monoxide and nitrogen dioxide, so its
+score will be very negative if those two variables are high. Are they?
+Well, carbon monoxide on this day was 6, which is above the 3rd
+quartile (and thus high), and nitrogen dioxide was 21, which was the
+highest of all. So it is not at all surprising that this day would
+have the most negative score on component 1.
+
+I think, one point for displaying the 8th row (or whichever row you
+got), and two points for some kind of sensible explanation for why it
+was so negative, based on what you thought component 1 depended
+on. For your reference (and maybe the grader's aid), here are all the
+variables: 
+
+\begin{tabular}{lrrrr}
+\hline
+Variable & Row 8 & where & Component 1 coeff & Contribution\\
+\hline
+Wind & 5 & lowest & positive & negative \\
+Solar radiation & 72 & below median &  negative & positive\\
+Carbon monoxide & 6 & above 3rd quartile & negative & negative\\
+Nitric oxide & 4 & above 3rd quartile & negative & negative\\
+Nitrogen dioxide & 21 & highest & negative & negative \\
+Ozone & 14 & above 3rd quartile & negative & negative\\
+Hydrocarbons & 4 & above 3rd quartile & negative & negative\\
+\hline
+Total & & & & negative\\
+\hline
+\end{tabular}
+
+In all but one of these, day 8 is high when the loading on component 1
+is negative and low when the loading is positive. The only exception
+is solar radiation, which has the closest loading to zero in the table
+of loadings. So, whichever variables you thought were important in
+component 1, you ought to come to the same conclusion about why day 8
+came out so negative: ``day 8 is high on the variables that load
+negatively on component 1 (and low on the one that loads
+positively)''. 
+
+That's all I asked for. I didn't ask for a biplot, which might also
+shed some light on this part. But you can certainly produce one if you
+want. The default is this:
+
+```{r }
+ggbiplot(air.1)
+```
+
+ 
+
+The problem here is that we don't know which observation is
+which. `ggbiplot` has an option `labels` for this, only
+we don't have row numbers anywhere in our data frame (I should have
+saved the ones I made earlier), so we're going to have to manufacture
+them first:
+
+```{r }
+withrow = air %>% mutate(row=row_number())
+ggbiplot(air.1,labels=withrow$row)
+```
+
+ 
+Day 8 is way over on the left. The things that point in the direction
+of observation 8 (`NO2, CO` and to a lesser extent `NO`
+and `HC`) are the things that observation 8 is high on. On the
+other hand, observation 8 is around the middle of the arrows for
+`wind`, `solar.radiation` and `O3`, so that day
+is not especially remarkable for those. This is more or less what we
+found before.
+
+Contrast that with day 38, which is near the bottom of the picture
+(and has a low, very negative, score on component 2). This ought to
+have a high value for `solar.radiation` and `O3` and a
+*low* value for `wind`. Does it?
+
+```{r }
+air[38,]
+```
+
+ 
+
+Solar radiation is 86 (above 3rd quartile), ozone is 18 (ditto) and
+wind is 5 (the lowest). It all matches. What about the score on
+component 2, which is negative? Component 2 depends on solar radiation
+and ozone, both negatively, so day 38's component 2 score
+*should*  be the negative value that it is.
+
+This business about figuring out whether values on variables are high
+or low is kind of fiddly, since you have to refer back to the
+five-number summary to see where the values for a particular
+observation come. Another way to approach this is to calculate
+*percentile ranks* for everything:
+
+```{r }
+map_df(air,percent_rank) %>% 
+slice(c(8,38))
+```
+
+ 
+
+This gives percentile ranks for each of the variables for observations
+8 and 38. A percentile rank of 0 means it's the lowest; 0.25 means
+it's at the first quartile, 0.5 is at the median, 0.75 is at the third
+quartile, and 1 is the highest. So this gives a direct interpretation
+of where the variables' values stand for an observation.
+
+Observation 8, on the left of the biplot, should be high on NO2, CO,
+NO, and HC and average on the other things. Looking at the percentile
+ranks for these variables, these are between 0.78 and 1: that is,
+observation 8 is higher than the third quartile on all of these. It
+also happens to be high on O3 (ozone), which is a surprise, but the
+solar radiation is between Q1 and the median, which is the kind of
+thing we'd expect.
+
+Observation 38, at the bottom of the biplot, should be high on solar
+radiation and O3, low on wind, and average on the other things. The
+first two of those variables are at the 78th and 93rd percentiles, so
+they are definitely high (higher than Q3). Wind is (jointly) lowest of
+all, as expected.  The other variables are a real mixed bag: some of
+them, like NO2, are high, and some of them, like HC, are low. The
+correspondence between high and low, in real data, won't be perfect,
+but it should be right more often than not.
+
+Now that I think about it, this percentile rank idea is really the
+best way to assess whether a variable's values are high or low,
+because you only have to look at one thing: you no longer have to
+compare the values with the five-number summary and jump from one to
+the other.
+
+The other thing that you see from the  biplot is that there are four
+variables pointing more or less up and to the left, and at right
+angles to them, three other variables pointing up-and-right or
+down-and-left. You could imagine rotating those arrows so that the
+group of 4 point upwards, and the other three point left and
+right. This is what factor analysis does, so you might imagine that
+this technique might give a clearer picture of which variables belong
+in which factor than principal components does. 
+
+I would  normally put a question on this on the next assignment (and
+using the same data set would save me having to find another one). But
+since you aren't going to be handing in an assignment 10, I can do it
+here. I'll obtain two factors first, since we are comparing with the biplot:
+
+```{r }
+air.2=factanal(air,2)
+air.2$loadings
+```
+$
+
+This is almost the same as the biplot, but not quite: factor 1
+contains three of the four variables that point up and left (not
+`HC)`), while factor 2 is mainly ozone, with only moderate
+loadings for the other things that point up-and-right and
+down-and-left on the biplot.
+
+`wind`, `solar.radiation` and `HC` don't appear
+in either of our factors, which also shows up here:
+
+```{r }
+air.2$uniquenesses
+```
+
+ 
+
+Those variables all have *high* uniquenesses.
+
+What with the high uniquenesses, and the fact that two factors explain
+only 42\% of the variability, we
+really ought to look at 3 factors, the same way that we said we should look at
+3 components:
+
+```{r }
+air.3=factanal(air,3)
+air.3$loadings
+```
+$
+
+In case you are wondering, `factanal` automatically uses the
+correlation matrix, and so takes care of variables measured on
+different scales without our having to worry about that.
+
+The rotation has only helped somewhat here. Factor 1 is mainly
+`NO2` with some influence of `CO` and `HC`;
+factor 2 is mainly ozone (with a bit of solar radiation and ozone),
+and factor 3 is mainly `NO` with a bit of `CO`.
+
+I think I mentioned most of the variables in there, so the uniquenesses
+should not be too bad:
+
+```{r }
+air.3$uniquenesses
+```
+$
+
+Well, not great: `wind` and `solar.radiation` still have
+high uniquenesses because they are not *strongly* part of any factors.
+
+```{r }
+air.3$PVAL
+```
+$
+
+This is small, if not *very* small, so there is still some
+evidence that 3 factors are not enough to describe what's going
+on. But with only seven variables, more than three factors wouldn't
+offer much insight.
+
+Factor scores:
+
+```{r }
+air.4=factanal(air,3,scores="r")
+air.4$scores
+```
+$
+
+Since there are 3 columns here, you could plot them in `rgl`
+and rotate it around to see how the days stack up. Unlike principal
+components, there is no sense that factor 1 is the most important and
+factor 3 the least; because of the rotation, all that we have is that
+the three factors together explain 58\% of the
+variability.\endnote{This is unlike principal components because,
+*by design* there, the first principal component explains the most
+variability. That does not happen here, because the (rotated)
+factors act as a team.}
+
+Note that day 8 has the most extreme score on factor 1 again. This is
+for more or less the same reasons that it had the most extreme score
+on component 1  before.
+ maybe discuss some other days
+    
+
+
+

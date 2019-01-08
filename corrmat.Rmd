@@ -1,0 +1,277 @@
+
+
+ Here is a correlation matrix between five variables. This
+correlation matrix was based on $n=50$ observations. Save the data
+into a file.
+
+
+```
+
+1.00 0.90 -0.40 0.28 -0.05
+0.90 1.00 -0.60 0.43 -0.20
+-0.40 -0.60 1.00 -0.80 0.40
+0.28 0.43 -0.80 1.00 -0.70
+-0.05 -0.20 0.40 -0.70 1.00
+
+```
+
+
+
+
+(a) Read in the data, using `col_names=F` (why?). Check that you
+have five variables with names invented by R.
+
+Solution
+
+
+I saved my data into `cov5.txt`,\endnote{Not to be confused
+with "covfefe".} delimited by single spaces, so:
+```{r }
+corr=read_delim("cov5.txt"," ",col_names=F)
+corr
+```
+
+   
+
+I needed to say that I have no variable names and I want R
+to provide some. As you see, it did: `X1` through
+`X5`. You can also supply your own names in this fashion:
+
+```{r }
+my_names=c("first","second","third","fourth","fifth")
+corr2=read_delim("cov5.txt"," ",col_names=my_names)
+corr2
+```
+
+ 
+
+
+(b) Run a principal components analysis from this correlation matrix.
+
+Solution
+
+
+Two lines, these:
+```{r }
+corr.mat=as.matrix(corr)
+corr.1=princomp(covmat=corr.mat)
+```
+
+     
+
+Or do it in one step as
+
+```{r }
+corr.1a=princomp(as.matrix(corr))
+```
+
+ 
+
+if you like, but I think it's less clear what's going on.
+
+
+(c) <a name="part:howmany">*</a> Obtain a scree plot. Can you justify
+the use of two components (later, factors), bearing in mind that we
+have only five variables?
+
+Solution
+
+
+```{r sdljhljsahja}
+ggscreeplot(corr.1)
+```
+
+     
+
+There is kind of an elbow at 3, which would suggest two
+components/factors.\endnote{There is also kind of an elbow at 4, which would
+suggest three factors, but that's really too many with only 5
+variables. That wouldn't be much of a *reduction* in the number
+of variables, which is what principal components is trying to achieve.}
+
+You can also use the eigenvalue-bigger-than-1 thing: 
+
+```{r }
+summary(corr.1)
+```
+
+ 
+
+Only the first
+*two* eigenvalues are bigger than 1, and the third is quite a bit
+smaller. So this would suggest two factors also. The third eigenvalue
+is in that kind of nebulous zone between between being big and being
+small, and the percent of variance explained is also ambiguous: is
+86\% good enough or should I go for 96\%? These questions rarely have
+good answers. But an issue is that you want to summarize your
+variables with a (much) smaller number of factors; with 5 variables,
+having two factors rather than more than two seems to be a way of
+gaining some insight.
+
+
+(d) Take a look at the first two component loadings. Which variables appear
+to feature in which component? Do they have a positive or negative effect?
+
+Solution
+
+
+```{r }
+corr.1$loadings
+```
+$ %$ 
+
+This is messy. 
+
+In the first component, the loadings are all about the
+same in size, but the ones for `X3` and `X5` are
+negative and the rest are positive. Thus, component 1 is contrasting
+`X3` and `X5` with the others.
+
+In the second component,  the emphasis is on `X1`, `X2`
+and `X5`, all with negative loadings, and possibly `X4`,
+with a positive loading.
+
+Note that the first component is basically "size", since the
+component loadings are all almost equal in absolute value. This often
+happens in principal components; for example, it also happened with
+the running records in class.
+
+I hope the factor analysis, with its rotation, will straighten things
+out some. 
+
+
+(e) Create a "covariance list" (for the purposes of
+performing a factor analysis on the correlation matrix).
+
+Solution
+
+
+This is about the most direct way:
+
+```{r }
+corr.list=list(cov=corr.mat,n.obs=50)
+```
+
+     
+recalling that there were 50 observations. The idea is that we feed
+this into `factanal` instead of the correlation matrix, so that
+the factor analysis knows how many individuals there were (for testing
+and such).
+
+Note that you need the correlation matrix *as a `matrix`*,
+not as a data frame. If you ran the `princomp` all in one step,
+you'll have to create the correlation matrix again, for example like this:
+
+```{r }
+corr.list2=list(cov=as.matrix(corr),n.obs=50)
+```
+
+ 
+
+The actual list looks like this:
+
+```{r }
+corr.list
+```
+
+ 
+
+An R list is a collection of things *not all of the same type*,
+here a matrix and a number, and is a handy way of keeping a bunch of
+connected things together. You use the same dollar-sign notation as
+for a data frame to
+access the things in a list:
+
+```{r }
+corr.list$n.obs
+```
+$
+
+and logically this is because, to R, a data frame *is* a special
+kind of a list, so anything that works for a list also works for a
+data frame, plus some extra things besides.\endnote{In computer
+science terms, a data frame is said to **inherit** from a list:
+it is a list plus extra stuff.} 
+
+The same idea applies to extracting things from the output of a
+regression (with `lm`) or something like a `t.test`: the
+output from those is also a list. But for those, I like `tidy`
+from `broom` better.
+
+
+(f) Carry out a factor analysis with two factors. We'll
+investigate the bits of it in a 
+moment.  
+
+Solution
+
+
+```{r }
+corr.2=factanal(factors=2,covmat=corr.list)
+```
+
+     
+
+
+(g) <a name="part:load">*</a> Look at the factor loadings. Describe how the factors are
+related to the original variables. Is the interpretation clearer
+than for the principal components analysis?
+
+Solution
+
+
+```{r }
+corr.2$loadings
+```
+
+     
+
+Oh yes, this is a lot clearer. Factor 1 is variables 3 and 5
+contrasted with variable 4; factor 2 is variables 1 and 2. No
+hand-waving required.
+
+Perhaps now is a good time to look back at the correlation matrix and
+see why the factor analysis came out this way:
+
+```{r }
+corr
+```
+
+ 
+
+Variable `X1` is highly correlated with `X2` but not
+really any of the others. Likewise variables `X3, X4, X5` are
+more or less highly correlated among themselves but not with the
+others (`X2` and `X3` being an exception, but the big
+picture is as I described). So variables that appear in the same
+factor should be highly correlated with each other and not with
+variables that are in different factors. But it took the factor
+analysis to really show this up.
+
+
+(h) Look at the uniquenesses. Are there any that are unusually
+high? Does that surprise you, given your answer to
+(<a href="#part:load">here</a>)? (You will probably have to make a judgement call here.)
+
+Solution
+
+
+```{r }
+corr.2$uniquenesses
+```
+$ %$
+
+The ones for `X3` and `X5` are higher than the rest;
+this is because their loadings on factor 1 are lower than the
+rest. Since those loadings are still high, I wouldn't be worried about
+the uniquenesses.
+
+The point here is that an (excessively) high uniqueness indicates a
+variable that doesn't appear in *any* factor. The easy link to
+make is ``all the variables appear in a factor, so there shouldn't be
+any very high uniquenesses''. If, say, `X3` doesn't have a high
+loading on any factor, `X3` would have a high uniqueness (like
+0.9, and none of these values approach that).
+
+
+

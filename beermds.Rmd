@@ -1,0 +1,185 @@
+
+
+ Previously, you did a cluster analysis of
+ten brands of beer, as rated by 32 students. This time, we will do a
+non-metric multidimensional scaling of those same brands of beer. The
+data are in [link](http://www.utsc.utoronto.ca/~butler/d29/beer.txt).
+
+
+
+(a) Noting that we want to assess distances between brands of beer,
+read in the data and do whatever you need to do to work out
+distances between the beers. Show your result.
+ 
+Solution
+
+
+First I should get rid of `MASS`, since we don't need it here:
+```{r }
+detach("package:MASS", unload=T)
+```
+
+       
+This is really a copy of last time. We need to transpose the data
+frame to get the beers in *rows* (`dist` works on
+distances between rows), then feed everything but the student IDs
+into `dist`:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
+beer=read_table2(my_url)
+beer
+d = beer %>%
+dplyr::select(-student) %>%
+t() %>%
+dist()
+```
+
+
+
+I did it the funny-looking way. The cluster analysis question offers
+an alternative.
+ 
+
+(b) Obtain a non-metric multidimensional scaling of the
+beers. (Comment coming up in a moment.)
+ 
+Solution
+
+
+```{r }
+library(MASS)
+beer.1=isoMDS(d)
+```
+
+     
+ 
+
+(c) Obtain the `stress` value of the map, and comment on it.
+ 
+Solution
+
+
+```{r }
+beer.1$stress
+```
+$
+
+The stress is around 10\%, on the boundary between "good" and
+"fair". It seems as if the map should be more or less worth
+using. (Insert your own hand-waving language here.)
+ 
+
+(d) Obtain a map of the beers, labelled with the names of the
+beers. 
+ 
+Solution
+
+
+This is slightly different from class, where I plotted the
+languages actually *at* their locations. But here, the beer
+names are longer, so we should plot the points and label them. I'd
+make a data frame first, and probably pipe it into the plot,
+thus. Don't forget we have to get the names of the 10 beers, and
+not the 32 students! The names of the columns of the data frame
+include an identifier column for the students, so skip the first one:
+
+```{r }
+beer_names = beer %>% dplyr::select(-student) %>% names()
+beer_names
+data.frame(beer.1$points,beer=beer_names) %>%
+ggplot(aes(x=X1,y=X2,label=beer))+
+geom_point()+geom_text_repel()
+```
+
+     
+ 
+
+(e) Find a pair of beers close together on your map. Are they
+similar in terms of student ratings? Explain briefly.
+ 
+Solution
+
+
+I think Sam Adams and Gordon Biersch, right in the middle of the
+map. We can pull them out by name:
+```{r }
+beer %>% dplyr::select(SamAdams,GordonB) %>% print(n=Inf)
+```
+
+     
+
+These are, with a few exceptions (the most glaring being the 18th
+student), within a couple of points of each other. So I would say they
+are similar. Another way to show this is to make a scatterplot of
+them, and draw on it the line where the ratings are the same. Since
+the ratings are whole numbers, they are likely to be duplicated, so I
+"jitter" them as I plot them, to prevent overplotting:
+
+```{r adkjalkjdsg}
+ggplot(beer,aes(x=SamAdams,y=GordonB))+geom_jitter()+
+geom_abline(intercept=0,slope=1)
+```
+
+ 
+
+Are they close to the line, or not? Dunno. Maybe I should plot the
+ratings of some far-apart beers, and see whether it looks any
+different, for example `Becks` and `SierraN`:
+
+```{r adkjalkjdsh}
+ggplot(beer,aes(x=Becks,y=SierraN))+geom_jitter()+
+geom_abline(intercept=0,slope=1)
+```
+
+ 
+
+Not much. I was expecting something a lot more impressive. Another way
+is to summarize the rating *differences* for the pairs of beers:
+
+```{r }
+diff=with(beer,SamAdams-GordonB) 
+summary(diff)
+```
+
+ 
+
+and
+
+```{r }
+diff=with(beer,Becks-SierraN)
+summary(diff)
+```
+
+ 
+
+Now we see something: two beers that are similar ought to have a
+median rating difference close to 0 most of the time. That is the
+case for the first pair; the median *is* zero, and the IQR is
+only 2. But for the second pair, Becks is typically rated lower than
+Sierra Nevada (negative median) and the IQR is larger (4 rather than
+2). 
+ 
+
+(f) In our cluster analysis, we found that Anchor Steam, Pete's
+Wicked Ale, Guinness and Sierra Nevada were all in the same
+cluster. Would you expect them to be close together on your map? Are
+they? Explain briefly.
+ 
+Solution
+
+
+If they are in the same cluster, we would expect them to
+"cluster" together on the map. Except that they don't, really.
+These are the four beers over on the right of our map. They are kind
+of in the same general neighbourhood, but not really what you would
+call close together. (This is a judgement call, again.) In fact, none
+of the beers, with the exception of Sam Adams and Gordon Biersch in
+the centre, are really very close to any of the others.
+
+That may be the story, in the end. With the cluster analysis, we were
+forcing the clustering to happen, whether it was really there or
+not. We haven't seen a test for the "significance" of clusters, so
+the clusters we found may not mean very much.
+ 
+
+

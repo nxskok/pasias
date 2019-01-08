@@ -1,0 +1,343 @@
+
+
+ Two researchers studied how often people mistook one letter
+for another one. They did this by showing their subjects each
+(uppercase) letter for a few milliseconds only, and asking them which
+letter (out of a list) they just saw. The researchers obtain a
+"confusion matrix" in which, for example, the W-Q entry is the total
+of W's taken as Q and Q's taken as W. This confusion matrix is in
+[link](http://www.utsc.utoronto.ca/~butler/d29/letterrec.txt). Note that
+the confusions are actually *similarities* rather than
+dissimilarities: a large number means that the two letters concerned
+are easily confused, that is, similar. Similarities can be converted
+to dissimilarities by subtracting them from a larger number than
+anything in the table (that is, subtracting from 21 is good here).
+
+
+
+(a) Read in the confusion matrix and convert it to
+dissimilarities and then to a
+`dist` object, displaying the `dist` object that you
+obtain. 
+
+
+Solution
+
+
+`read_table` to read in the data, having first noted that
+we have aligned columns with spaces between:
+```{r }
+my_url="http://www.utsc.utoronto.ca/~butler/d29/letterrec.txt"
+letters=read_table(my_url)
+letters
+```
+
+    
+
+The first column didn't have a heading, so `read_table` filled
+in `X1` for it (there was data down below, so it needed to have
+a name). This is in contrast to something like `read_delim`,
+where you have to have as many headers as columns. In
+`read_table`, you know where the headers have to be, so if any
+are missing they can be filled in, but with `read_delim` you
+don't have that knowledge, so you have to have exactly the right
+number of headers, one per data column exactly.
+
+These are similarities, so convert to dissimilarities by subtracting
+from 21. This is a shortcut way to do that, once you've gotten rid of
+everything that is not numbers:
+
+```{r error=T}
+letters %>% select(-X1) -> letters2
+letters2=21-letters2
+letters2
+```
+
+ 
+
+This looks weird, or at least the stuff above the diagonal does, but
+`dist` works with the stuff *below* the diagonal (unless
+you tell it otherwise), so all will be good.
+
+`as.dist` comes next:
+
+```{r error=T}
+d=as.dist(letters2)
+d
+```
+
+ 
+
+This works because the letters that are confused are actually
+column names of the data frame. 
+
+You can check (and probably should, at least for yourself) that the
+distances in `d` correspond properly to the ones in
+`letters`. For example, the letters C and G were confused 12
+times, $21-12=9$, and the entry for C and G in `d` is indeed
+9. 
+
+Note that the actual confusion numbers were in the data file as the
+bottom half of the matrix, with the top half being
+zeroes. `as.dist` handled this with no problem. (You can check
+the help for `as.dist` to find out how it deals with this kind
+of thing.)
+
+
+
+(b) Run a multidimensional scaling, with the default two
+dimensions, on your `dist` object, and display the
+results. (Making a graph is coming later.)
+
+Solution
+
+
+This:
+```{r }
+d.1=cmdscale(d)
+d.1
+```
+
+     
+
+Or you can do it with `eig=T`, which gets you some more information:
+
+```{r }
+d.1a=cmdscale(d,eig=T)
+d.1a
+```
+
+ 
+
+The most interesting thing here is the `GOF` at the bottom,
+which is not that high (whichever one of the two values you take),
+suggesting that the two-dimensional representation is not very
+good. Further evidence for that is in `eig`, the
+"eigenvalues", which are about 493, 232, 140, 50, 40, 0 and some
+negative ones, which suggests that three dimensions might be better
+than two for representing the data, because the first *three*
+eigenvalues seem noticeably bigger than the others. (This is the same
+thinking as the `svd` or percent of trace in discriminant
+analysis.)  But that's by the way: we'll stick with two dimensions.
+
+The important thing to remember is that if you go the `eig=T`
+way, you have to pull out the points to plot from the thing called
+`points`, so that you plot `d.1` itself  but `d.1a$points`.
+$ %$ %$
+
+
+(c) Obtain a vector of the names of the letters that were
+confused in this study. 
+
+Solution
+
+
+Easiest way is to pull out the first column of the data frame that
+you read in from the file (if you can remember what it was called):
+```{r }
+letter_names=letters$X1
+```
+$ %$ %$ %$ %$
+
+That silly column name `X1` that `read_table`
+supplied. 
+
+Extra: You can even get the letter names from the thing I called `d`,
+but I can't remember how, so I have to cheat. I said that `d`
+has a "print method"\endnote{The way that a multicoloured function
+like `print` works is that when you ask to show something,
+like `d`, R first looks to see what kind of thing you want to
+show (by calling `class`), and determines that it is a
+`dist` object. Then it looks to see if there is a function
+called `print.dist` (there is), and if there is, it calls that
+(to produce that nice display). If there isn't, it calls
+`print.default`, which just displays its input without doing
+anything special. This is why printing the output from an `lm`
+looks very different from printing a data frame: the first calls
+`print.lm` and the second calls `print.data.frame`, or
+`print.tbl_df` for a tibble.} that controls how it looks:
+
+```{r }
+d
+```
+
+
+
+but its innards are a whole lot more complicated than that:
+
+```{r }
+print.default(d)
+```
+
+ 
+
+or
+
+```{r }
+unclass(d)
+```
+
+ 
+
+This one gets rid of any special kind of thing that `d` is, and
+displays it like a thing without any special properties.
+
+It's the "attribute" called `Labels` that we need to grab:
+
+```{r }
+attributes(d)$Labels
+```
+
+ 
+
+
+(d) Plot your multidimensional scaling map. To do this, first
+create a data frame containing the points you want to plot and their
+labels, and then plot the points labelled by the right thing.
+
+Solution
+
+
+The "labels" need to be the letter names, which is why I made
+you find them in the previous part. I'm going to do this with a
+pipe, or else I'll create *another* thing called `d`
+and overwrite the one I wanted to keep, again:
+```{r error=T}
+data.frame(d.1,names=letter_names) 
+```
+
+     
+
+So far so good. The coordinates have gained names `X1` and
+`X2` (as they did before, but I wanted to check). This is what
+happens when you turn a matrix with nameless columns into a data
+frame. So I can proceed:
+
+```{r error=T}
+data.frame(d.1,names=letter_names) %>% 
+ggplot(aes(x=X1,y=X2,label=names))+
+geom_point()+geom_text_repel()+
+coord_fixed()
+```
+
+     
+
+I need the  last line for the same reason as before: I want to treat
+the two axes equally. If you don't have that, you have a distorted map
+where one of the coordinates appears to be more important than the other.
+
+If you can't get `ggrepel` to behave itself, an equally good
+alternative is to plot the letter names instead of the labelled
+dots. To do that, take out the `geom_point` and add an
+ordinary `geom_text`. This will plot, *at* the location
+given by the `x` and `y`, the text in `label`,
+centred at the location. (If you have `geom_point()` as well,
+you'll get a black dot in the middle of each piece of text.)
+`geom_text` has options to justify the text relative to the
+point, so you can see both, but I've always found these rather
+finicky, so I'd rather let `geom_text_repel` do the work of
+figuring out where to put the text relative to the point.
+
+```{r error=T}
+data.frame(d.1,names=letter_names) %>% 
+ggplot(aes(x=X1,y=X2,label=names))+
+geom_text()+coord_fixed()
+```
+
+ 
+
+Then pick (in the next part) a pair of letters that is close together,
+and proceed. I like the labelled dots better (as a matter of taste),
+but this way is a perfectly good way to answer the question, so is
+perfectly acceptable here.
+
+
+(e) Pick a pair of letters appear close together on your
+map. Does it make sense, from looking at these letters, that they
+would be easy to confuse? Explain briefly.
+
+Solution
+
+
+My map has four pairs of close-together letters: C and G, H and M,
+N and W, Q and D. Pick one of those pairs. I don't mind which pair
+you pick. (If you got something different, pick from what your map
+shows.) 
+I think it is not at all surprising that these pairs of letters
+got confused, because the letters of each pair have similar shapes
+(which is all you'd have to react to if you see them for ``a few
+milliseconds'' each): C and G circular with a hole on the right,
+H, M, N and W vertical lines on the outside with something across
+the middle, Q and D almost circular. (It's up to you whether you
+consider H, M, N and W as a group of four or as two pairs.)
+
+
+(f) Verify that your chosen pair of letters was often confused
+in the data.
+
+Solution
+
+
+The data we read in from the file was this:
+```{r }
+letters
+```
+
+     
+
+Then look for your pair of letters:
+
+
+\begin{tabular}{lr}
+letters & confusion\\
+\hline            
+C,G & 12\\
+H,M & 10\\
+N,W & 13\\
+Q,D & 20\\     
+\hline
+\end{tabular}
+
+
+These are four of the biggest numbers in the matrix, which is as it
+should be. You need to find the number of confusions for your pair of
+letters and assert that it is large (compared to the others).
+
+These are actually not *all* the large ones: M and W, H and N, M
+and N are also large (which lends some support to these letters being
+a foursome\endnote{Set of four. Match-play golf has a game called
+"foursomes" where the two players on each team take it in turns to
+hit the ball, as opposed to the game called "fourballs", where each
+of the two players plays their own ball, and the team's score on a
+hole is the better of the two players' scores.} rather than two pairs).
+
+If you prefer, you can work from your `dist` object, the thing
+I called `d`:
+
+```{r }
+d
+```
+
+
+
+This time, you're looking for a *small* dissimilarity between
+your pair of letters:
+
+
+\begin{tabular}{lr}
+letters & dissimilarity\\
+\hline            
+C,G & 9\\
+H,M & 11\\
+N,W & 8\\
+Q,D & 1\\     
+\hline
+\end{tabular}
+
+
+These, again, are smaller than most, though not the smallest
+overall. So, if you go this way, you need to assert that the
+corresponding number in your `dist` object is *small*.
+
+
+

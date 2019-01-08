@@ -1,0 +1,316 @@
+
+
+ Previously, we looked at an experiment about which objects feel similar to one another and which ones feel different.
+
+30 subjects were each
+given 17 different objects to feel, for example ``inner surface of
+pine  bark'', "rubber eraser" and "nylon scouring pad". The
+subjects had to group the objects into a maximum of 8 groups such that
+the objects within a group felt similar, and the ones in different
+groups felt different.
+A
+dissimilarity matrix was formed by counting how many subjects put each
+pair of objects into *different* groups, so that the
+dissimilarity ranged from 0 (the objects were always put together in
+the same group) to 30 (the objects were not put together into the same
+group by any of the subjects). 
+
+The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt). These have
+*no* column names.
+
+This time we are going to try *non-metric* multidimensional
+scaling, to see whether that produces a more reasonable map. The
+reading in of the data is the same as before (so I have reduced the
+marks given for it).
+
+
+
+(a) Obtain and display the distance matrix that you used last
+time for these data. (I don't care whether you run all the code
+again, or whether you just produce the matrix from where you had it
+before on R Studio. Correct is all I care about.)
+
+
+Solution
+
+
+Copied and pasted from last time:
+```{r message=F}
+my_url="http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt"
+stimuli=read_delim(my_url," ",col_names=F)
+objects=stimuli$X1
+names(stimuli)=c("object",objects)
+stimuli
+```
+$ %$ %$
+
+That gets a data frame with the right column names. Then:
+
+```{r }
+d = stimuli %>% dplyr::select(-1) %>% as.dist()
+```
+
+ 
+
+and just to check:
+
+```{r size="tiny"}
+w=getOption("width")
+options(width=132)
+d
+options(width=w)
+```
+
+ 
+    
+
+
+(b) Obtain a non-metric multidimensional scaling map of the
+objects. (No plotting or comments yet.)
+
+
+Solution
+
+
+```{r }
+stimuli.1=isoMDS(d)
+```
+
+     
+
+I'm going to remind myself of what this has in it:
+
+```{r }
+names(stimuli.1)
+```
+
+ 
+
+This is rather like running `cmdscale` with `eig=T`: a
+thing called `points` with coordinates to plot, and a measure
+of fit, here called `stress`, with, as you'd guess, a smaller
+`stress` being better.
+    
+
+
+(c) <a name="part:stress">*</a> Obtain a number that says how well the map reproduces the
+distances in the data, and comment on that number.
+
+
+Solution
+
+
+What you need here is the "stress":
+```{r }
+stimuli.1$stress
+```
+$
+
+This is just over 20\%, which is described in the notes as
+"poor". We should thus be skeptical about the map that this produces.
+    
+
+
+(d) Plot the non-metric multidimensional scaling map. Label each
+point with its (full) object name, sized suitably.
+
+
+Solution
+
+
+Make a data frame first of things to plot, the points and the
+names. I'm going to plot the names smaller). I am *not*
+naming this data frame `d`, in an attempt to avoid
+overwriting things I want to keep:
+```{r }
+stimuli.1.d=data.frame(stimuli.1$points,names=objects)
+stimuli.1.d
+```
+$ %$ %$
+
+The repeated stimuli down the left are row names, but since they're
+row names, we won't be able to use them in
+`ggplot`.\endnote{Next year, I'll make everyone turn matrices
+into data frames first so that we won't deal with old-fashioned data
+frames, row names and the like.}
+
+Remember that we are turning a matrix and a column into a data frame,
+so we need either the more forgiving `data.frame`, or to turn
+`points` into a data frame first, which would go like this:
+
+```{r }
+as_tibble(stimuli.1$points) %>%
+mutate(name=objects)
+```
+$ %$ %$
+
+This time, the columns are called `V1` and `V2`, since
+that's what `as_tibble` does. Also note the slightly different
+look: fewer decimals, since displaying a tibble rounds numerical
+things to three significant digits.
+$ %$ %$
+
+Back to my data frame `stimuli.1.d`.
+The points have acquired names `X1` and `X2`, as usual,
+so we have all we need:
+
+```{r }
+ggplot(stimuli.1.d,aes(x=X1,y=X2,label=names))+
+geom_point()+
+geom_text_repel(size=2)+
+coord_fixed()
+```
+
+ 
+
+I think the full names are good with the text this small.
+
+Actually, this came out a lot like the metric multidimensional scaling
+that we did earlier.
+
+I was expecting a greater difference. See whether you can find
+out what moved, if anything.
+    
+
+
+(e) <a name="part:incons">*</a> Find all the distances in your distance matrix that are 10
+or less (there should be three of them). Find these pairs of objects
+on your map. Describe where they are on your map. Do
+they appear to be the three closest pairs of objects?
+
+
+Solution
+
+
+These are:
+
+
+* `velvet` and `felt` (distance 4). On the map,
+close together at the top.
+
+* `block of styrofoam` and `cork` (distance 10). On the
+map, close together at the bottom (though they appear to be
+slightly farther apart than `rubbereraser` and
+`cardboard`). 
+
+* `unglazed ceramic tile` and `brick` (distance
+10). On the map, on the left but not especially close together
+(for example, `very fine sandpaper` is in between them
+and thus closer to both).
+
+I would say that they are not anything like the three closest
+pairs of objects on the map. Consider, for example, \texttt{rigid
+plastic sheet} and `wax paper`, or \texttt{very fine
+sandpaper} and `unglazed ceramic tile`, or \texttt{rubber
+eraser} and `cardboard`, all of which are closer together
+on the map than the three pairs of objects with distances 10 or
+less.
+Three points for saying something about the three pairs of objects
+of distance 10 or less, and one point for making some relevant
+comment about whether these are the three closest pairs on the
+map, eg. by finding one pair (or more than one) of objects on the
+map that are closer.
+    
+
+
+(f) Consider again your conclusions in parts (<a href="#part:stress">here</a>)
+and (<a href="#part:incons">here</a>). Explain briefly how they are consistent.
+
+
+Solution
+
+
+The stress is rather high, which means that the map distances and
+actual distances may not correspond very well. This is also
+exactly what we found in the last part, by finding one (or two)
+pairs of objects that were really close in actuality, but not so
+much on the map.
+The point here is that a high stress *means* that distances
+in real life and on the map won't correspond very well. That's
+what I want you to say.
+Extra: another way to assess this is with a Shepard\endnote{This always
+makes me think of the number 190 bus, but that's the wrong
+spelling. Spelled like this, this is also the name of the
+illustrator of the original pre-Disney Winnie-the-Pooh
+stories. See [link](https://en.wikipedia.org/wiki/E._H._Shepard}.)
+diagram. That would go like this:
+```{r }
+stimuli.sh=Shepard(d,stimuli.1$points)
+names(stimuli.sh)
+```
+
+  
+
+In here, we plot the actual distances `x` against the map
+distances `y`, making a data frame first:
+
+```{r }
+with(stimuli.sh,data.frame(x=x,y=y)) %>%
+ggplot(aes(x=x,y=y))+geom_point()
+```
+
+ 
+
+The actual distances are on the $x$-axis and the map distances are on
+the $y$ axis, as far as I can tell (the help file is not clear on
+this). But I think I am right, since a lot of the actual distances
+were 28 or 29. Notice how the upward trend, such as it is, is very
+fuzzy: when the actual distance is very large, the map distance could
+be almost anything.
+    
+
+
+(g) Would a three-dimensional map work better than a
+two-dimensional one, bearing in mind that a three-dimensional map
+will need something like `rgl` to interpret? Calculate
+something that will help you decide, and explain what you think.
+
+
+Solution
+
+
+The calculation part is to figure out the stress value for a
+three-dimensional map, and compare it with the 20\% that we had
+before. `k=3` gets the three dimensions:
+```{r }
+isoMDS(d,k=3)$stress
+```
+
+     
+
+What this does is to obtain the map and throw all of it away except
+for the stress value.\endnote{Which seems like a very SAS way of doing
+things.} 
+
+I think this stress value, just under 10\%, or on the "fair" end of
+"good", is a worthwhile improvement over the just-over-20\% that we
+had in two dimensions. So I think this is worth the trouble of having
+to use a 3-dimensional plotting tool like `rgl` to interpret it
+with. You might agree with me, or you might  not: for example, you
+might be looking for a bigger improvement. Either is good, as far as
+I'm concerned, as long as your answer does something to balance the
+smaller stress value\endnote{Using more dimensions will
+*certainly* decrease the stress, in the same way that adding
+an $x$-variable to a regression will increase R-squared; it's the
+same issue, of whether the change is big enough to be worth having.} with the difficulty of interpreting it.
+
+The kind of `rgl` code you'll need is something like this (not tested):
+
+```{r eval=F}
+library(rgl)
+stimuli.2=isoMDS(d,k=3)$points
+plot3d(stimuli.2)
+text3d(stimuli.2,text=object.abb)
+```
+
+ 
+
+What you should find, looking at this (try it!) is that objects close
+together in this 3-dimensional place are more nearly close together in
+actuality as well, because of the in my opinion notably smaller stress
+value. 
+    
+
+
+

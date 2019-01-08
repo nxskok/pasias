@@ -5,6 +5,26 @@ Packages for this chapter:
 
 ```r
 library(MASS)
+library(ggbiplot)
+```
+
+```
+## Loading required package: ggplot2
+```
+
+```
+## Loading required package: plyr
+```
+
+```
+## Loading required package: scales
+```
+
+```
+## Loading required package: grid
+```
+
+```r
 library(tidyverse)
 ```
 
@@ -13,17 +33,28 @@ library(tidyverse)
 ```
 
 ```
-## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tibble  1.4.2     ✔ purrr   0.2.5
+## ✔ tidyr   0.8.1     ✔ dplyr   0.7.8
+## ✔ readr   1.1.1     ✔ stringr 1.3.1
+## ✔ tibble  1.4.2     ✔ forcats 0.3.0
 ```
 
 ```
 ## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ✖ dplyr::select() masks MASS::select()
+## ✖ dplyr::arrange()    masks plyr::arrange()
+## ✖ readr::col_factor() masks scales::col_factor()
+## ✖ purrr::compact()    masks plyr::compact()
+## ✖ dplyr::count()      masks plyr::count()
+## ✖ purrr::discard()    masks scales::discard()
+## ✖ dplyr::failwith()   masks plyr::failwith()
+## ✖ dplyr::filter()     masks stats::filter()
+## ✖ dplyr::id()         masks plyr::id()
+## ✖ dplyr::lag()        masks stats::lag()
+## ✖ dplyr::mutate()     masks plyr::mutate()
+## ✖ dplyr::rename()     masks plyr::rename()
+## ✖ dplyr::select()     masks MASS::select()
+## ✖ dplyr::summarise()  masks plyr::summarise()
+## ✖ dplyr::summarize()  masks plyr::summarize()
 ```
 
 
@@ -3799,55 +3830,6 @@ first, so I call it here with the package name and the two colons:
 ggbiplot::ggbiplot(carsx.1,groups=factor(carsx$cluster))
 ```
 
-```
-## -------------------------------------------------------------------------
-```
-
-```
-## You have loaded plyr after dplyr - this is likely to cause problems.
-## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
-## library(plyr); library(dplyr)
-```
-
-```
-## -------------------------------------------------------------------------
-```
-
-```
-## 
-## Attaching package: 'plyr'
-```
-
-```
-## The following objects are masked from 'package:dplyr':
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     compact
-```
-
-```
-## 
-## Attaching package: 'scales'
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     discard
-```
-
-```
-## The following object is masked from 'package:readr':
-## 
-##     col_factor
-```
-
 <img src="22-thingy_files/figure-html/unnamed-chunk-112-1.png" width="672"  />
 $ %$ %$ %$
 
@@ -5788,6 +5770,880 @@ then either type (if the span is long) or material and maybe river
 This is an example of a "classification tree" which is a nice
 easy-to-follow version of logistic regression.
 
+
+
+
+
+K-means clustering:
+
+
+
+
+ Recall the Australian athlete data (that we've seen so many
+times before). This time, we'll do some K-means clustering, and then
+see whether athletes of certain genders and certain sports tend to end
+up in the same cluster.
+
+
+
+(a) Read in the data from
+[link](http://www.utsc.utoronto.ca/~butler/c32/ais.txt), recalling
+that the data values are separated by tabs. Display (some of) the
+data set.
+
+Solution
+
+
+So, `read_tsv`. 
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   Sex = col_character(),
+##   Sport = col_character(),
+##   RCC = col_double(),
+##   WCC = col_double(),
+##   Hc = col_double(),
+##   Hg = col_double(),
+##   Ferr = col_integer(),
+##   BMI = col_double(),
+##   SSF = col_double(),
+##   `%Bfat` = col_double(),
+##   LBM = col_double(),
+##   Ht = col_double(),
+##   Wt = col_double()
+## )
+```
+
+```r
+athletes
+```
+
+```
+## # A tibble: 202 x 13
+##    Sex   Spo…   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
+##    <chr> <ch> <dbl> <dbl> <dbl> <dbl> <int> <dbl> <dbl>   <dbl> <dbl>
+##  1 fema… Net…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
+##  2 fema… Net…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
+##  3 fema… Net…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
+##  4 fema… Net…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
+##  5 fema… Net…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
+##  6 fema… Net…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
+##  7 fema… Net…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
+##  8 fema… Net…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
+##  9 fema… Net…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
+## 10 fema… Net…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
+## # ... with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
+```
+
+     
+
+
+(b) From your data frame, select only the columns that are numbers
+(or get rid of the ones that are text), and standardize all of the
+columns you have left. This is, done the best way, a slick piece of
+code. Display what you get.
+
+Solution
+
+
+This, in fact:
+
+```r
+athletes.s = athletes %>% select_if(is.numeric) %>% mutate_all(scale)
+athletes.s
+```
+
+```
+## # A tibble: 202 x 11
+##       RCC    WCC     Hc     Hg    Ferr     BMI    SSF `%Bfat`    LBM
+##     <dbl>  <dbl>  <dbl>  <dbl>   <dbl>   <dbl>  <dbl>   <dbl>  <dbl>
+##  1 -0.346  3.44  -0.243 -0.709 -1.20   -1.33   -0.615  -0.358 -0.898
+##  2 -1.24  -0.616 -1.39  -1.37  -0.376  -0.631   1.26    1.90  -1.36 
+##  3 -1.22   0.273 -1.53  -1.66  -1.16   -0.543   0.613   0.950 -0.875
+##  4 -0.870 -0.394 -1.47  -1.66  -0.987  -0.672   0.899   0.989 -1.23 
+##  5 -1.44  -0.727 -1.20  -1.30   0.0237 -0.414   1.63    1.55  -0.675
+##  6 -1.31  -0.560 -1.77  -2.03  -1.18   -0.550   0.656   0.542 -0.644
+##  7 -1.20  -1.17  -1.55  -1.37   0.676  -0.519   1.16    1.26  -0.900
+##  8 -2.01  -0.283 -1.80  -1.59   0.529   0.522   2.69    2.11  -0.801
+##  9 -1.66  -0.893 -1.85  -1.59  -0.124  -0.114   0.985   0.714 -0.681
+## 10 -0.608  1.44  -0.462 -0.342 -0.271  -0.0544  1.76    1.85  -1.01 
+## # ... with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
+```
+
+ 
+
+Elsewhere, I stuck `scale()` on the end, which produces a
+*matrix*, which I should then display the top of (it has 200-plus rows):
+
+
+```r
+athletes %>% select_if(is.numeric) %>% scale() %>% head()
+```
+
+```
+##             RCC        WCC         Hc         Hg        Ferr
+## [1,] -0.3463363  3.4385826 -0.2434034 -0.7092631 -1.19736325
+## [2,] -1.2415791 -0.6157363 -1.3900079 -1.3698371 -0.37633203
+## [3,] -1.2197439  0.2728816 -1.5265084 -1.6634256 -1.15525908
+## [4,] -0.8703809 -0.3935818 -1.4719082 -1.6634256 -0.98684242
+## [5,] -1.4380958 -0.7268135 -1.1989072 -1.2964400  0.02365754
+## [6,] -1.3070846 -0.5601977 -1.7722094 -2.0304111 -1.17631117
+##             BMI        SSF      %Bfat        LBM         Ht
+## [1,] -1.3254121 -0.6148189 -0.3582372 -0.8977457 -0.3394075
+## [2,] -0.6305634  1.2644802  1.8986922 -1.3606308 -0.7708629
+## [3,] -0.5432708  0.6134811  0.9503618 -0.8747927 -0.4215895
+## [4,] -0.6724638  0.8990609  0.9891351 -1.2313290 -1.0482270
+## [5,] -0.4140778  1.6298994  1.5513480 -0.6751017  0.2975028
+## [6,] -0.5502542  0.6564716  0.5416266 -0.6444978 -0.1955890
+##              Wt
+## [1,] -1.0849225
+## [2,] -0.8623105
+## [3,] -0.6253364
+## [4,] -1.0274742
+## [5,] -0.1513883
+## [6,] -0.5104399
+```
+
+ 
+
+I (at this moment) like the first one better, but these preferences
+tend to change over time (as will yours).
+
+The first athlete has a `WCC` value that is very large compared
+to the others.
+
+
+(c) Make a data frame that contains the total within-cluster sum
+of squares from a K-means clustering for each number of clusters
+from 2 to 20.
+
+Solution
+
+
+I'm going to attempt a slick way of doing this, and then I'll talk
+about how I'd expect *you* to tackle this. First, though, I
+set the random number seed so that everything comes out the same
+every time I run it:
+
+```r
+set.seed(457299)
+```
+
+     
+Here we go:
+
+```r
+withinss = tibble(clusters=2:20) %>%
+mutate(wss=map_dbl(clusters,~kmeans(athletes.s,.,nstart=20)$tot.withinss))
+withinss
+```
+
+```
+## # A tibble: 19 x 2
+##    clusters   wss
+##       <int> <dbl>
+##  1        2 1426.
+##  2        3 1201.
+##  3        4 1043.
+##  4        5  970.
+##  5        6  901.
+##  6        7  836.
+##  7        8  778.
+##  8        9  731.
+##  9       10  688.
+## 10       11  654.
+## 11       12  626.
+## 12       13  610.
+## 13       14  581.
+## 14       15  566.
+## 15       16  550.
+## 16       17  532.
+## 17       18  514.
+## 18       19  502.
+## 19       20  483.
+```
+$ %$ %$
+
+A one-liner, kinda. The thing after the squiggle is called an
+"anonymous function"; it is what is done for each of the first
+thing, and where you want the thing you're varying to go, you put a
+dot (the notation is like the dot meaning ``whatever came out of the
+previous step''). The advantage to this is that it looks exactly like
+the `kmeans` that you would write, except for the number of
+clusters that is replaced by a dot.
+
+I didn't (reliably) know how to do this until about three weeks ago.
+
+All right then, how would I expect *you* to do this? First write
+a function to take a number of clusters and a data frame and return
+the total within-cluster sum of squares:
+
+
+```r
+twss=function(i,x) {
+ans=kmeans(x,i,nstart=20)
+ans$tot.withinss
+}
+```
+
+ 
+
+and test it (against my answer above):
+
+
+```r
+twss(3,athletes.s)
+```
+
+```
+## [1] 1201.346
+```
+
+ 
+
+Check (with a few extra decimals).
+
+Now, recognize that your function returns a decimal number, so that
+you will be using `map_dbl` in a moment, and then calculate
+all the total within-cluster sum of squares values by making a little
+data frame with all your numbers of clusters:
+
+
+```r
+tibble(clusters=2:20)
+```
+
+```
+## # A tibble: 19 x 1
+##    clusters
+##       <int>
+##  1        2
+##  2        3
+##  3        4
+##  4        5
+##  5        6
+##  6        7
+##  7        8
+##  8        9
+##  9       10
+## 10       11
+## 11       12
+## 12       13
+## 13       14
+## 14       15
+## 15       16
+## 16       17
+## 17       18
+## 18       19
+## 19       20
+```
+
+ 
+
+and then make a pipeline and save it:
+
+
+```r
+withinss = tibble(clusters=2:20) %>%
+mutate(wss=map_dbl(clusters,twss,athletes.s))
+withinss
+```
+
+```
+## # A tibble: 19 x 2
+##    clusters   wss
+##       <int> <dbl>
+##  1        2 1426.
+##  2        3 1201.
+##  3        4 1043.
+##  4        5  968.
+##  5        6  900.
+##  6        7  836.
+##  7        8  785.
+##  8        9  731.
+##  9       10  696.
+## 10       11  665.
+## 11       12  631.
+## 12       13  609.
+## 13       14  584.
+## 14       15  569.
+## 15       16  543.
+## 16       17  530.
+## 17       18  519.
+## 18       19  498.
+## 19       20  494.
+```
+
+ 
+
+
+(d) Use the data frame you just created to make a scree plot. What
+does the scree plot tell you?
+
+Solution
+
+
+`ggscreeplot` is for principal components; this one you can
+plot directly, with the points joined by lines:
+
+```r
+ggplot(withinss,aes(x=clusters,y=wss))+geom_point()+geom_line()
+```
+
+<img src="22-thingy_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
+
+     
+
+On this plot, you are looking for "elbows", but ones sufficiently
+far down the mountain. For example, that's an elbow at 4 clusters, but
+it's still up the mountain, which means that the total within-cluster
+sum of squares is quite large and that the athletes within those 4
+clusters might be quite dissimilar from each other. I see an elbow at
+12 clusters and possibly others at 14, 16 and 19; these are nearer the bottom
+of the mountain, so that the athletes within a cluster will be quite
+similar to each other. With over 200 athletes, there's no problem
+having as many as 19 clusters, because that will still offer you some
+insight. 
+
+So I'm thinking 12 clusters (because I want to have a fairly small
+number of clusters to interpret later).
+
+The other thing I'm thinking is I could have put a bigger number of
+clusters on the scree plot. The `wss` axis should go all the
+way down to 0 for 202 clusters, with each athlete in one cluster. So
+you could make the point that even 20 clusters is still a fair way up
+the mountain.
+
+
+(e) Using a sensible number of clusters as deduced from your scree
+plot, run a K-means cluster analysis. Don't forget the
+`nstart`! 
+
+Solution
+
+
+This:
+
+
+```r
+athletes.km=kmeans(athletes.s,12,nstart=20)
+```
+
+ 
+
+or for your chosen number of clusters. 
+
+I don't think there's any great need to display the output, since the
+most interesting thing is which athletes are in which cluster, which
+we'll get to next.
+
+
+(f) Make a data frame consisting of the athletes' sport and
+gender, and which of your clusters they belong to, taking the
+appropriate things from the appropriate one of your data frames.
+
+Solution
+
+
+
+```r
+athletes2=tibble(gender=athletes$Sex,
+sport=athletes$Sport,
+cluster=athletes.km$cluster)
+athletes2
+```
+
+```
+## # A tibble: 202 x 3
+##    gender sport   cluster
+##    <chr>  <chr>     <int>
+##  1 female Netball       3
+##  2 female Netball       9
+##  3 female Netball       9
+##  4 female Netball       9
+##  5 female Netball       9
+##  6 female Netball       9
+##  7 female Netball       9
+##  8 female Netball      10
+##  9 female Netball       9
+## 10 female Netball      10
+## # ... with 192 more rows
+```
+
+     
+
+
+(g) Using the data frame you created in the previous part, display
+all the athletes in some of your clusters. Do the athletes within a
+cluster appear to have anything in common? (If a cluster has more
+than 10 athletes in it, make sure to display them all.)
+
+Solution
+
+
+Let's start with my cluster 1. I'm putting a `print(n=Inf)`
+on the end of each of these, to make sure all the cluster members
+get shown.
+
+```r
+athletes2 %>% filter(cluster==1) %>% print(n=Inf)
+```
+
+```
+## # A tibble: 25 x 3
+##    gender sport   cluster
+##    <chr>  <chr>     <int>
+##  1 female Netball       1
+##  2 female Row           1
+##  3 female Swim          1
+##  4 female Swim          1
+##  5 female Swim          1
+##  6 female Swim          1
+##  7 female Swim          1
+##  8 female Field         1
+##  9 female T400m         1
+## 10 female T400m         1
+## 11 female T400m         1
+## 12 female T400m         1
+## 13 female T400m         1
+## 14 female T400m         1
+## 15 female T400m         1
+## 16 female Tennis        1
+## 17 female Tennis        1
+## 18 female Tennis        1
+## 19 female Gym           1
+## 20 female Gym           1
+## 21 female Gym           1
+## 22 female Gym           1
+## 23 male   T400m         1
+## 24 male   T400m         1
+## 25 male   T400m         1
+```
+
+     
+
+These are almost all female, and if you remember back to our study of
+height and weight for these data, these are the kinds of sport that
+are played by shorter, lighter people.
+Cluster 2:
+
+
+```r
+athletes2 %>% filter(cluster==2) %>% print(n=Inf)
+```
+
+```
+## # A tibble: 27 x 3
+##    gender sport  cluster
+##    <chr>  <chr>    <int>
+##  1 male   Swim         2
+##  2 male   Swim         2
+##  3 male   Swim         2
+##  4 male   Swim         2
+##  5 male   Swim         2
+##  6 male   Swim         2
+##  7 male   Row          2
+##  8 male   Row          2
+##  9 male   Row          2
+## 10 male   Row          2
+## 11 male   Row          2
+## 12 male   Row          2
+## 13 male   Row          2
+## 14 male   Row          2
+## 15 male   Row          2
+## 16 male   Row          2
+## 17 male   BBall        2
+## 18 male   BBall        2
+## 19 male   BBall        2
+## 20 male   BBall        2
+## 21 male   BBall        2
+## 22 male   BBall        2
+## 23 male   Field        2
+## 24 male   TSprnt       2
+## 25 male   WPolo        2
+## 26 male   WPolo        2
+## 27 male   WPolo        2
+```
+
+ 
+
+Males, apparently some of the more muscular ones, but not the field
+athletes. 
+
+
+```r
+athletes2 %>% filter(cluster==3) %>% print(n=Inf)
+```
+
+```
+## # A tibble: 10 x 3
+##    gender sport   cluster
+##    <chr>  <chr>     <int>
+##  1 female Netball       3
+##  2 female T400m         3
+##  3 female TSprnt        3
+##  4 female TSprnt        3
+##  5 female T400m         3
+##  6 female TSprnt        3
+##  7 female TSprnt        3
+##  8 female Tennis        3
+##  9 female Tennis        3
+## 10 male   Row           3
+```
+
+ 
+
+This is an odd one, since there is one male rower (rowers tend to be
+fairly big) along with a bunch of females mostly from sports involving
+running. 
+Cluster 4:
+
+
+```r
+athletes2 %>% filter(cluster==4) %>% print(n=Inf)
+```
+
+```
+## # A tibble: 13 x 3
+##    gender sport  cluster
+##    <chr>  <chr>    <int>
+##  1 male   Swim         4
+##  2 male   Row          4
+##  3 male   Row          4
+##  4 male   Row          4
+##  5 male   BBall        4
+##  6 male   BBall        4
+##  7 male   TSprnt       4
+##  8 male   Field        4
+##  9 male   WPolo        4
+## 10 male   WPolo        4
+## 11 male   WPolo        4
+## 12 male   WPolo        4
+## 13 male   WPolo        4
+```
+
+ 
+
+Males, but possibly more muscular ones.
+
+
+```r
+athletes2 %>% filter(cluster==5) %>% print(n=Inf)
+```
+
+```
+## # A tibble: 10 x 3
+##    gender sport  cluster
+##    <chr>  <chr>    <int>
+##  1 male   Swim         5
+##  2 male   Swim         5
+##  3 male   Row          5
+##  4 male   TSprnt       5
+##  5 male   TSprnt       5
+##  6 male   TSprnt       5
+##  7 male   T400m        5
+##  8 male   WPolo        5
+##  9 male   WPolo        5
+## 10 male   Tennis       5
+```
+
+ 
+
+More males, from similar sports. I wonder what makes these last two
+clusters different?
+
+One more:
+
+
+```r
+athletes2 %>% filter(cluster==6) %>% print(n=Inf)
+```
+
+```
+## # A tibble: 3 x 3
+##   gender sport cluster
+##   <chr>  <chr>   <int>
+## 1 male   BBall       6
+## 2 male   Field       6
+## 3 male   Field       6
+```
+
+ 
+
+These are three of our "big guys", by the looks of it.
+
+
+(h) Add the cluster membership to the data frame you read in from
+the file, and do a discriminant analysis treating the clusters as
+known groups. Don't display the output yet.
+
+Solution
+
+
+`MASS` is already loaded (for me), so:
+
+```r
+athletes.3 = athletes %>% 
+mutate(cluster=athletes.km$cluster) %>%
+lda(cluster~RCC+WCC+Hc+Hg+Ferr+BMI+SSF+`%Bfat`+LBM+Ht+Wt,data=.)
+```
+
+     
+
+We can display all the output now, or pull out pieces of it later. The
+problem here, with 12 groups and 11 variables, is that there is rather
+a lot of output.
+
+
+(i) How many linear discriminants do you have? How many do you
+think are important?
+
+Solution
+
+
+`svd`:
+
+```r
+athletes.3$svd
+```
+
+```
+##  [1] 13.37199926  8.27381171  5.16852326  4.76633686  3.80174381
+##  [6]  2.86014021  2.67746840  1.94766320  1.20487899  0.50727181
+## [11]  0.04670973
+```
+
+     
+
+It's hard to draw the line here. The first two, or maybe the first
+seven, or something like that. Your call.
+
+
+(j) Which variables seem to be important in distinguishing the
+clusters? Look only at the linear discriminants that you judged to
+be important.
+
+Solution
+
+
+This is rather large, since I had 12 clusters, and thus there are
+11 `LD`s:
+
+```r
+athletes.3$scaling
+```
+
+```
+##                 LD1           LD2         LD3         LD4
+## RCC      0.97065695 -0.6603068763  1.33756370  1.09562690
+## WCC      0.14419412  0.0976964684 -0.18593544  0.20949626
+## Hc       0.03993365 -0.0167282552  0.02944517  0.03757250
+## Hg       0.37674322 -0.0804231815  0.23604530  0.25585971
+## Ferr     0.01034932  0.0004759457 -0.01890123  0.01000745
+## BMI     -0.80345854 -0.1154590209  2.36621577  1.09372321
+## SSF      0.03104854  0.0201862368 -0.04266384 -0.01010683
+## `%Bfat` -0.26070019  0.3084472414  0.38633638 -0.56728329
+## LBM      0.13127761  0.2535714776  0.15237852 -0.95583785
+## Ht      -0.18753716 -0.0383066459  0.62101446  0.21807165
+## Wt       0.24096298 -0.0758565305 -0.86525933  0.47345760
+##                  LD5          LD6         LD7          LD8
+## RCC      0.823150984 -1.043582865 -0.07505452  3.349225162
+## WCC      0.040948618 -0.253978139  0.51122383 -0.208802305
+## Hc      -0.091527860  0.076362064  0.22579774 -0.064326188
+## Hg      -0.411820765  0.324683430 -0.49946561 -0.333561523
+## Ferr     0.016374918  0.014745757 -0.00126626  0.004707277
+## BMI      2.093393957 -0.074129274 -0.73341244 -1.414080937
+## SSF      0.042455393 -0.123300713 -0.04694265  0.039099433
+## `%Bfat`  0.001281886  0.805369458  0.62262118  0.321154264
+## LBM      0.326510350  0.150544819  0.47745059  0.502240317
+## Ht       0.617572863 -0.007326729 -0.13542176 -0.307307666
+## Wt      -1.003298275 -0.085364884 -0.21648376 -0.068463691
+##                  LD9         LD10        LD11
+## RCC      2.409712056 -2.458531332  3.02712544
+## WCC     -0.055087889 -0.096574434  0.08365257
+## Hc       0.323729320  0.495620032 -0.87338911
+## Hg      -2.113984890 -0.353250579  1.25812670
+## Ferr     0.001033493  0.001997618 -0.00132641
+## BMI      0.395756559 -0.745699734 -0.24072424
+## SSF     -0.046138514  0.008604107 -0.05862077
+## `%Bfat` -0.312212279 -0.634599730 -0.23032505
+## LBM     -0.603622986 -0.884218147 -0.69461824
+## Ht       0.039454667 -0.059206652  0.01561849
+## Wt       0.486302236  0.926849133  0.66518616
+```
+$ %$ %$ %$
+
+If we go back to my thought of only using two linear discriminants:
+LD1 is mostly `RCC` positively and `BMI` negatively, in
+that an athlete with large `RCC` and small `BMI` will
+tend to score high (positive) on LD1. `BMI` is the familiar
+body fat index. LD2 depends on `RCC` again, but this time
+negatively, and maybe percent body fat and `LBM`. And so on, if
+you went on.
+
+It may be that `RCC` is just very variable anyway, since it
+seems to appear just about everywhere.
+
+Extra: we can also look at the means on each variable by cluster,
+which is part of the output:
+
+
+```r
+round(athletes.3$means,2)
+```
+
+```
+##     RCC   WCC    Hc    Hg   Ferr   BMI    SSF `%Bfat`    LBM     Ht
+## 1  4.29  6.39 39.96 13.52  70.08 19.72  52.54   11.63  47.90 165.56
+## 2  4.99  6.47 45.27 15.36  82.63 24.08  52.92    9.35  80.52 192.14
+## 3  4.97  8.13 44.32 14.52  52.20 19.70  49.86   11.13  51.59 171.68
+## 4  4.81 10.11 44.27 14.97 121.31 24.57  57.79   10.16  80.00 190.39
+## 5  5.18  7.21 46.44 15.93 200.30 22.97  47.22    8.74  68.60 180.82
+## 6  5.38  6.27 48.50 16.90  87.33 30.96  75.77   12.32 101.67 194.53
+## 7  4.97  6.48 45.23 15.40  62.44 22.19  39.21    7.24  67.84 181.57
+## 8  5.02  8.20 46.02 15.86 128.18 29.09  92.78   16.62  80.08 182.03
+## 9  4.17  5.99 38.25 12.69  53.48 22.06  96.97   19.65  56.45 178.58
+## 10 4.34  8.82 39.14 13.22  70.00 25.04 150.16   26.95  57.36 177.13
+## 11 6.00  8.15 52.38 17.88  52.50 23.92  45.27    8.66  71.00 180.53
+## 12 4.59  7.29 42.66 14.36  46.04 22.74  86.31   18.59  58.60 178.09
+##        Wt
+## 1   54.21
+## 2   88.83
+## 3   58.04
+## 4   89.06
+## 5   75.27
+## 6  116.07
+## 7   73.13
+## 8   96.21
+## 9   70.31
+## 10  78.66
+## 11  77.85
+## 12  72.03
+```
+$ %$
+
+Perhaps the easiest thing to eyeball here is the cluster in which a
+variable is noticeably biggest (or possibly smallest). For example,
+`WCC` is highest in cluster 4, and while Ferritin is high
+there, it is higher still in cluster 5. `BMI` is highest in
+cluster 6 and lowest in clusters 1 and 3. Height is smallest in
+cluster 1, with weight being smallest there as well, and weight is
+much the biggest in cluster 6. 
+
+
+(k) Draw a biplot (which shows the first two LDs), drawing the
+clusters in different colours. Comment briefly on anything
+especially consistent or inconsistent with what you've seen so far.
+
+Solution
+
+
+The thing to get the colours is to feed a `groups` into
+`ggbiplot`. I suspect I need the `factor` in there
+because the clusters are numbers and I want them treated as
+categorical (the numbers are labels). Also, note that we will have
+a lot of colours here, so I am trying to make them more
+distinguishable using `scale_colour_brewer` from the
+`RColorBrewer` package (loaded at the beginning):
+
+```r
+ggbiplot(athletes.3,groups=factor(athletes2$cluster)) +
+scale_colour_brewer(palette="Paired")
+```
+
+<img src="22-thingy_files/figure-html/unnamed-chunk-184-1.png" width="672"  />
+
+     
+
+What the biplot shows, that we haven't seen any hint of so far, is
+that the clusters are pretty well separated on LD1 and LD2: there is
+not a great deal of overlap. 
+
+Anyway, low LD1 means high on BMI and low on RCC, as we saw
+before. The arrow for RCC points down as well as right, so it's part
+of LD2 as well. There isn't much else that points up or down, but
+percent body fat and LBM do as much as anything. This is all pretty
+much what we saw before.
+
+As to where the clusters fall on the picture:
+
+
+
+* Cluster 1 in light blue was "small and light": small BMI, so
+ought to be on the right. This cluster's RCC was also small, which
+on balance puts them on the left, but then they should be *top*
+left because RCC points down. I dunno.
+
+* Cluster 2 in dark blue was "more muscular males", mid-right,
+so above average on LD1 but about average on LD2.
+
+* Cluster 3, light green, was "running females" (mostly), lower
+left, so below average on both LD1 and LD2.
+
+* Cluster 4, dark green, "more muscular males" again. There is a
+lot of overlap with cluster 2.
+
+* Cluster 5, pink, was "yet more males".  Mostly above average on
+LD1 and below average on LD2. The latter was what distinguished
+these from clusters 4 and 2.
+
+* Cluster 6, red, was "big guys". The biggest on LD1 and almost
+the biggest on LD2.
+
+
+There is something a bit confusing in LD1, which contrasts RCC and
+BMI. You would expect, therefore, RCC and BMI to be negatively
+correlated, but if you look at the cluster means, that isn't really
+the story: for example, cluster 1 has almost the lowest mean on both
+variables, and the highest RCC, in cluster 11, goes with a middling
+BMI. 
+
+I like these colours much better than the default ones. Much easier to
+tell apart.
+In any case, RCC and BMI seem to be important, so let's plot them
+against each other, coloured by cluster:
+
+
+```r
+athletes %>%
+mutate(cluster=factor(athletes2$cluster)) %>%
+ggplot(aes(x=RCC, y=BMI, colour=cluster))+
+geom_point()+scale_colour_brewer(palette="Paired")
+```
+
+<img src="22-thingy_files/figure-html/unnamed-chunk-185-1.png" width="672"  />
+
+ 
+
+I decided to create a column called `cluster` in the data
+frame, so that the legend would have a nice clear title. (If you do
+the `factor(athletes2$cluster)` in the `ggplot`, that
+is what will appear as the legend title.)
+
+There seems to be very little relationship here, in terms of an
+overall trend on the plot. But at least these two variables do
+*something* to distinguish the clusters. It's not as clear as
+using LD1 and LD2 (as it won't be, since they're designed to be the
+best at separating the groups), but you can see that the clusters are
+at least somewhat distinct.
+
+The "paired" part of the colour palette indicates that successive
+colours come in pairs: light and dark of blue, green, red, orange,
+purple and brown (if you think of yellow as being "light brown" or
+brown as being "dark yellow", like bananas).
+
+A good resource for RColorBrewer is
+[link](https://moderndata.plot.ly/create-colorful-graphs-in-r-with-rcolorbrewer-and-plotly/). The
+"qualitative palettes" shown there are for distinguishing groups
+(what we want here); the sequential palettes are for distinguishing
+values on a continuous scale, and the diverging palettes are for
+drawing attention to high and low.
 
 
 

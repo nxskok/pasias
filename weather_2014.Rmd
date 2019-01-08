@@ -1,0 +1,487 @@
+
+
+ The data in
+[link](http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv) is of the
+weather in a certain location: daily weather records for 2014. The
+variables are:
+
+
+
+* day of the year (1 through 365)
+
+* day of the month
+
+* number of the month
+
+* season
+
+* low temperature (for the day)
+
+* high temperature
+
+* average temperature
+
+* time of the low temperature
+
+* time of the high temperature
+
+* rainfall (mm)
+
+* average wind speed
+
+* wind gust (highest wind speed)
+
+* time of the wind gust
+
+* wind direction
+
+
+
+
+(a) Read in the data, and create a data frame containing only
+the temperature variables, the rainfall and the wind speed variables
+(the ones that are actual numbers, not times or text). Display the
+first few lines of your data frame.
+ 
+Solution
+
+
+I like `dplyr` (as you know). Or you could just pick out
+the columns by number:
+```{r message=F}
+my_url="http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv"
+weather.0=read_csv(my_url)
+weather.0
+```
+
+     
+
+There are lots of columns, of which we only want a few:
+
+```{r }
+weather = weather.0 %>% select(l.temp:ave.temp,rain:gust.wind) 
+weather
+```
+
+ 
+ 
+
+(b) Find five-number summaries for each column by running
+`quantile` on all the columns of the data frame (at once, if
+you can: remember the `map` stuff?)
+ 
+Solution
+
+
+This:
+```{r }
+map_df(weather,quantile) 
+```
+
+     
+
+These are, reading down, the min, Q1, median, Q3, max of each
+variable. The rain, in particular, is very skewed: the median is near
+zero, but the maximum is much higher. (Most of the time, you get no
+rain, but if you get any, you can get a lot.)
+ 
+
+(c) Run a principal components analysis (on the correlation matrix).
+ 
+Solution
+
+
+```{r }
+weather.1=princomp(weather,cor=T)
+```
+
+     
+ 
+
+(d) Obtain a `summary` of your principal components
+analysis. How many components do you think are worth investigating?
+ 
+Solution
+
+
+```{r }
+summary(weather.1)
+```
+
+     
+The issue is to see where the standard deviations are getting small
+(after the second component, or perhaps the third one) and to see
+where  the cumulative proportion of variance explained is acceptably
+high (again, after the second one, 86\%, or the third, 95\%).
+ 
+
+(e) Make a scree plot. Does this
+support your conclusion from the previous part?
+ 
+Solution
+
+
+`ggscreeplot` from `ggbiplot`:
+```{r adskjheuya}
+ggscreeplot(weather.1)
+```
+
+     
+
+I see elbows at 3 and at 4. Remember you want to be on the mountain
+for these, not on the scree, so this suggests 2 or 3 components, which
+is exactly what we got from looking at the standard deviations and
+cumulative variance explained.
+
+The eigenvalue-greater-than-1 thing (that is, the ``standard
+deviation'' in the `summary` being greater than 1)
+says 2 components, rather than 3.
+ 
+
+(f) Obtain the component loadings. How do the first three
+components depend on the original variables? (That is, what kind of
+values for the original variables would make the component scores
+large or small?)
+ 
+Solution
+
+
+```{r }
+weather.1$loadings
+```
+
+     
+
+
+
+* This component loads mainly (and negatively) on the temperature
+variables, so when temperature is high, component 1 is low.
+You could also say that it loads positively on the other
+variables, in which case component 1 is high if the temperature
+variables are low and the rain and wind variables are high.
+
+
+* This one loads most heavily, negatively, on wind: when wind is high,
+component 2 is low. Again, you can make the judgement call that the
+other variables also feature in component 2, so that when
+*everything* is large, component 2 is small and vice versa.
+
+* This one is a bit clearer. The blank loadings are close to 0,
+and can be ignored. The main thing in component 3 is rain: when
+rainfall is large, component 3 is large. Or, if you like, it is
+large (positive) when rainfall is large *and wind is small*.
+
+
+The interpretation here is kind of muffled, because each component has
+bits of everything. One of the advantages of factor analysis that we
+see in class later is that
+you can do a "rotation" so that each variable (to a greater extent)
+is either *in* a factor or *out* of it. Such a varimax rotation
+is the default for `factanal`, which I presume I now have to
+show you (so this is looking ahead): 
+
+```{r }
+weather.2=factanal(weather,3,scores="r")
+weather.2$loadings
+```
+
+ 
+
+These are a lot less ambiguous: factor 1 is temperature, factor 2 is
+rain and wind, and factor 3 is large (positive) if the high
+temperature is high or the low temperature is low: that is, if the
+high temperature was especially high relative to the low temperature
+(or, said differently, if the temperature *range* was high).
+
+These factors are rather pleasantly interpretable.
+
+`ggbiplot` mysteriously doesn't handle factor analyses, so we
+have to go back to the base-graphics version, which goes a bit like this:
+
+```{r }
+biplot(weather.2$scores,weather.2$loadings)
+```
+
+ 
+
+Now you see that the factors are aligned with the axes, and it's very
+clear what the factors "represent". (You don't see much else, in all
+honesty, but you see at least this much.)
+ 
+
+(g) Obtain the principal component scores, for as many components
+as you think are reasonable, and display the first
+20 of them for each component alongside the other variables in your
+data frame.
+ 
+Solution
+
+
+Something like this. I begin by turning the component scores
+(which are a matrix) into a data frame, and selecting the ones I
+want (the first three):
+```{r echo=F}
+ww=getOption("width")
+options(width=ww+20)
+```
+
+      
+```{r size="footnotesize"}
+as_tibble(weather.1$scores) %>% 
+select(1:3) %>% 
+bind_cols(weather) %>%
+print(n=20)
+```
+
+      
+
+I just did the first three scores.
+ 
+
+(h) Find a day that scores high on component 1, and explain briefly why
+it came out that way (by looking at the measured variables).
+ 
+Solution
+
+
+Day 4 has the highest component 1 score. This is one of the
+cooler days. Also, there is a
+largish amount of rain *and* wind. So low temperature, high
+rain and wind.
+The days at the bottom of my list were cooler than day 4, but they
+had less rain and less wind.
+  
+
+(i) Find a day that scores low on component 2, and explain
+briefly why it came out low.
+ 
+Solution
+
+
+Day 6 (or day 1). These are days when the wind speed (average or
+gust) is on the high side. These days win over day 4 because their
+temperature was also higher.
+ 
+
+(j) Find a day that scores high on component 3, and explain
+briefly why it came out high.
+ 
+Solution
+
+
+Day 2. Component 3 was mainly rain, so it is not surprising that
+the rainfall is the highest on this day.
+ 
+
+(k) Make a biplot of these data, labelling the days by the day
+count (from 1 to 365). You may have to get the day count from the
+original data frame that you read in from the file. You can shrink
+the day numbers to make them overwrite each other (a bit) less.
+ 
+Solution
+
+
+`ggbiplot`. I did some digging in the help file to figure
+out how to label the points by a variable and how to control the
+size of the labels, and I also went digging in the data frame
+that I read in from the file to get the count of the day in the
+year, which was called `day.count`:
+```{r }
+ggbiplot(weather.1,labels=weather.0$day.count,labels.size=2)
+```
+
+     
+
+I think the label text is small enough, though you could make it
+smaller. I'll be asking you to look at some extreme points in a
+moment, so those are the only ones you'll need to be able to
+disentangle. 
+
+The variables divide into two groups: the temperature ones, that point
+to about 8 o'clock, and the wind and rain ones, that point to about 5
+o'clock. These are not straight up or down or across, so they all
+feature in both components: component 1 is mostly temperature, but has
+a bit of wind/rain in it, while component 2 is mostly wind/rain with a
+bit of temperature in it. You might be wondering whether things
+couldn't be rotated so that, say, the temperature variables go across
+and the rain/wind ones go down, which means you'd have a temperature
+component and a rain/wind component. This is what factor analysis
+does, and I think I did that earlier (and this is what we found).
+$
+
+(l) Looking at your biplot, what do you think was remarkable
+about the weather on day 37? Day 211? Confirm your guesses by
+looking at the appropriate rows of your data frame (and comparing
+with your `summary` from earlier).
+ 
+Solution
+
+
+Day 37 is at the bottom right of the plot, at the pointy end of
+the arrows for rain, wind gust and average wind. This suggests a
+rainy, windy day:
+```{r }
+weather %>% slice(37)
+```
+
+     
+
+Those are high numbers for both rain and wind (the highest for average
+wind and above the third quartile otherwise), but the temperatures
+are unremarkable.
+
+Day 211 is towards the pointy end of the arrows for temperature, so
+this is a hot day:
+
+```{r }
+weather %>% slice(211)
+```
+
+ 
+
+This is actually the hottest day of the entire year: day 211 is
+highest on all three temperatures, while the 
+wind speeds are right around average (and no rain is not completely
+surprising). 
+
+I can do a couple more. Points away from the pointy end of the arrows
+are *low* on the variables in question, for example day 265:
+
+```{r }
+weather %>% slice(265)
+```
+
+ 
+
+This is not really low rain, but it is definitely low
+*wind*. What about day 47?
+
+```{r }
+weather %>% slice(47)
+```
+
+ 
+
+This is predominantly low on temperature. In fact, it is kind of low
+on wind and rain too.
+`r tufte::margin_note("If you ignore the wind gust, anyway.")`
+This makes sense, because not only is it at the "wrong" end of the
+temperature arrows, it is kind of at the wrong end of the wind/rain
+arrows as well.
+
+Having done these by percentile ranks in one of the other questions,
+let's see if we can do that here as well:
+
+```{r }
+map_df(weather,percent_rank) %>%
+slice(c(37,211,265,47))
+```
+
+ 
+
+These are:
+
+
+
+* Day 37: highly rainy and windy (and below average,
+but not remarkably so, on temperature). 
+
+* Day 211: the highest or near-highest temperature, no rain but
+unremarkable for wind.
+
+* Day 265: Lowest for wind (and above Q3 for low temperature and
+rain). 
+
+* Day 47: Lowest or near-lowest temperature.
+
+
+The advantage to doing it this way is that you don't need a separate
+five-number summary for each variable; the percentile ranks
+*give* you a comparison with quartiles (or any other percentile
+of interest to you).
+In case you are wondering where this is: I was doing a presentation
+using these data to some Environmental Science grad students, and I
+had them guess where it was. The temperatures for the whole year are
+warm-temperate, with a smallish range, and sometimes a lot of
+rain. This suggests a maritime climate. I gave the additional clues of
+"western Europe" and ``this place's soccer team plays in blue and
+white striped shirts''. The temperatures have about the right range
+low-to-high for Britain, but are too warm. Which suggests going south:
+perhaps Brittany in France, but actually the west
+coast of the Iberian peninsula: Porto, in northern Portugal, with the
+weather blowing in off the Atlantic. 
+Let's make a map, but first we "geocode" Porto (and La Coru\~{n}a,
+for later). I like to do the lookup of longitude and latitude first,
+once and for all, since I find the geocoding a bit finicky (it's
+actually Google that's finicky, because sometimes it decides that
+you've done too many lookups and returns you missings).
+I save the result:
+
+```{r eval=F}
+places=tribble(
+~place,
+"Porto PT",
+"La Coruna ES"
+)
+places = places %>% mutate_geocode(place)
+saveRDS(places,"places1.rds")
+```
+
+ 
+
+Then I use these points, reading them in from the saved file first. I
+just want Porto this time (we'll use the other one in a minute). You
+can obtain a map from a place name (just like you can in
+`maps.google.com`, since it's the same interface), but since we
+already have the longitude and latitude, we'll use them again, to save
+Google looking them up again, and possibly saving us from getting an error:
+
+```{r error=T}
+porto = readRDS("places1.rds") %>% slice(1)
+mapp=get_map(c(lon=porto$lon,lat=porto$lat), zoom=5)
+ggmap(mapp)+geom_point(data=porto,aes(x=lon,y=lat),colour="red")
+```
+
+ 
+
+As a point of technique, I've gone further than necessary (as
+usual). I wanted to mark the point corresponding to Porto. I thought
+about circling it or drawing an arrow to it, but this way, marking it
+with a dot, is easiest. There is always a choice, marking places on
+maps, whether you put a label on the place or not; it depends on the
+scale of the map (and the size of the place you are labelling) whether
+it will already appear labelled on the map or not.
+
+The weather in this part of the world tends to come from the
+southwest. Now you see why Porto gets so much rain!
+If you know your soccer teams, La Coru\~{n}a in north-western Spain would
+have been a good choice too (their team Deportivo also plays in blue and white
+striped shirts, and the climate is likely to be similar).
+
+I suppose I have to show you that on the map too. First I read in the
+longitudes and latitudes for both places from the file, and (just for
+fun) add a column saying which country each one is in. I'm also
+labelling both places:
+
+```{r error=T}
+places=readRDS("places1.rds")
+places = places %>% mutate(country=c("Portugal","Spain"))
+ggmap(mapp)+
+geom_point(data=places,aes(x=lon,y=lat,colour=country)) +
+geom_text_repel(data=places, aes(label=place))
+```
+
+ 
+
+Note that this time the `colour` is inside the `aes`, so
+`ggplot` will choose different colours to represent the
+countries with.
+
+I'm not sure what the warnings are, but they are something to do with
+plotting the labels.
+
+You might guess that La Coru\~{n}a (in blue) will have very similar
+weather to Porto.
+ 
+
+

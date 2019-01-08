@@ -264,26 +264,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 4
 ##    drug       junk  time  weight
 ##    <chr>      <chr> <chr>  <int>
-##  1 thyroxin   Time  4        177
-##  2 thyroxin   Time  2        121
-##  3 thiouracil Time  1         75
-##  4 control    Time  4        140
-##  5 thiouracil Time  2        101
-##  6 thiouracil Time  3        104
-##  7 control    Time  2        112
-##  8 control    Time  2        123
-##  9 control    Time  0         46
-## 10 thiouracil Time  1         72
-## 11 control    Time  4        177
-## 12 thiouracil Time  3         90
-## 13 thiouracil Time  3        111
-## 14 thyroxin   Time  0         52
-## 15 thiouracil Time  1         86
-## 16 control    Time  4        172
-## 17 control    Time  3        146
-## 18 thiouracil Time  1         69
-## 19 control    Time  3        139
-## 20 thyroxin   Time  4        189
+##  1 thyroxin   Time  3        120
+##  2 thiouracil Time  3        123
+##  3 thiouracil Time  2        100
+##  4 thiouracil Time  2        101
+##  5 thiouracil Time  1         72
+##  6 thiouracil Time  2        101
+##  7 control    Time  1         77
+##  8 thiouracil Time  3        104
+##  9 thiouracil Time  1         79
+## 10 control    Time  0         57
+## 11 thiouracil Time  0         59
+## 12 control    Time  2         94
+## 13 thyroxin   Time  0         59
+## 14 thiouracil Time  1         61
+## 15 thyroxin   Time  2        116
+## 16 control    Time  4        164
+## 17 control    Time  3        139
+## 18 thyroxin   Time  1         71
+## 19 control    Time  2         90
+## 20 thyroxin   Time  4        144
 ```
 
  
@@ -309,26 +309,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 4
 ##    drug       timex weight  time
 ##    <chr>      <chr>  <int> <dbl>
-##  1 thiouracil Time0     59     0
-##  2 thiouracil Time2     92     2
-##  3 control    Time0     57     0
-##  4 thiouracil Time0     56     0
-##  5 control    Time1     67     1
+##  1 thyroxin   Time2    116     2
+##  2 thyroxin   Time1     70     1
+##  3 control    Time3    129     3
+##  4 control    Time3    139     3
+##  5 thyroxin   Time3    138     3
 ##  6 control    Time0     57     0
-##  7 thyroxin   Time1     70     1
-##  8 control    Time2     90     2
-##  9 thyroxin   Time1     85     1
-## 10 control    Time4    185     4
-## 11 thyroxin   Time3    110     3
-## 12 control    Time4    154     4
-## 13 thiouracil Time4    108     4
-## 14 thiouracil Time0     59     0
-## 15 thyroxin   Time4    171     4
-## 16 control    Time3    139     3
-## 17 thiouracil Time3    104     3
-## 18 control    Time0     49     0
-## 19 thiouracil Time1     79     1
-## 20 thiouracil Time1     69     1
+##  7 thyroxin   Time4    144     4
+##  8 thiouracil Time2     89     2
+##  9 thiouracil Time2     92     2
+## 10 thiouracil Time0     58     0
+## 11 control    Time1     70     1
+## 12 thiouracil Time1     61     1
+## 13 thiouracil Time0     53     0
+## 14 control    Time3    131     3
+## 15 control    Time1     91     1
+## 16 control    Time1     93     1
+## 17 thyroxin   Time3    151     3
+## 18 thyroxin   Time2     97     2
+## 19 control    Time0     52     0
+## 20 thiouracil Time4    129     4
 ```
 
  
