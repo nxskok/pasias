@@ -6,20 +6,20 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 
@@ -47,8 +47,8 @@ Solution
 I see this:
 
 ```r
-myurl = "http://www.utsc.utoronto.ca/~butler/c32/pluggedin.txt"
-plugged = read_delim(myurl, " ")
+myurl="http://www.utsc.utoronto.ca/~butler/c32/pluggedin.txt"
+plugged=read_delim(myurl," ")
 ```
 
 ```
@@ -102,7 +102,7 @@ or the more verbose form of the same thing:
 
 
 ```r
-plugged %>% group_by(year) %>% summarize(rows = n())
+plugged %>% group_by(year) %>% summarize(rows=n())
 ```
 
 ```
@@ -129,12 +129,10 @@ Solution
 
 
 ```r
-ggplot(plugged, aes(x = factor(year), y = hours)) + 
-    geom_boxplot()
+ggplot(plugged,aes(x=factor(year),y=hours))+geom_boxplot()
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-5-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
 
 The `fct_inorder` trick from assignment 1 will also work, since
 the years are in the data in the order we want them to be displayed.
@@ -152,12 +150,11 @@ like this. There is a wrinkle that I explain afterwards:
 
 
 ```r
-plugged %>% mutate(the_year = factor(year)) %>% 
-    ggplot(aes(x = the_year, y = hours)) + geom_boxplot()
+plugged %>% mutate(the_year=factor(year)) %>%
+ggplot(aes(x=the_year, y=hours))+geom_boxplot()
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-6-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
 You could even redefine `year` to be the factor version of
 itself (if you don't need the year-as-number anywhere else). The
@@ -173,16 +170,14 @@ If you forget to make `year` into a factor, this happens:
 
 
 ```r
-ggplot(plugged, aes(x = year, y = hours)) + geom_boxplot()
+ggplot(plugged,aes(x=year,y=hours))+geom_boxplot()
 ```
 
 ```
-## Warning: Continuous x aesthetic -- did you
-## forget aes(group=...)?
+## Warning: Continuous x aesthetic -- did you forget aes(group=...)?
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-7-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
 You get *one* boxplot, for all the hours, without distinguishing
 by year, and a warning message that tries (and fails) to read our
@@ -206,7 +201,7 @@ than "greater") because 1999 is "before" 2009:
 
 
 ```r
-t.test(hours ~ year, data = plugged, alternative = "less")
+t.test(hours~year,data=plugged,alternative="less")  
 ```
 
 ```
@@ -214,8 +209,7 @@ t.test(hours ~ year, data = plugged, alternative = "less")
 ## 	Welch Two Sample t-test
 ## 
 ## data:  hours by year
-## t = -3.3323, df = 24.861, p-value =
-## 0.001348
+## t = -3.3323, df = 24.861, p-value = 0.001348
 ## alternative hypothesis: true difference in means is less than 0
 ## 95 percent confidence interval:
 ##        -Inf -0.8121415
@@ -235,7 +229,7 @@ things from. The other ways, using (for example) `with`, also work:
 
 
 ```r
-with(plugged, t.test(hours ~ year, alternative = "less"))
+with(plugged,t.test(hours~year,alternative="less"))
 ```
 
 ```
@@ -243,8 +237,7 @@ with(plugged, t.test(hours ~ year, alternative = "less"))
 ## 	Welch Two Sample t-test
 ## 
 ## data:  hours by year
-## t = -3.3323, df = 24.861, p-value =
-## 0.001348
+## t = -3.3323, df = 24.861, p-value = 0.001348
 ## alternative hypothesis: true difference in means is less than 0
 ## 95 percent confidence interval:
 ##        -Inf -0.8121415
@@ -257,7 +250,7 @@ This also works, but is *ugly*:
 
 
 ```r
-t.test(plugged$hours ~ plugged$year, alternative = "less")
+t.test(plugged$hours~plugged$year,alternative="less")
 ```
 
 ```
@@ -265,8 +258,7 @@ t.test(plugged$hours ~ plugged$year, alternative = "less")
 ## 	Welch Two Sample t-test
 ## 
 ## data:  plugged$hours by plugged$year
-## t = -3.3323, df = 24.861, p-value =
-## 0.001348
+## t = -3.3323, df = 24.861, p-value = 0.001348
 ## alternative hypothesis: true difference in means is less than 0
 ## 95 percent confidence interval:
 ##        -Inf -0.8121415
@@ -284,8 +276,7 @@ If you want the pooled test in R, you have to ask for it:
 
 
 ```r
-t.test(hours ~ year, alternative = "less", data = plugged, 
-    var.equal = T)
+t.test(hours~year,alternative="less",data=plugged,var.equal=T)    
 ```
 
 ```
@@ -293,8 +284,7 @@ t.test(hours ~ year, alternative = "less", data = plugged,
 ## 	Two Sample t-test
 ## 
 ## data:  hours by year
-## t = -3.3323, df = 28, p-value =
-## 0.001216
+## t = -3.3323, df = 28, p-value = 0.001216
 ## alternative hypothesis: true difference in means is less than 0
 ## 95 percent confidence interval:
 ##        -Inf -0.8158312
@@ -323,7 +313,7 @@ the *smaller* SD, the probability of a type I error will be
 larger than $\alpha$. This is why you see S-W in STAB22. You see the
 pooled test in STAB57 because the logic of its derivation is so much
 clearer,
-\marginnote{I return to this issue when we look at the same data  in SAS later.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I return to this issue when we look at the same data  in SAS later.</span> 
 not because it's really the better test in
 practice. The theory says that if your data are normal in both groups
 with the same variance, then the pooled test is best, but it says
@@ -352,7 +342,7 @@ put in a thing that gets the right CI:
 
 
 ```r
-t.test(hours ~ year, data = plugged, conf.level = 0.99)
+t.test(hours~year,data=plugged,conf.level=0.99)  
 ```
 
 ```
@@ -360,8 +350,7 @@ t.test(hours ~ year, data = plugged, conf.level = 0.99)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  hours by year
-## t = -3.3323, df = 24.861, p-value =
-## 0.002696
+## t = -3.3323, df = 24.861, p-value = 0.002696
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 99 percent confidence interval:
 ##  -3.0614628 -0.2718705
@@ -393,7 +382,7 @@ their car. The data are in an Excel spreadsheet,
 know if you cannot handle this format.) Click on the link. The data
 will probably download automatically. Check the folder on your
 computer where things get downloaded.
-\marginnote{Mine is rather  prosaically called *Downloads*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mine is rather  prosaically called *Downloads*.</span> 
 If the spreadsheet is just
 displayed and not downloaded, save it somewhere on your computer.
 
@@ -470,9 +459,9 @@ otherwise. (I am grateful to Rose Gao for this idea.)
 Here is how you can use `download.file` here:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx"
-local = "parking.xlsx"
-download.file(my_url, local, mode = "wb")
+my_url='http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx'
+local="parking.xlsx"
+download.file(my_url, local, mode="wb")
 ```
 
          
@@ -482,7 +471,7 @@ those two ways, you go ahead and do this:
 
 ```r
 library(readxl)
-parking = read_excel("parking.xlsx", sheet = 2)
+parking=read_excel("parking.xlsx",sheet=2)
 parking
 ```
 
@@ -508,7 +497,7 @@ parking
 You have to do it this way, using the version of the spreadsheet on
 your computer, since `read_excel` won't take a
 URL, or if it does, I can't make it work.
-\marginnote{Let me know if you  have more success than I did.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Let me know if you  have more success than I did.</span> 
 I put the spreadsheet in R Studio's
 current folder, so I could read it in by name, or you can do the
 `f=file.choose()` thing, find it, then read it in.
@@ -521,9 +510,9 @@ you and explain:
 
 
 ```r
-tf = tempfile()
-download.file(my_url, tf, mode = "wb")
-p = read_excel(tf, sheet = 2)
+tf=tempfile()
+download.file(my_url, tf, mode="wb")
+p=read_excel(tf, sheet = 2)
 ```
 
  
@@ -544,7 +533,7 @@ If you are wondering about that `mode` thing on
 like Notepad), and "binary" that you can't look at directly, but for
 which you need special software like Word or Excel to decode it for
 you.
-\marginnote{A Word or Excel document has all kinds of formatting  information hidden in the file as well as the text that you see on  the screen.}  
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">A Word or Excel document has all kinds of formatting  information hidden in the file as well as the text that you see on  the screen.</span>  
 The first character in `mode` is either
 `w` for "write a new file", which is what we want here, or
 `a` for "append", which would mean adding to the end of a
@@ -563,7 +552,7 @@ sheet 2, but you can use any name you like).
 Then I read this into R thus:
 
 ```r
-parking2 = read_csv("parking2.csv")
+parking2=read_csv("parking2.csv")
 ```
 
 ```
@@ -638,12 +627,10 @@ Solution
 With the right data set, this is a piece of cake:
 
 ```r
-ggplot(parking, aes(x = gender, y = distance)) + 
-    geom_boxplot()
+ggplot(parking,aes(x=gender,y=distance))+geom_boxplot()
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-18-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
          
 
@@ -662,11 +649,10 @@ the distances, without distinguishing by gender:
 
 
 ```r
-ggplot(parking, aes(x = distance)) + geom_histogram(bins = 8)
+ggplot(parking,aes(x=distance))+geom_histogram(bins=8)
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-19-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
  
 
@@ -680,12 +666,12 @@ the code first, and then explain how it works:
 
 
 ```r
-ggplot(parking, aes(x = distance)) + geom_histogram(bins = 7) + 
-    facet_grid(gender ~ .)
+ggplot(parking,aes(x=distance))+
+geom_histogram(bins=7)+
+facet_grid(gender~.)
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-20-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
  
 
@@ -699,7 +685,7 @@ having `gender` as the $y$ in the arrangement of the facets, so
 it goes before the squiggle. We don't have any $x$ in the arrangement
 of the facets, and we tell `ggplot` this by putting a dot where
 the $x$ would be.
-\marginnote{You might have a second categorical variable  by which you want to arrange the facets left and right, and that  would go where the dot is.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might have a second categorical variable  by which you want to arrange the facets left and right, and that  would go where the dot is.</span>
 
 You can also use `facet_wrap` for this, but you have to be
 more careful since you don't have any control over how the histograms
@@ -709,12 +695,12 @@ for comparing distributions). You can make it work by using
 
 
 ```r
-ggplot(parking, aes(x = distance)) + geom_histogram(bins = 7) + 
-    facet_wrap(~gender, ncol = 1)
+ggplot(parking,aes(x=distance))+
+geom_histogram(bins=7)+
+facet_wrap(~gender,ncol=1)
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-21-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
  
 
@@ -735,8 +721,9 @@ you don't have anything else to put there, you put a dot. Here's my
 
 
 ```r
-ggplot(parking, aes(x = distance)) + geom_histogram(bins = 7) + 
-    facet_grid(gender ~ .)
+ggplot(parking,aes(x=distance))+
+geom_histogram(bins=7)+
+facet_grid(gender~.)
 ```
 
  
@@ -744,12 +731,13 @@ ggplot(parking, aes(x = distance)) + geom_histogram(bins = 7) +
 We wanted gender to go up and down, and we had nothing to go left and
 right, hence the dot. Contrast that with my `facet_wrap`
 code:
-\marginnote{I took out the *ncol* since that confuses the  explanation here.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I took out the *ncol* since that confuses the  explanation here.</span> 
 
 
 ```r
-ggplot(parking, aes(x = distance)) + geom_histogram(bins = 7) + 
-    facet_wrap(~gender)
+ggplot(parking,aes(x=distance))+
+geom_histogram(bins=7)+
+facet_wrap(~gender)
 ```
 
  
@@ -764,7 +752,7 @@ observations, so we should use this many bins:
 
 
 ```r
-sturges = log(95, 2) + 1
+sturges=log(95,2)+1
 sturges
 ```
 
@@ -783,7 +771,7 @@ Or:
 
 
 ```r
-with(parking, nclass.Sturges(distance))
+with(parking,nclass.Sturges(distance))
 ```
 
 ```
@@ -813,11 +801,10 @@ and that leads to this histogram:
 
 
 ```r
-ggplot(parking, aes(x = distance)) + geom_histogram(bins = 14)
+ggplot(parking,aes(x=distance))+geom_histogram(bins=14)
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-27-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
  
 
@@ -834,7 +821,7 @@ compromise. For example, using Sturges' rule based on 47 observations
 
 
 ```r
-log(47, 2) + 1
+log(47,2)+1
 ```
 
 ```
@@ -852,8 +839,9 @@ up. To do *that*, `filter` one of the genders first:
 
 
 ```r
-parking %>% filter(gender == "female") %>% with(., 
-    nclass.Sturges(distance))
+parking %>%
+filter(gender=="female") %>%
+with(.,nclass.Sturges(distance))
 ```
 
 ```
@@ -916,7 +904,7 @@ Solution
  comparing the heights of the boxes on the boxplots:
 
 ```r
-t.test(distance ~ gender, data = parking)
+t.test(distance~gender,data=parking)
 ```
 
 ```
@@ -924,8 +912,7 @@ t.test(distance ~ gender, data = parking)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  distance by gender
-## t = -1.3238, df = 79.446, p-value =
-## 0.1894
+## t = -1.3238, df = 79.446, p-value = 0.1894
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  -4.5884103  0.9228228
@@ -945,7 +932,7 @@ Or, this being the pooled one:
 
 
 ```r
-t.test(distance ~ gender, data = parking, var.equal = T)
+t.test(distance~gender,data=parking,var.equal=T)
 ```
 
 ```
@@ -986,7 +973,7 @@ your point of view) that both groups are right-skewed, or
 that both groups have outliers, neither of which fits a
 normal distribution. The outlier in the male group is
 particularly egregious.
-\marginnote{Google defines this as            meaning *outstandingly bad, shocking*.} So I think we
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Google defines this as            meaning *outstandingly bad, shocking*.</span> So I think we
 are entitled to question whether a two-sample $t$-test is
 the right thing to do.
 Having said that, we should go back and remember that the
@@ -1006,7 +993,7 @@ Work out the overall median of all the distances, regardless
 of gender:
 
 ```r
-parking %>% summarize(med = median(distance))
+parking %>% summarize(med=median(distance))
 ```
 
 ```
@@ -1027,7 +1014,7 @@ of exposition.)
 
 
 ```r
-tab = with(parking, table(gender, distance < 9))
+tab=with(parking,table(gender,distance<9))
 tab
 ```
 
@@ -1048,7 +1035,7 @@ if you know that):
 
 
 ```r
-chisq.test(tab, correct = F)
+chisq.test(tab,correct=F)
 ```
 
 ```
@@ -1056,8 +1043,7 @@ chisq.test(tab, correct = F)
 ## 	Pearson's Chi-squared test
 ## 
 ## data:  tab
-## X-squared = 0.89075, df = 1, p-value =
-## 0.3453
+## X-squared = 0.89075, df = 1, p-value = 0.3453
 ```
 
  
@@ -1123,8 +1109,8 @@ Solution
 Reading directly from the URL is easiest:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/bellpepper.csv"
-pepper = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/bellpepper.csv"
+pepper=read_csv(my_url)
 ```
 
 ```
@@ -1187,11 +1173,10 @@ Solution
 This kind of thing:
 
 ```r
-ggplot(pepper, aes(x = field, y = water)) + geom_boxplot()
+ggplot(pepper,aes(x=field,y=water))+geom_boxplot()
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/dartmouth-1} 
+<img src="05-two-sample-inference_files/figure-html/dartmouth-1.png" width="672"  />
 
      
 
@@ -1203,12 +1188,11 @@ The other reasonable plot is a facetted histogram, something like this:
 
 
 ```r
-ggplot(pepper, aes(x = water)) + geom_histogram(bins = 6) + 
-    facet_grid(field ~ .)
+ggplot(pepper,aes(x=water))+geom_histogram(bins=6)+
+facet_grid(field~.)
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-37-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
  
 
@@ -1221,10 +1205,12 @@ earlier to find the five-number summaries for each field:
 
 
 ```r
-pepper %>% nest(-field) %>% mutate(qq = map(data, 
-    ~enframe(quantile(.$water)))) %>% unnest(qq) %>% 
-    mutate(pctile = parse_number(name)) %>% select(-name) %>% 
-    spread(pctile, value)
+pepper %>% nest(-field) %>%
+mutate(qq=map(data,~enframe(quantile(.$water)))) %>%
+unnest(qq) %>%
+mutate(pctile=parse_number(name)) %>%
+select(-name) %>%
+spread(pctile,value)
 ```
 
 ```
@@ -1253,8 +1239,7 @@ Solution
 
 
 ```r
-t.test(water ~ field, alternative = "greater", 
-    data = pepper)
+t.test(water~field,alternative="greater", data=pepper)
 ```
 
 ```
@@ -1262,8 +1247,7 @@ t.test(water ~ field, alternative = "greater",
 ## 	Welch Two Sample t-test
 ## 
 ## data:  water by field
-## t = 2.0059, df = 27.495, p-value =
-## 0.0274
+## t = 2.0059, df = 27.495, p-value = 0.0274
 ## alternative hypothesis: true difference in means is greater than 0
 ## 95 percent confidence interval:
 ##  0.2664399       Inf
@@ -1287,7 +1271,7 @@ Another way to tackle this is to do a two-sided test and adapt the P-value:
 
 
 ```r
-t.test(water ~ field, data = pepper)
+t.test(water~field, data=pepper)
 ```
 
 ```
@@ -1295,8 +1279,7 @@ t.test(water ~ field, data = pepper)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  water by field
-## t = 2.0059, df = 27.495, p-value =
-## 0.0548
+## t = 2.0059, df = 27.495, p-value = 0.0548
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  -0.03878411  3.55842696
@@ -1367,8 +1350,8 @@ Solution
 These are aligned columns with spaces in between, so we need `read_table`:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/stressedmice.txt"
-mice = read_table(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/stressedmice.txt"
+mice=read_table(my_url)
 ```
 
 ```
@@ -1437,12 +1420,10 @@ Solution
 This:
 
 ```r
-ggplot(mice, aes(x = Environment, y = Time)) + 
-    geom_boxplot()
+ggplot(mice, aes(x=Environment, y=Time))+geom_boxplot()
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/artichoke-1} 
+<img src="05-two-sample-inference_files/figure-html/artichoke-1.png" width="672"  />
 
      
 
@@ -1466,7 +1447,7 @@ So we'd expect the mice in the standard environment to spend more
 time in darkness, if that hypothesis is correct.
 That's exactly what the boxplots show, with very little
 doubt.
-\marginnote{This means that I would expect to reject a null hypothesis of equal means, but I get ahead of myself.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This means that I would expect to reject a null hypothesis of equal means, but I get ahead of myself.</span>
 Your answer needs to make two points: (i) what you would expect to
 see, if the hypothesis about anxiety and exercise is true, and
 (ii) whether you actually did see it. You can do this either way
@@ -1492,7 +1473,7 @@ prove that the mean `Time` is *less* for
 `Enriched` than for `Standard`, so we need `alternative="less"`:
 
 ```r
-with(mice, t.test(Time ~ Environment, alternative = "less"))
+with(mice,t.test(Time~Environment,alternative="less"))
 ```
 
 ```
@@ -1500,16 +1481,13 @@ with(mice, t.test(Time ~ Environment, alternative = "less"))
 ## 	Welch Two Sample t-test
 ## 
 ## data:  Time by Environment
-## t = -6.7966, df = 9.1146, p-value =
-## 3.734e-05
+## t = -6.7966, df = 9.1146, p-value = 3.734e-05
 ## alternative hypothesis: true difference in means is less than 0
 ## 95 percent confidence interval:
 ##       -Inf -151.2498
 ## sample estimates:
-## mean in group Enriched 
-##               231.7143 
-## mean in group Standard 
-##               438.7143
+## mean in group Enriched mean in group Standard 
+##               231.7143               438.7143
 ```
 
      
@@ -1518,7 +1496,7 @@ A common clue that you have the wrong alternative hypothesis is a P-value coming
 
 
 ```r
-with(mice, t.test(Time ~ Environment, alternative = "greater"))
+with(mice,t.test(Time~Environment,alternative="greater"))
 ```
 
 ```
@@ -1531,10 +1509,8 @@ with(mice, t.test(Time ~ Environment, alternative = "greater"))
 ## 95 percent confidence interval:
 ##  -262.7502       Inf
 ## sample estimates:
-## mean in group Enriched 
-##               231.7143 
-## mean in group Standard 
-##               438.7143
+## mean in group Enriched mean in group Standard 
+##               231.7143               438.7143
 ```
 
      
@@ -1598,13 +1574,11 @@ Extra: another way to think about this is normal quantile plots to assess
 normality within each group. This uses the facetting trick to get a separate normal quantile plot for each `Environment`:
 
 ```r
-ggplot(mice, aes(sample = Time)) + stat_qq() + 
-    stat_qq_line() + facet_wrap(~Environment, 
-    scales = "free")
+ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
+facet_wrap(~Environment, scales="free")
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-45-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
      
 
@@ -1622,13 +1596,11 @@ What happens if we change the shape of the plots?
 
 
 ```r
-ggplot(mice, aes(sample = Time)) + stat_qq() + 
-    stat_qq_line() + facet_wrap(~Environment, 
-    scales = "free", ncol = 1)
+ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
+facet_wrap(~Environment, scales="free", ncol=1)
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-46-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
      
 
@@ -1651,7 +1623,7 @@ and `b` in our data set. Both sects are vegetarian; the
 difference between them is that people in Sect A only eat vegetables
 from below the ground, and Sect B only eats vegetables from above the
 ground. The height and weight of the boys
-\marginnote{This was not sexism, but a recognition that boys and girls will be of different heights for reasons unrelated to diet. Doing it this way makes the analysis simpler.} are measured at regular
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was not sexism, but a recognition that boys and girls will be of different heights for reasons unrelated to diet. Doing it this way makes the analysis simpler.</span> are measured at regular
 intervals. The data in
 [link](http://www.utsc.utoronto.ca/~butler/d29/kids-diet.txt) are the
 heights of the boys at age 12.
@@ -1668,8 +1640,8 @@ Solution
 The data values are separated by one space, so:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/kids-diet.txt"
-diet = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/kids-diet.txt"
+diet=read_delim(my_url," ")
 ```
 
 ```
@@ -1725,11 +1697,10 @@ The boxplot is the kind of thing we've seen before:
 
 
 ```r
-ggplot(diet, aes(x = sect, y = height)) + geom_boxplot()
+ggplot(diet,aes(x=sect,y=height))+geom_boxplot()
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-48-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
  
 
@@ -1758,12 +1729,11 @@ data in this form, the
 two samples are mixed up, but using facets is the way to go. Philosophically, we draw a normal quantile plot of *all* the heights, and then say at the end that we would actually like a separate plot for each sect:
 
 ```r
-diet %>% ggplot(aes(sample = height)) + stat_qq() + 
-    stat_qq_line() + facet_wrap(~sect, ncol = 1)
+diet %>% ggplot(aes(sample=height))+stat_qq()+stat_qq_line()+
+facet_wrap(~sect, ncol=1)
 ```
 
-
-\includegraphics{05-two-sample-inference_files/figure-latex/unnamed-chunk-49-1} 
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 
@@ -1779,8 +1749,8 @@ rows you want and then feed that into the plot:
 
 
 ```r
-secta = filter(diet, sect == "a") %>% ggplot(aes(sample = sect)) + 
-    stat_qq() + stat_qq_line()
+secta=filter(diet,sect=="a") %>%
+ggplot(aes(sample=sect))+stat_qq()+stat_qq_line()
 ```
 
  
@@ -1806,7 +1776,7 @@ default, so you don't need anything special:
 
 
 ```r
-t.test(height ~ sect, data = diet)
+t.test(height~sect,data=diet)
 ```
 
 ```
@@ -1814,8 +1784,7 @@ t.test(height ~ sect, data = diet)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  height by sect
-## t = -1.7393, df = 14.629, p-value =
-## 0.103
+## t = -1.7393, df = 14.629, p-value = 0.103
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  -12.007505   1.229728
@@ -1851,7 +1820,7 @@ could do it this way:
 
 ```r
 library(smmr)
-median_test(diet, height, sect)
+median_test(diet,height,sect)
 ```
 
 ```

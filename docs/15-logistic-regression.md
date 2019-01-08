@@ -6,20 +6,20 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 
@@ -59,8 +59,8 @@ Solution
 The nature of the file means that you need `read_table2`:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/spiders.txt"
-spider = read_table2(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/spiders.txt"
+spider=read_table2(my_url)
 ```
 
 ```
@@ -109,12 +109,10 @@ Solution
 
 
 ```r
-ggplot(spider, aes(x = Spiders, y = Grain.size)) + 
-    geom_boxplot()
+ggplot(spider,aes(x=Spiders,y=Grain.size))+geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/starcross-1} 
+<img src="15-logistic-regression_files/figure-html/starcross-1.png" width="672"  />
 
      
 
@@ -167,7 +165,7 @@ the edge and overwrite everything:
 
 
 ```r
-spider = spider %>% mutate(Spiders = factor(Spiders))
+spider = spider %>% mutate(Spiders=factor(Spiders))
 spider
 ```
 
@@ -199,8 +197,7 @@ of name is good, though.
 
 
 ```r
-Spiders.1 = glm(Spiders ~ Grain.size, family = "binomial", 
-    data = spider)
+Spiders.1=glm(Spiders~Grain.size,family="binomial",data=spider)
 summary(Spiders.1)
 ```
 
@@ -214,15 +211,11 @@ summary(Spiders.1)
 ## -1.7406  -1.0781   0.4837   0.9809   1.2582  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept)   -1.648      1.354  -1.217
-## Grain.size     5.122      3.006   1.704
-##             Pr(>|z|)  
-## (Intercept)   0.2237  
-## Grain.size    0.0884 .
+##             Estimate Std. Error z value Pr(>|z|)  
+## (Intercept)   -1.648      1.354  -1.217   0.2237  
+## Grain.size     5.122      3.006   1.704   0.0884 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -272,8 +265,8 @@ Something like this. I like to save all the values first, and
 go if you prefer: 
 
 ```r
-Grain.sizes = c(0.2, 0.5, 0.8, 1.1)
-spider.new = tibble(Grain.size = Grain.sizes)
+Grain.sizes=c(0.2,0.5,0.8,1.1)
+spider.new=tibble(Grain.size=Grain.sizes)
 spider.new
 ```
 
@@ -288,8 +281,8 @@ spider.new
 ```
 
 ```r
-pred.prob = predict(Spiders.1, spider.new, type = "response")
-cbind(spider.new, pred.prob)
+pred.prob=predict(Spiders.1,spider.new,type="response")
+cbind(spider.new,pred.prob)
 ```
 
 ```
@@ -326,8 +319,8 @@ go up linearly. In fact, if you leave out the `type` on the
 
 
 ```r
-pred.log.odds = predict(Spiders.1, spider.new)
-cbind(spider.new, pred.log.odds)
+pred.log.odds=predict(Spiders.1,spider.new)
+cbind(spider.new,pred.log.odds)
 ```
 
 ```
@@ -351,7 +344,7 @@ them, we have to `exp` the log-odds:
 
 
 ```r
-cbind(spider.new, odds = exp(pred.log.odds))
+cbind(spider.new,odds=exp(pred.log.odds))
 ```
 
 ```
@@ -439,9 +432,13 @@ There are a couple of ways. My current favourite is the `tidyverse`-approved
 `tribble` method. A `tribble` is a "transposed `tibble`", in which you copy and paste the data, inserting column headings and commas in the right places:
 
 ```r
-dead_bugs = tribble(~log_conc, ~exposed, ~killed, 
-    0.96, 50, 6, 1.33, 48, 16, 1.63, 46, 24, 2.04, 
-    49, 42, 2.32, 50, 44)
+dead_bugs=tribble(
+~log_conc, ~exposed, ~killed,
+0.96           ,            50    ,          6    ,
+1.33           ,            48    ,          16   ,           
+1.63           ,            46    ,          24   ,           
+2.04           ,            49    ,          42   ,           
+2.32           ,            50    ,          44   )
 dead_bugs
 ```
 
@@ -465,10 +462,10 @@ Studio, you can insert a column of commas all at once (using
 I used to do it like this. I make vectors of each column using `c` and then glue the columns together into a data frame:
 
 ```r
-log_conc = c(0.96, 1.33, 1.63, 2.04, 2.32)
-exposed = c(50, 48, 46, 49, 50)
-killed = c(6, 16, 24, 42, 44)
-dead_bugs2 = tibble(log_conc, exposed, killed)
+log_conc=c(0.96,1.33,1.63,2.04,2.32)
+exposed=c(50,48,46,49,50)
+killed=c(6,16,24,42,44)
+dead_bugs2=tibble(log_conc,exposed,killed)
 dead_bugs2
 ```
 
@@ -499,7 +496,7 @@ I copied them into a file `exposed.txt` in my current folder
 
 
 ```r
-bugs2 = read_table("exposed.txt")
+bugs2=read_table("exposed.txt")
 ```
 
 ```
@@ -518,14 +515,13 @@ bugs2
 
 ```
 ## # A tibble: 5 x 4
-##   `Log-Concentrat~ `Insects expose~ Number
-##              <dbl>            <int>  <int>
-## 1             0.96               50      6
-## 2             1.33               48     16
-## 3             1.63               46     24
-## 4             2.04               49     42
-## 5             2.32               50     44
-## # ... with 1 more variable: killed <chr>
+##   `Log-Concentration` `Insects exposed` Number killed
+##                 <dbl>             <int>  <int> <chr> 
+## 1                0.96                50      6 ""    
+## 2                1.33                48     16 ""    
+## 3                1.63                46     24 ""    
+## 4                2.04                49     42 ""    
+## 5                2.32                50     44 ""
 ```
 
  
@@ -539,13 +535,13 @@ out this way. Also, you'll note, the column names have those
 "backticks" around them, because they contain illegal characters
 like a minus sign and spaces. Perhaps a good way to
 pre-empt
-\marginnote{My daughter learned the word pre-empt because we  like to play a bridge app on my phone; in the game of bridge, you  make a pre-emptive bid when you have no great strength but a lot of  cards of one suit, say seven, and it won't be too bad if that suit  is trumps, no matter what your partner has. If you have a weak hand  with a lot of cards in one suit, your opponents are probably going  to be able to bid and make something, so you pre-emptively bid first  to try and make it difficult for them.}  all these problems is to
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">My daughter learned the word pre-empt because we  like to play a bridge app on my phone; in the game of bridge, you  make a pre-emptive bid when you have no great strength but a lot of  cards of one suit, say seven, and it won't be too bad if that suit  is trumps, no matter what your partner has. If you have a weak hand  with a lot of cards in one suit, your opponents are probably going  to be able to bid and make something, so you pre-emptively bid first  to try and make it difficult for them.</span>  all these problems is to
 make a copy of the data file with the illegal characters replaced by
 underscores, which is my file `exposed2.txt`:
 
 
 ```r
-bugs2 = read_table("exposed2.txt")
+bugs2=read_table("exposed2.txt")
 ```
 
 ```
@@ -563,15 +559,13 @@ bugs2
 
 ```
 ## # A tibble: 5 x 3
-##   Log_Concentrati~ Insects_exposed
-##              <dbl>           <int>
-## 1             0.96              50
-## 2             1.33              48
-## 3             1.63              46
-## 4             2.04              49
-## 5             2.32              50
-## # ... with 1 more variable:
-## #   Number_killed <int>
+##   Log_Concentration Insects_exposed Number_killed
+##               <dbl>           <int>         <int>
+## 1              0.96              50             6
+## 2              1.33              48            16
+## 3              1.63              46            24
+## 4              2.04              49            42
+## 5              2.32              50            44
 ```
 
  
@@ -617,8 +611,10 @@ insects were exposed in total to each dose, so we can work it
 out. Like this:
 
 ```r
-response = dead_bugs %>% mutate(survived = exposed - 
-    killed) %>% select(killed, survived) %>% as.matrix()
+response = dead_bugs %>% 
+mutate(survived=exposed-killed) %>%
+select(killed, survived) %>%
+as.matrix()
 response
 ```
 
@@ -644,8 +640,8 @@ data frame and use `cbind` to glue its columns together:
 
 
 ```r
-resp2 = with(dead_bugs, cbind(killed, survived = exposed - 
-    killed))
+resp2=with(dead_bugs, 
+cbind(killed,survived=exposed-killed))
 resp2
 ```
 
@@ -672,8 +668,7 @@ Solution
 I think you know how to do this by now:
 
 ```r
-bugs.1 = glm(response ~ log_conc, family = "binomial", 
-    data = dead_bugs)
+bugs.1=glm(response~log_conc,family="binomial",data=dead_bugs)
 summary(bugs.1)
 ```
 
@@ -687,15 +682,11 @@ summary(bugs.1)
 ## -0.1963   0.2099  -0.2978   0.8726  -0.7222  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept)  -4.8923     0.6426  -7.613
-## log_conc      3.1088     0.3879   8.015
-##             Pr(>|z|)    
-## (Intercept) 2.67e-14 ***
-## log_conc    1.11e-15 ***
+##             Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  -4.8923     0.6426  -7.613 2.67e-14 ***
+## log_conc      3.1088     0.3879   8.015 1.11e-15 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -738,8 +729,8 @@ Just this (notice there are only *two* things going into
 `predict`): 
 
 ```r
-prob = predict(bugs.1, type = "response")
-cbind(dead_bugs$log_conc, prob)
+prob=predict(bugs.1,type="response")
+cbind(dead_bugs$log_conc,prob)
 ```
 
 ```
@@ -804,9 +795,9 @@ closest to a probability 0.5 of killing the insect.
 Something like this would work:
 
 ```r
-lc.new = tibble(log_conc = seq(1.5, 1.63, 0.01))
-prob = predict(bugs.1, lc.new, type = "response")
-cbind(lc.new, prob)
+lc.new=tibble(log_conc=seq(1.5,1.63,0.01))
+prob=predict(bugs.1,lc.new,type="response")
+cbind(lc.new,prob)
 ```
 
 ```
@@ -875,8 +866,15 @@ function).
 Or, use a `tribble`:
 
 ```r
-dr = tribble(~dose, ~damaged, 10, 10, 20, 28, 
-    30, 53, 40, 77, 50, 91, 60, 98, 70, 99)
+dr=tribble(
+~dose, ~damaged,
+10, 10,
+20, 28,
+30, 53,
+40, 77,
+50, 91,
+60, 98,
+70, 99)
 dr
 ```
 
@@ -898,8 +896,8 @@ Or, make a data frame with the values typed in:
 
 
 ```r
-dr2 = tibble(dose = seq(10, 70, 10), damaged = c(10, 
-    28, 53, 77, 91, 98, 99))
+dr2=tibble(dose=seq(10,70,10),
+damaged=c(10, 28, 53, 77, 91, 98, 99))
 dr2
 ```
 
@@ -964,7 +962,7 @@ go: create a new column in `dr` and save back in
 `dr` (because I like living on the edge):
 
 ```r
-dr = dr %>% mutate(undamaged = 100 - damaged)
+dr = dr %>% mutate(undamaged=100-damaged)
 dr
 ```
 
@@ -989,7 +987,7 @@ multiply or divide) two vectors of different lengths, it recycles the
 smaller one by repeating it until it's as long as the longer one. So
 rather than `100-damaged` giving an error, it does what you
 want.
-\marginnote{The usual application of this is to combine a number  with a vector. If you try to subtract a length-2 vector from a  length-6 vector, R will repeat the shorter one three times and do  the subtraction, but if you try to subtract a length-2 vector from a length-*7* vector, where you'd have to repeat the shorter one a fractional number of times, R will do it, but you'll get a warning, because this is probably *not* what you wanted. Try it and see.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The usual application of this is to combine a number  with a vector. If you try to subtract a length-2 vector from a  length-6 vector, R will repeat the shorter one three times and do  the subtraction, but if you try to subtract a length-2 vector from a length-*7* vector, where you'd have to repeat the shorter one a fractional number of times, R will do it, but you'll get a warning, because this is probably *not* what you wanted. Try it and see.</span>
 
 I took the risk of saving the new data frame over the old one. If it
 had failed for some reason, I could have started again.
@@ -998,7 +996,7 @@ Now we have to make our response "matrix" with two columns, using `cbind`:
 
 
 ```r
-response = with(dr, cbind(damaged, undamaged))
+response=with(dr,cbind(damaged,undamaged))
 response
 ```
 
@@ -1051,7 +1049,8 @@ to do it with `cbind`, or use some other trickery, like this:
 
 
 ```r
-resp = dr %>% select(damaged, undamaged) %>% as.matrix()
+resp = dr %>% select(damaged, undamaged) %>%
+as.matrix()
 class(resp)
 ```
 
@@ -1065,8 +1064,7 @@ Now we fit our model:
 
 
 ```r
-cells.1 = glm(response ~ dose, family = "binomial", 
-    data = dr)
+cells.1=glm(response~dose,family="binomial",data=dr)
 summary(cells.1)
 ```
 
@@ -1076,21 +1074,15 @@ summary(cells.1)
 ## glm(formula = response ~ dose, family = "binomial", data = dr)
 ## 
 ## Deviance Residuals: 
-##        1         2         3         4  
-## -0.16650   0.28794  -0.02092  -0.20637  
-##        5         6         7  
-## -0.21853   0.54693  -0.06122  
+##        1         2         3         4         5         6         7  
+## -0.16650   0.28794  -0.02092  -0.20637  -0.21853   0.54693  -0.06122  
 ## 
 ## Coefficients:
-##              Estimate Std. Error z value
-## (Intercept) -3.275364   0.278479  -11.76
-## dose         0.113323   0.008315   13.63
-##             Pr(>|z|)    
-## (Intercept)   <2e-16 ***
-## dose          <2e-16 ***
+##              Estimate Std. Error z value Pr(>|z|)    
+## (Intercept) -3.275364   0.278479  -11.76   <2e-16 ***
+## dose         0.113323   0.008315   13.63   <2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -1128,7 +1120,7 @@ and down twice its standard error (this is the usual
 approximately-normal thing). Here that would be
 
 ```r
-0.113323 + c(-2, 2) * 0.008315
+0.113323+c(-2,2)*0.008315
 ```
 
 ```
@@ -1159,8 +1151,8 @@ indeed get predicted probabilities, and then some
 `cbind`ing to get the right kind of display:
 
 ```r
-p = predict(cells.1, type = "response")
-with(dr, cbind(dose, damaged, p))
+p=predict(cells.1,type="response")
+with(dr,cbind(dose,damaged,p))
 ```
 
 ```
@@ -1225,8 +1217,8 @@ Solution
 The usual beginnings, bearing in mind the data layout:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/infection.txt"
-infect = read_tsv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/infection.txt"
+infect=read_tsv(my_url)
 ```
 
 ```
@@ -1273,7 +1265,7 @@ convince yourself:
 
 
 ```r
-infect %>% print(n = 20)
+infect %>% print(n=20)
 ```
 
 ```
@@ -1318,8 +1310,7 @@ before, skip ahead to part (<a href="#part:crossing">here</a>):
 
 
 ```r
-d = crossing(age = c(10, 12), gender = c("f", 
-    "m"), infected = c("y", "n"))
+d=crossing(age=c(10,12),gender=c("f","m"),infected=c("y","n"))
 d
 ```
 
@@ -1344,8 +1335,7 @@ as they would be if we have a column of frequencies:
 
 
 ```r
-d = d %>% mutate(freq = c(12, 19, 17, 11, 18, 
-    26, 16, 8))
+d = d %>% mutate(freq=c(12,19,17,11,18,26,16,8))
 d
 ```
 
@@ -1375,7 +1365,7 @@ opposite of `gather`:
 
 
 ```r
-d %>% spread(infected, freq)
+d %>% spread(infected,freq)
 ```
 
 ```
@@ -1417,19 +1407,16 @@ What comes to my mind for the numerical variables `age` and
 `weight` is boxplots:
 
 ```r
-ggplot(infect, aes(x = infected, y = age)) + geom_boxplot()
+ggplot(infect,aes(x=infected,y=age))+geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/fodudu-1} 
+<img src="15-logistic-regression_files/figure-html/fodudu-1.png" width="672"  />
 
 ```r
-ggplot(infect, aes(x = infected, y = weight)) + 
-    geom_boxplot()
+ggplot(infect,aes(x=infected,y=weight))+geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/fodudu-2} 
+<img src="15-logistic-regression_files/figure-html/fodudu-2.png" width="672"  />
 
      
 
@@ -1441,7 +1428,7 @@ cross-tabulation, which is gotten via `table`:
 
 
 ```r
-with(infect, table(sex, infected))
+with(infect,table(sex,infected))
 ```
 
 ```
@@ -1457,7 +1444,7 @@ Or, if you like the `tidyverse`:
 
 
 ```r
-infect %>% count(sex, infected)
+infect %>% count(sex,infected) 
 ```
 
 ```
@@ -1480,11 +1467,10 @@ so that the plot is just this:
 
 
 ```r
-ggplot(infect, aes(x = sex)) + geom_bar()
+ggplot(infect,aes(x=sex))+geom_bar()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-37-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
  
 
@@ -1509,12 +1495,10 @@ variable, which is specified by `fill`. Here's the basic idea:
 
 
 ```r
-ggplot(infect, aes(x = sex, fill = infected)) + 
-    geom_bar()
+ggplot(infect, aes(x=sex,fill=infected))+geom_bar()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-38-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
  
 
@@ -1528,12 +1512,11 @@ There are two ways to improve this. One is known as a "grouped bar chart", which
 
 
 ```r
-ggplot(infect, aes(x = sex, fill = infected)) + 
-    geom_bar(position = "dodge")
+ggplot(infect, aes(x=sex,fill=infected))+
+geom_bar(position="dodge")
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-39-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
  
 
@@ -1555,12 +1538,11 @@ colour. This is `position="fill"`:
 
 
 ```r
-ggplot(infect, aes(x = sex, fill = infected)) + 
-    geom_bar(position = "fill")
+ggplot(infect, aes(x=sex,fill=infected))+
+geom_bar(position="fill")
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-40-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
  
 
@@ -1613,8 +1595,7 @@ Solution
 Thus:
 
 ```r
-infect.1 = glm(infected ~ age + weight + sex, 
-    family = "binomial", data = infect)
+infect.1=glm(infected~age+weight+sex,family="binomial",data=infect)
 ```
 
 ```
@@ -1628,8 +1609,7 @@ shortcut way to do that:
 
 
 ```r
-infect.1 = glm(factor(infected) ~ age + weight + 
-    sex, family = "binomial", data = infect)
+infect.1=glm(factor(infected)~age+weight+sex,family="binomial",data=infect)
 summary(infect.1)
 ```
 
@@ -1644,19 +1624,13 @@ summary(infect.1)
 ## -1.9481  -0.5284  -0.3120  -0.1437   2.2525  
 ## 
 ## Coefficients:
-##              Estimate Std. Error z value
-## (Intercept)  0.609369   0.803288   0.759
-## age          0.012653   0.006772   1.868
-## weight      -0.227912   0.068599  -3.322
-## sexmale     -1.543444   0.685681  -2.251
-##             Pr(>|z|)    
-## (Intercept) 0.448096    
-## age         0.061701 .  
-## weight      0.000893 ***
-## sexmale     0.024388 *  
+##              Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  0.609369   0.803288   0.759 0.448096    
+## age          0.012653   0.006772   1.868 0.061701 .  
+## weight      -0.227912   0.068599  -3.322 0.000893 ***
+## sexmale     -1.543444   0.685681  -2.251 0.024388 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -1675,9 +1649,8 @@ fans among you can do it this way:
 
 
 ```r
-infect.1a <- infect %>% mutate(infected = factor(infected)) %>% 
-    glm(infected ~ age + weight + sex, family = "binomial", 
-        data = .)
+infect %>% mutate(infected=factor(infected)) %>%
+glm(infected~age+weight+sex,family="binomial",data=.) -> infect.1a
 summary(infect.1a)
 ```
 
@@ -1692,19 +1665,13 @@ summary(infect.1a)
 ## -1.9481  -0.5284  -0.3120  -0.1437   2.2525  
 ## 
 ## Coefficients:
-##              Estimate Std. Error z value
-## (Intercept)  0.609369   0.803288   0.759
-## age          0.012653   0.006772   1.868
-## weight      -0.227912   0.068599  -3.322
-## sexmale     -1.543444   0.685681  -2.251
-##             Pr(>|z|)    
-## (Intercept) 0.448096    
-## age         0.061701 .  
-## weight      0.000893 ***
-## sexmale     0.024388 *  
+##              Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  0.609369   0.803288   0.759 0.448096    
+## age          0.012653   0.006772   1.868 0.061701 .  
+## weight      -0.227912   0.068599  -3.322 0.000893 ***
+## sexmale     -1.543444   0.685681  -2.251 0.024388 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -1773,11 +1740,10 @@ goes. I'll do it in steps. Note my use of plural names to denote
 the things I want all combinations of:
 
 ```r
-ages = c(26, 130)
-weights = c(9, 16)
-sexes = c("female", "male")
-infect.new = crossing(age = ages, weight = weights, 
-    sex = sexes)
+ages=c(26,130)
+weights=c(9,16)
+sexes=c("female","male")
+infect.new = crossing(age=ages,weight=weights,sex=sexes)
 infect.new
 ```
 
@@ -1812,8 +1778,8 @@ Next, the predictions:
 
 
 ```r
-pred = predict(infect.1, infect.new, type = "response")
-cbind(infect.new, pred)
+pred=predict(infect.1,infect.new,type="response")
+cbind(infect.new,pred)
 ```
 
 ```
@@ -1873,41 +1839,38 @@ containing the residuals alongside the original data:
 
 ```r
 library(broom)
-infect.1a = infect.1 %>% augment()
+infect.1a = infect.1 %>% augment() 
 infect.1a %>% as_tibble()
 ```
 
 ```
 ## # A tibble: 81 x 11
-##    factor.infected.   age weight sex  
-##  * <fct>            <int>  <int> <chr>
-##  1 absent               2      1 fema~
-##  2 absent               9     13 fema~
-##  3 present             15      2 fema~
-##  4 absent              15     16 fema~
-##  5 absent              18      2 fema~
-##  6 absent              20      9 fema~
-##  7 absent              26     13 fema~
-##  8 present             42      6 fema~
-##  9 absent              51      9 fema~
-## 10 present             52      6 fema~
-## # ... with 71 more rows, and 7 more
-## #   variables: .fitted <dbl>, .se.fit <dbl>,
-## #   .resid <dbl>, .hat <dbl>, .sigma <dbl>,
-## #   .cooksd <dbl>, .std.resid <dbl>
+##    factor.infected.   age weight sex   .fitted .se.fit .resid   .hat .sigma
+##  * <fct>            <int>  <int> <chr>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>
+##  1 absent               2      1 fema…   0.407   0.763 -1.35  0.140   0.872
+##  2 absent               9     13 fema…  -2.24    0.791 -0.450 0.0544  0.886
+##  3 present             15      2 fema…   0.343   0.691  1.04  0.116   0.878
+##  4 absent              15     16 fema…  -2.85    0.896 -0.336 0.0416  0.887
+##  5 absent              18      2 fema…   0.381   0.682 -1.34  0.112   0.872
+##  6 absent              20      9 fema…  -1.19    0.616 -0.729 0.0678  0.883
+##  7 absent              26     13 fema…  -2.02    0.707 -0.498 0.0515  0.886
+##  8 present             42      6 fema…  -0.227   0.519  1.28  0.0664  0.874
+##  9 absent              51      9 fema…  -0.797   0.490 -0.863 0.0515  0.882
+## 10 present             52      6 fema…  -0.100   0.494  1.22  0.0609  0.876
+## # ... with 71 more rows, and 2 more variables: .cooksd <dbl>,
+## #   .std.resid <dbl>
 ```
 
 ```r
-ggplot(infect.1a, aes(x = weight, y = .resid)) + 
-    geom_point() + geom_smooth()
+ggplot(infect.1a,aes(x=weight,y=.resid))+geom_point()+
+geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-46-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -1922,16 +1885,15 @@ The corresponding plot with age goes the same way:
 
 
 ```r
-ggplot(infect.1a, aes(x = age, y = .resid)) + 
-    geom_point() + geom_smooth()
+ggplot(infect.1a,aes(x=age,y=.resid))+geom_point()+
+geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-47-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
  
 Crawley found the slightest suggestion of an up-and-down curve in
@@ -1945,8 +1907,7 @@ are, so it's much easier to use `update`:
 
 
 ```r
-infect.2 = update(infect.1, . ~ . + I(age^2) + 
-    I(weight^2))
+infect.2=update(infect.1,.~.+I(age^2)+I(weight^2))
 summary(infect.2)
 ```
 
@@ -1957,29 +1918,19 @@ summary(infect.2)
 ##     I(weight^2), family = "binomial", data = infect)
 ## 
 ## Deviance Residuals: 
-##      Min        1Q    Median        3Q  
-## -1.70226  -0.44412  -0.19584  -0.02505  
-##      Max  
-##  2.36653  
+##      Min        1Q    Median        3Q       Max  
+## -1.70226  -0.44412  -0.19584  -0.02505   2.36653  
 ## 
 ## Coefficients:
-##               Estimate Std. Error z value
-## (Intercept) -3.4475839  1.7978359  -1.918
-## age          0.0829364  0.0360205   2.302
-## weight       0.4466284  0.3372352   1.324
-## sexmale     -1.2203683  0.7683288  -1.588
-## I(age^2)    -0.0004009  0.0002004  -2.000
-## I(weight^2) -0.0415128  0.0209677  -1.980
-##             Pr(>|z|)  
-## (Intercept)   0.0552 .
-## age           0.0213 *
-## weight        0.1854  
-## sexmale       0.1122  
-## I(age^2)      0.0455 *
-## I(weight^2)   0.0477 *
+##               Estimate Std. Error z value Pr(>|z|)  
+## (Intercept) -3.4475839  1.7978359  -1.918   0.0552 .
+## age          0.0829364  0.0360205   2.302   0.0213 *
+## weight       0.4466284  0.3372352   1.324   0.1854  
+## sexmale     -1.2203683  0.7683288  -1.588   0.1122  
+## I(age^2)    -0.0004009  0.0002004  -2.000   0.0455 *
+## I(weight^2) -0.0415128  0.0209677  -1.980   0.0477 *
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -1995,7 +1946,7 @@ summary(infect.2)
 The squared terms are both *just* significant. The linear terms,
 `age` and `weight`, have to stay, regardless of their
 significance.
-\marginnote{When you have higher-order terms, you have to keep the lower-order ones as well: higher powers, or interactions (as we see in ANOVA later).}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When you have higher-order terms, you have to keep the lower-order ones as well: higher powers, or interactions (as we see in ANOVA later).</span>
 What do the squared terms do to the predictions? Before, there was a
 clear one-directional trend in the relationships with `age` and
 `weight`. Has that changed? Let's see. We'll need a few more
@@ -2004,7 +1955,7 @@ different way to get a filled series of a desired length:
 
 
 ```r
-weights = seq(9, 16, length.out = 6)
+weights=seq(9,16,length.out=6)
 weights
 ```
 
@@ -2013,7 +1964,7 @@ weights
 ```
 
 ```r
-ages = seq(26, 130, length.out = 6)
+ages=seq(26,130,length.out=6)
 ages
 ```
 
@@ -2022,8 +1973,7 @@ ages
 ```
 
 ```r
-infect.new = crossing(weight = weights, age = ages, 
-    sex = sexes)
+infect.new=crossing(weight=weights,age=ages,sex=sexes)
 infect.new
 ```
 
@@ -2056,9 +2006,9 @@ predictions from both models so that we can compare them:
 
 
 ```r
-pred = predict(infect.2, infect.new, type = "response")
-pred.old = predict(infect.1, infect.new, type = "response")
-pp = cbind(infect.new, pred.old, pred)
+pred=predict(infect.2,infect.new,type="response")
+pred.old=predict(infect.1,infect.new,type="response")
+pp=cbind(infect.new,pred.old,pred)
 ```
 
  
@@ -2070,7 +2020,7 @@ age-sex combinations as well):
 
 
 ```r
-pp %>% filter(age == 46.8, sex == "female")
+pp %>% filter(age==46.8,sex=="female")
 ```
 
 ```
@@ -2091,7 +2041,7 @@ weight 9:
 
 
 ```r
-pp %>% filter(weight == 9, sex == "male")
+pp %>% filter(weight==9,sex=="male")
 ```
 
 ```
@@ -2120,7 +2070,7 @@ equal to that maximum value:
 
 
 ```r
-pp %>% filter(pred == max(pred))
+pp %>% filter(pred==max(pred))
 ```
 
 ```
@@ -2137,7 +2087,7 @@ This would also work:
 
 
 ```r
-pp %>% summarize(max.pred = max(pred))
+pp %>% summarize(max.pred=max(pred))
 ```
 
 ```
@@ -2152,7 +2102,7 @@ probability. What you might do then is to say
 
 
 ```r
-pp %>% filter(pred > 0.8)
+pp %>% filter(pred>0.8)
 ```
 
 ```
@@ -2240,7 +2190,7 @@ questionnaire assessed "idealism": a high score reflects a belief
 that ethical behaviour will always lead to good consequences (and thus
 that  if a behaviour leads to any bad consequences at all, it is
 unethical).
-\marginnote{I get confused about the difference between morals  and ethics. This is a very short description of that difference:  url{http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html}. The
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I get confused about the difference between morals  and ethics. This is a very short description of that difference:  url{http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html</span>. The
 basic idea is that morals are part of who you are, derived from
 religion, philosophy etc. Ethics are how you act in a particular
 situation: that is, your morals, what you believe, inform your ethics,
@@ -2273,7 +2223,7 @@ variables in the data set are these:
 
 
 A more detailed discussion
-\marginnote{If you can believe it.} of this
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you can believe it.</span> of this
 study is at
 [link](http://core.ecu.edu/psyc/wuenschk/MV/Multreg/Logistic-SPSS.PDF). 
 
@@ -2290,8 +2240,8 @@ Solution
 So, like this, using the name `decide` in my case:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/decision.csv"
-decide = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/decision.csv"
+decide=read_csv(my_url)
 ```
 
 ```
@@ -2311,20 +2261,19 @@ decide
 
 ```
 ## # A tibble: 315 x 5
-##    decision idealism relativism gender
-##    <chr>       <dbl>      <dbl> <chr> 
-##  1 stop          8.2        5.1 Female
-##  2 continue      6.8        5.3 Male  
-##  3 continue      8.2        6   Female
-##  4 stop          7.4        6.2 Female
-##  5 continue      1.7        3.1 Female
-##  6 continue      5.6        7.7 Male  
-##  7 stop          7.2        6.7 Female
-##  8 stop          7.8        4   Male  
-##  9 stop          7.8        4.7 Female
-## 10 stop          8          7.6 Female
-## # ... with 305 more rows, and 1 more
-## #   variable: scenario <chr>
+##    decision idealism relativism gender scenario
+##    <chr>       <dbl>      <dbl> <chr>  <chr>   
+##  1 stop          8.2        5.1 Female cosmetic
+##  2 continue      6.8        5.3 Male   cosmetic
+##  3 continue      8.2        6   Female cosmetic
+##  4 stop          7.4        6.2 Female cosmetic
+##  5 continue      1.7        3.1 Female cosmetic
+##  6 continue      5.6        7.7 Male   cosmetic
+##  7 stop          7.2        6.7 Female cosmetic
+##  8 stop          7.8        4   Male   cosmetic
+##  9 stop          7.8        4.7 Female cosmetic
+## 10 stop          8          7.6 Female cosmetic
+## # ... with 305 more rows
 ```
 
        
@@ -2348,8 +2297,7 @@ Turn the response into a `factor` somehow, either by
 creating a new variable in the data frame or like this:
 
 ```r
-decide.1 = glm(factor(decision) ~ gender, data = decide, 
-    family = "binomial")
+decide.1=glm(factor(decision)~gender,data=decide,family="binomial")
 summary(decide.1)
 ```
 
@@ -2364,15 +2312,11 @@ summary(decide.1)
 ## -1.5518  -1.0251   0.8446   0.8446   1.3377  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept)   0.8473     0.1543   5.491
-## genderMale   -1.2167     0.2445  -4.976
-##             Pr(>|z|)    
-## (Intercept) 3.99e-08 ***
-## genderMale  6.50e-07 ***
+##             Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)   0.8473     0.1543   5.491 3.99e-08 ***
+## genderMale   -1.2167     0.2445  -4.976 6.50e-07 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -2405,7 +2349,7 @@ Solution
 
 
 ```r
-with(decide, table(decision, gender))
+with(decide,table(decision,gender))
 ```
 
 ```
@@ -2428,8 +2372,8 @@ column percentages rather than row percentages:
 
 
 ```r
-tab = with(decide, table(decision, gender))
-prop.table(tab, 2)
+tab=with(decide,table(decision,gender))
+prop.table(tab,2)
 ```
 
 ```
@@ -2457,7 +2401,7 @@ same result:
 
 
 ```r
-xtabs(~decision + gender, data = decide)
+xtabs(~decision+gender,data=decide) 
 ```
 
 ```
@@ -2507,10 +2451,10 @@ think about
 this is to do a prediction, which would go like this:
 
 ```r
-genders = c("Female", "Male")
-new = tibble(gender = genders)
-p = predict(decide.1, new, type = "response")
-cbind(new, p)
+genders=c("Female","Male")
+new=tibble(gender=genders)
+p=predict(decide.1,new,type="response")
+cbind(new,p)
 ```
 
 ```
@@ -2547,8 +2491,8 @@ with the two new variables on the end. You have to remember to
 turn `decision` into a `factor` again:
 
 ```r
-decide.2 = glm(factor(decision) ~ gender + idealism + 
-    relativism, data = decide, family = "binomial")
+decide.2=glm(factor(decision)~gender+idealism+relativism,
+data=decide,family="binomial")
 summary(decide.2)
 ```
 
@@ -2563,19 +2507,13 @@ summary(decide.2)
 ## -2.2226  -0.9891   0.4798   0.8748   2.0442  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept)  -1.4876     0.9787  -1.520
-## genderMale   -1.1710     0.2679  -4.372
-## idealism      0.6893     0.1115   6.180
-## relativism   -0.3432     0.1245  -2.757
-##             Pr(>|z|)    
-## (Intercept)  0.12849    
-## genderMale  1.23e-05 ***
-## idealism    6.41e-10 ***
-## relativism   0.00584 ** 
+##             Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  -1.4876     0.9787  -1.520  0.12849    
+## genderMale   -1.1710     0.2679  -4.372 1.23e-05 ***
+## idealism      0.6893     0.1115   6.180 6.41e-10 ***
+## relativism   -0.3432     0.1245  -2.757  0.00584 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -2594,8 +2532,7 @@ longish model, is to use `update`:
 
 
 ```r
-decide.2 = update(decide.1, . ~ . + idealism + 
-    relativism)
+decide.2=update(decide.1,.~.+idealism+relativism)
 summary(decide.2)
 ```
 
@@ -2610,19 +2547,13 @@ summary(decide.2)
 ## -2.2226  -0.9891   0.4798   0.8748   2.0442  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept)  -1.4876     0.9787  -1.520
-## genderMale   -1.1710     0.2679  -4.372
-## idealism      0.6893     0.1115   6.180
-## relativism   -0.3432     0.1245  -2.757
-##             Pr(>|z|)    
-## (Intercept)  0.12849    
-## genderMale  1.23e-05 ***
-## idealism    6.41e-10 ***
-## relativism   0.00584 ** 
+##             Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  -1.4876     0.9787  -1.520  0.12849    
+## genderMale   -1.1710     0.2679  -4.372 1.23e-05 ***
+## idealism      0.6893     0.1115   6.180 6.41e-10 ***
+## relativism   -0.3432     0.1245  -2.757  0.00584 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -2650,7 +2581,7 @@ Solution
 To my mind, `update` wins hands down here:
 
 ```r
-decide.3 = update(decide.2, . ~ . + scenario)
+decide.3=update(decide.2,.~.+scenario)
 ```
 
      
@@ -2678,7 +2609,7 @@ Solution
 These are the models that you fit in the last two parts:
 
 ```r
-anova(decide.2, decide.3, test = "Chisq")
+anova(decide.2,decide.3,test="Chisq")
 ```
 
 ```
@@ -2686,15 +2617,11 @@ anova(decide.2, decide.3, test = "Chisq")
 ## 
 ## Model 1: factor(decision) ~ gender + idealism + relativism
 ## Model 2: factor(decision) ~ gender + idealism + relativism + scenario
-##   Resid. Df Resid. Dev Df Deviance Pr(>Chi)
-## 1       311     346.50                     
-## 2       307     338.06  4   8.4431  0.07663
-##    
-## 1  
-## 2 .
+##   Resid. Df Resid. Dev Df Deviance Pr(>Chi)  
+## 1       311     346.50                       
+## 2       307     338.06  4   8.4431  0.07663 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -2714,7 +2641,7 @@ linear models of which logistic regression is one):
 
 
 ```r
-drop1(decide.3, test = "Chisq")
+drop1(decide.3, test="Chisq")
 ```
 
 ```
@@ -2722,21 +2649,14 @@ drop1(decide.3, test = "Chisq")
 ## 
 ## Model:
 ## factor(decision) ~ gender + idealism + relativism + scenario
-##            Df Deviance    AIC    LRT
-## <none>          338.06 354.06       
-## gender      1   359.61 373.61 21.546
-## idealism    1   384.40 398.40 46.340
-## relativism  1   344.97 358.97  6.911
-## scenario    4   346.50 354.50  8.443
-##             Pr(>Chi)    
-## <none>                  
-## gender     3.454e-06 ***
-## idealism   9.943e-12 ***
-## relativism  0.008567 ** 
-## scenario    0.076630 .  
+##            Df Deviance    AIC    LRT  Pr(>Chi)    
+## <none>          338.06 354.06                     
+## gender      1   359.61 373.61 21.546 3.454e-06 ***
+## idealism    1   384.40 398.40 46.340 9.943e-12 ***
+## relativism  1   344.97 358.97  6.911  0.008567 ** 
+## scenario    4   346.50 354.50  8.443  0.076630 .  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2775,27 +2695,17 @@ summary(decide.3)
 ## -2.3350  -0.9402   0.4645   0.8266   2.1564  
 ## 
 ## Coefficients:
-##                    Estimate Std. Error
-## (Intercept)         -1.5694     1.0426
-## genderMale          -1.2551     0.2766
-## idealism             0.7012     0.1139
-## relativism          -0.3264     0.1267
-## scenariomeat         0.1565     0.4283
-## scenariomedical     -0.7095     0.4202
-## scenariotheory       0.4501     0.4271
-## scenarioveterinary  -0.1672     0.4159
-##                    z value Pr(>|z|)    
-## (Intercept)         -1.505   0.1322    
-## genderMale          -4.537 5.70e-06 ***
-## idealism             6.156 7.48e-10 ***
-## relativism          -2.576   0.0100 *  
-## scenariomeat         0.365   0.7149    
-## scenariomedical     -1.688   0.0914 .  
-## scenariotheory       1.054   0.2919    
-## scenarioveterinary  -0.402   0.6878    
+##                    Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)         -1.5694     1.0426  -1.505   0.1322    
+## genderMale          -1.2551     0.2766  -4.537 5.70e-06 ***
+## idealism             0.7012     0.1139   6.156 7.48e-10 ***
+## relativism          -0.3264     0.1267  -2.576   0.0100 *  
+## scenariomeat         0.1565     0.4283   0.365   0.7149    
+## scenariomedical     -0.7095     0.4202  -1.688   0.0914 .  
+## scenariotheory       0.4501     0.4271   1.054   0.2919    
+## scenarioveterinary  -0.1672     0.4159  -0.402   0.6878    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -2835,7 +2745,7 @@ and I don't know what they are yet:
 
 
 ```r
-decide %>% summarize_if(is.numeric, median)
+decide %>% summarize_if(is.numeric,median)
 ```
 
 ```
@@ -2859,8 +2769,7 @@ scenarios
 ```
 
 ```
-## [1] "cosmetic"   "meat"       "medical"   
-## [4] "theory"     "veterinary"
+## [1] "cosmetic"   "meat"       "medical"    "theory"     "veterinary"
 ```
 
  
@@ -2877,8 +2786,7 @@ females. So I could just as well have looked at males.)
 
 
 ```r
-new = crossing(idealism = 6.5, relativism = 6.1, 
-    gender = "Female", scenario = scenarios)
+new=crossing(idealism=6.5,relativism=6.1,gender="Female",scenario=scenarios)
 new
 ```
 
@@ -2894,23 +2802,17 @@ new
 ```
 
 ```r
-p = predict(decide.3, new, type = "response")
-cbind(new, p)
+p=predict(decide.3,new,type="response")
+cbind(new,p)
 ```
 
 ```
-##   idealism relativism gender   scenario
-## 1      6.5        6.1 Female   cosmetic
-## 2      6.5        6.1 Female       meat
-## 3      6.5        6.1 Female    medical
-## 4      6.5        6.1 Female     theory
-## 5      6.5        6.1 Female veterinary
-##           p
-## 1 0.7304565
-## 2 0.7601305
-## 3 0.5713725
-## 4 0.8095480
-## 5 0.6963099
+##   idealism relativism gender   scenario         p
+## 1      6.5        6.1 Female   cosmetic 0.7304565
+## 2      6.5        6.1 Female       meat 0.7601305
+## 3      6.5        6.1 Female    medical 0.5713725
+## 4      6.5        6.1 Female     theory 0.8095480
+## 5      6.5        6.1 Female veterinary 0.6963099
 ```
 
  
@@ -2926,8 +2828,8 @@ the model without:
 
 
 ```r
-decide.4 = update(decide.3, . ~ . + gender * scenario)
-anova(decide.3, decide.4, test = "Chisq")
+decide.4=update(decide.3,.~.+gender*scenario)
+anova(decide.3,decide.4,test="Chisq")
 ```
 
 ```
@@ -2949,8 +2851,7 @@ different genders. The appropriate `predict` should show that too:
 
 ```r
 genders = decide %>% count(gender) %>% pull(gender)
-new = crossing(idealism = 6.5, relativism = 6.1, 
-    gender = genders, scenario = scenarios)
+new=crossing(idealism=6.5,relativism=6.1,gender=genders,scenario=scenarios)
 new
 ```
 
@@ -2971,33 +2872,22 @@ new
 ```
 
 ```r
-p = predict(decide.4, new, type = "response")
-cbind(new, p)
+p=predict(decide.4,new,type="response")
+cbind(new,p)
 ```
 
 ```
-##    idealism relativism gender   scenario
-## 1       6.5        6.1 Female   cosmetic
-## 2       6.5        6.1 Female       meat
-## 3       6.5        6.1 Female    medical
-## 4       6.5        6.1 Female     theory
-## 5       6.5        6.1 Female veterinary
-## 6       6.5        6.1   Male   cosmetic
-## 7       6.5        6.1   Male       meat
-## 8       6.5        6.1   Male    medical
-## 9       6.5        6.1   Male     theory
-## 10      6.5        6.1   Male veterinary
-##            p
-## 1  0.7670133
-## 2  0.7290272
-## 3  0.5666034
-## 4  0.8251472
-## 5  0.6908189
-## 6  0.3928582
-## 7  0.5438679
-## 8  0.2860504
-## 9  0.5237310
-## 10 0.4087458
+##    idealism relativism gender   scenario         p
+## 1       6.5        6.1 Female   cosmetic 0.7670133
+## 2       6.5        6.1 Female       meat 0.7290272
+## 3       6.5        6.1 Female    medical 0.5666034
+## 4       6.5        6.1 Female     theory 0.8251472
+## 5       6.5        6.1 Female veterinary 0.6908189
+## 6       6.5        6.1   Male   cosmetic 0.3928582
+## 7       6.5        6.1   Male       meat 0.5438679
+## 8       6.5        6.1   Male    medical 0.2860504
+## 9       6.5        6.1   Male     theory 0.5237310
+## 10      6.5        6.1   Male veterinary 0.4087458
 ```
 
  
@@ -3005,7 +2895,7 @@ The probability of "stop" is a lot higher for females than for males
 (that is the strong `gender` effect we found earlier), but the
 *pattern* is about the same for males and females: the difference in
 probabilities
-\marginnote{Strictly, we should look at the difference in log-odds.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Strictly, we should look at the difference in log-odds.</span>
 is about the same, and also both genders have almost the highest predicted
 probability for `theory` (the highest male one is actually for
 `meat` but there's not much in it)
@@ -3016,33 +2906,22 @@ with interaction. If you use the model without interaction, you get this:
 
 
 ```r
-p = predict(decide.3, new, type = "response")
-cbind(new, p)
+p=predict(decide.3,new,type="response")
+cbind(new,p)
 ```
 
 ```
-##    idealism relativism gender   scenario
-## 1       6.5        6.1 Female   cosmetic
-## 2       6.5        6.1 Female       meat
-## 3       6.5        6.1 Female    medical
-## 4       6.5        6.1 Female     theory
-## 5       6.5        6.1 Female veterinary
-## 6       6.5        6.1   Male   cosmetic
-## 7       6.5        6.1   Male       meat
-## 8       6.5        6.1   Male    medical
-## 9       6.5        6.1   Male     theory
-## 10      6.5        6.1   Male veterinary
-##            p
-## 1  0.7304565
-## 2  0.7601305
-## 3  0.5713725
-## 4  0.8095480
-## 5  0.6963099
-## 6  0.4358199
-## 7  0.4745996
-## 8  0.2753530
-## 9  0.5478510
-## 10 0.3952499
+##    idealism relativism gender   scenario         p
+## 1       6.5        6.1 Female   cosmetic 0.7304565
+## 2       6.5        6.1 Female       meat 0.7601305
+## 3       6.5        6.1 Female    medical 0.5713725
+## 4       6.5        6.1 Female     theory 0.8095480
+## 5       6.5        6.1 Female veterinary 0.6963099
+## 6       6.5        6.1   Male   cosmetic 0.4358199
+## 7       6.5        6.1   Male       meat 0.4745996
+## 8       6.5        6.1   Male    medical 0.2753530
+## 9       6.5        6.1   Male     theory 0.5478510
+## 10      6.5        6.1   Male veterinary 0.3952499
 ```
 
  
@@ -3102,9 +2981,10 @@ This will also lead to a `predict`. We need "low" and
 the quartiles:
 
 ```r
-decide %>% summarize(i_q1 = quantile(idealism, 
-    0.25), i_q3 = quantile(idealism, 0.75), r_q1 = quantile(relativism, 
-    0.25), r_q3 = quantile(relativism, 0.75))
+decide %>% summarize(i_q1=quantile(idealism,0.25),
+i_q3=quantile(idealism,0.75),
+r_q1=quantile(relativism,0.25),
+r_q3=quantile(relativism,0.75))
 ```
 
 ```
@@ -3121,8 +3001,8 @@ Let's use the scenario `cosmetic` that was middling in its
 effects, and think about females:
 
 ```r
-new = crossing(idealism = c(5.6, 7.5), relativism = c(5.4, 
-    6.8), gender = "Female", scenario = "cosmetic")
+new=crossing(idealism=c(5.6,7.5),relativism=c(5.4,6.8),
+gender="Female",scenario="cosmetic")
 new
 ```
 
@@ -3137,21 +3017,16 @@ new
 ```
 
 ```r
-p = predict(decide.3, new, type = "response")
-cbind(new, p)
+p=predict(decide.3,new,type="response")
+cbind(new,p) 
 ```
 
 ```
-##   idealism relativism gender scenario
-## 1      5.6        5.4 Female cosmetic
-## 2      5.6        6.8 Female cosmetic
-## 3      7.5        5.4 Female cosmetic
-## 4      7.5        6.8 Female cosmetic
-##           p
-## 1 0.6443730
-## 2 0.5342955
-## 3 0.8728724
-## 4 0.8129966
+##   idealism relativism gender scenario         p
+## 1      5.6        5.4 Female cosmetic 0.6443730
+## 2      5.6        6.8 Female cosmetic 0.5342955
+## 3      7.5        5.4 Female cosmetic 0.8728724
+## 4      7.5        6.8 Female cosmetic 0.8129966
 ```
 
      
@@ -3172,14 +3047,14 @@ These data came from a psychology study (with, probably, the students
 in a class serving as experimental subjects). Social scientists like
 to use SPSS software, so the data came to me as an SPSS `.sav`
 file.
-\marginnote{If you took STAB23, you'll have used PSPP, which is  a free version of SPSS.} The least-fuss way of handling this that I
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you took STAB23, you'll have used PSPP, which is  a free version of SPSS.</span> The least-fuss way of handling this that I
 could think of was to use `import` from the `rio`
 package, which I think I mentioned before:
 
 
 ```r
 library(rio)
-x = import("/home/ken/Downloads/Logistic.sav")
+x=import("/home/ken/Downloads/Logistic.sav")
 str(x)
 ```
 
@@ -3224,7 +3099,7 @@ simpler structure than this, but this is R trying to interpret how
 SPSS does things. Here, each column (listed on the lines beginning
 with a dollar sign) has some values, listed on the `atomic`
 line
-\marginnote{Which always makes me think of  https://www.youtube.com/watch?v=1Tko1G6XRiQ.} and possibly
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which always makes me think of  https://www.youtube.com/watch?v=1Tko1G6XRiQ.</span> and possibly
 some "attributes", which affect how the variable is interpreted. The
 important one for us is the "names" attribute; if a column has this,
 it needs to be interpreted as categorical with the names as levels
@@ -3244,34 +3119,40 @@ errors --- "impossible" values occur distressingly often in real data:
 
 
 ```r
-xx = x %>% mutate(decision = case_when(decision == 
-    0 ~ "stop", decision == 1 ~ "continue", TRUE ~ 
-    "error"), gender = case_when(gender == 0 ~ 
-    "Female", gender == 1 ~ "Male", TRUE ~ "error"), 
-    scenario = case_when(scenario == 1 ~ "cosmetic", 
-        scenario == 2 ~ "theory", scenario == 
-            3 ~ "meat", scenario == 4 ~ "veterinary", 
-        scenario == 5 ~ "medical", TRUE ~ "error"))
+xx = x %>% 
+mutate(decision=case_when(
+decision==0 ~ "stop",
+decision==1 ~ "continue",
+TRUE        ~ "error"),
+gender=case_when(
+gender==0 ~ "Female",
+gender==1 ~ "Male",
+TRUE      ~ "error"),
+scenario=case_when(
+scenario==1 ~ "cosmetic",
+scenario==2 ~ "theory",
+scenario==3 ~ "meat",
+scenario==4 ~ "veterinary",
+scenario==5 ~ "medical",
+TRUE        ~ "error"))
 xx %>% as_tibble() %>% select(-(cosmetic:veterin))
 ```
 
 ```
 ## # A tibble: 315 x 7
-##    decision idealism relatvsm gender
-##    <chr>       <dbl>    <dbl> <chr> 
-##  1 stop          8.2      5.1 Female
-##  2 continue      6.8      5.3 Male  
-##  3 continue      8.2      6   Female
-##  4 stop          7.4      6.2 Female
-##  5 continue      1.7      3.1 Female
-##  6 continue      5.6      7.7 Male  
-##  7 stop          7.2      6.7 Female
-##  8 stop          7.8      4   Male  
-##  9 stop          7.8      4.7 Female
-## 10 stop          8        7.6 Female
-## # ... with 305 more rows, and 3 more
-## #   variables: idealism_LN <dbl>,
-## #   relatvsm_LN <dbl>, scenario <chr>
+##    decision idealism relatvsm gender idealism_LN relatvsm_LN scenario
+##    <chr>       <dbl>    <dbl> <chr>        <dbl>       <dbl> <chr>   
+##  1 stop          8.2      5.1 Female       2.10         1.63 cosmetic
+##  2 continue      6.8      5.3 Male         1.92         1.67 cosmetic
+##  3 continue      8.2      6   Female       2.10         1.79 cosmetic
+##  4 stop          7.4      6.2 Female       2.00         1.82 cosmetic
+##  5 continue      1.7      3.1 Female       0.531        1.13 cosmetic
+##  6 continue      5.6      7.7 Male         1.72         2.04 cosmetic
+##  7 stop          7.2      6.7 Female       1.97         1.90 cosmetic
+##  8 stop          7.8      4   Male         2.05         1.39 cosmetic
+##  9 stop          7.8      4.7 Female       2.05         1.55 cosmetic
+## 10 stop          8        7.6 Female       2.08         2.03 cosmetic
+## # ... with 305 more rows
 ```
 
  
@@ -3298,7 +3179,7 @@ My next step is to check that I don't actually have any errors:
 
 
 ```r
-xx %>% count(scenario, gender, decision)
+xx %>% count(scenario,gender,decision)
 ```
 
 ```
@@ -3336,8 +3217,8 @@ would be smart:
 
 
 ```r
-xx %>% select(decision, idealism, relatvsm, gender, 
-    scenario) %>% write_csv("decision.csv")
+xx %>% select(decision,idealism,relatvsm,gender,scenario) %>%
+write_csv("decision.csv")
 ```
 
  
@@ -3355,7 +3236,7 @@ Just to show that you can do *anything* in R:
 
 ```r
 library(ggmap)
-gg = get_map("Catbrain", zoom = 14, maptype = "roadmap")
+gg=get_map("Catbrain",zoom=14,maptype="roadmap")
 ggmap(gg)
 ```
 
@@ -3378,11 +3259,10 @@ plotting points on the map as well:
 
 
 ```r
-lons = c(-2.6, -2.62)
-lats = c(51.51, 51.52, 51.53)
-points = expand.grid(lon = lons, lat = lats)
-ggmap(gg) + geom_point(data = points, aes(x = lon, 
-    y = lat))
+lons=c(-2.60,-2.62)
+lats=c(51.51,51.52,51.53)
+points=expand.grid(lon=lons,lat=lats)
+ggmap(gg)+geom_point(data=points,aes(x=lon,y=lat))
 ```
 
  
@@ -3469,13 +3349,12 @@ Solution
 A `.csv` file, so:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/heartf.csv"
-heart = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/heartf.csv"
+heart=read_csv(my_url)
 ```
 
 ```
-## Warning: Missing column names filled in:
-## 'X1' [1]
+## Warning: Missing column names filled in: 'X1' [1]
 ```
 
 ```
@@ -3505,25 +3384,21 @@ heart
 
 ```
 ## # A tibble: 270 x 15
-##       X1   age sex   pain.type resting.bp
-##    <int> <int> <chr> <chr>          <int>
-##  1     1    70 male  asymptom~        130
-##  2     2    67 fema~ nonangin~        115
-##  3     3    57 male  atypical         124
-##  4     4    64 male  asymptom~        128
-##  5     5    74 fema~ atypical         120
-##  6     6    65 male  asymptom~        120
-##  7     7    56 male  nonangin~        130
-##  8     8    59 male  asymptom~        110
-##  9     9    60 male  asymptom~        140
-## 10    10    63 fema~ asymptom~        150
-## # ... with 260 more rows, and 10 more
-## #   variables: serum.chol <int>,
-## #   high.blood.sugar <chr>, electro <chr>,
-## #   max.hr <int>, angina <chr>,
-## #   oldpeak <dbl>, slope <chr>,
-## #   colored <int>, thal <chr>,
-## #   heart.disease <chr>
+##       X1   age sex   pain.type resting.bp serum.chol high.blood.sugar
+##    <int> <int> <chr> <chr>          <int>      <int> <chr>           
+##  1     1    70 male  asymptom…        130        322 no              
+##  2     2    67 fema… nonangin…        115        564 no              
+##  3     3    57 male  atypical         124        261 no              
+##  4     4    64 male  asymptom…        128        263 no              
+##  5     5    74 fema… atypical         120        269 no              
+##  6     6    65 male  asymptom…        120        177 no              
+##  7     7    56 male  nonangin…        130        256 yes             
+##  8     8    59 male  asymptom…        110        239 no              
+##  9     9    60 male  asymptom…        140        293 no              
+## 10    10    63 fema… asymptom…        150        407 no              
+## # ... with 260 more rows, and 8 more variables: electro <chr>,
+## #   max.hr <int>, angina <chr>, oldpeak <dbl>, slope <chr>, colored <int>,
+## #   thal <chr>, heart.disease <chr>
 ```
 
      
@@ -3576,10 +3451,9 @@ A lot of typing, since there are so many variables. Don't forget
 that the response variable *must* be a factor:
 
 ```r
-heart.1 = glm(factor(heart.disease) ~ age + sex + 
-    pain.type + resting.bp + serum.chol + high.blood.sugar + 
-    electro + max.hr + angina + oldpeak + slope + 
-    colored + thal, family = "binomial", data = heart)
+heart.1=glm(factor(heart.disease)~age+sex+pain.type+resting.bp+serum.chol+
+high.blood.sugar+electro+max.hr+angina+oldpeak+slope+colored+thal, 
+family="binomial",data=heart)
 ```
 
  
@@ -3609,49 +3483,28 @@ summary(heart.1)
 ## -2.6431  -0.4754  -0.1465   0.3342   2.8100  
 ## 
 ## Coefficients:
-##                      Estimate Std. Error
-## (Intercept)         -3.973837   3.133311
-## age                 -0.016007   0.026394
-## sexmale              1.763012   0.580761
-## pain.typeatypical   -0.997298   0.626233
-## pain.typenonanginal -1.833394   0.520808
-## pain.typetypical    -2.386128   0.756538
-## resting.bp           0.026004   0.012080
-## serum.chol           0.006621   0.004228
-## high.blood.sugaryes -0.370040   0.626396
-## electronormal       -0.633593   0.412073
-## electroSTT           0.013986   3.184512
-## max.hr              -0.019337   0.011486
-## anginayes            0.596869   0.460540
-## oldpeak              0.449245   0.244631
-## slopeflat            0.827054   0.966139
-## slopeupsloping      -0.122787   1.041666
-## colored              1.199839   0.280947
-## thalnormal           0.146197   0.845517
-## thalreversible       1.577988   0.838550
-##                     z value Pr(>|z|)    
-## (Intercept)          -1.268 0.204707    
-## age                  -0.606 0.544208    
-## sexmale               3.036 0.002400 ** 
-## pain.typeatypical    -1.593 0.111264    
-## pain.typenonanginal  -3.520 0.000431 ***
-## pain.typetypical     -3.154 0.001610 ** 
-## resting.bp            2.153 0.031346 *  
-## serum.chol            1.566 0.117322    
-## high.blood.sugaryes  -0.591 0.554692    
-## electronormal        -1.538 0.124153    
-## electroSTT            0.004 0.996496    
-## max.hr               -1.683 0.092278 .  
-## anginayes             1.296 0.194968    
-## oldpeak               1.836 0.066295 .  
-## slopeflat             0.856 0.391975    
-## slopeupsloping       -0.118 0.906166    
-## colored               4.271 1.95e-05 ***
-## thalnormal            0.173 0.862723    
-## thalreversible        1.882 0.059863 .  
+##                      Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)         -3.973837   3.133311  -1.268 0.204707    
+## age                 -0.016007   0.026394  -0.606 0.544208    
+## sexmale              1.763012   0.580761   3.036 0.002400 ** 
+## pain.typeatypical   -0.997298   0.626233  -1.593 0.111264    
+## pain.typenonanginal -1.833394   0.520808  -3.520 0.000431 ***
+## pain.typetypical    -2.386128   0.756538  -3.154 0.001610 ** 
+## resting.bp           0.026004   0.012080   2.153 0.031346 *  
+## serum.chol           0.006621   0.004228   1.566 0.117322    
+## high.blood.sugaryes -0.370040   0.626396  -0.591 0.554692    
+## electronormal       -0.633593   0.412073  -1.538 0.124153    
+## electroSTT           0.013986   3.184512   0.004 0.996496    
+## max.hr              -0.019337   0.011486  -1.683 0.092278 .  
+## anginayes            0.596869   0.460540   1.296 0.194968    
+## oldpeak              0.449245   0.244631   1.836 0.066295 .  
+## slopeflat            0.827054   0.966139   0.856 0.391975    
+## slopeupsloping      -0.122787   1.041666  -0.118 0.906166    
+## colored              1.199839   0.280947   4.271 1.95e-05 ***
+## thalnormal           0.146197   0.845517   0.173 0.862723    
+## thalreversible       1.577988   0.838550   1.882 0.059863 .  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -3702,7 +3555,7 @@ Following the instructions:
 
 
 ```r
-drop1(heart.1, test = "Chisq")
+drop1(heart.1,test="Chisq")
 ```
 
 ```
@@ -3712,39 +3565,23 @@ drop1(heart.1, test = "Chisq")
 ## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
 ##     serum.chol + high.blood.sugar + electro + max.hr + angina + 
 ##     oldpeak + slope + colored + thal
-##                  Df Deviance    AIC     LRT
-## <none>                168.90 206.90        
-## age               1   169.27 205.27  0.3705
-## sex               1   179.16 215.16 10.2684
-## pain.type         3   187.85 219.85 18.9557
-## resting.bp        1   173.78 209.78  4.8793
-## serum.chol        1   171.34 207.34  2.4484
-## high.blood.sugar  1   169.25 205.25  0.3528
-## electro           2   171.31 205.31  2.4119
-## max.hr            1   171.84 207.84  2.9391
-## angina            1   170.55 206.55  1.6562
-## oldpeak           1   172.44 208.44  3.5449
-## slope             2   172.98 206.98  4.0844
-## colored           1   191.78 227.78 22.8878
-## thal              2   180.78 214.78 11.8809
-##                   Pr(>Chi)    
-## <none>                        
-## age              0.5427474    
-## sex              0.0013533 ** 
-## pain.type        0.0002792 ***
-## resting.bp       0.0271810 *  
-## serum.chol       0.1176468    
-## high.blood.sugar 0.5525052    
-## electro          0.2994126    
-## max.hr           0.0864608 .  
-## angina           0.1981121    
-## oldpeak          0.0597303 .  
-## slope            0.1297422    
-## colored          1.717e-06 ***
-## thal             0.0026308 ** 
+##                  Df Deviance    AIC     LRT  Pr(>Chi)    
+## <none>                168.90 206.90                      
+## age               1   169.27 205.27  0.3705 0.5427474    
+## sex               1   179.16 215.16 10.2684 0.0013533 ** 
+## pain.type         3   187.85 219.85 18.9557 0.0002792 ***
+## resting.bp        1   173.78 209.78  4.8793 0.0271810 *  
+## serum.chol        1   171.34 207.34  2.4484 0.1176468    
+## high.blood.sugar  1   169.25 205.25  0.3528 0.5525052    
+## electro           2   171.31 205.31  2.4119 0.2994126    
+## max.hr            1   171.84 207.84  2.9391 0.0864608 .  
+## angina            1   170.55 206.55  1.6562 0.1981121    
+## oldpeak           1   172.44 208.44  3.5449 0.0597303 .  
+## slope             2   172.98 206.98  4.0844 0.1297422    
+## colored           1   191.78 227.78 22.8878 1.717e-06 ***
+## thal              2   180.78 214.78 11.8809 0.0026308 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -3798,8 +3635,8 @@ Solution
 small change to a *very* big model:
 
 ```r
-heart.2 = update(heart.1, . ~ . - high.blood.sugar)
-drop1(heart.2, test = "Chisq")
+heart.2=update(heart.1,.~.-high.blood.sugar)
+drop1(heart.2,test="Chisq")
 ```
 
 ```
@@ -3809,37 +3646,22 @@ drop1(heart.2, test = "Chisq")
 ## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
 ##     serum.chol + electro + max.hr + angina + oldpeak + slope + 
 ##     colored + thal
-##            Df Deviance    AIC     LRT
-## <none>          169.25 205.25        
-## age         1   169.66 203.66  0.4104
-## sex         1   179.27 213.27 10.0229
-## pain.type   3   190.54 220.54 21.2943
-## resting.bp  1   173.84 207.84  4.5942
-## serum.chol  1   171.69 205.69  2.4458
-## electro     2   171.65 203.65  2.3963
-## max.hr      1   172.35 206.35  3.0969
-## angina      1   170.78 204.78  1.5323
-## oldpeak     1   173.26 207.26  4.0094
-## slope       2   173.18 205.18  3.9288
-## colored     1   191.87 225.87 22.6232
-## thal        2   181.61 213.61 12.3588
-##             Pr(>Chi)    
-## <none>                  
-## age         0.521756    
-## sex         0.001546 ** 
-## pain.type  9.145e-05 ***
-## resting.bp  0.032080 *  
-## serum.chol  0.117841    
-## electro     0.301750    
-## max.hr      0.078440 .  
-## angina      0.215764    
-## oldpeak     0.045248 *  
-## slope       0.140240    
-## colored    1.971e-06 ***
-## thal        0.002072 ** 
+##            Df Deviance    AIC     LRT  Pr(>Chi)    
+## <none>          169.25 205.25                      
+## age         1   169.66 203.66  0.4104  0.521756    
+## sex         1   179.27 213.27 10.0229  0.001546 ** 
+## pain.type   3   190.54 220.54 21.2943 9.145e-05 ***
+## resting.bp  1   173.84 207.84  4.5942  0.032080 *  
+## serum.chol  1   171.69 205.69  2.4458  0.117841    
+## electro     2   171.65 203.65  2.3963  0.301750    
+## max.hr      1   172.35 206.35  3.0969  0.078440 .  
+## angina      1   170.78 204.78  1.5323  0.215764    
+## oldpeak     1   173.26 207.26  4.0094  0.045248 *  
+## slope       2   173.18 205.18  3.9288  0.140240    
+## colored     1   191.87 225.87 22.6232 1.971e-06 ***
+## thal        2   181.61 213.61 12.3588  0.002072 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
    
@@ -3867,8 +3689,7 @@ Solution
 The hints ought to lead you to this:
 
 ```r
-heart.3 = step(heart.1, direction = "backward", 
-    test = "Chisq")
+heart.3=step(heart.1,direction="backward",test="Chisq")
 ```
 
 ```
@@ -3877,173 +3698,103 @@ heart.3 = step(heart.1, direction = "backward",
 ##     serum.chol + high.blood.sugar + electro + max.hr + angina + 
 ##     oldpeak + slope + colored + thal
 ## 
-##                    Df Deviance    AIC
-## - high.blood.sugar  1   169.25 205.25
-## - age               1   169.27 205.27
-## - electro           2   171.31 205.31
-## - angina            1   170.55 206.55
-## <none>                  168.90 206.90
-## - slope             2   172.98 206.98
-## - serum.chol        1   171.34 207.34
-## - max.hr            1   171.84 207.84
-## - oldpeak           1   172.44 208.44
-## - resting.bp        1   173.78 209.78
-## - thal              2   180.78 214.78
-## - sex               1   179.16 215.16
-## - pain.type         3   187.85 219.85
-## - colored           1   191.78 227.78
-##                        LRT  Pr(>Chi)    
-## - high.blood.sugar  0.3528 0.5525052    
-## - age               0.3705 0.5427474    
-## - electro           2.4119 0.2994126    
-## - angina            1.6562 0.1981121    
-## <none>                                  
-## - slope             4.0844 0.1297422    
-## - serum.chol        2.4484 0.1176468    
-## - max.hr            2.9391 0.0864608 .  
-## - oldpeak           3.5449 0.0597303 .  
-## - resting.bp        4.8793 0.0271810 *  
-## - thal             11.8809 0.0026308 ** 
-## - sex              10.2684 0.0013533 ** 
-## - pain.type        18.9557 0.0002792 ***
-## - colored          22.8878 1.717e-06 ***
+##                    Df Deviance    AIC     LRT  Pr(>Chi)    
+## - high.blood.sugar  1   169.25 205.25  0.3528 0.5525052    
+## - age               1   169.27 205.27  0.3705 0.5427474    
+## - electro           2   171.31 205.31  2.4119 0.2994126    
+## - angina            1   170.55 206.55  1.6562 0.1981121    
+## <none>                  168.90 206.90                      
+## - slope             2   172.98 206.98  4.0844 0.1297422    
+## - serum.chol        1   171.34 207.34  2.4484 0.1176468    
+## - max.hr            1   171.84 207.84  2.9391 0.0864608 .  
+## - oldpeak           1   172.44 208.44  3.5449 0.0597303 .  
+## - resting.bp        1   173.78 209.78  4.8793 0.0271810 *  
+## - thal              2   180.78 214.78 11.8809 0.0026308 ** 
+## - sex               1   179.16 215.16 10.2684 0.0013533 ** 
+## - pain.type         3   187.85 219.85 18.9557 0.0002792 ***
+## - colored           1   191.78 227.78 22.8878 1.717e-06 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Step:  AIC=205.25
 ## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
 ##     serum.chol + electro + max.hr + angina + oldpeak + slope + 
 ##     colored + thal
 ## 
-##              Df Deviance    AIC     LRT
-## - electro     2   171.65 203.65  2.3963
-## - age         1   169.66 203.66  0.4104
-## - angina      1   170.78 204.78  1.5323
-## - slope       2   173.18 205.18  3.9288
-## <none>            169.25 205.25        
-## - serum.chol  1   171.69 205.69  2.4458
-## - max.hr      1   172.35 206.35  3.0969
-## - oldpeak     1   173.26 207.26  4.0094
-## - resting.bp  1   173.84 207.84  4.5942
-## - sex         1   179.27 213.27 10.0229
-## - thal        2   181.61 213.61 12.3588
-## - pain.type   3   190.54 220.54 21.2943
-## - colored     1   191.87 225.87 22.6232
-##               Pr(>Chi)    
-## - electro     0.301750    
-## - age         0.521756    
-## - angina      0.215764    
-## - slope       0.140240    
-## <none>                    
-## - serum.chol  0.117841    
-## - max.hr      0.078440 .  
-## - oldpeak     0.045248 *  
-## - resting.bp  0.032080 *  
-## - sex         0.001546 ** 
-## - thal        0.002072 ** 
-## - pain.type  9.145e-05 ***
-## - colored    1.971e-06 ***
+##              Df Deviance    AIC     LRT  Pr(>Chi)    
+## - electro     2   171.65 203.65  2.3963  0.301750    
+## - age         1   169.66 203.66  0.4104  0.521756    
+## - angina      1   170.78 204.78  1.5323  0.215764    
+## - slope       2   173.18 205.18  3.9288  0.140240    
+## <none>            169.25 205.25                      
+## - serum.chol  1   171.69 205.69  2.4458  0.117841    
+## - max.hr      1   172.35 206.35  3.0969  0.078440 .  
+## - oldpeak     1   173.26 207.26  4.0094  0.045248 *  
+## - resting.bp  1   173.84 207.84  4.5942  0.032080 *  
+## - sex         1   179.27 213.27 10.0229  0.001546 ** 
+## - thal        2   181.61 213.61 12.3588  0.002072 ** 
+## - pain.type   3   190.54 220.54 21.2943 9.145e-05 ***
+## - colored     1   191.87 225.87 22.6232 1.971e-06 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Step:  AIC=203.65
 ## factor(heart.disease) ~ age + sex + pain.type + resting.bp + 
 ##     serum.chol + max.hr + angina + oldpeak + slope + colored + 
 ##     thal
 ## 
-##              Df Deviance    AIC     LRT
-## - age         1   172.03 202.03  0.3894
-## - angina      1   173.13 203.13  1.4843
-## <none>            171.65 203.65        
-## - slope       2   175.99 203.99  4.3442
-## - max.hr      1   175.00 205.00  3.3560
-## - serum.chol  1   175.11 205.11  3.4610
-## - oldpeak     1   175.42 205.42  3.7710
-## - resting.bp  1   176.61 206.61  4.9639
-## - thal        2   182.91 210.91 11.2633
-## - sex         1   182.77 212.77 11.1221
-## - pain.type   3   192.83 218.83 21.1859
-## - colored     1   194.90 224.90 23.2530
-##               Pr(>Chi)    
-## - age        0.5326108    
-## - angina     0.2231042    
-## <none>                    
-## - slope      0.1139366    
-## - max.hr     0.0669599 .  
-## - serum.chol 0.0628319 .  
-## - oldpeak    0.0521485 .  
-## - resting.bp 0.0258824 *  
-## - thal       0.0035826 ** 
-## - sex        0.0008531 ***
-## - pain.type  9.632e-05 ***
-## - colored    1.420e-06 ***
+##              Df Deviance    AIC     LRT  Pr(>Chi)    
+## - age         1   172.03 202.03  0.3894 0.5326108    
+## - angina      1   173.13 203.13  1.4843 0.2231042    
+## <none>            171.65 203.65                      
+## - slope       2   175.99 203.99  4.3442 0.1139366    
+## - max.hr      1   175.00 205.00  3.3560 0.0669599 .  
+## - serum.chol  1   175.11 205.11  3.4610 0.0628319 .  
+## - oldpeak     1   175.42 205.42  3.7710 0.0521485 .  
+## - resting.bp  1   176.61 206.61  4.9639 0.0258824 *  
+## - thal        2   182.91 210.91 11.2633 0.0035826 ** 
+## - sex         1   182.77 212.77 11.1221 0.0008531 ***
+## - pain.type   3   192.83 218.83 21.1859 9.632e-05 ***
+## - colored     1   194.90 224.90 23.2530 1.420e-06 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Step:  AIC=202.03
 ## factor(heart.disease) ~ sex + pain.type + resting.bp + serum.chol + 
 ##     max.hr + angina + oldpeak + slope + colored + thal
 ## 
-##              Df Deviance    AIC     LRT
-## - angina      1   173.57 201.57  1.5385
-## <none>            172.03 202.03        
-## - slope       2   176.33 202.33  4.2934
-## - max.hr      1   175.00 203.00  2.9696
-## - serum.chol  1   175.22 203.22  3.1865
-## - oldpeak     1   175.92 203.92  3.8856
-## - resting.bp  1   176.63 204.63  4.5911
-## - thal        2   183.38 209.38 11.3500
-## - sex         1   183.97 211.97 11.9388
-## - pain.type   3   193.71 217.71 21.6786
-## - colored     1   195.73 223.73 23.6997
-##               Pr(>Chi)    
-## - angina     0.2148451    
-## <none>                    
-## - slope      0.1168678    
-## - max.hr     0.0848415 .  
-## - serum.chol 0.0742492 .  
-## - oldpeak    0.0487018 *  
-## - resting.bp 0.0321391 *  
-## - thal       0.0034306 ** 
-## - sex        0.0005498 ***
-## - pain.type  7.609e-05 ***
-## - colored    1.126e-06 ***
+##              Df Deviance    AIC     LRT  Pr(>Chi)    
+## - angina      1   173.57 201.57  1.5385 0.2148451    
+## <none>            172.03 202.03                      
+## - slope       2   176.33 202.33  4.2934 0.1168678    
+## - max.hr      1   175.00 203.00  2.9696 0.0848415 .  
+## - serum.chol  1   175.22 203.22  3.1865 0.0742492 .  
+## - oldpeak     1   175.92 203.92  3.8856 0.0487018 *  
+## - resting.bp  1   176.63 204.63  4.5911 0.0321391 *  
+## - thal        2   183.38 209.38 11.3500 0.0034306 ** 
+## - sex         1   183.97 211.97 11.9388 0.0005498 ***
+## - pain.type   3   193.71 217.71 21.6786 7.609e-05 ***
+## - colored     1   195.73 223.73 23.6997 1.126e-06 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Step:  AIC=201.57
 ## factor(heart.disease) ~ sex + pain.type + resting.bp + serum.chol + 
 ##     max.hr + oldpeak + slope + colored + thal
 ## 
-##              Df Deviance    AIC     LRT
-## <none>            173.57 201.57        
-## - slope       2   178.44 202.44  4.8672
-## - serum.chol  1   176.83 202.83  3.2557
-## - max.hr      1   177.52 203.52  3.9442
-## - oldpeak     1   177.79 203.79  4.2135
-## - resting.bp  1   178.56 204.56  4.9828
-## - thal        2   186.22 210.22 12.6423
-## - sex         1   185.88 211.88 12.3088
-## - pain.type   3   200.68 222.68 27.1025
-## - colored     1   196.98 222.98 23.4109
-##               Pr(>Chi)    
-## <none>                    
-## - slope      0.0877201 .  
-## - serum.chol 0.0711768 .  
-## - max.hr     0.0470322 *  
-## - oldpeak    0.0401045 *  
-## - resting.bp 0.0256006 *  
-## - thal       0.0017978 ** 
-## - sex        0.0004508 ***
-## - pain.type  5.603e-06 ***
-## - colored    1.308e-06 ***
+##              Df Deviance    AIC     LRT  Pr(>Chi)    
+## <none>            173.57 201.57                      
+## - slope       2   178.44 202.44  4.8672 0.0877201 .  
+## - serum.chol  1   176.83 202.83  3.2557 0.0711768 .  
+## - max.hr      1   177.52 203.52  3.9442 0.0470322 *  
+## - oldpeak     1   177.79 203.79  4.2135 0.0401045 *  
+## - resting.bp  1   178.56 204.56  4.9828 0.0256006 *  
+## - thal        2   186.22 210.22 12.6423 0.0017978 ** 
+## - sex         1   185.88 211.88 12.3088 0.0004508 ***
+## - pain.type   3   200.68 222.68 27.1025 5.603e-06 ***
+## - colored     1   196.98 222.98 23.4109 1.308e-06 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -4081,39 +3832,23 @@ summary(heart.3)
 ## -2.7103  -0.4546  -0.1442   0.3864   2.7121  
 ## 
 ## Coefficients:
-##                      Estimate Std. Error
-## (Intercept)         -4.818418   2.550437
-## sexmale              1.850559   0.561583
-## pain.typeatypical   -1.268233   0.604488
-## pain.typenonanginal -2.086204   0.486591
-## pain.typetypical    -2.532340   0.748941
-## resting.bp           0.024125   0.011077
-## serum.chol           0.007142   0.003941
-## max.hr              -0.020373   0.010585
-## oldpeak              0.467028   0.233280
-## slopeflat            0.859564   0.922749
-## slopeupsloping      -0.165832   0.991474
-## colored              1.134561   0.261547
-## thalnormal           0.323543   0.813442
-## thalreversible       1.700314   0.805127
-##                     z value Pr(>|z|)    
-## (Intercept)          -1.889 0.058858 .  
-## sexmale               3.295 0.000983 ***
-## pain.typeatypical    -2.098 0.035903 *  
-## pain.typenonanginal  -4.287 1.81e-05 ***
-## pain.typetypical     -3.381 0.000722 ***
-## resting.bp            2.178 0.029410 *  
-## serum.chol            1.812 0.069966 .  
-## max.hr               -1.925 0.054262 .  
-## oldpeak               2.002 0.045284 *  
-## slopeflat             0.932 0.351582    
-## slopeupsloping       -0.167 0.867167    
-## colored               4.338 1.44e-05 ***
-## thalnormal            0.398 0.690818    
-## thalreversible        2.112 0.034699 *  
+##                      Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)         -4.818418   2.550437  -1.889 0.058858 .  
+## sexmale              1.850559   0.561583   3.295 0.000983 ***
+## pain.typeatypical   -1.268233   0.604488  -2.098 0.035903 *  
+## pain.typenonanginal -2.086204   0.486591  -4.287 1.81e-05 ***
+## pain.typetypical    -2.532340   0.748941  -3.381 0.000722 ***
+## resting.bp           0.024125   0.011077   2.178 0.029410 *  
+## serum.chol           0.007142   0.003941   1.812 0.069966 .  
+## max.hr              -0.020373   0.010585  -1.925 0.054262 .  
+## oldpeak              0.467028   0.233280   2.002 0.045284 *  
+## slopeflat            0.859564   0.922749   0.932 0.351582    
+## slopeupsloping      -0.165832   0.991474  -0.167 0.867167    
+## colored              1.134561   0.261547   4.338 1.44e-05 ***
+## thalnormal           0.323543   0.813442   0.398 0.690818    
+## thalreversible       1.700314   0.805127   2.112 0.034699 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -4167,62 +3902,34 @@ summary(heart)
 ```
 
 ```
-##        X1              age       
-##  Min.   :  1.00   Min.   :29.00  
-##  1st Qu.: 68.25   1st Qu.:48.00  
-##  Median :135.50   Median :55.00  
-##  Mean   :135.50   Mean   :54.43  
-##  3rd Qu.:202.75   3rd Qu.:61.00  
-##  Max.   :270.00   Max.   :77.00  
-##      sex             pain.type        
-##  Length:270         Length:270        
-##  Class :character   Class :character  
-##  Mode  :character   Mode  :character  
-##                                       
-##                                       
-##                                       
-##    resting.bp      serum.chol   
-##  Min.   : 94.0   Min.   :126.0  
-##  1st Qu.:120.0   1st Qu.:213.0  
-##  Median :130.0   Median :245.0  
-##  Mean   :131.3   Mean   :249.7  
-##  3rd Qu.:140.0   3rd Qu.:280.0  
-##  Max.   :200.0   Max.   :564.0  
-##  high.blood.sugar     electro         
-##  Length:270         Length:270        
-##  Class :character   Class :character  
-##  Mode  :character   Mode  :character  
-##                                       
-##                                       
-##                                       
-##      max.hr         angina         
-##  Min.   : 71.0   Length:270        
-##  1st Qu.:133.0   Class :character  
-##  Median :153.5   Mode  :character  
-##  Mean   :149.7                     
-##  3rd Qu.:166.0                     
-##  Max.   :202.0                     
-##     oldpeak        slope          
-##  Min.   :0.00   Length:270        
-##  1st Qu.:0.00   Class :character  
-##  Median :0.80   Mode  :character  
-##  Mean   :1.05                     
-##  3rd Qu.:1.60                     
-##  Max.   :6.20                     
-##     colored           thal          
-##  Min.   :0.0000   Length:270        
-##  1st Qu.:0.0000   Class :character  
-##  Median :0.0000   Mode  :character  
-##  Mean   :0.6704                     
-##  3rd Qu.:1.0000                     
-##  Max.   :3.0000                     
-##  heart.disease     
-##  Length:270        
-##  Class :character  
-##  Mode  :character  
-##                    
-##                    
-## 
+##        X1              age            sex             pain.type        
+##  Min.   :  1.00   Min.   :29.00   Length:270         Length:270        
+##  1st Qu.: 68.25   1st Qu.:48.00   Class :character   Class :character  
+##  Median :135.50   Median :55.00   Mode  :character   Mode  :character  
+##  Mean   :135.50   Mean   :54.43                                        
+##  3rd Qu.:202.75   3rd Qu.:61.00                                        
+##  Max.   :270.00   Max.   :77.00                                        
+##    resting.bp      serum.chol    high.blood.sugar     electro         
+##  Min.   : 94.0   Min.   :126.0   Length:270         Length:270        
+##  1st Qu.:120.0   1st Qu.:213.0   Class :character   Class :character  
+##  Median :130.0   Median :245.0   Mode  :character   Mode  :character  
+##  Mean   :131.3   Mean   :249.7                                        
+##  3rd Qu.:140.0   3rd Qu.:280.0                                        
+##  Max.   :200.0   Max.   :564.0                                        
+##      max.hr         angina             oldpeak        slope          
+##  Min.   : 71.0   Length:270         Min.   :0.00   Length:270        
+##  1st Qu.:133.0   Class :character   1st Qu.:0.00   Class :character  
+##  Median :153.5   Mode  :character   Median :0.80   Mode  :character  
+##  Mean   :149.7                      Mean   :1.05                     
+##  3rd Qu.:166.0                      3rd Qu.:1.60                     
+##  Max.   :202.0                      Max.   :6.20                     
+##     colored           thal           heart.disease     
+##  Min.   :0.0000   Length:270         Length:270        
+##  1st Qu.:0.0000   Class :character   Class :character  
+##  Median :0.0000   Mode  :character   Mode  :character  
+##  Mean   :0.6704                                        
+##  3rd Qu.:1.0000                                        
+##  Max.   :3.0000
 ```
 
          
@@ -4234,21 +3941,18 @@ the quantitative variables:
 
 
 ```r
-q1 = function(x) quantile(x, 0.25)
-q3 = function(x) quantile(x, 0.75)
-heart %>% summarize_if(is.numeric, funs(q1, q3))
+q1=function(x) quantile(x,0.25)
+q3=function(x) quantile(x,0.75)
+heart %>% summarize_if(is.numeric,funs(q1,q3))
 ```
 
 ```
 ## # A tibble: 1 x 14
-##   X1_q1 age_q1 resting.bp_q1 serum.chol_q1
-##   <dbl>  <dbl>         <dbl>         <dbl>
-## 1  68.2     48           120           213
-## # ... with 10 more variables:
-## #   max.hr_q1 <dbl>, oldpeak_q1 <dbl>,
-## #   colored_q1 <dbl>, X1_q3 <dbl>,
-## #   age_q3 <dbl>, resting.bp_q3 <dbl>,
-## #   serum.chol_q3 <dbl>, max.hr_q3 <dbl>,
+##   X1_q1 age_q1 resting.bp_q1 serum.chol_q1 max.hr_q1 oldpeak_q1 colored_q1
+##   <dbl>  <dbl>         <dbl>         <dbl>     <dbl>      <dbl>      <dbl>
+## 1  68.2     48           120           213       133          0          0
+## # ... with 7 more variables: X1_q3 <dbl>, age_q3 <dbl>,
+## #   resting.bp_q3 <dbl>, serum.chol_q3 <dbl>, max.hr_q3 <dbl>,
 ## #   oldpeak_q3 <dbl>, colored_q3 <dbl>
 ```
 
@@ -4262,8 +3966,9 @@ combinations in a column and the actual quartile values in another:
 
 
 ```r
-heart2 = heart %>% summarize_if(is.numeric, funs(q1, 
-    q3)) %>% gather(vq, quartile, everything())
+heart2 = heart %>% 
+summarize_if(is.numeric,funs(q1,q3)) %>%
+gather(vq,quartile,everything())  
 ```
 
 ```
@@ -4301,9 +4006,11 @@ If you want to be really fancy:
 
 
 ```r
-heart %>% summarize_if(is.numeric, funs(q1, q3)) %>% 
-    gather(vq, quartile, everything()) %>% separate(vq, 
-    c("variable", "q"), "_") %>% spread(q, quartile)
+heart %>% 
+summarize_if(is.numeric,funs(q1,q3)) %>%
+gather(vq,quartile,everything()) %>%
+separate(vq,c("variable","q"),"_") %>%
+spread(q,quartile)
 ```
 
 ```
@@ -4337,30 +4044,22 @@ different numbers of possible values. Here's my idea:
 
 
 ```r
-heart %>% select_if(is.character) %>% mutate_all(factor) %>% 
-    summary()
+heart %>%
+select_if(is.character) %>%
+mutate_all(factor) %>%
+summary()
 ```
 
 ```
-##      sex             pain.type  
-##  female: 87   asymptomatic:129  
-##  male  :183   atypical    : 42  
-##               nonanginal  : 79  
-##               typical     : 20  
-##  high.blood.sugar        electro   
-##  no :230          hypertrophy:137  
-##  yes: 40          normal     :131  
-##                   STT        :  2  
-##                                    
-##  angina            slope    
-##  no :181   downsloping: 18  
-##  yes: 89   flat       :122  
-##            upsloping  :130  
-##                             
-##          thal     heart.disease
-##  fixed     : 14   no :150      
-##  normal    :152   yes:120      
-##  reversible:104                
+##      sex             pain.type   high.blood.sugar        electro   
+##  female: 87   asymptomatic:129   no :230          hypertrophy:137  
+##  male  :183   atypical    : 42   yes: 40          normal     :131  
+##               nonanginal  : 79                    STT        :  2  
+##               typical     : 20                                     
+##  angina            slope             thal     heart.disease
+##  no :181   downsloping: 18   fixed     : 14   no :150      
+##  yes: 89   flat       :122   normal    :152   yes:120      
+##            upsloping  :130   reversible:104                
 ## 
 ```
 
@@ -4382,9 +4081,11 @@ combinations. My go at that:
 
 
 ```r
-heart3 = heart %>% select_if(is.character) %>% 
-    gather(vname, value, everything()) %>% distinct()
-heart3 %>% print(n = Inf)
+heart3 = heart %>%
+select_if(is.character) %>%
+gather(vname,value,everything()) %>%
+distinct() 
+heart3 %>% print(n=Inf)
 ```
 
 ```
@@ -4427,10 +4128,11 @@ Hmm, another way would be to count everything:
 
 
 ```r
-heart3 = heart %>% select_if(is.character) %>% 
-    gather(vname, value, everything()) %>% count(vname, 
-    value)
-heart3 %>% print(n = Inf)
+heart3 = heart %>%
+select_if(is.character) %>%
+gather(vname,value,everything()) %>%
+count(vname,value) 
+heart3 %>% print(n=Inf)
 ```
 
 ```
@@ -4498,14 +4200,15 @@ heart2
 
 and pull out the rows whose names contain `age_`. This is done
 using `str_detect`
-\marginnote{If you're selecting *columns*,  you can use select-helpers, but for rows, not.} from
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you're selecting *columns*,  you can use select-helpers, but for rows, not.</span> from
 `stringr`.
-\marginnote{Which is loaded with the *tidyverse*  so you don't have to load it.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which is loaded with the *tidyverse*  so you don't have to load it.</span> 
 Here's how it goes for `age`:
 
 
 ```r
-heart2 %>% filter(str_detect(vq, "age_"))
+heart2 %>%
+filter(str_detect(vq,"age_"))
 ```
 
 ```
@@ -4522,8 +4225,9 @@ and one more step to get just the quartiles:
 
 
 ```r
-heart2 %>% filter(str_detect(vq, "age_")) %>% 
-    pull(quartile)
+heart2 %>%
+filter(str_detect(vq,"age_")) %>%
+pull(quartile)  
 ```
 
 ```
@@ -4536,8 +4240,10 @@ We'll be doing this a few times, so we should write a function to do it:
 
 
 ```r
-get_quartiles = function(d, x) {
-    d %>% filter(str_detect(vq, x)) %>% pull(quartile)
+get_quartiles=function(d,x) {
+d %>% 
+filter(str_detect(vq,x)) %>%
+pull(quartile)  
 }
 ```
 
@@ -4547,7 +4253,7 @@ and to test:
 
 
 ```r
-get_quartiles(heart2, "age_")
+get_quartiles(heart2,"age_")
 ```
 
 ```
@@ -4591,8 +4297,9 @@ previous one that I think we can write a function right away:
 
 
 ```r
-get_categories = function(d, x) {
-    d %>% filter(vname == x) %>% pull(value)
+get_categories=function(d,x) {
+d %>% filter(vname==x) %>%
+pull(value)  
 }
 get_categories(heart3, "electro")
 ```
@@ -4607,15 +4314,15 @@ those functions we just wrote:
 
 
 ```r
-sexes = get_categories(heart3, "sex")
-pain.types = get_categories(heart3, "pain.type")
-resting.bps = get_quartiles(heart2, "resting.bp_")
-serum.chols = get_quartiles(heart2, "serum.chol_")
-max.hrs = get_quartiles(heart2, "max.hr_")
-oldpeaks = get_quartiles(heart2, "oldpeak_")
-slopes = get_categories(heart3, "slope")
-coloreds = get_quartiles(heart2, "colored_")
-thals = get_categories(heart3, "thal")
+sexes=get_categories(heart3,"sex")
+pain.types=get_categories(heart3,"pain.type")
+resting.bps=get_quartiles(heart2,"resting.bp_")
+serum.chols=get_quartiles(heart2,"serum.chol_")
+max.hrs=get_quartiles(heart2,"max.hr_")
+oldpeaks=get_quartiles(heart2,"oldpeak_")
+slopes=get_categories(heart3,"slope")
+coloreds=get_quartiles(heart2,"colored_")
+thals=get_categories(heart3,"thal")
 ```
 
  
@@ -4624,30 +4331,27 @@ All combos of all of those (and there will be a lot of those):
 
 
 ```r
-heart.new = crossing(sex = sexes, pain.type = pain.types, 
-    resting.bp = resting.bps, serum.chol = serum.chols, 
-    max.hr = max.hrs, oldpeak = oldpeaks, slope = slopes, 
-    colored = coloreds, thal = thals)
+heart.new=crossing(sex=sexes,pain.type=pain.types,resting.bp=resting.bps,
+serum.chol=serum.chols,max.hr=max.hrs,oldpeak=oldpeaks,slope=slopes,
+colored=coloreds,thal=thals)
 heart.new
 ```
 
 ```
 ## # A tibble: 2,304 x 9
-##    sex   pain.type resting.bp serum.chol
-##    <chr> <chr>          <dbl>      <dbl>
-##  1 fema~ asymptom~        120        213
-##  2 fema~ asymptom~        120        213
-##  3 fema~ asymptom~        120        213
-##  4 fema~ asymptom~        120        213
-##  5 fema~ asymptom~        120        213
-##  6 fema~ asymptom~        120        213
-##  7 fema~ asymptom~        120        213
-##  8 fema~ asymptom~        120        213
-##  9 fema~ asymptom~        120        213
-## 10 fema~ asymptom~        120        213
-## # ... with 2,294 more rows, and 5 more
-## #   variables: max.hr <dbl>, oldpeak <dbl>,
-## #   slope <chr>, colored <dbl>, thal <chr>
+##    sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal
+##    <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <ch>
+##  1 fema… asymptom…        120        213    133       0 down…       0 fix…
+##  2 fema… asymptom…        120        213    133       0 down…       0 nor…
+##  3 fema… asymptom…        120        213    133       0 down…       0 rev…
+##  4 fema… asymptom…        120        213    133       0 down…       1 fix…
+##  5 fema… asymptom…        120        213    133       0 down…       1 nor…
+##  6 fema… asymptom…        120        213    133       0 down…       1 rev…
+##  7 fema… asymptom…        120        213    133       0 flat        0 fix…
+##  8 fema… asymptom…        120        213    133       0 flat        0 nor…
+##  9 fema… asymptom…        120        213    133       0 flat        0 rev…
+## 10 fema… asymptom…        120        213    133       0 flat        1 fix…
+## # ... with 2,294 more rows
 ```
 
  
@@ -4669,7 +4373,7 @@ Solution
 Get the predictions, which is less scary than it seems:
 
 ```r
-p = predict(heart.3, heart.new, type = "response")
+p=predict(heart.3,heart.new,type="response")
 ```
 
          
@@ -4678,7 +4382,7 @@ and the easiest way to add these to `heart.new` is this:
 
 
 ```r
-heart.new$pred = p
+heart.new$pred=p
 ```
 
  
@@ -4687,7 +4391,7 @@ Or, if you like, with a `mutate` of this kind:
 
 
 ```r
-heart.x = heart.new %>% mutate(prediction = p)
+heart.x = heart.new %>% mutate(prediction=p) 
 ```
 
  
@@ -4701,19 +4405,17 @@ heart.new %>% sample_n(8)
 
 ```
 ## # A tibble: 8 x 10
-##   sex   pain.type resting.bp serum.chol
-##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  nonangin~        140        213
-## 2 fema~ asymptom~        140        280
-## 3 fema~ typical          120        280
-## 4 male  typical          140        213
-## 5 fema~ atypical         120        280
-## 6 male  typical          120        280
-## 7 male  nonangin~        120        280
-## 8 fema~ typical          140        280
-## # ... with 6 more variables: max.hr <dbl>,
-## #   oldpeak <dbl>, slope <chr>,
-## #   colored <dbl>, thal <chr>, pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
+## 1 male  atypical         120        213    133     0   down…       1 fixed
+## 2 fema… nonangin…        140        213    166     1.6 down…       1 fixed
+## 3 fema… typical          120        280    166     1.6 upsl…       0 fixed
+## 4 fema… nonangin…        140        213    166     0   upsl…       1 reve…
+## 5 male  nonangin…        120        280    166     0   down…       1 fixed
+## 6 male  nonangin…        140        280    166     0   flat        1 norm…
+## 7 fema… atypical         140        213    133     1.6 upsl…       1 reve…
+## 8 male  asymptom…        120        280    133     1.6 down…       0 norm…
+## # ... with 1 more variable: pred <dbl>
 ```
 
  
@@ -4733,17 +4435,15 @@ Solution
 This can be done in one step:
 
 ```r
-heart.new %>% filter(pred == max(pred))
+heart.new %>% filter(pred==max(pred))
 ```
 
 ```
 ## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol
-##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  asymptom~        140        280
-## # ... with 6 more variables: max.hr <dbl>,
-## #   oldpeak <dbl>, slope <chr>,
-## #   colored <dbl>, thal <chr>, pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
+## # ... with 1 more variable: pred <dbl>
 ```
 
          
@@ -4753,7 +4453,7 @@ then display the rows with predictions close to it:
 
 
 ```r
-heart.new %>% summarize(m = max(pred))
+heart.new %>% summarize(m=max(pred))
 ```
 
 ```
@@ -4764,17 +4464,15 @@ heart.new %>% summarize(m = max(pred))
 ```
 
 ```r
-heart.new %>% filter(pred > 0.98)
+heart.new %>% filter(pred>0.98)
 ```
 
 ```
 ## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol
-##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  asymptom~        140        280
-## # ... with 6 more variables: max.hr <dbl>,
-## #   oldpeak <dbl>, slope <chr>,
-## #   colored <dbl>, thal <chr>, pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
+## # ... with 1 more variable: pred <dbl>
 ```
 
  
@@ -4783,7 +4481,7 @@ or even find *which* row has the maximum, and then display that row:
 
 
 ```r
-heart.new %>% summarize(row = which.max(pred))
+heart.new %>% summarize(row=which.max(pred))
 ```
 
 ```
@@ -4799,12 +4497,10 @@ heart.new %>% slice(1398)
 
 ```
 ## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol
-##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  asymptom~        140        280
-## # ... with 6 more variables: max.hr <dbl>,
-## #   oldpeak <dbl>, slope <chr>,
-## #   colored <dbl>, thal <chr>, pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
+## # ... with 1 more variable: pred <dbl>
 ```
 
  
@@ -4813,25 +4509,22 @@ or sort the rows by `pred`, descending, and display the top few:
 
 
 ```r
-heart.new %>% arrange(desc(pred)) %>% print(n = 8)
+heart.new %>% arrange(desc(pred)) %>% print(n=8)
 ```
 
 ```
 ## # A tibble: 2,304 x 10
-##   sex   pain.type resting.bp serum.chol
-##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  asymptom~        140        280
-## 2 male  asymptom~        140        213
-## 3 male  asymptom~        120        280
-## 4 male  asymptom~        140        280
-## 5 male  asymptom~        140        280
-## 6 male  asymptom~        140        280
-## 7 male  asymptom~        120        213
-## 8 male  asymptom~        140        280
-## # ... with 2,296 more rows, and 6 more
-## #   variables: max.hr <dbl>, oldpeak <dbl>,
-## #   slope <chr>, colored <dbl>, thal <chr>,
-## #   pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
+## 2 male  asymptom…        140        213    133     1.6 flat        1 reve…
+## 3 male  asymptom…        120        280    133     1.6 flat        1 reve…
+## 4 male  asymptom…        140        280    166     1.6 flat        1 reve…
+## 5 male  asymptom…        140        280    133     0   flat        1 reve…
+## 6 male  asymptom…        140        280    133     1.6 down…       1 reve…
+## 7 male  asymptom…        120        213    133     1.6 flat        1 reve…
+## 8 male  asymptom…        140        280    133     1.6 upsl…       1 reve…
+## # ... with 2,296 more rows, and 1 more variable: pred <dbl>
 ```
 
  
@@ -4935,8 +4628,8 @@ Solution
 No great challenge here, I hope:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/breastfeed.csv"
-breastfeed = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/breastfeed.csv"
+breastfeed=read_csv(my_url)
 ```
 
 ```
@@ -4983,8 +4676,7 @@ question of adding them up. For example:
 
 
 ```r
-breastfeed %>% summarize(total = sum(bf.yes) + 
-    sum(bf.no))
+breastfeed %>% summarize(total=sum(bf.yes)+sum(bf.no))
 ```
 
 ```
@@ -5001,8 +4693,8 @@ together into one column and then adds them up):
 
 
 ```r
-breastfeed %>% gather(yesno, freq, bf.yes:bf.no) %>% 
-    summarize(total = sum(freq))
+breastfeed %>% gather(yesno,freq,bf.yes:bf.no) %>%
+summarize(total=sum(freq))
 ```
 
 ```
@@ -5078,7 +4770,7 @@ three marks rather than two.)
 So, let's make the `response` first:
 
 ```r
-response = with(breastfeed, cbind(bf.yes, bf.no))
+response=with(breastfeed,cbind(bf.yes,bf.no))
 response
 ```
 
@@ -5099,8 +4791,9 @@ or, more Tidyverse-like, but we have to remember to turn it into a
 
 
 ```r
-response = breastfeed %>% select(starts_with("bf")) %>% 
-    as.matrix()
+response = breastfeed %>%
+select(starts_with("bf")) %>%
+as.matrix()
 response
 ```
 
@@ -5123,8 +4816,7 @@ Now we fit the logistic regression:
 
 
 ```r
-breastfeed.1 = glm(response ~ gest.age, data = breastfeed, 
-    family = "binomial")
+breastfeed.1=glm(response~gest.age,data=breastfeed,family="binomial")
 summary(breastfeed.1)
 ```
 
@@ -5134,21 +4826,15 @@ summary(breastfeed.1)
 ## glm(formula = response ~ gest.age, family = "binomial", data = breastfeed)
 ## 
 ## Deviance Residuals: 
-##       1        2        3        4        5  
-## -0.1472  -0.4602   0.8779   0.1114  -0.6119  
-##       6  
-##  0.3251  
+##       1        2        3        4        5        6  
+## -0.1472  -0.4602   0.8779   0.1114  -0.6119   0.3251  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept) -16.7198     6.0630  -2.758
-## gest.age      0.5769     0.1977   2.918
-##             Pr(>|z|)   
-## (Intercept)  0.00582 **
-## gest.age     0.00352 **
+##             Estimate Std. Error z value Pr(>|z|)   
+## (Intercept) -16.7198     6.0630  -2.758  0.00582 **
+## gest.age      0.5769     0.1977   2.918  0.00352 **
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -5212,8 +4898,8 @@ are using the original data).
 Thus, you only need something like this:
 
 ```r
-p = predict(breastfeed.1, type = "response")
-cbind(breastfeed, p)
+p=predict(breastfeed.1,type="response")
+cbind(breastfeed,p)
 ```
 
 ```
@@ -5236,9 +4922,9 @@ If you only wanted certain gestational ages, for example 25, 30 and
 
 
 ```r
-ages.new = data.frame(gest.age = c(25, 30, 35))
-p2 = predict(breastfeed.1, ages.new, type = "response")
-cbind(ages.new, p2)
+ages.new=data.frame(gest.age=c(25,30,35))
+p2=predict(breastfeed.1,ages.new,type="response")
+cbind(ages.new,p2)
 ```
 
 ```
@@ -5255,14 +4941,14 @@ proportions/probabilities, you could do something like this:
 
 
 ```r
-breastfeed %>% mutate(total = bf.yes + bf.no, 
-    obs = bf.yes/total) %>% mutate(pred = p) %>% 
-    ggplot(aes(x = gest.age, y = obs)) + geom_line(aes(y = pred)) + 
-    geom_point(aes(size = total))
+breastfeed %>% mutate( total=bf.yes+bf.no,
+obs=bf.yes/total) %>%
+mutate(pred=p) %>%
+ggplot(aes(x=gest.age,y=obs))+
+geom_line(aes(y=pred))+geom_point(aes(size=total))
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-122-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
 
  
 
@@ -5326,8 +5012,8 @@ Solution
 Nothing very new here:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/donner.txt"
-donner = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/donner.txt"
+donner=read_delim(my_url," ")
 ```
 
 ```
@@ -5403,11 +5089,10 @@ and summarizes them in a sensible way.
 Starting with `age` vs. `gender`:
 
 ```r
-ggplot(donner, aes(x = gender, y = age)) + geom_boxplot()
+ggplot(donner,aes(x=gender,y=age))+geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-124-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-124-1.png" width="672"  />
 
      
 
@@ -5415,12 +5100,10 @@ or:
 
 
 ```r
-ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + 
-    facet_grid(gender ~ .)
+ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(gender~.)
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-125-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
 
  
 
@@ -5428,7 +5111,7 @@ or:
 
 
 ```r
-aggregate(age ~ gender, donner, mean)
+aggregate(age~gender,donner,mean)
 ```
 
 ```
@@ -5443,7 +5126,7 @@ or:
 
 
 ```r
-donner %>% group_by(gender) %>% summarize(m = mean(age))
+donner %>% group_by(gender) %>% summarize(m=mean(age))
 ```
 
 ```
@@ -5460,11 +5143,10 @@ Age vs. `survived` is the same idea:
 
 
 ```r
-ggplot(donner, aes(x = survived, y = age)) + geom_boxplot()
+ggplot(donner,aes(x=survived,y=age))+geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-128-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-128-1.png" width="672"  />
 
      
 
@@ -5472,12 +5154,10 @@ or:
 
 
 ```r
-ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + 
-    facet_grid(survived ~ .)
+ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(survived~.)
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-129-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-129-1.png" width="672"  />
 
  
 
@@ -5485,7 +5165,7 @@ or:
 
 
 ```r
-aggregate(age ~ survived, donner, mean)
+aggregate(age~survived,donner,mean)
 ```
 
 ```
@@ -5500,7 +5180,7 @@ or:
 
 
 ```r
-donner %>% group_by(survived) %>% summarize(m = mean(age))
+donner %>% group_by(survived) %>% summarize(m=mean(age))
 ```
 
 ```
@@ -5518,7 +5198,7 @@ cross-tabulation, gotten like this:
 
 
 ```r
-with(donner, table(gender, survived))
+with(donner,table(gender,survived))
 ```
 
 ```
@@ -5534,7 +5214,7 @@ or like this:
 
 
 ```r
-donner %>% group_by(gender, survived) %>% summarize(n = n())
+donner %>% group_by(gender,survived) %>% summarize(n=n())
 ```
 
 ```
@@ -5554,12 +5234,10 @@ For a graph, borrow the grouped bar-plot idea from the parasites question:
 
 
 ```r
-ggplot(donner, aes(x = gender, fill = survived)) + 
-    geom_bar(position = "dodge")
+ggplot(donner,aes(x=gender,fill=survived))+geom_bar(position="dodge")
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-134-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-134-1.png" width="672"  />
 
  
 
@@ -5610,8 +5288,7 @@ variable expressed as text, so we need to make it into a
 factor version of `survived`, or do it right in the `glm`:
 
 ```r
-donner.1 = glm(factor(survived) ~ age + gender, 
-    family = "binomial", data = donner)
+donner.1=glm(factor(survived)~age+gender,family="binomial",data=donner)
 summary(donner.1)
 ```
 
@@ -5626,17 +5303,12 @@ summary(donner.1)
 ## -1.7445  -1.0441  -0.3029   0.8877   2.0472  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept)  3.23041    1.38686   2.329
-## age         -0.07820    0.03728  -2.097
-## gendermale  -1.59729    0.75547  -2.114
-##             Pr(>|z|)  
-## (Intercept)   0.0198 *
-## age           0.0359 *
-## gendermale    0.0345 *
+##             Estimate Std. Error z value Pr(>|z|)  
+## (Intercept)  3.23041    1.38686   2.329   0.0198 *
+## age         -0.07820    0.03728  -2.097   0.0359 *
+## gendermale  -1.59729    0.75547  -2.114   0.0345 *
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -5777,8 +5449,8 @@ literally copying the values output from above:
 
 
 ```r
-ages = c(24, 28, 40)
-genders = c("female", "male")
+ages=c(24,28,40)
+genders=c("female","male")
 ```
 
  
@@ -5793,8 +5465,10 @@ So, let's get the median and quartiles of age:
 
 
 ```r
-donner %>% summarize(q1 = quantile(age, 0.25), 
-    med = median(age), q3 = quantile(age, 0.75))
+donner %>% 
+summarize(q1=quantile(age,0.25),
+med=median(age),
+q3=quantile(age,0.75))
 ```
 
 ```
@@ -5810,9 +5484,11 @@ only these came out sideways, so we can "transpose" them:
 
 
 ```r
-donner %>% summarize(q1 = quantile(age, 0.25), 
-    med = median(age), q3 = quantile(age, 0.75)) %>% 
-    gather(stat, value, everything())
+donner %>% 
+summarize(q1=quantile(age,0.25),
+med=median(age),
+q3=quantile(age,0.75)) %>%
+gather(stat,value,everything())              
 ```
 
 ```
@@ -5835,10 +5511,12 @@ and now if we "pull out" the `value` column, we are good:
 
 
 ```r
-ages = donner %>% summarize(q1 = quantile(age, 
-    0.25), med = median(age), q3 = quantile(age, 
-    0.75)) %>% gather(stat, value, everything()) %>% 
-    pull(value)
+ages = donner %>% 
+summarize(q1=quantile(age,0.25),
+med=median(age),
+q3=quantile(age,0.75)) %>%
+gather(stat,value,everything()) %>%
+pull(value)
 ```
 
 ```
@@ -5860,7 +5538,9 @@ The same kind of idea will get us both genders without typing any genders:
 
 
 ```r
-genders = donner %>% count(gender) %>% pull(gender)
+genders = donner %>%
+count(gender) %>%
+pull(gender)
 genders
 ```
 
@@ -5872,12 +5552,14 @@ genders
 
 We don't care how many there are of each gender; it's just a device to
 get the different genders.
-\marginnote{The counts are in a column called  *n* which we calculate and then ignore.} This is another way:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The counts are in a column called  *n* which we calculate and then ignore.</span> This is another way:
 
 
 ```r
-genders = donner %>% select(gender) %>% distinct() %>% 
-    pull(gender)
+genders = donner %>%
+select(gender) %>%
+distinct() %>%
+pull(gender)
 genders
 ```
 
@@ -5899,7 +5581,7 @@ Step 2:
 
 
 ```r
-donner.new = crossing(age = ages, gender = genders)
+donner.new=crossing(age=ages,gender=genders)
 donner.new
 ```
 
@@ -5923,15 +5605,13 @@ Step 3:
 
 
 ```r
-p = predict(donner.1, donner.new, type = "response")
+p=predict(donner.1,donner.new,type="response")
 p
 ```
 
 ```
-##         1         2         3         4 
-## 0.7947039 0.4393557 0.7389850 0.3643360 
-##         5         6 
-## 0.5255405 0.1831661
+##         1         2         3         4         5         6 
+## 0.7947039 0.4393557 0.7389850 0.3643360 0.5255405 0.1831661
 ```
 
 
@@ -5940,7 +5620,7 @@ Step 4:
 
 
 ```r
-cbind(donner.new, p)
+cbind(donner.new,p)
 ```
 
 ```
@@ -5998,7 +5678,7 @@ what the model is saying.
 arrive in the intensive care unit (ICU) of a hospital. These are seriously
 ill patients who may die despite the ICU's best attempts. APACHE
 stands for "Acute Physiology And Chronic Health Evaluation".
-\marginnote{As with many of these acronyms, you get the idea that the acronym came first and they devised some words to fit it.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As with many of these acronyms, you get the idea that the acronym came first and they devised some words to fit it.</span>
 The scale score is calculated from several physiological measurements
 such as body temperature, heart rate and the Glasgow coma scale, as
 well as the patient's age. The final result is a score between 0 and
@@ -6022,8 +5702,8 @@ Solution
 Data values separated by one space, so:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/apache.txt"
-icu = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/apache.txt"
+icu=read_delim(my_url," ")
 ```
 
 ```
@@ -6109,9 +5789,8 @@ numbers of patients (since a patient must have either lived or
 died): 
 
 ```r
-response = icu %>% mutate(survivals = patients - 
-    deaths) %>% select(deaths, survivals) %>% 
-    as.matrix()
+response = icu %>% mutate(survivals=patients-deaths) %>%
+select(deaths, survivals) %>% as.matrix()
 response
 ```
 
@@ -6170,8 +5849,8 @@ frame:
 
 
 ```r
-survivals = with(icu, patients - deaths)
-resp = with(icu, cbind(deaths, survivals))
+survivals=with(icu,patients-deaths)
+resp=with(icu, cbind(deaths, survivals))
 resp
 ```
 
@@ -6241,8 +5920,7 @@ Solution
 
 
 ```r
-apache.1 = glm(response ~ apache, family = "binomial", 
-    data = icu)
+apache.1=glm(response~apache,family="binomial",data=icu)
 summary(apache.1)
 ```
 
@@ -6256,15 +5934,11 @@ summary(apache.1)
 ## -2.2508  -0.5662   0.1710   0.6649   2.3695  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept)  -2.2903     0.2765  -8.282
-## apache        0.1156     0.0160   7.227
-##             Pr(>|z|)    
-## (Intercept)  < 2e-16 ***
-## apache      4.94e-13 ***
+##             Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  -2.2903     0.2765  -8.282  < 2e-16 ***
+## apache        0.1156     0.0160   7.227 4.94e-13 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -6322,8 +5996,8 @@ This is the easier version of `predict` since we don't have
 to make a new data frame of values to predict from:
 
 ```r
-p = predict(apache.1, type = "response")
-cbind(icu, p)
+p=predict(apache.1,type="response")
+cbind(icu,p)
 ```
 
 ```
@@ -6390,13 +6064,13 @@ This means calculating the observed proportions first, adding the
 predicted probabilities, and then making the plot, like this:
 
 ```r
-icu %>% mutate(obs_prop = deaths/patients) %>% 
-    mutate(pred = p) %>% ggplot(aes(x = apache, 
-    y = pred)) + geom_line() + geom_point(aes(y = obs_prop))
+icu %>% mutate(obs_prop=deaths/patients) %>%
+mutate(pred=p) %>%
+ggplot(aes(x=apache,y=pred))+geom_line()+
+geom_point(aes(y=obs_prop))
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-152-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-152-1.png" width="672"  />
 
      
 
@@ -6421,20 +6095,19 @@ That's what I asked for, and is full marks if you got it. However, the
 points are not all based on the same number of observations. One way
 to show that on your plot is to vary the size of the plotted
 point
-\marginnote{By size is meant the *area* of the circle,  which is what our brains perceive as the size of   two-dimensional, like the area of a slice in a pie chart. On the  plot, the radius of the circle for 20 is less than twice that of the circle for 10, because the area depends on the radius *squared*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">By size is meant the *area* of the circle,  which is what our brains perceive as the size of   two-dimensional, like the area of a slice in a pie chart. On the  plot, the radius of the circle for 20 is less than twice that of the circle for 10, because the area depends on the radius *squared*.</span>
 according to the number of patients it was based on. This is not hard
 to do, since we have exactly that in `patients`:
 
 
 ```r
-icu %>% mutate(obs_prop = deaths/patients) %>% 
-    mutate(pred = p) %>% ggplot(aes(x = apache, 
-    y = pred)) + geom_line() + geom_point(aes(y = obs_prop, 
-    size = patients))
+icu %>% mutate(obs_prop=deaths/patients) %>%
+mutate(pred=p) %>%
+ggplot(aes(x=apache,y=pred))+geom_line()+
+geom_point(aes(y=obs_prop,size=patients))
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-153-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-153-1.png" width="672"  />
 
      
 The points that are far from the prediction are mostly based on a
@@ -6446,7 +6119,7 @@ points all to be of size 5, say, you'd do it this way:
 
 
 ```r
-geom_point(aes(y = obs_prop), size = 5)
+geom_point(aes(y=obs_prop),size=5)
 ```
 
  
@@ -6485,8 +6158,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/ha2.txt"
-ha = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/ha2.txt"
+ha=read_delim(my_url," ")
 ```
 
 ```
@@ -6547,8 +6220,7 @@ This:
 
 
 ```r
-ha.1 = glm(factor(second) ~ anger + anxiety, family = "binomial", 
-    data = ha)
+ha.1=glm(factor(second)~anger+anxiety, family="binomial",data=ha)
 summary(ha.1)
 ```
 
@@ -6559,23 +6231,16 @@ summary(ha.1)
 ##     data = ha)
 ## 
 ## Deviance Residuals: 
-##      Min        1Q    Median        3Q  
-## -1.52106  -0.68746   0.00424   0.70625  
-##      Max  
-##  1.88960  
+##      Min        1Q    Median        3Q       Max  
+## -1.52106  -0.68746   0.00424   0.70625   1.88960  
 ## 
 ## Coefficients:
-##             Estimate Std. Error z value
-## (Intercept) -6.36347    3.21362  -1.980
-## angery      -1.02411    1.17101  -0.875
-## anxiety      0.11904    0.05497   2.165
-##             Pr(>|z|)  
-## (Intercept)   0.0477 *
-## angery        0.3818  
-## anxiety       0.0304 *
+##             Estimate Std. Error z value Pr(>|z|)  
+## (Intercept) -6.36347    3.21362  -1.980   0.0477 *
+## angery      -1.02411    1.17101  -0.875   0.3818  
+## anxiety      0.11904    0.05497   2.165   0.0304 *
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -6624,8 +6289,8 @@ we might as well just type them in.
 Step 1 is to save them (my preference is under plural names):
 
 ```r
-anxieties = c(40, 50, 60)
-angers = c("y", "n")
+anxieties=c(40,50,60)
+angers=c("y","n")
 ```
 
      
@@ -6635,7 +6300,7 @@ Step 2 is to make a data frame of combinations using
 
 
 ```r
-new = crossing(anxiety = anxieties, anger = angers)
+new=crossing(anxiety=anxieties, anger=angers)
 new
 ```
 
@@ -6659,7 +6324,7 @@ to make the predictions be probabilities:
 
 
 ```r
-p = predict(ha.1, new, type = "response")
+p=predict(ha.1,new,type="response")
 ```
 
  
@@ -6670,7 +6335,7 @@ thing `p` might be, and `bind_cols` is pickier:
 
 
 ```r
-cbind(new, p)
+cbind(new,p)
 ```
 
 ```
@@ -6748,11 +6413,10 @@ the probability of a second heart attack. The pattern is clear
 enough even with this small data set. Here's a visual:
 
 ```r
-ggplot(ha, aes(x = second, y = anxiety)) + geom_boxplot()
+ggplot(ha,aes(x=second,y=anxiety))+geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-161-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-161-1.png" width="672"  />
 
      
 
@@ -6776,24 +6440,23 @@ bar chart:
 
 
 ```r
-ggplot(ha, aes(x = anger, fill = second)) + geom_bar(position = "dodge")
+ggplot(ha,aes(x=anger,fill=second))+geom_bar(position="dodge")
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-162-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-162-1.png" width="672"  />
 
  
 
 A small majority of people who took the anger management did not have
 a second heart attack, while a small minority of those who did not,
 did.
-\marginnote{Read that carefully.} But with these small numbers, the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Read that carefully.</span> But with these small numbers, the
 difference, even though it points the way we would have guessed, is
 not large enough to be significant:
 
 
 ```r
-with(ha, table(anger, second))
+with(ha,table(anger,second))
 ```
 
 ```

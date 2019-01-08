@@ -1,7 +1,7 @@
 ---
 title: "Problems and Solutions in Applied Statistics"
 author: "Ken Butler"
-date: "function () , as.Date(as.POSIXlt(Sys.time()))"
+date: "2019-01-07"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: []
