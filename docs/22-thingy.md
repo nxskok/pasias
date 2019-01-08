@@ -2623,7 +2623,7 @@ LD's were important).
 
 
 
-##  CLustering the Swiss bills
+##  Clustering the Swiss bills
 
 
  This question is about the Swiss bank counterfeit bills
