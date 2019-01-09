@@ -60,6 +60,7 @@ library(ggrepel)
 ```
 
 
+##  Making a map of Wisconsin
 
 
  The file
@@ -196,7 +197,8 @@ cities
 ##  [5] "Marshfield"    "Milwaukee"     "Monroe"        "Superior"     
 ##  [9] "Wausau"        "Dubuque"       "St.Paul"       "Chicago"
 ```
-$ %$ %$ 
+
+       
  
 
 (c) Run a (metric) multidimensional scaling on the data, to
@@ -494,12 +496,8 @@ cst
 
 And then I look them up. I don't want Google to tell me that I have
 done too many lookups, so I look them up first and save the results,
-like this:\endnote{I actually had to do some further processing, not
-shown, because Google would fail to look up some of the places on
-one run, and then fail to look up *different* ones the next
-time I tried. So I saved two runs that together looked up all the
-places at least once, and then made a pipeline to put these together
-into one complete data frame.}
+like this:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I actually had to do some further processing, not  shown, because Google would fail to look up some of the places on  one run, and then fail to look up *different* ones the next  time I tried. So I saved two runs that together looked up all the  places at least once, and then made a pipeline to put these together into one complete data frame.</span>
 
 ```r
 g = tibble(cst) %>% 
@@ -690,7 +688,6 @@ fine.)
  truecoord
  @ 
  
- %$ %$ %$
  
  `procOPA` needs matrices rather than data frames.
  `wisc.1` contained the coordinates for our
@@ -702,7 +699,6 @@ fine.)
  
  I discuss `reflect=T` below.
  
- %$ %$ %$ %$
  
  Now, we need to plot these. I'm following the procedure from class, to
  cut down on the amount of my thinking required.
@@ -751,7 +747,6 @@ fine.)
  wisc.pro$R
  @ 
  
- %$
  
  This time, the diagonal elements differ in sign (indicating that a
  reflection was performed to make the points line up). Indeed, I
@@ -801,10 +796,8 @@ cmdscale(d,1,eig=T)$GOF
    
 
 The goodness-of-fit of the two-dimensional solution is pretty
-good,\endnote{As it ought to be, since there is a "real answer"
-here: the cities *do* exist as locations in two dimensions, if
-you ignore the curvature of the earth. The goodness of fit isn't
-100\% because the roads bend a bit.}
+good,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As it ought to be, since there is a real answer  here: the cities *do* exist as locations in two dimensions,   you ignore the curvature of the earth. The goodness of fit isn't  100% because the roads bend a bit.</span>
 but that of the one-dimensional solution (which arranges all the
 cities along a line) is pretty awful in comparison.
 
@@ -864,14 +857,16 @@ pretty awful.
 
 
 
+##  Things that feel similar to each other
 
 
  Which objects feel similar to one another and which ones
 feel different? Can we draw them on a "map"? 30
-subjects\endnote{Probably students in a psychology course. You know
-how it goes.} were each
-given 17 different objects to feel, for example ``inner surface of
-pine  bark'', "rubber eraser" and "nylon scouring pad". The
+subjects
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Probably students in a psychology course. You know  how it goes.</span> were each
+given 17 different objects to feel, for example "inner surface of pine  bark", 
+"rubber eraser" and 
+"nylon scouring pad". The
 subjects had to group the objects into a maximum of 8 groups such that
 the objects within a group felt similar, and the ones in different
 groups felt different.\endnote{The maximum number of groups was to
@@ -1215,8 +1210,7 @@ I note that any map that is the same as this apart from rotation and
 reflection is also fine (since the distances will be the same). I saw
 a lot of maps that were like mine but upside down (with `cork`
 at the top).
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I lie. Last year, emph{I</span> got cork at the top,
-and a lot of other people got cork at the bottom as you see here.} No problem there.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I lie. Last year, *I* got cork at the top,  and a lot of other people got cork at the bottom as you see here.</span> No problem there.
     
 
 
@@ -1282,7 +1276,8 @@ d.2$GOF
 ```
 ## [1] 0.4019251 0.4110603
 ```
-$
+
+     
 
 I didn't ask you to comment on this, but the adjective that came to my
 mind was "disappointing". I think that's to do with the
@@ -1303,7 +1298,8 @@ d.2a$GOF
 ```
 ## [1] 0.5775841 0.5907117
 ```
-$
+
+ 
 
 That is quite a bit better. The problem with this, though, is that we
 need something like `rgl` to explore it with.
@@ -1388,8 +1384,7 @@ Extra: this is where I have to say I cheated. I thought this would be
 hard to do by trying to match  those names in the clusters
 with the ones on the MDS map. So I put myself through some
 short-term R coding pain for some substantial long-term gain.
-I was thinking, ``can I extract the clusters from this
-analysis, and plot them on the MDS map in different colours?'' That
+I was thinking, "can I extract the clusters from this    analysis, and plot them on the MDS map in different colours?" That
 would go like this:
 
 ```r
@@ -1480,7 +1475,8 @@ save.3d
 ## 16  13.1702265   1.677039   8.2862272               waxpaper        5
 ## 17  11.2914904   5.331796   9.6288283      glossypaintedwood        5
 ```
-$
+
+ 
 
 It looks as if the combo of negative `X1` and positive
 `X3` distinguishes cluster 2 from cluster 1.
@@ -1526,7 +1522,8 @@ geom_point()
 ```
 
 <img src="23-mds_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
-$
+
+     
 
 This says that the three-dimensional MDS *has* separated clusters
 1 and 2, and if we were to plot `d.2a` in `rgl` and
@@ -1608,8 +1605,8 @@ ggbiplot(save.3d.lda,groups=factor(save.3d$clusters))
 ```
 
 <img src="23-mds_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
-$ %$ %$
 
+ 
 Points on the right have `X1` and `X2` large, and
 `X3` small (cluster 4, and to a lesser extent, cluster
 5). Points on the left are the other way around. None of the arrows
@@ -1631,6 +1628,7 @@ compare.
 
   
 
+##  Confusing letters
 
 
  Two researchers studied how often people mistook one letter
@@ -1719,27 +1717,21 @@ everything that is not numbers:
 
 
 ```r
-letters %>% select(-X1) -> letters2
-```
-
-```
-## Error in select(., -X1): unused argument (-X1)
-```
-
-```r
+letters %>% dplyr::select(-X1) -> letters2
 letters2=21-letters2
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'letters2' not found
-```
-
-```r
 letters2
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'letters2' not found
+##    C  D  G  H  M  N  Q  W
+## 1 21 21 21 21 21 21 21 21
+## 2 16 21 21 21 21 21 21 21
+## 3  9 19 21 21 21 21 21 21
+## 4 19 17 18 21 21 21 21 21
+## 5 19 18 19 11 21 21 21 21
+## 6 19 17 20  3  5 21 21 21
+## 7 12  1 12 20 19 13 21 21
+## 8 20 16 19 16  3  8 17 21
 ```
 
  
@@ -1753,102 +1745,18 @@ you tell it otherwise), so all will be good.
 
 ```r
 d=as.dist(letters2)
-```
-
-```
-## Error in as.dist(letters2): object 'letters2' not found
-```
-
-```r
 d
 ```
 
 ```
-##                        innersurfaceofpinebark brick cardboard cork
-## brick                                      22                     
-## cardboard                                  23    27               
-## cork                                       24    27        18     
-## rubbereraser                               26    27        19   15
-## felt                                       27    29        28   28
-## leatherwallet                              26    29        23   25
-## rigidplasticsheet                          23    28        24   26
-## veryfinesandpaper                          24    16        24   28
-## nylonscouringpad                           23    18        29   28
-## cellulosekitchensponge                     23    28        27   20
-## wovenstraw                                 18    25        28   27
-## blockofstyrofoam                           23    24        21   10
-## unglazedceramictile                        21    10        26   26
-## velvet                                     28    29        28   28
-## waxpaper                                   24    28        24   28
-## glossypaintedwood                          22    27        23   29
-##                        rubbereraser felt leatherwallet rigidplasticsheet
-## brick                                                                   
-## cardboard                                                               
-## cork                                                                    
-## rubbereraser                                                            
-## felt                             28                                     
-## leatherwallet                    20   24                                
-## rigidplasticsheet                27   28            22                  
-## veryfinesandpaper                24   29            28                27
-## nylonscouringpad                 27   26            28                29
-## cellulosekitchensponge           24   26            27                29
-## wovenstraw                       25   29            26                27
-## blockofstyrofoam                 19   28            25                25
-## unglazedceramictile              24   29            29                25
-## velvet                           29    4            24                29
-## waxpaper                         24   28            21                12
-## glossypaintedwood                28   29            20                13
-##                        veryfinesandpaper nylonscouringpad
-## brick                                                    
-## cardboard                                                
-## cork                                                     
-## rubbereraser                                             
-## felt                                                     
-## leatherwallet                                            
-## rigidplasticsheet                                        
-## veryfinesandpaper                                        
-## nylonscouringpad                      21                 
-## cellulosekitchensponge                24               22
-## wovenstraw                            26               16
-## blockofstyrofoam                      25               25
-## unglazedceramictile                   12               24
-## velvet                                29               27
-## waxpaper                              29               29
-## glossypaintedwood                     27               28
-##                        cellulosekitchensponge wovenstraw blockofstyrofoam
-## brick                                                                    
-## cardboard                                                                
-## cork                                                                     
-## rubbereraser                                                             
-## felt                                                                     
-## leatherwallet                                                            
-## rigidplasticsheet                                                        
-## veryfinesandpaper                                                        
-## nylonscouringpad                                                         
-## cellulosekitchensponge                                                   
-## wovenstraw                                 19                            
-## blockofstyrofoam                           21         26                 
-## unglazedceramictile                        26         26               25
-## velvet                                     27         28               29
-## waxpaper                                   29         27               26
-## glossypaintedwood                          27         25               29
-##                        unglazedceramictile velvet waxpaper
-## brick                                                     
-## cardboard                                                 
-## cork                                                      
-## rubbereraser                                              
-## felt                                                      
-## leatherwallet                                             
-## rigidplasticsheet                                         
-## veryfinesandpaper                                         
-## nylonscouringpad                                          
-## cellulosekitchensponge                                    
-## wovenstraw                                                
-## blockofstyrofoam                                          
-## unglazedceramictile                                       
-## velvet                                  29                
-## waxpaper                                28     27         
-## glossypaintedwood                       26     26       12
+##    C  D  G  H  M  N  Q
+## D 16                  
+## G  9 19               
+## H 19 17 18            
+## M 19 18 19 11         
+## N 19 17 20  3  5      
+## Q 12  1 12 20 19 13   
+## W 20 16 19 16  3  8 17
 ```
 
  
@@ -1885,24 +1793,15 @@ d.1
 ```
 
 ```
-##                               [,1]       [,2]
-## innersurfaceofpinebark  -2.7066290   1.694420
-## brick                  -12.2011332   5.147970
-## cardboard                3.8630322  -9.322759
-## cork                    -0.8424358 -14.884926
-## rubbereraser             0.1676463 -11.733873
-## felt                     5.1803473   9.328562
-## leatherwallet           10.4636668  -1.016525
-## rigidplasticsheet       11.0208731   1.201504
-## veryfinesandpaper      -11.0869483   2.800988
-## nylonscouringpad       -10.4469053   7.232787
-## cellulosekitchensponge  -5.3886609  -2.770991
-## wovenstraw              -5.2762142   3.836948
-## blockofstyrofoam        -2.9950151 -11.927717
-## unglazedceramictile    -10.5902291   2.926805
-## velvet                   6.3768882  10.477972
-## waxpaper                13.1702265   1.677039
-## glossypaintedwood       11.2914904   5.331796
+##        [,1]       [,2]
+## C  9.624942  4.7694928
+## D  4.451129 -9.5740790
+## G  8.863167  7.6643690
+## H -6.817352  3.8283789
+## M -8.917331  2.0059242
+## N -7.926704 -0.8531024
+## Q  7.875169 -5.9942901
+## W -7.153020 -1.8466934
 ```
 
      
@@ -1917,30 +1816,19 @@ d.1a
 
 ```
 ## $points
-##                               [,1]       [,2]
-## innersurfaceofpinebark  -2.7066290   1.694420
-## brick                  -12.2011332   5.147970
-## cardboard                3.8630322  -9.322759
-## cork                    -0.8424358 -14.884926
-## rubbereraser             0.1676463 -11.733873
-## felt                     5.1803473   9.328562
-## leatherwallet           10.4636668  -1.016525
-## rigidplasticsheet       11.0208731   1.201504
-## veryfinesandpaper      -11.0869483   2.800988
-## nylonscouringpad       -10.4469053   7.232787
-## cellulosekitchensponge  -5.3886609  -2.770991
-## wovenstraw              -5.2762142   3.836948
-## blockofstyrofoam        -2.9950151 -11.927717
-## unglazedceramictile    -10.5902291   2.926805
-## velvet                   6.3768882  10.477972
-## waxpaper                13.1702265   1.677039
-## glossypaintedwood       11.2914904   5.331796
+##        [,1]       [,2]
+## C  9.624942  4.7694928
+## D  4.451129 -9.5740790
+## G  8.863167  7.6643690
+## H -6.817352  3.8283789
+## M -8.917331  2.0059242
+## N -7.926704 -0.8531024
+## Q  7.875169 -5.9942901
+## W -7.153020 -1.8466934
 ## 
 ## $eig
-##  [1]  1.181313e+03  9.394546e+02  9.268689e+02  6.314409e+02  3.467493e+02
-##  [6]  2.705989e+02  2.575474e+02  1.937616e+02  1.485443e+02  1.186640e+02
-## [11]  8.449108e+01  4.651045e+01  1.331767e+01 -1.278977e-13 -1.739199e+01
-## [16] -3.204147e+01 -6.782875e+01
+## [1]  4.930195e+02  2.319034e+02  1.399674e+02  5.318040e+01  4.054851e+01
+## [6] -5.684342e-14 -1.539358e+01 -9.610062e+01
 ## 
 ## $x
 ## NULL
@@ -1949,7 +1837,7 @@ d.1a
 ## [1] 0
 ## 
 ## $GOF
-## [1] 0.4019251 0.4110603
+## [1] 0.6774262 0.7562157
 ```
 
  
@@ -1968,7 +1856,6 @@ analysis.)  But that's by the way: we'll stick with two dimensions.
 The important thing to remember is that if you go the `eig=T`
 way, you have to pull out the points to plot from the thing called
 `points`, so that you plot `d.1` itself  but `d.1a$points`.
-$ %$ %$
 
 
 (c) Obtain a vector of the names of the letters that were
@@ -1983,7 +1870,8 @@ you read in from the file (if you can remember what it was called):
 ```r
 letter_names=letters$X1
 ```
-$ %$ %$ %$ %$
+
+     
 
 That silly column name `X1` that `read_table`
 supplied. 
@@ -2009,91 +1897,14 @@ d
 ```
 
 ```
-##                        innersurfaceofpinebark brick cardboard cork
-## brick                                      22                     
-## cardboard                                  23    27               
-## cork                                       24    27        18     
-## rubbereraser                               26    27        19   15
-## felt                                       27    29        28   28
-## leatherwallet                              26    29        23   25
-## rigidplasticsheet                          23    28        24   26
-## veryfinesandpaper                          24    16        24   28
-## nylonscouringpad                           23    18        29   28
-## cellulosekitchensponge                     23    28        27   20
-## wovenstraw                                 18    25        28   27
-## blockofstyrofoam                           23    24        21   10
-## unglazedceramictile                        21    10        26   26
-## velvet                                     28    29        28   28
-## waxpaper                                   24    28        24   28
-## glossypaintedwood                          22    27        23   29
-##                        rubbereraser felt leatherwallet rigidplasticsheet
-## brick                                                                   
-## cardboard                                                               
-## cork                                                                    
-## rubbereraser                                                            
-## felt                             28                                     
-## leatherwallet                    20   24                                
-## rigidplasticsheet                27   28            22                  
-## veryfinesandpaper                24   29            28                27
-## nylonscouringpad                 27   26            28                29
-## cellulosekitchensponge           24   26            27                29
-## wovenstraw                       25   29            26                27
-## blockofstyrofoam                 19   28            25                25
-## unglazedceramictile              24   29            29                25
-## velvet                           29    4            24                29
-## waxpaper                         24   28            21                12
-## glossypaintedwood                28   29            20                13
-##                        veryfinesandpaper nylonscouringpad
-## brick                                                    
-## cardboard                                                
-## cork                                                     
-## rubbereraser                                             
-## felt                                                     
-## leatherwallet                                            
-## rigidplasticsheet                                        
-## veryfinesandpaper                                        
-## nylonscouringpad                      21                 
-## cellulosekitchensponge                24               22
-## wovenstraw                            26               16
-## blockofstyrofoam                      25               25
-## unglazedceramictile                   12               24
-## velvet                                29               27
-## waxpaper                              29               29
-## glossypaintedwood                     27               28
-##                        cellulosekitchensponge wovenstraw blockofstyrofoam
-## brick                                                                    
-## cardboard                                                                
-## cork                                                                     
-## rubbereraser                                                             
-## felt                                                                     
-## leatherwallet                                                            
-## rigidplasticsheet                                                        
-## veryfinesandpaper                                                        
-## nylonscouringpad                                                         
-## cellulosekitchensponge                                                   
-## wovenstraw                                 19                            
-## blockofstyrofoam                           21         26                 
-## unglazedceramictile                        26         26               25
-## velvet                                     27         28               29
-## waxpaper                                   29         27               26
-## glossypaintedwood                          27         25               29
-##                        unglazedceramictile velvet waxpaper
-## brick                                                     
-## cardboard                                                 
-## cork                                                      
-## rubbereraser                                              
-## felt                                                      
-## leatherwallet                                             
-## rigidplasticsheet                                         
-## veryfinesandpaper                                         
-## nylonscouringpad                                          
-## cellulosekitchensponge                                    
-## wovenstraw                                                
-## blockofstyrofoam                                          
-## unglazedceramictile                                       
-## velvet                                  29                
-## waxpaper                                28     27         
-## glossypaintedwood                       26     26       12
+##    C  D  G  H  M  N  Q
+## D 16                  
+## G  9 19               
+## H 19 17 18            
+## M 19 18 19 11         
+## N 19 17 20  3  5      
+## Q 12  1 12 20 19 13   
+## W 20 16 19 16  3  8 17
 ```
 
 
@@ -2106,26 +1917,14 @@ print.default(d)
 ```
 
 ```
-##   [1] 22 23 24 26 27 26 23 24 23 23 18 23 21 28 24 22 27 27 27 29 29 28 16
-##  [24] 18 28 25 24 10 29 28 27 18 19 28 23 24 24 29 27 28 21 26 28 24 23 15
-##  [47] 28 25 26 28 28 20 27 10 26 28 28 29 28 20 27 24 27 24 25 19 24 29 24
-##  [70] 28 24 28 29 26 26 29 28 29  4 28 29 22 28 28 27 26 25 29 24 21 20 27
-##  [93] 29 29 27 25 25 29 12 13 21 24 26 25 12 29 29 27 22 16 25 24 27 29 28
-## [116] 19 21 26 27 29 27 26 26 28 27 25 25 29 26 29 29 28 26 27 26 12
+##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
+## [24] 19  3 13  8 17
 ## attr(,"Labels")
-##  [1] "innersurfaceofpinebark" "brick"                 
-##  [3] "cardboard"              "cork"                  
-##  [5] "rubbereraser"           "felt"                  
-##  [7] "leatherwallet"          "rigidplasticsheet"     
-##  [9] "veryfinesandpaper"      "nylonscouringpad"      
-## [11] "cellulosekitchensponge" "wovenstraw"            
-## [13] "blockofstyrofoam"       "unglazedceramictile"   
-## [15] "velvet"                 "waxpaper"              
-## [17] "glossypaintedwood"     
+## [1] "C" "D" "G" "H" "M" "N" "Q" "W"
 ## attr(,"Size")
-## [1] 17
+## [1] 8
 ## attr(,"call")
-## as.dist.default(m = .)
+## as.dist.default(m = letters2)
 ## attr(,"class")
 ## [1] "dist"
 ## attr(,"Diag")
@@ -2144,26 +1943,14 @@ unclass(d)
 ```
 
 ```
-##   [1] 22 23 24 26 27 26 23 24 23 23 18 23 21 28 24 22 27 27 27 29 29 28 16
-##  [24] 18 28 25 24 10 29 28 27 18 19 28 23 24 24 29 27 28 21 26 28 24 23 15
-##  [47] 28 25 26 28 28 20 27 10 26 28 28 29 28 20 27 24 27 24 25 19 24 29 24
-##  [70] 28 24 28 29 26 26 29 28 29  4 28 29 22 28 28 27 26 25 29 24 21 20 27
-##  [93] 29 29 27 25 25 29 12 13 21 24 26 25 12 29 29 27 22 16 25 24 27 29 28
-## [116] 19 21 26 27 29 27 26 26 28 27 25 25 29 26 29 29 28 26 27 26 12
+##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
+## [24] 19  3 13  8 17
 ## attr(,"Labels")
-##  [1] "innersurfaceofpinebark" "brick"                 
-##  [3] "cardboard"              "cork"                  
-##  [5] "rubbereraser"           "felt"                  
-##  [7] "leatherwallet"          "rigidplasticsheet"     
-##  [9] "veryfinesandpaper"      "nylonscouringpad"      
-## [11] "cellulosekitchensponge" "wovenstraw"            
-## [13] "blockofstyrofoam"       "unglazedceramictile"   
-## [15] "velvet"                 "waxpaper"              
-## [17] "glossypaintedwood"     
+## [1] "C" "D" "G" "H" "M" "N" "Q" "W"
 ## attr(,"Size")
-## [1] 17
+## [1] 8
 ## attr(,"call")
-## as.dist.default(m = .)
+## as.dist.default(m = letters2)
 ## attr(,"Diag")
 ## [1] FALSE
 ## attr(,"Upper")
@@ -2183,15 +1970,7 @@ attributes(d)$Labels
 ```
 
 ```
-##  [1] "innersurfaceofpinebark" "brick"                 
-##  [3] "cardboard"              "cork"                  
-##  [5] "rubbereraser"           "felt"                  
-##  [7] "leatherwallet"          "rigidplasticsheet"     
-##  [9] "veryfinesandpaper"      "nylonscouringpad"      
-## [11] "cellulosekitchensponge" "wovenstraw"            
-## [13] "blockofstyrofoam"       "unglazedceramictile"   
-## [15] "velvet"                 "waxpaper"              
-## [17] "glossypaintedwood"
+## [1] "C" "D" "G" "H" "M" "N" "Q" "W"
 ```
 
  
@@ -2214,7 +1993,15 @@ data.frame(d.1,names=letter_names)
 ```
 
 ```
-## Error in data.frame(d.1, names = letter_names): arguments imply differing number of rows: 17, 8
+##          X1         X2 names
+## C  9.624942  4.7694928     C
+## D  4.451129 -9.5740790     D
+## G  8.863167  7.6643690     G
+## H -6.817352  3.8283789     H
+## M -8.917331  2.0059242     M
+## N -7.926704 -0.8531024     N
+## Q  7.875169 -5.9942901     Q
+## W -7.153020 -1.8466934     W
 ```
 
      
@@ -2232,9 +2019,7 @@ geom_point()+geom_text_repel()+
 coord_fixed()
 ```
 
-```
-## Error in data.frame(d.1, names = letter_names): arguments imply differing number of rows: 17, 8
-```
+<img src="23-mds_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
      
 
@@ -2261,9 +2046,7 @@ ggplot(aes(x=X1,y=X2,label=names))+
 geom_text()+coord_fixed()
 ```
 
-```
-## Error in data.frame(d.1, names = letter_names): arguments imply differing number of rows: 17, 8
-```
+<img src="23-mds_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -2286,8 +2069,7 @@ you pick. (If you got something different, pick from what your map
 shows.) 
 I think it is not at all surprising that these pairs of letters
 got confused, because the letters of each pair have similar shapes
-(which is all you'd have to react to if you see them for ``a few
-milliseconds'' each): C and G circular with a hole on the right,
+(which is all you'd have to react to if you see them for "a few    milliseconds" each): C and G circular with a hole on the right,
 H, M, N and W vertical lines on the outside with something across
 the middle, Q and D almost circular. (It's up to you whether you
 consider H, M, N and W as a group of four or as two pairs.)
@@ -2356,91 +2138,14 @@ d
 ```
 
 ```
-##                        innersurfaceofpinebark brick cardboard cork
-## brick                                      22                     
-## cardboard                                  23    27               
-## cork                                       24    27        18     
-## rubbereraser                               26    27        19   15
-## felt                                       27    29        28   28
-## leatherwallet                              26    29        23   25
-## rigidplasticsheet                          23    28        24   26
-## veryfinesandpaper                          24    16        24   28
-## nylonscouringpad                           23    18        29   28
-## cellulosekitchensponge                     23    28        27   20
-## wovenstraw                                 18    25        28   27
-## blockofstyrofoam                           23    24        21   10
-## unglazedceramictile                        21    10        26   26
-## velvet                                     28    29        28   28
-## waxpaper                                   24    28        24   28
-## glossypaintedwood                          22    27        23   29
-##                        rubbereraser felt leatherwallet rigidplasticsheet
-## brick                                                                   
-## cardboard                                                               
-## cork                                                                    
-## rubbereraser                                                            
-## felt                             28                                     
-## leatherwallet                    20   24                                
-## rigidplasticsheet                27   28            22                  
-## veryfinesandpaper                24   29            28                27
-## nylonscouringpad                 27   26            28                29
-## cellulosekitchensponge           24   26            27                29
-## wovenstraw                       25   29            26                27
-## blockofstyrofoam                 19   28            25                25
-## unglazedceramictile              24   29            29                25
-## velvet                           29    4            24                29
-## waxpaper                         24   28            21                12
-## glossypaintedwood                28   29            20                13
-##                        veryfinesandpaper nylonscouringpad
-## brick                                                    
-## cardboard                                                
-## cork                                                     
-## rubbereraser                                             
-## felt                                                     
-## leatherwallet                                            
-## rigidplasticsheet                                        
-## veryfinesandpaper                                        
-## nylonscouringpad                      21                 
-## cellulosekitchensponge                24               22
-## wovenstraw                            26               16
-## blockofstyrofoam                      25               25
-## unglazedceramictile                   12               24
-## velvet                                29               27
-## waxpaper                              29               29
-## glossypaintedwood                     27               28
-##                        cellulosekitchensponge wovenstraw blockofstyrofoam
-## brick                                                                    
-## cardboard                                                                
-## cork                                                                     
-## rubbereraser                                                             
-## felt                                                                     
-## leatherwallet                                                            
-## rigidplasticsheet                                                        
-## veryfinesandpaper                                                        
-## nylonscouringpad                                                         
-## cellulosekitchensponge                                                   
-## wovenstraw                                 19                            
-## blockofstyrofoam                           21         26                 
-## unglazedceramictile                        26         26               25
-## velvet                                     27         28               29
-## waxpaper                                   29         27               26
-## glossypaintedwood                          27         25               29
-##                        unglazedceramictile velvet waxpaper
-## brick                                                     
-## cardboard                                                 
-## cork                                                      
-## rubbereraser                                              
-## felt                                                      
-## leatherwallet                                             
-## rigidplasticsheet                                         
-## veryfinesandpaper                                         
-## nylonscouringpad                                          
-## cellulosekitchensponge                                    
-## wovenstraw                                                
-## blockofstyrofoam                                          
-## unglazedceramictile                                       
-## velvet                                  29                
-## waxpaper                                28     27         
-## glossypaintedwood                       26     26       12
+##    C  D  G  H  M  N  Q
+## D 16                  
+## G  9 19               
+## H 19 17 18            
+## M 19 18 19 11         
+## N 19 17 20  3  5      
+## Q 12  1 12 20 19 13   
+## W 20 16 19 16  3  8 17
 ```
 
 
@@ -2469,6 +2174,7 @@ corresponding number in your `dist` object is *small*.
 
 
 
+##  More beer please
 
 
  Previously, you did a cluster analysis of
@@ -2604,7 +2310,8 @@ beer.1$stress
 ```
 ## [1] 10.32195
 ```
-$
+
+     
 
 The stress is around 10\%, on the boundary between "good" and
 "fair". It seems as if the map should be more or less worth
@@ -2795,13 +2502,16 @@ the clusters we found may not mean very much.
 
 
 
+##  Feeling similar, again
 
 
  Previously, we looked at an experiment about which objects feel similar to one another and which ones feel different.
 
 30 subjects were each
-given 17 different objects to feel, for example ``inner surface of
-pine  bark'', "rubber eraser" and "nylon scouring pad". The
+given 17 different objects to feel, for example 
+"inner surface of pine  bark", 
+"rubber eraser" and 
+"nylon scouring pad". The
 subjects had to group the objects into a maximum of 8 groups such that
 the objects within a group felt similar, and the ones in different
 groups felt different.
@@ -2869,7 +2579,8 @@ stimuli
 ## #   wovenstraw <int>, blockofstyrofoam <int>, unglazedceramictile <int>,
 ## #   velvet <int>, waxpaper <int>, glossypaintedwood <int>
 ```
-$ %$ %$
+
+     
 
 That gets a data frame with the right column names. Then:
 
@@ -3008,7 +2719,8 @@ stimuli.1$stress
 ```
 ## [1] 20.2161
 ```
-$
+
+     
 
 This is just over 20\%, which is described in the notes as
 "poor". We should thus be skeptical about the map that this produces.
@@ -3052,7 +2764,8 @@ stimuli.1.d
 ## waxpaper                14.2695604  -0.7584453               waxpaper
 ## glossypaintedwood       11.4681889   2.2406642      glossypaintedwood
 ```
-$ %$ %$
+
+     
 
 The repeated stimuli down the left are row names, but since they're
 row names, we won't be able to use them in
@@ -3092,14 +2805,12 @@ mutate(name=objects)
 ## 16  14.3    -0.758 waxpaper              
 ## 17  11.5     2.24  glossypaintedwood
 ```
-$ %$ %$
 
+ 
 This time, the columns are called `V1` and `V2`, since
 that's what `as_tibble` does. Also note the slightly different
 look: fewer decimals, since displaying a tibble rounds numerical
 things to three significant digits.
-$ %$ %$
-
 Back to my data frame `stimuli.1.d`.
 The points have acquired names `X1` and `X2`, as usual,
 so we have all we need:

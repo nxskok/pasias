@@ -56,6 +56,7 @@ library(tidyverse)
 ```
 
 
+##  The weather, somewhere
 
 
  The data in
@@ -499,7 +500,7 @@ couldn't be rotated so that, say, the temperature variables go across
 and the rain/wind ones go down, which means you'd have a temperature
 component and a rain/wind component. This is what factor analysis
 does, and I think I did that earlier (and this is what we found).
-$
+ 
 
 (l) Looking at your biplot, what do you think was remarkable
 about the weather on day 37? Day 211? Confirm your guesses by
@@ -639,13 +640,14 @@ using these data to some Environmental Science grad students, and I
 had them guess where it was. The temperatures for the whole year are
 warm-temperate, with a smallish range, and sometimes a lot of
 rain. This suggests a maritime climate. I gave the additional clues of
-"western Europe" and ``this place's soccer team plays in blue and
-white striped shirts''. The temperatures have about the right range
+"western Europe" and 
+"this place's soccer team plays in blue and white striped shirts". 
+The temperatures have about the right range
 low-to-high for Britain, but are too warm. Which suggests going south:
 perhaps Brittany in France, but actually the west
 coast of the Iberian peninsula: Porto, in northern Portugal, with the
 weather blowing in off the Atlantic. 
-Let's make a map, but first we "geocode" Porto (and La Coru\~{n}a,
+Let's make a map, but first we "geocode" Porto (and La Coruna,
 for later). I like to do the lookup of longitude and latitude first,
 once and for all, since I find the geocoding a bit finicky (it's
 actually Google that's finicky, because sometimes it decides that
@@ -714,7 +716,7 @@ it will already appear labelled on the map or not.
 
 The weather in this part of the world tends to come from the
 southwest. Now you see why Porto gets so much rain!
-If you know your soccer teams, La Coru\~{n}a in north-western Spain would
+If you know your soccer teams, La Coruna in north-western Spain would
 have been a good choice too (their team Deportivo also plays in blue and white
 striped shirts, and the climate is likely to be similar).
 
@@ -764,13 +766,14 @@ countries with.
 I'm not sure what the warnings are, but they are something to do with
 plotting the labels.
 
-You might guess that La Coru\~{n}a (in blue) will have very similar
+You might guess that La Coruna (in blue) will have very similar
 weather to Porto.
  
 
 
 
 
+##  Air pollution
 
 
  The data in
@@ -1030,7 +1033,8 @@ air.1$loadings
 ## Proportion Var  0.143  0.143  0.143  0.143  0.143  0.143  0.143
 ## Cumulative Var  0.143  0.286  0.429  0.571  0.714  0.857  1.000
 ```
-$
+
+     
 
 You'll have to decide where to draw the line between "zero" and
 "nonzero". It doesn't matter so much where you put the line, so your
@@ -1135,8 +1139,8 @@ as_tibble(air.1$scores) %>% select(1) %>% print(n=Inf)
 ## 41 -1.12  
 ## 42  1.82
 ```
-$ %$ %$
 
+ 
 You'll need the last step, or else you'll only get the first ten rows
 (it's a tibble-type data frame). Print a number of rows, or this,
 which is "all of them, no matter how many".
@@ -1197,7 +1201,8 @@ filter(Comp.1==min(Comp.1))
 ##    <dbl> <int>
 ## 1  -3.98     8
 ```
-$ %$ %$
+
+   
 
 I did two more steps: created a column of row numbers, so I'd know
 *which one* was the smallest, then I displayed all rows for which
@@ -1308,9 +1313,7 @@ is negative and low when the loading is positive. The only exception
 is solar radiation, which has the closest loading to zero in the table
 of loadings. So, whichever variables you thought were important in
 component 1, you ought to come to the same conclusion about why day 8
-came out so negative: ``day 8 is high on the variables that load
-negatively on component 1 (and low on the one that loads
-positively)''. 
+came out so negative: "day 8 is high on the variables that load negatively on component 1 (and low on the one that loads positively)". 
 
 That's all I asked for. I didn't ask for a biplot, which might also
 shed some light on this part. But you can certainly produce one if you
@@ -1461,7 +1464,8 @@ air.2$loadings
 ## Proportion Var   0.225   0.197
 ## Cumulative Var   0.225   0.422
 ```
-$
+
+ 
 
 This is almost the same as the biplot, but not quite: factor 1
 contains three of the four variables that point up and left (not
@@ -1516,7 +1520,8 @@ air.3$loadings
 ## Proportion Var   0.210   0.187   0.184
 ## Cumulative Var   0.210   0.398   0.582
 ```
-$
+
+ 
 
 In case you are wondering, `factanal` automatically uses the
 correlation matrix, and so takes care of variables measured on
@@ -1541,7 +1546,8 @@ air.3$uniquenesses
 ##              O3              HC 
 ##       0.0050000       0.7776557
 ```
-$
+
+ 
 
 Well, not great: `wind` and `solar.radiation` still have
 high uniquenesses because they are not *strongly* part of any factors.
@@ -1555,7 +1561,8 @@ air.3$PVAL
 ## objective 
 ## 0.0229409
 ```
-$
+
+ 
 
 This is small, if not *very* small, so there is still some
 evidence that 3 factors are not enough to describe what's going
@@ -1615,7 +1622,8 @@ air.4$scores
 ## [41,]  0.21480717  0.82109666  0.0015108562
 ## [42,] -1.21738120 -0.82518472  0.8645643843
 ```
-$
+
+ 
 
 Since there are 3 columns here, you could plot them in `rgl`
 and rotate it around to see how the days stack up. Unlike principal
@@ -1630,7 +1638,6 @@ factors act as a team.}
 Note that day 8 has the most extreme score on factor 1 again. This is
 for more or less the same reasons that it had the most extreme score
 on component 1  before.
- maybe discuss some other days
     
 
 
@@ -1638,6 +1645,7 @@ on component 1  before.
 
 	
 
+##  A correlation matrix
 
 
  Here is a correlation matrix between five variables. This
@@ -1664,8 +1672,8 @@ have five variables with names invented by R.
 Solution
 
 
-I saved my data into `cov5.txt`,\endnote{Not to be confused
-with "covfefe".} delimited by single spaces, so:
+I saved my data into `cov5.txt`,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not to be confused    with *covfefe*.</span> delimited by single spaces, so:
 
 ```r
 corr=read_delim("cov5.txt"," ",col_names=F)
@@ -1841,8 +1849,8 @@ corr.1$loadings
 ## Proportion Var    0.2    0.2    0.2    0.2    0.2
 ## Cumulative Var    0.2    0.4    0.6    0.8    1.0
 ```
-$ %$ 
 
+     
 This is messy. 
 
 In the first component, the loadings are all about the
@@ -1929,7 +1937,8 @@ corr.list$n.obs
 ```
 ## [1] 50
 ```
-$
+
+ 
 
 and logically this is because, to R, a data frame *is* a special
 kind of a list, so anything that works for a list also works for a
@@ -2039,7 +2048,8 @@ corr.2$uniquenesses
 ##        X1        X2        X3        X4        X5 
 ## 0.1715682 0.0050000 0.2789445 0.0050000 0.4961028
 ```
-$ %$
+
+     
 
 The ones for `X3` and `X5` are higher than the rest;
 this is because their loadings on factor 1 are lower than the
@@ -2048,8 +2058,7 @@ the uniquenesses.
 
 The point here is that an (excessively) high uniqueness indicates a
 variable that doesn't appear in *any* factor. The easy link to
-make is ``all the variables appear in a factor, so there shouldn't be
-any very high uniquenesses''. If, say, `X3` doesn't have a high
+make is "all the variables appear in a factor, so there shouldn't be any very high uniquenesses". If, say, `X3` doesn't have a high
 loading on any factor, `X3` would have a high uniqueness (like
 0.9, and none of these values approach that).
 
@@ -2057,7 +2066,8 @@ loading on any factor, `X3` would have a high uniqueness (like
 
 
 
-  
+##   The Interpersonal Circumplex
+
 
  The "IPIP Interpersonal Circumplex" (see
 [link](http://ipip.ori.org/newIPIP-IPCSurvey.htm)) is a personal
@@ -2159,6 +2169,7 @@ front of each one:
 * sophisticated in art and music
 
 \end{multicols}
+I don't know what a "circumplex" is, but I know it's not one of those "hat" accents that they have in French.
 The data are in
 [link](http://www.utsc.utoronto.ca/~butler/d29/personality.txt). The
 columns `PERS01` through `PERS44` represent the above traits.
@@ -2312,8 +2323,7 @@ table(v)
 which shows that there are 26 rows that have missing values in them
 somewhere. 
 
-A way of asking ``are there any missing values
-anywhere?'' is:
+A way of asking "are there any missing values anywhere?" is:
 
 
 ```r
@@ -2840,8 +2850,8 @@ pers.ok.2$loadings
 ## Proportion Var   0.087   0.075   0.073   0.065   0.057   0.038
 ## Cumulative Var   0.087   0.162   0.235   0.300   0.357   0.395
 ```
-$ %$ %$ %$
 
+       
 Much of the same kind of thing seems to be happening, though it's a
 bit fuzzier. I suspect the devisers of this survey were adherents to
 the "big 5" theory. The factor 6 here is items 11, 16 and 26, which
@@ -2901,8 +2911,8 @@ scores.1
 ## #   PERS34 <int>, PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>,
 ## #   PERS40 <int>, PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>
 ```
-$ %$ %$
 
+   
 I did it this way, rather than using `data.frame`, so that I
 would end up with a `tibble` that would display nicely rather
 than running off the page. This meant turning the matrix of factor
@@ -3040,8 +3050,7 @@ scores.1 %>% arrange(desc(abs(Factor1))) %>% print(n=5)
 
  
 
-It looks as if it does: ``sort the Factor 1 scores in descending order
-by absolute value, and display the first few''. The most extreme
+It looks as if it does: "sort the Factor 1 scores in descending order by absolute value, and display the first few". The most extreme
 scores on Factor 1 are all negative: the most positive one (found
 above) was only about 1.70. 
 

@@ -7357,8 +7357,8 @@ ggplot(minutes.1,aes(x=chemicals$weight,y=.resid))+geom_point()
 ```
 
 <img src="12-regression_files/figure-html/unnamed-chunk-195-1.png" width="672"  />
-$ %$
 
+ 
 What would also work is to make a data frame first with the things to plot:
 
 

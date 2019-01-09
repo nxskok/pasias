@@ -320,7 +320,8 @@ swiss.3$scaling
 ## top    -1.178884468
 ## diag    1.556520967
 ```
-$
+
+       
 
 This is the same as the \texttt{coefficients of linear
 discriminants} on the big output.
@@ -2955,7 +2956,8 @@ table(obs=adhd$parent,pred=adhd.2$class)
 ##   father      5      0
 ##   mother      1     23
 ```
-$
+
+     
 
 Or,
 
@@ -3005,7 +3007,8 @@ filter(parent!=pred)
 ##   <chr>  <int> <int> <int> <int> <fct>  <int>
 ## 1 mother     1     1     2     1 father    17
 ```
-$
+
+ 
 
 It was the original row 17. So what was unusual about this? We know
 from earlier
@@ -3472,7 +3475,8 @@ cornseed.2$scaling
 ## water     -0.03759961 -0.09598577 -0.03231897
 ## herbicide  0.50654017 -0.06979662  0.27281743
 ```
-$ %$ %$
+
+     
 
 We said earlier that the only important discriminant is
 `LD1`. On that, the only notably non-zero coefficient is for
@@ -3843,8 +3847,8 @@ filter(soil=="loam")
 ## 7     7 loam  65.4  21.6       4.3 sandy 0.174 0.214 0.147 0.465
 ## 8     8 loam  65.7  27.7       5.3 sandy 0.163 0.352 0.113 0.373
 ```
-$ %$ %$ %$
 
+ 
 Fields 7 and 8 could have been pretty much any type of soil;
 `sandy` came out with the highest posterior probability, so
 that's what they were predicted (wrongly) to be. Some of the fields,
@@ -3879,7 +3883,8 @@ summary(cornseed)
 ##  3rd Qu.: 5.825  
 ##  Max.   :11.700
 ```
-$ %$ %$
+
+ 
 
 The problem is that the variables have different spreads. Let's do
 some predictions (ie.\ calculations) of LD1 score for combinations of
@@ -3944,7 +3949,8 @@ ggbiplot(cornseed.2,groups=cornseed$soil)
 ```
 
 <img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
-$ %$ %$
+
+ 
 
 This shows the dominant influence of `herbicide` on LD1 score
 (more herbicide is more positive), and that `water` has nothing

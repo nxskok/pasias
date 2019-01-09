@@ -1,11 +1,13 @@
+##  Things that feel similar to each other
 
 
  Which objects feel similar to one another and which ones
 feel different? Can we draw them on a "map"? 30
-subjects\endnote{Probably students in a psychology course. You know
-how it goes.} were each
-given 17 different objects to feel, for example ``inner surface of
-pine  bark'', "rubber eraser" and "nylon scouring pad". The
+subjects
+`r tufte::margin_note("Probably students in a psychology course. You know  how it goes.")` were each
+given 17 different objects to feel, for example "inner surface of pine  bark", 
+"rubber eraser" and 
+"nylon scouring pad". The
 subjects had to group the objects into a maximum of 8 groups such that
 the objects within a group felt similar, and the ones in different
 groups felt different.\endnote{The maximum number of groups was to
@@ -170,8 +172,7 @@ I note that any map that is the same as this apart from rotation and
 reflection is also fine (since the distances will be the same). I saw
 a lot of maps that were like mine but upside down (with `cork`
 at the top).
-`r tufte::margin_note("I lie. Last year, emph{I")` got cork at the top,
-and a lot of other people got cork at the bottom as you see here.} No problem there.
+`r tufte::margin_note("I lie. Last year, *I* got cork at the top,  and a lot of other people got cork at the bottom as you see here.")` No problem there.
     
 
 
@@ -232,7 +233,8 @@ since that's the default 2 dimensions:
 d.2=cmdscale(d,2,eig=T)
 d.2$GOF
 ```
-$
+
+     
 
 I didn't ask you to comment on this, but the adjective that came to my
 mind was "disappointing". I think that's to do with the
@@ -248,7 +250,8 @@ I was curious about whether 3 dimensions would be any better:
 d.2a=cmdscale(d,3,eig=T)
 d.2a$GOF
 ```
-$
+
+ 
 
 That is quite a bit better. The problem with this, though, is that we
 need something like `rgl` to explore it with.
@@ -327,8 +330,7 @@ Extra: this is where I have to say I cheated. I thought this would be
 hard to do by trying to match  those names in the clusters
 with the ones on the MDS map. So I put myself through some
 short-term R coding pain for some substantial long-term gain.
-I was thinking, ``can I extract the clusters from this
-analysis, and plot them on the MDS map in different colours?'' That
+I was thinking, "can I extract the clusters from this    analysis, and plot them on the MDS map in different colours?" That
 would go like this:
 ```{r }
 clusters=cutree(d.3,5)
@@ -372,7 +374,8 @@ save.3d = data.frame(d.2a$points,objects,clusters) %>%
 arrange(clusters) 
 save.3d  
 ```
-$
+
+ 
 
 It looks as if the combo of negative `X1` and positive
 `X3` distinguishes cluster 2 from cluster 1.
@@ -400,7 +403,8 @@ data.frame(ppp$x,cluster=factor(save.3d$clusters)) %>%
 ggplot(aes(x=LD1,y=LD2,colour=cluster))+
 geom_point()
 ```
-$
+
+     
 
 This says that the three-dimensional MDS *has* separated clusters
 1 and 2, and if we were to plot `d.2a` in `rgl` and
@@ -442,8 +446,8 @@ A biplot would be another way to look at that:
 ```{r }
 ggbiplot(save.3d.lda,groups=factor(save.3d$clusters))
 ```
-$ %$ %$
 
+ 
 Points on the right have `X1` and `X2` large, and
 `X3` small (cluster 4, and to a lesser extent, cluster
 5). Points on the left are the other way around. None of the arrows

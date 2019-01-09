@@ -1,3 +1,4 @@
+##  Air pollution
 
 
  The data in
@@ -175,7 +176,8 @@ Off we go:
 ```{r }
 air.1$loadings
 ```
-$
+
+     
 
 You'll have to decide where to draw the line between "zero" and
 "nonzero". It doesn't matter so much where you put the line, so your
@@ -221,8 +223,8 @@ first, and then display its first column:
 ```{r }
 as_tibble(air.1$scores) %>% select(1) %>% print(n=Inf)
 ```
-$ %$ %$
 
+ 
 You'll need the last step, or else you'll only get the first ten rows
 (it's a tibble-type data frame). Print a number of rows, or this,
 which is "all of them, no matter how many".
@@ -265,7 +267,8 @@ as_tibble(air.1$scores) %>% select(1) %>%
 mutate(row=row_number()) %>%
 filter(Comp.1==min(Comp.1))
 ```
-$ %$ %$
+
+   
 
 I did two more steps: created a column of row numbers, so I'd know
 *which one* was the smallest, then I displayed all rows for which
@@ -348,9 +351,7 @@ is negative and low when the loading is positive. The only exception
 is solar radiation, which has the closest loading to zero in the table
 of loadings. So, whichever variables you thought were important in
 component 1, you ought to come to the same conclusion about why day 8
-came out so negative: ``day 8 is high on the variables that load
-negatively on component 1 (and low on the one that loads
-positively)''. 
+came out so negative: "day 8 is high on the variables that load negatively on component 1 (and low on the one that loads positively)". 
 
 That's all I asked for. I didn't ask for a biplot, which might also
 shed some light on this part. But you can certainly produce one if you
@@ -459,7 +460,8 @@ here. I'll obtain two factors first, since we are comparing with the biplot:
 air.2=factanal(air,2)
 air.2$loadings
 ```
-$
+
+ 
 
 This is almost the same as the biplot, but not quite: factor 1
 contains three of the four variables that point up and left (not
@@ -487,7 +489,8 @@ really ought to look at 3 factors, the same way that we said we should look at
 air.3=factanal(air,3)
 air.3$loadings
 ```
-$
+
+ 
 
 In case you are wondering, `factanal` automatically uses the
 correlation matrix, and so takes care of variables measured on
@@ -504,7 +507,8 @@ should not be too bad:
 ```{r }
 air.3$uniquenesses
 ```
-$
+
+ 
 
 Well, not great: `wind` and `solar.radiation` still have
 high uniquenesses because they are not *strongly* part of any factors.
@@ -512,7 +516,8 @@ high uniquenesses because they are not *strongly* part of any factors.
 ```{r }
 air.3$PVAL
 ```
-$
+
+ 
 
 This is small, if not *very* small, so there is still some
 evidence that 3 factors are not enough to describe what's going
@@ -525,7 +530,8 @@ Factor scores:
 air.4=factanal(air,3,scores="r")
 air.4$scores
 ```
-$
+
+ 
 
 Since there are 3 columns here, you could plot them in `rgl`
 and rotate it around to see how the days stack up. Unlike principal
@@ -540,7 +546,6 @@ factors act as a team.}
 Note that day 8 has the most extreme score on factor 1 again. This is
 for more or less the same reasons that it had the most extreme score
 on component 1  before.
- maybe discuss some other days
     
 
 

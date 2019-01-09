@@ -2691,7 +2691,8 @@ wss.1
 ##  [1]       NA 701.2054 576.1284 491.7085 449.3900 413.0068 381.6123
 ##  [8] 354.8694 333.6222 312.5101
 ```
-$ %$ %$
+
+       
 
 Note that there are 10 `wss` values, but the first one is
 missing, since we didn't do one cluster.
@@ -2719,8 +2720,8 @@ wssf=function(i,data,nstart=20)
 kmeans(data,i,nstart=nstart)$tot.withinss
 }
 ```
-$ %$
 
+ 
 This takes the number of clusters as the *first* thing
 (important, as we see later), then anything else we need: some data,
 and the value for `nstart`, which defaults to 20.
@@ -2857,8 +2858,8 @@ swiss.7$size
 ```
 ## [1] 50 32 68 50
 ```
-$ %$
 
+       
 This many. Note that my clusters 1 and 4 (and also 2 and 3) add up to
 100 bills. There were 100 genuine and 100 counterfeit bills in the
 original data set.
@@ -3312,7 +3313,8 @@ print(n=Inf)
 ## 31 Ferrari Dino              3
 ## 32 Volvo 142E                3
 ```
-$
+
+ 
 
 This time we want to *keep* the car names and throw away
 everything else.
@@ -3523,7 +3525,8 @@ wwx
 ## 8        9  17.3
 ## 9       10  15.2
 ```
-$ %$ %$
+
+
 
 Instead of having a function name as the second thing in the
 `map_dbl`, I have a so-called "one-sided model formula" that
@@ -3831,8 +3834,8 @@ ggbiplot::ggbiplot(carsx.1,groups=factor(carsx$cluster))
 ```
 
 <img src="22-thingy_files/figure-html/unnamed-chunk-112-1.png" width="672"  />
-$ %$ %$ %$
 
+ 
 Or you can do the predictions, then plot `LD1` against
 `LD2`, coloured by cluster:
 
@@ -4056,8 +4059,8 @@ round(decathlon,2)
 ##    javelin     x1500m 
 ## 5.01529875 7.22352899
 ```
-$ %$ %$
 
+     
 I think the matrix of standardized values is small enough to look at
 all  of, particularly if I round off the values to a small number of
 decimals, and, as I did, shrink it a bit. (Note that the means and SDs
@@ -4105,7 +4108,7 @@ w
 ##  [9]  68.99662  60.77665  54.29991  47.64227  41.40352  35.39181  29.52008  25.05344
 ## [17]  21.02841  17.28444  13.80627  10.44197
 ```
-$ %$ %$
+
 
 I defined `maxclust` earlier, surreptitiously. (Actually, what
 happened was that I changed my mind about how many clusters I wanted
@@ -5968,7 +5971,8 @@ withinss
 ## 18       19  502.
 ## 19       20  483.
 ```
-$ %$ %$
+
+     
 
 A one-liner, kinda. The thing after the squiggle is called an
 "anonymous function"; it is what is done for each of the first
@@ -6477,8 +6481,8 @@ athletes.3$scaling
 ## Ht       0.039454667 -0.059206652  0.01561849
 ## Wt       0.486302236  0.926849133  0.66518616
 ```
-$ %$ %$ %$
 
+   
 If we go back to my thought of only using two linear discriminants:
 LD1 is mostly `RCC` positively and `BMI` negatively, in
 that an athlete with large `RCC` and small `BMI` will
@@ -6526,7 +6530,8 @@ round(athletes.3$means,2)
 ## 11  77.85
 ## 12  72.03
 ```
-$ %$
+
+ 
 
 Perhaps the easiest thing to eyeball here is the cluster in which a
 variable is noticeably biggest (or possibly smallest). For example,

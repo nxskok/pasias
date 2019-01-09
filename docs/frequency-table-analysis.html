@@ -292,9 +292,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">23.7</span> Running, jumping, and throwing</a></li>
 <li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">23.8</span> Bridges in Pittsburgh</a></li>
 </ul></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">24</span> Multidimensional Scaling</a></li>
-<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">25</span> Principal Components and Factor Analysis</a></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">26</span> Frequency table analysis</a></li>
+<li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">24</span> Multidimensional Scaling</a><ul>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">24.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">24.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">24.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">24.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">24.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li class="has-sub"><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">25</span> Principal Components and Factor Analysis</a><ul>
+<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">25.1</span> The weather, somewhere</a></li>
+<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">25.2</span> Air pollution</a></li>
+<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">25.3</span> A correlation matrix</a></li>
+<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">25.4</span> The Interpersonal Circumplex</a></li>
+</ul></li>
+<li class="has-sub"><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">26</span> Frequency table analysis</a><ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">26.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">26.2</span> Predicting voting</a></li>
+</ul></li>
 </ul>
 </div>
 </div>
@@ -304,7 +318,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="frequency-table-analysis" class="section level1">
 <h1><span class="header-section-number">Chapter 26</span> Frequency table analysis</h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb4208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4208-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb4200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4200-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
@@ -313,6 +327,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<div id="college-plans" class="section level2">
+<h2><span class="header-section-number">26.1</span> College plans</h2>
 <p>5199 male high school seniors in Wisconsin were classified by
 socio-economic status (low, lower-middle, upper-middle, high), by
 the degree that their parents encouraged them in their education (low
@@ -327,8 +343,8 @@ variable and a column of frequencies.</li>
 </ol>
 <p>Solution</p>
 <p>Delimited by one space:</p>
-<div class="sourceCode" id="cb4212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4212-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/college-plans.txt&quot;</span></a>
-<a class="sourceLine" id="cb4212-2" data-line-number="2">wisc=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4204-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/college-plans.txt&quot;</span></a>
+<a class="sourceLine" id="cb4204-2" data-line-number="2">wisc=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   social.stratum = col_character(),
@@ -336,7 +352,7 @@ variable and a column of frequencies.</li>
 ##   college.plans = col_character(),
 ##   frequency = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb4214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4214-1" data-line-number="1">wisc</a></code></pre></div>
+<div class="sourceCode" id="cb4206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4206-1" data-line-number="1">wisc</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 4
 ##    social.stratum encouragement college.plans frequency
 ##    &lt;chr&gt;          &lt;chr&gt;         &lt;chr&gt;             &lt;int&gt;
@@ -365,7 +381,7 @@ one. For example, the first line says that 749 students were in the
 lower social stratum, received low encouragement and have no college
 plans. If we sum up the frequencies, we should get 5199 because there
 were that many students altogether:</p>
-<div class="sourceCode" id="cb4216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4216-1" data-line-number="1">wisc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">tot=</span><span class="kw">sum</span>(frequency))</a></code></pre></div>
+<div class="sourceCode" id="cb4208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4208-1" data-line-number="1">wisc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">tot=</span><span class="kw">sum</span>(frequency))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     tot
 ##   &lt;int&gt;
@@ -375,8 +391,8 @@ were that many students altogether:</p>
 interactions. You don’t need to examine it yet.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4218-1" data-line-number="1">wisc<span class="fl">.1</span>=<span class="kw">glm</span>(frequency<span class="op">~</span>social.stratum<span class="op">*</span>encouragement<span class="op">*</span>college.plans,</a>
-<a class="sourceLine" id="cb4218-2" data-line-number="2"><span class="dt">data=</span>wisc,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4210-1" data-line-number="1">wisc<span class="fl">.1</span>=<span class="kw">glm</span>(frequency<span class="op">~</span>social.stratum<span class="op">*</span>encouragement<span class="op">*</span>college.plans,</a>
+<a class="sourceLine" id="cb4210-2" data-line-number="2"><span class="dt">data=</span>wisc,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a></code></pre></div>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Find out which terms (interactions) could be removed. Do you
 think removing any of them is a good idea?</li>
@@ -384,7 +400,7 @@ think removing any of them is a good idea?</li>
 <p>Solution</p>
 <p>This is <code>drop1</code>. If you forget the <code>test=</code>, you won’t
 get any P-values:</p>
-<div class="sourceCode" id="cb4219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4219-1" data-line-number="1"><span class="kw">drop1</span>(wisc<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4211-1" data-line-number="1"><span class="kw">drop1</span>(wisc<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -404,14 +420,14 @@ get any P-values:</p>
 should be made to get from one model to another, rather than
 writing out the whole thing from scratch again.
 Anyway, the three-way interaction can come out:</p>
-<div class="sourceCode" id="cb4221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4221-1" data-line-number="1">wisc<span class="fl">.2</span>=<span class="kw">update</span>(wisc<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>social.stratum<span class="op">:</span>encouragement<span class="op">:</span>college.plans)</a></code></pre></div>
+<div class="sourceCode" id="cb4213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4213-1" data-line-number="1">wisc<span class="fl">.2</span>=<span class="kw">update</span>(wisc<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>social.stratum<span class="op">:</span>encouragement<span class="op">:</span>college.plans)</a></code></pre></div>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Continue to examine what can be removed, and if reasonable,
 remove it, until you need to stop. Which terms are left in your final model?</li>
 </ol>
 <p>Solution</p>
 <p>Start with <code>drop1</code>:</p>
-<div class="sourceCode" id="cb4222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4222-1" data-line-number="1"><span class="kw">drop1</span>(wisc<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4214-1" data-line-number="1"><span class="kw">drop1</span>(wisc<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -434,7 +450,7 @@ describe any relationships that you see.</li>
 </ol>
 <p>Solution</p>
 <p>We have three two-way tables to make:</p>
-<div class="sourceCode" id="cb4224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4224-1" data-line-number="1"><span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>encouragement,<span class="dt">data=</span>wisc)</a></code></pre></div>
+<div class="sourceCode" id="cb4216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4216-1" data-line-number="1"><span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>encouragement,<span class="dt">data=</span>wisc)</a></code></pre></div>
 <pre><code>##               encouragement
 ## social.stratum high  low
 ##    higher      1066  179
@@ -444,8 +460,8 @@ describe any relationships that you see.</li>
 <p>This says that there tends to be more parental encouragement, the
 higher the social stratum. <code>prop.table</code> would be good here,
 because it’s easier to judge proportions than actual frequencies:</p>
-<div class="sourceCode" id="cb4226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4226-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>encouragement,<span class="dt">data=</span>wisc)</a>
-<a class="sourceLine" id="cb4226-2" data-line-number="2"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4218-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>encouragement,<span class="dt">data=</span>wisc)</a>
+<a class="sourceLine" id="cb4218-2" data-line-number="2"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
 <pre><code>##               encouragement
 ## social.stratum      high       low
 ##    higher      0.8562249 0.1437751
@@ -462,15 +478,15 @@ response to social stratum, and so you want to sum over what is
 rows, or 1. That makes it very clear that the higher the social
 stratum, the more encouragement.</p>
 <p>Next, this:</p>
-<div class="sourceCode" id="cb4228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4228-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>college.plans,<span class="dt">data=</span>wisc)</a>
-<a class="sourceLine" id="cb4228-2" data-line-number="2">xt</a></code></pre></div>
+<div class="sourceCode" id="cb4220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4220-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>social.stratum<span class="op">+</span>college.plans,<span class="dt">data=</span>wisc)</a>
+<a class="sourceLine" id="cb4220-2" data-line-number="2">xt</a></code></pre></div>
 <pre><code>##               college.plans
 ## social.stratum   no  yes
 ##    higher       419  826
 ##    lower        982  168
 ##    lowermiddle 1260   38
 ##    uppermiddle 1001  505</code></pre>
-<div class="sourceCode" id="cb4230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4230-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4222-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
 <pre><code>##               college.plans
 ## social.stratum         no        yes
 ##    higher      0.33654618 0.66345382
@@ -485,13 +501,13 @@ is not in order, so you’ll have to jump from the second row to the
 third to the fourth to the first to assess this. Lower and lower
 middle are not in order, but the others are.)</p>
 <p>Finally, this:</p>
-<div class="sourceCode" id="cb4232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4232-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>encouragement<span class="op">+</span>college.plans,<span class="dt">data=</span>wisc)</a>
-<a class="sourceLine" id="cb4232-2" data-line-number="2">xt</a></code></pre></div>
+<div class="sourceCode" id="cb4224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4224-1" data-line-number="1">xt=<span class="kw">xtabs</span>(frequency<span class="op">~</span>encouragement<span class="op">+</span>college.plans,<span class="dt">data=</span>wisc)</a>
+<a class="sourceLine" id="cb4224-2" data-line-number="2">xt</a></code></pre></div>
 <pre><code>##              college.plans
 ## encouragement   no  yes
 ##          high 1203 1400
 ##          low  2459  137</code></pre>
-<div class="sourceCode" id="cb4234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4234-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4226-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">1</span>)</a></code></pre></div>
 <pre><code>##              college.plans
 ## encouragement        no       yes
 ##          high 0.4621590 0.5378410
@@ -508,6 +524,9 @@ college depends separately on the socio-economic status and the level
 of parental encouragement (rather than on the combination of both, as
 would have been the case had the three-way interaction been
 significant).</p>
+</div>
+<div id="predicting-voting" class="section level2">
+<h2><span class="header-section-number">26.2</span> Predicting voting</h2>
 <p>1257 British voters were classified according
 to their social class, age (categorized), sex and the political party
 they voted for (Labour or Conservative). Which, if any, of these
@@ -519,8 +538,8 @@ per line.</p>
 </ol>
 <p>Solution</p>
 <p>Space-delimited:</p>
-<div class="sourceCode" id="cb4236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4236-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/voting.txt&quot;</span></a>
-<a class="sourceLine" id="cb4236-2" data-line-number="2">vote0=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4228-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/voting.txt&quot;</span></a>
+<a class="sourceLine" id="cb4228-2" data-line-number="2">vote0=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   id = col_integer(),
@@ -529,7 +548,7 @@ per line.</p>
 ##   sex = col_character(),
 ##   vote = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb4238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4238-1" data-line-number="1">vote0</a></code></pre></div>
+<div class="sourceCode" id="cb4230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4230-1" data-line-number="1">vote0</a></code></pre></div>
 <pre><code>## # A tibble: 1,257 x 5
 ##       id class        age   sex    vote        
 ##    &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;       
@@ -557,8 +576,8 @@ have something that you need?</li>
 <p>Solution</p>
 <p>I changed my mind about how to do this from last year. Using
 <code>count</code> is alarmingly more direct than the method I had before:</p>
-<div class="sourceCode" id="cb4240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4240-1" data-line-number="1">votes =<span class="st"> </span>vote0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(class,age,sex,vote)</a>
-<a class="sourceLine" id="cb4240-2" data-line-number="2">votes</a></code></pre></div>
+<div class="sourceCode" id="cb4232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4232-1" data-line-number="1">votes =<span class="st"> </span>vote0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(class,age,sex,vote)</a>
+<a class="sourceLine" id="cb4232-2" data-line-number="2">votes</a></code></pre></div>
 <pre><code>## # A tibble: 58 x 5
 ##    class        age   sex    vote             n
 ##    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;int&gt;
@@ -583,7 +602,7 @@ set (with, inevitably, a lot of repeats).</p>
 starting point).</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4242-1" data-line-number="1">vote<span class="fl">.1</span>=<span class="kw">glm</span>(n<span class="op">~</span>class<span class="op">*</span>age<span class="op">*</span>sex<span class="op">*</span>vote,<span class="dt">data=</span>votes,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4234-1" data-line-number="1">vote<span class="fl">.1</span>=<span class="kw">glm</span>(n<span class="op">~</span>class<span class="op">*</span>age<span class="op">*</span>sex<span class="op">*</span>vote,<span class="dt">data=</span>votes,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a></code></pre></div>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Refine your model by taking out suitable non-significant
 terms, in multiple steps. What model do you finish with?</li>
@@ -591,7 +610,7 @@ terms, in multiple steps. What model do you finish with?</li>
 <p>Solution</p>
 <p>Alternating <code>drop1</code> and <code>update</code> until everything
 remaining is significant:</p>
-<div class="sourceCode" id="cb4243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4243-1" data-line-number="1"><span class="kw">drop1</span>(vote<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4235-1" data-line-number="1"><span class="kw">drop1</span>(vote<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -600,8 +619,8 @@ remaining is significant:</p>
 ## &lt;none&gt;                   0.000 381.49               
 ## class:age:sex:vote  7    8.086 375.58 8.086   0.3251</code></pre>
 <p>Not anywhere near significant, so out it comes:</p>
-<div class="sourceCode" id="cb4245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4245-1" data-line-number="1">vote<span class="fl">.2</span>=<span class="kw">update</span>(vote<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>age<span class="op">:</span>sex<span class="op">:</span>vote)</a>
-<a class="sourceLine" id="cb4245-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4237-1" data-line-number="1">vote<span class="fl">.2</span>=<span class="kw">update</span>(vote<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>age<span class="op">:</span>sex<span class="op">:</span>vote)</a>
+<a class="sourceLine" id="cb4237-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -617,8 +636,8 @@ remaining is significant:</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Take out the first one, since it has the highest P-value:</p>
-<div class="sourceCode" id="cb4247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4247-1" data-line-number="1">vote<span class="fl">.3</span>=<span class="kw">update</span>(vote<span class="fl">.2</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>age<span class="op">:</span>sex)</a>
-<a class="sourceLine" id="cb4247-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.3</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4239-1" data-line-number="1">vote<span class="fl">.3</span>=<span class="kw">update</span>(vote<span class="fl">.2</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>age<span class="op">:</span>sex)</a>
+<a class="sourceLine" id="cb4239-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.3</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -633,8 +652,8 @@ remaining is significant:</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p><code>class:sex:vote</code>:</p>
-<div class="sourceCode" id="cb4249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4249-1" data-line-number="1">vote<span class="fl">.4</span>=<span class="kw">update</span>(vote<span class="fl">.3</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>sex<span class="op">:</span>vote)</a>
-<a class="sourceLine" id="cb4249-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.4</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4241-1" data-line-number="1">vote<span class="fl">.4</span>=<span class="kw">update</span>(vote<span class="fl">.3</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>sex<span class="op">:</span>vote)</a>
+<a class="sourceLine" id="cb4241-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.4</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -648,8 +667,8 @@ remaining is significant:</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p><code>class:sex</code>:</p>
-<div class="sourceCode" id="cb4251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4251-1" data-line-number="1">vote<span class="fl">.5</span>=<span class="kw">update</span>(vote<span class="fl">.4</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>sex)</a>
-<a class="sourceLine" id="cb4251-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.5</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4243-1" data-line-number="1">vote<span class="fl">.5</span>=<span class="kw">update</span>(vote<span class="fl">.4</span>,.<span class="op">~</span>.<span class="op">-</span>class<span class="op">:</span>sex)</a>
+<a class="sourceLine" id="cb4243-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.5</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -663,8 +682,8 @@ remaining is significant:</p>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>I don’t like having three-way interactions, so I’m going to yank
 <code>age:sex:vote</code> now, even though its P-value is smallish:</p>
-<div class="sourceCode" id="cb4253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4253-1" data-line-number="1">vote<span class="fl">.6</span>=<span class="kw">update</span>(vote<span class="fl">.5</span>,.<span class="op">~</span>.<span class="op">-</span>age<span class="op">:</span>sex<span class="op">:</span>vote)</a>
-<a class="sourceLine" id="cb4253-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.6</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4245-1" data-line-number="1">vote<span class="fl">.6</span>=<span class="kw">update</span>(vote<span class="fl">.5</span>,.<span class="op">~</span>.<span class="op">-</span>age<span class="op">:</span>sex<span class="op">:</span>vote)</a>
+<a class="sourceLine" id="cb4245-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.6</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -678,8 +697,8 @@ remaining is significant:</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The age-sex interaction can go, but we must be near the end now:</p>
-<div class="sourceCode" id="cb4255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4255-1" data-line-number="1">vote<span class="fl">.7</span>=<span class="kw">update</span>(vote<span class="fl">.6</span>,.<span class="op">~</span>.<span class="op">-</span>age<span class="op">:</span>sex)</a>
-<a class="sourceLine" id="cb4255-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.7</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4247-1" data-line-number="1">vote<span class="fl">.7</span>=<span class="kw">update</span>(vote<span class="fl">.6</span>,.<span class="op">~</span>.<span class="op">-</span>age<span class="op">:</span>sex)</a>
+<a class="sourceLine" id="cb4247-2" data-line-number="2"><span class="kw">drop1</span>(vote<span class="fl">.7</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -696,7 +715,7 @@ list of droppable things because
 both variables are part of higher-order interactions that are still in
 the model.</p>
 <p>If you want to, you can look at the <code>summary</code> of your final model:</p>
-<div class="sourceCode" id="cb4257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4257-1" data-line-number="1"><span class="kw">summary</span>(vote<span class="fl">.7</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4249-1" data-line-number="1"><span class="kw">summary</span>(vote<span class="fl">.7</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = n ~ class + age + sex + vote + class:age + class:vote + 
@@ -776,8 +795,8 @@ any of the things it’s related to.</li>
 <p>Solution</p>
 <p>This is <code>xtabs</code> again. The 3-way interaction is a bit
 tricky, so we’ll do the simple one first:</p>
-<div class="sourceCode" id="cb4259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4259-1" data-line-number="1">xt=<span class="kw">xtabs</span>(n<span class="op">~</span>vote<span class="op">+</span>sex,<span class="dt">data=</span>votes)</a>
-<a class="sourceLine" id="cb4259-2" data-line-number="2">xt</a></code></pre></div>
+<div class="sourceCode" id="cb4251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4251-1" data-line-number="1">xt=<span class="kw">xtabs</span>(n<span class="op">~</span>vote<span class="op">+</span>sex,<span class="dt">data=</span>votes)</a>
+<a class="sourceLine" id="cb4251-2" data-line-number="2">xt</a></code></pre></div>
 <pre><code>##               sex
 ## vote           female male
 ##   conservative    352  279
@@ -790,7 +809,7 @@ therefore I want to address things like <code>if a voter is female, how likely a
 they to be female’’, which doesn’t make nearly so much sense).</p>
 <p>You
 can do a <code>prop.table</code> here if you like, summing over <em>columns</em>:</p>
-<div class="sourceCode" id="cb4261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4261-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4253-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">2</span>)</a></code></pre></div>
 <pre><code>##               sex
 ## vote              female      male
 ##   conservative 0.5474339 0.4543974
@@ -798,8 +817,8 @@ can do a <code>prop.table</code> here if you like, summing over <em>columns</em>
 <p>Since the numbers of males and females were about the same, this
 doesn’t really tell us anything that the previous table didn’t tell us.</p>
 <p>Then the tricky one:</p>
-<div class="sourceCode" id="cb4263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4263-1" data-line-number="1">xt=<span class="kw">xtabs</span>(n<span class="op">~</span>vote<span class="op">+</span>age<span class="op">+</span>class,<span class="dt">data=</span>votes)</a>
-<a class="sourceLine" id="cb4263-2" data-line-number="2">xt</a></code></pre></div>
+<div class="sourceCode" id="cb4255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4255-1" data-line-number="1">xt=<span class="kw">xtabs</span>(n<span class="op">~</span>vote<span class="op">+</span>age<span class="op">+</span>class,<span class="dt">data=</span>votes)</a>
+<a class="sourceLine" id="cb4255-2" data-line-number="2">xt</a></code></pre></div>
 <pre><code>## , , class = lower middle
 ## 
 ##               age
@@ -821,8 +840,8 @@ doesn’t really tell us anything that the previous table didn’t tell us.</p>
 ##   conservative  32    68    61    87  25
 ##   labour        67   133   145   115  19</code></pre>
 <p>Doing it this way has produced different subtables for each
-<code>class</code>. This is actually OK, because we can say ``if a voter
-was of lower middle class’’ and then talk about the relationship
+<code>class</code>. This is actually OK, because we can
+say “if a voter was of lower middle class” and then talk about the relationship
 between age and vote, as if we were looking at a simple effect:</p>
 <ul>
 <li><p>If a voter was of lower-middle-class, they strongly favour voting
@@ -838,13 +857,11 @@ Labour, except in the
 would no longer have been an interaction between age and class in
 their effect on <code>vote</code>. But the anomalous age groups were
 different for each class (“different pattern”), and that explains
-why there was a <code>vote:age:class</code> interaction: `` the way
-someone votes depends on the <em>combination</em> of age and social
-class’’.</p>
+why there was a <code>vote:age:class</code> interaction: &quot; the way someone votes depends on the <em>combination</em> of age and social class“.</p>
 <p>For <code>prop.table</code> in three dimensions, as we have here, we have to be a little
 more careful about what to make add up to 1. For example, to make the
 social classes each add up to 1, which is the third dimension:</p>
-<div class="sourceCode" id="cb4265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4265-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4257-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="dv">3</span>)</a></code></pre></div>
 <pre><code>## , , class = lower middle
 ## 
 ##               age
@@ -868,7 +885,7 @@ social classes each add up to 1, which is the third dimension:</p>
 <p>What happened here is that each of the three subtables adds up to 1,
 so that we have a “joint distribution” in each table. We can put
 <em>two</em> variables into <code>prop.table</code>, and see what happens then:</p>
-<div class="sourceCode" id="cb4267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4267-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4259-1" data-line-number="1"><span class="kw">prop.table</span>(xt,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</a></code></pre></div>
 <pre><code>## , , class = lower middle
 ## 
 ##               age
@@ -908,8 +925,8 @@ ties with “working people”, trades unions in particular. The
 Conservatives are like the Conservatives here (indeed, the nickname
 “Tories” comes from the UK; the Conservatives there were officially
 known as the Tories many years ago). Many people are lifelong voters
-for their party, and would never think of voting for the ``other
-side’‘, in the same way that many Americans vote either Democrat or
+for their party, and would never think of voting for the “other side”,
+in the same way that many Americans vote either Democrat or
 Republican without thinking about it too much. Our parliamentary
 system comes from the UK system (vote for a candidate in a riding, the
 leader of the party with the most elected candidates becomes Prime
@@ -919,6 +936,7 @@ here, the parties’ share of the popular vote doesn’t change all that
 much from election to election, even though the number of seats in
 Parliament might change quite a lot.</p>
 
+</div>
 </div>
 <p style="text-align: center;">
 <a href="principal-components-and-factor-analysis.html"><button class="btn btn-default">Previous</button></a>

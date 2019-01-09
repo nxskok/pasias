@@ -292,9 +292,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">23.7</span> Running, jumping, and throwing</a></li>
 <li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">23.8</span> Bridges in Pittsburgh</a></li>
 </ul></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">24</span> Multidimensional Scaling</a></li>
-<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">25</span> Principal Components and Factor Analysis</a></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">26</span> Frequency table analysis</a></li>
+<li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">24</span> Multidimensional Scaling</a><ul>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">24.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">24.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">24.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">24.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">24.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li class="has-sub"><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">25</span> Principal Components and Factor Analysis</a><ul>
+<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">25.1</span> The weather, somewhere</a></li>
+<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">25.2</span> Air pollution</a></li>
+<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">25.3</span> A correlation matrix</a></li>
+<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">25.4</span> The Interpersonal Circumplex</a></li>
+</ul></li>
+<li class="has-sub"><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">26</span> Frequency table analysis</a><ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">26.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">26.2</span> Predicting voting</a></li>
+</ul></li>
 </ul>
 </div>
 </div>
@@ -330,6 +344,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## ✖ dplyr::summarise()  masks plyr::summarise()
 ## ✖ dplyr::summarize()  masks plyr::summarize()</code></pre>
 <div class="sourceCode" id="cb3855"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3855-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a></code></pre></div>
+<div id="making-a-map-of-wisconsin" class="section level2">
+<h2><span class="header-section-number">24.1</span> Making a map of Wisconsin</h2>
 <p>The file
 <a href="http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt">link</a> contains
 the road distances (in miles) between 12 cities in Wisconsin and
@@ -427,7 +443,6 @@ from the file:</p>
 <pre><code>##  [1] &quot;Appleton&quot;      &quot;Beloit&quot;        &quot;Fort.Atkinson&quot; &quot;Madison&quot;      
 ##  [5] &quot;Marshfield&quot;    &quot;Milwaukee&quot;     &quot;Monroe&quot;        &quot;Superior&quot;     
 ##  [9] &quot;Wausau&quot;        &quot;Dubuque&quot;       &quot;St.Paul&quot;       &quot;Chicago&quot;</code></pre>
-<p>$ %$ %$</p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Run a (metric) multidimensional scaling on the data, to
 obtain a two-dimensional representation of the cities. (You
@@ -607,7 +622,8 @@ the states they are actually in:</p>
 ## [10] &quot;Dubuque IA&quot;       &quot;St.Paul MN&quot;       &quot;Chicago IL&quot;</code></pre>
 <p>And then I look them up. I don’t want Google to tell me that I have
 done too many lookups, so I look them up first and save the results,
-like this:</p>
+like this:
+<label for="tufte-mn-234" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-234" class="margin-toggle"><span class="marginnote">I actually had to do some further processing, not shown, because Google would fail to look up some of the places on one run, and then fail to look up <em>different</em> ones the next time I tried. So I saved two runs that together looked up all the places at least once, and then made a pipeline to put these together into one complete data frame.</span></p>
 <div class="sourceCode" id="cb3885"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3885-1" data-line-number="1">g =<span class="st"> </span><span class="kw">tibble</span>(cst) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb3885-2" data-line-number="2">ggmap<span class="op">::</span><span class="kw">mutate_geocode</span>(cst)</a>
 <a class="sourceLine" id="cb3885-3" data-line-number="3"><span class="kw">saveRDS</span>(g,<span class="st">&quot;gg.rds&quot;</span>)</a></code></pre></div>
@@ -712,7 +728,6 @@ mult=cos(meanlat<em>pi/180)
 truecoord=with(ll,data.frame(x=lon</em>mult,y=lat))
 truecoord
 @</p>
-<p>%$ %$ %$</p>
 <p><code>procOPA</code> needs matrices rather than data frames.
 <code>wisc.1</code> contained the coordinates for our
 two-dimensional solution:</p>
@@ -720,7 +735,6 @@ two-dimensional solution:</p>
 wisc.pro=procOPA(as.matrix(truecoord),wisc.1,reflect=T)
 @</p>
 <p>I discuss <code>reflect=T</code> below.</p>
-<p>%$ %$ %$ %$</p>
 <p>Now, we need to plot these. I’m following the procedure from class, to
 cut down on the amount of my thinking required.</p>
 <p>&lt;&lt;&gt;&gt;=
@@ -758,7 +772,6 @@ from MDS coordinates to real ones?</p>
 <p>&lt;&lt;&gt;&gt;=
 wisc.pro$R
 @</p>
-<p>%$</p>
 <p>This time, the diagonal elements differ in sign (indicating that a
 reflection was performed to make the points line up). Indeed, I
 allowed <code>procOPA</code> to use a reflection if it needed to by means
@@ -786,6 +799,7 @@ in class, but if we skip it, don’t worry about this part.)</li>
 <pre><code>## [1] 0.7916925 0.8078690</code></pre>
 <p>The goodness-of-fit of the two-dimensional solution is pretty
 good,
+<label for="tufte-mn-235" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-235" class="margin-toggle"><span class="marginnote">As it ought to be, since there is a real answer here: the cities <em>do</em> exist as locations in two dimensions, you ignore the curvature of the earth. The goodness of fit isn’t 100% because the roads bend a bit.</span>
 but that of the one-dimensional solution (which arranges all the
 cities along a line) is pretty awful in comparison.</p>
 <p>How awful? Let’s find out. I should have saved it from just above, but
@@ -820,11 +834,16 @@ the name <code>V1</code>), and the plot:</p>
 southeast (bottom). This is not completely terrible, since there
 aren’t really any cities in the northeast of the state, but it <em>is</em>
 pretty awful.</p>
+</div>
+<div id="things-that-feel-similar-to-each-other" class="section level2">
+<h2><span class="header-section-number">24.2</span> Things that feel similar to each other</h2>
 <p>Which objects feel similar to one another and which ones
 feel different? Can we draw them on a “map”? 30
-subjects were each
-given 17 different objects to feel, for example ``inner surface of
-pine bark’’, “rubber eraser” and “nylon scouring pad”. The
+subjects
+<label for="tufte-mn-236" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-236" class="margin-toggle"><span class="marginnote">Probably students in a psychology course. You know how it goes.</span> were each
+given 17 different objects to feel, for example “inner surface of pine bark”,
+“rubber eraser” and
+“nylon scouring pad”. The
 subjects had to group the objects into a maximum of 8 groups such that
 the objects within a group felt similar, and the ones in different
 groups felt different. A
@@ -1070,8 +1089,7 @@ in two dimensions:</p>
 reflection is also fine (since the distances will be the same). I saw
 a lot of maps that were like mine but upside down (with <code>cork</code>
 at the top).
-<label for="tufte-mn-234" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-234" class="margin-toggle"><span class="marginnote">I lie. Last year, emph{I</span> got cork at the top,
-and a lot of other people got cork at the bottom as you see here.} No problem there.</p>
+<label for="tufte-mn-237" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-237" class="margin-toggle"><span class="marginnote">I lie. Last year, <em>I</em> got cork at the top, and a lot of other people got cork at the bottom as you see here.</span> No problem there.</p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Find a pair of objects that are close together on your
 plot. Look back at your answer to part~(<a href="#part:distances">here</a>): is
@@ -1116,7 +1134,6 @@ since that’s the default 2 dimensions:</p>
 <div class="sourceCode" id="cb3918"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3918-1" data-line-number="1">d<span class="fl">.2</span>=<span class="kw">cmdscale</span>(d,<span class="dv">2</span>,<span class="dt">eig=</span>T)</a>
 <a class="sourceLine" id="cb3918-2" data-line-number="2">d<span class="fl">.2</span><span class="op">$</span>GOF</a></code></pre></div>
 <pre><code>## [1] 0.4019251 0.4110603</code></pre>
-<p>$</p>
 <p>I didn’t ask you to comment on this, but the adjective that came to my
 mind was “disappointing”. I think that’s to do with the
 upper-limit-30 thing again. Also, this time (unlike with Wisconsin)
@@ -1128,7 +1145,6 @@ distance isn’t very good; this is the same issue.</p>
 <div class="sourceCode" id="cb3920"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3920-1" data-line-number="1">d<span class="fl">.2</span>a=<span class="kw">cmdscale</span>(d,<span class="dv">3</span>,<span class="dt">eig=</span>T)</a>
 <a class="sourceLine" id="cb3920-2" data-line-number="2">d<span class="fl">.2</span>a<span class="op">$</span>GOF</a></code></pre></div>
 <pre><code>## [1] 0.5775841 0.5907117</code></pre>
-<p>$</p>
 <p>That is quite a bit better. The problem with this, though, is that we
 need something like <code>rgl</code> to explore it with.</p>
 <ol start="8" style="list-style-type: lower-alpha">
@@ -1183,8 +1199,7 @@ Extra: this is where I have to say I cheated. I thought this would be
 hard to do by trying to match those names in the clusters
 with the ones on the MDS map. So I put myself through some
 short-term R coding pain for some substantial long-term gain.
-I was thinking, ``can I extract the clusters from this
-analysis, and plot them on the MDS map in different colours?’’ That
+I was thinking, “can I extract the clusters from this analysis, and plot them on the MDS map in different colours?” That
 would go like this:</p>
 <div class="sourceCode" id="cb3924"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3924-1" data-line-number="1">clusters=<span class="kw">cutree</span>(d<span class="fl">.3</span>,<span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb3924-2" data-line-number="2"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>stimuli[,<span class="dv">1</span>],<span class="dt">cluster=</span><span class="kw">factor</span>(clusters)) <span class="op">%&gt;%</span></a>
@@ -1248,7 +1263,6 @@ mixed up, with <code>X1</code> and (usually) <code>X2</code> negative; cluster
 ## 15  11.0208731   1.201504  10.0016248      rigidplasticsheet        5
 ## 16  13.1702265   1.677039   8.2862272               waxpaper        5
 ## 17  11.2914904   5.331796   9.6288283      glossypaintedwood        5</code></pre>
-<p>$</p>
 <p>It looks as if the combo of negative <code>X1</code> and positive
 <code>X3</code> distinguishes cluster 2 from cluster 1.</p>
 <p>As I was writing this, I was thinking that we should throw the
@@ -1270,8 +1284,7 @@ found that <code>LD3</code> is basically worthless, so I can plot
 <div class="sourceCode" id="cb3933"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3933-1" data-line-number="1"><span class="kw">data.frame</span>(ppp<span class="op">$</span>x,<span class="dt">cluster=</span><span class="kw">factor</span>(save<span class="fl">.3</span>d<span class="op">$</span>clusters)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb3933-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>LD1,<span class="dt">y=</span>LD2,<span class="dt">colour=</span>cluster))<span class="op">+</span></a>
 <a class="sourceLine" id="cb3933-3" data-line-number="3"><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="23-mds_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
-$</p>
+<p><img src="23-mds_files/figure-html/unnamed-chunk-35-1.png" width="672"  /></p>
 <p>This says that the three-dimensional MDS <em>has</em> separated clusters
 1 and 2, and if we were to plot <code>d.2a</code> in <code>rgl</code> and
 rotate it the right way, we <em>would</em> be able to see a difference
@@ -1316,8 +1329,7 @@ plot of the first two <code>LD</code>s says, in fact, that under the
 3-dimensional multidimensional scaling, all five groups are distinct.</p>
 <p>A biplot would be another way to look at that:</p>
 <div class="sourceCode" id="cb3940"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3940-1" data-line-number="1"><span class="kw">ggbiplot</span>(save<span class="fl">.3</span>d.lda,<span class="dt">groups=</span><span class="kw">factor</span>(save<span class="fl">.3</span>d<span class="op">$</span>clusters))</a></code></pre></div>
-<p><img src="23-mds_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
-$ %$ %$</p>
+<p><img src="23-mds_files/figure-html/unnamed-chunk-38-1.png" width="672"  /></p>
 <p>Points on the right have <code>X1</code> and <code>X2</code> large, and
 <code>X3</code> small (cluster 4, and to a lesser extent, cluster
 5). Points on the left are the other way around. None of the arrows
@@ -1330,6 +1342,9 @@ be high on <code>X1</code> and low on <code>X2</code>, like cluster 5.</p>
 output from the cluster analysis and the multidimensional
 scaling. That way you can see both in the same place, and see how they
 compare.</p>
+</div>
+<div id="confusing-letters" class="section level2">
+<h2><span class="header-section-number">24.3</span> Confusing letters</h2>
 <p>Two researchers studied how often people mistook one letter
 for another one. They did this by showing their subjects each
 (uppercase) letter for a few milliseconds only, and asking them which
@@ -1389,104 +1404,32 @@ number of headers, one per data column exactly.</p>
 <p>These are similarities, so convert to dissimilarities by subtracting
 from 21. This is a shortcut way to do that, once you’ve gotten rid of
 everything that is not numbers:</p>
-<div class="sourceCode" id="cb3946"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3946-1" data-line-number="1">letters <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>X1) -&gt;<span class="st"> </span>letters2</a></code></pre></div>
-<pre><code>## Error in select(., -X1): unused argument (-X1)</code></pre>
-<div class="sourceCode" id="cb3948"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3948-1" data-line-number="1">letters2=<span class="dv">21</span><span class="op">-</span>letters2</a></code></pre></div>
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;letters2&#39; not found</code></pre>
-<div class="sourceCode" id="cb3950"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3950-1" data-line-number="1">letters2</a></code></pre></div>
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;letters2&#39; not found</code></pre>
+<div class="sourceCode" id="cb3946"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3946-1" data-line-number="1">letters <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>X1) -&gt;<span class="st"> </span>letters2</a>
+<a class="sourceLine" id="cb3946-2" data-line-number="2">letters2=<span class="dv">21</span><span class="op">-</span>letters2</a>
+<a class="sourceLine" id="cb3946-3" data-line-number="3">letters2</a></code></pre></div>
+<pre><code>##    C  D  G  H  M  N  Q  W
+## 1 21 21 21 21 21 21 21 21
+## 2 16 21 21 21 21 21 21 21
+## 3  9 19 21 21 21 21 21 21
+## 4 19 17 18 21 21 21 21 21
+## 5 19 18 19 11 21 21 21 21
+## 6 19 17 20  3  5 21 21 21
+## 7 12  1 12 20 19 13 21 21
+## 8 20 16 19 16  3  8 17 21</code></pre>
 <p>This looks weird, or at least the stuff above the diagonal does, but
 <code>dist</code> works with the stuff <em>below</em> the diagonal (unless
 you tell it otherwise), so all will be good.</p>
 <p><code>as.dist</code> comes next:</p>
-<div class="sourceCode" id="cb3952"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3952-1" data-line-number="1">d=<span class="kw">as.dist</span>(letters2)</a></code></pre></div>
-<pre><code>## Error in as.dist(letters2): object &#39;letters2&#39; not found</code></pre>
-<div class="sourceCode" id="cb3954"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3954-1" data-line-number="1">d</a></code></pre></div>
-<pre><code>##                        innersurfaceofpinebark brick cardboard cork
-## brick                                      22                     
-## cardboard                                  23    27               
-## cork                                       24    27        18     
-## rubbereraser                               26    27        19   15
-## felt                                       27    29        28   28
-## leatherwallet                              26    29        23   25
-## rigidplasticsheet                          23    28        24   26
-## veryfinesandpaper                          24    16        24   28
-## nylonscouringpad                           23    18        29   28
-## cellulosekitchensponge                     23    28        27   20
-## wovenstraw                                 18    25        28   27
-## blockofstyrofoam                           23    24        21   10
-## unglazedceramictile                        21    10        26   26
-## velvet                                     28    29        28   28
-## waxpaper                                   24    28        24   28
-## glossypaintedwood                          22    27        23   29
-##                        rubbereraser felt leatherwallet rigidplasticsheet
-## brick                                                                   
-## cardboard                                                               
-## cork                                                                    
-## rubbereraser                                                            
-## felt                             28                                     
-## leatherwallet                    20   24                                
-## rigidplasticsheet                27   28            22                  
-## veryfinesandpaper                24   29            28                27
-## nylonscouringpad                 27   26            28                29
-## cellulosekitchensponge           24   26            27                29
-## wovenstraw                       25   29            26                27
-## blockofstyrofoam                 19   28            25                25
-## unglazedceramictile              24   29            29                25
-## velvet                           29    4            24                29
-## waxpaper                         24   28            21                12
-## glossypaintedwood                28   29            20                13
-##                        veryfinesandpaper nylonscouringpad
-## brick                                                    
-## cardboard                                                
-## cork                                                     
-## rubbereraser                                             
-## felt                                                     
-## leatherwallet                                            
-## rigidplasticsheet                                        
-## veryfinesandpaper                                        
-## nylonscouringpad                      21                 
-## cellulosekitchensponge                24               22
-## wovenstraw                            26               16
-## blockofstyrofoam                      25               25
-## unglazedceramictile                   12               24
-## velvet                                29               27
-## waxpaper                              29               29
-## glossypaintedwood                     27               28
-##                        cellulosekitchensponge wovenstraw blockofstyrofoam
-## brick                                                                    
-## cardboard                                                                
-## cork                                                                     
-## rubbereraser                                                             
-## felt                                                                     
-## leatherwallet                                                            
-## rigidplasticsheet                                                        
-## veryfinesandpaper                                                        
-## nylonscouringpad                                                         
-## cellulosekitchensponge                                                   
-## wovenstraw                                 19                            
-## blockofstyrofoam                           21         26                 
-## unglazedceramictile                        26         26               25
-## velvet                                     27         28               29
-## waxpaper                                   29         27               26
-## glossypaintedwood                          27         25               29
-##                        unglazedceramictile velvet waxpaper
-## brick                                                     
-## cardboard                                                 
-## cork                                                      
-## rubbereraser                                              
-## felt                                                      
-## leatherwallet                                             
-## rigidplasticsheet                                         
-## veryfinesandpaper                                         
-## nylonscouringpad                                          
-## cellulosekitchensponge                                    
-## wovenstraw                                                
-## blockofstyrofoam                                          
-## unglazedceramictile                                       
-## velvet                                  29                
-## waxpaper                                28     27         
-## glossypaintedwood                       26     26       12</code></pre>
+<div class="sourceCode" id="cb3948"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3948-1" data-line-number="1">d=<span class="kw">as.dist</span>(letters2)</a>
+<a class="sourceLine" id="cb3948-2" data-line-number="2">d</a></code></pre></div>
+<pre><code>##    C  D  G  H  M  N  Q
+## D 16                  
+## G  9 19               
+## H 19 17 18            
+## M 19 18 19 11         
+## N 19 17 20  3  5      
+## Q 12  1 12 20 19 13   
+## W 20 16 19 16  3  8 17</code></pre>
 <p>This works because the letters that are confused are actually
 column names of the data frame.</p>
 <p>You can check (and probably should, at least for yourself) that the
@@ -1506,54 +1449,34 @@ results. (Making a graph is coming later.)</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb3956"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3956-1" data-line-number="1">d<span class="fl">.1</span>=<span class="kw">cmdscale</span>(d)</a>
-<a class="sourceLine" id="cb3956-2" data-line-number="2">d<span class="fl">.1</span></a></code></pre></div>
-<pre><code>##                               [,1]       [,2]
-## innersurfaceofpinebark  -2.7066290   1.694420
-## brick                  -12.2011332   5.147970
-## cardboard                3.8630322  -9.322759
-## cork                    -0.8424358 -14.884926
-## rubbereraser             0.1676463 -11.733873
-## felt                     5.1803473   9.328562
-## leatherwallet           10.4636668  -1.016525
-## rigidplasticsheet       11.0208731   1.201504
-## veryfinesandpaper      -11.0869483   2.800988
-## nylonscouringpad       -10.4469053   7.232787
-## cellulosekitchensponge  -5.3886609  -2.770991
-## wovenstraw              -5.2762142   3.836948
-## blockofstyrofoam        -2.9950151 -11.927717
-## unglazedceramictile    -10.5902291   2.926805
-## velvet                   6.3768882  10.477972
-## waxpaper                13.1702265   1.677039
-## glossypaintedwood       11.2914904   5.331796</code></pre>
+<div class="sourceCode" id="cb3950"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3950-1" data-line-number="1">d<span class="fl">.1</span>=<span class="kw">cmdscale</span>(d)</a>
+<a class="sourceLine" id="cb3950-2" data-line-number="2">d<span class="fl">.1</span></a></code></pre></div>
+<pre><code>##        [,1]       [,2]
+## C  9.624942  4.7694928
+## D  4.451129 -9.5740790
+## G  8.863167  7.6643690
+## H -6.817352  3.8283789
+## M -8.917331  2.0059242
+## N -7.926704 -0.8531024
+## Q  7.875169 -5.9942901
+## W -7.153020 -1.8466934</code></pre>
 <p>Or you can do it with <code>eig=T</code>, which gets you some more information:</p>
-<div class="sourceCode" id="cb3958"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3958-1" data-line-number="1">d<span class="fl">.1</span>a=<span class="kw">cmdscale</span>(d,<span class="dt">eig=</span>T)</a>
-<a class="sourceLine" id="cb3958-2" data-line-number="2">d<span class="fl">.1</span>a</a></code></pre></div>
+<div class="sourceCode" id="cb3952"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3952-1" data-line-number="1">d<span class="fl">.1</span>a=<span class="kw">cmdscale</span>(d,<span class="dt">eig=</span>T)</a>
+<a class="sourceLine" id="cb3952-2" data-line-number="2">d<span class="fl">.1</span>a</a></code></pre></div>
 <pre><code>## $points
-##                               [,1]       [,2]
-## innersurfaceofpinebark  -2.7066290   1.694420
-## brick                  -12.2011332   5.147970
-## cardboard                3.8630322  -9.322759
-## cork                    -0.8424358 -14.884926
-## rubbereraser             0.1676463 -11.733873
-## felt                     5.1803473   9.328562
-## leatherwallet           10.4636668  -1.016525
-## rigidplasticsheet       11.0208731   1.201504
-## veryfinesandpaper      -11.0869483   2.800988
-## nylonscouringpad       -10.4469053   7.232787
-## cellulosekitchensponge  -5.3886609  -2.770991
-## wovenstraw              -5.2762142   3.836948
-## blockofstyrofoam        -2.9950151 -11.927717
-## unglazedceramictile    -10.5902291   2.926805
-## velvet                   6.3768882  10.477972
-## waxpaper                13.1702265   1.677039
-## glossypaintedwood       11.2914904   5.331796
+##        [,1]       [,2]
+## C  9.624942  4.7694928
+## D  4.451129 -9.5740790
+## G  8.863167  7.6643690
+## H -6.817352  3.8283789
+## M -8.917331  2.0059242
+## N -7.926704 -0.8531024
+## Q  7.875169 -5.9942901
+## W -7.153020 -1.8466934
 ## 
 ## $eig
-##  [1]  1.181313e+03  9.394546e+02  9.268689e+02  6.314409e+02  3.467493e+02
-##  [6]  2.705989e+02  2.575474e+02  1.937616e+02  1.485443e+02  1.186640e+02
-## [11]  8.449108e+01  4.651045e+01  1.331767e+01 -1.278977e-13 -1.739199e+01
-## [16] -3.204147e+01 -6.782875e+01
+## [1]  4.930195e+02  2.319034e+02  1.399674e+02  5.318040e+01  4.054851e+01
+## [6] -5.684342e-14 -1.539358e+01 -9.610062e+01
 ## 
 ## $x
 ## NULL
@@ -1562,7 +1485,7 @@ results. (Making a graph is coming later.)</li>
 ## [1] 0
 ## 
 ## $GOF
-## [1] 0.4019251 0.4110603</code></pre>
+## [1] 0.6774262 0.7562157</code></pre>
 <p>The most interesting thing here is the <code>GOF</code> at the bottom,
 which is not that high (whichever one of the two values you take),
 suggesting that the two-dimensional representation is not very
@@ -1575,8 +1498,7 @@ thinking as the <code>svd</code> or percent of trace in discriminant
 analysis.) But that’s by the way: we’ll stick with two dimensions.</p>
 <p>The important thing to remember is that if you go the <code>eig=T</code>
 way, you have to pull out the points to plot from the thing called
-<code>points</code>, so that you plot <code>d.1</code> itself but <code>d.1a$points</code>.
-$ %$ %$</p>
+<code>points</code>, so that you plot <code>d.1</code> itself but <code>d.1a$points</code>.</p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Obtain a vector of the names of the letters that were
 confused in this study.</li>
@@ -1584,121 +1506,31 @@ confused in this study.</li>
 <p>Solution</p>
 <p>Easiest way is to pull out the first column of the data frame that
 you read in from the file (if you can remember what it was called):</p>
-<div class="sourceCode" id="cb3960"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3960-1" data-line-number="1">letter_names=letters<span class="op">$</span>X1</a></code></pre></div>
-<p>$ %$ %$ %$ %$</p>
+<div class="sourceCode" id="cb3954"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3954-1" data-line-number="1">letter_names=letters<span class="op">$</span>X1</a></code></pre></div>
 <p>That silly column name <code>X1</code> that <code>read_table</code>
 supplied.</p>
 <p>Extra: You can even get the letter names from the thing I called <code>d</code>,
 but I can’t remember how, so I have to cheat. I said that <code>d</code>
 has a “print method” that controls how it looks:</p>
-<div class="sourceCode" id="cb3961"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3961-1" data-line-number="1">d</a></code></pre></div>
-<pre><code>##                        innersurfaceofpinebark brick cardboard cork
-## brick                                      22                     
-## cardboard                                  23    27               
-## cork                                       24    27        18     
-## rubbereraser                               26    27        19   15
-## felt                                       27    29        28   28
-## leatherwallet                              26    29        23   25
-## rigidplasticsheet                          23    28        24   26
-## veryfinesandpaper                          24    16        24   28
-## nylonscouringpad                           23    18        29   28
-## cellulosekitchensponge                     23    28        27   20
-## wovenstraw                                 18    25        28   27
-## blockofstyrofoam                           23    24        21   10
-## unglazedceramictile                        21    10        26   26
-## velvet                                     28    29        28   28
-## waxpaper                                   24    28        24   28
-## glossypaintedwood                          22    27        23   29
-##                        rubbereraser felt leatherwallet rigidplasticsheet
-## brick                                                                   
-## cardboard                                                               
-## cork                                                                    
-## rubbereraser                                                            
-## felt                             28                                     
-## leatherwallet                    20   24                                
-## rigidplasticsheet                27   28            22                  
-## veryfinesandpaper                24   29            28                27
-## nylonscouringpad                 27   26            28                29
-## cellulosekitchensponge           24   26            27                29
-## wovenstraw                       25   29            26                27
-## blockofstyrofoam                 19   28            25                25
-## unglazedceramictile              24   29            29                25
-## velvet                           29    4            24                29
-## waxpaper                         24   28            21                12
-## glossypaintedwood                28   29            20                13
-##                        veryfinesandpaper nylonscouringpad
-## brick                                                    
-## cardboard                                                
-## cork                                                     
-## rubbereraser                                             
-## felt                                                     
-## leatherwallet                                            
-## rigidplasticsheet                                        
-## veryfinesandpaper                                        
-## nylonscouringpad                      21                 
-## cellulosekitchensponge                24               22
-## wovenstraw                            26               16
-## blockofstyrofoam                      25               25
-## unglazedceramictile                   12               24
-## velvet                                29               27
-## waxpaper                              29               29
-## glossypaintedwood                     27               28
-##                        cellulosekitchensponge wovenstraw blockofstyrofoam
-## brick                                                                    
-## cardboard                                                                
-## cork                                                                     
-## rubbereraser                                                             
-## felt                                                                     
-## leatherwallet                                                            
-## rigidplasticsheet                                                        
-## veryfinesandpaper                                                        
-## nylonscouringpad                                                         
-## cellulosekitchensponge                                                   
-## wovenstraw                                 19                            
-## blockofstyrofoam                           21         26                 
-## unglazedceramictile                        26         26               25
-## velvet                                     27         28               29
-## waxpaper                                   29         27               26
-## glossypaintedwood                          27         25               29
-##                        unglazedceramictile velvet waxpaper
-## brick                                                     
-## cardboard                                                 
-## cork                                                      
-## rubbereraser                                              
-## felt                                                      
-## leatherwallet                                             
-## rigidplasticsheet                                         
-## veryfinesandpaper                                         
-## nylonscouringpad                                          
-## cellulosekitchensponge                                    
-## wovenstraw                                                
-## blockofstyrofoam                                          
-## unglazedceramictile                                       
-## velvet                                  29                
-## waxpaper                                28     27         
-## glossypaintedwood                       26     26       12</code></pre>
+<div class="sourceCode" id="cb3955"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3955-1" data-line-number="1">d</a></code></pre></div>
+<pre><code>##    C  D  G  H  M  N  Q
+## D 16                  
+## G  9 19               
+## H 19 17 18            
+## M 19 18 19 11         
+## N 19 17 20  3  5      
+## Q 12  1 12 20 19 13   
+## W 20 16 19 16  3  8 17</code></pre>
 <p>but its innards are a whole lot more complicated than that:</p>
-<div class="sourceCode" id="cb3963"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3963-1" data-line-number="1"><span class="kw">print.default</span>(d)</a></code></pre></div>
-<pre><code>##   [1] 22 23 24 26 27 26 23 24 23 23 18 23 21 28 24 22 27 27 27 29 29 28 16
-##  [24] 18 28 25 24 10 29 28 27 18 19 28 23 24 24 29 27 28 21 26 28 24 23 15
-##  [47] 28 25 26 28 28 20 27 10 26 28 28 29 28 20 27 24 27 24 25 19 24 29 24
-##  [70] 28 24 28 29 26 26 29 28 29  4 28 29 22 28 28 27 26 25 29 24 21 20 27
-##  [93] 29 29 27 25 25 29 12 13 21 24 26 25 12 29 29 27 22 16 25 24 27 29 28
-## [116] 19 21 26 27 29 27 26 26 28 27 25 25 29 26 29 29 28 26 27 26 12
+<div class="sourceCode" id="cb3957"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3957-1" data-line-number="1"><span class="kw">print.default</span>(d)</a></code></pre></div>
+<pre><code>##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
+## [24] 19  3 13  8 17
 ## attr(,&quot;Labels&quot;)
-##  [1] &quot;innersurfaceofpinebark&quot; &quot;brick&quot;                 
-##  [3] &quot;cardboard&quot;              &quot;cork&quot;                  
-##  [5] &quot;rubbereraser&quot;           &quot;felt&quot;                  
-##  [7] &quot;leatherwallet&quot;          &quot;rigidplasticsheet&quot;     
-##  [9] &quot;veryfinesandpaper&quot;      &quot;nylonscouringpad&quot;      
-## [11] &quot;cellulosekitchensponge&quot; &quot;wovenstraw&quot;            
-## [13] &quot;blockofstyrofoam&quot;       &quot;unglazedceramictile&quot;   
-## [15] &quot;velvet&quot;                 &quot;waxpaper&quot;              
-## [17] &quot;glossypaintedwood&quot;     
+## [1] &quot;C&quot; &quot;D&quot; &quot;G&quot; &quot;H&quot; &quot;M&quot; &quot;N&quot; &quot;Q&quot; &quot;W&quot;
 ## attr(,&quot;Size&quot;)
-## [1] 17
+## [1] 8
 ## attr(,&quot;call&quot;)
-## as.dist.default(m = .)
+## as.dist.default(m = letters2)
 ## attr(,&quot;class&quot;)
 ## [1] &quot;dist&quot;
 ## attr(,&quot;Diag&quot;)
@@ -1706,27 +1538,15 @@ has a “print method” that controls how it looks:</p>
 ## attr(,&quot;Upper&quot;)
 ## [1] FALSE</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb3965"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3965-1" data-line-number="1"><span class="kw">unclass</span>(d)</a></code></pre></div>
-<pre><code>##   [1] 22 23 24 26 27 26 23 24 23 23 18 23 21 28 24 22 27 27 27 29 29 28 16
-##  [24] 18 28 25 24 10 29 28 27 18 19 28 23 24 24 29 27 28 21 26 28 24 23 15
-##  [47] 28 25 26 28 28 20 27 10 26 28 28 29 28 20 27 24 27 24 25 19 24 29 24
-##  [70] 28 24 28 29 26 26 29 28 29  4 28 29 22 28 28 27 26 25 29 24 21 20 27
-##  [93] 29 29 27 25 25 29 12 13 21 24 26 25 12 29 29 27 22 16 25 24 27 29 28
-## [116] 19 21 26 27 29 27 26 26 28 27 25 25 29 26 29 29 28 26 27 26 12
+<div class="sourceCode" id="cb3959"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3959-1" data-line-number="1"><span class="kw">unclass</span>(d)</a></code></pre></div>
+<pre><code>##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
+## [24] 19  3 13  8 17
 ## attr(,&quot;Labels&quot;)
-##  [1] &quot;innersurfaceofpinebark&quot; &quot;brick&quot;                 
-##  [3] &quot;cardboard&quot;              &quot;cork&quot;                  
-##  [5] &quot;rubbereraser&quot;           &quot;felt&quot;                  
-##  [7] &quot;leatherwallet&quot;          &quot;rigidplasticsheet&quot;     
-##  [9] &quot;veryfinesandpaper&quot;      &quot;nylonscouringpad&quot;      
-## [11] &quot;cellulosekitchensponge&quot; &quot;wovenstraw&quot;            
-## [13] &quot;blockofstyrofoam&quot;       &quot;unglazedceramictile&quot;   
-## [15] &quot;velvet&quot;                 &quot;waxpaper&quot;              
-## [17] &quot;glossypaintedwood&quot;     
+## [1] &quot;C&quot; &quot;D&quot; &quot;G&quot; &quot;H&quot; &quot;M&quot; &quot;N&quot; &quot;Q&quot; &quot;W&quot;
 ## attr(,&quot;Size&quot;)
-## [1] 17
+## [1] 8
 ## attr(,&quot;call&quot;)
-## as.dist.default(m = .)
+## as.dist.default(m = letters2)
 ## attr(,&quot;Diag&quot;)
 ## [1] FALSE
 ## attr(,&quot;Upper&quot;)
@@ -1734,16 +1554,8 @@ has a “print method” that controls how it looks:</p>
 <p>This one gets rid of any special kind of thing that <code>d</code> is, and
 displays it like a thing without any special properties.</p>
 <p>It’s the “attribute” called <code>Labels</code> that we need to grab:</p>
-<div class="sourceCode" id="cb3967"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3967-1" data-line-number="1"><span class="kw">attributes</span>(d)<span class="op">$</span>Labels</a></code></pre></div>
-<pre><code>##  [1] &quot;innersurfaceofpinebark&quot; &quot;brick&quot;                 
-##  [3] &quot;cardboard&quot;              &quot;cork&quot;                  
-##  [5] &quot;rubbereraser&quot;           &quot;felt&quot;                  
-##  [7] &quot;leatherwallet&quot;          &quot;rigidplasticsheet&quot;     
-##  [9] &quot;veryfinesandpaper&quot;      &quot;nylonscouringpad&quot;      
-## [11] &quot;cellulosekitchensponge&quot; &quot;wovenstraw&quot;            
-## [13] &quot;blockofstyrofoam&quot;       &quot;unglazedceramictile&quot;   
-## [15] &quot;velvet&quot;                 &quot;waxpaper&quot;              
-## [17] &quot;glossypaintedwood&quot;</code></pre>
+<div class="sourceCode" id="cb3961"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3961-1" data-line-number="1"><span class="kw">attributes</span>(d)<span class="op">$</span>Labels</a></code></pre></div>
+<pre><code>## [1] &quot;C&quot; &quot;D&quot; &quot;G&quot; &quot;H&quot; &quot;M&quot; &quot;N&quot; &quot;Q&quot; &quot;W&quot;</code></pre>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Plot your multidimensional scaling map. To do this, first
 create a data frame containing the points you want to plot and their
@@ -1754,17 +1566,25 @@ labels, and then plot the points labelled by the right thing.</li>
 you find them in the previous part. I’m going to do this with a
 pipe, or else I’ll create <em>another</em> thing called <code>d</code>
 and overwrite the one I wanted to keep, again:</p>
-<div class="sourceCode" id="cb3969"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3969-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) </a></code></pre></div>
-<pre><code>## Error in data.frame(d.1, names = letter_names): arguments imply differing number of rows: 17, 8</code></pre>
+<div class="sourceCode" id="cb3963"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3963-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) </a></code></pre></div>
+<pre><code>##          X1         X2 names
+## C  9.624942  4.7694928     C
+## D  4.451129 -9.5740790     D
+## G  8.863167  7.6643690     G
+## H -6.817352  3.8283789     H
+## M -8.917331  2.0059242     M
+## N -7.926704 -0.8531024     N
+## Q  7.875169 -5.9942901     Q
+## W -7.153020 -1.8466934     W</code></pre>
 <p>So far so good. The coordinates have gained names <code>X1</code> and
 <code>X2</code> (as they did before, but I wanted to check). This is what
 happens when you turn a matrix with nameless columns into a data
 frame. So I can proceed:</p>
-<div class="sourceCode" id="cb3971"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3971-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3971-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
-<a class="sourceLine" id="cb3971-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb3971-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
-<pre><code>## Error in data.frame(d.1, names = letter_names): arguments imply differing number of rows: 17, 8</code></pre>
+<div class="sourceCode" id="cb3965"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3965-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3965-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
+<a class="sourceLine" id="cb3965-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb3965-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
+<p><img src="23-mds_files/figure-html/unnamed-chunk-50-1.png" width="672"  /></p>
 <p>I need the last line for the same reason as before: I want to treat
 the two axes equally. If you don’t have that, you have a distorted map
 where one of the coordinates appears to be more important than the other.</p>
@@ -1779,10 +1599,10 @@ you’ll get a black dot in the middle of each piece of text.)
 point, so you can see both, but I’ve always found these rather
 finicky, so I’d rather let <code>geom_text_repel</code> do the work of
 figuring out where to put the text relative to the point.</p>
-<div class="sourceCode" id="cb3973"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3973-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3973-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
-<a class="sourceLine" id="cb3973-3" data-line-number="3"><span class="kw">geom_text</span>()<span class="op">+</span><span class="kw">coord_fixed</span>()</a></code></pre></div>
-<pre><code>## Error in data.frame(d.1, names = letter_names): arguments imply differing number of rows: 17, 8</code></pre>
+<div class="sourceCode" id="cb3966"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3966-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3966-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
+<a class="sourceLine" id="cb3966-3" data-line-number="3"><span class="kw">geom_text</span>()<span class="op">+</span><span class="kw">coord_fixed</span>()</a></code></pre></div>
+<p><img src="23-mds_files/figure-html/unnamed-chunk-51-1.png" width="672"  /></p>
 <p>Then pick (in the next part) a pair of letters that is close together,
 and proceed. I like the labelled dots better (as a matter of taste),
 but this way is a perfectly good way to answer the question, so is
@@ -1799,8 +1619,7 @@ you pick. (If you got something different, pick from what your map
 shows.)
 I think it is not at all surprising that these pairs of letters
 got confused, because the letters of each pair have similar shapes
-(which is all you’d have to react to if you see them for ``a few
-milliseconds’’ each): C and G circular with a hole on the right,
+(which is all you’d have to react to if you see them for “a few milliseconds” each): C and G circular with a hole on the right,
 H, M, N and W vertical lines on the outside with something across
 the middle, Q and D almost circular. (It’s up to you whether you
 consider H, M, N and W as a group of four or as two pairs.)</p>
@@ -1810,7 +1629,7 @@ in the data.</li>
 </ol>
 <p>Solution</p>
 <p>The data we read in from the file was this:</p>
-<div class="sourceCode" id="cb3975"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3975-1" data-line-number="1">letters</a></code></pre></div>
+<div class="sourceCode" id="cb3967"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3967-1" data-line-number="1">letters</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 9
 ##   X1        C     D     G     H     M     N     Q     W
 ##   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
@@ -1832,98 +1651,24 @@ and N are also large (which lends some support to these letters being
 a foursome rather than two pairs).</p>
 <p>If you prefer, you can work from your <code>dist</code> object, the thing
 I called <code>d</code>:</p>
-<div class="sourceCode" id="cb3977"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3977-1" data-line-number="1">d</a></code></pre></div>
-<pre><code>##                        innersurfaceofpinebark brick cardboard cork
-## brick                                      22                     
-## cardboard                                  23    27               
-## cork                                       24    27        18     
-## rubbereraser                               26    27        19   15
-## felt                                       27    29        28   28
-## leatherwallet                              26    29        23   25
-## rigidplasticsheet                          23    28        24   26
-## veryfinesandpaper                          24    16        24   28
-## nylonscouringpad                           23    18        29   28
-## cellulosekitchensponge                     23    28        27   20
-## wovenstraw                                 18    25        28   27
-## blockofstyrofoam                           23    24        21   10
-## unglazedceramictile                        21    10        26   26
-## velvet                                     28    29        28   28
-## waxpaper                                   24    28        24   28
-## glossypaintedwood                          22    27        23   29
-##                        rubbereraser felt leatherwallet rigidplasticsheet
-## brick                                                                   
-## cardboard                                                               
-## cork                                                                    
-## rubbereraser                                                            
-## felt                             28                                     
-## leatherwallet                    20   24                                
-## rigidplasticsheet                27   28            22                  
-## veryfinesandpaper                24   29            28                27
-## nylonscouringpad                 27   26            28                29
-## cellulosekitchensponge           24   26            27                29
-## wovenstraw                       25   29            26                27
-## blockofstyrofoam                 19   28            25                25
-## unglazedceramictile              24   29            29                25
-## velvet                           29    4            24                29
-## waxpaper                         24   28            21                12
-## glossypaintedwood                28   29            20                13
-##                        veryfinesandpaper nylonscouringpad
-## brick                                                    
-## cardboard                                                
-## cork                                                     
-## rubbereraser                                             
-## felt                                                     
-## leatherwallet                                            
-## rigidplasticsheet                                        
-## veryfinesandpaper                                        
-## nylonscouringpad                      21                 
-## cellulosekitchensponge                24               22
-## wovenstraw                            26               16
-## blockofstyrofoam                      25               25
-## unglazedceramictile                   12               24
-## velvet                                29               27
-## waxpaper                              29               29
-## glossypaintedwood                     27               28
-##                        cellulosekitchensponge wovenstraw blockofstyrofoam
-## brick                                                                    
-## cardboard                                                                
-## cork                                                                     
-## rubbereraser                                                             
-## felt                                                                     
-## leatherwallet                                                            
-## rigidplasticsheet                                                        
-## veryfinesandpaper                                                        
-## nylonscouringpad                                                         
-## cellulosekitchensponge                                                   
-## wovenstraw                                 19                            
-## blockofstyrofoam                           21         26                 
-## unglazedceramictile                        26         26               25
-## velvet                                     27         28               29
-## waxpaper                                   29         27               26
-## glossypaintedwood                          27         25               29
-##                        unglazedceramictile velvet waxpaper
-## brick                                                     
-## cardboard                                                 
-## cork                                                      
-## rubbereraser                                              
-## felt                                                      
-## leatherwallet                                             
-## rigidplasticsheet                                         
-## veryfinesandpaper                                         
-## nylonscouringpad                                          
-## cellulosekitchensponge                                    
-## wovenstraw                                                
-## blockofstyrofoam                                          
-## unglazedceramictile                                       
-## velvet                                  29                
-## waxpaper                                28     27         
-## glossypaintedwood                       26     26       12</code></pre>
+<div class="sourceCode" id="cb3969"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3969-1" data-line-number="1">d</a></code></pre></div>
+<pre><code>##    C  D  G  H  M  N  Q
+## D 16                  
+## G  9 19               
+## H 19 17 18            
+## M 19 18 19 11         
+## N 19 17 20  3  5      
+## Q 12  1 12 20 19 13   
+## W 20 16 19 16  3  8 17</code></pre>
 <p>This time, you’re looking for a <em>small</em> dissimilarity between
 your pair of letters:</p>
 
 <p>These, again, are smaller than most, though not the smallest
 overall. So, if you go this way, you need to assert that the
 corresponding number in your <code>dist</code> object is <em>small</em>.</p>
+</div>
+<div id="more-beer-please" class="section level2">
+<h2><span class="header-section-number">24.4</span> More beer please</h2>
 <p>Previously, you did a cluster analysis of
 ten brands of beer, as rated by 32 students. This time, we will do a
 non-metric multidimensional scaling of those same brands of beer. The
@@ -1935,13 +1680,13 @@ distances between the beers. Show your result.</li>
 </ol>
 <p>Solution</p>
 <p>First I should get rid of <code>MASS</code>, since we don’t need it here:</p>
-<div class="sourceCode" id="cb3979"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3979-1" data-line-number="1"><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>, <span class="dt">unload=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb3971"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3971-1" data-line-number="1"><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>, <span class="dt">unload=</span>T)</a></code></pre></div>
 <p>This is really a copy of last time. We need to transpose the data
 frame to get the beers in <em>rows</em> (<code>dist</code> works on
 distances between rows), then feed everything but the student IDs
 into <code>dist</code>:</p>
-<div class="sourceCode" id="cb3980"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3980-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/beer.txt&quot;</span></a>
-<a class="sourceLine" id="cb3980-2" data-line-number="2">beer=<span class="kw">read_table2</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb3972"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3972-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/beer.txt&quot;</span></a>
+<a class="sourceLine" id="cb3972-2" data-line-number="2">beer=<span class="kw">read_table2</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   student = col_character(),
@@ -1956,7 +1701,7 @@ into <code>dist</code>:</p>
 ##   SamAdams = col_integer(),
 ##   SierraN = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb3982"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3982-1" data-line-number="1">beer</a></code></pre></div>
+<div class="sourceCode" id="cb3974"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3974-1" data-line-number="1">beer</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 11
 ##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
 ##    &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;  &lt;int&gt;
@@ -1972,10 +1717,10 @@ into <code>dist</code>:</p>
 ## 10 S064          2     6     6      5       6        4        8      4
 ## # ... with 22 more rows, and 2 more variables: SamAdams &lt;int&gt;,
 ## #   SierraN &lt;int&gt;</code></pre>
-<div class="sourceCode" id="cb3984"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3984-1" data-line-number="1">d =<span class="st"> </span>beer <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3984-2" data-line-number="2">dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>student) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3984-3" data-line-number="3"><span class="kw">t</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3984-4" data-line-number="4"><span class="kw">dist</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3976"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3976-1" data-line-number="1">d =<span class="st"> </span>beer <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3976-2" data-line-number="2">dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>student) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3976-3" data-line-number="3"><span class="kw">t</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3976-4" data-line-number="4"><span class="kw">dist</span>()</a></code></pre></div>
 <p>I did it the funny-looking way. The cluster analysis question offers
 an alternative.</p>
 <ol start="2" style="list-style-type: lower-alpha">
@@ -1983,13 +1728,13 @@ an alternative.</p>
 beers. (Comment coming up in a moment.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3985"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3985-1" data-line-number="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
+<div class="sourceCode" id="cb3977"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3977-1" data-line-number="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;MASS&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
 ## 
 ##     select</code></pre>
-<div class="sourceCode" id="cb3988"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3988-1" data-line-number="1">beer<span class="fl">.1</span>=<span class="kw">isoMDS</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb3980"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3980-1" data-line-number="1">beer<span class="fl">.1</span>=<span class="kw">isoMDS</span>(d)</a></code></pre></div>
 <pre><code>## initial  value 13.344792 
 ## iter   5 value 10.855662
 ## iter  10 value 10.391446
@@ -1999,9 +1744,8 @@ beers. (Comment coming up in a moment.)</li>
 <li>Obtain the <code>stress</code> value of the map, and comment on it.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3990"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3990-1" data-line-number="1">beer<span class="fl">.1</span><span class="op">$</span>stress</a></code></pre></div>
+<div class="sourceCode" id="cb3982"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3982-1" data-line-number="1">beer<span class="fl">.1</span><span class="op">$</span>stress</a></code></pre></div>
 <pre><code>## [1] 10.32195</code></pre>
-<p>$</p>
 <p>The stress is around 10%, on the boundary between “good” and
 “fair”. It seems as if the map should be more or less worth
 using. (Insert your own hand-waving language here.)</p>
@@ -2017,13 +1761,13 @@ make a data frame first, and probably pipe it into the plot,
 thus. Don’t forget we have to get the names of the 10 beers, and
 not the 32 students! The names of the columns of the data frame
 include an identifier column for the students, so skip the first one:</p>
-<div class="sourceCode" id="cb3992"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3992-1" data-line-number="1">beer_names =<span class="st"> </span>beer <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>student) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()</a>
-<a class="sourceLine" id="cb3992-2" data-line-number="2">beer_names</a></code></pre></div>
+<div class="sourceCode" id="cb3984"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3984-1" data-line-number="1">beer_names =<span class="st"> </span>beer <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>student) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()</a>
+<a class="sourceLine" id="cb3984-2" data-line-number="2">beer_names</a></code></pre></div>
 <pre><code>##  [1] &quot;AnchorS&quot;  &quot;Bass&quot;     &quot;Becks&quot;    &quot;Corona&quot;   &quot;GordonB&quot;  &quot;Guinness&quot;
 ##  [7] &quot;Heineken&quot; &quot;PetesW&quot;   &quot;SamAdams&quot; &quot;SierraN&quot;</code></pre>
-<div class="sourceCode" id="cb3994"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3994-1" data-line-number="1"><span class="kw">data.frame</span>(beer<span class="fl">.1</span><span class="op">$</span>points,<span class="dt">beer=</span>beer_names) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3994-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>beer))<span class="op">+</span></a>
-<a class="sourceLine" id="cb3994-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3986"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3986-1" data-line-number="1"><span class="kw">data.frame</span>(beer<span class="fl">.1</span><span class="op">$</span>points,<span class="dt">beer=</span>beer_names) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3986-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>beer))<span class="op">+</span></a>
+<a class="sourceLine" id="cb3986-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-58-1.png" width="672"  /></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Find a pair of beers close together on your map. Are they
@@ -2032,7 +1776,7 @@ similar in terms of student ratings? Explain briefly.</li>
 <p>Solution</p>
 <p>I think Sam Adams and Gordon Biersch, right in the middle of the
 map. We can pull them out by name:</p>
-<div class="sourceCode" id="cb3995"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3995-1" data-line-number="1">beer <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(SamAdams,GordonB) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3987"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3987-1" data-line-number="1">beer <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(SamAdams,GordonB) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 2
 ##    SamAdams GordonB
 ##       &lt;int&gt;   &lt;int&gt;
@@ -2074,24 +1818,24 @@ are similar. Another way to show this is to make a scatterplot of
 them, and draw on it the line where the ratings are the same. Since
 the ratings are whole numbers, they are likely to be duplicated, so I
 “jitter” them as I plot them, to prevent overplotting:</p>
-<div class="sourceCode" id="cb3997"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3997-1" data-line-number="1"><span class="kw">ggplot</span>(beer,<span class="kw">aes</span>(<span class="dt">x=</span>SamAdams,<span class="dt">y=</span>GordonB))<span class="op">+</span><span class="kw">geom_jitter</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb3997-2" data-line-number="2"><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>,<span class="dt">slope=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3989"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3989-1" data-line-number="1"><span class="kw">ggplot</span>(beer,<span class="kw">aes</span>(<span class="dt">x=</span>SamAdams,<span class="dt">y=</span>GordonB))<span class="op">+</span><span class="kw">geom_jitter</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb3989-2" data-line-number="2"><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>,<span class="dt">slope=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/adkjalkjdsg-1.png" width="672"  /></p>
 <p>Are they close to the line, or not? Dunno. Maybe I should plot the
 ratings of some far-apart beers, and see whether it looks any
 different, for example <code>Becks</code> and <code>SierraN</code>:</p>
-<div class="sourceCode" id="cb3998"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3998-1" data-line-number="1"><span class="kw">ggplot</span>(beer,<span class="kw">aes</span>(<span class="dt">x=</span>Becks,<span class="dt">y=</span>SierraN))<span class="op">+</span><span class="kw">geom_jitter</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb3998-2" data-line-number="2"><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>,<span class="dt">slope=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3990"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3990-1" data-line-number="1"><span class="kw">ggplot</span>(beer,<span class="kw">aes</span>(<span class="dt">x=</span>Becks,<span class="dt">y=</span>SierraN))<span class="op">+</span><span class="kw">geom_jitter</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb3990-2" data-line-number="2"><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>,<span class="dt">slope=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/adkjalkjdsh-1.png" width="672"  /></p>
 <p>Not much. I was expecting something a lot more impressive. Another way
 is to summarize the rating <em>differences</em> for the pairs of beers:</p>
-<div class="sourceCode" id="cb3999"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3999-1" data-line-number="1">diff=<span class="kw">with</span>(beer,SamAdams<span class="op">-</span>GordonB) </a>
-<a class="sourceLine" id="cb3999-2" data-line-number="2"><span class="kw">summary</span>(diff)</a></code></pre></div>
+<div class="sourceCode" id="cb3991"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3991-1" data-line-number="1">diff=<span class="kw">with</span>(beer,SamAdams<span class="op">-</span>GordonB) </a>
+<a class="sourceLine" id="cb3991-2" data-line-number="2"><span class="kw">summary</span>(diff)</a></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ## -3.0000 -1.0000  0.0000  0.1562  1.0000  6.0000</code></pre>
 <p>and</p>
-<div class="sourceCode" id="cb4001"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4001-1" data-line-number="1">diff=<span class="kw">with</span>(beer,Becks<span class="op">-</span>SierraN)</a>
-<a class="sourceLine" id="cb4001-2" data-line-number="2"><span class="kw">summary</span>(diff)</a></code></pre></div>
+<div class="sourceCode" id="cb3993"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3993-1" data-line-number="1">diff=<span class="kw">with</span>(beer,Becks<span class="op">-</span>SierraN)</a>
+<a class="sourceLine" id="cb3993-2" data-line-number="2"><span class="kw">summary</span>(diff)</a></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   -8.00   -4.00   -1.50   -1.75    0.00    3.00</code></pre>
 <p>Now we see something: two beers that are similar ought to have a
@@ -2118,10 +1862,15 @@ the centre, are really very close to any of the others.</p>
 forcing the clustering to happen, whether it was really there or
 not. We haven’t seen a test for the “significance” of clusters, so
 the clusters we found may not mean very much.</p>
+</div>
+<div id="feeling-similar-again" class="section level2">
+<h2><span class="header-section-number">24.5</span> Feeling similar, again</h2>
 <p>Previously, we looked at an experiment about which objects feel similar to one another and which ones feel different.</p>
 <p>30 subjects were each
-given 17 different objects to feel, for example ``inner surface of
-pine bark’’, “rubber eraser” and “nylon scouring pad”. The
+given 17 different objects to feel, for example
+“inner surface of pine bark”,
+“rubber eraser” and
+“nylon scouring pad”. The
 subjects had to group the objects into a maximum of 8 groups such that
 the objects within a group felt similar, and the ones in different
 groups felt different.
@@ -2146,11 +1895,11 @@ before on R Studio. Correct is all I care about.)</li>
 </ol>
 <p>Solution</p>
 <p>Copied and pasted from last time:</p>
-<div class="sourceCode" id="cb4003"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4003-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt&quot;</span></a>
-<a class="sourceLine" id="cb4003-2" data-line-number="2">stimuli=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a>
-<a class="sourceLine" id="cb4003-3" data-line-number="3">objects=stimuli<span class="op">$</span>X1</a>
-<a class="sourceLine" id="cb4003-4" data-line-number="4"><span class="kw">names</span>(stimuli)=<span class="kw">c</span>(<span class="st">&quot;object&quot;</span>,objects)</a>
-<a class="sourceLine" id="cb4003-5" data-line-number="5">stimuli</a></code></pre></div>
+<div class="sourceCode" id="cb3995"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3995-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt&quot;</span></a>
+<a class="sourceLine" id="cb3995-2" data-line-number="2">stimuli=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a>
+<a class="sourceLine" id="cb3995-3" data-line-number="3">objects=stimuli<span class="op">$</span>X1</a>
+<a class="sourceLine" id="cb3995-4" data-line-number="4"><span class="kw">names</span>(stimuli)=<span class="kw">c</span>(<span class="st">&quot;object&quot;</span>,objects)</a>
+<a class="sourceLine" id="cb3995-5" data-line-number="5">stimuli</a></code></pre></div>
 <pre><code>## # A tibble: 17 x 18
 ##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
 ##    &lt;chr&gt;             &lt;int&gt; &lt;int&gt;     &lt;int&gt; &lt;int&gt;        &lt;int&gt; &lt;int&gt;
@@ -2176,13 +1925,12 @@ before on R Studio. Correct is all I care about.)</li>
 ## #   nylonscouringpad &lt;int&gt;, cellulosekitchensponge &lt;int&gt;,
 ## #   wovenstraw &lt;int&gt;, blockofstyrofoam &lt;int&gt;, unglazedceramictile &lt;int&gt;,
 ## #   velvet &lt;int&gt;, waxpaper &lt;int&gt;, glossypaintedwood &lt;int&gt;</code></pre>
-<p>$ %$ %$</p>
 <p>That gets a data frame with the right column names. Then:</p>
-<div class="sourceCode" id="cb4005"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4005-1" data-line-number="1">d =<span class="st"> </span>stimuli <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.dist</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3997"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3997-1" data-line-number="1">d =<span class="st"> </span>stimuli <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.dist</span>()</a></code></pre></div>
 <p>and just to check:</p>
-<div class="sourceCode" id="cb4006"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4006-1" data-line-number="1">w=<span class="kw">getOption</span>(<span class="st">&quot;width&quot;</span>)</a>
-<a class="sourceLine" id="cb4006-2" data-line-number="2"><span class="kw">options</span>(<span class="dt">width=</span><span class="dv">132</span>)</a>
-<a class="sourceLine" id="cb4006-3" data-line-number="3">d</a></code></pre></div>
+<div class="sourceCode" id="cb3998"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3998-1" data-line-number="1">w=<span class="kw">getOption</span>(<span class="st">&quot;width&quot;</span>)</a>
+<a class="sourceLine" id="cb3998-2" data-line-number="2"><span class="kw">options</span>(<span class="dt">width=</span><span class="dv">132</span>)</a>
+<a class="sourceLine" id="cb3998-3" data-line-number="3">d</a></code></pre></div>
 <pre><code>##                        innersurfaceofpinebark brick cardboard cork rubbereraser felt leatherwallet rigidplasticsheet
 ## brick                                      22                                                                       
 ## cardboard                                  23    27                                                                 
@@ -2234,19 +1982,19 @@ before on R Studio. Correct is all I care about.)</li>
 ## velvet                                
 ## waxpaper                   27         
 ## glossypaintedwood          26       12</code></pre>
-<div class="sourceCode" id="cb4008"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4008-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">width=</span>w)</a></code></pre></div>
+<div class="sourceCode" id="cb4000"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4000-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">width=</span>w)</a></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Obtain a non-metric multidimensional scaling map of the
 objects. (No plotting or comments yet.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4009"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4009-1" data-line-number="1">stimuli<span class="fl">.1</span>=<span class="kw">isoMDS</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb4001"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4001-1" data-line-number="1">stimuli<span class="fl">.1</span>=<span class="kw">isoMDS</span>(d)</a></code></pre></div>
 <pre><code>## initial  value 25.537169 
 ## iter   5 value 20.521473
 ## final  value 20.216103 
 ## converged</code></pre>
 <p>I’m going to remind myself of what this has in it:</p>
-<div class="sourceCode" id="cb4011"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4011-1" data-line-number="1"><span class="kw">names</span>(stimuli<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4003"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4003-1" data-line-number="1"><span class="kw">names</span>(stimuli<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;points&quot; &quot;stress&quot;</code></pre>
 <p>This is rather like running <code>cmdscale</code> with <code>eig=T</code>: a
 thing called <code>points</code> with coordinates to plot, and a measure
@@ -2258,9 +2006,8 @@ distances in the data, and comment on that number.</li>
 </ol>
 <p>Solution</p>
 <p>What you need here is the “stress”:</p>
-<div class="sourceCode" id="cb4013"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4013-1" data-line-number="1">stimuli<span class="fl">.1</span><span class="op">$</span>stress</a></code></pre></div>
+<div class="sourceCode" id="cb4005"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4005-1" data-line-number="1">stimuli<span class="fl">.1</span><span class="op">$</span>stress</a></code></pre></div>
 <pre><code>## [1] 20.2161</code></pre>
-<p>$</p>
 <p>This is just over 20%, which is described in the notes as
 “poor”. We should thus be skeptical about the map that this produces.</p>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -2272,8 +2019,8 @@ point with its (full) object name, sized suitably.</li>
 names. I’m going to plot the names smaller). I am <em>not</em>
 naming this data frame <code>d</code>, in an attempt to avoid
 overwriting things I want to keep:</p>
-<div class="sourceCode" id="cb4015"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4015-1" data-line-number="1">stimuli.<span class="fl">1.</span>d=<span class="kw">data.frame</span>(stimuli<span class="fl">.1</span><span class="op">$</span>points,<span class="dt">names=</span>objects)</a>
-<a class="sourceLine" id="cb4015-2" data-line-number="2">stimuli.<span class="fl">1.</span>d</a></code></pre></div>
+<div class="sourceCode" id="cb4007"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4007-1" data-line-number="1">stimuli.<span class="fl">1.</span>d=<span class="kw">data.frame</span>(stimuli<span class="fl">.1</span><span class="op">$</span>points,<span class="dt">names=</span>objects)</a>
+<a class="sourceLine" id="cb4007-2" data-line-number="2">stimuli.<span class="fl">1.</span>d</a></code></pre></div>
 <pre><code>##                                 X1          X2                  names
 ## innersurfaceofpinebark  -1.5343296   1.3163495 innersurfaceofpinebark
 ## brick                  -11.1198228   4.1255022                  brick
@@ -2292,15 +2039,14 @@ overwriting things I want to keep:</p>
 ## velvet                   7.0712701  15.3712514                 velvet
 ## waxpaper                14.2695604  -0.7584453               waxpaper
 ## glossypaintedwood       11.4681889   2.2406642      glossypaintedwood</code></pre>
-<p>$ %$ %$</p>
 <p>The repeated stimuli down the left are row names, but since they’re
 row names, we won’t be able to use them in
 <code>ggplot</code>.</p>
 <p>Remember that we are turning a matrix and a column into a data frame,
 so we need either the more forgiving <code>data.frame</code>, or to turn
 <code>points</code> into a data frame first, which would go like this:</p>
-<div class="sourceCode" id="cb4017"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4017-1" data-line-number="1"><span class="kw">as_tibble</span>(stimuli<span class="fl">.1</span><span class="op">$</span>points) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4017-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">name=</span>objects)</a></code></pre></div>
+<div class="sourceCode" id="cb4009"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4009-1" data-line-number="1"><span class="kw">as_tibble</span>(stimuli<span class="fl">.1</span><span class="op">$</span>points) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4009-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">name=</span>objects)</a></code></pre></div>
 <pre><code>## # A tibble: 17 x 3
 ##         V1      V2 name                  
 ##      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                 
@@ -2321,19 +2067,17 @@ so we need either the more forgiving <code>data.frame</code>, or to turn
 ## 15   7.07   15.4   velvet                
 ## 16  14.3    -0.758 waxpaper              
 ## 17  11.5     2.24  glossypaintedwood</code></pre>
-<p>$ %$ %$</p>
 <p>This time, the columns are called <code>V1</code> and <code>V2</code>, since
 that’s what <code>as_tibble</code> does. Also note the slightly different
 look: fewer decimals, since displaying a tibble rounds numerical
 things to three significant digits.
-$ %$ %$</p>
-<p>Back to my data frame <code>stimuli.1.d</code>.
+Back to my data frame <code>stimuli.1.d</code>.
 The points have acquired names <code>X1</code> and <code>X2</code>, as usual,
 so we have all we need:</p>
-<div class="sourceCode" id="cb4019"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4019-1" data-line-number="1"><span class="kw">ggplot</span>(stimuli.<span class="fl">1.</span>d,<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
-<a class="sourceLine" id="cb4019-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb4019-3" data-line-number="3"><span class="kw">geom_text_repel</span>(<span class="dt">size=</span><span class="dv">2</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb4019-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4011"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4011-1" data-line-number="1"><span class="kw">ggplot</span>(stimuli.<span class="fl">1.</span>d,<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
+<a class="sourceLine" id="cb4011-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb4011-3" data-line-number="3"><span class="kw">geom_text_repel</span>(<span class="dt">size=</span><span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb4011-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-70-1.png" width="672"  /></p>
 <p>I think the full names are good with the text this small.</p>
 <p>Actually, this came out a lot like the metric multidimensional scaling
@@ -2384,13 +2128,13 @@ in real life and on the map won’t correspond very well. That’s
 what I want you to say.
 Extra: another way to assess this is with a Shepard.)
 diagram. That would go like this:</p>
-<div class="sourceCode" id="cb4020"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4020-1" data-line-number="1">stimuli.sh=<span class="kw">Shepard</span>(d,stimuli<span class="fl">.1</span><span class="op">$</span>points)</a>
-<a class="sourceLine" id="cb4020-2" data-line-number="2"><span class="kw">names</span>(stimuli.sh)</a></code></pre></div>
+<div class="sourceCode" id="cb4012"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4012-1" data-line-number="1">stimuli.sh=<span class="kw">Shepard</span>(d,stimuli<span class="fl">.1</span><span class="op">$</span>points)</a>
+<a class="sourceLine" id="cb4012-2" data-line-number="2"><span class="kw">names</span>(stimuli.sh)</a></code></pre></div>
 <pre><code>## [1] &quot;x&quot;  &quot;y&quot;  &quot;yf&quot;</code></pre>
 <p>In here, we plot the actual distances <code>x</code> against the map
 distances <code>y</code>, making a data frame first:</p>
-<div class="sourceCode" id="cb4022"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4022-1" data-line-number="1"><span class="kw">with</span>(stimuli.sh,<span class="kw">data.frame</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4022-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4014"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4014-1" data-line-number="1"><span class="kw">with</span>(stimuli.sh,<span class="kw">data.frame</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4014-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-72-1.png" width="672"  /></p>
 <p>The actual distances are on the <span class="math inline">\(x\)</span>-axis and the map distances are on
 the <span class="math inline">\(y\)</span> axis, as far as I can tell (the help file is not clear on
@@ -2408,7 +2152,7 @@ something that will help you decide, and explain what you think.</li>
 <p>The calculation part is to figure out the stress value for a
 three-dimensional map, and compare it with the 20% that we had
 before. <code>k=3</code> gets the three dimensions:</p>
-<div class="sourceCode" id="cb4023"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4023-1" data-line-number="1"><span class="kw">isoMDS</span>(d,<span class="dt">k=</span><span class="dv">3</span>)<span class="op">$</span>stress</a></code></pre></div>
+<div class="sourceCode" id="cb4015"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4015-1" data-line-number="1"><span class="kw">isoMDS</span>(d,<span class="dt">k=</span><span class="dv">3</span>)<span class="op">$</span>stress</a></code></pre></div>
 <pre><code>## initial  value 14.934110 
 ## iter   5 value 11.280474
 ## iter  10 value 10.094796
@@ -2427,15 +2171,16 @@ might be looking for a bigger improvement. Either is good, as far as
 I’m concerned, as long as your answer does something to balance the
 smaller stress value with the difficulty of interpreting it.</p>
 <p>The kind of <code>rgl</code> code you’ll need is something like this (not tested):</p>
-<div class="sourceCode" id="cb4026"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4026-1" data-line-number="1"><span class="kw">library</span>(rgl)</a>
-<a class="sourceLine" id="cb4026-2" data-line-number="2">stimuli<span class="fl">.2</span>=<span class="kw">isoMDS</span>(d,<span class="dt">k=</span><span class="dv">3</span>)<span class="op">$</span>points</a>
-<a class="sourceLine" id="cb4026-3" data-line-number="3"><span class="kw">plot3d</span>(stimuli<span class="fl">.2</span>)</a>
-<a class="sourceLine" id="cb4026-4" data-line-number="4"><span class="kw">text3d</span>(stimuli<span class="fl">.2</span>,<span class="dt">text=</span>object.abb)</a></code></pre></div>
+<div class="sourceCode" id="cb4018"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4018-1" data-line-number="1"><span class="kw">library</span>(rgl)</a>
+<a class="sourceLine" id="cb4018-2" data-line-number="2">stimuli<span class="fl">.2</span>=<span class="kw">isoMDS</span>(d,<span class="dt">k=</span><span class="dv">3</span>)<span class="op">$</span>points</a>
+<a class="sourceLine" id="cb4018-3" data-line-number="3"><span class="kw">plot3d</span>(stimuli<span class="fl">.2</span>)</a>
+<a class="sourceLine" id="cb4018-4" data-line-number="4"><span class="kw">text3d</span>(stimuli<span class="fl">.2</span>,<span class="dt">text=</span>object.abb)</a></code></pre></div>
 <p>What you should find, looking at this (try it!) is that objects close
 together in this 3-dimensional place are more nearly close together in
 actuality as well, because of the in my opinion notably smaller stress
 value.</p>
 
+</div>
 </div>
 <p style="text-align: center;">
 <a href="cluster-analysis.html"><button class="btn btn-default">Previous</button></a>

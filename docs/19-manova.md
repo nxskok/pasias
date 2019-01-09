@@ -208,7 +208,10 @@ ggplot(simple,aes(x=y1,y=y2,colour=group))+geom_point()
 ```
 
 <img src="19-manova_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
-$ 
+
+
+    
+
 
 (e) How is it that group `b` is not distinguishable on
 either `y1` or `y2` individually (from the ANOVAs),

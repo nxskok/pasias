@@ -2730,7 +2730,9 @@ new
 ## 15 trafford >2.3  f     
 ## 16 trafford >2.3  m
 ```
-$ %$
+
+ 
+
 If you predict this in the model *without* `Gender`, you'll get
 the following:
 
@@ -4037,7 +4039,8 @@ preps
 ```
 ## [1] "Medium rare" "Rare"        "Medium"      "Medium Well" "Well"
 ```
-$ %$ %$ %$
+
+     
 
 This is almost the right order (`distinct` uses the order in
 the data frame). We just need to switch the first two around, and then
@@ -4102,8 +4105,6 @@ steak = steak %>% mutate(steak_prep_ord=ordered(steak_prep,preps1))
  
 or using one of the other `preps` vectors containing the levels
 in the correct order.
-$ %$ %$
-
 As far as `polr` is concerned,
 it doesn't matter whether I start at `Rare` and go "up", or
 start at `Well` and go "down". So if you do it the other way
