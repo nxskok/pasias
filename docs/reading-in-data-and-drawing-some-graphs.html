@@ -121,6 +121,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">2.4</span> Reading files different ways</a></li>
 </ul></li>
 <li class="has-sub"><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
 <li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
@@ -336,7 +337,7 @@ into a “tibble”.</li>
 </ol>
 <p>Solution</p>
 <p>Start with this (almost always):</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
@@ -350,8 +351,8 @@ will be <code>read_delim</code>. Put the URL as the first thing in
 <code>read_delim</code>, or (better) define it into a variable
 first:
 <label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">I say <em>better</em> because otherwise the read line gets rather long. This way you read it as <em>the URL is some long thing that I don’t care about especially, and I what I need to do is to read the data from that URL, separated by spaces.</em></span></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt&quot;</span></a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">juice=<span class="kw">read_delim</span>(url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt&quot;</span></a>
+<a class="sourceLine" id="cb50-2" data-line-number="2">juice=<span class="kw">read_delim</span>(url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   run = col_integer(),
@@ -378,7 +379,7 @@ a “tibble”, which is what <code>read_delim</code> reads in,
 you’ll only actually see the first 10 lines, but it will tell
 you how many lines there are altogether, and you can click on
 the appropriate thing to see the rest of it.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">juice  </a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">juice  </a></code></pre></div>
 <pre><code>## # A tibble: 24 x 3
 ##      run sweetness pectin
 ##    &lt;int&gt;     &lt;dbl&gt;  &lt;int&gt;
@@ -419,7 +420,7 @@ with file <code>a.txt</code> thus:
 <code>timinput{</code>.txt}<br />
 you could read the same data but call the columns <code>x</code> and
 <code>y</code> thus:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">read_delim</span>(<span class="st">&quot;a.txt&quot;</span>,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>),<span class="dt">skip=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw">read_delim</span>(<span class="st">&quot;a.txt&quot;</span>,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>),<span class="dt">skip=</span><span class="dv">1</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   x = col_integer(),
@@ -446,7 +447,7 @@ the “what to plot” is the <span class="math inline">\(x\)</span>-axis and <s
 with the response on the <span class="math inline">\(y\)</span>-axis (starting with a data frame
 to get the variables from), and the “how to plot” is
 <code>geom_point</code> to plot the points:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">ggplot</span>(juice,<span class="kw">aes</span>(<span class="dt">x=</span>pectin,<span class="dt">y=</span>sweetness))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">ggplot</span>(juice,<span class="kw">aes</span>(<span class="dt">x=</span>pectin,<span class="dt">y=</span>sweetness))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-8-1.png" width="672"  /></p>
 <p>It looks to me as if there is a negative relationship: as pectin goes
 up, sweetness tends to go <em>down</em>. The trend appears to go top
@@ -455,7 +456,7 @@ left to bottom right.</p>
 apparent trend is caused by those two observations bottom right with
 pectin over 350. If you take those away, the trend seems to me to be a
 lot less convincing. As an extra, you could add a smooth trend to the plot:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">ggplot</span>(juice,<span class="kw">aes</span>(<span class="dt">x=</span>pectin,<span class="dt">y=</span>sweetness))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="kw">ggplot</span>(juice,<span class="kw">aes</span>(<span class="dt">x=</span>pectin,<span class="dt">y=</span>sweetness))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-9-1.png" width="672"  /></p>
 <p>The smooth trend is kind of downhill, but not very convincing.</p>
@@ -475,8 +476,8 @@ rows. Are there?</li>
 </ol>
 <p>Solution</p>
 <p>Read directly from the URL, most easily:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/soap.txt&quot;</span></a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">soap=<span class="kw">read_delim</span>(url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/soap.txt&quot;</span></a>
+<a class="sourceLine" id="cb60-2" data-line-number="2">soap=<span class="kw">read_delim</span>(url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   case = col_integer(),
@@ -484,7 +485,7 @@ rows. Are there?</li>
 ##   speed = col_integer(),
 ##   line = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">soap</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">soap</a></code></pre></div>
 <pre><code>## # A tibble: 27 x 4
 ##     case scrap speed line 
 ##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;
@@ -506,7 +507,7 @@ correctly deduced to be text.</p>
 bins for your histogram.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672"  /></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Comment briefly on the shape of the histogram. Is it approximately
@@ -522,7 +523,7 @@ call it anything other than symmetric.
 Having said that (this is going beyond the question), the way a
 histogram looks can depend on the bins you choose to draw it
 with. This is 8 bins rather than 10:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">8</span>)</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672"  /></p>
 <p>The middle low-frequency bin has gone, and this one just looks
 symmetric, with a kind of “flat top”.</p>
@@ -531,7 +532,7 @@ symmetric, with a kind of “flat top”.</p>
 production line.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>line,<span class="dt">y=</span>scrap))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>line,<span class="dt">y=</span>scrap))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
 <p>One categorical, one quantitative variable, so boxplots make sense.</p>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -556,7 +557,7 @@ You might be wondering whether the medians, or means, since
 there is no serious skewness here and definitely no outliers,
 are “significantly different”. This is inference, which we
 will come to later, but a preview looks like this:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">t.test</span>(scrap<span class="op">~</span>line,<span class="dt">data=</span>soap)</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="kw">t.test</span>(scrap<span class="op">~</span>line,<span class="dt">data=</span>soap)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -579,7 +580,7 @@ different production lines being mixed together? One way to understand
 that is to have two separate histograms, one for each line, side by
 side, which is what facetting does. There is an extra wrinkle here
 that I explain afterwards:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)<span class="op">+</span><span class="kw">facet_grid</span>(line<span class="op">~</span>.)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>scrap))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)<span class="op">+</span><span class="kw">facet_grid</span>(line<span class="op">~</span>.)</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672"  /></p>
 <p>I could have used <code>facet_wrap</code>, but that would have put the
 histograms side by side, and I wanted them one above the other (for
@@ -613,7 +614,7 @@ yet. Draw a scatter plot with <code>scrap</code> on the <span class="math inline
 </ol>
 <p>Solution</p>
 <p>Same mechanism as before:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672"  /></p>
 <ol start="7" style="list-style-type: lower-alpha">
 <li>What do you think is the most important conclusion from
@@ -642,7 +643,7 @@ line. <code>ggplot</code> makes that easy: you add a
 <label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote">If you are concerned about the spelling: the guy who wrote ggplot is from New Zealand, where they spell <em>colour</em> the same way we do. However, if you want to use <em>color</em>, that works too.</span> to say what you want to
 distinguish by colour. This is two quantitative variables and one
 categorical variable, if you want to think of it that way:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap,<span class="dt">colour=</span>line))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap,<span class="dt">colour=</span>line))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-17-1.png" width="672"  /></p>
 <p>Notice that we get a legend, automatically.</p>
 <p>What is interesting about this one is the red dots are mostly at the
@@ -652,8 +653,8 @@ there is a difference between lines.</p>
 <p>I want to show you one more embellishment, which is to put the
 regression lines on the plot for each group separately. This is where
 <code>ggplot</code> is so nice, since I just have to add one thing:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap,<span class="dt">colour=</span>line))<span class="op">+</span></a>
-<a class="sourceLine" id="cb46-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap,<span class="dt">colour=</span>line))<span class="op">+</span></a>
+<a class="sourceLine" id="cb72-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672"  /></p>
 <p>The points and lines have come out in different colours, without our
 having to think too hard.</p>
@@ -671,10 +672,10 @@ more raw material, which will eat into your profits (from one angle),
 but you will also have more bars of soap to sell.</p>
 <p>Here’s another way to see the same thing. I’m <em>definitely</em> not
 expecting you to follow the code, but you can admire the result!</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">soap2=soap <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>line)</a>
-<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap))<span class="op">+</span></a>
-<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="kw">geom_point</span>(<span class="dt">data=</span>soap2,<span class="dt">colour=</span><span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb47-4" data-line-number="4"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">colour=</span>line))<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>line)</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1">soap2=soap <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>line)</a>
+<a class="sourceLine" id="cb73-2" data-line-number="2"><span class="kw">ggplot</span>(soap,<span class="kw">aes</span>(<span class="dt">x=</span>speed,<span class="dt">y=</span>scrap))<span class="op">+</span></a>
+<a class="sourceLine" id="cb73-3" data-line-number="3"><span class="kw">geom_point</span>(<span class="dt">data=</span>soap2,<span class="dt">colour=</span><span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb73-4" data-line-number="4"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">colour=</span>line))<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>line)</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 $</p>
 <p>The idea is that we plot all the points in grey (to
@@ -704,8 +705,8 @@ below, either,
 but I would like you to try and get the logic. What we do is a
 regression predicting <code>scrap</code> from <em>two</em> things:
 <code>speed</code> and production <code>line</code>. The results we get are these:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">scrap<span class="fl">.1</span>=<span class="kw">lm</span>(scrap<span class="op">~</span>speed<span class="op">+</span>line,<span class="dt">data=</span>soap)</a>
-<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="kw">summary</span>(scrap<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1">scrap<span class="fl">.1</span>=<span class="kw">lm</span>(scrap<span class="op">~</span>speed<span class="op">+</span>line,<span class="dt">data=</span>soap)</a>
+<a class="sourceLine" id="cb74-2" data-line-number="2"><span class="kw">summary</span>(scrap<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = scrap ~ speed + line, data = soap)
@@ -765,8 +766,8 @@ open as a spreadsheet, which is not really very helpful, since
 then it is not clear what to do with it. You could, I suppose,
 save it and upload it to R Studio Cloud, but it requires much less
 brainpower to open it directly from the URL:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/global.csv&quot;</span></a>
-<a class="sourceLine" id="cb50-2" data-line-number="2">shipments=<span class="kw">read_csv</span>(url)</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1">url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/global.csv&quot;</span></a>
+<a class="sourceLine" id="cb76-2" data-line-number="2">shipments=<span class="kw">read_csv</span>(url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   warehouse = col_character(),
@@ -775,7 +776,7 @@ brainpower to open it directly from the URL:</p>
 ## )</code></pre>
 <p>If you display your data frame and it looks like this, you are good
 (you can give the data frame any name):</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">shipments</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1">shipments</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 3
 ##    warehouse  size  cost
 ##    &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;
@@ -802,7 +803,7 @@ depends on the shipment’s size.</li>
 belongs on the <span class="math inline">\(y\)</span>-axis. To make the plot, <code>ggplot</code> with an
 <code>x=</code> and a <code>y=</code> in the <code>aes</code> (the “what to plot”
 part), and a <code>geom_point()</code> after (the “how to plot it”):</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw">ggplot</span>(shipments,<span class="kw">aes</span>(<span class="dt">x=</span>size,<span class="dt">y=</span>cost))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="kw">ggplot</span>(shipments,<span class="kw">aes</span>(<span class="dt">x=</span>size,<span class="dt">y=</span>cost))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-23-1.png" width="672"  /></p>
 <p>As a matter of coding, there are usually <em>two</em> brackets to close
 after the <code>aes</code>, the one that begins the <code>ggplot</code> and
@@ -837,7 +838,7 @@ graph to support your answer.</li>
 on <code>size</code>, since it cannot depend on <code>cost</code>. So we
 have one quantitative variable <code>size</code> and one categorical
 variable <code>warehouse</code>, which suggests drawing boxplots:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">ggplot</span>(shipments,<span class="kw">aes</span>(<span class="dt">x=</span>warehouse,<span class="dt">y=</span>size))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1"><span class="kw">ggplot</span>(shipments,<span class="kw">aes</span>(<span class="dt">x=</span>warehouse,<span class="dt">y=</span>size))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-24-1.png" width="672"  /></p>
 <p>Well, there’s the answer right there. When the shipment has small
 <code>size</code>, it goes to warehouse A, and when it’s large, it goes to
@@ -849,8 +850,8 @@ about 225, and the smallest B, about 290, will do.)</p>
 <p>Another way to think about this is to add something to the scatterplot
 you drew before. The obvious thing is to make the two warehouses
 different colours:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="kw">ggplot</span>(shipments,<span class="kw">aes</span>(<span class="dt">x=</span>size,<span class="dt">y=</span>cost,<span class="dt">colour=</span>warehouse))<span class="op">+</span></a>
-<a class="sourceLine" id="cb56-2" data-line-number="2"><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" data-line-number="1"><span class="kw">ggplot</span>(shipments,<span class="kw">aes</span>(<span class="dt">x=</span>size,<span class="dt">y=</span>cost,<span class="dt">colour=</span>warehouse))<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-2" data-line-number="2"><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="02-reading-in_files/figure-html/unnamed-chunk-25-1.png" width="672"  /></p>
 <p>As a point of technique, you can split lines of code to make them fit
 on your screen. You can do this as long as , so that R knows more is to

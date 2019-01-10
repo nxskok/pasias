@@ -16,13 +16,16 @@ rmds: carp.Rmd socwork.Rmd pinetrees.Rmd jays-dplyr.Rmd tomatoes.Rmd migraine.Rm
     cornseed.Rmd athletes-d.Rmd fruits.Rmd species.Rmd beer.Rmd seabed.Rmd\
     swiss-cluster.Rmd carc.Rmd decathlon.Rmd pittsburgh.Rmd college-plans.Rmd\
     vote.Rmd airpollution.Rmd weather_2014.Rmd corrmat.Rmd ipip.Rmd\
-    wisconsin.Rmd stimuli.Rmd letterrec.Rmd beermds.Rmd stimuli2.Rmd ais-km.Rmd
+    wisconsin.Rmd stimuli.Rmd letterrec.Rmd beermds.Rmd stimuli2.Rmd ais-km.Rmd\
+    different-ways.Rmd
 %.Rmd: ~/teaching/d29/exams/%.Rnw convert.pl
 	perl convert.pl $< > $@
 all: index.Rmd
 	Rscript -e "bookdown::render_book('index.Rmd')"
 pdf: index.Rmd
 	Rscript -e "bookdown::render_book(\"index.Rmd\", output_format=\"bookdown::tufte_book2\")"
+ch01: index.Rmd
+	Rscript -e "bookdown::preview_chapter('01-getting-used.Rmd')"
 ch10: index.Rmd
 	Rscript -e "bookdown::preview_chapter('10-analysis-of-variance.Rmd')"
 ch15: index.Rmd

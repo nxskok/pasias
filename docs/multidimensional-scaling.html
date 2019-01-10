@@ -121,6 +121,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">2.4</span> Reading files different ways</a></li>
 </ul></li>
 <li class="has-sub"><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a><ul>
 <li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
@@ -318,12 +319,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="multidimensional-scaling" class="section level1">
 <h1><span class="header-section-number">Chapter 24</span> Multidimensional Scaling</h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb3870"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3870-1" data-line-number="1"><span class="kw">library</span>(ggbiplot)</a></code></pre></div>
+<div class="sourceCode" id="cb3896"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3896-1" data-line-number="1"><span class="kw">library</span>(ggbiplot)</a></code></pre></div>
 <pre><code>## Loading required package: ggplot2</code></pre>
 <pre><code>## Loading required package: plyr</code></pre>
 <pre><code>## Loading required package: scales</code></pre>
 <pre><code>## Loading required package: grid</code></pre>
-<div class="sourceCode" id="cb3875"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3875-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb3901"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3901-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ tibble  1.4.2     ✔ purrr   0.2.5
 ## ✔ tidyr   0.8.1     ✔ dplyr   0.7.8
@@ -343,7 +344,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## ✖ dplyr::rename()     masks plyr::rename()
 ## ✖ dplyr::summarise()  masks plyr::summarise()
 ## ✖ dplyr::summarize()  masks plyr::summarize()</code></pre>
-<div class="sourceCode" id="cb3879"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3879-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a></code></pre></div>
+<div class="sourceCode" id="cb3905"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3905-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a></code></pre></div>
 <div id="making-a-map-of-wisconsin" class="section level2">
 <h2><span class="header-section-number">24.1</span> Making a map of Wisconsin</h2>
 <p>The file
@@ -358,8 +359,8 @@ distances. Display your <code>dist</code> object. Probably, displaying
 the data that you read in is a good idea also.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3880"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3880-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt&quot;</span></a>
-<a class="sourceLine" id="cb3880-2" data-line-number="2">wisc=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb3906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3906-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt&quot;</span></a>
+<a class="sourceLine" id="cb3906-2" data-line-number="2">wisc=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   location = col_character(),
@@ -376,7 +377,7 @@ the data that you read in is a good idea also.</li>
 ##   St.Paul = col_integer(),
 ##   Chicago = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb3882"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3882-1" data-line-number="1">wisc</a></code></pre></div>
+<div class="sourceCode" id="cb3908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3908-1" data-line-number="1">wisc</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 13
 ##    location Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee
 ##    &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;         &lt;int&gt;   &lt;int&gt;      &lt;int&gt;     &lt;int&gt;
@@ -403,9 +404,9 @@ rid of before we make a <code>dist</code> object using <code>as.dist</code>
 (since what we read in is already distances). The columns are also the
 names of the places, so we won’t lose anything by getting rid of the
 <code>location</code> column:</p>
-<div class="sourceCode" id="cb3884"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3884-1" data-line-number="1">d =<span class="st"> </span>wisc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>location) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3884-2" data-line-number="2"><span class="kw">as.dist</span>()</a>
-<a class="sourceLine" id="cb3884-3" data-line-number="3">d</a></code></pre></div>
+<div class="sourceCode" id="cb3910"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3910-1" data-line-number="1">d =<span class="st"> </span>wisc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>location) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3910-2" data-line-number="2"><span class="kw">as.dist</span>()</a>
+<a class="sourceLine" id="cb3910-3" data-line-number="3">d</a></code></pre></div>
 <pre><code>##               Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee
 ## Beloit             130                                                  
 ## Fort.Atkinson       98     33                                           
@@ -438,8 +439,8 @@ a different way.)</li>
 <p>Solution</p>
 <p>The <code>location</code> column of the data frame you read in
 from the file:</p>
-<div class="sourceCode" id="cb3886"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3886-1" data-line-number="1">cities=wisc<span class="op">$</span>location</a>
-<a class="sourceLine" id="cb3886-2" data-line-number="2">cities</a></code></pre></div>
+<div class="sourceCode" id="cb3912"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3912-1" data-line-number="1">cities=wisc<span class="op">$</span>location</a>
+<a class="sourceLine" id="cb3912-2" data-line-number="2">cities</a></code></pre></div>
 <pre><code>##  [1] &quot;Appleton&quot;      &quot;Beloit&quot;        &quot;Fort.Atkinson&quot; &quot;Madison&quot;      
 ##  [5] &quot;Marshfield&quot;    &quot;Milwaukee&quot;     &quot;Monroe&quot;        &quot;Superior&quot;     
 ##  [9] &quot;Wausau&quot;        &quot;Dubuque&quot;       &quot;St.Paul&quot;       &quot;Chicago&quot;</code></pre>
@@ -449,7 +450,7 @@ obtain a two-dimensional representation of the cities. (You
 don’t need to look at the results yet.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3888"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3888-1" data-line-number="1">wisc<span class="fl">.1</span>=<span class="kw">cmdscale</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb3914"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3914-1" data-line-number="1">wisc<span class="fl">.1</span>=<span class="kw">cmdscale</span>(d)</a></code></pre></div>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Plot the results of the multidimensional scaling,
 labelling the cities with their names. Use your judgement to
@@ -459,7 +460,7 @@ whole city names are shown on the map.</li>
 <p>Solution</p>
 <p>Let’s see what <code>wisc.1</code> has in it, and make a data
 frame of the right thing:</p>
-<div class="sourceCode" id="cb3889"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3889-1" data-line-number="1"><span class="kw">head</span>(wisc<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3915-1" data-line-number="1"><span class="kw">head</span>(wisc<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##                     [,1]       [,2]
 ## Appleton       -13.37076  85.067148
 ## Beloit         -92.94157 -20.205916
@@ -476,8 +477,8 @@ than an actual genuine column. It’s probably best <em>not</em> to assume
 that they will make it through the transition to a data frame, so
 we’ll explicitly create a column called <code>city</code> with the city
 names (that we saved before):</p>
-<div class="sourceCode" id="cb3891"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3891-1" data-line-number="1">dd=<span class="kw">data.frame</span>(wisc<span class="fl">.1</span>,<span class="dt">city=</span>cities)</a>
-<a class="sourceLine" id="cb3891-2" data-line-number="2">dd</a></code></pre></div>
+<div class="sourceCode" id="cb3917"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3917-1" data-line-number="1">dd=<span class="kw">data.frame</span>(wisc<span class="fl">.1</span>,<span class="dt">city=</span>cities)</a>
+<a class="sourceLine" id="cb3917-2" data-line-number="2">dd</a></code></pre></div>
 <pre><code>##                       X1          X2          city
 ## Appleton       -13.37076   85.067148      Appleton
 ## Beloit         -92.94157  -20.205916        Beloit
@@ -496,10 +497,10 @@ names (that we saved before):</p>
 elsewhere that I want to keep. I should use better names.</p>
 <p>I think the best use of your judgement is to go straight to
 <code>geom_text_repel</code> from package <code>ggrepel</code>:</p>
-<div class="sourceCode" id="cb3893"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3893-1" data-line-number="1"><span class="kw">ggplot</span>(dd,<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>city))<span class="op">+</span></a>
-<a class="sourceLine" id="cb3893-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb3893-3" data-line-number="3"><span class="kw">geom_text_repel</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb3893-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3919"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3919-1" data-line-number="1"><span class="kw">ggplot</span>(dd,<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>city))<span class="op">+</span></a>
+<a class="sourceLine" id="cb3919-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb3919-3" data-line-number="3"><span class="kw">geom_text_repel</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb3919-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-8-1.png" width="672"  /></p>
 <p>Your map may come out different from mine, but subject to the usual
 stuff about rotation and reflection it should be equivalent to
@@ -517,12 +518,12 @@ in real life? Give an example or two.</li>
 are closest together. How far apart are they actually? Well, you
 can go back to the original file (or display of what I called
 <code>d</code>) and find them, or you can do this:</p>
-<div class="sourceCode" id="cb3894"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3894-1" data-line-number="1">cities</a></code></pre></div>
+<div class="sourceCode" id="cb3920"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3920-1" data-line-number="1">cities</a></code></pre></div>
 <pre><code>##  [1] &quot;Appleton&quot;      &quot;Beloit&quot;        &quot;Fort.Atkinson&quot; &quot;Madison&quot;      
 ##  [5] &quot;Marshfield&quot;    &quot;Milwaukee&quot;     &quot;Monroe&quot;        &quot;Superior&quot;     
 ##  [9] &quot;Wausau&quot;        &quot;Dubuque&quot;       &quot;St.Paul&quot;       &quot;Chicago&quot;</code></pre>
 <p>Cities 2, 3 and 4, so:</p>
-<div class="sourceCode" id="cb3896"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3896-1" data-line-number="1">wisc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span><span class="op">:</span><span class="dv">5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb3922"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3922-1" data-line-number="1">wisc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span><span class="op">:</span><span class="dv">5</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 4
 ##   location      Beloit Fort.Atkinson Madison
 ##   &lt;chr&gt;          &lt;int&gt;         &lt;int&gt;   &lt;int&gt;
@@ -539,7 +540,7 @@ Extra: the slice-select thing doesn’t work on <code>d</code> because that is n
 a data frame. It is actually stored internally as a
 <em>one</em>-dimensional vector that displays nicely, but if you want to
 pull things out of it you have to figure out where in the vector they are:</p>
-<div class="sourceCode" id="cb3898"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3898-1" data-line-number="1"><span class="kw">print.default</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb3924"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3924-1" data-line-number="1"><span class="kw">print.default</span>(d)</a></code></pre></div>
 <pre><code>##  [1] 130  98 102 103 100 149 315  91 196 257 186  33  50 185  73  33 377
 ## [18] 186  94 304  97  36 164  54  58 359 166 119 287 113 138  77  47 330
 ## [35] 139  95 258 146 184 170 219  45 186 161 276 107 394 181 168 322  93
@@ -563,11 +564,11 @@ goes all the way down the first column ending at 130, then all the way
 down the second column (which has one fewer entry), ending at 467, and
 so on. Thus the three entries we picked out are at <span class="math inline">\(11+1=12\)</span>,
 <span class="math inline">\(11+2=13\)</span>, and <span class="math inline">\(11+10+1=22\)</span>:</p>
-<div class="sourceCode" id="cb3900"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3900-1" data-line-number="1">d[<span class="dv">12</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb3926"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3926-1" data-line-number="1">d[<span class="dv">12</span>]</a></code></pre></div>
 <pre><code>## [1] 33</code></pre>
-<div class="sourceCode" id="cb3902"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3902-1" data-line-number="1">d[<span class="dv">13</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb3928"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3928-1" data-line-number="1">d[<span class="dv">13</span>]</a></code></pre></div>
 <pre><code>## [1] 50</code></pre>
-<div class="sourceCode" id="cb3904"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3904-1" data-line-number="1">d[<span class="dv">22</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb3930"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3930-1" data-line-number="1">d[<span class="dv">22</span>]</a></code></pre></div>
 <pre><code>## [1] 36</code></pre>
 <p>It’s very easy to be off by one in this sort of calculation. There are
 12 cities altogether, so <em>11</em> distances in the first column, 10
@@ -586,14 +587,14 @@ in your document.)</li>
 using the package <code>ggmap</code>. (Of course, you can just open the
 appropriate map in your browser and copy-paste it, taking a
 screenshot if necessary):</p>
-<div class="sourceCode" id="cb3906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3906-1" data-line-number="1"><span class="kw">library</span>(ggmap)</a></code></pre></div>
+<div class="sourceCode" id="cb3932"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3932-1" data-line-number="1"><span class="kw">library</span>(ggmap)</a></code></pre></div>
 <pre><code>## Google Maps API Terms of Service: https://cloud.google.com/maps-platform/terms/.</code></pre>
 <pre><code>## Please cite ggmap if you use it: see citation(&quot;ggmap&quot;) for details.</code></pre>
-<div class="sourceCode" id="cb3909"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3909-1" data-line-number="1"><span class="kw">library</span>(ggmap)</a>
-<a class="sourceLine" id="cb3909-2" data-line-number="2">wisc.map=<span class="kw">get_map</span>(<span class="dt">location=</span><span class="st">&quot;Milwaukee, WI&quot;</span>,<span class="dt">zoom=</span><span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3935"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3935-1" data-line-number="1"><span class="kw">library</span>(ggmap)</a>
+<a class="sourceLine" id="cb3935-2" data-line-number="2">wisc.map=<span class="kw">get_map</span>(<span class="dt">location=</span><span class="st">&quot;Milwaukee, WI&quot;</span>,<span class="dt">zoom=</span><span class="dv">6</span>)</a></code></pre></div>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=Milwaukee,%20WI&amp;zoom=6&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;language=en-EN&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Milwaukee%2C%20WI&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
-<div class="sourceCode" id="cb3912"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3912-1" data-line-number="1"><span class="kw">ggmap</span>(wisc.map)</a></code></pre></div>
+<div class="sourceCode" id="cb3938"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3938-1" data-line-number="1"><span class="kw">ggmap</span>(wisc.map)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/laskhsal-1.png" width="576"  /></p>
 <p>I centred this map around Milwaukee (a guess), which is not quite
 where the centre should be, since Milwaukee is in southeastern
@@ -616,12 +617,12 @@ last three: Dubuque is in Iowa, St. Paul is in Minnesota and Chicago
 is in Illinois. I am first making a vector with 12 copies of the
 abbreviation for Wisconsin, and then overwriting the last three with
 the states they are actually in:</p>
-<div class="sourceCode" id="cb3913"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3913-1" data-line-number="1">states=<span class="kw">rep</span>(<span class="st">&quot;WI&quot;</span>,<span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb3913-2" data-line-number="2">states[<span class="dv">10</span>]=<span class="st">&quot;IA&quot;</span></a>
-<a class="sourceLine" id="cb3913-3" data-line-number="3">states[<span class="dv">11</span>]=<span class="st">&quot;MN&quot;</span> </a>
-<a class="sourceLine" id="cb3913-4" data-line-number="4">states[<span class="dv">12</span>]=<span class="st">&quot;IL&quot;</span></a>
-<a class="sourceLine" id="cb3913-5" data-line-number="5">cst=<span class="kw">str_c</span>(cities,<span class="st">&quot; &quot;</span>,states)</a>
-<a class="sourceLine" id="cb3913-6" data-line-number="6">cst</a></code></pre></div>
+<div class="sourceCode" id="cb3939"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3939-1" data-line-number="1">states=<span class="kw">rep</span>(<span class="st">&quot;WI&quot;</span>,<span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb3939-2" data-line-number="2">states[<span class="dv">10</span>]=<span class="st">&quot;IA&quot;</span></a>
+<a class="sourceLine" id="cb3939-3" data-line-number="3">states[<span class="dv">11</span>]=<span class="st">&quot;MN&quot;</span> </a>
+<a class="sourceLine" id="cb3939-4" data-line-number="4">states[<span class="dv">12</span>]=<span class="st">&quot;IL&quot;</span></a>
+<a class="sourceLine" id="cb3939-5" data-line-number="5">cst=<span class="kw">str_c</span>(cities,<span class="st">&quot; &quot;</span>,states)</a>
+<a class="sourceLine" id="cb3939-6" data-line-number="6">cst</a></code></pre></div>
 <pre><code>##  [1] &quot;Appleton WI&quot;      &quot;Beloit WI&quot;        &quot;Fort.Atkinson WI&quot;
 ##  [4] &quot;Madison WI&quot;       &quot;Marshfield WI&quot;    &quot;Milwaukee WI&quot;    
 ##  [7] &quot;Monroe WI&quot;        &quot;Superior WI&quot;      &quot;Wausau WI&quot;       
@@ -629,8 +630,8 @@ the states they are actually in:</p>
 <p>And then I look them up. I don’t want Google to tell me that I have
 done too many lookups, so I look them up first and save the results,
 like this:</p>
-<div class="sourceCode" id="cb3915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3915-1" data-line-number="1"><span class="kw">tibble</span>(cst) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3915-2" data-line-number="2">ggmap<span class="op">::</span><span class="kw">mutate_geocode</span>(cst) -&gt;<span class="st"> </span>g</a></code></pre></div>
+<div class="sourceCode" id="cb3941"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3941-1" data-line-number="1"><span class="kw">tibble</span>(cst) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3941-2" data-line-number="2">ggmap<span class="op">::</span><span class="kw">mutate_geocode</span>(cst) -&gt;<span class="st"> </span>g</a></code></pre></div>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Appleton%20WI&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Beloit%20WI&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Fort.Atkinson%20WI&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
@@ -643,7 +644,7 @@ like this:</p>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Dubuque%20IA&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=St.Paul%20MN&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Chicago%20IL&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
-<div class="sourceCode" id="cb3928"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3928-1" data-line-number="1">g</a></code></pre></div>
+<div class="sourceCode" id="cb3954"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3954-1" data-line-number="1">g</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 3
 ##    cst                lon   lat
 ##    &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt;
@@ -660,13 +661,13 @@ like this:</p>
 ## 11 St.Paul MN       -93.1  45.0
 ## 12 Chicago IL       -87.6  41.9</code></pre>
 <p>What are the extreme corners of these?</p>
-<div class="sourceCode" id="cb3930"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3930-1" data-line-number="1"><span class="kw">range</span>(g<span class="op">$</span>lon)</a></code></pre></div>
+<div class="sourceCode" id="cb3956"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3956-1" data-line-number="1"><span class="kw">range</span>(g<span class="op">$</span>lon)</a></code></pre></div>
 <pre><code>## [1] -93.08996 -87.62980</code></pre>
-<div class="sourceCode" id="cb3932"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3932-1" data-line-number="1"><span class="kw">range</span>(g<span class="op">$</span>lat)</a></code></pre></div>
+<div class="sourceCode" id="cb3958"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3958-1" data-line-number="1"><span class="kw">range</span>(g<span class="op">$</span>lat)</a></code></pre></div>
 <pre><code>## [1] 41.87811 46.72077</code></pre>
 <p>or even</p>
-<div class="sourceCode" id="cb3934"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3934-1" data-line-number="1">g <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(lat,lon) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3934-2" data-line-number="2"><span class="kw">map_df</span>(range)</a></code></pre></div>
+<div class="sourceCode" id="cb3960"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3960-1" data-line-number="1">g <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(lat,lon) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3960-2" data-line-number="2"><span class="kw">map_df</span>(range)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##     lat   lon
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -684,14 +685,14 @@ below, since on my first attempt the map zoomed in too much.
 I also asked for a “roadmap” to maximize the number of places marked
 on there.</p>
 <p>So:</p>
-<div class="sourceCode" id="cb3936"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3936-1" data-line-number="1">wisc.map<span class="fl">.2</span>=<span class="kw">get_map</span>(<span class="dt">location=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">94</span>,<span class="fl">41.8</span>,<span class="op">-</span><span class="dv">87</span>,<span class="fl">46.8</span>),<span class="dt">maptype=</span><span class="st">&quot;roadmap&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3962"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3962-1" data-line-number="1">wisc.map<span class="fl">.2</span>=<span class="kw">get_map</span>(<span class="dt">location=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">94</span>,<span class="fl">41.8</span>,<span class="op">-</span><span class="dv">87</span>,<span class="fl">46.8</span>),<span class="dt">maptype=</span><span class="st">&quot;roadmap&quot;</span>)</a></code></pre></div>
 <pre><code>## Warning: bounding box given to google - spatial extent only approximate.</code></pre>
-<div class="sourceCode" id="cb3938"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3938-1" data-line-number="1"><span class="kw">ggmap</span>(wisc.map<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3964"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3964-1" data-line-number="1"><span class="kw">ggmap</span>(wisc.map<span class="fl">.2</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/lhsdljhadkfj-1.png" width="576"  /></p>
 <p>This came out about right.</p>
 <p>Now we need to mark our 12 cities on the map. This is a
 <code>ggplot</code> map, so the right syntax is as below.</p>
-<div class="sourceCode" id="cb3939"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3939-1" data-line-number="1"><span class="kw">ggmap</span>(wisc.map<span class="fl">.2</span>)<span class="op">+</span><span class="kw">geom_point</span>(<span class="dt">data=</span>g, <span class="kw">aes</span>(<span class="dt">x=</span>lon,<span class="dt">y=</span>lat))</a></code></pre></div>
+<div class="sourceCode" id="cb3965"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3965-1" data-line-number="1"><span class="kw">ggmap</span>(wisc.map<span class="fl">.2</span>)<span class="op">+</span><span class="kw">geom_point</span>(<span class="dt">data=</span>g, <span class="kw">aes</span>(<span class="dt">x=</span>lon,<span class="dt">y=</span>lat))</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/sldkhdlf-1.png" width="672"  /></p>
 <p>There’s a slight weirdness in that <code>ggmap</code> only takes a map,
 not a data frame or an <code>aes</code>, so those go in
@@ -737,9 +738,9 @@ in class, but if we skip it, don’t worry about this part.)</li>
 </ol>
 <p>Solution</p>
 <p>Run again with <code>eig=T</code> and take a look at <code>GOF</code> (uppercase):</p>
-<div class="sourceCode" id="cb3941"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3941-1" data-line-number="1"><span class="kw">cmdscale</span>(d,<span class="dv">2</span>,<span class="dt">eig=</span>T)<span class="op">$</span>GOF</a></code></pre></div>
+<div class="sourceCode" id="cb3967"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3967-1" data-line-number="1"><span class="kw">cmdscale</span>(d,<span class="dv">2</span>,<span class="dt">eig=</span>T)<span class="op">$</span>GOF</a></code></pre></div>
 <pre><code>## [1] 0.9129333 0.9315871</code></pre>
-<div class="sourceCode" id="cb3943"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3943-1" data-line-number="1"><span class="kw">cmdscale</span>(d,<span class="dv">1</span>,<span class="dt">eig=</span>T)<span class="op">$</span>GOF</a></code></pre></div>
+<div class="sourceCode" id="cb3969"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3969-1" data-line-number="1"><span class="kw">cmdscale</span>(d,<span class="dv">1</span>,<span class="dt">eig=</span>T)<span class="op">$</span>GOF</a></code></pre></div>
 <pre><code>## [1] 0.7916925 0.8078690</code></pre>
 <p>The goodness-of-fit of the two-dimensional solution is pretty
 good,
@@ -749,11 +750,11 @@ cities along a line) is pretty awful in comparison.</p>
 <p>How awful? Let’s find out. I should have saved it from just above, but
 now I have to do it again. For the plot, <code>ones</code> is a string of
 ones, as many as there are cities.</p>
-<div class="sourceCode" id="cb3945"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3945-1" data-line-number="1">ones=<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb3945-2" data-line-number="2">v=<span class="kw">cmdscale</span>(d,<span class="dv">1</span>,<span class="dt">eig=</span>T)</a>
-<a class="sourceLine" id="cb3945-3" data-line-number="3">ddd =<span class="st"> </span><span class="kw">as_tibble</span>(v<span class="op">$</span>points) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3945-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">one=</span>ones, <span class="dt">city=</span>cities)</a>
-<a class="sourceLine" id="cb3945-5" data-line-number="5">ddd</a></code></pre></div>
+<div class="sourceCode" id="cb3971"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3971-1" data-line-number="1">ones=<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb3971-2" data-line-number="2">v=<span class="kw">cmdscale</span>(d,<span class="dv">1</span>,<span class="dt">eig=</span>T)</a>
+<a class="sourceLine" id="cb3971-3" data-line-number="3">ddd =<span class="st"> </span><span class="kw">as_tibble</span>(v<span class="op">$</span>points) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3971-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">one=</span>ones, <span class="dt">city=</span>cities)</a>
+<a class="sourceLine" id="cb3971-5" data-line-number="5">ddd</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 3
 ##        V1   one city         
 ##     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;        
@@ -771,8 +772,8 @@ ones, as many as there are cities.</p>
 ## 12 -185.      1 Chicago</code></pre>
 <p>(the one-column matrix of points didn’t have a name, so it acquired
 the name <code>V1</code>), and the plot:</p>
-<div class="sourceCode" id="cb3947"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3947-1" data-line-number="1"><span class="kw">ggplot</span>(ddd,<span class="kw">aes</span>(<span class="dt">x=</span>one,<span class="dt">y=</span>V1,<span class="dt">label=</span>city))<span class="op">+</span></a>
-<a class="sourceLine" id="cb3947-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3973"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3973-1" data-line-number="1"><span class="kw">ggplot</span>(ddd,<span class="kw">aes</span>(<span class="dt">x=</span>one,<span class="dt">y=</span>V1,<span class="dt">label=</span>city))<span class="op">+</span></a>
+<a class="sourceLine" id="cb3973-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-20-1.png" width="672"  /></p>
 <p>The cities get mapped onto a line that goes northwest (top) to
 southeast (bottom). This is not completely terrible, since there
@@ -807,8 +808,8 @@ names? Do your columns have the same names as the objects?</li>
 <p>Solution</p>
 <p>Looking at the file first, there are <em>no column names</em>. So we
 have to tell <code>read_delim</code> that:</p>
-<div class="sourceCode" id="cb3948"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3948-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt&quot;</span></a>
-<a class="sourceLine" id="cb3948-2" data-line-number="2">stimuli=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb3974"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3974-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt&quot;</span></a>
+<a class="sourceLine" id="cb3974-2" data-line-number="2">stimuli=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   X1 = col_character(),
@@ -830,7 +831,7 @@ have to tell <code>read_delim</code> that:</p>
 ##   X17 = col_integer(),
 ##   X18 = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb3950"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3950-1" data-line-number="1">stimuli</a></code></pre></div>
+<div class="sourceCode" id="cb3976"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3976-1" data-line-number="1">stimuli</a></code></pre></div>
 <pre><code>## # A tibble: 17 x 18
 ##    X1       X2    X3    X4    X5    X6    X7    X8    X9   X10   X11   X12
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
@@ -868,8 +869,8 @@ long.</li>
 </ol>
 <p>Solution</p>
 <p>The object names are in the first column, <code>X1</code>, of the data frame:</p>
-<div class="sourceCode" id="cb3952"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3952-1" data-line-number="1">objects=stimuli<span class="op">$</span>X1</a>
-<a class="sourceLine" id="cb3952-2" data-line-number="2">objects</a></code></pre></div>
+<div class="sourceCode" id="cb3978"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3978-1" data-line-number="1">objects=stimuli<span class="op">$</span>X1</a>
+<a class="sourceLine" id="cb3978-2" data-line-number="2">objects</a></code></pre></div>
 <pre><code>##  [1] &quot;innersurfaceofpinebark&quot; &quot;brick&quot;                 
 ##  [3] &quot;cardboard&quot;              &quot;cork&quot;                  
 ##  [5] &quot;rubbereraser&quot;           &quot;felt&quot;                  
@@ -889,8 +890,8 @@ ones. Check that your data frame now has the right column names.</li>
 <p>Solution</p>
 <p>I have 18 columns to name (including the column of object names),
 but only 17 names, so I need to supply an extra one:</p>
-<div class="sourceCode" id="cb3954"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3954-1" data-line-number="1"><span class="kw">names</span>(stimuli)=<span class="kw">c</span>(<span class="st">&quot;object&quot;</span>,objects)</a>
-<a class="sourceLine" id="cb3954-2" data-line-number="2">stimuli</a></code></pre></div>
+<div class="sourceCode" id="cb3980"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3980-1" data-line-number="1"><span class="kw">names</span>(stimuli)=<span class="kw">c</span>(<span class="st">&quot;object&quot;</span>,objects)</a>
+<a class="sourceLine" id="cb3980-2" data-line-number="2">stimuli</a></code></pre></div>
 <pre><code>## # A tibble: 17 x 18
 ##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
 ##    &lt;chr&gt;             &lt;int&gt; &lt;int&gt;     &lt;int&gt; &lt;int&gt;        &lt;int&gt; &lt;int&gt;
@@ -924,12 +925,12 @@ Convert your data frame into a distance object. Take a look at the
 <p>Solution</p>
 <p>This is <code>as.dist</code>, since we have distances
 (dissimilarities) already. Don’t forget to take off the first column!</p>
-<div class="sourceCode" id="cb3956"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3956-1" data-line-number="1">d =<span class="st"> </span>stimuli <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.dist</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3982"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3982-1" data-line-number="1">d =<span class="st"> </span>stimuli <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.dist</span>()</a></code></pre></div>
 <p>I can try and show it all here, tiny, but even then it’s long because
 the column names are long:</p>
-<div class="sourceCode" id="cb3957"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3957-1" data-line-number="1">w=<span class="kw">getOption</span>(<span class="st">&quot;width&quot;</span>)</a>
-<a class="sourceLine" id="cb3957-2" data-line-number="2"><span class="kw">options</span>(<span class="dt">width=</span><span class="dv">132</span>)</a>
-<a class="sourceLine" id="cb3957-3" data-line-number="3">d</a></code></pre></div>
+<div class="sourceCode" id="cb3983"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3983-1" data-line-number="1">w=<span class="kw">getOption</span>(<span class="st">&quot;width&quot;</span>)</a>
+<a class="sourceLine" id="cb3983-2" data-line-number="2"><span class="kw">options</span>(<span class="dt">width=</span><span class="dv">132</span>)</a>
+<a class="sourceLine" id="cb3983-3" data-line-number="3">d</a></code></pre></div>
 <pre><code>##                        innersurfaceofpinebark brick cardboard cork rubbereraser felt leatherwallet rigidplasticsheet
 ## brick                                      22                                                                       
 ## cardboard                                  23    27                                                                 
@@ -981,7 +982,7 @@ the column names are long:</p>
 ## velvet                                
 ## waxpaper                   27         
 ## glossypaintedwood          26       12</code></pre>
-<div class="sourceCode" id="cb3959"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3959-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">width=</span>w)</a></code></pre></div>
+<div class="sourceCode" id="cb3985"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3985-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">width=</span>w)</a></code></pre></div>
 <p>The stuff with <code>width</code> was to make it display lots of columns,
 and then setting it back afterwards so as not to mess things up later.
 If
@@ -996,10 +997,10 @@ the size of the text.)</li>
 </ol>
 <p>Solution</p>
 <p>This is the procedure. Talking about it is coming in a minute.</p>
-<div class="sourceCode" id="cb3960"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3960-1" data-line-number="1">d<span class="fl">.1</span>=<span class="kw">cmdscale</span>(d,<span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb3960-2" data-line-number="2"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">stim=</span>objects) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3960-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>stim))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb3960-4" data-line-number="4"><span class="kw">geom_text_repel</span>(<span class="dt">size=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3986"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3986-1" data-line-number="1">d<span class="fl">.1</span>=<span class="kw">cmdscale</span>(d,<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb3986-2" data-line-number="2"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">stim=</span>objects) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3986-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>stim))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb3986-4" data-line-number="4"><span class="kw">geom_text_repel</span>(<span class="dt">size=</span><span class="dv">2</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-26-1.png" width="672"  /></p>
 <p><code>cmdscale</code> gets the coordinates to plot, then we plot them, and
 then we place the object names next to the points. I’m not
@@ -1011,7 +1012,7 @@ probably have to experiment to find a <code>size</code> that you like.</p>
 <code>cmdscale</code>, you’ll get a two-dimensional solution anyway (since
 two dimensions is the default). The output is an array of coordinates
 in two dimensions:</p>
-<div class="sourceCode" id="cb3961"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3961-1" data-line-number="1">d<span class="fl">.1</span></a></code></pre></div>
+<div class="sourceCode" id="cb3987"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3987-1" data-line-number="1">d<span class="fl">.1</span></a></code></pre></div>
 <pre><code>##                               [,1]       [,2]
 ## innersurfaceofpinebark  -2.7066290   1.694420
 ## brick                  -12.2011332   5.147970
@@ -1077,8 +1078,8 @@ multidimensional scaling map.</li>
 <p>This means fitting again, but this time with <code>eig=T</code>, and
 pulling out the thing called <code>GOF</code>. You can omit the 2,
 since that’s the default 2 dimensions:</p>
-<div class="sourceCode" id="cb3963"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3963-1" data-line-number="1">d<span class="fl">.2</span>=<span class="kw">cmdscale</span>(d,<span class="dv">2</span>,<span class="dt">eig=</span>T)</a>
-<a class="sourceLine" id="cb3963-2" data-line-number="2">d<span class="fl">.2</span><span class="op">$</span>GOF</a></code></pre></div>
+<div class="sourceCode" id="cb3989"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3989-1" data-line-number="1">d<span class="fl">.2</span>=<span class="kw">cmdscale</span>(d,<span class="dv">2</span>,<span class="dt">eig=</span>T)</a>
+<a class="sourceLine" id="cb3989-2" data-line-number="2">d<span class="fl">.2</span><span class="op">$</span>GOF</a></code></pre></div>
 <pre><code>## [1] 0.4019251 0.4110603</code></pre>
 <p>I didn’t ask you to comment on this, but the adjective that came to my
 mind was “disappointing”. I think that’s to do with the
@@ -1088,8 +1089,8 @@ good. If you looked at several pairs of points above, you might have
 noticed that the correspondence between map distance and actual
 distance isn’t very good; this is the same issue.</p>
 <p>I was curious about whether 3 dimensions would be any better:</p>
-<div class="sourceCode" id="cb3965"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3965-1" data-line-number="1">d<span class="fl">.2</span>a=<span class="kw">cmdscale</span>(d,<span class="dv">3</span>,<span class="dt">eig=</span>T)</a>
-<a class="sourceLine" id="cb3965-2" data-line-number="2">d<span class="fl">.2</span>a<span class="op">$</span>GOF</a></code></pre></div>
+<div class="sourceCode" id="cb3991"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3991-1" data-line-number="1">d<span class="fl">.2</span>a=<span class="kw">cmdscale</span>(d,<span class="dv">3</span>,<span class="dt">eig=</span>T)</a>
+<a class="sourceLine" id="cb3991-2" data-line-number="2">d<span class="fl">.2</span>a<span class="op">$</span>GOF</a></code></pre></div>
 <pre><code>## [1] 0.5775841 0.5907117</code></pre>
 <p>That is quite a bit better. The problem with this, though, is that we
 need something like <code>rgl</code> to explore it with.</p>
@@ -1101,13 +1102,13 @@ of clusters? Mark them on your dendrogram too.</li>
 <p>Solution</p>
 <p>This seems to be a throwback to last week, but I have my reasons,
 which you’ll see in a moment:</p>
-<div class="sourceCode" id="cb3967"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3967-1" data-line-number="1">d<span class="fl">.3</span>=<span class="kw">hclust</span>(d,<span class="dt">method=</span><span class="st">&quot;ward.D&quot;</span>)</a>
-<a class="sourceLine" id="cb3967-2" data-line-number="2"><span class="kw">plot</span>(d<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3993"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3993-1" data-line-number="1">d<span class="fl">.3</span>=<span class="kw">hclust</span>(d,<span class="dt">method=</span><span class="st">&quot;ward.D&quot;</span>)</a>
+<a class="sourceLine" id="cb3993-2" data-line-number="2"><span class="kw">plot</span>(d<span class="fl">.3</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-30-1.png" width="672"  /></p>
 <p>That looks like 5 clusters to me (chopping the tree at a height of
 30). Drawing them:</p>
-<div class="sourceCode" id="cb3968"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3968-1" data-line-number="1"><span class="kw">plot</span>(d<span class="fl">.3</span>)</a>
-<a class="sourceLine" id="cb3968-2" data-line-number="2"><span class="kw">rect.hclust</span>(d<span class="fl">.3</span>,<span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3994"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3994-1" data-line-number="1"><span class="kw">plot</span>(d<span class="fl">.3</span>)</a>
+<a class="sourceLine" id="cb3994-2" data-line-number="2"><span class="kw">rect.hclust</span>(d<span class="fl">.3</span>,<span class="dv">5</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-31-1.png" width="672"  /></p>
 <ol style="list-style-type: lower-roman">
 <li>Discuss as briefly as seems reasonable whether your
@@ -1147,11 +1148,11 @@ with the ones on the MDS map. So I put myself through some
 short-term R coding pain for some substantial long-term gain.
 I was thinking, “can I extract the clusters from this analysis, and plot them on the MDS map in different colours?” That
 would go like this:</p>
-<div class="sourceCode" id="cb3969"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3969-1" data-line-number="1">clusters=<span class="kw">cutree</span>(d<span class="fl">.3</span>,<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb3969-2" data-line-number="2"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>stimuli[,<span class="dv">1</span>],<span class="dt">cluster=</span><span class="kw">factor</span>(clusters)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3969-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>objects,<span class="dt">colour=</span>cluster))<span class="op">+</span></a>
-<a class="sourceLine" id="cb3969-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb3969-5" data-line-number="5"><span class="kw">geom_text_repel</span>(<span class="dt">size=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3995"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3995-1" data-line-number="1">clusters=<span class="kw">cutree</span>(d<span class="fl">.3</span>,<span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb3995-2" data-line-number="2"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>stimuli[,<span class="dv">1</span>],<span class="dt">cluster=</span><span class="kw">factor</span>(clusters)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3995-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>objects,<span class="dt">colour=</span>cluster))<span class="op">+</span></a>
+<a class="sourceLine" id="cb3995-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb3995-5" data-line-number="5"><span class="kw">geom_text_repel</span>(<span class="dt">size=</span><span class="dv">2</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-32-1.png" width="672"  /></p>
 <p>The first line obtains the clusters as numbers, which I then had to
 turn into a factor (to make the plot different colours).
@@ -1162,7 +1163,7 @@ broken off into a cluster of their own; they are, kind of, in their
 own little area on the map.</p>
 <p>Another, non-graphical, way of doing this is to list the MDS coordinates
 along with the clusters, probably sorted by cluster:</p>
-<div class="sourceCode" id="cb3970"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3970-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">object=</span>stimuli[,<span class="dv">1</span>],clusters) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(clusters)</a></code></pre></div>
+<div class="sourceCode" id="cb3996"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3996-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">object=</span>stimuli[,<span class="dv">1</span>],clusters) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(clusters)</a></code></pre></div>
 <pre><code>##             X1         X2                 object clusters
 ## 1   -2.7066290   1.694420 innersurfaceofpinebark        1
 ## 2  -10.4469053   7.232787       nylonscouringpad        1
@@ -1190,9 +1191,9 @@ mixed up, with <code>X1</code> and (usually) <code>X2</code> negative; cluster
 and cluster 5 has strongly positive <code>X1</code>.</p>
 <p>I wonder whether our three-dimensional solution distinguishes clusters
 1 and 2 at all? Same approach again:</p>
-<div class="sourceCode" id="cb3972"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3972-1" data-line-number="1">save<span class="fl">.3</span>d =<span class="st"> </span><span class="kw">data.frame</span>(d<span class="fl">.2</span>a<span class="op">$</span>points,objects,clusters) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3972-2" data-line-number="2"><span class="kw">arrange</span>(clusters) </a>
-<a class="sourceLine" id="cb3972-3" data-line-number="3">save<span class="fl">.3</span>d  </a></code></pre></div>
+<div class="sourceCode" id="cb3998"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3998-1" data-line-number="1">save<span class="fl">.3</span>d =<span class="st"> </span><span class="kw">data.frame</span>(d<span class="fl">.2</span>a<span class="op">$</span>points,objects,clusters) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3998-2" data-line-number="2"><span class="kw">arrange</span>(clusters) </a>
+<a class="sourceLine" id="cb3998-3" data-line-number="3">save<span class="fl">.3</span>d  </a></code></pre></div>
 <pre><code>##             X1         X2          X3                objects clusters
 ## 1   -2.7066290   1.694420   4.1176385 innersurfaceofpinebark        1
 ## 2  -10.4469053   7.232787  -1.9720211       nylonscouringpad        1
@@ -1218,20 +1219,20 @@ coordinates and the <code>clusters</code> into a
 <em>discriminant analysis</em>, to find out what distinguishes the
 clusters. Which is way too weird, and therefore deserves to be
 explored (with the three-dimensional solution, for example):</p>
-<div class="sourceCode" id="cb3974"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3974-1" data-line-number="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
+<div class="sourceCode" id="cb4000"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4000-1" data-line-number="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;MASS&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
 ## 
 ##     select</code></pre>
-<div class="sourceCode" id="cb3977"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3977-1" data-line-number="1">save<span class="fl">.3</span>d.lda=<span class="kw">lda</span>(clusters<span class="op">~</span>X1<span class="op">+</span>X2<span class="op">+</span>X3,<span class="dt">data=</span>save<span class="fl">.3</span>d)</a>
-<a class="sourceLine" id="cb3977-2" data-line-number="2">ppp=<span class="kw">predict</span>(save<span class="fl">.3</span>d.lda)</a></code></pre></div>
+<div class="sourceCode" id="cb4003"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4003-1" data-line-number="1">save<span class="fl">.3</span>d.lda=<span class="kw">lda</span>(clusters<span class="op">~</span>X1<span class="op">+</span>X2<span class="op">+</span>X3,<span class="dt">data=</span>save<span class="fl">.3</span>d)</a>
+<a class="sourceLine" id="cb4003-2" data-line-number="2">ppp=<span class="kw">predict</span>(save<span class="fl">.3</span>d.lda)</a></code></pre></div>
 <p>I snuck a look at the output and
 found that <code>LD3</code> is basically worthless, so I can plot
 <code>LD1</code> against <code>LD2</code>, coloured by cluster:</p>
-<div class="sourceCode" id="cb3978"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3978-1" data-line-number="1"><span class="kw">data.frame</span>(ppp<span class="op">$</span>x,<span class="dt">cluster=</span><span class="kw">factor</span>(save<span class="fl">.3</span>d<span class="op">$</span>clusters)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3978-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>LD1,<span class="dt">y=</span>LD2,<span class="dt">colour=</span>cluster))<span class="op">+</span></a>
-<a class="sourceLine" id="cb3978-3" data-line-number="3"><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4004"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4004-1" data-line-number="1"><span class="kw">data.frame</span>(ppp<span class="op">$</span>x,<span class="dt">cluster=</span><span class="kw">factor</span>(save<span class="fl">.3</span>d<span class="op">$</span>clusters)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4004-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>LD1,<span class="dt">y=</span>LD2,<span class="dt">colour=</span>cluster))<span class="op">+</span></a>
+<a class="sourceLine" id="cb4004-3" data-line-number="3"><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-36-1.png" width="672"  /></p>
 <p>This says that the three-dimensional MDS <em>has</em> separated clusters
 1 and 2, and if we were to plot <code>d.2a</code> in <code>rgl</code> and
@@ -1242,7 +1243,7 @@ they do on the two-dimensional map.)</p>
 discriminant analysis and ask “what distinguishes the clusters?”.
 Map coordinates first. I need <code>points</code> since I ran
 the scaling with <code>eig=T</code>:</p>
-<div class="sourceCode" id="cb3979"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3979-1" data-line-number="1">save<span class="fl">.3</span>d</a></code></pre></div>
+<div class="sourceCode" id="cb4005"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4005-1" data-line-number="1">save<span class="fl">.3</span>d</a></code></pre></div>
 <pre><code>##             X1         X2          X3                objects clusters
 ## 1   -2.7066290   1.694420   4.1176385 innersurfaceofpinebark        1
 ## 2  -10.4469053   7.232787  -1.9720211       nylonscouringpad        1
@@ -1262,9 +1263,9 @@ the scaling with <code>eig=T</code>:</p>
 ## 16  13.1702265   1.677039   8.2862272               waxpaper        5
 ## 17  11.2914904   5.331796   9.6288283      glossypaintedwood        5</code></pre>
 <p>and the business end of the LDA output:</p>
-<div class="sourceCode" id="cb3981"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3981-1" data-line-number="1">save<span class="fl">.3</span>d.lda<span class="op">$</span>svd</a></code></pre></div>
+<div class="sourceCode" id="cb4007"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4007-1" data-line-number="1">save<span class="fl">.3</span>d.lda<span class="op">$</span>svd</a></code></pre></div>
 <pre><code>## [1] 12.593922  5.767636  3.007893</code></pre>
-<div class="sourceCode" id="cb3983"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3983-1" data-line-number="1">save<span class="fl">.3</span>d.lda<span class="op">$</span>scaling</a></code></pre></div>
+<div class="sourceCode" id="cb4009"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4009-1" data-line-number="1">save<span class="fl">.3</span>d.lda<span class="op">$</span>scaling</a></code></pre></div>
 <pre><code>##           LD1         LD2        LD3
 ## X1  0.5463715  0.22819994 0.03521147
 ## X2  0.4370065 -0.28250040 0.10269853
@@ -1278,7 +1279,7 @@ we <em>can</em> enumerate what makes clusters 1 and 2 different. The
 plot of the first two <code>LD</code>s says, in fact, that under the
 3-dimensional multidimensional scaling, all five groups are distinct.</p>
 <p>A biplot would be another way to look at that:</p>
-<div class="sourceCode" id="cb3985"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3985-1" data-line-number="1"><span class="kw">ggbiplot</span>(save<span class="fl">.3</span>d.lda,<span class="dt">groups=</span><span class="kw">factor</span>(save<span class="fl">.3</span>d<span class="op">$</span>clusters))</a></code></pre></div>
+<div class="sourceCode" id="cb4011"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4011-1" data-line-number="1"><span class="kw">ggbiplot</span>(save<span class="fl">.3</span>d.lda,<span class="dt">groups=</span><span class="kw">factor</span>(save<span class="fl">.3</span>d<span class="op">$</span>clusters))</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-39-1.png" width="672"  /></p>
 <p>Points on the right have <code>X1</code> and <code>X2</code> large, and
 <code>X3</code> small (cluster 4, and to a lesser extent, cluster
@@ -1316,8 +1317,8 @@ obtain.</li>
 <p>Solution</p>
 <p><code>read_table</code> to read in the data, having first noted that
 we have aligned columns with spaces between:</p>
-<div class="sourceCode" id="cb3986"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3986-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/letterrec.txt&quot;</span></a>
-<a class="sourceLine" id="cb3986-2" data-line-number="2">letters=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb4012"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4012-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/letterrec.txt&quot;</span></a>
+<a class="sourceLine" id="cb4012-2" data-line-number="2">letters=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
@@ -1331,7 +1332,7 @@ we have aligned columns with spaces between:</p>
 ##   Q = col_integer(),
 ##   W = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb3989"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3989-1" data-line-number="1">letters</a></code></pre></div>
+<div class="sourceCode" id="cb4015"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4015-1" data-line-number="1">letters</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 9
 ##   X1        C     D     G     H     M     N     Q     W
 ##   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
@@ -1354,9 +1355,9 @@ number of headers, one per data column exactly.</p>
 <p>These are similarities, so convert to dissimilarities by subtracting
 from 21. This is a shortcut way to do that, once you’ve gotten rid of
 everything that is not numbers:</p>
-<div class="sourceCode" id="cb3991"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3991-1" data-line-number="1">letters <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>X1) -&gt;<span class="st"> </span>letters2</a>
-<a class="sourceLine" id="cb3991-2" data-line-number="2">letters2=<span class="dv">21</span><span class="op">-</span>letters2</a>
-<a class="sourceLine" id="cb3991-3" data-line-number="3">letters2</a></code></pre></div>
+<div class="sourceCode" id="cb4017"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4017-1" data-line-number="1">letters <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>X1) -&gt;<span class="st"> </span>letters2</a>
+<a class="sourceLine" id="cb4017-2" data-line-number="2">letters2=<span class="dv">21</span><span class="op">-</span>letters2</a>
+<a class="sourceLine" id="cb4017-3" data-line-number="3">letters2</a></code></pre></div>
 <pre><code>##    C  D  G  H  M  N  Q  W
 ## 1 21 21 21 21 21 21 21 21
 ## 2 16 21 21 21 21 21 21 21
@@ -1370,8 +1371,8 @@ everything that is not numbers:</p>
 <code>dist</code> works with the stuff <em>below</em> the diagonal (unless
 you tell it otherwise), so all will be good.</p>
 <p><code>as.dist</code> comes next:</p>
-<div class="sourceCode" id="cb3993"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3993-1" data-line-number="1">d=<span class="kw">as.dist</span>(letters2)</a>
-<a class="sourceLine" id="cb3993-2" data-line-number="2">d</a></code></pre></div>
+<div class="sourceCode" id="cb4019"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4019-1" data-line-number="1">d=<span class="kw">as.dist</span>(letters2)</a>
+<a class="sourceLine" id="cb4019-2" data-line-number="2">d</a></code></pre></div>
 <pre><code>##    C  D  G  H  M  N  Q
 ## D 16                  
 ## G  9 19               
@@ -1399,8 +1400,8 @@ results. (Making a graph is coming later.)</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb3995"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3995-1" data-line-number="1">d<span class="fl">.1</span>=<span class="kw">cmdscale</span>(d)</a>
-<a class="sourceLine" id="cb3995-2" data-line-number="2">d<span class="fl">.1</span></a></code></pre></div>
+<div class="sourceCode" id="cb4021"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4021-1" data-line-number="1">d<span class="fl">.1</span>=<span class="kw">cmdscale</span>(d)</a>
+<a class="sourceLine" id="cb4021-2" data-line-number="2">d<span class="fl">.1</span></a></code></pre></div>
 <pre><code>##        [,1]       [,2]
 ## C  9.624942  4.7694928
 ## D  4.451129 -9.5740790
@@ -1411,8 +1412,8 @@ results. (Making a graph is coming later.)</li>
 ## Q  7.875169 -5.9942901
 ## W -7.153020 -1.8466934</code></pre>
 <p>Or you can do it with <code>eig=T</code>, which gets you some more information:</p>
-<div class="sourceCode" id="cb3997"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3997-1" data-line-number="1">d<span class="fl">.1</span>a=<span class="kw">cmdscale</span>(d,<span class="dt">eig=</span>T)</a>
-<a class="sourceLine" id="cb3997-2" data-line-number="2">d<span class="fl">.1</span>a</a></code></pre></div>
+<div class="sourceCode" id="cb4023"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4023-1" data-line-number="1">d<span class="fl">.1</span>a=<span class="kw">cmdscale</span>(d,<span class="dt">eig=</span>T)</a>
+<a class="sourceLine" id="cb4023-2" data-line-number="2">d<span class="fl">.1</span>a</a></code></pre></div>
 <pre><code>## $points
 ##        [,1]       [,2]
 ## C  9.624942  4.7694928
@@ -1456,7 +1457,7 @@ confused in this study.</li>
 <p>Solution</p>
 <p>Easiest way is to pull out the first column of the data frame that
 you read in from the file (if you can remember what it was called):</p>
-<div class="sourceCode" id="cb3999"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3999-1" data-line-number="1">letter_names=letters<span class="op">$</span>X1</a></code></pre></div>
+<div class="sourceCode" id="cb4025"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4025-1" data-line-number="1">letter_names=letters<span class="op">$</span>X1</a></code></pre></div>
 <p>That silly column name <code>X1</code> that <code>read_table</code>
 supplied.</p>
 <p>Extra: You can even get the letter names from the thing I called <code>d</code>,
@@ -1464,7 +1465,7 @@ but I can’t remember how, so I have to cheat. I said that <code>d</code>
 has a “print method”
 <label for="tufte-mn-240" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-240" class="margin-toggle"><span class="marginnote">The way that a multicoloured function like <em>print</em> works is that when you ask to show something, like <em>d</em>, R first looks to see what kind of thing you want to show (by calling <em>class</em>), and determines that it is a <em>dist</em> object. Then it looks to see if there is a function called <em>print.dist</em> (there is), and if there is, it calls that (to produce that nice display). If there isn’t, it calls <em>print.default</em>, which just displays its input without doing anything special. This is why printing the output from an <em>lm</em> looks very different from printing a data frame: the first calls <em>print.lm</em> and the second calls <em>print.data.frame</em>, or <em>print.tbl-df</em> for a tibble.</span>
 that controls how it looks:</p>
-<div class="sourceCode" id="cb4000"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4000-1" data-line-number="1">d</a></code></pre></div>
+<div class="sourceCode" id="cb4026"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4026-1" data-line-number="1">d</a></code></pre></div>
 <pre><code>##    C  D  G  H  M  N  Q
 ## D 16                  
 ## G  9 19               
@@ -1474,7 +1475,7 @@ that controls how it looks:</p>
 ## Q 12  1 12 20 19 13   
 ## W 20 16 19 16  3  8 17</code></pre>
 <p>but its innards are a whole lot more complicated than that:</p>
-<div class="sourceCode" id="cb4002"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4002-1" data-line-number="1"><span class="kw">print.default</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb4028"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4028-1" data-line-number="1"><span class="kw">print.default</span>(d)</a></code></pre></div>
 <pre><code>##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
 ## [24] 19  3 13  8 17
 ## attr(,&quot;Labels&quot;)
@@ -1490,7 +1491,7 @@ that controls how it looks:</p>
 ## attr(,&quot;Upper&quot;)
 ## [1] FALSE</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb4004"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4004-1" data-line-number="1"><span class="kw">unclass</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb4030"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4030-1" data-line-number="1"><span class="kw">unclass</span>(d)</a></code></pre></div>
 <pre><code>##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
 ## [24] 19  3 13  8 17
 ## attr(,&quot;Labels&quot;)
@@ -1506,7 +1507,7 @@ that controls how it looks:</p>
 <p>This one gets rid of any special kind of thing that <code>d</code> is, and
 displays it like a thing without any special properties.</p>
 <p>It’s the “attribute” called <code>Labels</code> that we need to grab:</p>
-<div class="sourceCode" id="cb4006"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4006-1" data-line-number="1"><span class="kw">attributes</span>(d)<span class="op">$</span>Labels</a></code></pre></div>
+<div class="sourceCode" id="cb4032"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4032-1" data-line-number="1"><span class="kw">attributes</span>(d)<span class="op">$</span>Labels</a></code></pre></div>
 <pre><code>## [1] &quot;C&quot; &quot;D&quot; &quot;G&quot; &quot;H&quot; &quot;M&quot; &quot;N&quot; &quot;Q&quot; &quot;W&quot;</code></pre>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Plot your multidimensional scaling map. To do this, first
@@ -1518,7 +1519,7 @@ labels, and then plot the points labelled by the right thing.</li>
 you find them in the previous part. I’m going to do this with a
 pipe, or else I’ll create <em>another</em> thing called <code>d</code>
 and overwrite the one I wanted to keep, again:</p>
-<div class="sourceCode" id="cb4008"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4008-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) </a></code></pre></div>
+<div class="sourceCode" id="cb4034"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4034-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) </a></code></pre></div>
 <pre><code>##          X1         X2 names
 ## C  9.624942  4.7694928     C
 ## D  4.451129 -9.5740790     D
@@ -1532,10 +1533,10 @@ and overwrite the one I wanted to keep, again:</p>
 <code>X2</code> (as they did before, but I wanted to check). This is what
 happens when you turn a matrix with nameless columns into a data
 frame. So I can proceed:</p>
-<div class="sourceCode" id="cb4010"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4010-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4010-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
-<a class="sourceLine" id="cb4010-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb4010-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4036"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4036-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4036-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
+<a class="sourceLine" id="cb4036-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb4036-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-51-1.png" width="672"  /></p>
 <p>I need the last line for the same reason as before: I want to treat
 the two axes equally. If you don’t have that, you have a distorted map
@@ -1551,9 +1552,9 @@ you’ll get a black dot in the middle of each piece of text.)
 point, so you can see both, but I’ve always found these rather
 finicky, so I’d rather let <code>geom_text_repel</code> do the work of
 figuring out where to put the text relative to the point.</p>
-<div class="sourceCode" id="cb4011"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4011-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4011-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
-<a class="sourceLine" id="cb4011-3" data-line-number="3"><span class="kw">geom_text</span>()<span class="op">+</span><span class="kw">coord_fixed</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4037"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4037-1" data-line-number="1"><span class="kw">data.frame</span>(d<span class="fl">.1</span>,<span class="dt">names=</span>letter_names) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4037-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
+<a class="sourceLine" id="cb4037-3" data-line-number="3"><span class="kw">geom_text</span>()<span class="op">+</span><span class="kw">coord_fixed</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-52-1.png" width="672"  /></p>
 <p>Then pick (in the next part) a pair of letters that is close together,
 and proceed. I like the labelled dots better (as a matter of taste),
@@ -1581,7 +1582,7 @@ in the data.</li>
 </ol>
 <p>Solution</p>
 <p>The data we read in from the file was this:</p>
-<div class="sourceCode" id="cb4012"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4012-1" data-line-number="1">letters</a></code></pre></div>
+<div class="sourceCode" id="cb4038"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4038-1" data-line-number="1">letters</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 9
 ##   X1        C     D     G     H     M     N     Q     W
 ##   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
@@ -1604,7 +1605,7 @@ a foursome
 <label for="tufte-mn-241" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-241" class="margin-toggle"><span class="marginnote">Set of four. Match-play golf has a game called <em>foursomes</em> where the two players on each team take it in turns to hit the ball, as opposed to the game called <em>fourballs</em>, where each of the two players plays their own ball, and the team’s score on a hole is the better of the two players’ scores.</span> rather than two pairs).</p>
 <p>If you prefer, you can work from your <code>dist</code> object, the thing
 I called <code>d</code>:</p>
-<div class="sourceCode" id="cb4014"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4014-1" data-line-number="1">d</a></code></pre></div>
+<div class="sourceCode" id="cb4040"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4040-1" data-line-number="1">d</a></code></pre></div>
 <pre><code>##    C  D  G  H  M  N  Q
 ## D 16                  
 ## G  9 19               
@@ -1633,13 +1634,13 @@ distances between the beers. Show your result.</li>
 </ol>
 <p>Solution</p>
 <p>First I should get rid of <code>MASS</code>, since we don’t need it here:</p>
-<div class="sourceCode" id="cb4016"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4016-1" data-line-number="1"><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>, <span class="dt">unload=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb4042"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4042-1" data-line-number="1"><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>, <span class="dt">unload=</span>T)</a></code></pre></div>
 <p>This is really a copy of last time. We need to transpose the data
 frame to get the beers in <em>rows</em> (<code>dist</code> works on
 distances between rows), then feed everything but the student IDs
 into <code>dist</code>:</p>
-<div class="sourceCode" id="cb4017"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4017-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/beer.txt&quot;</span></a>
-<a class="sourceLine" id="cb4017-2" data-line-number="2">beer=<span class="kw">read_table2</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb4043"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4043-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/beer.txt&quot;</span></a>
+<a class="sourceLine" id="cb4043-2" data-line-number="2">beer=<span class="kw">read_table2</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   student = col_character(),
@@ -1654,7 +1655,7 @@ into <code>dist</code>:</p>
 ##   SamAdams = col_integer(),
 ##   SierraN = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb4019"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4019-1" data-line-number="1">beer</a></code></pre></div>
+<div class="sourceCode" id="cb4045"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4045-1" data-line-number="1">beer</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 11
 ##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
 ##    &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;  &lt;int&gt;
@@ -1670,10 +1671,10 @@ into <code>dist</code>:</p>
 ## 10 S064          2     6     6      5       6        4        8      4
 ## # ... with 22 more rows, and 2 more variables: SamAdams &lt;int&gt;,
 ## #   SierraN &lt;int&gt;</code></pre>
-<div class="sourceCode" id="cb4021"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4021-1" data-line-number="1">d =<span class="st"> </span>beer <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4021-2" data-line-number="2">dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>student) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4021-3" data-line-number="3"><span class="kw">t</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4021-4" data-line-number="4"><span class="kw">dist</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4047"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4047-1" data-line-number="1">d =<span class="st"> </span>beer <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4047-2" data-line-number="2">dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>student) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4047-3" data-line-number="3"><span class="kw">t</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4047-4" data-line-number="4"><span class="kw">dist</span>()</a></code></pre></div>
 <p>I did it the funny-looking way. The cluster analysis question offers
 an alternative.</p>
 <ol start="2" style="list-style-type: lower-alpha">
@@ -1681,13 +1682,13 @@ an alternative.</p>
 beers. (Comment coming up in a moment.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4022"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4022-1" data-line-number="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
+<div class="sourceCode" id="cb4048"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4048-1" data-line-number="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;MASS&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
 ## 
 ##     select</code></pre>
-<div class="sourceCode" id="cb4025"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4025-1" data-line-number="1">beer<span class="fl">.1</span>=<span class="kw">isoMDS</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb4051"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4051-1" data-line-number="1">beer<span class="fl">.1</span>=<span class="kw">isoMDS</span>(d)</a></code></pre></div>
 <pre><code>## initial  value 13.344792 
 ## iter   5 value 10.855662
 ## iter  10 value 10.391446
@@ -1697,7 +1698,7 @@ beers. (Comment coming up in a moment.)</li>
 <li>Obtain the <code>stress</code> value of the map, and comment on it.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4027"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4027-1" data-line-number="1">beer<span class="fl">.1</span><span class="op">$</span>stress</a></code></pre></div>
+<div class="sourceCode" id="cb4053"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4053-1" data-line-number="1">beer<span class="fl">.1</span><span class="op">$</span>stress</a></code></pre></div>
 <pre><code>## [1] 10.32195</code></pre>
 <p>The stress is around 10%, on the boundary between “good” and
 “fair”. It seems as if the map should be more or less worth
@@ -1714,13 +1715,13 @@ make a data frame first, and probably pipe it into the plot,
 thus. Don’t forget we have to get the names of the 10 beers, and
 not the 32 students! The names of the columns of the data frame
 include an identifier column for the students, so skip the first one:</p>
-<div class="sourceCode" id="cb4029"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4029-1" data-line-number="1">beer_names =<span class="st"> </span>beer <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>student) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()</a>
-<a class="sourceLine" id="cb4029-2" data-line-number="2">beer_names</a></code></pre></div>
+<div class="sourceCode" id="cb4055"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4055-1" data-line-number="1">beer_names =<span class="st"> </span>beer <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>student) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()</a>
+<a class="sourceLine" id="cb4055-2" data-line-number="2">beer_names</a></code></pre></div>
 <pre><code>##  [1] &quot;AnchorS&quot;  &quot;Bass&quot;     &quot;Becks&quot;    &quot;Corona&quot;   &quot;GordonB&quot;  &quot;Guinness&quot;
 ##  [7] &quot;Heineken&quot; &quot;PetesW&quot;   &quot;SamAdams&quot; &quot;SierraN&quot;</code></pre>
-<div class="sourceCode" id="cb4031"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4031-1" data-line-number="1"><span class="kw">data.frame</span>(beer<span class="fl">.1</span><span class="op">$</span>points,<span class="dt">beer=</span>beer_names) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4031-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>beer))<span class="op">+</span></a>
-<a class="sourceLine" id="cb4031-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4057"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4057-1" data-line-number="1"><span class="kw">data.frame</span>(beer<span class="fl">.1</span><span class="op">$</span>points,<span class="dt">beer=</span>beer_names) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4057-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>beer))<span class="op">+</span></a>
+<a class="sourceLine" id="cb4057-3" data-line-number="3"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-59-1.png" width="672"  /></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Find a pair of beers close together on your map. Are they
@@ -1729,7 +1730,7 @@ similar in terms of student ratings? Explain briefly.</li>
 <p>Solution</p>
 <p>I think Sam Adams and Gordon Biersch, right in the middle of the
 map. We can pull them out by name:</p>
-<div class="sourceCode" id="cb4032"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4032-1" data-line-number="1">beer <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(SamAdams,GordonB) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4058"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4058-1" data-line-number="1">beer <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(SamAdams,GordonB) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 2
 ##    SamAdams GordonB
 ##       &lt;int&gt;   &lt;int&gt;
@@ -1771,24 +1772,24 @@ are similar. Another way to show this is to make a scatterplot of
 them, and draw on it the line where the ratings are the same. Since
 the ratings are whole numbers, they are likely to be duplicated, so I
 “jitter” them as I plot them, to prevent overplotting:</p>
-<div class="sourceCode" id="cb4034"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4034-1" data-line-number="1"><span class="kw">ggplot</span>(beer,<span class="kw">aes</span>(<span class="dt">x=</span>SamAdams,<span class="dt">y=</span>GordonB))<span class="op">+</span><span class="kw">geom_jitter</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb4034-2" data-line-number="2"><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>,<span class="dt">slope=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4060"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4060-1" data-line-number="1"><span class="kw">ggplot</span>(beer,<span class="kw">aes</span>(<span class="dt">x=</span>SamAdams,<span class="dt">y=</span>GordonB))<span class="op">+</span><span class="kw">geom_jitter</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb4060-2" data-line-number="2"><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>,<span class="dt">slope=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/adkjalkjdsg-1.png" width="672"  /></p>
 <p>Are they close to the line, or not? Dunno. Maybe I should plot the
 ratings of some far-apart beers, and see whether it looks any
 different, for example <code>Becks</code> and <code>SierraN</code>:</p>
-<div class="sourceCode" id="cb4035"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4035-1" data-line-number="1"><span class="kw">ggplot</span>(beer,<span class="kw">aes</span>(<span class="dt">x=</span>Becks,<span class="dt">y=</span>SierraN))<span class="op">+</span><span class="kw">geom_jitter</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb4035-2" data-line-number="2"><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>,<span class="dt">slope=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4061"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4061-1" data-line-number="1"><span class="kw">ggplot</span>(beer,<span class="kw">aes</span>(<span class="dt">x=</span>Becks,<span class="dt">y=</span>SierraN))<span class="op">+</span><span class="kw">geom_jitter</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb4061-2" data-line-number="2"><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>,<span class="dt">slope=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/adkjalkjdsh-1.png" width="672"  /></p>
 <p>Not much. I was expecting something a lot more impressive. Another way
 is to summarize the rating <em>differences</em> for the pairs of beers:</p>
-<div class="sourceCode" id="cb4036"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4036-1" data-line-number="1">diff=<span class="kw">with</span>(beer,SamAdams<span class="op">-</span>GordonB) </a>
-<a class="sourceLine" id="cb4036-2" data-line-number="2"><span class="kw">summary</span>(diff)</a></code></pre></div>
+<div class="sourceCode" id="cb4062"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4062-1" data-line-number="1">diff=<span class="kw">with</span>(beer,SamAdams<span class="op">-</span>GordonB) </a>
+<a class="sourceLine" id="cb4062-2" data-line-number="2"><span class="kw">summary</span>(diff)</a></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ## -3.0000 -1.0000  0.0000  0.1562  1.0000  6.0000</code></pre>
 <p>and</p>
-<div class="sourceCode" id="cb4038"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4038-1" data-line-number="1">diff=<span class="kw">with</span>(beer,Becks<span class="op">-</span>SierraN)</a>
-<a class="sourceLine" id="cb4038-2" data-line-number="2"><span class="kw">summary</span>(diff)</a></code></pre></div>
+<div class="sourceCode" id="cb4064"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4064-1" data-line-number="1">diff=<span class="kw">with</span>(beer,Becks<span class="op">-</span>SierraN)</a>
+<a class="sourceLine" id="cb4064-2" data-line-number="2"><span class="kw">summary</span>(diff)</a></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   -8.00   -4.00   -1.50   -1.75    0.00    3.00</code></pre>
 <p>Now we see something: two beers that are similar ought to have a
@@ -1848,11 +1849,11 @@ before on R Studio. Correct is all I care about.)</li>
 </ol>
 <p>Solution</p>
 <p>Copied and pasted from last time:</p>
-<div class="sourceCode" id="cb4040"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4040-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt&quot;</span></a>
-<a class="sourceLine" id="cb4040-2" data-line-number="2">stimuli=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a>
-<a class="sourceLine" id="cb4040-3" data-line-number="3">objects=stimuli<span class="op">$</span>X1</a>
-<a class="sourceLine" id="cb4040-4" data-line-number="4"><span class="kw">names</span>(stimuli)=<span class="kw">c</span>(<span class="st">&quot;object&quot;</span>,objects)</a>
-<a class="sourceLine" id="cb4040-5" data-line-number="5">stimuli</a></code></pre></div>
+<div class="sourceCode" id="cb4066"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4066-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt&quot;</span></a>
+<a class="sourceLine" id="cb4066-2" data-line-number="2">stimuli=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a>
+<a class="sourceLine" id="cb4066-3" data-line-number="3">objects=stimuli<span class="op">$</span>X1</a>
+<a class="sourceLine" id="cb4066-4" data-line-number="4"><span class="kw">names</span>(stimuli)=<span class="kw">c</span>(<span class="st">&quot;object&quot;</span>,objects)</a>
+<a class="sourceLine" id="cb4066-5" data-line-number="5">stimuli</a></code></pre></div>
 <pre><code>## # A tibble: 17 x 18
 ##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
 ##    &lt;chr&gt;             &lt;int&gt; &lt;int&gt;     &lt;int&gt; &lt;int&gt;        &lt;int&gt; &lt;int&gt;
@@ -1879,11 +1880,11 @@ before on R Studio. Correct is all I care about.)</li>
 ## #   wovenstraw &lt;int&gt;, blockofstyrofoam &lt;int&gt;, unglazedceramictile &lt;int&gt;,
 ## #   velvet &lt;int&gt;, waxpaper &lt;int&gt;, glossypaintedwood &lt;int&gt;</code></pre>
 <p>That gets a data frame with the right column names. Then:</p>
-<div class="sourceCode" id="cb4042"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4042-1" data-line-number="1">d =<span class="st"> </span>stimuli <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.dist</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4068"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4068-1" data-line-number="1">d =<span class="st"> </span>stimuli <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.dist</span>()</a></code></pre></div>
 <p>and just to check:</p>
-<div class="sourceCode" id="cb4043"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4043-1" data-line-number="1">w=<span class="kw">getOption</span>(<span class="st">&quot;width&quot;</span>)</a>
-<a class="sourceLine" id="cb4043-2" data-line-number="2"><span class="kw">options</span>(<span class="dt">width=</span><span class="dv">132</span>)</a>
-<a class="sourceLine" id="cb4043-3" data-line-number="3">d</a></code></pre></div>
+<div class="sourceCode" id="cb4069"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4069-1" data-line-number="1">w=<span class="kw">getOption</span>(<span class="st">&quot;width&quot;</span>)</a>
+<a class="sourceLine" id="cb4069-2" data-line-number="2"><span class="kw">options</span>(<span class="dt">width=</span><span class="dv">132</span>)</a>
+<a class="sourceLine" id="cb4069-3" data-line-number="3">d</a></code></pre></div>
 <pre><code>##                        innersurfaceofpinebark brick cardboard cork rubbereraser felt leatherwallet rigidplasticsheet
 ## brick                                      22                                                                       
 ## cardboard                                  23    27                                                                 
@@ -1935,19 +1936,19 @@ before on R Studio. Correct is all I care about.)</li>
 ## velvet                                
 ## waxpaper                   27         
 ## glossypaintedwood          26       12</code></pre>
-<div class="sourceCode" id="cb4045"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4045-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">width=</span>w)</a></code></pre></div>
+<div class="sourceCode" id="cb4071"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4071-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">width=</span>w)</a></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Obtain a non-metric multidimensional scaling map of the
 objects. (No plotting or comments yet.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4046"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4046-1" data-line-number="1">stimuli<span class="fl">.1</span>=<span class="kw">isoMDS</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb4072"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4072-1" data-line-number="1">stimuli<span class="fl">.1</span>=<span class="kw">isoMDS</span>(d)</a></code></pre></div>
 <pre><code>## initial  value 25.537169 
 ## iter   5 value 20.521473
 ## final  value 20.216103 
 ## converged</code></pre>
 <p>I’m going to remind myself of what this has in it:</p>
-<div class="sourceCode" id="cb4048"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4048-1" data-line-number="1"><span class="kw">names</span>(stimuli<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4074"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4074-1" data-line-number="1"><span class="kw">names</span>(stimuli<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;points&quot; &quot;stress&quot;</code></pre>
 <p>This is rather like running <code>cmdscale</code> with <code>eig=T</code>: a
 thing called <code>points</code> with coordinates to plot, and a measure
@@ -1959,7 +1960,7 @@ distances in the data, and comment on that number.</li>
 </ol>
 <p>Solution</p>
 <p>What you need here is the “stress”:</p>
-<div class="sourceCode" id="cb4050"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4050-1" data-line-number="1">stimuli<span class="fl">.1</span><span class="op">$</span>stress</a></code></pre></div>
+<div class="sourceCode" id="cb4076"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4076-1" data-line-number="1">stimuli<span class="fl">.1</span><span class="op">$</span>stress</a></code></pre></div>
 <pre><code>## [1] 20.2161</code></pre>
 <p>This is just over 20%, which is described in the notes as
 “poor”. We should thus be skeptical about the map that this produces.</p>
@@ -1972,8 +1973,8 @@ point with its (full) object name, sized suitably.</li>
 names. I’m going to plot the names smaller). I am <em>not</em>
 naming this data frame <code>d</code>, in an attempt to avoid
 overwriting things I want to keep:</p>
-<div class="sourceCode" id="cb4052"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4052-1" data-line-number="1">stimuli.<span class="fl">1.</span>d=<span class="kw">data.frame</span>(stimuli<span class="fl">.1</span><span class="op">$</span>points,<span class="dt">names=</span>objects)</a>
-<a class="sourceLine" id="cb4052-2" data-line-number="2">stimuli.<span class="fl">1.</span>d</a></code></pre></div>
+<div class="sourceCode" id="cb4078"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4078-1" data-line-number="1">stimuli.<span class="fl">1.</span>d=<span class="kw">data.frame</span>(stimuli<span class="fl">.1</span><span class="op">$</span>points,<span class="dt">names=</span>objects)</a>
+<a class="sourceLine" id="cb4078-2" data-line-number="2">stimuli.<span class="fl">1.</span>d</a></code></pre></div>
 <pre><code>##                                 X1          X2                  names
 ## innersurfaceofpinebark  -1.5343296   1.3163495 innersurfaceofpinebark
 ## brick                  -11.1198228   4.1255022                  brick
@@ -1999,8 +2000,8 @@ row names, we won’t be able to use them in
 <p>Remember that we are turning a matrix and a column into a data frame,
 so we need either the more forgiving <code>data.frame</code>, or to turn
 <code>points</code> into a data frame first, which would go like this:</p>
-<div class="sourceCode" id="cb4054"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4054-1" data-line-number="1"><span class="kw">as_tibble</span>(stimuli<span class="fl">.1</span><span class="op">$</span>points) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4054-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">name=</span>objects)</a></code></pre></div>
+<div class="sourceCode" id="cb4080"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4080-1" data-line-number="1"><span class="kw">as_tibble</span>(stimuli<span class="fl">.1</span><span class="op">$</span>points) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4080-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">name=</span>objects)</a></code></pre></div>
 <pre><code>## # A tibble: 17 x 3
 ##         V1      V2 name                  
 ##      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                 
@@ -2028,10 +2029,10 @@ things to three significant digits.
 Back to my data frame <code>stimuli.1.d</code>.
 The points have acquired names <code>X1</code> and <code>X2</code>, as usual,
 so we have all we need:</p>
-<div class="sourceCode" id="cb4056"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4056-1" data-line-number="1"><span class="kw">ggplot</span>(stimuli.<span class="fl">1.</span>d,<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
-<a class="sourceLine" id="cb4056-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb4056-3" data-line-number="3"><span class="kw">geom_text_repel</span>(<span class="dt">size=</span><span class="dv">2</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb4056-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4082"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4082-1" data-line-number="1"><span class="kw">ggplot</span>(stimuli.<span class="fl">1.</span>d,<span class="kw">aes</span>(<span class="dt">x=</span>X1,<span class="dt">y=</span>X2,<span class="dt">label=</span>names))<span class="op">+</span></a>
+<a class="sourceLine" id="cb4082-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb4082-3" data-line-number="3"><span class="kw">geom_text_repel</span>(<span class="dt">size=</span><span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb4082-4" data-line-number="4"><span class="kw">coord_fixed</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-71-1.png" width="672"  /></p>
 <p>I think the full names are good with the text this small.</p>
 <p>Actually, this came out a lot like the metric multidimensional scaling
@@ -2083,13 +2084,13 @@ what I want you to say.
 Extra: another way to assess this is with a Shepard
 <label for="tufte-mn-243" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-243" class="margin-toggle"><span class="marginnote">This always makes me think of the number 190 (now 985) bus, but that’s the wrong spelling. Spelled like this, this is also the name of the illustrator of the original pre-Disney Winnie-the-Pooh stories. See <a href="https://en.wikipedia.org/wiki/E.-H.-Shepard" class="uri">https://en.wikipedia.org/wiki/E.-H.-Shepard</a>, replacing the dashes by underscores.</span>
 diagram. That would go like this:</p>
-<div class="sourceCode" id="cb4057"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4057-1" data-line-number="1">stimuli.sh=<span class="kw">Shepard</span>(d,stimuli<span class="fl">.1</span><span class="op">$</span>points)</a>
-<a class="sourceLine" id="cb4057-2" data-line-number="2"><span class="kw">names</span>(stimuli.sh)</a></code></pre></div>
+<div class="sourceCode" id="cb4083"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4083-1" data-line-number="1">stimuli.sh=<span class="kw">Shepard</span>(d,stimuli<span class="fl">.1</span><span class="op">$</span>points)</a>
+<a class="sourceLine" id="cb4083-2" data-line-number="2"><span class="kw">names</span>(stimuli.sh)</a></code></pre></div>
 <pre><code>## [1] &quot;x&quot;  &quot;y&quot;  &quot;yf&quot;</code></pre>
 <p>In here, we plot the actual distances <code>x</code> against the map
 distances <code>y</code>, making a data frame first:</p>
-<div class="sourceCode" id="cb4059"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4059-1" data-line-number="1"><span class="kw">with</span>(stimuli.sh,<span class="kw">data.frame</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4059-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4085"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4085-1" data-line-number="1"><span class="kw">with</span>(stimuli.sh,<span class="kw">data.frame</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4085-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="23-mds_files/figure-html/unnamed-chunk-73-1.png" width="672"  /></p>
 <p>The actual distances are on the <span class="math inline">\(x\)</span>-axis and the map distances are on
 the <span class="math inline">\(y\)</span> axis, as far as I can tell (the help file is not clear on
@@ -2107,7 +2108,7 @@ something that will help you decide, and explain what you think.</li>
 <p>The calculation part is to figure out the stress value for a
 three-dimensional map, and compare it with the 20% that we had
 before. <code>k=3</code> gets the three dimensions:</p>
-<div class="sourceCode" id="cb4060"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4060-1" data-line-number="1"><span class="kw">isoMDS</span>(d,<span class="dt">k=</span><span class="dv">3</span>)<span class="op">$</span>stress</a></code></pre></div>
+<div class="sourceCode" id="cb4086"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4086-1" data-line-number="1"><span class="kw">isoMDS</span>(d,<span class="dt">k=</span><span class="dv">3</span>)<span class="op">$</span>stress</a></code></pre></div>
 <pre><code>## initial  value 14.934110 
 ## iter   5 value 11.280474
 ## iter  10 value 10.094796
@@ -2128,10 +2129,10 @@ I’m concerned, as long as your answer does something to balance the
 smaller stress value
 <label for="tufte-mn-245" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-245" class="margin-toggle"><span class="marginnote">Using more dimensions will <em>certainly</em> decrease the stress, in the same way that adding an <span class="math inline">\(x\)</span>-variable to a regression will increase R-squared; it’s the same issue, of whether the change is big enough to be worth having.</span> with the difficulty of interpreting it.</p>
 <p>The kind of <code>rgl</code> code you’ll need is something like this (not tested):</p>
-<div class="sourceCode" id="cb4063"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4063-1" data-line-number="1"><span class="kw">library</span>(rgl)</a>
-<a class="sourceLine" id="cb4063-2" data-line-number="2">stimuli<span class="fl">.2</span>=<span class="kw">isoMDS</span>(d,<span class="dt">k=</span><span class="dv">3</span>)<span class="op">$</span>points</a>
-<a class="sourceLine" id="cb4063-3" data-line-number="3"><span class="kw">plot3d</span>(stimuli<span class="fl">.2</span>)</a>
-<a class="sourceLine" id="cb4063-4" data-line-number="4"><span class="kw">text3d</span>(stimuli<span class="fl">.2</span>,<span class="dt">text=</span>object.abb)</a></code></pre></div>
+<div class="sourceCode" id="cb4089"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4089-1" data-line-number="1"><span class="kw">library</span>(rgl)</a>
+<a class="sourceLine" id="cb4089-2" data-line-number="2">stimuli<span class="fl">.2</span>=<span class="kw">isoMDS</span>(d,<span class="dt">k=</span><span class="dv">3</span>)<span class="op">$</span>points</a>
+<a class="sourceLine" id="cb4089-3" data-line-number="3"><span class="kw">plot3d</span>(stimuli<span class="fl">.2</span>)</a>
+<a class="sourceLine" id="cb4089-4" data-line-number="4"><span class="kw">text3d</span>(stimuli<span class="fl">.2</span>,<span class="dt">text=</span>object.abb)</a></code></pre></div>
 <p>What you should find, looking at this (try it!) is that objects close
 together in this 3-dimensional place are more nearly close together in
 actuality as well, because of the in my opinion notably smaller stress
