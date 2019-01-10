@@ -679,7 +679,7 @@ are <em>low</em> on the variables in question, for example day 265:</p>
 ## 1    3.1   11.8      7.3   0.8        2      24.1</code></pre>
 <p>This is predominantly low on temperature. In fact, it is kind of low
 on wind and rain too.
-<label for="tufte-mn-241" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-241" class="margin-toggle"><span class="marginnote">If you ignore the wind gust, anyway.</span>
+<label for="tufte-mn-246" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-246" class="margin-toggle"><span class="marginnote">If you ignore the wind gust, anyway.</span>
 This makes sense, because not only is it at the “wrong” end of the
 temperature arrows, it is kind of at the wrong end of the wind/rain
 arrows as well.</p>
@@ -1324,7 +1324,8 @@ and rotate it around to see how the days stack up. Unlike principal
 components, there is no sense that factor 1 is the most important and
 factor 3 the least; because of the rotation, all that we have is that
 the three factors together explain 58% of the
-variability.</p>
+variability.
+<label for="tufte-mn-247" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-247" class="margin-toggle"><span class="marginnote">This is unlike principal components because, <em>by design</em> there, the first principal component explains the most variability. That does not happen here, because the (rotated) factors act as a team.</span></p>
 <p>Note that day 8 has the most extreme score on factor 1 again. This is
 for more or less the same reasons that it had the most extreme score
 on component 1 before.</p>
@@ -1347,7 +1348,7 @@ have five variables with names invented by R.</li>
 </ol>
 <p>Solution</p>
 <p>I saved my data into <code>cov5.txt</code>,
-<label for="tufte-mn-242" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-242" class="margin-toggle"><span class="marginnote">Not to be confused with <em>covfefe</em>.</span> delimited by single spaces, so:</p>
+<label for="tufte-mn-248" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-248" class="margin-toggle"><span class="marginnote">Not to be confused with <em>covfefe</em>.</span> delimited by single spaces, so:</p>
 <div class="sourceCode" id="cb4166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4166-1" data-line-number="1">corr=<span class="kw">read_delim</span>(<span class="st">&quot;cov5.txt&quot;</span>,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
@@ -1406,8 +1407,8 @@ have only five variables?</li>
 <p>Solution</p>
 <div class="sourceCode" id="cb4176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4176-1" data-line-number="1"><span class="kw">ggscreeplot</span>(corr<span class="fl">.1</span>)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/sdljhljsahja-1.png" width="672"  /></p>
-<p>There is kind of an elbow at 3, which would suggest two
-components/factors.</p>
+<p>There is kind of an elbow at 3, which would suggest two components/factors.
+<label for="tufte-mn-249" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-249" class="margin-toggle"><span class="marginnote">There is also kind of an elbow at 4, which would suggest three factors, but that’s really too many with only 5 variables. That wouldn’t be much of a <em>reduction</em> in the number of variables, which is what principal components is trying to achieve.</span></p>
 <p>You can also use the eigenvalue-bigger-than-1 thing:</p>
 <div class="sourceCode" id="cb4177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4177-1" data-line-number="1"><span class="kw">summary</span>(corr<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Importance of components:
@@ -1494,7 +1495,8 @@ access the things in a list:</p>
 <pre><code>## [1] 50</code></pre>
 <p>and logically this is because, to R, a data frame <em>is</em> a special
 kind of a list, so anything that works for a list also works for a
-data frame, plus some extra things besides.</p>
+data frame, plus some extra things besides.
+<label for="tufte-mn-250" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-250" class="margin-toggle"><span class="marginnote">In computer science terms, a data frame is said to <strong>inherit</strong> from a list: it is a list plus extra stuff.</span></p>
 <p>The same idea applies to extracting things from the output of a
 regression (with <code>lm</code>) or something like a <code>t.test</code>: the
 output from those is also a list. But for those, I like <code>tidy</code>
@@ -2083,6 +2085,7 @@ reasonably briefly.</li>
 <p>Solution</p>
 <p>For this, we need the factor scores obtained in part
 (<a href="#part:score">here</a>).
+<label for="tufte-mn-251" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-251" class="margin-toggle"><span class="marginnote">There are two types of scores here: a person’s scores on the psychological test, 1 through 5, and their factor scores, which are decimal numbers centred at zero. Try not to get these confused.</span>
 I’m thinking that I will create a data frame
 with the original data (with the missing values removed) and the
 factor scores together, and then look in there. This will have a
@@ -2243,7 +2246,8 @@ last four.
 Having struggled through that, factors 2 and 3 are repeats of
 this. The high loaders on factor 2 are the ones shown in <code>f2</code>
 below, with the first five loading positively and the last three
-negatively.</p>
+negatively.
+<label for="tufte-mn-252" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-252" class="margin-toggle"><span class="marginnote">I think the last four items in the entire survey are different; otherwise the total number of items would be a multiple of 5.</span></p>
 <div class="sourceCode" id="cb4242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4242-1" data-line-number="1">f2=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">11</span>,<span class="dv">16</span>,<span class="dv">26</span>,<span class="dv">36</span>,<span class="dv">6</span>,<span class="dv">21</span>,<span class="dv">31</span>)</a>
 <a class="sourceLine" id="cb4242-2" data-line-number="2">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">abso=</span><span class="kw">abs</span>(Factor2)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4242-3" data-line-number="3"><span class="kw">filter</span>(abso<span class="op">==</span><span class="kw">max</span>(abso)) <span class="op">%&gt;%</span></a>

@@ -8,28 +8,28 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 
 ##  College plans
 
 
- 5199 male high school seniors in Wisconsin\endnote{I don't
-know why Wisconsin again, but that's what it is.} were classified by
+ 5199 male high school seniors in Wisconsin
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I don't  know why Wisconsin again, but that's what it is.</span> were classified by
 socio-economic status (low, lower-middle, upper-middle, high), by
 the degree that their parents encouraged them in their education (low
 or high),
@@ -49,8 +49,8 @@ Solution
 Delimited by one space:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/college-plans.txt"
-wisc = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/college-plans.txt"
+wisc=read_delim(my_url," ")
 ```
 
 ```
@@ -69,25 +69,24 @@ wisc
 
 ```
 ## # A tibble: 16 x 4
-##    social.stratum encouragement college.plans
-##    <chr>          <chr>         <chr>        
-##  1 lower          low           no           
-##  2 lower          low           yes          
-##  3 lower          high          no           
-##  4 lower          high          yes          
-##  5 lowermiddle    low           no           
-##  6 lowermiddle    low           yes          
-##  7 lowermiddle    high          no           
-##  8 lowermiddle    low           no           
-##  9 uppermiddle    low           no           
-## 10 uppermiddle    low           yes          
-## 11 uppermiddle    high          no           
-## 12 uppermiddle    high          yes          
-## 13 higher         low           no           
-## 14 higher         low           yes          
-## 15 higher         high          no           
-## 16 higher         high          yes          
-## # ... with 1 more variable: frequency <int>
+##    social.stratum encouragement college.plans frequency
+##    <chr>          <chr>         <chr>             <int>
+##  1 lower          low           no                  749
+##  2 lower          low           yes                  35
+##  3 lower          high          no                  233
+##  4 lower          high          yes                 133
+##  5 lowermiddle    low           no                  627
+##  6 lowermiddle    low           yes                  38
+##  7 lowermiddle    high          no                  330
+##  8 lowermiddle    low           no                  303
+##  9 uppermiddle    low           no                  627
+## 10 uppermiddle    low           yes                  38
+## 11 uppermiddle    high          no                  374
+## 12 uppermiddle    high          yes                 467
+## 13 higher         low           no                  153
+## 14 higher         low           yes                  26
+## 15 higher         high          no                  266
+## 16 higher         high          yes                 800
 ```
 
      
@@ -105,7 +104,7 @@ were that many students altogether:
 
 
 ```r
-wisc %>% summarize(tot = sum(frequency))
+wisc %>% summarize(tot=sum(frequency))
 ```
 
 ```
@@ -126,8 +125,8 @@ Solution
 
 
 ```r
-wisc.1 = glm(frequency ~ social.stratum * encouragement * 
-    college.plans, data = wisc, family = "poisson")
+wisc.1=glm(frequency~social.stratum*encouragement*college.plans,
+data=wisc,family="poisson")
 ```
 
    
@@ -145,7 +144,7 @@ This is `drop1`. If you forget the `test=`, you won't
 get any P-values:
 
 ```r
-drop1(wisc.1, test = "Chisq")
+drop1(wisc.1,test="Chisq")
 ```
 
 ```
@@ -153,18 +152,9 @@ drop1(wisc.1, test = "Chisq")
 ## 
 ## Model:
 ## frequency ~ social.stratum * encouragement * college.plans
-##                                            Df
-## <none>                                       
-## social.stratum:encouragement:college.plans  2
-##                                            Deviance
-## <none>                                       115.28
-## social.stratum:encouragement:college.plans   118.98
-##                                               AIC
-## <none>                                     259.52
-## social.stratum:encouragement:college.plans 259.22
-##                                              LRT
-## <none>                                          
-## social.stratum:encouragement:college.plans 3.697
+##                                            Df Deviance    AIC   LRT
+## <none>                                          115.28 259.52      
+## social.stratum:encouragement:college.plans  2   118.98 259.22 3.697
 ##                                            Pr(>Chi)
 ## <none>                                             
 ## social.stratum:encouragement:college.plans   0.1575
@@ -188,7 +178,7 @@ writing out the whole thing from scratch again.
 Anyway, the three-way interaction can come out:
 
 ```r
-wisc.2 = update(wisc.1, . ~ . - social.stratum:encouragement:college.plans)
+wisc.2=update(wisc.1,.~.-social.stratum:encouragement:college.plans)
 ```
 
    
@@ -205,7 +195,7 @@ Solution
 Start with `drop1`:
 
 ```r
-drop1(wisc.2, test = "Chisq")
+drop1(wisc.2,test="Chisq")
 ```
 
 ```
@@ -215,24 +205,13 @@ drop1(wisc.2, test = "Chisq")
 ## frequency ~ social.stratum + encouragement + college.plans + 
 ##     social.stratum:encouragement + social.stratum:college.plans + 
 ##     encouragement:college.plans
-##                              Df Deviance
-## <none>                            118.98
-## social.stratum:encouragement  3   379.18
-## social.stratum:college.plans  3   331.86
-## encouragement:college.plans   1  1024.69
-##                                  AIC    LRT
-## <none>                        259.22       
-## social.stratum:encouragement  513.42 260.20
-## social.stratum:college.plans  466.10 212.88
-## encouragement:college.plans  1162.94 905.72
-##                               Pr(>Chi)    
-## <none>                                    
-## social.stratum:encouragement < 2.2e-16 ***
-## social.stratum:college.plans < 2.2e-16 ***
-## encouragement:college.plans  < 2.2e-16 ***
+##                              Df Deviance     AIC    LRT  Pr(>Chi)    
+## <none>                            118.98  259.22                     
+## social.stratum:encouragement  3   379.18  513.42 260.20 < 2.2e-16 ***
+## social.stratum:college.plans  3   331.86  466.10 212.88 < 2.2e-16 ***
+## encouragement:college.plans   1  1024.69 1162.94 905.72 < 2.2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
    
@@ -253,8 +232,7 @@ Solution
 We have three two-way tables to make:
 
 ```r
-xtabs(frequency ~ social.stratum + encouragement, 
-    data = wisc)
+xtabs(frequency~social.stratum+encouragement,data=wisc)
 ```
 
 ```
@@ -274,9 +252,8 @@ because it's easier to judge proportions than actual frequencies:
 
 
 ```r
-xt = xtabs(frequency ~ social.stratum + encouragement, 
-    data = wisc)
-prop.table(xt, 1)
+xt=xtabs(frequency~social.stratum+encouragement,data=wisc)
+prop.table(xt,1)
 ```
 
 ```
@@ -304,8 +281,7 @@ Next, this:
 
 
 ```r
-xt = xtabs(frequency ~ social.stratum + college.plans, 
-    data = wisc)
+xt=xtabs(frequency~social.stratum+college.plans,data=wisc)
 xt
 ```
 
@@ -319,7 +295,7 @@ xt
 ```
 
 ```r
-prop.table(xt, 1)
+prop.table(xt,1)
 ```
 
 ```
@@ -346,8 +322,7 @@ Finally, this:
 
 
 ```r
-xt = xtabs(frequency ~ encouragement + college.plans, 
-    data = wisc)
+xt=xtabs(frequency~encouragement+college.plans,data=wisc)
 xt
 ```
 
@@ -359,7 +334,7 @@ xt
 ```
 
 ```r
-prop.table(xt, 1)
+prop.table(xt,1)
 ```
 
 ```
@@ -412,8 +387,8 @@ Solution
 Space-delimited:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/voting.txt"
-vote0 = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/voting.txt"
+vote0=read_delim(my_url," ")
 ```
 
 ```
@@ -433,18 +408,18 @@ vote0
 
 ```
 ## # A tibble: 1,257 x 5
-##       id class       age   sex    vote      
-##    <int> <chr>       <chr> <chr>  <chr>     
-##  1     1 upper midd~ >75   male   conservat~
-##  2     2 upper midd~ >75   male   conservat~
-##  3     3 upper midd~ >75   male   conservat~
-##  4     4 upper midd~ >75   male   conservat~
-##  5     5 upper midd~ >75   female conservat~
-##  6     6 upper midd~ >75   female conservat~
-##  7     7 upper midd~ >75   female conservat~
-##  8     8 upper midd~ >75   female conservat~
-##  9     9 upper midd~ >75   female conservat~
-## 10    10 upper midd~ >75   female conservat~
+##       id class        age   sex    vote        
+##    <int> <chr>        <chr> <chr>  <chr>       
+##  1     1 upper middle >75   male   conservative
+##  2     2 upper middle >75   male   conservative
+##  3     3 upper middle >75   male   conservative
+##  4     4 upper middle >75   male   conservative
+##  5     5 upper middle >75   female conservative
+##  6     6 upper middle >75   female conservative
+##  7     7 upper middle >75   female conservative
+##  8     8 upper middle >75   female conservative
+##  9     9 upper middle >75   female conservative
+## 10    10 upper middle >75   female conservative
 ## # ... with 1,247 more rows
 ```
 
@@ -468,24 +443,24 @@ I changed my mind about how to do this from last year. Using
 `count` is alarmingly more direct than the method I had before:
 
 ```r
-votes = vote0 %>% count(class, age, sex, vote)
+votes = vote0 %>% count(class,age,sex,vote)
 votes
 ```
 
 ```
 ## # A tibble: 58 x 5
-##    class       age   sex    vote           n
-##    <chr>       <chr> <chr>  <chr>      <int>
-##  1 lower midd~ <26   female conservat~    13
-##  2 lower midd~ <26   female labour         7
-##  3 lower midd~ <26   male   conservat~     9
-##  4 lower midd~ <26   male   labour         9
-##  5 lower midd~ 26-40 female conservat~    17
-##  6 lower midd~ 26-40 female labour        13
-##  7 lower midd~ 26-40 male   conservat~    14
-##  8 lower midd~ 26-40 male   labour        15
-##  9 lower midd~ 41-50 female conservat~    29
-## 10 lower midd~ 41-50 female labour         4
+##    class        age   sex    vote             n
+##    <chr>        <chr> <chr>  <chr>        <int>
+##  1 lower middle <26   female conservative    13
+##  2 lower middle <26   female labour           7
+##  3 lower middle <26   male   conservative     9
+##  4 lower middle <26   male   labour           9
+##  5 lower middle 26-40 female conservative    17
+##  6 lower middle 26-40 female labour          13
+##  7 lower middle 26-40 male   conservative    14
+##  8 lower middle 26-40 male   labour          15
+##  9 lower middle 41-50 female conservative    29
+## 10 lower middle 41-50 female labour           4
 ## # ... with 48 more rows
 ```
 
@@ -506,8 +481,7 @@ Solution
 
 
 ```r
-vote.1 = glm(n ~ class * age * sex * vote, data = votes, 
-    family = "poisson")
+vote.1=glm(n~class*age*sex*vote,data=votes,family="poisson")
 ```
 
      
@@ -523,7 +497,7 @@ Alternating `drop1` and `update` until everything
 remaining is significant:
 
 ```r
-drop1(vote.1, test = "Chisq")
+drop1(vote.1,test="Chisq")
 ```
 
 ```
@@ -531,12 +505,9 @@ drop1(vote.1, test = "Chisq")
 ## 
 ## Model:
 ## n ~ class * age * sex * vote
-##                    Df Deviance    AIC   LRT
-## <none>                   0.000 381.49      
-## class:age:sex:vote  7    8.086 375.58 8.086
-##                    Pr(>Chi)
-## <none>                     
-## class:age:sex:vote   0.3251
+##                    Df Deviance    AIC   LRT Pr(>Chi)
+## <none>                   0.000 381.49               
+## class:age:sex:vote  7    8.086 375.58 8.086   0.3251
 ```
 
      
@@ -545,8 +516,8 @@ Not anywhere near significant, so out it comes:
 
 
 ```r
-vote.2 = update(vote.1, . ~ . - class:age:sex:vote)
-drop1(vote.2, test = "Chisq")
+vote.2=update(vote.1,.~.-class:age:sex:vote)
+drop1(vote.2,test="Chisq")
 ```
 
 ```
@@ -556,21 +527,14 @@ drop1(vote.2, test = "Chisq")
 ## n ~ class + age + sex + vote + class:age + class:sex + age:sex + 
 ##     class:vote + age:vote + sex:vote + class:age:sex + class:age:vote + 
 ##     class:sex:vote + age:sex:vote
-##                Df Deviance    AIC     LRT
-## <none>               8.086 375.58        
-## class:age:sex   8   11.244 362.74  3.1583
-## class:age:vote  7   21.962 375.46 13.8759
-## class:sex:vote  2   10.142 373.64  2.0564
-## age:sex:vote    4   14.239 373.73  6.1528
-##                Pr(>Chi)  
-## <none>                   
-## class:age:sex   0.92404  
-## class:age:vote  0.05343 .
-## class:sex:vote  0.35765  
-## age:sex:vote    0.18802  
+##                Df Deviance    AIC     LRT Pr(>Chi)  
+## <none>               8.086 375.58                   
+## class:age:sex   8   11.244 362.74  3.1583  0.92404  
+## class:age:vote  7   21.962 375.46 13.8759  0.05343 .
+## class:sex:vote  2   10.142 373.64  2.0564  0.35765  
+## age:sex:vote    4   14.239 373.73  6.1528  0.18802  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -579,8 +543,8 @@ Take out the first one, since it has the highest P-value:
 
 
 ```r
-vote.3 = update(vote.2, . ~ . - class:age:sex)
-drop1(vote.3, test = "Chisq")
+vote.3=update(vote.2,.~.-class:age:sex)
+drop1(vote.3,test="Chisq")
 ```
 
 ```
@@ -590,19 +554,13 @@ drop1(vote.3, test = "Chisq")
 ## n ~ class + age + sex + vote + class:age + class:sex + age:sex + 
 ##     class:vote + age:vote + sex:vote + class:age:vote + class:sex:vote + 
 ##     age:sex:vote
-##                Df Deviance    AIC     LRT
-## <none>              11.244 362.74        
-## class:age:vote  7   25.171 362.66 13.9262
-## class:sex:vote  2   12.794 360.29  1.5498
-## age:sex:vote    4   19.248 362.74  8.0041
-##                Pr(>Chi)  
-## <none>                   
-## class:age:vote  0.05251 .
-## class:sex:vote  0.46074  
-## age:sex:vote    0.09143 .
+##                Df Deviance    AIC     LRT Pr(>Chi)  
+## <none>              11.244 362.74                   
+## class:age:vote  7   25.171 362.66 13.9262  0.05251 .
+## class:sex:vote  2   12.794 360.29  1.5498  0.46074  
+## age:sex:vote    4   19.248 362.74  8.0041  0.09143 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -611,8 +569,8 @@ drop1(vote.3, test = "Chisq")
 
 
 ```r
-vote.4 = update(vote.3, . ~ . - class:sex:vote)
-drop1(vote.4, test = "Chisq")
+vote.4=update(vote.3,.~.-class:sex:vote)
+drop1(vote.4,test="Chisq")
 ```
 
 ```
@@ -621,19 +579,13 @@ drop1(vote.4, test = "Chisq")
 ## Model:
 ## n ~ class + age + sex + vote + class:age + class:sex + age:sex + 
 ##     class:vote + age:vote + sex:vote + class:age:vote + age:sex:vote
-##                Df Deviance    AIC     LRT
-## <none>              12.794 360.29        
-## class:sex       2   13.477 356.97  0.6830
-## class:age:vote  7   26.698 360.19 13.9036
-## age:sex:vote    4   21.211 360.71  8.4172
-##                Pr(>Chi)  
-## <none>                   
-## class:sex       0.71070  
-## class:age:vote  0.05292 .
-## age:sex:vote    0.07744 .
+##                Df Deviance    AIC     LRT Pr(>Chi)  
+## <none>              12.794 360.29                   
+## class:sex       2   13.477 356.97  0.6830  0.71070  
+## class:age:vote  7   26.698 360.19 13.9036  0.05292 .
+## age:sex:vote    4   21.211 360.71  8.4172  0.07744 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -642,8 +594,8 @@ drop1(vote.4, test = "Chisq")
 
 
 ```r
-vote.5 = update(vote.4, . ~ . - class:sex)
-drop1(vote.5, test = "Chisq")
+vote.5=update(vote.4,.~.-class:sex)
+drop1(vote.5,test="Chisq")
 ```
 
 ```
@@ -652,17 +604,12 @@ drop1(vote.5, test = "Chisq")
 ## Model:
 ## n ~ class + age + sex + vote + class:age + age:sex + class:vote + 
 ##     age:vote + sex:vote + class:age:vote + age:sex:vote
-##                Df Deviance    AIC     LRT
-## <none>              13.477 356.97        
-## class:age:vote  7   27.633 357.13 14.1555
-## age:sex:vote    4   22.081 357.57  8.6037
-##                Pr(>Chi)  
-## <none>                   
-## class:age:vote  0.04848 *
-## age:sex:vote    0.07181 .
+##                Df Deviance    AIC     LRT Pr(>Chi)  
+## <none>              13.477 356.97                   
+## class:age:vote  7   27.633 357.13 14.1555  0.04848 *
+## age:sex:vote    4   22.081 357.57  8.6037  0.07181 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -672,8 +619,8 @@ I don't like having three-way interactions, so I'm going to yank
 
 
 ```r
-vote.6 = update(vote.5, . ~ . - age:sex:vote)
-drop1(vote.6, test = "Chisq")
+vote.6=update(vote.5,.~.-age:sex:vote)
+drop1(vote.6,test="Chisq")
 ```
 
 ```
@@ -682,19 +629,13 @@ drop1(vote.6, test = "Chisq")
 ## Model:
 ## n ~ class + age + sex + vote + class:age + age:sex + class:vote + 
 ##     age:vote + sex:vote + class:age:vote
-##                Df Deviance    AIC     LRT
-## <none>              22.081 357.57        
-## age:sex         4   22.918 350.41  0.8372
-## sex:vote        1   33.018 366.51 10.9376
-## class:age:vote  7   36.236 357.73 14.1555
-##                 Pr(>Chi)    
-## <none>                      
-## age:sex        0.9333914    
-## sex:vote       0.0009423 ***
-## class:age:vote 0.0484843 *  
+##                Df Deviance    AIC     LRT  Pr(>Chi)    
+## <none>              22.081 357.57                      
+## age:sex         4   22.918 350.41  0.8372 0.9333914    
+## sex:vote        1   33.018 366.51 10.9376 0.0009423 ***
+## class:age:vote  7   36.236 357.73 14.1555 0.0484843 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -703,8 +644,8 @@ The age-sex interaction can go, but we must be near the end now:
 
 
 ```r
-vote.7 = update(vote.6, . ~ . - age:sex)
-drop1(vote.7, test = "Chisq")
+vote.7=update(vote.6,.~.-age:sex)
+drop1(vote.7,test="Chisq")
 ```
 
 ```
@@ -713,17 +654,12 @@ drop1(vote.7, test = "Chisq")
 ## Model:
 ## n ~ class + age + sex + vote + class:age + class:vote + age:vote + 
 ##     sex:vote + class:age:vote
-##                Df Deviance    AIC    LRT
-## <none>              22.918 350.41       
-## sex:vote        1   33.808 359.30 10.890
-## class:age:vote  7   37.073 350.57 14.155
-##                 Pr(>Chi)    
-## <none>                      
-## sex:vote       0.0009667 ***
-## class:age:vote 0.0484843 *  
+##                Df Deviance    AIC    LRT  Pr(>Chi)    
+## <none>              22.918 350.41                     
+## sex:vote        1   33.808 359.30 10.890 0.0009667 ***
+## class:age:vote  7   37.073 350.57 14.155 0.0484843 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -838,7 +774,7 @@ This is `xtabs` again. The 3-way interaction is a bit
 tricky, so we'll do the simple one first:
 
 ```r
-xt = xtabs(n ~ vote + sex, data = votes)
+xt=xtabs(n~vote+sex,data=votes)
 xt
 ```
 
@@ -866,7 +802,7 @@ can do a `prop.table` here if you like, summing over *columns*:
 
 
 ```r
-prop.table(xt, 2)
+prop.table(xt,2)
 ```
 
 ```
@@ -885,7 +821,7 @@ Then the tricky one:
 
 
 ```r
-xt = xtabs(n ~ vote + age + class, data = votes)
+xt=xtabs(n~vote+age+class,data=votes)
 xt
 ```
 
@@ -945,7 +881,7 @@ social classes each add up to 1, which is the third dimension:
 
 
 ```r
-prop.table(xt, 3)
+prop.table(xt,3)
 ```
 
 ```
@@ -979,7 +915,7 @@ so that we have a "joint distribution" in each table. We can put
 
 
 ```r
-prop.table(xt, c(2, 3))
+prop.table(xt,c(2,3))
 ```
 
 ```
@@ -1009,8 +945,8 @@ prop.table(xt, c(2, 3))
 
 This is making each `class`-`age` combination add up to
 1, so that we can clearly see what fraction of voters voted for each
-party in each case.\endnote{The reason I thought of doing this is that
-these two are "all the variables except response".}
+party in each case.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The reason I thought of doing this is that these two are all the variables except response.</span>
 In the first two subtables, the two youngest
 subgroups are clearly different from the others, with a smaller
 proportion of people voting Conservative rather than Labour than for

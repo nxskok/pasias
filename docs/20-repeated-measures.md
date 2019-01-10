@@ -24,23 +24,23 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.1     v stringr 1.3.1
-## v readr   1.1.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x tidyr::expand() masks Matrix::expand()
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-## x dplyr::recode() masks car::recode()
-## x purrr::some()   masks car::some()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ tidyr::expand() masks Matrix::expand()
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ✖ dplyr::recode() masks car::recode()
+## ✖ purrr::some()   masks car::some()
 ```
 
 
@@ -69,8 +69,8 @@ A `.csv` file, so `read_csv`. (I typed the data from
 \citet{christensen01} into a spreadsheet.)
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/ratweight.csv"
-weights = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/ratweight.csv"
+weights=read_csv(my_url)
 ```
 
 ```
@@ -136,9 +136,8 @@ The response variable is the same idea as for any MANOVA: just
 glue the columns together:
 
 ```r
-response = with(weights, cbind(Time0, Time1, Time2, 
-    Time3, Time4))
-weights.1 = lm(response ~ drug, data = weights)
+response=with(weights,cbind(Time0,Time1,Time2,Time3,Time4))
+weights.1=lm(response~drug,data=weights)
 ```
 
      
@@ -157,10 +156,9 @@ Solution
 Something like this:
 
 ```r
-times = colnames(response)
-times.df = data.frame(times)
-weights.2 = Manova(weights.1, idata = times.df, 
-    idesign = ~times)
+times=colnames(response)
+times.df=data.frame(times)
+weights.2=Manova(weights.1,idata=times.df,idesign=~times)
 ```
 
      
@@ -192,19 +190,13 @@ weights.2
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df
-## (Intercept)  1   0.99257   3204.1      1
-## drug         2   0.39192      7.7      2
-## times        1   0.98265    297.4      4
-## drug:times   2   0.87791      4.3      8
-##             den Df    Pr(>F)    
-## (Intercept)     24 < 2.2e-16 ***
-## drug            24 0.0025559 ** 
-## times           21 < 2.2e-16 ***
-## drug:times      44 0.0006931 ***
+##             Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)  1   0.99257   3204.1      1     24 < 2.2e-16 ***
+## drug         2   0.39192      7.7      2     24 0.0025559 ** 
+## times        1   0.98265    297.4      4     21 < 2.2e-16 ***
+## drug:times   2   0.87791      4.3      8     44 0.0006931 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -230,8 +222,8 @@ Solution
 
 
 ```r
-weights.long = weights %>% gather(time, weight, 
-    Time0:Time4)
+weights.long = weights %>% 
+gather(time,weight,Time0:Time4) 
 weights.long
 ```
 
@@ -263,9 +255,8 @@ like this:
 
 
 ```r
-weights2.long <- weights %>% gather(timex, weight, 
-    Time0:Time4) %>% separate(timex, into = c("junk", 
-    "time"), sep = 4)
+weights %>% gather(timex,weight,Time0:Time4) %>%
+separate(timex,into=c("junk","time"),sep=4) -> weights2.long
 weights2.long %>% sample_n(20)
 ```
 
@@ -273,26 +264,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 4
 ##    drug       junk  time  weight
 ##    <chr>      <chr> <chr>  <int>
-##  1 thiouracil Time  0         53
-##  2 thyroxin   Time  0         56
-##  3 control    Time  0         51
-##  4 thyroxin   Time  4        140
-##  5 thiouracil Time  1         80
-##  6 thiouracil Time  2        100
-##  7 thyroxin   Time  0         57
-##  8 control    Time  1         67
-##  9 control    Time  3        139
-## 10 control    Time  4        140
-## 11 thyroxin   Time  3        120
-## 12 control    Time  3        144
-## 13 control    Time  2        123
-## 14 thiouracil Time  3        114
-## 15 thiouracil Time  4        140
-## 16 control    Time  2         90
-## 17 control    Time  2        112
-## 18 control    Time  0         57
-## 19 control    Time  0         49
-## 20 thiouracil Time  2        100
+##  1 thiouracil Time  4        122
+##  2 thyroxin   Time  1         72
+##  3 control    Time  2        104
+##  4 thiouracil Time  2        100
+##  5 thiouracil Time  1         61
+##  6 control    Time  4        177
+##  7 control    Time  3        129
+##  8 thyroxin   Time  2         97
+##  9 thiouracil Time  3         90
+## 10 control    Time  4        141
+## 11 thiouracil Time  3        120
+## 12 control    Time  0         63
+## 13 control    Time  0         60
+## 14 thiouracil Time  2        109
+## 15 thiouracil Time  1         88
+## 16 thyroxin   Time  1         85
+## 17 control    Time  2        110
+## 18 control    Time  4        185
+## 19 thiouracil Time  4        119
+## 20 control    Time  2         94
 ```
 
  
@@ -308,8 +299,9 @@ Since the piece of the time we want is the number,
 
 
 ```r
-weights2.long = weights %>% gather(timex, weight, 
-    Time0:Time4) %>% mutate(time = parse_number(timex))
+weights2.long = weights %>% 
+gather(timex,weight,Time0:Time4) %>%
+mutate(time=parse_number(timex))
 weights2.long %>% sample_n(20)
 ```
 
@@ -317,26 +309,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 4
 ##    drug       timex weight  time
 ##    <chr>      <chr>  <int> <dbl>
-##  1 control    Time0     52     0
-##  2 thiouracil Time3     90     3
-##  3 thiouracil Time1     86     1
-##  4 thiouracil Time3    114     3
-##  5 thiouracil Time2     92     2
-##  6 control    Time2    114     2
-##  7 control    Time3    121     3
-##  8 thyroxin   Time0     57     0
-##  9 thyroxin   Time3    148     3
-## 10 control    Time1     91     1
-## 11 control    Time2    112     2
-## 12 control    Time3    146     3
-## 13 thyroxin   Time2    121     2
-## 14 thiouracil Time2    100     2
-## 15 thiouracil Time4    122     4
-## 16 control    Time4    177     4
-## 17 thyroxin   Time2     90     2
-## 18 control    Time3    139     3
-## 19 control    Time1     82     1
-## 20 control    Time3    110     3
+##  1 thiouracil Time0     53     0
+##  2 control    Time3    130     3
+##  3 control    Time1     91     1
+##  4 thiouracil Time0     56     0
+##  5 thiouracil Time3    111     3
+##  6 thiouracil Time0     51     0
+##  7 thiouracil Time2    100     2
+##  8 thiouracil Time3    123     3
+##  9 control    Time2    104     2
+## 10 thiouracil Time4    122     4
+## 11 control    Time1     77     1
+## 12 control    Time1     86     1
+## 13 thiouracil Time2     93     2
+## 14 control    Time1     70     1
+## 15 control    Time1     71     1
+## 16 thyroxin   Time1     71     1
+## 17 thyroxin   Time2     97     2
+## 18 thiouracil Time1     80     1
+## 19 control    Time0     60     0
+## 20 thyroxin   Time0     52     0
 ```
 
  
@@ -360,13 +352,13 @@ latter using the data frame that came out of the
 grabbed the `x` spot:
 
 ```r
-weights.long %>% group_by(time, drug) %>% summarize(mean.weight = mean(weight)) %>% 
-    ggplot(aes(x = time, y = mean.weight, colour = drug, 
-        group = drug)) + geom_point() + geom_line()
+weights.long %>% group_by(time,drug) %>%
+summarize(mean.weight=mean(weight)) %>%
+ggplot(aes(x=time,y=mean.weight,colour=drug,group=drug))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-9-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
        
  
@@ -407,8 +399,8 @@ do that here. Then we save the result into a new data frame
 `wt`, and take a look at the first few lines:
 
 ```r
-wt = weights %>% mutate(subject = 1:27) %>% gather(time, 
-    weight, Time0:Time4)
+wt = weights %>% mutate(subject=1:27) %>% 
+gather(time,weight,Time0:Time4)  
 wt
 ```
 
@@ -442,12 +434,10 @@ according to subject and colouring them according to
 
 ```r
 library(ggplot2)
-ggplot(wt, aes(time, weight, group = subject, 
-    colour = drug)) + geom_line()
+ggplot(wt,aes(time,weight,group=subject,colour=drug))+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/mantequilla-1} 
+<img src="20-repeated-measures_files/figure-html/mantequilla-1.png" width="576"  />
 
  
 
@@ -473,12 +463,10 @@ you see the point:
 
 
 ```r
-ggplot(wt, aes(time, weight, group = subject, 
-    colour = weight)) + geom_line()
+ggplot(wt,aes(time,weight,group=subject,colour=weight))+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/alphington-1} 
+<img src="20-repeated-measures_files/figure-html/alphington-1.png" width="576"  />
 
  
 
@@ -490,9 +478,8 @@ mixed-model idea (described elsewhere in this assignment):
 
 
 ```r
-wt.1 = lmer(weight ~ drug * time + (1 | subject), 
-    data = wt)
-drop1(wt.1, test = "Chisq")
+wt.1=lmer(weight~drug*time+(1|subject),data=wt)
+drop1(wt.1,test="Chisq")
 ```
 
 ```
@@ -504,8 +491,7 @@ drop1(wt.1, test = "Chisq")
 ## <none>        990.5                    
 ## drug:time  8 1067.8 93.27 < 2.2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -551,8 +537,8 @@ The usual, separated by a single space:
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/geriatrics.txt"
-geriatrics = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/geriatrics.txt"
+geriatrics=read_delim(my_url," ")
 ```
 
 ```
@@ -605,9 +591,8 @@ Solution
 This:
 
 ```r
-response = with(geriatrics, cbind(t1, t2, t3, 
-    t4))
-geriatrics.1 = lm(response ~ treatment, data = geriatrics)
+response=with(geriatrics,cbind(t1,t2,t3,t4))
+geriatrics.1=lm(response~treatment,data=geriatrics)
 ```
 
      
@@ -630,10 +615,9 @@ Make sure `car` is loaded, and do the `idata` and
 `idesign` thing:
 
 ```r
-times = colnames(response)
-times.df = data.frame(times)
-geriatrics.2 = Manova(geriatrics.1, idata = times.df, 
-    idesign = ~times)
+times=colnames(response)
+times.df=data.frame(times)
+geriatrics.2=Manova(geriatrics.1,idata=times.df,idesign=~times)
 ```
 
      
@@ -675,19 +659,13 @@ geriatrics.2
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##                 Df test stat approx F num Df
-## (Intercept)      1   0.74589   52.836      1
-## treatment        2   0.24366    2.899      2
-## times            1   0.72143   13.812      3
-## treatment:times  2   0.92581    4.884      6
-##                 den Df    Pr(>F)    
-## (Intercept)         18 9.332e-07 ***
-## treatment           18  0.080994 .  
-## times               16  0.000105 ***
-## treatment:times     34  0.001073 ** 
+##                 Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)      1   0.74589   52.836      1     18 9.332e-07 ***
+## treatment        2   0.24366    2.899      2     18  0.080994 .  
+## times            1   0.72143   13.812      3     16  0.000105 ***
+## treatment:times  2   0.92581    4.884      6     34  0.001073 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -715,8 +693,8 @@ Solution
 The usual layout for `gather`:
 
 ```r
-geriatrics.long = geriatrics %>% gather(time, 
-    intpct, t1:t4)
+geriatrics.long = geriatrics %>% 
+gather(time,intpct,t1:t4) 
 geriatrics.long
 ```
 
@@ -767,8 +745,8 @@ Solution
 `group_by` followed by `summarize`, as ever:
 
 ```r
-means <- geriatrics.long %>% group_by(treatment, 
-    time) %>% summarize(mean = mean(intpct))
+geriatrics.long %>% group_by(treatment,time) %>%
+summarize(mean=mean(intpct)) -> means
 means
 ```
 
@@ -806,12 +784,11 @@ Once you have the means, this is not too bad:
 
 
 ```r
-ggplot(means, aes(x = time, y = mean, group = treatment, 
-    colour = treatment)) + geom_point() + geom_line()
+ggplot(means,aes(x=time,y=mean,group=treatment,colour=treatment))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-19-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
  
 
@@ -835,11 +812,11 @@ between times 1 and 2, a completely different pattern to the others.
 The two treatments `bt` and `ro` are not exactly
 parallel, but they do at least  have qualitatively the same
 pattern.
-\marginnote{That is to say, it's the same kind of shape.} It
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is to say, it's the same kind of shape.</span> It
 is, I think, the fact that the control group has a
 *completely* different pattern over time that makes the
 interaction come out significant.
-\marginnote{I am kind of wrong about    that, as we see.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I am kind of wrong about    that, as we see.</span>
 I'm going to explore that some more later, but first I want to get
 you to draw a spaghetti plot.
     
@@ -859,12 +836,11 @@ Solution
 This is almost easier to do than it is to ask you to do:
 
 ```r
-ggplot(geriatrics.long, aes(x = time, y = intpct, 
-    colour = treatment, group = subject)) + geom_line()
+ggplot(geriatrics.long,aes(x=time,y=intpct,colour=treatment,group=subject))+
+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-20-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
      
 
@@ -892,14 +868,14 @@ up and down, and the green lines do basically nothing.
 I said that the control subjects' time pattern was noticeably
 different from the others. Which made me think: what if we remove the
 control subjects? Would there still be an interaction?
-\marginnote{This is rather like removing time zero in the example in class.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is rather like removing time zero in the example in class.</span>
 
 All right, we need to start with the original wide data frame, and
 from *that* select everything but `ctrl`:
 
 
 ```r
-gg = geriatrics %>% filter(treatment != "ctrl")
+gg = geriatrics %>% filter(treatment!="ctrl") 
 gg
 ```
 
@@ -927,7 +903,7 @@ gg
 
 So now there are two treatments left, seven people on
 each:
-\marginnote{The factor *treatment* still has three levels,  but only two of them have any remaining data.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The factor *treatment* still has three levels,  but only two of them have any remaining data.</span> 
 
 
 ```r
@@ -952,30 +928,24 @@ and run the `Manova`. There's really nothing new here:
 
 ```r
 attach(gg)
-response = cbind(t1, t2, t3, t4)
-gg.1 = lm(response ~ treatment)
-times = colnames(response)
-times.df = data.frame(times)
-gg.2 = Manova(gg.1, idata = times.df, idesign = ~times)
+response=cbind(t1,t2,t3,t4)
+gg.1=lm(response~treatment)
+times=colnames(response)
+times.df=data.frame(times)
+gg.2=Manova(gg.1,idata=times.df,idesign=~times)
 gg.2
 ```
 
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##                 Df test stat approx F num Df
-## (Intercept)      1   0.76503   39.069      1
-## treatment        1   0.18506    2.725      1
-## times            1   0.81730   14.912      3
-## treatment:times  1   0.58168    4.635      3
-##                 den Df    Pr(>F)    
-## (Intercept)         12 4.251e-05 ***
-## treatment           12 0.1247005    
-## times               10 0.0005073 ***
-## treatment:times     10 0.0279590 *  
+##                 Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)      1   0.76503   39.069      1     12 4.251e-05 ***
+## treatment        1   0.18506    2.725      1     12 0.1247005    
+## times            1   0.81730   14.912      3     10 0.0005073 ***
+## treatment:times  1   0.58168    4.635      3     10 0.0279590 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```r
@@ -1003,7 +973,7 @@ main effects: there is no effect of treatment, but there is an effect
 of time. Or, to put it another way, once you allow for an effect of
 time, there is no difference between the two remaining
 treatments.
-\marginnote{There is often an effect of time, which is why you would be taking multiple time measurements, but the issue is when you take that into account, you are giving yourself an improved chance, in general, to find a treatment effect. This is exactly the same idea as using a matched pairs design to give yourself an improved chance of finding a treatment effect, even though the subjects might be quite different from each other. In fact, repeated measures *is* matched pairs with more than two measurements on each person. Which makes me think, I should have you do a matched pairs as repeated measures.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There is often an effect of time, which is why you would be taking multiple time measurements, but the issue is when you take that into account, you are giving yourself an improved chance, in general, to find a treatment effect. This is exactly the same idea as using a matched pairs design to give yourself an improved chance of finding a treatment effect, even though the subjects might be quite different from each other. In fact, repeated measures *is* matched pairs with more than two measurements on each person. Which makes me think, I should have you do a matched pairs as repeated measures.</span>
 
 Thinking back to our spaghetti plot, we are now comparing the red and
 blue treatments. They both go up at time 2 and down afterwards, which
@@ -1020,7 +990,7 @@ came up with:
 
 
 ```r
-fake = read.csv("fake.csv", header = T)
+fake=read.csv("fake.csv",header=T)
 fake
 ```
 
@@ -1052,14 +1022,13 @@ long format to use again later.
 
 
 ```r
-fake.long <- fake %>% gather(times, score, t1:t4)
-fake.long %>% ggplot(aes(x = times, y = score, 
-    colour = drug, group = subject)) + geom_point() + 
-    geom_line()
+fake %>% gather(times,score,t1:t4) -> fake.long
+fake.long %>%
+ggplot(aes(x=times,y=score,colour=drug,group=subject))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-25-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
  
 
@@ -1076,11 +1045,11 @@ Let's do the repeated-measures ANOVA and see whether my guess above is right:
 
 
 ```r
-response = with(fake, cbind(t1, t2, t3, t4))
-fake.1 = lm(response ~ drug, data = fake)
-times = colnames(response)
-times.df = data.frame(times)
-fake.2 = Manova(fake.1, idata = times.df, idesign = ~times)
+response=with(fake,cbind(t1,t2,t3,t4))
+fake.1=lm(response~drug,data=fake)
+times=colnames(response)
+times.df=data.frame(times)
+fake.2=Manova(fake.1,idata=times.df,idesign=~times)
 ```
 
  
@@ -1107,7 +1076,7 @@ frame that you want:
 
 
 ```r
-r <- fake %>% select(t1:t4)
+fake %>% select(t1:t4) -> r
 class(r)
 ```
 
@@ -1139,7 +1108,7 @@ This is the kind of thing you'd have to do in a function, I think,
 since you'd have to have some way of telling the function which are
 the "time" columns. Anyway, hope you haven't forgotten what we were
 doing:
-\marginnote{I got sidetracked, surprise surprise.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I got sidetracked, surprise surprise.</span>
 
 
 ```r
@@ -1149,19 +1118,13 @@ fake.2
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df
-## (Intercept)  1   0.98478   517.73      1
-## drug         1   0.68417    17.33      1
-## times        1   0.98778   161.71      3
-## drug:times   1   0.64900     3.70      3
-##             den Df    Pr(>F)    
-## (Intercept)      8 1.475e-08 ***
-## drug             8  0.003152 ** 
-## times            6 3.970e-06 ***
-## drug:times       6  0.081108 .  
+##             Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)  1   0.98478   517.73      1      8 1.475e-08 ***
+## drug         1   0.68417    17.33      1      8  0.003152 ** 
+## times        1   0.98778   161.71      3      6 3.970e-06 ***
+## drug:times   1   0.64900     3.70      3      6  0.081108 .  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1192,20 +1155,16 @@ head(fake.long)
 ```
 
 ```r
-fake.3 = aov(score ~ drug, data = fake.long)
+fake.3=aov(score~drug,data=fake.long)
 summary(fake.3)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## drug         1  133.2  133.23   30.54
-## Residuals   38  165.8    4.36        
-##               Pr(>F)    
-## drug        2.54e-06 ***
-## Residuals               
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## drug         1  133.2  133.23   30.54 2.54e-06 ***
+## Residuals   38  165.8    4.36                     
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1218,7 +1177,7 @@ haven't really, because we have done so by cheating.
 
 What we could do instead is to average the scores for each subject
 over all the times,
-\marginnote{This would be allowable, since we are  averaging *over* the time-dependence; we are creating 10  independent averages, from the 10 subjects. People do this kind of  thing, instead of having to deal with the repeated measures.} for
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This would be allowable, since we are  averaging *over* the time-dependence; we are creating 10  independent averages, from the 10 subjects. People do this kind of  thing, instead of having to deal with the repeated measures.</span> for
 which we go back to the original data frame:
 
 
@@ -1241,20 +1200,16 @@ fake
 ```
 
 ```r
-fake %>% mutate(avg.score = (t1 + t2 + t3 + t4)/4) %>% 
-    aov(avg.score ~ drug, data = .) %>% summary()
+fake %>% mutate(avg.score=(t1+t2+t3+t4)/4) %>%
+aov(avg.score~drug,data=.) %>% summary()
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## drug         1  33.31   33.31   17.33
-## Residuals    8  15.37    1.92        
-##              Pr(>F)   
-## drug        0.00315 **
-## Residuals             
+##             Df Sum Sq Mean Sq F value  Pr(>F)   
+## drug         1  33.31   33.31   17.33 0.00315 **
+## Residuals    8  15.37    1.92                   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1332,8 +1287,8 @@ The usual, data values separated by one space:
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/airport.txt"
-airport = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/c32/airport.txt"
+airport=read_delim(my_url," ")
 ```
 
 ```
@@ -1391,8 +1346,7 @@ Solution
 
 
 ```r
-airport.long = airport %>% gather(when, epinephrine, 
-    epi_1:epi_4)
+airport.long = airport %>% gather(when, epinephrine, epi_1:epi_4) 
 airport.long
 ```
 
@@ -1437,13 +1391,12 @@ Solution
 I hope you are thinking "pipeline":
 
 ```r
-airport.long %>% mutate(time = parse_number(when)) %>% 
-    ggplot(aes(x = time, y = epinephrine, colour = factor(location), 
-        group = child)) + geom_point() + geom_line()
+airport.long %>% mutate(time=parse_number(when)) %>%
+ggplot(aes(x=time,y=epinephrine,colour=factor(location),group=child))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-35-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
          
 
@@ -1459,16 +1412,15 @@ Another problem with this plot is that there are so many children, you
 can't see the ones underneath because the ones on top are overwriting
 them. The solution to that is to make the lines (partly) transparent,
 which is controlled by a parameter `alpha`:
-\marginnote{This is  different from the 0.05 *alpha*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is  different from the 0.05 *alpha*.</span>
 
 ```r
-airport.long %>% mutate(time = parse_number(when)) %>% 
-    ggplot(aes(x = time, y = epinephrine, colour = factor(location), 
-        group = child)) + geom_point() + geom_line(alpha = 0.2)
+airport.long %>% mutate(time=parse_number(when)) %>%
+ggplot(aes(x=time,y=epinephrine,colour=factor(location),group=child))+
+geom_point()+geom_line(alpha=0.2)
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-36-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
          
 
@@ -1512,15 +1464,15 @@ Solution
 We've done this before:
 
 ```r
-airport.long %>% mutate(time = parse_number(when)) %>% 
-    mutate(floc = factor(location)) %>% group_by(floc, 
-    time) %>% summarize(mean.epi = mean(epinephrine)) %>% 
-    ggplot(aes(x = time, y = mean.epi, group = floc, 
-        colour = floc)) + geom_point() + geom_line()
+airport.long %>% mutate(time=parse_number(when)) %>%
+mutate(floc=factor(location)) %>% 
+group_by(floc,time) %>%
+summarize(mean.epi=mean(epinephrine)) %>%
+ggplot(aes(x=time,y=mean.epi,group=floc,colour=floc))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-37-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
          
 
@@ -1534,14 +1486,14 @@ should try it:
 
 
 ```r
-airport.long %>% mutate(time = parse_number(when)) %>% 
-    group_by(location, time) %>% summarize(mean.epi = mean(epinephrine)) %>% 
-    ggplot(aes(x = time, y = mean.epi, group = location, 
-        colour = location)) + geom_point() + geom_line()
+airport.long %>% mutate(time=parse_number(when)) %>%
+group_by(location,time) %>%
+summarize(mean.epi=mean(epinephrine)) %>%
+ggplot(aes(x=time,y=mean.epi,group=location,colour=location))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-38-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
           
 
@@ -1549,15 +1501,14 @@ It seems that `colour` requires a non-number:
 
 
 ```r
-airport.long %>% mutate(time = parse_number(when)) %>% 
-    group_by(location, time) %>% summarize(mean.epi = mean(epinephrine)) %>% 
-    ggplot(aes(x = time, y = mean.epi, group = location, 
-        colour = factor(location))) + geom_point() + 
-    geom_line()
+airport.long %>% mutate(time=parse_number(when)) %>%
+group_by(location,time) %>%
+summarize(mean.epi=mean(epinephrine)) %>%
+ggplot(aes(x=time,y=mean.epi,group=location,colour=factor(location)))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-39-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
          
 With a long pipeline like this, none of us get it right the first time (I
@@ -1611,37 +1562,25 @@ The usual process. I'll try the other way I used of making the
 `response`: 
 
 ```r
-response <- airport %>% select(epi_1:epi_4) %>% 
-    as.matrix()
-airport.1 = lm(response ~ factor(location), data = airport)
-times = colnames(response)
-times.df = data.frame(times)
-airport.2 = Manova(airport.1, idata = times.df, 
-    idesign = ~times)
+airport %>% select(epi_1:epi_4) %>% 
+as.matrix() -> response
+airport.1=lm(response~factor(location),data=airport)
+times=colnames(response)
+times.df=data.frame(times)
+airport.2=Manova(airport.1,idata=times.df,idesign=~times)
 airport.2
 ```
 
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##                        Df test stat approx F
-## (Intercept)             1   0.92013  2281.00
-## factor(location)        1   0.13120    29.90
-## times                   1   0.32741    31.80
-## factor(location):times  1   0.23737    20.34
-##                        num Df den Df
-## (Intercept)                 1    198
-## factor(location)            1    198
-## times                       3    196
-## factor(location):times      3    196
-##                           Pr(>F)    
-## (Intercept)            < 2.2e-16 ***
-## factor(location)       1.361e-07 ***
-## times                  < 2.2e-16 ***
-## factor(location):times 1.626e-11 ***
+##                        Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)             1   0.92013  2281.00      1    198 < 2.2e-16 ***
+## factor(location)        1   0.13120    29.90      1    198 1.361e-07 ***
+## times                   1   0.32741    31.80      3    196 < 2.2e-16 ***
+## factor(location):times  1   0.23737    20.34      3    196 1.626e-11 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
          
@@ -1686,37 +1625,25 @@ might want to change your model numbers rather than re-using
 the old ones as I did:
 
 ```r
-response <- airport %>% select(epi_2:epi_4) %>% 
-    as.matrix()
-airport.1 = lm(response ~ factor(location), data = airport)
-times = colnames(response)
-times.df = data.frame(times)
-airport.2 = Manova(airport.1, idata = times.df, 
-    idesign = ~times)
+airport %>% select(epi_2:epi_4) %>% 
+as.matrix() -> response
+airport.1=lm(response~factor(location),data=airport)
+times=colnames(response)
+times.df=data.frame(times)
+airport.2=Manova(airport.1,idata=times.df,idesign=~times)
 airport.2
 ```
 
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##                        Df test stat approx F
-## (Intercept)             1   0.91853  2232.38
-## factor(location)        1   0.19515    48.01
-## times                   1   0.01236     1.23
-## factor(location):times  1   0.05086     5.28
-##                        num Df den Df
-## (Intercept)                 1    198
-## factor(location)            1    198
-## times                       2    197
-## factor(location):times      2    197
-##                           Pr(>F)    
-## (Intercept)            < 2.2e-16 ***
-## factor(location)       5.822e-11 ***
-## times                   0.293852    
-## factor(location):times  0.005851 ** 
+##                        Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)             1   0.91853  2232.38      1    198 < 2.2e-16 ***
+## factor(location)        1   0.19515    48.01      1    198 5.822e-11 ***
+## times                   1   0.01236     1.23      2    197  0.293852    
+## factor(location):times  1   0.05086     5.28      2    197  0.005851 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
          
@@ -1741,7 +1668,7 @@ like.
 
 Extra: the other way to analyze repeated measures data (that we, well, you, do not look
 at in this course)
-\marginnote{This is something *I* want to  understand, so I will share my findings with you. You can read them  or not, as you choose.} is to treat them as "mixed models", which
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is something *I* want to  understand, so I will share my findings with you. You can read them  or not, as you choose.</span> is to treat them as "mixed models", which
 requires a different kind of analysis using the `lme4`
 package. I always forget how these go, and I have to look them up when
 I need them, but the idea is this: the treatments you observe, and the
@@ -1766,11 +1693,11 @@ Let's see if we can make it fly for this example. We need the data in
 
 
 ```r
-fairport <- airport.long %>% mutate(fchild = factor(child), 
-    flocation = factor(location))
+airport.long %>% mutate(fchild=factor(child),
+flocation=factor(location)
+) -> fairport
 
-airport.3 = lmer(epinephrine ~ flocation * when + 
-    (1 | fchild), data = fairport)
+airport.3=lmer(epinephrine~flocation*when+(1|fchild), data=fairport)
 anova(airport.3)
 ```
 
@@ -1783,7 +1710,7 @@ anova(airport.3)
 ```
 
 ```r
-drop1(airport.3, test = "Chisq")
+drop1(airport.3,test="Chisq")
 ```
 
 ```
@@ -1791,15 +1718,11 @@ drop1(airport.3, test = "Chisq")
 ## 
 ## Model:
 ## epinephrine ~ flocation * when + (1 | fchild)
-##                Df    AIC    LRT   Pr(Chi)
-## <none>            9521.2                 
-## flocation:when  3 9577.6 62.475 1.739e-13
-##                   
-## <none>            
-## flocation:when ***
+##                Df    AIC    LRT   Pr(Chi)    
+## <none>            9521.2                     
+## flocation:when  3 9577.6 62.475 1.739e-13 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1817,8 +1740,8 @@ are testing and use `anova` to compare the two models:
 
 
 ```r
-airport.4 = update(airport.3, . ~ . - flocation:when)
-anova(airport.4, airport.3)
+airport.4=update(airport.3,.~.-flocation:when)
+anova(airport.4,airport.3)
 ```
 
 ```
@@ -1830,15 +1753,11 @@ anova(airport.4, airport.3)
 ## Models:
 ## airport.4: epinephrine ~ flocation + when + (1 | fchild)
 ## airport.3: epinephrine ~ flocation * when + (1 | fchild)
-##           Df    AIC    BIC  logLik deviance
-## airport.4  7 9577.6 9610.4 -4781.8   9563.6
-## airport.3 10 9521.2 9568.0 -4750.6   9501.2
-##            Chisq Chi Df Pr(>Chisq)    
-## airport.4                             
-## airport.3 62.475      3  1.739e-13 ***
+##           Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)    
+## airport.4  7 9577.6 9610.4 -4781.8   9563.6                             
+## airport.3 10 9521.2 9568.0 -4750.6   9501.2 62.475      3  1.739e-13 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1889,12 +1808,12 @@ for each format of data set:
 
 
 ```r
-loc1 = airport %>% filter(location == 1)
-response = loc1 %>% select(epi_1:epi_4) %>% as.matrix()
-loc1.1 = lm(response ~ 1, data = loc1)
-times = colnames(response)
-times.df = data.frame(times)
-loc1.2 = Manova(loc1.1, idata = times.df, idesign = ~times)
+loc1 = airport %>% filter(location==1)
+response = loc1 %>% select(epi_1:epi_4) %>% as.matrix() 
+loc1.1=lm(response~1,data=loc1)
+times=colnames(response)
+times.df=data.frame(times)
+loc1.2=Manova(loc1.1,idata=times.df,idesign=~times)
 ```
 
 ```
@@ -1908,15 +1827,11 @@ loc1.2
 ```
 ## 
 ## Type III Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df
-## (Intercept)  1   0.89729   864.86      1
-## times        1   0.45423    26.91      3
-##             den Df    Pr(>F)    
-## (Intercept)     99 < 2.2e-16 ***
-## times           97 9.496e-13 ***
+##             Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)  1   0.89729   864.86      1     99 < 2.2e-16 ***
+## times        1   0.45423    26.91      3     97 9.496e-13 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1945,8 +1860,9 @@ fixed effect is time:
 
 
 ```r
-fairport %>% filter(location == 1) %>% lmer(epinephrine ~ 
-    when + (1 | fchild), data = .) %>% drop1(test = "Chisq")
+fairport %>% filter(location==1) %>% 
+lmer(epinephrine~when+(1|fchild),data=.) %>%
+drop1(test="Chisq")
 ```
 
 ```
@@ -1958,8 +1874,7 @@ fairport %>% filter(location == 1) %>% lmer(epinephrine ~
 ## <none>    4964.1                     
 ## when    3 5032.1 74.048 5.796e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1974,10 +1889,9 @@ nothing wrong with doing it like this:
 
 
 ```r
-tmp = fairport %>% filter(location == 1)
-tmp.1 = lmer(epinephrine ~ when + (1 | child), 
-    data = tmp)
-drop1(tmp.1, test = "Chisq")
+tmp=fairport %>% filter(location==1)
+tmp.1=lmer(epinephrine~when+(1|child),data=tmp)
+drop1(tmp.1,test="Chisq")
 ```
 
 ```
@@ -1989,8 +1903,7 @@ drop1(tmp.1, test = "Chisq")
 ## <none>    4964.1                     
 ## when    3 5032.1 74.048 5.796e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2009,9 +1922,9 @@ time. To do that, you'd rewrite the above like this:
 
 
 ```r
-fairport %>% filter(location == 1) %>% lmer(epinephrine ~ 
-    when + (1 + when | fchild), data = .) %>% 
-    drop1(test = "Chisq")
+fairport %>% filter(location==1) %>% 
+lmer(epinephrine~when+(1+when|fchild),data=.) %>%
+drop1(test="Chisq")
 ```
 
  
@@ -2019,7 +1932,7 @@ fairport %>% filter(location == 1) %>% lmer(epinephrine ~
 The change is on the `lmer` line: the bit in brackets has a
 linear model in `when` for each child. I didn't run that, so
 I'm not certain it works,
-\marginnote{I'm suspicious about *when*  needing to be the numerical time inside. Not sure.} but that's the idea.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I'm suspicious about *when*  needing to be the numerical time inside. Not sure.</span> but that's the idea.
 
 All right, let's get on to location 2. This was the control location,
 so we expect to see *no* dependence of epinephrine level on time,
@@ -2028,12 +1941,12 @@ is a large amount of copying and pasting coming up:
 
 
 ```r
-loc2 <- airport %>% filter(location == 2)
-response <- loc2 %>% select(epi_1:epi_4) %>% as.matrix()
-loc2.1 = lm(response ~ 1, data = loc1)
-times = colnames(response)
-times.df = data.frame(times)
-loc2.2 = Manova(loc2.1, idata = times.df, idesign = ~times)
+airport %>% filter(location==2) -> loc2
+loc2 %>% select(epi_1:epi_4) %>% as.matrix() -> response
+loc2.1=lm(response~1,data=loc1)
+times=colnames(response)
+times.df=data.frame(times)
+loc2.2=Manova(loc2.1,idata=times.df,idesign=~times)
 ```
 
 ```
@@ -2047,15 +1960,11 @@ loc2.2
 ```
 ## 
 ## Type III Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df
-## (Intercept)  1   0.96147  2470.17      1
-## times        1   0.30236    14.01      3
-##             den Df    Pr(>F)    
-## (Intercept)     99 < 2.2e-16 ***
-## times           97 1.161e-07 ***
+##             Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)  1   0.96147  2470.17      1     99 < 2.2e-16 ***
+## times        1   0.30236    14.01      3     97 1.161e-07 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2070,8 +1979,8 @@ words):
 
 
 ```r
-airport %>% filter(location == 2) %>% summarize_at(vars(starts_with("epi")), 
-    funs(mean))
+airport %>% filter(location==2) %>%
+summarize_at(vars(starts_with("epi")),funs(mean))
 ```
 
 ```
@@ -2099,8 +2008,8 @@ airport %>% group_by(location) %>% nest()
 ## # A tibble: 2 x 2
 ##   location data              
 ##      <int> <list>            
-## 1        1 <tibble [100 x 5]>
-## 2        2 <tibble [100 x 5]>
+## 1        1 <tibble [100 × 5]>
+## 2        2 <tibble [100 × 5]>
 ```
 
  
@@ -2112,9 +2021,8 @@ then apply it to each of those "nested" data frames.
 
 
 ```r
-epi.means = function(x) {
-    x %>% summarize_at(vars(starts_with("epi")), 
-        funs(mean))
+epi.means=function(x) {
+x %>% summarize_at(vars(starts_with("epi")),funs(mean))
 }
 
 epi.means(airport)
@@ -2133,16 +2041,17 @@ OK, and then:
 
 
 ```r
-airport %>% group_by(location) %>% nest() %>% 
-    mutate(means = map(data, epi.means)) %>% unnest(means)
+airport %>% group_by(location) %>% nest() %>%
+mutate(means=map(data,epi.means)) %>%
+unnest(means)
 ```
 
 ```
 ## # A tibble: 2 x 6
-##   location data      epi_1 epi_2 epi_3 epi_4
-##      <int> <list>    <dbl> <dbl> <dbl> <dbl>
-## 1        1 <tibble ~  247.  340.  356.  349.
-## 2        2 <tibble ~  249.  279.  251.  247.
+##   location data               epi_1 epi_2 epi_3 epi_4
+##      <int> <list>             <dbl> <dbl> <dbl> <dbl>
+## 1        1 <tibble [100 × 5]>  247.  340.  356.  349.
+## 2        2 <tibble [100 × 5]>  249.  279.  251.  247.
 ```
 
  
@@ -2158,8 +2067,9 @@ and pasting. Here is the "simple time effect" at location 2:
 
 
 ```r
-fairport %>% filter(location == 2) %>% lmer(epinephrine ~ 
-    when + (1 | fchild), data = .) %>% drop1(test = "Chisq")
+fairport %>% filter(location==2) %>% 
+lmer(epinephrine~when+(1|fchild),data=.) %>%
+drop1(test="Chisq")
 ```
 
 ```
@@ -2171,8 +2081,7 @@ fairport %>% filter(location == 2) %>% lmer(epinephrine ~
 ## <none>    4336.8                     
 ## when    3 4363.7 32.889 3.399e-07 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2240,7 +2149,7 @@ standard theory doesn't work for it (the technical term is
 null-hypothesis value is strictly *inside* the set of possible
 values the parameter can take). Back when we did this stuff by
 hand,
-\marginnote{I understand psychology students *still* do this  kind of stuff by hand.} we had to figure out whether we were testing
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I understand psychology students *still* do this  kind of stuff by hand.</span> we had to figure out whether we were testing
 a fixed or a random effect, and there were rules, involving things
 called "expected mean squares", that told you how to get the tests
 right. Anyway, that is all considered rather old-fashioned now, and
@@ -2303,8 +2212,8 @@ Solution
 This kind of thing:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
-bodyfat = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat=read_delim(my_url," ")
 ```
 
 ```
@@ -2365,7 +2274,7 @@ $t$-test, so that you can't use a `data=`. You therefore have
 to wrap everything in a `with`:
 
 ```r
-with(bodyfat, t.test(xray, ultrasound, paired = T))
+with(bodyfat,t.test(xray,ultrasound,paired=T))
 ```
 
 ```
@@ -2400,7 +2309,7 @@ Solution
 
 The P-value of 0.7623 is not at all small, so there is no way we can
 reject the null hypothesis.
-\marginnote{My hat stays on my head.} There
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">My hat stays on my head.</span> There
 is no evidence of a difference in means; we can act as if the two
 methods produce the same mean body fat percentage. 
 That is to say, on this evidence we can use either method, whichever
@@ -2426,13 +2335,12 @@ within-subjects part of the design, run `Manova`:
 
 
 ```r
-response <- bodyfat %>% select(xray:ultrasound) %>% 
-    as.matrix()
-bodyfat.1 = lm(response ~ 1)
-methods = colnames(response)
-methods.df = data.frame(methods)
-bodyfat.2 = Manova(bodyfat.1, idata = methods.df, 
-    idesign = ~methods)
+bodyfat %>% select(xray:ultrasound) %>%
+as.matrix() -> response
+bodyfat.1=lm(response~1)
+methods=colnames(response)
+methods.df=data.frame(methods)
+bodyfat.2=Manova(bodyfat.1,idata=methods.df,idesign=~methods)
 ```
 
 ```
@@ -2446,15 +2354,11 @@ bodyfat.2
 ```
 ## 
 ## Type III Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df
-## (Intercept)  1   0.79734   59.016      1
-## methods      1   0.00628    0.095      1
-##             den Df    Pr(>F)    
-## (Intercept)     15 1.413e-06 ***
-## methods         15    0.7623    
+##             Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)  1   0.79734   59.016      1     15 1.413e-06 ***
+## methods      1   0.00628    0.095      1     15    0.7623    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2482,7 +2386,7 @@ Since this really is repeated measures, we ought to be able to use
 a mixed model here too. We need "long" or "tidy" format, which
 we don't have yet. One pipe to save them all, to paraphrase Lord
 of the Rings
-\marginnote{The movies of Lord of the Rings were filmed      in New Zealand, which is also the country in which R was first      designed.} --- put all the fat measurements in one column with a
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The movies of Lord of the Rings were filmed      in New Zealand, which is also the country in which R was first      designed.</span> --- put all the fat measurements in one column with a
 label saying which `method` they were obtained with; create
 a column which is the athlete number as a factor; fit the linear
 mixed model; see what we can drop from it:
@@ -2514,9 +2418,10 @@ bodyfat
 ```
 
 ```r
-bodyfat %>% gather(method, fat, xray:ultrasound) %>% 
-    mutate(fathlete = factor(athlete)) %>% lmer(fat ~ 
-    method + (1 | fathlete), data = .) %>% drop1(test = "Chisq")
+bodyfat %>% gather(method,fat,xray:ultrasound) %>%
+mutate(fathlete=factor(athlete)) %>%
+lmer(fat~method+(1|fathlete),data=.) %>%
+drop1(test="Chisq")
 ```
 
 ```
@@ -2540,8 +2445,8 @@ If you're not clear about the tidy data frame used for input to
 
 
 ```r
-bodyfat %>% gather(method, fat, xray:ultrasound) %>% 
-    mutate(fathlete = factor(athlete))
+bodyfat %>% gather(method,fat,xray:ultrasound) %>%
+mutate(fathlete=factor(athlete)) 
 ```
 
 ```
@@ -2638,8 +2543,8 @@ Solution
 The usual:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/king.csv"
-king = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/king.csv"
+king=read_csv(my_url)
 ```
 
 ```
@@ -2662,20 +2567,19 @@ king
 
 ```
 ## # A tibble: 24 x 8
-##       id context    i1    i2    i3    i4
-##    <int> <chr>   <int> <int> <int> <int>
-##  1   101 control   150    44    71    59
-##  2   102 control   335   270   156   160
-##  3   103 control   149    52    91   115
-##  4   104 control   159    31   127   212
-##  5   105 control   292   125   184   246
-##  6   106 control   297   187    66    96
-##  7   107 control   170    37    42    66
-##  8   108 control   159     0    35    75
-##  9   109 same      346   175   177   192
-## 10   110 same      426   329   236    76
-## # ... with 14 more rows, and 2 more
-## #   variables: i5 <int>, i6 <int>
+##       id context    i1    i2    i3    i4    i5    i6
+##    <int> <chr>   <int> <int> <int> <int> <int> <int>
+##  1   101 control   150    44    71    59   132    74
+##  2   102 control   335   270   156   160   118   230
+##  3   103 control   149    52    91   115    43   154
+##  4   104 control   159    31   127   212    71   224
+##  5   105 control   292   125   184   246   225   170
+##  6   106 control   297   187    66    96   209    74
+##  7   107 control   170    37    42    66   114    81
+##  8   108 control   159     0    35    75    71    34
+##  9   109 same      346   175   177   192   239   140
+## 10   110 same      426   329   236    76   102   232
+## # ... with 14 more rows
 ```
 
      
@@ -2699,8 +2603,7 @@ Solution
 `cbind` the appropriate columns together, to make a matrix:
 
 ```r
-response = with(king, cbind(i1, i2, i3, i4, i5, 
-    i6))
+response=with(king,cbind(i1,i2,i3,i4,i5,i6))
 ```
 
      
@@ -2730,8 +2633,10 @@ because we are now in the `tidyverse`:
 
 
 ```r
-response = king %>% select(i1:i6) %>% as.matrix()
-class(response)
+response = king %>% 
+select(i1:i6) %>%
+as.matrix() 
+class(response)  
 ```
 
 ```
@@ -2748,8 +2653,9 @@ idea, but not before trying this:
 
 
 ```r
-response = king %>% select(matches("i[0-9]")) %>% 
-    as.matrix()
+response = king %>%
+select(matches("i[0-9]")) %>%
+as.matrix()
 head(response)
 ```
 
@@ -2786,8 +2692,8 @@ Solution
 
 
 ```r
-times = colnames(response)
-times.df = data.frame(times)
+times=colnames(response)
+times.df=data.frame(times)
 ```
 
    
@@ -2805,27 +2711,21 @@ Fit the `lm` first, and then pass that into `Manova`
 from `car`:
 
 ```r
-king.1 = lm(response ~ context, data = king)
-king.2 = Manova(king.1, idata = times.df, idesign = ~times)
+king.1=lm(response~context,data=king)
+king.2=Manova(king.1,idata=times.df,idesign=~times)
 king.2
 ```
 
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##               Df test stat approx F num Df
-## (Intercept)    1   0.91326  221.107      1
-## context        2   0.41017    7.302      2
-## times          1   0.85700   20.376      5
-## context:times  2   0.80339    2.417     10
-##               den Df    Pr(>F)    
-## (Intercept)       21 1.273e-12 ***
-## context           21  0.003914 ** 
-## times             17 1.233e-06 ***
-## context:times     36  0.025628 *  
+##               Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)    1   0.91326  221.107      1     21 1.273e-12 ***
+## context        2   0.41017    7.302      2     21  0.003914 ** 
+## times          1   0.85700   20.376      5     17 1.233e-06 ***
+## context:times  2   0.80339    2.417     10     36  0.025628 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -2865,7 +2765,7 @@ This is `gather` yet again: gather up columns `i1`
 through `i6` and call them something like `activity`:
 
 ```r
-king.long = king %>% gather(time, activity, i1:i6)
+king.long = king %>% gather(time,activity,i1:i6)
 king.long
 ```
 
@@ -2909,13 +2809,11 @@ That means this, using `group` to indicate which points to
 join by lines, since it's different from the `colour`: 
 
 ```r
-ggplot(king.long, aes(x = time, y = activity, 
-    colour = context, group = id)) + geom_point() + 
-    geom_line()
+ggplot(king.long,aes(x=time,y=activity,colour=context,group=id))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-67-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
 
      
 
@@ -2924,12 +2822,11 @@ good, perhaps better even:
 
 
 ```r
-ggplot(king.long, aes(x = time, y = activity, 
-    colour = context, group = id)) + geom_line()
+ggplot(king.long,aes(x=time,y=activity,colour=context,group=id))+
+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-68-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
  
     
@@ -2956,13 +2853,13 @@ If you like, you can draw an interaction plot by working out the
 means for each `context`-`time` group first:
 
 ```r
-king.long %>% group_by(context, time) %>% summarize(m = mean(activity)) %>% 
-    ggplot(aes(x = time, y = m, colour = context, 
-        group = context)) + geom_point() + geom_line()
+king.long %>% group_by(context,time) %>%
+summarize(m=mean(activity)) %>%
+ggplot(aes(x=time,y=m,colour=context,group=context))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-69-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
 
    
 
@@ -2976,8 +2873,7 @@ This kind of thing also runs with `lmer` from package
 
 
 ```r
-king.3 = lmer(activity ~ context * time + (1 | 
-    id), data = king.long)
+king.3=lmer(activity~context*time+(1|id),data=king.long)
 ```
 
  
@@ -2986,7 +2882,7 @@ What can we drop? The only thing under consideration is the interaction:
 
 
 ```r
-drop1(king.3, test = "Chisq")
+drop1(king.3,test="Chisq")
 ```
 
 ```
@@ -2998,8 +2894,7 @@ drop1(king.3, test = "Chisq")
 ## <none>          1609.0                     
 ## context:time 10 1622.7 33.764 0.0002025 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -3067,8 +2962,8 @@ We therefore need `read_tsv`. I'm not quite sure what to
 call this one:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/rm.txt"
-treatments = read_tsv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/rm.txt"
+treatments=read_tsv(my_url)
 ```
 
 ```
@@ -3126,12 +3021,11 @@ The individuals are labelled in `subject` and the
 treatments are in `trt`, which means we need to do this:
 
 ```r
-ggplot(treatments, aes(x = time, y = y, colour = trt, 
-    group = subject)) + geom_point() + geom_line()
+ggplot(treatments,aes(x=time,y=y,colour=trt,group=subject))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-73-1} 
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
      
 
@@ -3193,7 +3087,7 @@ contains the column names you are going to make, and the values to
 carry along with them, in that order:
 
 ```r
-tr2 = treatments %>% spread(time, y)
+tr2 = treatments %>% spread(time,y)
 tr2
 ```
 
@@ -3232,8 +3126,8 @@ Solution
 Create the response variable first, and use it in an `lm`:
 
 ```r
-response = with(tr2, cbind(T1, T2, T3))
-treatment.1 = lm(response ~ trt, data = tr2)
+response=with(tr2,cbind(T1,T2,T3))
+treatment.1=lm(response~trt,data=tr2)
 ```
 
      
@@ -3244,8 +3138,8 @@ here), or get them from the `response` you just made:
 
 
 ```r
-times = colnames(response)
-times.df = data.frame(times)
+times=colnames(response)
+times.df=data.frame(times)
 ```
 
  
@@ -3260,27 +3154,20 @@ Then, uppercase-M `Manova`:
 
 
 ```r
-treatment.2 = Manova(treatment.1, idata = times.df, 
-    idesign = ~times)
+treatment.2=Manova(treatment.1,idata=times.df,idesign=~times)
 treatment.2
 ```
 
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df
-## (Intercept)  1   0.99751  2399.02      1
-## trt          2   0.70412     7.14      2
-## times        1   0.99876  2010.30      2
-## trt:times    2   1.34513     6.16      4
-##             den Df    Pr(>F)    
-## (Intercept)      6 4.857e-09 ***
-## trt              6  0.025902 *  
-## times            5 5.437e-08 ***
-## trt:times       12  0.006206 ** 
+##             Df test stat approx F num Df den Df    Pr(>F)    
+## (Intercept)  1   0.99751  2399.02      1      6 4.857e-09 ***
+## trt          2   0.70412     7.14      2      6  0.025902 *  
+## times        1   0.99876  2010.30      2      5 5.437e-08 ***
+## trt:times    2   1.34513     6.16      4     12  0.006206 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -3297,8 +3184,7 @@ capital A. That looks a bit different but gives us some extra information:
 
 
 ```r
-treatment.3 = Anova(treatment.1, idata = times.df, 
-    idesign = ~times, type = "III")
+treatment.3=Anova(treatment.1,idata=times.df,idesign=~times,type="III")
 ```
 
  
@@ -3308,26 +3194,20 @@ do. III is good:
 
 
 ```r
-summary(treatment.3, multivariate = F)
+summary(treatment.3,multivariate=F)
 ```
 
 ```
 ## 
 ## Univariate Type III Repeated-Measures ANOVA Assuming Sphericity
 ## 
-##             Sum Sq num Df Error SS den Df
-## (Intercept) 3211.1      1   27.111      6
-## trt           64.5      2   27.111      6
-## times        338.9      2   12.889     12
-## trt:times     41.5      4   12.889     12
-##              F value    Pr(>F)    
-## (Intercept) 710.6557 1.840e-07 ***
-## trt           7.1393 0.0259021 *  
-## times       157.7586 2.419e-09 ***
-## trt:times     9.6552 0.0009899 ***
+##             Sum Sq num Df Error SS den Df  F value    Pr(>F)    
+## (Intercept) 3211.1      1   27.111      6 710.6557 1.840e-07 ***
+## trt           64.5      2   27.111      6   7.1393 0.0259021 *  
+## times        338.9      2   12.889     12 157.7586 2.419e-09 ***
+## trt:times     41.5      4   12.889     12   9.6552 0.0009899 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## 
 ## Mauchly Tests for Sphericity
@@ -3344,8 +3224,7 @@ summary(treatment.3, multivariate = F)
 ## times     0.58811  3.285e-06 ***
 ## trt:times 0.58811   0.008332 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ##              HF eps   Pr(>F[HF])
 ## times     0.6461293 1.182316e-06
@@ -3404,12 +3283,12 @@ too. The subjects, though, are different: they are a random sample
 of all possible people, and you want your results to generalize to
 the population of all people of whom your subjects are a
 sample.
-\marginnote{In practice, things are usually fuzzier than this,      because the subjects in your study are typically the ones you      could get, rather than being a physical random sample of all      possible people, but we usually act as if our subjects are a      random sample of all possible subjects.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In practice, things are usually fuzzier than this,      because the subjects in your study are typically the ones you      could get, rather than being a physical random sample of all      possible people, but we usually act as if our subjects are a      random sample of all possible subjects.</span>
 So subjects are a different kind of thing and they have what are
 called random effects. When each subject only gives one
 measurement, as in all the things we've seen so
 far,
-\marginnote{Including matched pairs, because what we do there is      to take the difference between the two measurements for each      person and throw away the actual measurements themselves, so      that each subject still only gives us one measurement.} it
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Including matched pairs, because what we do there is      to take the difference between the two measurements for each      person and throw away the actual measurements themselves, so      that each subject still only gives us one measurement.</span> it
 doesn't matter how you treat (statistically) the subjects, but
 when each subject gives *more* than one measurement, it does
 matter. Which is why we have to do the `idesign` stuff in
@@ -3432,9 +3311,8 @@ with the tidy data frame} that we read in from the file and made
 the spaghetti plot out of:
 
 ```r
-treatment.4 = lmer(y ~ trt * time + (1 | subject), 
-    data = treatments)
-drop1(treatment.4, test = "Chisq")
+treatment.4=lmer(y~trt*time+(1|subject),data=treatments)
+drop1(treatment.4,test="Chisq")
 ```
 
 ```
@@ -3446,8 +3324,7 @@ drop1(treatment.4, test = "Chisq")
 ## <none>      102.53                    
 ## trt:time  4 120.44 25.91 3.299e-05 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -3460,7 +3337,7 @@ each subject is different.
 You don't get a test for the random effects; you are assuming that the
 subjects will be different from each other and you want to adjust for
 that.
-\marginnote{This is rather like the test for blocks in a randomized  block design: you want to *allow* for differences among blocks,  but you don't especially care to test that there *are* any. In  fact, blocks are a lot like subjects, in that they are typically  things like different experimental plots in which plants are grown,  or different days on which the experiment is conducted, and you want to generalize from the blocks you observed, which are certainly *not* all possible blocks, to the population of all possible blocks.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is rather like the test for blocks in a randomized  block design: you want to *allow* for differences among blocks,  but you don't especially care to test that there *are* any. In  fact, blocks are a lot like subjects, in that they are typically  things like different experimental plots in which plants are grown,  or different days on which the experiment is conducted, and you want to generalize from the blocks you observed, which are certainly *not* all possible blocks, to the population of all possible blocks.</span>
 All you get is tests for the fixed effects that are currently up for
 grabs, in this case the interaction, which is strongly significant.
 
