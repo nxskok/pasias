@@ -212,7 +212,19 @@ Since I like to show off, let me show you how you can do this in R,
 using the package `ggmap`. (Of course, you can just open the
 appropriate map in your browser and copy-paste it, taking a
 screenshot if necessary):
-```{r laskhsal,cache=TRUE,fig.width=6,fig.height=6, eval=F}
+```{r }
+library(ggmap)
+```
+
+   
+
+```{r echo=F}
+api_key="AIzaSyC7eVXz84-Mj1-zNBW4GTnXNAYdGQJDNXU"
+register_google(api_key)
+```
+
+ 
+```{r laskhsal,cache=TRUE,fig.width=6,fig.height=6}
 library(ggmap)
 wisc.map=get_map(location="Milwaukee, WI",zoom=6)
 ggmap(wisc.map)
@@ -258,34 +270,14 @@ cst
 And then I look them up. I don't want Google to tell me that I have
 done too many lookups, so I look them up first and save the results,
 like this:
-`r tufte::margin_note("I actually had to do some further processing, not  shown, because Google would fail to look up some of the places on  one run, and then fail to look up *different* ones the next  time I tried. So I saved two runs that together looked up all the  places at least once, and then made a pipeline to put these together into one complete data frame.")`
-```{r eval=F} 
-g = tibble(cst) %>% 
-ggmap::mutate_geocode(cst)
-saveRDS(g,"gg.rds")
-```
 
- 
-Then I skip that on future runs, and get the values from the file:
-
-```{r }
-g=readRDS("gg.rds")
+```{r } 
+tibble(cst) %>% 
+ggmap::mutate_geocode(cst) -> g
 g
 ```
 
  
-
-`saveRDS` and `readRDS` are a mechanism for saving any R
-objects in files so that you can share them between sessions. There is
-a school of thought that says that when you have an R script or
-notebook, you don't save anything at the end, but instead have the
-script read in or re-create everything it needs. This should mean that
-anyone else can run the script and reproduce your results, without any
-reliance on other things that you might have lying around. A good
-mechanism to avoid recreating things that take a long time to get,
-like geocoding locations, is to do it once, save it using
-`saveRDS`, and then forever after read it in from the file.  
-
 What are the extreme corners of these?
 
 ```{r }
@@ -319,8 +311,7 @@ on there.
 
 So:
 
-```{r lhsdljhadkfj,fig.width=6,fig.height=6,cache=T,message=F, eval=F}
-library(ggmap)
+```{r lhsdljhadkfj,fig.width=6,fig.height=6,cache=T,message=F}
 wisc.map.2=get_map(location=c(-94,41.8,-87,46.8),maptype="roadmap")
 ggmap(wisc.map.2)
 ```
@@ -332,9 +323,9 @@ This came out about right.
 Now we need to mark our 12 cities on the map. This is a
 `ggplot` map, so the right syntax is as below.
 
-```{r sldkhdlf,echo=-1,message=F, eval=F}
+```{r sldkhdlf,echo=-1,message=F, cache=T}
 library(ggmap)
-ggmap(wisc.map.2)+geom_point(aes(x=lon,y=lat),data=g)
+ggmap(wisc.map.2)+geom_point(data=g, aes(x=lon,y=lat))
 ```
 
  
@@ -364,17 +355,18 @@ Solution
 Let's pick a few places from the actual map, and make a table of
 where they are on the actual map and the `cmdscale` map:
 
-\begin{tabular}{lll}
-\hline
- Place     &  Real           &  Cmdscale       \\
- \hline
- Superior  &  northwest      &  central east   \\
- St. Paul  &  central west   &  southeast      \\
- Dubuque   &  central south  &  central south  \\
- Chicago   &  southeast      &  central west   \\
- Appleton  &  central east   &  central north  \\
- \hline
-\end{tabular}
+```
+
+ Place        Real              Cmdscale       
+----------------------------------------------
+ Superior     northwest         central east   
+ St. Paul     central west      southeast      
+ Dubuque      central south     central south  
+ Chicago      southeast         central west   
+ Appleton     central east      central north  
+
+
+```
 
 
 This is a bit tricky. Dubuque is the only one in the right place, and
@@ -388,100 +380,6 @@ but I'll call that close enough.
 (For you, any comment along the lines of "flipped around this line"
 or "rotated about this much" that seems to describe what has happened, is
 fine.)
- This one calls for a Procrustes rotation, which I can do since I have
- longitudes and latitudes for my 12 cities. It goes like the one
- in class. Let's start with `ll`:
- 
- 
- <<>>=
- ll
- @ 
- 
- We have to begin by making these into true coordinates by multiplying
- the longitudes by the cosine of the mean latitude:
- 
- <<>>=
- meanlat=mean(ll$lat)
- mult=cos(meanlat*pi/180)
- truecoord=with(ll,data.frame(x=lon*mult,y=lat))
- truecoord
- @ 
- 
- 
- `procOPA` needs matrices rather than data frames.
- `wisc.1` contained the coordinates for our
- two-dimensional solution:
- 
- <<>>=
- wisc.pro=procOPA(as.matrix(truecoord),wisc.1,reflect=T)
- @ 
- 
- I discuss `reflect=T` below.
- 
- 
- Now, we need to plot these. I'm following the procedure from class, to
- cut down on the amount of my thinking required.
- 
- <<>>=
- A=with(wisc.pro,data.frame(x=Ahat[,1],y=Ahat[,2],which="actual",city=cities))
- B=with(wisc.pro,data.frame(x=Bhat[,1],y=Bhat[,2],which="MDS",city=cities))
- dp=bind_rows(A,B)
- @ 
- 
- The warning is that `which`, which it's trying to treat as a
- factor, has different "levels": all the rows of `A` say
- `actual` and all the rows of `B` say `MDS`.  But
- it does the right thing (despite the warning).
- 
- Here's what we have so far:
- 
- <<>>=
- dp
- @ 
- 
- Now we plot these: the points, joining the two points for the same
- city by a line (coloured dark green), colouring the points and city
- names by whether they came from the actual coordinates or the scaling,
- labelling the points with small text, and using the same scaling on
- both axes:
- 
- <<>>=
- ggplot(dp,aes(x=x,y=y,colour=which,label=city))+
-   geom_point()+
-   geom_line(aes(group=city),colour="darkgreen")+
-   geom_text_repel(size=2)+
-   coord_fixed()
- @ 
- 
- The lines joining the two sets of coordinates for each city are dark
- green this time, just because. But mostly you don't see them because
- they are very short. It's really only in the top left corner that you
- see coordinates that differ to any significant degree.
- 
- This is pretty good.
- What does it think is the right transformation to get
- from MDS coordinates to real ones?
- 
- <<>>=
- wisc.pro$R
- @ 
- 
- 
- This time, the diagonal elements differ in sign (indicating that a
- reflection was performed to make the points line up). Indeed, I
- allowed `procOPA` to use a reflection if it needed to by means
- of `reflect=T` above.
- 
- According to Wikipedia
- ([link](http://en.wikipedia.org/wiki/Coordinate_rotations_and_reflections)),
- our `R` corresponds to a reflection about a line making angle
- $\theta$ with the $x$-axis, where $\cos 2\theta=-0.5944$ and $\sin
- 2\theta=0.8041$. This means that $2\theta=126$ degrees, or
- $\theta=63$ degrees. That is to say, we draw a line that makes an
- angle of this much with the $x$-axis of our `cmdscale` map, and
- then reflect the cities in that. For example, a line through Dubuque
- and Marshfield on the `cmdscale` map makes about the right
- angle, and then reflect all the cities in that. 
  
 
 

@@ -318,10 +318,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="analysis-of-variance-revisited" class="section level1">
 <h1><span class="header-section-number">Chapter 19</span> Analysis of Variance revisited</h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb2724"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2724-1" data-line-number="1"><span class="kw">library</span>(MASS)</a>
-<a class="sourceLine" id="cb2724-2" data-line-number="2"><span class="kw">library</span>(car)</a></code></pre></div>
+<div class="sourceCode" id="cb2748"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2748-1" data-line-number="1"><span class="kw">library</span>(MASS)</a>
+<a class="sourceLine" id="cb2748-2" data-line-number="2"><span class="kw">library</span>(car)</a></code></pre></div>
 <pre><code>## Loading required package: carData</code></pre>
-<div class="sourceCode" id="cb2726"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2726-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb2750"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2750-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
@@ -361,8 +361,8 @@ factor version of <code>amount</code>.</p>
 display it. This is the untidy format, so name it appropriately:</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2730"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2730-1" data-line-number="1">my_url=<span class="st">&quot;http://individual.utoronto.ca/kbutler/stad29/caffeine.csv&quot;</span></a>
-<a class="sourceLine" id="cb2730-2" data-line-number="2">caffeine.untidy=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb2754"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2754-1" data-line-number="1">my_url=<span class="st">&quot;http://individual.utoronto.ca/kbutler/stad29/caffeine.csv&quot;</span></a>
+<a class="sourceLine" id="cb2754-2" data-line-number="2">caffeine.untidy=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Sub = col_integer(),
@@ -370,7 +370,7 @@ display it. This is the untidy format, so name it appropriately:</li>
 ##   Moderate = col_integer(),
 ##   None = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb2732"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2732-1" data-line-number="1">caffeine.untidy</a></code></pre></div>
+<div class="sourceCode" id="cb2756"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2756-1" data-line-number="1">caffeine.untidy</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 4
 ##      Sub  High Moderate  None
 ##    &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;int&gt;
@@ -395,9 +395,9 @@ results. What has changed from before?</li>
 </ol>
 <p>Solution</p>
 <p>We’ll save into <code>caffeine</code> again:</p>
-<div class="sourceCode" id="cb2734"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2734-1" data-line-number="1">caffeine =<span class="st"> </span>caffeine.untidy <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2734-2" data-line-number="2"><span class="kw">gather</span>(amount,score,High<span class="op">:</span>None,<span class="dt">factor_key=</span>T)</a>
-<a class="sourceLine" id="cb2734-3" data-line-number="3">caffeine</a></code></pre></div>
+<div class="sourceCode" id="cb2758"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2758-1" data-line-number="1">caffeine =<span class="st"> </span>caffeine.untidy <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2758-2" data-line-number="2"><span class="kw">gather</span>(amount,score,High<span class="op">:</span>None,<span class="dt">factor_key=</span>T)</a>
+<a class="sourceLine" id="cb2758-3" data-line-number="3">caffeine</a></code></pre></div>
 <pre><code>## # A tibble: 36 x 3
 ##      Sub amount score
 ##    &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
@@ -421,8 +421,8 @@ not doing so.</p>
 of the output. What do you see?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2736"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2736-1" data-line-number="1">caffeine<span class="fl">.2</span>=<span class="kw">lm</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
-<a class="sourceLine" id="cb2736-2" data-line-number="2"><span class="kw">summary</span>(caffeine<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2760"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2760-1" data-line-number="1">caffeine<span class="fl">.2</span>=<span class="kw">lm</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
+<a class="sourceLine" id="cb2760-2" data-line-number="2"><span class="kw">summary</span>(caffeine<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ amount, data = caffeine)
@@ -453,7 +453,7 @@ since high was the baseline. This is, as we saw from Tukey,
 significant. But it is not what I said we wanted to test.</p>
 <p>In case you’re curious, you can also get the regular analysis of
 variance table as below. <code>anova</code> is multi-talented:</p>
-<div class="sourceCode" id="cb2738"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2738-1" data-line-number="1"><span class="kw">anova</span>(caffeine<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2762"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2762-1" data-line-number="1"><span class="kw">anova</span>(caffeine<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: score
@@ -467,7 +467,7 @@ often what you want to do next. That’s why we used <code>aov</code> before.</p
 <p>Since we have a regression model (albeit a peculiar one), we can test
 whether we should remove <code>amount</code> (that is, whether it has any
 impact on test scores) this way too:</p>
-<div class="sourceCode" id="cb2740"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2740-1" data-line-number="1"><span class="kw">drop1</span>(caffeine<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2764"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2764-1" data-line-number="1"><span class="kw">drop1</span>(caffeine<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -484,7 +484,7 @@ that R has them.</li>
 </ol>
 <p>Solution</p>
 <p>Count them, or find the distinct ones:</p>
-<div class="sourceCode" id="cb2742"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2742-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(amount) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb2766"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2766-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(amount) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>())</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   amount   count
 ##   &lt;fct&gt;    &lt;int&gt;
@@ -492,7 +492,7 @@ that R has them.</li>
 ## 2 Moderate    12
 ## 3 None        12</code></pre>
 <p>or there is this shortcut to the above:</p>
-<div class="sourceCode" id="cb2744"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2744-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</a></code></pre></div>
+<div class="sourceCode" id="cb2768"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2768-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   amount       n
 ##   &lt;fct&gt;    &lt;int&gt;
@@ -500,7 +500,7 @@ that R has them.</li>
 ## 2 Moderate    12
 ## 3 None        12</code></pre>
 <p>Or</p>
-<div class="sourceCode" id="cb2746"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2746-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(amount)</a></code></pre></div>
+<div class="sourceCode" id="cb2770"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2770-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(amount)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 1
 ##   amount  
 ##   &lt;fct&gt;   
@@ -511,10 +511,10 @@ that R has them.</li>
 <p>These would all have worked if <code>amount</code> had been text rather a
 factor. If you have a genuine <code>factor</code>, you can also ask for
 its <code>levels</code>:</p>
-<div class="sourceCode" id="cb2748"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2748-1" data-line-number="1"><span class="kw">with</span>(caffeine, <span class="kw">levels</span>(amount))</a></code></pre></div>
+<div class="sourceCode" id="cb2772"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2772-1" data-line-number="1"><span class="kw">with</span>(caffeine, <span class="kw">levels</span>(amount))</a></code></pre></div>
 <pre><code>## [1] &quot;High&quot;     &quot;Moderate&quot; &quot;None&quot;</code></pre>
 <p>or <code>summary</code> will count them up and list them:</p>
-<div class="sourceCode" id="cb2750"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2750-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(amount) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2774"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2774-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(amount) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##       amount  
 ##  High    :12  
 ##  Moderate:12  
@@ -532,26 +532,26 @@ High and a <span class="math inline">\(-1\)</span> to represent Moderate.</li>
 </ol>
 <p>Solution</p>
 <p>Put a 0 in for None:</p>
-<div class="sourceCode" id="cb2752"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2752-1" data-line-number="1">c.hm=<span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2776"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2776-1" data-line-number="1">c.hm=<span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>)</a></code></pre></div>
 <p>Having the 1 and the <span class="math inline">\(-1\)</span> the other way around is also fine.</p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Create a contrast that compares “any caffeine” against
 “none” by comparing None against the average of Moderate and High.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2753"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2753-1" data-line-number="1">c.any=<span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2777"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2777-1" data-line-number="1">c.any=<span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="dv">1</span>)</a></code></pre></div>
 <p>Note that both our contrasts have coefficients that add up to zero, as
 they must:</p>
-<div class="sourceCode" id="cb2754"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2754-1" data-line-number="1"><span class="kw">sum</span>(c.hm)</a></code></pre></div>
+<div class="sourceCode" id="cb2778"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2778-1" data-line-number="1"><span class="kw">sum</span>(c.hm)</a></code></pre></div>
 <pre><code>## [1] 0</code></pre>
-<div class="sourceCode" id="cb2756"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2756-1" data-line-number="1"><span class="kw">sum</span>(c.any)</a></code></pre></div>
+<div class="sourceCode" id="cb2780"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2780-1" data-line-number="1"><span class="kw">sum</span>(c.any)</a></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <ol start="7" style="list-style-type: lower-alpha">
 <li>Verify that your two contrasts are orthogonal.</li>
 </ol>
 <p>Solution</p>
 <p>Multiply them together and check that what you get adds up to zero:</p>
-<div class="sourceCode" id="cb2758"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2758-1" data-line-number="1"><span class="kw">sum</span>(c.hm<span class="op">*</span>c.any)</a></code></pre></div>
+<div class="sourceCode" id="cb2782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2782-1" data-line-number="1"><span class="kw">sum</span>(c.hm<span class="op">*</span>c.any)</a></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>Zero, so orthogonal. You can check that writing <code>c.any</code> as
 <code>c(-1,-1,2)</code> would also work (and still be orthogonal with
@@ -563,15 +563,15 @@ they must:</p>
 called it).</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2760"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2760-1" data-line-number="1">m=<span class="kw">cbind</span>(c.hm,c.any)</a>
-<a class="sourceLine" id="cb2760-2" data-line-number="2"><span class="kw">contrasts</span>(caffeine<span class="op">$</span>amount)=m</a></code></pre></div>
+<div class="sourceCode" id="cb2784"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2784-1" data-line-number="1">m=<span class="kw">cbind</span>(c.hm,c.any)</a>
+<a class="sourceLine" id="cb2784-2" data-line-number="2"><span class="kw">contrasts</span>(caffeine<span class="op">$</span>amount)=m</a></code></pre></div>
 <ol style="list-style-type: lower-roman">
 <li>Fit the ANOVA as an <code>lm</code>, and look at the
 <code>summary</code>. What do you conclude about your contrasts?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2761"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2761-1" data-line-number="1">caff<span class="fl">.3</span>=<span class="kw">lm</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
-<a class="sourceLine" id="cb2761-2" data-line-number="2"><span class="kw">summary</span>(caff<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2785"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2785-1" data-line-number="1">caff<span class="fl">.3</span>=<span class="kw">lm</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
+<a class="sourceLine" id="cb2785-2" data-line-number="2"><span class="kw">summary</span>(caff<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ amount, data = caffeine)
@@ -607,11 +607,11 @@ contrast tells us that having any caffeine is better than having none.</p>
 caffeine and moderate vs. none as your two contrasts?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2763"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2763-1" data-line-number="1">c.hm=<span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb2763-2" data-line-number="2">c.mn=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2787"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2787-1" data-line-number="1">c.hm=<span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb2787-2" data-line-number="2">c.mn=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>)</a></code></pre></div>
 <p>So far so good: the coefficients add up to zero and they reflect the
 right comparisons. But now:</p>
-<div class="sourceCode" id="cb2764"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2764-1" data-line-number="1"><span class="kw">sum</span>(c.hm<span class="op">*</span>c.mn)</a></code></pre></div>
+<div class="sourceCode" id="cb2788"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2788-1" data-line-number="1"><span class="kw">sum</span>(c.hm<span class="op">*</span>c.mn)</a></code></pre></div>
 <pre><code>## [1] -1</code></pre>
 <p>This does <em>not</em> add up to zero, so these two contrasts are not
 orthogonal, and we can’t do what we just did. R will give us an answer
@@ -629,9 +629,9 @@ me try to follow his method.</p>
 <code>c.mn</code> have 3 things in them (3 groups), we need to add a
 “dummy” 3rd contrast to give us a <span class="math inline">\(3\times 3\)</span> array of numbers:
 <label for="tufte-mn-167" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-167" class="margin-toggle"><span class="marginnote">which we are going to invert, as a matrix. But I get ahead of myself.</span></p>
-<div class="sourceCode" id="cb2766"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2766-1" data-line-number="1">c0=<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb2766-2" data-line-number="2">m=<span class="kw">cbind</span>(c0,c.hm,c.mn)</a>
-<a class="sourceLine" id="cb2766-3" data-line-number="3">m</a></code></pre></div>
+<div class="sourceCode" id="cb2790"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2790-1" data-line-number="1">c0=<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb2790-2" data-line-number="2">m=<span class="kw">cbind</span>(c0,c.hm,c.mn)</a>
+<a class="sourceLine" id="cb2790-3" data-line-number="3">m</a></code></pre></div>
 <pre><code>##      c0 c.hm c.mn
 ## [1,]  1    1    0
 ## [2,]  1   -1    1
@@ -642,16 +642,16 @@ the extra dummy one. Next we invert this matrix of contrasts,
 which we can do because it’s square. <code>t(m)</code> means
 “take the matrix transpose of <code>m</code>”, if you’re trying to keep up at the
 back, and <code>solve</code> finds a matrix inverse:</p>
-<div class="sourceCode" id="cb2768"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2768-1" data-line-number="1">minv=<span class="kw">solve</span>(<span class="kw">t</span>(m))</a></code></pre></div>
+<div class="sourceCode" id="cb2792"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2792-1" data-line-number="1">minv=<span class="kw">solve</span>(<span class="kw">t</span>(m))</a></code></pre></div>
 <p>and then we remove the first column, which represents the contrast
 that we didn’t want anyway (what Howell calls “deaugmenting”):</p>
-<div class="sourceCode" id="cb2769"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2769-1" data-line-number="1">m.contr=minv[,<span class="op">-</span><span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb2769-2" data-line-number="2">m.contr</a></code></pre></div>
+<div class="sourceCode" id="cb2793"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2793-1" data-line-number="1">m.contr=minv[,<span class="op">-</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb2793-2" data-line-number="2">m.contr</a></code></pre></div>
 <pre><code>##            c.hm       c.mn
 ## [1,]  0.6666667  0.3333333
 ## [2,] -0.3333333  0.3333333
 ## [3,] -0.3333333 -0.6666667</code></pre>
-<div class="sourceCode" id="cb2771"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2771-1" data-line-number="1"><span class="kw">contrasts</span>(caffeine<span class="op">$</span>amount)=m.contr</a></code></pre></div>
+<div class="sourceCode" id="cb2795"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2795-1" data-line-number="1"><span class="kw">contrasts</span>(caffeine<span class="op">$</span>amount)=m.contr</a></code></pre></div>
 <p>The columns of <code>m.contr</code> are our new
 contrasts. Note that they appear to be something else: high vs. the
 average of moderate and none, and none vs. the average of moderate
@@ -660,8 +660,8 @@ and high. Note that they are actually
 used to test what we want. I think Howell is famous enough to be
 trusted.
 Now fit the model again:</p>
-<div class="sourceCode" id="cb2772"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2772-1" data-line-number="1">caff<span class="fl">.4</span>=<span class="kw">lm</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
-<a class="sourceLine" id="cb2772-2" data-line-number="2"><span class="kw">summary</span>(caff<span class="fl">.4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2796"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2796-1" data-line-number="1">caff<span class="fl">.4</span>=<span class="kw">lm</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
+<a class="sourceLine" id="cb2796-2" data-line-number="2"><span class="kw">summary</span>(caff<span class="fl">.4</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ amount, data = caffeine)
@@ -721,15 +721,15 @@ that the researcher wants to make?</li>
 <p>Separated by one space. There appear to be some strange quotes
 in there, but we’ll ignore those and see whether they cause any
 trouble:</p>
-<div class="sourceCode" id="cb2774"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2774-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt&quot;</span></a>
-<a class="sourceLine" id="cb2774-2" data-line-number="2">studyhours=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2798"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2798-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt&quot;</span></a>
+<a class="sourceLine" id="cb2798-2" data-line-number="2">studyhours=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   id = col_integer(),
 ##   major = col_character(),
 ##   hours = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb2776"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2776-1" data-line-number="1">studyhours</a></code></pre></div>
+<div class="sourceCode" id="cb2800"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2800-1" data-line-number="1">studyhours</a></code></pre></div>
 <pre><code>## # A tibble: 75 x 3
 ##       id major hours
 ##    &lt;int&gt; &lt;chr&gt; &lt;int&gt;
@@ -745,7 +745,7 @@ trouble:</p>
 ## 10    10 math     11
 ## # ... with 65 more rows</code></pre>
 <p>So far so good. 75 students, in tidy format.</p>
-<div class="sourceCode" id="cb2778"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2778-1" data-line-number="1"><span class="kw">ggplot</span>(studyhours,<span class="kw">aes</span>(<span class="dt">x=</span>major,<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2802"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2802-1" data-line-number="1"><span class="kw">ggplot</span>(studyhours,<span class="kw">aes</span>(<span class="dt">x=</span>major,<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-25-1.png" width="672"  /></p>
 <p>This suggests that the math students study more than the others, but
 the English and social science students study about the same amount.</p>
@@ -758,7 +758,7 @@ like square root, perhaps. The spreads are not that unequal, but it
 lowest on both.</p>
 <p>Box-Cox also works on ANOVA-type data, since that is an <code>lm</code>
 kind of model:</p>
-<div class="sourceCode" id="cb2779"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2779-1" data-line-number="1"><span class="kw">boxcox</span>(hours<span class="op">~</span>major,<span class="dt">data=</span>studyhours)</a></code></pre></div>
+<div class="sourceCode" id="cb2803"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2803-1" data-line-number="1"><span class="kw">boxcox</span>(hours<span class="op">~</span>major,<span class="dt">data=</span>studyhours)</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-26-1.png" width="672"  /></p>
 <p>This suggests that some kind of transformation would be a good idea
 (no transformation, power 1, is not supported by the data). My guess
@@ -776,15 +776,15 @@ Math against the average of the other two.)</li>
 <p>Solution</p>
 <p>We need to know what the categories of <code>major</code> are, so that
 we can set up the contrasts correctly, so let’s start with that:</p>
-<div class="sourceCode" id="cb2780"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2780-1" data-line-number="1">studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(major) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2804"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2804-1" data-line-number="1">studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(major) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##     major          
 ##  Length:75         
 ##  Class :character  
 ##  Mode  :character</code></pre>
 <p>Oh. Yeah. We never turned <code>major</code> into a factor. We’d better do
 that, and then try again:</p>
-<div class="sourceCode" id="cb2782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2782-1" data-line-number="1">studyhours =<span class="st"> </span>studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">major=</span><span class="kw">factor</span>(major))</a>
-<a class="sourceLine" id="cb2782-2" data-line-number="2">studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(major) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2806"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2806-1" data-line-number="1">studyhours =<span class="st"> </span>studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">major=</span><span class="kw">factor</span>(major))</a>
+<a class="sourceLine" id="cb2806-2" data-line-number="2">studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(major) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##      major   
 ##  english:25  
 ##  math   :25  
@@ -794,7 +794,7 @@ that, and then try again:</p>
 so we’ll do that first. Just set it up with a 1 for one of them and a
 <span class="math inline">\(-1\)</span> for the other and 0 for math, in the right order according to
 what the levels are, viz:</p>
-<div class="sourceCode" id="cb2784"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2784-1" data-line-number="1">c.eng.socsci=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2808"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2808-1" data-line-number="1">c.eng.socsci=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>)</a></code></pre></div>
 <p>Or <code>c(-1,0,1)</code> would be just as good.</p>
 <p>The other one is a bit trickier, because you want math against the
 average of the others, like
@@ -802,7 +802,7 @@ average of the others, like
 This translates into contrast-ese like this, making sure to get Math
 in the middle where it belongs:
 <label for="tufte-mn-168" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-168" class="margin-toggle"><span class="marginnote">As I failed to do the first time.</span></p>
-<div class="sourceCode" id="cb2785"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2785-1" data-line-number="1">c.math.others=<span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>,<span class="dv">1</span>,<span class="op">-</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2809"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2809-1" data-line-number="1">c.math.others=<span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>,<span class="dv">1</span>,<span class="op">-</span><span class="fl">0.5</span>)</a></code></pre></div>
 <p>The coefficients have to add up to zero, so I have to have two halves
 to balance my one 1. Or I can use two <span class="math inline">\(-1\)</span>s and a 2.</p>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -811,7 +811,7 @@ to balance my one 1. Or I can use two <span class="math inline">\(-1\)</span>s a
 <p>Solution</p>
 <p>Multiply them together (elementwise, which is how R does it)
 and show that what you get adds up to zero:</p>
-<div class="sourceCode" id="cb2786"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2786-1" data-line-number="1"><span class="kw">sum</span>(c.eng.socsci<span class="op">*</span>c.math.others)</a></code></pre></div>
+<div class="sourceCode" id="cb2810"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2810-1" data-line-number="1"><span class="kw">sum</span>(c.eng.socsci<span class="op">*</span>c.math.others)</a></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>Zero. Orthogonal.</p>
 <p>So we are safely in “familiar” territory, not in the
@@ -826,13 +826,13 @@ data frame <code>studyhours</code> (or whatever you called it).</li>
 <p>Solution</p>
 <p>So, like the example in class (where the
 <code>contrasts(model)</code> was admittedly rather confusing):</p>
-<div class="sourceCode" id="cb2788"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2788-1" data-line-number="1">m=<span class="kw">cbind</span>(c.math.others,c.eng.socsci)</a>
-<a class="sourceLine" id="cb2788-2" data-line-number="2">m</a></code></pre></div>
+<div class="sourceCode" id="cb2812"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2812-1" data-line-number="1">m=<span class="kw">cbind</span>(c.math.others,c.eng.socsci)</a>
+<a class="sourceLine" id="cb2812-2" data-line-number="2">m</a></code></pre></div>
 <pre><code>##      c.math.others c.eng.socsci
 ## [1,]          -0.5            1
 ## [2,]           1.0            0
 ## [3,]          -0.5           -1</code></pre>
-<div class="sourceCode" id="cb2790"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2790-1" data-line-number="1"><span class="kw">contrasts</span>(studyhours<span class="op">$</span>major)=m</a></code></pre></div>
+<div class="sourceCode" id="cb2814"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2814-1" data-line-number="1"><span class="kw">contrasts</span>(studyhours<span class="op">$</span>major)=m</a></code></pre></div>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Fit the model using <code>lm</code>. What do you conclude about
 your contrasts?</li>
@@ -841,8 +841,8 @@ your contrasts?</li>
 <p>Pretend the ANOVA is a regression (though you can fit ANOVAs
 either way: we just used <code>aov</code> before because we were
 going to follow up with Tukey):</p>
-<div class="sourceCode" id="cb2791"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2791-1" data-line-number="1">studyhours<span class="fl">.1</span>=<span class="kw">lm</span>(hours<span class="op">~</span>major,<span class="dt">data=</span>studyhours)</a>
-<a class="sourceLine" id="cb2791-2" data-line-number="2"><span class="kw">summary</span>(studyhours<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2815"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2815-1" data-line-number="1">studyhours<span class="fl">.1</span>=<span class="kw">lm</span>(hours<span class="op">~</span>major,<span class="dt">data=</span>studyhours)</a>
+<a class="sourceLine" id="cb2815-2" data-line-number="2"><span class="kw">summary</span>(studyhours<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = hours ~ major, data = studyhours)
@@ -889,7 +889,7 @@ you run an ANOVA using <code>lm</code>, you get the ANOVA table by
 passing the fitted model object into <code>anova</code> rather than
 <code>summary</code>:
 <label for="tufte-mn-171" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-171" class="margin-toggle"><span class="marginnote"><em>anova</em> is one of R’s multi-purpose tools; what it does depends on what you feed it.</span></p>
-<div class="sourceCode" id="cb2793"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2793-1" data-line-number="1"><span class="kw">anova</span>(studyhours<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2817"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2817-1" data-line-number="1"><span class="kw">anova</span>(studyhours<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: hours
@@ -902,15 +902,15 @@ passing the fitted model object into <code>anova</code> rather than
 contrasts. (The example in class had four models of chainsaw, so 3 df
 for model, so 3 contrasts possible.) What if we don’t use all those
 contrasts up? Try it and see:</p>
-<div class="sourceCode" id="cb2795"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2795-1" data-line-number="1">m=<span class="kw">cbind</span>(c.math.others)</a>
-<a class="sourceLine" id="cb2795-2" data-line-number="2">m</a></code></pre></div>
+<div class="sourceCode" id="cb2819"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2819-1" data-line-number="1">m=<span class="kw">cbind</span>(c.math.others)</a>
+<a class="sourceLine" id="cb2819-2" data-line-number="2">m</a></code></pre></div>
 <pre><code>##      c.math.others
 ## [1,]          -0.5
 ## [2,]           1.0
 ## [3,]          -0.5</code></pre>
-<div class="sourceCode" id="cb2797"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2797-1" data-line-number="1"><span class="kw">contrasts</span>(studyhours<span class="op">$</span>major)=m</a>
-<a class="sourceLine" id="cb2797-2" data-line-number="2">studyhours<span class="fl">.2</span>=<span class="kw">lm</span>(hours<span class="op">~</span>major,<span class="dt">data=</span>studyhours)</a>
-<a class="sourceLine" id="cb2797-3" data-line-number="3"><span class="kw">summary</span>(studyhours<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2821"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2821-1" data-line-number="1"><span class="kw">contrasts</span>(studyhours<span class="op">$</span>major)=m</a>
+<a class="sourceLine" id="cb2821-2" data-line-number="2">studyhours<span class="fl">.2</span>=<span class="kw">lm</span>(hours<span class="op">~</span>major,<span class="dt">data=</span>studyhours)</a>
+<a class="sourceLine" id="cb2821-3" data-line-number="3"><span class="kw">summary</span>(studyhours<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = hours ~ major, data = studyhours)
@@ -941,11 +941,11 @@ with categorical variables which are genuine factors, which we haven’t
 had much cause to do so far. But now we do. What we want to do is to
 <em>recode</em> the levels of <code>major</code>, which is done by
 <code>fct_recode</code>:</p>
-<div class="sourceCode" id="cb2799"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2799-1" data-line-number="1">studyhoursx =<span class="st"> </span>studyhours <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2799-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">mathrest=</span><span class="kw">fct_recode</span>(major,</a>
-<a class="sourceLine" id="cb2799-3" data-line-number="3"><span class="st">&quot;rest&quot;</span> =<span class="st"> &quot;english&quot;</span>,</a>
-<a class="sourceLine" id="cb2799-4" data-line-number="4"><span class="st">&quot;rest&quot;</span> =<span class="st"> &quot;socsci&quot;</span>))</a>
-<a class="sourceLine" id="cb2799-5" data-line-number="5">studyhoursx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(mathrest)</a></code></pre></div>
+<div class="sourceCode" id="cb2823"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2823-1" data-line-number="1">studyhoursx =<span class="st"> </span>studyhours <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2823-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">mathrest=</span><span class="kw">fct_recode</span>(major,</a>
+<a class="sourceLine" id="cb2823-3" data-line-number="3"><span class="st">&quot;rest&quot;</span> =<span class="st"> &quot;english&quot;</span>,</a>
+<a class="sourceLine" id="cb2823-4" data-line-number="4"><span class="st">&quot;rest&quot;</span> =<span class="st"> &quot;socsci&quot;</span>))</a>
+<a class="sourceLine" id="cb2823-5" data-line-number="5">studyhoursx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(mathrest)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   mathrest     n
 ##   &lt;fct&gt;    &lt;int&gt;
@@ -967,7 +967,7 @@ had 25 students in each major. Now I have 25 students for whom
 <code>mathrest</code> is <code>math</code> (the math majors) and 50 (<span class="math inline">\(25+25\)</span>)
 students for whom <code>mathrest</code> is <code>rest</code> (everyone else).</p>
 <p>Now, the <span class="math inline">\(t\)</span>-test.</p>
-<div class="sourceCode" id="cb2801"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2801-1" data-line-number="1"><span class="kw">t.test</span>(hours<span class="op">~</span>mathrest,<span class="dt">data=</span>studyhoursx,<span class="dt">var.equal=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb2825"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2825-1" data-line-number="1"><span class="kw">t.test</span>(hours<span class="op">~</span>mathrest,<span class="dt">data=</span>studyhoursx,<span class="dt">var.equal=</span>T)</a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -1060,15 +1060,15 @@ original researcher’s name was Smith).</p>
 <p>Solution</p>
 <p>The usual thing — read in the data appropriately and look at the
 data frame you got:</p>
-<div class="sourceCode" id="cb2803"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2803-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/smith.txt&quot;</span></a>
-<a class="sourceLine" id="cb2803-2" data-line-number="2">smith=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2827"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2827-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/smith.txt&quot;</span></a>
+<a class="sourceLine" id="cb2827-2" data-line-number="2">smith=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   id = col_integer(),
 ##   context = col_character(),
 ##   words = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb2805"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2805-1" data-line-number="1">smith</a></code></pre></div>
+<div class="sourceCode" id="cb2829"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2829-1" data-line-number="1">smith</a></code></pre></div>
 <pre><code>## # A tibble: 50 x 3
 ##       id context words
 ##    &lt;int&gt; &lt;chr&gt;   &lt;int&gt;
@@ -1092,8 +1092,8 @@ data frame now looks.</li>
 <p>Solution</p>
 <p>Use <code>mutate</code> and assign everything back to what it was
 before:</p>
-<div class="sourceCode" id="cb2807"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2807-1" data-line-number="1">smith =<span class="st"> </span>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">context=</span><span class="kw">factor</span>(context))</a>
-<a class="sourceLine" id="cb2807-2" data-line-number="2">smith</a></code></pre></div>
+<div class="sourceCode" id="cb2831"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2831-1" data-line-number="1">smith =<span class="st"> </span>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">context=</span><span class="kw">factor</span>(context))</a>
+<a class="sourceLine" id="cb2831-2" data-line-number="2">smith</a></code></pre></div>
 <pre><code>## # A tibble: 50 x 3
 ##       id context words
 ##    &lt;int&gt; &lt;fct&gt;   &lt;int&gt;
@@ -1118,10 +1118,10 @@ and what order are they in?</li>
 <p>You have lots of choices now, since <code>context</code> is a factor
 (and can also be treated as text).
 The most obvious factor-based way is this:</p>
-<div class="sourceCode" id="cb2809"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2809-1" data-line-number="1"><span class="kw">levels</span>(smith<span class="op">$</span>context)</a></code></pre></div>
+<div class="sourceCode" id="cb2833"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2833-1" data-line-number="1"><span class="kw">levels</span>(smith<span class="op">$</span>context)</a></code></pre></div>
 <pre><code>## [1] &quot;different&quot;  &quot;imaginary&quot;  &quot;photograph&quot; &quot;placebo&quot;    &quot;same&quot;</code></pre>
 <p>or use <code>summary</code>:</p>
-<div class="sourceCode" id="cb2811"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2811-1" data-line-number="1">smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(context) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2835"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2835-1" data-line-number="1">smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(context) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##        context  
 ##  different :10  
 ##  imaginary :10  
@@ -1129,7 +1129,7 @@ The most obvious factor-based way is this:</p>
 ##  placebo   :10  
 ##  same      :10</code></pre>
 <p>Or treat <code>context</code> as text, such as this way:</p>
-<div class="sourceCode" id="cb2813"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2813-1" data-line-number="1">smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(context)</a></code></pre></div>
+<div class="sourceCode" id="cb2837"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2837-1" data-line-number="1">smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(context)</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   context        n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -1140,7 +1140,7 @@ The most obvious factor-based way is this:</p>
 ## 5 same          10</code></pre>
 <p>These all display the contexts in alphabetical order.</p>
 <p>Or display the distinct values:</p>
-<div class="sourceCode" id="cb2815"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2815-1" data-line-number="1">smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(context)</a></code></pre></div>
+<div class="sourceCode" id="cb2839"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2839-1" data-line-number="1">smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(context)</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 1
 ##   context   
 ##   &lt;fct&gt;     
@@ -1150,7 +1150,7 @@ The most obvious factor-based way is this:</p>
 ## 4 photograph
 ## 5 placebo</code></pre>
 <p>or, without using the <code>tidyverse</code>,</p>
-<div class="sourceCode" id="cb2817"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2817-1" data-line-number="1"><span class="kw">unique</span>(smith<span class="op">$</span>context)</a></code></pre></div>
+<div class="sourceCode" id="cb2841"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2841-1" data-line-number="1"><span class="kw">unique</span>(smith<span class="op">$</span>context)</a></code></pre></div>
 <pre><code>## [1] same       different  imaginary  photograph placebo   
 ## Levels: different imaginary photograph placebo same</code></pre>
 <p>These two <em>don’t</em> display things in alphabetical order, because
@@ -1169,29 +1169,29 @@ easiest. The first one is actually the hardest.)</li>
 <ul>
 <li>Different and placebo have same means. These are 1st and 4th.</li>
 </ul>
-<div class="sourceCode" id="cb2819"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2819-1" data-line-number="1">c4=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2843"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2843-1" data-line-number="1">c4=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>)</a></code></pre></div>
 <ul>
 <li>Imaginary and photograph have same means. 2nd and 3rd:</li>
 </ul>
-<div class="sourceCode" id="cb2820"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2820-1" data-line-number="1">c3=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2844"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2844-1" data-line-number="1">c3=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</a></code></pre></div>
 <ul>
 <li>Imaginary and photograph together same as <code>same</code>. This
 time we have two means being compared with one, so we need to give
 the two means half weight. 2nd and 3rd against 5th:</li>
 </ul>
-<div class="sourceCode" id="cb2821"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2821-1" data-line-number="1">c2=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2845"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2845-1" data-line-number="1">c2=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>)</a></code></pre></div>
 <ul>
 <li>(Same and imaginary and photograph) vs. (different or placebo):
 2nd, 3rd and 5th with weight <span class="math inline">\(1/3\)</span> (three of them) against 1st and
 4th with weight <span class="math inline">\(1/2\)</span> (2 of them):</li>
 </ul>
-<div class="sourceCode" id="cb2822"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2822-1" data-line-number="1">c1=<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>,<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2846"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2846-1" data-line-number="1">c1=<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>,<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
 <p>Variations: you can switch the sign on everything within a
 contrast (since it doesn’t matter which is plus and which is
 minus). You can also multiply through by anything to get rid of
 the fractions, for example these:</p>
-<div class="sourceCode" id="cb2823"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2823-1" data-line-number="1">c2=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb2823-2" data-line-number="2">c1=<span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="op">-</span><span class="dv">3</span>,<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2847"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2847-1" data-line-number="1">c2=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb2847-2" data-line-number="2">c1=<span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="op">-</span><span class="dv">3</span>,<span class="dv">2</span>)</a></code></pre></div>
 <p>All that matters is that the coefficients add up to zero, and that they are the right size and sign relative to each other.</p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Pick two of your contrasts (doesn’t matter which two) and
@@ -1200,11 +1200,11 @@ demonstrate that they are orthogonal.</li>
 <p>Solution</p>
 <p>Multiply your chosen contrasts together elementwise, and show
 that the results add to zero, eg. by showing the whole thing:</p>
-<div class="sourceCode" id="cb2824"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2824-1" data-line-number="1">c1<span class="op">*</span>c2</a></code></pre></div>
+<div class="sourceCode" id="cb2848"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2848-1" data-line-number="1">c1<span class="op">*</span>c2</a></code></pre></div>
 <pre><code>## [1]  0.0000000  0.1666667  0.1666667  0.0000000 -0.3333333</code></pre>
 <p>which adds to zero because it is <span class="math inline">\(2/6\)</span> minus <span class="math inline">\(1/3\)</span>,
 or by explicitly summing the elementwise product:</p>
-<div class="sourceCode" id="cb2826"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2826-1" data-line-number="1"><span class="kw">sum</span>(c1<span class="op">*</span>c3)</a></code></pre></div>
+<div class="sourceCode" id="cb2850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2850-1" data-line-number="1"><span class="kw">sum</span>(c1<span class="op">*</span>c3)</a></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>Any pair is good.</p>
 <ol start="6" style="list-style-type: lower-alpha">
@@ -1213,8 +1213,8 @@ tell <code>lm</code> that these are the contrasts for <code>context</code>.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb2828"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2828-1" data-line-number="1">m=<span class="kw">cbind</span>(c1,c2,c3,c4)</a>
-<a class="sourceLine" id="cb2828-2" data-line-number="2"><span class="kw">contrasts</span>(smith<span class="op">$</span>context)=m</a></code></pre></div>
+<div class="sourceCode" id="cb2852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2852-1" data-line-number="1">m=<span class="kw">cbind</span>(c1,c2,c3,c4)</a>
+<a class="sourceLine" id="cb2852-2" data-line-number="2"><span class="kw">contrasts</span>(smith<span class="op">$</span>context)=m</a></code></pre></div>
 <p>Slipping off into another aside, you might have been wondering whether
 there was a way to test
 <em>all</em> the contrasts for orthogonality at once. There is, and it
@@ -1225,7 +1225,7 @@ matter, <em>transposing</em> a matrix interchanges rows and columns, so
 that in math, we want to look at the matrix <span class="math inline">\(M^T M\)</span>. In R,
 <code>%*%</code> means “matrix multiply”.
 <label for="tufte-mn-173" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-173" class="margin-toggle"><span class="marginnote">In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.</span> Thus,</p>
-<div class="sourceCode" id="cb2829"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2829-1" data-line-number="1"><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</a></code></pre></div>
+<div class="sourceCode" id="cb2853"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2853-1" data-line-number="1"><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</a></code></pre></div>
 <pre><code>##           c1  c2 c3 c4
 ## c1 0.8333333 0.0  0  0
 ## c2 0.0000000 1.5  0  0
@@ -1243,8 +1243,8 @@ the four contrasts is orthogonal to each of the other three.</p>
 </ol>
 <p>Solution</p>
 <p>We’re past the hard part:</p>
-<div class="sourceCode" id="cb2831"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2831-1" data-line-number="1">smith<span class="fl">.1</span>=<span class="kw">lm</span>(words<span class="op">~</span>context,<span class="dt">data=</span>smith)</a>
-<a class="sourceLine" id="cb2831-2" data-line-number="2"><span class="kw">summary</span>(smith<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2855"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2855-1" data-line-number="1">smith<span class="fl">.1</span>=<span class="kw">lm</span>(words<span class="op">~</span>context,<span class="dt">data=</span>smith)</a>
+<a class="sourceLine" id="cb2855-2" data-line-number="2"><span class="kw">summary</span>(smith<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = words ~ context, data = smith)
@@ -1347,14 +1347,14 @@ have, and is that what you should have?</li>
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code>:</p>
-<div class="sourceCode" id="cb2833"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2833-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/shirts.csv&quot;</span></a>
-<a class="sourceLine" id="cb2833-2" data-line-number="2">shirts=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb2857"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2857-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/shirts.csv&quot;</span></a>
+<a class="sourceLine" id="cb2857-2" data-line-number="2">shirts=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   treatment = col_character(),
 ##   score = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2835"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2835-1" data-line-number="1">shirts</a></code></pre></div>
+<div class="sourceCode" id="cb2859"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2859-1" data-line-number="1">shirts</a></code></pre></div>
 <pre><code>## # A tibble: 125 x 2
 ##    treatment         score
 ##    &lt;chr&gt;             &lt;dbl&gt;
@@ -1378,9 +1378,9 @@ that you read in from the file.)</li>
 </ol>
 <p>Solution</p>
 <p>Thus:</p>
-<div class="sourceCode" id="cb2837"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2837-1" data-line-number="1">shirts =<span class="st"> </span>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">treatment=</span><span class="kw">factor</span>(treatment))</a></code></pre></div>
+<div class="sourceCode" id="cb2861"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2861-1" data-line-number="1">shirts =<span class="st"> </span>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">treatment=</span><span class="kw">factor</span>(treatment))</a></code></pre></div>
 <p>and for checking:</p>
-<div class="sourceCode" id="cb2838"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2838-1" data-line-number="1">shirts</a></code></pre></div>
+<div class="sourceCode" id="cb2862"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2862-1" data-line-number="1">shirts</a></code></pre></div>
 <pre><code>## # A tibble: 125 x 2
 ##    treatment         score
 ##    &lt;fct&gt;             &lt;dbl&gt;
@@ -1404,11 +1404,11 @@ them except for <code>distinct</code> is good.)</li>
 </ol>
 <p>Solution</p>
 <p>This is the most direct:</p>
-<div class="sourceCode" id="cb2840"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2840-1" data-line-number="1"><span class="kw">levels</span>(shirts<span class="op">$</span>treatment)</a></code></pre></div>
+<div class="sourceCode" id="cb2864"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2864-1" data-line-number="1"><span class="kw">levels</span>(shirts<span class="op">$</span>treatment)</a></code></pre></div>
 <pre><code>## [1] &quot;control&quot;               &quot;female_seeing_model&quot;   &quot;female_seeing_student&quot;
 ## [4] &quot;male_seeing_model&quot;     &quot;male_seeing_student&quot;</code></pre>
 <p>or you can do one of the <code>tidyverse</code>-style ways, such as</p>
-<div class="sourceCode" id="cb2842"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2842-1" data-line-number="1">shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(treatment)</a></code></pre></div>
+<div class="sourceCode" id="cb2866"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2866-1" data-line-number="1">shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(treatment)</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   treatment                 n
 ##   &lt;fct&gt;                 &lt;int&gt;
@@ -1418,7 +1418,7 @@ them except for <code>distinct</code> is good.)</li>
 ## 4 male_seeing_model        25
 ## 5 male_seeing_student      25</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb2844"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2844-1" data-line-number="1">shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(treatment)</a></code></pre></div>
+<div class="sourceCode" id="cb2868"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2868-1" data-line-number="1">shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(treatment)</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 1
 ##   treatment            
 ##   &lt;fct&gt;                
@@ -1433,8 +1433,8 @@ appear in the factor. So that’s why I asked you not to do it that way.</p>
 <p>Alphabetical order, is the moral of the story.</p>
 <p>Extra: you can make them appear in the order they appear in the data,
 if you want to (and if you know what you are doing):</p>
-<div class="sourceCode" id="cb2846"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2846-1" data-line-number="1">shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">trt2=</span><span class="kw">fct_inorder</span>(treatment)) -&gt;<span class="st"> </span>d</a>
-<a class="sourceLine" id="cb2846-2" data-line-number="2"><span class="kw">levels</span>(d<span class="op">$</span>trt2)</a></code></pre></div>
+<div class="sourceCode" id="cb2870"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2870-1" data-line-number="1">shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">trt2=</span><span class="kw">fct_inorder</span>(treatment)) -&gt;<span class="st"> </span>d</a>
+<a class="sourceLine" id="cb2870-2" data-line-number="2"><span class="kw">levels</span>(d<span class="op">$</span>trt2)</a></code></pre></div>
 <pre><code>## [1] &quot;male_seeing_model&quot;     &quot;male_seeing_student&quot;   &quot;female_seeing_model&quot;  
 ## [4] &quot;female_seeing_student&quot; &quot;control&quot;</code></pre>
 <p><code>fct_inorder</code> <em>creates</em> a factor whose levels are in the
@@ -1449,8 +1449,8 @@ Obtain a table of mean evaluation scores for each treatment group.</li>
 <p>Solution</p>
 <p>We will use this later when assessing the significance of the
 contrasts. It’s the usual group-by and summarize:</p>
-<div class="sourceCode" id="cb2848"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2848-1" data-line-number="1">shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2848-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(score))</a></code></pre></div>
+<div class="sourceCode" id="cb2872"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2872-1" data-line-number="1">shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2872-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(score))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   treatment                 m
 ##   &lt;fct&gt;                 &lt;dbl&gt;
@@ -1461,7 +1461,7 @@ contrasts. It’s the usual group-by and summarize:</p>
 ## 5 male_seeing_student    3.25</code></pre>
 <p>Extra: how does this come out if you have your factor levels in a
 non-alphabetical order?</p>
-<div class="sourceCode" id="cb2850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2850-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(trt2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(score))</a></code></pre></div>
+<div class="sourceCode" id="cb2874"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2874-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(trt2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(score))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   trt2                      m
 ##   &lt;fct&gt;                 &lt;dbl&gt;
@@ -1495,17 +1495,17 @@ treatments and for the control group</p></li>
 appropriate values.</p>
 <p>Solution</p>
 <p>These, in that order, are comparisons of treatments 4 and 5:</p>
-<div class="sourceCode" id="cb2852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2852-1" data-line-number="1">c_mms=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2876"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2876-1" data-line-number="1">c_mms=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>)</a></code></pre></div>
 <p>treatments 2 and 3:</p>
-<div class="sourceCode" id="cb2853"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2853-1" data-line-number="1">c_fms=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2877"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2877-1" data-line-number="1">c_fms=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</a></code></pre></div>
 <p>(in these two the 1 and <span class="math inline">\(-1\)</span> can also be the other way around)</p>
 <p>the average of 2 and 3 vs. the average of 4 and 5:</p>
-<div class="sourceCode" id="cb2854"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2854-1" data-line-number="1">c_mf=<span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2878"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2878-1" data-line-number="1">c_mf=<span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>)</a></code></pre></div>
 <p>or you can use 1 and <span class="math inline">\(-1\)</span> instead of the 0.5s, or you can switch the
 signs around. I like the 0.5 values to remind me it’s an average of
 two means.</p>
 <p>Finally</p>
-<div class="sourceCode" id="cb2855"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2855-1" data-line-number="1">c_tc=<span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="fl">0.25</span>,<span class="op">-</span><span class="fl">0.25</span>,<span class="op">-</span><span class="fl">0.25</span>,<span class="op">-</span><span class="fl">0.25</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2879"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2879-1" data-line-number="1">c_tc=<span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="fl">0.25</span>,<span class="op">-</span><span class="fl">0.25</span>,<span class="op">-</span><span class="fl">0.25</span>,<span class="op">-</span><span class="fl">0.25</span>)</a></code></pre></div>
 <p>or multiply through by 4 to get rid of the fractions, or have the
 negative sign on the first one and positive signs on the others.</p>
 <p>I tried to give the contrasts mnemonic but short names, so that I
@@ -1517,7 +1517,7 @@ demonstrate that they are orthogonal.</li>
 <p>Solution</p>
 <p>Multiply them together (elementwise, which is what <code>*</code>
 does) and add them up, showing that you get zero, for example:</p>
-<div class="sourceCode" id="cb2856"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2856-1" data-line-number="1"><span class="kw">sum</span>(c_mf<span class="op">*</span>c_tc)</a></code></pre></div>
+<div class="sourceCode" id="cb2880"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2880-1" data-line-number="1"><span class="kw">sum</span>(c_mf<span class="op">*</span>c_tc)</a></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>Check (mops brow).</p>
 <ol start="7" style="list-style-type: lower-alpha">
@@ -1527,12 +1527,12 @@ data frame (whatever you called it).</li>
 </ol>
 <p>Solution</p>
 <p>I called my data frame <code>shirts</code>, so I need to do this:</p>
-<div class="sourceCode" id="cb2858"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2858-1" data-line-number="1">m=<span class="kw">cbind</span>(c_mms, c_fms, c_mf, c_tc)</a>
-<a class="sourceLine" id="cb2858-2" data-line-number="2"><span class="kw">contrasts</span>(shirts<span class="op">$</span>treatment)=m</a></code></pre></div>
+<div class="sourceCode" id="cb2882"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2882-1" data-line-number="1">m=<span class="kw">cbind</span>(c_mms, c_fms, c_mf, c_tc)</a>
+<a class="sourceLine" id="cb2882-2" data-line-number="2"><span class="kw">contrasts</span>(shirts<span class="op">$</span>treatment)=m</a></code></pre></div>
 <p>There’s no output here; we’ll see in a moment whether it worked.</p>
 <p>Extra: once you’ve created the matrix <code>m</code>, it gives you a
 second way to test the contrasts for orthogonality, all at once:</p>
-<div class="sourceCode" id="cb2859"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2859-1" data-line-number="1"><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</a></code></pre></div>
+<div class="sourceCode" id="cb2883"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2883-1" data-line-number="1"><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</a></code></pre></div>
 <pre><code>##       c_mms c_fms c_mf c_tc
 ## c_mms     2     0    0 0.00
 ## c_fms     0     2    0 0.00
@@ -1545,8 +1545,8 @@ themselves, hence the non-zeros down the diagonal, but all the
 off-diagonal entries are zero. Hence each contrast is orthogonal to
 each other contrast.</p>
 <p>Or even:</p>
-<div class="sourceCode" id="cb2861"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2861-1" data-line-number="1">z=<span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</a>
-<a class="sourceLine" id="cb2861-2" data-line-number="2"><span class="kw">all</span>(z[<span class="kw">row</span>(z)<span class="op">!=</span><span class="kw">col</span>(z)]<span class="op">==</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2885"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2885-1" data-line-number="1">z=<span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</a>
+<a class="sourceLine" id="cb2885-2" data-line-number="2"><span class="kw">all</span>(z[<span class="kw">row</span>(z)<span class="op">!=</span><span class="kw">col</span>(z)]<span class="op">==</span><span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>That says (a little breathlessly) that it is true that all the
 elements of <span class="math inline">\(M^TM\)</span> that are off the diagonal are zero.
@@ -1558,8 +1558,8 @@ treatment <em>as a regression</em>, and display the results.</li>
 <p>Solution</p>
 <p>Once you have everything set up, it’s just a matter of going
 through the process:</p>
-<div class="sourceCode" id="cb2863"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2863-1" data-line-number="1">score<span class="fl">.1</span>=<span class="kw">lm</span>(score<span class="op">~</span>treatment,<span class="dt">data=</span>shirts)</a>
-<a class="sourceLine" id="cb2863-2" data-line-number="2"><span class="kw">summary</span>(score<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2887"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2887-1" data-line-number="1">score<span class="fl">.1</span>=<span class="kw">lm</span>(score<span class="op">~</span>treatment,<span class="dt">data=</span>shirts)</a>
+<a class="sourceLine" id="cb2887-2" data-line-number="2"><span class="kw">summary</span>(score<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ treatment, data = shirts)
@@ -1662,15 +1662,15 @@ recorded this as well.</p>
 <p>The data values are separated by one space, so let’s use
 <code>read_delim</code> and display whatever displays (probably the
 first ten lines):</p>
-<div class="sourceCode" id="cb2865"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2865-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/productivity.txt&quot;</span></a>
-<a class="sourceLine" id="cb2865-2" data-line-number="2">productivity=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2889"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2889-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/productivity.txt&quot;</span></a>
+<a class="sourceLine" id="cb2889-2" data-line-number="2">productivity=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   expenditure = col_character(),
 ##   improvement = col_double(),
 ##   last = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2867"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2867-1" data-line-number="1">productivity</a></code></pre></div>
+<div class="sourceCode" id="cb2891"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2891-1" data-line-number="1">productivity</a></code></pre></div>
 <pre><code>## # A tibble: 27 x 3
 ##    expenditure improvement  last
 ##    &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;
@@ -1695,8 +1695,8 @@ to keep typing it!</p>
 sorted into alphabetical order unless we stop them. They are actually
 in the right order in the data file, so maybe we should turn them into
 a factor (with the levels in the right order) now:</p>
-<div class="sourceCode" id="cb2869"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2869-1" data-line-number="1">productivity <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2869-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">expenditure=</span><span class="kw">fct_inorder</span>(expenditure)) -&gt;<span class="st"> </span>productivity</a></code></pre></div>
+<div class="sourceCode" id="cb2893"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2893-1" data-line-number="1">productivity <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2893-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">expenditure=</span><span class="kw">fct_inorder</span>(expenditure)) -&gt;<span class="st"> </span>productivity</a></code></pre></div>
 <p>If you don’t do this, your answers below will be different from
 mine. Probably not in any kind of consequential way, but different
 nonetheless.</p>
@@ -1710,8 +1710,8 @@ lines for each expenditure group.</li>
 <p>Two quantitative and one categorical variable, so plot the
 categorical variable using colour (or <code>shape</code> etc., if you
 know about that, but colour is the most obvious thing):</p>
-<div class="sourceCode" id="cb2870"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2870-1" data-line-number="1"><span class="kw">ggplot</span>(productivity,<span class="kw">aes</span>(<span class="dt">x=</span>last,<span class="dt">y=</span>improvement,<span class="dt">colour=</span>expenditure))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2870-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb2894"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2894-1" data-line-number="1"><span class="kw">ggplot</span>(productivity,<span class="kw">aes</span>(<span class="dt">x=</span>last,<span class="dt">y=</span>improvement,<span class="dt">colour=</span>expenditure))<span class="op">+</span></a>
+<a class="sourceLine" id="cb2894-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">se=</span>F)</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-75-1.png" width="672"  /></p>
 <p>The <code>se=F</code> is optional; no problem if you don’t include it. (If
 you miss it out, you’ll get those CI-of-mean-response grey envelopes
@@ -1747,8 +1747,8 @@ the results through <code>drop1</code> with <code>test=&quot;F&quot;</code> (the
 <p>Solution</p>
 <p>This looks exactly like a regression with a categorical variable,
 and is. Just the two main effects, thus:</p>
-<div class="sourceCode" id="cb2871"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2871-1" data-line-number="1">improvement<span class="fl">.1</span>=<span class="kw">lm</span>(improvement<span class="op">~</span>last<span class="op">+</span>expenditure,<span class="dt">data=</span>productivity)</a>
-<a class="sourceLine" id="cb2871-2" data-line-number="2"><span class="kw">drop1</span>(improvement<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2895"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2895-1" data-line-number="1">improvement<span class="fl">.1</span>=<span class="kw">lm</span>(improvement<span class="op">~</span>last<span class="op">+</span>expenditure,<span class="dt">data=</span>productivity)</a>
+<a class="sourceLine" id="cb2895-2" data-line-number="2"><span class="kw">drop1</span>(improvement<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1769,7 +1769,7 @@ numbers in the <code>Estimate</code> column are consistent with your graph.</li>
 </ol>
 <p>Solution</p>
 <p>To begin:</p>
-<div class="sourceCode" id="cb2873"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2873-1" data-line-number="1"><span class="kw">summary</span>(improvement<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2897"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2897-1" data-line-number="1"><span class="kw">summary</span>(improvement<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = improvement ~ last + expenditure, data = productivity)
@@ -1844,8 +1844,8 @@ are not surprised.</li>
 <p>Solution</p>
 <p>I like <code>update</code> for this (writing out the whole model is an
 alternative):</p>
-<div class="sourceCode" id="cb2875"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2875-1" data-line-number="1">improvement<span class="fl">.2</span>=<span class="kw">update</span>(improvement<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">+</span>last<span class="op">:</span>expenditure)</a>
-<a class="sourceLine" id="cb2875-2" data-line-number="2"><span class="kw">drop1</span>(improvement<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2899"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2899-1" data-line-number="1">improvement<span class="fl">.2</span>=<span class="kw">update</span>(improvement<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">+</span>last<span class="op">:</span>expenditure)</a>
+<a class="sourceLine" id="cb2899-2" data-line-number="2"><span class="kw">drop1</span>(improvement<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1874,7 +1874,7 @@ the lines in the graph, so that even a small difference in slopes can
 be signficant. You might argue that my green line is not <em>quite</em>
 as steep as the others, but the difference does look very small.</p>
 <p>Let’s take a look at the <code>summary</code> for my interaction model:</p>
-<div class="sourceCode" id="cb2877"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2877-1" data-line-number="1"><span class="kw">summary</span>(improvement<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2901"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2901-1" data-line-number="1"><span class="kw">summary</span>(improvement<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = improvement ~ last + expenditure + last:expenditure, 
@@ -1916,10 +1916,10 @@ at least, I led you through it wrong). The right way to do this would
 have been to fit the interaction model <em>first</em>, see that it is
 significant, and then done some predictions to assess the effects of
 things:</p>
-<div class="sourceCode" id="cb2879"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2879-1" data-line-number="1">lasts=<span class="kw">c</span>(<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">11</span>)</a>
-<a class="sourceLine" id="cb2879-2" data-line-number="2">expenditures=<span class="kw">c</span>(<span class="st">&quot;low&quot;</span>,<span class="st">&quot;moderate&quot;</span>,<span class="st">&quot;high&quot;</span>)</a>
-<a class="sourceLine" id="cb2879-3" data-line-number="3">new=<span class="kw">crossing</span>(<span class="dt">last=</span>lasts,<span class="dt">expenditure=</span>expenditures)</a>
-<a class="sourceLine" id="cb2879-4" data-line-number="4">new</a></code></pre></div>
+<div class="sourceCode" id="cb2903"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2903-1" data-line-number="1">lasts=<span class="kw">c</span>(<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">11</span>)</a>
+<a class="sourceLine" id="cb2903-2" data-line-number="2">expenditures=<span class="kw">c</span>(<span class="st">&quot;low&quot;</span>,<span class="st">&quot;moderate&quot;</span>,<span class="st">&quot;high&quot;</span>)</a>
+<a class="sourceLine" id="cb2903-3" data-line-number="3">new=<span class="kw">crossing</span>(<span class="dt">last=</span>lasts,<span class="dt">expenditure=</span>expenditures)</a>
+<a class="sourceLine" id="cb2903-4" data-line-number="4">new</a></code></pre></div>
 <pre><code>## # A tibble: 9 x 2
 ##    last expenditure
 ##   &lt;dbl&gt; &lt;chr&gt;      
@@ -1934,8 +1934,8 @@ things:</p>
 ## 9    11 moderate</code></pre>
 <p>(oh, how I wish I’d given those variables shorter names),
 <label for="tufte-mn-175" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-175" class="margin-toggle"><span class="marginnote">The expenditure levels have come out in alphabetical order again.</span> and then:</p>
-<div class="sourceCode" id="cb2881"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2881-1" data-line-number="1">p=<span class="kw">predict</span>(improvement<span class="fl">.2</span>,new)</a>
-<a class="sourceLine" id="cb2881-2" data-line-number="2"><span class="kw">cbind</span>(new,p)</a></code></pre></div>
+<div class="sourceCode" id="cb2905"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2905-1" data-line-number="1">p=<span class="kw">predict</span>(improvement<span class="fl">.2</span>,new)</a>
+<a class="sourceLine" id="cb2905-2" data-line-number="2"><span class="kw">cbind</span>(new,p)</a></code></pre></div>
 <pre><code>##   last expenditure         p
 ## 1    7        high  2.517338
 ## 2    7         low  6.805256
@@ -1982,15 +1982,15 @@ right thing.</li>
 <p>Take a look at the data file. The values have multiple spaces
 between them, but they are aligned with each other and the
 column headings, so <code>read_table</code> is the thing:</p>
-<div class="sourceCode" id="cb2883"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2883-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt&quot;</span></a>
-<a class="sourceLine" id="cb2883-2" data-line-number="2">lepro=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb2907"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2907-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt&quot;</span></a>
+<a class="sourceLine" id="cb2907-2" data-line-number="2">lepro=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   drug = col_character(),
 ##   pre = col_integer(),
 ##   post = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb2885"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2885-1" data-line-number="1">lepro</a></code></pre></div>
+<div class="sourceCode" id="cb2909"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2909-1" data-line-number="1">lepro</a></code></pre></div>
 <pre><code>## # A tibble: 30 x 3
 ##    drug    pre  post
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
@@ -2015,7 +2015,7 @@ different colour.</li>
 <p>Solution</p>
 <p>This is the kind of thing that <code>ggplot</code> does without
 batting an eyelid:</p>
-<div class="sourceCode" id="cb2887"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2887-1" data-line-number="1"><span class="kw">ggplot</span>(lepro,<span class="kw">aes</span>(<span class="dt">x=</span>pre,<span class="dt">y=</span>post,<span class="dt">colour=</span>drug))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2911"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2911-1" data-line-number="1"><span class="kw">ggplot</span>(lepro,<span class="kw">aes</span>(<span class="dt">x=</span>pre,<span class="dt">y=</span>post,<span class="dt">colour=</span>drug))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-84-1.png" width="672"  /></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Does it appear that including the pre-treatment score was a
@@ -2050,9 +2050,9 @@ the model.)</li>
 <p>Solution</p>
 <p>This is what you’d guess. <code>lm</code> handles the interaction
 properly, even though <code>pre</code> is a quantitative variable.</p>
-<div class="sourceCode" id="cb2888"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2888-1" data-line-number="1">lepro<span class="fl">.1</span>=<span class="kw">lm</span>(post<span class="op">~</span>pre<span class="op">*</span>drug,<span class="dt">data=</span>lepro)</a></code></pre></div>
+<div class="sourceCode" id="cb2912"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2912-1" data-line-number="1">lepro<span class="fl">.1</span>=<span class="kw">lm</span>(post<span class="op">~</span>pre<span class="op">*</span>drug,<span class="dt">data=</span>lepro)</a></code></pre></div>
 <p>I wanted to take a look, so I did:</p>
-<div class="sourceCode" id="cb2889"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2889-1" data-line-number="1"><span class="kw">summary</span>(lepro<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2913"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2913-1" data-line-number="1"><span class="kw">summary</span>(lepro<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = post ~ pre * drug, data = lepro)
@@ -2085,7 +2085,7 @@ the interaction term significant?</li>
 </ol>
 <p>Solution</p>
 <p>Just this:</p>
-<div class="sourceCode" id="cb2891"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2891-1" data-line-number="1"><span class="kw">drop1</span>(lepro<span class="fl">.1</span>, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2915-1" data-line-number="1"><span class="kw">drop1</span>(lepro<span class="fl">.1</span>, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -2102,9 +2102,9 @@ do (in addition, that is, to the fact that I just asked you to do it)?</li>
 </ol>
 <p>Solution</p>
 <p>Change the <code>*</code> to a <code>+</code>:</p>
-<div class="sourceCode" id="cb2893"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2893-1" data-line-number="1">lepro<span class="fl">.2</span>=<span class="kw">lm</span>(post<span class="op">~</span>pre<span class="op">+</span>drug,<span class="dt">data=</span>lepro)</a></code></pre></div>
+<div class="sourceCode" id="cb2917"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2917-1" data-line-number="1">lepro<span class="fl">.2</span>=<span class="kw">lm</span>(post<span class="op">~</span>pre<span class="op">+</span>drug,<span class="dt">data=</span>lepro)</a></code></pre></div>
 <p>Or use <code>update</code> (not much in it, here):</p>
-<div class="sourceCode" id="cb2894"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2894-1" data-line-number="1">lepro<span class="fl">.2</span>a=<span class="kw">update</span>(lepro<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>pre<span class="op">:</span>drug)</a></code></pre></div>
+<div class="sourceCode" id="cb2918"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2918-1" data-line-number="1">lepro<span class="fl">.2</span>a=<span class="kw">update</span>(lepro<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>pre<span class="op">:</span>drug)</a></code></pre></div>
 <p>We just said that the interaction could come out, since it wasn’t
 significant, so this is exactly the model that we should be fitting.</p>
 <ol start="8" style="list-style-type: lower-alpha">
@@ -2116,7 +2116,7 @@ of drugs make sense?</li>
 </ol>
 <p>Solution</p>
 <p>Mine was the no-interaction model <code>lepro.2</code>:</p>
-<div class="sourceCode" id="cb2895"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2895-1" data-line-number="1"><span class="kw">summary</span>(lepro<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2919"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2919-1" data-line-number="1"><span class="kw">summary</span>(lepro<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = post ~ pre + drug, data = lepro)
@@ -2151,7 +2151,7 @@ higher score is worse, and the two “real” drugs are both better than
 the fake one.</p>
 <p>Whether there is a real drug difference, I didn’t ask you to assess,
 but you could do it by <code>drop1</code> again, this way:</p>
-<div class="sourceCode" id="cb2897"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2897-1" data-line-number="1"><span class="kw">drop1</span>(lepro<span class="fl">.2</span>, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2921"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2921-1" data-line-number="1"><span class="kw">drop1</span>(lepro<span class="fl">.2</span>, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -2180,10 +2180,10 @@ your preferred model.
 <code>crossing</code>. I’m doing this in small steps for clarity:
 first, I define all the drugs and <code>pre</code> values, and then I
 feed them into <code>crossing</code>:</p>
-<div class="sourceCode" id="cb2899"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2899-1" data-line-number="1">drugs=<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>,<span class="st">&quot;D&quot;</span>,<span class="st">&quot;F&quot;</span>)</a>
-<a class="sourceLine" id="cb2899-2" data-line-number="2">pres=<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">12</span>,<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb2899-3" data-line-number="3">lepro.new=<span class="kw">crossing</span>(<span class="dt">drug=</span>drugs,<span class="dt">pre=</span>pres)</a>
-<a class="sourceLine" id="cb2899-4" data-line-number="4">lepro.new</a></code></pre></div>
+<div class="sourceCode" id="cb2923"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2923-1" data-line-number="1">drugs=<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>,<span class="st">&quot;D&quot;</span>,<span class="st">&quot;F&quot;</span>)</a>
+<a class="sourceLine" id="cb2923-2" data-line-number="2">pres=<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">12</span>,<span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb2923-3" data-line-number="3">lepro.new=<span class="kw">crossing</span>(<span class="dt">drug=</span>drugs,<span class="dt">pre=</span>pres)</a>
+<a class="sourceLine" id="cb2923-4" data-line-number="4">lepro.new</a></code></pre></div>
 <pre><code>## # A tibble: 9 x 2
 ##   drug    pre
 ##   &lt;chr&gt; &lt;dbl&gt;
@@ -2201,16 +2201,16 @@ feed them into <code>crossing</code>:</p>
 <code>predict</code> won’t work.</p>
 <p>Now I obtain the predictions, from my best model <code>lepro.2</code>. I
 don’t need intervals or anything like that:</p>
-<div class="sourceCode" id="cb2901"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2901-1" data-line-number="1">preds=<span class="kw">predict</span>(lepro<span class="fl">.2</span>,lepro.new)</a>
-<a class="sourceLine" id="cb2901-2" data-line-number="2">preds</a></code></pre></div>
+<div class="sourceCode" id="cb2925"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2925-1" data-line-number="1">preds=<span class="kw">predict</span>(lepro<span class="fl">.2</span>,lepro.new)</a>
+<a class="sourceLine" id="cb2925-2" data-line-number="2">preds</a></code></pre></div>
 <pre><code>##         1         2         3         4         5         6         7 
 ##  1.055110  7.965396 15.862867  1.164081  8.074368 15.971838  4.501248 
 ##         8         9 
 ## 11.411535 19.309005</code></pre>
 <p>only it would be easier to see the predictions side by side with the
 values they are predictions for:</p>
-<div class="sourceCode" id="cb2903"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2903-1" data-line-number="1">allpreds=<span class="kw">cbind</span>(lepro.new,preds)</a>
-<a class="sourceLine" id="cb2903-2" data-line-number="2">allpreds</a></code></pre></div>
+<div class="sourceCode" id="cb2927"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2927-1" data-line-number="1">allpreds=<span class="kw">cbind</span>(lepro.new,preds)</a>
+<a class="sourceLine" id="cb2927-2" data-line-number="2">allpreds</a></code></pre></div>
 <pre><code>##   drug pre     preds
 ## 1    A   5  1.055110
 ## 2    A  12  7.965396
@@ -2228,8 +2228,8 @@ the trick of using the original data frame (and plot the points),
 and the data frame of predictions (and join those points with lines).</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2905"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2905-1" data-line-number="1"><span class="kw">ggplot</span>(lepro,<span class="kw">aes</span>(<span class="dt">x=</span>pre,<span class="dt">y=</span>post,<span class="dt">colour=</span>drug))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb2905-2" data-line-number="2"><span class="kw">geom_line</span>(<span class="dt">data=</span>allpreds,<span class="kw">aes</span>(<span class="dt">y=</span>preds,<span class="dt">linetype=</span>drug))</a></code></pre></div>
+<div class="sourceCode" id="cb2929"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2929-1" data-line-number="1"><span class="kw">ggplot</span>(lepro,<span class="kw">aes</span>(<span class="dt">x=</span>pre,<span class="dt">y=</span>post,<span class="dt">colour=</span>drug))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb2929-2" data-line-number="2"><span class="kw">geom_line</span>(<span class="dt">data=</span>allpreds,<span class="kw">aes</span>(<span class="dt">y=</span>preds,<span class="dt">linetype=</span>drug))</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-95-1.png" width="672"  /></p>
 <p>Inside the <code>aes</code> for the <code>geom_line</code>, I only have to
 specify the things that have changed, so that the <code>x</code>
@@ -2252,8 +2252,8 @@ would make the lines <em>not</em> be parallel.
 If your best model
 <em>did</em> have the interaction term still in it, your predictions
 would have been these:</p>
-<div class="sourceCode" id="cb2906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2906-1" data-line-number="1">preds=<span class="kw">predict</span>(lepro<span class="fl">.1</span>,lepro.new)</a>
-<a class="sourceLine" id="cb2906-2" data-line-number="2"><span class="kw">cbind</span>(lepro.new,preds)</a></code></pre></div>
+<div class="sourceCode" id="cb2930"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2930-1" data-line-number="1">preds=<span class="kw">predict</span>(lepro<span class="fl">.1</span>,lepro.new)</a>
+<a class="sourceLine" id="cb2930-2" data-line-number="2"><span class="kw">cbind</span>(lepro.new,preds)</a></code></pre></div>
 <pre><code>##   drug pre      preds
 ## 1    A   5  2.0955414
 ## 2    A  12  7.3121019
@@ -2271,8 +2271,8 @@ scores goes up by 7.5.</p>
 <p>The <code>ggplot</code> in this case is actually a lot easier than the
 other <code>ggplot</code>, because the lines are now just the regression
 lines for each group. So <code>geom_smooth</code> will get them:</p>
-<div class="sourceCode" id="cb2908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2908-1" data-line-number="1"><span class="kw">ggplot</span>(lepro,<span class="kw">aes</span>(<span class="dt">x=</span>pre,<span class="dt">y=</span>post,<span class="dt">colour=</span>drug))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2908-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2932"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2932-1" data-line-number="1"><span class="kw">ggplot</span>(lepro,<span class="kw">aes</span>(<span class="dt">x=</span>pre,<span class="dt">y=</span>post,<span class="dt">colour=</span>drug))<span class="op">+</span></a>
+<a class="sourceLine" id="cb2932-2" data-line-number="2"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-97-1.png" width="672"  /></p>
 <p>The grey intervals are a bit confusing.
 <label for="tufte-mn-179" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-179" class="margin-toggle"><span class="marginnote">You can get rid of them by saying <em>se=F</em> inside the geom-smooth, as normal.</span> They are
@@ -2298,8 +2298,8 @@ of observations and the right variables.</li>
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code>:</p>
-<div class="sourceCode" id="cb2909"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2909-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/urine.csv&quot;</span></a>
-<a class="sourceLine" id="cb2909-2" data-line-number="2">urine=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb2933"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2933-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/urine.csv&quot;</span></a>
+<a class="sourceLine" id="cb2933-2" data-line-number="2">urine=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   obesity = col_character(),
@@ -2308,7 +2308,7 @@ of observations and the right variables.</li>
 ##   chloride = col_double(),
 ##   chlorine = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2911"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2911-1" data-line-number="1">urine</a></code></pre></div>
+<div class="sourceCode" id="cb2935"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2935-1" data-line-number="1">urine</a></code></pre></div>
 <pre><code>## # A tibble: 45 x 5
 ##    obesity     x creatinine chloride chlorine
 ##    &lt;chr&gt;   &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -2330,18 +2330,18 @@ against obesity group.</li>
 </ol>
 <p>Solution</p>
 <p>Just churn through it:</p>
-<div class="sourceCode" id="cb2913"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2913-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>creatinine))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2937"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2937-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>creatinine))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/peppercorn-1.png" width="672"  /></p>
-<div class="sourceCode" id="cb2914"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2914-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>chlorine))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2938"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2938-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>chlorine))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/peppercorn-2.png" width="672"  /></p>
-<div class="sourceCode" id="cb2915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2915-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>chloride))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2939"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2939-1" data-line-number="1"><span class="kw">ggplot</span>(urine,<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>chloride))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/peppercorn-3.png" width="672"  /></p>
 <p>This also works with facets, though it is different from the other
 ones we’ve done, in that we have to collect together the <span class="math inline">\(y\)</span>-variables
 first rather than the <span class="math inline">\(x\)</span>s:</p>
-<div class="sourceCode" id="cb2916"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2916-1" data-line-number="1">urine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(yname,y,creatinine<span class="op">:</span>chlorine) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2916-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>y))<span class="op">+</span><span class="kw">geom_boxplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb2916-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>yname,<span class="dt">scales=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2940"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2940-1" data-line-number="1">urine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(yname,y,creatinine<span class="op">:</span>chlorine) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2940-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>obesity,<span class="dt">y=</span>y))<span class="op">+</span><span class="kw">geom_boxplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb2940-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>yname,<span class="dt">scales=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-99-1.png" width="672"  /></p>
 <p>I decided to throw a couple of things in here: first, the
 <code>scales=&quot;free&quot;</code> thing since the <span class="math inline">\(y\)</span>-variables (this time) are
@@ -2373,9 +2373,9 @@ as explanatory. (This is a so-called one-way MANOVA.)</li>
 </ol>
 <p>Solution</p>
 <p>Create the response variable and run <code>manova</code>:</p>
-<div class="sourceCode" id="cb2917"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2917-1" data-line-number="1">response=<span class="kw">with</span>(urine,<span class="kw">cbind</span>(creatinine,chlorine,chloride))</a>
-<a class="sourceLine" id="cb2917-2" data-line-number="2">urine<span class="fl">.1</span>=<span class="kw">manova</span>(response<span class="op">~</span>obesity,<span class="dt">data=</span>urine)</a>
-<a class="sourceLine" id="cb2917-3" data-line-number="3"><span class="kw">summary</span>(urine<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2941"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2941-1" data-line-number="1">response=<span class="kw">with</span>(urine,<span class="kw">cbind</span>(creatinine,chlorine,chloride))</a>
+<a class="sourceLine" id="cb2941-2" data-line-number="2">urine<span class="fl">.1</span>=<span class="kw">manova</span>(response<span class="op">~</span>obesity,<span class="dt">data=</span>urine)</a>
+<a class="sourceLine" id="cb2941-3" data-line-number="3"><span class="kw">summary</span>(urine<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##           Df  Pillai approx F num Df den Df  Pr(&gt;F)  
 ## obesity    3 0.43144   2.2956      9    123 0.02034 *
 ## Residuals 41                                         
@@ -2395,8 +2395,8 @@ anyway. There was a lot of variability within the groups, which is
 why the P-value didn’t come out smaller.)
 The other way of doing this is the following, using
 <code>Manova</code> from <code>car</code>:</p>
-<div class="sourceCode" id="cb2919"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2919-1" data-line-number="1">response<span class="fl">.1</span>=<span class="kw">lm</span>(response<span class="op">~</span>obesity,<span class="dt">data=</span>urine)</a>
-<a class="sourceLine" id="cb2919-2" data-line-number="2"><span class="kw">Manova</span>(response<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2943"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2943-1" data-line-number="1">response<span class="fl">.1</span>=<span class="kw">lm</span>(response<span class="op">~</span>obesity,<span class="dt">data=</span>urine)</a>
+<a class="sourceLine" id="cb2943-2" data-line-number="2"><span class="kw">Manova</span>(response<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Type II MANOVA Tests: Pillai test statistic
 ##         Df test stat approx F num Df den Df  Pr(&gt;F)  
@@ -2421,9 +2421,9 @@ are in <a href="http://individual.utoronto.ca/kbutler/stad29/hayfever.txt">link<
 <p>(a)[2] Read the data and display its structure. Verify that you
 have what you were expecting.</p>
 <p>Solution</p>
-<div class="sourceCode" id="cb2921"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2921-1" data-line-number="1">my_url=<span class="st">&quot;http://individual.utoronto.ca/kbutler/stad29/hayfever.txt&quot;</span></a>
-<a class="sourceLine" id="cb2921-2" data-line-number="2">hayfever=<span class="kw">read.table</span>(my_url,<span class="dt">header=</span>T)</a>
-<a class="sourceLine" id="cb2921-3" data-line-number="3">hayfever</a></code></pre></div>
+<div class="sourceCode" id="cb2945"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2945-1" data-line-number="1">my_url=<span class="st">&quot;http://individual.utoronto.ca/kbutler/stad29/hayfever.txt&quot;</span></a>
+<a class="sourceLine" id="cb2945-2" data-line-number="2">hayfever=<span class="kw">read.table</span>(my_url,<span class="dt">header=</span>T)</a>
+<a class="sourceLine" id="cb2945-3" data-line-number="3">hayfever</a></code></pre></div>
 <pre><code>##    relief      a      b replicate
 ## 1     2.4    low    low         1
 ## 2     2.7    low    low         2
@@ -2463,15 +2463,15 @@ have what you were expecting.</p>
 ## 36   13.2   high   high         4</code></pre>
 <p>(b)[2] interaction plot</p>
 <p>Solution</p>
-<div class="sourceCode" id="cb2923"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2923-1" data-line-number="1">hayfever <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(a,b) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2923-2" data-line-number="2"><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">relief.mean=</span><span class="kw">mean</span>(relief)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2923-3" data-line-number="3"><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>a,<span class="dt">y=</span>relief.mean,<span class="dt">colour=</span>b,<span class="dt">group=</span>b))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2923-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2947"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2947-1" data-line-number="1">hayfever <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(a,b) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2947-2" data-line-number="2"><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">relief.mean=</span><span class="kw">mean</span>(relief)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2947-3" data-line-number="3"><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>a,<span class="dt">y=</span>relief.mean,<span class="dt">colour=</span>b,<span class="dt">group=</span>b))<span class="op">+</span></a>
+<a class="sourceLine" id="cb2947-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-103-1.png" width="672"  /></p>
 <p>(c)[2] Run an analysis of variance with interaction.</p>
 <p>Solution</p>
-<div class="sourceCode" id="cb2924"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2924-1" data-line-number="1">hayfever<span class="fl">.1</span>=<span class="kw">aov</span>(relief<span class="op">~</span>a<span class="op">*</span>b,<span class="dt">data=</span>hayfever)</a>
-<a class="sourceLine" id="cb2924-2" data-line-number="2"><span class="kw">summary</span>(hayfever<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2948"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2948-1" data-line-number="1">hayfever<span class="fl">.1</span>=<span class="kw">aov</span>(relief<span class="op">~</span>a<span class="op">*</span>b,<span class="dt">data=</span>hayfever)</a>
+<a class="sourceLine" id="cb2948-2" data-line-number="2"><span class="kw">summary</span>(hayfever<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)    
 ## a            2 220.02  110.01  1827.9 &lt;2e-16 ***
 ## b            2 123.66   61.83  1027.3 &lt;2e-16 ***
@@ -2499,8 +2499,8 @@ different dates, in April and June 1991. The data are in
 <p>(a)[2] Read in and display the data.</p>
 <p>Solution</p>
 <p>This time, it’s a <code>.csv</code>:</p>
-<div class="sourceCode" id="cb2926"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2926-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv&quot;</span></a>
-<a class="sourceLine" id="cb2926-2" data-line-number="2">acidrain=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb2950"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2950-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv&quot;</span></a>
+<a class="sourceLine" id="cb2950-2" data-line-number="2">acidrain=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   soil_depth = col_character(),
@@ -2508,7 +2508,7 @@ different dates, in April and June 1991. The data are in
 ##   rain_pH = col_double(),
 ##   soil_acidity = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2928"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2928-1" data-line-number="1">acidrain</a></code></pre></div>
+<div class="sourceCode" id="cb2952"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2952-1" data-line-number="1">acidrain</a></code></pre></div>
 <pre><code>## # A tibble: 18 x 4
 ##    soil_depth date       rain_pH soil_acidity
 ##    &lt;chr&gt;      &lt;date&gt;       &lt;dbl&gt;        &lt;dbl&gt;
@@ -2545,21 +2545,21 @@ you might not get the boxplot you want. How can you fix that?)</p>
 <code>dbl</code>) rather than the categorical variable you need.
 Try to use one of the explanatory variables as <code>x</code> and the other
 one as <code>fill</code> (or <code>colour</code>):</p>
-<div class="sourceCode" id="cb2930"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2930-1" data-line-number="1"><span class="kw">ggplot</span>(acidrain,<span class="kw">aes</span>(<span class="dt">x=</span>rain_pH,<span class="dt">y=</span>soil_acidity,<span class="dt">fill=</span>soil_depth))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2930-2" data-line-number="2"><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2954"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2954-1" data-line-number="1"><span class="kw">ggplot</span>(acidrain,<span class="kw">aes</span>(<span class="dt">x=</span>rain_pH,<span class="dt">y=</span>soil_acidity,<span class="dt">fill=</span>soil_depth))<span class="op">+</span></a>
+<a class="sourceLine" id="cb2954-2" data-line-number="2"><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-106-1.png" width="672"  /></p>
 <p>That looks as if it worked, but it didn’t. See the boxplot below for
 how it’s supposed to be. I need <code>x</code> for the boxplot needs to
 be categorical. The easiest way to make it such is to wrap it in
 <code>factor</code>:</p>
-<div class="sourceCode" id="cb2931"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2931-1" data-line-number="1"><span class="kw">ggplot</span>(acidrain,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(rain_pH),<span class="dt">y=</span>soil_acidity,<span class="dt">fill=</span>soil_depth))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2931-2" data-line-number="2"><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2955"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2955-1" data-line-number="1"><span class="kw">ggplot</span>(acidrain,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(rain_pH),<span class="dt">y=</span>soil_acidity,<span class="dt">fill=</span>soil_depth))<span class="op">+</span></a>
+<a class="sourceLine" id="cb2955-2" data-line-number="2"><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-107-1.png" width="672"  /></p>
 <p>Even though <code>soil_depth</code> looks like numbers, the printout of
 the data frame reveals that it is text, so that is OK.</p>
 <p>If you prefer, exchange <code>x</code> and <code>fill</code>:</p>
-<div class="sourceCode" id="cb2932"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2932-1" data-line-number="1"><span class="kw">ggplot</span>(acidrain,<span class="kw">aes</span>(<span class="dt">fill=</span><span class="kw">factor</span>(rain_pH),<span class="dt">y=</span>soil_acidity,<span class="dt">x=</span>soil_depth))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2932-2" data-line-number="2"><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2956"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2956-1" data-line-number="1"><span class="kw">ggplot</span>(acidrain,<span class="kw">aes</span>(<span class="dt">fill=</span><span class="kw">factor</span>(rain_pH),<span class="dt">y=</span>soil_acidity,<span class="dt">x=</span>soil_depth))<span class="op">+</span></a>
+<a class="sourceLine" id="cb2956-2" data-line-number="2"><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-108-1.png" width="672"  /></p>
 <p>(c)[2] What does your grouped boxplot say about likely
 interactions? Explain briefly.</p>
@@ -2584,9 +2584,9 @@ it? You may want to create a column that is the factor version of
 <code>rain_pH</code> first.</p>
 <p>Solution</p>
 <p>Following my own hint:</p>
-<div class="sourceCode" id="cb2933"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2933-1" data-line-number="1">acidrain =<span class="st"> </span>acidrain <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">frph=</span><span class="kw">factor</span>(rain_pH))</a>
-<a class="sourceLine" id="cb2933-2" data-line-number="2">soil<span class="fl">.1</span>=<span class="kw">aov</span>(soil_acidity<span class="op">~</span>frph<span class="op">*</span>soil_depth,<span class="dt">data=</span>acidrain)</a>
-<a class="sourceLine" id="cb2933-3" data-line-number="3"><span class="kw">summary</span>(soil<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2957"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2957-1" data-line-number="1">acidrain =<span class="st"> </span>acidrain <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">frph=</span><span class="kw">factor</span>(rain_pH))</a>
+<a class="sourceLine" id="cb2957-2" data-line-number="2">soil<span class="fl">.1</span>=<span class="kw">aov</span>(soil_acidity<span class="op">~</span>frph<span class="op">*</span>soil_depth,<span class="dt">data=</span>acidrain)</a>
+<a class="sourceLine" id="cb2957-3" data-line-number="3"><span class="kw">summary</span>(soil<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##                 Df Sum Sq Mean Sq F value Pr(&gt;F)
 ## frph             1 0.0304 0.03042   0.759  0.401
 ## soil_depth       2 0.0671 0.03357   0.838  0.457
@@ -2598,8 +2598,8 @@ on the boxplot is based on <em>three</em> observations only. So the
 interaction would have to be a lot bigger to be significant.</p>
 <p>The usual procedure after finding a significant interaction is to take
 it out:</p>
-<div class="sourceCode" id="cb2935"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2935-1" data-line-number="1">soil<span class="fl">.2</span>=<span class="kw">update</span>(soil<span class="fl">.1</span>, .<span class="op">~</span>.<span class="op">-</span>frph<span class="op">:</span>soil_depth)</a>
-<a class="sourceLine" id="cb2935-2" data-line-number="2"><span class="kw">summary</span>(soil<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2959"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2959-1" data-line-number="1">soil<span class="fl">.2</span>=<span class="kw">update</span>(soil<span class="fl">.1</span>, .<span class="op">~</span>.<span class="op">-</span>frph<span class="op">:</span>soil_depth)</a>
+<a class="sourceLine" id="cb2959-2" data-line-number="2"><span class="kw">summary</span>(soil<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)
 ## frph         1 0.0304 0.03042   0.871  0.366
 ## soil_depth   2 0.0671 0.03357   0.962  0.406

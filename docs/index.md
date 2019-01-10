@@ -97,3 +97,4 @@ My checklist:
 - I think I have all the D29 questions I want. Now to edit them!
 - look for multiple regression Qs in C32 A6 or wherever
 - *** puts a vertical line across in Markdown. Put that above and below each question part, somehow. (Programmatically?)
+- these files can go into chapter 2: initial.Rnw fileread.Rnw quickfire.Rnw random-normal.Rnw binomial.Rnw

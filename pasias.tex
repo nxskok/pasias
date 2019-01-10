@@ -238,6 +238,9 @@ My checklist:
 \item
   *** puts a vertical line across in Markdown. Put that above and below
   each question part, somehow. (Programmatically?)
+\item
+  these files can go into chapter 2: initial.Rnw fileread.Rnw
+  quickfire.Rnw random-normal.Rnw binomial.Rnw
 \end{itemize}
 
 \hypertarget{getting-used-to-r-and-r-studio}{%
@@ -8867,9 +8870,9 @@ we use \texttt{rnorm} with this mean and SD, obtaining 10 values:
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] 38.17878 62.09456 70.60699 54.45536
-##  [5] 59.78007 39.09082 46.54506 28.58023
-##  [9] 59.70697 46.89752
+##  [1] 46.45188 59.35052 49.82125 37.52529
+##  [5] 50.68812 55.69755 48.45894 65.29990
+##  [9] 21.49748 60.94532
 \end{verbatim}
 
 \begin{enumerate}
@@ -8895,8 +8898,8 @@ The way we know this is to put \texttt{x} into a data frame first:
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        7
-## 2 TRUE         3
+## 1 FALSE        8
+## 2 TRUE         2
 \end{verbatim}
 
 2 values less (and 8 greater-or-equal).
@@ -8930,7 +8933,7 @@ minimum value you want. I add to my pipeline:
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       3 FALSE
+## 1       2 FALSE
 \end{verbatim}
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -8951,7 +8954,7 @@ not reject. The fix is
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       3 FALSE
+## 1       2 FALSE
 \end{verbatim}
 
 The above is almost the right thing, but not quite: we only want that
@@ -28675,7 +28678,6 @@ and
 \end{Shaded}
 
 \includegraphics{12-regression_files/figure-latex/unnamed-chunk-195-1}
-\$ \%\$
 
 What would also work is to make a data frame first with the things to
 plot:
@@ -36072,17 +36074,64 @@ shown here.)
 
 There is actually a \emph{town} called Catbrain. It's in England, near
 Bristol, and seems to be home to a street of car dealerships. Just to
-show that you can do \emph{anything} in R:
+show that you can do \emph{anything} in R (but first I need a Google API
+key) and some packages:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(ggmap)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Google Maps API Terms of Service: https://cloud.google.com/maps-platform/terms/.
+\end{verbatim}
+
+\begin{verbatim}
+## Please cite ggmap if you use it: see citation("ggmap") for details.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggrepel)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{register_google}\NormalTok{(api_key)}
+\KeywordTok{has_google_key}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+My Google API key is hidden in a variable called \texttt{api\_key} that
+I am not showing you. You can get your own!
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{gg =}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\StringTok{"Catbrain"}\NormalTok{, }\DataTypeTok{zoom =} \DecValTok{14}\NormalTok{, }\DataTypeTok{maptype =} \StringTok{"roadmap"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=Catbrain&zoom=14&size=640x640&scale=2&maptype=roadmap&language=en-EN&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Catbrain&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{ggmap}\NormalTok{(gg)}
 \end{Highlighting}
 \end{Shaded}
 
-(fix this up later)
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-84-1}
 
 The car dealerships are along Lysander Road. Change the \texttt{zoom} to
 a bigger number to see them. Evidently, there is no other Catbrain
@@ -36101,11 +36150,13 @@ plotting points on the map as well:
 \begin{Highlighting}[]
 \NormalTok{lons =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{2.6}\NormalTok{, }\FloatTok{-2.62}\NormalTok{)}
 \NormalTok{lats =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{51.51}\NormalTok{, }\FloatTok{51.52}\NormalTok{, }\FloatTok{51.53}\NormalTok{)}
-\NormalTok{points =}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{lon =}\NormalTok{ lons, }\DataTypeTok{lat =}\NormalTok{ lats)}
+\NormalTok{points =}\StringTok{ }\KeywordTok{crossing}\NormalTok{(}\DataTypeTok{lon =}\NormalTok{ lons, }\DataTypeTok{lat =}\NormalTok{ lats)}
 \KeywordTok{ggmap}\NormalTok{(gg) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ points, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lon, }
     \DataTypeTok{y =}\NormalTok{ lat))}
 \end{Highlighting}
 \end{Shaded}
+
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-85-1}
 
 Note the unusual way in which you specify the points to plot.
 \texttt{ggmap} replaces the usual \texttt{ggplot} which is where the
@@ -36114,16 +36165,115 @@ you have to specify them in \texttt{geom\_point} as shown.
 
 I have no idea why you'd want to plot those points. Normally, on a map,
 you'd find the longitude and latitude of some named points (a process
-known as ``geocoding'').
+known as ``geocoding''):
 
-The M5 is one of the English ``motorways'' (like 400-series highways or
-US Interstates). The M5 goes from Birmingham to Exeter. You can tell
-that this is England because of the huge number of traffic circles,
-known there as ``roundabouts''. One of the first things they teach you
-in British driving schools is how to handle roundabouts: which lane to
-approach them in, which (stick-shift) gear to be in, and when you're
-supposed to signal where you're going. I hope I still remember all that
-for when I next drive in England!
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{places =}\StringTok{ }\KeywordTok{tribble}\NormalTok{(}\OperatorTok{~}\NormalTok{where, }\StringTok{"Catbrain UK"}\NormalTok{, }\StringTok{"Bristol UK"}\NormalTok{, }
+    \StringTok{"Taunton UK"}\NormalTok{, }\StringTok{"Newport UK"}\NormalTok{, }\StringTok{"Gloucester UK"}\NormalTok{)}
+\NormalTok{places <-}\StringTok{ }\NormalTok{places }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_geocode}\NormalTok{(where) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{plotname =} \KeywordTok{ifelse}\NormalTok{(where }\OperatorTok{==}\StringTok{ "Catbrain UK"}\NormalTok{, }
+\NormalTok{        where, }\StringTok{""}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Catbrain%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Bristol%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Taunton%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Newport%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Gloucester%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{places}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 4
+##   where           lon   lat plotname   
+##   <chr>         <dbl> <dbl> <chr>      
+## 1 Catbrain UK   -2.61  51.5 Catbrain UK
+## 2 Bristol UK    -2.59  51.5 ""         
+## 3 Taunton UK    -3.11  51.0 ""         
+## 4 Newport UK    -3.00  51.6 ""         
+## 5 Gloucester UK -2.24  51.9 ""
+\end{verbatim}
+
+Now to plot them on a map. I'll need to zoom out a bit, so I'll get
+another map:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gg =}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\StringTok{"Catbrain"}\NormalTok{, }\DataTypeTok{zoom =} \DecValTok{9}\NormalTok{, }\DataTypeTok{maptype =} \StringTok{"roadmap"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=Catbrain&zoom=9&size=640x640&scale=2&maptype=roadmap&language=en-EN&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Catbrain&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggmap}\NormalTok{(gg) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ places, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lon, }
+    \DataTypeTok{y =}\NormalTok{ lat)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ places, }\DataTypeTok{colour =} \StringTok{"red"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_text_repel}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ places, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =}\NormalTok{ plotname))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in min(x): no non-missing arguments
+## to min; returning Inf
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(x): no non-missing arguments
+## to max; returning -Inf
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in min(x): no non-missing arguments
+## to min; returning Inf
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(x): no non-missing arguments
+## to max; returning -Inf
+\end{verbatim}
+
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-87-1}
+
+Now, if you have any sense of the geography of the UK, you know where
+you are. The places on the top left of the map are in Wales, including
+Caldicot (see question about pottery). The big river (the Severn) is the
+border between England and Wales.
+
+More irrelevant extra: the M5 is one of the English ``motorways'' (like
+400-series highways or US Interstates). The M5 goes from Birmingham to
+Exeter. You can tell that this is England because of the huge number of
+traffic circles, known there as ``roundabouts''. One of the first things
+they teach you in British driving schools is how to handle roundabouts:
+which lane to approach them in, which (stick-shift) gear to be in, and
+when you're supposed to signal where you're going. I hope I still
+remember all that for when I next drive in England!
 
 \hypertarget{how-not-to-get-heart-disease}{%
 \section{How not to get heart
@@ -36783,10 +36933,9 @@ There are a lot of variables left.
 \begin{enumerate}
 \def\labelenumi{(\alph{enumi})}
 \setcounter{enumi}{6}
+\tightlist
 \item
-\begin{verbatim}
- Display the summary of the model that came out of `step`.
-\end{verbatim}
+  Display the summary of the model that came out of \texttt{step}.
 \end{enumerate}
 
 Solution
@@ -37419,14 +37568,14 @@ sanity-checking:
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol
 ##   <chr> <chr>          <dbl>      <dbl>
-## 1 male  typical          120        213
-## 2 fema~ nonangin~        140        280
-## 3 fema~ atypical         120        213
-## 4 fema~ nonangin~        140        213
-## 5 male  atypical         140        280
-## 6 male  atypical         140        280
-## 7 male  atypical         120        280
-## 8 male  nonangin~        140        213
+## 1 fema~ nonangin~        140        213
+## 2 fema~ typical          120        213
+## 3 fema~ asymptom~        140        280
+## 4 fema~ typical          120        280
+## 5 fema~ atypical         120        280
+## 6 male  atypical         120        213
+## 7 fema~ asymptom~        140        213
+## 8 male  atypical         120        280
 ## # ... with 6 more variables: max.hr <dbl>,
 ## #   oldpeak <dbl>, slope <chr>,
 ## #   colored <dbl>, thal <chr>, pred <dbl>
@@ -37975,7 +38124,7 @@ proportions/probabilities, you could do something like this:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-122-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-127-1}
 
 What did I do there? I first created some new variables: \texttt{count}
 is the total number of babies of each gestational age, \texttt{obs} is
@@ -38115,7 +38264,7 @@ variables somehow and summarizes them in a sensible way. Starting with
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-124-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-129-1}
 
 or:
 
@@ -38126,7 +38275,7 @@ or:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-125-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-130-1}
 
 or:
 
@@ -38166,7 +38315,7 @@ Age vs. \texttt{survived} is the same idea:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-128-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-133-1}
 
 or:
 
@@ -38177,7 +38326,7 @@ or:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-129-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-134-1}
 
 or:
 
@@ -38254,7 +38403,7 @@ question:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-134-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-139-1}
 
 I think this way around for \texttt{x} and \texttt{fill} is better,
 since we want to ask something like ``out of the females, how many
@@ -39115,7 +39264,7 @@ predicted probabilities, and then making the plot, like this:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-152-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-157-1}
 
 You don't need to make a column in the pipeline with the predictions in
 it; you can just use what I called \texttt{p} directly in the
@@ -39150,7 +39299,7 @@ do, since we have exactly that in \texttt{patients}:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-153-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-158-1}
 
 The points that are far from the prediction are mostly based on a small
 number of patients, and the observed proportions for \texttt{apache}
@@ -39473,7 +39622,7 @@ visual:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-161-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-166-1}
 
 This is the wrong way around in terms of cause and effect, but it shows
 pretty clearly that people who suffer a second heart attack have a
@@ -39499,7 +39648,7 @@ bar chart:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-162-1}
+\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-167-1}
 
 A small majority of people who took the anger management did not have a
 second heart attack, while a small minority of those who did not, did.
@@ -42417,8 +42566,8 @@ you needed to do something like this as well:
 ## 16 trafford >2.3  m
 \end{verbatim}
 
-\$ \%\$ If you predict this in the model \emph{without} \texttt{Gender},
-you'll get the following:
+If you predict this in the model \emph{without} \texttt{Gender}, you'll
+get the following:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -43893,8 +44042,6 @@ This is the most direct way to find out:
 ## [4] "Medium Well" "Well"
 \end{verbatim}
 
-\$ \%\$ \%\$ \%\$
-
 This is almost the right order (\texttt{distinct} uses the order in the
 data frame). We just need to switch the first two around, and then we'll
 be done:
@@ -43957,12 +44104,11 @@ So now I create my ordered response:
 \end{Shaded}
 
 or using one of the other \texttt{preps} vectors containing the levels
-in the correct order. \$ \%\$ \%\$
-
-As far as \texttt{polr} is concerned, it doesn't matter whether I start
-at \texttt{Rare} and go ``up'', or start at \texttt{Well} and go
-``down''. So if you do it the other way around, that's fine. As long as
-you get the levels in a sensible order, you're good.
+in the correct order. As far as \texttt{polr} is concerned, it doesn't
+matter whether I start at \texttt{Rare} and go ``up'', or start at
+\texttt{Well} and go ``down''. So if you do it the other way around,
+that's fine. As long as you get the levels in a sensible order, you're
+good.
 
 \begin{enumerate}
 \def\labelenumi{(\alph{enumi})}
@@ -53930,7 +54076,7 @@ both response variables (!):
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{19-manova_files/figure-latex/unnamed-chunk-5-1} \$
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-5-1}
 
 \begin{enumerate}
 \def\labelenumi{(\alph{enumi})}
@@ -55128,26 +55274,26 @@ this:
 ## # A tibble: 20 x 4
 ##    drug       junk  time  weight
 ##    <chr>      <chr> <chr>  <int>
-##  1 thyroxin   Time  4        189
-##  2 thyroxin   Time  4        140
-##  3 thyroxin   Time  2        116
-##  4 thyroxin   Time  3        138
-##  5 control    Time  3        121
-##  6 control    Time  0         51
-##  7 thyroxin   Time  1         73
-##  8 control    Time  3        144
-##  9 thiouracil Time  3        114
-## 10 thyroxin   Time  3        151
-## 11 thiouracil Time  2        101
-## 12 thiouracil Time  4        122
-## 13 control    Time  2        104
-## 14 thyroxin   Time  4        177
-## 15 thiouracil Time  2         92
-## 16 thiouracil Time  4        107
-## 17 thyroxin   Time  1         71
-## 18 thyroxin   Time  1         75
-## 19 control    Time  4        151
-## 20 thiouracil Time  1         80
+##  1 thiouracil Time  0         53
+##  2 thyroxin   Time  0         56
+##  3 control    Time  0         51
+##  4 thyroxin   Time  4        140
+##  5 thiouracil Time  1         80
+##  6 thiouracil Time  2        100
+##  7 thyroxin   Time  0         57
+##  8 control    Time  1         67
+##  9 control    Time  3        139
+## 10 control    Time  4        140
+## 11 thyroxin   Time  3        120
+## 12 control    Time  3        144
+## 13 control    Time  2        123
+## 14 thiouracil Time  3        114
+## 15 thiouracil Time  4        140
+## 16 control    Time  2         90
+## 17 control    Time  2        112
+## 18 control    Time  0         57
+## 19 control    Time  0         49
+## 20 thiouracil Time  2        100
 \end{verbatim}
 
 Separate after the fourth character (\texttt{sep=4}), which will put
@@ -55170,26 +55316,26 @@ the number, \texttt{parse\_number} (from \texttt{readr}, part of the
 ## # A tibble: 20 x 4
 ##    drug       timex weight  time
 ##    <chr>      <chr>  <int> <dbl>
-##  1 thyroxin   Time2     90     2
-##  2 thiouracil Time0     53     0
-##  3 thyroxin   Time2     97     2
-##  4 control    Time1     70     1
-##  5 control    Time2    102     2
-##  6 thiouracil Time2    100     2
-##  7 thyroxin   Time0     57     0
-##  8 thiouracil Time3    120     3
-##  9 thiouracil Time2     92     2
-## 10 thyroxin   Time3    156     3
-## 11 thiouracil Time3    123     3
-## 12 control    Time3    139     3
-## 13 thiouracil Time3    111     3
-## 14 thyroxin   Time0     56     0
-## 15 thyroxin   Time1     70     1
-## 16 thyroxin   Time1     73     1
-## 17 control    Time2    100     2
-## 18 thyroxin   Time1     72     1
-## 19 control    Time3    130     3
-## 20 thiouracil Time4    140     4
+##  1 control    Time0     52     0
+##  2 thiouracil Time3     90     3
+##  3 thiouracil Time1     86     1
+##  4 thiouracil Time3    114     3
+##  5 thiouracil Time2     92     2
+##  6 control    Time2    114     2
+##  7 control    Time3    121     3
+##  8 thyroxin   Time0     57     0
+##  9 thyroxin   Time3    148     3
+## 10 control    Time1     91     1
+## 11 control    Time2    112     2
+## 12 control    Time3    146     3
+## 13 thyroxin   Time2    121     2
+## 14 thiouracil Time2    100     2
+## 15 thiouracil Time4    122     4
+## 16 control    Time4    177     4
+## 17 thyroxin   Time2     90     2
+## 18 control    Time3    139     3
+## 19 control    Time1     82     1
+## 20 control    Time3    110     3
 \end{verbatim}
 
 I decided to show you a random collection of rows, so that you can see
@@ -58644,8 +58790,6 @@ Solution
 ## diag    1.556520967
 \end{verbatim}
 
-\$
-
 This is the same as the \texttt{coefficients of linear
 discriminants} on the big output.
 
@@ -61335,8 +61479,6 @@ Use the predictions from the previous part, and the observed
 ##   mother      1     23
 \end{verbatim}
 
-\$
-
 Or,
 
 \begin{Shaded}
@@ -61385,8 +61527,6 @@ us the row of the \emph{original} data frame:
 ##   <chr>  <int> <int> <int> <int> <fct>  <int>
 ## 1 mother     1     1     2     1 father    17
 \end{verbatim}
-
-\$
 
 It was the original row 17. So what was unusual about this? We know from
 earlier that behaviour \texttt{q2} was the one that generally
@@ -61904,8 +62044,6 @@ discriminants'' (same):
 ## herbicide  0.27281743
 \end{verbatim}
 
-\$ \%\$ \%\$
-
 We said earlier that the only important discriminant is \texttt{LD1}. On
 that, the only notably non-zero coefficient is for \texttt{herbicide};
 the ones for \texttt{yield} and \texttt{water} are close to zero. That
@@ -62298,8 +62436,6 @@ soils that were actually loam. This is a small edit:
 ## 8 0.163 0.352 0.113 0.373
 \end{verbatim}
 
-\$ \%\$ \%\$ \%\$
-
 Fields 7 and 8 could have been pretty much any type of soil;
 \texttt{sandy} came out with the highest posterior probability, so
 that's what they were predicted (wrongly) to be. Some of the fields, 1,
@@ -62342,8 +62478,6 @@ effect on \texttt{LD1}:
 ##  3rd Qu.: 5.825  
 ##  Max.   :11.700
 \end{verbatim}
-
-\$ \%\$ \%\$
 
 The problem is that the variables have different spreads. Let's do some
 predictions (ie.~calculations) of LD1 score for combinations of
@@ -62417,7 +62551,6 @@ could, since it's a discriminant analysis:
 \end{Shaded}
 
 \includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-106-1}
-\$ \%\$ \%\$
 
 This shows the dominant influence of \texttt{herbicide} on LD1 score
 (more herbicide is more positive), and that \texttt{water} has nothing
@@ -66486,8 +66619,6 @@ This is (perhaps most easily) a loop:
 ##  [9] 333.6222 312.5101
 \end{verbatim}
 
-\$ \%\$ \%\$
-
 Note that there are 10 \texttt{wss} values, but the first one is
 missing, since we didn't do one cluster.
 \marginnote{R vectors start from  1, unlike C arrays or Python lists, which start from 0.}
@@ -66512,8 +66643,6 @@ clusters, like this:
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
-
-\$ \%\$
 
 This takes the number of clusters as the \emph{first} thing (important,
 as we see later), then anything else we need: some data, and the value
@@ -66662,8 +66791,6 @@ Now, down to business:
 \begin{verbatim}
 ## [1] 50 32 68 50
 \end{verbatim}
-
-\$ \%\$
 
 This many. Note that my clusters 1 and 4 (and also 2 and 3) add up to
 100 bills. There were 100 genuine and 100 counterfeit bills in the
@@ -67149,8 +67276,6 @@ only what you want:
 ## 32 Volvo 142E                3
 \end{verbatim}
 
-\$
-
 This time we want to \emph{keep} the car names and throw away everything
 else.
 
@@ -67363,8 +67488,6 @@ This one is just about simple enough to define the function within the
 ## 8        9  17.3
 ## 9       10  15.2
 \end{verbatim}
-
-\$ \%\$ \%\$
 
 Instead of having a function name as the second thing in the
 \texttt{map\_dbl}, I have a so-called ``one-sided model formula'' that
@@ -67685,8 +67808,7 @@ and the two colons:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-112-1} \$
-\%\$ \%\$ \%\$
+\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-112-1}
 
 Or you can do the predictions, then plot \texttt{LD1} against
 \texttt{LD2}, coloured by cluster:
@@ -67909,8 +68031,6 @@ likely that the column \emph{name} will change.)
 ## 5.01529875 7.22352899
 \end{verbatim}
 
-\$ \%\$ \%\$
-
 I think the matrix of standardized values is small enough to look at all
 of, particularly if I round off the values to a small number of
 decimals, and, as I did, shrink it a bit. (Note that the means and SDs
@@ -67960,8 +68080,6 @@ clever way. The obvious way is to do a Python-style loop, thus:
 ##  [9]  68.99662  60.77665  54.29991  47.64227  41.40352  35.39181  29.52008  25.05344
 ## [17]  21.02841  17.28444  13.80627  10.44197
 \end{verbatim}
-
-\$ \%\$ \%\$
 
 I defined \texttt{maxclust} earlier, surreptitiously. (Actually, what
 happened was that I changed my mind about how many clusters I wanted you
@@ -69830,8 +69948,6 @@ Here we go:
 ## 19       20  483.
 \end{verbatim}
 
-\$ \%\$ \%\$
-
 A one-liner, kinda. The thing after the squiggle is called an
 ``anonymous function''; it is what is done for each of the first thing,
 and where you want the thing you're varying to go, you put a dot (the
@@ -70350,8 +70466,6 @@ This is rather large, since I had 12 clusters, and thus there are 11
 ## Wt       0.486302236  0.926849133  0.66518616
 \end{verbatim}
 
-\$ \%\$ \%\$ \%\$
-
 If we go back to my thought of only using two linear discriminants: LD1
 is mostly \texttt{RCC} positively and \texttt{BMI} negatively, in that
 an athlete with large \texttt{RCC} and small \texttt{BMI} will tend to
@@ -70399,8 +70513,6 @@ is part of the output:
 ## 11  77.85
 ## 12  72.03
 \end{verbatim}
-
-\$ \%\$
 
 Perhaps the easiest thing to eyeball here is the cluster in which a
 variable is noticeably biggest (or possibly smallest). For example,
@@ -71037,11 +71149,40 @@ if necessary):
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(ggmap)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Google Maps API Terms of Service: https://cloud.google.com/maps-platform/terms/.
+\end{verbatim}
+
+\begin{verbatim}
+## Please cite ggmap if you use it: see citation("ggmap") for details.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggmap)}
 \NormalTok{wisc.map =}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \StringTok{"Milwaukee, WI"}\NormalTok{, }
     \DataTypeTok{zoom =} \DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=Milwaukee,%20WI&zoom=6&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Milwaukee%2C%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{ggmap}\NormalTok{(wisc.map)}
 \end{Highlighting}
 \end{Shaded}
+
+\includegraphics{23-mds_files/figure-latex/laskhsal-1}
 
 I centred this map around Milwaukee (a guess), which is not quite where
 the centre should be, since Milwaukee is in southeastern Wisconsin. The
@@ -71089,20 +71230,63 @@ are actually in:
 And then I look them up. I don't want Google to tell me that I have done
 too many lookups, so I look them up first and save the results, like
 this:
-\marginnote{I actually had to do some further processing, not  shown, because Google would fail to look up some of the places on  one run, and then fail to look up *different* ones the next  time I tried. So I saved two runs that together looked up all the  places at least once, and then made a pipeline to put these together into one complete data frame.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{g =}\StringTok{ }\KeywordTok{tibble}\NormalTok{(cst) }\OperatorTok{%>%}\StringTok{ }\NormalTok{ggmap}\OperatorTok{::}\KeywordTok{mutate_geocode}\NormalTok{(cst)}
-\KeywordTok{saveRDS}\NormalTok{(g, }\StringTok{"gg.rds"}\NormalTok{)}
+\NormalTok{g <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(cst) }\OperatorTok{%>%}\StringTok{ }\NormalTok{ggmap}\OperatorTok{::}\KeywordTok{mutate_geocode}\NormalTok{(cst)}
 \end{Highlighting}
 \end{Shaded}
 
-Then I skip that on future runs, and get the values from the file:
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Appleton%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Beloit%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Fort.Atkinson%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Madison%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Marshfield%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Milwaukee%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Monroe%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Superior%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Wausau%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Dubuque%20IA&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=St.Paul%20MN&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Chicago%20IL&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{g =}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\StringTok{"gg.rds"}\NormalTok{)}
 \NormalTok{g}
 \end{Highlighting}
 \end{Shaded}
@@ -71113,28 +71297,17 @@ Then I skip that on future runs, and get the values from the file:
 ##    <chr>            <dbl> <dbl>
 ##  1 Appleton WI      -88.4  44.3
 ##  2 Beloit WI        -89.0  42.5
-##  3 Madison WI       -89.4  43.1
-##  4 Marshfield WI    -90.2  44.7
-##  5 Milwaukee WI     -87.9  43.0
-##  6 Monroe WI        -89.6  42.6
-##  7 Superior WI      -92.1  46.7
-##  8 Wausau WI        -89.6  45.0
-##  9 Dubuque IA       -90.7  42.5
-## 10 St.Paul MN       -93.1  45.0
-## 11 Chicago IL       -87.6  41.9
-## 12 Fort.Atkinson WI -88.8  42.9
+##  3 Fort.Atkinson WI -88.8  42.9
+##  4 Madison WI       -89.4  43.1
+##  5 Marshfield WI    -90.2  44.7
+##  6 Milwaukee WI     -87.9  43.0
+##  7 Monroe WI        -89.6  42.6
+##  8 Superior WI      -92.1  46.7
+##  9 Wausau WI        -89.6  45.0
+## 10 Dubuque IA       -90.7  42.5
+## 11 St.Paul MN       -93.1  45.0
+## 12 Chicago IL       -87.6  41.9
 \end{verbatim}
-
-\texttt{saveRDS} and \texttt{readRDS} are a mechanism for saving any R
-objects in files so that you can share them between sessions. There is a
-school of thought that says that when you have an R script or notebook,
-you don't save anything at the end, but instead have the script read in
-or re-create everything it needs. This should mean that anyone else can
-run the script and reproduce your results, without any reliance on other
-things that you might have lying around. A good mechanism to avoid
-recreating things that take a long time to get, like geocoding
-locations, is to do it once, save it using \texttt{saveRDS}, and then
-forever after read it in from the file.
 
 What are the extreme corners of these?
 
@@ -71190,12 +71363,23 @@ So:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(ggmap)}
 \NormalTok{wisc.map}\FloatTok{.2}\NormalTok{ =}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{94}\NormalTok{, }\FloatTok{41.8}\NormalTok{, }\DecValTok{-87}\NormalTok{, }
     \FloatTok{46.8}\NormalTok{), }\DataTypeTok{maptype =} \StringTok{"roadmap"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: bounding box given to google -
+## spatial extent only approximate.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{ggmap}\NormalTok{(wisc.map}\FloatTok{.2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\includegraphics{23-mds_files/figure-latex/lhsdljhadkfj-1}
 
 This came out about right.
 
@@ -71204,10 +71388,12 @@ map, so the right syntax is as below.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{ggmap}\NormalTok{(wisc.map}\FloatTok{.2}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lon, }\DataTypeTok{y =}\NormalTok{ lat), }
-    \DataTypeTok{data =}\NormalTok{ g)}
+\KeywordTok{ggmap}\NormalTok{(wisc.map}\FloatTok{.2}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ g, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lon, }
+    \DataTypeTok{y =}\NormalTok{ lat))}
 \end{Highlighting}
 \end{Shaded}
+
+\includegraphics{23-mds_files/figure-latex/sldkhdlf-1}
 
 There's a slight weirdness in that \texttt{ggmap} only takes a map, not
 a data frame or an \texttt{aes}, so those go in \texttt{geom\_point} or
@@ -71235,17 +71421,17 @@ Solution
 Let's pick a few places from the actual map, and make a table of where
 they are on the actual map and the \texttt{cmdscale} map:
 
-\begin{tabular}{lll}
-\hline
- Place     &  Real           &  Cmdscale       \\
- \hline
- Superior  &  northwest      &  central east   \\
- St. Paul  &  central west   &  southeast      \\
- Dubuque   &  central south  &  central south  \\
- Chicago   &  southeast      &  central west   \\
- Appleton  &  central east   &  central north  \\
- \hline
-\end{tabular}
+\begin{verbatim}
+
+ Place        Real              Cmdscale       
+----------------------------------------------
+ Superior     northwest         central east   
+ St. Paul     central west      southeast      
+ Dubuque      central south     central south  
+ Chicago      southeast         central west   
+ Appleton     central east      central north  
+
+\end{verbatim}
 
 This is a bit tricky. Dubuque is the only one in the right place, and
 the others that were west have become east and vice versa. So I think
@@ -71257,85 +71443,7 @@ I'll call that close enough.
 
 (For you, any comment along the lines of ``flipped around this line'' or
 ``rotated about this much'' that seems to describe what has happened, is
-fine.) This one calls for a Procrustes rotation, which I can do since I
-have longitudes and latitudes for my 12 cities. It goes like the one in
-class. Let's start with \texttt{ll}:
-
-\textless{}\textless{}\textgreater{}\textgreater{}= ll @
-
-We have to begin by making these into true coordinates by multiplying
-the longitudes by the cosine of the mean latitude:
-
-\textless{}\textless{}\textgreater{}\textgreater{}=
-meanlat=mean(ll\$lat) mult=cos(meanlat\emph{pi/180)
-truecoord=with(ll,data.frame(x=lon}mult,y=lat)) truecoord @
-
-\%\$ \%\$ \%\$
-
-\texttt{procOPA} needs matrices rather than data frames. \texttt{wisc.1}
-contained the coordinates for our two-dimensional solution:
-
-\textless{}\textless{}\textgreater{}\textgreater{}=
-wisc.pro=procOPA(as.matrix(truecoord),wisc.1,reflect=T) @
-
-I discuss \texttt{reflect=T} below.
-
-\%\$ \%\$ \%\$ \%\$
-
-Now, we need to plot these. I'm following the procedure from class, to
-cut down on the amount of my thinking required.
-
-\textless{}\textless{}\textgreater{}\textgreater{}=
-A=with(wisc.pro,data.frame(x=Ahat{[},1{]},y=Ahat{[},2{]},which=``actual'',city=cities))
-B=with(wisc.pro,data.frame(x=Bhat{[},1{]},y=Bhat{[},2{]},which=``MDS'',city=cities))
-dp=bind\_rows(A,B) @
-
-The warning is that \texttt{which}, which it's trying to treat as a
-factor, has different ``levels'': all the rows of \texttt{A} say
-\texttt{actual} and all the rows of \texttt{B} say \texttt{MDS}. But it
-does the right thing (despite the warning).
-
-Here's what we have so far:
-
-\textless{}\textless{}\textgreater{}\textgreater{}= dp @
-
-Now we plot these: the points, joining the two points for the same city
-by a line (coloured dark green), colouring the points and city names by
-whether they came from the actual coordinates or the scaling, labelling
-the points with small text, and using the same scaling on both axes:
-
-\textless{}\textless{}\textgreater{}\textgreater{}=
-ggplot(dp,aes(x=x,y=y,colour=which,label=city))+ geom\_point()+
-geom\_line(aes(group=city),colour=``darkgreen'')+
-geom\_text\_repel(size=2)+ coord\_fixed() @
-
-The lines joining the two sets of coordinates for each city are dark
-green this time, just because. But mostly you don't see them because
-they are very short. It's really only in the top left corner that you
-see coordinates that differ to any significant degree.
-
-This is pretty good. What does it think is the right transformation to
-get from MDS coordinates to real ones?
-
-\textless{}\textless{}\textgreater{}\textgreater{}= wisc.pro\$R @
-
-\%\$
-
-This time, the diagonal elements differ in sign (indicating that a
-reflection was performed to make the points line up). Indeed, I allowed
-\texttt{procOPA} to use a reflection if it needed to by means of
-\texttt{reflect=T} above.
-
-According to Wikipedia
-(\href{http://en.wikipedia.org/wiki/Coordinate_rotations_and_reflections}{link}),
-our \texttt{R} corresponds to a reflection about a line making angle
-\(\theta\) with the \(x\)-axis, where \(\cos 2\theta=-0.5944\) and
-\(\sin  2\theta=0.8041\). This means that \(2\theta=126\) degrees, or
-\(\theta=63\) degrees. That is to say, we draw a line that makes an
-angle of this much with the \(x\)-axis of our \texttt{cmdscale} map, and
-then reflect the cities in that. For example, a line through Dubuque and
-Marshfield on the \texttt{cmdscale} map makes about the right angle, and
-then reflect all the cities in that.
+fine.)
 
 \begin{enumerate}
 \def\labelenumi{(\alph{enumi})}
@@ -71373,12 +71481,12 @@ Run again with \texttt{eig=T} and take a look at \texttt{GOF}
 ## [1] 0.7916925 0.8078690
 \end{verbatim}
 
-The goodness-of-fit of the two-dimensional solution is pretty
-good,\endnote{As it ought to be, since there is a real answer
-here: the cities *do* exist as locations in two dimensions, if
-you ignore the curvature of the earth. The goodness of fit isn't
-100\% because the roads bend a bit.} but that of the one-dimensional
-solution (which arranges all the cities along a line) is pretty awful in
+The goodness-of-fit of the two-dimensional solution is pretty good,
+\textbackslash{}marginnote\{As it ought to be, since there is a real
+answer here: the cities \emph{do} exist as locations in two dimensions,
+you ignore the curvature of the earth. The goodness of fit isn't 100\%
+because the roads bend a bit.\} but that of the one-dimensional solution
+(which arranges all the cities along a line) is pretty awful in
 comparison.
 
 How awful? Let's find out. I should have saved it from just above, but
@@ -71423,7 +71531,7 @@ name \texttt{V1}), and the plot:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-19-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-20-1}
 
 The cities get mapped onto a line that goes northwest (top) to southeast
 (bottom). This is not completely terrible, since there aren't really any
@@ -71440,14 +71548,13 @@ were each given 17 different objects to feel, for example ``inner
 surface of pine bark'', ``rubber eraser'' and ``nylon scouring pad''.
 The subjects had to group the objects into a maximum of 8 groups such
 that the objects within a group felt similar, and the ones in different
-groups felt different.\endnote{The maximum number of groups was to
-ensure that each subject actually *did* group some objects
-together, rather than saying "they all feel different".} A dissimilarity
-matrix was formed by counting how many subjects put each pair of objects
-into \emph{different} groups, so that the dissimilarity ranged from 0
-(the objects were always put together in the same group) to 30 (the
-objects were not put together into the same group by any of the
-subjects).
+groups felt different.
+\marginnote{The maximum number of groups was to  ensure that each subject actually *did* group some objects  together, rather than saying that they all feel different.}
+A dissimilarity matrix was formed by counting how many subjects put each
+pair of objects into \emph{different} groups, so that the dissimilarity
+ranged from 0 (the objects were always put together in the same group)
+to 30 (the objects were not put together into the same group by any of
+the subjects).
 
 The data are in
 \href{http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt}{link}.
@@ -71762,7 +71869,7 @@ This is the procedure. Talking about it is coming in a minute.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-25-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-26-1}
 
 \texttt{cmdscale} gets the coordinates to plot, then we plot them, and
 then we place the object names next to the points. I'm not quite sure
@@ -71854,9 +71961,9 @@ possibilities:
 \item
   Rigid plastic sheet and wax paper. Distance 12. Smallish.
 \item
-  unglazed ceramic
-  tile\endnote{The first association that "unglazed" made for me
-  was "donut"!} and very fine sandpaper. Distance 12. Smallish.
+  unglazed ceramic tile
+  \marginnote{The first association that *unglazed* made for me      was *donut*!}
+  and very fine sandpaper. Distance 12. Smallish.
 \end{itemize}
 
 There won't be a perfect relationship between distance in the distance
@@ -71898,8 +72005,6 @@ default 2 dimensions:
 ## [1] 0.4019251 0.4110603
 \end{verbatim}
 
-\$
-
 I didn't ask you to comment on this, but the adjective that came to my
 mind was ``disappointing''. I think that's to do with the upper-limit-30
 thing again. Also, this time (unlike with Wisconsin) there was no
@@ -71920,8 +72025,6 @@ I was curious about whether 3 dimensions would be any better:
 \begin{verbatim}
 ## [1] 0.5775841 0.5907117
 \end{verbatim}
-
-\$
 
 That is quite a bit better. The problem with this, though, is that we
 need something like \texttt{rgl} to explore it with.
@@ -71948,7 +72051,7 @@ you'll see in a moment:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-29-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-30-1}
 
 That looks like 5 clusters to me (chopping the tree at a height of 30).
 Drawing them:
@@ -71960,7 +72063,7 @@ Drawing them:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-30-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-31-1}
 
 \begin{enumerate}
 \def\labelenumi{(\roman{enumi})}
@@ -72020,7 +72123,7 @@ That would go like this:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-31-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-32-1}
 
 The first line obtains the clusters as numbers, which I then had to turn
 into a factor (to make the plot different colours). I copied the rest
@@ -72082,8 +72185,9 @@ Then you can think about what makes the clusters different in terms of
 \texttt{X1} and \texttt{X2}. For me, clusters 1 and 2 are kind of mixed
 up, with \texttt{X1} and (usually) \texttt{X2} negative; cluster 3 has
 strongly positive \texttt{X2}; cluster 4 has very \emph{negative}
-\texttt{X2};\endnote{Oxford semicolon, for the grammar
-mavens among you.} and cluster 5 has strongly positive \texttt{X1}.
+\texttt{X2};
+\marginnote{Oxford semicolon, for the grammar mavens among you.} and
+cluster 5 has strongly positive \texttt{X1}.
 
 I wonder whether our three-dimensional solution distinguishes clusters 1
 and 2 at all? Same approach again:
@@ -72135,8 +72239,6 @@ and 2 at all? Same approach again:
 ## 17      glossypaintedwood        5
 \end{verbatim}
 
-\$
-
 It looks as if the combo of negative \texttt{X1} and positive
 \texttt{X3} distinguishes cluster 2 from cluster 1.
 
@@ -72182,7 +72284,7 @@ cluster:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-35-1} \$
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-36-1}
 
 This says that the three-dimensional MDS \emph{has} separated clusters 1
 and 2, and if we were to plot \texttt{d.2a} in \texttt{rgl} and rotate
@@ -72191,8 +72293,9 @@ those two clusters as well. (They wouldn't look mixed up as they do on
 the two-dimensional map.)
 
 So we can look at the three-dimensional map coordinates and the
-discriminant analysis and ask
-`\texttt{what\ distinguishes\ the\ clusters?\textquotesingle{}\textquotesingle{}.\ Map\ coordinates\ first.\ I\ need}points\texttt{since\ I\ ran\ the\ scaling\ with}eig=T`:
+discriminant analysis and ask ``what distinguishes the clusters?''. Map
+coordinates first. I need \texttt{points} since I ran the scaling with
+\texttt{eig=T}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -72281,8 +72384,7 @@ A biplot would be another way to look at that:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-38-1} \$ \%\$
-\%\$
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-39-1}
 
 Points on the right have \texttt{X1} and \texttt{X2} large, and
 \texttt{X3} small (cluster 4, and to a lesser extent, cluster 5). Points
@@ -72531,7 +72633,7 @@ stick with two dimensions.
 The important thing to remember is that if you go the \texttt{eig=T}
 way, you have to pull out the points to plot from the thing called
 \texttt{points}, so that you plot \texttt{d.1} itself but
-\texttt{d.1a\$points}. \$ \%\$ \%\$
+\texttt{d.1a\$points}.
 
 \begin{enumerate}
 \def\labelenumi{(\alph{enumi})}
@@ -72553,25 +72655,13 @@ read in from the file (if you can remember what it was called):
 \end{Highlighting}
 \end{Shaded}
 
-\$ \%\$ \%\$ \%\$ \%\$
-
 That silly column name \texttt{X1} that \texttt{read\_table} supplied.
 
 Extra: You can even get the letter names from the thing I called
 \texttt{d}, but I can't remember how, so I have to cheat. I said that
-\texttt{d} has a ``print
-method''\endnote{The way that a multicoloured function
-like `print` works is that when you ask to show something,
-like `d`, R first looks to see what kind of thing you want to
-show (by calling `class`), and determines that it is a
-`dist` object. Then it looks to see if there is a function
-called `print.dist` (there is), and if there is, it calls that
-(to produce that nice display). If there isn't, it calls
-`print.default`, which just displays its input without doing
-anything special. This is why printing the output from an `lm`
-looks very different from printing a data frame: the first calls
-`print.lm` and the second calls `print.data.frame`, or
-`print.tbl_df` for a tibble.} that controls how it looks:
+\texttt{d} has a ``print method''
+\marginnote{The way that a multicoloured function  like *print* works is that when you ask to show something,  like *d*, R first looks to see what kind of thing you want to show (by calling *class*), and determines that it is a *dist* object. Then it looks to see if there is a function called *print.dist* (there is), and if there is, it calls that (to produce that nice display). If there isn't, it calls *print.default*, which just displays its input without doing anything special. This is why printing the output from an *lm* looks very different from printing a data frame: the first calls *print.lm* and the second calls *print.data.frame*, or *print.tbl-df* for a tibble.}
+that controls how it looks:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -72703,7 +72793,7 @@ So I can proceed:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-50-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-51-1}
 
 I need the last line for the same reason as before: I want to treat the
 two axes equally. If you don't have that, you have a distorted map where
@@ -72728,7 +72818,7 @@ text relative to the point.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-51-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-52-1}
 
 Then pick (in the next part) a pair of letters that is close together,
 and proceed. I like the labelled dots better (as a matter of taste), but
@@ -72811,11 +72901,9 @@ letters and assert that it is large (compared to the others).
 
 These are actually not \emph{all} the large ones: M and W, H and N, M
 and N are also large (which lends some support to these letters being a
-foursome\endnote{Set of four. Match-play golf has a game called
-"foursomes" where the two players on each team take it in turns to
-hit the ball, as opposed to the game called "fourballs", where each
-of the two players plays their own ball, and the team's score on a
-hole is the better of the two players' scores.} rather than two pairs).
+foursome
+\marginnote{Set of four. Match-play golf has a game called  *foursomes* where the two players on each team take it in turns to hit the ball, as opposed to the game called *fourballs*, where each of the two players plays their own ball, and the team's score on a hole is the better of the two players' scores.}
+rather than two pairs).
 
 If you prefer, you can work from your \texttt{dist} object, the thing I
 called \texttt{d}:
@@ -73008,8 +73096,6 @@ Solution
 ## [1] 10.32195
 \end{verbatim}
 
-\$
-
 The stress is around 10\%, on the boundary between ``good'' and
 ``fair''. It seems as if the map should be more or less worth using.
 (Insert your own hand-waving language here.)
@@ -73055,7 +73141,7 @@ so skip the first one:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-58-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-59-1}
 
 \begin{enumerate}
 \def\labelenumi{(\alph{enumi})}
@@ -73294,8 +73380,6 @@ Copied and pasted from last time:
 ## #   waxpaper <int>, glossypaintedwood <int>
 \end{verbatim}
 
-\$ \%\$ \%\$
-
 That gets a data frame with the right column names. Then:
 
 \begin{Shaded}
@@ -73438,8 +73522,6 @@ What you need here is the ``stress'':
 ## [1] 20.2161
 \end{verbatim}
 
-\$
-
 This is just over 20\%, which is described in the notes as ``poor''. We
 should thus be skeptical about the map that this produces.
 
@@ -73522,13 +73604,9 @@ going to plot the names smaller). I am \emph{not} naming this data frame
 ## glossypaintedwood           glossypaintedwood
 \end{verbatim}
 
-\$ \%\$ \%\$
-
 The repeated stimuli down the left are row names, but since they're row
-names, we won't be able to use them in
-\texttt{ggplot}.\endnote{Next year, I'll make everyone turn matrices
-into data frames first so that we won't deal with old-fashioned data
-frames, row names and the like.}
+names, we won't be able to use them in \texttt{ggplot}.
+\marginnote{Next year, I'll make everyone turn matrices  into data frames first so that we won't deal with old-fashioned data frames, row names and the like.}
 
 Remember that we are turning a matrix and a column into a data frame, so
 we need either the more forgiving \texttt{data.frame}, or to turn
@@ -73563,15 +73641,12 @@ we need either the more forgiving \texttt{data.frame}, or to turn
 ## 17  11.5     2.24  glossypaintedwood
 \end{verbatim}
 
-\$ \%\$ \%\$
-
 This time, the columns are called \texttt{V1} and \texttt{V2}, since
 that's what \texttt{as\_tibble} does. Also note the slightly different
 look: fewer decimals, since displaying a tibble rounds numerical things
-to three significant digits. \$ \%\$ \%\$
-
-Back to my data frame \texttt{stimuli.1.d}. The points have acquired
-names \texttt{X1} and \texttt{X2}, as usual, so we have all we need:
+to three significant digits. Back to my data frame \texttt{stimuli.1.d}.
+The points have acquired names \texttt{X1} and \texttt{X2}, as usual, so
+we have all we need:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -73581,7 +73656,7 @@ names \texttt{X1} and \texttt{X2}, as usual, so we have all we need:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-70-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-71-1}
 
 I think the full names are good with the text this small.
 
@@ -73649,11 +73724,8 @@ found in the last part, by finding one (or two) pairs of objects that
 were really close in actuality, but not so much on the map. The point
 here is that a high stress \emph{means} that distances in real life and
 on the map won't correspond very well. That's what I want you to say.
-Extra: another way to assess this is with a Shepard\endnote{This always
-makes me think of the number 190 bus, but that's the wrong
-spelling. Spelled like this, this is also the name of the
-illustrator of the original pre-Disney Winnie-the-Pooh
-stories. See [link](https://en.wikipedia.org/wiki/E._H._Shepard}.)
+Extra: another way to assess this is with a Shepard
+\marginnote{This always      makes me think of the number 190 (now 985) bus, but that's the wrong      spelling. Spelled like this, this is also the name of the      illustrator of the original pre-Disney Winnie-the-Pooh      stories. See https://en.wikipedia.org/wiki/E.-H.-Shepard, replacing the dashes by underscores.}
 diagram. That would go like this:
 
 \begin{Shaded}
@@ -73677,7 +73749,7 @@ distances \texttt{y}, making a data frame first:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-72-1}
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-73-1}
 
 The actual distances are on the \(x\)-axis and the map distances are on
 the \(y\) axis, as far as I can tell (the help file is not clear on
@@ -73723,8 +73795,8 @@ three-dimensional map, and compare it with the 20\% that we had before.
 \end{verbatim}
 
 What this does is to obtain the map and throw all of it away except for
-the stress value.\endnote{Which seems like a very SAS way of doing
-things.}
+the stress value.
+\marginnote{Which seems like a very SAS way of doing  things.}
 
 I think this stress value, just under 10\%, or on the ``fair'' end of
 ``good'', is a worthwhile improvement over the just-over-20\% that we
@@ -73733,10 +73805,8 @@ use a 3-dimensional plotting tool like \texttt{rgl} to interpret it
 with. You might agree with me, or you might not: for example, you might
 be looking for a bigger improvement. Either is good, as far as I'm
 concerned, as long as your answer does something to balance the smaller
-stress value\endnote{Using more dimensions will
-*certainly* decrease the stress, in the same way that adding
-an $x$-variable to a regression will increase R-squared; it's the
-same issue, of whether the change is big enough to be worth having.}
+stress value
+\marginnote{Using more dimensions will  *certainly* decrease the stress, in the same way that adding  an $x$-variable to a regression will increase R-squared; it's the  same issue, of whether the change is big enough to be worth having.}
 with the difficulty of interpreting it.
 
 The kind of \texttt{rgl} code you'll need is something like this (not
@@ -74312,7 +74382,7 @@ of temperature in it. You might be wondering whether things couldn't be
 rotated so that, say, the temperature variables go across and the
 rain/wind ones go down, which means you'd have a temperature component
 and a rain/wind component. This is what factor analysis does, and I
-think I did that earlier (and this is what we found). \$
+think I did that earlier (and this is what we found).
 
 \begin{enumerate}
 \def\labelenumi{(\alph{enumi})}
@@ -74453,51 +74523,82 @@ and white striped shirts''. The temperatures have about the right range
 low-to-high for Britain, but are too warm. Which suggests going south:
 perhaps Brittany in France, but actually the west coast of the Iberian
 peninsula: Porto, in northern Portugal, with the weather blowing in off
-the Atlantic. Let's make a map, but first we ``geocode'' Porto (and La
-Coruna, for later). I like to do the lookup of longitude and latitude
-first, once and for all, since I find the geocoding a bit finicky (it's
-actually Google that's finicky, because sometimes it decides that you've
-done too many lookups and returns you missings). I save the result:
+the Atlantic.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{places =}\StringTok{ }\KeywordTok{tribble}\NormalTok{(}\OperatorTok{~}\NormalTok{place, }\StringTok{"Porto PT"}\NormalTok{, }\StringTok{"La Coruna ES"}\NormalTok{)}
-\NormalTok{places =}\StringTok{ }\NormalTok{places }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_geocode}\NormalTok{(place)}
-\KeywordTok{saveRDS}\NormalTok{(places, }\StringTok{"places1.rds"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-Then I use these points, reading them in from the saved file first. I
-just want Porto this time (we'll use the other one in a minute). You can
-obtain a map from a place name (just like you can in
-\texttt{maps.google.com}, since it's the same interface), but since we
-already have the longitude and latitude, we'll use them again, to save
-Google looking them up again, and possibly saving us from getting an
-error:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{porto =}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\StringTok{"places1.rds"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(ggmap)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Warning in gzfile(file, "rb"): cannot open compressed file
-## 'places1.rds', probable reason 'No such file or directory'
+## Google Maps API Terms of Service: https://cloud.google.com/maps-platform/terms/.
 \end{verbatim}
 
 \begin{verbatim}
-## Error in gzfile(file, "rb"): cannot open the connection
+## Please cite ggmap if you use it: see citation("ggmap") for details.
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{mapp =}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DataTypeTok{lon =}\NormalTok{ porto}\OperatorTok{$}\NormalTok{lon, }\DataTypeTok{lat =}\NormalTok{ porto}\OperatorTok{$}\NormalTok{lat), }\DataTypeTok{zoom =} \DecValTok{5}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(ggrepel)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's make a map, but first we ``geocode'' Porto (and La Coruna, for
+later). I like to do the lookup of longitude and latitude first, once
+and for all, since I find the geocoding a bit finicky (it's actually
+Google that's finicky, because sometimes it decides that you've done too
+many lookups and returns you missings). I save the result:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{places <-}\StringTok{ }\KeywordTok{tribble}\NormalTok{(}\OperatorTok{~}\NormalTok{place, }\StringTok{"Porto PT"}\NormalTok{, }\StringTok{"La Coruna ES"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_geocode}\NormalTok{(place)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Error in get_map(c(lon = porto$lon, lat = porto$lat), zoom = 5): could not find function "get_map"
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Porto%20PT&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=La%20Coruna%20ES&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{places}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   place          lon   lat
+##   <chr>        <dbl> <dbl>
+## 1 Porto PT     -8.63  41.2
+## 2 La Coruna ES -8.41  43.4
+\end{verbatim}
+
+Then I use these points. I just want Porto this time (we'll use the
+other one in a minute). You can obtain a map from a place name (just
+like you can in \texttt{maps.google.com}, since it's the same
+interface), but since we already have the longitude and latitude, we'll
+use them again, to save Google looking them up again, and possibly
+saving us from getting an error:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{porto <-}\StringTok{ }\NormalTok{places }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{mapp =}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\StringTok{"Porto"}\NormalTok{, }\DataTypeTok{zoom =} \DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=Porto&zoom=5&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Porto&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 \end{verbatim}
 
 \begin{Shaded}
@@ -74506,9 +74607,7 @@ error:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Error in ggmap(mapp): could not find function "ggmap"
-\end{verbatim}
+\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-21-1}
 
 As a point of technique, I've gone further than necessary (as usual). I
 wanted to mark the point corresponding to Porto. I thought about
@@ -74531,39 +74630,31 @@ labelling both places:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{places =}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\StringTok{"places1.rds"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning in gzfile(file, "rb"): cannot open compressed file
-## 'places1.rds', probable reason 'No such file or directory'
-\end{verbatim}
-
-\begin{verbatim}
-## Error in gzfile(file, "rb"): cannot open the connection
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{places =}\StringTok{ }\NormalTok{places }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{country =} \KeywordTok{c}\NormalTok{(}\StringTok{"Portugal"}\NormalTok{, }\StringTok{"Spain"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Error in eval(lhs, parent, parent): object 'places' not found
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
+\NormalTok{places <-}\StringTok{ }\NormalTok{places }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{country =} \KeywordTok{c}\NormalTok{(}\StringTok{"Portugal"}\NormalTok{, }\StringTok{"Spain"}\NormalTok{))}
 \KeywordTok{ggmap}\NormalTok{(mapp) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ places, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lon, }\DataTypeTok{y =}\NormalTok{ lat, }\DataTypeTok{colour =}\NormalTok{ country)) }\OperatorTok{+}\StringTok{ }
 \StringTok{    }\KeywordTok{geom_text_repel}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ places, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =}\NormalTok{ place))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Error in ggmap(mapp): could not find function "ggmap"
+## Warning in min(x): no non-missing arguments to min; returning Inf
 \end{verbatim}
+
+\begin{verbatim}
+## Warning in max(x): no non-missing arguments to max; returning -
+## Inf
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in min(x): no non-missing arguments to min; returning Inf
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(x): no non-missing arguments to max; returning -
+## Inf
+\end{verbatim}
+
+\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-22-1}
 
 Note that this time the \texttt{colour} is inside the \texttt{aes}, so
 \texttt{ggplot} will choose different colours to represent the countries
@@ -74739,7 +74830,7 @@ Solution
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-24-1}
+\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-26-1}
 
 There is a technicality here, which is that \texttt{ggbiplot}, the
 package, loads \texttt{plyr}, which contains a lot of the same things as
@@ -74846,8 +74937,6 @@ was a bit of a giveaway! Off we go:
 ## Proportion Var  0.143  0.143  0.143  0.143  0.143  0.143  0.143
 ## Cumulative Var  0.143  0.286  0.429  0.571  0.714  0.857  1.000
 \end{verbatim}
-
-\$
 
 You'll have to decide where to draw the line between ``zero'' and
 ``nonzero''. It doesn't matter so much where you put the line, so your
@@ -74960,8 +75049,6 @@ first, and then display its first column:
 ## 42  1.82
 \end{verbatim}
 
-\$ \%\$ \%\$
-
 You'll need the last step, or else you'll only get the first ten rows
 (it's a tibble-type data frame). Print a number of rows, or this, which
 is ``all of them, no matter how many''.
@@ -75020,8 +75107,6 @@ If you did this the \texttt{tidyverse} way:
 ##    <dbl> <int>
 ## 1  -3.98     8
 \end{verbatim}
-
-\$ \%\$ \%\$
 
 I did two more steps: created a column of row numbers, so I'd know
 \emph{which one} was the smallest, then I displayed all rows for which
@@ -75143,7 +75228,7 @@ The default is this:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-35-1}
+\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-37-1}
 
 The problem here is that we don't know which observation is which.
 \texttt{ggbiplot} has an option \texttt{labels} for this, only we don't
@@ -75157,7 +75242,7 @@ ones I made earlier), so we're going to have to manufacture them first:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-36-1}
+\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-38-1}
 
 Day 8 is way over on the left. The things that point in the direction of
 observation 8 (\texttt{NO2,\ CO} and to a lesser extent \texttt{NO} and
@@ -75278,8 +75363,6 @@ biplot:
 ## Cumulative Var   0.225   0.422
 \end{verbatim}
 
-\$
-
 This is almost the same as the biplot, but not quite: factor 1 contains
 three of the four variables that point up and left (not \texttt{HC)}),
 while factor 2 is mainly ozone, with only moderate loadings for the
@@ -75332,8 +75415,6 @@ same way that we said we should look at 3 components:
 ## Cumulative Var   0.210   0.398   0.582
 \end{verbatim}
 
-\$
-
 In case you are wondering, \texttt{factanal} automatically uses the
 correlation matrix, and so takes care of variables measured on different
 scales without our having to worry about that.
@@ -75359,8 +75440,6 @@ should not be too bad:
 ##       0.0050000       0.0050000       0.7776557
 \end{verbatim}
 
-\$
-
 Well, not great: \texttt{wind} and \texttt{solar.radiation} still have
 high uniquenesses because they are not \emph{strongly} part of any
 factors.
@@ -75375,8 +75454,6 @@ factors.
 ## objective 
 ## 0.0229409
 \end{verbatim}
-
-\$
 
 This is small, if not \emph{very} small, so there is still some evidence
 that 3 factors are not enough to describe what's going on. But with only
@@ -75437,21 +75514,16 @@ Factor scores:
 ## [42,] -1.21738120 -0.82518472  0.8645643843
 \end{verbatim}
 
-\$
-
 Since there are 3 columns here, you could plot them in \texttt{rgl} and
 rotate it around to see how the days stack up. Unlike principal
 components, there is no sense that factor 1 is the most important and
 factor 3 the least; because of the rotation, all that we have is that
-the three factors together explain 58\% of the
-variability.\endnote{This is unlike principal components because,
-*by design* there, the first principal component explains the most
-variability. That does not happen here, because the (rotated)
-factors act as a team.}
+the three factors together explain 58\% of the variability.
+\marginnote{This is unlike principal components because,  *by design* there, the first principal component explains the most  variability. That does not happen here, because the (rotated)  factors act as a team.}
 
 Note that day 8 has the most extreme score on factor 1 again. This is
 for more or less the same reasons that it had the most extreme score on
-component 1 before. maybe discuss some other days
+component 1 before.
 
 \hypertarget{a-correlation-matrix}{%
 \section{A correlation matrix}\label{a-correlation-matrix}}
@@ -75604,10 +75676,8 @@ Solution
 \includegraphics{24-pcfa_files/figure-latex/sdljhljsahja-1}
 
 There is kind of an elbow at 3, which would suggest two
-components/factors.\endnote{There is also kind of an elbow at 4, which would
-suggest three factors, but that's really too many with only 5
-variables. That wouldn't be much of a *reduction* in the number
-of variables, which is what principal components is trying to achieve.}
+components/factors.
+\marginnote{There is also kind of an elbow at 4, which would suggest three factors, but that's really too many with only 5 variables. That wouldn't be much of a *reduction* in the number of variables, which is what principal components is trying to achieve.}
 
 You can also use the eigenvalue-bigger-than-1 thing:
 
@@ -75672,8 +75742,6 @@ Solution
 ## Proportion Var    0.2    0.2    0.2    0.2    0.2
 ## Cumulative Var    0.2    0.4    0.6    0.8    1.0
 \end{verbatim}
-
-\$ \%\$
 
 This is messy.
 
@@ -75765,13 +75833,10 @@ a data frame to access the things in a list:
 ## [1] 50
 \end{verbatim}
 
-\$
-
 and logically this is because, to R, a data frame \emph{is} a special
 kind of a list, so anything that works for a list also works for a data
-frame, plus some extra things besides.\endnote{In computer
-science terms, a data frame is said to **inherit** from a list:
-it is a list plus extra stuff.}
+frame, plus some extra things besides.
+\marginnote{In computer  science terms, a data frame is said to **inherit** from a list: it is a list plus extra stuff.}
 
 The same idea applies to extracting things from the output of a
 regression (with \texttt{lm}) or something like a \texttt{t.test}: the
@@ -75883,8 +75948,6 @@ Solution
 ##        X1        X2        X3        X4        X5 
 ## 0.1715682 0.0050000 0.2789445 0.0050000 0.4961028
 \end{verbatim}
-
-\$ \%\$
 
 The ones for \texttt{X3} and \texttt{X5} are higher than the rest; this
 is because their loadings on factor 1 are lower than the rest. Since
@@ -76125,7 +76188,7 @@ charts of responses facetted by item:
 ## (stat_count).
 \end{verbatim}
 
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-60-1}
+\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-62-1}
 
 The first time I did this, item \texttt{PERS36} appeared out of order at
 the end, and I was wondering what happened, until I realized it was
@@ -76727,8 +76790,6 @@ pretty good. (I wrote my answers above last year without thinking about
 ## Cumulative Var   0.087   0.162   0.235   0.300   0.357   0.395
 \end{verbatim}
 
-\$ \%\$ \%\$ \%\$
-
 Much of the same kind of thing seems to be happening, though it's a bit
 fuzzier. I suspect the devisers of this survey were adherents to the
 ``big 5'' theory. The factor 6 here is items 11, 16 and 26, which would
@@ -76749,16 +76810,14 @@ rather than (necessarily) about being extraverted oneself.
 
 Solution
 
-For this, we need the factor scores obtained in part
-(here).\endnote{There are two types of scores here:
-a person's scores on the psychological test, 1 through 5, and
-their factor scores, which are decimal numbers centred at
-zero. Try not to get these confused.} I'm thinking that I will create a
-data frame with the original data (with the missing values removed) and
-the factor scores together, and then look in there. This will have a lot
-of columns, but we'll only need to display some each time. This is based
-on my 5-factor solution. I'm adding a column \texttt{id} so that I know
-which of the individuals (with no missing data) we are looking at:
+For this, we need the factor scores obtained in part (here).
+\marginnote{There are two types of scores here:        a person's scores on the psychological test, 1 through 5, and        their factor scores, which are decimal numbers centred at        zero. Try not to get these confused.}
+I'm thinking that I will create a data frame with the original data
+(with the missing values removed) and the factor scores together, and
+then look in there. This will have a lot of columns, but we'll only need
+to display some each time. This is based on my 5-factor solution. I'm
+adding a column \texttt{id} so that I know which of the individuals
+(with no missing data) we are looking at:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -76795,8 +76854,6 @@ which of the individuals (with no missing data) we are looking at:
 ## #   PERS40 <int>, PERS41 <int>, PERS42 <int>, PERS43 <int>,
 ## #   PERS44 <int>
 \end{verbatim}
-
-\$ \%\$ \%\$
 
 I did it this way, rather than using \texttt{data.frame}, so that I
 would end up with a \texttt{tibble} that would display nicely rather
@@ -77002,10 +77059,8 @@ scores on the first five items (the ones with positive loading on factor
 2s and 3s on the first five items and 4s and 5s on the last four. Having
 struggled through that, factors 2 and 3 are repeats of this. The high
 loaders on factor 2 are the ones shown in \texttt{f2} below, with the
-first five loading positively and the last three
-negatively.\endnote{I think the last four items in the entire survey
-are different; otherwise the total number of items would be a
-multiple of 5.}
+first five loading positively and the last three negatively.
+\marginnote{I think the last four items in the entire survey  are different; otherwise the total number of items would be a  multiple of 5.}
 
 \begin{Shaded}
 \begin{Highlighting}[]

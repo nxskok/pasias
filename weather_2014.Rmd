@@ -412,6 +412,20 @@ low-to-high for Britain, but are too warm. Which suggests going south:
 perhaps Brittany in France, but actually the west
 coast of the Iberian peninsula: Porto, in northern Portugal, with the
 weather blowing in off the Atlantic. 
+
+```{r }
+library(ggmap)
+library(ggrepel)
+```
+
+ 
+
+```{r echo=F}
+api_key="AIzaSyC7eVXz84-Mj1-zNBW4GTnXNAYdGQJDNXU"
+register_google(api_key)
+```
+
+ 
 Let's make a map, but first we "geocode" Porto (and La Coruna,
 for later). I like to do the lookup of longitude and latitude first,
 once and for all, since I find the geocoding a bit finicky (it's
@@ -419,28 +433,26 @@ actually Google that's finicky, because sometimes it decides that
 you've done too many lookups and returns you missings).
 I save the result:
 
-```{r eval=F}
-places=tribble(
+```{r cache=T}
+tribble(
 ~place,
 "Porto PT",
 "La Coruna ES"
-)
-places = places %>% mutate_geocode(place)
-saveRDS(places,"places1.rds")
+) %>% mutate_geocode(place) -> places
+places
 ```
 
  
 
-Then I use these points, reading them in from the saved file first. I
+Then I use these points. I
 just want Porto this time (we'll use the other one in a minute). You
 can obtain a map from a place name (just like you can in
 `maps.google.com`, since it's the same interface), but since we
 already have the longitude and latitude, we'll use them again, to save
 Google looking them up again, and possibly saving us from getting an error:
-
-```{r error=T}
-porto = readRDS("places1.rds") %>% slice(1)
-mapp=get_map(c(lon=porto$lon,lat=porto$lat), zoom=5)
+```{r error=T, cache=T}
+places %>% slice(1) -> porto
+mapp=get_map("Porto", zoom=5)
 ggmap(mapp)+geom_point(data=porto,aes(x=lon,y=lat),colour="red")
 ```
 
@@ -466,8 +478,7 @@ fun) add a column saying which country each one is in. I'm also
 labelling both places:
 
 ```{r error=T}
-places=readRDS("places1.rds")
-places = places %>% mutate(country=c("Portugal","Spain"))
+places %>% mutate(country=c("Portugal","Spain")) -> places
 ggmap(mapp)+
 geom_point(data=places,aes(x=lon,y=lat,colour=country)) +
 geom_text_repel(data=places, aes(label=place))
