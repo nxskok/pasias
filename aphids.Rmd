@@ -31,24 +31,32 @@ not, as you wish. Demonstrate that you have the right data in R.
  
 Solution
 
-
-There are a couple of ways. My current favourite is the `tidyverse`-approved 
-`tribble` method. A `tribble` is a "transposed `tibble`", in which you copy and paste the data, inserting column headings and commas in the right places:
+ 
+There are a couple of ways. My
+current favourite is the `tidyverse`-approved
+`tribble` method. A `tribble` is a 
+"transposed `tibble`", in which you copy and paste the data,
+inserting column headings and commas in the right places. The
+columns don't have to line up, since it's the commas that
+determine where one value ends and the next one begins:
 ```{r }
 dead_bugs=tribble(
 ~log_conc, ~exposed, ~killed,
-0.96           ,            50    ,          6    ,
-1.33           ,            48    ,          16   ,           
-1.63           ,            46    ,          24   ,           
-2.04           ,            49    ,          42   ,           
-2.32           ,            50    ,          44   )
+0.96, 50, 6,
+1.33, 48, 16,           
+1.63, 46, 24,           
+2.04, 49, 42,           
+2.32, 50, 44)
 dead_bugs
 ```
 
     
 
 Note that the last data value has no comma after it, but instead has
-the closing bracket of `tribble`.  If you are clever in R
+the closing bracket of `tribble`.  
+
+You can have extra spaces if you wish. They will just be ignored.
+If you are clever in R
 Studio, you can insert a column of commas all at once (using
 "multiple cursors").
 I used to do it like this. I make vectors of each column using `c` and then glue the columns together into a data frame:
@@ -90,7 +98,7 @@ out this way. Also, you'll note, the column names have those
 "backticks" around them, because they contain illegal characters
 like a minus sign and spaces. Perhaps a good way to
 pre-empt
-`r tufte::margin_note("My daughter learned the word pre-empt because we  like to play a bridge app on my phone; in the game of bridge, you  make a pre-emptive bid when you have no great strength but a lot of  cards of one suit, say seven, and it won't be too bad if that suit  is trumps, no matter what your partner has. If you have a weak hand  with a lot of cards in one suit, your opponents are probably going  to be able to bid and make something, so you pre-emptively bid first  to try and make it difficult for them.")`  all these problems is to
+`r tufte::margin_note("My daughter learned the word pre-empt because we  like to play a bridge app on my phone; in the game of bridge, you  make a pre-emptive bid when you have no great strength but a lot of  cards of one suit, say seven, and it won't be too bad if that suit  is trumps, no matter what your partner has. If you have a weakish hand with a lot of cards in one suit, your opponents are probably going  to be able to bid and make something, so you pre-emptively bid first  to try and make it difficult for them.")`  all these problems is to
 make a copy of the data file with the illegal characters replaced by
 underscores, which is my file `exposed2.txt`:
 
@@ -141,10 +149,10 @@ survived). We don't actually have the latter, but we know how many
 insects were exposed in total to each dose, so we can work it
 out. Like this:
 ```{r }
-response = dead_bugs %>% 
+dead_bugs %>% 
 mutate(survived=exposed-killed) %>%
 select(killed, survived) %>%
-as.matrix()
+as.matrix() -> response
 response
 ```
 
@@ -249,12 +257,16 @@ the insects, so the median lethal dose should be a bit less than
 log-concentration only kills less than a third of the insects. So I
 would guess somewhere a bit bigger than 1.5. Any guess somewhere in
 this ballpark is fine: you really cannot be very accurate.
-This is kind of a strange prediction problem, because we know what
+
+Extra: this is kind of a strange prediction problem, because we know what
 the *response* variable should be, and we want to know what the
 explanatory variable's value is. Normally we do predictions the
-other way around. So the only way to get a more accurate figure is
+other way around.
+`r tufte::margin_note("This kind of thing is sometimes called an inverse prediction.")`
+So the only way to get a more accurate figure is
 to try some different log-concentrations, and see which one gets
 closest to a probability 0.5 of killing the insect.
+
 Something like this would work:
 ```{r }
 lc.new=tibble(log_conc=seq(1.5,1.63,0.01))
@@ -275,6 +287,100 @@ prediction in regression. There is uncertainty attached to it (because
 the actual logistic regression might be different from the one we
 estimated), so we ought to provide a confidence interval for it. But
 I'm riding the bus as I type this, so I can't look it up right now.
+
+Later: there's a function called `dose.p` 
+in `MASS` that appears to do this:
+
+```{r }
+library(MASS)
+lethal=dose.p(bugs.1)
+lethal
+```
+
+ 
+
+We have a sensible point estimate (the same 1.57 that we got by hand),
+and we have a standard error, so we can make a confidence interval by
+going up and down twice it (or 1.96 times it) from the estimate. The
+structure of the result is a bit arcane, though:
+
+```{r }
+str(lethal)
+```
+
+ 
+
+It is what R calls a "vector with attributes". To get at the pieces and calculate the interval, we have to do something like this:
+
+```{r }
+(lethal_est=as.numeric(lethal))
+(lethal_SE=as.vector(attr(lethal, "SE")))
+```
+
+ 
+
+and then make the interval:
+
+```{r }
+lethal_est+c(-2,2)*lethal_SE
+```
+
+ 
+
+1.47 to 1.68.
+
+I got this idea from page 4.14 of
+[link](http://www.chrisbilder.com/stat875old/schedule_new/chapter4.doc). I
+think I got a little further than he did. An idea that works more
+generally is to get several intervals all at once, say for the
+"quartile lethal doses" as well:
+
+```{r }
+lethal=dose.p(bugs.1, p=c(0.25,0.5,0.75))
+lethal
+```
+
+ 
+
+This looks like a data frame or matrix, but is actually a 
+"named vector", so `enframe` will get at least some of this and turn
+it into a genuine data frame:
+
+```{r }
+enframe(lethal)
+```
+
+ 
+
+That doesn't get the SEs, so we'll make a new column by grabbing the "attribute" as above:
+
+```{r }
+enframe(lethal) %>% mutate(SE=attr(lethal, "SE"))
+```
+
+ 
+
+and now we make the intervals by making new columns containing the lower and upper limits:
+
+```{r }
+enframe(lethal) %>% mutate(SE=attr(lethal, "SE")) %>%
+mutate(LCL=value-2*SE, UCL=value+2*SE)
+```
+
+ 
+
+Now we have intervals for the median lethal dose, as well as for the doses that kill a quarter and three quarters of the aphids.
+
+To end this question, we loaded `MASS`, so we should unload it before we run into 
+problems with 
+`select` later:
+
+```{r }
+detach("package:MASS", unload=T)
+```
+
+ 
+
  
 
 

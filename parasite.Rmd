@@ -100,7 +100,7 @@ each of the other variables. (You'll have to think about
 `sex`, um, you'll have to think about the `sex`
 variable, because it too is categorical.) Anything sensible is OK
 here. You might like to think back to what we did in
-Question~<a href="#q:wolfspider">here</a> for inspiration. (You can also
+Question <a href="#q:wolfspider">here</a> for inspiration. (You can also
 investigate `table`, which does cross-tabulations.)
  
 Solution
@@ -306,10 +306,54 @@ has a P-value of 0.062, which is (just) larger than 0.05, so we
 can consider removing this variable. The other two P-values,
 0.00089 and 0.024, are definitely less than 0.05, so those
 variables should stay.
+
 Alternatively, you can say that the P-value for `age` is
 small enough to be interesting, and therefore that `age`
 should stay. That's fine, but then you need to be consistent in
 the next part.
+
+You probably noted that `sex` is categorical. However, it
+has only the obvious two levels, and such a categorical variable
+can be assessed for significance this way. If you were worried
+about this, the right way to go is `drop1`:
+
+```{r }
+drop1(infect.1, test="Chisq")
+```
+
+ 
+
+The P-values are similar, but not identical.
+`r tufte::margin_note("The *test* is this way because it's a generalized linear model rather than a regular regression.")`
+
+I have to stop and think about this. There is a lot of theory that
+says there are several ways to do stuff in regression, but they are
+all identical. The theory doesn't quite apply the same in generalized
+linear models (of which logistic regression is one): if you had an
+infinite sample size, the ways would all be identical, but in practice
+you'll have a very finite amount of data, so they won't agree.
+
+I'm thinking about my aims here: I want to decide whether each
+$x$-variable should stay in the model, and for that I want a test that
+expresses whether the model fits significantly worse if I take it
+out. The result I get ought to be the same as physically removing it
+and comparing the models with `anova`, 
+eg. for `age`:
+
+```{r }
+infect.1b=update(infect.1, .~.-age)
+anova(infect.1b, infect.1, test="Chisq")
+```
+
+ 
+
+This is the same thing as `drop1` gives. 
+
+So, I think: use `drop1` to assess whether anything should come
+out of a model like this, and use `summary` to obtain the
+slopes to interpret (in this kind of model, whether they're positive
+or negative, and thus what kind of effect each explanatory variable
+has on the probability of whatever-it-is.
  
 
 (f) Are the conclusions you drew in (<a href="#part:plot">here</a>) and
@@ -329,8 +373,7 @@ the evidence of its usefulness was weaker).
 
 (g) <a name="part:crossing">*</a>
 The first and third quartiles of `age` are 26 and 130;
-the first and third quartiles of `weight` are 9 and
-16. Obtain predicted probabilities for all combinations of these and
+the first and third quartiles of `weight` are 9 and 16. Obtain predicted probabilities for all combinations of these and
 `sex`. (You'll need to start by making a new data frame, using
 `crossing` to get all the combinations.)
  
@@ -372,11 +415,8 @@ cbind(infect.new,pred)
 I didn't ask you to comment on these, since the question is long
 enough already. But that's not going to stop me!
 
-These are predicted probabilities of infection. (When you have one
-observation per line, the predictions are of the *second* of the
-two levels of the response variable. When you make that two-column
-response, the predictions are of the probability of being in the
-*first* column. That's what it is. As the young people say, don't @ me.)
+These are predicted probabilities of infection.
+`r tufte::margin_note("When you have one observation per line, the predictions are of the *second* of the two levels of the response variable. When you make that two-column response, the predictions are of the probability of being in the *first* column. That's what it is. As the young people say, don't @ me.")`
 
 The way I remember the one-column-response thing is that the first
 level is the baseline (as it is in a regression with a categorical
@@ -411,7 +451,7 @@ explanatory variables. I think the best way to do this is
 containing the residuals alongside the original data:
 ```{r }
 library(broom)
-infect.1a = infect.1 %>% augment() 
+infect.1a = infect.1 %>% augment(infect) 
 infect.1a %>% as_tibble()
 ggplot(infect.1a,aes(x=weight,y=.resid))+geom_point()+
 geom_smooth()
@@ -445,12 +485,19 @@ are, so it's much easier to use `update`:
 
 ```{r }
 infect.2=update(infect.1,.~.+I(age^2)+I(weight^2))
-summary(infect.2)
 ```
 
  
 
-The squared terms are both *just* significant. The linear terms,
+As we saw before, when thinking about what to keep, we want to look at `drop1`:
+
+```{r }
+drop1(infect.2, test="Chisq")
+```
+
+ 
+
+The squared terms are both significant. The linear terms,
 `age` and `weight`, have to stay, regardless of their
 significance.
 `r tufte::margin_note("When you have higher-order terms, you have to keep the lower-order ones as well: higher powers, or interactions (as we see in ANOVA later).")`

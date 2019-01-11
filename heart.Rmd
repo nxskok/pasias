@@ -63,11 +63,6 @@ heart
 
      
 
-This display is kind of compressed. Every time you see a squiggle, as
-in `pain~`, that means there is actually more (not shown), so
-what you do is to check that what you see here matches at least the
-start of what is supposed to be there. 
-
 You should check that the variables that should be numbers actually
 are, that the variables that should be categorical have (as far as is
 shown) the right values as per my description above, and you should
@@ -253,8 +248,8 @@ heart.3=step(heart.1,direction="backward",test="Chisq")
 
        
 
-The output is very long, and I made it tiny so that you would see all
-of it. In terms of AIC, which is what `step` uses, `age`
+The output is very long.
+In terms of AIC, which is what `step` uses, `age`
 hangs on for a bit, but eventually gets eliminated. 
 
 There are a lot of variables left.
@@ -329,11 +324,13 @@ heart %>% summarize_if(is.numeric,funs(q1,q3))
 
  
 
-These are actually all the Q1s followed by all the Q3s,  but it's hard
-to see that because the column names got truncated (every time you see
-a squiggle it means that there is more not shown). One way to see the
-results is to "transpose" the result with the variable-quartile
-combinations in a column and the actual quartile values in another:
+These are actually all the Q1s followed by all the Q3s, but it's hard
+to see that because you only see a few columns. On yours, click the
+little right-arrow to see more columns.  
+
+One way to see all the results is
+to "transpose" the result with the variable-quartile combinations in
+a column and the actual quartile values in another:
 
 ```{r }
 heart2 = heart %>% 
@@ -550,15 +547,7 @@ p=predict(heart.3,heart.new,type="response")
 and the easiest way to add these to `heart.new` is this:
 
 ```{r }
-heart.new$pred=p
-```
-
- 
-
-Or, if you like, with a `mutate` of this kind:
-
-```{r }
-heart.x = heart.new %>% mutate(prediction=p) 
+heart.new %>% mutate(prediction=p) -> heart.new
 ```
 
  

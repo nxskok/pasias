@@ -47,15 +47,7 @@ questionnaire assessed "idealism": a high score reflects a belief
 that ethical behaviour will always lead to good consequences (and thus
 that  if a behaviour leads to any bad consequences at all, it is
 unethical).
-`r tufte::margin_note("I get confused about the difference between morals  and ethics. This is a very short description of that difference:  url{http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html")`. The
-basic idea is that morals are part of who you are, derived from
-religion, philosophy etc. Ethics are how you act in a particular
-situation: that is, your morals, what you believe, inform your ethics,
-what you do. That's why the students had to play the role of an ``ethics
-committee'', rather than a "morals committee"; presumably the
-researcher had good morals, but an ethics committee had to evaluate
-what he was planning to do.
-}
+`r tufte::margin_note("I get confused about the difference between morals  and ethics. This is a very short description of that difference:  http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html. The basic idea is that morals are part of who you are, derived from religion, philosophy etc. Ethics are how you act in a particular situation: that is, your morals, what you believe, inform your ethics, what you do. That's why the students had to play the role of an  ethics committee, rather than a morals committee; presumably the researcher had good morals, but an ethics committee had to evaluate what he was planning to do, rather than his character as a person.")`
 
 After being exposed to all of that, each student stated their decision
 about whether the research should continue or stop.
@@ -133,6 +125,17 @@ immediately clear what kind of effect it is: that's the reason for
 the next part, and we'll revisit this slope coefficient in a moment.
 Categorical *explanatory* variables are perfectly all right
 as text.
+Should I have used `drop1` to assess the significance? Maybe:
+```{r }
+drop1(decide.1, test="Chisq")
+```
+
+     
+
+The thing is, this gives us a P-value but not a slope, which we might
+have wanted to try to interpret. Also, the P-value in `summary`
+is so small that it is likely to be still significant in
+`drop1` as well.
     
 
 
@@ -277,6 +280,14 @@ summary(decide.2)
 
 Either way is good. The conclusion you need to draw is that they both
 have something to add, because their P-values are both less than 0.05.
+
+Or (and perhaps better) you can look at `drop1` of either of these:
+
+```{r }
+drop1(decide.2, test="Chisq")
+```
+
+ 
   
 
 
@@ -516,6 +527,7 @@ relativism score would (or  might) go with "continue". This
 would mean a *negative* slope coefficient for
 `relativism`, which is what we observed. (Are you still
 with me? There was some careful thinking there.)
+
 What about `idealism`? This is a belief that ethical behaviour
 will always lead to good consequences, and thus, if the
 consequences are bad, the behaviour must not have been ethical. A
@@ -524,9 +536,11 @@ consequences (experimentation on animals), see that as a bad
 thing, and thus conclude that the research should be stopped. The
 `idealism` slope coefficient, by that argument, should be
 positive, and is.
+
 This will also lead to a `predict`. We need "low" and
 "high" scores on the idealism and relativism tests. Let's use
 the quartiles:
+
 ```{r }
 decide %>% summarize(i_q1=quantile(idealism,0.25),
 i_q3=quantile(idealism,0.75),
@@ -581,13 +595,12 @@ The last line `str` displays the "structure" of the data
 frame that was obtained. Normally a data frame read into R has a much
 simpler structure than this, but this is R trying to interpret how
 SPSS does things. Here, each column (listed on the lines beginning
-with a dollar sign) has some values, listed on the `atomic`
-line
-`r tufte::margin_note("Which always makes me think of  https://www.youtube.com/watch?v=1Tko1G6XRiQ.")` and possibly
-some "attributes", which affect how the variable is interpreted. The
-important one for us is the "names" attribute; if a column has this,
-it needs to be interpreted as categorical with the names as levels
-(going in order with the values in the `atomic` line). Thus, on
+with a dollar sign) has some values, listed after `num`; they
+are all numeric, even the categorical ones. What happened to the
+categorical variables is that they got turned into numbers, and they
+have a `names` "attribute" further down that says what those
+numbers actually represent.
+Thus, on
 the `gender` line, the subjects are a female (0), then a male
 (1), then three females, then a male, and so on. Variables like
 `gender` are thus so far neither really factors nor text
@@ -669,7 +682,7 @@ not shown here.)
 
 There is actually a *town* called Catbrain. It's in England,
 near Bristol, and seems to be home to a street of car dealerships.
-Just to show that you can do *anything* in R (but first I need a Google API key) and some packages:
+Just to show that you can do *anything* in R (but first I need a Google API key and some packages):
 
 ```{r }
 library(ggmap)

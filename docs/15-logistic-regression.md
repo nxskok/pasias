@@ -26,7 +26,8 @@ library(tidyverse)
 ##  Finding wolf spiders on the beach
 
 
- <a name="q:wolfspider">*</a> A team of Japanese researchers were investigating what would
+ <a name="q:wolfspider">*</a> 
+A team of Japanese researchers were investigating what would
 cause the burrowing wolf spider *Lycosa ishikariana* to be found
 on a beach. They hypothesized that it had to do with the size of the
 grains of sand on the beach. They went to 28 beaches in Japan,
@@ -280,6 +281,43 @@ spider.new
 ## 4        1.1
 ```
 
+     
+
+Another way to make the data frame of values to predict from  is directly, using `tribble`:
+
+
+```r
+new=tribble(
+~Grain.size,
+0.2,
+0.5,
+0.8,
+1.1
+)
+new
+```
+
+```
+## # A tibble: 4 x 1
+##   Grain.size
+##        <dbl>
+## 1        0.2
+## 2        0.5
+## 3        0.8
+## 4        1.1
+```
+
+ 
+
+I have no particular preference here (use whichever makes most sense
+to you), but when we come later to combinations of things using
+`crossing`, I think the vector way is easier (make vectors of
+each of the things you want combinations of, *then* combine them
+into a data frame).
+
+Now for the actual predictions. Get the predicted probabilities first, using `response` to get probabilities rather than something else, then put them next to the values being predicted for (using `cbind` because my `pred.prob` below is a `matrix` rather than a data frame:
+
+
 ```r
 pred.prob=predict(Spiders.1,spider.new,type="response")
 cbind(spider.new,pred.prob)
@@ -293,7 +331,7 @@ cbind(spider.new,pred.prob)
 ## 4        1.1 0.9817663
 ```
 
-     
+ 
 
 (Second attempt: on my first, the `tibble` contained
 `Grain.Sizes`!) 
@@ -427,18 +465,23 @@ not, as you wish. Demonstrate that you have the right data in R.
  
 Solution
 
-
-There are a couple of ways. My current favourite is the `tidyverse`-approved 
-`tribble` method. A `tribble` is a "transposed `tibble`", in which you copy and paste the data, inserting column headings and commas in the right places:
+ 
+There are a couple of ways. My
+current favourite is the `tidyverse`-approved
+`tribble` method. A `tribble` is a 
+"transposed `tibble`", in which you copy and paste the data,
+inserting column headings and commas in the right places. The
+columns don't have to line up, since it's the commas that
+determine where one value ends and the next one begins:
 
 ```r
 dead_bugs=tribble(
 ~log_conc, ~exposed, ~killed,
-0.96           ,            50    ,          6    ,
-1.33           ,            48    ,          16   ,           
-1.63           ,            46    ,          24   ,           
-2.04           ,            49    ,          42   ,           
-2.32           ,            50    ,          44   )
+0.96, 50, 6,
+1.33, 48, 16,           
+1.63, 46, 24,           
+2.04, 49, 42,           
+2.32, 50, 44)
 dead_bugs
 ```
 
@@ -456,7 +499,10 @@ dead_bugs
     
 
 Note that the last data value has no comma after it, but instead has
-the closing bracket of `tribble`.  If you are clever in R
+the closing bracket of `tribble`.  
+
+You can have extra spaces if you wish. They will just be ignored.
+If you are clever in R
 Studio, you can insert a column of commas all at once (using
 "multiple cursors").
 I used to do it like this. I make vectors of each column using `c` and then glue the columns together into a data frame:
@@ -535,7 +581,7 @@ out this way. Also, you'll note, the column names have those
 "backticks" around them, because they contain illegal characters
 like a minus sign and spaces. Perhaps a good way to
 pre-empt
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">My daughter learned the word pre-empt because we  like to play a bridge app on my phone; in the game of bridge, you  make a pre-emptive bid when you have no great strength but a lot of  cards of one suit, say seven, and it won't be too bad if that suit  is trumps, no matter what your partner has. If you have a weak hand  with a lot of cards in one suit, your opponents are probably going  to be able to bid and make something, so you pre-emptively bid first  to try and make it difficult for them.</span>  all these problems is to
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">My daughter learned the word pre-empt because we  like to play a bridge app on my phone; in the game of bridge, you  make a pre-emptive bid when you have no great strength but a lot of  cards of one suit, say seven, and it won't be too bad if that suit  is trumps, no matter what your partner has. If you have a weakish hand with a lot of cards in one suit, your opponents are probably going  to be able to bid and make something, so you pre-emptively bid first  to try and make it difficult for them.</span>  all these problems is to
 make a copy of the data file with the illegal characters replaced by
 underscores, which is my file `exposed2.txt`:
 
@@ -611,10 +657,10 @@ insects were exposed in total to each dose, so we can work it
 out. Like this:
 
 ```r
-response = dead_bugs %>% 
+dead_bugs %>% 
 mutate(survived=exposed-killed) %>%
 select(killed, survived) %>%
-as.matrix()
+as.matrix() -> response
 response
 ```
 
@@ -786,12 +832,16 @@ the insects, so the median lethal dose should be a bit less than
 log-concentration only kills less than a third of the insects. So I
 would guess somewhere a bit bigger than 1.5. Any guess somewhere in
 this ballpark is fine: you really cannot be very accurate.
-This is kind of a strange prediction problem, because we know what
+
+Extra: this is kind of a strange prediction problem, because we know what
 the *response* variable should be, and we want to know what the
 explanatory variable's value is. Normally we do predictions the
-other way around. So the only way to get a more accurate figure is
+other way around.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This kind of thing is sometimes called an inverse prediction.</span>
+So the only way to get a more accurate figure is
 to try some different log-concentrations, and see which one gets
 closest to a probability 0.5 of killing the insect.
+
 Something like this would work:
 
 ```r
@@ -831,6 +881,187 @@ prediction in regression. There is uncertainty attached to it (because
 the actual logistic regression might be different from the one we
 estimated), so we ought to provide a confidence interval for it. But
 I'm riding the bus as I type this, so I can't look it up right now.
+
+Later: there's a function called `dose.p` 
+in `MASS` that appears to do this:
+
+
+```r
+library(MASS)
+```
+
+```
+## 
+## Attaching package: 'MASS'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     select
+```
+
+```r
+lethal=dose.p(bugs.1)
+lethal
+```
+
+```
+##              Dose         SE
+## p = 0.5: 1.573717 0.05159576
+```
+
+ 
+
+We have a sensible point estimate (the same 1.57 that we got by hand),
+and we have a standard error, so we can make a confidence interval by
+going up and down twice it (or 1.96 times it) from the estimate. The
+structure of the result is a bit arcane, though:
+
+
+```r
+str(lethal)
+```
+
+```
+##  'glm.dose' Named num 1.57
+##  - attr(*, "names")= chr "p = 0.5:"
+##  - attr(*, "SE")= num [1, 1] 0.0516
+##   ..- attr(*, "dimnames")=List of 2
+##   .. ..$ : chr "p = 0.5:"
+##   .. ..$ : NULL
+##  - attr(*, "p")= num 0.5
+```
+
+ 
+
+It is what R calls a "vector with attributes". To get at the pieces and calculate the interval, we have to do something like this:
+
+
+```r
+(lethal_est=as.numeric(lethal))
+```
+
+```
+## [1] 1.573717
+```
+
+```r
+(lethal_SE=as.vector(attr(lethal, "SE")))
+```
+
+```
+## [1] 0.05159576
+```
+
+ 
+
+and then make the interval:
+
+
+```r
+lethal_est+c(-2,2)*lethal_SE
+```
+
+```
+## [1] 1.470526 1.676909
+```
+
+ 
+
+1.47 to 1.68.
+
+I got this idea from page 4.14 of
+[link](http://www.chrisbilder.com/stat875old/schedule_new/chapter4.doc). I
+think I got a little further than he did. An idea that works more
+generally is to get several intervals all at once, say for the
+"quartile lethal doses" as well:
+
+
+```r
+lethal=dose.p(bugs.1, p=c(0.25,0.5,0.75))
+lethal
+```
+
+```
+##               Dose         SE
+## p = 0.25: 1.220327 0.07032465
+## p = 0.50: 1.573717 0.05159576
+## p = 0.75: 1.927108 0.06532356
+```
+
+ 
+
+This looks like a data frame or matrix, but is actually a 
+"named vector", so `enframe` will get at least some of this and turn
+it into a genuine data frame:
+
+
+```r
+enframe(lethal)
+```
+
+```
+## # A tibble: 3 x 2
+##   name      value
+##   <chr>     <dbl>
+## 1 p = 0.25:  1.22
+## 2 p = 0.50:  1.57
+## 3 p = 0.75:  1.93
+```
+
+ 
+
+That doesn't get the SEs, so we'll make a new column by grabbing the "attribute" as above:
+
+
+```r
+enframe(lethal) %>% mutate(SE=attr(lethal, "SE"))
+```
+
+```
+## # A tibble: 3 x 3
+##   name      value     SE
+##   <chr>     <dbl>  <dbl>
+## 1 p = 0.25:  1.22 0.0703
+## 2 p = 0.50:  1.57 0.0516
+## 3 p = 0.75:  1.93 0.0653
+```
+
+ 
+
+and now we make the intervals by making new columns containing the lower and upper limits:
+
+
+```r
+enframe(lethal) %>% mutate(SE=attr(lethal, "SE")) %>%
+mutate(LCL=value-2*SE, UCL=value+2*SE)
+```
+
+```
+## # A tibble: 3 x 5
+##   name      value     SE   LCL   UCL
+##   <chr>     <dbl>  <dbl> <dbl> <dbl>
+## 1 p = 0.25:  1.22 0.0703  1.08  1.36
+## 2 p = 0.50:  1.57 0.0516  1.47  1.68
+## 3 p = 0.75:  1.93 0.0653  1.80  2.06
+```
+
+ 
+
+Now we have intervals for the median lethal dose, as well as for the doses that kill a quarter and three quarters of the aphids.
+
+To end this question, we loaded `MASS`, so we should unload it before we run into 
+problems with 
+`select` later:
+
+
+```r
+detach("package:MASS", unload=T)
+```
+
+ 
+
  
 
 
@@ -1049,8 +1280,8 @@ to do it with `cbind`, or use some other trickery, like this:
 
 
 ```r
-resp = dr %>% select(damaged, undamaged) %>%
-as.matrix()
+dr %>% select(damaged, undamaged) %>%
+as.matrix() -> resp
 class(resp)
 ```
 
@@ -1397,7 +1628,7 @@ each of the other variables. (You'll have to think about
 `sex`, um, you'll have to think about the `sex`
 variable, because it too is categorical.) Anything sensible is OK
 here. You might like to think back to what we did in
-Question~<a href="#q:wolfspider">here</a> for inspiration. (You can also
+Question <a href="#q:wolfspider">here</a> for inspiration. (You can also
 investigate `table`, which does cross-tabulations.)
  
 Solution
@@ -1470,7 +1701,7 @@ so that the plot is just this:
 ggplot(infect,aes(x=sex))+geom_bar()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
  
 
@@ -1498,7 +1729,7 @@ variable, which is specified by `fill`. Here's the basic idea:
 ggplot(infect, aes(x=sex,fill=infected))+geom_bar()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 
@@ -1516,7 +1747,7 @@ ggplot(infect, aes(x=sex,fill=infected))+
 geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
  
 
@@ -1542,7 +1773,7 @@ ggplot(infect, aes(x=sex,fill=infected))+
 geom_bar(position="fill")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -1705,10 +1936,82 @@ has a P-value of 0.062, which is (just) larger than 0.05, so we
 can consider removing this variable. The other two P-values,
 0.00089 and 0.024, are definitely less than 0.05, so those
 variables should stay.
+
 Alternatively, you can say that the P-value for `age` is
 small enough to be interesting, and therefore that `age`
 should stay. That's fine, but then you need to be consistent in
 the next part.
+
+You probably noted that `sex` is categorical. However, it
+has only the obvious two levels, and such a categorical variable
+can be assessed for significance this way. If you were worried
+about this, the right way to go is `drop1`:
+
+
+```r
+drop1(infect.1, test="Chisq")
+```
+
+```
+## Single term deletions
+## 
+## Model:
+## factor(infected) ~ age + weight + sex
+##        Df Deviance    AIC     LRT  Pr(>Chi)    
+## <none>      59.859 67.859                      
+## age     1   63.785 69.785  3.9268 0.0475236 *  
+## weight  1   72.796 78.796 12.9373 0.0003221 ***
+## sex     1   65.299 71.299  5.4405 0.0196754 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+ 
+
+The P-values are similar, but not identical.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *test* is this way because it's a generalized linear model rather than a regular regression.</span>
+
+I have to stop and think about this. There is a lot of theory that
+says there are several ways to do stuff in regression, but they are
+all identical. The theory doesn't quite apply the same in generalized
+linear models (of which logistic regression is one): if you had an
+infinite sample size, the ways would all be identical, but in practice
+you'll have a very finite amount of data, so they won't agree.
+
+I'm thinking about my aims here: I want to decide whether each
+$x$-variable should stay in the model, and for that I want a test that
+expresses whether the model fits significantly worse if I take it
+out. The result I get ought to be the same as physically removing it
+and comparing the models with `anova`, 
+eg. for `age`:
+
+
+```r
+infect.1b=update(infect.1, .~.-age)
+anova(infect.1b, infect.1, test="Chisq")
+```
+
+```
+## Analysis of Deviance Table
+## 
+## Model 1: factor(infected) ~ weight + sex
+## Model 2: factor(infected) ~ age + weight + sex
+##   Resid. Df Resid. Dev Df Deviance Pr(>Chi)  
+## 1        78     63.785                       
+## 2        77     59.859  1   3.9268  0.04752 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+ 
+
+This is the same thing as `drop1` gives. 
+
+So, I think: use `drop1` to assess whether anything should come
+out of a model like this, and use `summary` to obtain the
+slopes to interpret (in this kind of model, whether they're positive
+or negative, and thus what kind of effect each explanatory variable
+has on the probability of whatever-it-is.
  
 
 (f) Are the conclusions you drew in (<a href="#part:plot">here</a>) and
@@ -1728,8 +2031,7 @@ the evidence of its usefulness was weaker).
 
 (g) <a name="part:crossing">*</a>
 The first and third quartiles of `age` are 26 and 130;
-the first and third quartiles of `weight` are 9 and
-16. Obtain predicted probabilities for all combinations of these and
+the first and third quartiles of `weight` are 9 and 16. Obtain predicted probabilities for all combinations of these and
 `sex`. (You'll need to start by making a new data frame, using
 `crossing` to get all the combinations.)
  
@@ -1799,11 +2101,8 @@ cbind(infect.new,pred)
 I didn't ask you to comment on these, since the question is long
 enough already. But that's not going to stop me!
 
-These are predicted probabilities of infection. (When you have one
-observation per line, the predictions are of the *second* of the
-two levels of the response variable. When you make that two-column
-response, the predictions are of the probability of being in the
-*first* column. That's what it is. As the young people say, don't @ me.)
+These are predicted probabilities of infection.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When you have one observation per line, the predictions are of the *second* of the two levels of the response variable. When you make that two-column response, the predictions are of the probability of being in the *first* column. That's what it is. As the young people say, don't @ me.</span>
 
 The way I remember the one-column-response thing is that the first
 level is the baseline (as it is in a regression with a categorical
@@ -1839,26 +2138,25 @@ containing the residuals alongside the original data:
 
 ```r
 library(broom)
-infect.1a = infect.1 %>% augment() 
+infect.1a = infect.1 %>% augment(infect) 
 infect.1a %>% as_tibble()
 ```
 
 ```
 ## # A tibble: 81 x 11
-##    factor.infected.   age weight sex   .fitted .se.fit .resid   .hat .sigma
-##  * <fct>            <int>  <int> <chr>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>
-##  1 absent               2      1 fema…   0.407   0.763 -1.35  0.140   0.872
-##  2 absent               9     13 fema…  -2.24    0.791 -0.450 0.0544  0.886
-##  3 present             15      2 fema…   0.343   0.691  1.04  0.116   0.878
-##  4 absent              15     16 fema…  -2.85    0.896 -0.336 0.0416  0.887
-##  5 absent              18      2 fema…   0.381   0.682 -1.34  0.112   0.872
-##  6 absent              20      9 fema…  -1.19    0.616 -0.729 0.0678  0.883
-##  7 absent              26     13 fema…  -2.02    0.707 -0.498 0.0515  0.886
-##  8 present             42      6 fema…  -0.227   0.519  1.28  0.0664  0.874
-##  9 absent              51      9 fema…  -0.797   0.490 -0.863 0.0515  0.882
-## 10 present             52      6 fema…  -0.100   0.494  1.22  0.0609  0.876
-## # ... with 71 more rows, and 2 more variables: .cooksd <dbl>,
-## #   .std.resid <dbl>
+##    infected   age weight sex   .fitted .se.fit .resid   .hat .sigma .cooksd
+##  * <chr>    <int>  <int> <chr>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
+##  1 absent       2      1 fema…   0.407   0.763 -1.35  0.140   0.872 7.10e-2
+##  2 absent       9     13 fema…  -2.24    0.791 -0.450 0.0544  0.886 1.62e-3
+##  3 present     15      2 fema…   0.343   0.691  1.04  0.116   0.878 2.63e-2
+##  4 absent      15     16 fema…  -2.85    0.896 -0.336 0.0416  0.887 6.57e-4
+##  5 absent      18      2 fema…   0.381   0.682 -1.34  0.112   0.872 5.21e-2
+##  6 absent      20      9 fema…  -1.19    0.616 -0.729 0.0678  0.883 5.94e-3
+##  7 absent      26     13 fema…  -2.02    0.707 -0.498 0.0515  0.886 1.89e-3
+##  8 present     42      6 fema…  -0.227   0.519  1.28  0.0664  0.874 2.39e-2
+##  9 absent      51      9 fema…  -0.797   0.490 -0.863 0.0515  0.882 6.45e-3
+## 10 present     52      6 fema…  -0.100   0.494  1.22  0.0609  0.876 1.91e-2
+## # ... with 71 more rows, and 1 more variable: .std.resid <dbl>
 ```
 
 ```r
@@ -1870,7 +2168,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
 
  
 
@@ -1893,7 +2191,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
 
  
 Crawley found the slightest suggestion of an up-and-down curve in
@@ -1908,42 +2206,36 @@ are, so it's much easier to use `update`:
 
 ```r
 infect.2=update(infect.1,.~.+I(age^2)+I(weight^2))
-summary(infect.2)
-```
-
-```
-## 
-## Call:
-## glm(formula = factor(infected) ~ age + weight + sex + I(age^2) + 
-##     I(weight^2), family = "binomial", data = infect)
-## 
-## Deviance Residuals: 
-##      Min        1Q    Median        3Q       Max  
-## -1.70226  -0.44412  -0.19584  -0.02505   2.36653  
-## 
-## Coefficients:
-##               Estimate Std. Error z value Pr(>|z|)  
-## (Intercept) -3.4475839  1.7978359  -1.918   0.0552 .
-## age          0.0829364  0.0360205   2.302   0.0213 *
-## weight       0.4466284  0.3372352   1.324   0.1854  
-## sexmale     -1.2203683  0.7683288  -1.588   0.1122  
-## I(age^2)    -0.0004009  0.0002004  -2.000   0.0455 *
-## I(weight^2) -0.0415128  0.0209677  -1.980   0.0477 *
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 83.234  on 80  degrees of freedom
-## Residual deviance: 48.620  on 75  degrees of freedom
-## AIC: 60.62
-## 
-## Number of Fisher Scoring iterations: 6
 ```
 
  
 
-The squared terms are both *just* significant. The linear terms,
+As we saw before, when thinking about what to keep, we want to look at `drop1`:
+
+
+```r
+drop1(infect.2, test="Chisq")
+```
+
+```
+## Single term deletions
+## 
+## Model:
+## factor(infected) ~ age + weight + sex + I(age^2) + I(weight^2)
+##             Df Deviance    AIC    LRT Pr(>Chi)   
+## <none>           48.620 60.620                   
+## age          1   57.631 67.631 9.0102 0.002685 **
+## weight       1   50.443 60.443 1.8222 0.177054   
+## sex          1   51.298 61.298 2.6771 0.101800   
+## I(age^2)     1   55.274 65.274 6.6534 0.009896 **
+## I(weight^2)  1   53.091 63.091 4.4710 0.034474 * 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+ 
+
+The squared terms are both significant. The linear terms,
 `age` and `weight`, have to stay, regardless of their
 significance.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When you have higher-order terms, you have to keep the lower-order ones as well: higher powers, or interactions (as we see in ANOVA later).</span>
@@ -2190,15 +2482,7 @@ questionnaire assessed "idealism": a high score reflects a belief
 that ethical behaviour will always lead to good consequences (and thus
 that  if a behaviour leads to any bad consequences at all, it is
 unethical).
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I get confused about the difference between morals  and ethics. This is a very short description of that difference:  url{http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html</span>. The
-basic idea is that morals are part of who you are, derived from
-religion, philosophy etc. Ethics are how you act in a particular
-situation: that is, your morals, what you believe, inform your ethics,
-what you do. That's why the students had to play the role of an ``ethics
-committee'', rather than a "morals committee"; presumably the
-researcher had good morals, but an ethics committee had to evaluate
-what he was planning to do.
-}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I get confused about the difference between morals  and ethics. This is a very short description of that difference:  http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html. The basic idea is that morals are part of who you are, derived from religion, philosophy etc. Ethics are how you act in a particular situation: that is, your morals, what you believe, inform your ethics, what you do. That's why the students had to play the role of an  ethics committee, rather than a morals committee; presumably the researcher had good morals, but an ethics committee had to evaluate what he was planning to do, rather than his character as a person.</span>
 
 After being exposed to all of that, each student stated their decision
 about whether the research should continue or stop.
@@ -2335,6 +2619,30 @@ immediately clear what kind of effect it is: that's the reason for
 the next part, and we'll revisit this slope coefficient in a moment.
 Categorical *explanatory* variables are perfectly all right
 as text.
+Should I have used `drop1` to assess the significance? Maybe:
+
+```r
+drop1(decide.1, test="Chisq")
+```
+
+```
+## Single term deletions
+## 
+## Model:
+## factor(decision) ~ gender
+##        Df Deviance    AIC    LRT  Pr(>Chi)    
+## <none>      399.91 403.91                     
+## gender  1   425.57 427.57 25.653 4.086e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+     
+
+The thing is, this gives us a P-value but not a slope, which we might
+have wanted to try to interpret. Also, the P-value in `summary`
+is so small that it is likely to be still significant in
+`drop1` as well.
     
 
 
@@ -2568,6 +2876,29 @@ summary(decide.2)
 
 Either way is good. The conclusion you need to draw is that they both
 have something to add, because their P-values are both less than 0.05.
+
+Or (and perhaps better) you can look at `drop1` of either of these:
+
+
+```r
+drop1(decide.2, test="Chisq")
+```
+
+```
+## Single term deletions
+## 
+## Model:
+## factor(decision) ~ gender + idealism + relativism
+##            Df Deviance    AIC    LRT  Pr(>Chi)    
+## <none>          346.50 354.50                     
+## gender      1   366.27 372.27 19.770 8.734e-06 ***
+## idealism    1   393.22 399.22 46.720 8.188e-12 ***
+## relativism  1   354.46 360.46  7.956  0.004792 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+ 
   
 
 
@@ -2968,6 +3299,7 @@ relativism score would (or  might) go with "continue". This
 would mean a *negative* slope coefficient for
 `relativism`, which is what we observed. (Are you still
 with me? There was some careful thinking there.)
+
 What about `idealism`? This is a belief that ethical behaviour
 will always lead to good consequences, and thus, if the
 consequences are bad, the behaviour must not have been ethical. A
@@ -2976,9 +3308,11 @@ consequences (experimentation on animals), see that as a bad
 thing, and thus conclude that the research should be stopped. The
 `idealism` slope coefficient, by that argument, should be
 positive, and is.
+
 This will also lead to a `predict`. We need "low" and
 "high" scores on the idealism and relativism tests. Let's use
 the quartiles:
+
 
 ```r
 decide %>% summarize(i_q1=quantile(idealism,0.25),
@@ -3097,13 +3431,12 @@ The last line `str` displays the "structure" of the data
 frame that was obtained. Normally a data frame read into R has a much
 simpler structure than this, but this is R trying to interpret how
 SPSS does things. Here, each column (listed on the lines beginning
-with a dollar sign) has some values, listed on the `atomic`
-line
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which always makes me think of  https://www.youtube.com/watch?v=1Tko1G6XRiQ.</span> and possibly
-some "attributes", which affect how the variable is interpreted. The
-important one for us is the "names" attribute; if a column has this,
-it needs to be interpreted as categorical with the names as levels
-(going in order with the values in the `atomic` line). Thus, on
+with a dollar sign) has some values, listed after `num`; they
+are all numeric, even the categorical ones. What happened to the
+categorical variables is that they got turned into numbers, and they
+have a `names` "attribute" further down that says what those
+numbers actually represent.
+Thus, on
 the `gender` line, the subjects are a female (0), then a male
 (1), then three females, then a male, and so on. Variables like
 `gender` are thus so far neither really factors nor text
@@ -3231,7 +3564,7 @@ not shown here.)
 
 There is actually a *town* called Catbrain. It's in England,
 near Bristol, and seems to be home to a street of car dealerships.
-Just to show that you can do *anything* in R (but first I need a Google API key) and some packages:
+Just to show that you can do *anything* in R (but first I need a Google API key and some packages):
 
 
 ```r
@@ -3287,7 +3620,7 @@ gg=get_map("Catbrain",zoom=14,maptype="roadmap")
 ggmap(gg)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-84-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-100-1.png" width="672"  />
 
  
 The car dealerships are along Lysander Road. Change the `zoom`
@@ -3311,7 +3644,7 @@ points=crossing(lon=lons,lat=lats)
 ggmap(gg)+geom_point(data=points,aes(x=lon,y=lat))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-85-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-101-1.png" width="672"  />
 
  
 
@@ -3412,7 +3745,7 @@ geom_text_repel(data=places, aes(label=plotname))
 ## Warning in max(x): no non-missing arguments to max; returning -Inf
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-87-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
 
  
 
@@ -3547,11 +3880,6 @@ heart
 ```
 
      
-
-This display is kind of compressed. Every time you see a squiggle, as
-in `pain~`, that means there is actually more (not shown), so
-what you do is to check that what you see here matches at least the
-start of what is supposed to be there. 
 
 You should check that the variables that should be numbers actually
 are, that the variables that should be categorical have (as far as is
@@ -3944,8 +4272,8 @@ heart.3=step(heart.1,direction="backward",test="Chisq")
 
        
 
-The output is very long, and I made it tiny so that you would see all
-of it. In terms of AIC, which is what `step` uses, `age`
+The output is very long.
+In terms of AIC, which is what `step` uses, `age`
 hangs on for a bit, but eventually gets eliminated. 
 
 There are a lot of variables left.
@@ -4103,11 +4431,13 @@ heart %>% summarize_if(is.numeric,funs(q1,q3))
 
  
 
-These are actually all the Q1s followed by all the Q3s,  but it's hard
-to see that because the column names got truncated (every time you see
-a squiggle it means that there is more not shown). One way to see the
-results is to "transpose" the result with the variable-quartile
-combinations in a column and the actual quartile values in another:
+These are actually all the Q1s followed by all the Q3s, but it's hard
+to see that because you only see a few columns. On yours, click the
+little right-arrow to see more columns.  
+
+One way to see all the results is
+to "transpose" the result with the variable-quartile combinations in
+a column and the actual quartile values in another:
 
 
 ```r
@@ -4552,14 +4882,14 @@ heart.new %>% sample_n(8)
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  atypical         120        280    133     0   down…       0 reve…
-## 2 fema… nonangin…        140        280    133     1.6 flat        0 fixed
-## 3 fema… atypical         140        280    166     1.6 flat        1 reve…
-## 4 fema… asymptom…        120        213    133     1.6 down…       0 fixed
-## 5 fema… nonangin…        120        213    133     0   upsl…       1 reve…
-## 6 male  nonangin…        140        213    133     0   flat        1 norm…
-## 7 fema… atypical         140        213    166     1.6 down…       0 reve…
-## 8 male  asymptom…        140        280    166     1.6 flat        1 reve…
+## 1 fema… nonangin…        140        213    133     1.6 upsl…       0 fixed
+## 2 fema… nonangin…        120        280    166     1.6 flat        0 reve…
+## 3 fema… typical          120        280    133     1.6 down…       1 norm…
+## 4 male  nonangin…        140        280    133     0   down…       1 fixed
+## 5 fema… atypical         120        280    133     1.6 down…       0 reve…
+## 6 male  typical          120        280    166     0   flat        1 norm…
+## 7 male  nonangin…        140        213    133     1.6 flat        0 fixed
+## 8 male  typical          120        280    166     1.6 down…       0 reve…
 ## # ... with 1 more variable: pred <dbl>
 ```
 
@@ -5093,7 +5423,7 @@ ggplot(aes(x=gest.age,y=obs))+
 geom_line(aes(y=pred))+geom_point(aes(size=total))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-127-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-143-1.png" width="672"  />
 
  
 
@@ -5237,7 +5567,7 @@ Starting with `age` vs. `gender`:
 ggplot(donner,aes(x=gender,y=age))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-129-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
 
      
 
@@ -5248,7 +5578,7 @@ or:
 ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(gender~.)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-130-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
 
  
 
@@ -5291,7 +5621,7 @@ Age vs. `survived` is the same idea:
 ggplot(donner,aes(x=survived,y=age))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-133-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-149-1.png" width="672"  />
 
      
 
@@ -5302,7 +5632,7 @@ or:
 ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(survived~.)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-134-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-150-1.png" width="672"  />
 
  
 
@@ -5382,7 +5712,7 @@ For a graph, borrow the grouped bar-plot idea from the parasites question:
 ggplot(donner,aes(x=gender,fill=survived))+geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-139-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-155-1.png" width="672"  />
 
  
 
@@ -6215,7 +6545,7 @@ ggplot(aes(x=apache,y=pred))+geom_line()+
 geom_point(aes(y=obs_prop))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-157-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
 
      
 
@@ -6252,7 +6582,7 @@ ggplot(aes(x=apache,y=pred))+geom_line()+
 geom_point(aes(y=obs_prop,size=patients))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-158-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
 
      
 The points that are far from the prediction are mostly based on a
@@ -6561,7 +6891,7 @@ enough even with this small data set. Here's a visual:
 ggplot(ha,aes(x=second,y=anxiety))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-166-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-182-1.png" width="672"  />
 
      
 
@@ -6588,7 +6918,7 @@ bar chart:
 ggplot(ha,aes(x=anger,fill=second))+geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-167-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-183-1.png" width="672"  />
 
  
 

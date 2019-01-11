@@ -1,7 +1,8 @@
 ##  Finding wolf spiders on the beach
 
 
- <a name="q:wolfspider">*</a> A team of Japanese researchers were investigating what would
+ <a name="q:wolfspider">*</a> 
+A team of Japanese researchers were investigating what would
 cause the burrowing wolf spider *Lycosa ishikariana* to be found
 on a beach. They hypothesized that it had to do with the size of the
 grains of sand on the beach. They went to 28 beaches in Japan,
@@ -148,11 +149,39 @@ go if you prefer:
 Grain.sizes=c(0.2,0.5,0.8,1.1)
 spider.new=tibble(Grain.size=Grain.sizes)
 spider.new
+```
+
+     
+
+Another way to make the data frame of values to predict from  is directly, using `tribble`:
+
+```{r }
+new=tribble(
+~Grain.size,
+0.2,
+0.5,
+0.8,
+1.1
+)
+new
+```
+
+ 
+
+I have no particular preference here (use whichever makes most sense
+to you), but when we come later to combinations of things using
+`crossing`, I think the vector way is easier (make vectors of
+each of the things you want combinations of, *then* combine them
+into a data frame).
+
+Now for the actual predictions. Get the predicted probabilities first, using `response` to get probabilities rather than something else, then put them next to the values being predicted for (using `cbind` because my `pred.prob` below is a `matrix` rather than a data frame:
+
+```{r }
 pred.prob=predict(Spiders.1,spider.new,type="response")
 cbind(spider.new,pred.prob)
 ```
 
-     
+ 
 
 (Second attempt: on my first, the `tibble` contained
 `Grain.Sizes`!) 
