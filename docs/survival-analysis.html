@@ -318,8 +318,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="survival-analysis" class="section level1">
 <h1><span class="header-section-number">Chapter 18</span> Survival analysis</h1>
-<div class="sourceCode" id="cb2595"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2595-1" data-line-number="1"><span class="kw">library</span>(survival)</a>
-<a class="sourceLine" id="cb2595-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb2627"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2627-1" data-line-number="1"><span class="kw">library</span>(survival)</a>
+<a class="sourceLine" id="cb2627-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
@@ -328,7 +328,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode" id="cb2599"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2599-1" data-line-number="1"><span class="kw">library</span>(survminer)</a></code></pre></div>
+<div class="sourceCode" id="cb2631"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2631-1" data-line-number="1"><span class="kw">library</span>(survminer)</a></code></pre></div>
 <pre><code>## Loading required package: ggpubr</code></pre>
 <pre><code>## Loading required package: magrittr</code></pre>
 <pre><code>## 
@@ -343,9 +343,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">18.1</span> The Worcester survey</h2>
 <p>The Worcester survey was a long-term study of
 all myocardial-infarction
-<label for="tufte-mn-154" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-154" class="margin-toggle"><span class="marginnote">Heart attack.</span> victims admitted to hospitals in the
+<label for="tufte-mn-156" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-156" class="margin-toggle"><span class="marginnote">Heart attack.</span> victims admitted to hospitals in the
 Worcester, Massachusetts area.
-<label for="tufte-mn-155" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-155" class="margin-toggle"><span class="marginnote">Worcester is pronounced, by locals, <em>Woo-stuh</em>.</span>
+<label for="tufte-mn-157" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-157" class="margin-toggle"><span class="marginnote">Worcester is pronounced, by locals, <em>Woo-stuh</em>.</span>
 The data have been well studied, and can be found in
 the file <a href="http://www.utsc.utoronto.ca/~butler/d29/whas100.csv">link</a>.</p>
 <ol style="list-style-type: lower-alpha">
@@ -367,8 +367,8 @@ patient died)</p></li>
 <li><p>body mass index (kg/m<span class="math inline">\(^2\)</span>)</p></li>
 </ul>
 <p>Solution</p>
-<div class="sourceCode" id="cb2605"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2605-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/whas100.csv&quot;</span></a>
-<a class="sourceLine" id="cb2605-2" data-line-number="2">whas100=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb2637"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2637-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/whas100.csv&quot;</span></a>
+<a class="sourceLine" id="cb2637-2" data-line-number="2">whas100=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
@@ -383,7 +383,7 @@ patient died)</p></li>
 ##   gender = col_integer(),
 ##   bmi = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2608"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2608-1" data-line-number="1">whas100</a></code></pre></div>
+<div class="sourceCode" id="cb2640"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2640-1" data-line-number="1">whas100</a></code></pre></div>
 <pre><code>## # A tibble: 100 x 10
 ##       X1    id admitdate  foldate      los lenfol fstat   age gender   bmi
 ##    &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;
@@ -412,8 +412,8 @@ followup status.</li>
 <p><code>Surv</code>. The event here is death, so the two parts of the
 response variable are followup time <code>lenfol</code> and followup
 status, 1 being “dead”, <code>fstat</code>:</p>
-<div class="sourceCode" id="cb2610"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2610-1" data-line-number="1">y=<span class="kw">with</span>(whas100,<span class="kw">Surv</span>(lenfol,fstat<span class="op">==</span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb2610-2" data-line-number="2">y</a></code></pre></div>
+<div class="sourceCode" id="cb2642"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2642-1" data-line-number="1">y=<span class="kw">with</span>(whas100,<span class="kw">Surv</span>(lenfol,fstat<span class="op">==</span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb2642-2" data-line-number="2">y</a></code></pre></div>
 <pre><code>##   [1]    6   374  2421    98  1205  2065  1002  2201   189  2719+ 2638+
 ##  [12]  492   302  2574+ 2610+ 2641+ 1669  2624  2578+ 2595+  123  2613+
 ##  [23]  774  2012  2573+ 1874  2631+ 1907   538   104     6  1401  2710 
@@ -439,8 +439,8 @@ need to comment on it yet).</li>
 </ol>
 <p>Solution</p>
 <p>This, using the response variable that we just created:</p>
-<div class="sourceCode" id="cb2612"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2612-1" data-line-number="1">whas100<span class="fl">.1</span>=<span class="kw">coxph</span>(y<span class="op">~</span>age<span class="op">+</span>gender<span class="op">+</span>bmi,<span class="dt">data=</span>whas100)</a>
-<a class="sourceLine" id="cb2612-2" data-line-number="2"><span class="kw">summary</span>(whas100<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2644"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2644-1" data-line-number="1">whas100<span class="fl">.1</span>=<span class="kw">coxph</span>(y<span class="op">~</span>age<span class="op">+</span>gender<span class="op">+</span>bmi,<span class="dt">data=</span>whas100)</a>
+<a class="sourceLine" id="cb2644-2" data-line-number="2"><span class="kw">summary</span>(whas100<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + gender + bmi, data = whas100)
 ## 
@@ -479,7 +479,7 @@ model? Explain briefly.</li>
 out of the model. The other two variables have small P-values
 (<code>bmi</code> only just under 0.05), so they need to stay.
 The other way to think about this is <code>step</code>, or <code>drop1</code>:</p>
-<div class="sourceCode" id="cb2614"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2614-1" data-line-number="1"><span class="kw">drop1</span>(whas100<span class="fl">.1</span>, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2646"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2646-1" data-line-number="1"><span class="kw">drop1</span>(whas100<span class="fl">.1</span>, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -493,10 +493,10 @@ The other way to think about this is <code>step</code>, or <code>drop1</code>:</
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>This is here the same as the output from <code>summary</code>, but where it scores is if you have a categorical explanatory variable like “treatment” with more than two levels: <code>drop1</code> will tell you about keeping or dropping it as a
 whole.
-<label for="tufte-mn-156" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-156" class="margin-toggle"><span class="marginnote">Our categorical variable <em>gender</em> has only two levels.</span>
+<label for="tufte-mn-158" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-158" class="margin-toggle"><span class="marginnote">Our categorical variable <em>gender</em> has only two levels.</span>
 If you prefer:</p>
-<div class="sourceCode" id="cb2616"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2616-1" data-line-number="1">whas100.step=<span class="kw">step</span>(whas100<span class="fl">.1</span>,<span class="dt">trace=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb2616-2" data-line-number="2"><span class="kw">summary</span>(whas100.step)</a></code></pre></div>
+<div class="sourceCode" id="cb2648"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2648-1" data-line-number="1">whas100.step=<span class="kw">step</span>(whas100<span class="fl">.1</span>,<span class="dt">trace=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb2648-2" data-line-number="2"><span class="kw">summary</span>(whas100.step)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + bmi, data = whas100)
 ## 
@@ -528,8 +528,8 @@ explanatory variables were previously significant, you can skip this part.)</li>
 </ol>
 <p>Solution</p>
 <p>So, take out <code>gender</code>:</p>
-<div class="sourceCode" id="cb2618"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2618-1" data-line-number="1">whas100<span class="fl">.2</span>=<span class="kw">update</span>(whas100<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>gender)</a>
-<a class="sourceLine" id="cb2618-2" data-line-number="2"><span class="kw">summary</span>(whas100<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2650"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2650-1" data-line-number="1">whas100<span class="fl">.2</span>=<span class="kw">update</span>(whas100<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>gender)</a>
+<a class="sourceLine" id="cb2650-2" data-line-number="2"><span class="kw">summary</span>(whas100<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + bmi, data = whas100)
 ## 
@@ -561,17 +561,17 @@ you want.) As an alternative, you can get these by passing the whole
 data frame into <code>summary</code>.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2620"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2620-1" data-line-number="1"><span class="kw">quantile</span>(whas100<span class="op">$</span>age)</a></code></pre></div>
+<div class="sourceCode" id="cb2652"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2652-1" data-line-number="1"><span class="kw">quantile</span>(whas100<span class="op">$</span>age)</a></code></pre></div>
 <pre><code>##    0%   25%   50%   75%  100% 
 ## 32.00 59.75 71.00 80.25 92.00</code></pre>
-<div class="sourceCode" id="cb2622"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2622-1" data-line-number="1"><span class="kw">quantile</span>(whas100<span class="op">$</span>bmi)</a></code></pre></div>
+<div class="sourceCode" id="cb2654"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2654-1" data-line-number="1"><span class="kw">quantile</span>(whas100<span class="op">$</span>bmi)</a></code></pre></div>
 <pre><code>##       0%      25%      50%      75%     100% 
 ## 14.91878 23.53717 27.19158 30.34770 39.93835</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb2624"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2624-1" data-line-number="1"><span class="kw">with</span>(whas100, {</a>
-<a class="sourceLine" id="cb2624-2" data-line-number="2"><span class="kw">print</span>(<span class="kw">quantile</span>(age))</a>
-<a class="sourceLine" id="cb2624-3" data-line-number="3"><span class="kw">print</span>(<span class="kw">quantile</span>(bmi))</a>
-<a class="sourceLine" id="cb2624-4" data-line-number="4">})</a></code></pre></div>
+<div class="sourceCode" id="cb2656"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2656-1" data-line-number="1"><span class="kw">with</span>(whas100, {</a>
+<a class="sourceLine" id="cb2656-2" data-line-number="2"><span class="kw">print</span>(<span class="kw">quantile</span>(age))</a>
+<a class="sourceLine" id="cb2656-3" data-line-number="3"><span class="kw">print</span>(<span class="kw">quantile</span>(bmi))</a>
+<a class="sourceLine" id="cb2656-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>##    0%   25%   50%   75%  100% 
 ## 32.00 59.75 71.00 80.25 92.00 
 ##       0%      25%      50%      75%     100% 
@@ -580,19 +580,19 @@ data frame into <code>summary</code>.</li>
 brackets, and since there are curly brackets you need to explicitly
 <code>print</code> the things you want to display.)
 Or, tidyverse-style:</p>
-<div class="sourceCode" id="cb2626"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2626-1" data-line-number="1">whas100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age,bmi) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2626-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">ageq=</span><span class="kw">list</span>(<span class="kw">quantile</span>(age)),</a>
-<a class="sourceLine" id="cb2626-3" data-line-number="3"><span class="dt">bmiq=</span><span class="kw">list</span>(<span class="kw">quantile</span>(bmi)))</a></code></pre></div>
+<div class="sourceCode" id="cb2658"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2658-1" data-line-number="1">whas100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age,bmi) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2658-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">ageq=</span><span class="kw">list</span>(<span class="kw">quantile</span>(age)),</a>
+<a class="sourceLine" id="cb2658-3" data-line-number="3"><span class="dt">bmiq=</span><span class="kw">list</span>(<span class="kw">quantile</span>(bmi)))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 2
 ##   ageq      bmiq     
 ##   &lt;list&gt;    &lt;list&gt;   
 ## 1 &lt;dbl [5]&gt; &lt;dbl [5]&gt;</code></pre>
 <p>These are list-columns containing the five quantiles for each
 variable, which we then have to pull apart:</p>
-<div class="sourceCode" id="cb2628"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2628-1" data-line-number="1">whas100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age,bmi) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2628-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">ageq=</span><span class="kw">list</span>(<span class="kw">quantile</span>(age)),</a>
-<a class="sourceLine" id="cb2628-3" data-line-number="3"><span class="dt">bmiq=</span><span class="kw">list</span>(<span class="kw">quantile</span>(bmi))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2628-4" data-line-number="4"><span class="kw">unnest</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2660"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2660-1" data-line-number="1">whas100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age,bmi) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2660-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">ageq=</span><span class="kw">list</span>(<span class="kw">quantile</span>(age)),</a>
+<a class="sourceLine" id="cb2660-3" data-line-number="3"><span class="dt">bmiq=</span><span class="kw">list</span>(<span class="kw">quantile</span>(bmi))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2660-4" data-line-number="4"><span class="kw">unnest</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##    ageq  bmiq
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -607,12 +607,12 @@ the five-number summary, rather than just one number (in which case it
 would be a regular <code>summarize</code>).
 This might strike you as a bit repetitive. There is also a <code>summarize_all</code>, which summarizes all the columns (after you’ve done the <code>select</code>).
 This requires a function to summarize with, which we need to write first:</p>
-<div class="sourceCode" id="cb2630"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2630-1" data-line-number="1">lq=<span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb2630-2" data-line-number="2"><span class="kw">list</span>(<span class="kw">quantile</span>(x))</a>
-<a class="sourceLine" id="cb2630-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb2630-4" data-line-number="4">whas100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age, bmi) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2630-5" data-line-number="5"><span class="kw">summarize_all</span>(lq) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2630-6" data-line-number="6"><span class="kw">unnest</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2662"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2662-1" data-line-number="1">lq=<span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb2662-2" data-line-number="2"><span class="kw">list</span>(<span class="kw">quantile</span>(x))</a>
+<a class="sourceLine" id="cb2662-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb2662-4" data-line-number="4">whas100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age, bmi) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2662-5" data-line-number="5"><span class="kw">summarize_all</span>(lq) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2662-6" data-line-number="6"><span class="kw">unnest</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##     age   bmi
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -623,7 +623,7 @@ This requires a function to summarize with, which we need to write first:</p>
 ## 5  92    39.9</code></pre>
 <p>The <code>summary</code> approach is simply this (which I think I now like
 best of all):</p>
-<div class="sourceCode" id="cb2632"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2632-1" data-line-number="1"><span class="kw">summary</span>(whas100)</a></code></pre></div>
+<div class="sourceCode" id="cb2664"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2664-1" data-line-number="1"><span class="kw">summary</span>(whas100)</a></code></pre></div>
 <pre><code>##        X1               id          admitdate           foldate         
 ##  Min.   :  1.00   Min.   :  1.00   Length:100         Length:100        
 ##  1st Qu.: 25.75   1st Qu.: 25.75   Class :character   Class :character  
@@ -648,7 +648,7 @@ best of all):</p>
 <p>or, if you want just the summaries of <code>age</code> and <code>bmi</code>,
 you select those columns first before passing the data frame into
 <code>summary</code>:</p>
-<div class="sourceCode" id="cb2634"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2634-1" data-line-number="1">whas100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age,bmi) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2666"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2666-1" data-line-number="1">whas100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age,bmi) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##       age             bmi       
 ##  Min.   :32.00   Min.   :14.92  
 ##  1st Qu.:59.75   1st Qu.:23.54  
@@ -666,8 +666,8 @@ with.</li>
 </ol>
 <p>Solution</p>
 <p>The inevitable <code>crossing</code>:</p>
-<div class="sourceCode" id="cb2636"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2636-1" data-line-number="1">whas100.new=<span class="kw">crossing</span>(<span class="dt">age=</span><span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">71</span>,<span class="dv">80</span>),<span class="dt">bmi=</span><span class="kw">c</span>(<span class="dv">24</span>,<span class="dv">27</span>,<span class="dv">30</span>))</a>
-<a class="sourceLine" id="cb2636-2" data-line-number="2">whas100.new</a></code></pre></div>
+<div class="sourceCode" id="cb2668"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2668-1" data-line-number="1">whas100.new=<span class="kw">crossing</span>(<span class="dt">age=</span><span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">71</span>,<span class="dv">80</span>),<span class="dt">bmi=</span><span class="kw">c</span>(<span class="dv">24</span>,<span class="dv">27</span>,<span class="dv">30</span>))</a>
+<a class="sourceLine" id="cb2668-2" data-line-number="2">whas100.new</a></code></pre></div>
 <pre><code>## # A tibble: 9 x 2
 ##     age   bmi
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -682,10 +682,10 @@ with.</li>
 ## 9    80    30</code></pre>
 <p>Or, with some setup beforehand to make the <code>crossing</code>
 clearer. This is my no-think approach:</p>
-<div class="sourceCode" id="cb2638"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2638-1" data-line-number="1">ages=<span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">71</span>,<span class="dv">80</span>)</a>
-<a class="sourceLine" id="cb2638-2" data-line-number="2">bmis=<span class="kw">c</span>(<span class="dv">24</span>,<span class="dv">27</span>,<span class="dv">30</span>)</a>
-<a class="sourceLine" id="cb2638-3" data-line-number="3">whas100.new=<span class="kw">crossing</span>(<span class="dt">age=</span>ages,<span class="dt">bmi=</span>bmis)</a>
-<a class="sourceLine" id="cb2638-4" data-line-number="4">whas100.new</a></code></pre></div>
+<div class="sourceCode" id="cb2670"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2670-1" data-line-number="1">ages=<span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">71</span>,<span class="dv">80</span>)</a>
+<a class="sourceLine" id="cb2670-2" data-line-number="2">bmis=<span class="kw">c</span>(<span class="dv">24</span>,<span class="dv">27</span>,<span class="dv">30</span>)</a>
+<a class="sourceLine" id="cb2670-3" data-line-number="3">whas100.new=<span class="kw">crossing</span>(<span class="dt">age=</span>ages,<span class="dt">bmi=</span>bmis)</a>
+<a class="sourceLine" id="cb2670-4" data-line-number="4">whas100.new</a></code></pre></div>
 <pre><code>## # A tibble: 9 x 2
 ##     age   bmi
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -707,7 +707,7 @@ at the results, though you can if you want to.)</li>
 <p>The magic word is <code>survfit</code> (which plays the role of
 <code>predict</code> here). The best model is <code>whas100.2</code>,
 with the non-significant <code>gender</code> removed:</p>
-<div class="sourceCode" id="cb2640"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2640-1" data-line-number="1">pp2=<span class="kw">survfit</span>(whas100<span class="fl">.2</span>,whas100.new,<span class="dt">data=</span>whas100)</a></code></pre></div>
+<div class="sourceCode" id="cb2672"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2672-1" data-line-number="1">pp2=<span class="kw">survfit</span>(whas100<span class="fl">.2</span>,whas100.new,<span class="dt">data=</span>whas100)</a></code></pre></div>
 <p>This doesn’t need the <code>data=</code> at the end (it works perfectly
 well without), but the plot (later) seems to need it to be there. I
 think the plot needs the information from the original data to be in
@@ -722,7 +722,7 @@ survival curves.</li>
 </ol>
 <p>Solution</p>
 <p>This is actually easy once you work out what to do:</p>
-<div class="sourceCode" id="cb2641"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2641-1" data-line-number="1"><span class="kw">ggsurvplot</span>(pp2, <span class="dt">conf.int=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb2673"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2673-1" data-line-number="1"><span class="kw">ggsurvplot</span>(pp2, <span class="dt">conf.int=</span>F)</a></code></pre></div>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672"  /></p>
 <p>Without the <code>conf.int</code> thing, you get confidence intervals for
 each survival curve, which overlap each other and generally make the
@@ -731,7 +731,7 @@ plot look messy.</p>
 predicted for, so it’s usually a good idea to list the “new”
 prediction data frame, either here or when you assess the effects of
 the variables (next part) so that you can see which is which:</p>
-<div class="sourceCode" id="cb2642"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2642-1" data-line-number="1">whas100.new</a></code></pre></div>
+<div class="sourceCode" id="cb2674"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2674-1" data-line-number="1">whas100.new</a></code></pre></div>
 <pre><code>## # A tibble: 9 x 2
 ##     age   bmi
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -780,7 +780,7 @@ around. According to Wikipedia
 here are “overweight” or close to it. Maybe being heavier helps
 the body recover from a heart attack.</p>
 <p>Let’s start with the martingale residual plot:</p>
-<div class="sourceCode" id="cb2644"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2644-1" data-line-number="1"><span class="kw">ggcoxdiagnostics</span>(whas100<span class="fl">.2</span>)<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2676"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2676-1" data-line-number="1"><span class="kw">ggcoxdiagnostics</span>(whas100<span class="fl">.2</span>)<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-20-1.png" width="672"  /></p>
 <p>There is a suspicion of bendiness here, though the left side of the
@@ -789,8 +789,8 @@ left. In any case, this suggests that nonlinearity (evidently in terms
 of BMI, since that’s the relationship that currently makes no sense)
 would be worth exploring.</p>
 <p>Thus:</p>
-<div class="sourceCode" id="cb2646"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2646-1" data-line-number="1">whas100<span class="fl">.3</span>=<span class="kw">update</span>(whas100<span class="fl">.2</span>,.<span class="op">~</span>.<span class="op">+</span><span class="kw">I</span>(bmi<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb2646-2" data-line-number="2"><span class="kw">summary</span>(whas100<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2678"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2678-1" data-line-number="1">whas100<span class="fl">.3</span>=<span class="kw">update</span>(whas100<span class="fl">.2</span>,.<span class="op">~</span>.<span class="op">+</span><span class="kw">I</span>(bmi<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb2678-2" data-line-number="2"><span class="kw">summary</span>(whas100<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + bmi + I(bmi^2), data = whas100)
 ## 
@@ -823,10 +823,10 @@ model, the effect of BMI is the same for all ages (to make it
 different, we would need an interaction term, ANOVA-style).</p>
 <p>First we create a data frame with a bunch of different BMIs in, and
 one age 70:</p>
-<div class="sourceCode" id="cb2648"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2648-1" data-line-number="1">bmis=<span class="kw">seq</span>(<span class="dv">20</span>,<span class="dv">36</span>,<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb2648-2" data-line-number="2">ages=<span class="dv">70</span></a>
-<a class="sourceLine" id="cb2648-3" data-line-number="3">whas100.new<span class="fl">.2</span>=<span class="kw">crossing</span>(<span class="dt">bmi=</span>bmis,<span class="dt">age=</span>ages)</a>
-<a class="sourceLine" id="cb2648-4" data-line-number="4">whas100.new<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb2680"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2680-1" data-line-number="1">bmis=<span class="kw">seq</span>(<span class="dv">20</span>,<span class="dv">36</span>,<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb2680-2" data-line-number="2">ages=<span class="dv">70</span></a>
+<a class="sourceLine" id="cb2680-3" data-line-number="3">whas100.new<span class="fl">.2</span>=<span class="kw">crossing</span>(<span class="dt">bmi=</span>bmis,<span class="dt">age=</span>ages)</a>
+<a class="sourceLine" id="cb2680-4" data-line-number="4">whas100.new<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##     bmi   age
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -838,13 +838,13 @@ one age 70:</p>
 <p>It is rather absurd to have a plural <code>ages</code> with only one age
 in it, but that’s the way it goes, if you’re me and trying to avoid thinking.</p>
 <p>Predictions, using the model with the squared term in it:</p>
-<div class="sourceCode" id="cb2650"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2650-1" data-line-number="1">pp3=<span class="kw">survfit</span>(whas100<span class="fl">.3</span>,whas100.new<span class="fl">.2</span>,<span class="dt">data=</span>whas100)</a></code></pre></div>
+<div class="sourceCode" id="cb2682"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2682-1" data-line-number="1">pp3=<span class="kw">survfit</span>(whas100<span class="fl">.3</span>,whas100.new<span class="fl">.2</span>,<span class="dt">data=</span>whas100)</a></code></pre></div>
 <p>And then the plot:</p>
-<div class="sourceCode" id="cb2651"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2651-1" data-line-number="1"><span class="kw">ggsurvplot</span>(pp3, <span class="dt">conf.int=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb2683"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2683-1" data-line-number="1"><span class="kw">ggsurvplot</span>(pp3, <span class="dt">conf.int=</span>F)</a></code></pre></div>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-24-1.png" width="672"  /></p>
 <p>and the customary reminder of which stratum is which, with its rather
 ungainly name:</p>
-<div class="sourceCode" id="cb2652"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2652-1" data-line-number="1">whas100.new<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb2684"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2684-1" data-line-number="1">whas100.new<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##     bmi   age
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -892,8 +892,8 @@ have what was promised above.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb2654"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2654-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt&quot;</span></a>
-<a class="sourceLine" id="cb2654-2" data-line-number="2">drugusers=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2686"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2686-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt&quot;</span></a>
+<a class="sourceLine" id="cb2686-2" data-line-number="2">drugusers=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   row = col_integer(),
@@ -906,7 +906,7 @@ have what was promised above.</li>
 ##   censor = col_integer(),
 ##   herco = col_integer()
 ## )</code></pre>
-<div class="sourceCode" id="cb2656"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2656-1" data-line-number="1">drugusers</a></code></pre></div>
+<div class="sourceCode" id="cb2688"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2688-1" data-line-number="1">drugusers</a></code></pre></div>
 <pre><code>## # A tibble: 628 x 9
 ##      row    ID   age ndrugtx treat  site  time censor herco
 ##    &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt;
@@ -930,7 +930,7 @@ removes all rows that have missing values in them.)</li>
 </ol>
 <p>Solution</p>
 <p>First off, <code>summary</code> is a quick way to show how many missing values there are:</p>
-<div class="sourceCode" id="cb2658"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2658-1" data-line-number="1"><span class="kw">summary</span>(drugusers)</a></code></pre></div>
+<div class="sourceCode" id="cb2690"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2690-1" data-line-number="1"><span class="kw">summary</span>(drugusers)</a></code></pre></div>
 <pre><code>##       row              ID             age           ndrugtx      
 ##  Min.   :  1.0   Min.   :  1.0   Min.   :20.00   Min.   : 0.000  
 ##  1st Qu.:157.8   1st Qu.:157.8   1st Qu.:27.00   1st Qu.: 1.000  
@@ -958,9 +958,9 @@ removes all rows that have missing values in them.)</li>
 <p>Age has five missing values and “number of previous drug treatments”
 has seventeen.</p>
 <p>Following the instructions, and saving back into the original dataframe:</p>
-<div class="sourceCode" id="cb2660"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2660-1" data-line-number="1">drugusers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">drop_na</span>() -&gt;<span class="st"> </span>drugusers</a></code></pre></div>
+<div class="sourceCode" id="cb2692"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2692-1" data-line-number="1">drugusers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">drop_na</span>() -&gt;<span class="st"> </span>drugusers</a></code></pre></div>
 <p>and then</p>
-<div class="sourceCode" id="cb2661"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2661-1" data-line-number="1"><span class="kw">summary</span>(drugusers)</a></code></pre></div>
+<div class="sourceCode" id="cb2693"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2693-1" data-line-number="1"><span class="kw">summary</span>(drugusers)</a></code></pre></div>
 <pre><code>##       row              ID             age           ndrugtx      
 ##  Min.   :  1.0   Min.   :  1.0   Min.   :20.00   Min.   : 0.000  
 ##  1st Qu.:155.2   1st Qu.:155.2   1st Qu.:27.00   1st Qu.: 1.000  
@@ -984,7 +984,7 @@ has seventeen.</p>
 ##  Max.   :3.00</code></pre>
 <p>No NA left. Gosh, as they say, that was easy.</p>
 <p>Extra: how many rows did we lose:</p>
-<div class="sourceCode" id="cb2663"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2663-1" data-line-number="1"><span class="kw">nrow</span>(drugusers)</a></code></pre></div>
+<div class="sourceCode" id="cb2695"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2695-1" data-line-number="1"><span class="kw">nrow</span>(drugusers)</a></code></pre></div>
 <pre><code>## [1] 610</code></pre>
 <p>There were 628 rows before, so we lost 18. (There were 22 missing
 values, but some of them were two on one row, so we only lost 18
@@ -1007,17 +1007,17 @@ data frame so that they have sensible (text) values.</li>
 <li><p><code>herco</code></p></li>
 </ul>
 <p>Most of them have only two levels, so it doesn’t matter whether we make them categorical or leave them as numbers, but for <code>herco</code> it matters. Let’s give them all sensible values, mostly with <code>ifelse</code>, thus:</p>
-<div class="sourceCode" id="cb2665"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2665-1" data-line-number="1">drugusers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb2665-2" data-line-number="2"><span class="dt">treat=</span><span class="kw">ifelse</span>(treat<span class="op">==</span><span class="dv">0</span>, <span class="st">&quot;short&quot;</span>, <span class="st">&quot;long&quot;</span>),</a>
-<a class="sourceLine" id="cb2665-3" data-line-number="3"><span class="dt">site=</span><span class="kw">ifelse</span>(site<span class="op">==</span><span class="dv">0</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>),</a>
-<a class="sourceLine" id="cb2665-4" data-line-number="4"><span class="dt">censor=</span><span class="kw">ifelse</span>(censor<span class="op">==</span><span class="dv">1</span>, <span class="st">&quot;returned&quot;</span>, <span class="st">&quot;no-return&quot;</span>),</a>
-<a class="sourceLine" id="cb2665-5" data-line-number="5"><span class="dt">herco=</span><span class="kw">case_when</span>(</a>
-<a class="sourceLine" id="cb2665-6" data-line-number="6">herco<span class="op">==</span><span class="dv">1</span> <span class="op">~</span><span class="st"> &quot;both&quot;</span>,</a>
-<a class="sourceLine" id="cb2665-7" data-line-number="7">herco<span class="op">==</span><span class="dv">2</span> <span class="op">~</span><span class="st"> &quot;one&quot;</span>,</a>
-<a class="sourceLine" id="cb2665-8" data-line-number="8">herco<span class="op">==</span><span class="dv">3</span> <span class="op">~</span><span class="st"> &quot;neither&quot;</span>)</a>
-<a class="sourceLine" id="cb2665-9" data-line-number="9">) -&gt;<span class="st"> </span>drugusers</a></code></pre></div>
+<div class="sourceCode" id="cb2697"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2697-1" data-line-number="1">drugusers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb2697-2" data-line-number="2"><span class="dt">treat=</span><span class="kw">ifelse</span>(treat<span class="op">==</span><span class="dv">0</span>, <span class="st">&quot;short&quot;</span>, <span class="st">&quot;long&quot;</span>),</a>
+<a class="sourceLine" id="cb2697-3" data-line-number="3"><span class="dt">site=</span><span class="kw">ifelse</span>(site<span class="op">==</span><span class="dv">0</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>),</a>
+<a class="sourceLine" id="cb2697-4" data-line-number="4"><span class="dt">censor=</span><span class="kw">ifelse</span>(censor<span class="op">==</span><span class="dv">1</span>, <span class="st">&quot;returned&quot;</span>, <span class="st">&quot;no-return&quot;</span>),</a>
+<a class="sourceLine" id="cb2697-5" data-line-number="5"><span class="dt">herco=</span><span class="kw">case_when</span>(</a>
+<a class="sourceLine" id="cb2697-6" data-line-number="6">herco<span class="op">==</span><span class="dv">1</span> <span class="op">~</span><span class="st"> &quot;both&quot;</span>,</a>
+<a class="sourceLine" id="cb2697-7" data-line-number="7">herco<span class="op">==</span><span class="dv">2</span> <span class="op">~</span><span class="st"> &quot;one&quot;</span>,</a>
+<a class="sourceLine" id="cb2697-8" data-line-number="8">herco<span class="op">==</span><span class="dv">3</span> <span class="op">~</span><span class="st"> &quot;neither&quot;</span>)</a>
+<a class="sourceLine" id="cb2697-9" data-line-number="9">) -&gt;<span class="st"> </span>drugusers</a></code></pre></div>
 <p>I’m living on the edge and overwriting everything:</p>
-<div class="sourceCode" id="cb2666"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2666-1" data-line-number="1">drugusers</a></code></pre></div>
+<div class="sourceCode" id="cb2698"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2698-1" data-line-number="1">drugusers</a></code></pre></div>
 <pre><code>## # A tibble: 610 x 9
 ##      row    ID   age ndrugtx treat site   time censor    herco  
 ##    &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;  
@@ -1045,7 +1045,7 @@ variable needs to encode two things: the time until the event of
 interest (return to drug use) and whether or not that event
 happened for each patient. In this case, that is
 <code>censor=&quot;returned&quot;</code>.</p>
-<div class="sourceCode" id="cb2668"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2668-1" data-line-number="1">y=<span class="kw">with</span>(drugusers,<span class="kw">Surv</span>(time,censor<span class="op">==</span><span class="st">&quot;returned&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2700"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2700-1" data-line-number="1">y=<span class="kw">with</span>(drugusers,<span class="kw">Surv</span>(time,censor<span class="op">==</span><span class="st">&quot;returned&quot;</span>))</a></code></pre></div>
 <p>Use whatever name you gave to the level of <code>censor</code> that means “returned to drug use”.</p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Look at the first few values of your response variable. Why
@@ -1054,13 +1054,13 @@ is the fifth one marked with a <code>+</code>? Explain briefly.</li>
 <p>Solution</p>
 <p><code>head</code> works as well with a vector (displaying the first
 six values) as it does with a data frame:</p>
-<div class="sourceCode" id="cb2669"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2669-1" data-line-number="1"><span class="kw">head</span>(y)</a></code></pre></div>
+<div class="sourceCode" id="cb2701"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2701-1" data-line-number="1"><span class="kw">head</span>(y)</a></code></pre></div>
 <pre><code>## [1] 188   26  207  144  551+  32</code></pre>
 <p>The fifth value is marked with a <code>+</code> because it is a censored
 value: this is a patient who was never observed to go back to drug
 use. You can tell this by looking at the <code>head</code> of the entire
 data frame:</p>
-<div class="sourceCode" id="cb2671"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2671-1" data-line-number="1"><span class="kw">head</span>(drugusers)</a></code></pre></div>
+<div class="sourceCode" id="cb2703"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2703-1" data-line-number="1"><span class="kw">head</span>(drugusers)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 9
 ##     row    ID   age ndrugtx treat site   time censor    herco  
 ##   &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;  
@@ -1075,7 +1075,7 @@ data frame:</p>
 <p>Typically, censored values will be bigger than uncensored ones,
 because (in general) the individual will be observed until the study
 ends, and studies of this kind carry on for years:</p>
-<div class="sourceCode" id="cb2673"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2673-1" data-line-number="1"><span class="kw">ggplot</span>(drugusers,<span class="kw">aes</span>(<span class="dt">x=</span>censor,<span class="dt">y=</span>time))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2705"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2705-1" data-line-number="1"><span class="kw">ggplot</span>(drugusers,<span class="kw">aes</span>(<span class="dt">x=</span>censor,<span class="dt">y=</span>time))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-36-1.png" width="672"  /></p>
 <p>Yep. The smallest time for a censored observation would be an upper outlier
 if it were observed for an uncensored observation.</p>
@@ -1085,8 +1085,8 @@ distinguish groups as a boxplot requires.</p>
 year ago). Suppose you want to compare times for the two treatment
 groups, and you <em>also</em> want to distinguish censored from
 non-censored observations. Then, this works:</p>
-<div class="sourceCode" id="cb2674"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2674-1" data-line-number="1"><span class="kw">ggplot</span>(drugusers,<span class="kw">aes</span>(<span class="dt">x=</span>treat,<span class="dt">y=</span>time,<span class="dt">colour=</span>censor))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2674-2" data-line-number="2"><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2706"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2706-1" data-line-number="1"><span class="kw">ggplot</span>(drugusers,<span class="kw">aes</span>(<span class="dt">x=</span>treat,<span class="dt">y=</span>time,<span class="dt">colour=</span>censor))<span class="op">+</span></a>
+<a class="sourceLine" id="cb2706-2" data-line-number="2"><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-37-1.png" width="672"  /></p>
 <p>For each treatment, you get side-by-side boxplots of the times for
 censored (red) and uncensored (blue) observations, and so you see for
@@ -1101,8 +1101,8 @@ the other variables (except for <code>row</code> and <code>ID</code>) that you h
 yet. Display the results.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2675"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2675-1" data-line-number="1">drugusers<span class="fl">.1</span>=<span class="kw">coxph</span>(y<span class="op">~</span>age<span class="op">+</span>ndrugtx<span class="op">+</span>treat<span class="op">+</span>site<span class="op">+</span>herco,<span class="dt">data=</span>drugusers)</a>
-<a class="sourceLine" id="cb2675-2" data-line-number="2"><span class="kw">summary</span>(drugusers<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2707"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2707-1" data-line-number="1">drugusers<span class="fl">.1</span>=<span class="kw">coxph</span>(y<span class="op">~</span>age<span class="op">+</span>ndrugtx<span class="op">+</span>treat<span class="op">+</span>site<span class="op">+</span>herco,<span class="dt">data=</span>drugusers)</a>
+<a class="sourceLine" id="cb2707-2" data-line-number="2"><span class="kw">summary</span>(drugusers<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + ndrugtx + treat + site + herco, data = drugusers)
 ## 
@@ -1133,8 +1133,8 @@ yet. Display the results.</li>
 ## Score (logrank) test = 37.36  on 6 df,   p=1e-06</code></pre>
 <p>Another way to handle
 “all the other <span class="math inline">\(x\)</span>’s except <code>row</code>, <code>ID</code>, <code>time</code> and <code>censor</code>” is this:</p>
-<div class="sourceCode" id="cb2677"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2677-1" data-line-number="1">drugusers<span class="fl">.1</span>a=<span class="kw">coxph</span>(y<span class="op">~</span>.<span class="op">-</span>row<span class="op">-</span>ID<span class="op">-</span>time<span class="op">-</span>censor,<span class="dt">data=</span>drugusers)</a>
-<a class="sourceLine" id="cb2677-2" data-line-number="2">broom<span class="op">::</span><span class="kw">tidy</span>(drugusers<span class="fl">.1</span>a)</a></code></pre></div>
+<div class="sourceCode" id="cb2709"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2709-1" data-line-number="1">drugusers<span class="fl">.1</span>a=<span class="kw">coxph</span>(y<span class="op">~</span>.<span class="op">-</span>row<span class="op">-</span>ID<span class="op">-</span>time<span class="op">-</span>censor,<span class="dt">data=</span>drugusers)</a>
+<a class="sourceLine" id="cb2709-2" data-line-number="2">broom<span class="op">::</span><span class="kw">tidy</span>(drugusers<span class="fl">.1</span>a)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 7
 ##   term         estimate std.error statistic    p.value conf.low conf.high
 ##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -1151,7 +1151,7 @@ yet. Display the results.</li>
 </ol>
 <p>Solution</p>
 <p>The hint is meant to suggest to you that looking at <code>drop1</code> is the right way to go:</p>
-<div class="sourceCode" id="cb2679"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2679-1" data-line-number="1"><span class="kw">drop1</span>(drugusers<span class="fl">.1</span>, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2711"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2711-1" data-line-number="1"><span class="kw">drop1</span>(drugusers<span class="fl">.1</span>, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1177,14 +1177,14 @@ that your smaller model is the better one.</li>
 <p>Solution</p>
 <p><code>site</code> and <code>herco</code> are the two variables to come
 out.
-<label for="tufte-mn-157" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-157" class="margin-toggle"><span class="marginnote">The researchers were probably relieved that there was not quite a significant effect of <em>site</em>.</span> I like
+<label for="tufte-mn-159" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-159" class="margin-toggle"><span class="marginnote">The researchers were probably relieved that there was not quite a significant effect of <em>site</em>.</span> I like
 <code>update</code>, but there is no
 problem about copying-pasting your <code>coxph</code> and taking out
 what you no longer need.</p>
-<div class="sourceCode" id="cb2681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2681-1" data-line-number="1">drugusers<span class="fl">.2</span>=<span class="kw">update</span>(drugusers<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>site<span class="op">-</span>herco)</a></code></pre></div>
+<div class="sourceCode" id="cb2713"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2713-1" data-line-number="1">drugusers<span class="fl">.2</span>=<span class="kw">update</span>(drugusers<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>site<span class="op">-</span>herco)</a></code></pre></div>
 <p>Having fit two models, we can use <code>anova</code> to compare them. The
 right test gets done, so no need for <code>test=</code>:</p>
-<div class="sourceCode" id="cb2682"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2682-1" data-line-number="1"><span class="kw">anova</span>(drugusers<span class="fl">.2</span>,drugusers<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2714"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2714-1" data-line-number="1"><span class="kw">anova</span>(drugusers<span class="fl">.2</span>,drugusers<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Analysis of Deviance Table
 ##  Cox model: response is  y
 ##  Model 1: ~ age + ndrugtx + treat
@@ -1196,7 +1196,7 @@ right test gets done, so no need for <code>test=</code>:</p>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>There is no significant difference between these two
 models,
-<label for="tufte-mn-158" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-158" class="margin-toggle"><span class="marginnote">Not at the 0.05 level, anyway.</span> so we can go with the
+<label for="tufte-mn-160" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-160" class="margin-toggle"><span class="marginnote">Not at the 0.05 level, anyway.</span> so we can go with the
 smaller, simpler one
 (with just <code>age</code>, <code>ndrugtx</code> and <code>treat</code>).</p>
 <ol style="list-style-type: lower-roman">
@@ -1206,7 +1206,7 @@ sensible signs (plus or minus), based on what you know or can guess
 about drug treatments? Explain briefly.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2684"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2684-1" data-line-number="1"><span class="kw">summary</span>(drugusers<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2716"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2716-1" data-line-number="1"><span class="kw">summary</span>(drugusers<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + ndrugtx + treat, data = drugusers)
 ## 
@@ -1271,11 +1271,11 @@ frame). Display the resulting data frame.</li>
 <p>This data frame is going to be used for prediction, so I will
 call it <code>new</code> and construct it in pieces as I did before
 (thus meaning that I don’t have to think too hard about what I’m doing):</p>
-<div class="sourceCode" id="cb2686"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2686-1" data-line-number="1">ages=<span class="kw">c</span>(<span class="dv">27</span>,<span class="dv">37</span>)</a>
-<a class="sourceLine" id="cb2686-2" data-line-number="2">ndrugtxs=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">6</span>)</a>
-<a class="sourceLine" id="cb2686-3" data-line-number="3">treats=<span class="kw">c</span>(<span class="st">&quot;short&quot;</span>,<span class="st">&quot;long&quot;</span>)</a>
-<a class="sourceLine" id="cb2686-4" data-line-number="4">new=<span class="kw">crossing</span>(<span class="dt">age=</span>ages,<span class="dt">ndrugtx=</span>ndrugtxs,<span class="dt">treat=</span>treats)</a>
-<a class="sourceLine" id="cb2686-5" data-line-number="5">new</a></code></pre></div>
+<div class="sourceCode" id="cb2718"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2718-1" data-line-number="1">ages=<span class="kw">c</span>(<span class="dv">27</span>,<span class="dv">37</span>)</a>
+<a class="sourceLine" id="cb2718-2" data-line-number="2">ndrugtxs=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb2718-3" data-line-number="3">treats=<span class="kw">c</span>(<span class="st">&quot;short&quot;</span>,<span class="st">&quot;long&quot;</span>)</a>
+<a class="sourceLine" id="cb2718-4" data-line-number="4">new=<span class="kw">crossing</span>(<span class="dt">age=</span>ages,<span class="dt">ndrugtx=</span>ndrugtxs,<span class="dt">treat=</span>treats)</a>
+<a class="sourceLine" id="cb2718-5" data-line-number="5">new</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 3
 ##     age ndrugtx treat
 ##   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;
@@ -1297,7 +1297,7 @@ plot it shortly).</li>
 <p>Solution</p>
 <p><code>survfit</code> is the survival analysis version of
 <code>predict</code> and works the same way, so this is all you need:</p>
-<div class="sourceCode" id="cb2688"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2688-1" data-line-number="1">pp=<span class="kw">survfit</span>(drugusers<span class="fl">.2</span>,new,<span class="dt">data=</span>drugusers)</a></code></pre></div>
+<div class="sourceCode" id="cb2720"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2720-1" data-line-number="1">pp=<span class="kw">survfit</span>(drugusers<span class="fl">.2</span>,new,<span class="dt">data=</span>drugusers)</a></code></pre></div>
 <p>Make sure that you use your best model, ie. the second one. The
 <code>data=</code> is needed for the plot below, not in itself for the
 prediction.</p>
@@ -1306,14 +1306,14 @@ prediction.</p>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb2689"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2689-1" data-line-number="1"><span class="kw">ggsurvplot</span>(pp, <span class="dt">conf.int=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb2721"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2721-1" data-line-number="1"><span class="kw">ggsurvplot</span>(pp, <span class="dt">conf.int=</span>F)</a></code></pre></div>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-46-1.png" width="672"  /></p>
 <p>The only thing to remember is that you plot your <em>predictions</em>,
 not the model from which they came.</p>
 <p>If your plot didn’t come out, you may have to go back and re-do the
 <code>survfit</code> with the <code>data=</code> at the end.</p>
 <p>For reference in a minute:</p>
-<div class="sourceCode" id="cb2690"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2690-1" data-line-number="1">new</a></code></pre></div>
+<div class="sourceCode" id="cb2722"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2722-1" data-line-number="1">new</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 3
 ##     age ndrugtx treat
 ##   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;
@@ -1390,7 +1390,7 @@ The variables are:</p>
 <li><p><code>logbun</code>: log of BUN test score (BUN test is a test of
 kidney function, not to be confused with cha siu
 bao
-<label for="tufte-mn-159" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-159" class="margin-toggle"><span class="marginnote">Barbecued pork in a bun. A staple of Chinese dim sum and Chinese bakeries, such as Ding Dong bakery on Spadina.</span>).</p></li>
+<label for="tufte-mn-161" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-161" class="margin-toggle"><span class="marginnote">Barbecued pork in a bun. A staple of Chinese dim sum and Chinese bakeries, such as Ding Dong bakery on Spadina.</span>).</p></li>
 <li><p><code>hgb</code>: hemoglobin (at diagnosis).</p></li>
 <li><p><code>platelet</code>: platelets: 1=normal, 0=abnormal (at
 diagnosis).</p></li>
@@ -1414,8 +1414,8 @@ you have the right number of observations and the right variables.</li>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb2692"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2692-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv&quot;</span></a>
-<a class="sourceLine" id="cb2692-2" data-line-number="2">myeloma=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb2724"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2724-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv&quot;</span></a>
+<a class="sourceLine" id="cb2724-2" data-line-number="2">myeloma=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   time = col_double(),
@@ -1430,7 +1430,7 @@ you have the right number of observations and the right variables.</li>
 ##   protein = col_double(),
 ##   scalc = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2694"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2694-1" data-line-number="1">myeloma</a></code></pre></div>
+<div class="sourceCode" id="cb2726"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2726-1" data-line-number="1">myeloma</a></code></pre></div>
 <pre><code>## # A tibble: 65 x 11
 ##     time vstatus logbun   hgb platelet   age logwbc  frac logpbm protein
 ##    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
@@ -1451,7 +1451,7 @@ further (not necessary here), you can check that the variables
 zero and one actually <em>are</em> zero and one, at least for the values
 shown (they are), and the ages look like ages (they do).</p>
 <p>The tidyverse also offers:</p>
-<div class="sourceCode" id="cb2696"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2696-1" data-line-number="1"><span class="kw">glimpse</span>(myeloma)</a></code></pre></div>
+<div class="sourceCode" id="cb2728"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2728-1" data-line-number="1"><span class="kw">glimpse</span>(myeloma)</a></code></pre></div>
 <pre><code>## Observations: 65
 ## Variables: 11
 ## $ time     &lt;dbl&gt; 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00,...
@@ -1466,10 +1466,10 @@ shown (they are), and the ages look like ages (they do).</p>
 ## $ protein  &lt;dbl&gt; 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0,...
 ## $ scalc    &lt;dbl&gt; 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13,...</code></pre>
 <p>which gives a bit more of a picture of the values.
-<label for="tufte-mn-160" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-160" class="margin-toggle"><span class="marginnote">Don’t confuse this with <em>glance</em> from <em>broom</em>, which gives a one-line summary of a <em>model</em>, containing things like R-squared and a test for the overall model significance.</span>
+<label for="tufte-mn-162" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-162" class="margin-toggle"><span class="marginnote">Don’t confuse this with <em>glance</em> from <em>broom</em>, which gives a one-line summary of a <em>model</em>, containing things like R-squared and a test for the overall model significance.</span>
 Or if you were
 serious about checking, you could do</p>
-<div class="sourceCode" id="cb2698"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2698-1" data-line-number="1"><span class="kw">summary</span>(myeloma)</a></code></pre></div>
+<div class="sourceCode" id="cb2730"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2730-1" data-line-number="1"><span class="kw">summary</span>(myeloma)</a></code></pre></div>
 <pre><code>##       time          vstatus           logbun            hgb      
 ##  Min.   : 1.25   Min.   :0.0000   Min.   :0.7782   Min.   : 4.9  
 ##  1st Qu.: 7.00   1st Qu.:0.0000   1st Qu.:1.1461   1st Qu.: 8.8  
@@ -1506,8 +1506,8 @@ mean, without using a technical term.</li>
 yours whatever you like. Two things: the survival times, here
 <code>time</code>, and the indicator of the event, here
 <code>vstatus</code> being 1:</p>
-<div class="sourceCode" id="cb2700"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2700-1" data-line-number="1">y=<span class="kw">with</span>(myeloma,<span class="kw">Surv</span>(time, vstatus<span class="op">==</span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb2700-2" data-line-number="2">y</a></code></pre></div>
+<div class="sourceCode" id="cb2732"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2732-1" data-line-number="1">y=<span class="kw">with</span>(myeloma,<span class="kw">Surv</span>(time, vstatus<span class="op">==</span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb2732-2" data-line-number="2">y</a></code></pre></div>
 <pre><code>##  [1]  1.25   1.25   2.00   2.00   2.00   3.00   5.00   5.00   6.00   6.00 
 ## [11]  6.00   6.00   7.00   7.00   7.00   9.00  11.00  11.00  11.00  11.00 
 ## [21] 11.00  13.00  14.00  15.00  16.00  16.00  17.00  17.00  18.00  19.00 
@@ -1545,8 +1545,8 @@ ones that you used to make the response variable). Display the
 <p>Solution</p>
 <p>The obvious way to do this is to list all the other variables on
 the right side of the squiggle, but a faster way is this:</p>
-<div class="sourceCode" id="cb2702"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2702-1" data-line-number="1">y<span class="fl">.1</span>=<span class="kw">coxph</span>(y<span class="op">~</span>.<span class="op">-</span>time<span class="op">-</span>vstatus,<span class="dt">data=</span>myeloma)</a>
-<a class="sourceLine" id="cb2702-2" data-line-number="2"><span class="kw">summary</span>(y<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2734"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2734-1" data-line-number="1">y<span class="fl">.1</span>=<span class="kw">coxph</span>(y<span class="op">~</span>.<span class="op">-</span>time<span class="op">-</span>vstatus,<span class="dt">data=</span>myeloma)</a>
+<a class="sourceLine" id="cb2734-2" data-line-number="2"><span class="kw">summary</span>(y<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ . - time - vstatus, data = myeloma)
 ## 
@@ -1588,11 +1588,11 @@ frame, which here it was not). I used <code>time</code> and
 <code>vstatus</code> to make <code>y</code>, so I had to exclude them explicitly.</p>
 <p>If you forget to exclude <code>time</code> and <code>vstatus</code>, you are
 in danger of having a model that fits perfectly:</p>
-<div class="sourceCode" id="cb2704"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2704-1" data-line-number="1">y<span class="fl">.00</span>=<span class="kw">coxph</span>(y<span class="op">~</span>.,<span class="dt">data=</span>myeloma)</a></code></pre></div>
+<div class="sourceCode" id="cb2736"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2736-1" data-line-number="1">y<span class="fl">.00</span>=<span class="kw">coxph</span>(y<span class="op">~</span>.,<span class="dt">data=</span>myeloma)</a></code></pre></div>
 <pre><code>## Warning in fitter(X, Y, strats, offset, init, control, weights = weights, :
 ## Loglik converged before variable 1,2,3,4,5,6,7,8,9,10,11 ; beta may be
 ## infinite.</code></pre>
-<div class="sourceCode" id="cb2706"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2706-1" data-line-number="1"><span class="kw">summary</span>(y<span class="fl">.00</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2738"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2738-1" data-line-number="1"><span class="kw">summary</span>(y<span class="fl">.00</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ ., data = myeloma)
 ## 
@@ -1648,8 +1648,8 @@ Because there are so many variables to remove, I am frightened
 away from <code>update</code> here (which I would normally try to use
 in this situation). I’m going to copy-and-paste my code for
 <code>y.1</code> and edit it:</p>
-<div class="sourceCode" id="cb2708"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2708-1" data-line-number="1">y<span class="fl">.2</span>=<span class="kw">coxph</span>(y<span class="op">~</span>logbun<span class="op">+</span>hgb,<span class="dt">data=</span>myeloma)</a>
-<a class="sourceLine" id="cb2708-2" data-line-number="2"><span class="kw">summary</span>(y<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2740"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2740-1" data-line-number="1">y<span class="fl">.2</span>=<span class="kw">coxph</span>(y<span class="op">~</span>logbun<span class="op">+</span>hgb,<span class="dt">data=</span>myeloma)</a>
+<a class="sourceLine" id="cb2740-2" data-line-number="2"><span class="kw">summary</span>(y<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ logbun + hgb, data = myeloma)
 ## 
@@ -1681,7 +1681,7 @@ you prefer the second model? Explain briefly.</li>
 <p>Solution</p>
 <p>Comparing two models is <code>anova</code>, which also works here. The
 right <code>test</code> is <code>Chisq</code>:</p>
-<div class="sourceCode" id="cb2710"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2710-1" data-line-number="1"><span class="kw">anova</span>(y<span class="fl">.2</span>,y<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2742"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2742-1" data-line-number="1"><span class="kw">anova</span>(y<span class="fl">.2</span>,y<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Analysis of Deviance Table
 ##  Cox model: response is  y
 ##  Model 1: ~ logbun + hgb
@@ -1702,8 +1702,8 @@ happened is that the <code>.</code> got expanded out into all the
 variables separated by <code>+</code>, and then whatever else (the
 “minus” variables) were on the end.</p>
 <p>In case you are curious, <code>step</code> also works on models like these:</p>
-<div class="sourceCode" id="cb2712"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2712-1" data-line-number="1">y<span class="fl">.3</span>=<span class="kw">step</span>(y<span class="fl">.1</span>,<span class="dt">direction=</span><span class="st">&quot;backward&quot;</span>,<span class="dt">trace=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb2712-2" data-line-number="2"><span class="kw">summary</span>(y<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2744"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2744-1" data-line-number="1">y<span class="fl">.3</span>=<span class="kw">step</span>(y<span class="fl">.1</span>,<span class="dt">direction=</span><span class="st">&quot;backward&quot;</span>,<span class="dt">trace=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb2744-2" data-line-number="2"><span class="kw">summary</span>(y<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ logbun + hgb, data = myeloma)
 ## 
@@ -1742,16 +1742,16 @@ third quartiles, any way you like.</li>
 </ol>
 <p>Solution</p>
 <p>The obvious way is probably this:</p>
-<div class="sourceCode" id="cb2714"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2714-1" data-line-number="1"><span class="kw">quantile</span>(myeloma<span class="op">$</span>logbun)</a></code></pre></div>
+<div class="sourceCode" id="cb2746"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2746-1" data-line-number="1"><span class="kw">quantile</span>(myeloma<span class="op">$</span>logbun)</a></code></pre></div>
 <pre><code>##     0%    25%    50%    75%   100% 
 ## 0.7782 1.1461 1.3222 1.5682 2.2355</code></pre>
-<div class="sourceCode" id="cb2716"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2716-1" data-line-number="1"><span class="kw">quantile</span>(myeloma<span class="op">$</span>hgb)</a></code></pre></div>
+<div class="sourceCode" id="cb2748"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2748-1" data-line-number="1"><span class="kw">quantile</span>(myeloma<span class="op">$</span>hgb)</a></code></pre></div>
 <pre><code>##   0%  25%  50%  75% 100% 
 ##  4.9  8.8 10.2 12.0 14.6</code></pre>
 <p>So the quartiles are 1.15 and 1.57 for <code>logbun</code>, and 8.8 and
 12.0 for <code>hgb</code>.</p>
 <p>There are (at least) three other ways to do it. This is the easiest:</p>
-<div class="sourceCode" id="cb2718"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2718-1" data-line-number="1"><span class="kw">summary</span>(myeloma)</a></code></pre></div>
+<div class="sourceCode" id="cb2750"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2750-1" data-line-number="1"><span class="kw">summary</span>(myeloma)</a></code></pre></div>
 <pre><code>##       time          vstatus           logbun            hgb      
 ##  Min.   : 1.25   Min.   :0.0000   Min.   :0.7782   Min.   : 4.9  
 ##  1st Qu.: 7.00   1st Qu.:0.0000   1st Qu.:1.1461   1st Qu.: 8.8  
@@ -1775,7 +1775,7 @@ third quartiles, any way you like.</li>
 ##  Max.   :2.0000   Max.   :27.000   Max.   :18.00</code></pre>
 <p>from which you pick out the ones you need. Or, you <code>select</code> the
 ones you need first:</p>
-<div class="sourceCode" id="cb2720"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2720-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(logbun,hgb) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2752"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2752-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(logbun,hgb) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##      logbun            hgb      
 ##  Min.   :0.7782   Min.   : 4.9  
 ##  1st Qu.:1.1461   1st Qu.: 8.8  
@@ -1786,10 +1786,10 @@ ones you need first:</p>
 <p>The <code>with</code> method
 is a bit hairy because there are two things to calculate inside, so
 you have to do it like this:</p>
-<div class="sourceCode" id="cb2722"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2722-1" data-line-number="1"><span class="kw">with</span>(myeloma, {</a>
-<a class="sourceLine" id="cb2722-2" data-line-number="2"><span class="kw">print</span>(<span class="kw">quantile</span>(logbun))</a>
-<a class="sourceLine" id="cb2722-3" data-line-number="3"><span class="kw">print</span>(<span class="kw">quantile</span>(hgb))</a>
-<a class="sourceLine" id="cb2722-4" data-line-number="4">})</a></code></pre></div>
+<div class="sourceCode" id="cb2754"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2754-1" data-line-number="1"><span class="kw">with</span>(myeloma, {</a>
+<a class="sourceLine" id="cb2754-2" data-line-number="2"><span class="kw">print</span>(<span class="kw">quantile</span>(logbun))</a>
+<a class="sourceLine" id="cb2754-3" data-line-number="3"><span class="kw">print</span>(<span class="kw">quantile</span>(hgb))</a>
+<a class="sourceLine" id="cb2754-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>##     0%    25%    50%    75%   100% 
 ## 0.7782 1.1461 1.3222 1.5682 2.2355 
 ##   0%  25%  50%  75% 100% 
@@ -1801,10 +1801,10 @@ brackets you have to explicitly <code>print</code> it.</p>
 inelegant, because you have to calculate two things for two variables
 (<code>summarize</code> will only allow you to have a single-number
 answer):</p>
-<div class="sourceCode" id="cb2724"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2724-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">logbun.q1=</span><span class="kw">quantile</span>(logbun,<span class="fl">0.25</span>),</a>
-<a class="sourceLine" id="cb2724-2" data-line-number="2"><span class="dt">logbun.q3=</span><span class="kw">quantile</span>(logbun,<span class="fl">0.75</span>),</a>
-<a class="sourceLine" id="cb2724-3" data-line-number="3"><span class="dt">hgb.q1=</span><span class="kw">quantile</span>(hgb,<span class="fl">0.25</span>),</a>
-<a class="sourceLine" id="cb2724-4" data-line-number="4"><span class="dt">hgb.q3=</span><span class="kw">quantile</span>(hgb,<span class="fl">0.75</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2756"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2756-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">logbun.q1=</span><span class="kw">quantile</span>(logbun,<span class="fl">0.25</span>),</a>
+<a class="sourceLine" id="cb2756-2" data-line-number="2"><span class="dt">logbun.q3=</span><span class="kw">quantile</span>(logbun,<span class="fl">0.75</span>),</a>
+<a class="sourceLine" id="cb2756-3" data-line-number="3"><span class="dt">hgb.q1=</span><span class="kw">quantile</span>(hgb,<span class="fl">0.25</span>),</a>
+<a class="sourceLine" id="cb2756-4" data-line-number="4"><span class="dt">hgb.q3=</span><span class="kw">quantile</span>(hgb,<span class="fl">0.75</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##   logbun.q1 logbun.q3 hgb.q1 hgb.q3
 ##       &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -1812,24 +1812,24 @@ answer):</p>
 <p>There is a <code>tidyverse</code> way to obtain the quartiles of
 <em>all</em> the columns. It lives in package <code>purrr</code>, which gets
 loaded with the <code>tidyverse</code>:</p>
-<div class="sourceCode" id="cb2726"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2726-1" data-line-number="1"><span class="kw">map_dbl</span>(myeloma,quantile,<span class="fl">0.25</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2758"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2758-1" data-line-number="1"><span class="kw">map_dbl</span>(myeloma,quantile,<span class="fl">0.25</span>)</a></code></pre></div>
 <pre><code>##     time  vstatus   logbun      hgb platelet      age   logwbc     frac 
 ##   7.0000   0.0000   1.1461   8.8000   1.0000  51.0000   3.6435   1.0000 
 ##   logpbm  protein    scalc 
 ##   1.3617   0.0000   9.0000</code></pre>
-<div class="sourceCode" id="cb2728"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2728-1" data-line-number="1"><span class="kw">map_dbl</span>(myeloma,quantile,<span class="fl">0.75</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2760"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2760-1" data-line-number="1"><span class="kw">map_dbl</span>(myeloma,quantile,<span class="fl">0.75</span>)</a></code></pre></div>
 <pre><code>##     time  vstatus   logbun      hgb platelet      age   logwbc     frac 
 ##  35.0000   1.0000   1.5682  12.0000   1.0000  67.0000   3.8751   1.0000 
 ##   logpbm  protein    scalc 
 ##   1.8451   4.0000  10.0000</code></pre>
 <p>So what you do is a <code>select</code> to get just <code>logbun</code> and
 <code>hgb</code>, first, and then, for example:</p>
-<div class="sourceCode" id="cb2730"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2730-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(logbun,hgb) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_dbl</span>(quantile,<span class="fl">0.25</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2762"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2762-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(logbun,hgb) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_dbl</span>(quantile,<span class="fl">0.25</span>)</a></code></pre></div>
 <pre><code>## logbun    hgb 
 ## 1.1461 8.8000</code></pre>
 <p>Can we get them both in one shot? Let’s see what this does:</p>
-<div class="sourceCode" id="cb2732"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2732-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(logbun,hgb) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2732-2" data-line-number="2"><span class="kw">map</span>(quantile, <span class="kw">c</span>(<span class="fl">0.25</span>,<span class="fl">0.75</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2764"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2764-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(logbun,hgb) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2764-2" data-line-number="2"><span class="kw">map</span>(quantile, <span class="kw">c</span>(<span class="fl">0.25</span>,<span class="fl">0.75</span>))</a></code></pre></div>
 <pre><code>## $logbun
 ##    25%    75% 
 ## 1.1461 1.5682 
@@ -1839,8 +1839,8 @@ loaded with the <code>tidyverse</code>:</p>
 ##  8.8 12.0</code></pre>
 <p>This is what R calls a <code>list</code>. It would look nicer as a data
 frame. There is a way to get that:</p>
-<div class="sourceCode" id="cb2734"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2734-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(logbun,hgb) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2734-2" data-line-number="2"><span class="kw">map_df</span>(quantile, <span class="kw">c</span>(<span class="fl">0.25</span>,<span class="fl">0.75</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2766"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2766-1" data-line-number="1">myeloma <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(logbun,hgb) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2766-2" data-line-number="2"><span class="kw">map_df</span>(quantile, <span class="kw">c</span>(<span class="fl">0.25</span>,<span class="fl">0.75</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   logbun   hgb
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -1849,17 +1849,17 @@ frame. There is a way to get that:</p>
 <p>The <code>25%</code> and <code>75%</code> have gone missing. They were
 actually the <code>names</code> of each of the components of the list,
 which I don’t think we easily have access to.
-<label for="tufte-mn-161" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-161" class="margin-toggle"><span class="marginnote">The way, as we have seen elsewhere, is to use <em>tidy(quantile)</em> or <em>enframe(quantile)</em>, which produce a two-column data frame with the percentiles shown.</span></p>
+<label for="tufte-mn-163" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-163" class="margin-toggle"><span class="marginnote">The way, as we have seen elsewhere, is to use <em>tidy(quantile)</em> or <em>enframe(quantile)</em>, which produce a two-column data frame with the percentiles shown.</span></p>
 <ol start="8" style="list-style-type: lower-alpha">
 <li>Create a data frame containing all possible combinations
 of the two quartiles for each of the two variables, and display the result.</li>
 </ol>
 <p>Solution</p>
 <p>The usual <code>crossing</code>:</p>
-<div class="sourceCode" id="cb2736"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2736-1" data-line-number="1">logbuns=<span class="kw">c</span>(<span class="fl">1.1461</span>,<span class="fl">1.5682</span>)</a>
-<a class="sourceLine" id="cb2736-2" data-line-number="2">hgbs=<span class="kw">c</span>(<span class="fl">8.8</span>,<span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb2736-3" data-line-number="3">new=<span class="kw">crossing</span>(<span class="dt">logbun=</span>logbuns,<span class="dt">hgb=</span>hgbs)</a>
-<a class="sourceLine" id="cb2736-4" data-line-number="4">new</a></code></pre></div>
+<div class="sourceCode" id="cb2768"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2768-1" data-line-number="1">logbuns=<span class="kw">c</span>(<span class="fl">1.1461</span>,<span class="fl">1.5682</span>)</a>
+<a class="sourceLine" id="cb2768-2" data-line-number="2">hgbs=<span class="kw">c</span>(<span class="fl">8.8</span>,<span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb2768-3" data-line-number="3">new=<span class="kw">crossing</span>(<span class="dt">logbun=</span>logbuns,<span class="dt">hgb=</span>hgbs)</a>
+<a class="sourceLine" id="cb2768-4" data-line-number="4">new</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   logbun   hgb
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -1881,7 +1881,7 @@ at the results (they are rather long).</li>
 <p>Solution</p>
 <p>This seems as if it ought to be <code>predict</code>, but the
 <code>survival</code> version of it is called <code>survfit</code>:</p>
-<div class="sourceCode" id="cb2738"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2738-1" data-line-number="1">s=<span class="kw">survfit</span>(y<span class="fl">.2</span>,new,<span class="dt">data=</span>myeloma)</a></code></pre></div>
+<div class="sourceCode" id="cb2770"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2770-1" data-line-number="1">s=<span class="kw">survfit</span>(y<span class="fl">.2</span>,new,<span class="dt">data=</span>myeloma)</a></code></pre></div>
 <p>It works the same as <code>predict</code>: a fitted model object (your
 smaller survival model), and a data frame of values to predict
 for. The <code>data=</code> is not strictly needed here, but if you want
@@ -1892,7 +1892,7 @@ combination of your variables.</li>
 </ol>
 <p>Solution</p>
 <p>This is easier than you think: it’s just <code>ggsurvplot</code> from <code>survminer</code>:</p>
-<div class="sourceCode" id="cb2739"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2739-1" data-line-number="1"><span class="kw">ggsurvplot</span>(s,<span class="dt">conf.int=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb2771"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2771-1" data-line-number="1"><span class="kw">ggsurvplot</span>(s,<span class="dt">conf.int=</span>F)</a></code></pre></div>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-68-1.png" width="672"  /></p>
 <ol start="11" style="list-style-type: lower-alpha">
 <li>Is it better to have high or low values for each of the
@@ -1902,7 +1902,7 @@ variables in your prediction? Explain briefly.</li>
 <p>Those four “strata” are the four rows in your prediction data
 frame (the four combinations). They are in the same order that
 they were in <code>new</code> (or whatever name you used):</p>
-<div class="sourceCode" id="cb2740"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2740-1" data-line-number="1">new</a></code></pre></div>
+<div class="sourceCode" id="cb2772"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2772-1" data-line-number="1">new</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   logbun   hgb
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -1912,7 +1912,7 @@ they were in <code>new</code> (or whatever name you used):</p>
 ## 4   1.57  12</code></pre>
 <p>The best survival curve is the top-right green one. This is
 stratum
-<label for="tufte-mn-162" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-162" class="margin-toggle"><span class="marginnote">Strata is plural; the singular is <em>stratum</em>. Like data and datum.} 2, from the legend at the top. In texttt{new</span>,
+<label for="tufte-mn-164" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-164" class="margin-toggle"><span class="marginnote">Strata is plural; the singular is <em>stratum</em>. Like data and datum.} 2, from the legend at the top. In texttt{new</span>,
 this goes with a low value of <code>logbun</code> and a <em>high</em> value
 of <code>hgb</code>.</p>
 <p>You can check this by looking at the <em>worst</em> survival curve,
@@ -1937,7 +1937,7 @@ loading the package and typing the data set’s name.</li>
 </ol>
 <p>Solution</p>
 <p>Thus. You may need to start with <code>library(survival)</code>:</p>
-<div class="sourceCode" id="cb2742"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2742-1" data-line-number="1">ovarian</a></code></pre></div>
+<div class="sourceCode" id="cb2774"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2774-1" data-line-number="1">ovarian</a></code></pre></div>
 <pre><code>##    futime fustat     age resid.ds rx ecog.ps
 ## 1      59      1 72.3315        2  1       1
 ## 2     115      1 74.4932        2  1       1
@@ -1968,7 +1968,7 @@ loading the package and typing the data set’s name.</li>
 <p>There are indeed 26 rows. This is a <code>data.frame</code> rather than a
 <code>tibble</code>, so you see the whole thing, in case you were
 expecting something like this:</p>
-<div class="sourceCode" id="cb2744"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2744-1" data-line-number="1">ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.tibble</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2776"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2776-1" data-line-number="1">ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.tibble</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 26 x 6
 ##    futime fustat   age resid.ds    rx ecog.ps
 ##  *  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
@@ -2013,8 +2013,8 @@ I always forget whether the second thing in <code>Surv</code> has to
 be 1 or 0 if the event happened. The help says that it needs to be
 1 or <code>TRUE</code> if the event (death) happened, which is what
 <code>fustat</code> is, so we can use it as it is:</p>
-<div class="sourceCode" id="cb2746"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2746-1" data-line-number="1">y=<span class="kw">with</span>(ovarian,<span class="kw">Surv</span>(futime,fustat))</a>
-<a class="sourceLine" id="cb2746-2" data-line-number="2">y</a></code></pre></div>
+<div class="sourceCode" id="cb2778"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2778-1" data-line-number="1">y=<span class="kw">with</span>(ovarian,<span class="kw">Surv</span>(futime,fustat))</a>
+<a class="sourceLine" id="cb2778-2" data-line-number="2">y</a></code></pre></div>
 <pre><code>##  [1]   59   115   156   421+  431   448+  464   475   477+  563   638 
 ## [12]  744+  769+  770+  803+  855+ 1040+ 1106+ 1129+ 1206+ 1227+  268 
 ## [23]  329   353   365   377+</code></pre>
@@ -2022,10 +2022,10 @@ be 1 or 0 if the event happened. The help says that it needs to be
 frame. This is how it has to be done, because although <code>y</code>
 looks as if it is 26 long (one per patient), it’s actually more
 complicated than that:</p>
-<div class="sourceCode" id="cb2748"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2748-1" data-line-number="1">ov2 =<span class="st"> </span>ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">y=</span><span class="kw">Surv</span>(futime,fustat))</a></code></pre></div>
+<div class="sourceCode" id="cb2780"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2780-1" data-line-number="1">ov2 =<span class="st"> </span>ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">y=</span><span class="kw">Surv</span>(futime,fustat))</a></code></pre></div>
 <pre><code>## Error in mutate_impl(.data, dots): Column `y` must be length 26 (the number of rows) or one, not 52</code></pre>
 <p>This doesn’t work, because internally <code>y</code> is a <code>matrix</code> with two columns:</p>
-<div class="sourceCode" id="cb2750"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2750-1" data-line-number="1"><span class="kw">print.default</span>(y)</a></code></pre></div>
+<div class="sourceCode" id="cb2782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2782-1" data-line-number="1"><span class="kw">print.default</span>(y)</a></code></pre></div>
 <pre><code>##       time status
 ##  [1,]   59      1
 ##  [2,]  115      1
@@ -2065,7 +2065,7 @@ or length 1 (in which case it is repeated 26 times).</p>
 <p>With some cajoling, you can get this into a data frame, but with more
 cajoling than seems necessary. It’s much easier to leave it as a
 separate thing outside a data frame.
-<label for="tufte-mn-163" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-163" class="margin-toggle"><span class="marginnote">In some respects, it’s like that two-column response in logistic regression, where each row of the data frame represents several observations pooled together.</span></p>
+<label for="tufte-mn-165" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-165" class="margin-toggle"><span class="marginnote">In some respects, it’s like that two-column response in logistic regression, where each row of the data frame represents several observations pooled together.</span></p>
 <p>I gave <code>ov2</code> a “temporary” name because I am not going to use
 it again.</p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -2109,8 +2109,8 @@ results.</li>
 </ol>
 <p>Solution</p>
 <p>The hint suggests something like this:</p>
-<div class="sourceCode" id="cb2752"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2752-1" data-line-number="1">time<span class="fl">.1</span>=<span class="kw">coxph</span>(y<span class="op">~</span>age<span class="op">+</span><span class="kw">factor</span>(rx),<span class="dt">data=</span>ovarian)</a>
-<a class="sourceLine" id="cb2752-2" data-line-number="2"><span class="kw">summary</span>(time<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2784"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2784-1" data-line-number="1">time<span class="fl">.1</span>=<span class="kw">coxph</span>(y<span class="op">~</span>age<span class="op">+</span><span class="kw">factor</span>(rx),<span class="dt">data=</span>ovarian)</a>
+<a class="sourceLine" id="cb2784-2" data-line-number="2"><span class="kw">summary</span>(time<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + factor(rx), data = ovarian)
 ## 
@@ -2133,9 +2133,9 @@ results.</li>
 ## Score (logrank) test = 18.56  on 2 df,   p=9e-05</code></pre>
 <p>Alternatively, define the factor version of <code>rx</code> in the data
 frame first. This is the slick way to do that:</p>
-<div class="sourceCode" id="cb2754"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2754-1" data-line-number="1">time<span class="fl">.1</span>a =<span class="st"> </span>ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">rxf=</span><span class="kw">factor</span>(rx)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2754-2" data-line-number="2"><span class="kw">coxph</span>(y<span class="op">~</span>age<span class="op">+</span>rxf,<span class="dt">data=</span>.)</a>
-<a class="sourceLine" id="cb2754-3" data-line-number="3"><span class="kw">summary</span>(time<span class="fl">.1</span>a)</a></code></pre></div>
+<div class="sourceCode" id="cb2786"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2786-1" data-line-number="1">time<span class="fl">.1</span>a =<span class="st"> </span>ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">rxf=</span><span class="kw">factor</span>(rx)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2786-2" data-line-number="2"><span class="kw">coxph</span>(y<span class="op">~</span>age<span class="op">+</span>rxf,<span class="dt">data=</span>.)</a>
+<a class="sourceLine" id="cb2786-3" data-line-number="3"><span class="kw">summary</span>(time<span class="fl">.1</span>a)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + rxf, data = .)
 ## 
@@ -2206,8 +2206,8 @@ is why I talk about “hazard of death”, since that guides us to
 the correct interpretation.)
 Extra: I was curious about what would happen if I just included
 <code>rx</code> in the model:</p>
-<div class="sourceCode" id="cb2756"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2756-1" data-line-number="1">time<span class="fl">.2</span>=<span class="kw">update</span>(time<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>age)</a>
-<a class="sourceLine" id="cb2756-2" data-line-number="2"><span class="kw">summary</span>(time<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2788"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2788-1" data-line-number="1">time<span class="fl">.2</span>=<span class="kw">update</span>(time<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>age)</a>
+<a class="sourceLine" id="cb2788-2" data-line-number="2"><span class="kw">summary</span>(time<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ factor(rx), data = ovarian)
 ## 
@@ -2239,7 +2239,7 @@ treatments.</p>
 <p>What you often see early on in a paper on this kind of stuff is a
 graph showing that the treatment groups are similar in terms of
 important things like <code>age</code>. Here, that could be a boxplot:</p>
-<div class="sourceCode" id="cb2758"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2758-1" data-line-number="1"><span class="kw">ggplot</span>(ovarian, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(rx),<span class="dt">y=</span>age))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2790"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2790-1" data-line-number="1"><span class="kw">ggplot</span>(ovarian, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(rx),<span class="dt">y=</span>age))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-78-1.png" width="672"  /></p>
 <p>I needed to do <code>factor(rx)</code> because <code>geom_boxplot</code>
 needs a genuine categorical variable, not just a numerical variable
@@ -2262,7 +2262,7 @@ any problems? Explain briefly.</li>
 <p>Solution</p>
 <p>The plot is just the same idea as the one in the notes. Make sure
 you have <code>survminer</code> installed and loaded:</p>
-<div class="sourceCode" id="cb2759"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2759-1" data-line-number="1"><span class="kw">ggcoxdiagnostics</span>(time<span class="fl">.1</span>)<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2791"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2791-1" data-line-number="1"><span class="kw">ggcoxdiagnostics</span>(time<span class="fl">.1</span>)<span class="op">+</span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-79-1.png" width="672"  /></p>
 <p>Make a call about whether you think the smooth trend deviates too much
@@ -2292,23 +2292,23 @@ hand, rather than trying to save them and use them.)</li>
 predictions, so we’ll call the data frame <code>new</code> when we get
 there.
 Quartiles first:</p>
-<div class="sourceCode" id="cb2761"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2761-1" data-line-number="1"><span class="kw">quantile</span>(ovarian<span class="op">$</span>age)</a></code></pre></div>
+<div class="sourceCode" id="cb2793"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2793-1" data-line-number="1"><span class="kw">quantile</span>(ovarian<span class="op">$</span>age)</a></code></pre></div>
 <pre><code>##       0%      25%      50%      75%     100% 
 ## 38.89320 50.16712 56.84660 62.37810 74.50410</code></pre>
 <p>or, if you prefer,</p>
-<div class="sourceCode" id="cb2763"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2763-1" data-line-number="1">ovarian <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2763-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(age,<span class="fl">0.25</span>),</a>
-<a class="sourceLine" id="cb2763-3" data-line-number="3"><span class="dt">q3=</span><span class="kw">quantile</span>(age,<span class="fl">0.75</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2795"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2795-1" data-line-number="1">ovarian <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2795-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(age,<span class="fl">0.25</span>),</a>
+<a class="sourceLine" id="cb2795-3" data-line-number="3"><span class="dt">q3=</span><span class="kw">quantile</span>(age,<span class="fl">0.75</span>))</a></code></pre></div>
 <pre><code>##         q1      q3
 ## 1 50.16712 62.3781</code></pre>
 <p>The quartiles are 50.17 and 62.38 (rounding slightly).</p>
 <p>Either way is good.</p>
 <p>Then follow my standard procedure (or one of your own devising),
 remembering that “treatment” is called <code>rx</code> here:</p>
-<div class="sourceCode" id="cb2765"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2765-1" data-line-number="1">ages=<span class="kw">c</span>(<span class="fl">50.17</span>, <span class="fl">62.38</span>)</a>
-<a class="sourceLine" id="cb2765-2" data-line-number="2">rxs=<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb2765-3" data-line-number="3">new=<span class="kw">crossing</span>(<span class="dt">age=</span>ages,<span class="dt">rx=</span>rxs)</a>
-<a class="sourceLine" id="cb2765-4" data-line-number="4">new</a></code></pre></div>
+<div class="sourceCode" id="cb2797"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2797-1" data-line-number="1">ages=<span class="kw">c</span>(<span class="fl">50.17</span>, <span class="fl">62.38</span>)</a>
+<a class="sourceLine" id="cb2797-2" data-line-number="2">rxs=<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb2797-3" data-line-number="3">new=<span class="kw">crossing</span>(<span class="dt">age=</span>ages,<span class="dt">rx=</span>rxs)</a>
+<a class="sourceLine" id="cb2797-4" data-line-number="4">new</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##     age    rx
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -2324,8 +2324,8 @@ times. (This is only one thing, despite it sounding like a lot.)</li>
 <p>Solution</p>
 <p>The magic word here is <code>survfit</code>. The structure is the same
 as for <code>predict</code>:</p>
-<div class="sourceCode" id="cb2767"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2767-1" data-line-number="1">s=<span class="kw">survfit</span>(time<span class="fl">.1</span>,new,<span class="dt">data=</span>ovarian)</a>
-<a class="sourceLine" id="cb2767-2" data-line-number="2"><span class="kw">summary</span>(s)</a></code></pre></div>
+<div class="sourceCode" id="cb2799"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2799-1" data-line-number="1">s=<span class="kw">survfit</span>(time<span class="fl">.1</span>,new,<span class="dt">data=</span>ovarian)</a>
+<a class="sourceLine" id="cb2799-2" data-line-number="2"><span class="kw">summary</span>(s)</a></code></pre></div>
 <pre><code>## Call: survfit(formula = time.1, newdata = new, data = ovarian)
 ## 
 ##  time n.risk n.event survival1 survival2 survival3 survival4
@@ -2363,7 +2363,7 @@ different times.</li>
 <p>Solution</p>
 <p>Thus. The <code>conf.int=F</code> means to skip the confidence interval
 “envelopes” that I find make the plot rather messy:</p>
-<div class="sourceCode" id="cb2769"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2769-1" data-line-number="1"><span class="kw">ggsurvplot</span>(s,<span class="dt">conf.int=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb2801"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2801-1" data-line-number="1"><span class="kw">ggsurvplot</span>(s,<span class="dt">conf.int=</span>F)</a></code></pre></div>
 <p><img src="17-survival-analysis_files/figure-html/unnamed-chunk-84-1.png" width="672"  /></p>
 <ol start="11" style="list-style-type: lower-alpha">
 <li>According to your plot, how would you describe the effects of
@@ -2373,9 +2373,9 @@ treatment and of age?</li>
 <p>The best survival curve, in terms of surviving longest, is up and to
 the right, so the green one is best and the blue one is
 worst.
-<label for="tufte-mn-164" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-164" class="margin-toggle"><span class="marginnote">In other cases, having the event happen sooner is better. For example, you might be poisoning rats, in which case you want them to die quicker. Or the event might be something desirable like becoming qualified to fly an airplane. In those cases, down and to the left is better.</span> To figure out which those
+<label for="tufte-mn-166" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-166" class="margin-toggle"><span class="marginnote">In other cases, having the event happen sooner is better. For example, you might be poisoning rats, in which case you want them to die quicker. Or the event might be something desirable like becoming qualified to fly an airplane. In those cases, down and to the left is better.</span> To figure out which those
 are, we have to go back to the data frame we created:</p>
-<div class="sourceCode" id="cb2770"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2770-1" data-line-number="1">new</a></code></pre></div>
+<div class="sourceCode" id="cb2802"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2802-1" data-line-number="1">new</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##     age    rx
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -2400,7 +2400,7 @@ not significant).</p>
 which, and one each for saying something about the effects of age and
 of treatment, including which one is better.</p>
 <p>Extra: recall the output from the Cox model:</p>
-<div class="sourceCode" id="cb2772"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2772-1" data-line-number="1"><span class="kw">summary</span>(time<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2804"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2804-1" data-line-number="1"><span class="kw">summary</span>(time<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + factor(rx), data = ovarian)
 ## 

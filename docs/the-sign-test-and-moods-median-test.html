@@ -858,8 +858,8 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb522-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb522-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 75.58213 20.27846 51.36402 45.77873 24.70023 67.43089 40.26974
-##  [8] 32.14569 45.53024 56.55874</code></pre>
+<pre><code>##  [1] 34.68950 34.91177 51.39953 39.31177 47.40422 62.06332 16.49261
+##  [8] 48.61702 31.28652 53.05042</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
@@ -870,8 +870,8 @@ than 40 and how many are greater (or equal)?</li>
 <pre><code>## # A tibble: 2 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE        7
-## 2 TRUE         3</code></pre>
+## 1 FALSE        5
+## 2 TRUE         5</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -891,7 +891,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       3 FALSE</code></pre>
+## 1       5 FALSE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
@@ -903,7 +903,7 @@ should not reject. The fix is</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       3 FALSE</code></pre>
+## 1       5 FALSE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>

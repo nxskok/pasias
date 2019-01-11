@@ -4857,16 +4857,7 @@ and the easiest way to add these to `heart.new` is this:
 
 
 ```r
-heart.new$pred=p
-```
-
- 
-
-Or, if you like, with a `mutate` of this kind:
-
-
-```r
-heart.x = heart.new %>% mutate(prediction=p) 
+heart.new %>% mutate(pred=p) -> heart.new
 ```
 
  
@@ -5423,7 +5414,7 @@ ggplot(aes(x=gest.age,y=obs))+
 geom_line(aes(y=pred))+geom_point(aes(size=total))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-143-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-142-1.png" width="672"  />
 
  
 
@@ -5567,7 +5558,7 @@ Starting with `age` vs. `gender`:
 ggplot(donner,aes(x=gender,y=age))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-144-1.png" width="672"  />
 
      
 
@@ -5578,7 +5569,7 @@ or:
 ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(gender~.)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
 
  
 
@@ -5621,7 +5612,7 @@ Age vs. `survived` is the same idea:
 ggplot(donner,aes(x=survived,y=age))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-149-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-148-1.png" width="672"  />
 
      
 
@@ -5632,7 +5623,7 @@ or:
 ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(survived~.)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-150-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-149-1.png" width="672"  />
 
  
 
@@ -5712,7 +5703,7 @@ For a graph, borrow the grouped bar-plot idea from the parasites question:
 ggplot(donner,aes(x=gender,fill=survived))+geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-155-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-154-1.png" width="672"  />
 
  
 
@@ -6545,7 +6536,7 @@ ggplot(aes(x=apache,y=pred))+geom_line()+
 geom_point(aes(y=obs_prop))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-172-1.png" width="672"  />
 
      
 
@@ -6582,7 +6573,7 @@ ggplot(aes(x=apache,y=pred))+geom_line()+
 geom_point(aes(y=obs_prop,size=patients))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
 
      
 The points that are far from the prediction are mostly based on a
@@ -6835,17 +6826,20 @@ Solution
 
 The idea is to change one variable \emph{while leaving the other
 fixed}. (This is the common refrain of "all else equal".)
+
 Pick a level of `anger`, say `n` (it doesn't matter
 which) and look at the effect of `anxiety`. The probability
 of a second heart attack increases sharply from 0.17 to 0.40 to
 0.69. So an increased anxiety score is associated with an
 increased probability of second heart attack (all else equal).
+
 To assess the effect of taking the anger management course, pick
 an `anxiety` value, say 40, and compare the probabilities
 for `anger` `n` and `y`. For someone who has
 not taken the anger management course, the probability is 0.17,
 but for someone who has, it drops all the way to 0.07. (The
 pattern is the same at the other anxiety scores.)
+
 Extra: the reason it doesn't matter what value of the other
 variable you look at (as long as you keep it fixed) is that the
 model is "additive" with no interaction, so that the effect of
@@ -6891,7 +6885,7 @@ enough even with this small data set. Here's a visual:
 ggplot(ha,aes(x=second,y=anxiety))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-182-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-181-1.png" width="672"  />
 
      
 
@@ -6918,7 +6912,7 @@ bar chart:
 ggplot(ha,aes(x=anger,fill=second))+geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-183-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-182-1.png" width="672"  />
 
  
 
