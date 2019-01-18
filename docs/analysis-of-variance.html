@@ -318,12 +318,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="analysis-of-variance" class="section level1">
 <h1><span class="header-section-number">Chapter 11</span> Analysis of variance</h1>
-<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb735-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb736"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb736-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
@@ -343,17 +343,17 @@ all the movies released that year. The data are at
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code>:</p>
-<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb739-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv&quot;</span></a>
-<a class="sourceLine" id="cb739-2" data-line-number="2">movies=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb740"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb740-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv&quot;</span></a>
+<a class="sourceLine" id="cb740-2" data-line-number="2">movies=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   length = col_integer(),
+##   length = col_double(),
 ##   rating = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb741"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb741-1" data-line-number="1">movies</a></code></pre></div>
+<div class="sourceCode" id="cb742"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb742-1" data-line-number="1">movies</a></code></pre></div>
 <pre><code>## # A tibble: 60 x 2
 ##    length rating
-##     &lt;int&gt; &lt;chr&gt; 
+##     &lt;dbl&gt; &lt;chr&gt; 
 ##  1     25 G     
 ##  2     75 G     
 ##  3     88 G     
@@ -370,7 +370,7 @@ all the movies released that year. The data are at
 <li>Count how many movies there are of each rating.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb743-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(rating)</a></code></pre></div>
+<div class="sourceCode" id="cb744"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb744-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(rating)</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   rating     n
 ##   &lt;chr&gt;  &lt;int&gt;
@@ -386,8 +386,8 @@ analysis (if warranted).</li>
 </ol>
 <p>Solution</p>
 <p>ANOVA first:</p>
-<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb745-1" data-line-number="1">length<span class="fl">.1</span>=<span class="kw">aov</span>(length<span class="op">~</span>rating,<span class="dt">data=</span>movies)</a>
-<a class="sourceLine" id="cb745-2" data-line-number="2"><span class="kw">summary</span>(length<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb746"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb746-1" data-line-number="1">length<span class="fl">.1</span>=<span class="kw">aov</span>(length<span class="op">~</span>rating,<span class="dt">data=</span>movies)</a>
+<a class="sourceLine" id="cb746-2" data-line-number="2"><span class="kw">summary</span>(length<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## rating       3  14624    4875   11.72 4.59e-06 ***
 ## Residuals   56  23295     416                     
@@ -396,7 +396,7 @@ analysis (if warranted).</li>
 <p>This P-value is 0.00000459, which is way less than 0.05.</p>
 <p>Having rejected the null (which said “all means equal”), we now need to
 do Tukey, thus:</p>
-<div class="sourceCode" id="cb747"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb747-1" data-line-number="1"><span class="kw">TukeyHSD</span>(length<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb748"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb748-1" data-line-number="1"><span class="kw">TukeyHSD</span>(length<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -415,8 +415,8 @@ that are significant, here the first three. These are all comparisons
 with the G (“general”) movies, which are shorter on average than the
 others (which are not significantly different from each other).</p>
 <p>If you like, you can make a table of means to verify that:</p>
-<div class="sourceCode" id="cb749"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb749-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb749-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(length))</a></code></pre></div>
+<div class="sourceCode" id="cb750"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb750-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb750-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(length))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   rating  mean
 ##   &lt;chr&gt;  &lt;dbl&gt;
@@ -432,7 +432,7 @@ trustworthy. Discuss your graph and its implications briefly.</li>
 </ol>
 <p>Solution</p>
 <p>The obvious graph is a boxplot:</p>
-<div class="sourceCode" id="cb751"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb751-1" data-line-number="1"><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">x=</span>rating, <span class="dt">y=</span>length))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb752-1" data-line-number="1"><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">x=</span>rating, <span class="dt">y=</span>length))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-7-1.png" width="672"  /></p>
 <p>For ANOVA, we are looking for approximately normal distributions
 within each group and approximately equal spreads. Without the
@@ -447,8 +447,8 @@ be significant.</p>
 <p>Extra: the way to go if you don’t trust the ANOVA is (as for the
 two-sample <span class="math inline">\(t\)</span>) the Mood’s median test. This applies to any number of
 groups, and works in the same way as before:</p>
-<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb752-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb752-2" data-line-number="2"><span class="kw">median_test</span>(movies,length,rating)</a></code></pre></div>
+<div class="sourceCode" id="cb753"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb753-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb753-2" data-line-number="2"><span class="kw">median_test</span>(movies,length,rating)</a></code></pre></div>
 <pre><code>## $table
 ##        above
 ## group   above below
@@ -473,7 +473,7 @@ What you can do is to do all the pairwise Mood’s median tests, between
 each pair of groups, and then adjust to allow for your having done
 several tests at once. I thought this was generally useful enough that
 I put it into <code>smmr</code> under the name <code>pairwise_median_test</code>:</p>
-<div class="sourceCode" id="cb754"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb754-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(movies,length,rating)</a></code></pre></div>
+<div class="sourceCode" id="cb755"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb755-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(movies,length,rating)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   g1    g2      p_value adj_p_value
 ##   &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;
@@ -521,8 +521,8 @@ eaten each month.</li>
 </ol>
 <p>Solution</p>
 <p>The usual stuff for data values separated by spaces:</p>
-<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb756-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/deer.txt&quot;</span></a>
-<a class="sourceLine" id="cb756-2" data-line-number="2">deer=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb757"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb757-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/deer.txt&quot;</span></a>
+<a class="sourceLine" id="cb757-2" data-line-number="2">deer=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   month = col_character(),
@@ -530,8 +530,8 @@ eaten each month.</li>
 ## )</code></pre>
 <p>and then, recalling that <code>n()</code> is the handy way of getting the
 number of observations in each group:</p>
-<div class="sourceCode" id="cb758"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb758-1" data-line-number="1">deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb758-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">n=</span><span class="kw">n</span>(),<span class="dt">med=</span><span class="kw">median</span>(food))</a></code></pre></div>
+<div class="sourceCode" id="cb759"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb759-1" data-line-number="1">deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb759-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">n=</span><span class="kw">n</span>(),<span class="dt">med=</span><span class="kw">median</span>(food))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   month     n   med
 ##   &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;
@@ -552,7 +552,7 @@ and May a bit lower.</p>
 month. Comment briefly on what you see.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb760"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb760-1" data-line-number="1"><span class="kw">ggplot</span>(deer,<span class="kw">aes</span>(<span class="dt">x=</span>month,<span class="dt">y=</span>food))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb761-1" data-line-number="1"><span class="kw">ggplot</span>(deer,<span class="kw">aes</span>(<span class="dt">x=</span>month,<span class="dt">y=</span>food))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-12-1.png" width="672"  /></p>
 <p>This offers the suggestion that maybe November will be significantly
 higher than the rest and May significantly lower, or at least they
@@ -568,7 +568,7 @@ are quite similar.</p>
 sizes, is a “dot plot”: instead of making a boxplot for each month,
 we plot the actual points for each month as if we were making a
 scatterplot:</p>
-<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb761-1" data-line-number="1"><span class="kw">ggplot</span>(deer,<span class="kw">aes</span>(<span class="dt">x=</span>month,<span class="dt">y=</span>food))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb762-1" data-line-number="1"><span class="kw">ggplot</span>(deer,<span class="kw">aes</span>(<span class="dt">x=</span>month,<span class="dt">y=</span>food))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
 <p>Wait a minute. There were five deer in February and six in
 August. Where did they go?</p>
@@ -578,7 +578,7 @@ only given to one decimal place and there were some duplicated values.
 One way to solve this is to randomly
 move the points around so that no two of them plot in the same
 place. This is called <em>jittering</em>, and is done like this:</p>
-<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb762-1" data-line-number="1"><span class="kw">ggplot</span>(deer,<span class="kw">aes</span>(<span class="dt">x=</span>month,<span class="dt">y=</span>food))<span class="op">+</span><span class="kw">geom_jitter</span>(<span class="dt">width=</span><span class="dv">0</span>,<span class="dt">height=</span><span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb763-1" data-line-number="1"><span class="kw">ggplot</span>(deer,<span class="kw">aes</span>(<span class="dt">x=</span>month,<span class="dt">y=</span>food))<span class="op">+</span><span class="kw">geom_jitter</span>(<span class="dt">width=</span><span class="dv">0</span>,<span class="dt">height=</span><span class="fl">0.05</span>)</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-14-1.png" width="672"  /></p>
 <p>Now you see all the deer, and you can see that two pairs of points in
 August and one pair of points in February are close enough on the
@@ -609,18 +609,18 @@ the Mood’s median test, and so should be preferred.)</p>
 <p>Solution</p>
 <p>To give you some practice with the mechanics, first find the
 overall median:</p>
-<div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb763-1" data-line-number="1">deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(food))</a></code></pre></div>
+<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb764-1" data-line-number="1">deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(food))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     med
 ##   &lt;dbl&gt;
 ## 1   4.7</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb765"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb765-1" data-line-number="1"><span class="kw">median</span>(deer<span class="op">$</span>food)</a></code></pre></div>
+<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb766-1" data-line-number="1"><span class="kw">median</span>(deer<span class="op">$</span>food)</a></code></pre></div>
 <pre><code>## [1] 4.7</code></pre>
 <p>I like the first way because it’s the same idea as we did before, just
 not differentiating by month. I think there are some observations
 exactly equal to the median, which will mess things up later:</p>
-<div class="sourceCode" id="cb767"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb767-1" data-line-number="1">deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(food<span class="op">==</span><span class="fl">4.7</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb768-1" data-line-number="1">deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(food<span class="op">==</span><span class="fl">4.7</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   month  food
 ##   &lt;chr&gt; &lt;dbl&gt;
@@ -631,8 +631,8 @@ exactly equal to the median, which will mess things up later:</p>
 <p>There are, two in February and two in August.</p>
 <p>Next, make (and save) a table of the observations within each month
 that are above and below this median:</p>
-<div class="sourceCode" id="cb769"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb769-1" data-line-number="1">tab1=<span class="kw">with</span>(deer,<span class="kw">table</span>(month,food<span class="op">&lt;</span><span class="fl">4.7</span>))</a>
-<a class="sourceLine" id="cb769-2" data-line-number="2">tab1</a></code></pre></div>
+<div class="sourceCode" id="cb770"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb770-1" data-line-number="1">tab1=<span class="kw">with</span>(deer,<span class="kw">table</span>(month,food<span class="op">&lt;</span><span class="fl">4.7</span>))</a>
+<a class="sourceLine" id="cb770-2" data-line-number="2">tab1</a></code></pre></div>
 <pre><code>##      
 ## month FALSE TRUE
 ##   Aug     4    2
@@ -640,8 +640,8 @@ that are above and below this median:</p>
 ##   May     0    6
 ##   Nov     5    0</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb771"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb771-1" data-line-number="1">tab2=<span class="kw">with</span>(deer,<span class="kw">table</span>(month,food<span class="op">&gt;</span><span class="fl">4.7</span>))</a>
-<a class="sourceLine" id="cb771-2" data-line-number="2">tab2</a></code></pre></div>
+<div class="sourceCode" id="cb772"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb772-1" data-line-number="1">tab2=<span class="kw">with</span>(deer,<span class="kw">table</span>(month,food<span class="op">&gt;</span><span class="fl">4.7</span>))</a>
+<a class="sourceLine" id="cb772-2" data-line-number="2">tab2</a></code></pre></div>
 <pre><code>##      
 ## month FALSE TRUE
 ##   Aug     4    2
@@ -654,7 +654,7 @@ February observations (the ones that were exactly 4.7) have
 and (look carefully) two of the August ones also. Hence the
 test results will be different, and <code>smmr</code> (later) will give
 different results again:</p>
-<div class="sourceCode" id="cb773"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb773-1" data-line-number="1"><span class="kw">chisq.test</span>(tab1,<span class="dt">correct=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb774-1" data-line-number="1"><span class="kw">chisq.test</span>(tab1,<span class="dt">correct=</span>F)</a></code></pre></div>
 <pre><code>## Warning in chisq.test(tab1, correct = F): Chi-squared approximation may be
 ## incorrect</code></pre>
 <pre><code>## 
@@ -662,7 +662,7 @@ different results again:</p>
 ## 
 ## data:  tab1
 ## X-squared = 16.238, df = 3, p-value = 0.001013</code></pre>
-<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb776-1" data-line-number="1"><span class="kw">chisq.test</span>(tab2,<span class="dt">correct=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb777-1" data-line-number="1"><span class="kw">chisq.test</span>(tab2,<span class="dt">correct=</span>F)</a></code></pre></div>
 <pre><code>## Warning in chisq.test(tab2, correct = F): Chi-squared approximation may be
 ## incorrect</code></pre>
 <pre><code>## 
@@ -693,8 +693,8 @@ results with the previous part.</li>
 </ol>
 <p>Solution</p>
 <p>Off we go:</p>
-<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb779-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb779-2" data-line-number="2"><span class="kw">median_test</span>(deer,food,month)</a></code></pre></div>
+<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb780-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb780-2" data-line-number="2"><span class="kw">median_test</span>(deer,food,month)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -715,16 +715,16 @@ out <em>why</em> the animals eat different amounts in the different months.</p>
 <p>You might be wondering how you could get rid of the equal-to-median
 values in the build-it-yourself way. This is <code>filter</code> from
 <code>dplyr</code>, which you use first:</p>
-<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb781-1" data-line-number="1">deer2 =<span class="st"> </span>deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(food <span class="op">!=</span><span class="st"> </span><span class="fl">4.7</span>) </a>
-<a class="sourceLine" id="cb781-2" data-line-number="2">tab3 =<span class="st"> </span><span class="kw">with</span>(deer2, <span class="kw">table</span>(month, food<span class="op">&lt;</span><span class="fl">4.7</span>))</a>
-<a class="sourceLine" id="cb781-3" data-line-number="3">tab3</a></code></pre></div>
+<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb782-1" data-line-number="1">deer2 =<span class="st"> </span>deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(food <span class="op">!=</span><span class="st"> </span><span class="fl">4.7</span>) </a>
+<a class="sourceLine" id="cb782-2" data-line-number="2">tab3 =<span class="st"> </span><span class="kw">with</span>(deer2, <span class="kw">table</span>(month, food<span class="op">&lt;</span><span class="fl">4.7</span>))</a>
+<a class="sourceLine" id="cb782-3" data-line-number="3">tab3</a></code></pre></div>
 <pre><code>##      
 ## month FALSE TRUE
 ##   Aug     2    2
 ##   Feb     3    0
 ##   May     0    6
 ##   Nov     5    0</code></pre>
-<div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb783-1" data-line-number="1"><span class="kw">chisq.test</span>(tab3)</a></code></pre></div>
+<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb784-1" data-line-number="1"><span class="kw">chisq.test</span>(tab3)</a></code></pre></div>
 <pre><code>## Warning in chisq.test(tab3): Chi-squared approximation may be incorrect</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
@@ -735,14 +735,14 @@ values in the build-it-yourself way. This is <code>filter</code> from
 identical.
 <label for="tufte-mn-40" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-40" class="margin-toggle"><span class="marginnote">The computer scientists among you will note that I should not use equals or not-equals to compare a decimal floating-point number, since decimal numbers are not represented exactly in the computer. R, however, is ahead of us here, since when you try to do food not equal to 4.7, it tests whether food is more than a small distance away from 4.7, which is the right way to do it. In R, therefore, code like my <em>food != 4.7</em> does exactly what I want, but in something like C, it <em>does not</em>, and you have to be more careful: <em>abs(food-4.7)&gt;1e-8</em>, or something like that. The small number <em>1e-8</em> is typically equal to <strong>machine epsilon</strong>, the smallest number on a computer that is distinguishable from zero.</span>
 How would an ANOVA come out here? My guess is, very similarly:</p>
-<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb786-1" data-line-number="1">deer<span class="fl">.1</span>=<span class="kw">aov</span>(food<span class="op">~</span>month,<span class="dt">data=</span>deer)</a>
-<a class="sourceLine" id="cb786-2" data-line-number="2"><span class="kw">summary</span>(deer<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb787"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb787-1" data-line-number="1">deer<span class="fl">.1</span>=<span class="kw">aov</span>(food<span class="op">~</span>month,<span class="dt">data=</span>deer)</a>
+<a class="sourceLine" id="cb787-2" data-line-number="2"><span class="kw">summary</span>(deer<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## month        3 2.3065  0.7688   22.08 2.94e-06 ***
 ## Residuals   18 0.6267  0.0348                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb788-1" data-line-number="1"><span class="kw">TukeyHSD</span>(deer<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb789"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb789-1" data-line-number="1"><span class="kw">TukeyHSD</span>(deer<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -784,7 +784,7 @@ adjusting for doing (here) six tests at once, look at the adjusted
 P-values to see how the months differ in terms of food eaten.</p>
 <p>This is accomplished in <code>smmr</code> via <code>pairwise_median_test</code>,
 thus:</p>
-<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb790-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(deer, food, month)</a></code></pre></div>
+<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb791-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(deer, food, month)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   g1    g2    p_value adj_p_value
 ##   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;       &lt;dbl&gt;
@@ -820,17 +820,17 @@ each rating and the <em>median</em> length of movies of each rating.</li>
 <p>Solution</p>
 <p>Reading in is as in the other question using these data (just copy
 your code, or mine). No credit for that, since you’ve done it before.</p>
-<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb792-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv&quot;</span></a>
-<a class="sourceLine" id="cb792-2" data-line-number="2">movies=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb793"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb793-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv&quot;</span></a>
+<a class="sourceLine" id="cb793-2" data-line-number="2">movies=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   length = col_integer(),
+##   length = col_double(),
 ##   rating = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb794-1" data-line-number="1">movies</a></code></pre></div>
+<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb795-1" data-line-number="1">movies</a></code></pre></div>
 <pre><code>## # A tibble: 60 x 2
 ##    length rating
-##     &lt;int&gt; &lt;chr&gt; 
+##     &lt;dbl&gt; &lt;chr&gt; 
 ##  1     25 G     
 ##  2     75 G     
 ##  3     88 G     
@@ -844,11 +844,11 @@ your code, or mine). No credit for that, since you’ve done it before.</p>
 ## # ... with 50 more rows</code></pre>
 <p>Now, the actual for-credit part, which is a <code>group_by</code> and
 <code>summarize</code>:</p>
-<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb796-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb796-2" data-line-number="2"><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>(),<span class="dt">med=</span><span class="kw">median</span>(length))</a></code></pre></div>
+<div class="sourceCode" id="cb797"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb797-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb797-2" data-line-number="2"><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>(),<span class="dt">med=</span><span class="kw">median</span>(length))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   rating count   med
-##   &lt;chr&gt;  &lt;int&gt; &lt;int&gt;
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt;
 ## 1 G         15    82
 ## 2 PG        15   100
 ## 3 PG-13     15   117
@@ -862,7 +862,7 @@ briefly.</li>
 </ol>
 <p>Solution</p>
 <p>The graph would seem to be a boxplot, side by side for each group:</p>
-<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb798-1" data-line-number="1"><span class="kw">ggplot</span>(movies,<span class="kw">aes</span>(<span class="dt">x=</span>rating, <span class="dt">y=</span>length))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb799"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb799-1" data-line-number="1"><span class="kw">ggplot</span>(movies,<span class="kw">aes</span>(<span class="dt">x=</span>rating, <span class="dt">y=</span>length))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-27-1.png" width="672"  /></p>
 <p>We are looking for approximate normal distributions with approximately
 equal spreads, which I don’t think we have: there are outliers, at the
@@ -885,9 +885,9 @@ all the data together, regardless of group, and then at the last
 minute, you throw in a <code>facet_wrap</code>. I’ve written the code out
 on three lines, so that you can see the pieces: the “what to plot”,
 then the normal quantile plot part, then the facetting:</p>
-<div class="sourceCode" id="cb799"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb799-1" data-line-number="1"><span class="kw">ggplot</span>(movies,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
-<a class="sourceLine" id="cb799-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb799-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>rating)</a></code></pre></div>
+<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb800-1" data-line-number="1"><span class="kw">ggplot</span>(movies,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
+<a class="sourceLine" id="cb800-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb800-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>rating)</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-28-1.png" width="672"  /></p>
 <p>Since there are four movie ratings, <code>facet_wrap</code> has arranged
 them into a <span class="math inline">\(2\times 2\)</span> grid, which satisfyingly means that each
@@ -938,8 +938,8 @@ like). What do you conclude, in the context of the data?</li>
 </ol>
 <p>Solution</p>
 <p>The smart way is to use <code>smmr</code>, since it is much easier:</p>
-<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb800-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb800-2" data-line-number="2"><span class="kw">median_test</span>(movies,length,rating)</a></code></pre></div>
+<div class="sourceCode" id="cb801"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb801-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb801-2" data-line-number="2"><span class="kw">median_test</span>(movies,length,rating)</a></code></pre></div>
 <pre><code>## $table
 ##        above
 ## group   above below
@@ -965,7 +965,7 @@ are different from means.)</p>
 <p>The easiest way to see which movie types really differ in length from
 which is to do all the pairwise median tests, which is in
 <code>smmr</code> thus:</p>
-<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb802-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(movies, length, rating)</a></code></pre></div>
+<div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb803-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(movies, length, rating)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   g1    g2      p_value adj_p_value
 ##   &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;
@@ -980,11 +980,11 @@ which is to do all the pairwise median tests, which is in
 <em>I</em> would never have been able to remember how to run these!)
 Only the first two of these are significant (look in the last
 column). We can remind ourselves of the sample medians:</p>
-<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb804-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb804-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>(),<span class="dt">med=</span><span class="kw">median</span>(length))</a></code></pre></div>
+<div class="sourceCode" id="cb805"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb805-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb805-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>(),<span class="dt">med=</span><span class="kw">median</span>(length))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   rating count   med
-##   &lt;chr&gt;  &lt;int&gt; &lt;int&gt;
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt;
 ## 1 G         15    82
 ## 2 PG        15   100
 ## 3 PG-13     15   117
@@ -1000,25 +1000,25 @@ table tabulating the number of values above and below the overall
 median for each group, (iii) test the table for association, (iv)
 draw a conclusion.
 Thus (i):</p>
-<div class="sourceCode" id="cb806"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb806-1" data-line-number="1"><span class="kw">median</span>(movies<span class="op">$</span>length)</a></code></pre></div>
+<div class="sourceCode" id="cb807"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb807-1" data-line-number="1"><span class="kw">median</span>(movies<span class="op">$</span>length)</a></code></pre></div>
 <pre><code>## [1] 100</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb808"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb808-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(length))</a></code></pre></div>
+<div class="sourceCode" id="cb809"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb809-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(length))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     med
 ##   &lt;dbl&gt;
 ## 1   100</code></pre>
 <p>or store it in a variable,
 and then (ii):</p>
-<div class="sourceCode" id="cb810"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb810-1" data-line-number="1">tab1=<span class="kw">with</span>(movies,<span class="kw">table</span>(length<span class="op">&lt;</span><span class="dv">100</span>,rating))</a>
-<a class="sourceLine" id="cb810-2" data-line-number="2">tab1</a></code></pre></div>
+<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb811-1" data-line-number="1">tab1=<span class="kw">with</span>(movies,<span class="kw">table</span>(length<span class="op">&lt;</span><span class="dv">100</span>,rating))</a>
+<a class="sourceLine" id="cb811-2" data-line-number="2">tab1</a></code></pre></div>
 <pre><code>##        rating
 ##          G PG PG-13  R
 ##   FALSE  2  8    12  9
 ##   TRUE  13  7     3  6</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb812"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb812-1" data-line-number="1">tab2=<span class="kw">with</span>(movies,<span class="kw">table</span>(length<span class="op">&gt;</span><span class="dv">100</span>,rating))</a>
-<a class="sourceLine" id="cb812-2" data-line-number="2">tab2</a></code></pre></div>
+<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb813-1" data-line-number="1">tab2=<span class="kw">with</span>(movies,<span class="kw">table</span>(length<span class="op">&gt;</span><span class="dv">100</span>,rating))</a>
+<a class="sourceLine" id="cb813-2" data-line-number="2">tab2</a></code></pre></div>
 <pre><code>##        rating
 ##          G PG PG-13  R
 ##   FALSE 13  8     3  7
@@ -1027,10 +1027,10 @@ and then (ii):</p>
 100 minutes, and it matters whether you count <span class="math inline">\(&lt;\)</span> and <span class="math inline">\(\ge\)</span> (as in
 <code>tab1</code>) or <span class="math inline">\(&gt;\)</span> and <span class="math inline">\(le\)</span> (<code>tab2</code>). Either is good.</p>
 <p>Was I right about movies of length exactly 100 minutes?</p>
-<div class="sourceCode" id="cb814"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb814-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(length<span class="op">==</span><span class="dv">100</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb815-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(length<span class="op">==</span><span class="dv">100</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   length rating
-##    &lt;int&gt; &lt;chr&gt; 
+##    &lt;dbl&gt; &lt;chr&gt; 
 ## 1    100 PG    
 ## 2    100 R</code></pre>
 <p>One PG and one R. It makes a difference to the R movies, but if you
@@ -1040,14 +1040,14 @@ because the False and True switch roles between <code>tab1</code> and
 You
 need to store your table in a variable because it has to get passed on
 to <code>chisq.test</code> below, (iii):</p>
-<div class="sourceCode" id="cb816"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb816-1" data-line-number="1"><span class="kw">chisq.test</span>(tab1, <span class="dt">correct=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb817-1" data-line-number="1"><span class="kw">chisq.test</span>(tab1, <span class="dt">correct=</span>F)</a></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
 ## 
 ## data:  tab1
 ## X-squared = 14.082, df = 3, p-value = 0.002795</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb818"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb818-1" data-line-number="1"><span class="kw">chisq.test</span>(tab2, <span class="dt">correct=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb819-1" data-line-number="1"><span class="kw">chisq.test</span>(tab2, <span class="dt">correct=</span>F)</a></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
 ## 
@@ -1070,8 +1070,8 @@ differences (that is, what’s lurking in the background of
 to pull out just those, and then compare them using
 <code>smmr</code>. Because the first input to <code>median_test</code> is a
 data frame, it fits neatly into a pipe (with the data frame omitted):</p>
-<div class="sourceCode" id="cb820"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb820-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rating<span class="op">==</span><span class="st">&quot;G&quot;</span> <span class="op">|</span><span class="st"> </span>rating<span class="op">==</span><span class="st">&quot;PG&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb820-2" data-line-number="2"><span class="kw">median_test</span>(length,rating)</a></code></pre></div>
+<div class="sourceCode" id="cb821"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb821-1" data-line-number="1">movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rating<span class="op">==</span><span class="st">&quot;G&quot;</span> <span class="op">|</span><span class="st"> </span>rating<span class="op">==</span><span class="st">&quot;PG&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb821-2" data-line-number="2"><span class="kw">median_test</span>(length,rating)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1088,10 +1088,10 @@ of two rating groups to compare out of the four — so we should have a
 function to do it. I think the input to the function should be a data
 frame that has a column called <code>rating</code>, and two names of
 ratings to compare:</p>
-<div class="sourceCode" id="cb822"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb822-1" data-line-number="1">comp2=<span class="cf">function</span>(rat_<span class="dv">1</span>,rat_<span class="dv">2</span>,d) {</a>
-<a class="sourceLine" id="cb822-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rating<span class="op">==</span>rat_<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>rating<span class="op">==</span>rat_<span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb822-3" data-line-number="3"><span class="kw">median_test</span>(length,rating)</a>
-<a class="sourceLine" id="cb822-4" data-line-number="4">}</a></code></pre></div>
+<div class="sourceCode" id="cb823"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb823-1" data-line-number="1">comp2=<span class="cf">function</span>(rat_<span class="dv">1</span>,rat_<span class="dv">2</span>,d) {</a>
+<a class="sourceLine" id="cb823-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rating<span class="op">==</span>rat_<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>rating<span class="op">==</span>rat_<span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb823-3" data-line-number="3"><span class="kw">median_test</span>(length,rating)</a>
+<a class="sourceLine" id="cb823-4" data-line-number="4">}</a></code></pre></div>
 <p>The way I wrote this function is that you have to specify the movie
 ratings in quotes. It is <em>possible</em> to write it in such a way
 that you input them without quotes, <code>tidyverse</code> style, but that
@@ -1103,7 +1103,7 @@ to make it work in <code>smmr</code> (note that you specify column names
 without quotes there). There are tutorials on this kind of thing if
 you’re interested.</p>
 <p>Anyway, testing:</p>
-<div class="sourceCode" id="cb823"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb823-1" data-line-number="1"><span class="kw">comp2</span>(<span class="st">&quot;G&quot;</span>,<span class="st">&quot;PG&quot;</span>,movies)</a></code></pre></div>
+<div class="sourceCode" id="cb824"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb824-1" data-line-number="1"><span class="kw">comp2</span>(<span class="st">&quot;G&quot;</span>,<span class="st">&quot;PG&quot;</span>,movies)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1118,11 +1118,11 @@ you’re interested.</p>
 <p>That works, but I really only want to pick out the P-value, which is
 in the list item <code>test</code> in the column <code>value</code>, the third
 entry. So let’s rewrite the function to return just that:</p>
-<div class="sourceCode" id="cb825"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb825-1" data-line-number="1">comp2=<span class="cf">function</span>(rat_<span class="dv">1</span>,rat_<span class="dv">2</span>,d) {</a>
-<a class="sourceLine" id="cb825-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rating<span class="op">==</span>rat_<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>rating<span class="op">==</span>rat_<span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb825-3" data-line-number="3"><span class="kw">median_test</span>(length,rating) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;test&quot;</span>,<span class="st">&quot;value&quot;</span>,<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb825-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb825-5" data-line-number="5"><span class="kw">comp2</span>(<span class="st">&quot;G&quot;</span>,<span class="st">&quot;PG&quot;</span>,movies)</a></code></pre></div>
+<div class="sourceCode" id="cb826"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb826-1" data-line-number="1">comp2=<span class="cf">function</span>(rat_<span class="dv">1</span>,rat_<span class="dv">2</span>,d) {</a>
+<a class="sourceLine" id="cb826-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rating<span class="op">==</span>rat_<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>rating<span class="op">==</span>rat_<span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb826-3" data-line-number="3"><span class="kw">median_test</span>(length,rating) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;test&quot;</span>,<span class="st">&quot;value&quot;</span>,<span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb826-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb826-5" data-line-number="5"><span class="kw">comp2</span>(<span class="st">&quot;G&quot;</span>,<span class="st">&quot;PG&quot;</span>,movies)</a></code></pre></div>
 <pre><code>## [1] 0.007989183</code></pre>
 <p>Gosh.</p>
 <p>What <code>median_test</code> returns is an R <code>list</code> that has two
@@ -1146,25 +1146,25 @@ function and not returning it. Ooops. The nice thing about
 <code>pluck</code> is that I can put it on the end of the pipeline and and
 it will pull out (and return) whatever I want it to.</p>
 <p>Let’s grab a hold of the different rating groups we have:</p>
-<div class="sourceCode" id="cb827"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb827-1" data-line-number="1">the_ratings=<span class="kw">unique</span>(movies<span class="op">$</span>rating)</a>
-<a class="sourceLine" id="cb827-2" data-line-number="2">the_ratings</a></code></pre></div>
+<div class="sourceCode" id="cb828"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb828-1" data-line-number="1">the_ratings=<span class="kw">unique</span>(movies<span class="op">$</span>rating)</a>
+<a class="sourceLine" id="cb828-2" data-line-number="2">the_ratings</a></code></pre></div>
 <pre><code>## [1] &quot;G&quot;     &quot;PG-13&quot; &quot;PG&quot;    &quot;R&quot;</code></pre>
 <p>The Pythonisti among you will know how to finish this off: do a
 loop-inside-a-loop over the rating groups, and get the P-value for
 each pair. You can do that in R, if you must. It’s not pretty at all,
 but it works:</p>
-<div class="sourceCode" id="cb829"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb829-1" data-line-number="1">ii=<span class="kw">character</span>(<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb829-2" data-line-number="2">jj=<span class="kw">character</span>(<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb829-3" data-line-number="3">pp=<span class="kw">numeric</span>(<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb829-4" data-line-number="4"><span class="cf">for</span> (i <span class="cf">in</span> the_ratings) {</a>
-<a class="sourceLine" id="cb829-5" data-line-number="5"><span class="cf">for</span> (j <span class="cf">in</span> the_ratings) {</a>
-<a class="sourceLine" id="cb829-6" data-line-number="6">pval=<span class="kw">comp2</span>(i,j,movies)</a>
-<a class="sourceLine" id="cb829-7" data-line-number="7">ii=<span class="kw">c</span>(ii,i)</a>
-<a class="sourceLine" id="cb829-8" data-line-number="8">jj=<span class="kw">c</span>(jj,j)</a>
-<a class="sourceLine" id="cb829-9" data-line-number="9">pp=<span class="kw">c</span>(pp,pval)</a>
-<a class="sourceLine" id="cb829-10" data-line-number="10">}</a>
-<a class="sourceLine" id="cb829-11" data-line-number="11">}  </a>
-<a class="sourceLine" id="cb829-12" data-line-number="12"><span class="kw">tibble</span>(ii,jj,pp)</a></code></pre></div>
+<div class="sourceCode" id="cb830"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb830-1" data-line-number="1">ii=<span class="kw">character</span>(<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb830-2" data-line-number="2">jj=<span class="kw">character</span>(<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb830-3" data-line-number="3">pp=<span class="kw">numeric</span>(<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb830-4" data-line-number="4"><span class="cf">for</span> (i <span class="cf">in</span> the_ratings) {</a>
+<a class="sourceLine" id="cb830-5" data-line-number="5"><span class="cf">for</span> (j <span class="cf">in</span> the_ratings) {</a>
+<a class="sourceLine" id="cb830-6" data-line-number="6">pval=<span class="kw">comp2</span>(i,j,movies)</a>
+<a class="sourceLine" id="cb830-7" data-line-number="7">ii=<span class="kw">c</span>(ii,i)</a>
+<a class="sourceLine" id="cb830-8" data-line-number="8">jj=<span class="kw">c</span>(jj,j)</a>
+<a class="sourceLine" id="cb830-9" data-line-number="9">pp=<span class="kw">c</span>(pp,pval)</a>
+<a class="sourceLine" id="cb830-10" data-line-number="10">}</a>
+<a class="sourceLine" id="cb830-11" data-line-number="11">}  </a>
+<a class="sourceLine" id="cb830-12" data-line-number="12"><span class="kw">tibble</span>(ii,jj,pp)</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 3
 ##    ii    jj           pp
 ##    &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -1191,7 +1191,7 @@ calculation of the P-value, and that’s almost hidden by all the
 book-keeping. (It’s also slow and inefficient, though the slowness
 doesn’t matter too much here since it’s not a very big problem.)</p>
 <p>Let’s try another way:</p>
-<div class="sourceCode" id="cb831"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb831-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings)</a></code></pre></div>
+<div class="sourceCode" id="cb832"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb832-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings)</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 2
 ##    first second
 ##    &lt;chr&gt; &lt;chr&gt; 
@@ -1217,8 +1217,8 @@ one is (alphabetically) strictly less than the second one. This is
 because we’re never comparing a rating with itself, and each pair of
 ratings appears twice, once in alphabetical order, and once the other
 way around. The ones we need are these:</p>
-<div class="sourceCode" id="cb833"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb833-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb833-2" data-line-number="2"><span class="kw">filter</span>(first<span class="op">&lt;</span>second)</a></code></pre></div>
+<div class="sourceCode" id="cb834"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb834-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb834-2" data-line-number="2"><span class="kw">filter</span>(first<span class="op">&lt;</span>second)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   first second
 ##   &lt;chr&gt; &lt;chr&gt; 
@@ -1242,9 +1242,9 @@ first time I’ve ever used it)
 <label for="tufte-mn-43" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-43" class="margin-toggle"><span class="marginnote">This was a year ago when I first wrote this.} is exactly what the texttt{map2</span> family of functions
 does. In our case, <code>comp2</code> returns a decimal number, a
 <code>dbl</code>, so <code>map2_dbl</code> does it. Thus:</p>
-<div class="sourceCode" id="cb835"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb835-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb835-2" data-line-number="2"><span class="kw">filter</span>(first<span class="op">&lt;</span>second) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb835-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">pval=</span><span class="kw">map2_dbl</span>(first,second,<span class="op">~</span><span class="kw">comp2</span>(.x,.y,movies)))</a></code></pre></div>
+<div class="sourceCode" id="cb836"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb836-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb836-2" data-line-number="2"><span class="kw">filter</span>(first<span class="op">&lt;</span>second) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb836-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">pval=</span><span class="kw">map2_dbl</span>(first,second,<span class="op">~</span><span class="kw">comp2</span>(.x,.y,movies)))</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 3
 ##   first second      pval
 ##   &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
@@ -1270,10 +1270,10 @@ only reject if it is less than <span class="math inline">\(0.05/6\)</span>, sinc
 tests. This is a fiddly calculation to do by hand, but it’s easy to
 build in another <code>mutate</code>, thus:
 <label for="tufte-mn-44" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-44" class="margin-toggle"><span class="marginnote">In the pairwise median test in <em>smmr</em>, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I flip it around so that you adjust the P-values by <em>multiplying</em> them by 6, and then comparing the adjusted P-values with the usual 0.05. It comes to the same place in the end, except that this way you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.</span></p>
-<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb837-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb837-2" data-line-number="2"><span class="kw">filter</span>(first<span class="op">&lt;</span>second) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb837-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">pval=</span><span class="kw">map2_dbl</span>(first,second,<span class="op">~</span><span class="kw">comp2</span>(.x,.y,movies))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb837-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">reject=</span>pval<span class="op">&lt;</span><span class="fl">0.05</span><span class="op">/</span><span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb838"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb838-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb838-2" data-line-number="2"><span class="kw">filter</span>(first<span class="op">&lt;</span>second) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb838-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">pval=</span><span class="kw">map2_dbl</span>(first,second,<span class="op">~</span><span class="kw">comp2</span>(.x,.y,movies))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb838-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">reject=</span>pval<span class="op">&lt;</span><span class="fl">0.05</span><span class="op">/</span><span class="dv">6</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   first second      pval reject
 ##   &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;lgl&gt; 
@@ -1301,13 +1301,13 @@ adjustment, we only reject if the P-value is less than
 with.)</p>
 <p>Listing the rating groups sorted by median would give you an idea of
 how far different the medians have to be to be significantly different:</p>
-<div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb839-1" data-line-number="1">medians=movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb839-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(length)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb839-3" data-line-number="3"><span class="kw">arrange</span>(<span class="kw">desc</span>(med))</a>
-<a class="sourceLine" id="cb839-4" data-line-number="4">medians</a></code></pre></div>
+<div class="sourceCode" id="cb840"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb840-1" data-line-number="1">medians=movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb840-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(length)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb840-3" data-line-number="3"><span class="kw">arrange</span>(<span class="kw">desc</span>(med))</a>
+<a class="sourceLine" id="cb840-4" data-line-number="4">medians</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   rating   med
-##   &lt;chr&gt;  &lt;int&gt;
+##   &lt;chr&gt;  &lt;dbl&gt;
 ## 1 PG-13    117
 ## 2 R        103
 ## 3 PG       100
@@ -1319,15 +1319,15 @@ the Mood median test is not actually literally comparing the sample
 medians, but only assessing the splits of values above and below the
 median of the combined sample. A subtlety, rather than an error, I’d say.</p>
 <p>Here’s something extremely flashy to finish with:</p>
-<div class="sourceCode" id="cb841"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb841-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb841-2" data-line-number="2"><span class="kw">filter</span>(first<span class="op">&lt;</span>second) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb841-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">pval=</span><span class="kw">map2_dbl</span>(first,second,<span class="op">~</span><span class="kw">comp2</span>(.x,.y,movies))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb841-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">reject=</span>pval<span class="op">&lt;</span><span class="fl">0.05</span><span class="op">/</span><span class="dv">6</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb841-5" data-line-number="5"><span class="kw">left_join</span>(medians,<span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>=<span class="st">&quot;rating&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb841-6" data-line-number="6"><span class="kw">left_join</span>(medians,<span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;second&quot;</span>=<span class="st">&quot;rating&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb842"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb842-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">first=</span>the_ratings,<span class="dt">second=</span>the_ratings) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb842-2" data-line-number="2"><span class="kw">filter</span>(first<span class="op">&lt;</span>second) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb842-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">pval=</span><span class="kw">map2_dbl</span>(first,second,<span class="op">~</span><span class="kw">comp2</span>(.x,.y,movies))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb842-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">reject=</span>pval<span class="op">&lt;</span><span class="fl">0.05</span><span class="op">/</span><span class="dv">6</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb842-5" data-line-number="5"><span class="kw">left_join</span>(medians,<span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>=<span class="st">&quot;rating&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb842-6" data-line-number="6"><span class="kw">left_join</span>(medians,<span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;second&quot;</span>=<span class="st">&quot;rating&quot;</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 6
 ##   first second      pval reject med.x med.y
-##   &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;lgl&gt;  &lt;int&gt; &lt;int&gt;
+##   &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;lgl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 G     PG     0.00799   TRUE      82   100
 ## 2 G     PG-13  0.0000590 TRUE      82   117
 ## 3 G     R      0.0106    FALSE     82   103
@@ -1404,17 +1404,17 @@ read the data into R and display the results.</li>
 </ol>
 <p>Solution</p>
 <p>Values separated by spaces:</p>
-<div class="sourceCode" id="cb843"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb843-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/carbon.txt&quot;</span></a>
-<a class="sourceLine" id="cb843-2" data-line-number="2">carbon=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb844-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/carbon.txt&quot;</span></a>
+<a class="sourceLine" id="cb844-2" data-line-number="2">carbon=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   method = col_integer(),
+##   method = col_double(),
 ##   weight = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb845-1" data-line-number="1">carbon</a></code></pre></div>
+<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb846-1" data-line-number="1">carbon</a></code></pre></div>
 <pre><code>## # A tibble: 15 x 2
 ##    method weight
-##     &lt;int&gt;  &lt;dbl&gt;
+##     &lt;dbl&gt;  &lt;dbl&gt;
 ##  1      1   12.0
 ##  2      1   12.0
 ##  3      1   12.0
@@ -1449,11 +1449,11 @@ weight, is something like a boxplot. If you’re not careful,
 <code>method</code> will get treated as a quantitative variable,
 which you don’t want; the easiest way around that, for a boxplot
 at least, is to turn it into a factor like this:</p>
-<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb847-1" data-line-number="1"><span class="kw">ggplot</span>(carbon,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(method),<span class="dt">y=</span>weight))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb848"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb848-1" data-line-number="1"><span class="kw">ggplot</span>(carbon,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(method),<span class="dt">y=</span>weight))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-52-1.png" width="672"  /></p>
 <p>If you insist, you could do a faceted histogram (above and below, for preference):</p>
-<div class="sourceCode" id="cb848"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb848-1" data-line-number="1"><span class="kw">ggplot</span>(carbon,<span class="kw">aes</span>(<span class="dt">x=</span>weight))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb848-2" data-line-number="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>method,<span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb849-1" data-line-number="1"><span class="kw">ggplot</span>(carbon,<span class="kw">aes</span>(<span class="dt">x=</span>weight))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb849-2" data-line-number="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>method,<span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-53-1.png" width="672"  /></p>
 <p>There are really not enough data values for a histogram to be of much
 help, so I don’t like this as much.</p>
@@ -1462,9 +1462,9 @@ you’ll realize that normality is the kind of thing we’re looking for,
 in which case normal quantile plots would be the thing. However, we
 might have to be rather forgiving for method 2 since there are only 5
 observations:</p>
-<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb849-1" data-line-number="1"><span class="kw">ggplot</span>(carbon,<span class="kw">aes</span>(<span class="dt">sample=</span>weight))<span class="op">+</span></a>
-<a class="sourceLine" id="cb849-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb849-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>method)</a></code></pre></div>
+<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb850-1" data-line-number="1"><span class="kw">ggplot</span>(carbon,<span class="kw">aes</span>(<span class="dt">sample=</span>weight))<span class="op">+</span></a>
+<a class="sourceLine" id="cb850-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb850-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>method)</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-54-1.png" width="672"  /></p>
 <p>I don’t mind these coming out side by side, though I would rather have
 them squarer.</p>
@@ -1508,7 +1508,7 @@ begin another new section in your report here.)</li>
 <p>Solution</p>
 <p>This would be the Welch-Satterthwaite version of the two-sample
 <span class="math inline">\(t\)</span>-test, since the two groups do appear to have different spreads:</p>
-<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb850-1" data-line-number="1"><span class="kw">t.test</span>(weight<span class="op">~</span>method,<span class="dt">data=</span>carbon)</a></code></pre></div>
+<div class="sourceCode" id="cb851"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb851-1" data-line-number="1"><span class="kw">t.test</span>(weight<span class="op">~</span>method,<span class="dt">data=</span>carbon)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1525,7 +1525,7 @@ to defend your choice of the Welch-Satterthwaite test (as I did
 above), and not just do the default <span class="math inline">\(t\)</span>-test without comment.</p>
 <p>If, in your discussion above, you thought the spreads were equal
 enough, then you should do the pooled <span class="math inline">\(t\)</span>-test here, which goes like this:</p>
-<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb852-1" data-line-number="1"><span class="kw">t.test</span>(weight<span class="op">~</span>method,<span class="dt">data=</span>carbon,<span class="dt">var.equal=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb853"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb853-1" data-line-number="1"><span class="kw">t.test</span>(weight<span class="op">~</span>method,<span class="dt">data=</span>carbon,<span class="dt">var.equal=</span>T)</a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -1554,7 +1554,7 @@ variances, given that you might be pondering that. There are
 several that I can think of, that R can do, of which I mention two.</p>
 <p>The first is the <span class="math inline">\(F\)</span>-test for variances that you might have learned in
 B57 (that is the basis for the ANOVA <span class="math inline">\(F\)</span>-test):</p>
-<div class="sourceCode" id="cb854"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb854-1" data-line-number="1"><span class="kw">var.test</span>(weight<span class="op">~</span>method,<span class="dt">data=</span>carbon)</a></code></pre></div>
+<div class="sourceCode" id="cb855"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb855-1" data-line-number="1"><span class="kw">var.test</span>(weight<span class="op">~</span>method,<span class="dt">data=</span>carbon)</a></code></pre></div>
 <pre><code>## 
 ##  F test to compare two variances
 ## 
@@ -1574,7 +1574,7 @@ large). Since the ANOVA <span class="math inline">\(F\)</span>-test is based on 
 why normality is also more important in ANOVA than it is in a <span class="math inline">\(t\)</span>-test.</p>
 <p>The second is Levene’s test. This doesn’t depend on normality (at
 least, not nearly so much), so I like it better in general:</p>
-<div class="sourceCode" id="cb856"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb856-1" data-line-number="1"><span class="kw">library</span>(car)</a></code></pre></div>
+<div class="sourceCode" id="cb857"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb857-1" data-line-number="1"><span class="kw">library</span>(car)</a></code></pre></div>
 <pre><code>## Loading required package: carData</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;car&#39;</code></pre>
@@ -1584,7 +1584,7 @@ least, not nearly so much), so I like it better in general:</p>
 <pre><code>## The following object is masked from &#39;package:purrr&#39;:
 ## 
 ##     some</code></pre>
-<div class="sourceCode" id="cb861"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb861-1" data-line-number="1"><span class="kw">leveneTest</span>(weight<span class="op">~</span><span class="kw">factor</span>(method),<span class="dt">data=</span>carbon)</a></code></pre></div>
+<div class="sourceCode" id="cb862"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb862-1" data-line-number="1"><span class="kw">leveneTest</span>(weight<span class="op">~</span><span class="kw">factor</span>(method),<span class="dt">data=</span>carbon)</a></code></pre></div>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
 ##       Df F value Pr(&gt;F)
 ## group  1  0.9887 0.3382
@@ -1611,8 +1611,8 @@ normally-distributed data.</li>
 <p>Solution</p>
 <p>That would be Mood’s median test. Since I didn’t say anything
 about building it yourself, feel free to use <code>smmr</code>:</p>
-<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb863-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb863-2" data-line-number="2"><span class="kw">median_test</span>(carbon, weight, method)</a></code></pre></div>
+<div class="sourceCode" id="cb864"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb864-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb864-2" data-line-number="2"><span class="kw">median_test</span>(carbon, weight, method)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1690,7 +1690,7 @@ not being considered, but I think it’s good practice to draw a
 picture and make a call about which test is appropriate.
 I loaded package <code>car</code> above; I’d better be tidy and
 unload it before I go on:</p>
-<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb865-1" data-line-number="1"><span class="kw">detach</span>(package<span class="op">:</span>car,<span class="dt">unload=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb866"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb866-1" data-line-number="1"><span class="kw">detach</span>(package<span class="op">:</span>car,<span class="dt">unload=</span>T)</a></code></pre></div>
 </div>
 <div id="can-caffeine-improve-your-performance-on-a-test" class="section level2">
 <h2><span class="header-section-number">11.5</span> Can caffeine improve your performance on a test?</h2>
@@ -1709,19 +1709,19 @@ test. The data are in
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code> because it’s a <code>.csv</code> file:</p>
-<div class="sourceCode" id="cb866"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb866-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv&quot;</span></a>
-<a class="sourceLine" id="cb866-2" data-line-number="2">caffeine.untidy=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb867"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb867-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv&quot;</span></a>
+<a class="sourceLine" id="cb867-2" data-line-number="2">caffeine.untidy=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   Sub = col_integer(),
-##   High = col_integer(),
-##   Moderate = col_integer(),
-##   None = col_integer()
+##   Sub = col_double(),
+##   High = col_double(),
+##   Moderate = col_double(),
+##   None = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb868"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb868-1" data-line-number="1">caffeine.untidy</a></code></pre></div>
+<div class="sourceCode" id="cb869"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb869-1" data-line-number="1">caffeine.untidy</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 4
 ##      Sub  High Moderate  None
-##    &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+##    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
 ##  1     1    72       68    68
 ##  2     2    65       80    74
 ##  3     3    68       64    59
@@ -1757,15 +1757,15 @@ column of group labels <code>amount</code>. Is it a <code>factor</code>?</li>
 </ol>
 <p>Solution</p>
 <p>We are combining several columns into one, so this is <code>gather</code>:</p>
-<div class="sourceCode" id="cb870"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb870-1" data-line-number="1">caffeine =<span class="st"> </span>caffeine.untidy <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb870-2" data-line-number="2"><span class="kw">gather</span>(amount,score,<span class="kw">c</span>(High<span class="op">:</span>None))</a></code></pre></div>
+<div class="sourceCode" id="cb871"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb871-1" data-line-number="1">caffeine =<span class="st"> </span>caffeine.untidy <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb871-2" data-line-number="2"><span class="kw">gather</span>(amount,score,<span class="kw">c</span>(High<span class="op">:</span>None))</a></code></pre></div>
 <p>I didn’t ask you to list the resulting data frame, but it is smart to
 at least look for yourself, to make sure <code>gather</code> has done
 what you expected.</p>
-<div class="sourceCode" id="cb871"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb871-1" data-line-number="1">caffeine</a></code></pre></div>
+<div class="sourceCode" id="cb872"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb872-1" data-line-number="1">caffeine</a></code></pre></div>
 <pre><code>## # A tibble: 36 x 3
 ##      Sub amount score
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt;
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
 ##  1     1 High      72
 ##  2     2 High      65
 ##  3     3 High      68
@@ -1780,7 +1780,7 @@ what you expected.</p>
 <p>A column of amounts of caffeine, and a column of test scores. This is
 what we expected. There should be 12 each of the <code>amount</code>s,
 which you can check if you like:</p>
-<div class="sourceCode" id="cb873"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb873-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</a></code></pre></div>
+<div class="sourceCode" id="cb874"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb874-1" data-line-number="1">caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   amount       n
 ##   &lt;chr&gt;    &lt;int&gt;
@@ -1795,7 +1795,7 @@ so get used to seeing where it will be useful.</p>
 <li>Obtain side-by-side boxplots of test scores by amount of caffeine.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb875"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb875-1" data-line-number="1"><span class="kw">ggplot</span>(caffeine,<span class="kw">aes</span>(<span class="dt">x=</span>amount,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb876"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb876-1" data-line-number="1"><span class="kw">ggplot</span>(caffeine,<span class="kw">aes</span>(<span class="dt">x=</span>amount,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-65-1.png" width="672"  /></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Does caffeine amount seem to have an effect? If so, what
@@ -1816,8 +1816,8 @@ do you conclude?</li>
 </ol>
 <p>Solution</p>
 <p>Something like this:</p>
-<div class="sourceCode" id="cb876"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb876-1" data-line-number="1">caff<span class="fl">.1</span>=<span class="kw">aov</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
-<a class="sourceLine" id="cb876-2" data-line-number="2"><span class="kw">summary</span>(caff<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb877"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb877-1" data-line-number="1">caff<span class="fl">.1</span>=<span class="kw">aov</span>(score<span class="op">~</span>amount,<span class="dt">data=</span>caffeine)</a>
+<a class="sourceLine" id="cb877-2" data-line-number="2"><span class="kw">summary</span>(caff<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
 ## amount       2  477.7  238.86   3.986 0.0281 *
 ## Residuals   33 1977.5   59.92                 
@@ -1843,8 +1843,8 @@ there are differences to find that we don’t know about yet.</p>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb878"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb878-1" data-line-number="1">caff<span class="fl">.3</span>=<span class="kw">TukeyHSD</span>(caff<span class="fl">.1</span>)</a>
-<a class="sourceLine" id="cb878-2" data-line-number="2">caff<span class="fl">.3</span></a></code></pre></div>
+<div class="sourceCode" id="cb879"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb879-1" data-line-number="1">caff<span class="fl">.3</span>=<span class="kw">TukeyHSD</span>(caff<span class="fl">.1</span>)</a>
+<a class="sourceLine" id="cb879-2" data-line-number="2">caff<span class="fl">.3</span></a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 

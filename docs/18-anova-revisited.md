@@ -23,8 +23,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -83,10 +83,10 @@ caffeine.untidy=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   Sub = col_integer(),
-##   High = col_integer(),
-##   Moderate = col_integer(),
-##   None = col_integer()
+##   Sub = col_double(),
+##   High = col_double(),
+##   Moderate = col_double(),
+##   None = col_double()
 ## )
 ```
 
@@ -97,7 +97,7 @@ caffeine.untidy
 ```
 ## # A tibble: 12 x 4
 ##      Sub  High Moderate  None
-##    <int> <int>    <int> <int>
+##    <dbl> <dbl>    <dbl> <dbl>
 ##  1     1    72       68    68
 ##  2     2    65       80    74
 ##  3     3    68       64    59
@@ -139,7 +139,7 @@ caffeine
 ```
 ## # A tibble: 36 x 3
 ##      Sub amount score
-##    <int> <fct>  <int>
+##    <dbl> <fct>  <dbl>
 ##  1     1 High      72
 ##  2     2 High      65
 ##  3     3 High      68
@@ -719,9 +719,9 @@ studyhours=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   id = col_integer(),
+##   id = col_double(),
 ##   major = col_character(),
-##   hours = col_integer()
+##   hours = col_double()
 ## )
 ```
 
@@ -732,7 +732,7 @@ studyhours
 ```
 ## # A tibble: 75 x 3
 ##       id major hours
-##    <int> <chr> <int>
+##    <dbl> <chr> <dbl>
 ##  1     1 math     15
 ##  2     2 math     20
 ##  3     3 math     14
@@ -1264,9 +1264,9 @@ smith=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   id = col_integer(),
+##   id = col_double(),
 ##   context = col_character(),
-##   words = col_integer()
+##   words = col_double()
 ## )
 ```
 
@@ -1277,7 +1277,7 @@ smith
 ```
 ## # A tibble: 50 x 3
 ##       id context words
-##    <int> <chr>   <int>
+##    <dbl> <chr>   <dbl>
 ##  1     1 same       25
 ##  2     2 same       26
 ##  3     3 same       17
@@ -1316,7 +1316,7 @@ smith
 ```
 ## # A tibble: 50 x 3
 ##       id context words
-##    <int> <fct>   <int>
+##    <dbl> <fct>   <dbl>
 ##  1     1 same       25
 ##  2     2 same       26
 ##  3     3 same       17
@@ -2730,8 +2730,8 @@ lepro=read_table(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   drug = col_character(),
-##   pre = col_integer(),
-##   post = col_integer()
+##   pre = col_double(),
+##   post = col_double()
 ## )
 ```
 
@@ -2742,7 +2742,7 @@ lepro
 ```
 ## # A tibble: 30 x 3
 ##    drug    pre  post
-##    <chr> <int> <int>
+##    <chr> <dbl> <dbl>
 ##  1 A        11     6
 ##  2 A         6     4
 ##  3 D         6     0
@@ -3230,7 +3230,7 @@ urine=read_csv(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   obesity = col_character(),
-##   x = col_integer(),
+##   x = col_double(),
 ##   creatinine = col_double(),
 ##   chloride = col_double(),
 ##   chlorine = col_double()
@@ -3244,7 +3244,7 @@ urine
 ```
 ## # A tibble: 45 x 5
 ##    obesity     x creatinine chloride chlorine
-##    <chr>   <int>      <dbl>    <dbl>    <dbl>
+##    <chr>   <dbl>      <dbl>    <dbl>    <dbl>
 ##  1 a          24       17.6     5.15      7.5
 ##  2 a          32       13.4     5.75      7.1
 ##  3 a          17       20.3     4.35      2.3

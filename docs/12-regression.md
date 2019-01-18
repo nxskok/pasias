@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -64,9 +64,9 @@ rains=read_table2(my_url)
 ## cols(
 ##   station = col_character(),
 ##   rainfall = col_double(),
-##   altitude = col_integer(),
+##   altitude = col_double(),
 ##   latitude = col_double(),
-##   fromcoast = col_integer()
+##   fromcoast = col_double()
 ## )
 ```
 
@@ -89,7 +89,7 @@ rains
 ```
 ## # A tibble: 30 x 5
 ##    station      rainfall altitude latitude fromcoast
-##    <chr>           <dbl>    <int>    <dbl>     <int>
+##    <chr>           <dbl>    <dbl>    <dbl>     <dbl>
 ##  1 Eureka           39.6       43     40.8         1
 ##  2 RedBluff         23.3      341     40.2        97
 ##  3 Thermal          18.2     4152     33.8        70
@@ -159,7 +159,7 @@ rains %>% filter(rainfall>60)
 ```
 ## # A tibble: 1 x 5
 ##   station      rainfall altitude latitude fromcoast
-##   <chr>           <dbl>    <int>    <dbl>     <int>
+##   <chr>           <dbl>    <dbl>    <dbl>     <dbl>
 ## 1 CrescentCity     74.9       35     41.7         1
 ```
 
@@ -179,7 +179,7 @@ rains %>% filter(rainfall<2)
 ```
 ## # A tibble: 1 x 5
 ##   station     rainfall altitude latitude fromcoast
-##   <chr>          <dbl>    <int>    <dbl>     <int>
+##   <chr>          <dbl>    <dbl>    <dbl>     <dbl>
 ## 1 DeathValley     1.66     -178     36.5       194
 ```
 
@@ -1420,7 +1420,7 @@ fb=read_tsv(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   GMdensity = col_double(),
-##   FBfriends = col_integer()
+##   FBfriends = col_double()
 ## )
 ```
 
@@ -1431,7 +1431,7 @@ fb
 ```
 ## # A tibble: 40 x 2
 ##    GMdensity FBfriends
-##        <dbl>     <int>
+##        <dbl>     <dbl>
 ##  1      -1.8        23
 ##  2       0.1        35
 ##  3      -1.2        80
@@ -1745,7 +1745,7 @@ carp=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   tank = col_integer(),
+##   tank = col_double(),
 ##   bodyweight = col_double(),
 ##   ENE = col_double()
 ## )
@@ -1758,7 +1758,7 @@ carp
 ```
 ## # A tibble: 10 x 3
 ##     tank bodyweight   ENE
-##    <int>      <dbl> <dbl>
+##    <dbl>      <dbl> <dbl>
 ##  1     1       11.7  15.3
 ##  2     2       25.3   9.3
 ##  3     3       90.2   6.5
@@ -2014,7 +2014,7 @@ carp.2a
 ```
 ## # A tibble: 10 x 10
 ##     tank bodyweight   ENE .fitted .se.fit .resid  .hat .sigma .cooksd
-##  * <int>      <dbl> <dbl>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>   <dbl>
+##  * <dbl>      <dbl> <dbl>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>   <dbl>
 ##  1     1       11.7  15.3   12.6    1.07   2.74  0.239   1.99 0.215  
 ##  2     2       25.3   9.3   11.3    0.886 -2.01  0.163   2.19 0.0651 
 ##  3     3       90.2   6.5    6.75   1.07  -0.252 0.240   2.37 0.00182
@@ -2258,8 +2258,8 @@ sparrowhawks=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   returning = col_integer(),
-##   newadults = col_integer()
+##   returning = col_double(),
+##   newadults = col_double()
 ## )
 ```
 
@@ -2530,8 +2530,8 @@ soc=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   experience = col_integer(),
-##   salary = col_integer()
+##   experience = col_double(),
+##   salary = col_double()
 ## )
 ```
 
@@ -2542,7 +2542,7 @@ soc
 ```
 ## # A tibble: 50 x 2
 ##    experience salary
-##         <int>  <int>
+##         <dbl>  <dbl>
 ##  1          7  26075
 ##  2         28  79370
 ##  3         23  65726
@@ -3216,8 +3216,8 @@ trees=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   diameter = col_integer(),
-##   volume = col_integer()
+##   diameter = col_double(),
+##   volume = col_double()
 ## )
 ```
 
@@ -3228,7 +3228,7 @@ trees
 ```
 ## # A tibble: 10 x 2
 ##    diameter volume
-##       <int>  <int>
+##       <dbl>  <dbl>
 ##  1       32    185
 ##  2       29    109
 ##  3       24     95
@@ -3898,8 +3898,8 @@ tortoises=read_table(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   length = col_integer(),
-##   eggs = col_integer()
+##   length = col_double(),
+##   eggs = col_double()
 ## )
 ```
 
@@ -3910,7 +3910,7 @@ tortoises
 ```
 ## # A tibble: 18 x 2
 ##    length  eggs
-##     <int> <int>
+##     <dbl> <dbl>
 ##  1    284     3
 ##  2    290     2
 ##  3    290     7
@@ -4798,8 +4798,8 @@ coasters=read_csv(my_url)
 ## cols(
 ##   coaster_name = col_character(),
 ##   state = col_character(),
-##   drop = col_integer(),
-##   duration = col_integer()
+##   drop = col_double(),
+##   duration = col_double()
 ## )
 ```
 
@@ -4810,7 +4810,7 @@ coasters
 ```
 ## # A tibble: 10 x 4
 ##    coaster_name     state         drop duration
-##    <chr>            <chr>        <int>    <int>
+##    <chr>            <chr>        <dbl>    <dbl>
 ##  1 Incredible Hulk  Florida        105      135
 ##  2 Millennium Force Ohio           300      105
 ##  3 Goliath          California     255      180
@@ -4935,7 +4935,7 @@ arrange(desc(abs(.resid)))
 ```
 ## # A tibble: 10 x 4
 ##    coaster_name     duration  drop .resid
-##    <chr>               <int> <int>  <dbl>
+##    <chr>               <dbl> <dbl>  <dbl>
 ##  1 Nitro                 240   215  97.0 
 ##  2 The Beast              65   141 -60.1 
 ##  3 Millennium Force      105   300 -58.6 
@@ -4973,7 +4973,7 @@ arrange(desc(abs(.resid)))
 ```
 ## # A tibble: 10 x 11
 ##    coaster_name state  drop duration .fitted .se.fit .resid  .hat .sigma
-##    <chr>        <chr> <int>    <int>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>
+##    <chr>        <chr> <dbl>    <dbl>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>
 ##  1 Nitro        New …   215      240    143.    18.9  97.0  0.138   37.5
 ##  2 The Beast    Ohio    141       65    125.    17.5 -60.1  0.118   48.8
 ##  3 Millennium … Ohio    300      105    164.    33.4 -58.6  0.429   45.9
@@ -5044,7 +5044,7 @@ runs=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   distance = col_double(),
-##   blood_sugar = col_integer()
+##   blood_sugar = col_double()
 ## )
 ```
 
@@ -5055,7 +5055,7 @@ runs
 ```
 ## # A tibble: 12 x 2
 ##    distance blood_sugar
-##       <dbl>       <int>
+##       <dbl>       <dbl>
 ##  1      2           136
 ##  2      2           146
 ##  3      2.5         131
@@ -5403,7 +5403,7 @@ pizza=read_csv(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   Type = col_character(),
-##   Calories = col_integer(),
+##   Calories = col_double(),
 ##   Fat = col_double(),
 ##   Cost = col_double()
 ## )
@@ -5416,7 +5416,7 @@ pizza
 ```
 ## # A tibble: 24 x 4
 ##    Type                                               Calories   Fat  Cost
-##    <chr>                                                 <int> <dbl> <dbl>
+##    <chr>                                                 <dbl> <dbl> <dbl>
 ##  1 Domino's Deep Dish with Pepperoni                       385  19.5  1.87
 ##  2 Pizza Hut's Stuffed Crust with Pepperoni                370  15    1.83
 ##  3 Pizza Hut's Pan Pizza with Pepperoni                    280  14    1.83
@@ -5492,6 +5492,16 @@ will gobble up that pizza too:
 ```r
 my_other_url="http://www.utsc.utoronto.ca/~butler/d29/Pizza_E29.xls"
 pizza4=import(my_other_url)
+```
+
+```
+## readxl works best with a newer version of the tibble package.
+## You currently have tibble v1.4.2.
+## Falling back to column name repair from tibble <= v1.4.2.
+## Message displays once per session.
+```
+
+```r
 head(pizza4)
 ```
 
@@ -6318,9 +6328,9 @@ satisf=read_table(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   satis = col_integer(),
-##   age = col_integer(),
-##   severity = col_integer(),
+##   satis = col_double(),
+##   age = col_double(),
+##   severity = col_double(),
 ##   anxiety = col_double()
 ## )
 ```
@@ -6332,7 +6342,7 @@ satisf
 ```
 ## # A tibble: 46 x 4
 ##    satis   age severity anxiety
-##    <int> <int>    <int>   <dbl>
+##    <dbl> <dbl>    <dbl>   <dbl>
 ##  1    48    50       51     2.3
 ##  2    57    36       46     2.3
 ##  3    66    40       48     2.2
@@ -8090,8 +8100,8 @@ gpa=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   high_GPA = col_double(),
-##   math_SAT = col_integer(),
-##   verb_SAT = col_integer(),
+##   math_SAT = col_double(),
+##   verb_SAT = col_double(),
 ##   comp_GPA = col_double(),
 ##   univ_GPA = col_double()
 ## )
@@ -8104,7 +8114,7 @@ gpa
 ```
 ## # A tibble: 105 x 5
 ##    high_GPA math_SAT verb_SAT comp_GPA univ_GPA
-##       <dbl>    <int>    <int>    <dbl>    <dbl>
+##       <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
 ##  1     3.45      643      589     3.76     3.52
 ##  2     2.78      558      512     2.87     2.91
 ##  3     2.52      583      503     2.54     2.4 

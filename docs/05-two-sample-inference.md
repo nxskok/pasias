@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -54,8 +54,8 @@ plugged=read_delim(myurl," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   year = col_integer(),
-##   hours = col_integer()
+##   year = col_double(),
+##   hours = col_double()
 ## )
 ```
 
@@ -66,7 +66,7 @@ plugged
 ```
 ## # A tibble: 30 x 2
 ##     year hours
-##    <int> <int>
+##    <dbl> <dbl>
 ##  1  1999     4
 ##  2  1999     5
 ##  3  1999     7
@@ -93,7 +93,7 @@ plugged %>% count(year)
 ```
 ## # A tibble: 2 x 2
 ##    year     n
-##   <int> <int>
+##   <dbl> <int>
 ## 1  1999    15
 ## 2  2009    15
 ```
@@ -108,7 +108,7 @@ plugged %>% group_by(year) %>% summarize(rows=n())
 ```
 ## # A tibble: 2 x 2
 ##    year  rows
-##   <int> <int>
+##   <dbl> <int>
 ## 1  1999    15
 ## 2  2009    15
 ```
@@ -472,6 +472,16 @@ those two ways, you go ahead and do this:
 ```r
 library(readxl)
 parking=read_excel("parking.xlsx",sheet=2)
+```
+
+```
+## readxl works best with a newer version of the tibble package.
+## You currently have tibble v1.4.2.
+## Falling back to column name repair from tibble <= v1.4.2.
+## Message displays once per session.
+```
+
+```r
 parking
 ```
 
@@ -1357,7 +1367,7 @@ mice=read_table(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   Time = col_integer(),
+##   Time = col_double(),
 ##   Environment = col_character()
 ## )
 ```
@@ -1369,7 +1379,7 @@ mice
 ```
 ## # A tibble: 14 x 2
 ##     Time Environment
-##    <int> <chr>      
+##    <dbl> <chr>      
 ##  1   359 Enriched   
 ##  2   280 Enriched   
 ##  3   138 Enriched   
@@ -1648,7 +1658,7 @@ diet=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   sect = col_character(),
-##   height = col_integer()
+##   height = col_double()
 ## )
 ```
 
@@ -1659,7 +1669,7 @@ diet
 ```
 ## # A tibble: 21 x 2
 ##    sect  height
-##    <chr>  <int>
+##    <chr>  <dbl>
 ##  1 a        140
 ##  2 a        140
 ##  3 a        140

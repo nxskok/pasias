@@ -15,8 +15,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -622,7 +622,7 @@ rats=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   group = col_character(),
-##   density = col_integer()
+##   density = col_double()
 ## )
 ```
 
@@ -645,7 +645,7 @@ rats
 ```
 ## # A tibble: 30 x 2
 ##    group   density
-##    <chr>     <int>
+##    <chr>     <dbl>
 ##  1 Control     611
 ##  2 Control     621
 ##  3 Control     614
@@ -784,8 +784,8 @@ testing=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   x = col_integer(),
-##   y = col_integer(),
+##   x = col_double(),
+##   y = col_double(),
 ##   g = col_character()
 ## )
 ```
@@ -797,7 +797,7 @@ testing
 ```
 ## # A tibble: 6 x 3
 ##       x     y g    
-##   <int> <int> <chr>
+##   <dbl> <dbl> <chr>
 ## 1     1    10 a    
 ## 2     2    11 b    
 ## 3     3    14 a    
@@ -865,8 +865,8 @@ testing2=read_delim("testing.txt", " ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   x = col_integer(),
-##   y = col_integer(),
+##   x = col_double(),
+##   y = col_double(),
 ##   g = col_character()
 ## )
 ```
@@ -883,7 +883,7 @@ testing2
 ```
 ## # A tibble: 6 x 3
 ##       x     y g    
-##   <int> <int> <chr>
+##   <dbl> <dbl> <chr>
 ## 1     1    10 a    
 ## 2     2    11 b    
 ## 3     3    14 a    
@@ -935,8 +935,8 @@ cars=read_csv("cars.csv")
 ##   Car = col_character(),
 ##   MPG = col_double(),
 ##   Weight = col_double(),
-##   Cylinders = col_integer(),
-##   Horsepower = col_integer(),
+##   Cylinders = col_double(),
+##   Horsepower = col_double(),
 ##   Country = col_character()
 ## )
 ```
@@ -948,7 +948,7 @@ cars
 ```
 ## # A tibble: 38 x 6
 ##    Car                  MPG Weight Cylinders Horsepower Country
-##    <chr>              <dbl>  <dbl>     <int>      <int> <chr>  
+##    <chr>              <dbl>  <dbl>     <dbl>      <dbl> <chr>  
 ##  1 Buick Skylark       28.4   2.67         4         90 U.S.   
 ##  2 Dodge Omni          30.9   2.23         4         75 U.S.   
 ##  3 Mercury Zephyr      20.8   3.07         6         85 U.S.   
@@ -990,8 +990,8 @@ testing=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   x = col_integer(),
-##   y = col_integer(),
+##   x = col_double(),
+##   y = col_double(),
 ##   g = col_character()
 ## )
 ```
@@ -1003,7 +1003,7 @@ testing
 ```
 ## # A tibble: 6 x 3
 ##       x     y g    
-##   <int> <int> <chr>
+##   <dbl> <dbl> <chr>
 ## 1     1    10 a    
 ## 2     2    11 b    
 ## 3     3    14 a    
@@ -1093,7 +1093,7 @@ testing2
 ```
 ## # A tibble: 6 x 3
 ##       x     y g    
-##   <int> <int> <chr>
+##   <dbl> <dbl> <chr>
 ## 1     1    10 a    
 ## 2     2    11 b    
 ## 3     3    14 a    
@@ -1151,7 +1151,7 @@ cars
 ```
 ## # A tibble: 38 x 6
 ##    Car                  MPG Weight Cylinders Horsepower Country
-##    <chr>              <dbl>  <dbl>     <int>      <int> <chr>  
+##    <chr>              <dbl>  <dbl>     <dbl>      <dbl> <chr>  
 ##  1 Buick Skylark       28.4   2.67         4         90 U.S.   
 ##  2 Dodge Omni          30.9   2.23         4         75 U.S.   
 ##  3 Mercury Zephyr      20.8   3.07         6         85 U.S.   

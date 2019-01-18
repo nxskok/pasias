@@ -318,16 +318,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="the-sign-test-and-moods-median-test" class="section level1">
 <h1><span class="header-section-number">Chapter 8</span> The sign test and Mood’s median test</h1>
-<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb430-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb431-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb434-1" data-line-number="1"><span class="kw">library</span>(smmr)</a></code></pre></div>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb435-1" data-line-number="1"><span class="kw">library</span>(smmr)</a></code></pre></div>
 <div id="running-a-maze" class="section level2">
 <h2><span class="header-section-number">8.1</span> Running a maze</h2>
 <p>A researcher is trying to design a maze that can be run by
@@ -343,13 +343,13 @@ delimited by?</li>
 data, so you can treat it as being delimited by anything you like:
 a space, or a comma (the file can also be treated as a
 <code>.csv</code>), etc.:</p>
-<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb435-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/maze.txt&quot;</span></a>
-<a class="sourceLine" id="cb435-2" data-line-number="2">times=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb436-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/maze.txt&quot;</span></a>
+<a class="sourceLine" id="cb436-2" data-line-number="2">times=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   time = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb437-1" data-line-number="1">times</a></code></pre></div>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb438-1" data-line-number="1">times</a></code></pre></div>
 <pre><code>## # A tibble: 21 x 1
 ##     time
 ##    &lt;dbl&gt;
@@ -373,7 +373,7 @@ points), doubling the answer because the test is two-sided.</li>
 </ol>
 <p>Solution</p>
 <p>Count how many values are above and below 60:</p>
-<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb439-1" data-line-number="1">times <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(time<span class="op">&gt;</span><span class="dv">60</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb440-1" data-line-number="1">times <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(time<span class="op">&gt;</span><span class="dv">60</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   `time &gt; 60`     n
 ##   &lt;lgl&gt;       &lt;int&gt;
@@ -381,14 +381,14 @@ points), doubling the answer because the test is two-sided.</li>
 ## 2 TRUE            5</code></pre>
 <p>5 above and 16 below. Then find out how likely it is that a binomial
 with <span class="math inline">\(n=21, p=0.5\)</span> would produce 5 or fewer successes:</p>
-<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb441-1" data-line-number="1">p=<span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>,<span class="dv">21</span>,<span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb441-2" data-line-number="2">p</a></code></pre></div>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb442-1" data-line-number="1">p=<span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>,<span class="dv">21</span>,<span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb442-2" data-line-number="2">p</a></code></pre></div>
 <pre><code>## [1] 0.01330185</code></pre>
 <p>or if you prefer count upwards from 16:</p>
-<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb443-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">16</span><span class="op">:</span><span class="dv">21</span>,<span class="dv">21</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb444-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">16</span><span class="op">:</span><span class="dv">21</span>,<span class="dv">21</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 0.01330185</code></pre>
 <p>and double it to get a two-sided P-value:</p>
-<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb445-1" data-line-number="1"><span class="dv">2</span><span class="op">*</span>p  </a></code></pre></div>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb446-1" data-line-number="1"><span class="dv">2</span><span class="op">*</span>p  </a></code></pre></div>
 <pre><code>## [1] 0.0266037</code></pre>
 <p>We’ll compare this with <code>smmr</code> in a moment.</p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -397,13 +397,13 @@ this, you first need to install the package <code>devtools</code> (if you
 haven’t already),
 by going to the console and typing</li>
 </ol>
-<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb447-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb448-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</a></code></pre></div>
 <p>When that’s all done, install <code>smmr</code> thus:</p>
-<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb448-1" data-line-number="1"><span class="kw">library</span>(devtools)</a>
-<a class="sourceLine" id="cb448-2" data-line-number="2"><span class="kw">install_github</span>(<span class="st">&quot;nxskok/smmr&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb449-1" data-line-number="1"><span class="kw">library</span>(devtools)</a>
+<a class="sourceLine" id="cb449-2" data-line-number="2"><span class="kw">install_github</span>(<span class="st">&quot;nxskok/smmr&quot;</span>)</a></code></pre></div>
 <p>That all needs to be done only once. Then, each R Studio session where
 you want to use <code>smmr</code> needs this:</p>
-<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb449-1" data-line-number="1"><span class="kw">library</span>(smmr)</a></code></pre></div>
+<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb450-1" data-line-number="1"><span class="kw">library</span>(smmr)</a></code></pre></div>
 <p>As usual, only the <code>library</code> thing only needs to be done every
 time.</p>
 <p>When you have <code>smmr</code> installed, use <code>sign_test</code> from
@@ -412,8 +412,8 @@ that package to re-run your sign test. Do you get the same P-value?</p>
 <p>The sign test function takes a data frame, an (unquoted) column
 name from that data frame of data to test the median of, and a
 null median (which defaults to 0 if you omit it):</p>
-<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb450-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb450-2" data-line-number="2"><span class="kw">sign_test</span>(times,time,<span class="dv">60</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb451-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb451-2" data-line-number="2"><span class="kw">sign_test</span>(times,time,<span class="dv">60</span>)</a></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##    16     5 
@@ -436,7 +436,7 @@ a function <code>enquo</code> that you don’t have), there is an
 alternative function <code>sign_test0</code> that doesn’t use it. It
 requires as input a <em>column</em> of values (extracted from the data
 frame) and a null median, thus:</p>
-<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb452-1" data-line-number="1"><span class="kw">with</span>(times, <span class="kw">sign_test0</span>(time,<span class="dv">60</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb453-1" data-line-number="1"><span class="kw">with</span>(times, <span class="kw">sign_test0</span>(time,<span class="dv">60</span>))</a></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##    16     5 
@@ -455,12 +455,12 @@ Run it on your data and see what it gives.</li>
 </ol>
 <p>Solution</p>
 <p>Try it and see:</p>
-<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb454-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">60</span>,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb455-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">60</span>,times,time)</a></code></pre></div>
 <pre><code>## [1] 0.0266037</code></pre>
 <p>The two-sided P-value, and that is all. We’ll be using this in a minute.</p>
 <p>Alternatively, there is also this, which needs a null median and a
 <em>column</em> as input:</p>
-<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb456-1" data-line-number="1"><span class="kw">with</span>(times, <span class="kw">pval_sign0</span>(<span class="dv">60</span>,time))</a></code></pre></div>
+<div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb457-1" data-line-number="1"><span class="kw">with</span>(times, <span class="kw">pval_sign0</span>(<span class="dv">60</span>,time))</a></code></pre></div>
 <pre><code>## [1] 0.0266037</code></pre>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Obtain a 95% confidence interval for the median based on these
@@ -480,19 +480,19 @@ We know that the value 60 is
 outside the 95% CI, and the sample median is close to 50 (which we
 expect to be inside), so sensible values to try for the upper end of
 the interval would be between 50 and 60:</p>
-<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb458-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">58</span>,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb459-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">58</span>,times,time)</a></code></pre></div>
 <pre><code>## [1] 0.0266037</code></pre>
-<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb460-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">55</span>,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb461-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">55</span>,times,time)</a></code></pre></div>
 <pre><code>## [1] 0.6636238</code></pre>
 <p>So, 55 is inside the interval and 58 is outside. I could investigate
 further in similar fashion, but I thought I would try a whole bunch of null
 medians all at once. That goes like this:</p>
-<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb462-1" data-line-number="1">meds=<span class="kw">seq</span>(<span class="dv">55</span>,<span class="dv">58</span>,<span class="fl">0.25</span>)</a>
-<a class="sourceLine" id="cb462-2" data-line-number="2">meds</a></code></pre></div>
+<div class="sourceCode" id="cb463"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb463-1" data-line-number="1">meds=<span class="kw">seq</span>(<span class="dv">55</span>,<span class="dv">58</span>,<span class="fl">0.25</span>)</a>
+<a class="sourceLine" id="cb463-2" data-line-number="2">meds</a></code></pre></div>
 <pre><code>##  [1] 55.00 55.25 55.50 55.75 56.00 56.25 56.50 56.75 57.00 57.25 57.50
 ## [12] 57.75 58.00</code></pre>
-<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb464-1" data-line-number="1">pvals=<span class="kw">map_dbl</span>(meds,pval_sign,times,time)</a>
-<a class="sourceLine" id="cb464-2" data-line-number="2"><span class="kw">data.frame</span>(meds,pvals)</a></code></pre></div>
+<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb465-1" data-line-number="1">pvals=<span class="kw">map_dbl</span>(meds,pval_sign,times,time)</a>
+<a class="sourceLine" id="cb465-2" data-line-number="2"><span class="kw">data.frame</span>(meds,pvals)</a></code></pre></div>
 <pre><code>##     meds      pvals
 ## 1  55.00 0.66362381
 ## 2  55.25 0.38331032
@@ -529,8 +529,8 @@ things more than necessary, but now that you <em>do</em> know what it
 does, you might be in a better position to understand this more
 Tidyverse-flavoured code, with the <code>map_dbl</code> inside a
 <code>mutate</code> and the data frame created as we go:</p>
-<div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb466-1" data-line-number="1"><span class="kw">tibble</span>(<span class="dt">meds=</span><span class="kw">seq</span>(<span class="dv">55</span>,<span class="dv">58</span>,<span class="fl">0.25</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb466-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">pvals=</span><span class="kw">map_dbl</span>(meds,pval_sign,times,time)) </a></code></pre></div>
+<div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb467-1" data-line-number="1"><span class="kw">tibble</span>(<span class="dt">meds=</span><span class="kw">seq</span>(<span class="dv">55</span>,<span class="dv">58</span>,<span class="fl">0.25</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb467-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">pvals=</span><span class="kw">map_dbl</span>(meds,pval_sign,times,time)) </a></code></pre></div>
 <pre><code>## # A tibble: 13 x 2
 ##     meds  pvals
 ##    &lt;dbl&gt;  &lt;dbl&gt;
@@ -551,9 +551,9 @@ Tidyverse-flavoured code, with the <code>map_dbl</code> inside a
 different way: more efficient, but less transparent. The first thing I
 need is a pair of values for the median: one inside the interval and
 one outside. Let’s try 40 and 50:</p>
-<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb468-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">40</span>,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb469"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb469-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">40</span>,times,time)</a></code></pre></div>
 <pre><code>## [1] 0.00719738</code></pre>
-<div class="sourceCode" id="cb470"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb470-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">50</span>,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb471-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">50</span>,times,time)</a></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>OK, so 40 is outside and 50 is inside. So what do I guess for the next
 value to try? I could do something clever like assuming that the
@@ -562,12 +562,12 @@ and then guessing where that line crosses 0.05. But I’m going to
 assume <em>nothing</em> about the relationship except that it goes
 uphill, and therefore crosses 0.05 somewhere. So my next guess is
 halfway between the two values I tried before:</p>
-<div class="sourceCode" id="cb472"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb472-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">45</span>,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb473-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">45</span>,times,time)</a></code></pre></div>
 <pre><code>## [1] 0.07835388</code></pre>
 <p>So, 45 is inside the interval, and my (slightly) improved guess at the
 bottom end of the interval is that it’s between 40 and 45. So next, I
 try halfway between <em>those</em>:</p>
-<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb474-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="fl">42.5</span>,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb475-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="fl">42.5</span>,times,time)</a></code></pre></div>
 <pre><code>## [1] 0.0266037</code></pre>
 <p>42.5 is outside, so the bottom end of the interval is between 42.5 and 45.</p>
 <p>What we are doing is narrowing down where the interval’s bottom end
@@ -583,18 +583,18 @@ bottom end (when we tried 42.5).</p>
 <code>for</code>-type loop, because we don’t know how many times we’ll be
 going around. It’s a <code>while</code> loop: keep going while something
 is true. Here’s how it goes:</p>
-<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb476-1" data-line-number="1">lo=<span class="dv">40</span></a>
-<a class="sourceLine" id="cb476-2" data-line-number="2">hi=<span class="dv">50</span></a>
-<a class="sourceLine" id="cb476-3" data-line-number="3"><span class="cf">while</span>(<span class="kw">abs</span>(hi<span class="op">-</span>lo)<span class="op">&gt;</span><span class="fl">0.1</span>) {</a>
-<a class="sourceLine" id="cb476-4" data-line-number="4">try=(hi<span class="op">+</span>lo)<span class="op">/</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb476-5" data-line-number="5">ptry=<span class="kw">pval_sign</span>(try,times,time)</a>
-<a class="sourceLine" id="cb476-6" data-line-number="6"><span class="kw">print</span>(<span class="kw">c</span>(try,ptry))</a>
-<a class="sourceLine" id="cb476-7" data-line-number="7"><span class="cf">if</span> (ptry<span class="op">&lt;</span><span class="fl">0.05</span>) {</a>
-<a class="sourceLine" id="cb476-8" data-line-number="8">lo=try</a>
-<a class="sourceLine" id="cb476-9" data-line-number="9">} <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb476-10" data-line-number="10">hi=try</a>
-<a class="sourceLine" id="cb476-11" data-line-number="11">}</a>
-<a class="sourceLine" id="cb476-12" data-line-number="12">}</a></code></pre></div>
+<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb477-1" data-line-number="1">lo=<span class="dv">40</span></a>
+<a class="sourceLine" id="cb477-2" data-line-number="2">hi=<span class="dv">50</span></a>
+<a class="sourceLine" id="cb477-3" data-line-number="3"><span class="cf">while</span>(<span class="kw">abs</span>(hi<span class="op">-</span>lo)<span class="op">&gt;</span><span class="fl">0.1</span>) {</a>
+<a class="sourceLine" id="cb477-4" data-line-number="4">try=(hi<span class="op">+</span>lo)<span class="op">/</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb477-5" data-line-number="5">ptry=<span class="kw">pval_sign</span>(try,times,time)</a>
+<a class="sourceLine" id="cb477-6" data-line-number="6"><span class="kw">print</span>(<span class="kw">c</span>(try,ptry))</a>
+<a class="sourceLine" id="cb477-7" data-line-number="7"><span class="cf">if</span> (ptry<span class="op">&lt;</span><span class="fl">0.05</span>) {</a>
+<a class="sourceLine" id="cb477-8" data-line-number="8">lo=try</a>
+<a class="sourceLine" id="cb477-9" data-line-number="9">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb477-10" data-line-number="10">hi=try</a>
+<a class="sourceLine" id="cb477-11" data-line-number="11">}</a>
+<a class="sourceLine" id="cb477-12" data-line-number="12">}</a></code></pre></div>
 <pre><code>## [1] 45.00000000  0.07835388
 ## [1] 42.5000000  0.0266037
 ## [1] 43.7500000  0.0266037
@@ -602,13 +602,13 @@ is true. Here’s how it goes:</p>
 ## [1] 44.0625000  0.0266037
 ## [1] 44.2187500  0.0266037
 ## [1] 44.2968750  0.0266037</code></pre>
-<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb478-1" data-line-number="1">lo</a></code></pre></div>
+<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb479-1" data-line-number="1">lo</a></code></pre></div>
 <pre><code>## [1] 44.29688</code></pre>
-<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb480-1" data-line-number="1"><span class="kw">pval_sign</span>(lo,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb481-1" data-line-number="1"><span class="kw">pval_sign</span>(lo,times,time)</a></code></pre></div>
 <pre><code>## [1] 0.0266037</code></pre>
-<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb482-1" data-line-number="1">hi</a></code></pre></div>
+<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb483-1" data-line-number="1">hi</a></code></pre></div>
 <pre><code>## [1] 44.375</code></pre>
-<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb484-1" data-line-number="1"><span class="kw">pval_sign</span>(hi,times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb485-1" data-line-number="1"><span class="kw">pval_sign</span>(hi,times,time)</a></code></pre></div>
 <pre><code>## [1] 0.07835388</code></pre>
 <p>The loop stopped because 44.297 and 44.375 are less than 0.1
 apart. The first of those is outside the interval and the second is
@@ -623,12 +623,12 @@ data value, so you won’t get a P-value exactly 0.05; you’ll get one
 above and one below.</p>
 <p>Likewise, you can use the function with a zero on its name and feed it
 a column rather than a data frame and a column name:</p>
-<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb486-1" data-line-number="1">meds=<span class="kw">seq</span>(<span class="dv">55</span>,<span class="dv">58</span>,<span class="fl">0.25</span>)</a>
-<a class="sourceLine" id="cb486-2" data-line-number="2">meds</a></code></pre></div>
+<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb487-1" data-line-number="1">meds=<span class="kw">seq</span>(<span class="dv">55</span>,<span class="dv">58</span>,<span class="fl">0.25</span>)</a>
+<a class="sourceLine" id="cb487-2" data-line-number="2">meds</a></code></pre></div>
 <pre><code>##  [1] 55.00 55.25 55.50 55.75 56.00 56.25 56.50 56.75 57.00 57.25 57.50
 ## [12] 57.75 58.00</code></pre>
-<div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb488-1" data-line-number="1">pvals=<span class="kw">map_dbl</span>(meds,<span class="op">~</span><span class="kw">with</span>(times, <span class="kw">pval_sign0</span>(.,time)))</a>
-<a class="sourceLine" id="cb488-2" data-line-number="2"><span class="kw">data.frame</span>(meds,pvals)</a></code></pre></div>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb489-1" data-line-number="1">pvals=<span class="kw">map_dbl</span>(meds,<span class="op">~</span><span class="kw">with</span>(times, <span class="kw">pval_sign0</span>(.,time)))</a>
+<a class="sourceLine" id="cb489-2" data-line-number="2"><span class="kw">data.frame</span>(meds,pvals)</a></code></pre></div>
 <pre><code>##     meds      pvals
 ## 1  55.00 0.66362381
 ## 2  55.25 0.38331032
@@ -650,7 +650,7 @@ has a function <code>ci_median</code> that does all of the above without
 you having to do it. As I first wrote it, it was using the trial and
 error thing with <code>map_dbl</code>, but I chose to rewrite it with the
 bisection idea, because I thought that would be more accurate.</p>
-<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb490-1" data-line-number="1"><span class="kw">ci_median</span>(times,time)</a></code></pre></div>
+<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb491-1" data-line-number="1"><span class="kw">ci_median</span>(times,time)</a></code></pre></div>
 <pre><code>## [1] 44.30747 57.59766</code></pre>
 <p>This is a more accurate interval than we got above. (The
 <code>while</code> loop for the bisection keeps going until the two
@@ -659,15 +659,15 @@ apart, by default.)
 <label for="tufte-mn-27" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-27" class="margin-toggle"><span class="marginnote">You can change this by adding something like <em>tol=1e-4</em> to the end of your <em>ci-median</em>.</span></p>
 <p>If you want some other confidence level, you add <code>conf.level</code>
 on the end, as you would for <code>t.test</code>:</p>
-<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb492-1" data-line-number="1"><span class="kw">ci_median</span>(times,time,<span class="dt">conf.level=</span><span class="fl">0.75</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb493-1" data-line-number="1"><span class="kw">ci_median</span>(times,time,<span class="dt">conf.level=</span><span class="fl">0.75</span>)</a></code></pre></div>
 <pre><code>## [1] 46.20444 55.49473</code></pre>
 <p>A 75% CI, just for fun. This is a shorter interval than the 95% one,
 as it should be.</p>
 <p>Likewise there is a <code>ci_median0</code> that takes a column and an
 optional confidence level:</p>
-<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb494-1" data-line-number="1"><span class="kw">with</span>(times, <span class="kw">ci_median0</span>(time))</a></code></pre></div>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb495-1" data-line-number="1"><span class="kw">with</span>(times, <span class="kw">ci_median0</span>(time))</a></code></pre></div>
 <pre><code>## [1] 44.30747 57.59766</code></pre>
-<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb496-1" data-line-number="1"><span class="kw">with</span>(times, <span class="kw">ci_median0</span>(time,<span class="dt">conf.level=</span><span class="fl">0.75</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb497-1" data-line-number="1"><span class="kw">with</span>(times, <span class="kw">ci_median0</span>(time,<span class="dt">conf.level=</span><span class="fl">0.75</span>))</a></code></pre></div>
 <pre><code>## [1] 46.20444 55.49473</code></pre>
 <p>with the same results. Try <code>ci_median</code> first, and if it
 doesn’t work, try <code>ci_median0</code>.</p>
@@ -686,15 +686,15 @@ bag. The results are in <a href="http://www.utsc.utoronto.ca/~butler/c32/chips.t
 <code>.csv</code> this time, just for fun. Give the data frame a
 name different from <code>chips</code>, so that you don’t get
 confused:</p>
-<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb498-1" data-line-number="1">bags=<span class="kw">read_csv</span>(<span class="st">&quot;chips.txt&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb499-1" data-line-number="1">bags=<span class="kw">read_csv</span>(<span class="st">&quot;chips.txt&quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   chips = col_integer()
+##   chips = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb500-1" data-line-number="1">bags</a></code></pre></div>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb501-1" data-line-number="1">bags</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 1
 ##    chips
-##    &lt;int&gt;
+##    &lt;dbl&gt;
 ##  1  1219
 ##  2  1214
 ##  3  1087
@@ -722,7 +722,7 @@ P-value.</li>
 <p>Solution</p>
 <p>The null median is 1100, so we count the number
 of values above and below:</p>
-<div class="sourceCode" id="cb502"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb502-1" data-line-number="1">bags <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(chips<span class="op">&lt;</span><span class="dv">1100</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb503-1" data-line-number="1">bags <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(chips<span class="op">&lt;</span><span class="dv">1100</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   `chips &lt; 1100`     n
 ##   &lt;lgl&gt;          &lt;int&gt;
@@ -732,15 +732,15 @@ of values above and below:</p>
 directly into the <code>count</code>. If you don’t think of that, you can
 also do this, which creates a new variable <code>less</code> that is
 <code>TRUE</code> or <code>FALSE</code> for each bag appropriately:</p>
-<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb504-1" data-line-number="1">bags <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">less=</span>(chips<span class="op">&lt;</span><span class="dv">1100</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(less)</a></code></pre></div>
+<div class="sourceCode" id="cb505"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb505-1" data-line-number="1">bags <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">less=</span>(chips<span class="op">&lt;</span><span class="dv">1100</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(less)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   less      n
 ##   &lt;lgl&gt; &lt;int&gt;
 ## 1 FALSE    15
 ## 2 TRUE      1</code></pre>
 <p>or the more verbose</p>
-<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb506-1" data-line-number="1">bags <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">less=</span>(chips<span class="op">&lt;</span><span class="dv">1100</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb506-2" data-line-number="2"><span class="kw">group_by</span>(less) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">howmany=</span><span class="kw">n</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb507-1" data-line-number="1">bags <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">less=</span>(chips<span class="op">&lt;</span><span class="dv">1100</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb507-2" data-line-number="2"><span class="kw">group_by</span>(less) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">howmany=</span><span class="kw">n</span>())</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   less  howmany
 ##   &lt;lgl&gt;   &lt;int&gt;
@@ -757,10 +757,10 @@ less than 1100. So, if we are going to reject the null (as it looks as
 if we will), that small number of values below 1100 is what we want.</p>
 <p>The P-value is the probability of a value 1 or less in a binomial
 distribution with <span class="math inline">\(n=16, p=0.5\)</span>:</p>
-<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb508-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1</span>,<span class="dv">16</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb509"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb509-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1</span>,<span class="dv">16</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 0.0002593994</code></pre>
 <p>Or, equivalently, count <em>up</em> from 15:</p>
-<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb510-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">15</span><span class="op">:</span><span class="dv">16</span>,<span class="dv">16</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb511"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb511-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">15</span><span class="op">:</span><span class="dv">16</span>,<span class="dv">16</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 0.0002593994</code></pre>
 <p>This is correctly one-sided, so we don’t have to do anything with
 it.</p>
@@ -772,8 +772,8 @@ haven’t yet.)</li>
 </ol>
 <p>Solution</p>
 <p>This will mean reading the output carefully:</p>
-<div class="sourceCode" id="cb512"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb512-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb512-2" data-line-number="2"><span class="kw">sign_test</span>(bags,chips,<span class="dv">1100</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb513-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb513-2" data-line-number="2"><span class="kw">sign_test</span>(bags,chips,<span class="dv">1100</span>)</a></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     1    15 
@@ -790,7 +790,7 @@ got “by hand”: 15 values above and one below, and a P-value (look
 along the <code>upper</code> line) of 0.00026.
 The two-sided P-value of 0.00052 rounds to the same 0.0005 as SAS got.</p>
 <p>Alternatively, you can do this:</p>
-<div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb514-1" data-line-number="1"><span class="kw">sign_test0</span>(bags<span class="op">$</span>chips,<span class="dv">1100</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb515"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb515-1" data-line-number="1"><span class="kw">sign_test0</span>(bags<span class="op">$</span>chips,<span class="dv">1100</span>)</a></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     1    15 
@@ -807,14 +807,14 @@ median number of chocolate chips per bag of cookies.</li>
 </ol>
 <p>Solution</p>
 <p>Once everything is in place, this is simplicity itself:</p>
-<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb516-1" data-line-number="1"><span class="kw">ci_median</span>(bags,chips)</a></code></pre></div>
+<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb517-1" data-line-number="1"><span class="kw">ci_median</span>(bags,chips)</a></code></pre></div>
 <pre><code>## [1] 1135.003 1324.996</code></pre>
 <p>1135 to 1325. I would round these off to whole numbers, since the data
 values are all whole numbers. These values are all above 1100, which
 supports the conclusion we got above that the median is above
 1100. This is as it should be, because the CI is “all those medians that would <em>not</em> be rejected by the sign test”.</p>
 <p>Or,</p>
-<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb518-1" data-line-number="1"><span class="kw">ci_median0</span>(bags<span class="op">$</span>chips)</a></code></pre></div>
+<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb519-1" data-line-number="1"><span class="kw">ci_median0</span>(bags<span class="op">$</span>chips)</a></code></pre></div>
 <pre><code>## [1] 1135.003 1324.996</code></pre>
 </div>
 <div id="the-power-of-the-sign-test" class="section level2">
@@ -836,7 +836,7 @@ here.)</p>
 of <span class="math inline">\(n=10\)</span>.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb520-1" data-line-number="1"><span class="kw">power.t.test</span>(<span class="dt">delta=</span><span class="dv">50-40</span>,<span class="dt">n=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">15</span>,<span class="dt">type=</span><span class="st">&quot;one.sample&quot;</span>,<span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb521"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb521-1" data-line-number="1"><span class="kw">power.t.test</span>(<span class="dt">delta=</span><span class="dv">50-40</span>,<span class="dt">n=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">15</span>,<span class="dt">type=</span><span class="st">&quot;one.sample&quot;</span>,<span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##      One-sample t test power calculation 
 ## 
@@ -856,21 +856,22 @@ against the sign test.</p>
 <p>The data actually have a normal distribution with mean 50 and
 SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
-<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb522-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
-<a class="sourceLine" id="cb522-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 56.37780 41.07161 42.94376 66.90592 43.13489 41.13124 63.73140
-##  [8] 40.79353 60.94481 77.70804</code></pre>
+<div class="sourceCode" id="cb523"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb523-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
+<a class="sourceLine" id="cb523-2" data-line-number="2">x</a></code></pre></div>
+<pre><code>##  [1] 83.39105 44.76648 64.00485 29.49772 44.86446 43.74926 71.58317
+##  [8] 80.49975 55.67955 49.50855</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
 </ol>
 <p>Solution</p>
 <p>The way we know this is to put <code>x</code> into a data frame first:</p>
-<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb524-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>)</a></code></pre></div>
-<pre><code>## # A tibble: 1 x 2
+<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb525-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE       10</code></pre>
+## 1 FALSE        9
+## 2 TRUE         1</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -884,32 +885,32 @@ data and <code>FALSE</code> otherwise.</li>
 <p>This is actually easier than you might think. The output from
 <code>count</code> is a data frame with a column called <code>n</code>,
 whose minimum value you want. I add to my pipeline:</p>
-<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb526-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb526-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb526-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb527-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb527-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb527-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1      10 FALSE</code></pre>
+## 1       1 TRUE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
 is 10 (since there is only one), and it will falsely say that you
 should not reject. The fix is</p>
-<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb528-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb528-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb528-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb529-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb529-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb529-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1      10 TRUE</code></pre>
+## 1       1 TRUE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>
-<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb530-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb530-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb530-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb530-4" data-line-number="4"><span class="kw">pull</span>(is_rejected)</a></code></pre></div>
+<div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb531-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb531-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb531-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb531-4" data-line-number="4"><span class="kw">pull</span>(is_rejected)</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>You might be wondering where the “1 or less” came from. Getting a
 P-value for the sign test involves the binomial distribution: if the
@@ -917,11 +918,11 @@ null is correct, each data value is independently either above or
 below 40, with probability 0.5 of each, so the number of values below
 40 (say) is binomial with <span class="math inline">\(n=10\)</span> and <span class="math inline">\(p=0.5\)</span>. The P-value for 1
 observed value below 40 and the rest above is</p>
-<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" data-line-number="1"><span class="dv">2</span><span class="op">*</span><span class="kw">pbinom</span>(<span class="dv">1</span>,<span class="dv">10</span>,<span class="fl">0.5</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb533-1" data-line-number="1"><span class="dv">2</span><span class="op">*</span><span class="kw">pbinom</span>(<span class="dv">1</span>,<span class="dv">10</span>,<span class="fl">0.5</span>)  </a></code></pre></div>
 <pre><code>## [1] 0.02148438</code></pre>
 <p>which is less than 0.05; the P-value for 2 values below 40 and the
 rest above is</p>
-<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb534-1" data-line-number="1"><span class="dv">2</span><span class="op">*</span><span class="kw">pbinom</span>(<span class="dv">2</span>,<span class="dv">10</span>,<span class="fl">0.5</span>)    </a></code></pre></div>
+<div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb535-1" data-line-number="1"><span class="dv">2</span><span class="op">*</span><span class="kw">pbinom</span>(<span class="dv">2</span>,<span class="dv">10</span>,<span class="fl">0.5</span>)    </a></code></pre></div>
 <pre><code>## [1] 0.109375</code></pre>
 <p>which is bigger than 0.05.</p>
 <p>You might have encountered the term “critical region” for a
@@ -960,15 +961,15 @@ you want to do something.) While you’re debugging, try it with a
 small number of random samples like 5.
 I start with setting the random number seed, so it comes out the
 same each time. I discuss the results below and the code below that.</p>
-<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb536-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a>
-<a class="sourceLine" id="cb536-2" data-line-number="2"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb536-3" data-line-number="3"><span class="kw">map</span>(<span class="op">~</span><span class="kw">tibble</span>(<span class="dt">x=</span>.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb536-4" data-line-number="4"><span class="kw">map</span>(<span class="op">~</span><span class="kw">count</span>(.,x<span class="op">&lt;</span><span class="dv">40</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb536-5" data-line-number="5"><span class="kw">map</span>(<span class="op">~</span><span class="kw">summarize</span>(.,<span class="dt">the_min=</span><span class="kw">min</span>(n))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb536-6" data-line-number="6"><span class="kw">map</span>(<span class="op">~</span><span class="kw">mutate</span>(.,<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb536-7" data-line-number="7"><span class="kw">map_lgl</span>(<span class="op">~</span><span class="kw">pull</span>(.,is_rejected)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb536-8" data-line-number="8"><span class="kw">tibble</span>(<span class="dt">was_true=</span>.) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb536-9" data-line-number="9"><span class="kw">count</span>(was_true)</a></code></pre></div>
+<div class="sourceCode" id="cb537"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb537-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a>
+<a class="sourceLine" id="cb537-2" data-line-number="2"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb537-3" data-line-number="3"><span class="kw">map</span>(<span class="op">~</span><span class="kw">tibble</span>(<span class="dt">x=</span>.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb537-4" data-line-number="4"><span class="kw">map</span>(<span class="op">~</span><span class="kw">count</span>(.,x<span class="op">&lt;</span><span class="dv">40</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb537-5" data-line-number="5"><span class="kw">map</span>(<span class="op">~</span><span class="kw">summarize</span>(.,<span class="dt">the_min=</span><span class="kw">min</span>(n))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb537-6" data-line-number="6"><span class="kw">map</span>(<span class="op">~</span><span class="kw">mutate</span>(.,<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb537-7" data-line-number="7"><span class="kw">map_lgl</span>(<span class="op">~</span><span class="kw">pull</span>(.,is_rejected)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb537-8" data-line-number="8"><span class="kw">tibble</span>(<span class="dt">was_true=</span>.) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb537-9" data-line-number="9"><span class="kw">count</span>(was_true)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   was_true     n
 ##   &lt;lgl&gt;    &lt;int&gt;
@@ -1020,23 +1021,23 @@ count them, so we put them into a data frame (with a column called
 <p>I’m now thinking a better way to do this is to write a function that
 takes a sample (in a vector) and returns a TRUE or FALSE according to
 whether or not a median of 40 would be rejected for that sample:</p>
-<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb538-1" data-line-number="1">is_reject=<span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb538-2" data-line-number="2"><span class="kw">tibble</span>(<span class="dt">x=</span>x) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb538-3" data-line-number="3"><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb538-4" data-line-number="4"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb538-5" data-line-number="5"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb538-6" data-line-number="6"><span class="kw">pull</span>(is_rejected)</a>
-<a class="sourceLine" id="cb538-7" data-line-number="7">}</a></code></pre></div>
+<div class="sourceCode" id="cb539"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb539-1" data-line-number="1">is_reject=<span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb539-2" data-line-number="2"><span class="kw">tibble</span>(<span class="dt">x=</span>x) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb539-3" data-line-number="3"><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb539-4" data-line-number="4"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb539-5" data-line-number="5"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb539-6" data-line-number="6"><span class="kw">pull</span>(is_rejected)</a>
+<a class="sourceLine" id="cb539-7" data-line-number="7">}</a></code></pre></div>
 <p>Now, we have to use that. This function will be “mapped” over for
 each of the random samples that come out of <code>rerun</code>, but now
 there will be only one <code>map</code> because the complication of the
 multiple <code>maps</code> has been subsumed into this one function. I’ll
 set my random number seed so that I get the same results as before:</p>
-<div class="sourceCode" id="cb539"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb539-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a>
-<a class="sourceLine" id="cb539-2" data-line-number="2"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb539-3" data-line-number="3"><span class="kw">map_lgl</span>(<span class="op">~</span><span class="kw">is_reject</span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb539-4" data-line-number="4"><span class="kw">tibble</span>(<span class="dt">rejected=</span>.) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb539-5" data-line-number="5"><span class="kw">count</span>(rejected)</a></code></pre></div>
+<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb540-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a>
+<a class="sourceLine" id="cb540-2" data-line-number="2"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb540-3" data-line-number="3"><span class="kw">map_lgl</span>(<span class="op">~</span><span class="kw">is_reject</span>(.)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb540-4" data-line-number="4"><span class="kw">tibble</span>(<span class="dt">rejected=</span>.) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb540-5" data-line-number="5"><span class="kw">count</span>(rejected)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   rejected     n
 ##   &lt;lgl&gt;    &lt;int&gt;
@@ -1058,7 +1059,7 @@ The power of my sign test was 0.243, so in
 <code>power.t.test</code> we set
 <code>power</code> equal to that and
 omit the sample size <code>n</code>:</p>
-<div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb541-1" data-line-number="1"><span class="kw">power.t.test</span>(<span class="dt">delta=</span><span class="dv">50-40</span>,<span class="dt">power=</span><span class="fl">0.243</span>,<span class="dt">sd=</span><span class="dv">15</span>,<span class="dt">type=</span><span class="st">&quot;one.sample&quot;</span>,<span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb542"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb542-1" data-line-number="1"><span class="kw">power.t.test</span>(<span class="dt">delta=</span><span class="dv">50-40</span>,<span class="dt">power=</span><span class="fl">0.243</span>,<span class="dt">sd=</span><span class="dv">15</span>,<span class="dt">type=</span><span class="st">&quot;one.sample&quot;</span>,<span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##      One-sample t test power calculation 
 ## 
@@ -1112,15 +1113,15 @@ power of the <span class="math inline">\(t\)</span> test, and one to simulate th
 <p>To simulate the <span class="math inline">\(t\)</span> test, we first have to generate some Laplace data
 with the true mean of 0.5. We’ll use a sample size of 50 throughout
 these simulations.</p>
-<div class="sourceCode" id="cb543"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb543-1" data-line-number="1"><span class="kw">library</span>(smoothmest)</a></code></pre></div>
+<div class="sourceCode" id="cb544"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb544-1" data-line-number="1"><span class="kw">library</span>(smoothmest)</a></code></pre></div>
 <pre><code>## Loading required package: MASS</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;MASS&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
 ## 
 ##     select</code></pre>
-<div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb547-1" data-line-number="1">rl=<span class="kw">rdoublex</span>(<span class="dv">50</span>,<span class="dt">mu=</span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb547-2" data-line-number="2">rl</a></code></pre></div>
+<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb548-1" data-line-number="1">rl=<span class="kw">rdoublex</span>(<span class="dv">50</span>,<span class="dt">mu=</span><span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb548-2" data-line-number="2">rl</a></code></pre></div>
 <pre><code>##  [1] -0.33323285  0.70569291 -1.22513053  0.68517708  0.12778518
 ##  [6]  0.50749949  0.26700527  1.90236874  0.53288312 -0.37374732
 ## [11]  0.27256566  0.53365929  0.43581431 -0.01545866  0.18594908
@@ -1132,15 +1133,15 @@ these simulations.</p>
 ## [41] -0.07606399 -1.11338640 -1.20427995 -0.70986104 -1.66466321
 ## [46]  0.55346854  0.66091469  0.72100677  0.92025176  0.98922656</code></pre>
 <p>This seems to have some unusual values, far away from zero:</p>
-<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb549-1" data-line-number="1"><span class="kw">tibble</span>(rl) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb549-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample=</span>rl))<span class="op">+</span></a>
-<a class="sourceLine" id="cb549-3" data-line-number="3"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb550-1" data-line-number="1"><span class="kw">tibble</span>(rl) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb550-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample=</span>rl))<span class="op">+</span></a>
+<a class="sourceLine" id="cb550-3" data-line-number="3"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="07-sign-mood-median_files/figure-html/unnamed-chunk-48-1.png" width="672"  /></p>
 <p>You see the long tails compared to the normal.</p>
 <p>Now, we feed these values into <code>t.test</code> and see whether we
 reject a null median of zero (at <span class="math inline">\(\alpha=0.05\)</span>):</p>
-<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb550-1" data-line-number="1">tt=<span class="kw">t.test</span>(rl)  </a>
-<a class="sourceLine" id="cb550-2" data-line-number="2">tt</a></code></pre></div>
+<div class="sourceCode" id="cb551"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb551-1" data-line-number="1">tt=<span class="kw">t.test</span>(rl)  </a>
+<a class="sourceLine" id="cb551-2" data-line-number="2">tt</a></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1153,11 +1154,11 @@ reject a null median of zero (at <span class="math inline">\(\alpha=0.05\)</span
 ## mean of x 
 ## 0.4547064</code></pre>
 <p>Or we can just pull out the P-value and even compare it to 0.05:</p>
-<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb552-1" data-line-number="1">pval=tt<span class="op">$</span>p.value  </a>
-<a class="sourceLine" id="cb552-2" data-line-number="2">pval</a></code></pre></div>
+<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb553-1" data-line-number="1">pval=tt<span class="op">$</span>p.value  </a>
+<a class="sourceLine" id="cb553-2" data-line-number="2">pval</a></code></pre></div>
 <pre><code>## [1] 0.02859596</code></pre>
-<div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb554-1" data-line-number="1">is.reject=(pval<span class="op">&lt;=</span><span class="fl">0.05</span>)</a>
-<a class="sourceLine" id="cb554-2" data-line-number="2">is.reject</a></code></pre></div>
+<div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb555-1" data-line-number="1">is.reject=(pval<span class="op">&lt;=</span><span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb555-2" data-line-number="2">is.reject</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>$</p>
 <p>This one has a small P-value and so the null median of 0 should be
@@ -1165,12 +1166,12 @@ reject a null median of zero (at <span class="math inline">\(\alpha=0.05\)</span
 <p>We’ll use these ideas to simulate the power of the <span class="math inline">\(t\)</span>-test for these
 data, testing a mean of 0. This uses the same ideas as for any power
 simulation; the difference here is the true distribution:</p>
-<div class="sourceCode" id="cb556"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb556-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rdoublex</span>(<span class="dv">50</span>,<span class="dt">mu=</span><span class="fl">0.5</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb556-2" data-line-number="2"><span class="kw">map</span>(<span class="op">~</span><span class="kw">t.test</span>(.,<span class="dt">mu=</span><span class="dv">0</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb556-3" data-line-number="3"><span class="kw">map_dbl</span>(<span class="st">&quot;p.value&quot;</span>) -&gt;</a>
-<a class="sourceLine" id="cb556-4" data-line-number="4">pvals</a></code></pre></div>
+<div class="sourceCode" id="cb557"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb557-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rdoublex</span>(<span class="dv">50</span>,<span class="dt">mu=</span><span class="fl">0.5</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb557-2" data-line-number="2"><span class="kw">map</span>(<span class="op">~</span><span class="kw">t.test</span>(.,<span class="dt">mu=</span><span class="dv">0</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb557-3" data-line-number="3"><span class="kw">map_dbl</span>(<span class="st">&quot;p.value&quot;</span>) -&gt;</a>
+<a class="sourceLine" id="cb557-4" data-line-number="4">pvals</a></code></pre></div>
 <p>and then count them:</p>
-<div class="sourceCode" id="cb557"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb557-1" data-line-number="1"><span class="kw">tibble</span>(pvals) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(pvals<span class="op">&lt;=</span><span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb558"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb558-1" data-line-number="1"><span class="kw">tibble</span>(pvals) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(pvals<span class="op">&lt;=</span><span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   `pvals &lt;= 0.05`     n
 ##   &lt;lgl&gt;           &lt;int&gt;
@@ -1180,11 +1181,11 @@ simulation; the difference here is the true distribution:</p>
 from a vector, the easiest way to do this is to use
 <code>pval_sign0</code> from <code>smmr</code>, which returns exactly the
 two-sided P-value that we want, so that the procedure is a step simpler:</p>
-<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb559-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rdoublex</span>(<span class="dv">50</span>,<span class="dt">mu=</span><span class="fl">0.5</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb559-2" data-line-number="2"><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">pval_sign0</span>(<span class="dv">0</span>,.)) -&gt;</a>
-<a class="sourceLine" id="cb559-3" data-line-number="3">pvals_sign</a></code></pre></div>
+<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb560-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>,<span class="kw">rdoublex</span>(<span class="dv">50</span>,<span class="dt">mu=</span><span class="fl">0.5</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb560-2" data-line-number="2"><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">pval_sign0</span>(<span class="dv">0</span>,.)) -&gt;</a>
+<a class="sourceLine" id="cb560-3" data-line-number="3">pvals_sign</a></code></pre></div>
 <p>and then</p>
-<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb560-1" data-line-number="1"><span class="kw">tibble</span>(pvals_sign) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(pvals_sign<span class="op">&lt;=</span><span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb561"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb561-1" data-line-number="1"><span class="kw">tibble</span>(pvals_sign) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(pvals_sign<span class="op">&lt;=</span><span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   `pvals_sign &lt;= 0.05`     n
 ##   &lt;lgl&gt;                &lt;int&gt;
@@ -1204,8 +1205,8 @@ needs to be qualified a bit: when your data come from a
 sufficiently long-tailed distribution, the sign test can be more
 powerful relative to the <span class="math inline">\(t\)</span>-test than you would think.</p>
 <p>I finish by “unloading” the two packages that got loaded:</p>
-<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb562-1" data-line-number="1"><span class="kw">detach</span>(package<span class="op">:</span>smoothmest, <span class="dt">unload=</span>T)</a>
-<a class="sourceLine" id="cb562-2" data-line-number="2"><span class="kw">detach</span>(package<span class="op">:</span>MASS, <span class="dt">unload=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb563-1" data-line-number="1"><span class="kw">detach</span>(package<span class="op">:</span>smoothmest, <span class="dt">unload=</span>T)</a>
+<a class="sourceLine" id="cb563-2" data-line-number="2"><span class="kw">detach</span>(package<span class="op">:</span>MASS, <span class="dt">unload=</span>T)</a></code></pre></div>
 </div>
 <div id="sugar-in-breakfast-cereals" class="section level2">
 <h2><span class="header-section-number">8.4</span> Sugar in breakfast cereals</h2>
@@ -1220,14 +1221,14 @@ a variable that distinguishes the children’s cereals from the
 adults’ cereals, and another that contains the amount of sugar?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb563-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/cereal-sugar.txt&quot;</span></a>
-<a class="sourceLine" id="cb563-2" data-line-number="2">cereals=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb564-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/cereal-sugar.txt&quot;</span></a>
+<a class="sourceLine" id="cb564-2" data-line-number="2">cereals=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   who = col_character(),
 ##   sugar = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb565"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb565-1" data-line-number="1">cereals</a></code></pre></div>
+<div class="sourceCode" id="cb566"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb566-1" data-line-number="1">cereals</a></code></pre></div>
 <pre><code>## # A tibble: 40 x 2
 ##    who      sugar
 ##    &lt;chr&gt;    &lt;dbl&gt;
@@ -1251,8 +1252,8 @@ adults’ ones and the children’s ones). Do they look similar or different?</l
 </ol>
 <p>Solution</p>
 <p><code>group_by</code> and <code>summarize</code>:</p>
-<div class="sourceCode" id="cb567"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb567-1" data-line-number="1">cereals <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(who) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb567-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">sugar_mean=</span><span class="kw">mean</span>(sugar))</a></code></pre></div>
+<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb568-1" data-line-number="1">cereals <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(who) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb568-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">sugar_mean=</span><span class="kw">mean</span>(sugar))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   who      sugar_mean
 ##   &lt;chr&gt;         &lt;dbl&gt;
@@ -1266,7 +1267,7 @@ types of cereal. What do you see that is out of the ordinary?</li>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb569-1" data-line-number="1"><span class="kw">ggplot</span>(cereals,<span class="kw">aes</span>(<span class="dt">x=</span>who,<span class="dt">y=</span>sugar))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb570-1" data-line-number="1"><span class="kw">ggplot</span>(cereals,<span class="kw">aes</span>(<span class="dt">x=</span>who,<span class="dt">y=</span>sugar))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="07-sign-mood-median_files/figure-html/unnamed-chunk-58-1.png" width="672"  /></p>
 <p>I see outliers: two high ones on the adults’ cereals, and one high and
 one low on the children’s cereals.</p>
@@ -1295,8 +1296,8 @@ context of the data?</li>
 <p>Having ruled out the two-sample <span class="math inline">\(t\)</span>-test, we are left with Mood’s
 median test. I didn’t need you to build it yourself, so you can
 use package <code>smmr</code> to run it with:</p>
-<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb570-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb570-2" data-line-number="2"><span class="kw">median_test</span>(cereals,sugar,who)</a></code></pre></div>
+<div class="sourceCode" id="cb571"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb571-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb571-2" data-line-number="2"><span class="kw">median_test</span>(cereals,sugar,who)</a></code></pre></div>
 <pre><code>## $table
 ##           above
 ## group      above below
@@ -1325,7 +1326,7 @@ Wheat and <em>Bran Flakes</em>. Go figure. (Her current favourite is
 Raisin Bran, even though she doesn’t like raisins by themselves.)</p>
 <p>Mood’s median test is the test we should trust, but you might be
 curious about how the <span class="math inline">\(t\)</span>-test stacks up here:</p>
-<div class="sourceCode" id="cb572"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb572-1" data-line-number="1"><span class="kw">t.test</span>(sugar<span class="op">~</span>who,<span class="dt">data=</span>cereals)</a></code></pre></div>
+<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb573-1" data-line-number="1"><span class="kw">t.test</span>(sugar<span class="op">~</span>who,<span class="dt">data=</span>cereals)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1359,17 +1360,17 @@ observations, 5 from each course.</li>
 </ol>
 <p>Solution</p>
 <p>This doesn’t need much comment:</p>
-<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb574-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt&quot;</span></a>
-<a class="sourceLine" id="cb574-2" data-line-number="2">math=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb575-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/mathphobia.txt&quot;</span></a>
+<a class="sourceLine" id="cb575-2" data-line-number="2">math=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   course = col_character(),
-##   phobia = col_integer()
+##   phobia = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb576-1" data-line-number="1">math</a></code></pre></div>
+<div class="sourceCode" id="cb577"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb577-1" data-line-number="1">math</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ##    course phobia
-##    &lt;chr&gt;   &lt;int&gt;
+##    &lt;chr&gt;   &lt;dbl&gt;
 ##  1 a           8
 ##  2 a           7
 ##  3 a           7
@@ -1382,7 +1383,7 @@ observations, 5 from each course.</li>
 ## 10 b           1</code></pre>
 <p>This will do, counting the <code>a</code> and <code>b</code>. Or, to save
 yourself that trouble:</p>
-<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb578-1" data-line-number="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(course)</a></code></pre></div>
+<div class="sourceCode" id="cb579"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb579-1" data-line-number="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(course)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   course     n
 ##   &lt;chr&gt;  &lt;int&gt;
@@ -1390,14 +1391,14 @@ yourself that trouble:</p>
 ## 2 b          5</code></pre>
 <p>Five each. The story is to get the computer to do the grunt work for
 you, if you can make it do so. Other ways:</p>
-<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb580-1" data-line-number="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(course) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb581"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb581-1" data-line-number="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(course) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>())</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   course count
 ##   &lt;chr&gt;  &lt;int&gt;
 ## 1 a          5
 ## 2 b          5</code></pre>
 <p>and this:</p>
-<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb582-1" data-line-number="1"><span class="kw">with</span>(math,<span class="kw">table</span>(course))</a></code></pre></div>
+<div class="sourceCode" id="cb583"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb583-1" data-line-number="1"><span class="kw">with</span>(math,<span class="kw">table</span>(course))</a></code></pre></div>
 <pre><code>## course
 ## a b 
 ## 5 5</code></pre>
@@ -1414,7 +1415,7 @@ than the other, so do a two-sided test.)</li>
 </ol>
 <p>Solution</p>
 <p>A two-sided test is the default, so there is not much to do here:</p>
-<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb584-1" data-line-number="1"><span class="kw">t.test</span>(phobia<span class="op">~</span>course,<span class="dt">data=</span>math)</a></code></pre></div>
+<div class="sourceCode" id="cb585"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb585-1" data-line-number="1"><span class="kw">t.test</span>(phobia<span class="op">~</span>course,<span class="dt">data=</span>math)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1434,7 +1435,7 @@ mean math phobia scores are different between the two courses.</p>
 line of code). What is the most striking thing that you notice?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb586-1" data-line-number="1"><span class="kw">ggplot</span>(math,<span class="kw">aes</span>(<span class="dt">x=</span>course,<span class="dt">y=</span>phobia))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb587-1" data-line-number="1"><span class="kw">ggplot</span>(math,<span class="kw">aes</span>(<span class="dt">x=</span>course,<span class="dt">y=</span>phobia))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="07-sign-mood-median_files/figure-html/unnamed-chunk-66-1.png" width="672"  /></p>
 <p>Boxplot <code>a</code> is just weird. The bar across the middle is
 actually at the top, and it has no bottom. (Noting something sensible
@@ -1444,15 +1445,15 @@ out.
 <p>By way of explanation: the course <code>a</code> scores have a number of
 values equal so that the 3rd quartile and the median are the name, and
 also that the first quartile and the minimum value are the same:</p>
-<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb587-1" data-line-number="1">tmp=math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(course<span class="op">==</span><span class="st">&quot;a&quot;</span>)</a>
-<a class="sourceLine" id="cb587-2" data-line-number="2">tmp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</a></code></pre></div>
+<div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb588-1" data-line-number="1">tmp=math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(course<span class="op">==</span><span class="st">&quot;a&quot;</span>)</a>
+<a class="sourceLine" id="cb588-2" data-line-number="2">tmp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   phobia     n
-##    &lt;int&gt; &lt;int&gt;
+##    &lt;dbl&gt; &lt;int&gt;
 ## 1      6     2
 ## 2      7     2
 ## 3      8     1</code></pre>
-<div class="sourceCode" id="cb589"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb589-1" data-line-number="1"><span class="kw">summary</span>(tmp)</a></code></pre></div>
+<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb590-1" data-line-number="1"><span class="kw">summary</span>(tmp)</a></code></pre></div>
 <pre><code>##     course              phobia   
 ##  Length:5           Min.   :6.0  
 ##  Class :character   1st Qu.:6.0  
@@ -1485,9 +1486,9 @@ only 5 values in each group, and so they can certainly look
 non-normal even if they actually are normal, but these values are
 all integers, so it is perhaps wise to be cautious.)
 We have the machinery to assess the normality for these, in one shot:</p>
-<div class="sourceCode" id="cb591"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb591-1" data-line-number="1"><span class="kw">ggplot</span>(math,<span class="kw">aes</span>(<span class="dt">sample=</span>phobia))<span class="op">+</span></a>
-<a class="sourceLine" id="cb591-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb591-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>course,<span class="dt">ncol=</span><span class="dv">1</span>, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb592-1" data-line-number="1"><span class="kw">ggplot</span>(math,<span class="kw">aes</span>(<span class="dt">sample=</span>phobia))<span class="op">+</span></a>
+<a class="sourceLine" id="cb592-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb592-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>course,<span class="dt">ncol=</span><span class="dv">1</span>, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>)</a></code></pre></div>
 <p><img src="07-sign-mood-median_files/figure-html/unnamed-chunk-68-1.png" width="672"  /></p>
 <p>I don’t know what <em>you</em> make of those, but they both look pretty
 straight to me (and there are only five observations, so it’s hard to
@@ -1516,8 +1517,8 @@ building your own.) What do you conclude?</li>
 </ol>
 <p>Solution</p>
 <p>This is an invite to use <code>smmr</code>:</p>
-<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb592-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb592-2" data-line-number="2"><span class="kw">median_test</span>(math,phobia,course)</a></code></pre></div>
+<div class="sourceCode" id="cb593"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb593-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb593-2" data-line-number="2"><span class="kw">median_test</span>(math,phobia,course)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1535,15 +1536,15 @@ very close to 50–50 above and below the overall median.</p>
 something: there were 10 observations, but there are only <span class="math inline">\(1+2+2+2=7\)</span>
 in the table. This is because three of the observations were equal to
 the overall median, and had to be thrown away:</p>
-<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb594-1" data-line-number="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(phobia))</a></code></pre></div>
+<div class="sourceCode" id="cb595"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb595-1" data-line-number="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(phobia))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     med
 ##   &lt;dbl&gt;
 ## 1     7</code></pre>
-<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb596-1" data-line-number="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</a></code></pre></div>
+<div class="sourceCode" id="cb597"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb597-1" data-line-number="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   phobia     n
-##    &lt;int&gt; &lt;int&gt;
+##    &lt;dbl&gt; &lt;int&gt;
 ## 1      1     1
 ## 2      2     1
 ## 3      6     2
@@ -1557,10 +1558,10 @@ begin with). The other thing to say is that with small sample sizes,
 the frequencies in the table have to be <em>very</em> lopsided for you
 to have a chance of rejecting the null. Something like this is what
 you’d need:</p>
-<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb598-1" data-line-number="1">x=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb598-2" data-line-number="2">g=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb598-3" data-line-number="3">d=<span class="kw">tibble</span>(x,g)</a>
-<a class="sourceLine" id="cb598-4" data-line-number="4"><span class="kw">median_test</span>(d,x,g)</a></code></pre></div>
+<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb599-1" data-line-number="1">x=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb599-2" data-line-number="2">g=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb599-3" data-line-number="3">d=<span class="kw">tibble</span>(x,g)</a>
+<a class="sourceLine" id="cb599-4" data-line-number="4"><span class="kw">median_test</span>(d,x,g)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1597,17 +1598,17 @@ separated by spaces).</p>
 </ol>
 <p>Solution</p>
 <p>Separated by spaces, so <code>read_delim</code>:</p>
-<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb600-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/forehead.txt&quot;</span></a>
-<a class="sourceLine" id="cb600-2" data-line-number="2">instr=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb601"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb601-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/forehead.txt&quot;</span></a>
+<a class="sourceLine" id="cb601-2" data-line-number="2">instr=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   group = col_character(),
-##   score = col_integer()
+##   score = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb602-1" data-line-number="1">instr</a></code></pre></div>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb603-1" data-line-number="1">instr</a></code></pre></div>
 <pre><code>## # A tibble: 18 x 2
 ##    group score
-##    &lt;chr&gt; &lt;int&gt;
+##    &lt;chr&gt; &lt;dbl&gt;
 ##  1 A        88
 ##  2 A        89
 ##  3 A        79
@@ -1633,13 +1634,13 @@ assumptions for a two-sample <span class="math inline">\(t\)</span>-test.</li>
 <p>Solution</p>
 <p>We need the values in each group to be approximately normally
 distributed. Side-by-side boxplots will do it:</p>
-<div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb604-1" data-line-number="1"><span class="kw">ggplot</span>(instr,<span class="kw">aes</span>(<span class="dt">x=</span>group,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb605"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb605-1" data-line-number="1"><span class="kw">ggplot</span>(instr,<span class="kw">aes</span>(<span class="dt">x=</span>group,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="07-sign-mood-median_files/figure-html/unnamed-chunk-73-1.png" width="672"  /></p>
 <p>or, if you like, separate (facetted) normal quantile plots, which I
 would do this way:</p>
-<div class="sourceCode" id="cb605"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb605-1" data-line-number="1"><span class="kw">ggplot</span>(instr,<span class="kw">aes</span>(<span class="dt">sample=</span>score))<span class="op">+</span></a>
-<a class="sourceLine" id="cb605-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb605-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>group,<span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb606-1" data-line-number="1"><span class="kw">ggplot</span>(instr,<span class="kw">aes</span>(<span class="dt">sample=</span>score))<span class="op">+</span></a>
+<a class="sourceLine" id="cb606-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb606-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>group,<span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="07-sign-mood-median_files/figure-html/unnamed-chunk-74-1.png" width="672"  /></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Why might you have doubts about using a two-sample <span class="math inline">\(t\)</span>-test here?</li>
@@ -1668,7 +1669,7 @@ which you can ignore here.)</li>
 </ol>
 <p>Solution</p>
 <p>The overall median first:</p>
-<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb606-1" data-line-number="1">instr <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(score))</a></code></pre></div>
+<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb607-1" data-line-number="1">instr <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(score))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     med
 ##   &lt;dbl&gt;
@@ -1678,8 +1679,8 @@ integers). This will avoid any issues with values-equal-to-median later.</p>
 <p>Then, create and save a table of the value by group and above/below
 median. You can count either above or below (it comes out equivalently
 either way):</p>
-<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb608-1" data-line-number="1">tab=<span class="kw">with</span>(instr,<span class="kw">table</span>(group,score<span class="op">&gt;</span><span class="fl">87.5</span>))</a>
-<a class="sourceLine" id="cb608-2" data-line-number="2">tab</a></code></pre></div>
+<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb609-1" data-line-number="1">tab=<span class="kw">with</span>(instr,<span class="kw">table</span>(group,score<span class="op">&gt;</span><span class="fl">87.5</span>))</a>
+<a class="sourceLine" id="cb609-2" data-line-number="2">tab</a></code></pre></div>
 <pre><code>##      
 ## group FALSE TRUE
 ##     A     2    8
@@ -1689,7 +1690,7 @@ some kind (the alternative). The <code>correct=F</code> is saying not to
 do Yates’s correction, so that it would come out the same if you were
 doing it by hand (“observed minus expected, squared, divided by expected”
 and all that stuff).</p>
-<div class="sourceCode" id="cb610"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb610-1" data-line-number="1"><span class="kw">chisq.test</span>(tab,<span class="dt">correct=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb611-1" data-line-number="1"><span class="kw">chisq.test</span>(tab,<span class="dt">correct=</span>F)</a></code></pre></div>
 <pre><code>## Warning in chisq.test(tab, correct = F): Chi-squared approximation may be
 ## incorrect</code></pre>
 <pre><code>## 
@@ -1712,7 +1713,7 @@ are safe.</p>
 your boxplots and see that the median for group A (8:30 am) is
 substantially higher than for group B (3:00pm). But you can also see
 it from your frequency table, if you displayed it:</p>
-<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb613-1" data-line-number="1">tab</a></code></pre></div>
+<div class="sourceCode" id="cb614"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb614-1" data-line-number="1">tab</a></code></pre></div>
 <pre><code>##      
 ## group FALSE TRUE
 ##     A     2    8
@@ -1786,7 +1787,7 @@ and especially if you use Yates’s correction.</p>
 get a publication out of drinking tea.</p>
 <p>How does that apply to Mood’s median test? Well, let’s remind
 ourselves of the table we had:</p>
-<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb617-1" data-line-number="1">tab</a></code></pre></div>
+<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb618-1" data-line-number="1">tab</a></code></pre></div>
 <pre><code>##      
 ## group FALSE TRUE
 ##     A     2    8
@@ -1809,8 +1810,8 @@ package, and verify that you get the same answer.</li>
 </ol>
 <p>Solution</p>
 <p>Not much to it, since the data is already read in:</p>
-<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb619-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb619-2" data-line-number="2"><span class="kw">median_test</span>(instr, score, group)</a></code></pre></div>
+<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb620-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb620-2" data-line-number="2"><span class="kw">median_test</span>(instr, score, group)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below

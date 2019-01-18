@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -292,7 +292,7 @@ journey.times=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   minutes = col_integer()
+##   minutes = col_double()
 ## )
 ```
 
@@ -303,7 +303,7 @@ journey.times
 ```
 ## # A tibble: 11 x 1
 ##    minutes
-##      <int>
+##      <dbl>
 ##  1      58
 ##  2      61
 ##  3      69
@@ -546,16 +546,16 @@ bw=read_csv(myurl)
 ```
 ## Parsed with column specification:
 ## cols(
-##   `Father Age` = col_integer(),
-##   `Mother Age` = col_integer(),
-##   `Weeks Gestation` = col_integer(),
-##   `Pre-natal Visits` = col_integer(),
-##   `Marital Status` = col_integer(),
-##   `Mother Weight Gained` = col_integer(),
-##   `Low Birthweight?` = col_integer(),
+##   `Father Age` = col_double(),
+##   `Mother Age` = col_double(),
+##   `Weeks Gestation` = col_double(),
+##   `Pre-natal Visits` = col_double(),
+##   `Marital Status` = col_double(),
+##   `Mother Weight Gained` = col_double(),
+##   `Low Birthweight?` = col_double(),
 ##   `Weight (pounds)` = col_double(),
-##   `Premie?` = col_integer(),
-##   `Few Visits?` = col_integer()
+##   `Premie?` = col_double(),
+##   `Few Visits?` = col_double()
 ## )
 ```
 
@@ -819,7 +819,7 @@ nenana=read_tsv(myurl)
 ```
 ## Parsed with column specification:
 ## cols(
-##   Year = col_integer(),
+##   Year = col_double(),
 ##   JulianDate = col_double(),
 ##   `Date&Time` = col_character()
 ## )

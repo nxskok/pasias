@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -549,9 +549,9 @@ bugs2=read_table("exposed.txt")
 ## Parsed with column specification:
 ## cols(
 ##   `Log-Concentration` = col_double(),
-##   `Insects exposed` = col_integer(),
-##   Number = col_integer(),
-##   killed = col_character()
+##   `Insects exposed` = col_double(),
+##   Number = col_double(),
+##   killed = col_logical()
 ## )
 ```
 
@@ -562,12 +562,12 @@ bugs2
 ```
 ## # A tibble: 5 x 4
 ##   `Log-Concentration` `Insects exposed` Number killed
-##                 <dbl>             <int>  <int> <chr> 
-## 1                0.96                50      6 ""    
-## 2                1.33                48     16 ""    
-## 3                1.63                46     24 ""    
-## 4                2.04                49     42 ""    
-## 5                2.32                50     44 ""
+##                 <dbl>             <dbl>  <dbl> <lgl> 
+## 1                0.96                50      6 NA    
+## 2                1.33                48     16 NA    
+## 3                1.63                46     24 NA    
+## 4                2.04                49     42 NA    
+## 5                2.32                50     44 NA
 ```
 
  
@@ -594,8 +594,8 @@ bugs2=read_table("exposed2.txt")
 ## Parsed with column specification:
 ## cols(
 ##   Log_Concentration = col_double(),
-##   Insects_exposed = col_integer(),
-##   Number_killed = col_integer()
+##   Insects_exposed = col_double(),
+##   Number_killed = col_double()
 ## )
 ```
 
@@ -606,7 +606,7 @@ bugs2
 ```
 ## # A tibble: 5 x 3
 ##   Log_Concentration Insects_exposed Number_killed
-##               <dbl>           <int>         <int>
+##               <dbl>           <dbl>         <dbl>
 ## 1              0.96              50             6
 ## 2              1.33              48            16
 ## 3              1.63              46            24
@@ -1456,8 +1456,8 @@ infect=read_tsv(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   infected = col_character(),
-##   age = col_integer(),
-##   weight = col_integer(),
+##   age = col_double(),
+##   weight = col_double(),
 ##   sex = col_character()
 ## )
 ```
@@ -1469,7 +1469,7 @@ infect
 ```
 ## # A tibble: 81 x 4
 ##    infected   age weight sex   
-##    <chr>    <int>  <int> <chr> 
+##    <chr>    <dbl>  <dbl> <chr> 
 ##  1 absent       2      1 female
 ##  2 absent       9     13 female
 ##  3 present     15      2 female
@@ -1502,7 +1502,7 @@ infect %>% print(n=20)
 ```
 ## # A tibble: 81 x 4
 ##    infected   age weight sex   
-##    <chr>    <int>  <int> <chr> 
+##    <chr>    <dbl>  <dbl> <chr> 
 ##  1 absent       2      1 female
 ##  2 absent       9     13 female
 ##  3 present     15      2 female
@@ -2145,7 +2145,7 @@ infect.1a %>% as_tibble()
 ```
 ## # A tibble: 81 x 11
 ##    infected   age weight sex   .fitted .se.fit .resid   .hat .sigma .cooksd
-##  * <chr>    <int>  <int> <chr>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
+##  * <chr>    <dbl>  <dbl> <chr>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
 ##  1 absent       2      1 fema…   0.407   0.763 -1.35  0.140   0.872 7.10e-2
 ##  2 absent       9     13 fema…  -2.24    0.791 -0.450 0.0544  0.886 1.62e-3
 ##  3 present     15      2 fema…   0.343   0.691  1.04  0.116   0.878 2.63e-2
@@ -3394,7 +3394,7 @@ str(x)
 
 ```
 ## 'data.frame':	315 obs. of  11 variables:
-##  $ decision   : num  0 1 1 0 1 1 0 0 0 0 ...
+##  $ decision   : 'haven_labelled' num  0 1 1 0 1 1 0 0 0 0 ...
 ##   ..- attr(*, "format.spss")= chr "F1.0"
 ##   ..- attr(*, "labels")= Named num  0 1
 ##   .. ..- attr(*, "names")= chr  "stop" "continue"
@@ -3402,7 +3402,7 @@ str(x)
 ##   ..- attr(*, "format.spss")= chr "F12.4"
 ##  $ relatvsm   : num  5.1 5.3 6 6.2 3.1 7.7 6.7 4 4.7 7.6 ...
 ##   ..- attr(*, "format.spss")= chr "F12.4"
-##  $ gender     : num  0 1 0 0 0 1 0 1 0 0 ...
+##  $ gender     : 'haven_labelled' num  0 1 0 0 0 1 0 1 0 0 ...
 ##   ..- attr(*, "format.spss")= chr "F1.0"
 ##   ..- attr(*, "labels")= Named num  0 1
 ##   .. ..- attr(*, "names")= chr  "Female" "Male"
@@ -3838,19 +3838,19 @@ heart=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   X1 = col_integer(),
-##   age = col_integer(),
+##   X1 = col_double(),
+##   age = col_double(),
 ##   sex = col_character(),
 ##   pain.type = col_character(),
-##   resting.bp = col_integer(),
-##   serum.chol = col_integer(),
+##   resting.bp = col_double(),
+##   serum.chol = col_double(),
 ##   high.blood.sugar = col_character(),
 ##   electro = col_character(),
-##   max.hr = col_integer(),
+##   max.hr = col_double(),
 ##   angina = col_character(),
 ##   oldpeak = col_double(),
 ##   slope = col_character(),
-##   colored = col_integer(),
+##   colored = col_double(),
 ##   thal = col_character(),
 ##   heart.disease = col_character()
 ## )
@@ -3863,7 +3863,7 @@ heart
 ```
 ## # A tibble: 270 x 15
 ##       X1   age sex   pain.type resting.bp serum.chol high.blood.sugar
-##    <int> <int> <chr> <chr>          <int>      <int> <chr>           
+##    <dbl> <dbl> <chr> <chr>          <dbl>      <dbl> <chr>           
 ##  1     1    70 male  asymptom…        130        322 no              
 ##  2     2    67 fema… nonangin…        115        564 no              
 ##  3     3    57 male  atypical         124        261 no              
@@ -3875,7 +3875,7 @@ heart
 ##  9     9    60 male  asymptom…        140        293 no              
 ## 10    10    63 fema… asymptom…        150        407 no              
 ## # ... with 260 more rows, and 8 more variables: electro <chr>,
-## #   max.hr <int>, angina <chr>, oldpeak <dbl>, slope <chr>, colored <int>,
+## #   max.hr <dbl>, angina <chr>, oldpeak <dbl>, slope <chr>, colored <dbl>,
 ## #   thal <chr>, heart.disease <chr>
 ```
 
@@ -5101,9 +5101,9 @@ breastfeed=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   gest.age = col_integer(),
-##   bf.yes = col_integer(),
-##   bf.no = col_integer()
+##   gest.age = col_double(),
+##   bf.yes = col_double(),
+##   bf.no = col_double()
 ## )
 ```
 
@@ -5114,7 +5114,7 @@ breastfeed
 ```
 ## # A tibble: 6 x 3
 ##   gest.age bf.yes bf.no
-##      <int>  <int> <int>
+##      <dbl>  <dbl> <dbl>
 ## 1       28      2     4
 ## 2       29      2     3
 ## 3       30      7     2
@@ -5148,7 +5148,7 @@ breastfeed %>% summarize(total=sum(bf.yes)+sum(bf.no))
 ```
 ## # A tibble: 1 x 1
 ##   total
-##   <int>
+##   <dbl>
 ## 1    64
 ```
 
@@ -5166,7 +5166,7 @@ summarize(total=sum(freq))
 ```
 ## # A tibble: 1 x 1
 ##   total
-##   <int>
+##   <dbl>
 ## 1    64
 ```
 
@@ -5485,7 +5485,7 @@ donner=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   age = col_integer(),
+##   age = col_double(),
 ##   gender = col_character(),
 ##   survived = col_character()
 ## )
@@ -5498,7 +5498,7 @@ donner
 ```
 ## # A tibble: 45 x 3
 ##      age gender survived
-##    <int> <chr>  <chr>   
+##    <dbl> <chr>  <chr>   
 ##  1    23 male   no      
 ##  2    40 female yes     
 ##  3    40 male   yes     
@@ -5940,7 +5940,7 @@ q3=quantile(age,0.75))
 ```
 ## # A tibble: 1 x 3
 ##      q1   med    q3
-##   <dbl> <int> <dbl>
+##   <dbl> <dbl> <dbl>
 ## 1    24    28    40
 ```
 
@@ -6175,9 +6175,9 @@ icu=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   apache = col_integer(),
-##   patients = col_integer(),
-##   deaths = col_integer()
+##   apache = col_double(),
+##   patients = col_double(),
+##   deaths = col_double()
 ## )
 ```
 
@@ -6188,7 +6188,7 @@ icu
 ```
 ## # A tibble: 38 x 3
 ##    apache patients deaths
-##     <int>    <int>  <int>
+##     <dbl>    <dbl>  <dbl>
 ##  1      0        1      0
 ##  2      2        1      0
 ##  3      3        4      1
@@ -6633,7 +6633,7 @@ ha=read_delim(my_url," ")
 ## cols(
 ##   second = col_character(),
 ##   anger = col_character(),
-##   anxiety = col_integer()
+##   anxiety = col_double()
 ## )
 ```
 
@@ -6644,7 +6644,7 @@ ha
 ```
 ## # A tibble: 20 x 3
 ##    second anger anxiety
-##    <chr>  <chr>   <int>
+##    <chr>  <chr>   <dbl>
 ##  1 y      y          70
 ##  2 y      y          80
 ##  3 y      y          50

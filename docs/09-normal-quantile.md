@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -365,7 +365,7 @@ athletes=read_tsv(my_url)
 ##   WCC = col_double(),
 ##   Hc = col_double(),
 ##   Hg = col_double(),
-##   Ferr = col_integer(),
+##   Ferr = col_double(),
 ##   BMI = col_double(),
 ##   SSF = col_double(),
 ##   `%Bfat` = col_double(),
@@ -382,7 +382,7 @@ athletes
 ```
 ## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <int> <dbl> <dbl>   <dbl> <dbl>
+##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
 ##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
 ##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
 ##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4

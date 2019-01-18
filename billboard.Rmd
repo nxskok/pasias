@@ -128,7 +128,8 @@ select(week, rank)
 (d) Both your `week` and `rank` columns are
 (probably) text. Create new columns that contain just the numeric
 values, and display just your new columns, again adding onto the
-end of your pipe. (In the previous part, you probably had some
+end of your pipe. If it so happens that `rank` is already a number, leave it as it is.
+(In the previous part, you probably had some
 code that picked out a few columns to display them. Get rid of
 that.) 
  
@@ -136,13 +137,17 @@ that.)
 Solution
 
 
-`parse_number` is the easiest. Create new columns,
+My `rank` is already a number, so I leave that. 
+I'm defining a new column `rank_number` that is just a copy 
+of `rank`, so that I can check the two new things 
+that should now both be numbers.
+`parse_number` is the easiest. Create new column(s),
 with `mutate`, that are the `parse_number`-ed
-versions of the old ones.
+versions of the old one(s).
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 select(ends_with("number"))
 ```
 
@@ -152,10 +157,10 @@ that ended with `number`, which meant that I could select them
 with the select-helper `ends_with`. I'm not insisting that you
 do this, but it's a handy trick.)
 
-Since `rank` already looks like a number, but happens to be
+If your `rank` already looks like a number but happens to be
 text, you can also convert it with `as.numeric` (or
 `as.integer`, since it is actually text that looks like a whole
-number). For converting `rank`, these are also good, but for
+number. For converting `rank`, these are also good, but for
 converting `week`, you need something that will pull out the
 number. (`str_extract` from `stringr` will also do it,
 but that's beyond our scope now. It's on page 212 of the R book if
@@ -188,7 +193,7 @@ After that thinking, this:
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 select(date.entered,week_number,current)
 ```
@@ -222,7 +227,7 @@ set.seed(457299)
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 select(date.entered,week_number,current) %>%
 sample_n(10)  
@@ -262,7 +267,7 @@ since we are only checking for equal-to, not something like
 ```{r size="scriptsize"}
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
@@ -307,7 +312,7 @@ This is a question of using `count`, but on the
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
@@ -328,7 +333,7 @@ equal to its maximum value:
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
@@ -345,7 +350,7 @@ to make it easier to pick out the top one:
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
@@ -376,7 +381,7 @@ wherever it appears:
 ```{r }
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(combo=paste(track,artist.inverted,sep=" by ")) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%

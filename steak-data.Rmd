@@ -1,7 +1,8 @@
 ##  How do you like your steak -- the data
 
 
- <a name="q:steak-data">*</a> This question takes you through the data preparation for one
+  <a name="q:steak-data">*</a> 
+This question takes you through the data preparation for one
 of the other questions. You don't have to do *this*
 question, but you may find it interesting or useful.
 
@@ -78,33 +79,82 @@ The usual:
 
 ```{r }
 my_url="http://www.utsc.utoronto.ca/~butler/d29/steak.csv"
-steak=read_csv(my_url)
-steak
+steak0=read_csv(my_url)
+steak0
 ```
 
  
 
+I'm using a temporary name for reasons that will become clear shortly.
 
 
-(b) Run the function `complete.cases` on your data
-frame. This will produce a lot of output. Pick
-three rows where `complete.cases` is TRUE and three where it
-is FALSE, and display those rows of the data frame. Looking at your
-results, what do you think `complete.cases` does? Explain briefly.
 
+(b) What do you immediately notice about your data frame? Run `summary` on the entire data frame. Would you say you have a lot of missing values, or only a few?
 
 Solution
 
 
-If you don't believe the whole output is long, well, here it is:
+I see missing values, starting in the very first row.
+Running the data frame through `summary` gives this, either as `summary(steak0)` or this way:
+```{r }
+steak0 %>% summary()
+```
 
-```{r size="footnotesize"}
-complete.cases(steak) 
+     
+
+Make a call about whether you think that's a lot of missing values or only a few. This might not be all of them, because missing text doesn't show here (we see later how to make it show up).
+
+
+(c) What does the function `drop_na` do when applied to a data frame with missing values? To find out, pass the data frame into `drop_na()`, then into `summary` again. What has happened?
+
+Solution
+
+
+Let's try it and see.
+
+```{r }
+steak0 %>% drop_na() %>% summary()
 ```
 
  
-It doesn't  matter which three TRUE and which three FALSE values you
-pick (as long as they *are* TRUE or FALSE as you claim). 
+
+The missing values, the ones we can see anyway, have all gone. Precisely, `drop_na`, as its
+name suggests, drops all the rows that have missing values in them
+anywhere. This is potentially wasteful, since a row might be missing
+only one value, and we drop the entire rest of the row, throwing away
+the good data as well. If you check, we started with 550 rows, and we
+now have only 311 left. Ouch.
+
+So now we'll save this into our "good" data frame, which means doing it again (now that we know it works):
+
+```{r }
+steak0 %>% drop_na() -> steak
+```
+
+ 
+
+Extra: another way to handle missing data is called "imputation":
+what you do is to *estimate* a value for any missing data, and
+then use that later on as if it were the truth. One way of estimating
+missing values is to do a regression (of appropriate kind: regular or
+logistic) to predict a column with missing values from all the other
+columns.
+
+Extra extra: below we see how we used to have to do this, for your information.
+
+First, we run `complete.cases` on the data frame:
+
+```{r }
+complete.cases(steak0) 
+```
+
+ 
+
+You might be able to guess what this does, in the light of what we
+just did, but if not, you can investigate. Let's pick three rows where
+`complete.cases` is 
+`TRUE` and three where it's
+`FALSE`, and see what happens.
 
 I'll pick rows 496, 497, and 498 for the TRUE rows, and 540, 541 and
 542 for the FALSE ones. Let's assemble these rows into a vector and
@@ -120,29 +170,22 @@ rows
 Like this:
 
 ```{r }
-steak %>% slice(rows)
+steak0 %>% slice(rows)
 ```
 
  
 
-
-
-(c) What's the difference between the rows where
-`complete.cases` is TRUE and the rows where it is false?
-
-
-Solution
-
-
+What's the difference? 
 The rows where `complete.cases` is FALSE have one (or more)
 missing values in them; where `complete.cases` is TRUE the
 rows have no missing values. (Depending on the rows you choose,
 you may not see the missing value(s), as I didn't.)
-Extra: this is a bit tricky to investigate more thoroughly, because the
-text variables might have missing values in them, and they won't
-show up unless we turn them into a factor first:
+Extra (within "extra extra": I hope you are keeping track): this
+is a bit tricky to investigate more thoroughly, because the text
+variables might have missing values in them, and they won't show
+up unless we turn them into a factor first:
 ```{r }
-steak %>% mutate_if(is.character,factor) %>% 
+steak0 %>% mutate_if(is.character,factor) %>% 
 summary()
 ```
 
@@ -161,7 +204,7 @@ in our rows by looking at the columns 1 through 8 and then 9 through
 columns by number:
 
 ```{r }
-steak %>% select(1:8) %>% slice(rows)
+steak0 %>% select(1:8) %>% slice(rows)
 ```
 
  
@@ -169,7 +212,7 @@ steak %>% select(1:8) %>% slice(rows)
 and
 
 ```{r }
-steak %>% select(9:15) %>% slice(rows)
+steak0 %>% select(9:15) %>% slice(rows)
 ```
 
  
@@ -179,27 +222,14 @@ and the last three rows have exactly one missing value. This
 corresponds to what we would expect, with `complete.cases`
 identifying rows that have any missing values.
 
-
-
-(d) Obtain a new data frame that contains only the rows without
-missing values (from the data frame you read in from the
-file). Hints: save the result of `complete.cases` in a variable
-first; `filter` can take anything that produces a true or a
-false for each row, and will return the rows for which the thing it
-was fed was true.
-
-
-Solution
-
-
-The hint, together with the previous part, suggests that the thing
-fed into `filter` should be based on
-`complete.cases(steak)`. Create a variable containing the
-results of `complete.cases` first, then use it in the
-`filter`: 
+What we now need to do is to obtain a data frame that contains only
+the rows with non-missing values. This can be done by saving the
+result of `complete.cases` in a variable first; `filter`
+can take anything that produces a true or a false for each row, and
+will return the rows for which the thing it was fed was true.
 ```{r cca}
-cc=complete.cases(steak)
-steak.complete = steak %>% filter(cc) 
+cc=complete.cases(steak0)
+steak0 %>% filter(cc) -> steak.complete
 ```
 
      
@@ -231,7 +261,7 @@ five-number sumamries. But there aren't.  So here's your proof.
 
 
 
-(e) Write the data into a `.csv` file, with a name like
+(d) Write the data into a `.csv` file, with a name like
 `steak1.csv`.  Open this file in a spreadsheet and (quickly)
 verify that you have the right columns and no missing values.
 
@@ -241,7 +271,7 @@ Solution
 
 This is `write_csv`:
 ```{r }
-write_csv(steak.complete,"steak1.csv")
+write_csv(steak,"steak1.csv")
 ```
 
      

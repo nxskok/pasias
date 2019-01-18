@@ -34,8 +34,8 @@ library(tidyverse)
 
 ```
 ## ✔ tibble  1.4.2     ✔ purrr   0.2.5
-## ✔ tidyr   0.8.1     ✔ dplyr   0.7.8
-## ✔ readr   1.1.1     ✔ stringr 1.3.1
+## ✔ tidyr   0.8.2     ✔ dplyr   0.7.8
+## ✔ readr   1.3.1     ✔ stringr 1.3.1
 ## ✔ tibble  1.4.2     ✔ forcats 0.3.0
 ```
 
@@ -210,7 +210,7 @@ class(response2)
 ```
 
 ```
-## [1] "tbl_df"     "tbl"        "data.frame"
+## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
 ```
 
  
@@ -634,7 +634,7 @@ urine=read_csv(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   obesity = col_character(),
-##   x = col_integer(),
+##   x = col_double(),
 ##   creatinine = col_double(),
 ##   chloride = col_double(),
 ##   chlorine = col_double()
@@ -817,7 +817,7 @@ d2
 ```
 ## # A tibble: 45 x 8
 ##    obesity     x creatinine chloride chlorine    LD1     LD2     LD3
-##    <chr>   <int>      <dbl>    <dbl>    <dbl>  <dbl>   <dbl>   <dbl>
+##    <chr>   <dbl>      <dbl>    <dbl>    <dbl>  <dbl>   <dbl>   <dbl>
 ##  1 a          24       17.6     5.15      7.5  0.393 -0.329  -0.0704
 ##  2 a          32       13.4     5.75      7.1 -0.482  0.655   0.177 
 ##  3 a          17       20.3     4.35      2.3  0.975 -0.372  -0.985 
@@ -1230,8 +1230,8 @@ simple=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   group = col_character(),
-##   y1 = col_integer(),
-##   y2 = col_integer()
+##   y1 = col_double(),
+##   y2 = col_double()
 ## )
 ```
 
@@ -1242,7 +1242,7 @@ simple
 ```
 ## # A tibble: 12 x 3
 ##    group    y1    y2
-##    <chr> <int> <int>
+##    <chr> <dbl> <dbl>
 ##  1 a         2     3
 ##  2 a         3     4
 ##  3 a         5     4
@@ -1735,11 +1735,11 @@ jobs0=read_table(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   outdoor = col_integer(),
-##   social = col_integer(),
-##   conservative = col_integer(),
-##   job = col_integer(),
-##   id = col_integer()
+##   outdoor = col_double(),
+##   social = col_double(),
+##   conservative = col_double(),
+##   job = col_double(),
+##   id = col_double()
 ## )
 ```
 
@@ -1750,7 +1750,7 @@ jobs0
 ```
 ## # A tibble: 244 x 5
 ##    outdoor social conservative   job    id
-##      <int>  <int>        <int> <int> <int>
+##      <dbl>  <dbl>        <dbl> <dbl> <dbl>
 ##  1      10     22            5     1     1
 ##  2      14     17            6     1     2
 ##  3      19     33            7     1     3
@@ -1807,7 +1807,7 @@ jobs
 ```
 ## # A tibble: 244 x 5
 ##    outdoor social conservative job         id
-##      <int>  <int>        <int> <fct>    <int>
+##      <dbl>  <dbl>        <dbl> <fct>    <dbl>
 ##  1      10     22            5 custserv     1
 ##  2      14     17            6 custserv     2
 ##  3      19     33            7 custserv     3
@@ -2784,10 +2784,10 @@ adhd=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   parent = col_character(),
-##   q1 = col_integer(),
-##   q2 = col_integer(),
-##   q3 = col_integer(),
-##   q4 = col_integer()
+##   q1 = col_double(),
+##   q2 = col_double(),
+##   q3 = col_double(),
+##   q4 = col_double()
 ## )
 ```
 
@@ -2798,7 +2798,7 @@ adhd
 ```
 ## # A tibble: 29 x 5
 ##    parent    q1    q2    q3    q4
-##    <chr>  <int> <int> <int> <int>
+##    <chr>  <dbl> <dbl> <dbl> <dbl>
 ##  1 father     2     1     3     1
 ##  2 mother     1     3     1     1
 ##  3 father     2     1     3     1
@@ -3004,7 +3004,7 @@ filter(parent!=pred)
 ```
 ## # A tibble: 1 x 7
 ##   parent    q1    q2    q3    q4 pred      id
-##   <chr>  <int> <int> <int> <int> <fct>  <int>
+##   <chr>  <dbl> <dbl> <dbl> <dbl> <fct>  <int>
 ## 1 mother     1     1     2     1 father    17
 ```
 
@@ -3252,7 +3252,7 @@ cornseed=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   field = col_integer(),
+##   field = col_double(),
 ##   soil = col_character(),
 ##   yield = col_double(),
 ##   water = col_double(),
@@ -3267,7 +3267,7 @@ cornseed
 ```
 ## # A tibble: 32 x 5
 ##    field soil  yield water herbicide
-##    <int> <chr> <dbl> <dbl>     <dbl>
+##    <dbl> <chr> <dbl> <dbl>     <dbl>
 ##  1     1 loam   76.7  29.5       7.5
 ##  2     2 loam   60.5  32.1       6.3
 ##  3     3 loam   96.1  40.7       4.2
@@ -3399,7 +3399,7 @@ cornseed %>% select(field,soil)
 ```
 ## # A tibble: 32 x 2
 ##    field soil 
-##    <int> <chr>
+##    <dbl> <chr>
 ##  1     1 loam 
 ##  2     2 loam 
 ##  3     3 loam 
@@ -3931,7 +3931,7 @@ cornseed %>% filter(field==3)
 ```
 ## # A tibble: 1 x 5
 ##   field soil  yield water herbicide
-##   <int> <chr> <dbl> <dbl>     <dbl>
+##   <dbl> <chr> <dbl> <dbl>     <dbl>
 ## 1     3 loam   96.1  40.7       4.2
 ```
 
@@ -4006,7 +4006,7 @@ athletes=read_tsv(my_url)
 ##   WCC = col_double(),
 ##   Hc = col_double(),
 ##   Hg = col_double(),
-##   Ferr = col_integer(),
+##   Ferr = col_double(),
 ##   BMI = col_double(),
 ##   SSF = col_double(),
 ##   `%Bfat` = col_double(),
@@ -4023,7 +4023,7 @@ athletes
 ```
 ## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <int> <dbl> <dbl>   <dbl> <dbl>
+##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
 ##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
 ##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
 ##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4

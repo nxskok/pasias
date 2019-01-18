@@ -22,8 +22,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -65,8 +65,8 @@ simple=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   group = col_character(),
-##   y1 = col_integer(),
-##   y2 = col_integer()
+##   y1 = col_double(),
+##   y2 = col_double()
 ## )
 ```
 
@@ -77,7 +77,7 @@ simple
 ```
 ## # A tibble: 12 x 3
 ##    group    y1    y2
-##    <chr> <int> <int>
+##    <chr> <dbl> <dbl>
 ##  1 a         2     3
 ##  2 a         3     4
 ##  3 a         5     4
@@ -309,7 +309,7 @@ urine=read_csv(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   obesity = col_character(),
-##   x = col_integer(),
+##   x = col_double(),
 ##   creatinine = col_double(),
 ##   chloride = col_double(),
 ##   chlorine = col_double()
@@ -323,7 +323,7 @@ urine
 ```
 ## # A tibble: 45 x 5
 ##    obesity     x creatinine chloride chlorine
-##    <chr>   <int>      <dbl>    <dbl>    <dbl>
+##    <chr>   <dbl>      <dbl>    <dbl>    <dbl>
 ##  1 a          24       17.6     5.15      7.5
 ##  2 a          32       13.4     5.75      7.1
 ##  3 a          17       20.3     4.35      2.3
@@ -521,7 +521,7 @@ athletes=read_tsv(my_url)
 ##   WCC = col_double(),
 ##   Hc = col_double(),
 ##   Hg = col_double(),
-##   Ferr = col_integer(),
+##   Ferr = col_double(),
 ##   BMI = col_double(),
 ##   SSF = col_double(),
 ##   `%Bfat` = col_double(),
@@ -538,7 +538,7 @@ athletes
 ```
 ## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <int> <dbl> <dbl>   <dbl> <dbl>
+##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
 ##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
 ##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
 ##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4

@@ -14,8 +14,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -60,10 +60,10 @@ mobile=read_delim(my_url," ")
 ## cols(
 ##   gender = col_character(),
 ##   age.group = col_character(),
-##   very.unsat = col_integer(),
-##   unsat = col_integer(),
-##   sat = col_integer(),
-##   very.sat = col_integer()
+##   very.unsat = col_double(),
+##   unsat = col_double(),
+##   sat = col_double(),
+##   very.sat = col_double()
 ## )
 ```
 
@@ -74,7 +74,7 @@ mobile
 ```
 ## # A tibble: 8 x 6
 ##   gender age.group very.unsat unsat   sat very.sat
-##   <chr>  <chr>          <int> <int> <int>    <int>
+##   <chr>  <chr>          <dbl> <dbl> <dbl>    <dbl>
 ## 1 male   0-17               3     9    18       24
 ## 2 male   18-24              6    13    16       28
 ## 3 male   25-30              9    13    17       20
@@ -97,7 +97,7 @@ mobile.long
 ```
 ## # A tibble: 32 x 4
 ##    gender age.group satisfied  frequency
-##    <chr>  <chr>     <chr>          <int>
+##    <chr>  <chr>     <chr>          <dbl>
 ##  1 male   0-17      very.unsat         3
 ##  2 male   18-24     very.unsat         6
 ##  3 male   25-30     very.unsat         9
@@ -141,7 +141,7 @@ mobile.long
 ```
 ## # A tibble: 32 x 4
 ##    gender age.group satisfied  frequency
-##    <chr>  <chr>     <chr>          <int>
+##    <chr>  <chr>     <chr>          <dbl>
 ##  1 male   0-17      very.unsat         3
 ##  2 male   18-24     very.unsat         6
 ##  3 male   25-30     very.unsat         9
@@ -345,7 +345,7 @@ mobile.long2
 ```
 ## # A tibble: 32 x 5
 ##    gender age.group satisfied  frequency satis     
-##    <chr>  <chr>     <chr>          <int> <ord>     
+##    <chr>  <chr>     <chr>          <dbl> <ord>     
 ##  1 male   0-17      very.unsat         3 very.unsat
 ##  2 male   18-24     very.unsat         6 very.unsat
 ##  3 male   25-30     very.unsat         9 very.unsat
@@ -808,11 +808,11 @@ abortion=read_table2(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   year = col_integer(),
+##   year = col_double(),
 ##   religion = col_character(),
 ##   education = col_character(),
 ##   attitude = col_character(),
-##   frequency = col_integer()
+##   frequency = col_double()
 ## )
 ```
 
@@ -823,7 +823,7 @@ abortion
 ```
 ## # A tibble: 81 x 5
 ##     year religion education attitude frequency
-##    <int> <chr>    <chr>     <chr>        <int>
+##    <dbl> <chr>    <chr>     <chr>        <dbl>
 ##  1  1972 Prot     Low       Neg              9
 ##  2  1972 Prot     Low       Mix             12
 ##  3  1972 Prot     Low       Pos             48
@@ -915,7 +915,7 @@ abortion
 ```
 ## # A tibble: 81 x 6
 ##     year religion education attitude frequency attitude.ord
-##    <int> <chr>    <chr>     <chr>        <int> <ord>       
+##    <dbl> <chr>    <chr>     <chr>        <dbl> <ord>       
 ##  1  1972 Prot     Low       Neg              9 Neg         
 ##  2  1972 Prot     Low       Mix             12 Mix         
 ##  3  1972 Prot     Low       Pos             48 Pos         
@@ -1280,20 +1280,24 @@ Solution
 
 As in the previous part: pick a level of `education`, and
 then judge the effect of `religion`. 
+
 The `Low` level of education appeared to be the most
 opposed to abortion before, so the effects of `religion`
 might be the most noticeable there. For those, the Catholics are
 most likely to be negatively inclined towards abortion, and the
 least likely to be postively inclined. There is not much
 difference between the two flavours of Protestant.
+
 Some further thoughts:
+
 What actually surprises me is that you hear (in the media) about
 Christians being steadfastly opposed to abortion. This is
 something that these data do not support at all: an appreciable
 fraction of people from each of the denominations, especially
 with medium or high levels of education, are actually in favour
 of abortion in all three of the circumstances described in the question.
-The models we fitted assume an effect of `religion`
+
+Extra: the models we fitted assume an effect of `religion`
 regardless of education, and an effect of `education`
 regardless of religion. But it might be that the effect of
 education depends on which religious denomination you're looking
@@ -1597,21 +1601,21 @@ ess=read_csv(my_url)
 ## cols(
 ##   cntry = col_character(),
 ##   cname = col_character(),
-##   cedition = col_integer(),
+##   cedition = col_double(),
 ##   cproddat = col_character(),
-##   cseqno = col_integer(),
+##   cseqno = col_double(),
 ##   name = col_character(),
-##   essround = col_integer(),
+##   essround = col_double(),
 ##   edition = col_double(),
-##   idno = col_integer(),
+##   idno = col_double(),
 ##   dweight = col_double(),
 ##   pspwght = col_double(),
 ##   pweight = col_double(),
-##   prtvtgb = col_integer(),
-##   gndr = col_integer(),
-##   agea = col_integer(),
-##   eduyrs = col_integer(),
-##   inwtm = col_integer()
+##   prtvtgb = col_double(),
+##   gndr = col_double(),
+##   agea = col_double(),
+##   eduyrs = col_double(),
+##   inwtm = col_double()
 ## )
 ```
 
@@ -1622,7 +1626,7 @@ ess
 ```
 ## # A tibble: 2,286 x 17
 ##    cntry cname cedition cproddat cseqno name  essround edition   idno
-##    <chr> <chr>    <int> <chr>     <int> <chr>    <int>   <dbl>  <int>
+##    <chr> <chr>    <dbl> <chr>     <dbl> <chr>    <dbl>   <dbl>  <dbl>
 ##  1 GB    ESS1…        1 26.11.2… 134168 ESS6…        6     2.1 101014
 ##  2 GB    ESS1…        1 26.11.2… 134169 ESS6…        6     2.1 101048
 ##  3 GB    ESS1…        1 26.11.2… 134170 ESS6…        6     2.1 101055
@@ -1634,8 +1638,8 @@ ess
 ##  9 GB    ESS1…        1 26.11.2… 134176 ESS6…        6     2.1 101154
 ## 10 GB    ESS1…        1 26.11.2… 134177 ESS6…        6     2.1 101170
 ## # ... with 2,276 more rows, and 8 more variables: dweight <dbl>,
-## #   pspwght <dbl>, pweight <dbl>, prtvtgb <int>, gndr <int>, agea <int>,
-## #   eduyrs <int>, inwtm <int>
+## #   pspwght <dbl>, pweight <dbl>, prtvtgb <dbl>, gndr <dbl>, agea <dbl>,
+## #   eduyrs <dbl>, inwtm <dbl>
 ```
 
      
@@ -1689,7 +1693,7 @@ done in one go.
 Solution
 
 
-This seems to call for a chain. The major parties are numbered 1,
+This seems to call for a pipeline. The major parties are numbered 1,
 2 and 3, so we can select the ones less than 4 (or
 `<=3`). The reference back to the last question is a hint
 to use `!is.na()`.
@@ -1772,9 +1776,13 @@ The response variable is political party voted for. There is no
 (obvious) ordering to this (unless you want to try to place the parties
 on a left-right spectrum), so this is nominal, and you'll need
 `multinom` from package `nnet`.
+
 If I had included the minor parties and you were working on a
 left-right spectrum, you would have had to decide where to put the
-somewhat libertarian Greens or the parties that exist only in Northern Ireland.
+somewhat libertarian Greens
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The American Green party is more libertarian than Green parties elsewhere.</span> 
+or the parties that exist only in Northern Ireland.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Northern Ireland's political parties distinguish themselves by politics *and* religion. Northern Ireland has always had political tensions between its Protestants and its Catholics.</span>
  
 
 (f) <a name="part:full">*</a> Take the political party voted for, and turn it into a
@@ -1842,7 +1850,6 @@ the R function `step` does what you want. You feed `step`
 two things: a fitted model object, and the option `trace=0`
 (otherwise you get a lot of output). The final part of the output from
 `step` tells you which explanatory variables you need to keep.
-
 Run `step` on your fitted model. Which explanatory variables
 need to stay in the model here?
 
@@ -1853,7 +1860,7 @@ Solution
 I tried to give you lots of hints here:
 
 ```r
-step(ess.1,trace=0)
+ess.2a=step(ess.1,trace=0)
 ```
 
 ```
@@ -1871,6 +1878,10 @@ step(ess.1,trace=0)
 ## trying - inwtm
 ```
 
+```r
+ess.2a
+```
+
 ```
 ## Call:
 ## multinom(formula = factor(prtvtgb) ~ agea + eduyrs + inwtm, data = ess.major)
@@ -1885,6 +1896,9 @@ step(ess.1,trace=0)
 ```
 
    
+
+If you didn't save your output in a variable, you'll get my last bit
+automatically.
 
 The end of the output gives us coefficients for (and thus tells us we
 need to keep)  age, years of education and interview length.  
@@ -1916,10 +1930,13 @@ have to wade through all of that output). Try values like 1 or 2 for
  
 Solution
 
-
-Copy and paste, and take out the variables you don't need. I found
-that gender needed to be removed, but if yours is different, follow
-through with whatever your `step` said to do.
+ Copy and paste, and take out the
+variables you don't need. Or, better, save the output from
+`step` in a variable. This then becomes a fitted model
+object and you can look at it any of the ways you can look at a
+model fit.  I found that gender needed to be removed, but if yours
+is different, follow through with whatever your `step` said
+to do.
 
 ```r
 ess.2=multinom(party~agea+eduyrs+inwtm,data=ess.major)
@@ -1934,6 +1951,27 @@ ess.2=multinom(party~agea+eduyrs+inwtm,data=ess.major)
 ```
 
    
+
+If you saved the output from `step`, you'll already have this and you don't need to do it again:
+
+
+```r
+anova(ess.2, ess.2a)
+```
+
+```
+## Likelihood ratio tests of Multinomial Models
+## 
+## Response: party
+## Response: factor(prtvtgb)
+##                   Model Resid. df Resid. Dev   Test    Df LR stat. Pr(Chi)
+## 1 agea + eduyrs + inwtm      2438   2496.507                              
+## 2 agea + eduyrs + inwtm      2438   2496.507 1 vs 2     0        0       1
+```
+
+ 
+
+Same model.
  
 
 
@@ -2113,11 +2151,13 @@ increasing age tends to increase the chance that a person will
 vote Conservative (party 1), and decrease the chance that a person
 will vote Labour (party 2). There doesn't seem to be much effect
 of age on the chance that a person will vote Liberal Democrat.
+
 To assess education, hold age constant, and thus compare rows 1
 and 2 (or rows 3 and 4). This time, there isn't much effect on the
 chances of voting Conservative, but as education increases, the
 chance of voting Labour goes down, and the chance of voting
 Liberal Democrat goes up.
+
 A little history: back 150 or so years ago, Britain had two
 political parties, the Tories and the Whigs. The Tories became the
 Conservative party (and hence, in Britain and in Canada, the
@@ -2133,6 +2173,7 @@ Labour goverments, with the Liberals as a third party. In the
 but on realizing that they couldn't make much of a dent by
 themselves, they merged with the Liberals to form the Liberal
 Democrats, which became a slightly stronger third party.
+
 I was curious about what the effect of interview length would
 be. Presumably, the effect is small, but I have no idea which way
 it would be. To assess this, it's the same idea over again: create
@@ -2244,15 +2285,15 @@ gators.orig=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   profile = col_integer(),
+##   profile = col_double(),
 ##   Gender = col_character(),
 ##   Size = col_character(),
 ##   Lake = col_character(),
-##   Fish = col_integer(),
-##   Invertebrate = col_integer(),
-##   Reptile = col_integer(),
-##   Bird = col_integer(),
-##   Other = col_integer()
+##   Fish = col_double(),
+##   Invertebrate = col_double(),
+##   Reptile = col_double(),
+##   Bird = col_double(),
+##   Other = col_double()
 ## )
 ```
 
@@ -2263,7 +2304,7 @@ gators.orig
 ```
 ## # A tibble: 16 x 9
 ##    profile Gender Size  Lake      Fish Invertebrate Reptile  Bird Other
-##      <int> <chr>  <chr> <chr>    <int>        <int>   <int> <int> <int>
+##      <dbl> <chr>  <chr> <chr>    <dbl>        <dbl>   <dbl> <dbl> <dbl>
 ##  1       1 f      <2.3  george       3            9       1     0     1
 ##  2       2 m      <2.3  george      13           10       0     2     2
 ##  3       3 f      >2.3  george       8            1       0     0     1
@@ -2312,7 +2353,7 @@ gators
 ```
 ## # A tibble: 80 x 6
 ##    profile Gender Size  Lake     Food.type Frequency
-##      <int> <chr>  <chr> <chr>    <chr>         <int>
+##      <dbl> <chr>  <chr> <chr>    <chr>         <dbl>
 ##  1       1 f      <2.3  george   Fish              3
 ##  2       2 m      <2.3  george   Fish             13
 ##  3       3 f      >2.3  george   Fish              8
@@ -2366,7 +2407,7 @@ where it is supposed to be a factor.
 
 
 (c) What is different about this problem, compared to
-Question~<a href="#q:abortion">here</a>, that would make 
+Question <a href="#q:abortion">here</a>, that would make 
 `multinom` the right tool to use?
 
 
@@ -2419,7 +2460,7 @@ gators %>% count(Food.type,wt=Frequency)
 ```
 ## # A tibble: 5 x 2
 ##   Food.type        n
-##   <chr>        <int>
+##   <chr>        <dbl>
 ## 1 Bird            13
 ## 2 Fish            94
 ## 3 Invertebrate    61
@@ -2877,11 +2918,13 @@ That will do, though you can also note that reptiles are more
 commonly found in the last two lakes, and birds sometimes appear
 in the diet in Hancock and Trafford but rarely in the other two
 lakes. 
+
 Another way to think about this is to hold size constant and
 compare lakes (and then check that it applies to the other size
 too). In this case, you'd find the biggest predictions among the
 first four rows, and then check that the pattern persists in the
 second four rows. (It does.)
+
 I think looking at predicted probabilities like this is the
 easiest way to see what the model is telling you. I also think
 that having a consistent recipe for doing predictions makes the
@@ -2891,6 +2934,7 @@ create a data frame for prediction using `crossing`,
 where the things inside are all "singular=plural"; run
 `predict` with model, new data and (if needed) type of
 value to predict, glue the predictions onto the new data.
+
 If you somehow mess up the creation of your new data frame (this
 typically happens by forgetting a variable that you should have
 included, or giving it the wrong name), `predict` will
@@ -2931,7 +2975,8 @@ commoner for large alligators than small ones.
 ##  How do you like your steak -- the data
 
 
- <a name="q:steak-data">*</a> This question takes you through the data preparation for one
+  <a name="q:steak-data">*</a> 
+This question takes you through the data preparation for one
 of the other questions. You don't have to do *this*
 question, but you may find it interesting or useful.
 
@@ -3009,7 +3054,7 @@ The usual:
 
 ```r
 my_url="http://www.utsc.utoronto.ca/~butler/d29/steak.csv"
-steak=read_csv(my_url)
+steak0=read_csv(my_url)
 ```
 
 ```
@@ -3034,7 +3079,7 @@ steak=read_csv(my_url)
 ```
 
 ```r
-steak
+steak0
 ```
 
 ```
@@ -3058,23 +3103,133 @@ steak
 
  
 
+I'm using a temporary name for reasons that will become clear shortly.
 
 
-(b) Run the function `complete.cases` on your data
-frame. This will produce a lot of output. Pick
-three rows where `complete.cases` is TRUE and three where it
-is FALSE, and display those rows of the data frame. Looking at your
-results, what do you think `complete.cases` does? Explain briefly.
 
+(b) What do you immediately notice about your data frame? Run `summary` on the entire data frame. Would you say you have a lot of missing values, or only a few?
 
 Solution
 
 
-If you don't believe the whole output is long, well, here it is:
+I see missing values, starting in the very first row.
+Running the data frame through `summary` gives this, either as `summary(steak0)` or this way:
+
+```r
+steak0 %>% summary()
+```
+
+```
+##  respondent_id       lottery_a         smoke          alcohol       
+##  Min.   :3.235e+09   Mode :logical   Mode :logical   Mode :logical  
+##  1st Qu.:3.235e+09   FALSE:279       FALSE:453       FALSE:125      
+##  Median :3.235e+09   TRUE :267       TRUE :84        TRUE :416      
+##  Mean   :3.235e+09   NA's :4         NA's :13        NA's :9        
+##  3rd Qu.:3.235e+09                                                  
+##  Max.   :3.238e+09                                                  
+##    gamble        skydiving         speed          cheated       
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
+##  FALSE:280       FALSE:502       FALSE:59        FALSE:447      
+##  TRUE :257       TRUE :36        TRUE :480       TRUE :92       
+##  NA's :13        NA's :12        NA's :11        NA's :11       
+##                                                                 
+##                                                                 
+##    steak          steak_prep          female            age           
+##  Mode :logical   Length:550         Mode :logical   Length:550        
+##  FALSE:109       Class :character   FALSE:246       Class :character  
+##  TRUE :430       Mode  :character   TRUE :268       Mode  :character  
+##  NA's :11                           NA's :36                          
+##                                                                       
+##                                                                       
+##  hhold_income           educ              region         
+##  Length:550         Length:550         Length:550        
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
+## 
+```
+
+     
+
+Make a call about whether you think that's a lot of missing values or only a few. This might not be all of them, because missing text doesn't show here (we see later how to make it show up).
+
+
+(c) What does the function `drop_na` do when applied to a data frame with missing values? To find out, pass the data frame into `drop_na()`, then into `summary` again. What has happened?
+
+Solution
+
+
+Let's try it and see.
 
 
 ```r
-complete.cases(steak) 
+steak0 %>% drop_na() %>% summary()
+```
+
+```
+##  respondent_id       lottery_a         smoke          alcohol       
+##  Min.   :3.235e+09   Mode :logical   Mode :logical   Mode :logical  
+##  1st Qu.:3.235e+09   FALSE:171       FALSE:274       FALSE:65       
+##  Median :3.235e+09   TRUE :160       TRUE :57        TRUE :266      
+##  Mean   :3.235e+09                                                  
+##  3rd Qu.:3.235e+09                                                  
+##  Max.   :3.235e+09                                                  
+##    gamble        skydiving         speed          cheated       
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
+##  FALSE:158       FALSE:308       FALSE:28        FALSE:274      
+##  TRUE :173       TRUE :23        TRUE :303       TRUE :57       
+##                                                                 
+##                                                                 
+##                                                                 
+##   steak          steak_prep          female            age           
+##  Mode:logical   Length:331         Mode :logical   Length:331        
+##  TRUE:331       Class :character   FALSE:174       Class :character  
+##                 Mode  :character   TRUE :157       Mode  :character  
+##                                                                      
+##                                                                      
+##                                                                      
+##  hhold_income           educ              region         
+##  Length:331         Length:331         Length:331        
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
+## 
+```
+
+ 
+
+The missing values, the ones we can see anyway, have all gone. Precisely, `drop_na`, as its
+name suggests, drops all the rows that have missing values in them
+anywhere. This is potentially wasteful, since a row might be missing
+only one value, and we drop the entire rest of the row, throwing away
+the good data as well. If you check, we started with 550 rows, and we
+now have only 311 left. Ouch.
+
+So now we'll save this into our "good" data frame, which means doing it again (now that we know it works):
+
+
+```r
+steak0 %>% drop_na() -> steak
+```
+
+ 
+
+Extra: another way to handle missing data is called "imputation":
+what you do is to *estimate* a value for any missing data, and
+then use that later on as if it were the truth. One way of estimating
+missing values is to do a regression (of appropriate kind: regular or
+logistic) to predict a column with missing values from all the other
+columns.
+
+Extra extra: below we see how we used to have to do this, for your information.
+
+First, we run `complete.cases` on the data frame:
+
+
+```r
+complete.cases(steak0) 
 ```
 
 ```
@@ -3131,8 +3286,12 @@ complete.cases(steak)
 ```
 
  
-It doesn't  matter which three TRUE and which three FALSE values you
-pick (as long as they *are* TRUE or FALSE as you claim). 
+
+You might be able to guess what this does, in the light of what we
+just did, but if not, you can investigate. Let's pick three rows where
+`complete.cases` is 
+`TRUE` and three where it's
+`FALSE`, and see what happens.
 
 I'll pick rows 496, 497, and 498 for the TRUE rows, and 540, 541 and
 542 for the FALSE ones. Let's assemble these rows into a vector and
@@ -3154,7 +3313,7 @@ Like this:
 
 
 ```r
-steak %>% slice(rows)
+steak0 %>% slice(rows)
 ```
 
 ```
@@ -3173,25 +3332,18 @@ steak %>% slice(rows)
 
  
 
-
-
-(c) What's the difference between the rows where
-`complete.cases` is TRUE and the rows where it is false?
-
-
-Solution
-
-
+What's the difference? 
 The rows where `complete.cases` is FALSE have one (or more)
 missing values in them; where `complete.cases` is TRUE the
 rows have no missing values. (Depending on the rows you choose,
 you may not see the missing value(s), as I didn't.)
-Extra: this is a bit tricky to investigate more thoroughly, because the
-text variables might have missing values in them, and they won't
-show up unless we turn them into a factor first:
+Extra (within "extra extra": I hope you are keeping track): this
+is a bit tricky to investigate more thoroughly, because the text
+variables might have missing values in them, and they won't show
+up unless we turn them into a factor first:
 
 ```r
-steak %>% mutate_if(is.character,factor) %>% 
+steak0 %>% mutate_if(is.character,factor) %>% 
 summary()
 ```
 
@@ -3254,7 +3406,7 @@ columns by number:
 
 
 ```r
-steak %>% select(1:8) %>% slice(rows)
+steak0 %>% select(1:8) %>% slice(rows)
 ```
 
 ```
@@ -3275,7 +3427,7 @@ and
 
 
 ```r
-steak %>% select(9:15) %>% slice(rows)
+steak0 %>% select(9:15) %>% slice(rows)
 ```
 
 ```
@@ -3297,28 +3449,15 @@ and the last three rows have exactly one missing value. This
 corresponds to what we would expect, with `complete.cases`
 identifying rows that have any missing values.
 
-
-
-(d) Obtain a new data frame that contains only the rows without
-missing values (from the data frame you read in from the
-file). Hints: save the result of `complete.cases` in a variable
-first; `filter` can take anything that produces a true or a
-false for each row, and will return the rows for which the thing it
-was fed was true.
-
-
-Solution
-
-
-The hint, together with the previous part, suggests that the thing
-fed into `filter` should be based on
-`complete.cases(steak)`. Create a variable containing the
-results of `complete.cases` first, then use it in the
-`filter`: 
+What we now need to do is to obtain a data frame that contains only
+the rows with non-missing values. This can be done by saving the
+result of `complete.cases` in a variable first; `filter`
+can take anything that produces a true or a false for each row, and
+will return the rows for which the thing it was fed was true.
 
 ```r
-cc=complete.cases(steak)
-steak.complete = steak %>% filter(cc) 
+cc=complete.cases(steak0)
+steak0 %>% filter(cc) -> steak.complete
 ```
 
      
@@ -3414,7 +3553,7 @@ five-number sumamries. But there aren't.  So here's your proof.
 
 
 
-(e) Write the data into a `.csv` file, with a name like
+(d) Write the data into a `.csv` file, with a name like
 `steak1.csv`.  Open this file in a spreadsheet and (quickly)
 verify that you have the right columns and no missing values.
 
@@ -3425,7 +3564,7 @@ Solution
 This is `write_csv`:
 
 ```r
-write_csv(steak.complete,"steak1.csv")
+write_csv(steak,"steak1.csv")
 ```
 
      
@@ -3728,24 +3867,18 @@ at a time for membership in the set in `my.crimes`, so this:
 ```r
 sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
 select(c(Category,DayOfWeek,PdDistrict)) 
+```
+
+```
+## Error in select(., c(Category, DayOfWeek, PdDistrict)): unused argument (c(Category, DayOfWeek, PdDistrict))
+```
+
+```r
 sfcrimea
 ```
 
 ```
-## # A tibble: 359,528 x 3
-##    Category      DayOfWeek PdDistrict
-##    <chr>         <chr>     <chr>     
-##  1 LARCENY/THEFT Wednesday NORTHERN  
-##  2 LARCENY/THEFT Wednesday PARK      
-##  3 LARCENY/THEFT Wednesday INGLESIDE 
-##  4 VEHICLE THEFT Wednesday INGLESIDE 
-##  5 VEHICLE THEFT Wednesday BAYVIEW   
-##  6 LARCENY/THEFT Wednesday RICHMOND  
-##  7 LARCENY/THEFT Wednesday CENTRAL   
-##  8 LARCENY/THEFT Wednesday CENTRAL   
-##  9 LARCENY/THEFT Wednesday NORTHERN  
-## 10 ASSAULT       Wednesday INGLESIDE 
-## # ... with 359,518 more rows
+## Error in eval(expr, envir, enclos): object 'sfcrimea' not found
 ```
 
    
@@ -3758,13 +3891,13 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:bindrcpp"  "package:forcats"  
-##  [4] "package:stringr"   "package:dplyr"     "package:purrr"    
-##  [7] "package:readr"     "package:tidyr"     "package:tibble"   
-## [10] "package:ggplot2"   "package:tidyverse" "package:nnet"     
-## [13] "package:stats"     "package:graphics"  "package:grDevices"
-## [16] "package:utils"     "package:datasets"  "package:methods"  
-## [19] "Autoloads"         "package:base"
+##  [1] ".GlobalEnv"        "package:MASS"      "package:bindrcpp" 
+##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
+##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
+## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
+## [13] "package:nnet"      "package:stats"     "package:graphics" 
+## [16] "package:grDevices" "package:utils"     "package:datasets" 
+## [19] "package:methods"   "Autoloads"         "package:base"
 ```
 
  
@@ -3774,10 +3907,6 @@ so we need to get rid of `MASS`:
 
 ```r
 detach("package:MASS", unload=T)
-```
-
-```
-## Error in detach("package:MASS", unload = T): invalid 'name' argument
 ```
 
  
@@ -4021,8 +4150,8 @@ right choice.
     
 
 
-(c) What are the levels of `steak_prep`, \emph{in the
-order that R thinks they are in?} If they are not in a sensible
+(c) What are the levels of `steak_prep`, 
+*in the  order that R thinks they are in?* If they are not in a sensible
 order, create an ordered factor where the levels are in a sensible order.
 
 
@@ -4652,15 +4781,12 @@ lot of crime categories, so we will focus on the top four
 
 Some of the model-fitting takes a while (you'll see why below). If
 you're using R Markdown, you can wait for the models to fit each time
-you re-run your document, or, edit the top line of a code chunk to say 
-
-$$
-````{r,cache=T}`
-$$
-
-What that does is to re-run that code chunk only if it changes; if it
-hasn't changed it will use the saved results from last time it was
-run. That can save you a lot of waiting around.
+you re-run your document, or insert `cache=T` in the top line
+of your code chunk (the one with `r` in curly brackets in it,
+above the actual code). Put a comma and the `cache=T` inside
+the curly brackets.  What that does is to re-run that code chunk only
+if it changes; if it hasn't changed it will use the saved results from
+last time it was run. That can save you a lot of waiting around.
 
 
 
@@ -5369,16 +5495,16 @@ hsb=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   id = col_integer(),
+##   id = col_double(),
 ##   race = col_character(),
 ##   ses = col_character(),
 ##   schtyp = col_character(),
 ##   prog = col_character(),
-##   read = col_integer(),
-##   write = col_integer(),
-##   math = col_integer(),
-##   science = col_integer(),
-##   socst = col_integer(),
+##   read = col_double(),
+##   write = col_double(),
+##   math = col_double(),
+##   science = col_double(),
+##   socst = col_double(),
 ##   gender = col_character()
 ## )
 ```
@@ -5390,7 +5516,7 @@ hsb
 ```
 ## # A tibble: 200 x 11
 ##       id race         ses    schtyp prog        read write  math science socst gender
-##    <int> <chr>        <chr>  <chr>  <chr>      <int> <int> <int>   <int> <int> <chr> 
+##    <dbl> <chr>        <chr>  <chr>  <chr>      <dbl> <dbl> <dbl>   <dbl> <dbl> <chr> 
 ##  1    70 white        low    public general       57    52    41      47    57 male  
 ##  2   121 white        middle public vocational    68    59    53      63    61 female
 ##  3    86 white        high   public general       44    33    54      58    31 male  
@@ -5438,7 +5564,7 @@ hsb
 ```
 ## # A tibble: 200 x 11
 ##       id race         ses    schtyp prog        read write  math science socst gender
-##    <int> <chr>        <ord>  <chr>  <chr>      <int> <int> <int>   <int> <int> <chr> 
+##    <dbl> <chr>        <ord>  <chr>  <chr>      <dbl> <dbl> <dbl>   <dbl> <dbl> <chr> 
 ##  1    70 white        low    public general       57    52    41      47    57 male  
 ##  2   121 white        middle public vocational    68    59    53      63    61 female
 ##  3    86 white        high   public general       44    33    54      58    31 male  
@@ -5869,7 +5995,7 @@ athletes=read_tsv(my_url)
 ##   WCC = col_double(),
 ##   Hc = col_double(),
 ##   Hg = col_double(),
-##   Ferr = col_integer(),
+##   Ferr = col_double(),
 ##   BMI = col_double(),
 ##   SSF = col_double(),
 ##   `%Bfat` = col_double(),
@@ -5886,7 +6012,7 @@ athletes
 ```
 ## # A tibble: 202 x 13
 ##    Sex    Sport     RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht    Wt
-##    <chr>  <chr>   <dbl> <dbl> <dbl> <dbl> <int> <dbl> <dbl>   <dbl> <dbl> <dbl> <dbl>
+##    <chr>  <chr>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl> <dbl>
 ##  1 female Netball  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.  59.9
 ##  2 female Netball  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.  63  
 ##  3 female Netball  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176   66.3
@@ -5918,7 +6044,7 @@ athletes=read_delim(my_url,"\t")
 ##   WCC = col_double(),
 ##   Hc = col_double(),
 ##   Hg = col_double(),
-##   Ferr = col_integer(),
+##   Ferr = col_double(),
 ##   BMI = col_double(),
 ##   SSF = col_double(),
 ##   `%Bfat` = col_double(),
@@ -5946,7 +6072,7 @@ I'm doing this to give you a little intuition for later:
 ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport))+geom_point()
 ```
 
-<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
+<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-150-1.png" width="672"  />
 
      
 

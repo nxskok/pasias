@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -729,7 +729,7 @@ bags=read_csv("chips.txt")
 ```
 ## Parsed with column specification:
 ## cols(
-##   chips = col_integer()
+##   chips = col_double()
 ## )
 ```
 
@@ -740,7 +740,7 @@ bags
 ```
 ## # A tibble: 16 x 1
 ##    chips
-##    <int>
+##    <dbl>
 ##  1  1219
 ##  2  1214
 ##  3  1087
@@ -1025,8 +1025,8 @@ x
 ```
 
 ```
-##  [1] 56.37780 41.07161 42.94376 66.90592 43.13489 41.13124 63.73140
-##  [8] 40.79353 60.94481 77.70804
+##  [1] 83.39105 44.76648 64.00485 29.49772 44.86446 43.74926 71.58317
+##  [8] 80.49975 55.67955 49.50855
 ```
 
 
@@ -1047,10 +1047,11 @@ tibble(x) %>% count(x<40)
 ```
 
 ```
-## # A tibble: 1 x 2
+## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE       10
+## 1 FALSE        9
+## 2 TRUE         1
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1084,7 +1085,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1      10 FALSE
+## 1       1 TRUE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1104,7 +1105,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1      10 TRUE
+## 1       1 TRUE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1838,7 +1839,7 @@ math=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   course = col_character(),
-##   phobia = col_integer()
+##   phobia = col_double()
 ## )
 ```
 
@@ -1849,7 +1850,7 @@ math
 ```
 ## # A tibble: 10 x 2
 ##    course phobia
-##    <chr>   <int>
+##    <chr>   <dbl>
 ##  1 a           8
 ##  2 a           7
 ##  3 a           7
@@ -2001,7 +2002,7 @@ tmp %>% count(phobia)
 ```
 ## # A tibble: 3 x 2
 ##   phobia     n
-##    <int> <int>
+##    <dbl> <int>
 ## 1      6     2
 ## 2      7     2
 ## 3      8     1
@@ -2151,7 +2152,7 @@ math %>% count(phobia)
 ```
 ## # A tibble: 6 x 2
 ##   phobia     n
-##    <int> <int>
+##    <dbl> <int>
 ## 1      1     1
 ## 2      2     1
 ## 3      6     2
@@ -2241,7 +2242,7 @@ instr=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   group = col_character(),
-##   score = col_integer()
+##   score = col_double()
 ## )
 ```
 
@@ -2252,7 +2253,7 @@ instr
 ```
 ## # A tibble: 18 x 2
 ##    group score
-##    <chr> <int>
+##    <chr> <dbl>
 ##  1 A        88
 ##  2 A        89
 ##  3 A        79

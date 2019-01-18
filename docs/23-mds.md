@@ -33,8 +33,8 @@ library(tidyverse)
 
 ```
 ## ✔ tibble  1.4.2     ✔ purrr   0.2.5
-## ✔ tidyr   0.8.1     ✔ dplyr   0.7.8
-## ✔ readr   1.1.1     ✔ stringr 1.3.1
+## ✔ tidyr   0.8.2     ✔ dplyr   0.7.8
+## ✔ readr   1.3.1     ✔ stringr 1.3.1
 ## ✔ tibble  1.4.2     ✔ forcats 0.3.0
 ```
 
@@ -88,18 +88,18 @@ wisc=read_table(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   location = col_character(),
-##   Appleton = col_integer(),
-##   Beloit = col_integer(),
-##   Fort.Atkinson = col_integer(),
-##   Madison = col_integer(),
-##   Marshfield = col_integer(),
-##   Milwaukee = col_integer(),
-##   Monroe = col_integer(),
-##   Superior = col_integer(),
-##   Wausau = col_integer(),
-##   Dubuque = col_integer(),
-##   St.Paul = col_integer(),
-##   Chicago = col_integer()
+##   Appleton = col_double(),
+##   Beloit = col_double(),
+##   Fort.Atkinson = col_double(),
+##   Madison = col_double(),
+##   Marshfield = col_double(),
+##   Milwaukee = col_double(),
+##   Monroe = col_double(),
+##   Superior = col_double(),
+##   Wausau = col_double(),
+##   Dubuque = col_double(),
+##   St.Paul = col_double(),
+##   Chicago = col_double()
 ## )
 ```
 
@@ -110,7 +110,7 @@ wisc
 ```
 ## # A tibble: 12 x 13
 ##    location Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee
-##    <chr>       <int>  <int>         <int>   <int>      <int>     <int>
+##    <chr>       <dbl>  <dbl>         <dbl>   <dbl>      <dbl>     <dbl>
 ##  1 Appleton        0    130            98     102        103       100
 ##  2 Beloit        130      0            33      50        185        73
 ##  3 Fort.At…       98     33             0      36        164        54
@@ -123,8 +123,8 @@ wisc
 ## 10 Dubuque       196     94           119      95        186       168
 ## 11 St.Paul       257    304           287     258        161       322
 ## 12 Chicago       186     97           113     146        276        93
-## # ... with 6 more variables: Monroe <int>, Superior <int>, Wausau <int>,
-## #   Dubuque <int>, St.Paul <int>, Chicago <int>
+## # ... with 6 more variables: Monroe <dbl>, Superior <dbl>, Wausau <dbl>,
+## #   Dubuque <dbl>, St.Paul <dbl>, Chicago <dbl>
 ```
 
        
@@ -338,7 +338,7 @@ wisc %>% slice(2:4) %>% select(c(1,3:5))
 ```
 ## # A tibble: 3 x 4
 ##   location      Beloit Fort.Atkinson Madison
-##   <chr>          <int>         <int>   <int>
+##   <chr>          <dbl>         <dbl>   <dbl>
 ## 1 Beloit             0            33      50
 ## 2 Fort.Atkinson     33             0      36
 ## 3 Madison           50            36       0
@@ -880,23 +880,23 @@ stimuli=read_delim(my_url," ",col_names=F)
 ## Parsed with column specification:
 ## cols(
 ##   X1 = col_character(),
-##   X2 = col_integer(),
-##   X3 = col_integer(),
-##   X4 = col_integer(),
-##   X5 = col_integer(),
-##   X6 = col_integer(),
-##   X7 = col_integer(),
-##   X8 = col_integer(),
-##   X9 = col_integer(),
-##   X10 = col_integer(),
-##   X11 = col_integer(),
-##   X12 = col_integer(),
-##   X13 = col_integer(),
-##   X14 = col_integer(),
-##   X15 = col_integer(),
-##   X16 = col_integer(),
-##   X17 = col_integer(),
-##   X18 = col_integer()
+##   X2 = col_double(),
+##   X3 = col_double(),
+##   X4 = col_double(),
+##   X5 = col_double(),
+##   X6 = col_double(),
+##   X7 = col_double(),
+##   X8 = col_double(),
+##   X9 = col_double(),
+##   X10 = col_double(),
+##   X11 = col_double(),
+##   X12 = col_double(),
+##   X13 = col_double(),
+##   X14 = col_double(),
+##   X15 = col_double(),
+##   X16 = col_double(),
+##   X17 = col_double(),
+##   X18 = col_double()
 ## )
 ```
 
@@ -907,7 +907,7 @@ stimuli
 ```
 ## # A tibble: 17 x 18
 ##    X1       X2    X3    X4    X5    X6    X7    X8    X9   X10   X11   X12
-##    <chr> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int>
+##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1 inne…     0    22    23    24    26    27    26    23    24    23    23
 ##  2 brick    22     0    27    27    27    29    29    28    16    18    28
 ##  3 card…    23    27     0    18    19    28    23    24    24    29    27
@@ -925,8 +925,8 @@ stimuli
 ## 15 velv…    28    29    28    28    29     4    24    29    29    27    27
 ## 16 waxp…    24    28    24    28    24    28    21    12    29    29    29
 ## 17 glos…    22    27    23    29    28    29    20    13    27    28    27
-## # ... with 6 more variables: X13 <int>, X14 <int>, X15 <int>, X16 <int>,
-## #   X17 <int>, X18 <int>
+## # ... with 6 more variables: X13 <dbl>, X14 <dbl>, X15 <dbl>, X16 <dbl>,
+## #   X17 <dbl>, X18 <dbl>
 ```
 
      
@@ -997,7 +997,7 @@ stimuli
 ```
 ## # A tibble: 17 x 18
 ##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
-##    <chr>             <int> <int>     <int> <int>        <int> <int>
+##    <chr>             <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
 ##  1 inner…                0    22        23    24           26    27
 ##  2 brick                22     0        27    27           27    29
 ##  3 cardb…               23    27         0    18           19    28
@@ -1015,11 +1015,11 @@ stimuli
 ## 15 velvet               28    29        28    28           29     4
 ## 16 waxpa…               24    28        24    28           24    28
 ## 17 gloss…               22    27        23    29           28    29
-## # ... with 11 more variables: leatherwallet <int>,
-## #   rigidplasticsheet <int>, veryfinesandpaper <int>,
-## #   nylonscouringpad <int>, cellulosekitchensponge <int>,
-## #   wovenstraw <int>, blockofstyrofoam <int>, unglazedceramictile <int>,
-## #   velvet <int>, waxpaper <int>, glossypaintedwood <int>
+## # ... with 11 more variables: leatherwallet <dbl>,
+## #   rigidplasticsheet <dbl>, veryfinesandpaper <dbl>,
+## #   nylonscouringpad <dbl>, cellulosekitchensponge <dbl>,
+## #   wovenstraw <dbl>, blockofstyrofoam <dbl>, unglazedceramictile <dbl>,
+## #   velvet <dbl>, waxpaper <dbl>, glossypaintedwood <dbl>
 ```
 
      
@@ -1649,14 +1649,14 @@ letters=read_table(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   X1 = col_character(),
-##   C = col_integer(),
-##   D = col_integer(),
-##   G = col_integer(),
-##   H = col_integer(),
-##   M = col_integer(),
-##   N = col_integer(),
-##   Q = col_integer(),
-##   W = col_integer()
+##   C = col_double(),
+##   D = col_double(),
+##   G = col_double(),
+##   H = col_double(),
+##   M = col_double(),
+##   N = col_double(),
+##   Q = col_double(),
+##   W = col_double()
 ## )
 ```
 
@@ -1667,7 +1667,7 @@ letters
 ```
 ## # A tibble: 8 x 9
 ##   X1        C     D     G     H     M     N     Q     W
-##   <chr> <int> <int> <int> <int> <int> <int> <int> <int>
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1 C         0     0     0     0     0     0     0     0
 ## 2 D         5     0     0     0     0     0     0     0
 ## 3 G        12     2     0     0     0     0     0     0
@@ -2059,7 +2059,7 @@ letters
 ```
 ## # A tibble: 8 x 9
 ##   X1        C     D     G     H     M     N     Q     W
-##   <chr> <int> <int> <int> <int> <int> <int> <int> <int>
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1 C         0     0     0     0     0     0     0     0
 ## 2 D         5     0     0     0     0     0     0     0
 ## 3 G        12     2     0     0     0     0     0     0
@@ -2178,16 +2178,16 @@ beer=read_table2(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   student = col_character(),
-##   AnchorS = col_integer(),
-##   Bass = col_integer(),
-##   Becks = col_integer(),
-##   Corona = col_integer(),
-##   GordonB = col_integer(),
-##   Guinness = col_integer(),
-##   Heineken = col_integer(),
-##   PetesW = col_integer(),
-##   SamAdams = col_integer(),
-##   SierraN = col_integer()
+##   AnchorS = col_double(),
+##   Bass = col_double(),
+##   Becks = col_double(),
+##   Corona = col_double(),
+##   GordonB = col_double(),
+##   Guinness = col_double(),
+##   Heineken = col_double(),
+##   PetesW = col_double(),
+##   SamAdams = col_double(),
+##   SierraN = col_double()
 ## )
 ```
 
@@ -2198,7 +2198,7 @@ beer
 ```
 ## # A tibble: 32 x 11
 ##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
-##    <chr>     <int> <int> <int>  <int>   <int>    <int>    <int>  <int>
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
 ##  1 S001          5     9     7      1       7        6        6      5
 ##  2 S008          7     5     6      8       8        4        8      8
 ##  3 S015          7     7     5      6       6        1        8      4
@@ -2209,8 +2209,8 @@ beer
 ##  8 S050          5     3     1      5       5        5        3      5
 ##  9 S057          9     3     2      6       4        6        1      5
 ## 10 S064          2     6     6      5       6        4        8      4
-## # ... with 22 more rows, and 2 more variables: SamAdams <int>,
-## #   SierraN <int>
+## # ... with 22 more rows, and 2 more variables: SamAdams <dbl>,
+## #   SierraN <dbl>
 ```
 
 ```r
@@ -2336,7 +2336,7 @@ beer %>% dplyr::select(SamAdams,GordonB) %>% print(n=Inf)
 ```
 ## # A tibble: 32 x 2
 ##    SamAdams GordonB
-##       <int>   <int>
+##       <dbl>   <dbl>
 ##  1        9       7
 ##  2        7       8
 ##  3        7       6
@@ -2521,7 +2521,7 @@ stimuli
 ```
 ## # A tibble: 17 x 18
 ##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
-##    <chr>             <int> <int>     <int> <int>        <int> <int>
+##    <chr>             <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
 ##  1 inner…                0    22        23    24           26    27
 ##  2 brick                22     0        27    27           27    29
 ##  3 cardb…               23    27         0    18           19    28
@@ -2539,11 +2539,11 @@ stimuli
 ## 15 velvet               28    29        28    28           29     4
 ## 16 waxpa…               24    28        24    28           24    28
 ## 17 gloss…               22    27        23    29           28    29
-## # ... with 11 more variables: leatherwallet <int>,
-## #   rigidplasticsheet <int>, veryfinesandpaper <int>,
-## #   nylonscouringpad <int>, cellulosekitchensponge <int>,
-## #   wovenstraw <int>, blockofstyrofoam <int>, unglazedceramictile <int>,
-## #   velvet <int>, waxpaper <int>, glossypaintedwood <int>
+## # ... with 11 more variables: leatherwallet <dbl>,
+## #   rigidplasticsheet <dbl>, veryfinesandpaper <dbl>,
+## #   nylonscouringpad <dbl>, cellulosekitchensponge <dbl>,
+## #   wovenstraw <dbl>, blockofstyrofoam <dbl>, unglazedceramictile <dbl>,
+## #   velvet <dbl>, waxpaper <dbl>, glossypaintedwood <dbl>
 ```
 
      

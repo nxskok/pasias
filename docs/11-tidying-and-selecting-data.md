@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -53,14 +53,15 @@ jays=read_csv(myurl)
 ## Parsed with column specification:
 ## cols(
 ##   .default = col_character(),
-##   row = col_integer(),
-##   game = col_integer(),
-##   runs = col_integer(),
-##   Oppruns = col_integer(),
-##   innings = col_integer(),
-##   position = col_integer(),
+##   row = col_double(),
+##   game = col_double(),
+##   venue = col_logical(),
+##   runs = col_double(),
+##   Oppruns = col_double(),
+##   innings = col_double(),
+##   position = col_double(),
 ##   `game time` = col_time(format = ""),
-##   attendance = col_integer()
+##   attendance = col_double()
 ## )
 ```
 
@@ -75,20 +76,20 @@ jays
 ```
 ## # A tibble: 25 x 21
 ##      row  game date  box   team  venue opp   result  runs Oppruns innings
-##    <int> <int> <chr> <chr> <chr> <chr> <chr> <chr>  <int>   <int>   <int>
-##  1    82     7 Mond… boxs… TOR   <NA>  TBR   L          1       2      NA
-##  2    83     8 Tues… boxs… TOR   <NA>  TBR   L          2       3      NA
-##  3    84     9 Wedn… boxs… TOR   <NA>  TBR   W         12       7      NA
-##  4    85    10 Thur… boxs… TOR   <NA>  TBR   L          2       4      NA
-##  5    86    11 Frid… boxs… TOR   <NA>  ATL   L          7       8      NA
-##  6    87    12 Satu… boxs… TOR   <NA>  ATL   W-wo       6       5      10
-##  7    88    13 Sund… boxs… TOR   <NA>  ATL   L          2       5      NA
-##  8    89    14 Tues… boxs… TOR   <NA>  BAL   W         13       6      NA
-##  9    90    15 Wedn… boxs… TOR   <NA>  BAL   W          4       2      NA
-## 10    91    16 Thur… boxs… TOR   <NA>  BAL   W          7       6      NA
-## # ... with 15 more rows, and 10 more variables: wl <chr>, position <int>,
+##    <dbl> <dbl> <chr> <chr> <chr> <lgl> <chr> <chr>  <dbl>   <dbl>   <dbl>
+##  1    82     7 Mond… boxs… TOR   NA    TBR   L          1       2      NA
+##  2    83     8 Tues… boxs… TOR   NA    TBR   L          2       3      NA
+##  3    84     9 Wedn… boxs… TOR   NA    TBR   W         12       7      NA
+##  4    85    10 Thur… boxs… TOR   NA    TBR   L          2       4      NA
+##  5    86    11 Frid… boxs… TOR   NA    ATL   L          7       8      NA
+##  6    87    12 Satu… boxs… TOR   NA    ATL   W-wo       6       5      10
+##  7    88    13 Sund… boxs… TOR   NA    ATL   L          2       5      NA
+##  8    89    14 Tues… boxs… TOR   NA    BAL   W         13       6      NA
+##  9    90    15 Wedn… boxs… TOR   NA    BAL   W          4       2      NA
+## 10    91    16 Thur… boxs… TOR   NA    BAL   W          7       6      NA
+## # ... with 15 more rows, and 10 more variables: wl <chr>, position <dbl>,
 ## #   gb <chr>, winner <chr>, loser <chr>, save <chr>, `game time` <time>,
-## #   Daynight <chr>, attendance <int>, streak <chr>
+## #   Daynight <chr>, attendance <dbl>, streak <chr>
 ```
 
 
@@ -119,26 +120,26 @@ spec(jays)
 
 ```
 ## cols(
-##   row = col_integer(),
-##   game = col_integer(),
+##   row = col_double(),
+##   game = col_double(),
 ##   date = col_character(),
 ##   box = col_character(),
 ##   team = col_character(),
-##   venue = col_character(),
+##   venue = col_logical(),
 ##   opp = col_character(),
 ##   result = col_character(),
-##   runs = col_integer(),
-##   Oppruns = col_integer(),
-##   innings = col_integer(),
+##   runs = col_double(),
+##   Oppruns = col_double(),
+##   innings = col_double(),
 ##   wl = col_character(),
-##   position = col_integer(),
+##   position = col_double(),
 ##   gb = col_character(),
 ##   winner = col_character(),
 ##   loser = col_character(),
 ##   save = col_character(),
 ##   `game time` = col_time(format = ""),
 ##   Daynight = col_character(),
-##   attendance = col_integer(),
+##   attendance = col_double(),
 ##   streak = col_character()
 ## )
 ```
@@ -167,17 +168,17 @@ jays %>% filter(opp=="NYY") %>% print(width=Inf)
 ```
 ## # A tibble: 3 x 21
 ##     row  game date             box      team  venue opp   result  runs
-##   <int> <int> <chr>            <chr>    <chr> <chr> <chr> <chr>  <int>
-## 1    92    27 Monday, May 4    boxscore TOR   <NA>  NYY   W          3
-## 2    93    28 Tuesday, May 5   boxscore TOR   <NA>  NYY   L          3
-## 3    94    29 Wednesday, May 6 boxscore TOR   <NA>  NYY   W          5
+##   <dbl> <dbl> <chr>            <chr>    <chr> <lgl> <chr> <chr>  <dbl>
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
 ##   Oppruns innings wl    position gb    winner  loser    save   `game time`
-##     <int>   <int> <chr>    <int> <chr> <chr>   <chr>    <chr>  <time>     
+##     <dbl>   <dbl> <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>     
 ## 1       1      NA 13-14        4 3.5   Dickey  Martin   Cecil  02:18      
 ## 2       6      NA 13-15        5 4.5   Pineda  Estrada  Miller 02:54      
 ## 3       1      NA 14-15        3 3.5   Buehrle Sabathia <NA>   02:30      
 ##   Daynight attendance streak
-##   <chr>         <int> <chr> 
+##   <chr>         <dbl> <chr> 
 ## 1 N             19217 +     
 ## 2 N             21519 -     
 ## 3 N             21312 +
@@ -211,12 +212,12 @@ jays %>% filter(opp=="NYY") %>% select(row:innings) %>% print(width=Inf)
 ```
 ## # A tibble: 3 x 11
 ##     row  game date             box      team  venue opp   result  runs
-##   <int> <int> <chr>            <chr>    <chr> <chr> <chr> <chr>  <int>
-## 1    92    27 Monday, May 4    boxscore TOR   <NA>  NYY   W          3
-## 2    93    28 Tuesday, May 5   boxscore TOR   <NA>  NYY   L          3
-## 3    94    29 Wednesday, May 6 boxscore TOR   <NA>  NYY   W          5
+##   <dbl> <dbl> <chr>            <chr>    <chr> <lgl> <chr> <chr>  <dbl>
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
 ##   Oppruns innings
-##     <int>   <int>
+##     <dbl>   <dbl>
 ## 1       1      NA
 ## 2       6      NA
 ## 3       1      NA
@@ -229,12 +230,12 @@ jays %>% filter(opp=="NYY") %>% select(wl:streak) %>% print(width=Inf)
 ```
 ## # A tibble: 3 x 10
 ##   wl    position gb    winner  loser    save   `game time` Daynight
-##   <chr>    <int> <chr> <chr>   <chr>    <chr>  <time>      <chr>   
+##   <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>      <chr>   
 ## 1 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N       
 ## 2 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N       
 ## 3 14-15        3 3.5   Buehrle Sabathia <NA>   02:30       N       
 ##   attendance streak
-##        <int> <chr> 
+##        <dbl> <chr> 
 ## 1      19217 +     
 ## 2      21519 -     
 ## 3      21312 +
@@ -268,7 +269,7 @@ select(c(attendance,Daynight))
 ```
 ## # A tibble: 8 x 2
 ##   attendance Daynight
-##        <int> <chr>   
+##        <dbl> <chr>   
 ## 1      48414 N       
 ## 2      34743 D       
 ## 3      44794 D       
@@ -293,7 +294,7 @@ select(c(Daynight:attendance))
 ```
 ## # A tibble: 8 x 2
 ##   Daynight attendance
-##   <chr>         <int>
+##   <chr>         <dbl>
 ## 1 N             48414
 ## 2 D             34743
 ## 3 D             44794
@@ -536,9 +537,9 @@ throws=read_delim(myurl," ",col_names=c("student","baseball","softball"))
 ```
 ## Parsed with column specification:
 ## cols(
-##   student = col_integer(),
-##   baseball = col_integer(),
-##   softball = col_integer()
+##   student = col_double(),
+##   baseball = col_double(),
+##   softball = col_double()
 ## )
 ```
 
@@ -549,7 +550,7 @@ throws
 ```
 ## # A tibble: 24 x 3
 ##    student baseball softball
-##      <int>    <int>    <int>
+##      <dbl>    <dbl>    <dbl>
 ##  1       1       65       57
 ##  2       2       90       58
 ##  3       3       75       66
@@ -584,7 +585,7 @@ throws %>% mutate(fs=factor(student))
 ```
 ## # A tibble: 24 x 4
 ##    student baseball softball fs   
-##      <int>    <int>    <int> <fct>
+##      <dbl>    <dbl>    <dbl> <fct>
 ##  1       1       65       57 1    
 ##  2       2       90       58 2    
 ##  3       3       75       66 3    
@@ -622,7 +623,7 @@ gather(ball,distance,baseball:softball)
 ```
 ## # A tibble: 48 x 4
 ##    student fs    ball     distance
-##      <int> <fct> <chr>       <int>
+##      <dbl> <fct> <chr>       <dbl>
 ##  1       1 1     baseball       65
 ##  2       2 2     baseball       90
 ##  3       3 3     baseball       75
@@ -654,7 +655,7 @@ gather(ball,distance,ends_with("ball"))
 ```
 ## # A tibble: 48 x 4
 ##    student fs    ball     distance
-##      <int> <fct> <chr>       <int>
+##      <dbl> <fct> <chr>       <dbl>
 ##  1       1 1     baseball       65
 ##  2       2 2     baseball       90
 ##  3       3 3     baseball       75
@@ -1173,7 +1174,7 @@ toms1=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   plant = col_integer(),
+##   plant = col_double(),
 ##   blue = col_double(),
 ##   red = col_double(),
 ##   yellow = col_double(),
@@ -1188,7 +1189,7 @@ toms1
 ```
 ## # A tibble: 8 x 5
 ##   plant  blue   red yellow green
-##   <int> <dbl> <dbl>  <dbl> <dbl>
+##   <dbl> <dbl> <dbl>  <dbl> <dbl>
 ## 1     1  5.34  13.7   4.61  2.72
 ## 2     2  7.45  13.0   6.63  1.08
 ## 3     3  7.15  10.2   5.29  3.97
@@ -1226,7 +1227,7 @@ toms2
 ```
 ## # A tibble: 32 x 3
 ##    plant colour growthrate
-##    <int> <chr>       <dbl>
+##    <dbl> <chr>       <dbl>
 ##  1     1 blue         5.34
 ##  2     2 blue         7.45
 ##  3     3 blue         7.15
@@ -1713,9 +1714,9 @@ migraine=read_table(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   DrugA = col_integer(),
-##   DrugB = col_integer(),
-##   DrugC = col_integer()
+##   DrugA = col_double(),
+##   DrugB = col_double(),
+##   DrugC = col_double()
 ## )
 ```
 
@@ -1726,7 +1727,7 @@ migraine
 ```
 ## # A tibble: 9 x 3
 ##   DrugA DrugB DrugC
-##   <int> <int> <int>
+##   <dbl> <dbl> <dbl>
 ## 1     4     6     6
 ## 2     5     8     7
 ## 3     4     4     6
@@ -1802,7 +1803,7 @@ dataframe to work with. I'm going to save my new data frame:
 ```
 ## # A tibble: 27 x 2
 ##    drug  painrelief
-##    <chr>      <int>
+##    <chr>      <dbl>
 ##  1 DrugA          4
 ##  2 DrugA          5
 ##  3 DrugA          4
@@ -2187,10 +2188,10 @@ tbl=read_table(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   Species = col_character(),
-##   px = col_integer(),
-##   py = col_integer(),
-##   ax = col_integer(),
-##   ay = col_integer()
+##   px = col_double(),
+##   py = col_double(),
+##   ax = col_double(),
+##   ay = col_double()
 ## )
 ```
 
@@ -2201,7 +2202,7 @@ tbl
 ```
 ## # A tibble: 2 x 5
 ##   Species    px    py    ax    ay
-##   <chr>   <int> <int> <int> <int>
+##   <chr>   <dbl> <dbl> <dbl> <dbl>
 ## 1 A          44    12    38    10
 ## 2 B          28    22    20    18
 ```
@@ -2257,7 +2258,7 @@ free to call it `temp` for now if you prefer:
 ```
 ## # A tibble: 8 x 3
 ##   Species disloc frequency
-##   <chr>   <chr>      <int>
+##   <chr>   <chr>      <dbl>
 ## 1 A       px            44
 ## 2 B       px            28
 ## 3 A       py            12
@@ -2280,7 +2281,7 @@ This also works ("gather together everything but `Species`"):
 ```
 ## # A tibble: 8 x 3
 ##   Species disloc frequency
-##   <chr>   <chr>      <int>
+##   <chr>   <chr>      <dbl>
 ## 1 A       px            44
 ## 2 B       px            28
 ## 3 A       py            12
@@ -2328,7 +2329,7 @@ splitting after the first character, thus:
 ```
 ## # A tibble: 8 x 4
 ##   Species disease location frequency
-##   <chr>   <chr>   <chr>        <int>
+##   <chr>   <chr>   <chr>        <dbl>
 ## 1 A       p       x               44
 ## 2 B       p       x               28
 ## 3 A       p       y               12
@@ -2769,13 +2770,11 @@ d=read_delim(my_url," ",col_names=F)
 ```
 
 ```
-## Warning in rbind(names(probs), probs_f): number of columns of result is not
-## a multiple of vector length (arg 1)
-```
-
-```
 ## Warning: 3 parsing failures.
-## row # A tibble: 3 x 5 col     row col   expected  actual   file                                      expected   <int> <chr> <chr>     <chr>    <chr>                                     actual 1    15 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… file 2    16 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32… row 3    17 <NA>  1 columns 2 colum… 'http://www.utsc.utoronto.ca/~butler/c32…
+## row col  expected    actual                                                   file
+##  15  -- 1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32/crickets.txt'
+##  16  -- 1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32/crickets.txt'
+##  17  -- 1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32/crickets.txt'
 ```
 
  
@@ -3332,8 +3331,8 @@ cars=read_csv(my_url)
 ##   car = col_character(),
 ##   MPG = col_double(),
 ##   weight = col_double(),
-##   cylinders = col_integer(),
-##   hp = col_integer(),
+##   cylinders = col_double(),
+##   hp = col_double(),
 ##   country = col_character()
 ## )
 ```
@@ -3345,7 +3344,7 @@ cars
 ```
 ## # A tibble: 38 x 6
 ##    car                  MPG weight cylinders    hp country
-##    <chr>              <dbl>  <dbl>     <int> <int> <chr>  
+##    <chr>              <dbl>  <dbl>     <dbl> <dbl> <chr>  
 ##  1 Buick Skylark       28.4   2.67         4    90 U.S.   
 ##  2 Dodge Omni          30.9   2.23         4    75 U.S.   
 ##  3 Mercury Zephyr      20.8   3.07         6    85 U.S.   
@@ -3404,7 +3403,7 @@ cars %>% select(starts_with("c"))
 ```
 ## # A tibble: 38 x 3
 ##    car                cylinders country
-##    <chr>                  <int> <chr>  
+##    <chr>                  <dbl> <chr>  
 ##  1 Buick Skylark              4 U.S.   
 ##  2 Dodge Omni                 4 U.S.   
 ##  3 Mercury Zephyr             6 U.S.   
@@ -3440,7 +3439,7 @@ cars %>% select(-hp)
 ```
 ## # A tibble: 38 x 5
 ##    car                  MPG weight cylinders country
-##    <chr>              <dbl>  <dbl>     <int> <chr>  
+##    <chr>              <dbl>  <dbl>     <dbl> <chr>  
 ##  1 Buick Skylark       28.4   2.67         4 U.S.   
 ##  2 Dodge Omni          30.9   2.23         4 U.S.   
 ##  3 Mercury Zephyr      20.8   3.07         6 U.S.   
@@ -3474,7 +3473,7 @@ cars %>% filter(cylinders==8)
 ```
 ## # A tibble: 8 x 6
 ##   car                         MPG weight cylinders    hp country
-##   <chr>                     <dbl>  <dbl>     <int> <int> <chr>  
+##   <chr>                     <dbl>  <dbl>     <dbl> <dbl> <chr>  
 ## 1 Buick Estate Wagon         16.9   4.36         8   155 U.S.   
 ## 2 Chevy Malibu Wagon         19.2   3.60         8   125 U.S.   
 ## 3 Chrysler LeBaron Wagon     18.5   3.94         8   150 U.S.   
@@ -3506,7 +3505,7 @@ cars %>% filter(hp<=70) %>% select(cylinders:hp)
 ```
 ## # A tibble: 6 x 2
 ##   cylinders    hp
-##       <int> <int>
+##       <dbl> <dbl>
 ## 1         4    69
 ## 2         4    70
 ## 3         4    65
@@ -3563,7 +3562,7 @@ cars %>% group_by(cylinders) %>% summarize(m=mean(MPG),s=sd(MPG))
 ```
 ## # A tibble: 4 x 3
 ##   cylinders     m     s
-##       <int> <dbl> <dbl>
+##       <dbl> <dbl> <dbl>
 ## 1         4  30.0  4.18
 ## 2         5  20.3 NA   
 ## 3         6  21.1  4.08
@@ -3585,7 +3584,7 @@ filter(cylinders==4)
 ```
 ## # A tibble: 1 x 3
 ##   cylinders     m     s
-##       <int> <dbl> <dbl>
+##       <dbl> <dbl> <dbl>
 ## 1         4  30.0  4.18
 ```
 
@@ -3629,24 +3628,24 @@ billboard=read_csv("http://stat405.had.co.nz/data/billboard.csv")
 ```
 ## Parsed with column specification:
 ## cols(
-##   .default = col_integer(),
+##   .default = col_double(),
 ##   artist.inverted = col_character(),
 ##   track = col_character(),
 ##   time = col_time(format = ""),
 ##   genre = col_character(),
 ##   date.entered = col_date(format = ""),
 ##   date.peaked = col_date(format = ""),
-##   x66th.week = col_character(),
-##   x67th.week = col_character(),
-##   x68th.week = col_character(),
-##   x69th.week = col_character(),
-##   x70th.week = col_character(),
-##   x71st.week = col_character(),
-##   x72nd.week = col_character(),
-##   x73rd.week = col_character(),
-##   x74th.week = col_character(),
-##   x75th.week = col_character(),
-##   x76th.week = col_character()
+##   x66th.week = col_logical(),
+##   x67th.week = col_logical(),
+##   x68th.week = col_logical(),
+##   x69th.week = col_logical(),
+##   x70th.week = col_logical(),
+##   x71st.week = col_logical(),
+##   x72nd.week = col_logical(),
+##   x73rd.week = col_logical(),
+##   x74th.week = col_logical(),
+##   x75th.week = col_logical(),
+##   x76th.week = col_logical()
 ## )
 ```
 
@@ -3666,7 +3665,7 @@ billboard
 ```
 ## # A tibble: 317 x 83
 ##     year artist.inverted track time  genre date.entered date.peaked
-##    <int> <chr>           <chr> <tim> <chr> <date>       <date>     
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>     
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18 
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08 
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29 
@@ -3677,31 +3676,31 @@ billboard
 ##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24 
 ##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12 
 ## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04 
-## # ... with 307 more rows, and 76 more variables: x1st.week <int>,
-## #   x2nd.week <int>, x3rd.week <int>, x4th.week <int>, x5th.week <int>,
-## #   x6th.week <int>, x7th.week <int>, x8th.week <int>, x9th.week <int>,
-## #   x10th.week <int>, x11th.week <int>, x12th.week <int>,
-## #   x13th.week <int>, x14th.week <int>, x15th.week <int>,
-## #   x16th.week <int>, x17th.week <int>, x18th.week <int>,
-## #   x19th.week <int>, x20th.week <int>, x21st.week <int>,
-## #   x22nd.week <int>, x23rd.week <int>, x24th.week <int>,
-## #   x25th.week <int>, x26th.week <int>, x27th.week <int>,
-## #   x28th.week <int>, x29th.week <int>, x30th.week <int>,
-## #   x31st.week <int>, x32nd.week <int>, x33rd.week <int>,
-## #   x34th.week <int>, x35th.week <int>, x36th.week <int>,
-## #   x37th.week <int>, x38th.week <int>, x39th.week <int>,
-## #   x40th.week <int>, x41st.week <int>, x42nd.week <int>,
-## #   x43rd.week <int>, x44th.week <int>, x45th.week <int>,
-## #   x46th.week <int>, x47th.week <int>, x48th.week <int>,
-## #   x49th.week <int>, x50th.week <int>, x51st.week <int>,
-## #   x52nd.week <int>, x53rd.week <int>, x54th.week <int>,
-## #   x55th.week <int>, x56th.week <int>, x57th.week <int>,
-## #   x58th.week <int>, x59th.week <int>, x60th.week <int>,
-## #   x61st.week <int>, x62nd.week <int>, x63rd.week <int>,
-## #   x64th.week <int>, x65th.week <int>, x66th.week <chr>,
-## #   x67th.week <chr>, x68th.week <chr>, x69th.week <chr>,
-## #   x70th.week <chr>, x71st.week <chr>, x72nd.week <chr>,
-## #   x73rd.week <chr>, x74th.week <chr>, x75th.week <chr>, x76th.week <chr>
+## # ... with 307 more rows, and 76 more variables: x1st.week <dbl>,
+## #   x2nd.week <dbl>, x3rd.week <dbl>, x4th.week <dbl>, x5th.week <dbl>,
+## #   x6th.week <dbl>, x7th.week <dbl>, x8th.week <dbl>, x9th.week <dbl>,
+## #   x10th.week <dbl>, x11th.week <dbl>, x12th.week <dbl>,
+## #   x13th.week <dbl>, x14th.week <dbl>, x15th.week <dbl>,
+## #   x16th.week <dbl>, x17th.week <dbl>, x18th.week <dbl>,
+## #   x19th.week <dbl>, x20th.week <dbl>, x21st.week <dbl>,
+## #   x22nd.week <dbl>, x23rd.week <dbl>, x24th.week <dbl>,
+## #   x25th.week <dbl>, x26th.week <dbl>, x27th.week <dbl>,
+## #   x28th.week <dbl>, x29th.week <dbl>, x30th.week <dbl>,
+## #   x31st.week <dbl>, x32nd.week <dbl>, x33rd.week <dbl>,
+## #   x34th.week <dbl>, x35th.week <dbl>, x36th.week <dbl>,
+## #   x37th.week <dbl>, x38th.week <dbl>, x39th.week <dbl>,
+## #   x40th.week <dbl>, x41st.week <dbl>, x42nd.week <dbl>,
+## #   x43rd.week <dbl>, x44th.week <dbl>, x45th.week <dbl>,
+## #   x46th.week <dbl>, x47th.week <dbl>, x48th.week <dbl>,
+## #   x49th.week <dbl>, x50th.week <dbl>, x51st.week <dbl>,
+## #   x52nd.week <dbl>, x53rd.week <dbl>, x54th.week <dbl>,
+## #   x55th.week <dbl>, x56th.week <dbl>, x57th.week <dbl>,
+## #   x58th.week <dbl>, x59th.week <dbl>, x60th.week <dbl>,
+## #   x61st.week <dbl>, x62nd.week <dbl>, x63rd.week <dbl>,
+## #   x64th.week <dbl>, x65th.week <dbl>, x66th.week <lgl>,
+## #   x67th.week <lgl>, x68th.week <lgl>, x69th.week <lgl>,
+## #   x70th.week <lgl>, x71st.week <lgl>, x72nd.week <lgl>,
+## #   x73rd.week <lgl>, x74th.week <lgl>, x75th.week <lgl>, x76th.week <lgl>
 ```
 
  
@@ -3738,7 +3737,7 @@ billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T)
 ```
 ## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre date.entered date.peaked week 
-##  * <int> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##  * <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
@@ -3749,7 +3748,7 @@ billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T)
 ##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
 ##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
 ## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
-## # ... with 5,297 more rows, and 1 more variable: rank <chr>
+## # ... with 5,297 more rows, and 1 more variable: rank <dbl>
 ```
 
          
@@ -3765,7 +3764,7 @@ billboard %>% gather(week,rank,ends_with("week"),na.rm=T)
 ```
 ## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre date.entered date.peaked week 
-##  * <int> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##  * <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
@@ -3776,7 +3775,7 @@ billboard %>% gather(week,rank,ends_with("week"),na.rm=T)
 ##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
 ##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
 ## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
-## # ... with 5,297 more rows, and 1 more variable: rank <chr>
+## # ... with 5,297 more rows, and 1 more variable: rank <dbl>
 ```
 
  
@@ -3837,18 +3836,18 @@ select(week, rank)
 
 ```
 ## # A tibble: 5,307 x 2
-##    week      rank 
-##  * <chr>     <chr>
-##  1 x1st.week 78   
-##  2 x1st.week 15   
-##  3 x1st.week 71   
-##  4 x1st.week 41   
-##  5 x1st.week 57   
-##  6 x1st.week 59   
-##  7 x1st.week 83   
-##  8 x1st.week 63   
-##  9 x1st.week 77   
-## 10 x1st.week 81   
+##    week       rank
+##  * <chr>     <dbl>
+##  1 x1st.week    78
+##  2 x1st.week    15
+##  3 x1st.week    71
+##  4 x1st.week    41
+##  5 x1st.week    57
+##  6 x1st.week    59
+##  7 x1st.week    83
+##  8 x1st.week    63
+##  9 x1st.week    77
+## 10 x1st.week    81
 ## # ... with 5,297 more rows
 ```
 
@@ -3859,7 +3858,8 @@ select(week, rank)
 (d) Both your `week` and `rank` columns are
 (probably) text. Create new columns that contain just the numeric
 values, and display just your new columns, again adding onto the
-end of your pipe. (In the previous part, you probably had some
+end of your pipe. If it so happens that `rank` is already a number, leave it as it is.
+(In the previous part, you probably had some
 code that picked out a few columns to display them. Get rid of
 that.) 
  
@@ -3867,14 +3867,18 @@ that.)
 Solution
 
 
-`parse_number` is the easiest. Create new columns,
+My `rank` is already a number, so I leave that. 
+I'm defining a new column `rank_number` that is just a copy 
+of `rank`, so that I can check the two new things 
+that should now both be numbers.
+`parse_number` is the easiest. Create new column(s),
 with `mutate`, that are the `parse_number`-ed
-versions of the old ones.
+versions of the old one(s).
 
 ```r
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 select(ends_with("number"))
 ```
 
@@ -3901,10 +3905,10 @@ that ended with `number`, which meant that I could select them
 with the select-helper `ends_with`. I'm not insisting that you
 do this, but it's a handy trick.)
 
-Since `rank` already looks like a number, but happens to be
+If your `rank` already looks like a number but happens to be
 text, you can also convert it with `as.numeric` (or
 `as.integer`, since it is actually text that looks like a whole
-number). For converting `rank`, these are also good, but for
+number. For converting `rank`, these are also good, but for
 converting `week`, you need something that will pull out the
 number. (`str_extract` from `stringr` will also do it,
 but that's beyond our scope now. It's on page 212 of the R book if
@@ -3938,7 +3942,7 @@ After that thinking, this:
 ```r
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 select(date.entered,week_number,current)
 ```
@@ -3988,7 +3992,7 @@ of the 5,000-odd rows of the data frame. To do that, add the line
 ```r
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 select(date.entered,week_number,current) %>%
 sample_n(10)  
@@ -4045,7 +4049,7 @@ since we are only checking for equal-to, not something like
 ```r
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
@@ -4108,7 +4112,7 @@ This is a question of using `count`, but on the
 ```r
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
@@ -4153,7 +4157,7 @@ equal to its maximum value:
 ```r
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
@@ -4178,7 +4182,7 @@ to make it easier to pick out the top one:
 ```r
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
 arrange(current) %>%
@@ -4233,7 +4237,7 @@ wherever it appears:
 ```r
 billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
 mutate(week_number=parse_number(week),
-rank_number=parse_number(rank)) %>%
+rank_number=rank) %>%
 mutate(combo=paste(track,artist.inverted,sep=" by ")) %>%
 mutate(current=date.entered+(week_number-1)*7) %>%
 filter(rank==1) %>%
@@ -5526,7 +5530,7 @@ heat=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   id = col_integer(),
+##   id = col_double(),
 ##   date = col_date(format = ""),
 ##   code = col_character(),
 ##   text = col_character()
@@ -5540,7 +5544,7 @@ heat
 ```
 ## # A tibble: 200 x 4
 ##       id date       code  text                                            
-##    <int> <date>     <chr> <chr>                                           
+##    <dbl> <date>     <chr> <chr>                                           
 ##  1   232 2016-09-08 HAU   Toronto's Medical Officer of Health has upgrade…
 ##  2   231 2016-09-07 HAE   Toronto's Medical Officer of Health has continu…
 ##  3   230 2016-09-06 HA    Toronto's Medical Officer of Health has issued …
@@ -5742,7 +5746,7 @@ mutate(daydiff=abs(c(diff(daycount),0)))
 ```
 ## # A tibble: 200 x 5
 ##       id date       code  daycount daydiff
-##    <int> <date>     <chr>    <dbl>   <dbl>
+##    <dbl> <date>     <chr>    <dbl>   <dbl>
 ##  1   232 2016-09-08 HAU      17052       1
 ##  2   231 2016-09-07 HAE      17051       1
 ##  3   230 2016-09-06 HA       17050      24
@@ -5907,7 +5911,7 @@ heat %>% select(-text) %>% mutate(year=year(date)) %>% sample_n(10)
 ```
 ## # A tibble: 10 x 4
 ##       id date       code   year
-##    <int> <date>     <chr> <dbl>
+##    <dbl> <date>     <chr> <dbl>
 ##  1    48 2005-07-11 EHA    2005
 ##  2   131 2011-07-22 EHAE   2011
 ##  3   197 2015-08-16 HA     2015

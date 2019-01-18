@@ -30,8 +30,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -77,11 +77,11 @@ weights=read_csv(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   drug = col_character(),
-##   Time0 = col_integer(),
-##   Time1 = col_integer(),
-##   Time2 = col_integer(),
-##   Time3 = col_integer(),
-##   Time4 = col_integer()
+##   Time0 = col_double(),
+##   Time1 = col_double(),
+##   Time2 = col_double(),
+##   Time3 = col_double(),
+##   Time4 = col_double()
 ## )
 ```
 
@@ -92,7 +92,7 @@ weights
 ```
 ## # A tibble: 27 x 6
 ##    drug       Time0 Time1 Time2 Time3 Time4
-##    <chr>      <int> <int> <int> <int> <int>
+##    <chr>      <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1 thyroxin      59    85   121   156   191
 ##  2 thyroxin      54    71    90   110   138
 ##  3 thyroxin      56    75   108   151   189
@@ -230,7 +230,7 @@ weights.long
 ```
 ## # A tibble: 135 x 3
 ##    drug       time  weight
-##    <chr>      <chr>  <int>
+##    <chr>      <chr>  <dbl>
 ##  1 thyroxin   Time0     59
 ##  2 thyroxin   Time0     54
 ##  3 thyroxin   Time0     56
@@ -263,27 +263,27 @@ weights2.long %>% sample_n(20)
 ```
 ## # A tibble: 20 x 4
 ##    drug       junk  time  weight
-##    <chr>      <chr> <chr>  <int>
-##  1 thiouracil Time  2         93
-##  2 control    Time  0         52
-##  3 thiouracil Time  3        123
-##  4 control    Time  1         93
-##  5 thiouracil Time  0         59
-##  6 control    Time  3        110
-##  7 control    Time  2         94
-##  8 control    Time  0         63
-##  9 thiouracil Time  2        100
-## 10 control    Time  0         60
-## 11 thiouracil Time  1         75
-## 12 thiouracil Time  0         59
-## 13 control    Time  3        121
-## 14 thiouracil Time  2        109
-## 15 control    Time  2        123
-## 16 control    Time  4        177
-## 17 thiouracil Time  3        111
-## 18 control    Time  2        110
-## 19 control    Time  1         67
-## 20 thyroxin   Time  4        144
+##    <chr>      <chr> <chr>  <dbl>
+##  1 control    Time  1         93
+##  2 thyroxin   Time  2        116
+##  3 thyroxin   Time  2        108
+##  4 control    Time  4        154
+##  5 thiouracil Time  1         61
+##  6 control    Time  2         94
+##  7 thyroxin   Time  0         56
+##  8 control    Time  4        140
+##  9 control    Time  4        151
+## 10 thyroxin   Time  0         57
+## 11 thiouracil Time  3        123
+## 12 thiouracil Time  0         46
+## 13 control    Time  1         86
+## 14 control    Time  0         49
+## 15 control    Time  3        129
+## 16 control    Time  3        110
+## 17 thiouracil Time  2         78
+## 18 thiouracil Time  4        129
+## 19 thyroxin   Time  4        138
+## 20 control    Time  1         91
 ```
 
  
@@ -308,27 +308,27 @@ weights2.long %>% sample_n(20)
 ```
 ## # A tibble: 20 x 4
 ##    drug       timex weight  time
-##    <chr>      <chr>  <int> <dbl>
-##  1 thiouracil Time0     59     0
-##  2 control    Time1     67     1
-##  3 thiouracil Time4    122     4
-##  4 thiouracil Time3    111     3
-##  5 thyroxin   Time1     75     1
-##  6 control    Time1     86     1
-##  7 control    Time4    169     4
-##  8 thyroxin   Time4    144     4
-##  9 thyroxin   Time2    108     2
-## 10 thiouracil Time3    120     3
-## 11 thiouracil Time1     88     1
-## 12 control    Time2    104     2
-## 13 thyroxin   Time2    116     2
-## 14 control    Time3    144     3
-## 15 thyroxin   Time2     97     2
-## 16 thyroxin   Time1     72     1
-## 17 control    Time1     77     1
-## 18 thiouracil Time0     61     0
-## 19 thiouracil Time2    109     2
-## 20 thiouracil Time0     53     0
+##    <chr>      <chr>  <dbl> <dbl>
+##  1 thyroxin   Time3    138     3
+##  2 control    Time2    104     2
+##  3 control    Time3    129     3
+##  4 thiouracil Time1     78     1
+##  5 control    Time4    141     4
+##  6 control    Time3    146     3
+##  7 thiouracil Time0     61     0
+##  8 control    Time1     67     1
+##  9 control    Time1     67     1
+## 10 thiouracil Time4    140     4
+## 11 control    Time0     63     0
+## 12 thiouracil Time1     69     1
+## 13 control    Time3    112     3
+## 14 thyroxin   Time3    156     3
+## 15 thiouracil Time3    106     3
+## 16 control    Time3    121     3
+## 17 thyroxin   Time2    105     2
+## 18 thiouracil Time3     90     3
+## 19 control    Time4    172     4
+## 20 thiouracil Time4    108     4
 ```
 
  
@@ -407,7 +407,7 @@ wt
 ```
 ## # A tibble: 135 x 4
 ##    drug       subject time  weight
-##    <chr>        <int> <chr>  <int>
+##    <chr>        <int> <chr>  <dbl>
 ##  1 thyroxin         1 Time0     59
 ##  2 thyroxin         2 Time0     54
 ##  3 thyroxin         3 Time0     56
@@ -544,7 +544,7 @@ geriatrics=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   subject = col_integer(),
+##   subject = col_double(),
 ##   treatment = col_character(),
 ##   t1 = col_double(),
 ##   t2 = col_double(),
@@ -560,7 +560,7 @@ geriatrics
 ```
 ## # A tibble: 21 x 6
 ##    subject treatment    t1    t2    t3    t4
-##      <int> <chr>     <dbl> <dbl> <dbl> <dbl>
+##      <dbl> <chr>     <dbl> <dbl> <dbl> <dbl>
 ##  1       1 bt          1.5   9     5     4  
 ##  2       2 bt          5    14     4.5   7  
 ##  3       3 bt          1     8     4.5   2.5
@@ -701,7 +701,7 @@ geriatrics.long
 ```
 ## # A tibble: 84 x 4
 ##    subject treatment time  intpct
-##      <int> <chr>     <chr>  <dbl>
+##      <dbl> <chr>     <chr>  <dbl>
 ##  1       1 bt        t1       1.5
 ##  2       2 bt        t1       5  
 ##  3       3 bt        t1       1  
@@ -882,7 +882,7 @@ gg
 ```
 ## # A tibble: 14 x 6
 ##    subject treatment    t1    t2    t3    t4
-##      <int> <chr>     <dbl> <dbl> <dbl> <dbl>
+##      <dbl> <chr>     <dbl> <dbl> <dbl> <dbl>
 ##  1       1 bt          1.5   9     5     4  
 ##  2       2 bt          5    14     4.5   7  
 ##  3       3 bt          1     8     4.5   2.5
@@ -1298,8 +1298,8 @@ airport=read_delim(my_url," ")
 ##   epi_2 = col_double(),
 ##   epi_3 = col_double(),
 ##   epi_4 = col_double(),
-##   location = col_integer(),
-##   child = col_integer()
+##   location = col_double(),
+##   child = col_double()
 ## )
 ```
 
@@ -1310,7 +1310,7 @@ airport
 ```
 ## # A tibble: 200 x 6
 ##      epi_1   epi_2 epi_3 epi_4 location child
-##      <dbl>   <dbl> <dbl> <dbl>    <int> <int>
+##      <dbl>   <dbl> <dbl> <dbl>    <dbl> <dbl>
 ##  1   89.6   253.   214.   209.        1     1
 ##  2  -55.5    -1.45  26.0  259.        1     2
 ##  3  201.    280.   265.   174.        1     3
@@ -1353,7 +1353,7 @@ airport.long
 ```
 ## # A tibble: 800 x 4
 ##    location child when  epinephrine
-##       <int> <int> <chr>       <dbl>
+##       <dbl> <dbl> <chr>       <dbl>
 ##  1        1     1 epi_1       89.6 
 ##  2        1     2 epi_1      -55.5 
 ##  3        1     3 epi_1      201.  
@@ -2007,7 +2007,7 @@ airport %>% group_by(location) %>% nest()
 ```
 ## # A tibble: 2 x 2
 ##   location data              
-##      <int> <list>            
+##      <dbl> <list>            
 ## 1        1 <tibble [100 × 5]>
 ## 2        2 <tibble [100 × 5]>
 ```
@@ -2049,7 +2049,7 @@ unnest(means)
 ```
 ## # A tibble: 2 x 6
 ##   location data               epi_1 epi_2 epi_3 epi_4
-##      <int> <list>             <dbl> <dbl> <dbl> <dbl>
+##      <dbl> <list>             <dbl> <dbl> <dbl> <dbl>
 ## 1        1 <tibble [100 × 5]>  247.  340.  356.  349.
 ## 2        2 <tibble [100 × 5]>  249.  279.  251.  247.
 ```
@@ -2219,7 +2219,7 @@ bodyfat=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   athlete = col_integer(),
+##   athlete = col_double(),
 ##   xray = col_double(),
 ##   ultrasound = col_double()
 ## )
@@ -2232,7 +2232,7 @@ bodyfat
 ```
 ## # A tibble: 16 x 3
 ##    athlete  xray ultrasound
-##      <int> <dbl>      <dbl>
+##      <dbl> <dbl>      <dbl>
 ##  1       1  5          4.75
 ##  2       2  7          3.75
 ##  3       3  9.25       9   
@@ -2398,7 +2398,7 @@ bodyfat
 ```
 ## # A tibble: 16 x 3
 ##    athlete  xray ultrasound
-##      <int> <dbl>      <dbl>
+##      <dbl> <dbl>      <dbl>
 ##  1       1  5          4.75
 ##  2       2  7          3.75
 ##  3       3  9.25       9   
@@ -2452,7 +2452,7 @@ mutate(fathlete=factor(athlete))
 ```
 ## # A tibble: 32 x 4
 ##    athlete method   fat fathlete
-##      <int> <chr>  <dbl> <fct>   
+##      <dbl> <chr>  <dbl> <fct>   
 ##  1       1 xray    5    1       
 ##  2       2 xray    7    2       
 ##  3       3 xray    9.25 3       
@@ -2550,14 +2550,14 @@ king=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   id = col_integer(),
+##   id = col_double(),
 ##   context = col_character(),
-##   i1 = col_integer(),
-##   i2 = col_integer(),
-##   i3 = col_integer(),
-##   i4 = col_integer(),
-##   i5 = col_integer(),
-##   i6 = col_integer()
+##   i1 = col_double(),
+##   i2 = col_double(),
+##   i3 = col_double(),
+##   i4 = col_double(),
+##   i5 = col_double(),
+##   i6 = col_double()
 ## )
 ```
 
@@ -2568,7 +2568,7 @@ king
 ```
 ## # A tibble: 24 x 8
 ##       id context    i1    i2    i3    i4    i5    i6
-##    <int> <chr>   <int> <int> <int> <int> <int> <int>
+##    <dbl> <chr>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1   101 control   150    44    71    59   132    74
 ##  2   102 control   335   270   156   160   118   230
 ##  3   103 control   149    52    91   115    43   154
@@ -2772,7 +2772,7 @@ king.long
 ```
 ## # A tibble: 144 x 4
 ##       id context time  activity
-##    <int> <chr>   <chr>    <int>
+##    <dbl> <chr>   <chr>    <dbl>
 ##  1   101 control i1         150
 ##  2   102 control i1         335
 ##  3   103 control i1         149
@@ -2971,8 +2971,8 @@ treatments=read_tsv(my_url)
 ## cols(
 ##   trt = col_character(),
 ##   time = col_character(),
-##   subject = col_integer(),
-##   y = col_integer()
+##   subject = col_double(),
+##   y = col_double()
 ## )
 ```
 
@@ -2983,7 +2983,7 @@ treatments
 ```
 ## # A tibble: 27 x 4
 ##    trt   time  subject     y
-##    <chr> <chr>   <int> <int>
+##    <chr> <chr>   <dbl> <dbl>
 ##  1 A     T1          1    10
 ##  2 A     T1          2    12
 ##  3 A     T1          3    13
@@ -3094,7 +3094,7 @@ tr2
 ```
 ## # A tibble: 9 x 5
 ##   trt   subject    T1    T2    T3
-##   <chr>   <int> <int> <int> <int>
+##   <chr>   <dbl> <dbl> <dbl> <dbl>
 ## 1 A           1    10    16    25
 ## 2 A           2    12    19    27
 ## 3 A           3    13    20    28

@@ -33,8 +33,8 @@ library(tidyverse)
 
 ```
 ## ✔ tibble  1.4.2     ✔ purrr   0.2.5
-## ✔ tidyr   0.8.1     ✔ dplyr   0.7.8
-## ✔ readr   1.1.1     ✔ stringr 1.3.1
+## ✔ tidyr   0.8.2     ✔ dplyr   0.7.8
+## ✔ readr   1.3.1     ✔ stringr 1.3.1
 ## ✔ tibble  1.4.2     ✔ forcats 0.3.0
 ```
 
@@ -117,7 +117,7 @@ weather.0
 ```
 ## # A tibble: 365 x 14
 ##    day.count   day month season l.temp h.temp ave.temp l.temp.time
-##        <int> <int> <int> <chr>   <dbl>  <dbl>    <dbl> <time>     
+##        <dbl> <dbl> <dbl> <chr>   <dbl>  <dbl>    <dbl> <time>     
 ##  1         1     1     1 Winter   12.7   14       13.4 01:25      
 ##  2         2     2     1 Winter   11.3   14.7     13.5 07:30      
 ##  3         3     3     1 Winter   12.6   14.7     13.6 21:00      
@@ -846,13 +846,13 @@ air=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   wind = col_integer(),
-##   solar.radiation = col_integer(),
-##   CO = col_integer(),
-##   NO = col_integer(),
-##   NO2 = col_integer(),
-##   O3 = col_integer(),
-##   HC = col_integer()
+##   wind = col_double(),
+##   solar.radiation = col_double(),
+##   CO = col_double(),
+##   NO = col_double(),
+##   NO2 = col_double(),
+##   O3 = col_double(),
+##   HC = col_double()
 ## )
 ```
 
@@ -863,7 +863,7 @@ air
 ```
 ## # A tibble: 42 x 7
 ##     wind solar.radiation    CO    NO   NO2    O3    HC
-##    <int>           <int> <int> <int> <int> <int> <int>
+##    <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1     8              98     7     2    12     8     2
 ##  2     7             107     4     3     9     5     3
 ##  3     7             103     4     3     5     6     3
@@ -1257,7 +1257,7 @@ air %>% slice(8)
 ```
 ## # A tibble: 1 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
-##   <int>           <int> <int> <int> <int> <int> <int>
+##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1     5              72     6     4    21    14     4
 ```
 
@@ -1275,7 +1275,7 @@ air[8,]
 ```
 ## # A tibble: 1 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
-##   <int>           <int> <int> <int> <int> <int> <int>
+##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1     5              72     6     4    21    14     4
 ```
 
@@ -1388,7 +1388,7 @@ air[38,]
 ```
 ## # A tibble: 1 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
-##   <int>           <int> <int> <int> <int> <int> <int>
+##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1     5              86     7     2    13    18     2
 ```
 
@@ -2209,7 +2209,7 @@ pers=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   .default = col_integer()
+##   .default = col_double()
 ## )
 ```
 
@@ -2224,7 +2224,7 @@ pers
 ```
 ## # A tibble: 459 x 45
 ##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12
-##    <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ##  1     1      5      4      5      1      4      3      3      1      2      3      2      4
 ##  2     2      1      1      5      2      1      2      5      1      5      1      5      3
 ##  3     3      4      1      5      3      3      4      5      3      1      4      2      1
@@ -2235,12 +2235,12 @@ pers
 ##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
 ##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
 ## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
-## # ... with 449 more rows, and 32 more variables: PERS13 <int>, PERS14 <int>, PERS15 <int>,
-## #   PERS16 <int>, PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>,
-## #   PERS22 <int>, PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>,
-## #   PERS28 <int>, PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>,
-## #   PERS34 <int>, PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>,
-## #   PERS40 <int>, PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>
+## # ... with 449 more rows, and 32 more variables: PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
        
@@ -2267,7 +2267,7 @@ pers %>% gather(item,response,-id)
 ```
 ## # A tibble: 20,196 x 3
 ##       id item   response
-##    <int> <chr>     <int>
+##    <dbl> <chr>     <dbl>
 ##  1     1 PERS01        5
 ##  2     2 PERS01        1
 ##  3     3 PERS01        4
@@ -2396,7 +2396,7 @@ filter(v)
 ```
 ## # A tibble: 433 x 46
 ##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12
-##    <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ##  1     1      5      4      5      1      4      3      3      1      2      3      2      4
 ##  2     2      1      1      5      2      1      2      5      1      5      1      5      3
 ##  3     3      4      1      5      3      3      4      5      3      1      4      2      1
@@ -2407,12 +2407,12 @@ filter(v)
 ##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
 ##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
 ## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
-## # ... with 423 more rows, and 33 more variables: PERS13 <int>, PERS14 <int>, PERS15 <int>,
-## #   PERS16 <int>, PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>,
-## #   PERS22 <int>, PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>,
-## #   PERS28 <int>, PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>,
-## #   PERS34 <int>, PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>,
-## #   PERS40 <int>, PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>, v <lgl>
+## # ... with 423 more rows, and 33 more variables: PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>, v <lgl>
 ```
 
  
@@ -2440,7 +2440,7 @@ gather(item,rating,-id)
 ```
 ## # A tibble: 20,196 x 3
 ##       id item   rating
-##    <int> <chr>   <int>
+##    <dbl> <chr>   <dbl>
 ##  1     1 PERS01      5
 ##  2     2 PERS01      1
 ##  3     3 PERS01      4
@@ -2477,7 +2477,7 @@ filter(is.na(m))
 ```
 ## # A tibble: 26 x 2
 ##       id     m
-##    <int> <dbl>
+##    <dbl> <dbl>
 ##  1    12    NA
 ##  2    40    NA
 ##  3    45    NA
@@ -2514,7 +2514,7 @@ pers.hm %>% print(n=15)
 ```
 ## # A tibble: 459 x 3
 ##       id     m has_missing
-##    <int> <dbl> <lgl>      
+##    <dbl> <dbl> <lgl>      
 ##  1     1  3.41 FALSE      
 ##  2     2  2.98 FALSE      
 ##  3     3  3.34 FALSE      
@@ -2547,7 +2547,7 @@ pers %>% bind_cols(pers.hm)
 ```
 ## # A tibble: 459 x 48
 ##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12
-##    <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ##  1     1      5      4      5      1      4      3      3      1      2      3      2      4
 ##  2     2      1      1      5      2      1      2      5      1      5      1      5      3
 ##  3     3      4      1      5      3      3      4      5      3      1      4      2      1
@@ -2558,12 +2558,12 @@ pers %>% bind_cols(pers.hm)
 ##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
 ##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
 ## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
-## # ... with 449 more rows, and 35 more variables: PERS13 <int>, PERS14 <int>, PERS15 <int>,
-## #   PERS16 <int>, PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>,
-## #   PERS22 <int>, PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>,
-## #   PERS28 <int>, PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>,
-## #   PERS34 <int>, PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>,
-## #   PERS40 <int>, PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>, id1 <int>, m <dbl>,
+## # ... with 449 more rows, and 35 more variables: PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>, id1 <dbl>, m <dbl>,
 ## #   has_missing <lgl>
 ```
 
@@ -2908,7 +2908,7 @@ scores.1
 ```
 ## # A tibble: 433 x 50
 ##    Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
-##      <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##      <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ##  1  1.11     0.543   0.530  -0.978 -0.528      1      5      4      5      1      4      3
 ##  2  0.930   -1.62   -0.823   1.11  -2.49       2      1      1      5      2      1      2
 ##  3  0.0405  -0.908   1.01    0.415 -0.169      3      4      1      5      3      3      4
@@ -2919,13 +2919,13 @@ scores.1
 ##  8 -0.589    0.747  -0.257   1.18  -0.517      8      5      2      4      2      4      1
 ##  9 -0.836    1.02    0.620   1.36  -0.705      9      5      1      4      3      2      1
 ## 10  0.984    0.298  -1.06    0.681 -0.553     10      4      1      5      1      4      3
-## # ... with 423 more rows, and 38 more variables: PERS07 <int>, PERS08 <int>, PERS09 <int>,
-## #   PERS10 <int>, PERS11 <int>, PERS12 <int>, PERS13 <int>, PERS14 <int>, PERS15 <int>,
-## #   PERS16 <int>, PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>,
-## #   PERS22 <int>, PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>,
-## #   PERS28 <int>, PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>,
-## #   PERS34 <int>, PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>,
-## #   PERS40 <int>, PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>
+## # ... with 423 more rows, and 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>,
+## #   PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
    
@@ -2948,15 +2948,15 @@ scores.1 %>% filter(Factor1==max(Factor1))
 ```
 ## # A tibble: 1 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1    1.70   -2.14   0.471  -0.525   0.681   231      1      4      5      4      4      5
-## # ... with 38 more variables: PERS07 <int>, PERS08 <int>, PERS09 <int>, PERS10 <int>,
-## #   PERS11 <int>, PERS12 <int>, PERS13 <int>, PERS14 <int>, PERS15 <int>, PERS16 <int>,
-## #   PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>, PERS22 <int>,
-## #   PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>, PERS28 <int>,
-## #   PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>, PERS34 <int>,
-## #   PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>, PERS40 <int>,
-## #   PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>
+## # ... with 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
+## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
+## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
+## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>,
+## #   PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
+## #   PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
  
@@ -2971,19 +2971,19 @@ scores.1 %>% arrange(Factor1) %>% print(n=5)
 ```
 ## # A tibble: 433 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1   -2.82   1.33  -0.548    0.786  0.488    340      5      1      1      2      5      1
 ## 2   -2.24  -0.510  0.125   -0.523 -0.0971   128      1      2      2      4      2      2
 ## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3
 ## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3
 ## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3
-## # ... with 428 more rows, and 38 more variables: PERS07 <int>, PERS08 <int>, PERS09 <int>,
-## #   PERS10 <int>, PERS11 <int>, PERS12 <int>, PERS13 <int>, PERS14 <int>, PERS15 <int>,
-## #   PERS16 <int>, PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>,
-## #   PERS22 <int>, PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>,
-## #   PERS28 <int>, PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>,
-## #   PERS34 <int>, PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>,
-## #   PERS40 <int>, PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>
+## # ... with 428 more rows, and 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>,
+## #   PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
  
@@ -2998,15 +2998,15 @@ scores.1 %>% filter(abs(Factor1)==max(abs(Factor1)))
 ```
 ## # A tibble: 1 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1
-## # ... with 38 more variables: PERS07 <int>, PERS08 <int>, PERS09 <int>, PERS10 <int>,
-## #   PERS11 <int>, PERS12 <int>, PERS13 <int>, PERS14 <int>, PERS15 <int>, PERS16 <int>,
-## #   PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>, PERS22 <int>,
-## #   PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>, PERS28 <int>,
-## #   PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>, PERS34 <int>,
-## #   PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>, PERS40 <int>,
-## #   PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>
+## # ... with 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
+## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
+## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
+## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>,
+## #   PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
+## #   PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
  
@@ -3025,15 +3025,15 @@ filter(abso==max(abso))
 ```
 ## # A tibble: 1 x 51
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1
-## # ... with 39 more variables: PERS07 <int>, PERS08 <int>, PERS09 <int>, PERS10 <int>,
-## #   PERS11 <int>, PERS12 <int>, PERS13 <int>, PERS14 <int>, PERS15 <int>, PERS16 <int>,
-## #   PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>, PERS22 <int>,
-## #   PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>, PERS28 <int>,
-## #   PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>, PERS34 <int>,
-## #   PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>, PERS40 <int>,
-## #   PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>, abso <dbl>
+## # ... with 39 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
+## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
+## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
+## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>,
+## #   PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
+## #   PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>, abso <dbl>
 ```
 
  
@@ -3049,19 +3049,19 @@ scores.1 %>% arrange(desc(abs(Factor1))) %>% print(n=5)
 ```
 ## # A tibble: 433 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1   -2.82   1.33  -0.548    0.786  0.488    340      5      1      1      2      5      1
 ## 2   -2.24  -0.510  0.125   -0.523 -0.0971   128      1      2      2      4      2      2
 ## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3
 ## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3
 ## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3
-## # ... with 428 more rows, and 38 more variables: PERS07 <int>, PERS08 <int>, PERS09 <int>,
-## #   PERS10 <int>, PERS11 <int>, PERS12 <int>, PERS13 <int>, PERS14 <int>, PERS15 <int>,
-## #   PERS16 <int>, PERS17 <int>, PERS18 <int>, PERS19 <int>, PERS20 <int>, PERS21 <int>,
-## #   PERS22 <int>, PERS23 <int>, PERS24 <int>, PERS25 <int>, PERS26 <int>, PERS27 <int>,
-## #   PERS28 <int>, PERS29 <int>, PERS30 <int>, PERS31 <int>, PERS32 <int>, PERS33 <int>,
-## #   PERS34 <int>, PERS35 <int>, PERS36 <int>, PERS37 <int>, PERS38 <int>, PERS39 <int>,
-## #   PERS40 <int>, PERS41 <int>, PERS42 <int>, PERS43 <int>, PERS44 <int>
+## # ... with 428 more rows, and 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>,
+## #   PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
  
@@ -3094,7 +3094,7 @@ print(width=Inf)
 ```
 ## # A tibble: 1 x 11
 ##      id Factor1 PERS03 PERS13 PERS28 PERS33 PERS38 PERS08 PERS18 PERS23 PERS43
-##   <int>   <dbl>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1   340   -2.82      1      3      3      1      2      5      5      4      5
 ```
 
@@ -3136,7 +3136,7 @@ print(width=Inf)
 ```
 ## # A tibble: 1 x 10
 ##      id Factor2 PERS01 PERS11 PERS16 PERS26 PERS36 PERS06 PERS21 PERS31
-##   <int>   <dbl>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1    58   -2.35      1      2      1      2      2      5      5      5
 ```
 
@@ -3167,7 +3167,7 @@ print(width=Inf)
 ```
 ## # A tibble: 1 x 10
 ##      id Factor3 PERS04 PERS14 PERS19 PERS29 PERS39 PERS09 PERS24 PERS34
-##   <int>   <dbl>  <int>  <int>  <int>  <int>  <int>  <int>  <int>  <int>
+##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1   209   -2.27      1      1      4      1      1      5      4      4
 ```
 

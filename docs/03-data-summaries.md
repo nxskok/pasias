@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -56,16 +56,16 @@ bw=read_csv(myurl)
 ```
 ## Parsed with column specification:
 ## cols(
-##   `Father Age` = col_integer(),
-##   `Mother Age` = col_integer(),
-##   `Weeks Gestation` = col_integer(),
-##   `Pre-natal Visits` = col_integer(),
-##   `Marital Status` = col_integer(),
-##   `Mother Weight Gained` = col_integer(),
-##   `Low Birthweight?` = col_integer(),
+##   `Father Age` = col_double(),
+##   `Mother Age` = col_double(),
+##   `Weeks Gestation` = col_double(),
+##   `Pre-natal Visits` = col_double(),
+##   `Marital Status` = col_double(),
+##   `Mother Weight Gained` = col_double(),
+##   `Low Birthweight?` = col_double(),
 ##   `Weight (pounds)` = col_double(),
-##   `Premie?` = col_integer(),
-##   `Few Visits?` = col_integer()
+##   `Premie?` = col_double(),
+##   `Few Visits?` = col_double()
 ## )
 ```
 
@@ -86,7 +86,7 @@ bw
 ```
 ## # A tibble: 500 x 10
 ##    `Father Age` `Mother Age` `Weeks Gestatio… `Pre-natal Visi…
-##           <int>        <int>            <int>            <int>
+##           <dbl>        <dbl>            <dbl>            <dbl>
 ##  1           27           26               38               14
 ##  2           35           33               40               11
 ##  3           34           22               37               10
@@ -97,9 +97,9 @@ bw
 ##  8           38           35               38               16
 ##  9           28           29               40                5
 ## 10           NA           19               34               10
-## # ... with 490 more rows, and 6 more variables: `Marital Status` <int>,
-## #   `Mother Weight Gained` <int>, `Low Birthweight?` <int>, `Weight
-## #   (pounds)` <dbl>, `Premie?` <int>, `Few Visits?` <int>
+## # ... with 490 more rows, and 6 more variables: `Marital Status` <dbl>,
+## #   `Mother Weight Gained` <dbl>, `Low Birthweight?` <dbl>, `Weight
+## #   (pounds)` <dbl>, `Premie?` <dbl>, `Few Visits?` <dbl>
 ```
 
  
@@ -114,16 +114,16 @@ glimpse(bw)
 ```
 ## Observations: 500
 ## Variables: 10
-## $ `Father Age`           <int> 27, 35, 34, NA, 35, 32, 33, 38, 28, NA,...
-## $ `Mother Age`           <int> 26, 33, 22, 16, 33, 24, 33, 35, 29, 19,...
-## $ `Weeks Gestation`      <int> 38, 40, 37, 38, 39, 36, 38, 38, 40, 34,...
-## $ `Pre-natal Visits`     <int> 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 1...
-## $ `Marital Status`       <int> 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, ...
-## $ `Mother Weight Gained` <int> 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, ...
-## $ `Low Birthweight?`     <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, ...
+## $ `Father Age`           <dbl> 27, 35, 34, NA, 35, 32, 33, 38, 28, NA,...
+## $ `Mother Age`           <dbl> 26, 33, 22, 16, 33, 24, 33, 35, 29, 19,...
+## $ `Weeks Gestation`      <dbl> 38, 40, 37, 38, 39, 36, 38, 38, 40, 34,...
+## $ `Pre-natal Visits`     <dbl> 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 1...
+## $ `Marital Status`       <dbl> 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, ...
+## $ `Mother Weight Gained` <dbl> 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, ...
+## $ `Low Birthweight?`     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, ...
 ## $ `Weight (pounds)`      <dbl> 6.8750, 6.8125, 7.2500, 8.8125, 8.8125,...
-## $ `Premie?`              <int> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, ...
-## $ `Few Visits?`          <int> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, ...
+## $ `Premie?`              <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, ...
+## $ `Few Visits?`          <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, ...
 ```
 
  
@@ -482,7 +482,7 @@ max=max(`Weeks Gestation`))
 ```
 ## # A tibble: 3 x 4
 ##   `Premie?`     n   min   max
-##       <int> <int> <dbl> <dbl>
+##       <dbl> <int> <dbl> <dbl>
 ## 1         0   424    37    45
 ## 2         1    75    20    36
 ## 3        NA     1    NA    NA
@@ -669,7 +669,7 @@ nenana=read_tsv(myurl)
 ```
 ## Parsed with column specification:
 ## cols(
-##   Year = col_integer(),
+##   Year = col_double(),
 ##   JulianDate = col_double(),
 ##   `Date&Time` = col_character()
 ## )
@@ -705,14 +705,14 @@ x=read_delim(myurl," ")
 ```
 
 ```
-## Warning in rbind(names(probs), probs_f): number of columns of result is not
-## a multiple of vector length (arg 1)
-```
-
-```
 ## Warning: 87 parsing failures.
-## row # A tibble: 5 x 5 col     row col   expected  actual    file                                     expected   <int> <chr> <chr>     <chr>     <chr>                                    actual 1     1 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3… file 2     2 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3… row 3     3 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3… col 4     4 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3… expected 5     5 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-## ... ................. ... .......................................................................... ........ .......................................................................... ...... .......................................................................... .... .......................................................................... ... .......................................................................... ... .......................................................................... ........ ..........................................................................
+## row col  expected    actual                                                 file
+##   1  -- 1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nenana.txt'
+##   2  -- 1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nenana.txt'
+##   3  -- 1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nenana.txt'
+##   4  -- 1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nenana.txt'
+##   5  -- 1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nenana.txt'
+## ... ... ......... ......... ....................................................
 ## See problems(...) for more details.
 ```
 
@@ -803,7 +803,7 @@ nenana
 ```
 ## # A tibble: 87 x 3
 ##     Year JulianDate `Date&Time`         
-##    <int>      <dbl> <chr>               
+##    <dbl>      <dbl> <chr>               
 ##  1  1917       120. April 30 at 11:30 AM
 ##  2  1918       131. May 11 at 9:33 AM   
 ##  3  1919       124. May 3 at 2:33 PM    
@@ -828,7 +828,7 @@ glimpse(nenana)
 ```
 ## Observations: 87
 ## Variables: 3
-## $ Year        <int> 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 19...
+## $ Year        <dbl> 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 19...
 ## $ JulianDate  <dbl> 120.4795, 131.3983, 123.6066, 132.4490, 131.2795, ...
 ## $ `Date&Time` <chr> "April 30 at 11:30 AM", "May 11 at 9:33 AM", "May ...
 ```
@@ -924,7 +924,7 @@ mutate(datetime=ymd_hm(longdt,tz="America/Anchorage"))
 ```
 ## # A tibble: 87 x 5
 ##     Year JulianDate `Date&Time`       longdt           datetime           
-##    <int>      <dbl> <chr>             <chr>            <dttm>             
+##    <dbl>      <dbl> <chr>             <chr>            <dttm>             
 ##  1  1917       120. April 30 at 11:3… 1917 April 30 a… 1917-04-30 11:30:00
 ##  2  1918       131. May 11 at 9:33 AM 1918 May 11 at … 1918-05-11 09:33:00
 ##  3  1919       124. May 3 at 2:33 PM  1919 May 3 at 2… 1919-05-03 14:33:00
@@ -1491,7 +1491,7 @@ marks=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   class = col_character(),
-##   score = col_integer()
+##   score = col_double()
 ## )
 ```
 
@@ -1502,7 +1502,7 @@ marks
 ```
 ## # A tibble: 11 x 2
 ##    class  score
-##    <chr>  <int>
+##    <chr>  <dbl>
 ##  1 ken       78
 ##  2 ken       62
 ##  3 ken       59
@@ -1536,14 +1536,14 @@ read_delim(my_url," ",col_names=F,skip=1)
 ## Parsed with column specification:
 ## cols(
 ##   X1 = col_character(),
-##   X2 = col_integer()
+##   X2 = col_double()
 ## )
 ```
 
 ```
 ## # A tibble: 11 x 2
 ##    X1        X2
-##    <chr>  <int>
+##    <chr>  <dbl>
 ##  1 ken       78
 ##  2 ken       62
 ##  3 ken       59
@@ -1572,14 +1572,14 @@ read_delim(my_url," ",col_names=c("instructor","mark"),skip=1)
 ## Parsed with column specification:
 ## cols(
 ##   instructor = col_character(),
-##   mark = col_integer()
+##   mark = col_double()
 ## )
 ```
 
 ```
 ## # A tibble: 11 x 2
 ##    instructor  mark
-##    <chr>      <int>
+##    <chr>      <dbl>
 ##  1 ken           78
 ##  2 ken           62
 ##  3 ken           59
@@ -1709,7 +1709,7 @@ marks %>% summarize(med=median(score))
 ```
 ## # A tibble: 1 x 1
 ##     med
-##   <int>
+##   <dbl>
 ## 1    72
 ```
 

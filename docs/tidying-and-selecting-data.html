@@ -318,12 +318,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="tidying-and-selecting-data" class="section level1">
 <h1><span class="header-section-number">Chapter 12</span> Tidying and selecting data</h1>
-<div class="sourceCode" id="cb880"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb880-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb881"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb881-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
@@ -339,38 +339,39 @@ it into R. Check that you have 25 rows and a bunch of variables.</li>
 <p>Solution</p>
 <p>Save the URL into a variable and then read from the URL, using
 <code>read_csv</code> because it’s a <code>.csv</code> file:</p>
-<div class="sourceCode" id="cb884"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb884-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv&quot;</span></a>
-<a class="sourceLine" id="cb884-2" data-line-number="2">jays=<span class="kw">read_csv</span>(myurl)</a></code></pre></div>
+<div class="sourceCode" id="cb885"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb885-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv&quot;</span></a>
+<a class="sourceLine" id="cb885-2" data-line-number="2">jays=<span class="kw">read_csv</span>(myurl)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   .default = col_character(),
-##   row = col_integer(),
-##   game = col_integer(),
-##   runs = col_integer(),
-##   Oppruns = col_integer(),
-##   innings = col_integer(),
-##   position = col_integer(),
+##   row = col_double(),
+##   game = col_double(),
+##   venue = col_logical(),
+##   runs = col_double(),
+##   Oppruns = col_double(),
+##   innings = col_double(),
+##   position = col_double(),
 ##   `game time` = col_time(format = &quot;&quot;),
-##   attendance = col_integer()
+##   attendance = col_double()
 ## )</code></pre>
 <pre><code>## See spec(...) for full column specifications.</code></pre>
-<div class="sourceCode" id="cb887"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb887-1" data-line-number="1">jays</a></code></pre></div>
+<div class="sourceCode" id="cb888"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb888-1" data-line-number="1">jays</a></code></pre></div>
 <pre><code>## # A tibble: 25 x 21
 ##      row  game date  box   team  venue opp   result  runs Oppruns innings
-##    &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
-##  1    82     7 Mond… boxs… TOR   &lt;NA&gt;  TBR   L          1       2      NA
-##  2    83     8 Tues… boxs… TOR   &lt;NA&gt;  TBR   L          2       3      NA
-##  3    84     9 Wedn… boxs… TOR   &lt;NA&gt;  TBR   W         12       7      NA
-##  4    85    10 Thur… boxs… TOR   &lt;NA&gt;  TBR   L          2       4      NA
-##  5    86    11 Frid… boxs… TOR   &lt;NA&gt;  ATL   L          7       8      NA
-##  6    87    12 Satu… boxs… TOR   &lt;NA&gt;  ATL   W-wo       6       5      10
-##  7    88    13 Sund… boxs… TOR   &lt;NA&gt;  ATL   L          2       5      NA
-##  8    89    14 Tues… boxs… TOR   &lt;NA&gt;  BAL   W         13       6      NA
-##  9    90    15 Wedn… boxs… TOR   &lt;NA&gt;  BAL   W          4       2      NA
-## 10    91    16 Thur… boxs… TOR   &lt;NA&gt;  BAL   W          7       6      NA
-## # ... with 15 more rows, and 10 more variables: wl &lt;chr&gt;, position &lt;int&gt;,
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1    82     7 Mond… boxs… TOR   NA    TBR   L          1       2      NA
+##  2    83     8 Tues… boxs… TOR   NA    TBR   L          2       3      NA
+##  3    84     9 Wedn… boxs… TOR   NA    TBR   W         12       7      NA
+##  4    85    10 Thur… boxs… TOR   NA    TBR   L          2       4      NA
+##  5    86    11 Frid… boxs… TOR   NA    ATL   L          7       8      NA
+##  6    87    12 Satu… boxs… TOR   NA    ATL   W-wo       6       5      10
+##  7    88    13 Sund… boxs… TOR   NA    ATL   L          2       5      NA
+##  8    89    14 Tues… boxs… TOR   NA    BAL   W         13       6      NA
+##  9    90    15 Wedn… boxs… TOR   NA    BAL   W          4       2      NA
+## 10    91    16 Thur… boxs… TOR   NA    BAL   W          7       6      NA
+## # ... with 15 more rows, and 10 more variables: wl &lt;chr&gt;, position &lt;dbl&gt;,
 ## #   gb &lt;chr&gt;, winner &lt;chr&gt;, loser &lt;chr&gt;, save &lt;chr&gt;, `game time` &lt;time&gt;,
-## #   Daynight &lt;chr&gt;, attendance &lt;int&gt;, streak &lt;chr&gt;</code></pre>
+## #   Daynight &lt;chr&gt;, attendance &lt;dbl&gt;, streak &lt;chr&gt;</code></pre>
 <p>If you must, copy and paste the spreadsheet into R Studio, and read it
 in with <code>read_delim</code> (or possibly <code>read_tsv</code>), but
 this runs the risk of being defeated by spreadsheet cells that contain
@@ -388,28 +389,28 @@ minutes, which is turned into an R <code>time</code> in hours, minutes and
 seconds.</p>
 <p>With all those columns, <code>read_csv</code> doesn’t tell you what
 column specification it inferred for all of them, but you can type</p>
-<div class="sourceCode" id="cb889"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb889-1" data-line-number="1"><span class="kw">spec</span>(jays)</a></code></pre></div>
+<div class="sourceCode" id="cb890"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb890-1" data-line-number="1"><span class="kw">spec</span>(jays)</a></code></pre></div>
 <pre><code>## cols(
-##   row = col_integer(),
-##   game = col_integer(),
+##   row = col_double(),
+##   game = col_double(),
 ##   date = col_character(),
 ##   box = col_character(),
 ##   team = col_character(),
-##   venue = col_character(),
+##   venue = col_logical(),
 ##   opp = col_character(),
 ##   result = col_character(),
-##   runs = col_integer(),
-##   Oppruns = col_integer(),
-##   innings = col_integer(),
+##   runs = col_double(),
+##   Oppruns = col_double(),
+##   innings = col_double(),
 ##   wl = col_character(),
-##   position = col_integer(),
+##   position = col_double(),
 ##   gb = col_character(),
 ##   winner = col_character(),
 ##   loser = col_character(),
 ##   save = col_character(),
 ##   `game time` = col_time(format = &quot;&quot;),
 ##   Daynight = col_character(),
-##   attendance = col_integer(),
+##   attendance = col_double(),
 ##   streak = col_character()
 ## )</code></pre>
 <p>to find it all out.</p>
@@ -420,20 +421,20 @@ the columns. What do you notice about these games?</li>
 </ol>
 <p>Solution</p>
 <p>I get to do this:</p>
-<div class="sourceCode" id="cb891"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb891-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp<span class="op">==</span><span class="st">&quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">width=</span><span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb892"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb892-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp<span class="op">==</span><span class="st">&quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">width=</span><span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 21
 ##     row  game date             box      team  venue opp   result  runs
-##   &lt;int&gt; &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;
-## 1    92    27 Monday, May 4    boxscore TOR   &lt;NA&gt;  NYY   W          3
-## 2    93    28 Tuesday, May 5   boxscore TOR   &lt;NA&gt;  NYY   L          3
-## 3    94    29 Wednesday, May 6 boxscore TOR   &lt;NA&gt;  NYY   W          5
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
 ##   Oppruns innings wl    position gb    winner  loser    save   `game time`
-##     &lt;int&gt;   &lt;int&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;time&gt;     
+##     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;time&gt;     
 ## 1       1      NA 13-14        4 3.5   Dickey  Martin   Cecil  02:18      
 ## 2       6      NA 13-15        5 4.5   Pineda  Estrada  Miller 02:54      
 ## 3       1      NA 14-15        3 3.5   Buehrle Sabathia &lt;NA&gt;   02:30      
 ##   Daynight attendance streak
-##   &lt;chr&gt;         &lt;int&gt; &lt;chr&gt; 
+##   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt; 
 ## 1 N             19217 +     
 ## 2 N             21519 -     
 ## 3 N             21312 +</code></pre>
@@ -452,27 +453,27 @@ looked at all the attendances in class). I just want you to notice
 something meaningful that seems to be interesting about these games.</p>
 <p>You could also print all the columns in two or more goes, using
 <code>select</code>, for example:</p>
-<div class="sourceCode" id="cb893"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb893-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp<span class="op">==</span><span class="st">&quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(row<span class="op">:</span>innings) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">width=</span><span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb894"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb894-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp<span class="op">==</span><span class="st">&quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(row<span class="op">:</span>innings) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">width=</span><span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 11
 ##     row  game date             box      team  venue opp   result  runs
-##   &lt;int&gt; &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;
-## 1    92    27 Monday, May 4    boxscore TOR   &lt;NA&gt;  NYY   W          3
-## 2    93    28 Tuesday, May 5   boxscore TOR   &lt;NA&gt;  NYY   L          3
-## 3    94    29 Wednesday, May 6 boxscore TOR   &lt;NA&gt;  NYY   W          5
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
 ##   Oppruns innings
-##     &lt;int&gt;   &lt;int&gt;
+##     &lt;dbl&gt;   &lt;dbl&gt;
 ## 1       1      NA
 ## 2       6      NA
 ## 3       1      NA</code></pre>
-<div class="sourceCode" id="cb895"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb895-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp<span class="op">==</span><span class="st">&quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(wl<span class="op">:</span>streak) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">width=</span><span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb896"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb896-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp<span class="op">==</span><span class="st">&quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(wl<span class="op">:</span>streak) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">width=</span><span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 10
 ##   wl    position gb    winner  loser    save   `game time` Daynight
-##   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;time&gt;      &lt;chr&gt;   
+##   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;time&gt;      &lt;chr&gt;   
 ## 1 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N       
 ## 2 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N       
 ## 3 14-15        3 3.5   Buehrle Sabathia &lt;NA&gt;   02:30       N       
 ##   attendance streak
-##        &lt;int&gt; &lt;chr&gt; 
+##        &lt;dbl&gt; &lt;chr&gt; 
 ## 1      19217 +     
 ## 2      21519 -     
 ## 3      21312 +</code></pre>
@@ -485,11 +486,11 @@ attendance was more than 30,000, showing only the columns
 </ol>
 <p>Solution</p>
 <p>Two steps, since we selecting rows <em>and</em> columns.</p>
-<div class="sourceCode" id="cb897"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb897-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(attendance<span class="op">&gt;</span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb897-2" data-line-number="2"><span class="kw">select</span>(<span class="kw">c</span>(attendance,Daynight))</a></code></pre></div>
+<div class="sourceCode" id="cb898"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb898-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(attendance<span class="op">&gt;</span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb898-2" data-line-number="2"><span class="kw">select</span>(<span class="kw">c</span>(attendance,Daynight))</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 2
 ##   attendance Daynight
-##        &lt;int&gt; &lt;chr&gt;   
+##        &lt;dbl&gt; &lt;chr&gt;   
 ## 1      48414 N       
 ## 2      34743 D       
 ## 3      44794 D       
@@ -500,11 +501,11 @@ attendance was more than 30,000, showing only the columns
 ## 8      37929 D</code></pre>
 <p>Or this way, since we are selecting
 <em>consecutive</em> columns:</p>
-<div class="sourceCode" id="cb899"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb899-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(attendance<span class="op">&gt;</span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb899-2" data-line-number="2"><span class="kw">select</span>(<span class="kw">c</span>(Daynight<span class="op">:</span>attendance))  </a></code></pre></div>
+<div class="sourceCode" id="cb900"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb900-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(attendance<span class="op">&gt;</span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb900-2" data-line-number="2"><span class="kw">select</span>(<span class="kw">c</span>(Daynight<span class="op">:</span>attendance))  </a></code></pre></div>
 <pre><code>## # A tibble: 8 x 2
 ##   Daynight attendance
-##   &lt;chr&gt;         &lt;int&gt;
+##   &lt;chr&gt;         &lt;dbl&gt;
 ## 1 N             48414
 ## 2 D             34743
 ## 3 D             44794
@@ -517,8 +518,8 @@ attendance was more than 30,000, showing only the columns
 result). Only two of them are night games, while the other six are day
 (weekend) games.</p>
 <p>If you wanted to, you could automate the counting, like this:</p>
-<div class="sourceCode" id="cb901"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb901-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(attendance<span class="op">&gt;</span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb901-2" data-line-number="2"><span class="kw">count</span>(Daynight)</a></code></pre></div>
+<div class="sourceCode" id="cb902"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb902-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(attendance<span class="op">&gt;</span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb902-2" data-line-number="2"><span class="kw">count</span>(Daynight)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   Daynight     n
 ##   &lt;chr&gt;    &lt;int&gt;
@@ -534,9 +535,9 @@ day and night games.</li>
 summarizing according to what I want to summarize by. Since I am
 summarizing, only the summaries find their way into the final data
 frame, so I don’t need to “select out” the other variables:</p>
-<div class="sourceCode" id="cb903"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb903-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Daynight) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb903-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">mean.att=</span><span class="kw">mean</span>(attendance),</a>
-<a class="sourceLine" id="cb903-3" data-line-number="3"><span class="dt">sd.att=</span><span class="kw">sd</span>(attendance))</a></code></pre></div>
+<div class="sourceCode" id="cb904"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb904-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Daynight) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb904-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">mean.att=</span><span class="kw">mean</span>(attendance),</a>
+<a class="sourceLine" id="cb904-3" data-line-number="3"><span class="dt">sd.att=</span><span class="kw">sd</span>(attendance))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
 ##   Daynight mean.att sd.att
 ##   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
@@ -546,9 +547,9 @@ frame, so I don’t need to “select out” the other variables:</p>
 that the night games have much the larger SD, possibly because of the
 large outlier night attendance (opening night). Which we can also
 investigate.</p>
-<div class="sourceCode" id="cb905"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb905-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Daynight) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb905-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">median.att=</span><span class="kw">median</span>(attendance),</a>
-<a class="sourceLine" id="cb905-3" data-line-number="3"><span class="dt">iqr.att=</span><span class="kw">IQR</span>(attendance))</a></code></pre></div>
+<div class="sourceCode" id="cb906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb906-1" data-line-number="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Daynight) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb906-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">median.att=</span><span class="kw">median</span>(attendance),</a>
+<a class="sourceLine" id="cb906-3" data-line-number="3"><span class="dt">iqr.att=</span><span class="kw">IQR</span>(attendance))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
 ##   Daynight median.att iqr.att
 ##   &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;
@@ -558,14 +559,14 @@ investigate.</p>
 noticeably smaller median (compared to the mean), so it must have been
 the outlier that made the difference. There was another high value
 that R marked as an outlier:</p>
-<div class="sourceCode" id="cb907"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb907-1" data-line-number="1"><span class="kw">ggplot</span>(jays,<span class="kw">aes</span>(<span class="dt">x=</span>Daynight,<span class="dt">y=</span>attendance))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb908-1" data-line-number="1"><span class="kw">ggplot</span>(jays,<span class="kw">aes</span>(<span class="dt">x=</span>Daynight,<span class="dt">y=</span>attendance))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-11-1.png" width="672"  /></p>
 <p>So when you take away those unusual values, the night game attendances
 are indeed less variable.</p>
 <p>The right test, as you might have guessed, for comparing the medians
 of these non-normal data, is Mood’s median test:</p>
-<div class="sourceCode" id="cb908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb908-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb908-2" data-line-number="2"><span class="kw">median_test</span>(jays,attendance,Daynight)</a></code></pre></div>
+<div class="sourceCode" id="cb909"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb909-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb909-2" data-line-number="2"><span class="kw">median_test</span>(jays,attendance,Daynight)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -598,9 +599,9 @@ opening-night value.)</li>
 <p>Solution</p>
 <p>The best way to do this is facetted normal quantile
 plots. Remember that the facetting part goes right at the end:</p>
-<div class="sourceCode" id="cb910"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb910-1" data-line-number="1"><span class="kw">ggplot</span>(jays,<span class="kw">aes</span>(<span class="dt">sample=</span>attendance))<span class="op">+</span></a>
-<a class="sourceLine" id="cb910-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb910-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>Daynight,<span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb911"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb911-1" data-line-number="1"><span class="kw">ggplot</span>(jays,<span class="kw">aes</span>(<span class="dt">sample=</span>attendance))<span class="op">+</span></a>
+<a class="sourceLine" id="cb911-2" data-line-number="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb911-3" data-line-number="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>Daynight,<span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
 <p>The day attendances are pretty normal, though it is hard to be sure
 with only 7 of them.</p>
@@ -648,18 +649,18 @@ variables had no names, so supply some, as you did before.</li>
 </ol>
 <p>Solution</p>
 <p>Literal copy and paste:</p>
-<div class="sourceCode" id="cb911"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb911-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/throw.txt&quot;</span></a>
-<a class="sourceLine" id="cb911-2" data-line-number="2">throws=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;student&quot;</span>,<span class="st">&quot;baseball&quot;</span>,<span class="st">&quot;softball&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb912"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb912-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/throw.txt&quot;</span></a>
+<a class="sourceLine" id="cb912-2" data-line-number="2">throws=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;student&quot;</span>,<span class="st">&quot;baseball&quot;</span>,<span class="st">&quot;softball&quot;</span>))</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   student = col_integer(),
-##   baseball = col_integer(),
-##   softball = col_integer()
+##   student = col_double(),
+##   baseball = col_double(),
+##   softball = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb913"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb913-1" data-line-number="1">throws</a></code></pre></div>
+<div class="sourceCode" id="cb914"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb914-1" data-line-number="1">throws</a></code></pre></div>
 <pre><code>## # A tibble: 24 x 3
 ##    student baseball softball
-##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+##      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 ##  1       1       65       57
 ##  2       2       90       58
 ##  3       3       75       66
@@ -678,10 +679,10 @@ variables had no names, so supply some, as you did before.</li>
 <p>Solution</p>
 <p>Feed <code>student</code> into <code>factor</code>, creating a new
 column with <code>mutate</code>:</p>
-<div class="sourceCode" id="cb915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb915-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student))</a></code></pre></div>
+<div class="sourceCode" id="cb916"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb916-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student))</a></code></pre></div>
 <pre><code>## # A tibble: 24 x 4
 ##    student baseball softball fs   
-##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;fct&gt;
+##      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;
 ##  1       1       65       57 1    
 ##  2       2       90       58 2    
 ##  3       3       75       66 3    
@@ -701,11 +702,11 @@ making a second column that says which ball was thrown.</li>
 </ol>
 <p>Solution</p>
 <p>Literally <code>gather</code> (from <code>tidyr</code>):</p>
-<div class="sourceCode" id="cb917"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb917-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb917-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball)</a></code></pre></div>
+<div class="sourceCode" id="cb918"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb918-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb918-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball)</a></code></pre></div>
 <pre><code>## # A tibble: 48 x 4
 ##    student fs    ball     distance
-##      &lt;int&gt; &lt;fct&gt; &lt;chr&gt;       &lt;int&gt;
+##      &lt;dbl&gt; &lt;fct&gt; &lt;chr&gt;       &lt;dbl&gt;
 ##  1       1 1     baseball       65
 ##  2       2 2     baseball       90
 ##  3       3 3     baseball       75
@@ -722,11 +723,11 @@ and last. So I think it’s
 easier to name the ones you want to include.</p>
 <p>If you want to show off a little, you can use a select-helper, noting
 that the columns you want to gather up all end in “ball”:</p>
-<div class="sourceCode" id="cb919"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb919-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb919-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,<span class="kw">ends_with</span>(<span class="st">&quot;ball&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb920"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb920-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb920-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,<span class="kw">ends_with</span>(<span class="st">&quot;ball&quot;</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 48 x 4
 ##    student fs    ball     distance
-##      &lt;int&gt; &lt;fct&gt; &lt;chr&gt;       &lt;int&gt;
+##      &lt;dbl&gt; &lt;fct&gt; &lt;chr&gt;       &lt;dbl&gt;
 ##  1       1 1     baseball       65
 ##  2       2 2     baseball       90
 ##  3       3 3     baseball       75
@@ -745,9 +746,9 @@ distance against type of ball.</li>
 </ol>
 <p>Solution</p>
 <p>The obvious thing:</p>
-<div class="sourceCode" id="cb921"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb921-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb921-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb921-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ball,<span class="dt">y=</span>distance))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb922"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb922-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb922-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb922-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ball,<span class="dt">y=</span>distance))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-18-1.png" width="672"  /></p>
 <p>What this plot is missing is an indication of which student threw
 which ball. As it stands now, it could be an inferior version of a
@@ -764,16 +765,16 @@ a line.</li>
 <p>Solution</p>
 <p>A <code>colour</code> and a <code>group</code> in the <code>aes</code>, and
 a <code>geom_line</code>:</p>
-<div class="sourceCode" id="cb922"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb922-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb922-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb922-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ball,<span class="dt">y=</span>distance,<span class="dt">group=</span>fs,<span class="dt">colour=</span>fs))<span class="op">+</span></a>
-<a class="sourceLine" id="cb922-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
-<p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-19-1.png" width="672"  /></p>
-<p>You can see what happens if you use the student as a number:</p>
 <div class="sourceCode" id="cb923"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb923-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb923-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb923-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ball,<span class="dt">y=</span>distance,<span class="dt">group=</span>student,<span class="dt">colour=</span>student))<span class="op">+</span></a>
+<a class="sourceLine" id="cb923-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ball,<span class="dt">y=</span>distance,<span class="dt">group=</span>fs,<span class="dt">colour=</span>fs))<span class="op">+</span></a>
 <a class="sourceLine" id="cb923-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
+<p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-19-1.png" width="672"  /></p>
+<p>You can see what happens if you use the student as a number:</p>
+<div class="sourceCode" id="cb924"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb924-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb924-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb924-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ball,<span class="dt">y=</span>distance,<span class="dt">group=</span>student,<span class="dt">colour=</span>student))<span class="op">+</span></a>
+<a class="sourceLine" id="cb924-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-20-1.png" width="672"  /></p>
 <p>Now the student numbers are distinguished as a shade of blue (on an
 implied continuous scale: even a nonsensical fractional student number
@@ -792,11 +793,11 @@ at the top of the legend that you want to remove. Here that is
 <code>aes</code>. It actually appears in two places: in
 <code>group</code> and <code>colour</code>. I think the legend we want
 to get rid of is actually the <code>colour</code> one, so we do this:</p>
-<div class="sourceCode" id="cb924"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb924-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb924-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb924-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ball,<span class="dt">y=</span>distance,<span class="dt">group=</span>fs,<span class="dt">colour=</span>fs))<span class="op">+</span></a>
-<a class="sourceLine" id="cb924-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb924-5" data-line-number="5"><span class="kw">guides</span>(<span class="dt">colour=</span>F) </a></code></pre></div>
+<div class="sourceCode" id="cb925"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb925-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">fs=</span><span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb925-2" data-line-number="2"><span class="kw">gather</span>(ball,distance,baseball<span class="op">:</span>softball) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb925-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ball,<span class="dt">y=</span>distance,<span class="dt">group=</span>fs,<span class="dt">colour=</span>fs))<span class="op">+</span></a>
+<a class="sourceLine" id="cb925-4" data-line-number="4"><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb925-5" data-line-number="5"><span class="kw">guides</span>(<span class="dt">colour=</span>F) </a></code></pre></div>
 <p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-21-1.png" width="672"  /></p>
 <p>That seems to have done it.</p>
 <ol start="7" style="list-style-type: lower-alpha">
@@ -843,7 +844,7 @@ of observations and five columns of sleep times.</li>
 </ol>
 <p>Solution</p>
 <p>Separated by single spaces:</p>
-<div class="sourceCode" id="cb925"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb925-1" data-line-number="1">sleep1=<span class="kw">read_delim</span>(<span class="st">&quot;ratsleep.txt&quot;</span>,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb926"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb926-1" data-line-number="1">sleep1=<span class="kw">read_delim</span>(<span class="st">&quot;ratsleep.txt&quot;</span>,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   treatment = col_character(),
@@ -853,7 +854,7 @@ of observations and five columns of sleep times.</li>
 ##   obs4 = col_double(),
 ##   obs5 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb927"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb927-1" data-line-number="1">sleep1</a></code></pre></div>
+<div class="sourceCode" id="cb928"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb928-1" data-line-number="1">sleep1</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 6
 ##   treatment  obs1  obs2  obs3  obs4  obs5
 ##   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -896,7 +897,7 @@ the <code>gather</code> into a data frame <code>sleep</code>. Note that I
 also used the brackets-around-the-outside to display what I had,
 so that I didn’t have to do a separate display. This is a handy
 way of saving <em>and</em> displaying in one shot:</p>
-<div class="sourceCode" id="cb929"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb929-1" data-line-number="1">(sleep1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(rep,sleeptime,obs1<span class="op">:</span>obs5) -&gt;<span class="st"> </span>sleep)</a></code></pre></div>
+<div class="sourceCode" id="cb930"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb930-1" data-line-number="1">(sleep1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(rep,sleeptime,obs1<span class="op">:</span>obs5) -&gt;<span class="st"> </span>sleep)</a></code></pre></div>
 <pre><code>## # A tibble: 20 x 3
 ##    treatment rep   sleeptime
 ##    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;
@@ -935,7 +936,7 @@ analysis of variance.</p>
 time by treatment group.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb931"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb931-1" data-line-number="1"><span class="kw">ggplot</span>(sleep,<span class="kw">aes</span>(<span class="dt">x=</span>treatment,<span class="dt">y=</span>sleeptime))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb932"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb932-1" data-line-number="1"><span class="kw">ggplot</span>(sleep,<span class="kw">aes</span>(<span class="dt">x=</span>treatment,<span class="dt">y=</span>sleeptime))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-24-1.png" width="672"  /></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>In your boxplots, how does the median sleep time appear to
@@ -960,8 +961,8 @@ should look at the heights of the boxes on the boxplot, and see
 whether they are grossly unequal. They appear to be to be of very
 similar heights, all things considered, so I am happy.
 If you want the SDs themselves:</p>
-<div class="sourceCode" id="cb932"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb932-1" data-line-number="1">sleep <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb932-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">stddev=</span><span class="kw">sd</span>(sleeptime))</a></code></pre></div>
+<div class="sourceCode" id="cb933"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb933-1" data-line-number="1">sleep <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb933-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">stddev=</span><span class="kw">sd</span>(sleeptime))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   treatment stddev
 ##   &lt;chr&gt;      &lt;dbl&gt;
@@ -978,8 +979,8 @@ significantly among treatment groups. What do you conclude?</li>
 <p>Solution</p>
 <p>I use <code>aov</code> here, because I might be following up with
 Tukey in a minute:</p>
-<div class="sourceCode" id="cb934"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb934-1" data-line-number="1">sleep<span class="fl">.1</span>=<span class="kw">aov</span>(sleeptime<span class="op">~</span>treatment,<span class="dt">data=</span>sleep)  </a>
-<a class="sourceLine" id="cb934-2" data-line-number="2"><span class="kw">summary</span>(sleep<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb935"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb935-1" data-line-number="1">sleep<span class="fl">.1</span>=<span class="kw">aov</span>(sleeptime<span class="op">~</span>treatment,<span class="dt">data=</span>sleep)  </a>
+<a class="sourceLine" id="cb935-2" data-line-number="2"><span class="kw">summary</span>(sleep<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## treatment    3   5882    1961   21.09 8.32e-06 ***
 ## Residuals   16   1487      93                     
@@ -1001,7 +1002,7 @@ it.</li>
 variance and got a significant result and (ii) when we want to know
 which groups differ significantly from which. Both (i) and (ii) are
 true here. So:</p>
-<div class="sourceCode" id="cb936"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb936-1" data-line-number="1"><span class="kw">TukeyHSD</span>(sleep<span class="fl">.1</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb937"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb937-1" data-line-number="1"><span class="kw">TukeyHSD</span>(sleep<span class="fl">.1</span>)  </a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -1051,20 +1052,20 @@ columns of data.</li>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb938"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb938-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt&quot;</span></a>
-<a class="sourceLine" id="cb938-2" data-line-number="2">toms1=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb939"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb939-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt&quot;</span></a>
+<a class="sourceLine" id="cb939-2" data-line-number="2">toms1=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   plant = col_integer(),
+##   plant = col_double(),
 ##   blue = col_double(),
 ##   red = col_double(),
 ##   yellow = col_double(),
 ##   green = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb940"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb940-1" data-line-number="1">toms1</a></code></pre></div>
+<div class="sourceCode" id="cb941"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb941-1" data-line-number="1">toms1</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 5
 ##   plant  blue   red yellow green
-##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1     1  5.34  13.7   4.61  2.72
 ## 2     2  7.45  13.0   6.63  1.08
 ## 3     3  7.15  10.2   5.29  3.97
@@ -1083,11 +1084,11 @@ something suitable for feeding into <code>aov</code> later.)</li>
 </ol>
 <p>Solution</p>
 <p>This is a job for <code>gather</code>:</p>
-<div class="sourceCode" id="cb942"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb942-1" data-line-number="1">toms2 =<span class="st"> </span>toms1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(colour,growthrate,blue<span class="op">:</span>green)</a>
-<a class="sourceLine" id="cb942-2" data-line-number="2">toms2</a></code></pre></div>
+<div class="sourceCode" id="cb943"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb943-1" data-line-number="1">toms2 =<span class="st"> </span>toms1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(colour,growthrate,blue<span class="op">:</span>green)</a>
+<a class="sourceLine" id="cb943-2" data-line-number="2">toms2</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 3
 ##    plant colour growthrate
-##    &lt;int&gt; &lt;chr&gt;       &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
 ##  1     1 blue         5.34
 ##  2     2 blue         7.45
 ##  3     3 blue         7.15
@@ -1120,10 +1121,10 @@ extension.</li>
 </ol>
 <p>Solution</p>
 <p>The code is easy enough:</p>
-<div class="sourceCode" id="cb944"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb944-1" data-line-number="1"><span class="kw">write_csv</span>(toms2,<span class="st">&quot;tomatoes2.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb945"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb945-1" data-line-number="1"><span class="kw">write_csv</span>(toms2,<span class="st">&quot;tomatoes2.csv&quot;</span>)</a></code></pre></div>
 <p>If no error, it worked. That’s all you need.</p>
 <p>To verify (for my satisfaction) that it was saved correctly:</p>
-<div class="sourceCode" id="cb945"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb945-1" data-line-number="1"><span class="fu">cat</span> tomatoes2.csv </a></code></pre></div>
+<div class="sourceCode" id="cb946"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb946-1" data-line-number="1"><span class="fu">cat</span> tomatoes2.csv </a></code></pre></div>
 <pre><code>## plant,colour,growthrate
 ## 1,blue,5.34
 ## 2,blue,7.45
@@ -1167,7 +1168,7 @@ for ANOVA. What do you conclude? Explain briefly.</li>
 <p>Solution</p>
 <p>Nothing terribly surprising here. My data frame is called
 <code>toms2</code>, for some reason:</p>
-<div class="sourceCode" id="cb947"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb947-1" data-line-number="1"><span class="kw">ggplot</span>(toms2,<span class="kw">aes</span>(<span class="dt">x=</span>colour, <span class="dt">y=</span>growthrate))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb948"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb948-1" data-line-number="1"><span class="kw">ggplot</span>(toms2,<span class="kw">aes</span>(<span class="dt">x=</span>colour, <span class="dt">y=</span>growthrate))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-32-1.png" width="672"  /></p>
 <p>There are no outliers, but there is a little skewness (compare the
 <em>whiskers</em>, not the placement of the median within the box,
@@ -1187,7 +1188,7 @@ them for equality. My favourite (for reasons explained elsewhere) is
 the Levene test, if you insist on going this way. It lives in package
 <code>car</code>, and <em>does not</em> take a <code>data=</code>, so you need
 to do the <code>with</code> thing:</p>
-<div class="sourceCode" id="cb948"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb948-1" data-line-number="1"><span class="kw">library</span>(car)</a></code></pre></div>
+<div class="sourceCode" id="cb949"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb949-1" data-line-number="1"><span class="kw">library</span>(car)</a></code></pre></div>
 <pre><code>## Loading required package: carData</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;car&#39;</code></pre>
@@ -1197,7 +1198,7 @@ to do the <code>with</code> thing:</p>
 <pre><code>## The following object is masked from &#39;package:purrr&#39;:
 ## 
 ##     some</code></pre>
-<div class="sourceCode" id="cb953"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb953-1" data-line-number="1"><span class="kw">with</span>(toms2,<span class="kw">leveneTest</span>(growthrate,colour))</a></code></pre></div>
+<div class="sourceCode" id="cb954"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb954-1" data-line-number="1"><span class="kw">with</span>(toms2,<span class="kw">leveneTest</span>(growthrate,colour))</a></code></pre></div>
 <pre><code>## Warning in leveneTest.default(growthrate, colour): colour coerced to
 ## factor.</code></pre>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
@@ -1217,7 +1218,7 @@ a different story.) Decide for yourself whether you’re surprised by this.</p>
 <p>With that in mind, I think the regular ANOVA will be perfectly good,
 and we would expect that and the Welch ANOVA to give very similar results.</p>
 <p>I don’t need <code>car</code> again, so let’s get rid of it:</p>
-<div class="sourceCode" id="cb956"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb956-1" data-line-number="1"><span class="kw">detach</span>(<span class="st">&quot;package:car&quot;</span>,<span class="dt">unload=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb957"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb957-1" data-line-number="1"><span class="kw">detach</span>(<span class="st">&quot;package:car&quot;</span>,<span class="dt">unload=</span>T)</a></code></pre></div>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Run (regular) ANOVA on these data. What do you conclude?
 (Optional extra: if you think that some other variant of ANOVA would
@@ -1225,8 +1226,8 @@ be better, run that as well and compare the results.)</li>
 </ol>
 <p>Solution</p>
 <p><code>aov</code>, bearing in mind that Tukey is likely to follow:</p>
-<div class="sourceCode" id="cb957"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb957-1" data-line-number="1">toms<span class="fl">.1</span>=<span class="kw">aov</span>(growthrate<span class="op">~</span>colour,<span class="dt">data=</span>toms2)</a>
-<a class="sourceLine" id="cb957-2" data-line-number="2"><span class="kw">summary</span>(toms<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb958"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb958-1" data-line-number="1">toms<span class="fl">.1</span>=<span class="kw">aov</span>(growthrate<span class="op">~</span>colour,<span class="dt">data=</span>toms2)</a>
+<a class="sourceLine" id="cb958-2" data-line-number="2"><span class="kw">summary</span>(toms<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## colour       3  410.5  136.82   118.2 5.28e-16 ***
 ## Residuals   28   32.4    1.16                     
@@ -1239,8 +1240,8 @@ the others.</p>
 <p>This, remember, is as far as we go right now.</p>
 <p>Extra: if you thought that normality was OK but not equal spreads,
 then Welch ANOVA is the way to go:</p>
-<div class="sourceCode" id="cb959"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb959-1" data-line-number="1">toms<span class="fl">.2</span>=<span class="kw">oneway.test</span>(growthrate<span class="op">~</span>colour,<span class="dt">data=</span>toms2)</a>
-<a class="sourceLine" id="cb959-2" data-line-number="2">toms<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb960"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb960-1" data-line-number="1">toms<span class="fl">.2</span>=<span class="kw">oneway.test</span>(growthrate<span class="op">~</span>colour,<span class="dt">data=</span>toms2)</a>
+<a class="sourceLine" id="cb960-2" data-line-number="2">toms<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ##  One-way analysis of means (not assuming equal variances)
 ## 
@@ -1251,8 +1252,8 @@ it is still very small, and the conclusion is the same.</p>
 <p>If you had doubts about the normality (that were sufficiently great,
 even given the small sample sizes), then go with Mood’s median test
 for multiple groups:</p>
-<div class="sourceCode" id="cb961"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb961-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb961-2" data-line-number="2"><span class="kw">median_test</span>(toms2,growthrate,colour)</a></code></pre></div>
+<div class="sourceCode" id="cb962"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb962-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb962-2" data-line-number="2"><span class="kw">median_test</span>(toms2,growthrate,colour)</a></code></pre></div>
 <pre><code>## $table
 ##         above
 ## group    above below
@@ -1301,7 +1302,7 @@ right one for the analysis you did. Looking at the boxplots suggests that red is
 and green clearly worst, and it is possible that all the colours
 are significantly different from each other.)
 If you did regular ANOVA, Tukey is what you need:</p>
-<div class="sourceCode" id="cb963"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb963-1" data-line-number="1"><span class="kw">TukeyHSD</span>(toms<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb964"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb964-1" data-line-number="1"><span class="kw">TukeyHSD</span>(toms<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -1321,8 +1322,8 @@ would have no hesitation in saying that growth rate is biggest in red
 light and smallest in green light.</p>
 <p>If you did Welch ANOVA, you need Games-Howell, which you have to get
 from one of the packages that offers it:</p>
-<div class="sourceCode" id="cb965"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb965-1" data-line-number="1"><span class="kw">library</span>(PMCMRplus)</a>
-<a class="sourceLine" id="cb965-2" data-line-number="2"><span class="kw">gamesHowellTest</span>(growthrate<span class="op">~</span><span class="kw">factor</span>(colour),<span class="dt">data=</span>toms2)</a></code></pre></div>
+<div class="sourceCode" id="cb966"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb966-1" data-line-number="1"><span class="kw">library</span>(PMCMRplus)</a>
+<a class="sourceLine" id="cb966-2" data-line-number="2"><span class="kw">gamesHowellTest</span>(growthrate<span class="op">~</span><span class="kw">factor</span>(colour),<span class="dt">data=</span>toms2)</a></code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using Games-Howell test</code></pre>
 <pre><code>## data: growthrate by factor(colour)</code></pre>
@@ -1336,7 +1337,7 @@ from one of the packages that offers it:</p>
 <p>The conclusions are the same as for the Tukey: all the means are
 significantly different except for yellow and blue.
 Finally, if you did Mood’s median test, you need this one:</p>
-<div class="sourceCode" id="cb971"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb971-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(toms2, growthrate, colour)</a></code></pre></div>
+<div class="sourceCode" id="cb972"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb972-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(toms2, growthrate, colour)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   g1    g2       p_value adj_p_value
 ##   &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;
@@ -1382,18 +1383,18 @@ the column names are above and aligned with the columns, which
 is what <code>read_table</code> wants. If the column names had
 <em>not</em> been aligned with the columns, we would have needed
 <code>read_table2</code>.</p>
-<div class="sourceCode" id="cb973"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb973-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/migraine.txt&quot;</span></a>
-<a class="sourceLine" id="cb973-2" data-line-number="2">migraine=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb974"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb974-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/migraine.txt&quot;</span></a>
+<a class="sourceLine" id="cb974-2" data-line-number="2">migraine=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   DrugA = col_integer(),
-##   DrugB = col_integer(),
-##   DrugC = col_integer()
+##   DrugA = col_double(),
+##   DrugB = col_double(),
+##   DrugC = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb975"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb975-1" data-line-number="1">migraine</a></code></pre></div>
+<div class="sourceCode" id="cb976"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb976-1" data-line-number="1">migraine</a></code></pre></div>
 <pre><code>## # A tibble: 9 x 3
 ##   DrugA DrugB DrugC
-##   &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     4     6     6
 ## 2     5     8     7
 ## 3     4     4     6
@@ -1442,10 +1443,10 @@ The syntax of <code>gather</code> is: what
 makes the columns different, what makes them the same, and which
 columns need to be gathered together. Use a pipe to name the
 dataframe to work with. I’m going to save my new data frame:</p>
-<div class="sourceCode" id="cb977"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb977-1" data-line-number="1">(migraine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(drug,painrelief,DrugA<span class="op">:</span>DrugC) -&gt;<span class="st"> </span>migraine2)</a></code></pre></div>
+<div class="sourceCode" id="cb978"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb978-1" data-line-number="1">(migraine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(drug,painrelief,DrugA<span class="op">:</span>DrugC) -&gt;<span class="st"> </span>migraine2)</a></code></pre></div>
 <pre><code>## # A tibble: 27 x 2
 ##    drug  painrelief
-##    &lt;chr&gt;      &lt;int&gt;
+##    &lt;chr&gt;      &lt;dbl&gt;
 ##  1 DrugA          4
 ##  2 DrugA          5
 ##  3 DrugA          4
@@ -1474,8 +1475,8 @@ equal spreads.</li>
 <p>Solution</p>
 <p>My last sentence absolves us from doing the boxplots that we
 would normally insist on doing.</p>
-<div class="sourceCode" id="cb979"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb979-1" data-line-number="1">painrelief<span class="fl">.1</span>=<span class="kw">aov</span>(painrelief<span class="op">~</span>drug,<span class="dt">data=</span>migraine2)</a>
-<a class="sourceLine" id="cb979-2" data-line-number="2"><span class="kw">summary</span>(painrelief<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb980"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb980-1" data-line-number="1">painrelief<span class="fl">.1</span>=<span class="kw">aov</span>(painrelief<span class="op">~</span>drug,<span class="dt">data=</span>migraine2)</a>
+<a class="sourceLine" id="cb980-2" data-line-number="2"><span class="kw">summary</span>(painrelief<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value  Pr(&gt;F)   
 ## drug         2  41.19   20.59   7.831 0.00241 **
 ## Residuals   24  63.11    2.63                   
@@ -1483,7 +1484,7 @@ would normally insist on doing.</p>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>There are (strongly) significant differences among the drugs, so it is
 definitely worth firing up Tukey to figure out where the differences are:</p>
-<div class="sourceCode" id="cb981"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb981-1" data-line-number="1"><span class="kw">TukeyHSD</span>(painrelief<span class="fl">.1</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb982"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb982-1" data-line-number="1"><span class="kw">TukeyHSD</span>(painrelief<span class="fl">.1</span>)  </a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -1499,10 +1500,10 @@ high value of <code>painrelief</code> is better, in both cases drug A is
 <em>worse</em> than the other drugs. Drugs B and C are not significantly
 different from each other.</p>
 <p>Extra: we can also use the “pipe” to do this all in one go:</p>
-<div class="sourceCode" id="cb983"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb983-1" data-line-number="1">migraine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb983-2" data-line-number="2"><span class="kw">gather</span>(drug,painrelief,DrugA<span class="op">:</span>DrugC) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb983-3" data-line-number="3"><span class="kw">aov</span>(painrelief<span class="op">~</span>drug,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb983-4" data-line-number="4"><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb984"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb984-1" data-line-number="1">migraine <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb984-2" data-line-number="2"><span class="kw">gather</span>(drug,painrelief,DrugA<span class="op">:</span>DrugC) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb984-3" data-line-number="3"><span class="kw">aov</span>(painrelief<span class="op">~</span>drug,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb984-4" data-line-number="4"><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value  Pr(&gt;F)   
 ## drug         2  41.19   20.59   7.831 0.00241 **
 ## Residuals   24  63.11    2.63                   
@@ -1517,10 +1518,10 @@ I also used the
 <p>Read the above like this: “take <code>migraine</code>, and then gather together the <code>DrugA</code> through <code>DrugC</code> columns into a column <code>painrelief</code>, labelling each by its drug, and then do an ANOVA of <code>painrelief</code> by <code>drug</code>, and then summarize the results.”</p>
 <p>What is even more alarming is that I can feed the output from
 <code>aov</code> straight into <code>TukeyHSD</code>:</p>
-<div class="sourceCode" id="cb985"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb985-1" data-line-number="1">migraine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb985-2" data-line-number="2"><span class="kw">gather</span>(drug,painrelief,DrugA<span class="op">:</span>DrugC) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb985-3" data-line-number="3"><span class="kw">aov</span>(painrelief<span class="op">~</span>drug,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb985-4" data-line-number="4"><span class="kw">TukeyHSD</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb986"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb986-1" data-line-number="1">migraine <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb986-2" data-line-number="2"><span class="kw">gather</span>(drug,painrelief,DrugA<span class="op">:</span>DrugC) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb986-3" data-line-number="3"><span class="kw">aov</span>(painrelief<span class="op">~</span>drug,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb986-4" data-line-number="4"><span class="kw">TukeyHSD</span>()</a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -1538,11 +1539,11 @@ kind of thing it is.</p>
 <p>What I am missing here is to display the result of <code>aov</code>
 <em>and</em> use it as input to <code>TukeyHSD</code>. Of course, I had to
 discover that this could be solved, and indeed it can:</p>
-<div class="sourceCode" id="cb987"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb987-1" data-line-number="1">migraine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb987-2" data-line-number="2"><span class="kw">gather</span>(drug,painrelief,DrugA<span class="op">:</span>DrugC) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb987-3" data-line-number="3"><span class="kw">aov</span>(painrelief<span class="op">~</span>drug,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb987-4" data-line-number="4">{ <span class="kw">print</span>(<span class="kw">summary</span>(.)) ; . } <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb987-5" data-line-number="5"><span class="kw">TukeyHSD</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb988"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb988-1" data-line-number="1">migraine <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb988-2" data-line-number="2"><span class="kw">gather</span>(drug,painrelief,DrugA<span class="op">:</span>DrugC) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb988-3" data-line-number="3"><span class="kw">aov</span>(painrelief<span class="op">~</span>drug,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb988-4" data-line-number="4">{ <span class="kw">print</span>(<span class="kw">summary</span>(.)) ; . } <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb988-5" data-line-number="5"><span class="kw">TukeyHSD</span>()</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value  Pr(&gt;F)   
 ## drug         2  41.19   20.59   7.831 0.00241 **
 ## Residuals   24  63.11    2.63                   
@@ -1583,9 +1584,9 @@ other. Thus, we recommend “either B or C”.
 If you weren’t sure which way around the drugs actually came
 out, then you should work out the mean pain relief score by
 drug:</p>
-<div class="sourceCode" id="cb990"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb990-1" data-line-number="1">migraine2 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb990-2" data-line-number="2"><span class="kw">group_by</span>(drug) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb990-3" data-line-number="3"><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(painrelief))</a></code></pre></div>
+<div class="sourceCode" id="cb991"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb991-1" data-line-number="1">migraine2 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb991-2" data-line-number="2"><span class="kw">group_by</span>(drug) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb991-3" data-line-number="3"><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(painrelief))</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   drug      m
 ##   &lt;chr&gt; &lt;dbl&gt;
@@ -1604,7 +1605,7 @@ sometimes C’s mean will be higher, because there is no significant
 difference between them.
 <label for="tufte-mn-58" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-58" class="margin-toggle"><span class="marginnote">This talks about <em>means</em> rather than individual observations; in individual cases, sometimes even drug <em>A</em> will come out best. But we’re interested in population means, since we want to do the greatest good for the greatest number. <em>Greatest good for the greatest number</em> is from Jeremy Bentham, 1748–1832, British philosopher and advocate of utilitarianism.</span>
 Another way is to draw a boxplot of pain-relief scores:</p>
-<div class="sourceCode" id="cb992"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb992-1" data-line-number="1"><span class="kw">ggplot</span>(migraine2,<span class="kw">aes</span>(<span class="dt">x=</span>drug,<span class="dt">y=</span>painrelief))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb993"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb993-1" data-line-number="1"><span class="kw">ggplot</span>(migraine2,<span class="kw">aes</span>(<span class="dt">x=</span>drug,<span class="dt">y=</span>painrelief))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-49-1.png" width="672"  /></p>
 <p>The medians of drugs B and C are actually exactly the same. Because
 the pain relief values are all whole numbers (and there are only 9 in
@@ -1624,8 +1625,8 @@ have been an outlier.</p>
 <p>As I said, I didn’t want you to have to get into this, but if you are
 worried, you know what the remedy is — Mood’s median test. Don’t
 forget to use the right data frame:</p>
-<div class="sourceCode" id="cb993"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb993-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb993-2" data-line-number="2"><span class="kw">median_test</span>(migraine2,painrelief,drug)</a></code></pre></div>
+<div class="sourceCode" id="cb994"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb994-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb994-2" data-line-number="2"><span class="kw">median_test</span>(migraine2,painrelief,drug)</a></code></pre></div>
 <pre><code>## $table
 ##        above
 ## group   above below
@@ -1652,7 +1653,7 @@ drugs in terms of pain relief. The table at the top of the output
 again suggests that drug A is worse than the others, but to confirm
 that you’d have to do Mood’s median test on all three <em>pairs</em> of
 drugs, and then use Bonferroni to allow for your having done three tests:</p>
-<div class="sourceCode" id="cb995"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb995-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(migraine2, painrelief, drug)</a></code></pre></div>
+<div class="sourceCode" id="cb996"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb996-1" data-line-number="1"><span class="kw">pairwise_median_test</span>(migraine2, painrelief, drug)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 4
 ##   g1    g2     p_value adj_p_value
 ##   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;       &lt;dbl&gt;
@@ -1689,20 +1690,20 @@ multiple spaces and aligned with the variable names.</p>
 at the data file, which of course you did (didn’t you?), you saw
 that the data values were aligned by columns with multiple spaces
 between them:</p>
-<div class="sourceCode" id="cb998"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb998-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/disease.txt&quot;</span></a>
-<a class="sourceLine" id="cb998-2" data-line-number="2">tbl=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb999"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb999-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/disease.txt&quot;</span></a>
+<a class="sourceLine" id="cb999-2" data-line-number="2">tbl=<span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Species = col_character(),
-##   px = col_integer(),
-##   py = col_integer(),
-##   ax = col_integer(),
-##   ay = col_integer()
+##   px = col_double(),
+##   py = col_double(),
+##   ax = col_double(),
+##   ay = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1000"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1000-1" data-line-number="1">tbl</a></code></pre></div>
+<div class="sourceCode" id="cb1001"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1001-1" data-line-number="1">tbl</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   Species    px    py    ax    ay
-##   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 A          44    12    38    10
 ## 2 B          28    22    20    18</code></pre>
 <p>I was thinking ahead, since I’ll be wanting to have one of my columns
@@ -1735,10 +1736,10 @@ result.</li>
 They are frequencies in disease-location combinations, so
 I’ll call the column of “what’s different” <code>disloc</code>. Feel
 free to call it <code>temp</code> for now if you prefer:</p>
-<div class="sourceCode" id="cb1002"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1002-1" data-line-number="1">(tbl <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(disloc,frequency,px<span class="op">:</span>ay) -&gt;<span class="st"> </span>tbl<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1003"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1003-1" data-line-number="1">(tbl <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(disloc,frequency,px<span class="op">:</span>ay) -&gt;<span class="st"> </span>tbl<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 3
 ##   Species disloc frequency
-##   &lt;chr&gt;   &lt;chr&gt;      &lt;int&gt;
+##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;
 ## 1 A       px            44
 ## 2 B       px            28
 ## 3 A       py            12
@@ -1748,10 +1749,10 @@ free to call it <code>temp</code> for now if you prefer:</p>
 ## 7 A       ay            10
 ## 8 B       ay            18</code></pre>
 <p>This also works (“gather together everything but <code>Species</code>”):</p>
-<div class="sourceCode" id="cb1004"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1004-1" data-line-number="1">(tbl <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(disloc,frequency,<span class="op">-</span>Species) -&gt;<span class="st"> </span>tbl<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1005"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1005-1" data-line-number="1">(tbl <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(disloc,frequency,<span class="op">-</span>Species) -&gt;<span class="st"> </span>tbl<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 3
 ##   Species disloc frequency
-##   &lt;chr&gt;   &lt;chr&gt;      &lt;int&gt;
+##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;
 ## 1 A       px            44
 ## 2 B       px            28
 ## 3 A       py            12
@@ -1778,10 +1779,10 @@ and show your result.</li>
 <p>Solution</p>
 <p>This means splitting up <code>disloc</code> into two separate columns,
 splitting after the first character, thus:</p>
-<div class="sourceCode" id="cb1006"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1006-1" data-line-number="1">(tbl<span class="fl">.2</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(disloc,<span class="kw">c</span>(<span class="st">&quot;disease&quot;</span>,<span class="st">&quot;location&quot;</span>),<span class="dv">1</span>) -&gt;<span class="st"> </span>tbl<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1007"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1007-1" data-line-number="1">(tbl<span class="fl">.2</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(disloc,<span class="kw">c</span>(<span class="st">&quot;disease&quot;</span>,<span class="st">&quot;location&quot;</span>),<span class="dv">1</span>) -&gt;<span class="st"> </span>tbl<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 4
 ##   Species disease location frequency
-##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;        &lt;int&gt;
+##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;
 ## 1 A       p       x               44
 ## 2 B       p       x               28
 ## 3 A       p       y               12
@@ -1804,8 +1805,8 @@ your data frame from the previous part into <code>xtabs</code>. Save the
 result in a variable and display the result.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb1008"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1008-1" data-line-number="1">tbl<span class="fl">.4</span>=<span class="kw">xtabs</span>(frequency<span class="op">~</span>Species<span class="op">+</span>disease<span class="op">+</span>location,<span class="dt">data=</span>tbl<span class="fl">.3</span>)</a>
-<a class="sourceLine" id="cb1008-2" data-line-number="2">tbl<span class="fl">.4</span></a></code></pre></div>
+<div class="sourceCode" id="cb1009"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1009-1" data-line-number="1">tbl<span class="fl">.4</span>=<span class="kw">xtabs</span>(frequency<span class="op">~</span>Species<span class="op">+</span>disease<span class="op">+</span>location,<span class="dt">data=</span>tbl<span class="fl">.3</span>)</a>
+<a class="sourceLine" id="cb1009-2" data-line-number="2">tbl<span class="fl">.4</span></a></code></pre></div>
 <pre><code>## , , location = x
 ## 
 ##        disease
@@ -1832,7 +1833,7 @@ you like better? Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb1010"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1010-1" data-line-number="1"><span class="kw">ftable</span>(tbl<span class="fl">.4</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb1011"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1011-1" data-line-number="1"><span class="kw">ftable</span>(tbl<span class="fl">.4</span>)  </a></code></pre></div>
 <pre><code>##                 location  x  y
 ## Species disease               
 ## A       a                38 10
@@ -1857,8 +1858,8 @@ link. (It’s better if you know what that means, but you ought to be
 able to follow the logic if you don’t.)</p>
 <p>First, fit a model predicting frequency from everything, including all
 the interactions. (The reason for doing it this way will become clear later):</p>
-<div class="sourceCode" id="cb1012"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1012-1" data-line-number="1">model<span class="fl">.1</span>=<span class="kw">glm</span>(frequency<span class="op">~</span>Species<span class="op">*</span>location<span class="op">*</span>disease,<span class="dt">data=</span>tbl<span class="fl">.3</span>,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a>
-<a class="sourceLine" id="cb1012-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1013"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1013-1" data-line-number="1">model<span class="fl">.1</span>=<span class="kw">glm</span>(frequency<span class="op">~</span>Species<span class="op">*</span>location<span class="op">*</span>disease,<span class="dt">data=</span>tbl<span class="fl">.3</span>,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a>
+<a class="sourceLine" id="cb1013-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1885,8 +1886,8 @@ significant, so out it comes).</p>
 <p>Let’s get rid of that three-way interaction. This is another use for
 <code>update</code> that we’ve seen in connection with multiple regression
 (to make small changes to a big model):</p>
-<div class="sourceCode" id="cb1014"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1014-1" data-line-number="1">model<span class="fl">.2</span>=<span class="kw">update</span>(model<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>Species<span class="op">:</span>location<span class="op">:</span>disease)</a>
-<a class="sourceLine" id="cb1014-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1015"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1015-1" data-line-number="1">model<span class="fl">.2</span>=<span class="kw">update</span>(model<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>Species<span class="op">:</span>location<span class="op">:</span>disease)</a>
+<a class="sourceLine" id="cb1015-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.2</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1906,8 +1907,8 @@ out again.</p>
 <code>location:disease</code>. The last of these is the least significant,
 so out it comes. I did some copying and pasting, but I had to remember
 which model I was working with and what I was removing:</p>
-<div class="sourceCode" id="cb1016"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1016-1" data-line-number="1">model<span class="fl">.3</span>=<span class="kw">update</span>(model<span class="fl">.2</span>,.<span class="op">~</span>.<span class="op">-</span>location<span class="op">:</span>disease)</a>
-<a class="sourceLine" id="cb1016-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.3</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb1017"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1017-1" data-line-number="1">model<span class="fl">.3</span>=<span class="kw">update</span>(model<span class="fl">.2</span>,.<span class="op">~</span>.<span class="op">-</span>location<span class="op">:</span>disease)</a>
+<a class="sourceLine" id="cb1017-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.3</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)  </a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1921,8 +1922,8 @@ which model I was working with and what I was removing:</p>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p><code>Species:disease</code> comes out, but it looks as if
 <code>Species:location</code> will have to stay:</p>
-<div class="sourceCode" id="cb1018"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1018-1" data-line-number="1">model<span class="fl">.4</span>=<span class="kw">update</span>(model<span class="fl">.3</span>,.<span class="op">~</span>.<span class="op">-</span>Species<span class="op">:</span>disease)</a>
-<a class="sourceLine" id="cb1018-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.4</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb1019"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1019-1" data-line-number="1">model<span class="fl">.4</span>=<span class="kw">update</span>(model<span class="fl">.3</span>,.<span class="op">~</span>.<span class="op">-</span>Species<span class="op">:</span>disease)</a>
+<a class="sourceLine" id="cb1019-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.4</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)  </a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1937,8 +1938,8 @@ which model I was working with and what I was removing:</p>
 “contained in” it also has to stay, regardless of its main
 effect. So the only candidate for removal now is <code>disease</code>: not
 significant, out it comes:</p>
-<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1020-1" data-line-number="1">model<span class="fl">.5</span>=<span class="kw">update</span>(model<span class="fl">.4</span>,.<span class="op">~</span>.<span class="op">-</span>disease)</a>
-<a class="sourceLine" id="cb1020-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.5</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb1021"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1021-1" data-line-number="1">model<span class="fl">.5</span>=<span class="kw">update</span>(model<span class="fl">.4</span>,.<span class="op">~</span>.<span class="op">-</span>disease)</a>
+<a class="sourceLine" id="cb1021-2" data-line-number="2"><span class="kw">drop1</span>(model<span class="fl">.5</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)  </a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1953,7 +1954,7 @@ significant, out it comes:</p>
 on the <code>Species:location</code> combination, but not on anything
 else. To see how, we make a contingency table of species by location
 (totalling up over disease status, since that is not significant):</p>
-<div class="sourceCode" id="cb1022"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1022-1" data-line-number="1"><span class="kw">xtabs</span>(frequency<span class="op">~</span>Species<span class="op">+</span>location,<span class="dt">data=</span>tbl<span class="fl">.3</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb1023"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1023-1" data-line-number="1"><span class="kw">xtabs</span>(frequency<span class="op">~</span>Species<span class="op">+</span>location,<span class="dt">data=</span>tbl<span class="fl">.3</span>)  </a></code></pre></div>
 <pre><code>##        location
 ## Species  x  y
 ##       A 82 22
@@ -1977,11 +1978,11 @@ location, species or the combination of them.</p>
 stayed in the model, that something would have been associated with
 disease. For example, if the <code>disease:Species</code> table had looked
 like this:</p>
-<div class="sourceCode" id="cb1024"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1024-1" data-line-number="1">disease=<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;p&quot;</span>,<span class="st">&quot;p&quot;</span>)</a>
-<a class="sourceLine" id="cb1024-2" data-line-number="2">Species=<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>,<span class="st">&quot;B&quot;</span>,<span class="st">&quot;A&quot;</span>,<span class="st">&quot;B&quot;</span>)</a>
-<a class="sourceLine" id="cb1024-3" data-line-number="3">frequency=<span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">30</span>,<span class="dv">30</span>)</a>
-<a class="sourceLine" id="cb1024-4" data-line-number="4">xx=<span class="kw">data.frame</span>(disease,Species,frequency)</a>
-<a class="sourceLine" id="cb1024-5" data-line-number="5"><span class="kw">xtabs</span>(frequency<span class="op">~</span>disease<span class="op">+</span>Species)</a></code></pre></div>
+<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1025-1" data-line-number="1">disease=<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;p&quot;</span>,<span class="st">&quot;p&quot;</span>)</a>
+<a class="sourceLine" id="cb1025-2" data-line-number="2">Species=<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>,<span class="st">&quot;B&quot;</span>,<span class="st">&quot;A&quot;</span>,<span class="st">&quot;B&quot;</span>)</a>
+<a class="sourceLine" id="cb1025-3" data-line-number="3">frequency=<span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">30</span>,<span class="dv">30</span>)</a>
+<a class="sourceLine" id="cb1025-4" data-line-number="4">xx=<span class="kw">data.frame</span>(disease,Species,frequency)</a>
+<a class="sourceLine" id="cb1025-5" data-line-number="5"><span class="kw">xtabs</span>(frequency<span class="op">~</span>disease<span class="op">+</span>Species)</a></code></pre></div>
 <pre><code>##        Species
 ## disease  A  B
 ##       a 10 50
@@ -1989,8 +1990,8 @@ like this:</p>
 <p>For species A, disease is present 75% of the time, but for species B
 it’s present less than 40% of the time. So in this one there ought to be a
 significant association between disease and species:</p>
-<div class="sourceCode" id="cb1026"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1026-1" data-line-number="1">xx<span class="fl">.1</span>=<span class="kw">glm</span>(frequency<span class="op">~</span>disease<span class="op">*</span>Species,<span class="dt">data=</span>xx,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a>
-<a class="sourceLine" id="cb1026-2" data-line-number="2"><span class="kw">drop1</span>(xx<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1027"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1027-1" data-line-number="1">xx<span class="fl">.1</span>=<span class="kw">glm</span>(frequency<span class="op">~</span>disease<span class="op">*</span>Species,<span class="dt">data=</span>xx,<span class="dt">family=</span><span class="st">&quot;poisson&quot;</span>)</a>
+<a class="sourceLine" id="cb1027-2" data-line-number="2"><span class="kw">drop1</span>(xx<span class="fl">.1</span>,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -2031,8 +2032,8 @@ OK.</li>
 </ol>
 <p>Solution</p>
 <p>Tab-separated, so <code>read_tsv</code>; no column names, so <code>col_names=F</code>:</p>
-<div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1028-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/crickets.txt&quot;</span></a>
-<a class="sourceLine" id="cb1028-2" data-line-number="2">crickets=<span class="kw">read_tsv</span>(my_url,<span class="dt">col_names=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb1029"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1029-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/crickets.txt&quot;</span></a>
+<a class="sourceLine" id="cb1029-2" data-line-number="2">crickets=<span class="kw">read_tsv</span>(my_url,<span class="dt">col_names=</span>F)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   X1 = col_double(),
@@ -2040,7 +2041,7 @@ OK.</li>
 ##   X3 = col_double(),
 ##   X4 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1030-1" data-line-number="1">crickets  </a></code></pre></div>
+<div class="sourceCode" id="cb1031"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1031-1" data-line-number="1">crickets  </a></code></pre></div>
 <pre><code>## # A tibble: 17 x 4
 ##       X1    X2    X3    X4
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -2063,15 +2064,16 @@ OK.</li>
 ## 17  NA    NA    28.6  84.7</code></pre>
 <p>As promised.</p>
 <p>If you didn’t catch the tab-separated part, this probably happened to you:</p>
-<div class="sourceCode" id="cb1032"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1032-1" data-line-number="1">d=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb1033"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1033-1" data-line-number="1">d=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   X1 = col_character()
 ## )</code></pre>
-<pre><code>## Warning in rbind(names(probs), probs_f): number of columns of result is not
-## a multiple of vector length (arg 1)</code></pre>
 <pre><code>## Warning: 3 parsing failures.
-## row # A tibble: 3 x 5 col     row col   expected  actual   file                                      expected   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;                                     actual 1    15 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32… file 2    16 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32… row 3    17 &lt;NA&gt;  1 columns 2 colum… &#39;http://www.utsc.utoronto.ca/~butler/c32…</code></pre>
+## row col  expected    actual                                                   file
+##  15  -- 1 columns 2 columns &#39;http://www.utsc.utoronto.ca/~butler/c32/crickets.txt&#39;
+##  16  -- 1 columns 2 columns &#39;http://www.utsc.utoronto.ca/~butler/c32/crickets.txt&#39;
+##  17  -- 1 columns 2 columns &#39;http://www.utsc.utoronto.ca/~butler/c32/crickets.txt&#39;</code></pre>
 <p>This doesn’t look good:</p>
 <div class="sourceCode" id="cb1036"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1036-1" data-line-number="1"><span class="kw">problems</span>(d)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 5
@@ -2425,14 +2427,14 @@ is all you need here; there’s no need to display all the lines.</p>
 ##   car = col_character(),
 ##   MPG = col_double(),
 ##   weight = col_double(),
-##   cylinders = col_integer(),
-##   hp = col_integer(),
+##   cylinders = col_double(),
+##   hp = col_double(),
 ##   country = col_character()
 ## )</code></pre>
 <div class="sourceCode" id="cb1072"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1072-1" data-line-number="1">cars</a></code></pre></div>
 <pre><code>## # A tibble: 38 x 6
 ##    car                  MPG weight cylinders    hp country
-##    &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;  
+##    &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
 ##  1 Buick Skylark       28.4   2.67         4    90 U.S.   
 ##  2 Dodge Omni          30.9   2.23         4    75 U.S.   
 ##  3 Mercury Zephyr      20.8   3.07         6    85 U.S.   
@@ -2467,7 +2469,7 @@ is all you need here; there’s no need to display all the lines.</p>
 <div class="sourceCode" id="cb1076"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1076-1" data-line-number="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;c&quot;</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 38 x 3
 ##    car                cylinders country
-##    &lt;chr&gt;                  &lt;int&gt; &lt;chr&gt;  
+##    &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;  
 ##  1 Buick Skylark              4 U.S.   
 ##  2 Dodge Omni                 4 U.S.   
 ##  3 Mercury Zephyr             6 U.S.   
@@ -2489,7 +2491,7 @@ includes <code>cylinders</code> as well.</p>
 <div class="sourceCode" id="cb1078"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1078-1" data-line-number="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>hp)  </a></code></pre></div>
 <pre><code>## # A tibble: 38 x 5
 ##    car                  MPG weight cylinders country
-##    &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;  
+##    &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;  
 ##  1 Buick Skylark       28.4   2.67         4 U.S.   
 ##  2 Dodge Omni          30.9   2.23         4 U.S.   
 ##  3 Mercury Zephyr      20.8   3.07         6 U.S.   
@@ -2510,7 +2512,7 @@ display all the variables for those cars).</li>
 <div class="sourceCode" id="cb1080"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1080-1" data-line-number="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(cylinders<span class="op">==</span><span class="dv">8</span>)  </a></code></pre></div>
 <pre><code>## # A tibble: 8 x 6
 ##   car                         MPG weight cylinders    hp country
-##   &lt;chr&gt;                     &lt;dbl&gt;  &lt;dbl&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;  
+##   &lt;chr&gt;                     &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
 ## 1 Buick Estate Wagon         16.9   4.36         8   155 U.S.   
 ## 2 Chevy Malibu Wagon         19.2   3.60         8   125 U.S.   
 ## 3 Chrysler LeBaron Wagon     18.5   3.94         8   150 U.S.   
@@ -2529,7 +2531,7 @@ horsepower 70 or less.</li>
 <div class="sourceCode" id="cb1082"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1082-1" data-line-number="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(hp<span class="op">&lt;=</span><span class="dv">70</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(cylinders<span class="op">:</span>hp)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   cylinders    hp
-##       &lt;int&gt; &lt;int&gt;
+##       &lt;dbl&gt; &lt;dbl&gt;
 ## 1         4    69
 ## 2         4    70
 ## 3         4    65
@@ -2560,7 +2562,7 @@ cylinders, and pick out the one you want:</p>
 <div class="sourceCode" id="cb1086"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1086-1" data-line-number="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(cylinders) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(MPG),<span class="dt">s=</span><span class="kw">sd</span>(MPG))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   cylinders     m     s
-##       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+##       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1         4  30.0  4.18
 ## 2         5  20.3 NA   
 ## 3         6  21.1  4.08
@@ -2572,7 +2574,7 @@ you can do any of these things with <em>that</em>, for example:</p>
 <a class="sourceLine" id="cb1088-3" data-line-number="3"><span class="kw">filter</span>(cylinders<span class="op">==</span><span class="dv">4</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   cylinders     m     s
-##       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+##       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1         4  30.0  4.18</code></pre>
 <p>to pick out just the right row.
 This is a very easy kind of question to set on an exam. Just so you know.</p>
@@ -2595,31 +2597,31 @@ display the previous result).</p>
 <div class="sourceCode" id="cb1090"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1090-1" data-line-number="1">billboard=<span class="kw">read_csv</span>(<span class="st">&quot;http://stat405.had.co.nz/data/billboard.csv&quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   .default = col_integer(),
+##   .default = col_double(),
 ##   artist.inverted = col_character(),
 ##   track = col_character(),
 ##   time = col_time(format = &quot;&quot;),
 ##   genre = col_character(),
 ##   date.entered = col_date(format = &quot;&quot;),
 ##   date.peaked = col_date(format = &quot;&quot;),
-##   x66th.week = col_character(),
-##   x67th.week = col_character(),
-##   x68th.week = col_character(),
-##   x69th.week = col_character(),
-##   x70th.week = col_character(),
-##   x71st.week = col_character(),
-##   x72nd.week = col_character(),
-##   x73rd.week = col_character(),
-##   x74th.week = col_character(),
-##   x75th.week = col_character(),
-##   x76th.week = col_character()
+##   x66th.week = col_logical(),
+##   x67th.week = col_logical(),
+##   x68th.week = col_logical(),
+##   x69th.week = col_logical(),
+##   x70th.week = col_logical(),
+##   x71st.week = col_logical(),
+##   x72nd.week = col_logical(),
+##   x73rd.week = col_logical(),
+##   x74th.week = col_logical(),
+##   x75th.week = col_logical(),
+##   x76th.week = col_logical()
 ## )</code></pre>
 <pre><code>## See spec(...) for full column specifications.</code></pre>
 <p>There are a <em>lot</em> of columns. What does this look like?</p>
 <div class="sourceCode" id="cb1093"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1093-1" data-line-number="1">billboard</a></code></pre></div>
 <pre><code>## # A tibble: 317 x 83
 ##     year artist.inverted track time  genre date.entered date.peaked
-##    &lt;int&gt; &lt;chr&gt;           &lt;chr&gt; &lt;tim&gt; &lt;chr&gt; &lt;date&gt;       &lt;date&gt;     
+##    &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt; &lt;tim&gt; &lt;chr&gt; &lt;date&gt;       &lt;date&gt;     
 ##  1  2000 Destiny&#39;s Child Inde… 03:38 Rock  2000-09-23   2000-11-18 
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08 
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29 
@@ -2630,31 +2632,31 @@ display the previous result).</p>
 ##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24 
 ##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12 
 ## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04 
-## # ... with 307 more rows, and 76 more variables: x1st.week &lt;int&gt;,
-## #   x2nd.week &lt;int&gt;, x3rd.week &lt;int&gt;, x4th.week &lt;int&gt;, x5th.week &lt;int&gt;,
-## #   x6th.week &lt;int&gt;, x7th.week &lt;int&gt;, x8th.week &lt;int&gt;, x9th.week &lt;int&gt;,
-## #   x10th.week &lt;int&gt;, x11th.week &lt;int&gt;, x12th.week &lt;int&gt;,
-## #   x13th.week &lt;int&gt;, x14th.week &lt;int&gt;, x15th.week &lt;int&gt;,
-## #   x16th.week &lt;int&gt;, x17th.week &lt;int&gt;, x18th.week &lt;int&gt;,
-## #   x19th.week &lt;int&gt;, x20th.week &lt;int&gt;, x21st.week &lt;int&gt;,
-## #   x22nd.week &lt;int&gt;, x23rd.week &lt;int&gt;, x24th.week &lt;int&gt;,
-## #   x25th.week &lt;int&gt;, x26th.week &lt;int&gt;, x27th.week &lt;int&gt;,
-## #   x28th.week &lt;int&gt;, x29th.week &lt;int&gt;, x30th.week &lt;int&gt;,
-## #   x31st.week &lt;int&gt;, x32nd.week &lt;int&gt;, x33rd.week &lt;int&gt;,
-## #   x34th.week &lt;int&gt;, x35th.week &lt;int&gt;, x36th.week &lt;int&gt;,
-## #   x37th.week &lt;int&gt;, x38th.week &lt;int&gt;, x39th.week &lt;int&gt;,
-## #   x40th.week &lt;int&gt;, x41st.week &lt;int&gt;, x42nd.week &lt;int&gt;,
-## #   x43rd.week &lt;int&gt;, x44th.week &lt;int&gt;, x45th.week &lt;int&gt;,
-## #   x46th.week &lt;int&gt;, x47th.week &lt;int&gt;, x48th.week &lt;int&gt;,
-## #   x49th.week &lt;int&gt;, x50th.week &lt;int&gt;, x51st.week &lt;int&gt;,
-## #   x52nd.week &lt;int&gt;, x53rd.week &lt;int&gt;, x54th.week &lt;int&gt;,
-## #   x55th.week &lt;int&gt;, x56th.week &lt;int&gt;, x57th.week &lt;int&gt;,
-## #   x58th.week &lt;int&gt;, x59th.week &lt;int&gt;, x60th.week &lt;int&gt;,
-## #   x61st.week &lt;int&gt;, x62nd.week &lt;int&gt;, x63rd.week &lt;int&gt;,
-## #   x64th.week &lt;int&gt;, x65th.week &lt;int&gt;, x66th.week &lt;chr&gt;,
-## #   x67th.week &lt;chr&gt;, x68th.week &lt;chr&gt;, x69th.week &lt;chr&gt;,
-## #   x70th.week &lt;chr&gt;, x71st.week &lt;chr&gt;, x72nd.week &lt;chr&gt;,
-## #   x73rd.week &lt;chr&gt;, x74th.week &lt;chr&gt;, x75th.week &lt;chr&gt;, x76th.week &lt;chr&gt;</code></pre>
+## # ... with 307 more rows, and 76 more variables: x1st.week &lt;dbl&gt;,
+## #   x2nd.week &lt;dbl&gt;, x3rd.week &lt;dbl&gt;, x4th.week &lt;dbl&gt;, x5th.week &lt;dbl&gt;,
+## #   x6th.week &lt;dbl&gt;, x7th.week &lt;dbl&gt;, x8th.week &lt;dbl&gt;, x9th.week &lt;dbl&gt;,
+## #   x10th.week &lt;dbl&gt;, x11th.week &lt;dbl&gt;, x12th.week &lt;dbl&gt;,
+## #   x13th.week &lt;dbl&gt;, x14th.week &lt;dbl&gt;, x15th.week &lt;dbl&gt;,
+## #   x16th.week &lt;dbl&gt;, x17th.week &lt;dbl&gt;, x18th.week &lt;dbl&gt;,
+## #   x19th.week &lt;dbl&gt;, x20th.week &lt;dbl&gt;, x21st.week &lt;dbl&gt;,
+## #   x22nd.week &lt;dbl&gt;, x23rd.week &lt;dbl&gt;, x24th.week &lt;dbl&gt;,
+## #   x25th.week &lt;dbl&gt;, x26th.week &lt;dbl&gt;, x27th.week &lt;dbl&gt;,
+## #   x28th.week &lt;dbl&gt;, x29th.week &lt;dbl&gt;, x30th.week &lt;dbl&gt;,
+## #   x31st.week &lt;dbl&gt;, x32nd.week &lt;dbl&gt;, x33rd.week &lt;dbl&gt;,
+## #   x34th.week &lt;dbl&gt;, x35th.week &lt;dbl&gt;, x36th.week &lt;dbl&gt;,
+## #   x37th.week &lt;dbl&gt;, x38th.week &lt;dbl&gt;, x39th.week &lt;dbl&gt;,
+## #   x40th.week &lt;dbl&gt;, x41st.week &lt;dbl&gt;, x42nd.week &lt;dbl&gt;,
+## #   x43rd.week &lt;dbl&gt;, x44th.week &lt;dbl&gt;, x45th.week &lt;dbl&gt;,
+## #   x46th.week &lt;dbl&gt;, x47th.week &lt;dbl&gt;, x48th.week &lt;dbl&gt;,
+## #   x49th.week &lt;dbl&gt;, x50th.week &lt;dbl&gt;, x51st.week &lt;dbl&gt;,
+## #   x52nd.week &lt;dbl&gt;, x53rd.week &lt;dbl&gt;, x54th.week &lt;dbl&gt;,
+## #   x55th.week &lt;dbl&gt;, x56th.week &lt;dbl&gt;, x57th.week &lt;dbl&gt;,
+## #   x58th.week &lt;dbl&gt;, x59th.week &lt;dbl&gt;, x60th.week &lt;dbl&gt;,
+## #   x61st.week &lt;dbl&gt;, x62nd.week &lt;dbl&gt;, x63rd.week &lt;dbl&gt;,
+## #   x64th.week &lt;dbl&gt;, x65th.week &lt;dbl&gt;, x66th.week &lt;lgl&gt;,
+## #   x67th.week &lt;lgl&gt;, x68th.week &lt;lgl&gt;, x69th.week &lt;lgl&gt;,
+## #   x70th.week &lt;lgl&gt;, x71st.week &lt;lgl&gt;, x72nd.week &lt;lgl&gt;,
+## #   x73rd.week &lt;lgl&gt;, x74th.week &lt;lgl&gt;, x75th.week &lt;lgl&gt;, x76th.week &lt;lgl&gt;</code></pre>
 <p>On yours, you will definitely see a little arrow top right saying
 “there are more columns”, and you will have to click on it several
 times to see them all.</p>
@@ -2677,7 +2679,7 @@ briefly.</li>
 <div class="sourceCode" id="cb1095"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1095-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) </a></code></pre></div>
 <pre><code>## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre date.entered date.peaked week 
-##  * &lt;int&gt; &lt;chr&gt;           &lt;chr&gt; &lt;tim&gt; &lt;chr&gt; &lt;date&gt;       &lt;date&gt;      &lt;chr&gt;
+##  * &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt; &lt;tim&gt; &lt;chr&gt; &lt;date&gt;       &lt;date&gt;      &lt;chr&gt;
 ##  1  2000 Destiny&#39;s Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
@@ -2688,13 +2690,13 @@ briefly.</li>
 ##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
 ##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
 ## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
-## # ... with 5,297 more rows, and 1 more variable: rank &lt;chr&gt;</code></pre>
+## # ... with 5,297 more rows, and 1 more variable: rank &lt;dbl&gt;</code></pre>
 <p>Another way to do this is with a select-helper: all those column names
 end with <code>week</code>, so we can select them all thus:</p>
 <div class="sourceCode" id="cb1097"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1097-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,<span class="kw">ends_with</span>(<span class="st">&quot;week&quot;</span>),<span class="dt">na.rm=</span>T)</a></code></pre></div>
 <pre><code>## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre date.entered date.peaked week 
-##  * &lt;int&gt; &lt;chr&gt;           &lt;chr&gt; &lt;tim&gt; &lt;chr&gt; &lt;date&gt;       &lt;date&gt;      &lt;chr&gt;
+##  * &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt; &lt;tim&gt; &lt;chr&gt; &lt;date&gt;       &lt;date&gt;      &lt;chr&gt;
 ##  1  2000 Destiny&#39;s Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
@@ -2705,7 +2707,7 @@ end with <code>week</code>, so we can select them all thus:</p>
 ##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
 ##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
 ## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
-## # ... with 5,297 more rows, and 1 more variable: rank &lt;chr&gt;</code></pre>
+## # ... with 5,297 more rows, and 1 more variable: rank &lt;dbl&gt;</code></pre>
 <p>There are now only 9 columns, a lot fewer than we started with. This
 is (I didn’t need you to say) because we have collected together all
 those <code>week</code> columns into one (a column called <code>rank</code>
@@ -2739,34 +2741,39 @@ rows). Add something appropriate onto the end of your pipe to do this.</li>
 <div class="sourceCode" id="cb1101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1101-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1101-2" data-line-number="2"><span class="kw">select</span>(week, rank)</a></code></pre></div>
 <pre><code>## # A tibble: 5,307 x 2
-##    week      rank 
-##  * &lt;chr&gt;     &lt;chr&gt;
-##  1 x1st.week 78   
-##  2 x1st.week 15   
-##  3 x1st.week 71   
-##  4 x1st.week 41   
-##  5 x1st.week 57   
-##  6 x1st.week 59   
-##  7 x1st.week 83   
-##  8 x1st.week 63   
-##  9 x1st.week 77   
-## 10 x1st.week 81   
+##    week       rank
+##  * &lt;chr&gt;     &lt;dbl&gt;
+##  1 x1st.week    78
+##  2 x1st.week    15
+##  3 x1st.week    71
+##  4 x1st.week    41
+##  5 x1st.week    57
+##  6 x1st.week    59
+##  7 x1st.week    83
+##  8 x1st.week    63
+##  9 x1st.week    77
+## 10 x1st.week    81
 ## # ... with 5,297 more rows</code></pre>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Both your <code>week</code> and <code>rank</code> columns are
 (probably) text. Create new columns that contain just the numeric
 values, and display just your new columns, again adding onto the
-end of your pipe. (In the previous part, you probably had some
+end of your pipe. If it so happens that <code>rank</code> is already a number, leave it as it is.
+(In the previous part, you probably had some
 code that picked out a few columns to display them. Get rid of
 that.)</li>
 </ol>
 <p>Solution</p>
-<p><code>parse_number</code> is the easiest. Create new columns,
+<p>My <code>rank</code> is already a number, so I leave that.
+I’m defining a new column <code>rank_number</code> that is just a copy
+of <code>rank</code>, so that I can check the two new things
+that should now both be numbers.
+<code>parse_number</code> is the easiest. Create new column(s),
 with <code>mutate</code>, that are the <code>parse_number</code>-ed
-versions of the old ones.</p>
+versions of the old one(s).</p>
 <div class="sourceCode" id="cb1103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1103-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1103-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">week_number=</span><span class="kw">parse_number</span>(week),</a>
-<a class="sourceLine" id="cb1103-3" data-line-number="3"><span class="dt">rank_number=</span><span class="kw">parse_number</span>(rank)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1103-3" data-line-number="3"><span class="dt">rank_number=</span>rank) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1103-4" data-line-number="4"><span class="kw">select</span>(<span class="kw">ends_with</span>(<span class="st">&quot;number&quot;</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 5,307 x 2
 ##    week_number rank_number
@@ -2786,10 +2793,10 @@ versions of the old ones.</p>
 that ended with <code>number</code>, which meant that I could select them
 with the select-helper <code>ends_with</code>. I’m not insisting that you
 do this, but it’s a handy trick.)</p>
-<p>Since <code>rank</code> already looks like a number, but happens to be
+<p>If your <code>rank</code> already looks like a number but happens to be
 text, you can also convert it with <code>as.numeric</code> (or
 <code>as.integer</code>, since it is actually text that looks like a whole
-number). For converting <code>rank</code>, these are also good, but for
+number. For converting <code>rank</code>, these are also good, but for
 converting <code>week</code>, you need something that will pull out the
 number. (<code>str_extract</code> from <code>stringr</code> will also do it,
 but that’s beyond our scope now. It’s on page 212 of the R book if
@@ -2816,7 +2823,7 @@ it by seven to get a number of days.
 After that thinking, this:</p>
 <div class="sourceCode" id="cb1105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1105-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1105-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">week_number=</span><span class="kw">parse_number</span>(week),</a>
-<a class="sourceLine" id="cb1105-3" data-line-number="3"><span class="dt">rank_number=</span><span class="kw">parse_number</span>(rank)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1105-3" data-line-number="3"><span class="dt">rank_number=</span>rank) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1105-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">current=</span>date.entered<span class="op">+</span>(week_number<span class="dv">-1</span>)<span class="op">*</span><span class="dv">7</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1105-5" data-line-number="5"><span class="kw">select</span>(date.entered,week_number,current)</a></code></pre></div>
 <pre><code>## # A tibble: 5,307 x 3
@@ -2849,7 +2856,7 @@ of the 5,000-odd rows of the data frame. To do that, add the line
 <code>sample_n(10)</code> on the end, like this:</p>
 <div class="sourceCode" id="cb1107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1107-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1107-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">week_number=</span><span class="kw">parse_number</span>(week),</a>
-<a class="sourceLine" id="cb1107-3" data-line-number="3"><span class="dt">rank_number=</span><span class="kw">parse_number</span>(rank)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1107-3" data-line-number="3"><span class="dt">rank_number=</span>rank) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1107-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">current=</span>date.entered<span class="op">+</span>(week_number<span class="dv">-1</span>)<span class="op">*</span><span class="dv">7</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1107-5" data-line-number="5"><span class="kw">select</span>(date.entered,week_number,current) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1107-6" data-line-number="6"><span class="kw">sample_n</span>(<span class="dv">10</span>)  </a></code></pre></div>
@@ -2891,7 +2898,7 @@ since we are only checking for equal-to, not something like
 “less than”:</p>
 <div class="sourceCode" id="cb1109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1109-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1109-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">week_number=</span><span class="kw">parse_number</span>(week),</a>
-<a class="sourceLine" id="cb1109-3" data-line-number="3"><span class="dt">rank_number=</span><span class="kw">parse_number</span>(rank)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1109-3" data-line-number="3"><span class="dt">rank_number=</span>rank) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1109-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">current=</span>date.entered<span class="op">+</span>(week_number<span class="dv">-1</span>)<span class="op">*</span><span class="dv">7</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1109-5" data-line-number="5"><span class="kw">filter</span>(rank<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1109-6" data-line-number="6"><span class="kw">arrange</span>(current) <span class="op">%&gt;%</span></a>
@@ -2939,7 +2946,7 @@ making it easy to see which song it was.</li>
 <code>track</code> title:</p>
 <div class="sourceCode" id="cb1111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1111-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1111-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">week_number=</span><span class="kw">parse_number</span>(week),</a>
-<a class="sourceLine" id="cb1111-3" data-line-number="3"><span class="dt">rank_number=</span><span class="kw">parse_number</span>(rank)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1111-3" data-line-number="3"><span class="dt">rank_number=</span>rank) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1111-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">current=</span>date.entered<span class="op">+</span>(week_number<span class="dv">-1</span>)<span class="op">*</span><span class="dv">7</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1111-5" data-line-number="5"><span class="kw">filter</span>(rank<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1111-6" data-line-number="6"><span class="kw">arrange</span>(current) <span class="op">%&gt;%</span></a>
@@ -2973,7 +2980,7 @@ can do to this, like listing out only the row(s) where <code>n</code> is
 equal to its maximum value:</p>
 <div class="sourceCode" id="cb1113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1113-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1113-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">week_number=</span><span class="kw">parse_number</span>(week),</a>
-<a class="sourceLine" id="cb1113-3" data-line-number="3"><span class="dt">rank_number=</span><span class="kw">parse_number</span>(rank)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1113-3" data-line-number="3"><span class="dt">rank_number=</span>rank) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1113-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">current=</span>date.entered<span class="op">+</span>(week_number<span class="dv">-1</span>)<span class="op">*</span><span class="dv">7</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1113-5" data-line-number="5"><span class="kw">filter</span>(rank<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1113-6" data-line-number="6"><span class="kw">arrange</span>(current) <span class="op">%&gt;%</span></a>
@@ -2988,7 +2995,7 @@ equal to its maximum value:</p>
 to make it easier to pick out the top one:</p>
 <div class="sourceCode" id="cb1115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1115-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1115-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">week_number=</span><span class="kw">parse_number</span>(week),</a>
-<a class="sourceLine" id="cb1115-3" data-line-number="3"><span class="dt">rank_number=</span><span class="kw">parse_number</span>(rank)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1115-3" data-line-number="3"><span class="dt">rank_number=</span>rank) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1115-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">current=</span>date.entered<span class="op">+</span>(week_number<span class="dv">-1</span>)<span class="op">*</span><span class="dv">7</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1115-5" data-line-number="5"><span class="kw">filter</span>(rank<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1115-6" data-line-number="6"><span class="kw">arrange</span>(current) <span class="op">%&gt;%</span></a>
@@ -3031,7 +3038,7 @@ replacing <code>track</code> by my <code>combo</code> later in the pipe,
 wherever it appears:</p>
 <div class="sourceCode" id="cb1117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1117-1" data-line-number="1">billboard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(week,rank,x1st.week<span class="op">:</span>x76th.week,<span class="dt">na.rm=</span>T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1117-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">week_number=</span><span class="kw">parse_number</span>(week),</a>
-<a class="sourceLine" id="cb1117-3" data-line-number="3"><span class="dt">rank_number=</span><span class="kw">parse_number</span>(rank)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1117-3" data-line-number="3"><span class="dt">rank_number=</span>rank) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1117-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">combo=</span><span class="kw">paste</span>(track,artist.inverted,<span class="dt">sep=</span><span class="st">&quot; by &quot;</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1117-5" data-line-number="5"><span class="kw">mutate</span>(<span class="dt">current=</span>date.entered<span class="op">+</span>(week_number<span class="dv">-1</span>)<span class="op">*</span><span class="dv">7</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1117-6" data-line-number="6"><span class="kw">filter</span>(rank<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
@@ -3899,7 +3906,7 @@ format with 4-digit years.</p></li>
 <a class="sourceLine" id="cb1183-2" data-line-number="2">heat=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   id = col_integer(),
+##   id = col_double(),
 ##   date = col_date(format = &quot;&quot;),
 ##   code = col_character(),
 ##   text = col_character()
@@ -3907,7 +3914,7 @@ format with 4-digit years.</p></li>
 <div class="sourceCode" id="cb1185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1185-1" data-line-number="1">heat</a></code></pre></div>
 <pre><code>## # A tibble: 200 x 4
 ##       id date       code  text                                            
-##    &lt;int&gt; &lt;date&gt;     &lt;chr&gt; &lt;chr&gt;                                           
+##    &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;chr&gt;                                           
 ##  1   232 2016-09-08 HAU   Toronto&#39;s Medical Officer of Health has upgrade…
 ##  2   231 2016-09-07 HAE   Toronto&#39;s Medical Officer of Health has continu…
 ##  3   230 2016-09-06 HA    Toronto&#39;s Medical Officer of Health has issued …
@@ -4034,7 +4041,7 @@ a pipeline, just because:</p>
 <a class="sourceLine" id="cb1191-4" data-line-number="4"><span class="kw">mutate</span>(<span class="dt">daydiff=</span><span class="kw">abs</span>(<span class="kw">c</span>(<span class="kw">diff</span>(daycount),<span class="dv">0</span>))) </a></code></pre></div>
 <pre><code>## # A tibble: 200 x 5
 ##       id date       code  daycount daydiff
-##    &lt;int&gt; &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;
 ##  1   232 2016-09-08 HAU      17052       1
 ##  2   231 2016-09-07 HAE      17051       1
 ##  3   230 2016-09-06 HA       17050      24
@@ -4146,7 +4153,7 @@ to extract the year from each of our dates.</li>
 <div class="sourceCode" id="cb1200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1200-1" data-line-number="1">heat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>text) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year=</span><span class="kw">year</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">10</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 4
 ##       id date       code   year
-##    &lt;int&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;
 ##  1    48 2005-07-11 EHA    2005
 ##  2   131 2011-07-22 EHAE   2011
 ##  3   197 2015-08-16 HA     2015

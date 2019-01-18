@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -115,7 +115,7 @@ bodyfat=read_delim(myurl," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   athlete = col_integer(),
+##   athlete = col_double(),
 ##   xray = col_double(),
 ##   ultrasound = col_double()
 ## )
@@ -128,7 +128,7 @@ bodyfat
 ```
 ## # A tibble: 16 x 3
 ##    athlete  xray ultrasound
-##      <int> <dbl>      <dbl>
+##      <dbl> <dbl>      <dbl>
 ##  1       1  5          4.75
 ##  2       2  7          3.75
 ##  3       3  9.25       9   
@@ -360,9 +360,9 @@ throws=read_delim(myurl," ",col_names=c("student","baseball","softball"))
 ```
 ## Parsed with column specification:
 ## cols(
-##   student = col_integer(),
-##   baseball = col_integer(),
-##   softball = col_integer()
+##   student = col_double(),
+##   baseball = col_double(),
+##   softball = col_double()
 ## )
 ```
 
@@ -373,7 +373,7 @@ throws
 ```
 ## # A tibble: 24 x 3
 ##    student baseball softball
-##      <int>    <int>    <int>
+##      <dbl>    <dbl>    <dbl>
 ##  1       1       65       57
 ##  2       2       90       58
 ##  3       3       75       66
@@ -603,9 +603,9 @@ mutate(diff=baseball-softball)
 ```
 ## Parsed with column specification:
 ## cols(
-##   student = col_integer(),
-##   baseball = col_integer(),
-##   softball = col_integer()
+##   student = col_double(),
+##   baseball = col_double(),
+##   softball = col_double()
 ## )
 ```
 
@@ -616,7 +616,7 @@ throws
 ```
 ## # A tibble: 24 x 4
 ##    student baseball softball  diff
-##      <int>    <int>    <int> <int>
+##      <dbl>    <dbl>    <dbl> <dbl>
 ##  1       1       65       57     8
 ##  2       2       90       58    32
 ##  3       3       75       66     9
@@ -1266,7 +1266,7 @@ bodyfat=read_delim(myurl," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   athlete = col_integer(),
+##   athlete = col_double(),
 ##   xray = col_double(),
 ##   ultrasound = col_double()
 ## )
@@ -1279,7 +1279,7 @@ bodyfat
 ```
 ## # A tibble: 16 x 3
 ##    athlete  xray ultrasound
-##      <int> <dbl>      <dbl>
+##      <dbl> <dbl>      <dbl>
 ##  1       1  5          4.75
 ##  2       2  7          3.75
 ##  3       3  9.25       9   

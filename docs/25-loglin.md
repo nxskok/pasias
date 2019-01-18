@@ -14,8 +14,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -59,7 +59,7 @@ wisc=read_delim(my_url," ")
 ##   social.stratum = col_character(),
 ##   encouragement = col_character(),
 ##   college.plans = col_character(),
-##   frequency = col_integer()
+##   frequency = col_double()
 ## )
 ```
 
@@ -70,7 +70,7 @@ wisc
 ```
 ## # A tibble: 16 x 4
 ##    social.stratum encouragement college.plans frequency
-##    <chr>          <chr>         <chr>             <int>
+##    <chr>          <chr>         <chr>             <dbl>
 ##  1 lower          low           no                  749
 ##  2 lower          low           yes                  35
 ##  3 lower          high          no                  233
@@ -110,7 +110,7 @@ wisc %>% summarize(tot=sum(frequency))
 ```
 ## # A tibble: 1 x 1
 ##     tot
-##   <int>
+##   <dbl>
 ## 1  5199
 ```
 
@@ -394,7 +394,7 @@ vote0=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   id = col_integer(),
+##   id = col_double(),
 ##   class = col_character(),
 ##   age = col_character(),
 ##   sex = col_character(),
@@ -409,7 +409,7 @@ vote0
 ```
 ## # A tibble: 1,257 x 5
 ##       id class        age   sex    vote        
-##    <int> <chr>        <chr> <chr>  <chr>       
+##    <dbl> <chr>        <chr> <chr>  <chr>       
 ##  1     1 upper middle >75   male   conservative
 ##  2     2 upper middle >75   male   conservative
 ##  3     3 upper middle >75   male   conservative

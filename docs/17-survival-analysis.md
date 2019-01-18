@@ -13,8 +13,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -108,15 +108,15 @@ whas100=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   X1 = col_integer(),
-##   id = col_integer(),
+##   X1 = col_double(),
+##   id = col_double(),
 ##   admitdate = col_character(),
 ##   foldate = col_character(),
-##   los = col_integer(),
-##   lenfol = col_integer(),
-##   fstat = col_integer(),
-##   age = col_integer(),
-##   gender = col_integer(),
+##   los = col_double(),
+##   lenfol = col_double(),
+##   fstat = col_double(),
+##   age = col_double(),
+##   gender = col_double(),
 ##   bmi = col_double()
 ## )
 ```
@@ -128,7 +128,7 @@ whas100
 ```
 ## # A tibble: 100 x 10
 ##       X1    id admitdate  foldate      los lenfol fstat   age gender   bmi
-##    <int> <int> <chr>      <chr>      <int>  <int> <int> <int>  <int> <dbl>
+##    <dbl> <dbl> <chr>      <chr>      <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl>
 ##  1     1     1 3/13/1995  3/19/1995      4      6     1    65      0  31.4
 ##  2     2     2 1/14/1995  1/23/1996      5    374     1    88      1  22.7
 ##  3     3     3 2/17/1995  10/4/2001      5   2421     1    77      0  27.9
@@ -929,15 +929,15 @@ drugusers=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   row = col_integer(),
-##   ID = col_integer(),
-##   age = col_integer(),
-##   ndrugtx = col_integer(),
-##   treat = col_integer(),
-##   site = col_integer(),
-##   time = col_integer(),
-##   censor = col_integer(),
-##   herco = col_integer()
+##   row = col_double(),
+##   ID = col_double(),
+##   age = col_double(),
+##   ndrugtx = col_double(),
+##   treat = col_double(),
+##   site = col_double(),
+##   time = col_double(),
+##   censor = col_double(),
+##   herco = col_double()
 ## )
 ```
 
@@ -948,7 +948,7 @@ drugusers
 ```
 ## # A tibble: 628 x 9
 ##      row    ID   age ndrugtx treat  site  time censor herco
-##    <int> <int> <int>   <int> <int> <int> <int>  <int> <int>
+##    <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl>
 ##  1     1     1    39       1     1     0   188      1     3
 ##  2     2     2    33       8     1     0    26      1     3
 ##  3     3     3    33       3     1     0   207      1     2
@@ -1128,7 +1128,7 @@ drugusers
 ```
 ## # A tibble: 610 x 9
 ##      row    ID   age ndrugtx treat site   time censor    herco  
-##    <int> <int> <int>   <int> <chr> <chr> <int> <chr>     <chr>  
+##    <dbl> <dbl> <dbl>   <dbl> <chr> <chr> <dbl> <chr>     <chr>  
 ##  1     1     1    39       1 long  A       188 returned  neither
 ##  2     2     2    33       8 long  A        26 returned  neither
 ##  3     3     3    33       3 long  A       207 returned  one    
@@ -1205,7 +1205,7 @@ head(drugusers)
 ```
 ## # A tibble: 6 x 9
 ##     row    ID   age ndrugtx treat site   time censor    herco  
-##   <int> <int> <int>   <int> <chr> <chr> <int> <chr>     <chr>  
+##   <dbl> <dbl> <dbl>   <dbl> <chr> <chr> <dbl> <chr>     <chr>  
 ## 1     1     1    39       1 long  A       188 returned  neither
 ## 2     2     2    33       8 long  A        26 returned  neither
 ## 3     3     3    33       3 long  A       207 returned  one    

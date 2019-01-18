@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -55,7 +55,7 @@ movies=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   length = col_integer(),
+##   length = col_double(),
 ##   rating = col_character()
 ## )
 ```
@@ -67,7 +67,7 @@ movies
 ```
 ## # A tibble: 60 x 2
 ##    length rating
-##     <int> <chr> 
+##     <dbl> <chr> 
 ##  1     25 G     
 ##  2     75 G     
 ##  3     88 G     
@@ -852,7 +852,7 @@ movies=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   length = col_integer(),
+##   length = col_double(),
 ##   rating = col_character()
 ## )
 ```
@@ -864,7 +864,7 @@ movies
 ```
 ## # A tibble: 60 x 2
 ##    length rating
-##     <int> <chr> 
+##     <dbl> <chr> 
 ##  1     25 G     
 ##  2     75 G     
 ##  3     88 G     
@@ -892,7 +892,7 @@ movies %>% group_by(rating) %>%
 ```
 ## # A tibble: 4 x 3
 ##   rating count   med
-##   <chr>  <int> <int>
+##   <chr>  <int> <dbl>
 ## 1 G         15    82
 ## 2 PG        15   100
 ## 3 PG-13     15   117
@@ -1092,7 +1092,7 @@ summarize(count=n(),med=median(length))
 ```
 ## # A tibble: 4 x 3
 ##   rating count   med
-##   <chr>  <int> <int>
+##   <chr>  <int> <dbl>
 ## 1 G         15    82
 ## 2 PG        15   100
 ## 3 PG-13     15   117
@@ -1188,7 +1188,7 @@ movies %>% filter(length==100)
 ```
 ## # A tibble: 2 x 2
 ##   length rating
-##    <int> <chr> 
+##    <dbl> <chr> 
 ## 1    100 PG    
 ## 2    100 R
 ```
@@ -1605,7 +1605,7 @@ medians
 ```
 ## # A tibble: 4 x 2
 ##   rating   med
-##   <chr>  <int>
+##   <chr>  <dbl>
 ## 1 PG-13    117
 ## 2 R        103
 ## 3 PG       100
@@ -1636,7 +1636,7 @@ left_join(medians,by=c("second"="rating"))
 ```
 ## # A tibble: 6 x 6
 ##   first second      pval reject med.x med.y
-##   <chr> <chr>      <dbl> <lgl>  <int> <int>
+##   <chr> <chr>      <dbl> <lgl>  <dbl> <dbl>
 ## 1 G     PG     0.00799   TRUE      82   100
 ## 2 G     PG-13  0.0000590 TRUE      82   117
 ## 3 G     R      0.0106    FALSE     82   103
@@ -1760,7 +1760,7 @@ carbon=read_delim(my_url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   method = col_integer(),
+##   method = col_double(),
 ##   weight = col_double()
 ## )
 ```
@@ -1772,7 +1772,7 @@ carbon
 ```
 ## # A tibble: 15 x 2
 ##    method weight
-##     <int>  <dbl>
+##     <dbl>  <dbl>
 ##  1      1   12.0
 ##  2      1   12.0
 ##  3      1   12.0
@@ -2217,10 +2217,10 @@ caffeine.untidy=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   Sub = col_integer(),
-##   High = col_integer(),
-##   Moderate = col_integer(),
-##   None = col_integer()
+##   Sub = col_double(),
+##   High = col_double(),
+##   Moderate = col_double(),
+##   None = col_double()
 ## )
 ```
 
@@ -2231,7 +2231,7 @@ caffeine.untidy
 ```
 ## # A tibble: 12 x 4
 ##      Sub  High Moderate  None
-##    <int> <int>    <int> <int>
+##    <dbl> <dbl>    <dbl> <dbl>
 ##  1     1    72       68    68
 ##  2     2    65       80    74
 ##  3     3    68       64    59
@@ -2302,7 +2302,7 @@ caffeine
 ```
 ## # A tibble: 36 x 3
 ##      Sub amount score
-##    <int> <chr>  <int>
+##    <dbl> <chr>  <dbl>
 ##  1     1 High      72
 ##  2     2 High      65
 ##  3     3 High      68

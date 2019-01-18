@@ -34,8 +34,8 @@ library(tidyverse)
 
 ```
 ## ✔ tibble  1.4.2     ✔ purrr   0.2.5
-## ✔ tidyr   0.8.1     ✔ dplyr   0.7.8
-## ✔ readr   1.1.1     ✔ stringr 1.3.1
+## ✔ tidyr   0.8.2     ✔ dplyr   0.7.8
+## ✔ readr   1.3.1     ✔ stringr 1.3.1
 ## ✔ tibble  1.4.2     ✔ forcats 0.3.0
 ```
 
@@ -152,12 +152,12 @@ fruit1=read_table(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   Property = col_character(),
-##   Apple = col_integer(),
-##   Orange = col_integer(),
-##   Banana = col_integer(),
-##   Pear = col_integer(),
-##   Strawberry = col_integer(),
-##   Blueberry = col_integer()
+##   Apple = col_double(),
+##   Orange = col_double(),
+##   Banana = col_double(),
+##   Pear = col_double(),
+##   Strawberry = col_double(),
+##   Blueberry = col_double()
 ## )
 ```
 
@@ -168,7 +168,7 @@ fruit1
 ```
 ## # A tibble: 4 x 7
 ##   Property    Apple Orange Banana  Pear Strawberry Blueberry
-##   <chr>       <int>  <int>  <int> <int>      <int>     <int>
+##   <chr>       <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
 ## 1 Round.shape     1      1      0     0          0         1
 ## 2 Sweet           1      1      0     0          1         0
 ## 3 Crunchy         1      0      0     1          0         0
@@ -188,7 +188,7 @@ fruit2
 ```
 ## # A tibble: 4 x 6
 ##   Apple Orange Banana  Pear Strawberry Blueberry
-##   <int>  <int>  <int> <int>      <int>     <int>
+##   <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
 ## 1     1      1      0     0          0         1
 ## 2     1      1      0     0          1         0
 ## 3     1      0      0     1          0         0
@@ -444,12 +444,12 @@ dissims=read_table("fruits.txt")
 ## Parsed with column specification:
 ## cols(
 ##   fruit = col_character(),
-##   Apple = col_integer(),
-##   Orange = col_integer(),
-##   Banana = col_integer(),
-##   Pear = col_integer(),
-##   Strawberry = col_integer(),
-##   Blueberry = col_integer()
+##   Apple = col_double(),
+##   Orange = col_double(),
+##   Banana = col_double(),
+##   Pear = col_double(),
+##   Strawberry = col_double(),
+##   Blueberry = col_double()
 ## )
 ```
 
@@ -460,7 +460,7 @@ dissims
 ```
 ## # A tibble: 6 x 7
 ##   fruit      Apple Orange Banana  Pear Strawberry Blueberry
-##   <chr>      <int>  <int>  <int> <int>      <int>     <int>
+##   <chr>      <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
 ## 1 Apple          0      1      3     2          3         3
 ## 2 Orange         1      0      2     3          2         2
 ## 3 Banana         3      2      0     1          2         2
@@ -632,14 +632,14 @@ species=read_delim(my_url," ")
 ## Parsed with column specification:
 ## cols(
 ##   what = col_character(),
-##   Man = col_integer(),
-##   Monkey = col_integer(),
-##   Horse = col_integer(),
-##   Pig = col_integer(),
-##   Pigeon = col_integer(),
-##   Tuna = col_integer(),
-##   Mould = col_integer(),
-##   Fungus = col_integer()
+##   Man = col_double(),
+##   Monkey = col_double(),
+##   Horse = col_double(),
+##   Pig = col_double(),
+##   Pigeon = col_double(),
+##   Tuna = col_double(),
+##   Mould = col_double(),
+##   Fungus = col_double()
 ## )
 ```
 
@@ -650,7 +650,7 @@ species
 ```
 ## # A tibble: 8 x 9
 ##   what     Man Monkey Horse   Pig Pigeon  Tuna Mould Fungus
-##   <chr>  <int>  <int> <int> <int>  <int> <int> <int>  <int>
+##   <chr>  <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>  <dbl>
 ## 1 Man        0      1    17    13     16    31    63     66
 ## 2 Monkey     1      0    16    12     15    32    62     65
 ## 3 Horse     17     16     0     5     16    27    64     68
@@ -981,16 +981,16 @@ beer=read_table2(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   student = col_character(),
-##   AnchorS = col_integer(),
-##   Bass = col_integer(),
-##   Becks = col_integer(),
-##   Corona = col_integer(),
-##   GordonB = col_integer(),
-##   Guinness = col_integer(),
-##   Heineken = col_integer(),
-##   PetesW = col_integer(),
-##   SamAdams = col_integer(),
-##   SierraN = col_integer()
+##   AnchorS = col_double(),
+##   Bass = col_double(),
+##   Becks = col_double(),
+##   Corona = col_double(),
+##   GordonB = col_double(),
+##   Guinness = col_double(),
+##   Heineken = col_double(),
+##   PetesW = col_double(),
+##   SamAdams = col_double(),
+##   SierraN = col_double()
 ## )
 ```
 
@@ -1001,7 +1001,7 @@ beer
 ```
 ## # A tibble: 32 x 11
 ##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
-##    <chr>     <int> <int> <int>  <int>   <int>    <int>    <int>  <int>
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
 ##  1 S001          5     9     7      1       7        6        6      5
 ##  2 S008          7     5     6      8       8        4        8      8
 ##  3 S015          7     7     5      6       6        1        8      4
@@ -1012,8 +1012,8 @@ beer
 ##  8 S050          5     3     1      5       5        5        3      5
 ##  9 S057          9     3     2      6       4        6        1      5
 ## 10 S064          2     6     6      5       6        4        8      4
-## # ... with 22 more rows, and 2 more variables: SamAdams <int>,
-## #   SierraN <int>
+## # ... with 22 more rows, and 2 more variables: SamAdams <dbl>,
+## #   SierraN <dbl>
 ```
 
        
@@ -1209,7 +1209,7 @@ beer
 ```
 ## # A tibble: 32 x 11
 ##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
-##    <chr>     <int> <int> <int>  <int>   <int>    <int>    <int>  <int>
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
 ##  1 S001          5     9     7      1       7        6        6      5
 ##  2 S008          7     5     6      8       8        4        8      8
 ##  3 S015          7     7     5      6       6        1        8      4
@@ -1220,8 +1220,8 @@ beer
 ##  8 S050          5     3     1      5       5        5        3      5
 ##  9 S057          9     3     2      6       4        6        1      5
 ## 10 S064          2     6     6      5       6        4        8      4
-## # ... with 22 more rows, and 2 more variables: SamAdams <int>,
-## #   SierraN <int>
+## # ... with 22 more rows, and 2 more variables: SamAdams <dbl>,
+## #   SierraN <dbl>
 ```
 
        
@@ -1840,12 +1840,12 @@ seabed.z=read_csv(my_url)
 ## Parsed with column specification:
 ## cols(
 ##   site = col_character(),
-##   a = col_integer(),
-##   b = col_integer(),
-##   c = col_integer(),
-##   d = col_integer(),
-##   e = col_integer(),
-##   depth = col_integer(),
+##   a = col_double(),
+##   b = col_double(),
+##   c = col_double(),
+##   d = col_double(),
+##   e = col_double(),
+##   depth = col_double(),
 ##   pollution = col_double(),
 ##   temp = col_double(),
 ##   sediment = col_character()
@@ -1859,7 +1859,7 @@ seabed.z
 ```
 ## # A tibble: 30 x 10
 ##    site      a     b     c     d     e depth pollution  temp sediment
-##    <chr> <int> <int> <int> <int> <int> <int>     <dbl> <dbl> <chr>   
+##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
 ##  1 s1        0     2     9    14     2    72       4.8   3.5 s       
 ##  2 s2       26     4    13    11     0    75       2.8   2.5 c       
 ##  3 s3        0    10     9     8     0    59       5.4   2.7 c       
@@ -1917,7 +1917,7 @@ seabed.z %>% filter(site=="s3" | site=="s20")
 ```
 ## # A tibble: 2 x 10
 ##   site      a     b     c     d     e depth pollution  temp sediment
-##   <chr> <int> <int> <int> <int> <int> <int>     <dbl> <dbl> <chr>   
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
 ## 1 s3        0    10     9     8     0    59       5.4   2.7 c       
 ## 2 s20       0    10    14     9     0    73       5.6   3   s
 ```
@@ -1934,7 +1934,7 @@ seabed.z %>% filter(site %in% c("s3", "s20"))
 ```
 ## # A tibble: 2 x 10
 ##   site      a     b     c     d     e depth pollution  temp sediment
-##   <chr> <int> <int> <int> <int> <int> <int>     <dbl> <dbl> <chr>   
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
 ## 1 s3        0    10     9     8     0    59       5.4   2.7 c       
 ## 2 s20       0    10    14     9     0    73       5.6   3   s
 ```
@@ -1971,7 +1971,7 @@ seabed.z %>% filter(site=="s4" | site=="s7")
 ```
 ## # A tibble: 2 x 10
 ##   site      a     b     c     d     e depth pollution  temp sediment
-##   <chr> <int> <int> <int> <int> <int> <int>     <dbl> <dbl> <chr>   
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
 ## 1 s4        0     0    15     3     0    64       8.2   2.9 s       
 ## 2 s7        9     6     0    11     2    53       4.6   2.9 s
 ```
@@ -2193,7 +2193,7 @@ seabed.z %>% slice(c(3,20))
 ```
 ## # A tibble: 2 x 10
 ##   site      a     b     c     d     e depth pollution  temp sediment
-##   <chr> <int> <int> <int> <int> <int> <int>     <dbl> <dbl> <chr>   
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
 ## 1 s3        0    10     9     8     0    59       5.4   2.7 c       
 ## 2 s20       0    10    14     9     0    73       5.6   3   s
 ```
@@ -2971,7 +2971,7 @@ cars=read_csv(my_url)
 ##   Carname = col_character(),
 ##   mpg = col_double(),
 ##   disp = col_double(),
-##   hp = col_integer(),
+##   hp = col_double(),
 ##   drat = col_double(),
 ##   wt = col_double(),
 ##   qsec = col_double()
@@ -2985,7 +2985,7 @@ cars
 ```
 ## # A tibble: 32 x 7
 ##    Carname             mpg  disp    hp  drat    wt  qsec
-##    <chr>             <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+##    <chr>             <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1 Mazda RX4          21    160    110  3.9   2.62  16.5
 ##  2 Mazda RX4 Wag      21    160    110  3.9   2.88  17.0
 ##  3 Datsun 710         22.8  108     93  3.85  2.32  18.6
@@ -4757,7 +4757,7 @@ bridges0=read_csv(my_url,na="?")
 ##   erected = col_character(),
 ##   purpose = col_character(),
 ##   length = col_character(),
-##   lanes = col_integer(),
+##   lanes = col_double(),
 ##   clear_g = col_character(),
 ##   t_d = col_character(),
 ##   material = col_character(),
@@ -4774,7 +4774,7 @@ bridges0
 ```
 ## # A tibble: 108 x 13
 ##    id    river location erected purpose length lanes clear_g t_d  
-##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>
+##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
 ##  1 E1    M            3 CRAFTS  HIGHWAY <NA>       2 N       THRO…
 ##  2 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  3 E3    A           39 CRAFTS  AQUEDU… <NA>       1 N       THRO…
@@ -4947,7 +4947,7 @@ bridges
 ```
 ## # A tibble: 70 x 14
 ##    id    river location erected purpose length lanes clear_g t_d  
-##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>
+##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
 ##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
@@ -4975,7 +4975,7 @@ bridges
 ```
 ## # A tibble: 70 x 14
 ##    id    river location erected purpose length lanes clear_g t_d  
-##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>
+##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
 ##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
@@ -5175,7 +5175,7 @@ bridges %>% slice(c(3,4)) %>% print(width=Inf)
 ```
 ## # A tibble: 2 x 14
 ##   id    river location erected purpose  length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <int> <chr>   <chr>  
+##   <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
 ## 1 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
 ## 2 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
 ##   material span   rel_l type   is_complete
@@ -5237,7 +5237,7 @@ bridges
 ```
 ## # A tibble: 70 x 14
 ##    id    river location erected purpose length lanes clear_g t_d  
-##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>
+##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
 ##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
@@ -5457,7 +5457,7 @@ mmm=read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
-##   .default = col_integer()
+##   .default = col_double()
 ## )
 ```
 
@@ -5472,7 +5472,7 @@ mmm
 ```
 ## # A tibble: 70 x 71
 ##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`
-##    <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int>
+##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1     1     0     0     2     4     3     1     2     4     3     1
 ##  2     2     0     0     2     4     3     1     2     4     3     1
 ##  3     3     2     2     0     6     5     1     2     4     5     1
@@ -5483,19 +5483,19 @@ mmm
 ##  8     8     4     4     4     4     3     3     4     0     4     3
 ##  9     9     3     3     5     3     3     4     5     4     0     4
 ## 10    10     1     1     1     5     4     0     1     3     4     0
-## # ... with 60 more rows, and 60 more variables: `11` <int>,
-## #   `12` <int>, `13` <int>, `14` <int>, `15` <int>, `16` <int>,
-## #   `17` <int>, `18` <int>, `19` <int>, `20` <int>, `21` <int>,
-## #   `22` <int>, `23` <int>, `24` <int>, `25` <int>, `26` <int>,
-## #   `27` <int>, `28` <int>, `29` <int>, `30` <int>, `31` <int>,
-## #   `32` <int>, `33` <int>, `34` <int>, `35` <int>, `36` <int>,
-## #   `37` <int>, `38` <int>, `39` <int>, `40` <int>, `41` <int>,
-## #   `42` <int>, `43` <int>, `44` <int>, `45` <int>, `46` <int>,
-## #   `47` <int>, `48` <int>, `49` <int>, `50` <int>, `51` <int>,
-## #   `52` <int>, `53` <int>, `54` <int>, `55` <int>, `56` <int>,
-## #   `57` <int>, `58` <int>, `59` <int>, `60` <int>, `61` <int>,
-## #   `62` <int>, `63` <int>, `64` <int>, `65` <int>, `66` <int>,
-## #   `67` <int>, `68` <int>, `69` <int>, `70` <int>
+## # ... with 60 more rows, and 60 more variables: `11` <dbl>,
+## #   `12` <dbl>, `13` <dbl>, `14` <dbl>, `15` <dbl>, `16` <dbl>,
+## #   `17` <dbl>, `18` <dbl>, `19` <dbl>, `20` <dbl>, `21` <dbl>,
+## #   `22` <dbl>, `23` <dbl>, `24` <dbl>, `25` <dbl>, `26` <dbl>,
+## #   `27` <dbl>, `28` <dbl>, `29` <dbl>, `30` <dbl>, `31` <dbl>,
+## #   `32` <dbl>, `33` <dbl>, `34` <dbl>, `35` <dbl>, `36` <dbl>,
+## #   `37` <dbl>, `38` <dbl>, `39` <dbl>, `40` <dbl>, `41` <dbl>,
+## #   `42` <dbl>, `43` <dbl>, `44` <dbl>, `45` <dbl>, `46` <dbl>,
+## #   `47` <dbl>, `48` <dbl>, `49` <dbl>, `50` <dbl>, `51` <dbl>,
+## #   `52` <dbl>, `53` <dbl>, `54` <dbl>, `55` <dbl>, `56` <dbl>,
+## #   `57` <dbl>, `58` <dbl>, `59` <dbl>, `60` <dbl>, `61` <dbl>,
+## #   `62` <dbl>, `63` <dbl>, `64` <dbl>, `65` <dbl>, `66` <dbl>,
+## #   `67` <dbl>, `68` <dbl>, `69` <dbl>, `70` <dbl>
 ```
 
 ```r
@@ -5577,7 +5577,7 @@ bridges %>% slice(c(41,42,48)) %>% print(width=Inf)
 ```
 ## # A tibble: 3 x 14
 ##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>  
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
 ## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THROUGH
 ## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THROUGH
 ## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THROUGH
@@ -5605,7 +5605,7 @@ bridges %>% slice(c(10,12,19)) %>% print(width=Inf)
 ```
 ## # A tibble: 3 x 14
 ##   id    river location erected  purpose  length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>    <chr>    <chr>  <int> <chr>   <chr>  
+##   <chr> <chr>    <dbl> <chr>    <chr>    <chr>  <dbl> <chr>   <chr>  
 ## 1 E19   A           29 CRAFTS   HIGHWAY  MEDIUM     2 N       THROUGH
 ## 2 E22   A           24 EMERGING HIGHWAY  MEDIUM     4 G       THROUGH
 ## 3 E4    A           27 MATURE   AQUEDUCT MEDIUM     1 N       THROUGH
@@ -5632,7 +5632,7 @@ bridges %>% slice(c(8,24,52)) %>% print(width=Inf)
 ```
 ## # A tibble: 3 x 14
 ##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>  
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
 ## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THROUGH
 ## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THROUGH
 ## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THROUGH
@@ -5712,7 +5712,7 @@ bridges.rpart %>% slice(c(20,29)) %>% print(width=Inf)
 ```
 ## # A tibble: 2 x 15
 ##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <int> <chr>   <chr>  
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
 ## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THROUGH
 ## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THROUGH
 ##   material span   rel_l type     is_complete cluster
@@ -5813,7 +5813,7 @@ athletes=read_tsv(my_url)
 ##   WCC = col_double(),
 ##   Hc = col_double(),
 ##   Hg = col_double(),
-##   Ferr = col_integer(),
+##   Ferr = col_double(),
 ##   BMI = col_double(),
 ##   SSF = col_double(),
 ##   `%Bfat` = col_double(),
@@ -5830,7 +5830,7 @@ athletes
 ```
 ## # A tibble: 202 x 13
 ##    Sex   Spo…   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
-##    <chr> <ch> <dbl> <dbl> <dbl> <dbl> <int> <dbl> <dbl>   <dbl> <dbl>
+##    <chr> <ch> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
 ##  1 fema… Net…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
 ##  2 fema… Net…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
 ##  3 fema… Net…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4

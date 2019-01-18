@@ -40,8 +40,8 @@ library(tidyverse)
 ```
 ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
+## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0
 ```
 
 ```
@@ -67,9 +67,9 @@ juice=read_delim(url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   run = col_integer(),
+##   run = col_double(),
 ##   sweetness = col_double(),
-##   pectin = col_integer()
+##   pectin = col_double()
 ## )
 ```
 
@@ -110,7 +110,7 @@ juice
 ```
 ## # A tibble: 24 x 3
 ##      run sweetness pectin
-##    <int>     <dbl>  <int>
+##    <dbl>     <dbl>  <dbl>
 ##  1     1       5.2    220
 ##  2     2       5.5    227
 ##  3     3       6      259
@@ -166,15 +166,15 @@ read_delim("a.txt"," ",col_names=c("x","y"),skip=1)
 ```
 ## Parsed with column specification:
 ## cols(
-##   x = col_integer(),
-##   y = col_integer()
+##   x = col_double(),
+##   y = col_double()
 ## )
 ```
 
 ```
 ## # A tibble: 3 x 2
 ##       x     y
-##   <int> <int>
+##   <dbl> <dbl>
 ## 1     1     2
 ## 2     3     4
 ## 3     5     6
@@ -269,9 +269,9 @@ soap=read_delim(url," ")
 ```
 ## Parsed with column specification:
 ## cols(
-##   case = col_integer(),
-##   scrap = col_integer(),
-##   speed = col_integer(),
+##   case = col_double(),
+##   scrap = col_double(),
+##   speed = col_double(),
 ##   line = col_character()
 ## )
 ```
@@ -283,7 +283,7 @@ soap
 ```
 ## # A tibble: 27 x 4
 ##     case scrap speed line 
-##    <int> <int> <int> <chr>
+##    <dbl> <dbl> <dbl> <chr>
 ##  1     1   218   100 a    
 ##  2     2   248   125 a    
 ##  3     3   360   220 a    
@@ -713,7 +713,7 @@ shipments=read_csv(url)
 ## Parsed with column specification:
 ## cols(
 ##   warehouse = col_character(),
-##   size = col_integer(),
+##   size = col_double(),
 ##   cost = col_double()
 ## )
 ```
@@ -731,7 +731,7 @@ shipments
 ```
 ## # A tibble: 10 x 3
 ##    warehouse  size  cost
-##    <chr>     <int> <dbl>
+##    <chr>     <dbl> <dbl>
 ##  1 A           225 12.0 
 ##  2 B           350 14.1 
 ##  3 A           150  8.93
