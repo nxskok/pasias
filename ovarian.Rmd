@@ -95,6 +95,9 @@ print.default(y)
 
  
 
+The `attr(,"class")` thing at the bottom of this says that `y` is actually  a `Surv` object, which is how it knows to display as it does, as 26 values some of which have plusses.
+`r tufte::margin_note("Internally, printing a *Surv* thing calls the method *print.Surv*, which is defined in the *survival* package.")`
+
 The way R works out the length of something is its total number of
 entries, which for this matrix is $26 \times 2=52$. The only things
 you can add via `mutate` to a data frame with 26 rows have
@@ -117,14 +120,17 @@ a technical term, you should explain what it means.)
 Solution
 
 
+
 These are the censored observations. You can say this, but you
 also need to say what that means (this is the "technical term"
 referred to in the question). The observations with a `+`
 are individuals who were never observed to die, or who were still
 alive at the end of the study.
+
 I want you to demonstrate that you know what censored
 *means*, not just that you know when you have a censored
 observation.
+
 Extra: in a study like this, patients are typically "recruited"
 into the study at various different times. Patients who happened
 to be in the study near the beginning and who survived can have a
@@ -137,6 +143,7 @@ the doctor had a paper to write. (There is *some* information
 in these small censored values, but not much, because most of the
 patients, even the ones who eventually died, survived for longer
 than 377 days.)
+
 The other thing that might have happened is that a patient with
 the 377-censored value died *from something else* unrelated
 to ovarian cancer. The study is only concerned with deaths from
@@ -183,15 +190,18 @@ terms of their effects on survival (from ovarian cancer)?
 Solution
 
 
+
 Look at the P-value for my `factor(rx)2`, 0.203. This is
 not small, so there is no evidence of a difference between
 treatments. 
+
 Extra: the reason for the odd label is that we have turned
 treatment into a categorical variable; treatment 1 is used as the
 baseline, and the negative slope says that the "hazard of death"
 is lower for treatment 2 than for treatment 1: that is, people
 survive longer on treatment 2, but the difference is not big
 enough to be significant (we also have a smallish sample size).
+
 Since there are only two treatments, it would in fact have been OK
 to leave them as numbers (with two numbers one unit apart, the
 slope would have been the same size as here), but I think it's a
@@ -201,10 +211,12 @@ categories. I might have used `t1` and `t2` in this
 case, or the names of the different treatments.
 
 
+
 (f) Is there a significant effect of age? If there is, describe
 the effect that age has on survival.
 
 Solution
+
 
 
 The P-value for age is 0.0014, small, so age definitely has a
@@ -212,10 +224,12 @@ significant effect on survival. As to what kind of effect, look at
 the slope coefficient, 0.15, positive, which means that increased
 age-at-diagnosis goes with an *increased* hazard of death, or
 that older patients do not survive as long.
+
 I would like you to get to the plain-English words at the
 end. Part of your job as a statistician is explaining what you got
 to people who are doctors, managers, etc., who won't
 understand the terminology. 
+
 Thus, one mark for assessing significance
 via P-value, one for looking at the slope coefficient and noting
 that it is positive, and one for getting to "older patients do     not survive as long", or 
@@ -223,12 +237,15 @@ that it is positive, and one for getting to "older patients do     not survive a
 (Strictly, this is also "all else equal" as usual,
 since survival time might also have depended on treatment, but the
 point of this question is for you to get to "older patients do not survive as long".) 
+
 (The interpretation of the slope may seem backwards: a positive
 slope means a *shorter* survival time for a larger age. This
 is why I talk about "hazard of death", since that guides us to
 the correct interpretation.)
+
 Extra: I was curious about what would happen if I just included
 `rx` in the model:
+
 ```{r }
 time.2=update(time.1,.~.-age)
 summary(time.2)

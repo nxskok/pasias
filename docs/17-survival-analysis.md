@@ -278,42 +278,34 @@ drop1(whas100.1, test="Chisq")
 
      
 
-This is here the same as the output from `summary`, but where it scores is if you have a categorical explanatory variable like "treatment" with more than two levels: `drop1` will tell you about keeping or dropping it as a 
-whole.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Our categorical variable *gender* has only two levels.</span>
-If you prefer:
+This is here equivalent to
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not exactly the same as that output, because it  is doing a test that would be the same if you had an infinitely  large sample, but is slightly different with an ordinary finite number of observations.</span> the output 
+from `summary`, but where it
+scores is if you have a categorical explanatory variable like
+"treatment" with more than two levels: `drop1` will tell you
+about keeping or dropping it as a whole.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Our categorical  variable *gender* has only two levels.</span>
+
+If you prefer: 
 
 
 ```r
-whas100.step=step(whas100.1,trace=0)
-summary(whas100.step)
+step(whas100.1, trace=0, test="Chisq")
 ```
 
 ```
 ## Call:
 ## coxph(formula = y ~ age + bmi, data = whas100)
 ## 
-##   n= 100, number of events= 51 
+##         coef exp(coef) se(coef)      z        p
+## age  0.03927   1.04005  0.01187  3.309 0.000938
+## bmi -0.07116   0.93131  0.03614 -1.969 0.048952
 ## 
-##         coef exp(coef) se(coef)      z Pr(>|z|)    
-## age  0.03927   1.04005  0.01187  3.309 0.000938 ***
-## bmi -0.07116   0.93131  0.03614 -1.969 0.048952 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-##     exp(coef) exp(-coef) lower .95 upper .95
-## age    1.0401     0.9615    1.0161    1.0645
-## bmi    0.9313     1.0738    0.8676    0.9997
-## 
-## Concordance= 0.681  (se = 0.037 )
-## Rsquare= 0.192   (max possible= 0.985 )
-## Likelihood ratio test= 21.32  on 2 df,   p=2e-05
-## Wald test            = 19  on 2 df,   p=7e-05
-## Score (logrank) test = 19.99  on 2 df,   p=5e-05
+## Likelihood ratio test=21.32  on 2 df, p=2.346e-05
+## n= 100, number of events= 51
 ```
 
      
-
 `gender` comes out, but the others stay. As usual, put
 `trace=1` or `trace=2` to get more output, which will
 look like a sequence of `drop1`'s one after the other.
@@ -368,7 +360,7 @@ age and BMI. (`quantile`.) Round these off to the
 nearest whole number. (Do the rounding off yourself, though R has a
 function `round` that does this, which you can investigate if
 you want.) As an alternative, you can get these by passing the whole
-data frame into `summary`.
+data frame, or the columns of it you want, into `summary`.
  
 Solution
 
@@ -398,80 +390,27 @@ or
 
 
 ```r
-with(whas100, {
-print(quantile(age))
-print(quantile(bmi))
-})
-```
-
-```
-##    0%   25%   50%   75%  100% 
-## 32.00 59.75 71.00 80.25 92.00 
-##       0%      25%      50%      75%     100% 
-## 14.91878 23.53717 27.19158 30.34770 39.93835
-```
-
- 
-
-(since there are two things in the `with`, you need the curly
-brackets, and since there are curly brackets you need to explicitly
-`print` the things you want to display.)
-Or, tidyverse-style:
-
-
-```r
-whas100 %>% select(age,bmi) %>% 
-summarize(ageq=list(quantile(age)),
-bmiq=list(quantile(bmi)))
-```
-
-```
-## # A tibble: 1 x 2
-##   ageq      bmiq     
-##   <list>    <list>   
-## 1 <dbl [5]> <dbl [5]>
-```
-
- 
-
-These are list-columns containing the five quantiles for each
-variable, which we then have to pull apart:
-
-
-```r
-whas100 %>% select(age,bmi) %>% 
-summarize(ageq=list(quantile(age)),
-bmiq=list(quantile(bmi))) %>%
-unnest()
-```
-
-```
-## # A tibble: 5 x 2
-##    ageq  bmiq
-##   <dbl> <dbl>
-## 1  32    14.9
-## 2  59.8  23.5
-## 3  71    27.2
-## 4  80.2  30.3
-## 5  92    39.9
-```
-
- 
-
-The reason for the `list` and the list-columns and the
-`unnest` is that `quantile` returns the five numbers of
-the five-number summary, rather than just one number (in which case it
-would be a regular `summarize`).
-This might strike you as a bit repetitive. There is also a `summarize_all`, which summarizes all the columns (after you've done the `select`). 
-This requires a function to summarize with, which we need to write first:
-
-
-```r
-lq=function(x) {
-list(quantile(x))
-}
 whas100 %>% select(age, bmi) %>%
-summarize_all(lq) %>%
+summary()
+```
+
+```
+##       age             bmi       
+##  Min.   :32.00   Min.   :14.92  
+##  1st Qu.:59.75   1st Qu.:23.54  
+##  Median :71.00   Median :27.19  
+##  Mean   :68.25   Mean   :27.04  
+##  3rd Qu.:80.25   3rd Qu.:30.35  
+##  Max.   :92.00   Max.   :39.94
+```
+
+ 
+Or, pure tidyverse: use `summarize_all`, which summarizes all the columns (after you've done the `select`). 
+
+
+```r
+whas100 %>% select(age, bmi) %>%
+summarize_all(~list(quantile(.))) %>%
 unnest()
 ```
 
@@ -487,64 +426,14 @@ unnest()
 ```
 
  
-The `summary` approach is simply this (which I think I now like
-best of all):
 
-
-```r
-summary(whas100)
-```
-
-```
-##        X1               id          admitdate           foldate         
-##  Min.   :  1.00   Min.   :  1.00   Length:100         Length:100        
-##  1st Qu.: 25.75   1st Qu.: 25.75   Class :character   Class :character  
-##  Median : 50.50   Median : 50.50   Mode  :character   Mode  :character  
-##  Mean   : 50.50   Mean   : 50.50                                        
-##  3rd Qu.: 75.25   3rd Qu.: 75.25                                        
-##  Max.   :100.00   Max.   :100.00                                        
-##       los            lenfol         fstat           age       
-##  Min.   : 1.00   Min.   :   6   Min.   :0.00   Min.   :32.00  
-##  1st Qu.: 4.00   1st Qu.: 715   1st Qu.:0.00   1st Qu.:59.75  
-##  Median : 5.00   Median :1878   Median :1.00   Median :71.00  
-##  Mean   : 6.84   Mean   :1505   Mean   :0.51   Mean   :68.25  
-##  3rd Qu.: 7.00   3rd Qu.:2076   3rd Qu.:1.00   3rd Qu.:80.25  
-##  Max.   :56.00   Max.   :2719   Max.   :1.00   Max.   :92.00  
-##      gender          bmi       
-##  Min.   :0.00   Min.   :14.92  
-##  1st Qu.:0.00   1st Qu.:23.54  
-##  Median :0.00   Median :27.19  
-##  Mean   :0.35   Mean   :27.04  
-##  3rd Qu.:1.00   3rd Qu.:30.35  
-##  Max.   :1.00   Max.   :39.94
-```
-
- 
-
-or, if you want just the summaries of `age` and `bmi`,
-you select those columns first before passing the data frame into
-`summary`: 
-
-
-```r
-whas100 %>% select(age,bmi) %>% summary()
-```
-
-```
-##       age             bmi       
-##  Min.   :32.00   Min.   :14.92  
-##  1st Qu.:59.75   1st Qu.:23.54  
-##  Median :71.00   Median :27.19  
-##  Mean   :68.25   Mean   :27.04  
-##  3rd Qu.:80.25   3rd Qu.:30.35  
-##  Max.   :92.00   Max.   :39.94
-```
-
- 
-
-Think small tools, combined.
-
-Whichever of this multitude of ways appeals to you:
+The reason for the `list()` and the `unnest()` is that
+`quantile` returns five numbers rather than just one, so it has
+to go into the output data frame as a list-column, which then gets
+broken apart with `unnest` so that you can see it. Try it
+without the `unnest()` line to see what happens if you don't do
+that.
+Using whichever of this multitude of ways appeals to you:
 
 60, 71 and 80 for age, 24, 27 and 30 for BMI. 
  
@@ -556,7 +445,7 @@ with.
 Solution
 
 
-The inevitable `crossing`:
+The inevitable `crossing`. This is probably quickest:
 
 ```r
 whas100.new=crossing(age=c(60,71,80),bmi=c(24,27,30))
@@ -581,7 +470,9 @@ whas100.new
      
 
 Or, with some setup beforehand to make the `crossing`
-clearer. This is my no-think approach:
+clearer. This is my no-think approach, which is what I recommend;
+vectors with plural names containing the values, and inside the
+`crossing`, a singular name equals a plural one:
 
 
 ```r
@@ -650,7 +541,7 @@ This is actually easy once you work out what to do:
 ggsurvplot(pp2, conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -739,7 +630,7 @@ ggcoxdiagnostics(whas100.2)+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
      
 
@@ -788,7 +679,24 @@ Ah, that seems to be it. The significant positive coefficient on
 `bmi`-squared 
 means that the "hazard of dying" increases faster with increasing
 `bmi`, so there ought to be an optimal BMI beyond which
-survival chances decrease again. Let's explore that on a graph.
+survival chances decrease again. 
+Have we improved the residuals by adding the squared term?
+
+
+```r
+ggcoxdiagnostics(whas100.3)+geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+
+ 
+
+I call those "inconsequential wiggles" now, so I think we are good.
+Let's explore the quadratic relationship on a graph.
 
 I'm going to focus on a close-to-median age of 70, since, in this
 model, the effect of BMI is the same for all ages (to make it
@@ -837,7 +745,7 @@ And then the plot:
 ggsurvplot(pp3, conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
  
 
@@ -977,8 +885,9 @@ removes all rows that have missing values in them.)
 Solution
 
 
-First off, `summary` is a quick way to show how many missing values there are:
-
+First off, `summary` is a quick way to show how many missing
+values there are:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using *mutate-if*. However, we don't have any text  columns here, so what we do here is good for this data set.</span>
 
 ```r
 summary(drugusers)
@@ -1058,8 +967,7 @@ summary(drugusers)
  
 
 No NA left. Gosh, as they say, that was easy.
-
-Extra: how many rows did we lose:
+Extra: how many rows did we lose?
 
 
 ```r
@@ -1079,7 +987,7 @@ rows.)
 This is a very unsophisticated way of dealing with missing
 values. Another way is to "impute" them, that is, to guess what they
 would have been, and then fill in the guessed values and use them as
-if they were the truth.
+if they were the truth, for example by regressing the columns with missing values on all the others, and using the regression predictions in place of the missing values.
 
 
 
@@ -1102,7 +1010,11 @@ These variables are actually categorical rather than quantitative:
 
 * `herco`
 
-Most of them have only two levels, so it doesn't matter whether we make them categorical or leave them as numbers, but for `herco` it matters. Let's give them all sensible values, mostly with `ifelse`, thus:
+Most of them have only two levels, so it doesn't matter whether
+we make them categorical or leave them as numbers, but for
+`herco` it matters. Let's give them all sensible values,
+mostly with `ifelse`,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Case-when is much clearer than using nested if-elses when you have three or more categories, as for *herco*.</span> thus:
 
 ```r
 drugusers %>% mutate(
@@ -1159,7 +1071,9 @@ Solution
 This is `Surv` in package `survival`. The response
 variable needs to encode two things: the time until the event of
 interest (return to drug use) and whether or not that event
-happened for each patient. In this case, that is
+happened for each patient.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Some people define the response variable right inside the *coxph*, in the same way as putting something like *log(y)* as a response in an *lm*, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.</span>
+In this case, that is
 `censor="returned"`. 
 
 ```r
@@ -1228,7 +1142,7 @@ ends, and studies of this kind carry on for years:
 ggplot(drugusers,aes(x=censor,y=time))+geom_boxplot()
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
  
 Yep. The smallest time for a censored observation would be an upper outlier
@@ -1248,7 +1162,7 @@ ggplot(drugusers,aes(x=treat,y=time,colour=censor))+
 geom_boxplot()
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
  
 
@@ -1585,7 +1499,7 @@ This:
 ggsurvplot(pp, conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
    
 
@@ -1868,7 +1782,7 @@ which gives means and five-number summaries for each of the variables
 (b) Create a suitable response variable for a Cox
 proportional-hazards survival model, bearing in mind that the
 "event" here is death. Display your response variable, and explain
-briefly what the `+` signs attached to some of the variables
+briefly what the `+` signs attached to some of the values
 mean, without using a technical term.
 
 
@@ -2285,35 +2199,10 @@ myeloma %>% select(logbun,hgb) %>% summary()
 ```
 
  
-The `with` method
-is a bit hairy because there are two things to calculate inside, so
-you have to do it like this:
 
-
-```r
-with(myeloma, {
-print(quantile(logbun))
-print(quantile(hgb))
-})
-```
-
-```
-##     0%    25%    50%    75%   100% 
-## 0.7782 1.1461 1.3222 1.5682 2.2355 
-##   0%  25%  50%  75% 100% 
-##  4.9  8.8 10.2 12.0 14.6
-```
-
-
-
-with the same result. Note that the multiple things to do are
-surrounded by curly brackets, and to display something within curly
-brackets you have to explicitly `print` it.
-
-The `tidyverse` way is actually a bit
-inelegant, because you have to calculate two things for two variables
-(`summarize` will only allow you to have a single-number
-answer): 
+The obvious `tidyverse` way is actually a bit
+inelegant, because you have to calculate two things for two variables:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Because *summarize* will only allow you to have a single-number answer.</span> 
 
 
 ```r
@@ -2336,49 +2225,6 @@ There is a `tidyverse` way to obtain the quartiles of
 *all* the columns. It lives in package `purrr`, which gets
 loaded with the `tidyverse`:
 
-
-```r
-map_dbl(myeloma,quantile,0.25)
-```
-
-```
-##     time  vstatus   logbun      hgb platelet      age   logwbc     frac 
-##   7.0000   0.0000   1.1461   8.8000   1.0000  51.0000   3.6435   1.0000 
-##   logpbm  protein    scalc 
-##   1.3617   0.0000   9.0000
-```
-
-```r
-map_dbl(myeloma,quantile,0.75)
-```
-
-```
-##     time  vstatus   logbun      hgb platelet      age   logwbc     frac 
-##  35.0000   1.0000   1.5682  12.0000   1.0000  67.0000   3.8751   1.0000 
-##   logpbm  protein    scalc 
-##   1.8451   4.0000  10.0000
-```
-
- 
-
-So what you do is a `select` to get just `logbun` and
-`hgb`, first, and then, for example:
-
-
-```r
-myeloma %>% select(logbun,hgb) %>% map_dbl(quantile,0.25)
-```
-
-```
-## logbun    hgb 
-## 1.1461 8.8000
-```
-
- 
-
-Can we get them both in one shot? Let's see what this does:
-
-
 ```r
 myeloma %>% select(logbun,hgb) %>% 
 map(quantile, c(0.25,0.75))
@@ -2399,10 +2245,9 @@ map(quantile, c(0.25,0.75))
 This is what R calls a `list`. It would look nicer as a data
 frame. There is a way to get that:
 
-
 ```r
 myeloma %>% select(logbun,hgb) %>% 
-map_df(quantile, c(0.25,0.75))
+map_df(~quantile(.,c(0.25,0.75)))
 ```
 
 ```
@@ -2414,7 +2259,6 @@ map_df(quantile, c(0.25,0.75))
 ```
 
  
-
 The `25%` and `75%` have gone missing. They were
 actually the `names` of each of the components of the list,
 which I don't think we easily have access to.
@@ -2455,8 +2299,8 @@ Or anything equivalent to that. This is my procedure, but you are free
 to shorten it if it will still work. The place you have to get to in
 the end is a data frame with columns called `logbun` and
 `hgb`, and the right four combinations of values. If you want
-to round them off, that's fine; it won't affect the graph that's
-coming up.
+to round the `logbun` values off more, for example to two
+decimals, that's fine; it won't affect the graph that's coming up.
     
 
 
@@ -2497,7 +2341,7 @@ This is easier than you think: it's just `ggsurvplot` from `survminer`:
 ggsurvplot(s,conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
      
     
@@ -2532,7 +2376,8 @@ new
 
 The best survival curve is the top-right green one. This is
 stratum
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Strata is plural; the singular is *stratum*. Like  data and datum.} 2, from the legend at the top. In texttt{new</span>,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Strata is plural; the singular is *stratum*. Like  data and datum.</span> 
+2, from the legend at the top. In `new`,
 this goes with a low value of `logbun` and a *high* value
 of `hgb`. 
 
@@ -2746,6 +2591,9 @@ print.default(y)
 
  
 
+The `attr(,"class")` thing at the bottom of this says that `y` is actually  a `Surv` object, which is how it knows to display as it does, as 26 values some of which have plusses.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Internally, printing a *Surv* thing calls the method *print.Surv*, which is defined in the *survival* package.</span>
+
 The way R works out the length of something is its total number of
 entries, which for this matrix is $26 \times 2=52$. The only things
 you can add via `mutate` to a data frame with 26 rows have
@@ -2768,14 +2616,17 @@ a technical term, you should explain what it means.)
 Solution
 
 
+
 These are the censored observations. You can say this, but you
 also need to say what that means (this is the "technical term"
 referred to in the question). The observations with a `+`
 are individuals who were never observed to die, or who were still
 alive at the end of the study.
+
 I want you to demonstrate that you know what censored
 *means*, not just that you know when you have a censored
 observation.
+
 Extra: in a study like this, patients are typically "recruited"
 into the study at various different times. Patients who happened
 to be in the study near the beginning and who survived can have a
@@ -2788,6 +2639,7 @@ the doctor had a paper to write. (There is *some* information
 in these small censored values, but not much, because most of the
 patients, even the ones who eventually died, survived for longer
 than 377 days.)
+
 The other thing that might have happened is that a patient with
 the 377-censored value died *from something else* unrelated
 to ovarian cancer. The study is only concerned with deaths from
@@ -2882,15 +2734,18 @@ terms of their effects on survival (from ovarian cancer)?
 Solution
 
 
+
 Look at the P-value for my `factor(rx)2`, 0.203. This is
 not small, so there is no evidence of a difference between
 treatments. 
+
 Extra: the reason for the odd label is that we have turned
 treatment into a categorical variable; treatment 1 is used as the
 baseline, and the negative slope says that the "hazard of death"
 is lower for treatment 2 than for treatment 1: that is, people
 survive longer on treatment 2, but the difference is not big
 enough to be significant (we also have a smallish sample size).
+
 Since there are only two treatments, it would in fact have been OK
 to leave them as numbers (with two numbers one unit apart, the
 slope would have been the same size as here), but I think it's a
@@ -2900,10 +2755,12 @@ categories. I might have used `t1` and `t2` in this
 case, or the names of the different treatments.
 
 
+
 (f) Is there a significant effect of age? If there is, describe
 the effect that age has on survival.
 
 Solution
+
 
 
 The P-value for age is 0.0014, small, so age definitely has a
@@ -2911,10 +2768,12 @@ significant effect on survival. As to what kind of effect, look at
 the slope coefficient, 0.15, positive, which means that increased
 age-at-diagnosis goes with an *increased* hazard of death, or
 that older patients do not survive as long.
+
 I would like you to get to the plain-English words at the
 end. Part of your job as a statistician is explaining what you got
 to people who are doctors, managers, etc., who won't
 understand the terminology. 
+
 Thus, one mark for assessing significance
 via P-value, one for looking at the slope coefficient and noting
 that it is positive, and one for getting to "older patients do     not survive as long", or 
@@ -2922,12 +2781,15 @@ that it is positive, and one for getting to "older patients do     not survive a
 (Strictly, this is also "all else equal" as usual,
 since survival time might also have depended on treatment, but the
 point of this question is for you to get to "older patients do not survive as long".) 
+
 (The interpretation of the slope may seem backwards: a positive
 slope means a *shorter* survival time for a larger age. This
 is why I talk about "hazard of death", since that guides us to
 the correct interpretation.)
+
 Extra: I was curious about what would happen if I just included
 `rx` in the model:
+
 
 ```r
 time.2=update(time.1,.~.-age)
@@ -2978,7 +2840,7 @@ important things like `age`. Here, that could be a boxplot:
 ggplot(ovarian, aes(x=factor(rx),y=age))+geom_boxplot()
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-78-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
  
 
@@ -3016,7 +2878,7 @@ ggcoxdiagnostics(time.1)+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-79-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
      
 
@@ -3183,7 +3045,7 @@ Thus. The `conf.int=F` means to skip the confidence interval
 ggsurvplot(s,conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-84-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-78-1.png" width="672"  />
 
    
 

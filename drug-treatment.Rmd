@@ -61,8 +61,9 @@ removes all rows that have missing values in them.)
 Solution
 
 
-First off, `summary` is a quick way to show how many missing values there are:
-
+First off, `summary` is a quick way to show how many missing
+values there are:
+`r tufte::margin_note("It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using *mutate-if*. However, we don't have any text  columns here, so what we do here is good for this data set.")`
 ```{r }
 summary(drugusers)
 ```
@@ -88,8 +89,7 @@ summary(drugusers)
  
 
 No NA left. Gosh, as they say, that was easy.
-
-Extra: how many rows did we lose:
+Extra: how many rows did we lose?
 
 ```{r }
 nrow(drugusers)
@@ -104,7 +104,7 @@ rows.)
 This is a very unsophisticated way of dealing with missing
 values. Another way is to "impute" them, that is, to guess what they
 would have been, and then fill in the guessed values and use them as
-if they were the truth.
+if they were the truth, for example by regressing the columns with missing values on all the others, and using the regression predictions in place of the missing values.
 
 
 
@@ -127,7 +127,11 @@ These variables are actually categorical rather than quantitative:
 
 * `herco`
 
-Most of them have only two levels, so it doesn't matter whether we make them categorical or leave them as numbers, but for `herco` it matters. Let's give them all sensible values, mostly with `ifelse`, thus:
+Most of them have only two levels, so it doesn't matter whether
+we make them categorical or leave them as numbers, but for
+`herco` it matters. Let's give them all sensible values,
+mostly with `ifelse`,
+`r tufte::margin_note("Case-when is much clearer than using nested if-elses when you have three or more categories, as for *herco*.")` thus:
 ```{r }
 drugusers %>% mutate(
 treat=ifelse(treat==0, "short", "long"),
@@ -165,7 +169,9 @@ Solution
 This is `Surv` in package `survival`. The response
 variable needs to encode two things: the time until the event of
 interest (return to drug use) and whether or not that event
-happened for each patient. In this case, that is
+happened for each patient.
+`r tufte::margin_note("Some people define the response variable right inside the *coxph*, in the same way as putting something like *log(y)* as a response in an *lm*, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.")`
+In this case, that is
 `censor="returned"`. 
 ```{r }
 y=with(drugusers,Surv(time,censor=="returned"))

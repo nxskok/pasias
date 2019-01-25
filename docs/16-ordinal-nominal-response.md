@@ -3561,7 +3561,8 @@ verify that you have the right columns and no missing values.
 Solution
 
 
-This is `write_csv`:
+This is `write_csv`, using my output from 
+`drop_na`:
 
 ```r
 write_csv(steak,"steak1.csv")
@@ -3867,18 +3868,24 @@ at a time for membership in the set in `my.crimes`, so this:
 ```r
 sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
 select(c(Category,DayOfWeek,PdDistrict)) 
-```
-
-```
-## Error in select(., c(Category, DayOfWeek, PdDistrict)): unused argument (c(Category, DayOfWeek, PdDistrict))
-```
-
-```r
 sfcrimea
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'sfcrimea' not found
+## # A tibble: 359,528 x 3
+##    Category      DayOfWeek PdDistrict
+##    <chr>         <chr>     <chr>     
+##  1 LARCENY/THEFT Wednesday NORTHERN  
+##  2 LARCENY/THEFT Wednesday PARK      
+##  3 LARCENY/THEFT Wednesday INGLESIDE 
+##  4 VEHICLE THEFT Wednesday INGLESIDE 
+##  5 VEHICLE THEFT Wednesday BAYVIEW   
+##  6 LARCENY/THEFT Wednesday RICHMOND  
+##  7 LARCENY/THEFT Wednesday CENTRAL   
+##  8 LARCENY/THEFT Wednesday CENTRAL   
+##  9 LARCENY/THEFT Wednesday NORTHERN  
+## 10 ASSAULT       Wednesday INGLESIDE 
+## # ... with 359,518 more rows
 ```
 
    
@@ -3891,13 +3898,13 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:MASS"      "package:bindrcpp" 
-##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
-##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
-## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
-## [13] "package:nnet"      "package:stats"     "package:graphics" 
-## [16] "package:grDevices" "package:utils"     "package:datasets" 
-## [19] "package:methods"   "Autoloads"         "package:base"
+##  [1] ".GlobalEnv"        "package:bindrcpp"  "package:forcats"  
+##  [4] "package:stringr"   "package:dplyr"     "package:purrr"    
+##  [7] "package:readr"     "package:tidyr"     "package:tibble"   
+## [10] "package:ggplot2"   "package:tidyverse" "package:nnet"     
+## [13] "package:stats"     "package:graphics"  "package:grDevices"
+## [16] "package:utils"     "package:datasets"  "package:methods"  
+## [19] "Autoloads"         "package:base"
 ```
 
  
@@ -3907,6 +3914,10 @@ so we need to get rid of `MASS`:
 
 ```r
 detach("package:MASS", unload=T)
+```
+
+```
+## Error in detach("package:MASS", unload = T): invalid 'name' argument
 ```
 
  

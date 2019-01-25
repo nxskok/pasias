@@ -127,18 +127,21 @@ drop1(whas100.1, test="Chisq")
 
      
 
-This is here the same as the output from `summary`, but where it scores is if you have a categorical explanatory variable like "treatment" with more than two levels: `drop1` will tell you about keeping or dropping it as a 
-whole.
-`r tufte::margin_note("Our categorical variable *gender* has only two levels.")`
-If you prefer:
+This is here equivalent to
+`r tufte::margin_note("Not exactly the same as that output, because it  is doing a test that would be the same if you had an infinitely  large sample, but is slightly different with an ordinary finite number of observations.")` the output 
+from `summary`, but where it
+scores is if you have a categorical explanatory variable like
+"treatment" with more than two levels: `drop1` will tell you
+about keeping or dropping it as a whole.
+`r tufte::margin_note("Our categorical  variable *gender* has only two levels.")`
+
+If you prefer: 
 
 ```{r }
-whas100.step=step(whas100.1,trace=0)
-summary(whas100.step)
+step(whas100.1, trace=0, test="Chisq")
 ```
 
      
-
 `gender` comes out, but the others stay. As usual, put
 `trace=1` or `trace=2` to get more output, which will
 look like a sequence of `drop1`'s one after the other.
@@ -169,7 +172,7 @@ age and BMI. (`quantile`.) Round these off to the
 nearest whole number. (Do the rounding off yourself, though R has a
 function `round` that does this, which you can investigate if
 you want.) As an alternative, you can get these by passing the whole
-data frame into `summary`.
+data frame, or the columns of it you want, into `summary`.
  
 Solution
 
@@ -184,78 +187,28 @@ quantile(whas100$bmi)
 or
 
 ```{r }
-with(whas100, {
-print(quantile(age))
-print(quantile(bmi))
-})
-```
-
- 
-
-(since there are two things in the `with`, you need the curly
-brackets, and since there are curly brackets you need to explicitly
-`print` the things you want to display.)
-Or, tidyverse-style:
-
-```{r }
-whas100 %>% select(age,bmi) %>% 
-summarize(ageq=list(quantile(age)),
-bmiq=list(quantile(bmi)))
-```
-
- 
-
-These are list-columns containing the five quantiles for each
-variable, which we then have to pull apart:
-
-```{r }
-whas100 %>% select(age,bmi) %>% 
-summarize(ageq=list(quantile(age)),
-bmiq=list(quantile(bmi))) %>%
-unnest()
-```
-
- 
-
-The reason for the `list` and the list-columns and the
-`unnest` is that `quantile` returns the five numbers of
-the five-number summary, rather than just one number (in which case it
-would be a regular `summarize`).
-This might strike you as a bit repetitive. There is also a `summarize_all`, which summarizes all the columns (after you've done the `select`). 
-This requires a function to summarize with, which we need to write first:
-
-```{r }
-lq=function(x) {
-list(quantile(x))
-}
 whas100 %>% select(age, bmi) %>%
-summarize_all(lq) %>%
+summary()
+```
+
+ 
+Or, pure tidyverse: use `summarize_all`, which summarizes all the columns (after you've done the `select`). 
+
+```{r }
+whas100 %>% select(age, bmi) %>%
+summarize_all(~list(quantile(.))) %>%
 unnest()
 ```
 
  
-The `summary` approach is simply this (which I think I now like
-best of all):
 
-```{r }
-summary(whas100)
-```
-
- 
-
-or, if you want just the summaries of `age` and `bmi`,
-you select those columns first before passing the data frame into
-`summary`: 
-
-```{r }
-whas100 %>% select(age,bmi) %>% summary()
-```
-
- 
-
-Think small tools, combined.
-
-Whichever of this multitude of ways appeals to you:
+The reason for the `list()` and the `unnest()` is that
+`quantile` returns five numbers rather than just one, so it has
+to go into the output data frame as a list-column, which then gets
+broken apart with `unnest` so that you can see it. Try it
+without the `unnest()` line to see what happens if you don't do
+that.
+Using whichever of this multitude of ways appeals to you:
 
 60, 71 and 80 for age, 24, 27 and 30 for BMI. 
  
@@ -267,7 +220,7 @@ with.
 Solution
 
 
-The inevitable `crossing`:
+The inevitable `crossing`. This is probably quickest:
 ```{r }
 whas100.new=crossing(age=c(60,71,80),bmi=c(24,27,30))
 whas100.new
@@ -276,7 +229,9 @@ whas100.new
      
 
 Or, with some setup beforehand to make the `crossing`
-clearer. This is my no-think approach:
+clearer. This is my no-think approach, which is what I recommend;
+vectors with plural names containing the values, and inside the
+`crossing`, a singular name equals a plural one:
 
 ```{r }
 ages=c(60,71,80)
@@ -414,7 +369,17 @@ Ah, that seems to be it. The significant positive coefficient on
 `bmi`-squared 
 means that the "hazard of dying" increases faster with increasing
 `bmi`, so there ought to be an optimal BMI beyond which
-survival chances decrease again. Let's explore that on a graph.
+survival chances decrease again. 
+Have we improved the residuals by adding the squared term?
+
+```{r }
+ggcoxdiagnostics(whas100.3)+geom_smooth()
+```
+
+ 
+
+I call those "inconsequential wiggles" now, so I think we are good.
+Let's explore the quadratic relationship on a graph.
 
 I'm going to focus on a close-to-median age of 70, since, in this
 model, the effect of BMI is the same for all ages (to make it

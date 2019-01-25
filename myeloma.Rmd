@@ -100,7 +100,7 @@ which gives means and five-number summaries for each of the variables
 (b) Create a suitable response variable for a Cox
 proportional-hazards survival model, bearing in mind that the
 "event" here is death. Display your response variable, and explain
-briefly what the `+` signs attached to some of the variables
+briefly what the `+` signs attached to some of the values
 mean, without using a technical term.
 
 
@@ -310,27 +310,10 @@ myeloma %>% select(logbun,hgb) %>% summary()
 ```
 
  
-The `with` method
-is a bit hairy because there are two things to calculate inside, so
-you have to do it like this:
 
-```{r }
-with(myeloma, {
-print(quantile(logbun))
-print(quantile(hgb))
-})
-```
-
-
-
-with the same result. Note that the multiple things to do are
-surrounded by curly brackets, and to display something within curly
-brackets you have to explicitly `print` it.
-
-The `tidyverse` way is actually a bit
-inelegant, because you have to calculate two things for two variables
-(`summarize` will only allow you to have a single-number
-answer): 
+The obvious `tidyverse` way is actually a bit
+inelegant, because you have to calculate two things for two variables:
+`r tufte::margin_note("Because *summarize* will only allow you to have a single-number answer.")` 
 
 ```{r }
 myeloma %>% summarize(logbun.q1=quantile(logbun,0.25),
@@ -344,25 +327,6 @@ hgb.q3=quantile(hgb,0.75))
 There is a `tidyverse` way to obtain the quartiles of
 *all* the columns. It lives in package `purrr`, which gets
 loaded with the `tidyverse`:
-
-```{r }
-map_dbl(myeloma,quantile,0.25)
-map_dbl(myeloma,quantile,0.75)
-```
-
- 
-
-So what you do is a `select` to get just `logbun` and
-`hgb`, first, and then, for example:
-
-```{r }
-myeloma %>% select(logbun,hgb) %>% map_dbl(quantile,0.25)
-```
-
- 
-
-Can we get them both in one shot? Let's see what this does:
-
 ```{r }
 myeloma %>% select(logbun,hgb) %>% 
 map(quantile, c(0.25,0.75))
@@ -372,14 +336,12 @@ map(quantile, c(0.25,0.75))
 
 This is what R calls a `list`. It would look nicer as a data
 frame. There is a way to get that:
-
 ```{r }
 myeloma %>% select(logbun,hgb) %>% 
-map_df(quantile, c(0.25,0.75))
+map_df(~quantile(.,c(0.25,0.75)))
 ```
 
  
-
 The `25%` and `75%` have gone missing. They were
 actually the `names` of each of the components of the list,
 which I don't think we easily have access to.
@@ -409,8 +371,8 @@ Or anything equivalent to that. This is my procedure, but you are free
 to shorten it if it will still work. The place you have to get to in
 the end is a data frame with columns called `logbun` and
 `hgb`, and the right four combinations of values. If you want
-to round them off, that's fine; it won't affect the graph that's
-coming up.
+to round the `logbun` values off more, for example to two
+decimals, that's fine; it won't affect the graph that's coming up.
     
 
 
@@ -471,7 +433,8 @@ new
 
 The best survival curve is the top-right green one. This is
 stratum
-`r tufte::margin_note("Strata is plural; the singular is *stratum*. Like  data and datum.} 2, from the legend at the top. In texttt{new")`,
+`r tufte::margin_note("Strata is plural; the singular is *stratum*. Like  data and datum.")` 
+2, from the legend at the top. In `new`,
 this goes with a low value of `logbun` and a *high* value
 of `hgb`. 
 
