@@ -16,14 +16,14 @@ test. The data are in
 This time we look at
 contrasts. Suppose I knew ahead of time
 that I wanted to compare moderate caffeine with high, and any
-caffeine with none. (In the latter case, we're comparing ``no
-caffeine'' against the average of the other two groups.)
+caffeine with none. (In the latter case, we're comparing 
+"no caffeine" against the average of the other two groups.)
 
-In the previous go-through of the caffeine data, we discovered that
-`amount` was actually text rather than a factor, but we also
-discovered that it *didn't matter*. Here it does matter, so the
-first thing we have to do is to re-do the `gather`, creating a
-factor version of `amount`.
+In the previous go-through of the caffeine data, problem 11.5, we
+discovered that `amount` was actually text rather than a
+factor, but we also discovered that it *didn't matter*. Here it
+does matter, so the first thing we have to do is to re-do the
+`gather`, creating a factor version of `amount`.
 
 
 
@@ -73,16 +73,29 @@ not doing so.
 
 
 
-(c) Using the newly tidied caffeine data, run the ANOVA \emph{as a
-regression} (that is, using `lm`). Look at the `summary`
-of the output. What do you see?
+(c) Using the newly tidied caffeine data, run the ANOVA 
+*as a  regression* (that is, using `lm`). Look at the
+`summary` of the output. What do you see?
 
 
 Solution
 
 
+Extra: I'm going to run the ANOVA the "old way" first, so that we can
+compare results. You don't need to do this:
 ```{r }
-caffeine.2=lm(score~amount,data=caffeine)
+caffeine.old=aov(score~amount, data=caffeine)
+summary(caffeine.old)
+TukeyHSD(caffeine.old)
+```
+
+       
+
+End of digression.
+Now we'll do it using `lm`, with contrasts later, and see how
+things change:
+```{r }
+caffeine.2=lm(score~amount, data=caffeine)
 summary(caffeine.2)
 ```
 
@@ -97,7 +110,7 @@ coefficient for `amountNone`? That's none vs.\ *high*,
 since high was the baseline. This is, as we saw from Tukey,
 significant. But it is not what I said we wanted to test. 
 
-In case you're curious, you can also get the regular analysis of
+Extra: in case you're curious, you can also get the regular analysis of
 variance table as below. `anova` is multi-talented:
 
 ```{r }
@@ -323,7 +336,7 @@ if we try it, but it'll be the *wrong* answer.
 
 The best
 description I have seen of what to do here is by David Howell
-`r tufte::margin_note("the author of a famous text on Statistics in Psychology.")`, at
+`r tufte::margin_note("Howell is the author of a famous text on Statistics in Psychology.")`, at
 [link](https://www.uvm.edu/~dhowell/StatPages/More_Stuff/R/AnovaOneway.html)
 (at the bottom).
 Let
@@ -358,6 +371,7 @@ minv=solve(t(m))
 
 and then we remove the first column, which represents the contrast
 that we didn't want anyway (what Howell calls "deaugmenting"):
+`r tufte::margin_note("We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one.")`
 
 ```{r }
 m.contr=minv[,-1]
