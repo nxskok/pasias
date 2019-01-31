@@ -253,14 +253,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">18.3</span> Multiple myeloma</a></li>
 <li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">18.4</span> Ovarian cancer</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">19</span> Analysis of Variance revisited</a><ul>
+<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">19</span> Analysis of variance revisited</a><ul>
 <li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">19.1</span> Focused comparisons of the effect of caffeine</a></li>
 <li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">19.2</span> Who studies the most outside class?</a></li>
 <li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">19.3</span> Mental context</a></li>
 <li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">19.4</span> Trying on shirts</a></li>
-<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">19.5</span> Productivity and research-and-development</a></li>
-<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">19.6</span> Treating leprosy</a></li>
-<li><a href="analysis-of-variance-revisited.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">19.7</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">19.5</span> Acid rain</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">19.6</span> Treating hay fever</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">19.7</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">19.8</span> Treating leprosy</a></li>
+<li><a href="analysis-of-variance-revisited.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">19.9</span> Do characteristics of urine depend on obesity?</a></li>
 </ul></li>
 <li class="has-sub"><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">20</span> Multivariate analysis of variance</a><ul>
 <li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">20.1</span> Fabricated data</a></li>
@@ -858,8 +860,8 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb523"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb523-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb523-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 68.76352 33.20471 38.97254 55.98565 57.88255 11.16262 56.96318
-##  [8] 47.99700 51.39252 68.75758</code></pre>
+<pre><code>##  [1] 59.44110 61.07585 39.09849 53.44032 46.29605 54.32112 46.37099
+##  [8] 45.72711 52.88587 83.72346</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
@@ -870,8 +872,8 @@ than 40 and how many are greater (or equal)?</li>
 <pre><code>## # A tibble: 2 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE        7
-## 2 TRUE         3</code></pre>
+## 1 FALSE        9
+## 2 TRUE         1</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -891,7 +893,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       3 FALSE</code></pre>
+## 1       1 TRUE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
@@ -903,7 +905,7 @@ should not reject. The fix is</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       3 FALSE</code></pre>
+## 1       1 TRUE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>
@@ -911,7 +913,7 @@ so a <code>pull</code> will grab it:</p>
 <a class="sourceLine" id="cb531-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb531-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb531-4" data-line-number="4"><span class="kw">pull</span>(is_rejected)</a></code></pre></div>
-<pre><code>## [1] FALSE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 <p>You might be wondering where the “1 or less” came from. Getting a
 P-value for the sign test involves the binomial distribution: if the
 null is correct, each data value is independently either above or

@@ -1,4 +1,4 @@
-# Analysis of Variance revisited
+# Analysis of variance revisited
 
 Packages for this chapter:
 
@@ -589,8 +589,8 @@ if we try it, but it'll be the *wrong* answer.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">SAS, for example, has a way of making non-orthogonal contrasts orthogonal in a way that the user doesn't have to worry about, but in R, you are closer to the ground, so to speak, and you have to make it happen yourself.</span>
 
 The best
-description I have seen of what to do here is by David Howell
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Howell is the author of a famous text on Statistics in Psychology.</span>, at
+description I have seen of what to do here is by David Howell,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Howell is the author of a famous text on Statistics in Psychology.</span> at
 [link](https://www.uvm.edu/~dhowell/StatPages/More_Stuff/R/AnovaOneway.html)
 (at the bottom).
 Let
@@ -634,7 +634,7 @@ minv=solve(t(m))
 
 and then we remove the first column, which represents the contrast
 that we didn't want anyway (what Howell calls "deaugmenting"):
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one.</span>
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one. You can access data frames this way too, but the Tidyverse makes it much easier.</span>
 
 
 ```r
@@ -1700,7 +1700,7 @@ imaginary/photographed context (P-value 0.823)
 * Different context *not* different from placebo
 context (P-value 0.699). 
 
-***<
+
 I wanted you to match up the research hypotheses with the
 P-values, as above, and state a conclusion about each one. If
 you do that, I am happy.
@@ -1726,7 +1726,7 @@ the difference in the (mean of the) recall-orange-room means and
 the (mean of the) don't-recall means is between about 4.6 and
 12.6 words (out of 80). I leave it for you to decide whether
 that is practically important as well as being statistically significant.
-***>
+
       
 
 
@@ -2287,6 +2287,585 @@ students are *such* suckers!
 
 
 
+##  Acid rain
+
+
+ One of the first noticeable effects of climate change was
+"acid rain". This is formed by the water vapour in clouds combining
+with nitrous oxide and sulfur dioxide, which come from coal and oil
+production. How does the acidity of rain affect the acidity of the
+soil on which it falls? (This will have an effect on the kind of
+plants that can be grown in that soil.) Acidity is measured using the
+pH scale, where a pH of 7 is chemically neutral, a number less than 7
+is acidic, and a number greater than 7 is alkaline.
+
+An experiment was conducted at the Florida Institute of Food and
+Agricultural Sciences, to determine how acidity of rain affects soil
+acidity. Experimental plots were irrigated with rainwater that was
+prepared to have one of two different pH levels, 3.7 and 4.5. The
+acidity of the soil was then measured at three different depths,
+0--15, 15--30, and 30--46 centimetres. This was done on three
+different dates, in April and June 1991. The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv).
+
+
+
+(a) Read in and display the data.
+
+Solution
+
+
+This time, it's a `.csv`:
+
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
+acidrain=read_csv(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   soil_depth = col_character(),
+##   date = col_date(format = ""),
+##   rain_pH = col_double(),
+##   soil_acidity = col_double()
+## )
+```
+
+```r
+acidrain
+```
+
+```
+## # A tibble: 18 x 4
+##    soil_depth date       rain_pH soil_acidity
+##    <chr>      <date>       <dbl>        <dbl>
+##  1 0-15       1991-04-03     3.7         5.33
+##  2 0-15       1991-04-03     4.5         5.33
+##  3 0-15       1991-06-16     3.7         5.47
+##  4 0-15       1991-06-16     4.5         5.47
+##  5 0-15       1991-06-30     3.7         5.2 
+##  6 0-15       1991-06-30     4.5         5.13
+##  7 15-30      1991-04-03     3.7         5.27
+##  8 15-30      1991-04-03     4.5         5.03
+##  9 15-30      1991-06-16     3.7         5.5 
+## 10 15-30      1991-06-16     4.5         5.53
+## 11 15-30      1991-06-30     3.7         5.33
+## 12 15-30      1991-06-30     4.5         5.2 
+## 13 30-46      1991-04-03     3.7         5.37
+## 14 30-46      1991-04-03     4.5         5.4 
+## 15 30-46      1991-06-16     3.7         5.8 
+## 16 30-46      1991-06-16     4.5         5.6 
+## 17 30-46      1991-06-30     3.7         5.33
+## 18 30-46      1991-06-30     4.5         5.17
+```
+
+ 
+
+There are 4 columns, soil depth, date, pH of the rain that was
+applied (all explanatory) and soil acidity, the response. You'll note
+that we have one soil acidity value per combination of the other
+things (it was a designed experiment).
+
+We're going to ignore the date for now, treating the observations on
+different dates as replicates.
+
+
+(b) Draw a grouped boxplot to show how soil acidity depends on
+the pH of the rain and the soil depth. (The first time you do this
+you might not get the boxplot you want. How can you fix that?)
+
+Solution
+
+
+The problem is likely to be that either your `x` or your
+`fill` for your boxplot is numerical (`rain_pH` is
+`dbl`) rather than the categorical variable you need.
+Try to use one of the explanatory variables as `x` and the other
+one as `fill` (or `colour`):
+
+```r
+ggplot(acidrain,aes(x=rain_pH,y=soil_acidity,fill=soil_depth))+
+geom_boxplot()
+```
+
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
+
+     
+
+That looks as if it worked, but it didn't. See the boxplot below for
+how it's supposed to be.  I need `x` for the boxplot needs to
+be categorical. The easiest way to make it such is to wrap it in
+`factor`:
+
+
+```r
+ggplot(acidrain,aes(x=factor(rain_pH),y=soil_acidity,fill=soil_depth))+
+geom_boxplot()
+```
+
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
+
+     
+
+Even though `soil_depth` looks like numbers, the printout of
+the data frame reveals that it is text, so that is OK.
+
+If you prefer, exchange `x` and `fill`:
+
+
+```r
+ggplot(acidrain,aes(fill=factor(rain_pH),y=soil_acidity,x=soil_depth))+
+geom_boxplot()
+```
+
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-77-1.png" width="672"  />
+
+     
+
+
+(c) What does your grouped boxplot say about likely
+interactions? Explain briefly.
+
+Solution
+
+
+Think about the effect of one of your explanatory variables, for
+each level of the other. For example, in the last plot, the effect
+of the rain pH pm on the soil acidity is very small at the largest
+and smallest depths, but at the middle soil depth 15--30, the
+average (median) soil acidity is a lot less when the rain pH is
+*higher* (which seems odd to me). The effect of rain pH being
+different according to soil pH is what suggests an interaction
+effect. 
+Another way of thinking about this is imagining what an
+interaction plot would look like. This would be a trace going
+through the middle (strictly, mean rather than median) of each set
+of boxplots of one colour. In the last boxplot, the red trace
+would go close to straight across, while the blue one would dip in
+the middle. Not parallel, so suggesting an interaction.
+Either approach is good.
+
+
+(d) Fit an ANOVA with interaction. What do you conclude from
+it? You may want to create a column that is the factor version of
+`rain_pH` first.
+
+Solution
+
+
+Following my own hint:
+
+```r
+acidrain = acidrain %>% mutate(frph=factor(rain_pH))
+soil.1=aov(soil_acidity~frph*soil_depth,data=acidrain)
+summary(soil.1)
+```
+
+```
+##                 Df Sum Sq Mean Sq F value Pr(>F)
+## frph             1 0.0304 0.03042   0.759  0.401
+## soil_depth       2 0.0671 0.03357   0.838  0.457
+## frph:soil_depth  2 0.0078 0.00391   0.097  0.908
+## Residuals       12 0.4810 0.04008
+```
+
+ 
+
+The interaction is nowhere near significant, perhaps surprisingly. But
+bear in mind that there are only 18 observations in total, so each box
+on the boxplot is based on *three* observations only. So the
+interaction would have to be a lot bigger to be significant.
+
+The usual procedure after finding a non-significant
+interaction is to take it out:
+
+
+```r
+soil.2=update(soil.1, .~.-frph:soil_depth)
+summary(soil.2)
+```
+
+```
+##             Df Sum Sq Mean Sq F value Pr(>F)
+## frph         1 0.0304 0.03042   0.871  0.366
+## soil_depth   2 0.0671 0.03357   0.962  0.406
+## Residuals   14 0.4888 0.03492
+```
+
+ 
+
+The P-values have come down a bit (the result of gaining two df for
+error while the error SS only got a tiny bit bigger), but not nearly
+enough to be significant.
+
+
+
+
+
+##  Treating hay fever
+
+
+ Hay fever is an allergic reaction to things like grasses or
+pollen which can make it unpleasant to go outside when the weather is
+at its best.  A research lab is developing a new compound to relieve
+severe cases of hay fever. There were two active ingredients, labelled
+A and B, with each one having three levels, low, medium and
+high. There were thus $3\times 3=9$ treatment combinations. 36
+subjects were available, and these were randomly assigned to
+combinations of levels of factor A and factor B, so that each
+combination was tested on 4 people. The response variable was the
+number of hours of relief from symptoms (so a higher value is
+better). The data are in
+[link](https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt).
+
+
+
+(a) Read the data and display its structure. Verify that you
+have what you were expecting.
+
+Solution
+
+
+Aligned columns separated by spaces, so `read_table`:
+
+```r
+my_url="https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt"
+hayfever=read_table(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   relief = col_double(),
+##   a = col_character(),
+##   b = col_character(),
+##   replicate = col_double()
+## )
+```
+
+```r
+hayfever
+```
+
+```
+## # A tibble: 36 x 4
+##    relief a     b      replicate
+##     <dbl> <chr> <chr>      <dbl>
+##  1    2.4 low   low            1
+##  2    2.7 low   low            2
+##  3    2.3 low   low            3
+##  4    2.5 low   low            4
+##  5    4.6 low   medium         1
+##  6    4.2 low   medium         2
+##  7    4.9 low   medium         3
+##  8    4.7 low   medium         4
+##  9    4.8 low   high           1
+## 10    4.5 low   high           2
+## # ... with 26 more rows
+```
+
+     
+
+I have 36 observations (patients). There are two categorical columns
+`a` and `b` corresponding to the two active ingredients,
+and they each seem to have levels low, medium and high.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It's important to be clear about the distinction between a categorical variable, that lives in a data frame column, and its levels, the values that appear in the column. This is especially important if you're trying to decide whether a data frame is tidy, since typically an untidy data frame will have factor levels as column names rather than the factor itself, and you need to be able to tell the difference.</span>
+
+The `replicate` column labels each observation *within*
+its A-B combination, so that each treatment combination was indeed
+replicated four times. We won't be using this column in our analysis;
+I think it's a refugee from the original untidy format the data was in
+before it came to you.
+
+
+(b) Calculate the mean hours of relief for each combination of
+levels of the two active ingredients. Save your results in a data
+frame and display that.
+
+Solution
+
+
+This is a group-by and summarize, but there are two active ingredients and they *both* have to go in the group-by:
+
+```r
+hayfever %>% group_by(a,b) %>%
+summarize(m=mean(relief)) -> d
+d
+```
+
+```
+## # A tibble: 9 x 3
+## # Groups:   a [?]
+##   a      b          m
+##   <chr>  <chr>  <dbl>
+## 1 high   high   13.2 
+## 2 high   low     5.98
+## 3 high   medium 10.3 
+## 4 low    high    4.58
+## 5 low    low     2.48
+## 6 low    medium  4.6 
+## 7 medium high    9.12
+## 8 medium low     5.45
+## 9 medium medium  8.93
+```
+
+
+
+I'm using my usual name `d` for a temporary data frame. I could
+have put brackets around my whole pipeline to display its result, but
+I still need to save the data frame `d` to use in a moment.
+
+These levels are in the wrong logical order, but they are in the right order in the original data frame, so we can use `fct_inorder` first, thus:
+
+
+```r
+hayfever %>% 
+mutate(a=fct_inorder(a), b=fct_inorder(b)) %>%
+group_by(a,b) %>%
+summarize(m=mean(relief)) -> d2
+d2
+```
+
+```
+## # A tibble: 9 x 3
+## # Groups:   a [?]
+##   a      b          m
+##   <fct>  <fct>  <dbl>
+## 1 low    low     2.48
+## 2 low    medium  4.6 
+## 3 low    high    4.58
+## 4 medium low     5.45
+## 5 medium medium  8.93
+## 6 medium high    9.12
+## 7 high   low     5.98
+## 8 high   medium 10.3 
+## 9 high   high   13.2
+```
+
+ 
+
+
+(c) Make an interaction plot, showing how the mean pain relief depends on the combination of levels of A and B. It is probably easiest to use the data frame you obtained in the previous part.
+
+Solution
+
+
+My column of mean relief values is called `m`. Use whatever
+name you gave it.  I'm going to use my proper-order data frame for
+this:
+
+```r
+ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
+geom_point()+geom_line()
+```
+
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-83-1.png" width="672"  />
+
+     
+Or, you probably had this:
+
+```r
+ ggplot(d, aes(x=a,y=m,colour=b,group=b))+
+geom_point()+geom_line()
+```
+
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-84-1.png" width="672"  />
+
+     
+
+Since `a` and `b` both have three levels, you could just as well use them the other way around:
+
+
+```r
+ ggplot(d2, aes(x=b,y=m,colour=a,group=a))+
+geom_point()+geom_line()
+```
+
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-85-1.png" width="672"  />
+
+ 
+
+The plot looks different depending on how you draw it, but the
+conclusion from it (below) will be the same.
+
+
+(d) What do you conclude from your interaction plot? Explain briefly.
+
+Solution
+
+
+The three lines are not particularly close to being parallel, so I
+would expect to see an interaction between the two active
+ingredients (that is, the number of hours of pain relief depends
+on the combination of the two of them).
+
+Extra: It is always a judgment call to decide whether the lines
+are "approximately parallel" or not. It depends on how much
+variability there is in the data, which the interaction plot
+doesn't show. Another idea is to add the data to the interaction
+plot, colour-coded in the same way. I would do this by taking out
+the `geom_point` for the means and add one instead for the
+data, taken from the original data frame:
+
+```r
+ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
+geom_line()+
+geom_point(data=hayfever, aes(y=relief))
+```
+
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-86-1.png" width="672"  />
+
+     
+
+Technique: for that last `geom_point`, put in anything that
+changes: a new data frame, and a new `y` for the plot, but the
+`x` and `colour` and `group` are the same as they
+were before, so I don't need to specify them.
+
+The points are *very* close to the lines, so there is almost no
+residual variability. This makes it more convincing that the
+interaction is real and will be significant.
+
+
+(e) Run an analysis of variance with interaction. What do you conclude?
+
+Solution
+
+
+
+```r
+hayfever.1=aov(relief~a*b,data=hayfever)
+summary(hayfever.1)
+```
+
+```
+##             Df Sum Sq Mean Sq F value Pr(>F)    
+## a            2 220.02  110.01  1827.9 <2e-16 ***
+## b            2 123.66   61.83  1027.3 <2e-16 ***
+## a:b          4  29.42    7.36   122.2 <2e-16 ***
+## Residuals   27   1.63    0.06                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+     
+
+The interaction is (strongly) significant. The hours of relief depend on the combination of levels of the active ingredients A and B.
+
+Don't try to interpret the main effects of A and B from here. That's what simple effects are for, coming up.
+
+
+(f) Analyze the simple effects of B when A is
+`medium`. (This means doing an appropriate `aov` and
+an appropriate Tukey, if warranted.)
+
+Solution
+
+
+First, we pull out only the data where A is `medium`, and then we do a one-way analysis of B on that data. This is the slick way, though you can certainly save the result of `filter` first:
+
+```r
+hayfever %>% filter(a=="medium") %>%
+aov(relief~b, data=.) -> simple_medium
+summary(simple_medium)
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## b            2  34.16  17.081   262.8 1.04e-08 ***
+## Residuals    9   0.59   0.065                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+     
+
+There is definitely some effect of ingredient B when A is medium. What
+is it? Tukey will tell us:
+
+
+```r
+TukeyHSD(simple_medium)
+```
+
+```
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = relief ~ b, data = .)
+## 
+## $b
+##               diff       lwr       upr     p adj
+## low-high    -3.675 -4.178336 -3.171664 0.0000000
+## medium-high -0.200 -0.703336  0.303336 0.5323662
+## medium-low   3.475  2.971664  3.978336 0.0000000
+```
+
+ 
+
+There is no difference between medium and high (levels of B), but both of these are better in terms of relief than low is.
+
+
+(g) Analyze the simple effects of B when A is `high`.
+
+Solution
+
+
+Same idea: pull out only the data where A is `high`, do a one-way analysis of B, and do Tukey if needed:
+
+```r
+hayfever %>% filter(a=="high") %>%
+aov(relief~b, data=.) -> simple_high
+summary(simple_high)
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## b            2 107.02   53.51     796 7.49e-11 ***
+## Residuals    9   0.61    0.07                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```r
+TukeyHSD(simple_high)
+```
+
+```
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = relief ~ b, data = .)
+## 
+## $b
+##               diff       lwr       upr p adj
+## low-high    -7.275 -7.786868 -6.763132 0e+00
+## medium-high -2.975 -3.486868 -2.463132 2e-07
+## medium-low   4.300  3.788132  4.811868 0e+00
+```
+
+     
+
+When A is high, there is definitely an effect of B again, but this
+time high (for B) is better than medium is better than low. (All the
+P-values in Tukey are very small.)
+
+You could guess this from the interaction plot as well (whichever one
+you came up with): when A is high, it is better for B to be high as
+well, but when A is medium or low, there is not much difference
+between B being medium or high.
+
+Extra: here, the effect of B is different, depending on what A is. This is
+what a significant interaction *means*. If there were no
+significant interaction, the effect of B would always be the same, no
+matter what A was.
+
+
+
+
+
 ##  Productivity and research-and-development
 
 
@@ -2396,7 +2975,7 @@ ggplot(productivity,aes(x=last,y=improvement,colour=expenditure))+
 geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
 
      
 
@@ -2421,11 +3000,9 @@ Taking the three things in turn:
 (i) knowing about last year's productivity increase definitely
 helps, because the three trends definitely go up (extra: and are
 pretty much linear).
-***<    
 (ii) knowing about the level of expenditure helps because the
 coloured trends are in different places (low on the
 left and high on the right, whatever colours they are for you).
-***>    
 (iii) I am guessing there is no interaction because the three
 lines look more or less parallel (a judgement call: if you think
 that there *will* be an interaction because you think the
@@ -2609,7 +3186,7 @@ Extra: I didn't expect the interaction to come out significant, but
 the P-value is not nearly so small as the ones we had before. I guess
 the explanation for this is that the data cluster pretty tightly about
 the lines in the graph, so that even a small difference in slopes can
-be signficant. You might argue that my green line is not *quite*
+be signficant. You might argue that my red line is not *quite*
 as steep as the others, but the difference does look very small.
 
 Let's take a look at the `summary` for my interaction model:
@@ -2823,7 +3400,7 @@ batting an eyelid:
 ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-85-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-102-1.png" width="672"  />
 
        
  
@@ -3162,7 +3739,7 @@ ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()+
 geom_line(data=allpreds,aes(y=preds,linetype=drug))
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-96-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
 
  
 
@@ -3228,7 +3805,7 @@ ggplot(lepro,aes(x=pre,y=post,colour=drug))+
 geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-98-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
 
  
 
@@ -3348,7 +3925,7 @@ ggplot(aes(x=obesity,y=y))+geom_boxplot()+
 facet_wrap(~yname,scales="free",ncol=2)
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-100-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
 
  
 
@@ -3448,340 +4025,6 @@ need to run a discriminant analysis (coming up later).
 
  
 
-
-
-
-questionable questions:
-
-
-
-
- A research lab is developing a new compound to relieve
-severe cases of hay fever. There were two active ingredients, labelled
-A and B, with each one having three levels, low, medium and
-high. There were thus $3\times 3=9$ treatment combinations. 36
-subjects were available, and these were randomly assigned to
-combinations of levels of factor A and factor B, so that each
-combination was tested on 4 people. The response variable was the
-number of hours of pain relief (so a higher value is better). The data
-are in [link](http://individual.utoronto.ca/kbutler/stad29/hayfever.txt).
-
-
-
-(a)[2] Read the data and display its structure. Verify that you
-have what you were expecting.
-
-Solution
-
-
-
-```r
-my_url="http://individual.utoronto.ca/kbutler/stad29/hayfever.txt"
-hayfever=read.table(my_url,header=T)
-hayfever
-```
-
-```
-##    relief      a      b replicate
-## 1     2.4    low    low         1
-## 2     2.7    low    low         2
-## 3     2.3    low    low         3
-## 4     2.5    low    low         4
-## 5     4.6    low medium         1
-## 6     4.2    low medium         2
-## 7     4.9    low medium         3
-## 8     4.7    low medium         4
-## 9     4.8    low   high         1
-## 10    4.5    low   high         2
-## 11    4.4    low   high         3
-## 12    4.6    low   high         4
-## 13    5.8 medium    low         1
-## 14    5.2 medium    low         2
-## 15    5.5 medium    low         3
-## 16    5.3 medium    low         4
-## 17    8.9 medium medium         1
-## 18    9.1 medium medium         2
-## 19    8.7 medium medium         3
-## 20    9.0 medium medium         4
-## 21    9.1 medium   high         1
-## 22    9.3 medium   high         2
-## 23    8.7 medium   high         3
-## 24    9.4 medium   high         4
-## 25    6.1   high    low         1
-## 26    5.7   high    low         2
-## 27    5.9   high    low         3
-## 28    6.2   high    low         4
-## 29    9.9   high medium         1
-## 30   10.5   high medium         2
-## 31   10.6   high medium         3
-## 32   10.1   high medium         4
-## 33   13.5   high   high         1
-## 34   13.0   high   high         2
-## 35   13.3   high   high         3
-## 36   13.2   high   high         4
-```
-
-     
-
-
-(b)[2] interaction plot
-
-Solution
-
-
-
-```r
-hayfever %>% group_by(a,b) %>%
- summarize(relief.mean=mean(relief)) %>%
- ggplot(aes(x=a,y=relief.mean,colour=b,group=b))+
-geom_point()+geom_line()
-```
-
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
-
-     
-
-
-(c)[2] Run an analysis of variance with interaction.
-
-Solution
-
-
-
-```r
-hayfever.1=aov(relief~a*b,data=hayfever)
-summary(hayfever.1)
-```
-
-```
-##             Df Sum Sq Mean Sq F value Pr(>F)    
-## a            2 220.02  110.01  1827.9 <2e-16 ***
-## b            2 123.66   61.83  1027.3 <2e-16 ***
-## a:b          4  29.42    7.36   122.2 <2e-16 ***
-## Residuals   27   1.63    0.06                   
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-     
-
-
-(d)[2] simple effects
-
-
-
-
-
-
- One of the first noticeable effects of climate change was
-"acid rain". This is formed by the water vapour in clouds combining
-with nitrous oxide and sulfur dioxide, which come from coal and oil
-production. How does the acidity of rain affect the acidity of the
-soil on which it falls? (This will have an effect on the kind of
-plants that can be grown in that soil.) Acidity is measured using the
-pH scale, where a pH of 7 is chemically neutral, a number less than 7
-is acidic, and a number greater than 7 is alkaline.
-
-An experiment was conducted at the Florida Institute of Food and
-Agricultural Sciences, to determine how acidity of rain affects soil
-acidity. Experimental plots were irrigated with rainwater that was
-prepared to have one of two different pH levels, 3.7 and 4.5. The
-acidity of the soil was then measured at three different depths,
-0--15, 15--30, and 30--46 centimetres. This was done on three
-different dates, in April and June 1991. The data are in
-[link](http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv).
-
-
-
-(a)[2] Read in and display the data.
-
-Solution
-
-
-This time, it's a `.csv`:
-
-
-```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
-acidrain=read_csv(my_url)
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   soil_depth = col_character(),
-##   date = col_date(format = ""),
-##   rain_pH = col_double(),
-##   soil_acidity = col_double()
-## )
-```
-
-```r
-acidrain
-```
-
-```
-## # A tibble: 18 x 4
-##    soil_depth date       rain_pH soil_acidity
-##    <chr>      <date>       <dbl>        <dbl>
-##  1 0-15       1991-04-03     3.7         5.33
-##  2 0-15       1991-04-03     4.5         5.33
-##  3 0-15       1991-06-16     3.7         5.47
-##  4 0-15       1991-06-16     4.5         5.47
-##  5 0-15       1991-06-30     3.7         5.2 
-##  6 0-15       1991-06-30     4.5         5.13
-##  7 15-30      1991-04-03     3.7         5.27
-##  8 15-30      1991-04-03     4.5         5.03
-##  9 15-30      1991-06-16     3.7         5.5 
-## 10 15-30      1991-06-16     4.5         5.53
-## 11 15-30      1991-06-30     3.7         5.33
-## 12 15-30      1991-06-30     4.5         5.2 
-## 13 30-46      1991-04-03     3.7         5.37
-## 14 30-46      1991-04-03     4.5         5.4 
-## 15 30-46      1991-06-16     3.7         5.8 
-## 16 30-46      1991-06-16     4.5         5.6 
-## 17 30-46      1991-06-30     3.7         5.33
-## 18 30-46      1991-06-30     4.5         5.17
-```
-
- 
-
-There are 4 columns, soil depth, date, pH of the rain that was
-applied (all explanatory) and soil acidity, the response. You'll note
-that we have one soil acidity value per combination of the other
-things (it was a designed experiment).
-
-We're going to ignore the date for now, treating the observations on
-different dates as replicates.
-
-
-(b)[3] Draw a grouped boxplot to show how soil acidity depends on
-the pH of the rain and the soil depth. (The first time you do this
-you might not get the boxplot you want. How can you fix that?)
-
-Solution
-
-
-The problem is likely to be that either your `x` or your
-`fill` for your boxplot is numerical (`rain_pH` is
-`dbl`) rather than the categorical variable you need.
-Try to use one of the explanatory variables as `x` and the other
-one as `fill` (or `colour`):
-
-```r
-ggplot(acidrain,aes(x=rain_pH,y=soil_acidity,fill=soil_depth))+
-geom_boxplot()
-```
-
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
-
-     
-
-That looks as if it worked, but it didn't. See the boxplot below for
-how it's supposed to be.  I need `x` for the boxplot needs to
-be categorical. The easiest way to make it such is to wrap it in
-`factor`:
-
-
-```r
-ggplot(acidrain,aes(x=factor(rain_pH),y=soil_acidity,fill=soil_depth))+
-geom_boxplot()
-```
-
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
-
-     
-
-Even though `soil_depth` looks like numbers, the printout of
-the data frame reveals that it is text, so that is OK.
-
-If you prefer, exchange `x` and `fill`:
-
-
-```r
-ggplot(acidrain,aes(fill=factor(rain_pH),y=soil_acidity,x=soil_depth))+
-geom_boxplot()
-```
-
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-109-1.png" width="672"  />
-
-     
-
-
-(c)[2] What does your grouped boxplot say about likely
-interactions? Explain briefly.
-
-Solution
-
-
-Think about the effect of one of your explanatory variables, for
-each level of the other. For example, in the last plot, the effect
-of the rain pH pm on the soil acidity is very small at the largest
-and smallest depths, but at the middle soil depth 15--30, the
-average (median) soil acidity is a lot less when the rain pH is
-*higher* (which seems odd to me). The effect of rain pH being
-different according to soil pH is what suggests an interaction
-effect. 
-Another way of thinking about this is imagining what an
-interaction plot would look like. This would be a trace going
-through the middle (strictly, mean rather than median) of each set
-of boxplots of one colour. In the last boxplot, the red trace
-would go close to straight across, while the blue one would dip in
-the middle. Not parallel, so suggesting an interaction.
-Either approach is good.
-
-
-(d)[3] Fit an ANOVA with interaction. What do you conclude from
-it? You may want to create a column that is the factor version of
-`rain_pH` first.
-
-Solution
-
-
-Following my own hint:
-
-```r
-acidrain = acidrain %>% mutate(frph=factor(rain_pH))
-soil.1=aov(soil_acidity~frph*soil_depth,data=acidrain)
-summary(soil.1)
-```
-
-```
-##                 Df Sum Sq Mean Sq F value Pr(>F)
-## frph             1 0.0304 0.03042   0.759  0.401
-## soil_depth       2 0.0671 0.03357   0.838  0.457
-## frph:soil_depth  2 0.0078 0.00391   0.097  0.908
-## Residuals       12 0.4810 0.04008
-```
-
- 
-
-The interaction is nowhere near significant, perhaps surprisingly. But
-bear in mind that there are only 18 observations in total, so each box
-on the boxplot is based on *three* observations only. So the
-interaction would have to be a lot bigger to be significant.
-
-The usual procedure after finding a significant interaction is to take
-it out:
-
-
-```r
-soil.2=update(soil.1, .~.-frph:soil_depth)
-summary(soil.2)
-```
-
-```
-##             Df Sum Sq Mean Sq F value Pr(>F)
-## frph         1 0.0304 0.03042   0.871  0.366
-## soil_depth   2 0.0671 0.03357   0.962  0.406
-## Residuals   14 0.4888 0.03492
-```
-
- 
-
-The P-values have come down a bit (the result of gaining two df for
-error while the error SS only got a tiny bit bigger), but not nearly
-enough to be significant.
 
 
 

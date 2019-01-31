@@ -1,48 +1,152 @@
+##  Treating hay fever
 
 
- A research lab is developing a new compound to relieve
+ Hay fever is an allergic reaction to things like grasses or
+pollen which can make it unpleasant to go outside when the weather is
+at its best.  A research lab is developing a new compound to relieve
 severe cases of hay fever. There were two active ingredients, labelled
 A and B, with each one having three levels, low, medium and
 high. There were thus $3\times 3=9$ treatment combinations. 36
 subjects were available, and these were randomly assigned to
 combinations of levels of factor A and factor B, so that each
 combination was tested on 4 people. The response variable was the
-number of hours of pain relief (so a higher value is better). The data
-are in [link](http://individual.utoronto.ca/kbutler/stad29/hayfever.txt).
+number of hours of relief from symptoms (so a higher value is
+better). The data are in
+[link](https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt).
 
 
 
-(a)[2] Read the data and display its structure. Verify that you
+(a) Read the data and display its structure. Verify that you
 have what you were expecting.
 
 Solution
 
 
+Aligned columns separated by spaces, so `read_table`:
 ```{r }
-my_url="http://individual.utoronto.ca/kbutler/stad29/hayfever.txt"
-hayfever=read.table(my_url,header=T)
+my_url="https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt"
+hayfever=read_table(my_url)
 hayfever
 ```
 
      
 
+I have 36 observations (patients). There are two categorical columns
+`a` and `b` corresponding to the two active ingredients,
+and they each seem to have levels low, medium and high.
+`r tufte::margin_note("It's important to be clear about the distinction between a categorical variable, that lives in a data frame column, and its levels, the values that appear in the column. This is especially important if you're trying to decide whether a data frame is tidy, since typically an untidy data frame will have factor levels as column names rather than the factor itself, and you need to be able to tell the difference.")`
 
-(b)[2] interaction plot
+The `replicate` column labels each observation *within*
+its A-B combination, so that each treatment combination was indeed
+replicated four times. We won't be using this column in our analysis;
+I think it's a refugee from the original untidy format the data was in
+before it came to you.
+
+
+(b) Calculate the mean hours of relief for each combination of
+levels of the two active ingredients. Save your results in a data
+frame and display that.
 
 Solution
 
 
+This is a group-by and summarize, but there are two active ingredients and they *both* have to go in the group-by:
 ```{r }
 hayfever %>% group_by(a,b) %>%
- summarize(relief.mean=mean(relief)) %>%
- ggplot(aes(x=a,y=relief.mean,colour=b,group=b))+
+summarize(m=mean(relief)) -> d
+d
+```
+
+
+
+I'm using my usual name `d` for a temporary data frame. I could
+have put brackets around my whole pipeline to display its result, but
+I still need to save the data frame `d` to use in a moment.
+
+These levels are in the wrong logical order, but they are in the right order in the original data frame, so we can use `fct_inorder` first, thus:
+
+```{r }
+hayfever %>% 
+mutate(a=fct_inorder(a), b=fct_inorder(b)) %>%
+group_by(a,b) %>%
+summarize(m=mean(relief)) -> d2
+d2
+```
+
+ 
+
+
+(c) Make an interaction plot, showing how the mean pain relief depends on the combination of levels of A and B. It is probably easiest to use the data frame you obtained in the previous part.
+
+Solution
+
+
+My column of mean relief values is called `m`. Use whatever
+name you gave it.  I'm going to use my proper-order data frame for
+this:
+```{r }
+ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
+geom_point()+geom_line()
+```
+
+     
+Or, you probably had this:
+```{r }
+ ggplot(d, aes(x=a,y=m,colour=b,group=b))+
 geom_point()+geom_line()
 ```
 
      
 
+Since `a` and `b` both have three levels, you could just as well use them the other way around:
 
-(c)[2] Run an analysis of variance with interaction.
+```{r }
+ ggplot(d2, aes(x=b,y=m,colour=a,group=a))+
+geom_point()+geom_line()
+```
+
+ 
+
+The plot looks different depending on how you draw it, but the
+conclusion from it (below) will be the same.
+
+
+(d) What do you conclude from your interaction plot? Explain briefly.
+
+Solution
+
+
+The three lines are not particularly close to being parallel, so I
+would expect to see an interaction between the two active
+ingredients (that is, the number of hours of pain relief depends
+on the combination of the two of them).
+
+Extra: It is always a judgment call to decide whether the lines
+are "approximately parallel" or not. It depends on how much
+variability there is in the data, which the interaction plot
+doesn't show. Another idea is to add the data to the interaction
+plot, colour-coded in the same way. I would do this by taking out
+the `geom_point` for the means and add one instead for the
+data, taken from the original data frame:
+```{r }
+ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
+geom_line()+
+geom_point(data=hayfever, aes(y=relief))
+```
+
+     
+
+Technique: for that last `geom_point`, put in anything that
+changes: a new data frame, and a new `y` for the plot, but the
+`x` and `colour` and `group` are the same as they
+were before, so I don't need to specify them.
+
+The points are *very* close to the lines, so there is almost no
+residual variability. This makes it more convincing that the
+interaction is real and will be significant.
+
+
+(e) Run an analysis of variance with interaction. What do you conclude?
 
 Solution
 
@@ -54,7 +158,67 @@ summary(hayfever.1)
 
      
 
+The interaction is (strongly) significant. The hours of relief depend on the combination of levels of the active ingredients A and B.
 
-(d)[2] simple effects
+Don't try to interpret the main effects of A and B from here. That's what simple effects are for, coming up.
+
+
+(f) Analyze the simple effects of B when A is
+`medium`. (This means doing an appropriate `aov` and
+an appropriate Tukey, if warranted.)
+
+Solution
+
+
+First, we pull out only the data where A is `medium`, and then we do a one-way analysis of B on that data. This is the slick way, though you can certainly save the result of `filter` first:
+```{r }
+hayfever %>% filter(a=="medium") %>%
+aov(relief~b, data=.) -> simple_medium
+summary(simple_medium)
+```
+
+     
+
+There is definitely some effect of ingredient B when A is medium. What
+is it? Tukey will tell us:
+
+```{r }
+TukeyHSD(simple_medium)
+```
+
+ 
+
+There is no difference between medium and high (levels of B), but both of these are better in terms of relief than low is.
+
+
+(g) Analyze the simple effects of B when A is `high`.
+
+Solution
+
+
+Same idea: pull out only the data where A is `high`, do a one-way analysis of B, and do Tukey if needed:
+```{r }
+hayfever %>% filter(a=="high") %>%
+aov(relief~b, data=.) -> simple_high
+summary(simple_high)
+TukeyHSD(simple_high)
+```
+
+     
+
+When A is high, there is definitely an effect of B again, but this
+time high (for B) is better than medium is better than low. (All the
+P-values in Tukey are very small.)
+
+You could guess this from the interaction plot as well (whichever one
+you came up with): when A is high, it is better for B to be high as
+well, but when A is medium or low, there is not much difference
+between B being medium or high.
+
+Extra: here, the effect of B is different, depending on what A is. This is
+what a significant interaction *means*. If there were no
+significant interaction, the effect of B would always be the same, no
+matter what A was.
+
 
 
