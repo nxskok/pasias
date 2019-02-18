@@ -97,7 +97,7 @@ Solution
 
 
 I hope you are thinking "pipeline":
-```{r }
+```{r toofat}
 airport.long %>% mutate(time=parse_number(when)) %>%
 ggplot(aes(x=time,y=epinephrine,colour=factor(location),group=child))+
 geom_point()+geom_line()
@@ -118,14 +118,13 @@ can't see the ones underneath because the ones on top are overwriting
 them. The solution to that is to make the lines (partly) transparent,
 which is controlled by a parameter `alpha`:
 `r tufte::margin_note("This is  different from the 0.05 *alpha*.")`
-```{r }
+```{r skinnier}
 airport.long %>% mutate(time=parse_number(when)) %>%
 ggplot(aes(x=time,y=epinephrine,colour=factor(location),group=child))+
 geom_point()+geom_line(alpha=0.2)
 ```
 
-         
-
+   
 It seems to make the lines skinnier, so they look more like
 threads. Even given the lesser thickness, they seem to be a little bit
 see-through as well. You can experiment with adding transparency to
@@ -579,7 +578,7 @@ OK, and then:
 
 ```{r }
 airport %>% group_by(location) %>% nest() %>%
-mutate(means=map(data,epi.means)) %>%
+mutate(means=map(data,~epi.means(.))) %>%
 unnest(means)
 ```
 

@@ -12,9 +12,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -478,16 +478,6 @@ working in, so I just need the file name:
 ```r
 library(readxl)
 mizuna = read_excel("mizuna.xlsx")
-```
-
-```
-## readxl works best with a newer version of the tibble package.
-## You currently have tibble v1.4.2.
-## Falling back to column name repair from tibble <= v1.4.2.
-## Message displays once per session.
-```
-
-```r
 mizuna
 ```
 
@@ -1150,15 +1140,15 @@ denali %>% mutate(mon = month(date), wd = wday(date))
 
 ```
 ## # A tibble: 7 x 6
-##   date       name  caribou  wolf   mon    wd
-##   <date>     <chr>   <dbl> <dbl> <dbl> <dbl>
-## 1 1995-09-01 Davi~      30    66     9     6
-## 2 1996-09-24 Youn~      34    79     9     3
-## 3 1997-10-03 Srin~      27    70    10     6
-## 4 1998-09-15 Lee ~      25    60     9     3
-## 5 1999-09-08 Step~      17    48     9     4
-## 6 2000-09-03 Angu~      23    55     9     1
-## 7 2001-10-06 Davi~      20    60    10     7
+##   date       name   caribou  wolf   mon    wd
+##   <date>     <chr>    <dbl> <dbl> <dbl> <dbl>
+## 1 1995-09-01 David~      30    66     9     6
+## 2 1996-09-24 Young~      34    79     9     3
+## 3 1997-10-03 Srini~      27    70    10     6
+## 4 1998-09-15 Lee A~      25    60     9     3
+## 5 1999-09-08 Steph~      17    48     9     4
+## 6 2000-09-03 Angus~      23    55     9     1
+## 7 2001-10-06 David~      20    60    10     7
 ```
 
      
@@ -1174,15 +1164,15 @@ denali %>% mutate(mon = month(date, label = T),
 
 ```
 ## # A tibble: 7 x 6
-##   date       name  caribou  wolf mon   wd   
-##   <date>     <chr>   <dbl> <dbl> <ord> <ord>
-## 1 1995-09-01 Davi~      30    66 Sep   Fri  
-## 2 1996-09-24 Youn~      34    79 Sep   Tue  
-## 3 1997-10-03 Srin~      27    70 Oct   Fri  
-## 4 1998-09-15 Lee ~      25    60 Sep   Tue  
-## 5 1999-09-08 Step~      17    48 Sep   Wed  
-## 6 2000-09-03 Angu~      23    55 Sep   Sun  
-## 7 2001-10-06 Davi~      20    60 Oct   Sat
+##   date       name   caribou  wolf mon   wd   
+##   <date>     <chr>    <dbl> <dbl> <ord> <ord>
+## 1 1995-09-01 David~      30    66 Sep   Fri  
+## 2 1996-09-24 Young~      34    79 Sep   Tue  
+## 3 1997-10-03 Srini~      27    70 Oct   Fri  
+## 4 1998-09-15 Lee A~      25    60 Sep   Tue  
+## 5 1999-09-08 Steph~      17    48 Sep   Wed  
+## 6 2000-09-03 Angus~      23    55 Sep   Sun  
+## 7 2001-10-06 David~      20    60 Oct   Sat
 ```
 
  

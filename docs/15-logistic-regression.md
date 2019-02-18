@@ -10,9 +10,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -802,6 +802,11 @@ as_tibble(prob) %>% bind_cols(dead_bugs)
 ```
 
 ```
+## Warning: Calling `as_tibble()` on a vector is discouraged, because the behavior is likely to change in the future. Use `enframe(name = NULL)` instead.
+## This warning is displayed once per session.
+```
+
+```
 ## # A tibble: 5 x 4
 ##   value log_conc exposed killed
 ##   <dbl>    <dbl>   <dbl>  <dbl>
@@ -1024,7 +1029,7 @@ enframe(lethal) %>% mutate(SE = attr(lethal, "SE"))
 
 ```
 ## # A tibble: 3 x 3
-##   name      value     SE
+##   name      value SE[,1]
 ##   <chr>     <dbl>  <dbl>
 ## 1 p = 0.25:  1.22 0.0703
 ## 2 p = 0.50:  1.57 0.0516
@@ -1044,11 +1049,11 @@ enframe(lethal) %>% mutate(SE = attr(lethal, "SE")) %>%
 
 ```
 ## # A tibble: 3 x 5
-##   name      value     SE   LCL   UCL
-##   <chr>     <dbl>  <dbl> <dbl> <dbl>
-## 1 p = 0.25:  1.22 0.0703  1.08  1.36
-## 2 p = 0.50:  1.57 0.0516  1.47  1.68
-## 3 p = 0.75:  1.93 0.0653  1.80  2.06
+##   name      value SE[,1] LCL[,1] UCL[,1]
+##   <chr>     <dbl>  <dbl>   <dbl>   <dbl>
+## 1 p = 0.25:  1.22 0.0703    1.08    1.36
+## 2 p = 0.50:  1.57 0.0516    1.47    1.68
+## 3 p = 0.75:  1.93 0.0653    1.80    2.06
 ```
 
  
@@ -2185,7 +2190,7 @@ infect.1a %>% as_tibble()
 ```
 ## # A tibble: 81 x 11
 ##    infected   age weight sex   .fitted
-##  * <chr>    <dbl>  <dbl> <chr>   <dbl>
+##    <chr>    <dbl>  <dbl> <chr>   <dbl>
 ##  1 absent       2      1 fema~   0.407
 ##  2 absent       9     13 fema~  -2.24 
 ##  3 present     15      2 fema~   0.343
@@ -3706,11 +3711,11 @@ library(ggmap)
 ```
 
 ```
-## Google Maps API Terms of Service: https://cloud.google.com/maps-platform/terms/.
+## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
 ```
 
 ```
-## Please cite ggmap if you use it: see citation("ggmap") for details.
+## Please cite ggmap if you use it! See citation("ggmap") for details.
 ```
 
 ```r

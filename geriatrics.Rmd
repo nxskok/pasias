@@ -184,7 +184,7 @@ Solution
 
 Once you have the means, this is not too bad:
 
-```{r }
+```{r ger_int}
 ggplot(means,aes(x=time,y=mean,group=treatment,colour=treatment))+
 geom_point()+geom_line()
 ```
@@ -233,12 +233,13 @@ Solution
 
 
 This is almost easier to do than it is to ask you to do:
-```{r }
+
+```{r ger_spag}
 ggplot(geriatrics.long,aes(x=time,y=intpct,colour=treatment,group=subject))+
 geom_line()
 ```
 
-     
+   
 
 The basic difficulty here is to get all the parts. We need both a
 `colour` and a `group`; the latter controls the joining
@@ -309,11 +310,10 @@ before. I think it is still significant because the shape of the two
 time trends is not the same: the red `bt` group goes up further
 and down further. I was musing that the higher values are also more
 variable, which would suggest a transformation, but I haven't explored that.
-
 If the interaction had turned out to be nonsignificant this way? You
 might think about trying to remove it from the model, except that in
-this kind of model, `treatment` is a ``between-subjects
-factor'' and `times` is a "within-subjects factor", so they
+this kind of model, `treatment` is a "between-subjects factor" 
+and `times` is a "within-subjects factor", so they
 are different kinds of things. What you do in that case is to ignore
 the non-significant interaction and interpret the main effects: there
 is no way to "gain df for error" like we did in two-way

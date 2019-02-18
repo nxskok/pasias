@@ -10,9 +10,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -2130,7 +2130,7 @@ carp.2a
 ```
 ## # A tibble: 10 x 10
 ##     tank bodyweight   ENE .fitted .se.fit
-##  * <dbl>      <dbl> <dbl>   <dbl>   <dbl>
+##    <dbl>      <dbl> <dbl>   <dbl>   <dbl>
 ##  1     1       11.7  15.3   12.6    1.07 
 ##  2     2       25.3   9.3   11.3    0.886
 ##  3     3       90.2   6.5    6.75   1.07 
@@ -3544,7 +3544,7 @@ glance(volume.1)
 ```
 ## # A tibble: 1 x 11
 ##   r.squared adj.r.squared sigma statistic
-## *     <dbl>         <dbl> <dbl>     <dbl>
+##       <dbl>         <dbl> <dbl>     <dbl>
 ## 1     0.959         0.953  20.4      185.
 ## # ... with 7 more variables: p.value <dbl>,
 ## #   df <int>, logLik <dbl>, AIC <dbl>,
@@ -3568,10 +3568,10 @@ tidy(volume.1)
 
 ```
 ## # A tibble: 2 x 5
-##   term  estimate std.error statistic p.value
-##   <chr>    <dbl>     <dbl>     <dbl>   <dbl>
-## 1 (Int~   -192.     24.0       -8.01 4.35e-5
-## 2 diam~     10.9     0.801     13.6  8.22e-7
+##   term   estimate std.error statistic p.value
+##   <chr>     <dbl>     <dbl>     <dbl>   <dbl>
+## 1 (Inte~   -192.     24.0       -8.01 4.35e-5
+## 2 diame~     10.9     0.801     13.6  8.22e-7
 ```
 
  
@@ -3587,9 +3587,9 @@ tidy(volume.1) %>% filter(term == "diameter")
 
 ```
 ## # A tibble: 1 x 5
-##   term  estimate std.error statistic p.value
-##   <chr>    <dbl>     <dbl>     <dbl>   <dbl>
-## 1 diam~     10.9     0.801      13.6 8.22e-7
+##   term   estimate std.error statistic p.value
+##   <chr>     <dbl>     <dbl>     <dbl>   <dbl>
+## 1 diame~     10.9     0.801      13.6 8.22e-7
 ```
 
  
@@ -5070,18 +5070,18 @@ coasters
 
 ```
 ## # A tibble: 10 x 4
-##    coaster_name    state       drop duration
-##    <chr>           <chr>      <dbl>    <dbl>
-##  1 Incredible Hulk Florida      105      135
-##  2 Millennium For~ Ohio         300      105
-##  3 Goliath         California   255      180
-##  4 Nitro           New Jersey   215      240
-##  5 Magnum XL-2000  Ohio         195      120
-##  6 The Beast       Ohio         141       65
-##  7 Son of Beast    Ohio         214      140
-##  8 Thunderbolt     Pennsylva~    95       90
-##  9 Ghost Rider     California   108      160
-## 10 Raven           Indiana       86       90
+##    coaster_name     state       drop duration
+##    <chr>            <chr>      <dbl>    <dbl>
+##  1 Incredible Hulk  Florida      105      135
+##  2 Millennium Force Ohio         300      105
+##  3 Goliath          California   255      180
+##  4 Nitro            New Jersey   215      240
+##  5 Magnum XL-2000   Ohio         195      120
+##  6 The Beast        Ohio         141       65
+##  7 Son of Beast     Ohio         214      140
+##  8 Thunderbolt      Pennsylva~    95       90
+##  9 Ghost Rider      California   108      160
+## 10 Raven            Indiana       86       90
 ```
 
  
@@ -5682,18 +5682,18 @@ pizza
 
 ```
 ## # A tibble: 24 x 4
-##    Type                 Calories   Fat  Cost
-##    <chr>                   <dbl> <dbl> <dbl>
-##  1 Domino's Deep Dish ~      385  19.5  1.87
-##  2 Pizza Hut's Stuffed~      370  15    1.83
-##  3 Pizza Hut's Pan Piz~      280  14    1.83
-##  4 Domino's Hand-Tosse~      305  12    1.67
-##  5 Pizza Hut's Hand-To~      230   9    1.63
-##  6 Little Caesars' Dee~      350  14.2  1.06
-##  7 Little Caesars' Ori~      230   8    0.81
-##  8 Freschetta Bakes & ~      364  15    0.98
-##  9 Freschetta Bakes & ~      334  11    1.23
-## 10 DiGiorno Rising Cru~      332  12    0.94
+##    Type                  Calories   Fat  Cost
+##    <chr>                    <dbl> <dbl> <dbl>
+##  1 Domino's Deep Dish w~      385  19.5  1.87
+##  2 Pizza Hut's Stuffed ~      370  15    1.83
+##  3 Pizza Hut's Pan Pizz~      280  14    1.83
+##  4 Domino's Hand-Tossed~      305  12    1.67
+##  5 Pizza Hut's Hand-Tos~      230   9    1.63
+##  6 Little Caesars' Deep~      350  14.2  1.06
+##  7 Little Caesars' Orig~      230   8    0.81
+##  8 Freschetta Bakes & R~      364  15    0.98
+##  9 Freschetta Bakes & R~      334  11    1.23
+## 10 DiGiorno Rising Crus~      332  12    0.94
 ## # ... with 14 more rows
 ```
 
@@ -5766,16 +5766,6 @@ will gobble up that pizza too:
 ```r
 my_other_url = "http://www.utsc.utoronto.ca/~butler/d29/Pizza_E29.xls"
 pizza4 = import(my_other_url)
-```
-
-```
-## readxl works best with a newer version of the tibble package.
-## You currently have tibble v1.4.2.
-## Falling back to column name repair from tibble <= v1.4.2.
-## Message displays once per session.
-```
-
-```r
 head(pizza4)
 ```
 
@@ -7793,7 +7783,7 @@ as_tibble(d)
 ```
 ## # A tibble: 20 x 10
 ##    minutes drums weight .fitted .se.fit
-##  *   <dbl> <dbl>  <dbl>   <dbl>   <dbl>
+##      <dbl> <dbl>  <dbl>   <dbl>   <dbl>
 ##  1      58     7   5.11    55.7    1.70
 ##  2     152    18  16.7    156.     2.47
 ##  3      41     5   3.2     38.4    2.03

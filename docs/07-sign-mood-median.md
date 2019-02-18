@@ -10,9 +10,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -1029,9 +1029,9 @@ x
 ```
 
 ```
-##  [1] 25.27956 52.60985 48.67348 37.12309
-##  [5] 45.21550 55.02674 43.27321 55.11397
-##  [9] 39.60205 47.76569
+##  [1] 42.16343 53.32438 48.67553 61.19034
+##  [5] 43.80379 53.20271 37.99220 50.65858
+##  [9] 37.58807 66.73135
 ```
 
 
@@ -1055,8 +1055,8 @@ tibble(x) %>% count(x < 40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        7
-## 2 TRUE         3
+## 1 FALSE        8
+## 2 TRUE         2
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1089,7 +1089,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       3 FALSE
+## 1       2 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1109,7 +1109,7 @@ tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>%
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       3 FALSE
+## 1       2 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value

@@ -12,9 +12,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -433,18 +433,18 @@ vote0
 
 ```
 ## # A tibble: 1,257 x 5
-##       id class       age   sex    vote      
-##    <dbl> <chr>       <chr> <chr>  <chr>     
-##  1     1 upper midd~ >75   male   conservat~
-##  2     2 upper midd~ >75   male   conservat~
-##  3     3 upper midd~ >75   male   conservat~
-##  4     4 upper midd~ >75   male   conservat~
-##  5     5 upper midd~ >75   female conservat~
-##  6     6 upper midd~ >75   female conservat~
-##  7     7 upper midd~ >75   female conservat~
-##  8     8 upper midd~ >75   female conservat~
-##  9     9 upper midd~ >75   female conservat~
-## 10    10 upper midd~ >75   female conservat~
+##       id class        age   sex   vote       
+##    <dbl> <chr>        <chr> <chr> <chr>      
+##  1     1 upper middle >75   male  conservati~
+##  2     2 upper middle >75   male  conservati~
+##  3     3 upper middle >75   male  conservati~
+##  4     4 upper middle >75   male  conservati~
+##  5     5 upper middle >75   fema~ conservati~
+##  6     6 upper middle >75   fema~ conservati~
+##  7     7 upper middle >75   fema~ conservati~
+##  8     8 upper middle >75   fema~ conservati~
+##  9     9 upper middle >75   fema~ conservati~
+## 10    10 upper middle >75   fema~ conservati~
 ## # ... with 1,247 more rows
 ```
 
@@ -474,18 +474,18 @@ votes
 
 ```
 ## # A tibble: 58 x 5
-##    class       age   sex    vote           n
-##    <chr>       <chr> <chr>  <chr>      <int>
-##  1 lower midd~ <26   female conservat~    13
-##  2 lower midd~ <26   female labour         7
-##  3 lower midd~ <26   male   conservat~     9
-##  4 lower midd~ <26   male   labour         9
-##  5 lower midd~ 26-40 female conservat~    17
-##  6 lower midd~ 26-40 female labour        13
-##  7 lower midd~ 26-40 male   conservat~    14
-##  8 lower midd~ 26-40 male   labour        15
-##  9 lower midd~ 41-50 female conservat~    29
-## 10 lower midd~ 41-50 female labour         4
+##    class        age   sex   vote            n
+##    <chr>        <chr> <chr> <chr>       <int>
+##  1 lower middle <26   fema~ conservati~    13
+##  2 lower middle <26   fema~ labour          7
+##  3 lower middle <26   male  conservati~     9
+##  4 lower middle <26   male  labour          9
+##  5 lower middle 26-40 fema~ conservati~    17
+##  6 lower middle 26-40 fema~ labour         13
+##  7 lower middle 26-40 male  conservati~    14
+##  8 lower middle 26-40 male  labour         15
+##  9 lower middle 41-50 fema~ conservati~    29
+## 10 lower middle 41-50 fema~ labour          4
 ## # ... with 48 more rows
 ```
 

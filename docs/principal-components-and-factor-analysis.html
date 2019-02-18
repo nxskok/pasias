@@ -272,8 +272,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">21.1</span> Effect of drug on rat weight</a></li>
 <li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">21.2</span> Social interaction among old people</a></li>
 <li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">21.3</span> Children’s stress levels and airports</a></li>
-<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">21.4</span> Investigating motor activity in rats</a></li>
-<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">21.5</span> Repeated measures with no background</a></li>
+<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">21.4</span> Body fat as repeated measures</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">21.5</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">21.6</span> Repeated measures with no background</a></li>
 </ul></li>
 <li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">22</span> Discriminant analysis</a><ul>
 <li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">22.1</span> Telling whether a banknote is real or counterfeit</a></li>
@@ -327,10 +328,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## Loading required package: grid</code></pre>
 <div class="sourceCode" id="cb4134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4134-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ tibble  1.4.2     ✔ purrr   0.2.5
+<pre><code>## ✔ tibble  2.0.1     ✔ purrr   0.3.0
 ## ✔ tidyr   0.8.2     ✔ dplyr   0.7.8
-## ✔ readr   1.3.1     ✔ stringr 1.3.1
-## ✔ tibble  1.4.2     ✔ forcats 0.3.0</code></pre>
+## ✔ readr   1.3.1     ✔ stringr 1.4.0
+## ✔ tibble  2.0.1     ✔ forcats 0.3.0</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::arrange()    masks plyr::arrange()
 ## ✖ readr::col_factor() masks scales::col_factor()
@@ -392,7 +393,7 @@ the columns by number:</p>
 ##  8         8     8     1 Winter   12.4   15.6     14.1 23:50      
 ##  9         9     9     1 Winter    9.2   18.4     12.9 07:10      
 ## 10        10    10     1 Winter    8.3   14.8     11   07:55      
-## # ... with 355 more rows, and 6 more variables: h.temp.time &lt;time&gt;,
+## # … with 355 more rows, and 6 more variables: h.temp.time &lt;time&gt;,
 ## #   rain &lt;dbl&gt;, ave.wind &lt;dbl&gt;, gust.wind &lt;dbl&gt;, gust.wind.time &lt;time&gt;,
 ## #   dir.wind &lt;chr&gt;</code></pre>
 <p>There are lots of columns, of which we only want a few:</p>
@@ -411,7 +412,7 @@ the columns by number:</p>
 ##  8   12.4   15.6     14.1   1.5      5.9      33.8
 ##  9    9.2   18.4     12.9   0        0.2      16.1
 ## 10    8.3   14.8     11     0        1.4      24.1
-## # ... with 355 more rows</code></pre>
+## # … with 355 more rows</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Find five-number summaries for each column by running
 <code>quantile</code> on all the columns of the data frame (at once, if
@@ -580,7 +581,7 @@ want (the first three):</p>
 ## 18 -1.95  -1.82     1.28       7.5   10.9      9    17        1.4      24.1
 ## 19 -2.13  -1.60    -0.293      6.4   11.4      8.7   2.5      3.3      32.2
 ## 20 -1.29  -2.62     0.448      6.9   12.2      9.2   2.8      1.1      17.7
-## # ... with 345 more rows</code></pre>
+## # … with 345 more rows</code></pre>
 <p>I just did the first three scores.</p>
 <ol start="8" style="list-style-type: lower-alpha">
 <li>Find a day that scores high on component 1, and explain briefly why
@@ -681,7 +682,7 @@ are <em>low</em> on the variables in question, for example day 265:</p>
 ## 1    3.1   11.8      7.3   0.8        2      24.1</code></pre>
 <p>This is predominantly low on temperature. In fact, it is kind of low
 on wind and rain too.
-<label for="tufte-mn-257" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-257" class="margin-toggle"><span class="marginnote">If you ignore the wind gust, anyway.</span>
+<label for="tufte-mn-259" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-259" class="margin-toggle"><span class="marginnote">If you ignore the wind gust, anyway.</span>
 This makes sense, because not only is it at the “wrong” end of the
 temperature arrows, it is kind of at the wrong end of the wind/rain
 arrows as well.</p>
@@ -723,8 +724,8 @@ perhaps Brittany in France, but actually the west
 coast of the Iberian peninsula: Porto, in northern Portugal, with the
 weather blowing in off the Atlantic.</p>
 <div class="sourceCode" id="cb4166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4166-1" data-line-number="1"><span class="kw">library</span>(ggmap)</a></code></pre></div>
-<pre><code>## Google Maps API Terms of Service: https://cloud.google.com/maps-platform/terms/.</code></pre>
-<pre><code>## Please cite ggmap if you use it: see citation(&quot;ggmap&quot;) for details.</code></pre>
+<pre><code>## Google&#39;s Terms of Service: https://cloud.google.com/maps-platform/terms/.</code></pre>
+<pre><code>## Please cite ggmap if you use it! See citation(&quot;ggmap&quot;) for details.</code></pre>
 <div class="sourceCode" id="cb4169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4169-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a></code></pre></div>
 <p>Let’s make a map, but first we “geocode” Porto (and La Coruna,
 for later). I like to do the lookup of longitude and latitude first,
@@ -841,7 +842,7 @@ number of rows and columns in your data frame.</li>
 ##  8     5              72     6     4    21    14     4
 ##  9     7              82     5     1    11    11     3
 ## 10     8              64     5     2    13     9     4
-## # ... with 32 more rows</code></pre>
+## # … with 32 more rows</code></pre>
 <p>There should be 42 rows (for the 42 days), and 7 columns (for the 7
 variables), and there are.</p>
 <ol start="2" style="list-style-type: lower-alpha">
@@ -1327,7 +1328,7 @@ components, there is no sense that factor 1 is the most important and
 factor 3 the least; because of the rotation, all that we have is that
 the three factors together explain 58% of the
 variability.
-<label for="tufte-mn-258" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-258" class="margin-toggle"><span class="marginnote">This is unlike principal components because, <em>by design</em> there, the first principal component explains the most variability. That does not happen here, because the (rotated) factors act as a team.</span></p>
+<label for="tufte-mn-260" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-260" class="margin-toggle"><span class="marginnote">This is unlike principal components because, <em>by design</em> there, the first principal component explains the most variability. That does not happen here, because the (rotated) factors act as a team.</span></p>
 <p>Note that day 8 has the most extreme score on factor 1 again. This is
 for more or less the same reasons that it had the most extreme score
 on component 1 before.</p>
@@ -1350,7 +1351,7 @@ have five variables with names invented by R.</li>
 </ol>
 <p>Solution</p>
 <p>I saved my data into <code>cov5.txt</code>,
-<label for="tufte-mn-259" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-259" class="margin-toggle"><span class="marginnote">Not to be confused with <em>covfefe</em>.</span> delimited by single spaces, so:</p>
+<label for="tufte-mn-261" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-261" class="margin-toggle"><span class="marginnote">Not to be confused with <em>covfefe</em>.</span> delimited by single spaces, so:</p>
 <div class="sourceCode" id="cb4231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4231-1" data-line-number="1">corr=<span class="kw">read_delim</span>(<span class="st">&quot;cov5.txt&quot;</span>,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
@@ -1410,7 +1411,7 @@ have only five variables?</li>
 <div class="sourceCode" id="cb4241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4241-1" data-line-number="1"><span class="kw">ggscreeplot</span>(corr<span class="fl">.1</span>)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/sdljhljsahja-1.png" width="672"  /></p>
 <p>There is kind of an elbow at 3, which would suggest two components/factors.
-<label for="tufte-mn-260" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-260" class="margin-toggle"><span class="marginnote">There is also kind of an elbow at 4, which would suggest three factors, but that’s really too many with only 5 variables. That wouldn’t be much of a <em>reduction</em> in the number of variables, which is what principal components is trying to achieve.</span></p>
+<label for="tufte-mn-262" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-262" class="margin-toggle"><span class="marginnote">There is also kind of an elbow at 4, which would suggest three factors, but that’s really too many with only 5 variables. That wouldn’t be much of a <em>reduction</em> in the number of variables, which is what principal components is trying to achieve.</span></p>
 <p>You can also use the eigenvalue-bigger-than-1 thing:</p>
 <div class="sourceCode" id="cb4242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4242-1" data-line-number="1"><span class="kw">summary</span>(corr<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Importance of components:
@@ -1498,7 +1499,7 @@ access the things in a list:</p>
 <p>and logically this is because, to R, a data frame <em>is</em> a special
 kind of a list, so anything that works for a list also works for a
 data frame, plus some extra things besides.
-<label for="tufte-mn-261" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-261" class="margin-toggle"><span class="marginnote">In computer science terms, a data frame is said to <strong>inherit</strong> from a list: it is a list plus extra stuff.</span></p>
+<label for="tufte-mn-263" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-263" class="margin-toggle"><span class="marginnote">In computer science terms, a data frame is said to <strong>inherit</strong> from a list: it is a list plus extra stuff.</span></p>
 <p>The same idea applies to extracting things from the output of a
 regression (with <code>lm</code>) or something like a <code>t.test</code>: the
 output from those is also a list. But for those, I like <code>tidy</code>
@@ -1613,7 +1614,7 @@ of rows and columns.</li>
 ##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
 ##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
 ## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
-## # ... with 449 more rows, and 32 more variables: PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
+## # … with 449 more rows, and 32 more variables: PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
 ## #   PERS16 &lt;dbl&gt;, PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;,
 ## #   PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
 ## #   PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;,
@@ -1644,7 +1645,7 @@ doing something like this:</p>
 ##  8     8 PERS01        5
 ##  9     9 PERS01        5
 ## 10    10 PERS01        4
-## # ... with 20,186 more rows</code></pre>
+## # … with 20,186 more rows</code></pre>
 <p>to get a <em>really</em> long and skinny data frame. It all depends on
 what you are doing with it. Long-and-skinny is ideal if you are going
 to summarize the responses by survey item, or draw something like bar
@@ -1709,7 +1710,7 @@ like this:</p>
 ##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
 ##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
 ## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
-## # ... with 423 more rows, and 33 more variables: PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
+## # … with 423 more rows, and 33 more variables: PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
 ## #   PERS16 &lt;dbl&gt;, PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;,
 ## #   PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
 ## #   PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;,
@@ -1739,7 +1740,7 @@ we wanted to remove all the distances for two cities .</p>
 ##  8     8 PERS01      5
 ##  9     9 PERS01      5
 ## 10    10 PERS01      4
-## # ... with 20,186 more rows</code></pre>
+## # … with 20,186 more rows</code></pre>
 <p>To find out which <em>subjects</em> have any missing values, we can do a
 <code>group_by</code> and <code>summarize</code> on <em>subjects</em> (that
 means, the <code>id</code> column; the <code>PERS</code> in the column I
@@ -1766,7 +1767,7 @@ of thing, adding to my pipeline:</p>
 ##  8    84    NA
 ##  9    96    NA
 ## 10   159    NA
-## # ... with 16 more rows</code></pre>
+## # … with 16 more rows</code></pre>
 <p>Most of the subjects had an actual numerical mean here, whose value
 we don’t care about; all we care about here is whether the mean is
 missing, which implies that one (or more) of the responses was
@@ -1797,7 +1798,7 @@ subject has any missing values and false otherwise:</p>
 ## 13    13  3.59 FALSE      
 ## 14    14  3.27 FALSE      
 ## 15    15  3.75 FALSE      
-## # ... with 444 more rows</code></pre>
+## # … with 444 more rows</code></pre>
 <p>This data frame <code>pers.hm</code> has the same number of rows as the
 original data frame <code>pers</code>, one per subject, so we can just
 glue it onto the end of that:</p>
@@ -1815,7 +1816,7 @@ glue it onto the end of that:</p>
 ##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
 ##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
 ## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
-## # ... with 449 more rows, and 35 more variables: PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
+## # … with 449 more rows, and 35 more variables: PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
 ## #   PERS16 &lt;dbl&gt;, PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;,
 ## #   PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
 ## #   PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;,
@@ -2087,7 +2088,7 @@ reasonably briefly.</li>
 <p>Solution</p>
 <p>For this, we need the factor scores obtained in part
 (<a href="#part:score">here</a>).
-<label for="tufte-mn-262" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-262" class="margin-toggle"><span class="marginnote">There are two types of scores here: a person’s scores on the psychological test, 1 through 5, and their factor scores, which are decimal numbers centred at zero. Try not to get these confused.</span>
+<label for="tufte-mn-264" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-264" class="margin-toggle"><span class="marginnote">There are two types of scores here: a person’s scores on the psychological test, 1 through 5, and their factor scores, which are decimal numbers centred at zero. Try not to get these confused.</span>
 I’m thinking that I will create a data frame
 with the original data (with the missing values removed) and the
 factor scores together, and then look in there. This will have a
@@ -2112,7 +2113,7 @@ missing data) we are looking at:</p>
 ##  8 -0.589    0.747  -0.257   1.18  -0.517      8      5      2      4      2      4      1
 ##  9 -0.836    1.02    0.620   1.36  -0.705      9      5      1      4      3      2      1
 ## 10  0.984    0.298  -1.06    0.681 -0.553     10      4      1      5      1      4      3
-## # ... with 423 more rows, and 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;,
+## # … with 423 more rows, and 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;,
 ## #   PERS10 &lt;dbl&gt;, PERS11 &lt;dbl&gt;, PERS12 &lt;dbl&gt;, PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
 ## #   PERS16 &lt;dbl&gt;, PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;,
 ## #   PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
@@ -2134,7 +2135,7 @@ who scores highest and/or lowest on that factor:</p>
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1    1.70   -2.14   0.471  -0.525   0.681   231      1      4      5      4      4      5
-## # ... with 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;, PERS10 &lt;dbl&gt;,
+## # … with 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;, PERS10 &lt;dbl&gt;,
 ## #   PERS11 &lt;dbl&gt;, PERS12 &lt;dbl&gt;, PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;, PERS16 &lt;dbl&gt;,
 ## #   PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;,
 ## #   PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;,
@@ -2151,7 +2152,7 @@ who scores highest and/or lowest on that factor:</p>
 ## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3
 ## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3
 ## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3
-## # ... with 428 more rows, and 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;,
+## # … with 428 more rows, and 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;,
 ## #   PERS10 &lt;dbl&gt;, PERS11 &lt;dbl&gt;, PERS12 &lt;dbl&gt;, PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
 ## #   PERS16 &lt;dbl&gt;, PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;,
 ## #   PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
@@ -2164,7 +2165,7 @@ who scores highest and/or lowest on that factor:</p>
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1
-## # ... with 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;, PERS10 &lt;dbl&gt;,
+## # … with 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;, PERS10 &lt;dbl&gt;,
 ## #   PERS11 &lt;dbl&gt;, PERS12 &lt;dbl&gt;, PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;, PERS16 &lt;dbl&gt;,
 ## #   PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;,
 ## #   PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;,
@@ -2181,7 +2182,7 @@ values in it and look at that:</p>
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1
-## # ... with 39 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;, PERS10 &lt;dbl&gt;,
+## # … with 39 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;, PERS10 &lt;dbl&gt;,
 ## #   PERS11 &lt;dbl&gt;, PERS12 &lt;dbl&gt;, PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;, PERS16 &lt;dbl&gt;,
 ## #   PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;,
 ## #   PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;,
@@ -2199,7 +2200,7 @@ this work too?</p>
 ## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3
 ## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3
 ## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3
-## # ... with 428 more rows, and 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;,
+## # … with 428 more rows, and 38 more variables: PERS07 &lt;dbl&gt;, PERS08 &lt;dbl&gt;, PERS09 &lt;dbl&gt;,
 ## #   PERS10 &lt;dbl&gt;, PERS11 &lt;dbl&gt;, PERS12 &lt;dbl&gt;, PERS13 &lt;dbl&gt;, PERS14 &lt;dbl&gt;, PERS15 &lt;dbl&gt;,
 ## #   PERS16 &lt;dbl&gt;, PERS17 &lt;dbl&gt;, PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;,
 ## #   PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
@@ -2249,7 +2250,7 @@ Having struggled through that, factors 2 and 3 are repeats of
 this. The high loaders on factor 2 are the ones shown in <code>f2</code>
 below, with the first five loading positively and the last three
 negatively.
-<label for="tufte-mn-263" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-263" class="margin-toggle"><span class="marginnote">I think the last four items in the entire survey are different; otherwise the total number of items would be a multiple of 5.</span></p>
+<label for="tufte-mn-265" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-265" class="margin-toggle"><span class="marginnote">I think the last four items in the entire survey are different; otherwise the total number of items would be a multiple of 5.</span></p>
 <div class="sourceCode" id="cb4307"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4307-1" data-line-number="1">f2=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">11</span>,<span class="dv">16</span>,<span class="dv">26</span>,<span class="dv">36</span>,<span class="dv">6</span>,<span class="dv">21</span>,<span class="dv">31</span>)</a>
 <a class="sourceLine" id="cb4307-2" data-line-number="2">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">abso=</span><span class="kw">abs</span>(Factor2)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4307-3" data-line-number="3"><span class="kw">filter</span>(abso<span class="op">==</span><span class="kw">max</span>(abso)) <span class="op">%&gt;%</span></a>

@@ -28,9 +28,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -51,6 +51,7 @@ library(tidyverse)
 rats. One group was given thyroxin in their drinking water, one group
 thiouracil, and the third group was a control. (This description comes
 from Christensen (2001).)
+\marginnote{References: Box, George EP, Problems in the analysis of growth and wear curves, Biometrics vol. 6, 362-369, 1950; Christensen R, Advanced Linear Modeling, 2nd edition, Springer, 2001. Yes, that's the Box-Cox Box.}
 Weights are measured in
 grams at weekly intervals (over a 4-week period, so that each rat is
 measured 5 times). The data are in
@@ -66,7 +67,7 @@ Solution
 
 
 A `.csv` file, so `read_csv`. (I typed the data from
-\citet{christensen01} into a spreadsheet.)
+Christensen (2001) into a spreadsheet.)
 
 ```r
 my_url = "http://www.utsc.utoronto.ca/~butler/d29/ratweight.csv"
@@ -76,6 +77,7 @@ weights = read_csv(my_url)
 ```
 ## Parsed with column specification:
 ## cols(
+##   rat = col_double(),
 ##   drug = col_character(),
 ##   Time0 = col_double(),
 ##   Time1 = col_double(),
@@ -90,19 +92,19 @@ weights
 ```
 
 ```
-## # A tibble: 27 x 6
-##    drug       Time0 Time1 Time2 Time3 Time4
-##    <chr>      <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 thyroxin      59    85   121   156   191
-##  2 thyroxin      54    71    90   110   138
-##  3 thyroxin      56    75   108   151   189
-##  4 thyroxin      59    85   116   148   177
-##  5 thyroxin      57    72    97   120   144
-##  6 thyroxin      52    73    97   116   140
-##  7 thyroxin      52    70   105   138   171
-##  8 thiouracil    61    86   109   120   129
-##  9 thiouracil    59    80   101   111   122
-## 10 thiouracil    53    79   100   106   133
+## # A tibble: 27 x 7
+##      rat drug   Time0 Time1 Time2 Time3 Time4
+##    <dbl> <chr>  <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1     1 thyro~    59    85   121   156   191
+##  2     2 thyro~    54    71    90   110   138
+##  3     3 thyro~    56    75   108   151   189
+##  4     4 thyro~    59    85   116   148   177
+##  5     5 thyro~    57    72    97   120   144
+##  6     6 thyro~    52    73    97   116   140
+##  7     7 thyro~    52    70   105   138   171
+##  8     8 thiou~    61    86   109   120   129
+##  9     9 thiou~    59    80   101   111   122
+## 10    10 thiou~    53    79   100   106   133
 ## # ... with 17 more rows
 ```
 
@@ -171,10 +173,8 @@ The thought process is that the columns of the response
 response values are at different times. That's the only part of it
 that is within subjects. The different drugs are a
 "between-subjects" factor: each rat only gets one of the
-drugs. (Things would be a lot more complicated if each rat got a
-different drug at a different time! But the rats each got one drug
-*once*, at the beginning, and the issue was the effect of that
-drug on all the growth that followed.)
+drugs.
+\marginnote{Things would be a lot more complicated if each rat got a different drug at a different time! But the rats each got one drug *once*, at the beginning, and the issue was the effect of that drug on all the growth that followed.}
  
 
 (e) Take a look at the output from the MANOVA. Is there a
@@ -236,19 +236,19 @@ weights.long
 ```
 
 ```
-## # A tibble: 135 x 3
-##    drug       time  weight
-##    <chr>      <chr>  <dbl>
-##  1 thyroxin   Time0     59
-##  2 thyroxin   Time0     54
-##  3 thyroxin   Time0     56
-##  4 thyroxin   Time0     59
-##  5 thyroxin   Time0     57
-##  6 thyroxin   Time0     52
-##  7 thyroxin   Time0     52
-##  8 thiouracil Time0     61
-##  9 thiouracil Time0     59
-## 10 thiouracil Time0     53
+## # A tibble: 135 x 4
+##      rat drug       time  weight
+##    <dbl> <chr>      <chr>  <dbl>
+##  1     1 thyroxin   Time0     59
+##  2     2 thyroxin   Time0     54
+##  3     3 thyroxin   Time0     56
+##  4     4 thyroxin   Time0     59
+##  5     5 thyroxin   Time0     57
+##  6     6 thyroxin   Time0     52
+##  7     7 thyroxin   Time0     52
+##  8     8 thiouracil Time0     61
+##  9     9 thiouracil Time0     59
+## 10    10 thiouracil Time0     53
 ## # ... with 125 more rows
 ```
 
@@ -270,29 +270,29 @@ weights2.long %>% sample_n(20)
 ```
 
 ```
-## # A tibble: 20 x 4
-##    drug       junk  time  weight
-##    <chr>      <chr> <chr>  <dbl>
-##  1 control    Time  1         91
-##  2 thiouracil Time  4        129
-##  3 control    Time  1         81
-##  4 thiouracil Time  4        119
-##  5 thyroxin   Time  4        171
-##  6 control    Time  1         77
-##  7 thiouracil Time  2         93
-##  8 thiouracil Time  2         78
-##  9 control    Time  2        104
-## 10 control    Time  3        121
-## 11 thiouracil Time  1         61
-## 12 control    Time  2        100
-## 13 thiouracil Time  0         61
-## 14 control    Time  0         56
-## 15 thiouracil Time  1         80
-## 16 control    Time  1         82
-## 17 thyroxin   Time  2        108
-## 18 control    Time  2        110
-## 19 control    Time  2        102
-## 20 control    Time  4        154
+## # A tibble: 20 x 5
+##      rat drug       junk  time  weight
+##    <dbl> <chr>      <chr> <chr>  <dbl>
+##  1    16 thiouracil Time  2         78
+##  2    26 control    Time  0         49
+##  3    24 control    Time  3        110
+##  4    13 thiouracil Time  4        119
+##  5    11 thiouracil Time  2        100
+##  6    13 thiouracil Time  2         92
+##  7     9 thiouracil Time  1         80
+##  8    23 control    Time  0         46
+##  9    18 control    Time  4        172
+## 10    10 thiouracil Time  3        106
+## 11    25 control    Time  0         63
+## 12    17 thiouracil Time  2         89
+## 13    14 thiouracil Time  4        108
+## 14    21 control    Time  1         67
+## 15    16 thiouracil Time  0         46
+## 16    26 control    Time  4        140
+## 17    19 control    Time  3        146
+## 18    12 thiouracil Time  4        140
+## 19    18 control    Time  2        114
+## 20    10 thiouracil Time  2        100
 ```
 
  
@@ -314,29 +314,29 @@ weights2.long %>% sample_n(20)
 ```
 
 ```
-## # A tibble: 20 x 4
-##    drug       timex weight  time
-##    <chr>      <chr>  <dbl> <dbl>
-##  1 control    Time0     51     0
-##  2 control    Time3    129     3
-##  3 thiouracil Time1     75     1
-##  4 thiouracil Time3    100     3
-##  5 thyroxin   Time2     97     2
-##  6 thyroxin   Time0     54     0
-##  7 thiouracil Time0     51     0
-##  8 thiouracil Time1     79     1
-##  9 thyroxin   Time3    110     3
-## 10 control    Time1     67     1
-## 11 thiouracil Time1     72     1
-## 12 thiouracil Time3    111     3
-## 13 thiouracil Time0     51     0
-## 14 thiouracil Time1     69     1
-## 15 thiouracil Time2     92     2
-## 16 control    Time2    110     2
-## 17 thyroxin   Time1     85     1
-## 18 thyroxin   Time3    151     3
-## 19 thyroxin   Time0     59     0
-## 20 thyroxin   Time1     72     1
+## # A tibble: 20 x 5
+##      rat drug       timex weight  time
+##    <dbl> <chr>      <chr>  <dbl> <dbl>
+##  1    20 control    Time4    185     4
+##  2    10 thiouracil Time0     53     0
+##  3    27 control    Time2    110     2
+##  4    15 thiouracil Time2     93     2
+##  5    19 control    Time3    146     3
+##  6    22 control    Time4    151     4
+##  7    13 thiouracil Time0     51     0
+##  8    22 control    Time2    104     2
+##  9     7 thyroxin   Time3    138     3
+## 10    26 control    Time4    140     4
+## 11    11 thiouracil Time1     88     1
+## 12    25 control    Time2    112     2
+## 13    10 thiouracil Time3    106     3
+## 14     6 thyroxin   Time0     52     0
+## 15     7 thyroxin   Time1     70     1
+## 16    12 thiouracil Time1     75     1
+## 17     8 thiouracil Time4    129     4
+## 18    23 control    Time4    153     4
+## 19     3 thyroxin   Time2    108     2
+## 20    27 control    Time1     82     1
 ```
 
  
@@ -384,13 +384,18 @@ grew more slowly. The idea is not just that thiouracil has a
 of growth is different for the different drugs: whether or not
 thiouracil inhibits growth, and, if so, by how much, depends on
 what time point you are looking at.
+
 Rats on thyroxin or the control drug grew at pretty much the same
 rate over all times, so I wouldn't concern myself with any
 differences there.
-What I thought would be interesting is to plot the growth curves
-for *all* the rats individually, colour-coded by which drug
-the rat was on.  In other words, a "spaghetti plot".
-This goes rather nicely with `ggplot2`.
+
+What I thought would be interesting is to plot the growth curves for
+*all* the rats individually, colour-coded by which drug the rat
+was on. This is the repeated-measures version of the ANOVA interaction
+plot with the data on it. (We don't use the lines for the means, here,
+instead using them for joining the measurements belonging to the same
+subject.)
+
 Unfortunately, there's a bit of data awkwardness, because we need
 to know which rat is which when we plot them. To do that, we need
 to go all the way back to `weights` and introduce a
@@ -406,33 +411,57 @@ the `x` part (`x` being 0, 1, 2, 3, 4), but I won't
 do that here. Then we save the result into a new data frame
 `wt`, and take a look at the first few lines:
 
+
 ```r
-wt = weights %>% mutate(subject = 1:27) %>% gather(time, 
-    weight, Time0:Time4)
+wt = weights %>% mutate(subject = row_number()) %>% 
+    gather(time, weight, Time0:Time4)
 wt
 ```
 
 ```
-## # A tibble: 135 x 4
-##    drug       subject time  weight
-##    <chr>        <int> <chr>  <dbl>
-##  1 thyroxin         1 Time0     59
-##  2 thyroxin         2 Time0     54
-##  3 thyroxin         3 Time0     56
-##  4 thyroxin         4 Time0     59
-##  5 thyroxin         5 Time0     57
-##  6 thyroxin         6 Time0     52
-##  7 thyroxin         7 Time0     52
-##  8 thiouracil       8 Time0     61
-##  9 thiouracil       9 Time0     59
-## 10 thiouracil      10 Time0     53
+## # A tibble: 135 x 5
+##      rat drug       subject time  weight
+##    <dbl> <chr>        <int> <chr>  <dbl>
+##  1     1 thyroxin         1 Time0     59
+##  2     2 thyroxin         2 Time0     54
+##  3     3 thyroxin         3 Time0     56
+##  4     4 thyroxin         4 Time0     59
+##  5     5 thyroxin         5 Time0     57
+##  6     6 thyroxin         6 Time0     52
+##  7     7 thyroxin         7 Time0     52
+##  8     8 thiouracil       8 Time0     61
+##  9     9 thiouracil       9 Time0     59
+## 10    10 thiouracil      10 Time0     53
 ## # ... with 125 more rows
 ```
 
-     
-
+  
 Each rat is identified by `subject`, which repeats 5 times,
-once for each value of `time`.
+once for each value of `time`:
+
+
+```r
+wt %>% count(rat)
+```
+
+```
+## # A tibble: 27 x 2
+##      rat     n
+##    <dbl> <int>
+##  1     1     5
+##  2     2     5
+##  3     3     5
+##  4     4     5
+##  5     5     5
+##  6     6     5
+##  7     7     5
+##  8     8     5
+##  9     9     5
+## 10    10     5
+## # ... with 17 more rows
+```
+
+ 
 
 After going through that, the logic of the actual plotting part is
 pretty straightforward. In the data frame `wt`, we plot
@@ -486,7 +515,8 @@ The line segments get lighter as you go up the page.
 
 Since we went to the trouble of making the "long" data frame
 `wt`, we can also run a repeated measures analysis using the
-mixed-model idea (described elsewhere in this assignment):
+mixed-model idea (described more fully in the problem of the children
+near the new airport):
 
 
 ```r
@@ -811,7 +841,7 @@ ggplot(means, aes(x = time, y = mean, group = treatment,
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-19-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/ger_int-1} 
 
  
 
@@ -858,15 +888,16 @@ Solution
 
 This is almost easier to do than it is to ask you to do:
 
+
 ```r
 ggplot(geriatrics.long, aes(x = time, y = intpct, 
     colour = treatment, group = subject)) + geom_line()
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-20-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/ger_spag-1} 
 
-     
+   
 
 The basic difficulty here is to get all the parts. We need both a
 `colour` and a `group`; the latter controls the joining
@@ -989,11 +1020,10 @@ before. I think it is still significant because the shape of the two
 time trends is not the same: the red `bt` group goes up further
 and down further. I was musing that the higher values are also more
 variable, which would suggest a transformation, but I haven't explored that.
-
 If the interaction had turned out to be nonsignificant this way? You
 might think about trying to remove it from the model, except that in
-this kind of model, `treatment` is a ``between-subjects
-factor'' and `times` is a "within-subjects factor", so they
+this kind of model, `treatment` is a "between-subjects factor" 
+and `times` is a "within-subjects factor", so they
 are different kinds of things. What you do in that case is to ignore
 the non-significant interaction and interpret the main effects: there
 is no way to "gain df for error" like we did in two-way
@@ -1059,7 +1089,7 @@ fake.long %>% ggplot(aes(x = times, y = score,
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-25-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-24-1} 
 
  
 
@@ -1443,7 +1473,7 @@ airport.long %>% mutate(time = parse_number(when)) %>%
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-35-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/toofat-1} 
 
          
 
@@ -1468,10 +1498,9 @@ airport.long %>% mutate(time = parse_number(when)) %>%
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-36-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/skinnier-1} 
 
-         
-
+   
 It seems to make the lines skinnier, so they look more like
 threads. Even given the lesser thickness, they seem to be a little bit
 see-through as well. You can experiment with adding transparency to
@@ -1520,7 +1549,7 @@ airport.long %>% mutate(time = parse_number(when)) %>%
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-37-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-34-1} 
 
          
 
@@ -1541,7 +1570,7 @@ airport.long %>% mutate(time = parse_number(when)) %>%
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-38-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-35-1} 
 
           
 
@@ -1557,7 +1586,7 @@ airport.long %>% mutate(time = parse_number(when)) %>%
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-39-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-36-1} 
 
          
 With a long pipeline like this, none of us get it right the first time (I
@@ -2134,15 +2163,16 @@ OK, and then:
 
 ```r
 airport %>% group_by(location) %>% nest() %>% 
-    mutate(means = map(data, epi.means)) %>% unnest(means)
+    mutate(means = map(data, ~epi.means(.))) %>% 
+    unnest(means)
 ```
 
 ```
 ## # A tibble: 2 x 6
-##   location data      epi_1 epi_2 epi_3 epi_4
-##      <dbl> <list>    <dbl> <dbl> <dbl> <dbl>
-## 1        1 <tibble ~  247.  340.  356.  349.
-## 2        2 <tibble ~  249.  279.  251.  247.
+##   location data       epi_1 epi_2 epi_3 epi_4
+##      <dbl> <list>     <dbl> <dbl> <dbl> <dbl>
+## 1        1 <tibble [~  247.  340.  356.  349.
+## 2        2 <tibble [~  249.  279.  251.  247.
 ```
 
  
@@ -2280,6 +2310,7 @@ always more than one way to look at these things.
 
 
 
+##  Body fat as repeated measures
 
 
  This one is also stolen from STAC32. Athletes are concerned
@@ -2887,9 +2918,8 @@ king.long
 ```
 
      
-
-Displaying the resulting data frame is a good way to display ``some
-of'' it. You can always look at more if you like. There are more rows
+Displaying the resulting data frame is a good way to display "some of" it. 
+You can always look at more if you like. There are more rows
 and fewer columns than there were before, which is
 encouraging. `gather` works columnwise: it gathers up all the
 values in the first time column `i1` first, then `i2`,
@@ -2915,13 +2945,12 @@ ggplot(king.long, aes(x = time, y = activity,
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-67-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-64-1} 
 
      
 
 I'd say the `geom_point` is optional, so that this is also
 good, perhaps better even:
-
 
 ```r
 ggplot(king.long, aes(x = time, y = activity, 
@@ -2929,7 +2958,7 @@ ggplot(king.long, aes(x = time, y = activity,
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-68-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-65-1} 
 
  
     
@@ -2962,7 +2991,7 @@ king.long %>% group_by(context, time) %>% summarize(m = mean(activity)) %>%
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-69-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-66-1} 
 
    
 
@@ -3131,7 +3160,7 @@ ggplot(treatments, aes(x = time, y = y, colour = trt,
 ```
 
 
-\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-73-1} 
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-70-1} 
 
      
 
@@ -3452,9 +3481,8 @@ drop1(treatment.4, test = "Chisq")
 
      
 
-The way to read that model is ```y` depends on the combination
-of treatment and time and also on a random intercept for each
-subject''. This is the way in which the model captures the idea that
+The way to read that model is "`y` depends on the combination of treatment and time and also on a random intercept for each subject". 
+This is the way in which the model captures the idea that
 each subject is different. 
 
 You don't get a test for the random effects; you are assuming that the

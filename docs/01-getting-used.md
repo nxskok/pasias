@@ -13,9 +13,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -288,7 +288,7 @@ mtcars
 ```
 ## # A tibble: 32 x 11
 ##      mpg   cyl  disp    hp  drat    wt  qsec
-##  * <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1  21       6  160    110  3.9   2.62  16.5
 ##  2  21       6  160    110  3.9   2.88  17.0
 ##  3  22.8     4  108     93  3.85  2.32  18.6

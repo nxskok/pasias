@@ -11,9 +11,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -2683,9 +2683,14 @@ ovarian %>% as.tibble()
 ```
 
 ```
+## Warning: `as.tibble()` is deprecated, use `as_tibble()` (but mind the new semantics).
+## This warning is displayed once per session.
+```
+
+```
 ## # A tibble: 26 x 6
 ##    futime fustat   age resid.ds    rx ecog.ps
-##  *  <dbl>  <dbl> <dbl>    <dbl> <dbl>   <dbl>
+##     <dbl>  <dbl> <dbl>    <dbl> <dbl>   <dbl>
 ##  1     59      1  72.3        2     1       1
 ##  2    115      1  74.5        2     1       1
 ##  3    156      1  66.5        2     1       2

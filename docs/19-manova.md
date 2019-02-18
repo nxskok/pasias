@@ -20,9 +20,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -238,7 +238,7 @@ enough to distinguish group `b`. But group `b`
 stands out on the graph as being "top left" of the picture. That
 means that `y1` has to be low *and* `y2` has to
 be high, both together, to pick out group `b`. 
-That seems like a lot of work for two marks, but the important point
+That seems like a lot of work, but the important point
 that I want you to raise is that the points in group `b`
 are distinguished by a particular *combination* of values of
 `y1` and `y2`.
@@ -566,18 +566,18 @@ athletes
 
 ```
 ## # A tibble: 202 x 13
-##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 fema~ Netb~  4.56  13.3  42.2  13.6    20
-##  2 fema~ Netb~  4.15   6    38    12.7    59
-##  3 fema~ Netb~  4.16   7.6  37.5  12.3    22
-##  4 fema~ Netb~  4.32   6.4  37.7  12.3    30
-##  5 fema~ Netb~  4.06   5.8  38.7  12.8    78
-##  6 fema~ Netb~  4.12   6.1  36.6  11.8    21
-##  7 fema~ Netb~  4.17   5    37.4  12.7   109
-##  8 fema~ Netb~  3.8    6.6  36.5  12.4   102
-##  9 fema~ Netb~  3.96   5.5  36.3  12.4    71
-## 10 fema~ Netb~  4.44   9.7  41.4  14.1    64
+##    Sex    Sport   RCC   WCC    Hc    Hg  Ferr
+##    <chr>  <chr> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 female Netb~  4.56  13.3  42.2  13.6    20
+##  2 female Netb~  4.15   6    38    12.7    59
+##  3 female Netb~  4.16   7.6  37.5  12.3    22
+##  4 female Netb~  4.32   6.4  37.7  12.3    30
+##  5 female Netb~  4.06   5.8  38.7  12.8    78
+##  6 female Netb~  4.12   6.1  36.6  11.8    21
+##  7 female Netb~  4.17   5    37.4  12.7   109
+##  8 female Netb~  3.8    6.6  36.5  12.4   102
+##  9 female Netb~  3.96   5.5  36.3  12.4    71
+## 10 female Netb~  4.44   9.7  41.4  14.1    64
 ## # ... with 192 more rows, and 6 more
 ## #   variables: BMI <dbl>, SSF <dbl>,
 ## #   `%Bfat` <dbl>, LBM <dbl>, Ht <dbl>,
@@ -601,6 +601,7 @@ We now have *two* response variables, height and weight,
 rather than just one. In order to do a test with more than one
 response variable, we need to use multivariate ANOVA rather than
 regular ANOVA. (The first sentence is enough.)
+
 Extra: the explanatory variables, sport and gender, are both
 categorical here, which makes a MANOVA work. If either of them had
 been quantitative, we would have needed to do a multivariate

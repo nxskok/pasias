@@ -5,6 +5,7 @@
 rats. One group was given thyroxin in their drinking water, one group
 thiouracil, and the third group was a control. (This description comes
 from Christensen (2001).)
+`r tufte::margin_note("References: Box, George EP, Problems in the analysis of growth and wear curves, Biometrics vol. 6, 362-369, 1950; Christensen R, Advanced Linear Modeling, 2nd edition, Springer, 2001. Yes, that's the Box-Cox Box.")`
 Weights are measured in
 grams at weekly intervals (over a 4-week period, so that each rat is
 measured 5 times). The data are in
@@ -20,7 +21,7 @@ Solution
 
 
 A `.csv` file, so `read_csv`. (I typed the data from
-\citet{christensen01} into a spreadsheet.)
+Christensen (2001) into a spreadsheet.)
 ```{r }
 my_url="http://www.utsc.utoronto.ca/~butler/d29/ratweight.csv"
 weights=read_csv(my_url)
@@ -88,10 +89,8 @@ The thought process is that the columns of the response
 response values are at different times. That's the only part of it
 that is within subjects. The different drugs are a
 "between-subjects" factor: each rat only gets one of the
-drugs. (Things would be a lot more complicated if each rat got a
-different drug at a different time! But the rats each got one drug
-*once*, at the beginning, and the issue was the effect of that
-drug on all the growth that followed.)
+drugs.
+`r tufte::margin_note("Things would be a lot more complicated if each rat got a different drug at a different time! But the rats each got one drug *once*, at the beginning, and the issue was the effect of that drug on all the growth that followed.")`
  
 
 (e) Take a look at the output from the MANOVA. Is there a
@@ -207,13 +206,18 @@ grew more slowly. The idea is not just that thiouracil has a
 of growth is different for the different drugs: whether or not
 thiouracil inhibits growth, and, if so, by how much, depends on
 what time point you are looking at.
+
 Rats on thyroxin or the control drug grew at pretty much the same
 rate over all times, so I wouldn't concern myself with any
 differences there.
-What I thought would be interesting is to plot the growth curves
-for *all* the rats individually, colour-coded by which drug
-the rat was on.  In other words, a "spaghetti plot".
-This goes rather nicely with `ggplot2`.
+
+What I thought would be interesting is to plot the growth curves for
+*all* the rats individually, colour-coded by which drug the rat
+was on. This is the repeated-measures version of the ANOVA interaction
+plot with the data on it. (We don't use the lines for the means, here,
+instead using them for joining the measurements belonging to the same
+subject.)
+
 Unfortunately, there's a bit of data awkwardness, because we need
 to know which rat is which when we plot them. To do that, we need
 to go all the way back to `weights` and introduce a
@@ -228,16 +232,22 @@ gather together the columns `Time0` through
 the `x` part (`x` being 0, 1, 2, 3, 4), but I won't
 do that here. Then we save the result into a new data frame
 `wt`, and take a look at the first few lines:
+
 ```{r }
-wt = weights %>% mutate(subject=1:27) %>% 
+wt = weights %>% mutate(subject=row_number()) %>% 
 gather(time,weight,Time0:Time4)  
 wt
 ```
 
-     
-
+  
 Each rat is identified by `subject`, which repeats 5 times,
-once for each value of `time`.
+once for each value of `time`:
+
+```{r }
+wt %>% count(rat)
+```
+
+ 
 
 After going through that, the logic of the actual plotting part is
 pretty straightforward. In the data frame `wt`, we plot
@@ -281,7 +291,8 @@ The line segments get lighter as you go up the page.
 
 Since we went to the trouble of making the "long" data frame
 `wt`, we can also run a repeated measures analysis using the
-mixed-model idea (described elsewhere in this assignment):
+mixed-model idea (described more fully in the problem of the children
+near the new airport):
 
 ```{r }
 wt.1=lmer(weight~drug*time+(1|subject),data=wt)

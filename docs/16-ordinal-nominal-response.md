@@ -12,9 +12,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -345,18 +345,18 @@ mobile.long2
 
 ```
 ## # A tibble: 32 x 5
-##    gender age.group satisfied frequency sat~
-##    <chr>  <chr>     <chr>         <dbl> <or>
-##  1 male   0-17      very.uns~         3 ver~
-##  2 male   18-24     very.uns~         6 ver~
-##  3 male   25-30     very.uns~         9 ver~
-##  4 male   31+       very.uns~         5 ver~
-##  5 female 0-17      very.uns~         4 ver~
-##  6 female 18-24     very.uns~         8 ver~
-##  7 female 25-30     very.uns~        10 ver~
-##  8 female 31+       very.uns~         5 ver~
-##  9 male   0-17      unsat             9 uns~
-## 10 male   18-24     unsat            13 uns~
+##    gender age.group satisfied frequency satis
+##    <chr>  <chr>     <chr>         <dbl> <ord>
+##  1 male   0-17      very.uns~         3 very~
+##  2 male   18-24     very.uns~         6 very~
+##  3 male   25-30     very.uns~         9 very~
+##  4 male   31+       very.uns~         5 very~
+##  5 female 0-17      very.uns~         4 very~
+##  6 female 18-24     very.uns~         8 very~
+##  7 female 25-30     very.uns~        10 very~
+##  8 female 31+       very.uns~         5 very~
+##  9 male   0-17      unsat             9 unsat
+## 10 male   18-24     unsat            13 unsat
 ## # ... with 22 more rows
 ```
 

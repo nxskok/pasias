@@ -10,9 +10,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -777,18 +777,18 @@ problems(x)
 
 ```
 ## # A tibble: 87 x 5
-##      row col   expected  actual file        
-##    <int> <chr> <chr>     <chr>  <chr>       
-##  1     1 <NA>  1 columns 5 col~ 'http://www~
-##  2     2 <NA>  1 columns 5 col~ 'http://www~
-##  3     3 <NA>  1 columns 5 col~ 'http://www~
-##  4     4 <NA>  1 columns 5 col~ 'http://www~
-##  5     5 <NA>  1 columns 5 col~ 'http://www~
-##  6     6 <NA>  1 columns 5 col~ 'http://www~
-##  7     7 <NA>  1 columns 5 col~ 'http://www~
-##  8     8 <NA>  1 columns 5 col~ 'http://www~
-##  9     9 <NA>  1 columns 5 col~ 'http://www~
-## 10    10 <NA>  1 columns 5 col~ 'http://www~
+##      row col   expected  actual file         
+##    <int> <chr> <chr>     <chr>  <chr>        
+##  1     1 <NA>  1 columns 5 col~ 'http://www.~
+##  2     2 <NA>  1 columns 5 col~ 'http://www.~
+##  3     3 <NA>  1 columns 5 col~ 'http://www.~
+##  4     4 <NA>  1 columns 5 col~ 'http://www.~
+##  5     5 <NA>  1 columns 5 col~ 'http://www.~
+##  6     6 <NA>  1 columns 5 col~ 'http://www.~
+##  7     7 <NA>  1 columns 5 col~ 'http://www.~
+##  8     8 <NA>  1 columns 5 col~ 'http://www.~
+##  9     9 <NA>  1 columns 5 col~ 'http://www.~
+## 10    10 <NA>  1 columns 5 col~ 'http://www.~
 ## # ... with 77 more rows
 ```
 

@@ -10,9 +10,9 @@ library(tidyverse)
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.3.1
+## v ggplot2 3.1.0     v purrr   0.3.0
+## v tibble  2.0.1     v dplyr   0.7.8
+## v tidyr   0.8.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.3.0
 ```
 
@@ -75,18 +75,18 @@ jays
 
 ```
 ## # A tibble: 25 x 21
-##      row  game date  box   team  venue opp  
-##    <dbl> <dbl> <chr> <chr> <chr> <lgl> <chr>
-##  1    82     7 Mond~ boxs~ TOR   NA    TBR  
-##  2    83     8 Tues~ boxs~ TOR   NA    TBR  
-##  3    84     9 Wedn~ boxs~ TOR   NA    TBR  
-##  4    85    10 Thur~ boxs~ TOR   NA    TBR  
-##  5    86    11 Frid~ boxs~ TOR   NA    ATL  
-##  6    87    12 Satu~ boxs~ TOR   NA    ATL  
-##  7    88    13 Sund~ boxs~ TOR   NA    ATL  
-##  8    89    14 Tues~ boxs~ TOR   NA    BAL  
-##  9    90    15 Wedn~ boxs~ TOR   NA    BAL  
-## 10    91    16 Thur~ boxs~ TOR   NA    BAL  
+##      row  game date   box   team  venue opp  
+##    <dbl> <dbl> <chr>  <chr> <chr> <lgl> <chr>
+##  1    82     7 Monda~ boxs~ TOR   NA    TBR  
+##  2    83     8 Tuesd~ boxs~ TOR   NA    TBR  
+##  3    84     9 Wedne~ boxs~ TOR   NA    TBR  
+##  4    85    10 Thurs~ boxs~ TOR   NA    TBR  
+##  5    86    11 Frida~ boxs~ TOR   NA    ATL  
+##  6    87    12 Satur~ boxs~ TOR   NA    ATL  
+##  7    88    13 Sunda~ boxs~ TOR   NA    ATL  
+##  8    89    14 Tuesd~ boxs~ TOR   NA    BAL  
+##  9    90    15 Wedne~ boxs~ TOR   NA    BAL  
+## 10    91    16 Thurs~ boxs~ TOR   NA    BAL  
 ## # ... with 15 more rows, and 14 more
 ## #   variables: result <chr>, runs <dbl>,
 ## #   Oppruns <dbl>, innings <dbl>, wl <chr>,
@@ -2883,11 +2883,11 @@ problems(d)
 
 ```
 ## # A tibble: 3 x 5
-##     row col   expected  actual file         
-##   <int> <chr> <chr>     <chr>  <chr>        
-## 1    15 <NA>  1 columns 2 col~ 'http://www.~
-## 2    16 <NA>  1 columns 2 col~ 'http://www.~
-## 3    17 <NA>  1 columns 2 col~ 'http://www.~
+##     row col   expected  actual file          
+##   <int> <chr> <chr>     <chr>  <chr>         
+## 1    15 <NA>  1 columns 2 col~ 'http://www.u~
+## 2    16 <NA>  1 columns 2 col~ 'http://www.u~
+## 3    17 <NA>  1 columns 2 col~ 'http://www.u~
 ```
 
  
@@ -3430,18 +3430,18 @@ cars
 
 ```
 ## # A tibble: 38 x 6
-##    car    MPG weight cylinders    hp country
-##    <ch> <dbl>  <dbl>     <dbl> <dbl> <chr>  
-##  1 Bui~  28.4   2.67         4    90 U.S.   
-##  2 Dod~  30.9   2.23         4    75 U.S.   
-##  3 Mer~  20.8   3.07         6    85 U.S.   
-##  4 Fia~  37.3   2.13         4    69 Italy  
-##  5 Peu~  16.2   3.41         6   133 France 
-##  6 VW ~  31.9   1.92         4    71 Germany
-##  7 Ply~  34.2   2.2          4    70 U.S.   
-##  8 Maz~  34.1   1.98         4    65 Japan  
-##  9 Bui~  16.9   4.36         8   155 U.S.   
-## 10 Aud~  20.3   2.83         5   103 Germany
+##    car     MPG weight cylinders    hp country
+##    <chr> <dbl>  <dbl>     <dbl> <dbl> <chr>  
+##  1 Buic~  28.4   2.67         4    90 U.S.   
+##  2 Dodg~  30.9   2.23         4    75 U.S.   
+##  3 Merc~  20.8   3.07         6    85 U.S.   
+##  4 Fiat~  37.3   2.13         4    69 Italy  
+##  5 Peug~  16.2   3.41         6   133 France 
+##  6 VW R~  31.9   1.92         4    71 Germany
+##  7 Plym~  34.2   2.2          4    70 U.S.   
+##  8 Mazd~  34.1   1.98         4    65 Japan  
+##  9 Buic~  16.9   4.36         8   155 U.S.   
+## 10 Audi~  20.3   2.83         5   103 Germany
 ## # ... with 28 more rows
 ```
 
@@ -3525,18 +3525,18 @@ cars %>% select(-hp)
 
 ```
 ## # A tibble: 38 x 5
-##    car          MPG weight cylinders country
-##    <chr>      <dbl>  <dbl>     <dbl> <chr>  
-##  1 Buick Sky~  28.4   2.67         4 U.S.   
-##  2 Dodge Omni  30.9   2.23         4 U.S.   
-##  3 Mercury Z~  20.8   3.07         6 U.S.   
-##  4 Fiat Stra~  37.3   2.13         4 Italy  
-##  5 Peugeot 6~  16.2   3.41         6 France 
-##  6 VW Rabbit   31.9   1.92         4 Germany
-##  7 Plymouth ~  34.2   2.2          4 U.S.   
-##  8 Mazda GLC   34.1   1.98         4 Japan  
-##  9 Buick Est~  16.9   4.36         8 U.S.   
-## 10 Audi 5000   20.3   2.83         5 Germany
+##    car           MPG weight cylinders country
+##    <chr>       <dbl>  <dbl>     <dbl> <chr>  
+##  1 Buick Skyl~  28.4   2.67         4 U.S.   
+##  2 Dodge Omni   30.9   2.23         4 U.S.   
+##  3 Mercury Ze~  20.8   3.07         6 U.S.   
+##  4 Fiat Strada  37.3   2.13         4 Italy  
+##  5 Peugeot 69~  16.2   3.41         6 France 
+##  6 VW Rabbit    31.9   1.92         4 Germany
+##  7 Plymouth H~  34.2   2.2          4 U.S.   
+##  8 Mazda GLC    34.1   1.98         4 Japan  
+##  9 Buick Esta~  16.9   4.36         8 U.S.   
+## 10 Audi 5000    20.3   2.83         5 Germany
 ## # ... with 28 more rows
 ```
 
@@ -3559,16 +3559,16 @@ cars %>% filter(cylinders == 8)
 
 ```
 ## # A tibble: 8 x 6
-##   car     MPG weight cylinders    hp country
-##   <chr> <dbl>  <dbl>     <dbl> <dbl> <chr>  
-## 1 Buic~  16.9   4.36         8   155 U.S.   
-## 2 Chev~  19.2   3.60         8   125 U.S.   
-## 3 Chry~  18.5   3.94         8   150 U.S.   
-## 4 Ford~  17.6   3.72         8   129 U.S.   
-## 5 Dodg~  18.2   3.83         8   135 U.S.   
-## 6 Ford~  15.5   4.05         8   142 U.S.   
-## 7 Merc~  16.5   3.96         8   138 U.S.   
-## 8 Chev~  17     3.84         8   130 U.S.
+##   car      MPG weight cylinders    hp country
+##   <chr>  <dbl>  <dbl>     <dbl> <dbl> <chr>  
+## 1 Buick~  16.9   4.36         8   155 U.S.   
+## 2 Chevy~  19.2   3.60         8   125 U.S.   
+## 3 Chrys~  18.5   3.94         8   150 U.S.   
+## 4 Ford ~  17.6   3.72         8   129 U.S.   
+## 5 Dodge~  18.2   3.83         8   135 U.S.   
+## 6 Ford ~  15.5   4.05         8   142 U.S.   
+## 7 Mercu~  16.5   3.96         8   138 U.S.   
+## 8 Chevy~  17     3.84         8   130 U.S.
 ```
 
  
@@ -3842,7 +3842,7 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 ```
 ## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre
-##  * <dbl> <chr>           <chr> <tim> <chr>
+##    <dbl> <chr>           <chr> <tim> <chr>
 ##  1  2000 Destiny's Child Inde~ 03:38 Rock 
 ##  2  2000 Santana         Mari~ 04:18 Rock 
 ##  3  2000 Savage Garden   I Kn~ 04:07 Rock 
@@ -3873,7 +3873,7 @@ billboard %>% gather(week, rank, ends_with("week"),
 ```
 ## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre
-##  * <dbl> <chr>           <chr> <tim> <chr>
+##    <dbl> <chr>           <chr> <tim> <chr>
 ##  1  2000 Destiny's Child Inde~ 03:38 Rock 
 ##  2  2000 Santana         Mari~ 04:18 Rock 
 ##  3  2000 Savage Garden   I Kn~ 04:07 Rock 
@@ -3949,7 +3949,7 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 ```
 ## # A tibble: 5,307 x 2
 ##    week       rank
-##  * <chr>     <dbl>
+##    <chr>     <dbl>
 ##  1 x1st.week    78
 ##  2 x1st.week    15
 ##  3 x1st.week    71
@@ -4167,18 +4167,18 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 
 ```
 ## # A tibble: 55 x 3
-##    artist.inverted   track        current   
-##    <chr>             <chr>        <date>    
-##  1 Aguilera, Christ~ What A Girl~ 2000-01-15
-##  2 Aguilera, Christ~ What A Girl~ 2000-01-22
-##  3 Savage Garden     I Knew I Lo~ 2000-01-29
-##  4 Savage Garden     I Knew I Lo~ 2000-02-05
-##  5 Savage Garden     I Knew I Lo~ 2000-02-12
-##  6 Carey, Mariah     Thank God I~ 2000-02-19
-##  7 Savage Garden     I Knew I Lo~ 2000-02-26
-##  8 Lonestar          Amazed       2000-03-04
-##  9 Lonestar          Amazed       2000-03-11
-## 10 Destiny's Child   Say My Name  2000-03-18
+##    artist.inverted   track         current   
+##    <chr>             <chr>         <date>    
+##  1 Aguilera, Christ~ What A Girl ~ 2000-01-15
+##  2 Aguilera, Christ~ What A Girl ~ 2000-01-22
+##  3 Savage Garden     I Knew I Lov~ 2000-01-29
+##  4 Savage Garden     I Knew I Lov~ 2000-02-05
+##  5 Savage Garden     I Knew I Lov~ 2000-02-12
+##  6 Carey, Mariah     Thank God I ~ 2000-02-19
+##  7 Savage Garden     I Knew I Lov~ 2000-02-26
+##  8 Lonestar          Amazed        2000-03-04
+##  9 Lonestar          Amazed        2000-03-11
+## 10 Destiny's Child   Say My Name   2000-03-18
 ## # ... with 45 more rows
 ```
 
@@ -4229,25 +4229,25 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 
 ```
 ## # A tibble: 17 x 2
-##    track                                   n
-##    <chr>                               <int>
-##  1 Amazed                                  2
-##  2 Bent                                    1
-##  3 Be With You                             3
-##  4 Come On Over Baby (All I Want Is Y~     4
-##  5 Doesn't Really Matter                   3
-##  6 Everything You Want                     1
-##  7 I Knew I Loved You                      4
-##  8 Incomplete                              2
-##  9 Independent Women Part I               11
-## 10 It's Gonna Be Me                        2
-## 11 Maria, Maria                           10
-## 12 Music                                   4
-## 13 Say My Name                             3
-## 14 Thank God I Found You                   1
-## 15 Try Again                               1
-## 16 What A Girl Wants                       2
-## 17 With Arms Wide Open                     1
+##    track                                    n
+##    <chr>                                <int>
+##  1 Amazed                                   2
+##  2 Bent                                     1
+##  3 Be With You                              3
+##  4 Come On Over Baby (All I Want Is Yo~     4
+##  5 Doesn't Really Matter                    3
+##  6 Everything You Want                      1
+##  7 I Knew I Loved You                       4
+##  8 Incomplete                               2
+##  9 Independent Women Part I                11
+## 10 It's Gonna Be Me                         2
+## 11 Maria, Maria                            10
+## 12 Music                                    4
+## 13 Say My Name                              3
+## 14 Thank God I Found You                    1
+## 15 Try Again                                1
+## 16 What A Girl Wants                        2
+## 17 With Arms Wide Open                      1
 ```
 
          
@@ -4295,25 +4295,25 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 
 ```
 ## # A tibble: 17 x 2
-##    track                                   n
-##    <chr>                               <int>
-##  1 Independent Women Part I               11
-##  2 Maria, Maria                           10
-##  3 Come On Over Baby (All I Want Is Y~     4
-##  4 I Knew I Loved You                      4
-##  5 Music                                   4
-##  6 Be With You                             3
-##  7 Doesn't Really Matter                   3
-##  8 Say My Name                             3
-##  9 Amazed                                  2
-## 10 Incomplete                              2
-## 11 It's Gonna Be Me                        2
-## 12 What A Girl Wants                       2
-## 13 Bent                                    1
-## 14 Everything You Want                     1
-## 15 Thank God I Found You                   1
-## 16 Try Again                               1
-## 17 With Arms Wide Open                     1
+##    track                                    n
+##    <chr>                                <int>
+##  1 Independent Women Part I                11
+##  2 Maria, Maria                            10
+##  3 Come On Over Baby (All I Want Is Yo~     4
+##  4 I Knew I Loved You                       4
+##  5 Music                                    4
+##  6 Be With You                              3
+##  7 Doesn't Really Matter                    3
+##  8 Say My Name                              3
+##  9 Amazed                                   2
+## 10 Incomplete                               2
+## 11 It's Gonna Be Me                         2
+## 12 What A Girl Wants                        2
+## 13 Bent                                     1
+## 14 Everything You Want                      1
+## 15 Thank God I Found You                    1
+## 16 Try Again                                1
+## 17 With Arms Wide Open                      1
 ```
 
  
@@ -4348,25 +4348,25 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 
 ```
 ## # A tibble: 17 x 2
-##    combo                                   n
-##    <chr>                               <int>
-##  1 Independent Women Part I by Destin~    11
-##  2 Maria, Maria by Santana                10
-##  3 Come On Over Baby (All I Want Is Y~     4
-##  4 I Knew I Loved You by Savage Garden     4
-##  5 Music by Madonna                        4
-##  6 Be With You by Iglesias, Enrique        3
-##  7 Doesn't Really Matter by Janet          3
-##  8 Say My Name by Destiny's Child          3
-##  9 Amazed by Lonestar                      2
-## 10 Incomplete by Sisqo                     2
-## 11 It's Gonna Be Me by N'Sync              2
-## 12 What A Girl Wants by Aguilera, Chr~     2
-## 13 Bent by matchbox twenty                 1
-## 14 Everything You Want by Vertical Ho~     1
-## 15 Thank God I Found You by Carey, Ma~     1
-## 16 Try Again by Aaliyah                    1
-## 17 With Arms Wide Open by Creed            1
+##    combo                                    n
+##    <chr>                                <int>
+##  1 Independent Women Part I by Destiny~    11
+##  2 Maria, Maria by Santana                 10
+##  3 Come On Over Baby (All I Want Is Yo~     4
+##  4 I Knew I Loved You by Savage Garden      4
+##  5 Music by Madonna                         4
+##  6 Be With You by Iglesias, Enrique         3
+##  7 Doesn't Really Matter by Janet           3
+##  8 Say My Name by Destiny's Child           3
+##  9 Amazed by Lonestar                       2
+## 10 Incomplete by Sisqo                      2
+## 11 It's Gonna Be Me by N'Sync               2
+## 12 What A Girl Wants by Aguilera, Chri~     2
+## 13 Bent by matchbox twenty                  1
+## 14 Everything You Want by Vertical Hor~     1
+## 15 Thank God I Found You by Carey, Mar~     1
+## 16 Try Again by Aaliyah                     1
+## 17 With Arms Wide Open by Creed             1
 ```
 
  
@@ -4844,18 +4844,18 @@ bikes %>% fill(X1) %>% rename(Time = X1) %>% rename(male = X2,
 
 ```
 ## # A tibble: 1,958 x 9
-##    Time male  female X4    X5    X6    X7   
-##    <ti> <chr> <chr>  <chr> <chr> <chr> <chr>
-##  1 07:~ X     <NA>   <NA>  X     <NA>  X    
-##  2 07:~ X     <NA>   <NA>  X     <NA>  X    
-##  3 07:~ X     <NA>   <NA>  X     <NA>  X    
-##  4 07:~ X     <NA>   <NA>  X     <NA>  X    
-##  5 07:~ X     <NA>   <NA>  X     <NA>  X    
-##  6 07:~ X     <NA>   X     <NA>  <NA>  X    
-##  7 07:~ <NA>  X      X     <NA>  <NA>  X    
-##  8 07:~ X     <NA>   X     <NA>  <NA>  X    
-##  9 07:~ <NA>  X      X     <NA>  <NA>  X    
-## 10 07:~ X     <NA>   X     <NA>  <NA>  X    
+##    Time  male  female X4    X5    X6    X7   
+##    <tim> <chr> <chr>  <chr> <chr> <chr> <chr>
+##  1 07:00 X     <NA>   <NA>  X     <NA>  X    
+##  2 07:00 X     <NA>   <NA>  X     <NA>  X    
+##  3 07:00 X     <NA>   <NA>  X     <NA>  X    
+##  4 07:00 X     <NA>   <NA>  X     <NA>  X    
+##  5 07:00 X     <NA>   <NA>  X     <NA>  X    
+##  6 07:15 X     <NA>   X     <NA>  <NA>  X    
+##  7 07:15 <NA>  X      X     <NA>  <NA>  X    
+##  8 07:15 X     <NA>   X     <NA>  <NA>  X    
+##  9 07:15 <NA>  X      X     <NA>  <NA>  X    
+## 10 07:15 X     <NA>   X     <NA>  <NA>  X    
 ## # ... with 1,948 more rows, and 2 more
 ## #   variables: X8 <chr>, X9 <chr>
 ```
@@ -4934,7 +4934,7 @@ bikes %>% fill(X1) %>% rename(Time = X1) %>% rename(male = X2,
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   X4    X5    X6    X7    X8    X9   
-##  * <time> <chr> <chr> <chr> <chr> <chr> <chr>
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  <NA>  X     <NA>  X     <NA>  X    
 ##  2 07:00  <NA>  X     <NA>  X     <NA>  X    
 ##  3 07:00  <NA>  X     <NA>  X     <NA>  X    
@@ -5643,18 +5643,18 @@ heat
 
 ```
 ## # A tibble: 200 x 4
-##       id date       code  text              
-##    <dbl> <date>     <chr> <chr>             
-##  1   232 2016-09-08 HAU   Toronto's Medical~
-##  2   231 2016-09-07 HAE   Toronto's Medical~
-##  3   230 2016-09-06 HA    Toronto's Medical~
-##  4   228 2016-08-13 EHAE  Toronto's Medical~
-##  5   227 2016-08-12 EHAE  Toronto's Medical~
-##  6   226 2016-08-11 HAU   Toronto's Medical~
-##  7   225 2016-08-10 HAE   Toronto's Medical~
-##  8   224 2016-08-09 HA    Toronto's Medical~
-##  9   222 2016-08-05 HAE   Toronto's Medical~
-## 10   221 2016-08-04 HA    Toronto's Medical~
+##       id date       code  text               
+##    <dbl> <date>     <chr> <chr>              
+##  1   232 2016-09-08 HAU   Toronto's Medical ~
+##  2   231 2016-09-07 HAE   Toronto's Medical ~
+##  3   230 2016-09-06 HA    Toronto's Medical ~
+##  4   228 2016-08-13 EHAE  Toronto's Medical ~
+##  5   227 2016-08-12 EHAE  Toronto's Medical ~
+##  6   226 2016-08-11 HAU   Toronto's Medical ~
+##  7   225 2016-08-10 HAE   Toronto's Medical ~
+##  8   224 2016-08-09 HA    Toronto's Medical ~
+##  9   222 2016-08-05 HAE   Toronto's Medical ~
+## 10   221 2016-08-04 HA    Toronto's Medical ~
 ## # ... with 190 more rows
 ```
 

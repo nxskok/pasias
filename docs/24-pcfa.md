@@ -32,10 +32,10 @@ library(tidyverse)
 ```
 
 ```
-## v tibble  1.4.2     v purrr   0.2.5
+## v tibble  2.0.1     v purrr   0.3.0
 ## v tidyr   0.8.2     v dplyr   0.7.8
-## v readr   1.3.1     v stringr 1.3.1
-## v tibble  1.4.2     v forcats 0.3.0
+## v readr   1.3.1     v stringr 1.4.0
+## v tibble  2.0.1     v forcats 0.3.0
 ```
 
 ```
@@ -679,11 +679,11 @@ library(ggmap)
 ```
 
 ```
-## Google Maps API Terms of Service: https://cloud.google.com/maps-platform/terms/.
+## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
 ```
 
 ```
-## Please cite ggmap if you use it: see citation("ggmap") for details.
+## Please cite ggmap if you use it! See citation("ggmap") for details.
 ```
 
 ```r

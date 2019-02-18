@@ -32,10 +32,10 @@ library(tidyverse)
 ```
 
 ```
-## v tibble  1.4.2     v purrr   0.2.5
+## v tibble  2.0.1     v purrr   0.3.0
 ## v tidyr   0.8.2     v dplyr   0.7.8
-## v readr   1.3.1     v stringr 1.3.1
-## v tibble  1.4.2     v forcats 0.3.0
+## v readr   1.3.1     v stringr 1.4.0
+## v tibble  2.0.1     v forcats 0.3.0
 ```
 
 ```
@@ -498,11 +498,11 @@ library(ggmap)
 ```
 
 ```
-## Google Maps API Terms of Service: https://cloud.google.com/maps-platform/terms/.
+## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
 ```
 
 ```
-## Please cite ggmap if you use it: see citation("ggmap") for details.
+## Please cite ggmap if you use it! See citation("ggmap") for details.
 ```
 
    
@@ -589,51 +589,51 @@ g <- tibble(cst) %>% ggmap::mutate_geocode(cst)
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Appleton%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Appleton+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Beloit%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Beloit+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Fort.Atkinson%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Fort.Atkinson+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Madison%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Madison+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Marshfield%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Marshfield+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Milwaukee%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Milwaukee+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Monroe%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Monroe+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Superior%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Superior+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Wausau%20WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Wausau+WI&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Dubuque%20IA&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Dubuque+IA&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=St.Paul%20MN&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=St.Paul+MN&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Chicago%20IL&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Chicago+IL&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```r
@@ -846,6 +846,14 @@ ones = rep(1, 12)
 v = cmdscale(d, 1, eig = T)
 ddd = as_tibble(v$points) %>% mutate(one = ones, 
     city = cities)
+```
+
+```
+## Warning: `as_tibble.matrix()` requires a matrix with column names or a `.name_repair` argument. Using compatibility `.name_repair`.
+## This warning is displayed once per session.
+```
+
+```r
 ddd
 ```
 
@@ -964,25 +972,25 @@ stimuli
 
 ```
 ## # A tibble: 17 x 18
-##    X1       X2    X3    X4    X5    X6    X7
-##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 inne~     0    22    23    24    26    27
-##  2 brick    22     0    27    27    27    29
-##  3 card~    23    27     0    18    19    28
-##  4 cork     24    27    18     0    15    28
-##  5 rubb~    26    27    19    15     0    28
-##  6 felt     27    29    28    28    28     0
-##  7 leat~    26    29    23    25    20    24
-##  8 rigi~    23    28    24    26    27    28
-##  9 very~    24    16    24    28    24    29
-## 10 nylo~    23    18    29    28    27    26
-## 11 cell~    23    28    27    20    24    26
-## 12 wove~    18    25    28    27    25    29
-## 13 bloc~    23    24    21    10    19    28
-## 14 ungl~    21    10    26    26    24    29
-## 15 velv~    28    29    28    28    29     4
-## 16 waxp~    24    28    24    28    24    28
-## 17 glos~    22    27    23    29    28    29
+##    X1        X2    X3    X4    X5    X6    X7
+##    <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 inner~     0    22    23    24    26    27
+##  2 brick     22     0    27    27    27    29
+##  3 cardb~    23    27     0    18    19    28
+##  4 cork      24    27    18     0    15    28
+##  5 rubbe~    26    27    19    15     0    28
+##  6 felt      27    29    28    28    28     0
+##  7 leath~    26    29    23    25    20    24
+##  8 rigid~    23    28    24    26    27    28
+##  9 veryf~    24    16    24    28    24    29
+## 10 nylon~    23    18    29    28    27    26
+## 11 cellu~    23    28    27    20    24    26
+## 12 woven~    18    25    28    27    25    29
+## 13 block~    23    24    21    10    19    28
+## 14 ungla~    21    10    26    26    24    29
+## 15 velvet    28    29    28    28    29     4
+## 16 waxpa~    24    28    24    28    24    28
+## 17 gloss~    22    27    23    29    28    29
 ## # ... with 11 more variables: X8 <dbl>,
 ## #   X9 <dbl>, X10 <dbl>, X11 <dbl>,
 ## #   X12 <dbl>, X13 <dbl>, X14 <dbl>,
