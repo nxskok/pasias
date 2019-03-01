@@ -349,8 +349,8 @@ one) and $2-1$ is 1.
 
 (e) <a name="part:big">*</a> Using the output of the last part, describe how each of
 the linear discriminants that you got is related to your original
-variables. (This can, maybe even should, be done crudely: ``does
-each variable feature in each linear discriminant: yes or no?''.)
+variables. (This can, maybe even should, be done crudely: 
+"does each variable feature in each linear discriminant: yes or no?".)
  
 Solution
 
@@ -565,6 +565,23 @@ d %>% count(obs, pred)
 This gives a "long" table, with frequencies for each of the
 combinations for which anything was observed.
 
+Frequency tables are usually wide, and we can make this one so by `spread`ing `pred`:
+
+
+```r
+d %>% count(obs, pred) %>% spread(pred, n)
+```
+
+```
+## # A tibble: 2 x 3
+##   obs         counterfeit genuine
+##   <chr>             <int>   <int>
+## 1 counterfeit         100      NA
+## 2 genuine               1      99
+```
+
+ 
+
 One of the genuine bills is incorrectly classified as a counterfeit
 one (evidently that low outlier on LD1), but every single one of the
 counterfeit bills is classified correctly.
@@ -639,7 +656,27 @@ entry in `genuine`. If I used `max` instead, I'd get the
 largest of *all* the entries in `counterfeit` and
 *all* the entries in `genuine`, repeated 200 times. (Try
 it and see.) `pmax` stands for "parallel maximum", that is,
-for each row separately.
+for each row separately. This also should work:
+
+
+```r
+d %>% mutate(max.post = map2_dbl(counterfeit, 
+    genuine, ~max(.x, .y))) %>% filter(max.post < 
+    0.99) %>% dplyr::select(-c(length:diag))
+```
+
+```
+##    status       class counterfeit    genuine
+## 1 genuine counterfeit   0.9825773 0.01742267
+##    max.post
+## 1 0.9825773
+```
+
+ 
+
+Because we're using `map`, `max` is applied to the pairs
+of values of `counterfeit` and `genuine`, 
+*taken one at a time.*
  
 
 
@@ -907,7 +944,7 @@ ggplot(d, aes(x = LD1, y = LD2, colour = obesity)) +
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-24-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-26-1} 
 
  
  
@@ -987,7 +1024,7 @@ plot(urine.1)
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-26-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-28-1} 
 
  
 
@@ -1000,7 +1037,7 @@ plot(urine.1, dimen = 2)
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-27-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-29-1} 
 
  
 
@@ -1065,6 +1102,25 @@ tab
 ## 12 d       a             2
 ## 13 d       c             1
 ## 14 d       d             5
+```
+
+ 
+
+or if you prefer to make it look more like a table of frequencies:
+
+
+```r
+tab %>% spread(predicted, n)
+```
+
+```
+## # A tibble: 4 x 5
+##   obesity     a     b     c     d
+##   <chr>   <int> <int> <int> <int>
+## 1 a           7     3     2    NA
+## 2 b           2     9     2     1
+## 3 c           3     4     1     3
+## 4 d           2    NA     1     5
 ```
 
  
@@ -1169,7 +1225,7 @@ tab %>% group_by(obesity) %>% count(correct = (obesity ==
  
 
 This gives the proportion wrong and correct for each (true) obesity
-group. I'm going to do one more cosmetic thing to make it easier to
+group. I'm going to do the one more cosmetic thing to make it easier to
 read, a kind of "untidying":
 
 
@@ -1238,6 +1294,7 @@ respectively of the plot. That suggests that these three
 groups should be somewhat predictable. The `c`'s, on
 the other hand, were all over the place on the plot, and
 were mostly predicted wrong.
+
 The idea is that the stories you pull from the plot and the
 predictions should be more or less consistent. There are
 several ways you might say that: another approach is to say
@@ -1355,8 +1412,8 @@ simple.4 = lda(group ~ y1 + y2, data = simple)
 
 Note that this is the other way around from MANOVA: here, we are
 "predicting the group" from the response variables, in the same
-manner as one of the flavours of logistic regression: ``what makes the
-groups different, in terms of those response variables?''.
+manner as one of the flavours of logistic regression: 
+"what makes the groups different, in terms of those response variables?".
 
     
 
@@ -1430,8 +1487,8 @@ simple.4$svd
 
 The first number is much bigger than the second, so the first linear
 discriminant is much more important than the second. (I care about
-your reason; you can say it's "more important" rather than ``much
-more important'' and I'm good with that.)
+your reason; you can say it's "more important" rather than 
+"much more important" and I'm good with that.)
   
 
 
@@ -1451,7 +1508,7 @@ plot(simple.4)
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-39-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-42-1} 
 
    
 
@@ -1505,7 +1562,7 @@ ggplot(d, aes(x = LD1, y = LD2, colour = group)) +
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-42-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-45-1} 
 
  
 
@@ -1519,7 +1576,7 @@ ggplot(simple, aes(x = y1, y = y2, colour = group)) +
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-43-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-46-1} 
 
  
 
@@ -1538,7 +1595,7 @@ ggplot(d, aes(x = group, y = LD1)) + geom_boxplot()
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-44-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-47-1} 
 
  
 
@@ -1588,9 +1645,11 @@ Solution
 
 The information you need is in the output in part
 (<a href="#part:output">here</a>). 
+
 The means of `y1` and `y2` for group `a` are 3
 and 4 respectively, which are the lowest of all the groups. That's
 the first thing. 
+
 The second thing is the coefficients of
 `LD1` in terms of `y1` and `y2`, which are both
 *positive*. That means, for any observation, if its `y1`
@@ -1598,18 +1657,21 @@ and `y2` values are *large*, that observation's score on
 `LD1` will be large as well. Conversely, if its values are
 *small*, as the ones in group `a` are, its score on
 `LD1` will be small. You need these two things.
+
 This explains why the group `a` observations are on the left
 of the plot. It also explains why the group `c` observations
 are on the right: they are *large* on both `y1` and
 `y2`, and so large on `LD1`.
+
 What about `LD2`? This is a little more confusing (and thus I
-didn't ask you about that). Its ``coefficients of linear
-discriminant'' are positive on `y1` and negative on
+didn't ask you about that). Its "coefficients of linear discriminant" 
+are positive on `y1` and negative on
 `y2`, with the latter being bigger in size. Group `b`
 is about average on `y1` and distinctly *high* on
 `y2`; the second of these coupled with the negative
 coefficient on `y2` means that the `LD2` score for
 observations in group `b` will be *negative*.
+
 For `LD2`, group `a` has a low mean on both variables
 and group `c` has a high mean, so for both groups there is a
 kind of cancelling-out happening, and neither group `a` nor
@@ -1691,9 +1753,9 @@ data.frame(obs = simple$group, pred = simple.pred$class) %>%
  
 
 That's the end of what I asked you to do, but as ever I wanted to
-press on. The next question to ask after getting the predicted groups
-is ``what are the posterior probabilities of being in each group for
-each observation'': that is, not just which group do I think it
+press on. The next question to ask after getting the predicted groups is 
+"what are the posterior probabilities of being in each group for each observation": 
+that is, not just which group do I think it
 belongs in, but how sure am I about that call? The magic name for the
 posterior probabilities is `posterior` in
 `simple.pred`. These have a ton of decimal places which I like to
@@ -1742,7 +1804,7 @@ simple %>% mutate(is6 = (row_number() == 6)) %>%
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-49-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-52-1} 
 
  
 
@@ -2129,7 +2191,7 @@ ggplot(d, aes(x = LD1, y = LD2, colour = job)) +
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-55-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-58-1} 
 
  
 
@@ -3020,7 +3082,7 @@ data.frame(parent = adhd$parent, adhd.2$x) %>%
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-78-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-81-1} 
 
  
 The fathers look to be a very compact group with `LD1` score
@@ -3640,7 +3702,7 @@ ggplot(cornseed, aes(x = soil, y = herbicide)) +
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-91-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-94-1} 
 
 
 
@@ -3654,7 +3716,7 @@ ggplot(cornseed, aes(x = soil, y = water)) + geom_boxplot()
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-92-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-95-1} 
 
  
 
@@ -3724,7 +3786,7 @@ ggplot(d, aes(x = LD1, y = LD2, colour = soil)) +
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-95-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-98-1} 
 
  
     
@@ -3772,7 +3834,7 @@ ggplot(d, aes(x = soil, y = LD1)) + geom_boxplot()
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-96-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-99-1} 
 
    
 
@@ -4139,7 +4201,7 @@ ggbiplot(cornseed.2, groups = cornseed$soil)
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-106-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-109-1} 
 
  
 
@@ -4717,7 +4779,7 @@ ggplot(d, aes(x = LD1, y = LD2, colour = combo)) +
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-120-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-123-1} 
 
  
 
@@ -4732,7 +4794,7 @@ ggplot(d, aes(x = LD1, y = LD2, shape = combo)) +
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-121-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-124-1} 
 
      
 
@@ -4749,7 +4811,7 @@ ggplot(d, aes(x = LD1, y = LD2, shape = combo,
 ```
 
 
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-122-1} 
+\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-125-1} 
 
  
 

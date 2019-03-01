@@ -242,8 +242,16 @@ later:
 
 ```{r }
 tab = tibble(obesity=urine$obesity,predicted=urine.pred$class) %>%
-count(obesity,predicted)
+count(obesity, predicted)
 tab
+```
+
+ 
+
+or if you prefer to make it look more like a table of frequencies:
+
+```{r }
+tab %>% spread(predicted, n)
 ```
 
  
@@ -315,7 +323,7 @@ mutate(proportion=nn/sum(nn))
  
 
 This gives the proportion wrong and correct for each (true) obesity
-group. I'm going to do one more cosmetic thing to make it easier to
+group. I'm going to do the one more cosmetic thing to make it easier to
 read, a kind of "untidying":
 
 ```{r }
@@ -366,6 +374,7 @@ respectively of the plot. That suggests that these three
 groups should be somewhat predictable. The `c`'s, on
 the other hand, were all over the place on the plot, and
 were mostly predicted wrong.
+
 The idea is that the stories you pull from the plot and the
 predictions should be more or less consistent. There are
 several ways you might say that: another approach is to say

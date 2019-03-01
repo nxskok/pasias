@@ -150,8 +150,8 @@ one) and $2-1$ is 1.
 
 (e) <a name="part:big">*</a> Using the output of the last part, describe how each of
 the linear discriminants that you got is related to your original
-variables. (This can, maybe even should, be done crudely: ``does
-each variable feature in each linear discriminant: yes or no?''.)
+variables. (This can, maybe even should, be done crudely: 
+"does each variable feature in each linear discriminant: yes or no?".)
  
 Solution
 
@@ -303,6 +303,15 @@ d %>% count(obs,pred)
 This gives a "long" table, with frequencies for each of the
 combinations for which anything was observed.
 
+Frequency tables are usually wide, and we can make this one so by `spread`ing `pred`:
+
+```{r }
+d %>% count(obs, pred) %>%
+spread(pred, n)
+```
+
+ 
+
 One of the genuine bills is incorrectly classified as a counterfeit
 one (evidently that low outlier on LD1), but every single one of the
 counterfeit bills is classified correctly.
@@ -350,7 +359,18 @@ entry in `genuine`. If I used `max` instead, I'd get the
 largest of *all* the entries in `counterfeit` and
 *all* the entries in `genuine`, repeated 200 times. (Try
 it and see.) `pmax` stands for "parallel maximum", that is,
-for each row separately.
+for each row separately. This also should work:
+
+```{r }
+d %>% mutate(max.post=map2_dbl(counterfeit, genuine, ~max(.x, .y))) %>%
+filter(max.post<0.99) %>% dplyr::select(-c(length:diag))    
+```
+
+ 
+
+Because we're using `map`, `max` is applied to the pairs
+of values of `counterfeit` and `genuine`, 
+*taken one at a time.*
  
 
 
