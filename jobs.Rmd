@@ -16,7 +16,7 @@ data are in [link](http://www.utsc.utoronto.ca/~butler/d29/jobs.txt).
 
 
 
-(a) Read in the data and display its structure.
+(a) Read in the data and display some of it.
 
 
 Solution
@@ -80,6 +80,31 @@ remember which jobs they go with. I'm a fan of giving factors named
 levels, so that you can remember what stands for what.
 `r tufte::margin_note("When  you're *recording* the data, you may find it convenient to use  short codes to represent the possibly long factor levels, but in  that case you should also use a *codebook* so that you know what  the codes represent. When I read the data into R, I would create a  factor with named levels, like I did here, if I don't already have one.")`
 
+Extra: another way of doing this is to make a lookup table, that is, a little table that shows which job goes with which number:
+
+```{r }
+lookup_tab=tribble(
+~job, ~jobname,
+1, "custserv",
+2, "mechanic",
+3, "dispatcher"
+)
+lookup_tab
+```
+
+ 
+
+I carefully put the numbers in a column called `job` because I want to match these with the column called `job` in `jobs0`:
+
+```{r }
+jobs0 %>% left_join(lookup_tab) %>%
+sample_n(20)
+```
+
+ 
+
+You see that each row has the *name* of the job that employee has, in the column `jobname`, because the job `id` was looked up in our lookup table. (I displayed some random rows so you could see that it worked.)
+
 
 
 (c) Run a multivariate analysis of variance to convince yourself
@@ -117,26 +142,6 @@ This, and the `lda` below, actually works perfectly well if you use the
 original (integer) job, but then you have to remember which job number
 is which.
 
-I'm not going to use `car` again in this assignment, so I
-should "unload" it:
-
-```{r angelucci, error=T}
-detach("package:car",unload=T)
-Manova(response.2)
-```
-
- 
-
-This error is what I expected to see: `car` is not loaded any
-more, so I no longer have a function `Manova` available to me.
-
-The time to unload a package is when you have several packages loaded
-at once that have functions of the *same names* (like
-`select`, which is in both `dplyr` and
-`MASS`). If you unload a package you no longer need to use, you
-might be able to avoid having to say things like
-`dplyr::select` to indicate which package's function you want
-to use.
 
 
 
@@ -146,7 +151,7 @@ to use.
 Solution
 
 
-My numbering scheme has gotten messed up, since now `job`
+Now `job`
 is the "response":
 ```{r }
 job.1=lda(job~social+outdoor+conservative,data=jobs)
@@ -233,29 +238,22 @@ individual with the job they have).
 Solution
 
 
-Predictions first, then make a data frame with the original job
-from `jobs` and the discriminant scores in `x`
-from the predictions:
+Predictions first, then make a data frame combining the predictions with the original data:
 ```{r }
-job.2=predict(job.1)
-d=data.frame(job=jobs$job,job.2$x)
+p=predict(job.1)
+d=cbind(jobs, p)
+head(d)
 ```
 
        
-
-I had a terrible time trying to remember whether `job` should
-be singular or plural, caused by not being sure whether my output
-should be named according to the data frame or according to the
-response variable for the modelling. Anyway.
 Following my suggestion, plot these the standard way with
 `colour` distinguishing the jobs:
 
 ```{r }
-ggplot(d,aes(x=LD1,y=LD2,colour=job))+geom_point()
+ggplot(d,aes(x=x.LD1,y=x.LD2,colour=job))+geom_point()
 ```
 
  
-
 I was mostly right about the customer service people: small
 `LD1` definitely, large `LD2` kinda. I wasn't more right
 because the group means don't tell the whole story: evidently, the
@@ -284,22 +282,30 @@ the classification? Is that in line with what the plot would suggest?
 Solution
 
 
-Use the predictions that you got before and saved in `job.2`:
+Use the predictions that you got before and saved in `d`:
 ```{r cabteloupt}
-table(obs=jobs$job,pred=job.2$class)
+with(d, table(obs=job, pred=class))
 ```
 
-       
-
+     
 Or, the `tidyverse` way:
 
 ```{r }
-d=data.frame(job=jobs$job,pred=job.2$class)
-d %>% count(job,pred)
+d %>% count(job, class)
+```
+
+ 
+or:
+
+```{r }
+d %>% count(job,class) %>%
+spread(class, n, fill=0)
 ```
 
  
 
+I didn't really need the `fill=0` since there are no missing
+frequencies, but I've gotten used to putting it in.
 There are a lot of misclassifications, but there are a lot of people,
 so a large fraction of people actually got classified correctly. The
 biggest frequencies are of people who got classified correctly.  I
@@ -326,8 +332,8 @@ example, we can make a new column that indicates whether a group is
 the correct or wrong classification:
 
 ```{r }
-d %>% count(job,pred) %>%
-mutate(job_stat=ifelse(job==pred,"correct","wrong"))
+d %>% count(job, class) %>%
+mutate(job_stat=ifelse(job==class, "correct", "wrong"))
 ```
 
  
@@ -337,8 +343,8 @@ we want to total up the *frequencies* in `n`, not just
 count the number of rows:
 
 ```{r }
-d %>% count(job,pred) %>%
-mutate(job_stat=ifelse(job==pred,"correct","wrong")) %>%
+d %>% count(job, class) %>%
+mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
 count(job_stat,wt=n)
 ```
 
@@ -347,13 +353,15 @@ count(job_stat,wt=n)
 and turn these into proportions:
 
 ```{r }
-d %>% count(job,pred) %>%
-mutate(job_stat=ifelse(job==pred,"correct","wrong")) %>%
+d %>% count(job, class) %>%
+mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
 count(job_stat,wt=n) %>%
 mutate(proportion=nn/sum(nn))
 ```
 
  
+
+There is a `count` followed by another `count` of the first lot of counts, so the second count column has acquired the name `nn`.
 
 24\% of all the employees got classified into the wrong job, based on
 their scores on `outdoor`, `social` and
@@ -368,10 +376,9 @@ big improvement, and *that* is what the  MANOVA is reacting to.
 To figure out whether some of the groups were harder to classify than
 others, squeeze a `group_by` in early to do the counts and
 proportions for each (true) job:
-
 ```{r }
-d %>% count(job,pred) %>%
-mutate(job_stat=ifelse(job==pred,"correct","wrong")) %>%
+d %>% count(job, class) %>%
+mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
 group_by(job) %>%
 count(job_stat,wt=n) %>%
 mutate(proportion=nn/sum(nn))
@@ -382,8 +389,8 @@ mutate(proportion=nn/sum(nn))
 or even split out the correct and wrong ones into their own columns:
 
 ```{r }
-d %>% count(job,pred) %>%
-mutate(job_stat=ifelse(job==pred,"correct","wrong")) %>%
+d %>% count(job, class) %>%
+mutate(job_stat=ifelse(job==class,"correct","wrong")) %>%
 group_by(job) %>%
 count(job_stat,wt=n) %>%
 mutate(proportion=nn/sum(nn)) %>%
@@ -392,7 +399,6 @@ spread(job_stat,proportion)
 ```
 
  
-
 The mechanics were hardest to get right and easiest to get wrong,
 though there isn't much in it. I think the reason is that the
 mechanics were sort of "in the middle" in that a mechanic could be
@@ -419,9 +425,14 @@ Solution
 
 
 This is in fact exactly the same idea as the data frame that I
-generally called `new` when doing predictions for other models:
+generally called `new` when doing predictions for other
+models. I think the
+clearest way to make one of these is with `tribble`:
 ```{r }
-new=tibble(outdoor=20,social=17,conservative=8)
+new=tribble(
+~outdoor, ~social, ~conservative,
+20,       17,      8
+)
 new
 ```
 
@@ -557,17 +568,30 @@ Solution
 
 
 Stick a `CV=T` in the `lda`:
+
 ```{r } 
 job.3=lda(job~social+outdoor+conservative,data=jobs,CV=T)
+glimpse(job.3)
 ```
 
        
 
 This directly contains a `class` (no need for a
-`predict`), so we can go straight to the `table`:
+`predict`), so we make a data frame, with a different name
+since I shortly want to compare this one with the previous one:
 
 ```{r }
-table(obs=jobs$job,pred=job.3$class)
+dcv=cbind(jobs, class=job.3$class, posterior=job.3$posterior)
+head(dcv)
+```
+
+ 
+
+This is a bit fiddlier than before because `job.3` contains some things of different lengths and we can't just `cbind` them all together.
+
+Then go straight to the `table`:
+```{r }
+with(dcv, table(job,class))
 ```
 
  
@@ -591,15 +615,27 @@ conclusions are more "fragile" or less likely to be
 generalizable. With a larger data set like this one, cross-validation,
 which is the right thing to do, makes almost no difference.
 `r tufte::margin_note("So we should do it, when assessing how good the classification is.")`
+
 All right, I suppose I do want to investigate the individuals whose
 predicted jobs changed, and look at their posterior probabilities. I
-think I have the machinery to do that. The key is that `job.2` and
-`job.3` have respectively the predictions for the original `lda`
-and the cross-validation, so I can compare them directly:
+think I have the machinery to do that. 
+
+xxxa
+
+Let's start by gluing together the dataframes with the predictions from the regular `lda` (in `d`) and the ones from the cross-validation (in `dcv`). I think I can do that like this:
 
 ```{r }
-diff=(job.3$class!=job.2$class)
-str(diff)
+all=bind_cols(d, dcv)
+all
+```
+
+ 
+
+then fix up the below
+
+xxxb
+```{r error=T}
+diff=(dcv$class!=d$class)
 table(diff)
 ```
 
@@ -611,18 +647,27 @@ To find out which ones, and to do some more analysis, let's make a
 data frame identifying the individuals, their actual jobs, and their
 predicted jobs by regular discriminant analysis and by cross-validation:
 
-```{r awayscore}
-d=data.frame(id=jobs$id,job=jobs$job,p.lda=job.2$class,p.cv=job.3$class) 
+```{r awayscore, error=T}
+allpreds=tibble(id=jobs$id,job=jobs$job,p.lda=d$class,p.cv=dcv$class) 
 ```
 
  
 
-The individuals are actually numbered *within* jobs.
+The individuals are actually numbered *within* jobs. Also, these are vectors being glued together, so `tibble` should work.
 
 Now we can find out which ones had their job predictions disagree:
 
+```{r error=T}
+allpreds %>% filter(p.lda!=p.cv)
+```
+
+ 
+
+xxxa
+
+Now let's glue these two dataframes `d` and `dcv` together.
+
 ```{r }
-d %>% filter(p.lda!=p.cv)
 ```
 
  
@@ -632,7 +677,7 @@ stick the posterior probabilities next to each other. We ought
 to round them first, to keep them on one line, and for the same
 reason, we'd better abbreviate the job names as well:
 
-```{r spal}
+```{r spal, error=T}
 j.lda.post=round(job.2$posterior,3)
 j.cv.post=round(job.3$posterior,3)
 colnames(j.cv.post)=abbreviate(colnames(j.cv.post),5)
@@ -644,6 +689,8 @@ dplyr::select(-(p.lda:p.cv))
 ```
 
  
+
+xxxb
 
 This wound up being more complicated than I would have liked. First I
 round the two sets of posterior probabilities to 3 decimals. These are
@@ -675,7 +722,7 @@ we find which employees got misclassified, and count them, and before
 we do that, we make a data frame that has everything in it that we
 are likely to need:
 
-```{r }
+```{r error=T}
 post=round(job.2$posterior,3)
 d=data.frame(id=jobs$id,obs=jobs$job,pred=job.2$class,post)
 d %>% mutate(correct=(obs==pred)) %>%
@@ -689,9 +736,9 @@ summarize(count=n())
 ones they are, and because there are a lot of them this time, I'll
 take a random sample of 10 of them:
 
-```{r }
+```{r error=T}
 set.seed(457299)
-d %>% filter(obs!=pred) %>%
+d %>% filter(job!=class) %>%
 sample_n(10)
 ```
 
@@ -729,6 +776,8 @@ Further further analysis would look at the original variables
 `social`, `outdoor` and `conservative` for the
 misclassified people, and try to find out what was unusual about
 them. But I think now would be an excellent place for me to stop.
+
+xxxb
 
 
 

@@ -35,22 +35,13 @@ As above, plus:
 
 ```{r }
 urine.1=lda(obesity~creatinine+chlorine+chloride,data=urine)
-```
-
-     
-
-If you like, you can look at the whole output via
-
-```{r }
 urine.1
 ```
 
-
-
-and pick things off it to answer the questions later.
+     
  
 
-(b) How many linear discriminants are you expecting? Explain briefly.
+(b) How many linear discriminants were you expecting? Explain briefly.
  
 Solution
 
@@ -59,92 +50,111 @@ There are 3 variables and 4 groups, so the smaller of 3 and
 $4-1=3$: that is, 3.
  
 
-(c) Obtain something that shows the relationship between the
-original variables and the linear discriminants. (Don't comment on
-it yet: that's coming up.)
+(c) Why do you think we should pay attention to the first two
+linear discriminants but not the third? Explain briefly.
  
 Solution
 
-
-```{r }
-urine.1$scaling
-```
-
-       
-
-Or point to the "coefficients of linear discriminants" in the big output.
+ The first two ``proportion of
+trace'' values are a lot bigger than the third (or, the third
+one is close to 0).
  
 
-(d) Obtain something that shows the relative importance of
-the linear discriminants. Why do you think we should 
-pay attention to the first two but not the third? Explain briefly.
- 
-Solution
-
-
-```{r }
-urine.1$svd
-```
-
-         
-The first two singular values are a lot bigger than the third (or, the
-third one is close to 0).
-
-Or look at the `Proportion of trace` in the big output. The
-numbers there are different, but the relative sizes of them, and
-therefore the conclusions, are the same.
- 
-
-(e) Plot the first two linear discriminant scores (against each
+(d) Plot the first two linear discriminant scores (against each
 other), with each obesity group being a different colour.
  
 Solution
 
+ First obtain the predictions, and
+then make a data frame out of the original data and the
+predictions. 
 
-Obtain the predictions, and make a data frame out of the
-original data and the thing called `x` in the
-predictions. I'm again using `data.frame` because
-`x` is a matrix:
 ```{r }
 urine.pred=predict(urine.1)
-d=data.frame(urine,urine.pred$x)
+d=cbind(urine,urine.pred)
 head(d)
 ```
 
              
 
-Another way would be to turn `x` into a data frame (tibble)
-first, and then use `bind_cols`. That way, `d` would be
-a `tibble` and we wouldn't need to make it display only some of
-itself. I think you can use either `as_tibble` or
-`as.tibble`:
+`urine` produced the first five columns and `urine.pred`
+produced the rest.
+
+To go a more tidyverse way, we can combine the original data frame and
+the predictions using `bind_cols`, but we have to be more
+careful that the things we are gluing together are both data frames:
 
 ```{r }
-xx=as_tibble(urine.pred$x)
-d2=bind_cols(urine,xx)
-d2
+class(urine)
+class(urine.pred)
 ```
 
  
 
-`urine` produced the first five columns and `xx` (from
-`urine.pred`) produced the last three.
+`urine` is a `tibble` all right, but `urine.pred` is a `list`. What does it look like?
 
-Either of these ways (in general) is good. The second way is a more
+```{r }
+glimpse(urine.pred)
+```
+
+ 
+A data frame is a list for which all the items are the same length,
+but some of the things in here are matrices. You can tell because they
+have a number of rows, 45, *and* a number of columns, 3 or
+4. They *do* have the right number of rows, though, so something
+like `as.data.frame` (a base R function) will smoosh them all
+into one data frame, grabbing the columns from the matrices:
+
+```{r }
+head(as.data.frame(urine.pred))
+```
+
+ 
+
+You see that the columns that came from matrices have gained two-part names, the first part from the name of the matrix, the second part from the column name within that matrix. Then we can do this:
+
+```{r }
+dd=bind_cols(urine, as.data.frame(urine.pred))
+dd
+```
+
+ 
+
+If you want to avoid base R altogether, though, and go straight to
+`bind_cols`, you have to be more careful about the types of
+things. `bind_cols` *only* works with vectors and data
+frames, not matrices, so that is what it is up to you to make sure you
+have. That means pulling out the pieces, turning them from matrices
+into data frames, and then gluing everything back together:
+
+```{r error=T}
+post=as_tibble(urine.pred$posterior)
+ld=as_tibble(urine.pred$x)
+ddd=bind_cols(urine, class=urine.pred$class, ld, post)
+ddd
+```
+
+ 
+That's a lot of work, but you might say that it's worth it because you
+are now absolutely sure what kind of thing everything is. I also had
+to be slightly careful with the vector of `class` values; in
+`ddd` it has to have a name, so I have to make sure I give it
+one.
+`r tufte::margin_note("If you run into an error like *Argument 2 must have names* here, that means that the second thing, *class*, needs  to have a name and doesn't have one.")`
+Any of these ways (in general) is good. The last way is a more
 careful approach, since you are making sure things are of the right
 type rather than relying on R to convert them for you, but I don't
 mind which way you go.
+Now make the plot, making sure that you are using columns with the right names. I'm using my first data frame, with the two-part names:
 
-Now make the plot:
-
-```{r }
-ggplot(d,aes(x=LD1,y=LD2,colour=obesity))+geom_point()
+```{r error=T}
+ggplot(d,aes(x=x.LD1,y=x.LD2,colour=obesity))+geom_point()
 ```
 
  
  
 
-(f) <a name="part:plot">*</a> Looking at your plot, discuss how (if at all) the
+(e) <a name="part:plot">*</a> Looking at your plot, discuss how (if at all) the
 discriminants separate the obesity groups. (Where does each
 obesity group fall on the plot?)
  
@@ -179,25 +189,20 @@ individuals within a group are very variable, as they are
 here (especially group `c`), then that group will
 appear all over the plot. The table of means only says how
 the *average* individual within a group stacks up.
- 
-
-(g) We are going obtain posterior probabilities for each
-man in the data set, for each obesity group. Do a suitable prediction.
- 
-Solution
-
-
-We did this above:
-
 ```{r }
-glimpse(urine.pred)
+ggbiplot(urine.1, groups=urine$obesity)
 ```
 
-           
+ 
 
-This question ended up backwards because the way I used to do this was
-with "base graphics". If you plot the `lda` object itself,
-you get this:
+This shows (in a way that is perhaps easier to see) how the linear
+discriminants are related to the original variables, and thus how the
+groups differ in terms of the original variables.\endnote{This was why
+we were doing discriminant analysis in the first place.} Most of the
+B's are high creatinine and high chloride (on the right); most of the
+D's are low on both (on the left). LD2 has a bit of `chloride`,
+but not much of anything else.
+Extra: the way we used to do this was with "base graphics", which involved plotting the `lda` output itself:
 
 ```{r }
 plot(urine.1)
@@ -213,27 +218,31 @@ plot(urine.1,dimen=2)
 ```
 
  
-
 This is easier than using `ggplot`, but (i) less flexible and
 (ii) you have to figure out how it works rather than doing things the
 standard `ggplot` way. So I went with constructing a data frame
-from the `x` thing in the predictions, and then
+from the predictions, and then
 `ggplot`ting that. It's a matter of taste which way is better.
+xxxb
  
 
-(h) <a name="part:table">*</a> Obtain a table showing observed and predicted obesity
+(f) <a name="part:table">*</a> Obtain a table showing observed and predicted obesity
 groups. Comment on the accuracy of the predictions.
  
 Solution
 
 
-Following the idea from class:
-```{r }
-tab=table(urine$obesity,urine.pred$class)
+Make a table, one way or another:
+
+```{r error=T}
+tab=with(urine, table(obesity,class))
 tab
 ```
 
            
+
+`class` is always the *predicted* group in these. You can
+also name things in `table`.
 Or, if you prefer (equally good), the `tidyverse` way of
 counting all the combinations of true `obesity` and predicted
 `class`, which can be done all in one go, or in
@@ -241,21 +250,20 @@ two steps by saving the data frame first. I'm saving my results for
 later:
 
 ```{r }
-tab = tibble(obesity=urine$obesity,predicted=urine.pred$class) %>%
-count(obesity, predicted)
+d %>% count(obesity, class) -> tab
 tab
 ```
 
  
-
 or if you prefer to make it look more like a table of frequencies:
-
 ```{r }
-tab %>% spread(predicted, n)
+tab %>% spread(class, n, fill=0)
 ```
 
  
 
+The thing on the end fills in zero frequencies as such (they would
+otherwise be `NA`, which they are not: we know they are zero).
 My immediate reaction to this is "it's terrible"! But at least some
 of the men have their obesity group correctly predicted: 7 of the
 $7+3+2+0=12$ 
@@ -275,17 +283,23 @@ the most incisive way of getting at this, because the `c` men
 are the hardest to get right and the others are easier, but you could
 also think about an overall misclassification rate. This comes most
 easily from the "tidy" table:
-
 ```{r }
-tab %>% count(correct=(obesity==predicted),wt=n) 
+tab %>% count(correct=(obesity==class),wt=n) 
 ```
 
  
-
 You can count anything, not just columns that already exist. This one
 is a kind of combined mutate-and-count to create the (logical) column
-called `correct`.
+called `correct`. 
 
+It's a shortcut for this:
+
+```{r }
+tab %>% mutate(is_correct=(obesity==class)) %>%
+count(is_correct, wt=n)
+```
+
+ 
 If I don't put the `wt`, `count` counts the number of
 *rows* for which the true and predicted obesity group is the
 same. But that's not what I want here: I want the number of
@@ -297,7 +311,7 @@ This says that 22 men were classified correctly and 23 were gotten
 wrong. We can find the proportions correct and wrong:
 
 ```{r }
-tab %>% count(correct=(obesity==predicted),wt=n) %>%
+tab %>% count(correct=(obesity==class),wt=n) %>%
 mutate(proportion=nn/sum(nn))
 ```
 
@@ -316,7 +330,7 @@ do any summarizing:
 ```{r }
 tab %>%
 group_by(obesity) %>%
-count(correct=(obesity==predicted),wt=n) %>%
+count(correct=(obesity==class),wt=n) %>%
 mutate(proportion=nn/sum(nn))
 ```
 
@@ -329,7 +343,7 @@ read, a kind of "untidying":
 ```{r }
 tab %>%
 group_by(obesity) %>%
-count(correct=(obesity==predicted),wt=n) %>%
+count(correct=(obesity==class),wt=n) %>%
 mutate(proportion=nn/sum(nn)) %>%
 select(-nn) %>%
 spread(correct,proportion)
@@ -351,7 +365,7 @@ values than TRUE and FALSE:
 ```{r }
 tab %>%
 group_by(obesity) %>%
-mutate(prediction_stat=ifelse(obesity==predicted,"correct","wrong")) %>%
+mutate(prediction_stat=ifelse(obesity==class,"correct","wrong")) %>%
 count(prediction_stat,wt=n) %>%
 mutate(proportion=nn/sum(nn)) %>%
 select(-nn) %>%
@@ -361,7 +375,7 @@ spread(prediction_stat,proportion)
  
  
 
-(i) Do your conclusions from (<a href="#part:plot">here</a>) and
+(g) Do your conclusions from (<a href="#part:plot">here</a>) and
 (<a href="#part:table">here</a>) appear to be consistent?
  
 Solution

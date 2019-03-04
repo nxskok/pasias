@@ -80,15 +80,12 @@ acts like a response and the others act as explanatory.)
 
 
 (c) Run a discriminant analysis on these data, "predicting"
-soil type from the three response variables. You don't need to look
-at the results yet.
+soil type from the three response variables. Display the results.
 
 
 Solution
 
 
-Loading library `MASS` first. I'm displaying all my
-results, but I didn't ask you to:
 ```{r }
 cornseed.2=lda(soil~yield+water+herbicide,data=cornseed)
 cornseed.2
@@ -114,23 +111,15 @@ thereof.
     
 
 
-(d) <a name="part:corn-svd">*</a> Obtain something from your output that displays the
-relative importance of your linear discriminants. Which one(s) seem
-to be worth paying attention to?
-Why did you get
-three linear discriminants? Explain briefly.
+(d) <a name="part:corn-svd">*</a> 
+Which linear discriminants seem to be worth paying attention to?
+Why did you get three linear discriminants? Explain briefly.
 
 
 Solution
 
 
-Either display the whole output and pick out ``proportion of
-trace'', or do this (either is good):
-```{r }
-cornseed.2$svd
-```
-
-     
+Look for  "proportion of trace" in the output.
 
 The first one is *way* bigger than the others, which says that
 the first linear discriminant is way more important (at separating the
@@ -149,14 +138,7 @@ your discriminant analysis output.
 Solution
 
 
-`scaling` is the thing, or the table ``coefficients of
-linear discriminants'' (same):
-```{r }
-cornseed.2$scaling
-```
-
-     
-
+The table "coefficients of linear discriminants".
 We said earlier that the only important discriminant is
 `LD1`. On that, the only notably non-zero coefficient is for
 `herbicide`; the ones for `yield` and `water` are
@@ -214,26 +196,21 @@ containing what you need.
 Solution
 
 
-We need the `soil` out of `cornseed` and the thing
-called `x` out of `cornseed.pred`:
+I changed my mind from the past about how to do this. I make a big data frame out of the data and predictions (with `cbind`) and go from there:
 ```{r }
-d=data.frame(soil=cornseed$soil,cornseed.pred$x)
+d=cbind(cornseed, cornseed.pred)
 head(d)
 ```
 
      
-
-The name thing again: `soil` was only one column, so we gave it
-a name, while `x` had three columns, all with their own names
-that we wanted to keep, so we didn't give them names.
-
 Then we use this as input to `ggplot`:
 
 ```{r }
-ggplot(d,aes(x=LD1,y=LD2,colour=soil))+geom_point()
+ggplot(d,aes(x=x.LD1,y=x.LD2,colour=soil))+geom_point()
 ```
 
  
+
     
 
 
@@ -274,17 +251,16 @@ discriminant, and now we see  why: only the first one separates the
 groups. If you wanted to do that, you could  make a boxplot of the
 discriminant scores by `soil` group, thus:
 ```{r }
-ggplot(d,aes(x=soil,y=LD1))+geom_boxplot()
+ggplot(d,aes(x=soil,y=x.LD1))+geom_boxplot()
 ```
 
    
-
 This says more or less the same thing as your plot of `LD1` and
 `LD2`: `loam` has the highest `LD1` score,
 `sandy` is about in the middle, and `clay` and
 `salty` have typically negative `LD1` scores, similar to
 each other, though there is one outlying `salty` that looks a
-lot more like a \textrm{loam}.
+lot more like a `loam`.
   
 
 
@@ -296,10 +272,9 @@ group. Which soil type was classified correctly the most often?
 Solution
 
 
-This is a matter of grabbing the things you want from where they
-live, and giving them short names:
-```{r }
-table(obs=cornseed$soil,pred=cornseed.pred$class)
+
+```{r error=T}
+with(d, table(obs=soil,pred=class))
 ```
 
    
@@ -317,8 +292,9 @@ on the right.)
 
 This was easier because we had the same number of fields of each
 type. If we didn't have that, the right way to go then would be to work out
-*row* percentages: ``out of the fields that were actually sandy,
-what percent of them got classified as sandy'', and so on.
+*row* percentages: 
+"out of the fields that were actually sandy, what percent of them got classified as sandy", 
+and so on.
 
 This is not a perfect classification, though, which is about what you
 would expect from the soil types being intermingled on the plot of
@@ -327,29 +303,30 @@ would expect from the soil types being intermingled on the plot of
 `clay` is often confused with both of them. On the plot of
 `LD1` and `LD2`, `salty` is generally to the left
 of `sandy`, but `clay` is mixed up with them both.
-
-The `dplyr` way of doing this is equally good:
+The tidyverse way of doing this is equally good. This is the tidied-up way:
 
 ```{r }
-data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
-count(obs,pred)
+d %>% count(soil, class) %>% spread(class, n, fill=0)
 ```
 
  
-
 Six out of eight `loam`s were correctly classified, which is
 better than anything else.
 
 Extra: we can calculate misclassification rates, first overall, which is easier:
 
-```{r }
-data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
-mutate(soil_stat=ifelse(obs==pred,"correct","wrong")) %>%
+xxxa
+
+```{r error=T}
+d %>% count(soil, class) %>%
+mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
 count(soil_stat) %>%
-mutate(prop=n/sum(n))
+mutate(prop=nn/sum(nn))
 ```
 
- 
+
+
+xxxb
 
 This shows that 44\% of the soil types were misclassified, which
 sounds awful, but is actually not so bad, considering. Bear in mind
@@ -360,17 +337,19 @@ about soil type; it's better to know them than not to.
 
 Or do it by actual soil type:
 
-```{r }
-data.frame(obs=cornseed$soil,pred=cornseed.pred$class) %>%
-group_by(obs) %>%
-mutate(soil_stat=ifelse(obs==pred,"correct","wrong")) %>%
+xxxa
+```{r error=T}
+d %>% count(soil, class) %>%
+group_by(soil) %>%
+mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
 count(soil_stat) %>%
-mutate(prop=n/sum(n)) %>%
-select(-n) %>%
+mutate(prop=nn/sum(nn)) %>%
+select(-nn) %>%
 spread(soil_stat,prop)
 ```
 
  
+xxxb
 
 Loam soil was the easiest to get right, and clay was easiest to get
 wrong. However, these proportions were each based on only eight
@@ -386,15 +365,14 @@ it that we want to look at. And before *that*, I want to round
 the posterior probabilities to a small number of decimals.
 
 Then, we can fire away with this:
+```{r error=T}
+d %>% mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
+mutate(row=row_number()) -> dd
+dd %>% filter(soil!=class) 
 
-```{r }
-pr=round(cornseed.pred$posterior,3)
-data.frame(cornseed,pred=cornseed.pred$class,pr) %>%
-filter(soil!=pred)
 ```
 
  
-
 Most of the posterior probabilities are neither especially small nor
 especially large, which adds to the impression that things are really
 rather uncertain. For example, field 8 could have been either loam
@@ -413,14 +391,18 @@ that soil type had was on the amount of herbicide needed, with the
 loam soils needing most.
 
 I wanted to finish with one more thing, which was to look again at the
-soils that were actually loam. This is a small edit:
+soils that were actually loam:
+
+xxxa
 
 ```{r }
-data.frame(cornseed,pred=cornseed.pred$class,pr) %>%
-filter(soil=="loam")
+dd %>% filter(soil=="loam") %>%
+select(soil, yield, water, herbicide, class, starts_with("posterior"))
+
 ```
 
  
+xxxb 
 Fields 7 and 8 could have been pretty much any type of soil;
 `sandy` came out with the highest posterior probability, so
 that's what they were predicted (wrongly) to be. Some of the fields,

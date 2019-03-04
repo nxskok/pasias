@@ -47,15 +47,16 @@ give the name of the new combo column first, and then the names of
 the columns you want to combine, either by listing them or by
 using a select-helper. They will be separated by an underscore by
 default, which is usually easiest to handle.
-`r tufte::margin_note("The opposite      of *unite* is *separate*, which splits a combined      column like my *combo* into separate columns; it too uses    underscore as the default separator.} In texttt{unite")`, you can
+`r tufte::margin_note("The opposite      of *unite* is *separate*, which splits a combined      column like my *combo* into separate columns; it too uses    underscore as the default separator.")` 
+In `unite`, you can
 group the columns to "unite" with `c()`, as in class, or
 not, as here. Either way is good.
 `r tufte::margin_note("You used to have to group    them, but you don't any more. Hence my old code has them grouped,    but my new code does not.")`
 We'll be using height and weight in the
 analysis to come, so I decided to display just those:
 ```{r }
-athletesc = athletes %>%
-unite(combo,Sport,Sex)
+athletes %>%
+unite(combo,Sport,Sex) -> athletesc 
 athletesc %>% select(combo,Ht,Wt)
 ```
 
@@ -111,8 +112,8 @@ select(combo,Ht,Wt)
 
  
 
-The key was the `names`, and the extra dot (``output from
-previous step'') in `select_if`.
+The key was the `names`, and the extra dot 
+("output from previous step") in `select_if`.
 
 
 (c) Run a discriminant analysis "predicting" sport-gender
@@ -179,13 +180,15 @@ tall and reasonably heavy (or, I suppose, that matches with what
 you said in the previous part, whatever that was).
 
 
-(f) <a name="part:ld2">*</a> 
-What combination of height and weight would make an athlete have a
+(f) <a name="part:ld2">*</a> What combination of height and weight would make an athlete have a
 *small* (that is, very negative) score on LD2? Explain briefly.
 
 Solution
 
 
+The italics in the question are something to do with questions
+that have a link to them in Bookdown. I don't know how to fix
+that.
 Going back to the Coefficients of Linear Discriminants, the
 coefficient for Height is negative, and the one for Weight is
 positive. What will make an athlete come out small (very
@@ -240,76 +243,27 @@ glimpse(p)
 
  
 
-This is still kind of messy, so let's look at the top of the pieces:
+Our standard procedure is to `cbind` the predictions together with the original data (including the combo), and get a huge data frame (in this case):
 
 ```{r }
-head(p$class)
-```
-
- 
-
-These are the predicted sport-gender combinations (from the height and weight).
-
-```{r }
-head(p$posterior)
-```
-
- 
-
-These are the posterior probabilities of being in each sport-gender
-combination, based on height and weight. There are seventeen columns
-for each athlete, so this is rather hard to inspect.
-
-```{r }
-class(p$x)
-head(p$x)
-```
-
- 
-
-These are the LD1 and LD2 scores for each athlete, that we will need
-for the plot.
-
-So our first step is to make a data frame containing the things we
-want to plot:
-
-```{r }
-d=data.frame(combo=athletesc$combo,p$x)
+d=cbind(athletesc, p)
 head(d)
 ```
 
  
+And so, to the graph:
 
-There's a couple of subtleties here:
-
-
-
-* The LD scores are actually a matrix, so if you try to use
-`tibble` to combine the actual sport-gender combinations with
-the LD scores, you'll get an error (`data.frame` is rather
-more forgiving about the kinds of things it will let you combine).
-
-* If you *don't* give `p$x` a name, it will
-"inherit" the names `LD1` and `LD2`, which is
-probably what you want. If you call it, say, `x`, the names
-end up being `x.LD1` and `x.LD2`, which is perfectly
-fine but looks a bit odd.
-
-
-And so, to the graph, which is easy now:
-
-```{r }
-ggplot(d,aes(x=LD1,y=LD2,colour=combo))+geom_point()
+```{r error=T}
+ggplot(d,aes(x=x.LD1,y=x.LD2,colour=combo))+geom_point()
 ```
 
  
-
 If you can distinguish seventeen different colours, your eyes are
 better than mine! You might prefer to use seventeen different shapes,
 although I wonder how much better that will be:
 
-```{r }
-ggplot(d,aes(x=LD1,y=LD2,shape=combo))+geom_point()+
+```{r error=T}
+ggplot(d,aes(x=x.LD1,y=x.LD2,shape=combo))+geom_point()+
 scale_shape_manual(values=1:17)
 ```
 
@@ -321,13 +275,12 @@ assignment.
 
 Or even this:
 
-```{r }
-ggplot(d,aes(x=LD1,y=LD2,shape=combo,colour=combo))+geom_point()+
+```{r error=T}
+ggplot(d,aes(x=x.LD1,y=x.LD2,shape=combo,colour=combo))+geom_point()+
 scale_shape_manual(values=1:17)
 ```
 
  
-
 Perhaps having colours *and* shapes makes the combos easier to
 distinguish. We're beginning to stray onto the boundary between
 statistics and aesthetics here!
@@ -369,6 +322,7 @@ saying something like "weight relative to height", with someone
 at the top of the picture being unusually heavy and someone at the
 bottom unusually light.
 
+xxxa 
 
 (i) Obtain a (very large) square table, or a (very long) table
 with frequencies, of actual and predicted sport-gender
@@ -382,23 +336,20 @@ seem relatively easy to classify correctly?  Explain briefly.
 Solution
 
 
-Let's make this as tiny as we can (since it's a $17 \times 17$
-table). My `options` line is to see how many columns it
-will print out in one go; you don't need that.
-```{r size="scriptsize"}
-options(width=130)
-table(combo=athletesc$combo,pred=p$class)
+Let's see what happens:
+```{r error=T}
+with(d, table(combo, class))
 ```
 
      
 
-I can either have it smaller and fitting in the box, or larger (so
-that I can read it) and spilling out of the box. I went the latter way.
+That's kind of long.
 
 For combos that are easy to classify, you're looking for a largish
-number on the diagonal of the table (classified correctly) and (much)
-smaller numbers in the rest of the row and column. I don't mind which
-ones you pick out, but see if you can find a few:
+number on the diagonal of the table (classified correctly), bearing in
+mind that you only see about four columns of the table at once, and
+(much) smaller numbers in the rest of the row and column. I don't mind
+which ones you pick out, but see if you can find a few:
 
 
 
@@ -427,17 +378,15 @@ Or you can turn it into a tibble:
 
 ```{r }
 tab %>% as_tibble() 
-#%>% select(BBall_female:Gym_female)
 ```
 
  
 
 This makes the `tidyverse` output, with frequencies. You
-probably want to omit the zero ones and display (small) all the rows
-that remain:
+probably want to omit the zero ones:
 
 ```{r size="tiny"}
-tab %>% as_tibble() %>% filter(n>0) %>% print(n=Inf)
+tab %>% as_tibble() %>% filter(n>0)
 ```
 
  
@@ -445,17 +394,15 @@ tab %>% as_tibble() %>% filter(n>0) %>% print(n=Inf)
 This is the same output as below. See there for comments.
 
 The other, perhaps easier, way to tackle this one is the
-`tidyverse` way, making a "long" table of frequencies. Once
-again, I have to print it out small so that you can see all of it:
+`tidyverse` way, making a "long" table of frequencies. Here is some of it. You'll be able to click to see more:
 
-```{r size="scriptsize"}
-d=tibble(combo=athletesc$combo, pred=p$class)
-d %>% count(combo,pred) %>% print(n=70)
+```{r }
+d %>% count(combo,class) 
 ```
 
  
 
-The `combo` column is the truth, and the `pred` column
+The `combo` column is the truth, and the `class` column
 is the prediction. Again, you can see where the big frequencies are; a
 lot of the female netball players were gotten right, but there were a
 lot of them to begin with.
@@ -466,8 +413,8 @@ changed my mind from how I originally wrote this. I still use
 take it in steps:
 
 ```{r }
-d %>% count(combo,pred) %>% 
-mutate(stat=ifelse(combo==pred,"correct","wrong"))
+d %>% count(combo, class) %>% 
+mutate(stat=ifelse(combo==class, "correct", "wrong"))
 ```
 
  
@@ -479,8 +426,8 @@ simply counting the number of rows; rather, we need to total up the
 things in the `n` column:
 
 ```{r }
-d %>% count(combo,pred) %>% 
-mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+d %>% count(combo, class) %>% 
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n)
 ```
 
@@ -494,8 +441,8 @@ To make those into proportions, another `mutate`, dividing by
 the total of `nn`:
 
 ```{r }
-d %>% count(combo,pred) %>% 
-mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+d %>% count(combo, class) %>% 
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
 mutate(proportion=nn/sum(nn))
 ```
@@ -512,9 +459,9 @@ corresponding calculation by sport-gender combination. To do
 we define `stat` (it doesn't matter which way):
 
 ```{r }
-d %>% count(combo,pred) %>% 
+d %>% count(combo, class) %>% 
 group_by(combo) %>%
-mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
 mutate(proportion=nn/sum(nn))
 ```
@@ -530,10 +477,10 @@ We don't actually see all the answers, because there are too many of
 them. Let's try to get the proportion correct and wrong in their own
 columns. This almost works:
 
-```{r }
-d %>% count(combo,pred) %>% 
+```{r error=T}
+d %>% count(combo, class) %>% 
 group_by(combo) %>%
-mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
 mutate(proportion=nn/sum(nn)) %>%
 spread(stat, proportion)
@@ -548,34 +495,38 @@ tested for uniqueness; if it's unique, it gets its own row. Thus,
 easiest way around this is to get rid of `nn`, since it has
 served its purpose:
 
+xxxa
+
 ```{r }
-d %>% count(combo,pred) %>% 
+d %>% count(combo, class) %>% 
 group_by(combo) %>%
-mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
 mutate(proportion=nn/sum(nn)) %>%
 select(-nn) %>%
-spread(stat, proportion)
+spread(stat, proportion, fill=0)
 ```
 
  
 
-Those NAs are really zeros. While we're about it, let's arrange in
+While we're about it, let's arrange in
 order of misclassification probability:
 
 ```{r }
-d %>% count(combo,pred) %>% 
+d %>% count(combo, class) %>% 
 group_by(combo) %>%
-mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
 mutate(proportion=nn/sum(nn)) %>%
 select(-nn) %>%
-spread(stat, proportion) %>%
+spread(stat, proportion, fill=0) %>%
 replace_na(list(correct=0,wrong=0)) %>%
 arrange(wrong)
 ```
 
  
+
+xxxb 
 
 The most distinctive athletes were the female gymnasts (tiny!),
 followed by the male basketball players (tall) and the female field
@@ -585,20 +536,25 @@ the discriminant analysis guessed them all wrong!
 So what were the most common *misclassifications*? Let's go back
 to this:
 
-```{r }
-d %>% count(combo,pred) %>% 
+xxxa 
+
+```{r error=T}
+head(d)
+d %>% count(combo, class) %>% 
 mutate(stat=ifelse(combo==pred,"correct","wrong"))
 ```
 
  
 
+xxxb 
+
 We want to express those `n` values as proportions out of their
 actual sport-gender combo, so we group by `combo` before
 defining the proportions:
 
-```{r }
-d %>% count(combo,pred) %>% 
-mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+```{r error=T}
+d %>% count(combo, class) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong"))
 group_by(combo) %>%
 mutate(proportion=n/sum(n))
 ```
@@ -608,9 +564,9 @@ mutate(proportion=n/sum(n))
 Only pick out the ones that were gotten wrong, and arrange the remaining
 proportions in descending order:
 
-```{r }
-d %>% count(combo,pred) %>% 
-mutate(stat=ifelse(combo==pred,"correct","wrong")) %>%
+```{r error=T}
+d %>% count(combo, class) %>% 
+mutate(stat=ifelse(combo==pred,"correct","wrong"))
 group_by(combo) %>%
 mutate(proportion=n/sum(n)) %>%
 filter(stat=="wrong") %>%
@@ -621,9 +577,10 @@ arrange(desc(proportion))
 
 The embarrassment champion is the three male tennis players that were
 taken to be --- female rowers! Most of the other mistakes are more
-forgivable: the male rowers being taken for male waterpolo players,
+forgivable: the male rowers being taken for male water polo players,
 for example. 
 
+xxxb
 
 
 

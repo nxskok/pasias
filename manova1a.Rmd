@@ -10,14 +10,13 @@ data were in [link](http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt).
 
 
 (a) Read the data in again and run the MANOVA that you did
-before. (This is an easy two points since you can copy what you did,
-or 
-my solutions from last time!)
+before. 
 
 
 Solution
 
 
+This is an exact repeat of what you did before:
 ```{r }
 my_url="http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
 simple=read_delim(my_url," ")
@@ -36,20 +35,19 @@ groups differ on some of the variables.
 
 
 (b) Run a discriminant analysis "predicting" group from the
-two response variables. You don't need to look at the output yet.
+two response variables. Display the output.
 
 
 Solution
 
 
-Just this:
+This:
 ```{r }
-library(MASS)
 simple.4=lda(group~y1+y2,data=simple)
+simple.4
 ```
 
-     
-
+   
 Note that this is the other way around from MANOVA: here, we are
 "predicting the group" from the response variables, in the same
 manner as one of the flavours of logistic regression: 
@@ -58,47 +56,36 @@ manner as one of the flavours of logistic regression:
     
 
 
-(c) <a name="part:output">*</a> Obtain the output from the discriminant analysis. Why are
-there exactly two linear discriminants `LD1` and `LD2`? 
+(c) <a name="part:output">*</a> In the output from the discriminant analysis,
+why are there exactly two linear discriminants `LD1` and
+`LD2`?
 
 
 
 Solution
 
-
-This:
-```{r }
-simple.4
-```
-
-   
 
 There are two linear discriminants because there are 3 groups and two
 variables, so there are the smaller of $3-1$ and 2 discriminants.
+
   
 
 
-(d) <a name="part:svd">*</a> From the output in the last part, how would you say that the
+(d) <a name="part:svd">*</a> From the output, how would you say that the
 first linear discriminant `LD1` compares in importance to the
 second one `LD2`: much more important, more important, equally
-important, less important, much less important? Explain briefly.
+important, less important, much less important? Explain briefly. 
 
 
 
 Solution
 
 
-Look at the `trace` at the bottom of the output, or at this:
-```{r }
-simple.4$svd
-```
-
-   
-
+Look at the `Proportion of trace` at the bottom of the output.
 The first number is much bigger than the second, so the first linear
 discriminant is much more important than the second. (I care about
 your reason; you can say it's "more important" rather than 
-"much more important" and I'm good with that.)
+"much more important" and I'm good with that.) 
   
 
 
@@ -110,7 +97,7 @@ discriminant scores.
 Solution
 
 
-This is the old-fashioned way:
+This was the old-fashioned way:
 
 ```{r }
 plot(simple.4)
@@ -119,7 +106,7 @@ plot(simple.4)
    
 
 It needs cajoling to produce colours, but we can do better. The first
-thing is to obtain the predictions (which we'll use again later):
+thing is to obtain the predictions:
 
 ```{r }
 simple.pred=predict(simple.4)
@@ -128,21 +115,30 @@ simple.pred=predict(simple.4)
  
 
 Then we make a data frame out of the discriminant scores and the true
-groups, using `data.frame` or like this:
+groups, using `cbind`:
 
 ```{r }
-xx=as_tibble(simple.pred$x)
-d=bind_cols(group=simple$group,xx)
-d
+d=cbind(simple, simple.pred)
+head(d)
 ```
 
  
+or like this, for fun:
+`r tufte::margin_note("For suitable definitions of fun.")`
 
+```{r error=T}
+ld=as_tibble(simple.pred$x)
+post=as_tibble(simple.pred$posterior)
+dd=bind_cols(simple, class=simple.pred$class, ld, post)
+dd
+```
+
+ 
 After that, we plot the first one against the second one, colouring by
 true groups:
 
-```{r }
-ggplot(d,aes(x=LD1,y=LD2,colour=group))+geom_point()
+```{r error=T}
+ggplot(d,aes(x=x.LD1,y=x.LD2,colour=group))+geom_point()
 ```
 
  
@@ -165,15 +161,14 @@ the fact that `LD1` is quite a bit more important than
 With that in mind, we could also plot just `LD1`, presumably
 against groups via boxplot:
 
-```{r }
-ggplot(d,aes(x=group,y=LD1))+geom_boxplot()
+```{r error=T}
+ggplot(d,aes(x=group,y=x.LD1))+geom_boxplot()
 ```
 
  
 
 This shows that LD1 does a pretty fine job of separating the groups,
-and `LD2` doesn't really add much to the picture. 
-
+and `LD2` doesn't really have much to add to the picture. 
   
 
 
@@ -190,10 +185,12 @@ Solution
 low on `LD1`, `b` is in the middle and `c` is
 high on `LD1`. (There is no intermingling of the groups on
 `LD1`, so it separates the groups perfectly.)
+
 As for `LD2`, all it does (possibly) is to distinguish
 `b` (low) from `a` and `c` (high). Or you can,
 just as reasonably, take the view that it doesn't really separate
 any of the groups.
+
 Back in part (<a href="#part:svd">here</a>), you said (I hope) that `LD1`
 was (very) important compared to `LD2`. This shows up here in
 that `LD1` does a very good job of distinguishing the groups,
@@ -215,8 +212,7 @@ compare to the other groups, and consider how
 Solution
 
 
-The information you need is in the output in part
-(<a href="#part:output">here</a>). 
+The information you need is in the big output.
 
 The means of `y1` and `y2` for group `a` are 3
 and 4 respectively, which are the lowest of all the groups. That's
@@ -228,7 +224,9 @@ The second thing is the coefficients of
 and `y2` values are *large*, that observation's score on
 `LD1` will be large as well. Conversely, if its values are
 *small*, as the ones in group `a` are, its score on
-`LD1` will be small. You need these two things.
+`LD1` will be small. 
+
+You need these two things.
 
 This explains why the group `a` observations are on the left
 of the plot. It also explains why the group `c` observations
@@ -263,57 +261,47 @@ Solution
 Use the
 `simple.pred` that you got earlier. This is the
 `table` way:
-```{r }
-table(obs=simple$group,pred=simple.pred$class)
+```{r error=T}
+with(d, table(obs=group, pred=class))
 ```
 
    
-
 Every single one of the 12 observations has been classified into its
 correct group. (There is nothing off the diagonal of this table.) 
-
-The alternative to `table` is the `tidyverse` way, with the
-first line being as shown or an `as_tibble` followed by a
-`bind_cols`: 
+The alternative to `table` is the `tidyverse` way:
 
 ```{r }
-data.frame(obs=simple$group,pred=simple.pred$class) %>%
-group_by(obs) %>%
-count(pred) %>%
-mutate(frac=n/sum(n))
+d %>% count(group, class)
 ```
 
  
 
-All the `a`s got classified as `a`, and so on. The
-`frac` column shows that 100\% of the observations in each
-group got classified correctly. The overall misclassification rate is
-of course zero, which you could demonstrate by taking out the
-`group_by` and counting the right thing:
-
+or
 ```{r }
-data.frame(obs=simple$group,pred=simple.pred$class) %>%
-count(obs==pred) %>%
-mutate(frac=n/sum(n))
+d %>% count(group, class) %>%
+spread(class, n, fill=0)
 ```
 
  
 
+if you want something that looks like a frequency table.
+All the `a`s got classified as `a`, and so on. 
 That's the end of what I asked you to do, but as ever I wanted to
-press on. The next question to ask after getting the predicted groups is 
-"what are the posterior probabilities of being in each group for each observation": 
+press on. The next question to ask after getting the predicted groups
+is "what are the posterior probabilities of being in each group for each observation": 
 that is, not just which group do I think it
-belongs in, but how sure am I about that call? The magic name for the
-posterior probabilities is `posterior` in
-`simple.pred`. These have a ton of decimal places which I like to
-round off first before I display them, eg. to 3 decimals here:
-
+belongs in, but how sure am I about that call? The posterior
+probabilities in my `d` start with `posterior`. These
+have a ton of decimal places which I like to round off first before I
+display them, eg. to 3 decimals here:
 ```{r }
-ppr=round(simple.pred$posterior,3)
-cbind(simple,ppr)
+d %>% select(y1, y2, group, class, starts_with("posterior")) %>%
+mutate_at(vars(starts_with("posterior")), ~round(.,3))
 ```
 
  
+
+The repetition annoys me.
 
 You see that the posterior probability of an observation being in the
 group it actually *was* in is close to 1 all the way down. The
@@ -323,20 +311,20 @@ in group `b`, but has "only" probability 0.814 of being a
 could it be? Well, it's about equally split between being `a`
 and `c`. Let me see if I can display this observation on the
 plot in a different way. First I need to make a new column picking out
-observation 6, and then I use this new variable as the `shape`
-(plotting character) for my plot:
-
+observation 6, and then I use this new variable as the `size`
+of the point I plot:
 ```{r }
 simple %>% mutate(is6=(row_number()==6)) %>%
-ggplot(aes(x=y1,y=y2,colour=group,shape=is6))+
+ggplot(aes(x=y1,y=y2,colour=group,size=is6))+
 geom_point()
 ```
 
  
 
-As the legend indicates, observation \#6 is plotted as a triangle,
-with the rest being plotted as circles as usual. Since observation \#6
-is in group `b`, it appears as a green triangle. What makes it
+That makes it stand out.
+As the legend indicates, observation \#6 is plotted as a big circle,
+with the rest being plotted as small circles as usual. Since observation \#6
+is in group `b`, it appears as a big green circle. What makes it
 least like a `b`? Well, it has the smallest `y2` value
 of any of the `b`'s (which makes it most like an `a` of
 any of the `b`'s), and it has the largest `y1` value (which makes it

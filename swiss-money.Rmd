@@ -105,58 +105,47 @@ using `as.matrix`. As long as you end up with a
 `matrix`, it's all good.
  
 
-(c) Run a discriminant analysis. (You can look at the results
-now, or, later, grab the bits that you need.)
+(c) Run a discriminant analysis. Display the output.
  
+
 Solution
 
-
+ 
+Now we forget about all that
+`response` stuff. For a discriminant analysis, the
+grouping variable (or combination of the grouping variables)
+is the "response", and the quantitative ones are
+"explanatory":
 ```{r }
 swiss.3=lda(status~length+left+right+bottom+top+diag,data=swiss)
-```
-
-       
-
-You can display all the results now and refer back to them:
-
-```{r }
 swiss.3
 ```
 
- 
+       
  
 
-(d) Show the relationship between the linear
-discriminant(s) (you don't need to comment on that yet) and the
-measured variables. How many linear 
+(d) How many linear 
 discriminants did you get? Is that making sense? Explain briefly.
  
 Solution
 
-
-```{r }
-swiss.3$scaling
-```
-
-       
-
-This is the same as the \texttt{coefficients of linear
-discriminants} on the big output.
 
 I got one discriminant, which makes sense because there are two
 groups, and the smaller of 6 (variables, not counting the grouping
 one) and $2-1$ is 1. 
  
 
-(e) <a name="part:big">*</a> Using the output of the last part, describe how each of
-the linear discriminants that you got is related to your original
-variables. (This can, maybe even should, be done crudely: 
+(e) <a name="part:big">*</a> 
+Using your output from the discriminant analysis, describe how
+each of the linear discriminants that you got is related to your
+original variables. (This can, maybe even should, be done crudely:
 "does each variable feature in each linear discriminant: yes or no?".)
  
 Solution
 
 
-This one is a judgement call: either you can say that LD1
+This is the Coefficients of Linear Discriminants. Make a call about whether each of those coefficients is close to zero (small in size compared to the others), or definitely positive or definitely negative.
+These are judgement calls: either you can say that LD1
 depends mainly on `diag` (treating the other coefficients
 as "small" or close to zero), or you can say that `LD1`
 depends on everything except `length`.
@@ -197,26 +186,40 @@ mind that there is only one linear discriminant.
 Solution
 
 
-With only one linear discriminant, we can plot `LD1` on
+With only one linear discriminant, we can plot `LD1` scores on
 the $y$-axis and the grouping variable on the $x$-axis. How
 you do that is up to you. 
-Before we start, though, we need the predictions. The
-discriminant scores are in the thing named `x` in
-there. We take these and make a data frame with all the things
-in the original data:
+
+Before we start, though, we need the `LD1` scores. This means
+doing predictions. The discriminant scores are in there. We take the
+prediction output and make a data frame with all the things in the
+original data. My current preference (it changes) is to store the
+predictions, and then `cbind` them with the original data,
+thus:
+
 ```{r }
 swiss.pred=predict(swiss.3)
-d=data.frame(swiss,swiss.pred$x)
+d=cbind(swiss,swiss.pred)
 head(d)
 ```
 
-         
-I did a boxplot in class:
-```{r antioch}
+      
+
+I needed `head` because `cbind` makes an old-fashioned
+`data.frame` rather than a `tibble`, so if you display
+it, you get all of it.  
+
+This gives the LD1 scores, predicted groups, and posterior
+probabilities as well. That saves us having to pick out the other
+things later.
+The obvious thing is a boxplot. By examining `d` above (didn't
+you?), you saw that the LD scores were in a column called
+`LD1`:
+```{r antioch, error=T}
 ggplot(d,aes(x=status,y=LD1))+geom_boxplot()
 ```
 
-       
+   
 
 This shows that positive LD1 scores go (almost without exception) with
 genuine bills, and negative ones with counterfeit bills.
@@ -277,25 +280,24 @@ ggplot(d,aes(y=diag,x=status))+geom_boxplot()
 Here, there is an almost complete separation of the genuine and
 counterfeit bills, with just one low outlier amongst the genuine bills
 spoiling the pattern.
-
 I didn't look at the predictions (beyond the discriminant scores),
 since this question (as set on an assignment a couple of years ago)
-was already too long, but there is no difficulty in doing so, as long
-as you keep track of what comes from which data frame:
+was already too long, but there is no difficulty in doing so.
+Everything is in the data frame I called `d`:
 
 ```{r }
-tab=table(obs=swiss$status,pred=swiss.pred$class)
-tab
+with(d, table(obs=status, pred=class))
 ```
 
  
+
+(this labels the rows and columns, which is not necessary but is nice.)
 
 The `tidyverse` way is to make a data frame out of the actual
 and predicted statuses, and then `count` what's in there:
 
 ```{r }
-d=tibble(obs=swiss$status,pred=swiss.pred$class)
-d %>% count(obs,pred)
+d %>% count(status, class)
 ```
 
  
@@ -306,47 +308,46 @@ combinations for which anything was observed.
 Frequency tables are usually wide, and we can make this one so by `spread`ing `pred`:
 
 ```{r }
-d %>% count(obs, pred) %>%
-spread(pred, n)
+d %>% count(status, class) %>%
+spread(class, n)
 ```
 
  
-
 One of the genuine bills is incorrectly classified as a counterfeit
 one (evidently that low outlier on LD1), but every single one of the
-counterfeit bills is classified correctly.
+counterfeit bills is classified correctly. That missing value is
+actually a frequency that is zero, which you can fix up thus:
 
-It would be interesting to see what the posterior probabilities look
-like for that misclassified bill. Let's make a data frame with the
-original data and all the posterior probabilities, and then pick out
-some interesting observations. I'm using `data.frame` rather
-than `tibble` (or `bind_cols`) because the posterior
-probabilities are a matrix, and the others are more particular
-about what it will let you combine into a data
-frame. (`data.frame` turns things that are not vectors or data
-frames into those first before combining them.)
-
-```{r size="small"}
-d=data.frame(swiss,class=swiss.pred$class,swiss.pred$posterior)
-head(d)
+```{r }
+d %>% count(status, class) %>%
+spread(class, n, fill=0)
 ```
 
  
 
-I used `head` because `d` is an old-fashioned data frame
-rather than a tibble, so if you display it, you'll get all of it.
-
-How about, all the bills where the maximum posterior probability is
-less than 0.99?
+which turns any missing values into the zeroes they should be in this
+kind of problem.
+It would be interesting to see what the posterior probabilities look
+like for that misclassified bill:
 
 ```{r }
-d %>% mutate(max.post=pmax(counterfeit,genuine)) %>%
+d %>% filter(status != class) 
+```
+
+ 
+
+On the basis of the six measured variables, this looks a lot more like
+a counterfeit bill than a genuine one.
+Are there any other bills where there is any doubt? One way to find out is to find the maximum of the two posterior probabilities. If this is small, 
+there is some doubt about whether the bill is real or fake. 0.99 seems like a very stringent cutoff, but let's try it and see:
+
+```{r error=T}
+d %>% mutate(max.post=pmax(posterior.counterfeit,posterior.genuine)) %>%
 filter(max.post<0.99) %>% dplyr::select(-c(length:diag))
 ```
 
  
-
-This is the bill that was misclassified: it was actually genuine, but
+The only one is the bill that was misclassified: it was actually genuine, but
 was classified as counterfeit. The posterior probabilities say that it
 was pretty unlikely to be genuine, but it was the only bill for which
 there was any noticeable doubt at all.
@@ -361,16 +362,17 @@ largest of *all* the entries in `counterfeit` and
 it and see.) `pmax` stands for "parallel maximum", that is,
 for each row separately. This also should work:
 
-```{r }
-d %>% mutate(max.post=map2_dbl(counterfeit, genuine, ~max(.x, .y))) %>%
-filter(max.post<0.99) %>% dplyr::select(-c(length:diag))    
+```{r error=T}
+d %>% mutate(max.post=map2_dbl(
+posterior.counterfeit, posterior.genuine, ~max(.x, .y))) %>%
+filter(max.post<0.99) %>% select(-c(length:diag))    
 ```
 
  
-
 Because we're using `map`, `max` is applied to the pairs
-of values of `counterfeit` and `genuine`, 
+of values of `posterior.counterfeit` and `posterior.genuine`, 
 *taken one at a time.*
+`r tufte::margin_note("The *map2* is because we are for-eaching over the corresponding values in *counterfeit* and *genuine*. In the *do this*, there can no longer be one *it*; the *.x* and *.y* refer to each of the *counterfeit* and *genuine* values in that order.")`
  
 
 

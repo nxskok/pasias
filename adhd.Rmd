@@ -99,9 +99,10 @@ fathers), so the right way to plot it is against the true groups, eg.
 by a boxplot, first making a data frame, using `data.frame`,
 containing what you need:
 
-```{r }
-data.frame(parent=adhd$parent,adhd.2$x) %>%
-ggplot(aes(x=parent,y=LD1))+geom_boxplot()
+```{r error=T}
+d=cbind(adhd, adhd.2)
+head(d)
+ggplot(d, aes(x=parent, y=LD1))+geom_boxplot()
 ```
 
  
@@ -110,8 +111,9 @@ around $-3$, so I don't foresee any problems there. The mothers, on
 the other hand, have outliers: there is one with `LD1` score
 beyond $-3$ that will certainly be mistaken for a father. There are a
 couple of other unusual `LD1` scores among the mothers, but a
-rule like ``anything above $-2$ is called a mother, anything below is
-called a father'' will get these two right. So I expect that the one
+rule like 
+"anything above $-2$ is called a mother, anything below is called a father" 
+will get these two right. So I expect that the one
 very low mother will get misclassified, but that's the only one.
     
 
@@ -128,7 +130,7 @@ Use the predictions from the previous part, and the observed
 `parent` values from the original data frame. Then use
 either `table` or `tidyverse` to summarize.
 ```{r }
-table(obs=adhd$parent,pred=adhd.2$class)
+with(d, table(obs=parent, pred=class))
 ```
 
      
@@ -136,17 +138,25 @@ table(obs=adhd$parent,pred=adhd.2$class)
 Or,
 
 ```{r }
-d=data.frame(obs=adhd$parent,pred=adhd.2$class) 
-d %>% count(obs,pred)
+d %>% count(parent, class)
+```
+
+ 
+
+or
+
+```{r }
+d %>% count(parent, class) %>%
+spread(class, n, fill=0)
 ```
 
  
 One of the mothers got classified as a father (evidently that one with
 a very negative `LD1` score), but everything else is correct.
 
-This time, by "explain briefly" I mean something like ``tell me how
-you know there are or are not misclassifications'', or ``describe any
-misclassifications that occur'' or something like that. 
+This time, by "explain briefly" I mean something like 
+"tell me how you know there are or are not misclassifications", or 
+"describe any misclassifications that occur" or something like that. 
 
 Extra: I was curious --- what is it about that one mother that caused
 her to get misclassified? (I didn't ask you to think further about
@@ -157,6 +167,16 @@ classification to the data frame, and then we can query it by asking
 to see only the rows where the actual parent and the predicted parent
 were different. I'm also going to create a column `id` that
 will give us the row of the *original* data frame:
+
+xxxa
+
+maybe my d has it:
+
+```{r }
+d
+```
+
+ 
 
 ```{r }
 adhd %>%
@@ -181,6 +201,8 @@ adhd %>% group_by(parent) %>% summarize(m2=mean(q2),s2=sd(q2))
 The fathers' scores on `q2` were *all* 1, but the mothers'
 scores on `q2` were on average much higher. So it's not really
 a surprise  that this mother was mistaken for a father.
+
+xxxb
     
 
 
@@ -199,7 +221,8 @@ Solution
 So, this, with different name:
 ```{r }
 adhd.3=lda(parent~q1+q2+q3+q4,data=adhd,CV=T)
-table(obs=adhd$parent,pred=adhd.3$class)
+dd=cbind(adhd, class=adhd.3$class, posterior=adhd.3$posterior)
+with(dd, table(parent, class))
 ```
 
      
@@ -216,6 +239,7 @@ though (some of) the posterior probabilities are noticeably changed,
 which one is the bigger has not changed at all.
     
 
+xxxa read the rest of the question
 
 (g) Display the original data (that you read in from the data
 file) side by side with two sets of posterior probabilities: the
@@ -234,10 +258,10 @@ Solution
 
 
 Something like this:
-```{r }
-pr.lda=round(adhd.2$posterior,3)
-pr.cv=round(adhd.3$posterior,3)
-data.frame(adhd,adhd.2$x,pr.lda,pr.cv) %>% arrange(LD1)
+```{r error=T}
+pr.lda=round(d$posterior,3)
+pr.cv=round(dd$posterior,3)
+data.frame(adhd,d$x,pr.lda,pr.cv) %>% arrange(LD1)
 ```
 
    
@@ -262,6 +286,8 @@ father: her score on `q2` was only 2, compared to 3 for most of
 the mothers. If you take out this mother, as cross-validation does,
 there are noticeably fewer `q2=2` mothers left, so the
 observation looks more like a father than it would otherwise.
+
+xxxb
     
 
 
@@ -297,6 +323,7 @@ parents have in common, all of them or most of them?
 Solution
 
 
+xxxa
 To my mind, the "non-trivial" posterior probabilities are in
 rows 4 and 23, and maybe rows 13 and 16 as well. These are the
 ones where there was some doubt, though maybe only a little, about
@@ -317,6 +344,7 @@ comparing the posterior probabilities for `lda` and
 cross-validation above: there were only a few parents with
 `q2=2`, so the effect there is that under cross-validation,
 there are even fewer when you take one of them out.
+xxxb
     
 
 
