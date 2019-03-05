@@ -168,20 +168,9 @@ to see only the rows where the actual parent and the predicted parent
 were different. I'm also going to create a column `id` that
 will give us the row of the *original* data frame:
 
-xxxa
-
-maybe my d has it:
-
 ```{r }
-d
-```
-
- 
-
-```{r }
-adhd %>%
-mutate(pred=adhd.2$class,id=row_number()) %>%
-filter(parent!=pred)
+d %>% mutate(id=row_number()) %>%
+filter(parent != class)
 ```
 
  
@@ -201,8 +190,6 @@ adhd %>% group_by(parent) %>% summarize(m2=mean(q2),s2=sd(q2))
 The fathers' scores on `q2` were *all* 1, but the mothers'
 scores on `q2` were on average much higher. So it's not really
 a surprise  that this mother was mistaken for a father.
-
-xxxb
     
 
 

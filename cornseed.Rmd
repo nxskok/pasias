@@ -320,7 +320,15 @@ xxxa
 ```{r error=T}
 d %>% count(soil, class) %>%
 mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
-count(soil_stat) %>%
+count(soil_stat, wt=n)
+```
+
+ 
+
+```{r error=T}
+d %>% count(soil, class) %>%
+mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
+count(soil_stat, wt=n) %>%
 mutate(prop=nn/sum(nn))
 ```
 
@@ -338,11 +346,21 @@ about soil type; it's better to know them than not to.
 Or do it by actual soil type:
 
 xxxa
+
+```{r }
+d %>% count(soil, class) %>%
+group_by(soil) %>%
+mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
+count(soil_stat, wt=n)
+```
+
+ 
+
 ```{r error=T}
 d %>% count(soil, class) %>%
 group_by(soil) %>%
 mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
-count(soil_stat) %>%
+count(soil_stat, wt=n) %>%
 mutate(prop=nn/sum(nn)) %>%
 select(-nn) %>%
 spread(soil_stat,prop)
@@ -393,8 +411,6 @@ loam soils needing most.
 I wanted to finish with one more thing, which was to look again at the
 soils that were actually loam:
 
-xxxa
-
 ```{r }
 dd %>% filter(soil=="loam") %>%
 select(soil, yield, water, herbicide, class, starts_with("posterior"))
@@ -402,7 +418,6 @@ select(soil, yield, water, herbicide, class, starts_with("posterior"))
 ```
 
  
-xxxb 
 Fields 7 and 8 could have been pretty much any type of soil;
 `sandy` came out with the highest posterior probability, so
 that's what they were predicted (wrongly) to be. Some of the fields,

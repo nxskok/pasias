@@ -620,93 +620,51 @@ All right, I suppose I do want to investigate the individuals whose
 predicted jobs changed, and look at their posterior probabilities. I
 think I have the machinery to do that. 
 
-xxxa
-
 Let's start by gluing together the dataframes with the predictions from the regular `lda` (in `d`) and the ones from the cross-validation (in `dcv`). I think I can do that like this:
 
 ```{r }
 all=bind_cols(d, dcv)
-all
+head(all)
 ```
 
  
 
-then fix up the below
+This now has a lot of columns (and a lot of rows, that will all
+display, it being an old-fashioned `data.frame`).
 
-xxxb
-```{r error=T}
-diff=(dcv$class!=d$class)
-table(diff)
-```
-
- 
-
-There are exactly *two* individuals that were predicted differently.
-
-To find out which ones, and to do some more analysis, let's make a
-data frame identifying the individuals, their actual jobs, and their
-predicted jobs by regular discriminant analysis and by cross-validation:
-
-```{r awayscore, error=T}
-allpreds=tibble(id=jobs$id,job=jobs$job,p.lda=d$class,p.cv=dcv$class) 
-```
-
- 
-
-The individuals are actually numbered *within* jobs. Also, these are vectors being glued together, so `tibble` should work.
-
-Now we can find out which ones had their job predictions disagree:
-
-```{r error=T}
-allpreds %>% filter(p.lda!=p.cv)
-```
-
- 
-
-xxxa
-
-Now let's glue these two dataframes `d` and `dcv` together.
+How many individuals were predicted differently? If you look carefully, we have a column called `class` (predicted group membership from original LDA) and another called `class1` (from cross-validation):
 
 ```{r }
+all %>% select(starts_with("class")) %>% slice(1)
 ```
 
  
 
-Under cross-validation, they both got called mechanics. Now, let's
-stick the posterior probabilities next to each other. We ought
-to round them first, to keep them on one line, and for the same
-reason, we'd better abbreviate the job names as well:
+and so
 
-```{r spal, error=T}
-j.lda.post=round(job.2$posterior,3)
-j.cv.post=round(job.3$posterior,3)
-colnames(j.cv.post)=abbreviate(colnames(j.cv.post),5)
-colnames(j.lda.post)=abbreviate(colnames(j.lda.post),5)
-data.frame(id=jobs$id,job=jobs$job,p.lda=job.2$class,
-p.cv=job.3$class,j.lda.post,j.cv.post) %>% 
-filter(p.lda!=p.cv) %>%
-dplyr::select(-(p.lda:p.cv))
+```{r }
+all %>% filter(class != class1)
+```
+
+ 
+There are exactly *two* individuals that were predicted differently.
+Under cross-validation, they both got called mechanics. 
+
+xxxa 
+
+How do their posterior probabilities compare? These are all in columns beginning with `posterior`. We could scrutinize the output above, or
+try to make things simpler.
+Let's round them to three decimals, and then display only some of the columns:
+
+```{r }
+all %>% filter(class != class1) %>%
+mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>% 
+select(id, job, starts_with("posterior"))
 ```
 
  
 
 xxxb
-
-This wound up being more complicated than I would have liked. First I
-round the two sets of posterior probabilities to 3 decimals. These are
-actually matrices (not data frames), so I have to use
-`colnames` to replace their (column) names with abbreviated
-versions, again once for the `lda` predictions and once for the
-cross-validated ones. Then I create a data frame with everything in it
-that I want to display *and* that I want to select by; then I
-choose the rows I want to display and get rid of any columns that I
-don't (the ones I used to choose the rows I wanted to display).
-
-Breathe.
-
-The (abbreviated) job names with a `.1`  on the end are the
-ones from cross-validation. They got those names because otherwise the
-job names would have been exactly the same in the two cases.
 
 As I suspected, the posterior probabilities in each case are almost
 identical, but different ones happen to be slightly higher in the two
@@ -715,6 +673,10 @@ cross-validation just tweaked the posterior probabilities enough to
 call that individual a mechanic, and for the second one, actually a
 dispatcher, the first analysis was almost too close to call, and
 things under cross-validation got nudged onto the mechanic side again.
+
+xxxa
+
+edit: investigate the people who got misclassified
 
 With that in mind, I can explore the first analysis, where almost 25\%
 of employees got misclassified. The ideas are almost the same: 

@@ -361,19 +361,6 @@ which ones you pick out, but see if you can find a few:
 
 * Female rowers (10 out of about 22)
 
-
-A `table` behaves like an R `matrix`, so you can ask for
-columns by number using square brackets, eg:
-
-```{r size="small"}
-tab=table(combo=athletesc$combo,pred=p$class)
-tab[,1:5]
-```
-
- 
-
-The "blank" number before the comma means "all the rows". 
-
 Or you can turn it into a tibble:
 
 ```{r }
@@ -495,8 +482,6 @@ tested for uniqueness; if it's unique, it gets its own row. Thus,
 easiest way around this is to get rid of `nn`, since it has
 served its purpose:
 
-xxxa
-
 ```{r }
 d %>% count(combo, class) %>% 
 group_by(combo) %>%
@@ -526,8 +511,6 @@ arrange(wrong)
 
  
 
-xxxb 
-
 The most distinctive athletes were the female gymnasts (tiny!),
 followed by the male basketball players (tall) and the female field
 athletes (heavy). These were easiest to predict from their height and
@@ -541,20 +524,17 @@ xxxa
 ```{r error=T}
 head(d)
 d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==pred,"correct","wrong"))
+mutate(stat=ifelse(combo==class, "correct", "wrong"))
 ```
 
  
-
-xxxb 
-
 We want to express those `n` values as proportions out of their
 actual sport-gender combo, so we group by `combo` before
 defining the proportions:
 
 ```{r error=T}
 d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==pred,"correct","wrong"))
+mutate(stat=ifelse(combo==class, "correct", "wrong"))
 group_by(combo) %>%
 mutate(proportion=n/sum(n))
 ```
@@ -566,7 +546,7 @@ proportions in descending order:
 
 ```{r error=T}
 d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==pred,"correct","wrong"))
+mutate(stat=ifelse(combo==class, "correct", "wrong"))
 group_by(combo) %>%
 mutate(proportion=n/sum(n)) %>%
 filter(stat=="wrong") %>%
