@@ -235,11 +235,11 @@ Solution
 Make a table, one way or another:
 
 ```{r error=T}
-tab=with(urine, table(obesity,class))
+tab=with(d, table(obesity, class))
 tab
 ```
 
-           
+   
 
 `class` is always the *predicted* group in these. You can
 also name things in `table`.
@@ -310,9 +310,9 @@ means to total them up rather than count up the number of rows.
 This says that 22 men were classified correctly and 23 were gotten
 wrong. We can find the proportions correct and wrong:
 
-```{r }
+```{r error=T}
 tab %>% count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
  
@@ -321,17 +321,27 @@ and we see that 51\% of men had their obesity group predicted
 wrongly. This is the overall misclassification rate, which is a simple
 summary of how good a job the discriminant analysis did.
 
+There is a subtlety here. `n` has changed its meaning in the
+middle of this calculation! In `tab`, `n` is counting
+the number of obesity observed and predicted combinations, but now it
+is counting the number of men classified correctly and
+incorrectly. The `wt=n` uses the first `n`, but the
+`mutate` line uses the *new* `n`, the result of the
+`count` line here. (I think `count` used to use
+`nn` for the result of the second `count`, so that you
+could tell them apart, but it no longer seems to do so.)
+
 I said above that the obesity groups were not equally easy to
 predict. A small modification of the above will get the
 misclassification rates by (true) obesity group. This is done by
 putting an appropriate `group_by` in at the front, before we
 do any summarizing:
 
-```{r }
+```{r error=T}
 tab %>%
 group_by(obesity) %>%
 count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
  
@@ -340,12 +350,12 @@ This gives the proportion wrong and correct for each (true) obesity
 group. I'm going to do the one more cosmetic thing to make it easier to
 read, a kind of "untidying":
 
-```{r }
+```{r error=T}
 tab %>%
 group_by(obesity) %>%
 count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(correct,proportion)
 ```
 
@@ -356,19 +366,19 @@ about 60\% correct (and 40\% wrong), but group C is much worse. The
 overall misclassification rate is made bigger by the fact that C is so
 hard to predict.
 
-Find out for yourself what happens if I fail to remove the `nn`
+Find out for yourself what happens if I fail to remove the `n`
 column before doing the `spread`.
 
 A slightly more elegant look is obtained this way, by making nicer
 values than TRUE and FALSE:
 
-```{r }
+```{r error=T}
 tab %>%
 group_by(obesity) %>%
 mutate(prediction_stat=ifelse(obesity==class,"correct","wrong")) %>%
 count(prediction_stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(prediction_stat,proportion)
 ```
 

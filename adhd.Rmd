@@ -206,7 +206,7 @@ Solution
 
 
 So, this, with different name:
-```{r }
+```{r error=T}
 adhd.3=lda(parent~q1+q2+q3+q4,data=adhd,CV=T)
 dd=cbind(adhd, class=adhd.3$class, posterior=adhd.3$posterior)
 with(dd, table(parent, class))
@@ -226,7 +226,6 @@ though (some of) the posterior probabilities are noticeably changed,
 which one is the bigger has not changed at all.
     
 
-xxxa read the rest of the question
 
 (g) Display the original data (that you read in from the data
 file) side by side with two sets of posterior probabilities: the
@@ -236,7 +235,7 @@ two sets of posterior probabilities are similar. Hints: (i) use
 `data.frame` rather than `cbind`, for reasons that I
 explain elsewhere; (ii) round the posterior probabilities to 3
 decimals before you display them.
-There are only 29 rows, so display them all. I am going to add the
+There are only 29 rows, so look at them all. I am going to add the
 `LD1` scores to my output and sort by that, but you don't
 need to. (This is for something I am going to add later.)
 
@@ -244,37 +243,57 @@ need to. (This is for something I am going to add later.)
 Solution
 
 
-Something like this:
+
+We have two data frames, `d` and 
+`dd`
+`r tufte::margin_note("I have to learn to come up with better names.")`  
+that respectively
+contain everything from the (original) `lda` output and the
+cross-validated output. Let's glue them together, look at what we
+have, and then pull out what we need:
 ```{r error=T}
-pr.lda=round(d$posterior,3)
-pr.cv=round(dd$posterior,3)
-data.frame(adhd,d$x,pr.lda,pr.cv) %>% arrange(LD1)
+all=data.frame(d, dd)
+head(all)
 ```
 
-   
+ 
+The ones with a 1 on the end are the cross-validated ones. We need the posterior probabilities, rounded, and they need to  have shorter names:
+```{r error=T, fred}
+all %>% select(parent, starts_with("posterior"), LD1) %>%
+mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
+rename_at(vars(starts_with("posterior")), 
+~str_replace(.,"posterior","p")) %>%
+arrange(LD1)
+```
 
-The last four columns are: the posterior probabilities from before,
-for father and for mother (two columns), and the posterior
-probabilities from cross-validation for father and for mother (two
-more columns). You might have these the other way around, but in any
-case you ought to make it clear which is which. I included the
-`LD1` scores for my discussion below; you don't need to.
+ 
 
+The `rename_at` changes the names of the columns that start
+with `posterior` to start with `p` instead (shorter). I
+learned about this today (having wondered whether it existed or not),
+and it took about three goes for me to get it right.
+`r tufte::margin_note("*str-replace* is from *stringr*, and takes three inputs: a piece of text, the text to look for, and the text to replace it with. The piece of text in this case is one of the columns whose name starts with *posterior*; the dot represents *it* in the usual fashion.")`
+The first column is the actual parent; the other five columns are: the
+posterior probabilities from before, for father and for mother (two
+columns), and the posterior probabilities from cross-validation for
+father and for mother (two more columns), and the LD1 scores from
+before, sorted into order.  You might have these the other way around
+from me, but in any case you ought to make it clear which is which. I
+included the `LD1` scores for my discussion below; you don't
+need to.
 Are the two sets of posterior probabilities similar? Only kinda. The
-ones at the top and bottom of the list are without doubt fathers at
-the top of the list (top 5 rows on my sorted output, only one of those
-is actually a mother), or mothers at the bottom, from row 10 down. But
-for rows 6 through 9, the posterior probabilities are not that similar.
-The most dissimilar ones are in row 4, where the regular
-`lda` gives a posterior probability of 0.050 that the parent is
-a father, but under cross-validation that goes all the way up to
-0.236. I think this is one of those mothers that is a bit like a
+ones at the top and bottom of the list are without doubt respectively
+fathers at the top of the list (top 5 rows on my sorted output, except that
+one of those is actually a mother), or mothers at the bottom, from row
+10 down. But for rows 6 through 9, the posterior probabilities are not
+that similar.  The most dissimilar ones are in row 4, where the
+regular `lda` gives a posterior probability of 0.050 that the
+parent is a father, but under cross-validation that goes all the way
+up to 0.236. I think this is one of those mothers that is a bit like a
 father: her score on `q2` was only 2, compared to 3 for most of
 the mothers. If you take out this mother, as cross-validation does,
 there are noticeably fewer `q2=2` mothers left, so the
 observation looks more like a father than it would otherwise.
-
-xxxb
     
 
 
@@ -310,28 +329,37 @@ parents have in common, all of them or most of them?
 Solution
 
 
-xxxa
-To my mind, the "non-trivial" posterior probabilities are in
-rows 4 and 23, and maybe rows 13 and 16 as well. These are the
-ones where there was some doubt, though maybe only a little, about
-which parent actually gave the ratings. For three of these, rows
-4, 13 and 23, the parent (that was actually a mother) gave a
-rating of 2 on `q2`. These were the only 2's on
-`q2`. The others were easy to call: "mother" if 3 and
-"father" if 1, and you'd get them all right except for that
-outlying mother. 
+Let's add something to the output we had before: the original
+scores on `q1` through `q4`:
+```{r }
+all %>% select(q1:q4, parent, starts_with("posterior"), LD1) %>%
+mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
+rename_at(vars(starts_with("posterior")), 
+~str_replace(.,"posterior","p")) %>%    
+arrange(LD1)
+```
+
+     
+To my mind, the "non-trivial" posterior probabilities are in rows 5
+through 9. (You might have drawn the line in a different place.) These
+are the ones where there was some doubt, though maybe only a little,
+about which parent actually gave the ratings. For three of these,
+the parent (that was actually a mother) gave a rating of
+2 on `q2`. These were the only 2's on `q2`. The others
+were easy to call: "mother" if 3 and "father" if 1, and you'd get
+them all right except for that outlying mother.
 The clue in looking at `q2` was that we found earlier that
 `LD1` contained mostly `q2`, so that it was mainly
 `q2` that separated the fathers and mothers. If you found
-something else that the "non-trivial" rows had in common, that
-is good too, but I think looking at `q2` is your quickest
-route to an answer.
+something else that the "non-trivial" rows had in common, that is
+good too, but I think looking at `q2` is your quickest route to
+an answer. (`q1=1` picks out some of these, but not all of
+them.)
 This is really the same kind of issue as we discussed when
 comparing the posterior probabilities for `lda` and
 cross-validation above: there were only a few parents with
 `q2=2`, so the effect there is that under cross-validation,
 there are even fewer when you take one of them out.
-xxxb
     
 
 

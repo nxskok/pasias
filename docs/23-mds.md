@@ -28,31 +28,31 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v tibble  2.0.1     v purrr   0.3.0
-## v tidyr   0.8.2     v dplyr   0.7.8
-## v readr   1.3.1     v stringr 1.4.0
-## v tibble  2.0.1     v forcats 0.3.0
+## ✔ tibble  2.0.1       ✔ purrr   0.3.1  
+## ✔ tidyr   0.8.3       ✔ dplyr   0.8.0.1
+## ✔ readr   1.3.1       ✔ stringr 1.4.0  
+## ✔ tibble  2.0.1       ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::arrange()    masks plyr::arrange()
-## x readr::col_factor() masks scales::col_factor()
-## x purrr::compact()    masks plyr::compact()
-## x dplyr::count()      masks plyr::count()
-## x purrr::discard()    masks scales::discard()
-## x dplyr::failwith()   masks plyr::failwith()
-## x dplyr::filter()     masks stats::filter()
-## x dplyr::id()         masks plyr::id()
-## x dplyr::lag()        masks stats::lag()
-## x dplyr::mutate()     masks plyr::mutate()
-## x dplyr::rename()     masks plyr::rename()
-## x dplyr::summarise()  masks plyr::summarise()
-## x dplyr::summarize()  masks plyr::summarize()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::arrange()    masks plyr::arrange()
+## ✖ readr::col_factor() masks scales::col_factor()
+## ✖ purrr::compact()    masks plyr::compact()
+## ✖ dplyr::count()      masks plyr::count()
+## ✖ purrr::discard()    masks scales::discard()
+## ✖ dplyr::failwith()   masks plyr::failwith()
+## ✖ dplyr::filter()     masks stats::filter()
+## ✖ dplyr::id()         masks plyr::id()
+## ✖ dplyr::lag()        masks stats::lag()
+## ✖ dplyr::mutate()     masks plyr::mutate()
+## ✖ dplyr::rename()     masks plyr::rename()
+## ✖ dplyr::summarise()  masks plyr::summarise()
+## ✖ dplyr::summarize()  masks plyr::summarize()
 ```
 
 ```r
@@ -80,8 +80,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt"
-wisc = read_table(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt"
+wisc=read_table(my_url)
 ```
 
 ```
@@ -109,25 +109,22 @@ wisc
 
 ```
 ## # A tibble: 12 x 13
-##    location Appleton Beloit Fort.Atkinson
-##    <chr>       <dbl>  <dbl>         <dbl>
-##  1 Appleton        0    130            98
-##  2 Beloit        130      0            33
-##  3 Fort.At~       98     33             0
-##  4 Madison       102     50            36
-##  5 Marshfi~      103    185           164
-##  6 Milwauk~      100     73            54
-##  7 Monroe        149     33            58
-##  8 Superior      315    377           359
-##  9 Wausau         91    186           166
-## 10 Dubuque       196     94           119
-## 11 St.Paul       257    304           287
-## 12 Chicago       186     97           113
-## # ... with 9 more variables: Madison <dbl>,
-## #   Marshfield <dbl>, Milwaukee <dbl>,
-## #   Monroe <dbl>, Superior <dbl>,
-## #   Wausau <dbl>, Dubuque <dbl>,
-## #   St.Paul <dbl>, Chicago <dbl>
+##    location Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee
+##    <chr>       <dbl>  <dbl>         <dbl>   <dbl>      <dbl>     <dbl>
+##  1 Appleton        0    130            98     102        103       100
+##  2 Beloit        130      0            33      50        185        73
+##  3 Fort.At…       98     33             0      36        164        54
+##  4 Madison       102     50            36       0        138        77
+##  5 Marshfi…      103    185           164     138          0       184
+##  6 Milwauk…      100     73            54      77        184         0
+##  7 Monroe        149     33            58      47        170       107
+##  8 Superior      315    377           359     330        219       394
+##  9 Wausau         91    186           166     139         45       181
+## 10 Dubuque       196     94           119      95        186       168
+## 11 St.Paul       257    304           287     258        161       322
+## 12 Chicago       186     97           113     146        276        93
+## # … with 6 more variables: Monroe <dbl>, Superior <dbl>, Wausau <dbl>,
+## #   Dubuque <dbl>, St.Paul <dbl>, Chicago <dbl>
 ```
 
        
@@ -145,59 +142,36 @@ names  of the places, so we won't lose anything by getting rid of the
 
 
 ```r
-d = wisc %>% select(-location) %>% as.dist()
+d = wisc %>% select(-location) %>%
+as.dist()
 d
 ```
 
 ```
-##               Appleton Beloit Fort.Atkinson
-## Beloit             130                     
-## Fort.Atkinson       98     33              
-## Madison            102     50            36
-## Marshfield         103    185           164
-## Milwaukee          100     73            54
-## Monroe             149     33            58
-## Superior           315    377           359
-## Wausau              91    186           166
-## Dubuque            196     94           119
-## St.Paul            257    304           287
-## Chicago            186     97           113
-##               Madison Marshfield Milwaukee
-## Beloit                                    
-## Fort.Atkinson                             
-## Madison                                   
-## Marshfield        138                     
-## Milwaukee          77        184          
-## Monroe             47        170       107
-## Superior          330        219       394
-## Wausau            139         45       181
-## Dubuque            95        186       168
-## St.Paul           258        161       322
-## Chicago           146        276        93
-##               Monroe Superior Wausau Dubuque
-## Beloit                                      
-## Fort.Atkinson                               
-## Madison                                     
-## Marshfield                                  
-## Milwaukee                                   
-## Monroe                                      
-## Superior         362                        
-## Wausau           186      223               
-## Dubuque           61      351    215        
-## St.Paul          289      162    175     274
-## Chicago          130      467    275     184
-##               St.Paul
-## Beloit               
-## Fort.Atkinson        
-## Madison              
-## Marshfield           
-## Milwaukee            
-## Monroe               
-## Superior             
-## Wausau               
-## Dubuque              
-## St.Paul              
-## Chicago           395
+##               Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee
+## Beloit             130                                                  
+## Fort.Atkinson       98     33                                           
+## Madison            102     50            36                             
+## Marshfield         103    185           164     138                     
+## Milwaukee          100     73            54      77        184          
+## Monroe             149     33            58      47        170       107
+## Superior           315    377           359     330        219       394
+## Wausau              91    186           166     139         45       181
+## Dubuque            196     94           119      95        186       168
+## St.Paul            257    304           287     258        161       322
+## Chicago            186     97           113     146        276        93
+##               Monroe Superior Wausau Dubuque St.Paul
+## Beloit                                              
+## Fort.Atkinson                                       
+## Madison                                             
+## Marshfield                                          
+## Milwaukee                                           
+## Monroe                                              
+## Superior         362                                
+## Wausau           186      223                       
+## Dubuque           61      351    215                
+## St.Paul          289      162    175     274        
+## Chicago          130      467    275     184     395
 ```
 
  
@@ -214,17 +188,14 @@ The `location` column of the data frame you read in
 from the file:
 
 ```r
-cities = wisc$location
+cities=wisc$location
 cities
 ```
 
 ```
-##  [1] "Appleton"      "Beloit"       
-##  [3] "Fort.Atkinson" "Madison"      
-##  [5] "Marshfield"    "Milwaukee"    
-##  [7] "Monroe"        "Superior"     
-##  [9] "Wausau"        "Dubuque"      
-## [11] "St.Paul"       "Chicago"
+##  [1] "Appleton"      "Beloit"        "Fort.Atkinson" "Madison"      
+##  [5] "Marshfield"    "Milwaukee"     "Monroe"        "Superior"     
+##  [9] "Wausau"        "Dubuque"       "St.Paul"       "Chicago"
 ```
 
        
@@ -239,7 +210,7 @@ Solution
 
 
 ```r
-wisc.1 = cmdscale(d)
+wisc.1=cmdscale(d)
 ```
 
        
@@ -283,37 +254,24 @@ names (that we saved before):
 
 
 ```r
-dd = data.frame(wisc.1, city = cities)
+dd=data.frame(wisc.1,city=cities)
 dd
 ```
 
 ```
-##                       X1          X2
-## Appleton       -13.37076   85.067148
-## Beloit         -92.94157  -20.205916
-## Fort.Atkinson  -74.07473    4.804039
-## Madison        -44.68148  -11.252521
-## Marshfield      80.61250   27.097882
-## Milwaukee     -102.87582   49.849552
-## Monroe         -74.66603  -48.422639
-## Superior       279.27573   -8.621892
-## Wausau          79.19504   60.997371
-## Dubuque        -50.92029 -108.488036
-## St.Paul        199.16640  -39.595481
-## Chicago       -184.71900    8.770492
-##                        city
-## Appleton           Appleton
-## Beloit               Beloit
-## Fort.Atkinson Fort.Atkinson
-## Madison             Madison
-## Marshfield       Marshfield
-## Milwaukee         Milwaukee
-## Monroe               Monroe
-## Superior           Superior
-## Wausau               Wausau
-## Dubuque             Dubuque
-## St.Paul             St.Paul
-## Chicago             Chicago
+##                       X1          X2          city
+## Appleton       -13.37076   85.067148      Appleton
+## Beloit         -92.94157  -20.205916        Beloit
+## Fort.Atkinson  -74.07473    4.804039 Fort.Atkinson
+## Madison        -44.68148  -11.252521       Madison
+## Marshfield      80.61250   27.097882    Marshfield
+## Milwaukee     -102.87582   49.849552     Milwaukee
+## Monroe         -74.66603  -48.422639        Monroe
+## Superior       279.27573   -8.621892      Superior
+## Wausau          79.19504   60.997371        Wausau
+## Dubuque        -50.92029 -108.488036       Dubuque
+## St.Paul        199.16640  -39.595481       St.Paul
+## Chicago       -184.71900    8.770492       Chicago
 ```
 
  
@@ -328,12 +286,13 @@ I think the best use of your judgement is to go straight to
 
 
 ```r
-ggplot(dd, aes(x = X1, y = X2, label = city)) + 
-    geom_point() + geom_text_repel() + coord_fixed()
+ggplot(dd,aes(x=X1,y=X2,label=city))+
+geom_point()+
+geom_text_repel()+
+coord_fixed()
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-8-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
  
 
@@ -362,12 +321,9 @@ cities
 ```
 
 ```
-##  [1] "Appleton"      "Beloit"       
-##  [3] "Fort.Atkinson" "Madison"      
-##  [5] "Marshfield"    "Milwaukee"    
-##  [7] "Monroe"        "Superior"     
-##  [9] "Wausau"        "Dubuque"      
-## [11] "St.Paul"       "Chicago"
+##  [1] "Appleton"      "Beloit"        "Fort.Atkinson" "Madison"      
+##  [5] "Marshfield"    "Milwaukee"     "Monroe"        "Superior"     
+##  [9] "Wausau"        "Dubuque"       "St.Paul"       "Chicago"
 ```
 
      
@@ -376,7 +332,7 @@ Cities 2, 3 and 4, so:
 
 
 ```r
-wisc %>% slice(2:4) %>% select(c(1, 3:5))
+wisc %>% slice(2:4) %>% select(c(1,3:5))
 ```
 
 ```
@@ -408,20 +364,14 @@ print.default(d)
 ```
 
 ```
-##  [1] 130  98 102 103 100 149 315  91 196 257
-## [11] 186  33  50 185  73  33 377 186  94 304
-## [21]  97  36 164  54  58 359 166 119 287 113
-## [31] 138  77  47 330 139  95 258 146 184 170
-## [41] 219  45 186 161 276 107 394 181 168 322
-## [51]  93 362 186  61 289 130 223 351 162 467
-## [61] 215 175 275 274 184 395
+##  [1] 130  98 102 103 100 149 315  91 196 257 186  33  50 185  73  33 377
+## [18] 186  94 304  97  36 164  54  58 359 166 119 287 113 138  77  47 330
+## [35] 139  95 258 146 184 170 219  45 186 161 276 107 394 181 168 322  93
+## [52] 362 186  61 289 130 223 351 162 467 215 175 275 274 184 395
 ## attr(,"Labels")
-##  [1] "Appleton"      "Beloit"       
-##  [3] "Fort.Atkinson" "Madison"      
-##  [5] "Marshfield"    "Milwaukee"    
-##  [7] "Monroe"        "Superior"     
-##  [9] "Wausau"        "Dubuque"      
-## [11] "St.Paul"       "Chicago"      
+##  [1] "Appleton"      "Beloit"        "Fort.Atkinson" "Madison"      
+##  [5] "Marshfield"    "Milwaukee"     "Monroe"        "Superior"     
+##  [9] "Wausau"        "Dubuque"       "St.Paul"       "Chicago"      
 ## attr(,"Size")
 ## [1] 12
 ## attr(,"call")
@@ -513,8 +463,7 @@ library(ggmap)
 
 ```r
 library(ggmap)
-wisc.map = get_map(location = "Milwaukee, WI", 
-    zoom = 6)
+wisc.map=get_map(location="Milwaukee, WI",zoom=6)
 ```
 
 ```
@@ -529,8 +478,7 @@ wisc.map = get_map(location = "Milwaukee, WI",
 ggmap(wisc.map)
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/laskhsal-1} 
+<img src="23-mds_files/figure-html/laskhsal-1.png" width="576"  />
 
    
 
@@ -560,21 +508,19 @@ the states they are actually in:
 
 
 ```r
-states = rep("WI", 12)
-states[10] = "IA"
-states[11] = "MN"
-states[12] = "IL"
-cst = str_c(cities, " ", states)
+states=rep("WI",12)
+states[10]="IA"
+states[11]="MN" 
+states[12]="IL"
+cst=str_c(cities," ",states)
 cst
 ```
 
 ```
-##  [1] "Appleton WI"      "Beloit WI"       
-##  [3] "Fort.Atkinson WI" "Madison WI"      
-##  [5] "Marshfield WI"    "Milwaukee WI"    
-##  [7] "Monroe WI"        "Superior WI"     
-##  [9] "Wausau WI"        "Dubuque IA"      
-## [11] "St.Paul MN"       "Chicago IL"
+##  [1] "Appleton WI"      "Beloit WI"        "Fort.Atkinson WI"
+##  [4] "Madison WI"       "Marshfield WI"    "Milwaukee WI"    
+##  [7] "Monroe WI"        "Superior WI"      "Wausau WI"       
+## [10] "Dubuque IA"       "St.Paul MN"       "Chicago IL"
 ```
 
  
@@ -585,7 +531,8 @@ like this:
 
 
 ```r
-g <- tibble(cst) %>% ggmap::mutate_geocode(cst)
+tibble(cst) %>% 
+ggmap::mutate_geocode(cst) -> g
 ```
 
 ```
@@ -684,7 +631,8 @@ or even
 
 
 ```r
-g %>% select(lat, lon) %>% map_df(range)
+g %>% select(lat,lon) %>%
+map_df(range)
 ```
 
 ```
@@ -714,21 +662,18 @@ So:
 
 
 ```r
-wisc.map.2 = get_map(location = c(-94, 41.8, -87, 
-    46.8), maptype = "roadmap")
+wisc.map.2=get_map(location=c(-94,41.8,-87,46.8),maptype="roadmap")
 ```
 
 ```
-## Warning: bounding box given to google -
-## spatial extent only approximate.
+## Warning: bounding box given to google - spatial extent only approximate.
 ```
 
 ```r
 ggmap(wisc.map.2)
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/lhsdljhadkfj-1} 
+<img src="23-mds_files/figure-html/lhsdljhadkfj-1.png" width="576"  />
 
  
 
@@ -739,12 +684,10 @@ Now we need to mark our 12 cities on the map. This is a
 
 
 ```r
-ggmap(wisc.map.2) + geom_point(data = g, aes(x = lon, 
-    y = lat))
+ggmap(wisc.map.2)+geom_point(data=g, aes(x=lon,y=lat))
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/sldkhdlf-1} 
+<img src="23-mds_files/figure-html/sldkhdlf-1.png" width="672"  />
 
  
 
@@ -813,7 +756,7 @@ Solution
 Run again with `eig=T` and take a look at `GOF` (uppercase):
 
 ```r
-cmdscale(d, 2, eig = T)$GOF
+cmdscale(d,2,eig=T)$GOF
 ```
 
 ```
@@ -821,7 +764,7 @@ cmdscale(d, 2, eig = T)$GOF
 ```
 
 ```r
-cmdscale(d, 1, eig = T)$GOF
+cmdscale(d,1,eig=T)$GOF
 ```
 
 ```
@@ -832,7 +775,7 @@ cmdscale(d, 1, eig = T)$GOF
 
 The goodness-of-fit of the two-dimensional solution is pretty
 good,
-\marginnote{As it ought to be, since there is a real answer  here: the cities *do* exist as locations in two dimensions,   you ignore the curvature of the earth. The goodness of fit isn't  100% because the roads bend a bit.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As it ought to be, since there is a real answer  here: the cities *do* exist as locations in two dimensions,   you ignore the curvature of the earth. The goodness of fit isn't  100% because the roads bend a bit.</span>
 but that of the one-dimensional solution (which arranges all the
 cities along a line) is pretty awful in comparison.
 
@@ -842,10 +785,10 @@ ones, as many as there are cities.
 
 
 ```r
-ones = rep(1, 12)
-v = cmdscale(d, 1, eig = T)
-ddd = as_tibble(v$points) %>% mutate(one = ones, 
-    city = cities)
+ones=rep(1,12)
+v=cmdscale(d,1,eig=T)
+ddd = as_tibble(v$points) %>%
+mutate(one=ones, city=cities)
 ```
 
 ```
@@ -882,12 +825,11 @@ the name `V1`), and the plot:
 
 
 ```r
-ggplot(ddd, aes(x = one, y = V1, label = city)) + 
-    geom_point() + geom_text_repel()
+ggplot(ddd,aes(x=one,y=V1,label=city))+
+geom_point()+geom_text_repel()
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-20-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
  
 
@@ -907,14 +849,14 @@ pretty awful.
  Which objects feel similar to one another and which ones
 feel different? Can we draw them on a "map"? 30
 subjects
-\marginnote{Probably students in a psychology course. You know  how it goes.} were each
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Probably students in a psychology course. You know  how it goes.</span> were each
 given 17 different objects to feel, for example "inner surface of pine  bark", 
 "rubber eraser" and 
 "nylon scouring pad". The
 subjects had to group the objects into a maximum of 8 groups such that
 the objects within a group felt similar, and the ones in different
 groups felt different.
-\marginnote{The maximum number of groups was to  ensure that each subject actually *did* group some objects  together, rather than saying that they all feel different.} A
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The maximum number of groups was to  ensure that each subject actually *did* group some objects  together, rather than saying that they all feel different.</span> A
 dissimilarity matrix was formed by counting how many subjects put each
 pair of objects into *different* groups, so that the
 dissimilarity ranged from 0 (the objects were always put together in
@@ -938,8 +880,8 @@ Looking at the file first, there are *no column names*. So we
 have to tell `read_delim` that:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt"
-stimuli = read_delim(my_url, " ", col_names = F)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt"
+stimuli=read_delim(my_url," ",col_names=F)
 ```
 
 ```
@@ -972,30 +914,27 @@ stimuli
 
 ```
 ## # A tibble: 17 x 18
-##    X1        X2    X3    X4    X5    X6    X7
-##    <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 inner~     0    22    23    24    26    27
-##  2 brick     22     0    27    27    27    29
-##  3 cardb~    23    27     0    18    19    28
-##  4 cork      24    27    18     0    15    28
-##  5 rubbe~    26    27    19    15     0    28
-##  6 felt      27    29    28    28    28     0
-##  7 leath~    26    29    23    25    20    24
-##  8 rigid~    23    28    24    26    27    28
-##  9 veryf~    24    16    24    28    24    29
-## 10 nylon~    23    18    29    28    27    26
-## 11 cellu~    23    28    27    20    24    26
-## 12 woven~    18    25    28    27    25    29
-## 13 block~    23    24    21    10    19    28
-## 14 ungla~    21    10    26    26    24    29
-## 15 velvet    28    29    28    28    29     4
-## 16 waxpa~    24    28    24    28    24    28
-## 17 gloss~    22    27    23    29    28    29
-## # ... with 11 more variables: X8 <dbl>,
-## #   X9 <dbl>, X10 <dbl>, X11 <dbl>,
-## #   X12 <dbl>, X13 <dbl>, X14 <dbl>,
-## #   X15 <dbl>, X16 <dbl>, X17 <dbl>,
-## #   X18 <dbl>
+##    X1        X2    X3    X4    X5    X6    X7    X8    X9   X10   X11   X12
+##    <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 inner…     0    22    23    24    26    27    26    23    24    23    23
+##  2 brick     22     0    27    27    27    29    29    28    16    18    28
+##  3 cardb…    23    27     0    18    19    28    23    24    24    29    27
+##  4 cork      24    27    18     0    15    28    25    26    28    28    20
+##  5 rubbe…    26    27    19    15     0    28    20    27    24    27    24
+##  6 felt      27    29    28    28    28     0    24    28    29    26    26
+##  7 leath…    26    29    23    25    20    24     0    22    28    28    27
+##  8 rigid…    23    28    24    26    27    28    22     0    27    29    29
+##  9 veryf…    24    16    24    28    24    29    28    27     0    21    24
+## 10 nylon…    23    18    29    28    27    26    28    29    21     0    22
+## 11 cellu…    23    28    27    20    24    26    27    29    24    22     0
+## 12 woven…    18    25    28    27    25    29    26    27    26    16    19
+## 13 block…    23    24    21    10    19    28    25    25    25    25    21
+## 14 ungla…    21    10    26    26    24    29    29    25    12    24    26
+## 15 velvet    28    29    28    28    29     4    24    29    29    27    27
+## 16 waxpa…    24    28    24    28    24    28    21    12    29    29    29
+## 17 gloss…    22    27    23    29    28    29    20    13    27    28    27
+## # … with 6 more variables: X13 <dbl>, X14 <dbl>, X15 <dbl>, X16 <dbl>,
+## #   X17 <dbl>, X18 <dbl>
 ```
 
      
@@ -1024,27 +963,19 @@ Solution
 The object names are in the first column, `X1`, of the data frame:
 
 ```r
-objects = stimuli$X1
+objects=stimuli$X1
 objects
 ```
 
 ```
-##  [1] "innersurfaceofpinebark"
-##  [2] "brick"                 
-##  [3] "cardboard"             
-##  [4] "cork"                  
-##  [5] "rubbereraser"          
-##  [6] "felt"                  
-##  [7] "leatherwallet"         
-##  [8] "rigidplasticsheet"     
-##  [9] "veryfinesandpaper"     
-## [10] "nylonscouringpad"      
-## [11] "cellulosekitchensponge"
-## [12] "wovenstraw"            
-## [13] "blockofstyrofoam"      
-## [14] "unglazedceramictile"   
-## [15] "velvet"                
-## [16] "waxpaper"              
+##  [1] "innersurfaceofpinebark" "brick"                 
+##  [3] "cardboard"              "cork"                  
+##  [5] "rubbereraser"           "felt"                  
+##  [7] "leatherwallet"          "rigidplasticsheet"     
+##  [9] "veryfinesandpaper"      "nylonscouringpad"      
+## [11] "cellulosekitchensponge" "wovenstraw"            
+## [13] "blockofstyrofoam"       "unglazedceramictile"   
+## [15] "velvet"                 "waxpaper"              
 ## [17] "glossypaintedwood"
 ```
 
@@ -1067,41 +998,35 @@ I have 18 columns to name (including the column of object names),
 but only 17 names, so I need to supply an extra one:
 
 ```r
-names(stimuli) = c("object", objects)
+names(stimuli)=c("object",objects)
 stimuli
 ```
 
 ```
 ## # A tibble: 17 x 18
-##    object innersurfaceofp~ brick cardboard
-##    <chr>             <dbl> <dbl>     <dbl>
-##  1 inner~                0    22        23
-##  2 brick                22     0        27
-##  3 cardb~               23    27         0
-##  4 cork                 24    27        18
-##  5 rubbe~               26    27        19
-##  6 felt                 27    29        28
-##  7 leath~               26    29        23
-##  8 rigid~               23    28        24
-##  9 veryf~               24    16        24
-## 10 nylon~               23    18        29
-## 11 cellu~               23    28        27
-## 12 woven~               18    25        28
-## 13 block~               23    24        21
-## 14 ungla~               21    10        26
-## 15 velvet               28    29        28
-## 16 waxpa~               24    28        24
-## 17 gloss~               22    27        23
-## # ... with 14 more variables: cork <dbl>,
-## #   rubbereraser <dbl>, felt <dbl>,
-## #   leatherwallet <dbl>,
-## #   rigidplasticsheet <dbl>,
-## #   veryfinesandpaper <dbl>,
-## #   nylonscouringpad <dbl>,
-## #   cellulosekitchensponge <dbl>,
-## #   wovenstraw <dbl>,
-## #   blockofstyrofoam <dbl>,
-## #   unglazedceramictile <dbl>, velvet <dbl>,
+##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
+##    <chr>             <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
+##  1 inner…                0    22        23    24           26    27
+##  2 brick                22     0        27    27           27    29
+##  3 cardb…               23    27         0    18           19    28
+##  4 cork                 24    27        18     0           15    28
+##  5 rubbe…               26    27        19    15            0    28
+##  6 felt                 27    29        28    28           28     0
+##  7 leath…               26    29        23    25           20    24
+##  8 rigid…               23    28        24    26           27    28
+##  9 veryf…               24    16        24    28           24    29
+## 10 nylon…               23    18        29    28           27    26
+## 11 cellu…               23    28        27    20           24    26
+## 12 woven…               18    25        28    27           25    29
+## 13 block…               23    24        21    10           19    28
+## 14 ungla…               21    10        26    26           24    29
+## 15 velvet               28    29        28    28           29     4
+## 16 waxpa…               24    28        24    28           24    28
+## 17 gloss…               22    27        23    29           28    29
+## # … with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
+## #   veryfinesandpaper <dbl>, nylonscouringpad <dbl>,
+## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>,
+## #   blockofstyrofoam <dbl>, unglazedceramictile <dbl>, velvet <dbl>,
 ## #   waxpaper <dbl>, glossypaintedwood <dbl>
 ```
 
@@ -1131,8 +1056,8 @@ the column names are long:
 
 
 ```r
-w = getOption("width")
-options(width = 132)
+w=getOption("width")
+options(width=132)
 d
 ```
 
@@ -1191,7 +1116,7 @@ d
 ```
 
 ```r
-options(width = w)
+options(width=w)
 ```
 
  
@@ -1217,13 +1142,13 @@ Solution
 This is the procedure. Talking about it is coming in a minute.
 
 ```r
-d.1 = cmdscale(d, 2)
-data.frame(d.1, stim = objects) %>% ggplot(aes(x = X1, 
-    y = X2, label = stim)) + geom_point() + geom_text_repel(size = 2)
+d.1=cmdscale(d,2)
+data.frame(d.1,stim=objects) %>%
+ggplot(aes(x=X1,y=X2,label=stim))+geom_point()+
+geom_text_repel(size=2)
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-26-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
      
 
@@ -1245,42 +1170,24 @@ d.1
 ```
 
 ```
-##                               [,1]
-## innersurfaceofpinebark  -2.7066290
-## brick                  -12.2011332
-## cardboard                3.8630322
-## cork                    -0.8424358
-## rubbereraser             0.1676463
-## felt                     5.1803473
-## leatherwallet           10.4636668
-## rigidplasticsheet       11.0208731
-## veryfinesandpaper      -11.0869483
-## nylonscouringpad       -10.4469053
-## cellulosekitchensponge  -5.3886609
-## wovenstraw              -5.2762142
-## blockofstyrofoam        -2.9950151
-## unglazedceramictile    -10.5902291
-## velvet                   6.3768882
-## waxpaper                13.1702265
-## glossypaintedwood       11.2914904
-##                              [,2]
-## innersurfaceofpinebark   1.694420
-## brick                    5.147970
-## cardboard               -9.322759
-## cork                   -14.884926
-## rubbereraser           -11.733873
-## felt                     9.328562
-## leatherwallet           -1.016525
-## rigidplasticsheet        1.201504
-## veryfinesandpaper        2.800988
-## nylonscouringpad         7.232787
-## cellulosekitchensponge  -2.770991
-## wovenstraw               3.836948
-## blockofstyrofoam       -11.927717
-## unglazedceramictile      2.926805
-## velvet                  10.477972
-## waxpaper                 1.677039
-## glossypaintedwood        5.331796
+##                               [,1]       [,2]
+## innersurfaceofpinebark  -2.7066290   1.694420
+## brick                  -12.2011332   5.147970
+## cardboard                3.8630322  -9.322759
+## cork                    -0.8424358 -14.884926
+## rubbereraser             0.1676463 -11.733873
+## felt                     5.1803473   9.328562
+## leatherwallet           10.4636668  -1.016525
+## rigidplasticsheet       11.0208731   1.201504
+## veryfinesandpaper      -11.0869483   2.800988
+## nylonscouringpad       -10.4469053   7.232787
+## cellulosekitchensponge  -5.3886609  -2.770991
+## wovenstraw              -5.2762142   3.836948
+## blockofstyrofoam        -2.9950151 -11.927717
+## unglazedceramictile    -10.5902291   2.926805
+## velvet                   6.3768882  10.477972
+## waxpaper                13.1702265   1.677039
+## glossypaintedwood       11.2914904   5.331796
 ```
 
  
@@ -1288,7 +1195,7 @@ I note that any map that is the same as this apart from rotation and
 reflection is also fine (since the distances will be the same). I saw
 a lot of maps that were like mine but upside down (with `cork`
 at the top).
-\marginnote{I lie. Last year, *I* got cork at the top,  and a lot of other people got cork at the bottom as you see here.} No problem there.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I lie. Last year, *I* got cork at the top,  and a lot of other people got cork at the bottom as you see here.</span> No problem there.
     
 
 
@@ -1316,7 +1223,7 @@ wax paper. Distance 12. Smallish.
 
 * unglazed ceramic
 tile
-\marginnote{The first association that *unglazed* made for me      was *donut*!} and very fine sandpaper. Distance 12. Smallish.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The first association that *unglazed* made for me      was *donut*!</span> and very fine sandpaper. Distance 12. Smallish.
 
 There won't be a perfect relationship between distance in the
 distance matrix and on the map. In this case, there is an upper
@@ -1347,7 +1254,7 @@ pulling out the thing called `GOF`. You can omit the 2,
 since that's the default 2 dimensions:
 
 ```r
-d.2 = cmdscale(d, 2, eig = T)
+d.2=cmdscale(d,2,eig=T)
 d.2$GOF
 ```
 
@@ -1369,7 +1276,7 @@ I was curious about whether 3 dimensions would be any better:
 
 
 ```r
-d.2a = cmdscale(d, 3, eig = T)
+d.2a=cmdscale(d,3,eig=T)
 d.2a$GOF
 ```
 
@@ -1396,12 +1303,11 @@ This seems to be a throwback to last week, but I have my reasons,
 which you'll see in a moment:
 
 ```r
-d.3 = hclust(d, method = "ward.D")
+d.3=hclust(d,method="ward.D")
 plot(d.3)
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-30-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
 
      
 
@@ -1411,11 +1317,10 @@ That looks like 5 clusters to me (chopping the tree at a height of
 
 ```r
 plot(d.3)
-rect.hclust(d.3, 5)
+rect.hclust(d.3,5)
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-31-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
  
     
@@ -1468,14 +1373,14 @@ I was thinking, "can I extract the clusters from this    analysis, and plot them
 would go like this:
 
 ```r
-clusters = cutree(d.3, 5)
-data.frame(d.1, names = stimuli[, 1], cluster = factor(clusters)) %>% 
-    ggplot(aes(x = X1, y = X2, label = objects, 
-        colour = cluster)) + geom_point() + geom_text_repel(size = 2)
+clusters=cutree(d.3,5)
+data.frame(d.1,names=stimuli[,1],cluster=factor(clusters)) %>%
+ggplot(aes(x=X1,y=X2,label=objects,colour=cluster))+
+geom_point()+
+geom_text_repel(size=2)
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-32-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
 
      
 
@@ -1492,47 +1397,28 @@ along with the clusters, probably sorted by cluster:
 
 
 ```r
-data.frame(d.1, object = stimuli[, 1], clusters) %>% 
-    arrange(clusters)
+data.frame(d.1,object=stimuli[,1],clusters) %>% arrange(clusters)
 ```
 
 ```
-##             X1         X2
-## 1   -2.7066290   1.694420
-## 2  -10.4469053   7.232787
-## 3   -5.3886609  -2.770991
-## 4   -5.2762142   3.836948
-## 5  -12.2011332   5.147970
-## 6  -11.0869483   2.800988
-## 7  -10.5902291   2.926805
-## 8    3.8630322  -9.322759
-## 9   -0.8424358 -14.884926
-## 10   0.1676463 -11.733873
-## 11  -2.9950151 -11.927717
-## 12   5.1803473   9.328562
-## 13   6.3768882  10.477972
-## 14  10.4636668  -1.016525
-## 15  11.0208731   1.201504
-## 16  13.1702265   1.677039
-## 17  11.2914904   5.331796
-##                    object clusters
-## 1  innersurfaceofpinebark        1
-## 2        nylonscouringpad        1
-## 3  cellulosekitchensponge        1
-## 4              wovenstraw        1
-## 5                   brick        2
-## 6       veryfinesandpaper        2
-## 7     unglazedceramictile        2
-## 8               cardboard        3
-## 9                    cork        3
-## 10           rubbereraser        3
-## 11       blockofstyrofoam        3
-## 12                   felt        4
-## 13                 velvet        4
-## 14          leatherwallet        5
-## 15      rigidplasticsheet        5
-## 16               waxpaper        5
-## 17      glossypaintedwood        5
+##             X1         X2                 object clusters
+## 1   -2.7066290   1.694420 innersurfaceofpinebark        1
+## 2  -10.4469053   7.232787       nylonscouringpad        1
+## 3   -5.3886609  -2.770991 cellulosekitchensponge        1
+## 4   -5.2762142   3.836948             wovenstraw        1
+## 5  -12.2011332   5.147970                  brick        2
+## 6  -11.0869483   2.800988      veryfinesandpaper        2
+## 7  -10.5902291   2.926805    unglazedceramictile        2
+## 8    3.8630322  -9.322759              cardboard        3
+## 9   -0.8424358 -14.884926                   cork        3
+## 10   0.1676463 -11.733873           rubbereraser        3
+## 11  -2.9950151 -11.927717       blockofstyrofoam        3
+## 12   5.1803473   9.328562                   felt        4
+## 13   6.3768882  10.477972                 velvet        4
+## 14  10.4636668  -1.016525          leatherwallet        5
+## 15  11.0208731   1.201504      rigidplasticsheet        5
+## 16  13.1702265   1.677039               waxpaper        5
+## 17  11.2914904   5.331796      glossypaintedwood        5
 ```
 
  
@@ -1542,7 +1428,7 @@ Then you can think about what makes the clusters different in terms of
 mixed up, with `X1` and (usually) `X2` negative; cluster
 3 has strongly positive `X2`; cluster 4 has very
 *negative* `X2`;
-\marginnote{Oxford semicolon, for the grammar mavens among you.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Oxford semicolon, for the grammar mavens among you.</span> 
 and cluster 5 has strongly positive `X1`.
 
 I wonder whether our three-dimensional solution distinguishes clusters
@@ -1550,48 +1436,30 @@ I wonder whether our three-dimensional solution distinguishes clusters
 
 
 ```r
-save.3d = data.frame(d.2a$points, objects, clusters) %>% 
-    arrange(clusters)
-save.3d
+save.3d = data.frame(d.2a$points,objects,clusters) %>% 
+arrange(clusters) 
+save.3d  
 ```
 
 ```
-##             X1         X2          X3
-## 1   -2.7066290   1.694420   4.1176385
-## 2  -10.4469053   7.232787  -1.9720211
-## 3   -5.3886609  -2.770991  -6.8039573
-## 4   -5.2762142   3.836948  -0.3083513
-## 5  -12.2011332   5.147970   5.9802631
-## 6  -11.0869483   2.800988   4.9686770
-## 7  -10.5902291   2.926805   7.2124679
-## 8    3.8630322  -9.322759   1.2376174
-## 9   -0.8424358 -14.884926  -5.6157998
-## 10   0.1676463 -11.733873  -2.3880857
-## 11  -2.9950151 -11.927717  -2.9877666
-## 12   5.1803473   9.328562 -15.2730895
-## 13   6.3768882  10.477972 -14.1837552
-## 14  10.4636668  -1.016525  -1.9005177
-## 15  11.0208731   1.201504  10.0016248
-## 16  13.1702265   1.677039   8.2862272
-## 17  11.2914904   5.331796   9.6288283
-##                   objects clusters
-## 1  innersurfaceofpinebark        1
-## 2        nylonscouringpad        1
-## 3  cellulosekitchensponge        1
-## 4              wovenstraw        1
-## 5                   brick        2
-## 6       veryfinesandpaper        2
-## 7     unglazedceramictile        2
-## 8               cardboard        3
-## 9                    cork        3
-## 10           rubbereraser        3
-## 11       blockofstyrofoam        3
-## 12                   felt        4
-## 13                 velvet        4
-## 14          leatherwallet        5
-## 15      rigidplasticsheet        5
-## 16               waxpaper        5
-## 17      glossypaintedwood        5
+##             X1         X2          X3                objects clusters
+## 1   -2.7066290   1.694420   4.1176385 innersurfaceofpinebark        1
+## 2  -10.4469053   7.232787  -1.9720211       nylonscouringpad        1
+## 3   -5.3886609  -2.770991  -6.8039573 cellulosekitchensponge        1
+## 4   -5.2762142   3.836948  -0.3083513             wovenstraw        1
+## 5  -12.2011332   5.147970   5.9802631                  brick        2
+## 6  -11.0869483   2.800988   4.9686770      veryfinesandpaper        2
+## 7  -10.5902291   2.926805   7.2124679    unglazedceramictile        2
+## 8    3.8630322  -9.322759   1.2376174              cardboard        3
+## 9   -0.8424358 -14.884926  -5.6157998                   cork        3
+## 10   0.1676463 -11.733873  -2.3880857           rubbereraser        3
+## 11  -2.9950151 -11.927717  -2.9877666       blockofstyrofoam        3
+## 12   5.1803473   9.328562 -15.2730895                   felt        4
+## 13   6.3768882  10.477972 -14.1837552                 velvet        4
+## 14  10.4636668  -1.016525  -1.9005177          leatherwallet        5
+## 15  11.0208731   1.201504  10.0016248      rigidplasticsheet        5
+## 16  13.1702265   1.677039   8.2862272               waxpaper        5
+## 17  11.2914904   5.331796   9.6288283      glossypaintedwood        5
 ```
 
  
@@ -1622,8 +1490,8 @@ library(MASS)
 ```
 
 ```r
-save.3d.lda = lda(clusters ~ X1 + X2 + X3, data = save.3d)
-ppp = predict(save.3d.lda)
+save.3d.lda=lda(clusters~X1+X2+X3,data=save.3d)
+ppp=predict(save.3d.lda)
 ```
 
  
@@ -1634,13 +1502,12 @@ found that `LD3` is basically worthless, so I can plot
 
 
 ```r
-data.frame(ppp$x, cluster = factor(save.3d$clusters)) %>% 
-    ggplot(aes(x = LD1, y = LD2, colour = cluster)) + 
-    geom_point()
+data.frame(ppp$x,cluster=factor(save.3d$clusters)) %>%
+ggplot(aes(x=LD1,y=LD2,colour=cluster))+
+geom_point()
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-36-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
      
 
@@ -1661,42 +1528,24 @@ save.3d
 ```
 
 ```
-##             X1         X2          X3
-## 1   -2.7066290   1.694420   4.1176385
-## 2  -10.4469053   7.232787  -1.9720211
-## 3   -5.3886609  -2.770991  -6.8039573
-## 4   -5.2762142   3.836948  -0.3083513
-## 5  -12.2011332   5.147970   5.9802631
-## 6  -11.0869483   2.800988   4.9686770
-## 7  -10.5902291   2.926805   7.2124679
-## 8    3.8630322  -9.322759   1.2376174
-## 9   -0.8424358 -14.884926  -5.6157998
-## 10   0.1676463 -11.733873  -2.3880857
-## 11  -2.9950151 -11.927717  -2.9877666
-## 12   5.1803473   9.328562 -15.2730895
-## 13   6.3768882  10.477972 -14.1837552
-## 14  10.4636668  -1.016525  -1.9005177
-## 15  11.0208731   1.201504  10.0016248
-## 16  13.1702265   1.677039   8.2862272
-## 17  11.2914904   5.331796   9.6288283
-##                   objects clusters
-## 1  innersurfaceofpinebark        1
-## 2        nylonscouringpad        1
-## 3  cellulosekitchensponge        1
-## 4              wovenstraw        1
-## 5                   brick        2
-## 6       veryfinesandpaper        2
-## 7     unglazedceramictile        2
-## 8               cardboard        3
-## 9                    cork        3
-## 10           rubbereraser        3
-## 11       blockofstyrofoam        3
-## 12                   felt        4
-## 13                 velvet        4
-## 14          leatherwallet        5
-## 15      rigidplasticsheet        5
-## 16               waxpaper        5
-## 17      glossypaintedwood        5
+##             X1         X2          X3                objects clusters
+## 1   -2.7066290   1.694420   4.1176385 innersurfaceofpinebark        1
+## 2  -10.4469053   7.232787  -1.9720211       nylonscouringpad        1
+## 3   -5.3886609  -2.770991  -6.8039573 cellulosekitchensponge        1
+## 4   -5.2762142   3.836948  -0.3083513             wovenstraw        1
+## 5  -12.2011332   5.147970   5.9802631                  brick        2
+## 6  -11.0869483   2.800988   4.9686770      veryfinesandpaper        2
+## 7  -10.5902291   2.926805   7.2124679    unglazedceramictile        2
+## 8    3.8630322  -9.322759   1.2376174              cardboard        3
+## 9   -0.8424358 -14.884926  -5.6157998                   cork        3
+## 10   0.1676463 -11.733873  -2.3880857           rubbereraser        3
+## 11  -2.9950151 -11.927717  -2.9877666       blockofstyrofoam        3
+## 12   5.1803473   9.328562 -15.2730895                   felt        4
+## 13   6.3768882  10.477972 -14.1837552                 velvet        4
+## 14  10.4636668  -1.016525  -1.9005177          leatherwallet        5
+## 15  11.0208731   1.201504  10.0016248      rigidplasticsheet        5
+## 16  13.1702265   1.677039   8.2862272               waxpaper        5
+## 17  11.2914904   5.331796   9.6288283      glossypaintedwood        5
 ```
 
  
@@ -1738,11 +1587,10 @@ A biplot would be another way to look at that:
 
 
 ```r
-ggbiplot(save.3d.lda, groups = factor(save.3d$clusters))
+ggbiplot(save.3d.lda,groups=factor(save.3d$clusters))
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-39-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
  
 Points on the right have `X1` and `X2` large, and
@@ -1797,13 +1645,12 @@ Solution
 we have aligned columns with spaces between:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/letterrec.txt"
-letters = read_table(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/letterrec.txt"
+letters=read_table(my_url)
 ```
 
 ```
-## Warning: Missing column names filled in:
-## 'X1' [1]
+## Warning: Missing column names filled in: 'X1' [1]
 ```
 
 ```
@@ -1827,18 +1674,16 @@ letters
 
 ```
 ## # A tibble: 8 x 9
-##   X1        C     D     G     H     M     N
-##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 C         0     0     0     0     0     0
-## 2 D         5     0     0     0     0     0
-## 3 G        12     2     0     0     0     0
-## 4 H         2     4     3     0     0     0
-## 5 M         2     3     2    10     0     0
-## 6 N         2     4     1    18    16     0
-## 7 Q         9    20     9     1     2     8
-## 8 W         1     5     2     5    18    13
-## # ... with 2 more variables: Q <dbl>,
-## #   W <dbl>
+##   X1        C     D     G     H     M     N     Q     W
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1 C         0     0     0     0     0     0     0     0
+## 2 D         5     0     0     0     0     0     0     0
+## 3 G        12     2     0     0     0     0     0     0
+## 4 H         2     4     3     0     0     0     0     0
+## 5 M         2     3     2    10     0     0     0     0
+## 6 N         2     4     1    18    16     0     0     0
+## 7 Q         9    20     9     1     2     8     0     0
+## 8 W         1     5     2     5    18    13     4     0
 ```
 
     
@@ -1858,8 +1703,8 @@ everything that is not numbers:
 
 
 ```r
-letters2 <- letters %>% dplyr::select(-X1)
-letters2 = 21 - letters2
+letters %>% dplyr::select(-X1) -> letters2
+letters2=21-letters2
 letters2
 ```
 
@@ -1885,7 +1730,7 @@ you tell it otherwise), so all will be good.
 
 
 ```r
-d = as.dist(letters2)
+d=as.dist(letters2)
 d
 ```
 
@@ -1929,7 +1774,7 @@ Solution
 This:
 
 ```r
-d.1 = cmdscale(d)
+d.1=cmdscale(d)
 d.1
 ```
 
@@ -1951,7 +1796,7 @@ Or you can do it with `eig=T`, which gets you some more information:
 
 
 ```r
-d.1a = cmdscale(d, eig = T)
+d.1a=cmdscale(d,eig=T)
 d.1a
 ```
 
@@ -1968,9 +1813,8 @@ d.1a
 ## W -7.153020 -1.8466934
 ## 
 ## $eig
-## [1]  4.930195e+02  2.319034e+02  1.399674e+02
-## [4]  5.318040e+01  4.054851e+01 -5.684342e-14
-## [7] -1.539358e+01 -9.610062e+01
+## [1]  4.930195e+02  2.319034e+02  1.399674e+02  5.318040e+01  4.054851e+01
+## [6] -5.684342e-14 -1.539358e+01 -9.610062e+01
 ## 
 ## $x
 ## NULL
@@ -2010,7 +1854,7 @@ Easiest way is to pull out the first column of the data frame that
 you read in from the file (if you can remember what it was called):
 
 ```r
-letter_names = letters$X1
+letter_names=letters$X1
 ```
 
      
@@ -2021,7 +1865,7 @@ supplied.
 Extra: You can even get the letter names from the thing I called `d`,
 but I can't remember how, so I have to cheat. I said that `d`
 has a "print method"
-\marginnote{The way that a multicoloured function  like *print* works is that when you ask to show something,  like *d*, R first looks to see what kind of thing you want to show (by calling *class*), and determines that it is a *dist* object. Then it looks to see if there is a function called *print.dist* (there is), and if there is, it calls that (to produce that nice display). If there isn't, it calls *print.default*, which just displays its input without doing anything special. This is why printing the output from an *lm* looks very different from printing a data frame: the first calls *print.lm* and the second calls *print.data.frame*, or *print.tbl-df* for a tibble.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The way that a multicoloured function  like *print* works is that when you ask to show something,  like *d*, R first looks to see what kind of thing you want to show (by calling *class*), and determines that it is a *dist* object. Then it looks to see if there is a function called *print.dist* (there is), and if there is, it calls that (to produce that nice display). If there isn't, it calls *print.default*, which just displays its input without doing anything special. This is why printing the output from an *lm* looks very different from printing a data frame: the first calls *print.lm* and the second calls *print.data.frame*, or *print.tbl-df* for a tibble.</span> 
 that controls how it looks:
 
 
@@ -2050,9 +1894,8 @@ print.default(d)
 ```
 
 ```
-##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16
-## [14] 18 19 20 12 19 11  3 20 16  5 19  3 13
-## [27]  8 17
+##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
+## [24] 19  3 13  8 17
 ## attr(,"Labels")
 ## [1] "C" "D" "G" "H" "M" "N" "Q" "W"
 ## attr(,"Size")
@@ -2077,9 +1920,8 @@ unclass(d)
 ```
 
 ```
-##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16
-## [14] 18 19 20 12 19 11  3 20 16  5 19  3 13
-## [27]  8 17
+##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
+## [24] 19  3 13  8 17
 ## attr(,"Labels")
 ## [1] "C" "D" "G" "H" "M" "N" "Q" "W"
 ## attr(,"Size")
@@ -2124,7 +1966,7 @@ pipe, or else I'll create *another* thing called `d`
 and overwrite the one I wanted to keep, again:
 
 ```r
-data.frame(d.1, names = letter_names)
+data.frame(d.1,names=letter_names) 
 ```
 
 ```
@@ -2148,13 +1990,13 @@ frame. So I can proceed:
 
 
 ```r
-data.frame(d.1, names = letter_names) %>% ggplot(aes(x = X1, 
-    y = X2, label = names)) + geom_point() + geom_text_repel() + 
-    coord_fixed()
+data.frame(d.1,names=letter_names) %>% 
+ggplot(aes(x=X1,y=X2,label=names))+
+geom_point()+geom_text_repel()+
+coord_fixed()
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-51-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
      
 
@@ -2176,12 +2018,12 @@ figuring out where to put the text relative to the point.
 
 
 ```r
-data.frame(d.1, names = letter_names) %>% ggplot(aes(x = X1, 
-    y = X2, label = names)) + geom_text() + coord_fixed()
+data.frame(d.1,names=letter_names) %>% 
+ggplot(aes(x=X1,y=X2,label=names))+
+geom_text()+coord_fixed()
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-52-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
 
  
 
@@ -2224,18 +2066,16 @@ letters
 
 ```
 ## # A tibble: 8 x 9
-##   X1        C     D     G     H     M     N
-##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 C         0     0     0     0     0     0
-## 2 D         5     0     0     0     0     0
-## 3 G        12     2     0     0     0     0
-## 4 H         2     4     3     0     0     0
-## 5 M         2     3     2    10     0     0
-## 6 N         2     4     1    18    16     0
-## 7 Q         9    20     9     1     2     8
-## 8 W         1     5     2     5    18    13
-## # ... with 2 more variables: Q <dbl>,
-## #   W <dbl>
+##   X1        C     D     G     H     M     N     Q     W
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1 C         0     0     0     0     0     0     0     0
+## 2 D         5     0     0     0     0     0     0     0
+## 3 G        12     2     0     0     0     0     0     0
+## 4 H         2     4     3     0     0     0     0     0
+## 5 M         2     3     2    10     0     0     0     0
+## 6 N         2     4     1    18    16     0     0     0
+## 7 Q         9    20     9     1     2     8     0     0
+## 8 W         1     5     2     5    18    13     4     0
 ```
 
      
@@ -2261,7 +2101,7 @@ letters and assert that it is large (compared to the others).
 These are actually not *all* the large ones: M and W, H and N, M
 and N are also large (which lends some support to these letters being
 a foursome
-\marginnote{Set of four. Match-play golf has a game called  *foursomes* where the two players on each team take it in turns to hit the ball, as opposed to the game called *fourballs*, where each of the two players plays their own ball, and the team's score on a hole is the better of the two players' scores.} rather than two pairs).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Set of four. Match-play golf has a game called  *foursomes* where the two players on each team take it in turns to hit the ball, as opposed to the game called *fourballs*, where each of the two players plays their own ball, and the team's score on a hole is the better of the two players' scores.</span> rather than two pairs).
 
 If you prefer, you can work from your `dist` object, the thing
 I called `d`:
@@ -2328,7 +2168,7 @@ Solution
 First I should get rid of `MASS`, since we don't need it here:
 
 ```r
-detach("package:MASS", unload = T)
+detach("package:MASS", unload=T)
 ```
 
        
@@ -2338,8 +2178,8 @@ distances between rows), then feed everything but the student IDs
 into `dist`:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
-beer = read_table2(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
+beer=read_table2(my_url)
 ```
 
 ```
@@ -2365,27 +2205,26 @@ beer
 
 ```
 ## # A tibble: 32 x 11
-##    student AnchorS  Bass Becks Corona GordonB
-##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>
-##  1 S001          5     9     7      1       7
-##  2 S008          7     5     6      8       8
-##  3 S015          7     7     5      6       6
-##  4 S022          7     7     5      2       5
-##  5 S029          9     7     3      1       6
-##  6 S036          7     6     4      3       7
-##  7 S043          5     5     5      6       6
-##  8 S050          5     3     1      5       5
-##  9 S057          9     3     2      6       4
-## 10 S064          2     6     6      5       6
-## # ... with 22 more rows, and 5 more
-## #   variables: Guinness <dbl>,
-## #   Heineken <dbl>, PetesW <dbl>,
-## #   SamAdams <dbl>, SierraN <dbl>
+##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
+##  1 S001          5     9     7      1       7        6        6      5
+##  2 S008          7     5     6      8       8        4        8      8
+##  3 S015          7     7     5      6       6        1        8      4
+##  4 S022          7     7     5      2       5        8        4      6
+##  5 S029          9     7     3      1       6        8        2      7
+##  6 S036          7     6     4      3       7        6        6      5
+##  7 S043          5     5     5      6       6        4        7      5
+##  8 S050          5     3     1      5       5        5        3      5
+##  9 S057          9     3     2      6       4        6        1      5
+## 10 S064          2     6     6      5       6        4        8      4
+## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
 ```
 
 ```r
-d = beer %>% dplyr::select(-student) %>% t() %>% 
-    dist()
+d = beer %>%
+dplyr::select(-student) %>%
+t() %>%
+dist()
 ```
 
 
@@ -2417,7 +2256,7 @@ library(MASS)
 ```
 
 ```r
-beer.1 = isoMDS(d)
+beer.1=isoMDS(d)
 ```
 
 ```
@@ -2468,26 +2307,22 @@ include an identifier column for the students, so skip the first one:
 
 
 ```r
-beer_names = beer %>% dplyr::select(-student) %>% 
-    names()
+beer_names = beer %>% dplyr::select(-student) %>% names()
 beer_names
 ```
 
 ```
-##  [1] "AnchorS"  "Bass"     "Becks"   
-##  [4] "Corona"   "GordonB"  "Guinness"
-##  [7] "Heineken" "PetesW"   "SamAdams"
-## [10] "SierraN"
+##  [1] "AnchorS"  "Bass"     "Becks"    "Corona"   "GordonB"  "Guinness"
+##  [7] "Heineken" "PetesW"   "SamAdams" "SierraN"
 ```
 
 ```r
-data.frame(beer.1$points, beer = beer_names) %>% 
-    ggplot(aes(x = X1, y = X2, label = beer)) + 
-    geom_point() + geom_text_repel()
+data.frame(beer.1$points,beer=beer_names) %>%
+ggplot(aes(x=X1,y=X2,label=beer))+
+geom_point()+geom_text_repel()
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-59-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
 
      
  
@@ -2502,8 +2337,7 @@ I think Sam Adams and Gordon Biersch, right in the middle of the
 map. We can pull them out by name:
 
 ```r
-beer %>% dplyr::select(SamAdams, GordonB) %>% 
-    print(n = Inf)
+beer %>% dplyr::select(SamAdams,GordonB) %>% print(n=Inf)
 ```
 
 ```
@@ -2555,13 +2389,11 @@ the ratings are whole numbers, they are likely to be duplicated, so I
 
 
 ```r
-ggplot(beer, aes(x = SamAdams, y = GordonB)) + 
-    geom_jitter() + geom_abline(intercept = 0, 
-    slope = 1)
+ggplot(beer,aes(x=SamAdams,y=GordonB))+geom_jitter()+
+geom_abline(intercept=0,slope=1)
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/adkjalkjdsg-1} 
+<img src="23-mds_files/figure-html/adkjalkjdsg-1.png" width="672"  />
 
  
 
@@ -2571,12 +2403,11 @@ different, for example `Becks` and `SierraN`:
 
 
 ```r
-ggplot(beer, aes(x = Becks, y = SierraN)) + geom_jitter() + 
-    geom_abline(intercept = 0, slope = 1)
+ggplot(beer,aes(x=Becks,y=SierraN))+geom_jitter()+
+geom_abline(intercept=0,slope=1)
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/adkjalkjdsh-1} 
+<img src="23-mds_files/figure-html/adkjalkjdsh-1.png" width="672"  />
 
  
 
@@ -2585,15 +2416,13 @@ is to summarize the rating *differences* for the pairs of beers:
 
 
 ```r
-diff = with(beer, SamAdams - GordonB)
+diff=with(beer,SamAdams-GordonB) 
 summary(diff)
 ```
 
 ```
-##    Min. 1st Qu.  Median    Mean 3rd Qu. 
-## -3.0000 -1.0000  0.0000  0.1562  1.0000 
-##    Max. 
-##  6.0000
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -3.0000 -1.0000  0.0000  0.1562  1.0000  6.0000
 ```
 
  
@@ -2602,15 +2431,13 @@ and
 
 
 ```r
-diff = with(beer, Becks - SierraN)
+diff=with(beer,Becks-SierraN)
 summary(diff)
 ```
 
 ```
-##    Min. 1st Qu.  Median    Mean 3rd Qu. 
-##   -8.00   -4.00   -1.50   -1.75    0.00 
-##    Max. 
-##    3.00
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   -8.00   -4.00   -1.50   -1.75    0.00    3.00
 ```
 
  
@@ -2691,44 +2518,38 @@ Solution
 Copied and pasted from last time:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt"
-stimuli = read_delim(my_url, " ", col_names = F)
-objects = stimuli$X1
-names(stimuli) = c("object", objects)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt"
+stimuli=read_delim(my_url," ",col_names=F)
+objects=stimuli$X1
+names(stimuli)=c("object",objects)
 stimuli
 ```
 
 ```
 ## # A tibble: 17 x 18
-##    object innersurfaceofp~ brick cardboard
-##    <chr>             <dbl> <dbl>     <dbl>
-##  1 inner~                0    22        23
-##  2 brick                22     0        27
-##  3 cardb~               23    27         0
-##  4 cork                 24    27        18
-##  5 rubbe~               26    27        19
-##  6 felt                 27    29        28
-##  7 leath~               26    29        23
-##  8 rigid~               23    28        24
-##  9 veryf~               24    16        24
-## 10 nylon~               23    18        29
-## 11 cellu~               23    28        27
-## 12 woven~               18    25        28
-## 13 block~               23    24        21
-## 14 ungla~               21    10        26
-## 15 velvet               28    29        28
-## 16 waxpa~               24    28        24
-## 17 gloss~               22    27        23
-## # ... with 14 more variables: cork <dbl>,
-## #   rubbereraser <dbl>, felt <dbl>,
-## #   leatherwallet <dbl>,
-## #   rigidplasticsheet <dbl>,
-## #   veryfinesandpaper <dbl>,
-## #   nylonscouringpad <dbl>,
-## #   cellulosekitchensponge <dbl>,
-## #   wovenstraw <dbl>,
-## #   blockofstyrofoam <dbl>,
-## #   unglazedceramictile <dbl>, velvet <dbl>,
+##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
+##    <chr>             <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
+##  1 inner…                0    22        23    24           26    27
+##  2 brick                22     0        27    27           27    29
+##  3 cardb…               23    27         0    18           19    28
+##  4 cork                 24    27        18     0           15    28
+##  5 rubbe…               26    27        19    15            0    28
+##  6 felt                 27    29        28    28           28     0
+##  7 leath…               26    29        23    25           20    24
+##  8 rigid…               23    28        24    26           27    28
+##  9 veryf…               24    16        24    28           24    29
+## 10 nylon…               23    18        29    28           27    26
+## 11 cellu…               23    28        27    20           24    26
+## 12 woven…               18    25        28    27           25    29
+## 13 block…               23    24        21    10           19    28
+## 14 ungla…               21    10        26    26           24    29
+## 15 velvet               28    29        28    28           29     4
+## 16 waxpa…               24    28        24    28           24    28
+## 17 gloss…               22    27        23    29           28    29
+## # … with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
+## #   veryfinesandpaper <dbl>, nylonscouringpad <dbl>,
+## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>,
+## #   blockofstyrofoam <dbl>, unglazedceramictile <dbl>, velvet <dbl>,
 ## #   waxpaper <dbl>, glossypaintedwood <dbl>
 ```
 
@@ -2747,8 +2568,8 @@ and just to check:
 
 
 ```r
-w = getOption("width")
-options(width = 132)
+w=getOption("width")
+options(width=132)
 d
 ```
 
@@ -2807,7 +2628,7 @@ d
 ```
 
 ```r
-options(width = w)
+options(width=w)
 ```
 
  
@@ -2823,7 +2644,7 @@ Solution
 
 
 ```r
-stimuli.1 = isoMDS(d)
+stimuli.1=isoMDS(d)
 ```
 
 ```
@@ -2892,65 +2713,29 @@ naming this data frame `d`, in an attempt to avoid
 overwriting things I want to keep:
 
 ```r
-stimuli.1.d = data.frame(stimuli.1$points, names = objects)
+stimuli.1.d=data.frame(stimuli.1$points,names=objects)
 stimuli.1.d
 ```
 
 ```
-##                                 X1
-## innersurfaceofpinebark  -1.5343296
-## brick                  -11.1198228
-## cardboard                3.7481838
-## cork                    -0.8637631
-## rubbereraser             0.9478406
-## felt                     3.7030786
-## leatherwallet            9.5323886
-## rigidplasticsheet       11.3370118
-## veryfinesandpaper      -12.7743812
-## nylonscouringpad        -9.1348586
-## cellulosekitchensponge  -8.2296607
-## wovenstraw              -4.3321533
-## blockofstyrofoam        -3.3540109
-## unglazedceramictile    -10.7345424
-## velvet                   7.0712701
-## waxpaper                14.2695604
-## glossypaintedwood       11.4681889
-##                                 X2
-## innersurfaceofpinebark   1.3163495
-## brick                    4.1255022
-## cardboard               -9.4875599
-## cork                   -11.6740046
-## rubbereraser            -9.9955340
-## felt                    15.0204325
-## leatherwallet           -3.3715939
-## rigidplasticsheet       -0.5134769
-## veryfinesandpaper        1.1092242
-## nylonscouringpad         8.0045364
-## cellulosekitchensponge  -6.3368839
-## wovenstraw               5.1303993
-## blockofstyrofoam        -9.7135472
-## unglazedceramictile     -0.4673140
-## velvet                  15.3712514
-## waxpaper                -0.7584453
-## glossypaintedwood        2.2406642
-##                                         names
-## innersurfaceofpinebark innersurfaceofpinebark
-## brick                                   brick
-## cardboard                           cardboard
-## cork                                     cork
-## rubbereraser                     rubbereraser
-## felt                                     felt
-## leatherwallet                   leatherwallet
-## rigidplasticsheet           rigidplasticsheet
-## veryfinesandpaper           veryfinesandpaper
-## nylonscouringpad             nylonscouringpad
-## cellulosekitchensponge cellulosekitchensponge
-## wovenstraw                         wovenstraw
-## blockofstyrofoam             blockofstyrofoam
-## unglazedceramictile       unglazedceramictile
-## velvet                                 velvet
-## waxpaper                             waxpaper
-## glossypaintedwood           glossypaintedwood
+##                                 X1          X2                  names
+## innersurfaceofpinebark  -1.5343296   1.3163495 innersurfaceofpinebark
+## brick                  -11.1198228   4.1255022                  brick
+## cardboard                3.7481838  -9.4875599              cardboard
+## cork                    -0.8637631 -11.6740046                   cork
+## rubbereraser             0.9478406  -9.9955340           rubbereraser
+## felt                     3.7030786  15.0204325                   felt
+## leatherwallet            9.5323886  -3.3715939          leatherwallet
+## rigidplasticsheet       11.3370118  -0.5134769      rigidplasticsheet
+## veryfinesandpaper      -12.7743812   1.1092242      veryfinesandpaper
+## nylonscouringpad        -9.1348586   8.0045364       nylonscouringpad
+## cellulosekitchensponge  -8.2296607  -6.3368839 cellulosekitchensponge
+## wovenstraw              -4.3321533   5.1303993             wovenstraw
+## blockofstyrofoam        -3.3540109  -9.7135472       blockofstyrofoam
+## unglazedceramictile    -10.7345424  -0.4673140    unglazedceramictile
+## velvet                   7.0712701  15.3712514                 velvet
+## waxpaper                14.2695604  -0.7584453               waxpaper
+## glossypaintedwood       11.4681889   2.2406642      glossypaintedwood
 ```
 
      
@@ -2958,7 +2743,7 @@ stimuli.1.d
 The repeated stimuli down the left are row names, but since they're
 row names, we won't be able to use them in
 `ggplot`.
-\marginnote{Next year, I'll make everyone turn matrices  into data frames first so that we won't deal with old-fashioned data frames, row names and the like.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Next year, I'll make everyone turn matrices  into data frames first so that we won't deal with old-fashioned data frames, row names and the like.</span>
 
 Remember that we are turning a matrix and a column into a data frame,
 so we need either the more forgiving `data.frame`, or to turn
@@ -2966,7 +2751,8 @@ so we need either the more forgiving `data.frame`, or to turn
 
 
 ```r
-as_tibble(stimuli.1$points) %>% mutate(name = objects)
+as_tibble(stimuli.1$points) %>%
+mutate(name=objects)
 ```
 
 ```
@@ -3003,13 +2789,13 @@ so we have all we need:
 
 
 ```r
-ggplot(stimuli.1.d, aes(x = X1, y = X2, label = names)) + 
-    geom_point() + geom_text_repel(size = 2) + 
-    coord_fixed()
+ggplot(stimuli.1.d,aes(x=X1,y=X2,label=names))+
+geom_point()+
+geom_text_repel(size=2)+
+coord_fixed()
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-71-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
 
  
 
@@ -3079,11 +2865,11 @@ The point here is that a high stress *means* that distances
 in real life and on the map won't correspond very well. That's
 what I want you to say.
 Extra: another way to assess this is with a Shepard
-\marginnote{This always      makes me think of the number 190 (now 985) bus, but that's the wrong      spelling. Spelled like this, this is also the name of the      illustrator of the original pre-Disney Winnie-the-Pooh      stories. See https://en.wikipedia.org/wiki/E.-H.-Shepard, replacing the dashes by underscores.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This always      makes me think of the number 190 (now 985) bus, but that's the wrong      spelling. Spelled like this, this is also the name of the      illustrator of the original pre-Disney Winnie-the-Pooh      stories. See https://en.wikipedia.org/wiki/E.-H.-Shepard, replacing the dashes by underscores.</span>
 diagram. That would go like this:
 
 ```r
-stimuli.sh = Shepard(d, stimuli.1$points)
+stimuli.sh=Shepard(d,stimuli.1$points)
 names(stimuli.sh)
 ```
 
@@ -3098,12 +2884,11 @@ distances `y`, making a data frame first:
 
 
 ```r
-with(stimuli.sh, data.frame(x = x, y = y)) %>% 
-    ggplot(aes(x = x, y = y)) + geom_point()
+with(stimuli.sh,data.frame(x=x,y=y)) %>%
+ggplot(aes(x=x,y=y))+geom_point()
 ```
 
-
-\includegraphics{23-mds_files/figure-latex/unnamed-chunk-73-1} 
+<img src="23-mds_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
  
 
@@ -3130,7 +2915,7 @@ three-dimensional map, and compare it with the 20\% that we had
 before. `k=3` gets the three dimensions:
 
 ```r
-isoMDS(d, k = 3)$stress
+isoMDS(d,k=3)$stress
 ```
 
 ```
@@ -3150,7 +2935,7 @@ isoMDS(d, k = 3)$stress
 
 What this does is to obtain the map and throw all of it away except
 for the stress value.
-\marginnote{Which seems like a very SAS way of doing  things.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which seems like a very SAS way of doing  things.</span> 
 
 I think this stress value, just under 10\%, or on the "fair" end of
 "good", is a worthwhile improvement over the just-over-20\% that we
@@ -3160,16 +2945,16 @@ with. You might agree with me, or you might  not: for example, you
 might be looking for a bigger improvement. Either is good, as far as
 I'm concerned, as long as your answer does something to balance the
 smaller stress value
-\marginnote{Using more dimensions will  *certainly* decrease the stress, in the same way that adding  an $x$-variable to a regression will increase R-squared; it's the  same issue, of whether the change is big enough to be worth having.} with the difficulty of interpreting it.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Using more dimensions will  *certainly* decrease the stress, in the same way that adding  an $x$-variable to a regression will increase R-squared; it's the  same issue, of whether the change is big enough to be worth having.</span> with the difficulty of interpreting it.
 
 The kind of `rgl` code you'll need is something like this (not tested):
 
 
 ```r
 library(rgl)
-stimuli.2 = isoMDS(d, k = 3)$points
+stimuli.2=isoMDS(d,k=3)$points
 plot3d(stimuli.2)
-text3d(stimuli.2, text = object.abb)
+text3d(stimuli.2,text=object.abb)
 ```
 
  

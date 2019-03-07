@@ -321,12 +321,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="dates-and-times" class="section level1">
 <h1><span class="header-section-number">Chapter 14</span> Dates and times</h1>
 <p>The usual to begin with:</p>
-<div class="sourceCode" id="cb1679"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1679-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb1678"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1678-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.3.0
-## ✔ tibble  2.0.1     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.2     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## ✔ ggplot2 3.1.0       ✔ purrr   0.3.1  
+## ✔ tibble  2.0.1       ✔ dplyr   0.8.0.1
+## ✔ tidyr   0.8.3       ✔ stringr 1.4.0  
+## ✔ readr   1.3.1       ✔ forcats 0.3.0</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
@@ -346,8 +346,8 @@ that what it should be?</li>
 </ol>
 <p>Solution</p>
 <p>This is <code>read_delim</code>:</p>
-<div class="sourceCode" id="cb1683"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1683-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/whas500.txt&quot;</span></a>
-<a class="sourceLine" id="cb1683-2" data-line-number="2">whas=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1682"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1682-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/whas500.txt&quot;</span></a>
+<a class="sourceLine" id="cb1682-2" data-line-number="2">whas=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   .default = col_double(),
@@ -356,7 +356,7 @@ that what it should be?</li>
 ##   fdate = col_character()
 ## )</code></pre>
 <pre><code>## See spec(...) for full column specifications.</code></pre>
-<div class="sourceCode" id="cb1686"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1686-1" data-line-number="1">whas</a></code></pre></div>
+<div class="sourceCode" id="cb1685"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1685-1" data-line-number="1">whas</a></code></pre></div>
 <pre><code>## # A tibble: 500 x 22
 ##       id   age gender    hr sysbp diasbp   bmi   cvd   afb   sho   chf
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -394,7 +394,7 @@ demonstrate that it worked.</li>
 </ol>
 <p>Solution</p>
 <p>Load <code>lubridate</code> first:</p>
-<div class="sourceCode" id="cb1688"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1688-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a></code></pre></div>
+<div class="sourceCode" id="cb1687"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1687-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;lubridate&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:base&#39;:
@@ -402,10 +402,10 @@ demonstrate that it worked.</li>
 ##     date</code></pre>
 <p>These dates are day-month-year, so we need <code>dmy</code> from
 <code>lubridate</code>:</p>
-<div class="sourceCode" id="cb1691"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1691-1" data-line-number="1">whas2=whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">admit=</span><span class="kw">dmy</span>(admitdate),</a>
-<a class="sourceLine" id="cb1691-2" data-line-number="2"><span class="dt">dis=</span><span class="kw">dmy</span>(disdate),</a>
-<a class="sourceLine" id="cb1691-3" data-line-number="3"><span class="dt">f=</span><span class="kw">dmy</span>(fdate)) </a>
-<a class="sourceLine" id="cb1691-4" data-line-number="4"><span class="kw">glimpse</span>(whas2)</a></code></pre></div>
+<div class="sourceCode" id="cb1690"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1690-1" data-line-number="1">whas2=whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">admit=</span><span class="kw">dmy</span>(admitdate),</a>
+<a class="sourceLine" id="cb1690-2" data-line-number="2"><span class="dt">dis=</span><span class="kw">dmy</span>(disdate),</a>
+<a class="sourceLine" id="cb1690-3" data-line-number="3"><span class="dt">f=</span><span class="kw">dmy</span>(fdate)) </a>
+<a class="sourceLine" id="cb1690-4" data-line-number="4"><span class="kw">glimpse</span>(whas2)</a></code></pre></div>
 <pre><code>## Observations: 500
 ## Variables: 25
 ## $ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,…
@@ -451,7 +451,16 @@ these columns’ names all end in <code>date</code> and they are the only
 ones that do, so we can use a “select helper” to select only them,
 and then submit all of them to a <code>mutate</code> via <code>mutate_at</code>,
 which goes like this:</p>
-<div class="sourceCode" id="cb1693"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1693-1" data-line-number="1">whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">ends_with</span>(<span class="st">&quot;date&quot;</span>)),<span class="kw">funs</span>(<span class="dt">d=</span>dmy)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glimpse</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1692"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1692-1" data-line-number="1">whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">ends_with</span>(<span class="st">&quot;date&quot;</span>)),<span class="kw">funs</span>(<span class="dt">d=</span>dmy)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glimpse</span>()</a></code></pre></div>
+<pre><code>## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## please use list() instead
+## 
+## # Before:
+## funs(name = f(.)
+## 
+## # After: 
+## list(name = ~f(.))
+## This warning is displayed once per session.</code></pre>
 <pre><code>## Observations: 500
 ## Variables: 25
 ## $ id          &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1…

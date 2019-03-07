@@ -29,32 +29,32 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v tibble  2.0.1     v purrr   0.3.0
-## v tidyr   0.8.2     v dplyr   0.7.8
-## v readr   1.3.1     v stringr 1.4.0
-## v tibble  2.0.1     v forcats 0.3.0
+## ✔ tibble  2.0.1       ✔ purrr   0.3.1  
+## ✔ tidyr   0.8.3       ✔ dplyr   0.8.0.1
+## ✔ readr   1.3.1       ✔ stringr 1.4.0  
+## ✔ tibble  2.0.1       ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::arrange()    masks plyr::arrange()
-## x readr::col_factor() masks scales::col_factor()
-## x purrr::compact()    masks plyr::compact()
-## x dplyr::count()      masks plyr::count()
-## x purrr::discard()    masks scales::discard()
-## x dplyr::failwith()   masks plyr::failwith()
-## x dplyr::filter()     masks stats::filter()
-## x dplyr::id()         masks plyr::id()
-## x dplyr::lag()        masks stats::lag()
-## x dplyr::mutate()     masks plyr::mutate()
-## x dplyr::rename()     masks plyr::rename()
-## x dplyr::select()     masks MASS::select()
-## x dplyr::summarise()  masks plyr::summarise()
-## x dplyr::summarize()  masks plyr::summarize()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::arrange()    masks plyr::arrange()
+## ✖ readr::col_factor() masks scales::col_factor()
+## ✖ purrr::compact()    masks plyr::compact()
+## ✖ dplyr::count()      masks plyr::count()
+## ✖ purrr::discard()    masks scales::discard()
+## ✖ dplyr::failwith()   masks plyr::failwith()
+## ✖ dplyr::filter()     masks stats::filter()
+## ✖ dplyr::id()         masks plyr::id()
+## ✖ dplyr::lag()        masks stats::lag()
+## ✖ dplyr::mutate()     masks plyr::mutate()
+## ✖ dplyr::rename()     masks plyr::rename()
+## ✖ dplyr::select()     masks MASS::select()
+## ✖ dplyr::summarise()  masks plyr::summarise()
+## ✖ dplyr::summarize()  masks plyr::summarize()
 ```
 
 
@@ -144,8 +144,8 @@ I saved in
 [link](http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt):
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt"
-fruit1 = read_table(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt"
+fruit1=read_table(my_url)
 ```
 
 ```
@@ -162,19 +162,17 @@ fruit1 = read_table(my_url)
 ```
 
 ```r
-fruit1
+fruit1 
 ```
 
 ```
 ## # A tibble: 4 x 7
-##   Property Apple Orange Banana  Pear
-##   <chr>    <dbl>  <dbl>  <dbl> <dbl>
-## 1 Round.s~     1      1      0     0
-## 2 Sweet        1      1      0     0
-## 3 Crunchy      1      0      0     1
-## 4 Berry        0      0      0     0
-## # ... with 2 more variables:
-## #   Strawberry <dbl>, Blueberry <dbl>
+##   Property    Apple Orange Banana  Pear Strawberry Blueberry
+##   <chr>       <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
+## 1 Round.shape     1      1      0     0          0         1
+## 2 Sweet           1      1      0     0          1         0
+## 3 Crunchy         1      0      0     1          0         0
+## 4 Berry           0      0      0     0          1         1
 ```
 
      
@@ -189,13 +187,12 @@ fruit2
 
 ```
 ## # A tibble: 4 x 6
-##   Apple Orange Banana  Pear Strawberry
-##   <dbl>  <dbl>  <dbl> <dbl>      <dbl>
-## 1     1      1      0     0          0
-## 2     1      1      0     0          1
-## 3     1      0      0     1          0
-## 4     0      0      0     0          1
-## # ... with 1 more variable: Blueberry <dbl>
+##   Apple Orange Banana  Pear Strawberry Blueberry
+##   <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
+## 1     1      1      0     0          0         1
+## 2     1      1      0     0          1         0
+## 3     1      0      0     1          0         0
+## 4     0      0      0     0          1         1
 ```
 
  
@@ -213,11 +210,11 @@ Here's where we are at so far:
 
 
 ```r
-fruit_m = matrix(-1, 6, 6)
+fruit_m=matrix(-1,6,6)
 for (i in 1:6) {
-    for (j in 1:6) {
-        fruit_m[i, j] = 3  # dissim between fruit i and fruit j
-    }
+for (j in 1:6) {
+fruit_m[i,j]=3 # dissim between fruit i and fruit j
+}
 }
 ```
 
@@ -231,12 +228,12 @@ columns from:
 
 
 ```r
-dissim = function(i, j, d) {
-    x = d %>% select(i)
-    y = d %>% select(j)
-    sum(x != y)
+dissim=function(i,j,d) {
+x = d %>% select(i)
+y = d %>% select(j)
+sum(x!=y)
 }
-dissim(1, 2, fruit2)
+dissim(1,2,fruit2)
 ```
 
 ```
@@ -264,11 +261,11 @@ function (having put some thought into getting it right):
 
 
 ```r
-fruit_m = matrix(-1, 6, 6)
+fruit_m=matrix(-1,6,6)
 for (i in 1:6) {
-    for (j in 1:6) {
-        fruit_m[i, j] = dissim(i, j, fruit2)
-    }
+for (j in 1:6) {
+fruit_m[i,j]=dissim(i,j,fruit2)
+}
 }
 fruit_m
 ```
@@ -292,27 +289,20 @@ fruit names from `fruit2`:
 
 
 ```r
-fruit_names = names(fruit2)
-rownames(fruit_m) = fruit_names
-colnames(fruit_m) = fruit_names
+fruit_names=names(fruit2)
+rownames(fruit_m)=fruit_names
+colnames(fruit_m)=fruit_names
 fruit_m
 ```
 
 ```
-##            Apple Orange Banana Pear
-## Apple          0      1      3    2
-## Orange         1      0      2    3
-## Banana         3      2      0    1
-## Pear           2      3      1    0
-## Strawberry     3      2      2    3
-## Blueberry      3      2      2    3
-##            Strawberry Blueberry
-## Apple               3         3
-## Orange              2         2
-## Banana              2         2
-## Pear                3         3
-## Strawberry          0         2
-## Blueberry           2         0
+##            Apple Orange Banana Pear Strawberry Blueberry
+## Apple          0      1      3    2          3         3
+## Orange         1      0      2    3          2         2
+## Banana         3      2      0    1          2         2
+## Pear           2      3      1    0          3         3
+## Strawberry     3      2      2    3          0         2
+## Blueberry      3      2      2    3          2         0
 ```
 
  
@@ -326,7 +316,7 @@ each other, which is `crossing`:
 
 
 ```r
-combos = crossing(fruit = fruit_names, other = fruit_names)
+combos=crossing(fruit=fruit_names,other=fruit_names)
 combos
 ```
 
@@ -344,7 +334,7 @@ combos
 ##  8 Banana Banana    
 ##  9 Banana Blueberry 
 ## 10 Banana Orange    
-## # ... with 26 more rows
+## # … with 26 more rows
 ```
 
  
@@ -355,12 +345,12 @@ use the function we had before, *unmodified*! How? Take a look:
 
 
 ```r
-dissim = function(i, j, d) {
-    x = d %>% select(i)
-    y = d %>% select(j)
-    sum(x != y)
+dissim=function(i,j,d) {
+x = d %>% select(i)
+y = d %>% select(j)
+sum(x!=y)
 }
-dissim("Apple", "Orange", fruit2)
+dissim("Apple","Orange",fruit2)
 ```
 
 ```
@@ -380,8 +370,7 @@ dissimilarity is a whole number each time, so we need
 
 
 ```r
-combos %>% mutate(dissim = map2_int(fruit, other, 
-    dissim, fruit2))
+combos %>% mutate(dissim=map2_int(fruit,other,dissim,fruit2))
 ```
 
 ```
@@ -398,7 +387,7 @@ combos %>% mutate(dissim = map2_int(fruit, other,
 ##  8 Banana Banana          0
 ##  9 Banana Blueberry       2
 ## 10 Banana Orange          2
-## # ... with 26 more rows
+## # … with 26 more rows
 ```
 
  
@@ -413,23 +402,22 @@ square array:
 
 
 ```r
-fruit_spread = combos %>% mutate(dissim = map2_int(fruit, 
-    other, dissim, fruit2)) %>% spread(other, 
-    dissim)
+fruit_spread = combos %>% 
+mutate(dissim=map2_int(fruit,other,dissim,fruit2)) %>%
+spread(other,dissim)
 fruit_spread
 ```
 
 ```
 ## # A tibble: 6 x 7
-##   fruit Apple Banana Blueberry Orange  Pear
-##   <chr> <int>  <int>     <int>  <int> <int>
-## 1 Apple     0      3         3      1     2
-## 2 Bana~     3      0         2      2     1
-## 3 Blue~     3      2         0      2     3
-## 4 Oran~     1      2         2      0     3
-## 5 Pear      2      1         3      3     0
-## 6 Stra~     3      2         2      2     3
-## # ... with 1 more variable: Strawberry <int>
+##   fruit      Apple Banana Blueberry Orange  Pear Strawberry
+##   <chr>      <int>  <int>     <int>  <int> <int>      <int>
+## 1 Apple          0      3         3      1     2          3
+## 2 Banana         3      0         2      2     1          2
+## 3 Blueberry      3      2         0      2     3          2
+## 4 Orange         1      2         2      0     3          2
+## 5 Pear           2      1         3      3     0          3
+## 6 Strawberry     3      2         2      2     3          0
 ```
 
  
@@ -449,7 +437,7 @@ save yours into a file, let's start from there. Mine is aligned
 columns: 
 
 ```r
-dissims = read_table("fruits.txt")
+dissims=read_table("fruits.txt")
 ```
 
 ```
@@ -471,15 +459,14 @@ dissims
 
 ```
 ## # A tibble: 6 x 7
-##   fruit Apple Orange Banana  Pear Strawberry
-##   <chr> <dbl>  <dbl>  <dbl> <dbl>      <dbl>
-## 1 Apple     0      1      3     2          3
-## 2 Oran~     1      0      2     3          2
-## 3 Bana~     3      2      0     1          2
-## 4 Pear      2      3      1     0          3
-## 5 Stra~     3      2      2     3          0
-## 6 Blue~     3      2      2     3          2
-## # ... with 1 more variable: Blueberry <dbl>
+##   fruit      Apple Orange Banana  Pear Strawberry Blueberry
+##   <chr>      <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
+## 1 Apple          0      1      3     2          3         3
+## 2 Orange         1      0      2     3          2         2
+## 3 Banana         3      2      0     1          2         2
+## 4 Pear           2      3      1     0          3         3
+## 5 Strawberry     3      2      2     3          0         2
+## 6 Blueberry      3      2      2     3          2         0
 ```
 
       
@@ -490,23 +477,18 @@ the columns:
 
 
 ```r
-d = dissims %>% select(-fruit) %>% as.dist()
+d = dissims %>% select(-fruit) %>%
+as.dist()
 d
 ```
 
 ```
-##            Apple Orange Banana Pear
-## Orange         1                   
-## Banana         3      2            
-## Pear           2      3      1     
-## Strawberry     3      2      2    3
-## Blueberry      3      2      2    3
-##            Strawberry
-## Orange               
-## Banana               
-## Pear                 
-## Strawberry           
-## Blueberry           2
+##            Apple Orange Banana Pear Strawberry
+## Orange         1                              
+## Banana         3      2                       
+## Pear           2      3      1                
+## Strawberry     3      2      2    3           
+## Blueberry      3      2      2    3          2
 ```
 
 
@@ -519,13 +501,11 @@ as.dist(dissims)
 ```
 
 ```
-## Warning in storage.mode(m) <- "numeric": NAs
-## introduced by coercion
+## Warning in storage.mode(m) <- "numeric": NAs introduced by coercion
 ```
 
 ```
-## Warning in as.dist.default(dissims): non-
-## square matrix
+## Warning in as.dist.default(dissims): non-square matrix
 ```
 
 ```
@@ -545,12 +525,11 @@ we did before, so we don't want to do that now.
 Now, after all that work, the actual cluster analysis and dendrogram:
 
 ```r
-fruits.1 = hclust(d, method = "complete")
+fruits.1=hclust(d,method="complete")
 plot(fruits.1)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/hkadh-1} 
+<img src="22-thingy_files/figure-html/hkadh-1.png" width="672"  />
 
      
  
@@ -598,22 +577,21 @@ cluster, and take the maximum of those. Besides, if your
 dissimilarities are different from mine, your complete-linkage
 distance could be different from mine also. The grader will have
 to use her judgement!
-\marginnote{That's two cups of coffee I owe the      grader now.}  
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That's two cups of coffee I owe the      grader now.</span>  
 The important point is that you assess the dissimilarities between
 fruits in one cluster and fruits in the other. The dissimilarities
 between fruits in the same cluster don't enter into it.
-\marginnote{I      now have a mental image of John Cleese saying *it don't enter      into it* in the infamous Dead Parrot sketch,      https://www.youtube.com/watch?v=4vuW6tQ0218}. Not to      mention       *Ow to defend yourself against an assailant armed with fresh      fruit*, https://www.youtube.com/watch?v=piWCBOsJr-w}.    }
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I      now have a mental image of John Cleese saying *it don't enter      into it* in the infamous Dead Parrot sketch,      https://www.youtube.com/watch?v=4vuW6tQ0218}. Not to      mention       *Ow to defend yourself against an assailant armed with fresh      fruit*, https://www.youtube.com/watch?v=piWCBOsJr-w}.    </span>
 As it happens, all my complete-linkage distances between clusters
 (of at least 2 fruits) are 3. The single-linkage ones are
 different, though:
 
 ```r
-fruits.2 = hclust(d, method = "single")
+fruits.2=hclust(d,method="single")
 plot(fruits.2)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/lhsdjhad-1} 
+<img src="22-thingy_files/figure-html/lhsdjhad-1.png" width="672"  />
 
      
 
@@ -646,8 +624,8 @@ Solution
 Nothing much new here:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/species.txt"
-species = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/species.txt"
+species=read_delim(my_url," ")
 ```
 
 ```
@@ -671,18 +649,16 @@ species
 
 ```
 ## # A tibble: 8 x 9
-##   what    Man Monkey Horse   Pig Pigeon  Tuna
-##   <chr> <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl>
-## 1 Man       0      1    17    13     16    31
-## 2 Monk~     1      0    16    12     15    32
-## 3 Horse    17     16     0     5     16    27
-## 4 Pig      13     12     5     0     13    25
-## 5 Pige~    16     15    16    13      0    27
-## 6 Tuna     31     32    27    25     27     0
-## 7 Mould    63     62    64    64     59    72
-## 8 Fung~    66     65    68    67     66    69
-## # ... with 2 more variables: Mould <dbl>,
-## #   Fungus <dbl>
+##   what     Man Monkey Horse   Pig Pigeon  Tuna Mould Fungus
+##   <chr>  <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>  <dbl>
+## 1 Man        0      1    17    13     16    31    63     66
+## 2 Monkey     1      0    16    12     15    32    62     65
+## 3 Horse     17     16     0     5     16    27    64     68
+## 4 Pig       13     12     5     0     13    25    64     67
+## 5 Pigeon    16     15    16    13      0    27    59     66
+## 6 Tuna      31     32    27    25     27     0    72     69
+## 7 Mould     63     62    64    64     59    72     0     61
+## 8 Fungus    66     65    68    67     66    69    61      0
 ```
 
      
@@ -714,27 +690,21 @@ this is a job for `as.dist`, which merely changes how it
 looks. Use a pipeline to get rid of the first column first:
 
 ```r
-d = species %>% select(-what) %>% as.dist()
+d = species %>%
+select(-what) %>% 
+as.dist()
 d
 ```
 
 ```
-##        Man Monkey Horse Pig Pigeon Tuna
-## Monkey   1                             
-## Horse   17     16                      
-## Pig     13     12     5                
-## Pigeon  16     15    16  13            
-## Tuna    31     32    27  25     27     
-## Mould   63     62    64  64     59   72
-## Fungus  66     65    68  67     66   69
-##        Mould
-## Monkey      
-## Horse       
-## Pig         
-## Pigeon      
-## Tuna        
-## Mould       
-## Fungus    61
+##        Man Monkey Horse Pig Pigeon Tuna Mould
+## Monkey   1                                   
+## Horse   17     16                            
+## Pig     13     12     5                      
+## Pigeon  16     15    16  13                  
+## Tuna    31     32    27  25     27           
+## Mould   63     62    64  64     59   72      
+## Fungus  66     65    68  67     66   69    61
 ```
 
 
@@ -750,26 +720,20 @@ This also works, to select only the numerical columns:
 
 
 ```r
-species %>% select_if(is.numeric) %>% as.dist()
+species %>%
+select_if(is.numeric) %>%
+as.dist()
 ```
 
 ```
-##        Man Monkey Horse Pig Pigeon Tuna
-## Monkey   1                             
-## Horse   17     16                      
-## Pig     13     12     5                
-## Pigeon  16     15    16  13            
-## Tuna    31     32    27  25     27     
-## Mould   63     62    64  64     59   72
-## Fungus  66     65    68  67     66   69
-##        Mould
-## Monkey      
-## Horse       
-## Pig         
-## Pigeon      
-## Tuna        
-## Mould       
-## Fungus    61
+##        Man Monkey Horse Pig Pigeon Tuna Mould
+## Monkey   1                                   
+## Horse   17     16                            
+## Pig     13     12     5                      
+## Pigeon  16     15    16  13                  
+## Tuna    31     32    27  25     27           
+## Mould   63     62    64  64     59   72      
+## Fungus  66     65    68  67     66   69    61
 ```
 
  
@@ -807,12 +771,11 @@ Solution
 Something like this:
 
 ```r
-species.1 = hclust(d, method = "single")
+species.1=hclust(d,method="single")
 plot(species.1)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-18-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
      
     
@@ -828,12 +791,11 @@ Not much changes  here in the code, but the result is noticeably
 different:
 
 ```r
-species.2 = hclust(d, method = "ward.D")
+species.2=hclust(d,method="ward.D")
 plot(species.2)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-19-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
   
 
@@ -866,7 +828,7 @@ the most part, groups are formed first and then joined onto other
 groups. For example, in Ward's method, mould and fungus are joined
 earlier, and also the man-monkey group is joined to the
 pigeon-horse-pig group.
-\marginnote{Tuna is an exception, but usually Ward    tends to join fairly dissimilar things that are nonetheless more    similar to each other than to anything else. This is like    Hungarian and Finnish in the example in class: they are very    dissimilar languages, but they are more similar to each other than    to anything else.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Tuna is an exception, but usually Ward    tends to join fairly dissimilar things that are nonetheless more    similar to each other than to anything else. This is like    Hungarian and Finnish in the example in class: they are very    dissimilar languages, but they are more similar to each other than    to anything else.</span>
 You might prefer to look at the specifics of what gets joined. I
 think the principal difference from this angle is that mould and
 fungus get joined together (much) earlier in Ward. Also, pigeon
@@ -894,11 +856,10 @@ clusters, that would look like this:
 
 ```r
 plot(species.2)
-rect.hclust(species.2, 2)
+rect.hclust(species.2,2)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-20-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
  
 
@@ -910,11 +871,10 @@ Or we could go to the other end of the scale:
 
 ```r
 plot(species.2)
-rect.hclust(species.2, 5)
+rect.hclust(species.2,5)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-21-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
  
 
@@ -935,14 +895,12 @@ Solution
 This is `cutree`. For 2 clusters it would be this:
 
 ```r
-cutree(species.2, 2)
+cutree(species.2,2)
 ```
 
 ```
-##    Man Monkey  Horse    Pig Pigeon   Tuna 
-##      1      1      1      1      1      1 
-##  Mould Fungus 
-##      2      2
+##    Man Monkey  Horse    Pig Pigeon   Tuna  Mould Fungus 
+##      1      1      1      1      1      1      2      2
 ```
 
      
@@ -951,14 +909,12 @@ For 5 it would be this:
 
 
 ```r
-cutree(species.2, 5)
+cutree(species.2,5)
 ```
 
 ```
-##    Man Monkey  Horse    Pig Pigeon   Tuna 
-##      1      1      2      2      2      3 
-##  Mould Fungus 
-##      4      5
+##    Man Monkey  Horse    Pig Pigeon   Tuna  Mould Fungus 
+##      1      1      2      2      2      3      4      5
 ```
 
  
@@ -1017,8 +973,8 @@ Data values are aligned in columns, but the column headers are
 not aligned with them, so `read_table2`:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
-beer = read_table2(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
+beer=read_table2(my_url)
 ```
 
 ```
@@ -1044,22 +1000,19 @@ beer
 
 ```
 ## # A tibble: 32 x 11
-##    student AnchorS  Bass Becks Corona GordonB
-##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>
-##  1 S001          5     9     7      1       7
-##  2 S008          7     5     6      8       8
-##  3 S015          7     7     5      6       6
-##  4 S022          7     7     5      2       5
-##  5 S029          9     7     3      1       6
-##  6 S036          7     6     4      3       7
-##  7 S043          5     5     5      6       6
-##  8 S050          5     3     1      5       5
-##  9 S057          9     3     2      6       4
-## 10 S064          2     6     6      5       6
-## # ... with 22 more rows, and 5 more
-## #   variables: Guinness <dbl>,
-## #   Heineken <dbl>, PetesW <dbl>,
-## #   SamAdams <dbl>, SierraN <dbl>
+##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
+##  1 S001          5     9     7      1       7        6        6      5
+##  2 S008          7     5     6      8       8        4        8      8
+##  3 S015          7     7     5      6       6        1        8      4
+##  4 S022          7     7     5      2       5        8        4      6
+##  5 S029          9     7     3      1       6        8        2      7
+##  6 S036          7     6     4      3       7        6        6      5
+##  7 S043          5     5     5      6       6        4        7      5
+##  8 S050          5     3     1      5       5        5        3      5
+##  9 S057          9     3     2      6       4        6        1      5
+## 10 S064          2     6     6      5       6        4        8      4
+## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
 ```
 
        
@@ -1083,7 +1036,9 @@ things that are already distances). We need to skip the first
 column, since those are student identifiers:
 
 ```r
-d = beer %>% select(-student) %>% dist()
+d = beer %>%
+select(-student) %>%
+dist()
 glimpse(d)
 ```
 
@@ -1129,7 +1084,10 @@ Solution
 Again, omit the first column. The pipeline code looks a bit weird:
 
 ```r
-d = beer %>% select(-student) %>% t() %>% dist()
+d = beer %>%
+select(-student) %>%
+t() %>%
+dist()
 ```
 
    
@@ -1140,7 +1098,7 @@ that you can also refer to columns by number:
 
 ```r
 beer2 = beer %>% select(-1)
-d = dist(t(beer2))
+d=dist(t(beer2))
 ```
 
  
@@ -1153,36 +1111,26 @@ d
 ```
 
 ```
-##           AnchorS     Bass    Becks   Corona
-## Bass     15.19868                           
-## Becks    16.09348 13.63818                  
-## Corona   20.02498 17.83255 17.54993         
-## GordonB  13.96424 11.57584 14.42221 13.34166
-## Guinness 14.93318 13.49074 16.85230 20.59126
-## Heineken 20.66398 15.09967 13.78405 14.89966
-## PetesW   11.78983 14.00000 16.37071 17.72005
-## SamAdams 14.62874 11.61895 14.73092 14.93318
-## SierraN  12.60952 15.09967 17.94436 16.97056
-##           GordonB Guinness Heineken   PetesW
-## Bass                                        
-## Becks                                       
-## Corona                                      
-## GordonB                                     
-## Guinness 14.76482                           
-## Heineken 14.07125 18.54724                  
-## PetesW   11.57584 14.28286 19.49359         
-## SamAdams 10.90871 15.90597 14.52584 14.45683
-## SierraN  11.74734 13.34166 19.07878 13.41641
-##          SamAdams
-## Bass             
-## Becks            
-## Corona           
-## GordonB          
-## Guinness         
-## Heineken         
-## PetesW           
-## SamAdams         
-## SierraN  12.12436
+##           AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken
+## Bass     15.19868                                                      
+## Becks    16.09348 13.63818                                             
+## Corona   20.02498 17.83255 17.54993                                    
+## GordonB  13.96424 11.57584 14.42221 13.34166                           
+## Guinness 14.93318 13.49074 16.85230 20.59126 14.76482                  
+## Heineken 20.66398 15.09967 13.78405 14.89966 14.07125 18.54724         
+## PetesW   11.78983 14.00000 16.37071 17.72005 11.57584 14.28286 19.49359
+## SamAdams 14.62874 11.61895 14.73092 14.93318 10.90871 15.90597 14.52584
+## SierraN  12.60952 15.09967 17.94436 16.97056 11.74734 13.34166 19.07878
+##            PetesW SamAdams
+## Bass                      
+## Becks                     
+## Corona                    
+## GordonB                   
+## Guinness                  
+## Heineken                  
+## PetesW                    
+## SamAdams 14.45683         
+## SierraN  13.41641 12.12436
 ```
 
  
@@ -1213,12 +1161,11 @@ Solution
 This:
 
 ```r
-beer.1 = hclust(d, method = "ward.D")
+beer.1=hclust(d,method="ward.D")
 plot(beer.1)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/khas-1} 
+<img src="22-thingy_files/figure-html/khas-1.png" width="672"  />
 
        
  
@@ -1260,22 +1207,19 @@ beer
 
 ```
 ## # A tibble: 32 x 11
-##    student AnchorS  Bass Becks Corona GordonB
-##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>
-##  1 S001          5     9     7      1       7
-##  2 S008          7     5     6      8       8
-##  3 S015          7     7     5      6       6
-##  4 S022          7     7     5      2       5
-##  5 S029          9     7     3      1       6
-##  6 S036          7     6     4      3       7
-##  7 S043          5     5     5      6       6
-##  8 S050          5     3     1      5       5
-##  9 S057          9     3     2      6       4
-## 10 S064          2     6     6      5       6
-## # ... with 22 more rows, and 5 more
-## #   variables: Guinness <dbl>,
-## #   Heineken <dbl>, PetesW <dbl>,
-## #   SamAdams <dbl>, SierraN <dbl>
+##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
+##  1 S001          5     9     7      1       7        6        6      5
+##  2 S008          7     5     6      8       8        4        8      8
+##  3 S015          7     7     5      6       6        1        8      4
+##  4 S022          7     7     5      2       5        8        4      6
+##  5 S029          9     7     3      1       6        8        2      7
+##  6 S036          7     6     4      3       7        6        6      5
+##  7 S043          5     5     5      6       6        4        7      5
+##  8 S050          5     3     1      5       5        5        3      5
+##  9 S057          9     3     2      6       4        6        1      5
+## 10 S064          2     6     6      5       6        4        8      4
+## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
 ```
 
        
@@ -1324,17 +1268,17 @@ Off we go:
 
 
 ```r
-beer %>% gather(name, rating, AnchorS:SierraN) %>% 
-    mutate(beer.type = ifelse(name %in% c("AnchorS", 
-        "PetesW", "Guinness", "SierraN"), "dark", 
-        "light")) %>% group_by(student, beer.type) %>% 
-    summarize(mean.rat = mean(rating)) %>% spread(beer.type, 
-    mean.rat) %>% ggplot(aes(x = dark, y = light)) + 
-    geom_point()
+beer %>%
+gather(name,rating,AnchorS:SierraN) %>%
+mutate(beer.type=ifelse(name %in%
+c("AnchorS","PetesW","Guinness","SierraN"),"dark","light")) %>%
+group_by(student,beer.type) %>%
+summarize(mean.rat=mean(rating)) %>%
+spread(beer.type,mean.rat) %>%
+ggplot(aes(x=dark,y=light))+geom_point()
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/iyrpoydf-1} 
+<img src="22-thingy_files/figure-html/iyrpoydf-1.png" width="672"  />
 
  
 
@@ -1365,11 +1309,10 @@ Solution
 
 ```r
 plot(beer.1)
-rect.hclust(beer.1, 2)
+rect.hclust(beer.1,2)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/sdkjdh-1} 
+<img src="22-thingy_files/figure-html/sdkjdh-1.png" width="672"  />
 
        
 
@@ -1378,11 +1321,10 @@ Or if you prefer 5 clusters, like this:
 
 ```r
 plot(beer.1)
-rect.hclust(beer.1, 5)
+rect.hclust(beer.1,5)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/ljashkjsdah-1} 
+<img src="22-thingy_files/figure-html/ljashkjsdah-1.png" width="672"  />
 
  
 
@@ -1392,7 +1334,7 @@ with your preferred number of clusters from the previous part, I'm good.
 
 (h) Obtain a K-means
 clustering
-\marginnote{If we haven't done this in class yet, skip the      rest of the question, and the following question, for now and      come back to it next week.} with 2 clusters. 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If we haven't done this in class yet, skip the      rest of the question, and the following question, for now and      come back to it next week.</span> with 2 clusters. 
 Note that you will need to use the (transposed) 
 *original  data*, not the distances. Use a suitably large value of
 `nstart`. (The data are ratings all on the same scale, so
@@ -1408,8 +1350,9 @@ Solution
 I used 20 for `nstart`. This is the pipe way:
 
 ```r
-beer.2 = beer %>% select(-1) %>% t() %>% kmeans(2, 
-    nstart = 20)
+beer.2 = beer %>% select(-1) %>%
+t() %>%
+kmeans(2,nstart=20)
 ```
 
        
@@ -1453,15 +1396,15 @@ The cluster numbers of each beer are these:
 
 
 ```r
-clus = beer.2$cluster
+clus=beer.2$cluster
 clus
 ```
 
 ```
-##  AnchorS     Bass    Becks   Corona  GordonB 
-##        1        2        2        2        2 
-## Guinness Heineken   PetesW SamAdams  SierraN 
-##        1        2        1        2        1
+##  AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken   PetesW 
+##        1        2        2        2        2        1        2        1 
+## SamAdams  SierraN 
+##        2        1
 ```
 
   
@@ -1474,10 +1417,10 @@ sort(clus)
 ```
 
 ```
-##  AnchorS Guinness   PetesW  SierraN     Bass 
-##        1        1        1        1        2 
-##    Becks   Corona  GordonB Heineken SamAdams 
-##        2        2        2        2        2
+##  AnchorS Guinness   PetesW  SierraN     Bass    Becks   Corona  GordonB 
+##        1        1        1        1        2        2        2        2 
+## Heineken SamAdams 
+##        2        2
 ```
 
  
@@ -1486,8 +1429,9 @@ Or, make a data frame:
 
 
 ```r
-dd = tibble(cluster = beer.2$cluster, beer = names(beer.2$cluster)) %>% 
-    arrange(cluster)
+dd=tibble(cluster=beer.2$cluster,
+beer=names(beer.2$cluster)) %>%
+arrange(cluster)
 dd
 ```
 
@@ -1559,8 +1503,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/seabed1.csv"
-seabed = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/seabed1.csv"
+seabed=read_csv(my_url)
 ```
 
 ```
@@ -1580,27 +1524,22 @@ seabed
 
 ```
 ## # A tibble: 30 x 30
-##       s1    s2    s3    s4    s5    s6    s7
-##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 0     0.457 0.296 0.467 0.477 0.522 0.455
-##  2 0.457 0     0.481 0.556 0.348 0.229 0.415
-##  3 0.296 0.481 0     0.467 0.508 0.522 0.491
-##  4 0.467 0.556 0.467 0     0.786 0.692 0.870
-##  5 0.477 0.348 0.508 0.786 0     0.419 0.212
-##  6 0.522 0.229 0.522 0.692 0.419 0     0.509
-##  7 0.455 0.415 0.491 0.870 0.212 0.509 0    
-##  8 0.933 0.930 1     1     0.854 0.933 0.806
-##  9 0.333 0.222 0.407 0.639 0.196 0.243 0.317
-## 10 0.403 0.447 0.343 0.379 0.564 0.571 0.588
-## # ... with 20 more rows, and 23 more
-## #   variables: s8 <dbl>, s9 <dbl>,
-## #   s10 <dbl>, s11 <dbl>, s12 <dbl>,
-## #   s13 <dbl>, s14 <dbl>, s15 <dbl>,
-## #   s16 <dbl>, s17 <dbl>, s18 <dbl>,
-## #   s19 <dbl>, s20 <dbl>, s21 <dbl>,
-## #   s22 <dbl>, s23 <dbl>, s24 <dbl>,
-## #   s25 <dbl>, s26 <dbl>, s27 <dbl>,
-## #   s28 <dbl>, s29 <dbl>, s30 <dbl>
+##       s1    s2    s3    s4    s5    s6    s7    s8    s9   s10   s11   s12
+##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 0     0.457 0.296 0.467 0.477 0.522 0.455 0.933 0.333 0.403 0.357 0.375
+##  2 0.457 0     0.481 0.556 0.348 0.229 0.415 0.930 0.222 0.447 0.566 0.215
+##  3 0.296 0.481 0     0.467 0.508 0.522 0.491 1     0.407 0.343 0.214 0.325
+##  4 0.467 0.556 0.467 0     0.786 0.692 0.870 1     0.639 0.379 0.532 0.549
+##  5 0.477 0.348 0.508 0.786 0     0.419 0.212 0.854 0.196 0.564 0.373 0.319
+##  6 0.522 0.229 0.522 0.692 0.419 0     0.509 0.933 0.243 0.571 0.530 0.237
+##  7 0.455 0.415 0.491 0.870 0.212 0.509 0     0.806 0.317 0.588 0.509 0.358
+##  8 0.933 0.930 1     1     0.854 0.933 0.806 0     0.895 1     0.938 0.929
+##  9 0.333 0.222 0.407 0.639 0.196 0.243 0.317 0.895 0     0.489 0.349 0.159
+## 10 0.403 0.447 0.343 0.379 0.564 0.571 0.588 1     0.489 0     0.449 0.419
+## # … with 20 more rows, and 18 more variables: s13 <dbl>, s14 <dbl>,
+## #   s15 <dbl>, s16 <dbl>, s17 <dbl>, s18 <dbl>, s19 <dbl>, s20 <dbl>,
+## #   s21 <dbl>, s22 <dbl>, s23 <dbl>, s24 <dbl>, s25 <dbl>, s26 <dbl>,
+## #   s27 <dbl>, s28 <dbl>, s29 <dbl>, s30 <dbl>
 ```
 
      
@@ -1627,7 +1566,7 @@ a `dist` object. (`dist` would have
 distances/dissimilarities yet.)
 
 ```r
-d = as.dist(seabed)
+d=as.dist(seabed)
 ```
 
      
@@ -1648,12 +1587,11 @@ Solution
 This:
 
 ```r
-d.1 = hclust(d, method = "single")
+d.1=hclust(d,method="single")
 plot(d.1)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-38-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
      
 
@@ -1669,7 +1607,7 @@ joined together into a cluster, and then in sequence sites 6, 16, 27,
 formed into clusters first). 
 
 You might
-\marginnote{Conceivably.} be wondering what else is in that
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Conceivably.</span> be wondering what else is in that
 `hclust` object, and what it's good for. Let's take a look:
 
 
@@ -1697,7 +1635,7 @@ and you'd be correct. Of the other things, the most interesting are
 
 
 ```r
-with(d.1, cbind(height, merge))
+with(d.1,cbind(height,merge))
 ```
 
 ```
@@ -1767,12 +1705,11 @@ Same thing, with small changes. The hard part is getting the name
 of the `method` right:
 
 ```r
-d.2 = hclust(d, method = "ward.D")
-plot(d.2, cex = 0.7)
+d.2=hclust(d,method="ward.D")
+plot(d.2,cex=0.7)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-41-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
      
 
@@ -1847,12 +1784,11 @@ code draws the rectangles. I think three clusters is good, but you
 can have a few more than that if you like:
 
 ```r
-plot(d.2, cex = 0.7)
-rect.hclust(d.2, 3)
+plot(d.2,cex=0.7)
+rect.hclust(d.2,3)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-43-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
    
 
@@ -1862,12 +1798,11 @@ number of clusters on the plot. This is six clusters:
 
 
 ```r
-plot(d.2, cex = 0.7)
-rect.hclust(d.2, 6)
+plot(d.2,cex=0.7)
+rect.hclust(d.2,6)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-44-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
    
 
@@ -1877,7 +1812,7 @@ the plots with it and without it and see which you prefer.
 Looking at this, even seven clusters might work, but I doubt you'd
 want to go beyond that. The choice of the number of clusters is mainly
 an aesthetic
-\marginnote{This, I think, is the British spelling, with the  North American one being *esthetic*. My spelling is where the  *aes* in a *ggplot* comes from.} decision. 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This, I think, is the British spelling, with the  North American one being *esthetic*. My spelling is where the  *aes* in a *ggplot* comes from.</span> decision. 
 
   
 
@@ -1895,8 +1830,8 @@ Solution
 This is really a very cheap two points:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/seabed.csv"
-seabed.z = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/seabed.csv"
+seabed.z=read_csv(my_url)
 ```
 
 ```
@@ -1921,21 +1856,19 @@ seabed.z
 
 ```
 ## # A tibble: 30 x 10
-##    site      a     b     c     d     e depth
-##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 s1        0     2     9    14     2    72
-##  2 s2       26     4    13    11     0    75
-##  3 s3        0    10     9     8     0    59
-##  4 s4        0     0    15     3     0    64
-##  5 s5       13     5     3    10     7    61
-##  6 s6       31    21    13    16     5    94
-##  7 s7        9     6     0    11     2    53
-##  8 s8        2     0     0     0     1    61
-##  9 s9       17     7    10    14     6    68
-## 10 s10       0     5    26     9     0    69
-## # ... with 20 more rows, and 3 more
-## #   variables: pollution <dbl>, temp <dbl>,
-## #   sediment <chr>
+##    site      a     b     c     d     e depth pollution  temp sediment
+##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
+##  1 s1        0     2     9    14     2    72       4.8   3.5 s       
+##  2 s2       26     4    13    11     0    75       2.8   2.5 c       
+##  3 s3        0    10     9     8     0    59       5.4   2.7 c       
+##  4 s4        0     0    15     3     0    64       8.2   2.9 s       
+##  5 s5       13     5     3    10     7    61       3.9   3.1 c       
+##  6 s6       31    21    13    16     5    94       2.6   3.5 g       
+##  7 s7        9     6     0    11     2    53       4.6   2.9 s       
+##  8 s8        2     0     0     0     1    61       5.1   3.3 c       
+##  9 s9       17     7    10    14     6    68       3.9   3.4 c       
+## 10 s10       0     5    26     9     0    69      10     3   s       
+## # … with 20 more rows
 ```
 
    
@@ -1949,7 +1882,7 @@ don't think I really needed to worry.
 
 These data came from
 [link](http://www.fbbva.es/TLFU/dat/DE_2013_multivariate.pdf),
-\marginnote{If  you are a soccer fan, you might recognize BBVA as a former sponsor  of the top Spanish soccer league, *La Liga BBVA* (as it was). BBVA  is a Spanish bank that also has a Foundation that published this  book.} from which I also got the definition of the Bray-Curtis
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If  you are a soccer fan, you might recognize BBVA as a former sponsor  of the top Spanish soccer league, *La Liga BBVA* (as it was). BBVA  is a Spanish bank that also has a Foundation that published this  book.</span> from which I also got the definition of the Bray-Curtis
 dissimilarity that I calculated for you. The data are in Exhibit 1.1
 of that book.
 
@@ -1976,18 +1909,15 @@ Then you need to display just those rows of the original data (that
 you just read in), which is a `filter` with an "or" in it:
 
 ```r
-seabed.z %>% filter(site == "s3" | site == "s20")
+seabed.z %>% filter(site=="s3" | site=="s20")
 ```
 
 ```
 ## # A tibble: 2 x 10
-##   site      a     b     c     d     e depth
-##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 s3        0    10     9     8     0    59
-## 2 s20       0    10    14     9     0    73
-## # ... with 3 more variables:
-## #   pollution <dbl>, temp <dbl>,
-## #   sediment <chr>
+##   site      a     b     c     d     e depth pollution  temp sediment
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
+## 1 s3        0    10     9     8     0    59       5.4   2.7 c       
+## 2 s20       0    10    14     9     0    73       5.6   3   s
 ```
 
    
@@ -2001,13 +1931,10 @@ seabed.z %>% filter(site %in% c("s3", "s20"))
 
 ```
 ## # A tibble: 2 x 10
-##   site      a     b     c     d     e depth
-##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 s3        0    10     9     8     0    59
-## 2 s20       0    10    14     9     0    73
-## # ... with 3 more variables:
-## #   pollution <dbl>, temp <dbl>,
-## #   sediment <chr>
+##   site      a     b     c     d     e depth pollution  temp sediment
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
+## 1 s3        0    10     9     8     0    59       5.4   2.7 c       
+## 2 s20       0    10    14     9     0    73       5.6   3   s
 ```
 
  
@@ -2036,18 +1963,15 @@ very dissimilar ones, sites 4 and 7 from opposite ends of my dendrogram:
 
 
 ```r
-seabed.z %>% filter(site == "s4" | site == "s7")
+seabed.z %>% filter(site=="s4" | site=="s7")
 ```
 
 ```
 ## # A tibble: 2 x 10
-##   site      a     b     c     d     e depth
-##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 s4        0     0    15     3     0    64
-## 2 s7        9     6     0    11     2    53
-## # ... with 3 more variables:
-## #   pollution <dbl>, temp <dbl>,
-## #   sediment <chr>
+##   site      a     b     c     d     e depth pollution  temp sediment
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
+## 1 s4        0     0    15     3     0    64       8.2   2.9 s       
+## 2 s7        9     6     0    11     2    53       4.6   2.9 s
 ```
 
  
@@ -2066,7 +1990,7 @@ can call them A and B), and a vector like this:
 
 
 ```r
-v1 = c(10, 3)
+v1=c(10,3)
 ```
 
  
@@ -2076,7 +2000,7 @@ at a site. This is rather similar to this site:
 
 
 ```r
-v2 = c(8, 4)
+v2=c(8,4)
 ```
 
  
@@ -2085,7 +2009,7 @@ but very different from this site:
 
 
 ```r
-v3 = c(0, 7)
+v3=c(0,7)
 ```
 
  
@@ -2095,7 +2019,7 @@ absolute difference of counts of organisms of each species:
 
 
 ```r
-abs(v1 - v2)
+abs(v1-v2)
 ```
 
 ```
@@ -2108,7 +2032,7 @@ and add those up:
 
 
 ```r
-sum(abs(v1 - v2))
+sum(abs(v1-v2))
 ```
 
 ```
@@ -2121,7 +2045,7 @@ and then divide by the total of all the frequencies:
 
 
 ```r
-sum(abs(v1 - v2))/sum(v1 + v2)
+sum(abs(v1-v2))/sum(v1+v2)
 ```
 
 ```
@@ -2135,7 +2059,7 @@ might imagine that `v1` and `v3` would be more dissimilar:
 
 
 ```r
-sum(abs(v1 - v3))/sum(v1 + v3)
+sum(abs(v1-v3))/sum(v1+v3)
 ```
 
 ```
@@ -2165,8 +2089,8 @@ second time):
 
 
 ```r
-braycurtis = function(v1, v2) {
-    sum(abs(v1 - v2))/sum(v1 + v2)
+braycurtis=function(v1,v2) {
+sum(abs(v1-v2))/sum(v1+v2)
 }
 ```
 
@@ -2176,7 +2100,7 @@ Let's test it on my made-up sites, making up one more:
 
 
 ```r
-braycurtis(v1, v2)
+braycurtis(v1,v2)
 ```
 
 ```
@@ -2184,7 +2108,7 @@ braycurtis(v1, v2)
 ```
 
 ```r
-braycurtis(v1, v3)
+braycurtis(v1,v3)
 ```
 
 ```
@@ -2192,7 +2116,7 @@ braycurtis(v1, v3)
 ```
 
 ```r
-braycurtis(v2, v2)
+braycurtis(v2,v2)
 ```
 
 ```
@@ -2200,8 +2124,8 @@ braycurtis(v2, v2)
 ```
 
 ```r
-v4 = c(4, 0)
-braycurtis(v3, v4)
+v4=c(4,0)
+braycurtis(v3,v4)
 ```
 
 ```
@@ -2229,7 +2153,7 @@ v2
 ```
 
 ```r
-2 * v2
+2*v2
 ```
 
 ```
@@ -2237,7 +2161,7 @@ v2
 ```
 
 ```r
-braycurtis(v2, 2 * v2)
+braycurtis(v2,2*v2)
 ```
 
 ```
@@ -2251,28 +2175,25 @@ distribution, and so they are, proportionately. But Bray-Curtis is
 assessing whether the frequencies are *the same* (as opposed to
 something like a chi-squared test that is assessing
 proportionality).
-\marginnote{You could make a table out of the sites and  species, and use the test statistic from a chi-squared test as a  measure of dissimilarity: the smallest it can be is zero, if the  species counts are exactly proportional at the two sites. It doesn't have an upper limit.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You could make a table out of the sites and  species, and use the test statistic from a chi-squared test as a  measure of dissimilarity: the smallest it can be is zero, if the  species counts are exactly proportional at the two sites. It doesn't have an upper limit.</span>
 
 So far so good. Now we have to do this for the actual data. The first
 issue
-\marginnote{There are more.}  is that the data is some of the row of
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are more.</span>  is that the data is some of the row of
 the original data frame; specifically, it's columns 2 through 6. For
 example, rows 3 and 20 of the original data frame look like this:
 
 
 ```r
-seabed.z %>% slice(c(3, 20))
+seabed.z %>% slice(c(3,20))
 ```
 
 ```
 ## # A tibble: 2 x 10
-##   site      a     b     c     d     e depth
-##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 s3        0    10     9     8     0    59
-## 2 s20       0    10    14     9     0    73
-## # ... with 3 more variables:
-## #   pollution <dbl>, temp <dbl>,
-## #   sediment <chr>
+##   site      a     b     c     d     e depth pollution  temp sediment
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
+## 1 s3        0    10     9     8     0    59       5.4   2.7 c       
+## 2 s20       0    10    14     9     0    73       5.6   3   s
 ```
 
  
@@ -2288,10 +2209,10 @@ have my reasons (that you will see later):
 
 
 ```r
-braycurtis.spec = function(i, j, d) {
-    x = d %>% select(2:6) %>% slice(i) %>% unlist()
-    y = d %>% select(2:6) %>% slice(j) %>% unlist()
-    braycurtis(x, y)
+braycurtis.spec=function(i,j,d) {
+x = d %>% select(2:6) %>% slice(i) %>% unlist()
+y = d %>% select(2:6) %>% slice(j) %>% unlist()
+braycurtis(x,y)
 }
 ```
 
@@ -2316,7 +2237,7 @@ same cluster). So the dissimilarity should be small:
 
 
 ```r
-braycurtis.spec(3, 20, seabed.z)
+braycurtis.spec(3,20,seabed.z)
 ```
 
 ```
@@ -2333,7 +2254,7 @@ about 60, so the dissimilarity should be about $6/60=0.1$, as it is
 This is the cleaned-up version of my function. When I first wrote it,
 I `print`ed out `x` and `y`, so that I could
 check that they were what I was expecting (they were).
-\marginnote{I am a  paid-up member of the *print all the things* school of  debugging. You probably know how to do this better.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I am a  paid-up member of the *print all the things* school of  debugging. You probably know how to do this better.</span>
 
 We have almost all the machinery we need. Now what we have to do is to
 compare every site with every other site and compute the dissimilarity
@@ -2347,20 +2268,18 @@ I know I made a mistake in my coding:
 
 
 ```r
-m = matrix(-1, 30, 30)
+m=matrix(-1,30,30)
 for (i in 1:30) {
-    for (j in 1:30) {
-        m[i, j] = braycurtis.spec(i, j, seabed.z)
-    }
+for (j in 1:30) {
+m[i,j]=braycurtis.spec(i,j,seabed.z)
+}
 }
 summary(as.vector(m))
 ```
 
 ```
-##    Min. 1st Qu.  Median    Mean 3rd Qu. 
-##  0.0000  0.3571  0.5023  0.5235  0.6731 
-##    Max. 
-##  1.0000
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.0000  0.3571  0.5023  0.5235  0.6731  1.0000
 ```
 
  
@@ -2372,7 +2291,7 @@ one we did before:
 
 
 ```r
-m[3, 20]
+m[3,20]
 ```
 
 ```
@@ -2394,7 +2313,7 @@ which you know how to do:
 
 
 ```r
-ddd = crossing(i = 1:30, j = 1:30)
+ddd=crossing(i=1:30,j=1:30)
 ddd
 ```
 
@@ -2412,7 +2331,7 @@ ddd
 ##  8     1     8
 ##  9     1     9
 ## 10     1    10
-## # ... with 890 more rows
+## # … with 890 more rows
 ```
 
  
@@ -2427,8 +2346,7 @@ you of `map`; this is for-eaching both `i` and
 
 
 ```r
-ddd = ddd %>% mutate(bc = map2_dbl(i, j, braycurtis.spec, 
-    seabed.z))
+ddd = ddd %>% mutate(bc=map2_dbl(i,j,braycurtis.spec,seabed.z))
 ```
 
  
@@ -2458,7 +2376,7 @@ ddd
 ##  8     1     8 0.933
 ##  9     1     9 0.333
 ## 10     1    10 0.403
-## # ... with 890 more rows
+## # … with 890 more rows
 ```
 
  
@@ -2467,7 +2385,7 @@ That looks plausible. Did it give the right result for the one we checked?
 
 
 ```r
-ddd %>% filter(i == 3, j == 20)
+ddd %>% filter(i==3, j==20)
 ```
 
 ```
@@ -2487,33 +2405,28 @@ making it wide:
 
 
 ```r
-ddd %>% spread(j, bc)
+ddd %>% spread(j,bc)
 ```
 
 ```
 ## # A tibble: 30 x 31
-##        i   `1`   `2`   `3`   `4`   `5`   `6`
-##    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1     1 0     0.457 0.296 0.467 0.477 0.522
-##  2     2 0.457 0     0.481 0.556 0.348 0.229
-##  3     3 0.296 0.481 0     0.467 0.508 0.522
-##  4     4 0.467 0.556 0.467 0     0.786 0.692
-##  5     5 0.477 0.348 0.508 0.786 0     0.419
-##  6     6 0.522 0.229 0.522 0.692 0.419 0    
-##  7     7 0.455 0.415 0.491 0.870 0.212 0.509
-##  8     8 0.933 0.930 1     1     0.854 0.933
-##  9     9 0.333 0.222 0.407 0.639 0.196 0.243
-## 10    10 0.403 0.447 0.343 0.379 0.564 0.571
-## # ... with 20 more rows, and 24 more
-## #   variables: `7` <dbl>, `8` <dbl>,
-## #   `9` <dbl>, `10` <dbl>, `11` <dbl>,
-## #   `12` <dbl>, `13` <dbl>, `14` <dbl>,
-## #   `15` <dbl>, `16` <dbl>, `17` <dbl>,
-## #   `18` <dbl>, `19` <dbl>, `20` <dbl>,
-## #   `21` <dbl>, `22` <dbl>, `23` <dbl>,
-## #   `24` <dbl>, `25` <dbl>, `26` <dbl>,
-## #   `27` <dbl>, `28` <dbl>, `29` <dbl>,
-## #   `30` <dbl>
+##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`  `11`
+##    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1     1 0     0.457 0.296 0.467 0.477 0.522 0.455 0.933 0.333 0.403 0.357
+##  2     2 0.457 0     0.481 0.556 0.348 0.229 0.415 0.930 0.222 0.447 0.566
+##  3     3 0.296 0.481 0     0.467 0.508 0.522 0.491 1     0.407 0.343 0.214
+##  4     4 0.467 0.556 0.467 0     0.786 0.692 0.870 1     0.639 0.379 0.532
+##  5     5 0.477 0.348 0.508 0.786 0     0.419 0.212 0.854 0.196 0.564 0.373
+##  6     6 0.522 0.229 0.522 0.692 0.419 0     0.509 0.933 0.243 0.571 0.530
+##  7     7 0.455 0.415 0.491 0.870 0.212 0.509 0     0.806 0.317 0.588 0.509
+##  8     8 0.933 0.930 1     1     0.854 0.933 0.806 0     0.895 1     0.938
+##  9     9 0.333 0.222 0.407 0.639 0.196 0.243 0.317 0.895 0     0.489 0.349
+## 10    10 0.403 0.447 0.343 0.379 0.564 0.571 0.588 1     0.489 0     0.449
+## # … with 20 more rows, and 19 more variables: `12` <dbl>, `13` <dbl>,
+## #   `14` <dbl>, `15` <dbl>, `16` <dbl>, `17` <dbl>, `18` <dbl>,
+## #   `19` <dbl>, `20` <dbl>, `21` <dbl>, `22` <dbl>, `23` <dbl>,
+## #   `24` <dbl>, `25` <dbl>, `26` <dbl>, `27` <dbl>, `28` <dbl>,
+## #   `29` <dbl>, `30` <dbl>
 ```
 
  
@@ -2546,17 +2459,15 @@ reasonable, with the actual answer being less important.)
 
 
 ```r
-cluster = cutree(d.2, 3)
+cluster=cutree(d.2,3)
 cluster
 ```
 
 ```
-##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 
-##   1   2   1   1   3   2   3   3   2   1   1 
-## s12 s13 s14 s15 s16 s17 s18 s19 s20 s21 s22 
-##   2   1   3   1   2   3   2   1   1   3   2 
-## s23 s24 s25 s26 s27 s28 s29 s30 
-##   3   2   2   2   2   2   3   2
+##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 s18 
+##   1   2   1   1   3   2   3   3   2   1   1   2   1   3   1   2   3   2 
+## s19 s20 s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 
+##   1   1   3   2   3   2   2   2   2   2   3   2
 ```
 
  
@@ -2566,13 +2477,11 @@ Now, we add that to the original data, the data frame I called
 
 
 ```r
-seabed.z %>% mutate(cluster = factor(cluster)) %>% 
-    ggplot(aes(x = cluster, y = pollution)) + 
-    geom_boxplot()
+seabed.z %>% mutate(cluster=factor(cluster)) %>%
+ggplot(aes(x=cluster,y=pollution))+geom_boxplot()
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-70-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
 
  
 
@@ -2585,13 +2494,12 @@ could also do something like vertically-faceted histograms:
 
 
 ```r
-seabed.z %>% mutate(cluster = factor(cluster)) %>% 
-    ggplot(aes(x = pollution)) + geom_histogram(bins = 8) + 
-    facet_grid(cluster ~ .)
+seabed.z %>% mutate(cluster=factor(cluster)) %>%
+ggplot(aes(x=pollution))+geom_histogram(bins=8)+
+facet_grid(cluster~.)  
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-71-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
 
  
 
@@ -2604,27 +2512,23 @@ Here's how 5 clusters looks:
 
 
 ```r
-cluster = cutree(d.2, 5)
+cluster=cutree(d.2,5)
 cluster
 ```
 
 ```
-##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 
-##   1   2   1   1   3   4   3   5   2   1   1 
-## s12 s13 s14 s15 s16 s17 s18 s19 s20 s21 s22 
-##   2   1   3   1   4   5   2   1   1   3   4 
-## s23 s24 s25 s26 s27 s28 s29 s30 
-##   3   2   4   4   4   2   3   4
+##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 s18 
+##   1   2   1   1   3   4   3   5   2   1   1   2   1   3   1   4   5   2 
+## s19 s20 s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 
+##   1   1   3   4   3   2   4   4   4   2   3   4
 ```
 
 ```r
-seabed.z %>% mutate(cluster = factor(cluster)) %>% 
-    ggplot(aes(x = cluster, y = pollution)) + 
-    geom_boxplot()
+seabed.z %>% mutate(cluster=factor(cluster)) %>%
+ggplot(aes(x=cluster,y=pollution))+geom_boxplot()
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-72-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
  
 
@@ -2673,8 +2577,8 @@ Solution
 The data file was aligned in columns, so:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
-swiss = read_table(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
+swiss=read_table(my_url)
 ```
 
 ```
@@ -2696,20 +2600,19 @@ swiss
 
 ```
 ## # A tibble: 200 x 7
-##    length  left right bottom   top  diag
-##     <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>
-##  1   215.  131   131.    9     9.7  141 
-##  2   215.  130.  130.    8.1   9.5  142.
-##  3   215.  130.  130.    8.7   9.6  142.
-##  4   215.  130.  130.    7.5  10.4  142 
-##  5   215   130.  130.   10.4   7.7  142.
-##  6   216.  131.  130.    9    10.1  141.
-##  7   216.  130.  130.    7.9   9.6  142.
-##  8   214.  130.  129.    7.2  10.7  142.
-##  9   215.  129.  130.    8.2  11    142.
-## 10   215.  130.  130.    9.2  10    141.
-## # ... with 190 more rows, and 1 more
-## #   variable: status <chr>
+##    length  left right bottom   top  diag status 
+##     <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl> <chr>  
+##  1   215.  131   131.    9     9.7  141  genuine
+##  2   215.  130.  130.    8.1   9.5  142. genuine
+##  3   215.  130.  130.    8.7   9.6  142. genuine
+##  4   215.  130.  130.    7.5  10.4  142  genuine
+##  5   215   130.  130.   10.4   7.7  142. genuine
+##  6   216.  131.  130.    9    10.1  141. genuine
+##  7   216.  130.  130.    7.9   9.6  142. genuine
+##  8   214.  130.  129.    7.2  10.7  142. genuine
+##  9   215.  129.  130.    8.2  11    142. genuine
+## 10   215.  130.  130.    9.2  10    141. genuine
+## # … with 190 more rows
 ```
 
        
@@ -2724,7 +2627,8 @@ Solution
 
 
 ```r
-swiss.s = swiss %>% select(-status) %>% scale()
+swiss.s = swiss %>% select(-status) %>%
+scale()
 ```
 
     
@@ -2751,20 +2655,13 @@ head(swiss.s)
 ```
 
 ```
-##          length      left      right
-## [1,] -0.2549435  2.433346  2.8299417
-## [2,] -0.7860757 -1.167507 -0.6347880
-## [3,] -0.2549435 -1.167507 -0.6347880
-## [4,] -0.2549435 -1.167507 -0.8822687
-## [5,]  0.2761888 -1.444496 -0.6347880
-## [6,]  2.1351516  1.879368  1.3450576
-##          bottom        top      diag
-## [1,] -0.2890067 -1.1837648 0.4482473
-## [2,] -0.9120152 -1.4328473 1.0557460
-## [3,] -0.4966762 -1.3083061 1.4896737
-## [4,] -1.3273542 -0.3119759 1.3161027
-## [5,]  0.6801176 -3.6745902 1.1425316
-## [6,] -0.2890067 -0.6855997 0.7953894
+##          length      left      right     bottom        top      diag
+## [1,] -0.2549435  2.433346  2.8299417 -0.2890067 -1.1837648 0.4482473
+## [2,] -0.7860757 -1.167507 -0.6347880 -0.9120152 -1.4328473 1.0557460
+## [3,] -0.2549435 -1.167507 -0.6347880 -0.4966762 -1.3083061 1.4896737
+## [4,] -0.2549435 -1.167507 -0.8822687 -1.3273542 -0.3119759 1.3161027
+## [5,]  0.2761888 -1.444496 -0.6347880  0.6801176 -3.6745902 1.1425316
+## [6,]  2.1351516  1.879368  1.3450576 -0.2890067 -0.6855997 0.7953894
 ```
 
  
@@ -2779,25 +2676,25 @@ Solution
 This is (perhaps most easily) a loop:
 
 ```r
-clus = 2:10
-wss.1 = numeric(0)
-for (i in clus) {
-    wss.1[i] = kmeans(swiss.s, i, nstart = 20)$tot.withinss
+clus=2:10
+wss.1=numeric(0)
+for (i in clus)
+{
+wss.1[i]=kmeans(swiss.s,i,nstart=20)$tot.withinss
 }
 wss.1
 ```
 
 ```
-##  [1]       NA 701.2054 576.1284 491.7085
-##  [5] 449.3900 413.0068 381.6123 354.8694
-##  [9] 333.6222 312.5101
+##  [1]       NA 701.2054 576.1284 491.7085 449.3900 413.0068 381.6123
+##  [8] 354.8694 333.6222 312.5101
 ```
 
        
 
 Note that there are 10 `wss` values, but the first one is
 missing, since we didn't do one cluster.
-\marginnote{R vectors start from  1, unlike C arrays or Python lists, which start from 0.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">R vectors start from  1, unlike C arrays or Python lists, which start from 0.</span>
 
 The `numeric(0)` says ```wss` has nothing in it, but if
 it had anything, it would be numbers''. Or, you can initialize
@@ -2816,8 +2713,9 @@ clusters, like this:
 
 
 ```r
-wssf = function(i, data, nstart = 20) {
-    kmeans(data, i, nstart = nstart)$tot.withinss
+wssf=function(i,data,nstart=20)
+{
+kmeans(data,i,nstart=nstart)$tot.withinss
 }
 ```
 
@@ -2831,7 +2729,7 @@ want. To do this, make a data frame with the numbers of clusters we want:
 
 
 ```r
-w = tibble(clusters = 2:10)
+w = tibble(clusters=2:10)
 w
 ```
 
@@ -2857,8 +2755,7 @@ a new column by running the function "for each" number of clusters:
 
 
 ```r
-w = w %>% mutate(wss = map_dbl(clusters, wssf, 
-    swiss.s))
+w = w %>% mutate(wss=map_dbl(clusters,wssf,swiss.s))
 w
 ```
 
@@ -2893,12 +2790,10 @@ The easiest is to use the output from the `map_dbl`,
 which I called `wss`:
 
 ```r
-ggplot(w, aes(x = clusters, y = wss)) + geom_point() + 
-    geom_line()
+ggplot(w,aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-81-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-81-1.png" width="672"  />
 
          
 If you did it the loop way, you'll have to make a data frame
@@ -2906,22 +2801,19 @@ first, which you can then pipe into `ggplot`:
 
 
 ```r
-tibble(clusters = 1:10, wss = wss.1) %>% ggplot(aes(x = clusters, 
-    y = wss)) + geom_point() + geom_line()
+tibble(clusters=1:10,wss=wss.1) %>%
+ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
 ```
-## Warning: Removed 1 rows containing missing values
-## (geom_point).
+## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
 ```
-## Warning: Removed 1 rows containing missing
-## values (geom_path).
+## Warning: Removed 1 rows containing missing values (geom_path).
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/sasjhgajs-1} 
+<img src="22-thingy_files/figure-html/sasjhgajs-1.png" width="576"  />
 
        
 
@@ -2957,7 +2849,7 @@ set.seed(457299)
 Now, down to business:
 
 ```r
-swiss.7 = kmeans(swiss.s, 4, nstart = 20)
+swiss.7=kmeans(swiss.s,4,nstart=20)
 swiss.7$size
 ```
 
@@ -2983,7 +2875,7 @@ Solution
 cluster numbers:
 
 ```r
-table(swiss$status, swiss.7$cluster)
+table(swiss$status,swiss.7$cluster)
 ```
 
 ```
@@ -2999,8 +2891,8 @@ Or, if you prefer,
 
 
 ```r
-tibble(obs = swiss$status, pred = swiss.7$cluster) %>% 
-    count(obs, pred)
+tibble(obs=swiss$status,pred=swiss.7$cluster) %>%
+count(obs,pred)
 ```
 
 ```
@@ -3020,7 +2912,7 @@ tibble(obs = swiss$status, pred = swiss.7$cluster) %>%
 In my case (yours might be different), 99 of the 100 counterfeit bills
 are in clusters 1 and 4, and 99 of the 100 genuine bills are in
 clusters 2 and 3.
-\marginnote{This is again where *set.seed* is  valuable: write this text once and it never needs to change.} So the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is again where *set.seed* is  valuable: write this text once and it never needs to change.</span> So the
 clustering has done a very good job of distinguishing the genuine
 bills from the counterfeit ones. (You could imagine, if you were an
 employee at the bank, saying that a bill in cluster 1 or 4 is
@@ -3067,8 +2959,8 @@ for 32 different cars. The variables are:
 right number of cars and variables?
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv"
-cars = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv"
+cars=read_csv(my_url)
 ```
 
 ```
@@ -3090,20 +2982,19 @@ cars
 
 ```
 ## # A tibble: 32 x 7
-##    Carname   mpg  disp    hp  drat    wt
-##    <chr>   <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 Mazda ~  21    160    110  3.9   2.62
-##  2 Mazda ~  21    160    110  3.9   2.88
-##  3 Datsun~  22.8  108     93  3.85  2.32
-##  4 Hornet~  21.4  258    110  3.08  3.22
-##  5 Hornet~  18.7  360    175  3.15  3.44
-##  6 Valiant  18.1  225    105  2.76  3.46
-##  7 Duster~  14.3  360    245  3.21  3.57
-##  8 Merc 2~  24.4  147.    62  3.69  3.19
-##  9 Merc 2~  22.8  141.    95  3.92  3.15
-## 10 Merc 2~  19.2  168.   123  3.92  3.44
-## # ... with 22 more rows, and 1 more
-## #   variable: qsec <dbl>
+##    Carname             mpg  disp    hp  drat    wt  qsec
+##    <chr>             <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 Mazda RX4          21    160    110  3.9   2.62  16.5
+##  2 Mazda RX4 Wag      21    160    110  3.9   2.88  17.0
+##  3 Datsun 710         22.8  108     93  3.85  2.32  18.6
+##  4 Hornet 4 Drive     21.4  258    110  3.08  3.22  19.4
+##  5 Hornet Sportabout  18.7  360    175  3.15  3.44  17.0
+##  6 Valiant            18.1  225    105  2.76  3.46  20.2
+##  7 Duster 360         14.3  360    245  3.21  3.57  15.8
+##  8 Merc 240D          24.4  147.    62  3.69  3.19  20  
+##  9 Merc 230           22.8  141.    95  3.92  3.15  22.9
+## 10 Merc 280           19.2  168.   123  3.92  3.44  18.3
+## # … with 22 more rows
 ```
 
    
@@ -3148,20 +3039,13 @@ head(cars.s)
 ```
 
 ```
-##             mpg        disp         hp
-## [1,]  0.1508848 -0.57061982 -0.5350928
-## [2,]  0.1508848 -0.57061982 -0.5350928
-## [3,]  0.4495434 -0.99018209 -0.7830405
-## [4,]  0.2172534  0.22009369 -0.5350928
-## [5,] -0.2307345  1.04308123  0.4129422
-## [6,] -0.3302874 -0.04616698 -0.6080186
-##            drat           wt       qsec
-## [1,]  0.5675137 -0.610399567 -0.7771651
-## [2,]  0.5675137 -0.349785269 -0.4637808
-## [3,]  0.4739996 -0.917004624  0.4260068
-## [4,] -0.9661175 -0.002299538  0.8904872
-## [5,] -0.8351978  0.227654255 -0.4637808
-## [6,] -1.5646078  0.248094592  1.3269868
+##             mpg        disp         hp       drat           wt       qsec
+## [1,]  0.1508848 -0.57061982 -0.5350928  0.5675137 -0.610399567 -0.7771651
+## [2,]  0.1508848 -0.57061982 -0.5350928  0.5675137 -0.349785269 -0.4637808
+## [3,]  0.4495434 -0.99018209 -0.7830405  0.4739996 -0.917004624  0.4260068
+## [4,]  0.2172534  0.22009369 -0.5350928 -0.9661175 -0.002299538  0.8904872
+## [5,] -0.2307345  1.04308123  0.4129422 -0.8351978  0.227654255 -0.4637808
+## [6,] -0.3302874 -0.04616698 -0.6080186 -1.5646078  0.248094592  1.3269868
 ```
 
  
@@ -3174,20 +3058,13 @@ head(h)
 ```
 
 ```
-##             mpg        disp         hp
-## [1,]  0.1508848 -0.57061982 -0.5350928
-## [2,]  0.1508848 -0.57061982 -0.5350928
-## [3,]  0.4495434 -0.99018209 -0.7830405
-## [4,]  0.2172534  0.22009369 -0.5350928
-## [5,] -0.2307345  1.04308123  0.4129422
-## [6,] -0.3302874 -0.04616698 -0.6080186
-##            drat           wt       qsec
-## [1,]  0.5675137 -0.610399567 -0.7771651
-## [2,]  0.5675137 -0.349785269 -0.4637808
-## [3,]  0.4739996 -0.917004624  0.4260068
-## [4,] -0.9661175 -0.002299538  0.8904872
-## [5,] -0.8351978  0.227654255 -0.4637808
-## [6,] -1.5646078  0.248094592  1.3269868
+##             mpg        disp         hp       drat           wt       qsec
+## [1,]  0.1508848 -0.57061982 -0.5350928  0.5675137 -0.610399567 -0.7771651
+## [2,]  0.1508848 -0.57061982 -0.5350928  0.5675137 -0.349785269 -0.4637808
+## [3,]  0.4495434 -0.99018209 -0.7830405  0.4739996 -0.917004624  0.4260068
+## [4,]  0.2172534  0.22009369 -0.5350928 -0.9661175 -0.002299538  0.8904872
+## [5,] -0.2307345  1.04308123  0.4129422 -0.8351978  0.227654255 -0.4637808
+## [6,] -0.3302874 -0.04616698 -0.6080186 -1.5646078  0.248094592  1.3269868
 ```
 
  
@@ -3200,20 +3077,13 @@ summary(cars.s)
 ```
 
 ```
-##       mpg               disp        
-##  Min.   :-1.6079   Min.   :-1.2879  
-##  1st Qu.:-0.7741   1st Qu.:-0.8867  
-##  Median :-0.1478   Median :-0.2777  
-##  Mean   : 0.0000   Mean   : 0.0000  
-##  3rd Qu.: 0.4495   3rd Qu.: 0.7688  
-##  Max.   : 2.2913   Max.   : 1.9468  
-##        hp               drat        
-##  Min.   :-1.3810   Min.   :-1.5646  
-##  1st Qu.:-0.7320   1st Qu.:-0.9661  
-##  Median :-0.3455   Median : 0.1841  
-##  Mean   : 0.0000   Mean   : 0.0000  
-##  3rd Qu.: 0.4859   3rd Qu.: 0.6049  
-##  Max.   : 2.7466   Max.   : 2.4939  
+##       mpg               disp               hp               drat        
+##  Min.   :-1.6079   Min.   :-1.2879   Min.   :-1.3810   Min.   :-1.5646  
+##  1st Qu.:-0.7741   1st Qu.:-0.8867   1st Qu.:-0.7320   1st Qu.:-0.9661  
+##  Median :-0.1478   Median :-0.2777   Median :-0.3455   Median : 0.1841  
+##  Mean   : 0.0000   Mean   : 0.0000   Mean   : 0.0000   Mean   : 0.0000  
+##  3rd Qu.: 0.4495   3rd Qu.: 0.7688   3rd Qu.: 0.4859   3rd Qu.: 0.6049  
+##  Max.   : 2.2913   Max.   : 1.9468   Max.   : 2.7466   Max.   : 2.4939  
 ##        wt               qsec         
 ##  Min.   :-1.7418   Min.   :-1.87401  
 ##  1st Qu.:-0.6500   1st Qu.:-0.53513  
@@ -3234,7 +3104,8 @@ means). To get *that*, *this*:
 
 
 ```r
-as_tibble(cars.s) %>% map_dbl(sd)
+as_tibble(cars.s) %>%
+map_dbl(sd)
 ```
 
 ```
@@ -3247,20 +3118,21 @@ as_tibble(cars.s) %>% map_dbl(sd)
 The idea here is ``take the matrix `cars.s`, turn it into a
 data frame, and for each *column* (a data frame is a ``list of
 columns''), calculate the SD.
-\marginnote{The *scale* function can take  a data frame, as here, but always produces a matrix. That's why we  had to turn it back into a data frame to run *map-dbl* on  it.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *scale* function can take  a data frame, as here, but always produces a matrix. That's why we  had to turn it back into a data frame to run *map-dbl* on  it.</span>
 
 As you realize now, the same idea will get the mean of each column too:
 
 
 ```r
-as_tibble(cars.s) %>% map_dbl(mean)
+as_tibble(cars.s) %>%
+map_dbl(mean)
 ```
 
 ```
-##           mpg          disp            hp 
-##  7.112366e-17 -9.084937e-17  1.040834e-17 
-##          drat            wt          qsec 
-## -2.918672e-16  4.681043e-17  5.299580e-16
+##           mpg          disp            hp          drat            wt 
+##  7.112366e-17 -9.084937e-17  1.040834e-17 -2.918672e-16  4.681043e-17 
+##          qsec 
+##  5.299580e-16
 ```
 
  
@@ -3288,7 +3160,7 @@ The hint at the end says "use `nstart`", so something like this:
 
 ```r
 set.seed(457299)
-cars.1 = kmeans(cars.s, 3, nstart = 20)
+cars.1=kmeans(cars.s,3,nstart=20)
 cars.1
 ```
 
@@ -3296,18 +3168,13 @@ cars.1
 ## K-means clustering with 3 clusters of sizes 6, 14, 12
 ## 
 ## Cluster means:
-##          mpg       disp         hp
-## 1  1.6552394 -1.1624447 -1.0382807
-## 2 -0.8280518  0.9874085  0.9119628
-## 3  0.1384407 -0.5707543 -0.5448163
-##         drat         wt       qsec
-## 1  1.2252295 -1.3738462  0.3075550
-## 2 -0.6869112  0.7991807 -0.6024854
-## 3  0.1887816 -0.2454544  0.5491221
+##          mpg       disp         hp       drat         wt       qsec
+## 1  1.6552394 -1.1624447 -1.0382807  1.2252295 -1.3738462  0.3075550
+## 2 -0.8280518  0.9874085  0.9119628 -0.6869112  0.7991807 -0.6024854
+## 3  0.1384407 -0.5707543 -0.5448163  0.1887816 -0.2454544  0.5491221
 ## 
 ## Clustering vector:
-##  [1] 3 3 3 3 2 3 2 3 3 3 3 2 2 2 2 2 2 1 1 1
-## [21] 3 2 2 2 2 1 1 1 2 3 2 3
+##  [1] 3 3 3 3 2 3 2 3 3 3 3 2 2 2 2 2 2 1 1 1 3 2 2 2 2 1 1 1 2 3 2 3
 ## 
 ## Within cluster sum of squares by cluster:
 ## [1]  7.76019 33.37849 24.95528
@@ -3315,10 +3182,8 @@ cars.1
 ## 
 ## Available components:
 ## 
-## [1] "cluster"      "centers"     
-## [3] "totss"        "withinss"    
-## [5] "tot.withinss" "betweenss"   
-## [7] "size"         "iter"        
+## [1] "cluster"      "centers"      "totss"        "withinss"    
+## [5] "tot.withinss" "betweenss"    "size"         "iter"        
 ## [9] "ifault"
 ```
 
@@ -3333,7 +3198,7 @@ re-run, what you were talking about might have moved to cluster 3, say.
 If you are using R Markdown, for this reason, having a
 `set.seed` before anything involving random number generation
 is a smart move.
-\marginnote{I forgot this, and then realized that I would have to rewrite a whole paragraph. In case you think I remember everything the first time.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I forgot this, and then realized that I would have to rewrite a whole paragraph. In case you think I remember everything the first time.</span>
   
 
 
@@ -3354,8 +3219,9 @@ need to take some action to display everything (there are only 32
 cars, so it's perfectly all right to display all of them):
 
 ```r
-tibble(car = cars$Carname, cluster = cars.1$cluster) %>% 
-    arrange(cluster) %>% print(n = Inf)
+tibble(car=cars$Carname,cluster=cars.1$cluster) %>% 
+arrange(cluster) %>%
+print(n=Inf)
 ```
 
 ```
@@ -3403,8 +3269,9 @@ grab only what you want:
 
 
 ```r
-cars %>% select(Carname) %>% mutate(cluster = cars.1$cluster) %>% 
-    arrange(cluster) %>% print(n = Inf)
+cars %>% select(Carname) %>% mutate(cluster=cars.1$cluster) %>%
+arrange(cluster) %>%
+print(n=Inf)
 ```
 
 ```
@@ -3485,8 +3352,8 @@ The function way is just like the one in the previous question:
 
 
 ```r
-wss = function(howmany, data, nstart = 20) {
-    kmeans(data, howmany, nstart = 20)$tot.withinss
+wss=function(howmany,data,nstart=20) {
+kmeans(data,howmany,nstart=20)$tot.withinss
 }
 ```
 
@@ -3513,7 +3380,7 @@ and the function gives
 
 
 ```r
-wss(3, cars.s)
+wss(3,cars.s)
 ```
 
 ```
@@ -3541,18 +3408,17 @@ The loop way. I like to define my possible numbers of clusters into
 a vector first:
 
 ```r
-w = numeric(0)
-nclus = 2:10
+w=numeric(0)
+nclus=2:10
 for (i in nclus) {
-    w[i] = wss(i, cars.s)
+w[i]=wss(i,cars.s)
 }
 w
 ```
 
 ```
-##  [1]       NA 87.29448 66.09396 50.94273
-##  [5] 38.22004 29.28816 24.23138 20.76061
-##  [9] 17.58753 15.19850
+##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138
+##  [8] 20.76061 17.58753 15.19850
 ```
 
 
@@ -3562,18 +3428,17 @@ do within the loop, like this:
 
 
 ```r
-w = numeric(0)
-nclus = 2:10
+w=numeric(0)
+nclus=2:10
 for (i in nclus) {
-    w[i] = kmeans(cars.s, i, nstart = 20)$tot.withinss
+w[i]=kmeans(cars.s,i,nstart=20)$tot.withinss
 }
 w
 ```
 
 ```
-##  [1]       NA 87.29448 66.09396 50.94273
-##  [5] 38.22004 29.28816 24.23138 20.76061
-##  [9] 18.22591 15.51232
+##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138
+##  [8] 20.76061 18.22591 15.51232
 ```
 
  
@@ -3590,7 +3455,7 @@ definitely not. (Or, I suppose, you could start your loop at 1
 cluster, and get a legitimate, though very big, value for it.)
 In both of the above cases, the curly brackets are optional because
 there is only one line within the loop.
-\marginnote{I am m accustomed to  using the curly brackets all the time, partly because my single-line loops have a habit of expanding to more than one line as I embellish what they do, and partly because I'm used to the programming language Perl where the curly brackets are obligatory even with only one line. Curly brackets in Perl serve the same purpose as indentation serves in Python: figuring out what is inside a loop or an *if* and what is outside.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I am m accustomed to  using the curly brackets all the time, partly because my single-line loops have a habit of expanding to more than one line as I embellish what they do, and partly because I'm used to the programming language Perl where the curly brackets are obligatory even with only one line. Curly brackets in Perl serve the same purpose as indentation serves in Python: figuring out what is inside a loop or an *if* and what is outside.</span>
 
 What is *actually* happening here is an implicit
 loop-within-a-loop. There is a loop over `i` that goes over all
@@ -3606,8 +3471,8 @@ have mastered how it works):
 
 
 ```r
-wwx = tibble(clusters = 2:10) %>% mutate(wss = map_dbl(clusters, 
-    wss, cars.s))
+wwx = tibble(clusters=2:10) %>%
+mutate(wss=map_dbl(clusters,wss,cars.s))
 wwx
 ```
 
@@ -3639,8 +3504,8 @@ This one is just about simple enough to define the function within the `map_dbl`
 
 
 ```r
-wwx = tibble(clusters = 2:10) %>% mutate(wss = map_dbl(clusters, 
-    ~kmeans(cars.s, ., nstart = 20)$tot.withinss))
+wwx = tibble(clusters=2:10) %>%
+mutate(wss=map_dbl(clusters,~kmeans(cars.s,.,nstart=20)$tot.withinss))
 wwx
 ```
 
@@ -3671,7 +3536,7 @@ The upshot of all of this is that if you had obtained a total
 within-cluster sum of squares for each number of clusters,
 *somehow*, and it's correct, you should have gotten the
 points
-\marginnote{When this was a question to hand in, which it is not any  more.} for this part and the last part. This is a common principle
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When this was a question to hand in, which it is not any  more.</span> for this part and the last part. This is a common principle
 of mine, and works on exams as well as assignments; it goes back to
 the idea of "get the job done" that you first saw in C32.
 
@@ -3689,7 +3554,7 @@ Solution
 If you did this the loop way, it's tempting to leap into this:
 
 ```r
-d = data.frame(clusters = nclus, wss = w)
+d=data.frame(clusters=nclus,wss=w)
 ```
 
 ```
@@ -3708,9 +3573,8 @@ w
 ```
 
 ```
-##  [1]       NA 87.29448 66.09396 50.94273
-##  [5] 38.22004 29.28816 24.23138 20.76061
-##  [9] 18.22591 15.51232
+##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138
+##  [8] 20.76061 18.22591 15.51232
 ```
 
 ```r
@@ -3727,22 +3591,19 @@ while `nclus` only has 9. So do something like this instead:
 
 
 ```r
-tibble(clusters = 1:10, wss = w) %>% ggplot(aes(x = clusters, 
-    y = wss)) + geom_point() + geom_line()
+tibble(clusters=1:10,wss=w) %>%
+ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
 ```
-## Warning: Removed 1 rows containing missing values
-## (geom_point).
+## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
 ```
-## Warning: Removed 1 rows containing missing
-## values (geom_path).
+## Warning: Removed 1 rows containing missing values (geom_path).
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-106-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
 
  
 
@@ -3755,12 +3616,10 @@ already a data frame:
 
 
 ```r
-wwx %>% ggplot(aes(x = clusters, y = wss)) + geom_point() + 
-    geom_line()
+wwx %>% ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-107-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
 
  
 
@@ -3777,7 +3636,7 @@ Solution
 
 That seems to me to have a clear elbow at 6, suggesting six
 clusters.
-\marginnote{We do something similar on scree plots for principal components later, but then, for reasons that will become clear then, we take elbow *minus 1*.} Look for where the plot 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">We do something similar on scree plots for principal components later, but then, for reasons that will become clear then, we take elbow *minus 1*.</span> Look for where the plot 
 "turns the corner" from going down to going out, or the point that is the 
 "last  one on the mountain and the first one on the scree". This
 mountainside goes down to 6, and from there it seems to turn the
@@ -3815,7 +3674,7 @@ seems to be the cleanest way to arrange the output:
 The K-means analysis is thus:
 
 ```r
-cars.2 = kmeans(cars.s, 6, nstart = 20)
+cars.2=kmeans(cars.s,6,nstart=20)
 ```
 
   
@@ -3827,8 +3686,10 @@ Then display them:
 
 
 ```r
-cars %>% select(Carname) %>% mutate(cluster = cars.2$cluster) %>% 
-    arrange(cluster) %>% print(n = Inf)
+cars %>% select(Carname) %>%
+mutate(cluster=cars.2$cluster) %>%
+arrange(cluster) %>%
+print(n=Inf)
 ```
 
 ```
@@ -3893,7 +3754,7 @@ variables that were in `cars`):
 
 
 ```r
-carsx = cars %>% mutate(cluster = cars.2$cluster)
+carsx = cars %>% mutate(cluster=cars.2$cluster) 
 ```
 
  
@@ -3901,8 +3762,7 @@ Now we fire away:
 
 
 ```r
-carsx.1 = lda(cluster ~ mpg + disp + hp + drat + 
-    wt + qsec, data = carsx)
+carsx.1=lda(cluster~mpg+disp+hp+drat+wt+qsec,data=carsx)
 carsx.1
 ```
 
@@ -3911,42 +3771,26 @@ carsx.1
 ## lda(cluster ~ mpg + disp + hp + drat + wt + qsec, data = carsx)
 ## 
 ## Prior probabilities of groups:
-##       1       2       3       4       5 
-## 0.18750 0.15625 0.09375 0.21875 0.12500 
-##       6 
-## 0.21875 
+##       1       2       3       4       5       6 
+## 0.18750 0.15625 0.09375 0.21875 0.12500 0.21875 
 ## 
 ## Group means:
-##        mpg     disp       hp     drat
-## 1 30.06667  86.6500  75.5000 4.251667
-## 2 21.64000 178.1200  93.8000 3.430000
-## 3 11.83333 457.3333 216.6667 3.053333
-## 4 16.78571 315.6286 170.0000 3.050000
-## 5 14.60000 340.5000 272.2500 3.675000
-## 6 20.41429 147.0286 120.4286 3.888571
-##         wt     qsec
-## 1 1.873000 18.39833
-## 2 3.096000 20.51400
-## 3 5.339667 17.74000
-## 4 3.688571 17.32000
-## 5 3.537500 15.08750
-## 6 2.892143 17.62714
+##        mpg     disp       hp     drat       wt     qsec
+## 1 30.06667  86.6500  75.5000 4.251667 1.873000 18.39833
+## 2 21.64000 178.1200  93.8000 3.430000 3.096000 20.51400
+## 3 11.83333 457.3333 216.6667 3.053333 5.339667 17.74000
+## 4 16.78571 315.6286 170.0000 3.050000 3.688571 17.32000
+## 5 14.60000 340.5000 272.2500 3.675000 3.537500 15.08750
+## 6 20.41429 147.0286 120.4286 3.888571 2.892143 17.62714
 ## 
 ## Coefficients of linear discriminants:
-##              LD1           LD2         LD3
-## mpg  -0.19737944 -0.0155769096 -0.27978549
-## disp  0.01950855 -0.0001094137 -0.02090998
-## hp    0.02804348  0.0251253160 -0.01727355
-## drat  0.94348424  1.8928372037  0.56645563
-## wt    0.39068831 -1.3973097325  1.84808828
-## qsec  0.33992344 -0.3010056176 -0.66690927
-##               LD4          LD5
-## mpg   0.353766928  0.035582922
-## disp  0.001034719  0.001680201
-## hp   -0.015955928 -0.017220548
-## drat  1.264185553 -2.015644662
-## wt    2.963377419 -0.300573153
-## qsec -0.755053279 -0.738889640
+##              LD1           LD2         LD3          LD4          LD5
+## mpg  -0.19737944 -0.0155769096 -0.27978549  0.353766928  0.035582922
+## disp  0.01950855 -0.0001094137 -0.02090998  0.001034719  0.001680201
+## hp    0.02804348  0.0251253160 -0.01727355 -0.015955928 -0.017220548
+## drat  0.94348424  1.8928372037  0.56645563  1.264185553 -2.015644662
+## wt    0.39068831 -1.3973097325  1.84808828  2.963377419 -0.300573153
+## qsec  0.33992344 -0.3010056176 -0.66690927 -0.755053279 -0.738889640
 ## 
 ## Proportion of trace:
 ##    LD1    LD2    LD3    LD4    LD5 
@@ -3984,11 +3828,10 @@ first, so I call it here with the package name and the two colons:
 
 
 ```r
-ggbiplot::ggbiplot(carsx.1, groups = factor(carsx$cluster))
+ggbiplot::ggbiplot(carsx.1,groups=factor(carsx$cluster))
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-112-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-112-1.png" width="672"  />
 
  
 Or you can do the predictions, then plot `LD1` against
@@ -3996,14 +3839,13 @@ Or you can do the predictions, then plot `LD1` against
 
 
 ```r
-p = predict(carsx.1)
-data.frame(p$x, cluster = factor(carsx$cluster)) %>% 
-    ggplot(aes(x = LD1, y = LD2, colour = cluster)) + 
-    geom_point() + coord_fixed()
+p=predict(carsx.1)
+data.frame(p$x,cluster=factor(carsx$cluster)) %>%
+ggplot(aes(x=LD1,y=LD2,colour=cluster))+geom_point()+
+coord_fixed()
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-113-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
 
  
 
@@ -4051,7 +3893,7 @@ powerful, both averagely powerful for their size.
 
 
  The decathlon is a men's
-\marginnote{Women  compete in a similar competition called the *heptathlon* with seven  events.} track-and-field competition in which competitors complete 10
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Women  compete in a similar competition called the *heptathlon* with seven  events.</span> track-and-field competition in which competitors complete 10
 events over two days as follows, requiring the skills shown:
 
 
@@ -4075,7 +3917,7 @@ Javelin & Throwing, agility\\
 These are a mixture of running, jumping and throwing disciplines. The
 performance (time, distance or height) achieved in each event is
 converted to a number of points using standard tables,
-\marginnote{How I  understand it works is that  a *good* performance in an event is  worth 1000 points, and then, according to the event, each second or  centimetre better or worse than this is worth a certain number of  points up or down from 1000. At this level, the winner of the whole  decathlon will get somewhere near 10,000 points. A look at the  Wikipedia article reveals that it is not quite as simple as this,  but this is the idea.} and the winner of the entire decathlon is the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">How I  understand it works is that  a *good* performance in an event is  worth 1000 points, and then, according to the event, each second or  centimetre better or worse than this is worth a certain number of  points up or down from 1000. At this level, the winner of the whole  decathlon will get somewhere near 10,000 points. A look at the  Wikipedia article reveals that it is not quite as simple as this,  but this is the idea.</span> and the winner of the entire decathlon is the
 competitor with the largest total of points. (A good decathlete has to
 be at least reasonably good at all the disciplines.)
 
@@ -4099,8 +3941,8 @@ be concerned by the quotes; we'll read them in and see what
 happens to them.
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/dec2013.txt"
-decathlon0 = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/dec2013.txt"
+decathlon0=read_delim(my_url," ")
 ```
 
 ```
@@ -4126,22 +3968,19 @@ decathlon0
 
 ```
 ## # A tibble: 24 x 11
-##    name  x100m long.jump shot.put high.jump
-##    <chr> <dbl>     <dbl>    <dbl>     <dbl>
-##  1 Asht~  10.4      7.73     14.4      1.93
-##  2 Dami~  10.4      7.39     14.2      2.05
-##  3 Rico~  10.6      7.22     14.8      1.99
-##  4 Miha~  10.7      7.51     13.4      1.96
-##  5 Mich~  10.7      7.85     14.6      1.99
-##  6 Carl~  10.8      7.54     14.5      1.96
-##  7 Gunn~  10.8      7.8      14.7      2.14
-##  8 Eelc~  10.8      7.65     14.1      2.02
-##  9 Pasc~  11.0      7.19     15.9      1.99
-## 10 Will~  11.0      7.44     13.9      2.05
-## # ... with 14 more rows, and 6 more
-## #   variables: x400m <dbl>, x110mh <dbl>,
-## #   discus <dbl>, pole.vault <dbl>,
-## #   javelin <dbl>, x1500m <dbl>
+##    name  x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
+##    <chr> <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
+##  1 Asht…  10.4      7.73     14.4      1.93  46.0   13.7   45          5.2
+##  2 Dami…  10.4      7.39     14.2      2.05  48.4   14.0   44.1        4.8
+##  3 Rico…  10.6      7.22     14.8      1.99  48.0   13.9   48.7        4.9
+##  4 Miha…  10.7      7.51     13.4      1.96  47.7   14.6   44.1        4.9
+##  5 Mich…  10.7      7.85     14.6      1.99  47.7   14.3   46.4        5  
+##  6 Carl…  10.8      7.54     14.5      1.96  48.8   14.0   45.8        5.1
+##  7 Gunn…  10.8      7.8      14.7      2.14  48.6   14.6   42.4        4.6
+##  8 Eelc…  10.8      7.65     14.1      2.02  48.2   14.2   39.2        5.3
+##  9 Pasc…  11.0      7.19     15.9      1.99  48.4   14.5   45.7        4.7
+## 10 Will…  11.0      7.44     13.9      2.05  48.3   14.3   43.2        4.5
+## # … with 14 more rows, and 2 more variables: javelin <dbl>, x1500m <dbl>
 ```
 
      
@@ -4175,8 +4014,10 @@ work and less likely that the column *name* will change.)
      
 
 ```r
-decathlon = decathlon0 %>% select(-name) %>% scale()
-round(decathlon, 2)
+decathlon = decathlon0 %>%
+select(-name) %>%
+scale()
+round(decathlon,2)
 ```
 
 ```
@@ -4231,7 +4072,7 @@ appear at the bottom as "attributes".)
 (c) We are going to make a scree plot to decide on the number
 of clusters our K-means clustering should use. Using a loop, or
 otherwise,
-\marginnote{I grew up in the UK, and when I saw that in an    exam, it was code for *the way they say is obvious but long, and    the otherwise-way is clever but short*. I think this is one of    those.} obtain the total within-cluster sum of squares for these
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I grew up in the UK, and when I saw that in an    exam, it was code for *the way they say is obvious but long, and    the otherwise-way is clever but short*. I think this is one of    those.</span> obtain the total within-cluster sum of squares for these
 data for each number of clusters for 2 up to 20.
 
 
@@ -4252,10 +4093,10 @@ maxclust
 ```
 
 ```r
-w = numeric(0)
+w=numeric(0)
 for (i in 2:maxclust) {
-    sol = kmeans(decathlon, i, nstart = 20)
-    w[i] = sol$tot.withinss
+sol=kmeans(decathlon,i,nstart=20)
+w[i]=sol$tot.withinss
 }
 w
 ```
@@ -4284,18 +4125,18 @@ a value for 1 cluster (so that this `w` has 20 values, one of
 which is missing).
 
 Not that there's anything wrong with this,
-\marginnote{I have to sneak a  Seinfeld quote in there somewhere.} and if it works, it's good, but the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I have to sneak a  Seinfeld quote in there somewhere.</span> and if it works, it's good, but the
 True R Way
-\marginnote{Like Buddhism. I keep feeling that R should have  something called the Eight Noble Truths or similar.} is not to use a
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Like Buddhism. I keep feeling that R should have  something called the Eight Noble Truths or similar.</span> is not to use a
 loop, but get the whole thing in one shot. In preparation for this,
 you write a function that does it for *one* number of clusters
 that is the first thing fed in, thus:
 
 
 ```r
-wss = function(i, x) {
-    sol = kmeans(x, i, nstart = 20)  # or some suitable nstart
-    sol$tot.withinss
+wss=function(i,x) {
+sol=kmeans(x,i,nstart=20) # or some suitable nstart
+sol$tot.withinss
 }
 ```
 
@@ -4319,7 +4160,8 @@ it inside with a `mutate`:
 
 
 ```r
-ww = tibble(clusters = 2:maxclust) %>% mutate(wss = map_dbl(clusters, wss, decathlon))
+ww = tibble(clusters=2:maxclust) %>%
+mutate(wss=map_dbl(clusters,wss,decathlon))
 ww
 ```
 
@@ -4376,8 +4218,8 @@ frame, and do this:
 
 
 ```r
-decathlon.tmp = decathlon0 %>% select(-name)
-map_dbl(decathlon.tmp, mean)
+decathlon.tmp = decathlon0 %>% select(-name) 
+map_dbl(decathlon.tmp,mean)
 ```
 
 ```
@@ -4402,7 +4244,7 @@ and you get this:
 
 
 ```r
-map_df(decathlon.tmp, quantile)
+map_df(decathlon.tmp,quantile)
 ```
 
 ```
@@ -4414,7 +4256,7 @@ map_df(decathlon.tmp, quantile)
 ## 3  11.0      7.37     14.2      1.99  48.7   14.4   44.6       4.9 
 ## 4  11.2      7.52     14.6      2.05  49.7   14.7   45.9       5.1 
 ## 5  11.4      7.85     15.9      2.14  51.2   15.3   48.7       5.4 
-## # ... with 2 more variables: javelin <dbl>, x1500m <dbl>
+## # … with 2 more variables: javelin <dbl>, x1500m <dbl>
 ```
 
  
@@ -4445,8 +4287,9 @@ called `w` has a missing value first (unless you were
 especially careful), so you have to plot it against *1* through 20:
 
 ```r
-tibble(clusters = 1:maxclust, wss = w) %>% ggplot(aes(x = clusters, y = wss)) + 
-    geom_point() + geom_line()
+tibble(clusters=1:maxclust,wss=w) %>%
+ggplot(aes(x=clusters,y=wss)) +
+geom_point()+geom_line()
 ```
 
 ```
@@ -4457,8 +4300,7 @@ tibble(clusters = 1:maxclust, wss = w) %>% ggplot(aes(x = clusters, y = wss)) +
 ## Warning: Removed 1 rows containing missing values (geom_path).
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/freddo-1} 
+<img src="22-thingy_files/figure-html/freddo-1.png" width="672"  />
 
    
 
@@ -4474,11 +4316,11 @@ frame, so it is a fair bit simpler:
 
 
 ```r
-ww %>% ggplot(aes(x = clusters, y = wss)) + geom_point() + geom_line()
+ww %>% ggplot(aes(x=clusters,y=wss))+
+geom_point()+geom_line()
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/bilharzia-1} 
+<img src="22-thingy_files/figure-html/bilharzia-1.png" width="672"  />
 
  
 
@@ -4513,7 +4355,7 @@ Running the `kmeans` itself is a piece of cake, since you have
 done it a bunch of times already (in your loop or `map`):
 
 ```r
-decathlon.1 = kmeans(decathlon, 5, nstart = 20)
+decathlon.1=kmeans(decathlon, 5, nstart=20)
 decathlon.1
 ```
 
@@ -4559,8 +4401,9 @@ make a data frame of names and clusters and sort it:
 
 
 ```r
-tibble(name = decathlon0$name, cluster = decathlon.1$cluster) %>% arrange(cluster) %>% 
-    print(n = Inf)
+tibble(name=decathlon0$name,cluster=decathlon.1$cluster) %>%
+arrange(cluster) %>%
+print(n=Inf)
 ```
 
 ```
@@ -4612,7 +4455,7 @@ Solution
 
 
 This is the thing called `centers`:
-\marginnote{We are no longer    in the *tidyverse*, so you no longer have the option of    using British or American spelling.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">We are no longer    in the *tidyverse*, so you no longer have the option of    using British or American spelling.</span>
 
 ```r
 decathlon.1$centers
@@ -4821,7 +4664,7 @@ correlated.
  The city of Pittsburgh, Pennsylvania, lies where three
 rivers, the Allegheny, Monongahela, and Ohio, 
 meet.
-\marginnote{For a long  time, the Pittsburgh Steelers football team played at the Three  Rivers Stadium.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">For a long  time, the Pittsburgh Steelers football team played at the Three  Rivers Stadium.</span> 
 It has long been important to build bridges there,
 to enable its residents to cross the rivers safely. See
 [link](https://en.wikipedia.org/wiki/List_of_bridges_of_Pittsburgh) for
@@ -4899,8 +4742,8 @@ This sort of thing:
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/bridges.csv"
-bridges0 = read_csv(my_url, na = "?")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/bridges.csv"
+bridges0=read_csv(my_url,na="?")
 ```
 
 ```
@@ -4930,17 +4773,17 @@ bridges0
 ## # A tibble: 108 x 13
 ##    id    river location erected purpose length lanes clear_g t_d  
 ##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-##  1 E1    M            3 CRAFTS  HIGHWAY <NA>       2 N       THRO~
-##  2 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  3 E3    A           39 CRAFTS  AQUEDU~ <NA>       1 N       THRO~
-##  4 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  5 E6    M           23 CRAFTS  HIGHWAY <NA>       2 N       THRO~
-##  6 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO~
-##  7 E8    A           28 CRAFTS  AQUEDU~ MEDIUM     1 N       THRO~
-##  8 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  9 E10   A           39 CRAFTS  AQUEDU~ <NA>       1 N       DECK 
-## 10 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-## # ... with 98 more rows, and 4 more variables: material <chr>,
+##  1 E1    M            3 CRAFTS  HIGHWAY <NA>       2 N       THRO…
+##  2 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  3 E3    A           39 CRAFTS  AQUEDU… <NA>       1 N       THRO…
+##  4 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  5 E6    M           23 CRAFTS  HIGHWAY <NA>       2 N       THRO…
+##  6 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
+##  7 E8    A           28 CRAFTS  AQUEDU… MEDIUM     1 N       THRO…
+##  8 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  9 E10   A           39 CRAFTS  AQUEDU… <NA>       1 N       DECK 
+## 10 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+## # … with 98 more rows, and 4 more variables: material <chr>,
 ## #   span <chr>, rel_l <chr>, type <chr>
 ```
 
@@ -4950,7 +4793,7 @@ I have some missing values in the `length` column. (You
 sometimes see `<NA>` instead of `NA`, as you do here;
 this means the missing value is a missing piece of text rather than a
 missing number.)
-\marginnote{Sometimes it's necessary to distinguish  between the different types of missing value; if that's the case,  you can use eg. *NA-real-* and *NA-character-* to distinguish missing decimal numbers from missing text. Those dashes should actually be underscores.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Sometimes it's necessary to distinguish  between the different types of missing value; if that's the case,  you can use eg. *NA-real-* and *NA-character-* to distinguish missing decimal numbers from missing text. Those dashes should actually be underscores.</span>
 
 There are 108 bridges in the data set.
 
@@ -4974,8 +4817,8 @@ Solution
 This sounds like a lot to do, but is actually only this:
 
 ```r
-bridges1 = bridges0 %>% mutate(is_complete = complete.cases(bridges0))
-bridges1 %>% select(length, is_complete)
+bridges1 = bridges0 %>% mutate(is_complete=complete.cases(bridges0))
+bridges1 %>% select(length,is_complete)
 ```
 
 ```
@@ -4992,7 +4835,7 @@ bridges1 %>% select(length, is_complete)
 ##  8 MEDIUM TRUE       
 ##  9 <NA>   FALSE      
 ## 10 MEDIUM TRUE       
-## # ... with 98 more rows
+## # … with 98 more rows
 ```
 
      
@@ -5004,7 +4847,7 @@ missing values anywhere else other than in `length`, this is
 what we'd see, but there might be some missing values on other
 variables on later bridges, in which case `length` would have a
 value, but `is_complete` would be `FALSE`.
-\marginnote{This  is where I talk about necessary and sufficient conditions:  *length* being missing is sufficient for  *is-complete* to be *FALSE*, since nothing else is  needed then, but it is not necessary, since some other variable  could be missing.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This  is where I talk about necessary and sufficient conditions:  *length* being missing is sufficient for  *is-complete* to be *FALSE*, since nothing else is  needed then, but it is not necessary, since some other variable  could be missing.</span>
 
 Extra: `summary` is a handy way to show which columns the missing
 values are in, but the columns have to be something other than text. I
@@ -5012,7 +4855,9 @@ explain this trick below:
 
 
 ```r
-bridges0 %>% mutate_if(is.character, factor) %>% summary()
+bridges0 %>% 
+mutate_if(is.character,factor) %>%
+summary()
 ```
 
 ```
@@ -5101,17 +4946,17 @@ bridges
 ## # A tibble: 70 x 14
 ##    id    river location erected purpose length lanes clear_g t_d  
 ##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO~
-##  4 E8    A           28 CRAFTS  AQUEDU~ MEDIUM     1 N       THRO~
-##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO~
-## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-## # ... with 60 more rows, and 5 more variables: material <chr>,
+##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
+##  4 E8    A           28 CRAFTS  AQUEDU… MEDIUM     1 N       THRO…
+##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO…
+## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+## # … with 60 more rows, and 5 more variables: material <chr>,
 ## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
 ```
 
@@ -5121,7 +4966,7 @@ This also works:
 
 
 ```r
-bridges = bridges1 %>% filter(is_complete == TRUE)
+bridges = bridges1 %>% filter(is_complete==TRUE)
 bridges
 ```
 
@@ -5129,17 +4974,17 @@ bridges
 ## # A tibble: 70 x 14
 ##    id    river location erected purpose length lanes clear_g t_d  
 ##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO~
-##  4 E8    A           28 CRAFTS  AQUEDU~ MEDIUM     1 N       THRO~
-##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO~
-## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-## # ... with 60 more rows, and 5 more variables: material <chr>,
+##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
+##  4 E8    A           28 CRAFTS  AQUEDU… MEDIUM     1 N       THRO…
+##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO…
+## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+## # … with 60 more rows, and 5 more variables: material <chr>,
 ## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
 ```
 
@@ -5178,15 +5023,14 @@ end. If you've done Python, this is exactly the strategy you'd
 use there:
 
 ```r
-count_diff = function(v, w) {
-    n = length(v)
-    stopifnot(length(v) == length(w))  # I explain this below
-    count = 0
-    for (i in 1:n) {
-        if (v[i] != w[i]) 
-            count = count + 1
-    }
-    count
+count_diff=function(v,w) {
+n=length(v)
+stopifnot(length(v)==length(w)) # I explain this below
+count=0
+for (i in 1:n) {
+if (v[i]!=w[i]) count=count+1
+}
+count
 }
 ```
 
@@ -5203,9 +5047,9 @@ Does it work?
 
 
 ```r
-v = c(1, 1, 0, 0, 0)
-w = c(1, 2, 0, 2, 0)
-count_diff(v, w)
+v=c(1,1,0,0,0)
+w=c(1,2,0,2,0)
+count_diff(v,w)
 ```
 
 ```
@@ -5220,9 +5064,9 @@ What happens if my two vectors are of different lengths?
 
 
 ```r
-v1 = c(1, 1, 0, 0)
-w = c(1, 2, 0, 2, 0)
-count_diff(v1, w)
+v1=c(1,1,0,0)
+w=c(1,2,0,2,0)
+count_diff(v1,w)
 ```
 
 ```
@@ -5240,7 +5084,7 @@ time. Check out this (which is like what I did with the fruits):
 
 
 ```r
-v != w
+v!=w
 ```
 
 ```
@@ -5254,7 +5098,7 @@ same. But we can go one step further:
 
 
 ```r
-sum(v != w)
+sum(v!=w)
 ```
 
 ```
@@ -5269,8 +5113,8 @@ the function can be as simple as:
 
 
 ```r
-count_diff = function(v, w) {
-    sum(v != w)
+count_diff=function(v,w) {
+sum(v!=w)
 }
 ```
 
@@ -5302,13 +5146,13 @@ instead of calling `braycurtis` at the end, I call
 
 
 ```r
-row_diff = function(i, j, d) {
-    d1 = d %>% select(-id, -location, -is_complete)
-    x = d1 %>% slice(i) %>% unlist()
-    y = d1 %>% slice(j) %>% unlist()
-    count_diff(x, y)
+row_diff=function(i,j,d) {
+d1 = d %>% select(-id, -location, -is_complete)
+x = d1 %>% slice(i) %>% unlist()
+y = d1 %>% slice(j) %>% unlist()
+count_diff(x,y)
 }
-row_diff(3, 4, bridges)
+row_diff(3,4,bridges)
 ```
 
 ```
@@ -5323,7 +5167,7 @@ Extra: is that right, though? Let's print out those rows and count:
 
 
 ```r
-bridges %>% slice(c(3, 4)) %>% print(width = Inf)
+bridges %>% slice(c(3,4)) %>% print(width=Inf)
 ```
 
 ```
@@ -5347,13 +5191,13 @@ I actually think the `unlist` is not needed:
 
 
 ```r
-row_diff2 = function(i, j, d) {
-    d1 = d %>% select(-id, -location, -is_complete)
-    x = d1 %>% slice(i)
-    y = d1 %>% slice(j)
-    count_diff(x, y)
+row_diff2=function(i,j,d) {
+d1 = d %>% select(-id, -location, -is_complete)
+x = d1 %>% slice(i) 
+y = d1 %>% slice(j) 
+count_diff(x,y)
 }
-row_diff2(3, 4, bridges)
+row_diff2(3,4,bridges)
 ```
 
 ```
@@ -5392,17 +5236,17 @@ bridges
 ## # A tibble: 70 x 14
 ##    id    river location erected purpose length lanes clear_g t_d  
 ##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO~
-##  4 E8    A           28 CRAFTS  AQUEDU~ MEDIUM     1 N       THRO~
-##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO~
-## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO~
-## # ... with 60 more rows, and 5 more variables: material <chr>,
+##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
+##  4 E8    A           28 CRAFTS  AQUEDU… MEDIUM     1 N       THRO…
+##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO…
+## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+## # … with 60 more rows, and 5 more variables: material <chr>,
 ## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
 ```
 
@@ -5412,11 +5256,11 @@ bridges
 
 
 ```r
-m = matrix(-1, 70, 70)
+m=matrix(-1,70,70)
 for (i in 1:70) {
-    for (j in 1:70) {
-        m[i, j] = row_diff(i, j, bridges)
-    }
+for (j in 1:70) {
+m[i,j]=row_diff(i,j,bridges)
+}
 }
 ```
 
@@ -5494,7 +5338,7 @@ The `tidyverse` way is really similar in conception. First use
 
 
 ```r
-mm = crossing(i = 1:70, j = 1:70)
+mm=crossing(i=1:70,j=1:70)
 ```
 
  
@@ -5504,7 +5348,7 @@ returns a whole number):
 
 
 ```r
-mm = mm %>% mutate(diff = map2_int(i, j, row_diff, bridges))
+mm = mm %>% mutate(diff=map2_int(i,j,row_diff,bridges))
 mm
 ```
 
@@ -5532,7 +5376,7 @@ This is long format, though, so we need to `spread` the
 
 
 ```r
-mm = mm %>% spread(j, diff)
+mm = mm %>% spread(j,diff)
 mm
 ```
 
@@ -5550,19 +5394,19 @@ mm
 ##  8     8     4     4     4     4     3     3     4     0     4     3
 ##  9     9     3     3     5     3     3     4     5     4     0     4
 ## 10    10     1     1     1     5     4     0     1     3     4     0
-## # ... with 60 more rows, and 60 more variables: `11` <int>,
-## #   `12` <int>, `13` <int>, `14` <int>, `15` <int>, `16` <int>,
-## #   `17` <int>, `18` <int>, `19` <int>, `20` <int>, `21` <int>,
-## #   `22` <int>, `23` <int>, `24` <int>, `25` <int>, `26` <int>,
-## #   `27` <int>, `28` <int>, `29` <int>, `30` <int>, `31` <int>,
-## #   `32` <int>, `33` <int>, `34` <int>, `35` <int>, `36` <int>,
-## #   `37` <int>, `38` <int>, `39` <int>, `40` <int>, `41` <int>,
-## #   `42` <int>, `43` <int>, `44` <int>, `45` <int>, `46` <int>,
-## #   `47` <int>, `48` <int>, `49` <int>, `50` <int>, `51` <int>,
-## #   `52` <int>, `53` <int>, `54` <int>, `55` <int>, `56` <int>,
-## #   `57` <int>, `58` <int>, `59` <int>, `60` <int>, `61` <int>,
-## #   `62` <int>, `63` <int>, `64` <int>, `65` <int>, `66` <int>,
-## #   `67` <int>, `68` <int>, `69` <int>, `70` <int>
+## # … with 60 more rows, and 60 more variables: `11` <int>, `12` <int>,
+## #   `13` <int>, `14` <int>, `15` <int>, `16` <int>, `17` <int>,
+## #   `18` <int>, `19` <int>, `20` <int>, `21` <int>, `22` <int>,
+## #   `23` <int>, `24` <int>, `25` <int>, `26` <int>, `27` <int>,
+## #   `28` <int>, `29` <int>, `30` <int>, `31` <int>, `32` <int>,
+## #   `33` <int>, `34` <int>, `35` <int>, `36` <int>, `37` <int>,
+## #   `38` <int>, `39` <int>, `40` <int>, `41` <int>, `42` <int>,
+## #   `43` <int>, `44` <int>, `45` <int>, `46` <int>, `47` <int>,
+## #   `48` <int>, `49` <int>, `50` <int>, `51` <int>, `52` <int>,
+## #   `53` <int>, `54` <int>, `55` <int>, `56` <int>, `57` <int>,
+## #   `58` <int>, `59` <int>, `60` <int>, `61` <int>, `62` <int>,
+## #   `63` <int>, `64` <int>, `65` <int>, `66` <int>, `67` <int>,
+## #   `68` <int>, `69` <int>, `70` <int>
 ```
 
  
@@ -5586,7 +5430,7 @@ removed first. This also applies if you need to read it in from
 the file. Thus:
 
 ```r
-d1 = as.dist(m)
+d1=as.dist(m)
 ```
 
      
@@ -5604,8 +5448,8 @@ or, if you got stuck,
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/mm.csv"
-mmm = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/mm.csv"
+mmm=read_csv(my_url)
 ```
 
 ```
@@ -5637,19 +5481,19 @@ mmm
 ##  8     8     4     4     4     4     3     3     4     0     4     3
 ##  9     9     3     3     5     3     3     4     5     4     0     4
 ## 10    10     1     1     1     5     4     0     1     3     4     0
-## # ... with 60 more rows, and 60 more variables: `11` <dbl>,
-## #   `12` <dbl>, `13` <dbl>, `14` <dbl>, `15` <dbl>, `16` <dbl>,
-## #   `17` <dbl>, `18` <dbl>, `19` <dbl>, `20` <dbl>, `21` <dbl>,
-## #   `22` <dbl>, `23` <dbl>, `24` <dbl>, `25` <dbl>, `26` <dbl>,
-## #   `27` <dbl>, `28` <dbl>, `29` <dbl>, `30` <dbl>, `31` <dbl>,
-## #   `32` <dbl>, `33` <dbl>, `34` <dbl>, `35` <dbl>, `36` <dbl>,
-## #   `37` <dbl>, `38` <dbl>, `39` <dbl>, `40` <dbl>, `41` <dbl>,
-## #   `42` <dbl>, `43` <dbl>, `44` <dbl>, `45` <dbl>, `46` <dbl>,
-## #   `47` <dbl>, `48` <dbl>, `49` <dbl>, `50` <dbl>, `51` <dbl>,
-## #   `52` <dbl>, `53` <dbl>, `54` <dbl>, `55` <dbl>, `56` <dbl>,
-## #   `57` <dbl>, `58` <dbl>, `59` <dbl>, `60` <dbl>, `61` <dbl>,
-## #   `62` <dbl>, `63` <dbl>, `64` <dbl>, `65` <dbl>, `66` <dbl>,
-## #   `67` <dbl>, `68` <dbl>, `69` <dbl>, `70` <dbl>
+## # … with 60 more rows, and 60 more variables: `11` <dbl>, `12` <dbl>,
+## #   `13` <dbl>, `14` <dbl>, `15` <dbl>, `16` <dbl>, `17` <dbl>,
+## #   `18` <dbl>, `19` <dbl>, `20` <dbl>, `21` <dbl>, `22` <dbl>,
+## #   `23` <dbl>, `24` <dbl>, `25` <dbl>, `26` <dbl>, `27` <dbl>,
+## #   `28` <dbl>, `29` <dbl>, `30` <dbl>, `31` <dbl>, `32` <dbl>,
+## #   `33` <dbl>, `34` <dbl>, `35` <dbl>, `36` <dbl>, `37` <dbl>,
+## #   `38` <dbl>, `39` <dbl>, `40` <dbl>, `41` <dbl>, `42` <dbl>,
+## #   `43` <dbl>, `44` <dbl>, `45` <dbl>, `46` <dbl>, `47` <dbl>,
+## #   `48` <dbl>, `49` <dbl>, `50` <dbl>, `51` <dbl>, `52` <dbl>,
+## #   `53` <dbl>, `54` <dbl>, `55` <dbl>, `56` <dbl>, `57` <dbl>,
+## #   `58` <dbl>, `59` <dbl>, `60` <dbl>, `61` <dbl>, `62` <dbl>,
+## #   `63` <dbl>, `64` <dbl>, `65` <dbl>, `66` <dbl>, `67` <dbl>,
+## #   `68` <dbl>, `69` <dbl>, `70` <dbl>
 ```
 
 ```r
@@ -5670,12 +5514,11 @@ Solution
 Home stretch now. I found that `cex=0.3` was good for me:
 
 ```r
-bridges.1 = hclust(d1, method = "ward.D")
-plot(bridges.1, cex = 0.3)
+bridges.1=hclust(d1,method="ward.D")
+plot(bridges.1,cex=0.3)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-154-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-154-1.png" width="672"  />
 
      
 
@@ -5697,12 +5540,11 @@ within a cluster to be similar and bridges in different clusters
 to be different, however you judge that.
 
 ```r
-plot(bridges.1, cex = 0.3)
-rect.hclust(bridges.1, 5)
+plot(bridges.1,cex=0.3)
+rect.hclust(bridges.1,5)
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-155-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-155-1.png" width="672"  />
 
      
 
@@ -5727,7 +5569,7 @@ bridges and make the case that they are "similar". I'm picking
 `width=Inf` to display all the columns:
 
 ```r
-bridges %>% slice(c(41, 42, 48)) %>% print(width = Inf)
+bridges %>% slice(c(41,42,48)) %>% print(width=Inf)
 ```
 
 ```
@@ -5755,7 +5597,7 @@ got joined together further up:
 
 
 ```r
-bridges %>% slice(c(10, 12, 19)) %>% print(width = Inf)
+bridges %>% slice(c(10,12,19)) %>% print(width=Inf)
 ```
 
 ```
@@ -5782,7 +5624,7 @@ three bridges in different clusters:
 
 
 ```r
-bridges %>% slice(c(8, 24, 52)) %>% print(width = Inf)
+bridges %>% slice(c(8,24,52)) %>% print(width=Inf)
 ```
 
 ```
@@ -5823,7 +5665,7 @@ with the clusters in it. I'm going with my 5 clusters:
 
 
 ```r
-bridges.rpart = bridges %>% mutate(cluster = cutree(bridges.1, 5))
+bridges.rpart = bridges %>% mutate(cluster=cutree(bridges.1,5))
 ```
 
  
@@ -5833,9 +5675,8 @@ and then
 
 ```r
 library(rpart)
-bridges.tree = rpart(factor(cluster) ~ river + erected + purpose + length + 
-    lanes + clear_g + t_d + material + span + rel_l + type, data = bridges.rpart, 
-    method = "class")
+bridges.tree=rpart(factor(cluster)~river+erected+purpose+length+lanes+clear_g+
+t_d+material+span+rel_l+type,data=bridges.rpart,method="class")
 print(bridges.tree)
 ```
 
@@ -5863,7 +5704,7 @@ predict the cluster of:
 
 
 ```r
-bridges.rpart %>% slice(c(20, 29)) %>% print(width = Inf)
+bridges.rpart %>% slice(c(20,29)) %>% print(width=Inf)
 ```
 
 ```
@@ -5957,8 +5798,8 @@ Solution
 So, `read_tsv`. 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
-athletes = read_tsv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
 ```
 
 ```
@@ -5988,17 +5829,17 @@ athletes
 ## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
 ##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
-##  1 fema~ Netb~  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
-##  2 fema~ Netb~  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
-##  3 fema~ Netb~  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
-##  4 fema~ Netb~  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
-##  5 fema~ Netb~  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
-##  6 fema~ Netb~  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
-##  7 fema~ Netb~  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
-##  8 fema~ Netb~  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
-##  9 fema~ Netb~  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
-## 10 fema~ Netb~  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
-## # ... with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
+##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
+##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
+##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
+##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
+##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
+##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
+##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
+##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
+##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
+## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
+## # … with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
 ```
 
      
@@ -6033,7 +5874,7 @@ athletes.s
 ##  8  -2.01   -0.283 -1.80  -1.59    0.529   0.522    2.69        2.11 
 ##  9  -1.66   -0.893 -1.85  -1.59   -0.124  -0.114    0.985       0.714
 ## 10  -0.608   1.44  -0.462 -0.342  -0.271  -0.0544   1.76        1.85 
-## # ... with 192 more rows, and 3 more variables: LBM[,1] <dbl>,
+## # … with 192 more rows, and 3 more variables: LBM[,1] <dbl>,
 ## #   Ht[,1] <dbl>, Wt[,1] <dbl>
 ```
 
@@ -6100,8 +5941,8 @@ set.seed(457299)
 Here we go:
 
 ```r
-withinss = tibble(clusters = 2:20) %>% mutate(wss = map_dbl(clusters, ~kmeans(athletes.s, 
-    ., nstart = 20)$tot.withinss))
+withinss = tibble(clusters=2:20) %>%
+mutate(wss=map_dbl(clusters,~kmeans(athletes.s,.,nstart=20)$tot.withinss))
 withinss
 ```
 
@@ -6148,9 +5989,9 @@ the total within-cluster sum of squares:
 
 
 ```r
-twss = function(i, x) {
-    ans = kmeans(x, i, nstart = 20)
-    ans$tot.withinss
+twss=function(i,x) {
+ans=kmeans(x,i,nstart=20)
+ans$tot.withinss
 }
 ```
 
@@ -6160,7 +6001,7 @@ and test it (against my answer above):
 
 
 ```r
-twss(3, athletes.s)
+twss(3,athletes.s)
 ```
 
 ```
@@ -6178,7 +6019,7 @@ data frame with all your numbers of clusters:
 
 
 ```r
-tibble(clusters = 2:20)
+tibble(clusters=2:20)
 ```
 
 ```
@@ -6212,8 +6053,8 @@ and then make a pipeline and save it:
 
 
 ```r
-withinss = tibble(clusters = 2:20) %>% mutate(wss = map_dbl(clusters, twss, 
-    athletes.s))
+withinss = tibble(clusters=2:20) %>%
+mutate(wss=map_dbl(clusters,twss,athletes.s))
 withinss
 ```
 
@@ -6255,11 +6096,10 @@ Solution
 plot directly, with the points joined by lines:
 
 ```r
-ggplot(withinss, aes(x = clusters, y = wss)) + geom_point() + geom_line()
+ggplot(withinss,aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-171-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
 
      
 
@@ -6295,7 +6135,7 @@ This:
 
 
 ```r
-athletes.km = kmeans(athletes.s, 12, nstart = 20)
+athletes.km=kmeans(athletes.s,12,nstart=20)
 ```
 
  
@@ -6316,7 +6156,9 @@ Solution
 
 
 ```r
-athletes2 = tibble(gender = athletes$Sex, sport = athletes$Sport, cluster = athletes.km$cluster)
+athletes2=tibble(gender=athletes$Sex,
+sport=athletes$Sport,
+cluster=athletes.km$cluster)
 athletes2
 ```
 
@@ -6334,7 +6176,7 @@ athletes2
 ##  8 female Netball      10
 ##  9 female Netball       9
 ## 10 female Netball      10
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
      
@@ -6353,7 +6195,7 @@ on the end of each of these, to make sure all the cluster members
 get shown.
 
 ```r
-athletes2 %>% filter(cluster == 1) %>% print(n = Inf)
+athletes2 %>% filter(cluster==1) %>% print(n=Inf)
 ```
 
 ```
@@ -6396,7 +6238,7 @@ Cluster 2:
 
 
 ```r
-athletes2 %>% filter(cluster == 2) %>% print(n = Inf)
+athletes2 %>% filter(cluster==2) %>% print(n=Inf)
 ```
 
 ```
@@ -6439,7 +6281,7 @@ athletes.
 
 
 ```r
-athletes2 %>% filter(cluster == 3) %>% print(n = Inf)
+athletes2 %>% filter(cluster==3) %>% print(n=Inf)
 ```
 
 ```
@@ -6467,7 +6309,7 @@ Cluster 4:
 
 
 ```r
-athletes2 %>% filter(cluster == 4) %>% print(n = Inf)
+athletes2 %>% filter(cluster==4) %>% print(n=Inf)
 ```
 
 ```
@@ -6495,7 +6337,7 @@ Males, but possibly more muscular ones.
 
 
 ```r
-athletes2 %>% filter(cluster == 5) %>% print(n = Inf)
+athletes2 %>% filter(cluster==5) %>% print(n=Inf)
 ```
 
 ```
@@ -6523,7 +6365,7 @@ One more:
 
 
 ```r
-athletes2 %>% filter(cluster == 6) %>% print(n = Inf)
+athletes2 %>% filter(cluster==6) %>% print(n=Inf)
 ```
 
 ```
@@ -6550,8 +6392,9 @@ Solution
 `MASS` is already loaded (for me), so:
 
 ```r
-athletes.3 = athletes %>% mutate(cluster = athletes.km$cluster) %>% lda(cluster ~ 
-    RCC + WCC + Hc + Hg + Ferr + BMI + SSF + `%Bfat` + LBM + Ht + Wt, data = .)
+athletes.3 = athletes %>% 
+mutate(cluster=athletes.km$cluster) %>%
+lda(cluster~RCC+WCC+Hc+Hg+Ferr+BMI+SSF+`%Bfat`+LBM+Ht+Wt,data=.)
 ```
 
      
@@ -6655,7 +6498,7 @@ which is part of the output:
 
 
 ```r
-round(athletes.3$means, 2)
+round(athletes.3$means,2)
 ```
 
 ```
@@ -6714,11 +6557,11 @@ distinguishable using `scale_colour_brewer` from the
 `RColorBrewer` package (loaded at the beginning):
 
 ```r
-ggbiplot(athletes.3, groups = factor(athletes2$cluster)) + scale_colour_brewer(palette = "Paired")
+ggbiplot(athletes.3,groups=factor(athletes2$cluster)) +
+scale_colour_brewer(palette="Paired")
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-184-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-184-1.png" width="672"  />
 
      
 
@@ -6772,12 +6615,13 @@ against each other, coloured by cluster:
 
 
 ```r
-athletes %>% mutate(cluster = factor(athletes2$cluster)) %>% ggplot(aes(x = RCC, 
-    y = BMI, colour = cluster)) + geom_point() + scale_colour_brewer(palette = "Paired")
+athletes %>%
+mutate(cluster=factor(athletes2$cluster)) %>%
+ggplot(aes(x=RCC, y=BMI, colour=cluster))+
+geom_point()+scale_colour_brewer(palette="Paired")
 ```
 
-
-\includegraphics{22-thingy_files/figure-latex/unnamed-chunk-185-1} 
+<img src="22-thingy_files/figure-html/unnamed-chunk-185-1.png" width="672"  />
 
  
 

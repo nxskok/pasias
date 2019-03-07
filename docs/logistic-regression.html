@@ -322,10 +322,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 16</span> Logistic regression</h1>
 <div class="sourceCode" id="cb1856"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1856-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.3.0
-## ✔ tibble  2.0.1     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.2     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## ✔ ggplot2 3.1.0       ✔ purrr   0.3.1  
+## ✔ tibble  2.0.1       ✔ dplyr   0.8.0.1
+## ✔ tidyr   0.8.3       ✔ stringr 1.4.0  
+## ✔ readr   1.3.1       ✔ forcats 0.3.0</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
@@ -3200,6 +3200,15 @@ the quantitative variables:</p>
 <div class="sourceCode" id="cb2118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2118-1" data-line-number="1">q1=<span class="cf">function</span>(x) <span class="kw">quantile</span>(x,<span class="fl">0.25</span>)</a>
 <a class="sourceLine" id="cb2118-2" data-line-number="2">q3=<span class="cf">function</span>(x) <span class="kw">quantile</span>(x,<span class="fl">0.75</span>)</a>
 <a class="sourceLine" id="cb2118-3" data-line-number="3">heart <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_if</span>(is.numeric,<span class="kw">funs</span>(q1,q3))</a></code></pre></div>
+<pre><code>## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## please use list() instead
+## 
+## # Before:
+## funs(name = f(.)
+## 
+## # After: 
+## list(name = ~f(.))
+## This warning is displayed once per session.</code></pre>
 <pre><code>## # A tibble: 1 x 14
 ##   X1_q1 age_q1 resting.bp_q1 serum.chol_q1 max.hr_q1 oldpeak_q1 colored_q1
 ##   &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
@@ -3213,12 +3222,12 @@ little right-arrow to see more columns.</p>
 <p>One way to see all the results is
 to “transpose” the result with the variable-quartile combinations in
 a column and the actual quartile values in another:</p>
-<div class="sourceCode" id="cb2120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2120-1" data-line-number="1">heart2 =<span class="st"> </span>heart <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2120-2" data-line-number="2"><span class="kw">summarize_if</span>(is.numeric,<span class="kw">funs</span>(q1,q3)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2120-3" data-line-number="3"><span class="kw">gather</span>(vq,quartile,<span class="kw">everything</span>())  </a></code></pre></div>
+<div class="sourceCode" id="cb2121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2121-1" data-line-number="1">heart2 =<span class="st"> </span>heart <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2121-2" data-line-number="2"><span class="kw">summarize_if</span>(is.numeric,<span class="kw">funs</span>(q1,q3)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2121-3" data-line-number="3"><span class="kw">gather</span>(vq,quartile,<span class="kw">everything</span>())  </a></code></pre></div>
 <pre><code>## Warning: attributes are not identical across measure variables;
 ## they will be dropped</code></pre>
-<div class="sourceCode" id="cb2122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2122-1" data-line-number="1">heart2</a></code></pre></div>
+<div class="sourceCode" id="cb2123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2123-1" data-line-number="1">heart2</a></code></pre></div>
 <pre><code>## # A tibble: 14 x 2
 ##    vq            quartile
 ##    &lt;chr&gt;            &lt;dbl&gt;
@@ -3237,11 +3246,11 @@ a column and the actual quartile values in another:</p>
 ## 13 oldpeak_q3         1.6
 ## 14 colored_q3         1</code></pre>
 <p>If you want to be really fancy:</p>
-<div class="sourceCode" id="cb2124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2124-1" data-line-number="1">heart <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2124-2" data-line-number="2"><span class="kw">summarize_if</span>(is.numeric,<span class="kw">funs</span>(q1,q3)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2124-3" data-line-number="3"><span class="kw">gather</span>(vq,quartile,<span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2124-4" data-line-number="4"><span class="kw">separate</span>(vq,<span class="kw">c</span>(<span class="st">&quot;variable&quot;</span>,<span class="st">&quot;q&quot;</span>),<span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2124-5" data-line-number="5"><span class="kw">spread</span>(q,quartile)</a></code></pre></div>
+<div class="sourceCode" id="cb2125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2125-1" data-line-number="1">heart <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2125-2" data-line-number="2"><span class="kw">summarize_if</span>(is.numeric,<span class="kw">funs</span>(q1,q3)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2125-3" data-line-number="3"><span class="kw">gather</span>(vq,quartile,<span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2125-4" data-line-number="4"><span class="kw">separate</span>(vq,<span class="kw">c</span>(<span class="st">&quot;variable&quot;</span>,<span class="st">&quot;q&quot;</span>),<span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2125-5" data-line-number="5"><span class="kw">spread</span>(q,quartile)</a></code></pre></div>
 <pre><code>## Warning: attributes are not identical across measure variables;
 ## they will be dropped</code></pre>
 <pre><code>## # A tibble: 7 x 3
@@ -3261,10 +3270,10 @@ deliberately untidy the column that contains <code>q1</code> and
 <code>q3</code> into two columns of those names.</p>
 <p>The categorical variables are a bit trickier, because they will have
 different numbers of possible values. Here’s my idea:</p>
-<div class="sourceCode" id="cb2127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2127-1" data-line-number="1">heart <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2127-2" data-line-number="2"><span class="kw">select_if</span>(is.character) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2127-3" data-line-number="3"><span class="kw">mutate_all</span>(factor) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2127-4" data-line-number="4"><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2128-1" data-line-number="1">heart <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2128-2" data-line-number="2"><span class="kw">select_if</span>(is.character) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2128-3" data-line-number="3"><span class="kw">mutate_all</span>(factor) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2128-4" data-line-number="4"><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##      sex             pain.type   high.blood.sugar        electro   
 ##  female: 87   asymptomatic:129   no :230          hypertrophy:137  
 ##  male  :183   atypical    : 42   yes: 40          normal     :131  
@@ -3287,11 +3296,11 @@ shows how many observations we had in each category.</p>
 <p>What I would really like to do is to save these category names
 somewhere so I don’t have to type them below when I make all possible
 combinations. My go at that:</p>
-<div class="sourceCode" id="cb2129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2129-1" data-line-number="1">heart3 =<span class="st"> </span>heart <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2129-2" data-line-number="2"><span class="kw">select_if</span>(is.character) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2129-3" data-line-number="3"><span class="kw">gather</span>(vname,value,<span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2129-4" data-line-number="4"><span class="kw">distinct</span>() </a>
-<a class="sourceLine" id="cb2129-5" data-line-number="5">heart3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2130-1" data-line-number="1">heart3 =<span class="st"> </span>heart <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2130-2" data-line-number="2"><span class="kw">select_if</span>(is.character) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2130-3" data-line-number="3"><span class="kw">gather</span>(vname,value,<span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2130-4" data-line-number="4"><span class="kw">distinct</span>() </a>
+<a class="sourceLine" id="cb2130-5" data-line-number="5">heart3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 21 x 2
 ##    vname            value       
 ##    &lt;chr&gt;            &lt;chr&gt;       
@@ -3323,11 +3332,11 @@ column containing a variable name and another column containing the
 variable value. This contains a lot of repeats; the <code>distinct</code>
 keeps one of each and throws away the rest.</p>
 <p>Hmm, another way would be to count everything:</p>
-<div class="sourceCode" id="cb2131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2131-1" data-line-number="1">heart3 =<span class="st"> </span>heart <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2131-2" data-line-number="2"><span class="kw">select_if</span>(is.character) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2131-3" data-line-number="3"><span class="kw">gather</span>(vname,value,<span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2131-4" data-line-number="4"><span class="kw">count</span>(vname,value) </a>
-<a class="sourceLine" id="cb2131-5" data-line-number="5">heart3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2132-1" data-line-number="1">heart3 =<span class="st"> </span>heart <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2132-2" data-line-number="2"><span class="kw">select_if</span>(is.character) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2132-3" data-line-number="3"><span class="kw">gather</span>(vname,value,<span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2132-4" data-line-number="4"><span class="kw">count</span>(vname,value) </a>
+<a class="sourceLine" id="cb2132-5" data-line-number="5">heart3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 21 x 3
 ##    vname            value            n
 ##    &lt;chr&gt;            &lt;chr&gt;        &lt;int&gt;
@@ -3357,7 +3366,7 @@ tools there.</p>
 <p>Now, we come to setting up the variables that we are going to make all
 combinations of. For a quantitative variable such as <code>age</code>, I
 need to go back to <code>heart2</code>:</p>
-<div class="sourceCode" id="cb2133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2133-1" data-line-number="1">heart2</a></code></pre></div>
+<div class="sourceCode" id="cb2134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2134-1" data-line-number="1">heart2</a></code></pre></div>
 <pre><code>## # A tibble: 14 x 2
 ##    vq            quartile
 ##    &lt;chr&gt;            &lt;dbl&gt;
@@ -3381,31 +3390,31 @@ using <code>str_detect</code>
 <code>stringr</code>.
 <label for="tufte-mn-139" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-139" class="margin-toggle"><span class="marginnote">Which is loaded with the <em>tidyverse</em> so you don’t have to load it.</span>
 Here’s how it goes for <code>age</code>:</p>
-<div class="sourceCode" id="cb2135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2135-1" data-line-number="1">heart2 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2135-2" data-line-number="2"><span class="kw">filter</span>(<span class="kw">str_detect</span>(vq,<span class="st">&quot;age_&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2136-1" data-line-number="1">heart2 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2136-2" data-line-number="2"><span class="kw">filter</span>(<span class="kw">str_detect</span>(vq,<span class="st">&quot;age_&quot;</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   vq     quartile
 ##   &lt;chr&gt;     &lt;dbl&gt;
 ## 1 age_q1       48
 ## 2 age_q3       61</code></pre>
 <p>and one more step to get just the quartiles:</p>
-<div class="sourceCode" id="cb2137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2137-1" data-line-number="1">heart2 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2137-2" data-line-number="2"><span class="kw">filter</span>(<span class="kw">str_detect</span>(vq,<span class="st">&quot;age_&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2137-3" data-line-number="3"><span class="kw">pull</span>(quartile)  </a></code></pre></div>
+<div class="sourceCode" id="cb2138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2138-1" data-line-number="1">heart2 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2138-2" data-line-number="2"><span class="kw">filter</span>(<span class="kw">str_detect</span>(vq,<span class="st">&quot;age_&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2138-3" data-line-number="3"><span class="kw">pull</span>(quartile)  </a></code></pre></div>
 <pre><code>## [1] 48 61</code></pre>
 <p>We’ll be doing this a few times, so we should write a function to do it:</p>
-<div class="sourceCode" id="cb2139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2139-1" data-line-number="1">get_quartiles=<span class="cf">function</span>(d,x) {</a>
-<a class="sourceLine" id="cb2139-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2139-3" data-line-number="3"><span class="kw">filter</span>(<span class="kw">str_detect</span>(vq,x)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2139-4" data-line-number="4"><span class="kw">pull</span>(quartile)  </a>
-<a class="sourceLine" id="cb2139-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb2140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2140-1" data-line-number="1">get_quartiles=<span class="cf">function</span>(d,x) {</a>
+<a class="sourceLine" id="cb2140-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2140-3" data-line-number="3"><span class="kw">filter</span>(<span class="kw">str_detect</span>(vq,x)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2140-4" data-line-number="4"><span class="kw">pull</span>(quartile)  </a>
+<a class="sourceLine" id="cb2140-5" data-line-number="5">}</a></code></pre></div>
 <p>and to test:</p>
-<div class="sourceCode" id="cb2140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2140-1" data-line-number="1"><span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;age_&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2141-1" data-line-number="1"><span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;age_&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] 48 61</code></pre>
 <p>Yep. I put the underscore in so as to not catch other variables that
 have <code>age</code> inside them but not at the end.</p>
 <p>For the categorical variables, we need to look in <code>heart3</code>:</p>
-<div class="sourceCode" id="cb2142"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2142-1" data-line-number="1">heart3</a></code></pre></div>
+<div class="sourceCode" id="cb2143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2143-1" data-line-number="1">heart3</a></code></pre></div>
 <pre><code>## # A tibble: 21 x 3
 ##    vname            value            n
 ##    &lt;chr&gt;            &lt;chr&gt;        &lt;int&gt;
@@ -3423,28 +3432,28 @@ have <code>age</code> inside them but not at the end.</p>
 <p>then choose the rows with the right thing in <code>vname</code>, and then
 pull just the <code>value</code> column. This is sufficiently like the
 previous one that I think we can write a function right away:</p>
-<div class="sourceCode" id="cb2144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2144-1" data-line-number="1">get_categories=<span class="cf">function</span>(d,x) {</a>
-<a class="sourceLine" id="cb2144-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(vname<span class="op">==</span>x) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2144-3" data-line-number="3"><span class="kw">pull</span>(value)  </a>
-<a class="sourceLine" id="cb2144-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb2144-5" data-line-number="5"><span class="kw">get_categories</span>(heart3, <span class="st">&quot;electro&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2145-1" data-line-number="1">get_categories=<span class="cf">function</span>(d,x) {</a>
+<a class="sourceLine" id="cb2145-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(vname<span class="op">==</span>x) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2145-3" data-line-number="3"><span class="kw">pull</span>(value)  </a>
+<a class="sourceLine" id="cb2145-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb2145-5" data-line-number="5"><span class="kw">get_categories</span>(heart3, <span class="st">&quot;electro&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;hypertrophy&quot; &quot;normal&quot;      &quot;STT&quot;</code></pre>
 <p>All right, setup, using my usual habit of plural names, and using
 those functions we just wrote:</p>
-<div class="sourceCode" id="cb2146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2146-1" data-line-number="1">sexes=<span class="kw">get_categories</span>(heart3,<span class="st">&quot;sex&quot;</span>)</a>
-<a class="sourceLine" id="cb2146-2" data-line-number="2">pain.types=<span class="kw">get_categories</span>(heart3,<span class="st">&quot;pain.type&quot;</span>)</a>
-<a class="sourceLine" id="cb2146-3" data-line-number="3">resting.bps=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;resting.bp_&quot;</span>)</a>
-<a class="sourceLine" id="cb2146-4" data-line-number="4">serum.chols=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;serum.chol_&quot;</span>)</a>
-<a class="sourceLine" id="cb2146-5" data-line-number="5">max.hrs=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;max.hr_&quot;</span>)</a>
-<a class="sourceLine" id="cb2146-6" data-line-number="6">oldpeaks=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;oldpeak_&quot;</span>)</a>
-<a class="sourceLine" id="cb2146-7" data-line-number="7">slopes=<span class="kw">get_categories</span>(heart3,<span class="st">&quot;slope&quot;</span>)</a>
-<a class="sourceLine" id="cb2146-8" data-line-number="8">coloreds=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;colored_&quot;</span>)</a>
-<a class="sourceLine" id="cb2146-9" data-line-number="9">thals=<span class="kw">get_categories</span>(heart3,<span class="st">&quot;thal&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2147-1" data-line-number="1">sexes=<span class="kw">get_categories</span>(heart3,<span class="st">&quot;sex&quot;</span>)</a>
+<a class="sourceLine" id="cb2147-2" data-line-number="2">pain.types=<span class="kw">get_categories</span>(heart3,<span class="st">&quot;pain.type&quot;</span>)</a>
+<a class="sourceLine" id="cb2147-3" data-line-number="3">resting.bps=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;resting.bp_&quot;</span>)</a>
+<a class="sourceLine" id="cb2147-4" data-line-number="4">serum.chols=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;serum.chol_&quot;</span>)</a>
+<a class="sourceLine" id="cb2147-5" data-line-number="5">max.hrs=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;max.hr_&quot;</span>)</a>
+<a class="sourceLine" id="cb2147-6" data-line-number="6">oldpeaks=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;oldpeak_&quot;</span>)</a>
+<a class="sourceLine" id="cb2147-7" data-line-number="7">slopes=<span class="kw">get_categories</span>(heart3,<span class="st">&quot;slope&quot;</span>)</a>
+<a class="sourceLine" id="cb2147-8" data-line-number="8">coloreds=<span class="kw">get_quartiles</span>(heart2,<span class="st">&quot;colored_&quot;</span>)</a>
+<a class="sourceLine" id="cb2147-9" data-line-number="9">thals=<span class="kw">get_categories</span>(heart3,<span class="st">&quot;thal&quot;</span>)</a></code></pre></div>
 <p>All combos of all of those (and there will be a lot of those):</p>
-<div class="sourceCode" id="cb2147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2147-1" data-line-number="1">heart.new=<span class="kw">crossing</span>(<span class="dt">sex=</span>sexes,<span class="dt">pain.type=</span>pain.types,<span class="dt">resting.bp=</span>resting.bps,</a>
-<a class="sourceLine" id="cb2147-2" data-line-number="2"><span class="dt">serum.chol=</span>serum.chols,<span class="dt">max.hr=</span>max.hrs,<span class="dt">oldpeak=</span>oldpeaks,<span class="dt">slope=</span>slopes,</a>
-<a class="sourceLine" id="cb2147-3" data-line-number="3"><span class="dt">colored=</span>coloreds,<span class="dt">thal=</span>thals)</a>
-<a class="sourceLine" id="cb2147-4" data-line-number="4">heart.new</a></code></pre></div>
+<div class="sourceCode" id="cb2148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2148-1" data-line-number="1">heart.new=<span class="kw">crossing</span>(<span class="dt">sex=</span>sexes,<span class="dt">pain.type=</span>pain.types,<span class="dt">resting.bp=</span>resting.bps,</a>
+<a class="sourceLine" id="cb2148-2" data-line-number="2"><span class="dt">serum.chol=</span>serum.chols,<span class="dt">max.hr=</span>max.hrs,<span class="dt">oldpeak=</span>oldpeaks,<span class="dt">slope=</span>slopes,</a>
+<a class="sourceLine" id="cb2148-3" data-line-number="3"><span class="dt">colored=</span>coloreds,<span class="dt">thal=</span>thals)</a>
+<a class="sourceLine" id="cb2148-4" data-line-number="4">heart.new</a></code></pre></div>
 <pre><code>## # A tibble: 2,304 x 9
 ##    sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##    &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;
@@ -3469,11 +3478,11 @@ frame).</li>
 </ol>
 <p>Solution</p>
 <p>Get the predictions, which is less scary than it seems:</p>
-<div class="sourceCode" id="cb2149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2149-1" data-line-number="1">p=<span class="kw">predict</span>(heart<span class="fl">.3</span>,heart.new,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2150-1" data-line-number="1">p=<span class="kw">predict</span>(heart<span class="fl">.3</span>,heart.new,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a></code></pre></div>
 <p>and the easiest way to add these to <code>heart.new</code> is this:</p>
-<div class="sourceCode" id="cb2150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2150-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pred=</span>p) -&gt;<span class="st"> </span>heart.new</a></code></pre></div>
+<div class="sourceCode" id="cb2151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2151-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pred=</span>p) -&gt;<span class="st"> </span>heart.new</a></code></pre></div>
 <p>Let’s take a look at a few of the predictions, by way of sanity-checking:</p>
-<div class="sourceCode" id="cb2151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2151-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2152-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;
@@ -3494,7 +3503,7 @@ variables that it was a prediction for.</li>
 </ol>
 <p>Solution</p>
 <p>This can be done in one step:</p>
-<div class="sourceCode" id="cb2153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2153-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pred<span class="op">==</span><span class="kw">max</span>(pred))</a></code></pre></div>
+<div class="sourceCode" id="cb2154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2154-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pred<span class="op">==</span><span class="kw">max</span>(pred))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;
@@ -3502,31 +3511,31 @@ variables that it was a prediction for.</li>
 ## # … with 1 more variable: pred &lt;dbl&gt;</code></pre>
 <p>or if you didn’t think of that, you can find the maximum first, and
 then display the rows with predictions close to it:</p>
-<div class="sourceCode" id="cb2155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2155-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">max</span>(pred))</a></code></pre></div>
+<div class="sourceCode" id="cb2156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2156-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">max</span>(pred))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##       m
 ##   &lt;dbl&gt;
 ## 1 0.984</code></pre>
-<div class="sourceCode" id="cb2157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2157-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pred<span class="op">&gt;</span><span class="fl">0.98</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2158-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pred<span class="op">&gt;</span><span class="fl">0.98</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;
 ## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
 ## # … with 1 more variable: pred &lt;dbl&gt;</code></pre>
 <p>or even find <em>which</em> row has the maximum, and then display that row:</p>
-<div class="sourceCode" id="cb2159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2159-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">row=</span><span class="kw">which.max</span>(pred))</a></code></pre></div>
+<div class="sourceCode" id="cb2160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2160-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">row=</span><span class="kw">which.max</span>(pred))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     row
 ##   &lt;int&gt;
 ## 1  1398</code></pre>
-<div class="sourceCode" id="cb2161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2161-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1398</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2162-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1398</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;
 ## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
 ## # … with 1 more variable: pred &lt;dbl&gt;</code></pre>
 <p>or sort the rows by <code>pred</code>, descending, and display the top few:</p>
-<div class="sourceCode" id="cb2163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2163-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(pred)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2164-1" data-line-number="1">heart.new <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(pred)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n=</span><span class="dv">8</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2,304 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;
@@ -3610,15 +3619,15 @@ babies of the same gestational age, so the 64 babies are summarized in
 </ol>
 <p>Solution</p>
 <p>No great challenge here, I hope:</p>
-<div class="sourceCode" id="cb2165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2165-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/breastfeed.csv&quot;</span></a>
-<a class="sourceLine" id="cb2165-2" data-line-number="2">breastfeed=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb2166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2166-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/breastfeed.csv&quot;</span></a>
+<a class="sourceLine" id="cb2166-2" data-line-number="2">breastfeed=<span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   gest.age = col_double(),
 ##   bf.yes = col_double(),
 ##   bf.no = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2167-1" data-line-number="1">breastfeed</a></code></pre></div>
+<div class="sourceCode" id="cb2168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2168-1" data-line-number="1">breastfeed</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 3
 ##   gest.age bf.yes bf.no
 ##      &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -3637,15 +3646,15 @@ for the right reason.</li>
 <p>Solution</p>
 <p>The second and third columns are all frequencies, so it’s a
 question of adding them up. For example:</p>
-<div class="sourceCode" id="cb2169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2169-1" data-line-number="1">breastfeed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">sum</span>(bf.yes)<span class="op">+</span><span class="kw">sum</span>(bf.no))</a></code></pre></div>
+<div class="sourceCode" id="cb2170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2170-1" data-line-number="1">breastfeed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">sum</span>(bf.yes)<span class="op">+</span><span class="kw">sum</span>(bf.no))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##   total
 ##   &lt;dbl&gt;
 ## 1    64</code></pre>
 <p>or if you want to go nuts (this one gathers all the frequencies
 together into one column and then adds them up):</p>
-<div class="sourceCode" id="cb2171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2171-1" data-line-number="1">breastfeed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(yesno,freq,bf.yes<span class="op">:</span>bf.no) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2171-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">sum</span>(freq))</a></code></pre></div>
+<div class="sourceCode" id="cb2172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2172-1" data-line-number="1">breastfeed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(yesno,freq,bf.yes<span class="op">:</span>bf.no) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2172-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">sum</span>(freq))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##   total
 ##   &lt;dbl&gt;
@@ -3696,8 +3705,8 @@ successes in the first column and failures in the second, and then
 predict <em>that</em> from gestational age. (That’s why this was
 three marks rather than two.)
 So, let’s make the <code>response</code> first:</p>
-<div class="sourceCode" id="cb2173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2173-1" data-line-number="1">response=<span class="kw">with</span>(breastfeed,<span class="kw">cbind</span>(bf.yes,bf.no))</a>
-<a class="sourceLine" id="cb2173-2" data-line-number="2">response</a></code></pre></div>
+<div class="sourceCode" id="cb2174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2174-1" data-line-number="1">response=<span class="kw">with</span>(breastfeed,<span class="kw">cbind</span>(bf.yes,bf.no))</a>
+<a class="sourceLine" id="cb2174-2" data-line-number="2">response</a></code></pre></div>
 <pre><code>##      bf.yes bf.no
 ## [1,]      2     4
 ## [2,]      2     3
@@ -3707,10 +3716,10 @@ So, let’s make the <code>response</code> first:</p>
 ## [6,]     14     1</code></pre>
 <p>or, more Tidyverse-like, but we have to remember to turn it into a
 <code>matrix</code>:</p>
-<div class="sourceCode" id="cb2175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2175-1" data-line-number="1">response =<span class="st"> </span>breastfeed <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2175-2" data-line-number="2"><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;bf&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2175-3" data-line-number="3"><span class="kw">as.matrix</span>()</a>
-<a class="sourceLine" id="cb2175-4" data-line-number="4">response</a></code></pre></div>
+<div class="sourceCode" id="cb2176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2176-1" data-line-number="1">response =<span class="st"> </span>breastfeed <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2176-2" data-line-number="2"><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;bf&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2176-3" data-line-number="3"><span class="kw">as.matrix</span>()</a>
+<a class="sourceLine" id="cb2176-4" data-line-number="4">response</a></code></pre></div>
 <pre><code>##      bf.yes bf.no
 ## [1,]      2     4
 ## [2,]      2     3
@@ -3722,8 +3731,8 @@ So, let’s make the <code>response</code> first:</p>
 the names of the columns I wanted started with <code>bf</code>, but
 whatever way you have that works is good.
 Now we fit the logistic regression:</p>
-<div class="sourceCode" id="cb2177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2177-1" data-line-number="1">breastfeed<span class="fl">.1</span>=<span class="kw">glm</span>(response<span class="op">~</span>gest.age,<span class="dt">data=</span>breastfeed,<span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</a>
-<a class="sourceLine" id="cb2177-2" data-line-number="2"><span class="kw">summary</span>(breastfeed<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2178-1" data-line-number="1">breastfeed<span class="fl">.1</span>=<span class="kw">glm</span>(response<span class="op">~</span>gest.age,<span class="dt">data=</span>breastfeed,<span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</a>
+<a class="sourceLine" id="cb2178-2" data-line-number="2"><span class="kw">summary</span>(breastfeed<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = response ~ gest.age, family = &quot;binomial&quot;, data = breastfeed)
@@ -3781,8 +3790,8 @@ set, and display them side by side with the observed data.</li>
 have to create a data frame of values to predict from (since you
 are using the original data).
 Thus, you only need something like this:</p>
-<div class="sourceCode" id="cb2179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2179-1" data-line-number="1">p=<span class="kw">predict</span>(breastfeed<span class="fl">.1</span>,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb2179-2" data-line-number="2"><span class="kw">cbind</span>(breastfeed,p)</a></code></pre></div>
+<div class="sourceCode" id="cb2180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2180-1" data-line-number="1">p=<span class="kw">predict</span>(breastfeed<span class="fl">.1</span>,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb2180-2" data-line-number="2"><span class="kw">cbind</span>(breastfeed,p)</a></code></pre></div>
 <pre><code>##   gest.age bf.yes bf.no         p
 ## 1       28      2     4 0.3620282
 ## 2       29      2     3 0.5025820
@@ -3794,20 +3803,20 @@ Thus, you only need something like this:</p>
 gestational age goes up, just as we would have expected.</p>
 <p>If you only wanted certain gestational ages, for example 25, 30 and
 35, you would do that like this:</p>
-<div class="sourceCode" id="cb2181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2181-1" data-line-number="1">ages.new=<span class="kw">data.frame</span>(<span class="dt">gest.age=</span><span class="kw">c</span>(<span class="dv">25</span>,<span class="dv">30</span>,<span class="dv">35</span>))</a>
-<a class="sourceLine" id="cb2181-2" data-line-number="2">p2=<span class="kw">predict</span>(breastfeed<span class="fl">.1</span>,ages.new,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb2181-3" data-line-number="3"><span class="kw">cbind</span>(ages.new,p2)</a></code></pre></div>
+<div class="sourceCode" id="cb2182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2182-1" data-line-number="1">ages.new=<span class="kw">data.frame</span>(<span class="dt">gest.age=</span><span class="kw">c</span>(<span class="dv">25</span>,<span class="dv">30</span>,<span class="dv">35</span>))</a>
+<a class="sourceLine" id="cb2182-2" data-line-number="2">p2=<span class="kw">predict</span>(breastfeed<span class="fl">.1</span>,ages.new,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb2182-3" data-line-number="3"><span class="kw">cbind</span>(ages.new,p2)</a></code></pre></div>
 <pre><code>##   gest.age         p2
 ## 1       25 0.09134905
 ## 2       30 0.64272897
 ## 3       35 0.96987261</code></pre>
 <p>Or, if you wanted to make a graph of the observed and predicted
 proportions/probabilities, you could do something like this:</p>
-<div class="sourceCode" id="cb2183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2183-1" data-line-number="1">breastfeed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>( <span class="dt">total=</span>bf.yes<span class="op">+</span>bf.no,</a>
-<a class="sourceLine" id="cb2183-2" data-line-number="2"><span class="dt">obs=</span>bf.yes<span class="op">/</span>total) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2183-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">pred=</span>p) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2183-4" data-line-number="4"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>gest.age,<span class="dt">y=</span>obs))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2183-5" data-line-number="5"><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>pred))<span class="op">+</span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">size=</span>total))</a></code></pre></div>
+<div class="sourceCode" id="cb2184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2184-1" data-line-number="1">breastfeed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>( <span class="dt">total=</span>bf.yes<span class="op">+</span>bf.no,</a>
+<a class="sourceLine" id="cb2184-2" data-line-number="2"><span class="dt">obs=</span>bf.yes<span class="op">/</span>total) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2184-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">pred=</span>p) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2184-4" data-line-number="4"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>gest.age,<span class="dt">y=</span>obs))<span class="op">+</span></a>
+<a class="sourceLine" id="cb2184-5" data-line-number="5"><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>pred))<span class="op">+</span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">size=</span>total))</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-142-1.png" width="672"  /></p>
 <p>What did I do there? I first created some new variables:
 <code>count</code> is the total number of babies of each gestational age,
@@ -3853,15 +3862,15 @@ with the description in the previous paragraph?</li>
 </ol>
 <p>Solution</p>
 <p>Nothing very new here:</p>
-<div class="sourceCode" id="cb2184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2184-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/donner.txt&quot;</span></a>
-<a class="sourceLine" id="cb2184-2" data-line-number="2">donner=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2185-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/donner.txt&quot;</span></a>
+<a class="sourceLine" id="cb2185-2" data-line-number="2">donner=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   age = col_double(),
 ##   gender = col_character(),
 ##   survived = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb2186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2186-1" data-line-number="1">donner</a></code></pre></div>
+<div class="sourceCode" id="cb2187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2187-1" data-line-number="1">donner</a></code></pre></div>
 <pre><code>## # A tibble: 45 x 3
 ##      age gender survived
 ##    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   
@@ -3909,36 +3918,36 @@ for gender and survival. I’ll take any mixture of graphs and
 numerical summaries that addresses each pair of variables somehow
 and summarizes them in a sensible way.
 Starting with <code>age</code> vs. <code>gender</code>:</p>
-<div class="sourceCode" id="cb2188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2188-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>gender,<span class="dt">y=</span>age))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2189-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>gender,<span class="dt">y=</span>age))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-144-1.png" width="672"  /></p>
 <p>or:</p>
-<div class="sourceCode" id="cb2189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2189-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>age))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)<span class="op">+</span><span class="kw">facet_grid</span>(gender<span class="op">~</span>.)</a></code></pre></div>
+<div class="sourceCode" id="cb2190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2190-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>age))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)<span class="op">+</span><span class="kw">facet_grid</span>(gender<span class="op">~</span>.)</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  /></p>
 <p>or:</p>
-<div class="sourceCode" id="cb2190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2190-1" data-line-number="1"><span class="kw">aggregate</span>(age<span class="op">~</span>gender,donner,mean)</a></code></pre></div>
+<div class="sourceCode" id="cb2191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2191-1" data-line-number="1"><span class="kw">aggregate</span>(age<span class="op">~</span>gender,donner,mean)</a></code></pre></div>
 <pre><code>##   gender      age
 ## 1 female 31.06667
 ## 2   male 32.16667</code></pre>
 <p>or:</p>
-<div class="sourceCode" id="cb2192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2192-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(age))</a></code></pre></div>
+<div class="sourceCode" id="cb2193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2193-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(age))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   gender     m
 ##   &lt;chr&gt;  &lt;dbl&gt;
 ## 1 female  31.1
 ## 2 male    32.2</code></pre>
 <p>Age vs. <code>survived</code> is the same idea:</p>
-<div class="sourceCode" id="cb2194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2194-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>survived,<span class="dt">y=</span>age))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2195-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>survived,<span class="dt">y=</span>age))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-148-1.png" width="672"  /></p>
 <p>or:</p>
-<div class="sourceCode" id="cb2195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2195-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>age))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)<span class="op">+</span><span class="kw">facet_grid</span>(survived<span class="op">~</span>.)</a></code></pre></div>
+<div class="sourceCode" id="cb2196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2196-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>age))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)<span class="op">+</span><span class="kw">facet_grid</span>(survived<span class="op">~</span>.)</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-149-1.png" width="672"  /></p>
 <p>or:</p>
-<div class="sourceCode" id="cb2196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2196-1" data-line-number="1"><span class="kw">aggregate</span>(age<span class="op">~</span>survived,donner,mean)</a></code></pre></div>
+<div class="sourceCode" id="cb2197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2197-1" data-line-number="1"><span class="kw">aggregate</span>(age<span class="op">~</span>survived,donner,mean)</a></code></pre></div>
 <pre><code>##   survived   age
 ## 1       no 35.48
 ## 2      yes 27.20</code></pre>
 <p>or:</p>
-<div class="sourceCode" id="cb2198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2198-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(survived) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(age))</a></code></pre></div>
+<div class="sourceCode" id="cb2199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2199-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(survived) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m=</span><span class="kw">mean</span>(age))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   survived     m
 ##   &lt;chr&gt;    &lt;dbl&gt;
@@ -3946,15 +3955,15 @@ Starting with <code>age</code> vs. <code>gender</code>:</p>
 ## 2 yes       27.2</code></pre>
 <p>For <code>survived</code> against <code>gender</code>, the obvious thing is a
 cross-tabulation, gotten like this:</p>
-<div class="sourceCode" id="cb2200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2200-1" data-line-number="1"><span class="kw">with</span>(donner,<span class="kw">table</span>(gender,survived))</a></code></pre></div>
+<div class="sourceCode" id="cb2201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2201-1" data-line-number="1"><span class="kw">with</span>(donner,<span class="kw">table</span>(gender,survived))</a></code></pre></div>
 <pre><code>##         survived
 ## gender   no yes
 ##   female  5  10
 ##   male   20  10</code></pre>
 <p>or like this:</p>
-<div class="sourceCode" id="cb2202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2202-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender,survived) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">n=</span><span class="kw">n</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb2203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2203-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender,survived) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">n=</span><span class="kw">n</span>())</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
-## # Groups:   gender [?]
+## # Groups:   gender [2]
 ##   gender survived     n
 ##   &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;
 ## 1 female no           5
@@ -3962,7 +3971,7 @@ cross-tabulation, gotten like this:</p>
 ## 3 male   no          20
 ## 4 male   yes         10</code></pre>
 <p>For a graph, borrow the grouped bar-plot idea from the parasites question:</p>
-<div class="sourceCode" id="cb2204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2204-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>gender,<span class="dt">fill=</span>survived))<span class="op">+</span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;dodge&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2205-1" data-line-number="1"><span class="kw">ggplot</span>(donner,<span class="kw">aes</span>(<span class="dt">x=</span>gender,<span class="dt">fill=</span>survived))<span class="op">+</span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;dodge&quot;</span>)</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-154-1.png" width="672"  /></p>
 <p>I think this way around for <code>x</code> and <code>fill</code> is better,
 since we want to ask something like “out of the females, how many survived”
@@ -3996,8 +4005,8 @@ However, the response variable <code>survived</code> is a categorical
 variable expressed as text, so we need to make it into a
 <code>factor</code> first. Either create a new variable that is the
 factor version of <code>survived</code>, or do it right in the <code>glm</code>:</p>
-<div class="sourceCode" id="cb2205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2205-1" data-line-number="1">donner<span class="fl">.1</span>=<span class="kw">glm</span>(<span class="kw">factor</span>(survived)<span class="op">~</span>age<span class="op">+</span>gender,<span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>,<span class="dt">data=</span>donner)</a>
-<a class="sourceLine" id="cb2205-2" data-line-number="2"><span class="kw">summary</span>(donner<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2206-1" data-line-number="1">donner<span class="fl">.1</span>=<span class="kw">glm</span>(<span class="kw">factor</span>(survived)<span class="op">~</span>age<span class="op">+</span>gender,<span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>,<span class="dt">data=</span>donner)</a>
+<a class="sourceLine" id="cb2206-2" data-line-number="2"><span class="kw">summary</span>(donner<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = factor(survived) ~ age + gender, family = &quot;binomial&quot;, 
@@ -4023,7 +4032,7 @@ factor version of <code>survived</code>, or do it right in the <code>glm</code>:
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
 <p>We ought to take a moment to think about what is being predicted here:</p>
-<div class="sourceCode" id="cb2207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2207-1" data-line-number="1"><span class="kw">levels</span>(<span class="kw">factor</span>(donner<span class="op">$</span>survived))</a></code></pre></div>
+<div class="sourceCode" id="cb2208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2208-1" data-line-number="1"><span class="kw">levels</span>(<span class="kw">factor</span>(donner<span class="op">$</span>survived))</a></code></pre></div>
 <pre><code>## [1] &quot;no&quot;  &quot;yes&quot;</code></pre>
 <p>The baseline is the first of these, <code>no</code>, and the thing that is
 predicted is the probability of the second one, <code>yes</code> (that is,
@@ -4085,7 +4094,7 @@ There is a lazy way to do step 1 (which I’ll show first), and a way
 that is more work but more reliable (because you have to concentrate
 less).
 Step 1, the lazy way:</p>
-<div class="sourceCode" id="cb2209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2209-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2210-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(age) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##       age      
 ##  Min.   :15.0  
 ##  1st Qu.:24.0  
@@ -4093,7 +4102,7 @@ Step 1, the lazy way:</p>
 ##  Mean   :31.8  
 ##  3rd Qu.:40.0  
 ##  Max.   :65.0</code></pre>
-<div class="sourceCode" id="cb2211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2211-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender)</a></code></pre></div>
+<div class="sourceCode" id="cb2212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2212-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   gender     n
 ##   &lt;chr&gt;  &lt;int&gt;
@@ -4101,28 +4110,28 @@ Step 1, the lazy way:</p>
 ## 2 male      30</code></pre>
 <p>Then construct vectors called <code>ages</code> and <code>genders</code> by
 literally copying the values output from above:</p>
-<div class="sourceCode" id="cb2213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2213-1" data-line-number="1">ages=<span class="kw">c</span>(<span class="dv">24</span>,<span class="dv">28</span>,<span class="dv">40</span>)</a>
-<a class="sourceLine" id="cb2213-2" data-line-number="2">genders=<span class="kw">c</span>(<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2214-1" data-line-number="1">ages=<span class="kw">c</span>(<span class="dv">24</span>,<span class="dv">28</span>,<span class="dv">40</span>)</a>
+<a class="sourceLine" id="cb2214-2" data-line-number="2">genders=<span class="kw">c</span>(<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>)</a></code></pre></div>
 <p>There is a risk here, because it is very easy to make typos while
 copying, so it would be more reliable to compute these (and, as long
 as you trust your computation, reproducible as well). Thinking of
 reproducibility, if the data set changes, your computation of
 quartiles etc. will still work, whereas your copying above won’t.</p>
 <p>So, let’s get the median and quartiles of age:</p>
-<div class="sourceCode" id="cb2214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2214-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2214-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(age,<span class="fl">0.25</span>),</a>
-<a class="sourceLine" id="cb2214-3" data-line-number="3"><span class="dt">med=</span><span class="kw">median</span>(age),</a>
-<a class="sourceLine" id="cb2214-4" data-line-number="4"><span class="dt">q3=</span><span class="kw">quantile</span>(age,<span class="fl">0.75</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2215-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2215-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(age,<span class="fl">0.25</span>),</a>
+<a class="sourceLine" id="cb2215-3" data-line-number="3"><span class="dt">med=</span><span class="kw">median</span>(age),</a>
+<a class="sourceLine" id="cb2215-4" data-line-number="4"><span class="dt">q3=</span><span class="kw">quantile</span>(age,<span class="fl">0.75</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##      q1   med    q3
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1    24    28    40</code></pre>
 <p>only these came out sideways, so we can “transpose” them:</p>
-<div class="sourceCode" id="cb2216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2216-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2216-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(age,<span class="fl">0.25</span>),</a>
-<a class="sourceLine" id="cb2216-3" data-line-number="3"><span class="dt">med=</span><span class="kw">median</span>(age),</a>
-<a class="sourceLine" id="cb2216-4" data-line-number="4"><span class="dt">q3=</span><span class="kw">quantile</span>(age,<span class="fl">0.75</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2216-5" data-line-number="5"><span class="kw">gather</span>(stat,value,<span class="kw">everything</span>())              </a></code></pre></div>
+<div class="sourceCode" id="cb2217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2217-1" data-line-number="1">donner <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2217-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(age,<span class="fl">0.25</span>),</a>
+<a class="sourceLine" id="cb2217-3" data-line-number="3"><span class="dt">med=</span><span class="kw">median</span>(age),</a>
+<a class="sourceLine" id="cb2217-4" data-line-number="4"><span class="dt">q3=</span><span class="kw">quantile</span>(age,<span class="fl">0.75</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2217-5" data-line-number="5"><span class="kw">gather</span>(stat,value,<span class="kw">everything</span>())              </a></code></pre></div>
 <pre><code>## Warning: attributes are not identical across measure variables;
 ## they will be dropped</code></pre>
 <pre><code>## # A tibble: 3 x 2
@@ -4132,30 +4141,30 @@ quartiles etc. will still work, whereas your copying above won’t.</p>
 ## 2 med      28
 ## 3 q3       40</code></pre>
 <p>and now if we “pull out” the <code>value</code> column, we are good:</p>
-<div class="sourceCode" id="cb2219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2219-1" data-line-number="1">ages =<span class="st"> </span>donner <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2219-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(age,<span class="fl">0.25</span>),</a>
-<a class="sourceLine" id="cb2219-3" data-line-number="3"><span class="dt">med=</span><span class="kw">median</span>(age),</a>
-<a class="sourceLine" id="cb2219-4" data-line-number="4"><span class="dt">q3=</span><span class="kw">quantile</span>(age,<span class="fl">0.75</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2219-5" data-line-number="5"><span class="kw">gather</span>(stat,value,<span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2219-6" data-line-number="6"><span class="kw">pull</span>(value)</a></code></pre></div>
+<div class="sourceCode" id="cb2220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2220-1" data-line-number="1">ages =<span class="st"> </span>donner <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2220-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(age,<span class="fl">0.25</span>),</a>
+<a class="sourceLine" id="cb2220-3" data-line-number="3"><span class="dt">med=</span><span class="kw">median</span>(age),</a>
+<a class="sourceLine" id="cb2220-4" data-line-number="4"><span class="dt">q3=</span><span class="kw">quantile</span>(age,<span class="fl">0.75</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2220-5" data-line-number="5"><span class="kw">gather</span>(stat,value,<span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2220-6" data-line-number="6"><span class="kw">pull</span>(value)</a></code></pre></div>
 <pre><code>## Warning: attributes are not identical across measure variables;
 ## they will be dropped</code></pre>
-<div class="sourceCode" id="cb2221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2221-1" data-line-number="1">ages</a></code></pre></div>
+<div class="sourceCode" id="cb2222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2222-1" data-line-number="1">ages</a></code></pre></div>
 <pre><code>## [1] 24 28 40</code></pre>
 <p>The same kind of idea will get us both genders without typing any genders:</p>
-<div class="sourceCode" id="cb2223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2223-1" data-line-number="1">genders =<span class="st"> </span>donner <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2223-2" data-line-number="2"><span class="kw">count</span>(gender) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2223-3" data-line-number="3"><span class="kw">pull</span>(gender)</a>
-<a class="sourceLine" id="cb2223-4" data-line-number="4">genders</a></code></pre></div>
+<div class="sourceCode" id="cb2224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2224-1" data-line-number="1">genders =<span class="st"> </span>donner <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2224-2" data-line-number="2"><span class="kw">count</span>(gender) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2224-3" data-line-number="3"><span class="kw">pull</span>(gender)</a>
+<a class="sourceLine" id="cb2224-4" data-line-number="4">genders</a></code></pre></div>
 <pre><code>## [1] &quot;female&quot; &quot;male&quot;</code></pre>
 <p>We don’t care how many there are of each gender; it’s just a device to
 get the different genders.
 <label for="tufte-mn-140" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-140" class="margin-toggle"><span class="marginnote">The counts are in a column called <em>n</em> which we calculate and then ignore.</span> This is another way:</p>
-<div class="sourceCode" id="cb2225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2225-1" data-line-number="1">genders =<span class="st"> </span>donner <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2225-2" data-line-number="2"><span class="kw">select</span>(gender) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2225-3" data-line-number="3"><span class="kw">distinct</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2225-4" data-line-number="4"><span class="kw">pull</span>(gender)</a>
-<a class="sourceLine" id="cb2225-5" data-line-number="5">genders</a></code></pre></div>
+<div class="sourceCode" id="cb2226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2226-1" data-line-number="1">genders =<span class="st"> </span>donner <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2226-2" data-line-number="2"><span class="kw">select</span>(gender) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2226-3" data-line-number="3"><span class="kw">distinct</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2226-4" data-line-number="4"><span class="kw">pull</span>(gender)</a>
+<a class="sourceLine" id="cb2226-5" data-line-number="5">genders</a></code></pre></div>
 <pre><code>## [1] &quot;male&quot;   &quot;female&quot;</code></pre>
 <p>The rationale behind this one is that <code>distinct()</code> removes
 duplicates (or duplicate combinations if you have more than one
@@ -4164,8 +4173,8 @@ different from each other).</p>
 <p>I don’t think the genders are ever going to change, but it’s the
 principle of the thing.</p>
 <p>Step 2:</p>
-<div class="sourceCode" id="cb2227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2227-1" data-line-number="1">donner.new=<span class="kw">crossing</span>(<span class="dt">age=</span>ages,<span class="dt">gender=</span>genders)</a>
-<a class="sourceLine" id="cb2227-2" data-line-number="2">donner.new</a></code></pre></div>
+<div class="sourceCode" id="cb2228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2228-1" data-line-number="1">donner.new=<span class="kw">crossing</span>(<span class="dt">age=</span>ages,<span class="dt">gender=</span>genders)</a>
+<a class="sourceLine" id="cb2228-2" data-line-number="2">donner.new</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##     age gender
 ##   &lt;dbl&gt; &lt;chr&gt; 
@@ -4177,12 +4186,12 @@ principle of the thing.</p>
 ## 6    40 male</code></pre>
 <p>All combinations of the three ages and two genders.</p>
 <p>Step 3:</p>
-<div class="sourceCode" id="cb2229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2229-1" data-line-number="1">p=<span class="kw">predict</span>(donner<span class="fl">.1</span>,donner.new,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb2229-2" data-line-number="2">p</a></code></pre></div>
+<div class="sourceCode" id="cb2230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2230-1" data-line-number="1">p=<span class="kw">predict</span>(donner<span class="fl">.1</span>,donner.new,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb2230-2" data-line-number="2">p</a></code></pre></div>
 <pre><code>##         1         2         3         4         5         6 
 ## 0.7947039 0.4393557 0.7389850 0.3643360 0.5255405 0.1831661</code></pre>
 <p>Step 4:</p>
-<div class="sourceCode" id="cb2231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2231-1" data-line-number="1"><span class="kw">cbind</span>(donner.new,p)</a></code></pre></div>
+<div class="sourceCode" id="cb2232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2232-1" data-line-number="1"><span class="kw">cbind</span>(donner.new,p)</a></code></pre></div>
 <pre><code>##   age gender         p
 ## 1  24 female 0.7947039
 ## 2  24   male 0.4393557
@@ -4237,15 +4246,15 @@ displays). Why are you convinced that have the right thing?</li>
 </ol>
 <p>Solution</p>
 <p>Data values separated by one space, so:</p>
-<div class="sourceCode" id="cb2233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2233-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/apache.txt&quot;</span></a>
-<a class="sourceLine" id="cb2233-2" data-line-number="2">icu=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2234-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/apache.txt&quot;</span></a>
+<a class="sourceLine" id="cb2234-2" data-line-number="2">icu=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   apache = col_double(),
 ##   patients = col_double(),
 ##   deaths = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2235-1" data-line-number="1">icu</a></code></pre></div>
+<div class="sourceCode" id="cb2236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2236-1" data-line-number="1">icu</a></code></pre></div>
 <pre><code>## # A tibble: 38 x 3
 ##    apache patients deaths
 ##     &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
@@ -4300,9 +4309,9 @@ that didn’t happen (survived). We don’t actually have the numbers
 of survivals, but we can calculate these by subtracting from the
 numbers of patients (since a patient must have either lived or
 died):</p>
-<div class="sourceCode" id="cb2237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2237-1" data-line-number="1">response =<span class="st"> </span>icu <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">survivals=</span>patients<span class="op">-</span>deaths) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2237-2" data-line-number="2"><span class="kw">select</span>(deaths, survivals) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>()</a>
-<a class="sourceLine" id="cb2237-3" data-line-number="3">response</a></code></pre></div>
+<div class="sourceCode" id="cb2238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2238-1" data-line-number="1">response =<span class="st"> </span>icu <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">survivals=</span>patients<span class="op">-</span>deaths) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2238-2" data-line-number="2"><span class="kw">select</span>(deaths, survivals) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>()</a>
+<a class="sourceLine" id="cb2238-3" data-line-number="3">response</a></code></pre></div>
 <pre><code>##       deaths survivals
 ##  [1,]      0         1
 ##  [2,]      0         1
@@ -4349,9 +4358,9 @@ two numbers in each row add up to the number of <code>patients</code> for
 that row.</p>
 <p>Or do everything outside of the data
 frame:</p>
-<div class="sourceCode" id="cb2239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2239-1" data-line-number="1">survivals=<span class="kw">with</span>(icu,patients<span class="op">-</span>deaths)</a>
-<a class="sourceLine" id="cb2239-2" data-line-number="2">resp=<span class="kw">with</span>(icu, <span class="kw">cbind</span>(deaths, survivals))</a>
-<a class="sourceLine" id="cb2239-3" data-line-number="3">resp</a></code></pre></div>
+<div class="sourceCode" id="cb2240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2240-1" data-line-number="1">survivals=<span class="kw">with</span>(icu,patients<span class="op">-</span>deaths)</a>
+<a class="sourceLine" id="cb2240-2" data-line-number="2">resp=<span class="kw">with</span>(icu, <span class="kw">cbind</span>(deaths, survivals))</a>
+<a class="sourceLine" id="cb2240-3" data-line-number="3">resp</a></code></pre></div>
 <pre><code>##       deaths survivals
 ##  [1,]      0         1
 ##  [2,]      0         1
@@ -4391,7 +4400,7 @@ frame:</p>
 ## [36,]      1         0
 ## [37,]      1         0
 ## [38,]      0         1</code></pre>
-<div class="sourceCode" id="cb2241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2241-1" data-line-number="1"><span class="kw">class</span>(resp)</a></code></pre></div>
+<div class="sourceCode" id="cb2242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2242-1" data-line-number="1"><span class="kw">class</span>(resp)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <p>Or use the dollar sign instead of the <code>with</code>s. Any of those is
 good.</p>
@@ -4401,8 +4410,8 @@ good.</p>
 death from the <code>apache</code> score, and display the results.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2243-1" data-line-number="1">apache<span class="fl">.1</span>=<span class="kw">glm</span>(response<span class="op">~</span>apache,<span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>,<span class="dt">data=</span>icu)</a>
-<a class="sourceLine" id="cb2243-2" data-line-number="2"><span class="kw">summary</span>(apache<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2244-1" data-line-number="1">apache<span class="fl">.1</span>=<span class="kw">glm</span>(response<span class="op">~</span>apache,<span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>,<span class="dt">data=</span>icu)</a>
+<a class="sourceLine" id="cb2244-2" data-line-number="2"><span class="kw">summary</span>(apache<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = response ~ apache, family = &quot;binomial&quot;, data = icu)
@@ -4458,8 +4467,8 @@ from. (You can display all of them.)</li>
 <p>Solution</p>
 <p>This is the easier version of <code>predict</code> since we don’t have
 to make a new data frame of values to predict from:</p>
-<div class="sourceCode" id="cb2245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2245-1" data-line-number="1">p=<span class="kw">predict</span>(apache<span class="fl">.1</span>,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb2245-2" data-line-number="2"><span class="kw">cbind</span>(icu,p)</a></code></pre></div>
+<div class="sourceCode" id="cb2246"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2246-1" data-line-number="1">p=<span class="kw">predict</span>(apache<span class="fl">.1</span>,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb2246-2" data-line-number="2"><span class="kw">cbind</span>(icu,p)</a></code></pre></div>
 <pre><code>##    apache patients deaths          p
 ## 1       0        1      0 0.09192721
 ## 2       2        1      0 0.11313881
@@ -4513,10 +4522,10 @@ agreement between observation and prediction?</li>
 <p>Solution</p>
 <p>This means calculating the observed proportions first, adding the
 predicted probabilities, and then making the plot, like this:</p>
-<div class="sourceCode" id="cb2247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2247-1" data-line-number="1">icu <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">obs_prop=</span>deaths<span class="op">/</span>patients) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2247-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">pred=</span>p) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2247-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>apache,<span class="dt">y=</span>pred))<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb2247-4" data-line-number="4"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>obs_prop))</a></code></pre></div>
+<div class="sourceCode" id="cb2248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2248-1" data-line-number="1">icu <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">obs_prop=</span>deaths<span class="op">/</span>patients) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2248-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">pred=</span>p) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2248-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>apache,<span class="dt">y=</span>pred))<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb2248-4" data-line-number="4"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>obs_prop))</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-172-1.png" width="672"  /></p>
 <p>You don’t need to make a column in the pipeline with the predictions
 in it; you can just use what I called <code>p</code> directly in the
@@ -4538,10 +4547,10 @@ point
 <label for="tufte-mn-142" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-142" class="margin-toggle"><span class="marginnote">By size is meant the <em>area</em> of the circle, which is what our brains perceive as the size of two-dimensional, like the area of a slice in a pie chart. On the plot, the radius of the circle for 20 is less than twice that of the circle for 10, because the area depends on the radius <em>squared</em>.</span>
 according to the number of patients it was based on. This is not hard
 to do, since we have exactly that in <code>patients</code>:</p>
-<div class="sourceCode" id="cb2248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2248-1" data-line-number="1">icu <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">obs_prop=</span>deaths<span class="op">/</span>patients) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2248-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">pred=</span>p) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2248-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>apache,<span class="dt">y=</span>pred))<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb2248-4" data-line-number="4"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>obs_prop,<span class="dt">size=</span>patients))</a></code></pre></div>
+<div class="sourceCode" id="cb2249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2249-1" data-line-number="1">icu <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">obs_prop=</span>deaths<span class="op">/</span>patients) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2249-2" data-line-number="2"><span class="kw">mutate</span>(<span class="dt">pred=</span>p) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2249-3" data-line-number="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>apache,<span class="dt">y=</span>pred))<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb2249-4" data-line-number="4"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>obs_prop,<span class="dt">size=</span>patients))</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-173-1.png" width="672"  /></p>
 <p>The points that are far from the prediction are mostly based on a
 small number of patients, and the observed proportions for
@@ -4549,7 +4558,7 @@ small number of patients, and the observed proportions for
 prediction. Note that the <code>size</code>, because it is based on one of
 the variables, goes <em>inside</em> the <code>aes</code>. If you wanted the
 points all to be of size 5, say, you’d do it this way:</p>
-<div class="sourceCode" id="cb2249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2249-1" data-line-number="1"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>obs_prop),<span class="dt">size=</span><span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2250-1" data-line-number="1"><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>obs_prop),<span class="dt">size=</span><span class="dv">5</span>)</a></code></pre></div>
 </div>
 <div id="go-away-and-dont-come-back" class="section level2">
 <h2><span class="header-section-number">16.10</span> Go away and don’t come back!</h2>
@@ -4573,15 +4582,15 @@ score.</p>
 <li>Read in and display the data.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2250-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/ha2.txt&quot;</span></a>
-<a class="sourceLine" id="cb2250-2" data-line-number="2">ha=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2251-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/ha2.txt&quot;</span></a>
+<a class="sourceLine" id="cb2251-2" data-line-number="2">ha=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   second = col_character(),
 ##   anger = col_character(),
 ##   anxiety = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2252"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2252-1" data-line-number="1">ha</a></code></pre></div>
+<div class="sourceCode" id="cb2253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2253-1" data-line-number="1">ha</a></code></pre></div>
 <pre><code>## # A tibble: 20 x 3
 ##    second anger anxiety
 ##    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt;
@@ -4616,8 +4625,8 @@ class. Display the results.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb2254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2254-1" data-line-number="1">ha<span class="fl">.1</span>=<span class="kw">glm</span>(<span class="kw">factor</span>(second)<span class="op">~</span>anger<span class="op">+</span>anxiety, <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>,<span class="dt">data=</span>ha)</a>
-<a class="sourceLine" id="cb2254-2" data-line-number="2"><span class="kw">summary</span>(ha<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2255-1" data-line-number="1">ha<span class="fl">.1</span>=<span class="kw">glm</span>(<span class="kw">factor</span>(second)<span class="op">~</span>anger<span class="op">+</span>anxiety, <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>,<span class="dt">data=</span>ha)</a>
+<a class="sourceLine" id="cb2255-2" data-line-number="2"><span class="kw">summary</span>(ha<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = factor(second) ~ anger + anxiety, family = &quot;binomial&quot;, 
@@ -4670,12 +4679,12 @@ for.</li>
 opposed to calculating something like quartiles from the data), so
 we might as well just type them in.
 Step 1 is to save them (my preference is under plural names):</p>
-<div class="sourceCode" id="cb2256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2256-1" data-line-number="1">anxieties=<span class="kw">c</span>(<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>)</a>
-<a class="sourceLine" id="cb2256-2" data-line-number="2">angers=<span class="kw">c</span>(<span class="st">&quot;y&quot;</span>,<span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2257-1" data-line-number="1">anxieties=<span class="kw">c</span>(<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>)</a>
+<a class="sourceLine" id="cb2257-2" data-line-number="2">angers=<span class="kw">c</span>(<span class="st">&quot;y&quot;</span>,<span class="st">&quot;n&quot;</span>)</a></code></pre></div>
 <p>Step 2 is to make a data frame of combinations using
 <code>crossing</code>. I’ll call mine <code>new</code>:</p>
-<div class="sourceCode" id="cb2257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2257-1" data-line-number="1">new=<span class="kw">crossing</span>(<span class="dt">anxiety=</span>anxieties, <span class="dt">anger=</span>angers)</a>
-<a class="sourceLine" id="cb2257-2" data-line-number="2">new</a></code></pre></div>
+<div class="sourceCode" id="cb2258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2258-1" data-line-number="1">new=<span class="kw">crossing</span>(<span class="dt">anxiety=</span>anxieties, <span class="dt">anger=</span>angers)</a>
+<a class="sourceLine" id="cb2258-2" data-line-number="2">new</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   anxiety anger
 ##     &lt;dbl&gt; &lt;chr&gt;
@@ -4688,11 +4697,11 @@ Step 1 is to save them (my preference is under plural names):</p>
 <p>Step 3 is to do the predictions. Into <code>predict</code> go (in order)
 the fitted model, the new data frame that we just made, and something
 to make the predictions be probabilities:</p>
-<div class="sourceCode" id="cb2259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2259-1" data-line-number="1">p=<span class="kw">predict</span>(ha<span class="fl">.1</span>,new,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2260-1" data-line-number="1">p=<span class="kw">predict</span>(ha<span class="fl">.1</span>,new,<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a></code></pre></div>
 <p>Step 4 is to put these next to the data frame we
 created. <code>cbind</code> is easiest, since we don’t know what kind of
 thing <code>p</code> might be, and <code>bind_cols</code> is pickier:</p>
-<div class="sourceCode" id="cb2260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2260-1" data-line-number="1"><span class="kw">cbind</span>(new,p)</a></code></pre></div>
+<div class="sourceCode" id="cb2261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2261-1" data-line-number="1"><span class="kw">cbind</span>(new,p)</a></code></pre></div>
 <pre><code>##   anxiety anger          p
 ## 1      40     n 0.16774789
 ## 2      40     y 0.06749763
@@ -4755,7 +4764,7 @@ P-values.
 <code>anxiety</code> is significant, so it definitely has an effect on
 the probability of a second heart attack. The pattern is clear
 enough even with this small data set. Here’s a visual:</p>
-<div class="sourceCode" id="cb2262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2262-1" data-line-number="1"><span class="kw">ggplot</span>(ha,<span class="kw">aes</span>(<span class="dt">x=</span>second,<span class="dt">y=</span>anxiety))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2263-1" data-line-number="1"><span class="kw">ggplot</span>(ha,<span class="kw">aes</span>(<span class="dt">x=</span>second,<span class="dt">y=</span>anxiety))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-181-1.png" width="672"  /></p>
 <p>This is the wrong way around in terms of cause and effect, but it
 shows pretty clearly that people who suffer a second heart attack have
@@ -4772,7 +4781,7 @@ wide, and for the two levels of <code>anger</code> at a fixed
 <code>anxiety</code> they would almost certainly overlap.</p>
 <p>Another way of seeing that is a visual, which would be a side-by-side
 bar chart:</p>
-<div class="sourceCode" id="cb2263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2263-1" data-line-number="1"><span class="kw">ggplot</span>(ha,<span class="kw">aes</span>(<span class="dt">x=</span>anger,<span class="dt">fill=</span>second))<span class="op">+</span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;dodge&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2264-1" data-line-number="1"><span class="kw">ggplot</span>(ha,<span class="kw">aes</span>(<span class="dt">x=</span>anger,<span class="dt">fill=</span>second))<span class="op">+</span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;dodge&quot;</span>)</a></code></pre></div>
 <p><img src="15-logistic-regression_files/figure-html/unnamed-chunk-182-1.png" width="672"  /></p>
 <p>A small majority of people who took the anger management did not have
 a second heart attack, while a small minority of those who did not,
@@ -4780,7 +4789,7 @@ did.
 <label for="tufte-mn-143" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-143" class="margin-toggle"><span class="marginnote">Read that carefully.</span> But with these small numbers, the
 difference, even though it points the way we would have guessed, is
 not large enough to be significant:</p>
-<div class="sourceCode" id="cb2264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2264-1" data-line-number="1"><span class="kw">with</span>(ha,<span class="kw">table</span>(anger,second))</a></code></pre></div>
+<div class="sourceCode" id="cb2265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2265-1" data-line-number="1"><span class="kw">with</span>(ha,<span class="kw">table</span>(anger,second))</a></code></pre></div>
 <pre><code>##      second
 ## anger n y
 ##     n 4 7

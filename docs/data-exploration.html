@@ -322,10 +322,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 4</span> Data exploration</h1>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.3.0
-## ✔ tibble  2.0.1     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.2     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## ✔ ggplot2 3.1.0       ✔ purrr   0.3.1  
+## ✔ tibble  2.0.1       ✔ dplyr   0.8.0.1
+## ✔ tidyr   0.8.3       ✔ stringr 1.4.0  
+## ✔ readr   1.3.1       ✔ forcats 0.3.0</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
@@ -1092,18 +1092,27 @@ it’s harder to be sure there).</p>
 <p>Solution</p>
 <p>Without naming them explicitly means using some other way to pick them out of the data frame, either <code>summarize\_if</code> or <code>summarize\_at</code>. To do it the first way, ask what these two columns have in common: they are the only two numeric (quantitative) columns:</p>
 <div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_if</span>(is.numeric,<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
+<pre><code>## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## please use list() instead
+## 
+## # Before:
+## funs(name = f(.)
+## 
+## # After: 
+## list(name = ~f(.))
+## This warning is displayed once per session.</code></pre>
 <pre><code>## # A tibble: 1 x 4
 ##   CAS_mean CARS_mean CAS_sd CARS_sd
 ##      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
 ## 1     2.82      2.77  0.484   0.671</code></pre>
 <p>Or the second way, asking yourself what the <em>names</em> of those columns have in common: they start with C and the gender column doesn’t:</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb165-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;C&quot;</span>)),<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;C&quot;</span>)),<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##   CAS_mean CARS_mean CAS_sd CARS_sd
 ##      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
 ## 1     2.82      2.77  0.484   0.671</code></pre>
 <p>Either of these is good, or anything equivalent (like noting that the two anxiety scales both <code>ends\_with</code> S):</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">ends_with</span>(<span class="st">&quot;S&quot;</span>)),<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">ends_with</span>(<span class="st">&quot;S&quot;</span>)),<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##   CAS_mean CARS_mean CAS_sd CARS_sd
 ##      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
@@ -1112,13 +1121,13 @@ it’s harder to be sure there).</p>
 <p>Yet another way to do it is to select the columns you want first (which
 you can do by number so as not to name them), and then find the mean
 and SD of all of them. This uses two tools that we haven’t seen yet:</p>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb169-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##   CAS_mean CARS_mean CAS_sd CARS_sd
 ##      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
 ## 1     2.82      2.77  0.484   0.671</code></pre>
 <p>This doesn’t work:</p>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" data-line-number="1"><span class="kw">summary</span>(anxiety)</a></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" data-line-number="1"><span class="kw">summary</span>(anxiety)</a></code></pre></div>
 <pre><code>##     gender               CAS             CARS      
 ##  Length:35          Min.   :1.800   Min.   :1.000  
 ##  Class :character   1st Qu.:2.575   1st Qu.:2.445  
@@ -1132,16 +1141,16 @@ a way other than this.)</p>
 <p>In summary, find a way to get those answers without naming those
 columns in your code, and I’m good.</p>
 <p>In case you were wondering about how to do this separately by gender, well, put the <code>group\_by</code> in like you did before:</p>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb173-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb173-2" data-line-number="2"><span class="kw">summarize_if</span>(is.numeric,<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb174-2" data-line-number="2"><span class="kw">summarize_if</span>(is.numeric,<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   gender CAS_mean CARS_mean CAS_sd CARS_sd
 ##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
 ## 1 female     2.64      2.51  0.554   0.773
 ## 2 male       2.94      2.96  0.390   0.525</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb175-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb175-2" data-line-number="2"><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;C&quot;</span>)),<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" data-line-number="1">anxiety <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb176-2" data-line-number="2"><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;C&quot;</span>)),<span class="kw">funs</span>(mean,sd))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   gender CAS_mean CARS_mean CAS_sd CARS_sd
 ##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
@@ -1150,14 +1159,14 @@ columns in your code, and I’m good.</p>
 <p>The male means are slightly higher on both tests, but the male
 standard deviations are a little smaller.
 You might be wondering whether the test scores are related. They are both quantitative, so the obvious way to find out is a scatterplot:</p>
-<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb177-1" data-line-number="1"><span class="kw">ggplot</span>(anxiety,<span class="kw">aes</span>(<span class="dt">x=</span>CAS,<span class="dt">y=</span>CARS))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" data-line-number="1"><span class="kw">ggplot</span>(anxiety,<span class="kw">aes</span>(<span class="dt">x=</span>CAS,<span class="dt">y=</span>CARS))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672"  /></p>
 <p>The two variables can be on either axis, since there is no obvious
 response or explanatory variable. A higher score on one scale goes
 with a higher score on the other, suggesting that the two scales are
 measuring the same thing.</p>
 <p>This plot mixes up the males and females, so you might like to distinguish them, which goes like this:</p>
-<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" data-line-number="1"><span class="kw">ggplot</span>(anxiety,<span class="kw">aes</span>(<span class="dt">x=</span>CAS,<span class="dt">y=</span>CARS,<span class="dt">colour=</span>gender))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb179-1" data-line-number="1"><span class="kw">ggplot</span>(anxiety,<span class="kw">aes</span>(<span class="dt">x=</span>CAS,<span class="dt">y=</span>CARS,<span class="dt">colour=</span>gender))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="03-data-summaries_files/figure-html/unnamed-chunk-55-1.png" width="672"  /></p>
 <p>There is a slight (but only slight) tendency for the males to be up
 and to the right, and for the females to be down and to the left. This
@@ -1198,14 +1207,14 @@ it ought to.</li>
 <p>Solution</p>
 <p>I was lazy and used the one on the web, the
 values being separated (“delimited”) by exactly one space:</p>
-<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb180-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/marks.txt&quot;</span></a>
-<a class="sourceLine" id="cb180-2" data-line-number="2">marks=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb181-1" data-line-number="1">my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/marks.txt&quot;</span></a>
+<a class="sourceLine" id="cb181-2" data-line-number="2">marks=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   class = col_character(),
 ##   score = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" data-line-number="1">marks</a></code></pre></div>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" data-line-number="1">marks</a></code></pre></div>
 <pre><code>## # A tibble: 11 x 2
 ##    class  score
 ##    &lt;chr&gt;  &lt;dbl&gt;
@@ -1227,7 +1236,7 @@ top line of the data file was variable names. With
 <code>read_delim</code>, that’s the default, and if the top line is
 <em>not</em> variable names, that’s when you have to say so. If I cheat,
 by skipping the first line and saying that I then have no column names, I get:</p>
-<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" data-line-number="1"><span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F,<span class="dt">skip=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb185-1" data-line-number="1"><span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span>F,<span class="dt">skip=</span><span class="dv">1</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   X1 = col_character(),
@@ -1250,7 +1259,7 @@ by skipping the first line and saying that I then have no column names, I get:</
 <p>Column names are supplied (<code>X1</code> and <code>X2</code>). I could also
 supply my own column names, in which case the file needs not to have
 any, so I need the <code>skip</code> again:</p>
-<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" data-line-number="1"><span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;instructor&quot;</span>,<span class="st">&quot;mark&quot;</span>),<span class="dt">skip=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb188-1" data-line-number="1"><span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;instructor&quot;</span>,<span class="st">&quot;mark&quot;</span>),<span class="dt">skip=</span><span class="dv">1</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   instructor = col_character(),
@@ -1274,16 +1283,16 @@ any, so I need the <code>skip</code> again:</p>
 <li><a name="part:sbsbox">*</a> Obtain side-by-side boxplots of the scores for each class.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb190-2" data-line-number="2"><span class="kw">ggplot</span>(marks,<span class="kw">aes</span>(<span class="dt">x=</span>class,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb191-2" data-line-number="2"><span class="kw">ggplot</span>(marks,<span class="kw">aes</span>(<span class="dt">x=</span>class,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="03-data-summaries_files/figure-html/paignton-1.png" width="672"  /></p>
 <p>Remember: on a regular boxplot,
 <label for="tufte-mn-12" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-12" class="margin-toggle"><span class="marginnote">Boxplots can also go across the page, but for us, they don’t.</span>
 the groups go across (<span class="math inline">\(x\)</span>), the
 variable measured goes up (<span class="math inline">\(y\)</span>).</p>
 <p>Extra: this might work:</p>
-<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" data-line-number="1"><span class="kw">ggplot</span>(marks,<span class="kw">aes</span>(<span class="dt">x=</span>class,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb191-2" data-line-number="2"><span class="kw">coord_flip</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" data-line-number="1"><span class="kw">ggplot</span>(marks,<span class="kw">aes</span>(<span class="dt">x=</span>class,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb192-2" data-line-number="2"><span class="kw">coord_flip</span>()</a></code></pre></div>
 <p><img src="03-data-summaries_files/figure-html/unnamed-chunk-59-1.png" width="672"  /></p>
 <p>It does. That was a guess. So if you want sideways boxplots, this is
 how you can get them. Long group names sometimes fit better on the <span class="math inline">\(y\)</span>-axis, in which case flipping the axes will help.
@@ -1313,14 +1322,14 @@ of which class they came from.</li>
 <p>Solution</p>
 <p>Replace your <span class="math inline">\(x\)</span>-coordinate by some kind of dummy thing like
 <code>1</code> (<code>factor(1)</code> also works):</p>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" data-line-number="1"><span class="kw">ggplot</span>(marks,<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" data-line-number="1"><span class="kw">ggplot</span>(marks,<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="03-data-summaries_files/figure-html/torquay-1.png" width="672"  /></p>
 <p>The <span class="math inline">\(x\)</span>-axis is kind of dopey, so you just ignore it. It is possible
 to remove it, but that is more work than it’s worth, and I didn’t get
 rid of the ticks below:</p>
-<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" data-line-number="1"><span class="kw">ggplot</span>(marks,<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb193-2" data-line-number="2"><span class="kw">theme</span>(<span class="dt">axis.text.x=</span><span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb193-3" data-line-number="3"><span class="dt">axis.title.x=</span><span class="kw">element_blank</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" data-line-number="1"><span class="kw">ggplot</span>(marks,<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span>score))<span class="op">+</span><span class="kw">geom_boxplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb194-2" data-line-number="2"><span class="kw">theme</span>(<span class="dt">axis.text.x=</span><span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb194-3" data-line-number="3"><span class="dt">axis.title.x=</span><span class="kw">element_blank</span>())</a></code></pre></div>
 <p><img src="03-data-summaries_files/figure-html/unnamed-chunk-60-1.png" width="672"  /></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Compute the median score (of all the scores
@@ -1329,14 +1338,14 @@ Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>Three ways to get the median score. I like the first one best:</p>
-<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(score))</a></code></pre></div>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(score))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     med
 ##   &lt;dbl&gt;
 ## 1    72</code></pre>
-<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" data-line-number="1"><span class="kw">with</span>(marks,<span class="kw">median</span>(score))</a></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" data-line-number="1"><span class="kw">with</span>(marks,<span class="kw">median</span>(score))</a></code></pre></div>
 <pre><code>## [1] 72</code></pre>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" data-line-number="1"><span class="kw">median</span>(marks<span class="op">$</span>score)</a></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" data-line-number="1"><span class="kw">median</span>(marks<span class="op">$</span>score)</a></code></pre></div>
 <pre><code>## [1] 72</code></pre>
 <p><code>summarize</code> is the <code>tidyverse</code> “verb” that does what
 you want here. (The same idea gets the mean score for each class, below.)</p>
@@ -1346,8 +1355,8 @@ you want lives in the data frame <code>marks</code>. These are two ways to
 do that.</p>
 <p>Extra: if you wanted median by group, this is the approved
 (<code>tidyverse</code>) way:</p>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(class) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb200-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(score))</a></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(class) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb201-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">med=</span><span class="kw">median</span>(score))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   class    med
 ##   &lt;chr&gt;  &lt;dbl&gt;
@@ -1357,11 +1366,11 @@ do that.</p>
 then whatever you do after that is done for <em>each</em> group.</p>
 <p>You can now go back and compare these medians with the ones on the
 boxplots in (<a href="#part:sbsbox">here</a>). They should be the same. Or you can even do this:</p>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb202-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(class) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb202-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(score,<span class="fl">0.25</span>),</a>
-<a class="sourceLine" id="cb202-3" data-line-number="3"><span class="dt">med=</span><span class="kw">median</span>(score),</a>
-<a class="sourceLine" id="cb202-4" data-line-number="4"><span class="dt">q3=</span><span class="kw">quantile</span>(score,<span class="fl">0.75</span>)</a>
-<a class="sourceLine" id="cb202-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(class) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb203-2" data-line-number="2"><span class="kw">summarize</span>(<span class="dt">q1=</span><span class="kw">quantile</span>(score,<span class="fl">0.25</span>),</a>
+<a class="sourceLine" id="cb203-3" data-line-number="3"><span class="dt">med=</span><span class="kw">median</span>(score),</a>
+<a class="sourceLine" id="cb203-4" data-line-number="4"><span class="dt">q3=</span><span class="kw">quantile</span>(score,<span class="fl">0.75</span>)</a>
+<a class="sourceLine" id="cb203-5" data-line-number="5">)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 4
 ##   class     q1   med    q3
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1372,13 +1381,13 @@ match up with the top and bottom of the boxes on the boxplots. The
 only restriction is that the things on the right side of the equals
 should return a <em>single</em> number. If you have a function like
 <code>quantile</code> without anything extra that returns more than one number:</p>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" data-line-number="1"><span class="kw">quantile</span>(marks<span class="op">$</span>score)</a></code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" data-line-number="1"><span class="kw">quantile</span>(marks<span class="op">$</span>score)</a></code></pre></div>
 <pre><code>##   0%  25%  50%  75% 100% 
 ## 59.0 62.5 72.0 78.5 83.0</code></pre>
 <p>you’re in trouble. Only read on if you <em>really</em> want to know how
 to handle this. Here’s step 1:</p>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb206-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) </a></code></pre></div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb207-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) </a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   class  data            
 ##   &lt;chr&gt;  &lt;list&gt;          
@@ -1394,9 +1403,9 @@ quantiles of <code>score</code>.
 To do that, use <code>map</code>, which is the
 <code>tidyverse</code> version of “for each”: for each of our
 mini-data-frames, calculate the five-number summary of the column called <code>score</code> in <em>it</em>:</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb208-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb208-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">quantile</span>(.<span class="op">$</span>score)))</a></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb209-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb209-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">quantile</span>(.<span class="op">$</span>score)))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
 ##   class  data             qq       
 ##   &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;   
@@ -1409,10 +1418,10 @@ are the things we’re for-eaching over.</p>
 five-number summary for each group.
 <label for="tufte-mn-13" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-13" class="margin-toggle"><span class="marginnote">It’s actually a coincidence that the five-number summary and Ken’s class both have five values in them.</span></p>
 <p>Now we want to display the quantiles. This is the easiest way:</p>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb210-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb210-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">quantile</span>(.<span class="op">$</span>score))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb210-4" data-line-number="4"><span class="kw">unnest</span>(qq)</a></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb211-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb211-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">quantile</span>(.<span class="op">$</span>score))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb211-4" data-line-number="4"><span class="kw">unnest</span>(qq)</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ##    class     qq
 ##    &lt;chr&gt;  &lt;dbl&gt;
@@ -1433,7 +1442,7 @@ get the five quantiles for each class.</p>
 is the max and the quartiles and median are in between). It would be
 nice to see which is which, though. A trick to do that is to use
 <code>enframe</code>, thus:</p>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb212-1" data-line-number="1"><span class="kw">quantile</span>(marks<span class="op">$</span>score) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">enframe</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" data-line-number="1"><span class="kw">quantile</span>(marks<span class="op">$</span>score) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">enframe</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   name  value
 ##   &lt;chr&gt; &lt;dbl&gt;
@@ -1443,7 +1452,7 @@ nice to see which is which, though. A trick to do that is to use
 ## 4 75%    78.5
 ## 5 100%   83</code></pre>
 <p>or thus:</p>
-<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" data-line-number="1"><span class="kw">enframe</span>(<span class="kw">quantile</span>(marks<span class="op">$</span>score))</a></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb215-1" data-line-number="1"><span class="kw">enframe</span>(<span class="kw">quantile</span>(marks<span class="op">$</span>score))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   name  value
 ##   &lt;chr&gt; &lt;dbl&gt;
@@ -1461,9 +1470,9 @@ change the names of the columns it creates, but here we’ll keep track
 of which is which.)</p>
 <p>So we have a <em>two</em>-column data frame with a column saying
 which quantile is which. So let’s rewrite our code to use this:</p>
-<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb216-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb216-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">enframe</span>((<span class="kw">quantile</span>(.<span class="op">$</span>score)))))</a></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb217-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb217-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">enframe</span>((<span class="kw">quantile</span>(.<span class="op">$</span>score)))))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
 ##   class  data             qq              
 ##   &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;          
@@ -1472,10 +1481,10 @@ which quantile is which. So let’s rewrite our code to use this:</p>
 <p>Note that the <code>qq</code> data frames in the list-column now
 themselves have two columns.</p>
 <p>And finally <code>unnest</code> <code>qq</code>:</p>
-<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb218-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb218-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb218-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">enframe</span>((<span class="kw">quantile</span>(.<span class="op">$</span>score))))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb218-4" data-line-number="4"><span class="kw">unnest</span>(qq)  </a></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb219-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb219-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">enframe</span>((<span class="kw">quantile</span>(.<span class="op">$</span>score))))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb219-4" data-line-number="4"><span class="kw">unnest</span>(qq)  </a></code></pre></div>
 <pre><code>## # A tibble: 10 x 3
 ##    class  name  value
 ##    &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;
@@ -1490,13 +1499,13 @@ themselves have two columns.</p>
 ##  9 thomas 75%    78.5
 ## 10 thomas 100%   83</code></pre>
 <p>Success! Or even:</p>
-<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb220-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb220-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb220-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">enframe</span>((<span class="kw">quantile</span>(.<span class="op">$</span>score))))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb220-4" data-line-number="4"><span class="kw">unnest</span>(qq) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb220-5" data-line-number="5"><span class="kw">mutate</span>(<span class="dt">qn=</span><span class="kw">parse_number</span>(name)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb220-6" data-line-number="6"><span class="kw">select</span>(<span class="op">-</span>name) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb220-7" data-line-number="7"><span class="kw">spread</span>(qn, value)</a></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" data-line-number="1">marks <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb221-2" data-line-number="2"><span class="kw">nest</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-3" data-line-number="3"><span class="kw">mutate</span>(<span class="dt">qq=</span><span class="kw">map</span>(data,<span class="op">~</span><span class="kw">enframe</span>((<span class="kw">quantile</span>(.<span class="op">$</span>score))))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-4" data-line-number="4"><span class="kw">unnest</span>(qq) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-5" data-line-number="5"><span class="kw">mutate</span>(<span class="dt">qn=</span><span class="kw">parse_number</span>(name)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-6" data-line-number="6"><span class="kw">select</span>(<span class="op">-</span>name) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-7" data-line-number="7"><span class="kw">spread</span>(qn, value)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 6
 ##   class    `0`  `25`  `50`  `75` `100`
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;

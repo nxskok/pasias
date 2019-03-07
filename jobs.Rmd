@@ -352,16 +352,16 @@ count(job_stat,wt=n)
 
 and turn these into proportions:
 
-```{r }
+```{r error=T}
 d %>% count(job, class) %>%
 mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
 count(job_stat,wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
  
 
-There is a `count` followed by another `count` of the first lot of counts, so the second count column has acquired the name `nn`.
+There is a `count` followed by another `count` of the first lot of counts, so the second count column has taken over the name `n`.
 
 24\% of all the employees got classified into the wrong job, based on
 their scores on `outdoor`, `social` and
@@ -376,25 +376,26 @@ big improvement, and *that* is what the  MANOVA is reacting to.
 To figure out whether some of the groups were harder to classify than
 others, squeeze a `group_by` in early to do the counts and
 proportions for each (true) job:
-```{r }
+
+```{r error=T}
 d %>% count(job, class) %>%
 mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
 group_by(job) %>%
 count(job_stat,wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
  
 
 or even split out the correct and wrong ones into their own columns:
 
-```{r }
+```{r error=T}
 d %>% count(job, class) %>%
 mutate(job_stat=ifelse(job==class,"correct","wrong")) %>%
 group_by(job) %>%
 count(job_stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(job_stat,proportion)
 ```
 
@@ -649,9 +650,6 @@ all %>% filter(class != class1)
  
 There are exactly *two* individuals that were predicted differently.
 Under cross-validation, they both got called mechanics. 
-
-xxxa 
-
 How do their posterior probabilities compare? These are all in columns beginning with `posterior`. We could scrutinize the output above, or
 try to make things simpler.
 Let's round them to three decimals, and then display only some of the columns:
@@ -663,9 +661,6 @@ select(id, job, starts_with("posterior"))
 ```
 
  
-
-xxxb
-
 As I suspected, the posterior probabilities in each case are almost
 identical, but different ones happen to be slightly higher in the two
 cases. For the first individual (actually in customer service),
@@ -673,60 +668,55 @@ cross-validation just tweaked the posterior probabilities enough to
 call that individual a mechanic, and for the second one, actually a
 dispatcher, the first analysis was almost too close to call, and
 things under cross-validation got nudged onto the mechanic side again.
+All right, what *about* those people who got misclassified (say,
+by the LDA rather than the cross-validation, since it seems not to
+make much difference)?
 
-xxxa
-
-edit: investigate the people who got misclassified
-
-With that in mind, I can explore the first analysis, where almost 25\%
-of employees got misclassified. The ideas are almost the same: 
-we find which employees got misclassified, and count them, and before
-we do that, we make a data frame that has everything in it that we
-are likely to need:
+Let's count them first:
 
 ```{r error=T}
-post=round(job.2$posterior,3)
-d=data.frame(id=jobs$id,obs=jobs$job,pred=job.2$class,post)
-d %>% mutate(correct=(obs==pred)) %>%
-group_by(correct) %>%
-summarize(count=n())
+all %>% mutate(is_correct=ifelse(job==class, "correct", "wrong")) -> all.mis
+all.mis %>% count(is_correct=="wrong") %>%
+mutate(proportion=n/sum(n))
 ```
 
  
-
-59 of them out of 240, indeed almost 25\%. Then I need to find which
-ones they are, and because there are a lot of them this time, I'll
-take a random sample of 10 of them:
+24\% of them.
+There are a lot of them, so we'll pick a random sample to look at,
+rounding the posterior probabilities to 3 decimals first and reducing
+the number of columns to look at:
 
 ```{r error=T}
 set.seed(457299)
-d %>% filter(job!=class) %>%
-sample_n(10)
+all.mis %>% filter(is_correct=="wrong") %>%
+mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
+select(id, job, class, outdoor, social, conservative, 
+starts_with("posterior")) %>%
+sample_n(15)
 ```
 
  
-The `set.seed` is for reproducibility.
+
+I put the `set.seed` in so that this will come out the same
+each time I do it, and so that the discussion below always makes sense.
 
 Now we can look at the true and predicted jobs for these people, and
 the posterior probabilities (which I rounded earlier).
-These are a mixed bag. Mechanic \#83 looks as if they belong in
-customer service (posterior probability 0.753); dispatcher \#56 looks
-like a mechanic (posterior probability 0.641);
-dispatcher \#54 looks
-like a mechanic (posterior probability 0.623), and customer service
-\#57 also looks like a mechanic, with the same posterior probability
-of being a mechanic, but different posterior probabilities of other things.
 
-For the other people in our sample, there tend to be two similar
-posterior probabilities, one of which is their actual job, and the
-other one (slightly higher, since these are people who got
-misclassified) is the job they were predicted to be. For example,
-mechanic \#86, at the bottom of the list, is almost certainly
-*not* a dispatcher, but almost 50-50 split between being a
-mechanic (their actual job) and in customer service (their predicted
-job). 
+The first one, id \#54, is actually a dispatcher. The posterior probability of being one, though, is only 0.242; the posterior probability of being a mechanic is much higher at 0.623, so that employee gets called (wrongly) a mechanic. 
 
-The implication from looking at our sample of 10 people is that some
+The third one, though, id \#61, is a very close call: posterior
+probability 0.438 of being in customer service (correct), 0.453 of
+being a dispatcher, only slightly higher, but enough to make the
+prediction wrong.
+
+These ones are all misclassified (so we are not thinking about the
+ones that were gotten right). They tend to fall into two classes: ones
+that were "clearly" something other than what they actually were,
+like \#54 and \#56, and ones that could easily have been either of two
+things, but happened to come out on the wrong side, like \#61 and \#8.
+
+The implication from looking at our sample of 15 people is that some
 of them are "badly" misclassified (with a high posterior probability
 of having a different job from the one they actually hold), but most
 of them came out on the wrong end of a close call. This suggests that
@@ -738,8 +728,6 @@ Further further analysis would look at the original variables
 `social`, `outdoor` and `conservative` for the
 misclassified people, and try to find out what was unusual about
 them. But I think now would be an excellent place for me to stop.
-
-xxxb
 
 
 

@@ -33,10 +33,10 @@ library(tidyverse)
 ```
 
 ```
-## ✔ tibble  2.0.1     ✔ purrr   0.3.0
-## ✔ tidyr   0.8.2     ✔ dplyr   0.7.8
-## ✔ readr   1.3.1     ✔ stringr 1.4.0
-## ✔ tibble  2.0.1     ✔ forcats 0.3.0
+## ✔ tibble  2.0.1       ✔ purrr   0.3.1  
+## ✔ tidyr   0.8.3       ✔ dplyr   0.8.0.1
+## ✔ readr   1.3.1       ✔ stringr 1.4.0  
+## ✔ tibble  2.0.1       ✔ forcats 0.3.0
 ```
 
 ```
@@ -1052,22 +1052,20 @@ Make a table, one way or another:
 
 
 ```r
-tab=with(urine, table(obesity,class))
-```
-
-```
-## Error in table(obesity, class): all arguments must have the same length
-```
-
-```r
+tab=with(d, table(obesity, class))
 tab
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'tab' not found
+##        class
+## obesity a b c d
+##       a 7 3 2 0
+##       b 2 9 2 1
+##       c 3 4 1 3
+##       d 2 0 1 5
 ```
 
-           
+   
 
 `class` is always the *predicted* group in these. You can
 also name things in `table`.
@@ -1150,7 +1148,7 @@ tab %>% count(correct=(obesity==class),wt=n)
 
 ```
 ## # A tibble: 2 x 2
-##   correct    nn
+##   correct     n
 ##   <lgl>   <int>
 ## 1 FALSE      23
 ## 2 TRUE       22
@@ -1171,7 +1169,7 @@ count(is_correct, wt=n)
 
 ```
 ## # A tibble: 2 x 2
-##   is_correct    nn
+##   is_correct     n
 ##   <lgl>      <int>
 ## 1 FALSE         23
 ## 2 TRUE          22
@@ -1191,12 +1189,12 @@ wrong. We can find the proportions correct and wrong:
 
 ```r
 tab %>% count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
 ```
 ## # A tibble: 2 x 3
-##   correct    nn proportion
+##   correct     n proportion
 ##   <lgl>   <int>      <dbl>
 ## 1 FALSE      23      0.511
 ## 2 TRUE       22      0.489
@@ -1207,6 +1205,16 @@ mutate(proportion=nn/sum(nn))
 and we see that 51\% of men had their obesity group predicted
 wrongly. This is the overall misclassification rate, which is a simple
 summary of how good a job the discriminant analysis did.
+
+There is a subtlety here. `n` has changed its meaning in the
+middle of this calculation! In `tab`, `n` is counting
+the number of obesity observed and predicted combinations, but now it
+is counting the number of men classified correctly and
+incorrectly. The `wt=n` uses the first `n`, but the
+`mutate` line uses the *new* `n`, the result of the
+`count` line here. (I think `count` used to use
+`nn` for the result of the second `count`, so that you
+could tell them apart, but it no longer seems to do so.)
 
 I said above that the obesity groups were not equally easy to
 predict. A small modification of the above will get the
@@ -1219,13 +1227,13 @@ do any summarizing:
 tab %>%
 group_by(obesity) %>%
 count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
 ```
 ## # A tibble: 8 x 4
 ## # Groups:   obesity [4]
-##   obesity correct    nn proportion
+##   obesity correct     n proportion
 ##   <chr>   <lgl>   <int>      <dbl>
 ## 1 a       FALSE       5     0.417 
 ## 2 a       TRUE        7     0.583 
@@ -1248,8 +1256,8 @@ read, a kind of "untidying":
 tab %>%
 group_by(obesity) %>%
 count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(correct,proportion)
 ```
 
@@ -1271,7 +1279,7 @@ about 60\% correct (and 40\% wrong), but group C is much worse. The
 overall misclassification rate is made bigger by the fact that C is so
 hard to predict.
 
-Find out for yourself what happens if I fail to remove the `nn`
+Find out for yourself what happens if I fail to remove the `n`
 column before doing the `spread`.
 
 A slightly more elegant look is obtained this way, by making nicer
@@ -1283,8 +1291,8 @@ tab %>%
 group_by(obesity) %>%
 mutate(prediction_stat=ifelse(obesity==class,"correct","wrong")) %>%
 count(prediction_stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(prediction_stat,proportion)
 ```
 
@@ -2014,26 +2022,26 @@ sample_n(20)
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      22     27           12     1    55 custserv  
-##  2      19     19            7     2    79 mechanic  
-##  3      14     16            6     3    48 dispatcher
-##  4      14     29            8     1    80 custserv  
-##  5      19      7           13     3    43 dispatcher
-##  6      15     24            7     1    48 custserv  
-##  7      24     20           13     3    13 dispatcher
-##  8      12     12            6     3    23 dispatcher
-##  9       6     18            4     1     7 custserv  
-## 10      22     26           15     2    64 mechanic  
-## 11       7     13            7     1    61 custserv  
-## 12      21     29           11     2    49 mechanic  
-## 13      13     20           18     3    49 dispatcher
-## 14       8     17           14     3     3 dispatcher
-## 15      14     17           11     2    61 mechanic  
-## 16      10     12            9     3    38 dispatcher
-## 17      22     22            6     1    40 custserv  
-## 18      14     17            6     1     2 custserv  
-## 19      15     17            8     2    77 mechanic  
-## 20      17     24           11     2    47 mechanic
+##  1      15     10           13     3    31 dispatcher
+##  2      16     19           12     3    52 dispatcher
+##  3      17     16            6     2    52 mechanic  
+##  4       6     25           12     1    32 custserv  
+##  5      13     27            7     1     8 custserv  
+##  6      15     16           14     3    60 dispatcher
+##  7       7     28           12     1    52 custserv  
+##  8      18     17           11     2    16 mechanic  
+##  9      20     14           18     3    62 dispatcher
+## 10      13     16           11     2    65 mechanic  
+## 11      14     13           12     3    59 dispatcher
+## 12      16     21           10     2    19 mechanic  
+## 13      18     24            5     2    40 mechanic  
+## 14      20     19           11     2    82 mechanic  
+## 15      19     16            6     2    93 mechanic  
+## 16      22     19           10     2    54 mechanic  
+## 17       6     18            6     1    62 custserv  
+## 18      17     17           14     3    58 dispatcher
+## 19      28     16           10     2    23 mechanic  
+## 20      22     22            6     1    40 custserv
 ```
 
  
@@ -2403,7 +2411,7 @@ count(job_stat,wt=n)
 
 ```
 ## # A tibble: 2 x 2
-##   job_stat    nn
+##   job_stat     n
 ##   <chr>    <int>
 ## 1 correct    185
 ## 2 wrong       59
@@ -2418,12 +2426,12 @@ and turn these into proportions:
 d %>% count(job, class) %>%
 mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
 count(job_stat,wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
 ```
 ## # A tibble: 2 x 3
-##   job_stat    nn proportion
+##   job_stat     n proportion
 ##   <chr>    <int>      <dbl>
 ## 1 correct    185      0.758
 ## 2 wrong       59      0.242
@@ -2431,7 +2439,7 @@ mutate(proportion=nn/sum(nn))
 
  
 
-There is a `count` followed by another `count` of the first lot of counts, so the second count column has acquired the name `nn`.
+There is a `count` followed by another `count` of the first lot of counts, so the second count column has taken over the name `n`.
 
 24\% of all the employees got classified into the wrong job, based on
 their scores on `outdoor`, `social` and
@@ -2447,18 +2455,19 @@ To figure out whether some of the groups were harder to classify than
 others, squeeze a `group_by` in early to do the counts and
 proportions for each (true) job:
 
+
 ```r
 d %>% count(job, class) %>%
 mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
 group_by(job) %>%
 count(job_stat,wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
 ```
 ## # A tibble: 6 x 4
 ## # Groups:   job [3]
-##   job        job_stat    nn proportion
+##   job        job_stat     n proportion
 ##   <fct>      <chr>    <int>      <dbl>
 ## 1 custserv   correct     68      0.8  
 ## 2 custserv   wrong       17      0.2  
@@ -2478,8 +2487,8 @@ d %>% count(job, class) %>%
 mutate(job_stat=ifelse(job==class,"correct","wrong")) %>%
 group_by(job) %>%
 count(job_stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(job_stat,proportion)
 ```
 
@@ -2906,9 +2915,6 @@ all %>% filter(class != class1)
  
 There are exactly *two* individuals that were predicted differently.
 Under cross-validation, they both got called mechanics. 
-
-xxxa 
-
 How do their posterior probabilities compare? These are all in columns beginning with `posterior`. We could scrutinize the output above, or
 try to make things simpler.
 Let's round them to three decimals, and then display only some of the columns:
@@ -2930,9 +2936,6 @@ select(id, job, starts_with("posterior"))
 ```
 
  
-
-xxxb
-
 As I suspected, the posterior probabilities in each case are almost
 identical, but different ones happen to be slightly higher in the two
 cases. For the first individual (actually in customer service),
@@ -2940,105 +2943,116 @@ cross-validation just tweaked the posterior probabilities enough to
 call that individual a mechanic, and for the second one, actually a
 dispatcher, the first analysis was almost too close to call, and
 things under cross-validation got nudged onto the mechanic side again.
+All right, what *about* those people who got misclassified (say,
+by the LDA rather than the cross-validation, since it seems not to
+make much difference)?
 
-xxxa
-
-edit: investigate the people who got misclassified
-
-With that in mind, I can explore the first analysis, where almost 25\%
-of employees got misclassified. The ideas are almost the same: 
-we find which employees got misclassified, and count them, and before
-we do that, we make a data frame that has everything in it that we
-are likely to need:
+Let's count them first:
 
 
 ```r
-post=round(job.2$posterior,3)
+all %>% mutate(is_correct=ifelse(job==class, "correct", "wrong")) -> all.mis
+all.mis %>% count(is_correct=="wrong") %>%
+mutate(proportion=n/sum(n))
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'job.2' not found
-```
-
-```r
-d=data.frame(id=jobs$id,obs=jobs$job,pred=job.2$class,post)
-```
-
-```
-## Error in data.frame(id = jobs$id, obs = jobs$job, pred = job.2$class, : object 'job.2' not found
-```
-
-```r
-d %>% mutate(correct=(obs==pred)) %>%
-group_by(correct) %>%
-summarize(count=n())
-```
-
-```
-## Error in mutate_impl(.data, dots): Evaluation error: object 'obs' not found.
+## # A tibble: 2 x 3
+##   `is_correct == "wrong"`     n proportion
+##   <lgl>                   <int>      <dbl>
+## 1 FALSE                     185      0.758
+## 2 TRUE                       59      0.242
 ```
 
  
-
-59 of them out of 240, indeed almost 25\%. Then I need to find which
-ones they are, and because there are a lot of them this time, I'll
-take a random sample of 10 of them:
+24\% of them.
+There are a lot of them, so we'll pick a random sample to look at,
+rounding the posterior probabilities to 3 decimals first and reducing
+the number of columns to look at:
 
 
 ```r
 set.seed(457299)
-d %>% filter(job!=class) %>%
-sample_n(10)
+all.mis %>% filter(is_correct=="wrong") %>%
+mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
+select(id, job, class, outdoor, social, conservative, 
+starts_with("posterior")) %>%
+sample_n(15)
 ```
 
 ```
-##    outdoor social conservative        job id      class posterior.custserv
-## 56      18     23           15 dispatcher 54   mechanic          0.1347321
-## 8       15     21           10   custserv 49   mechanic          0.3774214
-## 13       7     13            7   custserv 61 dispatcher          0.4375162
-## 32      14     19           14   mechanic 39 dispatcher          0.1413975
-## 22      14     18            4   mechanic  8   custserv          0.5068084
-## 41      18     28            0   mechanic 83   custserv          0.7534177
-## 57      17     18            9 dispatcher 56   mechanic          0.1401549
-## 12      16     18            5   custserv 57   mechanic          0.3052008
-## 30      17     28           13   mechanic 34   custserv          0.5051718
-## 42      17     24            5   mechanic 86   custserv          0.5292573
-##    posterior.mechanic posterior.dispatcher      x.LD1       x.LD2
-## 56          0.6234862         0.2417816494  0.4491754 -0.26169329
-## 8           0.4998702         0.1227084023 -0.2131782  0.07619736
-## 13          0.1092589         0.4532249345  0.1401938  2.01253164
-## 32          0.3000579         0.5585445851  0.7033574  0.75014529
-## 22          0.4423674         0.0508241360 -0.6522883 -0.07350244
-## 41          0.2463943         0.0001880719 -2.8470751 -1.82074173
-## 57          0.6410331         0.2188119721  0.3986135 -0.31183099
-## 12          0.6230463         0.0717529538 -0.3133351 -0.43618819
-## 30          0.4711982         0.0236299959 -0.9241600 -0.46026999
-## 42          0.4638576         0.0068851106 -1.3869993 -0.95988882
+##    id        job      class outdoor social conservative posterior.custserv
+## 1  54 dispatcher   mechanic      18     23           15              0.135
+## 2  49   custserv   mechanic      15     21           10              0.377
+## 3  61   custserv dispatcher       7     13            7              0.438
+## 4  39   mechanic dispatcher      14     19           14              0.141
+## 5   8   mechanic   custserv      14     18            4              0.507
+## 6  83   mechanic   custserv      18     28            0              0.753
+## 7  56 dispatcher   mechanic      17     18            9              0.140
+## 8  57   custserv   mechanic      16     18            5              0.305
+## 9  34   mechanic   custserv      17     28           13              0.505
+## 10 86   mechanic   custserv      17     24            5              0.529
+## 11 65   mechanic dispatcher      13     16           11              0.138
+## 12  3   mechanic   custserv      15     27           12              0.657
+## 13 47   custserv   mechanic      15     19            9              0.296
+## 14  6   mechanic dispatcher      24      9           17              0.000
+## 15 61   mechanic dispatcher      14     17           11              0.155
+##    posterior.mechanic posterior.dispatcher posterior.custserv1
+## 1               0.623                0.242               0.138
+## 2               0.500                0.123               0.374
+## 3               0.109                0.453               0.392
+## 4               0.300                0.559               0.143
+## 5               0.442                0.051               0.526
+## 6               0.246                0.000               0.801
+## 7               0.641                0.219               0.142
+## 8               0.623                0.072               0.289
+## 9               0.471                0.024               0.518
+## 10              0.464                0.007               0.542
+## 11              0.269                0.593               0.140
+## 12              0.321                0.022               0.667
+## 13              0.526                0.178               0.289
+## 14              0.040                0.960               0.000
+## 15              0.355                0.490               0.157
+##    posterior.mechanic1 posterior.dispatcher1
+## 1                0.634                 0.228
+## 2                0.503                 0.123
+## 3                0.109                 0.499
+## 4                0.291                 0.566
+## 5                0.423                 0.051
+## 6                0.199                 0.000
+## 7                0.646                 0.212
+## 8                0.637                 0.074
+## 9                0.458                 0.024
+## 10               0.452                 0.007
+## 11               0.259                 0.601
+## 12               0.310                 0.022
+## 13               0.531                 0.180
+## 14               0.026                 0.974
+## 15               0.348                 0.495
 ```
 
  
-The `set.seed` is for reproducibility.
+
+I put the `set.seed` in so that this will come out the same
+each time I do it, and so that the discussion below always makes sense.
 
 Now we can look at the true and predicted jobs for these people, and
 the posterior probabilities (which I rounded earlier).
-These are a mixed bag. Mechanic \#83 looks as if they belong in
-customer service (posterior probability 0.753); dispatcher \#56 looks
-like a mechanic (posterior probability 0.641);
-dispatcher \#54 looks
-like a mechanic (posterior probability 0.623), and customer service
-\#57 also looks like a mechanic, with the same posterior probability
-of being a mechanic, but different posterior probabilities of other things.
 
-For the other people in our sample, there tend to be two similar
-posterior probabilities, one of which is their actual job, and the
-other one (slightly higher, since these are people who got
-misclassified) is the job they were predicted to be. For example,
-mechanic \#86, at the bottom of the list, is almost certainly
-*not* a dispatcher, but almost 50-50 split between being a
-mechanic (their actual job) and in customer service (their predicted
-job). 
+The first one, id \#54, is actually a dispatcher. The posterior probability of being one, though, is only 0.242; the posterior probability of being a mechanic is much higher at 0.623, so that employee gets called (wrongly) a mechanic. 
 
-The implication from looking at our sample of 10 people is that some
+The third one, though, id \#61, is a very close call: posterior
+probability 0.438 of being in customer service (correct), 0.453 of
+being a dispatcher, only slightly higher, but enough to make the
+prediction wrong.
+
+These ones are all misclassified (so we are not thinking about the
+ones that were gotten right). They tend to fall into two classes: ones
+that were "clearly" something other than what they actually were,
+like \#54 and \#56, and ones that could easily have been either of two
+things, but happened to come out on the wrong side, like \#61 and \#8.
+
+The implication from looking at our sample of 15 people is that some
 of them are "badly" misclassified (with a high posterior probability
 of having a different job from the one they actually hold), but most
 of them came out on the wrong end of a close call. This suggests that
@@ -3050,8 +3064,6 @@ Further further analysis would look at the original variables
 `social`, `outdoor` and `conservative` for the
 misclassified people, and try to find out what was unusual about
 them. But I think now would be an excellent place for me to stop.
-
-xxxb
 
 
 
@@ -3420,7 +3432,6 @@ though (some of) the posterior probabilities are noticeably changed,
 which one is the bigger has not changed at all.
     
 
-xxxa read the rest of the question
 
 (g) Display the original data (that you read in from the data
 file) side by side with two sets of posterior probabilities: the
@@ -3430,7 +3441,7 @@ two sets of posterior probabilities are similar. Hints: (i) use
 `data.frame` rather than `cbind`, for reasons that I
 explain elsewhere; (ii) round the posterior probabilities to 3
 decimals before you display them.
-There are only 29 rows, so display them all. I am going to add the
+There are only 29 rows, so look at them all. I am going to add the
 `LD1` scores to my output and sort by that, but you don't
 need to. (This is for something I am going to add later.)
 
@@ -3438,56 +3449,116 @@ need to. (This is for something I am going to add later.)
 Solution
 
 
-Something like this:
+
+We have two data frames, `d` and 
+`dd`
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I have to learn to come up with better names.</span>  
+that respectively
+contain everything from the (original) `lda` output and the
+cross-validated output. Let's glue them together, look at what we
+have, and then pull out what we need:
 
 ```r
-pr.lda=round(d$posterior,3)
+all=data.frame(d, dd)
+head(all)
 ```
 
 ```
-## Error in round(d$posterior, 3): non-numeric argument to mathematical function
+##   parent q1 q2 q3 q4  class posterior.father posterior.mother        LD1
+## 1 father  2  1  3  1 father     9.984540e-01      0.001545972 -3.3265660
+## 2 mother  1  3  1  1 mother     5.573608e-06      0.999994426  1.3573971
+## 3 father  2  1  3  1 father     9.984540e-01      0.001545972 -3.3265660
+## 4 mother  3  2  3  3 mother     4.971864e-02      0.950281356 -0.9500439
+## 5 mother  3  3  2  1 mother     4.102507e-05      0.999958975  0.8538422
+## 6 mother  1  3  3  1 mother     1.820430e-06      0.999998180  1.6396690
+##   parent.1 q1.1 q2.1 q3.1 q4.1 class.1 posterior.father.1
+## 1   father    2    1    3    1  father       9.958418e-01
+## 2   mother    1    3    1    1  mother       5.036602e-06
+## 3   father    2    1    3    1  father       9.958418e-01
+## 4   mother    3    2    3    3  mother       2.359247e-01
+## 5   mother    3    3    2    1  mother       5.702541e-05
+## 6   mother    1    3    3    1  mother       8.430421e-07
+##   posterior.mother.1
+## 1        0.004158233
+## 2        0.999994963
+## 3        0.004158233
+## 4        0.764075258
+## 5        0.999942975
+## 6        0.999999157
 ```
+
+ 
+The ones with a 1 on the end are the cross-validated ones. We need the posterior probabilities, rounded, and they need to  have shorter names:
 
 ```r
-pr.cv=round(dd$posterior,3)
+all %>% select(parent, starts_with("posterior"), LD1) %>%
+mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
+rename_at(vars(starts_with("posterior")), 
+~str_replace(.,"posterior","p")) %>%
+arrange(LD1)
 ```
 
 ```
-## Error in round(dd$posterior, 3): non-numeric argument to mathematical function
+##    parent p.father p.mother p.father.1 p.mother.1        LD1
+## 1  father    0.999    0.001      0.999      0.001 -3.6088379
+## 2  father    0.998    0.002      0.996      0.004 -3.3265660
+## 3  father    0.998    0.002      0.996      0.004 -3.3265660
+## 4  father    0.998    0.002      0.994      0.006 -3.2319152
+## 5  mother    0.997    0.003      1.000      0.000 -3.1453565
+## 6  father    0.992    0.008      0.958      0.042 -2.9095698
+## 7  mother    0.050    0.950      0.236      0.764 -0.9500439
+## 8  mother    0.043    0.957      0.107      0.893 -0.9099704
+## 9  mother    0.015    0.985      0.030      0.970 -0.6349504
+## 10 mother    0.000    1.000      0.000      1.000  0.7127063
+## 11 mother    0.000    1.000      0.000      1.000  0.7127063
+## 12 mother    0.000    1.000      0.000      1.000  0.7127063
+## 13 mother    0.000    1.000      0.000      1.000  0.8538422
+## 14 mother    0.000    1.000      0.000      1.000  0.8538422
+## 15 mother    0.000    1.000      0.000      1.000  0.9011676
+## 16 mother    0.000    1.000      0.000      1.000  0.9949782
+## 17 mother    0.000    1.000      0.000      1.000  0.9949782
+## 18 mother    0.000    1.000      0.000      1.000  0.9949782
+## 19 mother    0.000    1.000      0.000      1.000  0.9949782
+## 20 mother    0.000    1.000      0.000      1.000  1.0350517
+## 21 mother    0.000    1.000      0.000      1.000  1.0350517
+## 22 mother    0.000    1.000      0.000      1.000  1.2307649
+## 23 mother    0.000    1.000      0.000      1.000  1.2307649
+## 24 mother    0.000    1.000      0.000      1.000  1.2307649
+## 25 mother    0.000    1.000      0.000      1.000  1.3573971
+## 26 mother    0.000    1.000      0.000      1.000  1.3719009
+## 27 mother    0.000    1.000      0.000      1.000  1.5458584
+## 28 mother    0.000    1.000      0.000      1.000  1.6396690
+## 29 mother    0.000    1.000      0.000      1.000  1.6396690
 ```
 
-```r
-data.frame(adhd,d$x,pr.lda,pr.cv) %>% arrange(LD1)
-```
+ 
 
-```
-## Error in data.frame(adhd, d$x, pr.lda, pr.cv): object 'pr.lda' not found
-```
-
-   
-
-The last four columns are: the posterior probabilities from before,
-for father and for mother (two columns), and the posterior
-probabilities from cross-validation for father and for mother (two
-more columns). You might have these the other way around, but in any
-case you ought to make it clear which is which. I included the
-`LD1` scores for my discussion below; you don't need to.
-
+The `rename_at` changes the names of the columns that start
+with `posterior` to start with `p` instead (shorter). I
+learned about this today (having wondered whether it existed or not),
+and it took about three goes for me to get it right.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">*str-replace* is from *stringr*, and takes three inputs: a piece of text, the text to look for, and the text to replace it with. The piece of text in this case is one of the columns whose name starts with *posterior*; the dot represents *it* in the usual fashion.</span>
+The first column is the actual parent; the other five columns are: the
+posterior probabilities from before, for father and for mother (two
+columns), and the posterior probabilities from cross-validation for
+father and for mother (two more columns), and the LD1 scores from
+before, sorted into order.  You might have these the other way around
+from me, but in any case you ought to make it clear which is which. I
+included the `LD1` scores for my discussion below; you don't
+need to.
 Are the two sets of posterior probabilities similar? Only kinda. The
-ones at the top and bottom of the list are without doubt fathers at
-the top of the list (top 5 rows on my sorted output, only one of those
-is actually a mother), or mothers at the bottom, from row 10 down. But
-for rows 6 through 9, the posterior probabilities are not that similar.
-The most dissimilar ones are in row 4, where the regular
-`lda` gives a posterior probability of 0.050 that the parent is
-a father, but under cross-validation that goes all the way up to
-0.236. I think this is one of those mothers that is a bit like a
+ones at the top and bottom of the list are without doubt respectively
+fathers at the top of the list (top 5 rows on my sorted output, except that
+one of those is actually a mother), or mothers at the bottom, from row
+10 down. But for rows 6 through 9, the posterior probabilities are not
+that similar.  The most dissimilar ones are in row 4, where the
+regular `lda` gives a posterior probability of 0.050 that the
+parent is a father, but under cross-validation that goes all the way
+up to 0.236. I think this is one of those mothers that is a bit like a
 father: her score on `q2` was only 2, compared to 3 for most of
 the mothers. If you take out this mother, as cross-validation does,
 there are noticeably fewer `q2=2` mothers left, so the
 observation looks more like a father than it would otherwise.
-
-xxxb
     
 
 
@@ -3523,28 +3594,71 @@ parents have in common, all of them or most of them?
 Solution
 
 
-xxxa
-To my mind, the "non-trivial" posterior probabilities are in
-rows 4 and 23, and maybe rows 13 and 16 as well. These are the
-ones where there was some doubt, though maybe only a little, about
-which parent actually gave the ratings. For three of these, rows
-4, 13 and 23, the parent (that was actually a mother) gave a
-rating of 2 on `q2`. These were the only 2's on
-`q2`. The others were easy to call: "mother" if 3 and
-"father" if 1, and you'd get them all right except for that
-outlying mother. 
+Let's add something to the output we had before: the original
+scores on `q1` through `q4`:
+
+```r
+all %>% select(q1:q4, parent, starts_with("posterior"), LD1) %>%
+mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
+rename_at(vars(starts_with("posterior")), 
+~str_replace(.,"posterior","p")) %>%    
+arrange(LD1)
+```
+
+```
+##    q1 q2 q3 q4 parent p.father p.mother p.father.1 p.mother.1        LD1
+## 1   2  1  1  1 father    0.999    0.001      0.999      0.001 -3.6088379
+## 2   2  1  3  1 father    0.998    0.002      0.996      0.004 -3.3265660
+## 3   2  1  3  1 father    0.998    0.002      0.996      0.004 -3.3265660
+## 4   2  1  1  3 father    0.998    0.002      0.994      0.006 -3.2319152
+## 5   1  1  2  1 mother    0.997    0.003      1.000      0.000 -3.1453565
+## 6   1  1  1  3 father    0.992    0.008      0.958      0.042 -2.9095698
+## 7   3  2  3  3 mother    0.050    0.950      0.236      0.764 -0.9500439
+## 8   2  2  1  3 mother    0.043    0.957      0.107      0.893 -0.9099704
+## 9   1  2  2  2 mother    0.015    0.985      0.030      0.970 -0.6349504
+## 10  3  3  1  1 mother    0.000    1.000      0.000      1.000  0.7127063
+## 11  3  3  1  1 mother    0.000    1.000      0.000      1.000  0.7127063
+## 12  3  3  1  1 mother    0.000    1.000      0.000      1.000  0.7127063
+## 13  3  3  2  1 mother    0.000    1.000      0.000      1.000  0.8538422
+## 14  3  3  2  1 mother    0.000    1.000      0.000      1.000  0.8538422
+## 15  3  3  1  2 mother    0.000    1.000      0.000      1.000  0.9011676
+## 16  3  3  3  1 mother    0.000    1.000      0.000      1.000  0.9949782
+## 17  3  3  3  1 mother    0.000    1.000      0.000      1.000  0.9949782
+## 18  3  3  3  1 mother    0.000    1.000      0.000      1.000  0.9949782
+## 19  3  3  3  1 mother    0.000    1.000      0.000      1.000  0.9949782
+## 20  2  3  1  1 mother    0.000    1.000      0.000      1.000  1.0350517
+## 21  2  3  1  1 mother    0.000    1.000      0.000      1.000  1.0350517
+## 22  3  3  2  3 mother    0.000    1.000      0.000      1.000  1.2307649
+## 23  3  3  2  3 mother    0.000    1.000      0.000      1.000  1.2307649
+## 24  3  3  2  3 mother    0.000    1.000      0.000      1.000  1.2307649
+## 25  1  3  1  1 mother    0.000    1.000      0.000      1.000  1.3573971
+## 26  3  3  3  3 mother    0.000    1.000      0.000      1.000  1.3719009
+## 27  1  3  1  2 mother    0.000    1.000      0.000      1.000  1.5458584
+## 28  1  3  3  1 mother    0.000    1.000      0.000      1.000  1.6396690
+## 29  1  3  3  1 mother    0.000    1.000      0.000      1.000  1.6396690
+```
+
+     
+To my mind, the "non-trivial" posterior probabilities are in rows 5
+through 9. (You might have drawn the line in a different place.) These
+are the ones where there was some doubt, though maybe only a little,
+about which parent actually gave the ratings. For three of these,
+the parent (that was actually a mother) gave a rating of
+2 on `q2`. These were the only 2's on `q2`. The others
+were easy to call: "mother" if 3 and "father" if 1, and you'd get
+them all right except for that outlying mother.
 The clue in looking at `q2` was that we found earlier that
 `LD1` contained mostly `q2`, so that it was mainly
 `q2` that separated the fathers and mothers. If you found
-something else that the "non-trivial" rows had in common, that
-is good too, but I think looking at `q2` is your quickest
-route to an answer.
+something else that the "non-trivial" rows had in common, that is
+good too, but I think looking at `q2` is your quickest route to
+an answer. (`q1=1` picks out some of these, but not all of
+them.)
 This is really the same kind of issue as we discussed when
 comparing the posterior probabilities for `lda` and
 cross-validation above: there were only a few parents with
 `q2=2`, so the effect there is that under cross-validation,
 there are even fewer when you take one of them out.
-xxxb
     
 
 
@@ -3794,7 +3908,7 @@ I didn't ask you to, but you could check this by seeing how
 ggplot(cornseed,aes(x=soil,y=herbicide))+geom_boxplot()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-99-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-100-1.png" width="672"  />
 
 
 
@@ -3807,7 +3921,7 @@ Or by `water`:
 ggplot(cornseed,aes(x=soil,y=water))+geom_boxplot()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-100-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-101-1.png" width="672"  />
 
  
 
@@ -3876,7 +3990,7 @@ Then we use this as input to `ggplot`:
 ggplot(d,aes(x=x.LD1,y=x.LD2,colour=soil))+geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
 
  
 
@@ -3924,7 +4038,7 @@ discriminant scores by `soil` group, thus:
 ggplot(d,aes(x=soil,y=x.LD1))+geom_boxplot()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
 
    
 This says more or less the same thing as your plot of `LD1` and
@@ -4008,8 +4122,6 @@ better than anything else.
 
 Extra: we can calculate misclassification rates, first overall, which is easier:
 
-xxxa
-
 
 ```r
 d %>% count(soil, class) %>%
@@ -4019,7 +4131,7 @@ count(soil_stat, wt=n)
 
 ```
 ## # A tibble: 2 x 2
-##   soil_stat    nn
+##   soil_stat     n
 ##   <chr>     <int>
 ## 1 correct      18
 ## 2 wrong        14
@@ -4036,16 +4148,14 @@ mutate(prop=nn/sum(nn))
 ```
 
 ```
-## # A tibble: 2 x 3
-##   soil_stat    nn  prop
-##   <chr>     <int> <dbl>
-## 1 correct      18 0.562
-## 2 wrong        14 0.438
+## Error: object 'nn' not found
 ```
 
 
 
-xxxb
+Note the use of `wt` on the second `count` to count the
+number of *observations* from the first `count`, not the
+number of *rows*.
 
 This shows that 44\% of the soil types were misclassified, which
 sounds awful, but is actually not so bad, considering. Bear in mind
@@ -4055,9 +4165,6 @@ getting 44\% wrong is quite a bit better than that. The variables
 about soil type; it's better to know them than not to.
 
 Or do it by actual soil type:
-
-xxxa
-
 
 ```r
 d %>% count(soil, class) %>%
@@ -4069,7 +4176,7 @@ count(soil_stat, wt=n)
 ```
 ## # A tibble: 8 x 3
 ## # Groups:   soil [4]
-##   soil  soil_stat    nn
+##   soil  soil_stat     n
 ##   <chr> <chr>     <int>
 ## 1 clay  correct       3
 ## 2 clay  wrong         5
@@ -4095,18 +4202,10 @@ spread(soil_stat,prop)
 ```
 
 ```
-## # A tibble: 4 x 3
-## # Groups:   soil [4]
-##   soil  correct wrong
-##   <chr>   <dbl> <dbl>
-## 1 clay    0.375 0.625
-## 2 loam    0.75  0.25 
-## 3 salty   0.625 0.375
-## 4 sandy   0.5   0.5
+## Error: object 'nn' not found
 ```
 
  
-xxxb
 
 Loam soil was the easiest to get right, and clay was easiest to get
 wrong. However, these proportions were each based on only eight
@@ -4310,7 +4409,7 @@ could, since it's a discriminant analysis:
 ggbiplot(cornseed.2,groups=cornseed$soil)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-116-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
 
  
 
@@ -4502,7 +4601,7 @@ select(combo,Ht,Wt)
 ```
 
 ```
-## Error in UseMethod("tbl_vars"): no applicable method for 'tbl_vars' applied to an object of class "function"
+## Error in as_fun_list(.predicate, enquo(.predicate), caller_env()): argument ".predicate" is missing, with no default
 ```
 
  
@@ -4815,7 +4914,7 @@ And so, to the graph:
 ggplot(d,aes(x=x.LD1,y=x.LD2,colour=combo))+geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-127-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-128-1.png" width="672"  />
 
  
 If you can distinguish seventeen different colours, your eyes are
@@ -4828,7 +4927,7 @@ ggplot(d,aes(x=x.LD1,y=x.LD2,shape=combo))+geom_point()+
 scale_shape_manual(values=1:17)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-128-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-129-1.png" width="672"  />
 
      
 
@@ -4844,7 +4943,7 @@ ggplot(d,aes(x=x.LD1,y=x.LD2,shape=combo,colour=combo))+geom_point()+
 scale_shape_manual(values=1:17)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-129-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-130-1.png" width="672"  />
 
  
 Perhaps having colours *and* shapes makes the combos easier to
@@ -4888,7 +4987,6 @@ saying something like "weight relative to height", with someone
 at the top of the picture being unusually heavy and someone at the
 bottom unusually light.
 
-xxxa 
 
 (i) Obtain a (very large) square table, or a (very long) table
 with frequencies, of actual and predicted sport-gender
@@ -4905,7 +5003,8 @@ Solution
 Let's see what happens:
 
 ```r
-with(d, table(combo, class))
+tab=with(d, table(combo, class))
+tab
 ```
 
 ```
@@ -5015,27 +5114,23 @@ tab %>% as_tibble()
 ```
 
 ```
-## # A tibble: 14 x 3
-##    obesity class     n
-##    <chr>   <fct> <int>
-##  1 a       a         7
-##  2 a       b         3
-##  3 a       c         2
-##  4 b       a         2
-##  5 b       b         9
-##  6 b       c         2
-##  7 b       d         1
-##  8 c       a         3
-##  9 c       b         4
-## 10 c       c         1
-## 11 c       d         3
-## 12 d       a         2
-## 13 d       c         1
-## 14 d       d         5
+## # A tibble: 289 x 3
+##    combo          class            n
+##    <chr>          <chr>        <int>
+##  1 BBall_female   BBall_female     3
+##  2 BBall_male     BBall_female     0
+##  3 Field_female   BBall_female     0
+##  4 Field_male     BBall_female     0
+##  5 Gym_female     BBall_female     0
+##  6 Netball_female BBall_female     0
+##  7 Row_female     BBall_female     0
+##  8 Row_male       BBall_female     0
+##  9 Swim_female    BBall_female     0
+## 10 Swim_male      BBall_female     0
+## # … with 279 more rows
 ```
 
  
-
 This makes the `tidyverse` output, with frequencies. You
 probably want to omit the zero ones:
 
@@ -5045,27 +5140,23 @@ tab %>% as_tibble() %>% filter(n>0)
 ```
 
 ```
-## # A tibble: 14 x 3
-##    obesity class     n
-##    <chr>   <fct> <int>
-##  1 a       a         7
-##  2 a       b         3
-##  3 a       c         2
-##  4 b       a         2
-##  5 b       b         9
-##  6 b       c         2
-##  7 b       d         1
-##  8 c       a         3
-##  9 c       b         4
-## 10 c       c         1
-## 11 c       d         3
-## 12 d       a         2
-## 13 d       c         1
-## 14 d       d         5
+## # A tibble: 70 x 3
+##    combo        class            n
+##    <chr>        <chr>        <int>
+##  1 BBall_female BBall_female     3
+##  2 T400m_male   BBall_female     3
+##  3 Tennis_male  BBall_female     1
+##  4 WPolo_male   BBall_female     1
+##  5 BBall_female BBall_male       1
+##  6 BBall_male   BBall_male       9
+##  7 Field_male   BBall_male       1
+##  8 Row_male     BBall_male       2
+##  9 Swim_male    BBall_male       4
+## 10 T400m_male   BBall_male       1
+## # … with 60 more rows
 ```
 
  
-
 This is the same output as below. See there for comments.
 
 The other, perhaps easier, way to tackle this one is the
@@ -5095,6 +5186,7 @@ d %>% count(combo,class)
 
  
 
+The zeroes never show up here.
 The `combo` column is the truth, and the `class` column
 is the prediction. Again, you can see where the big frequencies are; a
 lot of the female netball players were gotten right, but there were a
@@ -5145,7 +5237,7 @@ count(stat,wt=n)
 
 ```
 ## # A tibble: 2 x 2
-##   stat       nn
+##   stat        n
 ##   <chr>   <int>
 ## 1 correct    70
 ## 2 wrong     132
@@ -5154,23 +5246,22 @@ count(stat,wt=n)
  
 
 This tells us how many predictions overall were right and how many
-wrong. We already had a column `n` so we now have a column
-`nn` with the second round of `count`s.
+wrong. 
 
 To make those into proportions, another `mutate`, dividing by
-the total of `nn`:
+the total of `n`:
 
 
 ```r
 d %>% count(combo, class) %>% 
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
 ```
 ## # A tibble: 2 x 3
-##   stat       nn proportion
+##   stat        n proportion
 ##   <chr>   <int>      <dbl>
 ## 1 correct    70      0.347
 ## 2 wrong     132      0.653
@@ -5193,13 +5284,13 @@ d %>% count(combo, class) %>%
 group_by(combo) %>%
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
 ```
 ## # A tibble: 27 x 4
 ## # Groups:   combo [17]
-##    combo          stat       nn proportion
+##    combo          stat        n proportion
 ##    <chr>          <chr>   <int>      <dbl>
 ##  1 BBall_female   correct     3      0.231
 ##  2 BBall_female   wrong      10      0.769
@@ -5216,7 +5307,7 @@ mutate(proportion=nn/sum(nn))
 
  
 
-That last `sum(nn)`: what is it summing over? The answer is
+That last `sum(n)`: what is it summing over? The answer is
 "within `combo`", since that is the `group_by`. You
 see that the two `proportion` values within, say,
 `BBall_female`, add up to 1.
@@ -5231,14 +5322,14 @@ d %>% count(combo, class) %>%
 group_by(combo) %>%
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
+mutate(proportion=n/sum(n)) %>%
 spread(stat, proportion)
 ```
 
 ```
 ## # A tibble: 27 x 4
 ## # Groups:   combo [17]
-##    combo             nn correct  wrong
+##    combo              n correct  wrong
 ##    <chr>          <int>   <dbl>  <dbl>
 ##  1 BBall_female       3   0.231 NA    
 ##  2 BBall_female      10  NA      0.769
@@ -5259,7 +5350,7 @@ This doesn't work because everything outside of the `spread` is
 tested for uniqueness; if it's unique, it gets its own row. Thus,
 `BBall_male` and 3 is different from `BBall_male` and
 9. But we only want one row of `BBall_male`. I think the
-easiest way around this is to get rid of `nn`, since it has
+easiest way around this is to get rid of `n`, since it has
 served its purpose:
 
 
@@ -5268,8 +5359,8 @@ d %>% count(combo, class) %>%
 group_by(combo) %>%
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(stat, proportion, fill=0)
 ```
 
@@ -5308,8 +5399,8 @@ d %>% count(combo, class) %>%
 group_by(combo) %>%
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(stat, proportion, fill=0) %>%
 replace_na(list(correct=0,wrong=0)) %>%
 arrange(wrong)
@@ -5348,9 +5439,6 @@ weight. The ones at the bottom of the list were very confusible since
 the discriminant analysis guessed them all wrong!
 So what were the most common *misclassifications*? Let's go back
 to this:
-
-xxxa 
-
 
 ```r
 head(d)
@@ -5445,33 +5533,27 @@ defining the proportions:
 
 ```r
 d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong"))
-```
-
-```
-## # A tibble: 70 x 4
-##    combo        class              n stat   
-##    <chr>        <fct>          <int> <chr>  
-##  1 BBall_female BBall_female       3 correct
-##  2 BBall_female BBall_male         1 wrong  
-##  3 BBall_female Netball_female     5 wrong  
-##  4 BBall_female Row_female         1 wrong  
-##  5 BBall_female T400m_male         2 wrong  
-##  6 BBall_female WPolo_male         1 wrong  
-##  7 BBall_male   BBall_male         9 correct
-##  8 BBall_male   Swim_male          2 wrong  
-##  9 BBall_male   WPolo_male         1 wrong  
-## 10 Field_female Field_female       5 correct
-## # … with 60 more rows
-```
-
-```r
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 group_by(combo) %>%
 mutate(proportion=n/sum(n))
 ```
 
 ```
-## Error in group_by(combo): object 'combo' not found
+## # A tibble: 70 x 5
+## # Groups:   combo [17]
+##    combo        class              n stat    proportion
+##    <chr>        <fct>          <int> <chr>        <dbl>
+##  1 BBall_female BBall_female       3 correct     0.231 
+##  2 BBall_female BBall_male         1 wrong       0.0769
+##  3 BBall_female Netball_female     5 wrong       0.385 
+##  4 BBall_female Row_female         1 wrong       0.0769
+##  5 BBall_female T400m_male         2 wrong       0.154 
+##  6 BBall_female WPolo_male         1 wrong       0.0769
+##  7 BBall_male   BBall_male         9 correct     0.75  
+##  8 BBall_male   Swim_male          2 wrong       0.167 
+##  9 BBall_male   WPolo_male         1 wrong       0.0833
+## 10 Field_female Field_female       5 correct     0.714 
+## # … with 60 more rows
 ```
 
  
@@ -5482,27 +5564,7 @@ proportions in descending order:
 
 ```r
 d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong"))
-```
-
-```
-## # A tibble: 70 x 4
-##    combo        class              n stat   
-##    <chr>        <fct>          <int> <chr>  
-##  1 BBall_female BBall_female       3 correct
-##  2 BBall_female BBall_male         1 wrong  
-##  3 BBall_female Netball_female     5 wrong  
-##  4 BBall_female Row_female         1 wrong  
-##  5 BBall_female T400m_male         2 wrong  
-##  6 BBall_female WPolo_male         1 wrong  
-##  7 BBall_male   BBall_male         9 correct
-##  8 BBall_male   Swim_male          2 wrong  
-##  9 BBall_male   WPolo_male         1 wrong  
-## 10 Field_female Field_female       5 correct
-## # … with 60 more rows
-```
-
-```r
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 group_by(combo) %>%
 mutate(proportion=n/sum(n)) %>%
 filter(stat=="wrong") %>%
@@ -5510,7 +5572,21 @@ arrange(desc(proportion))
 ```
 
 ```
-## Error in group_by(combo): object 'combo' not found
+## # A tibble: 59 x 5
+## # Groups:   combo [16]
+##    combo         class              n stat  proportion
+##    <chr>         <fct>          <int> <chr>      <dbl>
+##  1 Tennis_male   Row_female         3 wrong      0.75 
+##  2 Row_male      WPolo_male        10 wrong      0.667
+##  3 TSprnt_male   Netball_female     6 wrong      0.545
+##  4 TSprnt_female T400m_female       2 wrong      0.5  
+##  5 Swim_female   Netball_female     4 wrong      0.444
+##  6 BBall_female  Netball_female     5 wrong      0.385
+##  7 Swim_female   T400m_female       3 wrong      0.333
+##  8 Swim_male     BBall_male         4 wrong      0.308
+##  9 Tennis_female Netball_female     2 wrong      0.286
+## 10 Tennis_female T400m_female       2 wrong      0.286
+## # … with 49 more rows
 ```
 
  
@@ -5520,7 +5596,6 @@ taken to be --- female rowers! Most of the other mistakes are more
 forgivable: the male rowers being taken for male water polo players,
 for example. 
 
-xxxb
 
 
 

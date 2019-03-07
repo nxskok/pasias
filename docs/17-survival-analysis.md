@@ -7,20 +7,20 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v ggplot2 3.1.0     v purrr   0.3.0
-## v tibble  2.0.1     v dplyr   0.7.8
-## v tidyr   0.8.2     v stringr 1.4.0
-## v readr   1.3.1     v forcats 0.3.0
+## ✔ ggplot2 3.1.0       ✔ purrr   0.3.1  
+## ✔ tibble  2.0.1       ✔ dplyr   0.8.0.1
+## ✔ tidyr   0.8.3       ✔ stringr 1.4.0  
+## ✔ readr   1.3.1       ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 ```r
@@ -58,9 +58,9 @@ library(survminer)
 
  The Worcester survey was a long-term study of
 all myocardial-infarction
-\marginnote{Heart attack.} victims admitted to hospitals in the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Heart attack.</span> victims admitted to hospitals in the
 Worcester, Massachusetts area.
-\marginnote{Worcester is pronounced, by locals, *Woo-stuh*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Worcester is pronounced, by locals, *Woo-stuh*.</span> 
 The data have been well studied, and can be found in
 the file [link](http://www.utsc.utoronto.ca/~butler/d29/whas100.csv).
 
@@ -97,13 +97,12 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/whas100.csv"
-whas100 = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/whas100.csv"
+whas100=read_csv(my_url)
 ```
 
 ```
-## Warning: Missing column names filled in:
-## 'X1' [1]
+## Warning: Missing column names filled in: 'X1' [1]
 ```
 
 ```
@@ -128,21 +127,19 @@ whas100
 
 ```
 ## # A tibble: 100 x 10
-##       X1    id admitdate foldate   los lenfol
-##    <dbl> <dbl> <chr>     <chr>   <dbl>  <dbl>
-##  1     1     1 3/13/1995 3/19/1~     4      6
-##  2     2     2 1/14/1995 1/23/1~     5    374
-##  3     3     3 2/17/1995 10/4/2~     5   2421
-##  4     4     4 4/7/1995  7/14/1~     9     98
-##  5     5     5 2/9/1995  5/29/1~     4   1205
-##  6     6     6 1/16/1995 9/11/2~     7   2065
-##  7     7     7 1/17/1995 10/15/~     3   1002
-##  8     8     8 11/15/19~ 11/24/~    56   2201
-##  9     9     9 8/18/1995 2/23/1~     5    189
-## 10    10    10 7/22/1995 12/31/~     9   2719
-## # ... with 90 more rows, and 4 more
-## #   variables: fstat <dbl>, age <dbl>,
-## #   gender <dbl>, bmi <dbl>
+##       X1    id admitdate  foldate      los lenfol fstat   age gender   bmi
+##    <dbl> <dbl> <chr>      <chr>      <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl>
+##  1     1     1 3/13/1995  3/19/1995      4      6     1    65      0  31.4
+##  2     2     2 1/14/1995  1/23/1996      5    374     1    88      1  22.7
+##  3     3     3 2/17/1995  10/4/2001      5   2421     1    77      0  27.9
+##  4     4     4 4/7/1995   7/14/1995      9     98     1    81      1  21.5
+##  5     5     5 2/9/1995   5/29/1998      4   1205     1    78      0  30.7
+##  6     6     6 1/16/1995  9/11/2000      7   2065     1    82      1  26.5
+##  7     7     7 1/17/1995  10/15/1997     3   1002     1    66      1  35.7
+##  8     8     8 11/15/1994 11/24/2000    56   2201     1    81      1  28.3
+##  9     9     9 8/18/1995  2/23/1996      5    189     1    76      0  27.1
+## 10    10    10 7/22/1995  12/31/2002     9   2719     0    40      0  21.8
+## # … with 90 more rows
 ```
 
      
@@ -166,28 +163,21 @@ response variable are followup time `lenfol` and followup
 status, 1 being "dead", `fstat`:
 
 ```r
-y = with(whas100, Surv(lenfol, fstat == 1))
+y=with(whas100,Surv(lenfol,fstat==1))
 y
 ```
 
 ```
-##   [1]    6   374  2421    98  1205  2065 
-##   [7] 1002  2201   189  2719+ 2638+  492 
-##  [13]  302  2574+ 2610+ 2641+ 1669  2624 
-##  [19] 2578+ 2595+  123  2613+  774  2012 
-##  [25] 2573+ 1874  2631+ 1907   538   104 
-##  [31]    6  1401  2710   841   148  2137+
-##  [37] 2190+ 2173+  461  2114+ 2157+ 2054+
-##  [43] 2124+ 2137+ 2031  2003+ 2074+  274 
-##  [49] 1984+ 1993+ 1939+ 1172    89   128 
-##  [55] 1939+   14  1011  1497  1929+ 2084+
-##  [61]  107   451  2183+ 1876+  936   363 
-##  [67] 1048  1889+ 2072+ 1879+ 1870+ 1859+
-##  [73] 2052+ 1846+ 2061+ 1912+ 1836+  114 
-##  [79] 1557  1278  1836+ 1916+ 1934+ 1923+
-##  [85]   44  1922+  274  1860+ 1806  2145+
-##  [91]  182  2013+ 2174+ 1624   187  1883+
-##  [97] 1577    62  1969+ 1054
+##   [1]    6   374  2421    98  1205  2065  1002  2201   189  2719+ 2638+
+##  [12]  492   302  2574+ 2610+ 2641+ 1669  2624  2578+ 2595+  123  2613+
+##  [23]  774  2012  2573+ 1874  2631+ 1907   538   104     6  1401  2710 
+##  [34]  841   148  2137+ 2190+ 2173+  461  2114+ 2157+ 2054+ 2124+ 2137+
+##  [45] 2031  2003+ 2074+  274  1984+ 1993+ 1939+ 1172    89   128  1939+
+##  [56]   14  1011  1497  1929+ 2084+  107   451  2183+ 1876+  936   363 
+##  [67] 1048  1889+ 2072+ 1879+ 1870+ 1859+ 2052+ 1846+ 2061+ 1912+ 1836+
+##  [78]  114  1557  1278  1836+ 1916+ 1934+ 1923+   44  1922+  274  1860+
+##  [89] 1806  2145+  182  2013+ 2174+ 1624   187  1883+ 1577    62  1969+
+## [100] 1054
 ```
 
      
@@ -215,7 +205,7 @@ Solution
 This, using the response variable that we just created:
 
 ```r
-whas100.1 = coxph(y ~ age + gender + bmi, data = whas100)
+whas100.1=coxph(y~age+gender+bmi,data=whas100)
 summary(whas100.1)
 ```
 
@@ -225,26 +215,17 @@ summary(whas100.1)
 ## 
 ##   n= 100, number of events= 51 
 ## 
-##            coef exp(coef) se(coef)      z
-## age     0.03713   1.03783  0.01272  2.918
-## gender  0.14325   1.15402  0.30604  0.468
-## bmi    -0.07083   0.93162  0.03607 -1.964
-##        Pr(>|z|)   
-## age     0.00352 **
-## gender  0.63973   
-## bmi     0.04956 * 
+##            coef exp(coef) se(coef)      z Pr(>|z|)   
+## age     0.03713   1.03783  0.01272  2.918  0.00352 **
+## gender  0.14325   1.15402  0.30604  0.468  0.63973   
+## bmi    -0.07083   0.93162  0.03607 -1.964  0.04956 * 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##        exp(coef) exp(-coef) lower .95
-## age       1.0378     0.9636    1.0123
-## gender    1.1540     0.8665    0.6334
-## bmi       0.9316     1.0734    0.8680
-##        upper .95
-## age       1.0640
-## gender    2.1024
-## bmi       0.9999
+##        exp(coef) exp(-coef) lower .95 upper .95
+## age       1.0378     0.9636    1.0123    1.0640
+## gender    1.1540     0.8665    0.6334    2.1024
+## bmi       0.9316     1.0734    0.8680    0.9999
 ## 
 ## Concordance= 0.683  (se = 0.037 )
 ## Rsquare= 0.194   (max possible= 0.985 )
@@ -278,7 +259,7 @@ out of the model. The other two variables have small P-values
 The other way to think about this is `step`, or `drop1`:
 
 ```r
-drop1(whas100.1, test = "Chisq")
+drop1(whas100.1, test="Chisq")
 ```
 
 ```
@@ -292,37 +273,33 @@ drop1(whas100.1, test = "Chisq")
 ## gender  1 400.87 0.2185 0.640218   
 ## bmi     1 404.60 3.9389 0.047182 * 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
 
 This is here equivalent to
-\marginnote{Not exactly the same as that output, because it  is doing a test that would be the same if you had an infinitely  large sample, but is slightly different with an ordinary finite number of observations.} the output 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not exactly the same as that output, because it  is doing a test that would be the same if you had an infinitely  large sample, but is slightly different with an ordinary finite number of observations.</span> the output 
 from `summary`, but where it
 scores is if you have a categorical explanatory variable like
 "treatment" with more than two levels: `drop1` will tell you
 about keeping or dropping it as a whole.
-\marginnote{Our categorical  variable *gender* has only two levels.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Our categorical  variable *gender* has only two levels.</span>
 
 If you prefer: 
 
 
 ```r
-step(whas100.1, trace = 0, test = "Chisq")
+step(whas100.1, trace=0, test="Chisq")
 ```
 
 ```
 ## Call:
 ## coxph(formula = y ~ age + bmi, data = whas100)
 ## 
-##         coef exp(coef) se(coef)      z
-## age  0.03927   1.04005  0.01187  3.309
-## bmi -0.07116   0.93131  0.03614 -1.969
-##            p
-## age 0.000938
-## bmi 0.048952
+##         coef exp(coef) se(coef)      z        p
+## age  0.03927   1.04005  0.01187  3.309 0.000938
+## bmi -0.07116   0.93131  0.03614 -1.969 0.048952
 ## 
 ## Likelihood ratio test=21.32  on 2 df, p=2.346e-05
 ## n= 100, number of events= 51
@@ -345,7 +322,7 @@ Solution
 So, take out `gender`:
 
 ```r
-whas100.2 = update(whas100.1, . ~ . - gender)
+whas100.2=update(whas100.1,.~.-gender)
 summary(whas100.2)
 ```
 
@@ -355,15 +332,11 @@ summary(whas100.2)
 ## 
 ##   n= 100, number of events= 51 
 ## 
-##         coef exp(coef) se(coef)      z
-## age  0.03927   1.04005  0.01187  3.309
-## bmi -0.07116   0.93131  0.03614 -1.969
-##     Pr(>|z|)    
-## age 0.000938 ***
-## bmi 0.048952 *  
+##         coef exp(coef) se(coef)      z Pr(>|z|)    
+## age  0.03927   1.04005  0.01187  3.309 0.000938 ***
+## bmi -0.07116   0.93131  0.03614 -1.969 0.048952 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ##     exp(coef) exp(-coef) lower .95 upper .95
 ## age    1.0401     0.9615    1.0161    1.0645
@@ -417,7 +390,8 @@ or
 
 
 ```r
-whas100 %>% select(age, bmi) %>% summary()
+whas100 %>% select(age, bmi) %>%
+summary()
 ```
 
 ```
@@ -435,8 +409,9 @@ Or, pure tidyverse: use `summarize_all`, which summarizes all the columns (after
 
 
 ```r
-whas100 %>% select(age, bmi) %>% summarize_all(~list(quantile(.))) %>% 
-    unnest()
+whas100 %>% select(age, bmi) %>%
+summarize_all(~list(quantile(.))) %>%
+unnest()
 ```
 
 ```
@@ -473,8 +448,7 @@ Solution
 The inevitable `crossing`. This is probably quickest:
 
 ```r
-whas100.new = crossing(age = c(60, 71, 80), bmi = c(24, 
-    27, 30))
+whas100.new=crossing(age=c(60,71,80),bmi=c(24,27,30))
 whas100.new
 ```
 
@@ -502,9 +476,9 @@ vectors with plural names containing the values, and inside the
 
 
 ```r
-ages = c(60, 71, 80)
-bmis = c(24, 27, 30)
-whas100.new = crossing(age = ages, bmi = bmis)
+ages=c(60,71,80)
+bmis=c(24,27,30)
+whas100.new=crossing(age=ages,bmi=bmis)
 whas100.new
 ```
 
@@ -538,7 +512,7 @@ The magic word is `survfit` (which plays the role of
 with the non-significant `gender` removed:
 
 ```r
-pp2 = survfit(whas100.2, whas100.new, data = whas100)
+pp2=survfit(whas100.2,whas100.new,data=whas100)
 ```
 
       
@@ -564,11 +538,10 @@ This is actually easy once you work out what to do:
 
 
 ```r
-ggsurvplot(pp2, conf.int = F)
+ggsurvplot(pp2, conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-14-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -650,15 +623,14 @@ the body recover from a heart attack.
 Let's start with the martingale residual plot:
 
 ```r
-ggcoxdiagnostics(whas100.2) + geom_smooth()
+ggcoxdiagnostics(whas100.2)+geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-16-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
      
 
@@ -672,7 +644,7 @@ Thus:
 
 
 ```r
-whas100.3 = update(whas100.2, . ~ . + I(bmi^2))
+whas100.3=update(whas100.2,.~.+I(bmi^2))
 summary(whas100.3)
 ```
 
@@ -682,26 +654,17 @@ summary(whas100.3)
 ## 
 ##   n= 100, number of events= 51 
 ## 
-##               coef exp(coef)  se(coef)
-## age       0.040542  1.041375  0.012035
-## bmi      -0.848949  0.427864  0.231562
-## I(bmi^2)  0.014500  1.014606  0.004227
-##               z Pr(>|z|)    
-## age       3.369 0.000755 ***
-## bmi      -3.666 0.000246 ***
-## I(bmi^2)  3.430 0.000603 ***
+##               coef exp(coef)  se(coef)      z Pr(>|z|)    
+## age       0.040542  1.041375  0.012035  3.369 0.000755 ***
+## bmi      -0.848949  0.427864  0.231562 -3.666 0.000246 ***
+## I(bmi^2)  0.014500  1.014606  0.004227  3.430 0.000603 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##          exp(coef) exp(-coef) lower .95
-## age         1.0414     0.9603    1.0171
-## bmi         0.4279     2.3372    0.2718
-## I(bmi^2)    1.0146     0.9856    1.0062
-##          upper .95
-## age         1.0662
-## bmi         0.6736
-## I(bmi^2)    1.0230
+##          exp(coef) exp(-coef) lower .95 upper .95
+## age         1.0414     0.9603    1.0171    1.0662
+## bmi         0.4279     2.3372    0.2718    0.6736
+## I(bmi^2)    1.0146     0.9856    1.0062    1.0230
 ## 
 ## Concordance= 0.693  (se = 0.04 )
 ## Rsquare= 0.264   (max possible= 0.985 )
@@ -721,15 +684,14 @@ Have we improved the residuals by adding the squared term?
 
 
 ```r
-ggcoxdiagnostics(whas100.3) + geom_smooth()
+ggcoxdiagnostics(whas100.3)+geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-18-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
  
 
@@ -745,9 +707,9 @@ one age 70:
 
 
 ```r
-bmis = seq(20, 36, 4)
-ages = 70
-whas100.new.2 = crossing(bmi = bmis, age = ages)
+bmis=seq(20,36,4)
+ages=70
+whas100.new.2=crossing(bmi=bmis,age=ages)
 whas100.new.2
 ```
 
@@ -771,7 +733,7 @@ Predictions, using the model with the squared term in it:
 
 
 ```r
-pp3 = survfit(whas100.3, whas100.new.2, data = whas100)
+pp3=survfit(whas100.3,whas100.new.2,data=whas100)
 ```
 
  
@@ -780,11 +742,10 @@ And then the plot:
 
 
 ```r
-ggsurvplot(pp3, conf.int = F)
+ggsurvplot(pp3, conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-21-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
  
 
@@ -869,8 +830,8 @@ Solution
 This:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt"
-drugusers = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt"
+drugusers=read_delim(my_url," ")
 ```
 
 ```
@@ -894,21 +855,19 @@ drugusers
 
 ```
 ## # A tibble: 628 x 9
-##      row    ID   age ndrugtx treat  site
-##    <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl>
-##  1     1     1    39       1     1     0
-##  2     2     2    33       8     1     0
-##  3     3     3    33       3     1     0
-##  4     4     4    32       1     0     0
-##  5     5     5    24       5     1     0
-##  6     6     6    30       1     1     0
-##  7     7     7    39      34     1     0
-##  8     8     8    27       2     1     0
-##  9     9     9    40       3     1     0
-## 10    10    10    36       7     1     0
-## # ... with 618 more rows, and 3 more
-## #   variables: time <dbl>, censor <dbl>,
-## #   herco <dbl>
+##      row    ID   age ndrugtx treat  site  time censor herco
+##    <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl>
+##  1     1     1    39       1     1     0   188      1     3
+##  2     2     2    33       8     1     0    26      1     3
+##  3     3     3    33       3     1     0   207      1     2
+##  4     4     4    32       1     0     0   144      1     3
+##  5     5     5    24       5     1     0   551      0     2
+##  6     6     6    30       1     1     0    32      1     1
+##  7     7     7    39      34     1     0   459      1     3
+##  8     8     8    27       2     1     0    22      1     3
+##  9     9     9    40       3     1     0   210      1     2
+## 10    10    10    36       7     1     0   184      1     2
+## # … with 618 more rows
 ```
 
  
@@ -928,45 +887,29 @@ Solution
 
 First off, `summary` is a quick way to show how many missing
 values there are:
-\marginnote{It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using *mutate-if*. However, we don't have any text  columns here, so what we do here is good for this data set.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using *mutate-if*. However, we don't have any text  columns here, so what we do here is good for this data set.</span>
 
 ```r
 summary(drugusers)
 ```
 
 ```
-##       row              ID       
-##  Min.   :  1.0   Min.   :  1.0  
-##  1st Qu.:157.8   1st Qu.:157.8  
-##  Median :314.5   Median :314.5  
-##  Mean   :314.5   Mean   :314.5  
-##  3rd Qu.:471.2   3rd Qu.:471.2  
-##  Max.   :628.0   Max.   :628.0  
-##                                 
-##       age           ndrugtx      
-##  Min.   :20.00   Min.   : 0.000  
-##  1st Qu.:27.00   1st Qu.: 1.000  
-##  Median :32.00   Median : 3.000  
-##  Mean   :32.37   Mean   : 4.574  
-##  3rd Qu.:37.00   3rd Qu.: 6.000  
-##  Max.   :56.00   Max.   :40.000  
-##  NA's   :5       NA's   :17      
-##      treat             site      
-##  Min.   :0.0000   Min.   :0.000  
-##  1st Qu.:0.0000   1st Qu.:0.000  
-##  Median :0.0000   Median :0.000  
-##  Mean   :0.4904   Mean   :0.293  
-##  3rd Qu.:1.0000   3rd Qu.:1.000  
-##  Max.   :1.0000   Max.   :1.000  
-##                                  
-##       time            censor      
-##  Min.   :   2.0   Min.   :0.0000  
-##  1st Qu.:  79.0   1st Qu.:1.0000  
-##  Median : 166.0   Median :1.0000  
-##  Mean   : 234.7   Mean   :0.8089  
-##  3rd Qu.: 365.2   3rd Qu.:1.0000  
-##  Max.   :1172.0   Max.   :1.0000  
-##                                   
+##       row              ID             age           ndrugtx      
+##  Min.   :  1.0   Min.   :  1.0   Min.   :20.00   Min.   : 0.000  
+##  1st Qu.:157.8   1st Qu.:157.8   1st Qu.:27.00   1st Qu.: 1.000  
+##  Median :314.5   Median :314.5   Median :32.00   Median : 3.000  
+##  Mean   :314.5   Mean   :314.5   Mean   :32.37   Mean   : 4.574  
+##  3rd Qu.:471.2   3rd Qu.:471.2   3rd Qu.:37.00   3rd Qu.: 6.000  
+##  Max.   :628.0   Max.   :628.0   Max.   :56.00   Max.   :40.000  
+##                                  NA's   :5       NA's   :17      
+##      treat             site            time            censor      
+##  Min.   :0.0000   Min.   :0.000   Min.   :   2.0   Min.   :0.0000  
+##  1st Qu.:0.0000   1st Qu.:0.000   1st Qu.:  79.0   1st Qu.:1.0000  
+##  Median :0.0000   Median :0.000   Median : 166.0   Median :1.0000  
+##  Mean   :0.4904   Mean   :0.293   Mean   : 234.7   Mean   :0.8089  
+##  3rd Qu.:1.0000   3rd Qu.:1.000   3rd Qu.: 365.2   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :1.000   Max.   :1172.0   Max.   :1.0000  
+##                                                                    
 ##      herco      
 ##  Min.   :1.000  
 ##  1st Qu.:1.000  
@@ -986,7 +929,7 @@ Following the instructions, and saving back into the original dataframe:
 
 
 ```r
-drugusers <- drugusers %>% drop_na()
+drugusers %>% drop_na() -> drugusers
 ```
 
  
@@ -998,34 +941,20 @@ summary(drugusers)
 ```
 
 ```
-##       row              ID       
-##  Min.   :  1.0   Min.   :  1.0  
-##  1st Qu.:155.2   1st Qu.:155.2  
-##  Median :312.5   Median :312.5  
-##  Mean   :313.8   Mean   :313.8  
-##  3rd Qu.:473.8   3rd Qu.:473.8  
-##  Max.   :628.0   Max.   :628.0  
-##       age           ndrugtx      
-##  Min.   :20.00   Min.   : 0.000  
-##  1st Qu.:27.00   1st Qu.: 1.000  
-##  Median :32.00   Median : 3.000  
-##  Mean   :32.39   Mean   : 4.579  
-##  3rd Qu.:37.00   3rd Qu.: 6.000  
-##  Max.   :56.00   Max.   :40.000  
-##      treat             site       
-##  Min.   :0.0000   Min.   :0.0000  
-##  1st Qu.:0.0000   1st Qu.:0.0000  
-##  Median :0.0000   Median :0.0000  
-##  Mean   :0.4918   Mean   :0.2984  
-##  3rd Qu.:1.0000   3rd Qu.:1.0000  
-##  Max.   :1.0000   Max.   :1.0000  
-##       time            censor      
-##  Min.   :   2.0   Min.   :0.0000  
-##  1st Qu.:  79.0   1st Qu.:1.0000  
-##  Median : 166.0   Median :1.0000  
-##  Mean   : 234.4   Mean   :0.8115  
-##  3rd Qu.: 361.8   3rd Qu.:1.0000  
-##  Max.   :1172.0   Max.   :1.0000  
+##       row              ID             age           ndrugtx      
+##  Min.   :  1.0   Min.   :  1.0   Min.   :20.00   Min.   : 0.000  
+##  1st Qu.:155.2   1st Qu.:155.2   1st Qu.:27.00   1st Qu.: 1.000  
+##  Median :312.5   Median :312.5   Median :32.00   Median : 3.000  
+##  Mean   :313.8   Mean   :313.8   Mean   :32.39   Mean   : 4.579  
+##  3rd Qu.:473.8   3rd Qu.:473.8   3rd Qu.:37.00   3rd Qu.: 6.000  
+##  Max.   :628.0   Max.   :628.0   Max.   :56.00   Max.   :40.000  
+##      treat             site             time            censor      
+##  Min.   :0.0000   Min.   :0.0000   Min.   :   2.0   Min.   :0.0000  
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:  79.0   1st Qu.:1.0000  
+##  Median :0.0000   Median :0.0000   Median : 166.0   Median :1.0000  
+##  Mean   :0.4918   Mean   :0.2984   Mean   : 234.4   Mean   :0.8115  
+##  3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.: 361.8   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1172.0   Max.   :1.0000  
 ##      herco     
 ##  Min.   :1.00  
 ##  1st Qu.:1.00  
@@ -1085,15 +1014,18 @@ Most of them have only two levels, so it doesn't matter whether
 we make them categorical or leave them as numbers, but for
 `herco` it matters. Let's give them all sensible values,
 mostly with `ifelse`,
-\marginnote{Case-when is much clearer than using nested if-elses when you have three or more categories, as for *herco*.} thus:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Case-when is much clearer than using nested if-elses when you have three or more categories, as for *herco*.</span> thus:
 
 ```r
-drugusers <- drugusers %>% mutate(treat = ifelse(treat == 
-    0, "short", "long"), site = ifelse(site == 
-    0, "A", "B"), censor = ifelse(censor == 1, 
-    "returned", "no-return"), herco = case_when(herco == 
-    1 ~ "both", herco == 2 ~ "one", herco == 3 ~ 
-    "neither"))
+drugusers %>% mutate(
+treat=ifelse(treat==0, "short", "long"),
+site=ifelse(site==0, "A", "B"),
+censor=ifelse(censor==1, "returned", "no-return"),
+herco=case_when(
+herco==1 ~ "both",
+herco==2 ~ "one",
+herco==3 ~ "neither")
+) -> drugusers
 ```
 
        
@@ -1107,21 +1039,19 @@ drugusers
 
 ```
 ## # A tibble: 610 x 9
-##      row    ID   age ndrugtx treat site 
-##    <dbl> <dbl> <dbl>   <dbl> <chr> <chr>
-##  1     1     1    39       1 long  A    
-##  2     2     2    33       8 long  A    
-##  3     3     3    33       3 long  A    
-##  4     4     4    32       1 short A    
-##  5     5     5    24       5 long  A    
-##  6     6     6    30       1 long  A    
-##  7     7     7    39      34 long  A    
-##  8     8     8    27       2 long  A    
-##  9     9     9    40       3 long  A    
-## 10    10    10    36       7 long  A    
-## # ... with 600 more rows, and 3 more
-## #   variables: time <dbl>, censor <chr>,
-## #   herco <chr>
+##      row    ID   age ndrugtx treat site   time censor    herco  
+##    <dbl> <dbl> <dbl>   <dbl> <chr> <chr> <dbl> <chr>     <chr>  
+##  1     1     1    39       1 long  A       188 returned  neither
+##  2     2     2    33       8 long  A        26 returned  neither
+##  3     3     3    33       3 long  A       207 returned  one    
+##  4     4     4    32       1 short A       144 returned  neither
+##  5     5     5    24       5 long  A       551 no-return one    
+##  6     6     6    30       1 long  A        32 returned  both   
+##  7     7     7    39      34 long  A       459 returned  neither
+##  8     8     8    27       2 long  A        22 returned  neither
+##  9     9     9    40       3 long  A       210 returned  one    
+## 10    10    10    36       7 long  A       184 returned  one    
+## # … with 600 more rows
 ```
 
  
@@ -1142,12 +1072,12 @@ This is `Surv` in package `survival`. The response
 variable needs to encode two things: the time until the event of
 interest (return to drug use) and whether or not that event
 happened for each patient.
-\marginnote{Some people define the response variable right inside the *coxph*, in the same way as putting something like *log(y)* as a response in an *lm*, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Some people define the response variable right inside the *coxph*, in the same way as putting something like *log(y)* as a response in an *lm*, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.</span>
 In this case, that is
 `censor="returned"`. 
 
 ```r
-y = with(drugusers, Surv(time, censor == "returned"))
+y=with(drugusers,Surv(time,censor=="returned"))
 ```
 
        
@@ -1188,16 +1118,14 @@ head(drugusers)
 
 ```
 ## # A tibble: 6 x 9
-##     row    ID   age ndrugtx treat site   time
-##   <dbl> <dbl> <dbl>   <dbl> <chr> <chr> <dbl>
-## 1     1     1    39       1 long  A       188
-## 2     2     2    33       8 long  A        26
-## 3     3     3    33       3 long  A       207
-## 4     4     4    32       1 short A       144
-## 5     5     5    24       5 long  A       551
-## 6     6     6    30       1 long  A        32
-## # ... with 2 more variables: censor <chr>,
-## #   herco <chr>
+##     row    ID   age ndrugtx treat site   time censor    herco  
+##   <dbl> <dbl> <dbl>   <dbl> <chr> <chr> <dbl> <chr>     <chr>  
+## 1     1     1    39       1 long  A       188 returned  neither
+## 2     2     2    33       8 long  A        26 returned  neither
+## 3     3     3    33       3 long  A       207 returned  one    
+## 4     4     4    32       1 short A       144 returned  neither
+## 5     5     5    24       5 long  A       551 no-return one    
+## 6     6     6    30       1 long  A        32 returned  both
 ```
 
  
@@ -1211,12 +1139,10 @@ ends, and studies of this kind carry on for years:
 
 
 ```r
-ggplot(drugusers, aes(x = censor, y = time)) + 
-    geom_boxplot()
+ggplot(drugusers,aes(x=censor,y=time))+geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-33-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
  
 Yep. The smallest time for a censored observation would be an upper outlier
@@ -1232,12 +1158,11 @@ non-censored observations. Then, this works:
 
 
 ```r
-ggplot(drugusers, aes(x = treat, y = time, colour = censor)) + 
-    geom_boxplot()
+ggplot(drugusers,aes(x=treat,y=time,colour=censor))+
+geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-34-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
  
 
@@ -1263,8 +1188,7 @@ Solution
 
 
 ```r
-drugusers.1 = coxph(y ~ age + ndrugtx + treat + 
-    site + herco, data = drugusers)
+drugusers.1=coxph(y~age+ndrugtx+treat+site+herco,data=drugusers)
 summary(drugusers.1)
 ```
 
@@ -1274,38 +1198,23 @@ summary(drugusers.1)
 ## 
 ##   n= 610, number of events= 495 
 ## 
-##                   coef exp(coef)  se(coef)
-## age          -0.023798  0.976483  0.007561
-## ndrugtx       0.034815  1.035429  0.007755
-## treatshort    0.254606  1.289953  0.091006
-## siteB        -0.173021  0.841120  0.102105
-## herconeither  0.125779  1.134032  0.103075
-## hercoone      0.247318  1.280586  0.122759
-##                   z Pr(>|z|)    
-## age          -3.148  0.00165 ** 
-## ndrugtx       4.490 7.14e-06 ***
-## treatshort    2.798  0.00515 ** 
-## siteB        -1.695  0.09016 .  
-## herconeither  1.220  0.22236    
-## hercoone      2.015  0.04394 *  
+##                   coef exp(coef)  se(coef)      z Pr(>|z|)    
+## age          -0.023798  0.976483  0.007561 -3.148  0.00165 ** 
+## ndrugtx       0.034815  1.035429  0.007755  4.490 7.14e-06 ***
+## treatshort    0.254606  1.289953  0.091006  2.798  0.00515 ** 
+## siteB        -0.173021  0.841120  0.102105 -1.695  0.09016 .  
+## herconeither  0.125779  1.134032  0.103075  1.220  0.22236    
+## hercoone      0.247318  1.280586  0.122759  2.015  0.04394 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##              exp(coef) exp(-coef) lower .95
-## age             0.9765     1.0241    0.9621
-## ndrugtx         1.0354     0.9658    1.0198
-## treatshort      1.2900     0.7752    1.0792
-## siteB           0.8411     1.1889    0.6886
-## herconeither    1.1340     0.8818    0.9266
-## hercoone        1.2806     0.7809    1.0067
-##              upper .95
-## age             0.9911
-## ndrugtx         1.0513
-## treatshort      1.5418
-## siteB           1.0275
-## herconeither    1.3879
-## hercoone        1.6289
+##              exp(coef) exp(-coef) lower .95 upper .95
+## age             0.9765     1.0241    0.9621    0.9911
+## ndrugtx         1.0354     0.9658    1.0198    1.0513
+## treatshort      1.2900     0.7752    1.0792    1.5418
+## siteB           0.8411     1.1889    0.6886    1.0275
+## herconeither    1.1340     0.8818    0.9266    1.3879
+## hercoone        1.2806     0.7809    1.0067    1.6289
 ## 
 ## Concordance= 0.581  (se = 0.014 )
 ## Rsquare= 0.056   (max possible= 1 )
@@ -1321,23 +1230,20 @@ Another way to handle
 
 
 ```r
-drugusers.1a = coxph(y ~ . - row - ID - time - 
-    censor, data = drugusers)
+drugusers.1a=coxph(y~.-row-ID-time-censor,data=drugusers)
 broom::tidy(drugusers.1a)
 ```
 
 ```
 ## # A tibble: 6 x 7
-##   term  estimate std.error statistic p.value
-##   <chr>    <dbl>     <dbl>     <dbl>   <dbl>
-## 1 age    -0.0238   0.00756     -3.15 1.65e-3
-## 2 ndru~   0.0348   0.00775      4.49 7.14e-6
-## 3 trea~   0.255    0.0910       2.80 5.15e-3
-## 4 siteB  -0.173    0.102       -1.69 9.02e-2
-## 5 herc~   0.126    0.103        1.22 2.22e-1
-## 6 herc~   0.247    0.123        2.01 4.39e-2
-## # ... with 2 more variables: conf.low <dbl>,
-## #   conf.high <dbl>
+##   term         estimate std.error statistic    p.value conf.low conf.high
+##   <chr>           <dbl>     <dbl>     <dbl>      <dbl>    <dbl>     <dbl>
+## 1 age           -0.0238   0.00756     -3.15 0.00165    -0.0386   -0.00898
+## 2 ndrugtx        0.0348   0.00775      4.49 0.00000714  0.0196    0.0500 
+## 3 treatshort     0.255    0.0910       2.80 0.00515     0.0762    0.433  
+## 4 siteB         -0.173    0.102       -1.69 0.0902     -0.373     0.0271 
+## 5 herconeither   0.126    0.103        1.22 0.222      -0.0762    0.328  
+## 6 hercoone       0.247    0.123        2.01 0.0439      0.00671   0.488
 ```
 
  
@@ -1356,7 +1262,7 @@ Solution
 The hint is meant to suggest to you that looking at `drop1` is the right way to go:
 
 ```r
-drop1(drugusers.1, test = "Chisq")
+drop1(drugusers.1, test="Chisq")
 ```
 
 ```
@@ -1372,8 +1278,7 @@ drop1(drugusers.1, test = "Chisq")
 ## site     1 5713.1  2.9335  0.086760 .  
 ## herco    2 5712.5  4.3182  0.115427    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -1395,14 +1300,13 @@ Solution
 
 `site` and `herco` are the two variables to come
 out.
-\marginnote{The researchers were probably relieved that there        was not quite a significant effect of *site*.} I like
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The researchers were probably relieved that there        was not quite a significant effect of *site*.</span> I like
 `update`, but there is no
 problem about copying-pasting your `coxph` and taking out
 what you no longer need.
 
 ```r
-drugusers.2 = update(drugusers.1, . ~ . - site - 
-    herco)
+drugusers.2=update(drugusers.1,.~.-site-herco)
 ```
 
  
@@ -1412,7 +1316,7 @@ right test gets done, so no need for `test=`:
 
 
 ```r
-anova(drugusers.2, drugusers.1)
+anova(drugusers.2,drugusers.1)
 ```
 
 ```
@@ -1424,15 +1328,14 @@ anova(drugusers.2, drugusers.1)
 ## 1 -2853.7                      
 ## 2 -2850.1 7.2117  3   0.06545 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
 
 There is no significant difference between these two 
 models,
-\marginnote{Not at the 0.05 level, anyway.} so we can go with the 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not at the 0.05 level, anyway.</span> so we can go with the 
 smaller, simpler one
 (with just `age`, `ndrugtx` and `treat`).
     
@@ -1458,26 +1361,17 @@ summary(drugusers.2)
 ## 
 ##   n= 610, number of events= 495 
 ## 
-##                 coef exp(coef)  se(coef)
-## age        -0.020801  0.979414  0.007419
-## ndrugtx     0.035567  1.036207  0.007621
-## treatshort  0.231055  1.259929  0.090175
-##                 z Pr(>|z|)    
-## age        -2.804  0.00505 ** 
-## ndrugtx     4.667 3.05e-06 ***
-## treatshort  2.562  0.01040 *  
+##                 coef exp(coef)  se(coef)      z Pr(>|z|)    
+## age        -0.020801  0.979414  0.007419 -2.804  0.00505 ** 
+## ndrugtx     0.035567  1.036207  0.007621  4.667 3.05e-06 ***
+## treatshort  0.231055  1.259929  0.090175  2.562  0.01040 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##            exp(coef) exp(-coef) lower .95
-## age           0.9794     1.0210    0.9653
-## ndrugtx       1.0362     0.9651    1.0208
-## treatshort    1.2599     0.7937    1.0558
-##            upper .95
-## age           0.9938
-## ndrugtx       1.0518
-## treatshort    1.5035
+##            exp(coef) exp(-coef) lower .95 upper .95
+## age           0.9794     1.0210    0.9653    0.9938
+## ndrugtx       1.0362     0.9651    1.0208    1.0518
+## treatshort    1.2599     0.7937    1.0558    1.5035
 ## 
 ## Concordance= 0.572  (se = 0.014 )
 ## Rsquare= 0.045   (max possible= 1 )
@@ -1544,11 +1438,10 @@ call it `new` and construct it in pieces as I did before
 (thus meaning that I don't have to think too hard about what I'm doing):
 
 ```r
-ages = c(27, 37)
-ndrugtxs = c(1, 6)
-treats = c("short", "long")
-new = crossing(age = ages, ndrugtx = ndrugtxs, 
-    treat = treats)
+ages=c(27,37)
+ndrugtxs=c(1,6)
+treats=c("short","long")
+new=crossing(age=ages,ndrugtx=ndrugtxs,treat=treats)
 new
 ```
 
@@ -1584,7 +1477,7 @@ Solution
 `predict` and works the same way, so this is all you need:
 
 ```r
-pp = survfit(drugusers.2, new, data = drugusers)
+pp=survfit(drugusers.2,new,data=drugusers)
 ```
 
        
@@ -1603,11 +1496,10 @@ Solution
 This:
 
 ```r
-ggsurvplot(pp, conf.int = F)
+ggsurvplot(pp, conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-43-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
    
 
@@ -1729,7 +1621,7 @@ The variables are:
 * `logbun`: log of BUN test score (BUN test is a test of
 kidney function, not to be confused with cha siu
 bao
-\marginnote{Barbecued pork in a bun. A staple of Chinese dim sum and  Chinese bakeries, such as Ding Dong bakery on Spadina.}).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Barbecued pork in a bun. A staple of Chinese dim sum and  Chinese bakeries, such as Ding Dong bakery on Spadina.</span>).
 
 * `hgb`: hemoglobin (at diagnosis).
 
@@ -1770,8 +1662,8 @@ Solution
 The usual:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv"
-myeloma = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv"
+myeloma=read_csv(my_url)
 ```
 
 ```
@@ -1797,21 +1689,19 @@ myeloma
 
 ```
 ## # A tibble: 65 x 11
-##     time vstatus logbun   hgb platelet   age
-##    <dbl>   <dbl>  <dbl> <dbl>    <dbl> <dbl>
-##  1  1.25       1   2.22   9.4        1    67
-##  2  1.25       1   1.94  12          1    38
-##  3  2          1   1.52   9.8        1    81
-##  4  2          1   1.75  11.3        0    75
-##  5  2          1   1.30   5.1        0    57
-##  6  3          1   1.54   6.7        1    46
-##  7  5          1   2.24  10.1        1    50
-##  8  5          1   1.68   6.5        1    74
-##  9  6          1   1.36   9          1    77
-## 10  6          1   2.11  10.2        0    70
-## # ... with 55 more rows, and 5 more
-## #   variables: logwbc <dbl>, frac <dbl>,
-## #   logpbm <dbl>, protein <dbl>, scalc <dbl>
+##     time vstatus logbun   hgb platelet   age logwbc  frac logpbm protein
+##    <dbl>   <dbl>  <dbl> <dbl>    <dbl> <dbl>  <dbl> <dbl>  <dbl>   <dbl>
+##  1  1.25       1   2.22   9.4        1    67   3.66     1   1.95      12
+##  2  1.25       1   1.94  12          1    38   3.99     1   1.95      20
+##  3  2          1   1.52   9.8        1    81   3.88     1   2          2
+##  4  2          1   1.75  11.3        0    75   3.81     1   1.26       0
+##  5  2          1   1.30   5.1        0    57   3.72     1   2          3
+##  6  3          1   1.54   6.7        1    46   4.48     0   1.93      12
+##  7  5          1   2.24  10.1        1    50   4.95     1   1.66       4
+##  8  5          1   1.68   6.5        1    74   3.73     0   1.73       5
+##  9  6          1   1.36   9          1    77   3.54     0   1.46       1
+## 10  6          1   2.11  10.2        0    70   3.54     1   1.36       1
+## # … with 55 more rows, and 1 more variable: scalc <dbl>
 ```
 
      
@@ -1832,23 +1722,23 @@ glimpse(myeloma)
 ```
 ## Observations: 65
 ## Variables: 11
-## $ time     <dbl> 1.25, 1.25, 2.00, 2.00,...
-## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1,...
-## $ logbun   <dbl> 2.2175, 1.9395, 1.5185,...
-## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5...
-## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1,...
-## $ age      <dbl> 67, 38, 81, 75, 57, 46,...
-## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751,...
-## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0,...
-## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000,...
-## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4,...
-## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, ...
+## $ time     <dbl> 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00, 6…
+## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ logbun   <dbl> 2.2175, 1.9395, 1.5185, 1.7482, 1.3010, 1.5441, 2.2355,…
+## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5.1, 6.7, 10.1, 6.5, 9.0, 10.2, 9…
+## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1…
+## $ age      <dbl> 67, 38, 81, 75, 57, 46, 50, 74, 77, 70, 60, 67, 48, 61,…
+## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751, 3.8062, 3.7243, 4.4757, 4.9542,…
+## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000, 1.2553, 2.0000, 1.9345, 1.6628,…
+## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0, 1…
+## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13, 1…
 ```
 
  
 
 which gives a bit more of a picture of the values.
-\marginnote{Don't  confuse this with *glance* from *broom*, which gives a one-line summary of a *model*, containing things like R-squared and a test for the overall model significance.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Don't  confuse this with *glance* from *broom*, which gives a one-line summary of a *model*, containing things like R-squared and a test for the overall model significance.</span> 
 Or if you were
 serious about checking, you could do
 
@@ -1858,48 +1748,27 @@ summary(myeloma)
 ```
 
 ```
-##       time          vstatus      
-##  Min.   : 1.25   Min.   :0.0000  
-##  1st Qu.: 7.00   1st Qu.:0.0000  
-##  Median :15.00   Median :1.0000  
-##  Mean   :24.01   Mean   :0.7385  
-##  3rd Qu.:35.00   3rd Qu.:1.0000  
-##  Max.   :92.00   Max.   :1.0000  
-##      logbun            hgb      
-##  Min.   :0.7782   Min.   : 4.9  
-##  1st Qu.:1.1461   1st Qu.: 8.8  
-##  Median :1.3222   Median :10.2  
-##  Mean   :1.3929   Mean   :10.2  
-##  3rd Qu.:1.5682   3rd Qu.:12.0  
-##  Max.   :2.2355   Max.   :14.6  
-##     platelet           age       
-##  Min.   :0.0000   Min.   :38.00  
-##  1st Qu.:1.0000   1st Qu.:51.00  
-##  Median :1.0000   Median :60.00  
-##  Mean   :0.8615   Mean   :60.15  
-##  3rd Qu.:1.0000   3rd Qu.:67.00  
-##  Max.   :1.0000   Max.   :82.00  
-##      logwbc           frac       
-##  Min.   :3.362   Min.   :0.0000  
-##  1st Qu.:3.643   1st Qu.:1.0000  
-##  Median :3.732   Median :1.0000  
-##  Mean   :3.769   Mean   :0.7538  
-##  3rd Qu.:3.875   3rd Qu.:1.0000  
-##  Max.   :4.954   Max.   :1.0000  
-##      logpbm          protein      
-##  Min.   :0.4771   Min.   : 0.000  
-##  1st Qu.:1.3617   1st Qu.: 0.000  
-##  Median :1.6232   Median : 1.000  
-##  Mean   :1.5497   Mean   : 3.615  
-##  3rd Qu.:1.8451   3rd Qu.: 4.000  
-##  Max.   :2.0000   Max.   :27.000  
-##      scalc      
-##  Min.   : 7.00  
-##  1st Qu.: 9.00  
-##  Median :10.00  
-##  Mean   :10.12  
-##  3rd Qu.:10.00  
-##  Max.   :18.00
+##       time          vstatus           logbun            hgb      
+##  Min.   : 1.25   Min.   :0.0000   Min.   :0.7782   Min.   : 4.9  
+##  1st Qu.: 7.00   1st Qu.:0.0000   1st Qu.:1.1461   1st Qu.: 8.8  
+##  Median :15.00   Median :1.0000   Median :1.3222   Median :10.2  
+##  Mean   :24.01   Mean   :0.7385   Mean   :1.3929   Mean   :10.2  
+##  3rd Qu.:35.00   3rd Qu.:1.0000   3rd Qu.:1.5682   3rd Qu.:12.0  
+##  Max.   :92.00   Max.   :1.0000   Max.   :2.2355   Max.   :14.6  
+##     platelet           age            logwbc           frac       
+##  Min.   :0.0000   Min.   :38.00   Min.   :3.362   Min.   :0.0000  
+##  1st Qu.:1.0000   1st Qu.:51.00   1st Qu.:3.643   1st Qu.:1.0000  
+##  Median :1.0000   Median :60.00   Median :3.732   Median :1.0000  
+##  Mean   :0.8615   Mean   :60.15   Mean   :3.769   Mean   :0.7538  
+##  3rd Qu.:1.0000   3rd Qu.:67.00   3rd Qu.:3.875   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :82.00   Max.   :4.954   Max.   :1.0000  
+##      logpbm          protein           scalc      
+##  Min.   :0.4771   Min.   : 0.000   Min.   : 7.00  
+##  1st Qu.:1.3617   1st Qu.: 0.000   1st Qu.: 9.00  
+##  Median :1.6232   Median : 1.000   Median :10.00  
+##  Mean   :1.5497   Mean   : 3.615   Mean   :10.12  
+##  3rd Qu.:1.8451   3rd Qu.: 4.000   3rd Qu.:10.00  
+##  Max.   :2.0000   Max.   :27.000   Max.   :18.00
 ```
 
  
@@ -1926,23 +1795,17 @@ yours whatever you like. Two things: the survival times, here
 `vstatus` being 1:
 
 ```r
-y = with(myeloma, Surv(time, vstatus == 1))
+y=with(myeloma,Surv(time, vstatus==1))
 y
 ```
 
 ```
-##  [1]  1.25   1.25   2.00   2.00   2.00 
-##  [6]  3.00   5.00   5.00   6.00   6.00 
-## [11]  6.00   6.00   7.00   7.00   7.00 
-## [16]  9.00  11.00  11.00  11.00  11.00 
-## [21] 11.00  13.00  14.00  15.00  16.00 
-## [26] 16.00  17.00  17.00  18.00  19.00 
-## [31] 19.00  24.00  25.00  26.00  32.00 
-## [36] 35.00  37.00  41.00  41.00  51.00 
-## [41] 52.00  54.00  58.00  66.00  67.00 
-## [46] 88.00  89.00  92.00   4.00+  4.00+
-## [51]  7.00+  7.00+  8.00+ 12.00+ 11.00+
-## [56] 12.00+ 13.00+ 16.00+ 19.00+ 19.00+
+##  [1]  1.25   1.25   2.00   2.00   2.00   3.00   5.00   5.00   6.00   6.00 
+## [11]  6.00   6.00   7.00   7.00   7.00   9.00  11.00  11.00  11.00  11.00 
+## [21] 11.00  13.00  14.00  15.00  16.00  16.00  17.00  17.00  18.00  19.00 
+## [31] 19.00  24.00  25.00  26.00  32.00  35.00  37.00  41.00  41.00  51.00 
+## [41] 52.00  54.00  58.00  66.00  67.00  88.00  89.00  92.00   4.00+  4.00+
+## [51]  7.00+  7.00+  8.00+ 12.00+ 11.00+ 12.00+ 13.00+ 16.00+ 19.00+ 19.00+
 ## [61] 28.00+ 41.00+ 53.00+ 57.00+ 77.00+
 ```
 
@@ -1991,7 +1854,7 @@ The obvious way to do this is to list all the other variables on
 the right side of the squiggle, but a faster way is this:
 
 ```r
-y.1 = coxph(y ~ . - time - vstatus, data = myeloma)
+y.1=coxph(y~.-time-vstatus,data=myeloma)
 summary(y.1)
 ```
 
@@ -2001,50 +1864,29 @@ summary(y.1)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##              coef exp(coef) se(coef)      z
-## logbun    1.85557   6.39536  0.65628  2.827
-## hgb      -0.12629   0.88136  0.07212 -1.751
-## platelet -0.25488   0.77501  0.51194 -0.498
-## age      -0.01306   0.98702  0.01957 -0.668
-## logwbc    0.35389   1.42460  0.71576  0.494
-## frac      0.34232   1.40821  0.40725  0.841
-## logpbm    0.38165   1.46470  0.48743  0.783
-## protein   0.01302   1.01311  0.02612  0.498
-## scalc     0.12976   1.13856  0.10502  1.236
-##          Pr(>|z|)   
-## logbun    0.00469 **
-## hgb       0.07994 . 
-## platelet  0.61858   
-## age       0.50439   
-## logwbc    0.62101   
-## frac      0.40059   
-## logpbm    0.43364   
-## protein   0.61817   
-## scalc     0.21659   
+##              coef exp(coef) se(coef)      z Pr(>|z|)   
+## logbun    1.85557   6.39536  0.65628  2.827  0.00469 **
+## hgb      -0.12629   0.88136  0.07212 -1.751  0.07994 . 
+## platelet -0.25488   0.77501  0.51194 -0.498  0.61858   
+## age      -0.01306   0.98702  0.01957 -0.668  0.50439   
+## logwbc    0.35389   1.42460  0.71576  0.494  0.62101   
+## frac      0.34232   1.40821  0.40725  0.841  0.40059   
+## logpbm    0.38165   1.46470  0.48743  0.783  0.43364   
+## protein   0.01302   1.01311  0.02612  0.498  0.61817   
+## scalc     0.12976   1.13856  0.10502  1.236  0.21659   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##          exp(coef) exp(-coef) lower .95
-## logbun      6.3954     0.1564    1.7670
-## hgb         0.8814     1.1346    0.7652
-## platelet    0.7750     1.2903    0.2841
-## age         0.9870     1.0131    0.9499
-## logwbc      1.4246     0.7020    0.3503
-## frac        1.4082     0.7101    0.6339
-## logpbm      1.4647     0.6827    0.5634
-## protein     1.0131     0.9871    0.9625
-## scalc       1.1386     0.8783    0.9268
-##          upper .95
-## logbun      23.147
-## hgb          1.015
-## platelet     2.114
-## age          1.026
-## logwbc       5.794
-## frac         3.128
-## logpbm       3.808
-## protein      1.066
-## scalc        1.399
+##          exp(coef) exp(-coef) lower .95 upper .95
+## logbun      6.3954     0.1564    1.7670    23.147
+## hgb         0.8814     1.1346    0.7652     1.015
+## platelet    0.7750     1.2903    0.2841     2.114
+## age         0.9870     1.0131    0.9499     1.026
+## logwbc      1.4246     0.7020    0.3503     5.794
+## frac        1.4082     0.7101    0.6339     3.128
+## logpbm      1.4647     0.6827    0.5634     3.808
+## protein     1.0131     0.9871    0.9625     1.066
+## scalc       1.1386     0.8783    0.9268     1.399
 ## 
 ## Concordance= 0.675  (se = 0.051 )
 ## Rsquare= 0.237   (max possible= 0.991 )
@@ -2066,14 +1908,12 @@ in danger of having a model that fits perfectly:
 
 
 ```r
-y.00 = coxph(y ~ ., data = myeloma)
+y.00=coxph(y~.,data=myeloma)
 ```
 
 ```
-## Warning in fitter(X, Y, strats, offset,
-## init, control, weights = weights, :
-## Loglik converged before variable
-## 1,2,3,4,5,6,7,8,9,10,11 ; beta may be
+## Warning in fitter(X, Y, strats, offset, init, control, weights = weights, :
+## Loglik converged before variable 1,2,3,4,5,6,7,8,9,10,11 ; beta may be
 ## infinite.
 ```
 
@@ -2087,55 +1927,31 @@ summary(y.00)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##                coef  exp(coef)   se(coef)
-## time     -9.889e+00  5.071e-05  1.824e+01
-## vstatus   1.439e+01  1.775e+06  3.703e+02
-## logbun    4.864e-04  1.000e+00  8.626e-01
-## hgb       2.776e-05  1.000e+00  1.417e-01
-## platelet  2.287e-04  1.000e+00  7.862e-01
-## age      -1.144e-05  1.000e+00  2.834e-02
-## logwbc   -6.984e-06  1.000e+00  1.121e+00
-## frac     -1.930e-04  9.998e-01  9.787e-01
-## logpbm    8.106e-04  1.001e+00  9.518e-01
-## protein   1.018e-04  1.000e+00  8.550e-02
-## scalc    -4.515e-05  1.000e+00  1.639e-01
-##               z Pr(>|z|)
-## time     -0.542    0.588
-## vstatus   0.039    0.969
-## logbun    0.001    1.000
-## hgb       0.000    1.000
-## platelet  0.000    1.000
-## age       0.000    1.000
-## logwbc    0.000    1.000
-## frac      0.000    1.000
-## logpbm    0.001    0.999
-## protein   0.001    0.999
-## scalc     0.000    1.000
+##                coef  exp(coef)   se(coef)      z Pr(>|z|)
+## time     -9.889e+00  5.071e-05  1.824e+01 -0.542    0.588
+## vstatus   1.439e+01  1.775e+06  3.703e+02  0.039    0.969
+## logbun    4.864e-04  1.000e+00  8.626e-01  0.001    1.000
+## hgb       2.776e-05  1.000e+00  1.417e-01  0.000    1.000
+## platelet  2.287e-04  1.000e+00  7.862e-01  0.000    1.000
+## age      -1.144e-05  1.000e+00  2.834e-02  0.000    1.000
+## logwbc   -6.984e-06  1.000e+00  1.121e+00  0.000    1.000
+## frac     -1.930e-04  9.998e-01  9.787e-01  0.000    1.000
+## logpbm    8.106e-04  1.001e+00  9.518e-01  0.001    0.999
+## protein   1.018e-04  1.000e+00  8.550e-02  0.001    0.999
+## scalc    -4.515e-05  1.000e+00  1.639e-01  0.000    1.000
 ## 
-##          exp(coef) exp(-coef)  lower .95
-## time     5.071e-05  1.972e+04  1.500e-20
-## vstatus  1.775e+06  5.632e-07 1.209e-309
-## logbun   1.000e+00  9.995e-01  1.845e-01
-## hgb      1.000e+00  1.000e+00  7.576e-01
-## platelet 1.000e+00  9.998e-01  2.142e-01
-## age      1.000e+00  1.000e+00  9.460e-01
-## logwbc   1.000e+00  1.000e+00  1.111e-01
-## frac     9.998e-01  1.000e+00  1.468e-01
-## logpbm   1.001e+00  9.992e-01  1.550e-01
-## protein  1.000e+00  9.999e-01  8.458e-01
-## scalc    1.000e+00  1.000e+00  7.252e-01
-##          upper .95
-## time     1.714e+11
-## vstatus        Inf
-## logbun   5.425e+00
-## hgb      1.320e+00
-## platelet 4.670e+00
-## age      1.057e+00
-## logwbc   8.997e+00
-## frac     6.808e+00
-## logpbm   6.464e+00
-## protein  1.183e+00
-## scalc    1.379e+00
+##          exp(coef) exp(-coef)  lower .95 upper .95
+## time     5.071e-05  1.972e+04  1.500e-20 1.714e+11
+## vstatus  1.775e+06  5.632e-07 1.209e-309       Inf
+## logbun   1.000e+00  9.995e-01  1.845e-01 5.425e+00
+## hgb      1.000e+00  1.000e+00  7.576e-01 1.320e+00
+## platelet 1.000e+00  9.998e-01  2.142e-01 4.670e+00
+## age      1.000e+00  1.000e+00  9.460e-01 1.057e+00
+## logwbc   1.000e+00  1.000e+00  1.111e-01 8.997e+00
+## frac     9.998e-01  1.000e+00  1.468e-01 6.808e+00
+## logpbm   1.001e+00  9.992e-01  1.550e-01 6.464e+00
+## protein  1.000e+00  9.999e-01  8.458e-01 1.183e+00
+## scalc    1.000e+00  1.000e+00  7.252e-01 1.379e+00
 ## 
 ## Concordance= 1  (se = 0 )
 ## Rsquare= 0.986   (max possible= 0.991 )
@@ -2173,7 +1989,7 @@ in this situation). I'm going to copy-and-paste my code for
 `y.1` and edit it:
 
 ```r
-y.2 = coxph(y ~ logbun + hgb, data = myeloma)
+y.2=coxph(y~logbun+hgb,data=myeloma)
 summary(y.2)
 ```
 
@@ -2183,22 +1999,15 @@ summary(y.2)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##            coef exp(coef) se(coef)      z
-## logbun  1.71597   5.56209  0.61855  2.774
-## hgb    -0.11966   0.88722  0.05742 -2.084
-##        Pr(>|z|)   
-## logbun  0.00553 **
-## hgb     0.03717 * 
+##            coef exp(coef) se(coef)      z Pr(>|z|)   
+## logbun  1.71597   5.56209  0.61855  2.774  0.00553 **
+## hgb    -0.11966   0.88722  0.05742 -2.084  0.03717 * 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##        exp(coef) exp(-coef) lower .95
-## logbun    5.5621     0.1798    1.6547
-## hgb       0.8872     1.1271    0.7928
-##        upper .95
-## logbun   18.6961
-## hgb       0.9929
+##        exp(coef) exp(-coef) lower .95 upper .95
+## logbun    5.5621     0.1798    1.6547   18.6961
+## hgb       0.8872     1.1271    0.7928    0.9929
 ## 
 ## Concordance= 0.675  (se = 0.043 )
 ## Rsquare= 0.172   (max possible= 0.991 )
@@ -2227,7 +2036,7 @@ Comparing two models is `anova`, which also works here. The
 right `test` is `Chisq`:
 
 ```r
-anova(y.2, y.1, test = "Chisq")
+anova(y.2,y.1,test="Chisq")
 ```
 
 ```
@@ -2260,7 +2069,7 @@ In case you are curious, `step` also works on models like these:
 
 
 ```r
-y.3 = step(y.1, direction = "backward", trace = 0)
+y.3=step(y.1,direction="backward",trace=0)
 summary(y.3)
 ```
 
@@ -2270,22 +2079,15 @@ summary(y.3)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##            coef exp(coef) se(coef)      z
-## logbun  1.71597   5.56209  0.61855  2.774
-## hgb    -0.11966   0.88722  0.05742 -2.084
-##        Pr(>|z|)   
-## logbun  0.00553 **
-## hgb     0.03717 * 
+##            coef exp(coef) se(coef)      z Pr(>|z|)   
+## logbun  1.71597   5.56209  0.61855  2.774  0.00553 **
+## hgb    -0.11966   0.88722  0.05742 -2.084  0.03717 * 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##        exp(coef) exp(-coef) lower .95
-## logbun    5.5621     0.1798    1.6547
-## hgb       0.8872     1.1271    0.7928
-##        upper .95
-## logbun   18.6961
-## hgb       0.9929
+##        exp(coef) exp(-coef) lower .95 upper .95
+## logbun    5.5621     0.1798    1.6547   18.6961
+## hgb       0.8872     1.1271    0.7928    0.9929
 ## 
 ## Concordance= 0.675  (se = 0.043 )
 ## Rsquare= 0.172   (max possible= 0.991 )
@@ -2353,48 +2155,27 @@ summary(myeloma)
 ```
 
 ```
-##       time          vstatus      
-##  Min.   : 1.25   Min.   :0.0000  
-##  1st Qu.: 7.00   1st Qu.:0.0000  
-##  Median :15.00   Median :1.0000  
-##  Mean   :24.01   Mean   :0.7385  
-##  3rd Qu.:35.00   3rd Qu.:1.0000  
-##  Max.   :92.00   Max.   :1.0000  
-##      logbun            hgb      
-##  Min.   :0.7782   Min.   : 4.9  
-##  1st Qu.:1.1461   1st Qu.: 8.8  
-##  Median :1.3222   Median :10.2  
-##  Mean   :1.3929   Mean   :10.2  
-##  3rd Qu.:1.5682   3rd Qu.:12.0  
-##  Max.   :2.2355   Max.   :14.6  
-##     platelet           age       
-##  Min.   :0.0000   Min.   :38.00  
-##  1st Qu.:1.0000   1st Qu.:51.00  
-##  Median :1.0000   Median :60.00  
-##  Mean   :0.8615   Mean   :60.15  
-##  3rd Qu.:1.0000   3rd Qu.:67.00  
-##  Max.   :1.0000   Max.   :82.00  
-##      logwbc           frac       
-##  Min.   :3.362   Min.   :0.0000  
-##  1st Qu.:3.643   1st Qu.:1.0000  
-##  Median :3.732   Median :1.0000  
-##  Mean   :3.769   Mean   :0.7538  
-##  3rd Qu.:3.875   3rd Qu.:1.0000  
-##  Max.   :4.954   Max.   :1.0000  
-##      logpbm          protein      
-##  Min.   :0.4771   Min.   : 0.000  
-##  1st Qu.:1.3617   1st Qu.: 0.000  
-##  Median :1.6232   Median : 1.000  
-##  Mean   :1.5497   Mean   : 3.615  
-##  3rd Qu.:1.8451   3rd Qu.: 4.000  
-##  Max.   :2.0000   Max.   :27.000  
-##      scalc      
-##  Min.   : 7.00  
-##  1st Qu.: 9.00  
-##  Median :10.00  
-##  Mean   :10.12  
-##  3rd Qu.:10.00  
-##  Max.   :18.00
+##       time          vstatus           logbun            hgb      
+##  Min.   : 1.25   Min.   :0.0000   Min.   :0.7782   Min.   : 4.9  
+##  1st Qu.: 7.00   1st Qu.:0.0000   1st Qu.:1.1461   1st Qu.: 8.8  
+##  Median :15.00   Median :1.0000   Median :1.3222   Median :10.2  
+##  Mean   :24.01   Mean   :0.7385   Mean   :1.3929   Mean   :10.2  
+##  3rd Qu.:35.00   3rd Qu.:1.0000   3rd Qu.:1.5682   3rd Qu.:12.0  
+##  Max.   :92.00   Max.   :1.0000   Max.   :2.2355   Max.   :14.6  
+##     platelet           age            logwbc           frac       
+##  Min.   :0.0000   Min.   :38.00   Min.   :3.362   Min.   :0.0000  
+##  1st Qu.:1.0000   1st Qu.:51.00   1st Qu.:3.643   1st Qu.:1.0000  
+##  Median :1.0000   Median :60.00   Median :3.732   Median :1.0000  
+##  Mean   :0.8615   Mean   :60.15   Mean   :3.769   Mean   :0.7538  
+##  3rd Qu.:1.0000   3rd Qu.:67.00   3rd Qu.:3.875   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :82.00   Max.   :4.954   Max.   :1.0000  
+##      logpbm          protein           scalc      
+##  Min.   :0.4771   Min.   : 0.000   Min.   : 7.00  
+##  1st Qu.:1.3617   1st Qu.: 0.000   1st Qu.: 9.00  
+##  Median :1.6232   Median : 1.000   Median :10.00  
+##  Mean   :1.5497   Mean   : 3.615   Mean   :10.12  
+##  3rd Qu.:1.8451   3rd Qu.: 4.000   3rd Qu.:10.00  
+##  Max.   :2.0000   Max.   :27.000   Max.   :18.00
 ```
 
  
@@ -2404,7 +2185,7 @@ ones you need first:
 
 
 ```r
-myeloma %>% select(logbun, hgb) %>% summary()
+myeloma %>% select(logbun,hgb) %>% summary()
 ```
 
 ```
@@ -2421,14 +2202,14 @@ myeloma %>% select(logbun, hgb) %>% summary()
 
 The obvious `tidyverse` way is actually a bit
 inelegant, because you have to calculate two things for two variables:
-\marginnote{Because *summarize* will only allow you to have a single-number answer.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Because *summarize* will only allow you to have a single-number answer.</span> 
 
 
 ```r
-myeloma %>% summarize(logbun.q1 = quantile(logbun, 
-    0.25), logbun.q3 = quantile(logbun, 0.75), 
-    hgb.q1 = quantile(hgb, 0.25), hgb.q3 = quantile(hgb, 
-        0.75))
+myeloma %>% summarize(logbun.q1=quantile(logbun,0.25),
+logbun.q3=quantile(logbun,0.75),
+hgb.q1=quantile(hgb,0.25),
+hgb.q3=quantile(hgb,0.75))
 ```
 
 ```
@@ -2445,8 +2226,8 @@ There is a `tidyverse` way to obtain the quartiles of
 loaded with the `tidyverse`:
 
 ```r
-myeloma %>% select(logbun, hgb) %>% map(quantile, 
-    c(0.25, 0.75))
+myeloma %>% select(logbun,hgb) %>% 
+map(quantile, c(0.25,0.75))
 ```
 
 ```
@@ -2465,8 +2246,8 @@ This is what R calls a `list`. It would look nicer as a data
 frame. There is a way to get that:
 
 ```r
-myeloma %>% select(logbun, hgb) %>% map_df(~quantile(., 
-    c(0.25, 0.75)))
+myeloma %>% select(logbun,hgb) %>% 
+map_df(~quantile(.,c(0.25,0.75)))
 ```
 
 ```
@@ -2481,7 +2262,7 @@ myeloma %>% select(logbun, hgb) %>% map_df(~quantile(.,
 The `25%` and `75%` have gone missing. They were
 actually the `names` of each of the components of the list,
 which I don't think we easily have access to.
-\marginnote{The way, as we  have seen elsewhere, is to use *tidy(quantile)* or *enframe(quantile)*, which  produce a two-column data frame with the percentiles shown.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The way, as we  have seen elsewhere, is to use *tidy(quantile)* or *enframe(quantile)*, which  produce a two-column data frame with the percentiles shown.</span>
     
 
 
@@ -2496,9 +2277,9 @@ The usual `crossing`:
 
 
 ```r
-logbuns = c(1.1461, 1.5682)
-hgbs = c(8.8, 12)
-new = crossing(logbun = logbuns, hgb = hgbs)
+logbuns=c(1.1461,1.5682)
+hgbs=c(8.8,12)
+new=crossing(logbun=logbuns,hgb=hgbs)
 new
 ```
 
@@ -2535,7 +2316,7 @@ This seems as if it ought to be `predict`, but the
 `survival` version of it is called `survfit`:
 
 ```r
-s = survfit(y.2, new, data = myeloma)
+s=survfit(y.2,new,data=myeloma)
 ```
 
      
@@ -2557,11 +2338,10 @@ Solution
 This is easier than you think: it's just `ggsurvplot` from `survminer`:
 
 ```r
-ggsurvplot(s, conf.int = F)
+ggsurvplot(s,conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-62-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
      
     
@@ -2596,7 +2376,7 @@ new
 
 The best survival curve is the top-right green one. This is
 stratum
-\marginnote{Strata is plural; the singular is *stratum*. Like  data and datum.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Strata is plural; the singular is *stratum*. Like  data and datum.</span> 
 2, from the legend at the top. In `new`,
 this goes with a low value of `logbun` and a *high* value
 of `hgb`. 
@@ -2701,7 +2481,7 @@ ovarian %>% as.tibble()
 ##  8    475      1  59.9        2     2       2
 ##  9    477      0  64.2        2     1       1
 ## 10    563      1  55.2        1     2       2
-## # ... with 16 more rows
+## # … with 16 more rows
 ```
 
  
@@ -2745,16 +2525,14 @@ be 1 or 0 if the event happened. The help says that it needs to be
 `fustat` is, so we can use it as it is:
 
 ```r
-y = with(ovarian, Surv(futime, fustat))
+y=with(ovarian,Surv(futime,fustat))
 y
 ```
 
 ```
-##  [1]   59   115   156   421+  431   448+
-##  [7]  464   475   477+  563   638   744+
-## [13]  769+  770+  803+  855+ 1040+ 1106+
-## [19] 1129+ 1206+ 1227+  268   329   353 
-## [25]  365   377+
+##  [1]   59   115   156   421+  431   448+  464   475   477+  563   638 
+## [12]  744+  769+  770+  803+  855+ 1040+ 1106+ 1129+ 1206+ 1227+  268 
+## [23]  329   353   365   377+
 ```
 
      
@@ -2766,11 +2544,11 @@ complicated than that:
 
 
 ```r
-ov2 = ovarian %>% mutate(y = Surv(futime, fustat))
+ov2 = ovarian %>% mutate(y=Surv(futime,fustat))
 ```
 
 ```
-## Error in mutate_impl(.data, dots): Column `y` must be length 26 (the number of rows) or one, not 52
+## Error: Column `y` must be length 26 (the number of rows) or one, not 52
 ```
 
  
@@ -2819,7 +2597,7 @@ print.default(y)
  
 
 The `attr(,"class")` thing at the bottom of this says that `y` is actually  a `Surv` object, which is how it knows to display as it does, as 26 values some of which have plusses.
-\marginnote{Internally, printing a *Surv* thing calls the method *print.Surv*, which is defined in the *survival* package.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Internally, printing a *Surv* thing calls the method *print.Surv*, which is defined in the *survival* package.</span>
 
 The way R works out the length of something is its total number of
 entries, which for this matrix is $26 \times 2=52$. The only things
@@ -2830,7 +2608,7 @@ or length 1 (in which case it is repeated 26 times).
 With some cajoling, you can get this into a data frame, but with more
 cajoling than seems necessary. It's much easier to leave it as a
 separate thing outside a data frame.
-\marginnote{In some respects, it's  like that two-column response in logistic regression, where each row of the data frame represents several observations pooled together.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In some respects, it's  like that two-column response in logistic regression, where each row of the data frame represents several observations pooled together.</span>
 
 I gave `ov2` a "temporary" name because I am not going to use
 it again.
@@ -2887,7 +2665,7 @@ Solution
 The hint suggests something like this:
 
 ```r
-time.1 = coxph(y ~ age + factor(rx), data = ovarian)
+time.1=coxph(y~age+factor(rx),data=ovarian)
 summary(time.1)
 ```
 
@@ -2897,22 +2675,15 @@ summary(time.1)
 ## 
 ##   n= 26, number of events= 12 
 ## 
-##                 coef exp(coef) se(coef)
-## age          0.14733   1.15873  0.04615
-## factor(rx)2 -0.80397   0.44755  0.63205
-##                  z Pr(>|z|)   
-## age          3.193  0.00141 **
-## factor(rx)2 -1.272  0.20337   
+##                 coef exp(coef) se(coef)      z Pr(>|z|)   
+## age          0.14733   1.15873  0.04615  3.193  0.00141 **
+## factor(rx)2 -0.80397   0.44755  0.63205 -1.272  0.20337   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##             exp(coef) exp(-coef) lower .95
-## age            1.1587      0.863    1.0585
-## factor(rx)2    0.4475      2.234    0.1297
-##             upper .95
-## age             1.268
-## factor(rx)2     1.545
+##             exp(coef) exp(-coef) lower .95 upper .95
+## age            1.1587      0.863    1.0585     1.268
+## factor(rx)2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
 ## Rsquare= 0.457   (max possible= 0.932 )
@@ -2928,8 +2699,8 @@ frame first. This is the slick way to do that:
 
 
 ```r
-time.1a = ovarian %>% mutate(rxf = factor(rx)) %>% 
-    coxph(y ~ age + rxf, data = .)
+time.1a = ovarian %>% mutate(rxf=factor(rx)) %>%
+coxph(y~age+rxf,data=.)
 summary(time.1a)
 ```
 
@@ -2939,22 +2710,15 @@ summary(time.1a)
 ## 
 ##   n= 26, number of events= 12 
 ## 
-##          coef exp(coef) se(coef)      z
-## age   0.14733   1.15873  0.04615  3.193
-## rxf2 -0.80397   0.44755  0.63205 -1.272
-##      Pr(>|z|)   
-## age   0.00141 **
-## rxf2  0.20337   
+##          coef exp(coef) se(coef)      z Pr(>|z|)   
+## age   0.14733   1.15873  0.04615  3.193  0.00141 **
+## rxf2 -0.80397   0.44755  0.63205 -1.272  0.20337   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##      exp(coef) exp(-coef) lower .95
-## age     1.1587      0.863    1.0585
-## rxf2    0.4475      2.234    0.1297
-##      upper .95
-## age      1.268
-## rxf2     1.545
+##      exp(coef) exp(-coef) lower .95 upper .95
+## age     1.1587      0.863    1.0585     1.268
+## rxf2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
 ## Rsquare= 0.457   (max possible= 0.932 )
@@ -3033,7 +2797,7 @@ Extra: I was curious about what would happen if I just included
 
 
 ```r
-time.2 = update(time.1, . ~ . - age)
+time.2=update(time.1,.~.-age)
 summary(time.2)
 ```
 
@@ -3043,15 +2807,11 @@ summary(time.2)
 ## 
 ##   n= 26, number of events= 12 
 ## 
-##                coef exp(coef) se(coef)
-## factor(rx)2 -0.5964    0.5508   0.5870
-##                  z Pr(>|z|)
-## factor(rx)2 -1.016     0.31
+##                coef exp(coef) se(coef)      z Pr(>|z|)
+## factor(rx)2 -0.5964    0.5508   0.5870 -1.016     0.31
 ## 
-##             exp(coef) exp(-coef) lower .95
-## factor(rx)2    0.5508      1.816    0.1743
-##             upper .95
-## factor(rx)2      1.74
+##             exp(coef) exp(-coef) lower .95 upper .95
+## factor(rx)2    0.5508      1.816    0.1743      1.74
 ## 
 ## Concordance= 0.608  (se = 0.07 )
 ## Rsquare= 0.04   (max possible= 0.932 )
@@ -3082,12 +2842,10 @@ important things like `age`. Here, that could be a boxplot:
 
 
 ```r
-ggplot(ovarian, aes(x = factor(rx), y = age)) + 
-    geom_boxplot()
+ggplot(ovarian, aes(x=factor(rx),y=age))+geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-72-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
  
 
@@ -3118,15 +2876,14 @@ The plot is just the same idea as the one in the notes. Make sure
 you have `survminer` installed and loaded:
 
 ```r
-ggcoxdiagnostics(time.1) + geom_smooth()
+ggcoxdiagnostics(time.1)+geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-73-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
      
 
@@ -3181,8 +2938,9 @@ or, if you prefer,
 
 
 ```r
-ovarian %>% summarize(q1 = quantile(age, 0.25), 
-    q3 = quantile(age, 0.75))
+ovarian %>% 
+summarize(q1=quantile(age,0.25),
+q3=quantile(age,0.75))
 ```
 
 ```
@@ -3201,9 +2959,9 @@ remembering that "treatment" is called `rx` here:
 
 
 ```r
-ages = c(50.17, 62.38)
-rxs = c(1, 2)
-new = crossing(age = ages, rx = rxs)
+ages=c(50.17, 62.38)
+rxs=c(1, 2)
+new=crossing(age=ages,rx=rxs)
 new
 ```
 
@@ -3233,39 +2991,26 @@ The magic word here is `survfit`. The structure is the same
 as for `predict`:
 
 ```r
-s = survfit(time.1, new, data = ovarian)
+s=survfit(time.1,new,data=ovarian)
 summary(s)
 ```
 
 ```
 ## Call: survfit(formula = time.1, newdata = new, data = ovarian)
 ## 
-##  time n.risk n.event survival1 survival2
-##    59     26       1     0.993     0.997
-##   115     25       1     0.985     0.993
-##   156     24       1     0.973     0.988
-##   268     23       1     0.959     0.981
-##   329     22       1     0.932     0.969
-##   353     21       1     0.905     0.956
-##   365     20       1     0.877     0.943
-##   431     17       1     0.843     0.926
-##   464     15       1     0.805     0.908
-##   475     14       1     0.768     0.888
-##   563     12       1     0.701     0.853
-##   638     11       1     0.634     0.816
-##  survival3 survival4
-##      0.959     0.981
-##      0.911     0.959
-##      0.846     0.928
-##      0.777     0.893
-##      0.653     0.826
-##      0.548     0.764
-##      0.452     0.701
-##      0.356     0.630
-##      0.271     0.557
-##      0.202     0.489
-##      0.117     0.382
-##      0.064     0.292
+##  time n.risk n.event survival1 survival2 survival3 survival4
+##    59     26       1     0.993     0.997     0.959     0.981
+##   115     25       1     0.985     0.993     0.911     0.959
+##   156     24       1     0.973     0.988     0.846     0.928
+##   268     23       1     0.959     0.981     0.777     0.893
+##   329     22       1     0.932     0.969     0.653     0.826
+##   353     21       1     0.905     0.956     0.548     0.764
+##   365     20       1     0.877     0.943     0.452     0.701
+##   431     17       1     0.843     0.926     0.356     0.630
+##   464     15       1     0.805     0.908     0.271     0.557
+##   475     14       1     0.768     0.888     0.202     0.489
+##   563     12       1     0.701     0.853     0.117     0.382
+##   638     11       1     0.634     0.816     0.064     0.292
 ```
 
    
@@ -3302,11 +3047,10 @@ Thus. The `conf.int=F` means to skip the confidence interval
 "envelopes" that I find make the plot rather messy:
 
 ```r
-ggsurvplot(s, conf.int = F)
+ggsurvplot(s,conf.int=F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-78-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-78-1.png" width="672"  />
 
    
 
@@ -3321,7 +3065,7 @@ Solution
 The best survival curve, in terms of surviving longest, is up and to
 the right, so the green one is best and the blue one is
 worst.
-\marginnote{In other cases, having the event happen sooner is    better. For example, you might be poisoning rats, in which case    you want them to die quicker. Or the event might be something    desirable like becoming qualified to fly an airplane. In those    cases, down and to the left is better.} To figure out which those
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In other cases, having the event happen sooner is    better. For example, you might be poisoning rats, in which case    you want them to die quicker. Or the event might be something    desirable like becoming qualified to fly an airplane. In those    cases, down and to the left is better.</span> To figure out which those
 are, we have to go back to the data frame we created:
 
 ```r
@@ -3372,22 +3116,15 @@ summary(time.1)
 ## 
 ##   n= 26, number of events= 12 
 ## 
-##                 coef exp(coef) se(coef)
-## age          0.14733   1.15873  0.04615
-## factor(rx)2 -0.80397   0.44755  0.63205
-##                  z Pr(>|z|)   
-## age          3.193  0.00141 **
-## factor(rx)2 -1.272  0.20337   
+##                 coef exp(coef) se(coef)      z Pr(>|z|)   
+## age          0.14733   1.15873  0.04615  3.193  0.00141 **
+## factor(rx)2 -0.80397   0.44755  0.63205 -1.272  0.20337   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-##             exp(coef) exp(-coef) lower .95
-## age            1.1587      0.863    1.0585
-## factor(rx)2    0.4475      2.234    0.1297
-##             upper .95
-## age             1.268
-## factor(rx)2     1.545
+##             exp(coef) exp(-coef) lower .95 upper .95
+## age            1.1587      0.863    1.0585     1.268
+## factor(rx)2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
 ## Rsquare= 0.457   (max possible= 0.932 )

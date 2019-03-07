@@ -322,7 +322,6 @@ saying something like "weight relative to height", with someone
 at the top of the picture being unusually heavy and someone at the
 bottom unusually light.
 
-xxxa 
 
 (i) Obtain a (very large) square table, or a (very long) table
 with frequencies, of actual and predicted sport-gender
@@ -338,7 +337,8 @@ Solution
 
 Let's see what happens:
 ```{r error=T}
-with(d, table(combo, class))
+tab=with(d, table(combo, class))
+tab
 ```
 
      
@@ -368,7 +368,6 @@ tab %>% as_tibble()
 ```
 
  
-
 This makes the `tidyverse` output, with frequencies. You
 probably want to omit the zero ones:
 
@@ -377,7 +376,6 @@ tab %>% as_tibble() %>% filter(n>0)
 ```
 
  
-
 This is the same output as below. See there for comments.
 
 The other, perhaps easier, way to tackle this one is the
@@ -389,6 +387,7 @@ d %>% count(combo,class)
 
  
 
+The zeroes never show up here.
 The `combo` column is the truth, and the `class` column
 is the prediction. Again, you can see where the big frequencies are; a
 lot of the female netball players were gotten right, but there were a
@@ -412,7 +411,7 @@ overall misclassification rate we have to count these, but *not*
 simply counting the number of rows; rather, we need to total up the
 things in the `n` column:
 
-```{r }
+```{r error=T}
 d %>% count(combo, class) %>% 
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n)
@@ -421,17 +420,16 @@ count(stat,wt=n)
  
 
 This tells us how many predictions overall were right and how many
-wrong. We already had a column `n` so we now have a column
-`nn` with the second round of `count`s.
+wrong. 
 
 To make those into proportions, another `mutate`, dividing by
-the total of `nn`:
+the total of `n`:
 
-```{r }
+```{r error=T}
 d %>% count(combo, class) %>% 
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
  
@@ -445,17 +443,17 @@ corresponding calculation by sport-gender combination. To do
 *that*, we put a `group_by(combo)` either before or after
 we define `stat` (it doesn't matter which way):
 
-```{r }
+```{r error=T}
 d %>% count(combo, class) %>% 
 group_by(combo) %>%
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn))
+mutate(proportion=n/sum(n))
 ```
 
  
 
-That last `sum(nn)`: what is it summing over? The answer is
+That last `sum(n)`: what is it summing over? The answer is
 "within `combo`", since that is the `group_by`. You
 see that the two `proportion` values within, say,
 `BBall_female`, add up to 1.
@@ -469,7 +467,7 @@ d %>% count(combo, class) %>%
 group_by(combo) %>%
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
+mutate(proportion=n/sum(n)) %>%
 spread(stat, proportion)
 ```
 
@@ -479,16 +477,16 @@ This doesn't work because everything outside of the `spread` is
 tested for uniqueness; if it's unique, it gets its own row. Thus,
 `BBall_male` and 3 is different from `BBall_male` and
 9. But we only want one row of `BBall_male`. I think the
-easiest way around this is to get rid of `nn`, since it has
+easiest way around this is to get rid of `n`, since it has
 served its purpose:
 
-```{r }
+```{r error=T}
 d %>% count(combo, class) %>% 
 group_by(combo) %>%
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(stat, proportion, fill=0)
 ```
 
@@ -497,13 +495,13 @@ spread(stat, proportion, fill=0)
 While we're about it, let's arrange in
 order of misclassification probability:
 
-```{r }
+```{r error=T}
 d %>% count(combo, class) %>% 
 group_by(combo) %>%
 mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 count(stat,wt=n) %>%
-mutate(proportion=nn/sum(nn)) %>%
-select(-nn) %>%
+mutate(proportion=n/sum(n)) %>%
+select(-n) %>%
 spread(stat, proportion, fill=0) %>%
 replace_na(list(correct=0,wrong=0)) %>%
 arrange(wrong)
@@ -518,9 +516,6 @@ weight. The ones at the bottom of the list were very confusible since
 the discriminant analysis guessed them all wrong!
 So what were the most common *misclassifications*? Let's go back
 to this:
-
-xxxa 
-
 ```{r error=T}
 head(d)
 d %>% count(combo, class) %>% 
@@ -534,7 +529,7 @@ defining the proportions:
 
 ```{r error=T}
 d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong"))
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 group_by(combo) %>%
 mutate(proportion=n/sum(n))
 ```
@@ -546,7 +541,7 @@ proportions in descending order:
 
 ```{r error=T}
 d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong"))
+mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
 group_by(combo) %>%
 mutate(proportion=n/sum(n)) %>%
 filter(stat=="wrong") %>%
@@ -560,7 +555,6 @@ taken to be --- female rowers! Most of the other mistakes are more
 forgivable: the male rowers being taken for male water polo players,
 for example. 
 
-xxxb
 
 
 

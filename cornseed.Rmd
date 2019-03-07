@@ -315,8 +315,6 @@ better than anything else.
 
 Extra: we can calculate misclassification rates, first overall, which is easier:
 
-xxxa
-
 ```{r error=T}
 d %>% count(soil, class) %>%
 mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
@@ -334,7 +332,9 @@ mutate(prop=nn/sum(nn))
 
 
 
-xxxb
+Note the use of `wt` on the second `count` to count the
+number of *observations* from the first `count`, not the
+number of *rows*.
 
 This shows that 44\% of the soil types were misclassified, which
 sounds awful, but is actually not so bad, considering. Bear in mind
@@ -344,9 +344,6 @@ getting 44\% wrong is quite a bit better than that. The variables
 about soil type; it's better to know them than not to.
 
 Or do it by actual soil type:
-
-xxxa
-
 ```{r }
 d %>% count(soil, class) %>%
 group_by(soil) %>%
@@ -367,7 +364,6 @@ spread(soil_stat,prop)
 ```
 
  
-xxxb
 
 Loam soil was the easiest to get right, and clay was easiest to get
 wrong. However, these proportions were each based on only eight
