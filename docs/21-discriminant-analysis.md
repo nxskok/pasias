@@ -1112,7 +1112,6 @@ This is easier than using `ggplot`, but (i) less flexible and
 standard `ggplot` way. So I went with constructing a data frame
 from the predictions, and then
 `ggplot`ting that. It's a matter of taste which way is better.
-xxxb
  
 
 (f) <a name="part:table">*</a> Obtain a table showing observed and predicted obesity
@@ -2110,26 +2109,26 @@ jobs0 %>% left_join(lookup_tab) %>% sample_n(20)
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl>
-##  1      19     15           10     2    89
-##  2      17     20            6     1    81
-##  3      20     16           14     3    50
-##  4      17     11           10     3    30
-##  5      17     21           15     2    37
-##  6      16     19           12     3    52
-##  7      15     18           14     3    18
-##  8      15     13            6     2    70
-##  9       8     28           12     1    68
-## 10      20     14           18     3    62
-## 11      23     16           10     2    80
-## 12      17     21            9     2    10
-## 13      19     33            7     1     3
-## 14      17     18            9     3    56
-## 15      24     22           14     2    78
-## 16      10     29           11     1    12
-## 17      10     12            9     3    38
-## 18      19     14           12     3    32
-## 19      10     22           13     1    14
-## 20      15     13           13     3    65
+##  1      11     20            9     1    46
+##  2      20     13           18     3    61
+##  3      10     22            5     1     1
+##  4      18     28            0     2    83
+##  5      20     16           14     3    50
+##  6      22     21           11     2    28
+##  7       9     24            6     1    63
+##  8      18     28            7     1    79
+##  9      25     20            8     2    91
+## 10      21     23           11     2    36
+## 11      15     17            8     2    77
+## 12      18     30            9     1    56
+## 13      17     20            6     1    81
+## 14      20     19           11     2    82
+## 15      15     26            4     1    70
+## 16      15     18           14     3    18
+## 17      17     17           12     3     2
+## 18      21     19            8     2    74
+## 19      12     28           13     1    51
+## 20      14     25           15     1    78
 ## # ... with 1 more variable: jobname <chr>
 ```
 

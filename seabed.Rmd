@@ -154,9 +154,14 @@ plot(d.2,cex=0.7)
 
      
 
+xxxa
+
 The site numbers were a bit close together, so I printed them out
 smaller than usual size (which is what the `cex` and a number
 less than 1 is doing: 70\% of normal size).
+`r tufte::margin_note("This is base-graphics code, which I learned a long time ago. There are a lot of options with weird names that are hard to remember, and that are sometimes inconsistent with each other. There is a package *ggdendro* that makes nice *ggplot* dendrograms, and another called *dendextend* that does all kinds of stuff with dendrograms. I decided that it wasn't worth the trouble of teaching you (and therefore me) *ggdendro*, since the dendrograms look much the same.")`
+
+xxxb
 
 This time, there is a greater tendency for sites to be joined into
 small clusters first, then these small clusters are joined
@@ -317,7 +322,7 @@ Site `s4` has no `a` or `b` at all, and site
 `s7` has quite a few; site `s7` has no `c` at
 all, while site `s4` has a lot. These are very different sites.
 
-Now that you've seen what the original data look like, I should
+Extra: now that you've seen what the original data look like, I should
 explain how I got the Bray-Curtis dissimilarities. As I said, only the
 counts of species `a` through `e` enter into the
 calculation; the other variables have nothing to do with it.
@@ -388,14 +393,18 @@ exactly the same at the two sites, and the largest it can be is 1, if
 one site has only species A and the other has only species B. (I'll
 demonstrate that in a moment.)
 
+xxxa 
+
 You might imagine that we'll be doing this calculation a lot, and so
-we should define a function to automate it. Hadley Wickham (in ``R for
-Data Science'') says that you should copy and paste some code (as
+we should define a function to automate it. Hadley Wickham 
+(in "R for Data Science") says that you should copy and paste some code (as
 I did above) no more than twice; if you need to do it again, you
 should write a function instead. The thinking behind this is if you
 copy and paste and change something (like a variable name), you'll
 need to make the change *everywhere*, and it's so easy to miss
 one. 
+
+xxxb
 
 So, my function is (copying and pasting my code from above into the
 body of the function, which is Wickham-approved since it's only my
@@ -445,11 +454,15 @@ something like a chi-squared test that is assessing
 proportionality).
 `r tufte::margin_note("You could make a table out of the sites and  species, and use the test statistic from a chi-squared test as a  measure of dissimilarity: the smallest it can be is zero, if the  species counts are exactly proportional at the two sites. It doesn't have an upper limit.")`
 
+xxxa 
+
 So far so good. Now we have to do this for the actual data. The first
 issue
-`r tufte::margin_note("There are more.")`  is that the data is some of the row of
+`r tufte::margin_note("There are more issues.")`  is that the data is some of the row of
 the original data frame; specifically, it's columns 2 through 6. For
 example, rows 3 and 20 of the original data frame look like this:
+
+xxxb
 
 ```{r }
 seabed.z %>% slice(c(3,20))
@@ -457,17 +470,21 @@ seabed.z %>% slice(c(3,20))
 
  
 
+xxxa
+
 and we don't want to feed the whole of those into `braycurtis`,
 just the second through sixth elements of them. So let's write another
 function that extracts the second through sixth columns of its
 inputs for given rows, and passes those on to the `braycurtis`
 that we wrote before. This is a little fiddly, but bear with me. The
-input to the function is the two row numbers that we want, and the
-data frame. It seems more logical to have the data frame first, but I
-have my reasons (that you will see later):
+input to the function is the data frame, then the two row numbers that we want:
+
+xxxa
+have this take *site names*
+xxxb
 
 ```{r }
-braycurtis.spec=function(i,j,d) {
+braycurtis.spec=function(d, i, j) {
 x = d %>% select(2:6) %>% slice(i) %>% unlist()
 y = d %>% select(2:6) %>% slice(j) %>% unlist()
 braycurtis(x,y)
@@ -475,6 +492,8 @@ braycurtis(x,y)
 ```
 
  
+
+xxxb
 
 The first two lines pull out columns 2 through 6 of (respectively)
 rows `i` and `j`, then turn them into vectors (which is
@@ -493,11 +512,13 @@ into a separate function as well, but I didn't.
 Sites 3 and 20 were the two sites I chose before as being similar ones (in the
 same cluster). So the dissimilarity should be small:
 
+xxxa
 ```{r }
-braycurtis.spec(3,20,seabed.z)
+braycurtis.spec(seabed.z, 3, 20)
 ```
 
  
+xxxb
 
 and so it is. Is it about right? The `c` differ by 5, the
 `d` differ by one, and the total frequency in both rows is
@@ -523,7 +544,7 @@ I know I made a mistake in my coding:
 m=matrix(-1,30,30)
 for (i in 1:30) {
 for (j in 1:30) {
-m[i,j]=braycurtis.spec(i,j,seabed.z)
+m[i,j]=braycurtis.spec(seabed.z, i, j)
 }
 }
 summary(as.vector(m))
@@ -549,9 +570,10 @@ you read in at the beginning.
 
 *Of course* there is a `tidyverse` way to do
 this. Conceptually, it's not all that different from the loop here,
-but there is less housekeeping to do. The first thing we need is a
-data frame that has all combinations of 1 through 30 with each other,
-which you know how to do:
+but there is less housekeeping to do (and we end up with a data frame
+at the end of it). The first thing we need is a data frame that has
+all combinations of 1 through 30 with each other, which you know how
+to do:
 
 ```{r }
 ddd=crossing(i=1:30,j=1:30)
@@ -569,19 +591,9 @@ you of `map`; this is for-eaching both `i` and
 `map2_dbl`: 
 
 ```{r }
-ddd = ddd %>% mutate(bc=map2_dbl(i,j,braycurtis.spec,seabed.z))
-```
-
- 
-
-Now we finally see why I wrote `braycurtis.spec` the way I did:
-the "for each" things, the `i` and `j` go first in the
-`map`, then the function that is run for-each, and finally any
-extra input to the function that is the same every time (the data
-frame, here). 
-
-```{r }
-ddd
+ddd %>%
+mutate(bc=map2_dbl(i, j, ~braycurtis.spec(seabed.z, .x, .y))) -> ddd
+ddd           
 ```
 
  
@@ -593,6 +605,8 @@ ddd %>% filter(i==3, j==20)
 ```
 
  
+
+xxxb
 
 Check.
 

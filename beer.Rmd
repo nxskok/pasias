@@ -47,8 +47,13 @@ beer
 
        
 
-32 rows (students), 11 columns (10 beers, plus a column of student IDs).
-All seems to be kosher. If beer can be kosher.
+xxxa
+
+32 rows (students), 11 columns (10 beers, plus a column of student
+IDs).  All seems to be kosher. If beer can be kosher.
+`r tufte::margin_note("I  investigated. It can; in fact, I found a long list of kosher beers  that included Anchor Steam.")`
+
+xxxb
  
 
 (b) The researcher who collected the data wants to see which
@@ -64,14 +69,16 @@ The obvious thing is to feed these ratings into `dist`
 (we are *creating* distances rather than re-formatting
 things that are already distances). We need to skip the first
 column, since those are student identifiers:
+xxxa        
 ```{r }
-d = beer %>%
+beer %>%
 select(-student) %>%
-dist()
+dist() -> d
 glimpse(d)
 ```
 
-     
+   
+xxxb
 
 Feel free to be offended by my choice of the letter `d` to
 denote both data frames (that I didn't want to give a better name to)
@@ -103,10 +110,10 @@ Solution
 
 Again, omit the first column. The pipeline code looks a bit weird:
 ```{r }
-d = beer %>%
+beer %>%
 select(-student) %>%
 t() %>%
-dist()
+dist() -> d
 ```
 
    
@@ -114,12 +121,14 @@ dist()
 so you should feel free to do it in a couple of steps. This way shows
 that you can also refer to columns by number:
 
+xxxa
 ```{r }
-beer2 = beer %>% select(-1)
+beer %>% select(-1) -> beer2
 d=dist(t(beer2))
 ```
 
  
+xxxb
 
 Either way gets you to the same place:
 
@@ -167,6 +176,7 @@ beers are in which cluster?
 Solution
 
 
+xxxa        
 This is a judgement call. Almost anything sensible is
 reasonable. I personally think that two clusters is good, beers
 Anchor Steam, Pete's Wicked Ale, Guinness and Sierra Nevada in
@@ -177,20 +187,26 @@ Corona, Beck's and Heineken  into their own cluster, or even
 about 5 clusters as 
 Anchor Steam, Pete's Wicked Ale; Guinness, Sierra Nevada; Bass,
 Gordon Biersch, Sam Adams; Corona; Beck's, Heineken.
+
 The idea is to have a number of clusters sensibly smaller than
 the 10 observations, so that you are getting some actual
 insight. Having 8 clusters for 10 beers wouldn't be very
 informative! (This is where you use your own knowledge about
 beer to help you rationalize your choice of number of clusters.) 
+
 Extra: as to why the clusters split up like this, I think the four
 beers on the left of my dendrogram are "dark" and the six on
 the right are "light" (in colour), and I would expect the
 students to tend to like all the beers of one type and not so
 much all the beers of the other type.
+
 You knew I would have to investigate this, didn't you? Let's aim
 for a scatterplot of all the ratings for the dark  beers,
 against the ones for the light beers. 
+
 Start with the data frame read in from the file:
+
+xxxb
 ```{r }
 beer
 ```
@@ -215,9 +231,13 @@ two columns, the first being the beer names, and the second being
 `dark` or `light` as appropriate for that beer. Then you
 use a "left join" to look up beer type from beer name.)
 
+xxxa
+
 Next, group by beer type within student. Giving two things to
-`group_by` does it this way: the second thing within (or ``for
-each of'') the first. 
+`group_by` does it this way: the second thing within 
+(or "for each of") the first. 
+
+xxxb
 
 Then calculate the mean
 rating within each group. This gives one column of students, one
@@ -264,7 +284,8 @@ of beer; they like either dark beer, or light beer, or both.
 
 The reason a `ggplot` fits into this "workflow" is that the
 first thing you feed into `ggplot` is a data frame, the one
-created by the chain here. Because it's in a chain, you don't have the
+created by the chain here. Because it's in a xxxa pipeline, xxxb
+you don't have the
 first thing on `ggplot`, so you can concentrate on the
 `aes` ("what to plot") and then the "how to plot it". 
 Now back to your regularly-scheduled programming.
@@ -295,15 +316,17 @@ rect.hclust(beer.1,5)
 Same idea with any other number of clusters. If you follow through
 with your preferred number of clusters from the previous part, I'm good.
  
+xxxa
 
 (h) Obtain a K-means
-clustering
-`r tufte::margin_note("If we haven't done this in class yet, skip the      rest of the question, and the following question, for now and      come back to it next week.")` with 2 clusters. 
+clustering with 2 clusters.
+`r tufte::margin_note("If you haven't gotten to K-means clustering yet, leave this and save it for later.")`
 Note that you will need to use the (transposed) 
 *original  data*, not the distances. Use a suitably large value of
 `nstart`. (The data are ratings all on the same scale, so
 there is no need for `scale` here. In case you were
 wondering.) 
+xxxb
  
 Solution
 
@@ -355,27 +378,28 @@ Solution
 The cluster numbers of each beer are these:
 
 ```{r }
-clus=beer.2$cluster
-clus
+beer.2$cluster
 ```
 
   
-This is almost what you want. In fact, this will do it without digging
-out the beer names:
+
+xxxa
+
+This is what is known in the business as a "named vector": it has values (the cluster numbers) and each value has a name attached to it (the name of a beer).
+
+Named vectors are handily turned into a data frame with `enframe`:
 
 ```{r }
-sort(clus)
+enframe(beer.2$cluster)
 ```
 
  
 
-Or, make a data frame:
+or, give the columns better names and arrange them by cluster:
 
 ```{r }
-dd=tibble(cluster=beer.2$cluster,
-beer=names(beer.2$cluster)) %>%
+enframe(beer.2$cluster, name="beer", value="cluster") %>%
 arrange(cluster)
-dd
 ```
 
  
@@ -383,12 +407,7 @@ dd
 These happen to be the same clusters as in my 2-cluster solution using
 Ward's method.
 
-The thing I called `clus` up above is actually just a vector,
-but a vector with a "names" attribute. The actual values are the
-cluster numbers, but they come with a name attached (the name of a
-beer). These display when the vector is "printed".  To get those
-into a data frame that we can deal with, we have to use `names`
-to get the names and put them into a second column of the data frame.
+xxxb
  
 
 
