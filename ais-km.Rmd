@@ -35,11 +35,15 @@ Solution
 
 This, in fact:
 ```{r }
-athletes.s = athletes %>% select_if(is.numeric) %>% mutate_all(scale)
+athletes %>% select_if(is.numeric) %>% mutate_all(~scale(.)) -> athletes.s
 athletes.s
 ```
 
  
+
+The columns have weird names, possibly because `scale` expects
+a matrix or data frame (to standardize each column), and here it's
+getting the columns one at a time.
 
 Elsewhere, I stuck `scale()` on the end, which produces a
 *matrix*, which I should then display the top of (it has 200-plus rows):
@@ -85,13 +89,11 @@ withinss
 A one-liner, kinda. The thing after the squiggle is called an
 "anonymous function"; it is what is done for each of the first
 thing, and where you want the thing you're varying to go, you put a
-dot (the notation is like the dot meaning ``whatever came out of the
-previous step''). The advantage to this is that it looks exactly like
+dot (the notation is like the dot meaning 
+"whatever came out of the previous step"). 
+The advantage to this is that it looks exactly like
 the `kmeans` that you would write, except for the number of
 clusters that is replaced by a dot.
-
-I didn't (reliably) know how to do this until about three weeks ago.
-
 All right then, how would I expect *you* to do this? First write
 a function to take a number of clusters and a data frame and return
 the total within-cluster sum of squares:
@@ -127,10 +129,9 @@ tibble(clusters=2:20)
  
 
 and then make a pipeline and save it:
-
 ```{r }
-withinss = tibble(clusters=2:20) %>%
-mutate(wss=map_dbl(clusters,twss,athletes.s))
+tibble(clusters=2:20) %>%
+mutate(wss=map_dbl(clusters,~twss(., athletes.s))) -> withinss
 withinss
 ```
 
@@ -214,14 +215,14 @@ athletes2
 (g) Using the data frame you created in the previous part, display
 all the athletes in some of your clusters. Do the athletes within a
 cluster appear to have anything in common? (If a cluster has more
-than 10 athletes in it, make sure to display them all.)
+than 10 athletes in it, make sure to look at them all.)
 
 Solution
 
 
 Let's start with my cluster 1. I'm putting a `print(n=Inf)`
 on the end of each of these, to make sure all the cluster members
-get shown.
+get shown, at least in the Console:
 ```{r }
 athletes2 %>% filter(cluster==1) %>% print(n=Inf)
 ```
@@ -250,7 +251,33 @@ athletes2 %>% filter(cluster==3) %>% print(n=Inf)
 
 This is an odd one, since there is one male rower (rowers tend to be
 fairly big) along with a bunch of females mostly from sports involving
-running. 
+running. I have a feeling this rower is a "cox", whose job is
+*not* to row, but to sit in the boat and keep everybody in time
+by yelling out "stroke" in rhythm. Since the cox is not rowing, they
+need to be light in weight.
+
+Let's investigate:
+
+```{r }
+athletes %>% select(gender=Sex, sport=Sport, ht=Ht, wt=Wt) %>%
+mutate(cluster=athletes.km$cluster) -> athletes2a
+athletes2a %>% filter(sport == "Row", cluster == 3)
+```
+
+ 
+
+How does this athlete compare to the other rowers?
+
+```{r }
+athletes2a %>% filter(sport == "Row") %>%
+select(ht, wt) %>%
+summary()
+```
+
+ 
+
+The rower that is in cluster 3 is almost the lightest, and also almost
+the shortest, of all the rowers.
 Cluster 4:
 
 ```{r }
@@ -283,7 +310,7 @@ These are three of our "big guys", by the looks of it.
 
 (h) Add the cluster membership to the data frame you read in from
 the file, and do a discriminant analysis treating the clusters as
-known groups. Don't display the output yet.
+known groups. You can display the output.
 
 Solution
 
@@ -297,9 +324,15 @@ lda(cluster~RCC+WCC+Hc+Hg+Ferr+BMI+SSF+`%Bfat`+LBM+Ht+Wt,data=.)
 
      
 
-We can display all the output now, or pull out pieces of it later. The
+We can display all the output now. The
 problem here, with 12 groups and 11 variables, is that there is rather
-a lot of output.
+a lot of it:
+
+```{r }
+athletes.3
+```
+
+ 
 
 
 (i) How many linear discriminants do you have? How many do you
@@ -308,12 +341,7 @@ think are important?
 Solution
 
 
-`svd`:
-```{r }
-athletes.3$svd
-```
-
-     
+Proportion of trace, at the bottom of the output.
 
 It's hard to draw the line here. The first two, or maybe the first
 seven, or something like that. Your call.
@@ -326,13 +354,10 @@ be important.
 Solution
 
 
+Look at the coefficients of linear discriminants.
 This is rather large, since I had 12 clusters, and thus there are
-11 `LD`s:
-```{r }
-athletes.3$scaling
-```
+11 `LD`s.
 
-   
 If we go back to my thought of only using two linear discriminants:
 LD1 is mostly `RCC` positively and `BMI` negatively, in
 that an athlete with large `RCC` and small `BMI` will
@@ -345,14 +370,7 @@ It may be that `RCC` is just very variable anyway, since it
 seems to appear just about everywhere.
 
 Extra: we can also look at the means on each variable by cluster,
-which is part of the output:
-
-```{r size="footnotesize"}
-round(athletes.3$means,2)
-```
-
- 
-
+which is part of the output, in "Group Means".
 Perhaps the easiest thing to eyeball here is the cluster in which a
 variable is noticeably biggest (or possibly smallest). For example,
 `WCC` is highest in cluster 4, and while Ferritin is high

@@ -2260,7 +2260,6 @@ select(a:e)
 
 That leads us to this function, which is a bit repetitious, but for
 two repeats I can handle it. I haven't done anything about the fact that `x` and `y` below are actually data frames:
-xxxa
 
 ```r
 braycurtis.spec=function(d, i, j) {
@@ -2271,7 +2270,6 @@ braycurtis(x,y)
 ```
 
  
-xxxb
 The first time I did this, I had the `filter` and the
 `select` in the opposite order, so I was neatly *removing*
 the column I wanted to `filter` by *before* I did the
@@ -2357,16 +2355,10 @@ site_pairs
 ```
 
  
-
-xxxa
-
 Now, think about what to do in English first: "for each of the sites in `site1`, and for each of the sites in `site2`, taken in parallel, work out the Bray-Curtis distance."  This is, I hope,
 making you think of `map`. Two details: the Bray-Curtis
 distance is a (decimal) number, and we're for-eaching over two things in
 parallel, so `map2_dbl`:
-
-xxxb
-
 
 ```r
 site_pairs %>% 
@@ -2778,7 +2770,7 @@ within-cluster SS for each number of clusters from 2 to 10.
  
 Solution
 
- xxxa 
+ 
 When I first made this problem,
 I thought the obvious answer was a loop, but now that I've been
 steeped in the Tidyverse a while, I think `map` is much
@@ -2821,9 +2813,6 @@ kmeans(swiss.s, 3, nstart=20)$tot.withinss
 
 and then use that within your `map`, replacing the 3 with a dot:
 
-xxxa
-
-
 ```r
 tibble(clusters=2:10) %>%
 mutate(wss=map_dbl(clusters, ~kmeans(swiss.s, ., nstart=20)$tot.withinss)) -> wssq
@@ -2849,9 +2838,6 @@ wssq
 
 Another way is to save *all* the output from the `kmeans` and then *extract* the thing you want, thus:
 
-xxxa
-
-
 ```r
 tibble(clusters=2:10) %>%
 mutate(km=map(clusters, ~kmeans(swiss.s, ., nstart=20))) %>%
@@ -2875,19 +2861,15 @@ wssq.2
 ```
 
  
-
-The first one is a `map` since it gets the *whole*
+The first one here is a `map` since it gets the *whole*
 `kmeans` output; the second one is a `map_dbl` since it
 pulls just one number out of that output. (I somehow got this the
 wrong way around the first time. I think I copied and pasted and
 didn't check that I had changed what I needed to change.)
 
-xxxb
-
 We now have an extra list-column containing everything from each
-K-means fit, which means we can extract it from here for the number of
-clusters we eventually choose.
-xxxb
+K-means fit, which means we can extract the output from here for the number of
+clusters we eventually choose, rather than running `kmeans` again.
 If you prefer, do it as a loop, like this:        
 
 ```r
@@ -2911,13 +2893,11 @@ Note that there are 10 `wss` values, but the first one is
 missing, since we didn't do one cluster.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">R vectors start from  1, unlike C arrays or Python lists, which start from 0.</span>
 
-The `numeric(0)` says ```wss` has nothing in it, but if
-it had anything, it would be numbers''. Or, you can initialize
+The `numeric(0)` says "`wss` has nothing in it, but if it had anything, it would be numbers". Or, you can initialize
 `wss` to however long it's going to be (here 10), which is
-actually more efficient (R doesn't have to keep making it ``a bit
-longer''). If you initialize it to length 10, the 10 values will have
+actually more efficient (R doesn't have to keep making it 
+"a bit longer"). If you initialize it to length 10, the 10 values will have
 `NA`s in them when you start.
-
 It doesn't matter what `nstart` is: Ideally, big enough to have a decent
 chance of finding the best clustering, but small enough that it
 doesn't take too long to run.
@@ -2932,7 +2912,6 @@ should use?
 Solution
 
 
-xxxa
 The easiest is to use the output from the `map_dbl`,
 which I called `wssq`:
 
@@ -2963,9 +2942,6 @@ ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 <img src="22-thingy_files/figure-html/sasjhgajs-1.png" width="576"  />
 
        
-
-xxxb
-
 If you started at 2 clusters, your `wss` will start at 2
 clusters also, and you'll need to be careful to have something like
 `clusters=2:10` (not `1:10`) in the definition of your
@@ -2986,8 +2962,10 @@ Solution
 
 
 
-I'm going to start by setting the random number seed (so that my results don't change every time I run this). You don't need to do that, though you might want to in something like R Markdown code:
-
+I'm going to start by setting the random number seed (so that
+my results don't change every time I run this). You don't need
+to do that, though you might want to in something like R
+Markdown code (for example, in an R Notebook):
 
 ```r
 set.seed(457299)
@@ -2998,7 +2976,7 @@ set.seed(457299)
 Now, down to business:
 
 ```r
-swiss.7=kmeans(swiss.s,4,nstart=20)
+swiss.7=kmeans(swiss.s, 4, nstart=20)
 swiss.7$size
 ```
 
@@ -3011,6 +2989,112 @@ This many. Note that my clusters 1 and 4 (and also 2 and 3) add up to
 100 bills. There were 100 genuine and 100 counterfeit bills in the
 original data set.
 I don't know why "7". I just felt like it.
+Extra: you might remember that back before I actually *ran*
+K-means on each of the numbers of clusters from 2 to 10. How can we
+extract that output? Something like this. Here's where the output was:
+
+
+```r
+wssq.2
+```
+
+```
+## # A tibble: 9 x 3
+##   clusters km             wss
+##      <int> <list>       <dbl>
+## 1        2 <S3: kmeans>  701.
+## 2        3 <S3: kmeans>  576.
+## 3        4 <S3: kmeans>  492.
+## 4        5 <S3: kmeans>  449.
+## 5        6 <S3: kmeans>  413.
+## 6        7 <S3: kmeans>  382.
+## 7        8 <S3: kmeans>  355.
+## 8        9 <S3: kmeans>  334.
+## 9       10 <S3: kmeans>  313.
+```
+
+ 
+
+Now we need to pull out the 4th row and the `km` column. We need the output as an actual thing, not a data frame, so:
+
+
+```r
+wssq.2 %>% filter(clusters==4) %>%
+pull(km) -> swiss.7a
+```
+
+ 
+
+Is that the right thing?
+
+
+```r
+swiss.7a
+```
+
+```
+## [[1]]
+## K-means clustering with 4 clusters of sizes 50, 50, 68, 32
+## 
+## Cluster means:
+##       length       left      right     bottom         top       diag
+## 1 -0.5683115  0.2617543  0.3254371  1.3197396  0.04670298 -0.8483286
+## 2  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 3 -0.2002681 -1.0290130 -0.9878119 -0.8397381 -0.71307204  0.9434354
+## 4  1.1475776  0.6848546  0.2855308 -0.5788787 -0.40538184  0.7764051
+## 
+## Clustering vector:
+##   [1] 4 3 3 3 3 4 3 3 3 4 4 3 4 3 3 3 3 3 3 3 3 4 4 4 3 4 4 4 4 3 4 3 3 4 4
+##  [36] 4 4 3 4 3 3 3 3 4 3 3 3 3 3 3 3 4 3 4 3 3 4 3 4 3 3 3 3 3 3 4 3 3 3 2
+##  [71] 3 3 3 3 3 3 3 3 4 3 3 3 3 4 4 3 3 3 4 3 3 4 3 3 3 4 4 3 3 3 2 2 2 2 1
+## [106] 1 2 2 2 2 2 2 2 1 1 2 1 1 1 2 2 1 2 2 1 2 2 2 2 2 1 1 2 2 1 1 1 2 1 1
+## [141] 2 1 1 2 1 1 1 2 1 2 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 2 4 2 2 1 2 1 1 1 1
+## [176] 1 1 2 2 2 1 2 2 2 1 1 2 1 2 1 2 2 1 2 1 2 2 2 2 1
+## 
+## Within cluster sum of squares by cluster:
+## [1]  95.51948 137.68573 166.12573  92.37757
+##  (between_SS / total_SS =  58.8 %)
+## 
+## Available components:
+## 
+## [1] "cluster"      "centers"      "totss"        "withinss"    
+## [5] "tot.withinss" "betweenss"    "size"         "iter"        
+## [9] "ifault"
+```
+
+ 
+
+Looks like it. But I should check:
+
+
+```r
+swiss.7a$centers
+```
+
+```
+## NULL
+```
+
+ 
+
+Ah. `swiss.7a` is actually a `list`, as evidenced by the `[[1]]` at the top of the output, so I get things from it thus:
+
+
+```r
+swiss.7a[[1]]$centers
+```
+
+```
+##       length       left      right     bottom         top       diag
+## 1 -0.5683115  0.2617543  0.3254371  1.3197396  0.04670298 -0.8483286
+## 2  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 3 -0.2002681 -1.0290130 -0.9878119 -0.8397381 -0.71307204  0.9434354
+## 4  1.1475776  0.6848546  0.2855308 -0.5788787 -0.40538184  0.7764051
+```
+
+ 
+
+This would be because it came from a list-column; using `pull` removed the data-frameness from `swiss.7a`, but not its listness.
  
 
 (f) Make a table showing cluster membership against actual
@@ -3094,8 +3178,6 @@ counterfeit.
  
 
 
-
-xxxa this one
 
 
 ##  Grouping similar cars
@@ -3182,7 +3264,6 @@ Solution
 
 
 All but the first column needs to be scaled, so:
-xxxa
 
 ```r
 cars %>% select(-Carname) %>% scale() -> cars.s
@@ -3200,9 +3281,6 @@ cars %>% select_if(is.numeric) %>% scale() -> h
 ```
 
  
-
-xxxb
-
 I would prefer to have a look at my result, so that I can see that it
 has sane things in it:
 
@@ -3275,7 +3353,6 @@ This doesn't show the standard deviation of each variable, though,
 which should be exactly 1 (since that's what "standardizing"
 means). To get *that*, *this*:
 
-xxxa
 
 ```r
 as_tibble(cars.s) %>%
@@ -3290,17 +3367,12 @@ summarize_all(~sd(.))
 ```
 
  
-xxxb
 
-The idea here is ``take the matrix `cars.s`, turn it into a
-data frame, and for each *column* 
-(a data frame is a "list of columns"), calculate
-the SD.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *scale* function can take  a data frame, as here, but always produces a matrix. That's why we  had to turn it back into a data frame to run *map-dbl* on  it.</span>
+The idea here is "take the matrix `cars.s`, turn it into a data frame, and for each *column*, calculate the SD of it".
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *scale* function can take  a data frame, as here, but always produces a matrix. That's why we  had to turn it back into a data frame.</span>
 
 As you realize now, the same idea will get the mean of each column too:
 
-xxxa
 
 ```r
 as_tibble(cars.s) %>%
@@ -3315,15 +3387,8 @@ summarize_all(~mean(.))
 ```
 
  
-xxxb
 
 and we see that the means are all zero, to about 15 decimals, anyway.
-
-Technically, the output from these is a "named vector": a single
-collection of numbers, each of which has a name. As run this way, they
-are *not* single-row data frames, of the sort you might get from
-`summarize`. 
-
   
 
 
@@ -3783,7 +3848,7 @@ ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ## Warning: Removed 1 rows containing missing values (geom_path).
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-112-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
 
  
 
@@ -3799,7 +3864,7 @@ already a data frame:
 wwx %>% ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-118-1.png" width="672"  />
 
  
 
@@ -4011,7 +4076,7 @@ first, so I call it here with the package name and the two colons:
 ggbiplot::ggbiplot(carsx.1,groups=factor(carsx$cluster))
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-118-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-123-1.png" width="672"  />
 
  
 Or you can do the predictions, then plot `LD1` against
@@ -4025,7 +4090,7 @@ ggplot(aes(x=LD1,y=LD2,colour=cluster))+geom_point()+
 coord_fixed()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-124-1.png" width="672"  />
 
  
 
@@ -4067,8 +4132,6 @@ powerful, both averagely powerful for their size.
 
 
 
-
-xxxa this one
 
 
 ##  Running, jumping, and throwing
@@ -4188,17 +4251,18 @@ Solution
 
 
 `scale` is what I am trying to hint towards. Leave off the
-first column, which I would rather specify by name. (People have
-an annoying habit of changing the order of columns, but it's more
-work and less likely that the column *name* will change.)
+first column. I would rather specify this by name than by
+number. (People have an annoying habit of changing the order of
+columns, but the column *name* is more work to change and
+thus it is less likely that it will change.)
 
 
      
 
 ```r
-decathlon = decathlon0 %>%
+decathlon0 %>%
 select(-name) %>%
-scale()
+scale() -> decathlon
 round(decathlon,2)
 ```
 
@@ -4243,7 +4307,7 @@ round(decathlon,2)
      
 I think the matrix of standardized values is small enough to look at
 all  of, particularly if I round off the values to a small number of
-decimals, and, as I did, shrink it a bit. (Note that the means and SDs
+decimals. (Note that the means and SDs
 appear at the bottom as "attributes".)
     
 
@@ -4296,11 +4360,10 @@ you to go up to, so that instead of hard-coding the maximum number of
 clusters, I decided to put it in a variable so that I only had to
 change it once if I changed my mind again.)
 
-This is the same as the lecture notes, substituting some names, only I
-split the stuff within the loop into two lines, first getting the
-$i$-cluster solution, and then pulling out the total within-cluster
-sum of squares from it and saving it in the right place in
-`w`. You can do it in one step or two; I don't mind.
+I decided to split the stuff within the loop into two lines, first
+getting the $i$-cluster solution, and then pulling out the total
+within-cluster sum of squares from it and saving it in the right place
+in `w`. You can do it in one step or two; I don't mind.
 
 The first value in `w` is missing, because we didn't calculate
 a value for 1 cluster (so that this `w` has 20 values, one of
@@ -4309,32 +4372,27 @@ which is missing).
 Not that there's anything wrong with this,
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I have to sneak a  Seinfeld quote in there somewhere.</span> and if it works, it's good, but the
 True R Way
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Like Buddhism. I keep feeling that R should have  something called the Eight Noble Truths or similar.</span> is not to use a
-loop, but get the whole thing in one shot. In preparation for this,
-you write a function that does it for *one* number of clusters
-that is the first thing fed in, thus:
-
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Like Buddhism. I keep feeling that R should have  something called the Eight Noble Truths or similar. See the Extra at the end of this part.</span> is not to use a
+loop, but get the whole thing in one shot. 
+The first stage is to figure out what you want to do for some number of clusters. In this case, it's something like this:
 
 ```r
-wss=function(i,x) {
-sol=kmeans(x,i,nstart=20) # or some suitable nstart
-sol$tot.withinss
-}
+kmeans(decathlon, 3, nstart=20)$tot.withinss
+```
+
+```
+## [1] 151.0875
 ```
 
  
 
-Or you can steal the one from the lecture notes. In this one,
-`x` is the data matrix, and `i` is the number of
-clusters, but you can call them what you like.
+There's nothing special about 3; any number will do. 
 
-The second stage is to run this function for each desired number of
-clusters, without using a loop. This uses a package called
-`purrr` that is part of the `tidyverse` (check the
-beginning of this assignment to see that it got loaded when I loaded
-the `tidyverse`), and it contains a family of functions whose
-names start with `map` that do this. To figure out which one to
-use, take a look at your function: ours returns a single number, a
+The second stage is to run this for each desired number of
+clusters, without using a loop. 
+This uses a family of functions whose
+names start with `map`. To figure out which one to
+use, take a look at your line of code above: ours returns a single number, a
 `double` in the jargon (decimal number), so the `map`
 function we need is called `map_dbl`, and it goes like
 this. You can do it inside or outside a data frame, but I prefer to do
@@ -4342,8 +4400,9 @@ it inside with a `mutate`:
 
 
 ```r
-ww = tibble(clusters=2:maxclust) %>%
-mutate(wss=map_dbl(clusters,wss,decathlon))
+tibble(clusters=2:maxclust) %>%
+mutate(wss=map_dbl(clusters,~kmeans(decathlon, ., 
+nstart=20)$tot.withinss)) -> ww
 ww
 ```
 
@@ -4360,7 +4419,7 @@ ww
 ##  7        8  78.8
 ##  8        9  69.0
 ##  9       10  60.8
-## 10       11  54.1
+## 10       11  54.3
 ## 11       12  48.1
 ## 12       13  41.4
 ## 13       14  35.4
@@ -4368,7 +4427,7 @@ ww
 ## 15       16  25.1
 ## 16       17  21.0
 ## 17       18  17.3
-## 18       19  13.9
+## 18       19  13.8
 ## 19       20  10.4
 ```
 
@@ -4379,29 +4438,24 @@ benefitted greatly in that regard by writing out that explanation for
 you first. `wss` in `ww` has the same values as
 `w`, but without the missing one.
 
-The way to remember the bits in `map_dbl` (or any `map`) is
-that the thing that varies goes first (the numbers of clusters), then
-the function to run "for each of the first thing", and then any
-constant stuff after that (in this case, the data matrix to run
-`kmeans` on, every time).
-
-There is also a function `sapply` that does the same thing, but
-the `map` functions work a bit more uniformly. I learned
-`sapply` and friends a long time ago, and now, with the arrival
-of `purrr`, I think I need to unlearn them.
+There was (still is) also a function `sapply` that does the
+same thing, but the `map` functions work more uniformly. I
+learned `sapply` and friends a long time ago, and now, with the
+arrival of purrr, I think I need to unlearn them.
 
 If the thing in the "for each" slot of a `map` is a data
-frame, then the function is applied to every column of that data
-frame, so that if I go back to `decathlon0`, which was a data
-frame, and do this:
+frame (or if you pipe a data frame into it), then the function is
+applied to every column of that data frame, so that if I go back to
+`decathlon0`, which was a data frame, and do this:
+
 
 
  
 
 
 ```r
-decathlon.tmp = decathlon0 %>% select(-name) 
-map_dbl(decathlon.tmp,mean)
+decathlon0 %>% select(-name) -> decathlon.tmp
+decathlon.tmp %>% map_dbl(~mean(.))
 ```
 
 ```
@@ -4419,14 +4473,79 @@ of the name column, and save the result in a new temporary data frame
 the `name` column would be a
 pretty silly thing to take the mean of.
 
-What happens, I hear you asking, if the function returns more than one
+I wrote this out a couple of years ago, and realize that I no longer
+like doing things this way; what I prefer is `summarize_at` or
+`summarize_if` or 
+`summarize_all`. These work in much
+the same way as a `map`, dot and all. The last one is easiest:
+
+
+```r
+decathlon0 %>% select(-name) %>%
+summarize_all(~mean(.))
+```
+
+```
+## # A tibble: 1 x 10
+##   x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
+##   <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
+## 1  11.0      7.34     14.2      2.00  49.0   14.5   44.3       4.90
+## # … with 2 more variables: javelin <dbl>, x1500m <dbl>
+```
+
+ 
+
+That is, "for each column, find the mean of it". 
+
+The `_if` variant uses only those columns that have a property
+like being numeric (so that these are the only columns for which
+finding the mean makes sense):
+
+
+```r
+decathlon0 %>%
+summarize_if(is.numeric, ~mean(.))
+```
+
+```
+## # A tibble: 1 x 10
+##   x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
+##   <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
+## 1  11.0      7.34     14.2      2.00  49.0   14.5   44.3       4.90
+## # … with 2 more variables: javelin <dbl>, x1500m <dbl>
+```
+
+ 
+
+In words, "for each column that is numeric, find the mean of it". 
+This way, we no longer have to explicitly remove the names.
+
+The `_at` variant only uses the columns whose *names*
+satisfy some property, like beginning with `x`:
+
+
+```r
+decathlon0 %>% 
+summarize_at(vars(starts_with("x")), ~mean(.))
+```
+
+```
+## # A tibble: 1 x 4
+##   x100m x400m x110mh x1500m
+##   <dbl> <dbl>  <dbl>  <dbl>
+## 1  11.0  49.0   14.5   273.
+```
+
+ 
+
+In words, "for each variable whose name starts with `x`, find the mean of it."
+Now, what happens, I hear you asking, if the function returns more than one
 thing, like for example `quantile`, which returns a vector
 containing the five-number summary? Well, then you use `map_df`
 and you get this:
 
-
 ```r
-map_df(decathlon.tmp,quantile)
+decathlon.tmp %>% map_df(~quantile(.))
 ```
 
 ```
@@ -4450,6 +4569,139 @@ The only downside is that `quantile` actually (for each
 variable) returns a vector with a name attribute (the names of the
 five percentiles that were calculated), and the `tidyverse`
 treats those like row names and discards them.
+
+Another way that might work (and might keep the quantiles) is
+
+
+```r
+decathlon.tmp %>% 
+map_df(~enframe(quantile(.)))
+```
+
+```
+## # A tibble: 50 x 2
+##    name  value
+##    <chr> <dbl>
+##  1 0%    10.4 
+##  2 25%   10.8 
+##  3 50%   11.0 
+##  4 75%   11.2 
+##  5 100%  11.4 
+##  6 0%     6.62
+##  7 25%    7.21
+##  8 50%    7.37
+##  9 75%    7.52
+## 10 100%   7.85
+## # … with 40 more rows
+```
+
+ 
+This keeps the quantiles, but loses the variable names!
+
+All right, let's make the data frame long before taking quantiles,
+since the Tidyverse likes that kind of thing better anyway. This is
+the same kind of idea that you might have seen for plotting the
+residuals against *all* the $x$-variables in a multiple regression:
+
+
+```r
+decathlon.tmp %>%
+gather(event, performance, everything()) %>% 
+nest(-event) %>% 
+mutate(quantile=map(data, ~enframe(quantile(.$performance), 
+name="quantile", 
+value="perf"))) %>% 
+unnest(quantile) -> quantiles.long
+quantiles.long
+```
+
+```
+## # A tibble: 50 x 3
+##    event     quantile  perf
+##    <chr>     <chr>    <dbl>
+##  1 x100m     0%       10.4 
+##  2 x100m     25%      10.8 
+##  3 x100m     50%      11.0 
+##  4 x100m     75%      11.2 
+##  5 x100m     100%     11.4 
+##  6 long.jump 0%        6.62
+##  7 long.jump 25%       7.21
+##  8 long.jump 50%       7.37
+##  9 long.jump 75%       7.52
+## 10 long.jump 100%      7.85
+## # … with 40 more rows
+```
+
+ 
+
+To follow this, run it one line at a time. The `nest(-event)`
+line creates a two-column data frame that contains a column called
+`event` and a second column `data` that contains
+everything else (just `performance` in this case). Then the big `mutate` line says "for each data frame in `data`, calculate the quantiles of the performance column in it, giving names to the columns of the output". 
+This produces a second list-column called `quantile`, which I
+then `unnest` to display all the quantiles for each event.
+
+Almost there. Now we have both the events and the quantiles, but it would be nice to put the quantiles in columns. Which seems to be `spread`:
+
+
+```r
+quantiles.long %>% spread(quantile, perf)
+```
+
+```
+## # A tibble: 10 x 6
+##    event        `0%` `100%`  `25%`  `50%`  `75%`
+##    <chr>       <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+##  1 discus      38.1   48.7   42.5   44.6   45.9 
+##  2 high.jump    1.87   2.14   1.96   1.99   2.05
+##  3 javelin     50.7   69.4   58.8   62.4   65.8 
+##  4 long.jump    6.62   7.85   7.21   7.37   7.52
+##  5 pole.vault   4.5    5.4    4.68   4.9    5.1 
+##  6 shot.put    13.2   15.9   13.8   14.2   14.6 
+##  7 x100m       10.4   11.4   10.8   11.0   11.2 
+##  8 x110mh      13.7   15.3   14.2   14.4   14.7 
+##  9 x1500m     260.   288.   266.   275.   278.  
+## 10 x400m       46.0   51.2   48.3   48.7   49.7
+```
+
+ 
+
+except that now the quantiles are in the wrong order! Because they are
+text, they are sorted into alphabetical order by `spread`. So
+we need to turn them into numbers first. I overwrite the quantiles
+with the numeric versions of themselves (see what happens if you
+don't):
+
+
+```r
+quantiles.long %>% 
+mutate(quantile=parse_number(quantile)) %>%
+spread(quantile, perf)
+```
+
+```
+## # A tibble: 10 x 6
+##    event         `0`   `25`   `50`   `75`  `100`
+##    <chr>       <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+##  1 discus      38.1   42.5   44.6   45.9   48.7 
+##  2 high.jump    1.87   1.96   1.99   2.05   2.14
+##  3 javelin     50.7   58.8   62.4   65.8   69.4 
+##  4 long.jump    6.62   7.21   7.37   7.52   7.85
+##  5 pole.vault   4.5    4.68   4.9    5.1    5.4 
+##  6 shot.put    13.2   13.8   14.2   14.6   15.9 
+##  7 x100m       10.4   10.8   11.0   11.2   11.4 
+##  8 x110mh      13.7   14.2   14.4   14.7   15.3 
+##  9 x1500m     260.   266.   275.   278.   288.  
+## 10 x400m       46.0   48.3   48.7   49.7   51.2
+```
+
+ 
+
+and that looks nice.
+Extra: I made a post on Twitter, [link](https://twitter.com/KenButler12/status/1100133496637542401). 
+To which Malcolm Barrett replied with this: [link](https://twitter.com/malco_barrett/status/1100141130186780672) 
+and this: [link](https://twitter.com/malco_barrett/status/1100140736945647616). 
+So now you know all about the Four Noble R Truths.
 
     
 
@@ -4533,6 +4785,7 @@ but which cluster is cluster 1 might vary between runs. So if you talk
 about cluster 1 (below), and re-knit the document, you might otherwise
 find that cluster 1 has changed identity since the last time you
 knitted it. (I just remembered that for these solutions.)
+
 Running the `kmeans` itself is a piece of cake, since you have
 done it a bunch of times already (in your loop or `map`):
 
@@ -4694,8 +4947,8 @@ So I have to look along my cluster 4 row. I see:
 
 The only two good events here are shot put (throwing a heavy ball) and
 1500m (a long run). So what these athletes have in common is good strength
-and endurance, and bad speed and agility. (You can use my ``skills
-required'' in the table at the top of the question as a guide.)
+and endurance, and bad speed and agility. (You can use my 
+"skills required" in the table at the top of the question as a guide.)
 
 I said "these athletes". I actually meant "this athlete", since
 this is the cluster with just Marcus Nilsson in it. I ought to have
@@ -4802,6 +5055,95 @@ cor(decathlon)
 ```
 
  
+
+or, for this, maybe better:
+
+
+```r
+cor(decathlon) %>% as.data.frame() %>% 
+rownames_to_column("event") %>% 
+gather(event2, corr, -event) %>% 
+filter(event < event2) %>% 
+arrange(desc(abs(corr)))
+```
+
+```
+##         event     event2         corr
+## 1      x110mh      x400m  0.802854203
+## 2       x100m      x400m  0.789091241
+## 3       x100m     x110mh  0.673721520
+## 4   long.jump      x100m -0.613519318
+## 5   long.jump      x400m -0.548197160
+## 6  pole.vault     x110mh -0.518717326
+## 7      discus   shot.put  0.464495863
+## 8   high.jump  long.jump  0.463798523
+## 9      x1500m      x400m  0.446949386
+## 10     x110mh     x1500m  0.398005215
+## 11  long.jump     x110mh -0.394840852
+## 12 pole.vault      x400m -0.361823592
+## 13   shot.put     x110mh -0.283104686
+## 14  high.jump     x1500m  0.277792195
+## 15  long.jump pole.vault  0.219768900
+## 16 pole.vault   shot.put -0.193284491
+## 17   shot.put      x100m -0.173733960
+## 18   shot.put      x400m -0.172516054
+## 19     discus      x100m -0.149899598
+## 20      x100m     x1500m  0.149139491
+## 21     discus     x110mh -0.137777706
+## 22  high.jump pole.vault  0.135652689
+## 23     discus  long.jump  0.128910512
+## 24  high.jump    javelin -0.124544175
+## 25 pole.vault      x100m -0.120879657
+## 26     discus  high.jump -0.117702658
+## 27  long.jump     x1500m -0.116722829
+## 28    javelin   shot.put -0.113134672
+## 29     discus pole.vault -0.100450719
+## 30  long.jump   shot.put  0.083695699
+## 31  high.jump     x110mh -0.083563233
+## 32     discus      x400m -0.068778203
+## 33   shot.put     x1500m -0.061567926
+## 34 pole.vault     x1500m -0.059888360
+## 35    javelin     x110mh -0.052468568
+## 36    javelin pole.vault  0.052377148
+## 37  high.jump      x100m -0.037036192
+## 38    javelin      x100m  0.023637150
+## 39     discus    javelin  0.020977427
+## 40  high.jump   shot.put  0.020120488
+## 41     discus     x1500m  0.019890861
+## 42    javelin  long.jump  0.019693022
+## 43  high.jump      x400m  0.015217204
+## 44    javelin     x1500m -0.008858031
+## 45    javelin      x400m -0.005823468
+```
+
+ 
+
+I should probably talk about the code:
+
+
+
+* I want to grab the event names from the row names of the
+matrix. This is a bit awkward, because I want to turn the matrix
+into a data frame, but if I turn it into a `tibble`, the row
+names will disappear.
+
+* Thus, I turn it into an old-fashioned `data.frame`, and
+then it has row names, which I can grab and put into a column called
+`event`.
+
+* Then I make the data frame long, creating a column
+`event2` which is the second thing that each correlation will
+be between.
+
+* The correlations between an event and itself will be 1, and
+between events B and A will be the same as between A and B. So I
+take only the rows where the first event is alphabetically less than
+the second one.
+
+* Then I arrange them in descending order of *absolute*
+correlation, since a large negative correlation is also interesting.
+
+
 There are actually only a few high correlations:
 
 
@@ -4838,8 +5180,6 @@ correlated.
 
 
 
-
-xxxa this one
 
 
 ##  Bridges in Pittsburgh
@@ -4985,62 +5325,18 @@ I'm saving the name `bridges` for my final data set, after I'm
 finished organizing it.
 
 
-(b) The R function `complete.cases` takes a data frame
-as input and returns a vector of TRUE or FALSE values. Each row of
-the data frame is checked to see whether it is "complete" (has no
-missing values), in which case the result is TRUE, or not (has one
-or more missing values), in which case the result is FALSE. Add a
-new column called `is_complete` to your data frame that
-indicates whether each row is complete. Save the
-result, and then display (some of) your `length` column along
-with your new column. Do the results make sense?
+(b) Verify that there are missing values in this dataset. To see
+them, convert the text columns temporarily to `factor`s using
+`mutate_if`, and pass the resulting data frame into
+`summary`.
 
 Solution
 
 
-This sounds like a lot to do, but is actually only this:
+I called my data frame `bridges0`, so this:
 
 ```r
-bridges1 = bridges0 %>% mutate(is_complete=complete.cases(bridges0))
-bridges1 %>% select(length,is_complete)
-```
-
-```
-## # A tibble: 108 x 2
-##    length is_complete
-##    <chr>  <lgl>      
-##  1 <NA>   FALSE      
-##  2 MEDIUM TRUE       
-##  3 <NA>   FALSE      
-##  4 MEDIUM TRUE       
-##  5 <NA>   FALSE      
-##  6 SHORT  TRUE       
-##  7 MEDIUM TRUE       
-##  8 MEDIUM TRUE       
-##  9 <NA>   FALSE      
-## 10 MEDIUM TRUE       
-## # … with 98 more rows
-```
-
-     
-
-This makes sense, because there is a perfect match between whether or
-not there is a value for `length` and whether
-`is_complete` is TRUE or FALSE (abbreviated). If there were no
-missing values anywhere else other than in `length`, this is
-what we'd see, but there might be some missing values on other
-variables on later bridges, in which case `length` would have a
-value, but `is_complete` would be `FALSE`.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This  is where I talk about necessary and sufficient conditions:  *length* being missing is sufficient for  *is-complete* to be *FALSE*, since nothing else is  needed then, but it is not necessary, since some other variable  could be missing.</span>
-
-Extra: `summary` is a handy way to show which columns the missing
-values are in, but the columns have to be something other than text. I
-explain this trick below:
-
-
-```r
-bridges0 %>% 
-mutate_if(is.character,factor) %>%
+bridges0 %>% mutate_if(is.character, ~factor(.)) %>%
 summary()
 ```
 
@@ -5071,31 +5367,18 @@ summary()
 ##                        NA's    : 2
 ```
 
- 
+   
 
 There are missing values all over the place. `length` has the
 most, but `lanes` and `span` also have a fair few.
 
-What `mutate_if` does is to create new columns (and, by
-default, give them the same names they had before), but only if
-something is true about the columns: in this case, we pick out the
-ones that are text (for which `is.character` is true) and then
-run `factor` on them to turn them into `factor`s. Then
-we run `summary` on the resulting data frame, and it counts up
-the number of different categories and the number of `NA`s for
-each of the now-factor columns. (Try running `summary` on the
-original data frame, the one with text columns, and see the difference.)
+`mutate_if` requires a logical condition, something that is true or false, about the column and then something to do with it.
+In words, "for each column that is text, replace it (temporarily) with the factor version of itself."
 
-`summary` is one of R's oldest multi-coloured functions. When
-you feed it a fitted model object like a regression, it shows you the
-intercept and slopes, R-squared and stuff like that; when you feed it
-a data frame, it summarizes each column.
-
-I think the reason it doesn't handle text stuff very well is that,
-originally, text columns that were read in from 
-files *got turned  into* factors, 
-and if you didn't want that to happen, you had to
-explicitly stop it yourself. Try mentioning
+Extra: I think the reason `summary` doesn't handle text stuff very
+well is that, originally, text columns that were read in from files
+*got turned into* factors, and if you didn't want that to happen,
+you had to explicitly stop it yourself. Try mentioning
 `stringsAsFactors=F` to a veteran R user, and watch their
 reaction, or try it yourself by reading in a data file with text
 columns using `read.table` instead of
@@ -5110,24 +5393,20 @@ have to create factors when what we are using requires them rather
 than text.
 
 
-(c) Create the data frame that will be used for the analysis by
-picking out only those rows that have no missing values. (Use what
-you have done so far to help you.)
+(c) Use `drop_na` to remove any rows of the data frame with missing values in them. How many rows do you have left?
 
 Solution
 
 
-We need to pick out only those rows for which
-`is_complete` is `TRUE`; picking out rows is
-`filter`: 
+This is as simple as:
 
 ```r
-bridges = bridges1 %>% filter(is_complete)
+bridges0 %>% drop_na() -> bridges
 bridges
 ```
 
 ```
-## # A tibble: 70 x 14
+## # A tibble: 70 x 13
 ##    id    river location erected purpose length lanes clear_g t_d  
 ##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
 ##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
@@ -5140,44 +5419,12 @@ bridges
 ##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO…
 ## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-## # … with 60 more rows, and 5 more variables: material <chr>,
-## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
+## # … with 60 more rows, and 4 more variables: material <chr>,
+## #   span <chr>, rel_l <chr>, type <chr>
 ```
 
      
-
-This also works:
-
-
-```r
-bridges = bridges1 %>% filter(is_complete==TRUE)
-bridges
-```
-
-```
-## # A tibble: 70 x 14
-##    id    river location erected purpose length lanes clear_g t_d  
-##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
-##  4 E8    A           28 CRAFTS  AQUEDU… MEDIUM     1 N       THRO…
-##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO…
-## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-## # … with 60 more rows, and 5 more variables: material <chr>,
-## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
-```
-
- 
-
-If the thing inside `filter` already *is* true or false,
-it can be in the `filter` by itself. To the trained eye, it
-looks weird to have `==TRUE` on the end, but it works either
-way.
+I have 70 rows left (out of the original 108).
 
 
 (d) We are going to assess the dissimilarity between two bridges
@@ -5306,20 +5553,19 @@ sum(v!=w)
 
 I still think it's worth writing a function do this, though, since
 `count_diff` tells you what it does and `sum(v!=w)`
-doesn't. 
+doesn't, unless you happen to know.
 
 
-(e) Write a function that has as input two row numbers and a
-data frame to take those rows from. The function needs to select all
-the columns except for `id`, `location` and
-`is_complete`, select the rows required one at a time, and
-turn them into vectors. (There may be some repetitiousness
-here. That's OK.)  Then those two vectors are passed into the
-function you wrote in the previous part, and the count of the number
-of differences is returned. This is like the code in the Bray-Curtis
-problem. Test your function on rows 3 and 4 of your bridges
-data set (with the missings removed). There should be six variables
-that are different.
+(e) Write a function that has as input two row numbers and a data
+frame to take those rows from. The function needs to select all the
+columns except for `id` and `location`, select the
+rows required one at a time, and turn them into vectors. (There may
+be some repetitiousness here. That's OK.)  Then those two vectors
+are passed into the function you wrote in the previous part, and the
+count of the number of differences is returned. This is like the
+code in the Bray-Curtis problem. Test your function on rows 3 and 4
+of your bridges data set (with the missings removed). There should
+be six variables that are different.
 
 Solution
 
@@ -5331,7 +5577,7 @@ instead of calling `braycurtis` at the end, I call
 
 ```r
 row_diff=function(i,j,d) {
-d1 = d %>% select(-id, -location, -is_complete)
+d1 = d %>% select(-id, -location)
 x = d1 %>% slice(i) %>% unlist()
 y = d1 %>% slice(j) %>% unlist()
 count_diff(x,y)
@@ -5355,15 +5601,15 @@ bridges %>% slice(c(3,4)) %>% print(width=Inf)
 ```
 
 ```
-## # A tibble: 2 x 14
+## # A tibble: 2 x 13
 ##   id    river location erected purpose  length lanes clear_g t_d    
 ##   <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
 ## 1 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
 ## 2 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
-##   material span   rel_l type   is_complete
-##   <chr>    <chr>  <chr> <chr>  <lgl>      
-## 1 WOOD     MEDIUM S     WOOD   TRUE       
-## 2 IRON     SHORT  S     SUSPEN TRUE
+##   material span   rel_l type  
+##   <chr>    <chr>  <chr> <chr> 
+## 1 WOOD     MEDIUM S     WOOD  
+## 2 IRON     SHORT  S     SUSPEN
 ```
 
  
@@ -5376,7 +5622,7 @@ I actually think the `unlist` is not needed:
 
 ```r
 row_diff2=function(i,j,d) {
-d1 = d %>% select(-id, -location, -is_complete)
+d1 = d %>% select(-id, -location)
 x = d1 %>% slice(i) 
 y = d1 %>% slice(j) 
 count_diff(x,y)
@@ -5417,7 +5663,7 @@ bridges
 ```
 
 ```
-## # A tibble: 70 x 14
+## # A tibble: 70 x 13
 ##    id    river location erected purpose length lanes clear_g t_d  
 ##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
 ##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
@@ -5430,8 +5676,8 @@ bridges
 ##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
 ##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO…
 ## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-## # … with 60 more rows, and 5 more variables: material <chr>,
-## #   span <chr>, rel_l <chr>, type <chr>, is_complete <lgl>
+## # … with 60 more rows, and 4 more variables: material <chr>,
+## #   span <chr>, rel_l <chr>, type <chr>
 ```
 
      
@@ -5695,14 +5941,14 @@ plot so that you can see them.
 Solution
 
 
-Home stretch now. I found that `cex=0.3` was good for me:
+Home stretch now. I found that `cex=0.3` was good for me, though I had to enlarge the graph to see the bridge numbers:
 
 ```r
 bridges.1=hclust(d1,method="ward.D")
 plot(bridges.1,cex=0.3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-160-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
 
      
 
@@ -5728,7 +5974,7 @@ plot(bridges.1,cex=0.3)
 rect.hclust(bridges.1,5)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-161-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-172-1.png" width="672"  />
 
      
 
@@ -5749,25 +5995,26 @@ Solution
 
 What I want you to do is to display the data for your chosen three
 bridges and make the case that they are "similar". I'm picking
-41, 42 and 48 from my third cluster. Use `print` with
-`width=Inf` to display all the columns:
+41, 42 and 48 from my third cluster. I used `print` with
+`width=Inf` to display all the columns (this is how it
+looks in the Console):
 
 ```r
 bridges %>% slice(c(41,42,48)) %>% print(width=Inf)
 ```
 
 ```
-## # A tibble: 3 x 14
+## # A tibble: 3 x 13
 ##   id    river location erected purpose length lanes clear_g t_d    
 ##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
 ## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THROUGH
 ## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THROUGH
 ## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THROUGH
-##   material span   rel_l type   is_complete
-##   <chr>    <chr>  <chr> <chr>  <lgl>      
-## 1 STEEL    MEDIUM S-F   SUSPEN TRUE       
-## 2 STEEL    MEDIUM S-F   SUSPEN TRUE       
-## 3 STEEL    MEDIUM S-F   SUSPEN TRUE
+##   material span   rel_l type  
+##   <chr>    <chr>  <chr> <chr> 
+## 1 STEEL    MEDIUM S-F   SUSPEN
+## 2 STEEL    MEDIUM S-F   SUSPEN
+## 3 STEEL    MEDIUM S-F   SUSPEN
 ```
 
      
@@ -5785,17 +6032,17 @@ bridges %>% slice(c(10,12,19)) %>% print(width=Inf)
 ```
 
 ```
-## # A tibble: 3 x 14
+## # A tibble: 3 x 13
 ##   id    river location erected  purpose  length lanes clear_g t_d    
 ##   <chr> <chr>    <dbl> <chr>    <chr>    <chr>  <dbl> <chr>   <chr>  
 ## 1 E19   A           29 CRAFTS   HIGHWAY  MEDIUM     2 N       THROUGH
 ## 2 E22   A           24 EMERGING HIGHWAY  MEDIUM     4 G       THROUGH
 ## 3 E4    A           27 MATURE   AQUEDUCT MEDIUM     1 N       THROUGH
-##   material span   rel_l type  is_complete
-##   <chr>    <chr>  <chr> <chr> <lgl>      
-## 1 WOOD     MEDIUM S     WOOD  TRUE       
-## 2 WOOD     SHORT  S     WOOD  TRUE       
-## 3 WOOD     SHORT  S     WOOD  TRUE
+##   material span   rel_l type 
+##   <chr>    <chr>  <chr> <chr>
+## 1 WOOD     MEDIUM S     WOOD 
+## 2 WOOD     SHORT  S     WOOD 
+## 3 WOOD     SHORT  S     WOOD
 ```
 
      
@@ -5812,17 +6059,17 @@ bridges %>% slice(c(8,24,52)) %>% print(width=Inf)
 ```
 
 ```
-## # A tibble: 3 x 14
+## # A tibble: 3 x 13
 ##   id    river location erected purpose length lanes clear_g t_d    
 ##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
 ## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THROUGH
 ## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THROUGH
 ## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THROUGH
-##   material span   rel_l type     is_complete
-##   <chr>    <chr>  <chr> <chr>    <lgl>      
-## 1 IRON     MEDIUM S-F   SUSPEN   TRUE       
-## 2 STEEL    MEDIUM F     SIMPLE-T TRUE       
-## 3 STEEL    LONG   F     SUSPEN   TRUE
+##   material span   rel_l type    
+##   <chr>    <chr>  <chr> <chr>   
+## 1 IRON     MEDIUM S-F   SUSPEN  
+## 2 STEEL    MEDIUM F     SIMPLE-T
+## 3 STEEL    LONG   F     SUSPEN
 ```
 
  
@@ -5892,15 +6139,15 @@ bridges.rpart %>% slice(c(20,29)) %>% print(width=Inf)
 ```
 
 ```
-## # A tibble: 2 x 15
+## # A tibble: 2 x 14
 ##   id    river location erected purpose length lanes clear_g t_d    
 ##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
 ## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THROUGH
 ## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THROUGH
-##   material span   rel_l type     is_complete cluster
-##   <chr>    <chr>  <chr> <chr>    <lgl>         <int>
-## 1 STEEL    LONG   F     SIMPLE-T TRUE              3
-## 2 STEEL    MEDIUM F     SIMPLE-T TRUE              2
+##   material span   rel_l type     cluster
+##   <chr>    <chr>  <chr> <chr>      <int>
+## 1 STEEL    LONG   F     SIMPLE-T       3
+## 2 STEEL    MEDIUM F     SIMPLE-T       2
 ```
 
  
@@ -5921,7 +6168,7 @@ cluster. There are 18 bridges with this `span` and one of these
 errors. Cluster 3 contains long-span bridges of one of those types.
 
 Bridge 29, with ID E51, now. The first thing to look at is
-\textrm{span} again; this one is `medium`, so we are at
+`span` again; this one is `medium`, so we are at
 2. Under 2 is 4 and 5; we are invited to look at `material`,
 which is `STEEL`, number 5. We have another thing to look at,
 10 and 11, which is `river`; in this case, `river` is
@@ -5958,8 +6205,6 @@ easy-to-follow version of logistic regression.
 
 
 
-
-xxxa this one
 
 K-means clustering:
 
@@ -6042,7 +6287,7 @@ Solution
 This, in fact:
 
 ```r
-athletes.s = athletes %>% select_if(is.numeric) %>% mutate_all(scale)
+athletes %>% select_if(is.numeric) %>% mutate_all(~scale(.)) -> athletes.s
 athletes.s
 ```
 
@@ -6065,6 +6310,10 @@ athletes.s
 ```
 
  
+
+The columns have weird names, possibly because `scale` expects
+a matrix or data frame (to standardize each column), and here it's
+getting the columns one at a time.
 
 Elsewhere, I stuck `scale()` on the end, which produces a
 *matrix*, which I should then display the top of (it has 200-plus rows):
@@ -6162,13 +6411,11 @@ withinss
 A one-liner, kinda. The thing after the squiggle is called an
 "anonymous function"; it is what is done for each of the first
 thing, and where you want the thing you're varying to go, you put a
-dot (the notation is like the dot meaning ``whatever came out of the
-previous step''). The advantage to this is that it looks exactly like
+dot (the notation is like the dot meaning 
+"whatever came out of the previous step"). 
+The advantage to this is that it looks exactly like
 the `kmeans` that you would write, except for the number of
 clusters that is replaced by a dot.
-
-I didn't (reliably) know how to do this until about three weeks ago.
-
 All right then, how would I expect *you* to do this? First write
 a function to take a number of clusters and a data frame and return
 the total within-cluster sum of squares:
@@ -6237,10 +6484,9 @@ tibble(clusters=2:20)
 
 and then make a pipeline and save it:
 
-
 ```r
-withinss = tibble(clusters=2:20) %>%
-mutate(wss=map_dbl(clusters,twss,athletes.s))
+tibble(clusters=2:20) %>%
+mutate(wss=map_dbl(clusters,~twss(., athletes.s))) -> withinss
 withinss
 ```
 
@@ -6285,7 +6531,7 @@ plot directly, with the points joined by lines:
 ggplot(withinss,aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-177-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-188-1.png" width="672"  />
 
      
 
@@ -6371,14 +6617,14 @@ athletes2
 (g) Using the data frame you created in the previous part, display
 all the athletes in some of your clusters. Do the athletes within a
 cluster appear to have anything in common? (If a cluster has more
-than 10 athletes in it, make sure to display them all.)
+than 10 athletes in it, make sure to look at them all.)
 
 Solution
 
 
 Let's start with my cluster 1. I'm putting a `print(n=Inf)`
 on the end of each of these, to make sure all the cluster members
-get shown.
+get shown, at least in the Console:
 
 ```r
 athletes2 %>% filter(cluster==1) %>% print(n=Inf)
@@ -6490,7 +6736,52 @@ athletes2 %>% filter(cluster==3) %>% print(n=Inf)
 
 This is an odd one, since there is one male rower (rowers tend to be
 fairly big) along with a bunch of females mostly from sports involving
-running. 
+running. I have a feeling this rower is a "cox", whose job is
+*not* to row, but to sit in the boat and keep everybody in time
+by yelling out "stroke" in rhythm. Since the cox is not rowing, they
+need to be light in weight.
+
+Let's investigate:
+
+
+```r
+athletes %>% select(gender=Sex, sport=Sport, ht=Ht, wt=Wt) %>%
+mutate(cluster=athletes.km$cluster) -> athletes2a
+athletes2a %>% filter(sport == "Row", cluster == 3)
+```
+
+```
+## # A tibble: 1 x 5
+##   gender sport    ht    wt cluster
+##   <chr>  <chr> <dbl> <dbl>   <int>
+## 1 male   Row    165.  53.8       3
+```
+
+ 
+
+How does this athlete compare to the other rowers?
+
+
+```r
+athletes2a %>% filter(sport == "Row") %>%
+select(ht, wt) %>%
+summary()
+```
+
+```
+##        ht              wt       
+##  Min.   :156.0   Min.   :49.80  
+##  1st Qu.:179.3   1st Qu.:72.90  
+##  Median :181.8   Median :78.70  
+##  Mean   :182.4   Mean   :78.54  
+##  3rd Qu.:186.3   3rd Qu.:87.20  
+##  Max.   :198.0   Max.   :97.00
+```
+
+ 
+
+The rower that is in cluster 3 is almost the lightest, and also almost
+the shortest, of all the rowers.
 Cluster 4:
 
 
@@ -6570,7 +6861,7 @@ These are three of our "big guys", by the looks of it.
 
 (h) Add the cluster membership to the data frame you read in from
 the file, and do a discriminant analysis treating the clusters as
-known groups. Don't display the output yet.
+known groups. You can display the output.
 
 Solution
 
@@ -6585,50 +6876,55 @@ lda(cluster~RCC+WCC+Hc+Hg+Ferr+BMI+SSF+`%Bfat`+LBM+Ht+Wt,data=.)
 
      
 
-We can display all the output now, or pull out pieces of it later. The
+We can display all the output now. The
 problem here, with 12 groups and 11 variables, is that there is rather
-a lot of output.
+a lot of it:
 
-
-(i) How many linear discriminants do you have? How many do you
-think are important?
-
-Solution
-
-
-`svd`:
 
 ```r
-athletes.3$svd
+athletes.3
 ```
 
 ```
-##  [1] 13.37199926  8.27381171  5.16852326  4.76633686  3.80174381
-##  [6]  2.86014021  2.67746840  1.94766320  1.20487899  0.50727181
-## [11]  0.04670973
-```
-
-     
-
-It's hard to draw the line here. The first two, or maybe the first
-seven, or something like that. Your call.
-
-
-(j) Which variables seem to be important in distinguishing the
-clusters? Look only at the linear discriminants that you judged to
-be important.
-
-Solution
-
-
-This is rather large, since I had 12 clusters, and thus there are
-11 `LD`s:
-
-```r
-athletes.3$scaling
-```
-
-```
+## Call:
+## lda(cluster ~ RCC + WCC + Hc + Hg + Ferr + BMI + SSF + `%Bfat` + 
+##     LBM + Ht + Wt, data = .)
+## 
+## Prior probabilities of groups:
+##          1          2          3          4          5          6 
+## 0.12376238 0.13366337 0.04950495 0.06435644 0.04950495 0.01485149 
+##          7          8          9         10         11         12 
+## 0.15841584 0.05445545 0.14356436 0.05445545 0.01980198 0.13366337 
+## 
+## Group means:
+##         RCC       WCC       Hc       Hg      Ferr      BMI       SSF
+## 1  4.292800  6.390000 39.96000 13.52400  70.08000 19.71680  52.53600
+## 2  4.989259  6.466667 45.27407 15.35556  82.62963 24.08185  52.92222
+## 3  4.967000  8.130000 44.32000 14.52000  52.20000 19.69700  49.86000
+## 4  4.814615 10.107692 44.26923 14.96923 121.30769 24.56846  57.79231
+## 5  5.182000  7.210000 46.44000 15.93000 200.30000 22.96800  47.22000
+## 6  5.376667  6.266667 48.50000 16.90000  87.33333 30.95667  75.76667
+## 7  4.974687  6.484375 45.22812 15.40000  62.43750 22.19406  39.20625
+## 8  5.015455  8.200000 46.01818 15.86364 128.18182 29.08909  92.78182
+## 9  4.167241  5.993103 38.24828 12.68966  53.48276 22.05897  96.97241
+## 10 4.336364  8.818182 39.13636 13.21818  70.00000 25.03727 150.16364
+## 11 6.000000  8.150000 52.37500 17.87500  52.50000 23.91750  45.27500
+## 12 4.592963  7.292593 42.65926 14.35926  46.03704 22.74333  86.31111
+##      `%Bfat`       LBM       Ht        Wt
+## 1  11.629600  47.89800 165.5560  54.21200
+## 2   9.353333  80.51852 192.1407  88.82593
+## 3  11.127000  51.58500 171.6800  58.04000
+## 4  10.161538  80.00000 190.3923  89.06154
+## 5   8.737000  68.60000 180.8200  75.27000
+## 6  12.316667 101.66667 194.5333 116.06667
+## 7   7.244687  67.84375 181.5750  73.12969
+## 8  16.624545  80.07636 182.0273  96.21364
+## 9  19.652069  56.45069 178.5828  70.30862
+## 10 26.948182  57.36364 177.1273  78.66364
+## 11  8.655000  71.00000 180.5250  77.85000
+## 12 18.587778  58.60296 178.0926  72.02963
+## 
+## Coefficients of linear discriminants:
 ##                 LD1           LD2         LD3         LD4
 ## RCC      0.97065695 -0.6603068763  1.33756370  1.09562690
 ## WCC      0.14419412  0.0976964684 -0.18593544  0.20949626
@@ -6665,9 +6961,40 @@ athletes.3$scaling
 ## LBM     -0.603622986 -0.884218147 -0.69461824
 ## Ht       0.039454667 -0.059206652  0.01561849
 ## Wt       0.486302236  0.926849133  0.66518616
+## 
+## Proportion of trace:
+##    LD1    LD2    LD3    LD4    LD5    LD6    LD7    LD8    LD9   LD10 
+## 0.5386 0.2062 0.0805 0.0684 0.0435 0.0246 0.0216 0.0114 0.0044 0.0008 
+##   LD11 
+## 0.0000
 ```
 
-   
+ 
+
+
+(i) How many linear discriminants do you have? How many do you
+think are important?
+
+Solution
+
+
+Proportion of trace, at the bottom of the output.
+
+It's hard to draw the line here. The first two, or maybe the first
+seven, or something like that. Your call.
+
+
+(j) Which variables seem to be important in distinguishing the
+clusters? Look only at the linear discriminants that you judged to
+be important.
+
+Solution
+
+
+Look at the coefficients of linear discriminants.
+This is rather large, since I had 12 clusters, and thus there are
+11 `LD`s.
+
 If we go back to my thought of only using two linear discriminants:
 LD1 is mostly `RCC` positively and `BMI` negatively, in
 that an athlete with large `RCC` and small `BMI` will
@@ -6680,44 +7007,7 @@ It may be that `RCC` is just very variable anyway, since it
 seems to appear just about everywhere.
 
 Extra: we can also look at the means on each variable by cluster,
-which is part of the output:
-
-
-```r
-round(athletes.3$means,2)
-```
-
-```
-##     RCC   WCC    Hc    Hg   Ferr   BMI    SSF `%Bfat`    LBM     Ht
-## 1  4.29  6.39 39.96 13.52  70.08 19.72  52.54   11.63  47.90 165.56
-## 2  4.99  6.47 45.27 15.36  82.63 24.08  52.92    9.35  80.52 192.14
-## 3  4.97  8.13 44.32 14.52  52.20 19.70  49.86   11.13  51.59 171.68
-## 4  4.81 10.11 44.27 14.97 121.31 24.57  57.79   10.16  80.00 190.39
-## 5  5.18  7.21 46.44 15.93 200.30 22.97  47.22    8.74  68.60 180.82
-## 6  5.38  6.27 48.50 16.90  87.33 30.96  75.77   12.32 101.67 194.53
-## 7  4.97  6.48 45.23 15.40  62.44 22.19  39.21    7.24  67.84 181.57
-## 8  5.02  8.20 46.02 15.86 128.18 29.09  92.78   16.62  80.08 182.03
-## 9  4.17  5.99 38.25 12.69  53.48 22.06  96.97   19.65  56.45 178.58
-## 10 4.34  8.82 39.14 13.22  70.00 25.04 150.16   26.95  57.36 177.13
-## 11 6.00  8.15 52.38 17.88  52.50 23.92  45.27    8.66  71.00 180.53
-## 12 4.59  7.29 42.66 14.36  46.04 22.74  86.31   18.59  58.60 178.09
-##        Wt
-## 1   54.21
-## 2   88.83
-## 3   58.04
-## 4   89.06
-## 5   75.27
-## 6  116.07
-## 7   73.13
-## 8   96.21
-## 9   70.31
-## 10  78.66
-## 11  77.85
-## 12  72.03
-```
-
- 
-
+which is part of the output, in "Group Means".
 Perhaps the easiest thing to eyeball here is the cluster in which a
 variable is noticeably biggest (or possibly smallest). For example,
 `WCC` is highest in cluster 4, and while Ferritin is high
@@ -6747,7 +7037,7 @@ ggbiplot(athletes.3,groups=factor(athletes2$cluster)) +
 scale_colour_brewer(palette="Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-190-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
 
      
 
@@ -6807,7 +7097,7 @@ ggplot(aes(x=RCC, y=BMI, colour=cluster))+
 geom_point()+scale_colour_brewer(palette="Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-191-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-202-1.png" width="672"  />
 
  
 

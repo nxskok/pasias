@@ -100,75 +100,32 @@ I'm saving the name `bridges` for my final data set, after I'm
 finished organizing it.
 
 
-(b) 
-xxxa
-Think about `na_omit` for this one.
-xxxb
-The R function `complete.cases` takes a data frame
-as input and returns a vector of TRUE or FALSE values. Each row of
-the data frame is checked to see whether it is "complete" (has no
-missing values), in which case the result is TRUE, or not (has one
-or more missing values), in which case the result is FALSE. Add a
-new column called `is_complete` to your data frame that
-indicates whether each row is complete. Save the
-result, and then display (some of) your `length` column along
-with your new column. Do the results make sense?
+(b) Verify that there are missing values in this dataset. To see
+them, convert the text columns temporarily to `factor`s using
+`mutate_if`, and pass the resulting data frame into
+`summary`.
 
 Solution
 
 
-This sounds like a lot to do, but is actually only this:
+I called my data frame `bridges0`, so this:
 ```{r }
-bridges1 = bridges0 %>% mutate(is_complete=complete.cases(bridges0))
-bridges1 %>% select(length,is_complete)
-```
-
-     
-
-This makes sense, because there is a perfect match between whether or
-not there is a value for `length` and whether
-`is_complete` is TRUE or FALSE (abbreviated). If there were no
-missing values anywhere else other than in `length`, this is
-what we'd see, but there might be some missing values on other
-variables on later bridges, in which case `length` would have a
-value, but `is_complete` would be `FALSE`.
-`r tufte::margin_note("This  is where I talk about necessary and sufficient conditions:  *length* being missing is sufficient for  *is-complete* to be *FALSE*, since nothing else is  needed then, but it is not necessary, since some other variable  could be missing.")`
-
-Extra: `summary` is a handy way to show which columns the missing
-values are in, but the columns have to be something other than text. I
-explain this trick below:
-
-```{r }
-bridges0 %>% 
-mutate_if(is.character,factor) %>%
+bridges0 %>% mutate_if(is.character, ~factor(.)) %>%
 summary()
 ```
 
- 
+   
 
 There are missing values all over the place. `length` has the
 most, but `lanes` and `span` also have a fair few.
 
-What `mutate_if` does is to create new columns (and, by
-default, give them the same names they had before), but only if
-something is true about the columns: in this case, we pick out the
-ones that are text (for which `is.character` is true) and then
-run `factor` on them to turn them into `factor`s. Then
-we run `summary` on the resulting data frame, and it counts up
-the number of different categories and the number of `NA`s for
-each of the now-factor columns. (Try running `summary` on the
-original data frame, the one with text columns, and see the difference.)
+`mutate_if` requires a logical condition, something that is true or false, about the column and then something to do with it.
+In words, "for each column that is text, replace it (temporarily) with the factor version of itself."
 
-`summary` is one of R's oldest multi-coloured functions. When
-you feed it a fitted model object like a regression, it shows you the
-intercept and slopes, R-squared and stuff like that; when you feed it
-a data frame, it summarizes each column.
-
-I think the reason it doesn't handle text stuff very well is that,
-originally, text columns that were read in from 
-files *got turned  into* factors, 
-and if you didn't want that to happen, you had to
-explicitly stop it yourself. Try mentioning
+Extra: I think the reason `summary` doesn't handle text stuff very
+well is that, originally, text columns that were read in from files
+*got turned into* factors, and if you didn't want that to happen,
+you had to explicitly stop it yourself. Try mentioning
 `stringsAsFactors=F` to a veteran R user, and watch their
 reaction, or try it yourself by reading in a data file with text
 columns using `read.table` instead of
@@ -183,36 +140,19 @@ have to create factors when what we are using requires them rather
 than text.
 
 
-(c) Create the data frame that will be used for the analysis by
-picking out only those rows that have no missing values. (Use what
-you have done so far to help you.)
+(c) Use `drop_na` to remove any rows of the data frame with missing values in them. How many rows do you have left?
 
 Solution
 
 
-We need to pick out only those rows for which
-`is_complete` is `TRUE`; picking out rows is
-`filter`: 
+This is as simple as:
 ```{r }
-bridges = bridges1 %>% filter(is_complete)
+bridges0 %>% drop_na() -> bridges
 bridges
 ```
 
      
-
-This also works:
-
-```{r }
-bridges = bridges1 %>% filter(is_complete==TRUE)
-bridges
-```
-
- 
-
-If the thing inside `filter` already *is* true or false,
-it can be in the `filter` by itself. To the trained eye, it
-looks weird to have `==TRUE` on the end, but it works either
-way.
+I have 70 rows left (out of the original 108).
 
 
 (d) We are going to assess the dissimilarity between two bridges
@@ -319,20 +259,19 @@ sum(v!=w)
 
 I still think it's worth writing a function do this, though, since
 `count_diff` tells you what it does and `sum(v!=w)`
-doesn't. 
+doesn't, unless you happen to know.
 
 
-(e) Write a function that has as input two row numbers and a
-data frame to take those rows from. The function needs to select all
-the columns except for `id`, `location` and
-`is_complete`, select the rows required one at a time, and
-turn them into vectors. (There may be some repetitiousness
-here. That's OK.)  Then those two vectors are passed into the
-function you wrote in the previous part, and the count of the number
-of differences is returned. This is like the code in the Bray-Curtis
-problem. Test your function on rows 3 and 4 of your bridges
-data set (with the missings removed). There should be six variables
-that are different.
+(e) Write a function that has as input two row numbers and a data
+frame to take those rows from. The function needs to select all the
+columns except for `id` and `location`, select the
+rows required one at a time, and turn them into vectors. (There may
+be some repetitiousness here. That's OK.)  Then those two vectors
+are passed into the function you wrote in the previous part, and the
+count of the number of differences is returned. This is like the
+code in the Bray-Curtis problem. Test your function on rows 3 and 4
+of your bridges data set (with the missings removed). There should
+be six variables that are different.
 
 Solution
 
@@ -343,7 +282,7 @@ instead of calling `braycurtis` at the end, I call
 
 ```{r }
 row_diff=function(i,j,d) {
-d1 = d %>% select(-id, -location, -is_complete)
+d1 = d %>% select(-id, -location)
 x = d1 %>% slice(i) %>% unlist()
 y = d1 %>% slice(j) %>% unlist()
 count_diff(x,y)
@@ -370,7 +309,7 @@ I actually think the `unlist` is not needed:
 
 ```{r }
 row_diff2=function(i,j,d) {
-d1 = d %>% select(-id, -location, -is_complete)
+d1 = d %>% select(-id, -location)
 x = d1 %>% slice(i) 
 y = d1 %>% slice(j) 
 count_diff(x,y)
@@ -514,7 +453,7 @@ plot so that you can see them.
 Solution
 
 
-Home stretch now. I found that `cex=0.3` was good for me:
+Home stretch now. I found that `cex=0.3` was good for me, though I had to enlarge the graph to see the bridge numbers:
 ```{r }
 bridges.1=hclust(d1,method="ward.D")
 plot(bridges.1,cex=0.3)
@@ -562,8 +501,9 @@ Solution
 
 What I want you to do is to display the data for your chosen three
 bridges and make the case that they are "similar". I'm picking
-41, 42 and 48 from my third cluster. Use `print` with
-`width=Inf` to display all the columns:
+41, 42 and 48 from my third cluster. I used `print` with
+`width=Inf` to display all the columns (this is how it
+looks in the Console):
 ```{r }
 bridges %>% slice(c(41,42,48)) %>% print(width=Inf)
 ```
@@ -657,7 +597,7 @@ cluster. There are 18 bridges with this `span` and one of these
 errors. Cluster 3 contains long-span bridges of one of those types.
 
 Bridge 29, with ID E51, now. The first thing to look at is
-\textrm{span} again; this one is `medium`, so we are at
+`span` again; this one is `medium`, so we are at
 2. Under 2 is 4 and 5; we are invited to look at `material`,
 which is `STEEL`, number 5. We have another thing to look at,
 10 and 11, which is `river`; in this case, `river` is

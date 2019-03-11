@@ -99,9 +99,6 @@ wssq.2
 ```
 
  
-
-xxxa
-
 The first one here is a `map` since it gets the *whole*
 `kmeans` output; the second one is a `map_dbl` since it
 pulls just one number out of that output. (I somehow got this the
@@ -111,7 +108,6 @@ didn't check that I had changed what I needed to change.)
 We now have an extra list-column containing everything from each
 K-means fit, which means we can extract the output from here for the number of
 clusters we eventually choose, rather than running `kmeans` again.
-xxxb
 If you prefer, do it as a loop, like this:        
 ```{r }
 clus=2:10
@@ -129,13 +125,11 @@ Note that there are 10 `wss` values, but the first one is
 missing, since we didn't do one cluster.
 `r tufte::margin_note("R vectors start from  1, unlike C arrays or Python lists, which start from 0.")`
 
-The `numeric(0)` says ```wss` has nothing in it, but if
-it had anything, it would be numbers''. Or, you can initialize
+The `numeric(0)` says "`wss` has nothing in it, but if it had anything, it would be numbers". Or, you can initialize
 `wss` to however long it's going to be (here 10), which is
-actually more efficient (R doesn't have to keep making it ``a bit
-longer''). If you initialize it to length 10, the 10 values will have
+actually more efficient (R doesn't have to keep making it 
+"a bit longer"). If you initialize it to length 10, the 10 values will have
 `NA`s in them when you start.
-
 It doesn't matter what `nstart` is: Ideally, big enough to have a decent
 chance of finding the best clustering, but small enough that it
 doesn't take too long to run.
@@ -150,7 +144,6 @@ should use?
 Solution
 
 
-xxxa
 The easiest is to use the output from the `map_dbl`,
 which I called `wssq`:
 ```{r error=T}
@@ -167,9 +160,6 @@ ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
        
-
-xxxb
-
 If you started at 2 clusters, your `wss` will start at 2
 clusters also, and you'll need to be careful to have something like
 `clusters=2:10` (not `1:10`) in the definition of your
@@ -190,8 +180,10 @@ Solution
 
 
 
-I'm going to start by setting the random number seed (so that my results don't change every time I run this). You don't need to do that, though you might want to in something like R Markdown code:
-
+I'm going to start by setting the random number seed (so that
+my results don't change every time I run this). You don't need
+to do that, though you might want to in something like R
+Markdown code (for example, in an R Notebook):
 ```{r }
 set.seed(457299)
 ```
@@ -200,7 +192,7 @@ set.seed(457299)
 
 Now, down to business:
 ```{r }
-swiss.7=kmeans(swiss.s,4,nstart=20)
+swiss.7=kmeans(swiss.s, 4, nstart=20)
 swiss.7$size
 ```
 
@@ -209,9 +201,6 @@ This many. Note that my clusters 1 and 4 (and also 2 and 3) add up to
 100 bills. There were 100 genuine and 100 counterfeit bills in the
 original data set.
 I don't know why "7". I just felt like it.
-
-xxxa
-
 Extra: you might remember that back before I actually *ran*
 K-means on each of the numbers of clusters from 2 to 10. How can we
 extract that output? Something like this. Here's where the output was:
@@ -239,8 +228,23 @@ swiss.7a
 
  
 
-Looks like it.
-xxxb
+Looks like it. But I should check:
+
+```{r }
+swiss.7a$centers
+```
+
+ 
+
+Ah. `swiss.7a` is actually a `list`, as evidenced by the `[[1]]` at the top of the output, so I get things from it thus:
+
+```{r }
+swiss.7a[[1]]$centers
+```
+
+ 
+
+This would be because it came from a list-column; using `pull` removed the data-frameness from `swiss.7a`, but not its listness.
  
 
 (f) Make a table showing cluster membership against actual
