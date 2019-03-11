@@ -1016,14 +1016,9 @@ beer
 ```
 
        
-
-xxxa
-
 32 rows (students), 11 columns (10 beers, plus a column of student
 IDs).  All seems to be kosher. If beer can be kosher.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I  investigated. It can; in fact, I found a long list of kosher beers  that included Anchor Steam.</span>
-
-xxxb
  
 
 (b) The researcher who collected the data wants to see which
@@ -1039,7 +1034,6 @@ The obvious thing is to feed these ratings into `dist`
 (we are *creating* distances rather than re-formatting
 things that are already distances). We need to skip the first
 column, since those are student identifiers:
-xxxa        
 
 ```r
 beer %>%
@@ -1058,8 +1052,22 @@ glimpse(d)
 ```
 
    
-xxxb
 
+The 496 distances are:
+
+
+```r
+32*31/2
+```
+
+```
+## [1] 496
+```
+
+ 
+
+the number of ways of choosing 2 objects out of 32, when order does
+not matter.
 Feel free to be offended by my choice of the letter `d` to
 denote both data frames (that I didn't want to give a better name to)
 and dissimilarities in `dist` objects.
@@ -1102,7 +1110,6 @@ dist() -> d
 so you should feel free to do it in a couple of steps. This way shows
 that you can also refer to columns by number:
 
-xxxa
 
 ```r
 beer %>% select(-1) -> beer2
@@ -1110,7 +1117,6 @@ d=dist(t(beer2))
 ```
 
  
-xxxb
 
 Either way gets you to the same place:
 
@@ -1185,7 +1191,6 @@ beers are in which cluster?
 Solution
 
 
-xxxa        
 This is a judgement call. Almost anything sensible is
 reasonable. I personally think that two clusters is good, beers
 Anchor Steam, Pete's Wicked Ale, Guinness and Sierra Nevada in
@@ -1215,7 +1220,6 @@ against the ones for the light beers.
 
 Start with the data frame read in from the file:
 
-xxxb
 
 ```r
 beer
@@ -1244,6 +1248,8 @@ The aim is to find the average rating for a dark beer and a light beer
 for each student, and then plot them against each other. Does a
 student who likes dark beer tend not to like light beer, and vice versa?
 
+Let's think about what to do first.
+
 We need to: `gather` all the rating columns into one, labelled
 by `name` of beer. Then create a variable that is `dark`
 if we're looking at one of the dark beers and `light`
@@ -1258,13 +1264,9 @@ two columns, the first being the beer names, and the second being
 `dark` or `light` as appropriate for that beer. Then you
 use a "left join" to look up beer type from beer name.)
 
-xxxa
-
 Next, group by beer type within student. Giving two things to
 `group_by` does it this way: the second thing within 
 (or "for each of") the first. 
-
-xxxb
 
 Then calculate the mean
 rating within each group. This gives one column of students, one
@@ -1314,7 +1316,7 @@ of beer; they like either dark beer, or light beer, or both.
 
 The reason a `ggplot` fits into this "workflow" is that the
 first thing you feed into `ggplot` is a data frame, the one
-created by the chain here. Because it's in a xxxa pipeline, xxxb
+created by the chain here. Because it's in a pipeline, 
 you don't have the
 first thing on `ggplot`, so you can concentrate on the
 `aes` ("what to plot") and then the "how to plot it". 
@@ -1352,7 +1354,6 @@ rect.hclust(beer.1,5)
 Same idea with any other number of clusters. If you follow through
 with your preferred number of clusters from the previous part, I'm good.
  
-xxxa
 
 (h) Obtain a K-means
 clustering with 2 clusters.
@@ -1362,7 +1363,6 @@ Note that you will need to use the (transposed)
 `nstart`. (The data are ratings all on the same scale, so
 there is no need for `scale` here. In case you were
 wondering.) 
-xxxb
  
 Solution
 
@@ -1431,8 +1431,6 @@ beer.2$cluster
 
   
 
-xxxa
-
 This is what is known in the business as a "named vector": it has values (the cluster numbers) and each value has a name attached to it (the name of a beer).
 
 Named vectors are handily turned into a data frame with `enframe`:
@@ -1488,8 +1486,6 @@ arrange(cluster)
 
 These happen to be the same clusters as in my 2-cluster solution using
 Ward's method.
-
-xxxb
  
 
 
@@ -1619,7 +1615,7 @@ d.1=hclust(d,method="single")
 plot(d.1)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
      
 
@@ -1737,19 +1733,13 @@ d.2=hclust(d,method="ward.D")
 plot(d.2,cex=0.7)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
      
-
-xxxa
-
 The site numbers were a bit close together, so I printed them out
 smaller than usual size (which is what the `cex` and a number
 less than 1 is doing: 70\% of normal size).
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is base-graphics code, which I learned a long time ago. There are a lot of options with weird names that are hard to remember, and that are sometimes inconsistent with each other. There is a package *ggdendro* that makes nice *ggplot* dendrograms, and another called *dendextend* that does all kinds of stuff with dendrograms. I decided that it wasn't worth the trouble of teaching you (and therefore me) *ggdendro*, since the dendrograms look much the same.</span>
-
-xxxb
-
 This time, there is a greater tendency for sites to be joined into
 small clusters first, then these small clusters are joined
 together. It's not perfect, but there is a greater tendency for it to
@@ -1821,7 +1811,7 @@ plot(d.2,cex=0.7)
 rect.hclust(d.2,3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
    
 
@@ -1835,7 +1825,7 @@ plot(d.2,cex=0.7)
 rect.hclust(d.2,6)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
    
 
@@ -2106,9 +2096,6 @@ smallest it can be is 0, if the frequencies of each of the species are
 exactly the same at the two sites, and the largest it can be is 1, if
 one site has only species A and the other has only species B. (I'll
 demonstrate that in a moment.)
-
-xxxa 
-
 You might imagine that we'll be doing this calculation a lot, and so
 we should define a function to automate it. Hadley Wickham 
 (in "R for Data Science") says that you should copy and paste some code (as
@@ -2117,9 +2104,6 @@ should write a function instead. The thinking behind this is if you
 copy and paste and change something (like a variable name), you'll
 need to make the change *everywhere*, and it's so easy to miss
 one. 
-
-xxxb
-
 So, my function is (copying and pasting my code from above into the
 body of the function, which is Wickham-approved since it's only my
 second time):
@@ -2214,19 +2198,16 @@ something like a chi-squared test that is assessing
 proportionality).
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You could make a table out of the sites and  species, and use the test statistic from a chi-squared test as a  measure of dissimilarity: the smallest it can be is zero, if the  species counts are exactly proportional at the two sites. It doesn't have an upper limit.</span>
 
-xxxa 
-
 So far so good. Now we have to do this for the actual data. The first
 issue
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are more issues.</span>  is that the data is some of the row of
-the original data frame; specifically, it's columns 2 through 6. For
-example, rows 3 and 20 of the original data frame look like this:
-
-xxxb
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are more issues.</span>  is that the data is some of the
+row of the original data frame; specifically, it's columns 2 through
+6. For example, sites `s3` and `s20` of the original
+data frame look like this:
 
 
 ```r
-seabed.z %>% slice(c(3,20))
+seabed.z %>% filter(site == "s3" | site == "s20")
 ```
 
 ```
@@ -2239,53 +2220,76 @@ seabed.z %>% slice(c(3,20))
 
  
 
-xxxa
-
 and we don't want to feed the whole of those into `braycurtis`,
 just the second through sixth elements of them. So let's write another
-function that extracts the second through sixth columns of its
+function that extracts the columns `a` through `e` of its
 inputs for given rows, and passes those on to the `braycurtis`
 that we wrote before. This is a little fiddly, but bear with me. The
-input to the function is the data frame, then the two row numbers that we want:
-
-xxxa
-have this take *site names*
-xxxb
+input to the function is the data frame, then the two sites that we want:
+First, though, what happens if `filter` site `s3`?
 
 
 ```r
+seabed.z %>% filter(site == "s3")
+```
+
+```
+## # A tibble: 1 x 10
+##   site      a     b     c     d     e depth pollution  temp sediment
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl> <chr>   
+## 1 s3        0    10     9     8     0    59       5.4   2.7 c
+```
+
+ 
+This is a one-row data frame, not a vector as our function expects. 
+Do we need to worry about it? First, grab the right columns, so that we will know what our function has to do:
+
+```r
+seabed.z %>% filter(site == "s3") %>% 
+select(a:e)
+```
+
+```
+## # A tibble: 1 x 5
+##       a     b     c     d     e
+##   <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1     0    10     9     8     0
+```
+
+ 
+
+That leads us to this function, which is a bit repetitious, but for
+two repeats I can handle it. I haven't done anything about the fact that `x` and `y` below are actually data frames:
+xxxa
+
+```r
 braycurtis.spec=function(d, i, j) {
-x = d %>% select(2:6) %>% slice(i) %>% unlist()
-y = d %>% select(2:6) %>% slice(j) %>% unlist()
+d %>% filter(site == i) %>% select(a:e) -> x
+d %>% filter(site == j) %>% select(a:e) -> y
 braycurtis(x,y)
 }
 ```
 
  
-
 xxxb
+The first time I did this, I had the `filter` and the
+`select` in the opposite order, so I was neatly *removing*
+the column I wanted to `filter` by *before* I did the
+`filter`!
 
-The first two lines pull out columns 2 through 6 of (respectively)
-rows `i` and `j`, then turn them into vectors (which is
-what `braycurtis` wants). This last requires an extra step
-because the outputs of the two `slice` lines are both one-row
-data frames. If they had been columns, we could have said
-`pull`, but since they're rows, we can't. Remembering (however
-vaguely) that a data frame is a special kind of `list`, what
-`unlist` does is to remove any special properties the thing
-has, and turn it into a vector (which is R's "basic thing"). 
+The first two lines pull out columns `a` through `e` of
+(respectively) sites `i` and `j`.
 
 If I were going to create more than two things like `x` and
-`y` (notice all the repetition!), I would have hived that off
+`y`, I would have hived that off
 into a separate function as well, but I didn't.
 
 Sites 3 and 20 were the two sites I chose before as being similar ones (in the
 same cluster). So the dissimilarity should be small:
 
-xxxa
 
 ```r
-braycurtis.spec(seabed.z, 3, 20)
+braycurtis.spec(seabed.z, "s3", "s20")
 ```
 
 ```
@@ -2293,36 +2297,208 @@ braycurtis.spec(seabed.z, 3, 20)
 ```
 
  
-xxxb
 
 and so it is. Is it about right? The `c` differ by 5, the
 `d` differ by one, and the total frequency in both rows is
 about 60, so the dissimilarity should be about $6/60=0.1$, as it is
 (exactly, in fact). 
 
+This, you will note, works. I think R has taken the attitude that it can treat these one-row data frames as if they were vectors.
 This is the cleaned-up version of my function. When I first wrote it,
 I `print`ed out `x` and `y`, so that I could
 check that they were what I was expecting (they were).
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I am a  paid-up member of the *print all the things* school of  debugging. You probably know how to do this better.</span>
-
 We have almost all the machinery we need. Now what we have to do is to
 compare every site with every other site and compute the dissimilarity
 between them. If you're used to Python or another similar language,
-you'll recognize this as two loops, one inside the other, and this is
-also the easiest conceptual way to do this in R. My first step is to
-initialize a matrix `m` of the right size, but filled with $-1$
-values. I did this as a check: I know my final answers are all going
-to be between 0 and 1, so if any negative numbers are left at the end,
-I know I made a mistake in my coding:
+you'll recognize this as two loops, one inside the other. This can be done in R (and I'll show you how), but I'd rather show you the Tidyverse way first.
 
+The starting point is to make a vector containing all the sites, which
+is easier than you would guess:
+
+
+```r
+sites=str_c("s", 1:30)
+sites
+```
+
+```
+##  [1] "s1"  "s2"  "s3"  "s4"  "s5"  "s6"  "s7"  "s8"  "s9"  "s10" "s11"
+## [12] "s12" "s13" "s14" "s15" "s16" "s17" "s18" "s19" "s20" "s21" "s22"
+## [23] "s23" "s24" "s25" "s26" "s27" "s28" "s29" "s30"
+```
+
+ 
+
+Next, we need to make all possible *pairs* of sites, which we
+also know how to do:
+
+
+```r
+site_pairs=crossing(site1=sites, site2=sites)
+site_pairs
+```
+
+```
+## # A tibble: 900 x 2
+##    site1 site2
+##    <chr> <chr>
+##  1 s1    s1   
+##  2 s1    s10  
+##  3 s1    s11  
+##  4 s1    s12  
+##  5 s1    s13  
+##  6 s1    s14  
+##  7 s1    s15  
+##  8 s1    s16  
+##  9 s1    s17  
+## 10 s1    s18  
+## # … with 890 more rows
+```
+
+ 
+
+xxxa
+
+Now, think about what to do in English first: "for each of the sites in `site1`, and for each of the sites in `site2`, taken in parallel, work out the Bray-Curtis distance."  This is, I hope,
+making you think of `map`. Two details: the Bray-Curtis
+distance is a (decimal) number, and we're for-eaching over two things in
+parallel, so `map2_dbl`:
+
+xxxb
+
+
+```r
+site_pairs %>% 
+mutate(bray_curtis=map2_dbl(site1, site2, 
+~braycurtis.spec(seabed.z, .x, .y))) -> bc
+bc
+```
+
+```
+## # A tibble: 900 x 3
+##    site1 site2 bray_curtis
+##    <chr> <chr>       <dbl>
+##  1 s1    s1          0    
+##  2 s1    s10         0.403
+##  3 s1    s11         0.357
+##  4 s1    s12         0.375
+##  5 s1    s13         0.577
+##  6 s1    s14         0.633
+##  7 s1    s15         0.208
+##  8 s1    s16         0.857
+##  9 s1    s17         1    
+## 10 s1    s18         0.569
+## # … with 890 more rows
+```
+
+ 
+
+Remember that we have two "it"s to iterate over, so they get called
+`.x` and `.y` rather than just `.`, so you can
+tell them apart.
+
+This is a "long" data frame, but for the cluster analysis, we need a wide one with sites in rows and columns, so let's create that:
+
+
+```r
+(bc %>% spread(site2, bray_curtis) -> bc2)
+```
+
+```
+## # A tibble: 30 x 31
+##    site1    s1   s10   s11   s12   s13   s14   s15   s16   s17   s18   s19
+##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 s1    0     0.403 0.357 0.375 0.577 0.633 0.208 0.857 1     0.569 0.169
+##  2 s10   0.403 0     0.449 0.419 0.415 0.710 0.424 0.856 1     0.380 0.333
+##  3 s11   0.357 0.449 0     0.463 0.481 0.765 0.491 0.66  1     0.627 0.343
+##  4 s12   0.375 0.419 0.463 0     0.667 0.413 0.342 0.548 0.860 0.254 0.253
+##  5 s13   0.577 0.415 0.481 0.667 0     1     0.608 0.875 1     0.667 0.524
+##  6 s14   0.633 0.710 0.765 0.413 1     0     0.458 0.656 0.692 0.604 0.633
+##  7 s15   0.208 0.424 0.491 0.342 0.608 0.458 0     0.856 0.733 0.548 0.25 
+##  8 s16   0.857 0.856 0.66  0.548 0.875 0.656 0.856 0     0.893 0.512 0.761
+##  9 s17   1     1     1     0.860 1     0.692 0.733 0.893 0     0.914 0.905
+## 10 s18   0.569 0.380 0.627 0.254 0.667 0.604 0.548 0.512 0.914 0     0.449
+## # … with 20 more rows, and 19 more variables: s2 <dbl>, s20 <dbl>,
+## #   s21 <dbl>, s22 <dbl>, s23 <dbl>, s24 <dbl>, s25 <dbl>, s26 <dbl>,
+## #   s27 <dbl>, s28 <dbl>, s29 <dbl>, s3 <dbl>, s30 <dbl>, s4 <dbl>,
+## #   s5 <dbl>, s6 <dbl>, s7 <dbl>, s8 <dbl>, s9 <dbl>
+```
+
+ 
+
+That's the data frame I shared with you.
+
+The more Python-like way of doing it is a loop inside a loop. This
+works in R, but it has more housekeeping and a few possibly unfamiliar
+ideas. We are going to work with a `matrix`, and we access
+elements of a matrix with two numbers inside square brackets, a row
+number and a column number. We also have to initialize our matrix that
+we're going to fill with Bray-Curtis distances; I'll fill it with $-1$
+values, so that if any are left at the end, I'll know I missed
+something.
 
 ```r
 m=matrix(-1,30,30)
 for (i in 1:30) {
 for (j in 1:30) {
-m[i,j]=braycurtis.spec(seabed.z, i, j)
+m[i,j]=braycurtis.spec(seabed.z, sites[i], sites[j])
 }
 }
+rownames(m)=sites
+colnames(m)=sites
+head(m)
+```
+
+```
+##           s1        s2        s3        s4        s5        s6        s7
+## s1 0.0000000 0.4567901 0.2962963 0.4666667 0.4769231 0.5221239 0.4545455
+## s2 0.4567901 0.0000000 0.4814815 0.5555556 0.3478261 0.2285714 0.4146341
+## s3 0.2962963 0.4814815 0.0000000 0.4666667 0.5076923 0.5221239 0.4909091
+## s4 0.4666667 0.5555556 0.4666667 0.0000000 0.7857143 0.6923077 0.8695652
+## s5 0.4769231 0.3478261 0.5076923 0.7857143 0.0000000 0.4193548 0.2121212
+## s6 0.5221239 0.2285714 0.5221239 0.6923077 0.4193548 0.0000000 0.5087719
+##           s8        s9       s10       s11       s12       s13       s14
+## s1 0.9333333 0.3333333 0.4029851 0.3571429 0.3750000 0.5769231 0.6326531
+## s2 0.9298246 0.2222222 0.4468085 0.5662651 0.2149533 0.6708861 0.4210526
+## s3 1.0000000 0.4074074 0.3432836 0.2142857 0.3250000 0.6538462 0.6734694
+## s4 1.0000000 0.6388889 0.3793103 0.5319149 0.5492958 0.3023256 0.8500000
+## s5 0.8536585 0.1956522 0.5641026 0.3731343 0.3186813 0.7142857 0.2666667
+## s6 0.9325843 0.2428571 0.5714286 0.5304348 0.2374101 0.6756757 0.5925926
+##          s15       s16       s17       s18       s19       s20       s21
+## s1 0.2075472 0.8571429 1.0000000 0.5689655 0.1692308 0.3333333 0.7333333
+## s2 0.3750000 0.4720000 0.8620690 0.3146853 0.3695652 0.4022989 0.6666667
+## s3 0.3584906 0.7346939 1.0000000 0.5344828 0.3230769 0.1000000 0.8222222
+## s4 0.4090909 0.9325843 1.0000000 0.6635514 0.4642857 0.3333333 0.8333333
+## s5 0.4687500 0.5045872 0.8095238 0.5118110 0.3947368 0.5211268 0.3571429
+## s6 0.5357143 0.2484076 0.9111111 0.2571429 0.3870968 0.4621849 0.6730769
+##          s22       s23       s24       s25       s26       s27       s28
+## s1 0.7346939 0.4411765 0.5714286 0.7037037 0.6956522 0.6363636 0.3250000
+## s2 0.3760000 0.5368421 0.2432432 0.3925926 0.3277311 0.3809524 0.2149533
+## s3 0.6326531 0.5294118 0.3809524 0.6666667 0.6086957 0.6363636 0.5000000
+## s4 0.9325843 0.8644068 0.5200000 0.9393939 0.9277108 0.9333333 0.5774648
+## s5 0.3761468 0.2658228 0.4105263 0.5294118 0.4174757 0.3818182 0.3186813
+## s6 0.2993631 0.4488189 0.3006993 0.1856287 0.1523179 0.2151899 0.2949640
+##          s29       s30
+## s1 0.4339623 0.6071429
+## s2 0.3500000 0.3669065
+## s3 0.4339623 0.5892857
+## s4 0.5454545 0.8446602
+## s5 0.3125000 0.4796748
+## s6 0.5357143 0.2163743
+```
+
+ 
+
+Because my loops work with site *numbers* and my function works
+with site *names*, I have to remember to refer to the site names
+when I call my function. I also have to supply row and column names
+(the site names).
+
+That looks all right. Are all my Bray-Curtis distances between 0 and 1? I can smoosh my matrix into a vector and summarize it:
+
+
+```r
 summary(as.vector(m))
 ```
 
@@ -2332,11 +2508,25 @@ summary(as.vector(m))
 ```
 
  
-
-The last line "un-matrixifies" `m` (it makes a long vector
-out of all the $30 \times 30 =900$ values in it), from which we see that all the
+All the
 dissimilarities are correctly between 0 and 1. We can also check the
 one we did before:
+
+
+```r
+bc2 %>% filter(site1 == "s3") %>% select(s20)
+```
+
+```
+## # A tibble: 1 x 1
+##     s20
+##   <dbl>
+## 1   0.1
+```
+
+ 
+
+or
 
 
 ```r
@@ -2349,132 +2539,7 @@ m[3,20]
 
  
 
-I then turned this into a data frame (by passing it into
-`as.data.frame`) and saved it into the file
-`seabed1.csv` using `write.csv`, and that was the file
-you read in at the beginning.
-
-*Of course* there is a `tidyverse` way to do
-this. Conceptually, it's not all that different from the loop here,
-but there is less housekeeping to do (and we end up with a data frame
-at the end of it). The first thing we need is a data frame that has
-all combinations of 1 through 30 with each other, which you know how
-to do:
-
-
-```r
-ddd=crossing(i=1:30,j=1:30)
-ddd
-```
-
-```
-## # A tibble: 900 x 2
-##        i     j
-##    <int> <int>
-##  1     1     1
-##  2     1     2
-##  3     1     3
-##  4     1     4
-##  5     1     5
-##  6     1     6
-##  7     1     7
-##  8     1     8
-##  9     1     9
-## 10     1    10
-## # … with 890 more rows
-```
-
- 
-
-Now we have to run `braycurtis.spec` for each of those
-`i`, `j` combinations and create a new column with the
-appropriate Bray-Curtis distances in it. "For each" ought to remind
-you of `map`; this is for-eaching both `i` and
-`j` in parallel, so it'll be a `map2` (two things), and
-`braycurtis.spec` produces a decimal number, so it'll be
-`map2_dbl`: 
-
-
-```r
-ddd %>%
-mutate(bc=map2_dbl(i, j, ~braycurtis.spec(seabed.z, .x, .y))) -> ddd
-ddd           
-```
-
-```
-## # A tibble: 900 x 3
-##        i     j    bc
-##    <int> <int> <dbl>
-##  1     1     1 0    
-##  2     1     2 0.457
-##  3     1     3 0.296
-##  4     1     4 0.467
-##  5     1     5 0.477
-##  6     1     6 0.522
-##  7     1     7 0.455
-##  8     1     8 0.933
-##  9     1     9 0.333
-## 10     1    10 0.403
-## # … with 890 more rows
-```
-
- 
-
-That looks plausible. Did it give the right result for the one we checked?
-
-
-```r
-ddd %>% filter(i==3, j==20)
-```
-
-```
-## # A tibble: 1 x 3
-##       i     j    bc
-##   <int> <int> <dbl>
-## 1     3    20   0.1
-```
-
- 
-
-xxxb
-
 Check.
-
-This, you'll notice, is "long format", but we want a $30\times 30$
-matrix of dissimilarities rather a 900-long data frame. This means
-making it wide:
-
-
-```r
-ddd %>% spread(j,bc)
-```
-
-```
-## # A tibble: 30 x 31
-##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`  `11`
-##    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1     1 0     0.457 0.296 0.467 0.477 0.522 0.455 0.933 0.333 0.403 0.357
-##  2     2 0.457 0     0.481 0.556 0.348 0.229 0.415 0.930 0.222 0.447 0.566
-##  3     3 0.296 0.481 0     0.467 0.508 0.522 0.491 1     0.407 0.343 0.214
-##  4     4 0.467 0.556 0.467 0     0.786 0.692 0.870 1     0.639 0.379 0.532
-##  5     5 0.477 0.348 0.508 0.786 0     0.419 0.212 0.854 0.196 0.564 0.373
-##  6     6 0.522 0.229 0.522 0.692 0.419 0     0.509 0.933 0.243 0.571 0.530
-##  7     7 0.455 0.415 0.491 0.870 0.212 0.509 0     0.806 0.317 0.588 0.509
-##  8     8 0.933 0.930 1     1     0.854 0.933 0.806 0     0.895 1     0.938
-##  9     9 0.333 0.222 0.407 0.639 0.196 0.243 0.317 0.895 0     0.489 0.349
-## 10    10 0.403 0.447 0.343 0.379 0.564 0.571 0.588 1     0.489 0     0.449
-## # … with 20 more rows, and 19 more variables: `12` <dbl>, `13` <dbl>,
-## #   `14` <dbl>, `15` <dbl>, `16` <dbl>, `17` <dbl>, `18` <dbl>,
-## #   `19` <dbl>, `20` <dbl>, `21` <dbl>, `22` <dbl>, `23` <dbl>,
-## #   `24` <dbl>, `25` <dbl>, `26` <dbl>, `27` <dbl>, `28` <dbl>,
-## #   `29` <dbl>, `30` <dbl>
-```
-
- 
-
-That's basically the data frame you read in at the beginning. The only
-thing I didn't do here was to make the column names the site names.
-
   
 
 
@@ -2522,7 +2587,7 @@ seabed.z %>% mutate(cluster=factor(cluster)) %>%
 ggplot(aes(x=cluster,y=pollution))+geom_boxplot()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
 
  
 
@@ -2540,7 +2605,7 @@ ggplot(aes(x=pollution))+geom_histogram(bins=8)+
 facet_grid(cluster~.)  
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
 
  
 
@@ -2569,7 +2634,7 @@ seabed.z %>% mutate(cluster=factor(cluster)) %>%
 ggplot(aes(x=cluster,y=pollution))+geom_boxplot()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
 
  
 
@@ -2708,13 +2773,122 @@ head(swiss.s)
  
  
 
-(c) We are going to make a scree plot: First, calculate the total within-cluster SS for
-each number of clusters from 2 to 10.
+(c) We are going to make a scree plot. First, calculate the total
+within-cluster SS for each number of clusters from 2 to 10.
  
 Solution
 
+ xxxa 
+When I first made this problem,
+I thought the obvious answer was a loop, but now that I've been
+steeped in the Tidyverse a while, I think `map` is much
+clearer, so I'll do that first.
+Start by making a `tibble` that has one column called `clusters` containing the numbers 2 through 10:
 
-This is (perhaps most easily) a loop:
+
+```r
+tibble(clusters=2:10)
+```
+
+```
+## # A tibble: 9 x 1
+##   clusters
+##      <int>
+## 1        2
+## 2        3
+## 3        4
+## 4        5
+## 5        6
+## 6        7
+## 7        8
+## 8        9
+## 9       10
+```
+
+ 
+Now, for each of these numbers of clusters (think `map`), calculate the total within-cluster sum of squares for *it* (that number of clusters). To do that, think about how you'd do it for something like three clusters:
+
+
+```r
+kmeans(swiss.s, 3, nstart=20)$tot.withinss
+```
+
+```
+## [1] 576.466
+```
+
+ 
+
+and then use that within your `map`, replacing the 3 with a dot:
+
+xxxa
+
+
+```r
+tibble(clusters=2:10) %>%
+mutate(wss=map_dbl(clusters, ~kmeans(swiss.s, ., nstart=20)$tot.withinss)) -> wssq
+wssq
+```
+
+```
+## # A tibble: 9 x 2
+##   clusters   wss
+##      <int> <dbl>
+## 1        2  701.
+## 2        3  576.
+## 3        4  492.
+## 4        5  449.
+## 5        6  413.
+## 6        7  383.
+## 7        8  355.
+## 8        9  334.
+## 9       10  313.
+```
+
+ 
+
+Another way is to save *all* the output from the `kmeans` and then *extract* the thing you want, thus:
+
+xxxa
+
+
+```r
+tibble(clusters=2:10) %>%
+mutate(km=map(clusters, ~kmeans(swiss.s, ., nstart=20))) %>%
+mutate(wss=map_dbl(km, "tot.withinss")) -> wssq.2
+wssq.2
+```
+
+```
+## # A tibble: 9 x 3
+##   clusters km             wss
+##      <int> <list>       <dbl>
+## 1        2 <S3: kmeans>  701.
+## 2        3 <S3: kmeans>  576.
+## 3        4 <S3: kmeans>  492.
+## 4        5 <S3: kmeans>  449.
+## 5        6 <S3: kmeans>  413.
+## 6        7 <S3: kmeans>  382.
+## 7        8 <S3: kmeans>  355.
+## 8        9 <S3: kmeans>  334.
+## 9       10 <S3: kmeans>  313.
+```
+
+ 
+
+The first one is a `map` since it gets the *whole*
+`kmeans` output; the second one is a `map_dbl` since it
+pulls just one number out of that output. (I somehow got this the
+wrong way around the first time. I think I copied and pasted and
+didn't check that I had changed what I needed to change.)
+
+xxxb
+
+We now have an extra list-column containing everything from each
+K-means fit, which means we can extract it from here for the number of
+clusters we eventually choose.
+xxxb
+If you prefer, do it as a loop, like this:        
 
 ```r
 clus=2:10
@@ -2727,8 +2901,8 @@ wss.1
 ```
 
 ```
-##  [1]       NA 701.2054 576.1284 491.7085 449.3900 413.0068 381.6123
-##  [8] 354.8694 333.6222 312.5101
+##  [1]       NA 701.2054 576.4660 491.7085 449.3900 412.9139 381.3926
+##  [8] 355.3168 333.5024 313.2374
 ```
 
        
@@ -2747,77 +2921,8 @@ longer''). If you initialize it to length 10, the 10 values will have
 It doesn't matter what `nstart` is: Ideally, big enough to have a decent
 chance of finding the best clustering, but small enough that it
 doesn't take too long to run.
+Whichever way you create your total within-cluster sums of squares, you can use it to make a scree plot (next part). 
 
-A perhaps more R way of doing this is to first make a function that
-calculates the total within-group sum of squares for one number of
-clusters, like this:
-
-
-```r
-wssf=function(i,data,nstart=20)
-{
-kmeans(data,i,nstart=nstart)$tot.withinss
-}
-```
-
- 
-This takes the number of clusters as the *first* thing
-(important, as we see later), then anything else we need: some data,
-and the value for `nstart`, which defaults to 20.
-
-Then we apply this function to all the numbers of clusters we
-want. To do this, make a data frame with the numbers of clusters we want:
-
-
-```r
-w = tibble(clusters=2:10)
-w
-```
-
-```
-## # A tibble: 9 x 1
-##   clusters
-##      <int>
-## 1        2
-## 2        3
-## 3        4
-## 4        5
-## 5        6
-## 6        7
-## 7        8
-## 8        9
-## 9       10
-```
-
-
-
-Our function returns a decimal number (a `dbl`), so now we make
-a new column by running the function "for each" number of clusters:
-
-
-```r
-w = w %>% mutate(wss=map_dbl(clusters,wssf,swiss.s))
-w
-```
-
-```
-## # A tibble: 9 x 2
-##   clusters   wss
-##      <int> <dbl>
-## 1        2  701.
-## 2        3  576.
-## 3        4  492.
-## 4        5  449.
-## 5        6  414.
-## 6        7  382.
-## 7        8  355.
-## 8        9  334.
-## 9       10  313.
-```
-
- 
-
-We can use this easily for the scree plot in the next part.
  
 
 (d) <a name="part:howmany">*</a> Make a scree plot (creating a data frame
@@ -2827,16 +2932,17 @@ should use?
 Solution
 
 
+xxxa
 The easiest is to use the output from the `map_dbl`,
-which I called `wss`:
+which I called `wssq`:
 
 ```r
-ggplot(w,aes(x=clusters,y=wss))+geom_point()+geom_line()
+ggplot(wssq, aes(x=clusters, y=wss))+geom_point()+geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-86-1.png" width="672"  />
 
-         
+       
 If you did it the loop way, you'll have to make a data frame
 first, which you can then pipe into `ggplot`:
 
@@ -2857,6 +2963,8 @@ ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 <img src="22-thingy_files/figure-html/sasjhgajs-1.png" width="576"  />
 
        
+
+xxxb
 
 If you started at 2 clusters, your `wss` will start at 2
 clusters also, and you'll need to be careful to have something like
@@ -2950,6 +3058,25 @@ count(obs,pred)
 
  
 
+or even
+
+
+```r
+tibble(obs=swiss$status,pred=swiss.7$cluster) %>%
+count(obs, pred) %>%
+spread(pred, n, fill=0)
+```
+
+```
+## # A tibble: 2 x 5
+##   obs           `1`   `2`   `3`   `4`
+##   <chr>       <dbl> <dbl> <dbl> <dbl>
+## 1 counterfeit    50     1     0    49
+## 2 genuine         0    31    68     1
+```
+
+ 
+
 In my case (yours might be different), 99 of the 100 counterfeit bills
 are in clusters 1 and 4, and 99 of the 100 genuine bills are in
 clusters 2 and 3.
@@ -2967,6 +3094,8 @@ counterfeit.
  
 
 
+
+xxxa this one
 
 
 ##  Grouping similar cars
@@ -3053,9 +3182,10 @@ Solution
 
 
 All but the first column needs to be scaled, so:
+xxxa
 
 ```r
-cars.s = cars %>% select(-Carname) %>% scale()
+cars %>% select(-Carname) %>% scale() -> cars.s
 ```
 
    
@@ -3066,10 +3196,12 @@ Another way is like this:
 
 
 ```r
-h = cars %>% select_if(is.numeric) %>% scale()
+cars %>% select_if(is.numeric) %>% scale() -> h
 ```
 
  
+
+xxxb
 
 I would prefer to have a look at my result, so that I can see that it
 has sane things in it:
@@ -3143,40 +3275,47 @@ This doesn't show the standard deviation of each variable, though,
 which should be exactly 1 (since that's what "standardizing"
 means). To get *that*, *this*:
 
+xxxa
 
 ```r
 as_tibble(cars.s) %>%
-map_dbl(sd)
+summarize_all(~sd(.))
 ```
 
 ```
-##  mpg disp   hp drat   wt qsec 
-##    1    1    1    1    1    1
+## # A tibble: 1 x 6
+##     mpg  disp    hp  drat    wt  qsec
+##   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1     1    1.     1     1     1     1
 ```
 
  
+xxxb
 
 The idea here is ``take the matrix `cars.s`, turn it into a
-data frame, and for each *column* (a data frame is a ``list of
-columns''), calculate the SD.
+data frame, and for each *column* 
+(a data frame is a "list of columns"), calculate
+the SD.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *scale* function can take  a data frame, as here, but always produces a matrix. That's why we  had to turn it back into a data frame to run *map-dbl* on  it.</span>
 
 As you realize now, the same idea will get the mean of each column too:
 
+xxxa
 
 ```r
 as_tibble(cars.s) %>%
-map_dbl(mean)
+summarize_all(~mean(.))
 ```
 
 ```
-##           mpg          disp            hp          drat            wt 
-##  7.112366e-17 -9.084937e-17  1.040834e-17 -2.918672e-16  4.681043e-17 
-##          qsec 
-##  5.299580e-16
+## # A tibble: 1 x 6
+##        mpg      disp       hp      drat       wt     qsec
+##      <dbl>     <dbl>    <dbl>     <dbl>    <dbl>    <dbl>
+## 1 7.11e-17 -9.08e-17 1.04e-17 -2.92e-16 4.68e-17 5.30e-16
 ```
 
  
+xxxb
 
 and we see that the means are all zero, to about 15 decimals, anyway.
 
@@ -3644,7 +3783,7 @@ ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ## Warning: Removed 1 rows containing missing values (geom_path).
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-112-1.png" width="672"  />
 
  
 
@@ -3660,7 +3799,7 @@ already a data frame:
 wwx %>% ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
 
  
 
@@ -3872,7 +4011,7 @@ first, so I call it here with the package name and the two colons:
 ggbiplot::ggbiplot(carsx.1,groups=factor(carsx$cluster))
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-111-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-118-1.png" width="672"  />
 
  
 Or you can do the predictions, then plot `LD1` against
@@ -3886,7 +4025,7 @@ ggplot(aes(x=LD1,y=LD2,colour=cluster))+geom_point()+
 coord_fixed()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-112-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
 
  
 
@@ -3928,6 +4067,8 @@ powerful, both averagely powerful for their size.
 
 
 
+
+xxxa this one
 
 
 ##  Running, jumping, and throwing
@@ -4697,6 +4838,8 @@ correlated.
 
 
 
+
+xxxa this one
 
 
 ##  Bridges in Pittsburgh
@@ -5559,7 +5702,7 @@ bridges.1=hclust(d1,method="ward.D")
 plot(bridges.1,cex=0.3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-153-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-160-1.png" width="672"  />
 
      
 
@@ -5585,7 +5728,7 @@ plot(bridges.1,cex=0.3)
 rect.hclust(bridges.1,5)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-154-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-161-1.png" width="672"  />
 
      
 
@@ -5815,6 +5958,8 @@ easy-to-follow version of logistic regression.
 
 
 
+
+xxxa this one
 
 K-means clustering:
 
@@ -6140,7 +6285,7 @@ plot directly, with the points joined by lines:
 ggplot(withinss,aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-170-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-177-1.png" width="672"  />
 
      
 
@@ -6602,7 +6747,7 @@ ggbiplot(athletes.3,groups=factor(athletes2$cluster)) +
 scale_colour_brewer(palette="Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-183-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-190-1.png" width="672"  />
 
      
 
@@ -6662,7 +6807,7 @@ ggplot(aes(x=RCC, y=BMI, colour=cluster))+
 geom_point()+scale_colour_brewer(palette="Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-184-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-191-1.png" width="672"  />
 
  
 

@@ -49,7 +49,7 @@ Solution
 
 All but the first column needs to be scaled, so:
 ```{r }
-cars.s = cars %>% select(-Carname) %>% scale()
+cars %>% select(-Carname) %>% scale() -> cars.s
 ```
 
    
@@ -59,11 +59,10 @@ This is a `matrix`, as we've seen before.
 Another way is like this:
 
 ```{r }
-h = cars %>% select_if(is.numeric) %>% scale()
+cars %>% select_if(is.numeric) %>% scale() -> h
 ```
 
  
-
 I would prefer to have a look at my result, so that I can see that it
 has sane things in it:
 
@@ -98,32 +97,28 @@ means). To get *that*, *this*:
 
 ```{r }
 as_tibble(cars.s) %>%
-map_dbl(sd)
+summarize_all(~sd(.))
 ```
 
  
 
-The idea here is ``take the matrix `cars.s`, turn it into a
-data frame, and for each *column* (a data frame is a ``list of
-columns''), calculate the SD.
+xxxa
+
+The idea here is "take the matrix `cars.s`, turn it into a data frame, and for each *column*, calculate the SD of it".
 `r tufte::margin_note("The *scale* function can take  a data frame, as here, but always produces a matrix. That's why we  had to turn it back into a data frame to run *map-dbl* on  it.")`
+
+xxxb
 
 As you realize now, the same idea will get the mean of each column too:
 
 ```{r }
 as_tibble(cars.s) %>%
-map_dbl(mean)
+summarize_all(~mean(.))
 ```
 
  
 
 and we see that the means are all zero, to about 15 decimals, anyway.
-
-Technically, the output from these is a "named vector": a single
-collection of numbers, each of which has a name. As run this way, they
-are *not* single-row data frames, of the sort you might get from
-`summarize`. 
-
   
 
 

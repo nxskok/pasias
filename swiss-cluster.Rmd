@@ -56,13 +56,63 @@ head(swiss.s)
  
  
 
-(c) We are going to make a scree plot: First, calculate the total within-cluster SS for
-each number of clusters from 2 to 10.
+(c) We are going to make a scree plot. First, calculate the total
+within-cluster SS for each number of clusters from 2 to 10.
  
 Solution
 
+ 
+When I first made this problem,
+I thought the obvious answer was a loop, but now that I've been
+steeped in the Tidyverse a while, I think `map` is much
+clearer, so I'll do that first.
+Start by making a `tibble` that has one column called `clusters` containing the numbers 2 through 10:
 
-This is (perhaps most easily) a loop:
+```{r }
+tibble(clusters=2:10)
+```
+
+ 
+Now, for each of these numbers of clusters (think `map`), calculate the total within-cluster sum of squares for *it* (that number of clusters). To do that, think about how you'd do it for something like three clusters:
+
+```{r }
+kmeans(swiss.s, 3, nstart=20)$tot.withinss
+```
+
+ 
+
+and then use that within your `map`, replacing the 3 with a dot:
+```{r }
+tibble(clusters=2:10) %>%
+mutate(wss=map_dbl(clusters, ~kmeans(swiss.s, ., nstart=20)$tot.withinss)) -> wssq
+wssq
+```
+
+ 
+
+Another way is to save *all* the output from the `kmeans` and then *extract* the thing you want, thus:
+```{r }
+tibble(clusters=2:10) %>%
+mutate(km=map(clusters, ~kmeans(swiss.s, ., nstart=20))) %>%
+mutate(wss=map_dbl(km, "tot.withinss")) -> wssq.2
+wssq.2
+```
+
+ 
+
+xxxa
+
+The first one here is a `map` since it gets the *whole*
+`kmeans` output; the second one is a `map_dbl` since it
+pulls just one number out of that output. (I somehow got this the
+wrong way around the first time. I think I copied and pasted and
+didn't check that I had changed what I needed to change.)
+
+We now have an extra list-column containing everything from each
+K-means fit, which means we can extract the output from here for the number of
+clusters we eventually choose, rather than running `kmeans` again.
+xxxb
+If you prefer, do it as a loop, like this:        
 ```{r }
 clus=2:10
 wss.1=numeric(0)
@@ -89,44 +139,8 @@ longer''). If you initialize it to length 10, the 10 values will have
 It doesn't matter what `nstart` is: Ideally, big enough to have a decent
 chance of finding the best clustering, but small enough that it
 doesn't take too long to run.
+Whichever way you create your total within-cluster sums of squares, you can use it to make a scree plot (next part). 
 
-A perhaps more R way of doing this is to first make a function that
-calculates the total within-group sum of squares for one number of
-clusters, like this:
-
-```{r }
-wssf=function(i,data,nstart=20)
-{
-kmeans(data,i,nstart=nstart)$tot.withinss
-}
-```
-
- 
-This takes the number of clusters as the *first* thing
-(important, as we see later), then anything else we need: some data,
-and the value for `nstart`, which defaults to 20.
-
-Then we apply this function to all the numbers of clusters we
-want. To do this, make a data frame with the numbers of clusters we want:
-
-```{r }
-w = tibble(clusters=2:10)
-w
-```
-
-
-
-Our function returns a decimal number (a `dbl`), so now we make
-a new column by running the function "for each" number of clusters:
-
-```{r }
-w = w %>% mutate(wss=map_dbl(clusters,wssf,swiss.s))
-w
-```
-
- 
-
-We can use this easily for the scree plot in the next part.
  
 
 (d) <a name="part:howmany">*</a> Make a scree plot (creating a data frame
@@ -136,22 +150,25 @@ should use?
 Solution
 
 
+xxxa
 The easiest is to use the output from the `map_dbl`,
-which I called `wss`:
-```{r }
-ggplot(w,aes(x=clusters,y=wss))+geom_point()+geom_line()
+which I called `wssq`:
+```{r error=T}
+ggplot(wssq, aes(x=clusters, y=wss))+geom_point()+geom_line()
 ```
 
-         
+       
 If you did it the loop way, you'll have to make a data frame
 first, which you can then pipe into `ggplot`:
 
-```{r sasjhgajs,fig.height=6,fig.width=6}
+```{r sasjhgajs,fig.height=6,fig.width=6, error=T}
 tibble(clusters=1:10,wss=wss.1) %>%
 ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
        
+
+xxxb
 
 If you started at 2 clusters, your `wss` will start at 2
 clusters also, and you'll need to be careful to have something like
@@ -192,6 +209,38 @@ This many. Note that my clusters 1 and 4 (and also 2 and 3) add up to
 100 bills. There were 100 genuine and 100 counterfeit bills in the
 original data set.
 I don't know why "7". I just felt like it.
+
+xxxa
+
+Extra: you might remember that back before I actually *ran*
+K-means on each of the numbers of clusters from 2 to 10. How can we
+extract that output? Something like this. Here's where the output was:
+
+```{r }
+wssq.2
+```
+
+ 
+
+Now we need to pull out the 4th row and the `km` column. We need the output as an actual thing, not a data frame, so:
+
+```{r }
+wssq.2 %>% filter(clusters==4) %>%
+pull(km) -> swiss.7a
+```
+
+ 
+
+Is that the right thing?
+
+```{r }
+swiss.7a
+```
+
+ 
+
+Looks like it.
+xxxb
  
 
 (f) Make a table showing cluster membership against actual
@@ -214,6 +263,16 @@ Or, if you prefer,
 ```{r }
 tibble(obs=swiss$status,pred=swiss.7$cluster) %>%
 count(obs,pred)
+```
+
+ 
+
+or even
+
+```{r }
+tibble(obs=swiss$status,pred=swiss.7$cluster) %>%
+count(obs, pred) %>%
+spread(pred, n, fill=0)
 ```
 
  

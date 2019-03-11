@@ -153,16 +153,10 @@ plot(d.2,cex=0.7)
 ```
 
      
-
-xxxa
-
 The site numbers were a bit close together, so I printed them out
 smaller than usual size (which is what the `cex` and a number
 less than 1 is doing: 70\% of normal size).
 `r tufte::margin_note("This is base-graphics code, which I learned a long time ago. There are a lot of options with weird names that are hard to remember, and that are sometimes inconsistent with each other. There is a package *ggdendro* that makes nice *ggplot* dendrograms, and another called *dendextend* that does all kinds of stuff with dendrograms. I decided that it wasn't worth the trouble of teaching you (and therefore me) *ggdendro*, since the dendrograms look much the same.")`
-
-xxxb
-
 This time, there is a greater tendency for sites to be joined into
 small clusters first, then these small clusters are joined
 together. It's not perfect, but there is a greater tendency for it to
@@ -392,9 +386,6 @@ smallest it can be is 0, if the frequencies of each of the species are
 exactly the same at the two sites, and the largest it can be is 1, if
 one site has only species A and the other has only species B. (I'll
 demonstrate that in a moment.)
-
-xxxa 
-
 You might imagine that we'll be doing this calculation a lot, and so
 we should define a function to automate it. Hadley Wickham 
 (in "R for Data Science") says that you should copy and paste some code (as
@@ -403,9 +394,6 @@ should write a function instead. The thinking behind this is if you
 copy and paste and change something (like a variable name), you'll
 need to make the change *everywhere*, and it's so easy to miss
 one. 
-
-xxxb
-
 So, my function is (copying and pasting my code from above into the
 body of the function, which is Wickham-approved since it's only my
 second time):
@@ -454,175 +442,187 @@ something like a chi-squared test that is assessing
 proportionality).
 `r tufte::margin_note("You could make a table out of the sites and  species, and use the test statistic from a chi-squared test as a  measure of dissimilarity: the smallest it can be is zero, if the  species counts are exactly proportional at the two sites. It doesn't have an upper limit.")`
 
-xxxa 
-
 So far so good. Now we have to do this for the actual data. The first
 issue
-`r tufte::margin_note("There are more issues.")`  is that the data is some of the row of
-the original data frame; specifically, it's columns 2 through 6. For
-example, rows 3 and 20 of the original data frame look like this:
-
-xxxb
+`r tufte::margin_note("There are more issues.")`  is that the data is some of the
+row of the original data frame; specifically, it's columns 2 through
+6. For example, sites `s3` and `s20` of the original
+data frame look like this:
 
 ```{r }
-seabed.z %>% slice(c(3,20))
+seabed.z %>% filter(site == "s3" | site == "s20")
 ```
 
  
 
-xxxa
-
 and we don't want to feed the whole of those into `braycurtis`,
 just the second through sixth elements of them. So let's write another
-function that extracts the second through sixth columns of its
+function that extracts the columns `a` through `e` of its
 inputs for given rows, and passes those on to the `braycurtis`
 that we wrote before. This is a little fiddly, but bear with me. The
-input to the function is the data frame, then the two row numbers that we want:
-
-xxxa
-have this take *site names*
-xxxb
+input to the function is the data frame, then the two sites that we want:
+First, though, what happens if `filter` site `s3`?
 
 ```{r }
+seabed.z %>% filter(site == "s3")
+```
+
+ 
+This is a one-row data frame, not a vector as our function expects. 
+Do we need to worry about it? First, grab the right columns, so that we will know what our function has to do:
+```{r }
+seabed.z %>% filter(site == "s3") %>% 
+select(a:e)
+```
+
+ 
+
+That leads us to this function, which is a bit repetitious, but for
+two repeats I can handle it. I haven't done anything about the fact that `x` and `y` below are actually data frames:
+```{r }
 braycurtis.spec=function(d, i, j) {
-x = d %>% select(2:6) %>% slice(i) %>% unlist()
-y = d %>% select(2:6) %>% slice(j) %>% unlist()
+d %>% filter(site == i) %>% select(a:e) -> x
+d %>% filter(site == j) %>% select(a:e) -> y
 braycurtis(x,y)
 }
 ```
 
  
+The first time I did this, I had the `filter` and the
+`select` in the opposite order, so I was neatly *removing*
+the column I wanted to `filter` by *before* I did the
+`filter`!
 
-xxxb
-
-The first two lines pull out columns 2 through 6 of (respectively)
-rows `i` and `j`, then turn them into vectors (which is
-what `braycurtis` wants). This last requires an extra step
-because the outputs of the two `slice` lines are both one-row
-data frames. If they had been columns, we could have said
-`pull`, but since they're rows, we can't. Remembering (however
-vaguely) that a data frame is a special kind of `list`, what
-`unlist` does is to remove any special properties the thing
-has, and turn it into a vector (which is R's "basic thing"). 
+The first two lines pull out columns `a` through `e` of
+(respectively) sites `i` and `j`.
 
 If I were going to create more than two things like `x` and
-`y` (notice all the repetition!), I would have hived that off
+`y`, I would have hived that off
 into a separate function as well, but I didn't.
 
 Sites 3 and 20 were the two sites I chose before as being similar ones (in the
 same cluster). So the dissimilarity should be small:
 
-xxxa
 ```{r }
-braycurtis.spec(seabed.z, 3, 20)
+braycurtis.spec(seabed.z, "s3", "s20")
 ```
 
  
-xxxb
 
 and so it is. Is it about right? The `c` differ by 5, the
 `d` differ by one, and the total frequency in both rows is
 about 60, so the dissimilarity should be about $6/60=0.1$, as it is
 (exactly, in fact). 
 
+This, you will note, works. I think R has taken the attitude that it can treat these one-row data frames as if they were vectors.
 This is the cleaned-up version of my function. When I first wrote it,
 I `print`ed out `x` and `y`, so that I could
 check that they were what I was expecting (they were).
 `r tufte::margin_note("I am a  paid-up member of the *print all the things* school of  debugging. You probably know how to do this better.")`
-
 We have almost all the machinery we need. Now what we have to do is to
 compare every site with every other site and compute the dissimilarity
 between them. If you're used to Python or another similar language,
-you'll recognize this as two loops, one inside the other, and this is
-also the easiest conceptual way to do this in R. My first step is to
-initialize a matrix `m` of the right size, but filled with $-1$
-values. I did this as a check: I know my final answers are all going
-to be between 0 and 1, so if any negative numbers are left at the end,
-I know I made a mistake in my coding:
+you'll recognize this as two loops, one inside the other. This can be done in R (and I'll show you how), but I'd rather show you the Tidyverse way first.
+
+The starting point is to make a vector containing all the sites, which
+is easier than you would guess:
 
 ```{r }
-m=matrix(-1,30,30)
-for (i in 1:30) {
-for (j in 1:30) {
-m[i,j]=braycurtis.spec(seabed.z, i, j)
-}
-}
-summary(as.vector(m))
+sites=str_c("s", 1:30)
+sites
 ```
 
  
 
-The last line "un-matrixifies" `m` (it makes a long vector
-out of all the $30 \times 30 =900$ values in it), from which we see that all the
+Next, we need to make all possible *pairs* of sites, which we
+also know how to do:
+
+```{r }
+site_pairs=crossing(site1=sites, site2=sites)
+site_pairs
+```
+
+ 
+Now, think about what to do in English first: "for each of the sites in `site1`, and for each of the sites in `site2`, taken in parallel, work out the Bray-Curtis distance."  This is, I hope,
+making you think of `map`. Two details: the Bray-Curtis
+distance is a (decimal) number, and we're for-eaching over two things in
+parallel, so `map2_dbl`:
+```{r }
+site_pairs %>% 
+mutate(bray_curtis=map2_dbl(site1, site2, 
+~braycurtis.spec(seabed.z, .x, .y))) -> bc
+bc
+```
+
+ 
+
+Remember that we have two "it"s to iterate over, so they get called
+`.x` and `.y` rather than just `.`, so you can
+tell them apart.
+
+This is a "long" data frame, but for the cluster analysis, we need a wide one with sites in rows and columns, so let's create that:
+
+```{r }
+(bc %>% spread(site2, bray_curtis) -> bc2)
+```
+
+ 
+
+That's the data frame I shared with you.
+
+The more Python-like way of doing it is a loop inside a loop. This
+works in R, but it has more housekeeping and a few possibly unfamiliar
+ideas. We are going to work with a `matrix`, and we access
+elements of a matrix with two numbers inside square brackets, a row
+number and a column number. We also have to initialize our matrix that
+we're going to fill with Bray-Curtis distances; I'll fill it with $-1$
+values, so that if any are left at the end, I'll know I missed
+something.
+```{r error=T}
+m=matrix(-1,30,30)
+for (i in 1:30) {
+for (j in 1:30) {
+m[i,j]=braycurtis.spec(seabed.z, sites[i], sites[j])
+}
+}
+rownames(m)=sites
+colnames(m)=sites
+head(m)
+```
+
+ 
+
+Because my loops work with site *numbers* and my function works
+with site *names*, I have to remember to refer to the site names
+when I call my function. I also have to supply row and column names
+(the site names).
+
+That looks all right. Are all my Bray-Curtis distances between 0 and 1? I can smoosh my matrix into a vector and summarize it:
+
+```{r }
+summary(as.vector(m))
+```
+
+ 
+All the
 dissimilarities are correctly between 0 and 1. We can also check the
 one we did before:
 
 ```{r }
+bc2 %>% filter(site1 == "s3") %>% select(s20)
+```
+
+ 
+
+or
+
+```{r error=T}
 m[3,20]
 ```
 
  
 
-I then turned this into a data frame (by passing it into
-`as.data.frame`) and saved it into the file
-`seabed1.csv` using `write.csv`, and that was the file
-you read in at the beginning.
-
-*Of course* there is a `tidyverse` way to do
-this. Conceptually, it's not all that different from the loop here,
-but there is less housekeeping to do (and we end up with a data frame
-at the end of it). The first thing we need is a data frame that has
-all combinations of 1 through 30 with each other, which you know how
-to do:
-
-```{r }
-ddd=crossing(i=1:30,j=1:30)
-ddd
-```
-
- 
-
-Now we have to run `braycurtis.spec` for each of those
-`i`, `j` combinations and create a new column with the
-appropriate Bray-Curtis distances in it. "For each" ought to remind
-you of `map`; this is for-eaching both `i` and
-`j` in parallel, so it'll be a `map2` (two things), and
-`braycurtis.spec` produces a decimal number, so it'll be
-`map2_dbl`: 
-
-```{r }
-ddd %>%
-mutate(bc=map2_dbl(i, j, ~braycurtis.spec(seabed.z, .x, .y))) -> ddd
-ddd           
-```
-
- 
-
-That looks plausible. Did it give the right result for the one we checked?
-
-```{r }
-ddd %>% filter(i==3, j==20)
-```
-
- 
-
-xxxb
-
 Check.
-
-This, you'll notice, is "long format", but we want a $30\times 30$
-matrix of dissimilarities rather a 900-long data frame. This means
-making it wide:
-
-```{r }
-ddd %>% spread(j,bc)
-```
-
- 
-
-That's basically the data frame you read in at the beginning. The only
-thing I didn't do here was to make the column names the site names.
-
   
 
 
