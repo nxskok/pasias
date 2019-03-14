@@ -294,6 +294,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">23.6</span> Grouping similar cars</a></li>
 <li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">23.7</span> Running, jumping, and throwing</a></li>
 <li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">23.8</span> Bridges in Pittsburgh</a></li>
+<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">23.9</span> CLustering the Australian athletes</a></li>
 </ul></li>
 <li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">24</span> Multidimensional Scaling</a><ul>
 <li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">24.1</span> Making a map of Wisconsin</a></li>
@@ -1681,7 +1682,8 @@ Do we need to worry about it? First, grab the right columns, so that we will kno
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     0    10     9     8     0</code></pre>
 <p>That leads us to this function, which is a bit repetitious, but for
-two repeats I can handle it. I haven’t done anything about the fact that <code>x</code> and <code>y</code> below are actually data frames:</p>
+two repeats I can handle it. I haven’t done anything about the fact
+that <code>x</code> and <code>y</code> below are actually data frames:</p>
 <div class="sourceCode" id="cb3720"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3720-1" data-line-number="1">braycurtis.spec=<span class="cf">function</span>(d, i, j) {</a>
 <a class="sourceLine" id="cb3720-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(site <span class="op">==</span><span class="st"> </span>i) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(a<span class="op">:</span>e) -&gt;<span class="st"> </span>x</a>
 <a class="sourceLine" id="cb3720-3" data-line-number="3">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(site <span class="op">==</span><span class="st"> </span>j) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(a<span class="op">:</span>e) -&gt;<span class="st"> </span>y</a>
@@ -1704,7 +1706,8 @@ same cluster). So the dissimilarity should be small:</p>
 <code>d</code> differ by one, and the total frequency in both rows is
 about 60, so the dissimilarity should be about <span class="math inline">\(6/60=0.1\)</span>, as it is
 (exactly, in fact).</p>
-<p>This, you will note, works. I think R has taken the attitude that it can treat these one-row data frames as if they were vectors.
+<p>This, you will note, works. I think R has taken the attitude that it
+can treat these one-row data frames as if they were vectors.
 This is the cleaned-up version of my function. When I first wrote it,
 I <code>print</code>ed out <code>x</code> and <code>y</code>, so that I could
 check that they were what I was expecting (they were).
@@ -4179,7 +4182,9 @@ then either type (if the span is long) or material and maybe river
 (otherwise).</p>
 <p>This is an example of a “classification tree” which is a nice
 easy-to-follow version of logistic regression.</p>
-<p>K-means clustering:</p>
+</div>
+<div id="clustering-the-australian-athletes" class="section level2">
+<h2><span class="header-section-number">23.9</span> CLustering the Australian athletes</h2>
 <p>Recall the Australian athlete data (that we’ve seen so many
 times before). This time, we’ll do some K-means clustering, and then
 see whether athletes of certain genders and certain sports tend to end
