@@ -1025,8 +1025,8 @@ x
 ```
 
 ```
-##  [1] 75.19089 53.55982 77.74925 52.42662 53.87458 42.54922 27.51032
-##  [8] 46.23749 39.23019 13.30385
+##  [1] 82.12094 38.99122 46.33851 78.86167 28.86610 60.95926 33.54605
+##  [8] 60.64241 32.96612 61.50093
 ```
 
 
@@ -1050,8 +1050,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        7
-## 2 TRUE         3
+## 1 FALSE        6
+## 2 TRUE         4
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1085,7 +1085,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       3 FALSE
+## 1       4 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1105,7 +1105,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <dbl> <lgl>      
-## 1       3 FALSE
+## 1       4 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value

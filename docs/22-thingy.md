@@ -6209,7 +6209,7 @@ easy-to-follow version of logistic regression.
 
 
 
-##  CLustering the Australian athletes
+##  Clustering the Australian athletes
 
 
  Recall the Australian athlete data (that we've seen so many
