@@ -17,23 +17,23 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## -- Attaching packages ---- tidyverse 1.2.1 --
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## v ggplot2 3.1.0          v purrr   0.3.2     
+## v tibble  2.1.1          v dplyr   0.8.0.1   
+## v tidyr   0.8.3.9000     v stringr 1.4.0     
+## v readr   1.3.1          v forcats 0.3.0
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ✖ dplyr::recode() masks car::recode()
-## ✖ dplyr::select() masks MASS::select()
-## ✖ purrr::some()   masks car::some()
+## -- Conflicts ------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## x dplyr::recode() masks car::recode()
+## x dplyr::select() masks MASS::select()
+## x purrr::some()   masks car::some()
 ```
 
 
@@ -69,8 +69,8 @@ This time, it's a `.csv`:
 
 
 ```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
-acidrain=read_csv(my_url)
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
+acidrain = read_csv(my_url)
 ```
 
 ```
@@ -136,11 +136,12 @@ Try to use one of the explanatory variables as `x` and the other
 one as `fill` (or `colour`):
 
 ```r
-ggplot(acidrain,aes(x=rain_pH,y=soil_acidity,fill=soil_depth))+
-geom_boxplot()
+ggplot(acidrain, aes(x = rain_pH, y = soil_acidity, 
+    fill = soil_depth)) + geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-3-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-3-1} 
 
      
 
@@ -151,11 +152,12 @@ be categorical. The easiest way to make it such is to wrap it in
 
 
 ```r
-ggplot(acidrain,aes(x=factor(rain_pH),y=soil_acidity,fill=soil_depth))+
-geom_boxplot()
+ggplot(acidrain, aes(x = factor(rain_pH), y = soil_acidity, 
+    fill = soil_depth)) + geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-4-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-4-1} 
 
      
 
@@ -166,11 +168,12 @@ If you prefer, exchange `x` and `fill`:
 
 
 ```r
-ggplot(acidrain,aes(fill=factor(rain_pH),y=soil_acidity,x=soil_depth))+
-geom_boxplot()
+ggplot(acidrain, aes(fill = factor(rain_pH), y = soil_acidity, 
+    x = soil_depth)) + geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-5-1} 
 
      
 
@@ -208,17 +211,23 @@ Solution
 Following my own hint:
 
 ```r
-acidrain = acidrain %>% mutate(frph=factor(rain_pH))
-soil.1=aov(soil_acidity~frph*soil_depth,data=acidrain)
+acidrain = acidrain %>% mutate(frph = factor(rain_pH))
+soil.1 = aov(soil_acidity ~ frph * soil_depth, 
+    data = acidrain)
 summary(soil.1)
 ```
 
 ```
-##                 Df Sum Sq Mean Sq F value Pr(>F)
-## frph             1 0.0304 0.03042   0.759  0.401
-## soil_depth       2 0.0671 0.03357   0.838  0.457
-## frph:soil_depth  2 0.0078 0.00391   0.097  0.908
-## Residuals       12 0.4810 0.04008
+##                 Df Sum Sq Mean Sq F value
+## frph             1 0.0304 0.03042   0.759
+## soil_depth       2 0.0671 0.03357   0.838
+## frph:soil_depth  2 0.0078 0.00391   0.097
+## Residuals       12 0.4810 0.04008        
+##                 Pr(>F)
+## frph             0.401
+## soil_depth       0.457
+## frph:soil_depth  0.908
+## Residuals
 ```
 
  
@@ -233,7 +242,7 @@ interaction is to take it out:
 
 
 ```r
-soil.2=update(soil.1, .~.-frph:soil_depth)
+soil.2 = update(soil.1, . ~ . - frph:soil_depth)
 summary(soil.2)
 ```
 
@@ -281,8 +290,8 @@ Solution
 Aligned columns separated by spaces, so `read_table`:
 
 ```r
-my_url="https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt"
-hayfever=read_table(my_url)
+my_url = "https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt"
+hayfever = read_table(my_url)
 ```
 
 ```
@@ -313,7 +322,7 @@ hayfever
 ##  8    4.7 low   medium         4
 ##  9    4.8 low   high           1
 ## 10    4.5 low   high           2
-## # … with 26 more rows
+## # ... with 26 more rows
 ```
 
      
@@ -321,7 +330,7 @@ hayfever
 I have 36 observations (patients). There are two categorical columns
 `a` and `b` corresponding to the two active ingredients,
 and they each seem to have levels low, medium and high.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It's important to be clear about the distinction between a categorical variable, that lives in a data frame column, and its levels, the values that appear in the column. This is especially important if you're trying to decide whether a data frame is tidy, since typically an untidy data frame will have factor levels as column names rather than the factor itself, and you need to be able to tell the difference.</span>
+\marginnote{It's important to be clear about the distinction between a categorical variable, that lives in a data frame column, and its levels, the values that appear in the column. This is especially important if you're trying to decide whether a data frame is tidy, since typically an untidy data frame will have factor levels as column names rather than the factor itself, and you need to be able to tell the difference.}
 
 The `replicate` column labels each observation *within*
 its A-B combination, so that each treatment combination was indeed
@@ -340,8 +349,7 @@ Solution
 This is a group-by and summarize, but there are two active ingredients and they *both* have to go in the group-by:
 
 ```r
-hayfever %>% group_by(a,b) %>%
-summarize(m=mean(relief)) -> d
+d <- hayfever %>% group_by(a, b) %>% summarize(m = mean(relief))
 d
 ```
 
@@ -371,10 +379,9 @@ These levels are in the wrong logical order, but they are in the right order in 
 
 
 ```r
-hayfever %>% 
-mutate(a=fct_inorder(a), b=fct_inorder(b)) %>%
-group_by(a,b) %>%
-summarize(m=mean(relief)) -> d2
+d2 <- hayfever %>% mutate(a = fct_inorder(a), 
+    b = fct_inorder(b)) %>% group_by(a, b) %>% 
+    summarize(m = mean(relief))
 d2
 ```
 
@@ -407,21 +414,23 @@ name you gave it.  I'm going to use my proper-order data frame for
 this:
 
 ```r
-ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
-geom_point()+geom_line()
+ggplot(d2, aes(x = a, y = m, colour = b, group = b)) + 
+    geom_point() + geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-11-1} 
 
      
 Or, you probably had this:
 
 ```r
- ggplot(d, aes(x=a,y=m,colour=b,group=b))+
-geom_point()+geom_line()
+ggplot(d, aes(x = a, y = m, colour = b, group = b)) + 
+    geom_point() + geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-12-1} 
 
      
 
@@ -429,11 +438,12 @@ Since `a` and `b` both have three levels, you could just as well use them the ot
 
 
 ```r
- ggplot(d2, aes(x=b,y=m,colour=a,group=a))+
-geom_point()+geom_line()
+ggplot(d2, aes(x = b, y = m, colour = a, group = a)) + 
+    geom_point() + geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-13-1} 
 
  
 
@@ -460,12 +470,13 @@ the `geom_point` for the means and add one instead for the
 data, taken from the original data frame:
 
 ```r
-ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
-geom_line()+
-geom_point(data=hayfever, aes(y=relief))
+ggplot(d2, aes(x = a, y = m, colour = b, group = b)) + 
+    geom_line() + geom_point(data = hayfever, 
+    aes(y = relief))
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-14-1} 
 
      
 
@@ -486,18 +497,24 @@ Solution
 
 
 ```r
-hayfever.1=aov(relief~a*b,data=hayfever)
+hayfever.1 = aov(relief ~ a * b, data = hayfever)
 summary(hayfever.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value Pr(>F)    
-## a            2 220.02  110.01  1827.9 <2e-16 ***
-## b            2 123.66   61.83  1027.3 <2e-16 ***
-## a:b          4  29.42    7.36   122.2 <2e-16 ***
-## Residuals   27   1.63    0.06                   
+##             Df Sum Sq Mean Sq F value Pr(>F)
+## a            2 220.02  110.01  1827.9 <2e-16
+## b            2 123.66   61.83  1027.3 <2e-16
+## a:b          4  29.42    7.36   122.2 <2e-16
+## Residuals   27   1.63    0.06               
+##                
+## a           ***
+## b           ***
+## a:b         ***
+## Residuals      
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -517,17 +534,21 @@ Solution
 First, we pull out only the data where A is `medium`, and then we do a one-way analysis of B on that data. This is the slick way, though you can certainly save the result of `filter` first:
 
 ```r
-hayfever %>% filter(a=="medium") %>%
-aov(relief~b, data=.) -> simple_medium
+simple_medium <- hayfever %>% filter(a == "medium") %>% 
+    aov(relief ~ b, data = .)
 summary(simple_medium)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value   Pr(>F)    
-## b            2  34.16  17.081   262.8 1.04e-08 ***
-## Residuals    9   0.59   0.065                     
+##             Df Sum Sq Mean Sq F value
+## b            2  34.16  17.081   262.8
+## Residuals    9   0.59   0.065        
+##               Pr(>F)    
+## b           1.04e-08 ***
+## Residuals               
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -547,10 +568,14 @@ TukeyHSD(simple_medium)
 ## Fit: aov(formula = relief ~ b, data = .)
 ## 
 ## $b
-##               diff       lwr       upr     p adj
-## low-high    -3.675 -4.178336 -3.171664 0.0000000
-## medium-high -0.200 -0.703336  0.303336 0.5323662
-## medium-low   3.475  2.971664  3.978336 0.0000000
+##               diff       lwr       upr
+## low-high    -3.675 -4.178336 -3.171664
+## medium-high -0.200 -0.703336  0.303336
+## medium-low   3.475  2.971664  3.978336
+##                 p adj
+## low-high    0.0000000
+## medium-high 0.5323662
+## medium-low  0.0000000
 ```
 
  
@@ -566,17 +591,21 @@ Solution
 Same idea: pull out only the data where A is `high`, do a one-way analysis of B, and do Tukey if needed:
 
 ```r
-hayfever %>% filter(a=="high") %>%
-aov(relief~b, data=.) -> simple_high
+simple_high <- hayfever %>% filter(a == "high") %>% 
+    aov(relief ~ b, data = .)
 summary(simple_high)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value   Pr(>F)    
-## b            2 107.02   53.51     796 7.49e-11 ***
-## Residuals    9   0.61    0.07                     
+##             Df Sum Sq Mean Sq F value
+## b            2 107.02   53.51     796
+## Residuals    9   0.61    0.07        
+##               Pr(>F)    
+## b           7.49e-11 ***
+## Residuals               
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
 ```r
@@ -655,8 +684,8 @@ Solution
 
 
 ```r
-my_url="http://individual.utoronto.ca/kbutler/stad29/caffeine.csv"
-caffeine.untidy=read_csv(my_url)
+my_url = "http://individual.utoronto.ca/kbutler/stad29/caffeine.csv"
+caffeine.untidy = read_csv(my_url)
 ```
 
 ```
@@ -710,8 +739,8 @@ We'll save into `caffeine` again:
 
 
 ```r
-caffeine = caffeine.untidy %>% 
-gather(amount,score,High:None,factor_key=T)
+caffeine = caffeine.untidy %>% gather(amount, 
+    score, High:None, factor_key = T)
 caffeine
 ```
 
@@ -729,7 +758,7 @@ caffeine
 ##  8     8 High      74
 ##  9     9 High      78
 ## 10    10 High      83
-## # … with 26 more rows
+## # ... with 26 more rows
 ```
 
  
@@ -753,16 +782,20 @@ Extra: I'm going to run the ANOVA the "old way" first, so that we can
 compare results. You don't need to do this:
 
 ```r
-caffeine.old=aov(score~amount, data=caffeine)
+caffeine.old = aov(score ~ amount, data = caffeine)
 summary(caffeine.old)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value Pr(>F)  
-## amount       2  477.7  238.86   3.986 0.0281 *
-## Residuals   33 1977.5   59.92                 
+##             Df Sum Sq Mean Sq F value Pr(>F)
+## amount       2  477.7  238.86   3.986 0.0281
+## Residuals   33 1977.5   59.92               
+##              
+## amount      *
+## Residuals    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
 ```r
@@ -776,10 +809,14 @@ TukeyHSD(caffeine.old)
 ## Fit: aov(formula = score ~ amount, data = caffeine)
 ## 
 ## $amount
-##                    diff       lwr       upr     p adj
-## Moderate-High -4.750000 -12.50468  3.004679 0.3025693
-## None-High     -8.916667 -16.67135 -1.161987 0.0213422
-## None-Moderate -4.166667 -11.92135  3.588013 0.3952176
+##                    diff       lwr       upr
+## Moderate-High -4.750000 -12.50468  3.004679
+## None-High     -8.916667 -16.67135 -1.161987
+## None-Moderate -4.166667 -11.92135  3.588013
+##                   p adj
+## Moderate-High 0.3025693
+## None-High     0.0213422
+## None-Moderate 0.3952176
 ```
 
        
@@ -789,7 +826,7 @@ Now we'll do it using `lm`, with contrasts later, and see how
 things change:
 
 ```r
-caffeine.2=lm(score~amount, data=caffeine)
+caffeine.2 = lm(score ~ amount, data = caffeine)
 summary(caffeine.2)
 ```
 
@@ -803,12 +840,17 @@ summary(caffeine.2)
 ## -11.833  -6.958  -2.458   6.354  15.167 
 ## 
 ## Coefficients:
-##                Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      76.833      2.235  34.383  < 2e-16 ***
-## amountModerate   -4.750      3.160  -1.503  0.14234    
-## amountNone       -8.917      3.160  -2.821  0.00803 ** 
+##                Estimate Std. Error t value
+## (Intercept)      76.833      2.235  34.383
+## amountModerate   -4.750      3.160  -1.503
+## amountNone       -8.917      3.160  -2.821
+##                Pr(>|t|)    
+## (Intercept)     < 2e-16 ***
+## amountModerate  0.14234    
+## amountNone      0.00803 ** 
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 7.741 on 33 degrees of freedom
 ## Multiple R-squared:  0.1946,	Adjusted R-squared:  0.1458 
@@ -838,11 +880,15 @@ anova(caffeine.2)
 ## Analysis of Variance Table
 ## 
 ## Response: score
-##           Df  Sum Sq Mean Sq F value  Pr(>F)  
-## amount     2  477.72 238.861  3.9861 0.02815 *
-## Residuals 33 1977.50  59.924                  
+##           Df  Sum Sq Mean Sq F value  Pr(>F)
+## amount     2  477.72 238.861  3.9861 0.02815
+## Residuals 33 1977.50  59.924                
+##            
+## amount    *
+## Residuals  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -856,7 +902,7 @@ impact on test scores) this way too:
 
 
 ```r
-drop1(caffeine.2,test="F")
+drop1(caffeine.2, test = "F")
 ```
 
 ```
@@ -864,11 +910,15 @@ drop1(caffeine.2,test="F")
 ## 
 ## Model:
 ## score ~ amount
-##        Df Sum of Sq    RSS    AIC F value  Pr(>F)  
-## <none>              1977.5 150.22                  
-## amount  2    477.72 2455.2 154.01  3.9861 0.02815 *
+##        Df Sum of Sq    RSS    AIC F value
+## <none>              1977.5 150.22        
+## amount  2    477.72 2455.2 154.01  3.9861
+##         Pr(>F)  
+## <none>          
+## amount 0.02815 *
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -888,7 +938,7 @@ Count them, or find the distinct ones:
 
 
 ```r
-caffeine %>% group_by(amount) %>% summarize(count=n())
+caffeine %>% group_by(amount) %>% summarize(count = n())
 ```
 
 ```
@@ -992,7 +1042,7 @@ Solution
 Put a 0 in for None:
 
 ```r
-c.hm=c(1,-1,0)
+c.hm = c(1, -1, 0)
 ```
 
        
@@ -1010,7 +1060,7 @@ Solution
 
 
 ```r
-c.any=c(-0.5,-0.5,1)
+c.any = c(-0.5, -0.5, 1)
 ```
 
  
@@ -1047,7 +1097,7 @@ Solution
 Multiply them together and check that what you get adds up to zero:
 
 ```r
-sum(c.hm*c.any)
+sum(c.hm * c.any)
 ```
 
 ```
@@ -1073,8 +1123,8 @@ Solution
 
 
 ```r
-m=cbind(c.hm,c.any)
-contrasts(caffeine$amount)=m
+m = cbind(c.hm, c.any)
+contrasts(caffeine$amount) = m
 ```
 
  
@@ -1090,7 +1140,7 @@ Solution
 
 
 ```r
-caff.3=lm(score~amount,data=caffeine)
+caff.3 = lm(score ~ amount, data = caffeine)
 summary(caff.3)
 ```
 
@@ -1104,12 +1154,17 @@ summary(caff.3)
 ## -11.833  -6.958  -2.458   6.354  15.167 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)   72.278      1.290  56.022   <2e-16 ***
-## amountc.hm     2.375      1.580   1.503   0.1423    
-## amountc.any   -4.361      1.825  -2.390   0.0227 *  
+##             Estimate Std. Error t value
+## (Intercept)   72.278      1.290  56.022
+## amountc.hm     2.375      1.580   1.503
+## amountc.any   -4.361      1.825  -2.390
+##             Pr(>|t|)    
+## (Intercept)   <2e-16 ***
+## amountc.hm    0.1423    
+## amountc.any   0.0227 *  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 7.741 on 33 degrees of freedom
 ## Multiple R-squared:  0.1946,	Adjusted R-squared:  0.1458 
@@ -1142,8 +1197,8 @@ Solution
 
 
 ```r
-c.hm=c(1,-1,0)
-c.mn=c(0,1,-1)
+c.hm = c(1, -1, 0)
+c.mn = c(0, 1, -1)
 ```
 
  
@@ -1153,7 +1208,7 @@ right comparisons. But now:
 
 
 ```r
-sum(c.hm*c.mn)
+sum(c.hm * c.mn)
 ```
 
 ```
@@ -1165,11 +1220,11 @@ sum(c.hm*c.mn)
 This does *not* add up to zero, so these two contrasts are not
 orthogonal, and we can't do what we just did. R will give us an answer
 if we try it, but it'll be the *wrong* answer.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">SAS, for example, has a way of making non-orthogonal contrasts orthogonal in a way that the user doesn't have to worry about, but in R, you are closer to the ground, so to speak, and you have to make it happen yourself.</span>
+\marginnote{SAS, for example, has a way of making non-orthogonal contrasts orthogonal in a way that the user doesn't have to worry about, but in R, you are closer to the ground, so to speak, and you have to make it happen yourself.}
 
 The best
 description I have seen of what to do here is by David Howell,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Howell is the author of a famous text on Statistics in Psychology.</span> at
+\marginnote{Howell is the author of a famous text on Statistics in Psychology.} at
 [link](https://www.uvm.edu/~dhowell/StatPages/More_Stuff/R/AnovaOneway.html)
 (at the bottom).
 Let
@@ -1179,12 +1234,12 @@ First we need a vector that is all 1's, which I have called
 `c0` below. Since each of our contrasts `c.hm` and
 `c.mn` have 3 things in them (3 groups), we need to add a
 "dummy" 3rd contrast to give us a $3\times 3$ array of numbers:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">which we are going to invert, as a matrix. But I get ahead of myself.</span>
+\marginnote{which we are going to invert, as a matrix. But I get ahead of myself.}
 
 
 ```r
-c0=rep(1,3)
-m=cbind(c0,c.hm,c.mn)
+c0 = rep(1, 3)
+m = cbind(c0, c.hm, c.mn)
 m
 ```
 
@@ -1206,18 +1261,18 @@ back, and `solve` finds a matrix inverse:
 
 
 ```r
-minv=solve(t(m))
+minv = solve(t(m))
 ```
 
  
 
 and then we remove the first column, which represents the contrast
 that we didn't want anyway (what Howell calls "deaugmenting"):
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one. You can access data frames this way too, but the Tidyverse makes it much easier.</span>
+\marginnote{We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one. You can access data frames this way too, but the Tidyverse makes it much easier.}
 
 
 ```r
-m.contr=minv[,-1]
+m.contr = minv[, -1]
 m.contr
 ```
 
@@ -1229,7 +1284,7 @@ m.contr
 ```
 
 ```r
-contrasts(caffeine$amount)=m.contr
+contrasts(caffeine$amount) = m.contr
 ```
 
  
@@ -1245,7 +1300,7 @@ Now fit the model again:
 
 
 ```r
-caff.4=lm(score~amount,data=caffeine)
+caff.4 = lm(score ~ amount, data = caffeine)
 summary(caff.4)
 ```
 
@@ -1259,12 +1314,17 @@ summary(caff.4)
 ## -11.833  -6.958  -2.458   6.354  15.167 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)   72.278      1.290  56.022   <2e-16 ***
-## amountc.hm     4.750      3.160   1.503    0.142    
-## amountc.mn     4.167      3.160   1.318    0.196    
+##             Estimate Std. Error t value
+## (Intercept)   72.278      1.290  56.022
+## amountc.hm     4.750      3.160   1.503
+## amountc.mn     4.167      3.160   1.318
+##             Pr(>|t|)    
+## (Intercept)   <2e-16 ***
+## amountc.hm     0.142    
+## amountc.mn     0.196    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 7.741 on 33 degrees of freedom
 ## Multiple R-squared:  0.1946,	Adjusted R-squared:  0.1458 
@@ -1330,8 +1390,8 @@ in there, but we'll ignore those and see whether they cause any
 trouble: 
 
 ```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt"
-studyhours=read_delim(my_url," ")
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt"
+studyhours = read_delim(my_url, " ")
 ```
 
 ```
@@ -1361,7 +1421,7 @@ studyhours
 ##  8     8 math      9
 ##  9     9 math     10
 ## 10    10 math     11
-## # … with 65 more rows
+## # ... with 65 more rows
 ```
 
         
@@ -1370,10 +1430,12 @@ So far so good. 75 students, in tidy format.
 
 
 ```r
-ggplot(studyhours,aes(x=major,y=hours))+geom_boxplot()
+ggplot(studyhours, aes(x = major, y = hours)) + 
+    geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-43-1} 
 
  
 
@@ -1393,10 +1455,11 @@ kind of model:
 
 
 ```r
-boxcox(hours~major,data=studyhours)
+boxcox(hours ~ major, data = studyhours)
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-44-1} 
 
  
 
@@ -1440,7 +1503,7 @@ that, and then try again:
 
 
 ```r
-studyhours = studyhours %>% mutate(major=factor(major))
+studyhours = studyhours %>% mutate(major = factor(major))
 studyhours %>% select(major) %>% summary()
 ```
 
@@ -1462,7 +1525,7 @@ what the levels are, viz:
 
 
 ```r
-c.eng.socsci=c(1,0,-1)
+c.eng.socsci = c(1, 0, -1)
 ```
 
  
@@ -1474,11 +1537,11 @@ average of the others, like
 $$\mbox{math}-(\mbox{English}+\mbox{socsci})/2.$$ 
 This translates into contrast-ese like this, making sure to get Math
 in the middle where it belongs:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As I failed to do the first time.</span>
+\marginnote{As I failed to do the first time.}
 
 
 ```r
-c.math.others=c(-0.5,1,-0.5)
+c.math.others = c(-0.5, 1, -0.5)
 ```
 
  
@@ -1498,7 +1561,7 @@ Multiply them together (elementwise, which is how R does it)
 and show that what you get adds up to zero:
 
 ```r
-sum(c.eng.socsci*c.math.others)
+sum(c.eng.socsci * c.math.others)
 ```
 
 ```
@@ -1511,7 +1574,7 @@ Zero. Orthogonal.
 
 So we are safely in "familiar" territory, not in the 
 here-be-dragons
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">On ancient maps, people didn't know what was  in certain parts of the world, because no-one had ever explored  them, so they wrote on the map *here be dragons*.</span> land of
+\marginnote{On ancient maps, people didn't know what was  in certain parts of the world, because no-one had ever explored  them, so they wrote on the map *here be dragons*.} land of
 non-orthogonal contrasts.
 
 
@@ -1528,7 +1591,7 @@ So, like the example in class (where the
 `contrasts(model)` was admittedly rather confusing):
 
 ```r
-m=cbind(c.math.others,c.eng.socsci)
+m = cbind(c.math.others, c.eng.socsci)
 m
 ```
 
@@ -1540,7 +1603,7 @@ m
 ```
 
 ```r
-contrasts(studyhours$major)=m
+contrasts(studyhours$major) = m
 ```
 
         
@@ -1559,7 +1622,7 @@ either way: we just used `aov` before because we were
 going to follow up with Tukey):
 
 ```r
-studyhours.1=lm(hours~major,data=studyhours)
+studyhours.1 = lm(hours ~ major, data = studyhours)
 summary(studyhours.1)
 ```
 
@@ -1573,12 +1636,17 @@ summary(studyhours.1)
 ##  -6.44  -2.48  -0.48   2.52  10.56 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)          7.3200     0.3980  18.392  < 2e-16 ***
-## majorc.math.others   2.1200     0.5628   3.767 0.000335 ***
-## majorc.eng.socsci    0.7800     0.4874   1.600 0.113936    
+##                    Estimate Std. Error
+## (Intercept)          7.3200     0.3980
+## majorc.math.others   2.1200     0.5628
+## majorc.eng.socsci    0.7800     0.4874
+##                    t value Pr(>|t|)    
+## (Intercept)         18.392  < 2e-16 ***
+## majorc.math.others   3.767 0.000335 ***
+## majorc.eng.socsci    1.600 0.113936    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 3.447 on 72 degrees of freedom
 ## Multiple R-squared:  0.1887,	Adjusted R-squared:  0.1662 
@@ -1612,7 +1680,7 @@ interested in, so there is no reason for following up with
 Tukey or anything else. But you have to be able to say ahead of
 time which contrasts you want to test. This is in
 contrast
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In contrast. Get it? No? Well, never mind then.</span> to Tukey, where you don't have to decide
+\marginnote{In contrast. Get it? No? Well, never mind then.} to Tukey, where you don't have to decide
 which comparisons interest you until right at the end.
 
 Another question you might have had is 
@@ -1620,7 +1688,7 @@ Another question you might have had is
 you run an ANOVA using `lm`, you get the ANOVA table by
 passing the fitted model object into `anova` rather than
 `summary`:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">*anova* is one of R's  multi-purpose tools; what it does depends on what you feed it.</span>
+\marginnote{*anova* is one of R's  multi-purpose tools; what it does depends on what you feed it.}
 
 ```r
 anova(studyhours.1)
@@ -1630,11 +1698,15 @@ anova(studyhours.1)
 ## Analysis of Variance Table
 ## 
 ## Response: hours
-##           Df Sum Sq Mean Sq F value    Pr(>F)    
-## major      2 198.96   99.48  8.3737 0.0005375 ***
-## Residuals 72 855.36   11.88                      
+##           Df Sum Sq Mean Sq F value
+## major      2 198.96   99.48  8.3737
+## Residuals 72 855.36   11.88        
+##              Pr(>F)    
+## major     0.0005375 ***
+## Residuals              
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
         
@@ -1646,7 +1718,7 @@ contrasts up? Try it and see:
 
 
 ```r
-m=cbind(c.math.others)
+m = cbind(c.math.others)
 m
 ```
 
@@ -1658,8 +1730,8 @@ m
 ```
 
 ```r
-contrasts(studyhours$major)=m
-studyhours.2=lm(hours~major,data=studyhours)
+contrasts(studyhours$major) = m
+studyhours.2 = lm(hours ~ major, data = studyhours)
 summary(studyhours.2)
 ```
 
@@ -1673,12 +1745,17 @@ summary(studyhours.2)
 ##  -6.44  -2.48  -0.48   2.52  10.56 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)          7.3200     0.3980  18.392  < 2e-16 ***
-## majorc.math.others   2.1200     0.5628   3.767 0.000335 ***
-## major               -1.1031     0.6893  -1.600 0.113936    
+##                    Estimate Std. Error
+## (Intercept)          7.3200     0.3980
+## majorc.math.others   2.1200     0.5628
+## major               -1.1031     0.6893
+##                    t value Pr(>|t|)    
+## (Intercept)         18.392  < 2e-16 ***
+## majorc.math.others   3.767 0.000335 ***
+## major               -1.600 0.113936    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 3.447 on 72 degrees of freedom
 ## Multiple R-squared:  0.1887,	Adjusted R-squared:  0.1662 
@@ -1702,10 +1779,8 @@ had much cause to do so far. But now we do. What we want to do is to
 
 
 ```r
-studyhoursx = studyhours %>%
-mutate(mathrest=fct_recode(major,
-"rest" = "english",
-"rest" = "socsci"))
+studyhoursx = studyhours %>% mutate(mathrest = fct_recode(major, 
+    rest = "english", rest = "socsci"))
 studyhoursx %>% count(mathrest)
 ```
 
@@ -1741,7 +1816,7 @@ Now, the $t$-test.
 
 
 ```r
-t.test(hours~mathrest,data=studyhoursx,var.equal=T)
+t.test(hours ~ mathrest, data = studyhoursx, var.equal = T)
 ```
 
 ```
@@ -1749,7 +1824,8 @@ t.test(hours~mathrest,data=studyhoursx,var.equal=T)
 ## 	Two Sample t-test
 ## 
 ## data:  hours by mathrest
-## t = -3.7269, df = 73, p-value = 0.0003796
+## t = -3.7269, df = 73, p-value =
+## 0.0003796
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  -4.880528 -1.479472
@@ -1787,7 +1863,7 @@ learning and for testing leads to better test scores. An experiment
 was carried out to test this. During the learning phase, subjects
 learned a list of 80 words in a room painted orange and decorated with
 posters, paintings and other paraphernalia.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is a fancy  word for *stuff*.</span> A memory test was given to all subjects
+\marginnote{This is a fancy  word for *stuff*.} A memory test was given to all subjects
 immediately after they had learned the words, to give the impression
 that the experiment was over. (The results of this test were
 discarded.) One day later, subjects were unexpectedly re-tested under
@@ -1875,8 +1951,8 @@ The usual thing --- read in the data appropriately and look at the
 data frame you got:
 
 ```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/smith.txt"
-smith=read_delim(my_url," ")
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/smith.txt"
+smith = read_delim(my_url, " ")
 ```
 
 ```
@@ -1906,7 +1982,7 @@ smith
 ##  8     8 same       20
 ##  9     9 same       11
 ## 10    10 same       21
-## # … with 40 more rows
+## # ... with 40 more rows
 ```
 
        
@@ -1927,7 +2003,7 @@ Use `mutate` and assign everything back to what it was
 before:
 
 ```r
-smith = smith %>% mutate(context=factor(context))
+smith = smith %>% mutate(context = factor(context))
 smith
 ```
 
@@ -1945,7 +2021,7 @@ smith
 ##  8     8 same       20
 ##  9     9 same       11
 ## 10    10 same       21
-## # … with 40 more rows
+## # ... with 40 more rows
 ```
 
     
@@ -1971,7 +2047,8 @@ levels(smith$context)
 ```
 
 ```
-## [1] "different"  "imaginary"  "photograph" "placebo"    "same"
+## [1] "different"  "imaginary"  "photograph"
+## [4] "placebo"    "same"
 ```
 
        
@@ -2043,8 +2120,9 @@ unique(smith$context)
 ```
 
 ```
-## [1] same       different  imaginary  photograph placebo   
-## Levels: different imaginary photograph placebo same
+## [1] same       different  imaginary 
+## [4] photograph placebo   
+## 5 Levels: different ... same
 ```
 
  
@@ -2071,7 +2149,7 @@ All right, let's go from the bottom:
 * Different and placebo have same means. These are 1st and 4th.
 
 ```r
-c4=c(1,0,0,-1,0)
+c4 = c(1, 0, 0, -1, 0)
 ```
 
          
@@ -2079,7 +2157,7 @@ c4=c(1,0,0,-1,0)
 * Imaginary and photograph have same means. 2nd and 3rd:
 
 ```r
-c3=c(0,1,-1,0,0)
+c3 = c(0, 1, -1, 0, 0)
 ```
 
    
@@ -2090,7 +2168,7 @@ time we have two means being compared with one, so we need to give
 the two means half weight. 2nd and 3rd against 5th:
 
 ```r
-c2=c(0,1/2,1/2,0,-1)
+c2 = c(0, 1/2, 1/2, 0, -1)
 ```
 
    
@@ -2101,7 +2179,7 @@ c2=c(0,1/2,1/2,0,-1)
 4th with weight $1/2$ (2 of them):
 
 ```r
-c1=c(-1/2,1/3,1/3,-1/2,1/3)
+c1 = c(-1/2, 1/3, 1/3, -1/2, 1/3)
 ```
 
    
@@ -2112,8 +2190,8 @@ minus). You can also multiply through by anything to get rid of
 the fractions, for example these:
 
 ```r
-c2=c(0,1,1,0,-2)
-c1=c(-3,2,2,-3,2)
+c2 = c(0, 1, 1, 0, -2)
+c1 = c(-3, 2, 2, -3, 2)
 ```
 
        
@@ -2133,11 +2211,12 @@ Multiply your chosen contrasts together elementwise, and show
 that the results add to zero, eg. by showing the whole thing:
 
 ```r
-c1*c2
+c1 * c2
 ```
 
 ```
-## [1]  0.0000000  0.1666667  0.1666667  0.0000000 -0.3333333
+## [1]  0.0000000  0.1666667  0.1666667
+## [4]  0.0000000 -0.3333333
 ```
 
     
@@ -2146,7 +2225,7 @@ or by explicitly summing the elementwise product:
 
 
 ```r
-sum(c1*c3)
+sum(c1 * c3)
 ```
 
 ```
@@ -2169,8 +2248,8 @@ Solution
 This:
 
 ```r
-m=cbind(c1,c2,c3,c4)
-contrasts(smith$context)=m
+m = cbind(c1, c2, c3, c4)
+contrasts(smith$context) = m
 ```
 
        
@@ -2184,7 +2263,7 @@ multiplication works by combining a *row* with a column. No
 matter, *transposing* a matrix interchanges rows and columns, so
 that in math, we want to look at the matrix $M^T M$. In R,
 `%*%` means "matrix multiply".
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.</span> Thus,
+\marginnote{In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.} Thus,
 
 
 ```r
@@ -2219,7 +2298,7 @@ Solution
 We're past the hard part:
 
 ```r
-smith.1=lm(words~context,data=smith)
+smith.1 = lm(words ~ context, data = smith)
 summary(smith.1)
 ```
 
@@ -2233,14 +2312,21 @@ summary(smith.1)
 ##   -9.0   -4.0   -1.5    4.6   11.6 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  14.8000     0.8129  18.207  < 2e-16 ***
-## contextc1     8.6000     1.9912   4.319 8.52e-05 ***
-## contextc2    -0.3333     1.4841  -0.225    0.823    
-## contextc3    -0.1000     1.2853  -0.078    0.938    
-## contextc4     0.5000     1.2853   0.389    0.699    
+##             Estimate Std. Error t value
+## (Intercept)  14.8000     0.8129  18.207
+## contextc1     8.6000     1.9912   4.319
+## contextc2    -0.3333     1.4841  -0.225
+## contextc3    -0.1000     1.2853  -0.078
+## contextc4     0.5000     1.2853   0.389
+##             Pr(>|t|)    
+## (Intercept)  < 2e-16 ***
+## contextc1   8.52e-05 ***
+## contextc2      0.823    
+## contextc3      0.938    
+## contextc4      0.699    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 5.748 on 45 degrees of freedom
 ## Multiple R-squared:  0.2954,	Adjusted R-squared:  0.2327 
@@ -2358,8 +2444,8 @@ Solution
 `read_csv`:
 
 ```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/shirts.csv"
-shirts=read_csv(my_url)
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/shirts.csv"
+shirts = read_csv(my_url)
 ```
 
 ```
@@ -2388,7 +2474,7 @@ shirts
 ##  8 male_seeing_model   6  
 ##  9 male_seeing_model   5.3
 ## 10 male_seeing_model   6.3
-## # … with 115 more rows
+## # ... with 115 more rows
 ```
 
      
@@ -2407,7 +2493,7 @@ Solution
 Thus:
 
 ```r
-shirts = shirts %>% mutate(treatment=factor(treatment))
+shirts = shirts %>% mutate(treatment = factor(treatment))
 ```
 
      
@@ -2433,7 +2519,7 @@ shirts
 ##  8 male_seeing_model   6  
 ##  9 male_seeing_model   5.3
 ## 10 male_seeing_model   6.3
-## # … with 115 more rows
+## # ... with 115 more rows
 ```
 
  
@@ -2456,8 +2542,11 @@ levels(shirts$treatment)
 ```
 
 ```
-## [1] "control"               "female_seeing_model"   "female_seeing_student"
-## [4] "male_seeing_model"     "male_seeing_student"
+## [1] "control"              
+## [2] "female_seeing_model"  
+## [3] "female_seeing_student"
+## [4] "male_seeing_model"    
+## [5] "male_seeing_student"
 ```
 
      
@@ -2513,13 +2602,16 @@ if you want to (and if you know what you are doing):
 
 
 ```r
-shirts %>% mutate(trt2=fct_inorder(treatment)) -> d
+d <- shirts %>% mutate(trt2 = fct_inorder(treatment))
 levels(d$trt2)
 ```
 
 ```
-## [1] "male_seeing_model"     "male_seeing_student"   "female_seeing_model"  
-## [4] "female_seeing_student" "control"
+## [1] "male_seeing_model"    
+## [2] "male_seeing_student"  
+## [3] "female_seeing_model"  
+## [4] "female_seeing_student"
+## [5] "control"
 ```
 
  
@@ -2542,8 +2634,7 @@ We will use this later when assessing the significance of the
 contrasts. It's the usual group-by and summarize:
 
 ```r
-shirts %>% group_by(treatment) %>%
-summarize(m=mean(score))
+shirts %>% group_by(treatment) %>% summarize(m = mean(score))
 ```
 
 ```
@@ -2564,7 +2655,7 @@ non-alphabetical order?
 
 
 ```r
-d %>% group_by(trt2) %>% summarize(m=mean(score))
+d %>% group_by(trt2) %>% summarize(m = mean(score))
 ```
 
 ```
@@ -2616,7 +2707,7 @@ Solution
 These, in that order, are comparisons of treatments 4 and 5:
 
 ```r
-c_mms=c(0,0,0,1,-1)
+c_mms = c(0, 0, 0, 1, -1)
 ```
 
    
@@ -2625,7 +2716,7 @@ treatments 2 and 3:
 
 
 ```r
-c_fms=c(0,1,-1,0,0)
+c_fms = c(0, 1, -1, 0, 0)
 ```
 
  
@@ -2636,7 +2727,7 @@ the average of 2 and 3 vs.\ the average of 4 and 5:
 
 
 ```r
-c_mf=c(0,0.5,0.5,-0.5,-0.5)
+c_mf = c(0, 0.5, 0.5, -0.5, -0.5)
 ```
 
  
@@ -2649,7 +2740,7 @@ Finally
 
 
 ```r
-c_tc=c(1,-0.25,-0.25,-0.25,-0.25)
+c_tc = c(1, -0.25, -0.25, -0.25, -0.25)
 ```
 
  
@@ -2672,7 +2763,7 @@ Multiply them together (elementwise, which is what `*`
 does) and add them up, showing that you get zero, for example:
 
 ```r
-sum(c_mf*c_tc)
+sum(c_mf * c_tc)
 ```
 
 ```
@@ -2695,8 +2786,8 @@ Solution
 I called my data frame `shirts`, so I need to do this:
 
 ```r
-m=cbind(c_mms, c_fms, c_mf, c_tc)
-contrasts(shirts$treatment)=m
+m = cbind(c_mms, c_fms, c_mf, c_tc)
+contrasts(shirts$treatment) = m
 ```
 
        
@@ -2732,8 +2823,8 @@ Or even:
 
 
 ```r
-z=t(m) %*% m
-all(z[row(z)!=col(z)]==0)
+z = t(m) %*% m
+all(z[row(z) != col(z)] == 0)
 ```
 
 ```
@@ -2744,7 +2835,7 @@ all(z[row(z)!=col(z)]==0)
 
 That says (a little breathlessly) that it is true that all the
 elements of $M^TM$ that are off the diagonal are zero.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The thing inside the square brackets says only to look at the elements of $M^TM$ whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the *same* are *on* the diagonal, for example the element in row 2, column 2.</span>
+\marginnote{The thing inside the square brackets says only to look at the elements of $M^TM$ whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the *same* are *on* the diagonal, for example the element in row 2, column 2.}
   
 
 (h) Predict evaluation score from 
@@ -2758,7 +2849,7 @@ Once you have everything set up, it's just a matter of going
 through the process:
 
 ```r
-score.1=lm(score~treatment,data=shirts)
+score.1 = lm(score ~ treatment, data = shirts)
 summary(score.1)
 ```
 
@@ -2772,14 +2863,21 @@ summary(score.1)
 ## -3.860 -0.760  0.032  0.840  3.640 
 ## 
 ## Coefficients:
-##                Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      4.0256     0.1231  32.705  < 2e-16 ***
-## treatmentc_mms   1.0820     0.1946   5.560 1.66e-07 ***
-## treatmentc_fms   0.3540     0.1946   1.819   0.0714 .  
-## treatmentc_mf   -0.6200     0.2752  -2.253   0.0261 *  
-## treatmentc_tc    0.0064     0.2462   0.026   0.9793    
+##                Estimate Std. Error t value
+## (Intercept)      4.0256     0.1231  32.705
+## treatmentc_mms   1.0820     0.1946   5.560
+## treatmentc_fms   0.3540     0.1946   1.819
+## treatmentc_mf   -0.6200     0.2752  -2.253
+## treatmentc_tc    0.0064     0.2462   0.026
+##                Pr(>|t|)    
+## (Intercept)     < 2e-16 ***
+## treatmentc_mms 1.66e-07 ***
+## treatmentc_fms   0.0714 .  
+## treatmentc_mf    0.0261 *  
+## treatmentc_tc    0.9793    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 1.376 on 120 degrees of freedom
 ## Multiple R-squared:  0.2467,	Adjusted R-squared:  0.2216 
@@ -2897,8 +2995,8 @@ The data values are separated by one space, so let's use
 first ten lines):
 
 ```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/productivity.txt"
-productivity=read_delim(my_url," ")
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/productivity.txt"
+productivity = read_delim(my_url, " ")
 ```
 
 ```
@@ -2928,7 +3026,7 @@ productivity
 ##  8 low                 7.7   7.9
 ##  9 low                 6     6.3
 ## 10 moderate            6.7   8.8
-## # … with 17 more rows
+## # ... with 17 more rows
 ```
 
    
@@ -2948,8 +3046,7 @@ a factor (with the levels in the right order) now:
 
 
 ```r
-productivity %>%
-mutate(expenditure=fct_inorder(expenditure)) -> productivity
+productivity <- productivity %>% mutate(expenditure = fct_inorder(expenditure))
 ```
 
  
@@ -2972,11 +3069,13 @@ categorical variable using colour (or `shape` etc., if you
 know about that, but colour is the most obvious thing):
 
 ```r
-ggplot(productivity,aes(x=last,y=improvement,colour=expenditure))+
-geom_point()+geom_smooth(method="lm",se=F)
+ggplot(productivity, aes(x = last, y = improvement, 
+    colour = expenditure)) + geom_point() + geom_smooth(method = "lm", 
+    se = F)
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-93-1} 
 
      
 
@@ -3022,8 +3121,9 @@ This looks exactly like a regression with a categorical variable,
 and is. Just the two main effects, thus:
 
 ```r
-improvement.1=lm(improvement~last+expenditure,data=productivity)
-drop1(improvement.1,test="F")
+improvement.1 = lm(improvement ~ last + expenditure, 
+    data = productivity)
+drop1(improvement.1, test = "F")
 ```
 
 ```
@@ -3031,12 +3131,17 @@ drop1(improvement.1,test="F")
 ## 
 ## Model:
 ## improvement ~ last + expenditure
-##             Df Sum of Sq     RSS     AIC F value    Pr(>F)    
-## <none>                    1.3175 -73.542                      
-## last         1   14.0447 15.3622  -9.226 245.176 9.274e-14 ***
-## expenditure  2    4.1958  5.5134 -38.894  36.623 7.095e-08 ***
+##             Df Sum of Sq     RSS     AIC
+## <none>                    1.3175 -73.542
+## last         1   14.0447 15.3622  -9.226
+## expenditure  2    4.1958  5.5134 -38.894
+##             F value    Pr(>F)    
+## <none>                           
+## last        245.176 9.274e-14 ***
+## expenditure  36.623 7.095e-08 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -3069,13 +3174,19 @@ summary(improvement.1)
 ## -0.52812 -0.16385 -0.00046  0.08379  0.45730 
 ## 
 ## Coefficients:
-##                     Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)         -1.00804    0.50991  -1.977   0.0602 .  
-## last                 1.11417    0.07116  15.658 9.27e-14 ***
-## expendituremoderate -1.83316    0.22372  -8.194 2.84e-08 ***
-## expenditurehigh     -3.14338    0.37115  -8.469 1.59e-08 ***
+##                     Estimate Std. Error
+## (Intercept)         -1.00804    0.50991
+## last                 1.11417    0.07116
+## expendituremoderate -1.83316    0.22372
+## expenditurehigh     -3.14338    0.37115
+##                     t value Pr(>|t|)    
+## (Intercept)          -1.977   0.0602 .  
+## last                 15.658 9.27e-14 ***
+## expendituremoderate  -8.194 2.84e-08 ***
+## expenditurehigh      -8.469 1.59e-08 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 0.2393 on 23 degrees of freedom
 ## Multiple R-squared:  0.9629,	Adjusted R-squared:  0.958 
@@ -3150,8 +3261,9 @@ I like `update` for this (writing out the whole model is an
 alternative):
 
 ```r
-improvement.2=update(improvement.1,.~.+last:expenditure)
-drop1(improvement.2,test="F")
+improvement.2 = update(improvement.1, . ~ . + 
+    last:expenditure)
+drop1(improvement.2, test = "F")
 ```
 
 ```
@@ -3159,11 +3271,15 @@ drop1(improvement.2,test="F")
 ## 
 ## Model:
 ## improvement ~ last + expenditure + last:expenditure
-##                  Df Sum of Sq     RSS     AIC F value  Pr(>F)  
-## <none>                        0.95718 -78.169                  
-## last:expenditure  2   0.36035 1.31753 -73.542   3.953 0.03491 *
+##                  Df Sum of Sq     RSS
+## <none>                        0.95718
+## last:expenditure  2   0.36035 1.31753
+##                      AIC F value  Pr(>F)  
+## <none>           -78.169                  
+## last:expenditure -73.542   3.953 0.03491 *
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -3208,15 +3324,30 @@ summary(improvement.2)
 ## -0.32417 -0.14885 -0.02465  0.13739  0.55556 
 ## 
 ## Coefficients:
-##                          Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)               0.27827    0.64967   0.428  0.67278    
-## last                      0.93243    0.09124  10.220 1.32e-09 ***
-## expendituremoderate      -4.50268    1.25959  -3.575  0.00179 ** 
-## expenditurehigh          -7.14795    1.91223  -3.738  0.00121 ** 
-## last:expendituremoderate  0.32217    0.14243   2.262  0.03444 *  
-## last:expenditurehigh      0.40858    0.17549   2.328  0.02997 *  
+##                          Estimate Std. Error
+## (Intercept)               0.27827    0.64967
+## last                      0.93243    0.09124
+## expendituremoderate      -4.50268    1.25959
+## expenditurehigh          -7.14795    1.91223
+## last:expendituremoderate  0.32217    0.14243
+## last:expenditurehigh      0.40858    0.17549
+##                          t value Pr(>|t|)
+## (Intercept)                0.428  0.67278
+## last                      10.220 1.32e-09
+## expendituremoderate       -3.575  0.00179
+## expenditurehigh           -3.738  0.00121
+## last:expendituremoderate   2.262  0.03444
+## last:expenditurehigh       2.328  0.02997
+##                             
+## (Intercept)                 
+## last                     ***
+## expendituremoderate      ** 
+## expenditurehigh          ** 
+## last:expendituremoderate *  
+## last:expenditurehigh     *  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 0.2135 on 21 degrees of freedom
 ## Multiple R-squared:  0.973,	Adjusted R-squared:  0.9666 
@@ -3248,9 +3379,9 @@ things:
 
 
 ```r
-lasts=c(7,9,11)
-expenditures=c("low","moderate","high")
-new=crossing(last=lasts,expenditure=expenditures)
+lasts = c(7, 9, 11)
+expenditures = c("low", "moderate", "high")
+new = crossing(last = lasts, expenditure = expenditures)
 new
 ```
 
@@ -3272,12 +3403,12 @@ new
  
 
 (oh, how I wish I'd given those variables shorter names),
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The expenditure levels have come out in alphabetical order again.</span> and then:
+\marginnote{The expenditure levels have come out in alphabetical order again.} and then:
 
 
 ```r
-p=predict(improvement.2,new)
-cbind(new,p)
+p = predict(improvement.2, new)
+cbind(new, p)
 ```
 
 ```
@@ -3346,8 +3477,8 @@ between them, but they are aligned with each other and the
 column headings, so `read_table` is the thing:
 
 ```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt"
-lepro=read_table(my_url)
+my_url = "http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt"
+lepro = read_table(my_url)
 ```
 
 ```
@@ -3377,7 +3508,7 @@ lepro
 ##  8 A        10    13
 ##  9 D         6     2
 ## 10 D        19    14
-## # … with 20 more rows
+## # ... with 20 more rows
 ```
 
  
@@ -3398,10 +3529,12 @@ This is the kind of thing that `ggplot` does without
 batting an eyelid:
 
 ```r
-ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) + 
+    geom_point()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-102-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-102-1} 
 
        
  
@@ -3449,7 +3582,7 @@ properly, even though `pre` is a  quantitative variable.
 
 
 ```r
-lepro.1=lm(post~pre*drug,data=lepro)
+lepro.1 = lm(post ~ pre * drug, data = lepro)
 ```
 
      
@@ -3471,15 +3604,23 @@ summary(lepro.1)
 ## -6.225 -2.437 -0.586  1.126  8.775 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)  
-## (Intercept)  -1.6306     2.9455  -0.554   0.5850  
-## pre           0.7452     0.2849   2.616   0.0152 *
-## drugD        -2.9549     4.1246  -0.716   0.4806  
-## drugF        -1.4780     5.4678  -0.270   0.7892  
-## pre:drugD     0.3233     0.3846   0.841   0.4089  
-## pre:drugF     0.4492     0.4458   1.008   0.3236  
+##             Estimate Std. Error t value
+## (Intercept)  -1.6306     2.9455  -0.554
+## pre           0.7452     0.2849   2.616
+## drugD        -2.9549     4.1246  -0.716
+## drugF        -1.4780     5.4678  -0.270
+## pre:drugD     0.3233     0.3846   0.841
+## pre:drugF     0.4492     0.4458   1.008
+##             Pr(>|t|)  
+## (Intercept)   0.5850  
+## pre           0.0152 *
+## drugD         0.4806  
+## drugF         0.7892  
+## pre:drugD     0.4089  
+## pre:drugF     0.3236  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 4.07 on 24 degrees of freedom
 ## Multiple R-squared:  0.6915,	Adjusted R-squared:  0.6272 
@@ -3504,7 +3645,7 @@ Solution
 Just this:
 
 ```r
-drop1(lepro.1, test="F")
+drop1(lepro.1, test = "F")
 ```
 
 ```
@@ -3512,9 +3653,12 @@ drop1(lepro.1, test="F")
 ## 
 ## Model:
 ## post ~ pre * drug
-##          Df Sum of Sq    RSS    AIC F value Pr(>F)
-## <none>                397.56 89.524               
-## pre:drug  2    19.645 417.20 86.971   0.593 0.5606
+##          Df Sum of Sq    RSS    AIC F value
+## <none>                397.56 89.524        
+## pre:drug  2    19.645 417.20 86.971   0.593
+##          Pr(>F)
+## <none>         
+## pre:drug 0.5606
 ```
 
        
@@ -3536,7 +3680,7 @@ Solution
 Change the `*` to a `+`:
 
 ```r
-lepro.2=lm(post~pre+drug,data=lepro)
+lepro.2 = lm(post ~ pre + drug, data = lepro)
 ```
 
      
@@ -3545,7 +3689,7 @@ Or use `update` (not much in it, here):
 
 
 ```r
-lepro.2a=update(lepro.1,.~.-pre:drug)
+lepro.2a = update(lepro.1, . ~ . - pre:drug)
 ```
 
  
@@ -3580,13 +3724,19 @@ summary(lepro.2)
 ## -6.4115 -2.3891 -0.5711  1.7237  8.5885 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  -3.8808     1.9862  -1.954   0.0616 .  
-## pre           0.9872     0.1645   6.001 2.45e-06 ***
-## drugD         0.1090     1.7951   0.061   0.9521    
-## drugF         3.4461     1.8868   1.826   0.0793 .  
+##             Estimate Std. Error t value
+## (Intercept)  -3.8808     1.9862  -1.954
+## pre           0.9872     0.1645   6.001
+## drugD         0.1090     1.7951   0.061
+## drugF         3.4461     1.8868   1.826
+##             Pr(>|t|)    
+## (Intercept)   0.0616 .  
+## pre         2.45e-06 ***
+## drugD         0.9521    
+## drugF         0.0793 .  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 4.006 on 26 degrees of freedom
 ## Multiple R-squared:  0.6763,	Adjusted R-squared:  0.6389 
@@ -3613,7 +3763,7 @@ Whether there is a real drug difference, I didn't ask you to assess,
 but you could do it by `drop1` again, this way:
 
 ```r
-drop1(lepro.2, test="F")
+drop1(lepro.2, test = "F")
 ```
 
 ```
@@ -3621,18 +3771,23 @@ drop1(lepro.2, test="F")
 ## 
 ## Model:
 ## post ~ pre + drug
-##        Df Sum of Sq    RSS     AIC F value    Pr(>F)    
-## <none>              417.20  86.971                      
-## pre     1    577.90 995.10 111.049 36.0145 2.454e-06 ***
-## drug    2     68.55 485.76  87.535  2.1361    0.1384    
+##        Df Sum of Sq    RSS     AIC F value
+## <none>              417.20  86.971        
+## pre     1    577.90 995.10 111.049 36.0145
+## drug    2     68.55 485.76  87.535  2.1361
+##           Pr(>F)    
+## <none>              
+## pre    2.454e-06 ***
+## drug      0.1384    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
 
 This is actually not significant.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is why I didn't ask you to test this, since it would have confused the story.</span>
+\marginnote{This is why I didn't ask you to test this, since it would have confused the story.}
 This is one of those cases where the non-significant `drug` has
 a slightly *bigger* AIC than `<none>`, so `drop1`
 considers it best to leave it in the model.
@@ -3643,7 +3798,7 @@ three drugs at `pre` scores 5, 12 and 20. To do this, obtain
 a new data frame that has all 9 combinations of drugs and
 `pre` scores, and then feed this into `predict` using
 your preferred model.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Analysis of covariance is just a linear  model, so *predict* works the same here as in regression.</span>
+\marginnote{Analysis of covariance is just a linear  model, so *predict* works the same here as in regression.}
  
 Solution
 
@@ -3654,9 +3809,9 @@ first, I define all the drugs and `pre` values, and then I
 feed them into `crossing`:
 
 ```r
-drugs=c("A","D","F")
-pres=c(5,12,20)
-lepro.new=crossing(drug=drugs,pre=pres)
+drugs = c("A", "D", "F")
+pres = c(5, 12, 20)
+lepro.new = crossing(drug = drugs, pre = pres)
 lepro.new
 ```
 
@@ -3686,15 +3841,17 @@ don't need intervals or anything like that:
 
 
 ```r
-preds=predict(lepro.2,lepro.new)
+preds = predict(lepro.2, lepro.new)
 preds
 ```
 
 ```
-##         1         2         3         4         5         6         7 
-##  1.055110  7.965396 15.862867  1.164081  8.074368 15.971838  4.501248 
-##         8         9 
-## 11.411535 19.309005
+##         1         2         3         4 
+##  1.055110  7.965396 15.862867  1.164081 
+##         5         6         7         8 
+##  8.074368 15.971838  4.501248 11.411535 
+##         9 
+## 19.309005
 ```
 
  
@@ -3704,7 +3861,7 @@ values they are predictions for:
 
 
 ```r
-allpreds=cbind(lepro.new,preds)
+allpreds = cbind(lepro.new, preds)
 allpreds
 ```
 
@@ -3736,11 +3893,13 @@ Solution
 
 
 ```r
-ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()+
-geom_line(data=allpreds,aes(y=preds,linetype=drug))
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) + 
+    geom_point() + geom_line(data = allpreds, 
+    aes(y = preds, linetype = drug))
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-113-1} 
 
  
 
@@ -3755,7 +3914,7 @@ so I have to specify `data=` by name.
 The `linetype=` is really overkill, but I just wanted to show
 you that you can distinguish the drugs by line type as
 well.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The line types show up in the legend too, though they're not so easy to see.</span>
+\marginnote{The line types show up in the legend too, though they're not so easy to see.}
  
 
 (k) Are the lines on your plot parallel, with the same slopes? Is this what you would
@@ -3772,8 +3931,8 @@ If your best model
 would have been these:
 
 ```r
-preds=predict(lepro.1,lepro.new)
-cbind(lepro.new,preds)
+preds = predict(lepro.1, lepro.new)
+cbind(lepro.new, preds)
 ```
 
 ```
@@ -3802,16 +3961,17 @@ lines for each group.  So `geom_smooth` will get them:
 
 
 ```r
-ggplot(lepro,aes(x=pre,y=post,colour=drug))+
-geom_point()+geom_smooth(method="lm")
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) + 
+    geom_point() + geom_smooth(method = "lm")
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-115-1} 
 
  
 
 The grey intervals are a bit confusing.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You can get rid of them by saying *se=F* inside the geom-smooth, as normal.</span> They are
+\marginnote{You can get rid of them by saying *se=F* inside the geom-smooth, as normal.} They are
 confidence intervals for the mean `post` score (as we did for regression
 early on in the course). But I left them there to show that they
 overlap substantially and thus that those slopes are not 
