@@ -33,10 +33,10 @@ library(tidyverse)
 ```
 
 ```
-## ✔ tibble  2.0.1       ✔ purrr   0.3.1  
-## ✔ tidyr   0.8.3       ✔ dplyr   0.8.0.1
-## ✔ readr   1.3.1       ✔ stringr 1.4.0  
-## ✔ tibble  2.0.1       ✔ forcats 0.3.0
+## ✔ tibble  2.1.1          ✔ purrr   0.3.2     
+## ✔ tidyr   0.8.3.9000     ✔ dplyr   0.8.0.1   
+## ✔ readr   1.3.1          ✔ stringr 1.4.0     
+## ✔ tibble  2.1.1          ✔ forcats 0.3.0
 ```
 
 ```
@@ -2018,26 +2018,26 @@ sample_n(20)
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      20     23           12     2    32 mechanic  
-##  2       9     24            6     1    63 custserv  
-##  3      22     19           10     2    54 mechanic  
-##  4      14     26           15     3    45 dispatcher
-##  5      10     22            5     1     1 custserv  
-##  6      16     24           10     1    85 custserv  
-##  7      17     25            8     1    11 custserv  
-##  8      11     27           10     1    33 custserv  
-##  9      14     29            8     1    80 custserv  
-## 10      17     25            7     1    13 custserv  
-## 11       6     18            4     1     7 custserv  
-## 12      11     22           11     1    38 custserv  
-## 13      14     29           12     1     4 custserv  
-## 14      18     25            5     1    16 custserv  
-## 15      21     15           10     2     2 mechanic  
-## 16      14     18            4     2     8 mechanic  
-## 17      16     22           12     3    63 dispatcher
-## 18      13     21           11     1    25 custserv  
-## 19      22     22            6     1    40 custserv  
-## 20      20     24            5     2    35 mechanic
+##  1      11     26            9     1    74 custserv  
+##  2       7     28           12     1    52 custserv  
+##  3      10     22            5     1     1 custserv  
+##  4      14     21           16     3     8 dispatcher
+##  5      15     16           14     3    60 dispatcher
+##  6      15     11           13     3    29 dispatcher
+##  7       3     20           14     1    31 custserv  
+##  8      17     17           12     3     2 dispatcher
+##  9      17     20            6     1    81 custserv  
+## 10      15     26            9     1    60 custserv  
+## 11      11     12           19     3    39 dispatcher
+## 12      14     26           17     1    67 custserv  
+## 13      23     21           16     2    84 mechanic  
+## 14      16     24           10     1    85 custserv  
+## 15       1     30            6     1    23 custserv  
+## 16      24     22           14     2    78 mechanic  
+## 17       7     13            7     1    61 custserv  
+## 18      17     25            8     1    11 custserv  
+## 19      14     22           16     3    20 dispatcher
+## 20      17     21            9     2    10 mechanic
 ```
 
  

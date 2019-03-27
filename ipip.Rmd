@@ -9,7 +9,6 @@ number of statements about behaviour apply to them, on a scale from
 on 459 people, using a 44-item variant of the above questionnaire,
 where the statements were as follows. Put an "I" or an "I am" in
 front of each one:
-\begin{multicols}{3}
 
 
 * talkative
@@ -100,7 +99,6 @@ front of each one:
 
 * sophisticated in art and music
 
-\end{multicols}
 I don't know what a "circumplex" is, but I know it's not one of those "hat" accents that they have in French.
 The data are in
 [link](http://www.utsc.utoronto.ca/~butler/d29/personality.txt). The
@@ -165,27 +163,12 @@ For us, in this problem, though, we need the wide format.
 
 (b) There are some missing values among these responses. We
 are going to eliminate all the individuals with any missing values
-(since `princomp` can't handle them). Do this in two steps:
-first run `complete.cases` on the data frame, which will
-give `TRUE` if the row has no `NA`s and
-`FALSE` otherwise. Save this result. Then use it to create
-a new data frame that contains only rows without missing values
-(that is, only the "complete cases").
+(since `princomp` can't handle them). 
 
 Solution
 
 
-Thus:
-```{r }
-v=complete.cases(pers)
-table(v)
-```
-
-       
-
-which shows that there are 26 rows that have missing values in them
-somewhere. 
-
+This is actually much easier than it was in the past.
 A way of asking "are there any missing values anywhere?" is:
 
 ```{r }
@@ -194,20 +177,15 @@ any(is.na(pers))
 
  
 
-and the answer is "yes, there are". We'll come back to this after we
-think we've removed all the missing values.
-
-To create a new data frame with no missing values, we can use
-`filter`. The thing we're filtering on doesn't have to be part
-of the data frame we're working with:
-
+There are.
+To remove them, just this:
 ```{r }
-pers.ok = pers %>% filter(v) 
+pers %>% drop_na() -> pers.ok
 ```
 
- 
+       
 
-To check that all the missing values have gone:
+Are there any missings left?
 
 ```{r }
 any(is.na(pers.ok))
@@ -215,28 +193,11 @@ any(is.na(pers.ok))
 
  
 
-and they have indeed gone.
-
-The way I'd probably do this now (as opposed to a couple of years ago
-when I wrote the above) is to create the new variable in the data frame,
-like this:
-
-```{r }
-pers %>% mutate(v=complete.cases(pers)) %>% 
-filter(v)
-```
-
- 
-
-The `lgl` (true/false) variable `v` is at the end.
-
-This way keeps everything better organized, to my mind, but they are
-equally effective as a solution to the problem.
-
+Nope.
 Extra: you might also have thought of the "tidy, remove, untidy"
 strategy here. The trouble with that here is that you want to remove
 *all* the observations for a subject who has *any* missing
-ones. This is unlike the multidimensional scaling one in class where
+ones. This is unlike the multidimensional scaling one where
 we wanted to remove all the distances for two cities \emph{that we
 knew ahead of time}. 
 
@@ -297,9 +258,10 @@ pers %>% bind_cols(pers.hm)
 
  
 
-and then filter out the rows for which `has_missing` is true,
-the same way as we used `complete.cases` above. (What we did
-here is really a way of mimicking `complete.cases`.)
+and then filter out the rows for which `has_missing` is true.
+What we did here is really a way of mimicking `complete.cases`,
+which is the way we used to have to do it, before `drop_na`
+came on the scene.
 
 
 (c) Carry out a principal components analysis and obtain a
@@ -342,8 +304,8 @@ summary(pers.1)
 
        
 There are actually 10 of these. But if you look at the scree plot,
-there really seems to be no reason to take 11 factors rather than,
-say, 12 or 13. There are a lot of eigenvalues (standard deviations)
+there really seems to be no reason to take 10 factors rather than,
+say, 11 or 12. There are a lot of eigenvalues (standard deviations)
 close to (but just below) 1, and no obvious "bargains" in terms of
 variance explained: the "cumulative proportion" just keeps going
 gradually up.
@@ -408,12 +370,14 @@ Factor 1: 3, 8 (negatively), 13, 18
 reliable, not-disorganized, not-lazy, persevere, efficient,
 stick to plans, not-distractible. These have the common theme of
 paying attention to detail and getting the job done properly.
+
 Factor 2: 1, not-6, 16, not-21, 26, not-31, 36. Talkative,
 not-reserved, generates enthusiasm, not-quiet, assertive,
 not-shy, outgoing. "Extravert" seems to capture all of those.
 Factor 3: 4, not-9, 14, 19, not-24, 29, not-34, 39. Depressed,
 not-relaxed, tense, worried, not emotionally stable, moody,
 not-calm-when-tense, nervous. "Not happy" or something like that.
+
 Notice how these seem to be jumping in steps of 5? The
 psychology scoring of assessments like this is that a person's
 score on some dimension is found by adding up their scores on
@@ -424,20 +388,25 @@ my five factors. The questionnaire at
 [link](http://ipip.ori.org/newIPIP-IPCScoringKey.htm) is
 different, but you see the same idea there. (The jumps there seem to
 be in steps of 8, since they have 8 dimensions.)
+
 Factor 4: not-2, 7, not-12 (just), 22, not-27, 32, not-37,
 42. Doesn't find fault, helpful, doesn't start quarrels,
 trusting, not-cold-and-aloof, considerate, not-sometimes-rude,
 co-operative. "Helps without judgement" or similar.
+
 Factor 5: 5, 10, 15, 20, 25, 30, 40, 44. Original, curious,
 ingenious, imaginative, inventive, values artistic experiences,
 reflective, sophisticated in art and music. Creative.
+
 I remembered that psychologists like to talk about the "big 5"
 personality traits. These are extraversion (factor 2 here),
 agreeableness (factor 4), openness (factor 5?),
 conscientiousness (factor 1), and neuroticism (factor 3). The
 correspondence appears to be pretty good. (I wrote my answers
 above last year without thinking about "big 5" at all.)
+
 I wonder whether 6 factors is different?
+
 ```{r size="footnotesize"}
 pers.ok.2 = pers.ok %>% select(starts_with("PERS")) %>%
 factanal(6,scores="r")

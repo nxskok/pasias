@@ -32,10 +32,10 @@ library(tidyverse)
 ```
 
 ```
-## ✔ tibble  2.0.1       ✔ purrr   0.3.1  
-## ✔ tidyr   0.8.3       ✔ dplyr   0.8.0.1
-## ✔ readr   1.3.1       ✔ stringr 1.4.0  
-## ✔ tibble  2.0.1       ✔ forcats 0.3.0
+## ✔ tibble  2.1.1          ✔ purrr   0.3.2     
+## ✔ tidyr   0.8.3.9000     ✔ dplyr   0.8.0.1   
+## ✔ readr   1.3.1          ✔ stringr 1.4.0     
+## ✔ tibble  2.1.1          ✔ forcats 0.3.0
 ```
 
 ```
@@ -105,8 +105,7 @@ first few lines of your data frame.
 Solution
 
 
-I like `dplyr` (as you know). Or you could just pick out
-the columns by number:
+Read into a temporary data frame, and then process:
 
 ```r
 my_url="http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv"
@@ -139,8 +138,7 @@ There are lots of columns, of which we only want a few:
 
 
 ```r
-weather = weather.0 %>% select(l.temp:ave.temp,rain:gust.wind) 
-weather
+(weather.0 %>% select(l.temp:ave.temp,rain:gust.wind) -> weather)
 ```
 
 ```
@@ -165,15 +163,15 @@ weather
 
 (b) Find five-number summaries for each column by running
 `quantile` on all the columns of the data frame (at once, if
-you can: remember the `map` stuff?)
+you can).
  
 Solution
 
 
-This:
+This is cleanest, but you may not have seen the idea before:
 
 ```r
-map_df(weather,quantile) 
+map_df(weather, ~quantile(.)) 
 ```
 
 ```
@@ -188,11 +186,59 @@ map_df(weather,quantile)
 ```
 
      
-
 These are, reading down, the min, Q1, median, Q3, max of each
 variable. The rain, in particular, is very skewed: the median is near
 zero, but the maximum is much higher. (Most of the time, you get no
-rain, but if you get any, you can get a lot.)
+rain, but if you get any, you can get a lot. The maximum is 75 mm, or
+3 inches. In one day.)
+
+The coding idea is that if you feed a `map_` a data frame, it applies the function to each *column* of the data frame. 
+
+Another way to do it is to make a column of column names, using
+`gather`, and then use `nest` and list-columns to find
+the quantiles for each variable:
+
+
+```r
+weather %>% gather(xname, x, everything()) %>% 
+nest(-xname) %>% 
+mutate(q=map(data, ~enframe(quantile(.$x)))) %>% 
+unnest(q) %>% 
+spread(xname, value) %>% 
+arrange(parse_number(name))
+```
+
+```
+## # A tibble: 5 x 7
+##   name  ave.temp ave.wind gust.wind h.temp l.temp  rain
+##   <chr>    <dbl>    <dbl>     <dbl>  <dbl>  <dbl> <dbl>
+## 1 0%         7.3      0         3.2    9.8    3.1   0  
+## 2 25%       12        2.3      22.5   14.4    9.1   0  
+## 3 50%       15.8      3.5      29     19.1   12.9   0.3
+## 4 75%       19.3      5.2      38.6   23.3   16.3   5.3
+## 5 100%      26.6     16.6      86.9   31.5   22.6  74.9
+```
+
+ 
+
+That was a lot of work, but it depends on how you see it when you're coding it. You should investigate this one line at a time, but the steps are:
+
+
+
+* create a "long" data frame with one column of variable names and a second with the values for that variable
+
+* make mini-data-frames `data` containing everything but `xname`: that is, one column `x` with the values for that variable.
+
+* for each mini-data-frame, work out the quantiles of its `x`. The `enframe` saves the labels for what percentiles they are.
+
+* Unnest this to make a long data frame with one row for each quantile for each variable.
+
+* put the variable names in columns and the percentiles in rows
+
+* finally, put the percentiles in numerical order (if you run this
+one line at a time, you'll see that the percentiles get out of
+order, and you can probably guess why).
+
  
 
 (c) Run a principal components analysis (on the correlation matrix).
@@ -259,8 +305,8 @@ for these, not on the scree, so this suggests 2 or 3 components, which
 is exactly what we got from looking at the standard deviations and
 cumulative variance explained.
 
-The eigenvalue-greater-than-1 thing (that is, the ``standard
-deviation'' in the `summary` being greater than 1)
+The eigenvalue-greater-than-1 thing 
+(that is, the "standard deviation" in the `summary` being greater than 1)
 says 2 components, rather than 3.
  
 
@@ -298,19 +344,19 @@ weather.1$loadings
 
 
 
-* This component loads mainly (and negatively) on the temperature
-variables, so when temperature is high, component 1 is low.
-You could also say that it loads positively on the other
+* 1: This component loads mainly (and positively) on the temperature
+variables, so when temperature is high, component 1 is high.
+You could also say that it loads negatively on the other
 variables, in which case component 1 is high if the temperature
 variables are low and the rain and wind variables are high.
 
 
-* This one loads most heavily, negatively, on wind: when wind is high,
-component 2 is low. Again, you can make the judgement call that the
+* 2: This one loads most heavily, positively, on wind: when wind is high,
+component 2 is high. Again, you can make the judgement call that the
 other variables also feature in component 2, so that when
-*everything* is large, component 2 is small and vice versa.
+*everything* is large, component 2 is large and small with small.
 
-* This one is a bit clearer. The blank loadings are close to 0,
+* 3: This one is a bit clearer. The blank loadings are close to 0,
 and can be ignored. The main thing in component 3 is rain: when
 rainfall is large, component 3 is large. Or, if you like, it is
 large (positive) when rainfall is large *and wind is small*.
@@ -365,7 +411,7 @@ have to go back to the base-graphics version, which goes a bit like this:
 biplot(weather.2$scores,weather.2$loadings)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
  
 
@@ -393,64 +439,115 @@ want (the first three):
 as_tibble(weather.1$scores) %>% 
 select(1:3) %>% 
 bind_cols(weather) %>%
-print(n=20)
+mutate(day=row_number()) -> d
+d %>% print(n=20)
 ```
 
 ```
-## # A tibble: 365 x 9
-##    Comp.1   Comp.2   Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind
-##     <dbl>    <dbl>    <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl>
-##  1 -2.84   3.13    -0.00402   12.7   14       13.4  32       11.4      53.1
-##  2 -2.79   2.31     3.64      11.3   14.7     13.5  64.8      5.6      41.8
-##  3 -1.11   0.255    0.263     12.6   14.7     13.6  12.7      4.3      38.6
-##  4 -3.62   2.47    -0.992      7.7   13.9     11.3  20.1     10.3      66  
-##  5 -2.67   2.03    -1.68       8.8   14.6     13     9.4     11.6      51.5
-##  6 -3.09   3.14     0.664     11.8   14.4     13.1  38.9      9.9      57.9
-##  7 -1.22   0.328   -0.958     11.4   14.8     13.5   2        6.6      38.6
-##  8 -0.734  0.102   -0.743     12.4   15.6     14.1   1.5      5.9      33.8
-##  9  0.210 -2.26     0.534      9.2   18.4     12.9   0        0.2      16.1
-## 10 -0.825 -2.00     0.109      8.3   14.8     11     0        1.4      24.1
-## 11 -1.01  -2.72     0.294      5.8   14.8      9.5   0.3      1.1      16.1
-## 12 -1.68   0.0710  -0.0803     9.4   15.2     12.1  10.7      4.7      41.8
-## 13 -2.12  -0.822    0.653      7.3   12.9     10.2  15.7      3.1      35.4
-## 14 -1.34   0.00249 -0.169     11.4   13.9     12.8   8.1      4.7      38.6
-## 15 -2.52   0.929    0.955      9.4   13.1     12    29        5.9      43.5
-## 16 -2.38   0.200   -0.669      9     12.2     10.8   6.9      5.4      49.9
-## 17 -3.18   0.626    0.431      7.7   11.4      9.3  25.4      7.2      41.8
-## 18 -1.95  -1.82     1.28       7.5   10.9      9    17        1.4      24.1
-## 19 -2.13  -1.60    -0.293      6.4   11.4      8.7   2.5      3.3      32.2
-## 20 -1.29  -2.62     0.448      6.9   12.2      9.2   2.8      1.1      17.7
+## # A tibble: 365 x 10
+##    Comp.1   Comp.2   Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##     <dbl>    <dbl>    <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+##  1 -2.84   3.13    -0.00402   12.7   14       13.4  32       11.4      53.1     1
+##  2 -2.79   2.31     3.64      11.3   14.7     13.5  64.8      5.6      41.8     2
+##  3 -1.11   0.255    0.263     12.6   14.7     13.6  12.7      4.3      38.6     3
+##  4 -3.62   2.47    -0.992      7.7   13.9     11.3  20.1     10.3      66       4
+##  5 -2.67   2.03    -1.68       8.8   14.6     13     9.4     11.6      51.5     5
+##  6 -3.09   3.14     0.664     11.8   14.4     13.1  38.9      9.9      57.9     6
+##  7 -1.22   0.328   -0.958     11.4   14.8     13.5   2        6.6      38.6     7
+##  8 -0.734  0.102   -0.743     12.4   15.6     14.1   1.5      5.9      33.8     8
+##  9  0.210 -2.26     0.534      9.2   18.4     12.9   0        0.2      16.1     9
+## 10 -0.825 -2.00     0.109      8.3   14.8     11     0        1.4      24.1    10
+## 11 -1.01  -2.72     0.294      5.8   14.8      9.5   0.3      1.1      16.1    11
+## 12 -1.68   0.0710  -0.0803     9.4   15.2     12.1  10.7      4.7      41.8    12
+## 13 -2.12  -0.822    0.653      7.3   12.9     10.2  15.7      3.1      35.4    13
+## 14 -1.34   0.00249 -0.169     11.4   13.9     12.8   8.1      4.7      38.6    14
+## 15 -2.52   0.929    0.955      9.4   13.1     12    29        5.9      43.5    15
+## 16 -2.38   0.200   -0.669      9     12.2     10.8   6.9      5.4      49.9    16
+## 17 -3.18   0.626    0.431      7.7   11.4      9.3  25.4      7.2      41.8    17
+## 18 -1.95  -1.82     1.28       7.5   10.9      9    17        1.4      24.1    18
+## 19 -2.13  -1.60    -0.293      6.4   11.4      8.7   2.5      3.3      32.2    19
+## 20 -1.29  -2.62     0.448      6.9   12.2      9.2   2.8      1.1      17.7    20
 ## # … with 345 more rows
 ```
 
       
-
-I just did the first three scores.
+I just did the first three scores. I made a column `day` so that I can see which day of the year I am looking at (later).
  
+xxxa
 
-(h) Find a day that scores high on component 1, and explain briefly why
+(h) Find a day that scores low on component 1, and explain briefly why
 it came out that way (by looking at the measured variables).
  
 Solution
 
 
-Day 4 has the highest component 1 score. This is one of the
+We can do this one and the ones following by running
+`arrange` appropriately:
+
+```r
+d %>% arrange(Comp.1)
+```
+
+```
+## # A tibble: 365 x 10
+##    Comp.1 Comp.2 Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##     <dbl>  <dbl>  <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+##  1  -5.29  4.64  -0.294    7     14.4      9.9  43.2     13        86.9    40
+##  2  -4.89  3.50   1.64     6.5   12.9     10.3  57.4     10.3      66      35
+##  3  -4.64  5.33  -0.653    9.3   15.3     12.5  43.4     16.6      74      37
+##  4  -4.57  2.19  -1.49     5.5   10.7      8.8  17       11.1      69.2    41
+##  5  -4.48  2.11   1.90     6.8   11.5      8.9  50.5      6.8      61.2    34
+##  6  -4.36  4.45   1.06     9.1   15.2     12.2  55.1     12.8      66      45
+##  7  -3.82  2.24   0.532    7.8   12.9     10.7  34.8      8.1      62.8    39
+##  8  -3.62  2.47  -0.992    7.7   13.9     11.3  20.1     10.3      66       4
+##  9  -3.44  0.576 -2.10     5.7   11.4      8.4   0        9.8      51.5   363
+## 10  -3.36  2.19  -0.705    9.1   13       11.3  20.3      9.3      62.8    38
+## # … with 355 more rows
+```
+
+       
+Day 40 has the lowest component 1 score. This is one of the
 cooler days. Also, there is a
 largish amount of rain *and* wind. So low temperature, high
 rain and wind.
-The days at the bottom of my list were cooler than day 4, but they
+Some of the other days on my list were cooler than day 4, but they
 had less rain and less wind.
+xxxb
   
+xxxa
 
-(i) Find a day that scores low on component 2, and explain
-briefly why it came out low.
+(i) Find a day that scores high on component 2, and explain
+briefly why it came out that way.
  
 Solution
 
 
-Day 6 (or day 1). These are days when the wind speed (average or
-gust) is on the high side. These days win over day 4 because their
-temperature was also higher.
+
+```r
+d %>% arrange(desc(Comp.2))
+```
+
+```
+## # A tibble: 365 x 10
+##     Comp.1 Comp.2  Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##      <dbl>  <dbl>   <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+##  1 -4.64     5.33 -0.653     9.3   15.3     12.5  43.4     16.6      74      37
+##  2 -5.29     4.64 -0.294     7     14.4      9.9  43.2     13        86.9    40
+##  3 -4.36     4.45  1.06      9.1   15.2     12.2  55.1     12.8      66      45
+##  4 -1.61     4.33  3.43     17.7   19.1     18.3  68.3      8.3      46.7   261
+##  5 -1.02     3.63  1.36     16.8   20.4     19    39.1      6.9      59.5   289
+##  6  2.42     3.51 -1.39     20.9   31.2     25.7   0        8.8      46.7   166
+##  7 -4.89     3.50  1.64      6.5   12.9     10.3  57.4     10.3      66      35
+##  8  0.0301   3.49 -0.0846   18.5   22.3     20.3  22.9     10.3      43.5   260
+##  9 -0.745    3.45  1.99     15.9   21.4     19.9  46.2      7.7      45.1   281
+## 10 -0.105    3.20 -0.493    17.9   21.8     19.5  16.5      9.3      49.9   290
+## # … with 355 more rows
+```
+
+       
+Day 37. These are days when the wind speed (average or
+gust) is on the high side. 
+xxxb
  
 
 (j) Find a day that scores high on component 3, and explain
@@ -459,7 +556,30 @@ briefly why it came out high.
 Solution
 
 
-Day 2. Component 3 was mainly rain, so it is not surprising that
+
+```r
+d %>% arrange(desc(Comp.3))
+```
+
+```
+## # A tibble: 365 x 10
+##     Comp.1 Comp.2 Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##      <dbl>  <dbl>  <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+##  1 -2.32    2.23    4.92   11.8   17.2     14.6  74.9      2.8      41.8   307
+##  2 -2.79    2.31    3.64   11.3   14.7     13.5  64.8      5.6      41.8     2
+##  3  0.0819  2.90    3.59   16.1   26.6     20.3  54.4      2        49.9   264
+##  4 -1.61    4.33    3.43   17.7   19.1     18.3  68.3      8.3      46.7   261
+##  5 -0.759   2.48    3.42   15.7   19.5     18.6  55.6      4.5      37     288
+##  6 -2.21    3.12    2.15   12.8   17.7     15.8  50.5      7.2      53.1   317
+##  7 -0.745   3.45    1.99   15.9   21.4     19.9  46.2      7.7      45.1   281
+##  8 -4.48    2.11    1.90    6.8   11.5      8.9  50.5      6.8      61.2    34
+##  9 -1.77    0.693   1.72   10.7   15.6     13    32.8      4        38.6   312
+## 10 -4.89    3.50    1.64    6.5   12.9     10.3  57.4     10.3      66      35
+## # … with 355 more rows
+```
+
+ 
+Day 307. Component 3 was mainly rain, so it is not surprising that
 the rainfall is the highest on this day.
  
 
@@ -481,7 +601,7 @@ year, which was called `day.count`:
 ggbiplot(weather.1,labels=weather.0$day.count,labels.size=2)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
      
 
@@ -491,7 +611,7 @@ moment, so those are the only ones you'll need to be able to
 disentangle. 
 
 The variables divide into two groups: the temperature ones, that point
-to about 8 o'clock, and the wind and rain ones, that point to about 5
+to about 2 o'clock, and the wind and rain ones, that point to about 11
 o'clock. These are not straight up or down or across, so they all
 feature in both components: component 1 is mostly temperature, but has
 a bit of wind/rain in it, while component 2 is mostly wind/rain with a
@@ -510,7 +630,7 @@ with your `summary` from earlier).
 Solution
 
 
-Day 37 is at the bottom right of the plot, at the pointy end of
+Day 37 is at the top left of the plot, at the pointy end of
 the arrows for rain, wind gust and average wind. This suggests a
 rainy, windy day:
 
@@ -687,11 +807,11 @@ tribble(
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Porto%20PT&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Porto+PT&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=La%20Coruna%20ES&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=La+Coruna+ES&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```r
@@ -732,7 +852,7 @@ mapp=get_map("Porto", zoom=5)
 ggmap(mapp)+geom_point(data=porto,aes(x=lon,y=lat),colour="red")
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
  
 
@@ -779,7 +899,7 @@ geom_text_repel(data=places, aes(label=place))
 ## Warning in max(x): no non-missing arguments to max; returning -Inf
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -951,7 +1071,7 @@ package `ggbiplot`:
 ggscreeplot(air.1)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
 
      
 
@@ -1348,7 +1468,7 @@ want. The default is this:
 ggbiplot(air.1)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
  
 
@@ -1364,7 +1484,7 @@ withrow = air %>% mutate(row=row_number())
 ggbiplot(air.1,labels=withrow$row)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 Day 8 is way over on the left. The things that point in the direction
@@ -2095,7 +2215,6 @@ number of statements about behaviour apply to them, on a scale from
 on 459 people, using a 44-item variant of the above questionnaire,
 where the statements were as follows. Put an "I" or an "I am" in
 front of each one:
-\begin{multicols}{3}
 
 
 * talkative
@@ -2186,7 +2305,6 @@ front of each one:
 
 * sophisticated in art and music
 
-\end{multicols}
 I don't know what a "circumplex" is, but I know it's not one of those "hat" accents that they have in French.
 The data are in
 [link](http://www.utsc.utoronto.ca/~butler/d29/personality.txt). The
@@ -2298,7 +2416,7 @@ ggplot(aes(x=response))+geom_bar()+facet_wrap(~item)
 ## Warning: Removed 371 rows containing non-finite values (stat_count).
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
 
  
 
@@ -2313,34 +2431,12 @@ For us, in this problem, though, we need the wide format.
 
 (b) There are some missing values among these responses. We
 are going to eliminate all the individuals with any missing values
-(since `princomp` can't handle them). Do this in two steps:
-first run `complete.cases` on the data frame, which will
-give `TRUE` if the row has no `NA`s and
-`FALSE` otherwise. Save this result. Then use it to create
-a new data frame that contains only rows without missing values
-(that is, only the "complete cases").
+(since `princomp` can't handle them). 
 
 Solution
 
 
-Thus:
-
-```r
-v=complete.cases(pers)
-table(v)
-```
-
-```
-## v
-## FALSE  TRUE 
-##    26   433
-```
-
-       
-
-which shows that there are 26 rows that have missing values in them
-somewhere. 
-
+This is actually much easier than it was in the past.
 A way of asking "are there any missing values anywhere?" is:
 
 
@@ -2354,21 +2450,16 @@ any(is.na(pers))
 
  
 
-and the answer is "yes, there are". We'll come back to this after we
-think we've removed all the missing values.
-
-To create a new data frame with no missing values, we can use
-`filter`. The thing we're filtering on doesn't have to be part
-of the data frame we're working with:
-
+There are.
+To remove them, just this:
 
 ```r
-pers.ok = pers %>% filter(v) 
+pers %>% drop_na() -> pers.ok
 ```
 
- 
+       
 
-To check that all the missing values have gone:
+Are there any missings left?
 
 
 ```r
@@ -2381,51 +2472,11 @@ any(is.na(pers.ok))
 
  
 
-and they have indeed gone.
-
-The way I'd probably do this now (as opposed to a couple of years ago
-when I wrote the above) is to create the new variable in the data frame,
-like this:
-
-
-```r
-pers %>% mutate(v=complete.cases(pers)) %>% 
-filter(v)
-```
-
-```
-## # A tibble: 433 x 46
-##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12
-##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-##  1     1      5      4      5      1      4      3      3      1      2      3      2      4
-##  2     2      1      1      5      2      1      2      5      1      5      1      5      3
-##  3     3      4      1      5      3      3      4      5      3      1      4      2      1
-##  4     4      4      2      5      1      4      3      4      4      4      5      4      1
-##  5     5      2      3      5      1      2      4      5      2      3      3      4      2
-##  6     6      1      1      5      4      3      4      4      2      1      4      3      3
-##  7     7      3      2      5      1      2      1      1      2      5      4      4      1
-##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
-##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
-## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
-## # … with 423 more rows, and 33 more variables: PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
-## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
-## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
-## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
-## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
-## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>, v <lgl>
-```
-
- 
-
-The `lgl` (true/false) variable `v` is at the end.
-
-This way keeps everything better organized, to my mind, but they are
-equally effective as a solution to the problem.
-
+Nope.
 Extra: you might also have thought of the "tidy, remove, untidy"
 strategy here. The trouble with that here is that you want to remove
 *all* the observations for a subject who has *any* missing
-ones. This is unlike the multidimensional scaling one in class where
+ones. This is unlike the multidimensional scaling one where
 we wanted to remove all the distances for two cities \emph{that we
 knew ahead of time}. 
 
@@ -2569,9 +2620,10 @@ pers %>% bind_cols(pers.hm)
 
  
 
-and then filter out the rows for which `has_missing` is true,
-the same way as we used `complete.cases` above. (What we did
-here is really a way of mimicking `complete.cases`.)
+and then filter out the rows for which `has_missing` is true.
+What we did here is really a way of mimicking `complete.cases`,
+which is the way we used to have to do it, before `drop_na`
+came on the scene.
 
 
 (c) Carry out a principal components analysis and obtain a
@@ -2654,8 +2706,8 @@ summary(pers.1)
 
        
 There are actually 10 of these. But if you look at the scree plot,
-there really seems to be no reason to take 11 factors rather than,
-say, 12 or 13. There are a lot of eigenvalues (standard deviations)
+there really seems to be no reason to take 10 factors rather than,
+say, 11 or 12. There are a lot of eigenvalues (standard deviations)
 close to (but just below) 1, and no obvious "bargains" in terms of
 variance explained: the "cumulative proportion" just keeps going
 gradually up.
@@ -2777,12 +2829,14 @@ Factor 1: 3, 8 (negatively), 13, 18
 reliable, not-disorganized, not-lazy, persevere, efficient,
 stick to plans, not-distractible. These have the common theme of
 paying attention to detail and getting the job done properly.
+
 Factor 2: 1, not-6, 16, not-21, 26, not-31, 36. Talkative,
 not-reserved, generates enthusiasm, not-quiet, assertive,
 not-shy, outgoing. "Extravert" seems to capture all of those.
 Factor 3: 4, not-9, 14, 19, not-24, 29, not-34, 39. Depressed,
 not-relaxed, tense, worried, not emotionally stable, moody,
 not-calm-when-tense, nervous. "Not happy" or something like that.
+
 Notice how these seem to be jumping in steps of 5? The
 psychology scoring of assessments like this is that a person's
 score on some dimension is found by adding up their scores on
@@ -2793,20 +2847,25 @@ my five factors. The questionnaire at
 [link](http://ipip.ori.org/newIPIP-IPCScoringKey.htm) is
 different, but you see the same idea there. (The jumps there seem to
 be in steps of 8, since they have 8 dimensions.)
+
 Factor 4: not-2, 7, not-12 (just), 22, not-27, 32, not-37,
 42. Doesn't find fault, helpful, doesn't start quarrels,
 trusting, not-cold-and-aloof, considerate, not-sometimes-rude,
 co-operative. "Helps without judgement" or similar.
+
 Factor 5: 5, 10, 15, 20, 25, 30, 40, 44. Original, curious,
 ingenious, imaginative, inventive, values artistic experiences,
 reflective, sophisticated in art and music. Creative.
+
 I remembered that psychologists like to talk about the "big 5"
 personality traits. These are extraversion (factor 2 here),
 agreeableness (factor 4), openness (factor 5?),
 conscientiousness (factor 1), and neuroticism (factor 3). The
 correspondence appears to be pretty good. (I wrote my answers
 above last year without thinking about "big 5" at all.)
+
 I wonder whether 6 factors is different?
+
 
 ```r
 pers.ok.2 = pers.ok %>% select(starts_with("PERS")) %>%

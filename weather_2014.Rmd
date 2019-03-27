@@ -47,8 +47,7 @@ first few lines of your data frame.
 Solution
 
 
-I like `dplyr` (as you know). Or you could just pick out
-the columns by number:
+Read into a temporary data frame, and then process:
 ```{r message=F}
 my_url="http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv"
 weather.0=read_csv(my_url)
@@ -60,8 +59,7 @@ weather.0
 There are lots of columns, of which we only want a few:
 
 ```{r }
-weather = weather.0 %>% select(l.temp:ave.temp,rain:gust.wind) 
-weather
+(weather.0 %>% select(l.temp:ave.temp,rain:gust.wind) -> weather)
 ```
 
  
@@ -69,22 +67,58 @@ weather
 
 (b) Find five-number summaries for each column by running
 `quantile` on all the columns of the data frame (at once, if
-you can: remember the `map` stuff?)
+you can).
  
 Solution
 
 
-This:
+This is cleanest, but you may not have seen the idea before:
 ```{r }
-map_df(weather,quantile) 
+map_df(weather, ~quantile(.)) 
 ```
 
      
-
 These are, reading down, the min, Q1, median, Q3, max of each
 variable. The rain, in particular, is very skewed: the median is near
 zero, but the maximum is much higher. (Most of the time, you get no
-rain, but if you get any, you can get a lot.)
+rain, but if you get any, you can get a lot. The maximum is 75 mm, or
+3 inches. In one day.)
+
+The coding idea is that if you feed a `map_` a data frame, it applies the function to each *column* of the data frame. 
+
+Another way to do it is to make a column of column names, using
+`gather`, and then use `nest` and list-columns to find
+the quantiles for each variable:
+
+```{r }
+weather %>% gather(xname, x, everything()) %>% 
+nest(-xname) %>% 
+mutate(q=map(data, ~enframe(quantile(.$x)))) %>% 
+unnest(q) %>% 
+spread(xname, value) %>% 
+arrange(parse_number(name))
+```
+
+ 
+
+That was a lot of work, but it depends on how you see it when you're coding it. You should investigate this one line at a time, but the steps are:
+
+
+
+* create a "long" data frame with one column of variable names and a second with the values for that variable
+
+* make mini-data-frames `data` containing everything but `xname`: that is, one column `x` with the values for that variable.
+
+* for each mini-data-frame, work out the quantiles of its `x`. The `enframe` saves the labels for what percentiles they are.
+
+* Unnest this to make a long data frame with one row for each quantile for each variable.
+
+* put the variable names in columns and the percentiles in rows
+
+* finally, put the percentiles in numerical order (if you run this
+one line at a time, you'll see that the percentiles get out of
+order, and you can probably guess why).
+
  
 
 (c) Run a principal components analysis (on the correlation matrix).
@@ -134,8 +168,8 @@ for these, not on the scree, so this suggests 2 or 3 components, which
 is exactly what we got from looking at the standard deviations and
 cumulative variance explained.
 
-The eigenvalue-greater-than-1 thing (that is, the ``standard
-deviation'' in the `summary` being greater than 1)
+The eigenvalue-greater-than-1 thing 
+(that is, the "standard deviation" in the `summary` being greater than 1)
 says 2 components, rather than 3.
  
 
@@ -155,19 +189,19 @@ weather.1$loadings
 
 
 
-* This component loads mainly (and negatively) on the temperature
-variables, so when temperature is high, component 1 is low.
-You could also say that it loads positively on the other
+* 1: This component loads mainly (and positively) on the temperature
+variables, so when temperature is high, component 1 is high.
+You could also say that it loads negatively on the other
 variables, in which case component 1 is high if the temperature
 variables are low and the rain and wind variables are high.
 
 
-* This one loads most heavily, negatively, on wind: when wind is high,
-component 2 is low. Again, you can make the judgement call that the
+* 2: This one loads most heavily, positively, on wind: when wind is high,
+component 2 is high. Again, you can make the judgement call that the
 other variables also feature in component 2, so that when
-*everything* is large, component 2 is small and vice versa.
+*everything* is large, component 2 is large and small with small.
 
-* This one is a bit clearer. The blank loadings are close to 0,
+* 3: This one is a bit clearer. The blank loadings are close to 0,
 and can be ignored. The main thing in component 3 is rain: when
 rainfall is large, component 3 is large. Or, if you like, it is
 large (positive) when rainfall is large *and wind is small*.
@@ -231,37 +265,52 @@ options(width=ww+20)
 as_tibble(weather.1$scores) %>% 
 select(1:3) %>% 
 bind_cols(weather) %>%
-print(n=20)
+mutate(day=row_number()) -> d
+d %>% print(n=20)
 ```
 
       
-
-I just did the first three scores.
+I just did the first three scores. I made a column `day` so that I can see which day of the year I am looking at (later).
  
+xxxa
 
-(h) Find a day that scores high on component 1, and explain briefly why
+(h) Find a day that scores low on component 1, and explain briefly why
 it came out that way (by looking at the measured variables).
  
 Solution
 
 
-Day 4 has the highest component 1 score. This is one of the
+We can do this one and the ones following by running
+`arrange` appropriately:
+```{r }
+d %>% arrange(Comp.1)
+```
+
+       
+Day 40 has the lowest component 1 score. This is one of the
 cooler days. Also, there is a
 largish amount of rain *and* wind. So low temperature, high
 rain and wind.
-The days at the bottom of my list were cooler than day 4, but they
+Some of the other days on my list were cooler than day 4, but they
 had less rain and less wind.
+xxxb
   
+xxxa
 
-(i) Find a day that scores low on component 2, and explain
-briefly why it came out low.
+(i) Find a day that scores high on component 2, and explain
+briefly why it came out that way.
  
 Solution
 
 
-Day 6 (or day 1). These are days when the wind speed (average or
-gust) is on the high side. These days win over day 4 because their
-temperature was also higher.
+```{r }
+d %>% arrange(desc(Comp.2))
+```
+
+       
+Day 37. These are days when the wind speed (average or
+gust) is on the high side. 
+xxxb
  
 
 (j) Find a day that scores high on component 3, and explain
@@ -270,7 +319,12 @@ briefly why it came out high.
 Solution
 
 
-Day 2. Component 3 was mainly rain, so it is not surprising that
+```{r }
+d %>% arrange(desc(Comp.3))
+```
+
+ 
+Day 307. Component 3 was mainly rain, so it is not surprising that
 the rainfall is the highest on this day.
  
 
@@ -299,7 +353,7 @@ moment, so those are the only ones you'll need to be able to
 disentangle. 
 
 The variables divide into two groups: the temperature ones, that point
-to about 8 o'clock, and the wind and rain ones, that point to about 5
+to about 2 o'clock, and the wind and rain ones, that point to about 11
 o'clock. These are not straight up or down or across, so they all
 feature in both components: component 1 is mostly temperature, but has
 a bit of wind/rain in it, while component 2 is mostly wind/rain with a
@@ -318,7 +372,7 @@ with your `summary` from earlier).
 Solution
 
 
-Day 37 is at the bottom right of the plot, at the pointy end of
+Day 37 is at the top left of the plot, at the pointy end of
 the arrows for rain, wind gust and average wind. This suggests a
 rainy, windy day:
 ```{r }
