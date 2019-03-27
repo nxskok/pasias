@@ -131,20 +131,41 @@ My first one is social stratum by parental encouragement. Neither of
 these is really a response, but I thought that social stratum would
 influence parental encouragement rather than the other way around, hence:
 
+
+
 ```{r }
-xtabs(frequency~social.stratum+encouragement, data=wisc) %>%
-prop.table(margin=1)
+xtabs(frequency~social.stratum+encouragement,data=wisc)
 ```
 
  
 
 This says that there tends to be more parental encouragement, the
-higher the social stratum. 
+higher the social stratum. `prop.table` would be good here,
+because it's easier to judge proportions than actual frequencies:
+
+```{r }
+xt=xtabs(frequency~social.stratum+encouragement,data=wisc)
+prop.table(xt,1)
+```
+
+ 
+
+The idea here is to save the result of `xtabs`, and then feed
+that into `prop.table`. The second number in
+`prop.table` is the "dimension to make sum to 1", 1 being
+rows, 2 being columns (and 3 being layers, if your table goes that
+far). In this case, you might think of encouragement as being a
+response to social stratum, and so you want to sum over what is
+*not* a response, namely `social.stratum`, that is,
+rows, or 1. That makes it very clear that the higher the social
+stratum, the more encouragement.
+
 Next, this:
 
 ```{r }
-xtabs(frequency~social.stratum+college.plans,data=wisc) %>%
-prop.table(margin=1)
+xt=xtabs(frequency~social.stratum+college.plans,data=wisc)
+xt
+prop.table(xt,1)
 ```
 
  
@@ -161,8 +182,9 @@ middle are not in order, but the others are.)
 Finally, this:
 
 ```{r }
-xtabs(frequency~encouragement+college.plans,data=wisc) %>%
-prop.table(margin=1)
+xt=xtabs(frequency~encouragement+college.plans,data=wisc)
+xt
+prop.table(xt,1)
 ```
 
  

@@ -473,7 +473,6 @@ d %>% print(n=20)
       
 I just did the first three scores. I made a column `day` so that I can see which day of the year I am looking at (later).
  
-xxxa
 
 (h) Find a day that scores low on component 1, and explain briefly why
 it came out that way (by looking at the measured variables).
@@ -512,9 +511,7 @@ largish amount of rain *and* wind. So low temperature, high
 rain and wind.
 Some of the other days on my list were cooler than day 4, but they
 had less rain and less wind.
-xxxb
   
-xxxa
 
 (i) Find a day that scores high on component 2, and explain
 briefly why it came out that way.
@@ -547,7 +544,7 @@ d %>% arrange(desc(Comp.2))
        
 Day 37. These are days when the wind speed (average or
 gust) is on the high side. 
-xxxb
+
  
 
 (j) Find a day that scores high on component 3, and explain
@@ -1012,10 +1009,10 @@ one go for all seven variables.
 Solution
 
 
-Like this:
+Like this (the cleanest):
 
 ```r
-map_df(air, quantile) 
+map_df(air, ~quantile(.)) 
 ```
 
 ```
@@ -1031,10 +1028,40 @@ map_df(air, quantile)
 
      
 
-using `map` from `purrr`. I have to figure out how to
+using `map` from `purrr`: "for each (column of) `air`, calculate the quantiles of it"..
+I have to figure out how to
 identify which number from the five number summary each of these is,
 but in this case you can easily figure it out since the min is the
 smallest and the max has to be the biggest in each column.
+
+Or, with some more work, this:
+
+
+```r
+air %>% gather(xname, x, everything()) %>%
+nest(-xname) %>%
+mutate(q=map(data, ~enframe(quantile(.$x)))) %>% 
+unnest(q) %>% 
+spread(xname, value) %>% 
+arrange(parse_number(name))
+```
+
+```
+## # A tibble: 5 x 8
+##   name     CO    HC    NO   NO2    O3 solar.radiation  wind
+##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl>           <dbl> <dbl>
+## 1 0%        2     2     1   5     2              30    5   
+## 2 25%       4     3     1   8     6              68.2  6   
+## 3 50%       4     3     2   9.5   8.5            76.5  8   
+## 4 75%       5     3     3  12    11              84.8  8.75
+## 5 100%      7     5     5  21    25             107   10
+```
+
+ 
+
+just like the weather problem (in fact, *exactly* like the weather
+problem).
+
     
 
 
@@ -1046,7 +1073,7 @@ scales. You don't need to look at the results yet.
 Solution
 
 
-This is all rather like the previous question:
+This too is all rather like the previous question:
 
 ```r
 air.1=princomp(air, cor=T)
@@ -1071,7 +1098,7 @@ package `ggbiplot`:
 ggscreeplot(air.1)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
      
 
@@ -1085,7 +1112,7 @@ with trouble, and probably the wrong version of a lot of functions. To
 avoid this, load `ggbiplot` *first*, and then you'll be
 OK. 
 
-Now, finally, we might diverge from the last question. There are
+Now, finally, we might diverge from the previous question. There are
 actually *two* elbows on this plot, at 2 and at 4, which means
 that we should entertain the idea of either 1 or 3 components. I would
 be inclined to say that the elbow at 2 is still "too high up" the
@@ -1202,211 +1229,159 @@ abbreviated) back into the long forms.
     
 
 
-(g) Display all the scores on component 1 (just the scores on
-component 1, not the other scores, and not the other  variables in
-the original data). Which one is the smallest (most negative)?
-
+(g) Make a data frame that contains (i) the original data, (ii) a column of row numbers, (iii) the principal component scores. Display some of it.
 
 Solution
 
 
-If you like handling matrices using square brackets, this will work:
+All the columns contain numbers, so `cbind` will do
+it. (The component scores are seven columns, so
+`bind_cols` won't do it unless you are careful.):
 
 ```r
-v=air.1$scores[,1]
-v
+cbind(air, air.1$scores) %>% 
+mutate(row=row_number()) -> d
+class(d)
 ```
 
 ```
-##  [1] -0.95292110 -0.04941978  0.53767776 -0.37519620  0.19694099 -1.12344250 -3.15139458
-##  [8] -3.98104305 -0.15165763 -0.78386476 -0.60402136 -0.22411266 -2.97796885  0.78383262
-## [15]  1.38284280  1.02171175  1.35822739 -1.37285633  0.66428044  1.16194178 -0.66259617
-## [22]  1.07332913 -0.64183302  1.79880205 -1.34127497  1.42184148 -0.15463266  2.04936530
-## [29]  0.16201914  2.87668117  0.96965625  0.22069552 -1.04312150 -0.38484722  2.65231799
-## [36]  1.24143314  1.55729177 -2.00338842 -2.60151068  0.74386328 -1.11586529  1.82221699
+## [1] "data.frame"
 ```
-
-   
-
-In the more likely event that you don't, turn it into a data frame
-first, and then display its first column:
-
 
 ```r
-as_tibble(air.1$scores) %>% select(1) %>% print(n=Inf)
+head(d)
 ```
 
 ```
-## # A tibble: 42 x 1
-##     Comp.1
-##      <dbl>
-##  1 -0.953 
-##  2 -0.0494
-##  3  0.538 
-##  4 -0.375 
-##  5  0.197 
-##  6 -1.12  
-##  7 -3.15  
-##  8 -3.98  
-##  9 -0.152 
-## 10 -0.784 
-## 11 -0.604 
-## 12 -0.224 
-## 13 -2.98  
-## 14  0.784 
-## 15  1.38  
-## 16  1.02  
-## 17  1.36  
-## 18 -1.37  
-## 19  0.664 
-## 20  1.16  
-## 21 -0.663 
-## 22  1.07  
-## 23 -0.642 
-## 24  1.80  
-## 25 -1.34  
-## 26  1.42  
-## 27 -0.155 
-## 28  2.05  
-## 29  0.162 
-## 30  2.88  
-## 31  0.970 
-## 32  0.221 
-## 33 -1.04  
-## 34 -0.385 
-## 35  2.65  
-## 36  1.24  
-## 37  1.56  
-## 38 -2.00  
-## 39 -2.60  
-## 40  0.744 
-## 41 -1.12  
-## 42  1.82
-```
-
- 
-You'll need the last step, or else you'll only get the first ten rows
-(it's a tibble-type data frame). Print a number of rows, or this,
-which is "all of them, no matter how many".
-
-These will display only the 42 values for the first score, and not
-anything else. You don't need to save them in a  variable; just
-displaying the values is enough.
-
-To find the most negative one, you can eyeball the values and see that
-the most negative one is $-3.98$, which is the 8th one. (In the first
-output, the first one
-on the second row is number 6, as shown by the `[6]`.) 
-
-Or you can be lazy like me and get R to do the work for you. This
-applies to the matrix way.  This tells you how small the smallest
-value is:
-
-
-```r
-min(v)
-```
-
-```
-## [1] -3.981043
-```
-
- 
-
-only that is not quite what we wanted, since we wanted to know
-*which one* it was. This is a common thing to ask, so it has its
-own function:
-
-
-```r
-which.min(v)
-```
-
-```
-## [1] 8
-```
-
- 
-
-The 8th one.
-
-If you did this the `tidyverse` way:
-
-
-```r
-as_tibble(air.1$scores) %>% select(1) %>% 
-mutate(row=row_number()) %>%
-filter(Comp.1==min(Comp.1))
-```
-
-```
-## # A tibble: 1 x 2
-##   Comp.1   row
-##    <dbl> <int>
-## 1  -3.98     8
-```
-
-   
-
-I did two more steps: created a column of row numbers, so I'd know
-*which one* was the smallest, then I displayed all rows for which
-`Comp.1` was equal to the smallest one (this displays all  of
-the "minimum" rows if there are more than one).
-`tidyverse` tools aren't *always* better, so it's worth also
-knowing about the square-bracket way to get rows and columns, as well
-as `min` and `max` and `which.min` and
-`which.max`. Having extra choices makes you a better data
-analyst. 
-    
-
-
-(h) Display the original data for the observation with the most
-negative score on component 1. What is it about the data for this
-observation that makes the component 1 score come out so negative?
-(Refer back to part (<a href="#part:fivenum">here</a>) as you need.)
-
-
-Solution
-
-
-
-```r
-air %>% slice(8)
-```
-
-```
-## # A tibble: 1 x 7
-##    wind solar.radiation    CO    NO   NO2    O3    HC
-##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1     5              72     6     4    21    14     4
-```
-
- 
-
-Or, you can display the rows of the original data frame that go with
-the minimum score on component 1 like this:
-
-Or, the square-bracket way (the 8th row and all the columns):
-
-```r
-air[8,]
-```
-
-```
-## # A tibble: 1 x 7
-##    wind solar.radiation    CO    NO   NO2    O3    HC
-##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1     5              72     6     4    21    14     4
+##   wind solar.radiation CO NO NO2 O3 HC      Comp.1     Comp.2     Comp.3    Comp.4     Comp.5
+## 1    8              98  7  2  12  8  2 -0.95292110 -0.9754106 -0.4266696 1.4454463  2.0390917
+## 2    7             107  4  3   9  5  3 -0.04941978 -0.4291403 -0.2925624 2.1070743 -0.7830499
+## 3    7             103  4  3   5  6  3  0.53767776 -0.6491739 -0.5519781 1.8839424 -0.7923010
+## 4   10              88  5  2   8 15  4 -0.37519620 -0.3609587  2.0031533 0.1892788  0.2923780
+## 5    6              91  4  2   8 10  3  0.19694099 -1.0955256 -0.4489016 0.5501374 -0.8853554
+## 6    8              90  5  2  12 12  4 -1.12344250 -0.2297073  1.3544191 0.2851494 -0.4269438
+##       Comp.6     Comp.7 row
+## 1 -0.7280074 -0.5714587   1
+## 2  0.1619189  0.1581294   2
+## 3  1.1153956 -0.1744016   3
+## 4  1.4704360 -0.1020858   4
+## 5  0.1186414 -0.1581801   5
+## 6  0.1098276 -0.2316944   6
 ```
 
      
 
-Let me also display the five-number summary again (copying my code
-from part (<a href="#part:fivenum">here</a>)):
+This is probably the easiest way, but you see that there is a mixture
+of base R and Tidyverse. The result is actually a base R `data.frame`, so displaying it will display *all* of it, hence my use of `head`.
+If you want to do it the all-Tidyverse
+way
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There really ought to be a radio station *CTDY: All Tidyverse, All The Time*.</span>
+then you need to bear in mind that `bind_cols` *only* 
+accepts vectors or data frames, not matrices, so a bit of care is needed first:
 
 
 ```r
-map_df(air,quantile) 
+air.1$scores %>% as_tibble() %>%
+bind_cols(air) %>%
+mutate(row=row_number()) -> dd
+dd
+```
+
+```
+## # A tibble: 42 x 15
+##     Comp.1 Comp.2 Comp.3 Comp.4  Comp.5 Comp.6 Comp.7  wind solar.radiation    CO    NO   NO2
+##      <dbl>  <dbl>  <dbl>  <dbl>   <dbl>  <dbl>  <dbl> <dbl>           <dbl> <dbl> <dbl> <dbl>
+##  1 -0.953  -0.975 -0.427  1.45   2.04   -0.728 -0.571     8              98     7     2    12
+##  2 -0.0494 -0.429 -0.293  2.11  -0.783   0.162  0.158     7             107     4     3     9
+##  3  0.538  -0.649 -0.552  1.88  -0.792   1.12  -0.174     7             103     4     3     5
+##  4 -0.375  -0.361  2.00   0.189  0.292   1.47  -0.102    10              88     5     2     8
+##  5  0.197  -1.10  -0.449  0.550 -0.885   0.119 -0.158     6              91     4     2     8
+##  6 -1.12   -0.230  1.35   0.285 -0.427   0.110 -0.232     8              90     5     2    12
+##  7 -3.15    1.07   1.62   0.186  0.0374  1.84  -0.415     9              84     7     4    12
+##  8 -3.98    0.926 -0.379 -0.619 -0.810  -1.29   0.735     5              72     6     4    21
+##  9 -0.152  -0.974  0.337 -0.145  0.139  -0.681 -0.539     7              82     5     1    11
+## 10 -0.784   0.939  0.985 -0.632 -0.219  -0.303 -0.375     8              64     5     2    13
+## # … with 32 more rows, and 3 more variables: O3 <dbl>, HC <dbl>, row <int>
+```
+
+ 
+
+I think the best way to think about this is to start with what is
+farthest from being a data frame or a vector (the matrix of principal
+component scores, here), bash that into shape first, and then glue the
+rest of the things to it.
+
+Note that we used all Tidyverse stuff here, so the result is a
+`tibble`, and displaying it for me displays the first ten rows as
+you'd expect. (This may be different in an R Notebook, since I think
+there you get the first ten rows anyway.)
+
+
+(h) Display the row of your new data frame for the observation
+with the smallest (most negative) score on component 1. Which row is
+this? What makes this observation have the most negative score on
+component 1?
+
+Solution
+
+
+I think the best strategy is to sort by  component 1 score (in the default ascending order), and then display the first row:
+
+```r
+d %>% arrange(Comp.1) %>% slice(1)
+```
+
+```
+##   wind solar.radiation CO NO NO2 O3 HC    Comp.1    Comp.2     Comp.3     Comp.4     Comp.5
+## 1    5              72  6  4  21 14  4 -3.981043 0.9262199 -0.3789783 -0.6185173 -0.8095277
+##      Comp.6    Comp.7 row
+## 1 -1.290318 0.7352476   8
+```
+
+     
+
+It's row 8.
+
+We said earlier that component 1 depends negatively on carbon monoxide
+and nitrogen dioxide, so that an observation that is *low* on
+component 1 should be *high* on these things.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might  have said that component 1 depended on other things as well, in  which case you ought to consider whether observation 8 is, as  appropriate, high or low on these as well.</span>
+
+So are these values high or low? That was the reason for having you
+make the five-number summary <a href="#part:fivenum">here</a>. For
+observation 8, `CO` is 6 and `NO2` is 21; looking back
+at the five-number summary, the value of `CO` is above Q3, and
+the value of `NO2` is the highest of all. So this is entirely
+what we'd expect.
+
+
+(i) Which observation has the lowest (most negative) value on
+component 2? Which variables ought to be high or low for this
+observation? Are they? Explain briefly.
+
+Solution
+
+
+This is a repeat of the ideas we just saw:
+
+```r
+d %>% arrange(Comp.2) %>% slice(1)
+```
+
+```
+##   wind solar.radiation CO NO NO2 O3 HC     Comp.1    Comp.2    Comp.3    Comp.4     Comp.5
+## 1    6              75  4  1  10 24  3 -0.3848472 -2.331649 0.2453131 -1.765714 -0.4522935
+##      Comp.6    Comp.7 row
+## 1 0.0884973 0.6669804  34
+```
+
+     
+
+and for convenience, we'll grab the quantiles again:
+
+
+```r
+map_df(air, ~quantile(.)) 
 ```
 
 ```
@@ -1422,154 +1397,110 @@ map_df(air,quantile)
 
  
 
-Looking back to part (<a href="#part:preferred">here</a>), component 1 depended
-negatively mainly on carbon monoxide and nitrogen dioxide, so its
-score will be very negative if those two variables are high. Are they?
-Well, carbon monoxide on this day was 6, which is above the 3rd
-quartile (and thus high), and nitrogen dioxide was 21, which was the
-highest of all. So it is not at all surprising that this day would
-have the most negative score on component 1.
-
-I think, one point for displaying the 8th row (or whichever row you
-got), and two points for some kind of sensible explanation for why it
-was so negative, based on what you thought component 1 depended
-on. For your reference (and maybe the grader's aid), here are all the
-variables: 
-
-\begin{tabular}{lrrrr}
-\hline
-Variable & Row 8 & where & Component 1 coeff & Contribution\\
-\hline
-Wind & 5 & lowest & positive & negative \\
-Solar radiation & 72 & below median &  negative & positive\\
-Carbon monoxide & 6 & above 3rd quartile & negative & negative\\
-Nitric oxide & 4 & above 3rd quartile & negative & negative\\
-Nitrogen dioxide & 21 & highest & negative & negative \\
-Ozone & 14 & above 3rd quartile & negative & negative\\
-Hydrocarbons & 4 & above 3rd quartile & negative & negative\\
-\hline
-Total & & & & negative\\
-\hline
-\end{tabular}
-
-In all but one of these, day 8 is high when the loading on component 1
-is negative and low when the loading is positive. The only exception
-is solar radiation, which has the closest loading to zero in the table
-of loadings. So, whichever variables you thought were important in
-component 1, you ought to come to the same conclusion about why day 8
-came out so negative: "day 8 is high on the variables that load negatively on component 1 (and low on the one that loads positively)". 
-
-That's all I asked for. I didn't ask for a biplot, which might also
-shed some light on this part. But you can certainly produce one if you
-want. The default is this:
+Day 34. We said that component 2 depends (negatively) on solar
+radiation and ozone and possibly positively on nitric oxide. This
+means that day 34 ought to be *high* on the first two and low on
+the last one (since it's at the low end of component 2). Solar
+radiation is, surprisingly, close to the median (75), but ozone, 24,
+is very near the highest, and nitric oxide, 1, is one of a large
+number of values equal to the lowest. So day 34 is pointing the right
+way, even if its variable values are not quite what you'd expect.
+This business about figuring out whether values on variables are high
+or low is kind of fiddly, since you have to refer back to the
+five-number summary to see where the values for a particular
+observation come. Another way to approach this is to calculate
+*percentile ranks* for everything. Let's go back to our original data frame and replace everything with its percent rank: 
 
 
 ```r
-ggbiplot(air.1)
+air %>% mutate_all(~percent_rank(.)) -> pct_rank
+pct_rank
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+```
+## # A tibble: 42 x 7
+##     wind solar.radiation    CO    NO   NO2    O3    HC
+##    <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 0.488           0.951 0.902 0.317 0.707 0.439 0    
+##  2 0.317           1.    0.146 0.683 0.366 0.171 0.171
+##  3 0.317           0.976 0.146 0.683 0     0.244 0.171
+##  4 0.878           0.829 0.610 0.317 0.244 0.878 0.780
+##  5 0.122           0.902 0.146 0.317 0.244 0.561 0.171
+##  6 0.488           0.878 0.610 0.317 0.707 0.780 0.780
+##  7 0.756           0.707 0.902 0.878 0.707 0.878 1    
+##  8 0               0.390 0.829 0.878 1     0.829 0.780
+##  9 0.317           0.659 0.610 0     0.610 0.707 0.171
+## 10 0.488           0.195 0.610 0.317 0.829 0.512 0.780
+## # … with 32 more rows
+```
 
  
 
-The problem here is that we don't know which observation is
-which. `ggbiplot` has an option `labels` for this, only
-we don't have row numbers anywhere in our data frame (I should have
-saved the ones I made earlier), so we're going to have to manufacture
-them first:
+Observation 34 is row 34 of this:
 
 
 ```r
-withrow = air %>% mutate(row=row_number())
-ggbiplot(air.1,labels=withrow$row)
-```
-
-<img src="24-pcfa_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
-
- 
-Day 8 is way over on the left. The things that point in the direction
-of observation 8 (`NO2, CO` and to a lesser extent `NO`
-and `HC`) are the things that observation 8 is high on. On the
-other hand, observation 8 is around the middle of the arrows for
-`wind`, `solar.radiation` and `O3`, so that day
-is not especially remarkable for those. This is more or less what we
-found before.
-
-Contrast that with day 38, which is near the bottom of the picture
-(and has a low, very negative, score on component 2). This ought to
-have a high value for `solar.radiation` and `O3` and a
-*low* value for `wind`. Does it?
-
-
-```r
-air[38,]
+pct_rank %>% slice(34)
 ```
 
 ```
 ## # A tibble: 1 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
 ##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1     5              86     7     2    13    18     2
+## 1 0.122           0.463 0.146     0 0.512 0.976 0.171
 ```
 
  
 
-Solar radiation is 86 (above 3rd quartile), ozone is 18 (ditto) and
-wind is 5 (the lowest). It all matches. What about the score on
-component 2, which is negative? Component 2 depends on solar radiation
-and ozone, both negatively, so day 38's component 2 score
-*should*  be the negative value that it is.
-
-This business about figuring out whether values on variables are high
-or low is kind of fiddly, since you have to refer back to the
-five-number summary to see where the values for a particular
-observation come. Another way to approach this is to calculate
-*percentile ranks* for everything:
+Very high on ozone, (joint) lowest on nitric oxide, but middling on
+solar radiation.
+The one we looked at before, observation 8, is this:
 
 
 ```r
-map_df(air,percent_rank) %>% 
-slice(c(8,38))
+pct_rank %>% slice(8)
 ```
 
 ```
-## # A tibble: 2 x 7
+## # A tibble: 1 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
 ##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1     0           0.390 0.829 0.878 1     0.829 0.780
-## 2     0           0.780 0.902 0.317 0.829 0.927 0
+## 1     0           0.390 0.829 0.878     1 0.829 0.780
 ```
 
  
 
-This gives percentile ranks for each of the variables for observations
-8 and 38. A percentile rank of 0 means it's the lowest; 0.25 means
-it's at the first quartile, 0.5 is at the median, 0.75 is at the third
-quartile, and 1 is the highest. So this gives a direct interpretation
-of where the variables' values stand for an observation.
+High on carbon monoxide, the highest on nitrogen dioxide.
 
-Observation 8, on the left of the biplot, should be high on NO2, CO,
-NO, and HC and average on the other things. Looking at the percentile
-ranks for these variables, these are between 0.78 and 1: that is,
-observation 8 is higher than the third quartile on all of these. It
-also happens to be high on O3 (ozone), which is a surprise, but the
-solar radiation is between Q1 and the median, which is the kind of
-thing we'd expect.
 
-Observation 38, at the bottom of the biplot, should be high on solar
-radiation and O3, low on wind, and average on the other things. The
-first two of those variables are at the 78th and 93rd percentiles, so
-they are definitely high (higher than Q3). Wind is (jointly) lowest of
-all, as expected.  The other variables are a real mixed bag: some of
-them, like NO2, are high, and some of them, like HC, are low. The
-correspondence between high and low, in real data, won't be perfect,
-but it should be right more often than not.
+(j) Obtain a biplot, with the row numbers labelled, and explain briefly how your conclusions from the previous two parts are consistent with it.
 
-Now that I think about it, this percentile rank idea is really the
-best way to assess whether a variable's values are high or low,
-because you only have to look at one thing: you no longer have to
-compare the values with the five-number summary and jump from one to
-the other.
+Solution
+
+
+
+
+```r
+ggbiplot(air.1,labels=d$row)
+```
+
+<img src="24-pcfa_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+
+ 
+
+Day 8 is way over on the left. The things that point in the direction
+of observation 8 (`NO2, CO` and to a lesser extent `NO`
+and `HC`) are the things that observation 8 is high on. On the
+other hand, observation 8 is around the middle of the arrows for
+`wind`, `solar.radiation` and `O3`, so that day
+is not especially remarkable for those. 
+
+Observation 34 is
+nearest the bottom, so we'd expect it to be high on ozone (yes), high
+on solar radiation (no), low on nitric oxide (since that points the
+most upward, yes) and also maybe low on wind, since observation 34 is
+at the "back end" of that arrow. Wind is 6, which is at the first
+quartile, low indeed.
 
 The other thing that you see from the  biplot is that there are four
 variables pointing more or less up and to the left, and at right
@@ -1578,16 +1509,17 @@ down-and-left. You could imagine rotating those arrows so that the
 group of 4 point upwards, and the other three point left and
 right. This is what factor analysis does, so you might imagine that
 this technique might give a clearer picture of which variables belong
-in which factor than principal components does. 
+in which factor than principal components does. Hence what follows.
 
-I would  normally put a question on this on the next assignment (and
-using the same data set would save me having to find another one). But
-since you aren't going to be handing in an assignment 10, I can do it
-here. I'll obtain two factors first, since we are comparing with the biplot:
+
+(k) Run a factor analysis on the same data, obtaining two factors. Look at the factor loadings. Is it clearer which variables belong to which factor, compared to the principal components analysis? Explain briefly.
+
+Solution
+
 
 
 ```r
-air.2=factanal(air,2)
+air.2=factanal(air, 2, scores="r")
 air.2$loadings
 ```
 
@@ -1611,12 +1543,28 @@ air.2$loadings
 
  
 
-This is almost the same as the biplot, but not quite: factor 1
-contains three of the four variables that point up and left (not
-`HC)`), while factor 2 is mainly ozone, with only moderate
-loadings for the other things that point up-and-right and
-down-and-left on the biplot.
+I got the factor scores since I'm going to look at a biplot
+shortly. If you aren't, you don't need them.
 
+Factor 1 is rather more clearly carbon monoxide, nitric oxide and
+nitrogen dioxide. Factor 2 is mostly ozone, with a bit of solar
+radiation and carbon monoxide. I'd say this is clearer than before.
+
+A biplot would tell us whether the variables are better aligned with
+the axes now:
+
+
+```r
+biplot(air.2$scores, air.2$loadings)
+```
+
+<img src="24-pcfa_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+
+ 
+
+At least somewhat. Ozone points straight up, since it is the dominant part of factor 2 and not part of factor 1 at all. Carbon monoxide and the two oxides of nitrogen point to the right. 
+
+Extra: 
 `wind`, `solar.radiation` and `HC` don't appear
 in either of our factors, which also shows up here:
 
@@ -1673,7 +1621,7 @@ different scales without our having to worry about that.
 
 The rotation has only helped somewhat here. Factor 1 is mainly
 `NO2` with some influence of `CO` and `HC`;
-factor 2 is mainly ozone (with a bit of solar radiation and ozone),
+factor 2 is mainly ozone (with a bit of solar radiation and carbon monoxide),
 and factor 3 is mainly `NO` with a bit of `CO`.
 
 I think I mentioned most of the variables in there, so the uniquenesses
@@ -1694,93 +1642,16 @@ air.3$uniquenesses
  
 
 Well, not great: `wind` and `solar.radiation` still have
-high uniquenesses because they are not *strongly* part of any factors.
+high uniquenesses because they are not *strongly* part of any
+factors.
 
+If you wanted to, you could obtain the factor scores for the 3-factor
+solution, and plot them on a three-dimensional plot using
+`rgl`, rotating them to see the structure. A three dimensional
+"biplot"
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">A three-dimensional biplot ought to be called a *triplot*.</span> 
+would also be a cool thing to look at.
 
-```r
-air.3$PVAL
-```
-
-```
-## objective 
-## 0.0229409
-```
-
- 
-
-This is small, if not *very* small, so there is still some
-evidence that 3 factors are not enough to describe what's going
-on. But with only seven variables, more than three factors wouldn't
-offer much insight.
-
-Factor scores:
-
-
-```r
-air.4=factanal(air,3,scores="r")
-air.4$scores
-```
-
-```
-##           Factor1     Factor2       Factor3
-##  [1,]  0.64483227 -0.23714731 -0.4095760787
-##  [2,] -0.29528639 -0.85282437  0.6221216025
-##  [3,] -1.53954750 -0.63065382  1.0036978144
-##  [4,] -0.72082810  1.02716028  0.2903794654
-##  [5,] -0.62566042  0.15236460  0.0157874608
-##  [6,]  0.56381963  0.45673832 -0.1981115475
-##  [7,]  0.35308177  0.74966402  1.9066403318
-##  [8,]  3.11868141  0.46639542  1.1179340613
-##  [9,]  0.35361448  0.41207900 -1.1357198217
-## [10,]  0.93101834 -0.08262008 -0.4451462596
-## [11,] -0.02563331 -1.33276881  1.4020903954
-## [12,]  0.65971434 -0.42017536 -0.4760351969
-## [13,]  2.28337048 -0.19717326  1.1434791060
-## [14,]  0.35495552 -0.41414845 -0.4011225805
-## [15,] -0.54531239  0.26559360 -0.9560798591
-## [16,] -0.23970358  0.25514542 -1.0360212611
-## [17,] -0.79011924 -0.24518676 -1.0364817494
-## [18,]  1.87264046 -1.11148725 -0.0004041084
-## [19,]  1.06928379 -1.31221874 -0.8382921399
-## [20,] -0.29801227 -0.86170329  0.6136253453
-## [21,]  1.26144133 -1.09049517  0.1594811049
-## [22,] -0.84809286 -0.53889546 -0.1280667643
-## [23,]  0.88733996  0.26558264 -0.3399487887
-## [24,] -1.46207376 -1.33900266  0.7812972723
-## [25,] -0.19623120  2.52560167 -0.3904333048
-## [26,] -0.85133568 -0.54163027 -0.1314908719
-## [27,]  0.27120014  0.29044349 -0.1739760356
-## [28,] -0.85741878  0.27344972 -0.8812750767
-## [29,] -0.35828257 -0.33118837  0.7890318198
-## [30,] -0.68989446 -1.12912776 -1.3205724393
-## [31,]  0.12748319 -0.28133543 -1.2813443776
-## [32,]  0.72149454 -0.13032314 -1.3872590776
-## [33,] -0.73521612 -1.25081905  2.5922963036
-## [34,] -0.22330198  2.69585963 -0.3409950344
-## [35,] -1.14074197  0.11018463 -0.8486366562
-## [36,] -0.24347970  0.25622005 -1.0349215520
-## [37,] -1.20627665  0.64154702 -0.6799193954
-## [38,]  0.74342416  1.50263668  0.0649524380
-## [39,] -0.77849233  2.53540613  2.7048237886
-## [40,] -0.54388048 -0.54705946 -0.2018835733
-## [41,]  0.21480717  0.82109666  0.0015108562
-## [42,] -1.21738120 -0.82518472  0.8645643843
-```
-
- 
-
-Since there are 3 columns here, you could plot them in `rgl`
-and rotate it around to see how the days stack up. Unlike principal
-components, there is no sense that factor 1 is the most important and
-factor 3 the least; because of the rotation, all that we have is that
-the three factors together explain 58\% of the
-variability.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is unlike principal components because,  *by design* there, the first principal component explains the most  variability. That does not happen here, because the (rotated)  factors act as a team.</span>
-
-Note that day 8 has the most extreme score on factor 1 again. This is
-for more or less the same reasons that it had the most extreme score
-on component 1  before.
-    
 
 
 
@@ -2416,7 +2287,7 @@ ggplot(aes(x=response))+geom_bar()+facet_wrap(~item)
 ## Warning: Removed 371 rows containing non-finite values (stat_count).
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
 
  
 
@@ -2429,9 +2300,9 @@ error persisted for).
 For us, in this problem, though, we need the wide format.
 
 
-(b) There are some missing values among these responses. We
-are going to eliminate all the individuals with any missing values
-(since `princomp` can't handle them). 
+(b) There are some missing values among these
+responses. Eliminate all the individuals with any missing values
+(since `princomp` can't handle them).
 
 Solution
 

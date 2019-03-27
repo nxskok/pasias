@@ -189,8 +189,8 @@ Solution
 This is `xtabs` again. The 3-way interaction is a bit
 tricky, so we'll do the simple one first:
 ```{r }
-xt=xtabs(n~vote+sex,data=votes)
-xt
+xtabs(n~vote+sex,data=votes) %>%
+prop.table(margin=2)
 ```
 
      
@@ -200,22 +200,12 @@ voters slightly preferred to vote Labour. This is a small effect, but
 I guess the large number of voters made it big enough to be significant.
 
 I took it this way around because `vote` is the outcome, and
-therefore I want to address things like ``if a voter is female, how
-likely are they to vote Labour'', rather than conditioning the other
-way around (which would be ``if a voter voted Labour, how likely are
-they to be female'', which doesn't make nearly so much sense). 
-
-You
-can do a `prop.table` here if you like, summing over *columns*:
-
-```{r }
-prop.table(xt,2)
-```
-
- 
-
-Since the numbers of males and females were about the same, this
-doesn't really tell us anything that the previous table didn't tell us.
+therefore I want to address things 
+like "if a voter is female, how likely are they to vote Labour", 
+rather than conditioning the other
+way around (which would 
+be "if a voter voted Labour, how likely are they to be female", 
+which doesn't make nearly so much sense). 
 
 Then the tricky one:
 

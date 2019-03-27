@@ -229,31 +229,16 @@ describe any relationships that you see.
 Solution
 
 
-We have three two-way tables to make:
+We have three two-way tables to make.
 
-```r
-xtabs(frequency~social.stratum+encouragement,data=wisc)
-```
-
-```
-##               encouragement
-## social.stratum high  low
-##    higher      1066  179
-##    lower        366  784
-##    lowermiddle  330  968
-##    uppermiddle  841  665
-```
-
- 
-
-This says that there tends to be more parental encouragement, the
-higher the social stratum. `prop.table` would be good here,
-because it's easier to judge proportions than actual frequencies:
+My first one is social stratum by parental encouragement. Neither of
+these is really a response, but I thought that social stratum would
+influence parental encouragement rather than the other way around, hence:
 
 
 ```r
-xt=xtabs(frequency~social.stratum+encouragement,data=wisc)
-prop.table(xt,1)
+xtabs(frequency~social.stratum+encouragement, data=wisc) %>%
+prop.table(margin=1)
 ```
 
 ```
@@ -267,35 +252,14 @@ prop.table(xt,1)
 
  
 
-The idea here is to save the result of `xtabs`, and then feed
-that into `prop.table`. The second number in
-`prop.table` is the "dimension to make sum to 1", 1 being
-rows, 2 being columns (and 3 being layers, if your table goes that
-far). In this case, you might think of encouragement as being a
-response to social stratum, and so you want to sum over what is
-*not* a response, namely `social.stratum`, that is,
-rows, or 1. That makes it very clear that the higher the social
-stratum, the more encouragement.
-
+This says that there tends to be more parental encouragement, the
+higher the social stratum. 
 Next, this:
 
 
 ```r
-xt=xtabs(frequency~social.stratum+college.plans,data=wisc)
-xt
-```
-
-```
-##               college.plans
-## social.stratum   no  yes
-##    higher       419  826
-##    lower        982  168
-##    lowermiddle 1260   38
-##    uppermiddle 1001  505
-```
-
-```r
-prop.table(xt,1)
+xtabs(frequency~social.stratum+college.plans,data=wisc) %>%
+prop.table(margin=1)
 ```
 
 ```
@@ -322,19 +286,8 @@ Finally, this:
 
 
 ```r
-xt=xtabs(frequency~encouragement+college.plans,data=wisc)
-xt
-```
-
-```
-##              college.plans
-## encouragement   no  yes
-##          high 1203 1400
-##          low  2459  137
-```
-
-```r
-prop.table(xt,1)
+xtabs(frequency~encouragement+college.plans,data=wisc) %>%
+prop.table(margin=1)
 ```
 
 ```
@@ -774,35 +727,8 @@ This is `xtabs` again. The 3-way interaction is a bit
 tricky, so we'll do the simple one first:
 
 ```r
-xt=xtabs(n~vote+sex,data=votes)
-xt
-```
-
-```
-##               sex
-## vote           female male
-##   conservative    352  279
-##   labour          291  335
-```
-
-     
-
-The female voters slightly preferred to vote Conservative and the male
-voters slightly preferred to vote Labour. This is a small effect, but
-I guess the large number of voters made it big enough to be significant.
-
-I took it this way around because `vote` is the outcome, and
-therefore I want to address things like ``if a voter is female, how
-likely are they to vote Labour'', rather than conditioning the other
-way around (which would be ``if a voter voted Labour, how likely are
-they to be female'', which doesn't make nearly so much sense). 
-
-You
-can do a `prop.table` here if you like, summing over *columns*:
-
-
-```r
-prop.table(xt,2)
+xtabs(n~vote+sex,data=votes) %>%
+prop.table(margin=2)
 ```
 
 ```
@@ -812,10 +738,19 @@ prop.table(xt,2)
 ##   labour       0.4525661 0.5456026
 ```
 
- 
+     
 
-Since the numbers of males and females were about the same, this
-doesn't really tell us anything that the previous table didn't tell us.
+The female voters slightly preferred to vote Conservative and the male
+voters slightly preferred to vote Labour. This is a small effect, but
+I guess the large number of voters made it big enough to be significant.
+
+I took it this way around because `vote` is the outcome, and
+therefore I want to address things 
+like "if a voter is female, how likely are they to vote Labour", 
+rather than conditioning the other
+way around (which would 
+be "if a voter voted Labour, how likely are they to be female", 
+which doesn't make nearly so much sense). 
 
 Then the tricky one:
 
