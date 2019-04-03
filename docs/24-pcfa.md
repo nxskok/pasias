@@ -28,31 +28,31 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ---- tidyverse 1.2.1 --
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
-## v tibble  2.1.1          v purrr   0.3.2     
-## v tidyr   0.8.3.9000     v dplyr   0.8.0.1   
-## v readr   1.3.1          v stringr 1.4.0     
-## v tibble  2.1.1          v forcats 0.3.0
+## ✔ tibble  2.1.1          ✔ purrr   0.3.2     
+## ✔ tidyr   0.8.3.9000     ✔ dplyr   0.8.0.1   
+## ✔ readr   1.3.1          ✔ stringr 1.4.0     
+## ✔ tibble  2.1.1          ✔ forcats 0.3.0
 ```
 
 ```
-## -- Conflicts ------- tidyverse_conflicts() --
-## x dplyr::arrange()    masks plyr::arrange()
-## x readr::col_factor() masks scales::col_factor()
-## x purrr::compact()    masks plyr::compact()
-## x dplyr::count()      masks plyr::count()
-## x purrr::discard()    masks scales::discard()
-## x dplyr::failwith()   masks plyr::failwith()
-## x dplyr::filter()     masks stats::filter()
-## x dplyr::id()         masks plyr::id()
-## x dplyr::lag()        masks stats::lag()
-## x dplyr::mutate()     masks plyr::mutate()
-## x dplyr::rename()     masks plyr::rename()
-## x dplyr::summarise()  masks plyr::summarise()
-## x dplyr::summarize()  masks plyr::summarize()
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::arrange()    masks plyr::arrange()
+## ✖ readr::col_factor() masks scales::col_factor()
+## ✖ purrr::compact()    masks plyr::compact()
+## ✖ dplyr::count()      masks plyr::count()
+## ✖ purrr::discard()    masks scales::discard()
+## ✖ dplyr::failwith()   masks plyr::failwith()
+## ✖ dplyr::filter()     masks stats::filter()
+## ✖ dplyr::id()         masks plyr::id()
+## ✖ dplyr::lag()        masks stats::lag()
+## ✖ dplyr::mutate()     masks plyr::mutate()
+## ✖ dplyr::rename()     masks plyr::rename()
+## ✖ dplyr::summarise()  masks plyr::summarise()
+## ✖ dplyr::summarize()  masks plyr::summarize()
 ```
 
 
@@ -108,30 +108,27 @@ Solution
 Read into a temporary data frame, and then process:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv"
-weather.0 = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv"
+weather.0=read_csv(my_url)
 weather.0
 ```
 
 ```
 ## # A tibble: 365 x 14
-##    day.count   day month season l.temp h.temp
-##        <dbl> <dbl> <dbl> <chr>   <dbl>  <dbl>
-##  1         1     1     1 Winter   12.7   14  
-##  2         2     2     1 Winter   11.3   14.7
-##  3         3     3     1 Winter   12.6   14.7
-##  4         4     4     1 Winter    7.7   13.9
-##  5         5     5     1 Winter    8.8   14.6
-##  6         6     6     1 Winter   11.8   14.4
-##  7         7     7     1 Winter   11.4   14.8
-##  8         8     8     1 Winter   12.4   15.6
-##  9         9     9     1 Winter    9.2   18.4
-## 10        10    10     1 Winter    8.3   14.8
-## # ... with 355 more rows, and 8 more
-## #   variables: ave.temp <dbl>,
-## #   l.temp.time <time>, h.temp.time <time>,
-## #   rain <dbl>, ave.wind <dbl>,
-## #   gust.wind <dbl>, gust.wind.time <time>,
+##    day.count   day month season l.temp h.temp ave.temp l.temp.time
+##        <dbl> <dbl> <dbl> <chr>   <dbl>  <dbl>    <dbl> <time>     
+##  1         1     1     1 Winter   12.7   14       13.4 01:25      
+##  2         2     2     1 Winter   11.3   14.7     13.5 07:30      
+##  3         3     3     1 Winter   12.6   14.7     13.6 21:00      
+##  4         4     4     1 Winter    7.7   13.9     11.3 10:35      
+##  5         5     5     1 Winter    8.8   14.6     13   01:40      
+##  6         6     6     1 Winter   11.8   14.4     13.1 19:35      
+##  7         7     7     1 Winter   11.4   14.8     13.5 07:25      
+##  8         8     8     1 Winter   12.4   15.6     14.1 23:50      
+##  9         9     9     1 Winter    9.2   18.4     12.9 07:10      
+## 10        10    10     1 Winter    8.3   14.8     11   07:55      
+## # … with 355 more rows, and 6 more variables: h.temp.time <time>,
+## #   rain <dbl>, ave.wind <dbl>, gust.wind <dbl>, gust.wind.time <time>,
 ## #   dir.wind <chr>
 ```
 
@@ -141,26 +138,24 @@ There are lots of columns, of which we only want a few:
 
 
 ```r
-(weather <- weather.0 %>% select(l.temp:ave.temp, 
-    rain:gust.wind))
+(weather.0 %>% select(l.temp:ave.temp,rain:gust.wind) -> weather)
 ```
 
 ```
 ## # A tibble: 365 x 6
-##    l.temp h.temp ave.temp  rain ave.wind
-##     <dbl>  <dbl>    <dbl> <dbl>    <dbl>
-##  1   12.7   14       13.4  32       11.4
-##  2   11.3   14.7     13.5  64.8      5.6
-##  3   12.6   14.7     13.6  12.7      4.3
-##  4    7.7   13.9     11.3  20.1     10.3
-##  5    8.8   14.6     13     9.4     11.6
-##  6   11.8   14.4     13.1  38.9      9.9
-##  7   11.4   14.8     13.5   2        6.6
-##  8   12.4   15.6     14.1   1.5      5.9
-##  9    9.2   18.4     12.9   0        0.2
-## 10    8.3   14.8     11     0        1.4
-## # ... with 355 more rows, and 1 more
-## #   variable: gust.wind <dbl>
+##    l.temp h.temp ave.temp  rain ave.wind gust.wind
+##     <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl>
+##  1   12.7   14       13.4  32       11.4      53.1
+##  2   11.3   14.7     13.5  64.8      5.6      41.8
+##  3   12.6   14.7     13.6  12.7      4.3      38.6
+##  4    7.7   13.9     11.3  20.1     10.3      66  
+##  5    8.8   14.6     13     9.4     11.6      51.5
+##  6   11.8   14.4     13.1  38.9      9.9      57.9
+##  7   11.4   14.8     13.5   2        6.6      38.6
+##  8   12.4   15.6     14.1   1.5      5.9      33.8
+##  9    9.2   18.4     12.9   0        0.2      16.1
+## 10    8.3   14.8     11     0        1.4      24.1
+## # … with 355 more rows
 ```
 
  
@@ -176,19 +171,18 @@ Solution
 This is cleanest, but you may not have seen the idea before:
 
 ```r
-map_df(weather, ~quantile(.))
+map_df(weather, ~quantile(.)) 
 ```
 
 ```
 ## # A tibble: 5 x 6
-##   l.temp h.temp ave.temp  rain ave.wind
-##    <dbl>  <dbl>    <dbl> <dbl>    <dbl>
-## 1    3.1    9.8      7.3   0        0  
-## 2    9.1   14.4     12     0        2.3
-## 3   12.9   19.1     15.8   0.3      3.5
-## 4   16.3   23.3     19.3   5.3      5.2
-## 5   22.6   31.5     26.6  74.9     16.6
-## # ... with 1 more variable: gust.wind <dbl>
+##   l.temp h.temp ave.temp  rain ave.wind gust.wind
+##    <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl>
+## 1    3.1    9.8      7.3   0        0         3.2
+## 2    9.1   14.4     12     0        2.3      22.5
+## 3   12.9   19.1     15.8   0.3      3.5      29  
+## 4   16.3   23.3     19.3   5.3      5.2      38.6
+## 5   22.6   31.5     26.6  74.9     16.6      86.9
 ```
 
      
@@ -207,21 +201,22 @@ the quantiles for each variable:
 
 ```r
 weather %>% gather(xname, x, everything()) %>% 
-    nest(-xname) %>% mutate(q = map(data, ~enframe(quantile(.$x)))) %>% 
-    unnest(q) %>% spread(xname, value) %>% arrange(parse_number(name))
+nest(-xname) %>% 
+mutate(q=map(data, ~enframe(quantile(.$x)))) %>% 
+unnest(q) %>% 
+spread(xname, value) %>% 
+arrange(parse_number(name))
 ```
 
 ```
 ## # A tibble: 5 x 7
-##   name  ave.temp ave.wind gust.wind h.temp
-##   <chr>    <dbl>    <dbl>     <dbl>  <dbl>
-## 1 0%         7.3      0         3.2    9.8
-## 2 25%       12        2.3      22.5   14.4
-## 3 50%       15.8      3.5      29     19.1
-## 4 75%       19.3      5.2      38.6   23.3
-## 5 100%      26.6     16.6      86.9   31.5
-## # ... with 2 more variables: l.temp <dbl>,
-## #   rain <dbl>
+##   name  ave.temp ave.wind gust.wind h.temp l.temp  rain
+##   <chr>    <dbl>    <dbl>     <dbl>  <dbl>  <dbl> <dbl>
+## 1 0%         7.3      0         3.2    9.8    3.1   0  
+## 2 25%       12        2.3      22.5   14.4    9.1   0  
+## 3 50%       15.8      3.5      29     19.1   12.9   0.3
+## 4 75%       19.3      5.2      38.6   23.3   16.3   5.3
+## 5 100%      26.6     16.6      86.9   31.5   22.6  74.9
 ```
 
  
@@ -253,7 +248,7 @@ Solution
 
 
 ```r
-weather.1 = princomp(weather, cor = T)
+weather.1=princomp(weather,cor=T)
 ```
 
      
@@ -272,22 +267,14 @@ summary(weather.1)
 
 ```
 ## Importance of components:
-##                           Comp.1    Comp.2
-## Standard deviation     1.7830875 1.4138296
-## Proportion of Variance 0.5299001 0.3331524
-## Cumulative Proportion  0.5299001 0.8630525
-##                            Comp.3     Comp.4
-## Standard deviation     0.74407069 0.38584917
-## Proportion of Variance 0.09227353 0.02481326
-## Cumulative Proportion  0.95532604 0.98013930
-##                            Comp.5
-## Standard deviation     0.33552998
-## Proportion of Variance 0.01876339
-## Cumulative Proportion  0.99890270
-##                             Comp.6
-## Standard deviation     0.081140732
-## Proportion of Variance 0.001097303
-## Cumulative Proportion  1.000000000
+##                           Comp.1    Comp.2     Comp.3     Comp.4
+## Standard deviation     1.7830875 1.4138296 0.74407069 0.38584917
+## Proportion of Variance 0.5299001 0.3331524 0.09227353 0.02481326
+## Cumulative Proportion  0.5299001 0.8630525 0.95532604 0.98013930
+##                            Comp.5      Comp.6
+## Standard deviation     0.33552998 0.081140732
+## Proportion of Variance 0.01876339 0.001097303
+## Cumulative Proportion  0.99890270 1.000000000
 ```
 
      
@@ -309,8 +296,7 @@ Solution
 ggscreeplot(weather.1)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/adskjheuya-1} 
+<img src="24-pcfa_files/figure-html/adskjheuya-1.png" width="672"  />
 
      
 
@@ -340,29 +326,18 @@ weather.1$loadings
 ```
 ## 
 ## Loadings:
-##           Comp.1 Comp.2 Comp.3 Comp.4 Comp.5
-## l.temp     0.465  0.348         0.542  0.470
-## h.temp     0.510  0.231        -0.576 -0.381
-## ave.temp   0.502  0.311                     
-## rain      -0.296  0.397  0.853        -0.163
-## ave.wind  -0.253  0.560 -0.463  0.357 -0.529
-## gust.wind -0.347  0.507 -0.230 -0.492  0.572
-##           Comp.6
-## l.temp     0.379
-## h.temp     0.458
-## ave.temp  -0.804
-## rain            
-## ave.wind        
-## gust.wind       
+##           Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6
+## l.temp     0.465  0.348         0.542  0.470  0.379
+## h.temp     0.510  0.231        -0.576 -0.381  0.458
+## ave.temp   0.502  0.311                      -0.804
+## rain      -0.296  0.397  0.853        -0.163       
+## ave.wind  -0.253  0.560 -0.463  0.357 -0.529       
+## gust.wind -0.347  0.507 -0.230 -0.492  0.572       
 ## 
-##                Comp.1 Comp.2 Comp.3 Comp.4
-## SS loadings     1.000  1.000  1.000  1.000
-## Proportion Var  0.167  0.167  0.167  0.167
-## Cumulative Var  0.167  0.333  0.500  0.667
-##                Comp.5 Comp.6
-## SS loadings     1.000  1.000
-## Proportion Var  0.167  0.167
-## Cumulative Var  0.833  1.000
+##                Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6
+## SS loadings     1.000  1.000  1.000  1.000  1.000  1.000
+## Proportion Var  0.167  0.167  0.167  0.167  0.167  0.167
+## Cumulative Var  0.167  0.333  0.500  0.667  0.833  1.000
 ```
 
      
@@ -397,7 +372,7 @@ show you (so this is looking ahead):
 
 
 ```r
-weather.2 = factanal(weather, 3, scores = "r")
+weather.2=factanal(weather,3,scores="r")
 weather.2$loadings
 ```
 
@@ -433,11 +408,10 @@ have to go back to the base-graphics version, which goes a bit like this:
 
 
 ```r
-biplot(weather.2$scores, weather.2$loadings)
+biplot(weather.2$scores,weather.2$loadings)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-10-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
  
 
@@ -462,37 +436,38 @@ want (the first three):
       
 
 ```r
-d <- as_tibble(weather.1$scores) %>% select(1:3) %>% bind_cols(weather) %>% 
-    mutate(day = row_number())
-d %>% print(n = 20)
+as_tibble(weather.1$scores) %>% 
+select(1:3) %>% 
+bind_cols(weather) %>%
+mutate(day=row_number()) -> d
+d %>% print(n=20)
 ```
 
 ```
 ## # A tibble: 365 x 10
-##    Comp.1   Comp.2   Comp.3 l.temp h.temp ave.temp  rain ave.wind
-##     <dbl>    <dbl>    <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>
-##  1 -2.84   3.13    -0.00402   12.7   14       13.4  32       11.4
-##  2 -2.79   2.31     3.64      11.3   14.7     13.5  64.8      5.6
-##  3 -1.11   0.255    0.263     12.6   14.7     13.6  12.7      4.3
-##  4 -3.62   2.47    -0.992      7.7   13.9     11.3  20.1     10.3
-##  5 -2.67   2.03    -1.68       8.8   14.6     13     9.4     11.6
-##  6 -3.09   3.14     0.664     11.8   14.4     13.1  38.9      9.9
-##  7 -1.22   0.328   -0.958     11.4   14.8     13.5   2        6.6
-##  8 -0.734  0.102   -0.743     12.4   15.6     14.1   1.5      5.9
-##  9  0.210 -2.26     0.534      9.2   18.4     12.9   0        0.2
-## 10 -0.825 -2.00     0.109      8.3   14.8     11     0        1.4
-## 11 -1.01  -2.72     0.294      5.8   14.8      9.5   0.3      1.1
-## 12 -1.68   0.0710  -0.0803     9.4   15.2     12.1  10.7      4.7
-## 13 -2.12  -0.822    0.653      7.3   12.9     10.2  15.7      3.1
-## 14 -1.34   0.00249 -0.169     11.4   13.9     12.8   8.1      4.7
-## 15 -2.52   0.929    0.955      9.4   13.1     12    29        5.9
-## 16 -2.38   0.200   -0.669      9     12.2     10.8   6.9      5.4
-## 17 -3.18   0.626    0.431      7.7   11.4      9.3  25.4      7.2
-## 18 -1.95  -1.82     1.28       7.5   10.9      9    17        1.4
-## 19 -2.13  -1.60    -0.293      6.4   11.4      8.7   2.5      3.3
-## 20 -1.29  -2.62     0.448      6.9   12.2      9.2   2.8      1.1
-## # ... with 345 more rows, and 2 more variables: gust.wind <dbl>,
-## #   day <int>
+##    Comp.1   Comp.2   Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##     <dbl>    <dbl>    <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+##  1 -2.84   3.13    -0.00402   12.7   14       13.4  32       11.4      53.1     1
+##  2 -2.79   2.31     3.64      11.3   14.7     13.5  64.8      5.6      41.8     2
+##  3 -1.11   0.255    0.263     12.6   14.7     13.6  12.7      4.3      38.6     3
+##  4 -3.62   2.47    -0.992      7.7   13.9     11.3  20.1     10.3      66       4
+##  5 -2.67   2.03    -1.68       8.8   14.6     13     9.4     11.6      51.5     5
+##  6 -3.09   3.14     0.664     11.8   14.4     13.1  38.9      9.9      57.9     6
+##  7 -1.22   0.328   -0.958     11.4   14.8     13.5   2        6.6      38.6     7
+##  8 -0.734  0.102   -0.743     12.4   15.6     14.1   1.5      5.9      33.8     8
+##  9  0.210 -2.26     0.534      9.2   18.4     12.9   0        0.2      16.1     9
+## 10 -0.825 -2.00     0.109      8.3   14.8     11     0        1.4      24.1    10
+## 11 -1.01  -2.72     0.294      5.8   14.8      9.5   0.3      1.1      16.1    11
+## 12 -1.68   0.0710  -0.0803     9.4   15.2     12.1  10.7      4.7      41.8    12
+## 13 -2.12  -0.822    0.653      7.3   12.9     10.2  15.7      3.1      35.4    13
+## 14 -1.34   0.00249 -0.169     11.4   13.9     12.8   8.1      4.7      38.6    14
+## 15 -2.52   0.929    0.955      9.4   13.1     12    29        5.9      43.5    15
+## 16 -2.38   0.200   -0.669      9     12.2     10.8   6.9      5.4      49.9    16
+## 17 -3.18   0.626    0.431      7.7   11.4      9.3  25.4      7.2      41.8    17
+## 18 -1.95  -1.82     1.28       7.5   10.9      9    17        1.4      24.1    18
+## 19 -2.13  -1.60    -0.293      6.4   11.4      8.7   2.5      3.3      32.2    19
+## 20 -1.29  -2.62     0.448      6.9   12.2      9.2   2.8      1.1      17.7    20
+## # … with 345 more rows
 ```
 
       
@@ -514,20 +489,19 @@ d %>% arrange(Comp.1)
 
 ```
 ## # A tibble: 365 x 10
-##    Comp.1 Comp.2 Comp.3 l.temp h.temp ave.temp  rain ave.wind
-##     <dbl>  <dbl>  <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>
-##  1  -5.29  4.64  -0.294    7     14.4      9.9  43.2     13  
-##  2  -4.89  3.50   1.64     6.5   12.9     10.3  57.4     10.3
-##  3  -4.64  5.33  -0.653    9.3   15.3     12.5  43.4     16.6
-##  4  -4.57  2.19  -1.49     5.5   10.7      8.8  17       11.1
-##  5  -4.48  2.11   1.90     6.8   11.5      8.9  50.5      6.8
-##  6  -4.36  4.45   1.06     9.1   15.2     12.2  55.1     12.8
-##  7  -3.82  2.24   0.532    7.8   12.9     10.7  34.8      8.1
-##  8  -3.62  2.47  -0.992    7.7   13.9     11.3  20.1     10.3
-##  9  -3.44  0.576 -2.10     5.7   11.4      8.4   0        9.8
-## 10  -3.36  2.19  -0.705    9.1   13       11.3  20.3      9.3
-## # ... with 355 more rows, and 2 more variables: gust.wind <dbl>,
-## #   day <int>
+##    Comp.1 Comp.2 Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##     <dbl>  <dbl>  <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+##  1  -5.29  4.64  -0.294    7     14.4      9.9  43.2     13        86.9    40
+##  2  -4.89  3.50   1.64     6.5   12.9     10.3  57.4     10.3      66      35
+##  3  -4.64  5.33  -0.653    9.3   15.3     12.5  43.4     16.6      74      37
+##  4  -4.57  2.19  -1.49     5.5   10.7      8.8  17       11.1      69.2    41
+##  5  -4.48  2.11   1.90     6.8   11.5      8.9  50.5      6.8      61.2    34
+##  6  -4.36  4.45   1.06     9.1   15.2     12.2  55.1     12.8      66      45
+##  7  -3.82  2.24   0.532    7.8   12.9     10.7  34.8      8.1      62.8    39
+##  8  -3.62  2.47  -0.992    7.7   13.9     11.3  20.1     10.3      66       4
+##  9  -3.44  0.576 -2.10     5.7   11.4      8.4   0        9.8      51.5   363
+## 10  -3.36  2.19  -0.705    9.1   13       11.3  20.3      9.3      62.8    38
+## # … with 355 more rows
 ```
 
        
@@ -552,20 +526,19 @@ d %>% arrange(desc(Comp.2))
 
 ```
 ## # A tibble: 365 x 10
-##     Comp.1 Comp.2  Comp.3 l.temp h.temp ave.temp  rain ave.wind
-##      <dbl>  <dbl>   <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>
-##  1 -4.64     5.33 -0.653     9.3   15.3     12.5  43.4     16.6
-##  2 -5.29     4.64 -0.294     7     14.4      9.9  43.2     13  
-##  3 -4.36     4.45  1.06      9.1   15.2     12.2  55.1     12.8
-##  4 -1.61     4.33  3.43     17.7   19.1     18.3  68.3      8.3
-##  5 -1.02     3.63  1.36     16.8   20.4     19    39.1      6.9
-##  6  2.42     3.51 -1.39     20.9   31.2     25.7   0        8.8
-##  7 -4.89     3.50  1.64      6.5   12.9     10.3  57.4     10.3
-##  8  0.0301   3.49 -0.0846   18.5   22.3     20.3  22.9     10.3
-##  9 -0.745    3.45  1.99     15.9   21.4     19.9  46.2      7.7
-## 10 -0.105    3.20 -0.493    17.9   21.8     19.5  16.5      9.3
-## # ... with 355 more rows, and 2 more variables: gust.wind <dbl>,
-## #   day <int>
+##     Comp.1 Comp.2  Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##      <dbl>  <dbl>   <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+##  1 -4.64     5.33 -0.653     9.3   15.3     12.5  43.4     16.6      74      37
+##  2 -5.29     4.64 -0.294     7     14.4      9.9  43.2     13        86.9    40
+##  3 -4.36     4.45  1.06      9.1   15.2     12.2  55.1     12.8      66      45
+##  4 -1.61     4.33  3.43     17.7   19.1     18.3  68.3      8.3      46.7   261
+##  5 -1.02     3.63  1.36     16.8   20.4     19    39.1      6.9      59.5   289
+##  6  2.42     3.51 -1.39     20.9   31.2     25.7   0        8.8      46.7   166
+##  7 -4.89     3.50  1.64      6.5   12.9     10.3  57.4     10.3      66      35
+##  8  0.0301   3.49 -0.0846   18.5   22.3     20.3  22.9     10.3      43.5   260
+##  9 -0.745    3.45  1.99     15.9   21.4     19.9  46.2      7.7      45.1   281
+## 10 -0.105    3.20 -0.493    17.9   21.8     19.5  16.5      9.3      49.9   290
+## # … with 355 more rows
 ```
 
        
@@ -587,20 +560,19 @@ d %>% arrange(desc(Comp.3))
 
 ```
 ## # A tibble: 365 x 10
-##     Comp.1 Comp.2 Comp.3 l.temp h.temp ave.temp  rain ave.wind
-##      <dbl>  <dbl>  <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>
-##  1 -2.32    2.23    4.92   11.8   17.2     14.6  74.9      2.8
-##  2 -2.79    2.31    3.64   11.3   14.7     13.5  64.8      5.6
-##  3  0.0819  2.90    3.59   16.1   26.6     20.3  54.4      2  
-##  4 -1.61    4.33    3.43   17.7   19.1     18.3  68.3      8.3
-##  5 -0.759   2.48    3.42   15.7   19.5     18.6  55.6      4.5
-##  6 -2.21    3.12    2.15   12.8   17.7     15.8  50.5      7.2
-##  7 -0.745   3.45    1.99   15.9   21.4     19.9  46.2      7.7
-##  8 -4.48    2.11    1.90    6.8   11.5      8.9  50.5      6.8
-##  9 -1.77    0.693   1.72   10.7   15.6     13    32.8      4  
-## 10 -4.89    3.50    1.64    6.5   12.9     10.3  57.4     10.3
-## # ... with 355 more rows, and 2 more variables: gust.wind <dbl>,
-## #   day <int>
+##     Comp.1 Comp.2 Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##      <dbl>  <dbl>  <dbl>  <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+##  1 -2.32    2.23    4.92   11.8   17.2     14.6  74.9      2.8      41.8   307
+##  2 -2.79    2.31    3.64   11.3   14.7     13.5  64.8      5.6      41.8     2
+##  3  0.0819  2.90    3.59   16.1   26.6     20.3  54.4      2        49.9   264
+##  4 -1.61    4.33    3.43   17.7   19.1     18.3  68.3      8.3      46.7   261
+##  5 -0.759   2.48    3.42   15.7   19.5     18.6  55.6      4.5      37     288
+##  6 -2.21    3.12    2.15   12.8   17.7     15.8  50.5      7.2      53.1   317
+##  7 -0.745   3.45    1.99   15.9   21.4     19.9  46.2      7.7      45.1   281
+##  8 -4.48    2.11    1.90    6.8   11.5      8.9  50.5      6.8      61.2    34
+##  9 -1.77    0.693   1.72   10.7   15.6     13    32.8      4        38.6   312
+## 10 -4.89    3.50    1.64    6.5   12.9     10.3  57.4     10.3      66      35
+## # … with 355 more rows
 ```
 
  
@@ -623,11 +595,10 @@ that I read in from the file to get the count of the day in the
 year, which was called `day.count`:
 
 ```r
-ggbiplot(weather.1, labels = weather.0$day.count, labels.size = 2)
+ggbiplot(weather.1,labels=weather.0$day.count,labels.size=2)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-16-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
      
 
@@ -735,7 +706,7 @@ weather %>% slice(47)
 
 This is predominantly low on temperature. In fact, it is kind of low
 on wind and rain too.
-\marginnote{If you ignore the wind gust, anyway.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you ignore the wind gust, anyway.</span>
 This makes sense, because not only is it at the "wrong" end of the
 temperature arrows, it is kind of at the wrong end of the wind/rain
 arrows as well.
@@ -745,7 +716,8 @@ let's see if we can do that here as well:
 
 
 ```r
-map_df(weather, percent_rank) %>% slice(c(37, 211, 265, 47))
+map_df(weather,percent_rank) %>%
+slice(c(37,211,265,47))
 ```
 
 ```
@@ -824,7 +796,11 @@ I save the result:
 
 
 ```r
-places <- tribble(~place, "Porto PT", "La Coruna ES") %>% mutate_geocode(place)
+tribble(
+~place,
+"Porto PT",
+"La Coruna ES"
+) %>% mutate_geocode(place) -> places
 ```
 
 ```
@@ -857,8 +833,8 @@ already have the longitude and latitude, we'll use them again, to save
 Google looking them up again, and possibly saving us from getting an error:
 
 ```r
-porto <- places %>% slice(1)
-mapp = get_map("Porto", zoom = 5)
+places %>% slice(1) -> porto
+mapp=get_map("Porto", zoom=5)
 ```
 
 ```
@@ -870,11 +846,10 @@ mapp = get_map("Porto", zoom = 5)
 ```
 
 ```r
-ggmap(mapp) + geom_point(data = porto, aes(x = lon, y = lat), colour = "red")
+ggmap(mapp)+geom_point(data=porto,aes(x=lon,y=lat),colour="red")
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-25-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
  
 
@@ -899,9 +874,10 @@ labelling both places:
 
 
 ```r
-places <- places %>% mutate(country = c("Portugal", "Spain"))
-ggmap(mapp) + geom_point(data = places, aes(x = lon, y = lat, colour = country)) + 
-    geom_text_repel(data = places, aes(label = place))
+places %>% mutate(country=c("Portugal","Spain")) -> places
+ggmap(mapp)+
+geom_point(data=places,aes(x=lon,y=lat,colour=country)) +
+geom_text_repel(data=places, aes(label=place))
 ```
 
 ```
@@ -909,8 +885,7 @@ ggmap(mapp) + geom_point(data = places, aes(x = lon, y = lat, colour = country))
 ```
 
 ```
-## Warning in max(x): no non-missing arguments to max; returning -
-## Inf
+## Warning in max(x): no non-missing arguments to max; returning -Inf
 ```
 
 ```
@@ -918,12 +893,10 @@ ggmap(mapp) + geom_point(data = places, aes(x = lon, y = lat, colour = country))
 ```
 
 ```
-## Warning in max(x): no non-missing arguments to max; returning -
-## Inf
+## Warning in max(x): no non-missing arguments to max; returning -Inf
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-26-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -983,8 +956,8 @@ Solution
 This is a `.csv` file, so:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/airpollution.csv"
-air = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/airpollution.csv"
+air=read_csv(my_url)
 ```
 
 ```
@@ -1018,7 +991,7 @@ air
 ##  8     5              72     6     4    21    14     4
 ##  9     7              82     5     1    11    11     3
 ## 10     8              64     5     2    13     9     4
-## # ... with 32 more rows
+## # … with 32 more rows
 ```
 
      
@@ -1039,7 +1012,7 @@ Solution
 Like this (the cleanest):
 
 ```r
-map_df(air, ~quantile(.))
+map_df(air, ~quantile(.)) 
 ```
 
 ```
@@ -1065,9 +1038,12 @@ Or, with some more work, this:
 
 
 ```r
-air %>% gather(xname, x, everything()) %>% nest(-xname) %>% mutate(q = map(data, 
-    ~enframe(quantile(.$x)))) %>% unnest(q) %>% spread(xname, value) %>% 
-    arrange(parse_number(name))
+air %>% gather(xname, x, everything()) %>%
+nest(-xname) %>%
+mutate(q=map(data, ~enframe(quantile(.$x)))) %>% 
+unnest(q) %>% 
+spread(xname, value) %>% 
+arrange(parse_number(name))
 ```
 
 ```
@@ -1100,7 +1076,7 @@ Solution
 This too is all rather like the previous question:
 
 ```r
-air.1 = princomp(air, cor = T)
+air.1=princomp(air, cor=T)
 ```
 
      
@@ -1122,8 +1098,7 @@ package `ggbiplot`:
 ggscreeplot(air.1)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-31-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
      
 
@@ -1166,14 +1141,14 @@ summary(air.1)
 
 ```
 ## Importance of components:
-##                           Comp.1    Comp.2    Comp.3    Comp.4
-## Standard deviation     1.5286539 1.1772853 1.0972994 0.8526937
-## Proportion of Variance 0.3338261 0.1980001 0.1720094 0.1038695
-## Cumulative Proportion  0.3338261 0.5318262 0.7038356 0.8077051
-##                            Comp.5     Comp.6     Comp.7
-## Standard deviation     0.80837896 0.73259047 0.39484041
-## Proportion of Variance 0.09335379 0.07666983 0.02227128
-## Cumulative Proportion  0.90105889 0.97772872 1.00000000
+##                           Comp.1    Comp.2    Comp.3    Comp.4     Comp.5     Comp.6
+## Standard deviation     1.5286539 1.1772853 1.0972994 0.8526937 0.80837896 0.73259047
+## Proportion of Variance 0.3338261 0.1980001 0.1720094 0.1038695 0.09335379 0.07666983
+## Cumulative Proportion  0.3338261 0.5318262 0.7038356 0.8077051 0.90105889 0.97772872
+##                            Comp.7
+## Standard deviation     0.39484041
+## Proportion of Variance 0.02227128
+## Cumulative Proportion  1.00000000
 ```
 
      
@@ -1264,7 +1239,8 @@ it. (The component scores are seven columns, so
 `bind_cols` won't do it unless you are careful.):
 
 ```r
-d <- cbind(air, air.1$scores) %>% mutate(row = row_number())
+cbind(air, air.1$scores) %>% 
+mutate(row=row_number()) -> d
 class(d)
 ```
 
@@ -1277,20 +1253,20 @@ head(d)
 ```
 
 ```
-##   wind solar.radiation CO NO NO2 O3 HC      Comp.1     Comp.2
-## 1    8              98  7  2  12  8  2 -0.95292110 -0.9754106
-## 2    7             107  4  3   9  5  3 -0.04941978 -0.4291403
-## 3    7             103  4  3   5  6  3  0.53767776 -0.6491739
-## 4   10              88  5  2   8 15  4 -0.37519620 -0.3609587
-## 5    6              91  4  2   8 10  3  0.19694099 -1.0955256
-## 6    8              90  5  2  12 12  4 -1.12344250 -0.2297073
-##       Comp.3    Comp.4     Comp.5     Comp.6     Comp.7 row
-## 1 -0.4266696 1.4454463  2.0390917 -0.7280074 -0.5714587   1
-## 2 -0.2925624 2.1070743 -0.7830499  0.1619189  0.1581294   2
-## 3 -0.5519781 1.8839424 -0.7923010  1.1153956 -0.1744016   3
-## 4  2.0031533 0.1892788  0.2923780  1.4704360 -0.1020858   4
-## 5 -0.4489016 0.5501374 -0.8853554  0.1186414 -0.1581801   5
-## 6  1.3544191 0.2851494 -0.4269438  0.1098276 -0.2316944   6
+##   wind solar.radiation CO NO NO2 O3 HC      Comp.1     Comp.2     Comp.3    Comp.4     Comp.5
+## 1    8              98  7  2  12  8  2 -0.95292110 -0.9754106 -0.4266696 1.4454463  2.0390917
+## 2    7             107  4  3   9  5  3 -0.04941978 -0.4291403 -0.2925624 2.1070743 -0.7830499
+## 3    7             103  4  3   5  6  3  0.53767776 -0.6491739 -0.5519781 1.8839424 -0.7923010
+## 4   10              88  5  2   8 15  4 -0.37519620 -0.3609587  2.0031533 0.1892788  0.2923780
+## 5    6              91  4  2   8 10  3  0.19694099 -1.0955256 -0.4489016 0.5501374 -0.8853554
+## 6    8              90  5  2  12 12  4 -1.12344250 -0.2297073  1.3544191 0.2851494 -0.4269438
+##       Comp.6     Comp.7 row
+## 1 -0.7280074 -0.5714587   1
+## 2  0.1619189  0.1581294   2
+## 3  1.1153956 -0.1744016   3
+## 4  1.4704360 -0.1020858   4
+## 5  0.1186414 -0.1581801   5
+## 6  0.1098276 -0.2316944   6
 ```
 
      
@@ -1299,33 +1275,33 @@ This is probably the easiest way, but you see that there is a mixture
 of base R and Tidyverse. The result is actually a base R `data.frame`, so displaying it will display *all* of it, hence my use of `head`.
 If you want to do it the all-Tidyverse
 way
-\marginnote{There really ought to be a radio station *CTDY: All Tidyverse, All The Time*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There really ought to be a radio station *CTDY: All Tidyverse, All The Time*.</span>
 then you need to bear in mind that `bind_cols` *only* 
 accepts vectors or data frames, not matrices, so a bit of care is needed first:
 
 
 ```r
-dd <- air.1$scores %>% as_tibble() %>% bind_cols(air) %>% mutate(row = row_number())
+air.1$scores %>% as_tibble() %>%
+bind_cols(air) %>%
+mutate(row=row_number()) -> dd
 dd
 ```
 
 ```
 ## # A tibble: 42 x 15
-##     Comp.1 Comp.2 Comp.3 Comp.4  Comp.5 Comp.6 Comp.7  wind
-##      <dbl>  <dbl>  <dbl>  <dbl>   <dbl>  <dbl>  <dbl> <dbl>
-##  1 -0.953  -0.975 -0.427  1.45   2.04   -0.728 -0.571     8
-##  2 -0.0494 -0.429 -0.293  2.11  -0.783   0.162  0.158     7
-##  3  0.538  -0.649 -0.552  1.88  -0.792   1.12  -0.174     7
-##  4 -0.375  -0.361  2.00   0.189  0.292   1.47  -0.102    10
-##  5  0.197  -1.10  -0.449  0.550 -0.885   0.119 -0.158     6
-##  6 -1.12   -0.230  1.35   0.285 -0.427   0.110 -0.232     8
-##  7 -3.15    1.07   1.62   0.186  0.0374  1.84  -0.415     9
-##  8 -3.98    0.926 -0.379 -0.619 -0.810  -1.29   0.735     5
-##  9 -0.152  -0.974  0.337 -0.145  0.139  -0.681 -0.539     7
-## 10 -0.784   0.939  0.985 -0.632 -0.219  -0.303 -0.375     8
-## # ... with 32 more rows, and 7 more variables:
-## #   solar.radiation <dbl>, CO <dbl>, NO <dbl>, NO2 <dbl>,
-## #   O3 <dbl>, HC <dbl>, row <int>
+##     Comp.1 Comp.2 Comp.3 Comp.4  Comp.5 Comp.6 Comp.7  wind solar.radiation    CO    NO   NO2
+##      <dbl>  <dbl>  <dbl>  <dbl>   <dbl>  <dbl>  <dbl> <dbl>           <dbl> <dbl> <dbl> <dbl>
+##  1 -0.953  -0.975 -0.427  1.45   2.04   -0.728 -0.571     8              98     7     2    12
+##  2 -0.0494 -0.429 -0.293  2.11  -0.783   0.162  0.158     7             107     4     3     9
+##  3  0.538  -0.649 -0.552  1.88  -0.792   1.12  -0.174     7             103     4     3     5
+##  4 -0.375  -0.361  2.00   0.189  0.292   1.47  -0.102    10              88     5     2     8
+##  5  0.197  -1.10  -0.449  0.550 -0.885   0.119 -0.158     6              91     4     2     8
+##  6 -1.12   -0.230  1.35   0.285 -0.427   0.110 -0.232     8              90     5     2    12
+##  7 -3.15    1.07   1.62   0.186  0.0374  1.84  -0.415     9              84     7     4    12
+##  8 -3.98    0.926 -0.379 -0.619 -0.810  -1.29   0.735     5              72     6     4    21
+##  9 -0.152  -0.974  0.337 -0.145  0.139  -0.681 -0.539     7              82     5     1    11
+## 10 -0.784   0.939  0.985 -0.632 -0.219  -0.303 -0.375     8              64     5     2    13
+## # … with 32 more rows, and 3 more variables: O3 <dbl>, HC <dbl>, row <int>
 ```
 
  
@@ -1356,10 +1332,10 @@ d %>% arrange(Comp.1) %>% slice(1)
 ```
 
 ```
-##   wind solar.radiation CO NO NO2 O3 HC    Comp.1    Comp.2
-## 1    5              72  6  4  21 14  4 -3.981043 0.9262199
-##       Comp.3     Comp.4     Comp.5    Comp.6    Comp.7 row
-## 1 -0.3789783 -0.6185173 -0.8095277 -1.290318 0.7352476   8
+##   wind solar.radiation CO NO NO2 O3 HC    Comp.1    Comp.2     Comp.3     Comp.4     Comp.5
+## 1    5              72  6  4  21 14  4 -3.981043 0.9262199 -0.3789783 -0.6185173 -0.8095277
+##      Comp.6    Comp.7 row
+## 1 -1.290318 0.7352476   8
 ```
 
      
@@ -1369,7 +1345,7 @@ It's row 8.
 We said earlier that component 1 depends negatively on carbon monoxide
 and nitrogen dioxide, so that an observation that is *low* on
 component 1 should be *high* on these things.
-\marginnote{You might  have said that component 1 depended on other things as well, in  which case you ought to consider whether observation 8 is, as  appropriate, high or low on these as well.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might  have said that component 1 depended on other things as well, in  which case you ought to consider whether observation 8 is, as  appropriate, high or low on these as well.</span>
 
 So are these values high or low? That was the reason for having you
 make the five-number summary <a href="#part:fivenum">here</a>. For
@@ -1393,10 +1369,10 @@ d %>% arrange(Comp.2) %>% slice(1)
 ```
 
 ```
-##   wind solar.radiation CO NO NO2 O3 HC     Comp.1    Comp.2
-## 1    6              75  4  1  10 24  3 -0.3848472 -2.331649
-##      Comp.3    Comp.4     Comp.5    Comp.6    Comp.7 row
-## 1 0.2453131 -1.765714 -0.4522935 0.0884973 0.6669804  34
+##   wind solar.radiation CO NO NO2 O3 HC     Comp.1    Comp.2    Comp.3    Comp.4     Comp.5
+## 1    6              75  4  1  10 24  3 -0.3848472 -2.331649 0.2453131 -1.765714 -0.4522935
+##      Comp.6    Comp.7 row
+## 1 0.0884973 0.6669804  34
 ```
 
      
@@ -1405,7 +1381,7 @@ and for convenience, we'll grab the quantiles again:
 
 
 ```r
-map_df(air, ~quantile(.))
+map_df(air, ~quantile(.)) 
 ```
 
 ```
@@ -1437,7 +1413,7 @@ observation come. Another way to approach this is to calculate
 
 
 ```r
-pct_rank <- air %>% mutate_all(~percent_rank(.))
+air %>% mutate_all(~percent_rank(.)) -> pct_rank
 pct_rank
 ```
 
@@ -1455,7 +1431,7 @@ pct_rank
 ##  8 0               0.390 0.829 0.878 1     0.829 0.780
 ##  9 0.317           0.659 0.610 0     0.610 0.707 0.171
 ## 10 0.488           0.195 0.610 0.317 0.829 0.512 0.780
-## # ... with 32 more rows
+## # … with 32 more rows
 ```
 
  
@@ -1505,11 +1481,10 @@ Solution
 
 
 ```r
-ggbiplot(air.1, labels = d$row)
+ggbiplot(air.1,labels=d$row)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-42-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 
@@ -1544,7 +1519,7 @@ Solution
 
 
 ```r
-air.2 = factanal(air, 2, scores = "r")
+air.2=factanal(air, 2, scores="r")
 air.2$loadings
 ```
 
@@ -1583,8 +1558,7 @@ the axes now:
 biplot(air.2$scores, air.2$loadings)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-44-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
  
 
@@ -1600,10 +1574,10 @@ air.2$uniquenesses
 ```
 
 ```
-##            wind solar.radiation              CO              NO 
-##       0.9070224       0.8953343       0.2126417       0.4983564 
-##             NO2              O3              HC 
-##       0.6144170       0.0050000       0.9152467
+##            wind solar.radiation              CO              NO             NO2 
+##       0.9070224       0.8953343       0.2126417       0.4983564       0.6144170 
+##              O3              HC 
+##       0.0050000       0.9152467
 ```
 
  
@@ -1617,7 +1591,7 @@ really ought to look at 3 factors, the same way that we said we should look at
 
 
 ```r
-air.3 = factanal(air, 3)
+air.3=factanal(air,3)
 air.3$loadings
 ```
 
@@ -1659,10 +1633,10 @@ air.3$uniquenesses
 ```
 
 ```
-##            wind solar.radiation              CO              NO 
-##       0.8404417       0.8905074       0.4046425       0.0050000 
-##             NO2              O3              HC 
-##       0.0050000       0.0050000       0.7776557
+##            wind solar.radiation              CO              NO             NO2 
+##       0.8404417       0.8905074       0.4046425       0.0050000       0.0050000 
+##              O3              HC 
+##       0.0050000       0.7776557
 ```
 
  
@@ -1675,7 +1649,7 @@ If you wanted to, you could obtain the factor scores for the 3-factor
 solution, and plot them on a three-dimensional plot using
 `rgl`, rotating them to see the structure. A three dimensional
 "biplot"
-\marginnote{A three-dimensional biplot ought to be called a *triplot*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">A three-dimensional biplot ought to be called a *triplot*.</span> 
 would also be a cool thing to look at.
 
 
@@ -1712,10 +1686,10 @@ Solution
 
 
 I saved my data into `cov5.txt`,
-\marginnote{Not to be confused    with *covfefe*.} delimited by single spaces, so:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not to be confused    with *covfefe*.</span> delimited by single spaces, so:
 
 ```r
-corr = read_delim("cov5.txt", " ", col_names = F)
+corr=read_delim("cov5.txt"," ",col_names=F)
 ```
 
 ```
@@ -1752,8 +1726,8 @@ to provide some. As you see, it did: `X1` through
 
 
 ```r
-my_names = c("first", "second", "third", "fourth", "fifth")
-corr2 = read_delim("cov5.txt", " ", col_names = my_names)
+my_names=c("first","second","third","fourth","fifth")
+corr2=read_delim("cov5.txt"," ",col_names=my_names)
 ```
 
 ```
@@ -1793,8 +1767,8 @@ Solution
 Two lines, these:
 
 ```r
-corr.mat = as.matrix(corr)
-corr.1 = princomp(covmat = corr.mat)
+corr.mat=as.matrix(corr)
+corr.1=princomp(covmat=corr.mat)
 ```
 
      
@@ -1803,7 +1777,7 @@ Or do it in one step as
 
 
 ```r
-corr.1a = princomp(as.matrix(corr))
+corr.1a=princomp(as.matrix(corr))
 ```
 
  
@@ -1823,13 +1797,12 @@ Solution
 ggscreeplot(corr.1)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/sdljhljsahja-1} 
+<img src="24-pcfa_files/figure-html/sdljhljsahja-1.png" width="672"  />
 
      
 
 There is kind of an elbow at 3, which would suggest two components/factors.
-\marginnote{There is also kind of an elbow at 4, which would suggest three factors, but that's really too many with only 5 variables. That wouldn't be much of a *reduction* in the number of variables, which is what principal components is trying to achieve.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There is also kind of an elbow at 4, which would suggest three factors, but that's really too many with only 5 variables. That wouldn't be much of a *reduction* in the number of variables, which is what principal components is trying to achieve.</span>
 
 You can also use the eigenvalue-bigger-than-1 thing: 
 
@@ -1840,14 +1813,10 @@ summary(corr.1)
 
 ```
 ## Importance of components:
-##                           Comp.1    Comp.2     Comp.3     Comp.4
-## Standard deviation     1.7185460 1.1686447 0.70207741 0.36584870
-## Proportion of Variance 0.5906801 0.2731461 0.09858254 0.02676905
-## Cumulative Proportion  0.5906801 0.8638262 0.96240875 0.98917780
-##                           Comp.5
-## Standard deviation     0.2326177
-## Proportion of Variance 0.0108222
-## Cumulative Proportion  1.0000000
+##                           Comp.1    Comp.2     Comp.3     Comp.4    Comp.5
+## Standard deviation     1.7185460 1.1686447 0.70207741 0.36584870 0.2326177
+## Proportion of Variance 0.5906801 0.2731461 0.09858254 0.02676905 0.0108222
+## Cumulative Proportion  0.5906801 0.8638262 0.96240875 0.98917780 1.0000000
 ```
 
  
@@ -1922,7 +1891,7 @@ This is about the most direct way:
 
 
 ```r
-corr.list = list(cov = corr.mat, n.obs = 50)
+corr.list=list(cov=corr.mat,n.obs=50)
 ```
 
      
@@ -1937,7 +1906,7 @@ you'll have to create the correlation matrix again, for example like this:
 
 
 ```r
-corr.list2 = list(cov = as.matrix(corr), n.obs = 50)
+corr.list2=list(cov=as.matrix(corr),n.obs=50)
 ```
 
  
@@ -1984,7 +1953,7 @@ corr.list$n.obs
 and logically this is because, to R, a data frame *is* a special
 kind of a list, so anything that works for a list also works for a
 data frame, plus some extra things besides.
-\marginnote{In computer  science terms, a data frame is said to **inherit** from a list: it is a list plus extra stuff.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In computer  science terms, a data frame is said to **inherit** from a list: it is a list plus extra stuff.</span> 
 
 The same idea applies to extracting things from the output of a
 regression (with `lm`) or something like a `t.test`: the
@@ -2001,7 +1970,7 @@ Solution
 
 
 ```r
-corr.2 = factanal(factors = 2, covmat = corr.list)
+corr.2=factanal(factors=2,covmat=corr.list)
 ```
 
      
@@ -2222,8 +2191,8 @@ Solution
 Separated by single spaces. 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/personality.txt"
-pers = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/d29/personality.txt"
+pers=read_delim(my_url," ")
 ```
 
 ```
@@ -2243,28 +2212,24 @@ pers
 
 ```
 ## # A tibble: 459 x 45
-##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08
-##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-##  1     1      5      4      5      1      4      3      3      1
-##  2     2      1      1      5      2      1      2      5      1
-##  3     3      4      1      5      3      3      4      5      3
-##  4     4      4      2      5      1      4      3      4      4
-##  5     5      2      3      5      1      2      4      5      2
-##  6     6      1      1      5      4      3      4      4      2
-##  7     7      3      2      5      1      2      1      1      2
-##  8     8      5      2      4      2      4      1      4      3
-##  9     9      5      1      4      3      2      1      4      4
-## 10    10      4      1      5      1      4      3      4      1
-## # ... with 449 more rows, and 36 more variables: PERS09 <dbl>,
-## #   PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>,
-## #   PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>, PERS17 <dbl>,
-## #   PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
-## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>,
-## #   PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>, PERS29 <dbl>,
-## #   PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
-## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>,
-## #   PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>, PERS41 <dbl>,
-## #   PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
+##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12
+##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+##  1     1      5      4      5      1      4      3      3      1      2      3      2      4
+##  2     2      1      1      5      2      1      2      5      1      5      1      5      3
+##  3     3      4      1      5      3      3      4      5      3      1      4      2      1
+##  4     4      4      2      5      1      4      3      4      4      4      5      4      1
+##  5     5      2      3      5      1      2      4      5      2      3      3      4      2
+##  6     6      1      1      5      4      3      4      4      2      1      4      3      3
+##  7     7      3      2      5      1      2      1      1      2      5      4      4      1
+##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
+##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
+## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
+## # … with 449 more rows, and 32 more variables: PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
        
@@ -2285,7 +2250,7 @@ doing something like this:
 
 
 ```r
-pers %>% gather(item, response, -id)
+pers %>% gather(item,response,-id)
 ```
 
 ```
@@ -2302,7 +2267,7 @@ pers %>% gather(item, response, -id)
 ##  8     8 PERS01        5
 ##  9     9 PERS01        5
 ## 10    10 PERS01        4
-## # ... with 20,186 more rows
+## # … with 20,186 more rows
 ```
 
  
@@ -2314,17 +2279,15 @@ charts of responses facetted by item:
 
 
 ```r
-pers %>% gather(item, response, -id) %>% ggplot(aes(x = response)) + 
-    geom_bar() + facet_wrap(~item)
+pers %>% gather(item,response,-id) %>%
+ggplot(aes(x=response))+geom_bar()+facet_wrap(~item)
 ```
 
 ```
-## Warning: Removed 371 rows containing non-finite values
-## (stat_count).
+## Warning: Removed 371 rows containing non-finite values (stat_count).
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-63-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
 
  
 
@@ -2362,7 +2325,7 @@ There are.
 To remove them, just this:
 
 ```r
-pers.ok <- pers %>% drop_na()
+pers %>% drop_na() -> pers.ok
 ```
 
        
@@ -2392,7 +2355,8 @@ That gives me an idea, though.
 
 
 ```r
-pers %>% gather(item, rating, -id)
+pers %>%
+gather(item,rating,-id)
 ```
 
 ```
@@ -2409,7 +2373,7 @@ pers %>% gather(item, rating, -id)
 ##  8     8 PERS01      5
 ##  9     9 PERS01      5
 ## 10    10 PERS01      4
-## # ... with 20,186 more rows
+## # … with 20,186 more rows
 ```
 
  
@@ -2425,8 +2389,11 @@ of thing, adding to my pipeline:
 
 
 ```r
-pers %>% gather(item, rating, -id) %>% group_by(id) %>% summarize(m = mean(rating)) %>% 
-    filter(is.na(m))
+pers %>%
+gather(item,rating,-id) %>%
+group_by(id) %>%
+summarize(m=mean(rating)) %>%
+filter(is.na(m))
 ```
 
 ```
@@ -2443,7 +2410,7 @@ pers %>% gather(item, rating, -id) %>% group_by(id) %>% summarize(m = mean(ratin
 ##  8    84    NA
 ##  9    96    NA
 ## 10   159    NA
-## # ... with 16 more rows
+## # … with 16 more rows
 ```
 
  
@@ -2458,9 +2425,12 @@ subject has any missing values and false otherwise:
 
 
 ```r
-pers.hm = pers %>% gather(item, rating, -id) %>% group_by(id) %>% 
-    summarize(m = mean(rating)) %>% mutate(has_missing = is.na(m))
-pers.hm %>% print(n = 15)
+pers.hm = pers %>%
+gather(item,rating,-id) %>%
+group_by(id) %>%
+summarize(m=mean(rating)) %>%
+mutate(has_missing=is.na(m))
+pers.hm %>% print(n=15)
 ```
 
 ```
@@ -2482,7 +2452,7 @@ pers.hm %>% print(n = 15)
 ## 13    13  3.59 FALSE      
 ## 14    14  3.27 FALSE      
 ## 15    15  3.75 FALSE      
-## # ... with 444 more rows
+## # … with 444 more rows
 ```
 
  
@@ -2498,29 +2468,25 @@ pers %>% bind_cols(pers.hm)
 
 ```
 ## # A tibble: 459 x 48
-##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08
-##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-##  1     1      5      4      5      1      4      3      3      1
-##  2     2      1      1      5      2      1      2      5      1
-##  3     3      4      1      5      3      3      4      5      3
-##  4     4      4      2      5      1      4      3      4      4
-##  5     5      2      3      5      1      2      4      5      2
-##  6     6      1      1      5      4      3      4      4      2
-##  7     7      3      2      5      1      2      1      1      2
-##  8     8      5      2      4      2      4      1      4      3
-##  9     9      5      1      4      3      2      1      4      4
-## 10    10      4      1      5      1      4      3      4      1
-## # ... with 449 more rows, and 39 more variables: PERS09 <dbl>,
-## #   PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>,
-## #   PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>, PERS17 <dbl>,
-## #   PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
-## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>,
-## #   PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>, PERS29 <dbl>,
-## #   PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
-## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>,
-## #   PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>, PERS41 <dbl>,
-## #   PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>, id1 <dbl>,
-## #   m <dbl>, has_missing <lgl>
+##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12
+##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+##  1     1      5      4      5      1      4      3      3      1      2      3      2      4
+##  2     2      1      1      5      2      1      2      5      1      5      1      5      3
+##  3     3      4      1      5      3      3      4      5      3      1      4      2      1
+##  4     4      4      2      5      1      4      3      4      4      4      5      4      1
+##  5     5      2      3      5      1      2      4      5      2      3      3      4      2
+##  6     6      1      1      5      4      3      4      4      2      1      4      3      3
+##  7     7      3      2      5      1      2      1      1      2      5      4      4      1
+##  8     8      5      2      4      2      4      1      4      3      3      5      4      1
+##  9     9      5      1      4      3      2      1      4      4      2      3      4      1
+## 10    10      4      1      5      1      4      3      4      1      5      4      5      1
+## # … with 449 more rows, and 35 more variables: PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>, id1 <dbl>, m <dbl>,
+## #   has_missing <lgl>
 ```
 
  
@@ -2542,12 +2508,12 @@ use only the columns with actual data in them: that is,
 `PERS01` through `PERS44`:
 
 ```r
-pers.1 = pers.ok %>% select(starts_with("PERS")) %>% princomp(cor = T)
+pers.1 = pers.ok %>% select(starts_with("PERS")) %>%
+princomp(cor=T)
 ggscreeplot(pers.1)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/saljhsajd-1} 
+<img src="24-pcfa_files/figure-html/saljhsajd-1.png" width="672"  />
 
        
 
@@ -2575,62 +2541,34 @@ summary(pers.1)
 
 ```
 ## Importance of components:
-##                           Comp.1     Comp.2     Comp.3
-## Standard deviation     2.6981084 2.04738207 1.74372011
-## Proportion of Variance 0.1654497 0.09526758 0.06910363
-## Cumulative Proportion  0.1654497 0.26071732 0.32982096
-##                            Comp.4     Comp.5    Comp.6
-## Standard deviation     1.59610543 1.50114586 1.2627066
-## Proportion of Variance 0.05789892 0.05121452 0.0362370
-## Cumulative Proportion  0.38771988 0.43893440 0.4751714
-##                            Comp.7     Comp.8     Comp.9
-## Standard deviation     1.14816136 1.10615404 1.07405521
-## Proportion of Variance 0.02996078 0.02780856 0.02621806
-## Cumulative Proportion  0.50513218 0.53294074 0.55915880
-##                           Comp.10    Comp.11    Comp.12
-## Standard deviation     1.02180353 0.98309198 0.97514006
-## Proportion of Variance 0.02372915 0.02196522 0.02161132
-## Cumulative Proportion  0.58288795 0.60485317 0.62646449
-##                           Comp.13    Comp.14    Comp.15
-## Standard deviation     0.94861102 0.90832065 0.90680594
-## Proportion of Variance 0.02045143 0.01875105 0.01868857
-## Cumulative Proportion  0.64691592 0.66566698 0.68435554
-##                           Comp.16    Comp.17    Comp.18
-## Standard deviation     0.86798188 0.85762608 0.84515849
-## Proportion of Variance 0.01712256 0.01671642 0.01623393
-## Cumulative Proportion  0.70147810 0.71819452 0.73442845
-##                           Comp.19   Comp.20    Comp.21
-## Standard deviation     0.82819534 0.8123579 0.80910333
-## Proportion of Variance 0.01558881 0.0149983 0.01487837
-## Cumulative Proportion  0.75001726 0.7650156 0.77989393
-##                           Comp.22    Comp.23    Comp.24
-## Standard deviation     0.80435744 0.76594963 0.75946741
-## Proportion of Variance 0.01470434 0.01333361 0.01310888
-## Cumulative Proportion  0.79459827 0.80793188 0.82104076
-##                           Comp.25    Comp.26    Comp.27
-## Standard deviation     0.75434835 0.74494825 0.73105470
-## Proportion of Variance 0.01293276 0.01261245 0.01214639
-## Cumulative Proportion  0.83397352 0.84658597 0.85873236
-##                          Comp.28    Comp.29    Comp.30
-## Standard deviation     0.6956473 0.68327155 0.67765233
-## Proportion of Variance 0.0109983 0.01061045 0.01043665
-## Cumulative Proportion  0.8697307 0.88034111 0.89077776
-##                           Comp.31     Comp.32     Comp.33
-## Standard deviation     0.66847179 0.660473737 0.651473777
-## Proportion of Variance 0.01015578 0.009914217 0.009645865
-## Cumulative Proportion  0.90093355 0.910847763 0.920493629
-##                            Comp.34     Comp.35     Comp.36
-## Standard deviation     0.629487724 0.618765271 0.605892700
-## Proportion of Variance 0.009005791 0.008701601 0.008343317
-## Cumulative Proportion  0.929499420 0.938201021 0.946544338
-##                            Comp.37     Comp.38     Comp.39
-## Standard deviation     0.594231727 0.581419871 0.568951666
-## Proportion of Variance 0.008025258 0.007682933 0.007356955
-## Cumulative Proportion  0.954569596 0.962252530 0.969609484
-##                            Comp.40     Comp.41     Comp.42
-## Standard deviation     0.560084703 0.547059522 0.524949694
-## Proportion of Variance 0.007129429 0.006801685 0.006263004
-## Cumulative Proportion  0.976738913 0.983540598 0.989803602
+##                           Comp.1     Comp.2     Comp.3     Comp.4     Comp.5    Comp.6
+## Standard deviation     2.6981084 2.04738207 1.74372011 1.59610543 1.50114586 1.2627066
+## Proportion of Variance 0.1654497 0.09526758 0.06910363 0.05789892 0.05121452 0.0362370
+## Cumulative Proportion  0.1654497 0.26071732 0.32982096 0.38771988 0.43893440 0.4751714
+##                            Comp.7     Comp.8     Comp.9    Comp.10    Comp.11    Comp.12
+## Standard deviation     1.14816136 1.10615404 1.07405521 1.02180353 0.98309198 0.97514006
+## Proportion of Variance 0.02996078 0.02780856 0.02621806 0.02372915 0.02196522 0.02161132
+## Cumulative Proportion  0.50513218 0.53294074 0.55915880 0.58288795 0.60485317 0.62646449
+##                           Comp.13    Comp.14    Comp.15    Comp.16    Comp.17    Comp.18
+## Standard deviation     0.94861102 0.90832065 0.90680594 0.86798188 0.85762608 0.84515849
+## Proportion of Variance 0.02045143 0.01875105 0.01868857 0.01712256 0.01671642 0.01623393
+## Cumulative Proportion  0.64691592 0.66566698 0.68435554 0.70147810 0.71819452 0.73442845
+##                           Comp.19   Comp.20    Comp.21    Comp.22    Comp.23    Comp.24
+## Standard deviation     0.82819534 0.8123579 0.80910333 0.80435744 0.76594963 0.75946741
+## Proportion of Variance 0.01558881 0.0149983 0.01487837 0.01470434 0.01333361 0.01310888
+## Cumulative Proportion  0.75001726 0.7650156 0.77989393 0.79459827 0.80793188 0.82104076
+##                           Comp.25    Comp.26    Comp.27   Comp.28    Comp.29    Comp.30
+## Standard deviation     0.75434835 0.74494825 0.73105470 0.6956473 0.68327155 0.67765233
+## Proportion of Variance 0.01293276 0.01261245 0.01214639 0.0109983 0.01061045 0.01043665
+## Cumulative Proportion  0.83397352 0.84658597 0.85873236 0.8697307 0.88034111 0.89077776
+##                           Comp.31     Comp.32     Comp.33     Comp.34     Comp.35     Comp.36
+## Standard deviation     0.66847179 0.660473737 0.651473777 0.629487724 0.618765271 0.605892700
+## Proportion of Variance 0.01015578 0.009914217 0.009645865 0.009005791 0.008701601 0.008343317
+## Cumulative Proportion  0.90093355 0.910847763 0.920493629 0.929499420 0.938201021 0.946544338
+##                            Comp.37     Comp.38     Comp.39     Comp.40     Comp.41     Comp.42
+## Standard deviation     0.594231727 0.581419871 0.568951666 0.560084703 0.547059522 0.524949694
+## Proportion of Variance 0.008025258 0.007682933 0.007356955 0.007129429 0.006801685 0.006263004
+## Cumulative Proportion  0.954569596 0.962252530 0.969609484 0.976738913 0.983540598 0.989803602
 ##                            Comp.43     Comp.44
 ## Standard deviation     0.490608152 0.456010047
 ## Proportion of Variance 0.005470372 0.004726026
@@ -2657,8 +2595,8 @@ looked at this. Don't forget to grab only the appropriate
 columns from `pers.ok`:
 
 ```r
-pers.ok.1 = pers.ok %>% select(starts_with("PERS")) %>% factanal(5, 
-    scores = "r")
+pers.ok.1 = pers.ok %>% select(starts_with("PERS")) %>%
+factanal(5,scores="r")
 ```
 
        
@@ -2801,8 +2739,8 @@ I wonder whether 6 factors is different?
 
 
 ```r
-pers.ok.2 = pers.ok %>% select(starts_with("PERS")) %>% factanal(6, 
-    scores = "r")
+pers.ok.2 = pers.ok %>% select(starts_with("PERS")) %>%
+factanal(6,scores="r")
 pers.ok.2$loadings
 ```
 
@@ -2881,7 +2819,7 @@ Solution
 
 For this, we need the factor scores obtained in part
 (<a href="#part:score">here</a>).
-\marginnote{There are two types of scores here:        a person's scores on the psychological test, 1 through 5, and        their factor scores, which are decimal numbers centred at        zero. Try not to get these confused.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are two types of scores here:        a person's scores on the psychological test, 1 through 5, and        their factor scores, which are decimal numbers centred at        zero. Try not to get these confused.</span>
 I'm thinking that I will create a data frame
 with the original data (with the missing values removed) and the
 factor scores together, and then look in there. This will have a
@@ -2891,37 +2829,33 @@ This is based on my 5-factor solution. I'm adding a column
 missing data) we are looking at:
 
 ```r
-scores.1 = as_tibble(pers.ok.1$scores) %>% bind_cols(pers.ok) %>% 
-    mutate(id = row_number())
+scores.1 = as_tibble(pers.ok.1$scores) %>% 
+bind_cols(pers.ok) %>%
+mutate(id=row_number()) 
 scores.1
 ```
 
 ```
 ## # A tibble: 433 x 50
-##    Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02
-##      <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>
-##  1  1.11     0.543   0.530  -0.978 -0.528      1      5      4
-##  2  0.930   -1.62   -0.823   1.11  -2.49       2      1      1
-##  3  0.0405  -0.908   1.01    0.415 -0.169      3      4      1
-##  4  0.123   -0.600   0.442   0.753  0.774      4      4      2
-##  5  1.28    -1.30   -0.194  -0.170 -1.11       5      2      3
-##  6  0.671   -2.10    1.09    0.507 -0.0442     6      1      1
-##  7  0.474    0.467  -2.12    0.892 -2.57       7      3      2
-##  8 -0.589    0.747  -0.257   1.18  -0.517      8      5      2
-##  9 -0.836    1.02    0.620   1.36  -0.705      9      5      1
-## 10  0.984    0.298  -1.06    0.681 -0.553     10      4      1
-## # ... with 423 more rows, and 42 more variables: PERS03 <dbl>,
-## #   PERS04 <dbl>, PERS05 <dbl>, PERS06 <dbl>, PERS07 <dbl>,
-## #   PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>,
-## #   PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
-## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>,
-## #   PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>,
-## #   PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
-## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>,
-## #   PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>, PERS35 <dbl>,
-## #   PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
-## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>,
-## #   PERS44 <dbl>
+##    Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
+##      <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+##  1  1.11     0.543   0.530  -0.978 -0.528      1      5      4      5      1      4      3
+##  2  0.930   -1.62   -0.823   1.11  -2.49       2      1      1      5      2      1      2
+##  3  0.0405  -0.908   1.01    0.415 -0.169      3      4      1      5      3      3      4
+##  4  0.123   -0.600   0.442   0.753  0.774      4      4      2      5      1      4      3
+##  5  1.28    -1.30   -0.194  -0.170 -1.11       5      2      3      5      1      2      4
+##  6  0.671   -2.10    1.09    0.507 -0.0442     6      1      1      5      4      3      4
+##  7  0.474    0.467  -2.12    0.892 -2.57       7      3      2      5      1      2      1
+##  8 -0.589    0.747  -0.257   1.18  -0.517      8      5      2      4      2      4      1
+##  9 -0.836    1.02    0.620   1.36  -0.705      9      5      1      4      3      2      1
+## 10  0.984    0.298  -1.06    0.681 -0.553     10      4      1      5      1      4      3
+## # … with 423 more rows, and 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>,
+## #   PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
    
@@ -2938,24 +2872,20 @@ who scores highest and/or lowest on that factor:
 
 
 ```r
-scores.1 %>% filter(Factor1 == max(Factor1))
+scores.1 %>% filter(Factor1==max(Factor1))
 ```
 
 ```
 ## # A tibble: 1 x 50
-##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>
-## 1    1.70   -2.14   0.471  -0.525   0.681   231      1      4
-## # ... with 42 more variables: PERS03 <dbl>, PERS04 <dbl>,
-## #   PERS05 <dbl>, PERS06 <dbl>, PERS07 <dbl>, PERS08 <dbl>,
-## #   PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
-## #   PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
-## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>,
-## #   PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>,
-## #   PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
-## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>,
-## #   PERS33 <dbl>, PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>,
-## #   PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
+##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1    1.70   -2.14   0.471  -0.525   0.681   231      1      4      5      4      4      5
+## # … with 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
+## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
+## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
+## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>,
+## #   PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
 ## #   PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
@@ -2965,30 +2895,25 @@ to display the maximum, or
 
 
 ```r
-scores.1 %>% arrange(Factor1) %>% print(n = 5)
+scores.1 %>% arrange(Factor1) %>% print(n=5)
 ```
 
 ```
 ## # A tibble: 433 x 50
-##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>
-## 1   -2.82   1.33  -0.548    0.786  0.488    340      5      1
-## 2   -2.24  -0.510  0.125   -0.523 -0.0971   128      1      2
-## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2
-## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3
-## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1
-## # ... with 428 more rows, and 42 more variables: PERS03 <dbl>,
-## #   PERS04 <dbl>, PERS05 <dbl>, PERS06 <dbl>, PERS07 <dbl>,
-## #   PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>,
-## #   PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
-## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>,
-## #   PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>,
-## #   PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
-## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>,
-## #   PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>, PERS35 <dbl>,
-## #   PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
-## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>,
-## #   PERS44 <dbl>
+##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1   -2.82   1.33  -0.548    0.786  0.488    340      5      1      1      2      5      1
+## 2   -2.24  -0.510  0.125   -0.523 -0.0971   128      1      2      2      4      2      2
+## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3
+## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3
+## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3
+## # … with 428 more rows, and 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>,
+## #   PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
  
@@ -2997,24 +2922,20 @@ to display the minimum (and in this case the five smallest ones), or
 
 
 ```r
-scores.1 %>% filter(abs(Factor1) == max(abs(Factor1)))
+scores.1 %>% filter(abs(Factor1)==max(abs(Factor1)))
 ```
 
 ```
 ## # A tibble: 1 x 50
-##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>
-## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1
-## # ... with 42 more variables: PERS03 <dbl>, PERS04 <dbl>,
-## #   PERS05 <dbl>, PERS06 <dbl>, PERS07 <dbl>, PERS08 <dbl>,
-## #   PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
-## #   PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
-## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>,
-## #   PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>,
-## #   PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
-## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>,
-## #   PERS33 <dbl>, PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>,
-## #   PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
+##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1
+## # … with 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
+## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
+## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
+## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>,
+## #   PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
 ## #   PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
@@ -3027,26 +2948,22 @@ values in it and look at that:
 
 
 ```r
-scores.1 %>% mutate(abso = abs(Factor1)) %>% filter(abso == max(abso))
+scores.1 %>% mutate(abso=abs(Factor1)) %>% 
+filter(abso==max(abso))
 ```
 
 ```
 ## # A tibble: 1 x 51
-##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>
-## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1
-## # ... with 43 more variables: PERS03 <dbl>, PERS04 <dbl>,
-## #   PERS05 <dbl>, PERS06 <dbl>, PERS07 <dbl>, PERS08 <dbl>,
-## #   PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
-## #   PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
-## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>,
-## #   PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>,
-## #   PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
-## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>,
-## #   PERS33 <dbl>, PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>,
-## #   PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
-## #   PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>,
-## #   abso <dbl>
+##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1
+## # … with 39 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
+## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
+## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
+## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>,
+## #   PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>, PERS40 <dbl>,
+## #   PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>, abso <dbl>
 ```
 
  
@@ -3056,30 +2973,25 @@ this work too?
 
 
 ```r
-scores.1 %>% arrange(desc(abs(Factor1))) %>% print(n = 5)
+scores.1 %>% arrange(desc(abs(Factor1))) %>% print(n=5)
 ```
 
 ```
 ## # A tibble: 433 x 50
-##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02
-##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>
-## 1   -2.82   1.33  -0.548    0.786  0.488    340      5      1
-## 2   -2.24  -0.510  0.125   -0.523 -0.0971   128      1      2
-## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2
-## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3
-## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1
-## # ... with 428 more rows, and 42 more variables: PERS03 <dbl>,
-## #   PERS04 <dbl>, PERS05 <dbl>, PERS06 <dbl>, PERS07 <dbl>,
-## #   PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>,
-## #   PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
-## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>,
-## #   PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>,
-## #   PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
-## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>,
-## #   PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>, PERS35 <dbl>,
-## #   PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
-## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>,
-## #   PERS44 <dbl>
+##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
+##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1   -2.82   1.33  -0.548    0.786  0.488    340      5      1      1      2      5      1
+## 2   -2.24  -0.510  0.125   -0.523 -0.0971   128      1      2      2      4      2      2
+## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3
+## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3
+## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3
+## # … with 428 more rows, and 38 more variables: PERS07 <dbl>, PERS08 <dbl>, PERS09 <dbl>,
+## #   PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>,
+## #   PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>,
+## #   PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>,
+## #   PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>,
+## #   PERS34 <dbl>, PERS35 <dbl>, PERS36 <dbl>, PERS37 <dbl>, PERS38 <dbl>, PERS39 <dbl>,
+## #   PERS40 <dbl>, PERS41 <dbl>, PERS42 <dbl>, PERS43 <dbl>, PERS44 <dbl>
 ```
 
  
@@ -3102,19 +3014,18 @@ ones have positive loadings and the last three have negative loadings:
 
 
 ```r
-f1 = c(3, 13, 28, 33, 38, 8, 18, 23, 43)
-scores.1 %>% mutate(abso = abs(Factor1)) %>% filter(abso == max(abso)) %>% 
-    select(id, Factor1, num_range("PERS", f1, width = 2)) %>% print(width = Inf)
+f1=c(3,13,28,33,38,8,18,23,43)
+scores.1 %>% mutate(abso=abs(Factor1)) %>% 
+filter(abso==max(abso)) %>%
+select(id,Factor1,num_range("PERS",f1,width=2)) %>%
+print(width=Inf)
 ```
 
 ```
 ## # A tibble: 1 x 11
-##      id Factor1 PERS03 PERS13 PERS28 PERS33 PERS38 PERS08 PERS18
-##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-## 1   340   -2.82      1      3      3      1      2      5      5
-##   PERS23 PERS43
-##    <dbl>  <dbl>
-## 1      4      5
+##      id Factor1 PERS03 PERS13 PERS28 PERS33 PERS38 PERS08 PERS18 PERS23 PERS43
+##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1   340   -2.82      1      3      3      1      2      5      5      4      5
 ```
 
  
@@ -3141,23 +3052,22 @@ Having struggled through that, factors 2 and 3 are repeats of
 this. The high loaders on factor 2 are the ones shown in `f2`
 below, with the first five loading positively and the last three
 negatively.
-\marginnote{I think the last four items in the entire survey  are different; otherwise the total number of items would be a  multiple of 5.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I think the last four items in the entire survey  are different; otherwise the total number of items would be a  multiple of 5.</span>
 
 
 ```r
-f2 = c(1, 11, 16, 26, 36, 6, 21, 31)
-scores.1 %>% mutate(abso = abs(Factor2)) %>% filter(abso == max(abso)) %>% 
-    select(id, Factor2, num_range("PERS", f2, width = 2)) %>% print(width = Inf)
+f2=c(1,11,16,26,36,6,21,31)
+scores.1 %>% mutate(abso=abs(Factor2)) %>% 
+filter(abso==max(abso)) %>%
+select(id,Factor2,num_range("PERS",f2,width=2)) %>%
+print(width=Inf)
 ```
 
 ```
 ## # A tibble: 1 x 10
-##      id Factor2 PERS01 PERS11 PERS16 PERS26 PERS36 PERS06 PERS21
-##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-## 1    58   -2.35      1      2      1      2      2      5      5
-##   PERS31
-##    <dbl>
-## 1      5
+##      id Factor2 PERS01 PERS11 PERS16 PERS26 PERS36 PERS06 PERS21 PERS31
+##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1    58   -2.35      1      2      1      2      2      5      5      5
 ```
 
  
@@ -3177,19 +3087,18 @@ this is:
 
 
 ```r
-f3 = c(4, 14, 19, 29, 39, 9, 24, 34)
-scores.1 %>% mutate(abso = abs(Factor3)) %>% filter(abso == max(abso)) %>% 
-    select(id, Factor3, num_range("PERS", f3, width = 2)) %>% print(width = Inf)
+f3=c(4,14,19,29,39,9,24,34)
+scores.1 %>% mutate(abso=abs(Factor3)) %>% 
+filter(abso==max(abso)) %>%
+select(id,Factor3,num_range("PERS",f3,width=2)) %>%
+print(width=Inf)
 ```
 
 ```
 ## # A tibble: 1 x 10
-##      id Factor3 PERS04 PERS14 PERS19 PERS29 PERS39 PERS09 PERS24
-##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-## 1   209   -2.27      1      1      4      1      1      5      4
-##   PERS34
-##    <dbl>
-## 1      4
+##      id Factor3 PERS04 PERS14 PERS19 PERS29 PERS39 PERS09 PERS24 PERS34
+##   <int>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1   209   -2.27      1      1      4      1      1      5      4      4
 ```
 
  
@@ -3215,22 +3124,16 @@ pers.ok.1$uniquenesses
 ```
 
 ```
-##    PERS01    PERS02    PERS03    PERS04    PERS05    PERS06 
-## 0.3276244 0.6155884 0.4955364 0.6035655 0.5689691 0.4980334 
-##    PERS07    PERS08    PERS09    PERS10    PERS11    PERS12 
-## 0.5884146 0.6299781 0.5546981 0.7460655 0.7740590 0.8016644 
-##    PERS13    PERS14    PERS15    PERS16    PERS17    PERS18 
-## 0.5336047 0.5035412 0.7381636 0.6352166 0.8978624 0.5881834 
-##    PERS19    PERS20    PERS21    PERS22    PERS23    PERS24 
-## 0.5949740 0.6900378 0.3274366 0.6564542 0.5279346 0.6107080 
-##    PERS25    PERS26    PERS27    PERS28    PERS29    PERS30 
-## 0.6795545 0.5412962 0.7438329 0.5289192 0.7114735 0.7386601 
-##    PERS31    PERS32    PERS33    PERS34    PERS35    PERS36 
-## 0.5762901 0.5592906 0.6029914 0.6573411 0.9306766 0.4966071 
-##    PERS37    PERS38    PERS39    PERS40    PERS41    PERS42 
-## 0.6396371 0.6804821 0.5933423 0.6204610 0.8560531 0.5684220 
-##    PERS43    PERS44 
-## 0.6898732 0.7872295
+##    PERS01    PERS02    PERS03    PERS04    PERS05    PERS06    PERS07    PERS08    PERS09 
+## 0.3276244 0.6155884 0.4955364 0.6035655 0.5689691 0.4980334 0.5884146 0.6299781 0.5546981 
+##    PERS10    PERS11    PERS12    PERS13    PERS14    PERS15    PERS16    PERS17    PERS18 
+## 0.7460655 0.7740590 0.8016644 0.5336047 0.5035412 0.7381636 0.6352166 0.8978624 0.5881834 
+##    PERS19    PERS20    PERS21    PERS22    PERS23    PERS24    PERS25    PERS26    PERS27 
+## 0.5949740 0.6900378 0.3274366 0.6564542 0.5279346 0.6107080 0.6795545 0.5412962 0.7438329 
+##    PERS28    PERS29    PERS30    PERS31    PERS32    PERS33    PERS34    PERS35    PERS36 
+## 0.5289192 0.7114735 0.7386601 0.5762901 0.5592906 0.6029914 0.6573411 0.9306766 0.4966071 
+##    PERS37    PERS38    PERS39    PERS40    PERS41    PERS42    PERS43    PERS44 
+## 0.6396371 0.6804821 0.5933423 0.6204610 0.8560531 0.5684220 0.6898732 0.7872295
 ```
 
        
