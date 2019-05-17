@@ -5,21 +5,78 @@
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -132,7 +189,7 @@ ggplot(heliconia,aes(sample=bihai))+stat_qq()+stat_qq_line()
 ## Warning: Removed 7 rows containing non-finite values (stat_qq_line).
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-4-1.png" width="672"  />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
 I'm saving the comments until we've seen all three.
 
@@ -152,7 +209,7 @@ Same idea again:
 ggplot(heliconia,aes(sample=caribaea_red))+stat_qq()+stat_qq_line()
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
 
 
@@ -178,7 +235,7 @@ ggplot(heliconia,aes(sample=caribaea_yellow))+stat_qq()+stat_qq_line()
 ## Warning: Removed 8 rows containing non-finite values (stat_qq_line).
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
 I did a lot of copying and pasting there.
 
@@ -275,7 +332,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~variety,scale="free")
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
 These are a bit elongated vertically. The `scale="free"` allows
 a different vertical scale for each plot (otherwise there would be one
@@ -299,7 +356,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~variety,scale="free",ncol=2)
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
 I think the square plots make it easier to see the shape of these:
 curved, S-bend, straightish.
@@ -312,7 +369,7 @@ ggplot(heliconia.long,aes(x=length))+
 geom_histogram(binwidth=1)+facet_wrap(~variety,scale="free",ncol=2)
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
 *bihai* has those two outliers, *caribaea* red has no tails
 to speak of (or you might say "it's bimodal", which would be another
@@ -417,7 +474,7 @@ ggplot(athletes, aes(sample=Ferr))+
 stat_qq()+stat_qq_line()
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
 This is almost a classic right skew: the values are too bunched up at
 the bottom and too spread out at the top. The curved shape should be
@@ -443,7 +500,7 @@ ggplot(athletes,aes(sample=Ferr))+stat_qq()+stat_qq_line()+
 facet_wrap(~Sport)
 ```
 
-<img src="09-normal-quantile_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
   
 
 (d)[2] Looking at the plots in the previous part, would you say

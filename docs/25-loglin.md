@@ -7,22 +7,79 @@ Packages for this chapter:
 library(tidyverse)
 ```
 
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
+```
+
 
 
 ##  College plans
@@ -408,12 +465,12 @@ votes
 ##  2 lower middle <26   female labour           7
 ##  3 lower middle <26   male   conservative     9
 ##  4 lower middle <26   male   labour           9
-##  5 lower middle 26-40 female conservative    17
-##  6 lower middle 26-40 female labour          13
-##  7 lower middle 26-40 male   conservative    14
-##  8 lower middle 26-40 male   labour          15
-##  9 lower middle 41-50 female conservative    29
-## 10 lower middle 41-50 female labour           4
+##  5 lower middle >75   female conservative     9
+##  6 lower middle >75   female labour           2
+##  7 lower middle >75   male   conservative     8
+##  8 lower middle >75   male   labour           4
+##  9 lower middle 26-40 female conservative    17
+## 10 lower middle 26-40 female labour          13
 ## # … with 48 more rows
 ```
 
@@ -649,35 +706,35 @@ summary(vote.7)
 ## (Intercept)                            2.50737    0.21613  11.601  < 2e-16 ***
 ## classupper middle                     -0.45199    0.34188  -1.322 0.186151    
 ## classworking                           0.37469    0.27696   1.353 0.176088    
+## age>75                                -0.25783    0.32292  -0.798 0.424622    
 ## age26-40                               0.34294    0.27877   1.230 0.218619    
 ## age41-50                               0.93431    0.25162   3.713 0.000205 ***
 ## age51-75                               0.89794    0.25293   3.550 0.000385 ***
-## age>75                                -0.25783    0.32292  -0.798 0.424622    
 ## sexmale                               -0.23242    0.08016  -2.900 0.003737 ** 
 ## votelabour                            -0.50081    0.33324  -1.503 0.132882    
+## classupper middle:age>75               0.25783    0.49713   0.519 0.604013    
+## classworking:age>75                    0.01097    0.41896   0.026 0.979113    
 ## classupper middle:age26-40             0.82466    0.41396   1.992 0.046358 *  
 ## classworking:age26-40                  0.41083    0.35167   1.168 0.242713    
 ## classupper middle:age41-50             0.37788    0.39239   0.963 0.335542    
 ## classworking:age41-50                 -0.28917    0.33310  -0.868 0.385327    
 ## classupper middle:age51-75             0.43329    0.39277   1.103 0.269954    
 ## classworking:age51-75                  0.10223    0.32668   0.313 0.754325    
-## classupper middle:age>75               0.25783    0.49713   0.519 0.604013    
-## classworking:age>75                    0.01097    0.41896   0.026 0.979113    
 ## classupper middle:votelabour          -0.12338    0.53898  -0.229 0.818936    
 ## classworking:votelabour                1.05741    0.39259   2.693 0.007073 ** 
+## age>75:votelabour                     -0.72300    0.57745  -1.252 0.210547    
 ## age26-40:votelabour                    0.21667    0.41944   0.517 0.605452    
 ## age41-50:votelabour                   -0.93431    0.43395  -2.153 0.031315 *  
 ## age51-75:votelabour                   -0.62601    0.41724  -1.500 0.133526    
-## age>75:votelabour                     -0.72300    0.57745  -1.252 0.210547    
 ## sexmale:votelabour                     0.37323    0.11334   3.293 0.000992 ***
+## classupper middle:age>75:votelabour         NA         NA      NA       NA    
+## classworking:age>75:votelabour        -0.29039    0.68720  -0.423 0.672607    
 ## classupper middle:age26-40:votelabour -0.53698    0.65445  -0.821 0.411931    
 ## classworking:age26-40:votelabour      -0.28479    0.49429  -0.576 0.564516    
 ## classupper middle:age41-50:votelabour -0.01015    0.68338  -0.015 0.988147    
 ## classworking:age41-50:votelabour       1.06121    0.50772   2.090 0.036603 *  
 ## classupper middle:age51-75:votelabour -0.06924    0.65903  -0.105 0.916328    
 ## classworking:age51-75:votelabour       0.16608    0.49036   0.339 0.734853    
-## classupper middle:age>75:votelabour         NA         NA      NA       NA    
-## classworking:age>75:votelabour        -0.29039    0.68720  -0.423 0.672607    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -764,23 +821,23 @@ xt
 ## , , class = lower middle
 ## 
 ##               age
-## vote           <26 26-40 41-50 51-75 >75
-##   conservative  22    31    56    54  17
-##   labour        16    28    16    21   6
+## vote           <26 >75 26-40 41-50 51-75
+##   conservative  22  17    31    56    54
+##   labour        16   6    28    16    21
 ## 
 ## , , class = upper middle
 ## 
 ##               age
-## vote           <26 26-40 41-50 51-75 >75
-##   conservative  14    45    52    53  14
-##   labour         9    21    13    17   0
+## vote           <26 >75 26-40 41-50 51-75
+##   conservative  14  14    45    52    53
+##   labour         9   0    21    13    17
 ## 
 ## , , class = working
 ## 
 ##               age
-## vote           <26 26-40 41-50 51-75 >75
-##   conservative  32    68    61    87  25
-##   labour        67   133   145   115  19
+## vote           <26 >75 26-40 41-50 51-75
+##   conservative  32  25    68    61    87
+##   labour        67  19   133   145   115
 ```
 
  
@@ -823,23 +880,23 @@ prop.table(xt,3)
 ## , , class = lower middle
 ## 
 ##               age
-## vote                  <26      26-40      41-50      51-75        >75
-##   conservative 0.08239700 0.11610487 0.20973783 0.20224719 0.06367041
-##   labour       0.05992509 0.10486891 0.05992509 0.07865169 0.02247191
+## vote                  <26        >75      26-40      41-50      51-75
+##   conservative 0.08239700 0.06367041 0.11610487 0.20973783 0.20224719
+##   labour       0.05992509 0.02247191 0.10486891 0.05992509 0.07865169
 ## 
 ## , , class = upper middle
 ## 
 ##               age
-## vote                  <26      26-40      41-50      51-75        >75
-##   conservative 0.05882353 0.18907563 0.21848739 0.22268908 0.05882353
-##   labour       0.03781513 0.08823529 0.05462185 0.07142857 0.00000000
+## vote                  <26        >75      26-40      41-50      51-75
+##   conservative 0.05882353 0.05882353 0.18907563 0.21848739 0.22268908
+##   labour       0.03781513 0.00000000 0.08823529 0.05462185 0.07142857
 ## 
 ## , , class = working
 ## 
 ##               age
-## vote                  <26      26-40      41-50      51-75        >75
-##   conservative 0.04255319 0.09042553 0.08111702 0.11569149 0.03324468
-##   labour       0.08909574 0.17686170 0.19281915 0.15292553 0.02526596
+## vote                  <26        >75      26-40      41-50      51-75
+##   conservative 0.04255319 0.03324468 0.09042553 0.08111702 0.11569149
+##   labour       0.08909574 0.02526596 0.17686170 0.19281915 0.15292553
 ```
 
  
@@ -857,23 +914,23 @@ prop.table(xt,c(2,3))
 ## , , class = lower middle
 ## 
 ##               age
-## vote                 <26     26-40     41-50     51-75       >75
-##   conservative 0.5789474 0.5254237 0.7777778 0.7200000 0.7391304
-##   labour       0.4210526 0.4745763 0.2222222 0.2800000 0.2608696
+## vote                 <26       >75     26-40     41-50     51-75
+##   conservative 0.5789474 0.7391304 0.5254237 0.7777778 0.7200000
+##   labour       0.4210526 0.2608696 0.4745763 0.2222222 0.2800000
 ## 
 ## , , class = upper middle
 ## 
 ##               age
-## vote                 <26     26-40     41-50     51-75       >75
-##   conservative 0.6086957 0.6818182 0.8000000 0.7571429 1.0000000
-##   labour       0.3913043 0.3181818 0.2000000 0.2428571 0.0000000
+## vote                 <26       >75     26-40     41-50     51-75
+##   conservative 0.6086957 1.0000000 0.6818182 0.8000000 0.7571429
+##   labour       0.3913043 0.0000000 0.3181818 0.2000000 0.2428571
 ## 
 ## , , class = working
 ## 
 ##               age
-## vote                 <26     26-40     41-50     51-75       >75
-##   conservative 0.3232323 0.3383085 0.2961165 0.4306931 0.5681818
-##   labour       0.6767677 0.6616915 0.7038835 0.5693069 0.4318182
+## vote                 <26       >75     26-40     41-50     51-75
+##   conservative 0.3232323 0.5681818 0.3383085 0.2961165 0.4306931
+##   labour       0.6767677 0.4318182 0.6616915 0.7038835 0.5693069
 ```
 
  

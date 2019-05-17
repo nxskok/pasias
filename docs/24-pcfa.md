@@ -5,54 +5,81 @@ Packages for this chapter:
 
 ```r
 library(ggbiplot)
-```
-
-```
-## Loading required package: ggplot2
-```
-
-```
-## Loading required package: plyr
-```
-
-```
-## Loading required package: scales
-```
-
-```
-## Loading required package: grid
-```
-
-```r
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ tibble  2.1.1          ✔ purrr   0.3.2     
-## ✔ tidyr   0.8.3.9000     ✔ dplyr   0.8.0.1   
-## ✔ readr   1.3.1          ✔ stringr 1.4.0     
-## ✔ tibble  2.1.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::arrange()    masks plyr::arrange()
-## ✖ readr::col_factor() masks scales::col_factor()
-## ✖ purrr::compact()    masks plyr::compact()
-## ✖ dplyr::count()      masks plyr::count()
-## ✖ purrr::discard()    masks scales::discard()
-## ✖ dplyr::failwith()   masks plyr::failwith()
-## ✖ dplyr::filter()     masks stats::filter()
-## ✖ dplyr::id()         masks plyr::id()
-## ✖ dplyr::lag()        masks stats::lag()
-## ✖ dplyr::mutate()     masks plyr::mutate()
-## ✖ dplyr::rename()     masks plyr::rename()
-## ✖ dplyr::summarise()  masks plyr::summarise()
-## ✖ dplyr::summarize()  masks plyr::summarize()
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -411,7 +438,7 @@ have to go back to the base-graphics version, which goes a bit like this:
 biplot(weather.2$scores,weather.2$loadings)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -598,7 +625,7 @@ year, which was called `day.count`:
 ggbiplot(weather.1,labels=weather.0$day.count,labels.size=2)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
      
 
@@ -771,6 +798,10 @@ library(ggmap)
 ```
 
 ```
+## Warning: package 'ggmap' was built under R version 3.5.2
+```
+
+```
 ## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
 ```
 
@@ -849,7 +880,7 @@ mapp=get_map("Porto", zoom=5)
 ggmap(mapp)+geom_point(data=porto,aes(x=lon,y=lat),colour="red")
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
  
 
@@ -896,7 +927,7 @@ geom_text_repel(data=places, aes(label=place))
 ## Warning in max(x): no non-missing arguments to max; returning -Inf
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
  
 
@@ -1098,7 +1129,7 @@ package `ggbiplot`:
 ggscreeplot(air.1)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
      
 
@@ -1484,7 +1515,7 @@ Solution
 ggbiplot(air.1,labels=d$row)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
  
 
@@ -1558,7 +1589,7 @@ the axes now:
 biplot(air.2$scores, air.2$loadings)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -2287,7 +2318,7 @@ ggplot(aes(x=response))+geom_bar()+facet_wrap(~item)
 ## Warning: Removed 371 rows containing non-finite values (stat_count).
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
 
  
 

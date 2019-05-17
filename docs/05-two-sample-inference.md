@@ -5,21 +5,78 @@
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -132,7 +189,7 @@ Solution
 ggplot(plugged,aes(x=factor(year),y=hours))+geom_boxplot()
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
 The `fct_inorder` trick from assignment 1 will also work, since
 the years are in the data in the order we want them to be displayed.
@@ -154,7 +211,7 @@ plugged %>% mutate(the_year=factor(year)) %>%
 ggplot(aes(x=the_year, y=hours))+geom_boxplot()
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
 You could even redefine `year` to be the factor version of
 itself (if you don't need the year-as-number anywhere else). The
@@ -177,7 +234,7 @@ ggplot(plugged,aes(x=year,y=hours))+geom_boxplot()
 ## Warning: Continuous x aesthetic -- did you forget aes(group=...)?
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
 You get *one* boxplot, for all the hours, without distinguishing
 by year, and a warning message that tries (and fails) to read our
@@ -471,6 +528,13 @@ those two ways, you go ahead and do this:
 
 ```r
 library(readxl)
+```
+
+```
+## Warning: package 'readxl' was built under R version 3.5.2
+```
+
+```r
 parking=read_excel("parking.xlsx",sheet=2)
 parking
 ```
@@ -630,7 +694,7 @@ With the right data set, this is a piece of cake:
 ggplot(parking,aes(x=gender,y=distance))+geom_boxplot()
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
          
 
@@ -652,7 +716,7 @@ the distances, without distinguishing by gender:
 ggplot(parking,aes(x=distance))+geom_histogram(bins=8)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
  
 
@@ -671,7 +735,7 @@ geom_histogram(bins=7)+
 facet_grid(gender~.)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
  
 
@@ -700,7 +764,7 @@ geom_histogram(bins=7)+
 facet_wrap(~gender,ncol=1)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
  
 
@@ -804,7 +868,7 @@ and that leads to this histogram:
 ggplot(parking,aes(x=distance))+geom_histogram(bins=14)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
  
 
@@ -1192,7 +1256,7 @@ ggplot(pepper,aes(x=water))+geom_histogram(bins=6)+
 facet_grid(field~.)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
  
 
@@ -1578,7 +1642,7 @@ ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
 facet_wrap(~Environment, scales="free")
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
      
 
@@ -1600,7 +1664,7 @@ ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
 facet_wrap(~Environment, scales="free", ncol=1)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
      
 
@@ -1700,7 +1764,7 @@ The boxplot is the kind of thing we've seen before:
 ggplot(diet,aes(x=sect,y=height))+geom_boxplot()
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
  
 
@@ -1733,7 +1797,7 @@ diet %>% ggplot(aes(sample=height))+stat_qq()+stat_qq_line()+
 facet_wrap(~sect, ncol=1)
 ```
 
-<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
+<img src="05-two-sample-inference_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 

@@ -6,35 +6,83 @@ Packages for this chapter:
 ```r
 library(MASS)
 library(car)
-```
-
-```
-## Loading required package: carData
-```
-
-```r
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ✖ dplyr::recode() masks car::recode()
-## ✖ dplyr::select() masks MASS::select()
-## ✖ purrr::some()   masks car::some()
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
+```
+
 
 
 ##  Acid rain
@@ -140,7 +188,7 @@ ggplot(acidrain,aes(x=rain_pH,y=soil_acidity,fill=soil_depth))+
 geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-3-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
 
      
 
@@ -155,7 +203,7 @@ ggplot(acidrain,aes(x=factor(rain_pH),y=soil_acidity,fill=soil_depth))+
 geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-4-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
      
 
@@ -170,7 +218,7 @@ ggplot(acidrain,aes(fill=factor(rain_pH),y=soil_acidity,x=soil_depth))+
 geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
      
 
@@ -411,7 +459,7 @@ ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
 geom_point()+geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
      
 Or, you probably had this:
@@ -421,7 +469,7 @@ Or, you probably had this:
 geom_point()+geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
      
 
@@ -433,7 +481,7 @@ Since `a` and `b` both have three levels, you could just as well use them the ot
 geom_point()+geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
  
 
@@ -465,7 +513,7 @@ geom_line()+
 geom_point(data=hayfever, aes(y=relief))
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
      
 
@@ -1373,7 +1421,7 @@ So far so good. 75 students, in tidy format.
 ggplot(studyhours,aes(x=major,y=hours))+geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
  
 
@@ -1396,7 +1444,7 @@ kind of model:
 boxcox(hours~major,data=studyhours)
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -2976,7 +3024,7 @@ ggplot(productivity,aes(x=last,y=improvement,colour=expenditure))+
 geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-93-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
 
      
 
@@ -3401,7 +3449,7 @@ batting an eyelid:
 ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-102-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
 
        
  
@@ -3740,7 +3788,7 @@ ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()+
 geom_line(data=allpreds,aes(y=preds,linetype=drug))
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
 
  
 
@@ -3806,7 +3854,7 @@ ggplot(lepro,aes(x=pre,y=post,colour=drug))+
 geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
+<img src="18-anova-revisited_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
 
  
 

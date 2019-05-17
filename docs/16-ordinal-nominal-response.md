@@ -7,22 +7,77 @@ library(nnet)
 library(tidyverse)
 ```
 
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ✖ dplyr::select() masks MASS::select()
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -740,6 +795,11 @@ interfering with the `dplyr` one:
 detach("package:MASS",unload=T)
 ```
 
+```
+## Warning: 'MASS' namespace cannot be unloaded:
+##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+```
+
     
  
 
@@ -1018,20 +1078,6 @@ order that you went to such great pains to make in the last part!
 
 ```r
 library(MASS)
-```
-
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
-```r
 abortion.1=polr(attitude.ord~religion+education,
 data=abortion,weights=frequency)
 ```
@@ -1374,6 +1420,11 @@ Again, we should tidy up after ourselves:
 
 ```r
 detach("package:MASS", unload=T)
+```
+
+```
+## Warning: 'MASS' namespace cannot be unloaded:
+##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
 ```
 
  
@@ -2421,17 +2472,24 @@ response.
 
 
 
-(d) Fit a suitable multinomial model predicting food type from  gender, size
-and lake. How you account for having `Frequency` as well?
+(d) Fit a suitable multinomial model predicting food type from
+gender, size and lake. Does each row represent one alligator or more
+than one? If more than one, account for this in your modelling.
 
 
 Solution
 
 
-The clue in the question is to remind you not to forget the
-`weights` piece, otherwise `multinom` will assume
-that you have *one* observation per line and not as many as
-the number in `Frequency`. 
+Each row of the tidy `gators` represents as many
+alligators as are in the `Frequency` column. That is, if
+you look at female small alligators in Lake George that ate
+mainly fish, there are three of those.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When you have variables that are categories, you might have more than one individual with exactly the same categories; on the other hand, if they had measured *Size* as, say, length in centimetres, it would have been very unlikely to get two alligators of exactly the same size.</span>
+This to remind you to include the `weights` piece,
+otherwise `multinom` will assume that you have *one*
+observation per line and not as many as the number in
+`Frequency`.
+
 *That* is the
 reason that `count` earlier would have been confusing:
 it would have told you how many *rows* contained each
@@ -2454,7 +2512,7 @@ gators %>% count(Food.type)
 ```
 
 ```r
-gators %>% count(Food.type,wt=Frequency)
+gators %>% count(Food.type, wt=Frequency)
 ```
 
 ```
@@ -3365,10 +3423,10 @@ summary()
 ##                                                                 
 ##                                                                 
 ##    steak               steak_prep    female           age     
-##  Mode :logical   Medium     :132   Mode :logical   18-29:110  
-##  FALSE:109       Medium rare:166   FALSE:246       30-44:133  
-##  TRUE :430       Medium Well: 75   TRUE :268       45-60:140  
-##  NA's :11        Rare       : 23   NA's :36        >60  :131  
+##  Mode :logical   Medium     :132   Mode :logical   >60  :131  
+##  FALSE:109       Medium rare:166   FALSE:246       18-29:110  
+##  TRUE :430       Medium Well: 75   TRUE :268       30-44:133  
+##  NA's :11        Rare       : 23   NA's :36        45-60:140  
 ##                  Well       : 36                   NA's : 36  
 ##                  NA's       :118                              
 ##                                                               
@@ -3520,10 +3578,10 @@ summary()
 ##                                                                 
 ##                                                                 
 ##   steak               steak_prep    female           age    
-##  Mode:logical   Medium     :109   Mode :logical   18-29:70  
-##  TRUE:331       Medium rare:128   FALSE:174       30-44:93  
-##                 Medium Well: 56   TRUE :157       45-60:86  
-##                 Rare       : 18                   >60  :82  
+##  Mode:logical   Medium     :109   Mode :logical   >60  :82  
+##  TRUE:331       Medium rare:128   FALSE:174       18-29:70  
+##                 Medium Well: 56   TRUE :157       30-44:93  
+##                 Rare       : 18                   45-60:86  
 ##                 Well       : 20                             
 ##                                                             
 ##                                                             
@@ -3661,8 +3719,8 @@ sfcrime
 ##  8 2015-05-13 23:30:00 VEHICLE… STOLEN … Wednesday BAYVIEW    NONE      
 ##  9 2015-05-13 23:00:00 LARCENY… GRAND T… Wednesday RICHMOND   NONE      
 ## 10 2015-05-13 23:00:00 LARCENY… GRAND T… Wednesday CENTRAL    NONE      
-## # ... with 878,039 more rows, and 3 more variables: Address <chr>,
-## #   X <dbl>, Y <dbl>
+## # … with 878,039 more rows, and 3 more variables: Address <chr>, X <dbl>,
+## #   Y <dbl>
 ```
 
      
@@ -3898,13 +3956,19 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:forcats"   "package:stringr"  
-##  [4] "package:dplyr"     "package:purrr"     "package:readr"    
-##  [7] "package:tidyr"     "package:tibble"    "package:ggplot2"  
-## [10] "package:tidyverse" "package:nnet"      "package:stats"    
-## [13] "package:graphics"  "package:grDevices" "package:utils"    
-## [16] "package:datasets"  "package:methods"   "Autoloads"        
-## [19] "package:base"
+##  [1] ".GlobalEnv"         ".conflicts"         "package:conflicted"
+##  [4] "package:rpart"      "package:broom"      "package:ggrepel"   
+##  [7] "package:ggbiplot"   "package:grid"       "package:scales"    
+## [10] "package:plyr"       "package:lme4"       "package:Matrix"    
+## [13] "package:car"        "package:carData"    "package:survminer" 
+## [16] "package:ggpubr"     "package:magrittr"   "package:survival"  
+## [19] "package:nnet"       "package:smmr"       "package:forcats"   
+## [22] "package:stringr"    "package:dplyr"      "package:purrr"     
+## [25] "package:readr"      "package:tidyr"      "package:tibble"    
+## [28] "package:ggplot2"    "package:tidyverse"  "package:stats"     
+## [31] "package:graphics"   "package:grDevices"  "package:utils"     
+## [34] "package:datasets"   "package:methods"    "Autoloads"         
+## [37] "package:base"
 ```
 
  
@@ -4124,17 +4188,6 @@ We should also (re-)load `MASS`, since we'll be needing it:
 
 ```r
 library(MASS)
-```
-
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
 ```
 
  
@@ -6083,7 +6136,7 @@ I'm doing this to give you a little intuition for later:
 ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport))+geom_point()
 ```
 
-<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-150-1.png" width="672"  />
+<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-152-1.png" width="672"  />
 
      
 

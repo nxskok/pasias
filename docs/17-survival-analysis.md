@@ -4,52 +4,81 @@
 ```r
 library(survival)
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
-```
-
-```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
-```
-
-```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-```
-
-```r
 library(survminer)
 ```
 
+
+
 ```
-## Loading required package: ggpubr
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## Loading required package: magrittr
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## 
-## Attaching package: 'magrittr'
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
 
 ```
-## The following object is masked from 'package:purrr':
-## 
-##     set_names
+## Warning: package 'readr' was built under R version 3.5.2
 ```
 
 ```
-## The following object is masked from 'package:tidyr':
-## 
-##     extract
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -228,7 +257,6 @@ summary(whas100.1)
 ## bmi       0.9316     1.0734    0.8680    0.9999
 ## 
 ## Concordance= 0.683  (se = 0.037 )
-## Rsquare= 0.194   (max possible= 0.985 )
 ## Likelihood ratio test= 21.54  on 3 df,   p=8e-05
 ## Wald test            = 19.46  on 3 df,   p=2e-04
 ## Score (logrank) test = 20.82  on 3 df,   p=1e-04
@@ -343,7 +371,6 @@ summary(whas100.2)
 ## bmi    0.9313     1.0738    0.8676    0.9997
 ## 
 ## Concordance= 0.681  (se = 0.037 )
-## Rsquare= 0.192   (max possible= 0.985 )
 ## Likelihood ratio test= 21.32  on 2 df,   p=2e-05
 ## Wald test            = 19  on 2 df,   p=7e-05
 ## Score (logrank) test = 19.99  on 2 df,   p=5e-05
@@ -541,7 +568,7 @@ This is actually easy once you work out what to do:
 ggsurvplot(pp2, conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
  
 
@@ -630,7 +657,7 @@ ggcoxdiagnostics(whas100.2)+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
      
 
@@ -667,7 +694,6 @@ summary(whas100.3)
 ## I(bmi^2)    1.0146     0.9856    1.0062    1.0230
 ## 
 ## Concordance= 0.693  (se = 0.04 )
-## Rsquare= 0.264   (max possible= 0.985 )
 ## Likelihood ratio test= 30.71  on 3 df,   p=1e-06
 ## Wald test            = 32.56  on 3 df,   p=4e-07
 ## Score (logrank) test = 36.57  on 3 df,   p=6e-08
@@ -691,7 +717,7 @@ ggcoxdiagnostics(whas100.3)+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
  
 
@@ -745,7 +771,7 @@ And then the plot:
 ggsurvplot(pp3, conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
  
 
@@ -1142,7 +1168,7 @@ ends, and studies of this kind carry on for years:
 ggplot(drugusers,aes(x=censor,y=time))+geom_boxplot()
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
  
 Yep. The smallest time for a censored observation would be an upper outlier
@@ -1162,7 +1188,7 @@ ggplot(drugusers,aes(x=treat,y=time,colour=censor))+
 geom_boxplot()
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
  
 
@@ -1217,7 +1243,6 @@ summary(drugusers.1)
 ## hercoone        1.2806     0.7809    1.0067    1.6289
 ## 
 ## Concordance= 0.581  (se = 0.014 )
-## Rsquare= 0.056   (max possible= 1 )
 ## Likelihood ratio test= 35.08  on 6 df,   p=4e-06
 ## Wald test            = 36.96  on 6 df,   p=2e-06
 ## Score (logrank) test = 37.36  on 6 df,   p=1e-06
@@ -1374,7 +1399,6 @@ summary(drugusers.2)
 ## treatshort    1.2599     0.7937    1.0558    1.5035
 ## 
 ## Concordance= 0.572  (se = 0.014 )
-## Rsquare= 0.045   (max possible= 1 )
 ## Likelihood ratio test= 27.87  on 3 df,   p=4e-06
 ## Wald test            = 30.5  on 3 df,   p=1e-06
 ## Score (logrank) test = 30.62  on 3 df,   p=1e-06
@@ -1499,7 +1523,7 @@ This:
 ggsurvplot(pp, conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
    
 
@@ -1889,7 +1913,6 @@ summary(y.1)
 ## scalc       1.1386     0.8783    0.9268     1.399
 ## 
 ## Concordance= 0.675  (se = 0.051 )
-## Rsquare= 0.237   (max possible= 0.991 )
 ## Likelihood ratio test= 17.62  on 9 df,   p=0.04
 ## Wald test            = 17.93  on 9 df,   p=0.04
 ## Score (logrank) test = 18.97  on 9 df,   p=0.03
@@ -1913,8 +1936,7 @@ y.00=coxph(y~.,data=myeloma)
 
 ```
 ## Warning in fitter(X, Y, strats, offset, init, control, weights = weights, :
-## Loglik converged before variable 1,2,3,4,5,6,7,8,9,10,11 ; beta may be
-## infinite.
+## Ran out of iterations and did not converge
 ```
 
 ```r
@@ -1928,35 +1950,34 @@ summary(y.00)
 ##   n= 65, number of events= 48 
 ## 
 ##                coef  exp(coef)   se(coef)      z Pr(>|z|)
-## time     -9.889e+00  5.071e-05  1.824e+01 -0.542    0.588
-## vstatus   1.439e+01  1.775e+06  3.703e+02  0.039    0.969
-## logbun    4.864e-04  1.000e+00  8.626e-01  0.001    1.000
-## hgb       2.776e-05  1.000e+00  1.417e-01  0.000    1.000
-## platelet  2.287e-04  1.000e+00  7.862e-01  0.000    1.000
-## age      -1.144e-05  1.000e+00  2.834e-02  0.000    1.000
-## logwbc   -6.984e-06  1.000e+00  1.121e+00  0.000    1.000
-## frac     -1.930e-04  9.998e-01  9.787e-01  0.000    1.000
-## logpbm    8.106e-04  1.001e+00  9.518e-01  0.001    0.999
-## protein   1.018e-04  1.000e+00  8.550e-02  0.001    0.999
-## scalc    -4.515e-05  1.000e+00  1.639e-01  0.000    1.000
+## time     -1.067e+01  2.321e-05  2.556e+01 -0.417    0.676
+## vstatus   1.506e+01  3.458e+06  5.167e+02  0.029    0.977
+## logbun    2.941e-04  1.000e+00  7.904e-01  0.000    1.000
+## hgb       1.678e-05  1.000e+00  9.143e-02  0.000    1.000
+## platelet  1.381e-04  1.000e+00  6.220e-01  0.000    1.000
+## age      -6.911e-06  1.000e+00  2.245e-02  0.000    1.000
+## logwbc   -4.948e-06  1.000e+00  8.940e-01  0.000    1.000
+## frac     -1.162e-04  9.999e-01  6.262e-01  0.000    1.000
+## logpbm    4.899e-04  1.000e+00  7.307e-01  0.001    0.999
+## protein   6.151e-05  1.000e+00  6.775e-02  0.001    0.999
+## scalc    -2.720e-05  1.000e+00  1.091e-01  0.000    1.000
 ## 
-##          exp(coef) exp(-coef)  lower .95 upper .95
-## time     5.071e-05  1.972e+04  1.500e-20 1.714e+11
-## vstatus  1.775e+06  5.632e-07 1.209e-309       Inf
-## logbun   1.000e+00  9.995e-01  1.845e-01 5.425e+00
-## hgb      1.000e+00  1.000e+00  7.576e-01 1.320e+00
-## platelet 1.000e+00  9.998e-01  2.142e-01 4.670e+00
-## age      1.000e+00  1.000e+00  9.460e-01 1.057e+00
-## logwbc   1.000e+00  1.000e+00  1.111e-01 8.997e+00
-## frac     9.998e-01  1.000e+00  1.468e-01 6.808e+00
-## logpbm   1.001e+00  9.992e-01  1.550e-01 6.464e+00
-## protein  1.000e+00  9.999e-01  8.458e-01 1.183e+00
-## scalc    1.000e+00  1.000e+00  7.252e-01 1.379e+00
+##          exp(coef) exp(-coef) lower .95 upper .95
+## time     2.321e-05  4.308e+04 4.068e-27 1.324e+17
+## vstatus  3.458e+06  2.892e-07 0.000e+00       Inf
+## logbun   1.000e+00  9.997e-01 2.125e-01 4.709e+00
+## hgb      1.000e+00  1.000e+00 8.360e-01 1.196e+00
+## platelet 1.000e+00  9.999e-01 2.955e-01 3.385e+00
+## age      1.000e+00  1.000e+00 9.569e-01 1.045e+00
+## logwbc   1.000e+00  1.000e+00 1.734e-01 5.767e+00
+## frac     9.999e-01  1.000e+00 2.930e-01 3.412e+00
+## logpbm   1.000e+00  9.995e-01 2.389e-01 4.189e+00
+## protein  1.000e+00  9.999e-01 8.757e-01 1.142e+00
+## scalc    1.000e+00  1.000e+00 8.074e-01 1.238e+00
 ## 
 ## Concordance= 1  (se = 0 )
-## Rsquare= 0.986   (max possible= 0.991 )
 ## Likelihood ratio test= 277  on 11 df,   p=<2e-16
-## Wald test            = 0.3  on 11 df,   p=1
+## Wald test            = 0.18  on 11 df,   p=1
 ## Score (logrank) test = 87.4  on 11 df,   p=5e-14
 ```
 
@@ -2010,7 +2031,6 @@ summary(y.2)
 ## hgb       0.8872     1.1271    0.7928    0.9929
 ## 
 ## Concordance= 0.675  (se = 0.043 )
-## Rsquare= 0.172   (max possible= 0.991 )
 ## Likelihood ratio test= 12.27  on 2 df,   p=0.002
 ## Wald test            = 12.51  on 2 df,   p=0.002
 ## Score (logrank) test = 13.07  on 2 df,   p=0.001
@@ -2090,7 +2110,6 @@ summary(y.3)
 ## hgb       0.8872     1.1271    0.7928    0.9929
 ## 
 ## Concordance= 0.675  (se = 0.043 )
-## Rsquare= 0.172   (max possible= 0.991 )
 ## Likelihood ratio test= 12.27  on 2 df,   p=0.002
 ## Wald test            = 12.51  on 2 df,   p=0.002
 ## Score (logrank) test = 13.07  on 2 df,   p=0.001
@@ -2341,7 +2360,7 @@ This is easier than you think: it's just `ggsurvplot` from `survminer`:
 ggsurvplot(s,conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-64-1.png" width="672"  />
 
      
     
@@ -2686,7 +2705,6 @@ summary(time.1)
 ## factor(rx)2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
-## Rsquare= 0.457   (max possible= 0.932 )
 ## Likelihood ratio test= 15.89  on 2 df,   p=4e-04
 ## Wald test            = 13.47  on 2 df,   p=0.001
 ## Score (logrank) test = 18.56  on 2 df,   p=9e-05
@@ -2721,7 +2739,6 @@ summary(time.1a)
 ## rxf2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
-## Rsquare= 0.457   (max possible= 0.932 )
 ## Likelihood ratio test= 15.89  on 2 df,   p=4e-04
 ## Wald test            = 13.47  on 2 df,   p=0.001
 ## Score (logrank) test = 18.56  on 2 df,   p=9e-05
@@ -2814,7 +2831,6 @@ summary(time.2)
 ## factor(rx)2    0.5508      1.816    0.1743      1.74
 ## 
 ## Concordance= 0.608  (se = 0.07 )
-## Rsquare= 0.04   (max possible= 0.932 )
 ## Likelihood ratio test= 1.05  on 1 df,   p=0.3
 ## Wald test            = 1.03  on 1 df,   p=0.3
 ## Score (logrank) test = 1.06  on 1 df,   p=0.3
@@ -2845,7 +2861,7 @@ important things like `age`. Here, that could be a boxplot:
 ggplot(ovarian, aes(x=factor(rx),y=age))+geom_boxplot()
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
 
  
 
@@ -2883,7 +2899,7 @@ ggcoxdiagnostics(time.1)+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
 
      
 
@@ -3050,7 +3066,7 @@ Thus. The `conf.int=F` means to skip the confidence interval
 ggsurvplot(s,conf.int=F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-78-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
 
    
 
@@ -3127,7 +3143,6 @@ summary(time.1)
 ## factor(rx)2    0.4475      2.234    0.1297     1.545
 ## 
 ## Concordance= 0.798  (se = 0.076 )
-## Rsquare= 0.457   (max possible= 0.932 )
 ## Likelihood ratio test= 15.89  on 2 df,   p=4e-04
 ## Wald test            = 13.47  on 2 df,   p=0.001
 ## Score (logrank) test = 18.56  on 2 df,   p=9e-05

@@ -5,59 +5,84 @@ Packages for this chapter:
 
 ```r
 library(ggbiplot)
-```
-
-```
-## Loading required package: ggplot2
-```
-
-```
-## Loading required package: plyr
-```
-
-```
-## Loading required package: scales
-```
-
-```
-## Loading required package: grid
-```
-
-```r
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
-```
-
-```
-## ✔ tibble  2.1.1          ✔ purrr   0.3.2     
-## ✔ tidyr   0.8.3.9000     ✔ dplyr   0.8.0.1   
-## ✔ readr   1.3.1          ✔ stringr 1.4.0     
-## ✔ tibble  2.1.1          ✔ forcats 0.3.0
-```
-
-```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::arrange()    masks plyr::arrange()
-## ✖ readr::col_factor() masks scales::col_factor()
-## ✖ purrr::compact()    masks plyr::compact()
-## ✖ dplyr::count()      masks plyr::count()
-## ✖ purrr::discard()    masks scales::discard()
-## ✖ dplyr::failwith()   masks plyr::failwith()
-## ✖ dplyr::filter()     masks stats::filter()
-## ✖ dplyr::id()         masks plyr::id()
-## ✖ dplyr::lag()        masks stats::lag()
-## ✖ dplyr::mutate()     masks plyr::mutate()
-## ✖ dplyr::rename()     masks plyr::rename()
-## ✖ dplyr::summarise()  masks plyr::summarise()
-## ✖ dplyr::summarize()  masks plyr::summarize()
-```
-
-```r
 library(ggrepel)
 ```
+
+
+
+```
+## Warning: package 'ggplot2' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'tibble' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
+```
+
 
 
 ##  Making a map of Wisconsin
@@ -292,7 +317,7 @@ geom_text_repel()+
 coord_fixed()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
  
 
@@ -445,6 +470,10 @@ screenshot if necessary):
 
 ```r
 library(ggmap)
+```
+
+```
+## Warning: package 'ggmap' was built under R version 3.5.2
 ```
 
 ```
@@ -829,7 +858,7 @@ ggplot(ddd,aes(x=one,y=V1,label=city))+
 geom_point()+geom_text_repel()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
  
 
@@ -1148,7 +1177,7 @@ ggplot(aes(x=X1,y=X2,label=stim))+geom_point()+
 geom_text_repel(size=2)
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
      
 
@@ -1307,7 +1336,7 @@ d.3=hclust(d,method="ward.D")
 plot(d.3)
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
 
      
 
@@ -1320,7 +1349,7 @@ plot(d.3)
 rect.hclust(d.3,5)
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
  
     
@@ -1380,7 +1409,7 @@ geom_point()+
 geom_text_repel(size=2)
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
      
 
@@ -1476,20 +1505,6 @@ explored (with the three-dimensional solution, for example):
 
 ```r
 library(MASS)
-```
-
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
-```r
 save.3d.lda=lda(clusters~X1+X2+X3,data=save.3d)
 ppp=predict(save.3d.lda)
 ```
@@ -1507,7 +1522,7 @@ ggplot(aes(x=LD1,y=LD2,colour=cluster))+
 geom_point()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
      
 
@@ -1590,7 +1605,7 @@ A biplot would be another way to look at that:
 ggbiplot(save.3d.lda,groups=factor(save.3d$clusters))
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
  
 Points on the right have `X1` and `X2` large, and
@@ -1996,7 +2011,7 @@ geom_point()+geom_text_repel()+
 coord_fixed()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
      
 
@@ -2023,7 +2038,7 @@ ggplot(aes(x=X1,y=X2,label=names))+
 geom_text()+coord_fixed()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
  
 
@@ -2171,6 +2186,11 @@ First I should get rid of `MASS`, since we don't need it here:
 detach("package:MASS", unload=T)
 ```
 
+```
+## Warning: 'MASS' namespace cannot be unloaded:
+##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+```
+
        
 This is really a copy of last time. We need to transpose the data
 frame to get the beers in *rows* (`dist` works on
@@ -2242,20 +2262,6 @@ Solution
 
 ```r
 library(MASS)
-```
-
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
-```r
 beer.1=isoMDS(d)
 ```
 
@@ -2322,7 +2328,7 @@ ggplot(aes(x=X1,y=X2,label=beer))+
 geom_point()+geom_text_repel()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
 
      
  
@@ -2795,7 +2801,7 @@ geom_text_repel(size=2)+
 coord_fixed()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
  
 
@@ -2888,7 +2894,7 @@ with(stimuli.sh,data.frame(x=x,y=y)) %>%
 ggplot(aes(x=x,y=y))+geom_point()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
+<img src="23-mds_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
 
  
 

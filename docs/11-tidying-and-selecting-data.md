@@ -5,21 +5,78 @@
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -395,7 +452,7 @@ that R marked as an outlier:
 ggplot(jays,aes(x=Daynight,y=attendance))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -462,7 +519,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~Daynight,ncol=1)
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
      
 The day attendances are pretty normal, though it is hard to be sure
@@ -690,7 +747,7 @@ gather(ball,distance,baseball:softball) %>%
 ggplot(aes(x=ball,y=distance))+geom_point()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
        
 
@@ -722,7 +779,7 @@ ggplot(aes(x=ball,y=distance,group=fs,colour=fs))+
 geom_point()+geom_line()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
      
 
@@ -736,7 +793,7 @@ ggplot(aes(x=ball,y=distance,group=student,colour=student))+
 geom_point()+geom_line()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
      
 
@@ -771,7 +828,7 @@ geom_point()+geom_line()+
 guides(colour=F) 
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
        
 
@@ -971,7 +1028,7 @@ Solution
 ggplot(sleep,aes(x=treatment,y=sleeptime))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -1345,7 +1402,7 @@ Nothing terribly surprising here. My data frame is called
 ggplot(toms2,aes(x=colour, y=growthrate))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
      
 
@@ -1374,30 +1431,6 @@ to do the `with` thing:
 
 ```r
 library(car)
-```
-
-```
-## Loading required package: carData
-```
-
-```
-## 
-## Attaching package: 'car'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     recode
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     some
-```
-
-```r
 with(toms2,leveneTest(growthrate,colour))
 ```
 
@@ -1649,7 +1682,7 @@ pairwise_median_test(toms2, growthrate, colour)
 ##   <chr> <chr>      <dbl>       <dbl>
 ## 1 blue  green  0.0000633    0.000380
 ## 2 blue  red    0.0000633    0.000380
-## 3 blue  yellow 0.317        1.90    
+## 3 blue  yellow 0.317        1       
 ## 4 green red    0.0000633    0.000380
 ## 5 green yellow 0.0000633    0.000380
 ## 6 red   yellow 0.0000633    0.000380
@@ -2050,7 +2083,7 @@ Another way is to draw a boxplot of pain-relief scores:
 ggplot(migraine2,aes(x=drug,y=painrelief))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -2125,7 +2158,7 @@ pairwise_median_test(migraine2, painrelief, drug)
 ##   <chr> <chr>    <dbl>       <dbl>
 ## 1 DrugA DrugB 0.00721     0.0216  
 ## 2 DrugA DrugC 0.000183    0.000548
-## 3 DrugB DrugC 0.921       2.76
+## 3 DrugB DrugC 0.921       1
 ```
 
  
@@ -4125,8 +4158,8 @@ count(track)
 ##    track                                     n
 ##    <chr>                                 <int>
 ##  1 Amazed                                    2
-##  2 Bent                                      1
-##  3 Be With You                               3
+##  2 Be With You                               3
+##  3 Bent                                      1
 ##  4 Come On Over Baby (All I Want Is You)     4
 ##  5 Doesn't Really Matter                     3
 ##  6 Everything You Want                       1
@@ -5894,14 +5927,7 @@ library(lubridate)
 ```
 
 ```
-## 
-## Attaching package: 'lubridate'
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     date
+## Warning: package 'lubridate' was built under R version 3.5.1
 ```
 
 ```r
@@ -6002,7 +6028,7 @@ ggplot(aes(x=year, y=n))+geom_point()+geom_smooth(se=F)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-147-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-149-1.png" width="672"  />
 
  
 The pattern is very scattered, as is commonly the case with

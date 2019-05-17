@@ -100,17 +100,24 @@ response.
 
 
 
-(d) Fit a suitable multinomial model predicting food type from  gender, size
-and lake. How you account for having `Frequency` as well?
+(d) Fit a suitable multinomial model predicting food type from
+gender, size and lake. Does each row represent one alligator or more
+than one? If more than one, account for this in your modelling.
 
 
 Solution
 
 
-The clue in the question is to remind you not to forget the
-`weights` piece, otherwise `multinom` will assume
-that you have *one* observation per line and not as many as
-the number in `Frequency`. 
+Each row of the tidy `gators` represents as many
+alligators as are in the `Frequency` column. That is, if
+you look at female small alligators in Lake George that ate
+mainly fish, there are three of those.
+`r tufte::margin_note("When you have variables that are categories, you might have more than one individual with exactly the same categories; on the other hand, if they had measured *Size* as, say, length in centimetres, it would have been very unlikely to get two alligators of exactly the same size.")`
+This to remind you to include the `weights` piece,
+otherwise `multinom` will assume that you have *one*
+observation per line and not as many as the number in
+`Frequency`.
+
 *That* is the
 reason that `count` earlier would have been confusing:
 it would have told you how many *rows* contained each
@@ -118,7 +125,7 @@ food type, rather than how many *alligators*, and these
 would have been different:
 ```{r }
 gators %>% count(Food.type)
-gators %>% count(Food.type,wt=Frequency)
+gators %>% count(Food.type, wt=Frequency)
 ```
 
          

@@ -2,6 +2,86 @@
 # Reading in data and drawing some graphs
 
 
+```r
+library(tidyverse)
+```
+
+
+
+```
+## Warning: package 'ggplot2' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'tibble' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
+```
+
+
+
 ##  Orange juice
 
 
@@ -31,23 +111,6 @@ Start with this (almost always):
 
 ```r
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
-```
-
-```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
-```
-
-```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
 ```
 
  
@@ -206,7 +269,7 @@ to get the variables from),  and the "how to plot" is
 ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
          
 
@@ -228,7 +291,7 @@ ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
          
 The smooth trend is kind of downhill, but not very convincing.
@@ -317,7 +380,7 @@ Solution
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -344,7 +407,7 @@ with. This is 8 bins rather than 10:
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=8)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
  
 
@@ -366,7 +429,7 @@ Solution
 ggplot(soap,aes(x=line,y=scrap))+geom_boxplot()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
 
 
@@ -439,7 +502,7 @@ that I explain afterwards:
 ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)+facet_grid(line~.)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
  
 
@@ -487,7 +550,7 @@ Same mechanism as before:
 ggplot(soap,aes(x=speed,y=scrap))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
  
 
@@ -527,7 +590,7 @@ categorical variable, if you want to think of it that way:
 ggplot(soap,aes(x=speed,y=scrap,colour=line))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
        
 
@@ -548,7 +611,7 @@ ggplot(soap,aes(x=speed,y=scrap,colour=line))+
 geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
        
 
@@ -580,7 +643,7 @@ geom_point(data=soap2,colour="grey")+
 geom_point(aes(colour=line))+facet_wrap(~line)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 $
 
 The idea is that we plot all the points in grey (to 
@@ -770,7 +833,7 @@ part), and a `geom_point()` after (the "how to plot it"):
 ggplot(shipments,aes(x=size,y=cost))+geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
      
 
@@ -822,7 +885,7 @@ variable `warehouse`, which suggests drawing boxplots:
 ggplot(shipments,aes(x=warehouse,y=size))+geom_boxplot()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
      
 
@@ -844,7 +907,7 @@ ggplot(shipments,aes(x=size,y=cost,colour=warehouse))+
 geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+<img src="02-reading-in_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
      
 

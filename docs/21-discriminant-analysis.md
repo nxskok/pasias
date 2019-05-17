@@ -5,87 +5,89 @@ Packages for this chapter:
 
 ```r
 library(ggbiplot)
-```
-
-```
-## Loading required package: ggplot2
-```
-
-```
-## Loading required package: plyr
-```
-
-```
-## Loading required package: scales
-```
-
-```
-## Loading required package: grid
-```
-
-```r
 library(MASS)
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
-```
-
-```
-## ✔ tibble  2.1.1          ✔ purrr   0.3.2     
-## ✔ tidyr   0.8.3.9000     ✔ dplyr   0.8.0.1   
-## ✔ readr   1.3.1          ✔ stringr 1.4.0     
-## ✔ tibble  2.1.1          ✔ forcats 0.3.0
-```
-
-```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::arrange()    masks plyr::arrange()
-## ✖ readr::col_factor() masks scales::col_factor()
-## ✖ purrr::compact()    masks plyr::compact()
-## ✖ dplyr::count()      masks plyr::count()
-## ✖ purrr::discard()    masks scales::discard()
-## ✖ dplyr::failwith()   masks plyr::failwith()
-## ✖ dplyr::filter()     masks stats::filter()
-## ✖ dplyr::id()         masks plyr::id()
-## ✖ dplyr::lag()        masks stats::lag()
-## ✖ dplyr::mutate()     masks plyr::mutate()
-## ✖ dplyr::rename()     masks plyr::rename()
-## ✖ dplyr::select()     masks MASS::select()
-## ✖ dplyr::summarise()  masks plyr::summarise()
-## ✖ dplyr::summarize()  masks plyr::summarize()
-```
-
-```r
 library(car)
-```
-
-```
-## Loading required package: carData
-```
-
-```
-## 
-## Attaching package: 'car'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     recode
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     some
 ```
 
 (Note: `ggbiplot` loads `plyr`, which overlaps a lot with `dplyr`
 (`filter`, `select` etc.). We want the `dplyr` stuff elsewhere, so we
 load `ggbiplot` *first*, and the things in `plyr` get hidden, as shown
 in the Conflicts. This, despite appearances, is what we want.)
+
+
+
+```
+## Warning: package 'ggplot2' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'tibble' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
+```
 
 
 
@@ -439,7 +441,7 @@ Or you could do faceted histograms of `LD1` by `status`:
 ggplot(d,aes(x=LD1))+geom_histogram(bins=10)+facet_grid(status~.)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -956,7 +958,7 @@ Now make the plot, making sure that you are using columns with the right names. 
 ggplot(d,aes(x=x.LD1,y=x.LD2,colour=obesity))+geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
  
  
@@ -1001,14 +1003,15 @@ the *average* individual within a group stacks up.
 ggbiplot(urine.1, groups=urine$obesity)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
  
 
-This shows (in a way that is perhaps easier to see) how the linear
+xxx This shows (in a way that is perhaps easier to see) how the linear
 discriminants are related to the original variables, and thus how the
 groups differ in terms of the original variables.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was why  we were doing discriminant analysis in the first place.} Most of the B's are high creatinine and high chloride (on the right); most of the D's are low on both (on the left). LD2 has a bit of texttt{chloride</span>, but not much of anything else.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was why  we were doing discriminant analysis in the first place.</span> 
+Most of the B's are high creatinine and high chloride (on the right); most of the D's are low on both (on the left). LD2 has a bit of `chloride`, but not much of anything else.
 Extra: the way we used to do this was with "base graphics", which involved plotting the `lda` output itself:
 
 
@@ -1016,7 +1019,7 @@ Extra: the way we used to do this was with "base graphics", which involved plott
 plot(urine.1)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
 
  
 
@@ -1028,7 +1031,7 @@ one. You can plot just the first two, like this:
 plot(urine.1,dimen=2)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
  
 This is easier than using `ggplot`, but (i) less flexible and
@@ -1509,7 +1512,7 @@ This was the old-fashioned way:
 plot(simple.4)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
    
 
@@ -1588,7 +1591,7 @@ true groups:
 ggplot(d,aes(x=x.LD1,y=x.LD2,colour=group))+geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
  
 
@@ -1600,7 +1603,7 @@ vs.\ `y2`, coloured by groups:
 ggplot(simple,aes(x=y1,y=y2,colour=group))+geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
  
 
@@ -1618,7 +1621,7 @@ against groups via boxplot:
 ggplot(d,aes(x=group,y=x.LD1))+geom_boxplot()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 
@@ -1825,7 +1828,7 @@ geom_point()
 ## Warning: Using size for a discrete variable is not advised.
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
  
 
@@ -2018,26 +2021,26 @@ sample_n(20)
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      21     12            9     2    76 mechanic  
-##  2      12     26            9     1    27 custserv  
-##  3      24     20           15     2    13 mechanic  
-##  4      16     16           17     3    14 dispatcher
-##  5      14     24            7     2    17 mechanic  
-##  6      17     26            7     1    50 custserv  
-##  7      21     23           11     2    36 mechanic  
-##  8       0     27           11     1    17 custserv  
-##  9      17     21           15     2    37 mechanic  
-## 10      15     29            8     2     4 mechanic  
-## 11      17     11           10     3    30 dispatcher
-## 12       6     27           11     1    21 custserv  
-## 13      21     13           11     3    44 dispatcher
-## 14      19     23           12     2    26 mechanic  
-## 15      13     25           14     1    82 custserv  
-## 16      14     17            6     1     2 custserv  
-## 17      23     20           16     2    63 mechanic  
-## 18      15     21            4     1    44 custserv  
-## 19       5     17            9     1    37 custserv  
-## 20      17     15           10     3    15 dispatcher
+##  1      20     24            5     2    35 mechanic  
+##  2      18     20           15     3    42 dispatcher
+##  3       5     22           15     1    66 custserv  
+##  4      16     22           12     3    63 dispatcher
+##  5      12     26            9     1    27 custserv  
+##  6      19     23           12     2    55 mechanic  
+##  7       6     27           11     1    21 custserv  
+##  8      17     18            8     2    73 mechanic  
+##  9      20     15            7     3    12 dispatcher
+## 10      25     20            8     2    91 mechanic  
+## 11       1     30            6     1    23 custserv  
+## 12      19     26           12     2    60 mechanic  
+## 13      20     14           18     3    62 dispatcher
+## 14      12     14            8     3    51 dispatcher
+## 15      23     24            7     2    67 mechanic  
+## 16      14     16            7     3    41 dispatcher
+## 17      17     29            9     2    68 mechanic  
+## 18      10     12            9     3    38 dispatcher
+## 19       4     12           11     3    34 dispatcher
+## 20      10     24            5     1    30 custserv
 ```
 
  
@@ -2256,7 +2259,7 @@ Following my suggestion, plot these the standard way with
 ggplot(d,aes(x=x.LD1,y=x.LD2,colour=job))+geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
  
 I was mostly right about the customer service people: small
@@ -3255,7 +3258,7 @@ head(d)
 ggplot(d, aes(x=parent, y=LD1))+geom_boxplot()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-87-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-89-1.png" width="672"  />
 
  
 The fathers look to be a very compact group with `LD1` score
@@ -3904,7 +3907,7 @@ I didn't ask you to, but you could check this by seeing how
 ggplot(cornseed,aes(x=soil,y=herbicide))+geom_boxplot()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-100-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-102-1.png" width="672"  />
 
 
 
@@ -3917,7 +3920,7 @@ Or by `water`:
 ggplot(cornseed,aes(x=soil,y=water))+geom_boxplot()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-101-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
 
  
 
@@ -3986,7 +3989,7 @@ Then we use this as input to `ggplot`:
 ggplot(d,aes(x=x.LD1,y=x.LD2,colour=soil))+geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
 
  
 
@@ -4034,7 +4037,7 @@ discriminant scores by `soil` group, thus:
 ggplot(d,aes(x=soil,y=x.LD1))+geom_boxplot()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
 
    
 This says more or less the same thing as your plot of `LD1` and
@@ -4405,7 +4408,7 @@ could, since it's a discriminant analysis:
 ggbiplot(cornseed.2,groups=cornseed$soil)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
 
  
 
@@ -4910,7 +4913,7 @@ And so, to the graph:
 ggplot(d,aes(x=x.LD1,y=x.LD2,colour=combo))+geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-128-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-130-1.png" width="672"  />
 
  
 If you can distinguish seventeen different colours, your eyes are
@@ -4923,7 +4926,7 @@ ggplot(d,aes(x=x.LD1,y=x.LD2,shape=combo))+geom_point()+
 scale_shape_manual(values=1:17)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-129-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-131-1.png" width="672"  />
 
      
 
@@ -4939,7 +4942,7 @@ ggplot(d,aes(x=x.LD1,y=x.LD2,shape=combo,colour=combo))+geom_point()+
 scale_shape_manual(values=1:17)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-130-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-132-1.png" width="672"  />
 
  
 Perhaps having colours *and* shapes makes the combos easier to

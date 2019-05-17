@@ -6,1489 +6,82 @@ Packages for this chapter:
 ```r
 library(MASS)
 library(ggbiplot)
-```
-
-```
-## Loading required package: ggplot2
-```
-
-```
-## Loading required package: plyr
-```
-
-```
-## Loading required package: scales
-```
-
-```
-## Loading required package: grid
-```
-
-```r
 library(tidyverse)
 ```
 
-```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
-```
-
-```
-## ✔ tibble  2.1.1          ✔ purrr   0.3.2     
-## ✔ tidyr   0.8.3.9000     ✔ dplyr   0.8.0.1   
-## ✔ readr   1.3.1          ✔ stringr 1.4.0     
-## ✔ tibble  2.1.1          ✔ forcats 0.3.0
-```
-
-```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::arrange()    masks plyr::arrange()
-## ✖ readr::col_factor() masks scales::col_factor()
-## ✖ purrr::compact()    masks plyr::compact()
-## ✖ dplyr::count()      masks plyr::count()
-## ✖ purrr::discard()    masks scales::discard()
-## ✖ dplyr::failwith()   masks plyr::failwith()
-## ✖ dplyr::filter()     masks stats::filter()
-## ✖ dplyr::id()         masks plyr::id()
-## ✖ dplyr::lag()        masks stats::lag()
-## ✖ dplyr::mutate()     masks plyr::mutate()
-## ✖ dplyr::rename()     masks plyr::rename()
-## ✖ dplyr::select()     masks MASS::select()
-## ✖ dplyr::summarise()  masks plyr::summarise()
-## ✖ dplyr::summarize()  masks plyr::summarize()
-```
-
-
-##  Dissimilarities between fruits
-
-
- Consider the fruits apple, orange, banana, pear,
-strawberry, blueberry. We are going to work with these four
-properties of fruits:
-
-
-* has a round shape
-
-* Is sweet
-
-* Is crunchy
-
-* Is a berry
-
-
-
-(a)  Make a table with fruits as columns, and with
-rows "round shape", "sweet", "crunchy", "berry". In each cell
-of the table, put a 1 if the fruit has the property named in the
-row, and a 0 if it does not. (This is your opinion, and may not
-agree with mine. That doesn't matter, as long as you follow through
-with whatever your choices were.)
- 
-Solution
-
-
-Something akin to this:
-
-
-```
-
-Fruit        Apple Orange Banana Pear Strawberry Blueberry
-Round shape    1      1      0     0       0         1
-Sweet          1      1      0     0       1         0
-Crunchy        1      0      0     1       0         0
-Berry          0      0      0     0       1         1
-
-```
-
-You'll have to make a choice about "crunchy". I usually eat
-pears before they're fully ripe, so to me, they're crunchy.
- 
-
-(b) We'll define the dissimilarity between two fruits to be the
-number of qualities they *disagree* on. Thus, for example, the
-dissimilarity between Apple and Orange is 1 (an apple is crunchy and
-an orange is not, but they agree on everything else). Calculate the
-dissimilarity between each pair of fruits, and make a square table
-that summarizes the results. (To save yourself some work, note that
-the dissimilarity between a fruit and itself must be zero, and the
-dissimilarity between fruits A and B is the same as that between B
-and A.) Save your table of dissimilarities into a file for the next part.
- 
-Solution
-
-
-I got this, by counting them:
-
-```
- 
-Fruit         Apple  Orange   Banana   Pear  Strawberry  Blueberry
-Apple           0       1       3       2        3          3
-Orange          1       0       2       3        2          2
-Banana          3       2       0       1        2          2
-Pear            2       3       1       0        3          3
-Strawberry      3       2       2       3        0          2
-Blueberry       3       2       2       3        2          0
-
-```
-
-I copied this into a file `fruits.txt`. Note that (i) I
-have aligned my columns, so that I will be able to use
-`read_table` later, and (ii) I have given the first column
-a name, since `read_table` wants the same number of column
-names as columns.
-
-Extra: yes, you can do this in R too. We've seen some of the tricks
-before. 
-
-Let's start by reading in my table of fruits and properties, which
-I saved in
-[link](http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt):
-
-```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt"
-fruit1=read_table(my_url)
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   Property = col_character(),
-##   Apple = col_double(),
-##   Orange = col_double(),
-##   Banana = col_double(),
-##   Pear = col_double(),
-##   Strawberry = col_double(),
-##   Blueberry = col_double()
-## )
-```
-
-```r
-fruit1 
-```
-
-```
-## # A tibble: 4 x 7
-##   Property    Apple Orange Banana  Pear Strawberry Blueberry
-##   <chr>       <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
-## 1 Round.shape     1      1      0     0          0         1
-## 2 Sweet           1      1      0     0          1         0
-## 3 Crunchy         1      0      0     1          0         0
-## 4 Berry           0      0      0     0          1         1
-```
-
-     
-
-We don't need the first column, so we'll get rid of it:
-
-
-```r
-fruit2 = fruit1 %>% select(-Property)
-fruit2
-```
-
-```
-## # A tibble: 4 x 6
-##   Apple Orange Banana  Pear Strawberry Blueberry
-##   <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
-## 1     1      1      0     0          0         1
-## 2     1      1      0     0          1         0
-## 3     1      0      0     1          0         0
-## 4     0      0      0     0          1         1
-```
-
- 
-
-The loop way is the most direct. We're going to be looking at
-combinations of fruits and other fruits, so we'll need two loops one
-inside the other. It's easier for this to work with column numbers,
-which here are 1 through 6, and we'll make a matrix `m` with
-the dissimilarities in it, which we have to initialize first. I'll
-initialize it to a $6\times 6$ matrix of `-1`, since the final
-dissimilarities are 0 or bigger, and this way I'll know if I forgot
-anything.
-
-Here's where we are at so far:
-
-
-```r
-fruit_m=matrix(-1,6,6)
-for (i in 1:6) {
-for (j in 1:6) {
-fruit_m[i,j]=3 # dissim between fruit i and fruit j
-}
-}
-```
-
- 
-
-This, of course, doesn't run yet. The sticking point is how to
-calculate the dissimilarity between two columns. I think that is a
-separate thought process that should be in a function of its own. The
-inputs are the two column numbers, and a data frame to get those
-columns from:
-
-
-```r
-dissim=function(i,j,d) {
-x = d %>% select(i)
-y = d %>% select(j)
-sum(x!=y)
-}
-dissim(1,2,fruit2)
-```
-
-```
-## [1] 1
-```
-
- 
-
-Apple and orange differ by one (not being crunchy). The process is:
-grab the $i$-th column and call it `x`, grab the $j$-th column
-and call it `y`. These are two one-column data frames with four
-rows each (the four properties). `x!=y` goes down the rows, and
-for each one gives a `TRUE` if they're different and a
-`FALSE` if they're the same. So `x!=y` is a collection
-of four T-or-F values. This seems backwards, but I was thinking of
-what we want to do: we want to count the number of different
-ones. Numerically, `TRUE` counts as 1 and `FALSE` as 0,
-so we should make the thing we're counting (the different ones) come
-out as `TRUE`. To count the number of `TRUE`s (1s), add
-them up. 
-
-That was a complicated thought process, so it was probably wise to
-write a function to do it. Now, in our loop, we only have to call the
-function (having put some thought into getting it right):
-
-
-```r
-fruit_m=matrix(-1,6,6)
-for (i in 1:6) {
-for (j in 1:6) {
-fruit_m[i,j]=dissim(i,j,fruit2)
-}
-}
-fruit_m
-```
-
-```
-##      [,1] [,2] [,3] [,4] [,5] [,6]
-## [1,]    0    1    3    2    3    3
-## [2,]    1    0    2    3    2    2
-## [3,]    3    2    0    1    2    2
-## [4,]    2    3    1    0    3    3
-## [5,]    3    2    2    3    0    2
-## [6,]    3    2    2    3    2    0
-```
-
- 
-
-The last step is re-associate the fruit names with this matrix. This
-is a `matrix` so it has a `rownames` and a
-`colnames`. We set both of those, but first we have to get the
-fruit names from `fruit2`:
-
-
-```r
-fruit_names=names(fruit2)
-rownames(fruit_m)=fruit_names
-colnames(fruit_m)=fruit_names
-fruit_m
-```
-
-```
-##            Apple Orange Banana Pear Strawberry Blueberry
-## Apple          0      1      3    2          3         3
-## Orange         1      0      2    3          2         2
-## Banana         3      2      0    1          2         2
-## Pear           2      3      1    0          3         3
-## Strawberry     3      2      2    3          0         2
-## Blueberry      3      2      2    3          2         0
-```
-
- 
-
-This is good to go into the cluster analysis (happening later).
-
-There is a `tidyverse` way to do this also. It's actually a lot
-like the loop way in its conception, but the coding looks
-different. We start by making all combinations of the fruit names with
-each other, which is `crossing`:
-
-
-```r
-combos=crossing(fruit=fruit_names,other=fruit_names)
-combos
-```
-
-```
-## # A tibble: 36 x 2
-##    fruit  other     
-##    <chr>  <chr>     
-##  1 Apple  Apple     
-##  2 Apple  Banana    
-##  3 Apple  Blueberry 
-##  4 Apple  Orange    
-##  5 Apple  Pear      
-##  6 Apple  Strawberry
-##  7 Banana Apple     
-##  8 Banana Banana    
-##  9 Banana Blueberry 
-## 10 Banana Orange    
-## # … with 26 more rows
-```
-
- 
-
-Now, we want a function that, given any two fruit *names*, works
-out the dissimilarity between them. A happy coincidence is that we can
-use the function we had before, *unmodified*! How? Take a look: 
-
-
-```r
-dissim=function(i,j,d) {
-x = d %>% select(i)
-y = d %>% select(j)
-sum(x!=y)
-}
-dissim("Apple","Orange",fruit2)
-```
-
-```
-## [1] 1
-```
-
- 
-
-`select` can take a column number *or a column name*, so
-that running it with column names gives the right answer.
-
-Now, we want to run this function for each of the pairs in
-`combos`. The "for each" is `fruit` and `other`
-in parallel, so it's `map2` rather than `map`. Also, the
-dissimilarity is a whole number each time, so we need
-`map2_int`. So we can do this:
-
-
-```r
-combos %>% mutate(dissim=map2_int(fruit,other,dissim,fruit2))
-```
-
-```
-## # A tibble: 36 x 3
-##    fruit  other      dissim
-##    <chr>  <chr>       <int>
-##  1 Apple  Apple           0
-##  2 Apple  Banana          3
-##  3 Apple  Blueberry       3
-##  4 Apple  Orange          1
-##  5 Apple  Pear            2
-##  6 Apple  Strawberry      3
-##  7 Banana Apple           3
-##  8 Banana Banana          0
-##  9 Banana Blueberry       2
-## 10 Banana Orange          2
-## # … with 26 more rows
-```
-
- 
-
-This would work just as well using `fruit1` rather than
-`fruit`, since we are picking out the columns by name rather
-than number.
-
-To make this into something we can turn into a `dist` object
-later, we need to `spread` the column `other` to make a
-square array:
-
-
-```r
-fruit_spread = combos %>% 
-mutate(dissim=map2_int(fruit,other,dissim,fruit2)) %>%
-spread(other,dissim)
-fruit_spread
-```
-
-```
-## # A tibble: 6 x 7
-##   fruit      Apple Banana Blueberry Orange  Pear Strawberry
-##   <chr>      <int>  <int>     <int>  <int> <int>      <int>
-## 1 Apple          0      3         3      1     2          3
-## 2 Banana         3      0         2      2     1          2
-## 3 Blueberry      3      2         0      2     3          2
-## 4 Orange         1      2         2      0     3          2
-## 5 Pear           2      1         3      3     0          3
-## 6 Strawberry     3      2         2      2     3          0
-```
-
- 
-
-Done!
- 
-
-(c) Do a hierarchical cluster analysis using complete
-linkage. Display your dendrogram.
- 
-Solution
-
-
-First, we need to take one of our matrices of dissimilarities
-and turn it into a `dist` object. Since I asked you to
-save yours into a file, let's start from there. Mine is aligned
-columns: 
-
-```r
-dissims=read_table("fruits.txt")
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   fruit = col_character(),
-##   Apple = col_double(),
-##   Orange = col_double(),
-##   Banana = col_double(),
-##   Pear = col_double(),
-##   Strawberry = col_double(),
-##   Blueberry = col_double()
-## )
-```
-
-```r
-dissims
-```
-
-```
-## # A tibble: 6 x 7
-##   fruit      Apple Orange Banana  Pear Strawberry Blueberry
-##   <chr>      <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
-## 1 Apple          0      1      3     2          3         3
-## 2 Orange         1      0      2     3          2         2
-## 3 Banana         3      2      0     1          2         2
-## 4 Pear           2      3      1     0          3         3
-## 5 Strawberry     3      2      2     3          0         2
-## 6 Blueberry      3      2      2     3          2         0
-```
-
-      
-
-Then turn it into a `dist` object. The first step is to take
-off the first column, since `as.dist` can get the names from
-the columns:
-
-
-```r
-d = dissims %>% select(-fruit) %>%
-as.dist()
-d
-```
-
-```
-##            Apple Orange Banana Pear Strawberry
-## Orange         1                              
-## Banana         3      2                       
-## Pear           2      3      1                
-## Strawberry     3      2      2    3           
-## Blueberry      3      2      2    3          2
-```
-
-
-
-If you forget to take off the first column, this happens:
-
-
-```r
-as.dist(dissims)
-```
-
-```
-## Warning in storage.mode(m) <- "numeric": NAs introduced by coercion
-```
-
-```
-## Warning in as.dist.default(dissims): non-square matrix
-```
-
-```
-## Error in dimnames(df) <- if (is.null(labels)) list(seq_len(size), seq_len(size)) else list(labels, : length of 'dimnames' [1] not equal to array extent
-```
-
- 
-
-The key thing here is "non-square matrix": you have one more column
-than you have rows, since you have a column of fruit names.
-
-This one is `as.dist` since you already have dissimilarities
-and you want to arrange them into the right type of
-thing. `dist` is for *calculating* dissimilarities, which
-we did before, so we don't want to do that now.
-
-Now, after all that work, the actual cluster analysis and dendrogram:
-
-```r
-fruits.1=hclust(d,method="complete")
-plot(fruits.1)
-```
-
-<img src="22-thingy_files/figure-html/hkadh-1.png" width="672"  />
-
-     
- 
-
-(d) How many clusters, of what fruits, do you seem to have?
-Explain briefly.
- 
-Solution
-
-
-I reckon I have three clusters: strawberry and blueberry in one,
-apple and orange in the second, and banana and pear in the
-third. (If your dissimilarities were different from mine, your
-dendrogram will be different also.)
- 
-
-(e) Pick a pair of clusters (with at least 2 fruits in each)
-from your dendrogram. Verify that 
-the complete-linkage distance on your dendrogram is correct.
- 
-Solution
-
-
-I'll pick strawberry-blueberry and and apple-orange. I'll arrange
-the dissimilarities like this:
-
-```
-
-apple   orange
-strawberry    3       2
-blueberry     3       2
-
-```
-
-The largest of those is 3, so that's the complete-linkage
-distance. That's also what the dendrogram says.
-(Likewise, the smallest of those is 2, so 2 is the
-single-linkage distance.) That is to say, the largest distance or
-dissimilarity 
-from anything in one cluster to anything in the other is 3, and
-the smallest is 2.
-I don't mind which pair of clusters you take, as long as you spell
-out the dissimilarity (distance) between each fruit in each
-cluster, and take the maximum of those. Besides, if your
-dissimilarities are different from mine, your complete-linkage
-distance could be different from mine also. The grader will have
-to use her judgement!
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That's two cups of coffee I owe the      grader now.</span>  
-The important point is that you assess the dissimilarities between
-fruits in one cluster and fruits in the other. The dissimilarities
-between fruits in the same cluster don't enter into it.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I      now have a mental image of John Cleese saying *it don't enter      into it* in the infamous Dead Parrot sketch,      https://www.youtube.com/watch?v=4vuW6tQ0218}. Not to      mention       *How to defend yourself against an assailant armed with fresh      fruit*, https://www.youtube.com/watch?v=piWCBOsJr-w}.    </span>
-As it happens, all my complete-linkage distances between clusters
-(of at least 2 fruits) are 3. The single-linkage ones are
-different, though:
-
-```r
-fruits.2=hclust(d,method="single")
-plot(fruits.2)
-```
-
-<img src="22-thingy_files/figure-html/lhsdjhad-1.png" width="672"  />
-
-     
-
-All the single-linkage cluster distances are 2. (OK, so this wasn't a
-very interesting example, but I wanted to give you one where you could
-calculate what was going on.)
- 
-
-
-
-
-##  Similarity of species 
-
-
- Two scientists assessed the dissimilarity
-between a number 
-of species by recording the number of positions in the protein
-molecule cytochrome-$c$ where the two species being compared have
-different amino acids. The dissimilarities that they recorded are in
-[link](http://www.utsc.utoronto.ca/~butler/d29/species.txt).
-
-
-
-(a) Read the data into a data frame and take a look at it.
-
-
-Solution
-
-
-Nothing much new here:
-
-```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/species.txt"
-species=read_delim(my_url," ")
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   what = col_character(),
-##   Man = col_double(),
-##   Monkey = col_double(),
-##   Horse = col_double(),
-##   Pig = col_double(),
-##   Pigeon = col_double(),
-##   Tuna = col_double(),
-##   Mould = col_double(),
-##   Fungus = col_double()
-## )
-```
-
-```r
-species
-```
-
-```
-## # A tibble: 8 x 9
-##   what     Man Monkey Horse   Pig Pigeon  Tuna Mould Fungus
-##   <chr>  <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>  <dbl>
-## 1 Man        0      1    17    13     16    31    63     66
-## 2 Monkey     1      0    16    12     15    32    62     65
-## 3 Horse     17     16     0     5     16    27    64     68
-## 4 Pig       13     12     5     0     13    25    64     67
-## 5 Pigeon    16     15    16    13      0    27    59     66
-## 6 Tuna      31     32    27    25     27     0    72     69
-## 7 Mould     63     62    64    64     59    72     0     61
-## 8 Fungus    66     65    68    67     66    69    61      0
-```
-
-     
-
-This is a square array of dissimilarities between the eight species.
-
-The data set came from the 1960s, hence the use of "Man" rather than
-"human". It probably also came from the UK, judging by the spelling
-of `Mould`.
-
-(I gave the first column the name `what` so that you could
-safely use `species` for the whole data frame.)
-    
-
-
-(b) Bearing in mind that the values you read in are
-*already* dissimilarities, convert them into a `dist`
-object suitable for running a cluster analysis on, and display the
-results. (Note that you need to get rid of any columns that don't
-contain numbers.)
 
 
-Solution
-
-
-The point here is that the values you have are *already*
-dissimilarities, so no conversion of the numbers is required. Thus
-this is a job for `as.dist`, which merely changes how it
-looks. Use a pipeline to get rid of the first column first:
-
-```r
-species %>%
-select(-what) %>% 
-as.dist() -> d
-d
-```
-
-```
-##        Man Monkey Horse Pig Pigeon Tuna Mould
-## Monkey   1                                   
-## Horse   17     16                            
-## Pig     13     12     5                      
-## Pigeon  16     15    16  13                  
-## Tuna    31     32    27  25     27           
-## Mould   63     62    64  64     59   72      
-## Fungus  66     65    68  67     66   69    61
-```
-
-
-
-This doesn't display anything that it doesn't need to: we know that the
-dissimilarity between a species and itself is zero (no need to show
-that), and that the dissimilarity between B and A is the same as
-between A and B, so no need to show everything twice. It might look as
-if you are missing a row and a column, but one of the species (Fungus)
-appears only in a row and one of them (Man) only in a column.
-
-This also works, to select only the numerical columns:
-
-
-```r
-species %>%
-select_if(is.numeric) %>%
-as.dist()
-```
-
-```
-##        Man Monkey Horse Pig Pigeon Tuna Mould
-## Monkey   1                                   
-## Horse   17     16                            
-## Pig     13     12     5                      
-## Pigeon  16     15    16  13                  
-## Tuna    31     32    27  25     27           
-## Mould   63     62    64  64     59   72      
-## Fungus  66     65    68  67     66   69    61
-```
-
- 
-
-Extra: data frames officially have an attribute called "row names",
-that is displayed where the row numbers display, but which isn't
-actually a column of the data frame. In the past, when we used
-`read.table` with a dot, the first column of data read in from
-the file could be nameless (that is, you could have one more column of
-data than you had column names) and the first column would be treated
-as row names. People used row names for things like identifier
-variables. But row names have this sort of half-existence, and when
-Hadley Wickham designed the `tidyverse`, he decided not to use
-row names, taking the attitude that if it's part of the data, it
-should be in the data frame as a genuine column. This means that when
-you use a `read_` function, you have to have exactly as many
-column names as columns. 
-
-For these data, I previously had the column here called
-`what` as row names, and `as.dist` automatically got rid
-of the row names when formatting the distances. Now, it's a
-genuine column, so I have to get rid of it before running
-`as.dist`. This is more work, but it's also more honest, and
-doesn't involve thinking about row names at all. So, on balance, I
-think it's a win.
-  
-
-
-(c) Run a cluster analysis using single-linkage and obtain a dendrogram.
-
-
-Solution
-
-
-Something like this:
-
-```r
-species.1=hclust(d,method="single")
-plot(species.1)
 ```
-
-<img src="22-thingy_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
-
-     
-    
-
-
-(d) Run a cluster analysis using Ward's method and obtain a dendrogram.
-
-
-Solution
-
-
-Not much changes  here in the code, but the result is noticeably
-different:
-
-```r
-species.2=hclust(d,method="ward.D")
-plot(species.2)
-```
-
-<img src="22-thingy_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
-
-  
-
-Fewer points this time since you're doing much of the same stuff over again.
-
-Don't forget to take care with the `method`: it has to be
-`ward` in lowercase (even though it's someone's name) followed
-by a D in uppercase.
-
-    
-
-
-(e) Describe how the two dendrograms from the last two parts
-look different.
-
-
-Solution
-
-
-This is (as ever with this kind of thing) a judgement call. Your
-job is to come up with something reasonable.
-For myself, I was thinking about how single-linkage tends to
-produce "stringy" clusters that join single objects (species)
-onto already-formed clusters. Is that happening here? Apart from
-the first two clusters, man and monkey, horse and pig,
-*everything* that gets joined on is a single species joined
-on to a bigger cluster, including mould and fungus right at the
-end. Contrast that with the output from Ward's method, where, for
-the most part, groups are formed first and then joined onto other
-groups. For example, in Ward's method, mould and fungus are joined
-earlier, and also the man-monkey group is joined to the
-pigeon-horse-pig group.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Tuna is an exception, but usually Ward    tends to join fairly dissimilar things that are nonetheless more    similar to each other than to anything else. This is like    Hungarian and Finnish in the example in class: they are very    dissimilar languages, but they are more similar to each other than    to anything else.</span>
-You might prefer to look at the specifics of what gets joined. I
-think the principal difference from this angle is that mould and
-fungus get joined together (much) earlier in Ward. Also, pigeon
-gets joined to horse and pig first under Ward, but *after*
-those have been joined to man and monkey under
-single-linkage. This is also a reasonable kind of observation.
-    
-
-
-(f) Looking at your clustering for Ward's method, what seems to
-be a sensible number of clusters? Draw boxes around those clusters.
-
-
-Solution
-
-
-Pretty much any number of clusters bigger than 1 and smaller than
-8 is ok here, but I would prefer to see something between 2 and
-5, because a number of clusters of that sort offers (i) some
-insight ("these things are like these other things") and (ii) a
-number of clusters of that sort is supported by the data.
-To draw those clusters, you need `rect.hclust`, and
-before that you'll need to plot the cluster object again. For 2
-clusters, that would look like this:
-
-```r
-plot(species.2)
-rect.hclust(species.2,2)
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
-
-<img src="22-thingy_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
-
- 
-
-This one is "mould and fungus vs.\ everything else". (My red boxes
-seem to have gone off the side, sorry.)
-
-Or we could go to the other end of the scale:
-
 
-```r
-plot(species.2)
-rect.hclust(species.2,5)
 ```
-
-<img src="22-thingy_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
-
- 
-
-Five is not really an insightful number of clusters with 8 species,
-but it seems to correspond (for me at least) with a reasonable
-division of these species into "kinds of living things". That is, I
-am bringing some outside knowledge into my number-of-clusters division.
-    
-
-
-(g) List which cluster each species is in, for your preferred
-number of clusters (from Ward's method).
-
-
-Solution
-
-
-This is `cutree`. For 2 clusters it would be this:
-
-```r
-cutree(species.2,2)
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-##    Man Monkey  Horse    Pig Pigeon   Tuna  Mould Fungus 
-##      1      1      1      1      1      1      2      2
-```
-
-     
-
-For 5 it would be this:
-
-
-```r
-cutree(species.2,5)
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
 
 ```
-##    Man Monkey  Horse    Pig Pigeon   Tuna  Mould Fungus 
-##      1      1      2      2      2      3      4      5
-```
-
- 
-
-and anything in between is in between. 
-
-These ones came out sorted, so there is no need to sort them (so you
-don't need the methods of the next question).
-    
-
-
-
-
-
-
-##  Rating beer
-
-
- Thirty-two students each rated 10 brands of beer:
-
-
-* Anchor Steam
-
-* Bass
-
-* Beck's
-
-* Corona
-
-* Gordon Biersch
-
-* Guinness
-
-* Heineken
-
-* Pete's Wicked Ale
-
-* Sam Adams
-
-* Sierra Nevada
-
-The ratings are on a scale of 1 to 9, with a higher
-rating being better.
-The data are in
-[link](http://www.utsc.utoronto.ca/~butler/d29/beer.txt).  I
-abbreviated the beer names for the data file. I hope you can figure
-out which is which.
-
-
-(a) Read in the data, and look at the first few rows.
- 
-Solution
-
-
-Data values are aligned in columns, but the column headers are
-not aligned with them, so `read_table2`:
-
-```r
-my_url="http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
-beer=read_table2(my_url)
+## Warning: package 'readr' was built under R version 3.5.2
 ```
 
 ```
-## Parsed with column specification:
-## cols(
-##   student = col_character(),
-##   AnchorS = col_double(),
-##   Bass = col_double(),
-##   Becks = col_double(),
-##   Corona = col_double(),
-##   GordonB = col_double(),
-##   Guinness = col_double(),
-##   Heineken = col_double(),
-##   PetesW = col_double(),
-##   SamAdams = col_double(),
-##   SierraN = col_double()
-## )
+## Warning: package 'purrr' was built under R version 3.5.3
 ```
 
-```r
-beer
 ```
-
-```
-## # A tibble: 32 x 11
-##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
-##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
-##  1 S001          5     9     7      1       7        6        6      5
-##  2 S008          7     5     6      8       8        4        8      8
-##  3 S015          7     7     5      6       6        1        8      4
-##  4 S022          7     7     5      2       5        8        4      6
-##  5 S029          9     7     3      1       6        8        2      7
-##  6 S036          7     6     4      3       7        6        6      5
-##  7 S043          5     5     5      6       6        4        7      5
-##  8 S050          5     3     1      5       5        5        3      5
-##  9 S057          9     3     2      6       4        6        1      5
-## 10 S064          2     6     6      5       6        4        8      4
-## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
-```
-
-       
-32 rows (students), 11 columns (10 beers, plus a column of student
-IDs).  All seems to be kosher. If beer can be kosher.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I  investigated. It can; in fact, I found a long list of kosher beers  that included Anchor Steam.</span>
- 
-
-(b) The researcher who collected the data wants to see which
-beers are rated similarly to which other beers. Try to create a
-distance matrix from these data and explain why it didn't do what
-you wanted. (Remember to get rid of the `student` column
-first.) 
- 
-Solution
-
-
-The obvious thing is to feed these ratings into `dist`
-(we are *creating* distances rather than re-formatting
-things that are already distances). We need to skip the first
-column, since those are student identifiers:
-
-```r
-beer %>%
-select(-student) %>%
-dist() -> d
-glimpse(d)
+## Warning: package 'dplyr' was built under R version 3.5.2
 ```
 
 ```
-##  'dist' num [1:496] 9.8 8.49 6.56 8.89 8.19 ...
-##  - attr(*, "Size")= int 32
-##  - attr(*, "Diag")= logi FALSE
-##  - attr(*, "Upper")= logi FALSE
-##  - attr(*, "method")= chr "euclidean"
-##  - attr(*, "call")= language dist(x = .)
-```
-
-   
-
-The 496 distances are:
-
-
-```r
-32*31/2
+## Warning: package 'stringr' was built under R version 3.5.2
 ```
 
 ```
-## [1] 496
-```
-
- 
-
-the number of ways of choosing 2 objects out of 32, when order does
-not matter.
-Feel free to be offended by my choice of the letter `d` to
-denote both data frames (that I didn't want to give a better name to)
-and dissimilarities in `dist` objects.
-
-You can look at the whole thing if you like, though it is rather
-large. A `dist` object is stored internally as a long vector
-(here of 496 values); it's displayed as a nice triangle. The clue here
-is the thing called `Size`, which indicates that we have a
-$32\times 32$ matrix of distances *between the 32 students*, so
-that if we were to go on and do a cluster analysis based on this
-`d`, we'd get a clustering of the *students* rather than
-of the *beers*, as we want. (If you just print out `d`,
-you'll see that is of distances between 32 (unlabelled) objects, which
-by inference must be the 32 students.)
-
-It might be interesting to do a cluster analysis of the 32 students
-(it would tell you which of the students have similar taste in beer),
-but that's not what we have in mind here.
- 
-
-(c) The R function `t()` *transposes* a matrix: that
-is, it interchanges rows and columns. Feed the transpose of your
-read-in beer ratings into `dist`. Does this now give
-distances between beers?
- 
-Solution
-
-
-Again, omit the first column. The pipeline code looks a bit weird:
-
-```r
-beer %>%
-select(-student) %>%
-t() %>%
-dist() -> d
+## Warning: package 'forcats' was built under R version 3.5.1
 ```
-
-   
-
-so you should feel free to do it in a couple of steps. This way shows
-that you can also refer to columns by number:
 
-
-```r
-beer %>% select(-1) -> beer2
-d=dist(t(beer2))
 ```
-
- 
-
-Either way gets you to the same place:
-
-
-```r
-d
+## Warning: package 'survminer' was built under R version 3.5.1
 ```
 
 ```
-##           AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken
-## Bass     15.19868                                                      
-## Becks    16.09348 13.63818                                             
-## Corona   20.02498 17.83255 17.54993                                    
-## GordonB  13.96424 11.57584 14.42221 13.34166                           
-## Guinness 14.93318 13.49074 16.85230 20.59126 14.76482                  
-## Heineken 20.66398 15.09967 13.78405 14.89966 14.07125 18.54724         
-## PetesW   11.78983 14.00000 16.37071 17.72005 11.57584 14.28286 19.49359
-## SamAdams 14.62874 11.61895 14.73092 14.93318 10.90871 15.90597 14.52584
-## SierraN  12.60952 15.09967 17.94436 16.97056 11.74734 13.34166 19.07878
-##            PetesW SamAdams
-## Bass                      
-## Becks                     
-## Corona                    
-## GordonB                   
-## Guinness                  
-## Heineken                  
-## PetesW                    
-## SamAdams 14.45683         
-## SierraN  13.41641 12.12436
+## Warning: package 'ggpubr' was built under R version 3.5.1
 ```
-
- 
-
-There are 10 beers with these names, so this is good.
- 
 
-(d) Try to explain briefly why I used `as.dist` in the
-class example (the languages one) but `dist` here. (Think
-about the form of the input to each function.)
- 
-Solution
-
-
-`as.dist` is used if you *already* have
-dissimilarities (and you just want to format them right), but
-`dist` is used if you have 
-*data on variables* and you want to *calculate*
-dissimilarities. 
- 
-
-(e) <a name="part:beer-dendro">*</a> Obtain a clustering of the beers, using Ward's method. Show
-the dendrogram.
- 
-Solution
-
-
-This:
-
-```r
-beer.1=hclust(d,method="ward.D")
-plot(beer.1)
 ```
-
-<img src="22-thingy_files/figure-html/khas-1.png" width="672"  />
-
-       
- 
-
-(f) What seems to be a sensible number of clusters? Which
-beers are in which cluster?
- 
-Solution
-
-
-This is a judgement call. Almost anything sensible is
-reasonable. I personally think that two clusters is good, beers
-Anchor Steam, Pete's Wicked Ale, Guinness and Sierra Nevada in
-the first, and Bass, Gordon Biersch, Sam Adams, Corona, Beck's,
-and Heineken in the second.
-You could make a case for three clusters, splitting off
-Corona, Beck's and Heineken  into their own cluster, or even
-about 5 clusters as 
-Anchor Steam, Pete's Wicked Ale; Guinness, Sierra Nevada; Bass,
-Gordon Biersch, Sam Adams; Corona; Beck's, Heineken.
-
-The idea is to have a number of clusters sensibly smaller than
-the 10 observations, so that you are getting some actual
-insight. Having 8 clusters for 10 beers wouldn't be very
-informative! (This is where you use your own knowledge about
-beer to help you rationalize your choice of number of clusters.) 
-
-Extra: as to why the clusters split up like this, I think the four
-beers on the left of my dendrogram are "dark" and the six on
-the right are "light" (in colour), and I would expect the
-students to tend to like all the beers of one type and not so
-much all the beers of the other type.
-
-You knew I would have to investigate this, didn't you? Let's aim
-for a scatterplot of all the ratings for the dark  beers,
-against the ones for the light beers. 
-
-Start with the data frame read in from the file:
-
-
-```r
-beer
+## Warning: package 'magrittr' was built under R version 3.5.1
 ```
 
-```
-## # A tibble: 32 x 11
-##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
-##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
-##  1 S001          5     9     7      1       7        6        6      5
-##  2 S008          7     5     6      8       8        4        8      8
-##  3 S015          7     7     5      6       6        1        8      4
-##  4 S022          7     7     5      2       5        8        4      6
-##  5 S029          9     7     3      1       6        8        2      7
-##  6 S036          7     6     4      3       7        6        6      5
-##  7 S043          5     5     5      6       6        4        7      5
-##  8 S050          5     3     1      5       5        5        3      5
-##  9 S057          9     3     2      6       4        6        1      5
-## 10 S064          2     6     6      5       6        4        8      4
-## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
 ```
-
-       
-
-The aim is to find the average rating for a dark beer and a light beer
-for each student, and then plot them against each other. Does a
-student who likes dark beer tend not to like light beer, and vice versa?
-
-Let's think about what to do first.
-
-We need to: `gather` all the rating columns into one, labelled
-by `name` of beer. Then create a variable that is `dark`
-if we're looking at one of the dark beers and `light`
-otherwise. `ifelse` works like "if" in a spreadsheet: a
-logical thing that is either true or false, followed by a value if
-true and a value if false. There is a nice R command `%in%`
-which is `TRUE` if the thing in the first variable is to be
-found somewhere in the list of things given next (here, one of the
-apparently dark beers). (Another way to do this, which will appeal to
-you more if you like databases, is to create a second data frame with
-two columns, the first being the beer names, and the second being
-`dark` or `light` as appropriate for that beer. Then you
-use a "left join" to look up beer type from beer name.)
-
-Next, group by beer type within student. Giving two things to
-`group_by` does it this way: the second thing within 
-(or "for each of") the first. 
-
-Then calculate the mean
-rating within each group. This gives one column of students, one
-column of beer types, 
-and one column of rating means. 
-
-Then we need to `spread` beer type
-into two columns so that we can make a scatterplot of the mean ratings
-for light and dark against
-each other. 
-
-Finally, we make a scatterplot. 
-
-You'll see the final version of this that worked, but rest assured
-that there were many intervening versions of this that didn't!
-
-I urge you to examine the chain one line at a time and see what each
-line does. That was how I debugged it.
-
-Off we go:
-
-
-```r
-beer %>%
-gather(name,rating,AnchorS:SierraN) %>%
-mutate(beer.type=ifelse(name %in%
-c("AnchorS","PetesW","Guinness","SierraN"),"dark","light")) %>%
-group_by(student,beer.type) %>%
-summarize(mean.rat=mean(rating)) %>%
-spread(beer.type,mean.rat) %>%
-ggplot(aes(x=dark,y=light))+geom_point()
+## Warning: package 'car' was built under R version 3.5.1
 ```
-
-<img src="22-thingy_files/figure-html/iyrpoydf-1.png" width="672"  />
-
- 
 
-After all that work, not really. There are some students who like
-light beer but not dark beer (top left), there is a sort of vague
-straggle down to the bottom right, where some students like dark beer
-but not light beer, but there are definitely students at the top
-right, who just like beer! 
-
-The only really empty part of this plot is
-the bottom left, which says that these students don't hate both kinds
-of beer; they like either dark beer, or light beer, or both.
-
-The reason a `ggplot` fits into this "workflow" is that the
-first thing you feed into `ggplot` is a data frame, the one
-created by the chain here. Because it's in a pipeline, 
-you don't have the
-first thing on `ggplot`, so you can concentrate on the
-`aes` ("what to plot") and then the "how to plot it". 
-Now back to your regularly-scheduled programming.
- 
-
-(g) Re-draw your dendrogram with your clusters indicated.
- 
-Solution
-
-
-`rect.hclust`, with your chosen number  of clusters:
-
-```r
-plot(beer.1)
-rect.hclust(beer.1,2)
 ```
-
-<img src="22-thingy_files/figure-html/sdkjdh-1.png" width="672"  />
-
-       
-
-Or if you prefer 5 clusters, like this:
-
-
-```r
-plot(beer.1)
-rect.hclust(beer.1,5)
+## Warning: package 'carData' was built under R version 3.5.1
 ```
-
-<img src="22-thingy_files/figure-html/ljashkjsdah-1.png" width="672"  />
-
- 
-
-Same idea with any other number of clusters. If you follow through
-with your preferred number of clusters from the previous part, I'm good.
- 
 
-(h) Obtain a K-means
-clustering with 2 clusters.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you haven't gotten to K-means clustering yet, leave this and save it for later.</span>
-Note that you will need to use the (transposed) 
-*original  data*, not the distances. Use a suitably large value of
-`nstart`. (The data are ratings all on the same scale, so
-there is no need for `scale` here. In case you were
-wondering.) 
- 
-Solution
-
-
-
-
-       
-I used 20 for `nstart`. This is the pipe way:
-
-```r
-beer.2 = beer %>% select(-1) %>%
-t() %>%
-kmeans(2,nstart=20)
 ```
-
-       
-
-Not everyone (probably) will get the same answer, because of the
-random nature of the procedure, but the above code should be good
-whatever output it produces.
- 
-
-(i) How many beers are in each cluster?
- 
-Solution
-
-
-On mine:
-
-```r
-beer.2$size
+## Warning: package 'ggbiplot' was built under R version 3.5.1
 ```
 
 ```
-## [1] 4 6
-```
-
-       
-
-You might get the same numbers the other way around.
- 
-
-(j) *Which* beers are in each cluster? You can do this
-simply by obtaining the cluster memberships and using
-`sort` as in the last question, or you can do it as I did
-in class by obtaining the 
-names of the things to be clustered and picking out the ones of
-them that are in cluster 1, 2, 3, \ldots .)
- 
-Solution
-
-
-The cluster numbers of each beer are these:
-
-
-```r
-beer.2$cluster
+## Warning: package 'plyr' was built under R version 3.5.1
 ```
 
-```
-##  AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken   PetesW 
-##        1        2        2        2        2        1        2        1 
-## SamAdams  SierraN 
-##        2        1
 ```
-
-  
-
-This is what is known in the business as a "named vector": it has values (the cluster numbers) and each value has a name attached to it (the name of a beer).
-
-Named vectors are handily turned into a data frame with `enframe`:
-
-
-```r
-enframe(beer.2$cluster)
+## Warning: package 'scales' was built under R version 3.5.1
 ```
 
 ```
-## # A tibble: 10 x 2
-##    name     value
-##    <chr>    <int>
-##  1 AnchorS      1
-##  2 Bass         2
-##  3 Becks        2
-##  4 Corona       2
-##  5 GordonB      2
-##  6 Guinness     1
-##  7 Heineken     2
-##  8 PetesW       1
-##  9 SamAdams     2
-## 10 SierraN      1
-```
-
- 
-
-or, give the columns better names and arrange them by cluster:
-
-
-```r
-enframe(beer.2$cluster, name="beer", value="cluster") %>%
-arrange(cluster)
+## Warning: package 'ggrepel' was built under R version 3.5.1
 ```
 
 ```
-## # A tibble: 10 x 2
-##    beer     cluster
-##    <chr>      <int>
-##  1 AnchorS        1
-##  2 Guinness       1
-##  3 PetesW         1
-##  4 SierraN        1
-##  5 Bass           2
-##  6 Becks          2
-##  7 Corona         2
-##  8 GordonB        2
-##  9 Heineken       2
-## 10 SamAdams       2
+## Warning: package 'broom' was built under R version 3.5.2
 ```
-
- 
-
-These happen to be the same clusters as in my 2-cluster solution using
-Ward's method.
- 
-
-
 
 
 
@@ -1615,7 +208,7 @@ d.1=hclust(d,method="single")
 plot(d.1)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
      
 
@@ -1733,7 +326,7 @@ d.2=hclust(d,method="ward.D")
 plot(d.2,cex=0.7)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
      
 The site numbers were a bit close together, so I printed them out
@@ -1811,7 +404,7 @@ plot(d.2,cex=0.7)
 rect.hclust(d.2,3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
    
 
@@ -1825,7 +418,7 @@ plot(d.2,cex=0.7)
 rect.hclust(d.2,6)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
    
 
@@ -2539,8 +1132,8 @@ Check.
 
 (h) Obtain the cluster memberships for each site, for your
 preferred number of clusters from part (<a href="#part:prefclust">here</a>). Add a
-column to the original data that you read in in part
-(<a href="#part:original">here</a>) containing those cluster memberships, \emph{as a
+column to the original data that you read in, in part
+(<a href="#part:original">here</a>), containing those cluster memberships, \emph{as a
 factor}.  Obtain a plot that will enable you to assess the
 relationship between those clusters and `pollution`. (Once you
 have the cluster memberships, you can add them to the data frame and
@@ -2581,7 +1174,7 @@ seabed.z %>% mutate(cluster=factor(cluster)) %>%
 ggplot(aes(x=cluster,y=pollution))+geom_boxplot()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
  
 
@@ -2599,7 +1192,7 @@ ggplot(aes(x=pollution))+geom_histogram(bins=8)+
 facet_grid(cluster~.)  
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 
@@ -2628,7 +1221,7 @@ seabed.z %>% mutate(cluster=factor(cluster)) %>%
 ggplot(aes(x=cluster,y=pollution))+geom_boxplot()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
  
 
@@ -2652,6 +1245,1442 @@ LD's were important).
 
   
 
+
+
+
+
+
+
+
+##  Dissimilarities between fruits
+
+
+ Consider the fruits apple, orange, banana, pear,
+strawberry, blueberry. We are going to work with these four
+properties of fruits:
+
+
+* has a round shape
+
+* Is sweet
+
+* Is crunchy
+
+* Is a berry
+
+
+
+(a)  Make a table with fruits as columns, and with
+rows "round shape", "sweet", "crunchy", "berry". In each cell
+of the table, put a 1 if the fruit has the property named in the
+row, and a 0 if it does not. (This is your opinion, and may not
+agree with mine. That doesn't matter, as long as you follow through
+with whatever your choices were.)
+ 
+Solution
+
+
+Something akin to this:
+
+
+```
+
+Fruit        Apple Orange Banana Pear Strawberry Blueberry
+Round shape    1      1      0     0       0         1
+Sweet          1      1      0     0       1         0
+Crunchy        1      0      0     1       0         0
+Berry          0      0      0     0       1         1
+
+```
+
+You'll have to make a choice about "crunchy". I usually eat
+pears before they're fully ripe, so to me, they're crunchy.
+ 
+
+(b) We'll define the dissimilarity between two fruits to be the
+number of qualities they *disagree* on. Thus, for example, the
+dissimilarity between Apple and Orange is 1 (an apple is crunchy and
+an orange is not, but they agree on everything else). Calculate the
+dissimilarity between each pair of fruits, and make a square table
+that summarizes the results. (To save yourself some work, note that
+the dissimilarity between a fruit and itself must be zero, and the
+dissimilarity between fruits A and B is the same as that between B
+and A.) Save your table of dissimilarities into a file for the next part.
+ 
+Solution
+
+
+I got this, by counting them:
+
+```
+ 
+Fruit         Apple  Orange   Banana   Pear  Strawberry  Blueberry
+Apple           0       1       3       2        3          3
+Orange          1       0       2       3        2          2
+Banana          3       2       0       1        2          2
+Pear            2       3       1       0        3          3
+Strawberry      3       2       2       3        0          2
+Blueberry       3       2       2       3        2          0
+
+```
+
+I copied this into a file `fruits.txt`. Note that (i) I
+have aligned my columns, so that I will be able to use
+`read_table` later, and (ii) I have given the first column
+a name, since `read_table` wants the same number of column
+names as columns.
+
+Extra: yes, you can do this in R too. We've seen some of the tricks
+before. 
+
+Let's start by reading in my table of fruits and properties, which
+I saved in
+[link](http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt):
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt"
+fruit1=read_table(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   Property = col_character(),
+##   Apple = col_double(),
+##   Orange = col_double(),
+##   Banana = col_double(),
+##   Pear = col_double(),
+##   Strawberry = col_double(),
+##   Blueberry = col_double()
+## )
+```
+
+```r
+fruit1 
+```
+
+```
+## # A tibble: 4 x 7
+##   Property    Apple Orange Banana  Pear Strawberry Blueberry
+##   <chr>       <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
+## 1 Round.shape     1      1      0     0          0         1
+## 2 Sweet           1      1      0     0          1         0
+## 3 Crunchy         1      0      0     1          0         0
+## 4 Berry           0      0      0     0          1         1
+```
+
+     
+
+We don't need the first column, so we'll get rid of it:
+
+
+```r
+fruit2 = fruit1 %>% select(-Property)
+fruit2
+```
+
+```
+## # A tibble: 4 x 6
+##   Apple Orange Banana  Pear Strawberry Blueberry
+##   <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
+## 1     1      1      0     0          0         1
+## 2     1      1      0     0          1         0
+## 3     1      0      0     1          0         0
+## 4     0      0      0     0          1         1
+```
+
+ 
+
+The loop way is the most direct. We're going to be looking at
+combinations of fruits and other fruits, so we'll need two loops one
+inside the other. It's easier for this to work with column numbers,
+which here are 1 through 6, and we'll make a matrix `m` with
+the dissimilarities in it, which we have to initialize first. I'll
+initialize it to a $6\times 6$ matrix of `-1`, since the final
+dissimilarities are 0 or bigger, and this way I'll know if I forgot
+anything.
+
+Here's where we are at so far:
+
+
+```r
+fruit_m=matrix(-1,6,6)
+for (i in 1:6) {
+for (j in 1:6) {
+fruit_m[i,j]=3 # dissim between fruit i and fruit j
+}
+}
+```
+
+ 
+
+This, of course, doesn't run yet. The sticking point is how to
+calculate the dissimilarity between two columns. I think that is a
+separate thought process that should be in a function of its own. The
+inputs are the two column numbers, and a data frame to get those
+columns from:
+
+
+```r
+dissim=function(i,j,d) {
+x = d %>% select(i)
+y = d %>% select(j)
+sum(x!=y)
+}
+dissim(1,2,fruit2)
+```
+
+```
+## [1] 1
+```
+
+ 
+
+Apple and orange differ by one (not being crunchy). The process is:
+grab the $i$-th column and call it `x`, grab the $j$-th column
+and call it `y`. These are two one-column data frames with four
+rows each (the four properties). `x!=y` goes down the rows, and
+for each one gives a `TRUE` if they're different and a
+`FALSE` if they're the same. So `x!=y` is a collection
+of four T-or-F values. This seems backwards, but I was thinking of
+what we want to do: we want to count the number of different
+ones. Numerically, `TRUE` counts as 1 and `FALSE` as 0,
+so we should make the thing we're counting (the different ones) come
+out as `TRUE`. To count the number of `TRUE`s (1s), add
+them up. 
+
+That was a complicated thought process, so it was probably wise to
+write a function to do it. Now, in our loop, we only have to call the
+function (having put some thought into getting it right):
+
+
+```r
+fruit_m=matrix(-1,6,6)
+for (i in 1:6) {
+for (j in 1:6) {
+fruit_m[i,j]=dissim(i,j,fruit2)
+}
+}
+fruit_m
+```
+
+```
+##      [,1] [,2] [,3] [,4] [,5] [,6]
+## [1,]    0    1    3    2    3    3
+## [2,]    1    0    2    3    2    2
+## [3,]    3    2    0    1    2    2
+## [4,]    2    3    1    0    3    3
+## [5,]    3    2    2    3    0    2
+## [6,]    3    2    2    3    2    0
+```
+
+ 
+
+The last step is re-associate the fruit names with this matrix. This
+is a `matrix` so it has a `rownames` and a
+`colnames`. We set both of those, but first we have to get the
+fruit names from `fruit2`:
+
+
+```r
+fruit_names=names(fruit2)
+rownames(fruit_m)=fruit_names
+colnames(fruit_m)=fruit_names
+fruit_m
+```
+
+```
+##            Apple Orange Banana Pear Strawberry Blueberry
+## Apple          0      1      3    2          3         3
+## Orange         1      0      2    3          2         2
+## Banana         3      2      0    1          2         2
+## Pear           2      3      1    0          3         3
+## Strawberry     3      2      2    3          0         2
+## Blueberry      3      2      2    3          2         0
+```
+
+ 
+
+This is good to go into the cluster analysis (happening later).
+
+There is a `tidyverse` way to do this also. It's actually a lot
+like the loop way in its conception, but the coding looks
+different. We start by making all combinations of the fruit names with
+each other, which is `crossing`:
+
+
+```r
+combos=crossing(fruit=fruit_names,other=fruit_names)
+combos
+```
+
+```
+## # A tibble: 36 x 2
+##    fruit  other     
+##    <chr>  <chr>     
+##  1 Apple  Apple     
+##  2 Apple  Banana    
+##  3 Apple  Blueberry 
+##  4 Apple  Orange    
+##  5 Apple  Pear      
+##  6 Apple  Strawberry
+##  7 Banana Apple     
+##  8 Banana Banana    
+##  9 Banana Blueberry 
+## 10 Banana Orange    
+## # … with 26 more rows
+```
+
+ 
+
+Now, we want a function that, given any two fruit *names*, works
+out the dissimilarity between them. A happy coincidence is that we can
+use the function we had before, *unmodified*! How? Take a look: 
+
+
+```r
+dissim=function(i,j,d) {
+x = d %>% select(i)
+y = d %>% select(j)
+sum(x!=y)
+}
+dissim("Apple","Orange",fruit2)
+```
+
+```
+## [1] 1
+```
+
+ 
+
+`select` can take a column number *or a column name*, so
+that running it with column names gives the right answer.
+
+Now, we want to run this function for each of the pairs in
+`combos`. The "for each" is `fruit` and `other`
+in parallel, so it's `map2` rather than `map`. Also, the
+dissimilarity is a whole number each time, so we need
+`map2_int`. So we can do this:
+
+
+```r
+combos %>% mutate(dissim=map2_int(fruit,other,dissim,fruit2))
+```
+
+```
+## # A tibble: 36 x 3
+##    fruit  other      dissim
+##    <chr>  <chr>       <int>
+##  1 Apple  Apple           0
+##  2 Apple  Banana          3
+##  3 Apple  Blueberry       3
+##  4 Apple  Orange          1
+##  5 Apple  Pear            2
+##  6 Apple  Strawberry      3
+##  7 Banana Apple           3
+##  8 Banana Banana          0
+##  9 Banana Blueberry       2
+## 10 Banana Orange          2
+## # … with 26 more rows
+```
+
+ 
+
+This would work just as well using `fruit1` rather than
+`fruit`, since we are picking out the columns by name rather
+than number.
+
+To make this into something we can turn into a `dist` object
+later, we need to `spread` the column `other` to make a
+square array:
+
+
+```r
+fruit_spread = combos %>% 
+mutate(dissim=map2_int(fruit,other,dissim,fruit2)) %>%
+spread(other,dissim)
+fruit_spread
+```
+
+```
+## # A tibble: 6 x 7
+##   fruit      Apple Banana Blueberry Orange  Pear Strawberry
+##   <chr>      <int>  <int>     <int>  <int> <int>      <int>
+## 1 Apple          0      3         3      1     2          3
+## 2 Banana         3      0         2      2     1          2
+## 3 Blueberry      3      2         0      2     3          2
+## 4 Orange         1      2         2      0     3          2
+## 5 Pear           2      1         3      3     0          3
+## 6 Strawberry     3      2         2      2     3          0
+```
+
+ 
+
+Done!
+ 
+
+(c) Do a hierarchical cluster analysis using complete
+linkage. Display your dendrogram.
+ 
+Solution
+
+
+First, we need to take one of our matrices of dissimilarities
+and turn it into a `dist` object. Since I asked you to
+save yours into a file, let's start from there. Mine is aligned
+columns: 
+
+```r
+dissims=read_table("fruits.txt")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   fruit = col_character(),
+##   Apple = col_double(),
+##   Orange = col_double(),
+##   Banana = col_double(),
+##   Pear = col_double(),
+##   Strawberry = col_double(),
+##   Blueberry = col_double()
+## )
+```
+
+```r
+dissims
+```
+
+```
+## # A tibble: 6 x 7
+##   fruit      Apple Orange Banana  Pear Strawberry Blueberry
+##   <chr>      <dbl>  <dbl>  <dbl> <dbl>      <dbl>     <dbl>
+## 1 Apple          0      1      3     2          3         3
+## 2 Orange         1      0      2     3          2         2
+## 3 Banana         3      2      0     1          2         2
+## 4 Pear           2      3      1     0          3         3
+## 5 Strawberry     3      2      2     3          0         2
+## 6 Blueberry      3      2      2     3          2         0
+```
+
+      
+
+Then turn it into a `dist` object. The first step is to take
+off the first column, since `as.dist` can get the names from
+the columns:
+
+
+```r
+d = dissims %>% select(-fruit) %>%
+as.dist()
+d
+```
+
+```
+##            Apple Orange Banana Pear Strawberry
+## Orange         1                              
+## Banana         3      2                       
+## Pear           2      3      1                
+## Strawberry     3      2      2    3           
+## Blueberry      3      2      2    3          2
+```
+
+
+
+If you forget to take off the first column, this happens:
+
+
+```r
+as.dist(dissims)
+```
+
+```
+## Warning in storage.mode(m) <- "numeric": NAs introduced by coercion
+```
+
+```
+## Warning in as.dist.default(dissims): non-square matrix
+```
+
+```
+## Error in dimnames(df) <- if (is.null(labels)) list(seq_len(size), seq_len(size)) else list(labels, : length of 'dimnames' [1] not equal to array extent
+```
+
+ 
+
+The key thing here is "non-square matrix": you have one more column
+than you have rows, since you have a column of fruit names.
+
+This one is `as.dist` since you already have dissimilarities
+and you want to arrange them into the right type of
+thing. `dist` is for *calculating* dissimilarities, which
+we did before, so we don't want to do that now.
+
+Now, after all that work, the actual cluster analysis and dendrogram:
+
+```r
+fruits.1=hclust(d,method="complete")
+plot(fruits.1)
+```
+
+<img src="22-thingy_files/figure-html/hkadh-1.png" width="672"  />
+
+     
+ 
+
+(d) How many clusters, of what fruits, do you seem to have?
+Explain briefly.
+ 
+Solution
+
+
+I reckon I have three clusters: strawberry and blueberry in one,
+apple and orange in the second, and banana and pear in the
+third. (If your dissimilarities were different from mine, your
+dendrogram will be different also.)
+ 
+
+(e) Pick a pair of clusters (with at least 2 fruits in each)
+from your dendrogram. Verify that 
+the complete-linkage distance on your dendrogram is correct.
+ 
+Solution
+
+
+I'll pick strawberry-blueberry and and apple-orange. I'll arrange
+the dissimilarities like this:
+
+```
+
+apple   orange
+strawberry    3       2
+blueberry     3       2
+
+```
+
+The largest of those is 3, so that's the complete-linkage
+distance. That's also what the dendrogram says.
+(Likewise, the smallest of those is 2, so 2 is the
+single-linkage distance.) That is to say, the largest distance or
+dissimilarity 
+from anything in one cluster to anything in the other is 3, and
+the smallest is 2.
+I don't mind which pair of clusters you take, as long as you spell
+out the dissimilarity (distance) between each fruit in each
+cluster, and take the maximum of those. Besides, if your
+dissimilarities are different from mine, your complete-linkage
+distance could be different from mine also. The grader will have
+to use her judgement!
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That's two cups of coffee I owe the      grader now.</span>  
+The important point is that you assess the dissimilarities between
+fruits in one cluster and fruits in the other. The dissimilarities
+between fruits in the same cluster don't enter into it xxx.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I      now have a mental image of John Cleese saying *it don't enter      into it* in the infamous Dead Parrot sketch, https://www.youtube.com/watch?v=vnciwwsvNcc}. Not to      mention       *How to defend yourself against an assailant armed with fresh      fruit*, https://www.youtube.com/watch?v=4JgbOkLdRaE.    </span>
+As it happens, all my complete-linkage distances between clusters
+(of at least 2 fruits) are 3. The single-linkage ones are
+different, though:
+
+```r
+fruits.2=hclust(d,method="single")
+plot(fruits.2)
+```
+
+<img src="22-thingy_files/figure-html/lhsdjhad-1.png" width="672"  />
+
+     
+
+All the single-linkage cluster distances are 2. (OK, so this wasn't a
+very interesting example, but I wanted to give you one where you could
+calculate what was going on.)
+ 
+
+
+
+
+##  Similarity of species 
+
+
+ Two scientists assessed the dissimilarity
+between a number 
+of species by recording the number of positions in the protein
+molecule cytochrome-$c$ where the two species being compared have
+different amino acids. The dissimilarities that they recorded are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/species.txt).
+
+
+
+(a) Read the data into a data frame and take a look at it.
+
+
+Solution
+
+
+Nothing much new here:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/species.txt"
+species=read_delim(my_url," ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   what = col_character(),
+##   Man = col_double(),
+##   Monkey = col_double(),
+##   Horse = col_double(),
+##   Pig = col_double(),
+##   Pigeon = col_double(),
+##   Tuna = col_double(),
+##   Mould = col_double(),
+##   Fungus = col_double()
+## )
+```
+
+```r
+species
+```
+
+```
+## # A tibble: 8 x 9
+##   what     Man Monkey Horse   Pig Pigeon  Tuna Mould Fungus
+##   <chr>  <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>  <dbl>
+## 1 Man        0      1    17    13     16    31    63     66
+## 2 Monkey     1      0    16    12     15    32    62     65
+## 3 Horse     17     16     0     5     16    27    64     68
+## 4 Pig       13     12     5     0     13    25    64     67
+## 5 Pigeon    16     15    16    13      0    27    59     66
+## 6 Tuna      31     32    27    25     27     0    72     69
+## 7 Mould     63     62    64    64     59    72     0     61
+## 8 Fungus    66     65    68    67     66    69    61      0
+```
+
+     
+
+This is a square array of dissimilarities between the eight species.
+
+The data set came from the 1960s, hence the use of "Man" rather than
+"human". It probably also came from the UK, judging by the spelling
+of `Mould`.
+
+(I gave the first column the name `what` so that you could
+safely use `species` for the whole data frame.)
+    
+
+
+(b) Bearing in mind that the values you read in are
+*already* dissimilarities, convert them into a `dist`
+object suitable for running a cluster analysis on, and display the
+results. (Note that you need to get rid of any columns that don't
+contain numbers.)
+
+
+Solution
+
+
+The point here is that the values you have are *already*
+dissimilarities, so no conversion of the numbers is required. Thus
+this is a job for `as.dist`, which merely changes how it
+looks. Use a pipeline to get rid of the first column first:
+
+```r
+species %>%
+select(-what) %>% 
+as.dist() -> d
+d
+```
+
+```
+##        Man Monkey Horse Pig Pigeon Tuna Mould
+## Monkey   1                                   
+## Horse   17     16                            
+## Pig     13     12     5                      
+## Pigeon  16     15    16  13                  
+## Tuna    31     32    27  25     27           
+## Mould   63     62    64  64     59   72      
+## Fungus  66     65    68  67     66   69    61
+```
+
+
+
+This doesn't display anything that it doesn't need to: we know that the
+dissimilarity between a species and itself is zero (no need to show
+that), and that the dissimilarity between B and A is the same as
+between A and B, so no need to show everything twice. It might look as
+if you are missing a row and a column, but one of the species (Fungus)
+appears only in a row and one of them (Man) only in a column.
+
+This also works, to select only the numerical columns:
+
+
+```r
+species %>%
+select_if(is.numeric) %>%
+as.dist()
+```
+
+```
+##        Man Monkey Horse Pig Pigeon Tuna Mould
+## Monkey   1                                   
+## Horse   17     16                            
+## Pig     13     12     5                      
+## Pigeon  16     15    16  13                  
+## Tuna    31     32    27  25     27           
+## Mould   63     62    64  64     59   72      
+## Fungus  66     65    68  67     66   69    61
+```
+
+ 
+
+Extra: data frames officially have an attribute called "row names",
+that is displayed where the row numbers display, but which isn't
+actually a column of the data frame. In the past, when we used
+`read.table` with a dot, the first column of data read in from
+the file could be nameless (that is, you could have one more column of
+data than you had column names) and the first column would be treated
+as row names. People used row names for things like identifier
+variables. But row names have this sort of half-existence, and when
+Hadley Wickham designed the `tidyverse`, he decided not to use
+row names, taking the attitude that if it's part of the data, it
+should be in the data frame as a genuine column. This means that when
+you use a `read_` function, you have to have exactly as many
+column names as columns. 
+
+For these data, I previously had the column here called
+`what` as row names, and `as.dist` automatically got rid
+of the row names when formatting the distances. Now, it's a
+genuine column, so I have to get rid of it before running
+`as.dist`. This is more work, but it's also more honest, and
+doesn't involve thinking about row names at all. So, on balance, I
+think it's a win.
+  
+
+
+(c) Run a cluster analysis using single-linkage and obtain a dendrogram.
+
+
+Solution
+
+
+Something like this:
+
+```r
+species.1=hclust(d,method="single")
+plot(species.1)
+```
+
+<img src="22-thingy_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
+
+     
+    
+
+
+(d) Run a cluster analysis using Ward's method and obtain a dendrogram.
+
+
+Solution
+
+
+Not much changes  here in the code, but the result is noticeably
+different:
+
+```r
+species.2=hclust(d,method="ward.D")
+plot(species.2)
+```
+
+<img src="22-thingy_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
+
+  
+
+Fewer points this time since you're doing much of the same stuff over again.
+
+Don't forget to take care with the `method`: it has to be
+`ward` in lowercase (even though it's someone's name) followed
+by a D in uppercase.
+
+    
+
+
+(e) Describe how the two dendrograms from the last two parts
+look different.
+
+
+Solution
+
+
+This is (as ever with this kind of thing) a judgement call. Your
+job is to come up with something reasonable.
+For myself, I was thinking about how single-linkage tends to
+produce "stringy" clusters that join single objects (species)
+onto already-formed clusters. Is that happening here? Apart from
+the first two clusters, man and monkey, horse and pig,
+*everything* that gets joined on is a single species joined
+on to a bigger cluster, including mould and fungus right at the
+end. Contrast that with the output from Ward's method, where, for
+the most part, groups are formed first and then joined onto other
+groups. For example, in Ward's method, mould and fungus are joined
+earlier, and also the man-monkey group is joined to the
+pigeon-horse-pig group.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Tuna is an exception, but usually Ward    tends to join fairly dissimilar things that are nonetheless more    similar to each other than to anything else. This is like    Hungarian and Finnish in the example in class: they are very    dissimilar languages, but they are more similar to each other than    to anything else.</span>
+You might prefer to look at the specifics of what gets joined. I
+think the principal difference from this angle is that mould and
+fungus get joined together (much) earlier in Ward. Also, pigeon
+gets joined to horse and pig first under Ward, but *after*
+those have been joined to man and monkey under
+single-linkage. This is also a reasonable kind of observation.
+    
+
+
+(f) Looking at your clustering for Ward's method, what seems to
+be a sensible number of clusters? Draw boxes around those clusters.
+
+
+Solution
+
+
+Pretty much any number of clusters bigger than 1 and smaller than
+8 is ok here, but I would prefer to see something between 2 and
+5, because a number of clusters of that sort offers (i) some
+insight ("these things are like these other things") and (ii) a
+number of clusters of that sort is supported by the data.
+To draw those clusters, you need `rect.hclust`, and
+before that you'll need to plot the cluster object again. For 2
+clusters, that would look like this:
+
+```r
+plot(species.2)
+rect.hclust(species.2,2)
+```
+
+<img src="22-thingy_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
+
+ 
+
+This one is "mould and fungus vs.\ everything else". (My red boxes
+seem to have gone off the side, sorry.)
+
+Or we could go to the other end of the scale:
+
+
+```r
+plot(species.2)
+rect.hclust(species.2,5)
+```
+
+<img src="22-thingy_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
+
+ 
+
+Five is not really an insightful number of clusters with 8 species,
+but it seems to correspond (for me at least) with a reasonable
+division of these species into "kinds of living things". That is, I
+am bringing some outside knowledge into my number-of-clusters division.
+    
+
+
+(g) List which cluster each species is in, for your preferred
+number of clusters (from Ward's method).
+
+
+Solution
+
+
+This is `cutree`. For 2 clusters it would be this:
+
+```r
+cutree(species.2,2)
+```
+
+```
+##    Man Monkey  Horse    Pig Pigeon   Tuna  Mould Fungus 
+##      1      1      1      1      1      1      2      2
+```
+
+     
+
+For 5 it would be this:
+
+
+```r
+cutree(species.2,5)
+```
+
+```
+##    Man Monkey  Horse    Pig Pigeon   Tuna  Mould Fungus 
+##      1      1      2      2      2      3      4      5
+```
+
+ 
+
+and anything in between is in between. 
+
+These ones came out sorted, so there is no need to sort them (so you
+don't need the methods of the next question).
+    
+
+
+
+
+
+
+##  Rating beer
+
+
+ Thirty-two students each rated 10 brands of beer:
+
+
+* Anchor Steam
+
+* Bass
+
+* Beck's
+
+* Corona
+
+* Gordon Biersch
+
+* Guinness
+
+* Heineken
+
+* Pete's Wicked Ale
+
+* Sam Adams
+
+* Sierra Nevada
+
+The ratings are on a scale of 1 to 9, with a higher
+rating being better.
+The data are in
+[link](http://www.utsc.utoronto.ca/~butler/d29/beer.txt).  I
+abbreviated the beer names for the data file. I hope you can figure
+out which is which.
+
+
+(a) Read in the data, and look at the first few rows.
+ 
+Solution
+
+
+Data values are aligned in columns, but the column headers are
+not aligned with them, so `read_table2`:
+
+```r
+my_url="http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
+beer=read_table2(my_url)
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   student = col_character(),
+##   AnchorS = col_double(),
+##   Bass = col_double(),
+##   Becks = col_double(),
+##   Corona = col_double(),
+##   GordonB = col_double(),
+##   Guinness = col_double(),
+##   Heineken = col_double(),
+##   PetesW = col_double(),
+##   SamAdams = col_double(),
+##   SierraN = col_double()
+## )
+```
+
+```r
+beer
+```
+
+```
+## # A tibble: 32 x 11
+##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
+##  1 S001          5     9     7      1       7        6        6      5
+##  2 S008          7     5     6      8       8        4        8      8
+##  3 S015          7     7     5      6       6        1        8      4
+##  4 S022          7     7     5      2       5        8        4      6
+##  5 S029          9     7     3      1       6        8        2      7
+##  6 S036          7     6     4      3       7        6        6      5
+##  7 S043          5     5     5      6       6        4        7      5
+##  8 S050          5     3     1      5       5        5        3      5
+##  9 S057          9     3     2      6       4        6        1      5
+## 10 S064          2     6     6      5       6        4        8      4
+## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
+```
+
+       
+32 rows (students), 11 columns (10 beers, plus a column of student
+IDs).  All seems to be kosher. If beer can be kosher.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I  investigated. It can; in fact, I found a long list of kosher beers  that included Anchor Steam.</span>
+ 
+
+(b) The researcher who collected the data wants to see which
+beers are rated similarly to which other beers. Try to create a
+distance matrix from these data and explain why it didn't do what
+you wanted. (Remember to get rid of the `student` column
+first.) 
+ 
+Solution
+
+
+The obvious thing is to feed these ratings into `dist`
+(we are *creating* distances rather than re-formatting
+things that are already distances). We need to skip the first
+column, since those are student identifiers:
+
+```r
+beer %>%
+select(-student) %>%
+dist() -> d
+glimpse(d)
+```
+
+```
+##  'dist' num [1:496] 9.8 8.49 6.56 8.89 8.19 ...
+##  - attr(*, "Size")= int 32
+##  - attr(*, "Diag")= logi FALSE
+##  - attr(*, "Upper")= logi FALSE
+##  - attr(*, "method")= chr "euclidean"
+##  - attr(*, "call")= language dist(x = .)
+```
+
+   
+
+The 496 distances are:
+
+
+```r
+32*31/2
+```
+
+```
+## [1] 496
+```
+
+ 
+
+the number of ways of choosing 2 objects out of 32, when order does
+not matter.
+Feel free to be offended by my choice of the letter `d` to
+denote both data frames (that I didn't want to give a better name to)
+and dissimilarities in `dist` objects.
+
+You can look at the whole thing if you like, though it is rather
+large. A `dist` object is stored internally as a long vector
+(here of 496 values); it's displayed as a nice triangle. The clue here
+is the thing called `Size`, which indicates that we have a
+$32\times 32$ matrix of distances *between the 32 students*, so
+that if we were to go on and do a cluster analysis based on this
+`d`, we'd get a clustering of the *students* rather than
+of the *beers*, as we want. (If you just print out `d`,
+you'll see that is of distances between 32 (unlabelled) objects, which
+by inference must be the 32 students.)
+
+It might be interesting to do a cluster analysis of the 32 students
+(it would tell you which of the students have similar taste in beer),
+but that's not what we have in mind here.
+ 
+
+(c) The R function `t()` *transposes* a matrix: that
+is, it interchanges rows and columns. Feed the transpose of your
+read-in beer ratings into `dist`. Does this now give
+distances between beers?
+ 
+Solution
+
+
+Again, omit the first column. The pipeline code looks a bit weird:
+
+```r
+beer %>%
+select(-student) %>%
+t() %>%
+dist() -> d
+```
+
+   
+
+so you should feel free to do it in a couple of steps. This way shows
+that you can also refer to columns by number:
+
+
+```r
+beer %>% select(-1) -> beer2
+d=dist(t(beer2))
+```
+
+ 
+
+Either way gets you to the same place:
+
+
+```r
+d
+```
+
+```
+##           AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken
+## Bass     15.19868                                                      
+## Becks    16.09348 13.63818                                             
+## Corona   20.02498 17.83255 17.54993                                    
+## GordonB  13.96424 11.57584 14.42221 13.34166                           
+## Guinness 14.93318 13.49074 16.85230 20.59126 14.76482                  
+## Heineken 20.66398 15.09967 13.78405 14.89966 14.07125 18.54724         
+## PetesW   11.78983 14.00000 16.37071 17.72005 11.57584 14.28286 19.49359
+## SamAdams 14.62874 11.61895 14.73092 14.93318 10.90871 15.90597 14.52584
+## SierraN  12.60952 15.09967 17.94436 16.97056 11.74734 13.34166 19.07878
+##            PetesW SamAdams
+## Bass                      
+## Becks                     
+## Corona                    
+## GordonB                   
+## Guinness                  
+## Heineken                  
+## PetesW                    
+## SamAdams 14.45683         
+## SierraN  13.41641 12.12436
+```
+
+ 
+
+There are 10 beers with these names, so this is good.
+ 
+
+(d) Try to explain briefly why I used `as.dist` in the
+class example (the languages one) but `dist` here. (Think
+about the form of the input to each function.)
+ 
+Solution
+
+
+`as.dist` is used if you *already* have
+dissimilarities (and you just want to format them right), but
+`dist` is used if you have 
+*data on variables* and you want to *calculate*
+dissimilarities. 
+ 
+
+(e) <a name="part:beer-dendro">*</a> Obtain a clustering of the beers, using Ward's method. Show
+the dendrogram.
+ 
+Solution
+
+
+This:
+
+```r
+beer.1=hclust(d,method="ward.D")
+plot(beer.1)
+```
+
+<img src="22-thingy_files/figure-html/khas-1.png" width="672"  />
+
+       
+ 
+
+(f) What seems to be a sensible number of clusters? Which
+beers are in which cluster?
+ 
+Solution
+
+
+This is a judgement call. Almost anything sensible is
+reasonable. I personally think that two clusters is good, beers
+Anchor Steam, Pete's Wicked Ale, Guinness and Sierra Nevada in
+the first, and Bass, Gordon Biersch, Sam Adams, Corona, Beck's,
+and Heineken in the second.
+You could make a case for three clusters, splitting off
+Corona, Beck's and Heineken  into their own cluster, or even
+about 5 clusters as 
+Anchor Steam, Pete's Wicked Ale; Guinness, Sierra Nevada; Bass,
+Gordon Biersch, Sam Adams; Corona; Beck's, Heineken.
+
+The idea is to have a number of clusters sensibly smaller than
+the 10 observations, so that you are getting some actual
+insight. Having 8 clusters for 10 beers wouldn't be very
+informative! (This is where you use your own knowledge about
+beer to help you rationalize your choice of number of clusters.) 
+
+Extra: as to why the clusters split up like this, I think the four
+beers on the left of my dendrogram are "dark" and the six on
+the right are "light" (in colour), and I would expect the
+students to tend to like all the beers of one type and not so
+much all the beers of the other type.
+
+You knew I would have to investigate this, didn't you? Let's aim
+for a scatterplot of all the ratings for the dark  beers,
+against the ones for the light beers. 
+
+Start with the data frame read in from the file:
+
+
+```r
+beer
+```
+
+```
+## # A tibble: 32 x 11
+##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
+##  1 S001          5     9     7      1       7        6        6      5
+##  2 S008          7     5     6      8       8        4        8      8
+##  3 S015          7     7     5      6       6        1        8      4
+##  4 S022          7     7     5      2       5        8        4      6
+##  5 S029          9     7     3      1       6        8        2      7
+##  6 S036          7     6     4      3       7        6        6      5
+##  7 S043          5     5     5      6       6        4        7      5
+##  8 S050          5     3     1      5       5        5        3      5
+##  9 S057          9     3     2      6       4        6        1      5
+## 10 S064          2     6     6      5       6        4        8      4
+## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
+```
+
+       
+
+The aim is to find the average rating for a dark beer and a light beer
+for each student, and then plot them against each other. Does a
+student who likes dark beer tend not to like light beer, and vice versa?
+
+Let's think about what to do first.
+
+We need to: `gather` all the rating columns into one, labelled
+by `name` of beer. Then create a variable that is `dark`
+if we're looking at one of the dark beers and `light`
+otherwise. `ifelse` works like "if" in a spreadsheet: a
+logical thing that is either true or false, followed by a value if
+true and a value if false. There is a nice R command `%in%`
+which is `TRUE` if the thing in the first variable is to be
+found somewhere in the list of things given next (here, one of the
+apparently dark beers). (Another way to do this, which will appeal to
+you more if you like databases, is to create a second data frame with
+two columns, the first being the beer names, and the second being
+`dark` or `light` as appropriate for that beer. Then you
+use a "left join" to look up beer type from beer name.)
+
+Next, group by beer type within student. Giving two things to
+`group_by` does it this way: the second thing within 
+(or "for each of") the first. 
+
+Then calculate the mean
+rating within each group. This gives one column of students, one
+column of beer types, 
+and one column of rating means. 
+
+Then we need to `spread` beer type
+into two columns so that we can make a scatterplot of the mean ratings
+for light and dark against
+each other. 
+
+Finally, we make a scatterplot. 
+
+You'll see the final version of this that worked, but rest assured
+that there were many intervening versions of this that didn't!
+
+I urge you to examine the chain one line at a time and see what each
+line does. That was how I debugged it.
+
+Off we go:
+
+
+```r
+beer %>%
+gather(name,rating,AnchorS:SierraN) %>%
+mutate(beer.type=ifelse(name %in%
+c("AnchorS","PetesW","Guinness","SierraN"),"dark","light")) %>%
+group_by(student,beer.type) %>%
+summarize(mean.rat=mean(rating)) %>%
+spread(beer.type,mean.rat) %>%
+ggplot(aes(x=dark,y=light))+geom_point()
+```
+
+<img src="22-thingy_files/figure-html/iyrpoydf-1.png" width="672"  />
+
+ 
+
+After all that work, not really. There are some students who like
+light beer but not dark beer (top left), there is a sort of vague
+straggle down to the bottom right, where some students like dark beer
+but not light beer, but there are definitely students at the top
+right, who just like beer! 
+
+The only really empty part of this plot is
+the bottom left, which says that these students don't hate both kinds
+of beer; they like either dark beer, or light beer, or both.
+
+The reason a `ggplot` fits into this "workflow" is that the
+first thing you feed into `ggplot` is a data frame, the one
+created by the chain here. Because it's in a pipeline, 
+you don't have the
+first thing on `ggplot`, so you can concentrate on the
+`aes` ("what to plot") and then the "how to plot it". 
+Now back to your regularly-scheduled programming.
+ 
+
+(g) Re-draw your dendrogram with your clusters indicated.
+ 
+Solution
+
+
+`rect.hclust`, with your chosen number  of clusters:
+
+```r
+plot(beer.1)
+rect.hclust(beer.1,2)
+```
+
+<img src="22-thingy_files/figure-html/sdkjdh-1.png" width="672"  />
+
+       
+
+Or if you prefer 5 clusters, like this:
+
+
+```r
+plot(beer.1)
+rect.hclust(beer.1,5)
+```
+
+<img src="22-thingy_files/figure-html/ljashkjsdah-1.png" width="672"  />
+
+ 
+
+Same idea with any other number of clusters. If you follow through
+with your preferred number of clusters from the previous part, I'm good.
+ 
+
+(h) Obtain a K-means
+clustering with 2 clusters.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you haven't gotten to K-means clustering yet, leave this and save it for later.</span>
+Note that you will need to use the (transposed) 
+*original  data*, not the distances. Use a suitably large value of
+`nstart`. (The data are ratings all on the same scale, so
+there is no need for `scale` here. In case you were
+wondering.) 
+ 
+Solution
+
+
+
+
+       
+I used 20 for `nstart`. This is the pipe way:
+
+```r
+beer.2 = beer %>% select(-1) %>%
+t() %>%
+kmeans(2,nstart=20)
+```
+
+       
+
+Not everyone (probably) will get the same answer, because of the
+random nature of the procedure, but the above code should be good
+whatever output it produces.
+ 
+
+(i) How many beers are in each cluster?
+ 
+Solution
+
+
+On mine:
+
+```r
+beer.2$size
+```
+
+```
+## [1] 4 6
+```
+
+       
+
+You might get the same numbers the other way around.
+ 
+
+(j) *Which* beers are in each cluster? You can do this
+simply by obtaining the cluster memberships and using
+`sort` as in the last question, or you can do it as I did
+in class by obtaining the 
+names of the things to be clustered and picking out the ones of
+them that are in cluster 1, 2, 3, \ldots .)
+ 
+Solution
+
+
+The cluster numbers of each beer are these:
+
+
+```r
+beer.2$cluster
+```
+
+```
+##  AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken   PetesW 
+##        1        2        2        2        2        1        2        1 
+## SamAdams  SierraN 
+##        2        1
+```
+
+  
+
+This is what is known in the business as a "named vector": it has values (the cluster numbers) and each value has a name attached to it (the name of a beer).
+
+Named vectors are handily turned into a data frame with `enframe`:
+
+
+```r
+enframe(beer.2$cluster)
+```
+
+```
+## # A tibble: 10 x 2
+##    name     value
+##    <chr>    <int>
+##  1 AnchorS      1
+##  2 Bass         2
+##  3 Becks        2
+##  4 Corona       2
+##  5 GordonB      2
+##  6 Guinness     1
+##  7 Heineken     2
+##  8 PetesW       1
+##  9 SamAdams     2
+## 10 SierraN      1
+```
+
+ 
+
+or, give the columns better names and arrange them by cluster:
+
+
+```r
+enframe(beer.2$cluster, name="beer", value="cluster") %>%
+arrange(cluster)
+```
+
+```
+## # A tibble: 10 x 2
+##    beer     cluster
+##    <chr>      <int>
+##  1 AnchorS        1
+##  2 Guinness       1
+##  3 PetesW         1
+##  4 SierraN        1
+##  5 Bass           2
+##  6 Becks          2
+##  7 Corona         2
+##  8 GordonB        2
+##  9 Heineken       2
+## 10 SamAdams       2
+```
+
+ 
+
+These happen to be the same clusters as in my 2-cluster solution using
+Ward's method.
+ 
 
 
 
@@ -2921,7 +2950,7 @@ which I called `wssq`:
 ggplot(wssq, aes(x=clusters, y=wss))+geom_point()+geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-86-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-88-1.png" width="672"  />
 
        
 If you did it the loop way, you'll have to make a data frame
@@ -3850,7 +3879,7 @@ ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ## Warning: Removed 1 rows containing missing values (geom_path).
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
 
  
 
@@ -3866,7 +3895,7 @@ already a data frame:
 wwx %>% ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-118-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
 
  
 
@@ -4078,7 +4107,7 @@ first, so I call it here with the package name and the two colons:
 ggbiplot::ggbiplot(carsx.1,groups=factor(carsx$cluster))
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-123-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
 
  
 Or you can do the predictions, then plot `LD1` against
@@ -4092,7 +4121,7 @@ ggplot(aes(x=LD1,y=LD2,colour=cluster))+geom_point()+
 coord_fixed()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-124-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-126-1.png" width="672"  />
 
  
 
@@ -5950,7 +5979,7 @@ bridges.1=hclust(d1,method="ward.D")
 plot(bridges.1,cex=0.3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
 
      
 
@@ -5976,7 +6005,7 @@ plot(bridges.1,cex=0.3)
 rect.hclust(bridges.1,5)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-172-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
 
      
 
@@ -6532,7 +6561,7 @@ plot directly, with the points joined by lines:
 ggplot(withinss,aes(x=clusters,y=wss))+geom_point()+geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-188-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-190-1.png" width="672"  />
 
      
 
@@ -7038,7 +7067,7 @@ ggbiplot(athletes.3,groups=factor(athletes2$cluster)) +
 scale_colour_brewer(palette="Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
 
      
 
@@ -7098,7 +7127,7 @@ ggplot(aes(x=RCC, y=BMI, colour=cluster))+
 geom_point()+scale_colour_brewer(palette="Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-202-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
 
  
 

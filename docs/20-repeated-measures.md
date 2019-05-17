@@ -5,43 +5,84 @@ Packages for this chapter:
 
 ```r
 library(car)
-```
-
-```
-## Loading required package: carData
-```
-
-```r
 library(lme4)
-```
-
-```
-## Loading required package: Matrix
-```
-
-```r
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ tidyr::expand() masks Matrix::expand()
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ✖ dplyr::recode() masks car::recode()
-## ✖ purrr::some()   masks car::some()
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
+```
+
 
 
 ##  Effect of drug on rat weight
@@ -213,7 +254,7 @@ interpretation is concerned.
 
 (f) We are going to draw an interaction plot in a moment. To
 set that up, use `gather` as in the lecture notes to create
-one column of weights and and second column of times. (You don't
+one column of weights and a second column of times. (You don't
 need to do the `separate` thing that I did in class, though
 if you want to try it, go ahead.)
  
@@ -264,26 +305,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       junk  time  weight
 ##    <dbl> <chr>      <chr> <chr>  <dbl>
-##  1    12 thiouracil Time  0         51
-##  2    17 thiouracil Time  0         53
-##  3    26 control    Time  4        140
-##  4    12 thiouracil Time  3        123
-##  5    23 control    Time  3        131
-##  6     4 thyroxin   Time  0         59
-##  7    25 control    Time  2        112
-##  8    20 control    Time  3        144
-##  9    24 control    Time  4        141
-## 10     3 thyroxin   Time  2        108
-## 11     5 thyroxin   Time  2         97
-## 12     3 thyroxin   Time  3        151
-## 13     3 thyroxin   Time  0         56
-## 14     6 thyroxin   Time  2         97
-## 15    14 thiouracil Time  4        108
-## 16    16 thiouracil Time  2         78
-## 17     8 thiouracil Time  3        120
+##  1     3 thyroxin   Time  0         56
+##  2    20 control    Time  3        144
+##  3     3 thyroxin   Time  3        151
+##  4    12 thiouracil Time  1         75
+##  5    20 control    Time  4        185
+##  6    24 control    Time  0         51
+##  7    14 thiouracil Time  3        103
+##  8     4 thyroxin   Time  3        148
+##  9    10 thiouracil Time  0         53
+## 10    14 thiouracil Time  2         95
+## 11    16 thiouracil Time  2         78
+## 12     8 thiouracil Time  0         61
+## 13    10 thiouracil Time  3        106
+## 14     1 thyroxin   Time  0         59
+## 15     8 thiouracil Time  2        109
+## 16     5 thyroxin   Time  1         72
+## 17    12 thiouracil Time  0         51
 ## 18     9 thiouracil Time  3        111
-## 19     3 thyroxin   Time  4        189
-## 20     8 thiouracil Time  1         86
+## 19    18 control    Time  2        114
+## 20    24 control    Time  1         71
 ```
 
  
@@ -309,26 +350,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    19 control    Time4    177     4
-##  2     4 thyroxin   Time1     85     1
-##  3     2 thyroxin   Time2     90     2
-##  4     7 thyroxin   Time1     70     1
-##  5     6 thyroxin   Time2     97     2
-##  6     7 thyroxin   Time0     52     0
-##  7    25 control    Time3    130     3
-##  8    27 control    Time2    110     2
-##  9    15 thiouracil Time1     69     1
-## 10    12 thiouracil Time3    123     3
-## 11     6 thyroxin   Time0     52     0
-## 12     3 thyroxin   Time1     75     1
-## 13     4 thyroxin   Time0     59     0
-## 14    21 control    Time4    164     4
-## 15    27 control    Time1     82     1
-## 16    25 control    Time4    154     4
-## 17    22 control    Time2    104     2
-## 18    11 thiouracil Time3    111     3
-## 19    24 control    Time1     71     1
-## 20    25 control    Time2    112     2
+##  1    24 control    Time0     51     0
+##  2     4 thyroxin   Time3    148     3
+##  3    19 control    Time0     60     0
+##  4     2 thyroxin   Time3    110     3
+##  5     7 thyroxin   Time4    171     4
+##  6     5 thyroxin   Time4    144     4
+##  7    13 thiouracil Time1     75     1
+##  8    27 control    Time1     82     1
+##  9     7 thyroxin   Time0     52     0
+## 10    19 control    Time2    123     2
+## 11    19 control    Time4    177     4
+## 12     9 thiouracil Time0     59     0
+## 13    17 thiouracil Time1     72     1
+## 14    22 control    Time2    104     2
+## 15    27 control    Time2    110     2
+## 16    27 control    Time0     57     0
+## 17     3 thyroxin   Time4    189     4
+## 18    19 control    Time1     93     1
+## 19    26 control    Time3    112     3
+## 20    23 control    Time0     46     0
 ```
 
  
@@ -358,7 +399,7 @@ ggplot(aes(x=time,y=mean.weight,colour=drug,group=drug))+
 geom_point()+geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
        
  
@@ -1058,7 +1099,7 @@ ggplot(aes(x=times,y=score,colour=drug,group=subject))+
 geom_point()+geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -1501,7 +1542,7 @@ ggplot(aes(x=time,y=mean.epi,group=floc,colour=floc))+
 geom_point()+geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
          
 
@@ -1522,7 +1563,7 @@ ggplot(aes(x=time,y=mean.epi,group=location,colour=location))+
 geom_point()+geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
           
 
@@ -1537,7 +1578,7 @@ ggplot(aes(x=time,y=mean.epi,group=location,colour=factor(location)))+
 geom_point()+geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
          
 With a long pipeline like this, none of us get it right the first time (I
@@ -2854,7 +2895,7 @@ ggplot(king.long,aes(x=time,y=activity,colour=context,group=id))+
 geom_point()+geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-64-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
 
      
 
@@ -2866,7 +2907,7 @@ ggplot(king.long,aes(x=time,y=activity,colour=context,group=id))+
 geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
 
  
     
@@ -2899,7 +2940,7 @@ ggplot(aes(x=time,y=m,colour=context,group=context))+
 geom_point()+geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
    
 
@@ -3065,7 +3106,7 @@ ggplot(treatments,aes(x=time,y=y,colour=trt,group=subject))+
 geom_point()+geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
      
 

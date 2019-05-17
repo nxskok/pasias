@@ -5,21 +5,78 @@
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -211,7 +268,7 @@ The obvious graph is a boxplot:
 ggplot(movies, aes(x=rating, y=length))+geom_boxplot()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
        
 
@@ -280,8 +337,8 @@ pairwise_median_test(movies,length,rating)
 ## 2 G     PG-13 0.0000590    0.000354
 ## 3 G     R     0.0106       0.0635  
 ## 4 PG    PG-13 0.0106       0.0635  
-## 5 PG    R     0.715        4.29    
-## 6 PG-13 R     0.273        1.64
+## 5 PG    R     0.715        1       
+## 6 PG-13 R     0.273        1
 ```
 
  
@@ -396,7 +453,7 @@ Solution
 ggplot(deer,aes(x=month,y=food))+geom_boxplot()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
      
 
@@ -422,7 +479,7 @@ scatterplot:
 ggplot(deer,aes(x=month,y=food))+geom_point()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
  
 
@@ -441,7 +498,7 @@ place. This is called *jittering*, and is done like this:
 ggplot(deer,aes(x=month,y=food))+geom_jitter(width=0,height=0.05)
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
  
 
@@ -920,7 +977,7 @@ The graph would seem to be a boxplot, side by side for each group:
 ggplot(movies,aes(x=rating, y=length))+geom_boxplot()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
      
 
@@ -956,7 +1013,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~rating)
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
 
  
 
@@ -1071,8 +1128,8 @@ pairwise_median_test(movies, length, rating)
 ## 2 G     PG-13 0.0000590    0.000354
 ## 3 G     R     0.0106       0.0635  
 ## 4 PG    PG-13 0.0106       0.0635  
-## 5 PG    R     0.715        4.29    
-## 6 PG-13 R     0.273        1.64
+## 5 PG    R     0.715        1       
+## 6 PG-13 R     0.273        1
 ```
 
  
@@ -1821,7 +1878,7 @@ at least, is to turn it into a factor like this:
 ggplot(carbon,aes(x=factor(method),y=weight))+geom_boxplot()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
        
 
@@ -1832,7 +1889,7 @@ ggplot(carbon,aes(x=weight))+geom_histogram(bins=5)+
 facet_wrap(~method,ncol=1)
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
 
  
 
@@ -1852,7 +1909,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~method)
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
 
  
 
@@ -2013,30 +2070,6 @@ least, not nearly so much), so I like it better in general:
 
 ```r
 library(car)
-```
-
-```
-## Loading required package: carData
-```
-
-```
-## 
-## Attaching package: 'car'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     recode
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     some
-```
-
-```r
 leveneTest(weight~factor(method),data=carbon)
 ```
 
@@ -2359,7 +2392,7 @@ Solution
 ggplot(caffeine,aes(x=amount,y=score))+geom_boxplot()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
 
  
 

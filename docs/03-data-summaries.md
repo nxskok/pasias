@@ -5,21 +5,78 @@
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -200,7 +257,7 @@ principle. That would give
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -214,7 +271,7 @@ you'll lose the shape:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -230,7 +287,7 @@ up and down:
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -298,7 +355,7 @@ w
 ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
  
 
@@ -330,7 +387,7 @@ Another way to go is a "density plot". This is a smoothed-out version of a histo
 ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
  
 
@@ -364,7 +421,7 @@ quantitative variable. You can draw a boxplot for that, too, but the
 ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
  
 
@@ -415,7 +472,7 @@ ggplot(bw,aes(x=factor(`Premie?`),y=`Weeks Gestation`))+geom_boxplot()
 ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
 The warning is because the prematurity of one of the babies is not known.
 Or
@@ -429,7 +486,7 @@ ggplot(bw,aes(x=`Premie?`,y=`Weeks Gestation`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
 The same warning again, for the same reason.
 
@@ -560,7 +617,7 @@ ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
 You see a rather clear upward trend. Those very underweight babies
 came from very short pregnancies, but the vast majority of pregnancies
@@ -580,7 +637,7 @@ colour=`Premie?`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
 That was rather silly because `ggplot` treated prematureness as a *continuous* variable, and plotted the values on a dark blue-light blue scale. This is the same issue as on the boxplot above, and has the same solution:
 
@@ -594,7 +651,7 @@ colour=factor(`Premie?`)))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
 Better.
 
@@ -865,7 +922,7 @@ bin width, if you want to go that way:
 ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
        
 
@@ -885,7 +942,7 @@ We haven't done normal quantile plots yet, but looking ahead:
 ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
  
 
@@ -905,14 +962,7 @@ library(lubridate)
 ```
 
 ```
-## 
-## Attaching package: 'lubridate'
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     date
+## Warning: package 'lubridate' was built under R version 3.5.1
 ```
 
 ```r
@@ -1068,7 +1118,7 @@ Solution
 ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
  
 This is actually a small-but-real downward trend, especially since
@@ -1091,7 +1141,7 @@ ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 
@@ -1236,7 +1286,7 @@ Gender is categorical and CAS score is quantitative, so a boxplot would appear t
 ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
 The median for males is slightly higher, so male accountants are more anxious around computers than female accountants are.
 
@@ -1249,7 +1299,7 @@ ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
 facet_wrap(~gender,ncol=1)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
 If you go this way, you have to make a call about where the centres of the histograms are. I guess the male one is slightly further to the right, but it's not so easy to tell. (Make a call.)
     
@@ -1423,7 +1473,7 @@ You might be wondering whether the test scores are related. They are both quanti
 ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
 
 The two variables can be on either axis, since there is no obvious
 response or explanatory variable. A higher score on one scale goes
@@ -1437,7 +1487,7 @@ This plot mixes up the males and females, so you might like to distinguish them,
 ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
 
 There is a slight (but only slight) tendency for the males to be up
 and to the right, and for the females to be down and to the left. This
@@ -1637,7 +1687,7 @@ ggplot(marks,aes(x=class,y=score))+geom_boxplot()+
 coord_flip()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
 
  
 
@@ -1696,7 +1746,7 @@ theme(axis.text.x=element_blank(),
 axis.title.x=element_blank())
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
        
  

@@ -7,21 +7,78 @@ The usual to begin with:
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -125,14 +182,7 @@ library(lubridate)
 ```
 
 ```
-## 
-## Attaching package: 'lubridate'
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     date
+## Warning: package 'lubridate' was built under R version 3.5.1
 ```
 
        
@@ -411,7 +461,7 @@ is a numeric 0 or 1, in `factor()`:
 ggplot(whas3,aes(x=factor(fstat),y=lenfol))+geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
        
 
@@ -423,7 +473,7 @@ whas3 %>% mutate(ffstat=factor(fstat)) %>%
 ggplot(aes(x=ffstat,y=lenfol))+geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -441,7 +491,7 @@ whas3 %>% mutate(cfstat=as.character(fstat)) %>%
 ggplot(aes(x=cfstat, y=lenfol))+geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -482,6 +532,13 @@ working in, so I just need the file name:
 
 ```r
 library(readxl)
+```
+
+```
+## Warning: package 'readxl' was built under R version 3.5.2
+```
+
+```r
 mizuna=read_excel("mizuna.xlsx")
 mizuna
 ```
@@ -526,7 +583,7 @@ Solution
 ggplot(mizuna,aes(x=date,y=height))+geom_point()+geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
        
 
@@ -550,7 +607,7 @@ ggplot(mizuna,aes(x=date,y=height,label=water))+
 geom_point()+geom_line()+geom_text_repel(colour="red")
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
  
 
@@ -565,7 +622,7 @@ ggplot(mizuna,aes(x=date,y=height,label=water))+
 geom_point()+geom_line()+geom_label_repel(colour="red",alpha=0.7)
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
  
 
@@ -812,7 +869,7 @@ ggplot(b2,aes(x=thedate,y=cesarean_rate))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
         
 
@@ -829,7 +886,7 @@ geom_line(linetype="dashed")+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
  
 I see a downward trend. ("A downward trend with a wiggle" if you
@@ -1203,7 +1260,7 @@ Nothing terribly surprising here:
 ggplot(denali, aes(x=caribou, y=wolf))+geom_point()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
        
 If you like, add a smooth trend to it:
@@ -1218,7 +1275,7 @@ ggplot(denali, aes(x=caribou, y=wolf))+geom_point()+geom_smooth(se=F)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
        
 
@@ -1247,7 +1304,7 @@ denali %>% mutate(year=year(date)) %>%
 ggplot(aes(x=caribou, y=wolf, label=year))+geom_point()+geom_text_repel()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
  
 
@@ -1267,7 +1324,7 @@ ggplot(aes(x=caribou, y=wolf, label=year))+geom_point()+
 geom_text_repel()+geom_path()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
  
 
@@ -1294,7 +1351,7 @@ goes on the $x$-axis):
 ggplot(denali, aes(x=date, y=caribou))+geom_point()+geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
  
 
@@ -1329,7 +1386,7 @@ ggplot(aes(x=date, y=population, colour=animal))+
 geom_point()+geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
        
 This is not quite the story, though, because the caribou and wolf
@@ -1351,7 +1408,7 @@ All right, so let's put the caribou on the left:
 ggplot(denali, aes(x=date, y=caribou))+geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
  
 
@@ -1363,7 +1420,7 @@ from the wolf populations, that we're going to add in a moment. This looks rathe
 ggplot(denali, aes(x=date, y=caribou, colour="caribou"))+geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
  
 
@@ -1378,7 +1435,7 @@ geom_line()+
 geom_line(aes(y=wolf, colour="wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
  
 
@@ -1398,7 +1455,7 @@ geom_line()+
 geom_line(aes(y=wolf/2.5, colour="wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 
@@ -1414,7 +1471,7 @@ geom_line(aes(y=wolf/2.5, colour="wolf"))+
 scale_y_continuous(sec.axis=sec_axis(~.*2.5,name="wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
  
 

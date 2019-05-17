@@ -5,22 +5,80 @@
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
+```
+
 
 
 ##  Finding wolf spiders on the beach
@@ -893,20 +951,6 @@ in `MASS` that appears to do this:
 
 ```r
 library(MASS)
-```
-
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
-```r
 lethal=dose.p(bugs.1)
 lethal
 ```
@@ -1063,6 +1107,11 @@ problems with
 
 ```r
 detach("package:MASS", unload=T)
+```
+
+```
+## Warning: 'MASS' namespace cannot be unloaded:
+##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
 ```
 
  
@@ -1706,7 +1755,7 @@ so that the plot is just this:
 ggplot(infect,aes(x=sex))+geom_bar()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
  
 
@@ -1734,7 +1783,7 @@ variable, which is specified by `fill`. Here's the basic idea:
 ggplot(infect, aes(x=sex,fill=infected))+geom_bar()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -1752,7 +1801,7 @@ ggplot(infect, aes(x=sex,fill=infected))+
 geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
 
  
 
@@ -1778,7 +1827,7 @@ ggplot(infect, aes(x=sex,fill=infected))+
 geom_bar(position="fill")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
  
 
@@ -2016,7 +2065,7 @@ So, I think: use `drop1` to assess whether anything should come
 out of a model like this, and use `summary` to obtain the
 slopes to interpret (in this kind of model, whether they're positive
 or negative, and thus what kind of effect each explanatory variable
-has on the probability of whatever-it-is.
+has on the probability of whatever-it-is.)
  
 
 (f) Are the conclusions you drew in (<a href="#part:plot">here</a>) and
@@ -2173,7 +2222,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
 
  
 
@@ -2196,7 +2245,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
  
 Crawley found the slightest suggestion of an up-and-down curve in
@@ -3393,6 +3442,13 @@ package, which I think I mentioned before:
 
 ```r
 library(rio)
+```
+
+```
+## Warning: package 'rio' was built under R version 3.5.1
+```
+
+```r
 x=import("/home/ken/Downloads/Logistic.sav")
 str(x)
 ```
@@ -3577,6 +3633,10 @@ library(ggmap)
 ```
 
 ```
+## Warning: package 'ggmap' was built under R version 3.5.2
+```
+
+```
 ## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
 ```
 
@@ -3625,7 +3685,7 @@ gg=get_map("Catbrain",zoom=14,maptype="roadmap")
 ggmap(gg)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-100-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-102-1.png" width="672"  />
 
  
 The car dealerships are along Lysander Road. Change the `zoom`
@@ -3649,7 +3709,7 @@ points=crossing(lon=lons,lat=lats)
 ggmap(gg)+geom_point(data=points,aes(x=lon,y=lat))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-101-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
 
  
 
@@ -3677,23 +3737,23 @@ mutate(plotname=ifelse(where=="Catbrain UK", where, "")) -> places
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Catbrain%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Catbrain+UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Bristol%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Bristol+UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Taunton%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Taunton+UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Newport%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Newport+UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Gloucester%20UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Gloucester+UK&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
 ```
 
 ```r
@@ -3750,7 +3810,7 @@ geom_text_repel(data=places, aes(label=plotname))
 ## Warning in max(x): no non-missing arguments to max; returning -Inf
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
 
  
 
@@ -4890,14 +4950,14 @@ heart.new %>% sample_n(8)
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 fema… nonangin…        140        213    133     1.6 upsl…       0 fixed
-## 2 fema… nonangin…        120        280    166     1.6 flat        0 reve…
-## 3 fema… typical          120        280    133     1.6 down…       1 norm…
-## 4 male  nonangin…        140        280    133     0   down…       1 fixed
-## 5 fema… atypical         120        280    133     1.6 down…       0 reve…
-## 6 male  typical          120        280    166     0   flat        1 norm…
-## 7 male  nonangin…        140        213    133     1.6 flat        0 fixed
-## 8 male  typical          120        280    166     1.6 down…       0 reve…
+## 1 fema… atypical         140        280    166     0   down…       0 norm…
+## 2 male  asymptom…        120        280    166     0   flat        1 fixed
+## 3 male  asymptom…        120        213    133     1.6 flat        1 norm…
+## 4 male  nonangin…        140        280    166     1.6 upsl…       1 fixed
+## 5 male  typical          120        213    133     0   down…       0 norm…
+## 6 fema… typical          140        213    133     0   upsl…       1 reve…
+## 7 fema… asymptom…        120        213    166     1.6 down…       0 norm…
+## 8 fema… typical          120        280    133     1.6 flat        0 fixed
 ## # … with 1 more variable: pred <dbl>
 ```
 
@@ -5431,7 +5491,7 @@ ggplot(aes(x=gest.age,y=obs))+
 geom_line(aes(y=pred))+geom_point(aes(size=total))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-142-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-144-1.png" width="672"  />
 
  
 
@@ -5575,7 +5635,7 @@ Starting with `age` vs. `gender`:
 ggplot(donner,aes(x=gender,y=age))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-144-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
 
      
 
@@ -5586,7 +5646,7 @@ or:
 ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(gender~.)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-147-1.png" width="672"  />
 
  
 
@@ -5629,7 +5689,7 @@ Age vs. `survived` is the same idea:
 ggplot(donner,aes(x=survived,y=age))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-148-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-150-1.png" width="672"  />
 
      
 
@@ -5640,7 +5700,7 @@ or:
 ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(survived~.)
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-149-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-151-1.png" width="672"  />
 
  
 
@@ -5720,7 +5780,7 @@ For a graph, borrow the grouped bar-plot idea from the parasites question:
 ggplot(donner,aes(x=gender,fill=survived))+geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-154-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-156-1.png" width="672"  />
 
  
 
@@ -6553,7 +6613,7 @@ ggplot(aes(x=apache,y=pred))+geom_line()+
 geom_point(aes(y=obs_prop))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-172-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
 
      
 
@@ -6590,7 +6650,7 @@ ggplot(aes(x=apache,y=pred))+geom_line()+
 geom_point(aes(y=obs_prop,size=patients))
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-175-1.png" width="672"  />
 
      
 The points that are far from the prediction are mostly based on a
@@ -6902,7 +6962,7 @@ enough even with this small data set. Here's a visual:
 ggplot(ha,aes(x=second,y=anxiety))+geom_boxplot()
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-181-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-183-1.png" width="672"  />
 
      
 
@@ -6929,7 +6989,7 @@ bar chart:
 ggplot(ha,aes(x=anger,fill=second))+geom_bar(position="dodge")
 ```
 
-<img src="15-logistic-regression_files/figure-html/unnamed-chunk-182-1.png" width="672"  />
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-184-1.png" width="672"  />
 
  
 

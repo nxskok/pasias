@@ -10,10 +10,42 @@ library(tidyverse)
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
+## ✔ ggplot2 3.1.1          ✔ purrr   0.3.2     
 ## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
 ## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
 ## ✔ readr   1.3.1          ✔ forcats 0.3.0
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'tibble' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'tidyr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
 ```
 
 ```
@@ -24,6 +56,48 @@ library(tidyverse)
 
 ```r
 library(smmr)
+```
+
+
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -1025,8 +1099,8 @@ x
 ```
 
 ```
-##  [1] 41.83962 27.38222 50.83555 65.80125 64.89123 48.40207 28.69941
-##  [8] 68.16887 46.80532 47.13177
+##  [1] 61.31913 44.14660 48.82758 38.14577 46.53210 64.56218 49.71127
+##  [8] 59.30761 74.71029 34.79050
 ```
 
 
@@ -1407,18 +1481,7 @@ library(smoothmest)
 ```
 
 ```
-## Loading required package: MASS
-```
-
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
+## Warning: package 'smoothmest' was built under R version 3.5.1
 ```
 
 ```r
@@ -1448,7 +1511,7 @@ ggplot(aes(sample=rl))+
 stat_qq()+stat_qq_line()
 ```
 
-<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
 You see the long tails compared to the normal.
 
@@ -1577,6 +1640,11 @@ detach(package:smoothmest, unload=T)
 detach(package:MASS, unload=T)
 ```
 
+```
+## Warning: 'MASS' namespace cannot be unloaded:
+##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+```
+
 
 
 
@@ -1689,7 +1757,7 @@ The usual:
 ggplot(cereals,aes(x=who,y=sugar))+geom_boxplot()
 ```
 
-<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-58-1.png" width="672"  />
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
 
 I see outliers: two high ones on the adults' cereals, and one high and
 one low on the children's cereals.
@@ -1979,7 +2047,7 @@ Solution
 ggplot(math,aes(x=course,y=phobia))+geom_boxplot()
 ```
 
-<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
  
 
@@ -2065,7 +2133,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~course,ncol=1, scales="free")
 ```
 
-<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
 
    
 
@@ -2292,7 +2360,7 @@ distributed. Side-by-side boxplots will do it:
 ggplot(instr,aes(x=group,y=score))+geom_boxplot()
 ```
 
-<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
 
      
 
@@ -2306,7 +2374,7 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~group,ncol=1)
 ```
 
-<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
 
  
     

@@ -5,22 +5,80 @@
 library(tidyverse)
 ```
 
+
+
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## ✔ ggplot2 3.1.0          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-## ✔ readr   1.3.1          ✔ forcats 0.3.0
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
+
+```
+## Warning: package 'readr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'survminer' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'car' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'carData' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggbiplot' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'scales' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'ggrepel' was built under R version 3.5.1
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.2
+```
+
 These problems are about simple regression (just one $x$-variable):
 
 
@@ -132,7 +190,7 @@ Solution
 ggplot(rains,aes(y=rainfall,x=1))+geom_boxplot()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-4-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
      
 There is only one rainfall over 60 inches, and the smallest one is
@@ -145,7 +203,7 @@ Another possible plot here is a histogram, since there is only one quantitative 
 ggplot(rains, aes(x=rainfall))+geom_histogram(bins=7)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
 
 
@@ -206,7 +264,7 @@ acceptable) is one plot at a time:
 ggplot(rains,aes(y=rainfall,x=altitude))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
      
 
@@ -215,7 +273,7 @@ ggplot(rains,aes(y=rainfall,x=altitude))+geom_point()
 ggplot(rains,aes(y=rainfall,x=latitude))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
  
 
@@ -226,7 +284,7 @@ and finally
 ggplot(rains,aes(y=rainfall,x=fromcoast))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -242,7 +300,7 @@ ggplot(aes(x=x,y=rainfall))+geom_point()+
 facet_wrap(~xname,scales="free")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -272,7 +330,7 @@ ggplot(aes(x=x,y=rainfall))+geom_point()+
 facet_wrap(~xname,scales="free",ncol=2)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -854,7 +912,7 @@ Plot the entire data frame:
 plot(cigs)  
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
  
 
@@ -904,21 +962,14 @@ library(GGally)
 ```
 
 ```
-## 
-## Attaching package: 'GGally'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     nasa
+## Warning: package 'GGally' was built under R version 3.5.1
 ```
 
 ```r
 cigs %>% ggpairs()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -944,7 +995,7 @@ pairs plot of the other variables:
 cigs %>% select(-weight) %>% ggpairs()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
  
 
@@ -1356,7 +1407,7 @@ from package `GGally`:
 boys %>% ggpairs()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
  
 
@@ -1453,7 +1504,7 @@ ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
        
 
@@ -1643,7 +1694,7 @@ ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+
 geom_smooth(method="lm")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
        
 
@@ -1662,7 +1713,7 @@ This is, to my mind, the easiest way:
 ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
        
 
@@ -1687,7 +1738,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
        
 Now, why did I try adding a smooth trend, and why is it not
@@ -1792,7 +1843,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
  
 
@@ -1882,7 +1933,7 @@ straight into `ggplot`:
 ggplot(carp.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -1993,7 +2044,7 @@ geom_line(colour="blue")+
 geom_point(data=carp,aes(x=bodyweight,y=ENE))
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
        
 
@@ -2054,7 +2105,7 @@ is `ENE`. The plot is this:
 g
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
  
 
@@ -2094,7 +2145,7 @@ fitted model object `carp.2` as your data frame for the
 ggplot(carp.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -2173,7 +2224,7 @@ just did:
 ggplot(carp.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
  
 
@@ -2333,7 +2384,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
 
  
 
@@ -2468,7 +2519,7 @@ ggplot(sparrowhawks,aes(x=returning,y=newadults))+
 geom_point()+geom_smooth(method="lm")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
 
  
 
@@ -2724,7 +2775,7 @@ The usual:
 ggplot(soc,aes(x=experience,y=salary))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
  
 
@@ -2794,7 +2845,7 @@ columns in it, not forgetting the initial dots:
 ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
 
        
 I see a "fanning-out": the residuals are getting bigger *in size* 
@@ -2818,7 +2869,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
 
  
 
@@ -2838,7 +2889,7 @@ ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
  
 
@@ -2868,17 +2919,6 @@ You'll need to call in (and install if necessary) the package
 library(MASS)
 ```
 
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
  
 
 I explain that "masked" thing below.
@@ -2888,7 +2928,7 @@ I explain that "masked" thing below.
 boxcox(salary~experience,data=soc)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
 
  
 
@@ -2915,13 +2955,19 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:MASS"      "package:broom"    
-##  [4] "package:GGally"    "package:forcats"   "package:stringr"  
-##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
-## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
-## [13] "package:tidyverse" "package:stats"     "package:graphics" 
-## [16] "package:grDevices" "package:utils"     "package:datasets" 
-## [19] "package:methods"   "Autoloads"         "package:base"
+##  [1] ".GlobalEnv"         ".conflicts"         "package:GGally"    
+##  [4] "package:conflicted" "package:rpart"      "package:broom"     
+##  [7] "package:ggrepel"    "package:ggbiplot"   "package:grid"      
+## [10] "package:scales"     "package:plyr"       "package:lme4"      
+## [13] "package:Matrix"     "package:car"        "package:carData"   
+## [16] "package:survminer"  "package:ggpubr"     "package:magrittr"  
+## [19] "package:survival"   "package:nnet"       "package:MASS"      
+## [22] "package:smmr"       "package:forcats"    "package:stringr"   
+## [25] "package:dplyr"      "package:purrr"      "package:readr"     
+## [28] "package:tidyr"      "package:tibble"     "package:ggplot2"   
+## [31] "package:tidyverse"  "package:stats"      "package:graphics"  
+## [34] "package:grDevices"  "package:utils"      "package:datasets"  
+## [37] "package:methods"    "Autoloads"          "package:base"
 ```
 
  
@@ -2933,6 +2979,11 @@ then get rid of `MASS`:
 detach("package:MASS",unload=T)
 ```
 
+```
+## Warning: 'MASS' namespace cannot be unloaded:
+##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+```
+
  
 Now check that it has gone:
 
@@ -2942,13 +2993,19 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"        "package:broom"     "package:GGally"   
-##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
-##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
-## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
-## [13] "package:stats"     "package:graphics"  "package:grDevices"
-## [16] "package:utils"     "package:datasets"  "package:methods"  
-## [19] "Autoloads"         "package:base"
+##  [1] ".GlobalEnv"         ".conflicts"         "package:GGally"    
+##  [4] "package:conflicted" "package:rpart"      "package:broom"     
+##  [7] "package:ggrepel"    "package:ggbiplot"   "package:grid"      
+## [10] "package:scales"     "package:plyr"       "package:lme4"      
+## [13] "package:Matrix"     "package:car"        "package:carData"   
+## [16] "package:survminer"  "package:ggpubr"     "package:magrittr"  
+## [19] "package:survival"   "package:nnet"       "package:smmr"      
+## [22] "package:forcats"    "package:stringr"    "package:dplyr"     
+## [25] "package:purrr"      "package:readr"      "package:tidyr"     
+## [28] "package:tibble"     "package:ggplot2"    "package:tidyverse" 
+## [31] "package:stats"      "package:graphics"   "package:grDevices" 
+## [34] "package:utils"      "package:datasets"   "package:methods"   
+## [37] "Autoloads"          "package:base"
 ```
 
  
@@ -3123,7 +3180,7 @@ data frame:
 ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-82-1.png" width="672"  />
 
        
 
@@ -3139,7 +3196,7 @@ distributed as they should be? Well, that's easy enough to check:
 ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-81-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-83-1.png" width="672"  />
 
  
 
@@ -3260,7 +3317,7 @@ for. Also, the volume is the response, so that should go on the $y$-axis:
 ggplot(trees,aes(x=diameter,y=volume))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-84-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-86-1.png" width="672"  />
 
        
 
@@ -3277,7 +3334,7 @@ geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-85-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-87-1.png" width="672"  />
 
        
 
@@ -3436,7 +3493,7 @@ random mess of nothingness:
 ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-90-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
 
        
 
@@ -3565,7 +3622,7 @@ predicts the data well. I should look at the residuals from this one:
 ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-94-1.png" width="672"  />
 
  
 
@@ -3682,7 +3739,7 @@ got, is still high. The residuals are these:
 ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-97-1.png" width="672"  />
 
  
 
@@ -4128,7 +4185,7 @@ if it is for this:
 ggplot(tortoises.1,aes(x=.fitted, y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
 
  
 
@@ -4144,7 +4201,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
 
  
 Looking at the plot, you see a curve, up and down. The most
@@ -4169,7 +4226,7 @@ plots. Normal quantile plot of the residuals:
 ggplot(tortoises.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-109-1.png" width="672"  />
 
  
 
@@ -4193,7 +4250,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-110-1.png" width="672"  />
 
  
 
@@ -4432,7 +4489,7 @@ ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
 geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-114-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-116-1.png" width="672"  />
 
        
     
@@ -4663,7 +4720,7 @@ ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
 geom_point()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
 
  
 
@@ -4686,7 +4743,7 @@ it *is* a regression):
 ggplot(pulse.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
 
          
 
@@ -4706,7 +4763,7 @@ right place:
 ggplot(pulse.1,aes(x=crickets$temperature,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-123-1.png" width="672"  />
 
  
 
@@ -4722,7 +4779,7 @@ goes like this:
 ggplot(pulse.1,aes(x=crickets$species,y=.resid))+geom_boxplot()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-124-1.png" width="672"  />
 
  
 
@@ -4744,7 +4801,7 @@ normal quantile plot of all the residuals together:
 ggplot(pulse.1,aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-123-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
 
  
 
@@ -4856,7 +4913,7 @@ ggplot(coasters,aes(x=drop,y=duration,label=coaster_name))+
 geom_point()+geom_text_repel()+geom_smooth(method="lm",se=F)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-127-1.png" width="672"  />
 
        
 
@@ -5459,6 +5516,13 @@ packages too, and then you read in a file like this:
 
 ```r
 library(rio)
+```
+
+```
+## Warning: package 'rio' was built under R version 3.5.1
+```
+
+```r
 pizza3=import(my_url)
 head(pizza3)
 ```
@@ -5602,7 +5666,7 @@ ggplot(pizza.1,aes(x=.fitted,y=.resid))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-143-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
 
  
 
@@ -5620,7 +5684,7 @@ quantile plot of the residuals:
 ggplot(pizza.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-144-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
 
  
 
@@ -5637,7 +5701,7 @@ ggplot(pizza.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-147-1.png" width="672"  />
 
  
 
@@ -5970,7 +6034,7 @@ ggplot(fire,aes(x=distance,y=damage))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-154-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-156-1.png" width="672"  />
 
      
 
@@ -6126,7 +6190,7 @@ geom_smooth(method="lm")+
 geom_line(data=damage.3,aes(y=.fitted), colour="red")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-158-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-160-1.png" width="672"  />
 
  
 
@@ -6368,19 +6432,19 @@ The obvious way is to do these one after the other:
 ggplot(satisf,aes(x=age,y=satis))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-166-1.png" width="384"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-168-1.png" width="384"  />
 
 ```r
 ggplot(satisf,aes(x=severity,y=satis))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-166-2.png" width="384"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-168-2.png" width="384"  />
 
 ```r
 ggplot(satisf,aes(x=anxiety,y=satis))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-166-3.png" width="384"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-168-3.png" width="384"  />
 
        
 
@@ -6398,7 +6462,7 @@ ggplot(aes(x=x,y=satis))+geom_point()+
 facet_wrap(~xname,scales="free",ncol=2)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-167-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-169-1.png" width="672"  />
 
  
 
@@ -6448,7 +6512,7 @@ ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
 facet_grid(.~xname, scales="free")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-169-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
 
  
 
@@ -6463,7 +6527,7 @@ ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
 facet_grid(xname~., scales="free")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-170-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-172-1.png" width="672"  />
 
  
 
@@ -6478,7 +6542,7 @@ ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
 facet_wrap(~xname,ncol=1,scales="free")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
 
  
 
@@ -6980,7 +7044,7 @@ each other to see where most of the values are:
 ggplot(satisf,aes(x=age,y=anxiety))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-187-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-189-1.png" width="672"  />
 
  
 
@@ -7330,7 +7394,7 @@ Residuals against fitted values:
 ggplot(minutes.1,aes(x=.fitted,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-193-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-195-1.png" width="672"  />
 
      
 
@@ -7344,7 +7408,7 @@ for each explanatory variable) one at a time:
 ggplot(minutes.1,aes(x=chemicals$drums,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-194-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-196-1.png" width="672"  />
 
  
 
@@ -7355,7 +7419,7 @@ and
 ggplot(minutes.1,aes(x=chemicals$weight,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-195-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
 
  
 What would also work is to make a data frame first with the things to plot:
@@ -7374,7 +7438,7 @@ and then:
 ggplot(dd,aes(x=weight,y=res))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-199-1.png" width="672"  />
 
  
 
@@ -7428,7 +7492,7 @@ everything comes:
 ggplot(d,aes(x=drums,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-199-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
 
  
 
@@ -7439,7 +7503,7 @@ and
 ggplot(d,aes(x=weight,y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-200-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-202-1.png" width="672"  />
 
  
 
@@ -7452,7 +7516,7 @@ ggplot(aes(x=x,y=.resid))+geom_point()+
 facet_wrap(~xname)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
 
  
 
@@ -7463,7 +7527,7 @@ Last, the normal quantile plot:
 ggplot(minutes.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-202-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
 
  
 
@@ -7557,7 +7621,7 @@ ggplot(aes(x=drums,y=weight,colour=minutes,label=my_label))+
 geom_point()+geom_text_repel()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-205-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-207-1.png" width="672"  />
 
  
 
@@ -7586,7 +7650,7 @@ geom_point()+geom_text_repel()+
 scale_colour_gradient(low="red",high="blue")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-206-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-208-1.png" width="672"  />
 
  
 
@@ -7972,7 +8036,7 @@ vs.\ fitted values:
 ggplot(salaries.1, aes(x=.fitted, y=.resid))+geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-214-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-216-1.png" width="672"  />
 
     
 
@@ -7995,7 +8059,7 @@ ggplot(aes(x=x, y=.resid))+geom_point()+
 facet_wrap(~xname, scales="free", ncol=2)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-215-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-217-1.png" width="672"  />
 
  
 
@@ -8008,7 +8072,7 @@ For (ii), look at a normal quantile plot of the residuals, which is not as diffi
 ggplot(salaries.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-216-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-218-1.png" width="672"  />
 
  
 
@@ -8029,7 +8093,7 @@ ggplot(salaries.1, aes(x=.fitted, y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-217-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-219-1.png" width="672"  />
 
  
 
@@ -8145,7 +8209,7 @@ geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-219-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-221-1.png" width="672"  />
 
    
     
@@ -8240,7 +8304,7 @@ ggplot(gpa.1,aes(x=.fitted,y=.resid))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-221-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-223-1.png" width="672"  />
 
  
 
@@ -8255,7 +8319,7 @@ Normal quantile plot of residuals:
 ggplot(gpa.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-222-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-224-1.png" width="672"  />
 
  
 
@@ -8275,7 +8339,7 @@ ggplot(gpa.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-223-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-225-1.png" width="672"  />
 
  
 
@@ -8306,24 +8370,10 @@ All right, how does Box-Cox work out here, if at all?
 
 ```r
 library(MASS)
-```
-
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
-```r
 boxcox(univ_GPA~high_GPA,data=gpa)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-224-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-226-1.png" width="672"  />
 
  
 
@@ -8339,6 +8389,11 @@ function later, and things could get confused. So let's "unload"
 
 ```r
 detach("package:MASS",unload=T)
+```
+
+```
+## Warning: 'MASS' namespace cannot be unloaded:
+##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
 ```
 
  
