@@ -9,75 +9,93 @@ library(smmr)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
+## Warning: package 'ggplot2' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R version 3.5.3
+## Warning: package 'tibble' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R version 3.5.3
+## Warning: package 'tidyr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R version 3.5.2
+## Warning: package 'readr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R version 3.5.3
+## Warning: package 'purrr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R version 3.5.2
+## Warning: package 'dplyr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R version 3.5.2
+## Warning: package 'stringr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R version 3.5.1
+## Warning: package 'forcats' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under R version 3.5.1
+## Warning: package 'survminer' was built under
+## R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R version 3.5.1
+## Warning: package 'ggpubr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R version 3.5.1
+## Warning: package 'magrittr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R version 3.5.1
+## Warning: package 'car' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R version 3.5.1
+## Warning: package 'carData' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
+## Warning: package 'ggbiplot' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R version 3.5.1
+## Warning: package 'plyr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R version 3.5.1
+## Warning: package 'scales' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R version 3.5.1
+## Warning: package 'ggrepel' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R version 3.5.2
+## Warning: package 'broom' was built under R
+## version 3.5.2
 ```
 
 
@@ -162,8 +180,8 @@ you'll know that the values are separated by single spaces:
 
 
 ```r
-myurl="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
-bodyfat=read_delim(myurl," ")
+myurl = "http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat = read_delim(myurl, " ")
 ```
 
 ```
@@ -176,7 +194,7 @@ bodyfat=read_delim(myurl," ")
 ```
 
 ```r
-bodyfat  
+bodyfat
 ```
 
 ```
@@ -231,7 +249,7 @@ allow `data=`, so we have to go the `with` way:
 
 
 ```r
-with(bodyfat,t.test(xray,ultrasound,paired=T))
+with(bodyfat, t.test(xray, ultrasound, paired = T))
 ```
 
 ```
@@ -262,7 +280,7 @@ Solution
 
 The P-value of 0.7623 is not at all small, so there is no way we can
 reject the null hypothesis.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">My hat stays on my head.</span> There
+\marginnote{My hat stays on my head.} There
 is no evidence of a difference in means; we can act as if the two
 methods produce the same mean body fat percentage. 
 That is to say, on this evidence we can use either method, whichever
@@ -300,7 +318,7 @@ Solution
 
 
 The smoothest
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I learned yesterday that the Welsh word for *ironing* is *smwddio*, which seems weird until you say    it out loud: it sounds like *smoothio*.</span> 
+\marginnote{I learned yesterday that the Welsh word for *ironing* is *smwddio*, which seems weird until you say    it out loud: it sounds like *smoothio*.} 
 way to do this is to
 use a pipeline: use a `mutate` to create the column of
 differences, and then pipe that into `ggplot`, omitting the
@@ -310,11 +328,12 @@ name). I'll make a normal quantile plot in a moment, but if you
 haven't seen that yet, the plot to make is a histogram:
 
 ```r
-bodyfat %>% mutate(diff=xray-ultrasound) %>%
-ggplot(aes(x=diff))+geom_histogram(bins=6)
+bodyfat %>% mutate(diff = xray - ultrasound) %>% 
+    ggplot(aes(x = diff)) + geom_histogram(bins = 6)
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
+
+\includegraphics{08-matched-pairs-sign_files/figure-latex/unnamed-chunk-6-1} 
 
    
 
@@ -337,11 +356,12 @@ both, so you can use the appropriate one of my two bits of code. The
 normal quantile plot:
 
 ```r
-bodyfat %>% mutate(diff=xray-ultrasound) %>%
-ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
+bodyfat %>% mutate(diff = xray - ultrasound) %>% 
+    ggplot(aes(sample = diff)) + stat_qq() + stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+
+\includegraphics{08-matched-pairs-sign_files/figure-latex/unnamed-chunk-7-1} 
 
    
 This is showing a little evidence of skewness or outliers  (depending
@@ -407,8 +427,9 @@ Solution
 This kind of thing:
 
 ```r
-myurl="http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
-throws=read_delim(myurl," ",col_names=c("student","baseball","softball"))
+myurl = "http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
+throws = read_delim(myurl, " ", col_names = c("student", 
+    "baseball", "softball"))
 ```
 
 ```
@@ -438,7 +459,7 @@ throws
 ##  8       8       41       41
 ##  9       9       56       44
 ## 10      10       70       65
-## # … with 14 more rows
+## # ... with 14 more rows
 ```
 
 This is one of those times where we have to tell R what names to give
@@ -461,8 +482,8 @@ right-arrow assignment to create what I called
 
 
 ```r
-throws %>% mutate(diff=baseball-softball) ->
-throws2
+throws2 <- throws %>% mutate(diff = baseball - 
+    softball)
 ```
 
 
@@ -483,7 +504,7 @@ zero, which is exactly what we want here:
 
 ```r
 library(smmr)
-sign_test(throws2,diff)
+sign_test(throws2, diff)
 ```
 
 ```
@@ -506,7 +527,7 @@ To build it yourself, you know the steps by now.
 First step is to count how many differences are greater and less than zero:
 
 ```r
-table(throws2$diff>0)
+table(throws2$diff > 0)
 ```
 
 ```
@@ -519,7 +540,7 @@ or
 
 
 ```r
-table(throws2$diff<0)
+table(throws2$diff < 0)
 ```
 
 ```
@@ -532,7 +553,7 @@ or, since we have things in a data frame,
 
 
 ```r
-throws2 %>% count(diff>0)
+throws2 %>% count(diff > 0)
 ```
 
 ```
@@ -564,7 +585,7 @@ Thus any of these will get you a defensible P-value:
 
 
 ```r
-sum(dbinom(21:23,23,0.5))
+sum(dbinom(21:23, 23, 0.5))
 ```
 
 ```
@@ -572,7 +593,7 @@ sum(dbinom(21:23,23,0.5))
 ```
 
 ```r
-sum(dbinom(22:24,24,0.5))
+sum(dbinom(22:24, 24, 0.5))
 ```
 
 ```
@@ -580,7 +601,7 @@ sum(dbinom(22:24,24,0.5))
 ```
 
 ```r
-sum(dbinom(21:24,24,0.5))
+sum(dbinom(21:24, 24, 0.5))
 ```
 
 ```
@@ -588,7 +609,7 @@ sum(dbinom(21:24,24,0.5))
 ```
 
 ```r
-sum(dbinom(0:2,23,0.5))
+sum(dbinom(0:2, 23, 0.5))
 ```
 
 ```
@@ -596,7 +617,7 @@ sum(dbinom(0:2,23,0.5))
 ```
 
 ```r
-sum(dbinom(0:2,24,0.5))
+sum(dbinom(0:2, 24, 0.5))
 ```
 
 ```
@@ -604,7 +625,7 @@ sum(dbinom(0:2,24,0.5))
 ```
 
 ```r
-sum(dbinom(0:3,24,0.5))
+sum(dbinom(0:3, 24, 0.5))
 ```
 
 ```
@@ -649,9 +670,10 @@ of the data with the calculation of the differences in *one* pipe:
 
 
 ```r
-myurl="http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
-throws = read_delim(myurl," ",col_names=c("student","baseball","softball")) %>%
-mutate(diff=baseball-softball)
+myurl = "http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
+throws = read_delim(myurl, " ", col_names = c("student", 
+    "baseball", "softball")) %>% mutate(diff = baseball - 
+    softball)
 ```
 
 ```
@@ -664,7 +686,7 @@ mutate(diff=baseball-softball)
 ```
 
 ```r
-throws  
+throws
 ```
 
 ```
@@ -681,7 +703,7 @@ throws
 ##  8       8       41       41     0
 ##  9       9       56       44    12
 ## 10      10       70       65     5
-## # … with 14 more rows
+## # ... with 14 more rows
 ```
 
  
@@ -699,7 +721,7 @@ Solution
 
 
 ```r
-ci_median(throws,diff)
+ci_median(throws, diff)
 ```
 
 ```
@@ -734,7 +756,7 @@ Let's check that it works properly by repeating the previous
 the same thing:
 
 ```r
-sign_test(throws,diff,0)
+sign_test(throws, diff, 0)
 ```
 
 ```
@@ -750,7 +772,7 @@ sign_test(throws,diff,0)
 ```
 
 ```r
-pval_sign(0,throws,diff)
+pval_sign(0, throws, diff)
 ```
 
 ```
@@ -797,7 +819,7 @@ The most mindless way to try some values one at a time and see what
  you get, eg.:
 
 ```r
-pval_sign(1,throws,diff)
+pval_sign(1, throws, diff)
 ```
 
 ```
@@ -805,7 +827,7 @@ pval_sign(1,throws,diff)
 ```
 
 ```r
-pval_sign(5,throws,diff)
+pval_sign(5, throws, diff)
 ```
 
 ```
@@ -824,8 +846,9 @@ medians, and get the P-value for each of them, eg.:
 
 
 ```r
-d=tibble(my.med=seq(0,20,2))
-d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+d = tibble(my.med = seq(0, 20, 2))
+d %>% mutate(pvals = map_dbl(my.med, ~pval_sign(., 
+    throws, diff)))
 ```
 
 ```
@@ -852,8 +875,9 @@ outside. Some closer investigation:
 
 
 ```r
-d=tibble(my.med=seq(0,2,0.5))
-d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+d = tibble(my.med = seq(0, 2, 0.5))
+d %>% mutate(pvals = map_dbl(my.med, ~pval_sign(., 
+    throws, diff)))
 ```
 
 ```
@@ -874,8 +898,9 @@ The bottom end of the interval actually is 2, since 2 is inside and
 
 
 ```r
-d=tibble(my.med=seq(8,10,0.5))
-d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+d = tibble(my.med = seq(8, 10, 0.5))
+d %>% mutate(pvals = map_dbl(my.med, ~pval_sign(., 
+    throws, diff)))
 ```
 
 ```
@@ -901,7 +926,7 @@ limit has to be between 1 and 5. Let's try halfway between, ie.\ 3:
 
 
 ```r
-pval_sign(3,throws,diff)
+pval_sign(3, throws, diff)
 ```
 
 ```
@@ -914,18 +939,18 @@ Inside, so lower limit is between 1 and 3. This can be automated, thus:
 
 
 ```r
-lo=1
-hi=3
-while(abs(hi-lo)>0.1) {
-try=(lo+hi)/2
-ptry=pval_sign(try,throws,diff)
-if (ptry>0.05) {
-hi=try
-} else {
-lo=try
+lo = 1
+hi = 3
+while (abs(hi - lo) > 0.1) {
+    try = (lo + hi)/2
+    ptry = pval_sign(try, throws, diff)
+    if (ptry > 0.05) {
+        hi = try
+    } else {
+        lo = try
+    }
 }
-}
-c(lo,hi)
+c(lo, hi)
 ```
 
 ```
@@ -949,18 +974,18 @@ example, we know that 5 is inside and something big like 20 must be outside:
 
 
 ```r
-lo=5
-hi=20
-while(abs(hi-lo)>0.1) {
-try=(lo+hi)/2
-ptry=pval_sign(try,throws,diff)
-if (ptry>0.05) {
-lo=try
-} else {
-hi=try
+lo = 5
+hi = 20
+while (abs(hi - lo) > 0.1) {
+    try = (lo + hi)/2
+    ptry = pval_sign(try, throws, diff)
+    if (ptry > 0.05) {
+        lo = try
+    } else {
+        hi = try
+    }
 }
-}
-c(lo,hi)
+c(lo, hi)
 ```
 
 ```
@@ -1006,8 +1031,8 @@ Looking at the file, we see that the values are separated by
 exactly one space:
 
 ```r
-my_url="https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt"
-salaries=read_delim(my_url," ")
+my_url = "https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt"
+salaries = read_delim(my_url, " ")
 ```
 
 ```
@@ -1088,12 +1113,12 @@ We don't have the differences here, so we have to calculate them
 first. The smoothest way is to make a pipeline:
 
 ```r
-salaries %>%
-mutate(diff=jan2017-jan2016) %>%
-ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
+salaries %>% mutate(diff = jan2017 - jan2016) %>% 
+    ggplot(aes(sample = diff)) + stat_qq() + stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+
+\includegraphics{08-matched-pairs-sign_files/figure-latex/unnamed-chunk-27-1} 
 
      
 
@@ -1136,7 +1161,8 @@ over time, so we need a one-sided alternative.
 Following through the procedure, even though you may not trust it much:
 
 ```r
-with(salaries, t.test(jan2016, jan2017, alternative="less", paired=T))
+with(salaries, t.test(jan2016, jan2017, alternative = "less", 
+    paired = T))
 ```
 
 ```
@@ -1144,7 +1170,8 @@ with(salaries, t.test(jan2016, jan2017, alternative="less", paired=T))
 ## 	Paired t-test
 ## 
 ## data:  jan2016 and jan2017
-## t = -10.092, df = 19, p-value = 2.271e-09
+## t = -10.092, df = 19, p-value =
+## 2.271e-09
 ## alternative hypothesis: true difference in means is less than 0
 ## 95 percent confidence interval:
 ##       -Inf -5.125252
@@ -1160,7 +1187,8 @@ alternative has to be the other way around as well:
 
 
 ```r
-with(salaries, t.test(jan2017, jan2016, alternative="greater", paired=T))
+with(salaries, t.test(jan2017, jan2016, alternative = "greater", 
+    paired = T))
 ```
 
 ```
@@ -1168,7 +1196,8 @@ with(salaries, t.test(jan2017, jan2016, alternative="greater", paired=T))
 ## 	Paired t-test
 ## 
 ## data:  jan2017 and jan2016
-## t = 10.092, df = 19, p-value = 2.271e-09
+## t = 10.092, df = 19, p-value =
+## 2.271e-09
 ## alternative hypothesis: true difference in means is greater than 0
 ## 95 percent confidence interval:
 ##  5.125252      Inf
@@ -1186,9 +1215,8 @@ differences again:
 
 
 ```r
-salaries %>%
-mutate(diff=jan2017-jan2016) %>%
-with(.,t.test(diff, mu=0, alternative="greater"))
+salaries %>% mutate(diff = jan2017 - jan2016) %>% 
+    with(., t.test(diff, mu = 0, alternative = "greater"))
 ```
 
 ```
@@ -1196,7 +1224,8 @@ with(.,t.test(diff, mu=0, alternative="greater"))
 ## 	One Sample t-test
 ## 
 ## data:  diff
-## t = 10.092, df = 19, p-value = 2.271e-09
+## t = 10.092, df = 19, p-value =
+## 2.271e-09
 ## alternative hypothesis: true mean is greater than 0
 ## 95 percent confidence interval:
 ##  5.125252      Inf
@@ -1220,9 +1249,8 @@ sign test, which you could do this way:
 
 ```r
 library(smmr)
-salaries %>%
-mutate(diff=jan2017-jan2016) %>%
-sign_test(diff,0)
+salaries %>% mutate(diff = jan2017 - jan2016) %>% 
+    sign_test(diff, 0)
 ```
 
 ```
@@ -1260,7 +1288,7 @@ A confidence interval. 95\% is fine. As before, we have to run
 confidence interval for us is two-sided:
 
 ```r
-with(salaries, t.test(jan2017, jan2016, paired=T))
+with(salaries, t.test(jan2017, jan2016, paired = T))
 ```
 
 ```
@@ -1268,7 +1296,8 @@ with(salaries, t.test(jan2017, jan2016, paired=T))
 ## 	Paired t-test
 ## 
 ## data:  jan2017 and jan2016
-## t = 10.092, df = 19, p-value = 4.542e-09
+## t = 10.092, df = 19, p-value =
+## 4.542e-09
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  4.902231 7.467769
@@ -1313,8 +1342,8 @@ you'll know that the values are separated by single spaces:
 
 
 ```r
-myurl="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
-bodyfat=read_delim(myurl," ")
+myurl = "http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat = read_delim(myurl, " ")
 ```
 
 ```
@@ -1327,7 +1356,7 @@ bodyfat=read_delim(myurl," ")
 ```
 
 ```r
-bodyfat  
+bodyfat
 ```
 
 ```
@@ -1372,7 +1401,7 @@ for the matched-pairs sign test. So we should calculate and save them first:
 
 
 ```r
-bodyfat %>% mutate(diff=xray-ultrasound) -> bodyfat2
+bodyfat2 <- bodyfat %>% mutate(diff = xray - ultrasound)
 ```
 
  
@@ -1384,10 +1413,12 @@ Then, not forgetting to use the data frame that we just made:
 
 
 ```r
-ggplot(bodyfat2,aes(sample=diff))+stat_qq()+stat_qq_line()
+ggplot(bodyfat2, aes(sample = diff)) + stat_qq() + 
+    stat_qq_line()
 ```
 
-<img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
+
+\includegraphics{08-matched-pairs-sign_files/figure-latex/unnamed-chunk-35-1} 
 
    
 This is showing a little evidence of skewness or outliers  (depending
