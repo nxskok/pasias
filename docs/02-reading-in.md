@@ -9,75 +9,93 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
+## Warning: package 'ggplot2' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R version 3.5.3
+## Warning: package 'tibble' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R version 3.5.3
+## Warning: package 'tidyr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R version 3.5.2
+## Warning: package 'readr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R version 3.5.3
+## Warning: package 'purrr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R version 3.5.2
+## Warning: package 'dplyr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R version 3.5.2
+## Warning: package 'stringr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R version 3.5.1
+## Warning: package 'forcats' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under R version 3.5.1
+## Warning: package 'survminer' was built under
+## R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R version 3.5.1
+## Warning: package 'ggpubr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R version 3.5.1
+## Warning: package 'magrittr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R version 3.5.1
+## Warning: package 'car' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R version 3.5.1
+## Warning: package 'carData' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
+## Warning: package 'ggbiplot' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R version 3.5.1
+## Warning: package 'plyr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R version 3.5.1
+## Warning: package 'scales' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R version 3.5.1
+## Warning: package 'ggrepel' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R version 3.5.2
+## Warning: package 'broom' was built under R
+## version 3.5.2
 ```
 
 
@@ -119,12 +137,12 @@ The appropriate function, the data values being separated by a space,
 will be `read_delim`. Put the URL as the first thing in
 `read_delim`, or (better) define it into a variable
 first:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I say *better* because otherwise the read line gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*</span>
+\marginnote{I say *better* because otherwise the read line gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*}
 
 
 ```r
-url="http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt"
-juice=read_delim(url," ")
+url = "http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt"
+juice = read_delim(url, " ")
 ```
 
 ```
@@ -167,7 +185,7 @@ you how many lines there are altogether, and you can click on
 the appropriate thing to see the rest of it.
 
 ```r
-juice  
+juice
 ```
 
 ```
@@ -184,7 +202,7 @@ juice
 ##  8     8       5.6    268
 ##  9     9       5.6    239
 ## 10    10       5.9    212
-## # … with 14 more rows
+## # ... with 14 more rows
 ```
 
  
@@ -223,7 +241,8 @@ you could read the same data but call the columns `x` and
 
 
 ```r
-read_delim("a.txt"," ",col_names=c("x","y"),skip=1)
+read_delim("a.txt", " ", col_names = c("x", "y"), 
+    skip = 1)
 ```
 
 ```
@@ -266,10 +285,12 @@ to get the variables from),  and the "how to plot" is
 `geom_point` to plot the points:
 
 ```r
-ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()
+ggplot(juice, aes(x = pectin, y = sweetness)) + 
+    geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-11-1} 
 
          
 
@@ -284,14 +305,16 @@ lot less convincing. As an extra, you could add a smooth trend to the plot:
 
 
 ```r
-ggplot(juice,aes(x=pectin,y=sweetness))+geom_point()+geom_smooth()
+ggplot(juice, aes(x = pectin, y = sweetness)) + 
+    geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-12-1} 
 
          
 The smooth trend is kind of downhill, but not very convincing.
@@ -325,8 +348,8 @@ Solution
 Read directly from the URL, most easily:
 
 ```r
-url="http://www.utsc.utoronto.ca/~butler/c32/soap.txt"
-soap=read_delim(url," ")
+url = "http://www.utsc.utoronto.ca/~butler/c32/soap.txt"
+soap = read_delim(url, " ")
 ```
 
 ```
@@ -357,7 +380,7 @@ soap
 ##  8     8   321   175 a    
 ##  9     9   410   270 a    
 ## 10    10   260   170 a    
-## # … with 17 more rows
+## # ... with 17 more rows
 ```
 
     
@@ -377,10 +400,11 @@ Solution
 
 
 ```r
-ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)
+ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 10)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-14-1} 
 
  
 
@@ -404,10 +428,11 @@ histogram looks can depend on the bins you choose to draw it
 with. This is 8 bins rather than 10:
 
 ```r
-ggplot(soap,aes(x=scrap))+geom_histogram(bins=8)
+ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 8)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-15-1} 
 
  
 
@@ -426,10 +451,11 @@ Solution
 
 
 ```r
-ggplot(soap,aes(x=line,y=scrap))+geom_boxplot()
+ggplot(soap, aes(x = line, y = scrap)) + geom_boxplot()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-16-1} 
 
 
 
@@ -464,7 +490,7 @@ are "significantly different". This is inference, which we
 will come to later, but a preview looks like this:
 
 ```r
-t.test(scrap~line,data=soap)
+t.test(scrap ~ line, data = soap)
 ```
 
 ```
@@ -472,7 +498,8 @@ t.test(scrap~line,data=soap)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  scrap by line
-## t = 1.2493, df = 21.087, p-value = 0.2253
+## t = 1.2493, df = 21.087, p-value =
+## 0.2253
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  -26.97888 108.21222
@@ -499,10 +526,12 @@ that I explain afterwards:
 
 
 ```r
-ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)+facet_grid(line~.)
+ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 10) + 
+    facet_grid(line ~ .)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-18-1} 
 
  
 
@@ -547,10 +576,11 @@ Solution
 Same mechanism as before:
 
 ```r
-ggplot(soap,aes(x=speed,y=scrap))+geom_point()
+ggplot(soap, aes(x = speed, y = scrap)) + geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-19-1} 
 
  
 
@@ -582,15 +612,17 @@ and scrap for *each* production line. To do that, we want
 to plot the scrap-speed points distinguished for each production
 line. `ggplot` makes that easy: you add a
 `colour`
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you are concerned about the spelling: the guy who wrote ggplot is from New Zealand, where they spell *colour* the same way we do. However, if you want to use *color*, that works too.</span> to say what you want to
+\marginnote{If you are concerned about the spelling: the guy who wrote ggplot is from New Zealand, where they spell *colour* the same way we do. However, if you want to use *color*, that works too.} to say what you want to
 distinguish by colour. This is two quantitative variables and one
 categorical variable, if you want to think of it that way:
 
 ```r
-ggplot(soap,aes(x=speed,y=scrap,colour=line))+geom_point()
+ggplot(soap, aes(x = speed, y = scrap, colour = line)) + 
+    geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-20-1} 
 
        
 
@@ -607,11 +639,13 @@ regression lines on the plot for each group separately. This is where
 
 
 ```r
-ggplot(soap,aes(x=speed,y=scrap,colour=line))+
-geom_point()+geom_smooth(method="lm",se=F)
+ggplot(soap, aes(x = speed, y = scrap, colour = line)) + 
+    geom_point() + geom_smooth(method = "lm", 
+    se = F)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-21-1} 
 
        
 
@@ -637,13 +671,14 @@ expecting you to follow the code, but you can admire the result!
 
 
 ```r
-soap2=soap %>% select(-line)
-ggplot(soap,aes(x=speed,y=scrap))+
-geom_point(data=soap2,colour="grey")+
-geom_point(aes(colour=line))+facet_wrap(~line)
+soap2 = soap %>% select(-line)
+ggplot(soap, aes(x = speed, y = scrap)) + geom_point(data = soap2, 
+    colour = "grey") + geom_point(aes(colour = line)) + 
+    facet_wrap(~line)
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-22-1} 
 $
 
 The idea is that we plot all the points in grey (to 
@@ -683,7 +718,7 @@ regression predicting `scrap` from *two* things:
 
 
 ```r
-scrap.1=lm(scrap~speed+line,data=soap)
+scrap.1 = lm(scrap ~ speed + line, data = soap)
 summary(scrap.1)
 ```
 
@@ -697,12 +732,17 @@ summary(scrap.1)
 ## -39.557 -14.161  -0.121  17.518  33.953 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  80.41099   14.54379   5.529 1.10e-05 ***
-## speed         1.23074    0.06555  18.775 7.48e-16 ***
-## lineb       -53.12920    8.21003  -6.471 1.08e-06 ***
+##              Estimate Std. Error t value
+## (Intercept)  80.41099   14.54379   5.529
+## speed         1.23074    0.06555  18.775
+## lineb       -53.12920    8.21003  -6.471
+##             Pr(>|t|)    
+## (Intercept) 1.10e-05 ***
+## speed       7.48e-16 ***
+## lineb       1.08e-06 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## Residual standard error: 21.13 on 24 degrees of freedom
 ## Multiple R-squared:  0.9402,	Adjusted R-squared:  0.9352 
@@ -728,7 +768,7 @@ There is a moral to this story, which I would like you to get even if
 you don't get any of the statistics: if a variable makes a
 difference, it should be in your model and on your
 graph,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Meaning that the graph should contain all three variables, *speed*, *scrap* and *line*.</span>
+\marginnote{Meaning that the graph should contain all three variables, *speed*, *scrap* and *line*.}
 because it enables you to get better (more precise) conclusions about your
 other variables. Here, there really is a difference between the
 production lines, but the $t$-test was too much of a blunt instrument
@@ -768,8 +808,8 @@ save it and upload it to R Studio Cloud, but it requires much less
 brainpower to open it directly from the URL:
 
 ```r
-url="http://www.utsc.utoronto.ca/~butler/c32/global.csv"
-shipments=read_csv(url)
+url = "http://www.utsc.utoronto.ca/~butler/c32/global.csv"
+shipments = read_csv(url)
 ```
 
 ```
@@ -830,10 +870,11 @@ belongs on the $y$-axis. To make the plot, `ggplot` with an
 part), and a `geom_point()` after (the "how to plot it"):
 
 ```r
-ggplot(shipments,aes(x=size,y=cost))+geom_point()
+ggplot(shipments, aes(x = size, y = cost)) + geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-26-1} 
 
      
 
@@ -882,10 +923,12 @@ have one quantitative variable `size` and one categorical
 variable `warehouse`, which suggests drawing boxplots:
 
 ```r
-ggplot(shipments,aes(x=warehouse,y=size))+geom_boxplot()
+ggplot(shipments, aes(x = warehouse, y = size)) + 
+    geom_boxplot()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-27-1} 
 
      
 
@@ -903,11 +946,12 @@ different colours:
 
 
 ```r
-ggplot(shipments,aes(x=size,y=cost,colour=warehouse))+
-geom_point()
+ggplot(shipments, aes(x = size, y = cost, colour = warehouse)) + 
+    geom_point()
 ```
 
-<img src="02-reading-in_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+
+\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-28-1} 
 
      
 
@@ -929,7 +973,7 @@ In the place where I got these data, it said "larger shipments are sent to Wareh
 That
 is to say, very large shipments are more expensive to handle, but not
 as expensive as you might think.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is the same idea that it  costs more to ride the GO bus from UTSC to York U than it does to  ride from UTSC to Scarborough Town, but if you work out how much it  costs per kilometre, the longer journey costs less per km. As of  when I'm writing this, $5.30 for the 7.2 km to Scarborough Town and  $6.75 for the 38 km to York. That's quite an economy of scale,  isn't it?</span> 
+\marginnote{This is the same idea that it  costs more to ride the GO bus from UTSC to York U than it does to  ride from UTSC to Scarborough Town, but if you work out how much it  costs per kilometre, the longer journey costs less per km. As of  when I'm writing this, $5.30 for the 7.2 km to Scarborough Town and  $6.75 for the 38 km to York. That's quite an economy of scale,  isn't it?} 
 That makes sense with our scatterplot, because the
 *slope* for larger shipments is less than for smaller shipments.
 
