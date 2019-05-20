@@ -49,8 +49,8 @@ Solution
 
 Read into a temporary data frame, and then process:
 ```{r message=F}
-my_url="http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv"
-weather.0=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv"
+weather.0 <- read_csv(my_url)
 weather.0
 ```
 
@@ -59,7 +59,7 @@ weather.0
 There are lots of columns, of which we only want a few:
 
 ```{r }
-(weather.0 %>% select(l.temp:ave.temp,rain:gust.wind) -> weather)
+(weather.0 %>% select(l.temp:ave.temp, rain:gust.wind) -> weather)
 ```
 
  
@@ -74,7 +74,7 @@ Solution
 
 This is cleanest, but you may not have seen the idea before:
 ```{r }
-map_df(weather, ~quantile(.)) 
+map_df(weather, ~ quantile(.))
 ```
 
      
@@ -91,12 +91,13 @@ Another way to do it is to make a column of column names, using
 the quantiles for each variable:
 
 ```{r }
-weather %>% gather(xname, x, everything()) %>% 
-nest(-xname) %>% 
-mutate(q=map(data, ~enframe(quantile(.$x)))) %>% 
-unnest(q) %>% 
-spread(xname, value) %>% 
-arrange(parse_number(name))
+weather %>%
+  gather(xname, x, everything()) %>%
+  nest(-xname) %>%
+  mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
+  unnest(q) %>%
+  spread(xname, value) %>%
+  arrange(parse_number(name))
 ```
 
  
@@ -127,7 +128,7 @@ Solution
 
 
 ```{r }
-weather.1=princomp(weather,cor=T)
+weather.1 <- princomp(weather, cor = T)
 ```
 
      
@@ -216,7 +217,7 @@ is the default for `factanal`, which I presume I now have to
 show you (so this is looking ahead): 
 
 ```{r }
-weather.2=factanal(weather,3,scores="r")
+weather.2 <- factanal(weather, 3, scores = "r")
 weather.2$loadings
 ```
 
@@ -234,7 +235,7 @@ These factors are rather pleasantly interpretable.
 have to go back to the base-graphics version, which goes a bit like this:
 
 ```{r }
-biplot(weather.2$scores,weather.2$loadings)
+biplot(weather.2$scores, weather.2$loadings)
 ```
 
  
@@ -256,17 +257,17 @@ Something like this. I begin by turning the component scores
 (which are a matrix) into a data frame, and selecting the ones I
 want (the first three):
 ```{r echo=F}
-ww=getOption("width")
-options(width=ww+20)
+ww <- getOption("width")
+options(width = ww + 20)
 ```
 
       
 ```{r size="footnotesize"}
-as_tibble(weather.1$scores) %>% 
-select(1:3) %>% 
-bind_cols(weather) %>%
-mutate(day=row_number()) -> d
-d %>% print(n=20)
+as_tibble(weather.1$scores) %>%
+  select(1:3) %>%
+  bind_cols(weather) %>%
+  mutate(day = row_number()) -> d
+d %>% print(n = 20)
 ```
 
       
@@ -339,7 +340,7 @@ size of the labels, and I also went digging in the data frame
 that I read in from the file to get the count of the day in the
 year, which was called `day.count`:
 ```{r }
-ggbiplot(weather.1,labels=weather.0$day.count,labels.size=2)
+ggbiplot(weather.1, labels = weather.0$day.count, labels.size = 2)
 ```
 
      
@@ -425,8 +426,8 @@ Having done these by percentile ranks in one of the other questions,
 let's see if we can do that here as well:
 
 ```{r }
-map_df(weather,percent_rank) %>%
-slice(c(37,211,265,47))
+map_df(weather, percent_rank) %>%
+  slice(c(37, 211, 265, 47))
 ```
 
  
@@ -472,7 +473,7 @@ library(ggrepel)
  
 
 ```{r echo=F}
-api_key="AIzaSyC7eVXz84-Mj1-zNBW4GTnXNAYdGQJDNXU"
+api_key <- "AIzaSyC7eVXz84-Mj1-zNBW4GTnXNAYdGQJDNXU"
 register_google(api_key)
 ```
 
@@ -486,9 +487,9 @@ I save the result:
 
 ```{r cache=T}
 tribble(
-~place,
-"Porto PT",
-"La Coruna ES"
+  ~place,
+  "Porto PT",
+  "La Coruna ES"
 ) %>% mutate_geocode(place) -> places
 places
 ```
@@ -503,8 +504,8 @@ already have the longitude and latitude, we'll use them again, to save
 Google looking them up again, and possibly saving us from getting an error:
 ```{r error=T, cache=T}
 places %>% slice(1) -> porto
-mapp=get_map("Porto", zoom=5)
-ggmap(mapp)+geom_point(data=porto,aes(x=lon,y=lat),colour="red")
+mapp <- get_map("Porto", zoom = 5)
+ggmap(mapp) + geom_point(data = porto, aes(x = lon, y = lat), colour = "red")
 ```
 
  
@@ -529,10 +530,10 @@ fun) add a column saying which country each one is in. I'm also
 labelling both places:
 
 ```{r error=T}
-places %>% mutate(country=c("Portugal","Spain")) -> places
-ggmap(mapp)+
-geom_point(data=places,aes(x=lon,y=lat,colour=country)) +
-geom_text_repel(data=places, aes(label=place))
+places %>% mutate(country = c("Portugal", "Spain")) -> places
+ggmap(mapp) +
+  geom_point(data = places, aes(x = lon, y = lat, colour = country)) +
+  geom_text_repel(data = places, aes(label = place))
 ```
 
  

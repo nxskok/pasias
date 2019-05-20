@@ -23,8 +23,8 @@ Solution
 
 Literal copy and paste: 
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
-throws=read_delim(myurl," ",col_names=c("student","baseball","softball"))
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
+throws <- read_delim(myurl, " ", col_names = c("student", "baseball", "softball"))
 throws
 ```
 
@@ -42,7 +42,7 @@ Solution
 Feed `student` into `factor`, creating a new
 column with `mutate`:
 ```{r }
-throws %>% mutate(fs=factor(student))
+throws %>% mutate(fs = factor(student))
 ```
 
        
@@ -61,8 +61,9 @@ Solution
 
 Literally `gather` (from `tidyr`):
 ```{r }
-throws %>% mutate(fs=factor(student)) %>% 
-gather(ball,distance,baseball:softball)
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball)
 ```
 
        
@@ -75,8 +76,9 @@ If you want to show off a little, you can use a select-helper, noting
 that the columns you want to gather up all end in "ball":
 
 ```{r }
-throws %>% mutate(fs=factor(student)) %>% 
-gather(ball,distance,ends_with("ball"))
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, ends_with("ball"))
 ```
 
        
@@ -94,9 +96,10 @@ Solution
 
 The obvious thing:
 ```{r }
-throws %>% mutate(fs=factor(student)) %>% 
-gather(ball,distance,baseball:softball) %>%
-ggplot(aes(x=ball,y=distance))+geom_point()
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball) %>%
+  ggplot(aes(x = ball, y = distance)) + geom_point()
 ```
 
        
@@ -122,10 +125,11 @@ Solution
 A `colour` and a `group` in the `aes`, and
 a `geom_line`:
 ```{r }
-throws %>% mutate(fs=factor(student)) %>% 
-gather(ball,distance,baseball:softball) %>%
-ggplot(aes(x=ball,y=distance,group=fs,colour=fs))+
-geom_point()+geom_line()
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball) %>%
+  ggplot(aes(x = ball, y = distance, group = fs, colour = fs)) +
+  geom_point() + geom_line()
 ```
 
      
@@ -133,10 +137,11 @@ geom_point()+geom_line()
 You can see what happens if you use the student as a number:
 
 ```{r }
-throws %>% mutate(fs=factor(student)) %>% 
-gather(ball,distance,baseball:softball) %>%
-ggplot(aes(x=ball,y=distance,group=student,colour=student))+
-geom_point()+geom_line()
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball) %>%
+  ggplot(aes(x = ball, y = distance, group = student, colour = student)) +
+  geom_point() + geom_line()
 ```
 
      
@@ -164,11 +169,12 @@ at the top of the legend that you want to remove. Here that is
 `group` and `colour`. I think the legend we want
 to get rid of is actually the `colour` one, so we do this:
 ```{r }
-throws %>% mutate(fs=factor(student)) %>% 
-gather(ball,distance,baseball:softball) %>%
-ggplot(aes(x=ball,y=distance,group=fs,colour=fs))+
-geom_point()+geom_line()+
-guides(colour=F) 
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball) %>%
+  ggplot(aes(x = ball, y = distance, group = fs, colour = fs)) +
+  geom_point() + geom_line() +
+  guides(colour = F)
 ```
 
        

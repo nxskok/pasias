@@ -56,8 +56,8 @@ Solution
 
 A `.csv` file, so:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/heartf.csv"
-heart=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/heartf.csv"
+heart <- read_csv(my_url)
 heart
 ```
 
@@ -105,9 +105,10 @@ Solution
 A lot of typing, since there are so many variables. Don't forget
 that the response variable *must* be a factor:
 ```{r }
-heart.1=glm(factor(heart.disease)~age+sex+pain.type+resting.bp+serum.chol+
-high.blood.sugar+electro+max.hr+angina+oldpeak+slope+colored+thal, 
-family="binomial",data=heart)
+heart.1 <- glm(factor(heart.disease) ~ age + sex + pain.type + resting.bp + serum.chol +
+  high.blood.sugar + electro + max.hr + angina + oldpeak + slope + colored + thal,
+family = "binomial", data = heart
+)
 ```
 
  
@@ -162,7 +163,7 @@ Solution
 Following the instructions:
 
 ```{r }
-drop1(heart.1,test="Chisq")
+drop1(heart.1, test = "Chisq")
 ```
 
  
@@ -215,8 +216,8 @@ Solution
 `update` is the obvious choice here, since we're making a
 small change to a *very* big model:
 ```{r }
-heart.2=update(heart.1,.~.-high.blood.sugar)
-drop1(heart.2,test="Chisq")
+heart.2 <- update(heart.1, . ~ . - high.blood.sugar)
+drop1(heart.2, test = "Chisq")
 ```
 
    
@@ -243,7 +244,7 @@ Solution
 
 The hints ought to lead you to this:
 ```{r size="tiny"}
-heart.3=step(heart.1,direction="backward",test="Chisq")
+heart.3 <- step(heart.1, direction = "backward", test = "Chisq")
 ```
 
        
@@ -317,9 +318,9 @@ Q3 of anything, and then use `summarize_if` to apply those to
 the quantitative variables:
 
 ```{r }
-q1=function(x) quantile(x,0.25)
-q3=function(x) quantile(x,0.75)
-heart %>% summarize_if(is.numeric,funs(q1,q3))
+q1 <- function(x) quantile(x, 0.25)
+q3 <- function(x) quantile(x, 0.75)
+heart %>% summarize_if(is.numeric, funs(q1, q3))
 ```
 
  
@@ -333,9 +334,9 @@ to "transpose" the result with the variable-quartile combinations in
 a column and the actual quartile values in another:
 
 ```{r }
-heart2 = heart %>% 
-summarize_if(is.numeric,funs(q1,q3)) %>%
-gather(vq,quartile,everything())  
+heart2 <- heart %>%
+  summarize_if(is.numeric, funs(q1, q3)) %>%
+  gather(vq, quartile, everything())
 heart2
 ```
 
@@ -344,11 +345,11 @@ heart2
 If you want to be really fancy:
 
 ```{r }
-heart %>% 
-summarize_if(is.numeric,funs(q1,q3)) %>%
-gather(vq,quartile,everything()) %>%
-separate(vq,c("variable","q"),"_") %>%
-spread(q,quartile)
+heart %>%
+  summarize_if(is.numeric, funs(q1, q3)) %>%
+  gather(vq, quartile, everything()) %>%
+  separate(vq, c("variable", "q"), "_") %>%
+  spread(q, quartile)
 ```
 
  
@@ -364,9 +365,9 @@ different numbers of possible values. Here's my idea:
 
 ```{r }
 heart %>%
-select_if(is.character) %>%
-mutate_all(factor) %>%
-summary()
+  select_if(is.character) %>%
+  mutate_all(factor) %>%
+  summary()
 ```
 
  
@@ -386,11 +387,11 @@ somewhere so I don't have to type them below when I make all possible
 combinations. My go at that:
 
 ```{r }
-heart3 = heart %>%
-select_if(is.character) %>%
-gather(vname,value,everything()) %>%
-distinct() 
-heart3 %>% print(n=Inf)
+heart3 <- heart %>%
+  select_if(is.character) %>%
+  gather(vname, value, everything()) %>%
+  distinct()
+heart3 %>% print(n = Inf)
 ```
 
  
@@ -405,11 +406,11 @@ keeps one of each and throws away the rest.
 Hmm, another way would be to count everything:
 
 ```{r }
-heart3 = heart %>%
-select_if(is.character) %>%
-gather(vname,value,everything()) %>%
-count(vname,value) 
-heart3 %>% print(n=Inf)
+heart3 <- heart %>%
+  select_if(is.character) %>%
+  gather(vname, value, everything()) %>%
+  count(vname, value)
+heart3 %>% print(n = Inf)
 ```
 
  
@@ -436,7 +437,7 @@ Here's how it goes for `age`:
 
 ```{r }
 heart2 %>%
-filter(str_detect(vq,"age_"))
+  filter(str_detect(vq, "age_"))
 ```
 
  
@@ -445,8 +446,8 @@ and one more step to get just the quartiles:
 
 ```{r }
 heart2 %>%
-filter(str_detect(vq,"age_")) %>%
-pull(quartile)  
+  filter(str_detect(vq, "age_")) %>%
+  pull(quartile)
 ```
 
  
@@ -454,10 +455,10 @@ pull(quartile)
 We'll be doing this a few times, so we should write a function to do it:
 
 ```{r }
-get_quartiles=function(d,x) {
-d %>% 
-filter(str_detect(vq,x)) %>%
-pull(quartile)  
+get_quartiles <- function(d, x) {
+  d %>%
+    filter(str_detect(vq, x)) %>%
+    pull(quartile)
 }
 ```
 
@@ -466,7 +467,7 @@ pull(quartile)
 and to test:
 
 ```{r }
-get_quartiles(heart2,"age_")
+get_quartiles(heart2, "age_")
 ```
 
  
@@ -487,9 +488,10 @@ pull just the `value` column. This is sufficiently like the
 previous one that I think we can write a function right away:
 
 ```{r }
-get_categories=function(d,x) {
-d %>% filter(vname==x) %>%
-pull(value)  
+get_categories <- function(d, x) {
+  d %>%
+    filter(vname == x) %>%
+    pull(value)
 }
 get_categories(heart3, "electro")
 ```
@@ -499,15 +501,15 @@ All right, setup, using my usual habit of plural names, and using
 those functions we just wrote: 
 
 ```{r }
-sexes=get_categories(heart3,"sex")
-pain.types=get_categories(heart3,"pain.type")
-resting.bps=get_quartiles(heart2,"resting.bp_")
-serum.chols=get_quartiles(heart2,"serum.chol_")
-max.hrs=get_quartiles(heart2,"max.hr_")
-oldpeaks=get_quartiles(heart2,"oldpeak_")
-slopes=get_categories(heart3,"slope")
-coloreds=get_quartiles(heart2,"colored_")
-thals=get_categories(heart3,"thal")
+sexes <- get_categories(heart3, "sex")
+pain.types <- get_categories(heart3, "pain.type")
+resting.bps <- get_quartiles(heart2, "resting.bp_")
+serum.chols <- get_quartiles(heart2, "serum.chol_")
+max.hrs <- get_quartiles(heart2, "max.hr_")
+oldpeaks <- get_quartiles(heart2, "oldpeak_")
+slopes <- get_categories(heart3, "slope")
+coloreds <- get_quartiles(heart2, "colored_")
+thals <- get_categories(heart3, "thal")
 ```
 
  
@@ -515,9 +517,11 @@ thals=get_categories(heart3,"thal")
 All combos of all of those (and there will be a lot of those):
 
 ```{r }
-heart.new=crossing(sex=sexes,pain.type=pain.types,resting.bp=resting.bps,
-serum.chol=serum.chols,max.hr=max.hrs,oldpeak=oldpeaks,slope=slopes,
-colored=coloreds,thal=thals)
+heart.new <- crossing(
+  sex = sexes, pain.type = pain.types, resting.bp = resting.bps,
+  serum.chol = serum.chols, max.hr = max.hrs, oldpeak = oldpeaks, slope = slopes,
+  colored = coloreds, thal = thals
+)
 heart.new
 ```
 
@@ -539,7 +543,7 @@ Solution
 
 Get the predictions, which is less scary than it seems:
 ```{r }
-p=predict(heart.3,heart.new,type="response")
+p <- predict(heart.3, heart.new, type = "response")
 ```
 
          
@@ -547,7 +551,7 @@ p=predict(heart.3,heart.new,type="response")
 and the easiest way to add these to `heart.new` is this:
 
 ```{r }
-heart.new %>% mutate(pred=p) -> heart.new
+heart.new %>% mutate(pred = p) -> heart.new
 ```
 
  
@@ -574,7 +578,7 @@ Solution
 
 This can be done in one step:
 ```{r }
-heart.new %>% filter(pred==max(pred))
+heart.new %>% filter(pred == max(pred))
 ```
 
          
@@ -583,8 +587,8 @@ or if you didn't think of that, you can find the maximum first, and
 then display the rows with predictions close to it:
 
 ```{r }
-heart.new %>% summarize(m=max(pred))
-heart.new %>% filter(pred>0.98)
+heart.new %>% summarize(m = max(pred))
+heart.new %>% filter(pred > 0.98)
 ```
 
  
@@ -592,7 +596,7 @@ heart.new %>% filter(pred>0.98)
 or even find *which* row has the maximum, and then display that row:
 
 ```{r }
-heart.new %>% summarize(row=which.max(pred))
+heart.new %>% summarize(row = which.max(pred))
 heart.new %>% slice(1398)
 ```
 
@@ -601,7 +605,7 @@ heart.new %>% slice(1398)
 or sort the rows by `pred`, descending, and display the top few:
 
 ```{r }
-heart.new %>% arrange(desc(pred)) %>% print(n=8)
+heart.new %>% arrange(desc(pred)) %>% print(n = 8)
 ```
 
  

@@ -25,8 +25,8 @@ Solution
 
 These are aligned columns with spaces in between, so we need `read_table`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/stressedmice.txt"
-mice=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/stressedmice.txt"
+mice <- read_table(my_url)
 mice
 ```
 
@@ -54,7 +54,7 @@ Solution
 
 This:
 ```{r artichoke}
-ggplot(mice, aes(x=Environment, y=Time))+geom_boxplot()
+ggplot(mice, aes(x = Environment, y = Time)) + geom_boxplot()
 ```
 
      
@@ -104,7 +104,7 @@ think about is how R organizes the groups for
 prove that the mean `Time` is *less* for
 `Enriched` than for `Standard`, so we need `alternative="less"`:
 ```{r }
-with(mice,t.test(Time~Environment,alternative="less"))
+with(mice, t.test(Time ~ Environment, alternative = "less"))
 ```
 
      
@@ -112,7 +112,7 @@ with(mice,t.test(Time~Environment,alternative="less"))
 A common clue that you have the wrong alternative hypothesis is a P-value coming out close to *1*, which is what you would have gotten from something like this:
 
 ```{r }
-with(mice,t.test(Time~Environment,alternative="greater"))
+with(mice, t.test(Time ~ Environment, alternative = "greater"))
 ```
 
      
@@ -175,8 +175,8 @@ chance. So I do not see a problem.
 Extra: another way to think about this is normal quantile plots to assess
 normality within each group. This uses the facetting trick to get a separate normal quantile plot for each `Environment`:
 ```{r }
-ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
-facet_wrap(~Environment, scales="free")
+ggplot(mice, aes(sample = Time)) + stat_qq() + stat_qq_line() +
+  facet_wrap(~Environment, scales = "free")
 ```
 
      
@@ -194,8 +194,8 @@ at all.
 What happens if we change the shape of the plots?
 
 ```{r }
-ggplot(mice, aes(sample=Time))+stat_qq()+stat_qq_line()+
-facet_wrap(~Environment, scales="free", ncol=1)
+ggplot(mice, aes(sample = Time)) + stat_qq() + stat_qq_line() +
+  facet_wrap(~Environment, scales = "free", ncol = 1)
 ```
 
      

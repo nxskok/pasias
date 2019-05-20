@@ -20,8 +20,8 @@ Solution
 
 As in the hint:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
-athletes=read_tsv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes <- read_tsv(my_url)
 athletes
 ```
 
@@ -58,7 +58,7 @@ Solution
 
 Use `cbind` to glue the two columns together:
 ```{r }
-response=with(athletes,cbind(Ht,Wt))
+response <- with(athletes, cbind(Ht, Wt))
 ```
 
      
@@ -68,7 +68,7 @@ dollar sign, which you'll need to do twice (and thus the `with`
 way is more elegant):
 
 ```{r }
-response_a=cbind(athletes$Ht,athletes$Wt)
+response_a <- cbind(athletes$Ht, athletes$Wt)
 ```
 
  
@@ -87,7 +87,7 @@ what I should be calling my fitted model object, so I'm making
 something up. Don't forget to use the right names for the
 variables, and to include an interaction:
 ```{r }
-htwt.1=manova(response~Sex*Sport,data=athletes)
+htwt.1 <- manova(response ~ Sex * Sport, data = athletes)
 summary(htwt.1)
 ```
 
@@ -100,8 +100,8 @@ into `Manova`. This way, you just "print" the final result,
 rather than passing it into `summary`:
 
 ```{r error=T}
-htwt.2=lm(response~Sex*Sport,data=athletes)
-htwt.3=Manova(htwt.2)
+htwt.2 <- lm(response ~ Sex * Sport, data = athletes)
+htwt.3 <- Manova(htwt.2)
 ```
 
  
@@ -124,7 +124,7 @@ significant. (This is what I meant by "briefly.")
 To do that, in each case, replace the `*` with a `+`, or use
 `update`. Most of those work:
 ```{r }
-htwt.4=manova(response~Sex+Sport,data=athletes)
+htwt.4 <- manova(response ~ Sex + Sport, data = athletes)
 summary(htwt.4)
 ```
 
@@ -133,7 +133,7 @@ summary(htwt.4)
 or
 
 ```{r error=T}
-htwt.5=update(htwt.1,.~.-Sex:Sport)
+htwt.5 <- update(htwt.1, . ~ . - Sex:Sport)
 ```
 
  
@@ -144,8 +144,8 @@ that happened to you, try it another way.
 or, with `Manova`, the same two ways:
 
 ```{r }
-htwt.6=lm(response~Sex+Sport,data=athletes)
-htwt.7=Manova(htwt.6)
+htwt.6 <- lm(response ~ Sex + Sport, data = athletes)
+htwt.7 <- Manova(htwt.6)
 htwt.7
 ```
 
@@ -154,8 +154,8 @@ htwt.7
 or
 
 ```{r }
-htwt.8=update(htwt.2,.~.-Sex:Sport)
-htwt.9=Manova(htwt.8)
+htwt.8 <- update(htwt.2, . ~ . - Sex:Sport)
+htwt.9 <- Manova(htwt.8)
 htwt.9
 ```
 
@@ -227,7 +227,7 @@ distinguish a lot of, so it's best to limit this (if you use it at
 all) to gender.
 With that in mind, I would go for this one:
 ```{r }
-ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport,shape=Sex))+geom_point()
+ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, shape = Sex)) + geom_point()
 ```
 
      
@@ -239,19 +239,19 @@ variable. It will try to draw the graph, but will give you a warning,
 such as these:
 
 ```{r }
-ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport,size=Sex))+geom_point()
+ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, size = Sex)) + geom_point()
 ```
 
      
 
 ```{r }
-ggplot(athletes,aes(x=Ht,y=Wt,shape=Sport,size=Sex))+geom_point()
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, size = Sex)) + geom_point()
 ```
 
      
 
 ```{r }
-ggplot(athletes,aes(x=Ht,y=Wt,shape=Sport,colour=Sex))+geom_point()
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point()
 ```
 
      
@@ -283,8 +283,8 @@ shapes manually if you must have them''. I was wondering how you can
 avoid that. Here's how:
 
 ```{r }
-ggplot(athletes,aes(x=Ht,y=Wt,shape=Sport,colour=Sex))+geom_point()+
-scale_shape_manual(values=1:10)
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() +
+  scale_shape_manual(values = 1:10)
 ```
 
      
@@ -301,8 +301,8 @@ at the bottom. You can even use regular letters, but you have to refer
 to them by numeric code:
 
 ```{r }
-ggplot(athletes,aes(x=Ht,y=Wt,shape=Sport,colour=Sex))+geom_point()+
-scale_shape_manual(values=c(66,70,71,78,82,83,52,84,3,87))
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() +
+  scale_shape_manual(values = c(66, 70, 71, 78, 82, 83, 52, 84, 3, 87))
 ```
 
      

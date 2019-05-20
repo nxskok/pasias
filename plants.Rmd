@@ -36,8 +36,8 @@ at the data file, which of course you did (didn't you?), you saw
 that the data values were aligned by columns with multiple spaces
 between them:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/disease.txt"
-tbl=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/disease.txt"
+tbl <- read_table(my_url)
 tbl
 ```
 
@@ -85,7 +85,7 @@ They are frequencies in disease-location combinations, so
 I'll call the column of "what's different" `disloc`. Feel
 free to call it `temp` for now if you prefer:
 ```{r }
-(tbl %>% gather(disloc,frequency,px:ay) -> tbl.2)
+(tbl %>% gather(disloc, frequency, px:ay) -> tbl.2)
 ```
 
  
@@ -93,7 +93,7 @@ free to call it `temp` for now if you prefer:
 This also works ("gather together everything but `Species`"):
 
 ```{r }
-(tbl %>% gather(disloc,frequency,-Species) -> tbl.2)
+(tbl %>% gather(disloc, frequency, -Species) -> tbl.2)
 ```
 
  
@@ -126,7 +126,7 @@ Solution
 This means splitting up `disloc` into two separate columns,
 splitting after the first character, thus:
 ```{r }
-(tbl.2 %>% separate(disloc,c("disease","location"),1) -> tbl.3)
+(tbl.2 %>% separate(disloc, c("disease", "location"), 1) -> tbl.3)
 ```
 
  
@@ -151,7 +151,7 @@ Solution
 
 
 ```{r }
-tbl.4=xtabs(frequency~Species+disease+location,data=tbl.3)
+tbl.4 <- xtabs(frequency ~ Species + disease + location, data = tbl.3)
 tbl.4
 ```
 
@@ -176,7 +176,7 @@ Solution
 
 This:
 ```{r }
-ftable(tbl.4)  
+ftable(tbl.4)
 ```
 
  
@@ -203,8 +203,8 @@ First, fit a model predicting frequency from everything, including all
 the interactions. (The reason for doing it this way will become clear later):
 
 ```{r }
-model.1=glm(frequency~Species*location*disease,data=tbl.3,family="poisson")
-drop1(model.1,test="Chisq")
+model.1 <- glm(frequency ~ Species * location * disease, data = tbl.3, family = "poisson")
+drop1(model.1, test = "Chisq")
 ```
 
  
@@ -231,8 +231,8 @@ Let's get rid of that three-way interaction. This is another use for
 (to make small changes to a big model):
 
 ```{r }
-model.2=update(model.1,.~.-Species:location:disease)
-drop1(model.2,test="Chisq")
+model.2 <- update(model.1, . ~ . - Species:location:disease)
+drop1(model.2, test = "Chisq")
 ```
 
  
@@ -247,8 +247,8 @@ so out it comes. I did some copying and pasting, but I had to remember
 which model I was working with and what I was removing:
 
 ```{r }
-model.3=update(model.2,.~.-location:disease)
-drop1(model.3,test="Chisq")  
+model.3 <- update(model.2, . ~ . - location:disease)
+drop1(model.3, test = "Chisq")
 ```
 
  
@@ -257,8 +257,8 @@ drop1(model.3,test="Chisq")
 `Species:location` will have to stay:
 
 ```{r }
-model.4=update(model.3,.~.-Species:disease)
-drop1(model.4,test="Chisq")  
+model.4 <- update(model.3, . ~ . - Species:disease)
+drop1(model.4, test = "Chisq")
 ```
 
  
@@ -269,8 +269,8 @@ effect. So the only candidate for removal now is `disease`: not
 significant, out it comes:
 
 ```{r }
-model.5=update(model.4,.~.-disease)
-drop1(model.5,test="Chisq")  
+model.5 <- update(model.4, . ~ . - disease)
+drop1(model.5, test = "Chisq")
 ```
 
  
@@ -283,7 +283,7 @@ else. To see how, we make a contingency table of species by location
 (totalling up over disease status, since that is not significant):
 
 ```{r }
-xtabs(frequency~Species+location,data=tbl.3)  
+xtabs(frequency ~ Species + location, data = tbl.3)
 ```
 
  
@@ -311,11 +311,11 @@ disease. For example, if the `disease:Species` table had looked
 like this:
 
 ```{r }
-disease=c("a","a","p","p")
-Species=c("A","B","A","B")
-frequency=c(10,50,30,30)
-xx=data.frame(disease,Species,frequency)
-xtabs(frequency~disease+Species)
+disease <- c("a", "a", "p", "p")
+Species <- c("A", "B", "A", "B")
+frequency <- c(10, 50, 30, 30)
+xx <- data.frame(disease, Species, frequency)
+xtabs(frequency ~ disease + Species)
 ```
 
  
@@ -325,8 +325,8 @@ it's present less than 40\% of the time. So in this one there ought to be a
 significant association between disease and species:
 
 ```{r }
-xx.1=glm(frequency~disease*Species,data=xx,family="poisson")
-drop1(xx.1,test="Chisq")
+xx.1 <- glm(frequency ~ disease * Species, data = xx, family = "poisson")
+drop1(xx.1, test = "Chisq")
 ```
 
  

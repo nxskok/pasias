@@ -51,8 +51,8 @@ Solution
 The columns are aligned with each other but not with the headings,
 so `read_table2` it has to be:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/abortion.txt"
-abortion=read_table2(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/abortion.txt"
+abortion <- read_table2(my_url)
 abortion
 ```
 
@@ -115,7 +115,7 @@ low to high or high to low (it doesn't matter).
 `r tufte::margin_note("The        results might look different which way you go, but it won't        make any *material* difference.")` I'm going negative to
 positive. Either way, you want `Mix` in the middle:
 ```{r }
-lev=c("Neg","Mix","Pos")
+lev <- c("Neg", "Mix", "Pos")
 ```
 
        
@@ -124,8 +124,8 @@ Then use the original `attitude` plus this `lev` as
 input to `ordered`:
 
 ```{r }
-abortion = abortion %>%
-mutate(attitude.ord=ordered(attitude,lev))
+abortion <- abortion %>%
+  mutate(attitude.ord = ordered(attitude, lev))
 abortion
 ```
 
@@ -140,7 +140,7 @@ This is the easy way. To save yourself some typing, you can get the
 `attitude` levels from the data:
 
 ```{r }
-lev = abortion %>% distinct(attitude) %>% pull(attitude)
+lev <- abortion %>% distinct(attitude) %>% pull(attitude)
 lev
 ```
 
@@ -149,7 +149,7 @@ lev
 or 
 
 ```{r }
-lev2 = abortion %>% count(attitude) %>% pull(attitude)
+lev2 <- abortion %>% count(attitude) %>% pull(attitude)
 lev2
 ```
 
@@ -161,7 +161,7 @@ arranges the levels in alphabetical order, which is *not*
 sensible, so you'd need to rearrange them, like this:
 
 ```{r }
-lev3=lev2[c(2,1,3)]
+lev3 <- lev2[c(2, 1, 3)]
 lev3
 ```
 
@@ -170,8 +170,10 @@ lev3
 or, if you like working with data frames better:
 
 ```{r }
-lev4 = abortion %>% count(attitude) %>%
-slice(c(2,1,3)) %>% pull(attitude)
+lev4 <- abortion %>%
+  count(attitude) %>%
+  slice(c(2, 1, 3)) %>%
+  pull(attitude)
 lev4
 ```
 
@@ -197,8 +199,9 @@ thing. Don't forget to use your `attitude` in the proper
 order that you went to such great pains to make in the last part!
 ```{r }
 library(MASS)
-abortion.1=polr(attitude.ord~religion+education,
-data=abortion,weights=frequency)
+abortion.1 <- polr(attitude.ord ~ religion + education,
+  data = abortion, weights = frequency
+)
 ```
 
        
@@ -220,8 +223,8 @@ make sure you say what *changes*, and everything else
 (including the form of the model) will stay the same:
 
 ```{r }
-abortion.2=update(abortion.1,.~.-education)
-abortion.3=update(abortion.1,.~.-religion)
+abortion.2 <- update(abortion.1, . ~ . - education)
+abortion.3 <- update(abortion.1, . ~ . - religion)
 ```
 
  
@@ -230,10 +233,12 @@ The syntax means "take everything in the model abortion.1, and then take out edu
 If you don't like `update`, you can also copy and paste and edit:
 
 ```{r }
-abortion.2a=polr(attitude.ord~religion,
-data=abortion,weights=frequency)
-abortion.3a=polr(attitude.ord~education,
-data=abortion,weights=frequency)
+abortion.2a <- polr(attitude.ord ~ religion,
+  data = abortion, weights = frequency
+)
+abortion.3a <- polr(attitude.ord ~ education,
+  data = abortion, weights = frequency
+)
 ```
 
        
@@ -252,7 +257,7 @@ Solution
 
 I think `drop1` is easier, so let's do that first:
 ```{r dropping}
-drop1(abortion.1,test="Chisq")
+drop1(abortion.1, test = "Chisq")
 ```
 
        
@@ -273,7 +278,7 @@ First, we test `religion`, by comparing the model with it (and
 `education`, but the other way around (since the smaller model
 goes first):
 ```{r }
-anova(abortion.3,abortion.1)
+anova(abortion.3, abortion.1)
 ```
 
        
@@ -289,7 +294,7 @@ the model without `education` (but with `religion` since
 that's important):
 
 ```{r }
-anova(abortion.2,abortion.1)
+anova(abortion.2, abortion.1)
 ```
 
        
@@ -329,12 +334,12 @@ Solution
 Use either `distinct` or `count` to get the levels of
 `education` and `religion`:
 ```{r }
-educations = abortion %>% distinct(education) %>% pull(education)
-religions = abortion %>% distinct(religion) %>% pull(religion)
-new=crossing(education=educations,religion=religions)
+educations <- abortion %>% distinct(education) %>% pull(education)
+religions <- abortion %>% distinct(religion) %>% pull(religion)
+new <- crossing(education = educations, religion = religions)
 new
-pp=predict(abortion.1,new,type="p")
-cbind(new,pp)
+pp <- predict(abortion.1, new, type = "p")
+cbind(new, pp)
 ```
 
        
@@ -405,8 +410,8 @@ didn't ask you to do it.) In R, `a:b` means
 should add `education:religion` to our model and test it
 for significance:
 ```{r }
-abortion.4=update(abortion.1,.~.+education:religion)
-anova(abortion.1,abortion.4)
+abortion.4 <- update(abortion.1, . ~ . + education:religion)
+anova(abortion.1, abortion.4)
 ```
 
        
@@ -416,8 +421,8 @@ does it have on the predictions? We've done all the setup earlier, so
 we just run `predict` again on the new model:
 
 ```{r }
-pp=predict(abortion.4,new,type="p")
-cbind(new,pp)
+pp <- predict(abortion.4, new, type = "p")
+cbind(new, pp)
 ```
 
  
@@ -439,7 +444,7 @@ already too long, so I called a halt where I did.
 Again, we should tidy up after ourselves:
 
 ```{r }
-detach("package:MASS", unload=T)
+detach("package:MASS", unload = T)
 ```
 
  

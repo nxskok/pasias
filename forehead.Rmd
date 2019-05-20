@@ -23,8 +23,8 @@ Solution
 Separated by spaces, so `read_delim`:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/forehead.txt"
-instr=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/forehead.txt"
+instr <- read_delim(my_url, " ")
 instr
 ```
 
@@ -42,7 +42,7 @@ Solution
 We need the values in each group to be approximately normally
 distributed. Side-by-side boxplots will do it:
 ```{r }
-ggplot(instr,aes(x=group,y=score))+geom_boxplot()
+ggplot(instr, aes(x = group, y = score)) + geom_boxplot()
 ```
 
      
@@ -51,9 +51,9 @@ or, if you like, separate (facetted) normal quantile plots, which I
 would do this way:
 
 ```{r }
-ggplot(instr,aes(sample=score))+
-stat_qq()+stat_qq_line()+
-facet_wrap(~group,ncol=1)
+ggplot(instr, aes(sample = score)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~group, ncol = 1)
 ```
 
  
@@ -95,7 +95,7 @@ Solution
 
 The overall median first:
 ```{r }
-instr %>% summarize(med=median(score))
+instr %>% summarize(med = median(score))
 ```
 
      
@@ -108,7 +108,7 @@ median. You can count either above or below (it comes out equivalently
 either way):
 
 ```{r }
-tab=with(instr,table(group,score>87.5))
+tab <- with(instr, table(group, score > 87.5))
 tab
 ```
 
@@ -121,7 +121,7 @@ doing it by hand ("observed minus expected, squared, divided by expected"
 and all that stuff).
 
 ```{r }
-chisq.test(tab,correct=F)
+chisq.test(tab, correct = F)
 ```
 
  

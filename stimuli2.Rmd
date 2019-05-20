@@ -40,10 +40,10 @@ Solution
 
 Copied and pasted from last time:
 ```{r message=F}
-my_url="http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt"
-stimuli=read_delim(my_url," ",col_names=F)
-objects=stimuli$X1
-names(stimuli)=c("object",objects)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/stimuli.txt"
+stimuli <- read_delim(my_url, " ", col_names = F)
+objects <- stimuli$X1
+names(stimuli) <- c("object", objects)
 stimuli
 ```
 
@@ -52,7 +52,7 @@ stimuli
 That gets a data frame with the right column names. Then:
 
 ```{r }
-d = stimuli %>% dplyr::select(-1) %>% as.dist()
+d <- stimuli %>% dplyr::select(-1) %>% as.dist()
 ```
 
  
@@ -60,10 +60,10 @@ d = stimuli %>% dplyr::select(-1) %>% as.dist()
 and just to check:
 
 ```{r size="tiny"}
-w=getOption("width")
-options(width=132)
+w <- getOption("width")
+options(width = 132)
 d
-options(width=w)
+options(width = w)
 ```
 
  
@@ -78,7 +78,7 @@ Solution
 
 
 ```{r }
-stimuli.1=isoMDS(d)
+stimuli.1 <- isoMDS(d)
 ```
 
      
@@ -129,7 +129,7 @@ names. I'm going to plot the names smaller). I am *not*
 naming this data frame `d`, in an attempt to avoid
 overwriting things I want to keep:
 ```{r }
-stimuli.1.d=data.frame(stimuli.1$points,names=objects)
+stimuli.1.d <- data.frame(stimuli.1$points, names = objects)
 stimuli.1.d
 ```
 
@@ -146,7 +146,7 @@ so we need either the more forgiving `data.frame`, or to turn
 
 ```{r }
 as_tibble(stimuli.1$points) %>%
-mutate(name=objects)
+  mutate(name = objects)
 ```
 
  
@@ -159,10 +159,10 @@ The points have acquired names `X1` and `X2`, as usual,
 so we have all we need:
 
 ```{r }
-ggplot(stimuli.1.d,aes(x=X1,y=X2,label=names))+
-geom_point()+
-geom_text_repel(size=2)+
-coord_fixed()
+ggplot(stimuli.1.d, aes(x = X1, y = X2, label = names)) +
+  geom_point() +
+  geom_text_repel(size = 2) +
+  coord_fixed()
 ```
 
  
@@ -236,7 +236,7 @@ Extra: another way to assess this is with a Shepard
 `r tufte::margin_note("This always      makes me think of the number 190 (now 985) bus, but that's the wrong      spelling. Spelled like this, this is also the name of the      illustrator of the original pre-Disney Winnie-the-Pooh      stories. See https://en.wikipedia.org/wiki/E.-H.-Shepard, replacing the dashes by underscores.")`
 diagram. That would go like this:
 ```{r }
-stimuli.sh=Shepard(d,stimuli.1$points)
+stimuli.sh <- Shepard(d, stimuli.1$points)
 names(stimuli.sh)
 ```
 
@@ -246,8 +246,8 @@ In here, we plot the actual distances `x` against the map
 distances `y`, making a data frame first:
 
 ```{r }
-with(stimuli.sh,data.frame(x=x,y=y)) %>%
-ggplot(aes(x=x,y=y))+geom_point()
+with(stimuli.sh, data.frame(x = x, y = y)) %>%
+  ggplot(aes(x = x, y = y)) + geom_point()
 ```
 
  
@@ -274,7 +274,7 @@ The calculation part is to figure out the stress value for a
 three-dimensional map, and compare it with the 20\% that we had
 before. `k=3` gets the three dimensions:
 ```{r }
-isoMDS(d,k=3)$stress
+isoMDS(d, k = 3)$stress
 ```
 
      
@@ -297,9 +297,9 @@ The kind of `rgl` code you'll need is something like this (not tested):
 
 ```{r eval=F}
 library(rgl)
-stimuli.2=isoMDS(d,k=3)$points
+stimuli.2 <- isoMDS(d, k = 3)$points
 plot3d(stimuli.2)
-text3d(stimuli.2,text=object.abb)
+text3d(stimuli.2, text = object.abb)
 ```
 
  

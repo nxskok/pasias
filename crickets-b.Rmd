@@ -28,8 +28,8 @@ Solution
 Nothing terribly surprising here:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/crickets2.csv"
-crickets=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/crickets2.csv"
+crickets <- read_csv(my_url)
 crickets
 ```
 
@@ -56,7 +56,7 @@ Solution
 
 Drag your mind way back to this:
 ```{r }
-t.test(pulse_rate~species,data=crickets) 
+t.test(pulse_rate ~ species, data = crickets)
 ```
 
  
@@ -78,7 +78,7 @@ Solution
 Hang onto the "pulse rate depends on species" idea and try
 that in `lm`:
 ```{r }
-pulse.0=lm(pulse_rate~species,data=crickets)
+pulse.0 <- lm(pulse_rate ~ species, data = crickets)
 summary(pulse.0)
 ```
 
@@ -99,7 +99,7 @@ before, we did the Welch-Satterthwaite test that does not assume equal
 variances. What if we do the pooled $t$-test instead?
 
 ```{r }
-t.test(pulse_rate~species,data=crickets,var.equal=T) 
+t.test(pulse_rate ~ species, data = crickets, var.equal = T)
 ```
 
  
@@ -123,8 +123,8 @@ Solution
 One of the wonderful things about `ggplot` is that doing
 the obvious thing works:
 ```{r }
-ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
-geom_point()
+ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
+  geom_point()
 ```
 
        
@@ -179,7 +179,7 @@ Solution
 This is actually a so-called "analysis of covariance model",
 which properly belongs in D29, but it's really just a regression:
 ```{r }
-pulse.1=lm(pulse_rate~species+temperature,data=crickets)
+pulse.1 <- lm(pulse_rate ~ species + temperature, data = crickets)
 summary(pulse.1)
 ```
 
@@ -236,7 +236,7 @@ allow the slopes to differ between species, you add an interaction
 between temperature and species:
 
 ```{r }
-pulse.2=lm(pulse_rate~species*temperature,data=crickets)
+pulse.2 <- lm(pulse_rate ~ species * temperature, data = crickets)
 summary(pulse.2)
 ```
 
@@ -248,7 +248,7 @@ prediction,
 compare the model with and without using `anova`:
 
 ```{r }
-anova(pulse.1,pulse.2)  
+anova(pulse.1, pulse.2)
 ```
 
  
@@ -285,8 +285,8 @@ is going on.
 for each species to our plot, thus:
 
 ```{r }
-ggplot(crickets,aes(x=temperature,y=pulse_rate,colour=species))+
-geom_point()+geom_smooth(method="lm",se=F)
+ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
+  geom_point() + geom_smooth(method = "lm", se = F)
 ```
 
  
@@ -306,7 +306,7 @@ Solution
 First, the plot of residuals against fitted values (after all,
 it *is* a regression):
 ```{r }
-ggplot(pulse.1,aes(x=.fitted,y=.resid))+geom_point()
+ggplot(pulse.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
          
@@ -323,7 +323,7 @@ around that. Perhaps the simplest is to use `pulse.1` as our
 right place:
 
 ```{r }
-ggplot(pulse.1,aes(x=crickets$temperature,y=.resid))+geom_point()
+ggplot(pulse.1, aes(x = crickets$temperature, y = .resid)) + geom_point()
 ```
 
  
@@ -336,7 +336,7 @@ boxplot. Remembering to get species from the right place again, that
 goes like this:
 
 ```{r }
-ggplot(pulse.1,aes(x=crickets$species,y=.resid))+geom_boxplot()
+ggplot(pulse.1, aes(x = crickets$species, y = .resid)) + geom_boxplot()
 ```
 
  
@@ -355,7 +355,7 @@ Is that non-normality really problematic? Well, I could look at the
 normal quantile plot of all the residuals together:
 
 ```{r }
-ggplot(pulse.1,aes(sample=.resid))+stat_qq()+stat_qq_line()
+ggplot(pulse.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
  

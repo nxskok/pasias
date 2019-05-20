@@ -19,8 +19,8 @@ data, so you can treat it as being delimited by anything you like:
 a space, or a comma (the file can also be treated as a
 `.csv`), etc.:
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/maze.txt"
-times=read_delim(myurl," ")
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/maze.txt"
+times <- read_delim(myurl, " ")
 times
 ```
 
@@ -43,7 +43,7 @@ Solution
 Count how many values are above and below 60:
 
 ```{r }
-times %>% count(time>60)
+times %>% count(time > 60)
 ```
 
  
@@ -51,7 +51,7 @@ times %>% count(time>60)
 with $n=21, p=0.5$ would produce 5 or fewer successes:
 
 ```{r }
-p=sum(dbinom(0:5,21,0.5))
+p <- sum(dbinom(0:5, 21, 0.5))
 p
 ```
 
@@ -60,7 +60,7 @@ p
 or if you prefer count upwards from 16:
 
 ```{r }
-sum(dbinom(16:21,21,0.5))
+sum(dbinom(16:21, 21, 0.5))
 ```
 
  
@@ -68,7 +68,7 @@ sum(dbinom(16:21,21,0.5))
 and double it to get a two-sided P-value:
 
 ```{r }
-2*p  
+2 * p
 ```
 
  
@@ -123,7 +123,7 @@ name from that data frame of data to test the median of, and a
 null median (which defaults to 0 if you omit it):
 ```{r }
 library(smmr)
-sign_test(times,time,60)
+sign_test(times, time, 60)
 ```
 
      
@@ -145,7 +145,7 @@ requires as input a *column* of values (extracted from the data
 frame) and a null median, thus:
 
 ```{r }
-with(times, sign_test0(time,60))
+with(times, sign_test0(time, 60))
 ```
 
  
@@ -167,7 +167,7 @@ Solution
 
 Try it and see:
 ```{r }
-pval_sign(60,times,time)
+pval_sign(60, times, time)
 ```
 
      
@@ -178,7 +178,7 @@ Alternatively, there is also this, which needs a null median and a
 *column* as input:
 
 ```{r }
-with(times, pval_sign0(60,time))
+with(times, pval_sign0(60, time))
 ```
 
  
@@ -209,8 +209,8 @@ expect to be inside), so sensible values to try for the upper end of
 the interval would be between 50 and 60:
 
 ```{r }
-pval_sign(58,times,time)
-pval_sign(55,times,time)
+pval_sign(58, times, time)
+pval_sign(55, times, time)
 ```
 
  
@@ -220,10 +220,10 @@ further in similar fashion, but I thought I would try a whole bunch of null
 medians all at once. That goes like this:
 
 ```{r }
-meds=seq(55,58,0.25)
+meds <- seq(55, 58, 0.25)
 meds
-pvals=map_dbl(meds,pval_sign,times,time)
-data.frame(meds,pvals)
+pvals <- map_dbl(meds, pval_sign, times, time)
+data.frame(meds, pvals)
 ```
 
  
@@ -255,8 +255,8 @@ Tidyverse-flavoured code, with the `map_dbl` inside a
 `mutate` and the data frame created as we go:
 
 ```{r }
-tibble(meds=seq(55,58,0.25)) %>%
-mutate(pvals=map_dbl(meds,pval_sign,times,time)) 
+tibble(meds = seq(55, 58, 0.25)) %>%
+  mutate(pvals = map_dbl(meds, pval_sign, times, time))
 ```
 
  
@@ -267,8 +267,8 @@ need is a pair of values for the median: one inside the interval and
 one outside. Let's try 40 and 50:
 
 ```{r }
-pval_sign(40,times,time)
-pval_sign(50,times,time)
+pval_sign(40, times, time)
+pval_sign(50, times, time)
 ```
 
  
@@ -282,7 +282,7 @@ uphill, and therefore crosses 0.05 somewhere. So my next guess is
 halfway between the two values I tried before:
 
 ```{r }
-pval_sign(45,times,time)
+pval_sign(45, times, time)
 ```
 
  
@@ -292,7 +292,7 @@ bottom end of the interval is that it's between 40 and 45. So next, I
 try halfway between *those*:
 
 ```{r }
-pval_sign(42.5,times,time)
+pval_sign(42.5, times, time)
 ```
 
  
@@ -317,22 +317,22 @@ going around. It's a `while` loop: keep going while something
 is true. Here's how it goes:
 
 ```{r }
-lo=40
-hi=50
-while(abs(hi-lo)>0.1) {
-try=(hi+lo)/2
-ptry=pval_sign(try,times,time)
-print(c(try,ptry))
-if (ptry<0.05) {
-lo=try
-} else {
-hi=try
-}
+lo <- 40
+hi <- 50
+while (abs(hi - lo) > 0.1) {
+  try <- (hi + lo) / 2
+  ptry <- pval_sign(try, times, time)
+  print(c(try, ptry))
+  if (ptry < 0.05) {
+    lo <- try
+  } else {
+    hi <- try
+  }
 }
 lo
-pval_sign(lo,times,time)
+pval_sign(lo, times, time)
 hi
-pval_sign(hi,times,time)
+pval_sign(hi, times, time)
 ```
 
  
@@ -354,10 +354,10 @@ Likewise, you can use the function with a zero on its name and feed it
 a column rather than a data frame and a column name:
 
 ```{r }
-meds=seq(55,58,0.25)
+meds <- seq(55, 58, 0.25)
 meds
-pvals=map_dbl(meds,~with(times, pval_sign0(.,time)))
-data.frame(meds,pvals)
+pvals <- map_dbl(meds, ~ with(times, pval_sign0(., time)))
+data.frame(meds, pvals)
 ```
 
  
@@ -371,7 +371,7 @@ error thing with `map_dbl`, but I chose to rewrite it with the
 bisection idea, because I thought that would be more accurate.
 
 ```{r }
-ci_median(times,time)
+ci_median(times, time)
 ```
 
  
@@ -386,7 +386,7 @@ If you want some other confidence level, you add `conf.level`
 on the end, as you would for `t.test`:
 
 ```{r }
-ci_median(times,time,conf.level=0.75)
+ci_median(times, time, conf.level = 0.75)
 ```
 
  
@@ -399,7 +399,7 @@ optional confidence level:
 
 ```{r }
 with(times, ci_median0(time))
-with(times, ci_median0(time,conf.level=0.75))
+with(times, ci_median0(time, conf.level = 0.75))
 ```
 
  

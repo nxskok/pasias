@@ -27,8 +27,8 @@ Solution
 
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/ha2.txt"
-ha=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/ha2.txt"
+ha <- read_delim(my_url, " ")
 ha
 ```
 
@@ -50,7 +50,7 @@ Solution
 This:
 
 ```{r }
-ha.1=glm(factor(second)~anger+anxiety, family="binomial",data=ha)
+ha.1 <- glm(factor(second) ~ anger + anxiety, family = "binomial", data = ha)
 summary(ha.1)
 ```
 
@@ -91,8 +91,8 @@ opposed to calculating something like quartiles from the data), so
 we might as well just type them in.
 Step 1 is to save them (my preference is under plural names):
 ```{r }
-anxieties=c(40,50,60)
-angers=c("y","n")
+anxieties <- c(40, 50, 60)
+angers <- c("y", "n")
 ```
 
      
@@ -101,7 +101,7 @@ Step 2 is to make a data frame of combinations using
 `crossing`. I'll call mine `new`:
 
 ```{r }
-new=crossing(anxiety=anxieties, anger=angers)
+new <- crossing(anxiety = anxieties, anger = angers)
 new
 ```
 
@@ -112,7 +112,7 @@ the fitted model, the new data frame that we just made, and something
 to make the predictions be probabilities:
 
 ```{r }
-p=predict(ha.1,new,type="response")
+p <- predict(ha.1, new, type = "response")
 ```
 
  
@@ -122,7 +122,7 @@ created. `cbind` is easiest, since we don't know what kind of
 thing `p` might be, and `bind_cols` is pickier:
 
 ```{r }
-cbind(new,p)
+cbind(new, p)
 ```
 
  
@@ -192,7 +192,7 @@ P-values.
 the probability of a second heart attack. The pattern is clear
 enough even with this small data set. Here's a visual:
 ```{r }
-ggplot(ha,aes(x=second,y=anxiety))+geom_boxplot()
+ggplot(ha, aes(x = second, y = anxiety)) + geom_boxplot()
 ```
 
      
@@ -216,7 +216,7 @@ Another way of seeing that is a visual, which would be a side-by-side
 bar chart:
 
 ```{r }
-ggplot(ha,aes(x=anger,fill=second))+geom_bar(position="dodge")
+ggplot(ha, aes(x = anger, fill = second)) + geom_bar(position = "dodge")
 ```
 
  
@@ -229,7 +229,7 @@ difference, even though it points the way we would have guessed, is
 not large enough to be significant:
 
 ```{r }
-with(ha,table(anger,second))
+with(ha, table(anger, second))
 ```
 
  

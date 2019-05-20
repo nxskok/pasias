@@ -24,8 +24,8 @@ Solution
 A `.csv`, so the usual for that:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/coasters.csv"
-coasters=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/coasters.csv"
+coasters <- read_csv(my_url)
 coasters
 ```
 
@@ -58,8 +58,8 @@ of work organizing where the labels sit relative to the points,
 which is time you probably don't want to spend.) Thus:
 ```{r }
 library(ggrepel)
-ggplot(coasters,aes(x=drop,y=duration,label=coaster_name))+
-geom_point()+geom_text_repel()+geom_smooth(method="lm",se=F)
+ggplot(coasters, aes(x = drop, y = duration, label = coaster_name)) +
+  geom_point() + geom_text_repel() + geom_smooth(method = "lm", se = F)
 ```
 
        
@@ -128,10 +128,10 @@ you want to, `augment` from `broom` is the
 smoothest way to go:
 ```{r }
 library(broom)
-duration.1=lm(duration~drop,data=coasters) 
-augment(duration.1,coasters) %>%
-select(coaster_name,duration,drop,.resid) %>%
-arrange(desc(abs(.resid)))
+duration.1 <- lm(duration ~ drop, data = coasters)
+augment(duration.1, coasters) %>%
+  select(coaster_name, duration, drop, .resid) %>%
+  arrange(desc(abs(.resid)))
 ```
 
        
@@ -150,9 +150,9 @@ to `augment` so that you have everything:
 
 ```{r }
 coasters %>%
-lm(duration~drop, data=.) %>%
-augment(coasters) %>%
-arrange(desc(abs(.resid)))
+  lm(duration ~ drop, data = .) %>%
+  augment(coasters) %>%
+  arrange(desc(abs(.resid)))
 ```
 
  

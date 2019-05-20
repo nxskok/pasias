@@ -21,8 +21,8 @@ Solution
 Look at the data first. The columns are aligned and separated by
 more than one space, so it's `read_table`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/tortoise-eggs.txt"
-tortoises=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/tortoise-eggs.txt"
+tortoises <- read_table(my_url)
 tortoises
 ```
 
@@ -43,7 +43,7 @@ Solution
 
 Something like this:
 ```{r looe}
-ggplot(tortoises,aes(x=length,y=eggs))+geom_point()+geom_smooth()
+ggplot(tortoises, aes(x = length, y = eggs)) + geom_point() + geom_smooth()
 ```
 
    
@@ -72,7 +72,7 @@ Solution
 
 
 ```{r }
-tortoises.1=lm(eggs~length,data=tortoises)
+tortoises.1 <- lm(eggs ~ length, data = tortoises)
 summary(tortoises.1)
 ```
 
@@ -95,7 +95,7 @@ The `I()` is needed because the raise-to-a-power symbol has
 a special meaning in a model formula, and we want to *not*
 use that special meaning:
 ```{r }
-tortoises.2=lm(eggs~length+I(length^2),data=tortoises)
+tortoises.2 <- lm(eggs ~ length + I(length^2), data = tortoises)
 summary(tortoises.2)
 ```
 
@@ -104,7 +104,7 @@ summary(tortoises.2)
 Another way is to use `update`:
 
 ```{r }
-tortoises.2a=update(tortoises.1,.~.+I(length^2))
+tortoises.2a <- update(tortoises.1, . ~ . + I(length^2))
 summary(tortoises.2a)
 ```
 
@@ -147,7 +147,7 @@ regression object, which is not a data frame but you can treat it as
 if it is for this:
 
 ```{r }
-ggplot(tortoises.1,aes(x=.fitted, y=.resid))+geom_point()
+ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
  
@@ -155,8 +155,8 @@ ggplot(tortoises.1,aes(x=.fitted, y=.resid))+geom_point()
 Up to you whether you put a smooth trend on it or not:
 
 ```{r }
-ggplot(tortoises.1,aes(x=.fitted, y=.resid))+geom_point()+
-geom_smooth()
+ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + geom_point() +
+  geom_smooth()
 ```
 
  
@@ -178,7 +178,7 @@ That was all I wanted, but you can certainly look at other
 plots. Normal quantile plot of the residuals:
 
 ```{r }
-ggplot(tortoises.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+ggplot(tortoises.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -194,8 +194,8 @@ is that if there is fan-out, the absolute value of the residuals will
 get bigger:
 
 ```{r }
-ggplot(tortoises.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+
-geom_smooth()
+ggplot(tortoises.1, aes(x = .fitted, y = abs(.resid))) + geom_point() +
+  geom_smooth()
 ```
 
  

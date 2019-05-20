@@ -19,8 +19,8 @@ Save the URL into a variable and then read from the URL, using
 `read_csv` because it's a `.csv` file:
 
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv"
-jays=read_csv(myurl)
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv"
+jays <- read_csv(myurl)
 jays
 ```
 
@@ -66,7 +66,7 @@ Solution
 
 I get to do this:
 ```{r size="tiny"}
-jays %>% filter(opp=="NYY") %>% print(width=Inf)
+jays %>% filter(opp == "NYY") %>% print(width = Inf)
 ```
 
  
@@ -90,8 +90,8 @@ You could also print all the columns in two or more goes, using
 `select`, for example:
 
 ```{r size="small"}
-jays %>% filter(opp=="NYY") %>% select(row:innings) %>% print(width=Inf)
-jays %>% filter(opp=="NYY") %>% select(wl:streak) %>% print(width=Inf)
+jays %>% filter(opp == "NYY") %>% select(row:innings) %>% print(width = Inf)
+jays %>% filter(opp == "NYY") %>% select(wl:streak) %>% print(width = Inf)
 ```
 
  
@@ -114,8 +114,9 @@ Solution
 Two steps, since we selecting rows *and* columns. 
 
 ```{r }
-jays %>% filter(attendance>30000) %>%
-select(c(attendance,Daynight))
+jays %>%
+  filter(attendance > 30000) %>%
+  select(c(attendance, Daynight))
 ```
 
  
@@ -124,8 +125,9 @@ Or this way, since we are selecting
 *consecutive* columns:
 
 ```{r }
-jays %>% filter(attendance>30000) %>%
-select(c(Daynight:attendance))  
+jays %>%
+  filter(attendance > 30000) %>%
+  select(c(Daynight:attendance))
 ```
 
  
@@ -137,8 +139,9 @@ result). Only two of them are night games, while the other six are day
 If you wanted to, you could automate the counting, like this:
 
 ```{r }
-jays %>% filter(attendance>30000) %>%
-count(Daynight)
+jays %>%
+  filter(attendance > 30000) %>%
+  count(Daynight)
 ```
 
  
@@ -162,9 +165,12 @@ summarizing, only the summaries find their way into the final data
 frame, so I don't need to "select out" the other variables:
 
 ```{r }
-jays %>% group_by(Daynight) %>%
-summarize(mean.att=mean(attendance),
-sd.att=sd(attendance))
+jays %>%
+  group_by(Daynight) %>%
+  summarize(
+    mean.att = mean(attendance),
+    sd.att = sd(attendance)
+  )
 ```
 
  
@@ -175,9 +181,12 @@ large outlier night attendance (opening night). Which we can also
 investigate. 
 
 ```{r }
-jays %>% group_by(Daynight) %>%
-summarize(median.att=median(attendance),
-iqr.att=IQR(attendance))
+jays %>%
+  group_by(Daynight) %>%
+  summarize(
+    median.att = median(attendance),
+    iqr.att = IQR(attendance)
+  )
 ```
 
  
@@ -187,7 +196,7 @@ the outlier that made the difference. There was another high value
 that R marked as an outlier:
 
 ```{r }
-ggplot(jays,aes(x=Daynight,y=attendance))+geom_boxplot()
+ggplot(jays, aes(x = Daynight, y = attendance)) + geom_boxplot()
 ```
 
  
@@ -200,7 +209,7 @@ of these non-normal data, is Mood's median test:
 
 ```{r }
 library(smmr)
-median_test(jays,attendance,Daynight)
+median_test(jays, attendance, Daynight)
 ```
 
  
@@ -234,9 +243,9 @@ Solution
 The best way to do this is facetted normal quantile
 plots. Remember that the facetting part goes right at the end:
 ```{r }
-ggplot(jays,aes(sample=attendance))+
-stat_qq()+stat_qq_line()+
-facet_wrap(~Daynight,ncol=1)
+ggplot(jays, aes(sample = attendance)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~Daynight, ncol = 1)
 ```
 
      

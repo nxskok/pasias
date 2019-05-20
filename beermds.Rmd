@@ -17,7 +17,7 @@ Solution
 
 First I should get rid of `MASS`, since we don't need it here:
 ```{r }
-detach("package:MASS", unload=T)
+detach("package:MASS", unload = T)
 ```
 
        
@@ -26,13 +26,13 @@ frame to get the beers in *rows* (`dist` works on
 distances between rows), then feed everything but the student IDs
 into `dist`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
-beer=read_table2(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
+beer <- read_table2(my_url)
 beer
-d = beer %>%
-dplyr::select(-student) %>%
-t() %>%
-dist()
+d <- beer %>%
+  dplyr::select(-student) %>%
+  t() %>%
+  dist()
 ```
 
 
@@ -49,7 +49,7 @@ Solution
 
 ```{r }
 library(MASS)
-beer.1=isoMDS(d)
+beer.1 <- isoMDS(d)
 ```
 
      
@@ -86,11 +86,11 @@ not the 32 students! The names of the columns of the data frame
 include an identifier column for the students, so skip the first one:
 
 ```{r }
-beer_names = beer %>% dplyr::select(-student) %>% names()
+beer_names <- beer %>% dplyr::select(-student) %>% names()
 beer_names
-data.frame(beer.1$points,beer=beer_names) %>%
-ggplot(aes(x=X1,y=X2,label=beer))+
-geom_point()+geom_text_repel()
+data.frame(beer.1$points, beer = beer_names) %>%
+  ggplot(aes(x = X1, y = X2, label = beer)) +
+  geom_point() + geom_text_repel()
 ```
 
      
@@ -105,7 +105,7 @@ Solution
 I think Sam Adams and Gordon Biersch, right in the middle of the
 map. We can pull them out by name:
 ```{r }
-beer %>% dplyr::select(SamAdams,GordonB) %>% print(n=Inf)
+beer %>% dplyr::select(SamAdams, GordonB) %>% print(n = Inf)
 ```
 
      
@@ -118,8 +118,8 @@ the ratings are whole numbers, they are likely to be duplicated, so I
 "jitter" them as I plot them, to prevent overplotting:
 
 ```{r adkjalkjdsg}
-ggplot(beer,aes(x=SamAdams,y=GordonB))+geom_jitter()+
-geom_abline(intercept=0,slope=1)
+ggplot(beer, aes(x = SamAdams, y = GordonB)) + geom_jitter() +
+  geom_abline(intercept = 0, slope = 1)
 ```
 
  
@@ -129,8 +129,8 @@ ratings of some far-apart beers, and see whether it looks any
 different, for example `Becks` and `SierraN`:
 
 ```{r adkjalkjdsh}
-ggplot(beer,aes(x=Becks,y=SierraN))+geom_jitter()+
-geom_abline(intercept=0,slope=1)
+ggplot(beer, aes(x = Becks, y = SierraN)) + geom_jitter() +
+  geom_abline(intercept = 0, slope = 1)
 ```
 
  
@@ -139,7 +139,7 @@ Not much. I was expecting something a lot more impressive. Another way
 is to summarize the rating *differences* for the pairs of beers:
 
 ```{r }
-diff=with(beer,SamAdams-GordonB) 
+diff <- with(beer, SamAdams - GordonB)
 summary(diff)
 ```
 
@@ -148,7 +148,7 @@ summary(diff)
 and
 
 ```{r }
-diff=with(beer,Becks-SierraN)
+diff <- with(beer, Becks - SierraN)
 summary(diff)
 ```
 

@@ -22,8 +22,8 @@ Solution
 
 `read_csv` is the thing this time:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/Pizza.csv"
-pizza=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/Pizza.csv"
+pizza <- read_csv(my_url)
 pizza
 ```
 
@@ -55,7 +55,7 @@ packages too, and then you read in a file like this:
 
 ```{r }
 library(rio)
-pizza3=import(my_url)
+pizza3 <- import(my_url)
 head(pizza3)
 ```
 
@@ -74,8 +74,8 @@ I originally had the data as an Excel spreadsheet, but `import`
 will gobble up that pizza too:
 
 ```{r }
-my_other_url="http://www.utsc.utoronto.ca/~butler/d29/Pizza_E29.xls"
-pizza4=import(my_other_url)
+my_other_url <- "http://www.utsc.utoronto.ca/~butler/d29/Pizza_E29.xls"
+pizza4 <- import(my_other_url)
 head(pizza4)
 ```
 
@@ -94,8 +94,8 @@ Solution
 
 All the variable names start with Capital Letters:
 ```{r alskhslafkhlksfhsasvvvv}
-ggplot(pizza,aes(x=Fat,y=Calories))+geom_point()+
-geom_smooth()
+ggplot(pizza, aes(x = Fat, y = Calories)) + geom_point() +
+  geom_smooth()
 ```
 
        
@@ -116,7 +116,7 @@ Solution
 
 `lm`, with `summary`:
 ```{r }
-pizza.1=lm(Calories~Fat,data=pizza)
+pizza.1 <- lm(Calories ~ Fat, data = pizza)
 summary(pizza.1)
 ```
 
@@ -140,7 +140,7 @@ Solution
 Use the regression object `pizza.1`:
 
 ```{r }
-ggplot(pizza.1,aes(x=.fitted,y=.resid))+geom_point()+geom_smooth()
+ggplot(pizza.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ```
 
  
@@ -155,7 +155,7 @@ That's all you needed, but it is also worth looking at a normal
 quantile plot of the residuals:
 
 ```{r }
-ggplot(pizza.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+ggplot(pizza.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -165,7 +165,7 @@ A bit skewed to the left (the low ones are too low).
 Also a plot of the absolute residuals, for assessing fan-out:
 
 ```{r }
-ggplot(pizza.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
+ggplot(pizza.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
  
@@ -177,7 +177,7 @@ Another way of assessing curvedness is to fit a squared term anyway,
 and see whether it is significant:
 
 ```{r }
-pizza.2=update(pizza.1,.~.+I(Fat^2))
+pizza.2 <- update(pizza.1, . ~ . + I(Fat^2))
 summary(pizza.2)
 ```
 
@@ -204,11 +204,11 @@ returned with (and not, for example, in the mean calorie content
 for *all* brands of pizza that have 12 grams of fat per
 serving). Thus:
 ```{r }
-newfat=c(12,20)
-new=tibble(Fat=newfat)
+newfat <- c(12, 20)
+new <- tibble(Fat = newfat)
 new
-preds=predict(pizza.1,new,interval="p")
-cbind(new,preds)
+preds <- predict(pizza.1, new, interval = "p")
+cbind(new, preds)
 ```
 
        
@@ -250,8 +250,8 @@ isn't much to choose. For the confidence intervals for the mean
 calories of *all* brands with these fat contents, the picture is clearer:
 
 ```{r }
-preds=predict(pizza.1,new,interval="c")
-cbind(new,preds)
+preds <- predict(pizza.1, new, interval = "c")
+cbind(new, preds)
 ```
 
  

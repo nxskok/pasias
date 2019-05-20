@@ -34,8 +34,8 @@ Solution
 
 The nature of the file means that you need `read_table2`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/spiders.txt"
-spider=read_table2(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/spiders.txt"
+spider <- read_table2(my_url)
 spider
 ```
 
@@ -55,7 +55,7 @@ Solution
 
 
 ```{r starcross}
-ggplot(spider,aes(x=Spiders,y=Grain.size))+geom_boxplot()
+ggplot(spider, aes(x = Spiders, y = Grain.size)) + geom_boxplot()
 ```
 
      
@@ -90,7 +90,7 @@ so we need to make a factor version of it first. I'm going to live on
 the edge and overwrite everything:
 
 ```{r }
-spider = spider %>% mutate(Spiders=factor(Spiders))
+spider <- spider %>% mutate(Spiders = factor(Spiders))
 spider
 ```
 
@@ -104,7 +104,7 @@ response-with-a-number, so I still have the Capital Letter. Any choice
 of name is good, though.
 
 ```{r }
-Spiders.1=glm(Spiders~Grain.size,family="binomial",data=spider)
+Spiders.1 <- glm(Spiders ~ Grain.size, family = "binomial", data = spider)
 summary(Spiders.1)
 ```
 
@@ -146,8 +146,8 @@ Something like this. I like to save all the values first, and
 *then* make a data frame of them, but you can do it in one
 go if you prefer: 
 ```{r }
-Grain.sizes=c(0.2,0.5,0.8,1.1)
-spider.new=tibble(Grain.size=Grain.sizes)
+Grain.sizes <- c(0.2, 0.5, 0.8, 1.1)
+spider.new <- tibble(Grain.size = Grain.sizes)
 spider.new
 ```
 
@@ -156,12 +156,12 @@ spider.new
 Another way to make the data frame of values to predict from  is directly, using `tribble`:
 
 ```{r }
-new=tribble(
-~Grain.size,
-0.2,
-0.5,
-0.8,
-1.1
+new <- tribble(
+  ~Grain.size,
+  0.2,
+  0.5,
+  0.8,
+  1.1
 )
 new
 ```
@@ -177,8 +177,8 @@ into a data frame).
 Now for the actual predictions. Get the predicted probabilities first, using `response` to get probabilities rather than something else, then put them next to the values being predicted for (using `cbind` because my `pred.prob` below is a `matrix` rather than a data frame:
 
 ```{r }
-pred.prob=predict(Spiders.1,spider.new,type="response")
-cbind(spider.new,pred.prob)
+pred.prob <- predict(Spiders.1, spider.new, type = "response")
+cbind(spider.new, pred.prob)
 ```
 
  
@@ -206,8 +206,8 @@ go up linearly. In fact, if you leave out the `type` on the
 `predict`, log-odds is what you get:
 
 ```{r }
-pred.log.odds=predict(Spiders.1,spider.new)
-cbind(spider.new,pred.log.odds)
+pred.log.odds <- predict(Spiders.1, spider.new)
+cbind(spider.new, pred.log.odds)
 ```
 
  
@@ -222,7 +222,7 @@ Log-odds are hard to interpret. Odds are a bit easier, and to get
 them, we have to `exp` the log-odds:
 
 ```{r }
-cbind(spider.new,odds=exp(pred.log.odds))
+cbind(spider.new, odds = exp(pred.log.odds))
 ```
 
  

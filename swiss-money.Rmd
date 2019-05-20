@@ -33,8 +33,8 @@ Solution
 
 Check the data file first. It's aligned in columns, thus:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
-swiss=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/swiss1.txt"
+swiss <- read_table(my_url)
 swiss
 ```
 
@@ -52,8 +52,8 @@ Solution
 
 Small-m `manova` will do here:
 ```{r }
-response=with(swiss,cbind(length,left,right,bottom,top,diag))
-swiss.1=manova(response~status,data=swiss)
+response <- with(swiss, cbind(length, left, right, bottom, top, diag))
+swiss.1 <- manova(response ~ status, data = swiss)
 summary(swiss.1)
 ```
 
@@ -63,8 +63,8 @@ You might be wondering whether you had to go to all that trouble to
 make the response variable. Would this work?
 
 ```{r error=T}
-response2 = swiss %>% select(length:diag)
-swiss.1a=manova(response2~status,data=swiss)
+response2 <- swiss %>% select(length:diag)
+swiss.1a <- manova(response2 ~ status, data = swiss)
 ```
 
  
@@ -85,8 +85,8 @@ thought was a list.
 This, however, works, since it turns the data frame into a matrix:
 
 ```{r }
-response4 = swiss %>% select(length:diag) %>% as.matrix() 
-swiss.2a=manova(response4~status,data=swiss)
+response4 <- swiss %>% select(length:diag) %>% as.matrix()
+swiss.2a <- manova(response4 ~ status, data = swiss)
 summary(swiss.2a)
 ```
 
@@ -117,7 +117,7 @@ grouping variable (or combination of the grouping variables)
 is the "response", and the quantitative ones are
 "explanatory":
 ```{r }
-swiss.3=lda(status~length+left+right+bottom+top+diag,data=swiss)
+swiss.3 <- lda(status ~ length + left + right + bottom + top + diag, data = swiss)
 swiss.3
 ```
 
@@ -198,8 +198,8 @@ predictions, and then `cbind` them with the original data,
 thus:
 
 ```{r }
-swiss.pred=predict(swiss.3)
-d=cbind(swiss,swiss.pred)
+swiss.pred <- predict(swiss.3)
+d <- cbind(swiss, swiss.pred)
 head(d)
 ```
 
@@ -216,7 +216,7 @@ The obvious thing is a boxplot. By examining `d` above (didn't
 you?), you saw that the LD scores were in a column called
 `LD1`:
 ```{r antioch, error=T}
-ggplot(d,aes(x=status,y=LD1))+geom_boxplot()
+ggplot(d, aes(x = status, y = LD1)) + geom_boxplot()
 ```
 
    
@@ -230,7 +230,7 @@ with unusually high LD1 score, and one genuine one with unusually
 Or you could do faceted histograms of `LD1` by `status`:
 
 ```{r }
-ggplot(d,aes(x=LD1))+geom_histogram(bins=10)+facet_grid(status~.)
+ggplot(d, aes(x = LD1)) + geom_histogram(bins = 10) + facet_grid(status ~ .)
 ```
 
  
@@ -261,7 +261,7 @@ genuine and counterfeit coins).
 As to that last point, this is easy enough to think about. A
 boxplot seems a nice way to display it:
 ```{r gtabita}
-ggplot(d,aes(y=left,x=status))+geom_boxplot()
+ggplot(d, aes(y = left, x = status)) + geom_boxplot()
 ```
 
       
@@ -272,7 +272,7 @@ counterfeit bills, but the highest value actually belongs to a genuine one.
 Compare that to `diag`:
 
 ```{r iggle}
-ggplot(d,aes(y=diag,x=status))+geom_boxplot()
+ggplot(d, aes(y = diag, x = status)) + geom_boxplot()
 ```
 
  
@@ -286,7 +286,7 @@ was already too long, but there is no difficulty in doing so.
 Everything is in the data frame I called `d`:
 
 ```{r }
-with(d, table(obs=status, pred=class))
+with(d, table(obs = status, pred = class))
 ```
 
  
@@ -308,8 +308,9 @@ combinations for which anything was observed.
 Frequency tables are usually wide, and we can make this one so by `spread`ing `pred`:
 
 ```{r }
-d %>% count(status, class) %>%
-spread(class, n)
+d %>%
+  count(status, class) %>%
+  spread(class, n)
 ```
 
  
@@ -319,8 +320,9 @@ counterfeit bills is classified correctly. That missing value is
 actually a frequency that is zero, which you can fix up thus:
 
 ```{r }
-d %>% count(status, class) %>%
-spread(class, n, fill=0)
+d %>%
+  count(status, class) %>%
+  spread(class, n, fill = 0)
 ```
 
  
@@ -331,7 +333,7 @@ It would be interesting to see what the posterior probabilities look
 like for that misclassified bill:
 
 ```{r }
-d %>% filter(status != class) 
+d %>% filter(status != class)
 ```
 
  
@@ -342,8 +344,10 @@ Are there any other bills where there is any doubt? One way to find out is to fi
 there is some doubt about whether the bill is real or fake. 0.99 seems like a very stringent cutoff, but let's try it and see:
 
 ```{r error=T}
-d %>% mutate(max.post=pmax(posterior.counterfeit,posterior.genuine)) %>%
-filter(max.post<0.99) %>% dplyr::select(-c(length:diag))
+d %>%
+  mutate(max.post = pmax(posterior.counterfeit, posterior.genuine)) %>%
+  filter(max.post < 0.99) %>%
+  dplyr::select(-c(length:diag))
 ```
 
  
@@ -363,9 +367,12 @@ it and see.) `pmax` stands for "parallel maximum", that is,
 for each row separately. This also should work:
 
 ```{r error=T}
-d %>% mutate(max.post=map2_dbl(
-posterior.counterfeit, posterior.genuine, ~max(.x, .y))) %>%
-filter(max.post<0.99) %>% select(-c(length:diag))    
+d %>%
+  mutate(max.post = map2_dbl(
+    posterior.counterfeit, posterior.genuine, ~ max(.x, .y)
+  )) %>%
+  filter(max.post < 0.99) %>%
+  select(-c(length:diag))
 ```
 
  

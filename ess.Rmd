@@ -27,8 +27,8 @@ Solution
 The obvious way. Printing it out will display some of the data
 and tell you how many rows and columns you have:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/ess.csv"
-ess=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/ess.csv"
+ess <- read_csv(my_url)
 ess
 ```
 
@@ -88,8 +88,9 @@ This seems to call for a pipeline. The major parties are numbered 1,
 `<=3`). The reference back to the last question is a hint
 to use `!is.na()`.
 ```{r }
-ess.major = ess %>% select(prtvtgb:inwtm) %>% 
-filter(prtvtgb<4,agea<999,eduyrs<40,!is.na(inwtm)) 
+ess.major <- ess %>%
+  select(prtvtgb:inwtm) %>%
+  filter(prtvtgb < 4, agea < 999, eduyrs < 40, !is.na(inwtm))
 ```
 
      
@@ -117,9 +118,10 @@ the resulting data frame. For example, I first did this (note that my
 `filter` is a lot simpler than the one above):
 
 ```{r }
-ess %>% select(prtvtgb:inwtm) %>% 
-filter(prtvtgb<4,!is.na(inwtm)) %>%
-summary()
+ess %>%
+  select(prtvtgb:inwtm) %>%
+  filter(prtvtgb < 4, !is.na(inwtm)) %>%
+  summary()
 ```
 
  
@@ -170,7 +172,7 @@ This, or something like it. `multinom` lives in package
 `nnet`, which you'll have to install first if you haven't already:
 ```{r }
 library(nnet)
-ess.1=multinom(factor(prtvtgb)~gndr+agea+eduyrs+inwtm,data=ess.major)
+ess.1 <- multinom(factor(prtvtgb) ~ gndr + agea + eduyrs + inwtm, data = ess.major)
 ```
 
      
@@ -178,7 +180,7 @@ ess.1=multinom(factor(prtvtgb)~gndr+agea+eduyrs+inwtm,data=ess.major)
 Or create a factor version of your response in the data frame first:
 
 ```{r }
-ess.major = ess.major %>% mutate(party=factor(prtvtgb))
+ess.major <- ess.major %>% mutate(party = factor(prtvtgb))
 ```
 
  
@@ -186,7 +188,7 @@ ess.major = ess.major %>% mutate(party=factor(prtvtgb))
 and then:
 
 ```{r }
-ess.1a=multinom(party~gndr+agea+eduyrs+inwtm,data=ess.major)
+ess.1a <- multinom(party ~ gndr + agea + eduyrs + inwtm, data = ess.major)
 ```
 
  
@@ -211,7 +213,7 @@ Solution
 
 I tried to give you lots of hints here:
 ```{r }
-ess.2a=step(ess.1,trace=0)
+ess.2a <- step(ess.1, trace = 0)
 ess.2a
 ```
 
@@ -258,7 +260,7 @@ model fit.  I found that gender needed to be removed, but if yours
 is different, follow through with whatever your `step` said
 to do.
 ```{r }
-ess.2=multinom(party~agea+eduyrs+inwtm,data=ess.major)
+ess.2 <- multinom(party ~ agea + eduyrs + inwtm, data = ess.major)
 ```
 
    
@@ -286,7 +288,7 @@ Solution
 
 Fit the model without `inwtm`:
 ```{r }
-ess.3=multinom(party~agea+eduyrs,data=ess.major)
+ess.3 <- multinom(party ~ agea + eduyrs, data = ess.major)
 ```
 
    
@@ -294,7 +296,7 @@ ess.3=multinom(party~agea+eduyrs,data=ess.major)
 and then use `anova` to compare them:
 
 ```{r }
-anova(ess.3,ess.2)
+anova(ess.3, ess.2)
 ```
 
  
@@ -305,7 +307,7 @@ is good, ie.\ the one *without* interview length.
 I thought `drop1` would also work here, but it appears not to:
 
 ```{r error=T}
-drop1(ess.1,test="Chisq")
+drop1(ess.1, test = "Chisq")
 ```
 
  
@@ -352,7 +354,7 @@ summary(ess.major)
 Quartiles for age are 44 and 71, and for years of education are 11 and 16:
 
 ```{r }
-new=crossing(agea=c(44,71),eduyrs=c(11,16))
+new <- crossing(agea = c(44, 71), eduyrs = c(11, 16))
 new
 ```
 
@@ -363,8 +365,8 @@ kind of prediction is that `type` may not be what you
 expect. The best model is the one I called `ess.3`:
 
 ```{r } 
-pp=predict(ess.3,new,type="probs")
-cbind(new,pp)
+pp <- predict(ess.3, new, type = "probs")
+cbind(new, pp)
 ```
 
  
@@ -420,7 +422,7 @@ quantile(ess.major$inwtm)
 and then
 
 ```{r }
-ess.new=crossing(agea=c(44,71),eduyrs=c(11,16),inwtm=c(35,50))
+ess.new <- crossing(agea = c(44, 71), eduyrs = c(11, 16), inwtm = c(35, 50))
 ess.new
 ```
 
@@ -429,8 +431,8 @@ ess.new
 and then predict *using the model that contained interview time*:
 
 ```{r }
-pp=predict(ess.2,ess.new,type="probs")
-cbind(ess.new,pp)
+pp <- predict(ess.2, ess.new, type = "probs")
+cbind(ess.new, pp)
 ```
 
  

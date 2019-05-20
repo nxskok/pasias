@@ -8,93 +8,75 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R
-## version 3.5.3
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R
-## version 3.5.3
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R
-## version 3.5.3
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R
-## version 3.5.2
+## Warning: package 'readr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R
-## version 3.5.3
+## Warning: package 'purrr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R
-## version 3.5.2
+## Warning: package 'dplyr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R
-## version 3.5.2
+## Warning: package 'stringr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R
-## version 3.5.1
+## Warning: package 'forcats' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under
-## R version 3.5.1
+## Warning: package 'survminer' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R
-## version 3.5.1
+## Warning: package 'ggpubr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R
-## version 3.5.1
+## Warning: package 'magrittr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R
-## version 3.5.1
+## Warning: package 'car' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R
-## version 3.5.1
+## Warning: package 'carData' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R
-## version 3.5.1
+## Warning: package 'ggbiplot' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R
-## version 3.5.1
+## Warning: package 'plyr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R
-## version 3.5.1
+## Warning: package 'scales' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R
-## version 3.5.1
+## Warning: package 'ggrepel' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R
-## version 3.5.2
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 
@@ -120,8 +102,8 @@ Save the URL into a variable and then read from the URL, using
 
 
 ```r
-myurl = "http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv"
-jays = read_csv(myurl)
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/jays15-home.csv"
+jays <- read_csv(myurl)
 ```
 
 ```
@@ -150,25 +132,21 @@ jays
 
 ```
 ## # A tibble: 25 x 21
-##      row  game date   box   team  venue opp  
-##    <dbl> <dbl> <chr>  <chr> <chr> <lgl> <chr>
-##  1    82     7 Monda~ boxs~ TOR   NA    TBR  
-##  2    83     8 Tuesd~ boxs~ TOR   NA    TBR  
-##  3    84     9 Wedne~ boxs~ TOR   NA    TBR  
-##  4    85    10 Thurs~ boxs~ TOR   NA    TBR  
-##  5    86    11 Frida~ boxs~ TOR   NA    ATL  
-##  6    87    12 Satur~ boxs~ TOR   NA    ATL  
-##  7    88    13 Sunda~ boxs~ TOR   NA    ATL  
-##  8    89    14 Tuesd~ boxs~ TOR   NA    BAL  
-##  9    90    15 Wedne~ boxs~ TOR   NA    BAL  
-## 10    91    16 Thurs~ boxs~ TOR   NA    BAL  
-## # ... with 15 more rows, and 14 more
-## #   variables: result <chr>, runs <dbl>,
-## #   Oppruns <dbl>, innings <dbl>, wl <chr>,
-## #   position <dbl>, gb <chr>, winner <chr>,
-## #   loser <chr>, save <chr>, `game
-## #   time` <time>, Daynight <chr>,
-## #   attendance <dbl>, streak <chr>
+##      row  game date  box   team  venue opp   result  runs Oppruns innings
+##    <dbl> <dbl> <chr> <chr> <chr> <lgl> <chr> <chr>  <dbl>   <dbl>   <dbl>
+##  1    82     7 Mond… boxs… TOR   NA    TBR   L          1       2      NA
+##  2    83     8 Tues… boxs… TOR   NA    TBR   L          2       3      NA
+##  3    84     9 Wedn… boxs… TOR   NA    TBR   W         12       7      NA
+##  4    85    10 Thur… boxs… TOR   NA    TBR   L          2       4      NA
+##  5    86    11 Frid… boxs… TOR   NA    ATL   L          7       8      NA
+##  6    87    12 Satu… boxs… TOR   NA    ATL   W-wo       6       5      10
+##  7    88    13 Sund… boxs… TOR   NA    ATL   L          2       5      NA
+##  8    89    14 Tues… boxs… TOR   NA    BAL   W         13       6      NA
+##  9    90    15 Wedn… boxs… TOR   NA    BAL   W          4       2      NA
+## 10    91    16 Thur… boxs… TOR   NA    BAL   W          7       6      NA
+## # … with 15 more rows, and 10 more variables: wl <chr>, position <dbl>,
+## #   gb <chr>, winner <chr>, loser <chr>, save <chr>, `game time` <time>,
+## #   Daynight <chr>, attendance <dbl>, streak <chr>
 ```
 
 
@@ -178,7 +156,7 @@ this runs the risk of being defeated by spreadsheet cells that contain
 spaces. I don't think there are any here, but you might run into a
 pitcher whose name has more than one word, like (Andy) Van Hekken, who
 is in the Seattle Mariners farm system.
-\marginnote{I found this by  googling, after I had scrolled past all the pages of articles about  the baseball pitcher who *lives* in a van.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I found this by  googling, after I had scrolled past all the pages of articles about  the baseball pitcher who *lives* in a van.</span>
 
 Anyway, 25 rows and 21 columns. As usual, it's a tibble, so you see 10
 rows and as many columns as will fit. This is often enough to see
@@ -246,31 +224,21 @@ jays %>% filter(opp == "NYY") %>% print(width = Inf)
 
 ```
 ## # A tibble: 3 x 21
-##     row  game date             box      team 
-##   <dbl> <dbl> <chr>            <chr>    <chr>
-## 1    92    27 Monday, May 4    boxscore TOR  
-## 2    93    28 Tuesday, May 5   boxscore TOR  
-## 3    94    29 Wednesday, May 6 boxscore TOR  
-##   venue opp   result  runs Oppruns innings
-##   <lgl> <chr> <chr>  <dbl>   <dbl>   <dbl>
-## 1 NA    NYY   W          3       1      NA
-## 2 NA    NYY   L          3       6      NA
-## 3 NA    NYY   W          5       1      NA
-##   wl    position gb    winner  loser   
-##   <chr>    <dbl> <chr> <chr>   <chr>   
-## 1 13-14        4 3.5   Dickey  Martin  
-## 2 13-15        5 4.5   Pineda  Estrada 
-## 3 14-15        3 3.5   Buehrle Sabathia
-##   save   `game time` Daynight attendance
-##   <chr>  <time>      <chr>         <dbl>
-## 1 Cecil  02:18       N             19217
-## 2 Miller 02:54       N             21519
-## 3 <NA>   02:30       N             21312
-##   streak
-##   <chr> 
-## 1 +     
-## 2 -     
-## 3 +
+##     row  game date             box      team  venue opp   result  runs
+##   <dbl> <dbl> <chr>            <chr>    <chr> <lgl> <chr> <chr>  <dbl>
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
+##   Oppruns innings wl    position gb    winner  loser    save   `game time`
+##     <dbl>   <dbl> <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>     
+## 1       1      NA 13-14        4 3.5   Dickey  Martin   Cecil  02:18      
+## 2       6      NA 13-15        5 4.5   Pineda  Estrada  Miller 02:54      
+## 3       1      NA 14-15        3 3.5   Buehrle Sabathia <NA>   02:30      
+##   Daynight attendance streak
+##   <chr>         <dbl> <chr> 
+## 1 N             19217 +     
+## 2 N             21519 -     
+## 3 N             21312 +
 ```
 
  
@@ -282,7 +250,7 @@ What I notice is that these games are all on consecutive nights
 (against the same team). This is quite common, and goes back to the
 far-off days when teams travelled by train: teams play several games
 on one visit, rather than coming back many times.
-\marginnote{Hockey is  similar: teams go on road trips, playing several different teams  before returning home. Hockey teams, though, tend to play each team  only once on a road trip: for example, a west coast team like the  Canucks might play a game in each of Toronto, Montreal, Boston and  New York on a road trip. Well, maybe three games in the New York  area: one each against the Rangers, Islanders and Devils.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Hockey is  similar: teams go on road trips, playing several different teams  before returning home. Hockey teams, though, tend to play each team  only once on a road trip: for example, a west coast team like the  Canucks might play a game in each of Toronto, Montreal, Boston and  New York on a road trip. Well, maybe three games in the New York  area: one each against the Rangers, Islanders and Devils.</span> 
 You might have noticed something else;
 that's fine for this. For example, 
 "each of the games lasted less than three hours", 
@@ -295,46 +263,39 @@ You could also print all the columns in two or more goes, using
 
 
 ```r
-jays %>% filter(opp == "NYY") %>% select(row:innings) %>% 
-    print(width = Inf)
+jays %>% filter(opp == "NYY") %>% select(row:innings) %>% print(width = Inf)
 ```
 
 ```
 ## # A tibble: 3 x 11
-##     row  game date             box      team 
-##   <dbl> <dbl> <chr>            <chr>    <chr>
-## 1    92    27 Monday, May 4    boxscore TOR  
-## 2    93    28 Tuesday, May 5   boxscore TOR  
-## 3    94    29 Wednesday, May 6 boxscore TOR  
-##   venue opp   result  runs Oppruns innings
-##   <lgl> <chr> <chr>  <dbl>   <dbl>   <dbl>
-## 1 NA    NYY   W          3       1      NA
-## 2 NA    NYY   L          3       6      NA
-## 3 NA    NYY   W          5       1      NA
+##     row  game date             box      team  venue opp   result  runs
+##   <dbl> <dbl> <chr>            <chr>    <chr> <lgl> <chr> <chr>  <dbl>
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
+##   Oppruns innings
+##     <dbl>   <dbl>
+## 1       1      NA
+## 2       6      NA
+## 3       1      NA
 ```
 
 ```r
-jays %>% filter(opp == "NYY") %>% select(wl:streak) %>% 
-    print(width = Inf)
+jays %>% filter(opp == "NYY") %>% select(wl:streak) %>% print(width = Inf)
 ```
 
 ```
 ## # A tibble: 3 x 10
-##   wl    position gb    winner  loser   
-##   <chr>    <dbl> <chr> <chr>   <chr>   
-## 1 13-14        4 3.5   Dickey  Martin  
-## 2 13-15        5 4.5   Pineda  Estrada 
-## 3 14-15        3 3.5   Buehrle Sabathia
-##   save   `game time` Daynight attendance
-##   <chr>  <time>      <chr>         <dbl>
-## 1 Cecil  02:18       N             19217
-## 2 Miller 02:54       N             21519
-## 3 <NA>   02:30       N             21312
-##   streak
-##   <chr> 
-## 1 +     
-## 2 -     
-## 3 +
+##   wl    position gb    winner  loser    save   `game time` Daynight
+##   <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>      <chr>   
+## 1 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N       
+## 2 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N       
+## 3 14-15        3 3.5   Buehrle Sabathia <NA>   02:30       N       
+##   attendance streak
+##        <dbl> <chr> 
+## 1      19217 +     
+## 2      21519 -     
+## 3      21312 +
 ```
 
  
@@ -358,8 +319,9 @@ Two steps, since we selecting rows *and* columns.
 
 
 ```r
-jays %>% filter(attendance > 30000) %>% select(c(attendance, 
-    Daynight))
+jays %>%
+  filter(attendance > 30000) %>%
+  select(c(attendance, Daynight))
 ```
 
 ```
@@ -383,7 +345,9 @@ Or this way, since we are selecting
 
 
 ```r
-jays %>% filter(attendance > 30000) %>% select(c(Daynight:attendance))
+jays %>%
+  filter(attendance > 30000) %>%
+  select(c(Daynight:attendance))
 ```
 
 ```
@@ -410,7 +374,9 @@ If you wanted to, you could automate the counting, like this:
 
 
 ```r
-jays %>% filter(attendance > 30000) %>% count(Daynight)
+jays %>%
+  filter(attendance > 30000) %>%
+  count(Daynight)
 ```
 
 ```
@@ -443,8 +409,12 @@ frame, so I don't need to "select out" the other variables:
 
 
 ```r
-jays %>% group_by(Daynight) %>% summarize(mean.att = mean(attendance), 
-    sd.att = sd(attendance))
+jays %>%
+  group_by(Daynight) %>%
+  summarize(
+    mean.att = mean(attendance),
+    sd.att = sd(attendance)
+  )
 ```
 
 ```
@@ -464,8 +434,12 @@ investigate.
 
 
 ```r
-jays %>% group_by(Daynight) %>% summarize(median.att = median(attendance), 
-    iqr.att = IQR(attendance))
+jays %>%
+  group_by(Daynight) %>%
+  summarize(
+    median.att = median(attendance),
+    iqr.att = IQR(attendance)
+  )
 ```
 
 ```
@@ -484,12 +458,10 @@ that R marked as an outlier:
 
 
 ```r
-ggplot(jays, aes(x = Daynight, y = attendance)) + 
-    geom_boxplot()
+ggplot(jays, aes(x = Daynight, y = attendance)) + geom_boxplot()
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-13-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -533,7 +505,7 @@ games had attendance less than that. With the small frequencies, the
 accuracy of the P-value is a bit questionable, but taking it at face
 value, there *is* a significant difference between median 
 attendances at day and night games.
-\marginnote{If you do this by  hand, you'll get a warning about the chi-squared approximation  being inaccurate. This is because of the small frequencies, and  *not* because of the outliers. Those are not damaging the test  at all.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you do this by  hand, you'll get a warning about the chi-squared approximation  being inaccurate. This is because of the small frequencies, and  *not* because of the outliers. Those are not damaging the test  at all.</span>
 
 
 
@@ -551,12 +523,12 @@ The best way to do this is facetted normal quantile
 plots. Remember that the facetting part goes right at the end:
 
 ```r
-ggplot(jays, aes(sample = attendance)) + stat_qq() + 
-    stat_qq_line() + facet_wrap(~Daynight, ncol = 1)
+ggplot(jays, aes(sample = attendance)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~Daynight, ncol = 1)
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-15-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
      
 The day attendances are pretty normal, though it is hard to be sure
@@ -624,9 +596,8 @@ Solution
 Literal copy and paste: 
 
 ```r
-myurl = "http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
-throws = read_delim(myurl, " ", col_names = c("student", 
-    "baseball", "softball"))
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
+throws <- read_delim(myurl, " ", col_names = c("student", "baseball", "softball"))
 ```
 
 ```
@@ -656,7 +627,7 @@ throws
 ##  8       8       41       41
 ##  9       9       56       44
 ## 10      10       70       65
-## # ... with 14 more rows
+## # … with 14 more rows
 ```
 
        
@@ -691,7 +662,7 @@ throws %>% mutate(fs = factor(student))
 ##  8       8       41       41 8    
 ##  9       9       56       44 9    
 ## 10      10       70       65 10   
-## # ... with 14 more rows
+## # … with 14 more rows
 ```
 
        
@@ -711,8 +682,9 @@ Solution
 Literally `gather` (from `tidyr`):
 
 ```r
-throws %>% mutate(fs = factor(student)) %>% gather(ball, 
-    distance, baseball:softball)
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball)
 ```
 
 ```
@@ -729,7 +701,7 @@ throws %>% mutate(fs = factor(student)) %>% gather(ball,
 ##  8       8 8     baseball       41
 ##  9       9 9     baseball       56
 ## 10      10 10    baseball       70
-## # ... with 38 more rows
+## # … with 38 more rows
 ```
 
        
@@ -743,8 +715,9 @@ that the columns you want to gather up all end in "ball":
 
 
 ```r
-throws %>% mutate(fs = factor(student)) %>% gather(ball, 
-    distance, ends_with("ball"))
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, ends_with("ball"))
 ```
 
 ```
@@ -761,7 +734,7 @@ throws %>% mutate(fs = factor(student)) %>% gather(ball,
 ##  8       8 8     baseball       41
 ##  9       9 9     baseball       56
 ## 10      10 10    baseball       70
-## # ... with 38 more rows
+## # … with 38 more rows
 ```
 
        
@@ -780,13 +753,13 @@ Solution
 The obvious thing:
 
 ```r
-throws %>% mutate(fs = factor(student)) %>% gather(ball, 
-    distance, baseball:softball) %>% ggplot(aes(x = ball, 
-    y = distance)) + geom_point()
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball) %>%
+  ggplot(aes(x = ball, y = distance)) + geom_point()
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-20-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
        
 
@@ -800,7 +773,7 @@ are two independent sets of students, something that is not true).
 (e) Add two things to your plot: something that will distinguish
 the students by colour (this works best if the thing distinguished
 by colour is a factor),
-\marginnote{You can try it without. See below.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You can try it without. See below.</span>
 and something that will join the two points for the same student by
 a line.
 
@@ -812,14 +785,14 @@ A `colour` and a `group` in the `aes`, and
 a `geom_line`:
 
 ```r
-throws %>% mutate(fs = factor(student)) %>% gather(ball, 
-    distance, baseball:softball) %>% ggplot(aes(x = ball, 
-    y = distance, group = fs, colour = fs)) + 
-    geom_point() + geom_line()
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball) %>%
+  ggplot(aes(x = ball, y = distance, group = fs, colour = fs)) +
+  geom_point() + geom_line()
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-21-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
      
 
@@ -827,14 +800,14 @@ You can see what happens if you use the student as a number:
 
 
 ```r
-throws %>% mutate(fs = factor(student)) %>% gather(ball, 
-    distance, baseball:softball) %>% ggplot(aes(x = ball, 
-    y = distance, group = student, colour = student)) + 
-    geom_point() + geom_line()
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball) %>%
+  ggplot(aes(x = ball, y = distance, group = student, colour = student)) +
+  geom_point() + geom_line()
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-22-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
      
 
@@ -862,14 +835,15 @@ at the top of the legend that you want to remove. Here that is
 to get rid of is actually the `colour` one, so we do this:
 
 ```r
-throws %>% mutate(fs = factor(student)) %>% gather(ball, 
-    distance, baseball:softball) %>% ggplot(aes(x = ball, 
-    y = distance, group = fs, colour = fs)) + 
-    geom_point() + geom_line() + guides(colour = F)
+throws %>%
+  mutate(fs = factor(student)) %>%
+  gather(ball, distance, baseball:softball) %>%
+  ggplot(aes(x = ball, y = distance, group = fs, colour = fs)) +
+  geom_point() + geom_line() +
+  guides(colour = F)
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-23-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
        
 
@@ -936,7 +910,7 @@ Solution
 Separated by single spaces:
 
 ```r
-sleep1 = read_delim("ratsleep.txt", " ")
+sleep1 <- read_delim("ratsleep.txt", " ")
 ```
 
 ```
@@ -1011,7 +985,7 @@ so that I didn't have to do a separate display. This is a handy
 way of saving *and* displaying in one shot:
 
 ```r
-(sleep <- sleep1 %>% gather(rep, sleeptime, obs1:obs5))
+(sleep1 %>% gather(rep, sleeptime, obs1:obs5) -> sleep)
 ```
 
 ```
@@ -1048,7 +1022,7 @@ rows (20) and columns (3) you have.
 
 The column `rep` is not very interesting: it just says which
 observation each one was within its group.
-\marginnote{Sometimes the  column playing the role of *rep* *is* interesting to us, but  not here.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Sometimes the  column playing the role of *rep* *is* interesting to us, but  not here.</span> 
 The interesting things are `treatment` and
 `sleeptime`, which are the two variables we'll need for our
 analysis of variance.
@@ -1066,12 +1040,10 @@ Solution
 
 
 ```r
-ggplot(sleep, aes(x = treatment, y = sleeptime)) + 
-    geom_boxplot()
+ggplot(sleep, aes(x = treatment, y = sleeptime)) + geom_boxplot()
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-26-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -1114,7 +1086,9 @@ If you want the SDs themselves:
 
 
 ```r
-sleep %>% group_by(treatment) %>% summarize(stddev = sd(sleeptime))
+sleep %>%
+  group_by(treatment) %>%
+  summarize(stddev = sd(sleeptime))
 ```
 
 ```
@@ -1148,20 +1122,16 @@ Tukey in a minute:
 
 
 ```r
-sleep.1 = aov(sleeptime ~ treatment, data = sleep)
+sleep.1 <- aov(sleeptime ~ treatment, data = sleep)
 summary(sleep.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## treatment    3   5882    1961   21.09
-## Residuals   16   1487      93        
-##               Pr(>F)    
-## treatment   8.32e-06 ***
-## Residuals               
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## treatment    3   5882    1961   21.09 8.32e-06 ***
+## Residuals   16   1487      93                     
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1270,8 +1240,8 @@ Solution
 This kind of thing:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt"
-toms1 = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/c32/tomatoes.txt"
+toms1=read_delim(my_url," ")
 ```
 
 ```
@@ -1323,7 +1293,7 @@ Solution
 This is a job for `gather`:
 
 ```r
-toms2 = toms1 %>% gather(colour, growthrate, blue:green)
+toms2 = toms1 %>% gather(colour,growthrate,blue:green)
 toms2
 ```
 
@@ -1341,7 +1311,7 @@ toms2
 ##  8     8 blue         5.09
 ##  9     1 red         13.7 
 ## 10     2 red         13.0 
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
        
@@ -1376,7 +1346,7 @@ Solution
 The code is easy enough:
 
 ```r
-write_csv(toms2, "tomatoes2.csv")
+write_csv(toms2,"tomatoes2.csv")
 ```
 
        
@@ -1445,12 +1415,10 @@ Nothing terribly surprising here. My data frame is called
 `toms2`, for some reason:
 
 ```r
-ggplot(toms2, aes(x = colour, y = growthrate)) + 
-    geom_boxplot()
+ggplot(toms2,aes(x=colour, y=growthrate))+geom_boxplot()
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-34-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
      
 
@@ -1479,12 +1447,12 @@ to do the `with` thing:
 
 ```r
 library(car)
-with(toms2, leveneTest(growthrate, colour))
+with(toms2,leveneTest(growthrate,colour))
 ```
 
 ```
-## Warning in leveneTest.default(growthrate,
-## colour): colour coerced to factor.
+## Warning in leveneTest.default(growthrate, colour): colour coerced to
+## factor.
 ```
 
 ```
@@ -1515,7 +1483,7 @@ I don't need `car` again, so let's get rid of it:
 
 
 ```r
-detach("package:car", unload = T)
+detach("package:car",unload=T)
 ```
 
  
@@ -1534,20 +1502,16 @@ Solution
 
 
 ```r
-toms.1 = aov(growthrate ~ colour, data = toms2)
+toms.1=aov(growthrate~colour,data=toms2)
 summary(toms.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## colour       3  410.5  136.82   118.2
-## Residuals   28   32.4    1.16        
-##               Pr(>F)    
-## colour      5.28e-16 ***
-## Residuals               
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## colour       3  410.5  136.82   118.2 5.28e-16 ***
+## Residuals   28   32.4    1.16                     
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1564,18 +1528,16 @@ then Welch ANOVA is the way to go:
 
 
 ```r
-toms.2 = oneway.test(growthrate ~ colour, data = toms2)
+toms.2=oneway.test(growthrate~colour,data=toms2)
 toms.2
 ```
 
 ```
 ## 
-## 	One-way analysis of means (not
-## 	assuming equal variances)
+## 	One-way analysis of means (not assuming equal variances)
 ## 
 ## data:  growthrate and colour
-## F = 81.079, num df = 3.000, denom df =
-## 15.227, p-value = 1.377e-09
+## F = 81.079, num df = 3.000, denom df = 15.227, p-value = 1.377e-09
 ```
 
  
@@ -1590,7 +1552,7 @@ for multiple groups:
 
 ```r
 library(smmr)
-median_test(toms2, growthrate, colour)
+median_test(toms2,growthrate,colour)
 ```
 
 ```
@@ -1669,20 +1631,13 @@ TukeyHSD(toms.1)
 ## Fit: aov(formula = growthrate ~ colour, data = toms2)
 ## 
 ## $colour
-##                 diff       lwr        upr
-## green-blue   -3.8125 -5.281129 -2.3438706
-## red-blue      6.0150  4.546371  7.4836294
-## yellow-blue  -0.9825 -2.451129  0.4861294
-## red-green     9.8275  8.358871 11.2961294
-## yellow-green  2.8300  1.361371  4.2986294
-## yellow-red   -6.9975 -8.466129 -5.5288706
-##                  p adj
-## green-blue   0.0000006
-## red-blue     0.0000000
-## yellow-blue  0.2825002
-## red-green    0.0000000
-## yellow-green 0.0000766
-## yellow-red   0.0000000
+##                 diff       lwr        upr     p adj
+## green-blue   -3.8125 -5.281129 -2.3438706 0.0000006
+## red-blue      6.0150  4.546371  7.4836294 0.0000000
+## yellow-blue  -0.9825 -2.451129  0.4861294 0.2825002
+## red-green     9.8275  8.358871 11.2961294 0.0000000
+## yellow-green  2.8300  1.361371  4.2986294 0.0000766
+## yellow-red   -6.9975 -8.466129 -5.5288706 0.0000000
 ```
 
        
@@ -1698,7 +1653,7 @@ from one of the packages that offers it:
 
 ```r
 library(PMCMRplus)
-gamesHowellTest(growthrate ~ factor(colour), data = toms2)
+gamesHowellTest(growthrate~factor(colour),data=toms2)
 ```
 
 ```
@@ -1801,8 +1756,8 @@ is what `read_table` wants. If the column names had
 `read_table2`. 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/migraine.txt"
-migraine = read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/migraine.txt"
+migraine <- read_table(my_url)
 ```
 
 ```
@@ -1855,7 +1810,7 @@ each subject produced three measurements). That is like a
 three-measurement version of matched pairs, a so-called
 **repeated-measures design**, which requires its own kind
 of analysis.
-\marginnote{To allow for the fact that measurements on the same      subject are not independent but correlated.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">To allow for the fact that measurements on the same      subject are not independent but correlated.</span> 
 
 
 
@@ -1891,8 +1846,7 @@ columns need to be gathered together. Use a pipe to name the
 dataframe to work with. I'm going to save my new data frame:
 
 ```r
-(migraine2 <- migraine %>% gather(drug, painrelief, 
-    DrugA:DrugC))
+(migraine %>% gather(drug, painrelief, DrugA:DrugC) -> migraine2)
 ```
 
 ```
@@ -1909,7 +1863,7 @@ dataframe to work with. I'm going to save my new data frame:
 ##  8 DrugA          4
 ##  9 DrugA          4
 ## 10 DrugB          6
-## # ... with 17 more rows
+## # … with 17 more rows
 ```
 
  
@@ -1940,20 +1894,16 @@ My last sentence absolves us from doing the boxplots that we
 would normally insist on doing. 
 
 ```r
-painrelief.1 = aov(painrelief ~ drug, data = migraine2)
+painrelief.1 <- aov(painrelief ~ drug, data = migraine2)
 summary(painrelief.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## drug         2  41.19   20.59   7.831
-## Residuals   24  63.11    2.63        
-##              Pr(>F)   
-## drug        0.00241 **
-## Residuals             
+##             Df Sum Sq Mean Sq F value  Pr(>F)   
+## drug         2  41.19   20.59   7.831 0.00241 **
+## Residuals   24  63.11    2.63                   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -1973,14 +1923,10 @@ TukeyHSD(painrelief.1)
 ## Fit: aov(formula = painrelief ~ drug, data = migraine2)
 ## 
 ## $drug
-##                   diff        lwr      upr
-## DrugB-DrugA  2.8888889  0.9798731 4.797905
-## DrugC-DrugA  2.2222222  0.3132065 4.131238
-## DrugC-DrugB -0.6666667 -2.5756824 1.242349
-##                 p adj
-## DrugB-DrugA 0.0025509
-## DrugC-DrugA 0.0203671
-## DrugC-DrugB 0.6626647
+##                   diff        lwr      upr     p adj
+## DrugB-DrugA  2.8888889  0.9798731 4.797905 0.0025509
+## DrugC-DrugA  2.2222222  0.3132065 4.131238 0.0203671
+## DrugC-DrugB -0.6666667 -2.5756824 1.242349 0.6626647
 ```
 
  
@@ -1994,20 +1940,18 @@ Extra: we can also use the "pipe" to do this all in one go:
 
 
 ```r
-migraine %>% gather(drug, painrelief, DrugA:DrugC) %>% 
-    aov(painrelief ~ drug, data = .) %>% summary()
+migraine %>%
+  gather(drug, painrelief, DrugA:DrugC) %>%
+  aov(painrelief ~ drug, data = .) %>%
+  summary()
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## drug         2  41.19   20.59   7.831
-## Residuals   24  63.11    2.63        
-##              Pr(>F)   
-## drug        0.00241 **
-## Residuals             
+##             Df Sum Sq Mean Sq F value  Pr(>F)   
+## drug         2  41.19   20.59   7.831 0.00241 **
+## Residuals   24  63.11    2.63                   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2015,7 +1959,7 @@ migraine %>% gather(drug, painrelief, DrugA:DrugC) %>%
 with the same results as before. Notice that I never actually created
 a second data frame by name; it was created by `gather` and
 then immediately used as input to `aov`.
-\marginnote{And then thrown away.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">And then thrown away.</span> 
 I also used the
 `data=.` trick to use "the data frame that came out of the previous step" as my input to `aov`.
 
@@ -2026,8 +1970,10 @@ What is even more alarming is that I can feed the output from
 
 
 ```r
-migraine %>% gather(drug, painrelief, DrugA:DrugC) %>% 
-    aov(painrelief ~ drug, data = .) %>% TukeyHSD()
+migraine %>%
+  gather(drug, painrelief, DrugA:DrugC) %>%
+  aov(painrelief ~ drug, data = .) %>%
+  TukeyHSD()
 ```
 
 ```
@@ -2037,14 +1983,10 @@ migraine %>% gather(drug, painrelief, DrugA:DrugC) %>%
 ## Fit: aov(formula = painrelief ~ drug, data = .)
 ## 
 ## $drug
-##                   diff        lwr      upr
-## DrugB-DrugA  2.8888889  0.9798731 4.797905
-## DrugC-DrugA  2.2222222  0.3132065 4.131238
-## DrugC-DrugB -0.6666667 -2.5756824 1.242349
-##                 p adj
-## DrugB-DrugA 0.0025509
-## DrugC-DrugA 0.0203671
-## DrugC-DrugB 0.6626647
+##                   diff        lwr      upr     p adj
+## DrugB-DrugA  2.8888889  0.9798731 4.797905 0.0025509
+## DrugC-DrugA  2.2222222  0.3132065 4.131238 0.0203671
+## DrugC-DrugB -0.6666667 -2.5756824 1.242349 0.6626647
 ```
 
  
@@ -2060,23 +2002,22 @@ discover that this could be solved, and indeed it can:
 
 
 ```r
-migraine %>% gather(drug, painrelief, DrugA:DrugC) %>% 
-    aov(painrelief ~ drug, data = .) %>% {
+migraine %>%
+  gather(drug, painrelief, DrugA:DrugC) %>%
+  aov(painrelief ~ drug, data = .) %>%
+  {
     print(summary(.))
     .
-} %>% TukeyHSD()
+  } %>%
+  TukeyHSD()
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## drug         2  41.19   20.59   7.831
-## Residuals   24  63.11    2.63        
-##              Pr(>F)   
-## drug        0.00241 **
-## Residuals             
+##             Df Sum Sq Mean Sq F value  Pr(>F)   
+## drug         2  41.19   20.59   7.831 0.00241 **
+## Residuals   24  63.11    2.63                   
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```
@@ -2086,14 +2027,10 @@ migraine %>% gather(drug, painrelief, DrugA:DrugC) %>%
 ## Fit: aov(formula = painrelief ~ drug, data = .)
 ## 
 ## $drug
-##                   diff        lwr      upr
-## DrugB-DrugA  2.8888889  0.9798731 4.797905
-## DrugC-DrugA  2.2222222  0.3132065 4.131238
-## DrugC-DrugB -0.6666667 -2.5756824 1.242349
-##                 p adj
-## DrugB-DrugA 0.0025509
-## DrugC-DrugA 0.0203671
-## DrugC-DrugB 0.6626647
+##                   diff        lwr      upr     p adj
+## DrugB-DrugA  2.8888889  0.9798731 4.797905 0.0025509
+## DrugC-DrugA  2.2222222  0.3132065 4.131238 0.0203671
+## DrugC-DrugB -0.6666667 -2.5756824 1.242349 0.6626647
 ```
 
  
@@ -2102,7 +2039,7 @@ The odd-looking second-last line of that uses that `.` trick
 for "whatever came out of the previous step". The thing inside the
 curly brackets is two commands one after the other; the first is to
 display the `summary` of that `aov`
-\marginnote{It needs  *print* around it to display it, as you need *print*  to display something within a loop or a function.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It needs  *print* around it to display it, as you need *print*  to display something within a loop or a function.</span> 
 and the second
 part after the `;` is to just pass whatever came out of the
 previous line, the output from `aov`, on, unchanged, into
@@ -2132,7 +2069,9 @@ drug:
 
 
 ```r
-migraine2 %>% group_by(drug) %>% summarize(m = mean(painrelief))
+migraine2 %>%
+  group_by(drug) %>%
+  summarize(m = mean(painrelief))
 ```
 
 ```
@@ -2155,17 +2094,15 @@ mean pain relief score for drug A is expected to be worst, but between
 drugs B and C, sometimes the mean of B will come out higher and
 sometimes C's mean will be higher, because there is no significant
 difference between them.
-\marginnote{This talks about *means* rather  than individual observations; in individual cases, sometimes even  drug *A* will come out best. But we're interested in  population means, since we want to do the greatest good for the  greatest number. *Greatest good for the greatest number*  is from Jeremy Bentham, 1748--1832, British    philosopher and advocate of utilitarianism.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This talks about *means* rather  than individual observations; in individual cases, sometimes even  drug *A* will come out best. But we're interested in  population means, since we want to do the greatest good for the  greatest number. *Greatest good for the greatest number*  is from Jeremy Bentham, 1748--1832, British    philosopher and advocate of utilitarianism.</span>
 Another way is to draw a boxplot of pain-relief scores:
 
 
 ```r
-ggplot(migraine2, aes(x = drug, y = painrelief)) + 
-    geom_boxplot()
+ggplot(migraine2, aes(x = drug, y = painrelief)) + geom_boxplot()
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-51-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -2295,8 +2232,8 @@ that the data values were aligned by columns with multiple spaces
 between them:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/disease.txt"
-tbl = read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/disease.txt"
+tbl <- read_table(my_url)
 ```
 
 ```
@@ -2367,7 +2304,7 @@ I'll call the column of "what's different" `disloc`. Feel
 free to call it `temp` for now if you prefer:
 
 ```r
-(tbl.2 <- tbl %>% gather(disloc, frequency, px:ay))
+(tbl %>% gather(disloc, frequency, px:ay) -> tbl.2)
 ```
 
 ```
@@ -2390,7 +2327,7 @@ This also works ("gather together everything but `Species`"):
 
 
 ```r
-(tbl.2 <- tbl %>% gather(disloc, frequency, -Species))
+(tbl %>% gather(disloc, frequency, -Species) -> tbl.2)
 ```
 
 ```
@@ -2438,8 +2375,7 @@ This means splitting up `disloc` into two separate columns,
 splitting after the first character, thus:
 
 ```r
-(tbl.3 <- tbl.2 %>% separate(disloc, c("disease", 
-    "location"), 1))
+(tbl.2 %>% separate(disloc, c("disease", "location"), 1) -> tbl.3)
 ```
 
 ```
@@ -2479,8 +2415,7 @@ Solution
 
 
 ```r
-tbl.4 = xtabs(frequency ~ Species + disease + 
-    location, data = tbl.3)
+tbl.4 <- xtabs(frequency ~ Species + disease + location, data = tbl.3)
 tbl.4
 ```
 
@@ -2559,8 +2494,7 @@ the interactions. (The reason for doing it this way will become clear later):
 
 
 ```r
-model.1 = glm(frequency ~ Species * location * 
-    disease, data = tbl.3, family = "poisson")
+model.1 <- glm(frequency ~ Species * location * disease, data = tbl.3, family = "poisson")
 drop1(model.1, test = "Chisq")
 ```
 
@@ -2569,12 +2503,9 @@ drop1(model.1, test = "Chisq")
 ## 
 ## Model:
 ## frequency ~ Species * location * disease
-##                          Df Deviance    AIC
-## <none>                      0.000000 55.291
-## Species:location:disease  1 0.070257 53.362
-##                               LRT Pr(>Chi)
-## <none>                                    
-## Species:location:disease 0.070257    0.791
+##                          Df Deviance    AIC      LRT Pr(>Chi)
+## <none>                      0.000000 55.291                  
+## Species:location:disease  1 0.070257 53.362 0.070257    0.791
 ```
 
  
@@ -2602,7 +2533,7 @@ Let's get rid of that three-way interaction. This is another use for
 
 
 ```r
-model.2 = update(model.1, . ~ . - Species:location:disease)
+model.2 <- update(model.1, . ~ . - Species:location:disease)
 drop1(model.2, test = "Chisq")
 ```
 
@@ -2612,19 +2543,13 @@ drop1(model.2, test = "Chisq")
 ## Model:
 ## frequency ~ Species + location + disease + Species:location + 
 ##     Species:disease + location:disease
-##                  Df Deviance    AIC     LRT
-## <none>                0.0703 53.362        
-## Species:location  1  13.0627 64.354 12.9924
-## Species:disease   1   0.2696 51.561  0.1993
-## location:disease  1   0.1043 51.396  0.0340
-##                   Pr(>Chi)    
-## <none>                        
-## Species:location 0.0003128 ***
-## Species:disease  0.6552865    
-## location:disease 0.8536877    
+##                  Df Deviance    AIC     LRT  Pr(>Chi)    
+## <none>                0.0703 53.362                      
+## Species:location  1  13.0627 64.354 12.9924 0.0003128 ***
+## Species:disease   1   0.2696 51.561  0.1993 0.6552865    
+## location:disease  1   0.1043 51.396  0.0340 0.8536877    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2640,7 +2565,7 @@ which model I was working with and what I was removing:
 
 
 ```r
-model.3 = update(model.2, . ~ . - location:disease)
+model.3 <- update(model.2, . ~ . - location:disease)
 drop1(model.3, test = "Chisq")
 ```
 
@@ -2650,17 +2575,12 @@ drop1(model.3, test = "Chisq")
 ## Model:
 ## frequency ~ Species + location + disease + Species:location + 
 ##     Species:disease
-##                  Df Deviance    AIC     LRT
-## <none>                0.1043 51.396        
-## Species:location  1  13.0678 62.359 12.9635
-## Species:disease   1   0.2746 49.566  0.1703
-##                   Pr(>Chi)    
-## <none>                        
-## Species:location 0.0003176 ***
-## Species:disease  0.6798021    
+##                  Df Deviance    AIC     LRT  Pr(>Chi)    
+## <none>                0.1043 51.396                      
+## Species:location  1  13.0678 62.359 12.9635 0.0003176 ***
+## Species:disease   1   0.2746 49.566  0.1703 0.6798021    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2670,7 +2590,7 @@ drop1(model.3, test = "Chisq")
 
 
 ```r
-model.4 = update(model.3, . ~ . - Species:disease)
+model.4 <- update(model.3, . ~ . - Species:disease)
 drop1(model.4, test = "Chisq")
 ```
 
@@ -2679,17 +2599,12 @@ drop1(model.4, test = "Chisq")
 ## 
 ## Model:
 ## frequency ~ Species + location + disease + Species:location
-##                  Df Deviance    AIC     LRT
-## <none>                0.2746 49.566        
-## disease           1   2.3617 49.653  2.0871
-## Species:location  1  13.2381 60.530 12.9635
-##                   Pr(>Chi)    
-## <none>                        
-## disease          0.1485461    
-## Species:location 0.0003176 ***
+##                  Df Deviance    AIC     LRT  Pr(>Chi)    
+## <none>                0.2746 49.566                      
+## disease           1   2.3617 49.653  2.0871 0.1485461    
+## Species:location  1  13.2381 60.530 12.9635 0.0003176 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2701,7 +2616,7 @@ significant, out it comes:
 
 
 ```r
-model.5 = update(model.4, . ~ . - disease)
+model.5 <- update(model.4, . ~ . - disease)
 drop1(model.5, test = "Chisq")
 ```
 
@@ -2710,15 +2625,11 @@ drop1(model.5, test = "Chisq")
 ## 
 ## Model:
 ## frequency ~ Species + location + Species:location
-##                  Df Deviance    AIC    LRT
-## <none>                2.3617 49.653       
-## Species:location  1  15.3252 60.617 12.963
-##                   Pr(>Chi)    
-## <none>                        
-## Species:location 0.0003176 ***
+##                  Df Deviance    AIC    LRT  Pr(>Chi)    
+## <none>                2.3617 49.653                     
+## Species:location  1  15.3252 60.617 12.963 0.0003176 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2768,10 +2679,10 @@ like this:
 
 
 ```r
-disease = c("a", "a", "p", "p")
-Species = c("A", "B", "A", "B")
-frequency = c(10, 50, 30, 30)
-xx = data.frame(disease, Species, frequency)
+disease <- c("a", "a", "p", "p")
+Species <- c("A", "B", "A", "B")
+frequency <- c(10, 50, 30, 30)
+xx <- data.frame(disease, Species, frequency)
 xtabs(frequency ~ disease + Species)
 ```
 
@@ -2790,8 +2701,7 @@ significant association between disease and species:
 
 
 ```r
-xx.1 = glm(frequency ~ disease * Species, data = xx, 
-    family = "poisson")
+xx.1 <- glm(frequency ~ disease * Species, data = xx, family = "poisson")
 drop1(xx.1, test = "Chisq")
 ```
 
@@ -2800,15 +2710,11 @@ drop1(xx.1, test = "Chisq")
 ## 
 ## Model:
 ## frequency ~ disease * Species
-##                 Df Deviance    AIC    LRT
-## <none>                0.000 28.400       
-## disease:Species  1   15.518 41.918 15.518
-##                  Pr(>Chi)    
-## <none>                       
-## disease:Species 8.171e-05 ***
+##                 Df Deviance    AIC    LRT  Pr(>Chi)    
+## <none>                0.000 28.400                     
+## disease:Species  1   15.518 41.918 15.518 8.171e-05 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2856,8 +2762,8 @@ Solution
 Tab-separated, so `read_tsv`; no column names, so `col_names=F`:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
-crickets = read_tsv(my_url, col_names = F)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
+crickets <- read_tsv(my_url, col_names = F)
 ```
 
 ```
@@ -2905,7 +2811,7 @@ If you didn't catch the tab-separated part, this probably happened to you:
 
 
 ```r
-d = read_delim(my_url, " ", col_names = F)
+d <- read_delim(my_url, " ", col_names = F)
 ```
 
 ```
@@ -2934,11 +2840,11 @@ problems(d)
 
 ```
 ## # A tibble: 3 x 5
-##     row col   expected  actual file          
-##   <int> <chr> <chr>     <chr>  <chr>         
-## 1    15 <NA>  1 columns 2 col~ 'http://www.u~
-## 2    16 <NA>  1 columns 2 col~ 'http://www.u~
-## 3    17 <NA>  1 columns 2 col~ 'http://www.u~
+##     row col   expected  actual    file                                     
+##   <int> <chr> <chr>     <chr>     <chr>                                    
+## 1    15 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32…
+## 2    16 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32…
+## 3    17 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32…
 ```
 
  
@@ -3002,11 +2908,12 @@ Solution
 
 Breathe, and then begin. `unite` creates new columns by
 joining together old ones:
-\marginnote{As *str-c* or *paste* do, actually, but the advantage of *unite* is that it gets rid of the other columns, which you probably no longer need.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As *str-c* or *paste* do, actually, but the advantage of *unite* is that it gets rid of the other columns, which you probably no longer need.</span>
 
 ```r
-crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus, 
-    X3:X4)
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4)
 ```
 
 ```
@@ -3045,8 +2952,7 @@ the data values have spaces in them already. Consider this list of names:
 
 
 ```r
-names = c("Cameron McDonald", "Durwin Yang", "Ole Gunnar Solskjaer", 
-    "Mahmudullah")
+names <- c("Cameron McDonald", "Durwin Yang", "Ole Gunnar Solskjaer", "Mahmudullah")
 ```
 
  
@@ -3056,7 +2962,7 @@ Bangladeshi cricketer. Only one of these has played for Manchester United:
 
 
 ```r
-manu = c(F, F, T, F)
+manu <- c(F, F, T, F)
 ```
 
  
@@ -3065,7 +2971,7 @@ and let's make a data frame:
 
 
 ```r
-d = tibble(name = names, manu = manu)
+d <- tibble(name = names, manu = manu)
 d
 ```
 
@@ -3105,13 +3011,14 @@ If we then try to separate them again, what happens?
 
 
 ```r
-d %>% unite(joined, name:manu, sep = " ") %>% 
-    separate(joined, c("one", "two"), " ")
+d %>%
+  unite(joined, name:manu, sep = " ") %>%
+  separate(joined, c("one", "two"), " ")
 ```
 
 ```
-## Warning: Expected 2 pieces. Additional pieces
-## discarded in 3 rows [1, 2, 3].
+## Warning: Expected 2 pieces. Additional pieces discarded in 3 rows [1, 2,
+## 3].
 ```
 
 ```
@@ -3133,8 +3040,9 @@ everything works swimmingly:
 
 
 ```r
-d %>% unite(joined, name:manu, sep = ":") %>% 
-    separate(joined, c("one", "two"), ":")
+d %>%
+  unite(joined, name:manu, sep = ":") %>%
+  separate(joined, c("one", "two"), ":")
 ```
 
 ```
@@ -3172,8 +3080,10 @@ contains both of those things. Add to the end of the pipe you
 started building in the previous part:
 
 ```r
-crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus, 
-    X3:X4) %>% gather(species, temp_pulse, exclamationis:niveus)
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus)
 ```
 
 ```
@@ -3190,7 +3100,7 @@ crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus,
 ##  8 exclamationis 26.2_86.6 
 ##  9 exclamationis 26.2_87.5 
 ## 10 exclamationis 26.2_89.1 
-## # ... with 24 more rows
+## # … with 24 more rows
 ```
 
  
@@ -3220,10 +3130,11 @@ end. We are creating two new variables `temperature` and
 `pulse_rate`:
 
 ```r
-crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus, 
-    X3:X4) %>% gather(species, temp_pulse, exclamationis:niveus) %>% 
-    separate(temp_pulse, c("temperature", "pulse_rate"), 
-        "_")
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus) %>%
+  separate(temp_pulse, c("temperature", "pulse_rate"), "_")
 ```
 
 ```
@@ -3240,7 +3151,7 @@ crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus,
 ##  8 exclamationis 26.2        86.6      
 ##  9 exclamationis 26.2        87.5      
 ## 10 exclamationis 26.2        89.1      
-## # ... with 24 more rows
+## # … with 24 more rows
 ```
 
  
@@ -3263,7 +3174,7 @@ prefer to make is that `parse_number` is good for text
 with a number in it (that we want to pull the number out of),
 while `as.numeric` is for turning something that looks like
 a number but isn't one into a genuine number.
-\marginnote{You could      just as well make the point that the text 20.8 contains the      number 20.8 and nothing else, so that parsing it as text in search of a number      will pull out 20.8 as a number. If that logic works for you, go      with it.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You could      just as well make the point that the text 20.8 contains the      number 20.8 and nothing else, so that parsing it as text in search of a number      will pull out 20.8 as a number. If that logic works for you, go      with it.</span>
 
 
 Solution
@@ -3274,11 +3185,13 @@ the variable that's already there (which saves us some effort
 here). 
 
 ```r
-crickets.1 = crickets %>% unite(exclamationis, 
-    X1:X2) %>% unite(niveus, X3:X4) %>% gather(species, 
-    temp_pulse, exclamationis:niveus) %>% separate(temp_pulse, 
-    c("temperature", "pulse_rate"), "_") %>% mutate(temperature = as.numeric(temperature)) %>% 
-    mutate(pulse_rate = as.numeric(pulse_rate))
+crickets.1 <- crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus) %>%
+  separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
+  mutate(temperature = as.numeric(temperature)) %>%
+  mutate(pulse_rate = as.numeric(pulse_rate))
 ```
 
 ```
@@ -3305,7 +3218,7 @@ crickets.1
 ##  8 exclamationis        26.2       86.6
 ##  9 exclamationis        26.2       87.5
 ## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows
+## # … with 24 more rows
 ```
 
  
@@ -3316,7 +3229,7 @@ for our analysis.
 The warning message tells us that we got genuine missing-value NAs
 back, which is probably what we want. Specifically, they got turned
 from missing *text* to missing *numbers*!
-\marginnote{You might think that  missing is just missing, but R distinguishes between types of missing.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might think that  missing is just missing, but R distinguishes between types of missing.</span>
 The R word
 "coercion" means values being changed from one type of thing to
 another type of thing.  (We'll ignore the missings and see if they
@@ -3337,11 +3250,12 @@ something in common or that we can list, which is what we want here:
 
 
 ```r
-crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus, 
-    X3:X4) %>% gather(species, temp_pulse, exclamationis:niveus) %>% 
-    separate(temp_pulse, c("temperature", "pulse_rate"), 
-        "_") %>% mutate_at(vars(temperature:pulse_rate), 
-    funs(as.numeric))
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus) %>%
+  separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
+  mutate_at(vars(temperature:pulse_rate), funs(as.numeric))
 ```
 
 ```
@@ -3376,7 +3290,7 @@ crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus,
 ##  8 exclamationis        26.2       86.6
 ##  9 exclamationis        26.2       87.5
 ## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows
+## # … with 24 more rows
 ```
 
  
@@ -3385,10 +3299,12 @@ Can't I just say that these are columns 2 and 3?
 
 
 ```r
-crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus, 
-    X3:X4) %>% gather(species, temp_pulse, exclamationis:niveus) %>% 
-    separate(temp_pulse, c("temperature", "pulse_rate"), 
-        "_") %>% mutate_at(vars(2:3), funs(as.numeric))
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus) %>%
+  separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
+  mutate_at(vars(2:3), funs(as.numeric))
 ```
 
 ```
@@ -3411,7 +3327,7 @@ crickets %>% unite(exclamationis, X1:X2) %>% unite(niveus,
 ##  8 exclamationis        26.2       86.6
 ##  9 exclamationis        26.2       87.5
 ## 10 exclamationis        26.2       89.1
-## # ... with 24 more rows
+## # … with 24 more rows
 ```
 
  
@@ -3459,8 +3375,8 @@ Solution
 `read_csv` will do it:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/cars.csv"
-cars = read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/cars.csv"
+cars <- read_csv(my_url)
 ```
 
 ```
@@ -3481,19 +3397,19 @@ cars
 
 ```
 ## # A tibble: 38 x 6
-##    car     MPG weight cylinders    hp country
-##    <chr> <dbl>  <dbl>     <dbl> <dbl> <chr>  
-##  1 Buic~  28.4   2.67         4    90 U.S.   
-##  2 Dodg~  30.9   2.23         4    75 U.S.   
-##  3 Merc~  20.8   3.07         6    85 U.S.   
-##  4 Fiat~  37.3   2.13         4    69 Italy  
-##  5 Peug~  16.2   3.41         6   133 France 
-##  6 VW R~  31.9   1.92         4    71 Germany
-##  7 Plym~  34.2   2.2          4    70 U.S.   
-##  8 Mazd~  34.1   1.98         4    65 Japan  
-##  9 Buic~  16.9   4.36         8   155 U.S.   
-## 10 Audi~  20.3   2.83         5   103 Germany
-## # ... with 28 more rows
+##    car                  MPG weight cylinders    hp country
+##    <chr>              <dbl>  <dbl>     <dbl> <dbl> <chr>  
+##  1 Buick Skylark       28.4   2.67         4    90 U.S.   
+##  2 Dodge Omni          30.9   2.23         4    75 U.S.   
+##  3 Mercury Zephyr      20.8   3.07         6    85 U.S.   
+##  4 Fiat Strada         37.3   2.13         4    69 Italy  
+##  5 Peugeot 694 SL      16.2   3.41         6   133 France 
+##  6 VW Rabbit           31.9   1.92         4    71 Germany
+##  7 Plymouth Horizon    34.2   2.2          4    70 U.S.   
+##  8 Mazda GLC           34.1   1.98         4    65 Japan  
+##  9 Buick Estate Wagon  16.9   4.36         8   155 U.S.   
+## 10 Audi 5000           20.3   2.83         5   103 Germany
+## # … with 28 more rows
 ```
 
  
@@ -3526,7 +3442,7 @@ cars %>% select(car, country)
 ##  8 Mazda GLC          Japan  
 ##  9 Buick Estate Wagon U.S.   
 ## 10 Audi 5000          Germany
-## # ... with 28 more rows
+## # … with 28 more rows
 ```
 
  
@@ -3552,7 +3468,7 @@ cars %>% select(starts_with("c"))
 ##  8 Mazda GLC                  4 Japan  
 ##  9 Buick Estate Wagon         8 U.S.   
 ## 10 Audi 5000                  5 Germany
-## # ... with 28 more rows
+## # … with 28 more rows
 ```
 
  
@@ -3576,19 +3492,19 @@ cars %>% select(-hp)
 
 ```
 ## # A tibble: 38 x 5
-##    car           MPG weight cylinders country
-##    <chr>       <dbl>  <dbl>     <dbl> <chr>  
-##  1 Buick Skyl~  28.4   2.67         4 U.S.   
-##  2 Dodge Omni   30.9   2.23         4 U.S.   
-##  3 Mercury Ze~  20.8   3.07         6 U.S.   
-##  4 Fiat Strada  37.3   2.13         4 Italy  
-##  5 Peugeot 69~  16.2   3.41         6 France 
-##  6 VW Rabbit    31.9   1.92         4 Germany
-##  7 Plymouth H~  34.2   2.2          4 U.S.   
-##  8 Mazda GLC    34.1   1.98         4 Japan  
-##  9 Buick Esta~  16.9   4.36         8 U.S.   
-## 10 Audi 5000    20.3   2.83         5 Germany
-## # ... with 28 more rows
+##    car                  MPG weight cylinders country
+##    <chr>              <dbl>  <dbl>     <dbl> <chr>  
+##  1 Buick Skylark       28.4   2.67         4 U.S.   
+##  2 Dodge Omni          30.9   2.23         4 U.S.   
+##  3 Mercury Zephyr      20.8   3.07         6 U.S.   
+##  4 Fiat Strada         37.3   2.13         4 Italy  
+##  5 Peugeot 694 SL      16.2   3.41         6 France 
+##  6 VW Rabbit           31.9   1.92         4 Germany
+##  7 Plymouth Horizon    34.2   2.2          4 U.S.   
+##  8 Mazda GLC           34.1   1.98         4 Japan  
+##  9 Buick Estate Wagon  16.9   4.36         8 U.S.   
+## 10 Audi 5000           20.3   2.83         5 Germany
+## # … with 28 more rows
 ```
 
  
@@ -3610,16 +3526,16 @@ cars %>% filter(cylinders == 8)
 
 ```
 ## # A tibble: 8 x 6
-##   car      MPG weight cylinders    hp country
-##   <chr>  <dbl>  <dbl>     <dbl> <dbl> <chr>  
-## 1 Buick~  16.9   4.36         8   155 U.S.   
-## 2 Chevy~  19.2   3.60         8   125 U.S.   
-## 3 Chrys~  18.5   3.94         8   150 U.S.   
-## 4 Ford ~  17.6   3.72         8   129 U.S.   
-## 5 Dodge~  18.2   3.83         8   135 U.S.   
-## 6 Ford ~  15.5   4.05         8   142 U.S.   
-## 7 Mercu~  16.5   3.96         8   138 U.S.   
-## 8 Chevy~  17     3.84         8   130 U.S.
+##   car                         MPG weight cylinders    hp country
+##   <chr>                     <dbl>  <dbl>     <dbl> <dbl> <chr>  
+## 1 Buick Estate Wagon         16.9   4.36         8   155 U.S.   
+## 2 Chevy Malibu Wagon         19.2   3.60         8   125 U.S.   
+## 3 Chrysler LeBaron Wagon     18.5   3.94         8   150 U.S.   
+## 4 Ford LTD                   17.6   3.72         8   129 U.S.   
+## 5 Dodge St Regis             18.2   3.83         8   135 U.S.   
+## 6 Ford Country Squire Wagon  15.5   4.05         8   142 U.S.   
+## 7 Mercury Grand Marquis      16.5   3.96         8   138 U.S.   
+## 8 Chevy Caprice Classic      17     3.84         8   130 U.S.
 ```
 
  
@@ -3677,8 +3593,7 @@ Solution
 
 
 ```r
-cars %>% filter(cylinders == 4) %>% summarize(m = mean(MPG), 
-    s = sd(MPG))
+cars %>% filter(cylinders == 4) %>% summarize(m = mean(MPG), s = sd(MPG))
 ```
 
 ```
@@ -3695,8 +3610,7 @@ cylinders, and pick out the one you want:
 
 
 ```r
-cars %>% group_by(cylinders) %>% summarize(m = mean(MPG), 
-    s = sd(MPG))
+cars %>% group_by(cylinders) %>% summarize(m = mean(MPG), s = sd(MPG))
 ```
 
 ```
@@ -3716,8 +3630,10 @@ you can do any of these things with *that*, for example:
 
 
 ```r
-cars %>% group_by(cylinders) %>% summarize(m = mean(MPG), 
-    s = sd(MPG)) %>% filter(cylinders == 4)
+cars %>%
+  group_by(cylinders) %>%
+  summarize(m = mean(MPG), s = sd(MPG)) %>%
+  filter(cylinders == 4)
 ```
 
 ```
@@ -3761,7 +3677,7 @@ Solution
 
 
 ```r
-billboard = read_csv("http://stat405.had.co.nz/data/billboard.csv")
+billboard <- read_csv("http://stat405.had.co.nz/data/billboard.csv")
 ```
 
 ```
@@ -3803,59 +3719,43 @@ billboard
 
 ```
 ## # A tibble: 317 x 83
-##     year artist.inverted track time  genre
-##    <dbl> <chr>           <chr> <tim> <chr>
-##  1  2000 Destiny's Child Inde~ 03:38 Rock 
-##  2  2000 Santana         Mari~ 04:18 Rock 
-##  3  2000 Savage Garden   I Kn~ 04:07 Rock 
-##  4  2000 Madonna         Music 03:45 Rock 
-##  5  2000 Aguilera, Chri~ Come~ 03:38 Rock 
-##  6  2000 Janet           Does~ 04:17 Rock 
-##  7  2000 Destiny's Child Say ~ 04:31 Rock 
-##  8  2000 Iglesias, Enri~ Be W~ 03:36 Latin
-##  9  2000 Sisqo           Inco~ 03:52 Rock 
-## 10  2000 Lonestar        Amaz~ 04:25 Coun~
-## # ... with 307 more rows, and 78 more
-## #   variables: date.entered <date>,
-## #   date.peaked <date>, x1st.week <dbl>,
-## #   x2nd.week <dbl>, x3rd.week <dbl>,
-## #   x4th.week <dbl>, x5th.week <dbl>,
-## #   x6th.week <dbl>, x7th.week <dbl>,
-## #   x8th.week <dbl>, x9th.week <dbl>,
-## #   x10th.week <dbl>, x11th.week <dbl>,
-## #   x12th.week <dbl>, x13th.week <dbl>,
-## #   x14th.week <dbl>, x15th.week <dbl>,
-## #   x16th.week <dbl>, x17th.week <dbl>,
-## #   x18th.week <dbl>, x19th.week <dbl>,
-## #   x20th.week <dbl>, x21st.week <dbl>,
-## #   x22nd.week <dbl>, x23rd.week <dbl>,
-## #   x24th.week <dbl>, x25th.week <dbl>,
-## #   x26th.week <dbl>, x27th.week <dbl>,
-## #   x28th.week <dbl>, x29th.week <dbl>,
-## #   x30th.week <dbl>, x31st.week <dbl>,
-## #   x32nd.week <dbl>, x33rd.week <dbl>,
-## #   x34th.week <dbl>, x35th.week <dbl>,
-## #   x36th.week <dbl>, x37th.week <dbl>,
-## #   x38th.week <dbl>, x39th.week <dbl>,
-## #   x40th.week <dbl>, x41st.week <dbl>,
-## #   x42nd.week <dbl>, x43rd.week <dbl>,
-## #   x44th.week <dbl>, x45th.week <dbl>,
-## #   x46th.week <dbl>, x47th.week <dbl>,
-## #   x48th.week <dbl>, x49th.week <dbl>,
-## #   x50th.week <dbl>, x51st.week <dbl>,
-## #   x52nd.week <dbl>, x53rd.week <dbl>,
-## #   x54th.week <dbl>, x55th.week <dbl>,
-## #   x56th.week <dbl>, x57th.week <dbl>,
-## #   x58th.week <dbl>, x59th.week <dbl>,
-## #   x60th.week <dbl>, x61st.week <dbl>,
-## #   x62nd.week <dbl>, x63rd.week <dbl>,
-## #   x64th.week <dbl>, x65th.week <dbl>,
-## #   x66th.week <lgl>, x67th.week <lgl>,
-## #   x68th.week <lgl>, x69th.week <lgl>,
-## #   x70th.week <lgl>, x71st.week <lgl>,
-## #   x72nd.week <lgl>, x73rd.week <lgl>,
-## #   x74th.week <lgl>, x75th.week <lgl>,
-## #   x76th.week <lgl>
+##     year artist.inverted track time  genre date.entered date.peaked
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>     
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18 
+##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08 
+##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29 
+##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16 
+##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14 
+##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26 
+##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18 
+##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24 
+##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12 
+## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04 
+## # … with 307 more rows, and 76 more variables: x1st.week <dbl>,
+## #   x2nd.week <dbl>, x3rd.week <dbl>, x4th.week <dbl>, x5th.week <dbl>,
+## #   x6th.week <dbl>, x7th.week <dbl>, x8th.week <dbl>, x9th.week <dbl>,
+## #   x10th.week <dbl>, x11th.week <dbl>, x12th.week <dbl>,
+## #   x13th.week <dbl>, x14th.week <dbl>, x15th.week <dbl>,
+## #   x16th.week <dbl>, x17th.week <dbl>, x18th.week <dbl>,
+## #   x19th.week <dbl>, x20th.week <dbl>, x21st.week <dbl>,
+## #   x22nd.week <dbl>, x23rd.week <dbl>, x24th.week <dbl>,
+## #   x25th.week <dbl>, x26th.week <dbl>, x27th.week <dbl>,
+## #   x28th.week <dbl>, x29th.week <dbl>, x30th.week <dbl>,
+## #   x31st.week <dbl>, x32nd.week <dbl>, x33rd.week <dbl>,
+## #   x34th.week <dbl>, x35th.week <dbl>, x36th.week <dbl>,
+## #   x37th.week <dbl>, x38th.week <dbl>, x39th.week <dbl>,
+## #   x40th.week <dbl>, x41st.week <dbl>, x42nd.week <dbl>,
+## #   x43rd.week <dbl>, x44th.week <dbl>, x45th.week <dbl>,
+## #   x46th.week <dbl>, x47th.week <dbl>, x48th.week <dbl>,
+## #   x49th.week <dbl>, x50th.week <dbl>, x51st.week <dbl>,
+## #   x52nd.week <dbl>, x53rd.week <dbl>, x54th.week <dbl>,
+## #   x55th.week <dbl>, x56th.week <dbl>, x57th.week <dbl>,
+## #   x58th.week <dbl>, x59th.week <dbl>, x60th.week <dbl>,
+## #   x61st.week <dbl>, x62nd.week <dbl>, x63rd.week <dbl>,
+## #   x64th.week <dbl>, x65th.week <dbl>, x66th.week <lgl>,
+## #   x67th.week <lgl>, x68th.week <lgl>, x69th.week <lgl>,
+## #   x70th.week <lgl>, x71st.week <lgl>, x72nd.week <lgl>,
+## #   x73rd.week <lgl>, x74th.week <lgl>, x75th.week <lgl>, x76th.week <lgl>
 ```
 
  
@@ -3886,28 +3786,24 @@ This is `gather`ing up all those columns, with
 `na.rm=T` to get rid of the missings:
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T)
+billboard %>% gather(week, rank, x1st.week:x76th.week, na.rm = T)
 ```
 
 ```
 ## # A tibble: 5,307 x 9
-##     year artist.inverted track time  genre
-##    <dbl> <chr>           <chr> <tim> <chr>
-##  1  2000 Destiny's Child Inde~ 03:38 Rock 
-##  2  2000 Santana         Mari~ 04:18 Rock 
-##  3  2000 Savage Garden   I Kn~ 04:07 Rock 
-##  4  2000 Madonna         Music 03:45 Rock 
-##  5  2000 Aguilera, Chri~ Come~ 03:38 Rock 
-##  6  2000 Janet           Does~ 04:17 Rock 
-##  7  2000 Destiny's Child Say ~ 04:31 Rock 
-##  8  2000 Iglesias, Enri~ Be W~ 03:36 Latin
-##  9  2000 Sisqo           Inco~ 03:52 Rock 
-## 10  2000 Lonestar        Amaz~ 04:25 Coun~
-## # ... with 5,297 more rows, and 4 more
-## #   variables: date.entered <date>,
-## #   date.peaked <date>, week <chr>,
-## #   rank <dbl>
+##     year artist.inverted track time  genre date.entered date.peaked week 
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
+##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
+##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
+##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16  x1st…
+##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14  x1st…
+##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26  x1st…
+##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18  x1st…
+##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
+##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
+## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
+## # … with 5,297 more rows, and 1 more variable: rank <dbl>
 ```
 
          
@@ -3917,28 +3813,24 @@ end with `week`, so we can select them all thus:
 
 
 ```r
-billboard %>% gather(week, rank, ends_with("week"), 
-    na.rm = T)
+billboard %>% gather(week, rank, ends_with("week"), na.rm = T)
 ```
 
 ```
 ## # A tibble: 5,307 x 9
-##     year artist.inverted track time  genre
-##    <dbl> <chr>           <chr> <tim> <chr>
-##  1  2000 Destiny's Child Inde~ 03:38 Rock 
-##  2  2000 Santana         Mari~ 04:18 Rock 
-##  3  2000 Savage Garden   I Kn~ 04:07 Rock 
-##  4  2000 Madonna         Music 03:45 Rock 
-##  5  2000 Aguilera, Chri~ Come~ 03:38 Rock 
-##  6  2000 Janet           Does~ 04:17 Rock 
-##  7  2000 Destiny's Child Say ~ 04:31 Rock 
-##  8  2000 Iglesias, Enri~ Be W~ 03:36 Latin
-##  9  2000 Sisqo           Inco~ 03:52 Rock 
-## 10  2000 Lonestar        Amaz~ 04:25 Coun~
-## # ... with 5,297 more rows, and 4 more
-## #   variables: date.entered <date>,
-## #   date.peaked <date>, week <chr>,
-## #   rank <dbl>
+##     year artist.inverted track time  genre date.entered date.peaked week 
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
+##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
+##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
+##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16  x1st…
+##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14  x1st…
+##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26  x1st…
+##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18  x1st…
+##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
+##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
+## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
+## # … with 5,297 more rows, and 1 more variable: rank <dbl>
 ```
 
  
@@ -3993,8 +3885,9 @@ Solution
 A `select` is the thing:
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% select(week, rank)
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  select(week, rank)
 ```
 
 ```
@@ -4011,7 +3904,7 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 ##  8 x1st.week    63
 ##  9 x1st.week    77
 ## 10 x1st.week    81
-## # ... with 5,297 more rows
+## # … with 5,297 more rows
 ```
 
          
@@ -4039,9 +3932,13 @@ with `mutate`, that are the `parse_number`-ed
 versions of the old one(s).
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% mutate(week_number = parse_number(week), 
-    rank_number = rank) %>% select(ends_with("number"))
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  select(ends_with("number"))
 ```
 
 ```
@@ -4058,7 +3955,7 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 ##  8           1          63
 ##  9           1          77
 ## 10           1          81
-## # ... with 5,297 more rows
+## # … with 5,297 more rows
 ```
 
          
@@ -4102,11 +3999,14 @@ it by seven to get a number of days.
 After that thinking, this:
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% mutate(week_number = parse_number(week), 
-    rank_number = rank) %>% mutate(current = date.entered + 
-    (week_number - 1) * 7) %>% select(date.entered, 
-    week_number, current)
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  select(date.entered, week_number, current)
 ```
 
 ```
@@ -4123,7 +4023,7 @@ billboard %>% gather(week, rank, x1st.week:x76th.week,
 ##  8 2000-04-01             1 2000-04-01
 ##  9 2000-06-24             1 2000-06-24
 ## 10 1999-06-05             1 1999-06-05
-## # ... with 5,297 more rows
+## # … with 5,297 more rows
 ```
 
          
@@ -4152,11 +4052,15 @@ of the 5,000-odd rows of the data frame. To do that, add the line
 
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% mutate(week_number = parse_number(week), 
-    rank_number = rank) %>% mutate(current = date.entered + 
-    (week_number - 1) * 7) %>% select(date.entered, 
-    week_number, current) %>% sample_n(10)
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  select(date.entered, week_number, current) %>%
+  sample_n(10)
 ```
 
 ```
@@ -4208,29 +4112,33 @@ since we are only checking for equal-to, not something like
 "less than":
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% mutate(week_number = parse_number(week), 
-    rank_number = rank) %>% mutate(current = date.entered + 
-    (week_number - 1) * 7) %>% filter(rank == 
-    1) %>% arrange(current) %>% select(artist.inverted, 
-    track, current)
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current)
 ```
 
 ```
 ## # A tibble: 55 x 3
-##    artist.inverted   track         current   
-##    <chr>             <chr>         <date>    
-##  1 Aguilera, Christ~ What A Girl ~ 2000-01-15
-##  2 Aguilera, Christ~ What A Girl ~ 2000-01-22
-##  3 Savage Garden     I Knew I Lov~ 2000-01-29
-##  4 Savage Garden     I Knew I Lov~ 2000-02-05
-##  5 Savage Garden     I Knew I Lov~ 2000-02-12
-##  6 Carey, Mariah     Thank God I ~ 2000-02-19
-##  7 Savage Garden     I Knew I Lov~ 2000-02-26
-##  8 Lonestar          Amazed        2000-03-04
-##  9 Lonestar          Amazed        2000-03-11
-## 10 Destiny's Child   Say My Name   2000-03-18
-## # ... with 45 more rows
+##    artist.inverted     track                 current   
+##    <chr>               <chr>                 <date>    
+##  1 Aguilera, Christina What A Girl Wants     2000-01-15
+##  2 Aguilera, Christina What A Girl Wants     2000-01-22
+##  3 Savage Garden       I Knew I Loved You    2000-01-29
+##  4 Savage Garden       I Knew I Loved You    2000-02-05
+##  5 Savage Garden       I Knew I Loved You    2000-02-12
+##  6 Carey, Mariah       Thank God I Found You 2000-02-19
+##  7 Savage Garden       I Knew I Loved You    2000-02-26
+##  8 Lonestar            Amazed                2000-03-04
+##  9 Lonestar            Amazed                2000-03-11
+## 10 Destiny's Child     Say My Name           2000-03-18
+## # … with 45 more rows
 ```
 
          
@@ -4246,7 +4154,7 @@ chart in 2000, and the data set keeps a record of all such songs until
 they drop out of the chart. I'm not sure what happened to the song
 that was \#1 on January 8, 2000; maybe it entered the chart in
 1999
-\marginnote{Which was the title of a song by Prince.} and so is not
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which was the title of a song by Prince.</span> and so is not
 listed here.
 
  
@@ -4270,35 +4178,40 @@ This is a question of using `count`, but on the
 `track` title:
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% mutate(week_number = parse_number(week), 
-    rank_number = rank) %>% mutate(current = date.entered + 
-    (week_number - 1) * 7) %>% filter(rank == 
-    1) %>% arrange(current) %>% select(artist.inverted, 
-    track, current) %>% count(track)
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track)
 ```
 
 ```
 ## # A tibble: 17 x 2
-##    track                                    n
-##    <chr>                                <int>
-##  1 Amazed                                   2
-##  2 Be With You                              3
-##  3 Bent                                     1
-##  4 Come On Over Baby (All I Want Is Yo~     4
-##  5 Doesn't Really Matter                    3
-##  6 Everything You Want                      1
-##  7 I Knew I Loved You                       4
-##  8 Incomplete                               2
-##  9 Independent Women Part I                11
-## 10 It's Gonna Be Me                         2
-## 11 Maria, Maria                            10
-## 12 Music                                    4
-## 13 Say My Name                              3
-## 14 Thank God I Found You                    1
-## 15 Try Again                                1
-## 16 What A Girl Wants                        2
-## 17 With Arms Wide Open                      1
+##    track                                     n
+##    <chr>                                 <int>
+##  1 Amazed                                    2
+##  2 Be With You                               3
+##  3 Bent                                      1
+##  4 Come On Over Baby (All I Want Is You)     4
+##  5 Doesn't Really Matter                     3
+##  6 Everything You Want                       1
+##  7 I Knew I Loved You                        4
+##  8 Incomplete                                2
+##  9 Independent Women Part I                 11
+## 10 It's Gonna Be Me                          2
+## 11 Maria, Maria                             10
+## 12 Music                                     4
+## 13 Say My Name                               3
+## 14 Thank God I Found You                     1
+## 15 Try Again                                 1
+## 16 What A Girl Wants                         2
+## 17 With Arms Wide Open                       1
 ```
 
          
@@ -4313,13 +4226,18 @@ equal to its maximum value:
 
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% mutate(week_number = parse_number(week), 
-    rank_number = rank) %>% mutate(current = date.entered + 
-    (week_number - 1) * 7) %>% filter(rank == 
-    1) %>% arrange(current) %>% select(artist.inverted, 
-    track, current) %>% count(track) %>% filter(n == 
-    max(n))
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track) %>%
+  filter(n == max(n))
 ```
 
 ```
@@ -4336,35 +4254,41 @@ to make it easier to pick out the top one:
 
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% mutate(week_number = parse_number(week), 
-    rank_number = rank) %>% mutate(current = date.entered + 
-    (week_number - 1) * 7) %>% filter(rank == 
-    1) %>% arrange(current) %>% select(artist.inverted, 
-    track, current) %>% count(track) %>% arrange(desc(n))
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track) %>%
+  arrange(desc(n))
 ```
 
 ```
 ## # A tibble: 17 x 2
-##    track                                    n
-##    <chr>                                <int>
-##  1 Independent Women Part I                11
-##  2 Maria, Maria                            10
-##  3 Come On Over Baby (All I Want Is Yo~     4
-##  4 I Knew I Loved You                       4
-##  5 Music                                    4
-##  6 Be With You                              3
-##  7 Doesn't Really Matter                    3
-##  8 Say My Name                              3
-##  9 Amazed                                   2
-## 10 Incomplete                               2
-## 11 It's Gonna Be Me                         2
-## 12 What A Girl Wants                        2
-## 13 Bent                                     1
-## 14 Everything You Want                      1
-## 15 Thank God I Found You                    1
-## 16 Try Again                                1
-## 17 With Arms Wide Open                      1
+##    track                                     n
+##    <chr>                                 <int>
+##  1 Independent Women Part I                 11
+##  2 Maria, Maria                             10
+##  3 Come On Over Baby (All I Want Is You)     4
+##  4 I Knew I Loved You                        4
+##  5 Music                                     4
+##  6 Be With You                               3
+##  7 Doesn't Really Matter                     3
+##  8 Say My Name                               3
+##  9 Amazed                                    2
+## 10 Incomplete                                2
+## 11 It's Gonna Be Me                          2
+## 12 What A Girl Wants                         2
+## 13 Bent                                      1
+## 14 Everything You Want                       1
+## 15 Thank God I Found You                     1
+## 16 Try Again                                 1
+## 17 With Arms Wide Open                       1
 ```
 
  
@@ -4379,7 +4303,7 @@ very likely that the same artist would record two *different*
 songs with the same title, though it is possible that the same song by
 the same artist could appear in the Billboard chart on two different
 occasions.
-\marginnote{As, for example, when Prince died.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As, for example, when Prince died.</span>
 
 I think I want to create an artist-song combo fairly early in my pipe,
 and then display *that* later, something like this. This means
@@ -4388,36 +4312,42 @@ wherever it appears:
 
 
 ```r
-billboard %>% gather(week, rank, x1st.week:x76th.week, 
-    na.rm = T) %>% mutate(week_number = parse_number(week), 
-    rank_number = rank) %>% mutate(combo = paste(track, 
-    artist.inverted, sep = " by ")) %>% mutate(current = date.entered + 
-    (week_number - 1) * 7) %>% filter(rank == 
-    1) %>% arrange(current) %>% select(combo, 
-    current) %>% count(combo) %>% arrange(desc(n))
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(combo = paste(track, artist.inverted, sep = " by ")) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(combo, current) %>%
+  count(combo) %>%
+  arrange(desc(n))
 ```
 
 ```
 ## # A tibble: 17 x 2
-##    combo                                    n
-##    <chr>                                <int>
-##  1 Independent Women Part I by Destiny~    11
-##  2 Maria, Maria by Santana                 10
-##  3 Come On Over Baby (All I Want Is Yo~     4
-##  4 I Knew I Loved You by Savage Garden      4
-##  5 Music by Madonna                         4
-##  6 Be With You by Iglesias, Enrique         3
-##  7 Doesn't Really Matter by Janet           3
-##  8 Say My Name by Destiny's Child           3
-##  9 Amazed by Lonestar                       2
-## 10 Incomplete by Sisqo                      2
-## 11 It's Gonna Be Me by N'Sync               2
-## 12 What A Girl Wants by Aguilera, Chri~     2
-## 13 Bent by matchbox twenty                  1
-## 14 Everything You Want by Vertical Hor~     1
-## 15 Thank God I Found You by Carey, Mar~     1
-## 16 Try Again by Aaliyah                     1
-## 17 With Arms Wide Open by Creed             1
+##    combo                                                            n
+##    <chr>                                                        <int>
+##  1 Independent Women Part I by Destiny's Child                     11
+##  2 Maria, Maria by Santana                                         10
+##  3 Come On Over Baby (All I Want Is You) by Aguilera, Christina     4
+##  4 I Knew I Loved You by Savage Garden                              4
+##  5 Music by Madonna                                                 4
+##  6 Be With You by Iglesias, Enrique                                 3
+##  7 Doesn't Really Matter by Janet                                   3
+##  8 Say My Name by Destiny's Child                                   3
+##  9 Amazed by Lonestar                                               2
+## 10 Incomplete by Sisqo                                              2
+## 11 It's Gonna Be Me by N'Sync                                       2
+## 12 What A Girl Wants by Aguilera, Christina                         2
+## 13 Bent by matchbox twenty                                          1
+## 14 Everything You Want by Vertical Horizon                          1
+## 15 Thank God I Found You by Carey, Mariah                           1
+## 16 Try Again by Aaliyah                                             1
+## 17 With Arms Wide Open by Creed                                     1
 ```
 
  
@@ -4518,8 +4448,8 @@ is, 10) lines of it, so that you can check it for
 plausibleness: 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/bikes.csv"
-bikes = read_csv(my_url, skip = 8, col_names = F)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/bikes.csv"
+bikes <- read_csv(my_url, skip = 8, col_names = F)
 ```
 
 ```
@@ -4543,20 +4473,19 @@ bikes
 
 ```
 ## # A tibble: 1,958 x 9
-##    X1     X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2    NA  X     <NA>  <NA>  X     <NA>  X    
-##  3    NA  X     <NA>  <NA>  X     <NA>  X    
-##  4    NA  X     <NA>  <NA>  X     <NA>  X    
-##  5    NA  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7    NA  <NA>  X     X     <NA>  <NA>  X    
-##  8    NA  X     <NA>  X     <NA>  <NA>  X    
-##  9    NA  <NA>  X     X     <NA>  <NA>  X    
-## 10    NA  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 2 more
-## #   variables: X8 <chr>, X9 <chr>
+##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  2    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  3    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  4    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  5    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  7    NA  <NA>  X     X     <NA>  <NA>  X     <NA>  X    
+##  8    NA  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  9    NA  <NA>  X     X     <NA>  <NA>  X     X     <NA> 
+## 10    NA  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+## # … with 1,948 more rows
 ```
 
          
@@ -4595,7 +4524,7 @@ recorded as 7:15, and so on.
 
 (d) Find something from the `tidyverse` that will
 fill
-\marginnote{Oh, what a giveaway.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Oh, what a giveaway.</span>
 in those missing values with the right thing.
 Start a pipe from the data frame you read in, that updates the
 appropriate column with the filled-in times.
@@ -4623,20 +4552,19 @@ bikes %>% fill(X1)
 
 ```
 ## # A tibble: 1,958 x 9
-##    X1     X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 2 more
-## #   variables: X8 <chr>, X9 <chr>
+##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X    
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA> 
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+## # … with 1,948 more rows
 ```
 
            
@@ -4654,20 +4582,19 @@ bikes %>% fill(X1) %>% rename(Time = X1)
 
 ```
 ## # A tibble: 1,958 x 9
-##    Time   X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 2 more
-## #   variables: X8 <chr>, X9 <chr>
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9   
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X    
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA> 
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X    
+## # … with 1,948 more rows
 ```
 
  
@@ -4703,27 +4630,27 @@ Under the assumption we are making, we only have to look
 at column `X2` and we ignore `X3` totally:
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = ifelse(X2 == 
-    "X", "male", "female"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(X2 == "X", "male", "female"))
 ```
 
 ```
 ## # A tibble: 1,958 x 10
-##    Time   X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 3 more
-## #   variables: X8 <chr>, X9 <chr>,
-## #   gender <chr>
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     <NA>  
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  <NA>  
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+## # … with 1,948 more rows
 ```
 
             
@@ -4734,26 +4661,27 @@ happened? Let's just look at our logical condition this time:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(isX = (X2 == 
-    "X"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(isX = (X2 == "X"))
 ```
 
 ```
 ## # A tibble: 1,958 x 10
-##    Time   X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 3 more
-## #   variables: X8 <chr>, X9 <chr>, isX <lgl>
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    isX  
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <lgl>
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     TRUE 
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     NA   
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     TRUE 
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  NA   
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     TRUE 
+## # … with 1,948 more rows
 ```
 
  
@@ -4775,27 +4703,27 @@ goes like this:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = ifelse(is.na(X2), 
-    "female", "male"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male"))
 ```
 
 ```
 ## # A tibble: 1,958 x 10
-##    Time   X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 3 more
-## #   variables: X8 <chr>, X9 <chr>,
-## #   gender <chr>
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     female
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  female
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male  
+## # … with 1,948 more rows
 ```
 
             
@@ -4810,7 +4738,7 @@ them. This gives us more things to check, at least
 three. `ifelse` is good for something with only two
 alternatives, but when you have more, `case_when` is much
 better.
-\marginnote{In some languages it is called *switch*. Python  appears not to have it. What you do there instead is to use a Python  dictionary to pick out the value you want.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In some languages it is called *switch*. Python  appears not to have it. What you do there instead is to use a Python  dictionary to pick out the value you want.</span> 
 Here's how that goes. Our strategy is to
 check for three things: (i) `X2` has an `X` and
 `X3` is missing; (ii) `X2` is missing and `X3`
@@ -4818,28 +4746,31 @@ has an `X`; (iii) anything else, which is an error:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = case_when(X2 == 
-    "X" & is.na(X3) ~ "Male", is.na(X2) & X3 == 
-    "X" ~ "Female", TRUE ~ "Error!"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = case_when(
+    X2 == "X" & is.na(X3) ~ "Male",
+    is.na(X2) & X3 == "X" ~ "Female",
+    TRUE ~ "Error!"
+  ))
 ```
 
 ```
 ## # A tibble: 1,958 x 10
-##    Time   X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 3 more
-## #   variables: X8 <chr>, X9 <chr>,
-## #   gender <chr>
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     Male  
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     Female
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     Male  
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  Female
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     Male  
+## # … with 1,948 more rows
 ```
 
             
@@ -4865,9 +4796,15 @@ gluing this onto the end:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = case_when(X2 == 
-    "X" & is.na(X3) ~ "Male", is.na(X2) & X3 == 
-    "X" ~ "Female", TRUE ~ "Error!")) %>% count(gender)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = case_when(
+    X2 == "X" & is.na(X3) ~ "Male",
+    is.na(X2) & X3 == "X" ~ "Female",
+    TRUE ~ "Error!"
+  )) %>%
+  count(gender)
 ```
 
 ```
@@ -4889,26 +4826,27 @@ way to do it seems to be to rename the columns first:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% rename(male = X2, 
-    female = X3)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3)
 ```
 
 ```
 ## # A tibble: 1,958 x 9
-##    Time  male  female X4    X5    X6    X7   
-##    <tim> <chr> <chr>  <chr> <chr> <chr> <chr>
-##  1 07:00 X     <NA>   <NA>  X     <NA>  X    
-##  2 07:00 X     <NA>   <NA>  X     <NA>  X    
-##  3 07:00 X     <NA>   <NA>  X     <NA>  X    
-##  4 07:00 X     <NA>   <NA>  X     <NA>  X    
-##  5 07:00 X     <NA>   <NA>  X     <NA>  X    
-##  6 07:15 X     <NA>   X     <NA>  <NA>  X    
-##  7 07:15 <NA>  X      X     <NA>  <NA>  X    
-##  8 07:15 X     <NA>   X     <NA>  <NA>  X    
-##  9 07:15 <NA>  X      X     <NA>  <NA>  X    
-## 10 07:15 X     <NA>   X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 2 more
-## #   variables: X8 <chr>, X9 <chr>
+##    Time   male  female X4    X5    X6    X7    X8    X9   
+##    <time> <chr> <chr>  <chr> <chr> <chr> <chr> <chr> <chr>
+##  1 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  2 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  3 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  4 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  5 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
+##  6 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
+##  7 07:15  <NA>  X      X     <NA>  <NA>  X     <NA>  X    
+##  8 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
+##  9 07:15  <NA>  X      X     <NA>  <NA>  X     X     <NA> 
+## 10 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
+## # … with 1,948 more rows
 ```
 
  
@@ -4917,26 +4855,28 @@ and then gather them up:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% rename(male = X2, 
-    female = X3) %>% gather(gender, what, male:female)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3) %>%
+  gather(gender, what, male:female)
 ```
 
 ```
 ## # A tibble: 3,916 x 9
-##    Time   X4    X5    X6    X7    X8    X9   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  2 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  3 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  4 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  5 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  7 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  8 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  9 07:15  X     <NA>  <NA>  X     X     <NA> 
-## 10 07:15  X     <NA>  <NA>  X     <NA>  X    
-## # ... with 3,906 more rows, and 2 more
-## #   variables: gender <chr>, what <chr>
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   <NA> 
+##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  9 07:15  X     <NA>  <NA>  X     X     <NA>  male   <NA> 
+## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## # … with 3,906 more rows
 ```
 
  
@@ -4948,27 +4888,29 @@ is equal to `X`:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% rename(male = X2, 
-    female = X3) %>% gather(gender, what, male:female) %>% 
-    filter(what == "X")
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3) %>%
+  gather(gender, what, male:female) %>%
+  filter(what == "X")
 ```
 
 ```
 ## # A tibble: 1,958 x 9
-##    Time   X4    X5    X6    X7    X8    X9   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  2 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  3 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  4 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  5 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  7 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  8 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  9 07:15  X     <NA>  <NA>  X     <NA>  X    
-## 10 07:15  X     <NA>  <NA>  X     <NA>  X    
-## # ... with 1,948 more rows, and 2 more
-## #   variables: gender <chr>, what <chr>
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  9 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## # … with 1,948 more rows
 ```
 
  
@@ -4977,27 +4919,28 @@ Another way to do this is to remove the missings in the `gather`:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% rename(male = X2, 
-    female = X3) %>% gather(gender, what, male:female, 
-    na.rm = T)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3) %>%
+  gather(gender, what, male:female, na.rm = T)
 ```
 
 ```
 ## # A tibble: 1,958 x 9
-##    Time   X4    X5    X6    X7    X8    X9   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  2 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  3 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  4 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  5 07:00  <NA>  X     <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  7 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  8 07:15  X     <NA>  <NA>  X     <NA>  X    
-##  9 07:15  X     <NA>  <NA>  X     <NA>  X    
-## 10 07:15  X     <NA>  <NA>  X     <NA>  X    
-## # ... with 1,948 more rows, and 2 more
-## #   variables: gender <chr>, what <chr>
+##    Time   X4    X5    X6    X7    X8    X9    gender what 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
+##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+##  9 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## # … with 1,948 more rows
 ```
 
  
@@ -5009,9 +4952,12 @@ the same thing we got before:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% rename(male = X2, 
-    female = X3) %>% gather(gender, what, male:female, 
-    na.rm = T) %>% count(gender)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3) %>%
+  gather(gender, what, male:female, na.rm = T) %>%
+  count(gender)
 ```
 
 ```
@@ -5048,30 +4994,33 @@ On the face of it, the way to do this is to go looking
 for `X`'s:
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = ifelse(is.na(X2), 
-    "female", "male")) %>% mutate(helmet = (X4 == 
-    "X"), passenger = (X6 == "X"), sidewalk = (X8 == 
-    "X"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male")) %>%
+  mutate(
+    helmet = (X4 == "X"),
+    passenger = (X6 == "X"),
+    sidewalk = (X8 == "X")
+  )
 ```
 
 ```
 ## # A tibble: 1,958 x 13
-##    Time   X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 6 more
-## #   variables: X8 <chr>, X9 <chr>,
-## #   gender <chr>, helmet <lgl>,
-## #   passenger <lgl>, sidewalk <lgl>
+##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  4 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  5 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
+##  6 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  7 07:15 <NA>  X     X     <NA>  <NA>  X     <NA>  X     female TRUE  
+##  8 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  9 07:15 <NA>  X     X     <NA>  <NA>  X     X     <NA>  female TRUE  
+## 10 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+## # … with 1,948 more rows, and 2 more variables: passenger <lgl>,
+## #   sidewalk <lgl>
 ```
 
     
@@ -5085,29 +5034,33 @@ the sidewalk. These are `X5, X7, X9` respectively:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = ifelse(is.na(X2), 
-    "female", "male")) %>% mutate(helmet = is.na(X5), 
-    passenger = is.na(X7), sidewalk = is.na(X9))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male")) %>%
+  mutate(
+    helmet = is.na(X5),
+    passenger = is.na(X7),
+    sidewalk = is.na(X9)
+  )
 ```
 
 ```
 ## # A tibble: 1,958 x 13
-##    Time   X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 6 more
-## #   variables: X8 <chr>, X9 <chr>,
-## #   gender <chr>, helmet <lgl>,
-## #   passenger <lgl>, sidewalk <lgl>
+##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  4 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  5 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  6 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  7 07:15 <NA>  X     X     <NA>  <NA>  X     <NA>  X     female TRUE  
+##  8 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  9 07:15 <NA>  X     X     <NA>  <NA>  X     X     <NA>  female TRUE  
+## 10 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+## # … with 1,948 more rows, and 2 more variables: passenger <lgl>,
+## #   sidewalk <lgl>
 ```
 
     
@@ -5122,28 +5075,28 @@ like this, for example:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = ifelse(X2 == 
-    "X", "male", "female")) %>% mutate(helmet = ifelse(is.na(X5), 
-    T, F))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(X2 == "X", "male", "female")) %>%
+  mutate(helmet = ifelse(is.na(X5), T, F))
 ```
 
 ```
 ## # A tibble: 1,958 x 11
-##    Time   X2    X3    X4    X5    X6    X7   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>  <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  7 07:15  <NA>  X     X     <NA>  <NA>  X    
-##  8 07:15  X     <NA>  X     <NA>  <NA>  X    
-##  9 07:15  <NA>  X     X     <NA>  <NA>  X    
-## 10 07:15  X     <NA>  X     <NA>  <NA>  X    
-## # ... with 1,948 more rows, and 4 more
-## #   variables: X8 <chr>, X9 <chr>,
-## #   gender <chr>, helmet <lgl>
+##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  4 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  5 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
+##  6 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  7 07:15  <NA>  X     X     <NA>  <NA>  X     <NA>  X     <NA>   TRUE  
+##  8 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+##  9 07:15  <NA>  X     X     <NA>  <NA>  X     X     <NA>  <NA>   TRUE  
+## 10 07:15  X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
+## # … with 1,948 more rows
 ```
 
  
@@ -5152,7 +5105,7 @@ and the same for `passenger` and `sidewalk`. The warning
 is, whenever you see a `T` and an `F` in an
 `ifelse`, that you could probably get rid of the
 `ifelse` and use the logical condition directly.
-\marginnote{If I  was helping you, and you were struggling with *ifelse* but  finally mastered it, it seemed easier to suggest that you used it  again for the others.}  For texttt{gender}, though, you need the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If I  was helping you, and you were struggling with *ifelse* but  finally mastered it, it seemed easier to suggest that you used it  again for the others.}  For texttt{gender</span>, though, you need the
 `ifelse` (or a `case_when`) because the values you want
 it to take are `male` and `female`, something other than
 `TRUE` and `FALSE`.
@@ -5162,7 +5115,7 @@ them to a variable. If I don't, I get something like
 
 
 ```r
-helmet = V4 == "X"
+helmet <- V4 == "X"
 ```
 
  
@@ -5172,8 +5125,8 @@ works. Let's check:
 
 
 ```r
-exes = c("X", "", "X", "", "X")
-y = exes == "X"
+exes <- c("X", "", "X", "", "X")
+y <- exes == "X"
 y
 ```
 
@@ -5194,7 +5147,7 @@ better to write
 
 
 ```r
-y = (exes == "X")
+y <- (exes == "X")
 ```
 
  
@@ -5238,11 +5191,16 @@ needed above: this is just `select`, added to
 the end:
 
 ```r
-mybikes = bikes %>% fill(X1) %>% rename(Time = X1) %>% 
-    mutate(gender = ifelse(is.na(X2), "female", 
-        "male")) %>% mutate(helmet = is.na(X5), 
-    passenger = is.na(X7), sidewalk = is.na(X9)) %>% 
-    select(-(X2:X9))
+mybikes <- bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male")) %>%
+  mutate(
+    helmet = is.na(X5),
+    passenger = is.na(X7),
+    sidewalk = is.na(X9)
+  ) %>%
+  select(-(X2:X9))
 mybikes
 ```
 
@@ -5260,7 +5218,7 @@ mybikes
 ##  8 07:15  male   TRUE   FALSE     FALSE   
 ##  9 07:15  female TRUE   FALSE     TRUE    
 ## 10 07:15  male   TRUE   FALSE     FALSE   
-## # ... with 1,948 more rows
+## # … with 1,948 more rows
 ```
 
            
@@ -5272,10 +5230,16 @@ Another way to do this is to use a "select-helper", thus:
 
 
 ```r
-bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = ifelse(is.na(X2), 
-    "female", "male")) %>% mutate(helmet = is.na(X5), 
-    passenger = is.na(X7), sidewalk = is.na(X9)) %>% 
-    select(-num_range("X", 2:9))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male")) %>%
+  mutate(
+    helmet = is.na(X5),
+    passenger = is.na(X7),
+    sidewalk = is.na(X9)
+  ) %>%
+  select(-num_range("X", 2:9))
 ```
 
 ```
@@ -5292,7 +5256,7 @@ bikes %>% fill(X1) %>% rename(Time = X1) %>% mutate(gender = ifelse(is.na(X2),
 ##  8 07:15  male   TRUE   FALSE     FALSE   
 ##  9 07:15  female TRUE   FALSE     TRUE    
 ## 10 07:15  male   TRUE   FALSE     FALSE   
-## # ... with 1,948 more rows
+## # … with 1,948 more rows
 ```
 
            
@@ -5364,7 +5328,7 @@ mybikes %>% count(gender, helmet)
 we need.
 
 The real question of interest here is "what *proportion* of male and female cyclists were not wearing helmets?"
-\marginnote{But I didn't want to complicate this question any farther.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">But I didn't want to complicate this question any farther.</span> 
 This has a rather elegant
 solution that I will have to explain. First, let's go back to the
 `group_by` and `summarize` version of the
@@ -5372,7 +5336,9 @@ solution that I will have to explain. First, let's go back to the
 
 
 ```r
-mybikes %>% group_by(gender, helmet) %>% summarize(the_ount = n())
+mybikes %>%
+  group_by(gender, helmet) %>%
+  summarize(the_ount = n())
 ```
 
 ```
@@ -5393,8 +5359,10 @@ proportion and see what happens:
 
 
 ```r
-mybikes %>% group_by(gender, helmet) %>% summarize(the_count = n()) %>% 
-    mutate(prop = the_count/sum(the_count))
+mybikes %>%
+  group_by(gender, helmet) %>%
+  summarize(the_count = n()) %>%
+  mutate(prop = the_count / sum(the_count))
 ```
 
 ```
@@ -5416,7 +5384,7 @@ for example:
 
 
 ```r
-403/(403 + 458)
+403 / (403 + 458)
 ```
 
 ```
@@ -5447,8 +5415,10 @@ What happens if we switch the order of the things in the `group_by`?
 
 
 ```r
-mybikes %>% group_by(helmet, gender) %>% summarize(the_count = n()) %>% 
-    mutate(prop = the_count/sum(the_count))
+mybikes %>%
+  group_by(helmet, gender) %>%
+  summarize(the_count = n()) %>%
+  mutate(prop = the_count / sum(the_count))
 ```
 
 ```
@@ -5476,7 +5446,9 @@ This is row and column proportions in a contingency table, B22 style.
 Now, I have to see whether the `count` variant of this works:
 
 ```r
-mybikes %>% count(gender, helmet) %>% mutate(prop = n/sum(n))
+mybikes %>%
+  count(gender, helmet) %>%
+  mutate(prop = n / sum(n))
 ```
 
 ```
@@ -5615,7 +5587,9 @@ frequency:
 
 
 ```r
-mybikes %>% count(Time) %>% filter(n == max(n))
+mybikes %>%
+  count(Time) %>%
+  filter(n == max(n))
 ```
 
 ```
@@ -5649,7 +5623,7 @@ alert days from 2001 to 2016 are listed at
 
 The word "warning" is sometimes used in place of "alert" in these
 data. They mean the same thing.
-\marginnote{Unlike *thunderstorm watch*  and *thunderstorm warning*, which mean different things.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Unlike *thunderstorm watch*  and *thunderstorm warning*, which mean different things.</span>
 
 
 
@@ -5674,8 +5648,8 @@ Solution
 A `.csv`, so:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/heat.csv"
-heat = read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/heat.csv"
+heat <- read_csv(my_url)
 ```
 
 ```
@@ -5694,19 +5668,19 @@ heat
 
 ```
 ## # A tibble: 200 x 4
-##       id date       code  text               
-##    <dbl> <date>     <chr> <chr>              
-##  1   232 2016-09-08 HAU   Toronto's Medical ~
-##  2   231 2016-09-07 HAE   Toronto's Medical ~
-##  3   230 2016-09-06 HA    Toronto's Medical ~
-##  4   228 2016-08-13 EHAE  Toronto's Medical ~
-##  5   227 2016-08-12 EHAE  Toronto's Medical ~
-##  6   226 2016-08-11 HAU   Toronto's Medical ~
-##  7   225 2016-08-10 HAE   Toronto's Medical ~
-##  8   224 2016-08-09 HA    Toronto's Medical ~
-##  9   222 2016-08-05 HAE   Toronto's Medical ~
-## 10   221 2016-08-04 HA    Toronto's Medical ~
-## # ... with 190 more rows
+##       id date       code  text                                             
+##    <dbl> <date>     <chr> <chr>                                            
+##  1   232 2016-09-08 HAU   Toronto's Medical Officer of Health has upgraded…
+##  2   231 2016-09-07 HAE   Toronto's Medical Officer of Health has continue…
+##  3   230 2016-09-06 HA    Toronto's Medical Officer of Health has issued a…
+##  4   228 2016-08-13 EHAE  Toronto's Medical Officer of Health has continue…
+##  5   227 2016-08-12 EHAE  Toronto's Medical Officer of Health has continue…
+##  6   226 2016-08-11 HAU   Toronto's Medical Officer of Health has upgraded…
+##  7   225 2016-08-10 HAE   Toronto's Medical Officer of Health has continue…
+##  8   224 2016-08-09 HA    Toronto's Medical Officer of Health has issued a…
+##  9   222 2016-08-05 HAE   Toronto's Medical Officer of Health has continue…
+## 10   221 2016-08-04 HA    Toronto's Medical Officer of Health has issued a…
+## # … with 190 more rows
 ```
 
        
@@ -5888,8 +5862,10 @@ function `diff` that works out exactly this. Building
 a pipeline, just because:
 
 ```r
-heat %>% select(-text) %>% mutate(daycount = as.numeric(date)) %>% 
-    mutate(daydiff = abs(c(diff(daycount), 0)))
+heat %>%
+  select(-text) %>%
+  mutate(daycount = as.numeric(date)) %>%
+  mutate(daydiff = abs(c(diff(daycount), 0)))
 ```
 
 ```
@@ -5906,7 +5882,7 @@ heat %>% select(-text) %>% mutate(daycount = as.numeric(date)) %>%
 ##  8   224 2016-08-09 HA       17022       4
 ##  9   222 2016-08-05 HAE      17018       1
 ## 10   221 2016-08-04 HA       17017      11
-## # ... with 190 more rows
+## # … with 190 more rows
 ```
 
              
@@ -5948,9 +5924,11 @@ Thus my pipeline continues like this:
 
 
 ```r
-heat %>% select(-text) %>% mutate(daycount = as.numeric(date)) %>% 
-    mutate(daydiff = abs(c(diff(daycount), 0))) %>% 
-    count(daydiff != 1)
+heat %>%
+  select(-text) %>%
+  mutate(daycount = as.numeric(date)) %>%
+  mutate(daydiff = abs(c(diff(daycount), 0))) %>%
+  count(daydiff != 1)
 ```
 
 ```
@@ -5979,10 +5957,12 @@ the start of heat alert events? We can figure that out now:
 
 
 ```r
-heat %>% select(-text) %>% mutate(daycount = as.numeric(date)) %>% 
-    mutate(daydiff = abs(c(diff(daycount), 0))) %>% 
-    mutate(start = (daydiff != 1)) %>% count(code, 
-    start)
+heat %>%
+  select(-text) %>%
+  mutate(daycount = as.numeric(date)) %>%
+  mutate(daydiff = abs(c(diff(daycount), 0))) %>%
+  mutate(start = (daydiff != 1)) %>%
+  count(code, start)
 ```
 
 ```
@@ -6006,7 +5986,7 @@ heat alert event and `FALSE` otherwise, by comparing the days
 from the previous heat alert day with 1. Then I can make a
 `table`, or, as here, the `dplyr` equivalent with
 `count`.
-\marginnote{I did not know until just now that you could put  two variables in a count and you get counts of all the  combinations of them. Just goes to show the value of *try it and  see*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I did not know until just now that you could put  two variables in a count and you get counts of all the  combinations of them. Just goes to show the value of *try it and  see*.</span> 
 Or `group_by` and `summarize`. What this
 shows is that EHAD, EHAE, HAE and HAU *never* go with the start
 of a heat alert event (as they shouldn't). But look at the HAs and
@@ -6039,13 +6019,11 @@ library(lubridate)
 ```
 
 ```
-## Warning: package 'lubridate' was built under
-## R version 3.5.1
+## Warning: package 'lubridate' was built under R version 3.5.1
 ```
 
 ```r
-heat %>% select(-text) %>% mutate(year = year(date)) %>% 
-    sample_n(10)
+heat %>% select(-text) %>% mutate(year = year(date)) %>% sample_n(10)
 ```
 
 ```
@@ -6070,7 +6048,7 @@ get back to previous years.
 Having convinced myself that it worked, let me save it:
 
 ```r
-heat <- heat %>% select(-text) %>% mutate(year = year(date))
+heat %>% select(-text) %>% mutate(year = year(date)) -> heat
 ```
 
                  
@@ -6123,7 +6101,7 @@ not many are near the start, so there is something of an upward
 trend. Having said that, 2014 is unusually low (that was a cool
 summer, if you recall), and 2005 was unusually high. (Was that the
 summer of the big power outage? I forget.
-\marginnote{I looked it up. It  was 2003, my first summer in Ontario.})
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I looked it up. It  was 2003, my first summer in Ontario.</span>)
 
 You could also reasonably say that there isn't much pattern: the
 number of heat-alert days goes up and down. In fact, anything that's
@@ -6134,16 +6112,16 @@ and sticking some kind of smooth trend on it. This uses the output we just got, 
 
 
 ```r
-heat %>% count(year) %>% ggplot(aes(x = year, 
-    y = n)) + geom_point() + geom_smooth(se = F)
+heat %>%
+  count(year) %>%
+  ggplot(aes(x = year, y = n)) + geom_point() + geom_smooth(se = F)
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{11-tidying-and-selecting-data_files/figure-latex/unnamed-chunk-149-1} 
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-149-1.png" width="672"  />
 
  
 The pattern is very scattered, as is commonly the case with
@@ -6190,14 +6168,14 @@ This can be calculated, and even tested:
 
 
 ```r
-heat %>% count(year) %>% with(., cor.test(year, 
-    n, method = "kendall"))
+heat %>%
+  count(year) %>%
+  with(., cor.test(year, n, method = "kendall"))
 ```
 
 ```
-## Warning in cor.test.default(year, n, method =
-## "kendall"): Cannot compute exact p-value with
-## ties
+## Warning in cor.test.default(year, n, method = "kendall"): Cannot compute
+## exact p-value with ties
 ```
 
 ```
@@ -6236,7 +6214,7 @@ like this, repeated:
 
 one for each heat alert day. These are "keys" (on the left side of
 the `:`) and "values" (on the right side).
-\marginnote{This is  the same kind of thing as a *dictionary* in Python.}  The keys
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is  the same kind of thing as a *dictionary* in Python.</span>  The keys
 are column headers (if the data were in a data frame) and the values
 are the data values that would be in that column. In JSON generally,
 there's no need for the keys to be the same in every row, but if they
@@ -6248,8 +6226,8 @@ I did this in R, using a package called `jsonlite`, with this code:
 
 ```r
 library(jsonlite)
-url = "http://app.toronto.ca/opendata/heat_alerts/heat_alerts_list.json"
-heat = fromJSON(url, simplifyDataFrame = T)
+url <- "http://app.toronto.ca/opendata/heat_alerts/heat_alerts_list.json"
+heat <- fromJSON(url, simplifyDataFrame = T)
 head(heat)
 write_csv(heat, "heat.csv")
 ```

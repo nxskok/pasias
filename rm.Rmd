@@ -44,8 +44,8 @@ Solution
 We therefore need `read_tsv`. I'm not quite sure what to
 call this one:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/rm.txt"
-treatments=read_tsv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/rm.txt"
+treatments <- read_tsv(my_url)
 treatments
 ```
 
@@ -72,8 +72,8 @@ Solution
 The individuals are labelled in `subject` and the
 treatments are in `trt`, which means we need to do this:
 ```{r }
-ggplot(treatments,aes(x=time,y=y,colour=trt,group=subject))+
-geom_point()+geom_line()
+ggplot(treatments, aes(x = time, y = y, colour = trt, group = subject)) +
+  geom_point() + geom_line()
 ```
 
      
@@ -135,7 +135,7 @@ times). It needs two inputs: the current single column that
 contains the column names you are going to make, and the values to
 carry along with them, in that order:
 ```{r }
-tr2 = treatments %>% spread(time,y)
+tr2 <- treatments %>% spread(time, y)
 tr2
 ```
 
@@ -158,8 +158,8 @@ Solution
 
 Create the response variable first, and use it in an `lm`:
 ```{r }
-response=with(tr2,cbind(T1,T2,T3))
-treatment.1=lm(response~trt,data=tr2)
+response <- with(tr2, cbind(T1, T2, T3))
+treatment.1 <- lm(response ~ trt, data = tr2)
 ```
 
      
@@ -169,8 +169,8 @@ to get the different times we have. You can type them in again (fine
 here), or get them from the `response` you just made:
 
 ```{r }
-times=colnames(response)
-times.df=data.frame(times)
+times <- colnames(response)
+times.df <- data.frame(times)
 ```
 
  
@@ -184,7 +184,7 @@ approach at least.
 Then, uppercase-M `Manova`:
 
 ```{r }
-treatment.2=Manova(treatment.1,idata=times.df,idesign=~times)
+treatment.2 <- Manova(treatment.1, idata = times.df, idesign = ~times)
 treatment.2
 ```
 
@@ -201,7 +201,7 @@ Extra: `car` also includes a thing called `Anova` with a
 capital A. That looks a bit different but gives us some extra information:
 
 ```{r }
-treatment.3=Anova(treatment.1,idata=times.df,idesign=~times,type="III")
+treatment.3 <- Anova(treatment.1, idata = times.df, idesign = ~times, type = "III")
 ```
 
  
@@ -210,7 +210,7 @@ The "type" on the end is a Roman numeral 3, for the type of test to
 do. III is good:
 
 ```{r }
-summary(treatment.3,multivariate=F)
+summary(treatment.3, multivariate = F)
 ```
 
  
@@ -292,8 +292,8 @@ the random effects. It looks like this, noting that \emph{it works
 with the tidy data frame} that we read in from the file and made
 the spaghetti plot out of:
 ```{r }
-treatment.4=lmer(y~trt*time+(1|subject),data=treatments)
-drop1(treatment.4,test="Chisq")
+treatment.4 <- lmer(y ~ trt * time + (1 | subject), data = treatments)
+drop1(treatment.4, test = "Chisq")
 ```
 
      

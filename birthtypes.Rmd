@@ -27,8 +27,8 @@ Solution
 This is a space-delimited text file, which means:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/birthtypes.txt"
-births=read_delim(my_url, " ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/birthtypes.txt"
+births <- read_delim(my_url, " ")
 births
 ```
 
@@ -58,9 +58,10 @@ The cesarean rate is `cesarean` divided by
 `cesarean` plus `vaginal`:
 ```{r }
 library(lubridate)
-b2 = births %>% mutate(datestr=str_c("2012",month,"1",sep=" ")) %>%
-mutate(thedate=ymd(datestr)) %>%
-mutate(cesarean_rate=cesarean/(cesarean+vaginal))
+b2 <- births %>%
+  mutate(datestr = str_c("2012", month, "1", sep = " ")) %>%
+  mutate(thedate = ymd(datestr)) %>%
+  mutate(cesarean_rate = cesarean / (cesarean + vaginal))
 b2
 ```
 
@@ -72,7 +73,7 @@ single value gets repeated the right number of times:
 `r tufte::margin_note("This is  an example of R's so-called *recycling rules*.")`
 
 ```{r }
-births %>% mutate(year=2012,day=1)
+births %>% mutate(year = 2012, day = 1)
 ```
 
  
@@ -83,10 +84,11 @@ the columns that it is made out of; in this case, the original year,
 month and day disappear:
 
 ```{r }
-b3 = births %>% mutate(year=2012, day=1) %>%
-unite(datestr,year,month,day) %>%
-mutate(thedate=ymd(datestr)) %>%
-mutate(cesarean_rate=cesarean/(cesarean+vaginal))
+b3 <- births %>%
+  mutate(year = 2012, day = 1) %>%
+  unite(datestr, year, month, day) %>%
+  mutate(thedate = ymd(datestr)) %>%
+  mutate(cesarean_rate = cesarean / (cesarean + vaginal))
 b3
 ```
 
@@ -107,7 +109,7 @@ Solution
 
 This is a scatterplot with time on the $x$ axis:
 ```{r }
-ggplot(b2,aes(x=thedate,y=cesarean_rate))+geom_point()+geom_smooth()
+ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() + geom_smooth()
 ```
 
         
@@ -116,8 +118,8 @@ I like this better than joining the points by lines, since we already
 have a trend on the plot, but you can do that in some contrasting way:
 
 ```{r }
-ggplot(b2,aes(x=thedate,y=cesarean_rate))+geom_point()+
-geom_line(linetype="dashed")+geom_smooth()
+ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() +
+  geom_line(linetype = "dashed") + geom_smooth()
 ```
 
  
@@ -147,7 +149,7 @@ lurking in the background is how the date is actually
 passing it through `as.numeric` might turn it into that:
 
 ```{r }
-b2 %>% mutate(numeric_date=as.numeric(thedate)) -> b5
+b2 %>% mutate(numeric_date = as.numeric(thedate)) -> b5
 b5
 ```
 

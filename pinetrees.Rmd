@@ -30,8 +30,8 @@ Solution
 Observe that the data values are separated by spaces, and therefore
 that `read_delim` will do it:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt"
-trees=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/pinetrees.txt"
+trees <- read_delim(my_url, " ")
 trees
 ```
 
@@ -51,7 +51,7 @@ No clues this time. You need to recognize that you have two
 quantitative variables, so that a scatterplot is called
 for. Also, the volume is the response, so that should go on the $y$-axis:
 ```{r }
-ggplot(trees,aes(x=diameter,y=volume))+geom_point()
+ggplot(trees, aes(x = diameter, y = volume)) + geom_point()
 ```
 
        
@@ -60,8 +60,8 @@ You can put a smooth trend on it if you like, which would
 look like this:
 
 ```{r }
-ggplot(trees,aes(x=diameter,y=volume))+
-geom_point()+geom_smooth()
+ggplot(trees, aes(x = diameter, y = volume)) +
+  geom_point() + geom_smooth()
 ```
 
        
@@ -109,7 +109,7 @@ object by the name of the response variable and a number. (I
 have always used dots, but in the spirit of the
 `tidyverse` I suppose I should use underscores.)
 ```{r }
-volume.1=lm(volume~diameter,data=trees)
+volume.1 <- lm(volume ~ diameter, data = trees)
 summary(volume.1)
 ```
 
@@ -147,7 +147,7 @@ value to this one is that it is a *data frame*, so if you want to
 pull anything out of it, you know how to do that:
 `r tufte::margin_note("The  *summary* output is more designed for looking at than for  extracting things from.")`
 ```{r }
-tidy(volume.1) %>% filter(term=="diameter")
+tidy(volume.1) %>% filter(term == "diameter")
 ```
 
  
@@ -169,7 +169,7 @@ The thing I'm fishing for is a residual plot (of the residuals
 against the fitted values), and on it you are looking for a
 random mess of nothingness:
 ```{r }
-ggplot(volume.1,aes(x=.fitted,y=.resid))+geom_point()
+ggplot(volume.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
        
@@ -254,7 +254,7 @@ Solution
 According to my formula, the volume depends on the diameter
 squared, which I include in the model thus:
 ```{r }
-volume.2=lm(volume~I(diameter^2),data=trees)
+volume.2 <- lm(volume ~ I(diameter^2), data = trees)
 summary(volume.2)
 ```
 
@@ -273,7 +273,7 @@ intercept made no sense). So, from that point of view, either model
 predicts the data well. I should look at the residuals from this one:
 
 ```{r }
-ggplot(volume.2,aes(x=.fitted,y=.resid))+geom_point()
+ggplot(volume.2, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
  
@@ -332,7 +332,7 @@ so that log-volume has a linear relationship with log-diameter and we
 can go ahead and estimate it:
 
 ```{r }
-volume.3=lm(log(volume)~log(diameter),data=trees)
+volume.3 <- lm(log(volume) ~ log(diameter), data = trees)
 summary(volume.3)
 ```
 
@@ -358,7 +358,7 @@ The R-squared here, though it is less than the other ones we
 got, is still high. The residuals are these:
 
 ```{r }
-ggplot(volume.3,aes(x=.fitted,y=.resid))+geom_point()
+ggplot(volume.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
  
@@ -376,7 +376,7 @@ that mathematically rigorous, you can take limits, but that's the
 intuition. We can also do some predictions: set up a data frame that has a column called `diameter` with some diameters to predict for:
 
 ```{r }
-d=tibble(diameter=c(1,2,seq(5,50,5)))
+d <- tibble(diameter = c(1, 2, seq(5, 50, 5)))
 d
 ```
 
@@ -385,8 +385,8 @@ d
 and then feed that into `predict`:
 
 ```{r }
-p=predict(volume.3,d)
-d %>% mutate(pred=p)
+p <- predict(volume.3, d)
+d %>% mutate(pred = p)
 ```
 
 
@@ -394,7 +394,7 @@ d %>% mutate(pred=p)
 These are predicted log-volumes, so we'd better anti-log them. `log` in R is natural logs, so this is inverted using `exp`: 
 
 ```{r }
-d %>% mutate(pred=exp(p))
+d %>% mutate(pred = exp(p))
 ```
 
 
@@ -407,7 +407,7 @@ I mentioned `broom` earlier. We can make a data frame out of
 the one-line summaries of our three models:
 
 ```{r }
-bind_rows(glance(volume.1),glance(volume.2),glance(volume.3))
+bind_rows(glance(volume.1), glance(volume.2), glance(volume.3))
 ```
 
  
@@ -428,8 +428,8 @@ try this by remembering that `map_df` will work for a function
 like `glance` that outputs a data frame:
 
 ```{r }
-model_list=list(volume.1,volume.2,volume.3)
-map_df(model_list,~glance(.)) 
+model_list <- list(volume.1, volume.2, volume.3)
+map_df(model_list, ~ glance(.))
 ```
 
  

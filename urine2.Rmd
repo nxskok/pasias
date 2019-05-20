@@ -12,10 +12,10 @@ chloride and chlorine. The data are in
 Yes, you saw this one before. What you found was something like this:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
-urine=read_csv(my_url)
-response=with(urine,cbind(creatinine,chlorine,chloride))
-urine.1=manova(response~obesity,data=urine)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
+urine <- read_csv(my_url)
+response <- with(urine, cbind(creatinine, chlorine, chloride))
+urine.1 <- manova(response ~ obesity, data = urine)
 summary(urine.1)
 ```
 
@@ -34,7 +34,7 @@ Solution
 As above, plus:
 
 ```{r }
-urine.1=lda(obesity~creatinine+chlorine+chloride,data=urine)
+urine.1 <- lda(obesity ~ creatinine + chlorine + chloride, data = urine)
 urine.1
 ```
 
@@ -70,8 +70,8 @@ then make a data frame out of the original data and the
 predictions. 
 
 ```{r }
-urine.pred=predict(urine.1)
-d=cbind(urine,urine.pred)
+urine.pred <- predict(urine.1)
+d <- cbind(urine, urine.pred)
 head(d)
 ```
 
@@ -114,7 +114,7 @@ head(as.data.frame(urine.pred))
 You see that the columns that came from matrices have gained two-part names, the first part from the name of the matrix, the second part from the column name within that matrix. Then we can do this:
 
 ```{r }
-dd=bind_cols(urine, as.data.frame(urine.pred))
+dd <- bind_cols(urine, as.data.frame(urine.pred))
 dd
 ```
 
@@ -128,9 +128,9 @@ have. That means pulling out the pieces, turning them from matrices
 into data frames, and then gluing everything back together:
 
 ```{r error=T}
-post=as_tibble(urine.pred$posterior)
-ld=as_tibble(urine.pred$x)
-ddd=bind_cols(urine, class=urine.pred$class, ld, post)
+post <- as_tibble(urine.pred$posterior)
+ld <- as_tibble(urine.pred$x)
+ddd <- bind_cols(urine, class = urine.pred$class, ld, post)
 ddd
 ```
 
@@ -148,7 +148,7 @@ mind which way you go.
 Now make the plot, making sure that you are using columns with the right names. I'm using my first data frame, with the two-part names:
 
 ```{r error=T}
-ggplot(d,aes(x=x.LD1,y=x.LD2,colour=obesity))+geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = obesity)) + geom_point()
 ```
 
  
@@ -190,12 +190,12 @@ here (especially group `c`), then that group will
 appear all over the plot. The table of means only says how
 the *average* individual within a group stacks up.
 ```{r }
-ggbiplot(urine.1, groups=urine$obesity)
+ggbiplot(urine.1, groups = urine$obesity)
 ```
 
  
 
-xxx This shows (in a way that is perhaps easier to see) how the linear
+This shows (in a way that is perhaps easier to see) how the linear
 discriminants are related to the original variables, and thus how the
 groups differ in terms of the original variables.
 `r tufte::margin_note("This was why  we were doing discriminant analysis in the first place.")` 
@@ -212,7 +212,7 @@ which is a plot of each discriminant score against each other
 one. You can plot just the first two, like this:
 
 ```{r }
-plot(urine.1,dimen=2)
+plot(urine.1, dimen = 2)
 ```
 
  
@@ -232,7 +232,7 @@ Solution
 Make a table, one way or another:
 
 ```{r error=T}
-tab=with(d, table(obesity, class))
+tab <- with(d, table(obesity, class))
 tab
 ```
 
@@ -254,7 +254,7 @@ tab
  
 or if you prefer to make it look more like a table of frequencies:
 ```{r }
-tab %>% spread(class, n, fill=0)
+tab %>% spread(class, n, fill = 0)
 ```
 
  
@@ -281,7 +281,7 @@ are the hardest to get right and the others are easier, but you could
 also think about an overall misclassification rate. This comes most
 easily from the "tidy" table:
 ```{r }
-tab %>% count(correct=(obesity==class),wt=n) 
+tab %>% count(correct = (obesity == class), wt = n)
 ```
 
  
@@ -292,8 +292,9 @@ called `correct`.
 It's a shortcut for this:
 
 ```{r }
-tab %>% mutate(is_correct=(obesity==class)) %>%
-count(is_correct, wt=n)
+tab %>%
+  mutate(is_correct = (obesity == class)) %>%
+  count(is_correct, wt = n)
 ```
 
  
@@ -308,8 +309,9 @@ This says that 22 men were classified correctly and 23 were gotten
 wrong. We can find the proportions correct and wrong:
 
 ```{r error=T}
-tab %>% count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=n/sum(n))
+tab %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
  
@@ -336,9 +338,9 @@ do any summarizing:
 
 ```{r error=T}
 tab %>%
-group_by(obesity) %>%
-count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=n/sum(n))
+  group_by(obesity) %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
  
@@ -349,11 +351,11 @@ read, a kind of "untidying":
 
 ```{r error=T}
 tab %>%
-group_by(obesity) %>%
-count(correct=(obesity==class),wt=n) %>%
-mutate(proportion=n/sum(n)) %>%
-select(-n) %>%
-spread(correct,proportion)
+  group_by(obesity) %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(correct, proportion)
 ```
 
  
@@ -371,12 +373,12 @@ values than TRUE and FALSE:
 
 ```{r error=T}
 tab %>%
-group_by(obesity) %>%
-mutate(prediction_stat=ifelse(obesity==class,"correct","wrong")) %>%
-count(prediction_stat,wt=n) %>%
-mutate(proportion=n/sum(n)) %>%
-select(-n) %>%
-spread(prediction_stat,proportion)
+  group_by(obesity) %>%
+  mutate(prediction_stat = ifelse(obesity == class, "correct", "wrong")) %>%
+  count(prediction_stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(prediction_stat, proportion)
 ```
 
  

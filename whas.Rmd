@@ -21,8 +21,8 @@ Solution
 
 This is `read_delim`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/whas500.txt"
-whas=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/whas500.txt"
+whas <- read_delim(my_url, " ")
 whas
 ```
 
@@ -65,9 +65,11 @@ These dates are day-month-year, so we need `dmy` from
 `lubridate`: 
 
 ```{r }
-whas2=whas %>% mutate(admit=dmy(admitdate),
-dis=dmy(disdate),
-f=dmy(fdate)) 
+whas2 <- whas %>% mutate(
+  admit = dmy(admitdate),
+  dis = dmy(disdate),
+  f = dmy(fdate)
+)
 glimpse(whas2)
 ```
 
@@ -95,7 +97,7 @@ and then submit all of them to a `mutate` via `mutate_at`,
 which goes like this:
 
 ```{r }
-whas %>% mutate_at(vars(ends_with("date")),funs(d=dmy)) %>% glimpse()
+whas %>% mutate_at(vars(ends_with("date")), funs(d = dmy)) %>% glimpse()
 ```
 
  
@@ -132,11 +134,12 @@ milliseconds or anything, not necessarily days),
 so subtracting them requires care; you have to divide by the
 length of a day (in whatever units), thus:
 ```{r }
-whas3=whas2 %>% mutate(
-diff1=(dis-admit)/ddays(1),
-diff2=(f-admit)/ddays(1),
-diff3=(f-dis)/ddays(1))
-glimpse(whas3)	   
+whas3 <- whas2 %>% mutate(
+  diff1 = (dis - admit) / ddays(1),
+  diff2 = (f - admit) / ddays(1),
+  diff3 = (f - dis) / ddays(1)
+)
+glimpse(whas3)
 ```
 
        
@@ -159,11 +162,11 @@ more reliable than the human eye. R has a function `all.equal`
 which does exactly that. By way of warmup:
 
 ```{r }
-x=1:4
-y=1:4
-z=c(1,2,3,5)
-all.equal(x,y)
-all.equal(x,z)
+x <- 1:4
+y <- 1:4
+z <- c(1, 2, 3, 5)
+all.equal(x, y)
+all.equal(x, z)
 ```
 
  
@@ -176,8 +179,8 @@ enough to call equal, or, as in this case, not.
 Anyway:
 
 ```{r }
-with(whas3,all.equal(lenfol,diff2))
-with(whas3,all.equal(los,diff1))
+with(whas3, all.equal(lenfol, diff2))
+with(whas3, all.equal(los, diff1))
 ```
 
  
@@ -199,7 +202,7 @@ Solution
 The easiest way to make a factor is to wrap `fstat`, which
 is a numeric 0 or 1, in `factor()`:
 ```{r }
-ggplot(whas3,aes(x=factor(fstat),y=lenfol))+geom_boxplot()
+ggplot(whas3, aes(x = factor(fstat), y = lenfol)) + geom_boxplot()
 ```
 
        
@@ -207,8 +210,9 @@ ggplot(whas3,aes(x=factor(fstat),y=lenfol))+geom_boxplot()
 Or create a factor version of `fstat` first:
 
 ```{r }
-whas3 %>% mutate(ffstat=factor(fstat)) %>%
-ggplot(aes(x=ffstat,y=lenfol))+geom_boxplot()
+whas3 %>%
+  mutate(ffstat = factor(fstat)) %>%
+  ggplot(aes(x = ffstat, y = lenfol)) + geom_boxplot()
 ```
 
  
@@ -222,8 +226,9 @@ report for your boss, the first way is fine.
 this also works:
 
 ```{r }
-whas3 %>% mutate(cfstat=as.character(fstat)) %>%
-ggplot(aes(x=cfstat, y=lenfol))+geom_boxplot()
+whas3 %>%
+  mutate(cfstat = as.character(fstat)) %>%
+  ggplot(aes(x = cfstat, y = lenfol)) + geom_boxplot()
 ```
 
  

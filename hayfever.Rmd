@@ -24,8 +24,8 @@ Solution
 
 Aligned columns separated by spaces, so `read_table`:
 ```{r }
-my_url="https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt"
-hayfever=read_table(my_url)
+my_url <- "https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt"
+hayfever <- read_table(my_url)
 hayfever
 ```
 
@@ -52,8 +52,9 @@ Solution
 
 This is a group-by and summarize, but there are two active ingredients and they *both* have to go in the group-by:
 ```{r }
-hayfever %>% group_by(a,b) %>%
-summarize(m=mean(relief)) -> d
+hayfever %>%
+  group_by(a, b) %>%
+  summarize(m = mean(relief)) -> d
 d
 ```
 
@@ -66,10 +67,10 @@ I still need to save the data frame `d` to use in a moment.
 These levels are in the wrong logical order, but they are in the right order in the original data frame, so we can use `fct_inorder` first, thus:
 
 ```{r }
-hayfever %>% 
-mutate(a=fct_inorder(a), b=fct_inorder(b)) %>%
-group_by(a,b) %>%
-summarize(m=mean(relief)) -> d2
+hayfever %>%
+  mutate(a = fct_inorder(a), b = fct_inorder(b)) %>%
+  group_by(a, b) %>%
+  summarize(m = mean(relief)) -> d2
 d2
 ```
 
@@ -85,15 +86,15 @@ My column of mean relief values is called `m`. Use whatever
 name you gave it.  I'm going to use my proper-order data frame for
 this:
 ```{r }
-ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
-geom_point()+geom_line()
+ggplot(d2, aes(x = a, y = m, colour = b, group = b)) +
+  geom_point() + geom_line()
 ```
 
      
 Or, you probably had this:
 ```{r }
- ggplot(d, aes(x=a,y=m,colour=b,group=b))+
-geom_point()+geom_line()
+ggplot(d, aes(x = a, y = m, colour = b, group = b)) +
+  geom_point() + geom_line()
 ```
 
      
@@ -101,8 +102,8 @@ geom_point()+geom_line()
 Since `a` and `b` both have three levels, you could just as well use them the other way around:
 
 ```{r }
- ggplot(d2, aes(x=b,y=m,colour=a,group=a))+
-geom_point()+geom_line()
+ggplot(d2, aes(x = b, y = m, colour = a, group = a)) +
+  geom_point() + geom_line()
 ```
 
  
@@ -129,9 +130,9 @@ plot, colour-coded in the same way. I would do this by taking out
 the `geom_point` for the means and add one instead for the
 data, taken from the original data frame:
 ```{r }
-ggplot(d2, aes(x=a,y=m,colour=b,group=b))+
-geom_line()+
-geom_point(data=hayfever, aes(y=relief))
+ggplot(d2, aes(x = a, y = m, colour = b, group = b)) +
+  geom_line() +
+  geom_point(data = hayfever, aes(y = relief))
 ```
 
      
@@ -152,7 +153,7 @@ Solution
 
 
 ```{r }
-hayfever.1=aov(relief~a*b,data=hayfever)
+hayfever.1 <- aov(relief ~ a * b, data = hayfever)
 summary(hayfever.1)
 ```
 
@@ -172,8 +173,9 @@ Solution
 
 First, we pull out only the data where A is `medium`, and then we do a one-way analysis of B on that data. This is the slick way, though you can certainly save the result of `filter` first:
 ```{r }
-hayfever %>% filter(a=="medium") %>%
-aov(relief~b, data=.) -> simple_medium
+hayfever %>%
+  filter(a == "medium") %>%
+  aov(relief ~ b, data = .) -> simple_medium
 summary(simple_medium)
 ```
 
@@ -198,8 +200,9 @@ Solution
 
 Same idea: pull out only the data where A is `high`, do a one-way analysis of B, and do Tukey if needed:
 ```{r }
-hayfever %>% filter(a=="high") %>%
-aov(relief~b, data=.) -> simple_high
+hayfever %>%
+  filter(a == "high") %>%
+  aov(relief ~ b, data = .) -> simple_high
 summary(simple_high)
 TukeyHSD(simple_high)
 ```

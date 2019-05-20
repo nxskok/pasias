@@ -21,8 +21,8 @@ Solution
 
 `read_csv`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv"
-movies=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv"
+movies <- read_csv(my_url)
 movies
 ```
 
@@ -60,7 +60,7 @@ Solution
 ANOVA first:
 
 ```{r }
-length.1=aov(length~rating,data=movies)
+length.1 <- aov(length ~ rating, data = movies)
 summary(length.1)
 ```
 
@@ -85,8 +85,9 @@ others (which are not significantly different from each other).
 If you like, you can make a table of means to verify that:
 
 ```{r }
-movies %>% group_by(rating) %>%
-summarize(mean=mean(length))
+movies %>%
+  group_by(rating) %>%
+  summarize(mean = mean(length))
 ```
 
  
@@ -104,7 +105,7 @@ Solution
 
 The obvious graph is a boxplot:
 ```{r }
-ggplot(movies, aes(x=rating, y=length))+geom_boxplot()
+ggplot(movies, aes(x = rating, y = length)) + geom_boxplot()
 ```
 
        
@@ -126,7 +127,7 @@ groups, and works in the same way as before:
 
 ```{r }
 library(smmr)
-median_test(movies,length,rating)
+median_test(movies, length, rating)
 ```
 
  
@@ -145,7 +146,7 @@ several tests at once. I thought this was generally useful enough that
 I put it into `smmr` under the name `pairwise_median_test`:
 
 ```{r }
-pairwise_median_test(movies,length,rating)
+pairwise_median_test(movies, length, rating)
 ```
 
  

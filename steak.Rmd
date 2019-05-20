@@ -73,7 +73,7 @@ Solution
 The usual:
 
 ```{r }
-steak=read_csv("steak1.csv")
+steak <- read_csv("steak1.csv")
 head(steak)
 ```
 
@@ -119,7 +119,7 @@ Solution
 
 This is the most direct way to find out:
 ```{r }
-preps = steak %>% distinct(steak_prep) %>% pull(steak_prep)
+preps <- steak %>% distinct(steak_prep) %>% pull(steak_prep)
 preps
 ```
 
@@ -130,8 +130,8 @@ the data frame). We just need to switch the first two around, and then
 we'll be done:
 
 ```{r }
-preps1=preps[c(2,1,3,4,5)]
-preps1             
+preps1 <- preps[c(2, 1, 3, 4, 5)]
+preps1
 ```
 
  
@@ -139,7 +139,7 @@ preps1
 If you used `count`, there's a bit more work to do:
 
 ```{r }
-preps2 = steak %>% count (steak_prep) %>% pull(steak_prep)
+preps2 <- steak %>% count(steak_prep) %>% pull(steak_prep)
 preps2
 ```
 
@@ -148,7 +148,7 @@ preps2
 because `count` puts them in alphabetical order, so:
 
 ```{r }
-preps3=preps2[c(4,2,1,3,5)]
+preps3 <- preps2[c(4, 2, 1, 3, 5)]
 preps3
 ```
 
@@ -166,7 +166,7 @@ later).
 So now I create my ordered response:
 
 ```{r }
-steak = steak %>% mutate(steak_prep_ord=ordered(steak_prep,preps1))
+steak <- steak %>% mutate(steak_prep_ord = ordered(steak_prep, preps1))
 ```
 
  
@@ -193,7 +193,7 @@ Solution
 The thing you have to be careful about is that you use the
 *ordered* factor that you just created as the response:
 ```{r finetti,cache=T}
-steak.1=polr(steak_prep_ord~educ+female+lottery_a,data=steak)
+steak.1 <- polr(steak_prep_ord ~ educ + female + lottery_a, data = steak)
 ```
 
      
@@ -213,7 +213,7 @@ Solution
 This:
 
 ```{r }
-drop1(steak.1,test="Chisq")
+drop1(steak.1, test = "Chisq")
 ```
 
  
@@ -236,7 +236,7 @@ Solution
 You could type or copy-paste the whole model again, but
 `update` is quicker:
 ```{r }
-steak.2=update(steak.1,.~.-female)
+steak.2 <- update(steak.1, . ~ . - female)
 ```
 
      
@@ -249,7 +249,7 @@ a model with `female` and one without, we can compare them
 using `anova`:
 
 ```{r }
-anova(steak.2,steak.1,test="Chisq")
+anova(steak.2, steak.1, test = "Chisq")
 ```
 
  
@@ -262,7 +262,7 @@ exactly the same test). As non-significant as you could wish for.
 I was curious about whether either of the other $x$'s could come out now:
 
 ```{r }
-drop1(steak.2,test="Chisq")
+drop1(steak.2, test = "Chisq")
 ```
 
  
@@ -289,10 +289,10 @@ Again, I'm leaving it to you to follow all the steps. My variables
 remaining are `educ` and `lottery_a`. The second of
 these is a logical, TRUE and FALSE, so I just filled in the two values:
 ```{r }
-educs = steak %>% distinct(educ) %>% pull(educ)
-lottery_as=c(FALSE,TRUE)
+educs <- steak %>% distinct(educ) %>% pull(educ)
+lottery_as <- c(FALSE, TRUE)
 
-steak.new=crossing(educ=educs,lottery_a=lottery_as)
+steak.new <- crossing(educ = educs, lottery_a = lottery_as)
 steak.new
 ```
 
@@ -304,8 +304,8 @@ should be, put in *something*, and it will tell you what your
 choices are:
 
 ```{r }
-p=predict(steak.2,steak.new,type="probs")
-cbind(steak.new,p)
+p <- predict(steak.2, steak.new, type = "probs")
+cbind(steak.new, p)
 ```
 
  
@@ -314,7 +314,7 @@ I find this hard to read, so I'm going to round off those
 predictions. Three or four decimals seems to be sensible:
 
 ```{r }
-cbind(steak.new,round(p,3))
+cbind(steak.new, round(p, 3))
 ```
 
  
@@ -350,7 +350,7 @@ Solution
 The fitting part is the challenge, since the testing part is
 `anova` again. The direct fit is this:
 ```{r fiorentina,cache=T}
-steak.3=polr(steak_prep_ord~1,data=steak)
+steak.3 <- polr(steak_prep_ord ~ 1, data = steak)
 ```
 
      
@@ -359,7 +359,7 @@ and the `update` version is this, about equally long, starting
 from `steak.2` since that is the best model so far:
 
 ```{r }
-steak.3a=update(steak.2,.~.-educ-lottery_a)
+steak.3a <- update(steak.2, . ~ . - educ - lottery_a)
 ```
 
  
@@ -368,7 +368,7 @@ You can use whichever you like. Either way, the second part is
 `anova`, and the two possible answers should be the same:
 
 ```{r }
-anova(steak.3,steak.2,test="Chisq")
+anova(steak.3, steak.2, test = "Chisq")
 ```
 
  
@@ -376,7 +376,7 @@ anova(steak.3,steak.2,test="Chisq")
 or
 
 ```{r }
-anova(steak.3a,steak.2,test="Chisq")
+anova(steak.3a, steak.2, test = "Chisq")
 ```
 
  
@@ -396,7 +396,7 @@ If you think that removing these two variables is questionable, you
 might like to go back to that `drop1` output I had above:
 
 ```{r }
-drop1(steak.2,test="Chisq")
+drop1(steak.2, test = "Chisq")
 ```
 
  
@@ -405,8 +405,8 @@ The smallest AIC goes with `lottery_a`, so that comes out (it
 is nowhere near significant):
 
 ```{r }
-steak.4=update(steak.2,.~.-lottery_a)
-drop1(steak.4,test="Chisq")
+steak.4 <- update(steak.2, . ~ . - lottery_a)
+drop1(steak.4, test = "Chisq")
 ```
 
  
@@ -442,7 +442,7 @@ I choose what I did here? Well, I wanted to fit a regression predicting
 steak preference from everything else, do a big backward
 elimination, but:
 ```{r udinese,cache=T, error=T}
-steak.5=polr(steak_prep_ord~.,data=steak)
+steak.5 <- polr(steak_prep_ord ~ ., data = steak)
 ```
 
    
@@ -464,11 +464,13 @@ I don't normally recommend forward selection, but I wonder whether it
 works here:
 
 ```{r juventus,cache=T}
-steak.5=polr(steak_prep_ord~1,data=steak)
-steak.6=step(steak.5,scope=.~lottery_a+smoke+alcohol+gamble+skydiving+
-speed+cheated+female+age+hhold_income+educ+region,
-direction="forward",test="Chisq",trace=0)
-drop1(steak.6,test="Chisq")
+steak.5 <- polr(steak_prep_ord ~ 1, data = steak)
+steak.6 <- step(steak.5,
+  scope = . ~ lottery_a + smoke + alcohol + gamble + skydiving +
+    speed + cheated + female + age + hhold_income + educ + region,
+  direction = "forward", test = "Chisq", trace = 0
+)
+drop1(steak.6, test = "Chisq")
 ```
 
  

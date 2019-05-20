@@ -36,8 +36,8 @@ Solution
 
 
 ```{r }
-my_url="http://individual.utoronto.ca/kbutler/stad29/caffeine.csv"
-caffeine.untidy=read_csv(my_url)
+my_url <- "http://individual.utoronto.ca/kbutler/stad29/caffeine.csv"
+caffeine.untidy <- read_csv(my_url)
 caffeine.untidy
 ```
 
@@ -59,8 +59,8 @@ Solution
 We'll save into `caffeine` again:
 
 ```{r }
-caffeine = caffeine.untidy %>% 
-gather(amount,score,High:None,factor_key=T)
+caffeine <- caffeine.untidy %>%
+  gather(amount, score, High:None, factor_key = T)
 caffeine
 ```
 
@@ -84,7 +84,7 @@ Solution
 Extra: I'm going to run the ANOVA the "old way" first, so that we can
 compare results. You don't need to do this:
 ```{r }
-caffeine.old=aov(score~amount, data=caffeine)
+caffeine.old <- aov(score ~ amount, data = caffeine)
 summary(caffeine.old)
 TukeyHSD(caffeine.old)
 ```
@@ -95,7 +95,7 @@ End of digression.
 Now we'll do it using `lm`, with contrasts later, and see how
 things change:
 ```{r }
-caffeine.2=lm(score~amount, data=caffeine)
+caffeine.2 <- lm(score ~ amount, data = caffeine)
 summary(caffeine.2)
 ```
 
@@ -127,7 +127,7 @@ whether we should remove `amount` (that is, whether it has any
 impact on test scores) this way too:
 
 ```{r }
-drop1(caffeine.2,test="F")
+drop1(caffeine.2, test = "F")
 ```
 
  
@@ -146,7 +146,7 @@ Solution
 Count them, or find the distinct ones:
 
 ```{r }
-caffeine %>% group_by(amount) %>% summarize(count=n())
+caffeine %>% group_by(amount) %>% summarize(count = n())
 ```
 
  
@@ -207,7 +207,7 @@ Solution
 
 Put a 0 in for None:
 ```{r }
-c.hm=c(1,-1,0)
+c.hm <- c(1, -1, 0)
 ```
 
        
@@ -224,7 +224,7 @@ Solution
 
 
 ```{r }
-c.any=c(-0.5,-0.5,1)
+c.any <- c(-0.5, -0.5, 1)
 ```
 
  
@@ -248,7 +248,7 @@ Solution
 
 Multiply them together and check that what you get adds up to zero:
 ```{r }
-sum(c.hm*c.any)
+sum(c.hm * c.any)
 ```
 
  
@@ -269,8 +269,8 @@ Solution
 
 
 ```{r }
-m=cbind(c.hm,c.any)
-contrasts(caffeine$amount)=m
+m <- cbind(c.hm, c.any)
+contrasts(caffeine$amount) <- m
 ```
 
  
@@ -285,7 +285,7 @@ Solution
 
 
 ```{r }
-caff.3=lm(score~amount,data=caffeine)
+caff.3 <- lm(score ~ amount, data = caffeine)
 summary(caff.3)
 ```
 
@@ -314,8 +314,8 @@ Solution
 
 
 ```{r }
-c.hm=c(1,-1,0)
-c.mn=c(0,1,-1)
+c.hm <- c(1, -1, 0)
+c.mn <- c(0, 1, -1)
 ```
 
  
@@ -324,7 +324,7 @@ So far so good: the coefficients add up to zero and they reflect the
 right comparisons. But now:
 
 ```{r }
-sum(c.hm*c.mn)
+sum(c.hm * c.mn)
 ```
 
  
@@ -349,8 +349,8 @@ First we need a vector that is all 1's, which I have called
 `r tufte::margin_note("which we are going to invert, as a matrix. But I get ahead of myself.")`
 
 ```{r }
-c0=rep(1,3)
-m=cbind(c0,c.hm,c.mn)
+c0 <- rep(1, 3)
+m <- cbind(c0, c.hm, c.mn)
 m
 ```
 
@@ -364,7 +364,7 @@ which we can do because it's square. `t(m)` means
 back, and `solve` finds a matrix inverse:
 
 ```{r }
-minv=solve(t(m))
+minv <- solve(t(m))
 ```
 
  
@@ -374,9 +374,9 @@ that we didn't want anyway (what Howell calls "deaugmenting"):
 `r tufte::margin_note("We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one. You can access data frames this way too, but the Tidyverse makes it much easier.")`
 
 ```{r }
-m.contr=minv[,-1]
+m.contr <- minv[, -1]
 m.contr
-contrasts(caffeine$amount)=m.contr
+contrasts(caffeine$amount) <- m.contr
 ```
 
  
@@ -391,7 +391,7 @@ trusted.
 Now fit the model again:
 
 ```{r }
-caff.4=lm(score~amount,data=caffeine)
+caff.4 <- lm(score ~ amount, data = caffeine)
 summary(caff.4)
 ```
 

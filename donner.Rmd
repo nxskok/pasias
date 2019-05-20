@@ -24,8 +24,8 @@ Solution
 
 Nothing very new here:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/donner.txt"
-donner=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/donner.txt"
+donner <- read_delim(my_url, " ")
 donner
 ```
 
@@ -71,7 +71,7 @@ numerical summaries that addresses each pair of variables somehow
 and summarizes them in a sensible way.
 Starting with `age` vs. `gender`:
 ```{r }
-ggplot(donner,aes(x=gender,y=age))+geom_boxplot()
+ggplot(donner, aes(x = gender, y = age)) + geom_boxplot()
 ```
 
      
@@ -79,7 +79,7 @@ ggplot(donner,aes(x=gender,y=age))+geom_boxplot()
 or:
 
 ```{r }
-ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(gender~.)
+ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + facet_grid(gender ~ .)
 ```
 
  
@@ -87,7 +87,7 @@ ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(gender~.)
 or:
 
 ```{r }
-aggregate(age~gender,donner,mean)
+aggregate(age ~ gender, donner, mean)
 ```
 
  
@@ -95,7 +95,7 @@ aggregate(age~gender,donner,mean)
 or:
 
 ```{r }
-donner %>% group_by(gender) %>% summarize(m=mean(age))
+donner %>% group_by(gender) %>% summarize(m = mean(age))
 ```
 
  
@@ -103,7 +103,7 @@ donner %>% group_by(gender) %>% summarize(m=mean(age))
 Age vs. `survived` is the same idea:
 
 ```{r }
-ggplot(donner,aes(x=survived,y=age))+geom_boxplot()
+ggplot(donner, aes(x = survived, y = age)) + geom_boxplot()
 ```
 
      
@@ -111,7 +111,7 @@ ggplot(donner,aes(x=survived,y=age))+geom_boxplot()
 or:
 
 ```{r }
-ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(survived~.)
+ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + facet_grid(survived ~ .)
 ```
 
  
@@ -119,7 +119,7 @@ ggplot(donner,aes(x=age))+geom_histogram(bins=10)+facet_grid(survived~.)
 or:
 
 ```{r }
-aggregate(age~survived,donner,mean)
+aggregate(age ~ survived, donner, mean)
 ```
 
  
@@ -127,7 +127,7 @@ aggregate(age~survived,donner,mean)
 or:
 
 ```{r }
-donner %>% group_by(survived) %>% summarize(m=mean(age))
+donner %>% group_by(survived) %>% summarize(m = mean(age))
 ```
 
  
@@ -136,7 +136,7 @@ For `survived` against `gender`, the obvious thing is a
 cross-tabulation, gotten like this:
 
 ```{r }
-with(donner,table(gender,survived))
+with(donner, table(gender, survived))
 ```
 
  
@@ -144,7 +144,7 @@ with(donner,table(gender,survived))
 or like this:
 
 ```{r }
-donner %>% group_by(gender,survived) %>% summarize(n=n())
+donner %>% group_by(gender, survived) %>% summarize(n = n())
 ```
 
  
@@ -152,7 +152,7 @@ donner %>% group_by(gender,survived) %>% summarize(n=n())
 For a graph, borrow the grouped bar-plot idea from the parasites question:
 
 ```{r }
-ggplot(donner,aes(x=gender,fill=survived))+geom_bar(position="dodge")
+ggplot(donner, aes(x = gender, fill = survived)) + geom_bar(position = "dodge")
 ```
 
  
@@ -203,7 +203,7 @@ variable expressed as text, so we need to make it into a
 `factor` first. Either create a new variable that is the
 factor version of `survived`, or do it right in the `glm`:
 ```{r }
-donner.1=glm(factor(survived)~age+gender,family="binomial",data=donner)
+donner.1 <- glm(factor(survived) ~ age + gender, family = "binomial", data = donner)
 summary(donner.1)
 ```
 
@@ -309,8 +309,8 @@ Then construct vectors called `ages` and `genders` by
 literally copying the values output from above:
 
 ```{r }
-ages=c(24,28,40)
-genders=c("female","male")
+ages <- c(24, 28, 40)
+genders <- c("female", "male")
 ```
 
  
@@ -324,10 +324,12 @@ quartiles etc.\ will still work, whereas your copying above won't.
 So, let's get the median and quartiles of age:
 
 ```{r }
-donner %>% 
-summarize(q1=quantile(age,0.25),
-med=median(age),
-q3=quantile(age,0.75))
+donner %>%
+  summarize(
+    q1 = quantile(age, 0.25),
+    med = median(age),
+    q3 = quantile(age, 0.75)
+  )
 ```
 
  
@@ -335,11 +337,13 @@ q3=quantile(age,0.75))
 only these came out sideways, so we can "transpose" them:
 
 ```{r }
-donner %>% 
-summarize(q1=quantile(age,0.25),
-med=median(age),
-q3=quantile(age,0.75)) %>%
-gather(stat,value,everything())              
+donner %>%
+  summarize(
+    q1 = quantile(age, 0.25),
+    med = median(age),
+    q3 = quantile(age, 0.75)
+  ) %>%
+  gather(stat, value, everything())
 ```
 
  
@@ -347,12 +351,14 @@ gather(stat,value,everything())
 and now if we "pull out" the `value` column, we are good:
 
 ```{r }
-ages = donner %>% 
-summarize(q1=quantile(age,0.25),
-med=median(age),
-q3=quantile(age,0.75)) %>%
-gather(stat,value,everything()) %>%
-pull(value)
+ages <- donner %>%
+  summarize(
+    q1 = quantile(age, 0.25),
+    med = median(age),
+    q3 = quantile(age, 0.75)
+  ) %>%
+  gather(stat, value, everything()) %>%
+  pull(value)
 ages
 ```
 
@@ -361,9 +367,9 @@ ages
 The same kind of idea will get us both genders without typing any genders:
 
 ```{r }
-genders = donner %>%
-count(gender) %>%
-pull(gender)
+genders <- donner %>%
+  count(gender) %>%
+  pull(gender)
 genders
 ```
 
@@ -374,10 +380,10 @@ get the different genders.
 `r tufte::margin_note("The counts are in a column called  *n* which we calculate and then ignore.")` This is another way:
 
 ```{r }
-genders = donner %>%
-select(gender) %>%
-distinct() %>%
-pull(gender)
+genders <- donner %>%
+  select(gender) %>%
+  distinct() %>%
+  pull(gender)
 genders
 ```
 
@@ -394,7 +400,7 @@ principle of the thing.
 Step 2: 
 
 ```{r }
-donner.new=crossing(age=ages,gender=genders)
+donner.new <- crossing(age = ages, gender = genders)
 donner.new
 ```
 
@@ -405,7 +411,7 @@ All combinations of the three ages and two genders.
 Step 3:
 
 ```{r }
-p=predict(donner.1,donner.new,type="response")
+p <- predict(donner.1, donner.new, type = "response")
 p
 ```
 
@@ -414,7 +420,7 @@ p
 Step 4:
 
 ```{r }
-cbind(donner.new,p)
+cbind(donner.new, p)
 ```
 
  

@@ -16,8 +16,8 @@ Solution
 Reading in is as in the other question using these data (just copy
 your code, or mine). No credit for that, since you've done it before.
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv"
-movies=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv"
+movies <- read_csv(my_url)
 movies
 ```
 
@@ -27,8 +27,9 @@ Now, the actual for-credit part, which is a `group_by` and
 `summarize`: 
 
 ```{r }
-movies %>% group_by(rating) %>%
- summarize(count=n(),med=median(length))
+movies %>%
+  group_by(rating) %>%
+  summarize(count = n(), med = median(length))
 ```
 
  
@@ -48,7 +49,7 @@ Solution
 
 The graph would seem to be a boxplot, side by side for each group:
 ```{r }
-ggplot(movies,aes(x=rating, y=length))+geom_boxplot()
+ggplot(movies, aes(x = rating, y = length)) + geom_boxplot()
 ```
 
      
@@ -79,9 +80,9 @@ on three lines, so that you can see the pieces: the "what to plot",
 then the normal quantile plot part, then the facetting:
 
 ```{r }
-ggplot(movies,aes(sample=length))+
-stat_qq()+stat_qq_line()+
-facet_wrap(~rating)
+ggplot(movies, aes(sample = length)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~rating)
 ```
 
  
@@ -147,7 +148,7 @@ Solution
 The smart way is to use `smmr`, since it is much easier:
 ```{r }
 library(smmr)
-median_test(movies,length,rating)
+median_test(movies, length, rating)
 ```
 
      
@@ -180,8 +181,9 @@ Only the first two of these are significant (look in the last
 column). We can remind ourselves of the sample medians:
 
 ```{r }
-movies %>% group_by(rating) %>%
-summarize(count=n(),med=median(length))
+movies %>%
+  group_by(rating) %>%
+  summarize(count = n(), med = median(length))
 ```
 
  
@@ -206,7 +208,7 @@ median(movies$length)
 or
 
 ```{r }
-movies %>% summarize(med=median(length))
+movies %>% summarize(med = median(length))
 ```
 
  
@@ -215,7 +217,7 @@ or store it in a variable,
 and then (ii):
 
 ```{r }
-tab1=with(movies,table(length<100,rating))
+tab1 <- with(movies, table(length < 100, rating))
 tab1
 ```
 
@@ -224,7 +226,7 @@ tab1
 or
 
 ```{r }
-tab2=with(movies,table(length>100,rating))
+tab2 <- with(movies, table(length > 100, rating))
 tab2
 ```
 
@@ -237,7 +239,7 @@ These differ because there are evidently some movies of length exactly
 Was I right about movies of length exactly 100 minutes?
 
 ```{r }
-movies %>% filter(length==100)
+movies %>% filter(length == 100)
 ```
 
  
@@ -251,7 +253,7 @@ need to store your table in a variable because it has to get passed on
 to `chisq.test` below, (iii):
 
 ```{r }
-chisq.test(tab1, correct=F)
+chisq.test(tab1, correct = F)
 ```
 
  
@@ -259,7 +261,7 @@ chisq.test(tab1, correct=F)
 or 
 
 ```{r }
-chisq.test(tab2, correct=F)
+chisq.test(tab2, correct = F)
 ```
 
  
@@ -286,8 +288,9 @@ to pull out just those, and then compare them using
 data frame, it fits neatly into a pipe (with the data frame omitted):
 
 ```{r }
-movies %>% filter(rating=="G" | rating=="PG") %>%
-median_test(length,rating)
+movies %>%
+  filter(rating == "G" | rating == "PG") %>%
+  median_test(length, rating)
 ```
 
  
@@ -299,9 +302,10 @@ frame that has a column called `rating`, and two names of
 ratings to compare:
 
 ```{r }
-comp2=function(rat_1,rat_2,d) {
-d %>% filter(rating==rat_1 | rating==rat_2) %>%
-median_test(length,rating)
+comp2 <- function(rat_1, rat_2, d) {
+  d %>%
+    filter(rating == rat_1 | rating == rat_2) %>%
+    median_test(length, rating)
 }
 ```
 
@@ -321,7 +325,7 @@ you're interested.
 Anyway, testing:
 
 ```{r }
-comp2("G","PG",movies)
+comp2("G", "PG", movies)
 ```
 
  
@@ -331,11 +335,13 @@ in the list item `test` in the column `value`, the third
 entry. So let's rewrite the function to return just that:
 
 ```{r }
-comp2=function(rat_1,rat_2,d) {
-d %>% filter(rating==rat_1 | rating==rat_2) %>%
-median_test(length,rating) %>% pluck("test","value",3)
+comp2 <- function(rat_1, rat_2, d) {
+  d %>%
+    filter(rating == rat_1 | rating == rat_2) %>%
+    median_test(length, rating) %>%
+    pluck("test", "value", 3)
 }
-comp2("G","PG",movies)
+comp2("G", "PG", movies)
 ```
 
  
@@ -368,7 +374,7 @@ it will pull out (and return) whatever I want it to.
 
 Let's grab a hold of the different rating groups we have:
 ```{r }
-the_ratings=unique(movies$rating)
+the_ratings <- unique(movies$rating)
 the_ratings
 ```
 
@@ -380,18 +386,18 @@ each pair. You can do that in R, if you must. It's not pretty at all,
 but it works:
 
 ```{r }
-ii=character(0)
-jj=character(0)
-pp=numeric(0)
+ii <- character(0)
+jj <- character(0)
+pp <- numeric(0)
 for (i in the_ratings) {
-for (j in the_ratings) {
-pval=comp2(i,j,movies)
-ii=c(ii,i)
-jj=c(jj,j)
-pp=c(pp,pval)
+  for (j in the_ratings) {
+    pval <- comp2(i, j, movies)
+    ii <- c(ii, i)
+    jj <- c(jj, j)
+    pp <- c(pp, pval)
+  }
 }
-}  
-tibble(ii,jj,pp)
+tibble(ii, jj, pp)
 ```
 
  
@@ -406,7 +412,7 @@ doesn't matter too much here since it's not a very big problem.)
 Let's try another way:
 
 ```{r }
-crossing(first=the_ratings,second=the_ratings)
+crossing(first = the_ratings, second = the_ratings)
 ```
 
 
@@ -419,8 +425,8 @@ ratings appears twice, once in alphabetical order, and once the other
 way around. The ones we need are these:
 
 ```{r }
-crossing(first=the_ratings,second=the_ratings) %>%
-filter(first<second)
+crossing(first = the_ratings, second = the_ratings) %>%
+  filter(first < second)
 ```
 
  
@@ -441,9 +447,9 @@ first time I've ever used it)
 does. In our case, `comp2` returns a decimal number, a
 `dbl`, so `map2_dbl` does it.  Thus:
 ```{r }
-crossing(first=the_ratings,second=the_ratings) %>%
-filter(first<second) %>% 
-mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies)))
+crossing(first = the_ratings, second = the_ratings) %>%
+  filter(first < second) %>%
+  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies)))
 ```
 
  
@@ -467,10 +473,10 @@ tests. This is a fiddly calculation to do by hand, but it's easy to
 build in another `mutate`, thus:
 `r tufte::margin_note("In the pairwise median  test in *smmr*, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I  flip it around so that you adjust the P-values by *multiplying*  them by 6, and then comparing the adjusted P-values with the usual  0.05. It comes to the same place in the end, except that this way  you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.")`
 ```{r }
-crossing(first=the_ratings,second=the_ratings) %>%
-filter(first<second) %>% 
-mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies))) %>%
-mutate(reject=pval<0.05/6)
+crossing(first = the_ratings, second = the_ratings) %>%
+  filter(first < second) %>%
+  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies))) %>%
+  mutate(reject = pval < 0.05 / 6)
 ```
 
  
@@ -498,9 +504,10 @@ Listing the rating groups sorted by median would give you an idea of
 how far different the medians have to be to be significantly different:
 
 ```{r }
-medians=movies %>% group_by(rating) %>%
-summarize(med=median(length)) %>%
-arrange(desc(med))
+medians <- movies %>%
+  group_by(rating) %>%
+  summarize(med = median(length)) %>%
+  arrange(desc(med))
 medians
 ```
 
@@ -516,12 +523,12 @@ median of the combined sample. A subtlety, rather than an error, I'd say.
 Here's something extremely flashy to finish with:
 
 ```{r }
-crossing(first=the_ratings,second=the_ratings) %>%
-filter(first<second) %>% 
-mutate(pval=map2_dbl(first,second,~comp2(.x,.y,movies))) %>%
-mutate(reject=pval<0.05/6) %>%
-left_join(medians,by=c("first"="rating")) %>%
-left_join(medians,by=c("second"="rating"))
+crossing(first = the_ratings, second = the_ratings) %>%
+  filter(first < second) %>%
+  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies))) %>%
+  mutate(reject = pval < 0.05 / 6) %>%
+  left_join(medians, by = c("first" = "rating")) %>%
+  left_join(medians, by = c("second" = "rating"))
 ```
 
  

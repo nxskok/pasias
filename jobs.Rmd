@@ -26,8 +26,8 @@ The usual. This one is aligned columns.
 I'm using a "temporary" name for my read-in data
 frame, since I'm going to create the proper one in a moment.
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/jobs.txt"
-jobs0=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/jobs.txt"
+jobs0 <- read_table(my_url)
 jobs0
 ```
 
@@ -55,9 +55,9 @@ I think the best way to do that is via `mutate`, and then
 we save the new data frame into one called `jobs` that we
 actually use for the analysis below:
 ```{r }
-job_labels=c("custserv","mechanic","dispatcher")
-jobs = jobs0 %>% 
-mutate(job=factor(job,labels=job_labels)) 
+job_labels <- c("custserv", "mechanic", "dispatcher")
+jobs <- jobs0 %>%
+  mutate(job = factor(job, labels = job_labels))
 ```
 
        
@@ -83,11 +83,11 @@ levels, so that you can remember what stands for what.
 Extra: another way of doing this is to make a lookup table, that is, a little table that shows which job goes with which number:
 
 ```{r }
-lookup_tab=tribble(
-~job, ~jobname,
-1, "custserv",
-2, "mechanic",
-3, "dispatcher"
+lookup_tab <- tribble(
+  ~job, ~jobname,
+  1, "custserv",
+  2, "mechanic",
+  3, "dispatcher"
 )
 lookup_tab
 ```
@@ -97,8 +97,9 @@ lookup_tab
 I carefully put the numbers in a column called `job` because I want to match these with the column called `job` in `jobs0`:
 
 ```{r }
-jobs0 %>% left_join(lookup_tab) %>%
-sample_n(20)
+jobs0 %>%
+  left_join(lookup_tab) %>%
+  sample_n(20)
 ```
 
  
@@ -116,8 +117,8 @@ Solution
 
 You know how to do this, right? This one is the easy way:
 ```{r vuggy.a}
-response=with(jobs,cbind(social,outdoor,conservative))
-response.1=manova(response~job,data=jobs)
+response <- with(jobs, cbind(social, outdoor, conservative))
+response.1 <- manova(response ~ job, data = jobs)
 summary(response.1)
 ```
 
@@ -128,7 +129,7 @@ since there is no reason to make things difficult for yourself:
 
 ```{r kazoo}
 library(car)
-response.2=lm(response~job,data=jobs)
+response.2 <- lm(response ~ job, data = jobs)
 Manova(response.2)
 ```
 
@@ -154,7 +155,7 @@ Solution
 Now `job`
 is the "response":
 ```{r }
-job.1=lda(job~social+outdoor+conservative,data=jobs)
+job.1 <- lda(job ~ social + outdoor + conservative, data = jobs)
 job.1
 ```
 
@@ -240,8 +241,8 @@ Solution
 
 Predictions first, then make a data frame combining the predictions with the original data:
 ```{r }
-p=predict(job.1)
-d=cbind(jobs, p)
+p <- predict(job.1)
+d <- cbind(jobs, p)
 head(d)
 ```
 
@@ -250,7 +251,7 @@ Following my suggestion, plot these the standard way with
 `colour` distinguishing the jobs:
 
 ```{r }
-ggplot(d,aes(x=x.LD1,y=x.LD2,colour=job))+geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = job)) + geom_point()
 ```
 
  
@@ -284,7 +285,7 @@ Solution
 
 Use the predictions that you got before and saved in `d`:
 ```{r cabteloupt}
-with(d, table(obs=job, pred=class))
+with(d, table(obs = job, pred = class))
 ```
 
      
@@ -298,8 +299,9 @@ d %>% count(job, class)
 or:
 
 ```{r }
-d %>% count(job,class) %>%
-spread(class, n, fill=0)
+d %>%
+  count(job, class) %>%
+  spread(class, n, fill = 0)
 ```
 
  
@@ -332,8 +334,9 @@ example, we can make a new column that indicates whether a group is
 the correct or wrong classification:
 
 ```{r }
-d %>% count(job, class) %>%
-mutate(job_stat=ifelse(job==class, "correct", "wrong"))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong"))
 ```
 
  
@@ -343,9 +346,10 @@ we want to total up the *frequencies* in `n`, not just
 count the number of rows:
 
 ```{r }
-d %>% count(job, class) %>%
-mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
-count(job_stat,wt=n)
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  count(job_stat, wt = n)
 ```
 
  
@@ -353,10 +357,11 @@ count(job_stat,wt=n)
 and turn these into proportions:
 
 ```{r error=T}
-d %>% count(job, class) %>%
-mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
-count(job_stat,wt=n) %>%
-mutate(proportion=n/sum(n))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
  
@@ -378,11 +383,12 @@ others, squeeze a `group_by` in early to do the counts and
 proportions for each (true) job:
 
 ```{r error=T}
-d %>% count(job, class) %>%
-mutate(job_stat=ifelse(job==class, "correct", "wrong")) %>%
-group_by(job) %>%
-count(job_stat,wt=n) %>%
-mutate(proportion=n/sum(n))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  group_by(job) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
  
@@ -390,13 +396,14 @@ mutate(proportion=n/sum(n))
 or even split out the correct and wrong ones into their own columns:
 
 ```{r error=T}
-d %>% count(job, class) %>%
-mutate(job_stat=ifelse(job==class,"correct","wrong")) %>%
-group_by(job) %>%
-count(job_stat,wt=n) %>%
-mutate(proportion=n/sum(n)) %>%
-select(-n) %>%
-spread(job_stat,proportion)
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  group_by(job) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(job_stat, proportion)
 ```
 
  
@@ -430,9 +437,9 @@ generally called `new` when doing predictions for other
 models. I think the
 clearest way to make one of these is with `tribble`:
 ```{r }
-new=tribble(
-~outdoor, ~social, ~conservative,
-20,       17,      8
+new <- tribble(
+  ~outdoor, ~social, ~conservative,
+  20, 17, 8
 )
 new
 ```
@@ -445,7 +452,7 @@ for example of "what effect does a higher score on `outdoor` have on the likelih
 Then feed this into `predict` as the *second* thing:
 
 ```{r }
-pp1=predict(job.1,new)
+pp1 <- predict(job.1, new)
 ```
 
  
@@ -453,7 +460,7 @@ pp1=predict(job.1,new)
 Our predictions are these:
 
 ```{r }
-cbind(new,pp1)
+cbind(new, pp1)
 ```
 
  
@@ -500,9 +507,9 @@ found out above with `summary(jobs)`. I'll take the quartiles,
 in my usual fashion:
 
 ```{r }
-outdoors=c(13,19)
-socials=c(17,25)
-conservatives=c(8,13)
+outdoors <- c(13, 19)
+socials <- c(17, 25)
+conservatives <- c(8, 13)
 ```
 
  
@@ -512,11 +519,13 @@ not be that different from the ``coefficients of linear
 discriminants'' above:
 
 ```{r }
-new=crossing(outdoor=outdoors,social=socials,
-conservative=conservatives)
-pp2=predict(job.1,new)
-px=round(pp2$x,2)
-cbind(new,pp2$class,px)
+new <- crossing(
+  outdoor = outdoors, social = socials,
+  conservative = conservatives
+)
+pp2 <- predict(job.1, new)
+px <- round(pp2$x, 2)
+cbind(new, pp2$class, px)
 ```
 
  
@@ -571,7 +580,7 @@ Solution
 Stick a `CV=T` in the `lda`:
 
 ```{r } 
-job.3=lda(job~social+outdoor+conservative,data=jobs,CV=T)
+job.3 <- lda(job ~ social + outdoor + conservative, data = jobs, CV = T)
 glimpse(job.3)
 ```
 
@@ -582,7 +591,7 @@ This directly contains a `class` (no need for a
 since I shortly want to compare this one with the previous one:
 
 ```{r }
-dcv=cbind(jobs, class=job.3$class, posterior=job.3$posterior)
+dcv <- cbind(jobs, class = job.3$class, posterior = job.3$posterior)
 head(dcv)
 ```
 
@@ -592,7 +601,7 @@ This is a bit fiddlier than before because `job.3` contains some things of diffe
 
 Then go straight to the `table`:
 ```{r }
-with(dcv, table(job,class))
+with(dcv, table(job, class))
 ```
 
  
@@ -624,7 +633,7 @@ think I have the machinery to do that.
 Let's start by gluing together the dataframes with the predictions from the regular `lda` (in `d`) and the ones from the cross-validation (in `dcv`). I think I can do that like this:
 
 ```{r }
-all=bind_cols(d, dcv)
+all <- bind_cols(d, dcv)
 head(all)
 ```
 
@@ -655,9 +664,10 @@ try to make things simpler.
 Let's round them to three decimals, and then display only some of the columns:
 
 ```{r }
-all %>% filter(class != class1) %>%
-mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>% 
-select(id, job, starts_with("posterior"))
+all %>%
+  filter(class != class1) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  select(id, job, starts_with("posterior"))
 ```
 
  
@@ -675,9 +685,10 @@ make much difference)?
 Let's count them first:
 
 ```{r error=T}
-all %>% mutate(is_correct=ifelse(job==class, "correct", "wrong")) -> all.mis
-all.mis %>% count(is_correct=="wrong") %>%
-mutate(proportion=n/sum(n))
+all %>% mutate(is_correct = ifelse(job == class, "correct", "wrong")) -> all.mis
+all.mis %>%
+  count(is_correct == "wrong") %>%
+  mutate(proportion = n / sum(n))
 ```
 
  
@@ -688,11 +699,14 @@ the number of columns to look at:
 
 ```{r error=T}
 set.seed(457299)
-all.mis %>% filter(is_correct=="wrong") %>%
-mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
-select(id, job, class, outdoor, social, conservative, 
-starts_with("posterior")) %>%
-sample_n(15)
+all.mis %>%
+  filter(is_correct == "wrong") %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  select(
+    id, job, class, outdoor, social, conservative,
+    starts_with("posterior")
+  ) %>%
+  sample_n(15)
 ```
 
  

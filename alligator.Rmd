@@ -27,8 +27,8 @@ Solution
 
 Separated by exactly one space:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/alligator.txt"
-gators.orig=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/alligator.txt"
+gators.orig <- read_delim(my_url, " ")
 gators.orig
 ```
 
@@ -54,7 +54,7 @@ Solution
 
 I'm creating my "official" data frame here:
 ```{r }
-gators = gators.orig %>% gather(Food.type,Frequency,Fish:Other)
+gators <- gators.orig %>% gather(Food.type, Frequency, Fish:Other)
 gators
 ```
 
@@ -125,7 +125,7 @@ food type, rather than how many *alligators*, and these
 would have been different:
 ```{r }
 gators %>% count(Food.type)
-gators %>% count(Food.type, wt=Frequency)
+gators %>% count(Food.type, wt = Frequency)
 ```
 
          
@@ -141,8 +141,9 @@ All right, back to modelling:
 
 ```{r }
 library(nnet)
-gators.1=multinom(Food.type~Gender+Size+Lake,
-weights=Frequency,data=gators)
+gators.1 <- multinom(Food.type ~ Gender + Size + Lake,
+  weights = Frequency, data = gators
+)
 ```
 
        
@@ -175,7 +176,7 @@ Solution
 The other model to fit is the one *without* the variable
 you're testing:
 ```{r }
-gators.2=update(gators.1,.~.-Gender)
+gators.2 <- update(gators.1, . ~ . - Gender)
 ```
 
        
@@ -185,8 +186,9 @@ there's no problem in just writing out the whole model again and
 taking out `Gender`, preferably by copying and pasting:
 
 ```{r }
-gators.2x=multinom(Food.type~Size+Lake,
-weights=Frequency,data=gators)
+gators.2x <- multinom(Food.type ~ Size + Lake,
+  weights = Frequency, data = gators
+)
 ```
 
  
@@ -194,7 +196,7 @@ weights=Frequency,data=gators)
 and then you compare the models with and without `Gender` using `anova`:
 
 ```{r }
-anova(gators.2,gators.1)
+anova(gators.2, gators.1)
 ```
 
  
@@ -207,7 +209,7 @@ Sometimes `drop1` works here too (and sometimes it doesn't, for
 reasons I haven't figured out):
 
 ```{r error=T}
-drop1(gators.1,test="Chisq")
+drop1(gators.1, test = "Chisq")
 ```
 
  
@@ -232,9 +234,9 @@ Solution
 
 To get the different categories, use `distinct` and `pull`:
 ```{r }
-Lakes = gators %>% distinct(Lake) %>% pull(Lake)
+Lakes <- gators %>% distinct(Lake) %>% pull(Lake)
 Lakes
-Sizes = gators %>% distinct(Size) %>% pull(Size)
+Sizes <- gators %>% distinct(Size) %>% pull(Size)
 Sizes
 ```
 
@@ -250,7 +252,7 @@ Next, a data frame for predicting from, using `crossing`,
 and called, as per my tradition, `new`:
 
 ```{r }
-new=crossing(Lake=Lakes,Size=Sizes)
+new <- crossing(Lake = Lakes, Size = Sizes)
 new
 ```
 
@@ -263,8 +265,8 @@ an error anyway, because your data frame of values to predict from
 doesn't have any `Gender` in it:
 
 ```{r size="footnotesize"}
-pp=predict(gators.2,new,type="p")
-preds1=cbind(new,pp)
+pp <- predict(gators.2, new, type = "p")
+preds1 <- cbind(new, pp)
 preds1
 ```
 
@@ -278,8 +280,8 @@ in it, or you otherwise forgot that you didn't need `Gender`
 then you needed to do something like this as well:
 
 ```{r }
-Genders = gators %>% distinct(Gender) %>% pull(Gender)
-new=crossing(Lake=Lakes,Size=Sizes,Gender=Genders)
+Genders <- gators %>% distinct(Gender) %>% pull(Gender)
+new <- crossing(Lake = Lakes, Size = Sizes, Gender = Genders)
 new
 ```
 
@@ -289,8 +291,8 @@ If you predict this in the model *without* `Gender`, you'll get
 the following:
 
 ```{r size="footnotesize"}
-pp=predict(gators.2,new,type="p")
-cbind(new,pp)
+pp <- predict(gators.2, new, type = "p")
+cbind(new, pp)
 ```
 
  
@@ -303,8 +305,8 @@ Alternatively, if you really thought the model with `Gender` was the
 better one, then you'd do this:
 
 ```{r }
-pp=predict(gators.1,new,type="p")
-cbind(new,pp)
+pp <- predict(gators.1, new, type = "p")
+cbind(new, pp)
 ```
 
  

@@ -44,7 +44,7 @@ number.
 
 And so to work:
 ```{r }
-rbinom(1,100,0.6)
+rbinom(1, 100, 0.6)
 ```
 
 
@@ -57,7 +57,7 @@ you should get the same values I did.)
 For fun, you can see what happens if you change the 1:
 
 ```{r }
-rbinom(3,100,0.6)
+rbinom(3, 100, 0.6)
 ```
 
  
@@ -91,7 +91,7 @@ Solution
 
 I got exactly 60 successes, so I do this:
 ```{r }
-prop.test(60,100,0.5,alternative="greater")
+prop.test(60, 100, 0.5, alternative = "greater")
 ```
 
      
@@ -113,7 +113,7 @@ Solution
 Copying and pasting:
 
 ```{r }
-p_test=prop.test(60,100,0.5,alternative="greater")
+p_test <- prop.test(60, 100, 0.5, alternative = "greater")
 p_test$p.value
 ```
 
@@ -156,11 +156,11 @@ for-each, with each of the simulated binomials playing the role of
 "it", in turn.). The last part is to pull out all the P-values and
 make a table of them, just like the example in class.
 ```{r }
-rerun(10000,rbinom(1,500,0.56)) %>%
-map(~prop.test(.,500,0.5,alternative="greater")) %>%
-map_dbl("p.value") -> 
+rerun(10000, rbinom(1, 500, 0.56)) %>%
+  map(~ prop.test(., 500, 0.5, alternative = "greater")) %>%
+  map_dbl("p.value") ->
 pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(pvals) %>% count(pvals <= 0.05)
 ```
 
  

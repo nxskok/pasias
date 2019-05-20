@@ -59,8 +59,8 @@ Solution
 
 The usual:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv"
-myeloma=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv"
+myeloma <- read_csv(my_url)
 myeloma
 ```
 
@@ -112,7 +112,7 @@ yours whatever you like. Two things: the survival times, here
 `time`, and the indicator of the event, here
 `vstatus` being 1:
 ```{r }
-y=with(myeloma,Surv(time, vstatus==1))
+y <- with(myeloma, Surv(time, vstatus == 1))
 y
 ```
 
@@ -160,7 +160,7 @@ Solution
 The obvious way to do this is to list all the other variables on
 the right side of the squiggle, but a faster way is this:
 ```{r }
-y.1=coxph(y~.-time-vstatus,data=myeloma)
+y.1 <- coxph(y ~ . - time - vstatus, data = myeloma)
 summary(y.1)
 ```
 
@@ -176,7 +176,7 @@ If you forget to exclude `time` and `vstatus`, you are
 in danger of having a model that fits perfectly:
 
 ```{r }
-y.00=coxph(y~.,data=myeloma)
+y.00 <- coxph(y ~ ., data = myeloma)
 summary(y.00)
 ```
 
@@ -208,7 +208,7 @@ away from `update` here (which I would normally try to use
 in this situation). I'm going to copy-and-paste my code for
 `y.1` and edit it:
 ```{r }
-y.2=coxph(y~logbun+hgb,data=myeloma)
+y.2 <- coxph(y ~ logbun + hgb, data = myeloma)
 summary(y.2)
 ```
 
@@ -231,7 +231,7 @@ Solution
 Comparing two models is `anova`, which also works here. The
 right `test` is `Chisq`:
 ```{r }
-anova(y.2,y.1,test="Chisq")
+anova(y.2, y.1, test = "Chisq")
 ```
 
      
@@ -253,7 +253,7 @@ variables separated by `+`, and then whatever else (the
 In case you are curious, `step` also works on models like these:
 
 ```{r }
-y.3=step(y.1,direction="backward",trace=0)
+y.3 <- step(y.1, direction = "backward", trace = 0)
 summary(y.3)
 ```
 
@@ -306,7 +306,7 @@ from which you pick out the ones you need. Or, you `select` the
 ones you need first:
 
 ```{r }
-myeloma %>% select(logbun,hgb) %>% summary()
+myeloma %>% select(logbun, hgb) %>% summary()
 ```
 
  
@@ -316,10 +316,12 @@ inelegant, because you have to calculate two things for two variables:
 `r tufte::margin_note("Because *summarize* will only allow you to have a single-number answer.")` 
 
 ```{r }
-myeloma %>% summarize(logbun.q1=quantile(logbun,0.25),
-logbun.q3=quantile(logbun,0.75),
-hgb.q1=quantile(hgb,0.25),
-hgb.q3=quantile(hgb,0.75))
+myeloma %>% summarize(
+  logbun.q1 = quantile(logbun, 0.25),
+  logbun.q3 = quantile(logbun, 0.75),
+  hgb.q1 = quantile(hgb, 0.25),
+  hgb.q3 = quantile(hgb, 0.75)
+)
 ```
 
  
@@ -328,8 +330,9 @@ There is a `tidyverse` way to obtain the quartiles of
 *all* the columns. It lives in package `purrr`, which gets
 loaded with the `tidyverse`:
 ```{r }
-myeloma %>% select(logbun,hgb) %>% 
-map(quantile, c(0.25,0.75))
+myeloma %>%
+  select(logbun, hgb) %>%
+  map(quantile, c(0.25, 0.75))
 ```
 
  
@@ -337,8 +340,9 @@ map(quantile, c(0.25,0.75))
 This is what R calls a `list`. It would look nicer as a data
 frame. There is a way to get that:
 ```{r }
-myeloma %>% select(logbun,hgb) %>% 
-map_df(~quantile(.,c(0.25,0.75)))
+myeloma %>%
+  select(logbun, hgb) %>%
+  map_df(~ quantile(., c(0.25, 0.75)))
 ```
 
  
@@ -359,9 +363,9 @@ Solution
 The usual `crossing`:
 
 ```{r }
-logbuns=c(1.1461,1.5682)
-hgbs=c(8.8,12)
-new=crossing(logbun=logbuns,hgb=hgbs)
+logbuns <- c(1.1461, 1.5682)
+hgbs <- c(8.8, 12)
+new <- crossing(logbun = logbuns, hgb = hgbs)
 new
 ```
 
@@ -387,7 +391,7 @@ Solution
 This seems as if it ought to be `predict`, but the
 `survival` version of it is called `survfit`:
 ```{r }
-s=survfit(y.2,new,data=myeloma)
+s <- survfit(y.2, new, data = myeloma)
 ```
 
      
@@ -408,7 +412,7 @@ Solution
 
 This is easier than you think: it's just `ggsurvplot` from `survminer`:
 ```{r }
-ggsurvplot(s,conf.int=F)
+ggsurvplot(s, conf.int = F)
 ```
 
      

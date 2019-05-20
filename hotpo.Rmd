@@ -56,9 +56,9 @@ all we have to do is calculate the remainder on dividing by 2, turn it
 into a `logical`, and return it:
 
 ```{r }
-is_odd=function(x) {
-r=x %% 2
-as.logical(r)
+is_odd <- function(x) {
+  r <- x %% 2
+  as.logical(r)
 }
 ```
 
@@ -97,8 +97,8 @@ The logic is "if the input is odd, return 3 times it plus 1, otherwise return ha
 The R structure is an
 `if-then-else`: 
 ```{r }
-hotpo1=function(x) {
-if (is_odd(x)) 3*x+1 else x/2
+hotpo1 <- function(x) {
+  if (is_odd(x)) 3 * x + 1 else x / 2
 }
 ```
 
@@ -113,7 +113,7 @@ of the sequence. If we had not written `is_odd` before, the
 condition would have looked something like 
 
 ```{r eval=F}
-if (x %% 2 == 1) 3*x+1 else x/2
+if (x %% 2 == 1) 3 * x + 1 else x / 2
 ```
 
  
@@ -152,14 +152,14 @@ sequence, we start with the input value. There is an R trick to
 glue a value onto the sequence, which is to use `c` with a
 vector and a value, and save it back into the vector:
 ```{r }
-hotpo=function(x) {
-sequence=x
-term=x
-while(term>1) {
-term=hotpo1(term)
-sequence=c(sequence, term)
-}
-sequence
+hotpo <- function(x) {
+  sequence <- x
+  term <- x
+  while (term > 1) {
+    term <- hotpo1(term)
+    sequence <- c(sequence, term)
+  }
+  sequence
 }
 ```
 
@@ -192,8 +192,8 @@ back. You can do recursion in R also; there is no problem with a
 function calling itself:
 
 ```{r }
-hotpo_rec=function(x) {
-if (x==1) 1 else c(x, hotpo_rec(hotpo1(x)))
+hotpo_rec <- function(x) {
+  if (x == 1) 1 else c(x, hotpo_rec(hotpo1(x)))
 }
 ```
 
@@ -246,8 +246,8 @@ Solution
 These are both one-liners. Call the input whatever you like:
 
 ```{r }
-hotpo_len=function(sequence) length(sequence)
-hotpo_max=function(sequence) max(sequence)
+hotpo_len <- function(sequence) length(sequence)
+hotpo_max <- function(sequence) max(sequence)
 ```
 
  
@@ -283,10 +283,10 @@ functions actually uses decimals.
 `r tufte::margin_note("I should have been more careful in my functions to make sure everything was integers, and, in particular, to do integer division by 2 because I knew that this division was going to come out even.")` 
 Thus, a pipeline:
 ```{r }
-tibble(x=11:20) %>%
-mutate(sequence=map(x,~hotpo(.))) %>%
-mutate(length=map_dbl(sequence, ~hotpo_len(.))) %>%
-mutate(high=map_dbl(sequence, ~hotpo_max(.)))
+tibble(x = 11:20) %>%
+  mutate(sequence = map(x, ~ hotpo(.))) %>%
+  mutate(length = map_dbl(sequence, ~ hotpo_len(.))) %>%
+  mutate(high = map_dbl(sequence, ~ hotpo_max(.)))
 ```
 
      

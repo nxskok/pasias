@@ -17,8 +17,8 @@ Solution
 
 Space-delimited:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/voting.txt"
-vote0=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/voting.txt"
+vote0 <- read_delim(my_url, " ")
 vote0
 ```
 
@@ -41,7 +41,7 @@ Solution
 I changed my mind about how to do this from last year. Using
 `count` is alarmingly more direct than the method I had before:
 ```{r }
-votes = vote0 %>% count(class,age,sex,vote)
+votes <- vote0 %>% count(class, age, sex, vote)
 votes
 ```
 
@@ -61,7 +61,7 @@ Solution
 
 
 ```{r }
-vote.1=glm(n~class*age*sex*vote,data=votes,family="poisson")
+vote.1 <- glm(n ~ class * age * sex * vote, data = votes, family = "poisson")
 ```
 
      
@@ -76,7 +76,7 @@ Solution
 Alternating `drop1` and `update` until everything
 remaining is significant:
 ```{r }
-drop1(vote.1,test="Chisq")
+drop1(vote.1, test = "Chisq")
 ```
 
      
@@ -84,8 +84,8 @@ drop1(vote.1,test="Chisq")
 Not anywhere near significant, so out it comes:
 
 ```{r }
-vote.2=update(vote.1,.~.-class:age:sex:vote)
-drop1(vote.2,test="Chisq")
+vote.2 <- update(vote.1, . ~ . - class:age:sex:vote)
+drop1(vote.2, test = "Chisq")
 ```
 
  
@@ -93,8 +93,8 @@ drop1(vote.2,test="Chisq")
 Take out the first one, since it has the highest P-value:
 
 ```{r }
-vote.3=update(vote.2,.~.-class:age:sex)
-drop1(vote.3,test="Chisq")
+vote.3 <- update(vote.2, . ~ . - class:age:sex)
+drop1(vote.3, test = "Chisq")
 ```
 
  
@@ -102,8 +102,8 @@ drop1(vote.3,test="Chisq")
 `class:sex:vote`:
 
 ```{r }
-vote.4=update(vote.3,.~.-class:sex:vote)
-drop1(vote.4,test="Chisq")
+vote.4 <- update(vote.3, . ~ . - class:sex:vote)
+drop1(vote.4, test = "Chisq")
 ```
 
  
@@ -111,8 +111,8 @@ drop1(vote.4,test="Chisq")
 `class:sex`:
 
 ```{r }
-vote.5=update(vote.4,.~.-class:sex)
-drop1(vote.5,test="Chisq")
+vote.5 <- update(vote.4, . ~ . - class:sex)
+drop1(vote.5, test = "Chisq")
 ```
 
  
@@ -121,8 +121,8 @@ I don't like having three-way interactions, so I'm going to yank
 `age:sex:vote` now, even though its P-value is smallish:
 
 ```{r }
-vote.6=update(vote.5,.~.-age:sex:vote)
-drop1(vote.6,test="Chisq")
+vote.6 <- update(vote.5, . ~ . - age:sex:vote)
+drop1(vote.6, test = "Chisq")
 ```
 
  
@@ -130,8 +130,8 @@ drop1(vote.6,test="Chisq")
 The age-sex interaction can go, but we must be near the end now:
 
 ```{r }
-vote.7=update(vote.6,.~.-age:sex)
-drop1(vote.7,test="Chisq")
+vote.7 <- update(vote.6, . ~ . - age:sex)
+drop1(vote.7, test = "Chisq")
 ```
 
  
@@ -144,7 +144,7 @@ the model.
 If you want to, you can look at the `summary` of your final model:
 
 ```{r echo=F}
-options(width=90)
+options(width = 90)
 ```
 
  
@@ -189,8 +189,8 @@ Solution
 This is `xtabs` again. The 3-way interaction is a bit
 tricky, so we'll do the simple one first:
 ```{r }
-xtabs(n~vote+sex,data=votes) %>%
-prop.table(margin=2)
+xtabs(n ~ vote + sex, data = votes) %>%
+  prop.table(margin = 2)
 ```
 
      
@@ -210,7 +210,7 @@ which doesn't make nearly so much sense).
 Then the tricky one:
 
 ```{r }
-xt=xtabs(n~vote+age+class,data=votes)
+xt <- xtabs(n ~ vote + age + class, data = votes)
 xt
 ```
 
@@ -246,7 +246,7 @@ more careful about what to make add up to 1. For example, to make the
 social classes each add up to 1, which is the third dimension:
 
 ```{r }
-prop.table(xt,3)
+prop.table(xt, 3)
 ```
 
  
@@ -256,7 +256,7 @@ so that we have a "joint distribution" in each table. We can put
 *two* variables into `prop.table`, and see what happens then:
 
 ```{r }
-prop.table(xt,c(2,3))
+prop.table(xt, c(2, 3))
 ```
 
  

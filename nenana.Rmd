@@ -28,8 +28,8 @@ Solution
 These are "tab-separated values", so `read_tsv` is the
 thing, as for the Australian athletes:
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/nenana.txt"
-nenana=read_tsv(myurl)
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/nenana.txt"
+nenana <- read_tsv(myurl)
 ```
 
        
@@ -50,7 +50,7 @@ so things might go astray if you try and read the values in without
 recognizing that the actual separator is a tab:
 
 ```{r }
-x=read_delim(myurl," ")
+x <- read_delim(myurl, " ")
 ```
 
  
@@ -135,7 +135,7 @@ from 87 (our $n$) is 128, which is $2^7$, so the base 2 log of
 you, any not-insane number of bins will do, or any not-insane
 bin width, if you want to go that way:
 ```{r }
-ggplot(nenana,aes(x=JulianDate))+geom_histogram(bins=8)
+ggplot(nenana, aes(x = JulianDate)) + geom_histogram(bins = 8)
 ```
 
        
@@ -152,7 +152,7 @@ not especially important.
 We haven't done normal quantile plots yet, but looking ahead:
 
 ```{r }
-ggplot(nenana, aes(sample=JulianDate))+stat_qq()+stat_qq_line()
+ggplot(nenana, aes(sample = JulianDate)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -169,9 +169,9 @@ this is how you handle the dates and times:
 
 ```{r }
 library(lubridate)
-nenana %>% 
-mutate(longdt=str_c(Year," ",`Date&Time`)) %>%
-mutate(datetime=ymd_hm(longdt,tz="America/Anchorage"))
+nenana %>%
+  mutate(longdt = str_c(Year, " ", `Date&Time`)) %>%
+  mutate(datetime = ymd_hm(longdt, tz = "America/Anchorage"))
 ```
 
  
@@ -183,12 +183,12 @@ I have to do a preliminary step to get the date-times *with* their year in one p
 The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the `lubridate` function is called `yday` for "day of year"):
 
 ```{r }
-nenana %>% 
-mutate(longdt=str_c(Year," ",`Date&Time`)) %>%
-mutate(datetime=ymd_hm(longdt,tz="America/Anchorage")) %>% 
-mutate(jd=yday(datetime)) ->
+nenana %>%
+  mutate(longdt = str_c(Year, " ", `Date&Time`)) %>%
+  mutate(datetime = ymd_hm(longdt, tz = "America/Anchorage")) %>%
+  mutate(jd = yday(datetime)) ->
 nenana2
-nenana2 %>% select(JulianDate,jd,datetime)
+nenana2 %>% select(JulianDate, jd, datetime)
 ```
 
  
@@ -197,9 +197,9 @@ Hmm, some of those are off by one. What do the off-by-one ones have in common? L
 rounds off to the nearest integer (since these are actually decimal numbers):
 
 ```{r }
-nenana2 %>% 
-filter(round(JulianDate) != round(jd)) %>% 
-select(JulianDate,jd,datetime)
+nenana2 %>%
+  filter(round(JulianDate) != round(jd)) %>%
+  select(JulianDate, jd, datetime)
 ```
 
 
@@ -214,10 +214,10 @@ ones in the data value are that plus more than 0.5, which will round
 rather than only three:
 
 ```{r }
-options(pillar.sigfig=6)
-nenana2 %>% 
-filter(round(JulianDate) != round(jd)) %>% 
-select(JulianDate,jd,datetime)
+options(pillar.sigfig = 6)
+nenana2 %>%
+  filter(round(JulianDate) != round(jd)) %>%
+  select(JulianDate, jd, datetime)
 ```
 
 
@@ -227,7 +227,7 @@ Displaying more decimals shows that I was right: `jd` is (to this accuracy) a wh
 Now I have to turn the extra signficant digits off:
 
 ```{r }
-options(pillar.sigfig=3)
+options(pillar.sigfig = 3)
 ```
 
 
@@ -245,7 +245,7 @@ Solution
 `geom_point`:
 
 ```{r }
-ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()
+ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point()
 ```
 
  
@@ -261,7 +261,7 @@ before 1960, but most of the really early break-ups (less than about
 You can even add to the `ggplot`, by putting a smooth trend on it:
 
 ```{r }
-ggplot(nenana,aes(x=Year,y=JulianDate))+geom_point()+geom_smooth()
+ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() + geom_smooth()
 ```
 
  

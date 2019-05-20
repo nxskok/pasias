@@ -21,7 +21,7 @@ Solution
 
 Separated by single spaces:
 ```{r }
-sleep1=read_delim("ratsleep.txt"," ")
+sleep1 <- read_delim("ratsleep.txt", " ")
 sleep1
 ```
 
@@ -70,7 +70,7 @@ also used the brackets-around-the-outside to display what I had,
 so that I didn't have to do a separate display. This is a handy
 way of saving *and* displaying in one shot:
 ```{r }
-(sleep1 %>% gather(rep,sleeptime,obs1:obs5) -> sleep)
+(sleep1 %>% gather(rep, sleeptime, obs1:obs5) -> sleep)
 ```
 
  
@@ -98,7 +98,7 @@ Solution
 
 
 ```{r }
-ggplot(sleep,aes(x=treatment,y=sleeptime))+geom_boxplot()
+ggplot(sleep, aes(x = treatment, y = sleeptime)) + geom_boxplot()
 ```
 
  
@@ -141,8 +141,9 @@ similar heights, all things considered, so I am happy.
 If you want the SDs themselves:
 
 ```{r }
-sleep %>% group_by(treatment) %>%
-summarize(stddev=sd(sleeptime))
+sleep %>%
+  group_by(treatment) %>%
+  summarize(stddev = sd(sleeptime))
 ```
 
  
@@ -165,7 +166,7 @@ I use `aov` here, because I might be following up with
 Tukey in a minute:
 
 ```{r }
-sleep.1=aov(sleeptime~treatment,data=sleep)  
+sleep.1 <- aov(sleeptime ~ treatment, data = sleep)
 summary(sleep.1)
 ```
 
@@ -197,7 +198,7 @@ which groups differ significantly from which. Both (i) and (ii) are
 true here. So:
 
 ```{r }
-TukeyHSD(sleep.1)  
+TukeyHSD(sleep.1)
 ```
 
  

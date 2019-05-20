@@ -41,8 +41,8 @@ Solution
 I was lazy and used the one on the web, the
 values being separated ("delimited") by exactly one space:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/marks.txt"
-marks=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/marks.txt"
+marks <- read_delim(my_url, " ")
 marks
 ```
 
@@ -58,7 +58,7 @@ top line of the data file was variable names. With
 by skipping the first line and saying that I then have no column names, I get:
 
 ```{r }
-read_delim(my_url," ",col_names=F,skip=1)
+read_delim(my_url, " ", col_names = F, skip = 1)
 ```
 
  
@@ -68,7 +68,7 @@ supply my own column names, in which case the file needs not to have
 any, so I need the `skip` again:
 
 ```{r }
-read_delim(my_url," ",col_names=c("instructor","mark"),skip=1)
+read_delim(my_url, " ", col_names = c("instructor", "mark"), skip = 1)
 ```
 
  
@@ -82,7 +82,7 @@ Solution
 
 ```{r paignton}
 library(tidyverse)
-ggplot(marks,aes(x=class,y=score))+geom_boxplot()
+ggplot(marks, aes(x = class, y = score)) + geom_boxplot()
 ```
 
        
@@ -95,8 +95,8 @@ variable measured goes up ($y$).
 Extra: this might work:
 
 ```{r }
-ggplot(marks,aes(x=class,y=score))+geom_boxplot()+
-coord_flip()
+ggplot(marks, aes(x = class, y = score)) + geom_boxplot() +
+  coord_flip()
 ```
 
  
@@ -137,7 +137,7 @@ Solution
 Replace your $x$-coordinate by some kind of dummy thing like
 `1` (`factor(1)` also works):
 ```{r torquay}
-ggplot(marks,aes(x=1,y=score))+geom_boxplot()
+ggplot(marks, aes(x = 1, y = score)) + geom_boxplot()
 ```
 
        
@@ -147,9 +147,11 @@ to remove it, but that is more work than it's worth, and I didn't get
 rid of the ticks below:
 
 ```{r }
-ggplot(marks,aes(x=1,y=score))+geom_boxplot()+
-theme(axis.text.x=element_blank(),
-axis.title.x=element_blank())
+ggplot(marks, aes(x = 1, y = score)) + geom_boxplot() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank()
+  )
 ```
 
        
@@ -168,8 +170,8 @@ Solution
 Three ways to get the median score. I like the first one best:
 
 ```{r }
-marks %>% summarize(med=median(score))
-with(marks,median(score))
+marks %>% summarize(med = median(score))
+with(marks, median(score))
 median(marks$score)
 ```
 
@@ -186,8 +188,9 @@ Extra: if you wanted median by group, this is the approved
 (`tidyverse`) way:
 
 ```{r }
-marks %>% group_by(class) %>%
-summarize(med=median(score))
+marks %>%
+  group_by(class) %>%
+  summarize(med = median(score))
 ```
 
  
@@ -199,11 +202,13 @@ You can now go back and compare these medians with the ones on the
 boxplots in (<a href="#part:sbsbox">here</a>). They should be the same. Or you can even do this:
 
 ```{r }
-marks %>% group_by(class) %>%
-summarize(q1=quantile(score,0.25),
-med=median(score),
-q3=quantile(score,0.75)
-)
+marks %>%
+  group_by(class) %>%
+  summarize(
+    q1 = quantile(score, 0.25),
+    med = median(score),
+    q3 = quantile(score, 0.75)
+  )
 ```
 
  
@@ -224,8 +229,8 @@ you're in trouble. Only read on if you *really* want to know how
 to handle this. Here's step 1:
 
 ```{r }
-marks %>% 
-nest(-class) 
+marks %>%
+  nest(-class)
 ```
 
  
@@ -243,9 +248,9 @@ To do that, use `map`, which is the
 mini-data-frames, calculate the five-number summary of the column called `score` in *it*:
 
 ```{r }
-marks %>% 
-nest(-class) %>%
-mutate(qq=map(data,~quantile(.$score)))
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ quantile(.$score)))
 ```
 
   
@@ -261,10 +266,10 @@ five-number summary for each group.
 Now we want to display the quantiles. This is the easiest way:
 
 ```{r }
-marks %>% 
-nest(-class) %>%
-mutate(qq=map(data,~quantile(.$score))) %>%
-unnest(qq)
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ quantile(.$score))) %>%
+  unnest(qq)
 ```
 
   
@@ -305,9 +310,9 @@ So we have a *two*-column data frame with a column saying
 which quantile is which. So let's rewrite our code to use this:
 
 ```{r }
-marks %>% 
-nest(-class) %>%
-mutate(qq=map(data,~enframe((quantile(.$score)))))
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ enframe((quantile(.$score)))))
 ```
 
  
@@ -318,10 +323,10 @@ themselves have two columns.
 And finally `unnest` `qq`:
 
 ```{r }
-marks %>% 
-nest(-class) %>%
-mutate(qq=map(data,~enframe((quantile(.$score))))) %>%
-unnest(qq)  
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ enframe((quantile(.$score))))) %>%
+  unnest(qq)
 ```
 
  
@@ -329,13 +334,13 @@ unnest(qq)
 Success! Or even:
 
 ```{r }
-marks %>% 
-nest(-class) %>%
-mutate(qq=map(data,~enframe((quantile(.$score))))) %>%
-unnest(qq) %>%
-mutate(qn=parse_number(name)) %>%
-select(-name) %>%
-spread(qn, value)
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ enframe((quantile(.$score))))) %>%
+  unnest(qq) %>%
+  mutate(qn = parse_number(name)) %>%
+  select(-name) %>%
+  spread(qn, value)
 ```
 
  

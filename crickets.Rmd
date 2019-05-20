@@ -31,9 +31,9 @@ Solution
 
 Tab-separated, so `read_tsv`; no column names, so `col_names=F`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
-crickets=read_tsv(my_url,col_names=F)
-crickets  
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/crickets.txt"
+crickets <- read_tsv(my_url, col_names = F)
+crickets
 ```
 
  
@@ -43,7 +43,7 @@ As promised.
 If you didn't catch the tab-separated part, this probably happened to you:
 
 ```{r }
-d=read_delim(my_url," ",col_names=F)
+d <- read_delim(my_url, " ", col_names = F)
 ```
 
  
@@ -93,9 +93,9 @@ Breathe, and then begin. `unite` creates new columns by
 joining together old ones:
 `r tufte::margin_note("As *str-c* or *paste* do, actually, but the advantage of *unite* is that it gets rid of the other columns, which you probably no longer need.")`
 ```{r }
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) 
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4)
 ```
 
  
@@ -110,7 +110,7 @@ Digression: `unite`-ing with a space could cause problems if
 the data values have spaces in them already. Consider this list of names:
 
 ```{r }
-names=c("Cameron McDonald","Durwin Yang","Ole Gunnar Solskjaer","Mahmudullah")
+names <- c("Cameron McDonald", "Durwin Yang", "Ole Gunnar Solskjaer", "Mahmudullah")
 ```
 
  
@@ -119,7 +119,7 @@ Two very former students of mine, a Norwegian soccer player, and a
 Bangladeshi cricketer. Only one of these has played for Manchester United:
 
 ```{r }
-manu=c(F,F,T,F)
+manu <- c(F, F, T, F)
 ```
 
  
@@ -127,7 +127,7 @@ manu=c(F,F,T,F)
 and let's make a data frame:
 
 ```{r }
-d=tibble(name=names,manu=manu)
+d <- tibble(name = names, manu = manu)
 d
 ```
 
@@ -137,7 +137,7 @@ Now, what happens if we `unite` those columns, separating them
 by a space?
 
 ```{r }
-d %>% unite(joined,name:manu,sep=" ")
+d %>% unite(joined, name:manu, sep = " ")
 ```
 
  
@@ -145,8 +145,9 @@ d %>% unite(joined,name:manu,sep=" ")
 If we then try to separate them again, what happens?
 
 ```{r }
-d %>% unite(joined,name:manu,sep=" ") %>%
-separate(joined,c("one","two")," ")
+d %>%
+  unite(joined, name:manu, sep = " ") %>%
+  separate(joined, c("one", "two"), " ")
 ```
 
  
@@ -157,8 +158,9 @@ either choosing one deliberately or going with the default underscore,
 everything works swimmingly:
 
 ```{r }
-d %>% unite(joined,name:manu,sep=":") %>%
-separate(joined,c("one","two"),":")
+d %>%
+  unite(joined, name:manu, sep = ":") %>%
+  separate(joined, c("one", "two"), ":")
 ```
 
  
@@ -185,10 +187,10 @@ Thus, this, naming the new column `temp_pulse` since it
 contains both of those things. Add to the end of the pipe you
 started building in the previous part:
 ```{r }
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus)  
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus)
 ```
 
  
@@ -217,11 +219,11 @@ values it pastes together. Glue the `separate` onto the
 end. We are creating two new variables `temperature` and
 `pulse_rate`:
 ```{r }
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus) %>%
-separate(temp_pulse,c("temperature","pulse_rate"),"_")
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus) %>%
+  separate(temp_pulse, c("temperature", "pulse_rate"), "_")
 ```
 
  
@@ -254,14 +256,14 @@ Solution
 the variable that's already there (which saves us some effort
 here). 
 ```{r }
-crickets.1 = crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus) %>%
-separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
-mutate(temperature=as.numeric(temperature)) %>%
-mutate(pulse_rate=as.numeric(pulse_rate))
-crickets.1  
+crickets.1 <- crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus) %>%
+  separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
+  mutate(temperature = as.numeric(temperature)) %>%
+  mutate(pulse_rate = as.numeric(pulse_rate))
+crickets.1
 ```
 
  
@@ -292,12 +294,12 @@ numeric, and the `at` variant works on columns whose names have
 something in common or that we can list, which is what we want here:
 
 ```{r }
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus) %>%
-separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
-mutate_at(vars(temperature:pulse_rate),funs(as.numeric))
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus) %>%
+  separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
+  mutate_at(vars(temperature:pulse_rate), funs(as.numeric))
 ```
 
  
@@ -305,12 +307,12 @@ mutate_at(vars(temperature:pulse_rate),funs(as.numeric))
 Can't I just say that these are columns 2 and 3?
 
 ```{r }
-crickets %>% 
-unite(exclamationis,X1:X2) %>%
-unite(niveus,X3:X4) %>%
-gather(species,temp_pulse,exclamationis:niveus) %>%
-separate(temp_pulse,c("temperature","pulse_rate"),"_") %>%
-mutate_at(vars(2:3),funs(as.numeric))
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  gather(species, temp_pulse, exclamationis:niveus) %>%
+  separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
+  mutate_at(vars(2:3), funs(as.numeric))
 ```
 
  

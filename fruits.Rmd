@@ -83,9 +83,9 @@ Let's start by reading in my table of fruits and properties, which
 I saved in
 [link](http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt):
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt"
-fruit1=read_table(my_url)
-fruit1 
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/fruit1.txt"
+fruit1 <- read_table(my_url)
+fruit1
 ```
 
      
@@ -93,7 +93,7 @@ fruit1
 We don't need the first column, so we'll get rid of it:
 
 ```{r error=T}
-fruit2 = fruit1 %>% select(-Property)
+fruit2 <- fruit1 %>% select(-Property)
 fruit2
 ```
 
@@ -111,11 +111,11 @@ anything.
 Here's where we are at so far:
 
 ```{r eval=F}
-fruit_m=matrix(-1,6,6)
+fruit_m <- matrix(-1, 6, 6)
 for (i in 1:6) {
-for (j in 1:6) {
-fruit_m[i,j]=3 # dissim between fruit i and fruit j
-}
+  for (j in 1:6) {
+    fruit_m[i, j] <- 3 # dissim between fruit i and fruit j
+  }
 }
 ```
 
@@ -128,12 +128,12 @@ inputs are the two column numbers, and a data frame to get those
 columns from:
 
 ```{r }
-dissim=function(i,j,d) {
-x = d %>% select(i)
-y = d %>% select(j)
-sum(x!=y)
+dissim <- function(i, j, d) {
+  x <- d %>% select(i)
+  y <- d %>% select(j)
+  sum(x != y)
 }
-dissim(1,2,fruit2)
+dissim(1, 2, fruit2)
 ```
 
  
@@ -156,11 +156,11 @@ write a function to do it. Now, in our loop, we only have to call the
 function (having put some thought into getting it right):
 
 ```{r }
-fruit_m=matrix(-1,6,6)
+fruit_m <- matrix(-1, 6, 6)
 for (i in 1:6) {
-for (j in 1:6) {
-fruit_m[i,j]=dissim(i,j,fruit2)
-}
+  for (j in 1:6) {
+    fruit_m[i, j] <- dissim(i, j, fruit2)
+  }
 }
 fruit_m
 ```
@@ -173,9 +173,9 @@ is a `matrix` so it has a `rownames` and a
 fruit names from `fruit2`:
 
 ```{r }
-fruit_names=names(fruit2)
-rownames(fruit_m)=fruit_names
-colnames(fruit_m)=fruit_names
+fruit_names <- names(fruit2)
+rownames(fruit_m) <- fruit_names
+colnames(fruit_m) <- fruit_names
 fruit_m
 ```
 
@@ -189,7 +189,7 @@ different. We start by making all combinations of the fruit names with
 each other, which is `crossing`:
 
 ```{r }
-combos=crossing(fruit=fruit_names,other=fruit_names)
+combos <- crossing(fruit = fruit_names, other = fruit_names)
 combos
 ```
 
@@ -200,12 +200,12 @@ out the dissimilarity between them. A happy coincidence is that we can
 use the function we had before, *unmodified*! How? Take a look: 
 
 ```{r }
-dissim=function(i,j,d) {
-x = d %>% select(i)
-y = d %>% select(j)
-sum(x!=y)
+dissim <- function(i, j, d) {
+  x <- d %>% select(i)
+  y <- d %>% select(j)
+  sum(x != y)
 }
-dissim("Apple","Orange",fruit2)
+dissim("Apple", "Orange", fruit2)
 ```
 
  
@@ -220,7 +220,7 @@ dissimilarity is a whole number each time, so we need
 `map2_int`. So we can do this:
 
 ```{r }
-combos %>% mutate(dissim=map2_int(fruit,other,dissim,fruit2))
+combos %>% mutate(dissim = map2_int(fruit, other, dissim, fruit2))
 ```
 
  
@@ -234,9 +234,9 @@ later, we need to `spread` the column `other` to make a
 square array:
 
 ```{r }
-fruit_spread = combos %>% 
-mutate(dissim=map2_int(fruit,other,dissim,fruit2)) %>%
-spread(other,dissim)
+fruit_spread <- combos %>%
+  mutate(dissim = map2_int(fruit, other, dissim, fruit2)) %>%
+  spread(other, dissim)
 fruit_spread
 ```
 
@@ -256,7 +256,7 @@ and turn it into a `dist` object. Since I asked you to
 save yours into a file, let's start from there. Mine is aligned
 columns: 
 ```{r }
-dissims=read_table("fruits.txt")
+dissims <- read_table("fruits.txt")
 dissims
 ```
 
@@ -267,8 +267,9 @@ off the first column, since `as.dist` can get the names from
 the columns:
 
 ```{r }
-d = dissims %>% select(-fruit) %>%
-as.dist()
+d <- dissims %>%
+  select(-fruit) %>%
+  as.dist()
 d
 ```
 
@@ -292,7 +293,7 @@ we did before, so we don't want to do that now.
 
 Now, after all that work, the actual cluster analysis and dendrogram:
 ```{r hkadh}
-fruits.1=hclust(d,method="complete")
+fruits.1 <- hclust(d, method = "complete")
 plot(fruits.1)
 ```
 
@@ -346,12 +347,12 @@ to use her judgement!
 The important point is that you assess the dissimilarities between
 fruits in one cluster and fruits in the other. The dissimilarities
 between fruits in the same cluster don't enter into it xxx.
-`r tufte::margin_note("I      now have a mental image of John Cleese saying *it don't enter      into it* in the infamous Dead Parrot sketch, https://www.youtube.com/watch?v=vnciwwsvNcc}. Not to      mention       *How to defend yourself against an assailant armed with fresh      fruit*, https://www.youtube.com/watch?v=4JgbOkLdRaE.    ")`
+`r tufte::margin_note("I      now have a mental image of John Cleese saying *it don't enter      into it* in the infamous Dead Parrot sketch, https://www.youtube.com/watch?v=vnciwwsvNcc. Not to      mention       *How to defend yourself against an assailant armed with fresh      fruit*, https://www.youtube.com/watch?v=4JgbOkLdRaE.    ")`
 As it happens, all my complete-linkage distances between clusters
 (of at least 2 fruits) are 3. The single-linkage ones are
 different, though:
 ```{r lhsdjhad}
-fruits.2=hclust(d,method="single")
+fruits.2 <- hclust(d, method = "single")
 plot(fruits.2)
 ```
 

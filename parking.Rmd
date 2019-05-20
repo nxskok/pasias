@@ -87,9 +87,9 @@ by-passes the download-upload steps that you would have to do
 otherwise. (I am grateful to Rose Gao for this idea.)
 Here is how you can use `download.file` here:
 ```{r }
-my_url='http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx'
-local="parking.xlsx"
-download.file(my_url, local, mode="wb")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/parking.xlsx"
+local <- "parking.xlsx"
+download.file(my_url, local, mode = "wb")
 ```
 
          
@@ -98,7 +98,7 @@ When you've gotten the spreadsheet into your project folder via one of
 those two ways, you go ahead and do this:      
 ```{r }
 library(readxl)
-parking=read_excel("parking.xlsx",sheet=2)
+parking <- read_excel("parking.xlsx", sheet = 2)
 parking
 ```
 
@@ -119,9 +119,9 @@ Extra: Rose actually came up with a better idea, which I will show
 you and explain:
 
 ```{r }
-tf=tempfile()
-download.file(my_url, tf, mode="wb")
-p=read_excel(tf, sheet = 2)
+tf <- tempfile()
+download.file(my_url, tf, mode = "wb")
+p <- read_excel(tf, sheet = 2)
 ```
 
  
@@ -160,7 +160,7 @@ saved `.csv` `parking2.csv` (because it was from
 sheet 2, but you can use any name you like).
 Then I read this into R thus:
 ```{r }
-parking2=read_csv("parking2.csv")
+parking2 <- read_csv("parking2.csv")
 parking2
 ```
 
@@ -197,7 +197,7 @@ Solution
 
 With the right data set, this is a piece of cake:
 ```{r }
-ggplot(parking,aes(x=gender,y=distance))+geom_boxplot()
+ggplot(parking, aes(x = gender, y = distance)) + geom_boxplot()
 ```
 
          
@@ -216,7 +216,7 @@ females (two or more groups, in general). First, we make a histogram of all
 the distances, without distinguishing by gender:
 
 ```{r }
-ggplot(parking,aes(x=distance))+geom_histogram(bins=8)
+ggplot(parking, aes(x = distance)) + geom_histogram(bins = 8)
 ```
 
  
@@ -230,9 +230,9 @@ arranged as you want them is called `facet_grid`. Let me show you
 the code first, and then explain how it works:
 
 ```{r }
-ggplot(parking,aes(x=distance))+
-geom_histogram(bins=7)+
-facet_grid(gender~.)
+ggplot(parking, aes(x = distance)) +
+  geom_histogram(bins = 7) +
+  facet_grid(gender ~ .)
 ```
 
  
@@ -256,9 +256,9 @@ for comparing distributions). You can make it work by using
 `ncol=1` to arrange "all" the histograms in one column:
 
 ```{r }
-ggplot(parking,aes(x=distance))+
-geom_histogram(bins=7)+
-facet_wrap(~gender,ncol=1)
+ggplot(parking, aes(x = distance)) +
+  geom_histogram(bins = 7) +
+  facet_wrap(~gender, ncol = 1)
 ```
 
  
@@ -279,9 +279,9 @@ you don't have anything else to put there, you put a dot. Here's my
 `facet_grid` code from above, again:
 
 ```{r eval=F}
-ggplot(parking,aes(x=distance))+
-geom_histogram(bins=7)+
-facet_grid(gender~.)
+ggplot(parking, aes(x = distance)) +
+  geom_histogram(bins = 7) +
+  facet_grid(gender ~ .)
 ```
 
  
@@ -292,9 +292,9 @@ code:
 `r tufte::margin_note("I took out the *ncol* since that confuses the  explanation here.")` 
 
 ```{r eval=F}
-ggplot(parking,aes(x=distance))+
-geom_histogram(bins=7)+
-facet_wrap(~gender)
+ggplot(parking, aes(x = distance)) +
+  geom_histogram(bins = 7) +
+  facet_wrap(~gender)
 ```
 
  
@@ -308,7 +308,7 @@ parking distances combined together, we would have $n=47+48=95$
 observations, so we should use this many bins:
 
 ```{r }
-sturges=log(95,2)+1
+sturges <- log(95, 2) + 1
 sturges
 ```
 
@@ -322,7 +322,7 @@ can do it mentally by saying "the next power of 2 is 128, which is $2^7$, so I n
 Or:
 
 ```{r }
-with(parking,nclass.Sturges(distance))
+with(parking, nclass.Sturges(distance))
 ```
 
  
@@ -342,7 +342,7 @@ with(parking, nclass.FD(distance))
 and that leads to this histogram: 
 
 ```{r }
-ggplot(parking,aes(x=distance))+geom_histogram(bins=14)
+ggplot(parking, aes(x = distance)) + geom_histogram(bins = 14)
 ```
 
  
@@ -359,7 +359,7 @@ compromise. For example, using Sturges' rule based on 47 observations
 (the number of males; the number of females is one more):
 
 ```{r }
-log(47,2)+1
+log(47, 2) + 1
 ```
 
  
@@ -373,8 +373,8 @@ up. To do *that*, `filter` one of the genders first:
 
 ```{r }
 parking %>%
-filter(gender=="female") %>%
-with(.,nclass.Sturges(distance))
+  filter(gender == "female") %>%
+  with(., nclass.Sturges(distance))
 ```
 
  
@@ -432,7 +432,7 @@ Solution
  one, you need to say that the spreads are "about equal", by
  comparing the heights of the boxes on the boxplots:
 ```{r }
-t.test(distance~gender,data=parking)
+t.test(distance ~ gender, data = parking)
 ```
 
   
@@ -445,7 +445,7 @@ between males and females.
 Or, this being the pooled one:
 
 ```{r }
-t.test(distance~gender,data=parking,var.equal=T)
+t.test(distance ~ gender, data = parking, var.equal = T)
 ```
 
  
@@ -491,7 +491,7 @@ test (which we will also see later). It goes like this:
 Work out the overall median of all the distances, regardless
 of gender:
 ```{r }
-parking %>% summarize(med=median(distance))
+parking %>% summarize(med = median(distance))
 ```
 
 
@@ -504,7 +504,7 @@ are exactly equal to the overall median, but I won't here for clarity
 of exposition.)
 
 ```{r }
-tab=with(parking,table(gender,distance<9))
+tab <- with(parking, table(gender, distance < 9))
 tab
 ```
 
@@ -517,7 +517,7 @@ median. This can be tested (it's a chi-squared test for independence,
 if you know that):
 
 ```{r }
-chisq.test(tab,correct=F)
+chisq.test(tab, correct = F)
 ```
 
  

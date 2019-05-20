@@ -21,10 +21,10 @@ I did it this way, combining the reading
 of the data with the calculation of the differences in *one* pipe:
 
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
-throws = read_delim(myurl," ",col_names=c("student","baseball","softball")) %>%
-mutate(diff=baseball-softball)
-throws  
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/throw.txt"
+throws <- read_delim(myurl, " ", col_names = c("student", "baseball", "softball")) %>%
+  mutate(diff = baseball - softball)
+throws
 ```
 
  
@@ -41,7 +41,7 @@ Solution
 `ci_median`, with 95\% being the default confidence level:
 
 ```{r }
-ci_median(throws,diff)
+ci_median(throws, diff)
 ```
 
  
@@ -71,8 +71,8 @@ Let's check that it works properly by repeating the previous
 `sign_test` and verifying that `pval_sign` gives
 the same thing:
 ```{r }
-sign_test(throws,diff,0)
-pval_sign(0,throws,diff)
+sign_test(throws, diff, 0)
+pval_sign(0, throws, diff)
 ```
 
        
@@ -114,8 +114,8 @@ Solution
 The most mindless way to try some values one at a time and see what
  you get, eg.:
 ```{r }
-pval_sign(1,throws,diff)
-pval_sign(5,throws,diff)
+pval_sign(1, throws, diff)
+pval_sign(5, throws, diff)
 ```
 
   
@@ -129,8 +129,8 @@ Something more intelligent is to make a long list of potential
 medians, and get the P-value for each of them, eg.:
 
 ```{r }
-d=tibble(my.med=seq(0,20,2))
-d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+d <- tibble(my.med = seq(0, 20, 2))
+d %>% mutate(pvals = map_dbl(my.med, ~ pval_sign(., throws, diff)))
 ```
 
  
@@ -139,8 +139,8 @@ d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
 outside. Some closer investigation:
 
 ```{r }
-d=tibble(my.med=seq(0,2,0.5))
-d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+d <- tibble(my.med = seq(0, 2, 0.5))
+d %>% mutate(pvals = map_dbl(my.med, ~ pval_sign(., throws, diff)))
 ```
 
  
@@ -149,8 +149,8 @@ The bottom end of the interval actually is 2, since 2 is inside and
 1.5 is outside.
 
 ```{r }
-d=tibble(my.med=seq(8,10,0.5))
-d %>% mutate(pvals=map_dbl(my.med,~pval_sign(.,throws,diff)))
+d <- tibble(my.med = seq(8, 10, 0.5))
+d %>% mutate(pvals = map_dbl(my.med, ~ pval_sign(., throws, diff)))
 ```
 
  
@@ -164,7 +164,7 @@ outside the interval on the low end and 5 is inside, so the lower
 limit has to be between 1 and 5. Let's try halfway between, ie.\ 3:
 
 ```{r }
-pval_sign(3,throws,diff)
+pval_sign(3, throws, diff)
 ```
 
  
@@ -172,18 +172,18 @@ pval_sign(3,throws,diff)
 Inside, so lower limit is between 1 and 3. This can be automated, thus:
 
 ```{r }
-lo=1
-hi=3
-while(abs(hi-lo)>0.1) {
-try=(lo+hi)/2
-ptry=pval_sign(try,throws,diff)
-if (ptry>0.05) {
-hi=try
-} else {
-lo=try
+lo <- 1
+hi <- 3
+while (abs(hi - lo) > 0.1) {
+  try <- (lo + hi) / 2
+  ptry <- pval_sign(try, throws, diff)
+  if (ptry > 0.05) {
+    hi <- try
+  } else {
+    lo <- try
+  }
 }
-}
-c(lo,hi)
+c(lo, hi)
 ```
 
  
@@ -202,18 +202,18 @@ the loop. For starting values, you can be fairly mindless: for
 example, we know that 5 is inside and something big like 20 must be outside:
 
 ```{r }
-lo=5
-hi=20
-while(abs(hi-lo)>0.1) {
-try=(lo+hi)/2
-ptry=pval_sign(try,throws,diff)
-if (ptry>0.05) {
-lo=try
-} else {
-hi=try
+lo <- 5
+hi <- 20
+while (abs(hi - lo) > 0.1) {
+  try <- (lo + hi) / 2
+  ptry <- pval_sign(try, throws, diff)
+  if (ptry > 0.05) {
+    lo <- try
+  } else {
+    hi <- try
+  }
 }
-}
-c(lo,hi)
+c(lo, hi)
 ```
 
  

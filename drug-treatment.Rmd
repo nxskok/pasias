@@ -41,8 +41,8 @@ Solution
 
 This:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt"
-drugusers=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/drugusers.txt"
+drugusers <- read_delim(my_url, " ")
 drugusers
 ```
 
@@ -134,13 +134,14 @@ mostly with `ifelse`,
 `r tufte::margin_note("Case-when is much clearer than using nested if-elses when you have three or more categories, as for *herco*.")` thus:
 ```{r }
 drugusers %>% mutate(
-treat=ifelse(treat==0, "short", "long"),
-site=ifelse(site==0, "A", "B"),
-censor=ifelse(censor==1, "returned", "no-return"),
-herco=case_when(
-herco==1 ~ "both",
-herco==2 ~ "one",
-herco==3 ~ "neither")
+  treat = ifelse(treat == 0, "short", "long"),
+  site = ifelse(site == 0, "A", "B"),
+  censor = ifelse(censor == 1, "returned", "no-return"),
+  herco = case_when(
+    herco == 1 ~ "both",
+    herco == 2 ~ "one",
+    herco == 3 ~ "neither"
+  )
 ) -> drugusers
 ```
 
@@ -174,7 +175,7 @@ happened for each patient.
 In this case, that is
 `censor="returned"`. 
 ```{r }
-y=with(drugusers,Surv(time,censor=="returned"))
+y <- with(drugusers, Surv(time, censor == "returned"))
 ```
 
        
@@ -217,7 +218,7 @@ because (in general) the individual will be observed until the study
 ends, and studies of this kind carry on for years:
 
 ```{r }
-ggplot(drugusers,aes(x=censor,y=time))+geom_boxplot()
+ggplot(drugusers, aes(x = censor, y = time)) + geom_boxplot()
 ```
 
  
@@ -233,8 +234,8 @@ groups, and you *also* want to distinguish censored from
 non-censored observations. Then, this works:
 
 ```{r }
-ggplot(drugusers,aes(x=treat,y=time,colour=censor))+
-geom_boxplot()
+ggplot(drugusers, aes(x = treat, y = time, colour = censor)) +
+  geom_boxplot()
 ```
 
  
@@ -260,7 +261,7 @@ Solution
 
 
 ```{r }
-drugusers.1=coxph(y~age+ndrugtx+treat+site+herco,data=drugusers)
+drugusers.1 <- coxph(y ~ age + ndrugtx + treat + site + herco, data = drugusers)
 summary(drugusers.1)
 ```
 
@@ -270,7 +271,7 @@ Another way to handle
 "all the other $x$'s except `row`, `ID`, `time` and `censor`" is this:
 
 ```{r }
-drugusers.1a=coxph(y~.-row-ID-time-censor,data=drugusers)
+drugusers.1a <- coxph(y ~ . - row - ID - time - censor, data = drugusers)
 broom::tidy(drugusers.1a)
 ```
 
@@ -289,7 +290,7 @@ Solution
 
 The hint is meant to suggest to you that looking at `drop1` is the right way to go:
 ```{r error=T}
-drop1(drugusers.1, test="Chisq")
+drop1(drugusers.1, test = "Chisq")
 ```
 
        
@@ -316,7 +317,7 @@ out.
 problem about copying-pasting your `coxph` and taking out
 what you no longer need.
 ```{r }
-drugusers.2=update(drugusers.1,.~.-site-herco)
+drugusers.2 <- update(drugusers.1, . ~ . - site - herco)
 ```
 
  
@@ -325,7 +326,7 @@ Having fit two models, we can use `anova` to compare them. The
 right test gets done, so no need for `test=`:
 
 ```{r }
-anova(drugusers.2,drugusers.1)
+anova(drugusers.2, drugusers.1)
 ```
 
  
@@ -408,10 +409,10 @@ This data frame is going to be used for prediction, so I will
 call it `new` and construct it in pieces as I did before
 (thus meaning that I don't have to think too hard about what I'm doing):
 ```{r }
-ages=c(27,37)
-ndrugtxs=c(1,6)
-treats=c("short","long")
-new=crossing(age=ages,ndrugtx=ndrugtxs,treat=treats)
+ages <- c(27, 37)
+ndrugtxs <- c(1, 6)
+treats <- c("short", "long")
+new <- crossing(age = ages, ndrugtx = ndrugtxs, treat = treats)
 new
 ```
 
@@ -432,7 +433,7 @@ Solution
 `survfit` is the survival analysis version of
 `predict` and works the same way, so this is all you need:
 ```{r }
-pp=survfit(drugusers.2,new,data=drugusers)
+pp <- survfit(drugusers.2, new, data = drugusers)
 ```
 
        
@@ -450,7 +451,7 @@ Solution
 
 This:
 ```{r }
-ggsurvplot(pp, conf.int=F)
+ggsurvplot(pp, conf.int = F)
 ```
 
    

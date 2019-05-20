@@ -18,8 +18,8 @@ Solution
 
 Nothing much new here:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/species.txt"
-species=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/species.txt"
+species <- read_delim(my_url, " ")
 species
 ```
 
@@ -52,8 +52,8 @@ this is a job for `as.dist`, which merely changes how it
 looks. Use a pipeline to get rid of the first column first:
 ```{r }
 species %>%
-select(-what) %>% 
-as.dist() -> d
+  select(-what) %>%
+  as.dist() -> d
 d
 ```
 
@@ -70,8 +70,8 @@ This also works, to select only the numerical columns:
 
 ```{r }
 species %>%
-select_if(is.numeric) %>%
-as.dist()
+  select_if(is.numeric) %>%
+  as.dist()
 ```
 
  
@@ -108,7 +108,7 @@ Solution
 
 Something like this:
 ```{r }
-species.1=hclust(d,method="single")
+species.1 <- hclust(d, method = "single")
 plot(species.1)
 ```
 
@@ -125,7 +125,7 @@ Solution
 Not much changes  here in the code, but the result is noticeably
 different:
 ```{r }
-species.2=hclust(d,method="ward.D")
+species.2 <- hclust(d, method = "ward.D")
 plot(species.2)
 ```
 
@@ -187,7 +187,7 @@ before that you'll need to plot the cluster object again. For 2
 clusters, that would look like this:
 ```{r }
 plot(species.2)
-rect.hclust(species.2,2)
+rect.hclust(species.2, 2)
 ```
 
  
@@ -199,7 +199,7 @@ Or we could go to the other end of the scale:
 
 ```{r }
 plot(species.2)
-rect.hclust(species.2,5)
+rect.hclust(species.2, 5)
 ```
 
  
@@ -220,7 +220,7 @@ Solution
 
 This is `cutree`. For 2 clusters it would be this:
 ```{r }
-cutree(species.2,2)
+cutree(species.2, 2)
 ```
 
      
@@ -228,7 +228,7 @@ cutree(species.2,2)
 For 5 it would be this:
 
 ```{r }
-cutree(species.2,5)
+cutree(species.2, 5)
 ```
 
  

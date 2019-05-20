@@ -33,8 +33,8 @@ Solution
 
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/youngboys.txt"
-boys=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/youngboys.txt"
+boys <- read_delim(my_url, " ")
 boys
 ```
 
@@ -54,7 +54,7 @@ Solution
 Fitting four explanatory variables with only ten observations is likely to be pretty shaky, but we 
 press ahead regardless:
 ```{r }
-boys.1=lm(uptake~age+height+weight+chest,data=boys) 
+boys.1 <- lm(uptake ~ age + height + weight + chest, data = boys)
 summary(boys.1)
 ```
 
@@ -136,7 +136,7 @@ only explanatory variable we need to keep. I would
 just do the regression straight rather than using
 `update` here:
 ```{r }
-boys.2=lm(uptake~height,data=boys) 
+boys.2 <- lm(uptake ~ height, data = boys)
 summary(boys.2)
 ```
 
@@ -145,7 +145,7 @@ summary(boys.2)
 If you want, you can use `update` here, which looks like this:
 
 ```{r }
-boys.2a=update(boys.1,.~.-age-weight-chest)  
+boys.2a <- update(boys.1, . ~ . - age - weight - chest)
 summary(boys.2a)
 ```
 

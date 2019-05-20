@@ -70,7 +70,7 @@ be 1 or 0 if the event happened. The help says that it needs to be
 1 or `TRUE` if the event (death) happened, which is what
 `fustat` is, so we can use it as it is:
 ```{r }
-y=with(ovarian,Surv(futime,fustat))
+y <- with(ovarian, Surv(futime, fustat))
 y
 ```
 
@@ -82,7 +82,7 @@ looks as if it is 26 long (one per patient), it's actually more
 complicated than that:
 
 ```{r error=T}
-ov2 = ovarian %>% mutate(y=Surv(futime,fustat))
+ov2 <- ovarian %>% mutate(y = Surv(futime, fustat))
 ```
 
  
@@ -163,7 +163,7 @@ Solution
 
 The hint suggests something like this:
 ```{r }
-time.1=coxph(y~age+factor(rx),data=ovarian)
+time.1 <- coxph(y ~ age + factor(rx), data = ovarian)
 summary(time.1)
 ```
 
@@ -173,8 +173,9 @@ Alternatively, define the factor version of `rx` in the data
 frame first. This is the slick way to do that:
 
 ```{r }
-time.1a = ovarian %>% mutate(rxf=factor(rx)) %>%
-coxph(y~age+rxf,data=.)
+time.1a <- ovarian %>%
+  mutate(rxf = factor(rx)) %>%
+  coxph(y ~ age + rxf, data = .)
 summary(time.1a)
 ```
 
@@ -247,7 +248,7 @@ Extra: I was curious about what would happen if I just included
 `rx` in the model:
 
 ```{r }
-time.2=update(time.1,.~.-age)
+time.2 <- update(time.1, . ~ . - age)
 summary(time.2)
 ```
 
@@ -272,7 +273,7 @@ graph showing that the treatment groups are similar in terms of
 important things like `age`. Here, that could be a boxplot:
 
 ```{r }
-ggplot(ovarian, aes(x=factor(rx),y=age))+geom_boxplot()
+ggplot(ovarian, aes(x = factor(rx), y = age)) + geom_boxplot()
 ```
 
  
@@ -303,7 +304,7 @@ Solution
 The plot is just the same idea as the one in the notes. Make sure
 you have `survminer` installed and loaded:
 ```{r }
-ggcoxdiagnostics(time.1)+geom_smooth()
+ggcoxdiagnostics(time.1) + geom_smooth()
 ```
 
      
@@ -352,9 +353,11 @@ quantile(ovarian$age)
 or, if you prefer,
 
 ```{r }
-ovarian %>% 
-summarize(q1=quantile(age,0.25),
-q3=quantile(age,0.75))
+ovarian %>%
+  summarize(
+    q1 = quantile(age, 0.25),
+    q3 = quantile(age, 0.75)
+  )
 ```
 
  
@@ -367,9 +370,9 @@ Then follow my standard procedure (or one of your own devising),
 remembering that "treatment" is called `rx` here:
 
 ```{r }
-ages=c(50.17, 62.38)
-rxs=c(1, 2)
-new=crossing(age=ages,rx=rxs)
+ages <- c(50.17, 62.38)
+rxs <- c(1, 2)
+new <- crossing(age = ages, rx = rxs)
 new
 ```
 
@@ -388,7 +391,7 @@ Solution
 The magic word here is `survfit`. The structure is the same
 as for `predict`:
 ```{r }
-s=survfit(time.1,new,data=ovarian)
+s <- survfit(time.1, new, data = ovarian)
 summary(s)
 ```
 
@@ -425,7 +428,7 @@ Solution
 Thus. The `conf.int=F` means to skip the confidence interval
 "envelopes" that I find make the plot rather messy:
 ```{r }
-ggsurvplot(s,conf.int=F)
+ggsurvplot(s, conf.int = F)
 ```
 
    

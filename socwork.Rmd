@@ -17,8 +17,8 @@ Solution
 
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/socwork.txt"
-soc=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/socwork.txt"
+soc <- read_delim(my_url, " ")
 soc
 ```
 
@@ -29,7 +29,7 @@ check that we have sensible *values*, something like
 `summary` is called for:
 
 ```{r }
-summary(soc)  
+summary(soc)
 ```
 
  
@@ -44,7 +44,7 @@ reasonable.
 A rather more `tidyverse` way is this:
 
 ```{r }
-soc %>% summarize_all(c("min","max")) 
+soc %>% summarize_all(c("min", "max"))
 ```
 
  
@@ -56,7 +56,7 @@ as rows, the variables as columns), but that's not how this comes out.
 Here is another:
 
 ```{r }
-soc %>% map_df(~quantile(.)) 
+soc %>% map_df(~ quantile(.))
 ```
 
  
@@ -76,7 +76,7 @@ haven't found out how to get them back.
 This almost works:
 
 ```{r }
-soc %>% map_df(~enframe(quantile(.)))
+soc %>% map_df(~ enframe(quantile(.)))
 ```
 
 
@@ -94,7 +94,7 @@ actually very flexible: they run a function "for each" anything and
 glue the results together, like this:
 
 ```{r }
-soc %>% map_dbl(median) 
+soc %>% map_dbl(median)
 ```
 
  
@@ -118,7 +118,7 @@ Solution
 
 The usual:
 ```{r }
-ggplot(soc,aes(x=experience,y=salary))+geom_point()
+ggplot(soc, aes(x = experience, y = salary)) + geom_point()
 ```
 
  
@@ -137,7 +137,7 @@ Solution
 
 
 ```{r }
-soc.1=lm(salary~experience,data=soc)
+soc.1 <- lm(salary ~ experience, data = soc)
 summary(soc.1)
 ```
 
@@ -163,7 +163,7 @@ The easiest way to do this with `ggplot` is to plot the
 frame), and plot the `.fitted` and `.resid`
 columns in it, not forgetting the initial dots:
 ```{r }
-ggplot(soc.1,aes(x=.fitted,y=.resid))+geom_point()
+ggplot(soc.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
        
@@ -180,7 +180,7 @@ getting bigger in size, their absolute values are getting bigger. That
 would look like this:
 
 ```{r }
-ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
+ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
  
@@ -193,7 +193,7 @@ residuals. Don't get thrown off by the kinks in the smooth trend. Here
 is a smoother version:
 
 ```{r }
-ggplot(soc.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth(span=2)
+ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth(span = 2)
 ```
 
  
@@ -228,7 +228,7 @@ library(MASS)
 I explain that "masked" thing below.
 
 ```{r }
-boxcox(salary~experience,data=soc)
+boxcox(salary ~ experience, data = soc)
 ```
 
  
@@ -259,7 +259,7 @@ search()
 then get rid of `MASS`:
 
 ```{r }
-detach("package:MASS",unload=T)
+detach("package:MASS", unload = T)
 ```
 
  
@@ -306,7 +306,7 @@ Solution
 The best way is to add the new variable to the data frame using
 `mutate`, and save that new data frame. That goes like this:
 ```{r }
-soc.2=soc %>% mutate(log_salary=log(salary))
+soc.2 <- soc %>% mutate(log_salary = log(salary))
 ```
 
        
@@ -314,7 +314,7 @@ soc.2=soc %>% mutate(log_salary=log(salary))
 and then
 
 ```{r }
-soc.3=lm(log_salary~experience,data=soc.2)
+soc.3 <- lm(log_salary ~ experience, data = soc.2)
 summary(soc.3)
 ```
 
@@ -325,9 +325,10 @@ it, since we'll be doing a couple of things with it, and it's best to
 be able to start from `soc.2`. But you can also do this:
 
 ```{r }
-soc %>% mutate(log_salary=log(salary)) %>%
-lm(log_salary~experience,data=.) %>%
-summary()
+soc %>%
+  mutate(log_salary = log(salary)) %>%
+  lm(log_salary ~ experience, data = .) %>%
+  summary()
 ```
 
  
@@ -351,7 +352,7 @@ it. That's why I created `soc.2` and `soc.3` above.
 You can also put functions of things directly into `lm`:
 
 ```{r }
-soc.1a=lm(log(salary)~experience, data=soc)
+soc.1a <- lm(log(salary) ~ experience, data = soc)
 summary(soc.1a)
 ```
 
@@ -370,7 +371,7 @@ Solution
 As we did before, treating the regression object as if it were a
 data frame:
 ```{r }
-ggplot(soc.3,aes(x=.fitted,y=.resid))+geom_point()
+ggplot(soc.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
        
@@ -383,7 +384,7 @@ couple of very negative values: that is, are the residuals normally
 distributed as they should be? Well, that's easy enough to check:
 
 ```{r }
-ggplot(soc.3,aes(sample=.resid))+stat_qq()+stat_qq_line()
+ggplot(soc.3, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -402,7 +403,7 @@ experience is predicted to increase log-salary by 0.05, or to
 multiply actual salary by 
 
 ```{r }
-exp(0.05)  
+exp(0.05)
 ```
 
  

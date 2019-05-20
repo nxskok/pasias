@@ -81,8 +81,8 @@ Solution
 This sort of thing:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/bridges.csv"
-bridges0=read_csv(my_url,na="?")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/bridges.csv"
+bridges0 <- read_csv(my_url, na = "?")
 bridges0
 ```
 
@@ -110,8 +110,9 @@ Solution
 
 I called my data frame `bridges0`, so this:
 ```{r }
-bridges0 %>% mutate_if(is.character, ~factor(.)) %>%
-summary()
+bridges0 %>%
+  mutate_if(is.character, ~ factor(.)) %>%
+  summary()
 ```
 
    
@@ -181,14 +182,14 @@ differentness, then updating a counter which gets returned at the
 end. If you've done Python, this is exactly the strategy you'd
 use there:
 ```{r }
-count_diff=function(v,w) {
-n=length(v)
-stopifnot(length(v)==length(w)) # I explain this below
-count=0
-for (i in 1:n) {
-if (v[i]!=w[i]) count=count+1
-}
-count
+count_diff <- function(v, w) {
+  n <- length(v)
+  stopifnot(length(v) == length(w)) # I explain this below
+  count <- 0
+  for (i in 1:n) {
+    if (v[i] != w[i]) count <- count + 1
+  }
+  count
 }
 ```
 
@@ -204,9 +205,9 @@ inside the `stopifnot` is what has to be *true*.)
 Does it work?
 
 ```{r }
-v=c(1,1,0,0,0)
-w=c(1,2,0,2,0)
-count_diff(v,w)
+v <- c(1, 1, 0, 0, 0)
+w <- c(1, 2, 0, 2, 0)
+count_diff(v, w)
 ```
 
  
@@ -216,9 +217,9 @@ Three of the values are the same and two are different, so this is right.
 What happens if my two vectors are of different lengths?
 
 ```{r error=T}
-v1=c(1,1,0,0)
-w=c(1,2,0,2,0)
-count_diff(v1,w)
+v1 <- c(1, 1, 0, 0)
+w <- c(1, 2, 0, 2, 0)
+count_diff(v1, w)
 ```
 
  
@@ -231,7 +232,7 @@ whole vectors at once, rather than pulling things out of them one at a
 time. Check out this (which is like what I did with the fruits):
 
 ```{r }
-v!=w
+v != w
 ```
 
  
@@ -240,7 +241,7 @@ The second and fourth values are different, and the others are the
 same. But we can go one step further:
 
 ```{r }
-sum(v!=w)
+sum(v != w)
 ```
 
  
@@ -250,8 +251,8 @@ counting up how many values are different, exactly what we want. So
 the function can be as simple as:
 
 ```{r }
-count_diff=function(v,w) {
-sum(v!=w)
+count_diff <- function(v, w) {
+  sum(v != w)
 }
 ```
 
@@ -281,13 +282,13 @@ instead of calling `braycurtis` at the end, I call
 `count_diff`: 
 
 ```{r }
-row_diff=function(i,j,d) {
-d1 = d %>% select(-id, -location)
-x = d1 %>% slice(i) %>% unlist()
-y = d1 %>% slice(j) %>% unlist()
-count_diff(x,y)
+row_diff <- function(i, j, d) {
+  d1 <- d %>% select(-id, -location)
+  x <- d1 %>% slice(i) %>% unlist()
+  y <- d1 %>% slice(j) %>% unlist()
+  count_diff(x, y)
 }
-row_diff(3,4,bridges)
+row_diff(3, 4, bridges)
 ```
 
  
@@ -297,7 +298,7 @@ That's what I said.
 Extra: is that right, though? Let's print out those rows and count:
 
 ```{r }
-bridges %>% slice(c(3,4)) %>% print(width=Inf)
+bridges %>% slice(c(3, 4)) %>% print(width = Inf)
 ```
 
  
@@ -308,13 +309,13 @@ lanes, material, span and type. Six.
 I actually think the `unlist` is not needed:
 
 ```{r }
-row_diff2=function(i,j,d) {
-d1 = d %>% select(-id, -location)
-x = d1 %>% slice(i) 
-y = d1 %>% slice(j) 
-count_diff(x,y)
+row_diff2 <- function(i, j, d) {
+  d1 <- d %>% select(-id, -location)
+  x <- d1 %>% slice(i)
+  y <- d1 %>% slice(j)
+  count_diff(x, y)
 }
-row_diff2(3,4,bridges)
+row_diff2(3, 4, bridges)
 ```
 
  
@@ -349,11 +350,11 @@ bridges
 70. So the loops (and the `crossing`) will go up to 70. Loops first:
 
 ```{r cache=T}
-m=matrix(-1,70,70)
+m <- matrix(-1, 70, 70)
 for (i in 1:70) {
-for (j in 1:70) {
-m[i,j]=row_diff(i,j,bridges)
-}
+  for (j in 1:70) {
+    m[i, j] <- row_diff(i, j, bridges)
+  }
 }
 ```
 
@@ -377,7 +378,7 @@ The `tidyverse` way is really similar in conception. First use
 `crossing` to create all combinations of `i` and `j`:
 
 ```{r }
-mm=crossing(i=1:70,j=1:70)
+mm <- crossing(i = 1:70, j = 1:70)
 ```
 
  
@@ -386,7 +387,7 @@ and then use `map2_int` (since our dissimilarity function
 returns a whole number):
 
 ```{r cache=T}
-mm = mm %>% mutate(diff=map2_int(i,j,row_diff,bridges))
+mm <- mm %>% mutate(diff = map2_int(i, j, row_diff, bridges))
 mm
 ```
 
@@ -396,7 +397,7 @@ This is long format, though, so we need to `spread` the
 `j` column to get a square array of dissimilarities:
 
 ```{r }
-mm = mm %>% spread(j,diff)
+mm <- mm %>% spread(j, diff)
 mm
 ```
 
@@ -420,7 +421,7 @@ The only tricky thing is that the data frame that I called
 removed first. This also applies if you need to read it in from
 the file. Thus:
 ```{r }
-d1=as.dist(m)
+d1 <- as.dist(m)
 ```
 
      
@@ -428,7 +429,7 @@ d1=as.dist(m)
 or 
 
 ```{r }
-d2 = mm %>% select(-i) %>% as.dist()
+d2 <- mm %>% select(-i) %>% as.dist()
 ```
 
  
@@ -436,10 +437,10 @@ d2 = mm %>% select(-i) %>% as.dist()
 or, if you got stuck,
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/mm.csv"
-mmm=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/mm.csv"
+mmm <- read_csv(my_url)
 mmm
-d3 = mmm %>% select(-i) %>% as.dist()
+d3 <- mmm %>% select(-i) %>% as.dist()
 ```
 
  
@@ -455,8 +456,8 @@ Solution
 
 Home stretch now. I found that `cex=0.3` was good for me, though I had to enlarge the graph to see the bridge numbers:
 ```{r }
-bridges.1=hclust(d1,method="ward.D")
-plot(bridges.1,cex=0.3)
+bridges.1 <- hclust(d1, method = "ward.D")
+plot(bridges.1, cex = 0.3)
 ```
 
      
@@ -478,8 +479,8 @@ like 15, but my choice is 5. What you want is for the bridges
 within a cluster to be similar and bridges in different clusters
 to be different, however you judge that.
 ```{r }
-plot(bridges.1,cex=0.3)
-rect.hclust(bridges.1,5)
+plot(bridges.1, cex = 0.3)
+rect.hclust(bridges.1, 5)
 ```
 
      
@@ -505,7 +506,7 @@ bridges and make the case that they are "similar". I'm picking
 `width=Inf` to display all the columns (this is how it
 looks in the Console):
 ```{r }
-bridges %>% slice(c(41,42,48)) %>% print(width=Inf)
+bridges %>% slice(c(41, 42, 48)) %>% print(width = Inf)
 ```
 
      
@@ -518,7 +519,7 @@ You might not have been so lucky, for example, 10, 12 and 19, which
 got joined together further up:
 
 ```{r }
-bridges %>% slice(c(10,12,19)) %>% print(width=Inf)
+bridges %>% slice(c(10, 12, 19)) %>% print(width = Inf)
 ```
 
      
@@ -530,7 +531,7 @@ Extra: to get a feel for how different they might be, let's compare
 three bridges in different clusters:
 
 ```{r }
-bridges %>% slice(c(8,24,52)) %>% print(width=Inf)
+bridges %>% slice(c(8, 24, 52)) %>% print(width = Inf)
 ```
 
  
@@ -556,7 +557,7 @@ I am curious enough to have a crack at this. First we need a data set
 with the clusters in it. I'm going with my 5 clusters:
 
 ```{r }
-bridges.rpart = bridges %>% mutate(cluster=cutree(bridges.1,5))
+bridges.rpart <- bridges %>% mutate(cluster = cutree(bridges.1, 5))
 ```
 
  
@@ -565,8 +566,8 @@ and then
 
 ```{r }
 library(rpart)
-bridges.tree=rpart(factor(cluster)~river+erected+purpose+length+lanes+clear_g+
-t_d+material+span+rel_l+type,data=bridges.rpart,method="class")
+bridges.tree <- rpart(factor(cluster) ~ river + erected + purpose + length + lanes + clear_g +
+  t_d + material + span + rel_l + type, data = bridges.rpart, method = "class")
 print(bridges.tree)
 ```
 
@@ -576,7 +577,7 @@ This takes some making sense of, so let's grab a couple of bridges to
 predict the cluster of:
 
 ```{r }
-bridges.rpart %>% slice(c(20,29)) %>% print(width=Inf)
+bridges.rpart %>% slice(c(20, 29)) %>% print(width = Inf)
 ```
 
  

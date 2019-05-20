@@ -78,8 +78,8 @@ Solution
 The usual:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/steak.csv"
-steak0=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/steak.csv"
+steak0 <- read_csv(my_url)
 steak0
 ```
 
@@ -145,7 +145,7 @@ Extra extra: below we see how we used to have to do this, for your information.
 First, we run `complete.cases` on the data frame:
 
 ```{r }
-complete.cases(steak0) 
+complete.cases(steak0)
 ```
 
  
@@ -161,7 +161,7 @@ I'll pick rows 496, 497, and 498 for the TRUE rows, and 540, 541 and
 use `slice` to display the rows with these numbers:
 
 ```{r }
-rows=c(496,497,498,540,541,542)
+rows <- c(496, 497, 498, 540, 541, 542)
 rows
 ```
 
@@ -185,8 +185,9 @@ is a bit tricky to investigate more thoroughly, because the text
 variables might have missing values in them, and they won't show
 up unless we turn them into a factor first:
 ```{r }
-steak0 %>% mutate_if(is.character,factor) %>% 
-summary()
+steak0 %>%
+  mutate_if(is.character, factor) %>%
+  summary()
 ```
 
      
@@ -228,7 +229,7 @@ result of `complete.cases` in a variable first; `filter`
 can take anything that produces a true or a false for each row, and
 will return the rows for which the thing it was fed was true.
 ```{r cca}
-cc=complete.cases(steak0)
+cc <- complete.cases(steak0)
 steak0 %>% filter(cc) -> steak.complete
 ```
 
@@ -249,8 +250,9 @@ least it suggests that we might be good.
 For proof, this is the easiest way I know:
 
 ```{r ccd}
-steak.complete %>% mutate_if(is.character,factor) %>%
-summary()
+steak.complete %>%
+  mutate_if(is.character, factor) %>%
+  summary()
 ```
 
  
@@ -272,7 +274,7 @@ Solution
 This is `write_csv`, using my output from 
 `drop_na`:
 ```{r }
-write_csv(steak,"steak1.csv")
+write_csv(steak, "steak1.csv")
 ```
 
      

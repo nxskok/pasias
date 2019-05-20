@@ -89,8 +89,8 @@ Solution
 
 Values separated by spaces:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/carbon.txt"
-carbon=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/carbon.txt"
+carbon <- read_delim(my_url, " ")
 carbon
 ```
 
@@ -121,15 +121,15 @@ weight, is something like a boxplot. If you're not careful,
 which you don't want; the easiest way around that, for a boxplot
 at least, is to turn it into a factor like this:
 ```{r }
-ggplot(carbon,aes(x=factor(method),y=weight))+geom_boxplot()
+ggplot(carbon, aes(x = factor(method), y = weight)) + geom_boxplot()
 ```
 
        
 
 If you insist, you could do a faceted histogram (above and below, for preference):
 ```{r }
-ggplot(carbon,aes(x=weight))+geom_histogram(bins=5)+
-facet_wrap(~method,ncol=1)
+ggplot(carbon, aes(x = weight)) + geom_histogram(bins = 5) +
+  facet_wrap(~method, ncol = 1)
 ```
 
  
@@ -144,9 +144,9 @@ might have to be rather forgiving for method 2 since there are only 5
 observations: 
 
 ```{r }
-ggplot(carbon,aes(sample=weight))+
-stat_qq()+stat_qq_line()+
-facet_wrap(~method)
+ggplot(carbon, aes(sample = weight)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~method)
 ```
 
  
@@ -205,7 +205,7 @@ Solution
 This would be the Welch-Satterthwaite version of the two-sample
 $t$-test, since the two groups do appear to have different spreads:
 ```{r }
-t.test(weight~method,data=carbon)
+t.test(weight ~ method, data = carbon)
 ```
 
    
@@ -218,7 +218,7 @@ If, in your discussion above, you thought the spreads were equal
 enough, then you should do the pooled $t$-test here, which goes like this:
 
 ```{r }
-t.test(weight~method,data=carbon,var.equal=T)
+t.test(weight ~ method, data = carbon, var.equal = T)
 ```
 
  
@@ -245,7 +245,7 @@ The first is the $F$-test for variances that you might have learned in
 B57 (that is the basis for the ANOVA $F$-test):
 
 ```{r }
-var.test(weight~method,data=carbon)
+var.test(weight ~ method, data = carbon)
 ```
 
  
@@ -262,7 +262,7 @@ least, not nearly so much), so I like it better in general:
 
 ```{r }
 library(car)
-leveneTest(weight~factor(method),data=carbon)
+leveneTest(weight ~ factor(method), data = carbon)
 ```
 
  
@@ -376,7 +376,7 @@ picture and make a call about which test is appropriate.
 I loaded package `car` above; I'd better be tidy and
 unload it before I go on:
 ```{r }
-detach(package:car,unload=T)
+detach(package:car, unload = T)
 ```
 
        

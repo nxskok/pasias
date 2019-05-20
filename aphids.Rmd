@@ -40,13 +40,14 @@ inserting column headings and commas in the right places. The
 columns don't have to line up, since it's the commas that
 determine where one value ends and the next one begins:
 ```{r }
-dead_bugs=tribble(
-~log_conc, ~exposed, ~killed,
-0.96, 50, 6,
-1.33, 48, 16,           
-1.63, 46, 24,           
-2.04, 49, 42,           
-2.32, 50, 44)
+dead_bugs <- tribble(
+  ~log_conc, ~exposed, ~killed,
+  0.96, 50, 6,
+  1.33, 48, 16,
+  1.63, 46, 24,
+  2.04, 49, 42,
+  2.32, 50, 44
+)
 dead_bugs
 ```
 
@@ -61,10 +62,10 @@ Studio, you can insert a column of commas all at once (using
 "multiple cursors").
 I used to do it like this. I make vectors of each column using `c` and then glue the columns together into a data frame:
 ```{r }
-log_conc=c(0.96,1.33,1.63,2.04,2.32)
-exposed=c(50,48,46,49,50)
-killed=c(6,16,24,42,44)
-dead_bugs2=tibble(log_conc,exposed,killed)
+log_conc <- c(0.96, 1.33, 1.63, 2.04, 2.32)
+exposed <- c(50, 48, 46, 49, 50)
+killed <- c(6, 16, 24, 42, 44)
+dead_bugs2 <- tibble(log_conc, exposed, killed)
 dead_bugs2
 ```
 
@@ -83,7 +84,7 @@ I copied them into a file `exposed.txt` in my current folder
 (or use `file.choose`):
 
 ```{r }
-bugs2=read_table("exposed.txt")
+bugs2 <- read_table("exposed.txt")
 bugs2
 ```
 
@@ -103,7 +104,7 @@ make a copy of the data file with the illegal characters replaced by
 underscores, which is my file `exposed2.txt`:
 
 ```{r }
-bugs2=read_table("exposed2.txt")
+bugs2 <- read_table("exposed2.txt")
 bugs2
 ```
 
@@ -149,10 +150,10 @@ survived). We don't actually have the latter, but we know how many
 insects were exposed in total to each dose, so we can work it
 out. Like this:
 ```{r }
-dead_bugs %>% 
-mutate(survived=exposed-killed) %>%
-select(killed, survived) %>%
-as.matrix() -> response
+dead_bugs %>%
+  mutate(survived = exposed - killed) %>%
+  select(killed, survived) %>%
+  as.matrix() -> response
 response
 ```
 
@@ -168,8 +169,10 @@ It's also equally good to create the response *outside* of the
 data frame and use `cbind` to glue its columns together:
 
 ```{r }
-resp2=with(dead_bugs, 
-cbind(killed,survived=exposed-killed))
+resp2 <- with(
+  dead_bugs,
+  cbind(killed, survived = exposed - killed)
+)
 resp2
 ```
 
@@ -186,7 +189,7 @@ Solution
 
 I think you know how to do this by now:
 ```{r }
-bugs.1=glm(response~log_conc,family="binomial",data=dead_bugs)
+bugs.1 <- glm(response ~ log_conc, family = "binomial", data = dead_bugs)
 summary(bugs.1)
 ```
 
@@ -221,8 +224,8 @@ Solution
 Just this (notice there are only *two* things going into
 `predict`): 
 ```{r }
-prob=predict(bugs.1,type="response")
-cbind(dead_bugs$log_conc,prob)
+prob <- predict(bugs.1, type = "response")
+cbind(dead_bugs$log_conc, prob)
 ```
 
    
@@ -269,9 +272,9 @@ closest to a probability 0.5 of killing the insect.
 
 Something like this would work:
 ```{r }
-lc.new=tibble(log_conc=seq(1.5,1.63,0.01))
-prob=predict(bugs.1,lc.new,type="response")
-cbind(lc.new,prob)
+lc.new <- tibble(log_conc = seq(1.5, 1.63, 0.01))
+prob <- predict(bugs.1, lc.new, type = "response")
+cbind(lc.new, prob)
 ```
 
    
@@ -293,7 +296,7 @@ in `MASS` that appears to do this:
 
 ```{r }
 library(MASS)
-lethal=dose.p(bugs.1)
+lethal <- dose.p(bugs.1)
 lethal
 ```
 
@@ -313,8 +316,8 @@ str(lethal)
 It is what R calls a "vector with attributes". To get at the pieces and calculate the interval, we have to do something like this:
 
 ```{r }
-(lethal_est=as.numeric(lethal))
-(lethal_SE=as.vector(attr(lethal, "SE")))
+(lethal_est <- as.numeric(lethal))
+(lethal_SE <- as.vector(attr(lethal, "SE")))
 ```
 
  
@@ -322,7 +325,7 @@ It is what R calls a "vector with attributes". To get at the pieces and calculat
 and then make the interval:
 
 ```{r }
-lethal_est+c(-2,2)*lethal_SE
+lethal_est + c(-2, 2) * lethal_SE
 ```
 
  
@@ -336,7 +339,7 @@ generally is to get several intervals all at once, say for the
 "quartile lethal doses" as well:
 
 ```{r }
-lethal=dose.p(bugs.1, p=c(0.25,0.5,0.75))
+lethal <- dose.p(bugs.1, p = c(0.25, 0.5, 0.75))
 lethal
 ```
 
@@ -355,7 +358,7 @@ enframe(lethal)
 That doesn't get the SEs, so we'll make a new column by grabbing the "attribute" as above:
 
 ```{r }
-enframe(lethal) %>% mutate(SE=attr(lethal, "SE"))
+enframe(lethal) %>% mutate(SE = attr(lethal, "SE"))
 ```
 
  
@@ -363,8 +366,9 @@ enframe(lethal) %>% mutate(SE=attr(lethal, "SE"))
 and now we make the intervals by making new columns containing the lower and upper limits:
 
 ```{r }
-enframe(lethal) %>% mutate(SE=attr(lethal, "SE")) %>%
-mutate(LCL=value-2*SE, UCL=value+2*SE)
+enframe(lethal) %>%
+  mutate(SE = attr(lethal, "SE")) %>%
+  mutate(LCL = value - 2 * SE, UCL = value + 2 * SE)
 ```
 
  
@@ -376,7 +380,7 @@ problems with
 `select` later:
 
 ```{r }
-detach("package:MASS", unload=T)
+detach("package:MASS", unload = T)
 ```
 
  

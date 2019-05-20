@@ -37,10 +37,10 @@ Begin your document with a code chunk containing
 `library(tidyverse)`. The data values are
 separated by tabs, which you will need to take into account:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/facebook.txt"
-fb=read_tsv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/facebook.txt"
+fb <- read_tsv(my_url)
 fb
-ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
+ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() + geom_smooth()
 ```
 
        
@@ -81,7 +81,7 @@ That looks like this. You can call the "fitted model object"
 whatever you like, but you'll need to get the capitalization of
 the  variable names correct:
 ```{r }
-fb.1=lm(FBfriends~GMdensity,data=fb)
+fb.1 <- lm(FBfriends ~ GMdensity, data = fb)
 summary(fb.1)
 ```
 
@@ -150,7 +150,7 @@ may not have a very clear idea of what the slope actually
 interval. The obvious one is to use R as a calculator and go up
 and down twice its standard error (to get a rough idea):
 ```{r }
-82.45+2*27.58*c(-1,1)
+82.45 + 2 * 27.58 * c(-1, 1)
 ```
 
        
@@ -187,8 +187,8 @@ Solution
 Just a modification
 of (a):
 ```{r }
-ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+
-geom_smooth(method="lm")
+ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() +
+  geom_smooth(method = "lm")
 ```
 
        
@@ -204,7 +204,7 @@ Solution
 
 This is, to my mind, the easiest way:
 ```{r }
-ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
+ggplot(fb.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
        
@@ -221,8 +221,8 @@ what it implies about whether or not your regression is satisfactory.)
 Compare that residual plot with this one:
 
 ```{r }
-ggplot(fb.1,aes(x=.fitted,y=.resid))+
-geom_point()+geom_smooth()
+ggplot(fb.1, aes(x = .fitted, y = .resid)) +
+  geom_point() + geom_smooth()
 ```
 
        

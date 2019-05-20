@@ -21,8 +21,8 @@ Solution
 
 Read directly from the URL, most easily:
 ```{r }
-url="http://www.utsc.utoronto.ca/~butler/c32/soap.txt"
-soap=read_delim(url," ")
+url <- "http://www.utsc.utoronto.ca/~butler/c32/soap.txt"
+soap <- read_delim(url, " ")
 soap
 ```
 
@@ -42,7 +42,7 @@ Solution
 
 
 ```{r }
-ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)
+ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 10)
 ```
 
  
@@ -66,7 +66,7 @@ Having said that (this is going beyond the question), the way a
 histogram looks can depend on the bins you choose to draw it
 with. This is 8 bins rather than 10:
 ```{r }
-ggplot(soap,aes(x=scrap))+geom_histogram(bins=8)
+ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 8)
 ```
 
  
@@ -85,7 +85,7 @@ Solution
 
 
 ```{r }
-ggplot(soap,aes(x=line,y=scrap))+geom_boxplot()
+ggplot(soap, aes(x = line, y = scrap)) + geom_boxplot()
 ```
 
 
@@ -120,7 +120,7 @@ there is no serious skewness here and definitely no outliers,
 are "significantly different". This is inference, which we
 will come to later, but a preview looks like this:
 ```{r }
-t.test(scrap~line,data=soap)
+t.test(scrap ~ line, data = soap)
 ```
 
        
@@ -140,7 +140,7 @@ side, which is what facetting does. There is an extra wrinkle here
 that I explain afterwards:
 
 ```{r }
-ggplot(soap,aes(x=scrap))+geom_histogram(bins=10)+facet_grid(line~.)
+ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 10) + facet_grid(line ~ .)
 ```
 
  
@@ -185,7 +185,7 @@ Solution
 
 Same mechanism as before:
 ```{r }
-ggplot(soap,aes(x=speed,y=scrap))+geom_point()
+ggplot(soap, aes(x = speed, y = scrap)) + geom_point()
 ```
 
  
@@ -222,7 +222,7 @@ line. `ggplot` makes that easy: you add a
 distinguish by colour. This is two quantitative variables and one
 categorical variable, if you want to think of it that way:
 ```{r }
-ggplot(soap,aes(x=speed,y=scrap,colour=line))+geom_point()
+ggplot(soap, aes(x = speed, y = scrap, colour = line)) + geom_point()
 ```
 
        
@@ -239,8 +239,8 @@ regression lines on the plot for each group separately. This is where
 `ggplot` is so nice, since I just have to add one thing:
 
 ```{r }
-ggplot(soap,aes(x=speed,y=scrap,colour=line))+
-geom_point()+geom_smooth(method="lm",se=F)
+ggplot(soap, aes(x = speed, y = scrap, colour = line)) +
+  geom_point() + geom_smooth(method = "lm", se = F)
 ```
 
        
@@ -266,10 +266,10 @@ Here's another way to see the same thing. I'm *definitely* not
 expecting you to follow the code, but you can admire the result!
 
 ```{r }
-soap2=soap %>% select(-line)
-ggplot(soap,aes(x=speed,y=scrap))+
-geom_point(data=soap2,colour="grey")+
-geom_point(aes(colour=line))+facet_wrap(~line)
+soap2 <- soap %>% select(-line)
+ggplot(soap, aes(x = speed, y = scrap)) +
+  geom_point(data = soap2, colour = "grey") +
+  geom_point(aes(colour = line)) + facet_wrap(~line)
 ```
 $
 
@@ -309,7 +309,7 @@ regression predicting `scrap` from *two* things:
 `speed` and production `line`. The results we get are these:
 
 ```{r }
-scrap.1=lm(scrap~speed+line,data=soap)
+scrap.1 <- lm(scrap ~ speed + line, data = soap)
 summary(scrap.1)
 ```
 

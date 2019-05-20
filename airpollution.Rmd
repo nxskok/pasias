@@ -39,8 +39,8 @@ Solution
 
 This is a `.csv` file, so:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/airpollution.csv"
-air=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/airpollution.csv"
+air <- read_csv(my_url)
 air
 ```
 
@@ -61,7 +61,7 @@ Solution
 
 Like this (the cleanest):
 ```{r }
-map_df(air, ~quantile(.)) 
+map_df(air, ~ quantile(.))
 ```
 
      
@@ -75,12 +75,13 @@ smallest and the max has to be the biggest in each column.
 Or, with some more work, this:
 
 ```{r }
-air %>% gather(xname, x, everything()) %>%
-nest(-xname) %>%
-mutate(q=map(data, ~enframe(quantile(.$x)))) %>% 
-unnest(q) %>% 
-spread(xname, value) %>% 
-arrange(parse_number(name))
+air %>%
+  gather(xname, x, everything()) %>%
+  nest(-xname) %>%
+  mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
+  unnest(q) %>%
+  spread(xname, value) %>%
+  arrange(parse_number(name))
 ```
 
  
@@ -101,7 +102,7 @@ Solution
 
 This too is all rather like the previous question:
 ```{r }
-air.1=princomp(air, cor=T)
+air.1 <- princomp(air, cor = T)
 ```
 
      
@@ -228,8 +229,8 @@ All the columns contain numbers, so `cbind` will do
 it. (The component scores are seven columns, so
 `bind_cols` won't do it unless you are careful.):
 ```{r }
-cbind(air, air.1$scores) %>% 
-mutate(row=row_number()) -> d
+cbind(air, air.1$scores) %>%
+  mutate(row = row_number()) -> d
 class(d)
 head(d)
 ```
@@ -245,9 +246,10 @@ then you need to bear in mind that `bind_cols` *only*
 accepts vectors or data frames, not matrices, so a bit of care is needed first:
 
 ```{r }
-air.1$scores %>% as_tibble() %>%
-bind_cols(air) %>%
-mutate(row=row_number()) -> dd
+air.1$scores %>%
+  as_tibble() %>%
+  bind_cols(air) %>%
+  mutate(row = row_number()) -> dd
 dd
 ```
 
@@ -311,7 +313,7 @@ d %>% arrange(Comp.2) %>% slice(1)
 and for convenience, we'll grab the quantiles again:
 
 ```{r }
-map_df(air, ~quantile(.)) 
+map_df(air, ~ quantile(.))
 ```
 
  
@@ -331,7 +333,7 @@ observation come. Another way to approach this is to calculate
 *percentile ranks* for everything. Let's go back to our original data frame and replace everything with its percent rank: 
 
 ```{r }
-air %>% mutate_all(~percent_rank(.)) -> pct_rank
+air %>% mutate_all(~ percent_rank(.)) -> pct_rank
 pct_rank
 ```
 
@@ -365,7 +367,7 @@ Solution
 
 
 ```{r }
-ggbiplot(air.1,labels=d$row)
+ggbiplot(air.1, labels = d$row)
 ```
 
  
@@ -400,7 +402,7 @@ Solution
 
 
 ```{r }
-air.2=factanal(air, 2, scores="r")
+air.2 <- factanal(air, 2, scores = "r")
 air.2$loadings
 ```
 
@@ -442,7 +444,7 @@ really ought to look at 3 factors, the same way that we said we should look at
 3 components:
 
 ```{r }
-air.3=factanal(air,3)
+air.3 <- factanal(air, 3)
 air.3$loadings
 ```
 

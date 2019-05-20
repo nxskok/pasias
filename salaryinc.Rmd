@@ -21,8 +21,8 @@ Solution
 Looking at the file, we see that the values are separated by
 exactly one space:
 ```{r }
-my_url="https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt"
-salaries=read_delim(my_url," ")
+my_url <- "https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt"
+salaries <- read_delim(my_url, " ")
 salaries
 ```
 
@@ -65,8 +65,8 @@ We don't have the differences here, so we have to calculate them
 first. The smoothest way is to make a pipeline:
 ```{r }
 salaries %>%
-mutate(diff=jan2017-jan2016) %>%
-ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
+  mutate(diff = jan2017 - jan2016) %>%
+  ggplot(aes(sample = diff)) + stat_qq() + stat_qq_line()
 ```
 
      
@@ -109,7 +109,7 @@ The company is trying to prove that salaries are *increasing*
 over time, so we need a one-sided alternative.
 Following through the procedure, even though you may not trust it much:
 ```{r }
-with(salaries, t.test(jan2016, jan2017, alternative="less", paired=T))
+with(salaries, t.test(jan2016, jan2017, alternative = "less", paired = T))
 ```
 
      
@@ -118,7 +118,7 @@ You could also have the years the other way around, in which case the
 alternative has to be the other way around as well:
 
 ```{r }
-with(salaries, t.test(jan2017, jan2016, alternative="greater", paired=T))
+with(salaries, t.test(jan2017, jan2016, alternative = "greater", paired = T))
 ```
 
  
@@ -130,8 +130,8 @@ differences again:
 
 ```{r }
 salaries %>%
-mutate(diff=jan2017-jan2016) %>%
-with(.,t.test(diff, mu=0, alternative="greater"))
+  mutate(diff = jan2017 - jan2016) %>%
+  with(., t.test(diff, mu = 0, alternative = "greater"))
 ```
 
  
@@ -149,8 +149,8 @@ sign test, which you could do this way:
 ```{r }
 library(smmr)
 salaries %>%
-mutate(diff=jan2017-jan2016) %>%
-sign_test(diff,0)
+  mutate(diff = jan2017 - jan2016) %>%
+  sign_test(diff, 0)
 ```
 
  
@@ -175,7 +175,7 @@ A confidence interval. 95\% is fine. As before, we have to run
 `t.test` again because we ran a one-sided test and a
 confidence interval for us is two-sided:
 ```{r }
-with(salaries, t.test(jan2017, jan2016, paired=T))
+with(salaries, t.test(jan2017, jan2016, paired = T))
 ```
 
      

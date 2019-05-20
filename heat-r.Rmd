@@ -36,8 +36,8 @@ Solution
 
 A `.csv`, so:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/heat.csv"
-heat=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/heat.csv"
+heat <- read_csv(my_url)
 heat
 ```
 
@@ -80,7 +80,7 @@ heat %>% count(code)
 Alternatively, `group_by` and `summarize`:
 
 ```{r }
-heat %>% group_by(code) %>% summarize(count=n())
+heat %>% group_by(code) %>% summarize(count = n())
 ```
 
  
@@ -194,9 +194,9 @@ function `diff` that works out exactly this. Building
 a pipeline, just because:
 ```{r }
 heat %>%
-select(-text) %>%
-mutate(daycount=as.numeric(date)) %>%
-mutate(daydiff=abs(c(diff(daycount),0))) 
+  select(-text) %>%
+  mutate(daycount = as.numeric(date)) %>%
+  mutate(daydiff = abs(c(diff(daycount), 0)))
 ```
 
              
@@ -238,10 +238,10 @@ Thus my pipeline continues like this:
 
 ```{r }
 heat %>%
-select(-text) %>%
-mutate(daycount=as.numeric(date)) %>%
-mutate(daydiff=abs(c(diff(daycount),0))) %>%
-count(daydiff!=1) 
+  select(-text) %>%
+  mutate(daycount = as.numeric(date)) %>%
+  mutate(daydiff = abs(c(diff(daycount), 0))) %>%
+  count(daydiff != 1)
 ```
 
              
@@ -262,11 +262,11 @@ the start of heat alert events? We can figure that out now:
 
 ```{r }
 heat %>%
-select(-text) %>%
-mutate(daycount=as.numeric(date)) %>%
-mutate(daydiff=abs(c(diff(daycount),0))) %>%
-mutate(start=(daydiff!=1)) %>%
-count(code,start)
+  select(-text) %>%
+  mutate(daycount = as.numeric(date)) %>%
+  mutate(daydiff = abs(c(diff(daycount), 0))) %>%
+  mutate(start = (daydiff != 1)) %>%
+  count(code, start)
 ```
 
              
@@ -305,7 +305,7 @@ Solution
 This will need `lubridate`:
 ```{r }
 library(lubridate)
-heat %>% select(-text) %>% mutate(year=year(date)) %>% sample_n(10)
+heat %>% select(-text) %>% mutate(year = year(date)) %>% sample_n(10)
 ```
 
                  
@@ -313,7 +313,7 @@ That seems to have worked. I listed a random sample of rows to
 get back to previous years.
 Having convinced myself that it worked, let me save it:
 ```{r }
-heat %>% select(-text) %>% mutate(year=year(date)) -> heat
+heat %>% select(-text) %>% mutate(year = year(date)) -> heat
 ```
 
                  
@@ -353,8 +353,9 @@ I was thinking about making a graph of these frequencies against year,
 and sticking some kind of smooth trend on it. This uses the output we just got, which is itself a data frame:
 
 ```{r }
-heat %>% count(year) %>%
-ggplot(aes(x=year, y=n))+geom_point()+geom_smooth(se=F)
+heat %>%
+  count(year) %>%
+  ggplot(aes(x = year, y = n)) + geom_point() + geom_smooth(se = F)
 ```
 
  
@@ -401,8 +402,9 @@ the hypothesized median, not how far above or below they are.
 This can be calculated, and even tested:
 
 ```{r }
-heat %>% count(year) %>%
-with(.,cor.test(year, n, method="kendall"))
+heat %>%
+  count(year) %>%
+  with(., cor.test(year, n, method = "kendall"))
 ```
 
  
@@ -440,10 +442,10 @@ I did this in R, using a package called `jsonlite`, with this code:
 
 ```{r eval=F}
 library(jsonlite)
-url="http://app.toronto.ca/opendata/heat_alerts/heat_alerts_list.json"
-heat=fromJSON(url,simplifyDataFrame = T)
+url <- "http://app.toronto.ca/opendata/heat_alerts/heat_alerts_list.json"
+heat <- fromJSON(url, simplifyDataFrame = T)
 head(heat)
-write_csv(heat,"heat.csv")
+write_csv(heat, "heat.csv")
 ```
 
  

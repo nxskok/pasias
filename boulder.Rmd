@@ -23,8 +23,8 @@ were multiple columns, separated by whatever you like. It's least
 typing to pretend that they were separated by commas like a
 `.csv` file:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/buses.txt"
-journey.times=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/buses.txt"
+journey.times <- read_csv(my_url)
 journey.times
 ```
 
@@ -43,7 +43,7 @@ by starting each "word" after the first with an uppercase
 letter like this:
 
 ```{r eval=F}
-journeyTimes=read_csv(my_url)
+journeyTimes <- read_csv(my_url)
 ```
 
  
@@ -70,7 +70,7 @@ Solution
 `t.test` doesn't take a `data=` to say which
 data frame to use. Wrap it in a `with`:
 ```{r }
-with(journey.times,t.test(minutes,mu=60))
+with(journey.times, t.test(minutes, mu = 60))
 ```
 
        
@@ -119,7 +119,7 @@ Solution
  The grouping variable is a
 "nothing" as in the Ken and Thomas question (part (d)):
 ```{r brixham}
-ggplot(journey.times,aes(x=1,y=minutes))+geom_boxplot()
+ggplot(journey.times, aes(x = 1, y = minutes)) + geom_boxplot()
 ```
 
        
@@ -136,7 +136,7 @@ an outlier:
 `r tufte::margin_note("Whether you think it is or not may depend on how  many bins you have on your histogram. With 5 bins it looks like an  outlier, but with 6 it does not. Try it and see.")`
 
 ```{r babbacombe}
-ggplot(journey.times,aes(x=minutes))+geom_histogram(bins=5)
+ggplot(journey.times, aes(x = minutes)) + geom_histogram(bins = 5)
 ```
 
  
@@ -150,7 +150,7 @@ that comment is, as long as it's intelligent enough.
 Perhaps I should draw a normal quantile plot:
 
 ```{r }
-ggplot(journey.times, aes(sample=minutes))+stat_qq()+stat_qq_line()
+ggplot(journey.times, aes(sample = minutes)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -168,8 +168,8 @@ guess) utterly fail to reject:
 
 ```{r }
 library(smmr)
-sign_test(journey.times,minutes,60)
-ci_median(journey.times,minutes)
+sign_test(journey.times, minutes, 60)
+ci_median(journey.times, minutes)
 ```
 
  

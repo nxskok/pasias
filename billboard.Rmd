@@ -21,7 +21,7 @@ Solution
 
 
 ```{r }
-billboard=read_csv("http://stat405.had.co.nz/data/billboard.csv")
+billboard <- read_csv("http://stat405.had.co.nz/data/billboard.csv")
 ```
 
        
@@ -59,7 +59,7 @@ Solution
 This is `gather`ing up all those columns, with
 `na.rm=T` to get rid of the missings:
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) 
+billboard %>% gather(week, rank, x1st.week:x76th.week, na.rm = T)
 ```
 
          
@@ -68,7 +68,7 @@ Another way to do this is with a select-helper: all those column names
 end with `week`, so we can select them all thus:
 
 ```{r }
-billboard %>% gather(week,rank,ends_with("week"),na.rm=T)
+billboard %>% gather(week, rank, ends_with("week"), na.rm = T)
 ```
 
  
@@ -91,7 +91,7 @@ as there are song-week combinations. The original data frame had 317
 songs over 76 weeks, so this many:
 
 ```{r }
-317*76
+317 * 76
 ```
 
  
@@ -117,8 +117,9 @@ Solution
 
 A `select` is the thing:
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-select(week, rank)
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  select(week, rank)
 ```
 
          
@@ -145,10 +146,13 @@ that should now both be numbers.
 with `mutate`, that are the `parse_number`-ed
 versions of the old one(s).
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-mutate(week_number=parse_number(week),
-rank_number=rank) %>%
-select(ends_with("number"))
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  select(ends_with("number"))
 ```
 
          
@@ -191,11 +195,14 @@ to subtract one from the number of weeks before you multiply
 it by seven to get a number of days.
 After that thinking, this:
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-mutate(week_number=parse_number(week),
-rank_number=rank) %>%
-mutate(current=date.entered+(week_number-1)*7) %>%
-select(date.entered,week_number,current)
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  select(date.entered, week_number, current)
 ```
 
          
@@ -225,12 +232,15 @@ set.seed(457299)
  
 
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-mutate(week_number=parse_number(week),
-rank_number=rank) %>%
-mutate(current=date.entered+(week_number-1)*7) %>%
-select(date.entered,week_number,current) %>%
-sample_n(10)  
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  select(date.entered, week_number, current) %>%
+  sample_n(10)
 ```
 
  
@@ -265,13 +275,16 @@ either `rank` (text) or what I called
 since we are only checking for equal-to, not something like
 "less than":
 ```{r size="scriptsize"}
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-mutate(week_number=parse_number(week),
-rank_number=rank) %>%
-mutate(current=date.entered+(week_number-1)*7) %>%
-filter(rank==1) %>%
-arrange(current) %>%
-select(artist.inverted,track,current) 
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current)
 ```
 
          
@@ -310,14 +323,17 @@ Solution
 This is a question of using `count`, but on the
 `track` title:
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-mutate(week_number=parse_number(week),
-rank_number=rank) %>%
-mutate(current=date.entered+(week_number-1)*7) %>%
-filter(rank==1) %>%
-arrange(current) %>%
-select(artist.inverted,track,current) %>%
-count(track)
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track)
 ```
 
          
@@ -331,15 +347,18 @@ can do to this, like listing out only the row(s) where `n` is
 equal to its maximum value:
 
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-mutate(week_number=parse_number(week),
-rank_number=rank) %>%
-mutate(current=date.entered+(week_number-1)*7) %>%
-filter(rank==1) %>%
-arrange(current) %>%
-select(artist.inverted,track,current) %>%
-count(track) %>%
-filter(n==max(n))
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track) %>%
+  filter(n == max(n))
 ```
 
  
@@ -348,15 +367,18 @@ or arranging them in (most logically, descending) order by `n`
 to make it easier to pick out the top one:
 
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-mutate(week_number=parse_number(week),
-rank_number=rank) %>%
-mutate(current=date.entered+(week_number-1)*7) %>%
-filter(rank==1) %>%
-arrange(current) %>%
-select(artist.inverted,track,current) %>%
-count(track) %>%
-arrange(desc(n))
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track) %>%
+  arrange(desc(n))
 ```
 
  
@@ -379,16 +401,19 @@ replacing `track` by my `combo` later in the pipe,
 wherever it appears:
 
 ```{r }
-billboard %>% gather(week,rank,x1st.week:x76th.week,na.rm=T) %>%
-mutate(week_number=parse_number(week),
-rank_number=rank) %>%
-mutate(combo=paste(track,artist.inverted,sep=" by ")) %>%
-mutate(current=date.entered+(week_number-1)*7) %>%
-filter(rank==1) %>%
-arrange(current) %>%
-select(combo,current) %>%
-count(combo) %>%
-arrange(desc(n))
+billboard %>%
+  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  mutate(
+    week_number = parse_number(week),
+    rank_number = rank
+  ) %>%
+  mutate(combo = paste(track, artist.inverted, sep = " by ")) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(combo, current) %>%
+  count(combo) %>%
+  arrange(desc(n))
 ```
 
  

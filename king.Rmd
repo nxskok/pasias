@@ -56,8 +56,8 @@ Solution
 
 The usual:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/king.csv"
-king=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/king.csv"
+king <- read_csv(my_url)
 king
 ```
 
@@ -81,7 +81,7 @@ Solution
 
 `cbind` the appropriate columns together, to make a matrix:
 ```{r }
-response=with(king,cbind(i1,i2,i3,i4,i5,i6))
+response <- with(king, cbind(i1, i2, i3, i4, i5, i6))
 ```
 
      
@@ -105,10 +105,10 @@ and then turn them into a matrix. This *does* permit the colon
 because we are now in the `tidyverse`:
 
 ```{r }
-response = king %>% 
-select(i1:i6) %>%
-as.matrix() 
-class(response)  
+response <- king %>%
+  select(i1:i6) %>%
+  as.matrix()
+class(response)
 ```
 
  
@@ -120,9 +120,9 @@ another column `id` that starts with `i` that I do
 idea, but not before trying this:
 
 ```{r }
-response = king %>%
-select(matches("i[0-9]")) %>%
-as.matrix()
+response <- king %>%
+  select(matches("i[0-9]")) %>%
+  as.matrix()
 head(response)
 ```
 
@@ -148,8 +148,8 @@ Solution
 
 
 ```{r }
-times=colnames(response)
-times.df=data.frame(times)
+times <- colnames(response)
+times.df <- data.frame(times)
 ```
 
    
@@ -166,8 +166,8 @@ Solution
 Fit the `lm` first, and then pass that into `Manova`
 from `car`:
 ```{r }
-king.1=lm(response~context,data=king)
-king.2=Manova(king.1,idata=times.df,idesign=~times)
+king.1 <- lm(response ~ context, data = king)
+king.2 <- Manova(king.1, idata = times.df, idesign = ~times)
 king.2
 ```
 
@@ -207,7 +207,7 @@ Solution
 This is `gather` yet again: gather up columns `i1`
 through `i6` and call them something like `activity`:
 ```{r }
-king.long = king %>% gather(time,activity,i1:i6)
+king.long <- king %>% gather(time, activity, i1:i6)
 king.long
 ```
 
@@ -232,8 +232,8 @@ Solution
 That means this, using `group` to indicate which points to
 join by lines, since it's different from the `colour`: 
 ```{r }
-ggplot(king.long,aes(x=time,y=activity,colour=context,group=id))+
-geom_point()+geom_line()
+ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
+  geom_point() + geom_line()
 ```
 
      
@@ -241,8 +241,8 @@ geom_point()+geom_line()
 I'd say the `geom_point` is optional, so that this is also
 good, perhaps better even:
 ```{r }
-ggplot(king.long,aes(x=time,y=activity,colour=context,group=id))+
-geom_line()
+ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
+  geom_line()
 ```
 
  
@@ -269,10 +269,11 @@ decreasing so much after that.
 If you like, you can draw an interaction plot by working out the
 means for each `context`-`time` group first:
 ```{r }
-king.long %>% group_by(context,time) %>%
-summarize(m=mean(activity)) %>%
-ggplot(aes(x=time,y=m,colour=context,group=context))+
-geom_point()+geom_line()
+king.long %>%
+  group_by(context, time) %>%
+  summarize(m = mean(activity)) %>%
+  ggplot(aes(x = time, y = m, colour = context, group = context)) +
+  geom_point() + geom_line()
 ```
 
    
@@ -286,7 +287,7 @@ This kind of thing also runs with `lmer` from package
 (identifying the rats) as a random effect:
 
 ```{r }
-king.3=lmer(activity~context*time+(1|id),data=king.long)
+king.3 <- lmer(activity ~ context * time + (1 | id), data = king.long)
 ```
 
  
@@ -294,7 +295,7 @@ king.3=lmer(activity~context*time+(1|id),data=king.long)
 What can we drop? The only thing under consideration is the interaction:
 
 ```{r }
-drop1(king.3,test="Chisq")
+drop1(king.3, test = "Chisq")
 ```
 
  

@@ -20,6 +20,7 @@ pre-treatment and post-treatment scores are labelled `pre` and
 (a) Read in the data and check that you have apparently the
 right thing.
 ```{r }
+
 ```
 
    
@@ -31,8 +32,8 @@ Take a look at the data file. The values have multiple spaces
 between them, but they are aligned with each other and the
 column headings, so `read_table` is the thing:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt"
-lepro=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt"
+lepro <- read_table(my_url)
 lepro
 ```
 
@@ -53,7 +54,7 @@ Solution
 This is the kind of thing that `ggplot` does without
 batting an eyelid:
 ```{r }
-ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point()
 ```
 
        
@@ -101,7 +102,7 @@ This is what you'd guess. `lm` handles the interaction
 properly, even though `pre` is a  quantitative variable.
 
 ```{r }
-lepro.1=lm(post~pre*drug,data=lepro)
+lepro.1 <- lm(post ~ pre * drug, data = lepro)
 ```
 
      
@@ -129,7 +130,7 @@ Solution
 
 Just this:
 ```{r }
-drop1(lepro.1, test="F")
+drop1(lepro.1, test = "F")
 ```
 
        
@@ -150,7 +151,7 @@ Solution
 
 Change the `*` to a `+`:
 ```{r }
-lepro.2=lm(post~pre+drug,data=lepro)
+lepro.2 <- lm(post ~ pre + drug, data = lepro)
 ```
 
      
@@ -158,7 +159,7 @@ lepro.2=lm(post~pre+drug,data=lepro)
 Or use `update` (not much in it, here):
 
 ```{r }
-lepro.2a=update(lepro.1,.~.-pre:drug)
+lepro.2a <- update(lepro.1, . ~ . - pre:drug)
 ```
 
  
@@ -201,7 +202,7 @@ the fake one.
 Whether there is a real drug difference, I didn't ask you to assess,
 but you could do it by `drop1` again, this way:
 ```{r }
-drop1(lepro.2, test="F")
+drop1(lepro.2, test = "F")
 ```
 
  
@@ -228,9 +229,9 @@ First, make the new data frame for predicting from, using
 first, I define all the drugs and `pre` values, and then I
 feed them into `crossing`:
 ```{r }
-drugs=c("A","D","F")
-pres=c(5,12,20)
-lepro.new=crossing(drug=drugs,pre=pres)
+drugs <- c("A", "D", "F")
+pres <- c(5, 12, 20)
+lepro.new <- crossing(drug = drugs, pre = pres)
 lepro.new
 ```
 
@@ -244,7 +245,7 @@ Now I obtain the predictions, from my best model `lepro.2`. I
 don't need intervals or anything like that:
 
 ```{r }
-preds=predict(lepro.2,lepro.new)
+preds <- predict(lepro.2, lepro.new)
 preds
 ```
 
@@ -254,7 +255,7 @@ only it would be easier to see the predictions side by side with the
 values they are predictions for:
 
 ```{r }
-allpreds=cbind(lepro.new,preds)
+allpreds <- cbind(lepro.new, preds)
 allpreds
 ```
 
@@ -272,8 +273,8 @@ Solution
 
 
 ```{r }
-ggplot(lepro,aes(x=pre,y=post,colour=drug))+geom_point()+
-geom_line(data=allpreds,aes(y=preds,linetype=drug))
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point() +
+  geom_line(data = allpreds, aes(y = preds, linetype = drug))
 ```
 
  
@@ -305,8 +306,8 @@ If your best model
 *did* have the interaction term still in it, your predictions
 would have been these:
 ```{r }
-preds=predict(lepro.1,lepro.new)
-cbind(lepro.new,preds)
+preds <- predict(lepro.1, lepro.new)
+cbind(lepro.new, preds)
 ```
 
      
@@ -321,8 +322,8 @@ other `ggplot`, because the lines are now just the regression
 lines for each group.  So `geom_smooth` will get them:
 
 ```{r }
-ggplot(lepro,aes(x=pre,y=post,colour=drug))+
-geom_point()+geom_smooth(method="lm")
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) +
+  geom_point() + geom_smooth(method = "lm")
 ```
 
  

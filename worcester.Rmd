@@ -41,8 +41,8 @@ Solution
 
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/whas100.csv"
-whas100=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/whas100.csv"
+whas100 <- read_csv(my_url)
 whas100
 ```
 
@@ -66,7 +66,7 @@ Solution
 response variable are followup time `lenfol` and followup
 status, 1 being "dead", `fstat`:
 ```{r }
-y=with(whas100,Surv(lenfol,fstat==1))
+y <- with(whas100, Surv(lenfol, fstat == 1))
 y
 ```
 
@@ -94,7 +94,7 @@ Solution
 
 This, using the response variable that we just created:
 ```{r }
-whas100.1=coxph(y~age+gender+bmi,data=whas100)
+whas100.1 <- coxph(y ~ age + gender + bmi, data = whas100)
 summary(whas100.1)
 ```
 
@@ -122,7 +122,7 @@ out of the model. The other two variables have small P-values
 (`bmi` only just under 0.05), so they need to stay.
 The other way to think about this is `step`, or `drop1`:
 ```{r }
-drop1(whas100.1, test="Chisq")
+drop1(whas100.1, test = "Chisq")
 ```
 
      
@@ -138,7 +138,7 @@ about keeping or dropping it as a whole.
 If you prefer: 
 
 ```{r }
-step(whas100.1, trace=0, test="Chisq")
+step(whas100.1, trace = 0, test = "Chisq")
 ```
 
      
@@ -157,7 +157,7 @@ Solution
 
 So, take out `gender`:
 ```{r }
-whas100.2=update(whas100.1,.~.-gender)
+whas100.2 <- update(whas100.1, . ~ . - gender)
 summary(whas100.2)
 ```
 
@@ -187,17 +187,19 @@ quantile(whas100$bmi)
 or
 
 ```{r }
-whas100 %>% select(age, bmi) %>%
-summary()
+whas100 %>%
+  select(age, bmi) %>%
+  summary()
 ```
 
  
 Or, pure tidyverse: use `summarize_all`, which summarizes all the columns (after you've done the `select`). 
 
 ```{r }
-whas100 %>% select(age, bmi) %>%
-summarize_all(~list(quantile(.))) %>%
-unnest()
+whas100 %>%
+  select(age, bmi) %>%
+  summarize_all(~ list(quantile(.))) %>%
+  unnest()
 ```
 
  
@@ -222,7 +224,7 @@ Solution
 
 The inevitable `crossing`. This is probably quickest:
 ```{r }
-whas100.new=crossing(age=c(60,71,80),bmi=c(24,27,30))
+whas100.new <- crossing(age = c(60, 71, 80), bmi = c(24, 27, 30))
 whas100.new
 ```
 
@@ -234,9 +236,9 @@ vectors with plural names containing the values, and inside the
 `crossing`, a singular name equals a plural one:
 
 ```{r }
-ages=c(60,71,80)
-bmis=c(24,27,30)
-whas100.new=crossing(age=ages,bmi=bmis)
+ages <- c(60, 71, 80)
+bmis <- c(24, 27, 30)
+whas100.new <- crossing(age = ages, bmi = bmis)
 whas100.new
 ```
 
@@ -254,7 +256,7 @@ The magic word is `survfit` (which plays the role of
 `predict` here). The best model is `whas100.2`,
 with the non-significant `gender` removed:
 ```{r }
-pp2=survfit(whas100.2,whas100.new,data=whas100)
+pp2 <- survfit(whas100.2, whas100.new, data = whas100)
 ```
 
       
@@ -279,7 +281,7 @@ Solution
 This is actually easy once you work out what to do:
 
 ```{r }
-ggsurvplot(pp2, conf.int=F)
+ggsurvplot(pp2, conf.int = F)
 ```
 
  
@@ -345,7 +347,7 @@ the body recover from a heart attack.
 
 Let's start with the martingale residual plot:
 ```{r }
-ggcoxdiagnostics(whas100.2)+geom_smooth()
+ggcoxdiagnostics(whas100.2) + geom_smooth()
 ```
 
      
@@ -359,7 +361,7 @@ would be worth exploring.
 Thus:
 
 ```{r }
-whas100.3=update(whas100.2,.~.+I(bmi^2))
+whas100.3 <- update(whas100.2, . ~ . + I(bmi^2))
 summary(whas100.3)
 ```
 
@@ -373,7 +375,7 @@ survival chances decrease again.
 Have we improved the residuals by adding the squared term?
 
 ```{r }
-ggcoxdiagnostics(whas100.3)+geom_smooth()
+ggcoxdiagnostics(whas100.3) + geom_smooth()
 ```
 
  
@@ -389,9 +391,9 @@ First we create a data frame with a bunch of different BMIs in, and
 one age 70:
 
 ```{r }
-bmis=seq(20,36,4)
-ages=70
-whas100.new.2=crossing(bmi=bmis,age=ages)
+bmis <- seq(20, 36, 4)
+ages <- 70
+whas100.new.2 <- crossing(bmi = bmis, age = ages)
 whas100.new.2
 ```
 
@@ -403,7 +405,7 @@ in it, but that's the way it goes, if you're me and trying to avoid thinking.
 Predictions, using the model with the squared term in it:
 
 ```{r }
-pp3=survfit(whas100.3,whas100.new.2,data=whas100)
+pp3 <- survfit(whas100.3, whas100.new.2, data = whas100)
 ```
 
  
@@ -411,7 +413,7 @@ pp3=survfit(whas100.3,whas100.new.2,data=whas100)
 And then the plot:
 
 ```{r }
-ggsurvplot(pp3, conf.int=F)
+ggsurvplot(pp3, conf.int = F)
 ```
 
  

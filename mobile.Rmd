@@ -22,8 +22,8 @@ Solution
 
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/mobile.txt"
-mobile=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/mobile.txt"
+mobile <- read_delim(my_url, " ")
 mobile
 ```
 
@@ -31,7 +31,7 @@ mobile
 With multiple columns that are all frequencies, this is a job for
 `gather`:
 ```{r }
-mobile.long = mobile %>% gather(satisfied,frequency,very.unsat:very.sat)
+mobile.long <- mobile %>% gather(satisfied, frequency, very.unsat:very.sat)
 mobile.long
 ```
 
@@ -85,7 +85,7 @@ appear in the data *in the order that we want*. This is good
 news, because we can use `fct_inorder` like this:
 ```{r }
 mobile.long %>%
-mutate(satis=fct_inorder(satisfied)) -> mobile.long
+  mutate(satis = fct_inorder(satisfied)) -> mobile.long
 ```
 
      
@@ -128,9 +128,9 @@ need in a minute), use `pluck` to pull the column out of the
 data frame as a vector:
 
 ```{r }
-v1 = mobile.long %>% 
-distinct(satisfied) %>%
-pluck("satisfied")
+v1 <- mobile.long %>%
+  distinct(satisfied) %>%
+  pluck("satisfied")
 v1
 ```
 
@@ -139,9 +139,9 @@ v1
 which is in the correct order, or
 
 ```{r }
-v2 = mobile.long %>% 
-count(satisfied) %>%
-pluck("satisfied")  
+v2 <- mobile.long %>%
+  count(satisfied) %>%
+  pluck("satisfied")
 v2
 ```
 
@@ -153,9 +153,9 @@ that, so we have to rearrange it ourselves. The correct order from
 `v2` is 4, 2, 1, 3, so:
 
 ```{r }
-v3=c(v2[4],v2[2],v2[1],v2[3])
+v3 <- c(v2[4], v2[2], v2[1], v2[3])
 v3
-v4=v2[c(4,2,1,3)]
+v4 <- v2[c(4, 2, 1, 3)]
 v4
 ```
 
@@ -167,10 +167,10 @@ a data frame until the end, and use `slice` to pick out the
 rows in the right order:
 
 ```{r }
-v5 = mobile.long %>% 
-count(satisfied) %>%
-slice(c(4,2,1,3)) %>%  
-pluck("satisfied")  
+v5 <- mobile.long %>%
+  count(satisfied) %>%
+  slice(c(4, 2, 1, 3)) %>%
+  pluck("satisfied")
 v5
 ```
 
@@ -188,7 +188,7 @@ variable thus, using your vector of categories:
 
 ```{r }
 mobile.long %>%
-mutate(satis=ordered(satisfied,v1)) -> mobile.long2
+  mutate(satis = ordered(satisfied, v1)) -> mobile.long2
 mobile.long2
 ```
 
@@ -212,7 +212,7 @@ Solution
 
 ```{r }
 library(MASS)
-mobile.1=polr(satis~gender+age.group,weights=frequency,data=mobile.long)
+mobile.1 <- polr(satis ~ gender + age.group, weights = frequency, data = mobile.long)
 ```
 
  
@@ -221,8 +221,8 @@ For (ii) and (iii), `update` is the thing (it works for any
 kind of model):
 
 ```{r }
-mobile.2=update(mobile.1,.~.-age.group)
-mobile.3=update(mobile.1,.~.-gender)
+mobile.2 <- update(mobile.1, . ~ . - age.group)
+mobile.3 <- update(mobile.1, . ~ . - gender)
 ```
 
  
@@ -247,7 +247,7 @@ Solution
 it in turn, and says which (if any) should be removed. Here's how it goes:
 
 ```{r }
-drop1(mobile.1,test="Chisq")
+drop1(mobile.1, test = "Chisq")
 ```
 
  
@@ -272,7 +272,7 @@ This is a comparison of the model with both variables
 (`mobile.3`). Use `anova` for this, smaller
 (fewer-$x$) model first:
 ```{r }
-anova(mobile.3,mobile.1)
+anova(mobile.3, mobile.1)
 ```
 
      
@@ -297,7 +297,7 @@ Solution
 Exactly the same idea as the last part. In my case, I'm comparing
 models `mobile.2` and `mobile.1`:
 ```{r }
-anova(mobile.2,mobile.1)
+anova(mobile.2, mobile.1)
 ```
 
     
@@ -333,9 +333,10 @@ My model containing both $x$s was `mobile.1`, the data frame
 read in from the file was called `mobile`, and I  need
 `type="p"` to get probabilities:
 ```{r }
-probs=predict(mobile.1,mobile,type="p")
-mobile %>% select(gender, age.group) %>%
-cbind(probs)
+probs <- predict(mobile.1, mobile, type = "p")
+mobile %>%
+  select(gender, age.group) %>%
+  cbind(probs)
 ```
 
    
@@ -343,9 +344,10 @@ cbind(probs)
 This worked for me, but this might happen to you, with the same commands as above:
 
 ```{r error=T, echo=F}
-probs=predict(mobile.1,mobile,type="p")
-mobile %>% MASS::select(gender, age.group) %>%
-cbind(probs)
+probs <- predict(mobile.1, mobile, type = "p")
+mobile %>%
+  MASS::select(gender, age.group) %>%
+  cbind(probs)
 ```
 
  
@@ -378,9 +380,10 @@ package it comes from is `dplyr`.
 With that in mind, we can get the right `select` like this:
 
 ```{r }
-probs=predict(mobile.1,mobile,type="p")
-mobile %>% dplyr::select(gender, age.group) %>%
-cbind(probs)
+probs <- predict(mobile.1, mobile, type = "p")
+mobile %>%
+  dplyr::select(gender, age.group) %>%
+  cbind(probs)
 ```
 
    
@@ -411,9 +414,10 @@ The usual way to do this is something like the trick that we did for
 getting the different satisfaction levels:
 
 ```{r }
-genders = mobile.long %>% distinct(gender) %>% pluck("gender")
-age.groups = mobile.long %>% distinct(age.group) %>%
-pluck("age.group")
+genders <- mobile.long %>% distinct(gender) %>% pluck("gender")
+age.groups <- mobile.long %>%
+  distinct(age.group) %>%
+  pluck("age.group")
 ```
 
  
@@ -426,10 +430,10 @@ Then `crossing` to get the combinations, and then
 `predict`: 
 
 ```{r }
-new=crossing(gender=genders,age.group=age.groups)
+new <- crossing(gender = genders, age.group = age.groups)
 new
-pp=predict(mobile.1,new,type="p")
-cbind(new,pp)
+pp <- predict(mobile.1, new, type = "p")
+cbind(new, pp)
 ```
 
  
@@ -474,7 +478,7 @@ Now we need to "unload" MASS, because, as we saw, *it* has a
 `select` that we don't want to have
 interfering with the `dplyr` one:
 ```{r }
-detach("package:MASS",unload=T)
+detach("package:MASS", unload = T)
 ```
 
     

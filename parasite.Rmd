@@ -19,8 +19,8 @@ Solution
 
 The usual beginnings, bearing in mind the data layout:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/infection.txt"
-infect=read_tsv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/infection.txt"
+infect <- read_tsv(my_url)
 infect
 ```
 
@@ -36,7 +36,7 @@ You can check a few more lines to
 convince yourself:
 
 ```{r }
-infect %>% print(n=20)
+infect %>% print(n = 20)
 ```
 
  
@@ -53,7 +53,7 @@ If you haven't seen `crossing`
 before, skip ahead to part (<a href="#part:crossing">here</a>):
 
 ```{r }
-d=crossing(age=c(10,12),gender=c("f","m"),infected=c("y","n"))
+d <- crossing(age = c(10, 12), gender = c("f", "m"), infected = c("y", "n"))
 d
 ```
 
@@ -63,7 +63,7 @@ These might be one individual per row, or they might be more than one,
 as they would be if we have a column of frequencies:
 
 ```{r }
-d = d %>% mutate(freq=c(12,19,17,11,18,26,16,8))
+d <- d %>% mutate(freq = c(12, 19, 17, 11, 18, 26, 16, 8))
 d
 ```
 
@@ -78,7 +78,7 @@ a bit to make it suitable for modelling. This is `spread`, the
 opposite of `gather`:
 
 ```{r }
-d %>% spread(infected,freq)
+d %>% spread(infected, freq)
 ```
 
  
@@ -109,8 +109,8 @@ Solution
 What comes to my mind for the numerical variables `age` and
 `weight` is boxplots:
 ```{r fodudu}
-ggplot(infect,aes(x=infected,y=age))+geom_boxplot()
-ggplot(infect,aes(x=infected,y=weight))+geom_boxplot()
+ggplot(infect, aes(x = infected, y = age)) + geom_boxplot()
+ggplot(infect, aes(x = infected, y = weight)) + geom_boxplot()
 ```
 
      
@@ -122,7 +122,7 @@ So let's first try a numerical summary, a
 cross-tabulation, which is gotten via `table`:
 
 ```{r }
-with(infect,table(sex,infected))
+with(infect, table(sex, infected))
 ```
 
  
@@ -130,7 +130,7 @@ with(infect,table(sex,infected))
 Or, if you like the `tidyverse`:
 
 ```{r }
-infect %>% count(sex,infected) 
+infect %>% count(sex, infected)
 ```
 
  
@@ -142,7 +142,7 @@ nice about `geom_bar` is that it will do the counting for you,
 so that the plot is just this:
 
 ```{r }
-ggplot(infect,aes(x=sex))+geom_bar()
+ggplot(infect, aes(x = sex)) + geom_bar()
 ```
 
  
@@ -167,7 +167,7 @@ bar divided into sub-bars based on the frequencies of a second
 variable, which is specified by `fill`. Here's the basic idea:
 
 ```{r }
-ggplot(infect, aes(x=sex,fill=infected))+geom_bar()
+ggplot(infect, aes(x = sex, fill = infected)) + geom_bar()
 ```
 
  
@@ -181,8 +181,8 @@ taller. But we got lucky here.)
 There are two ways to improve this. One is known as a "grouped bar chart", which goes like this:
 
 ```{r }
-ggplot(infect, aes(x=sex,fill=infected))+
-geom_bar(position="dodge")
+ggplot(infect, aes(x = sex, fill = infected)) +
+  geom_bar(position = "dodge")
 ```
 
  
@@ -204,8 +204,8 @@ height, so you can compare the fractions of the bars that are each
 colour. This is `position="fill"`:
 
 ```{r }
-ggplot(infect, aes(x=sex,fill=infected))+
-geom_bar(position="fill")
+ggplot(infect, aes(x = sex, fill = infected)) +
+  geom_bar(position = "fill")
 ```
 
  
@@ -258,7 +258,7 @@ Solution
 
 Thus:
 ```{r error=T}
-infect.1=glm(infected~age+weight+sex,family="binomial",data=infect)
+infect.1 <- glm(infected ~ age + weight + sex, family = "binomial", data = infect)
 ```
 
      
@@ -267,7 +267,7 @@ Oh, I forgot to turn `infected` into a factor. This is the
 shortcut way to do that:
 
 ```{r }
-infect.1=glm(factor(infected)~age+weight+sex,family="binomial",data=infect)
+infect.1 <- glm(factor(infected) ~ age + weight + sex, family = "binomial", data = infect)
 summary(infect.1)
 ```
 
@@ -278,8 +278,9 @@ frame containing the factor version of `infected`. Pipeline
 fans among you can do it this way:
 
 ```{r }
-infect %>% mutate(infected=factor(infected)) %>%
-glm(infected~age+weight+sex,family="binomial",data=.) -> infect.1a
+infect %>%
+  mutate(infected = factor(infected)) %>%
+  glm(infected ~ age + weight + sex, family = "binomial", data = .) -> infect.1a
 summary(infect.1a)
 ```
 
@@ -318,7 +319,7 @@ can be assessed for significance this way. If you were worried
 about this, the right way to go is `drop1`:
 
 ```{r }
-drop1(infect.1, test="Chisq")
+drop1(infect.1, test = "Chisq")
 ```
 
  
@@ -341,8 +342,8 @@ and comparing the models with `anova`,
 eg. for `age`:
 
 ```{r }
-infect.1b=update(infect.1, .~.-age)
-anova(infect.1b, infect.1, test="Chisq")
+infect.1b <- update(infect.1, . ~ . - age)
+anova(infect.1b, infect.1, test = "Chisq")
 ```
 
  
@@ -383,10 +384,10 @@ Solution
 goes. I'll do it in steps. Note my use of plural names to denote
 the things I want all combinations of:
 ```{r }
-ages=c(26,130)
-weights=c(9,16)
-sexes=c("female","male")
-infect.new = crossing(age=ages,weight=weights,sex=sexes)
+ages <- c(26, 130)
+weights <- c(9, 16)
+sexes <- c("female", "male")
+infect.new <- crossing(age = ages, weight = weights, sex = sexes)
 infect.new
 ```
 
@@ -406,8 +407,8 @@ question), you wrap the whole `crossing` in a `with`.
 Next, the predictions:
 
 ```{r }
-pred=predict(infect.1,infect.new,type="response")
-cbind(infect.new,pred)
+pred <- predict(infect.1, infect.new, type = "response")
+cbind(infect.new, pred)
 ```
 
  
@@ -451,10 +452,10 @@ explanatory variables. I think the best way to do this is
 containing the residuals alongside the original data:
 ```{r }
 library(broom)
-infect.1a = infect.1 %>% augment(infect) 
+infect.1a <- infect.1 %>% augment(infect)
 infect.1a %>% as_tibble()
-ggplot(infect.1a,aes(x=weight,y=.resid))+geom_point()+
-geom_smooth()
+ggplot(infect.1a, aes(x = weight, y = .resid)) + geom_point() +
+  geom_smooth()
 ```
 
  
@@ -469,8 +470,8 @@ real kind of trend.
 The corresponding plot with age goes the same way:
 
 ```{r }
-ggplot(infect.1a,aes(x=age,y=.resid))+geom_point()+
-geom_smooth()
+ggplot(infect.1a, aes(x = age, y = .resid)) + geom_point() +
+  geom_smooth()
 ```
 
  
@@ -484,7 +485,7 @@ goes like this. The `glm` statement is long, as they usually
 are, so it's much easier to use `update`:
 
 ```{r }
-infect.2=update(infect.1,.~.+I(age^2)+I(weight^2))
+infect.2 <- update(infect.1, . ~ . + I(age^2) + I(weight^2))
 ```
 
  
@@ -492,7 +493,7 @@ infect.2=update(infect.1,.~.+I(age^2)+I(weight^2))
 As we saw before, when thinking about what to keep, we want to look at `drop1`:
 
 ```{r }
-drop1(infect.2, test="Chisq")
+drop1(infect.2, test = "Chisq")
 ```
 
  
@@ -508,11 +509,11 @@ ages and weights to investigate with. Below, I use `seq` a
 different way to get a filled series of a desired length:
 
 ```{r }
-weights=seq(9,16,length.out=6)
+weights <- seq(9, 16, length.out = 6)
 weights
-ages=seq(26,130,length.out=6)
+ages <- seq(26, 130, length.out = 6)
 ages
-infect.new=crossing(weight=weights,age=ages,sex=sexes)
+infect.new <- crossing(weight = weights, age = ages, sex = sexes)
 infect.new
 ```
 
@@ -527,9 +528,9 @@ reasons. Then the data frame `pp` below will contain the
 predictions from both models so that we can compare them:
 
 ```{r }
-pred=predict(infect.2,infect.new,type="response")
-pred.old=predict(infect.1,infect.new,type="response")
-pp=cbind(infect.new,pred.old,pred)
+pred <- predict(infect.2, infect.new, type = "response")
+pred.old <- predict(infect.1, infect.new, type = "response")
+pp <- cbind(infect.new, pred.old, pred)
 ```
 
  
@@ -540,7 +541,7 @@ for females of age 46.8, though it is the same idea for all the other
 age-sex combinations as well):
 
 ```{r }
-pp %>% filter(age==46.8,sex=="female")
+pp %>% filter(age == 46.8, sex == "female")
 ```
 
  
@@ -550,7 +551,7 @@ bit lower. What about the effect of `age`? Let's take males of
 weight 9:
 
 ```{r }
-pp %>% filter(weight==9,sex=="male")
+pp %>% filter(weight == 9, sex == "male")
 ```
 
  
@@ -568,7 +569,7 @@ new model? There's a trick here: work out the maximum value of
 equal to that maximum value:
 
 ```{r }
-pp %>% filter(pred==max(pred))
+pp %>% filter(pred == max(pred))
 ```
 
  
@@ -579,7 +580,7 @@ females (because of that squared term).
 This would also work:
 
 ```{r }
-pp %>% summarize(max.pred=max(pred))
+pp %>% summarize(max.pred = max(pred))
 ```
 
  
@@ -588,7 +589,7 @@ probability. What you might do then is to say
 "let's find all the predicted probabilities bigger than 0.8":
 
 ```{r }
-pp %>% filter(pred>0.8)
+pp %>% filter(pred > 0.8)
 ```
 
  

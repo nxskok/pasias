@@ -24,8 +24,8 @@ Solution
 
 The usual stuff for data values separated by spaces:
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/deer.txt"
-deer=read_delim(myurl," ")
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/deer.txt"
+deer <- read_delim(myurl, " ")
 ```
 
      
@@ -34,8 +34,9 @@ and then, recalling that `n()` is the handy way of getting the
 number of observations in each group:
 
 ```{r }
-deer %>% group_by(month) %>% 
-summarize(n=n(),med=median(food))
+deer %>%
+  group_by(month) %>%
+  summarize(n = n(), med = median(food))
 ```
 
  
@@ -58,7 +59,7 @@ Solution
 
 
 ```{r }
-ggplot(deer,aes(x=month,y=food))+geom_boxplot()
+ggplot(deer, aes(x = month, y = food)) + geom_boxplot()
 ```
 
      
@@ -81,7 +82,7 @@ we plot the actual points for each month as if we were making a
 scatterplot:
 
 ```{r }
-ggplot(deer,aes(x=month,y=food))+geom_point()
+ggplot(deer, aes(x = month, y = food)) + geom_point()
 ```
 
  
@@ -97,7 +98,7 @@ move the points around so that no two of them plot in the same
 place. This is called *jittering*, and is done like this:
 
 ```{r }
-ggplot(deer,aes(x=month,y=food))+geom_jitter(width=0,height=0.05)
+ggplot(deer, aes(x = month, y = food)) + geom_jitter(width = 0, height = 0.05)
 ```
 
  
@@ -137,7 +138,7 @@ Solution
 To give you some practice with the mechanics, first find the
 overall median:
 ```{r }
-deer %>% summarize(med=median(food))
+deer %>% summarize(med = median(food))
 ```
 
      
@@ -155,7 +156,7 @@ not differentiating by month. I think there are some observations
 exactly equal to the median, which will mess things up later:
 
 ```{r }
-deer %>% filter(food==4.7)
+deer %>% filter(food == 4.7)
 ```
 
  
@@ -166,7 +167,7 @@ Next, make (and save) a table of the observations within each month
 that are above and below this median:
 
 ```{r }
-tab1=with(deer,table(month,food<4.7))
+tab1 <- with(deer, table(month, food < 4.7))
 tab1
 ```
 
@@ -175,7 +176,7 @@ tab1
 or
 
 ```{r }
-tab2=with(deer,table(month,food>4.7))
+tab2 <- with(deer, table(month, food > 4.7))
 tab2
 ```
 
@@ -189,8 +190,8 @@ test results will be different, and `smmr` (later) will give
 different results again:
 
 ```{r }
-chisq.test(tab1,correct=F)
-chisq.test(tab2,correct=F)
+chisq.test(tab1, correct = F)
+chisq.test(tab2, correct = F)
 ```
 
  
@@ -226,7 +227,7 @@ Solution
 Off we go:
 ```{r }
 library(smmr)
-median_test(deer,food,month)
+median_test(deer, food, month)
 ```
 
      
@@ -241,8 +242,8 @@ values in the build-it-yourself way. This is `filter` from
 `dplyr`, which you use first:
 
 ```{r }
-deer2 = deer %>% filter(food != 4.7) 
-tab3 = with(deer2, table(month, food<4.7))
+deer2 <- deer %>% filter(food != 4.7)
+tab3 <- with(deer2, table(month, food < 4.7))
 tab3
 chisq.test(tab3)
 ```
@@ -255,7 +256,7 @@ identical.
 How would an ANOVA come out here? My guess is, very similarly:
 
 ```{r }
-deer.1=aov(food~month,data=deer)
+deer.1 <- aov(food ~ month, data = deer)
 summary(deer.1)
 TukeyHSD(deer.1)
 ```

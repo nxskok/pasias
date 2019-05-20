@@ -21,8 +21,8 @@ Solution
 From the URL is easiest. These are delimited by one space, as
 you can tell by looking at the file:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/runner.txt"
-runs=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/runner.txt"
+runs <- read_delim(my_url, " ")
 runs
 ```
 
@@ -37,8 +37,8 @@ Solution
 
 
 ```{r plymouth}
-ggplot(runs,aes(x=distance,y=blood_sugar))+geom_point()+
-geom_smooth()
+ggplot(runs, aes(x = distance, y = blood_sugar)) + geom_point() +
+  geom_smooth()
 ```
 
      
@@ -71,7 +71,7 @@ Solution
 
 Two steps: `lm` and then `summary`:
 ```{r }
-runs.1=lm(blood_sugar~distance,data=runs)
+runs.1 <- lm(blood_sugar ~ distance, data = runs)
 summary(runs.1)
 ```
 
@@ -125,8 +125,8 @@ The procedure is to set up a data frame with the two
 `distance` values in it, and then feed that and the
 regression object into `predict`, coming up in a moment.
 ```{r }
-dists=c(3,5)
-dist.new=tibble(distance=dists)
+dists <- c(3, 5)
+dist.new <- tibble(distance = dists)
 dist.new
 ```
 
@@ -140,7 +140,7 @@ won't work. At least, it won't work properly.
 Then, `predict`:
 
 ```{r }
-pp=predict(runs.1,dist.new,interval="p")
+pp <- predict(runs.1, dist.new, interval = "p")
 pp
 ```
 
@@ -149,7 +149,7 @@ pp
 and display this with the distances by the side:
 
 ```{r }
-cbind(dist.new,pp)
+cbind(dist.new, pp)
 ```
 
  
@@ -157,7 +157,7 @@ cbind(dist.new,pp)
 or
 
 ```{r }
-data.frame(dist.new,pp)
+data.frame(dist.new, pp)
 ```
 
  
@@ -201,8 +201,10 @@ which is a pretty result from very ugly code.
 I also remembered that if you finish with a `select`, you get the columns in the order they were in the `select`:
 
 ```{r }
-pp %>% as_tibble() %>% bind_cols(dist.new) %>%
-select(c(distance,everything()))
+pp %>%
+  as_tibble() %>%
+  bind_cols(dist.new) %>%
+  select(c(distance, everything()))
 ```
 
  

@@ -25,9 +25,9 @@ This kind of thing. Since you looked at the data (didn't you?),
 you'll know that the values are separated by single spaces:
 
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
-bodyfat=read_delim(myurl," ")
-bodyfat  
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat <- read_delim(myurl, " ")
+bodyfat
 ```
 
  
@@ -49,7 +49,7 @@ places, most likely: first for the normal quantile plot, and second
 for the matched-pairs sign test. So we should calculate and save them first:
 
 ```{r }
-bodyfat %>% mutate(diff=xray-ultrasound) -> bodyfat2
+bodyfat %>% mutate(diff = xray - ultrasound) -> bodyfat2
 ```
 
  
@@ -60,7 +60,7 @@ dataframe-with-differences, but you can use whatever name you like.
 Then, not forgetting to use the data frame that we just made:
 
 ```{r }
-ggplot(bodyfat2,aes(sample=diff))+stat_qq()+stat_qq_line()
+ggplot(bodyfat2, aes(sample = diff)) + stat_qq() + stat_qq_line()
 ```
 
    

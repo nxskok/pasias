@@ -28,8 +28,8 @@ Solution
 
 As ever:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/adhd-parents.txt"
-adhd=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/adhd-parents.txt"
+adhd <- read_delim(my_url, " ")
 adhd
 ```
 
@@ -47,7 +47,7 @@ Solution
 
 This is as before:
 ```{r }
-adhd.1=lda(parent~q1+q2+q3+q4,data=adhd)
+adhd.1 <- lda(parent ~ q1 + q2 + q3 + q4, data = adhd)
 adhd.1
 ```
 
@@ -87,7 +87,7 @@ Solution
 The prediction is the obvious thing. I take a quick look at it
 (using `glimpse`), but only because I feel like it:
 ```{r }
-adhd.2=predict(adhd.1)
+adhd.2 <- predict(adhd.1)
 glimpse(adhd.2)
 ```
 
@@ -100,9 +100,9 @@ by a boxplot, first making a data frame, using `data.frame`,
 containing what you need:
 
 ```{r error=T}
-d=cbind(adhd, adhd.2)
+d <- cbind(adhd, adhd.2)
 head(d)
-ggplot(d, aes(x=parent, y=LD1))+geom_boxplot()
+ggplot(d, aes(x = parent, y = LD1)) + geom_boxplot()
 ```
 
  
@@ -130,7 +130,7 @@ Use the predictions from the previous part, and the observed
 `parent` values from the original data frame. Then use
 either `table` or `tidyverse` to summarize.
 ```{r }
-with(d, table(obs=parent, pred=class))
+with(d, table(obs = parent, pred = class))
 ```
 
      
@@ -146,8 +146,9 @@ d %>% count(parent, class)
 or
 
 ```{r }
-d %>% count(parent, class) %>%
-spread(class, n, fill=0)
+d %>%
+  count(parent, class) %>%
+  spread(class, n, fill = 0)
 ```
 
  
@@ -169,8 +170,9 @@ were different. I'm also going to create a column `id` that
 will give us the row of the *original* data frame:
 
 ```{r }
-d %>% mutate(id=row_number()) %>%
-filter(parent != class)
+d %>%
+  mutate(id = row_number()) %>%
+  filter(parent != class)
 ```
 
  
@@ -182,7 +184,7 @@ mothers from fathers, so maybe we should find the mean and SD of scores for
 mothers and fathers on `q2`:
 
 ```{r }
-adhd %>% group_by(parent) %>% summarize(m2=mean(q2),s2=sd(q2))
+adhd %>% group_by(parent) %>% summarize(m2 = mean(q2), s2 = sd(q2))
 ```
 
  
@@ -207,8 +209,8 @@ Solution
 
 So, this, with different name:
 ```{r error=T}
-adhd.3=lda(parent~q1+q2+q3+q4,data=adhd,CV=T)
-dd=cbind(adhd, class=adhd.3$class, posterior=adhd.3$posterior)
+adhd.3 <- lda(parent ~ q1 + q2 + q3 + q4, data = adhd, CV = T)
+dd <- cbind(adhd, class = adhd.3$class, posterior = adhd.3$posterior)
 with(dd, table(parent, class))
 ```
 
@@ -252,18 +254,21 @@ contain everything from the (original) `lda` output and the
 cross-validated output. Let's glue them together, look at what we
 have, and then pull out what we need:
 ```{r error=T}
-all=data.frame(d, dd)
+all <- data.frame(d, dd)
 head(all)
 ```
 
  
 The ones with a 1 on the end are the cross-validated ones. We need the posterior probabilities, rounded, and they need to  have shorter names:
 ```{r error=T, fred}
-all %>% select(parent, starts_with("posterior"), LD1) %>%
-mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
-rename_at(vars(starts_with("posterior")), 
-~str_replace(.,"posterior","p")) %>%
-arrange(LD1)
+all %>%
+  select(parent, starts_with("posterior"), LD1) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  rename_at(
+    vars(starts_with("posterior")),
+    ~ str_replace(., "posterior", "p")
+  ) %>%
+  arrange(LD1)
 ```
 
  
@@ -332,11 +337,14 @@ Solution
 Let's add something to the output we had before: the original
 scores on `q1` through `q4`:
 ```{r }
-all %>% select(q1:q4, parent, starts_with("posterior"), LD1) %>%
-mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
-rename_at(vars(starts_with("posterior")), 
-~str_replace(.,"posterior","p")) %>%    
-arrange(LD1)
+all %>%
+  select(q1:q4, parent, starts_with("posterior"), LD1) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  rename_at(
+    vars(starts_with("posterior")),
+    ~ str_replace(., "posterior", "p")
+  ) %>%
+  arrange(LD1)
 ```
 
      

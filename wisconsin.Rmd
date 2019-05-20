@@ -17,8 +17,8 @@ Solution
 
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt"
-wisc=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt"
+wisc <- read_table(my_url)
 wisc
 ```
 
@@ -36,8 +36,9 @@ names  of the places, so we won't lose anything by getting rid of the
 `location` column:
 
 ```{r }
-d = wisc %>% select(-location) %>%
-as.dist()
+d <- wisc %>%
+  select(-location) %>%
+  as.dist()
 d
 ```
 
@@ -54,7 +55,7 @@ Solution
 The `location` column of the data frame you read in
 from the file:
 ```{r }
-cities=wisc$location
+cities <- wisc$location
 cities
 ```
 
@@ -69,7 +70,7 @@ Solution
 
 
 ```{r }
-wisc.1=cmdscale(d)
+wisc.1 <- cmdscale(d)
 ```
 
        
@@ -101,7 +102,7 @@ we'll explicitly create a column called `city` with the city
 names (that we saved before):
 
 ```{r }
-dd=data.frame(wisc.1,city=cities)
+dd <- data.frame(wisc.1, city = cities)
 dd
 ```
 
@@ -116,10 +117,10 @@ I think the best use of your judgement is to go straight to
 `geom_text_repel` from package `ggrepel`:
 
 ```{r }
-ggplot(dd,aes(x=X1,y=X2,label=city))+
-geom_point()+
-geom_text_repel()+
-coord_fixed()
+ggplot(dd, aes(x = X1, y = X2, label = city)) +
+  geom_point() +
+  geom_text_repel() +
+  coord_fixed()
 ```
 
  
@@ -152,7 +153,7 @@ cities
 Cities 2, 3 and 4, so:
 
 ```{r }
-wisc %>% slice(2:4) %>% select(c(1,3:5))
+wisc %>% slice(2:4) %>% select(c(1, 3:5))
 ```
 
  
@@ -219,14 +220,14 @@ library(ggmap)
    
 
 ```{r echo=F}
-api_key="AIzaSyC7eVXz84-Mj1-zNBW4GTnXNAYdGQJDNXU"
+api_key <- "AIzaSyC7eVXz84-Mj1-zNBW4GTnXNAYdGQJDNXU"
 register_google(api_key)
 ```
 
  
 ```{r laskhsal,cache=TRUE,fig.width=6,fig.height=6}
 library(ggmap)
-wisc.map=get_map(location="Milwaukee, WI",zoom=6)
+wisc.map <- get_map(location = "Milwaukee, WI", zoom = 6)
 ggmap(wisc.map)
 ```
 
@@ -257,11 +258,11 @@ abbreviation for Wisconsin, and then overwriting the last three with
 the states they are actually in:
 
 ```{r }
-states=rep("WI",12)
-states[10]="IA"
-states[11]="MN" 
-states[12]="IL"
-cst=str_c(cities," ",states)
+states <- rep("WI", 12)
+states[10] <- "IA"
+states[11] <- "MN"
+states[12] <- "IL"
+cst <- str_c(cities, " ", states)
 cst
 ```
 
@@ -272,8 +273,8 @@ done too many lookups, so I look them up first and save the results,
 like this:
 
 ```{r } 
-tibble(cst) %>% 
-ggmap::mutate_geocode(cst) -> g
+tibble(cst) %>%
+  ggmap::mutate_geocode(cst) -> g
 g
 ```
 
@@ -290,8 +291,9 @@ range(g$lat)
 or even
 
 ```{r }
-g %>% select(lat,lon) %>%
-map_df(range)
+g %>%
+  select(lat, lon) %>%
+  map_df(range)
 ```
 
  
@@ -312,7 +314,7 @@ on there.
 So:
 
 ```{r lhsdljhadkfj,fig.width=6,fig.height=6,cache=T,message=F}
-wisc.map.2=get_map(location=c(-94,41.8,-87,46.8),maptype="roadmap")
+wisc.map.2 <- get_map(location = c(-94, 41.8, -87, 46.8), maptype = "roadmap")
 ggmap(wisc.map.2)
 ```
 
@@ -325,7 +327,7 @@ Now we need to mark our 12 cities on the map. This is a
 
 ```{r sldkhdlf,echo=-1,message=F, cache=T}
 library(ggmap)
-ggmap(wisc.map.2)+geom_point(data=g, aes(x=lon,y=lat))
+ggmap(wisc.map.2) + geom_point(data = g, aes(x = lon, y = lat))
 ```
 
  
@@ -394,8 +396,8 @@ Solution
 
 Run again with `eig=T` and take a look at `GOF` (uppercase):
 ```{r }
-cmdscale(d,2,eig=T)$GOF
-cmdscale(d,1,eig=T)$GOF
+cmdscale(d, 2, eig = T)$GOF
+cmdscale(d, 1, eig = T)$GOF
 ```
 
    
@@ -411,10 +413,10 @@ now I have to do it again. For the plot, `ones` is a string of
 ones, as many as there are cities.
 
 ```{r kashklsahl0}
-ones=rep(1,12)
-v=cmdscale(d,1,eig=T)
-ddd = as_tibble(v$points) %>%
-mutate(one=ones, city=cities)
+ones <- rep(1, 12)
+v <- cmdscale(d, 1, eig = T)
+ddd <- as_tibble(v$points) %>%
+  mutate(one = ones, city = cities)
 ddd
 ```
 
@@ -424,8 +426,8 @@ ddd
 the name `V1`), and the plot:
 
 ```{r }
-ggplot(ddd,aes(x=one,y=V1,label=city))+
-geom_point()+geom_text_repel()
+ggplot(ddd, aes(x = one, y = V1, label = city)) +
+  geom_point() + geom_text_repel()
 ```
 
  

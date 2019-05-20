@@ -77,9 +77,9 @@ This kind of thing. Since you looked at the data (didn't you?),
 you'll know that the values are separated by single spaces:
 
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
-bodyfat=read_delim(myurl," ")
-bodyfat  
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat <- read_delim(myurl, " ")
+bodyfat
 ```
 
  
@@ -111,7 +111,7 @@ take any special steps for that. Note that we're back to the
 allow `data=`, so we have to go the `with` way:
 
 ```{r }
-with(bodyfat,t.test(xray,ultrasound,paired=T))
+with(bodyfat, t.test(xray, ultrasound, paired = T))
 ```
 
  
@@ -175,8 +175,9 @@ is the new one with the differences in it, which doesn't have a
 name). I'll make a normal quantile plot in a moment, but if you
 haven't seen that yet, the plot to make is a histogram:
 ```{r }
-bodyfat %>% mutate(diff=xray-ultrasound) %>%
-ggplot(aes(x=diff))+geom_histogram(bins=6)
+bodyfat %>%
+  mutate(diff = xray - ultrasound) %>%
+  ggplot(aes(x = diff)) + geom_histogram(bins = 6)
 ```
 
    
@@ -199,8 +200,9 @@ going to draw either the histogram or the normal quantile plot, not
 both, so you can use the appropriate one of my two bits of code. The
 normal quantile plot:
 ```{r }
-bodyfat %>% mutate(diff=xray-ultrasound) %>%
-ggplot(aes(sample=diff))+stat_qq()+stat_qq_line()
+bodyfat %>%
+  mutate(diff = xray - ultrasound) %>%
+  ggplot(aes(sample = diff)) + stat_qq() + stat_qq_line()
 ```
 
    

@@ -49,8 +49,8 @@ Solution
 
 This is a `.csv` file (I tried to make it easy for you):
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/hsb.csv"
-hsb=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/hsb.csv"
+hsb <- read_csv(my_url)
 hsb
 ```
 
@@ -80,8 +80,8 @@ Solution
 It has to be an `ordered` factor, which you can create in
 the data frame (or outside, if you prefer):
 ```{r }
-hsb = hsb %>% mutate(ses=ordered(ses,c("low","middle","high")))
-hsb                     
+hsb <- hsb %>% mutate(ses = ordered(ses, c("low", "middle", "high")))
+hsb
 ```
 
   
@@ -89,7 +89,7 @@ hsb
 `ses` is now `ord`. Good. Now fit the model:
 
 ```{r }
-ses.1=polr(ses~read+write+math+science+socst,data=hsb)
+ses.1 <- polr(ses ~ read + write + math + science + socst, data = hsb)
 ```
 
        
@@ -104,7 +104,7 @@ Solution
 
 
 ```{r }
-drop1(ses.1,test="Chisq")
+drop1(ses.1, test = "Chisq")
 ```
 
        
@@ -114,8 +114,8 @@ doesn't. Never mind. Scan for the largest P-value, which belongs to
 `read`. (This also has the lowest AIC.) So, remove `read`:
 
 ```{r }
-ses.2=update(ses.1,.~.-read)
-drop1(ses.2,test="Chisq")
+ses.2 <- update(ses.1, . ~ . - read)
+drop1(ses.2, test = "Chisq")
 ```
 
  
@@ -126,8 +126,8 @@ A close call, but `math` goes next.  The `update`
 doesn't take long to type:
 
 ```{r }
-ses.3=update(ses.2,.~.-math)
-drop1(ses.3,test="Chisq")
+ses.3 <- update(ses.2, . ~ . - math)
+drop1(ses.3, test = "Chisq")
 ```
 
  
@@ -142,8 +142,8 @@ I think we can guess what will happen now: `write` comes out,
 and the other two variables will stay, so that'll be where we stop:
 
 ```{r }
-ses.4=update(ses.3,.~.-write)
-drop1(ses.4,test="Chisq")
+ses.4 <- update(ses.3, . ~ . - write)
+drop1(ses.4, test = "Chisq")
 ```
 
  
@@ -182,7 +182,7 @@ The other thing is that you can use `step` for the
 variable-elimination task as well:
 
 ```{r size="footnotesize"}
-ses.5=step(ses.1,direction="backward",test="Chisq")
+ses.5 <- step(ses.1, direction = "backward", test = "Chisq")
 ```
 
  
@@ -204,9 +204,9 @@ Solution
 
 Thus, most obviously:
 ```{r }
-sciences=c(44,58)
-socsts=c(46,61)
-new=crossing(science=sciences, socst=socsts)
+sciences <- c(44, 58)
+socsts <- c(46, 61)
+new <- crossing(science = sciences, socst = socsts)
 new
 ```
 
@@ -223,9 +223,9 @@ this:
 `r tufte::margin_note("That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.")`
 
 ```{r }
-hsb %>% summarize(m=median(math))
-maths=52
-new2=crossing(science=sciences,socst=socsts,math=maths)
+hsb %>% summarize(m = median(math))
+maths <- 52
+new2 <- crossing(science = sciences, socst = socsts, math = maths)
 new2
 ```
 
@@ -244,8 +244,8 @@ Solution
 This is `predict`, and we've done the setup. My best model
 was called `ses.4`:
 ```{r }
-p=predict(ses.4,new,type="probs")
-cbind(new,p) 
+p <- predict(ses.4, new, type = "probs")
+cbind(new, p)
 ```
 
    

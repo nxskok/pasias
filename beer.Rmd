@@ -40,8 +40,8 @@ Solution
 Data values are aligned in columns, but the column headers are
 not aligned with them, so `read_table2`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
-beer=read_table2(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/beer.txt"
+beer <- read_table2(my_url)
 beer
 ```
 
@@ -66,8 +66,8 @@ things that are already distances). We need to skip the first
 column, since those are student identifiers:
 ```{r }
 beer %>%
-select(-student) %>%
-dist() -> d
+  select(-student) %>%
+  dist() -> d
 glimpse(d)
 ```
 
@@ -76,7 +76,7 @@ glimpse(d)
 The 496 distances are:
 
 ```{r }
-32*31/2
+32 * 31 / 2
 ```
 
  
@@ -114,9 +114,9 @@ Solution
 Again, omit the first column. The pipeline code looks a bit weird:
 ```{r }
 beer %>%
-select(-student) %>%
-t() %>%
-dist() -> d
+  select(-student) %>%
+  t() %>%
+  dist() -> d
 ```
 
    
@@ -126,7 +126,7 @@ that you can also refer to columns by number:
 
 ```{r }
 beer %>% select(-1) -> beer2
-d=dist(t(beer2))
+d <- dist(t(beer2))
 ```
 
  
@@ -164,7 +164,7 @@ Solution
 
 This:
 ```{r khas}
-beer.1=hclust(d,method="ward.D")
+beer.1 <- hclust(d, method = "ward.D")
 plot(beer.1)
 ```
 
@@ -258,13 +258,13 @@ Off we go:
 
 ```{r iyrpoydf,message=F}
 beer %>%
-gather(name,rating,AnchorS:SierraN) %>%
-mutate(beer.type=ifelse(name %in%
-c("AnchorS","PetesW","Guinness","SierraN"),"dark","light")) %>%
-group_by(student,beer.type) %>%
-summarize(mean.rat=mean(rating)) %>%
-spread(beer.type,mean.rat) %>%
-ggplot(aes(x=dark,y=light))+geom_point()
+  gather(name, rating, AnchorS:SierraN) %>%
+  mutate(beer.type = ifelse(name %in%
+    c("AnchorS", "PetesW", "Guinness", "SierraN"), "dark", "light")) %>%
+  group_by(student, beer.type) %>%
+  summarize(mean.rat = mean(rating)) %>%
+  spread(beer.type, mean.rat) %>%
+  ggplot(aes(x = dark, y = light)) + geom_point()
 ```
 
  
@@ -296,7 +296,7 @@ Solution
 `rect.hclust`, with your chosen number  of clusters:
 ```{r sdkjdh}
 plot(beer.1)
-rect.hclust(beer.1,2)
+rect.hclust(beer.1, 2)
 ```
 
        
@@ -305,7 +305,7 @@ Or if you prefer 5 clusters, like this:
 
 ```{r ljashkjsdah}
 plot(beer.1)
-rect.hclust(beer.1,5)
+rect.hclust(beer.1, 5)
 ```
 
  
@@ -333,9 +333,10 @@ set.seed(457299)
        
 I used 20 for `nstart`. This is the pipe way:
 ```{r }
-beer.2 = beer %>% select(-1) %>%
-t() %>%
-kmeans(2,nstart=20)
+beer.2 <- beer %>%
+  select(-1) %>%
+  t() %>%
+  kmeans(2, nstart = 20)
 ```
 
        
@@ -391,8 +392,8 @@ enframe(beer.2$cluster)
 or, give the columns better names and arrange them by cluster:
 
 ```{r }
-enframe(beer.2$cluster, name="beer", value="cluster") %>%
-arrange(cluster)
+enframe(beer.2$cluster, name = "beer", value = "cluster") %>%
+  arrange(cluster)
 ```
 
  

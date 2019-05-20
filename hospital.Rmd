@@ -24,8 +24,8 @@ Solution
 first. The data values are aligned in columns, and so are the
 column headers. Thus, `read_table` is what we need:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/satisfaction.txt"
-satisf=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/satisfaction.txt"
+satisf <- read_table(my_url)
 satisf
 ```
 
@@ -48,9 +48,9 @@ Solution
 
 The obvious way is to do these one after the other:
 ```{r fig.height=3, fig.width=4}
-ggplot(satisf,aes(x=age,y=satis))+geom_point()
-ggplot(satisf,aes(x=severity,y=satis))+geom_point()
-ggplot(satisf,aes(x=anxiety,y=satis))+geom_point()
+ggplot(satisf, aes(x = age, y = satis)) + geom_point()
+ggplot(satisf, aes(x = severity, y = satis)) + geom_point()
+ggplot(satisf, aes(x = anxiety, y = satis)) + geom_point()
 ```
 
        
@@ -63,9 +63,10 @@ that value was. This uses `gather`. The right way to do this is
 in a pipeline:
 
 ```{r }
-satisf %>% gather(xname,x,age:anxiety) %>%
-ggplot(aes(x=x,y=satis))+geom_point()+
-facet_wrap(~xname,scales="free",ncol=2)
+satisf %>%
+  gather(xname, x, age:anxiety) %>%
+  ggplot(aes(x = x, y = satis)) + geom_point() +
+  facet_wrap(~xname, scales = "free", ncol = 2)
 ```
 
  
@@ -96,7 +97,7 @@ rather than calculating it twice (so that I ought now to go back and
 do the other one using the saved data frame, really):
 
 ```{r }
-satisf.long = satisf %>% gather(xname,x,age:anxiety)
+satisf.long <- satisf %>% gather(xname, x, age:anxiety)
 ```
 
  
@@ -110,8 +111,8 @@ First, making a *row* of plots, so that `xname` is the $x$
 of the facets:
 
 ```{r }
-ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
-facet_grid(.~xname, scales="free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_grid(. ~ xname, scales = "free")
 ```
 
  
@@ -122,8 +123,8 @@ I find these too tall and skinny to see the trends, as on the first
 And now, making a *column* of plots, with `xname` as $y$:
 
 ```{r }
-ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
-facet_grid(xname~., scales="free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_grid(xname ~ ., scales = "free")
 ```
 
  
@@ -134,8 +135,8 @@ scales. The effect of the `scales="free"` is to allow the
 the facets are all in a line. Compare this:
 
 ```{r }
-ggplot(satisf.long,aes(x=x,y=satis))+geom_point()+
-facet_wrap(~xname,ncol=1,scales="free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_wrap(~xname, ncol = 1, scales = "free")
 ```
 
  
@@ -185,7 +186,7 @@ Solution
 
 
 ```{r }
-satisf.1=lm(satis~age+severity+anxiety,data=satisf)
+satisf.1 <- lm(satis ~ age + severity + anxiety, data = satisf)
 summary(satisf.1)
 ```
 
@@ -272,12 +273,14 @@ here. Let's predict satisfaction for all combinations of high and
 low age, severity and anxiety. I'll use the quartiles for high and
 low. There is a straightforward but ugly way:
 ```{r }
-quartiles = satisf %>% summarize(age_q1=quantile(age,0.25),
-age_q3=quantile(age,0.75),
-severity_q1=quantile(severity,0.25),
-severity_q3=quantile(severity,0.75),
-anxiety_q1=quantile(anxiety,0.25),
-anxiety_q3=quantile(anxiety,0.75))
+quartiles <- satisf %>% summarize(
+  age_q1 = quantile(age, 0.25),
+  age_q3 = quantile(age, 0.75),
+  severity_q1 = quantile(severity, 0.25),
+  severity_q3 = quantile(severity, 0.75),
+  anxiety_q1 = quantile(anxiety, 0.25),
+  anxiety_q3 = quantile(anxiety, 0.75)
+)
 ```
 
      
@@ -294,14 +297,16 @@ quartiles
 You can copy the numbers from here to below, or you can do some
 cleverness to get them in the right places:
 ```{r }
-quartiles %>% gather(var_q,quartile,everything()) %>%
-separate(var_q,c("var_name","quartile_name")) %>%
-spread(var_name,quartile)
+quartiles %>%
+  gather(var_q, quartile, everything()) %>%
+  separate(var_q, c("var_name", "quartile_name")) %>%
+  spread(var_name, quartile)
 ```
 
  
 
 ```{r }
+
 ```
 
      
@@ -309,7 +314,7 @@ spread(var_name,quartile)
 This is what we want for below. Let's test it line by line to see exactly
 what it did:
 ```{r }
-quartiles %>% gather(var_q,quartile,everything()) 
+quartiles %>% gather(var_q, quartile, everything())
 ```
 
  
@@ -319,8 +324,9 @@ Making long format. `everything()` is a select-helper saying
 warning comes from.
 
 ```{r }
-quartiles %>% gather(var_q,quartile,everything()) %>%
-separate(var_q,c("var_name","quartile_name")) 
+quartiles %>%
+  gather(var_q, quartile, everything()) %>%
+  separate(var_q, c("var_name", "quartile_name"))
 ```
 
  
@@ -332,9 +338,10 @@ with underscores.
 `r tufte::margin_note("I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.")`
 
 ```{r }
-qq = quartiles %>% gather(var_q,quartile,everything()) %>%
-separate(var_q,c("var_name","quartile_name")) %>%
-spread(var_name,quartile)
+qq <- quartiles %>%
+  gather(var_q, quartile, everything()) %>%
+  separate(var_q, c("var_name", "quartile_name")) %>%
+  spread(var_name, quartile)
 qq
 ```
 
@@ -351,7 +358,7 @@ Doing "all possible combinations" calls for `crossing`,
 which looks like this:
 
 ```{r }
-satisf.new=with(qq,crossing(age,anxiety,severity))
+satisf.new <- with(qq, crossing(age, anxiety, severity))
 satisf.new
 ```
 
@@ -367,8 +374,8 @@ regression, so it's ready to go into `predict`. I'll do
 prediction intervals, just because:
 
 ```{r }
-pp=predict(satisf.1,satisf.new,interval="p")
-cbind(satisf.new,pp)
+pp <- predict(satisf.1, satisf.new, interval = "p")
+cbind(satisf.new, pp)
 ```
 
  
@@ -410,8 +417,9 @@ so we make it one before calculating the lengths.
 We want `upr` minus `lwr`:
 
 ```{r }
-pp %>% as_tibble() %>%
-transmute(pi.length=upr-lwr)
+pp %>%
+  as_tibble() %>%
+  transmute(pi.length = upr - lwr)
 ```
 
  
@@ -425,9 +433,10 @@ the others.
 Then I put that side by side with the values being predicted for:
 
 ```{r }
-pp %>% as_tibble() %>%
-transmute(pi.length=upr-lwr) %>%
-bind_cols(satisf.new)
+pp %>%
+  as_tibble() %>%
+  transmute(pi.length = upr - lwr) %>%
+  bind_cols(satisf.new)
 ```
 
  
@@ -450,7 +459,7 @@ satisfaction, so I can plot these two explanatory variables against
 each other to see where most of the values are:
 
 ```{r }
-ggplot(satisf,aes(x=age,y=anxiety))+geom_point()
+ggplot(satisf, aes(x = age, y = anxiety)) + geom_point()
 ```
 
  
@@ -484,7 +493,7 @@ Pull out the least-significant (highest P-value) variable, which here
 is `severity`. We already decided that this had nothing to add:
 
 ```{r }
-satisf.2=update(satisf.1,.~.-severity)
+satisf.2 <- update(satisf.1, . ~ . - severity)
 summary(satisf.2)
 ```
 
@@ -503,7 +512,7 @@ older or more anxious is associated with a *decrease* in satisfaction.
 There is also a function `step` that will do this for you:
 
 ```{r }
-step(satisf.1,direction="backward",test="F")
+step(satisf.1, direction = "backward", test = "F")
 ```
 
  

@@ -29,8 +29,8 @@ Solution
 The usual, separated by a single space:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/geriatrics.txt"
-geriatrics=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/geriatrics.txt"
+geriatrics <- read_delim(my_url, " ")
 geriatrics
 ```
 
@@ -50,8 +50,8 @@ Solution
 
 This:
 ```{r }
-response=with(geriatrics,cbind(t1,t2,t3,t4))
-geriatrics.1=lm(response~treatment,data=geriatrics)
+response <- with(geriatrics, cbind(t1, t2, t3, t4))
+geriatrics.1 <- lm(response ~ treatment, data = geriatrics)
 ```
 
      
@@ -73,9 +73,9 @@ Solution
 Make sure `car` is loaded, and do the `idata` and
 `idesign` thing:
 ```{r }
-times=colnames(response)
-times.df=data.frame(times)
-geriatrics.2=Manova(geriatrics.1,idata=times.df,idesign=~times)
+times <- colnames(response)
+times.df <- data.frame(times)
+geriatrics.2 <- Manova(geriatrics.1, idata = times.df, idesign = ~times)
 ```
 
      
@@ -132,8 +132,8 @@ Solution
 
 The usual layout for `gather`:
 ```{r }
-geriatrics.long = geriatrics %>% 
-gather(time,intpct,t1:t4) 
+geriatrics.long <- geriatrics %>%
+  gather(time, intpct, t1:t4)
 geriatrics.long
 ```
 
@@ -166,8 +166,9 @@ Solution
 
 `group_by` followed by `summarize`, as ever:
 ```{r }
-geriatrics.long %>% group_by(treatment,time) %>%
-summarize(mean=mean(intpct)) -> means
+geriatrics.long %>%
+  group_by(treatment, time) %>%
+  summarize(mean = mean(intpct)) -> means
 means
 ```
 
@@ -185,8 +186,8 @@ Solution
 Once you have the means, this is not too bad:
 
 ```{r ger_int}
-ggplot(means,aes(x=time,y=mean,group=treatment,colour=treatment))+
-geom_point()+geom_line()
+ggplot(means, aes(x = time, y = mean, group = treatment, colour = treatment)) +
+  geom_point() + geom_line()
 ```
 
  
@@ -235,8 +236,8 @@ Solution
 This is almost easier to do than it is to ask you to do:
 
 ```{r ger_spag}
-ggplot(geriatrics.long,aes(x=time,y=intpct,colour=treatment,group=subject))+
-geom_line()
+ggplot(geriatrics.long, aes(x = time, y = intpct, colour = treatment, group = subject)) +
+  geom_line()
 ```
 
    
@@ -271,7 +272,7 @@ All right, we need to start with the original wide data frame, and
 from *that* select everything but `ctrl`:
 
 ```{r }
-gg = geriatrics %>% filter(treatment!="ctrl") 
+gg <- geriatrics %>% filter(treatment != "ctrl")
 gg
 ```
 
@@ -294,11 +295,11 @@ and run the `Manova`. There's really nothing new here:
 
 ```{r }
 attach(gg)
-response=cbind(t1,t2,t3,t4)
-gg.1=lm(response~treatment)
-times=colnames(response)
-times.df=data.frame(times)
-gg.2=Manova(gg.1,idata=times.df,idesign=~times)
+response <- cbind(t1, t2, t3, t4)
+gg.1 <- lm(response ~ treatment)
+times <- colnames(response)
+times.df <- data.frame(times)
+gg.2 <- Manova(gg.1, idata = times.df, idesign = ~times)
 gg.2
 detach(gg)
 ```
@@ -339,7 +340,7 @@ down afterwards, that is the same for two drugs A and B. Here's what I
 came up with:
 
 ```{r }
-fake=read.csv("fake.csv",header=T)
+fake <- read.csv("fake.csv", header = T)
 fake
 ```
 
@@ -356,10 +357,10 @@ which involves getting the data in long format first. I'm saving the
 long format to use again later.
 
 ```{r }
-fake %>% gather(times,score,t1:t4) -> fake.long
+fake %>% gather(times, score, t1:t4) -> fake.long
 fake.long %>%
-ggplot(aes(x=times,y=score,colour=drug,group=subject))+
-geom_point()+geom_line()
+  ggplot(aes(x = times, y = score, colour = drug, group = subject)) +
+  geom_point() + geom_line()
 ```
 
  
@@ -376,11 +377,11 @@ are the same) or a spaghetti plot (where `group` has to be
 Let's do the repeated-measures ANOVA and see whether my guess above is right:
 
 ```{r }
-response=with(fake,cbind(t1,t2,t3,t4))
-fake.1=lm(response~drug,data=fake)
-times=colnames(response)
-times.df=data.frame(times)
-fake.2=Manova(fake.1,idata=times.df,idesign=~times)
+response <- with(fake, cbind(t1, t2, t3, t4))
+fake.1 <- lm(response ~ drug, data = fake)
+times <- colnames(response)
+times.df <- data.frame(times)
+fake.2 <- Manova(fake.1, idata = times.df, idesign = ~times)
 ```
 
  
@@ -410,7 +411,7 @@ class(r)
 you get a data frame instead. I think this would work:
 
 ```{r }
-r = fake %>% select(t1:t4) %>% as.matrix()
+r <- fake %>% select(t1:t4) %>% as.matrix()
 class(r)
 ```
 
@@ -444,7 +445,7 @@ like this, treating the measurements at different times as replicates:
 
 ```{r }
 head(fake.long)
-fake.3=aov(score~drug,data=fake.long)
+fake.3 <- aov(score ~ drug, data = fake.long)
 summary(fake.3)
 ```
 
@@ -463,8 +464,10 @@ which we go back to the original data frame:
 
 ```{r }
 fake
-fake %>% mutate(avg.score=(t1+t2+t3+t4)/4) %>%
-aov(avg.score~drug,data=.) %>% summary()
+fake %>%
+  mutate(avg.score = (t1 + t2 + t3 + t4) / 4) %>%
+  aov(avg.score ~ drug, data = .) %>%
+  summary()
 ```
 
  

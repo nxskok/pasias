@@ -28,8 +28,8 @@ Solution
 This is a tricky one. There are aligned columns, but *the column headers are not aligned with them*. 
 Thus `read_table2` is what you need.
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/mathsal.txt"
-salaries=read_table2(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/mathsal.txt"
+salaries <- read_table2(my_url)
 salaries
 ```
 
@@ -64,9 +64,10 @@ you think about facets, and about having all the $x$-values in
 one column (and the names of the $x$-variables in another
 column):
 ```{r ivybridge}
-salaries %>% gather(xname, x, -salary) %>%
-ggplot(aes(x=x, y=salary))+geom_point()+
-facet_wrap(~xname, ncol=2, scales="free")
+salaries %>%
+  gather(xname, x, -salary) %>%
+  ggplot(aes(x = x, y = salary)) + geom_point() +
+  facet_wrap(~xname, ncol = 2, scales = "free")
 ```
 
        
@@ -114,7 +115,7 @@ Solution
 
 
 ```{r }
-salaries.1=lm(salary~workqual+experience+pubsucc,data=salaries)
+salaries.1 <- lm(salary ~ workqual + experience + pubsucc, data = salaries)
 summary(salaries.1)
 ```
 
@@ -154,7 +155,7 @@ regression much worse.
 If you need convincing of that, see what happens when we take
 the variable with the highest P-value out --- this is `workqual`:
 ```{r }
-salaries.2=lm(salary~experience+pubsucc,data=salaries)
+salaries.2 <- lm(salary ~ experience + pubsucc, data = salaries)
 summary(salaries.2)
 ```
 
@@ -181,8 +182,9 @@ this. I use `augment` from `broom`:
 
 ```{r dartington}
 library(broom)
-salaries.2 %>% augment(salaries) %>%
-ggplot(aes(x=workqual, y=.resid))+geom_point()
+salaries.2 %>%
+  augment(salaries) %>%
+  ggplot(aes(x = workqual, y = .resid)) + geom_point()
 ```
 
  
@@ -205,7 +207,7 @@ variables out of the regression is a bad idea (from the
 $t$-tests), so taking out more than one would be a *really* bad idea.
 To perform a test, fit the model without these two explanatory variables:
 ```{r }
-salaries.3=lm(salary~experience,data=salaries)
+salaries.3 <- lm(salary ~ experience, data = salaries)
 ```
 
      
@@ -214,7 +216,7 @@ and then use `anova` to compare the two regressions, smaller
 model first:
 
 ```{r }
-anova(salaries.3,salaries.1)
+anova(salaries.3, salaries.1)
 ```
 
  
@@ -238,7 +240,7 @@ Solution
 I intended that (i) should just be a matter of looking at residuals
 vs.\ fitted values:
 ```{r }
-ggplot(salaries.1, aes(x=.fitted, y=.resid))+geom_point()
+ggplot(salaries.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
     
@@ -255,10 +257,11 @@ it. The following thus looks rather complicated, and if it confuses
 you, run the code a piece at a time to see what it's doing:
 
 ```{r }
-salaries.1 %>% augment(salaries) %>%
-gather(xname, x, workqual:pubsucc) %>%
-ggplot(aes(x=x, y=.resid))+geom_point()+
-facet_wrap(~xname, scales="free", ncol=2)
+salaries.1 %>%
+  augment(salaries) %>%
+  gather(xname, x, workqual:pubsucc) %>%
+  ggplot(aes(x = x, y = .resid)) + geom_point() +
+  facet_wrap(~xname, scales = "free", ncol = 2)
 ```
 
  
@@ -268,7 +271,7 @@ These three residual plots are also pretty much textbook random, so no problems 
 For (ii), look at a normal quantile plot of the residuals, which is not as difficult as the plot I just did:
 
 ```{r }
-ggplot(salaries.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+ggplot(salaries.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -282,7 +285,7 @@ them to be.
 Our graph for assessing fan-in or fan-out is to plot the *absolute* values of the residuals against the fitted values. The plot from (i) suggests that we won't have any problems here, but to investigate:
 
 ```{r }
-ggplot(salaries.1, aes(x=.fitted, y=abs(.resid)))+geom_point()+geom_smooth()
+ggplot(salaries.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
  

@@ -23,8 +23,8 @@ Solution
 The data values are separated by tabs, so `read_tsv` is
 the thing:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
-athletes=read_tsv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes <- read_tsv(my_url)
 athletes
 ```
 
@@ -33,7 +33,7 @@ athletes
 If you didn't remember that, this also works:
 
 ```{r }
-athletes=read_delim(my_url,"\t")
+athletes <- read_delim(my_url, "\t")
 ```
 
  
@@ -50,7 +50,7 @@ Solution
 
 I'm doing this to give you a little intuition for later:
 ```{r }
-ggplot(athletes,aes(x=Ht,y=Wt,colour=Sport))+geom_point()
+ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport)) + geom_point()
 ```
 
      
@@ -87,7 +87,7 @@ fine. It doesn't matter if your guess is way too high. Like this:
 
 ```{r }
 library(nnet)
-sport.1=multinom(Sport~Ht+Wt,data=athletes,maxit=200)
+sport.1 <- multinom(Sport ~ Ht + Wt, data = athletes, maxit = 200)
 ```
 
  
@@ -105,8 +105,8 @@ Solution
 The idea is to fit a model without `Wt`, and then show that
 it fits significantly worse:
 ```{r }
-sport.2=update(sport.1,.~.-Wt)
-anova(sport.2,sport.1,test="Chisq")
+sport.2 <- update(sport.1, . ~ . - Wt)
+anova(sport.2, sport.1, test = "Chisq")
 ```
 
      
@@ -125,7 +125,7 @@ back at the graph you made).
 `drop1`, the obvious thing, doesn't work here:
 
 ```{r error=T}
-drop1(sport.1, test="Chisq", trace=T)
+drop1(sport.1, test = "Chisq", trace = T)
 ```
 
  
@@ -134,7 +134,7 @@ I gotta figure out what that error is.
 Does `step`?
 
 ```{r }
-step(sport.1,direction="backward",test="Chisq")
+step(sport.1, direction = "backward", test = "Chisq")
 ```
 
  
@@ -159,9 +159,9 @@ This is (again) the easier way: fill vectors with the given
 values, use `crossing` to get the combinations, and feed
 that into `predict`, thus:
 ```{r }
-Hts=c(160,180,200)
-Wts=c(50,75,100)
-new=crossing(Ht=Hts,Wt=Wts)
+Hts <- c(160, 180, 200)
+Wts <- c(50, 75, 100)
+new <- crossing(Ht = Hts, Wt = Wts)
 new
 ```
 
@@ -170,8 +170,8 @@ new
 and then
 
 ```{r size="scriptsize"}
-p=predict(sport.1,new,type="probs")
-cbind(new,p)
+p <- predict(sport.1, new, type = "probs")
+cbind(new, p)
 ```
 
  
@@ -183,7 +183,7 @@ round the predicted probabilities to 2 decimals, which, with luck,
 will also kill the scientific notation:
 
 ```{r }
-cbind(new,round(p,2))
+cbind(new, round(p, 2))
 ```
 
  

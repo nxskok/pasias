@@ -30,8 +30,8 @@ is what `read_table` wants. If the column names had
 *not* been aligned with the columns, we would have needed
 `read_table2`. 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/migraine.txt"
-migraine=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/migraine.txt"
+migraine <- read_table(my_url)
 migraine
 ```
 
@@ -92,7 +92,7 @@ makes the columns different, what makes them the same, and which
 columns need to be gathered together. Use a pipe to name the
 dataframe to work with. I'm going to save my new data frame:
 ```{r }
-(migraine %>% gather(drug,painrelief,DrugA:DrugC) -> migraine2)
+(migraine %>% gather(drug, painrelief, DrugA:DrugC) -> migraine2)
 ```
 
  
@@ -122,7 +122,7 @@ Solution
 My last sentence absolves us from doing the boxplots that we
 would normally insist on doing. 
 ```{r }
-painrelief.1=aov(painrelief~drug,data=migraine2)
+painrelief.1 <- aov(painrelief ~ drug, data = migraine2)
 summary(painrelief.1)
 ```
 
@@ -132,7 +132,7 @@ There are (strongly) significant differences among the drugs, so it is
 definitely worth firing up Tukey to figure out where the differences are:
 
 ```{r }
-TukeyHSD(painrelief.1)  
+TukeyHSD(painrelief.1)
 ```
 
  
@@ -146,9 +146,9 @@ Extra: we can also use the "pipe" to do this all in one go:
 
 ```{r }
 migraine %>%
-gather(drug,painrelief,DrugA:DrugC) %>%
-aov(painrelief~drug,data=.) %>%
-summary()
+  gather(drug, painrelief, DrugA:DrugC) %>%
+  aov(painrelief ~ drug, data = .) %>%
+  summary()
 ```
 
  
@@ -167,9 +167,9 @@ What is even more alarming is that I can feed the output from
 
 ```{r }
 migraine %>%
-gather(drug,painrelief,DrugA:DrugC) %>%
-aov(painrelief~drug,data=.) %>%
-TukeyHSD()
+  gather(drug, painrelief, DrugA:DrugC) %>%
+  aov(painrelief ~ drug, data = .) %>%
+  TukeyHSD()
 ```
 
  
@@ -185,10 +185,13 @@ discover that this could be solved, and indeed it can:
 
 ```{r }
 migraine %>%
-gather(drug,painrelief,DrugA:DrugC) %>%
-aov(painrelief~drug,data=.) %>%
-{ print(summary(.)) ; . } %>%
-TukeyHSD()
+  gather(drug, painrelief, DrugA:DrugC) %>%
+  aov(painrelief ~ drug, data = .) %>%
+  {
+    print(summary(.))
+    .
+  } %>%
+  TukeyHSD()
 ```
 
  
@@ -227,8 +230,8 @@ drug:
 
 ```{r }
 migraine2 %>%
-group_by(drug) %>%
-summarize(m=mean(painrelief))
+  group_by(drug) %>%
+  summarize(m = mean(painrelief))
 ```
 
  
@@ -246,7 +249,7 @@ difference between them.
 Another way is to draw a boxplot of pain-relief scores:
 
 ```{r }
-ggplot(migraine2,aes(x=drug,y=painrelief))+geom_boxplot()
+ggplot(migraine2, aes(x = drug, y = painrelief)) + geom_boxplot()
 ```
 
  
@@ -274,7 +277,7 @@ forget to use the right data frame:
 
 ```{r }
 library(smmr)
-median_test(migraine2,painrelief,drug)
+median_test(migraine2, painrelief, drug)
 ```
 
  

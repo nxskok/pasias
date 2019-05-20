@@ -38,8 +38,8 @@ Separated by one space. There appear to be some strange quotes
 in there, but we'll ignore those and see whether they cause any
 trouble: 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt"
-studyhours=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt"
+studyhours <- read_delim(my_url, " ")
 studyhours
 ```
 
@@ -48,7 +48,7 @@ studyhours
 So far so good. 75 students, in tidy format.
 
 ```{r }
-ggplot(studyhours,aes(x=major,y=hours))+geom_boxplot()
+ggplot(studyhours, aes(x = major, y = hours)) + geom_boxplot()
 ```
 
  
@@ -68,7 +68,7 @@ Extra: Box-Cox also works on ANOVA-type data, since that is an `lm`
 kind of model:
 
 ```{r }
-boxcox(hours~major,data=studyhours)
+boxcox(hours ~ major, data = studyhours)
 ```
 
  
@@ -104,7 +104,7 @@ Oh. Yeah. We never turned `major` into a factor. We'd better do
 that, and then try again:
 
 ```{r }
-studyhours = studyhours %>% mutate(major=factor(major))
+studyhours <- studyhours %>% mutate(major = factor(major))
 studyhours %>% select(major) %>% summary()
 ```
 
@@ -118,7 +118,7 @@ $-1$ for the other and 0 for math, in the right order according to
 what the levels are, viz:
 
 ```{r }
-c.eng.socsci=c(1,0,-1)
+c.eng.socsci <- c(1, 0, -1)
 ```
 
  
@@ -133,7 +133,7 @@ in the middle where it belongs:
 `r tufte::margin_note("As I failed to do the first time.")`
 
 ```{r }
-c.math.others=c(-0.5,1,-0.5)
+c.math.others <- c(-0.5, 1, -0.5)
 ```
 
  
@@ -152,7 +152,7 @@ Solution
 Multiply them together (elementwise, which is how R does it)
 and show that what you get adds up to zero:
 ```{r }
-sum(c.eng.socsci*c.math.others)
+sum(c.eng.socsci * c.math.others)
 ```
 
  
@@ -177,9 +177,9 @@ Solution
 So, like the example in class (where the
 `contrasts(model)` was admittedly rather confusing):
 ```{r }
-m=cbind(c.math.others,c.eng.socsci)
+m <- cbind(c.math.others, c.eng.socsci)
 m
-contrasts(studyhours$major)=m
+contrasts(studyhours$major) <- m
 ```
 
         
@@ -197,7 +197,7 @@ Pretend the ANOVA is a regression (though you can fit ANOVAs
 either way: we just used `aov` before because we were
 going to follow up with Tukey):
 ```{r }
-studyhours.1=lm(hours~major,data=studyhours)
+studyhours.1 <- lm(hours ~ major, data = studyhours)
 summary(studyhours.1)
 ```
 
@@ -249,10 +249,10 @@ for model, so 3 contrasts possible.) What if we don't use all those
 contrasts up? Try it and see:
 
 ```{r }
-m=cbind(c.math.others)
+m <- cbind(c.math.others)
 m
-contrasts(studyhours$major)=m
-studyhours.2=lm(hours~major,data=studyhours)
+contrasts(studyhours$major) <- m
+studyhours.2 <- lm(hours ~ major, data = studyhours)
 summary(studyhours.2)
 ```
 
@@ -272,10 +272,11 @@ had much cause to do so far. But now we do. What we want to do is to
 `fct_recode`:
 
 ```{r }
-studyhoursx = studyhours %>%
-mutate(mathrest=fct_recode(major,
-"rest" = "english",
-"rest" = "socsci"))
+studyhoursx <- studyhours %>%
+  mutate(mathrest = fct_recode(major,
+    "rest" = "english",
+    "rest" = "socsci"
+  ))
 studyhoursx %>% count(mathrest)
 ```
 
@@ -302,7 +303,7 @@ students for whom `mathrest` is `rest` (everyone else).
 Now, the $t$-test.
 
 ```{r }
-t.test(hours~mathrest,data=studyhoursx,var.equal=T)
+t.test(hours ~ mathrest, data = studyhoursx, var.equal = T)
 ```
 
  

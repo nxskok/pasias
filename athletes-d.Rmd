@@ -24,8 +24,8 @@ Solution
 Nothing new here:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
-athletes=read_tsv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes <- read_tsv(my_url)
 athletes
 ```
 
@@ -56,8 +56,8 @@ We'll be using height and weight in the
 analysis to come, so I decided to display just those:
 ```{r }
 athletes %>%
-unite(combo,Sport,Sex) -> athletesc 
-athletesc %>% select(combo,Ht,Wt)
+  unite(combo, Sport, Sex) -> athletesc
+athletesc %>% select(combo, Ht, Wt)
 ```
 
      
@@ -73,8 +73,8 @@ columns we want start with S followed by either e or p, so we could do this:
 
 ```{r }
 athletes %>%
-unite(combo,matches("^S(e|p)")) %>%
-select(combo,Ht,Wt)
+  unite(combo, matches("^S(e|p)")) %>%
+  select(combo, Ht, Wt)
 ```
 
  
@@ -89,9 +89,9 @@ I have a feeling we can also take advantage of the fact that the two
 columns we want to `unite` are the only two text ones:
 
 ```{r error=T}
-athletes %>% 
-unite(combo,select_if(is.character)) %>%
-select(combo,Ht,Wt)
+athletes %>%
+  unite(combo, select_if(is.character)) %>%
+  select(combo, Ht, Wt)
 ```
 
  
@@ -106,8 +106,8 @@ and got an answer! This is how it goes:
 
 ```{r }
 athletes %>%
-unite(combo,names(select_if(.,is.character))) %>%
-select(combo,Ht,Wt)
+  unite(combo, names(select_if(., is.character))) %>%
+  select(combo, Ht, Wt)
 ```
 
  
@@ -125,7 +125,7 @@ Solution
 
 That would be this. I'm having my familiar trouble with names:
 ```{r }
-combo.1=lda(combo~Ht+Wt,data=athletesc)
+combo.1 <- lda(combo ~ Ht + Wt, data = athletesc)
 ```
 
      
@@ -223,7 +223,7 @@ Solution
 
 The prediction part is only one step:
 ```{r }
-p=predict(combo.1)
+p <- predict(combo.1)
 ```
 
      
@@ -246,7 +246,7 @@ glimpse(p)
 Our standard procedure is to `cbind` the predictions together with the original data (including the combo), and get a huge data frame (in this case):
 
 ```{r }
-d=cbind(athletesc, p)
+d <- cbind(athletesc, p)
 head(d)
 ```
 
@@ -254,7 +254,7 @@ head(d)
 And so, to the graph:
 
 ```{r error=T}
-ggplot(d,aes(x=x.LD1,y=x.LD2,colour=combo))+geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = combo)) + geom_point()
 ```
 
  
@@ -263,8 +263,8 @@ better than mine! You might prefer to use seventeen different shapes,
 although I wonder how much better that will be:
 
 ```{r error=T}
-ggplot(d,aes(x=x.LD1,y=x.LD2,shape=combo))+geom_point()+
-scale_shape_manual(values=1:17)
+ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo)) + geom_point() +
+  scale_shape_manual(values = 1:17)
 ```
 
      
@@ -276,8 +276,8 @@ assignment.
 Or even this:
 
 ```{r error=T}
-ggplot(d,aes(x=x.LD1,y=x.LD2,shape=combo,colour=combo))+geom_point()+
-scale_shape_manual(values=1:17)
+ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo, colour = combo)) + geom_point() +
+  scale_shape_manual(values = 1:17)
 ```
 
  
@@ -337,7 +337,7 @@ Solution
 
 Let's see what happens:
 ```{r error=T}
-tab=with(d, table(combo, class))
+tab <- with(d, table(combo, class))
 tab
 ```
 
@@ -364,7 +364,7 @@ which ones you pick out, but see if you can find a few:
 Or you can turn it into a tibble:
 
 ```{r }
-tab %>% as_tibble() 
+tab %>% as_tibble()
 ```
 
  
@@ -372,7 +372,7 @@ This makes the `tidyverse` output, with frequencies. You
 probably want to omit the zero ones:
 
 ```{r size="tiny"}
-tab %>% as_tibble() %>% filter(n>0)
+tab %>% as_tibble() %>% filter(n > 0)
 ```
 
  
@@ -382,7 +382,7 @@ The other, perhaps easier, way to tackle this one is the
 `tidyverse` way, making a "long" table of frequencies. Here is some of it. You'll be able to click to see more:
 
 ```{r }
-d %>% count(combo,class) 
+d %>% count(combo, class)
 ```
 
  
@@ -399,8 +399,9 @@ changed my mind from how I originally wrote this. I still use
 take it in steps:
 
 ```{r }
-d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong"))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong"))
 ```
 
  
@@ -412,9 +413,10 @@ simply counting the number of rows; rather, we need to total up the
 things in the `n` column:
 
 ```{r error=T}
-d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
-count(stat,wt=n)
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n)
 ```
 
  
@@ -426,10 +428,11 @@ To make those into proportions, another `mutate`, dividing by
 the total of `n`:
 
 ```{r error=T}
-d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
-count(stat,wt=n) %>%
-mutate(proportion=n/sum(n))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
  
@@ -444,11 +447,12 @@ corresponding calculation by sport-gender combination. To do
 we define `stat` (it doesn't matter which way):
 
 ```{r error=T}
-d %>% count(combo, class) %>% 
-group_by(combo) %>%
-mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
-count(stat,wt=n) %>%
-mutate(proportion=n/sum(n))
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
  
@@ -463,12 +467,13 @@ them. Let's try to get the proportion correct and wrong in their own
 columns. This almost works:
 
 ```{r error=T}
-d %>% count(combo, class) %>% 
-group_by(combo) %>%
-mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
-count(stat,wt=n) %>%
-mutate(proportion=n/sum(n)) %>%
-spread(stat, proportion)
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  spread(stat, proportion)
 ```
 
  
@@ -481,13 +486,14 @@ easiest way around this is to get rid of `n`, since it has
 served its purpose:
 
 ```{r error=T}
-d %>% count(combo, class) %>% 
-group_by(combo) %>%
-mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
-count(stat,wt=n) %>%
-mutate(proportion=n/sum(n)) %>%
-select(-n) %>%
-spread(stat, proportion, fill=0)
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(stat, proportion, fill = 0)
 ```
 
  
@@ -496,15 +502,16 @@ While we're about it, let's arrange in
 order of misclassification probability:
 
 ```{r error=T}
-d %>% count(combo, class) %>% 
-group_by(combo) %>%
-mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
-count(stat,wt=n) %>%
-mutate(proportion=n/sum(n)) %>%
-select(-n) %>%
-spread(stat, proportion, fill=0) %>%
-replace_na(list(correct=0,wrong=0)) %>%
-arrange(wrong)
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(stat, proportion, fill = 0) %>%
+  replace_na(list(correct = 0, wrong = 0)) %>%
+  arrange(wrong)
 ```
 
  
@@ -518,8 +525,9 @@ So what were the most common *misclassifications*? Let's go back
 to this:
 ```{r error=T}
 head(d)
-d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong"))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong"))
 ```
 
  
@@ -528,10 +536,11 @@ actual sport-gender combo, so we group by `combo` before
 defining the proportions:
 
 ```{r error=T}
-d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
-group_by(combo) %>%
-mutate(proportion=n/sum(n))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  group_by(combo) %>%
+  mutate(proportion = n / sum(n))
 ```
 
  
@@ -540,12 +549,13 @@ Only pick out the ones that were gotten wrong, and arrange the remaining
 proportions in descending order:
 
 ```{r error=T}
-d %>% count(combo, class) %>% 
-mutate(stat=ifelse(combo==class, "correct", "wrong")) %>%
-group_by(combo) %>%
-mutate(proportion=n/sum(n)) %>%
-filter(stat=="wrong") %>%
-arrange(desc(proportion))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  group_by(combo) %>%
+  mutate(proportion = n / sum(n)) %>%
+  filter(stat == "wrong") %>%
+  arrange(desc(proportion))
 ```
 
  

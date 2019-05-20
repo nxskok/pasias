@@ -28,8 +28,8 @@ Solution
 `read_table` to read in the data, having first noted that
 we have aligned columns with spaces between:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/letterrec.txt"
-letters=read_table(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/letterrec.txt"
+letters <- read_table(my_url)
 letters
 ```
 
@@ -50,7 +50,7 @@ everything that is not numbers:
 
 ```{r error=T}
 letters %>% dplyr::select(-X1) -> letters2
-letters2=21-letters2
+letters2 <- 21 - letters2
 letters2
 ```
 
@@ -63,7 +63,7 @@ you tell it otherwise), so all will be good.
 `as.dist` comes next:
 
 ```{r error=T}
-d=as.dist(letters2)
+d <- as.dist(letters2)
 d
 ```
 
@@ -95,7 +95,7 @@ Solution
 
 This:
 ```{r }
-d.1=cmdscale(d)
+d.1 <- cmdscale(d)
 d.1
 ```
 
@@ -104,7 +104,7 @@ d.1
 Or you can do it with `eig=T`, which gets you some more information:
 
 ```{r }
-d.1a=cmdscale(d,eig=T)
+d.1a <- cmdscale(d, eig = T)
 d.1a
 ```
 
@@ -135,7 +135,7 @@ Solution
 Easiest way is to pull out the first column of the data frame that
 you read in from the file (if you can remember what it was called):
 ```{r }
-letter_names=letters$X1
+letter_names <- letters$X1
 ```
 
      
@@ -195,7 +195,7 @@ you find them in the previous part. I'm going to do this with a
 pipe, or else I'll create *another* thing called `d`
 and overwrite the one I wanted to keep, again:
 ```{r error=T}
-data.frame(d.1,names=letter_names) 
+data.frame(d.1, names = letter_names)
 ```
 
      
@@ -206,10 +206,10 @@ happens when you turn a matrix with nameless columns into a data
 frame. So I can proceed:
 
 ```{r error=T}
-data.frame(d.1,names=letter_names) %>% 
-ggplot(aes(x=X1,y=X2,label=names))+
-geom_point()+geom_text_repel()+
-coord_fixed()
+data.frame(d.1, names = letter_names) %>%
+  ggplot(aes(x = X1, y = X2, label = names)) +
+  geom_point() + geom_text_repel() +
+  coord_fixed()
 ```
 
      
@@ -231,9 +231,9 @@ finicky, so I'd rather let `geom_text_repel` do the work of
 figuring out where to put the text relative to the point.
 
 ```{r error=T}
-data.frame(d.1,names=letter_names) %>% 
-ggplot(aes(x=X1,y=X2,label=names))+
-geom_text()+coord_fixed()
+data.frame(d.1, names = letter_names) %>%
+  ggplot(aes(x = X1, y = X2, label = names)) +
+  geom_text() + coord_fixed()
 ```
 
  

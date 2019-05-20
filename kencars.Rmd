@@ -18,8 +18,8 @@ Solution
 
 `read_csv` will do it:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/cars.csv"
-cars=read_csv(my_url)  
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/cars.csv"
+cars <- read_csv(my_url)
 cars
 ```
 
@@ -35,7 +35,7 @@ Solution
 
 
 ```{r }
-cars %>% select(car,country)
+cars %>% select(car, country)
 ```
 
  
@@ -61,7 +61,7 @@ Solution
 
 Naming what you *don't* want is sometimes easier:
 ```{r }
-cars %>% select(-hp)  
+cars %>% select(-hp)
 ```
 
  
@@ -77,7 +77,7 @@ Solution
 
 This:
 ```{r }
-cars %>% filter(cylinders==8)  
+cars %>% filter(cylinders == 8)
 ```
 
  
@@ -94,7 +94,7 @@ Solution
 
 This one is selecting some observations and some variables:
 ```{r }
-cars %>% filter(hp<=70) %>% select(cylinders:hp)
+cars %>% filter(hp <= 70) %>% select(cylinders:hp)
 ```
 
  
@@ -121,7 +121,7 @@ Solution
 
 
 ```{r }
-cars %>% filter(cylinders==4) %>% summarize(m=mean(MPG),s=sd(MPG))  
+cars %>% filter(cylinders == 4) %>% summarize(m = mean(MPG), s = sd(MPG))
 ```
 
  
@@ -130,7 +130,7 @@ Or you can get the mean and SD of gas mileage for all numbers of
 cylinders, and pick out the one you want:
 
 ```{r }
-cars %>% group_by(cylinders) %>% summarize(m=mean(MPG),s=sd(MPG))
+cars %>% group_by(cylinders) %>% summarize(m = mean(MPG), s = sd(MPG))
 ```
 
  
@@ -139,9 +139,10 @@ Top row is the same as before. And since the output is a data frame,
 you can do any of these things with *that*, for example:
 
 ```{r }
-cars %>% group_by(cylinders) %>% 
-summarize(m=mean(MPG),s=sd(MPG)) %>%
-filter(cylinders==4)
+cars %>%
+  group_by(cylinders) %>%
+  summarize(m = mean(MPG), s = sd(MPG)) %>%
+  filter(cylinders == 4)
 ```
 
  

@@ -28,8 +28,8 @@ for 32 different cars. The variables are:
 (a) Read in the data and display its structure. Do you have the
 right number of cars and variables?
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv"
-cars=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv"
+cars <- read_csv(my_url)
 cars
 ```
 
@@ -97,7 +97,7 @@ means). To get *that*, *this*:
 
 ```{r }
 as_tibble(cars.s) %>%
-summarize_all(~sd(.))
+  summarize_all(~ sd(.))
 ```
 
  
@@ -109,7 +109,7 @@ As you realize now, the same idea will get the mean of each column too:
 
 ```{r }
 as_tibble(cars.s) %>%
-summarize_all(~mean(.))
+  summarize_all(~ mean(.))
 ```
 
  
@@ -130,7 +130,7 @@ Solution
 The hint at the end says "use `nstart`", so something like this:
 ```{r }
 set.seed(457299)
-cars.1=kmeans(cars.s,3,nstart=20)
+cars.1 <- kmeans(cars.s, 3, nstart = 20)
 cars.1
 ```
 
@@ -165,9 +165,9 @@ the `cluster` part of the output from `kmeans`. You'll
 need to take some action to display everything (there are only 32
 cars, so it's perfectly all right to display all of them):
 ```{r }
-tibble(car=cars$Carname,cluster=cars.1$cluster) %>% 
-arrange(cluster) %>%
-print(n=Inf)
+tibble(car = cars$Carname, cluster = cars.1$cluster) %>%
+  arrange(cluster) %>%
+  print(n = Inf)
 ```
 
    
@@ -176,9 +176,11 @@ Or start from the original data frame as read in from the file and
 grab only what you want:
 
 ```{r }
-cars %>% select(Carname) %>% mutate(cluster=cars.1$cluster) %>%
-arrange(cluster) %>%
-print(n=Inf)
+cars %>%
+  select(Carname) %>%
+  mutate(cluster = cars.1$cluster) %>%
+  arrange(cluster) %>%
+  print(n = Inf)
 ```
 
  
@@ -220,8 +222,8 @@ I'll talk about the function way here and the loop way in the next part.
 The function way is just like the one in the previous question:
 
 ```{r }
-wss=function(howmany,data,nstart=20) {
-kmeans(data,howmany,nstart=20)$tot.withinss
+wss <- function(howmany, data, nstart = 20) {
+  kmeans(data, howmany, nstart = 20)$tot.withinss
 }
 ```
 
@@ -242,7 +244,7 @@ cars.1$tot.withinss
 and the function gives
 
 ```{r }
-wss(3,cars.s)
+wss(3, cars.s)
 ```
 
  
@@ -265,10 +267,10 @@ Solution
 The loop way. I like to define my possible numbers of clusters into
 a vector first:
 ```{r }
-w=numeric(0)
-nclus=2:10
+w <- numeric(0)
+nclus <- 2:10
 for (i in nclus) {
-w[i]=wss(i,cars.s)
+  w[i] <- wss(i, cars.s)
 }
 w
 ```
@@ -279,10 +281,10 @@ need to write a function to do this: you can just do what you need to
 do within the loop, like this:
 
 ```{r }
-w=numeric(0)
-nclus=2:10
+w <- numeric(0)
+nclus <- 2:10
 for (i in nclus) {
-w[i]=kmeans(cars.s,i,nstart=20)$tot.withinss
+  w[i] <- kmeans(cars.s, i, nstart = 20)$tot.withinss
 }
 w
 ```
@@ -316,8 +318,8 @@ Or, using `map_dbl`, which I like better (perhaps because I
 have mastered how it works):
 
 ```{r }
-wwx = tibble(clusters=2:10) %>%
-mutate(wss=map_dbl(clusters,wss,cars.s))
+wwx <- tibble(clusters = 2:10) %>%
+  mutate(wss = map_dbl(clusters, wss, cars.s))
 wwx
 ```
 
@@ -333,8 +335,8 @@ function first, and then use it later.
 This one is just about simple enough to define the function within the `map_dbl`:
 
 ```{r }
-wwx = tibble(clusters=2:10) %>%
-mutate(wss=map_dbl(clusters,~kmeans(cars.s,.,nstart=20)$tot.withinss))
+wwx <- tibble(clusters = 2:10) %>%
+  mutate(wss = map_dbl(clusters, ~ kmeans(cars.s, ., nstart = 20)$tot.withinss))
 wwx
 ```
 
@@ -367,7 +369,7 @@ Solution
 
 If you did this the loop way, it's tempting to leap into this:
 ```{r error=T}
-d=data.frame(clusters=nclus,wss=w)
+d <- data.frame(clusters = nclus, wss = w)
 ```
 
    
@@ -386,8 +388,8 @@ nclus
 while `nclus` only has 9. So do something like this instead:
 
 ```{r }
-tibble(clusters=1:10,wss=w) %>%
-ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
+tibble(clusters = 1:10, wss = w) %>%
+  ggplot(aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
  
@@ -400,7 +402,7 @@ Or plot the output from `map_dbl`, which is easier since it's
 already a data frame:
 
 ```{r }
-wwx %>% ggplot(aes(x=clusters,y=wss))+geom_point()+geom_line()
+wwx %>% ggplot(aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
  
@@ -455,7 +457,7 @@ This is the same idea as above. The `arrange` idea from above
 seems to be the cleanest way to arrange the output:
 The K-means analysis is thus:
 ```{r }
-cars.2=kmeans(cars.s,6,nstart=20)
+cars.2 <- kmeans(cars.s, 6, nstart = 20)
 ```
 
   
@@ -466,10 +468,11 @@ scree plot.
 Then display them:
 
 ```{r }
-cars %>% select(Carname) %>%
-mutate(cluster=cars.2$cluster) %>%
-arrange(cluster) %>%
-print(n=Inf)
+cars %>%
+  select(Carname) %>%
+  mutate(cluster = cars.2$cluster) %>%
+  arrange(cluster) %>%
+  print(n = Inf)
 ```
 
  
@@ -495,14 +498,14 @@ and without the `select`, since this time I want all the
 variables that were in `cars`):
 
 ```{r }
-carsx = cars %>% mutate(cluster=cars.2$cluster) 
+carsx <- cars %>% mutate(cluster = cars.2$cluster)
 ```
 
  
 Now we fire away:
 
 ```{r }
-carsx.1=lda(cluster~mpg+disp+hp+drat+wt+qsec,data=carsx)
+carsx.1 <- lda(cluster ~ mpg + disp + hp + drat + wt + qsec, data = carsx)
 carsx.1
 ```
 
@@ -536,7 +539,7 @@ first (unless you like shades of blue). I didn't load the package
 first, so I call it here with the package name and the two colons:
 
 ```{r }
-ggbiplot::ggbiplot(carsx.1,groups=factor(carsx$cluster))
+ggbiplot::ggbiplot(carsx.1, groups = factor(carsx$cluster))
 ```
 
  
@@ -544,10 +547,10 @@ Or you can do the predictions, then plot `LD1` against
 `LD2`, coloured by cluster:
 
 ```{r }
-p=predict(carsx.1)
-data.frame(p$x,cluster=factor(carsx$cluster)) %>%
-ggplot(aes(x=LD1,y=LD2,colour=cluster))+geom_point()+
-coord_fixed()
+p <- predict(carsx.1)
+data.frame(p$x, cluster = factor(carsx$cluster)) %>%
+  ggplot(aes(x = LD1, y = LD2, colour = cluster)) + geom_point() +
+  coord_fixed()
 ```
 
  

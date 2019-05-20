@@ -93,8 +93,8 @@ Solution
 The usual thing --- read in the data appropriately and look at the
 data frame you got:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/smith.txt"
-smith=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/smith.txt"
+smith <- read_delim(my_url, " ")
 smith
 ```
 
@@ -115,7 +115,7 @@ Solution
 Use `mutate` and assign everything back to what it was
 before:
 ```{r }
-smith = smith %>% mutate(context=factor(context))
+smith <- smith %>% mutate(context = factor(context))
 smith
 ```
 
@@ -196,14 +196,14 @@ All right, let's go from the bottom:
 
 * Different and placebo have same means. These are 1st and 4th.
 ```{r }
-c4=c(1,0,0,-1,0)
+c4 <- c(1, 0, 0, -1, 0)
 ```
 
          
 
 * Imaginary and photograph have same means. 2nd and 3rd:
 ```{r }
-c3=c(0,1,-1,0,0)
+c3 <- c(0, 1, -1, 0, 0)
 ```
 
    
@@ -213,7 +213,7 @@ c3=c(0,1,-1,0,0)
 time we have two means being compared with one, so we need to give
 the two means half weight. 2nd and 3rd against 5th:
 ```{r }
-c2=c(0,1/2,1/2,0,-1)
+c2 <- c(0, 1 / 2, 1 / 2, 0, -1)
 ```
 
    
@@ -223,7 +223,7 @@ c2=c(0,1/2,1/2,0,-1)
 2nd, 3rd and 5th with weight $1/3$ (three of them) against 1st and
 4th with weight $1/2$ (2 of them):
 ```{r }
-c1=c(-1/2,1/3,1/3,-1/2,1/3)
+c1 <- c(-1 / 2, 1 / 3, 1 / 3, -1 / 2, 1 / 3)
 ```
 
    
@@ -233,8 +233,8 @@ contrast (since it doesn't matter which is plus and which is
 minus). You can also multiply through by anything to get rid of
 the fractions, for example these:
 ```{r eval=F}
-c2=c(0,1,1,0,-2)
-c1=c(-3,2,2,-3,2)
+c2 <- c(0, 1, 1, 0, -2)
+c1 <- c(-3, 2, 2, -3, 2)
 ```
 
        
@@ -253,7 +253,7 @@ Solution
 Multiply your chosen contrasts together elementwise, and show
 that the results add to zero, eg. by showing the whole thing:
 ```{r }
-c1*c2
+c1 * c2
 ```
 
     
@@ -261,7 +261,7 @@ which adds to zero because it is $2/6$ minus $1/3$,
 or by explicitly summing the elementwise product:
 
 ```{r }
-sum(c1*c3)
+sum(c1 * c3)
 ```
 
  
@@ -279,8 +279,8 @@ Solution
 
 This:
 ```{r }
-m=cbind(c1,c2,c3,c4)
-contrasts(smith$context)=m
+m <- cbind(c1, c2, c3, c4)
+contrasts(smith$context) <- m
 ```
 
        
@@ -319,7 +319,7 @@ Solution
 
 We're past the hard part:
 ```{r }
-smith.1=lm(words~context,data=smith)
+smith.1 <- lm(words ~ context, data = smith)
 summary(smith.1)
 ```
 

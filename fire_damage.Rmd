@@ -26,8 +26,8 @@ Solution
 A quick check of the data reveals that the data values are
 separated by exactly  one space, so:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/fire_damage.txt"
-fire=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/fire_damage.txt"
+fire <- read_delim(my_url, " ")
 fire
 ```
 
@@ -60,7 +60,7 @@ t.test(fire$damage)
 Or
 
 ```{r }
-with(fire,t.test(damage))
+with(fire, t.test(damage))
 ```
 
  
@@ -81,7 +81,7 @@ Solution
 
 We are predicting fire damage, so that goes on the $y$-axis:
 ```{r }
-ggplot(fire,aes(x=distance,y=damage))+geom_point()+geom_smooth()
+ggplot(fire, aes(x = distance, y = damage)) + geom_point() + geom_smooth()
 ```
 
      
@@ -114,7 +114,7 @@ Solution
 
 The regression is an ordinary `lm`:
 ```{r }
-damage.1=lm(damage~distance,data=fire)
+damage.1 <- lm(damage ~ distance, data = fire)
 summary(damage.1)
 ```
 
@@ -138,7 +138,7 @@ find that a parabola (or some other kind of curve) was definitely
 better than a straight line. Here's the parabola:
 
 ```{r }
-damage.2=lm(damage~distance+I(distance^2),data=fire)
+damage.2 <- lm(damage ~ distance + I(distance^2), data = fire)
 summary(damage.2)
 ```
 
@@ -149,7 +149,7 @@ There's no evidence here that a quadratic is better.
 Or you might even have thought from the wiggles that it was more like cubic:
 
 ```{r }
-damage.3=update(damage.2,.~.+I(distance^3))
+damage.3 <- update(damage.2, . ~ . + I(distance^3))
 summary(damage.3)
 ```
 
@@ -162,9 +162,9 @@ even a useless one, will increase R-squared).
 How bendy is the cubic?
 
 ```{r }
-ggplot(fire,aes(x=distance,y=damage))+geom_point()+
-geom_smooth(method="lm")+
-geom_line(data=damage.3,aes(y=.fitted), colour="red")
+ggplot(fire, aes(x = distance, y = damage)) + geom_point() +
+  geom_smooth(method = "lm") +
+  geom_line(data = damage.3, aes(y = .fitted), colour = "red")
 ```
 
  
@@ -192,7 +192,7 @@ part~(<a href="#part:ttest">here</a>), which is averaged over *all* distances.
 So, follow the steps. Make a tiny data frame with this one value
 of `distance`:
 ```{r }
-new=tibble(distance=4)
+new <- tibble(distance = 4)
 ```
 
      
@@ -200,7 +200,7 @@ new=tibble(distance=4)
 and then feed it into `predict`:
 
 ```{r }
-pp=predict(damage.1,new,interval="c")
+pp <- predict(damage.1, new, interval = "c")
 ```
 
  
@@ -208,7 +208,7 @@ pp=predict(damage.1,new,interval="c")
 and then put it side-by-side with the value it's a prediction for:
 
 ```{r }
-cbind(new,pp)
+cbind(new, pp)
 ```
 
  
@@ -249,7 +249,7 @@ The centre of the interval is higher for the mean damage when the
 distance is 4. This is because the mean distance is a bit less than 4:
 
 ```{r }
-fire %>% summarize(m=mean(distance))
+fire %>% summarize(m = mean(distance))
 ```
 
  

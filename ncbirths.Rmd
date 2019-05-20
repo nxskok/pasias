@@ -22,8 +22,8 @@ This is a `.csv` file (it came from a spreadsheet), so it
 needs reading in accordingly. Work directly from the URL (rather
 than downloading the file, unless you are working offline):
 ```{r }
-myurl="http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv"
-bw=read_csv(myurl)
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv"
+bw <- read_csv(myurl)
 ```
 
  
@@ -117,7 +117,7 @@ You'll have seen that I often start with 10 bins, or maybe not quite
 that many if I don't have much data, and this is a decent general
 principle. That would give
 ```{r }
-ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=10)
+ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 10)
 ```
 
  
@@ -128,7 +128,7 @@ for is a nice clear picture of *shape*. If you have too few bins,
 you'll lose the shape:
 
 ```{r }
-ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=4)
+ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 4)
 ```
 
  
@@ -141,7 +141,7 @@ it will be hard to make out in all the noise, with frequencies going
 up and down:
 
 ```{r }
-ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(bins=30)
+ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 30)
 ```
 
  
@@ -192,9 +192,9 @@ it won't be distorted by outliers. `geom_histogram` can take a
 bin width, so we can use it as follows:
 
 ```{r }
-w=2*IQR(bw$`Weight (pounds)`)*500^(-1/3)
+w <- 2 * IQR(bw$`Weight (pounds)`) * 500^(-1 / 3)
 w
-ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
+ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(binwidth = w)
 ```
 
  
@@ -202,7 +202,7 @@ ggplot(bw,aes(x=`Weight (pounds)`))+geom_histogram(binwidth=w)
 R also has
 
 ```{r }
-nc=nclass.FD(bw$`Weight (pounds)`)
+nc <- nclass.FD(bw$`Weight (pounds)`)
 nc
 ```
 
@@ -218,7 +218,7 @@ for you to make your own call.
 Another way to go is a "density plot". This is a smoothed-out version of a histogram that is not obviously frequencies in bins, but which does have a theoretical basis. It goes something like this:
 
 ```{r }
-ggplot(bw, aes(x=`Weight (pounds)`))+geom_density()
+ggplot(bw, aes(x = `Weight (pounds)`)) + geom_density()
 ```
 
  
@@ -249,7 +249,7 @@ quantitative variable. You can draw a boxplot for that, too, but the
 `x` equal 1, which produces a weird $x$-axis (that you ignore):
 
 ```{r }
-ggplot(bw,aes(x=1,y=`Weight (pounds)`))+geom_boxplot()
+ggplot(bw, aes(x = 1, y = `Weight (pounds)`)) + geom_boxplot()
 ```
 
  

@@ -30,8 +30,8 @@ Solution
 The usual:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/gpa.txt"
-gpa=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/gpa.txt"
+gpa <- read_delim(my_url, " ")
 gpa
 ```
 
@@ -54,8 +54,8 @@ explanatory and university should be the response. (High school
 grades are used as an admission criterion to university, so we
 would hope they would have some predictive value.)
 ```{r }
-ggplot(gpa,aes(x=high_GPA,y=univ_GPA))+geom_point()+
-geom_smooth()
+ggplot(gpa, aes(x = high_GPA, y = univ_GPA)) + geom_point() +
+  geom_smooth()
 ```
 
    
@@ -107,7 +107,7 @@ Solution
 
 Just this, therefore:
 ```{r }
-gpa.1=lm(univ_GPA~high_GPA,data=gpa)
+gpa.1 <- lm(univ_GPA ~ high_GPA, data = gpa)
 summary(gpa.1)
 ```
 
@@ -121,7 +121,7 @@ you are interested, I'll look at this here. First, residuals against
 fitted values:
 
 ```{r }
-ggplot(gpa.1,aes(x=.fitted,y=.resid))+geom_point()+geom_smooth()
+ggplot(gpa.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ```
 
  
@@ -133,7 +133,7 @@ grey envelope includes zero all the way across.
 Normal quantile plot of residuals:
 
 ```{r }
-ggplot(gpa.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+ggplot(gpa.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -146,7 +146,7 @@ The problem I was really worried about was the potential of
 fanning-in, which we can assess by looking at the absolute residuals:
 
 ```{r }
-ggplot(gpa.1,aes(x=.fitted,y=abs(.resid)))+geom_point()+geom_smooth()
+ggplot(gpa.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
  
@@ -177,7 +177,7 @@ All right, how does Box-Cox work out here, if at all?
 
 ```{r }
 library(MASS)
-boxcox(univ_GPA~high_GPA,data=gpa)
+boxcox(univ_GPA ~ high_GPA, data = gpa)
 ```
 
  
@@ -192,7 +192,7 @@ function later, and things could get confused. So let's "unload"
 `MASS` now:
 
 ```{r }
-detach("package:MASS",unload=T)
+detach("package:MASS", unload = T)
 ```
 
  
@@ -214,7 +214,7 @@ intervals are called for. The first step is to make a data
 frame to predict from. This has to contain columns for all the
 explanatory variables, just `high_GPA` in this case:
 ```{r }
-gpa.new=tibble(high_GPA=c(3,3.5))
+gpa.new <- tibble(high_GPA = c(3, 3.5))
 gpa.new
 ```
 
@@ -223,7 +223,7 @@ gpa.new
 and then feed that into `predict`:
 
 ```{r }
-preds=predict(gpa.1,gpa.new,interval="p")
+preds <- predict(gpa.1, gpa.new, interval = "p")
 preds
 ```
 
@@ -232,7 +232,7 @@ preds
 and display that side by side with the values it was predicted from:
 
 ```{r }
-cbind(gpa.new,preds)
+cbind(gpa.new, preds)
 ```
 
  
@@ -258,10 +258,12 @@ that's the case, the prediction interval for 3.5 should be longer
 (since there is less "nearby data"). Was I right about that?
 
 ```{r }
-gpa %>% summarize( mean=mean(high_GPA),
-med=median(high_GPA),
-q1=quantile(high_GPA,0.25),
-q3=quantile(high_GPA,0.75))
+gpa %>% summarize(
+  mean = mean(high_GPA),
+  med = median(high_GPA),
+  q1 = quantile(high_GPA, 0.25),
+  q3 = quantile(high_GPA, 0.75)
+)
 ```
 
  
@@ -272,8 +274,8 @@ a bit of a mystery. Maybe it works better for the confidence interval
 for the mean:
 
 ```{r }
-preds=predict(gpa.1,gpa.new,interval="c")
-cbind(gpa.new,preds)
+preds <- predict(gpa.1, gpa.new, interval = "c")
+cbind(gpa.new, preds)
 ```
 
  
@@ -299,7 +301,7 @@ Solution
 Create a new regression with all the explanatory variables you want in it:
 
 ```{r }
-gpa.2=lm(univ_GPA~high_GPA+math_SAT+verb_SAT,data=gpa)
+gpa.2 <- lm(univ_GPA ~ high_GPA + math_SAT + verb_SAT, data = gpa)
 summary(gpa.2)
 ```
 
@@ -320,7 +322,7 @@ Since we added *two* explanatory variables, the $t$-tests in
 *one* $x$-variable). We might have some suspicions, but that's
 all they are.  So we have to do `anova`:
 ```{r }
-anova(gpa.1,gpa.2)
+anova(gpa.1, gpa.2)
 ```
 
    
@@ -355,7 +357,7 @@ In the model of (<a href="#part:all">here</a>), `math_SAT` was the
 least significant, so that comes out first. (I use
 `update` but I'm not insisting that you do:)
 ```{r }
-gpa.3=update(gpa.2,.~.-math_SAT)
+gpa.3 <- update(gpa.2, . ~ . - math_SAT)
 summary(gpa.3)
 ```
 
@@ -383,7 +385,7 @@ The other way of tackling this one is via `step`, which
 does the backward elimination for you (not that it was much
 work here):
 ```{r }
-step(gpa.2,direction="backward",test="F")
+step(gpa.2, direction = "backward", test = "F")
 ```
 
          
@@ -467,7 +469,7 @@ That makes me wonder how a regression with the SAT math score and
 *not* the SAT verbal score would look:
 
 ```{r }
-gpa.4=lm(univ_GPA~high_GPA+math_SAT,data=gpa)
+gpa.4 <- lm(univ_GPA ~ high_GPA + math_SAT, data = gpa)
 summary(gpa.4)
 ```
 

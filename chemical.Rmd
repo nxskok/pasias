@@ -37,9 +37,9 @@ Or you can Google it, of course.
 The key observation is that you need to supply some column names
 in `col_names`, like this:
 ```{r }
-my_url="http://statweb.lsu.edu/EXSTWeb/StatLab/DataSets/NKNWData/CH06PR09.txt"
-cols=c("minutes","drums","weight")
-chemicals=read_table(my_url,col_names=cols)
+my_url <- "http://statweb.lsu.edu/EXSTWeb/StatLab/DataSets/NKNWData/CH06PR09.txt"
+cols <- c("minutes", "drums", "weight")
+chemicals <- read_table(my_url, col_names = cols)
 chemicals
 ```
 
@@ -69,7 +69,7 @@ Solution
 
 
 ```{r }
-minutes.1=lm(minutes~drums+weight,data=chemicals)
+minutes.1 <- lm(minutes ~ drums + weight, data = chemicals)
 summary(minutes.1)
 ```
 
@@ -119,7 +119,7 @@ These are the standard plots from a multiple regression. The
 second one requires care, but the first and last should be straightforward.
 Residuals against fitted values:
 ```{r }
-ggplot(minutes.1,aes(x=.fitted,y=.resid))+geom_point()
+ggplot(minutes.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
      
@@ -130,7 +130,7 @@ in the `ggplot`. The obvious way is to do the two plots (one
 for each explanatory variable) one at a time:
 
 ```{r }
-ggplot(minutes.1,aes(x=chemicals$drums,y=.resid))+geom_point()
+ggplot(minutes.1, aes(x = chemicals$drums, y = .resid)) + geom_point()
 ```
 
  
@@ -138,14 +138,14 @@ ggplot(minutes.1,aes(x=chemicals$drums,y=.resid))+geom_point()
 and 
 
 ```{r }
-ggplot(minutes.1,aes(x=chemicals$weight,y=.resid))+geom_point()
+ggplot(minutes.1, aes(x = chemicals$weight, y = .resid)) + geom_point()
 ```
 
  
 What would also work is to make a data frame first with the things to plot:
 
 ```{r }
-dd=tibble(weight=chemicals$weight,drums=chemicals$drums,res=resid(minutes.1))
+dd <- tibble(weight = chemicals$weight, drums = chemicals$drums, res = resid(minutes.1))
 ```
 
  
@@ -153,7 +153,7 @@ dd=tibble(weight=chemicals$weight,drums=chemicals$drums,res=resid(minutes.1))
 and then:
 
 ```{r }
-ggplot(dd,aes(x=weight,y=res))+geom_point()
+ggplot(dd, aes(x = weight, y = res)) + geom_point()
 ```
 
  
@@ -166,7 +166,7 @@ Another way to approach this is `augment` from
 
 ```{r }
 library(broom)
-d = minutes.1 %>% augment(chemicals)
+d <- minutes.1 %>% augment(chemicals)
 as_tibble(d)
 ```
 
@@ -176,7 +176,7 @@ and then you can use `d` as the "base" data frame from which
 everything comes:
 
 ```{r }
-ggplot(d,aes(x=drums,y=.resid))+geom_point()
+ggplot(d, aes(x = drums, y = .resid)) + geom_point()
 ```
 
  
@@ -184,7 +184,7 @@ ggplot(d,aes(x=drums,y=.resid))+geom_point()
 and
 
 ```{r }
-ggplot(d,aes(x=weight,y=.resid))+geom_point()
+ggplot(d, aes(x = weight, y = .resid)) + geom_point()
 ```
 
  
@@ -192,9 +192,10 @@ ggplot(d,aes(x=weight,y=.resid))+geom_point()
 or you can even do that trick to put the two plots on facets:
 
 ```{r }
-d %>% gather(xname,x,drums:weight) %>%
-ggplot(aes(x=x,y=.resid))+geom_point()+
-facet_wrap(~xname)
+d %>%
+  gather(xname, x, drums:weight) %>%
+  ggplot(aes(x = x, y = .resid)) + geom_point() +
+  facet_wrap(~xname)
 ```
 
  
@@ -202,7 +203,7 @@ facet_wrap(~xname)
 Last, the normal quantile plot:
 
 ```{r }
-ggplot(minutes.1, aes(sample=.resid))+stat_qq()+stat_qq_line()
+ggplot(minutes.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -247,7 +248,7 @@ Extra: what else can I find out about that large-positive-residual
 point? This is where having the "augmented" data frame is a plus:
 
 ```{r }
-d %>% filter(.resid>10)
+d %>% filter(.resid > 10)
 ```
 
  
@@ -258,8 +259,10 @@ Can we find "similar" numbers of `drums` and
 `weight` and compare the `minutes`? Try this:
 
 ```{r }
-chemicals %>% filter(between(weight,8,11),
-between(drums,10,14))
+chemicals %>% filter(
+  between(weight, 8, 11),
+  between(drums, 10, 14)
+)
 ```
 
  
@@ -272,9 +275,10 @@ look about 15 minutes too long. This was actually an average-sized shipment:
 
 ```{r }
 library(ggrepel)
-d %>% mutate(my_label=ifelse(.resid>10,"residual +","")) %>%
-ggplot(aes(x=drums,y=weight,colour=minutes,label=my_label))+
-geom_point()+geom_text_repel()
+d %>%
+  mutate(my_label = ifelse(.resid > 10, "residual +", "")) %>%
+  ggplot(aes(x = drums, y = weight, colour = minutes, label = my_label)) +
+  geom_point() + geom_text_repel()
 ```
 
  
@@ -297,10 +301,11 @@ The blue colour scheme is a little hard to judge values on. Here's
 another way to do that:
 
 ```{r }
-d %>% mutate(my_label=ifelse(.resid>10,"residual +","")) %>%
-ggplot(aes(x=drums,y=weight,colour=minutes,label=my_label))+
-geom_point()+geom_text_repel()+
-scale_colour_gradient(low="red",high="blue")
+d %>%
+  mutate(my_label = ifelse(.resid > 10, "residual +", "")) %>%
+  ggplot(aes(x = drums, y = weight, colour = minutes, label = my_label)) +
+  geom_point() + geom_text_repel() +
+  scale_colour_gradient(low = "red", high = "blue")
 ```
 
  

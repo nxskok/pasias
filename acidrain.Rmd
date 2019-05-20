@@ -29,8 +29,8 @@ Solution
 This time, it's a `.csv`:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
-acidrain=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv"
+acidrain <- read_csv(my_url)
 acidrain
 ```
 
@@ -58,8 +58,8 @@ The problem is likely to be that either your `x` or your
 Try to use one of the explanatory variables as `x` and the other
 one as `fill` (or `colour`):
 ```{r }
-ggplot(acidrain,aes(x=rain_pH,y=soil_acidity,fill=soil_depth))+
-geom_boxplot()
+ggplot(acidrain, aes(x = rain_pH, y = soil_acidity, fill = soil_depth)) +
+  geom_boxplot()
 ```
 
      
@@ -70,8 +70,8 @@ be categorical. The easiest way to make it such is to wrap it in
 `factor`:
 
 ```{r }
-ggplot(acidrain,aes(x=factor(rain_pH),y=soil_acidity,fill=soil_depth))+
-geom_boxplot()
+ggplot(acidrain, aes(x = factor(rain_pH), y = soil_acidity, fill = soil_depth)) +
+  geom_boxplot()
 ```
 
      
@@ -82,8 +82,8 @@ the data frame reveals that it is text, so that is OK.
 If you prefer, exchange `x` and `fill`:
 
 ```{r }
-ggplot(acidrain,aes(fill=factor(rain_pH),y=soil_acidity,x=soil_depth))+
-geom_boxplot()
+ggplot(acidrain, aes(fill = factor(rain_pH), y = soil_acidity, x = soil_depth)) +
+  geom_boxplot()
 ```
 
      
@@ -121,8 +121,8 @@ Solution
 
 Following my own hint:
 ```{r }
-acidrain = acidrain %>% mutate(frph=factor(rain_pH))
-soil.1=aov(soil_acidity~frph*soil_depth,data=acidrain)
+acidrain <- acidrain %>% mutate(frph = factor(rain_pH))
+soil.1 <- aov(soil_acidity ~ frph * soil_depth, data = acidrain)
 summary(soil.1)
 ```
 
@@ -137,7 +137,7 @@ The usual procedure after finding a non-significant
 interaction is to take it out:
 
 ```{r }
-soil.2=update(soil.1, .~.-frph:soil_depth)
+soil.2 <- update(soil.1, . ~ . - frph:soil_depth)
 summary(soil.2)
 ```
 

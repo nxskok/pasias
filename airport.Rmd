@@ -1,21 +1,21 @@
-##  Children's stress levels and airports
 
 
- If you did STAC32, you might remember this question, which
-we can now do properly. Some of this question is a repeat from there.
+ The data in
+[link](http://www.utsc.utoronto.ca/~butler/c32/airport.txt) are based on
+a 1998 study of stress levels in children as a result of the building
+of a new airport in Munich, Germany. A total of 200 children had their
+epinephrine levels (a stress indicator) measured at each of four
+different times: before the airport was built, and 6, 18 and 36 months
+after it was built. The four measurements are labelled `epi_1`
+through `epi_4`.  Out of the children, 100 were living near
+the new airport (location 1 in the data set), and could be expected to
+suffer stress because of the new airport. The other 100 children lived
+in the same city, but outside the noise impact zone. These children
+thus serve as a control group. The children are identified with
+numbers 1 through 200.
 
-The data in [link](http://www.utsc.utoronto.ca/~butler/c32/airport.txt)
-are based on a 1998 study of stress levels in children as a result of
-the building of a new airport in Munich, Germany. A total of 200
-children had their epinephrine levels (a stress indicator) measured at
-each of four different times: before the airport was built, and 6, 18
-and 36 months after it was built. The four measurements are labelled
-`epi_1` through `epi_4`.  Out of the children, 100
-were living near the new airport (location 1 in the data set), and
-could be expected to suffer stress because of the new airport. The
-other 100 children lived in the same city, but outside the noise
-impact zone. These children thus serve as a control group. The
-children are identified with numbers 1 through 200.
+As with the spaghetti-plot question about throwing baseballs and
+softballs, see if you can build a pipe, one step at a time.
 
 
 
@@ -31,7 +31,16 @@ It is the fact that each child was measured four times, rather
 than each measurement being on a *different* child (with
 thus $4\times 200=800$ observations altogether). It's
 the same distinction as between matched pairs and a two-sample
-$t$ test.
+$t$ test (and thus the previous question was a big hint for this
+one). 
+Extra: data in this form are called "repeated measures", and
+analysing them as if they were on different individuals is wrong
+because children are likely to be different from each other:
+some children are likely to be high at all times and some
+low. There is extra information in knowing that the sets of four
+measurements are each on the same child. The analysis is beyond
+our scope at the moment, but if you take D29, you'll see it
+there. 
 
 
 
@@ -42,18 +51,26 @@ number of observations and variables.
 Solution
 
 
-The usual, data values separated by one space:
 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/airport.txt"
-airport=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/airport.txt"
+airport <- read_delim(my_url, " ")
 airport
 ```
 
  
 
 There are 200 rows (children), with four `epi` measurements, a
-location and a child identifier, so that looks good.
+location and a child identifier, so that looks good. (Listing a
+`tibble` only lists the first ten rows, so this is good.)
+
+Or you can `glimpse` it:
+
+```{r }
+glimpse(airport)
+```
+
+ 
 
 (I am mildly concerned about the negative `epi` measurements,
 but I don't know what the scale is, so presumably they are all
@@ -63,642 +80,342 @@ see.)
 
 
 
-(c) Create and save a "long" data frame with all the epinephrine
-values gathered together into one column.
+(c) We are going to make a "spaghetti plot" of these data:
+that is, a plot of epinephrine levels against time, with the
+children identified by colour, and a separate plot for each
+location. Before we get to that, we need, as usual for a
+`ggplot`, all the $x$-values for our plot in one column,
+all the $y$-values for our plot in one column, and a separate
+column indicating which $y$ and $x$ we have (if there are more
+than one). 
+Use `gather` to produce something like this. (There will be
+a second stage of tidy-up, which we'll do in the next part.) Save
+your results in a data frame and display its first few rows, to
+convince yourself that you have the right thing.
 
 
 Solution
 
 
+This is exactly what `gather` does, so it's what we'll
+use here. Let's see how it comes out:
 ```{r }
-airport.long = airport %>% gather(when, epinephrine, epi_1:epi_4) 
-airport.long
+airport %>% gather(when, epinephrine, epi_1:epi_4)
 ```
 
- 
+        
 
-Success. I'm saving the name `time` for later, so I've called
-the time points `when` for now. There were 4 measurements on
-each of 200 children, so the long data frame should (and does) have
-$200\times 4 = 800$ rows.
+What makes the columns different (they're different times), what makes
+them the same (they're all epinephrine levels), and the columns to
+gather up (which are the consecutive ones `epi1` through
+`epi4`). For the last, this also works (but is more typing):
+
+```{r }
+airport %>% gather(when, epinephrine, c(epi_1, epi_2, epi_3, epi_4))
+```
+
+        
+
+and also this:
+
+```{r }
+airport %>% gather(when, epinephrine, starts_with("epi"))
+```
+
+        
+
+Your choice of names is not important, though it should be something
+reminiscent of what the columns actually represent. (For me, I want to
+reserve the name `time` for later, which is why I used the name
+`when` here.)
+
+The one thing we have to fix up is that the time column is not 1
+through 4, but `epi_1` through `epi_4`. That's what we
+tackle next.
 
 
 
-(d) Make a "spaghetti plot" of these data: that is, a plot of
-epinephrine levels against time, with the locations identified by
-colour, and the points for the same child joined by lines.  To do
-this: (i) from the long data frame, create a new column containing
-only the numeric values of time (1 through 4), (ii) plot epinephrine
-level against time with the points grouped by child and coloured by
-location (which you may have to turn from a number into a factor.)
+(d) Find a way to create a new column containing just the number
+of the time point, and save the resulting data frame. (Two options
+you can explore: `parse_number` combined with
+`mutate`, or `separate`. You may
+need to do some research.)
 
 
 Solution
 
 
-I hope you are thinking "pipeline":
-```{r toofat}
-airport.long %>% mutate(time=parse_number(when)) %>%
-ggplot(aes(x=time,y=epinephrine,colour=factor(location),group=child))+
-geom_point()+geom_line()
+
+The first suggestion goes like this:
+
+```{r }
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  mutate(time = parse_number(when))
 ```
 
-         
+ 
 
-This is different from the plot we had in C32, where I had you use a
-different colour for each *child*, and we ended up with a huge
-legend of all the children (which we then removed). 
+This creates a variable called `time`\endnote{I was saving the
+name from earlier for this.} by pulling out only the numbers from
+`when`. The only numbers are the time points, so this is
+exactly what we want.
 
-If you forget to turn `location` into a factor, `ggplot`
-will assume that you want `location` to be on a continuous
-scale, and you'll get two shades of blue. 
+Here's the other way, using `separate` from `dplyr`:
 
-Another problem with this plot is that there are so many children, you
-can't see the ones underneath because the ones on top are overwriting
-them. The solution to that is to make the lines (partly) transparent,
-which is controlled by a parameter `alpha`:
-`r tufte::margin_note("This is  different from the 0.05 *alpha*.")`
-```{r skinnier}
-airport.long %>% mutate(time=parse_number(when)) %>%
-ggplot(aes(x=time,y=epinephrine,colour=factor(location),group=child))+
-geom_point()+geom_line(alpha=0.2)
+```{r }
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  separate(when, into = c("junk", "time"), sep = "_")
 ```
 
-   
-It seems to make the lines skinnier, so they look more like
-threads. Even given the lesser thickness, they seem to be a little bit
-see-through as well. You can experiment with adding transparency to
-the points in addition. 
+ 
+
+The job of `separate` is to split a
+column, which currently contains two things mashed together, into two separate
+columns. The syntax is: column to separate, names of
+columns to create, and character to split at (underscore, here). The
+result is that `when` has disappeared, and two new columns have
+been created: `junk` which contains the text `epi` from
+before the underscore and `time` which contains the number
+after the underscore (the number of the time point).
+This appears to have worked, but look at the top of the columns.
+`time` is not actually a number, but is still text (because
+`when` was text). There is an option on `separate` that
+will fix that, if you want to:
+
+```{r }
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  separate(when, into = c("junk", "time"), sep = "_", convert = T)
+```
+
+ 
+
+What `convert` does is to look at the columns of output and see
+what they look like. `time` looked like numbers, so it was
+converted to numbers, while `junk` is unmistakably text, so
+that's what it stays.
+
+It turns out that the time can be either text or a number and the
+spaghetti plot will still work, so that the `convert` above is
+not necessary (it just makes things look prettier). I think what
+happens is that if the numbers are not equally spaced, like 1, 2, 4,
+8, having them be numbers will plot them unequally spaced as they
+should be, but if they are text, they will be spaced out equally
+across the plot.
+
+From here on, I'm going to use the data frame that I
+made using `parse_number`, but of course if you prefer to use
+the output from `separate`, use that instead. The relevant
+issue is the stuff you add to the end of your pipe each time.
 
 
 
-(e) What do you see on your spaghetti plot? We are looking ahead
-to possible effects of time, location and their interaction.
+(e) Use `ggplot` to plot the epinephrine values
+against time, as a scatterplot. (Your plot won't
+look very nice, but don't worry about that. We will fix it up
+later.)
 
 
 Solution
 
 
-This is not clear, so it's very much your call.
-I see the red spaghetti strands as going up further
-(especially) and maybe down further than the blue ones. The
-epinephrine levels of the children near the new airport are
-definitely more spread out, and maybe have a higher mean, than
-those of the control group of children not near the airport.
-The red spaghetti strands show something of an increase over
-time, at least up to time 3, after which they seem to drop
-again. The blue strands, however, don't show any kind of trend
-over time. Since the time trend is different for the two
-locations, I would expect to see a significant interaction.
+This is easy, and not very informative, but we are going
+to embellish this a good deal below:
+```{r }
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  mutate(time = parse_number(when)) %>%
+  ggplot(aes(x = time, y = epinephrine)) + geom_point()
+```
+
+ 
 
 
 
-(f) The spaghetti plot was hard to interpret because there are
-so many children. Calculate the mean epinephrine levels for each
-location-time combination, and make an interaction plot with time
-on the $x$-axis and location as the second factor.
+(f) In addition to plotting the points, join the points for
+the same child with lines, and make each child a different
+colour. This will mean adding two things to your `aes`
+and making an addition elsewhere. (Your `child` is
+probably a number, but it needs to be a factor. Feed it into
+`factor()` to make it one.) The resulting plot will
+look very colourful, but it will be dominated by a huge legend.
 
 
 Solution
 
 
-We've done this before:
+Here is where the previous question was intended to be a help:
+add both `colour=factor(child)` and
+`group=factor(child)` to the `aes`, and
+add `geom_line`:
 ```{r }
-airport.long %>% mutate(time=parse_number(when)) %>%
-mutate(floc=factor(location)) %>% 
-group_by(floc,time) %>%
-summarize(mean.epi=mean(epinephrine)) %>%
-ggplot(aes(x=time,y=mean.epi,group=floc,colour=floc))+
-geom_point()+geom_line()
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  mutate(time = parse_number(when)) %>%
+  ggplot(aes(
+    x = time, y = epinephrine, colour = factor(child),
+    group = factor(child)
+  )) + geom_point() + geom_line()
 ```
 
-         
+            
 
-I wanted the actual numerical times, so I made them again. Also, it
-seemed to be easier to create a factor version of the numeric location
-up front, and then use it several times later. I'm actually not sure
-that you need it here, since `group_by` works with the
-distinct values of a variable, whatever they are, and `group`
-in a boxplot may or may not insist on something other than a number. I
-should try it:
+R actually does have over 200 different colours, but they are rather
+hard to tell apart. The major benefit to the colours here is so that
+you can track the same child across the picture. Or you would be able
+to, if it were not for the huge legend. The one value of the legend is
+that it shows you that the brown and green kids are the low-numbered
+ones from location 1, and the blue and pink ones are the high-numbered
+ones from location 2.
 
-```{r }
-airport.long %>% mutate(time=parse_number(when)) %>%
-group_by(location,time) %>%
-summarize(mean.epi=mean(epinephrine)) %>%
-ggplot(aes(x=time,y=mean.epi,group=location,colour=location))+
-geom_point()+geom_line()
-```
+This seems not to work if you take out the `geom_point`. I'm
+not sure why: it gives (for me) an error message that is not very
+informative. 
 
-          
-
-It seems that `colour` requires a non-number:
+Does it work if you use a data frame from earlier where the times
+were text rather than numbers, and called `when`?
 
 ```{r }
-airport.long %>% mutate(time=parse_number(when)) %>%
-group_by(location,time) %>%
-summarize(mean.epi=mean(epinephrine)) %>%
-ggplot(aes(x=time,y=mean.epi,group=location,colour=factor(location)))+
-geom_point()+geom_line()
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  ggplot(aes(
+    x = when, y = epinephrine, colour = factor(child),
+    group = factor(child)
+  )) + geom_point() + geom_line()
 ```
 
-         
-With a long pipeline like this, none of us get it right the first time (I
-certainly didn't), so be prepared to debug it one line at a time. The
-way I like to do this is to take the pipe symbol and move it down to
-the next line (moving the cursor to just before it and hitting
-Enter). This ends the pipe at the end of *this* line and displays
-what it produces so far. When you are happy with that, go to the start
-of the next line (that currently has a pipe symbol by itself) and hit
-Backspace to move the pipe symbol back where it was. Then go to the
-end of the next line (where the next pipe symbol is), move *that*
-to a line by itself, and so on. Keep going until each line produces
-what you want, and when you are finished, the whole pipeline will do
-what you want.
+ 
+
+Yes it does. So you could either use `separate` earlier (with
+or without `convert`), or you could use
+`parse_number`, and it would work equally well. I happen to
+like `parse_number`, but that's a personal preference.
+
+The perhaps smarter way to do it, rather than repeating
+`factor(child)`, is to define the factor version of
+`child` first, in the pipe:
+
+```{r }
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  mutate(time = parse_number(when)) %>%
+  mutate(fchild = factor(child)) %>%
+  ggplot(aes(
+    x = time, y = epinephrine, colour = fchild,
+    group = fchild
+  )) + geom_point() + geom_line()
+```
+
+ 
+
+That is perhaps a good idea. 
 
 
 
-(g) What do you conclude from your interaction plot? Is your
-conclusion clearer than from the spaghetti plot?
+(g) Get rid of
+the huge legend.
 
 
 Solution
 
 
-The two "traces" are not parallel, so I would expect to see
-an interaction between location and time. The big difference
-seems to be between times 1 and 2; the traces are the same at
-time 1, and more or less parallel after time 2. Between times
-1 and 2, the mean epinephrine level of the children near the
-new airport increases sharply, whereas for the children in the
-control group it increases much less.
-This, to my mind, is very much easier to interpret than the
-spaghetti plot, even the second version with the thinner
-strands, because there is a lot of variability there that
-obscures the overall pattern. The interaction plot is plain as
-day, but it might be an oversimplification because it doesn't
-show variability.
+I showed you how to do this in a previous question.
+The title at the top of my huge legend is
+`factor(child)`, or `fchild` if you did
+it that way.  That appears after `colour=` in
+the `aes`, so `colour` is the thing that
+should be `FALSE` inside `guides`. As we
+found in the last question, it doesn't seem to be
+necessary to get rid of `group` as well. (The
+legend was actually distinguishing the
+*colours*.)
+```{r }
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  mutate(time = parse_number(when)) %>%
+  mutate(fchild = factor(child)) %>%
+  ggplot(aes(
+    x = time, y = epinephrine, colour = fchild,
+    group = fchild
+  )) + geom_point() + geom_line() + guides(colour = F)
+```
+
+            
+
+That is a spaghetti plot living up to its name!
 
 
 
-(h) Run a repeated-measures analysis of variance and display the
-results. Go back to your original data frame, the one you read in
-from the file, for this. You'll need to make sure your numeric
-`location` gets treated as a `factor`.
+(h) Instead of plotting both locations together,
+obtain a separate plot for each location, using *one*
+`ggplot`.
 
 
 Solution
 
 
-The usual process. I'll try the other way I used of making the
-`response`: 
+Add a `facet_wrap`:
 ```{r }
-airport %>% select(epi_1:epi_4) %>% 
-as.matrix() -> response
-airport.1=lm(response~factor(location),data=airport)
-times=colnames(response)
-times.df=data.frame(times)
-airport.2=Manova(airport.1,idata=times.df,idesign=~times)
-airport.2
+airport %>%
+  gather(when, epinephrine, epi_1:epi_4) %>%
+  mutate(time = parse_number(when)) %>%
+  mutate(fchild = factor(child)) %>%
+  ggplot(aes(
+    x = time, y = epinephrine, colour = fchild,
+    group = fchild
+  )) + geom_point() + geom_line() + guides(colour = F) +
+  facet_wrap(~location)
 ```
 
-         
+                 
+
+The blue and pink spaghetti strands on the right are because the
+location 2 children were the high-numbered ones, and the high-numbered
+children in that big legend that we got rid of were pink and blue.
 
 
 
-(i) What do you conclude from the MANOVA? Is that consistent
-with your graphs? Explain briefly.
+(i) How would you describe the difference in
+epinephrine (stress) levels between the two locations?
+Does this make sense, given where the locations are?
 
 
 Solution
 
 
-We start and end with the significant interaction: there is an
-effect of location, but the nature of that effect depends on
-time. This is the same as we saw in the interaction plot:
-from time 2 on, the mean epinephrine levels for the children near
-the new airport were clearly higher. 
-If you stare at the spaghetti plot, you *might* come to
-the same conclusion. Or you might not! I suppose those red
-dots at time 2 are mostly at the top, and generally so
-afterwards, whereas at time 1 they are all mixed up with the
-blue ones.
-Interactions of this sort in this kind of analysis  are very
-common. There is an "intervention" or "treatment", and the
-time points are chosen so that the first one is before the
-treatment happens, and the other time points are after. Then,
-the results are very similar for the first time point, and
-very different after that, rather than being (say) always
-higher for the treatment group by about the same amount for
-all times (in which case there would be no interaction). 
-So, you have some choices in practice as to how you might
-go. You might do the MANOVA, get a significant interaction,
-and draw an interaction plot to see why. You might stop there,
-or you might do something like what we did in class: having
-seen that the first time point is different from the others
-for reasons that you can explain, do the analysis again, but
-omitting the first time point. For the MANOVA, that means
-tweaking your definition of your `response` to omit the
-first time point. The rest of it stays the same, though you
-might want to change your model numbers rather than re-using
-the old ones as I did:
-```{r }
-airport %>% select(epi_2:epi_4) %>% 
-as.matrix() -> response
-airport.1=lm(response~factor(location),data=airport)
-times=colnames(response)
-times.df=data.frame(times)
-airport.2=Manova(airport.1,idata=times.df,idesign=~times)
-airport.2
-```
-
-         
-
-The interaction is still significant, so there is still not a
-consistent effect of being near the new airport on epinephrine levels:
-that is to say, the effect of the new airport *still* varies over
-time. That might be because (looking at the interaction plot) for the
-children near the new airport, the mean epinephrine level went up
-again between times 2 and 3, whereas for the control children it (for
-some reason) went dramatically down over the same time period.
-
-We have lots of data here (200 children), so the significant
-interaction effect also might not be very big.
-
-Experimental designs like this are kind of awkward, because you expect
-there to be some kind of pattern over time for the treatment group,
-that will vary over time, whereas for the control group, you expect
-there to be no pattern over time. So a significant difference shows up
-as an *interaction*, which is messier to interpret than you would
-like. 
-
-Extra: the other way to analyze repeated measures data (that we, well, you, do not look
-at in this course)
-`r tufte::margin_note("This is something *I* want to  understand, so I will share my findings with you. You can read them  or not, as you choose.")` is to treat them as "mixed models", which
-requires a different kind of analysis using the `lme4`
-package. I always forget how these go, and I have to look them up when
-I need them, but the idea is this: the treatments you observe, and the
-time points at which you observe them, are
-typically the only ones you care about (a so-called "fixed effect"),
-but the individuals (children, here)
-which you happen to observe are
-something like a random sample of all the children you might have
-observed (a so-called "random effect"). Models with random effects
-in them are called "mixed models" (or, I suppose, models with both
-fixed and random effects). This matters because you have repeated
-observations on the *same* child. Some people like to think of
-this in terms of "sources of variability": the epinephrine levels
-vary because of the location and time at which they were observed, but
-also because of the particular child they happen to have been observed
-for: each child has a "random effect" that they carry with them
-through all the time points at which they are observed.
-
-Let's see if we can make it fly for this example. We need the data in
-"long" format, the way we arranged it for graphing: the data frame
-`airport.long`. I'd like to convert things to factors first:
-
-```{r }
-airport.long %>% mutate(fchild=factor(child),
-flocation=factor(location)
-) -> fairport
-
-airport.3=lmer(epinephrine~flocation*when+(1|fchild), data=fairport)
-anova(airport.3)
-drop1(airport.3,test="Chisq")
-```
-
- 
-
-The `anova` doesn't actually give us any tests, but what you
-see in the ANOVA table are the fixed effects. These are testable. The
-easiest way to see what you can get rid of is `drop1`; the
-chi-squared test appears to be the right one (more on that
-below). This says that the interaction is strongly significant, and we
-should not consider removing it, the same conclusion as our 
-"profile analysis" before.
-The other choice for
-testing is to fit a model without what you
-are testing and use `anova` to compare the two models:
-
-```{r }
-airport.4=update(airport.3,.~.-flocation:when)
-anova(airport.4,airport.3)
-```
-
- 
-
-There are technical considerations involved in comparing the fit of
-two models (which is the reason for the 
-"refitting models with..."): there is one method for estimating and a different
-method for testing. The test is based on "likelihood ratio", which
-means that the right test for the `drop1` above is
-`Chisq`. 
-
-If you omit the test in `drop1`, it just gives
-you AIC values, which you can use for an informal assessment. In this
-case, `<none>` has a much smaller AIC than the interaction
-(smaller by over 50), so there's no way we should entertain taking out
-the interaction. However, if it had not been significant, we would
-just take it out by fitting a model like `airport4`: there is
-no distinction here between "within-subject" and 
-"between-subject"
-factors that prevented us from taking the interaction out in profile
-analysis. 
-
-As ever when an interaction is significant, we might think  about
-simple effects: that is, look at the two locations separately. That
-makes sense here because of the kind of experimental design it is: we
-*expect* a different kind of relationship with time for the
-"treatment" children (the ones living near the new airport) as
-compared to the control children, the ones who live farther away. That
-approach would work with either the profile-analysis way using
-`Manova` or the mixed-modelling way using `lmer`. In
-either case, we'd expect to see a time effect at location 1 but not at
-location 2. (Having separated out locations, only the time effect
-would be left for testing.) I guess I have to show you that, but I
-have to get ready for class first.
-
-Later\ldots
-
-The nice thing about Wednesday evenings is that I am so tired from
-class that I have energy for almost nothing except playing with these
-things. So let's have a crack at it. 
-
-Let's start with location 1, at which we expect there to be
-something happening. This is really a simple effect of time at
-location 1, but in repeated measures guise. The awkwardness is that
-the profile analysis needs the wide-format data, while the mixed-model
-analysis needs long format, so we'll have to repeat our process, once
-for each format of data set:
-
-```{r }
-loc1 = airport %>% filter(location==1)
-response = loc1 %>% select(epi_1:epi_4) %>% as.matrix() 
-loc1.1=lm(response~1,data=loc1)
-times=colnames(response)
-times.df=data.frame(times)
-loc1.2=Manova(loc1.1,idata=times.df,idesign=~times)
-loc1.2
-```
-
- 
-
-This is one of those times where a pipe doesn't quite do it. We need
-to grab the data for location 1, but then we need to do two things
-with it: one, create a response variable, and two, feed the response
-variable *and* the location 1 data into `lm`. Pipes are
-for linear sequences of things to do, and this one diverges. So, save
-what you need to save, and then do it without a pipe.
-
-This is one of those explanatory-variable-less repeated measures where
-you *only* have things varying over time. Here, the treatment was
-location, and we're only looking at one of those locations. We still
-have a within-subject design (the four times), but there is no
-between-subject design left.
-
-The conclusion is that there is very strong evidence of a time effect
-for location 1, as we would have guessed.
-
-Now, let's see whether the mixed-model analysis comes to the same
-conclusion. This time, we have to start from the *long* data set
-(the one I'm using is the one called `fairport` with things as
-factors) and pull out the rows for location 1. The only remaining
-fixed effect is time:
-
-```{r }
-fairport %>% filter(location==1) %>% 
-lmer(epinephrine~when+(1|fchild),data=.) %>%
-drop1(test="Chisq")
-```
-
- 
-
-The effect of time is, once again, substantial. The P-value is not the
-same, because the test is not the same, but it is very similar and
-points to exactly the same conclusion.
-
-I should perhaps point out that you don't *have* to do these
-models in a pipe. I just did because it was easier for me. But there's
-nothing wrong with doing it like this:
-
-```{r }
-tmp=fairport %>% filter(location==1)
-tmp.1=lmer(epinephrine~when+(1|child),data=tmp)
-drop1(tmp.1,test="Chisq")
-```
-
- 
-
-and it gives exactly the same result.
-
-This last model (in either of its versions) is a so-called random
-intercepts model. What it says is that epinephrine level for a child
-depends on time, but the effect of being one child rather than another
-is to shunt the mean epinephrine level up or down by a fixed amount
-for all times. It seems to me that this is a very reasonable way to
-model the child-to-child variation in this case, but in other cases,
-things might be different. `lmer` allows more sophisticated
-things, like for example the random child effect depending linearly on
-time. To do that, you'd rewrite the above like this:
-
-```{r eval=F}
-fairport %>% filter(location==1) %>% 
-lmer(epinephrine~when+(1+when|fchild),data=.) %>%
-drop1(test="Chisq")
-```
-
- 
-
-The change is on the `lmer` line: the bit in brackets has a
-linear model in `when` for each child. I didn't run that, so
-I'm not certain it works,
-`r tufte::margin_note("I'm suspicious about *when*  needing to be the numerical time inside. Not sure.")` but that's the idea.
-
-All right, let's get on to location 2. This was the control location,
-so we expect to see *no* dependence of epinephrine level on time,
-either in the profile analysis or in the mixed-model analysis. There
-is a large amount of copying and pasting coming up:
-
-```{r }
-airport %>% filter(location==2) -> loc2
-loc2 %>% select(epi_1:epi_4) %>% as.matrix() -> response
-loc2.1=lm(response~1,data=loc1)
-times=colnames(response)
-times.df=data.frame(times)
-loc2.2=Manova(loc2.1,idata=times.df,idesign=~times)
-loc2.2
-```
-
- 
-
-I think I changed everything I needed to. 
-
-There actually *is* still an effect of time. What kind of effect?
-We can look at that by finding epinephrine means at each time. That
-would be easier if we had long format, but I think we can still do
-it. The magic word is `summarize_at` (well, the magic two
-words): 
-
-```{r }
-airport %>% filter(location==2) %>%
-summarize_at(vars(starts_with("epi")),funs(mean))
-```
-
- 
-
-The message here is that the mean epinephrine levels at time 2 were
-higher than the others, so that's what seems to be driving the time
-effect. And remember, these were the control children, so they had no
-new airport nearby.
-
-I want to try this:
-
-```{r }
-airport %>% group_by(location) %>% nest()
-```
-
- 
-
-This is like the idea in the Spilich problem: I want to write a
-function that calculates the means of the `epi_1` through
-`epi_4` columns of a data frame like `airport`, and
-then apply it to each of those "nested" data frames.
-
-```{r }
-epi.means=function(x) {
-x %>% summarize_at(vars(starts_with("epi")),funs(mean))
-}
-
-epi.means(airport)
-```
-
- 
-
-OK, and then:
-
-```{r }
-airport %>% group_by(location) %>% nest() %>%
-mutate(means=map(data,~epi.means(.))) %>%
-unnest(means)
-```
-
- 
-
-Ooh, nice. There are the means for the four time points at both of the
-two locations. At location 1, epinephrine starts out low, jumps high
-after the airport is built, and stays there, while at location 2, the
-mean is mysteriously higher at time 2 and then epinephrine levels go
-back down again.
-
-Enough of that. Back to the mixed model analysis, with more copying
-and pasting. Here is the "simple time effect" at location 2:
-
-```{r }
-fairport %>% filter(location==2) %>% 
-lmer(epinephrine~when+(1|fchild),data=.) %>%
-drop1(test="Chisq")
-```
-
- 
-
-This also finds a time effect at location 2, with a very similar P-value.
-
-So which method is preferred? They are, I think, two different ways of
-approaching the same problem, and so there is no good reason to prefer
-one way over the other. The profile-analysis way is easier to follow
-if you are coming from a MANOVA direction: set it up the same way as
-you would a MANOVA, with your repeated measures as your multivariate
-response, and distinguish between the within-subject design (times,
-for us) and the between-subject design (treatments, stuff like
-that). As for mixed models: when you get your head around that crazy
-way of specifying the random effects, which are typically "subjects"
-in this kind of analysis, the actual model statement is brief:
-response depends on fixed effects plus random effects with the
-brackets and vertical bar. I always find the `lmer` models look
-very simple once you have figured them out (like `ggplot` in
-that regard). I also like the fact that `lmer` uses "tidy data", 
-so that you can make graphs and do this flavour of analysis
-with the same data frame. Having gotten my head around getting my data
-tidy, it seems odd to me that profile analysis requires the data to be
-untidy, although it does so for a good reason: if you were genuinely
-doing a MANOVA, you would *want* your multiple response
-variables each in their own column. Doing repeated measures this way
-is thinking of your responses at different times like different
-variables. 
-
-The approach I've taken in this course is for historical reasons. That
-is to say, *my* history, not because the historical perspective
-is necessarily the best one.  It began with doing repeated measures in
-SAS (this was like nine years ago), and the only way I could get my
-head around that was the profile-analysis way. I'm not even sure there
-was software for doing mixed models in those days, certainly not in
-SAS. Besides, random effects scared me back then. Anyway, when I
-moved things over to R (this must have been about six years ago), I
-realized I was using basically the same idea in R: make it into a
-MANOVA and tweak things as needed. So I developed things by showing
-you MANOVA first as ANOVA when you have lots of $y$-variables instead
-of just one, and then using it for repeated measures by thinking of
-the repeated measures as "different-but-related" $y$-variables. To
-my mind, this is a reasonable way of doing it in a course like this:
-you get to see MANOVA, which is worth knowing about anyway, and then
-you get to apply it to a very common situation.
-
-Mixed models are actually quite recent, as a way of doing this kind of
-modelling. Back when I was learning this stuff, you learned to
-distinguish between "fixed effects", whose levels were the only ones
-you cared about (like the two locations here), and "random effects",
-where the ones you observed were only a sample of the ones you might
-have seen (like "children" or in general "subjects"). Then you
-would test the fixed effects by hypothesizing that their mean effect
-was zero and seeing whether you could reject that (in the same way
-that you do in regression or regular ANOVA: in the latter case, you
-test that the effects of all the different groups are zero, which
-comes down to saying that all the groups have the same mean). The way
-you handled random effects was to estimate their *variance*, and
-then you would test whether a random effect exists or not by testing
-whether the variance of that random effect is zero (does not exist) or
-is greater than zero. Zero is the smallest a variance (or SD) can be,
-which means that testing for it has always been kind of flakey and the
-standard theory doesn't work for it (the technical term is 
-"on the boundary of the parameter space", and the theory applies when the
-null-hypothesis value is strictly *inside* the set of possible
-values the parameter can take). Back when we did this stuff by
-hand,
-`r tufte::margin_note("I understand psychology students *still* do this  kind of stuff by hand.")` we had to figure out whether we were testing
-a fixed or a random effect, and there were rules, involving things
-called "expected mean squares", that told you how to get the tests
-right. Anyway, that is all considered rather old-fashioned now, and
-mixed models are where it is at. In these, you typically *only*
-test the fixed effects, while estimating the size of the random
-effects, taking it for granted that they exist. This is an active area
-of research; the things that `lmer` fits are called 
-"linear mixed models", and there are also now 
-"generalized linear mixed models", things like logistic regression with random effects.
-
-We haven't had to worry about this up to now because in most of the
-experimental designs we have used, each subject only contributes
-*one*  measurement. In that case, you cannot separate out a
-subject-specific "random effect" from random error, and so we lump
-it all into random error. The one experimental design where a subject
-gives us more than one measurement is matched pairs, and the way we
-have handled that so far is to turn the two measurements into one by
-taking the difference between them; even in that case, each subject
-contributes only one *difference* to the analysis. Repeated
-measures, though, is genuinely different: you can't wish away multiple
-measurements on the same subject by taking differences any more, so
-you have to face up to the issue at last. Either we think of it as
-several different measurements that might be correlated (the
-profile-analysis MANOVA way), or we face up to the idea that different
-subjects bring their own random effect to the table that shows up in
-every measurement that the subject provides (mixed models).
-
-I did analysis of covariance as a separate mini-section, thinking of
-it as a regression, but if the numerical covariate is the same thing
-as the response but measured at a different time (eg., before rather than
-after), that would also respond to a repeated-measures approach, or to
-the taking of differences as matched pairs does. There is almost
-always more than one way to look at these things.
-
-
-
-
+The ones on the right, from location 2, are
+consistently close to 250, with no apparent change
+over time. The ones on the left, from location 1,
+are, depending on your tastes, more variable, have a
+higher mean, usually increase from time 1 to the
+other time points, or are potentially higher in
+terms of epinephrine. (I'd take any of those.)
+The location 2 children were our control group;
+their stress levels should not have been affected by
+the building of the airport, since they weren't
+close to it. So we'd expect to see, and do see,
+consistent levels over time. The location 1
+children, however, were the ones potentially
+affected by the building of the airport. It looks as
+if the building of the airport is associated with
+"potentially higher", "typically higher",
+"increased" or "more variable" stress levels
+(whatever words you used above). Unless there is
+something different about the children who live near
+the new airport (apart from the fact that they live
+near the new airport), it looks as if the new
+airport is having a bad effect on their stress
+levels. This is distressing, but not exactly a
+surprise.
+As for any effect on stress levels over time, there
+is not much especially consistent coming out of the
+spaghetti plot that I can see. Maybe the stress
+levels at the first time point, before the airport
+was built, are lower than the ones after that on average.
+(If you find something like this and it looks
+justifiable, it's good.)
+
+
+  

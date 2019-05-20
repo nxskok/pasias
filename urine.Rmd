@@ -19,8 +19,8 @@ Solution
 
 `read_csv`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
-urine=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/urine.csv"
+urine <- read_csv(my_url)
 urine
 ```
 
@@ -37,9 +37,9 @@ Solution
 
 Just churn through it:
 ```{r peppercorn}
-ggplot(urine,aes(x=obesity,y=creatinine))+geom_boxplot()
-ggplot(urine,aes(x=obesity,y=chlorine))+geom_boxplot()
-ggplot(urine,aes(x=obesity,y=chloride))+geom_boxplot()
+ggplot(urine, aes(x = obesity, y = creatinine)) + geom_boxplot()
+ggplot(urine, aes(x = obesity, y = chlorine)) + geom_boxplot()
+ggplot(urine, aes(x = obesity, y = chloride)) + geom_boxplot()
 ```
 
      
@@ -49,9 +49,10 @@ ones we've done, in that we have to collect together the $y$-variables
 first rather than the $x$s:
 
 ```{r }
-urine %>% gather(yname,y,creatinine:chlorine) %>%
-ggplot(aes(x=obesity,y=y))+geom_boxplot()+
-facet_wrap(~yname,scales="free",ncol=2)
+urine %>%
+  gather(yname, y, creatinine:chlorine) %>%
+  ggplot(aes(x = obesity, y = y)) + geom_boxplot() +
+  facet_wrap(~yname, scales = "free", ncol = 2)
 ```
 
  
@@ -94,8 +95,8 @@ Solution
 
 Create the response variable and run `manova`:
 ```{r }
-response=with(urine,cbind(creatinine,chlorine,chloride))
-urine.1=manova(response~obesity,data=urine)
+response <- with(urine, cbind(creatinine, chlorine, chloride))
+urine.1 <- manova(response ~ obesity, data = urine)
 summary(urine.1)
 ```
 
@@ -118,7 +119,7 @@ why the P-value didn't come out smaller.)
 The other way of doing this is the following, using
 `Manova` from `car`:
 ```{r }
-response.1=lm(response~obesity,data=urine)
+response.1 <- lm(response ~ obesity, data = urine)
 Manova(response.1)
 ```
 

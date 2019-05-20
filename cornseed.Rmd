@@ -22,8 +22,8 @@ Solution
 
 The usual:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/cornseed.csv"
-cornseed=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/cornseed.csv"
+cornseed <- read_csv(my_url)
 cornseed
 ```
 
@@ -48,8 +48,8 @@ Solution
 The usual thing: create the response, use `manova` (or
 `Manova` from `car` if you like, but it's not necessary):
 ```{r }
-response=with(cornseed,cbind(yield,water,herbicide))
-cornseed.1=manova(response~soil,data=cornseed)
+response <- with(cornseed, cbind(yield, water, herbicide))
+cornseed.1 <- manova(response ~ soil, data = cornseed)
 summary(cornseed.1)
 ```
 
@@ -87,7 +87,7 @@ Solution
 
 
 ```{r }
-cornseed.2=lda(soil~yield+water+herbicide,data=cornseed)
+cornseed.2 <- lda(soil ~ yield + water + herbicide, data = cornseed)
 cornseed.2
 ```
 
@@ -99,7 +99,7 @@ variable on the right of the squiggle.) The fields were numbered by
 soil type:
 
 ```{r }
-cornseed %>% select(field,soil)
+cornseed %>% select(field, soil)
 ```
 
  
@@ -149,7 +149,7 @@ I didn't ask you to, but you could check this by seeing how
 `herbicide` differs according to soil type:
 
 ```{r }
-ggplot(cornseed,aes(x=soil,y=herbicide))+geom_boxplot()
+ggplot(cornseed, aes(x = soil, y = herbicide)) + geom_boxplot()
 ```
 
 
@@ -159,7 +159,7 @@ The fields in `loam` soil needed more herbicide than the others.
 Or by `water`:
 
 ```{r }
-ggplot(cornseed,aes(x=soil,y=water))+geom_boxplot()
+ggplot(cornseed, aes(x = soil, y = water)) + geom_boxplot()
 ```
 
  
@@ -181,7 +181,7 @@ Solution
 
 Just this, therefore:
 ```{r }
-cornseed.pred=predict(cornseed.2)
+cornseed.pred <- predict(cornseed.2)
 ```
 
      
@@ -198,7 +198,7 @@ Solution
 
 I changed my mind from the past about how to do this. I make a big data frame out of the data and predictions (with `cbind`) and go from there:
 ```{r }
-d=cbind(cornseed, cornseed.pred)
+d <- cbind(cornseed, cornseed.pred)
 head(d)
 ```
 
@@ -206,7 +206,7 @@ head(d)
 Then we use this as input to `ggplot`:
 
 ```{r }
-ggplot(d,aes(x=x.LD1,y=x.LD2,colour=soil))+geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = soil)) + geom_point()
 ```
 
  
@@ -251,7 +251,7 @@ discriminant, and now we see  why: only the first one separates the
 groups. If you wanted to do that, you could  make a boxplot of the
 discriminant scores by `soil` group, thus:
 ```{r }
-ggplot(d,aes(x=soil,y=x.LD1))+geom_boxplot()
+ggplot(d, aes(x = soil, y = x.LD1)) + geom_boxplot()
 ```
 
    
@@ -274,7 +274,7 @@ Solution
 
 
 ```{r error=T}
-with(d, table(obs=soil,pred=class))
+with(d, table(obs = soil, pred = class))
 ```
 
    
@@ -306,7 +306,7 @@ of `sandy`, but `clay` is mixed up with them both.
 The tidyverse way of doing this is equally good. This is the tidied-up way:
 
 ```{r }
-d %>% count(soil, class) %>% spread(class, n, fill=0)
+d %>% count(soil, class) %>% spread(class, n, fill = 0)
 ```
 
  
@@ -316,18 +316,20 @@ better than anything else.
 Extra: we can calculate misclassification rates, first overall, which is easier:
 
 ```{r error=T}
-d %>% count(soil, class) %>%
-mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
-count(soil_stat, wt=n)
+d %>%
+  count(soil, class) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n)
 ```
 
  
 
 ```{r error=T}
-d %>% count(soil, class) %>%
-mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
-count(soil_stat, wt=n) %>%
-mutate(prop=nn/sum(nn))
+d %>%
+  count(soil, class) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n) %>%
+  mutate(prop = nn / sum(nn))
 ```
 
 
@@ -345,22 +347,24 @@ about soil type; it's better to know them than not to.
 
 Or do it by actual soil type:
 ```{r }
-d %>% count(soil, class) %>%
-group_by(soil) %>%
-mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
-count(soil_stat, wt=n)
+d %>%
+  count(soil, class) %>%
+  group_by(soil) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n)
 ```
 
  
 
 ```{r error=T}
-d %>% count(soil, class) %>%
-group_by(soil) %>%
-mutate(soil_stat=ifelse(soil==class, "correct", "wrong")) %>%
-count(soil_stat, wt=n) %>%
-mutate(prop=nn/sum(nn)) %>%
-select(-nn) %>%
-spread(soil_stat,prop)
+d %>%
+  count(soil, class) %>%
+  group_by(soil) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n) %>%
+  mutate(prop = nn / sum(nn)) %>%
+  select(-nn) %>%
+  spread(soil_stat, prop)
 ```
 
  
@@ -380,10 +384,10 @@ the posterior probabilities to a small number of decimals.
 
 Then, we can fire away with this:
 ```{r error=T}
-d %>% mutate_at(vars(starts_with("posterior")), ~round(.,3)) %>%
-mutate(row=row_number()) -> dd
-dd %>% filter(soil!=class) 
-
+d %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(row = row_number()) -> dd
+dd %>% filter(soil != class)
 ```
 
  
@@ -408,9 +412,9 @@ I wanted to finish with one more thing, which was to look again at the
 soils that were actually loam:
 
 ```{r }
-dd %>% filter(soil=="loam") %>%
-select(soil, yield, water, herbicide, class, starts_with("posterior"))
-
+dd %>%
+  filter(soil == "loam") %>%
+  select(soil, yield, water, herbicide, class, starts_with("posterior"))
 ```
 
  
@@ -440,12 +444,12 @@ are "representative" values of the variables, typical of how far up
 and down they go. This process is one you've seen before:
 
 ```{r }
-yields=c(51,67)
-waters=c(26,37)
-herbicides=c(3,6)
-new=crossing(yield=yields,water=waters,herbicide=herbicides)
-pred=predict(cornseed.2,new)
-cbind(new,pred$x) %>% arrange(desc(LD1))
+yields <- c(51, 67)
+waters <- c(26, 37)
+herbicides <- c(3, 6)
+new <- crossing(yield = yields, water = waters, herbicide = herbicides)
+pred <- predict(cornseed.2, new)
+cbind(new, pred$x) %>% arrange(desc(LD1))
 ```
 
  
@@ -458,7 +462,7 @@ towards explaining why field 3, with its non-high `herbicide`,
 was confidently predicted to be `loam`:
 
 ```{r }
-cornseed %>% filter(field==3)
+cornseed %>% filter(field == 3)
 ```
 
  
@@ -470,7 +474,7 @@ I suddenly remembered that I hadn't done a biplot of this one, which I
 could, since it's a discriminant analysis:
 
 ```{r }
-ggbiplot(cornseed.2,groups=cornseed$soil)
+ggbiplot(cornseed.2, groups = cornseed$soil)
 ```
 
  

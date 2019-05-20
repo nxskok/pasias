@@ -77,8 +77,8 @@ typing the name of the data frame will display "a few" (that
 is, 10) lines of it, so that you can check it for
 plausibleness: 
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/c32/bikes.csv"
-bikes=read_csv(my_url,skip=8,col_names=F)
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/bikes.csv"
+bikes <- read_csv(my_url, skip = 8, col_names = F)
 bikes
 ```
 
@@ -152,7 +152,7 @@ We will probably want to rename `X1` to something like
 `rename` that does about what you'd expect:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1)
+bikes %>% fill(X1) %>% rename(Time = X1)
 ```
 
  
@@ -187,8 +187,10 @@ Solution
 Under the assumption we are making, we only have to look
 at column `X2` and we ignore `X3` totally:
 ```{r error=T}
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=ifelse(X2=="X","male","female"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(X2 == "X", "male", "female"))
 ```
 
             
@@ -198,8 +200,10 @@ missing; the two missing ones here should say `female`. What
 happened? Let's just look at our logical condition this time:
 
 ```{r error=T}
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(isX=(X2=="X"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(isX = (X2 == "X"))
 ```
 
  
@@ -220,8 +224,10 @@ the thing inside it has some non-missing value. In our case, it
 goes like this:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=ifelse(is.na(X2),"female","male"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male"))
 ```
 
             
@@ -243,11 +249,14 @@ check for three things: (i) `X2` has an `X` and
 has an `X`; (iii) anything else, which is an error:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=case_when( 
-X2=="X" & is.na(X3) ~ "Male",
-is.na(X2) & X3=="X" ~ "Female",
-TRUE                ~ "Error!"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = case_when(
+    X2 == "X" & is.na(X3) ~ "Male",
+    is.na(X2) & X3 == "X" ~ "Female",
+    TRUE ~ "Error!"
+  ))
 ```
 
             
@@ -272,12 +281,15 @@ I wanted to check that the observer did check exactly one of
 gluing this onto the end:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=case_when( 
-X2=="X" & is.na(X3) ~ "Male",
-is.na(X2) & X3=="X" ~ "Female",
-TRUE                ~ "Error!")) %>%
-count(gender)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = case_when(
+    X2 == "X" & is.na(X3) ~ "Male",
+    is.na(X2) & X3 == "X" ~ "Female",
+    TRUE ~ "Error!"
+  )) %>%
+  count(gender)
 ```
 
             
@@ -290,8 +302,10 @@ Extra: I was wondering how `gather` would play out here. The
 way to do it seems to be to rename the columns first:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-rename(male=X2, female=X3)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3)
 ```
 
  
@@ -299,9 +313,11 @@ rename(male=X2, female=X3)
 and then gather them up:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-rename(male=X2, female=X3) %>%
-gather(gender, what, male:female)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3) %>%
+  gather(gender, what, male:female)
 ```
 
  
@@ -312,10 +328,12 @@ least not until I had seen how it came out. This is where the
 is equal to `X`:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-rename(male=X2, female=X3) %>%
-gather(gender, what, male:female) %>%
-filter(what=="X")  
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3) %>%
+  gather(gender, what, male:female) %>%
+  filter(what == "X")
 ```
 
  
@@ -323,9 +341,11 @@ filter(what=="X")
 Another way to do this is to remove the missings in the `gather`:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-rename(male=X2, female=X3) %>%
-gather(gender, what, male:female, na.rm=T) 
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3) %>%
+  gather(gender, what, male:female, na.rm = T)
 ```
 
  
@@ -336,10 +356,12 @@ can count the males and females obtained this way, and we should get
 the same thing we got before:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-rename(male=X2, female=X3) %>%
-gather(gender, what, male:female, na.rm=T) %>%
-count(gender)
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  rename(male = X2, female = X3) %>%
+  gather(gender, what, male:female, na.rm = T) %>%
+  count(gender)
 ```
 
  
@@ -367,11 +389,15 @@ Solution
 On the face of it, the way to do this is to go looking
 for `X`'s:
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=ifelse(is.na(X2),"female","male")) %>%
-mutate(helmet=(X4=="X"),
-passenger=(X6=="X"),
-sidewalk=(X8=="X"))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male")) %>%
+  mutate(
+    helmet = (X4 == "X"),
+    passenger = (X6 == "X"),
+    sidewalk = (X8 == "X")
+  )
 ```
 
     
@@ -384,11 +410,15 @@ if the cyclist is wearing a helmet, carrying a passenger or riding on
 the sidewalk. These are `X5, X7, X9` respectively:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=ifelse(is.na(X2),"female","male")) %>%
-mutate(helmet=is.na(X5),
-passenger=is.na(X7),
-sidewalk=is.na(X9)) 
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male")) %>%
+  mutate(
+    helmet = is.na(X5),
+    passenger = is.na(X7),
+    sidewalk = is.na(X9)
+  )
 ```
 
     
@@ -402,9 +432,11 @@ assignment, to use `ifelse` for these as well, which would go
 like this, for example:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=ifelse(X2=="X","male","female")) %>%
-mutate(helmet=ifelse(is.na(X5),T,F))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(X2 == "X", "male", "female")) %>%
+  mutate(helmet = ifelse(is.na(X5), T, F))
 ```
 
  
@@ -422,7 +454,7 @@ I like to put brackets around logical conditions when I am assigning
 them to a variable. If I don't, I get something like
 
 ```{r eval=F}
-helmet=V4=="X"
+helmet <- V4 == "X"
 ```
 
  
@@ -431,8 +463,8 @@ which actually works, but is very hard to read. Well, I *think* it
 works. Let's check:
 
 ```{r }
-exes=c("X","","X","","X")
-y=exes=="X"
+exes <- c("X", "", "X", "", "X")
+y <- exes == "X"
 y
 ```
 
@@ -448,7 +480,7 @@ the variable. But unless you or your readers remember that, it's
 better to write
 
 ```{r }
-y=(exes=="X")
+y <- (exes == "X")
 ```
 
  
@@ -456,7 +488,7 @@ y=(exes=="X")
 to draw attention to the order of calculation. This is the same reason that
 
 ```{r }
-4+5*6
+4 + 5 * 6
 ```
 
  
@@ -486,12 +518,16 @@ This is a breath of fresh air after all the thinking
 needed above: this is just `select`, added to
 the end:
 ```{r }
-mybikes = bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=ifelse(is.na(X2),"female","male")) %>%
-mutate(helmet=is.na(X5),
-passenger=is.na(X7),
-sidewalk=is.na(X9)) %>%
-select(-(X2:X9))
+mybikes <- bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male")) %>%
+  mutate(
+    helmet = is.na(X5),
+    passenger = is.na(X7),
+    sidewalk = is.na(X9)
+  ) %>%
+  select(-(X2:X9))
 mybikes
 ```
 
@@ -503,12 +539,16 @@ have it, but need to keep it (because it holds the times).
 Another way to do this is to use a "select-helper", thus:
 
 ```{r }
-bikes %>% fill(X1) %>% rename(Time=X1) %>%
-mutate(gender=ifelse(is.na(X2),"female","male")) %>%
-mutate(helmet=is.na(X5),
-passenger=is.na(X7),
-sidewalk=is.na(X9)) %>%
-select(-num_range("X",2:9))
+bikes %>%
+  fill(X1) %>%
+  rename(Time = X1) %>%
+  mutate(gender = ifelse(is.na(X2), "female", "male")) %>%
+  mutate(
+    helmet = is.na(X5),
+    passenger = is.na(X7),
+    sidewalk = is.na(X9)
+  ) %>%
+  select(-num_range("X", 2:9))
 ```
 
            
@@ -551,7 +591,7 @@ Solution
 You can count two variables at once, in which case
 you get counts of all combinations of them:
 ```{r }
-mybikes %>% count(gender,helmet)
+mybikes %>% count(gender, helmet)
 ```
 
                    
@@ -567,8 +607,9 @@ solution that I will have to explain. First, let's go back to the
 `count` here:
 
 ```{r }
-mybikes %>% group_by(gender,helmet) %>%
-summarize(the_ount=n())
+mybikes %>%
+  group_by(gender, helmet) %>%
+  summarize(the_ount = n())
 ```
 
  
@@ -577,9 +618,10 @@ That's the same table we got just now. Now, let's calculate a
 proportion and see what happens:
 
 ```{r }
-mybikes %>% group_by(gender,helmet) %>%
-summarize(the_count=n()) %>%
-mutate(prop=the_count/sum(the_count))
+mybikes %>%
+  group_by(gender, helmet) %>%
+  summarize(the_count = n()) %>%
+  mutate(prop = the_count / sum(the_count))
 ```
 
  
@@ -589,7 +631,7 @@ not wearing a helmet, and you can check that this is indeed the case,
 for example:
 
 ```{r }
-403/(403+458)
+403 / (403 + 458)
 ```
 
  
@@ -615,9 +657,10 @@ explanation ("peeling off") to explain how it worked.
 What happens if we switch the order of the things in the `group_by`?
 
 ```{r }
-mybikes %>% group_by(helmet,gender) %>%
-summarize(the_count=n()) %>%
-mutate(prop=the_count/sum(the_count))
+mybikes %>%
+  group_by(helmet, gender) %>%
+  summarize(the_count = n()) %>%
+  mutate(prop = the_count / sum(the_count))
 ```
 
  
@@ -633,8 +676,9 @@ This is row and column proportions in a contingency table, B22 style.
 
 Now, I have to see whether the `count` variant of this works:
 ```{r error=T}
-mybikes %>% count(gender,helmet) %>%
-mutate(prop=n/sum(n))
+mybikes %>%
+  count(gender, helmet) %>%
+  mutate(prop = n / sum(n))
 ```
 
  
@@ -683,7 +727,7 @@ few 15-minute periods, so be prepared to hit Next a
 few times (or use `View`):
 
 ```{r size="footnotesize"}
-mybikes %>% count(Time) %>% print(n=Inf)
+mybikes %>% count(Time) %>% print(n = Inf)
 ```
 
                    
@@ -697,8 +741,9 @@ example, display only the rows where the frequency equals the maximum
 frequency:
 
 ```{r }
-mybikes %>% count(Time) %>% 
-filter(n==max(n))
+mybikes %>%
+  count(Time) %>%
+  filter(n == max(n))
 ```
 
                    

@@ -21,8 +21,8 @@ Solution
 
 Reading directly from the URL is easiest:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/bellpepper.csv"
-pepper=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/bellpepper.csv"
+pepper <- read_csv(my_url)
 pepper
 ```
 
@@ -47,7 +47,7 @@ Solution
 
 This kind of thing:
 ```{r dartmouth}
-ggplot(pepper,aes(x=field,y=water))+geom_boxplot()
+ggplot(pepper, aes(x = field, y = water)) + geom_boxplot()
 ```
 
      
@@ -59,8 +59,8 @@ but the median for `a` is actually *lower*.
 The other reasonable plot is a facetted histogram, something like this:
 
 ```{r }
-ggplot(pepper,aes(x=water))+geom_histogram(bins=6)+
-facet_grid(field~.)
+ggplot(pepper, aes(x = water)) + geom_histogram(bins = 6) +
+  facet_grid(field ~ .)
 ```
 
  
@@ -73,12 +73,13 @@ A, or a lot less (nothing in between).  I can borrow an idea from
 earlier to find the five-number summaries for each field:
 
 ```{r }
-pepper %>% nest(-field) %>%
-mutate(qq=map(data,~enframe(quantile(.$water)))) %>%
-unnest(qq) %>%
-mutate(pctile=parse_number(name)) %>%
-select(-name) %>%
-spread(pctile,value)
+pepper %>%
+  nest(-field) %>%
+  mutate(qq = map(data, ~ enframe(quantile(.$water)))) %>%
+  unnest(qq) %>%
+  mutate(pctile = parse_number(name)) %>%
+  select(-name) %>%
+  spread(pctile, value)
 ```
 
  
@@ -98,7 +99,7 @@ Solution
 
 
 ```{r }
-t.test(water~field,alternative="greater", data=pepper)
+t.test(water ~ field, alternative = "greater", data = pepper)
 ```
 
      
@@ -115,7 +116,7 @@ content.
 Another way to tackle this is to do a two-sided test and adapt the P-value:
 
 ```{r }
-t.test(water~field, data=pepper)
+t.test(water ~ field, data = pepper)
 ```
 
  

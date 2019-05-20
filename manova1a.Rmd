@@ -18,11 +18,11 @@ Solution
 
 This is an exact repeat of what you did before:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
-simple=read_delim(my_url," ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
+simple <- read_delim(my_url, " ")
 simple
-response=with(simple,cbind(y1,y2))
-simple.3=manova(response~group,data=simple)
+response <- with(simple, cbind(y1, y2))
+simple.3 <- manova(response ~ group, data = simple)
 summary(simple.3)
 ```
 
@@ -43,7 +43,7 @@ Solution
 
 This:
 ```{r }
-simple.4=lda(group~y1+y2,data=simple)
+simple.4 <- lda(group ~ y1 + y2, data = simple)
 simple.4
 ```
 
@@ -109,7 +109,7 @@ It needs cajoling to produce colours, but we can do better. The first
 thing is to obtain the predictions:
 
 ```{r }
-simple.pred=predict(simple.4)
+simple.pred <- predict(simple.4)
 ```
 
  
@@ -118,7 +118,7 @@ Then we make a data frame out of the discriminant scores and the true
 groups, using `cbind`:
 
 ```{r }
-d=cbind(simple, simple.pred)
+d <- cbind(simple, simple.pred)
 head(d)
 ```
 
@@ -127,9 +127,9 @@ or like this, for fun:
 `r tufte::margin_note("For suitable definitions of fun.")`
 
 ```{r error=T}
-ld=as_tibble(simple.pred$x)
-post=as_tibble(simple.pred$posterior)
-dd=bind_cols(simple, class=simple.pred$class, ld, post)
+ld <- as_tibble(simple.pred$x)
+post <- as_tibble(simple.pred$posterior)
+dd <- bind_cols(simple, class = simple.pred$class, ld, post)
 dd
 ```
 
@@ -138,7 +138,7 @@ After that, we plot the first one against the second one, colouring by
 true groups:
 
 ```{r error=T}
-ggplot(d,aes(x=x.LD1,y=x.LD2,colour=group))+geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = group)) + geom_point()
 ```
 
  
@@ -147,7 +147,7 @@ I wanted to compare this plot with the original plot of `y1`
 vs.\ `y2`, coloured by groups:
 
 ```{r }
-ggplot(simple,aes(x=y1,y=y2,colour=group))+geom_point()
+ggplot(simple, aes(x = y1, y = y2, colour = group)) + geom_point()
 ```
 
  
@@ -162,7 +162,7 @@ With that in mind, we could also plot just `LD1`, presumably
 against groups via boxplot:
 
 ```{r error=T}
-ggplot(d,aes(x=group,y=x.LD1))+geom_boxplot()
+ggplot(d, aes(x = group, y = x.LD1)) + geom_boxplot()
 ```
 
  
@@ -262,7 +262,7 @@ Use the
 `simple.pred` that you got earlier. This is the
 `table` way:
 ```{r error=T}
-with(d, table(obs=group, pred=class))
+with(d, table(obs = group, pred = class))
 ```
 
    
@@ -278,8 +278,9 @@ d %>% count(group, class)
 
 or
 ```{r }
-d %>% count(group, class) %>%
-spread(class, n, fill=0)
+d %>%
+  count(group, class) %>%
+  spread(class, n, fill = 0)
 ```
 
  
@@ -295,8 +296,9 @@ probabilities in my `d` start with `posterior`. These
 have a ton of decimal places which I like to round off first before I
 display them, eg. to 3 decimals here:
 ```{r }
-d %>% select(y1, y2, group, class, starts_with("posterior")) %>%
-mutate_at(vars(starts_with("posterior")), ~round(.,3))
+d %>%
+  select(y1, y2, group, class, starts_with("posterior")) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3))
 ```
 
  
@@ -314,9 +316,10 @@ plot in a different way. First I need to make a new column picking out
 observation 6, and then I use this new variable as the `size`
 of the point I plot:
 ```{r }
-simple %>% mutate(is6=(row_number()==6)) %>%
-ggplot(aes(x=y1,y=y2,colour=group,size=is6))+
-geom_point()
+simple %>%
+  mutate(is6 = (row_number() == 6)) %>%
+  ggplot(aes(x = y1, y = y2, colour = group, size = is6)) +
+  geom_point()
 ```
 
  

@@ -43,8 +43,8 @@ Solution
 
 `read_csv`:
 ```{r }
-my_url="http://www.utsc.utoronto.ca/~butler/d29/shirts.csv"
-shirts=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/shirts.csv"
+shirts <- read_csv(my_url)
 shirts
 ```
 
@@ -63,7 +63,7 @@ Solution
 
 Thus:
 ```{r }
-shirts = shirts %>% mutate(treatment=factor(treatment))
+shirts <- shirts %>% mutate(treatment = factor(treatment))
 ```
 
      
@@ -120,7 +120,7 @@ Extra: you can make them appear in the order they appear in the data,
 if you want to (and if you know what you are doing):
 
 ```{r }
-shirts %>% mutate(trt2=fct_inorder(treatment)) -> d
+shirts %>% mutate(trt2 = fct_inorder(treatment)) -> d
 levels(d$trt2)
 ```
 
@@ -143,8 +143,9 @@ Solution
 We will use this later when assessing the significance of the
 contrasts. It's the usual group-by and summarize:
 ```{r }
-shirts %>% group_by(treatment) %>%
-summarize(m=mean(score))
+shirts %>%
+  group_by(treatment) %>%
+  summarize(m = mean(score))
 ```
 
      
@@ -153,7 +154,7 @@ Extra: how does this come out if you have your factor levels in a
 non-alphabetical order?
 
 ```{r }
-d %>% group_by(trt2) %>% summarize(m=mean(score))
+d %>% group_by(trt2) %>% summarize(m = mean(score))
 ```
 
  
@@ -193,7 +194,7 @@ Solution
 
 These, in that order, are comparisons of treatments 4 and 5:
 ```{r }
-c_mms=c(0,0,0,1,-1)
+c_mms <- c(0, 0, 0, 1, -1)
 ```
 
    
@@ -201,7 +202,7 @@ c_mms=c(0,0,0,1,-1)
 treatments 2 and 3:
 
 ```{r }
-c_fms=c(0,1,-1,0,0)
+c_fms <- c(0, 1, -1, 0, 0)
 ```
 
  
@@ -211,7 +212,7 @@ c_fms=c(0,1,-1,0,0)
 the average of 2 and 3 vs.\ the average of 4 and 5:
 
 ```{r }
-c_mf=c(0,0.5,0.5,-0.5,-0.5)
+c_mf <- c(0, 0.5, 0.5, -0.5, -0.5)
 ```
 
  
@@ -223,7 +224,7 @@ two means.
 Finally
 
 ```{r }
-c_tc=c(1,-0.25,-0.25,-0.25,-0.25)
+c_tc <- c(1, -0.25, -0.25, -0.25, -0.25)
 ```
 
  
@@ -245,7 +246,7 @@ Solution
 Multiply them together (elementwise, which is what `*`
 does) and add them up, showing that you get zero, for example:
 ```{r }
-sum(c_mf*c_tc)
+sum(c_mf * c_tc)
 ```
 
      
@@ -263,8 +264,8 @@ Solution
 
 I called my data frame `shirts`, so I need to do this:
 ```{r }
-m=cbind(c_mms, c_fms, c_mf, c_tc)
-contrasts(shirts$treatment)=m
+m <- cbind(c_mms, c_fms, c_mf, c_tc)
+contrasts(shirts$treatment) <- m
 ```
 
        
@@ -290,8 +291,8 @@ each other contrast.
 Or even:
 
 ```{r }
-z=t(m) %*% m
-all(z[row(z)!=col(z)]==0)
+z <- t(m) %*% m
+all(z[row(z) != col(z)] == 0)
 ```
 
  
@@ -311,7 +312,7 @@ Solution
 Once you have everything set up, it's just a matter of going
 through the process:
 ```{r }
-score.1=lm(score~treatment,data=shirts)
+score.1 <- lm(score ~ treatment, data = shirts)
 summary(score.1)
 ```
 
