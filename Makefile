@@ -18,7 +18,7 @@ rmds: carp.Rmd socwork.Rmd pinetrees.Rmd jays-dplyr.Rmd tomatoes.Rmd migraine.Rm
     vote.Rmd airpollution.Rmd weather_2014.Rmd corrmat.Rmd ipip.Rmd\
     wisconsin.Rmd stimuli.Rmd letterrec.Rmd beermds.Rmd stimuli2.Rmd ais-km.Rmd\
     different-ways.Rmd hayfever.Rmd acidrain.Rmd\
-manova1.Rmd bootstrap.Rmd bootstrap_median.Rmd binomial_stan.Rmd
+manova1.Rmd bootstrap.Rmd bootstrap_median.Rmd binomial_stan.Rmd regression_stan.Rmd
 %.Rmd: ~/teaching/d29/exams/%.Rnw convert.pl
 	perl convert.pl $< > $@
 	Rscript -e "styler::style_file(\"$@\")"

@@ -1,5 +1,7 @@
 ##  Estimating proportion in favour from a survey
-You are probably familiar with the kind of surveys where you are given a statement, like "I am the kind of person that finishes a task they start", 
+
+
+ You are probably familiar with the kind of surveys where you are given a statement, like "I am the kind of person that finishes a task they start", 
 and you have to express your agreement or disagreement with it. 
 Usually, you are given a five-point or seven-point scale on which you express your level of agreement (from "strongly agree" 
 through "neither agree nor disagree" to 
@@ -183,7 +185,7 @@ Solution
 
 Go down to the console and type something like
 ```{r eval=F}
-binomial_code=stan_model("binomial.stan")
+binomial_code <- stan_model("binomial.stan")
 ```
 
    
@@ -208,7 +210,7 @@ Solution
 Look in your `data` section, and see what you need to provide values for. 
 The order doesn't matter; make a list with the named pieces and their values, in some order. You need values for these four things:
 ```{r }
-binomial_data=list(n=277, x=69, alpha=2, beta=2)
+binomial_data <- list(n = 277, x = 69, alpha = 2, beta = 2)
 ```
 
    
@@ -220,11 +222,13 @@ Then *you* as a statistician have to choose values for `alpha` and `beta` that m
 The `beta` distribution is part of R, so this is doable, for example like this:
 
 ```{r }
-crossing(alpha=1:10, beta=1:10) %>% 
-mutate(lower=qbeta(0.025, alpha, beta),
-upper=qbeta(0.975, alpha, beta)) %>% 
-mutate(sse=(lower-0.1)^2+(upper-0.6)^2) %>% 
-arrange(sse)
+crossing(alpha = 1:10, beta = 1:10) %>%
+  mutate(
+    lower = qbeta(0.025, alpha, beta),
+    upper = qbeta(0.975, alpha, beta)
+  ) %>%
+  mutate(sse = (lower - 0.1)^2 + (upper - 0.6)^2) %>%
+  arrange(sse)
 ```
 
  
@@ -241,8 +245,8 @@ My process:
 The "inverse CDF" (the value $x$ that has this much of the probability below it) is what we want here; this is obtained in R by putting `q` in front of the name of the distribution.
 Try `qnorm(-1.96)` xxx and see if you recognize the answer. Also, `qbeta` is "vectorized", so the `alpha` and `beta` can be entire columns rather than just numbers, and it will work. If you want to, you can use `map2` to do it for each `alpha` and `beta`, something like this:
 ```{r }
-crossing(alpha=1:10, beta=1:10) %>% 
-mutate(lower=map2(alpha, beta, ~qbeta(0.0.25, .x, .y)))
+crossing(alpha = 1:10, beta = 1:10) %>%
+  mutate(lower = map2(alpha, beta, ~ qbeta(0, 0.25, .x, .y)))
 ```
 
    
@@ -264,7 +268,7 @@ Solution
 
 
 ```{r include=F}
-binomial_code=readRDS("binomial_code.rds")
+binomial_code <- readRDS("binomial_code.rds")
 binomial_code
 ```
 
@@ -273,7 +277,7 @@ binomial_code
 xxx
 This is what I got:
 ```{r }
-binomial.1=sampling(binomial_code, binomial_data)
+binomial.1 <- sampling(binomial_code, binomial_data)
 binomial.1
 ```
 
@@ -322,13 +326,23 @@ Solution
 
 
 With this stuff, you can throw away any constants.
+
 The likelihood is (proportional to) $$ p^x (1-p)^{n-x}.$$ There is a binomial coefficient that I threw away.
+
 Look up the form of the beta density if you don't know it (or look above): the prior for $p$ is proportional to
+
 $$ p^{\alpha-1} (1-p)^{\beta-1}.$$
+
 Posterior is proportional to likelihood times prior:
+
 $$ p^{x + \alpha - 1} (1-p)^{n-x +\beta - 1}$$
+
 which is recognized as a beta distribution with parameters $x+\alpha$, $n-x+\beta$. 
 Typically (unless you are very sure about $p$ a priori (that is, before collecting any data)), $x$ and $n-x$ will be much larger than $\alpha$ and $\beta$, so this will look a lot like a binomial likelihood, which is why the confidence interval and posterior interval in our example came out very similar.
+I leave it to you to decide which you prefer: algebra and
+intelligence (and luck, often), or writing code to sample from the
+posterior. I know what I prefer!
+
 Extra: one of the people behind Stan is on Twitter with handle `@betanalpha`.
 
 

@@ -1,0 +1,371 @@
+##  Bayesian regression
+
+
+ In this question, we will develop Stan code to run a simple
+linear regression, and later apply it to some data (and do a bit of
+elicitation of prior distributions along the way).
+
+
+
+(a) Create a `.stan` file that will run a simple linear
+regression predicting a variable `y` from a variable
+`x`, estimating an intercept `a` and a slope
+`b`. Use normal prior distributions for `a` and
+`b`, and allow the means and SDs of the prior distributions
+for `a` and `b`. The regression model says that the
+response `y` has a normal distribution with mean
+`a+bx` and SD `sigma` which is also estimated. Give
+this a prior chi-squared distribution with a prior mean that is also
+input.
+
+Solution
+
+
+This is a lot. Breathe. Pause. Then, in R Studio, File, New File and Stan File. Leave the template there, and change what you need as you go.
+I would start with the model part. The likelihood part says that `y` has a normal distribution with mean `a+bx` and SD `sigma`, thus:
+
+```
+
+// likelihood
+y ~ normal(a+b*x, sigma);
+
+```
+
+There is a subtlety here that I'll get to later, but this is the easiest way to begin.
+Next, take a look at what's here. `x` is data, and the
+other things, `a`, `b`, `sigma` are
+parameters. These last three need prior distributions. I said to
+use normal distributions for the first two, and a chi-squared
+distribution for the last one. (In practice, of course, you get to
+choose these, in consultation with the subject matter expert, but
+these are likely to be pretty reasonable.) I've given the
+parameters of these prior distributions longish names, so I hope
+I'm trading more typing for less confusion:
+
+```
+
+model {
+// prior
+a ~ normal(prior_int_mean, prior_int_sd);
+b ~ normal(prior_slope_mean, prior_slope_sd);
+sigma ~ chi_square(prior_sigma_mean);
+// likelihood
+y ~ normal(a+b*x, sigma);
+}
+
+```
+
+The chi-squared distribution is written that way in Stan, and has
+only one parameter, a degrees of freedom that is also its mean.
+
+Our three parameters then need to be declared, in the
+`parameters` section. `a` and `b` can be any
+real number, while `sigma` has to be positive:
+
+```
+
+parameters {
+real a;
+real b;
+real<lower=0> sigma;
+}
+
+```
+
+
+Everything else is data, and we have a *lot* of data this time:
+
+
+```
+
+data {
+int<lower=0> n;
+vector[n] x;
+vector[n] y;
+real prior_int_mean;
+real<lower=0> prior_int_sd;
+real prior_slope_mean;
+real<lower=0> prior_slope_sd;
+real<lower=0> prior_sigma_mean;
+}
+
+```
+
+
+The five things at the bottom are the prior distribution parameters,
+which we are going to be eliciting later. The means for intercept and
+slope can be anything; the prior SDs have to be positive, and so does
+the prior mean for `sigma`, since it's actually a degrees of
+freedom that has to be positive.
+
+Now we come to two pieces of subtlety. The first is that the
+`x` and `y` are going to have some (unknown) number of
+values in them, but we need to declare them with some length. The
+solution to that is to have the number of observations `n` also
+be part of the data. Once we have that, we can declare `x` and
+`y` to be of length `n` with no problems.
+
+The second piece of subtlety is that you were probably expecting this:
+
+
+```
+
+real x[n];
+real y[n];
+
+```
+
+
+This is usually what you need, but the problem is that when you work
+out `a+b*x` later on, it *doesn't work* because you are
+trying to multiply an array of values `x` by a single value
+`b`. (Try it.) There are two ways around this: (i), if you
+instead declare `x` and `y` to be (real) vectors of
+length `n`, Stan borrows from R's multiplication of a vector by
+a scalar and it works, by multiplying *each element* of the
+vector by the scalar. Or, (ii), you can go back to declaring
+`x` and `y` as real things of length `n`, and use
+a loop to get *each* y from its corresponding `x`, like
+this:
+
+
+```
+
+for (i in 1:n) {
+y[i] ~ normal(a + b * x[i], sigma)
+}
+
+
+```
+
+
+and this works because `a`, `b`, and `x[i]` are
+all scalar. I have to say that I don't really understand the
+distinction between `real x[n]` and `vector[n] x`,
+except that sometimes one works and the other doesn't.
+
+The manual tells you that the `vector` way is "much faster",
+though in a simple problem like this one I doubt that it makes any
+noticeable difference.
+
+My code looks like this, in total:
+
+
+```
+
+data {
+int<lower=0> n;
+vector[n] x;
+vector[n] y;
+real prior_int_mean;
+real<lower=0> prior_int_sd;
+real prior_slope_mean;
+real<lower=0> prior_slope_sd;
+real<lower=0> prior_sigma_mean;
+}
+
+parameters {
+real a;
+real b;
+real<lower=0> sigma;
+}
+
+model {
+// prior
+a ~ normal(prior_int_mean, prior_int_sd);
+b ~ normal(prior_slope_mean, prior_slope_sd);
+sigma ~ chi_square(prior_sigma_mean);
+// likelihood
+y ~ normal(a+b*x, sigma);
+}
+
+
+```
+
+
+
+(b) Check your Stan code for syntactic correctness, and when it is, compile it.
+
+Solution
+
+
+Click the Check button top right of the window where your Stan
+code is. If it finds any errors, correct them and try again.
+
+To compile, the usual thing:
+
+```{r eval=F}
+reg_code <- stan_model("reg.stan")
+```
+
+ 
+
+and wait for it to do its thing. With luck, Check will have found all
+the errors and this will quietly (eventually) do its job.
+
+
+(c) We are going to be analyzing some data on vocabulary size (the number of words known) by children of different ages. It is suspected that the relationship between age and vocabulary size is approximately linear.
+You go consult with an early childhood expert, and they tell you this:
+
+
+* In children of age up to about six, vocabulary almost always
+increases by between 300 and 700 words per year.
+
+* I can't talk about vocabulary of children of age 0, because children don't start learning to talk until age about 18 months (1.5 years).
+
+* Children of age 1.5 years almost always have a vocabulary
+between 0 and 500 words (depending on exactly what age they
+started talking.)
+
+* Even if we know a child's age, our prediction of their
+vocabulary size might be off by as much as 200 words.
+
+Use this information to obtain parameters for your prior distributions.
+
+Solution
+
+
+This is the typical kind of way in which you would elicit a prior
+distribution; you try to turn what the expert tells you into
+something you can use.
+
+Let's assume that the "almost always" above corresponds to a
+95\% confidence interval, and since our intercept and slope have
+prior normal distributions, this is, to the accuracy that we are
+working, mean plus/minus 2 SD. (You can make different assumptions
+and you'll get a somewhat different collection of prior
+distributions.)
+
+The first statement talks about the change in vocabulary size per
+year. This is talking about the slope. The supposed 95\%
+confidence interval given translates to $500 \pm 2(100)$, so the
+prior mean for the slope is 500 and the prior SD is 100.
+
+Not so hard. The problems start with the second one. 
+
+We want a prior mean and SD for the intercept, that is, for the
+mean and SD of vocabulary size at age 0, but the expert (in their
+second statement) is telling us this makes no sense. The third
+statement says that at age 1.5, a 95\% CI for vocabulary size is
+$250 \pm 2(125)$. You can go a number of different ways from here,
+but a simple one is use our best guess for the slope, 500, to
+project back 1.5 years from here by decreasing the mean by
+$(500)(1.5)=750$, that is, to $-500 \pm 2(125)$.
+
+The last one we need is the prior mean for `sigma`. This is what
+the last statement is getting at. Up to you whether you think this
+is an estimate of `sigma` or twice sigma. Let's take 200 as
+a prior estimate of `sigma`, to be safe.
+
+You see that getting a useful prior depends on asking the right
+questions and making good use of the answers you get.
+
+Some people like to use "ignorance" priors, where you assign equal
+probability to all possible values of the parameter. I don't, because
+these are saying that a slope of 10 million is just as likely as a
+slope of 1, regardless of the actual circumstances; you will almost
+always have *some* idea of what you are expecting. It might be
+vague, but it won't be infinitely vague.
+
+
+(d) Some data were collected on age and vocabulary size of 10
+randomly selected children, shown here:
+[link](https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt). Read
+in and display the data; the values are separated by single spaces.
+
+Solution
+
+
+Thus:
+```{r }
+my_url <- "https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt"
+vocabulary <- read_delim(my_url, " ")
+vocabulary
+```
+
+     
+
+
+(e) Use this dataset, along with your prior distribution from
+above, to obtain posterior distributions for intercept, slope and
+error SD. What is the 95\% posterior interval for the slope?
+
+Solution
+
+
+Two parts: set up the data, and then feed it into `sampling`:
+```{r include=F}
+reg_code <- readRDS("reg_code.rds")
+```
+
+
+
+```{r }
+reg_data <- list(
+  n = 10, x = vocabulary$age, y = vocabulary$vocab,
+  prior_int_mean = -500,
+  prior_int_sd = 125,
+  prior_slope_mean = 500,
+  prior_slope_sd = 100,
+  prior_sigma_mean = 200
+)
+reg.1 <- sampling(reg_code, reg_data)
+reg.1
+```
+
+ 
+
+One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are xxx and xxx. 
+
+
+(f) What can we say about the vocabulary size of a randomly
+selected child of age 5 (a new one, not the one in the original data
+set)? Use an appropriate predictive distribution.
+
+Solution
+
+
+If you have done STAC67, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:
+
+```{r }
+reg_samples <- rstan::extract(reg.1)
+cbind(a = reg_samples$a, b = reg_samples$b, sigma = reg_samples$sigma) %>%
+  as_tibble() -> sims
+sims
+```
+
+ 
+
+and now we need to simulate some response values for our notional child of age 5. That means simulating for an `x` of 5, using each of those values of `a`, `b` and `sigma`:
+
+```{r }
+
+sims %>%
+  mutate(sim_vocab = rnorm(nrow(sims), a + b * 5, sigma)) -> sims2
+ggplot(sims2, aes(x = sim_vocab)) + geom_histogram(bins = 20)
+```
+
+ 
+
+That's the distribution of the vocabulary size of children aged 5. We can get a 95\% interval from this the usual way: find the 2.5 and 97.5 percentiles:
+
+```{r }
+with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
+```
+
+ 
+
+Is it like the prediction interval?
+
+```{r }
+vocabulary.1 <- lm(vocab ~ age, data = vocabulary)
+new <- tibble(age = 5)
+predict(vocabulary.1, new, interval = "p")
+```
+
+ 
+
+It seems a bit wider.
+
+
+

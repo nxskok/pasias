@@ -120,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="packages-used-somewhere-in-this-book.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">2</span> Packages used somewhere in this book</a></li>
 <li class="has-sub"><a href="bayesian-statistics-with-rstan.html#bayesian-statistics-with-rstan"><span class="toc-section-number">3</span> Bayesian Statistics with <code>rstan</code></a><ul>
 <li><a href="bayesian-statistics-with-rstan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">3.1</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-rstan.html#bayesian-regression"><span class="toc-section-number">3.2</span> Bayesian regression</a></li>
 </ul></li>
 <li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">4</span> Getting used to R and R Studio</a><ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">4.1</span> Getting an R Studio Cloud account</a></li>
@@ -501,7 +502,27 @@ The <code>beta</code> distribution is part of R, so this is doable, for example 
 <li><p>Pick some values of <code>alpha</code> and <code>beta</code> to try, and make all possible combinations of them.</p></li>
 <li><p>Find the 2.5 and 97.5 percentiles of the beta distribution for each of those values.
 The “inverse CDF” (the value <span class="math inline">\(x\)</span> that has this much of the probability below it) is what we want here; this is obtained in R by putting <code>q</code> in front of the name of the distribution.
-Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qbeta</code> is “vectorized”, so the <code>alpha</code> and <code>beta</code> can be entire columns rather than just numbers, and it will work. If you want to, you can use <code>map2</code> to do it for each <code>alpha</code> and <code>beta</code>, something like \texttt{mutate(lower=map2(alpha, beta, ~qbeta(0.025, .x, .y).</p></li>
+Try <code>qnorm(-1.96)</code> xxx and see if you recognize the answer. Also, <code>qbeta</code> is “vectorized”, so the <code>alpha</code> and <code>beta</code> can be entire columns rather than just numbers, and it will work. If you want to, you can use <code>map2</code> to do it for each <code>alpha</code> and <code>beta</code>, something like this:</p></li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lower =</span> <span class="kw">map2</span>(alpha, beta, <span class="op">~</span><span class="st"> </span><span class="kw">qbeta</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, .x, .y)))</a></code></pre></div>
+<pre><code>## # A tibble: 100 x 3
+##    alpha  beta lower    
+##    &lt;int&gt; &lt;int&gt; &lt;list&gt;   
+##  1     1     1 &lt;dbl [1]&gt;
+##  2     1     2 &lt;dbl [1]&gt;
+##  3     1     3 &lt;dbl [1]&gt;
+##  4     1     4 &lt;dbl [1]&gt;
+##  5     1     5 &lt;dbl [1]&gt;
+##  6     1     6 &lt;dbl [1]&gt;
+##  7     1     7 &lt;dbl [1]&gt;
+##  8     1     8 &lt;dbl [1]&gt;
+##  9     1     9 &lt;dbl [1]&gt;
+## 10     1    10 &lt;dbl [1]&gt;
+## # … with 90 more rows</code></pre>
+<p>xxx Remember that there are two “it”s in <code>map2</code>, and they are called <code>.x</code> and
+<code>.y</code>.</p>
+<ul>
 <li><p>We want the lower limit to be close to 0.1 and the upper limit to be close to 0.6. Working out the sum of squared errors for each <code>alpha</code>-<code>beta</code> combo is a way to do this; if <code>sse</code> is small, that combination of <code>alpha</code> and <code>beta</code> gave lower and upper limits close to 0.1 and 0.6.</p></li>
 <li><p>Arrange the <code>sse</code> values smallest to largest. The top rows are the best choices of <code>alpha</code> and <code>beta</code>.</p></li>
 </ul>
@@ -509,51 +530,14 @@ Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qb
 <li>Sample from the posterior distribution of <code>p</code> with these data, and display your results.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">binomial_code &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;binomial_code.rds&quot;</span>)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">binomial_code</a></code></pre></div>
-<pre><code>## S4 class stanmodel &#39;binomial&#39; coded as follows:
-## //
-## // This Stan program defines a simple model, with a
-## // vector of values &#39;y&#39; modeled as normally distributed
-## // with mean &#39;mu&#39; and standard deviation &#39;sigma&#39;.
-## //
-## // Learn more about model development with Stan at:
-## //
-## //    http://mc-stan.org/users/interfaces/rstan.html
-## //    https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started
-## //
-## 
-## // The input data is a vector &#39;y&#39; of length &#39;N&#39;.
-## data {
-##   int&lt;lower=0&gt; n;
-##   int&lt;lower=0, upper=n&gt; x;
-##   real&lt;lower=0&gt; alpha;
-##   real&lt;lower=0&gt; beta;
-## }
-## 
-## // The parameters accepted by the model. Our model
-## // accepts two parameters &#39;mu&#39; and &#39;sigma&#39;.
-## parameters {
-##   real&lt;lower=0, upper=1&gt; p;
-## }
-## 
-## // The model to be estimated. We model the output
-## // &#39;y&#39; to be normally distributed with mean &#39;mu&#39;
-## // and standard deviation &#39;sigma&#39;.
-## model {
-##   // prior
-##   p ~ beta(alpha, beta);
-##   // likelihood
-##   x ~ binomial(n, p);
-## }
-## </code></pre>
-<p>This is what I got:</p>
+<p>xxx
+This is what I got:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">binomial<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(binomial_code, binomial_data)</a></code></pre></div>
 <pre><code>## 
 ## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 7e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 1: Gradient evaluation took 6e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -570,9 +554,9 @@ Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qb
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.008147 seconds (Warm-up)
-## Chain 1:                0.008053 seconds (Sampling)
-## Chain 1:                0.0162 seconds (Total)
+## Chain 1:  Elapsed Time: 0.007879 seconds (Warm-up)
+## Chain 1:                0.00693 seconds (Sampling)
+## Chain 1:                0.014809 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 2).
@@ -595,9 +579,9 @@ Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qb
 ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.008504 seconds (Warm-up)
-## Chain 2:                0.00783 seconds (Sampling)
-## Chain 2:                0.016334 seconds (Total)
+## Chain 2:  Elapsed Time: 0.007837 seconds (Warm-up)
+## Chain 2:                0.006966 seconds (Sampling)
+## Chain 2:                0.014803 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 3).
@@ -620,15 +604,15 @@ Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qb
 ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.008067 seconds (Warm-up)
-## Chain 3:                0.007549 seconds (Sampling)
-## Chain 3:                0.015616 seconds (Total)
+## Chain 3:  Elapsed Time: 0.0078 seconds (Warm-up)
+## Chain 3:                0.006893 seconds (Sampling)
+## Chain 3:                0.014693 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 4).
 ## Chain 4: 
-## Chain 4: Gradient evaluation took 4e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+## Chain 4: Gradient evaluation took 5e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 4: Adjust your expectations accordingly!
 ## Chain 4: 
 ## Chain 4: 
@@ -645,9 +629,9 @@ Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qb
 ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.008123 seconds (Warm-up)
-## Chain 4:                0.007127 seconds (Sampling)
-## Chain 4:                0.01525 seconds (Total)
+## Chain 4:  Elapsed Time: 0.007715 seconds (Warm-up)
+## Chain 4:                0.00868 seconds (Sampling)
+## Chain 4:                0.016395 seconds (Total)
 ## Chain 4:</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">binomial<span class="fl">.1</span></a></code></pre></div>
 <pre><code>## Inference for Stan model: binomial.
@@ -655,13 +639,13 @@ Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qb
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-## p       0.25    0.00 0.03    0.20    0.24    0.25    0.27    0.31  1529
-## lp__ -159.34    0.02 0.71 -161.35 -159.51 -159.07 -158.89 -158.84  1964
+## p       0.25    0.00 0.03    0.20    0.24    0.25    0.27    0.31  1425
+## lp__ -159.35    0.02 0.73 -161.46 -159.52 -159.06 -158.88 -158.84  1833
 ##      Rhat
 ## p       1
 ## lp__    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu May 23 14:53:32 2019.
+## Samples were drawn using NUTS(diag_e) at Thu May 23 18:31:54 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -670,7 +654,7 @@ Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qb
 <li>Obtain a 95% posterior interval for the probability that a randomly chosen adult female shopper will request a raincheck.</li>
 </ol>
 <p>Solution</p>
-<p>Read off the 2.5 and 97.5 values for <code>p</code>. Mine are xxx and xxx.</p>
+<p>Read off the 2.5 and 97.5 values for <code>p</code>. Mine are 0.20 and 0.31.</p>
 <ol start="11" style="list-style-type: lower-alpha">
 <li>Obtain a 95% (frequentist) confidence interval for <code>p</code>, and compare the results. (Hint: <code>prop.test</code>.) Comment briefly.</li>
 </ol>
@@ -688,7 +672,7 @@ Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qb
 ## sample estimates:
 ##         p 
 ## 0.2490975</code></pre>
-<p>My 95% intervals are almost identical.</p>
+<p>My 95% intervals are, to two decimals,xxx identical.</p>
 <p>Numerically, this is because the only (material) difference between them is the presence of the prior in the Bayesian approach. We have quite a lot of data, though, so the choice of prior is actually not that important (“the data overwhelm the prior”). I could have used <code>alpha=8, beta=4</code> that I obtained in the Extra above, and it wouldn’t have made any noticeable difference.</p>
 <p>Conceptually, though, the interpretations of these intervals are very different: the Bayesian posterior interval really does say “the probability of <span class="math inline">\(p\)</span> being between xxx and xxx is 0.95”, while for the confidence interval you have to talk about repeated sampling: “the procedure producing the 95% confidence interval will contain the true value of <span class="math inline">\(p\)</span> in 95% of all possible samples”.
 This might seem clunky in comparison; a Bayesian would tell you that the interpretation of the posterior interval is what you want the interpretation of the confidence interval to be, but is not!</p>
@@ -696,14 +680,424 @@ This might seem clunky in comparison; a Bayesian would tell you that the interpr
 <li>(optional) This is one of those problems where you can obtain the answer analytically. What is the posterior distribution of <span class="math inline">\(p\)</span>, using a prior <span class="math inline">\(beta(\alpha, \beta)\)</span> distribution for <span class="math inline">\(p\)</span> and observing <span class="math inline">\(x\)</span> successes out of <span class="math inline">\(n\)</span> trials?</li>
 </ol>
 <p>Solution</p>
-<p>With this stuff, you can throw away any constants.
-The likelihood is (proportional to) <span class="math display">\[ p^x (1-p)^{n-x}.\]</span> There is a binomial coefficient that I threw away.
-Look up the form of the beta density if you don’t know it (or look above): the prior for <span class="math inline">\(p\)</span> is proportional to
-<span class="math display">\[ p^{\alpha-1} (1-p)^{\beta-1}.\]</span>
-Posterior is proportional to likelihood times prior:
-<span class="math display">\[ p^{x + \alpha - 1} (1-p)^{n-x +\beta - 1}\]</span>
-which is recognized as a beta distribution with parameters <span class="math inline">\(x+\alpha\)</span>, <span class="math inline">\(n-x+\beta\)</span>.
-Typically (unless you are very sure about <span class="math inline">\(p\)</span> a priori (that is, before collecting any data)), <span class="math inline">\(x\)</span> and <span class="math inline">\(n-x\)</span> will be much larger than <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(beta\)</span>, so this will look a lot like a binomial likelihood, which is why the confidence interval and posterior interval in our example came out very similar.</p>
+<p>With this stuff, you can throw away any constants.</p>
+<p>The likelihood is (proportional to) <span class="math display">\[ p^x (1-p)^{n-x}.\]</span> There is a binomial coefficient that I threw away.</p>
+<p>Look up the form of the beta density if you don’t know it (or look above): the prior for <span class="math inline">\(p\)</span> is proportional to</p>
+<p><span class="math display">\[ p^{\alpha-1} (1-p)^{\beta-1}.\]</span></p>
+<p>Posterior is proportional to likelihood times prior:</p>
+<p><span class="math display">\[ p^{x + \alpha - 1} (1-p)^{n-x +\beta - 1}\]</span></p>
+<p>which is recognized as a beta distribution with parameters <span class="math inline">\(x+\alpha\)</span>, <span class="math inline">\(n-x+\beta\)</span>.
+Typically (unless you are very sure about <span class="math inline">\(p\)</span> a priori (that is, before collecting any data)), <span class="math inline">\(x\)</span> and <span class="math inline">\(n-x\)</span> will be much larger than <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, so this will look a lot like a binomial likelihood, which is why the confidence interval and posterior interval in our example came out very similar.
+I leave it to you to decide which you prefer: algebra and
+intelligence (and luck, often), or writing code to sample from the
+posterior. I know what I prefer!</p>
+<p>Extra: one of the people behind Stan is on Twitter with handle <code>@betanalpha</code>.</p>
+</div>
+<div id="bayesian-regression" class="section level2">
+<h2><span class="header-section-number">3.2</span> Bayesian regression</h2>
+<p>In this question, we will develop Stan code to run a simple
+linear regression, and later apply it to some data (and do a bit of
+elicitation of prior distributions along the way).</p>
+<ol style="list-style-type: lower-alpha">
+<li>Create a <code>.stan</code> file that will run a simple linear
+regression predicting a variable <code>y</code> from a variable
+<code>x</code>, estimating an intercept <code>a</code> and a slope
+<code>b</code>. Use normal prior distributions for <code>a</code> and
+<code>b</code>, and allow the means and SDs of the prior distributions
+for <code>a</code> and <code>b</code>. The regression model says that the
+response <code>y</code> has a normal distribution with mean
+<code>a+bx</code> and SD <code>sigma</code> which is also estimated. Give
+this a prior chi-squared distribution with a prior mean that is also
+input.</li>
+</ol>
+<p>Solution</p>
+<p>This is a lot. Breathe. Pause. Then, in R Studio, File, New File and Stan File. Leave the template there, and change what you need as you go.
+I would start with the model part. The likelihood part says that <code>y</code> has a normal distribution with mean <code>a+bx</code> and SD <code>sigma</code>, thus:</p>
+<pre><code>
+// likelihood
+y ~ normal(a+b*x, sigma);
+</code></pre>
+<p>There is a subtlety here that I’ll get to later, but this is the easiest way to begin.
+Next, take a look at what’s here. <code>x</code> is data, and the
+other things, <code>a</code>, <code>b</code>, <code>sigma</code> are
+parameters. These last three need prior distributions. I said to
+use normal distributions for the first two, and a chi-squared
+distribution for the last one. (In practice, of course, you get to
+choose these, in consultation with the subject matter expert, but
+these are likely to be pretty reasonable.) I’ve given the
+parameters of these prior distributions longish names, so I hope
+I’m trading more typing for less confusion:</p>
+<pre><code>
+model {
+// prior
+a ~ normal(prior_int_mean, prior_int_sd);
+b ~ normal(prior_slope_mean, prior_slope_sd);
+sigma ~ chi_square(prior_sigma_mean);
+// likelihood
+y ~ normal(a+b*x, sigma);
+}
+</code></pre>
+<p>The chi-squared distribution is written that way in Stan, and has
+only one parameter, a degrees of freedom that is also its mean.</p>
+<p>Our three parameters then need to be declared, in the
+<code>parameters</code> section. <code>a</code> and <code>b</code> can be any
+real number, while <code>sigma</code> has to be positive:</p>
+<pre><code>
+parameters {
+real a;
+real b;
+real&lt;lower=0&gt; sigma;
+}
+</code></pre>
+<p>Everything else is data, and we have a <em>lot</em> of data this time:</p>
+<pre><code>
+data {
+int&lt;lower=0&gt; n;
+vector[n] x;
+vector[n] y;
+real prior_int_mean;
+real&lt;lower=0&gt; prior_int_sd;
+real prior_slope_mean;
+real&lt;lower=0&gt; prior_slope_sd;
+real&lt;lower=0&gt; prior_sigma_mean;
+}
+</code></pre>
+<p>The five things at the bottom are the prior distribution parameters,
+which we are going to be eliciting later. The means for intercept and
+slope can be anything; the prior SDs have to be positive, and so does
+the prior mean for <code>sigma</code>, since it’s actually a degrees of
+freedom that has to be positive.</p>
+<p>Now we come to two pieces of subtlety. The first is that the
+<code>x</code> and <code>y</code> are going to have some (unknown) number of
+values in them, but we need to declare them with some length. The
+solution to that is to have the number of observations <code>n</code> also
+be part of the data. Once we have that, we can declare <code>x</code> and
+<code>y</code> to be of length <code>n</code> with no problems.</p>
+<p>The second piece of subtlety is that you were probably expecting this:</p>
+<pre><code>
+real x[n];
+real y[n];
+</code></pre>
+<p>This is usually what you need, but the problem is that when you work
+out <code>a+b*x</code> later on, it <em>doesn’t work</em> because you are
+trying to multiply an array of values <code>x</code> by a single value
+<code>b</code>. (Try it.) There are two ways around this: (i), if you
+instead declare <code>x</code> and <code>y</code> to be (real) vectors of
+length <code>n</code>, Stan borrows from R’s multiplication of a vector by
+a scalar and it works, by multiplying <em>each element</em> of the
+vector by the scalar. Or, (ii), you can go back to declaring
+<code>x</code> and <code>y</code> as real things of length <code>n</code>, and use
+a loop to get <em>each</em> y from its corresponding <code>x</code>, like
+this:</p>
+<pre><code>
+for (i in 1:n) {
+y[i] ~ normal(a + b * x[i], sigma)
+}
+
+</code></pre>
+<p>and this works because <code>a</code>, <code>b</code>, and <code>x[i]</code> are
+all scalar. I have to say that I don’t really understand the
+distinction between <code>real x[n]</code> and <code>vector[n] x</code>,
+except that sometimes one works and the other doesn’t.</p>
+<p>The manual tells you that the <code>vector</code> way is “much faster”,
+though in a simple problem like this one I doubt that it makes any
+noticeable difference.</p>
+<p>My code looks like this, in total:</p>
+<pre><code>
+data {
+int&lt;lower=0&gt; n;
+vector[n] x;
+vector[n] y;
+real prior_int_mean;
+real&lt;lower=0&gt; prior_int_sd;
+real prior_slope_mean;
+real&lt;lower=0&gt; prior_slope_sd;
+real&lt;lower=0&gt; prior_sigma_mean;
+}
+
+parameters {
+real a;
+real b;
+real&lt;lower=0&gt; sigma;
+}
+
+model {
+// prior
+a ~ normal(prior_int_mean, prior_int_sd);
+b ~ normal(prior_slope_mean, prior_slope_sd);
+sigma ~ chi_square(prior_sigma_mean);
+// likelihood
+y ~ normal(a+b*x, sigma);
+}
+
+</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Check your Stan code for syntactic correctness, and when it is, compile it.</li>
+</ol>
+<p>Solution</p>
+<p>Click the Check button top right of the window where your Stan
+code is. If it finds any errors, correct them and try again.</p>
+<p>To compile, the usual thing:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">reg_code &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;reg.stan&quot;</span>)</a></code></pre></div>
+<p>and wait for it to do its thing. With luck, Check will have found all
+the errors and this will quietly (eventually) do its job.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>We are going to be analyzing some data on vocabulary size (the number of words known) by children of different ages. It is suspected that the relationship between age and vocabulary size is approximately linear.
+You go consult with an early childhood expert, and they tell you this:</li>
+</ol>
+<ul>
+<li><p>In children of age up to about six, vocabulary almost always
+increases by between 300 and 700 words per year.</p></li>
+<li><p>I can’t talk about vocabulary of children of age 0, because children don’t start learning to talk until age about 18 months (1.5 years).</p></li>
+<li><p>Children of age 1.5 years almost always have a vocabulary
+between 0 and 500 words (depending on exactly what age they
+started talking.)</p></li>
+<li><p>Even if we know a child’s age, our prediction of their
+vocabulary size might be off by as much as 200 words.</p></li>
+</ul>
+<p>Use this information to obtain parameters for your prior distributions.</p>
+<p>Solution</p>
+<p>This is the typical kind of way in which you would elicit a prior
+distribution; you try to turn what the expert tells you into
+something you can use.</p>
+<p>Let’s assume that the “almost always” above corresponds to a
+95% confidence interval, and since our intercept and slope have
+prior normal distributions, this is, to the accuracy that we are
+working, mean plus/minus 2 SD. (You can make different assumptions
+and you’ll get a somewhat different collection of prior
+distributions.)</p>
+<p>The first statement talks about the change in vocabulary size per
+year. This is talking about the slope. The supposed 95%
+confidence interval given translates to <span class="math inline">\(500 \pm 2(100)\)</span>, so the
+prior mean for the slope is 500 and the prior SD is 100.</p>
+<p>Not so hard. The problems start with the second one.</p>
+<p>We want a prior mean and SD for the intercept, that is, for the
+mean and SD of vocabulary size at age 0, but the expert (in their
+second statement) is telling us this makes no sense. The third
+statement says that at age 1.5, a 95% CI for vocabulary size is
+<span class="math inline">\(250 \pm 2(125)\)</span>. You can go a number of different ways from here,
+but a simple one is use our best guess for the slope, 500, to
+project back 1.5 years from here by decreasing the mean by
+<span class="math inline">\((500)(1.5)=750\)</span>, that is, to <span class="math inline">\(-500 \pm 2(125)\)</span>.</p>
+<p>The last one we need is the prior mean for <code>sigma</code>. This is what
+the last statement is getting at. Up to you whether you think this
+is an estimate of <code>sigma</code> or twice sigma. Let’s take 200 as
+a prior estimate of <code>sigma</code>, to be safe.</p>
+<p>You see that getting a useful prior depends on asking the right
+questions and making good use of the answers you get.</p>
+<p>Some people like to use “ignorance” priors, where you assign equal
+probability to all possible values of the parameter. I don’t, because
+these are saying that a slope of 10 million is just as likely as a
+slope of 1, regardless of the actual circumstances; you will almost
+always have <em>some</em> idea of what you are expecting. It might be
+vague, but it won’t be infinitely vague.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Some data were collected on age and vocabulary size of 10
+randomly selected children, shown here:
+<a href="https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt">link</a>. Read
+in and display the data; the values are separated by single spaces.</li>
+</ol>
+<p>Solution</p>
+<p>Thus:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt&quot;</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">vocabulary &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   age = col_double(),
+##   vocab = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">vocabulary</a></code></pre></div>
+<pre><code>## # A tibble: 10 x 2
+##      age vocab
+##    &lt;dbl&gt; &lt;dbl&gt;
+##  1   1.5   100
+##  2   2     250
+##  3   2.5   460
+##  4   3     890
+##  5   3.5  1210
+##  6   4    1530
+##  7   4.5  1840
+##  8   5    2060
+##  9   5.5  2300
+## 10   6    2500</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Use this dataset, along with your prior distribution from
+above, to obtain posterior distributions for intercept, slope and
+error SD. What is the 95% posterior interval for the slope?</li>
+</ol>
+<p>Solution</p>
+<p>Two parts: set up the data, and then feed it into <code>sampling</code>:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">reg_data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">  <span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">x =</span> vocabulary<span class="op">$</span>age, <span class="dt">y =</span> vocabulary<span class="op">$</span>vocab,</a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">  <span class="dt">prior_int_mean =</span> <span class="dv">-500</span>,</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">  <span class="dt">prior_int_sd =</span> <span class="dv">125</span>,</a>
+<a class="sourceLine" id="cb33-5" data-line-number="5">  <span class="dt">prior_slope_mean =</span> <span class="dv">500</span>,</a>
+<a class="sourceLine" id="cb33-6" data-line-number="6">  <span class="dt">prior_slope_sd =</span> <span class="dv">100</span>,</a>
+<a class="sourceLine" id="cb33-7" data-line-number="7">  <span class="dt">prior_sigma_mean =</span> <span class="dv">200</span></a>
+<a class="sourceLine" id="cb33-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb33-9" data-line-number="9">reg<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(reg_code, reg_data)</a></code></pre></div>
+<pre><code>## 
+## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 7e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 0.103861 seconds (Warm-up)
+## Chain 1:                0.022792 seconds (Sampling)
+## Chain 1:                0.126653 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 9e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 0.11697 seconds (Warm-up)
+## Chain 2:                0.027973 seconds (Sampling)
+## Chain 2:                0.144943 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 7e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 0.116436 seconds (Warm-up)
+## Chain 3:                0.024436 seconds (Sampling)
+## Chain 3:                0.140872 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 6e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 0.104084 seconds (Warm-up)
+## Chain 4:                0.022728 seconds (Sampling)
+## Chain 4:                0.126812 seconds (Total)
+## Chain 4:</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">reg<span class="fl">.1</span></a></code></pre></div>
+<pre><code>## Inference for Stan model: reg.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##          mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff
+## a     -615.92    2.48 97.73 -804.43 -678.90 -618.22 -551.06 -422.65  1558
+## b      521.76    0.68 26.94  467.11  503.97  521.76  539.82  572.46  1556
+## sigma  189.25    0.37 18.97  153.74  176.29  188.54  201.91  227.54  2587
+## lp__   373.72    0.03  1.20  370.65  373.19  374.04  374.62  375.12  1452
+##       Rhat
+## a        1
+## b        1
+## sigma    1
+## lp__     1
+## 
+## Samples were drawn using NUTS(diag_e) at Thu May 23 18:31:56 2019.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p>One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for <code>b</code>, which are xxx and xxx.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>What can we say about the vocabulary size of a randomly
+selected child of age 5 (a new one, not the one in the original data
+set)? Use an appropriate predictive distribution.</li>
+</ol>
+<p>Solution</p>
+<p>If you have done STAC67, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">reg_samples &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(reg<span class="fl">.1</span>)</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">cbind</span>(<span class="dt">a =</span> reg_samples<span class="op">$</span>a, <span class="dt">b =</span> reg_samples<span class="op">$</span>b, <span class="dt">sigma =</span> reg_samples<span class="op">$</span>sigma) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="st">  </span><span class="kw">as_tibble</span>() -&gt;<span class="st"> </span>sims</a>
+<a class="sourceLine" id="cb37-4" data-line-number="4">sims</a></code></pre></div>
+<pre><code>## # A tibble: 4,000 x 3
+##        a     b sigma
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 -662.  531.  196.
+##  2 -817.  574.  199.
+##  3 -570.  507.  202.
+##  4 -488.  474.  185.
+##  5 -696.  537.  162.
+##  6 -445.  497.  198.
+##  7 -806.  547.  163.
+##  8 -623.  525.  196.
+##  9 -569.  528.  181.
+## 10 -793.  559.  210.
+## # … with 3,990 more rows</code></pre>
+<p>and now we need to simulate some response values for our notional child of age 5. That means simulating for an <code>x</code> of 5, using each of those values of <code>a</code>, <code>b</code> and <code>sigma</code>:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">sims <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim_vocab =</span> <span class="kw">rnorm</span>(<span class="kw">nrow</span>(sims), a <span class="op">+</span><span class="st"> </span>b <span class="op">*</span><span class="st"> </span><span class="dv">5</span>, sigma)) -&gt;<span class="st"> </span>sims2</a>
+<a class="sourceLine" id="cb39-3" data-line-number="3"><span class="kw">ggplot</span>(sims2, <span class="kw">aes</span>(<span class="dt">x =</span> sim_vocab)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>)</a></code></pre></div>
+<p><img src="27-stan_files/figure-html/unnamed-chunk-18-1.png" width="672"  /></p>
+<p>That’s the distribution of the vocabulary size of children aged 5. We can get a 95% interval from this the usual way: find the 2.5 and 97.5 percentiles:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">with</span>(sims2, <span class="kw">quantile</span>(sim_vocab, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)))</a></code></pre></div>
+<pre><code>##     2.5%    97.5% 
+## 1587.777 2386.419</code></pre>
+<p>Is it like the prediction interval?</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">vocabulary<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(vocab <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> vocabulary)</a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">new &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb42-3" data-line-number="3"><span class="kw">predict</span>(vocabulary<span class="fl">.1</span>, new, <span class="dt">interval =</span> <span class="st">&quot;p&quot;</span>)</a></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 2027.939 1818.223 2237.656</code></pre>
+<p>It seems a bit wider.</p>
 
 </div>
 </div>

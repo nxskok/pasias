@@ -14,7 +14,9 @@ library(rstan)
 
 
 ##  Estimating proportion in favour from a survey
-You are probably familiar with the kind of surveys where you are given a statement, like "I am the kind of person that finishes a task they start", 
+
+
+ You are probably familiar with the kind of surveys where you are given a statement, like "I am the kind of person that finishes a task they start", 
 and you have to express your agreement or disagreement with it. 
 Usually, you are given a five-point or seven-point scale on which you express your level of agreement (from "strongly agree" 
 through "neither agree nor disagree" to 
@@ -276,7 +278,34 @@ My process:
 
 * Find the 2.5 and 97.5 percentiles of the beta distribution for each of those values. 
 The "inverse CDF" (the value $x$ that has this much of the probability below it) is what we want here; this is obtained in R by putting `q` in front of the name of the distribution.
-Try `qnorm(-1.96` and see if you recognize the answer. Also, `qbeta` is "vectorized", so the `alpha` and `beta` can be entire columns rather than just numbers, and it will work. If you want to, you can use `map2` to do it for each `alpha` and `beta`, something like \texttt{mutate(lower=map2(alpha, beta, ~qbeta(0.025, .x, .y). 
+Try `qnorm(-1.96)` xxx and see if you recognize the answer. Also, `qbeta` is "vectorized", so the `alpha` and `beta` can be entire columns rather than just numbers, and it will work. If you want to, you can use `map2` to do it for each `alpha` and `beta`, something like this:
+
+```r
+crossing(alpha = 1:10, beta = 1:10) %>%
+  mutate(lower = map2(alpha, beta, ~ qbeta(0, 0.25, .x, .y)))
+```
+
+```
+## # A tibble: 100 x 3
+##    alpha  beta lower    
+##    <int> <int> <list>   
+##  1     1     1 <dbl [1]>
+##  2     1     2 <dbl [1]>
+##  3     1     3 <dbl [1]>
+##  4     1     4 <dbl [1]>
+##  5     1     5 <dbl [1]>
+##  6     1     6 <dbl [1]>
+##  7     1     7 <dbl [1]>
+##  8     1     8 <dbl [1]>
+##  9     1     9 <dbl [1]>
+## 10     1    10 <dbl [1]>
+## # … with 90 more rows
+```
+
+   
+
+xxx Remember that there are two "it"s in `map2`, and they are called `.x` and 
+`.y`.
 
 * We want the lower limit to be close to 0.1 and the upper limit to be close to 0.6. Working out the sum of squared errors for each `alpha`-`beta` combo is a way to do this; if `sse` is small, that combination of `alpha` and `beta` gave lower and upper limits close to 0.1 and 0.6.
 
@@ -292,51 +321,10 @@ Solution
 
 
 
-```r
-binomial_code <- readRDS("binomial_code.rds")
-binomial_code
-```
-
-```
-## S4 class stanmodel 'binomial' coded as follows:
-## //
-## // This Stan program defines a simple model, with a
-## // vector of values 'y' modeled as normally distributed
-## // with mean 'mu' and standard deviation 'sigma'.
-## //
-## // Learn more about model development with Stan at:
-## //
-## //    http://mc-stan.org/users/interfaces/rstan.html
-## //    https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started
-## //
-## 
-## // The input data is a vector 'y' of length 'N'.
-## data {
-##   int<lower=0> n;
-##   int<lower=0, upper=n> x;
-##   real<lower=0> alpha;
-##   real<lower=0> beta;
-## }
-## 
-## // The parameters accepted by the model. Our model
-## // accepts two parameters 'mu' and 'sigma'.
-## parameters {
-##   real<lower=0, upper=1> p;
-## }
-## 
-## // The model to be estimated. We model the output
-## // 'y' to be normally distributed with mean 'mu'
-## // and standard deviation 'sigma'.
-## model {
-##   // prior
-##   p ~ beta(alpha, beta);
-##   // likelihood
-##   x ~ binomial(n, p);
-## }
-## 
-```
 
    
+
+xxx
 This is what I got:
 
 ```r
@@ -347,8 +335,8 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 7e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 1: Gradient evaluation took 6e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -365,9 +353,9 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.008147 seconds (Warm-up)
-## Chain 1:                0.008053 seconds (Sampling)
-## Chain 1:                0.0162 seconds (Total)
+## Chain 1:  Elapsed Time: 0.007879 seconds (Warm-up)
+## Chain 1:                0.00693 seconds (Sampling)
+## Chain 1:                0.014809 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 2).
@@ -390,9 +378,9 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.008504 seconds (Warm-up)
-## Chain 2:                0.00783 seconds (Sampling)
-## Chain 2:                0.016334 seconds (Total)
+## Chain 2:  Elapsed Time: 0.007837 seconds (Warm-up)
+## Chain 2:                0.006966 seconds (Sampling)
+## Chain 2:                0.014803 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 3).
@@ -415,15 +403,15 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.008067 seconds (Warm-up)
-## Chain 3:                0.007549 seconds (Sampling)
-## Chain 3:                0.015616 seconds (Total)
+## Chain 3:  Elapsed Time: 0.0078 seconds (Warm-up)
+## Chain 3:                0.006893 seconds (Sampling)
+## Chain 3:                0.014693 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 4).
 ## Chain 4: 
-## Chain 4: Gradient evaluation took 4e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+## Chain 4: Gradient evaluation took 5e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 4: Adjust your expectations accordingly!
 ## Chain 4: 
 ## Chain 4: 
@@ -440,9 +428,9 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.008123 seconds (Warm-up)
-## Chain 4:                0.007127 seconds (Sampling)
-## Chain 4:                0.01525 seconds (Total)
+## Chain 4:  Elapsed Time: 0.007715 seconds (Warm-up)
+## Chain 4:                0.00868 seconds (Sampling)
+## Chain 4:                0.016395 seconds (Total)
 ## Chain 4:
 ```
 
@@ -456,13 +444,13 @@ binomial.1
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-## p       0.25    0.00 0.03    0.20    0.24    0.25    0.27    0.31  1529
-## lp__ -159.34    0.02 0.71 -161.35 -159.51 -159.07 -158.89 -158.84  1964
+## p       0.25    0.00 0.03    0.20    0.24    0.25    0.27    0.31  1425
+## lp__ -159.35    0.02 0.73 -161.46 -159.52 -159.06 -158.88 -158.84  1833
 ##      Rhat
 ## p       1
 ## lp__    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu May 23 14:53:32 2019.
+## Samples were drawn using NUTS(diag_e) at Thu May 23 18:31:54 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -480,7 +468,7 @@ Your results should be similar, though probably not identical, to mine. (There i
 Solution
 
 
-Read off the 2.5 and 97.5 values for `p`. Mine are xxx and xxx.
+Read off the 2.5 and 97.5 values for `p`. Mine are 0.20 and 0.31.
 
 
 
@@ -512,7 +500,7 @@ prop.test(69, 277)
 
    
 
-My 95\% intervals are almost identical.
+My 95\% intervals are, to two decimals,xxx  identical.
 
 Numerically, this is because the only (material) difference between them is the presence of the prior in the Bayesian approach. We have quite a lot of data, though, so the choice of prior is actually not that important ("the data overwhelm the prior"). I could have used `alpha=8, beta=4` that I obtained in the Extra above, and it wouldn't have made any noticeable difference.
 
@@ -528,14 +516,586 @@ Solution
 
 
 With this stuff, you can throw away any constants.
-The likelihood is (proportional to) $$ p^x (1-p)^{n-x}.$$ There is a binomial coefficient that I threw away.
-Look up the form of the beta density if you don't know it (or look above): the prior for $p$ is proportional to
-$$ p^{\alpha-1} (1-p)^{\beta-1}.$$
-Posterior is proportional to likelihood times prior:
-$$ p^{x + \alpha - 1} (1-p)^{n-x +\beta - 1}$$
-which is recognized as a beta distribution with parameters $x+\alpha$, $n-x+\beta$. 
-Typically (unless you are very sure about $p$ a priori (that is, before collecting any data)), $x$ and $n-x$ will be much larger than $\alpha$ and $beta$, so this will look a lot like a binomial likelihood, which is why the confidence interval and posterior interval in our example came out very similar.
 
+The likelihood is (proportional to) $$ p^x (1-p)^{n-x}.$$ There is a binomial coefficient that I threw away.
+
+Look up the form of the beta density if you don't know it (or look above): the prior for $p$ is proportional to
+
+$$ p^{\alpha-1} (1-p)^{\beta-1}.$$
+
+Posterior is proportional to likelihood times prior:
+
+$$ p^{x + \alpha - 1} (1-p)^{n-x +\beta - 1}$$
+
+which is recognized as a beta distribution with parameters $x+\alpha$, $n-x+\beta$. 
+Typically (unless you are very sure about $p$ a priori (that is, before collecting any data)), $x$ and $n-x$ will be much larger than $\alpha$ and $\beta$, so this will look a lot like a binomial likelihood, which is why the confidence interval and posterior interval in our example came out very similar.
+I leave it to you to decide which you prefer: algebra and
+intelligence (and luck, often), or writing code to sample from the
+posterior. I know what I prefer!
+
+Extra: one of the people behind Stan is on Twitter with handle `@betanalpha`.
+
+
+
+
+
+
+##  Bayesian regression
+
+
+ In this question, we will develop Stan code to run a simple
+linear regression, and later apply it to some data (and do a bit of
+elicitation of prior distributions along the way).
+
+
+
+(a) Create a `.stan` file that will run a simple linear
+regression predicting a variable `y` from a variable
+`x`, estimating an intercept `a` and a slope
+`b`. Use normal prior distributions for `a` and
+`b`, and allow the means and SDs of the prior distributions
+for `a` and `b`. The regression model says that the
+response `y` has a normal distribution with mean
+`a+bx` and SD `sigma` which is also estimated. Give
+this a prior chi-squared distribution with a prior mean that is also
+input.
+
+Solution
+
+
+This is a lot. Breathe. Pause. Then, in R Studio, File, New File and Stan File. Leave the template there, and change what you need as you go.
+I would start with the model part. The likelihood part says that `y` has a normal distribution with mean `a+bx` and SD `sigma`, thus:
+
+```
+
+// likelihood
+y ~ normal(a+b*x, sigma);
+
+```
+
+There is a subtlety here that I'll get to later, but this is the easiest way to begin.
+Next, take a look at what's here. `x` is data, and the
+other things, `a`, `b`, `sigma` are
+parameters. These last three need prior distributions. I said to
+use normal distributions for the first two, and a chi-squared
+distribution for the last one. (In practice, of course, you get to
+choose these, in consultation with the subject matter expert, but
+these are likely to be pretty reasonable.) I've given the
+parameters of these prior distributions longish names, so I hope
+I'm trading more typing for less confusion:
+
+```
+
+model {
+// prior
+a ~ normal(prior_int_mean, prior_int_sd);
+b ~ normal(prior_slope_mean, prior_slope_sd);
+sigma ~ chi_square(prior_sigma_mean);
+// likelihood
+y ~ normal(a+b*x, sigma);
+}
+
+```
+
+The chi-squared distribution is written that way in Stan, and has
+only one parameter, a degrees of freedom that is also its mean.
+
+Our three parameters then need to be declared, in the
+`parameters` section. `a` and `b` can be any
+real number, while `sigma` has to be positive:
+
+```
+
+parameters {
+real a;
+real b;
+real<lower=0> sigma;
+}
+
+```
+
+
+Everything else is data, and we have a *lot* of data this time:
+
+
+```
+
+data {
+int<lower=0> n;
+vector[n] x;
+vector[n] y;
+real prior_int_mean;
+real<lower=0> prior_int_sd;
+real prior_slope_mean;
+real<lower=0> prior_slope_sd;
+real<lower=0> prior_sigma_mean;
+}
+
+```
+
+
+The five things at the bottom are the prior distribution parameters,
+which we are going to be eliciting later. The means for intercept and
+slope can be anything; the prior SDs have to be positive, and so does
+the prior mean for `sigma`, since it's actually a degrees of
+freedom that has to be positive.
+
+Now we come to two pieces of subtlety. The first is that the
+`x` and `y` are going to have some (unknown) number of
+values in them, but we need to declare them with some length. The
+solution to that is to have the number of observations `n` also
+be part of the data. Once we have that, we can declare `x` and
+`y` to be of length `n` with no problems.
+
+The second piece of subtlety is that you were probably expecting this:
+
+
+```
+
+real x[n];
+real y[n];
+
+```
+
+
+This is usually what you need, but the problem is that when you work
+out `a+b*x` later on, it *doesn't work* because you are
+trying to multiply an array of values `x` by a single value
+`b`. (Try it.) There are two ways around this: (i), if you
+instead declare `x` and `y` to be (real) vectors of
+length `n`, Stan borrows from R's multiplication of a vector by
+a scalar and it works, by multiplying *each element* of the
+vector by the scalar. Or, (ii), you can go back to declaring
+`x` and `y` as real things of length `n`, and use
+a loop to get *each* y from its corresponding `x`, like
+this:
+
+
+```
+
+for (i in 1:n) {
+y[i] ~ normal(a + b * x[i], sigma)
+}
+
+
+```
+
+
+and this works because `a`, `b`, and `x[i]` are
+all scalar. I have to say that I don't really understand the
+distinction between `real x[n]` and `vector[n] x`,
+except that sometimes one works and the other doesn't.
+
+The manual tells you that the `vector` way is "much faster",
+though in a simple problem like this one I doubt that it makes any
+noticeable difference.
+
+My code looks like this, in total:
+
+
+```
+
+data {
+int<lower=0> n;
+vector[n] x;
+vector[n] y;
+real prior_int_mean;
+real<lower=0> prior_int_sd;
+real prior_slope_mean;
+real<lower=0> prior_slope_sd;
+real<lower=0> prior_sigma_mean;
+}
+
+parameters {
+real a;
+real b;
+real<lower=0> sigma;
+}
+
+model {
+// prior
+a ~ normal(prior_int_mean, prior_int_sd);
+b ~ normal(prior_slope_mean, prior_slope_sd);
+sigma ~ chi_square(prior_sigma_mean);
+// likelihood
+y ~ normal(a+b*x, sigma);
+}
+
+
+```
+
+
+
+(b) Check your Stan code for syntactic correctness, and when it is, compile it.
+
+Solution
+
+
+Click the Check button top right of the window where your Stan
+code is. If it finds any errors, correct them and try again.
+
+To compile, the usual thing:
+
+
+```r
+reg_code <- stan_model("reg.stan")
+```
+
+ 
+
+and wait for it to do its thing. With luck, Check will have found all
+the errors and this will quietly (eventually) do its job.
+
+
+(c) We are going to be analyzing some data on vocabulary size (the number of words known) by children of different ages. It is suspected that the relationship between age and vocabulary size is approximately linear.
+You go consult with an early childhood expert, and they tell you this:
+
+
+* In children of age up to about six, vocabulary almost always
+increases by between 300 and 700 words per year.
+
+* I can't talk about vocabulary of children of age 0, because children don't start learning to talk until age about 18 months (1.5 years).
+
+* Children of age 1.5 years almost always have a vocabulary
+between 0 and 500 words (depending on exactly what age they
+started talking.)
+
+* Even if we know a child's age, our prediction of their
+vocabulary size might be off by as much as 200 words.
+
+Use this information to obtain parameters for your prior distributions.
+
+Solution
+
+
+This is the typical kind of way in which you would elicit a prior
+distribution; you try to turn what the expert tells you into
+something you can use.
+
+Let's assume that the "almost always" above corresponds to a
+95\% confidence interval, and since our intercept and slope have
+prior normal distributions, this is, to the accuracy that we are
+working, mean plus/minus 2 SD. (You can make different assumptions
+and you'll get a somewhat different collection of prior
+distributions.)
+
+The first statement talks about the change in vocabulary size per
+year. This is talking about the slope. The supposed 95\%
+confidence interval given translates to $500 \pm 2(100)$, so the
+prior mean for the slope is 500 and the prior SD is 100.
+
+Not so hard. The problems start with the second one. 
+
+We want a prior mean and SD for the intercept, that is, for the
+mean and SD of vocabulary size at age 0, but the expert (in their
+second statement) is telling us this makes no sense. The third
+statement says that at age 1.5, a 95\% CI for vocabulary size is
+$250 \pm 2(125)$. You can go a number of different ways from here,
+but a simple one is use our best guess for the slope, 500, to
+project back 1.5 years from here by decreasing the mean by
+$(500)(1.5)=750$, that is, to $-500 \pm 2(125)$.
+
+The last one we need is the prior mean for `sigma`. This is what
+the last statement is getting at. Up to you whether you think this
+is an estimate of `sigma` or twice sigma. Let's take 200 as
+a prior estimate of `sigma`, to be safe.
+
+You see that getting a useful prior depends on asking the right
+questions and making good use of the answers you get.
+
+Some people like to use "ignorance" priors, where you assign equal
+probability to all possible values of the parameter. I don't, because
+these are saying that a slope of 10 million is just as likely as a
+slope of 1, regardless of the actual circumstances; you will almost
+always have *some* idea of what you are expecting. It might be
+vague, but it won't be infinitely vague.
+
+
+(d) Some data were collected on age and vocabulary size of 10
+randomly selected children, shown here:
+[link](https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt). Read
+in and display the data; the values are separated by single spaces.
+
+Solution
+
+
+Thus:
+
+```r
+my_url <- "https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt"
+vocabulary <- read_delim(my_url, " ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   age = col_double(),
+##   vocab = col_double()
+## )
+```
+
+```r
+vocabulary
+```
+
+```
+## # A tibble: 10 x 2
+##      age vocab
+##    <dbl> <dbl>
+##  1   1.5   100
+##  2   2     250
+##  3   2.5   460
+##  4   3     890
+##  5   3.5  1210
+##  6   4    1530
+##  7   4.5  1840
+##  8   5    2060
+##  9   5.5  2300
+## 10   6    2500
+```
+
+     
+
+
+(e) Use this dataset, along with your prior distribution from
+above, to obtain posterior distributions for intercept, slope and
+error SD. What is the 95\% posterior interval for the slope?
+
+Solution
+
+
+Two parts: set up the data, and then feed it into `sampling`:
+
+
+
+
+
+```r
+reg_data <- list(
+  n = 10, x = vocabulary$age, y = vocabulary$vocab,
+  prior_int_mean = -500,
+  prior_int_sd = 125,
+  prior_slope_mean = 500,
+  prior_slope_sd = 100,
+  prior_sigma_mean = 200
+)
+reg.1 <- sampling(reg_code, reg_data)
+```
+
+```
+## 
+## SAMPLING FOR MODEL 'reg' NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 7e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 0.103861 seconds (Warm-up)
+## Chain 1:                0.022792 seconds (Sampling)
+## Chain 1:                0.126653 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL 'reg' NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 9e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 0.11697 seconds (Warm-up)
+## Chain 2:                0.027973 seconds (Sampling)
+## Chain 2:                0.144943 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL 'reg' NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 7e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 0.116436 seconds (Warm-up)
+## Chain 3:                0.024436 seconds (Sampling)
+## Chain 3:                0.140872 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL 'reg' NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 6e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 0.104084 seconds (Warm-up)
+## Chain 4:                0.022728 seconds (Sampling)
+## Chain 4:                0.126812 seconds (Total)
+## Chain 4:
+```
+
+```r
+reg.1
+```
+
+```
+## Inference for Stan model: reg.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##          mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff
+## a     -615.92    2.48 97.73 -804.43 -678.90 -618.22 -551.06 -422.65  1558
+## b      521.76    0.68 26.94  467.11  503.97  521.76  539.82  572.46  1556
+## sigma  189.25    0.37 18.97  153.74  176.29  188.54  201.91  227.54  2587
+## lp__   373.72    0.03  1.20  370.65  373.19  374.04  374.62  375.12  1452
+##       Rhat
+## a        1
+## b        1
+## sigma    1
+## lp__     1
+## 
+## Samples were drawn using NUTS(diag_e) at Thu May 23 18:31:56 2019.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).
+```
+
+ 
+
+One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are xxx and xxx. 
+
+
+(f) What can we say about the vocabulary size of a randomly
+selected child of age 5 (a new one, not the one in the original data
+set)? Use an appropriate predictive distribution.
+
+Solution
+
+
+If you have done STAC67, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:
+
+
+```r
+reg_samples <- rstan::extract(reg.1)
+cbind(a = reg_samples$a, b = reg_samples$b, sigma = reg_samples$sigma) %>%
+  as_tibble() -> sims
+sims
+```
+
+```
+## # A tibble: 4,000 x 3
+##        a     b sigma
+##    <dbl> <dbl> <dbl>
+##  1 -662.  531.  196.
+##  2 -817.  574.  199.
+##  3 -570.  507.  202.
+##  4 -488.  474.  185.
+##  5 -696.  537.  162.
+##  6 -445.  497.  198.
+##  7 -806.  547.  163.
+##  8 -623.  525.  196.
+##  9 -569.  528.  181.
+## 10 -793.  559.  210.
+## # … with 3,990 more rows
+```
+
+ 
+
+and now we need to simulate some response values for our notional child of age 5. That means simulating for an `x` of 5, using each of those values of `a`, `b` and `sigma`:
+
+
+```r
+sims %>%
+  mutate(sim_vocab = rnorm(nrow(sims), a + b * 5, sigma)) -> sims2
+ggplot(sims2, aes(x = sim_vocab)) + geom_histogram(bins = 20)
+```
+
+<img src="27-stan_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+
+ 
+
+That's the distribution of the vocabulary size of children aged 5. We can get a 95\% interval from this the usual way: find the 2.5 and 97.5 percentiles:
+
+
+```r
+with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
+```
+
+```
+##     2.5%    97.5% 
+## 1587.777 2386.419
+```
+
+ 
+
+Is it like the prediction interval?
+
+
+```r
+vocabulary.1 <- lm(vocab ~ age, data = vocabulary)
+new <- tibble(age = 5)
+predict(vocabulary.1, new, interval = "p")
+```
+
+```
+##        fit      lwr      upr
+## 1 2027.939 1818.223 2237.656
+```
+
+ 
+
+It seems a bit wider.
 
 
 

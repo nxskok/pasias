@@ -120,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="packages-used-somewhere-in-this-book.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">2</span> Packages used somewhere in this book</a></li>
 <li class="has-sub"><a href="bayesian-statistics-with-rstan.html#bayesian-statistics-with-rstan"><span class="toc-section-number">3</span> Bayesian Statistics with <code>rstan</code></a><ul>
 <li><a href="bayesian-statistics-with-rstan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">3.1</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-rstan.html#bayesian-regression"><span class="toc-section-number">3.2</span> Bayesian regression</a></li>
 </ul></li>
 <li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">4</span> Getting used to R and R Studio</a><ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">4.1</span> Getting an R Studio Cloud account</a></li>
@@ -327,8 +328,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="matched-pairs-t-and-sign-test" class="section level1">
 <h1><span class="header-section-number">Chapter 11</span> Matched pairs t and sign test</h1>
-<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb764-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb764-2" data-line-number="2"><span class="kw">library</span>(smmr)</a></code></pre></div>
+<div class="sourceCode" id="cb787"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb787-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb787-2" data-line-number="2"><span class="kw">library</span>(smmr)</a></code></pre></div>
 <pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.5.3</code></pre>
 <pre><code>## Warning: package &#39;tibble&#39; was built under R version 3.5.3</code></pre>
 <pre><code>## Warning: package &#39;tidyr&#39; was built under R version 3.5.3</code></pre>
@@ -409,15 +410,15 @@ rows and columns.</li>
 <p>Solution</p>
 <p>This kind of thing. Since you looked at the data (didn’t you?),
 you’ll know that the values are separated by single spaces:</p>
-<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb786-1" data-line-number="1">myurl &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt&quot;</span></a>
-<a class="sourceLine" id="cb786-2" data-line-number="2">bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb809"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb809-1" data-line-number="1">myurl &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt&quot;</span></a>
+<a class="sourceLine" id="cb809-2" data-line-number="2">bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   athlete = col_double(),
 ##   xray = col_double(),
 ##   ultrasound = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb788-1" data-line-number="1">bodyfat</a></code></pre></div>
+<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb811-1" data-line-number="1">bodyfat</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 3
 ##    athlete  xray ultrasound
 ##      &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
@@ -453,7 +454,7 @@ the same or different. (At this point, obtain the R output including a P-value.)
 take any special steps for that. Note that we’re back to the
 “old-fashioned” version of <code>t.test</code> that <em>does not</em>
 allow <code>data=</code>, so we have to go the <code>with</code> way:</p>
-<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb790-1" data-line-number="1"><span class="kw">with</span>(bodyfat, <span class="kw">t.test</span>(xray, ultrasound, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb813-1" data-line-number="1"><span class="kw">with</span>(bodyfat, <span class="kw">t.test</span>(xray, ultrasound, <span class="dt">paired =</span> T))</a></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -502,9 +503,9 @@ data frame that would normally go first (the input data frame here
 is the new one with the differences in it, which doesn’t have a
 name). I’ll make a normal quantile plot in a moment, but if you
 haven’t seen that yet, the plot to make is a histogram:</p>
-<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb792-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb792-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb792-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb815-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb815-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb815-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>)</a></code></pre></div>
 <p><img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-6-1.png" width="672"  /></p>
 <p>I don’t know whether you’d call that “approximately normal” or
 not. We are in kind of a double-bind with this one: the sample size is
@@ -521,9 +522,9 @@ right way is to calculate the differences , then use that new data frame twice. 
 going to draw either the histogram or the normal quantile plot, not
 both, so you can use the appropriate one of my two bits of code. The
 normal quantile plot:</p>
-<div class="sourceCode" id="cb793"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb793-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb793-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb793-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb816"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb816-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb816-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb816-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-7-1.png" width="672"  /></p>
 <p>This is showing a little evidence of skewness or outliers (depending
 on your point of view: either is good). The lowest and highest values
@@ -570,15 +571,15 @@ to the columns.</li>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb794-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/throw.txt&quot;</span></a>
-<a class="sourceLine" id="cb794-2" data-line-number="2">throws=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;student&quot;</span>,<span class="st">&quot;baseball&quot;</span>,<span class="st">&quot;softball&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb817-1" data-line-number="1">myurl=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/c32/throw.txt&quot;</span></a>
+<a class="sourceLine" id="cb817-2" data-line-number="2">throws=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;student&quot;</span>,<span class="st">&quot;baseball&quot;</span>,<span class="st">&quot;softball&quot;</span>))</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   student = col_double(),
 ##   baseball = col_double(),
 ##   softball = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb796-1" data-line-number="1">throws</a></code></pre></div>
+<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb819-1" data-line-number="1">throws</a></code></pre></div>
 <pre><code>## # A tibble: 24 x 3
 ##    student baseball softball
 ##      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -605,8 +606,8 @@ columns called <code>X1, X2, X3</code> or whatever they end up as.</p>
 right-arrow assignment to create what I called
 <code>throws2</code> below, or put something like
 <code>throws2=</code> on the beginning of the line. Your choice.</p>
-<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb798-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">diff=</span>baseball<span class="op">-</span>softball) -&gt;</a>
-<a class="sourceLine" id="cb798-2" data-line-number="2">throws2</a></code></pre></div>
+<div class="sourceCode" id="cb821"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb821-1" data-line-number="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">diff=</span>baseball<span class="op">-</span>softball) -&gt;</a>
+<a class="sourceLine" id="cb821-2" data-line-number="2">throws2</a></code></pre></div>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Carry out a sign test in R, testing the null hypothesis
 that the median difference is zero, against the alternative that
@@ -617,8 +618,8 @@ it is greater than zero. Obtain a P-value. Your option whether you use
 <p>I think using <code>smmr</code> is way easier, so I’ll do that
 first. There is even a shortcut in that the null median defaults to
 zero, which is exactly what we want here:</p>
-<div class="sourceCode" id="cb799"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb799-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb799-2" data-line-number="2"><span class="kw">sign_test</span>(throws2,diff)</a></code></pre></div>
+<div class="sourceCode" id="cb822"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb822-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb822-2" data-line-number="2"><span class="kw">sign_test</span>(throws2,diff)</a></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     2    21 
@@ -633,17 +634,17 @@ prove that students can throw a baseball a <em>longer</em> distance
 than a softball. Thus the P-value we want is 0.000033.</p>
 <p>To build it yourself, you know the steps by now.
 First step is to count how many differences are greater and less than zero:</p>
-<div class="sourceCode" id="cb801"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb801-1" data-line-number="1"><span class="kw">table</span>(throws2<span class="op">$</span>diff<span class="op">&gt;</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb824"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb824-1" data-line-number="1"><span class="kw">table</span>(throws2<span class="op">$</span>diff<span class="op">&gt;</span><span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## 
 ## FALSE  TRUE 
 ##     3    21</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb803-1" data-line-number="1"><span class="kw">table</span>(throws2<span class="op">$</span>diff<span class="op">&lt;</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb826"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb826-1" data-line-number="1"><span class="kw">table</span>(throws2<span class="op">$</span>diff<span class="op">&lt;</span><span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## 
 ## FALSE  TRUE 
 ##    22     2</code></pre>
 <p>or, since we have things in a data frame,</p>
-<div class="sourceCode" id="cb805"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb805-1" data-line-number="1">throws2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(diff<span class="op">&gt;</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb828"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb828-1" data-line-number="1">throws2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(diff<span class="op">&gt;</span><span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   `diff &gt; 0`     n
 ##   &lt;lgl&gt;      &lt;int&gt;
@@ -664,17 +665,17 @@ from the appropriate binomial distribution.</p>
 differences out of 24 (or 23) or more, since this is the end of the
 distribution we should be at if the alternative hypothesis is correct.
 Thus any of these will get you a defensible P-value:</p>
-<div class="sourceCode" id="cb807"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb807-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">21</span><span class="op">:</span><span class="dv">23</span>,<span class="dv">23</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb830"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb830-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">21</span><span class="op">:</span><span class="dv">23</span>,<span class="dv">23</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 3.302097e-05</code></pre>
-<div class="sourceCode" id="cb809"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb809-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">22</span><span class="op">:</span><span class="dv">24</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb832"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb832-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">22</span><span class="op">:</span><span class="dv">24</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 1.7941e-05</code></pre>
-<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb811-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">21</span><span class="op">:</span><span class="dv">24</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb834"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb834-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">21</span><span class="op">:</span><span class="dv">24</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 0.0001385808</code></pre>
-<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb813-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">23</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb836"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb836-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">23</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 3.302097e-05</code></pre>
-<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb815-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb838"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb838-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 1.7941e-05</code></pre>
-<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb817-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb840"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb840-1" data-line-number="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
 <pre><code>## [1] 0.0001385808</code></pre>
 <p>The first and fourth of those are the same as <code>smmr</code> (throwing
 away the exactly-median value).</p>
@@ -698,16 +699,16 @@ differences.</li>
 <p>Solution</p>
 <p>I did it this way, combining the reading
 of the data with the calculation of the differences in <em>one</em> pipe:</p>
-<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb819-1" data-line-number="1">myurl &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/throw.txt&quot;</span></a>
-<a class="sourceLine" id="cb819-2" data-line-number="2">throws &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;student&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;softball&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb819-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> baseball <span class="op">-</span><span class="st"> </span>softball)</a></code></pre></div>
+<div class="sourceCode" id="cb842"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb842-1" data-line-number="1">myurl &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/throw.txt&quot;</span></a>
+<a class="sourceLine" id="cb842-2" data-line-number="2">throws &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;student&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;softball&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb842-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> baseball <span class="op">-</span><span class="st"> </span>softball)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   student = col_double(),
 ##   baseball = col_double(),
 ##   softball = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb821"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb821-1" data-line-number="1">throws</a></code></pre></div>
+<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb844-1" data-line-number="1">throws</a></code></pre></div>
 <pre><code>## # A tibble: 24 x 4
 ##    student baseball softball  diff
 ##      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
@@ -728,7 +729,7 @@ median difference.</li>
 </ol>
 <p>Solution</p>
 <p><code>ci_median</code>, with 95% being the default confidence level:</p>
-<div class="sourceCode" id="cb823"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb823-1" data-line-number="1"><span class="kw">ci_median</span>(throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb846-1" data-line-number="1"><span class="kw">ci_median</span>(throws, diff)</a></code></pre></div>
 <pre><code>## [1] 2.002930 8.999023</code></pre>
 <p>2 to 9. The ends of a CI for the median will be data values, which are
 all whole numbers, so round off that 8.999.</p>
@@ -749,7 +750,7 @@ on a function name brings up the help for that function.)
 Let’s check that it works properly by repeating the previous
 <code>sign_test</code> and verifying that <code>pval_sign</code> gives
 the same thing:</p>
-<div class="sourceCode" id="cb825"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb825-1" data-line-number="1"><span class="kw">sign_test</span>(throws, diff, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb848"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb848-1" data-line-number="1"><span class="kw">sign_test</span>(throws, diff, <span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     2    21 
@@ -759,7 +760,7 @@ the same thing:</p>
 ## 1       lower 9.999971e-01
 ## 2       upper 3.302097e-05
 ## 3   two-sided 6.604195e-05</code></pre>
-<div class="sourceCode" id="cb827"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb827-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">0</span>, throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb850-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">0</span>, throws, diff)</a></code></pre></div>
 <pre><code>## [1] 6.604195e-05</code></pre>
 <p>The P-values are the same (for the two-sided test) and both small, so
 the median difference is not zero.</p>
@@ -787,9 +788,9 @@ wish. Anything that makes sense is good: whatever mixture of
 mindlessness, guesswork and cleverness that you want to employ.
 The most mindless way to try some values one at a time and see what
 you get, eg.:</p>
-<div class="sourceCode" id="cb829"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb829-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">1</span>, throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb852-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">1</span>, throws, diff)</a></code></pre></div>
 <pre><code>## [1] 0.001489639</code></pre>
-<div class="sourceCode" id="cb831"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb831-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">5</span>, throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb854"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb854-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">5</span>, throws, diff)</a></code></pre></div>
 <pre><code>## [1] 1.168188</code></pre>
 <p>So median 1 is outside and median 5 is inside the 95% interval. Keep
 trying values until you’ve figured out where the lower and upper ends
@@ -797,8 +798,8 @@ of the interval are: where the P-values cross from below 0.05 to
 above, or vice versa.</p>
 <p>Something more intelligent is to make a long list of potential
 medians, and get the P-value for each of them, eg.:</p>
-<div class="sourceCode" id="cb833"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb833-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb833-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">map_dbl</span>(my.med, <span class="op">~</span><span class="st"> </span><span class="kw">pval_sign</span>(., throws, diff)))</a></code></pre></div>
+<div class="sourceCode" id="cb856"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb856-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb856-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">map_dbl</span>(my.med, <span class="op">~</span><span class="st"> </span><span class="kw">pval_sign</span>(., throws, diff)))</a></code></pre></div>
 <pre><code>## # A tibble: 11 x 2
 ##    my.med      pvals
 ##     &lt;dbl&gt;      &lt;dbl&gt;
@@ -815,8 +816,8 @@ medians, and get the P-value for each of them, eg.:</p>
 ## 11     20 0.00000298</code></pre>
 <p>2 is just inside the interval, 8 is also inside, and 10 is
 outside. Some closer investigation:</p>
-<div class="sourceCode" id="cb835"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb835-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb835-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">map_dbl</span>(my.med, <span class="op">~</span><span class="st"> </span><span class="kw">pval_sign</span>(., throws, diff)))</a></code></pre></div>
+<div class="sourceCode" id="cb858"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb858-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb858-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">map_dbl</span>(my.med, <span class="op">~</span><span class="st"> </span><span class="kw">pval_sign</span>(., throws, diff)))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   my.med     pvals
 ##    &lt;dbl&gt;     &lt;dbl&gt;
@@ -827,8 +828,8 @@ outside. Some closer investigation:</p>
 ## 5    2   0.0525</code></pre>
 <p>The bottom end of the interval actually is 2, since 2 is inside and
 1.5 is outside.</p>
-<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb837-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb837-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">map_dbl</span>(my.med, <span class="op">~</span><span class="st"> </span><span class="kw">pval_sign</span>(., throws, diff)))</a></code></pre></div>
+<div class="sourceCode" id="cb860"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb860-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb860-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">map_dbl</span>(my.med, <span class="op">~</span><span class="st"> </span><span class="kw">pval_sign</span>(., throws, diff)))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   my.med  pvals
 ##    &lt;dbl&gt;  &lt;dbl&gt;
@@ -843,21 +844,21 @@ The most sophisticated way is the “bisection” idea we saw before. We
 already have a kickoff for this, since we found, mindlessly, that 1 is
 outside the interval on the low end and 5 is inside, so the lower
 limit has to be between 1 and 5. Let’s try halfway between, ie. 3:</p>
-<div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb839-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">3</span>, throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb862"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb862-1" data-line-number="1"><span class="kw">pval_sign</span>(<span class="dv">3</span>, throws, diff)</a></code></pre></div>
 <pre><code>## [1] 0.3833103</code></pre>
 <p>Inside, so lower limit is between 1 and 3. This can be automated, thus:</p>
-<div class="sourceCode" id="cb841"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb841-1" data-line-number="1">lo &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb841-2" data-line-number="2">hi &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb841-3" data-line-number="3"><span class="cf">while</span> (<span class="kw">abs</span>(hi <span class="op">-</span><span class="st"> </span>lo) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>) {</a>
-<a class="sourceLine" id="cb841-4" data-line-number="4">  try &lt;-<span class="st"> </span>(lo <span class="op">+</span><span class="st"> </span>hi) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb841-5" data-line-number="5">  ptry &lt;-<span class="st"> </span><span class="kw">pval_sign</span>(try, throws, diff)</a>
-<a class="sourceLine" id="cb841-6" data-line-number="6">  <span class="cf">if</span> (ptry <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {</a>
-<a class="sourceLine" id="cb841-7" data-line-number="7">    hi &lt;-<span class="st"> </span>try</a>
-<a class="sourceLine" id="cb841-8" data-line-number="8">  } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb841-9" data-line-number="9">    lo &lt;-<span class="st"> </span>try</a>
-<a class="sourceLine" id="cb841-10" data-line-number="10">  }</a>
-<a class="sourceLine" id="cb841-11" data-line-number="11">}</a>
-<a class="sourceLine" id="cb841-12" data-line-number="12"><span class="kw">c</span>(lo, hi)</a></code></pre></div>
+<div class="sourceCode" id="cb864"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb864-1" data-line-number="1">lo &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb864-2" data-line-number="2">hi &lt;-<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb864-3" data-line-number="3"><span class="cf">while</span> (<span class="kw">abs</span>(hi <span class="op">-</span><span class="st"> </span>lo) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>) {</a>
+<a class="sourceLine" id="cb864-4" data-line-number="4">  try &lt;-<span class="st"> </span>(lo <span class="op">+</span><span class="st"> </span>hi) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb864-5" data-line-number="5">  ptry &lt;-<span class="st"> </span><span class="kw">pval_sign</span>(try, throws, diff)</a>
+<a class="sourceLine" id="cb864-6" data-line-number="6">  <span class="cf">if</span> (ptry <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {</a>
+<a class="sourceLine" id="cb864-7" data-line-number="7">    hi &lt;-<span class="st"> </span>try</a>
+<a class="sourceLine" id="cb864-8" data-line-number="8">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb864-9" data-line-number="9">    lo &lt;-<span class="st"> </span>try</a>
+<a class="sourceLine" id="cb864-10" data-line-number="10">  }</a>
+<a class="sourceLine" id="cb864-11" data-line-number="11">}</a>
+<a class="sourceLine" id="cb864-12" data-line-number="12"><span class="kw">c</span>(lo, hi)</a></code></pre></div>
 <pre><code>## [1] 1.9375 2.0000</code></pre>
 <p>The difficult bit is to decide whether the value <code>try</code> becomes
 the new <code>lo</code> or the new <code>hi</code>. If the P-value for the
@@ -870,18 +871,18 @@ inside, and they move closer and closer to each other.</p>
 <code>hi</code> is outside, so there is a little switching around within
 the loop. For starting values, you can be fairly mindless: for
 example, we know that 5 is inside and something big like 20 must be outside:</p>
-<div class="sourceCode" id="cb843"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb843-1" data-line-number="1">lo &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb843-2" data-line-number="2">hi &lt;-<span class="st"> </span><span class="dv">20</span></a>
-<a class="sourceLine" id="cb843-3" data-line-number="3"><span class="cf">while</span> (<span class="kw">abs</span>(hi <span class="op">-</span><span class="st"> </span>lo) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>) {</a>
-<a class="sourceLine" id="cb843-4" data-line-number="4">  try &lt;-<span class="st"> </span>(lo <span class="op">+</span><span class="st"> </span>hi) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb843-5" data-line-number="5">  ptry &lt;-<span class="st"> </span><span class="kw">pval_sign</span>(try, throws, diff)</a>
-<a class="sourceLine" id="cb843-6" data-line-number="6">  <span class="cf">if</span> (ptry <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {</a>
-<a class="sourceLine" id="cb843-7" data-line-number="7">    lo &lt;-<span class="st"> </span>try</a>
-<a class="sourceLine" id="cb843-8" data-line-number="8">  } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb843-9" data-line-number="9">    hi &lt;-<span class="st"> </span>try</a>
-<a class="sourceLine" id="cb843-10" data-line-number="10">  }</a>
-<a class="sourceLine" id="cb843-11" data-line-number="11">}</a>
-<a class="sourceLine" id="cb843-12" data-line-number="12"><span class="kw">c</span>(lo, hi)</a></code></pre></div>
+<div class="sourceCode" id="cb866"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb866-1" data-line-number="1">lo &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb866-2" data-line-number="2">hi &lt;-<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb866-3" data-line-number="3"><span class="cf">while</span> (<span class="kw">abs</span>(hi <span class="op">-</span><span class="st"> </span>lo) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>) {</a>
+<a class="sourceLine" id="cb866-4" data-line-number="4">  try &lt;-<span class="st"> </span>(lo <span class="op">+</span><span class="st"> </span>hi) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb866-5" data-line-number="5">  ptry &lt;-<span class="st"> </span><span class="kw">pval_sign</span>(try, throws, diff)</a>
+<a class="sourceLine" id="cb866-6" data-line-number="6">  <span class="cf">if</span> (ptry <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {</a>
+<a class="sourceLine" id="cb866-7" data-line-number="7">    lo &lt;-<span class="st"> </span>try</a>
+<a class="sourceLine" id="cb866-8" data-line-number="8">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb866-9" data-line-number="9">    hi &lt;-<span class="st"> </span>try</a>
+<a class="sourceLine" id="cb866-10" data-line-number="10">  }</a>
+<a class="sourceLine" id="cb866-11" data-line-number="11">}</a>
+<a class="sourceLine" id="cb866-12" data-line-number="12"><span class="kw">c</span>(lo, hi)</a></code></pre></div>
 <pre><code>## [1] 8.984375 9.042969</code></pre>
 <p>The interval goes from 2 to (as calculated here) about 9. (This is
 apparently the same as <code>ci_median</code> in <code>smmr</code> got.)
@@ -906,15 +907,15 @@ salaries for each of 20 employees.</li>
 <p>Solution</p>
 <p>Looking at the file, we see that the values are separated by
 exactly one space:</p>
-<div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb845-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt&quot;</span></a>
-<a class="sourceLine" id="cb845-2" data-line-number="2">salaries &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb868"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb868-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://www.utsc.utoronto.ca/~butler/c32/salaryinc.txt&quot;</span></a>
+<a class="sourceLine" id="cb868-2" data-line-number="2">salaries &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   employee = col_character(),
 ##   jan2016 = col_double(),
 ##   jan2017 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb847-1" data-line-number="1">salaries</a></code></pre></div>
+<div class="sourceCode" id="cb870"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb870-1" data-line-number="1">salaries</a></code></pre></div>
 <pre><code>## # A tibble: 20 x 3
 ##    employee jan2016 jan2017
 ##    &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;
@@ -967,9 +968,9 @@ the other, for each employee. The individual salaries don’t have
 to be normally distributed at all.
 We don’t have the differences here, so we have to calculate them
 first. The smoothest way is to make a pipeline:</p>
-<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb849-1" data-line-number="1">salaries <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb849-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb849-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb872"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb872-1" data-line-number="1">salaries <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb872-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb872-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-27-1.png" width="672"  /></p>
 <p>A couple of coding notes: (i) you can take the differences 2016 minus
 2017 if you like (then they will tend to be negative), (ii)
@@ -1001,7 +1002,7 @@ it anyway for the purposes of this assignment.) What do you conclude?</li>
 <p>The company is trying to prove that salaries are <em>increasing</em>
 over time, so we need a one-sided alternative.
 Following through the procedure, even though you may not trust it much:</p>
-<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb850-1" data-line-number="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2016, jan2017, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb873"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb873-1" data-line-number="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2016, jan2017, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>, <span class="dt">paired =</span> T))</a></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1015,7 +1016,7 @@ Following through the procedure, even though you may not trust it much:</p>
 ##                  -6.185</code></pre>
 <p>You could also have the years the other way around, in which case the
 alternative has to be the other way around as well:</p>
-<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb852-1" data-line-number="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2017, jan2016, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb875"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb875-1" data-line-number="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2017, jan2016, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">paired =</span> T))</a></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1031,9 +1032,9 @@ alternative has to be the other way around as well:</p>
 one-sample test on those, again making sure that you get the
 <code>alternative</code> right. I didn’t save it, so I’m calculating the
 differences again:</p>
-<div class="sourceCode" id="cb854"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb854-1" data-line-number="1">salaries <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb854-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb854-3" data-line-number="3"><span class="st">  </span><span class="kw">with</span>(., <span class="kw">t.test</span>(diff, <span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb877"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb877-1" data-line-number="1">salaries <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb877-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb877-3" data-line-number="3"><span class="st">  </span><span class="kw">with</span>(., <span class="kw">t.test</span>(diff, <span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1051,10 +1052,10 @@ all that salaries are increasing.</p>
 everyone’s 2017 salary appears to be greater than their 2016 salary.)</p>
 <p>Extra: you might be feeling that we ought to be doing a matched-pairs
 sign test, which you could do this way:</p>
-<div class="sourceCode" id="cb856"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb856-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb856-2" data-line-number="2">salaries <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb856-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb856-4" data-line-number="4"><span class="st">  </span><span class="kw">sign_test</span>(diff, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb879"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb879-1" data-line-number="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb879-2" data-line-number="2">salaries <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb879-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb879-4" data-line-number="4"><span class="st">  </span><span class="kw">sign_test</span>(diff, <span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     0    20 
@@ -1078,7 +1079,7 @@ of the output they should look at.</li>
 <p>A confidence interval. 95% is fine. As before, we have to run
 <code>t.test</code> again because we ran a one-sided test and a
 confidence interval for us is two-sided:</p>
-<div class="sourceCode" id="cb858"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb858-1" data-line-number="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2017, jan2016, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb881"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb881-1" data-line-number="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2017, jan2016, <span class="dt">paired =</span> T))</a></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1108,15 +1109,15 @@ athletes are at
 <p>Solution</p>
 <p>This kind of thing. Since you looked at the data (didn’t you?),
 you’ll know that the values are separated by single spaces:</p>
-<div class="sourceCode" id="cb860"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb860-1" data-line-number="1">myurl &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt&quot;</span></a>
-<a class="sourceLine" id="cb860-2" data-line-number="2">bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb883"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb883-1" data-line-number="1">myurl &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt&quot;</span></a>
+<a class="sourceLine" id="cb883-2" data-line-number="2">bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   athlete = col_double(),
 ##   xray = col_double(),
 ##   ultrasound = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb862"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb862-1" data-line-number="1">bodyfat</a></code></pre></div>
+<div class="sourceCode" id="cb885"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb885-1" data-line-number="1">bodyfat</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 3
 ##    athlete  xray ultrasound
 ##      &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
@@ -1145,11 +1146,11 @@ Explain briefly.</li>
 <p>This is a good place to look ahead. We’ll need the differences in two
 places, most likely: first for the normal quantile plot, and second
 for the matched-pairs sign test. So we should calculate and save them first:</p>
-<div class="sourceCode" id="cb864"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb864-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) -&gt;<span class="st"> </span>bodyfat2</a></code></pre></div>
+<div class="sourceCode" id="cb887"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb887-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) -&gt;<span class="st"> </span>bodyfat2</a></code></pre></div>
 <p>I seem to be using a 2 on the end to name my
 dataframe-with-differences, but you can use whatever name you like.</p>
 <p>Then, not forgetting to use the data frame that we just made:</p>
-<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb865-1" data-line-number="1"><span class="kw">ggplot</span>(bodyfat2, <span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb888"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb888-1" data-line-number="1"><span class="kw">ggplot</span>(bodyfat2, <span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="08-matched-pairs-sign_files/figure-html/unnamed-chunk-35-1.png" width="672"  /></p>
 <p>This is showing a little evidence of skewness or outliers (depending
 on your point of view: either is good). The lowest and highest values
@@ -1202,7 +1203,7 @@ for positive or only for negative differences, so I think two-sided is
 right. You need some reason to do a one-sided test, and there isn’t
 one here.)</p>
 <p>Remembering again to use the data frame that has the differences in it:</p>
-<div class="sourceCode" id="cb866"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb866-1" data-line-number="1"><span class="kw">sign_test</span>(bodyfat2, diff, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb889"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb889-1" data-line-number="1"><span class="kw">sign_test</span>(bodyfat2, diff, <span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##    10     6 
