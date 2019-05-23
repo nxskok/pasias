@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2019-01-07" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Problems and Solutions in Applied Statistics</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="packages-used-somewhere-in-this-book.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">2</span> Packages used somewhere in this book</a></li>
+<li class="has-sub"><a href="bayesian-statistics-with-rstan.html#bayesian-statistics-with-rstan"><span class="toc-section-number">3</span> Bayesian Statistics with <code>rstan</code></a><ul>
+<li><a href="bayesian-statistics-with-rstan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">3.1</span> Estimating proportion in favour from a survey</a></li>
+</ul></li>
+<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">4</span> Getting used to R and R Studio</a><ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">4.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">4.2</span> Getting started</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">4.3</span> Reading data from a file</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">4.4</span> Reading files different ways</a></li>
+</ul></li>
+<li class="has-sub"><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">5</span> Reading in data and drawing some graphs</a><ul>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">5.1</span> Orange juice</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#making-soap"><span class="toc-section-number">5.2</span> Making soap</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#handling-shipments"><span class="toc-section-number">5.3</span> Handling shipments</a></li>
+</ul></li>
+<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">6</span> Data exploration</a><ul>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">6.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">6.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">6.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">6.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">6.5</span> Test scores in two classes</a></li>
+</ul></li>
+<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">7</span> One-sample inference</a><ul>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">7.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">7.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">7.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">7.4</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">8</span> Two-sample inference</a><ul>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">8.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">8.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">8.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">8.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">8.5</span> Diet and growth in boys</a></li>
+</ul></li>
+<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">9</span> Power and sample size</a><ul>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">9.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">9.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">9.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li class="has-sub"><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">10</span> The sign test and Mood’s median test</a><ul>
+<li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">10.1</span> Running a maze</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">10.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">10.3</span> The power of the sign test</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.4</span> Sugar in breakfast cereals</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">10.5</span> Fear of math</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">10.6</span> Medical instructions</a></li>
+</ul></li>
+<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a><ul>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">11.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">11.5</span> Body fat revisited</a></li>
+</ul></li>
+<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
+</ul></li>
+<li class="has-sub"><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a><ul>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">13.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">13.5</span> Can caffeine improve your performance on a test?</a></li>
+</ul></li>
+<li class="has-sub"><a href="tidying-and-selecting-data.html#tidying-and-selecting-data"><span class="toc-section-number">14</span> Tidying and selecting data</a><ul>
+<li><a href="tidying-and-selecting-data.html#tidying-the-jays-data"><span class="toc-section-number">14.1</span> Tidying the Jays data</a></li>
+<li><a href="tidying-and-selecting-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">14.2</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-and-selecting-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">14.3</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-and-selecting-data.html#growth-of-tomatoes"><span class="toc-section-number">14.4</span> Growth of tomatoes</a></li>
+<li><a href="tidying-and-selecting-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">14.5</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-and-selecting-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">14.6</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-and-selecting-data.html#mating-songs-in-crickets"><span class="toc-section-number">14.7</span> Mating songs in crickets</a></li>
+<li><a href="tidying-and-selecting-data.html#cars"><span class="toc-section-number">14.8</span> Cars</a></li>
+<li><a href="tidying-and-selecting-data.html#number-1-songs"><span class="toc-section-number">14.9</span> Number 1 songs</a></li>
+<li><a href="tidying-and-selecting-data.html#bikes-on-college"><span class="toc-section-number">14.10</span> Bikes on College</a></li>
+<li><a href="tidying-and-selecting-data.html#feeling-the-heat"><span class="toc-section-number">14.11</span> Feeling the heat</a></li>
+</ul></li>
+<li class="has-sub"><a href="regression.html#regression"><span class="toc-section-number">15</span> Regression</a><ul>
+<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">15.1</span> Rainfall in California</a></li>
+<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">15.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">15.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">15.4</span> Facebook friends and grey matter</a></li>
+<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">15.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="regression.html#sparrowhawks"><span class="toc-section-number">15.6</span> Sparrowhawks</a></li>
+<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">15.7</span> Salaries of social workers</a></li>
+<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">15.8</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">15.9</span> Tortoise shells and eggs</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">15.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">15.11</span> Roller coasters</a></li>
+<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">15.12</span> Running and blood sugar</a></li>
+<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">15.13</span> Calories and fat in pizza</a></li>
+<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">15.14</span> Where should the fire stations be?</a></li>
+<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">15.15</span> Being satisfied with hospital</a></li>
+<li><a href="regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">15.16</span> Handling shipments of chemicals</a></li>
+<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">15.17</span> Salaries of mathematicians</a></li>
+<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">15.18</span> Predicting GPA of computer science students</a></li>
+</ul></li>
+<li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">16</span> Dates and times</a><ul>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">16.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">16.2</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">16.3</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">16.4</span> Wolves and caribou</a></li>
+</ul></li>
+<li class="has-sub"><a href="functions.html#functions"><span class="toc-section-number">17</span> Functions</a><ul>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">17.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">17.2</span> The Collatz sequence</a></li>
+</ul></li>
+<li class="has-sub"><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">18</span> The Bootstrap</a><ul>
+<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">18.1</span> Air conditioning failures</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">18.2</span> Air conditioning failures: bootstrapping the median</a></li>
+</ul></li>
+<li class="has-sub"><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">19</span> Logistic regression</a><ul>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">19.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">19.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">19.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">19.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">19.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">19.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">19.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">19.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">19.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">19.10</span> Go away and don’t come back!</a></li>
+</ul></li>
+<li class="has-sub"><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">20</span> Logistic regression with ordinal or nominal response</a><ul>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">20.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">20.2</span> Attitudes towards abortion</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">20.3</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">20.4</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">20.5</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">20.6</span> How do you like your steak – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">20.7</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">20.8</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">20.9</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">20.10</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">20.11</span> What sports do these athletes play?</a></li>
+</ul></li>
+<li class="has-sub"><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">21</span> Survival analysis</a><ul>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">21.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">21.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">21.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">21.4</span> Ovarian cancer</a></li>
+</ul></li>
+<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">22</span> Analysis of variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">22.1</span> Acid rain</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">22.2</span> Treating hay fever</a></li>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">22.3</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">22.4</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">22.5</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">22.6</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">22.7</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">22.8</span> Treating leprosy</a></li>
+</ul></li>
+<li class="has-sub"><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">23</span> Multivariate analysis of variance</a><ul>
+<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">23.1</span> Fabricated data</a></li>
+<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">23.2</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">23.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
+</ul></li>
+<li class="has-sub"><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">24</span> Repeated measures</a><ul>
+<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">24.1</span> Effect of drug on rat weight</a></li>
+<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">24.2</span> Social interaction among old people</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">24.3</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">24.4</span> Repeated measures with no background</a></li>
+</ul></li>
+<li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">25</span> Discriminant analysis</a><ul>
+<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">25.1</span> Telling whether a banknote is real or counterfeit</a></li>
+<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">25.2</span> Urine and obesity: what makes a difference?</a></li>
+<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">25.3</span> Understanding a MANOVA</a></li>
+<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">25.4</span> What distinguishes people who do different jobs?</a></li>
+<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">25.5</span> Observing children with ADHD</a></li>
+<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">25.6</span> Growing corn</a></li>
+<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">25.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
+</ul></li>
+<li class="has-sub"><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">26</span> Cluster analysis</a><ul>
+<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">26.1</span> Sites on the sea bed</a></li>
+<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">26.2</span> Dissimilarities between fruits</a></li>
+<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">26.3</span> Similarity of species</a></li>
+<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">26.4</span> Rating beer</a></li>
+<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">26.5</span> Clustering the Swiss bills</a></li>
+<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">26.6</span> Grouping similar cars</a></li>
+<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">26.7</span> Running, jumping, and throwing</a></li>
+<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">26.8</span> Bridges in Pittsburgh</a></li>
+<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">26.9</span> Clustering the Australian athletes</a></li>
+</ul></li>
+<li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">27</span> Multidimensional Scaling</a><ul>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">27.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">27.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">27.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">27.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">27.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li class="has-sub"><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">28</span> Principal Components and Factor Analysis</a><ul>
+<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">28.1</span> The weather, somewhere</a></li>
+<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">28.2</span> Air pollution</a></li>
+<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">28.3</span> A correlation matrix</a></li>
+<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">28.4</span> The Interpersonal Circumplex</a></li>
+</ul></li>
+<li class="has-sub"><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">29</span> Frequency table analysis</a><ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">29.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">29.2</span> Predicting voting</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="bayesian-statistics-with-rstan" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Bayesian Statistics with <code>rstan</code></h1>
+<p>Packages for this chapter:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(rstan)</a></code></pre></div>
+<div id="estimating-proportion-in-favour-from-a-survey" class="section level2">
+<h2><span class="header-section-number">3.1</span> Estimating proportion in favour from a survey</h2>
+<p>You are probably familiar with the kind of surveys where you are given a statement, like “I am the kind of person that finishes a task they start”,
+and you have to express your agreement or disagreement with it.
+Usually, you are given a five-point or seven-point scale on which you express your level of agreement (from “strongly agree”
+through “neither agree nor disagree” to
+“strongly disagree”, for example). Here, we will simplify things a little and only allow respondents to agree or disagree.
+So the kind of data you would have is a number of people that took part, and the number of these that said “agree”.</p>
+<p>Common assumptions that are made in this kind of analysis are:
+(i) the responses are independent of each other, and (ii) each respondent has the same unknown probability of agreeing.
+You might quibble about (ii), but the assumption we are making here is that we know <em>nothing</em> about the respondents apart from whether they agreed or disagreed.
+(In practice, we’d collect all kinds of demograhic information about each respondent, and this might give us a clue about how they’ll respond, but here we’re keeping it simple.)
+Under our assumptions, the number of respondents that agree has a binomial distribution with <span class="math inline">\(n\)</span> being our sample size, and <span class="math inline">\(p\)</span> being the probability we are trying to estimate. Let’s estimate <span class="math inline">\(p\)</span> using Stan: that is to say, let’s obtain the posterior distribution of <span class="math inline">\(p\)</span>.</p>
+<p>Note: I’m not sure how Stan goes in R Studio Cloud at the moment. This works better in R on your own computer.</p>
+<ol style="list-style-type: lower-alpha">
+<li>In R Studio, open a new Stan file (with File, New File, Stan File).
+You’ll see a template file of Stan code.
+Edit the <code>model</code> section to reflect that you have observed a number of successes <code>x</code> that we are modelling to have a binomial distribution with number of trials <code>n</code> and success probability <code>p</code>.</li>
+</ol>
+<p>Solution</p>
+<p>This is quicker to do than to ask for. Make a guess at this:</p>
+<pre><code>
+model {
+// likelihood
+x ~ binomial(n, p);
+</code></pre>
+<p>and then check the manual <a href="https://mc-stan.org/docs/2_18/functions-reference/binomial-distribution.html">link</a>, looking for Sampling Statement, to make sure that this is what is expected. It is.
+(I got to this page by googling “Stan binomial distribution”.)</p>
+<p>The “likelihood” line with the two slashes is a comment, C++ style.
+It is optional, but I like to have it to keep things straight.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>In the line of Stan code you wrote, there should be three variables.
+Which of these are parameters and which are data? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The way to think about this is to ask yourself which of <code>x</code>, <code>n</code>, and <code>p</code> are being given to the Stan code as data, and which you are trying to estimate.
+The only thing we are estimating here is <code>p</code>, so that is a parameter.
+The number of trials <code>n</code> and the number of successes <code>x</code> are data that you will observe (treated as “given” or “fixed” in the Bayesian framework).</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>I hope you found that there is only one parameter, <code>p</code>, in this problem. We know that <span class="math inline">\(0 \le p \le 1\)</span>, and we need a prior distribution for it. A common choice is a beta distribution.
+Look at the Stan manual, <a href="https://mc-stan.org/docs/2_18/functions-reference/beta-distribution.html">link</a>.
+The density function is given in 19.1.1.
+It has two parameters <span class="math inline">\(\alpha&gt;0\)</span> and <span class="math inline">\(\beta&gt;0\)</span>. <span class="math inline">\(B(\alpha, \beta)\)</span> given there is a constant.
+Add to your <code>model</code> section to express that <code>p</code> has a prior distribution with parameters <code>alpha</code> and <code>beta</code>.
+(<code>alpha</code> and <code>beta</code> will be input data when we run this code.)</li>
+</ol>
+<p>Solution</p>
+<p>Your <code>model</code> section should now look like this:</p>
+<pre><code>
+model {
+// prior
+p ~ beta(alpha, beta);
+// likelihood
+x ~ binomial(n, p);
+}
+</code></pre>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Above your <code>model</code> section, complete a <code>parameters</code> section that says what kind of variable <code>p</code> is.
+If <code>p</code> has upper or lower limits, put these in as well.
+You can edit the <code>parameters</code> section that is in the template.</li>
+</ol>
+<p>Solution</p>
+<p><code>p</code> is a real variable taking values between 0 and 1, so this:</p>
+<pre><code>
+parameters {
+real&lt;lower=0, upper=1&gt; p;
+}
+</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Everything else is <code>data</code>. Complete a <code>data</code> section (edit the one in the template) to say what type of thing everything else is, including limits if it has any.
+Don’t forget the parameters in the prior distribution!</li>
+</ol>
+<p>Solution</p>
+<p>We said before that <code>n</code> and <code>x</code> were (genuine) data. These are positive integers; also <code>x</code> cannot be bigger than <code>n</code> (why not?).
+In the data section also go the parameters <code>alpha</code> and <code>beta</code> of the prior distribution. These are real numbers bigger than zero.
+These two together give us this:</p>
+<pre><code>
+data {
+int&lt;lower=0&gt; n;
+int&lt;lower=0, upper=n&gt; x;
+real&lt;lower=0&gt; alpha;
+real&lt;lower=0&gt; beta;
+}
+</code></pre>
+<p>Putting in lower and upper limits, if you have them, will help because if you happen to enter data that does not respect the limits, you’ll get an error right there, and you won’t waste time sampling.</p>
+<p>It is more important to put in limits in the <code>parameters</code> section, because that is telling the sampler not to go there (eg. a value of <span class="math inline">\(p\)</span> outside <span class="math inline">\([0,1]\)</span>).</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Save your code, if you haven’t already. I used the filename <code>binomial.stan</code>.
+In your Stan code window, at the top right, you’ll see a button marked Check. This checks whether your code is syntactically correct. Click it.</li>
+</ol>
+<p>Solution</p>
+<p>This appeared in my console:</p>
+<pre><code>
+&gt; rstan:::rstudio_stanc(&quot;binomial.stan&quot;)
+binomial.stan is syntactically correct.
+</code></pre>
+<p>If you don’t see this, there is some kind of code error.
+You’ll then see some output that points you to a line of your code. The error is either there or at the end of the previous line (eg. you forgot a semicolon).
+Here is a typical one:</p>
+<pre><code>
+&gt; rstan:::rstudio_stanc(&quot;binomial.stan&quot;)
+SYNTAX ERROR, MESSAGE(S) FROM PARSER:
+error in &#39;model377242ac03ef_binomial&#39; at line 24, column 0
+-------------------------------------------------
+22: parameters {
+23:   real&lt;lower=0, upper=1&gt; p
+24: }
+^
+25: 
+-------------------------------------------------
+
+PARSER EXPECTED: &quot;;&quot;
+Error in stanc(filename, allow_undefined = TRUE) : 
+failed to parse Stan model &#39;binomial&#39; due to the above error.
+</code></pre>
+<p>The compiler (or at least the code checker) was expecting a semicolon, and when it got to the close-curly-bracket on line 24, that was where it knew that the semicolon was missing (and thus it objected there and not earlier).
+If you get an error, fix it and check again. Repeat until your code is “syntactically correct”.
+(That means that it will compile, but not that it will necessarily do what you want.)
+This process is an integral part of coding, so get used to it.
+It doesn’t matter how many errors you make; what matters is that you find and correct them all.</p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Compile your model. (This may take a minute or so, depending on how fast <code>rstudio.cloud</code> or your computer is.)</li>
+</ol>
+<p>Solution</p>
+<p>Go down to the console and type something like</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">binomial_code &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;binomial.stan&quot;</span>)</a></code></pre></div>
+<p>If it doesn’t work, make sure you installed and loaded <code>rstan</code> first, with <code>install.packages(&quot;rstan&quot;)</code> and <code>library(rstan)</code> respectively.</p>
+<p>If it sits there and does nothing for a while, this is actually a good sign. If it finds an error, it will tell you. If you get your command prompt <code>&gt;</code> back without it saying anything, that means it worked. (This is a Unix thing: no comment means no error.)</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>In most surveys, the probability to be estimated is fairly close to 0.5.
+A beta prior with <span class="math inline">\(\alpha=\beta=2\)</span> expresses the idea that any value of <code>p</code> is possible, but values near 0.5 are more likely.</li>
+</ol>
+<p>A survey of 277 randomly selected adult female shoppers was taken. 69 of them agreed that when an advertised item is not available at the local supermarket, they request a raincheck.</p>
+<p>Using the above information, set up a data <code>list</code> suitable for input to a run of <code>stan</code>.</p>
+<p>Solution</p>
+<p>Look in your <code>data</code> section, and see what you need to provide values for.
+The order doesn’t matter; make a list with the named pieces and their values, in some order. You need values for these four things:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">binomial_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">277</span>, <span class="dt">x =</span> <span class="dv">69</span>, <span class="dt">alpha =</span> <span class="dv">2</span>, <span class="dt">beta =</span> <span class="dv">2</span>)</a></code></pre></div>
+<p>Extra: in case you are wondering where the parameters for the prior came from: in this case, I looked on the Wikipedia page for the beta distribution and saw that <span class="math inline">\(\alpha=\beta=2\)</span> is a good shape, so I used that.
+In practice, getting a reasonable prior is a more difficult problem, called “elicitation”.
+What you have to do is ask a subject matter expert what they think <code>p</code> might be, giving you a range of values such as a guessed-at 95% confidence interval, like “I think <code>p</code> is almost certainly between 0.1 and 0.6”.
+Then <em>you</em> as a statistician have to choose values for <code>alpha</code> and <code>beta</code> that match this, probably by trial and error.
+The <code>beta</code> distribution is part of R, so this is doable, for example like this:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">    <span class="dt">lower =</span> <span class="kw">qbeta</span>(<span class="fl">0.025</span>, alpha, beta),</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">    <span class="dt">upper =</span> <span class="kw">qbeta</span>(<span class="fl">0.975</span>, alpha, beta)</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sse =</span> (lower <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>)<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>(upper <span class="op">-</span><span class="st"> </span><span class="fl">0.6</span>)<span class="op">^</span><span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="st">  </span><span class="kw">arrange</span>(sse)</a></code></pre></div>
+<pre><code>## # A tibble: 100 x 5
+##    alpha  beta  lower upper      sse
+##    &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+##  1     4     8 0.109  0.610 0.000181
+##  2     3     7 0.0749 0.600 0.000632
+##  3     4     9 0.0992 0.572 0.000793
+##  4     5    10 0.128  0.581 0.00112 
+##  5     5     9 0.139  0.614 0.00169 
+##  6     3     6 0.0852 0.651 0.00280 
+##  7     3     8 0.0667 0.556 0.00303 
+##  8     4     7 0.122  0.652 0.00322 
+##  9     4    10 0.0909 0.538 0.00391 
+## 10     6    10 0.163  0.616 0.00428 
+## # … with 90 more rows</code></pre>
+<p>This says that <span class="math inline">\(\alpha=4, \beta=8\)</span> is a pretty good choice.
+<label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">Alpha and beta don’t have to be integers; you could use <em>seq</em> to create sequences of values for alpha and beta that include decimal numbers.</span></p>
+<p>My process:</p>
+<ul>
+<li><p>Pick some values of <code>alpha</code> and <code>beta</code> to try, and make all possible combinations of them.</p></li>
+<li><p>Find the 2.5 and 97.5 percentiles of the beta distribution for each of those values.
+The “inverse CDF” (the value <span class="math inline">\(x\)</span> that has this much of the probability below it) is what we want here; this is obtained in R by putting <code>q</code> in front of the name of the distribution.
+Try <code>qnorm(-1.96</code> and see if you recognize the answer. Also, <code>qbeta</code> is “vectorized”, so the <code>alpha</code> and <code>beta</code> can be entire columns rather than just numbers, and it will work. If you want to, you can use <code>map2</code> to do it for each <code>alpha</code> and <code>beta</code>, something like \texttt{mutate(lower=map2(alpha, beta, ~qbeta(0.025, .x, .y).</p></li>
+<li><p>We want the lower limit to be close to 0.1 and the upper limit to be close to 0.6. Working out the sum of squared errors for each <code>alpha</code>-<code>beta</code> combo is a way to do this; if <code>sse</code> is small, that combination of <code>alpha</code> and <code>beta</code> gave lower and upper limits close to 0.1 and 0.6.</p></li>
+<li><p>Arrange the <code>sse</code> values smallest to largest. The top rows are the best choices of <code>alpha</code> and <code>beta</code>.</p></li>
+</ul>
+<ol style="list-style-type: lower-roman">
+<li>Sample from the posterior distribution of <code>p</code> with these data, and display your results.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">binomial_code &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;binomial_code.rds&quot;</span>)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">binomial_code</a></code></pre></div>
+<pre><code>## S4 class stanmodel &#39;binomial&#39; coded as follows:
+## //
+## // This Stan program defines a simple model, with a
+## // vector of values &#39;y&#39; modeled as normally distributed
+## // with mean &#39;mu&#39; and standard deviation &#39;sigma&#39;.
+## //
+## // Learn more about model development with Stan at:
+## //
+## //    http://mc-stan.org/users/interfaces/rstan.html
+## //    https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started
+## //
+## 
+## // The input data is a vector &#39;y&#39; of length &#39;N&#39;.
+## data {
+##   int&lt;lower=0&gt; n;
+##   int&lt;lower=0, upper=n&gt; x;
+##   real&lt;lower=0&gt; alpha;
+##   real&lt;lower=0&gt; beta;
+## }
+## 
+## // The parameters accepted by the model. Our model
+## // accepts two parameters &#39;mu&#39; and &#39;sigma&#39;.
+## parameters {
+##   real&lt;lower=0, upper=1&gt; p;
+## }
+## 
+## // The model to be estimated. We model the output
+## // &#39;y&#39; to be normally distributed with mean &#39;mu&#39;
+## // and standard deviation &#39;sigma&#39;.
+## model {
+##   // prior
+##   p ~ beta(alpha, beta);
+##   // likelihood
+##   x ~ binomial(n, p);
+## }
+## </code></pre>
+<p>This is what I got:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">binomial<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(binomial_code, binomial_data)</a></code></pre></div>
+<pre><code>## 
+## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 7e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 0.008147 seconds (Warm-up)
+## Chain 1:                0.008053 seconds (Sampling)
+## Chain 1:                0.0162 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 5e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 0.008504 seconds (Warm-up)
+## Chain 2:                0.00783 seconds (Sampling)
+## Chain 2:                0.016334 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 5e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 0.008067 seconds (Warm-up)
+## Chain 3:                0.007549 seconds (Sampling)
+## Chain 3:                0.015616 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 4e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 0.008123 seconds (Warm-up)
+## Chain 4:                0.007127 seconds (Sampling)
+## Chain 4:                0.01525 seconds (Total)
+## Chain 4:</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">binomial<span class="fl">.1</span></a></code></pre></div>
+<pre><code>## Inference for Stan model: binomial.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##         mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
+## p       0.25    0.00 0.03    0.20    0.24    0.25    0.27    0.31  1529
+## lp__ -159.34    0.02 0.71 -161.35 -159.51 -159.07 -158.89 -158.84  1964
+##      Rhat
+## p       1
+## lp__    1
+## 
+## Samples were drawn using NUTS(diag_e) at Thu May 23 14:53:32 2019.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p>Your results should be similar, though probably not identical, to mine. (There is a lot of randomness involved here.)</p>
+<ol start="10" style="list-style-type: lower-alpha">
+<li>Obtain a 95% posterior interval for the probability that a randomly chosen adult female shopper will request a raincheck.</li>
+</ol>
+<p>Solution</p>
+<p>Read off the 2.5 and 97.5 values for <code>p</code>. Mine are xxx and xxx.</p>
+<ol start="11" style="list-style-type: lower-alpha">
+<li>Obtain a 95% (frequentist) confidence interval for <code>p</code>, and compare the results. (Hint: <code>prop.test</code>.) Comment briefly.</li>
+</ol>
+<p>Solution</p>
+<p>If you remember this well enough, you can do it by hand, but there’s no need:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">prop.test</span>(<span class="dv">69</span>, <span class="dv">277</span>)</a></code></pre></div>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  69 out of 277, null probability 0.5
+## X-squared = 68.751, df = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.2001721 0.3051278
+## sample estimates:
+##         p 
+## 0.2490975</code></pre>
+<p>My 95% intervals are almost identical.</p>
+<p>Numerically, this is because the only (material) difference between them is the presence of the prior in the Bayesian approach. We have quite a lot of data, though, so the choice of prior is actually not that important (“the data overwhelm the prior”). I could have used <code>alpha=8, beta=4</code> that I obtained in the Extra above, and it wouldn’t have made any noticeable difference.</p>
+<p>Conceptually, though, the interpretations of these intervals are very different: the Bayesian posterior interval really does say “the probability of <span class="math inline">\(p\)</span> being between xxx and xxx is 0.95”, while for the confidence interval you have to talk about repeated sampling: “the procedure producing the 95% confidence interval will contain the true value of <span class="math inline">\(p\)</span> in 95% of all possible samples”.
+This might seem clunky in comparison; a Bayesian would tell you that the interpretation of the posterior interval is what you want the interpretation of the confidence interval to be, but is not!</p>
+<ol start="12" style="list-style-type: lower-alpha">
+<li>(optional) This is one of those problems where you can obtain the answer analytically. What is the posterior distribution of <span class="math inline">\(p\)</span>, using a prior <span class="math inline">\(beta(\alpha, \beta)\)</span> distribution for <span class="math inline">\(p\)</span> and observing <span class="math inline">\(x\)</span> successes out of <span class="math inline">\(n\)</span> trials?</li>
+</ol>
+<p>Solution</p>
+<p>With this stuff, you can throw away any constants.
+The likelihood is (proportional to) <span class="math display">\[ p^x (1-p)^{n-x}.\]</span> There is a binomial coefficient that I threw away.
+Look up the form of the beta density if you don’t know it (or look above): the prior for <span class="math inline">\(p\)</span> is proportional to
+<span class="math display">\[ p^{\alpha-1} (1-p)^{\beta-1}.\]</span>
+Posterior is proportional to likelihood times prior:
+<span class="math display">\[ p^{x + \alpha - 1} (1-p)^{n-x +\beta - 1}\]</span>
+which is recognized as a beta distribution with parameters <span class="math inline">\(x+\alpha\)</span>, <span class="math inline">\(n-x+\beta\)</span>.
+Typically (unless you are very sure about <span class="math inline">\(p\)</span> a priori (that is, before collecting any data)), <span class="math inline">\(x\)</span> and <span class="math inline">\(n-x\)</span> will be much larger than <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(beta\)</span>, so this will look a lot like a binomial likelihood, which is why the confidence interval and posterior interval in our example came out very similar.</p>
+
+</div>
+</div>
+<p style="text-align: center;">
+<a href="packages-used-somewhere-in-this-book.html"><button class="btn btn-default">Previous</button></a>
+<a href="getting-used-to-r-and-r-studio.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

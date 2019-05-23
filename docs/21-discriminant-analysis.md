@@ -89,6 +89,14 @@ in the Conflicts. This, despite appearances, is what we want.)
 ## Warning: package 'broom' was built under R version 3.5.2
 ```
 
+```
+## Warning: package 'rstan' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'StanHeaders' was built under R version 3.5.1
+```
+
 
 
 ##  Telling whether a banknote is real or counterfeit
@@ -2034,26 +2042,26 @@ jobs0 %>%
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      21     19            9     2    29 mechanic  
-##  2      14     26           17     1    67 custserv  
-##  3      13     20           10     2    22 mechanic  
-##  4      15     23           10     1    19 custserv  
-##  5       5     25            7     1    29 custserv  
-##  6      20     27            6     2     1 mechanic  
-##  7      20     28            8     1    65 custserv  
-##  8      14     22           16     3    20 dispatcher
-##  9      19     26            7     2    21 mechanic  
-## 10      15     26            9     1    60 custserv  
-## 11      19     26           12     2    60 mechanic  
-## 12      11     17           20     3    26 dispatcher
-## 13      18     20           10     3    66 dispatcher
-## 14      23     20           16     2    63 mechanic  
-## 15      20     13           18     3    61 dispatcher
-## 16      16     28           13     2    11 mechanic  
-## 17       8     20            8     3    40 dispatcher
-## 18      14     13           12     3    59 dispatcher
-## 19      21     19            7     2    69 mechanic  
-## 20      12     12            6     3    23 dispatcher
+##  1      19     25           13     2    44 mechanic  
+##  2      25     29           11     2    66 mechanic  
+##  3      25     16           12     3    46 dispatcher
+##  4      22     12            8     2    27 mechanic  
+##  5      19      7           13     3    43 dispatcher
+##  6      11     17           20     3    26 dispatcher
+##  7      11     12           19     3    39 dispatcher
+##  8      15     18           14     3    18 dispatcher
+##  9      17     12           17     3     7 dispatcher
+## 10       7     22           10     1    76 custserv  
+## 11      19     15           10     2    89 mechanic  
+## 12      13     25           14     1    82 custserv  
+## 13      13     26           13     1    84 custserv  
+## 14      12     23            4     1    58 custserv  
+## 15      18     30            9     1    56 custserv  
+## 16      20     28            8     1    65 custserv  
+## 17      21     19            7     2    69 mechanic  
+## 18      20     15            7     3    12 dispatcher
+## 19      18     23           15     3    54 dispatcher
+## 20      17     19           11     2    24 mechanic
 ```
 
  

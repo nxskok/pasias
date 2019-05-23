@@ -1,0 +1,53 @@
+---
+title: "regstan"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(rstan)
+```
+
+## read the data
+
+```{r}
+vocabulary=read_delim("vocab.txt", " ")
+vocabulary
+```
+
+## scatterplot
+
+```{r}
+ggplot(vocabulary, aes(x=age, y=vocab))+ geom_point()
+```
+
+ordinary regression
+
+```{r}
+vocab.1=lm(vocab~age, data=vocabulary)
+summary(vocab.1)
+cbind(vocabulary$age, predict(vocab.1, interval="p") )
+```
+
+compile
+
+```{r}
+reg_code=stan_model("reg.stan")
+```
+
+save
+
+```{r}
+saveRDS(reg_code, "reg_code.rds")
+```
+  
+construct data
+
+```{r}
+reg_data=list(n=10, x=vocabulary$age, y=vocabulary$vocab, prior_int_mean=-550, prior_int_sd=100, prior_slope_mean=500, prior_slope_sd=100, prior_sigma_mean=50)
+reg.1=sampling(reg_code, reg_data)
+reg.1
+```
+

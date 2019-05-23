@@ -81,6 +81,14 @@ library(survminer)
 ## Warning: package 'broom' was built under R version 3.5.2
 ```
 
+```
+## Warning: package 'rstan' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'StanHeaders' was built under R version 3.5.1
+```
+
 
 ##  The Worcester survey
 

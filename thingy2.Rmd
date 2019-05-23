@@ -1,0 +1,28 @@
+---
+title: "beta trial"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+```
+
+set up some trial values
+
+```{r}
+d=crossing(alpha=1:10, beta=1:10)
+d
+```
+
+work out upper and lower 2.5 points for beta distributions with these parameters
+
+```{r}
+d %>% mutate(lower=qbeta(0.025, alpha, beta),
+             upper=qbeta(0.975, alpha, beta)) %>% 
+  mutate(sse=(lower-0.1)^2+(upper-0.6)^2) %>% 
+  arrange(sse)
+  
+```
+

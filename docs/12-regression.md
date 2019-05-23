@@ -79,6 +79,14 @@ library(tidyverse)
 ## Warning: package 'broom' was built under R version 3.5.2
 ```
 
+```
+## Warning: package 'rstan' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'StanHeaders' was built under R version 3.5.1
+```
+
 These problems are about simple regression (just one $x$-variable):
 
 
@@ -2955,20 +2963,20 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"         ".conflicts"         "package:GGally"    
-##  [4] "package:conflicted" "package:bootstrap"  "package:rpart"     
-##  [7] "package:broom"      "package:ggrepel"    "package:ggbiplot"  
-## [10] "package:grid"       "package:scales"     "package:plyr"      
-## [13] "package:lme4"       "package:Matrix"     "package:car"       
-## [16] "package:carData"    "package:survminer"  "package:ggpubr"    
-## [19] "package:magrittr"   "package:survival"   "package:nnet"      
-## [22] "package:MASS"       "package:smmr"       "package:forcats"   
-## [25] "package:stringr"    "package:dplyr"      "package:purrr"     
-## [28] "package:readr"      "package:tidyr"      "package:tibble"    
-## [31] "package:ggplot2"    "package:tidyverse"  "package:stats"     
-## [34] "package:graphics"   "package:grDevices"  "package:utils"     
-## [37] "package:datasets"   "package:methods"    "Autoloads"         
-## [40] "package:base"
+##  [1] ".GlobalEnv"          ".conflicts"          "package:GGally"     
+##  [4] "package:conflicted"  "package:rstan"       "package:StanHeaders"
+##  [7] "package:bootstrap"   "package:rpart"       "package:broom"      
+## [10] "package:ggrepel"     "package:ggbiplot"    "package:grid"       
+## [13] "package:scales"      "package:plyr"        "package:lme4"       
+## [16] "package:Matrix"      "package:car"         "package:carData"    
+## [19] "package:survminer"   "package:ggpubr"      "package:magrittr"   
+## [22] "package:survival"    "package:nnet"        "package:MASS"       
+## [25] "package:smmr"        "package:forcats"     "package:stringr"    
+## [28] "package:dplyr"       "package:purrr"       "package:readr"      
+## [31] "package:tidyr"       "package:tibble"      "package:ggplot2"    
+## [34] "package:tidyverse"   "package:stats"       "package:graphics"   
+## [37] "package:grDevices"   "package:utils"       "package:datasets"   
+## [40] "package:methods"     "Autoloads"           "package:base"
 ```
 
  
@@ -2994,19 +3002,20 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"         ".conflicts"         "package:GGally"    
-##  [4] "package:conflicted" "package:bootstrap"  "package:rpart"     
-##  [7] "package:broom"      "package:ggrepel"    "package:ggbiplot"  
-## [10] "package:grid"       "package:scales"     "package:plyr"      
-## [13] "package:lme4"       "package:Matrix"     "package:car"       
-## [16] "package:carData"    "package:survminer"  "package:ggpubr"    
-## [19] "package:magrittr"   "package:survival"   "package:nnet"      
-## [22] "package:smmr"       "package:forcats"    "package:stringr"   
-## [25] "package:dplyr"      "package:purrr"      "package:readr"     
-## [28] "package:tidyr"      "package:tibble"     "package:ggplot2"   
-## [31] "package:tidyverse"  "package:stats"      "package:graphics"  
-## [34] "package:grDevices"  "package:utils"      "package:datasets"  
-## [37] "package:methods"    "Autoloads"          "package:base"
+##  [1] ".GlobalEnv"          ".conflicts"          "package:GGally"     
+##  [4] "package:conflicted"  "package:rstan"       "package:StanHeaders"
+##  [7] "package:bootstrap"   "package:rpart"       "package:broom"      
+## [10] "package:ggrepel"     "package:ggbiplot"    "package:grid"       
+## [13] "package:scales"      "package:plyr"        "package:lme4"       
+## [16] "package:Matrix"      "package:car"         "package:carData"    
+## [19] "package:survminer"   "package:ggpubr"      "package:magrittr"   
+## [22] "package:survival"    "package:nnet"        "package:smmr"       
+## [25] "package:forcats"     "package:stringr"     "package:dplyr"      
+## [28] "package:purrr"       "package:readr"       "package:tidyr"      
+## [31] "package:tibble"      "package:ggplot2"     "package:tidyverse"  
+## [34] "package:stats"       "package:graphics"    "package:grDevices"  
+## [37] "package:utils"       "package:datasets"    "package:methods"    
+## [40] "Autoloads"           "package:base"
 ```
 
  

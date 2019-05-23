@@ -83,6 +83,14 @@ library(tidyverse)
 ## Warning: package 'broom' was built under R version 3.5.2
 ```
 
+```
+## Warning: package 'rstan' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'StanHeaders' was built under R version 3.5.1
+```
+
 
 
 ##  Effect of drug on rat weight
@@ -306,26 +314,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       junk  time  weight
 ##    <dbl> <chr>      <chr> <chr>  <dbl>
-##  1    15 thiouracil Time  4        138
-##  2     5 thyroxin   Time  2         97
-##  3     5 thyroxin   Time  4        144
-##  4    25 control    Time  2        112
-##  5     7 thyroxin   Time  0         52
-##  6    24 control    Time  1         71
-##  7     3 thyroxin   Time  4        189
-##  8     6 thyroxin   Time  0         52
-##  9    17 thiouracil Time  2         89
-## 10    14 thiouracil Time  4        108
-## 11     9 thiouracil Time  3        111
-## 12     2 thyroxin   Time  0         54
-## 13    26 control    Time  1         67
-## 14    14 thiouracil Time  2         95
-## 15    12 thiouracil Time  2        101
-## 16    11 thiouracil Time  0         59
-## 17     8 thiouracil Time  4        129
-## 18     2 thyroxin   Time  1         71
-## 19    13 thiouracil Time  2         92
-## 20    23 control    Time  4        153
+##  1    23 control    Time  0         46
+##  2    16 thiouracil Time  0         46
+##  3    10 thiouracil Time  0         53
+##  4    13 thiouracil Time  3        100
+##  5    16 thiouracil Time  1         61
+##  6     8 thiouracil Time  4        129
+##  7    13 thiouracil Time  2         92
+##  8    12 thiouracil Time  1         75
+##  9    18 control    Time  2        114
+## 10    19 control    Time  4        177
+## 11     2 thyroxin   Time  3        110
+## 12    26 control    Time  4        140
+## 13    27 control    Time  4        169
+## 14    18 control    Time  0         57
+## 15    19 control    Time  3        146
+## 16     2 thyroxin   Time  2         90
+## 17    14 thiouracil Time  2         95
+## 18     6 thyroxin   Time  0         52
+## 19    13 thiouracil Time  4        119
+## 20    20 control    Time  2        111
 ```
 
  
@@ -351,26 +359,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    23 control    Time0     46     0
-##  2    26 control    Time2     90     2
-##  3    27 control    Time2    110     2
-##  4     9 thiouracil Time3    111     3
-##  5    17 thiouracil Time2     89     2
-##  6     6 thyroxin   Time3    116     3
-##  7     4 thyroxin   Time3    148     3
-##  8    13 thiouracil Time0     51     0
-##  9    25 control    Time4    154     4
-## 10    10 thiouracil Time3    106     3
-## 11    19 control    Time0     60     0
-## 12    21 control    Time3    129     3
-## 13    12 thiouracil Time2    101     2
-## 14     7 thyroxin   Time3    138     3
-## 15    20 control    Time0     52     0
-## 16     4 thyroxin   Time0     59     0
-## 17    14 thiouracil Time4    108     4
-## 18    18 control    Time1     86     1
-## 19    21 control    Time1     67     1
-## 20    25 control    Time2    112     2
+##  1     1 thyroxin   Time4    191     4
+##  2     2 thyroxin   Time0     54     0
+##  3    23 control    Time4    153     4
+##  4    19 control    Time3    146     3
+##  5     9 thiouracil Time4    122     4
+##  6     3 thyroxin   Time4    189     4
+##  7     1 thyroxin   Time0     59     0
+##  8    12 thiouracil Time2    101     2
+##  9    27 control    Time3    139     3
+## 10     5 thyroxin   Time1     72     1
+## 11     9 thiouracil Time0     59     0
+## 12     7 thyroxin   Time1     70     1
+## 13    14 thiouracil Time1     78     1
+## 14    27 control    Time2    110     2
+## 15     6 thyroxin   Time2     97     2
+## 16     8 thiouracil Time1     86     1
+## 17     2 thyroxin   Time4    138     4
+## 18    10 thiouracil Time2    100     2
+## 19     2 thyroxin   Time2     90     2
+## 20     1 thyroxin   Time2    121     2
 ```
 
  

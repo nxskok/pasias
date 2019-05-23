@@ -80,6 +80,14 @@ library(tidyverse)
 ## Warning: package 'broom' was built under R version 3.5.2
 ```
 
+```
+## Warning: package 'rstan' was built under R version 3.5.3
+```
+
+```
+## Warning: package 'StanHeaders' was built under R version 3.5.1
+```
+
 
 ##  Do you like your mobile phone?
 
@@ -3970,19 +3978,20 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"         ".conflicts"         "package:conflicted"
-##  [4] "package:bootstrap"  "package:rpart"      "package:broom"     
-##  [7] "package:ggrepel"    "package:ggbiplot"   "package:grid"      
-## [10] "package:scales"     "package:plyr"       "package:lme4"      
-## [13] "package:Matrix"     "package:car"        "package:carData"   
-## [16] "package:survminer"  "package:ggpubr"     "package:magrittr"  
-## [19] "package:survival"   "package:nnet"       "package:smmr"      
-## [22] "package:forcats"    "package:stringr"    "package:dplyr"     
-## [25] "package:purrr"      "package:readr"      "package:tidyr"     
-## [28] "package:tibble"     "package:ggplot2"    "package:tidyverse" 
-## [31] "package:stats"      "package:graphics"   "package:grDevices" 
-## [34] "package:utils"      "package:datasets"   "package:methods"   
-## [37] "Autoloads"          "package:base"
+##  [1] ".GlobalEnv"          ".conflicts"          "package:conflicted" 
+##  [4] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
+##  [7] "package:rpart"       "package:broom"       "package:ggrepel"    
+## [10] "package:ggbiplot"    "package:grid"        "package:scales"     
+## [13] "package:plyr"        "package:lme4"        "package:Matrix"     
+## [16] "package:car"         "package:carData"     "package:survminer"  
+## [19] "package:ggpubr"      "package:magrittr"    "package:survival"   
+## [22] "package:nnet"        "package:smmr"        "package:forcats"    
+## [25] "package:stringr"     "package:dplyr"       "package:purrr"      
+## [28] "package:readr"       "package:tidyr"       "package:tibble"     
+## [31] "package:ggplot2"     "package:tidyverse"   "package:stats"      
+## [34] "package:graphics"    "package:grDevices"   "package:utils"      
+## [37] "package:datasets"    "package:methods"     "Autoloads"          
+## [40] "package:base"
 ```
 
  
