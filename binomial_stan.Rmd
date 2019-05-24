@@ -170,6 +170,17 @@ failed to parse Stan model 'binomial' due to the above error.
 ```
 
 The compiler (or at least the code checker) was expecting a semicolon, and when it got to the close-curly-bracket on line 24, that was where it knew that the semicolon was missing (and thus it objected there and not earlier).
+The above was on my own computer. When I tried it on `rstudio.cloud`, I thought I had everything correct but I got an error message like this:
+
+
+```
+
+Error in sink(type = "output") : invalid connection
+
+```
+
+
+that I couldn't get rid of. This might happen to you also.
 If you get an error, fix it and check again. Repeat until your code is "syntactically correct". 
 (That means that it will compile, but not that it will necessarily do what you want.)
 This process is an integral part of coding, so get used to it. 
@@ -242,11 +253,21 @@ My process:
 * Pick some values of `alpha` and `beta` to try, and make all possible combinations of them.
 
 * Find the 2.5 and 97.5 percentiles of the beta distribution for each of those values. 
-The "inverse CDF" (the value $x$ that has this much of the probability below it) is what we want here; this is obtained in R by putting `q` in front of the name of the distribution.
-Try `qnorm(-1.96)` xxx and see if you recognize the answer. Also, `qbeta` is "vectorized", so the `alpha` and `beta` can be entire columns rather than just numbers, and it will work. If you want to, you can use `map2` to do it for each `alpha` and `beta`, something like this: xxx
+The "inverse CDF" (the value $x$ that has this much of the probability below it) is what we want here; this is obtained in R by putting `q` in front of the name of the distribution. For example, does this make sense to you?
+```{r }
+qnorm(0.025)
+```
+
+   
+
+Also, `qbeta` is "vectorized", so the `alpha` and
+`beta` can be entire columns rather than just numbers, and it
+will work. If you want to, you can use `map2` to do it for each
+`alpha` and `beta`, something like this (this does the lower end of the interval):
 ```{r }
 crossing(alpha = 1:10, beta = 1:10) %>%
-  mutate(lower = map2_dbl(alpha, beta, ~ qbeta(0, 0.25, .x, .y)))
+  mutate(lower = map2_dbl(alpha, beta, ~ qbeta(0.025, .x, .y))) %>%
+  arrange(abs(lower - 0.1))
 ```
 
    
@@ -308,7 +329,7 @@ prop.test(69, 277)
 
    
 
-My 95\% intervals are, to two decimals,xxx  identical.
+My 95\% intervals are, to two decimals, identical.
 
 Numerically, this is because the only (material) difference between
 them is the presence of the prior in the Bayesian approach. We have

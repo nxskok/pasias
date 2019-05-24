@@ -7,16 +7,16 @@ elicitation of prior distributions along the way).
 
 
 
-(a) xxx Create a `.stan` file that will run a simple linear
+(a) Create a `.stan` file that will run a simple linear
 regression predicting a variable `y` from a variable
 `x`, estimating an intercept `a` and a slope
 `b`. Use normal prior distributions for `a` and
 `b`, and allow the means and SDs of the prior distributions
-for `a` and `b`. The regression model says that the
-response `y` has a normal distribution with mean
-`a+bx` and SD `sigma` which is also estimated. Give
-this a prior chi-squared distribution with a prior mean that is also
-input.
+for `a` and `b` to be specified (as data, later). The
+regression model says that the response `y` has a normal
+distribution with mean `a+bx` and SD `sigma` which is
+also estimated. Give this a prior chi-squared distribution with a
+prior mean that is also input.
 
 Solution
 
@@ -32,10 +32,10 @@ y ~ normal(a+b*x, sigma);
 ```
 
 There is a subtlety here that I'll get to later, but this is the easiest way to begin.
-Next, take a look at what's here. `x` is data, and the
-other things, `a`, `b`, `sigma` are
-parameters. These last three need prior distributions. I said to
-use normal distributions for the first two, and a chi-squared
+Next, take a look at what's here. `x` and `y` are
+data, and the other things, `a`, `b`, `sigma`
+are parameters. These last three need prior distributions. I said
+to use normal distributions for the first two, and a chi-squared
 distribution for the last one. (In practice, of course, you get to
 choose these, in consultation with the subject matter expert, but
 these are likely to be pretty reasonable.) I've given the
@@ -184,7 +184,8 @@ y ~ normal(a+b*x, sigma);
 
 
 
-(b) Check your Stan code for syntactic correctness, and when it is, compile it.
+(b) Check your Stan code for syntactic correctness, and when it is
+correct, compile it.
 
 Solution
 
@@ -315,7 +316,7 @@ reg.1
 
  
 
-One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are 467 and 572. (This is about $520 \pm 52$, rounding crudely, while the prior distribution said $500 \pm 200$, so the data have allowed us to estimate the slope a fair bit more accurately. xxx 
+One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are 467 and 572. (This is about $520 \pm 52$, rounding crudely, while the prior distribution said $500 \pm 200$, so the data have allowed us to estimate the slope a fair bit more accurately.)
 
 
 (f) What can we say about the vocabulary size of a randomly
@@ -355,7 +356,10 @@ with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
 
  
 
-Is it like the prediction interval?
+The actual child of age 5 that we observed had a vocabulary of 2060
+words, squarely in the middle of this interval.
+
+Is the posterior predictive interval like the prediction interval?
 
 ```{r }
 vocabulary.1 <- lm(vocab ~ age, data = vocabulary)

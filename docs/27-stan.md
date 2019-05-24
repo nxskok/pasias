@@ -185,6 +185,17 @@ failed to parse Stan model 'binomial' due to the above error.
 ```
 
 The compiler (or at least the code checker) was expecting a semicolon, and when it got to the close-curly-bracket on line 24, that was where it knew that the semicolon was missing (and thus it objected there and not earlier).
+The above was on my own computer. When I tried it on `rstudio.cloud`, I thought I had everything correct but I got an error message like this:
+
+
+```
+
+Error in sink(type = "output") : invalid connection
+
+```
+
+
+that I couldn't get rid of. This might happen to you also.
 If you get an error, fix it and check again. Repeat until your code is "syntactically correct". 
 (That means that it will compile, but not that it will necessarily do what you want.)
 This process is an integral part of coding, so get used to it. 
@@ -277,28 +288,43 @@ My process:
 * Pick some values of `alpha` and `beta` to try, and make all possible combinations of them.
 
 * Find the 2.5 and 97.5 percentiles of the beta distribution for each of those values. 
-The "inverse CDF" (the value $x$ that has this much of the probability below it) is what we want here; this is obtained in R by putting `q` in front of the name of the distribution.
-Try `qnorm(-1.96)` xxx and see if you recognize the answer. Also, `qbeta` is "vectorized", so the `alpha` and `beta` can be entire columns rather than just numbers, and it will work. If you want to, you can use `map2` to do it for each `alpha` and `beta`, something like this: xxx
+The "inverse CDF" (the value $x$ that has this much of the probability below it) is what we want here; this is obtained in R by putting `q` in front of the name of the distribution. For example, does this make sense to you?
+
+```r
+qnorm(0.025)
+```
+
+```
+## [1] -1.959964
+```
+
+   
+
+Also, `qbeta` is "vectorized", so the `alpha` and
+`beta` can be entire columns rather than just numbers, and it
+will work. If you want to, you can use `map2` to do it for each
+`alpha` and `beta`, something like this (this does the lower end of the interval):
 
 ```r
 crossing(alpha = 1:10, beta = 1:10) %>%
-  mutate(lower = map2_dbl(alpha, beta, ~ qbeta(0, 0.25, .x, .y)))
+  mutate(lower = map2_dbl(alpha, beta, ~ qbeta(0.025, .x, .y))) %>%
+  arrange(abs(lower - 0.1))
 ```
 
 ```
 ## # A tibble: 100 x 3
-##    alpha  beta lower
-##    <int> <int> <dbl>
-##  1     1     1     0
-##  2     1     2     0
-##  3     1     3     0
-##  4     1     4     0
-##  5     1     5     0
-##  6     1     6     0
-##  7     1     7     0
-##  8     1     8     0
-##  9     1     9     0
-## 10     1    10     0
+##    alpha  beta  lower
+##    <int> <int>  <dbl>
+##  1     4     9 0.0992
+##  2     3     5 0.0990
+##  3     2     2 0.0943
+##  4     4    10 0.0909
+##  5     4     8 0.109 
+##  6     3     6 0.0852
+##  7     3     4 0.118 
+##  8     4     7 0.122 
+##  9     3     7 0.0749
+## 10     5    10 0.128 
 ## # … with 90 more rows
 ```
 
@@ -333,8 +359,8 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 9e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+## Chain 1: Gradient evaluation took 7e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -351,15 +377,15 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.011889 seconds (Warm-up)
-## Chain 1:                0.013683 seconds (Sampling)
-## Chain 1:                0.025572 seconds (Total)
+## Chain 1:  Elapsed Time: 0.00783 seconds (Warm-up)
+## Chain 1:                0.007741 seconds (Sampling)
+## Chain 1:                0.015571 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 8e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
+## Chain 2: Gradient evaluation took 5e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -376,15 +402,15 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.013566 seconds (Warm-up)
-## Chain 2:                0.010521 seconds (Sampling)
-## Chain 2:                0.024087 seconds (Total)
+## Chain 2:  Elapsed Time: 0.007575 seconds (Warm-up)
+## Chain 2:                0.006817 seconds (Sampling)
+## Chain 2:                0.014392 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 1e-05 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+## Chain 3: Gradient evaluation took 5e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -401,15 +427,15 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.008553 seconds (Warm-up)
-## Chain 3:                0.009982 seconds (Sampling)
-## Chain 3:                0.018535 seconds (Total)
+## Chain 3:  Elapsed Time: 0.008084 seconds (Warm-up)
+## Chain 3:                0.007298 seconds (Sampling)
+## Chain 3:                0.015382 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 4).
 ## Chain 4: 
-## Chain 4: Gradient evaluation took 6e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 4: Gradient evaluation took 5e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 4: Adjust your expectations accordingly!
 ## Chain 4: 
 ## Chain 4: 
@@ -426,9 +452,9 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.009076 seconds (Warm-up)
-## Chain 4:                0.009217 seconds (Sampling)
-## Chain 4:                0.018293 seconds (Total)
+## Chain 4:  Elapsed Time: 0.008068 seconds (Warm-up)
+## Chain 4:                0.007825 seconds (Sampling)
+## Chain 4:                0.015893 seconds (Total)
 ## Chain 4:
 ```
 
@@ -442,13 +468,13 @@ binomial.1
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-## p       0.25    0.00 0.03    0.20    0.23    0.25    0.27    0.30  1486
-## lp__ -159.34    0.02 0.73 -161.36 -159.50 -159.07 -158.89 -158.84  1940
+## p       0.25    0.00 0.03    0.21    0.24    0.25    0.27    0.30  1500
+## lp__ -159.31    0.02 0.69 -161.25 -159.46 -159.05 -158.88 -158.84  1895
 ##      Rhat
 ## p       1
 ## lp__    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu May 23 19:28:50 2019.
+## Samples were drawn using NUTS(diag_e) at Fri May 24 13:09:56 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -498,7 +524,7 @@ prop.test(69, 277)
 
    
 
-My 95\% intervals are, to two decimals,xxx  identical.
+My 95\% intervals are, to two decimals, identical.
 
 Numerically, this is because the only (material) difference between
 them is the presence of the prior in the Bayesian approach. We have
@@ -558,16 +584,16 @@ elicitation of prior distributions along the way).
 
 
 
-(a) xxx Create a `.stan` file that will run a simple linear
+(a) Create a `.stan` file that will run a simple linear
 regression predicting a variable `y` from a variable
 `x`, estimating an intercept `a` and a slope
 `b`. Use normal prior distributions for `a` and
 `b`, and allow the means and SDs of the prior distributions
-for `a` and `b`. The regression model says that the
-response `y` has a normal distribution with mean
-`a+bx` and SD `sigma` which is also estimated. Give
-this a prior chi-squared distribution with a prior mean that is also
-input.
+for `a` and `b` to be specified (as data, later). The
+regression model says that the response `y` has a normal
+distribution with mean `a+bx` and SD `sigma` which is
+also estimated. Give this a prior chi-squared distribution with a
+prior mean that is also input.
 
 Solution
 
@@ -583,10 +609,10 @@ y ~ normal(a+b*x, sigma);
 ```
 
 There is a subtlety here that I'll get to later, but this is the easiest way to begin.
-Next, take a look at what's here. `x` is data, and the
-other things, `a`, `b`, `sigma` are
-parameters. These last three need prior distributions. I said to
-use normal distributions for the first two, and a chi-squared
+Next, take a look at what's here. `x` and `y` are
+data, and the other things, `a`, `b`, `sigma`
+are parameters. These last three need prior distributions. I said
+to use normal distributions for the first two, and a chi-squared
 distribution for the last one. (In practice, of course, you get to
 choose these, in consultation with the subject matter expert, but
 these are likely to be pretty reasonable.) I've given the
@@ -735,7 +761,8 @@ y ~ normal(a+b*x, sigma);
 
 
 
-(b) Check your Stan code for syntactic correctness, and when it is, compile it.
+(b) Check your Stan code for syntactic correctness, and when it is
+correct, compile it.
 
 Solution
 
@@ -895,8 +922,8 @@ reg.1 <- sampling(reg_code, reg_data)
 ## 
 ## SAMPLING FOR MODEL 'reg' NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 1e-05 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+## Chain 1: Gradient evaluation took 6e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -913,15 +940,15 @@ reg.1 <- sampling(reg_code, reg_data)
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.241266 seconds (Warm-up)
-## Chain 1:                0.044811 seconds (Sampling)
-## Chain 1:                0.286077 seconds (Total)
+## Chain 1:  Elapsed Time: 0.098451 seconds (Warm-up)
+## Chain 1:                0.02179 seconds (Sampling)
+## Chain 1:                0.120241 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL 'reg' NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 9e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+## Chain 2: Gradient evaluation took 6e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -938,15 +965,15 @@ reg.1 <- sampling(reg_code, reg_data)
 ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.222404 seconds (Warm-up)
-## Chain 2:                0.04429 seconds (Sampling)
-## Chain 2:                0.266694 seconds (Total)
+## Chain 2:  Elapsed Time: 0.107461 seconds (Warm-up)
+## Chain 2:                0.028753 seconds (Sampling)
+## Chain 2:                0.136214 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL 'reg' NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 1.3e-05 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+## Chain 3: Gradient evaluation took 6e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -963,15 +990,15 @@ reg.1 <- sampling(reg_code, reg_data)
 ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.195419 seconds (Warm-up)
-## Chain 3:                0.050568 seconds (Sampling)
-## Chain 3:                0.245987 seconds (Total)
+## Chain 3:  Elapsed Time: 0.110631 seconds (Warm-up)
+## Chain 3:                0.025053 seconds (Sampling)
+## Chain 3:                0.135684 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL 'reg' NOW (CHAIN 4).
 ## Chain 4: 
-## Chain 4: Gradient evaluation took 1.1e-05 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+## Chain 4: Gradient evaluation took 9e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
 ## Chain 4: Adjust your expectations accordingly!
 ## Chain 4: 
 ## Chain 4: 
@@ -988,9 +1015,9 @@ reg.1 <- sampling(reg_code, reg_data)
 ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.243418 seconds (Warm-up)
-## Chain 4:                0.043332 seconds (Sampling)
-## Chain 4:                0.28675 seconds (Total)
+## Chain 4:  Elapsed Time: 0.126264 seconds (Warm-up)
+## Chain 4:                0.023653 seconds (Sampling)
+## Chain 4:                0.149917 seconds (Total)
 ## Chain 4:
 ```
 
@@ -1003,18 +1030,18 @@ reg.1
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
-##          mean se_mean     sd    2.5%     25%     50%     75%   97.5% n_eff
-## a     -617.07    2.39 100.69 -810.57 -686.19 -617.60 -548.82 -422.04  1780
-## b      522.05    0.65  27.25  468.61  503.15  522.38  540.26  575.67  1765
-## sigma  189.50    0.39  19.22  153.10  176.58  189.37  201.87  228.64  2424
-## lp__   373.70    0.03   1.25  370.41  373.14  374.03  374.60  375.11  1685
+##          mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff
+## a     -615.10    2.48 99.25 -807.03 -683.68 -615.79 -547.12 -424.06  1603
+## b      521.02    0.67 26.95  467.92  503.30  521.34  539.86  573.08  1623
+## sigma  188.19    0.39 18.79  153.54  174.72  187.29  201.10  226.34  2289
+## lp__   373.70    0.03  1.24  370.50  373.14  374.02  374.60  375.11  1542
 ##       Rhat
 ## a        1
 ## b        1
 ## sigma    1
 ## lp__     1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu May 23 19:28:54 2019.
+## Samples were drawn using NUTS(diag_e) at Fri May 24 13:09:58 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -1022,7 +1049,7 @@ reg.1
 
  
 
-One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are 467 and 572. (This is about $520 \pm 52$, rounding crudely, while the prior distribution said $500 \pm 200$, so the data have allowed us to estimate the slope a fair bit more accurately. xxx 
+One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are 467 and 572. (This is about $520 \pm 52$, rounding crudely, while the prior distribution said $500 \pm 200$, so the data have allowed us to estimate the slope a fair bit more accurately.)
 
 
 (f) What can we say about the vocabulary size of a randomly
@@ -1046,16 +1073,16 @@ sims
 ## # A tibble: 4,000 x 3
 ##        a     b sigma
 ##    <dbl> <dbl> <dbl>
-##  1 -512.  489.  177.
-##  2 -727.  554.  170.
-##  3 -677.  575.  206.
-##  4 -569.  499.  178.
-##  5 -728.  563.  163.
-##  6 -642.  507.  199.
-##  7 -656.  527.  200.
-##  8 -521.  490.  179.
-##  9 -698.  562.  197.
-## 10 -551.  509.  169.
+##  1 -683.  555.  193.
+##  2 -661.  501.  166.
+##  3 -549.  532.  187.
+##  4 -477.  477.  195.
+##  5 -607.  505.  175.
+##  6 -594.  509.  219.
+##  7 -635.  553.  193.
+##  8 -697.  512.  164.
+##  9 -537.  520.  197.
+## 10 -520.  493.  213.
 ## # … with 3,990 more rows
 ```
 
@@ -1070,7 +1097,7 @@ sims %>%
 ggplot(sims2, aes(x = sim_vocab)) + geom_histogram(bins = 20)
 ```
 
-<img src="27-stan_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+<img src="27-stan_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
  
 
@@ -1083,12 +1110,15 @@ with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
 
 ```
 ##     2.5%    97.5% 
-## 1594.267 2393.595
+## 1578.985 2394.866
 ```
 
  
 
-Is it like the prediction interval?
+The actual child of age 5 that we observed had a vocabulary of 2060
+words, squarely in the middle of this interval.
+
+Is the posterior predictive interval like the prediction interval?
 
 
 ```r

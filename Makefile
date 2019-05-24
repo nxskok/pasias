@@ -52,4 +52,9 @@ ch24: index.Rmd
 	Rscript -e "bookdown::preview_chapter('24-pcfa.Rmd')"
 ch25: index.Rmd
 	Rscript -e "bookdown::preview_chapter('25-loglin.Rmd')"
+ch26: index.Rmd 26-bootstrap.Rmd bootstrap.Rmd bootstrap_median.Rmd
+	Rscript -e "bookdown::preview_chapter('26-bootstrap.Rmd')"
+ch27: index.Rmd 27-stan.Rmd binomial_stan.Rmd regression_stan.Rmd
+	Rscript -e "bookdown::preview_chapter('27-stan.Rmd')"
+
 

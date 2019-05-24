@@ -3,7 +3,7 @@
 data {
   int<lower=0> n;
   vector[n] x;
-vector[n] y;
+  vector[n] y;
   real prior_int_mean;
   real<lower=0> prior_int_sd;
   real prior_slope_mean;

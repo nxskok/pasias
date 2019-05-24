@@ -46,8 +46,41 @@ saveRDS(reg_code, "reg_code.rds")
 construct data
 
 ```{r}
-reg_data=list(n=10, x=vocabulary$age, y=vocabulary$vocab, prior_int_mean=-550, prior_int_sd=100, prior_slope_mean=500, prior_slope_sd=100, prior_sigma_mean=50)
-reg.1=sampling(reg_code, reg_data)
+reg_data = list(
+  n = 10,
+  x = vocabulary$age,
+  y = vocabulary$vocab,
+  prior_int_mean = -500,
+  prior_int_sd = 125,
+  prior_slope_mean = 500,
+  prior_slope_sd = 100,
+  prior_sigma_mean = 200
+)
+reg.1 = sampling(reg_code, reg_data)
 reg.1
 ```
 
+```{r}
+reg_samples=rstan::extract(reg.1)
+cbind(a=reg_samples$a, b=reg_samples$b, sigma=reg_samples$sigma) %>%
+    as_tibble() -> sims
+sims
+```
+
+```{r}
+sims %>% 
+    mutate(sim_vocab=rnorm(nrow(sims), a+b*5, sigma)) -> sims2
+ggplot(sims2, aes(x=sim_vocab)) + geom_histogram(bins=20)
+```
+
+```{r}
+with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
+```
+
+```{r}
+vocabulary.1=lm(vocab~age, data=vocabulary)
+new=tibble(age=5)
+predict(vocabulary.1, new, interval="p")
+```
+
+a bit wider
