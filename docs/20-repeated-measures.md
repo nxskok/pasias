@@ -314,26 +314,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       junk  time  weight
 ##    <dbl> <chr>      <chr> <chr>  <dbl>
-##  1     7 thyroxin   Time  2        105
-##  2    23 control    Time  1         70
-##  3     3 thyroxin   Time  0         56
-##  4     5 thyroxin   Time  3        120
-##  5    17 thiouracil Time  1         72
-##  6    20 control    Time  0         52
-##  7    16 thiouracil Time  0         46
-##  8    21 control    Time  3        129
-##  9     9 thiouracil Time  0         59
-## 10     1 thyroxin   Time  3        156
-## 11    15 thiouracil Time  0         58
-## 12    16 thiouracil Time  1         61
-## 13    10 thiouracil Time  2        100
-## 14    10 thiouracil Time  0         53
-## 15    14 thiouracil Time  0         56
-## 16    23 control    Time  2        102
-## 17     2 thyroxin   Time  2         90
-## 18     2 thyroxin   Time  0         54
-## 19    19 control    Time  0         60
-## 20    22 control    Time  1         81
+##  1    12 thiouracil Time  0         51
+##  2    17 thiouracil Time  3        104
+##  3     7 thyroxin   Time  2        105
+##  4     7 thyroxin   Time  3        138
+##  5    15 thiouracil Time  0         58
+##  6     9 thiouracil Time  2        101
+##  7    14 thiouracil Time  1         78
+##  8    20 control    Time  1         77
+##  9    22 control    Time  3        121
+## 10     9 thiouracil Time  0         59
+## 11    24 control    Time  2         94
+## 12     7 thyroxin   Time  0         52
+## 13    23 control    Time  3        131
+## 14    13 thiouracil Time  3        100
+## 15    11 thiouracil Time  4        122
+## 16     5 thyroxin   Time  0         57
+## 17    14 thiouracil Time  4        108
+## 18     3 thyroxin   Time  3        151
+## 19    22 control    Time  2        104
+## 20    22 control    Time  4        151
 ```
 
  
@@ -359,26 +359,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1     6 thyroxin   Time0     52     0
-##  2    24 control    Time3    110     3
-##  3    17 thiouracil Time4    122     4
-##  4    12 thiouracil Time3    123     3
-##  5    12 thiouracil Time1     75     1
-##  6     7 thyroxin   Time4    171     4
-##  7    23 control    Time1     70     1
-##  8    18 control    Time1     86     1
-##  9    25 control    Time4    154     4
-## 10    17 thiouracil Time1     72     1
-## 11    26 control    Time1     67     1
-## 12     6 thyroxin   Time2     97     2
-## 13    14 thiouracil Time2     95     2
-## 14    24 control    Time2     94     2
-## 15    25 control    Time3    130     3
-## 16    13 thiouracil Time0     51     0
+##  1    21 control    Time0     49     0
+##  2     8 thiouracil Time4    129     4
+##  3     6 thyroxin   Time3    116     3
+##  4    19 control    Time1     93     1
+##  5    22 control    Time3    121     3
+##  6    17 thiouracil Time3    104     3
+##  7    25 control    Time0     63     0
+##  8    13 thiouracil Time3    100     3
+##  9    23 control    Time3    131     3
+## 10    26 control    Time4    140     4
+## 11    12 thiouracil Time0     51     0
+## 12    16 thiouracil Time1     61     1
+## 13     3 thyroxin   Time0     56     0
+## 14    12 thiouracil Time4    140     4
+## 15    11 thiouracil Time3    111     3
+## 16    13 thiouracil Time2     92     2
 ## 17     1 thyroxin   Time1     85     1
-## 18    21 control    Time2    100     2
-## 19    21 control    Time3    129     3
-## 20     3 thyroxin   Time2    108     2
+## 18    14 thiouracil Time3    103     3
+## 19    23 control    Time0     46     0
+## 20    14 thiouracil Time1     78     1
 ```
 
  
