@@ -18,103 +18,83 @@ in the Conflicts. This, despite appearances, is what we want.)
 
 
 ```
-## Warning: package 'ggplot2' was built under R
-## version 3.5.3
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R
-## version 3.5.3
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R
-## version 3.5.3
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R
-## version 3.5.2
+## Warning: package 'readr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R
-## version 3.5.3
+## Warning: package 'purrr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R
-## version 3.5.2
+## Warning: package 'dplyr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R
-## version 3.5.2
+## Warning: package 'stringr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R
-## version 3.5.1
+## Warning: package 'forcats' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under
-## R version 3.5.1
+## Warning: package 'survminer' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R
-## version 3.5.1
+## Warning: package 'ggpubr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R
-## version 3.5.1
+## Warning: package 'magrittr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R
-## version 3.5.1
+## Warning: package 'car' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R
-## version 3.5.1
+## Warning: package 'carData' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R
-## version 3.5.1
+## Warning: package 'ggbiplot' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R
-## version 3.5.1
+## Warning: package 'plyr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R
-## version 3.5.1
+## Warning: package 'scales' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R
-## version 3.5.1
+## Warning: package 'ggrepel' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R
-## version 3.5.2
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'rstan' was built under R
-## version 3.5.3
+## Warning: package 'rstan' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'StanHeaders' was built
-## under R version 3.5.1
+## Warning: package 'StanHeaders' was built under R version 3.5.1
 ```
 
 
@@ -178,20 +158,19 @@ swiss
 
 ```
 ## # A tibble: 200 x 7
-##    length  left right bottom   top  diag
-##     <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>
-##  1   215.  131   131.    9     9.7  141 
-##  2   215.  130.  130.    8.1   9.5  142.
-##  3   215.  130.  130.    8.7   9.6  142.
-##  4   215.  130.  130.    7.5  10.4  142 
-##  5   215   130.  130.   10.4   7.7  142.
-##  6   216.  131.  130.    9    10.1  141.
-##  7   216.  130.  130.    7.9   9.6  142.
-##  8   214.  130.  129.    7.2  10.7  142.
-##  9   215.  129.  130.    8.2  11    142.
-## 10   215.  130.  130.    9.2  10    141.
-## # ... with 190 more rows, and 1 more
-## #   variable: status <chr>
+##    length  left right bottom   top  diag status 
+##     <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl> <chr>  
+##  1   215.  131   131.    9     9.7  141  genuine
+##  2   215.  130.  130.    8.1   9.5  142. genuine
+##  3   215.  130.  130.    8.7   9.6  142. genuine
+##  4   215.  130.  130.    7.5  10.4  142  genuine
+##  5   215   130.  130.   10.4   7.7  142. genuine
+##  6   216.  131.  130.    9    10.1  141. genuine
+##  7   216.  130.  130.    7.9   9.6  142. genuine
+##  8   214.  130.  129.    7.2  10.7  142. genuine
+##  9   215.  129.  130.    8.2  11    142. genuine
+## 10   215.  130.  130.    9.2  10    141. genuine
+## # … with 190 more rows
 ```
 
        
@@ -209,22 +188,17 @@ Solution
 Small-m `manova` will do here:
 
 ```r
-response <- with(swiss, cbind(length, left, right, 
-    bottom, top, diag))
+response <- with(swiss, cbind(length, left, right, bottom, top, diag))
 swiss.1 <- manova(response ~ status, data = swiss)
 summary(swiss.1)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df
-## status      1 0.92415   391.92      6    193
-## Residuals 198                               
-##              Pr(>F)    
-## status    < 2.2e-16 ***
-## Residuals              
+##            Df  Pillai approx F num Df den Df    Pr(>F)    
+## status      1 0.92415   391.92      6    193 < 2.2e-16 ***
+## Residuals 198                                             
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -252,8 +226,7 @@ class(response2)
 ```
 
 ```
-## [1] "spec_tbl_df" "tbl_df"      "tbl"        
-## [4] "data.frame"
+## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
 ```
 
  
@@ -267,22 +240,17 @@ This, however, works, since it turns the data frame into a matrix:
 
 
 ```r
-response4 <- swiss %>% select(length:diag) %>% 
-    as.matrix()
+response4 <- swiss %>% select(length:diag) %>% as.matrix()
 swiss.2a <- manova(response4 ~ status, data = swiss)
 summary(swiss.2a)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df
-## status      1 0.92415   391.92      6    193
-## Residuals 198                               
-##              Pr(>F)    
-## status    < 2.2e-16 ***
-## Residuals              
+##            Df  Pillai approx F num Df den Df    Pr(>F)    
+## status      1 0.92415   391.92      6    193 < 2.2e-16 ***
+## Residuals 198                                             
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -313,8 +281,7 @@ is the "response", and the quantitative ones are
 "explanatory":
 
 ```r
-swiss.3 <- lda(status ~ length + left + right + 
-    bottom + top + diag, data = swiss)
+swiss.3 <- lda(status ~ length + left + right + bottom + top + diag, data = swiss)
 swiss.3
 ```
 
@@ -327,12 +294,9 @@ swiss.3
 ##         0.5         0.5 
 ## 
 ## Group means:
-##              length    left   right bottom
-## counterfeit 214.823 130.300 130.193 10.530
-## genuine     214.969 129.943 129.720  8.305
-##                top    diag
-## counterfeit 11.133 139.450
-## genuine     10.168 141.517
+##              length    left   right bottom    top    diag
+## counterfeit 214.823 130.300 130.193 10.530 11.133 139.450
+## genuine     214.969 129.943 129.720  8.305 10.168 141.517
 ## 
 ## Coefficients of linear discriminants:
 ##                 LD1
@@ -402,12 +366,9 @@ swiss.3$means
 ```
 
 ```
-##              length    left   right bottom
-## counterfeit 214.823 130.300 130.193 10.530
-## genuine     214.969 129.943 129.720  8.305
-##                top    diag
-## counterfeit 11.133 139.450
-## genuine     10.168 141.517
+##              length    left   right bottom    top    diag
+## counterfeit 214.823 130.300 130.193 10.530 11.133 139.450
+## genuine     214.969 129.943 129.720  8.305 10.168 141.517
 ```
 
  
@@ -438,27 +399,20 @@ head(d)
 ```
 
 ```
-##   length  left right bottom  top  diag
-## 1  214.8 131.0 131.1    9.0  9.7 141.0
-## 2  214.6 129.7 129.7    8.1  9.5 141.7
-## 3  214.8 129.7 129.7    8.7  9.6 142.2
-## 4  214.8 129.7 129.6    7.5 10.4 142.0
-## 5  215.0 129.6 129.7   10.4  7.7 141.8
-## 6  215.7 130.8 130.5    9.0 10.1 141.4
-##    status   class posterior.counterfeit
-## 1 genuine genuine          3.245560e-07
-## 2 genuine genuine          1.450624e-14
-## 3 genuine genuine          1.544496e-14
-## 4 genuine genuine          4.699587e-15
-## 5 genuine genuine          1.941700e-13
-## 6 genuine genuine          1.017550e-08
-##   posterior.genuine      LD1
-## 1         0.9999997 2.150948
-## 2         1.0000000 4.587317
-## 3         1.0000000 4.578290
-## 4         1.0000000 4.749580
-## 5         1.0000000 4.213851
-## 6         1.0000000 2.649422
+##   length  left right bottom  top  diag  status   class
+## 1  214.8 131.0 131.1    9.0  9.7 141.0 genuine genuine
+## 2  214.6 129.7 129.7    8.1  9.5 141.7 genuine genuine
+## 3  214.8 129.7 129.7    8.7  9.6 142.2 genuine genuine
+## 4  214.8 129.7 129.6    7.5 10.4 142.0 genuine genuine
+## 5  215.0 129.6 129.7   10.4  7.7 141.8 genuine genuine
+## 6  215.7 130.8 130.5    9.0 10.1 141.4 genuine genuine
+##   posterior.counterfeit posterior.genuine      LD1
+## 1          3.245560e-07         0.9999997 2.150948
+## 2          1.450624e-14         1.0000000 4.587317
+## 3          1.544496e-14         1.0000000 4.578290
+## 4          4.699587e-15         1.0000000 4.749580
+## 5          1.941700e-13         1.0000000 4.213851
+## 6          1.017550e-08         1.0000000 2.649422
 ```
 
       
@@ -478,8 +432,7 @@ you?), you saw that the LD scores were in a column called
 ggplot(d, aes(x = status, y = LD1)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/antioch-1} 
+<img src="21-discriminant-analysis_files/figure-html/antioch-1.png" width="672"  />
 
    
 
@@ -493,12 +446,10 @@ Or you could do faceted histograms of `LD1` by `status`:
 
 
 ```r
-ggplot(d, aes(x = LD1)) + geom_histogram(bins = 10) + 
-    facet_grid(status ~ .)
+ggplot(d, aes(x = LD1)) + geom_histogram(bins = 10) + facet_grid(status ~ .)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-12-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -532,8 +483,7 @@ boxplot seems a nice way to display it:
 ggplot(d, aes(y = left, x = status)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/gtabita-1} 
+<img src="21-discriminant-analysis_files/figure-html/gtabita-1.png" width="672"  />
 
       
 
@@ -547,8 +497,7 @@ Compare that to `diag`:
 ggplot(d, aes(y = diag, x = status)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/iggle-1} 
+<img src="21-discriminant-analysis_files/figure-html/iggle-1.png" width="672"  />
 
  
 
@@ -602,7 +551,9 @@ Frequency tables are usually wide, and we can make this one so by `spread`ing `p
 
 
 ```r
-d %>% count(status, class) %>% spread(class, n)
+d %>%
+  count(status, class) %>%
+  spread(class, n)
 ```
 
 ```
@@ -621,8 +572,9 @@ actually a frequency that is zero, which you can fix up thus:
 
 
 ```r
-d %>% count(status, class) %>% spread(class, n, 
-    fill = 0)
+d %>%
+  count(status, class) %>%
+  spread(class, n, fill = 0)
 ```
 
 ```
@@ -646,12 +598,10 @@ d %>% filter(status != class)
 ```
 
 ```
-##   length  left right bottom  top  diag
-## 1  214.9 130.2 130.2      8 11.2 139.6
-##    status       class posterior.counterfeit
-## 1 genuine counterfeit             0.9825773
-##   posterior.genuine        LD1
-## 1        0.01742267 -0.5805239
+##   length  left right bottom  top  diag  status       class
+## 1  214.9 130.2 130.2      8 11.2 139.6 genuine counterfeit
+##   posterior.counterfeit posterior.genuine        LD1
+## 1             0.9825773        0.01742267 -0.5805239
 ```
 
  
@@ -663,16 +613,17 @@ there is some doubt about whether the bill is real or fake. 0.99 seems like a ve
 
 
 ```r
-d %>% mutate(max.post = pmax(posterior.counterfeit, 
-    posterior.genuine)) %>% filter(max.post < 
-    0.99) %>% dplyr::select(-c(length:diag))
+d %>%
+  mutate(max.post = pmax(posterior.counterfeit, posterior.genuine)) %>%
+  filter(max.post < 0.99) %>%
+  dplyr::select(-c(length:diag))
 ```
 
 ```
-##    status       class posterior.counterfeit
-## 1 genuine counterfeit             0.9825773
-##   posterior.genuine        LD1  max.post
-## 1        0.01742267 -0.5805239 0.9825773
+##    status       class posterior.counterfeit posterior.genuine        LD1
+## 1 genuine counterfeit             0.9825773        0.01742267 -0.5805239
+##    max.post
+## 1 0.9825773
 ```
 
  
@@ -693,23 +644,26 @@ for each row separately. This also should work:
 
 
 ```r
-d %>% mutate(max.post = map2_dbl(posterior.counterfeit, 
-    posterior.genuine, ~max(.x, .y))) %>% filter(max.post < 
-    0.99) %>% select(-c(length:diag))
+d %>%
+  mutate(max.post = map2_dbl(
+    posterior.counterfeit, posterior.genuine, ~ max(.x, .y)
+  )) %>%
+  filter(max.post < 0.99) %>%
+  select(-c(length:diag))
 ```
 
 ```
-##    status       class posterior.counterfeit
-## 1 genuine counterfeit             0.9825773
-##   posterior.genuine        LD1  max.post
-## 1        0.01742267 -0.5805239 0.9825773
+##    status       class posterior.counterfeit posterior.genuine        LD1
+## 1 genuine counterfeit             0.9825773        0.01742267 -0.5805239
+##    max.post
+## 1 0.9825773
 ```
 
  
 Because we're using `map`, `max` is applied to the pairs
 of values of `posterior.counterfeit` and `posterior.genuine`, 
 *taken one at a time.*
-\marginnote{The *map2* is because we are for-eaching over the corresponding values in *counterfeit* and *genuine*. In the *do this*, there can no longer be one *it*; the *.x* and *.y* refer to each of the *counterfeit* and *genuine* values in that order.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *map2* is because we are for-eaching over the corresponding values in *counterfeit* and *genuine*. In the *do this*, there can no longer be one *it*; the *.x* and *.y* refer to each of the *counterfeit* and *genuine* values in that order.</span>
  
 
 
@@ -746,22 +700,17 @@ urine <- read_csv(my_url)
 ```
 
 ```r
-response <- with(urine, cbind(creatinine, chlorine, 
-    chloride))
+response <- with(urine, cbind(creatinine, chlorine, chloride))
 urine.1 <- manova(response ~ obesity, data = urine)
 summary(urine.1)
 ```
 
 ```
-##           Df  Pillai approx F num Df den Df
-## obesity    3 0.43144   2.2956      9    123
-## Residuals 41                               
-##            Pr(>F)  
-## obesity   0.02034 *
-## Residuals          
+##           Df  Pillai approx F num Df den Df  Pr(>F)  
+## obesity    3 0.43144   2.2956      9    123 0.02034 *
+## Residuals 41                                         
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -780,8 +729,7 @@ As above, plus:
 
 
 ```r
-urine.1 <- lda(obesity ~ creatinine + chlorine + 
-    chloride, data = urine)
+urine.1 <- lda(obesity ~ creatinine + chlorine + chloride, data = urine)
 urine.1
 ```
 
@@ -801,14 +749,10 @@ urine.1
 ## d   11.91250 9.675000 3.981250
 ## 
 ## Coefficients of linear discriminants:
-##                    LD1        LD2
-## creatinine  0.24429462 -0.1700525
-## chlorine   -0.02167823 -0.1353051
-## chloride    0.23805588  0.3590364
-##                    LD3
-## creatinine -0.02623962
-## chlorine    0.11524045
-## chloride    0.30564592
+##                    LD1        LD2         LD3
+## creatinine  0.24429462 -0.1700525 -0.02623962
+## chlorine   -0.02167823 -0.1353051  0.11524045
+## chloride    0.23805588  0.3590364  0.30564592
 ## 
 ## Proportion of trace:
 ##    LD1    LD2    LD3 
@@ -854,34 +798,20 @@ head(d)
 ```
 
 ```
-##   obesity  x creatinine chloride chlorine
-## 1       a 24       17.6     5.15      7.5
-## 2       a 32       13.4     5.75      7.1
-## 3       a 17       20.3     4.35      2.3
-## 4       a 30       22.3     7.55      4.0
-## 5       a 30       20.5     8.50      2.0
-## 6       a 27       18.5    10.25      2.0
-##   class posterior.a posterior.b posterior.c
-## 1     b   0.2327008   0.4124974   0.3022445
-## 2     a   0.3599095   0.2102510   0.2633959
-## 3     b   0.2271118   0.4993603   0.2519562
-## 4     b   0.2935374   0.4823766   0.2211991
-## 5     a   0.4774623   0.3258104   0.1933571
-## 6     a   0.6678748   0.1810762   0.1482500
-##   posterior.d      x.LD1      x.LD2
-## 1 0.052557333  0.3926519 -0.3290621
-## 2 0.166443708 -0.4818807  0.6547023
-## 3 0.021571722  0.9745295 -0.3718462
-## 4 0.002886957  2.1880446  0.2069465
-## 5 0.003370286  2.0178238  1.1247359
-## 6 0.002799004  1.9458323  2.0931546
-##        x.LD3
-## 1 -0.0704284
-## 2  0.1770694
-## 3 -0.9850425
-## 4  0.1364540
-## 5  0.2435680
-## 6  0.8309276
+##   obesity  x creatinine chloride chlorine class posterior.a posterior.b
+## 1       a 24       17.6     5.15      7.5     b   0.2327008   0.4124974
+## 2       a 32       13.4     5.75      7.1     a   0.3599095   0.2102510
+## 3       a 17       20.3     4.35      2.3     b   0.2271118   0.4993603
+## 4       a 30       22.3     7.55      4.0     b   0.2935374   0.4823766
+## 5       a 30       20.5     8.50      2.0     a   0.4774623   0.3258104
+## 6       a 27       18.5    10.25      2.0     a   0.6678748   0.1810762
+##   posterior.c posterior.d      x.LD1      x.LD2      x.LD3
+## 1   0.3022445 0.052557333  0.3926519 -0.3290621 -0.0704284
+## 2   0.2633959 0.166443708 -0.4818807  0.6547023  0.1770694
+## 3   0.2519562 0.021571722  0.9745295 -0.3718462 -0.9850425
+## 4   0.2211991 0.002886957  2.1880446  0.2069465  0.1364540
+## 5   0.1933571 0.003370286  2.0178238  1.1247359  0.2435680
+## 6   0.1482500 0.002799004  1.9458323  2.0931546  0.8309276
 ```
 
              
@@ -899,8 +829,7 @@ class(urine)
 ```
 
 ```
-## [1] "spec_tbl_df" "tbl_df"      "tbl"        
-## [4] "data.frame"
+## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
 ```
 
 ```r
@@ -947,27 +876,20 @@ head(as.data.frame(urine.pred))
 ```
 
 ```
-##   class posterior.a posterior.b posterior.c
-## 1     b   0.2327008   0.4124974   0.3022445
-## 2     a   0.3599095   0.2102510   0.2633959
-## 3     b   0.2271118   0.4993603   0.2519562
-## 4     b   0.2935374   0.4823766   0.2211991
-## 5     a   0.4774623   0.3258104   0.1933571
-## 6     a   0.6678748   0.1810762   0.1482500
-##   posterior.d      x.LD1      x.LD2
-## 1 0.052557333  0.3926519 -0.3290621
-## 2 0.166443708 -0.4818807  0.6547023
-## 3 0.021571722  0.9745295 -0.3718462
-## 4 0.002886957  2.1880446  0.2069465
-## 5 0.003370286  2.0178238  1.1247359
-## 6 0.002799004  1.9458323  2.0931546
-##        x.LD3
-## 1 -0.0704284
-## 2  0.1770694
-## 3 -0.9850425
-## 4  0.1364540
-## 5  0.2435680
-## 6  0.8309276
+##   class posterior.a posterior.b posterior.c posterior.d      x.LD1
+## 1     b   0.2327008   0.4124974   0.3022445 0.052557333  0.3926519
+## 2     a   0.3599095   0.2102510   0.2633959 0.166443708 -0.4818807
+## 3     b   0.2271118   0.4993603   0.2519562 0.021571722  0.9745295
+## 4     b   0.2935374   0.4823766   0.2211991 0.002886957  2.1880446
+## 5     a   0.4774623   0.3258104   0.1933571 0.003370286  2.0178238
+## 6     a   0.6678748   0.1810762   0.1482500 0.002799004  1.9458323
+##        x.LD2      x.LD3
+## 1 -0.3290621 -0.0704284
+## 2  0.6547023  0.1770694
+## 3 -0.3718462 -0.9850425
+## 4  0.2069465  0.1364540
+## 5  1.1247359  0.2435680
+## 6  2.0931546  0.8309276
 ```
 
  
@@ -982,23 +904,20 @@ dd
 
 ```
 ## # A tibble: 45 x 13
-##    obesity     x creatinine chloride chlorine
-##    <chr>   <dbl>      <dbl>    <dbl>    <dbl>
-##  1 a          24       17.6     5.15      7.5
-##  2 a          32       13.4     5.75      7.1
-##  3 a          17       20.3     4.35      2.3
-##  4 a          30       22.3     7.55      4  
-##  5 a          30       20.5     8.5       2  
-##  6 a          27       18.5    10.2       2  
-##  7 a          25       12.1     5.95     16.8
-##  8 a          30       12       6.3      14.5
-##  9 a          28       10.1     5.45      0.9
-## 10 a          24       14.7     3.75      2  
-## # ... with 35 more rows, and 8 more
-## #   variables: class <fct>,
-## #   posterior.a <dbl>, posterior.b <dbl>,
-## #   posterior.c <dbl>, posterior.d <dbl>,
-## #   x.LD1 <dbl>, x.LD2 <dbl>, x.LD3 <dbl>
+##    obesity     x creatinine chloride chlorine class posterior.a posterior.b
+##    <chr>   <dbl>      <dbl>    <dbl>    <dbl> <fct>       <dbl>       <dbl>
+##  1 a          24       17.6     5.15      7.5 b           0.233      0.412 
+##  2 a          32       13.4     5.75      7.1 a           0.360      0.210 
+##  3 a          17       20.3     4.35      2.3 b           0.227      0.499 
+##  4 a          30       22.3     7.55      4   b           0.294      0.482 
+##  5 a          30       20.5     8.5       2   a           0.477      0.326 
+##  6 a          27       18.5    10.2       2   a           0.668      0.181 
+##  7 a          25       12.1     5.95     16.8 c           0.167      0.208 
+##  8 a          30       12       6.3      14.5 c           0.230      0.197 
+##  9 a          28       10.1     5.45      0.9 a           0.481      0.0752
+## 10 a          24       14.7     3.75      2   a           0.323      0.247 
+## # … with 35 more rows, and 5 more variables: posterior.c <dbl>,
+## #   posterior.d <dbl>, x.LD1 <dbl>, x.LD2 <dbl>, x.LD3 <dbl>
 ```
 
  
@@ -1014,29 +933,26 @@ into data frames, and then gluing everything back together:
 ```r
 post <- as_tibble(urine.pred$posterior)
 ld <- as_tibble(urine.pred$x)
-ddd <- bind_cols(urine, class = urine.pred$class, 
-    ld, post)
+ddd <- bind_cols(urine, class = urine.pred$class, ld, post)
 ddd
 ```
 
 ```
 ## # A tibble: 45 x 13
-##    obesity     x creatinine chloride chlorine
-##    <chr>   <dbl>      <dbl>    <dbl>    <dbl>
-##  1 a          24       17.6     5.15      7.5
-##  2 a          32       13.4     5.75      7.1
-##  3 a          17       20.3     4.35      2.3
-##  4 a          30       22.3     7.55      4  
-##  5 a          30       20.5     8.5       2  
-##  6 a          27       18.5    10.2       2  
-##  7 a          25       12.1     5.95     16.8
-##  8 a          30       12       6.3      14.5
-##  9 a          28       10.1     5.45      0.9
-## 10 a          24       14.7     3.75      2  
-## # ... with 35 more rows, and 8 more
-## #   variables: class <fct>, LD1 <dbl>,
-## #   LD2 <dbl>, LD3 <dbl>, a <dbl>, b <dbl>,
-## #   c <dbl>, d <dbl>
+##    obesity     x creatinine chloride chlorine class    LD1     LD2     LD3
+##    <chr>   <dbl>      <dbl>    <dbl>    <dbl> <fct>  <dbl>   <dbl>   <dbl>
+##  1 a          24       17.6     5.15      7.5 b      0.393 -0.329  -0.0704
+##  2 a          32       13.4     5.75      7.1 a     -0.482  0.655   0.177 
+##  3 a          17       20.3     4.35      2.3 b      0.975 -0.372  -0.985 
+##  4 a          30       22.3     7.55      4   b      2.19   0.207   0.136 
+##  5 a          30       20.5     8.5       2   a      2.02   1.12    0.244 
+##  6 a          27       18.5    10.2       2   a      1.95   2.09    0.831 
+##  7 a          25       12.1     5.95     16.8 c     -0.962 -0.365   1.39  
+##  8 a          30       12       6.3      14.5 c     -0.853  0.0890  1.23  
+##  9 a          28       10.1     5.45      0.9 a     -1.23   1.95   -0.543 
+## 10 a          24       14.7     3.75      2   a     -0.530  0.406  -1.06  
+## # … with 35 more rows, and 4 more variables: a <dbl>, b <dbl>, c <dbl>,
+## #   d <dbl>
 ```
 
  
@@ -1045,7 +961,7 @@ are now absolutely sure what kind of thing everything is. I also had
 to be slightly careful with the vector of `class` values; in
 `ddd` it has to have a name, so I have to make sure I give it
 one.
-\marginnote{If you run into an error like *Argument 2 must have names* here, that means that the second thing, *class*, needs  to have a name and doesn't have one.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you run into an error like *Argument 2 must have names* here, that means that the second thing, *class*, needs  to have a name and doesn't have one.</span>
 Any of these ways (in general) is good. The last way is a more
 careful approach, since you are making sure things are of the right
 type rather than relying on R to convert them for you, but I don't
@@ -1054,12 +970,10 @@ Now make the plot, making sure that you are using columns with the right names. 
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, colour = obesity)) + 
-    geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = obesity)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-28-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
  
  
@@ -1104,15 +1018,14 @@ the *average* individual within a group stacks up.
 ggbiplot(urine.1, groups = urine$obesity)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-29-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
  
 
 This shows (in a way that is perhaps easier to see) how the linear
 discriminants are related to the original variables, and thus how the
 groups differ in terms of the original variables.
-\marginnote{This was why  we were doing discriminant analysis in the first place.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was why  we were doing discriminant analysis in the first place.</span> 
 Most of the B's are high creatinine and high chloride (on the right); most of the D's are low on both (on the left). LD2 has a bit of `chloride`, but not much of anything else.
 Extra: the way we used to do this was with "base graphics", which involved plotting the `lda` output itself:
 
@@ -1121,8 +1034,7 @@ Extra: the way we used to do this was with "base graphics", which involved plott
 plot(urine.1)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-30-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
 
  
 
@@ -1134,8 +1046,7 @@ one. You can plot just the first two, like this:
 plot(urine.1, dimen = 2)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-31-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
  
 This is easier than using `ggplot`, but (i) less flexible and
@@ -1180,7 +1091,7 @@ later:
 
 
 ```r
-tab <- d %>% count(obesity, class)
+d %>% count(obesity, class) -> tab
 tab
 ```
 
@@ -1266,8 +1177,9 @@ It's a shortcut for this:
 
 
 ```r
-tab %>% mutate(is_correct = (obesity == class)) %>% 
-    count(is_correct, wt = n)
+tab %>%
+  mutate(is_correct = (obesity == class)) %>%
+  count(is_correct, wt = n)
 ```
 
 ```
@@ -1291,8 +1203,9 @@ wrong. We can find the proportions correct and wrong:
 
 
 ```r
-tab %>% count(correct = (obesity == class), wt = n) %>% 
-    mutate(proportion = n/sum(n))
+tab %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -1327,8 +1240,10 @@ do any summarizing:
 
 
 ```r
-tab %>% group_by(obesity) %>% count(correct = (obesity == 
-    class), wt = n) %>% mutate(proportion = n/sum(n))
+tab %>%
+  group_by(obesity) %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -1354,9 +1269,12 @@ read, a kind of "untidying":
 
 
 ```r
-tab %>% group_by(obesity) %>% count(correct = (obesity == 
-    class), wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    select(-n) %>% spread(correct, proportion)
+tab %>%
+  group_by(obesity) %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(correct, proportion)
 ```
 
 ```
@@ -1385,10 +1303,13 @@ values than TRUE and FALSE:
 
 
 ```r
-tab %>% group_by(obesity) %>% mutate(prediction_stat = ifelse(obesity == 
-    class, "correct", "wrong")) %>% count(prediction_stat, 
-    wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    select(-n) %>% spread(prediction_stat, proportion)
+tab %>%
+  group_by(obesity) %>%
+  mutate(prediction_stat = ifelse(obesity == class, "correct", "wrong")) %>%
+  count(prediction_stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(prediction_stat, proportion)
 ```
 
 ```
@@ -1498,22 +1419,18 @@ summary(simple.3)
 ```
 
 ```
-##           Df Pillai approx F num Df den Df
-## group      2 1.3534   9.4196      4     18
-## Residuals  9                              
-##              Pr(>F)    
-## group     0.0002735 ***
-## Residuals              
+##           Df Pillai approx F num Df den Df    Pr(>F)    
+## group      2 1.3534   9.4196      4     18 0.0002735 ***
+## Residuals  9                                            
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
 
 This P-value is small, so there is some way in which some of the
 groups differ on some of the variables.
-\marginnote{That sounds like the  ultimate in evasiveness!}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That sounds like the  ultimate in evasiveness!</span>
     
 
 
@@ -1612,8 +1529,7 @@ This was the old-fashioned way:
 plot(simple.4)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-43-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
    
 
@@ -1637,53 +1553,50 @@ head(d)
 ```
 
 ```
-##   group y1 y2 class posterior.a  posterior.b
-## 1     a  2  3     a 0.999836110 0.0001636933
-## 2     a  3  4     a 0.994129686 0.0058400248
-## 3     a  5  4     a 0.953416498 0.0267238544
-## 4     a  2  5     a 0.957685668 0.0423077129
-## 5     b  4  8     b 0.001068057 0.9978789644
-## 6     b  5  6     b 0.107572389 0.8136017106
-##    posterior.c      x.LD1      x.LD2
-## 1 1.964310e-07 -3.5708196  1.1076359
-## 2 3.028912e-05 -2.4903326  0.5817994
-## 3 1.985965e-02 -1.0515795  1.3939939
-## 4 6.618865e-06 -2.8485988 -0.7562315
-## 5 1.052978e-03 -0.3265145 -2.7398380
-## 6 7.882590e-02 -0.3293587 -0.4698735
+##   group y1 y2 class posterior.a  posterior.b  posterior.c      x.LD1
+## 1     a  2  3     a 0.999836110 0.0001636933 1.964310e-07 -3.5708196
+## 2     a  3  4     a 0.994129686 0.0058400248 3.028912e-05 -2.4903326
+## 3     a  5  4     a 0.953416498 0.0267238544 1.985965e-02 -1.0515795
+## 4     a  2  5     a 0.957685668 0.0423077129 6.618865e-06 -2.8485988
+## 5     b  4  8     b 0.001068057 0.9978789644 1.052978e-03 -0.3265145
+## 6     b  5  6     b 0.107572389 0.8136017106 7.882590e-02 -0.3293587
+##        x.LD2
+## 1  1.1076359
+## 2  0.5817994
+## 3  1.3939939
+## 4 -0.7562315
+## 5 -2.7398380
+## 6 -0.4698735
 ```
 
  
 or like this, for fun:
-\marginnote{For suitable definitions of fun.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">For suitable definitions of fun.</span>
 
 
 ```r
 ld <- as_tibble(simple.pred$x)
 post <- as_tibble(simple.pred$posterior)
-dd <- bind_cols(simple, class = simple.pred$class, 
-    ld, post)
+dd <- bind_cols(simple, class = simple.pred$class, ld, post)
 dd
 ```
 
 ```
 ## # A tibble: 12 x 9
-##    group    y1    y2 class     LD1    LD2
-##    <chr> <dbl> <dbl> <fct>   <dbl>  <dbl>
-##  1 a         2     3 a     -3.57    1.11 
-##  2 a         3     4 a     -2.49    0.582
-##  3 a         5     4 a     -1.05    1.39 
-##  4 a         2     5 a     -2.85   -0.756
-##  5 b         4     8 b     -0.327  -2.74 
-##  6 b         5     6 b     -0.329  -0.470
-##  7 b         5     7 b      0.0318 -1.40 
-##  8 c         7     6 c      1.11    0.342
-##  9 c         8     7 c      2.19   -0.184
-## 10 c        10     8 c      3.99   -0.303
-## 11 c         9     5 c      2.19    2.09 
-## 12 c         7     6 c      1.11    0.342
-## # ... with 3 more variables: a <dbl>,
-## #   b <dbl>, c <dbl>
+##    group    y1    y2 class     LD1    LD2             a        b          c
+##    <chr> <dbl> <dbl> <fct>   <dbl>  <dbl>         <dbl>    <dbl>      <dbl>
+##  1 a         2     3 a     -3.57    1.11  1.000         0.000164    1.96e-7
+##  2 a         3     4 a     -2.49    0.582 0.994         0.00584     3.03e-5
+##  3 a         5     4 a     -1.05    1.39  0.953         0.0267      1.99e-2
+##  4 a         2     5 a     -2.85   -0.756 0.958         0.0423      6.62e-6
+##  5 b         4     8 b     -0.327  -2.74  0.00107       0.998       1.05e-3
+##  6 b         5     6 b     -0.329  -0.470 0.108         0.814       7.88e-2
+##  7 b         5     7 b      0.0318 -1.40  0.00772       0.959       3.35e-2
+##  8 c         7     6 c      1.11    0.342 0.00186       0.0671      9.31e-1
+##  9 c         8     7 c      2.19   -0.184 0.0000127     0.0164      9.84e-1
+## 10 c        10     8 c      3.99   -0.303 0.00000000317 0.000322   10.00e-1
+## 11 c         9     5 c      2.19    2.09  0.0000173     0.000181   10.00e-1
+## 12 c         7     6 c      1.11    0.342 0.00186       0.0671      9.31e-1
 ```
 
  
@@ -1692,12 +1605,10 @@ true groups:
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, colour = group)) + 
-    geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = group)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-47-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
  
 
@@ -1706,12 +1617,10 @@ vs.\ `y2`, coloured by groups:
 
 
 ```r
-ggplot(simple, aes(x = y1, y = y2, colour = group)) + 
-    geom_point()
+ggplot(simple, aes(x = y1, y = y2, colour = group)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-48-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
  
 
@@ -1729,8 +1638,7 @@ against groups via boxplot:
 ggplot(d, aes(x = group, y = x.LD1)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-49-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 
@@ -1865,8 +1773,9 @@ d %>% count(group, class)
 or
 
 ```r
-d %>% count(group, class) %>% spread(class, n, 
-    fill = 0)
+d %>%
+  count(group, class) %>%
+  spread(class, n, fill = 0)
 ```
 
 ```
@@ -1892,38 +1801,25 @@ have a ton of decimal places which I like to round off first before I
 display them, eg. to 3 decimals here:
 
 ```r
-d %>% select(y1, y2, group, class, starts_with("posterior")) %>% 
-    mutate_at(vars(starts_with("posterior")), 
-        ~round(., 3))
+d %>%
+  select(y1, y2, group, class, starts_with("posterior")) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3))
 ```
 
 ```
-##    y1 y2 group class posterior.a posterior.b
-## 1   2  3     a     a       1.000       0.000
-## 2   3  4     a     a       0.994       0.006
-## 3   5  4     a     a       0.953       0.027
-## 4   2  5     a     a       0.958       0.042
-## 5   4  8     b     b       0.001       0.998
-## 6   5  6     b     b       0.108       0.814
-## 7   5  7     b     b       0.008       0.959
-## 8   7  6     c     c       0.002       0.067
-## 9   8  7     c     c       0.000       0.016
-## 10 10  8     c     c       0.000       0.000
-## 11  9  5     c     c       0.000       0.000
-## 12  7  6     c     c       0.002       0.067
-##    posterior.c
-## 1        0.000
-## 2        0.000
-## 3        0.020
-## 4        0.000
-## 5        0.001
-## 6        0.079
-## 7        0.034
-## 8        0.931
-## 9        0.984
-## 10       1.000
-## 11       1.000
-## 12       0.931
+##    y1 y2 group class posterior.a posterior.b posterior.c
+## 1   2  3     a     a       1.000       0.000       0.000
+## 2   3  4     a     a       0.994       0.006       0.000
+## 3   5  4     a     a       0.953       0.027       0.020
+## 4   2  5     a     a       0.958       0.042       0.000
+## 5   4  8     b     b       0.001       0.998       0.001
+## 6   5  6     b     b       0.108       0.814       0.079
+## 7   5  7     b     b       0.008       0.959       0.034
+## 8   7  6     c     c       0.002       0.067       0.931
+## 9   8  7     c     c       0.000       0.016       0.984
+## 10 10  8     c     c       0.000       0.000       1.000
+## 11  9  5     c     c       0.000       0.000       1.000
+## 12  7  6     c     c       0.002       0.067       0.931
 ```
 
  
@@ -1942,18 +1838,17 @@ observation 6, and then I use this new variable as the `size`
 of the point I plot:
 
 ```r
-simple %>% mutate(is6 = (row_number() == 6)) %>% 
-    ggplot(aes(x = y1, y = y2, colour = group, 
-        size = is6)) + geom_point()
+simple %>%
+  mutate(is6 = (row_number() == 6)) %>%
+  ggplot(aes(x = y1, y = y2, colour = group, size = is6)) +
+  geom_point()
 ```
 
 ```
-## Warning: Using size for a discrete variable
-## is not advised.
+## Warning: Using size for a discrete variable is not advised.
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-54-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
  
 
@@ -1977,7 +1872,7 @@ it is like any of the other groups.
 
 
  244
-\marginnote{Grammatically, I am supposed to write this as  *two hundred and forty-four* in words, since I am not supposed to  start a sentence with a number. But, I say, deal with it. Or, I  suppose, *there are 244 people who work...*.} people work at a
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Grammatically, I am supposed to write this as  *two hundred and forty-four* in words, since I am not supposed to  start a sentence with a number. But, I say, deal with it. Or, I  suppose, *there are 244 people who work...*.</span> people work at a
 certain company. 
 They each have one of three jobs: customer service, mechanic,
 dispatcher. In the data set, these are labelled 1, 2 and 3
@@ -2035,14 +1930,14 @@ jobs0
 ##  8      13     27            7     1     8
 ##  9      18     31            9     1     9
 ## 10      16     35           13     1    10
-## # ... with 234 more rows
+## # … with 234 more rows
 ```
 
      
 
 We got all that was promised, plus a label `id` for each
 employee, which we will from here on ignore.
-\marginnote{Until much later.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Until much later.</span>
     
 
 
@@ -2064,7 +1959,8 @@ actually use for the analysis below:
 
 ```r
 job_labels <- c("custserv", "mechanic", "dispatcher")
-jobs <- jobs0 %>% mutate(job = factor(job, labels = job_labels))
+jobs <- jobs0 %>%
+  mutate(job = factor(job, labels = job_labels))
 ```
 
        
@@ -2091,7 +1987,7 @@ jobs
 ##  8      13     27            7 custserv     8
 ##  9      18     31            9 custserv     9
 ## 10      16     35           13 custserv    10
-## # ... with 234 more rows
+## # … with 234 more rows
 ```
 
  
@@ -2103,14 +1999,18 @@ All is good here. If you forget the `labels` thing, you'll get
 a factor, but its levels will be 1, 2, and 3, and you will have to
 remember which jobs they go with. I'm a fan of giving factors named
 levels, so that you can remember what stands for what.
-\marginnote{When  you're *recording* the data, you may find it convenient to use  short codes to represent the possibly long factor levels, but in  that case you should also use a *codebook* so that you know what  the codes represent. When I read the data into R, I would create a  factor with named levels, like I did here, if I don't already have one.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When  you're *recording* the data, you may find it convenient to use  short codes to represent the possibly long factor levels, but in  that case you should also use a *codebook* so that you know what  the codes represent. When I read the data into R, I would create a  factor with named levels, like I did here, if I don't already have one.</span>
 
 Extra: another way of doing this is to make a lookup table, that is, a little table that shows which job goes with which number:
 
 
 ```r
-lookup_tab <- tribble(~job, ~jobname, 1, "custserv", 
-    2, "mechanic", 3, "dispatcher")
+lookup_tab <- tribble(
+  ~job, ~jobname,
+  1, "custserv",
+  2, "mechanic",
+  3, "dispatcher"
+)
 lookup_tab
 ```
 
@@ -2129,7 +2029,9 @@ I carefully put the numbers in a column called `job` because I want to match the
 
 
 ```r
-jobs0 %>% left_join(lookup_tab) %>% sample_n(20)
+jobs0 %>%
+  left_join(lookup_tab) %>%
+  sample_n(20)
 ```
 
 ```
@@ -2138,29 +2040,28 @@ jobs0 %>% left_join(lookup_tab) %>% sample_n(20)
 
 ```
 ## # A tibble: 20 x 6
-##    outdoor social conservative   job    id
-##      <dbl>  <dbl>        <dbl> <dbl> <dbl>
-##  1      15     22           13     2    59
-##  2      10     22            5     1     1
-##  3      17     28           13     2    34
-##  4      18     16           15     3    10
-##  5      15     29            8     2     4
-##  6      17     20            8     2    90
-##  7      23     24            7     2    67
-##  8      10     31           13     1    15
-##  9      17     12           17     3     7
-## 10      15     14           17     3    11
-## 11      17     18            9     3    56
-## 12      20     25           12     1     6
-## 13       6     18            6     1    62
-## 14      17     18           15     2    87
-## 15      24      9           17     2     6
-## 16      19     11           13     3    55
-## 17       0     27           11     1    17
-## 18      14     25           15     1    78
-## 19      15     23           10     1    19
-## 20      17     24            5     2    86
-## # ... with 1 more variable: jobname <chr>
+##    outdoor social conservative   job    id jobname   
+##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
+##  1      16     28            6     1    41 custserv  
+##  2      16     24           10     1    85 custserv  
+##  3      17     21            9     2    10 mechanic  
+##  4      14     22            9     1    69 custserv  
+##  5      13     16            7     3    27 dispatcher
+##  6      11     12           19     3    39 dispatcher
+##  7      10     17            8     1    22 custserv  
+##  8      21     25           11     2    46 mechanic  
+##  9      12     28           13     1    51 custserv  
+## 10      15     11           13     3    29 dispatcher
+## 11      17     20            8     2    90 mechanic  
+## 12      19     11           13     3    55 dispatcher
+## 13      21     19            9     2    29 mechanic  
+## 14      19     23           12     2    55 mechanic  
+## 15       0     27           11     1    17 custserv  
+## 16      22     27           12     1    55 custserv  
+## 17      11     20            9     1    46 custserv  
+## 18      11     16           11     3    17 dispatcher
+## 19      21     19            8     2    74 mechanic  
+## 20      19     26            7     2    21 mechanic
 ```
 
  
@@ -2179,22 +2080,17 @@ Solution
 You know how to do this, right? This one is the easy way:
 
 ```r
-response <- with(jobs, cbind(social, outdoor, 
-    conservative))
+response <- with(jobs, cbind(social, outdoor, conservative))
 response.1 <- manova(response ~ job, data = jobs)
 summary(response.1)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df
-## job         2 0.76207   49.248      6    480
-## Residuals 241                               
-##              Pr(>F)    
-## job       < 2.2e-16 ***
-## Residuals              
+##            Df  Pillai approx F num Df den Df    Pr(>F)    
+## job         2 0.76207   49.248      6    480 < 2.2e-16 ***
+## Residuals 241                                             
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -2212,13 +2108,10 @@ Manova(response.2)
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##     Df test stat approx F num Df den Df
-## job  2   0.76207   49.248      6    480
-##        Pr(>F)    
-## job < 2.2e-16 ***
+##     Df test stat approx F num Df den Df    Pr(>F)    
+## job  2   0.76207   49.248      6    480 < 2.2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -2244,8 +2137,7 @@ Now `job`
 is the "response":
 
 ```r
-job.1 <- lda(job ~ social + outdoor + conservative, 
-    data = jobs)
+job.1 <- lda(job ~ social + outdoor + conservative, data = jobs)
 job.1
 ```
 
@@ -2363,34 +2255,20 @@ head(d)
 ```
 
 ```
-##   outdoor social conservative      job id
-## 1      10     22            5 custserv  1
-## 2      14     17            6 custserv  2
-## 3      19     33            7 custserv  3
-## 4      14     29           12 custserv  4
-## 5      14     25            7 custserv  5
-## 6      20     25           12 custserv  6
-##      class posterior.custserv
-## 1 custserv          0.9037622
-## 2 mechanic          0.3677743
-## 3 custserv          0.7302117
-## 4 custserv          0.8100756
-## 5 custserv          0.7677607
-## 6 mechanic          0.1682521
-##   posterior.mechanic posterior.dispatcher
-## 1         0.08894785         0.0072899882
-## 2         0.48897890         0.1432467601
-## 3         0.26946971         0.0003186265
-## 4         0.18217319         0.0077512155
-## 5         0.22505382         0.0071854904
-## 6         0.78482488         0.0469230463
-##        x.LD1       x.LD2
-## 1 -1.6423155  0.71477348
-## 2 -0.1480302  0.15096436
-## 3 -2.6415213 -1.68326115
-## 4 -1.5493681  0.07764901
-## 5 -1.5472314 -0.15994117
-## 6 -0.2203876 -1.07331266
+##   outdoor social conservative      job id    class posterior.custserv
+## 1      10     22            5 custserv  1 custserv          0.9037622
+## 2      14     17            6 custserv  2 mechanic          0.3677743
+## 3      19     33            7 custserv  3 custserv          0.7302117
+## 4      14     29           12 custserv  4 custserv          0.8100756
+## 5      14     25            7 custserv  5 custserv          0.7677607
+## 6      20     25           12 custserv  6 mechanic          0.1682521
+##   posterior.mechanic posterior.dispatcher      x.LD1       x.LD2
+## 1         0.08894785         0.0072899882 -1.6423155  0.71477348
+## 2         0.48897890         0.1432467601 -0.1480302  0.15096436
+## 3         0.26946971         0.0003186265 -2.6415213 -1.68326115
+## 4         0.18217319         0.0077512155 -1.5493681  0.07764901
+## 5         0.22505382         0.0071854904 -1.5472314 -0.15994117
+## 6         0.78482488         0.0469230463 -0.2203876 -1.07331266
 ```
 
        
@@ -2399,12 +2277,10 @@ Following my suggestion, plot these the standard way with
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, colour = job)) + 
-    geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = job)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-62-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
  
 I was mostly right about the customer service people: small
@@ -2477,7 +2353,9 @@ or:
 
 
 ```r
-d %>% count(job, class) %>% spread(class, n, fill = 0)
+d %>%
+  count(job, class) %>%
+  spread(class, n, fill = 0)
 ```
 
 ```
@@ -2520,8 +2398,9 @@ the correct or wrong classification:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == 
-    class, "correct", "wrong"))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong"))
 ```
 
 ```
@@ -2547,9 +2426,10 @@ count the number of rows:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == 
-    class, "correct", "wrong")) %>% count(job_stat, 
-    wt = n)
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  count(job_stat, wt = n)
 ```
 
 ```
@@ -2566,9 +2446,11 @@ and turn these into proportions:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == 
-    class, "correct", "wrong")) %>% count(job_stat, 
-    wt = n) %>% mutate(proportion = n/sum(n))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -2599,9 +2481,12 @@ proportions for each (true) job:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == 
-    class, "correct", "wrong")) %>% group_by(job) %>% 
-    count(job_stat, wt = n) %>% mutate(proportion = n/sum(n))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  group_by(job) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -2623,10 +2508,14 @@ or even split out the correct and wrong ones into their own columns:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == 
-    class, "correct", "wrong")) %>% group_by(job) %>% 
-    count(job_stat, wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    select(-n) %>% spread(job_stat, proportion)
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  group_by(job) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(job_stat, proportion)
 ```
 
 ```
@@ -2671,8 +2560,10 @@ models. I think the
 clearest way to make one of these is with `tribble`:
 
 ```r
-new <- tribble(~outdoor, ~social, ~conservative, 
-    20, 17, 8)
+new <- tribble(
+  ~outdoor, ~social, ~conservative,
+  20, 17, 8
+)
 new
 ```
 
@@ -2705,12 +2596,10 @@ cbind(new, pp1)
 ```
 
 ```
-##   outdoor social conservative    class
-## 1      20     17            8 mechanic
-##   posterior.custserv posterior.mechanic
-## 1         0.05114665          0.7800624
-##   posterior.dispatcher     x.LD1     x.LD2
-## 1            0.1687909 0.7138376 -1.024436
+##   outdoor social conservative    class posterior.custserv
+## 1      20     17            8 mechanic         0.05114665
+##   posterior.mechanic posterior.dispatcher     x.LD1     x.LD2
+## 1          0.7800624            0.1687909 0.7138376 -1.024436
 ```
 
  
@@ -2720,7 +2609,7 @@ The `class` thing gives our predicted job, and the
 So we reckon there's a 78\% chance that this person is a mechanic;
 they might be a dispatcher but they are unlikely to be in customer
 service. Our best guess is that they are a mechanic.
-\marginnote{I  discovered that I used *pp* twice, and I want to use the first one again later, so I had to rename this one.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I  discovered that I used *pp* twice, and I want to use the first one again later, so I had to rename this one.</span>
 
 Does this pass the sanity-check test? First figure out where our new
 employee stands compared to the others:
@@ -2731,20 +2620,13 @@ summary(jobs)
 ```
 
 ```
-##     outdoor          social     
-##  Min.   : 0.00   Min.   : 7.00  
-##  1st Qu.:13.00   1st Qu.:17.00  
-##  Median :16.00   Median :21.00  
-##  Mean   :15.64   Mean   :20.68  
-##  3rd Qu.:19.00   3rd Qu.:25.00  
-##  Max.   :28.00   Max.   :35.00  
-##   conservative           job    
-##  Min.   : 0.00   custserv  :85  
-##  1st Qu.: 8.00   mechanic  :93  
-##  Median :11.00   dispatcher:66  
-##  Mean   :10.59                  
-##  3rd Qu.:13.00                  
-##  Max.   :20.00                  
+##     outdoor          social       conservative           job    
+##  Min.   : 0.00   Min.   : 7.00   Min.   : 0.00   custserv  :85  
+##  1st Qu.:13.00   1st Qu.:17.00   1st Qu.: 8.00   mechanic  :93  
+##  Median :16.00   Median :21.00   Median :11.00   dispatcher:66  
+##  Mean   :15.64   Mean   :20.68   Mean   :10.59                  
+##  3rd Qu.:19.00   3rd Qu.:25.00   3rd Qu.:13.00                  
+##  Max.   :28.00   Max.   :35.00   Max.   :20.00                  
 ##        id       
 ##  Min.   : 1.00  
 ##  1st Qu.:21.00  
@@ -2796,32 +2678,25 @@ discriminants'' above:
 
 
 ```r
-new <- crossing(outdoor = outdoors, social = socials, 
-    conservative = conservatives)
+new <- crossing(
+  outdoor = outdoors, social = socials,
+  conservative = conservatives
+)
 pp2 <- predict(job.1, new)
 px <- round(pp2$x, 2)
 cbind(new, pp2$class, px)
 ```
 
 ```
-##   outdoor social conservative  pp2$class
-## 1      13     17            8   mechanic
-## 2      13     17           13 dispatcher
-## 3      13     25            8   custserv
-## 4      13     25           13   custserv
-## 5      19     17            8   mechanic
-## 6      19     17           13 dispatcher
-## 7      19     25            8   mechanic
-## 8      19     25           13   mechanic
-##     LD1   LD2
-## 1  0.07  0.55
-## 2  0.84  0.99
-## 3 -1.48  0.15
-## 4 -0.71  0.59
-## 5  0.62 -0.80
-## 6  1.40 -0.36
-## 7 -0.93 -1.20
-## 8 -0.16 -0.76
+##   outdoor social conservative  pp2$class   LD1   LD2
+## 1      13     17            8   mechanic  0.07  0.55
+## 2      13     17           13 dispatcher  0.84  0.99
+## 3      13     25            8   custserv -1.48  0.15
+## 4      13     25           13   custserv -0.71  0.59
+## 5      19     17            8   mechanic  0.62 -0.80
+## 6      19     17           13 dispatcher  1.40 -0.36
+## 7      19     25            8   mechanic -0.93 -1.20
+## 8      19     25           13   mechanic -0.16 -0.76
 ```
 
  
@@ -2885,8 +2760,7 @@ Stick a `CV=T` in the `lda`:
 
 
 ```r
-job.3 <- lda(job ~ social + outdoor + conservative, 
-    data = jobs, CV = T)
+job.3 <- lda(job ~ social + outdoor + conservative, data = jobs, CV = T)
 glimpse(job.3)
 ```
 
@@ -2909,7 +2783,7 @@ glimpse(job.3)
 ##   .. ..- attr(*, "predvars")= language list(job, social, outdoor, conservative)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:4] "factor" "numeric" "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:4] "job" "social" "outdoor" "conservative"
-##  $ call     : language lda(formula = job ~ social + outdoor +      conservative, data = jobs, CV = T)
+##  $ call     : language lda(formula = job ~ social + outdoor + conservative, data = jobs,      CV = T)
 ##  $ xlevels  : Named list()
 ```
 
@@ -2926,20 +2800,13 @@ head(dcv)
 ```
 
 ```
-##   outdoor social conservative      job id
-## 1      10     22            5 custserv  1
-## 2      14     17            6 custserv  2
-## 3      19     33            7 custserv  3
-## 4      14     29           12 custserv  4
-## 5      14     25            7 custserv  5
-## 6      20     25           12 custserv  6
-##      class posterior.custserv
-## 1 custserv          0.9015959
-## 2 mechanic          0.3521921
-## 3 custserv          0.7101838
-## 4 custserv          0.8054563
-## 5 custserv          0.7655123
-## 6 mechanic          0.1579450
+##   outdoor social conservative      job id    class posterior.custserv
+## 1      10     22            5 custserv  1 custserv          0.9015959
+## 2      14     17            6 custserv  2 mechanic          0.3521921
+## 3      19     33            7 custserv  3 custserv          0.7101838
+## 4      14     29           12 custserv  4 custserv          0.8054563
+## 5      14     25            7 custserv  5 custserv          0.7655123
+## 6      20     25           12 custserv  6 mechanic          0.1579450
 ##   posterior.mechanic posterior.dispatcher
 ## 1         0.09090173         0.0075023669
 ## 2         0.49980444         0.1480034406
@@ -2987,7 +2854,7 @@ This is another way of saying that with small data sets, your
 conclusions are more "fragile" or less likely to be
 generalizable. With a larger data set like this one, cross-validation,
 which is the right thing to do, makes almost no difference.
-\marginnote{So we should do it, when assessing how good the classification is.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">So we should do it, when assessing how good the classification is.</span>
 
 All right, I suppose I do want to investigate the individuals whose
 predicted jobs changed, and look at their posterior probabilities. I
@@ -3002,55 +2869,34 @@ head(all)
 ```
 
 ```
-##   outdoor social conservative      job id
-## 1      10     22            5 custserv  1
-## 2      14     17            6 custserv  2
-## 3      19     33            7 custserv  3
-## 4      14     29           12 custserv  4
-## 5      14     25            7 custserv  5
-## 6      20     25           12 custserv  6
-##      class posterior.custserv
-## 1 custserv          0.9037622
-## 2 mechanic          0.3677743
-## 3 custserv          0.7302117
-## 4 custserv          0.8100756
-## 5 custserv          0.7677607
-## 6 mechanic          0.1682521
-##   posterior.mechanic posterior.dispatcher
-## 1         0.08894785         0.0072899882
-## 2         0.48897890         0.1432467601
-## 3         0.26946971         0.0003186265
-## 4         0.18217319         0.0077512155
-## 5         0.22505382         0.0071854904
-## 6         0.78482488         0.0469230463
-##        x.LD1       x.LD2 outdoor1 social1
-## 1 -1.6423155  0.71477348       10      22
-## 2 -0.1480302  0.15096436       14      17
-## 3 -2.6415213 -1.68326115       19      33
-## 4 -1.5493681  0.07764901       14      29
-## 5 -1.5472314 -0.15994117       14      25
-## 6 -0.2203876 -1.07331266       20      25
-##   conservative1     job1 id1   class1
-## 1             5 custserv   1 custserv
-## 2             6 custserv   2 mechanic
-## 3             7 custserv   3 custserv
-## 4            12 custserv   4 custserv
-## 5             7 custserv   5 custserv
-## 6            12 custserv   6 mechanic
-##   posterior.custserv1 posterior.mechanic1
-## 1           0.9015959          0.09090173
-## 2           0.3521921          0.49980444
-## 3           0.7101838          0.28951755
-## 4           0.8054563          0.18657994
-## 5           0.7655123          0.22717194
-## 6           0.1579450          0.79420994
-##   posterior.dispatcher1
-## 1          0.0075023669
-## 2          0.1480034406
-## 3          0.0002986778
-## 4          0.0079637680
-## 5          0.0073158061
-## 6          0.0478450256
+##   outdoor social conservative      job id    class posterior.custserv
+## 1      10     22            5 custserv  1 custserv          0.9037622
+## 2      14     17            6 custserv  2 mechanic          0.3677743
+## 3      19     33            7 custserv  3 custserv          0.7302117
+## 4      14     29           12 custserv  4 custserv          0.8100756
+## 5      14     25            7 custserv  5 custserv          0.7677607
+## 6      20     25           12 custserv  6 mechanic          0.1682521
+##   posterior.mechanic posterior.dispatcher      x.LD1       x.LD2 outdoor1
+## 1         0.08894785         0.0072899882 -1.6423155  0.71477348       10
+## 2         0.48897890         0.1432467601 -0.1480302  0.15096436       14
+## 3         0.26946971         0.0003186265 -2.6415213 -1.68326115       19
+## 4         0.18217319         0.0077512155 -1.5493681  0.07764901       14
+## 5         0.22505382         0.0071854904 -1.5472314 -0.15994117       14
+## 6         0.78482488         0.0469230463 -0.2203876 -1.07331266       20
+##   social1 conservative1     job1 id1   class1 posterior.custserv1
+## 1      22             5 custserv   1 custserv           0.9015959
+## 2      17             6 custserv   2 mechanic           0.3521921
+## 3      33             7 custserv   3 custserv           0.7101838
+## 4      29            12 custserv   4 custserv           0.8054563
+## 5      25             7 custserv   5 custserv           0.7655123
+## 6      25            12 custserv   6 mechanic           0.1579450
+##   posterior.mechanic1 posterior.dispatcher1
+## 1          0.09090173          0.0075023669
+## 2          0.49980444          0.1480034406
+## 3          0.28951755          0.0002986778
+## 4          0.18657994          0.0079637680
+## 5          0.22717194          0.0073158061
+## 6          0.79420994          0.0478450256
 ```
 
  
@@ -3080,27 +2926,18 @@ all %>% filter(class != class1)
 ```
 
 ```
-##   outdoor social conservative        job id
-## 1      17     25            8   custserv 11
-## 2      18     20           15 dispatcher 42
-##        class posterior.custserv
-## 1   custserv         0.49503885
-## 2 dispatcher         0.05555677
-##   posterior.mechanic posterior.dispatcher
-## 1          0.4914751           0.01348603
-## 2          0.4721765           0.47226675
-##       x.LD1      x.LD2 outdoor1 social1
-## 1 -1.116297 -0.7476412       17      25
-## 2  1.031998 -0.1123501       18      20
-##   conservative1       job1 id1   class1
-## 1             8   custserv  11 mechanic
-## 2            15 dispatcher  42 mechanic
-##   posterior.custserv1 posterior.mechanic1
-## 1          0.49005230           0.4961868
-## 2          0.05681314           0.4789033
-##   posterior.dispatcher1
-## 1            0.01376092
-## 2            0.46428353
+##   outdoor social conservative        job id      class posterior.custserv
+## 1      17     25            8   custserv 11   custserv         0.49503885
+## 2      18     20           15 dispatcher 42 dispatcher         0.05555677
+##   posterior.mechanic posterior.dispatcher     x.LD1      x.LD2 outdoor1
+## 1          0.4914751           0.01348603 -1.116297 -0.7476412       17
+## 2          0.4721765           0.47226675  1.031998 -0.1123501       18
+##   social1 conservative1       job1 id1   class1 posterior.custserv1
+## 1      25             8   custserv  11 mechanic          0.49005230
+## 2      20            15 dispatcher  42 mechanic          0.05681314
+##   posterior.mechanic1 posterior.dispatcher1
+## 1           0.4961868            0.01376092
+## 2           0.4789033            0.46428353
 ```
 
  
@@ -3112,23 +2949,19 @@ Let's round them to three decimals, and then display only some of the columns:
 
 
 ```r
-all %>% filter(class != class1) %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% select(id, job, starts_with("posterior"))
+all %>%
+  filter(class != class1) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  select(id, job, starts_with("posterior"))
 ```
 
 ```
-##   id        job posterior.custserv
-## 1 11   custserv              0.495
-## 2 42 dispatcher              0.056
-##   posterior.mechanic posterior.dispatcher
-## 1              0.491                0.013
-## 2              0.472                0.472
-##   posterior.custserv1 posterior.mechanic1
-## 1               0.490               0.496
-## 2               0.057               0.479
-##   posterior.dispatcher1
-## 1                 0.014
-## 2                 0.464
+##   id        job posterior.custserv posterior.mechanic posterior.dispatcher
+## 1 11   custserv              0.495              0.491                0.013
+## 2 42 dispatcher              0.056              0.472                0.472
+##   posterior.custserv1 posterior.mechanic1 posterior.dispatcher1
+## 1               0.490               0.496                 0.014
+## 2               0.057               0.479                 0.464
 ```
 
  
@@ -3147,9 +2980,10 @@ Let's count them first:
 
 
 ```r
-all.mis <- all %>% mutate(is_correct = ifelse(job == 
-    class, "correct", "wrong"))
-all.mis %>% count(is_correct == "wrong") %>% mutate(proportion = n/sum(n))
+all %>% mutate(is_correct = ifelse(job == class, "correct", "wrong")) -> all.mis
+all.mis %>%
+  count(is_correct == "wrong") %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -3169,94 +3003,65 @@ the number of columns to look at:
 
 ```r
 set.seed(457299)
-all.mis %>% filter(is_correct == "wrong") %>% 
-    mutate_at(vars(starts_with("posterior")), 
-        ~round(., 3)) %>% select(id, job, class, 
-    outdoor, social, conservative, starts_with("posterior")) %>% 
-    sample_n(15)
+all.mis %>%
+  filter(is_correct == "wrong") %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  select(
+    id, job, class, outdoor, social, conservative,
+    starts_with("posterior")
+  ) %>%
+  sample_n(15)
 ```
 
 ```
-##    id        job      class outdoor social
-## 1  54 dispatcher   mechanic      18     23
-## 2  49   custserv   mechanic      15     21
-## 3  61   custserv dispatcher       7     13
-## 4  39   mechanic dispatcher      14     19
-## 5   8   mechanic   custserv      14     18
-## 6  83   mechanic   custserv      18     28
-## 7  56 dispatcher   mechanic      17     18
-## 8  57   custserv   mechanic      16     18
-## 9  34   mechanic   custserv      17     28
-## 10 86   mechanic   custserv      17     24
-## 11 65   mechanic dispatcher      13     16
-## 12  3   mechanic   custserv      15     27
-## 13 47   custserv   mechanic      15     19
-## 14  6   mechanic dispatcher      24      9
-## 15 61   mechanic dispatcher      14     17
-##    conservative posterior.custserv
-## 1            15              0.135
-## 2            10              0.377
-## 3             7              0.438
-## 4            14              0.141
-## 5             4              0.507
-## 6             0              0.753
-## 7             9              0.140
-## 8             5              0.305
-## 9            13              0.505
-## 10            5              0.529
-## 11           11              0.138
-## 12           12              0.657
-## 13            9              0.296
-## 14           17              0.000
-## 15           11              0.155
-##    posterior.mechanic posterior.dispatcher
-## 1               0.623                0.242
-## 2               0.500                0.123
-## 3               0.109                0.453
-## 4               0.300                0.559
-## 5               0.442                0.051
-## 6               0.246                0.000
-## 7               0.641                0.219
-## 8               0.623                0.072
-## 9               0.471                0.024
-## 10              0.464                0.007
-## 11              0.269                0.593
-## 12              0.321                0.022
-## 13              0.526                0.178
-## 14              0.040                0.960
-## 15              0.355                0.490
-##    posterior.custserv1 posterior.mechanic1
-## 1                0.138               0.634
-## 2                0.374               0.503
-## 3                0.392               0.109
-## 4                0.143               0.291
-## 5                0.526               0.423
-## 6                0.801               0.199
-## 7                0.142               0.646
-## 8                0.289               0.637
-## 9                0.518               0.458
-## 10               0.542               0.452
-## 11               0.140               0.259
-## 12               0.667               0.310
-## 13               0.289               0.531
-## 14               0.000               0.026
-## 15               0.157               0.348
-##    posterior.dispatcher1
-## 1                  0.228
-## 2                  0.123
-## 3                  0.499
-## 4                  0.566
-## 5                  0.051
-## 6                  0.000
-## 7                  0.212
-## 8                  0.074
-## 9                  0.024
-## 10                 0.007
-## 11                 0.601
-## 12                 0.022
-## 13                 0.180
-## 14                 0.974
-## 15                 0.495
+##    id        job      class outdoor social conservative posterior.custserv
+## 1  54 dispatcher   mechanic      18     23           15              0.135
+## 2  49   custserv   mechanic      15     21           10              0.377
+## 3  61   custserv dispatcher       7     13            7              0.438
+## 4  39   mechanic dispatcher      14     19           14              0.141
+## 5   8   mechanic   custserv      14     18            4              0.507
+## 6  83   mechanic   custserv      18     28            0              0.753
+## 7  56 dispatcher   mechanic      17     18            9              0.140
+## 8  57   custserv   mechanic      16     18            5              0.305
+## 9  34   mechanic   custserv      17     28           13              0.505
+## 10 86   mechanic   custserv      17     24            5              0.529
+## 11 65   mechanic dispatcher      13     16           11              0.138
+## 12  3   mechanic   custserv      15     27           12              0.657
+## 13 47   custserv   mechanic      15     19            9              0.296
+## 14  6   mechanic dispatcher      24      9           17              0.000
+## 15 61   mechanic dispatcher      14     17           11              0.155
+##    posterior.mechanic posterior.dispatcher posterior.custserv1
+## 1               0.623                0.242               0.138
+## 2               0.500                0.123               0.374
+## 3               0.109                0.453               0.392
+## 4               0.300                0.559               0.143
+## 5               0.442                0.051               0.526
+## 6               0.246                0.000               0.801
+## 7               0.641                0.219               0.142
+## 8               0.623                0.072               0.289
+## 9               0.471                0.024               0.518
+## 10              0.464                0.007               0.542
+## 11              0.269                0.593               0.140
+## 12              0.321                0.022               0.667
+## 13              0.526                0.178               0.289
+## 14              0.040                0.960               0.000
+## 15              0.355                0.490               0.157
+##    posterior.mechanic1 posterior.dispatcher1
+## 1                0.634                 0.228
+## 2                0.503                 0.123
+## 3                0.109                 0.499
+## 4                0.291                 0.566
+## 5                0.423                 0.051
+## 6                0.199                 0.000
+## 7                0.646                 0.212
+## 8                0.637                 0.074
+## 9                0.458                 0.024
+## 10               0.452                 0.007
+## 11               0.259                 0.601
+## 12               0.310                 0.022
+## 13               0.531                 0.180
+## 14               0.026                 0.974
+## 15               0.348                 0.495
 ```
 
  
@@ -3362,7 +3167,7 @@ adhd
 ##  8 mother     2     3     1     1
 ##  9 mother     1     3     3     1
 ## 10 mother     3     3     3     3
-## # ... with 19 more rows
+## # … with 19 more rows
 ```
 
      
@@ -3474,28 +3279,20 @@ head(d)
 ```
 
 ```
-##   parent q1 q2 q3 q4  class posterior.father
-## 1 father  2  1  3  1 father     9.984540e-01
-## 2 mother  1  3  1  1 mother     5.573608e-06
-## 3 father  2  1  3  1 father     9.984540e-01
-## 4 mother  3  2  3  3 mother     4.971864e-02
-## 5 mother  3  3  2  1 mother     4.102507e-05
-## 6 mother  1  3  3  1 mother     1.820430e-06
-##   posterior.mother        LD1
-## 1      0.001545972 -3.3265660
-## 2      0.999994426  1.3573971
-## 3      0.001545972 -3.3265660
-## 4      0.950281356 -0.9500439
-## 5      0.999958975  0.8538422
-## 6      0.999998180  1.6396690
+##   parent q1 q2 q3 q4  class posterior.father posterior.mother        LD1
+## 1 father  2  1  3  1 father     9.984540e-01      0.001545972 -3.3265660
+## 2 mother  1  3  1  1 mother     5.573608e-06      0.999994426  1.3573971
+## 3 father  2  1  3  1 father     9.984540e-01      0.001545972 -3.3265660
+## 4 mother  3  2  3  3 mother     4.971864e-02      0.950281356 -0.9500439
+## 5 mother  3  3  2  1 mother     4.102507e-05      0.999958975  0.8538422
+## 6 mother  1  3  3  1 mother     1.820430e-06      0.999998180  1.6396690
 ```
 
 ```r
 ggplot(d, aes(x = parent, y = LD1)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-89-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-89-1.png" width="672"  />
 
  
 The fathers look to be a very compact group with `LD1` score
@@ -3557,8 +3354,9 @@ or
 
 
 ```r
-d %>% count(parent, class) %>% spread(class, n, 
-    fill = 0)
+d %>%
+  count(parent, class) %>%
+  spread(class, n, fill = 0)
 ```
 
 ```
@@ -3589,15 +3387,14 @@ will give us the row of the *original* data frame:
 
 
 ```r
-d %>% mutate(id = row_number()) %>% filter(parent != 
-    class)
+d %>%
+  mutate(id = row_number()) %>%
+  filter(parent != class)
 ```
 
 ```
-##   parent q1 q2 q3 q4  class posterior.father
-## 1 mother  1  1  2  1 father        0.9968343
-##   posterior.mother       LD1 id
-## 1      0.003165699 -3.145357 17
+##   parent q1 q2 q3 q4  class posterior.father posterior.mother       LD1 id
+## 1 mother  1  1  2  1 father        0.9968343      0.003165699 -3.145357 17
 ```
 
  
@@ -3610,8 +3407,7 @@ mothers and fathers on `q2`:
 
 
 ```r
-adhd %>% group_by(parent) %>% summarize(m2 = mean(q2), 
-    s2 = sd(q2))
+adhd %>% group_by(parent) %>% summarize(m2 = mean(q2), s2 = sd(q2))
 ```
 
 ```
@@ -3645,8 +3441,7 @@ Solution
 So, this, with different name:
 
 ```r
-adhd.3 <- lda(parent ~ q1 + q2 + q3 + q4, data = adhd, 
-    CV = T)
+adhd.3 <- lda(parent ~ q1 + q2 + q3 + q4, data = adhd, CV = T)
 dd <- cbind(adhd, class = adhd.3$class, posterior = adhd.3$posterior)
 with(dd, table(parent, class))
 ```
@@ -3692,7 +3487,7 @@ Solution
 
 We have two data frames, `d` and 
 `dd`
-\marginnote{I have to learn to come up with better names.}  
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I have to learn to come up with better names.</span>  
 that respectively
 contain everything from the (original) `lda` output and the
 cross-validated output. Let's glue them together, look at what we
@@ -3704,27 +3499,20 @@ head(all)
 ```
 
 ```
-##   parent q1 q2 q3 q4  class posterior.father
-## 1 father  2  1  3  1 father     9.984540e-01
-## 2 mother  1  3  1  1 mother     5.573608e-06
-## 3 father  2  1  3  1 father     9.984540e-01
-## 4 mother  3  2  3  3 mother     4.971864e-02
-## 5 mother  3  3  2  1 mother     4.102507e-05
-## 6 mother  1  3  3  1 mother     1.820430e-06
-##   posterior.mother        LD1 parent.1 q1.1
-## 1      0.001545972 -3.3265660   father    2
-## 2      0.999994426  1.3573971   mother    1
-## 3      0.001545972 -3.3265660   father    2
-## 4      0.950281356 -0.9500439   mother    3
-## 5      0.999958975  0.8538422   mother    3
-## 6      0.999998180  1.6396690   mother    1
-##   q2.1 q3.1 q4.1 class.1 posterior.father.1
-## 1    1    3    1  father       9.958418e-01
-## 2    3    1    1  mother       5.036602e-06
-## 3    1    3    1  father       9.958418e-01
-## 4    2    3    3  mother       2.359247e-01
-## 5    3    2    1  mother       5.702541e-05
-## 6    3    3    1  mother       8.430421e-07
+##   parent q1 q2 q3 q4  class posterior.father posterior.mother        LD1
+## 1 father  2  1  3  1 father     9.984540e-01      0.001545972 -3.3265660
+## 2 mother  1  3  1  1 mother     5.573608e-06      0.999994426  1.3573971
+## 3 father  2  1  3  1 father     9.984540e-01      0.001545972 -3.3265660
+## 4 mother  3  2  3  3 mother     4.971864e-02      0.950281356 -0.9500439
+## 5 mother  3  3  2  1 mother     4.102507e-05      0.999958975  0.8538422
+## 6 mother  1  3  3  1 mother     1.820430e-06      0.999998180  1.6396690
+##   parent.1 q1.1 q2.1 q3.1 q4.1 class.1 posterior.father.1
+## 1   father    2    1    3    1  father       9.958418e-01
+## 2   mother    1    3    1    1  mother       5.036602e-06
+## 3   father    2    1    3    1  father       9.958418e-01
+## 4   mother    3    2    3    3  mother       2.359247e-01
+## 5   mother    3    3    2    1  mother       5.702541e-05
+## 6   mother    1    3    3    1  mother       8.430421e-07
 ##   posterior.mother.1
 ## 1        0.004158233
 ## 2        0.999994963
@@ -3738,73 +3526,47 @@ head(all)
 The ones with a 1 on the end are the cross-validated ones. We need the posterior probabilities, rounded, and they need to  have shorter names:
 
 ```r
-all %>% select(parent, starts_with("posterior"), 
-    LD1) %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% rename_at(vars(starts_with("posterior")), 
-    ~str_replace(., "posterior", "p")) %>% arrange(LD1)
+all %>%
+  select(parent, starts_with("posterior"), LD1) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  rename_at(
+    vars(starts_with("posterior")),
+    ~ str_replace(., "posterior", "p")
+  ) %>%
+  arrange(LD1)
 ```
 
 ```
-##    parent p.father p.mother p.father.1
-## 1  father    0.999    0.001      0.999
-## 2  father    0.998    0.002      0.996
-## 3  father    0.998    0.002      0.996
-## 4  father    0.998    0.002      0.994
-## 5  mother    0.997    0.003      1.000
-## 6  father    0.992    0.008      0.958
-## 7  mother    0.050    0.950      0.236
-## 8  mother    0.043    0.957      0.107
-## 9  mother    0.015    0.985      0.030
-## 10 mother    0.000    1.000      0.000
-## 11 mother    0.000    1.000      0.000
-## 12 mother    0.000    1.000      0.000
-## 13 mother    0.000    1.000      0.000
-## 14 mother    0.000    1.000      0.000
-## 15 mother    0.000    1.000      0.000
-## 16 mother    0.000    1.000      0.000
-## 17 mother    0.000    1.000      0.000
-## 18 mother    0.000    1.000      0.000
-## 19 mother    0.000    1.000      0.000
-## 20 mother    0.000    1.000      0.000
-## 21 mother    0.000    1.000      0.000
-## 22 mother    0.000    1.000      0.000
-## 23 mother    0.000    1.000      0.000
-## 24 mother    0.000    1.000      0.000
-## 25 mother    0.000    1.000      0.000
-## 26 mother    0.000    1.000      0.000
-## 27 mother    0.000    1.000      0.000
-## 28 mother    0.000    1.000      0.000
-## 29 mother    0.000    1.000      0.000
-##    p.mother.1        LD1
-## 1       0.001 -3.6088379
-## 2       0.004 -3.3265660
-## 3       0.004 -3.3265660
-## 4       0.006 -3.2319152
-## 5       0.000 -3.1453565
-## 6       0.042 -2.9095698
-## 7       0.764 -0.9500439
-## 8       0.893 -0.9099704
-## 9       0.970 -0.6349504
-## 10      1.000  0.7127063
-## 11      1.000  0.7127063
-## 12      1.000  0.7127063
-## 13      1.000  0.8538422
-## 14      1.000  0.8538422
-## 15      1.000  0.9011676
-## 16      1.000  0.9949782
-## 17      1.000  0.9949782
-## 18      1.000  0.9949782
-## 19      1.000  0.9949782
-## 20      1.000  1.0350517
-## 21      1.000  1.0350517
-## 22      1.000  1.2307649
-## 23      1.000  1.2307649
-## 24      1.000  1.2307649
-## 25      1.000  1.3573971
-## 26      1.000  1.3719009
-## 27      1.000  1.5458584
-## 28      1.000  1.6396690
-## 29      1.000  1.6396690
+##    parent p.father p.mother p.father.1 p.mother.1        LD1
+## 1  father    0.999    0.001      0.999      0.001 -3.6088379
+## 2  father    0.998    0.002      0.996      0.004 -3.3265660
+## 3  father    0.998    0.002      0.996      0.004 -3.3265660
+## 4  father    0.998    0.002      0.994      0.006 -3.2319152
+## 5  mother    0.997    0.003      1.000      0.000 -3.1453565
+## 6  father    0.992    0.008      0.958      0.042 -2.9095698
+## 7  mother    0.050    0.950      0.236      0.764 -0.9500439
+## 8  mother    0.043    0.957      0.107      0.893 -0.9099704
+## 9  mother    0.015    0.985      0.030      0.970 -0.6349504
+## 10 mother    0.000    1.000      0.000      1.000  0.7127063
+## 11 mother    0.000    1.000      0.000      1.000  0.7127063
+## 12 mother    0.000    1.000      0.000      1.000  0.7127063
+## 13 mother    0.000    1.000      0.000      1.000  0.8538422
+## 14 mother    0.000    1.000      0.000      1.000  0.8538422
+## 15 mother    0.000    1.000      0.000      1.000  0.9011676
+## 16 mother    0.000    1.000      0.000      1.000  0.9949782
+## 17 mother    0.000    1.000      0.000      1.000  0.9949782
+## 18 mother    0.000    1.000      0.000      1.000  0.9949782
+## 19 mother    0.000    1.000      0.000      1.000  0.9949782
+## 20 mother    0.000    1.000      0.000      1.000  1.0350517
+## 21 mother    0.000    1.000      0.000      1.000  1.0350517
+## 22 mother    0.000    1.000      0.000      1.000  1.2307649
+## 23 mother    0.000    1.000      0.000      1.000  1.2307649
+## 24 mother    0.000    1.000      0.000      1.000  1.2307649
+## 25 mother    0.000    1.000      0.000      1.000  1.3573971
+## 26 mother    0.000    1.000      0.000      1.000  1.3719009
+## 27 mother    0.000    1.000      0.000      1.000  1.5458584
+## 28 mother    0.000    1.000      0.000      1.000  1.6396690
+## 29 mother    0.000    1.000      0.000      1.000  1.6396690
 ```
 
  
@@ -3813,7 +3575,7 @@ The `rename_at` changes the names of the columns that start
 with `posterior` to start with `p` instead (shorter). I
 learned about this today (having wondered whether it existed or not),
 and it took about three goes for me to get it right.
-\marginnote{*str-replace* is from *stringr*, and takes three inputs: a piece of text, the text to look for, and the text to replace it with. The piece of text in this case is one of the columns whose name starts with *posterior*; the dot represents *it* in the usual fashion.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">*str-replace* is from *stringr*, and takes three inputs: a piece of text, the text to look for, and the text to replace it with. The piece of text in this case is one of the columns whose name starts with *posterior*; the dot represents *it* in the usual fashion.</span>
 The first column is the actual parent; the other five columns are: the
 posterior probabilities from before, for father and for mother (two
 columns), and the posterior probabilities from cross-validation for
@@ -3874,73 +3636,47 @@ Let's add something to the output we had before: the original
 scores on `q1` through `q4`:
 
 ```r
-all %>% select(q1:q4, parent, starts_with("posterior"), 
-    LD1) %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% rename_at(vars(starts_with("posterior")), 
-    ~str_replace(., "posterior", "p")) %>% arrange(LD1)
+all %>%
+  select(q1:q4, parent, starts_with("posterior"), LD1) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  rename_at(
+    vars(starts_with("posterior")),
+    ~ str_replace(., "posterior", "p")
+  ) %>%
+  arrange(LD1)
 ```
 
 ```
-##    q1 q2 q3 q4 parent p.father p.mother
-## 1   2  1  1  1 father    0.999    0.001
-## 2   2  1  3  1 father    0.998    0.002
-## 3   2  1  3  1 father    0.998    0.002
-## 4   2  1  1  3 father    0.998    0.002
-## 5   1  1  2  1 mother    0.997    0.003
-## 6   1  1  1  3 father    0.992    0.008
-## 7   3  2  3  3 mother    0.050    0.950
-## 8   2  2  1  3 mother    0.043    0.957
-## 9   1  2  2  2 mother    0.015    0.985
-## 10  3  3  1  1 mother    0.000    1.000
-## 11  3  3  1  1 mother    0.000    1.000
-## 12  3  3  1  1 mother    0.000    1.000
-## 13  3  3  2  1 mother    0.000    1.000
-## 14  3  3  2  1 mother    0.000    1.000
-## 15  3  3  1  2 mother    0.000    1.000
-## 16  3  3  3  1 mother    0.000    1.000
-## 17  3  3  3  1 mother    0.000    1.000
-## 18  3  3  3  1 mother    0.000    1.000
-## 19  3  3  3  1 mother    0.000    1.000
-## 20  2  3  1  1 mother    0.000    1.000
-## 21  2  3  1  1 mother    0.000    1.000
-## 22  3  3  2  3 mother    0.000    1.000
-## 23  3  3  2  3 mother    0.000    1.000
-## 24  3  3  2  3 mother    0.000    1.000
-## 25  1  3  1  1 mother    0.000    1.000
-## 26  3  3  3  3 mother    0.000    1.000
-## 27  1  3  1  2 mother    0.000    1.000
-## 28  1  3  3  1 mother    0.000    1.000
-## 29  1  3  3  1 mother    0.000    1.000
-##    p.father.1 p.mother.1        LD1
-## 1       0.999      0.001 -3.6088379
-## 2       0.996      0.004 -3.3265660
-## 3       0.996      0.004 -3.3265660
-## 4       0.994      0.006 -3.2319152
-## 5       1.000      0.000 -3.1453565
-## 6       0.958      0.042 -2.9095698
-## 7       0.236      0.764 -0.9500439
-## 8       0.107      0.893 -0.9099704
-## 9       0.030      0.970 -0.6349504
-## 10      0.000      1.000  0.7127063
-## 11      0.000      1.000  0.7127063
-## 12      0.000      1.000  0.7127063
-## 13      0.000      1.000  0.8538422
-## 14      0.000      1.000  0.8538422
-## 15      0.000      1.000  0.9011676
-## 16      0.000      1.000  0.9949782
-## 17      0.000      1.000  0.9949782
-## 18      0.000      1.000  0.9949782
-## 19      0.000      1.000  0.9949782
-## 20      0.000      1.000  1.0350517
-## 21      0.000      1.000  1.0350517
-## 22      0.000      1.000  1.2307649
-## 23      0.000      1.000  1.2307649
-## 24      0.000      1.000  1.2307649
-## 25      0.000      1.000  1.3573971
-## 26      0.000      1.000  1.3719009
-## 27      0.000      1.000  1.5458584
-## 28      0.000      1.000  1.6396690
-## 29      0.000      1.000  1.6396690
+##    q1 q2 q3 q4 parent p.father p.mother p.father.1 p.mother.1        LD1
+## 1   2  1  1  1 father    0.999    0.001      0.999      0.001 -3.6088379
+## 2   2  1  3  1 father    0.998    0.002      0.996      0.004 -3.3265660
+## 3   2  1  3  1 father    0.998    0.002      0.996      0.004 -3.3265660
+## 4   2  1  1  3 father    0.998    0.002      0.994      0.006 -3.2319152
+## 5   1  1  2  1 mother    0.997    0.003      1.000      0.000 -3.1453565
+## 6   1  1  1  3 father    0.992    0.008      0.958      0.042 -2.9095698
+## 7   3  2  3  3 mother    0.050    0.950      0.236      0.764 -0.9500439
+## 8   2  2  1  3 mother    0.043    0.957      0.107      0.893 -0.9099704
+## 9   1  2  2  2 mother    0.015    0.985      0.030      0.970 -0.6349504
+## 10  3  3  1  1 mother    0.000    1.000      0.000      1.000  0.7127063
+## 11  3  3  1  1 mother    0.000    1.000      0.000      1.000  0.7127063
+## 12  3  3  1  1 mother    0.000    1.000      0.000      1.000  0.7127063
+## 13  3  3  2  1 mother    0.000    1.000      0.000      1.000  0.8538422
+## 14  3  3  2  1 mother    0.000    1.000      0.000      1.000  0.8538422
+## 15  3  3  1  2 mother    0.000    1.000      0.000      1.000  0.9011676
+## 16  3  3  3  1 mother    0.000    1.000      0.000      1.000  0.9949782
+## 17  3  3  3  1 mother    0.000    1.000      0.000      1.000  0.9949782
+## 18  3  3  3  1 mother    0.000    1.000      0.000      1.000  0.9949782
+## 19  3  3  3  1 mother    0.000    1.000      0.000      1.000  0.9949782
+## 20  2  3  1  1 mother    0.000    1.000      0.000      1.000  1.0350517
+## 21  2  3  1  1 mother    0.000    1.000      0.000      1.000  1.0350517
+## 22  3  3  2  3 mother    0.000    1.000      0.000      1.000  1.2307649
+## 23  3  3  2  3 mother    0.000    1.000      0.000      1.000  1.2307649
+## 24  3  3  2  3 mother    0.000    1.000      0.000      1.000  1.2307649
+## 25  1  3  1  1 mother    0.000    1.000      0.000      1.000  1.3573971
+## 26  3  3  3  3 mother    0.000    1.000      0.000      1.000  1.3719009
+## 27  1  3  1  2 mother    0.000    1.000      0.000      1.000  1.5458584
+## 28  1  3  3  1 mother    0.000    1.000      0.000      1.000  1.6396690
+## 29  1  3  3  1 mother    0.000    1.000      0.000      1.000  1.6396690
 ```
 
      
@@ -4030,7 +3766,7 @@ cornseed
 ##  8     8 loam   65.7  27.7       5.3
 ##  9     9 sandy  67.3  48.3       5.5
 ## 10    10 sandy  61.3  28.9       6.9
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
      
@@ -4055,22 +3791,17 @@ The usual thing: create the response, use `manova` (or
 `Manova` from `car` if you like, but it's not necessary):
 
 ```r
-response <- with(cornseed, cbind(yield, water, 
-    herbicide))
+response <- with(cornseed, cbind(yield, water, herbicide))
 cornseed.1 <- manova(response ~ soil, data = cornseed)
 summary(cornseed.1)
 ```
 
 ```
-##           Df Pillai approx F num Df den Df
-## soil       3 0.5345   2.0234      9     84
-## Residuals 28                              
-##            Pr(>F)  
-## soil      0.04641 *
-## Residuals          
+##           Df Pillai approx F num Df den Df  Pr(>F)  
+## soil       3 0.5345   2.0234      9     84 0.04641 *
+## Residuals 28                                        
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -4108,8 +3839,7 @@ Solution
 
 
 ```r
-cornseed.2 <- lda(soil ~ yield + water + herbicide, 
-    data = cornseed)
+cornseed.2 <- lda(soil ~ yield + water + herbicide, data = cornseed)
 cornseed.2
 ```
 
@@ -4129,14 +3859,10 @@ cornseed.2
 ## sandy 62.5750 28.2000    4.3500
 ## 
 ## Coefficients of linear discriminants:
-##                   LD1         LD2
-## yield      0.08074845  0.02081174
-## water     -0.03759961 -0.09598577
-## herbicide  0.50654017 -0.06979662
-##                   LD3
-## yield     -0.04822432
-## water     -0.03231897
-## herbicide  0.27281743
+##                   LD1         LD2         LD3
+## yield      0.08074845  0.02081174 -0.04822432
+## water     -0.03759961 -0.09598577 -0.03231897
+## herbicide  0.50654017 -0.06979662  0.27281743
 ## 
 ## Proportion of trace:
 ##    LD1    LD2    LD3 
@@ -4169,7 +3895,7 @@ cornseed %>% select(field, soil)
 ##  8     8 loam 
 ##  9     9 sandy
 ## 10    10 sandy
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
  
@@ -4220,12 +3946,10 @@ I didn't ask you to, but you could check this by seeing how
 
 
 ```r
-ggplot(cornseed, aes(x = soil, y = herbicide)) + 
-    geom_boxplot()
+ggplot(cornseed, aes(x = soil, y = herbicide)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-102-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-102-1.png" width="672"  />
 
 
 
@@ -4238,8 +3962,7 @@ Or by `water`:
 ggplot(cornseed, aes(x = soil, y = water)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-103-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
 
  
 
@@ -4284,34 +4007,20 @@ head(d)
 ```
 
 ```
-##   field soil yield water herbicide class
-## 1     1 loam  76.7  29.5       7.5  loam
-## 2     2 loam  60.5  32.1       6.3  loam
-## 3     3 loam  96.1  40.7       4.2  loam
-## 4     4 loam  88.1  45.1       4.9  loam
-## 5     5 loam  50.2  34.1      11.7  loam
-## 6     6 loam  55.0  31.1       6.9  loam
-##   posterior.clay posterior.loam
-## 1    0.008122562      0.9303136
-## 2    0.195608997      0.3536733
-## 3    0.029529543      0.8533003
-## 4    0.069082256      0.7696194
-## 5    0.010588934      0.9457005
-## 6    0.208208691      0.3194421
-##   posterior.salty posterior.sandy     x.LD1
-## 1     0.003067182      0.05849665 2.7137304
-## 2     0.134234919      0.31648283 0.6999983
-## 3     0.008018680      0.10915147 2.1875521
-## 4     0.020907569      0.14039076 1.7307043
-## 5     0.005163698      0.03854692 2.5284069
-## 6     0.159072574      0.31327660 0.5974055
-##        x.LD2       x.LD3
-## 1  0.2765450  0.09765792
-## 2 -0.2264123  0.46748170
-## 3 -0.1644190 -2.10016387
-## 4 -0.8021079 -1.66560056
-## 5 -1.0096466  2.37276838
-## 6 -0.2867691  0.92872489
+##   field soil yield water herbicide class posterior.clay posterior.loam
+## 1     1 loam  76.7  29.5       7.5  loam    0.008122562      0.9303136
+## 2     2 loam  60.5  32.1       6.3  loam    0.195608997      0.3536733
+## 3     3 loam  96.1  40.7       4.2  loam    0.029529543      0.8533003
+## 4     4 loam  88.1  45.1       4.9  loam    0.069082256      0.7696194
+## 5     5 loam  50.2  34.1      11.7  loam    0.010588934      0.9457005
+## 6     6 loam  55.0  31.1       6.9  loam    0.208208691      0.3194421
+##   posterior.salty posterior.sandy     x.LD1      x.LD2       x.LD3
+## 1     0.003067182      0.05849665 2.7137304  0.2765450  0.09765792
+## 2     0.134234919      0.31648283 0.6999983 -0.2264123  0.46748170
+## 3     0.008018680      0.10915147 2.1875521 -0.1644190 -2.10016387
+## 4     0.020907569      0.14039076 1.7307043 -0.8021079 -1.66560056
+## 5     0.005163698      0.03854692 2.5284069 -1.0096466  2.37276838
+## 6     0.159072574      0.31327660 0.5974055 -0.2867691  0.92872489
 ```
 
      
@@ -4319,12 +4028,10 @@ Then we use this as input to `ggplot`:
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, colour = soil)) + 
-    geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = soil)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-106-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
 
  
 
@@ -4372,8 +4079,7 @@ discriminant scores by `soil` group, thus:
 ggplot(d, aes(x = soil, y = x.LD1)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-107-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
 
    
 This says more or less the same thing as your plot of `LD1` and
@@ -4438,8 +4144,7 @@ The tidyverse way of doing this is equally good. This is the tidied-up way:
 
 
 ```r
-d %>% count(soil, class) %>% spread(class, n, 
-    fill = 0)
+d %>% count(soil, class) %>% spread(class, n, fill = 0)
 ```
 
 ```
@@ -4460,9 +4165,10 @@ Extra: we can calculate misclassification rates, first overall, which is easier:
 
 
 ```r
-d %>% count(soil, class) %>% mutate(soil_stat = ifelse(soil == 
-    class, "correct", "wrong")) %>% count(soil_stat, 
-    wt = n)
+d %>%
+  count(soil, class) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n)
 ```
 
 ```
@@ -4477,9 +4183,11 @@ d %>% count(soil, class) %>% mutate(soil_stat = ifelse(soil ==
 
 
 ```r
-d %>% count(soil, class) %>% mutate(soil_stat = ifelse(soil == 
-    class, "correct", "wrong")) %>% count(soil_stat, 
-    wt = n) %>% mutate(prop = nn/sum(nn))
+d %>%
+  count(soil, class) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n) %>%
+  mutate(prop = nn / sum(nn))
 ```
 
 ```
@@ -4502,9 +4210,11 @@ about soil type; it's better to know them than not to.
 Or do it by actual soil type:
 
 ```r
-d %>% count(soil, class) %>% group_by(soil) %>% 
-    mutate(soil_stat = ifelse(soil == class, "correct", 
-        "wrong")) %>% count(soil_stat, wt = n)
+d %>%
+  count(soil, class) %>%
+  group_by(soil) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n)
 ```
 
 ```
@@ -4526,11 +4236,14 @@ d %>% count(soil, class) %>% group_by(soil) %>%
 
 
 ```r
-d %>% count(soil, class) %>% group_by(soil) %>% 
-    mutate(soil_stat = ifelse(soil == class, "correct", 
-        "wrong")) %>% count(soil_stat, wt = n) %>% 
-    mutate(prop = nn/sum(nn)) %>% select(-nn) %>% 
-    spread(soil_stat, prop)
+d %>%
+  count(soil, class) %>%
+  group_by(soil) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n) %>%
+  mutate(prop = nn / sum(nn)) %>%
+  select(-nn) %>%
+  spread(soil_stat, prop)
 ```
 
 ```
@@ -4545,7 +4258,7 @@ observations, so it's probably wise *not* to say that loam is
 *always* easiest to get right.
 
 I didn't have you look at posterior probabilities here.
-\marginnote{Rest assured that I will on the final exam!} With 32 fields, this is rather a lot
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Rest assured that I will on the final exam!</span> With 32 fields, this is rather a lot
 to list them all, but what we can do is to look at the ones that were
 misclassified (the true soil type differs from the predicted soil
 type). Before that, though, we need to make a data frame with the stuff in
@@ -4555,72 +4268,43 @@ the posterior probabilities to a small number of decimals.
 Then, we can fire away with this:
 
 ```r
-dd <- d %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% mutate(row = row_number())
+d %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(row = row_number()) -> dd
 dd %>% filter(soil != class)
 ```
 
 ```
-##    field  soil yield water herbicide class
-## 1      7  loam  65.4  21.6       4.3 sandy
-## 2      8  loam  65.7  27.7       5.3 sandy
-## 3      9 sandy  67.3  48.3       5.5  clay
-## 4     10 sandy  61.3  28.9       6.9  loam
-## 5     11 sandy  58.2  42.5       4.8  clay
-## 6     13 sandy  66.9  23.9       1.1 salty
-## 7     17 salty  62.8  25.9       2.9 sandy
-## 8     20 salty  75.6  27.7       6.3  loam
-## 9     24 salty  68.4  35.3       1.9  clay
-## 10    25  clay  52.5  39.0       3.1 salty
-## 11    28  clay  63.5  25.6       3.0 sandy
-## 12    30  clay  61.5  16.8       1.9 sandy
-## 13    31  clay  62.9  25.8       2.4 salty
-## 14    32  clay  49.3  39.4       5.2 salty
-##    posterior.clay posterior.loam
-## 1           0.174          0.214
-## 2           0.163          0.352
-## 3           0.384          0.206
-## 4           0.106          0.553
-## 5           0.436          0.043
-## 6           0.317          0.013
-## 7           0.308          0.038
-## 8           0.026          0.819
-## 9           0.403          0.018
-## 10          0.414          0.004
-## 11          0.298          0.047
-## 12          0.255          0.020
-## 13          0.320          0.024
-## 14          0.416          0.019
-##    posterior.salty posterior.sandy
-## 1            0.147           0.465
-## 2            0.113           0.373
-## 3            0.195           0.215
-## 4            0.069           0.272
-## 5            0.339           0.182
-## 6            0.362           0.307
-## 7            0.315           0.340
-## 8            0.012           0.143
-## 9            0.351           0.227
-## 10           0.484           0.098
-## 11           0.295           0.360
-## 12           0.338           0.388
-## 13           0.346           0.310
-## 14           0.418           0.146
-##         x.LD1       x.LD2       x.LD3 row
-## 1   0.4773813  1.02300901  0.02489683   7
-## 2   0.7787883  0.37394272  0.08610126   8
-## 3   0.2347419 -1.58402466 -0.60226491   9
-## 4   1.1888399  0.05551354  0.69601339  10
-## 5  -0.6365694 -1.16783644 -0.16694577  11
-## 6  -1.1089037  1.05680853 -0.99478905  13
-## 7  -0.6033993  0.65387493 -0.37063590  17
-## 8   2.0847382  0.51018238 -0.11850210  20
-## 9  -1.0111845 -0.06204891 -1.21730783  24
-## 10 -1.8263552 -0.83185894 -0.24274038  25
-## 11 -0.4849415  0.69025922 -0.36741549  28
-## 12 -0.8727560  1.57008678 -0.28665910  30
-## 13 -0.8448346  0.70045299 -0.50863515  31
-## 14 -1.0360558 -1.08342373  0.47156646  32
+##    field  soil yield water herbicide class posterior.clay posterior.loam
+## 1      7  loam  65.4  21.6       4.3 sandy          0.174          0.214
+## 2      8  loam  65.7  27.7       5.3 sandy          0.163          0.352
+## 3      9 sandy  67.3  48.3       5.5  clay          0.384          0.206
+## 4     10 sandy  61.3  28.9       6.9  loam          0.106          0.553
+## 5     11 sandy  58.2  42.5       4.8  clay          0.436          0.043
+## 6     13 sandy  66.9  23.9       1.1 salty          0.317          0.013
+## 7     17 salty  62.8  25.9       2.9 sandy          0.308          0.038
+## 8     20 salty  75.6  27.7       6.3  loam          0.026          0.819
+## 9     24 salty  68.4  35.3       1.9  clay          0.403          0.018
+## 10    25  clay  52.5  39.0       3.1 salty          0.414          0.004
+## 11    28  clay  63.5  25.6       3.0 sandy          0.298          0.047
+## 12    30  clay  61.5  16.8       1.9 sandy          0.255          0.020
+## 13    31  clay  62.9  25.8       2.4 salty          0.320          0.024
+## 14    32  clay  49.3  39.4       5.2 salty          0.416          0.019
+##    posterior.salty posterior.sandy      x.LD1       x.LD2       x.LD3 row
+## 1            0.147           0.465  0.4773813  1.02300901  0.02489683   7
+## 2            0.113           0.373  0.7787883  0.37394272  0.08610126   8
+## 3            0.195           0.215  0.2347419 -1.58402466 -0.60226491   9
+## 4            0.069           0.272  1.1888399  0.05551354  0.69601339  10
+## 5            0.339           0.182 -0.6365694 -1.16783644 -0.16694577  11
+## 6            0.362           0.307 -1.1089037  1.05680853 -0.99478905  13
+## 7            0.315           0.340 -0.6033993  0.65387493 -0.37063590  17
+## 8            0.012           0.143  2.0847382  0.51018238 -0.11850210  20
+## 9            0.351           0.227 -1.0111845 -0.06204891 -1.21730783  24
+## 10           0.484           0.098 -1.8263552 -0.83185894 -0.24274038  25
+## 11           0.295           0.360 -0.4849415  0.69025922 -0.36741549  28
+## 12           0.338           0.388 -0.8727560  1.57008678 -0.28665910  30
+## 13           0.346           0.310 -0.8448346  0.70045299 -0.50863515  31
+## 14           0.418           0.146 -1.0360558 -1.08342373  0.47156646  32
 ```
 
  
@@ -4646,29 +4330,21 @@ soils that were actually loam:
 
 
 ```r
-dd %>% filter(soil == "loam") %>% select(soil, 
-    yield, water, herbicide, class, starts_with("posterior"))
+dd %>%
+  filter(soil == "loam") %>%
+  select(soil, yield, water, herbicide, class, starts_with("posterior"))
 ```
 
 ```
-##   soil yield water herbicide class
-## 1 loam  76.7  29.5       7.5  loam
-## 2 loam  60.5  32.1       6.3  loam
-## 3 loam  96.1  40.7       4.2  loam
-## 4 loam  88.1  45.1       4.9  loam
-## 5 loam  50.2  34.1      11.7  loam
-## 6 loam  55.0  31.1       6.9  loam
-## 7 loam  65.4  21.6       4.3 sandy
-## 8 loam  65.7  27.7       5.3 sandy
-##   posterior.clay posterior.loam
-## 1          0.008          0.930
-## 2          0.196          0.354
-## 3          0.030          0.853
-## 4          0.069          0.770
-## 5          0.011          0.946
-## 6          0.208          0.319
-## 7          0.174          0.214
-## 8          0.163          0.352
+##   soil yield water herbicide class posterior.clay posterior.loam
+## 1 loam  76.7  29.5       7.5  loam          0.008          0.930
+## 2 loam  60.5  32.1       6.3  loam          0.196          0.354
+## 3 loam  96.1  40.7       4.2  loam          0.030          0.853
+## 4 loam  88.1  45.1       4.9  loam          0.069          0.770
+## 5 loam  50.2  34.1      11.7  loam          0.011          0.946
+## 6 loam  55.0  31.1       6.9  loam          0.208          0.319
+## 7 loam  65.4  21.6       4.3 sandy          0.174          0.214
+## 8 loam  65.7  27.7       5.3 sandy          0.163          0.352
 ##   posterior.salty posterior.sandy
 ## 1           0.003           0.058
 ## 2           0.134           0.316
@@ -4700,20 +4376,13 @@ summary(cornseed)
 ```
 
 ```
-##      field           soil          
-##  Min.   : 1.00   Length:32         
-##  1st Qu.: 8.75   Class :character  
-##  Median :16.50   Mode  :character  
-##  Mean   :16.50                     
-##  3rd Qu.:24.25                     
-##  Max.   :32.00                     
-##      yield           water      
-##  Min.   :45.00   Min.   :14.50  
-##  1st Qu.:50.58   1st Qu.:25.75  
-##  Median :61.40   Median :29.60  
-##  Mean   :61.61   Mean   :31.17  
-##  3rd Qu.:67.00   3rd Qu.:36.83  
-##  Max.   :96.10   Max.   :54.20  
+##      field           soil               yield           water      
+##  Min.   : 1.00   Length:32          Min.   :45.00   Min.   :14.50  
+##  1st Qu.: 8.75   Class :character   1st Qu.:50.58   1st Qu.:25.75  
+##  Median :16.50   Mode  :character   Median :61.40   Median :29.60  
+##  Mean   :16.50                      Mean   :61.61   Mean   :31.17  
+##  3rd Qu.:24.25                      3rd Qu.:67.00   3rd Qu.:36.83  
+##  Max.   :32.00                      Max.   :96.10   Max.   :54.20  
 ##    herbicide     
 ##  Min.   : 1.100  
 ##  1st Qu.: 3.075  
@@ -4736,31 +4405,21 @@ and down they go. This process is one you've seen before:
 yields <- c(51, 67)
 waters <- c(26, 37)
 herbicides <- c(3, 6)
-new <- crossing(yield = yields, water = waters, 
-    herbicide = herbicides)
+new <- crossing(yield = yields, water = waters, herbicide = herbicides)
 pred <- predict(cornseed.2, new)
 cbind(new, pred$x) %>% arrange(desc(LD1))
 ```
 
 ```
-##   yield water herbicide         LD1
-## 1    67    26         6  1.30225880
-## 2    67    37         6  0.88866305
-## 3    51    26         6  0.01028356
-## 4    67    26         3 -0.21736172
-## 5    51    37         6 -0.40331219
-## 6    67    37         3 -0.63095747
-## 7    51    26         3 -1.50933696
-## 8    51    37         3 -1.92293271
-##          LD2         LD3
-## 1  0.5153162  0.26932408
-## 2 -0.5405273 -0.08618456
-## 3  0.1823283  1.04091323
-## 4  0.7247060 -0.54912820
-## 5 -0.8735152  0.68540458
-## 6 -0.3311374 -0.90463685
-## 7  0.3917181  0.22246094
-## 8 -0.6641254 -0.13304771
+##   yield water herbicide         LD1        LD2         LD3
+## 1    67    26         6  1.30225880  0.5153162  0.26932408
+## 2    67    37         6  0.88866305 -0.5405273 -0.08618456
+## 3    51    26         6  0.01028356  0.1823283  1.04091323
+## 4    67    26         3 -0.21736172  0.7247060 -0.54912820
+## 5    51    37         6 -0.40331219 -0.8735152  0.68540458
+## 6    67    37         3 -0.63095747 -0.3311374 -0.90463685
+## 7    51    26         3 -1.50933696  0.3917181  0.22246094
+## 8    51    37         3 -1.92293271 -0.6641254 -0.13304771
 ```
 
  
@@ -4797,8 +4456,7 @@ could, since it's a discriminant analysis:
 ggbiplot(cornseed.2, groups = cornseed$soil)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-119-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
 
  
 
@@ -4872,22 +4530,19 @@ athletes
 
 ```
 ## # A tibble: 202 x 13
-##    Sex    Sport   RCC   WCC    Hc    Hg  Ferr
-##    <chr>  <chr> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 female Netb~  4.56  13.3  42.2  13.6    20
-##  2 female Netb~  4.15   6    38    12.7    59
-##  3 female Netb~  4.16   7.6  37.5  12.3    22
-##  4 female Netb~  4.32   6.4  37.7  12.3    30
-##  5 female Netb~  4.06   5.8  38.7  12.8    78
-##  6 female Netb~  4.12   6.1  36.6  11.8    21
-##  7 female Netb~  4.17   5    37.4  12.7   109
-##  8 female Netb~  3.8    6.6  36.5  12.4   102
-##  9 female Netb~  3.96   5.5  36.3  12.4    71
-## 10 female Netb~  4.44   9.7  41.4  14.1    64
-## # ... with 192 more rows, and 6 more
-## #   variables: BMI <dbl>, SSF <dbl>,
-## #   `%Bfat` <dbl>, LBM <dbl>, Ht <dbl>,
-## #   Wt <dbl>
+##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
+##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
+##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
+##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
+##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
+##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
+##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
+##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
+##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
+##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
+##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
+## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
+## # … with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
 ```
 
  
@@ -4908,17 +4563,17 @@ give the name of the new combo column first, and then the names of
 the columns you want to combine, either by listing them or by
 using a select-helper. They will be separated by an underscore by
 default, which is usually easiest to handle.
-\marginnote{The opposite      of *unite* is *separate*, which splits a combined      column like my *combo* into separate columns; it too uses    underscore as the default separator.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The opposite      of *unite* is *separate*, which splits a combined      column like my *combo* into separate columns; it too uses    underscore as the default separator.</span> 
 In `unite`, you can
 group the columns to "unite" with `c()`, as in class, or
 not, as here. Either way is good.
-\marginnote{You used to have to group    them, but you don't any more. Hence my old code has them grouped,    but my new code does not.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You used to have to group    them, but you don't any more. Hence my old code has them grouped,    but my new code does not.</span>
 We'll be using height and weight in the
 analysis to come, so I decided to display just those:
 
 ```r
-athletesc <- athletes %>% unite(combo, Sport, 
-    Sex)
+athletes %>%
+  unite(combo, Sport, Sex) -> athletesc
 athletesc %>% select(combo, Ht, Wt)
 ```
 
@@ -4936,7 +4591,7 @@ athletesc %>% select(combo, Ht, Wt)
 ##  8 Netball_female  174.  74.1
 ##  9 Netball_female  174.  68.2
 ## 10 Netball_female  174.  68.8
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
      
@@ -4952,8 +4607,9 @@ columns we want start with S followed by either e or p, so we could do this:
 
 
 ```r
-athletes %>% unite(combo, matches("^S(e|p)")) %>% 
-    select(combo, Ht, Wt)
+athletes %>%
+  unite(combo, matches("^S(e|p)")) %>%
+  select(combo, Ht, Wt)
 ```
 
 ```
@@ -4970,7 +4626,7 @@ athletes %>% unite(combo, matches("^S(e|p)")) %>%
 ##  8 female_Netball  174.  74.1
 ##  9 female_Netball  174.  68.2
 ## 10 female_Netball  174.  68.8
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
  
@@ -4986,8 +4642,9 @@ columns we want to `unite` are the only two text ones:
 
 
 ```r
-athletes %>% unite(combo, select_if(is.character)) %>% 
-    select(combo, Ht, Wt)
+athletes %>%
+  unite(combo, select_if(is.character)) %>%
+  select(combo, Ht, Wt)
 ```
 
 ```
@@ -5006,8 +4663,9 @@ and got an answer! This is how it goes:
 
 
 ```r
-athletes %>% unite(combo, names(select_if(., is.character))) %>% 
-    select(combo, Ht, Wt)
+athletes %>%
+  unite(combo, names(select_if(., is.character))) %>%
+  select(combo, Ht, Wt)
 ```
 
 ```
@@ -5024,7 +4682,7 @@ athletes %>% unite(combo, names(select_if(., is.character))) %>%
 ##  8 female_Netball  174.  74.1
 ##  9 female_Netball  174.  68.2
 ## 10 female_Netball  174.  68.8
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
  
@@ -5063,16 +4721,12 @@ combo.1
 ## lda(combo ~ Ht + Wt, data = athletesc)
 ## 
 ## Prior probabilities of groups:
-##   BBall_female     BBall_male   Field_female 
-##     0.06435644     0.05940594     0.03465347 
-##     Field_male     Gym_female Netball_female 
-##     0.05940594     0.01980198     0.11386139 
-##     Row_female       Row_male    Swim_female 
-##     0.10891089     0.07425743     0.04455446 
-##      Swim_male   T400m_female     T400m_male 
-##     0.06435644     0.05445545     0.08910891 
-##  Tennis_female    Tennis_male  TSprnt_female 
-##     0.03465347     0.01980198     0.01980198 
+##   BBall_female     BBall_male   Field_female     Field_male     Gym_female 
+##     0.06435644     0.05940594     0.03465347     0.05940594     0.01980198 
+## Netball_female     Row_female       Row_male    Swim_female      Swim_male 
+##     0.11386139     0.10891089     0.07425743     0.04455446     0.06435644 
+##   T400m_female     T400m_male  Tennis_female    Tennis_male  TSprnt_female 
+##     0.05445545     0.08910891     0.03465347     0.01980198     0.01980198 
 ##    TSprnt_male     WPolo_male 
 ##     0.05445545     0.08415842 
 ## 
@@ -5241,111 +4895,55 @@ head(d)
 ```
 
 ```
-##            combo  RCC  WCC   Hc   Hg Ferr
-## 1 Netball_female 4.56 13.3 42.2 13.6   20
-## 2 Netball_female 4.15  6.0 38.0 12.7   59
-## 3 Netball_female 4.16  7.6 37.5 12.3   22
-## 4 Netball_female 4.32  6.4 37.7 12.3   30
-## 5 Netball_female 4.06  5.8 38.7 12.8   78
-## 6 Netball_female 4.12  6.1 36.6 11.8   21
-##     BMI   SSF %Bfat   LBM    Ht   Wt
-## 1 19.16  49.0 11.29 53.14 176.8 59.9
-## 2 21.15 110.2 25.26 47.09 172.6 63.0
-## 3 21.40  89.0 19.39 53.44 176.0 66.3
-## 4 21.03  98.3 19.63 48.78 169.9 60.7
-## 5 21.77 122.1 23.11 56.05 183.0 72.9
-## 6 21.38  90.4 16.86 56.45 178.2 67.9
-##            class posterior.BBall_female
-## 1     T400m_male             0.12348360
-## 2 Netball_female             0.04927852
-## 3 Netball_female             0.08402197
-## 4 Netball_female             0.02820743
-## 5     Row_female             0.15383834
-## 6 Netball_female             0.11219817
-##   posterior.BBall_male
-## 1         3.479619e-04
-## 2         7.263143e-05
-## 3         4.567927e-04
-## 4         1.539520e-05
-## 5         1.197089e-02
-## 6         1.320889e-03
-##   posterior.Field_female
-## 1           0.0002835604
-## 2           0.0041253799
-## 3           0.0032633771
-## 4           0.0048909758
-## 5           0.0011443415
-## 6           0.0021761290
-##   posterior.Field_male posterior.Gym_female
-## 1         1.460578e-05         4.206308e-05
-## 2         9.838207e-05         3.101597e-04
-## 3         2.676308e-04         3.414854e-05
-## 4         4.524089e-05         1.531681e-03
-## 5         1.169322e-03         2.247239e-07
-## 6         3.751161e-04         8.019783e-06
-##   posterior.Netball_female
-## 1                0.1699941
-## 2                0.2333569
-## 3                0.2291353
-## 4                0.2122221
-## 5                0.1326885
-## 6                0.2054332
-##   posterior.Row_female posterior.Row_male
-## 1            0.1241779       0.0023825007
-## 2            0.1414225       0.0025370630
-## 3            0.1816810       0.0077872436
-## 4            0.1045723       0.0009826883
-## 5            0.1822427       0.0456717871
-## 6            0.1917380       0.0133925352
-##   posterior.Swim_female posterior.Swim_male
-## 1            0.07434038         0.011678465
-## 2            0.11730520         0.009274681
-## 3            0.08659049         0.023136399
-## 4            0.13254329         0.004132741
-## 5            0.02802782         0.089868173
-## 6            0.06557996         0.036249576
-##   posterior.T400m_female
-## 1            0.103051973
-## 2            0.119270442
-## 3            0.058696177
-## 4            0.179336337
-## 5            0.008428382
-## 6            0.036328215
-##   posterior.T400m_male
-## 1           0.25594274
-## 2           0.13618567
-## 3           0.17305732
-## 4           0.09812128
-## 5           0.17333438
-## 6           0.19213811
-##   posterior.Tennis_female
-## 1             0.047204095
-## 2             0.075858992
-## 3             0.035224944
-## 4             0.120824963
-## 5             0.004456769
-## 6             0.020599135
-##   posterior.Tennis_male
-## 1           0.017883433
-## 2           0.008601514
-## 3           0.017564554
-## 4           0.004345342
-## 5           0.046106286
-## 6           0.025565109
-##   posterior.TSprnt_female
-## 1             0.040192120
-## 2             0.050772549
-## 3             0.028170015
-## 4             0.070141970
-## 5             0.005144923
-## 6             0.018513425
-##   posterior.TSprnt_male posterior.WPolo_male
-## 1            0.02616911         0.0028113441
-## 2            0.04902216         0.0025072687
-## 3            0.06274649         0.0081661381
-## 4            0.03716409         0.0009221631
-## 5            0.06163897         0.0542681927
-## 6            0.06367698         0.0147074229
+##            combo  RCC  WCC   Hc   Hg Ferr   BMI   SSF %Bfat   LBM    Ht
+## 1 Netball_female 4.56 13.3 42.2 13.6   20 19.16  49.0 11.29 53.14 176.8
+## 2 Netball_female 4.15  6.0 38.0 12.7   59 21.15 110.2 25.26 47.09 172.6
+## 3 Netball_female 4.16  7.6 37.5 12.3   22 21.40  89.0 19.39 53.44 176.0
+## 4 Netball_female 4.32  6.4 37.7 12.3   30 21.03  98.3 19.63 48.78 169.9
+## 5 Netball_female 4.06  5.8 38.7 12.8   78 21.77 122.1 23.11 56.05 183.0
+## 6 Netball_female 4.12  6.1 36.6 11.8   21 21.38  90.4 16.86 56.45 178.2
+##     Wt          class posterior.BBall_female posterior.BBall_male
+## 1 59.9     T400m_male             0.12348360         3.479619e-04
+## 2 63.0 Netball_female             0.04927852         7.263143e-05
+## 3 66.3 Netball_female             0.08402197         4.567927e-04
+## 4 60.7 Netball_female             0.02820743         1.539520e-05
+## 5 72.9     Row_female             0.15383834         1.197089e-02
+## 6 67.9 Netball_female             0.11219817         1.320889e-03
+##   posterior.Field_female posterior.Field_male posterior.Gym_female
+## 1           0.0002835604         1.460578e-05         4.206308e-05
+## 2           0.0041253799         9.838207e-05         3.101597e-04
+## 3           0.0032633771         2.676308e-04         3.414854e-05
+## 4           0.0048909758         4.524089e-05         1.531681e-03
+## 5           0.0011443415         1.169322e-03         2.247239e-07
+## 6           0.0021761290         3.751161e-04         8.019783e-06
+##   posterior.Netball_female posterior.Row_female posterior.Row_male
+## 1                0.1699941            0.1241779       0.0023825007
+## 2                0.2333569            0.1414225       0.0025370630
+## 3                0.2291353            0.1816810       0.0077872436
+## 4                0.2122221            0.1045723       0.0009826883
+## 5                0.1326885            0.1822427       0.0456717871
+## 6                0.2054332            0.1917380       0.0133925352
+##   posterior.Swim_female posterior.Swim_male posterior.T400m_female
+## 1            0.07434038         0.011678465            0.103051973
+## 2            0.11730520         0.009274681            0.119270442
+## 3            0.08659049         0.023136399            0.058696177
+## 4            0.13254329         0.004132741            0.179336337
+## 5            0.02802782         0.089868173            0.008428382
+## 6            0.06557996         0.036249576            0.036328215
+##   posterior.T400m_male posterior.Tennis_female posterior.Tennis_male
+## 1           0.25594274             0.047204095           0.017883433
+## 2           0.13618567             0.075858992           0.008601514
+## 3           0.17305732             0.035224944           0.017564554
+## 4           0.09812128             0.120824963           0.004345342
+## 5           0.17333438             0.004456769           0.046106286
+## 6           0.19213811             0.020599135           0.025565109
+##   posterior.TSprnt_female posterior.TSprnt_male posterior.WPolo_male
+## 1             0.040192120            0.02616911         0.0028113441
+## 2             0.050772549            0.04902216         0.0025072687
+## 3             0.028170015            0.06274649         0.0081661381
+## 4             0.070141970            0.03716409         0.0009221631
+## 5             0.005144923            0.06163897         0.0542681927
+## 6             0.018513425            0.06367698         0.0147074229
 ##        x.LD1       x.LD2
 ## 1 -1.3251857 -1.34799600
 ## 2 -1.4873604 -0.15015145
@@ -5360,12 +4958,10 @@ And so, to the graph:
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, colour = combo)) + 
-    geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = combo)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-130-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-130-1.png" width="672"  />
 
  
 If you can distinguish seventeen different colours, your eyes are
@@ -5374,12 +4970,11 @@ although I wonder how much better that will be:
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo)) + 
-    geom_point() + scale_shape_manual(values = 1:17)
+ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo)) + geom_point() +
+  scale_shape_manual(values = 1:17)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-131-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-131-1.png" width="672"  />
 
      
 
@@ -5391,12 +4986,11 @@ Or even this:
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo, 
-    colour = combo)) + geom_point() + scale_shape_manual(values = 1:17)
+ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo, colour = combo)) + geom_point() +
+  scale_shape_manual(values = 1:17)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-132-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-132-1.png" width="672"  />
 
  
 Perhaps having colours *and* shapes makes the combos easier to
@@ -5462,176 +5056,81 @@ tab
 
 ```
 ##                 class
-## combo            BBall_female BBall_male
-##   BBall_female              3          1
-##   BBall_male                0          9
-##   Field_female              0          0
-##   Field_male                0          1
-##   Gym_female                0          0
-##   Netball_female            0          0
-##   Row_female                0          0
-##   Row_male                  0          2
-##   Swim_female               0          0
-##   Swim_male                 0          4
-##   T400m_female              0          0
-##   T400m_male                3          1
-##   Tennis_female             0          0
-##   Tennis_male               1          0
-##   TSprnt_female             0          0
-##   TSprnt_male               0          0
-##   WPolo_male                1          3
+## combo            BBall_female BBall_male Field_female Field_male
+##   BBall_female              3          1            0          0
+##   BBall_male                0          9            0          0
+##   Field_female              0          0            5          0
+##   Field_male                0          1            0          7
+##   Gym_female                0          0            0          0
+##   Netball_female            0          0            1          0
+##   Row_female                0          0            0          0
+##   Row_male                  0          2            0          1
+##   Swim_female               0          0            0          0
+##   Swim_male                 0          4            0          0
+##   T400m_female              0          0            0          0
+##   T400m_male                3          1            0          0
+##   Tennis_female             0          0            1          0
+##   Tennis_male               1          0            0          0
+##   TSprnt_female             0          0            0          0
+##   TSprnt_male               0          0            0          0
+##   WPolo_male                1          3            0          2
 ##                 class
-## combo            Field_female Field_male
-##   BBall_female              0          0
-##   BBall_male                0          0
-##   Field_female              5          0
-##   Field_male                0          7
-##   Gym_female                0          0
-##   Netball_female            1          0
-##   Row_female                0          0
-##   Row_male                  0          1
-##   Swim_female               0          0
-##   Swim_male                 0          0
-##   T400m_female              0          0
-##   T400m_male                0          0
-##   Tennis_female             1          0
-##   Tennis_male               0          0
-##   TSprnt_female             0          0
-##   TSprnt_male               0          0
-##   WPolo_male                0          2
+## combo            Gym_female Netball_female Row_female Row_male Swim_female
+##   BBall_female            0              5          1        0           0
+##   BBall_male              0              0          0        0           0
+##   Field_female            0              1          0        0           0
+##   Field_male              0              0          2        0           0
+##   Gym_female              4              0          0        0           0
+##   Netball_female          0             13          4        0           0
+##   Row_female              1              5         10        0           0
+##   Row_male                0              0          0        1           0
+##   Swim_female             0              4          1        0           0
+##   Swim_male               0              2          3        0           0
+##   T400m_female            0              3          0        0           0
+##   T400m_male              0              5          3        0           0
+##   Tennis_female           1              2          0        0           0
+##   Tennis_male             0              0          3        0           0
+##   TSprnt_female           0              1          0        0           0
+##   TSprnt_male             0              6          3        0           0
+##   WPolo_male              0              0          3        1           0
 ##                 class
-## combo            Gym_female Netball_female
-##   BBall_female            0              5
-##   BBall_male              0              0
-##   Field_female            0              1
-##   Field_male              0              0
-##   Gym_female              4              0
-##   Netball_female          0             13
-##   Row_female              1              5
-##   Row_male                0              0
-##   Swim_female             0              4
-##   Swim_male               0              2
-##   T400m_female            0              3
-##   T400m_male              0              5
-##   Tennis_female           1              2
-##   Tennis_male             0              0
-##   TSprnt_female           0              1
-##   TSprnt_male             0              6
-##   WPolo_male              0              0
+## combo            Swim_male T400m_female T400m_male Tennis_female
+##   BBall_female           0            0          2             0
+##   BBall_male             2            0          0             0
+##   Field_female           0            1          0             0
+##   Field_male             0            0          0             0
+##   Gym_female             0            0          0             0
+##   Netball_female         0            1          4             0
+##   Row_female             1            0          4             0
+##   Row_male               0            1          0             0
+##   Swim_female            0            3          1             0
+##   Swim_male              0            0          1             0
+##   T400m_female           0            6          2             0
+##   T400m_male             0            1          5             0
+##   Tennis_female          0            2          1             0
+##   Tennis_male            0            0          0             0
+##   TSprnt_female          0            2          1             0
+##   TSprnt_male            0            0          0             0
+##   WPolo_male             0            0          0             0
 ##                 class
-## combo            Row_female Row_male
-##   BBall_female            1        0
-##   BBall_male              0        0
-##   Field_female            0        0
-##   Field_male              2        0
-##   Gym_female              0        0
-##   Netball_female          4        0
-##   Row_female             10        0
-##   Row_male                0        1
-##   Swim_female             1        0
-##   Swim_male               3        0
-##   T400m_female            0        0
-##   T400m_male              3        0
-##   Tennis_female           0        0
-##   Tennis_male             3        0
-##   TSprnt_female           0        0
-##   TSprnt_male             3        0
-##   WPolo_male              3        1
-##                 class
-## combo            Swim_female Swim_male
-##   BBall_female             0         0
-##   BBall_male               0         2
-##   Field_female             0         0
-##   Field_male               0         0
-##   Gym_female               0         0
-##   Netball_female           0         0
-##   Row_female               0         1
-##   Row_male                 0         0
-##   Swim_female              0         0
-##   Swim_male                0         0
-##   T400m_female             0         0
-##   T400m_male               0         0
-##   Tennis_female            0         0
-##   Tennis_male              0         0
-##   TSprnt_female            0         0
-##   TSprnt_male              0         0
-##   WPolo_male               0         0
-##                 class
-## combo            T400m_female T400m_male
-##   BBall_female              0          2
-##   BBall_male                0          0
-##   Field_female              1          0
-##   Field_male                0          0
-##   Gym_female                0          0
-##   Netball_female            1          4
-##   Row_female                0          4
-##   Row_male                  1          0
-##   Swim_female               3          1
-##   Swim_male                 0          1
-##   T400m_female              6          2
-##   T400m_male                1          5
-##   Tennis_female             2          1
-##   Tennis_male               0          0
-##   TSprnt_female             2          1
-##   TSprnt_male               0          0
-##   WPolo_male                0          0
-##                 class
-## combo            Tennis_female Tennis_male
-##   BBall_female               0           0
-##   BBall_male                 0           0
-##   Field_female               0           0
-##   Field_male                 0           0
-##   Gym_female                 0           0
-##   Netball_female             0           0
-##   Row_female                 0           0
-##   Row_male                   0           0
-##   Swim_female                0           0
-##   Swim_male                  0           0
-##   T400m_female               0           0
-##   T400m_male                 0           0
-##   Tennis_female              0           0
-##   Tennis_male                0           0
-##   TSprnt_female              0           0
-##   TSprnt_male                0           0
-##   WPolo_male                 0           0
-##                 class
-## combo            TSprnt_female TSprnt_male
-##   BBall_female               0           0
-##   BBall_male                 0           0
-##   Field_female               0           0
-##   Field_male                 0           0
-##   Gym_female                 0           0
-##   Netball_female             0           0
-##   Row_female                 0           0
-##   Row_male                   0           0
-##   Swim_female                0           0
-##   Swim_male                  0           0
-##   T400m_female               0           0
-##   T400m_male                 0           0
-##   Tennis_female              0           0
-##   Tennis_male                0           0
-##   TSprnt_female              0           0
-##   TSprnt_male                0           0
-##   WPolo_male                 0           0
-##                 class
-## combo            WPolo_male
-##   BBall_female            1
-##   BBall_male              1
-##   Field_female            0
-##   Field_male              2
-##   Gym_female              0
-##   Netball_female          0
-##   Row_female              1
-##   Row_male               10
-##   Swim_female             0
-##   Swim_male               3
-##   T400m_female            0
-##   T400m_male              0
-##   Tennis_female           0
-##   Tennis_male             0
-##   TSprnt_female           0
-##   TSprnt_male             2
-##   WPolo_male              7
+## combo            Tennis_male TSprnt_female TSprnt_male WPolo_male
+##   BBall_female             0             0           0          1
+##   BBall_male               0             0           0          1
+##   Field_female             0             0           0          0
+##   Field_male               0             0           0          2
+##   Gym_female               0             0           0          0
+##   Netball_female           0             0           0          0
+##   Row_female               0             0           0          1
+##   Row_male                 0             0           0         10
+##   Swim_female              0             0           0          0
+##   Swim_male                0             0           0          3
+##   T400m_female             0             0           0          0
+##   T400m_male               0             0           0          0
+##   Tennis_female            0             0           0          0
+##   Tennis_male              0             0           0          0
+##   TSprnt_female            0             0           0          0
+##   TSprnt_male              0             0           0          2
+##   WPolo_male               0             0           0          7
 ```
 
      
@@ -5675,7 +5174,7 @@ tab %>% as_tibble()
 ##  8 Row_male       BBall_female     0
 ##  9 Swim_female    BBall_female     0
 ## 10 Swim_male      BBall_female     0
-## # ... with 279 more rows
+## # … with 279 more rows
 ```
 
  
@@ -5701,7 +5200,7 @@ tab %>% as_tibble() %>% filter(n > 0)
 ##  8 Row_male     BBall_male       2
 ##  9 Swim_male    BBall_male       4
 ## 10 T400m_male   BBall_male       1
-## # ... with 60 more rows
+## # … with 60 more rows
 ```
 
  
@@ -5729,7 +5228,7 @@ d %>% count(combo, class)
 ##  8 BBall_male   Swim_male          2
 ##  9 BBall_male   WPolo_male         1
 ## 10 Field_female Field_female       5
-## # ... with 60 more rows
+## # … with 60 more rows
 ```
 
  
@@ -5747,8 +5246,9 @@ take it in steps:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == 
-    class, "correct", "wrong"))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong"))
 ```
 
 ```
@@ -5765,7 +5265,7 @@ d %>% count(combo, class) %>% mutate(stat = ifelse(combo ==
 ##  8 BBall_male   Swim_male          2 wrong  
 ##  9 BBall_male   WPolo_male         1 wrong  
 ## 10 Field_female Field_female       5 correct
-## # ... with 60 more rows
+## # … with 60 more rows
 ```
 
  
@@ -5778,9 +5278,10 @@ things in the `n` column:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == 
-    class, "correct", "wrong")) %>% count(stat, 
-    wt = n)
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n)
 ```
 
 ```
@@ -5801,9 +5302,11 @@ the total of `n`:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == 
-    class, "correct", "wrong")) %>% count(stat, 
-    wt = n) %>% mutate(proportion = n/sum(n))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -5827,10 +5330,12 @@ we define `stat` (it doesn't matter which way):
 
 
 ```r
-d %>% count(combo, class) %>% group_by(combo) %>% 
-    mutate(stat = ifelse(combo == class, "correct", 
-        "wrong")) %>% count(stat, wt = n) %>% 
-    mutate(proportion = n/sum(n))
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -5848,7 +5353,7 @@ d %>% count(combo, class) %>% group_by(combo) %>%
 ##  8 Field_male     wrong       5      0.417
 ##  9 Gym_female     correct     4      1    
 ## 10 Netball_female correct    13      0.565
-## # ... with 17 more rows
+## # … with 17 more rows
 ```
 
  
@@ -5864,11 +5369,13 @@ columns. This almost works:
 
 
 ```r
-d %>% count(combo, class) %>% group_by(combo) %>% 
-    mutate(stat = ifelse(combo == class, "correct", 
-        "wrong")) %>% count(stat, wt = n) %>% 
-    mutate(proportion = n/sum(n)) %>% spread(stat, 
-    proportion)
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  spread(stat, proportion)
 ```
 
 ```
@@ -5886,7 +5393,7 @@ d %>% count(combo, class) %>% group_by(combo) %>%
 ##  8 Field_male         7   0.583 NA    
 ##  9 Gym_female         4   1     NA    
 ## 10 Netball_female    10  NA      0.435
-## # ... with 17 more rows
+## # … with 17 more rows
 ```
 
  
@@ -5900,11 +5407,14 @@ served its purpose:
 
 
 ```r
-d %>% count(combo, class) %>% group_by(combo) %>% 
-    mutate(stat = ifelse(combo == class, "correct", 
-        "wrong")) %>% count(stat, wt = n) %>% 
-    mutate(proportion = n/sum(n)) %>% select(-n) %>% 
-    spread(stat, proportion, fill = 0)
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(stat, proportion, fill = 0)
 ```
 
 ```
@@ -5938,12 +5448,16 @@ order of misclassification probability:
 
 
 ```r
-d %>% count(combo, class) %>% group_by(combo) %>% 
-    mutate(stat = ifelse(combo == class, "correct", 
-        "wrong")) %>% count(stat, wt = n) %>% 
-    mutate(proportion = n/sum(n)) %>% select(-n) %>% 
-    spread(stat, proportion, fill = 0) %>% replace_na(list(correct = 0, 
-    wrong = 0)) %>% arrange(wrong)
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(stat, proportion, fill = 0) %>%
+  replace_na(list(correct = 0, wrong = 0)) %>%
+  arrange(wrong)
 ```
 
 ```
@@ -5985,111 +5499,55 @@ head(d)
 ```
 
 ```
-##            combo  RCC  WCC   Hc   Hg Ferr
-## 1 Netball_female 4.56 13.3 42.2 13.6   20
-## 2 Netball_female 4.15  6.0 38.0 12.7   59
-## 3 Netball_female 4.16  7.6 37.5 12.3   22
-## 4 Netball_female 4.32  6.4 37.7 12.3   30
-## 5 Netball_female 4.06  5.8 38.7 12.8   78
-## 6 Netball_female 4.12  6.1 36.6 11.8   21
-##     BMI   SSF %Bfat   LBM    Ht   Wt
-## 1 19.16  49.0 11.29 53.14 176.8 59.9
-## 2 21.15 110.2 25.26 47.09 172.6 63.0
-## 3 21.40  89.0 19.39 53.44 176.0 66.3
-## 4 21.03  98.3 19.63 48.78 169.9 60.7
-## 5 21.77 122.1 23.11 56.05 183.0 72.9
-## 6 21.38  90.4 16.86 56.45 178.2 67.9
-##            class posterior.BBall_female
-## 1     T400m_male             0.12348360
-## 2 Netball_female             0.04927852
-## 3 Netball_female             0.08402197
-## 4 Netball_female             0.02820743
-## 5     Row_female             0.15383834
-## 6 Netball_female             0.11219817
-##   posterior.BBall_male
-## 1         3.479619e-04
-## 2         7.263143e-05
-## 3         4.567927e-04
-## 4         1.539520e-05
-## 5         1.197089e-02
-## 6         1.320889e-03
-##   posterior.Field_female
-## 1           0.0002835604
-## 2           0.0041253799
-## 3           0.0032633771
-## 4           0.0048909758
-## 5           0.0011443415
-## 6           0.0021761290
-##   posterior.Field_male posterior.Gym_female
-## 1         1.460578e-05         4.206308e-05
-## 2         9.838207e-05         3.101597e-04
-## 3         2.676308e-04         3.414854e-05
-## 4         4.524089e-05         1.531681e-03
-## 5         1.169322e-03         2.247239e-07
-## 6         3.751161e-04         8.019783e-06
-##   posterior.Netball_female
-## 1                0.1699941
-## 2                0.2333569
-## 3                0.2291353
-## 4                0.2122221
-## 5                0.1326885
-## 6                0.2054332
-##   posterior.Row_female posterior.Row_male
-## 1            0.1241779       0.0023825007
-## 2            0.1414225       0.0025370630
-## 3            0.1816810       0.0077872436
-## 4            0.1045723       0.0009826883
-## 5            0.1822427       0.0456717871
-## 6            0.1917380       0.0133925352
-##   posterior.Swim_female posterior.Swim_male
-## 1            0.07434038         0.011678465
-## 2            0.11730520         0.009274681
-## 3            0.08659049         0.023136399
-## 4            0.13254329         0.004132741
-## 5            0.02802782         0.089868173
-## 6            0.06557996         0.036249576
-##   posterior.T400m_female
-## 1            0.103051973
-## 2            0.119270442
-## 3            0.058696177
-## 4            0.179336337
-## 5            0.008428382
-## 6            0.036328215
-##   posterior.T400m_male
-## 1           0.25594274
-## 2           0.13618567
-## 3           0.17305732
-## 4           0.09812128
-## 5           0.17333438
-## 6           0.19213811
-##   posterior.Tennis_female
-## 1             0.047204095
-## 2             0.075858992
-## 3             0.035224944
-## 4             0.120824963
-## 5             0.004456769
-## 6             0.020599135
-##   posterior.Tennis_male
-## 1           0.017883433
-## 2           0.008601514
-## 3           0.017564554
-## 4           0.004345342
-## 5           0.046106286
-## 6           0.025565109
-##   posterior.TSprnt_female
-## 1             0.040192120
-## 2             0.050772549
-## 3             0.028170015
-## 4             0.070141970
-## 5             0.005144923
-## 6             0.018513425
-##   posterior.TSprnt_male posterior.WPolo_male
-## 1            0.02616911         0.0028113441
-## 2            0.04902216         0.0025072687
-## 3            0.06274649         0.0081661381
-## 4            0.03716409         0.0009221631
-## 5            0.06163897         0.0542681927
-## 6            0.06367698         0.0147074229
+##            combo  RCC  WCC   Hc   Hg Ferr   BMI   SSF %Bfat   LBM    Ht
+## 1 Netball_female 4.56 13.3 42.2 13.6   20 19.16  49.0 11.29 53.14 176.8
+## 2 Netball_female 4.15  6.0 38.0 12.7   59 21.15 110.2 25.26 47.09 172.6
+## 3 Netball_female 4.16  7.6 37.5 12.3   22 21.40  89.0 19.39 53.44 176.0
+## 4 Netball_female 4.32  6.4 37.7 12.3   30 21.03  98.3 19.63 48.78 169.9
+## 5 Netball_female 4.06  5.8 38.7 12.8   78 21.77 122.1 23.11 56.05 183.0
+## 6 Netball_female 4.12  6.1 36.6 11.8   21 21.38  90.4 16.86 56.45 178.2
+##     Wt          class posterior.BBall_female posterior.BBall_male
+## 1 59.9     T400m_male             0.12348360         3.479619e-04
+## 2 63.0 Netball_female             0.04927852         7.263143e-05
+## 3 66.3 Netball_female             0.08402197         4.567927e-04
+## 4 60.7 Netball_female             0.02820743         1.539520e-05
+## 5 72.9     Row_female             0.15383834         1.197089e-02
+## 6 67.9 Netball_female             0.11219817         1.320889e-03
+##   posterior.Field_female posterior.Field_male posterior.Gym_female
+## 1           0.0002835604         1.460578e-05         4.206308e-05
+## 2           0.0041253799         9.838207e-05         3.101597e-04
+## 3           0.0032633771         2.676308e-04         3.414854e-05
+## 4           0.0048909758         4.524089e-05         1.531681e-03
+## 5           0.0011443415         1.169322e-03         2.247239e-07
+## 6           0.0021761290         3.751161e-04         8.019783e-06
+##   posterior.Netball_female posterior.Row_female posterior.Row_male
+## 1                0.1699941            0.1241779       0.0023825007
+## 2                0.2333569            0.1414225       0.0025370630
+## 3                0.2291353            0.1816810       0.0077872436
+## 4                0.2122221            0.1045723       0.0009826883
+## 5                0.1326885            0.1822427       0.0456717871
+## 6                0.2054332            0.1917380       0.0133925352
+##   posterior.Swim_female posterior.Swim_male posterior.T400m_female
+## 1            0.07434038         0.011678465            0.103051973
+## 2            0.11730520         0.009274681            0.119270442
+## 3            0.08659049         0.023136399            0.058696177
+## 4            0.13254329         0.004132741            0.179336337
+## 5            0.02802782         0.089868173            0.008428382
+## 6            0.06557996         0.036249576            0.036328215
+##   posterior.T400m_male posterior.Tennis_female posterior.Tennis_male
+## 1           0.25594274             0.047204095           0.017883433
+## 2           0.13618567             0.075858992           0.008601514
+## 3           0.17305732             0.035224944           0.017564554
+## 4           0.09812128             0.120824963           0.004345342
+## 5           0.17333438             0.004456769           0.046106286
+## 6           0.19213811             0.020599135           0.025565109
+##   posterior.TSprnt_female posterior.TSprnt_male posterior.WPolo_male
+## 1             0.040192120            0.02616911         0.0028113441
+## 2             0.050772549            0.04902216         0.0025072687
+## 3             0.028170015            0.06274649         0.0081661381
+## 4             0.070141970            0.03716409         0.0009221631
+## 5             0.005144923            0.06163897         0.0542681927
+## 6             0.018513425            0.06367698         0.0147074229
 ##        x.LD1       x.LD2
 ## 1 -1.3251857 -1.34799600
 ## 2 -1.4873604 -0.15015145
@@ -6100,8 +5558,9 @@ head(d)
 ```
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == 
-    class, "correct", "wrong"))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong"))
 ```
 
 ```
@@ -6118,7 +5577,7 @@ d %>% count(combo, class) %>% mutate(stat = ifelse(combo ==
 ##  8 BBall_male   Swim_male          2 wrong  
 ##  9 BBall_male   WPolo_male         1 wrong  
 ## 10 Field_female Field_female       5 correct
-## # ... with 60 more rows
+## # … with 60 more rows
 ```
 
  
@@ -6128,27 +5587,29 @@ defining the proportions:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == 
-    class, "correct", "wrong")) %>% group_by(combo) %>% 
-    mutate(proportion = n/sum(n))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  group_by(combo) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
 ## # A tibble: 70 x 5
 ## # Groups:   combo [17]
-##    combo     class         n stat  proportion
-##    <chr>     <fct>     <int> <chr>      <dbl>
-##  1 BBall_fe~ BBall_fe~     3 corr~     0.231 
-##  2 BBall_fe~ BBall_ma~     1 wrong     0.0769
-##  3 BBall_fe~ Netball_~     5 wrong     0.385 
-##  4 BBall_fe~ Row_fema~     1 wrong     0.0769
-##  5 BBall_fe~ T400m_ma~     2 wrong     0.154 
-##  6 BBall_fe~ WPolo_ma~     1 wrong     0.0769
-##  7 BBall_ma~ BBall_ma~     9 corr~     0.75  
-##  8 BBall_ma~ Swim_male     2 wrong     0.167 
-##  9 BBall_ma~ WPolo_ma~     1 wrong     0.0833
-## 10 Field_fe~ Field_fe~     5 corr~     0.714 
-## # ... with 60 more rows
+##    combo        class              n stat    proportion
+##    <chr>        <fct>          <int> <chr>        <dbl>
+##  1 BBall_female BBall_female       3 correct     0.231 
+##  2 BBall_female BBall_male         1 wrong       0.0769
+##  3 BBall_female Netball_female     5 wrong       0.385 
+##  4 BBall_female Row_female         1 wrong       0.0769
+##  5 BBall_female T400m_male         2 wrong       0.154 
+##  6 BBall_female WPolo_male         1 wrong       0.0769
+##  7 BBall_male   BBall_male         9 correct     0.75  
+##  8 BBall_male   Swim_male          2 wrong       0.167 
+##  9 BBall_male   WPolo_male         1 wrong       0.0833
+## 10 Field_female Field_female       5 correct     0.714 
+## # … with 60 more rows
 ```
 
  
@@ -6158,28 +5619,31 @@ proportions in descending order:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == 
-    class, "correct", "wrong")) %>% group_by(combo) %>% 
-    mutate(proportion = n/sum(n)) %>% filter(stat == 
-    "wrong") %>% arrange(desc(proportion))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  group_by(combo) %>%
+  mutate(proportion = n / sum(n)) %>%
+  filter(stat == "wrong") %>%
+  arrange(desc(proportion))
 ```
 
 ```
 ## # A tibble: 59 x 5
 ## # Groups:   combo [16]
-##    combo     class         n stat  proportion
-##    <chr>     <fct>     <int> <chr>      <dbl>
-##  1 Tennis_m~ Row_fema~     3 wrong      0.75 
-##  2 Row_male  WPolo_ma~    10 wrong      0.667
-##  3 TSprnt_m~ Netball_~     6 wrong      0.545
-##  4 TSprnt_f~ T400m_fe~     2 wrong      0.5  
-##  5 Swim_fem~ Netball_~     4 wrong      0.444
-##  6 BBall_fe~ Netball_~     5 wrong      0.385
-##  7 Swim_fem~ T400m_fe~     3 wrong      0.333
-##  8 Swim_male BBall_ma~     4 wrong      0.308
-##  9 Tennis_f~ Netball_~     2 wrong      0.286
-## 10 Tennis_f~ T400m_fe~     2 wrong      0.286
-## # ... with 49 more rows
+##    combo         class              n stat  proportion
+##    <chr>         <fct>          <int> <chr>      <dbl>
+##  1 Tennis_male   Row_female         3 wrong      0.75 
+##  2 Row_male      WPolo_male        10 wrong      0.667
+##  3 TSprnt_male   Netball_female     6 wrong      0.545
+##  4 TSprnt_female T400m_female       2 wrong      0.5  
+##  5 Swim_female   Netball_female     4 wrong      0.444
+##  6 BBall_female  Netball_female     5 wrong      0.385
+##  7 Swim_female   T400m_female       3 wrong      0.333
+##  8 Swim_male     BBall_male         4 wrong      0.308
+##  9 Tennis_female Netball_female     2 wrong      0.286
+## 10 Tennis_female T400m_female       2 wrong      0.286
+## # … with 49 more rows
 ```
 
  

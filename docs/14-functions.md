@@ -8,103 +8,83 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R
-## version 3.5.3
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R
-## version 3.5.3
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R
-## version 3.5.3
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R
-## version 3.5.2
+## Warning: package 'readr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R
-## version 3.5.3
+## Warning: package 'purrr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R
-## version 3.5.2
+## Warning: package 'dplyr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R
-## version 3.5.2
+## Warning: package 'stringr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R
-## version 3.5.1
+## Warning: package 'forcats' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under
-## R version 3.5.1
+## Warning: package 'survminer' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R
-## version 3.5.1
+## Warning: package 'ggpubr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R
-## version 3.5.1
+## Warning: package 'magrittr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R
-## version 3.5.1
+## Warning: package 'car' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R
-## version 3.5.1
+## Warning: package 'carData' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R
-## version 3.5.1
+## Warning: package 'ggbiplot' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R
-## version 3.5.1
+## Warning: package 'plyr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R
-## version 3.5.1
+## Warning: package 'scales' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R
-## version 3.5.1
+## Warning: package 'ggrepel' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R
-## version 3.5.2
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'rstan' was built under R
-## version 3.5.3
+## Warning: package 'rstan' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'StanHeaders' was built
-## under R version 3.5.1
+## Warning: package 'StanHeaders' was built under R version 3.5.1
 ```
 
 
@@ -132,7 +112,7 @@ lowercase c has a special meaning to R):
 
 ```r
 c_to_k <- function(C) {
-    C + 273.15
+  C + 273.15
 }
 c_to_k(0)
 ```
@@ -161,8 +141,8 @@ value to be returned and then return it. You can do that in R too:
 
 ```r
 c_to_k <- function(C) {
-    K <- C + 273.15
-    return(K)
+  K <- C + 273.15
+  return(K)
 }
 c_to_k(0)
 ```
@@ -183,7 +163,7 @@ c_to_k(20)
 
 That works just as well, and for the rest of this question, you can go
 either way.
-\marginnote{R style is to use the last line of the function  for the return value, unless you are jumping out of the function  before the end, in which case use *return*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">R style is to use the last line of the function  for the return value, unless you are jumping out of the function  before the end, in which case use *return*.</span>
 
 
 (b) Write a function to convert a Fahrenheit temperature to
@@ -199,7 +179,7 @@ save the calculated value and return that instead:
 
 ```r
 f_to_c <- function(F) {
-    (F - 32) * 5/9
+  (F - 32) * 5 / 9
 }
 f_to_c(32)
 ```
@@ -247,9 +227,9 @@ conversion and then implementing that):
 
 ```r
 f_to_k <- function(F) {
-    C <- f_to_c(F)
-    K <- c_to_k(C)
-    return(K)
+  C <- f_to_c(F)
+  K <- c_to_k(C)
+  return(K)
 }
 f_to_k(32)
 ```
@@ -287,7 +267,7 @@ You can choose any default you like. I'll take a default of 68
 
 ```r
 f_to_c <- function(F = 68) {
-    (F - 32) * 5/9
+  (F - 32) * 5 / 9
 }
 f_to_c(68)
 ```
@@ -334,8 +314,7 @@ f_to_c(temps)
 ```
 
 ```
-## [1] -1.111111  4.444444 10.000000 15.555556
-## [5] 21.111111 26.666667
+## [1] -1.111111  4.444444 10.000000 15.555556 21.111111 26.666667
 ```
 
      
@@ -345,7 +324,8 @@ one. This is perhaps more useful in a data frame, thus:
 
 
 ```r
-tibble(temps = seq(30, 80, 10)) %>% mutate(celsius = f_to_c(temps))
+tibble(temps = seq(30, 80, 10)) %>%
+  mutate(celsius = f_to_c(temps))
 ```
 
 ```
@@ -369,7 +349,9 @@ Here's another way to do the above:
 
 ```r
 temps <- seq(30, 80, 10)
-temps %>% enframe(value = "fahrenheit") %>% mutate(celsius = f_to_c(temps))
+temps %>%
+  enframe(value = "fahrenheit") %>%
+  mutate(celsius = f_to_c(temps))
 ```
 
 ```
@@ -410,7 +392,7 @@ This:
 
 ```r
 wrap <- function(text = "hello", outside = "*") {
-    str_c(outside, text, outside)
+  str_c(outside, text, outside)
 }
 ```
 
@@ -571,10 +553,8 @@ wrap(mytext, myout)
 ```
 
 ```
-## Warning in stri_c(..., sep = sep, collapse =
-## collapse, ignore_null = TRUE): longer object
-## length is not a multiple of shorter object
-## length
+## Warning in stri_c(..., sep = sep, collapse = collapse, ignore_null = TRUE):
+## longer object length is not a multiple of shorter object length
 ```
 
 ```
@@ -593,9 +573,8 @@ the uppercase letters in it:
 
 
 ```r
-tibble(mytext = LETTERS[1:6], myout = c("*", "**", 
-    "!", "!!", "_", "__")) %>% mutate(newthing = wrap(mytext, 
-    myout))
+tibble(mytext = LETTERS[1:6], myout = c("*", "**", "!", "!!", "_", "__")) %>%
+  mutate(newthing = wrap(mytext, myout))
 ```
 
 ```
@@ -662,7 +641,7 @@ Solution
 Let's try this out. For example, 5 is odd and 6 is even, so
 
 ```r
-5%%2
+5 %% 2
 ```
 
 ```
@@ -670,7 +649,7 @@ Let's try this out. For example, 5 is odd and 6 is even, so
 ```
 
 ```r
-6%%2
+6 %% 2
 ```
 
 ```
@@ -688,8 +667,8 @@ into a `logical`, and return it:
 
 ```r
 is_odd <- function(x) {
-    r <- x%%2
-    as.logical(r)
+  r <- x %% 2
+  as.logical(r)
 }
 ```
 
@@ -734,7 +713,7 @@ is_odd(0)
 
 (c) Write an R function called
 `hotpo1`
-\marginnote{*Hotpo* is short for half or triple-plus-one.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">*Hotpo* is short for half or triple-plus-one.</span> 
 that takes an
 integer as input and returns the next number in the Collatz
 sequence. To do this, use the function you just wrote that
@@ -749,8 +728,7 @@ The R structure is an
 
 ```r
 hotpo1 <- function(x) {
-    if (is_odd(x)) 
-        3 * x + 1 else x/2
+  if (is_odd(x)) 3 * x + 1 else x / 2
 }
 ```
 
@@ -766,7 +744,7 @@ condition would have looked something like
 
 
 ```r
-if (x%%2 == 1) 3 * x + 1 else x/2
+if (x %% 2 == 1) 3 * x + 1 else x / 2
 ```
 
  
@@ -826,13 +804,13 @@ vector and a value, and save it back into the vector:
 
 ```r
 hotpo <- function(x) {
-    sequence <- x
-    term <- x
-    while (term > 1) {
-        term <- hotpo1(term)
-        sequence <- c(sequence, term)
-    }
-    sequence
+  sequence <- x
+  term <- x
+  while (term > 1) {
+    term <- hotpo1(term)
+    sequence <- c(sequence, term)
+  }
+  sequence
 }
 ```
 
@@ -865,20 +843,14 @@ hotpo(97)
 ```
 
 ```
-##   [1]   97  292  146   73  220  110   55  166
-##   [9]   83  250  125  376  188   94   47  142
-##  [17]   71  214  107  322  161  484  242  121
-##  [25]  364  182   91  274  137  412  206  103
-##  [33]  310  155  466  233  700  350  175  526
-##  [41]  263  790  395 1186  593 1780  890  445
-##  [49] 1336  668  334  167  502  251  754  377
-##  [57] 1132  566  283  850  425 1276  638  319
-##  [65]  958  479 1438  719 2158 1079 3238 1619
-##  [73] 4858 2429 7288 3644 1822  911 2734 1367
-##  [81] 4102 2051 6154 3077 9232 4616 2308 1154
-##  [89]  577 1732  866  433 1300  650  325  976
-##  [97]  488  244  122   61  184   92   46   23
-## [105]   70   35  106   53  160   80   40   20
+##   [1]   97  292  146   73  220  110   55  166   83  250  125  376  188   94
+##  [15]   47  142   71  214  107  322  161  484  242  121  364  182   91  274
+##  [29]  137  412  206  103  310  155  466  233  700  350  175  526  263  790
+##  [43]  395 1186  593 1780  890  445 1336  668  334  167  502  251  754  377
+##  [57] 1132  566  283  850  425 1276  638  319  958  479 1438  719 2158 1079
+##  [71] 3238 1619 4858 2429 7288 3644 1822  911 2734 1367 4102 2051 6154 3077
+##  [85] 9232 4616 2308 1154  577 1732  866  433 1300  650  325  976  488  244
+##  [99]  122   61  184   92   46   23   70   35  106   53  160   80   40   20
 ## [113]   10    5   16    8    4    2    1
 ```
 
@@ -900,8 +872,7 @@ function calling itself:
 
 ```r
 hotpo_rec <- function(x) {
-    if (x == 1) 
-        1 else c(x, hotpo_rec(hotpo1(x)))
+  if (x == 1) 1 else c(x, hotpo_rec(hotpo1(x)))
 }
 ```
 
@@ -915,7 +886,7 @@ paradoxical that you define a function in terms of itself, but what
 you are doing is calling a simpler sequence, in this case one that is
 length one shorter than the sequence for the original input. Thus, we
 hope,
-\marginnote{Nobody knows whether you *always* get to 1, but also nobody has ever found a case where you don't. Collatz's conjecture, that you will get to 1 eventually, is known to be true for all starting $x_1$ up to some absurdly large number, but not for *all* starting points.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Nobody knows whether you *always* get to 1, but also nobody has ever found a case where you don't. Collatz's conjecture, that you will get to 1 eventually, is known to be true for all starting $x_1$ up to some absurdly large number, but not for *all* starting points.</span>
 we will eventually reach 1.
 
 Does it work?
@@ -934,20 +905,14 @@ hotpo_rec(97)
 ```
 
 ```
-##   [1]   97  292  146   73  220  110   55  166
-##   [9]   83  250  125  376  188   94   47  142
-##  [17]   71  214  107  322  161  484  242  121
-##  [25]  364  182   91  274  137  412  206  103
-##  [33]  310  155  466  233  700  350  175  526
-##  [41]  263  790  395 1186  593 1780  890  445
-##  [49] 1336  668  334  167  502  251  754  377
-##  [57] 1132  566  283  850  425 1276  638  319
-##  [65]  958  479 1438  719 2158 1079 3238 1619
-##  [73] 4858 2429 7288 3644 1822  911 2734 1367
-##  [81] 4102 2051 6154 3077 9232 4616 2308 1154
-##  [89]  577 1732  866  433 1300  650  325  976
-##  [97]  488  244  122   61  184   92   46   23
-## [105]   70   35  106   53  160   80   40   20
+##   [1]   97  292  146   73  220  110   55  166   83  250  125  376  188   94
+##  [15]   47  142   71  214  107  322  161  484  242  121  364  182   91  274
+##  [29]  137  412  206  103  310  155  466  233  700  350  175  526  263  790
+##  [43]  395 1186  593 1780  890  445 1336  668  334  167  502  251  754  377
+##  [57] 1132  566  283  850  425 1276  638  319  958  479 1438  719 2158 1079
+##  [71] 3238 1619 4858 2429 7288 3644 1822  911 2734 1367 4102 2051 6154 3077
+##  [85] 9232 4616 2308 1154  577 1732  866  433 1300  650  325  976  488  244
+##  [99]  122   61  184   92   46   23   70   35  106   53  160   80   40   20
 ## [113]   10    5   16    8    4    2    1
 ```
 
@@ -1027,14 +992,14 @@ This one uses `map` ideas: an actual `map` for the
 sequence, and `map_dbl` for the length and maximum value,
 since these are both actually integers but the calculation in our
 functions actually uses decimals.
-\marginnote{I should have been more careful in my functions to make sure everything was integers, and, in particular, to do integer division by 2 because I knew that this division was going to come out even.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I should have been more careful in my functions to make sure everything was integers, and, in particular, to do integer division by 2 because I knew that this division was going to come out even.</span> 
 Thus, a pipeline:
 
 ```r
-tibble(x = 11:20) %>% mutate(sequence = map(x, 
-    ~hotpo(.))) %>% mutate(length = map_dbl(sequence, 
-    ~hotpo_len(.))) %>% mutate(high = map_dbl(sequence, 
-    ~hotpo_max(.)))
+tibble(x = 11:20) %>%
+  mutate(sequence = map(x, ~ hotpo(.))) %>%
+  mutate(length = map_dbl(sequence, ~ hotpo_len(.))) %>%
+  mutate(high = map_dbl(sequence, ~ hotpo_max(.)))
 ```
 
 ```

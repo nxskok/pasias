@@ -8,103 +8,83 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R
-## version 3.5.3
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R
-## version 3.5.3
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R
-## version 3.5.3
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R
-## version 3.5.2
+## Warning: package 'readr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R
-## version 3.5.3
+## Warning: package 'purrr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R
-## version 3.5.2
+## Warning: package 'dplyr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R
-## version 3.5.2
+## Warning: package 'stringr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R
-## version 3.5.1
+## Warning: package 'forcats' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under
-## R version 3.5.1
+## Warning: package 'survminer' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R
-## version 3.5.1
+## Warning: package 'ggpubr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R
-## version 3.5.1
+## Warning: package 'magrittr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R
-## version 3.5.1
+## Warning: package 'car' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R
-## version 3.5.1
+## Warning: package 'carData' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R
-## version 3.5.1
+## Warning: package 'ggbiplot' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R
-## version 3.5.1
+## Warning: package 'plyr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R
-## version 3.5.1
+## Warning: package 'scales' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R
-## version 3.5.1
+## Warning: package 'ggrepel' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R
-## version 3.5.2
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'rstan' was built under R
-## version 3.5.3
+## Warning: package 'rstan' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'StanHeaders' was built
-## under R version 3.5.1
+## Warning: package 'StanHeaders' was built under R version 3.5.1
 ```
 
 
@@ -163,7 +143,7 @@ movies
 ##  8     82 G     
 ##  9     98 G     
 ## 10     74 G     
-## # ... with 50 more rows
+## # … with 50 more rows
 ```
 
      
@@ -217,15 +197,11 @@ summary(length.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## rating       3  14624    4875   11.72
-## Residuals   56  23295     416        
-##               Pr(>F)    
-## rating      4.59e-06 ***
-## Residuals               
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## rating       3  14624    4875   11.72 4.59e-06 ***
+## Residuals   56  23295     416                     
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -247,20 +223,13 @@ TukeyHSD(length.1)
 ## Fit: aov(formula = length ~ rating, data = movies)
 ## 
 ## $rating
-##                diff        lwr       upr
-## PG-G      26.333333   6.613562 46.053104
-## PG-13-G   42.800000  23.080229 62.519771
-## R-G       30.600000  10.880229 50.319771
-## PG-13-PG  16.466667  -3.253104 36.186438
-## R-PG       4.266667 -15.453104 23.986438
-## R-PG-13  -12.200000 -31.919771  7.519771
-##              p adj
-## PG-G     0.0044541
-## PG-13-G  0.0000023
-## R-G      0.0007379
-## PG-13-PG 0.1327466
-## R-PG     0.9397550
-## R-PG-13  0.3660019
+##                diff        lwr       upr     p adj
+## PG-G      26.333333   6.613562 46.053104 0.0044541
+## PG-13-G   42.800000  23.080229 62.519771 0.0000023
+## R-G       30.600000  10.880229 50.319771 0.0007379
+## PG-13-PG  16.466667  -3.253104 36.186438 0.1327466
+## R-PG       4.266667 -15.453104 23.986438 0.9397550
+## R-PG-13  -12.200000 -31.919771  7.519771 0.3660019
 ```
 
  
@@ -274,7 +243,9 @@ If you like, you can make a table of means to verify that:
 
 
 ```r
-movies %>% group_by(rating) %>% summarize(mean = mean(length))
+movies %>%
+  group_by(rating) %>%
+  summarize(mean = mean(length))
 ```
 
 ```
@@ -303,12 +274,10 @@ Solution
 The obvious graph is a boxplot:
 
 ```r
-ggplot(movies, aes(x = rating, y = length)) + 
-    geom_boxplot()
+ggplot(movies, aes(x = rating, y = length)) + geom_boxplot()
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-9-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
 
        
 
@@ -398,7 +367,7 @@ significantly shorter than the R movies, \emph{when the difference in
 medians between G and R movies is bigger}? In Tukey, if the
 difference in means is bigger, the P-value is
 smaller.
-\marginnote{Actually, this doesn't always work if the sample  sizes in each group are different. If you're comparing two small  groups, it takes a *very large* difference in means to get a  small P-value. But in this case the sample sizes are all the same.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Actually, this doesn't always work if the sample  sizes in each group are different. If you're comparing two small  groups, it takes a *very large* difference in means to get a  small P-value. But in this case the sample sizes are all the same.</span>
 The resolution to this puzzle, such as it is, is that Mood's median
 test is not directly comparing the medians of the groups (despite its
 name); it's counting values above and below a *joint* median,
@@ -455,8 +424,9 @@ number of observations in each group:
 
 
 ```r
-deer %>% group_by(month) %>% summarize(n = n(), 
-    med = median(food))
+deer %>%
+  group_by(month) %>%
+  summarize(n = n(), med = median(food))
 ```
 
 ```
@@ -493,8 +463,7 @@ Solution
 ggplot(deer, aes(x = month, y = food)) + geom_boxplot()
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-14-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
      
 
@@ -520,8 +489,7 @@ scatterplot:
 ggplot(deer, aes(x = month, y = food)) + geom_point()
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-15-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
  
 
@@ -537,12 +505,10 @@ place. This is called *jittering*, and is done like this:
 
 
 ```r
-ggplot(deer, aes(x = month, y = food)) + geom_jitter(width = 0, 
-    height = 0.05)
+ggplot(deer, aes(x = month, y = food)) + geom_jitter(width = 0, height = 0.05)
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-16-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
  
 
@@ -682,8 +648,8 @@ chisq.test(tab1, correct = F)
 ```
 
 ```
-## Warning in chisq.test(tab1, correct = F):
-## Chi-squared approximation may be incorrect
+## Warning in chisq.test(tab1, correct = F): Chi-squared approximation may be
+## incorrect
 ```
 
 ```
@@ -691,8 +657,7 @@ chisq.test(tab1, correct = F)
 ## 	Pearson's Chi-squared test
 ## 
 ## data:  tab1
-## X-squared = 16.238, df = 3, p-value =
-## 0.001013
+## X-squared = 16.238, df = 3, p-value = 0.001013
 ```
 
 ```r
@@ -700,8 +665,8 @@ chisq.test(tab2, correct = F)
 ```
 
 ```
-## Warning in chisq.test(tab2, correct = F):
-## Chi-squared approximation may be incorrect
+## Warning in chisq.test(tab2, correct = F): Chi-squared approximation may be
+## incorrect
 ```
 
 ```
@@ -709,8 +674,7 @@ chisq.test(tab2, correct = F)
 ## 	Pearson's Chi-squared test
 ## 
 ## data:  tab2
-## X-squared = 11.782, df = 3, p-value =
-## 0.008168
+## X-squared = 11.782, df = 3, p-value = 0.008168
 ```
 
  
@@ -798,8 +762,7 @@ chisq.test(tab3)
 ```
 
 ```
-## Warning in chisq.test(tab3): Chi-squared
-## approximation may be incorrect
+## Warning in chisq.test(tab3): Chi-squared approximation may be incorrect
 ```
 
 ```
@@ -807,15 +770,14 @@ chisq.test(tab3)
 ## 	Pearson's Chi-squared test
 ## 
 ## data:  tab3
-## X-squared = 13.95, df = 3, p-value =
-## 0.002974
+## X-squared = 13.95, df = 3, p-value = 0.002974
 ```
 
  
 
 which is exactly what `smmr` does, so the answer is
 identical.
-\marginnote{The computer scientists among you will note that I  should not use equals or not-equals to compare a decimal  floating-point number, since decimal numbers are not represented exactly in the computer. R, however, is ahead of us here, since when you try to do food not equal to 4.7, it tests whether food is more than a small distance away from 4.7, which is the right way to do it. In R, therefore, code like my *food !=  4.7* does exactly what I want, but in something like C, it *does not*, and you have to be more careful: *abs(food-4.7)>1e-8*, or something like that. The small number *1e-8* is typically equal to **machine epsilon**, the smallest number on a computer that is distinguishable from zero.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The computer scientists among you will note that I  should not use equals or not-equals to compare a decimal  floating-point number, since decimal numbers are not represented exactly in the computer. R, however, is ahead of us here, since when you try to do food not equal to 4.7, it tests whether food is more than a small distance away from 4.7, which is the right way to do it. In R, therefore, code like my *food !=  4.7* does exactly what I want, but in something like C, it *does not*, and you have to be more careful: *abs(food-4.7)>1e-8*, or something like that. The small number *1e-8* is typically equal to **machine epsilon**, the smallest number on a computer that is distinguishable from zero.</span>
 How would an ANOVA come out here? My guess is, very similarly:
 
 
@@ -825,15 +787,11 @@ summary(deer.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value
-## month        3 2.3065  0.7688   22.08
-## Residuals   18 0.6267  0.0348        
-##               Pr(>F)    
-## month       2.94e-06 ***
-## Residuals               
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## month        3 2.3065  0.7688   22.08 2.94e-06 ***
+## Residuals   18 0.6267  0.0348                     
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```r
@@ -847,20 +805,13 @@ TukeyHSD(deer.1)
 ## Fit: aov(formula = food ~ month, data = deer)
 ## 
 ## $month
-##               diff         lwr        upr
-## Feb-Aug  0.1533333 -0.16599282  0.4726595
-## May-Aug -0.3333333 -0.63779887 -0.0288678
-## Nov-Aug  0.5733333  0.25400718  0.8926595
-## May-Feb -0.4866667 -0.80599282 -0.1673405
-## Nov-Feb  0.4200000  0.08647471  0.7535253
-## Nov-May  0.9066667  0.58734052  1.2259928
-##             p adj
-## Feb-Aug 0.5405724
-## May-Aug 0.0290758
-## Nov-Aug 0.0004209
-## May-Feb 0.0021859
-## Nov-Feb 0.0109631
-## Nov-May 0.0000013
+##               diff         lwr        upr     p adj
+## Feb-Aug  0.1533333 -0.16599282  0.4726595 0.5405724
+## May-Aug -0.3333333 -0.63779887 -0.0288678 0.0290758
+## Nov-Aug  0.5733333  0.25400718  0.8926595 0.0004209
+## May-Feb -0.4866667 -0.80599282 -0.1673405 0.0021859
+## Nov-Feb  0.4200000  0.08647471  0.7535253 0.0109631
+## Nov-May  0.9066667  0.58734052  1.2259928 0.0000013
 ```
 
  
@@ -886,7 +837,7 @@ Solution
 
 That's rather a lot, so let's take those things one at a
 time.
-\marginnote{Most of these parts are old from assignment questions that I actually asked a previous class to do, but not this part. I added it later.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Most of these parts are old from assignment questions that I actually asked a previous class to do, but not this part. I added it later.</span>
 
 Mood's median test is really like the $F$-test in ANOVA: it's testing
 the null hypothesis
@@ -991,7 +942,7 @@ movies
 ##  8     82 G     
 ##  9     98 G     
 ## 10     74 G     
-## # ... with 50 more rows
+## # … with 50 more rows
 ```
 
  
@@ -1001,8 +952,9 @@ Now, the actual for-credit part, which is a `group_by` and
 
 
 ```r
-movies %>% group_by(rating) %>% summarize(count = n(), 
-    med = median(length))
+movies %>%
+  group_by(rating) %>%
+  summarize(count = n(), med = median(length))
 ```
 
 ```
@@ -1033,12 +985,10 @@ Solution
 The graph would seem to be a boxplot, side by side for each group:
 
 ```r
-ggplot(movies, aes(x = rating, y = length)) + 
-    geom_boxplot()
+ggplot(movies, aes(x = rating, y = length)) + geom_boxplot()
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-29-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
      
 
@@ -1069,12 +1019,12 @@ then the normal quantile plot part, then the facetting:
 
 
 ```r
-ggplot(movies, aes(sample = length)) + stat_qq() + 
-    stat_qq_line() + facet_wrap(~rating)
+ggplot(movies, aes(sample = length)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~rating)
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-30-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
 
  
 
@@ -1203,8 +1153,9 @@ column). We can remind ourselves of the sample medians:
 
 
 ```r
-movies %>% group_by(rating) %>% summarize(count = n(), 
-    med = median(length))
+movies %>%
+  group_by(rating) %>%
+  summarize(count = n(), med = median(length))
 ```
 
 ```
@@ -1331,8 +1282,7 @@ chisq.test(tab1, correct = F)
 ## 	Pearson's Chi-squared test
 ## 
 ## data:  tab1
-## X-squared = 14.082, df = 3, p-value =
-## 0.002795
+## X-squared = 14.082, df = 3, p-value = 0.002795
 ```
 
  
@@ -1349,14 +1299,13 @@ chisq.test(tab2, correct = F)
 ## 	Pearson's Chi-squared test
 ## 
 ## data:  tab2
-## X-squared = 13.548, df = 3, p-value =
-## 0.003589
+## X-squared = 13.548, df = 3, p-value = 0.003589
 ```
 
  
 
 Either is correct, or, actually, without the `correct=F`.
-\marginnote{see discussion elsewhere about Yates' Correction and fixed margins.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">see discussion elsewhere about Yates' Correction and fixed margins.</span>
 
 The conclusion (iv) is the same either way: the null of no association
 is clearly rejected (with a P-value of 0.0028 or 0.0036 as
@@ -1378,8 +1327,9 @@ data frame, it fits neatly into a pipe (with the data frame omitted):
 
 
 ```r
-movies %>% filter(rating == "G" | rating == "PG") %>% 
-    median_test(length, rating)
+movies %>%
+  filter(rating == "G" | rating == "PG") %>%
+  median_test(length, rating)
 ```
 
 ```
@@ -1407,8 +1357,9 @@ ratings to compare:
 
 ```r
 comp2 <- function(rat_1, rat_2, d) {
-    d %>% filter(rating == rat_1 | rating == rat_2) %>% 
-        median_test(length, rating)
+  d %>%
+    filter(rating == rat_1 | rating == rat_2) %>%
+    median_test(length, rating)
 }
 ```
 
@@ -1455,9 +1406,10 @@ entry. So let's rewrite the function to return just that:
 
 ```r
 comp2 <- function(rat_1, rat_2, d) {
-    d %>% filter(rating == rat_1 | rating == rat_2) %>% 
-        median_test(length, rating) %>% pluck("test", 
-        "value", 3)
+  d %>%
+    filter(rating == rat_1 | rating == rat_2) %>%
+    median_test(length, rating) %>%
+    pluck("test", "value", 3)
 }
 comp2("G", "PG", movies)
 ```
@@ -1518,12 +1470,12 @@ ii <- character(0)
 jj <- character(0)
 pp <- numeric(0)
 for (i in the_ratings) {
-    for (j in the_ratings) {
-        pval <- comp2(i, j, movies)
-        ii <- c(ii, i)
-        jj <- c(jj, j)
-        pp <- c(pp, pval)
-    }
+  for (j in the_ratings) {
+    pval <- comp2(i, j, movies)
+    ii <- c(ii, i)
+    jj <- c(jj, j)
+    pp <- c(pp, pval)
+  }
 }
 tibble(ii, jj, pp)
 ```
@@ -1599,8 +1551,8 @@ way around. The ones we need are these:
 
 
 ```r
-crossing(first = the_ratings, second = the_ratings) %>% 
-    filter(first < second)
+crossing(first = the_ratings, second = the_ratings) %>%
+  filter(first < second)
 ```
 
 ```
@@ -1629,14 +1581,14 @@ in `first` *and* each of the things in `second`,
 and make a new column called `pval` that contains exactly
 that. This (coming fresh from page 332 of the R book, this being the
 first time I've ever used it)
-\marginnote{This was a year ago when I first  wrote this.} is exactly what the texttt{map2} family of functions
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was a year ago when I first  wrote this.} is exactly what the texttt{map2</span> family of functions
 does. In our case, `comp2` returns a decimal number, a
 `dbl`, so `map2_dbl` does it.  Thus:
 
 ```r
-crossing(first = the_ratings, second = the_ratings) %>% 
-    filter(first < second) %>% mutate(pval = map2_dbl(first, 
-    second, ~comp2(.x, .y, movies)))
+crossing(first = the_ratings, second = the_ratings) %>%
+  filter(first < second) %>%
+  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies)))
 ```
 
 ```
@@ -1670,13 +1622,13 @@ adjustment: instead of rejecting if the P-value is less than 0.05, we
 only reject if it is less than $0.05/6$, since we are doing 6
 tests. This is a fiddly calculation to do by hand, but it's easy to
 build in another `mutate`, thus:
-\marginnote{In the pairwise median  test in *smmr*, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I  flip it around so that you adjust the P-values by *multiplying*  them by 6, and then comparing the adjusted P-values with the usual  0.05. It comes to the same place in the end, except that this way  you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In the pairwise median  test in *smmr*, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I  flip it around so that you adjust the P-values by *multiplying*  them by 6, and then comparing the adjusted P-values with the usual  0.05. It comes to the same place in the end, except that this way  you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.</span>
 
 ```r
-crossing(first = the_ratings, second = the_ratings) %>% 
-    filter(first < second) %>% mutate(pval = map2_dbl(first, 
-    second, ~comp2(.x, .y, movies))) %>% mutate(reject = pval < 
-    0.05/6)
+crossing(first = the_ratings, second = the_ratings) %>%
+  filter(first < second) %>%
+  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies))) %>%
+  mutate(reject = pval < 0.05 / 6)
 ```
 
 ```
@@ -1717,8 +1669,10 @@ how far different the medians have to be to be significantly different:
 
 
 ```r
-medians <- movies %>% group_by(rating) %>% summarize(med = median(length)) %>% 
-    arrange(desc(med))
+medians <- movies %>%
+  group_by(rating) %>%
+  summarize(med = median(length)) %>%
+  arrange(desc(med))
 medians
 ```
 
@@ -1745,11 +1699,12 @@ Here's something extremely flashy to finish with:
 
 
 ```r
-crossing(first = the_ratings, second = the_ratings) %>% 
-    filter(first < second) %>% mutate(pval = map2_dbl(first, 
-    second, ~comp2(.x, .y, movies))) %>% mutate(reject = pval < 
-    0.05/6) %>% left_join(medians, by = c(first = "rating")) %>% 
-    left_join(medians, by = c(second = "rating"))
+crossing(first = the_ratings, second = the_ratings) %>%
+  filter(first < second) %>%
+  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies))) %>%
+  mutate(reject = pval < 0.05 / 6) %>%
+  left_join(medians, by = c("first" = "rating")) %>%
+  left_join(medians, by = c("second" = "rating"))
 ```
 
 ```
@@ -1914,7 +1869,7 @@ carbon
 I would expect you to include, without being told to include it, some
 text in your report indicating that you have sensible data: two
 methods labelled 1 and 2 as promised, and a bunch
-\marginnote{It's  probably better in a report to use language a bit more formal than  *a bunch*. Something like *a number* would be better.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It's  probably better in a report to use language a bit more formal than  *a bunch*. Something like *a number* would be better.</span> 
 of atomic
 weights close to the nominal figure of 12.
 
@@ -1937,24 +1892,21 @@ which you don't want; the easiest way around that, for a boxplot
 at least, is to turn it into a factor like this:
 
 ```r
-ggplot(carbon, aes(x = factor(method), y = weight)) + 
-    geom_boxplot()
+ggplot(carbon, aes(x = factor(method), y = weight)) + geom_boxplot()
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-54-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
        
 
 If you insist, you could do a faceted histogram (above and below, for preference):
 
 ```r
-ggplot(carbon, aes(x = weight)) + geom_histogram(bins = 5) + 
-    facet_wrap(~method, ncol = 1)
+ggplot(carbon, aes(x = weight)) + geom_histogram(bins = 5) +
+  facet_wrap(~method, ncol = 1)
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-55-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
 
  
 
@@ -1969,12 +1921,12 @@ observations:
 
 
 ```r
-ggplot(carbon, aes(sample = weight)) + stat_qq() + 
-    stat_qq_line() + facet_wrap(~method)
+ggplot(carbon, aes(sample = weight)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~method)
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-56-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
 
  
 
@@ -2041,8 +1993,7 @@ t.test(weight ~ method, data = carbon)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  weight by method
-## t = -1.817, df = 5.4808, p-value =
-## 0.1238
+## t = -1.817, df = 5.4808, p-value = 0.1238
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  -0.027777288  0.004417288
@@ -2112,8 +2063,7 @@ var.test(weight ~ method, data = carbon)
 ## 	F test to compare two variances
 ## 
 ## data:  weight by method
-## F = 0.35768, num df = 9, denom df = 4,
-## p-value = 0.1845
+## F = 0.35768, num df = 9, denom df = 4, p-value = 0.1845
 ## alternative hypothesis: true ratio of variances is not equal to 1
 ## 95 percent confidence interval:
 ##  0.04016811 1.68758230
@@ -2154,14 +2104,14 @@ differences from the group medians are calculated, and then an ANOVA
 is run on the absolute differences. If, say, one of the groups has a
 larger spread than the other(s), its absolute differences from the
 median will tend to be bigger.
-\marginnote{The use of absolute  differences, and the median, downplays the influence of outliers. The assumption here is that the absolute differences from the medians are approximately normal, which seems a less big assumption than assuming the actual data are approximately normal.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The use of absolute  differences, and the median, downplays the influence of outliers. The assumption here is that the absolute differences from the medians are approximately normal, which seems a less big assumption than assuming the actual data are approximately normal.</span>
 As for what we conclude here, well, neither of the variance tests show
 any significance at all, so from that point of view there is no
 evidence against using the pooled $t$-test. Having said that, the
 samples are small, and so it would be difficult to *prove* that
 the two methods have different variance, even if they actually
 did.
-\marginnote{This is coming back to the *power* of something like Levene's test; the power of any test is not going to be very big if the sample sizes are small.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is coming back to the *power* of something like Levene's test; the power of any test is not going to be very big if the sample sizes are small.</span>
 
 Things are never as clear-cut as you would like. In the end, it all
 comes down to making a call and defending it.
@@ -2204,7 +2154,7 @@ Mann-Whitney or Kruskal-Wallis that applies in this situation, be
 careful about using it here, because they have additional assumptions
 that you may not want to trust. Mann-Whitney started life as a test for
 "equal distributions".
-\marginnote{The test goes back to the 1940s.} This
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The test goes back to the 1940s.</span> This
 means that the null is equal location *and* equal spread, and if
 you reject the null, one of those has failed. But here, we suspect that
 equal spread will fail, so that the Mann-Whitney test may end up
@@ -2384,8 +2334,8 @@ Solution
 We are combining several columns into one, so this is `gather`:
 
 ```r
-caffeine <- caffeine.untidy %>% gather(amount, 
-    score, c(High:None))
+caffeine <- caffeine.untidy %>%
+  gather(amount, score, c(High:None))
 ```
 
      
@@ -2413,7 +2363,7 @@ caffeine
 ##  8     8 High      74
 ##  9     9 High      78
 ## 10    10 High      83
-## # ... with 26 more rows
+## # … with 26 more rows
 ```
 
  
@@ -2456,12 +2406,10 @@ Solution
 
 
 ```r
-ggplot(caffeine, aes(x = amount, y = score)) + 
-    geom_boxplot()
+ggplot(caffeine, aes(x = amount, y = score)) + geom_boxplot()
 ```
 
-
-\includegraphics{10-analysis-of-variance_files/figure-latex/unnamed-chunk-67-1} 
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
 
  
 
@@ -2500,15 +2448,11 @@ summary(caff.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value Pr(>F)
-## amount       2  477.7  238.86   3.986 0.0281
-## Residuals   33 1977.5   59.92               
-##              
-## amount      *
-## Residuals    
+##             Df Sum Sq Mean Sq F value Pr(>F)  
+## amount       2  477.7  238.86   3.986 0.0281 *
+## Residuals   33 1977.5   59.92                 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
      
@@ -2558,14 +2502,10 @@ caff.3
 ## Fit: aov(formula = score ~ amount, data = caffeine)
 ## 
 ## $amount
-##                    diff       lwr       upr
-## Moderate-High -4.750000 -12.50468  3.004679
-## None-High     -8.916667 -16.67135 -1.161987
-## None-Moderate -4.166667 -11.92135  3.588013
-##                   p adj
-## Moderate-High 0.3025693
-## None-High     0.0213422
-## None-Moderate 0.3952176
+##                    diff       lwr       upr     p adj
+## Moderate-High -4.750000 -12.50468  3.004679 0.3025693
+## None-High     -8.916667 -16.67135 -1.161987 0.0213422
+## None-Moderate -4.166667 -11.92135  3.588013 0.3952176
 ```
 
  
@@ -2580,7 +2520,7 @@ however, is away from zero, so this is the significant one. As is
 usual, we are pretty sure that the difference in means (this way
 around) is negative, but we are not at all clear about how big it is,
 because the confidence interval is rather long.
-\marginnote{We'd need a  lot more students to make it narrower, but this is not surprising  since students vary in a lot of other ways that were not measured here.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">We'd need a  lot more students to make it narrower, but this is not surprising  since students vary in a lot of other ways that were not measured here.</span>
 
 
 

@@ -280,8 +280,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="has-sub"><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">24</span> Repeated measures</a><ul>
 <li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">24.1</span> Effect of drug on rat weight</a></li>
 <li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">24.2</span> Social interaction among old people</a></li>
-<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">24.3</span> Investigating motor activity in rats</a></li>
-<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">24.4</span> Repeated measures with no background</a></li>
+<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">24.3</span> Children’s stress levels and airports</a></li>
+<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">24.4</span> Body fat as repeated measures</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">24.5</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">24.6</span> Repeated measures with no background</a></li>
 </ul></li>
 <li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">25</span> Discriminant analysis</a><ul>
 <li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">25.1</span> Telling whether a banknote is real or counterfeit</a></li>
@@ -329,8 +331,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="principal-components-and-factor-analysis" class="section level1">
 <h1><span class="header-section-number">Chapter 28</span> Principal Components and Factor Analysis</h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb4572"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4572-1" data-line-number="1"><span class="kw">library</span>(ggbiplot)</a>
-<a class="sourceLine" id="cb4572-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb4610"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4610-1" data-line-number="1"><span class="kw">library</span>(ggbiplot)</a>
+<a class="sourceLine" id="cb4610-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.5.3</code></pre>
 <pre><code>## Warning: package &#39;tibble&#39; was built under R version 3.5.3</code></pre>
 <pre><code>## Warning: package &#39;tidyr&#39; was built under R version 3.5.3</code></pre>
@@ -381,9 +383,9 @@ first few lines of your data frame.</li>
 </ol>
 <p>Solution</p>
 <p>Read into a temporary data frame, and then process:</p>
-<div class="sourceCode" id="cb4593"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4593-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv&quot;</span></a>
-<a class="sourceLine" id="cb4593-2" data-line-number="2">weather<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a>
-<a class="sourceLine" id="cb4593-3" data-line-number="3">weather<span class="fl">.0</span></a></code></pre></div>
+<div class="sourceCode" id="cb4631"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4631-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/weather_2014.csv&quot;</span></a>
+<a class="sourceLine" id="cb4631-2" data-line-number="2">weather<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a>
+<a class="sourceLine" id="cb4631-3" data-line-number="3">weather<span class="fl">.0</span></a></code></pre></div>
 <pre><code>## # A tibble: 365 x 14
 ##    day.count   day month season l.temp h.temp ave.temp l.temp.time
 ##        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;time&gt;     
@@ -401,7 +403,7 @@ first few lines of your data frame.</li>
 ## #   rain &lt;dbl&gt;, ave.wind &lt;dbl&gt;, gust.wind &lt;dbl&gt;, gust.wind.time &lt;time&gt;,
 ## #   dir.wind &lt;chr&gt;</code></pre>
 <p>There are lots of columns, of which we only want a few:</p>
-<div class="sourceCode" id="cb4595"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4595-1" data-line-number="1">(weather<span class="fl">.0</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(l.temp<span class="op">:</span>ave.temp, rain<span class="op">:</span>gust.wind) -&gt;<span class="st"> </span>weather)</a></code></pre></div>
+<div class="sourceCode" id="cb4633"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4633-1" data-line-number="1">(weather<span class="fl">.0</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(l.temp<span class="op">:</span>ave.temp, rain<span class="op">:</span>gust.wind) -&gt;<span class="st"> </span>weather)</a></code></pre></div>
 <pre><code>## # A tibble: 365 x 6
 ##    l.temp h.temp ave.temp  rain ave.wind gust.wind
 ##     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -423,7 +425,7 @@ you can).</li>
 </ol>
 <p>Solution</p>
 <p>This is cleanest, but you may not have seen the idea before:</p>
-<div class="sourceCode" id="cb4597"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4597-1" data-line-number="1"><span class="kw">map_df</span>(weather, <span class="op">~</span><span class="st"> </span><span class="kw">quantile</span>(.))</a></code></pre></div>
+<div class="sourceCode" id="cb4635"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4635-1" data-line-number="1"><span class="kw">map_df</span>(weather, <span class="op">~</span><span class="st"> </span><span class="kw">quantile</span>(.))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 6
 ##   l.temp h.temp ave.temp  rain ave.wind gust.wind
 ##    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -441,13 +443,13 @@ rain, but if you get any, you can get a lot. The maximum is 75 mm, or
 <p>Another way to do it is to make a column of column names, using
 <code>gather</code>, and then use <code>nest</code> and list-columns to find
 the quantiles for each variable:</p>
-<div class="sourceCode" id="cb4599"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4599-1" data-line-number="1">weather <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4599-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(xname, x, <span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4599-3" data-line-number="3"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>xname) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4599-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">q =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">enframe</span>(<span class="kw">quantile</span>(.<span class="op">$</span>x)))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4599-5" data-line-number="5"><span class="st">  </span><span class="kw">unnest</span>(q) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4599-6" data-line-number="6"><span class="st">  </span><span class="kw">spread</span>(xname, value) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4599-7" data-line-number="7"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">parse_number</span>(name))</a></code></pre></div>
+<div class="sourceCode" id="cb4637"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4637-1" data-line-number="1">weather <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4637-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(xname, x, <span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4637-3" data-line-number="3"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>xname) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4637-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">q =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">enframe</span>(<span class="kw">quantile</span>(.<span class="op">$</span>x)))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4637-5" data-line-number="5"><span class="st">  </span><span class="kw">unnest</span>(q) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4637-6" data-line-number="6"><span class="st">  </span><span class="kw">spread</span>(xname, value) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4637-7" data-line-number="7"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">parse_number</span>(name))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 7
 ##   name  ave.temp ave.wind gust.wind h.temp l.temp  rain
 ##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -471,13 +473,13 @@ order, and you can probably guess why).</p></li>
 <li>Run a principal components analysis (on the correlation matrix).</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4601"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4601-1" data-line-number="1">weather<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">princomp</span>(weather, <span class="dt">cor =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb4639"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4639-1" data-line-number="1">weather<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">princomp</span>(weather, <span class="dt">cor =</span> T)</a></code></pre></div>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Obtain a <code>summary</code> of your principal components
 analysis. How many components do you think are worth investigating?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4602"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4602-1" data-line-number="1"><span class="kw">summary</span>(weather<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4640"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4640-1" data-line-number="1"><span class="kw">summary</span>(weather<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Importance of components:
 ##                           Comp.1    Comp.2     Comp.3     Comp.4
 ## Standard deviation     1.7830875 1.4138296 0.74407069 0.38584917
@@ -497,7 +499,7 @@ support your conclusion from the previous part?</li>
 </ol>
 <p>Solution</p>
 <p><code>ggscreeplot</code> from <code>ggbiplot</code>:</p>
-<div class="sourceCode" id="cb4604"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4604-1" data-line-number="1"><span class="kw">ggscreeplot</span>(weather<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4642"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4642-1" data-line-number="1"><span class="kw">ggscreeplot</span>(weather<span class="fl">.1</span>)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/adskjheuya-1.png" width="672"  /></p>
 <p>I see elbows at 3 and at 4. Remember you want to be on the mountain
 for these, not on the scree, so this suggests 2 or 3 components, which
@@ -513,7 +515,7 @@ values for the original variables would make the component scores
 large or small?)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4605"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4605-1" data-line-number="1">weather<span class="fl">.1</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4643"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4643-1" data-line-number="1">weather<span class="fl">.1</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##           Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6
@@ -550,8 +552,8 @@ you can do a “rotation” so that each variable (to a greater extent)
 is either <em>in</em> a factor or <em>out</em> of it. Such a varimax rotation
 is the default for <code>factanal</code>, which I presume I now have to
 show you (so this is looking ahead):</p>
-<div class="sourceCode" id="cb4607"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4607-1" data-line-number="1">weather<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">factanal</span>(weather, <span class="dv">3</span>, <span class="dt">scores =</span> <span class="st">&quot;r&quot;</span>)</a>
-<a class="sourceLine" id="cb4607-2" data-line-number="2">weather<span class="fl">.2</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4645"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4645-1" data-line-number="1">weather<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">factanal</span>(weather, <span class="dv">3</span>, <span class="dt">scores =</span> <span class="st">&quot;r&quot;</span>)</a>
+<a class="sourceLine" id="cb4645-2" data-line-number="2">weather<span class="fl">.2</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##           Factor1 Factor2 Factor3
@@ -574,7 +576,7 @@ high temperature was especially high relative to the low temperature
 <p>These factors are rather pleasantly interpretable.</p>
 <p><code>ggbiplot</code> mysteriously doesn’t handle factor analyses, so we
 have to go back to the base-graphics version, which goes a bit like this:</p>
-<div class="sourceCode" id="cb4609"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4609-1" data-line-number="1"><span class="kw">biplot</span>(weather<span class="fl">.2</span><span class="op">$</span>scores, weather<span class="fl">.2</span><span class="op">$</span>loadings)</a></code></pre></div>
+<div class="sourceCode" id="cb4647"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4647-1" data-line-number="1"><span class="kw">biplot</span>(weather<span class="fl">.2</span><span class="op">$</span>scores, weather<span class="fl">.2</span><span class="op">$</span>loadings)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/unnamed-chunk-12-1.png" width="672"  /></p>
 <p>Now you see that the factors are aligned with the axes, and it’s very
 clear what the factors “represent”. (You don’t see much else, in all
@@ -589,11 +591,11 @@ data frame.</li>
 <p>Something like this. I begin by turning the component scores
 (which are a matrix) into a data frame, and selecting the ones I
 want (the first three):</p>
-<div class="sourceCode" id="cb4610"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4610-1" data-line-number="1"><span class="kw">as_tibble</span>(weather<span class="fl">.1</span><span class="op">$</span>scores) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4610-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4610-3" data-line-number="3"><span class="st">  </span><span class="kw">bind_cols</span>(weather) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4610-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">row_number</span>()) -&gt;<span class="st"> </span>d</a>
-<a class="sourceLine" id="cb4610-5" data-line-number="5">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4648"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4648-1" data-line-number="1"><span class="kw">as_tibble</span>(weather<span class="fl">.1</span><span class="op">$</span>scores) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4648-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4648-3" data-line-number="3"><span class="st">  </span><span class="kw">bind_cols</span>(weather) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4648-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">row_number</span>()) -&gt;<span class="st"> </span>d</a>
+<a class="sourceLine" id="cb4648-5" data-line-number="5">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">20</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 365 x 10
 ##    Comp.1   Comp.2   Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
 ##     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
@@ -626,7 +628,7 @@ it came out that way (by looking at the measured variables).</li>
 <p>Solution</p>
 <p>We can do this one and the ones following by running
 <code>arrange</code> appropriately:</p>
-<div class="sourceCode" id="cb4612"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4612-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Comp<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4650"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4650-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Comp<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 365 x 10
 ##    Comp.1 Comp.2 Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
 ##     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
@@ -652,7 +654,7 @@ had less rain and less wind.</p>
 briefly why it came out that way.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4614"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4614-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Comp<span class="fl">.2</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4652"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4652-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Comp<span class="fl">.2</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 365 x 10
 ##     Comp.1 Comp.2  Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
 ##      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
@@ -674,7 +676,7 @@ gust) is on the high side.</p>
 briefly why it came out high.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4616"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4616-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Comp<span class="fl">.3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4654"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4654-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Comp<span class="fl">.3</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 365 x 10
 ##     Comp.1 Comp.2 Comp.3 l.temp h.temp ave.temp  rain ave.wind gust.wind   day
 ##      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
@@ -703,7 +705,7 @@ out how to label the points by a variable and how to control the
 size of the labels, and I also went digging in the data frame
 that I read in from the file to get the count of the day in the
 year, which was called <code>day.count</code>:</p>
-<div class="sourceCode" id="cb4618"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4618-1" data-line-number="1"><span class="kw">ggbiplot</span>(weather<span class="fl">.1</span>, <span class="dt">labels =</span> weather<span class="fl">.0</span><span class="op">$</span>day.count, <span class="dt">labels.size =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4656"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4656-1" data-line-number="1"><span class="kw">ggbiplot</span>(weather<span class="fl">.1</span>, <span class="dt">labels =</span> weather<span class="fl">.0</span><span class="op">$</span>day.count, <span class="dt">labels.size =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/unnamed-chunk-18-1.png" width="672"  /></p>
 <p>I think the label text is small enough, though you could make it
 smaller. I’ll be asking you to look at some extreme points in a
@@ -729,7 +731,7 @@ with your <code>summary</code> from earlier).</li>
 <p>Day 37 is at the top left of the plot, at the pointy end of
 the arrows for rain, wind gust and average wind. This suggests a
 rainy, windy day:</p>
-<div class="sourceCode" id="cb4619"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4619-1" data-line-number="1">weather <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">37</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4657"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4657-1" data-line-number="1">weather <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">37</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 6
 ##   l.temp h.temp ave.temp  rain ave.wind gust.wind
 ##    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -739,7 +741,7 @@ wind and above the third quartile otherwise), but the temperatures
 are unremarkable.</p>
 <p>Day 211 is towards the pointy end of the arrows for temperature, so
 this is a hot day:</p>
-<div class="sourceCode" id="cb4621"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4621-1" data-line-number="1">weather <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">211</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4659"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4659-1" data-line-number="1">weather <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">211</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 6
 ##   l.temp h.temp ave.temp  rain ave.wind gust.wind
 ##    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -750,28 +752,28 @@ wind speeds are right around average (and no rain is not completely
 surprising).</p>
 <p>I can do a couple more. Points away from the pointy end of the arrows
 are <em>low</em> on the variables in question, for example day 265:</p>
-<div class="sourceCode" id="cb4623"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4623-1" data-line-number="1">weather <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">265</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4661"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4661-1" data-line-number="1">weather <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">265</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 6
 ##   l.temp h.temp ave.temp  rain ave.wind gust.wind
 ##    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 ## 1   16.6   20.3     18.1   6.3        0       3.2</code></pre>
 <p>This is not really low rain, but it is definitely low
 <em>wind</em>. What about day 47?</p>
-<div class="sourceCode" id="cb4625"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4625-1" data-line-number="1">weather <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">47</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4663"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4663-1" data-line-number="1">weather <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">47</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 6
 ##   l.temp h.temp ave.temp  rain ave.wind gust.wind
 ##    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 ## 1    3.1   11.8      7.3   0.8        2      24.1</code></pre>
 <p>This is predominantly low on temperature. In fact, it is kind of low
 on wind and rain too.
-<label for="tufte-mn-262" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-262" class="margin-toggle"><span class="marginnote">If you ignore the wind gust, anyway.</span>
+<label for="tufte-mn-268" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-268" class="margin-toggle"><span class="marginnote">If you ignore the wind gust, anyway.</span>
 This makes sense, because not only is it at the “wrong” end of the
 temperature arrows, it is kind of at the wrong end of the wind/rain
 arrows as well.</p>
 <p>Having done these by percentile ranks in one of the other questions,
 let’s see if we can do that here as well:</p>
-<div class="sourceCode" id="cb4627"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4627-1" data-line-number="1"><span class="kw">map_df</span>(weather, percent_rank) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4627-2" data-line-number="2"><span class="st">  </span><span class="kw">slice</span>(<span class="kw">c</span>(<span class="dv">37</span>, <span class="dv">211</span>, <span class="dv">265</span>, <span class="dv">47</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4665"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4665-1" data-line-number="1"><span class="kw">map_df</span>(weather, percent_rank) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4665-2" data-line-number="2"><span class="st">  </span><span class="kw">slice</span>(<span class="kw">c</span>(<span class="dv">37</span>, <span class="dv">211</span>, <span class="dv">265</span>, <span class="dv">47</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 6
 ##   l.temp h.temp ave.temp  rain ave.wind gust.wind
 ##    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -805,25 +807,25 @@ low-to-high for Britain, but are too warm. Which suggests going south:
 perhaps Brittany in France, but actually the west
 coast of the Iberian peninsula: Porto, in northern Portugal, with the
 weather blowing in off the Atlantic.</p>
-<div class="sourceCode" id="cb4629"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4629-1" data-line-number="1"><span class="kw">library</span>(ggmap)</a></code></pre></div>
+<div class="sourceCode" id="cb4667"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4667-1" data-line-number="1"><span class="kw">library</span>(ggmap)</a></code></pre></div>
 <pre><code>## Warning: package &#39;ggmap&#39; was built under R version 3.5.2</code></pre>
 <pre><code>## Google&#39;s Terms of Service: https://cloud.google.com/maps-platform/terms/.</code></pre>
 <pre><code>## Please cite ggmap if you use it! See citation(&quot;ggmap&quot;) for details.</code></pre>
-<div class="sourceCode" id="cb4633"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4633-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a></code></pre></div>
+<div class="sourceCode" id="cb4671"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4671-1" data-line-number="1"><span class="kw">library</span>(ggrepel)</a></code></pre></div>
 <p>Let’s make a map, but first we “geocode” Porto (and La Coruna,
 for later). I like to do the lookup of longitude and latitude first,
 once and for all, since I find the geocoding a bit finicky (it’s
 actually Google that’s finicky, because sometimes it decides that
 you’ve done too many lookups and returns you missings).
 I save the result:</p>
-<div class="sourceCode" id="cb4634"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4634-1" data-line-number="1"><span class="kw">tribble</span>(</a>
-<a class="sourceLine" id="cb4634-2" data-line-number="2">  <span class="op">~</span>place,</a>
-<a class="sourceLine" id="cb4634-3" data-line-number="3">  <span class="st">&quot;Porto PT&quot;</span>,</a>
-<a class="sourceLine" id="cb4634-4" data-line-number="4">  <span class="st">&quot;La Coruna ES&quot;</span></a>
-<a class="sourceLine" id="cb4634-5" data-line-number="5">) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_geocode</span>(place) -&gt;<span class="st"> </span>places</a></code></pre></div>
+<div class="sourceCode" id="cb4672"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4672-1" data-line-number="1"><span class="kw">tribble</span>(</a>
+<a class="sourceLine" id="cb4672-2" data-line-number="2">  <span class="op">~</span>place,</a>
+<a class="sourceLine" id="cb4672-3" data-line-number="3">  <span class="st">&quot;Porto PT&quot;</span>,</a>
+<a class="sourceLine" id="cb4672-4" data-line-number="4">  <span class="st">&quot;La Coruna ES&quot;</span></a>
+<a class="sourceLine" id="cb4672-5" data-line-number="5">) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_geocode</span>(place) -&gt;<span class="st"> </span>places</a></code></pre></div>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Porto+PT&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=La+Coruna+ES&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
-<div class="sourceCode" id="cb4637"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4637-1" data-line-number="1">places</a></code></pre></div>
+<div class="sourceCode" id="cb4675"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4675-1" data-line-number="1">places</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
 ##   place          lon   lat
 ##   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
@@ -835,11 +837,11 @@ can obtain a map from a place name (just like you can in
 <code>maps.google.com</code>, since it’s the same interface), but since we
 already have the longitude and latitude, we’ll use them again, to save
 Google looking them up again, and possibly saving us from getting an error:</p>
-<div class="sourceCode" id="cb4639"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4639-1" data-line-number="1">places <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span>) -&gt;<span class="st"> </span>porto</a>
-<a class="sourceLine" id="cb4639-2" data-line-number="2">mapp &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="st">&quot;Porto&quot;</span>, <span class="dt">zoom =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4677"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4677-1" data-line-number="1">places <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span>) -&gt;<span class="st"> </span>porto</a>
+<a class="sourceLine" id="cb4677-2" data-line-number="2">mapp &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="st">&quot;Porto&quot;</span>, <span class="dt">zoom =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=Porto&amp;zoom=5&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;language=en-EN&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Porto&amp;key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU</code></pre>
-<div class="sourceCode" id="cb4642"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4642-1" data-line-number="1"><span class="kw">ggmap</span>(mapp) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> porto, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4680"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4680-1" data-line-number="1"><span class="kw">ggmap</span>(mapp) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> porto, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/unnamed-chunk-27-1.png" width="672"  /></p>
 <p>As a point of technique, I’ve gone further than necessary (as
 usual). I wanted to mark the point corresponding to Porto. I thought
@@ -857,10 +859,10 @@ striped shirts, and the climate is likely to be similar).</p>
 longitudes and latitudes for both places from the file, and (just for
 fun) add a column saying which country each one is in. I’m also
 labelling both places:</p>
-<div class="sourceCode" id="cb4643"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4643-1" data-line-number="1">places <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">country =</span> <span class="kw">c</span>(<span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;Spain&quot;</span>)) -&gt;<span class="st"> </span>places</a>
-<a class="sourceLine" id="cb4643-2" data-line-number="2"><span class="kw">ggmap</span>(mapp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4643-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> places, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">colour =</span> country)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4643-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_text_repel</span>(<span class="dt">data =</span> places, <span class="kw">aes</span>(<span class="dt">label =</span> place))</a></code></pre></div>
+<div class="sourceCode" id="cb4681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4681-1" data-line-number="1">places <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">country =</span> <span class="kw">c</span>(<span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;Spain&quot;</span>)) -&gt;<span class="st"> </span>places</a>
+<a class="sourceLine" id="cb4681-2" data-line-number="2"><span class="kw">ggmap</span>(mapp) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4681-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> places, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">colour =</span> country)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4681-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_text_repel</span>(<span class="dt">data =</span> places, <span class="kw">aes</span>(<span class="dt">label =</span> place))</a></code></pre></div>
 <pre><code>## Warning in min(x): no non-missing arguments to min; returning Inf</code></pre>
 <pre><code>## Warning in max(x): no non-missing arguments to max; returning -Inf</code></pre>
 <pre><code>## Warning in min(x): no non-missing arguments to min; returning Inf</code></pre>
@@ -899,8 +901,8 @@ number of rows and columns in your data frame.</li>
 </ol>
 <p>Solution</p>
 <p>This is a <code>.csv</code> file, so:</p>
-<div class="sourceCode" id="cb4648"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4648-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/airpollution.csv&quot;</span></a>
-<a class="sourceLine" id="cb4648-2" data-line-number="2">air &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb4686"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4686-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/airpollution.csv&quot;</span></a>
+<a class="sourceLine" id="cb4686-2" data-line-number="2">air &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   wind = col_double(),
@@ -911,7 +913,7 @@ number of rows and columns in your data frame.</li>
 ##   O3 = col_double(),
 ##   HC = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb4650"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4650-1" data-line-number="1">air</a></code></pre></div>
+<div class="sourceCode" id="cb4688"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4688-1" data-line-number="1">air</a></code></pre></div>
 <pre><code>## # A tibble: 42 x 7
 ##     wind solar.radiation    CO    NO   NO2    O3    HC
 ##    &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -935,7 +937,7 @@ one go for all seven variables.</li>
 </ol>
 <p>Solution</p>
 <p>Like this (the cleanest):</p>
-<div class="sourceCode" id="cb4652"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4652-1" data-line-number="1"><span class="kw">map_df</span>(air, <span class="op">~</span><span class="st"> </span><span class="kw">quantile</span>(.))</a></code></pre></div>
+<div class="sourceCode" id="cb4690"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4690-1" data-line-number="1"><span class="kw">map_df</span>(air, <span class="op">~</span><span class="st"> </span><span class="kw">quantile</span>(.))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
 ##   &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -950,13 +952,13 @@ identify which number from the five number summary each of these is,
 but in this case you can easily figure it out since the min is the
 smallest and the max has to be the biggest in each column.</p>
 <p>Or, with some more work, this:</p>
-<div class="sourceCode" id="cb4654"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4654-1" data-line-number="1">air <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4654-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(xname, x, <span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4654-3" data-line-number="3"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>xname) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4654-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">q =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">enframe</span>(<span class="kw">quantile</span>(.<span class="op">$</span>x)))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4654-5" data-line-number="5"><span class="st">  </span><span class="kw">unnest</span>(q) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4654-6" data-line-number="6"><span class="st">  </span><span class="kw">spread</span>(xname, value) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4654-7" data-line-number="7"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">parse_number</span>(name))</a></code></pre></div>
+<div class="sourceCode" id="cb4692"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4692-1" data-line-number="1">air <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4692-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(xname, x, <span class="kw">everything</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4692-3" data-line-number="3"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>xname) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4692-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">q =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">enframe</span>(<span class="kw">quantile</span>(.<span class="op">$</span>x)))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4692-5" data-line-number="5"><span class="st">  </span><span class="kw">unnest</span>(q) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4692-6" data-line-number="6"><span class="st">  </span><span class="kw">spread</span>(xname, value) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4692-7" data-line-number="7"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">parse_number</span>(name))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 8
 ##   name     CO    HC    NO   NO2    O3 solar.radiation  wind
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt;
@@ -974,7 +976,7 @@ scales. You don’t need to look at the results yet.</li>
 </ol>
 <p>Solution</p>
 <p>This too is all rather like the previous question:</p>
-<div class="sourceCode" id="cb4656"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4656-1" data-line-number="1">air<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">princomp</span>(air, <span class="dt">cor =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb4694"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4694-1" data-line-number="1">air<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">princomp</span>(air, <span class="dt">cor =</span> T)</a></code></pre></div>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Obtain a scree plot. How many principal components might be
 worth looking at? Explain briefly. (There might be more than one
@@ -983,7 +985,7 @@ possibility. If so, discuss them all.)</li>
 <p>Solution</p>
 <p><code>ggscreeplot</code> the thing you just obtained, having loaded
 package <code>ggbiplot</code>:</p>
-<div class="sourceCode" id="cb4657"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4657-1" data-line-number="1"><span class="kw">ggscreeplot</span>(air<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4695"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4695-1" data-line-number="1"><span class="kw">ggscreeplot</span>(air<span class="fl">.1</span>)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/unnamed-chunk-33-1.png" width="672"  /></p>
 <p>There is a technicality here, which is
 that <code>ggbiplot</code>, the package, loads <code>plyr</code>, which
@@ -1010,7 +1012,7 @@ object. What light does this shed on the choice of number of
 components? Explain briefly.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4658"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4658-1" data-line-number="1"><span class="kw">summary</span>(air<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4696"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4696-1" data-line-number="1"><span class="kw">summary</span>(air<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Importance of components:
 ##                           Comp.1    Comp.2    Comp.3    Comp.4     Comp.5     Comp.6
 ## Standard deviation     1.5286539 1.1772853 1.0972994 0.8526937 0.80837896 0.73259047
@@ -1041,7 +1043,7 @@ on the variables that were measured? Explain briefly.</li>
 <p>When this was a hand-in question, there were three marks for it,
 which was a bit of a giveaway!
 Off we go:</p>
-<div class="sourceCode" id="cb4660"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4660-1" data-line-number="1">air<span class="fl">.1</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4698"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4698-1" data-line-number="1">air<span class="fl">.1</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##                 Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7
@@ -1077,11 +1079,11 @@ abbreviated) back into the long forms.</p>
 <p>All the columns contain numbers, so <code>cbind</code> will do
 it. (The component scores are seven columns, so
 <code>bind_cols</code> won’t do it unless you are careful.):</p>
-<div class="sourceCode" id="cb4662"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4662-1" data-line-number="1"><span class="kw">cbind</span>(air, air<span class="fl">.1</span><span class="op">$</span>scores) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4662-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">row =</span> <span class="kw">row_number</span>()) -&gt;<span class="st"> </span>d</a>
-<a class="sourceLine" id="cb4662-3" data-line-number="3"><span class="kw">class</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb4700"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4700-1" data-line-number="1"><span class="kw">cbind</span>(air, air<span class="fl">.1</span><span class="op">$</span>scores) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4700-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">row =</span> <span class="kw">row_number</span>()) -&gt;<span class="st"> </span>d</a>
+<a class="sourceLine" id="cb4700-3" data-line-number="3"><span class="kw">class</span>(d)</a></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
-<div class="sourceCode" id="cb4664"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4664-1" data-line-number="1"><span class="kw">head</span>(d)</a></code></pre></div>
+<div class="sourceCode" id="cb4702"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4702-1" data-line-number="1"><span class="kw">head</span>(d)</a></code></pre></div>
 <pre><code>##   wind solar.radiation CO NO NO2 O3 HC      Comp.1     Comp.2     Comp.3    Comp.4     Comp.5
 ## 1    8              98  7  2  12  8  2 -0.95292110 -0.9754106 -0.4266696 1.4454463  2.0390917
 ## 2    7             107  4  3   9  5  3 -0.04941978 -0.4291403 -0.2925624 2.1070743 -0.7830499
@@ -1100,14 +1102,14 @@ it. (The component scores are seven columns, so
 of base R and Tidyverse. The result is actually a base R <code>data.frame</code>, so displaying it will display <em>all</em> of it, hence my use of <code>head</code>.
 If you want to do it the all-Tidyverse
 way
-<label for="tufte-mn-263" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-263" class="margin-toggle"><span class="marginnote">There really ought to be a radio station <em>CTDY: All Tidyverse, All The Time</em>.</span>
+<label for="tufte-mn-269" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-269" class="margin-toggle"><span class="marginnote">There really ought to be a radio station <em>CTDY: All Tidyverse, All The Time</em>.</span>
 then you need to bear in mind that <code>bind_cols</code> <em>only</em>
 accepts vectors or data frames, not matrices, so a bit of care is needed first:</p>
-<div class="sourceCode" id="cb4666"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4666-1" data-line-number="1">air<span class="fl">.1</span><span class="op">$</span>scores <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4666-2" data-line-number="2"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4666-3" data-line-number="3"><span class="st">  </span><span class="kw">bind_cols</span>(air) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4666-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">row =</span> <span class="kw">row_number</span>()) -&gt;<span class="st"> </span>dd</a>
-<a class="sourceLine" id="cb4666-5" data-line-number="5">dd</a></code></pre></div>
+<div class="sourceCode" id="cb4704"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4704-1" data-line-number="1">air<span class="fl">.1</span><span class="op">$</span>scores <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4704-2" data-line-number="2"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4704-3" data-line-number="3"><span class="st">  </span><span class="kw">bind_cols</span>(air) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4704-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">row =</span> <span class="kw">row_number</span>()) -&gt;<span class="st"> </span>dd</a>
+<a class="sourceLine" id="cb4704-5" data-line-number="5">dd</a></code></pre></div>
 <pre><code>## # A tibble: 42 x 15
 ##     Comp.1 Comp.2 Comp.3 Comp.4  Comp.5 Comp.6 Comp.7  wind solar.radiation    CO    NO   NO2
 ##      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1138,7 +1140,7 @@ component 1?</li>
 </ol>
 <p>Solution</p>
 <p>I think the best strategy is to sort by component 1 score (in the default ascending order), and then display the first row:</p>
-<div class="sourceCode" id="cb4668"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4668-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Comp<span class="fl">.1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4706"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4706-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Comp<span class="fl">.1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span>)</a></code></pre></div>
 <pre><code>##   wind solar.radiation CO NO NO2 O3 HC    Comp.1    Comp.2     Comp.3     Comp.4     Comp.5
 ## 1    5              72  6  4  21 14  4 -3.981043 0.9262199 -0.3789783 -0.6185173 -0.8095277
 ##      Comp.6    Comp.7 row
@@ -1147,7 +1149,7 @@ component 1?</li>
 <p>We said earlier that component 1 depends negatively on carbon monoxide
 and nitrogen dioxide, so that an observation that is <em>low</em> on
 component 1 should be <em>high</em> on these things.
-<label for="tufte-mn-264" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-264" class="margin-toggle"><span class="marginnote">You might have said that component 1 depended on other things as well, in which case you ought to consider whether observation 8 is, as appropriate, high or low on these as well.</span></p>
+<label for="tufte-mn-270" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-270" class="margin-toggle"><span class="marginnote">You might have said that component 1 depended on other things as well, in which case you ought to consider whether observation 8 is, as appropriate, high or low on these as well.</span></p>
 <p>So are these values high or low? That was the reason for having you
 make the five-number summary <a href="#part:fivenum">here</a>. For
 observation 8, <code>CO</code> is 6 and <code>NO2</code> is 21; looking back
@@ -1161,13 +1163,13 @@ observation? Are they? Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>This is a repeat of the ideas we just saw:</p>
-<div class="sourceCode" id="cb4670"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4670-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Comp<span class="fl">.2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4708"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4708-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Comp<span class="fl">.2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span>)</a></code></pre></div>
 <pre><code>##   wind solar.radiation CO NO NO2 O3 HC     Comp.1    Comp.2    Comp.3    Comp.4     Comp.5
 ## 1    6              75  4  1  10 24  3 -0.3848472 -2.331649 0.2453131 -1.765714 -0.4522935
 ##      Comp.6    Comp.7 row
 ## 1 0.0884973 0.6669804  34</code></pre>
 <p>and for convenience, we’ll grab the quantiles again:</p>
-<div class="sourceCode" id="cb4672"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4672-1" data-line-number="1"><span class="kw">map_df</span>(air, <span class="op">~</span><span class="st"> </span><span class="kw">quantile</span>(.))</a></code></pre></div>
+<div class="sourceCode" id="cb4710"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4710-1" data-line-number="1"><span class="kw">map_df</span>(air, <span class="op">~</span><span class="st"> </span><span class="kw">quantile</span>(.))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
 ##   &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1189,8 +1191,8 @@ or low is kind of fiddly, since you have to refer back to the
 five-number summary to see where the values for a particular
 observation come. Another way to approach this is to calculate
 <em>percentile ranks</em> for everything. Let’s go back to our original data frame and replace everything with its percent rank:</p>
-<div class="sourceCode" id="cb4674"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4674-1" data-line-number="1">air <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_all</span>(<span class="op">~</span><span class="st"> </span><span class="kw">percent_rank</span>(.)) -&gt;<span class="st"> </span>pct_rank</a>
-<a class="sourceLine" id="cb4674-2" data-line-number="2">pct_rank</a></code></pre></div>
+<div class="sourceCode" id="cb4712"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4712-1" data-line-number="1">air <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_all</span>(<span class="op">~</span><span class="st"> </span><span class="kw">percent_rank</span>(.)) -&gt;<span class="st"> </span>pct_rank</a>
+<a class="sourceLine" id="cb4712-2" data-line-number="2">pct_rank</a></code></pre></div>
 <pre><code>## # A tibble: 42 x 7
 ##     wind solar.radiation    CO    NO   NO2    O3    HC
 ##    &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1206,7 +1208,7 @@ observation come. Another way to approach this is to calculate
 ## 10 0.488           0.195 0.610 0.317 0.829 0.512 0.780
 ## # … with 32 more rows</code></pre>
 <p>Observation 34 is row 34 of this:</p>
-<div class="sourceCode" id="cb4676"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4676-1" data-line-number="1">pct_rank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">34</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4714"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4714-1" data-line-number="1">pct_rank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">34</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
 ##   &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1214,7 +1216,7 @@ observation come. Another way to approach this is to calculate
 <p>Very high on ozone, (joint) lowest on nitric oxide, but middling on
 solar radiation.
 The one we looked at before, observation 8, is this:</p>
-<div class="sourceCode" id="cb4678"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4678-1" data-line-number="1">pct_rank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4716"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4716-1" data-line-number="1">pct_rank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">8</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 7
 ##    wind solar.radiation    CO    NO   NO2    O3    HC
 ##   &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1224,7 +1226,7 @@ The one we looked at before, observation 8, is this:</p>
 <li>Obtain a biplot, with the row numbers labelled, and explain briefly how your conclusions from the previous two parts are consistent with it.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4680"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4680-1" data-line-number="1"><span class="kw">ggbiplot</span>(air<span class="fl">.1</span>, <span class="dt">labels =</span> d<span class="op">$</span>row)</a></code></pre></div>
+<div class="sourceCode" id="cb4718"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4718-1" data-line-number="1"><span class="kw">ggbiplot</span>(air<span class="fl">.1</span>, <span class="dt">labels =</span> d<span class="op">$</span>row)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/unnamed-chunk-44-1.png" width="672"  /></p>
 <p>Day 8 is way over on the left. The things that point in the direction
 of observation 8 (<code>NO2, CO</code> and to a lesser extent <code>NO</code>
@@ -1250,8 +1252,8 @@ in which factor than principal components does. Hence what follows.</p>
 <li>Run a factor analysis on the same data, obtaining two factors. Look at the factor loadings. Is it clearer which variables belong to which factor, compared to the principal components analysis? Explain briefly.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4681-1" data-line-number="1">air<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">factanal</span>(air, <span class="dv">2</span>, <span class="dt">scores =</span> <span class="st">&quot;r&quot;</span>)</a>
-<a class="sourceLine" id="cb4681-2" data-line-number="2">air<span class="fl">.2</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4719"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4719-1" data-line-number="1">air<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">factanal</span>(air, <span class="dv">2</span>, <span class="dt">scores =</span> <span class="st">&quot;r&quot;</span>)</a>
+<a class="sourceLine" id="cb4719-2" data-line-number="2">air<span class="fl">.2</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##                 Factor1 Factor2
@@ -1274,13 +1276,13 @@ nitrogen dioxide. Factor 2 is mostly ozone, with a bit of solar
 radiation and carbon monoxide. I’d say this is clearer than before.</p>
 <p>A biplot would tell us whether the variables are better aligned with
 the axes now:</p>
-<div class="sourceCode" id="cb4683"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4683-1" data-line-number="1"><span class="kw">biplot</span>(air<span class="fl">.2</span><span class="op">$</span>scores, air<span class="fl">.2</span><span class="op">$</span>loadings)</a></code></pre></div>
+<div class="sourceCode" id="cb4721"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4721-1" data-line-number="1"><span class="kw">biplot</span>(air<span class="fl">.2</span><span class="op">$</span>scores, air<span class="fl">.2</span><span class="op">$</span>loadings)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/unnamed-chunk-46-1.png" width="672"  /></p>
 <p>At least somewhat. Ozone points straight up, since it is the dominant part of factor 2 and not part of factor 1 at all. Carbon monoxide and the two oxides of nitrogen point to the right.</p>
 <p>Extra:
 <code>wind</code>, <code>solar.radiation</code> and <code>HC</code> don’t appear
 in either of our factors, which also shows up here:</p>
-<div class="sourceCode" id="cb4684"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4684-1" data-line-number="1">air<span class="fl">.2</span><span class="op">$</span>uniquenesses</a></code></pre></div>
+<div class="sourceCode" id="cb4722"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4722-1" data-line-number="1">air<span class="fl">.2</span><span class="op">$</span>uniquenesses</a></code></pre></div>
 <pre><code>##            wind solar.radiation              CO              NO             NO2 
 ##       0.9070224       0.8953343       0.2126417       0.4983564       0.6144170 
 ##              O3              HC 
@@ -1290,8 +1292,8 @@ in either of our factors, which also shows up here:</p>
 only 42% of the variability, we
 really ought to look at 3 factors, the same way that we said we should look at
 3 components:</p>
-<div class="sourceCode" id="cb4686"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4686-1" data-line-number="1">air<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">factanal</span>(air, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb4686-2" data-line-number="2">air<span class="fl">.3</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4724"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4724-1" data-line-number="1">air<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">factanal</span>(air, <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb4724-2" data-line-number="2">air<span class="fl">.3</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##                 Factor1 Factor2 Factor3
@@ -1316,7 +1318,7 @@ factor 2 is mainly ozone (with a bit of solar radiation and carbon monoxide),
 and factor 3 is mainly <code>NO</code> with a bit of <code>CO</code>.</p>
 <p>I think I mentioned most of the variables in there, so the uniquenesses
 should not be too bad:</p>
-<div class="sourceCode" id="cb4688"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4688-1" data-line-number="1">air<span class="fl">.3</span><span class="op">$</span>uniquenesses</a></code></pre></div>
+<div class="sourceCode" id="cb4726"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4726-1" data-line-number="1">air<span class="fl">.3</span><span class="op">$</span>uniquenesses</a></code></pre></div>
 <pre><code>##            wind solar.radiation              CO              NO             NO2 
 ##       0.8404417       0.8905074       0.4046425       0.0050000       0.0050000 
 ##              O3              HC 
@@ -1328,7 +1330,7 @@ factors.</p>
 solution, and plot them on a three-dimensional plot using
 <code>rgl</code>, rotating them to see the structure. A three dimensional
 “biplot”
-<label for="tufte-mn-265" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-265" class="margin-toggle"><span class="marginnote">A three-dimensional biplot ought to be called a <em>triplot</em>.</span>
+<label for="tufte-mn-271" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-271" class="margin-toggle"><span class="marginnote">A three-dimensional biplot ought to be called a <em>triplot</em>.</span>
 would also be a cool thing to look at.</p>
 </div>
 <div id="a-correlation-matrix" class="section level2">
@@ -1349,8 +1351,8 @@ have five variables with names invented by R.</li>
 </ol>
 <p>Solution</p>
 <p>I saved my data into <code>cov5.txt</code>,
-<label for="tufte-mn-266" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-266" class="margin-toggle"><span class="marginnote">Not to be confused with <em>covfefe</em>.</span> delimited by single spaces, so:</p>
-<div class="sourceCode" id="cb4691"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4691-1" data-line-number="1">corr &lt;-<span class="st"> </span><span class="kw">read_delim</span>(<span class="st">&quot;cov5.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> F)</a></code></pre></div>
+<label for="tufte-mn-272" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-272" class="margin-toggle"><span class="marginnote">Not to be confused with <em>covfefe</em>.</span> delimited by single spaces, so:</p>
+<div class="sourceCode" id="cb4729"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4729-1" data-line-number="1">corr &lt;-<span class="st"> </span><span class="kw">read_delim</span>(<span class="st">&quot;cov5.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> F)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   X1 = col_double(),
@@ -1359,7 +1361,7 @@ have five variables with names invented by R.</li>
 ##   X4 = col_double(),
 ##   X5 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb4693"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4693-1" data-line-number="1">corr</a></code></pre></div>
+<div class="sourceCode" id="cb4731"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4731-1" data-line-number="1">corr</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 5
 ##      X1    X2    X3    X4    X5
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1371,8 +1373,8 @@ have five variables with names invented by R.</li>
 <p>I needed to say that I have no variable names and I want R
 to provide some. As you see, it did: <code>X1</code> through
 <code>X5</code>. You can also supply your own names in this fashion:</p>
-<div class="sourceCode" id="cb4695"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4695-1" data-line-number="1">my_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;second&quot;</span>, <span class="st">&quot;third&quot;</span>, <span class="st">&quot;fourth&quot;</span>, <span class="st">&quot;fifth&quot;</span>)</a>
-<a class="sourceLine" id="cb4695-2" data-line-number="2">corr2 &lt;-<span class="st"> </span><span class="kw">read_delim</span>(<span class="st">&quot;cov5.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> my_names)</a></code></pre></div>
+<div class="sourceCode" id="cb4733"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4733-1" data-line-number="1">my_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;second&quot;</span>, <span class="st">&quot;third&quot;</span>, <span class="st">&quot;fourth&quot;</span>, <span class="st">&quot;fifth&quot;</span>)</a>
+<a class="sourceLine" id="cb4733-2" data-line-number="2">corr2 &lt;-<span class="st"> </span><span class="kw">read_delim</span>(<span class="st">&quot;cov5.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> my_names)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   first = col_double(),
@@ -1381,7 +1383,7 @@ to provide some. As you see, it did: <code>X1</code> through
 ##   fourth = col_double(),
 ##   fifth = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb4697"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4697-1" data-line-number="1">corr2</a></code></pre></div>
+<div class="sourceCode" id="cb4735"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4735-1" data-line-number="1">corr2</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 5
 ##   first second third fourth fifth
 ##   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -1395,10 +1397,10 @@ to provide some. As you see, it did: <code>X1</code> through
 </ol>
 <p>Solution</p>
 <p>Two lines, these:</p>
-<div class="sourceCode" id="cb4699"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4699-1" data-line-number="1">corr.mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(corr)</a>
-<a class="sourceLine" id="cb4699-2" data-line-number="2">corr<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">princomp</span>(<span class="dt">covmat =</span> corr.mat)</a></code></pre></div>
+<div class="sourceCode" id="cb4737"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4737-1" data-line-number="1">corr.mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(corr)</a>
+<a class="sourceLine" id="cb4737-2" data-line-number="2">corr<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">princomp</span>(<span class="dt">covmat =</span> corr.mat)</a></code></pre></div>
 <p>Or do it in one step as</p>
-<div class="sourceCode" id="cb4700"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4700-1" data-line-number="1">corr<span class="fl">.1</span>a &lt;-<span class="st"> </span><span class="kw">princomp</span>(<span class="kw">as.matrix</span>(corr))</a></code></pre></div>
+<div class="sourceCode" id="cb4738"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4738-1" data-line-number="1">corr<span class="fl">.1</span>a &lt;-<span class="st"> </span><span class="kw">princomp</span>(<span class="kw">as.matrix</span>(corr))</a></code></pre></div>
 <p>if you like, but I think it’s less clear what’s going on.</p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li><a name="part:howmany">*</a> Obtain a scree plot. Can you justify
@@ -1406,12 +1408,12 @@ the use of two components (later, factors), bearing in mind that we
 have only five variables?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4701"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4701-1" data-line-number="1"><span class="kw">ggscreeplot</span>(corr<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4739"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4739-1" data-line-number="1"><span class="kw">ggscreeplot</span>(corr<span class="fl">.1</span>)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/sdljhljsahja-1.png" width="672"  /></p>
 <p>There is kind of an elbow at 3, which would suggest two components/factors.
-<label for="tufte-mn-267" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-267" class="margin-toggle"><span class="marginnote">There is also kind of an elbow at 4, which would suggest three factors, but that’s really too many with only 5 variables. That wouldn’t be much of a <em>reduction</em> in the number of variables, which is what principal components is trying to achieve.</span></p>
+<label for="tufte-mn-273" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-273" class="margin-toggle"><span class="marginnote">There is also kind of an elbow at 4, which would suggest three factors, but that’s really too many with only 5 variables. That wouldn’t be much of a <em>reduction</em> in the number of variables, which is what principal components is trying to achieve.</span></p>
 <p>You can also use the eigenvalue-bigger-than-1 thing:</p>
-<div class="sourceCode" id="cb4702"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4702-1" data-line-number="1"><span class="kw">summary</span>(corr<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4740"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4740-1" data-line-number="1"><span class="kw">summary</span>(corr<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Importance of components:
 ##                           Comp.1    Comp.2     Comp.3     Comp.4    Comp.5
 ## Standard deviation     1.7185460 1.1686447 0.70207741 0.36584870 0.2326177
@@ -1432,7 +1434,7 @@ gaining some insight.</p>
 to feature in which component? Do they have a positive or negative effect?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4704"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4704-1" data-line-number="1">corr<span class="fl">.1</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4742"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4742-1" data-line-number="1">corr<span class="fl">.1</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##    Comp.1 Comp.2 Comp.3 Comp.4 Comp.5
@@ -1466,7 +1468,7 @@ performing a factor analysis on the correlation matrix).</li>
 </ol>
 <p>Solution</p>
 <p>This is about the most direct way:</p>
-<div class="sourceCode" id="cb4706"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4706-1" data-line-number="1">corr.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">cov =</span> corr.mat, <span class="dt">n.obs =</span> <span class="dv">50</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4744"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4744-1" data-line-number="1">corr.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">cov =</span> corr.mat, <span class="dt">n.obs =</span> <span class="dv">50</span>)</a></code></pre></div>
 <p>recalling that there were 50 observations. The idea is that we feed
 this into <code>factanal</code> instead of the correlation matrix, so that
 the factor analysis knows how many individuals there were (for testing
@@ -1474,9 +1476,9 @@ and such).</p>
 <p>Note that you need the correlation matrix <em>as a <code>matrix</code></em>,
 not as a data frame. If you ran the <code>princomp</code> all in one step,
 you’ll have to create the correlation matrix again, for example like this:</p>
-<div class="sourceCode" id="cb4707"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4707-1" data-line-number="1">corr.list2 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">cov =</span> <span class="kw">as.matrix</span>(corr), <span class="dt">n.obs =</span> <span class="dv">50</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4745"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4745-1" data-line-number="1">corr.list2 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">cov =</span> <span class="kw">as.matrix</span>(corr), <span class="dt">n.obs =</span> <span class="dv">50</span>)</a></code></pre></div>
 <p>The actual list looks like this:</p>
-<div class="sourceCode" id="cb4708"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4708-1" data-line-number="1">corr.list</a></code></pre></div>
+<div class="sourceCode" id="cb4746"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4746-1" data-line-number="1">corr.list</a></code></pre></div>
 <pre><code>## $cov
 ##         X1    X2   X3    X4    X5
 ## [1,]  1.00  0.90 -0.4  0.28 -0.05
@@ -1492,12 +1494,12 @@ here a matrix and a number, and is a handy way of keeping a bunch of
 connected things together. You use the same dollar-sign notation as
 for a data frame to
 access the things in a list:</p>
-<div class="sourceCode" id="cb4710"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4710-1" data-line-number="1">corr.list<span class="op">$</span>n.obs</a></code></pre></div>
+<div class="sourceCode" id="cb4748"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4748-1" data-line-number="1">corr.list<span class="op">$</span>n.obs</a></code></pre></div>
 <pre><code>## [1] 50</code></pre>
 <p>and logically this is because, to R, a data frame <em>is</em> a special
 kind of a list, so anything that works for a list also works for a
 data frame, plus some extra things besides.
-<label for="tufte-mn-268" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-268" class="margin-toggle"><span class="marginnote">In computer science terms, a data frame is said to <strong>inherit</strong> from a list: it is a list plus extra stuff.</span></p>
+<label for="tufte-mn-274" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-274" class="margin-toggle"><span class="marginnote">In computer science terms, a data frame is said to <strong>inherit</strong> from a list: it is a list plus extra stuff.</span></p>
 <p>The same idea applies to extracting things from the output of a
 regression (with <code>lm</code>) or something like a <code>t.test</code>: the
 output from those is also a list. But for those, I like <code>tidy</code>
@@ -1508,14 +1510,14 @@ investigate the bits of it in a
 moment.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4712"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4712-1" data-line-number="1">corr<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">factanal</span>(<span class="dt">factors =</span> <span class="dv">2</span>, <span class="dt">covmat =</span> corr.list)</a></code></pre></div>
+<div class="sourceCode" id="cb4750"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4750-1" data-line-number="1">corr<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">factanal</span>(<span class="dt">factors =</span> <span class="dv">2</span>, <span class="dt">covmat =</span> corr.list)</a></code></pre></div>
 <ol start="7" style="list-style-type: lower-alpha">
 <li><a name="part:load">*</a> Look at the factor loadings. Describe how the factors are
 related to the original variables. Is the interpretation clearer
 than for the principal components analysis?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4713"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4713-1" data-line-number="1">corr<span class="fl">.2</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4751"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4751-1" data-line-number="1">corr<span class="fl">.2</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##      Factor1 Factor2
@@ -1534,7 +1536,7 @@ contrasted with variable 4; factor 2 is variables 1 and 2. No
 hand-waving required.</p>
 <p>Perhaps now is a good time to look back at the correlation matrix and
 see why the factor analysis came out this way:</p>
-<div class="sourceCode" id="cb4715"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4715-1" data-line-number="1">corr</a></code></pre></div>
+<div class="sourceCode" id="cb4753"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4753-1" data-line-number="1">corr</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 5
 ##      X1    X2    X3    X4    X5
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1557,7 +1559,7 @@ high? Does that surprise you, given your answer to
 (<a href="#part:load">here</a>)? (You will probably have to make a judgement call here.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4717"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4717-1" data-line-number="1">corr<span class="fl">.2</span><span class="op">$</span>uniquenesses</a></code></pre></div>
+<div class="sourceCode" id="cb4755"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4755-1" data-line-number="1">corr<span class="fl">.2</span><span class="op">$</span>uniquenesses</a></code></pre></div>
 <pre><code>##        X1        X2        X3        X4        X5 
 ## 0.1715682 0.0050000 0.2789445 0.0050000 0.4961028</code></pre>
 <p>The ones for <code>X3</code> and <code>X5</code> are higher than the rest;
@@ -1636,14 +1638,14 @@ of rows and columns.</li>
 </ol>
 <p>Solution</p>
 <p>Separated by single spaces.</p>
-<div class="sourceCode" id="cb4719"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4719-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/personality.txt&quot;</span></a>
-<a class="sourceLine" id="cb4719-2" data-line-number="2">pers &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4757"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4757-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/personality.txt&quot;</span></a>
+<a class="sourceLine" id="cb4757-2" data-line-number="2">pers &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   .default = col_double()
 ## )</code></pre>
 <pre><code>## See spec(...) for full column specifications.</code></pre>
-<div class="sourceCode" id="cb4722"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4722-1" data-line-number="1">pers</a></code></pre></div>
+<div class="sourceCode" id="cb4760"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4760-1" data-line-number="1">pers</a></code></pre></div>
 <pre><code>## # A tibble: 459 x 45
 ##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12
 ##    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -1674,7 +1676,7 @@ have to add one, ie. “I am”.</p>
 do with it. You could say that the <code>PERS</code> columns are all
 survey-responses, just to different questions, and you might think of
 doing something like this:</p>
-<div class="sourceCode" id="cb4724"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4724-1" data-line-number="1">pers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(item, response, <span class="op">-</span>id)</a></code></pre></div>
+<div class="sourceCode" id="cb4762"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4762-1" data-line-number="1">pers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(item, response, <span class="op">-</span>id)</a></code></pre></div>
 <pre><code>## # A tibble: 20,196 x 3
 ##       id item   response
 ##    &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -1693,9 +1695,9 @@ doing something like this:</p>
 what you are doing with it. Long-and-skinny is ideal if you are going
 to summarize the responses by survey item, or draw something like bar
 charts of responses facetted by item:</p>
-<div class="sourceCode" id="cb4726"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4726-1" data-line-number="1">pers <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4726-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(item, response, <span class="op">-</span>id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4726-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> response)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>item)</a></code></pre></div>
+<div class="sourceCode" id="cb4764"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4764-1" data-line-number="1">pers <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4764-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(item, response, <span class="op">-</span>id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4764-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> response)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>item)</a></code></pre></div>
 <pre><code>## Warning: Removed 371 rows containing non-finite values (stat_count).</code></pre>
 <p><img src="24-pcfa_files/figure-html/unnamed-chunk-65-1.png" width="672"  /></p>
 <p>The first time I did this, item <code>PERS36</code> appeared out of order
@@ -1712,13 +1714,13 @@ responses. Eliminate all the individuals with any missing values
 <p>Solution</p>
 <p>This is actually much easier than it was in the past.
 A way of asking “are there any missing values anywhere?” is:</p>
-<div class="sourceCode" id="cb4728"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4728-1" data-line-number="1"><span class="kw">any</span>(<span class="kw">is.na</span>(pers))</a></code></pre></div>
+<div class="sourceCode" id="cb4766"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4766-1" data-line-number="1"><span class="kw">any</span>(<span class="kw">is.na</span>(pers))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>There are.
 To remove them, just this:</p>
-<div class="sourceCode" id="cb4730"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4730-1" data-line-number="1">pers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">drop_na</span>() -&gt;<span class="st"> </span>pers.ok</a></code></pre></div>
+<div class="sourceCode" id="cb4768"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4768-1" data-line-number="1">pers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">drop_na</span>() -&gt;<span class="st"> </span>pers.ok</a></code></pre></div>
 <p>Are there any missings left?</p>
-<div class="sourceCode" id="cb4731"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4731-1" data-line-number="1"><span class="kw">any</span>(<span class="kw">is.na</span>(pers.ok))</a></code></pre></div>
+<div class="sourceCode" id="cb4769"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4769-1" data-line-number="1"><span class="kw">any</span>(<span class="kw">is.na</span>(pers.ok))</a></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>Nope.
 Extra: you might also have thought of the “tidy, remove, untidy”
@@ -1727,8 +1729,8 @@ strategy here. The trouble with that here is that you want to remove
 ones. This is unlike the multidimensional scaling one where
 we wanted to remove all the distances for two cities .</p>
 <p>That gives me an idea, though.</p>
-<div class="sourceCode" id="cb4733"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4733-1" data-line-number="1">pers <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4733-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(item, rating, <span class="op">-</span>id)</a></code></pre></div>
+<div class="sourceCode" id="cb4771"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4771-1" data-line-number="1">pers <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4771-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(item, rating, <span class="op">-</span>id)</a></code></pre></div>
 <pre><code>## # A tibble: 20,196 x 3
 ##       id item   rating
 ##    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
@@ -1751,11 +1753,11 @@ we summarize? Any one of the standard things like <code>mean</code> will
 return <code>NA</code> if the thing whose mean you are finding has any NA
 values in it anywhere, and a number if it’s “complete”, so this kind
 of thing, adding to my pipeline:</p>
-<div class="sourceCode" id="cb4735"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4735-1" data-line-number="1">pers <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4735-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(item, rating, <span class="op">-</span>id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4735-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4735-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(rating)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4735-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">is.na</span>(m))</a></code></pre></div>
+<div class="sourceCode" id="cb4773"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4773-1" data-line-number="1">pers <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4773-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(item, rating, <span class="op">-</span>id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4773-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4773-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(rating)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4773-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">is.na</span>(m))</a></code></pre></div>
 <pre><code>## # A tibble: 26 x 2
 ##       id     m
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -1776,12 +1778,12 @@ missing, which implies that one (or more) of the responses was
 missing.</p>
 <p>So now we define a column <code>has_missing</code> that is true if the
 subject has any missing values and false otherwise:</p>
-<div class="sourceCode" id="cb4737"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4737-1" data-line-number="1">pers.hm &lt;-<span class="st"> </span>pers <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4737-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(item, rating, <span class="op">-</span>id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4737-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4737-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(rating)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4737-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">has_missing =</span> <span class="kw">is.na</span>(m))</a>
-<a class="sourceLine" id="cb4737-6" data-line-number="6">pers.hm <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">15</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4775"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4775-1" data-line-number="1">pers.hm &lt;-<span class="st"> </span>pers <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4775-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(item, rating, <span class="op">-</span>id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4775-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4775-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(rating)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4775-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">has_missing =</span> <span class="kw">is.na</span>(m))</a>
+<a class="sourceLine" id="cb4775-6" data-line-number="6">pers.hm <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">15</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 459 x 3
 ##       id     m has_missing
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;      
@@ -1804,7 +1806,7 @@ subject has any missing values and false otherwise:</p>
 <p>This data frame <code>pers.hm</code> has the same number of rows as the
 original data frame <code>pers</code>, one per subject, so we can just
 glue it onto the end of that:</p>
-<div class="sourceCode" id="cb4739"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4739-1" data-line-number="1">pers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">bind_cols</span>(pers.hm)</a></code></pre></div>
+<div class="sourceCode" id="cb4777"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4777-1" data-line-number="1">pers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">bind_cols</span>(pers.hm)</a></code></pre></div>
 <pre><code>## # A tibble: 459 x 48
 ##       id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12
 ##    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -1837,10 +1839,10 @@ scree plot.</li>
 <p>This ought to be straightforward, but we’ve got to remember to
 use only the columns with actual data in them: that is,
 <code>PERS01</code> through <code>PERS44</code>:</p>
-<div class="sourceCode" id="cb4741"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4741-1" data-line-number="1">pers<span class="fl">.1</span> &lt;-<span class="st"> </span>pers.ok <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4741-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;PERS&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4741-3" data-line-number="3"><span class="st">  </span><span class="kw">princomp</span>(<span class="dt">cor =</span> T)</a>
-<a class="sourceLine" id="cb4741-4" data-line-number="4"><span class="kw">ggscreeplot</span>(pers<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4779"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4779-1" data-line-number="1">pers<span class="fl">.1</span> &lt;-<span class="st"> </span>pers.ok <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4779-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;PERS&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4779-3" data-line-number="3"><span class="st">  </span><span class="kw">princomp</span>(<span class="dt">cor =</span> T)</a>
+<a class="sourceLine" id="cb4779-4" data-line-number="4"><span class="kw">ggscreeplot</span>(pers<span class="fl">.1</span>)</a></code></pre></div>
 <p><img src="24-pcfa_files/figure-html/saljhsajd-1.png" width="672"  /></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>How many components/factors should you use? Explain briefly.</li>
@@ -1857,7 +1859,7 @@ When I drew this in R Studio, the elbow at 6 was clearer than
 the one at 7, so I went with 5 components/factors below.
 The other way to go is to take the number of eigenvalues bigger
 than 1:</p>
-<div class="sourceCode" id="cb4742"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4742-1" data-line-number="1"><span class="kw">summary</span>(pers<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4780"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4780-1" data-line-number="1"><span class="kw">summary</span>(pers<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## Importance of components:
 ##                           Comp.1     Comp.2     Comp.3     Comp.4     Comp.5    Comp.6
 ## Standard deviation     2.6981084 2.04738207 1.74372011 1.59610543 1.50114586 1.2627066
@@ -1905,16 +1907,16 @@ analysis. Obtain “r”-type factor scores, as in class. You don’t need to lo
 <p>I’m going to do the 5 factors that I preferred the first time I
 looked at this. Don’t forget to grab only the appropriate
 columns from <code>pers.ok</code>:</p>
-<div class="sourceCode" id="cb4744"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4744-1" data-line-number="1">pers.ok<span class="fl">.1</span> &lt;-<span class="st"> </span>pers.ok <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4744-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;PERS&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4744-3" data-line-number="3"><span class="st">  </span><span class="kw">factanal</span>(<span class="dv">5</span>, <span class="dt">scores =</span> <span class="st">&quot;r&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4782-1" data-line-number="1">pers.ok<span class="fl">.1</span> &lt;-<span class="st"> </span>pers.ok <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4782-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;PERS&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4782-3" data-line-number="3"><span class="st">  </span><span class="kw">factanal</span>(<span class="dv">5</span>, <span class="dt">scores =</span> <span class="st">&quot;r&quot;</span>)</a></code></pre></div>
 <p>If you think 6 is better, you should feel free to use that here.</p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Obtain the factor loadings. How much of the variability
 does your chosen number of factors explain?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb4745"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4745-1" data-line-number="1">pers.ok<span class="fl">.1</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4783"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4783-1" data-line-number="1">pers.ok<span class="fl">.1</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##        Factor1 Factor2 Factor3 Factor4 Factor5
@@ -2022,10 +2024,10 @@ conscientiousness (factor 1), and neuroticism (factor 3). The
 correspondence appears to be pretty good. (I wrote my answers
 above last year without thinking about “big 5” at all.)</p>
 <p>I wonder whether 6 factors is different?</p>
-<div class="sourceCode" id="cb4747"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4747-1" data-line-number="1">pers.ok<span class="fl">.2</span> &lt;-<span class="st"> </span>pers.ok <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4747-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;PERS&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4747-3" data-line-number="3"><span class="st">  </span><span class="kw">factanal</span>(<span class="dv">6</span>, <span class="dt">scores =</span> <span class="st">&quot;r&quot;</span>)</a>
-<a class="sourceLine" id="cb4747-4" data-line-number="4">pers.ok<span class="fl">.2</span><span class="op">$</span>loadings</a></code></pre></div>
+<div class="sourceCode" id="cb4785"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4785-1" data-line-number="1">pers.ok<span class="fl">.2</span> &lt;-<span class="st"> </span>pers.ok <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4785-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;PERS&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4785-3" data-line-number="3"><span class="st">  </span><span class="kw">factanal</span>(<span class="dv">6</span>, <span class="dt">scores =</span> <span class="st">&quot;r&quot;</span>)</a>
+<a class="sourceLine" id="cb4785-4" data-line-number="4">pers.ok<span class="fl">.2</span><span class="op">$</span>loadings</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##        Factor1 Factor2 Factor3 Factor4 Factor5 Factor6
@@ -2094,7 +2096,7 @@ reasonably briefly.</li>
 <p>Solution</p>
 <p>For this, we need the factor scores obtained in part
 (<a href="#part:score">here</a>).
-<label for="tufte-mn-269" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-269" class="margin-toggle"><span class="marginnote">There are two types of scores here: a person’s scores on the psychological test, 1 through 5, and their factor scores, which are decimal numbers centred at zero. Try not to get these confused.</span>
+<label for="tufte-mn-275" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-275" class="margin-toggle"><span class="marginnote">There are two types of scores here: a person’s scores on the psychological test, 1 through 5, and their factor scores, which are decimal numbers centred at zero. Try not to get these confused.</span>
 I’m thinking that I will create a data frame
 with the original data (with the missing values removed) and the
 factor scores together, and then look in there. This will have a
@@ -2102,10 +2104,10 @@ lot of columns, but we’ll only need to display some each time.
 This is based on my 5-factor solution. I’m adding a column
 <code>id</code> so that I know which of the individuals (with no
 missing data) we are looking at:</p>
-<div class="sourceCode" id="cb4749"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4749-1" data-line-number="1">scores<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(pers.ok<span class="fl">.1</span><span class="op">$</span>scores) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4749-2" data-line-number="2"><span class="st">  </span><span class="kw">bind_cols</span>(pers.ok) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4749-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">row_number</span>())</a>
-<a class="sourceLine" id="cb4749-4" data-line-number="4">scores<span class="fl">.1</span></a></code></pre></div>
+<div class="sourceCode" id="cb4787"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4787-1" data-line-number="1">scores<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(pers.ok<span class="fl">.1</span><span class="op">$</span>scores) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4787-2" data-line-number="2"><span class="st">  </span><span class="kw">bind_cols</span>(pers.ok) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4787-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">row_number</span>())</a>
+<a class="sourceLine" id="cb4787-4" data-line-number="4">scores<span class="fl">.1</span></a></code></pre></div>
 <pre><code>## # A tibble: 433 x 50
 ##    Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2136,7 +2138,7 @@ final result into <code>as_tibble</code> to end up with a
 <code>tibble</code>.)
 Let’s start with factor 1. There are several ways to find the person
 who scores highest and/or lowest on that factor:</p>
-<div class="sourceCode" id="cb4751"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4751-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Factor1 <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(Factor1))</a></code></pre></div>
+<div class="sourceCode" id="cb4789"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4789-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Factor1 <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(Factor1))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2149,7 +2151,7 @@ who scores highest and/or lowest on that factor:</p>
 ## #   PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;,
 ## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
 <p>to display the maximum, or</p>
-<div class="sourceCode" id="cb4753"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4753-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Factor1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4791"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4791-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Factor1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 433 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2166,7 +2168,7 @@ who scores highest and/or lowest on that factor:</p>
 ## #   PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;,
 ## #   PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
 <p>to display the minimum (and in this case the five smallest ones), or</p>
-<div class="sourceCode" id="cb4755"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4755-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">abs</span>(Factor1) <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(<span class="kw">abs</span>(Factor1)))</a></code></pre></div>
+<div class="sourceCode" id="cb4793"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4793-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">abs</span>(Factor1) <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(<span class="kw">abs</span>(Factor1)))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2182,9 +2184,9 @@ who scores highest and/or lowest on that factor:</p>
 code is a bit obfuscated because I have to take absolute values
 twice. Maybe it would be clearer to create a column with the absolute
 values in it and look at that:</p>
-<div class="sourceCode" id="cb4757"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4757-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4757-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abso =</span> <span class="kw">abs</span>(Factor1)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4757-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(abso <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(abso))</a></code></pre></div>
+<div class="sourceCode" id="cb4795"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4795-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4795-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abso =</span> <span class="kw">abs</span>(Factor1)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4795-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(abso <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(abso))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 51
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2198,7 +2200,7 @@ values in it and look at that:</p>
 ## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;, abso &lt;dbl&gt;</code></pre>
 <p>Does
 this work too?</p>
-<div class="sourceCode" id="cb4759"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4759-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(Factor1))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4797"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4797-1" data-line-number="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(Factor1))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 433 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2227,12 +2229,12 @@ though, remember that we don’t need to look at <em>all</em> the
 <code>PERS</code> columns, because only some of them load highly on each
 factor. These are the ones I defined into <code>f1</code> first; the first
 ones have positive loadings and the last three have negative loadings:</p>
-<div class="sourceCode" id="cb4761"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4761-1" data-line-number="1">f1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">13</span>, <span class="dv">28</span>, <span class="dv">33</span>, <span class="dv">38</span>, <span class="dv">8</span>, <span class="dv">18</span>, <span class="dv">23</span>, <span class="dv">43</span>)</a>
-<a class="sourceLine" id="cb4761-2" data-line-number="2">scores<span class="fl">.1</span> <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4761-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abso =</span> <span class="kw">abs</span>(Factor1)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4761-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(abso <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(abso)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4761-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(id, Factor1, <span class="kw">num_range</span>(<span class="st">&quot;PERS&quot;</span>, f1, <span class="dt">width =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4761-6" data-line-number="6"><span class="st">  </span><span class="kw">print</span>(<span class="dt">width =</span> <span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4799"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4799-1" data-line-number="1">f1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">13</span>, <span class="dv">28</span>, <span class="dv">33</span>, <span class="dv">38</span>, <span class="dv">8</span>, <span class="dv">18</span>, <span class="dv">23</span>, <span class="dv">43</span>)</a>
+<a class="sourceLine" id="cb4799-2" data-line-number="2">scores<span class="fl">.1</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4799-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abso =</span> <span class="kw">abs</span>(Factor1)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4799-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(abso <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(abso)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4799-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(id, Factor1, <span class="kw">num_range</span>(<span class="st">&quot;PERS&quot;</span>, f1, <span class="dt">width =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4799-6" data-line-number="6"><span class="st">  </span><span class="kw">print</span>(<span class="dt">width =</span> <span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 11
 ##      id Factor1 PERS03 PERS13 PERS28 PERS33 PERS38 PERS08 PERS18 PERS23 PERS43
 ##   &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2258,13 +2260,13 @@ Having struggled through that, factors 2 and 3 are repeats of
 this. The high loaders on factor 2 are the ones shown in <code>f2</code>
 below, with the first five loading positively and the last three
 negatively.
-<label for="tufte-mn-270" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-270" class="margin-toggle"><span class="marginnote">I think the last four items in the entire survey are different; otherwise the total number of items would be a multiple of 5.</span></p>
-<div class="sourceCode" id="cb4763"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4763-1" data-line-number="1">f2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">16</span>, <span class="dv">26</span>, <span class="dv">36</span>, <span class="dv">6</span>, <span class="dv">21</span>, <span class="dv">31</span>)</a>
-<a class="sourceLine" id="cb4763-2" data-line-number="2">scores<span class="fl">.1</span> <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4763-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abso =</span> <span class="kw">abs</span>(Factor2)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4763-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(abso <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(abso)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4763-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(id, Factor2, <span class="kw">num_range</span>(<span class="st">&quot;PERS&quot;</span>, f2, <span class="dt">width =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4763-6" data-line-number="6"><span class="st">  </span><span class="kw">print</span>(<span class="dt">width =</span> <span class="ot">Inf</span>)</a></code></pre></div>
+<label for="tufte-mn-276" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-276" class="margin-toggle"><span class="marginnote">I think the last four items in the entire survey are different; otherwise the total number of items would be a multiple of 5.</span></p>
+<div class="sourceCode" id="cb4801"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4801-1" data-line-number="1">f2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">16</span>, <span class="dv">26</span>, <span class="dv">36</span>, <span class="dv">6</span>, <span class="dv">21</span>, <span class="dv">31</span>)</a>
+<a class="sourceLine" id="cb4801-2" data-line-number="2">scores<span class="fl">.1</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4801-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abso =</span> <span class="kw">abs</span>(Factor2)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4801-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(abso <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(abso)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4801-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(id, Factor2, <span class="kw">num_range</span>(<span class="st">&quot;PERS&quot;</span>, f2, <span class="dt">width =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4801-6" data-line-number="6"><span class="st">  </span><span class="kw">print</span>(<span class="dt">width =</span> <span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 10
 ##      id Factor2 PERS01 PERS11 PERS16 PERS26 PERS36 PERS06 PERS21 PERS31
 ##   &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2279,12 +2281,12 @@ consistent with a negative factor score.</p>
 (neg), 29, 34 (neg), 39. (Item 44, which you’d expect to be part of
 this factor, is actually in factor 5.) First we see which individual
 this is:</p>
-<div class="sourceCode" id="cb4765"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4765-1" data-line-number="1">f3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">14</span>, <span class="dv">19</span>, <span class="dv">29</span>, <span class="dv">39</span>, <span class="dv">9</span>, <span class="dv">24</span>, <span class="dv">34</span>)</a>
-<a class="sourceLine" id="cb4765-2" data-line-number="2">scores<span class="fl">.1</span> <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4765-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abso =</span> <span class="kw">abs</span>(Factor3)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4765-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(abso <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(abso)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4765-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(id, Factor3, <span class="kw">num_range</span>(<span class="st">&quot;PERS&quot;</span>, f3, <span class="dt">width =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4765-6" data-line-number="6"><span class="st">  </span><span class="kw">print</span>(<span class="dt">width =</span> <span class="ot">Inf</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4803"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4803-1" data-line-number="1">f3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">14</span>, <span class="dv">19</span>, <span class="dv">29</span>, <span class="dv">39</span>, <span class="dv">9</span>, <span class="dv">24</span>, <span class="dv">34</span>)</a>
+<a class="sourceLine" id="cb4803-2" data-line-number="2">scores<span class="fl">.1</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4803-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abso =</span> <span class="kw">abs</span>(Factor3)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4803-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(abso <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(abso)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4803-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(id, Factor3, <span class="kw">num_range</span>(<span class="st">&quot;PERS&quot;</span>, f3, <span class="dt">width =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4803-6" data-line-number="6"><span class="st">  </span><span class="kw">print</span>(<span class="dt">width =</span> <span class="ot">Inf</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 10
 ##      id Factor3 PERS04 PERS14 PERS19 PERS29 PERS39 PERS09 PERS24 PERS34
 ##   &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -2301,7 +2303,7 @@ would expect?</li>
 </ol>
 <p>Solution</p>
 <p>Mine are</p>
-<div class="sourceCode" id="cb4767"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4767-1" data-line-number="1">pers.ok<span class="fl">.1</span><span class="op">$</span>uniquenesses</a></code></pre></div>
+<div class="sourceCode" id="cb4805"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4805-1" data-line-number="1">pers.ok<span class="fl">.1</span><span class="op">$</span>uniquenesses</a></code></pre></div>
 <pre><code>##    PERS01    PERS02    PERS03    PERS04    PERS05    PERS06    PERS07    PERS08    PERS09 
 ## 0.3276244 0.6155884 0.4955364 0.6035655 0.5689691 0.4980334 0.5884146 0.6299781 0.5546981 
 ##    PERS10    PERS11    PERS12    PERS13    PERS14    PERS15    PERS16    PERS17    PERS18 
