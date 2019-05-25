@@ -8,83 +8,103 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
+## Warning: package 'ggplot2' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R version 3.5.3
+## Warning: package 'tibble' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R version 3.5.3
+## Warning: package 'tidyr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R version 3.5.2
+## Warning: package 'readr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R version 3.5.3
+## Warning: package 'purrr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R version 3.5.2
+## Warning: package 'dplyr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R version 3.5.2
+## Warning: package 'stringr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R version 3.5.1
+## Warning: package 'forcats' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under R version 3.5.1
+## Warning: package 'survminer' was built under
+## R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R version 3.5.1
+## Warning: package 'ggpubr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R version 3.5.1
+## Warning: package 'magrittr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R version 3.5.1
+## Warning: package 'car' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R version 3.5.1
+## Warning: package 'carData' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
+## Warning: package 'ggbiplot' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R version 3.5.1
+## Warning: package 'plyr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R version 3.5.1
+## Warning: package 'scales' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R version 3.5.1
+## Warning: package 'ggrepel' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R version 3.5.2
+## Warning: package 'broom' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'rstan' was built under R version 3.5.3
+## Warning: package 'rstan' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: package 'StanHeaders' was built
+## under R version 3.5.1
 ```
 
 
@@ -120,8 +140,8 @@ The data values are separated by (single) spaces, so `read_delim`
 is the thing:
 
 ```r
-url="http://www.utsc.utoronto.ca/~butler/c32/hg.txt"
-societies=read_delim(url," ")
+url = "http://www.utsc.utoronto.ca/~butler/c32/hg.txt"
+societies = read_delim(url, " ")
 ```
 
 ```
@@ -203,7 +223,7 @@ Solution
 A $t$-test, since we are testing a mean:
 
 ```r
-t.test(societies$density,mu=7.38)
+t.test(societies$density, mu = 7.38)
 ```
 
 ```
@@ -245,27 +265,29 @@ histogram. You'll need to pick a suitable number of bins. This one
 comes from Sturges' rule:
 
 ```r
-ggplot(societies,aes(x=density))+geom_histogram(bins=5)
+ggplot(societies, aes(x = density)) + geom_histogram(bins = 5)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-11-1} 
 Your conclusion might depend on how many bins you chose for your
 histogram. Here's 8 bins (which is really too many with only 13
 observations, but it actually shows the shape well): 
 
 
 ```r
-ggplot(societies,aes(x=density))+geom_histogram(bins=8)
+ggplot(societies, aes(x = density)) + geom_histogram(bins = 8)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-12-1} 
 
 or you can get a number of bins from one of the built-in functions,
 such as:
 
 
 ```r
-mybins=nclass.FD(societies$density)
+mybins = nclass.FD(societies$density)
 mybins
 ```
 
@@ -281,10 +303,11 @@ Other choices: a one-group boxplot:
 
 
 ```r
-ggplot(societies,aes(x=1,y=density))+geom_boxplot()
+ggplot(societies, aes(x = 1, y = density)) + geom_boxplot()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-14-1} 
 
 This isn't the best for assessing normality as such, but it will tell
 you about lack of symmetry and outliers, which are the most important
@@ -292,11 +315,12 @@ threats to the $t$-test, so it's fine here. Or, a normal quantile plot:
 
 
 ```r
-ggplot(societies,aes(sample=density))+
-stat_qq()+stat_qq_line()
+ggplot(societies, aes(sample = density)) + stat_qq() + 
+    stat_qq_line()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-15-1} 
 
 This is actually the best way to assess normality, but I'm not
 expecting you to use this plot here, because we may not have gotten to
@@ -311,7 +335,7 @@ you should have no doubts about your $t$-test; if you think it has
 something wrong with it, you should say what it is and express your
 doubts. My guess is that you will think this distribution is skewed to
 the right. Most of my plots are saying that.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The normal  quantile plot is rather interesting: it says that the uppermost  values are approximately normal, but the *smallest* eight or so  values are too bunched up to be normal. That is, normality fails not  because of the long tail on the right, but the bunching on the  left. Still right-skewed, though.</span>
+\marginnote{The normal  quantile plot is rather interesting: it says that the uppermost  values are approximately normal, but the *smallest* eight or so  values are too bunched up to be normal. That is, normality fails not  because of the long tail on the right, but the bunching on the  left. Still right-skewed, though.}
 
 On the website where I got these data, they were using the data as
 an example for another test, precisely *because* they thought the
@@ -391,7 +415,7 @@ Variable names in R can have a dot (or an underscore, but not a space)
 in them. I have grown accustomed to using dots to separate words. This
 works in R but not other languages, but is seen by some as
 old-fashioned, with underscores being the modern way.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In some  languages, a dot is used to concatenate bits of text, or as a way of  calling a method on an object. But in R, a dot has no special  meaning, and is used in function names like *t.test*. Or  *read.table*. </span> 
+\marginnote{In some  languages, a dot is used to concatenate bits of text, or as a way of  calling a method on an object. But in R, a dot has no special  meaning, and is used in function names like *t.test*. Or  *read.table*. } 
 You can also use what is called "camel case" 
 by starting each "word" after the first with an uppercase
 letter like this:
@@ -490,10 +514,12 @@ Solution
 "nothing" as in the Ken and Thomas question (part (d)):
 
 ```r
-ggplot(journey.times, aes(x = 1, y = minutes)) + geom_boxplot()
+ggplot(journey.times, aes(x = 1, y = minutes)) + 
+    geom_boxplot()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/brixham-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/brixham-1} 
 
        
 
@@ -506,14 +532,15 @@ perfectly all right to say that this distribution is skewed, and
 therefore we should doubt the $t$-test, because the upper whisker is
 longer than the lower one. In fact, the topmost value is very nearly
 an outlier:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Whether you think it is or not may depend on how  many bins you have on your histogram. With 5 bins it looks like an  outlier, but with 6 it does not. Try it and see.</span>
+\marginnote{Whether you think it is or not may depend on how  many bins you have on your histogram. With 5 bins it looks like an  outlier, but with 6 it does not. Try it and see.}
 
 
 ```r
 ggplot(journey.times, aes(x = minutes)) + geom_histogram(bins = 5)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/babbacombe-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/babbacombe-1} 
 
  
 
@@ -527,10 +554,12 @@ Perhaps I should draw a normal quantile plot:
 
 
 ```r
-ggplot(journey.times, aes(sample = minutes)) + stat_qq() + stat_qq_line()
+ggplot(journey.times, aes(sample = minutes)) + 
+    stat_qq() + stat_qq_line()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-19-1} 
 
  
 
@@ -739,7 +768,8 @@ t.test(bw$`Weight (pounds)`, mu = 7.3, alternative = "less")
 ## 	One Sample t-test
 ## 
 ## data:  bw$`Weight (pounds)`
-## t = -3.4331, df = 499, p-value = 0.0003232
+## t = -3.4331, df = 499, p-value =
+## 0.0003232
 ## alternative hypothesis: true mean is less than 7.3
 ## 95 percent confidence interval:
 ##      -Inf 7.179752
@@ -786,7 +816,8 @@ but this is a matter of taste):
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 10)
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-25-1} 
 
  
 
@@ -808,10 +839,12 @@ the idea in class. Here's the normal quantile plot for these data:
 
 
 ```r
-ggplot(bw, aes(sample = `Weight (pounds)`)) + stat_qq() + stat_qq_line()
+ggplot(bw, aes(sample = `Weight (pounds)`)) + 
+    stat_qq() + stat_qq_line()
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-26-1} 
 
  
 
@@ -915,7 +948,7 @@ confidence level that we want. I'm going with `with` this
 time, though the dollar-sign thing is equally as good:
 
 ```r
-with(nenana, t.test(JulianDate, conf.level = 0.90))
+with(nenana, t.test(JulianDate, conf.level = 0.9))
 ```
 
 ```
@@ -975,7 +1008,8 @@ with(nenana, t.test(JulianDate, mu = 130, alternative = "less"))
 ## 	One Sample t-test
 ## 
 ## data:  JulianDate
-## t = -7.0063, df = 86, p-value = 2.575e-10
+## t = -7.0063, df = 86, p-value =
+## 2.575e-10
 ## alternative hypothesis: true mean is less than 130
 ## 95 percent confidence interval:
 ##      -Inf 126.6018
@@ -1018,14 +1052,16 @@ I liked  the `ggplot` with a smooth trend on it:
 
 
 ```r
-ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() + geom_smooth()
+ggplot(nenana, aes(x = Year, y = JulianDate)) + 
+    geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-30-1} 
 
  
 
@@ -1053,11 +1089,12 @@ fits a line; as we see later, `lm` does regressions in R:
 
 
 ```r
-ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() +
-  geom_smooth(method = "lm")
+ggplot(nenana, aes(x = Year, y = JulianDate)) + 
+    geom_point() + geom_smooth(method = "lm")
 ```
 
-<img src="04-one-sample-inference_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
+
+\includegraphics{04-one-sample-inference_files/figure-latex/unnamed-chunk-31-1} 
 
  
 

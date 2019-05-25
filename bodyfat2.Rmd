@@ -1,188 +1,175 @@
+##  Body fat as repeated measures
 
 
- How can we predict an individual's body fat? Physiologists
-measured body fat for 20 individuals, along with three other
-quantitative measurements: triceps skinfold thickness, thigh
-circumference and midarm circumference. (Measuring body fat requires a
-special device, but the other variables are easy to measure and might
-give a good estimate of body fat.) The data can be found at
-[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat2.txt). The data
-values are separated by *tabs*.
+ This one is also stolen from STAC32. Athletes are concerned
+with measuring their body fat percentage. Two different methods are
+available: one using ultrasound, and the other using X-ray
+technology. We are interested in whether there is a difference in the
+mean body fat percentage as measured by these two methods, and if so,
+how big that difference is. Data on 16 athletes are at
+[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt).
 
 
 
-(a) Read in (to SAS) and display the data. (You may display all
-the data.)
+(a) Read in the data and check that you have a sensible number of
+rows and columns.
+
 
 
 Solution
 
 
-Something like this. Remember the `delimiter` line that
-you need for tabs:
-\begin{Datastep}
-filename myurl url 'http://www.utsc.utoronto.ca/~butler/c32/bodyfat2.txt';
-proc import
-datafile=myurl
-out=bodyfat
-dbms=dlm
-replace;
-getnames=yes;
-delimiter='09'x;
-\end{Datastep}
-\begin{Sascode}[store=qonut]
-proc print;        
-\end{Sascode}
-\Listing[store=qonut, fontsize=footnotesize]{qonutt}
-As indicated, 20 observations, and all the variables
-quantitative. 
+This kind of thing:
+```{r }
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat <- read_delim(my_url, " ")
+bodyfat
+```
+
+ 
+
+16 rows (athletes) and 3 columns, one for each measurement
+method and one labelling the athletes. All good.
 
 
 
-(b) Fit a regression predicting body fat from all the other
-variables. 
+
+
+(b) Carry out a suitable (matched-pairs) $t$-test to determine
+whether the means are the same or different. 
+
 
 
 Solution
 
 
-`proc reg`, nothing very surprising:
-\begin{Sascode}[store=kufez]
-proc reg;
-model Bodyfat=Triceps Thigh Midarm;
-\end{Sascode}
-\Listing[store=kufez, fontsize=footnotesize]{kufezz}
+Feed the two columns into `t.test` along with
+`paired=T`. Remember that this is (in effect) a one-sample
+$t$-test, so that you can't use a `data=`. You therefore have
+to wrap everything in a `with`:
+```{r }
+with(bodyfat, t.test(xray, ultrasound, paired = T))
+```
+
+ 
+
+The test we want is two-sided, so we didn't have to take any special
+steps to get that.
 
 
 
-(c) What is R-squared for this regression? Look at the P-values
-for the individual explanatory variables. Does this seem surprising?
-Explain briefly.
+
+
+(c) What do you conclude from the test?
+
 
 
 Solution
 
 
-R-squared is about 80\% (0.8014), decently high. But *none*
-of the explanatory variables are significant; the lowest P-value
-is 0.1699. This seems surprising because if the regression fits
-reasonably well, as this one does, you would expect at least one
-of the explanatory variables to be significant. (The reason, if
-you wish to make a guess, is that at least two of the explanatory
-variables are highly correlated with each other, so that we
-don't know which one deserves the "credit" for predicting body
-fat. We'll explore this later.)
-SAS is not case sensitive, so you don't need those Initial
-Capital Letters on the variable names.
-I would have guessed that larger body fat would go with larger
-measurements on the other variables, so I would have expected
-those slopes to be positive. We'll keep an eye on this.
+The P-value of 0.7623 is not at all small, so there is no way we can
+reject the null hypothesis.
+`r tufte::margin_note("My hat stays on my head.")` There
+is no evidence of a difference in means; we can act as if the two
+methods produce the same mean body fat percentage. 
+That is to say, on this evidence we can use either method, whichever
+one is cheaper or more convenient.
+
+ 
 
 
+(d) Run a repeated-measures analysis of variance, treating the two
+methods of measuring body fat as the repeated measures (ie., playing
+the role of "time" that you have seen in most of the other repeated
+measures analyses). There is no "treatment" here, so there is
+nothing to go on the right side of the squiggle. Insert a `1`
+there to mean "just an intercept". Display the results.
 
-(d) Remove the least significant explanatory variable from your
-regression. What has happened to the P-values for the other
-explanatory variables? 
 
 
 Solution
 
 
-This means fitting a model without `Thigh`. SAS doesn't
-have `update`, so this means copying and pasting your
-code and deleting `Thigh`:
-\begin{Sascode}[store=gufow]
-proc reg;
-model Bodyfat=Triceps Midarm;
-\end{Sascode}
-\Listing[store=gufow, fontsize=footnotesize]{gufoww}
-The P-values for the remaining two explanatory variables have
-become (much) smaller. In particular, the P-value for
-`Triceps` is now *strongly* significant.
-This suggests that `Triceps` was strongly correlated with
-the variable `Thigh` that we removed. We can investigate this:
-\begin{Sascode}[store=guyuy]
-proc sgplot;
-scatter x=Thigh y=Triceps;
-\end{Sascode}
-\Graphic[store=guyuy, scale=0.7]{guyuyuy}
-That's a decently strong correlation: when one variable is high,
-the other one is too. That's why it was difficult for the
-regression to decide which of `Thigh` and
-`Triceps` deserved to stay.
-I note that the slope for
-`Midarm` is still negative, and now significant, so it
-really does seem to be true that if you have a larger midarm
-circumference, you have *less* body fat, all else (triceps
-skinfold thickness) being equal.
+Construct the response variable, run `lm`, construct the
+within-subjects part of the design, run `Manova`:
+
+```{r }
+bodyfat %>%
+  select(xray:ultrasound) %>%
+  as.matrix() -> response
+bodyfat.1 <- lm(response ~ 1)
+methods <- colnames(response)
+methods.df <- data.frame(methods)
+bodyfat.2 <- Manova(bodyfat.1, idata = methods.df, idesign = ~methods)
+bodyfat.2
+```
+
+ 
 
 
 
-(e) Make any other changes you would like to make to your
-regression model, or explain briefly why you are happy with the
-model as it stands. 
+
+(e) Compare your repeated-measures analysis to your matched-pairs
+one. Do you draw the same conclusions?
+
 
 
 Solution
 
 
-Both of the remaining explanatory variables are now significant,
-so it would be a mistake to remove either of them. We are
-therefore happy with the model as it stands.
-(This statement is really only worth one point, but I didn't
-want to give it away: if you thought you needed to fit another
-model and that had been correct, you would have deserved two
-points for doing it.)
+The P-value for `methods`, which is testing the same thing
+as the matched pairs, is 0.7623, which is actually
+*identical* to the matched pairs $t$-test, and so the
+conclusion is identical also. That is, there is no difference
+between the two methods for measuring body fat. 
+This goes to show that repeated measures gives the same answer as
+a matched-pairs $t$-test in the situation where they both
+apply. But repeated measures is, as we have seen, a lot more general.
+Since this really is repeated measures, we ought to be able to use
+a mixed model here too. We need "long" or "tidy" format, which
+we don't have yet. One pipe to save them all, to paraphrase Lord
+of the Rings
+`r tufte::margin_note("The movies of Lord of the Rings were filmed      in New Zealand, which is also the country in which R was first      designed.")` --- put all the fat measurements in one column with a
+label saying which `method` they were obtained with; create
+a column which is the athlete number as a factor; fit the linear
+mixed model; see what we can drop from it:
+```{r }
+bodyfat
+bodyfat %>%
+  gather(method, fat, xray:ultrasound) %>%
+  mutate(fathlete = factor(athlete)) %>%
+  lmer(fat ~ method + (1 | fathlete), data = .) %>%
+  drop1(test = "Chisq")
+```
+
+     
+
+Once again, there is no difference between methods, and though the
+P-value is different from the matched pairs or profile analysis, it is
+very close to those.
+
+If you're not clear about the tidy data frame used for input to
+`lmer`, pull the top two lines off the chain and see what they produce:
+
+```{r }
+bodyfat %>%
+  gather(method, fat, xray:ultrasound) %>%
+  mutate(fathlete = factor(athlete))
+```
+
+ 
+
+Each athlete now appears twice: once with their `fat` measured
+by `xray`, and again with it measured by
+`ultrasound`. The column `fathlete` is a factor.
+
+The mixed model took me two goes to get right: I forgot that I needed the
+`data=.` in `lmer`, because it works like `lm`
+with the model formula first, not the input data. If the chain is
+going too fast for you, create the tidy data frame and save it, then
+use the saved data frame as input to `lmer`.
 
 
-
-(f) For your preferred model, critically assess whether your
-residuals are (i) approximately random with respect to suitable
-things and (ii) approximately normal. You probably already have the
-output you need to investigate this. What do your conclusions tell
-you about your regression?
-
-
-Solution
-
-
-It's those graphs from the last regression you did:
-\Graphic[store=gufow, scale=0.7]{gufowx}
-On the first $3 \times 3$ "panel", look at the top left
-graph. This is the plot of residuals against fitted values. It
-is pretty much a random scatter. Also look at the last two
-plots; these are the residuals against the two remaining
-explanatory variables, and they both look random as well. (The
-one on the left, against `Triceps`, is pretty much a
-textbook random scatter).
-This all says that the residuals are random relative to anything
-relevant, or to say it another way, there is no remaining
-pattern that we need to incorporate in the model. To assess the
-residuals for normality, look at the normal quantile plot, which
-is the first plot on the second row of the $3\times 3$
-array.\endnote{I mistyped this as "arrau", and was reminded
-that there was a famous Chilean pianist called Claudio
-Arrau. Here he is playing Beethoven's "Waldstein" sonata:
-[link](https://www.youtube.com/watch?v=dL0JLNt_3EE). The people
-behind him are part of the audience, rather than, as is
-usually the case, the orchestra. I'm guessing that those are
-cheaper seats, because the lid of a grand piano always opens
-up so that the best sound comes if the pianist is (from your
-point of view as an audience member) on the left of the piano.} 
-The normal quantile plot is basically straight, I would say,
-with those wiggles being inconsequential ones, not indicative of
-any kind of curve. If the distribution had short tails, there
-would be a rather more pronounced S-shape than you see here.
-The bottom left plot of the $3 \times 3$ array is a histogram of
-the residuals. This does not look very normal, but, as we have
-seen, the histogram is rather a crude tool for assessing
-normality. 
-Concluding, as we have, that there are no problems with the
-residuals means that the regression is satisfactory; it does a
-good job of describing the shape of the relationship. So we
-should be happy to use this regression to predict body fat of
-future individuals based on their triceps and midarm
-measurements. 
 
 
 

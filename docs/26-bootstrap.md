@@ -99,7 +99,8 @@ Make a suitable graph. The obvious one is a histogram:
 ggplot(aircon, aes(x = hours)) + geom_histogram(bins = 7)
 ```
 
-<img src="26-bootstrap_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
+
+\includegraphics{26-bootstrap_files/figure-latex/unnamed-chunk-6-1} 
 
  
 
@@ -125,7 +126,8 @@ Another possibility is a one-group boxplot:
 ggplot(aircon, aes(y = hours, x = 1)) + geom_boxplot()
 ```
 
-<img src="26-bootstrap_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
+
+\includegraphics{26-bootstrap_files/figure-latex/unnamed-chunk-8-1} 
 
  
 
@@ -133,10 +135,12 @@ If you like, you can do a normal quantile plot. I rank that third here, because 
 
 
 ```r
-ggplot(aircon, aes(sample = hours)) + stat_qq() + stat_qq_line()
+ggplot(aircon, aes(sample = hours)) + stat_qq() + 
+    stat_qq_line()
 ```
 
-<img src="26-bootstrap_files/figure-html/unnamed-chunk-9-1.png" width="672"  />
+
+\includegraphics{26-bootstrap_files/figure-latex/unnamed-chunk-9-1} 
 
  
 Pick a visual and defend it.
@@ -161,8 +165,8 @@ Something like this, therefore:
 
 
 ```r
-rerun(1000, sample(aircon$hours, replace = T)) %>%
-  map_dbl(~ mean(.)) -> means
+means <- rerun(1000, sample(aircon$hours, replace = T)) %>% 
+    map_dbl(~mean(.))
 ```
 
 
@@ -182,10 +186,12 @@ This:
 
 
 ```r
-ggplot(tibble(means), aes(sample = means)) + stat_qq() + stat_qq_line()
+ggplot(tibble(means), aes(sample = means)) + stat_qq() + 
+    stat_qq_line()
 ```
 
-<img src="26-bootstrap_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+\includegraphics{26-bootstrap_files/figure-latex/unnamed-chunk-11-1} 
 
  
 
@@ -295,7 +301,7 @@ This means (possibly) installing and (certainly) loading the `bootstrap` package
 
 ```r
 theta <- function(x) {
-  mean(x)
+    mean(x)
 }
 bca_all <- with(aircon, bcanon(hours, 1000, theta))
 bca <- bca_all$confpoints
@@ -325,10 +331,8 @@ Or, if you feel like some extra coding: turn this matrix into a data frame, grab
 
 
 ```r
-bca %>%
-  as_tibble() %>%
-  filter(alpha %in% c(0.025, 0.975)) %>%
-  pull(`bca point`)
+bca %>% as_tibble() %>% filter(alpha %in% c(0.025, 
+    0.975)) %>% pull(`bca point`)
 ```
 
 ```
@@ -435,8 +439,8 @@ The usual do-it-yourself bootstrap:
 
 
 ```r
-rerun(1000, sample(aircon$hours, replace = T)) %>%
-  map_dbl(~ median(.)) -> medians
+medians <- rerun(1000, sample(aircon$hours, replace = T)) %>% 
+    map_dbl(~median(.))
 ```
 
  
@@ -447,10 +451,12 @@ As for a plot, well, this:
 
 
 ```r
-ggplot(tibble(medians), aes(sample = medians)) + stat_qq() + stat_qq_line()
+ggplot(tibble(medians), aes(sample = medians)) + 
+    stat_qq() + stat_qq_line()
 ```
 
-<img src="26-bootstrap_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+
+\includegraphics{26-bootstrap_files/figure-latex/unnamed-chunk-20-1} 
 
  
 
@@ -473,7 +479,8 @@ having few enough bins to show the shape.)
 ggplot(tibble(medians), aes(x = medians)) + geom_histogram(bins = 30)
 ```
 
-<img src="26-bootstrap_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+
+\includegraphics{26-bootstrap_files/figure-latex/unnamed-chunk-21-1} 
 
  
 
@@ -509,7 +516,7 @@ Yet more copying and pasting (from the previous question):
 
 ```r
 theta <- function(x) {
-  median(x)
+    median(x)
 }
 bca_all <- with(aircon, bcanon(hours, 1000, theta))
 bca <- bca_all$confpoints

@@ -11,83 +11,103 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
+## Warning: package 'ggplot2' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R version 3.5.3
+## Warning: package 'tibble' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R version 3.5.3
+## Warning: package 'tidyr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R version 3.5.2
+## Warning: package 'readr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R version 3.5.3
+## Warning: package 'purrr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R version 3.5.2
+## Warning: package 'dplyr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R version 3.5.2
+## Warning: package 'stringr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R version 3.5.1
+## Warning: package 'forcats' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under R version 3.5.1
+## Warning: package 'survminer' was built under
+## R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R version 3.5.1
+## Warning: package 'ggpubr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R version 3.5.1
+## Warning: package 'magrittr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R version 3.5.1
+## Warning: package 'car' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R version 3.5.1
+## Warning: package 'carData' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
+## Warning: package 'ggbiplot' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R version 3.5.1
+## Warning: package 'plyr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R version 3.5.1
+## Warning: package 'scales' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R version 3.5.1
+## Warning: package 'ggrepel' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R version 3.5.2
+## Warning: package 'broom' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'rstan' was built under R version 3.5.3
+## Warning: package 'rstan' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: package 'StanHeaders' was built
+## under R version 3.5.1
 ```
 
 
@@ -172,11 +192,15 @@ summary(simple.1)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value   Pr(>F)    
-## group        2  63.45   31.72    21.2 0.000393 ***
-## Residuals    9  13.47    1.50                     
+##             Df Sum Sq Mean Sq F value
+## group        2  63.45   31.72    21.2
+## Residuals    9  13.47    1.50        
+##               Pr(>F)    
+## group       0.000393 ***
+## Residuals               
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
 ```r
@@ -217,11 +241,15 @@ summary(simple.2)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value  Pr(>F)   
-## group        2  19.05   9.525   9.318 0.00642 **
-## Residuals    9   9.20   1.022                   
+##             Df Sum Sq Mean Sq F value
+## group        2  19.05   9.525   9.318
+## Residuals    9   9.20   1.022        
+##              Pr(>F)   
+## group       0.00642 **
+## Residuals             
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
 ```r
@@ -261,10 +289,12 @@ they are both response variables (!):
 
 
 ```r
-ggplot(simple, aes(x = y1, y = y2, colour = group)) + geom_point()
+ggplot(simple, aes(x = y1, y = y2, colour = group)) + 
+    geom_point()
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-7-1} 
 
 
     
@@ -309,11 +339,15 @@ summary(simple.3)
 ```
 
 ```
-##           Df Pillai approx F num Df den Df    Pr(>F)    
-## group      2 1.3534   9.4196      4     18 0.0002735 ***
-## Residuals  9                                            
+##           Df Pillai approx F num Df den Df
+## group      2 1.3534   9.4196      4     18
+## Residuals  9                              
+##              Pr(>F)    
+## group     0.0002735 ***
+## Residuals              
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -391,7 +425,7 @@ urine
 ##  8 a          30       12       6.3      14.5
 ##  9 a          28       10.1     5.45      0.9
 ## 10 a          24       14.7     3.75      2  
-## # … with 35 more rows
+## # ... with 35 more rows
 ```
 
      
@@ -408,22 +442,28 @@ Solution
 Just churn through it:
 
 ```r
-ggplot(urine, aes(x = obesity, y = creatinine)) + geom_boxplot()
+ggplot(urine, aes(x = obesity, y = creatinine)) + 
+    geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-1} 
 
 ```r
-ggplot(urine, aes(x = obesity, y = chlorine)) + geom_boxplot()
+ggplot(urine, aes(x = obesity, y = chlorine)) + 
+    geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-2.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-2} 
 
 ```r
-ggplot(urine, aes(x = obesity, y = chloride)) + geom_boxplot()
+ggplot(urine, aes(x = obesity, y = chloride)) + 
+    geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-3.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-3} 
 
      
 
@@ -433,13 +473,13 @@ first rather than the $x$s:
 
 
 ```r
-urine %>%
-  gather(yname, y, creatinine:chlorine) %>%
-  ggplot(aes(x = obesity, y = y)) + geom_boxplot() +
-  facet_wrap(~yname, scales = "free", ncol = 2)
+urine %>% gather(yname, y, creatinine:chlorine) %>% 
+    ggplot(aes(x = obesity, y = y)) + geom_boxplot() + 
+    facet_wrap(~yname, scales = "free", ncol = 2)
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-10-1} 
 
  
 
@@ -448,7 +488,7 @@ I decided to throw a couple of things in here: first, the
 on different scales, and second, the `ncol=2` to arrange the
 facets in (3 cells of) a $2\times 2$ grid, rather than having them
 come out tall and skinny.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Like one of those crazy drinks at  Starbucks.</span> It's unusual to have faceted boxplots, but this is one
+\marginnote{Like one of those crazy drinks at  Starbucks.} It's unusual to have faceted boxplots, but this is one
 of those cases where it makes sense. (The key is different $y$'s but
 the same $x$, I think.)
 
@@ -482,17 +522,22 @@ Solution
 Create the response variable and run `manova`:
 
 ```r
-response <- with(urine, cbind(creatinine, chlorine, chloride))
+response <- with(urine, cbind(creatinine, chlorine, 
+    chloride))
 urine.1 <- manova(response ~ obesity, data = urine)
 summary(urine.1)
 ```
 
 ```
-##           Df  Pillai approx F num Df den Df  Pr(>F)  
-## obesity    3 0.43144   2.2956      9    123 0.02034 *
-## Residuals 41                                         
+##           Df  Pillai approx F num Df den Df
+## obesity    3 0.43144   2.2956      9    123
+## Residuals 41                               
+##            Pr(>F)  
+## obesity   0.02034 *
+## Residuals          
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -522,10 +567,13 @@ Manova(response.1)
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##         Df test stat approx F num Df den Df  Pr(>F)  
-## obesity  3   0.43144   2.2956      9    123 0.02034 *
+##         Df test stat approx F num Df den Df
+## obesity  3   0.43144   2.2956      9    123
+##          Pr(>F)  
+## obesity 0.02034 *
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -595,19 +643,22 @@ athletes
 
 ```
 ## # A tibble: 202 x 13
-##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
-##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
-##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
-##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
-##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
-##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
-##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
-##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
-##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
-##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
-## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
-## # … with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
+##    Sex    Sport   RCC   WCC    Hc    Hg  Ferr
+##    <chr>  <chr> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 female Netb~  4.56  13.3  42.2  13.6    20
+##  2 female Netb~  4.15   6    38    12.7    59
+##  3 female Netb~  4.16   7.6  37.5  12.3    22
+##  4 female Netb~  4.32   6.4  37.7  12.3    30
+##  5 female Netb~  4.06   5.8  38.7  12.8    78
+##  6 female Netb~  4.12   6.1  36.6  11.8    21
+##  7 female Netb~  4.17   5    37.4  12.7   109
+##  8 female Netb~  3.8    6.6  36.5  12.4   102
+##  9 female Netb~  3.96   5.5  36.3  12.4    71
+## 10 female Netb~  4.44   9.7  41.4  14.1    64
+## # ... with 192 more rows, and 6 more
+## #   variables: BMI <dbl>, SSF <dbl>,
+## #   `%Bfat` <dbl>, LBM <dbl>, Ht <dbl>,
+## #   Wt <dbl>
 ```
 
      
@@ -680,13 +731,19 @@ summary(htwt.1)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df Pr(>F)    
-## Sex         1 0.52412  101.325      2    184 <2e-16 ***
-## Sport       9 0.87914   16.123     18    370 <2e-16 ***
-## Sex:Sport   6 0.04105    0.646     12    370 0.8023    
-## Residuals 185                                          
+##            Df  Pillai approx F num Df den Df
+## Sex         1 0.52412  101.325      2    184
+## Sport       9 0.87914   16.123     18    370
+## Sex:Sport   6 0.04105    0.646     12    370
+## Residuals 185                               
+##           Pr(>F)    
+## Sex       <2e-16 ***
+## Sport     <2e-16 ***
+## Sex:Sport 0.8023    
+## Residuals           
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -733,12 +790,17 @@ summary(htwt.4)
 ```
 
 ```
-##            Df  Pillai approx F num Df den Df    Pr(>F)    
-## Sex         1 0.51888  102.454      2    190 < 2.2e-16 ***
-## Sport       9 0.86923   16.314     18    382 < 2.2e-16 ***
-## Residuals 191                                             
+##            Df  Pillai approx F num Df den Df
+## Sex         1 0.51888  102.454      2    190
+## Sport       9 0.86923   16.314     18    382
+## Residuals 191                               
+##              Pr(>F)    
+## Sex       < 2.2e-16 ***
+## Sport     < 2.2e-16 ***
+## Residuals              
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
    
@@ -751,8 +813,9 @@ htwt.5 <- update(htwt.1, . ~ . - Sex:Sport)
 ```
 
 ```
-## Warning in if (projections) qr <- lmcall$qr <- TRUE: the condition has
-## length > 1 and only the first element will be used
+## Warning in if (projections) qr <- lmcall$qr
+## <- TRUE: the condition has length > 1 and
+## only the first element will be used
 ```
 
 ```
@@ -776,11 +839,15 @@ htwt.7
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##       Df test stat approx F num Df den Df    Pr(>F)    
-## Sex    1   0.44278   75.489      2    190 < 2.2e-16 ***
-## Sport  9   0.86923   16.314     18    382 < 2.2e-16 ***
+##       Df test stat approx F num Df den Df
+## Sex    1   0.44278   75.489      2    190
+## Sport  9   0.86923   16.314     18    382
+##          Pr(>F)    
+## Sex   < 2.2e-16 ***
+## Sport < 2.2e-16 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -797,11 +864,15 @@ htwt.9
 ```
 ## 
 ## Type II MANOVA Tests: Pillai test statistic
-##       Df test stat approx F num Df den Df    Pr(>F)    
-## Sex    1   0.44278   75.489      2    190 < 2.2e-16 ***
-## Sport  9   0.86923   16.314     18    382 < 2.2e-16 ***
+##       Df test stat approx F num Df den Df
+## Sex    1   0.44278   75.489      2    190
+## Sport  9   0.86923   16.314     18    382
+##          Pr(>F)    
+## Sex   < 2.2e-16 ***
+## Sport < 2.2e-16 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -840,13 +911,24 @@ summary(htwt.9)
 ## Wt 6146.078 8242.718
 ## 
 ## Multivariate Tests: Sex
-##                  Df test stat approx F num Df den Df     Pr(>F)    
-## Pillai            1 0.4427781 75.48862      2    190 < 2.22e-16 ***
-## Wilks             1 0.5572219 75.48862      2    190 < 2.22e-16 ***
-## Hotelling-Lawley  1 0.7946171 75.48862      2    190 < 2.22e-16 ***
-## Roy               1 0.7946171 75.48862      2    190 < 2.22e-16 ***
+##                  Df test stat approx F
+## Pillai            1 0.4427781 75.48862
+## Wilks             1 0.5572219 75.48862
+## Hotelling-Lawley  1 0.7946171 75.48862
+## Roy               1 0.7946171 75.48862
+##                  num Df den Df     Pr(>F)
+## Pillai                2    190 < 2.22e-16
+## Wilks                 2    190 < 2.22e-16
+## Hotelling-Lawley      2    190 < 2.22e-16
+## Roy                   2    190 < 2.22e-16
+##                     
+## Pillai           ***
+## Wilks            ***
+## Hotelling-Lawley ***
+## Roy              ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## ------------------------------------------
 ##  
@@ -858,13 +940,24 @@ summary(htwt.9)
 ## Wt 7070.085 13727.950
 ## 
 ## Multivariate Tests: Sport
-##                  Df test stat approx F num Df den Df     Pr(>F)    
-## Pillai            9 0.8692278 16.31358     18    382 < 2.22e-16 ***
-## Wilks             9 0.3132928 16.60578     18    380 < 2.22e-16 ***
-## Hotelling-Lawley  9 1.6093145 16.89780     18    378 < 2.22e-16 ***
-## Roy               9 1.0593835 22.48247      9    191 < 2.22e-16 ***
+##                  Df test stat approx F
+## Pillai            9 0.8692278 16.31358
+## Wilks             9 0.3132928 16.60578
+## Hotelling-Lawley  9 1.6093145 16.89780
+## Roy               9 1.0593835 22.48247
+##                  num Df den Df     Pr(>F)
+## Pillai               18    382 < 2.22e-16
+## Wilks                18    380 < 2.22e-16
+## Hotelling-Lawley     18    378 < 2.22e-16
+## Roy                   9    191 < 2.22e-16
+##                     
+## Pillai           ***
+## Wilks            ***
+## Hotelling-Lawley ***
+## Roy              ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -920,10 +1013,12 @@ all) to gender.
 With that in mind, I would go for this one:
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, shape = Sex)) + geom_point()
+ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, 
+    shape = Sex)) + geom_point()
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-23-1} 
 
      
 
@@ -935,56 +1030,72 @@ such as these:
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, size = Sex)) + geom_point()
+ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, 
+    size = Sex)) + geom_point()
 ```
 
 ```
-## Warning: Using size for a discrete variable is not advised.
+## Warning: Using size for a discrete variable
+## is not advised.
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
-     
-
-
-```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, size = Sex)) + geom_point()
-```
-
-```
-## Warning: Using size for a discrete variable is not advised.
-```
-
-```
-## Warning: The shape palette can deal with a maximum of 6 discrete values
-## because more than 6 becomes difficult to discriminate; you have
-## 10. Consider specifying shapes manually if you must have them.
-```
-
-```
-## Warning: Removed 72 rows containing missing values (geom_point).
-```
-
-<img src="19-manova_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-24-1} 
 
      
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point()
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
+    size = Sex)) + geom_point()
 ```
 
 ```
-## Warning: The shape palette can deal with a maximum of 6 discrete values
-## because more than 6 becomes difficult to discriminate; you have
-## 10. Consider specifying shapes manually if you must have them.
+## Warning: Using size for a discrete variable
+## is not advised.
 ```
 
 ```
-## Warning: Removed 72 rows containing missing values (geom_point).
+## Warning: The shape palette can deal with a
+## maximum of 6 discrete values because
+## more than 6 becomes difficult to
+## discriminate; you have 10. Consider
+## specifying shapes manually if you must
+## have them.
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+```
+## Warning: Removed 72 rows containing missing values
+## (geom_point).
+```
+
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-25-1} 
+
+     
+
+
+```r
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
+    colour = Sex)) + geom_point()
+```
+
+```
+## Warning: The shape palette can deal with a
+## maximum of 6 discrete values because
+## more than 6 becomes difficult to
+## discriminate; you have 10. Consider
+## specifying shapes manually if you must
+## have them.
+```
+
+```
+## Warning: Removed 72 rows containing missing values
+## (geom_point).
+```
+
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-26-1} 
 
      
 
@@ -1016,17 +1127,18 @@ avoid that. Here's how:
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() +
-  scale_shape_manual(values = 1:10)
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
+    colour = Sex)) + geom_point() + scale_shape_manual(values = 1:10)
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-27-1} 
 
      
 
 I agree with `ggplot2` that this many shapes are hard to tell
 apart,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Having said that, the shapes are less anbiguous than  the colours, because if you're willing to study the legend, you can  work out exactly which sport a shape belongs to, whereas the colours  might be hard to tell apart at all.</span> but if you can figure this out,
+\marginnote{Having said that, the shapes are less anbiguous than  the colours, because if you're willing to study the legend, you can  work out exactly which sport a shape belongs to, whereas the colours  might be hard to tell apart at all.} but if you can figure this out,
 you achieve the goal of producing a plot with no warnings, so you get
 full marks. (We need 10 shapes because there are 10 different sports,
 so we have to specify 10 different values in `values=`: any 10
@@ -1037,11 +1149,13 @@ to them by numeric code:
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() +
-  scale_shape_manual(values = c(66, 70, 71, 78, 82, 83, 52, 84, 3, 87))
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, 
+    colour = Sex)) + geom_point() + scale_shape_manual(values = c(66, 
+    70, 71, 78, 82, 83, 52, 84, 3, 87))
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-28-1} 
 
      
 

@@ -12,83 +12,103 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
+## Warning: package 'ggplot2' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R version 3.5.3
+## Warning: package 'tibble' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R version 3.5.3
+## Warning: package 'tidyr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R version 3.5.2
+## Warning: package 'readr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R version 3.5.3
+## Warning: package 'purrr' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R version 3.5.2
+## Warning: package 'dplyr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R version 3.5.2
+## Warning: package 'stringr' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R version 3.5.1
+## Warning: package 'forcats' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under R version 3.5.1
+## Warning: package 'survminer' was built under
+## R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R version 3.5.1
+## Warning: package 'ggpubr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R version 3.5.1
+## Warning: package 'magrittr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R version 3.5.1
+## Warning: package 'car' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R version 3.5.1
+## Warning: package 'carData' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
+## Warning: package 'ggbiplot' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R version 3.5.1
+## Warning: package 'plyr' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R version 3.5.1
+## Warning: package 'scales' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R version 3.5.1
+## Warning: package 'ggrepel' was built under R
+## version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R version 3.5.2
+## Warning: package 'broom' was built under R
+## version 3.5.2
 ```
 
 ```
-## Warning: package 'rstan' was built under R version 3.5.3
+## Warning: package 'rstan' was built under R
+## version 3.5.3
 ```
 
 ```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: package 'StanHeaders' was built
+## under R version 3.5.1
 ```
 
 
@@ -100,7 +120,7 @@ library(tidyverse)
 rats. One group was given thyroxin in their drinking water, one group
 thiouracil, and the third group was a control. (This description comes
 from Christensen (2001).)
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">References: Box, George EP, Problems in the analysis of growth and wear curves, Biometrics vol. 6, 362-369, 1950; Christensen R, Advanced Linear Modeling, 2nd edition, Springer, 2001. Yes, that's the Box-Cox Box.</span>
+\marginnote{References: Box, George EP, Problems in the analysis of growth and wear curves, Biometrics vol. 6, 362-369, 1950; Christensen R, Advanced Linear Modeling, 2nd edition, Springer, 2001. Yes, that's the Box-Cox Box.}
 Weights are measured in
 grams at weekly intervals (over a 4-week period, so that each rat is
 measured 5 times). The data are in
@@ -142,19 +162,19 @@ weights
 
 ```
 ## # A tibble: 27 x 7
-##      rat drug       Time0 Time1 Time2 Time3 Time4
-##    <dbl> <chr>      <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1     1 thyroxin      59    85   121   156   191
-##  2     2 thyroxin      54    71    90   110   138
-##  3     3 thyroxin      56    75   108   151   189
-##  4     4 thyroxin      59    85   116   148   177
-##  5     5 thyroxin      57    72    97   120   144
-##  6     6 thyroxin      52    73    97   116   140
-##  7     7 thyroxin      52    70   105   138   171
-##  8     8 thiouracil    61    86   109   120   129
-##  9     9 thiouracil    59    80   101   111   122
-## 10    10 thiouracil    53    79   100   106   133
-## # … with 17 more rows
+##      rat drug   Time0 Time1 Time2 Time3 Time4
+##    <dbl> <chr>  <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1     1 thyro~    59    85   121   156   191
+##  2     2 thyro~    54    71    90   110   138
+##  3     3 thyro~    56    75   108   151   189
+##  4     4 thyro~    59    85   116   148   177
+##  5     5 thyro~    57    72    97   120   144
+##  6     6 thyro~    52    73    97   116   140
+##  7     7 thyro~    52    70   105   138   171
+##  8     8 thiou~    61    86   109   120   129
+##  9     9 thiou~    59    80   101   111   122
+## 10    10 thiou~    53    79   100   106   133
+## # ... with 17 more rows
 ```
 
    
@@ -187,7 +207,8 @@ The response variable is the same idea as for any MANOVA: just
 glue the columns together:
 
 ```r
-response <- with(weights, cbind(Time0, Time1, Time2, Time3, Time4))
+response <- with(weights, cbind(Time0, Time1, 
+    Time2, Time3, Time4))
 weights.1 <- lm(response ~ drug, data = weights)
 ```
 
@@ -209,7 +230,8 @@ Something like this:
 ```r
 times <- colnames(response)
 times.df <- data.frame(times)
-weights.2 <- Manova(weights.1, idata = times.df, idesign = ~times)
+weights.2 <- Manova(weights.1, idata = times.df, 
+    idesign = ~times)
 ```
 
      
@@ -221,7 +243,7 @@ response values are at different times. That's the only part of it
 that is within subjects. The different drugs are a
 "between-subjects" factor: each rat only gets one of the
 drugs.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Things would be a lot more complicated if each rat got a different drug at a different time! But the rats each got one drug *once*, at the beginning, and the issue was the effect of that drug on all the growth that followed.</span>
+\marginnote{Things would be a lot more complicated if each rat got a different drug at a different time! But the rats each got one drug *once*, at the beginning, and the issue was the effect of that drug on all the growth that followed.}
  
 
 (e) Take a look at the output from the MANOVA. Is there a
@@ -239,13 +261,19 @@ weights.2
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df den Df    Pr(>F)    
-## (Intercept)  1   0.99257   3204.1      1     24 < 2.2e-16 ***
-## drug         2   0.39192      7.7      2     24 0.0025559 ** 
-## times        1   0.98265    297.4      4     21 < 2.2e-16 ***
-## drug:times   2   0.87791      4.3      8     44 0.0006931 ***
+##             Df test stat approx F num Df
+## (Intercept)  1   0.99257   3204.1      1
+## drug         2   0.39192      7.7      2
+## times        1   0.98265    297.4      4
+## drug:times   2   0.87791      4.3      8
+##             den Df    Pr(>F)    
+## (Intercept)     24 < 2.2e-16 ***
+## drug            24 0.0025559 ** 
+## times           21 < 2.2e-16 ***
+## drug:times      44 0.0006931 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -271,8 +299,8 @@ Solution
 
 
 ```r
-weights.long <- weights %>%
-  gather(time, weight, Time0:Time4)
+weights.long <- weights %>% gather(time, weight, 
+    Time0:Time4)
 weights.long
 ```
 
@@ -290,7 +318,7 @@ weights.long
 ##  8     8 thiouracil Time0     61
 ##  9     9 thiouracil Time0     59
 ## 10    10 thiouracil Time0     53
-## # … with 125 more rows
+## # ... with 125 more rows
 ```
 
      
@@ -304,9 +332,9 @@ like this:
 
 
 ```r
-weights %>%
-  gather(timex, weight, Time0:Time4) %>%
-  separate(timex, into = c("junk", "time"), sep = 4) -> weights2.long
+weights2.long <- weights %>% gather(timex, weight, 
+    Time0:Time4) %>% separate(timex, into = c("junk", 
+    "time"), sep = 4)
 weights2.long %>% sample_n(20)
 ```
 
@@ -314,26 +342,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       junk  time  weight
 ##    <dbl> <chr>      <chr> <chr>  <dbl>
-##  1    22 control    Time  0         56
-##  2     3 thyroxin   Time  3        151
-##  3    14 thiouracil Time  1         78
-##  4    19 control    Time  3        146
-##  5     8 thiouracil Time  1         86
-##  6    10 thiouracil Time  1         79
-##  7    22 control    Time  1         81
+##  1    24 control    Time  4        141
+##  2    12 thiouracil Time  0         51
+##  3     1 thyroxin   Time  2        121
+##  4     8 thiouracil Time  1         86
+##  5    26 control    Time  1         67
+##  6    22 control    Time  4        151
+##  7     6 thyroxin   Time  1         73
 ##  8     3 thyroxin   Time  0         56
-##  9     2 thyroxin   Time  0         54
-## 10     5 thyroxin   Time  0         57
-## 11    11 thiouracil Time  0         59
-## 12    15 thiouracil Time  3        114
-## 13     5 thyroxin   Time  3        120
-## 14    19 control    Time  1         93
-## 15    20 control    Time  3        144
-## 16    11 thiouracil Time  4        122
-## 17    23 control    Time  2        102
-## 18    27 control    Time  3        139
-## 19     4 thyroxin   Time  3        148
-## 20     7 thyroxin   Time  0         52
+##  9    17 thiouracil Time  0         53
+## 10     2 thyroxin   Time  2         90
+## 11    15 thiouracil Time  0         58
+## 12    20 control    Time  4        185
+## 13    16 thiouracil Time  2         78
+## 14    25 control    Time  4        154
+## 15    19 control    Time  3        146
+## 16    14 thiouracil Time  0         56
+## 17    26 control    Time  4        140
+## 18     2 thyroxin   Time  0         54
+## 19     3 thyroxin   Time  2        108
+## 20     8 thiouracil Time  3        120
 ```
 
  
@@ -349,9 +377,8 @@ Since the piece of the time we want is the number,
 
 
 ```r
-weights2.long <- weights %>%
-  gather(timex, weight, Time0:Time4) %>%
-  mutate(time = parse_number(timex))
+weights2.long <- weights %>% gather(timex, weight, 
+    Time0:Time4) %>% mutate(time = parse_number(timex))
 weights2.long %>% sample_n(20)
 ```
 
@@ -359,26 +386,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    20 control    Time1     77     1
-##  2    14 thiouracil Time2     95     2
-##  3    14 thiouracil Time3    103     3
-##  4    12 thiouracil Time4    140     4
-##  5     8 thiouracil Time3    120     3
-##  6     6 thyroxin   Time3    116     3
-##  7    20 control    Time3    144     3
-##  8    14 thiouracil Time1     78     1
-##  9    11 thiouracil Time0     59     0
-## 10    27 control    Time3    139     3
-## 11     7 thyroxin   Time3    138     3
-## 12     5 thyroxin   Time3    120     3
-## 13    13 thiouracil Time0     51     0
-## 14    18 control    Time3    139     3
-## 15    12 thiouracil Time3    123     3
-## 16    23 control    Time0     46     0
-## 17     2 thyroxin   Time0     54     0
-## 18     3 thyroxin   Time4    189     4
-## 19    13 thiouracil Time4    119     4
-## 20    21 control    Time3    129     3
+##  1    22 control    Time2    104     2
+##  2    24 control    Time1     71     1
+##  3    16 thiouracil Time3     90     3
+##  4     4 thyroxin   Time3    148     3
+##  5    16 thiouracil Time1     61     1
+##  6    18 control    Time3    139     3
+##  7    23 control    Time4    153     4
+##  8    20 control    Time2    111     2
+##  9     5 thyroxin   Time3    120     3
+## 10    19 control    Time1     93     1
+## 11    22 control    Time0     56     0
+## 12    16 thiouracil Time4    107     4
+## 13    14 thiouracil Time3    103     3
+## 14    10 thiouracil Time2    100     2
+## 15    15 thiouracil Time3    114     3
+## 16     2 thyroxin   Time0     54     0
+## 17    12 thiouracil Time4    140     4
+## 18    16 thiouracil Time2     78     2
+## 19     4 thyroxin   Time1     85     1
+## 20     2 thyroxin   Time3    110     3
 ```
 
  
@@ -402,14 +429,13 @@ latter using the data frame that came out of the
 grabbed the `x` spot:
 
 ```r
-weights.long %>%
-  group_by(time, drug) %>%
-  summarize(mean.weight = mean(weight)) %>%
-  ggplot(aes(x = time, y = mean.weight, colour = drug, group = drug)) +
-  geom_point() + geom_line()
+weights.long %>% group_by(time, drug) %>% summarize(mean.weight = mean(weight)) %>% 
+    ggplot(aes(x = time, y = mean.weight, colour = drug, 
+        group = drug)) + geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-11-1} 
 
        
  
@@ -456,9 +482,8 @@ do that here. Then we save the result into a new data frame
 
 
 ```r
-wt <- weights %>%
-  mutate(subject = row_number()) %>%
-  gather(time, weight, Time0:Time4)
+wt <- weights %>% mutate(subject = row_number()) %>% 
+    gather(time, weight, Time0:Time4)
 wt
 ```
 
@@ -476,7 +501,7 @@ wt
 ##  8     8 thiouracil       8 Time0     61
 ##  9     9 thiouracil       9 Time0     59
 ## 10    10 thiouracil      10 Time0     53
-## # … with 125 more rows
+## # ... with 125 more rows
 ```
 
   
@@ -502,7 +527,7 @@ wt %>% count(rat)
 ##  8     8     5
 ##  9     9     5
 ## 10    10     5
-## # … with 17 more rows
+## # ... with 17 more rows
 ```
 
  
@@ -515,10 +540,12 @@ according to subject and colouring them according to
 
 ```r
 library(ggplot2)
-ggplot(wt, aes(time, weight, group = subject, colour = drug)) + geom_line()
+ggplot(wt, aes(time, weight, group = subject, 
+    colour = drug)) + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/mantequilla-1.png" width="576"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/mantequilla-1} 
 
  
 
@@ -544,10 +571,12 @@ you see the point:
 
 
 ```r
-ggplot(wt, aes(time, weight, group = subject, colour = weight)) + geom_line()
+ggplot(wt, aes(time, weight, group = subject, 
+    colour = weight)) + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/alphington-1.png" width="576"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/alphington-1} 
 
  
 
@@ -560,7 +589,8 @@ near the new airport):
 
 
 ```r
-wt.1 <- lmer(weight ~ drug * time + (1 | subject), data = wt)
+wt.1 <- lmer(weight ~ drug * time + (1 | subject), 
+    data = wt)
 drop1(wt.1, test = "Chisq")
 ```
 
@@ -573,7 +603,8 @@ drop1(wt.1, test = "Chisq")
 ## <none>        990.5                    
 ## drug:time  8 1067.8 93.27 < 2.2e-16 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -653,7 +684,7 @@ geriatrics
 ##  8       8 ro          2     5     5     1.5
 ##  9       9 ro          1.5   1.9   1.5   1  
 ## 10      10 ro          3.5   7     8     4  
-## # … with 11 more rows
+## # ... with 11 more rows
 ```
 
  
@@ -673,7 +704,8 @@ Solution
 This:
 
 ```r
-response <- with(geriatrics, cbind(t1, t2, t3, t4))
+response <- with(geriatrics, cbind(t1, t2, t3, 
+    t4))
 geriatrics.1 <- lm(response ~ treatment, data = geriatrics)
 ```
 
@@ -699,7 +731,8 @@ Make sure `car` is loaded, and do the `idata` and
 ```r
 times <- colnames(response)
 times.df <- data.frame(times)
-geriatrics.2 <- Manova(geriatrics.1, idata = times.df, idesign = ~times)
+geriatrics.2 <- Manova(geriatrics.1, idata = times.df, 
+    idesign = ~times)
 ```
 
      
@@ -741,13 +774,19 @@ geriatrics.2
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##                 Df test stat approx F num Df den Df    Pr(>F)    
-## (Intercept)      1   0.74589   52.836      1     18 9.332e-07 ***
-## treatment        2   0.24366    2.899      2     18  0.080994 .  
-## times            1   0.72143   13.812      3     16  0.000105 ***
-## treatment:times  2   0.92581    4.884      6     34  0.001073 ** 
+##                 Df test stat approx F num Df
+## (Intercept)      1   0.74589   52.836      1
+## treatment        2   0.24366    2.899      2
+## times            1   0.72143   13.812      3
+## treatment:times  2   0.92581    4.884      6
+##                 den Df    Pr(>F)    
+## (Intercept)         18 9.332e-07 ***
+## treatment           18  0.080994 .  
+## times               16  0.000105 ***
+## treatment:times     34  0.001073 ** 
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -775,8 +814,8 @@ Solution
 The usual layout for `gather`:
 
 ```r
-geriatrics.long <- geriatrics %>%
-  gather(time, intpct, t1:t4)
+geriatrics.long <- geriatrics %>% gather(time, 
+    intpct, t1:t4)
 geriatrics.long
 ```
 
@@ -794,7 +833,7 @@ geriatrics.long
 ##  8       8 ro        t1       2  
 ##  9       9 ro        t1       1.5
 ## 10      10 ro        t1       3.5
-## # … with 74 more rows
+## # ... with 74 more rows
 ```
 
      
@@ -827,9 +866,8 @@ Solution
 `group_by` followed by `summarize`, as ever:
 
 ```r
-geriatrics.long %>%
-  group_by(treatment, time) %>%
-  summarize(mean = mean(intpct)) -> means
+means <- geriatrics.long %>% group_by(treatment, 
+    time) %>% summarize(mean = mean(intpct))
 means
 ```
 
@@ -867,11 +905,12 @@ Once you have the means, this is not too bad:
 
 
 ```r
-ggplot(means, aes(x = time, y = mean, group = treatment, colour = treatment)) +
-  geom_point() + geom_line()
+ggplot(means, aes(x = time, y = mean, group = treatment, 
+    colour = treatment)) + geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/ger_int-1.png" width="672"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/ger_int-1} 
 
  
 
@@ -895,11 +934,11 @@ between times 1 and 2, a completely different pattern to the others.
 The two treatments `bt` and `ro` are not exactly
 parallel, but they do at least  have qualitatively the same
 pattern.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is to say, it's the same kind of shape.</span> It
+\marginnote{That is to say, it's the same kind of shape.} It
 is, I think, the fact that the control group has a
 *completely* different pattern over time that makes the
 interaction come out significant.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I am kind of wrong about    that, as we see.</span>
+\marginnote{I am kind of wrong about    that, as we see.}
 I'm going to explore that some more later, but first I want to get
 you to draw a spaghetti plot.
     
@@ -920,11 +959,12 @@ This is almost easier to do than it is to ask you to do:
 
 
 ```r
-ggplot(geriatrics.long, aes(x = time, y = intpct, colour = treatment, group = subject)) +
-  geom_line()
+ggplot(geriatrics.long, aes(x = time, y = intpct, 
+    colour = treatment, group = subject)) + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/ger_spag-1.png" width="672"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/ger_spag-1} 
 
    
 
@@ -952,7 +992,7 @@ up and down, and the green lines do basically nothing.
 I said that the control subjects' time pattern was noticeably
 different from the others. Which made me think: what if we remove the
 control subjects? Would there still be an interaction?
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is rather like removing time zero in the example in class.</span>
+\marginnote{This is rather like removing time zero in the example in class.}
 
 All right, we need to start with the original wide data frame, and
 from *that* select everything but `ctrl`:
@@ -987,7 +1027,7 @@ gg
 
 So now there are two treatments left, seven people on
 each:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The factor *treatment* still has three levels,  but only two of them have any remaining data.</span> 
+\marginnote{The factor *treatment* still has three levels,  but only two of them have any remaining data.} 
 
 
 ```r
@@ -1023,13 +1063,19 @@ gg.2
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##                 Df test stat approx F num Df den Df    Pr(>F)    
-## (Intercept)      1   0.76503   39.069      1     12 4.251e-05 ***
-## treatment        1   0.18506    2.725      1     12 0.1247005    
-## times            1   0.81730   14.912      3     10 0.0005073 ***
-## treatment:times  1   0.58168    4.635      3     10 0.0279590 *  
+##                 Df test stat approx F num Df
+## (Intercept)      1   0.76503   39.069      1
+## treatment        1   0.18506    2.725      1
+## times            1   0.81730   14.912      3
+## treatment:times  1   0.58168    4.635      3
+##                 den Df    Pr(>F)    
+## (Intercept)         12 4.251e-05 ***
+## treatment           12 0.1247005    
+## times               10 0.0005073 ***
+## treatment:times     10 0.0279590 *  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
 ```r
@@ -1056,7 +1102,7 @@ main effects: there is no effect of treatment, but there is an effect
 of time. Or, to put it another way, once you allow for an effect of
 time, there is no difference between the two remaining
 treatments.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There is often an effect of time, which is why you would be taking multiple time measurements, but the issue is when you take that into account, you are giving yourself an improved chance, in general, to find a treatment effect. This is exactly the same idea as using a matched pairs design to give yourself an improved chance of finding a treatment effect, even though the subjects might be quite different from each other. In fact, repeated measures *is* matched pairs with more than two measurements on each person. Which makes me think, I should have you do a matched pairs as repeated measures.</span>
+\marginnote{There is often an effect of time, which is why you would be taking multiple time measurements, but the issue is when you take that into account, you are giving yourself an improved chance, in general, to find a treatment effect. This is exactly the same idea as using a matched pairs design to give yourself an improved chance of finding a treatment effect, even though the subjects might be quite different from each other. In fact, repeated measures *is* matched pairs with more than two measurements on each person. Which makes me think, I should have you do a matched pairs as repeated measures.}
 
 Thinking back to our spaghetti plot, we are now comparing the red and
 blue treatments. They both go up at time 2 and down afterwards, which
@@ -1105,13 +1151,14 @@ long format to use again later.
 
 
 ```r
-fake %>% gather(times, score, t1:t4) -> fake.long
-fake.long %>%
-  ggplot(aes(x = times, y = score, colour = drug, group = subject)) +
-  geom_point() + geom_line()
+fake.long <- fake %>% gather(times, score, t1:t4)
+fake.long %>% ggplot(aes(x = times, y = score, 
+    colour = drug, group = subject)) + geom_point() + 
+    geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-26-1} 
 
  
 
@@ -1159,7 +1206,7 @@ frame that you want:
 
 
 ```r
-fake %>% select(t1:t4) -> r
+r <- fake %>% select(t1:t4)
 class(r)
 ```
 
@@ -1191,7 +1238,7 @@ This is the kind of thing you'd have to do in a function, I think,
 since you'd have to have some way of telling the function which are
 the "time" columns. Anyway, hope you haven't forgotten what we were
 doing:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I got sidetracked, surprise surprise.</span>
+\marginnote{I got sidetracked, surprise surprise.}
 
 
 ```r
@@ -1201,13 +1248,19 @@ fake.2
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df den Df    Pr(>F)    
-## (Intercept)  1   0.98478   517.73      1      8 1.475e-08 ***
-## drug         1   0.68417    17.33      1      8  0.003152 ** 
-## times        1   0.98778   161.71      3      6 3.970e-06 ***
-## drug:times   1   0.64900     3.70      3      6  0.081108 .  
+##             Df test stat approx F num Df
+## (Intercept)  1   0.98478   517.73      1
+## drug         1   0.68417    17.33      1
+## times        1   0.98778   161.71      3
+## drug:times   1   0.64900     3.70      3
+##             den Df    Pr(>F)    
+## (Intercept)      8 1.475e-08 ***
+## drug             8  0.003152 ** 
+## times            6 3.970e-06 ***
+## drug:times       6  0.081108 .  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -1243,11 +1296,15 @@ summary(fake.3)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value   Pr(>F)    
-## drug         1  133.2  133.23   30.54 2.54e-06 ***
-## Residuals   38  165.8    4.36                     
+##             Df Sum Sq Mean Sq F value
+## drug         1  133.2  133.23   30.54
+## Residuals   38  165.8    4.36        
+##               Pr(>F)    
+## drug        2.54e-06 ***
+## Residuals               
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -1260,7 +1317,7 @@ haven't really, because we have done so by cheating.
 
 What we could do instead is to average the scores for each subject
 over all the times,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This would be allowable, since we are  averaging *over* the time-dependence; we are creating 10  independent averages, from the 10 subjects. People do this kind of  thing, instead of having to deal with the repeated measures.</span> for
+\marginnote{This would be allowable, since we are  averaging *over* the time-dependence; we are creating 10  independent averages, from the 10 subjects. People do this kind of  thing, instead of having to deal with the repeated measures.} for
 which we go back to the original data frame:
 
 
@@ -1283,18 +1340,20 @@ fake
 ```
 
 ```r
-fake %>%
-  mutate(avg.score = (t1 + t2 + t3 + t4) / 4) %>%
-  aov(avg.score ~ drug, data = .) %>%
-  summary()
+fake %>% mutate(avg.score = (t1 + t2 + t3 + t4)/4) %>% 
+    aov(avg.score ~ drug, data = .) %>% summary()
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value  Pr(>F)   
-## drug         1  33.31   33.31   17.33 0.00315 **
-## Residuals    8  15.37    1.92                   
+##             Df Sum Sq Mean Sq F value
+## drug         1  33.31   33.31   17.33
+## Residuals    8  15.37    1.92        
+##              Pr(>F)   
+## drug        0.00315 **
+## Residuals             
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -1324,24 +1383,24 @@ said earlier.
 
 
 
+##  Children's stress levels and airports
 
 
- The data in
-[link](http://www.utsc.utoronto.ca/~butler/c32/airport.txt) are based on
-a 1998 study of stress levels in children as a result of the building
-of a new airport in Munich, Germany. A total of 200 children had their
-epinephrine levels (a stress indicator) measured at each of four
-different times: before the airport was built, and 6, 18 and 36 months
-after it was built. The four measurements are labelled `epi_1`
-through `epi_4`.  Out of the children, 100 were living near
-the new airport (location 1 in the data set), and could be expected to
-suffer stress because of the new airport. The other 100 children lived
-in the same city, but outside the noise impact zone. These children
-thus serve as a control group. The children are identified with
-numbers 1 through 200.
+ If you did STAC32, you might remember this question, which
+we can now do properly. Some of this question is a repeat from there.
 
-As with the spaghetti-plot question about throwing baseballs and
-softballs, see if you can build a pipe, one step at a time.
+The data in [link](http://www.utsc.utoronto.ca/~butler/c32/airport.txt)
+are based on a 1998 study of stress levels in children as a result of
+the building of a new airport in Munich, Germany. A total of 200
+children had their epinephrine levels (a stress indicator) measured at
+each of four different times: before the airport was built, and 6, 18
+and 36 months after it was built. The four measurements are labelled
+`epi_1` through `epi_4`.  Out of the children, 100
+were living near the new airport (location 1 in the data set), and
+could be expected to suffer stress because of the new airport. The
+other 100 children lived in the same city, but outside the noise
+impact zone. These children thus serve as a control group. The
+children are identified with numbers 1 through 200.
 
 
 
@@ -1357,16 +1416,7 @@ It is the fact that each child was measured four times, rather
 than each measurement being on a *different* child (with
 thus $4\times 200=800$ observations altogether). It's
 the same distinction as between matched pairs and a two-sample
-$t$ test (and thus the previous question was a big hint for this
-one). 
-Extra: data in this form are called "repeated measures", and
-analysing them as if they were on different individuals is wrong
-because children are likely to be different from each other:
-some children are likely to be high at all times and some
-low. There is extra information in knowing that the sets of four
-measurements are each on the same child. The analysis is beyond
-our scope at the moment, but if you take D29, you'll see it
-there. 
+$t$ test.
 
 
 
@@ -1377,6 +1427,7 @@ number of observations and variables.
 Solution
 
 
+The usual, data values separated by one space:
 
 
 ```r
@@ -1414,34 +1465,13 @@ airport
 ##  8  336.    280.   362.   472.        1     8
 ##  9   16.8   190.    90.9  145.        1     9
 ## 10   54.5   359.   454.   199.        1    10
-## # … with 190 more rows
+## # ... with 190 more rows
 ```
 
  
 
 There are 200 rows (children), with four `epi` measurements, a
-location and a child identifier, so that looks good. (Listing a
-`tibble` only lists the first ten rows, so this is good.)
-
-Or you can `glimpse` it:
-
-
-```r
-glimpse(airport)
-```
-
-```
-## Observations: 200
-## Variables: 6
-## $ epi_1    <dbl> 89.572453, -55.502686, 200.577774, 448.140792, -4.59959…
-## $ epi_2    <dbl> 253.002500, -1.448935, 280.436232, 348.796678, 314.5355…
-## $ epi_3    <dbl> 213.8671558, 26.0415991, 264.6617732, 386.0929544, 330.…
-## $ epi_4    <dbl> 209.46932, 258.68919, 174.43089, 224.57243, 333.21189, …
-## $ location <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-## $ child    <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, …
-```
-
- 
+location and a child identifier, so that looks good.
 
 (I am mildly concerned about the negative `epi` measurements,
 but I don't know what the scale is, so presumably they are all
@@ -1451,28 +1481,18 @@ see.)
 
 
 
-(c) We are going to make a "spaghetti plot" of these data:
-that is, a plot of epinephrine levels against time, with the
-children identified by colour, and a separate plot for each
-location. Before we get to that, we need, as usual for a
-`ggplot`, all the $x$-values for our plot in one column,
-all the $y$-values for our plot in one column, and a separate
-column indicating which $y$ and $x$ we have (if there are more
-than one). 
-Use `gather` to produce something like this. (There will be
-a second stage of tidy-up, which we'll do in the next part.) Save
-your results in a data frame and display its first few rows, to
-convince yourself that you have the right thing.
+(c) Create and save a "long" data frame with all the epinephrine
+values gathered together into one column.
 
 
 Solution
 
 
-This is exactly what `gather` does, so it's what we'll
-use here. Let's see how it comes out:
 
 ```r
-airport %>% gather(when, epinephrine, epi_1:epi_4)
+airport.long <- airport %>% gather(when, epinephrine, 
+    epi_1:epi_4)
+airport.long
 ```
 
 ```
@@ -1489,620 +1509,1183 @@ airport %>% gather(when, epinephrine, epi_1:epi_4)
 ##  8        1     8 epi_1      336.  
 ##  9        1     9 epi_1       16.8 
 ## 10        1    10 epi_1       54.5 
-## # … with 790 more rows
-```
-
-        
-
-What makes the columns different (they're different times), what makes
-them the same (they're all epinephrine levels), and the columns to
-gather up (which are the consecutive ones `epi1` through
-`epi4`). For the last, this also works (but is more typing):
-
-
-```r
-airport %>% gather(when, epinephrine, c(epi_1, epi_2, epi_3, epi_4))
-```
-
-```
-## # A tibble: 800 x 4
-##    location child when  epinephrine
-##       <dbl> <dbl> <chr>       <dbl>
-##  1        1     1 epi_1       89.6 
-##  2        1     2 epi_1      -55.5 
-##  3        1     3 epi_1      201.  
-##  4        1     4 epi_1      448.  
-##  5        1     5 epi_1       -4.60
-##  6        1     6 epi_1      231.  
-##  7        1     7 epi_1      227.  
-##  8        1     8 epi_1      336.  
-##  9        1     9 epi_1       16.8 
-## 10        1    10 epi_1       54.5 
-## # … with 790 more rows
-```
-
-        
-
-and also this:
-
-
-```r
-airport %>% gather(when, epinephrine, starts_with("epi"))
-```
-
-```
-## # A tibble: 800 x 4
-##    location child when  epinephrine
-##       <dbl> <dbl> <chr>       <dbl>
-##  1        1     1 epi_1       89.6 
-##  2        1     2 epi_1      -55.5 
-##  3        1     3 epi_1      201.  
-##  4        1     4 epi_1      448.  
-##  5        1     5 epi_1       -4.60
-##  6        1     6 epi_1      231.  
-##  7        1     7 epi_1      227.  
-##  8        1     8 epi_1      336.  
-##  9        1     9 epi_1       16.8 
-## 10        1    10 epi_1       54.5 
-## # … with 790 more rows
-```
-
-        
-
-Your choice of names is not important, though it should be something
-reminiscent of what the columns actually represent. (For me, I want to
-reserve the name `time` for later, which is why I used the name
-`when` here.)
-
-The one thing we have to fix up is that the time column is not 1
-through 4, but `epi_1` through `epi_4`. That's what we
-tackle next.
-
-
-
-(d) Find a way to create a new column containing just the number
-of the time point, and save the resulting data frame. (Two options
-you can explore: `parse_number` combined with
-`mutate`, or `separate`. You may
-need to do some research.)
-
-
-Solution
-
-
-
-The first suggestion goes like this:
-
-
-```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  mutate(time = parse_number(when))
-```
-
-```
-## # A tibble: 800 x 5
-##    location child when  epinephrine  time
-##       <dbl> <dbl> <chr>       <dbl> <dbl>
-##  1        1     1 epi_1       89.6      1
-##  2        1     2 epi_1      -55.5      1
-##  3        1     3 epi_1      201.       1
-##  4        1     4 epi_1      448.       1
-##  5        1     5 epi_1       -4.60     1
-##  6        1     6 epi_1      231.       1
-##  7        1     7 epi_1      227.       1
-##  8        1     8 epi_1      336.       1
-##  9        1     9 epi_1       16.8      1
-## 10        1    10 epi_1       54.5      1
-## # … with 790 more rows
+## # ... with 790 more rows
 ```
 
  
 
-This creates a variable called `time`\endnote{I was saving the
-name from earlier for this.} by pulling out only the numbers from
-`when`. The only numbers are the time points, so this is
-exactly what we want.
+Success. I'm saving the name `time` for later, so I've called
+the time points `when` for now. There were 4 measurements on
+each of 200 children, so the long data frame should (and does) have
+$200\times 4 = 800$ rows.
 
-Here's the other way, using `separate` from `dplyr`:
+
+
+(d) Make a "spaghetti plot" of these data: that is, a plot of
+epinephrine levels against time, with the locations identified by
+colour, and the points for the same child joined by lines.  To do
+this: (i) from the long data frame, create a new column containing
+only the numeric values of time (1 through 4), (ii) plot epinephrine
+level against time with the points grouped by child and coloured by
+location (which you may have to turn from a number into a factor.)
+
+
+Solution
+
+
+I hope you are thinking "pipeline":
+
+```r
+airport.long %>% mutate(time = parse_number(when)) %>% 
+    ggplot(aes(x = time, y = epinephrine, colour = factor(location), 
+        group = child)) + geom_point() + geom_line()
+```
+
+
+\includegraphics{20-repeated-measures_files/figure-latex/toofat-1} 
+
+         
+
+This is different from the plot we had in C32, where I had you use a
+different colour for each *child*, and we ended up with a huge
+legend of all the children (which we then removed). 
+
+If you forget to turn `location` into a factor, `ggplot`
+will assume that you want `location` to be on a continuous
+scale, and you'll get two shades of blue. 
+
+Another problem with this plot is that there are so many children, you
+can't see the ones underneath because the ones on top are overwriting
+them. The solution to that is to make the lines (partly) transparent,
+which is controlled by a parameter `alpha`:
+\marginnote{This is  different from the 0.05 *alpha*.}
+
+```r
+airport.long %>% mutate(time = parse_number(when)) %>% 
+    ggplot(aes(x = time, y = epinephrine, colour = factor(location), 
+        group = child)) + geom_point() + geom_line(alpha = 0.2)
+```
+
+
+\includegraphics{20-repeated-measures_files/figure-latex/skinnier-1} 
+
+   
+It seems to make the lines skinnier, so they look more like
+threads. Even given the lesser thickness, they seem to be a little bit
+see-through as well. You can experiment with adding transparency to
+the points in addition. 
+
+
+
+(e) What do you see on your spaghetti plot? We are looking ahead
+to possible effects of time, location and their interaction.
+
+
+Solution
+
+
+This is not clear, so it's very much your call.
+I see the red spaghetti strands as going up further
+(especially) and maybe down further than the blue ones. The
+epinephrine levels of the children near the new airport are
+definitely more spread out, and maybe have a higher mean, than
+those of the control group of children not near the airport.
+The red spaghetti strands show something of an increase over
+time, at least up to time 3, after which they seem to drop
+again. The blue strands, however, don't show any kind of trend
+over time. Since the time trend is different for the two
+locations, I would expect to see a significant interaction.
+
+
+
+(f) The spaghetti plot was hard to interpret because there are
+so many children. Calculate the mean epinephrine levels for each
+location-time combination, and make an interaction plot with time
+on the $x$-axis and location as the second factor.
+
+
+Solution
+
+
+We've done this before:
+
+```r
+airport.long %>% mutate(time = parse_number(when)) %>% 
+    mutate(floc = factor(location)) %>% group_by(floc, 
+    time) %>% summarize(mean.epi = mean(epinephrine)) %>% 
+    ggplot(aes(x = time, y = mean.epi, group = floc, 
+        colour = floc)) + geom_point() + geom_line()
+```
+
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-36-1} 
+
+         
+
+I wanted the actual numerical times, so I made them again. Also, it
+seemed to be easier to create a factor version of the numeric location
+up front, and then use it several times later. I'm actually not sure
+that you need it here, since `group_by` works with the
+distinct values of a variable, whatever they are, and `group`
+in a boxplot may or may not insist on something other than a number. I
+should try it:
 
 
 ```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  separate(when, into = c("junk", "time"), sep = "_")
+airport.long %>% mutate(time = parse_number(when)) %>% 
+    group_by(location, time) %>% summarize(mean.epi = mean(epinephrine)) %>% 
+    ggplot(aes(x = time, y = mean.epi, group = location, 
+        colour = location)) + geom_point() + geom_line()
+```
+
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-37-1} 
+
+          
+
+It seems that `colour` requires a non-number:
+
+
+```r
+airport.long %>% mutate(time = parse_number(when)) %>% 
+    group_by(location, time) %>% summarize(mean.epi = mean(epinephrine)) %>% 
+    ggplot(aes(x = time, y = mean.epi, group = location, 
+        colour = factor(location))) + geom_point() + 
+    geom_line()
+```
+
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-38-1} 
+
+         
+With a long pipeline like this, none of us get it right the first time (I
+certainly didn't), so be prepared to debug it one line at a time. The
+way I like to do this is to take the pipe symbol and move it down to
+the next line (moving the cursor to just before it and hitting
+Enter). This ends the pipe at the end of *this* line and displays
+what it produces so far. When you are happy with that, go to the start
+of the next line (that currently has a pipe symbol by itself) and hit
+Backspace to move the pipe symbol back where it was. Then go to the
+end of the next line (where the next pipe symbol is), move *that*
+to a line by itself, and so on. Keep going until each line produces
+what you want, and when you are finished, the whole pipeline will do
+what you want.
+
+
+
+(g) What do you conclude from your interaction plot? Is your
+conclusion clearer than from the spaghetti plot?
+
+
+Solution
+
+
+The two "traces" are not parallel, so I would expect to see
+an interaction between location and time. The big difference
+seems to be between times 1 and 2; the traces are the same at
+time 1, and more or less parallel after time 2. Between times
+1 and 2, the mean epinephrine level of the children near the
+new airport increases sharply, whereas for the children in the
+control group it increases much less.
+This, to my mind, is very much easier to interpret than the
+spaghetti plot, even the second version with the thinner
+strands, because there is a lot of variability there that
+obscures the overall pattern. The interaction plot is plain as
+day, but it might be an oversimplification because it doesn't
+show variability.
+
+
+
+(h) Run a repeated-measures analysis of variance and display the
+results. Go back to your original data frame, the one you read in
+from the file, for this. You'll need to make sure your numeric
+`location` gets treated as a `factor`.
+
+
+Solution
+
+
+The usual process. I'll try the other way I used of making the
+`response`: 
+
+```r
+response <- airport %>% select(epi_1:epi_4) %>% 
+    as.matrix()
+airport.1 <- lm(response ~ factor(location), data = airport)
+times <- colnames(response)
+times.df <- data.frame(times)
+airport.2 <- Manova(airport.1, idata = times.df, 
+    idesign = ~times)
+airport.2
 ```
 
 ```
-## # A tibble: 800 x 5
-##    location child junk  time  epinephrine
-##       <dbl> <dbl> <chr> <chr>       <dbl>
-##  1        1     1 epi   1           89.6 
-##  2        1     2 epi   1          -55.5 
-##  3        1     3 epi   1          201.  
-##  4        1     4 epi   1          448.  
-##  5        1     5 epi   1           -4.60
-##  6        1     6 epi   1          231.  
-##  7        1     7 epi   1          227.  
-##  8        1     8 epi   1          336.  
-##  9        1     9 epi   1           16.8 
-## 10        1    10 epi   1           54.5 
-## # … with 790 more rows
+## 
+## Type II Repeated Measures MANOVA Tests: Pillai test statistic
+##                        Df test stat approx F
+## (Intercept)             1   0.92013  2281.00
+## factor(location)        1   0.13120    29.90
+## times                   1   0.32741    31.80
+## factor(location):times  1   0.23737    20.34
+##                        num Df den Df
+## (Intercept)                 1    198
+## factor(location)            1    198
+## times                       3    196
+## factor(location):times      3    196
+##                           Pr(>F)    
+## (Intercept)            < 2.2e-16 ***
+## factor(location)       1.361e-07 ***
+## times                  < 2.2e-16 ***
+## factor(location):times 1.626e-11 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+         
+
+
+
+(i) What do you conclude from the MANOVA? Is that consistent
+with your graphs? Explain briefly.
+
+
+Solution
+
+
+We start and end with the significant interaction: there is an
+effect of location, but the nature of that effect depends on
+time. This is the same as we saw in the interaction plot:
+from time 2 on, the mean epinephrine levels for the children near
+the new airport were clearly higher. 
+If you stare at the spaghetti plot, you *might* come to
+the same conclusion. Or you might not! I suppose those red
+dots at time 2 are mostly at the top, and generally so
+afterwards, whereas at time 1 they are all mixed up with the
+blue ones.
+Interactions of this sort in this kind of analysis  are very
+common. There is an "intervention" or "treatment", and the
+time points are chosen so that the first one is before the
+treatment happens, and the other time points are after. Then,
+the results are very similar for the first time point, and
+very different after that, rather than being (say) always
+higher for the treatment group by about the same amount for
+all times (in which case there would be no interaction). 
+So, you have some choices in practice as to how you might
+go. You might do the MANOVA, get a significant interaction,
+and draw an interaction plot to see why. You might stop there,
+or you might do something like what we did in class: having
+seen that the first time point is different from the others
+for reasons that you can explain, do the analysis again, but
+omitting the first time point. For the MANOVA, that means
+tweaking your definition of your `response` to omit the
+first time point. The rest of it stays the same, though you
+might want to change your model numbers rather than re-using
+the old ones as I did:
+
+```r
+response <- airport %>% select(epi_2:epi_4) %>% 
+    as.matrix()
+airport.1 <- lm(response ~ factor(location), data = airport)
+times <- colnames(response)
+times.df <- data.frame(times)
+airport.2 <- Manova(airport.1, idata = times.df, 
+    idesign = ~times)
+airport.2
+```
+
+```
+## 
+## Type II Repeated Measures MANOVA Tests: Pillai test statistic
+##                        Df test stat approx F
+## (Intercept)             1   0.91853  2232.38
+## factor(location)        1   0.19515    48.01
+## times                   1   0.01236     1.23
+## factor(location):times  1   0.05086     5.28
+##                        num Df den Df
+## (Intercept)                 1    198
+## factor(location)            1    198
+## times                       2    197
+## factor(location):times      2    197
+##                           Pr(>F)    
+## (Intercept)            < 2.2e-16 ***
+## factor(location)       5.822e-11 ***
+## times                   0.293852    
+## factor(location):times  0.005851 ** 
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+         
+
+The interaction is still significant, so there is still not a
+consistent effect of being near the new airport on epinephrine levels:
+that is to say, the effect of the new airport *still* varies over
+time. That might be because (looking at the interaction plot) for the
+children near the new airport, the mean epinephrine level went up
+again between times 2 and 3, whereas for the control children it (for
+some reason) went dramatically down over the same time period.
+
+We have lots of data here (200 children), so the significant
+interaction effect also might not be very big.
+
+Experimental designs like this are kind of awkward, because you expect
+there to be some kind of pattern over time for the treatment group,
+that will vary over time, whereas for the control group, you expect
+there to be no pattern over time. So a significant difference shows up
+as an *interaction*, which is messier to interpret than you would
+like. 
+
+Extra: the other way to analyze repeated measures data (that we, well, you, do not look
+at in this course)
+\marginnote{This is something *I* want to  understand, so I will share my findings with you. You can read them  or not, as you choose.} is to treat them as "mixed models", which
+requires a different kind of analysis using the `lme4`
+package. I always forget how these go, and I have to look them up when
+I need them, but the idea is this: the treatments you observe, and the
+time points at which you observe them, are
+typically the only ones you care about (a so-called "fixed effect"),
+but the individuals (children, here)
+which you happen to observe are
+something like a random sample of all the children you might have
+observed (a so-called "random effect"). Models with random effects
+in them are called "mixed models" (or, I suppose, models with both
+fixed and random effects). This matters because you have repeated
+observations on the *same* child. Some people like to think of
+this in terms of "sources of variability": the epinephrine levels
+vary because of the location and time at which they were observed, but
+also because of the particular child they happen to have been observed
+for: each child has a "random effect" that they carry with them
+through all the time points at which they are observed.
+
+Let's see if we can make it fly for this example. We need the data in
+"long" format, the way we arranged it for graphing: the data frame
+`airport.long`. I'd like to convert things to factors first:
+
+
+```r
+fairport <- airport.long %>% mutate(fchild = factor(child), 
+    flocation = factor(location))
+
+airport.3 <- lmer(epinephrine ~ flocation * when + 
+    (1 | fchild), data = fairport)
+anova(airport.3)
+```
+
+```
+## Analysis of Variance Table
+##                Df Sum Sq Mean Sq F value
+## flocation       1 168177  168177  29.900
+## when            3 475671  158557  28.190
+## flocation:when  3 366641  122214  21.728
+```
+
+```r
+drop1(airport.3, test = "Chisq")
+```
+
+```
+## Single term deletions
+## 
+## Model:
+## epinephrine ~ flocation * when + (1 | fchild)
+##                Df    AIC    LRT   Pr(Chi)
+## <none>            9521.2                 
+## flocation:when  3 9577.6 62.475 1.739e-13
+##                   
+## <none>            
+## flocation:when ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
 
-The job of `separate` is to split a
-column, which currently contains two things mashed together, into two separate
-columns. The syntax is: column to separate, names of
-columns to create, and character to split at (underscore, here). The
-result is that `when` has disappeared, and two new columns have
-been created: `junk` which contains the text `epi` from
-before the underscore and `time` which contains the number
-after the underscore (the number of the time point).
-This appears to have worked, but look at the top of the columns.
-`time` is not actually a number, but is still text (because
-`when` was text). There is an option on `separate` that
-will fix that, if you want to:
+The `anova` doesn't actually give us any tests, but what you
+see in the ANOVA table are the fixed effects. These are testable. The
+easiest way to see what you can get rid of is `drop1`; the
+chi-squared test appears to be the right one (more on that
+below). This says that the interaction is strongly significant, and we
+should not consider removing it, the same conclusion as our 
+"profile analysis" before.
+The other choice for
+testing is to fit a model without what you
+are testing and use `anova` to compare the two models:
 
 
 ```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  separate(when, into = c("junk", "time"), sep = "_", convert = T)
+airport.4 <- update(airport.3, . ~ . - flocation:when)
+anova(airport.4, airport.3)
 ```
 
 ```
-## # A tibble: 800 x 5
-##    location child junk   time epinephrine
-##       <dbl> <dbl> <chr> <int>       <dbl>
-##  1        1     1 epi       1       89.6 
-##  2        1     2 epi       1      -55.5 
-##  3        1     3 epi       1      201.  
-##  4        1     4 epi       1      448.  
-##  5        1     5 epi       1       -4.60
-##  6        1     6 epi       1      231.  
-##  7        1     7 epi       1      227.  
-##  8        1     8 epi       1      336.  
-##  9        1     9 epi       1       16.8 
-## 10        1    10 epi       1       54.5 
-## # … with 790 more rows
+## refitting model(s) with ML (instead of REML)
+```
+
+```
+## Data: fairport
+## Models:
+## airport.4: epinephrine ~ flocation + when + (1 | fchild)
+## airport.3: epinephrine ~ flocation * when + (1 | fchild)
+##           Df    AIC    BIC  logLik deviance
+## airport.4  7 9577.6 9610.4 -4781.8   9563.6
+## airport.3 10 9521.2 9568.0 -4750.6   9501.2
+##            Chisq Chi Df Pr(>Chisq)    
+## airport.4                             
+## airport.3 62.475      3  1.739e-13 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
 
-What `convert` does is to look at the columns of output and see
-what they look like. `time` looked like numbers, so it was
-converted to numbers, while `junk` is unmistakably text, so
-that's what it stays.
+There are technical considerations involved in comparing the fit of
+two models (which is the reason for the 
+"refitting models with..."): there is one method for estimating and a different
+method for testing. The test is based on "likelihood ratio", which
+means that the right test for the `drop1` above is
+`Chisq`. 
 
-It turns out that the time can be either text or a number and the
-spaghetti plot will still work, so that the `convert` above is
-not necessary (it just makes things look prettier). I think what
-happens is that if the numbers are not equally spaced, like 1, 2, 4,
-8, having them be numbers will plot them unequally spaced as they
-should be, but if they are text, they will be spaced out equally
-across the plot.
+If you omit the test in `drop1`, it just gives
+you AIC values, which you can use for an informal assessment. In this
+case, `<none>` has a much smaller AIC than the interaction
+(smaller by over 50), so there's no way we should entertain taking out
+the interaction. However, if it had not been significant, we would
+just take it out by fitting a model like `airport4`: there is
+no distinction here between "within-subject" and 
+"between-subject"
+factors that prevented us from taking the interaction out in profile
+analysis. 
 
-From here on, I'm going to use the data frame that I
-made using `parse_number`, but of course if you prefer to use
-the output from `separate`, use that instead. The relevant
-issue is the stuff you add to the end of your pipe each time.
+As ever when an interaction is significant, we might think  about
+simple effects: that is, look at the two locations separately. That
+makes sense here because of the kind of experimental design it is: we
+*expect* a different kind of relationship with time for the
+"treatment" children (the ones living near the new airport) as
+compared to the control children, the ones who live farther away. That
+approach would work with either the profile-analysis way using
+`Manova` or the mixed-modelling way using `lmer`. In
+either case, we'd expect to see a time effect at location 1 but not at
+location 2. (Having separated out locations, only the time effect
+would be left for testing.) I guess I have to show you that, but I
+have to get ready for class first.
 
+Later\ldots
 
+The nice thing about Wednesday evenings is that I am so tired from
+class that I have energy for almost nothing except playing with these
+things. So let's have a crack at it. 
 
-(e) Use `ggplot` to plot the epinephrine values
-against time, as a scatterplot. (Your plot won't
-look very nice, but don't worry about that. We will fix it up
-later.)
+Let's start with location 1, at which we expect there to be
+something happening. This is really a simple effect of time at
+location 1, but in repeated measures guise. The awkwardness is that
+the profile analysis needs the wide-format data, while the mixed-model
+analysis needs long format, so we'll have to repeat our process, once
+for each format of data set:
 
-
-Solution
-
-
-This is easy, and not very informative, but we are going
-to embellish this a good deal below:
 
 ```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  mutate(time = parse_number(when)) %>%
-  ggplot(aes(x = time, y = epinephrine)) + geom_point()
+loc1 <- airport %>% filter(location == 1)
+response <- loc1 %>% select(epi_1:epi_4) %>% as.matrix()
+loc1.1 <- lm(response ~ 1, data = loc1)
+times <- colnames(response)
+times.df <- data.frame(times)
+loc1.2 <- Manova(loc1.1, idata = times.df, idesign = ~times)
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+```
+## Note: model has only an intercept; equivalent type-III tests substituted.
+```
+
+```r
+loc1.2
+```
+
+```
+## 
+## Type III Repeated Measures MANOVA Tests: Pillai test statistic
+##             Df test stat approx F num Df
+## (Intercept)  1   0.89729   864.86      1
+## times        1   0.45423    26.91      3
+##             den Df    Pr(>F)    
+## (Intercept)     99 < 2.2e-16 ***
+## times           97 9.496e-13 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
 
  
 
+This is one of those times where a pipe doesn't quite do it. We need
+to grab the data for location 1, but then we need to do two things
+with it: one, create a response variable, and two, feed the response
+variable *and* the location 1 data into `lm`. Pipes are
+for linear sequences of things to do, and this one diverges. So, save
+what you need to save, and then do it without a pipe.
 
+This is one of those explanatory-variable-less repeated measures where
+you *only* have things varying over time. Here, the treatment was
+location, and we're only looking at one of those locations. We still
+have a within-subject design (the four times), but there is no
+between-subject design left.
 
-(f) In addition to plotting the points, join the points for
-the same child with lines, and make each child a different
-colour. This will mean adding two things to your `aes`
-and making an addition elsewhere. (Your `child` is
-probably a number, but it needs to be a factor. Feed it into
-`factor()` to make it one.) The resulting plot will
-look very colourful, but it will be dominated by a huge legend.
+The conclusion is that there is very strong evidence of a time effect
+for location 1, as we would have guessed.
 
-
-Solution
-
-
-Here is where the previous question was intended to be a help:
-add both `colour=factor(child)` and
-`group=factor(child)` to the `aes`, and
-add `geom_line`:
-
-```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  mutate(time = parse_number(when)) %>%
-  ggplot(aes(
-    x = time, y = epinephrine, colour = factor(child),
-    group = factor(child)
-  )) + geom_point() + geom_line()
-```
-
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
-
-            
-
-R actually does have over 200 different colours, but they are rather
-hard to tell apart. The major benefit to the colours here is so that
-you can track the same child across the picture. Or you would be able
-to, if it were not for the huge legend. The one value of the legend is
-that it shows you that the brown and green kids are the low-numbered
-ones from location 1, and the blue and pink ones are the high-numbered
-ones from location 2.
-
-This seems not to work if you take out the `geom_point`. I'm
-not sure why: it gives (for me) an error message that is not very
-informative. 
-
-Does it work if you use a data frame from earlier where the times
-were text rather than numbers, and called `when`?
+Now, let's see whether the mixed-model analysis comes to the same
+conclusion. This time, we have to start from the *long* data set
+(the one I'm using is the one called `fairport` with things as
+factors) and pull out the rows for location 1. The only remaining
+fixed effect is time:
 
 
 ```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  ggplot(aes(
-    x = when, y = epinephrine, colour = factor(child),
-    group = factor(child)
-  )) + geom_point() + geom_line()
+fairport %>% filter(location == 1) %>% lmer(epinephrine ~ 
+    when + (1 | fchild), data = .) %>% drop1(test = "Chisq")
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+```
+## Single term deletions
+## 
+## Model:
+## epinephrine ~ when + (1 | fchild)
+##        Df    AIC    LRT   Pr(Chi)    
+## <none>    4964.1                     
+## when    3 5032.1 74.048 5.796e-16 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
 
  
 
-Yes it does. So you could either use `separate` earlier (with
-or without `convert`), or you could use
-`parse_number`, and it would work equally well. I happen to
-like `parse_number`, but that's a personal preference.
+The effect of time is, once again, substantial. The P-value is not the
+same, because the test is not the same, but it is very similar and
+points to exactly the same conclusion.
 
-The perhaps smarter way to do it, rather than repeating
-`factor(child)`, is to define the factor version of
-`child` first, in the pipe:
+I should perhaps point out that you don't *have* to do these
+models in a pipe. I just did because it was easier for me. But there's
+nothing wrong with doing it like this:
 
 
 ```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  mutate(time = parse_number(when)) %>%
-  mutate(fchild = factor(child)) %>%
-  ggplot(aes(
-    x = time, y = epinephrine, colour = fchild,
-    group = fchild
-  )) + geom_point() + geom_line()
+tmp <- fairport %>% filter(location == 1)
+tmp.1 <- lmer(epinephrine ~ when + (1 | child), 
+    data = tmp)
+drop1(tmp.1, test = "Chisq")
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+```
+## Single term deletions
+## 
+## Model:
+## epinephrine ~ when + (1 | child)
+##        Df    AIC    LRT   Pr(Chi)    
+## <none>    4964.1                     
+## when    3 5032.1 74.048 5.796e-16 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
 
  
 
-That is perhaps a good idea. 
+and it gives exactly the same result.
 
+This last model (in either of its versions) is a so-called random
+intercepts model. What it says is that epinephrine level for a child
+depends on time, but the effect of being one child rather than another
+is to shunt the mean epinephrine level up or down by a fixed amount
+for all times. It seems to me that this is a very reasonable way to
+model the child-to-child variation in this case, but in other cases,
+things might be different. `lmer` allows more sophisticated
+things, like for example the random child effect depending linearly on
+time. To do that, you'd rewrite the above like this:
 
-
-(g) Get rid of
-the huge legend.
-
-
-Solution
-
-
-I showed you how to do this in a previous question.
-The title at the top of my huge legend is
-`factor(child)`, or `fchild` if you did
-it that way.  That appears after `colour=` in
-the `aes`, so `colour` is the thing that
-should be `FALSE` inside `guides`. As we
-found in the last question, it doesn't seem to be
-necessary to get rid of `group` as well. (The
-legend was actually distinguishing the
-*colours*.)
 
 ```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  mutate(time = parse_number(when)) %>%
-  mutate(fchild = factor(child)) %>%
-  ggplot(aes(
-    x = time, y = epinephrine, colour = fchild,
-    group = fchild
-  )) + geom_point() + geom_line() + guides(colour = F)
+fairport %>% filter(location == 1) %>% lmer(epinephrine ~ 
+    when + (1 + when | fchild), data = .) %>% 
+    drop1(test = "Chisq")
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+ 
 
-            
+The change is on the `lmer` line: the bit in brackets has a
+linear model in `when` for each child. I didn't run that, so
+I'm not certain it works,
+\marginnote{I'm suspicious about *when*  needing to be the numerical time inside. Not sure.} but that's the idea.
 
-That is a spaghetti plot living up to its name!
+All right, let's get on to location 2. This was the control location,
+so we expect to see *no* dependence of epinephrine level on time,
+either in the profile analysis or in the mixed-model analysis. There
+is a large amount of copying and pasting coming up:
 
-
-
-(h) Instead of plotting both locations together,
-obtain a separate plot for each location, using *one*
-`ggplot`.
-
-
-Solution
-
-
-Add a `facet_wrap`:
 
 ```r
-airport %>%
-  gather(when, epinephrine, epi_1:epi_4) %>%
-  mutate(time = parse_number(when)) %>%
-  mutate(fchild = factor(child)) %>%
-  ggplot(aes(
-    x = time, y = epinephrine, colour = fchild,
-    group = fchild
-  )) + geom_point() + geom_line() + guides(colour = F) +
-  facet_wrap(~location)
+loc2 <- airport %>% filter(location == 2)
+response <- loc2 %>% select(epi_1:epi_4) %>% as.matrix()
+loc2.1 <- lm(response ~ 1, data = loc1)
+times <- colnames(response)
+times.df <- data.frame(times)
+loc2.2 <- Manova(loc2.1, idata = times.df, idesign = ~times)
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
+```
+## Note: model has only an intercept; equivalent type-III tests substituted.
+```
 
-                 
+```r
+loc2.2
+```
 
-The blue and pink spaghetti strands on the right are because the
-location 2 children were the high-numbered ones, and the high-numbered
-children in that big legend that we got rid of were pink and blue.
+```
+## 
+## Type III Repeated Measures MANOVA Tests: Pillai test statistic
+##             Df test stat approx F num Df
+## (Intercept)  1   0.96147  2470.17      1
+## times        1   0.30236    14.01      3
+##             den Df    Pr(>F)    
+## (Intercept)     99 < 2.2e-16 ***
+## times           97 1.161e-07 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
 
+ 
 
+I think I changed everything I needed to. 
 
-(i) How would you describe the difference in
-epinephrine (stress) levels between the two locations?
-Does this make sense, given where the locations are?
-
-
-Solution
-
-
-The ones on the right, from location 2, are
-consistently close to 250, with no apparent change
-over time. The ones on the left, from location 1,
-are, depending on your tastes, more variable, have a
-higher mean, usually increase from time 1 to the
-other time points, or are potentially higher in
-terms of epinephrine. (I'd take any of those.)
-The location 2 children were our control group;
-their stress levels should not have been affected by
-the building of the airport, since they weren't
-close to it. So we'd expect to see, and do see,
-consistent levels over time. The location 1
-children, however, were the ones potentially
-affected by the building of the airport. It looks as
-if the building of the airport is associated with
-"potentially higher", "typically higher",
-"increased" or "more variable" stress levels
-(whatever words you used above). Unless there is
-something different about the children who live near
-the new airport (apart from the fact that they live
-near the new airport), it looks as if the new
-airport is having a bad effect on their stress
-levels. This is distressing, but not exactly a
-surprise.
-As for any effect on stress levels over time, there
-is not much especially consistent coming out of the
-spaghetti plot that I can see. Maybe the stress
-levels at the first time point, before the airport
-was built, are lower than the ones after that on average.
-(If you find something like this and it looks
-justifiable, it's good.)
+There actually *is* still an effect of time. What kind of effect?
+We can look at that by finding epinephrine means at each time. That
+would be easier if we had long format, but I think we can still do
+it. The magic word is `summarize_at` (well, the magic two
+words): 
 
 
-  
+```r
+airport %>% filter(location == 2) %>% summarize_at(vars(starts_with("epi")), 
+    funs(mean))
+```
+
+```
+## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## please use list() instead
+## 
+## # Before:
+## funs(name = f(.)
+## 
+## # After: 
+## list(name = ~f(.))
+## This warning is displayed once per session.
+```
+
+```
+## # A tibble: 1 x 4
+##   epi_1 epi_2 epi_3 epi_4
+##   <dbl> <dbl> <dbl> <dbl>
+## 1  249.  279.  251.  247.
+```
+
+ 
+
+The message here is that the mean epinephrine levels at time 2 were
+higher than the others, so that's what seems to be driving the time
+effect. And remember, these were the control children, so they had no
+new airport nearby.
+
+I want to try this:
 
 
+```r
+airport %>% group_by(location) %>% nest()
+```
+
+```
+## # A tibble: 2 x 2
+##   location data              
+##      <dbl> <list>            
+## 1        1 <tibble [100 x 5]>
+## 2        2 <tibble [100 x 5]>
+```
+
+ 
+
+This is like the idea in the Spilich problem: I want to write a
+function that calculates the means of the `epi_1` through
+`epi_4` columns of a data frame like `airport`, and
+then apply it to each of those "nested" data frames.
 
 
- How can we predict an individual's body fat? Physiologists
-measured body fat for 20 individuals, along with three other
-quantitative measurements: triceps skinfold thickness, thigh
-circumference and midarm circumference. (Measuring body fat requires a
-special device, but the other variables are easy to measure and might
-give a good estimate of body fat.) The data can be found at
-[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat2.txt). The data
-values are separated by *tabs*.
+```r
+epi.means <- function(x) {
+    x %>% summarize_at(vars(starts_with("epi")), 
+        funs(mean))
+}
+
+epi.means(airport)
+```
+
+```
+## # A tibble: 1 x 4
+##   epi_1 epi_2 epi_3 epi_4
+##   <dbl> <dbl> <dbl> <dbl>
+## 1  248.  309.  304.  298.
+```
+
+ 
+
+OK, and then:
 
 
+```r
+airport %>% group_by(location) %>% nest() %>% 
+    mutate(means = map(data, ~epi.means(.))) %>% 
+    unnest(means)
+```
 
-(a) Read in (to SAS) and display the data. (You may display all
-the data.)
+```
+## # A tibble: 2 x 6
+##   location data       epi_1 epi_2 epi_3 epi_4
+##      <dbl> <list>     <dbl> <dbl> <dbl> <dbl>
+## 1        1 <tibble [~  247.  340.  356.  349.
+## 2        2 <tibble [~  249.  279.  251.  247.
+```
 
+ 
 
-Solution
+Ooh, nice. There are the means for the four time points at both of the
+two locations. At location 1, epinephrine starts out low, jumps high
+after the airport is built, and stays there, while at location 2, the
+mean is mysteriously higher at time 2 and then epinephrine levels go
+back down again.
 
-
-Something like this. Remember the `delimiter` line that
-you need for tabs:
-\begin{Datastep}
-filename myurl url 'http://www.utsc.utoronto.ca/~butler/c32/bodyfat2.txt';
-proc import
-datafile=myurl
-out=bodyfat
-dbms=dlm
-replace;
-getnames=yes;
-delimiter='09'x;
-\end{Datastep}
-\begin{Sascode}[store=qonut]
-proc print;        
-\end{Sascode}
-\Listing[store=qonut, fontsize=footnotesize]{qonutt}
-As indicated, 20 observations, and all the variables
-quantitative. 
+Enough of that. Back to the mixed model analysis, with more copying
+and pasting. Here is the "simple time effect" at location 2:
 
 
+```r
+fairport %>% filter(location == 2) %>% lmer(epinephrine ~ 
+    when + (1 | fchild), data = .) %>% drop1(test = "Chisq")
+```
 
-(b) Fit a regression predicting body fat from all the other
+```
+## Single term deletions
+## 
+## Model:
+## epinephrine ~ when + (1 | fchild)
+##        Df    AIC    LRT   Pr(Chi)    
+## <none>    4336.8                     
+## when    3 4363.7 32.889 3.399e-07 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+ 
+
+This also finds a time effect at location 2, with a very similar P-value.
+
+So which method is preferred? They are, I think, two different ways of
+approaching the same problem, and so there is no good reason to prefer
+one way over the other. The profile-analysis way is easier to follow
+if you are coming from a MANOVA direction: set it up the same way as
+you would a MANOVA, with your repeated measures as your multivariate
+response, and distinguish between the within-subject design (times,
+for us) and the between-subject design (treatments, stuff like
+that). As for mixed models: when you get your head around that crazy
+way of specifying the random effects, which are typically "subjects"
+in this kind of analysis, the actual model statement is brief:
+response depends on fixed effects plus random effects with the
+brackets and vertical bar. I always find the `lmer` models look
+very simple once you have figured them out (like `ggplot` in
+that regard). I also like the fact that `lmer` uses "tidy data", 
+so that you can make graphs and do this flavour of analysis
+with the same data frame. Having gotten my head around getting my data
+tidy, it seems odd to me that profile analysis requires the data to be
+untidy, although it does so for a good reason: if you were genuinely
+doing a MANOVA, you would *want* your multiple response
+variables each in their own column. Doing repeated measures this way
+is thinking of your responses at different times like different
 variables. 
 
+The approach I've taken in this course is for historical reasons. That
+is to say, *my* history, not because the historical perspective
+is necessarily the best one.  It began with doing repeated measures in
+SAS (this was like nine years ago), and the only way I could get my
+head around that was the profile-analysis way. I'm not even sure there
+was software for doing mixed models in those days, certainly not in
+SAS. Besides, random effects scared me back then. Anyway, when I
+moved things over to R (this must have been about six years ago), I
+realized I was using basically the same idea in R: make it into a
+MANOVA and tweak things as needed. So I developed things by showing
+you MANOVA first as ANOVA when you have lots of $y$-variables instead
+of just one, and then using it for repeated measures by thinking of
+the repeated measures as "different-but-related" $y$-variables. To
+my mind, this is a reasonable way of doing it in a course like this:
+you get to see MANOVA, which is worth knowing about anyway, and then
+you get to apply it to a very common situation.
 
-Solution
+Mixed models are actually quite recent, as a way of doing this kind of
+modelling. Back when I was learning this stuff, you learned to
+distinguish between "fixed effects", whose levels were the only ones
+you cared about (like the two locations here), and "random effects",
+where the ones you observed were only a sample of the ones you might
+have seen (like "children" or in general "subjects"). Then you
+would test the fixed effects by hypothesizing that their mean effect
+was zero and seeing whether you could reject that (in the same way
+that you do in regression or regular ANOVA: in the latter case, you
+test that the effects of all the different groups are zero, which
+comes down to saying that all the groups have the same mean). The way
+you handled random effects was to estimate their *variance*, and
+then you would test whether a random effect exists or not by testing
+whether the variance of that random effect is zero (does not exist) or
+is greater than zero. Zero is the smallest a variance (or SD) can be,
+which means that testing for it has always been kind of flakey and the
+standard theory doesn't work for it (the technical term is 
+"on the boundary of the parameter space", and the theory applies when the
+null-hypothesis value is strictly *inside* the set of possible
+values the parameter can take). Back when we did this stuff by
+hand,
+\marginnote{I understand psychology students *still* do this  kind of stuff by hand.} we had to figure out whether we were testing
+a fixed or a random effect, and there were rules, involving things
+called "expected mean squares", that told you how to get the tests
+right. Anyway, that is all considered rather old-fashioned now, and
+mixed models are where it is at. In these, you typically *only*
+test the fixed effects, while estimating the size of the random
+effects, taking it for granted that they exist. This is an active area
+of research; the things that `lmer` fits are called 
+"linear mixed models", and there are also now 
+"generalized linear mixed models", things like logistic regression with random effects.
 
+We haven't had to worry about this up to now because in most of the
+experimental designs we have used, each subject only contributes
+*one*  measurement. In that case, you cannot separate out a
+subject-specific "random effect" from random error, and so we lump
+it all into random error. The one experimental design where a subject
+gives us more than one measurement is matched pairs, and the way we
+have handled that so far is to turn the two measurements into one by
+taking the difference between them; even in that case, each subject
+contributes only one *difference* to the analysis. Repeated
+measures, though, is genuinely different: you can't wish away multiple
+measurements on the same subject by taking differences any more, so
+you have to face up to the issue at last. Either we think of it as
+several different measurements that might be correlated (the
+profile-analysis MANOVA way), or we face up to the idea that different
+subjects bring their own random effect to the table that shows up in
+every measurement that the subject provides (mixed models).
 
-`proc reg`, nothing very surprising:
-\begin{Sascode}[store=kufez]
-proc reg;
-model Bodyfat=Triceps Thigh Midarm;
-\end{Sascode}
-\Listing[store=kufez, fontsize=footnotesize]{kufezz}
-
-
-
-(c) What is R-squared for this regression? Look at the P-values
-for the individual explanatory variables. Does this seem surprising?
-Explain briefly.
-
-
-Solution
-
-
-R-squared is about 80\% (0.8014), decently high. But *none*
-of the explanatory variables are significant; the lowest P-value
-is 0.1699. This seems surprising because if the regression fits
-reasonably well, as this one does, you would expect at least one
-of the explanatory variables to be significant. (The reason, if
-you wish to make a guess, is that at least two of the explanatory
-variables are highly correlated with each other, so that we
-don't know which one deserves the "credit" for predicting body
-fat. We'll explore this later.)
-SAS is not case sensitive, so you don't need those Initial
-Capital Letters on the variable names.
-I would have guessed that larger body fat would go with larger
-measurements on the other variables, so I would have expected
-those slopes to be positive. We'll keep an eye on this.
-
-
-
-(d) Remove the least significant explanatory variable from your
-regression. What has happened to the P-values for the other
-explanatory variables? 
-
-
-Solution
-
-
-This means fitting a model without `Thigh`. SAS doesn't
-have `update`, so this means copying and pasting your
-code and deleting `Thigh`:
-\begin{Sascode}[store=gufow]
-proc reg;
-model Bodyfat=Triceps Midarm;
-\end{Sascode}
-\Listing[store=gufow, fontsize=footnotesize]{gufoww}
-The P-values for the remaining two explanatory variables have
-become (much) smaller. In particular, the P-value for
-`Triceps` is now *strongly* significant.
-This suggests that `Triceps` was strongly correlated with
-the variable `Thigh` that we removed. We can investigate this:
-\begin{Sascode}[store=guyuy]
-proc sgplot;
-scatter x=Thigh y=Triceps;
-\end{Sascode}
-\Graphic[store=guyuy, scale=0.7]{guyuyuy}
-That's a decently strong correlation: when one variable is high,
-the other one is too. That's why it was difficult for the
-regression to decide which of `Thigh` and
-`Triceps` deserved to stay.
-I note that the slope for
-`Midarm` is still negative, and now significant, so it
-really does seem to be true that if you have a larger midarm
-circumference, you have *less* body fat, all else (triceps
-skinfold thickness) being equal.
-
-
-
-(e) Make any other changes you would like to make to your
-regression model, or explain briefly why you are happy with the
-model as it stands. 
-
-
-Solution
-
-
-Both of the remaining explanatory variables are now significant,
-so it would be a mistake to remove either of them. We are
-therefore happy with the model as it stands.
-(This statement is really only worth one point, but I didn't
-want to give it away: if you thought you needed to fit another
-model and that had been correct, you would have deserved two
-points for doing it.)
+I did analysis of covariance as a separate mini-section, thinking of
+it as a regression, but if the numerical covariate is the same thing
+as the response but measured at a different time (eg., before rather than
+after), that would also respond to a repeated-measures approach, or to
+the taking of differences as matched pairs does. There is almost
+always more than one way to look at these things.
 
 
 
-(f) For your preferred model, critically assess whether your
-residuals are (i) approximately random with respect to suitable
-things and (ii) approximately normal. You probably already have the
-output you need to investigate this. What do your conclusions tell
-you about your regression?
+
+
+
+##  Body fat as repeated measures
+
+
+ This one is also stolen from STAC32. Athletes are concerned
+with measuring their body fat percentage. Two different methods are
+available: one using ultrasound, and the other using X-ray
+technology. We are interested in whether there is a difference in the
+mean body fat percentage as measured by these two methods, and if so,
+how big that difference is. Data on 16 athletes are at
+[link](http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt).
+
+
+
+(a) Read in the data and check that you have a sensible number of
+rows and columns.
+
 
 
 Solution
 
 
-It's those graphs from the last regression you did:
-\Graphic[store=gufow, scale=0.7]{gufowx}
-On the first $3 \times 3$ "panel", look at the top left
-graph. This is the plot of residuals against fitted values. It
-is pretty much a random scatter. Also look at the last two
-plots; these are the residuals against the two remaining
-explanatory variables, and they both look random as well. (The
-one on the left, against `Triceps`, is pretty much a
-textbook random scatter).
-This all says that the residuals are random relative to anything
-relevant, or to say it another way, there is no remaining
-pattern that we need to incorporate in the model. To assess the
-residuals for normality, look at the normal quantile plot, which
-is the first plot on the second row of the $3\times 3$
-array.\endnote{I mistyped this as "arrau", and was reminded
-that there was a famous Chilean pianist called Claudio
-Arrau. Here he is playing Beethoven's "Waldstein" sonata:
-[link](https://www.youtube.com/watch?v=dL0JLNt_3EE). The people
-behind him are part of the audience, rather than, as is
-usually the case, the orchestra. I'm guessing that those are
-cheaper seats, because the lid of a grand piano always opens
-up so that the best sound comes if the pianist is (from your
-point of view as an audience member) on the left of the piano.} 
-The normal quantile plot is basically straight, I would say,
-with those wiggles being inconsequential ones, not indicative of
-any kind of curve. If the distribution had short tails, there
-would be a rather more pronounced S-shape than you see here.
-The bottom left plot of the $3 \times 3$ array is a histogram of
-the residuals. This does not look very normal, but, as we have
-seen, the histogram is rather a crude tool for assessing
-normality. 
-Concluding, as we have, that there are no problems with the
-residuals means that the regression is satisfactory; it does a
-good job of describing the shape of the relationship. So we
-should be happy to use this regression to predict body fat of
-future individuals based on their triceps and midarm
-measurements. 
+This kind of thing:
+
+```r
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt"
+bodyfat <- read_delim(my_url, " ")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   athlete = col_double(),
+##   xray = col_double(),
+##   ultrasound = col_double()
+## )
+```
+
+```r
+bodyfat
+```
+
+```
+## # A tibble: 16 x 3
+##    athlete  xray ultrasound
+##      <dbl> <dbl>      <dbl>
+##  1       1  5          4.75
+##  2       2  7          3.75
+##  3       3  9.25       9   
+##  4       4 12         11.8 
+##  5       5 17.2       17   
+##  6       6 29.5       27.5 
+##  7       7  5.5        6.5 
+##  8       8  6          6.75
+##  9       9  8          8.75
+## 10      10  8.5        9.5 
+## 11      11  9.25       9.5 
+## 12      12 11         12   
+## 13      13 12         12.2 
+## 14      14 14         15.5 
+## 15      15 17         18   
+## 16      16 18         18.2
+```
+
+ 
+
+16 rows (athletes) and 3 columns, one for each measurement
+method and one labelling the athletes. All good.
+
+
+
+
+
+(b) Carry out a suitable (matched-pairs) $t$-test to determine
+whether the means are the same or different. 
+
+
+
+Solution
+
+
+Feed the two columns into `t.test` along with
+`paired=T`. Remember that this is (in effect) a one-sample
+$t$-test, so that you can't use a `data=`. You therefore have
+to wrap everything in a `with`:
+
+```r
+with(bodyfat, t.test(xray, ultrasound, paired = T))
+```
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  xray and ultrasound
+## t = -0.30801, df = 15, p-value = 0.7623
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.7425068  0.5550068
+## sample estimates:
+## mean of the differences 
+##                -0.09375
+```
+
+ 
+
+The test we want is two-sided, so we didn't have to take any special
+steps to get that.
+
+
+
+
+
+(c) What do you conclude from the test?
+
+
+
+Solution
+
+
+The P-value of 0.7623 is not at all small, so there is no way we can
+reject the null hypothesis.
+\marginnote{My hat stays on my head.} There
+is no evidence of a difference in means; we can act as if the two
+methods produce the same mean body fat percentage. 
+That is to say, on this evidence we can use either method, whichever
+one is cheaper or more convenient.
+
+ 
+
+
+(d) Run a repeated-measures analysis of variance, treating the two
+methods of measuring body fat as the repeated measures (ie., playing
+the role of "time" that you have seen in most of the other repeated
+measures analyses). There is no "treatment" here, so there is
+nothing to go on the right side of the squiggle. Insert a `1`
+there to mean "just an intercept". Display the results.
+
+
+
+Solution
+
+
+Construct the response variable, run `lm`, construct the
+within-subjects part of the design, run `Manova`:
+
+
+```r
+response <- bodyfat %>% select(xray:ultrasound) %>% 
+    as.matrix()
+bodyfat.1 <- lm(response ~ 1)
+methods <- colnames(response)
+methods.df <- data.frame(methods)
+bodyfat.2 <- Manova(bodyfat.1, idata = methods.df, 
+    idesign = ~methods)
+```
+
+```
+## Note: model has only an intercept; equivalent type-III tests substituted.
+```
+
+```r
+bodyfat.2
+```
+
+```
+## 
+## Type III Repeated Measures MANOVA Tests: Pillai test statistic
+##             Df test stat approx F num Df
+## (Intercept)  1   0.79734   59.016      1
+## methods      1   0.00628    0.095      1
+##             den Df    Pr(>F)    
+## (Intercept)     15 1.413e-06 ***
+## methods         15    0.7623    
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+```
+
+ 
+
+
+
+
+(e) Compare your repeated-measures analysis to your matched-pairs
+one. Do you draw the same conclusions?
+
+
+
+Solution
+
+
+The P-value for `methods`, which is testing the same thing
+as the matched pairs, is 0.7623, which is actually
+*identical* to the matched pairs $t$-test, and so the
+conclusion is identical also. That is, there is no difference
+between the two methods for measuring body fat. 
+This goes to show that repeated measures gives the same answer as
+a matched-pairs $t$-test in the situation where they both
+apply. But repeated measures is, as we have seen, a lot more general.
+Since this really is repeated measures, we ought to be able to use
+a mixed model here too. We need "long" or "tidy" format, which
+we don't have yet. One pipe to save them all, to paraphrase Lord
+of the Rings
+\marginnote{The movies of Lord of the Rings were filmed      in New Zealand, which is also the country in which R was first      designed.} --- put all the fat measurements in one column with a
+label saying which `method` they were obtained with; create
+a column which is the athlete number as a factor; fit the linear
+mixed model; see what we can drop from it:
+
+```r
+bodyfat
+```
+
+```
+## # A tibble: 16 x 3
+##    athlete  xray ultrasound
+##      <dbl> <dbl>      <dbl>
+##  1       1  5          4.75
+##  2       2  7          3.75
+##  3       3  9.25       9   
+##  4       4 12         11.8 
+##  5       5 17.2       17   
+##  6       6 29.5       27.5 
+##  7       7  5.5        6.5 
+##  8       8  6          6.75
+##  9       9  8          8.75
+## 10      10  8.5        9.5 
+## 11      11  9.25       9.5 
+## 12      12 11         12   
+## 13      13 12         12.2 
+## 14      14 14         15.5 
+## 15      15 17         18   
+## 16      16 18         18.2
+```
+
+```r
+bodyfat %>% gather(method, fat, xray:ultrasound) %>% 
+    mutate(fathlete = factor(athlete)) %>% lmer(fat ~ 
+    method + (1 | fathlete), data = .) %>% drop1(test = "Chisq")
+```
+
+```
+## Single term deletions
+## 
+## Model:
+## fat ~ method + (1 | fathlete)
+##        Df    AIC     LRT Pr(Chi)
+## <none>    161.34                
+## method  1 159.44 0.10088  0.7508
+```
+
+     
+
+Once again, there is no difference between methods, and though the
+P-value is different from the matched pairs or profile analysis, it is
+very close to those.
+
+If you're not clear about the tidy data frame used for input to
+`lmer`, pull the top two lines off the chain and see what they produce:
+
+
+```r
+bodyfat %>% gather(method, fat, xray:ultrasound) %>% 
+    mutate(fathlete = factor(athlete))
+```
+
+```
+## # A tibble: 32 x 4
+##    athlete method   fat fathlete
+##      <dbl> <chr>  <dbl> <fct>   
+##  1       1 xray    5    1       
+##  2       2 xray    7    2       
+##  3       3 xray    9.25 3       
+##  4       4 xray   12    4       
+##  5       5 xray   17.2  5       
+##  6       6 xray   29.5  6       
+##  7       7 xray    5.5  7       
+##  8       8 xray    6    8       
+##  9       9 xray    8    9       
+## 10      10 xray    8.5  10      
+## # ... with 22 more rows
+```
+
+ 
+
+Each athlete now appears twice: once with their `fat` measured
+by `xray`, and again with it measured by
+`ultrasound`. The column `fathlete` is a factor.
+
+The mixed model took me two goes to get right: I forgot that I needed the
+`data=.` in `lmer`, because it works like `lm`
+with the model formula first, not the input data. If the chain is
+going too fast for you, create the tidy data frame and save it, then
+use the saved data frame as input to `lmer`.
+
+
 
 
 
@@ -2191,19 +2774,20 @@ king
 
 ```
 ## # A tibble: 24 x 8
-##       id context    i1    i2    i3    i4    i5    i6
-##    <dbl> <chr>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1   101 control   150    44    71    59   132    74
-##  2   102 control   335   270   156   160   118   230
-##  3   103 control   149    52    91   115    43   154
-##  4   104 control   159    31   127   212    71   224
-##  5   105 control   292   125   184   246   225   170
-##  6   106 control   297   187    66    96   209    74
-##  7   107 control   170    37    42    66   114    81
-##  8   108 control   159     0    35    75    71    34
-##  9   109 same      346   175   177   192   239   140
-## 10   110 same      426   329   236    76   102   232
-## # … with 14 more rows
+##       id context    i1    i2    i3    i4
+##    <dbl> <chr>   <dbl> <dbl> <dbl> <dbl>
+##  1   101 control   150    44    71    59
+##  2   102 control   335   270   156   160
+##  3   103 control   149    52    91   115
+##  4   104 control   159    31   127   212
+##  5   105 control   292   125   184   246
+##  6   106 control   297   187    66    96
+##  7   107 control   170    37    42    66
+##  8   108 control   159     0    35    75
+##  9   109 same      346   175   177   192
+## 10   110 same      426   329   236    76
+## # ... with 14 more rows, and 2 more
+## #   variables: i5 <dbl>, i6 <dbl>
 ```
 
      
@@ -2227,7 +2811,8 @@ Solution
 `cbind` the appropriate columns together, to make a matrix:
 
 ```r
-response <- with(king, cbind(i1, i2, i3, i4, i5, i6))
+response <- with(king, cbind(i1, i2, i3, i4, i5, 
+    i6))
 ```
 
      
@@ -2257,9 +2842,7 @@ because we are now in the `tidyverse`:
 
 
 ```r
-response <- king %>%
-  select(i1:i6) %>%
-  as.matrix()
+response <- king %>% select(i1:i6) %>% as.matrix()
 class(response)
 ```
 
@@ -2277,9 +2860,8 @@ idea, but not before trying this:
 
 
 ```r
-response <- king %>%
-  select(matches("i[0-9]")) %>%
-  as.matrix()
+response <- king %>% select(matches("i[0-9]")) %>% 
+    as.matrix()
 head(response)
 ```
 
@@ -2343,13 +2925,19 @@ king.2
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##               Df test stat approx F num Df den Df    Pr(>F)    
-## (Intercept)    1   0.91326  221.107      1     21 1.273e-12 ***
-## context        2   0.41017    7.302      2     21  0.003914 ** 
-## times          1   0.85700   20.376      5     17 1.233e-06 ***
-## context:times  2   0.80339    2.417     10     36  0.025628 *  
+##               Df test stat approx F num Df
+## (Intercept)    1   0.91326  221.107      1
+## context        2   0.41017    7.302      2
+## times          1   0.85700   20.376      5
+## context:times  2   0.80339    2.417     10
+##               den Df    Pr(>F)    
+## (Intercept)       21 1.273e-12 ***
+## context           21  0.003914 ** 
+## times             17 1.233e-06 ***
+## context:times     36  0.025628 *  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -2407,7 +2995,7 @@ king.long
 ##  8   108 control i1         159
 ##  9   109 same    i1         346
 ## 10   110 same    i1         426
-## # … with 134 more rows
+## # ... with 134 more rows
 ```
 
      
@@ -2432,11 +3020,13 @@ That means this, using `group` to indicate which points to
 join by lines, since it's different from the `colour`: 
 
 ```r
-ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
-  geom_point() + geom_line()
+ggplot(king.long, aes(x = time, y = activity, 
+    colour = context, group = id)) + geom_point() + 
+    geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-66-1} 
 
      
 
@@ -2444,11 +3034,12 @@ I'd say the `geom_point` is optional, so that this is also
 good, perhaps better even:
 
 ```r
-ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
-  geom_line()
+ggplot(king.long, aes(x = time, y = activity, 
+    colour = context, group = id)) + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-67-1} 
 
  
     
@@ -2475,14 +3066,13 @@ If you like, you can draw an interaction plot by working out the
 means for each `context`-`time` group first:
 
 ```r
-king.long %>%
-  group_by(context, time) %>%
-  summarize(m = mean(activity)) %>%
-  ggplot(aes(x = time, y = m, colour = context, group = context)) +
-  geom_point() + geom_line()
+king.long %>% group_by(context, time) %>% summarize(m = mean(activity)) %>% 
+    ggplot(aes(x = time, y = m, colour = context, 
+        group = context)) + geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-58-1.png" width="672"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-68-1} 
 
    
 
@@ -2496,7 +3086,8 @@ This kind of thing also runs with `lmer` from package
 
 
 ```r
-king.3 <- lmer(activity ~ context * time + (1 | id), data = king.long)
+king.3 <- lmer(activity ~ context * time + (1 | 
+    id), data = king.long)
 ```
 
  
@@ -2517,7 +3108,8 @@ drop1(king.3, test = "Chisq")
 ## <none>          1609.0                     
 ## context:time 10 1622.7 33.764 0.0002025 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -2617,7 +3209,7 @@ treatments
 ##  8 A     T3          2    27
 ##  9 A     T3          3    28
 ## 10 B     T1          4    12
-## # … with 17 more rows
+## # ... with 17 more rows
 ```
 
      
@@ -2644,11 +3236,12 @@ The individuals are labelled in `subject` and the
 treatments are in `trt`, which means we need to do this:
 
 ```r
-ggplot(treatments, aes(x = time, y = y, colour = trt, group = subject)) +
-  geom_point() + geom_line()
+ggplot(treatments, aes(x = time, y = y, colour = trt, 
+    group = subject)) + geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
+
+\includegraphics{20-repeated-measures_files/figure-latex/unnamed-chunk-72-1} 
 
      
 
@@ -2777,20 +3370,27 @@ Then, uppercase-M `Manova`:
 
 
 ```r
-treatment.2 <- Manova(treatment.1, idata = times.df, idesign = ~times)
+treatment.2 <- Manova(treatment.1, idata = times.df, 
+    idesign = ~times)
 treatment.2
 ```
 
 ```
 ## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
-##             Df test stat approx F num Df den Df    Pr(>F)    
-## (Intercept)  1   0.99751  2399.02      1      6 4.857e-09 ***
-## trt          2   0.70412     7.14      2      6  0.025902 *  
-## times        1   0.99876  2010.30      2      5 5.437e-08 ***
-## trt:times    2   1.34513     6.16      4     12  0.006206 ** 
+##             Df test stat approx F num Df
+## (Intercept)  1   0.99751  2399.02      1
+## trt          2   0.70412     7.14      2
+## times        1   0.99876  2010.30      2
+## trt:times    2   1.34513     6.16      4
+##             den Df    Pr(>F)    
+## (Intercept)      6 4.857e-09 ***
+## trt              6  0.025902 *  
+## times            5 5.437e-08 ***
+## trt:times       12  0.006206 ** 
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
  
@@ -2807,7 +3407,8 @@ capital A. That looks a bit different but gives us some extra information:
 
 
 ```r
-treatment.3 <- Anova(treatment.1, idata = times.df, idesign = ~times, type = "III")
+treatment.3 <- Anova(treatment.1, idata = times.df, 
+    idesign = ~times, type = "III")
 ```
 
  
@@ -2824,13 +3425,19 @@ summary(treatment.3, multivariate = F)
 ## 
 ## Univariate Type III Repeated-Measures ANOVA Assuming Sphericity
 ## 
-##             Sum Sq num Df Error SS den Df  F value    Pr(>F)    
-## (Intercept) 3211.1      1   27.111      6 710.6557 1.840e-07 ***
-## trt           64.5      2   27.111      6   7.1393 0.0259021 *  
-## times        338.9      2   12.889     12 157.7586 2.419e-09 ***
-## trt:times     41.5      4   12.889     12   9.6552 0.0009899 ***
+##             Sum Sq num Df Error SS den Df
+## (Intercept) 3211.1      1   27.111      6
+## trt           64.5      2   27.111      6
+## times        338.9      2   12.889     12
+## trt:times     41.5      4   12.889     12
+##              F value    Pr(>F)    
+## (Intercept) 710.6557 1.840e-07 ***
+## trt           7.1393 0.0259021 *  
+## times       157.7586 2.419e-09 ***
+## trt:times     9.6552 0.0009899 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ## 
 ## Mauchly Tests for Sphericity
@@ -2847,7 +3454,8 @@ summary(treatment.3, multivariate = F)
 ## times     0.58811  3.285e-06 ***
 ## trt:times 0.58811   0.008332 ** 
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ## 
 ##              HF eps   Pr(>F[HF])
 ## times     0.6461293 1.182316e-06
@@ -2906,12 +3514,12 @@ too. The subjects, though, are different: they are a random sample
 of all possible people, and you want your results to generalize to
 the population of all people of whom your subjects are a
 sample.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In practice, things are usually fuzzier than this,      because the subjects in your study are typically the ones you      could get, rather than being a physical random sample of all      possible people, but we usually act as if our subjects are a      random sample of all possible subjects.</span>
+\marginnote{In practice, things are usually fuzzier than this,      because the subjects in your study are typically the ones you      could get, rather than being a physical random sample of all      possible people, but we usually act as if our subjects are a      random sample of all possible subjects.}
 So subjects are a different kind of thing and they have what are
 called random effects. When each subject only gives one
 measurement, as in all the things we've seen so
 far,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Including matched pairs, because what we do there is      to take the difference between the two measurements for each      person and throw away the actual measurements themselves, so      that each subject still only gives us one measurement.</span> it
+\marginnote{Including matched pairs, because what we do there is      to take the difference between the two measurements for each      person and throw away the actual measurements themselves, so      that each subject still only gives us one measurement.} it
 doesn't matter how you treat (statistically) the subjects, but
 when each subject gives *more* than one measurement, it does
 matter. Which is why we have to do the `idesign` stuff in
@@ -2934,7 +3542,8 @@ with the tidy data frame} that we read in from the file and made
 the spaghetti plot out of:
 
 ```r
-treatment.4 <- lmer(y ~ trt * time + (1 | subject), data = treatments)
+treatment.4 <- lmer(y ~ trt * time + (1 | subject), 
+    data = treatments)
 drop1(treatment.4, test = "Chisq")
 ```
 
@@ -2947,7 +3556,8 @@ drop1(treatment.4, test = "Chisq")
 ## <none>      102.53                    
 ## trt:time  4 120.44 25.91 3.299e-05 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
 ```
 
      
@@ -2959,7 +3569,7 @@ each subject is different.
 You don't get a test for the random effects; you are assuming that the
 subjects will be different from each other and you want to adjust for
 that.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is rather like the test for blocks in a randomized  block design: you want to *allow* for differences among blocks,  but you don't especially care to test that there *are* any. In  fact, blocks are a lot like subjects, in that they are typically  things like different experimental plots in which plants are grown,  or different days on which the experiment is conducted, and you want to generalize from the blocks you observed, which are certainly *not* all possible blocks, to the population of all possible blocks.</span>
+\marginnote{This is rather like the test for blocks in a randomized  block design: you want to *allow* for differences among blocks,  but you don't especially care to test that there *are* any. In  fact, blocks are a lot like subjects, in that they are typically  things like different experimental plots in which plants are grown,  or different days on which the experiment is conducted, and you want to generalize from the blocks you observed, which are certainly *not* all possible blocks, to the population of all possible blocks.}
 All you get is tests for the fixed effects that are currently up for
 grabs, in this case the interaction, which is strongly significant.
 
