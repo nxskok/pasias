@@ -73,7 +73,7 @@ that students have already seen a little of regression and analysis of
 variance (and the things that precede them), and need mainly an
 introduction of how to run them in R.
 
-STAC33 is an introduction to R and SAS for students who have a background in mathematical statistics. The way our courses are structured, these students have a strong mathematical background, but not very much experience in applications, which this course is designed to provide. The material covered is similar to STAC32, with a planned addition of some ideas in bootstrap and practical Bayesian statistics (these last two will eventually get questions here).
+STAC33 is an introduction to R and SAS for students who have a background in mathematical statistics. The way our courses are structured, these students have a strong mathematical background, but not very much experience in applications, which this course is designed to provide. The material covered is similar to STAC32, with a planned addition of some ideas in bootstrap and practical Bayesian statistics. There are some questions on these here.
 
 STAD29 is an overview of a number of advanced statistical methods. I
 start from regression and proceed to some regression-like methods

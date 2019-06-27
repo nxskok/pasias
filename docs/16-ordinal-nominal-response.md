@@ -9,103 +9,83 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R
-## version 3.5.3
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R
-## version 3.5.3
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R
-## version 3.5.3
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R
-## version 3.5.2
+## Warning: package 'readr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R
-## version 3.5.3
+## Warning: package 'purrr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R
-## version 3.5.2
+## Warning: package 'dplyr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R
-## version 3.5.2
+## Warning: package 'stringr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R
-## version 3.5.1
+## Warning: package 'forcats' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under
-## R version 3.5.1
+## Warning: package 'survminer' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R
-## version 3.5.1
+## Warning: package 'ggpubr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R
-## version 3.5.1
+## Warning: package 'magrittr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R
-## version 3.5.1
+## Warning: package 'car' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R
-## version 3.5.1
+## Warning: package 'carData' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R
-## version 3.5.1
+## Warning: package 'ggbiplot' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R
-## version 3.5.1
+## Warning: package 'plyr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R
-## version 3.5.1
+## Warning: package 'scales' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R
-## version 3.5.1
+## Warning: package 'ggrepel' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R
-## version 3.5.2
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'rstan' was built under R
-## version 3.5.3
+## Warning: package 'rstan' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'StanHeaders' was built
-## under R version 3.5.1
+## Warning: package 'StanHeaders' was built under R version 3.5.1
 ```
 
 
@@ -156,17 +136,16 @@ mobile
 
 ```
 ## # A tibble: 8 x 6
-##   gender age.group very.unsat unsat   sat
-##   <chr>  <chr>          <dbl> <dbl> <dbl>
-## 1 male   0-17               3     9    18
-## 2 male   18-24              6    13    16
-## 3 male   25-30              9    13    17
-## 4 male   31+                5     7    16
-## 5 female 0-17               4     8    11
-## 6 female 18-24              8    14    20
-## 7 female 25-30             10    15    16
-## 8 female 31+                5    14    12
-## # ... with 1 more variable: very.sat <dbl>
+##   gender age.group very.unsat unsat   sat very.sat
+##   <chr>  <chr>          <dbl> <dbl> <dbl>    <dbl>
+## 1 male   0-17               3     9    18       24
+## 2 male   18-24              6    13    16       28
+## 3 male   25-30              9    13    17       20
+## 4 male   31+                5     7    16       16
+## 5 female 0-17               4     8    11       25
+## 6 female 18-24              8    14    20       18
+## 7 female 25-30             10    15    16       12
+## 8 female 31+                5    14    12        8
 ```
 
  
@@ -174,8 +153,7 @@ With multiple columns that are all frequencies, this is a job for
 `gather`:
 
 ```r
-mobile.long <- mobile %>% gather(satisfied, frequency, 
-    very.unsat:very.sat)
+mobile.long <- mobile %>% gather(satisfied, frequency, very.unsat:very.sat)
 mobile.long
 ```
 
@@ -193,7 +171,7 @@ mobile.long
 ##  8 female 31+       very.unsat         5
 ##  9 male   0-17      unsat              9
 ## 10 male   18-24     unsat             13
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
      
@@ -237,7 +215,7 @@ mobile.long
 ##  8 female 31+       very.unsat         5
 ##  9 male   0-17      unsat              9
 ## 10 male   18-24     unsat             13
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
      
@@ -264,7 +242,8 @@ appear in the data *in the order that we want*. This is good
 news, because we can use `fct_inorder` like this:
 
 ```r
-mobile.long <- mobile.long %>% mutate(satis = fct_inorder(satisfied))
+mobile.long %>%
+  mutate(satis = fct_inorder(satisfied)) -> mobile.long
 ```
 
      
@@ -279,8 +258,7 @@ with(mobile.long, levels(satis))
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
  
@@ -336,14 +314,14 @@ data frame as a vector:
 
 
 ```r
-v1 <- mobile.long %>% distinct(satisfied) %>% 
-    pluck("satisfied")
+v1 <- mobile.long %>%
+  distinct(satisfied) %>%
+  pluck("satisfied")
 v1
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
  
@@ -352,13 +330,14 @@ which is in the correct order, or
 
 
 ```r
-v2 <- mobile.long %>% count(satisfied) %>% pluck("satisfied")
+v2 <- mobile.long %>%
+  count(satisfied) %>%
+  pluck("satisfied")
 v2
 ```
 
 ```
-## [1] "sat"        "unsat"      "very.sat"  
-## [4] "very.unsat"
+## [1] "sat"        "unsat"      "very.sat"   "very.unsat"
 ```
 
  
@@ -375,8 +354,7 @@ v3
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
 ```r
@@ -385,8 +363,7 @@ v4
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
  
@@ -398,14 +375,15 @@ rows in the right order:
 
 
 ```r
-v5 <- mobile.long %>% count(satisfied) %>% slice(c(4, 
-    2, 1, 3)) %>% pluck("satisfied")
+v5 <- mobile.long %>%
+  count(satisfied) %>%
+  slice(c(4, 2, 1, 3)) %>%
+  pluck("satisfied")
 v5
 ```
 
 ```
-## [1] "very.unsat" "unsat"      "sat"       
-## [4] "very.sat"
+## [1] "very.unsat" "unsat"      "sat"        "very.sat"
 ```
 
  
@@ -422,26 +400,26 @@ variable thus, using your vector of categories:
 
 
 ```r
-mobile.long2 <- mobile.long %>% mutate(satis = ordered(satisfied, 
-    v1))
+mobile.long %>%
+  mutate(satis = ordered(satisfied, v1)) -> mobile.long2
 mobile.long2
 ```
 
 ```
 ## # A tibble: 32 x 5
-##    gender age.group satisfied frequency satis
-##    <chr>  <chr>     <chr>         <dbl> <ord>
-##  1 male   0-17      very.uns~         3 very~
-##  2 male   18-24     very.uns~         6 very~
-##  3 male   25-30     very.uns~         9 very~
-##  4 male   31+       very.uns~         5 very~
-##  5 female 0-17      very.uns~         4 very~
-##  6 female 18-24     very.uns~         8 very~
-##  7 female 25-30     very.uns~        10 very~
-##  8 female 31+       very.uns~         5 very~
-##  9 male   0-17      unsat             9 unsat
-## 10 male   18-24     unsat            13 unsat
-## # ... with 22 more rows
+##    gender age.group satisfied  frequency satis     
+##    <chr>  <chr>     <chr>          <dbl> <ord>     
+##  1 male   0-17      very.unsat         3 very.unsat
+##  2 male   18-24     very.unsat         6 very.unsat
+##  3 male   25-30     very.unsat         9 very.unsat
+##  4 male   31+       very.unsat         5 very.unsat
+##  5 female 0-17      very.unsat         4 very.unsat
+##  6 female 18-24     very.unsat         8 very.unsat
+##  7 female 25-30     very.unsat        10 very.unsat
+##  8 female 31+       very.unsat         5 very.unsat
+##  9 male   0-17      unsat              9 unsat     
+## 10 male   18-24     unsat             13 unsat     
+## # … with 22 more rows
 ```
 
  
@@ -465,8 +443,7 @@ Solution
 
 ```r
 library(MASS)
-mobile.1 <- polr(satis ~ gender + age.group, weights = frequency, 
-    data = mobile.long)
+mobile.1 <- polr(satis ~ gender + age.group, weights = frequency, data = mobile.long)
 ```
 
  
@@ -516,8 +493,7 @@ drop1(mobile.1, test = "Chisq")
 ## gender     1 1104.2  4.4089 0.035751 * 
 ## age.group  3 1109.0 13.1641 0.004295 **
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -550,12 +526,9 @@ anova(mobile.3, mobile.1)
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: satis
-##                Model Resid. df Resid. Dev
-## 1          age.group       414   1092.213
-## 2 gender + age.group       413   1087.804
-##     Test    Df LR stat.    Pr(Chi)
-## 1                                 
-## 2 1 vs 2     1  4.40892 0.03575146
+##                Model Resid. df Resid. Dev   Test    Df LR stat.    Pr(Chi)
+## 1          age.group       414   1092.213                                 
+## 2 gender + age.group       413   1087.804 1 vs 2     1  4.40892 0.03575146
 ```
 
      
@@ -588,12 +561,12 @@ anova(mobile.2, mobile.1)
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: satis
-##                Model Resid. df Resid. Dev
-## 1             gender       416   1100.968
-## 2 gender + age.group       413   1087.804
-##     Test    Df LR stat.     Pr(Chi)
-## 1                                  
-## 2 1 vs 2     3 13.16411 0.004294811
+##                Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1             gender       416   1100.968                      
+## 2 gender + age.group       413   1087.804 1 vs 2     3 13.16411
+##       Pr(Chi)
+## 1            
+## 2 0.004294811
 ```
 
     
@@ -631,28 +604,21 @@ read in from the file was called `mobile`, and I  need
 
 ```r
 probs <- predict(mobile.1, mobile, type = "p")
-mobile %>% select(gender, age.group) %>% cbind(probs)
+mobile %>%
+  select(gender, age.group) %>%
+  cbind(probs)
 ```
 
 ```
-##   gender age.group very.unsat     unsat
-## 1   male      0-17 0.06070852 0.1420302
-## 2   male     18-24 0.09212869 0.1932086
-## 3   male     25-30 0.13341018 0.2438110
-## 4   male       31+ 0.11667551 0.2252966
-## 5 female      0-17 0.08590744 0.1840411
-## 6 female     18-24 0.12858414 0.2387296
-## 7 female     25-30 0.18290971 0.2853880
-## 8 female       31+ 0.16112036 0.2692996
-##         sat  very.sat
-## 1 0.2752896 0.5219716
-## 2 0.3044732 0.4101894
-## 3 0.3084506 0.3143282
-## 4 0.3097920 0.3482359
-## 5 0.3011751 0.4288763
-## 6 0.3091489 0.3235374
-## 7 0.2920053 0.2396970
-## 8 0.3008711 0.2687089
+##   gender age.group very.unsat     unsat       sat  very.sat
+## 1   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
+## 2   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
+## 3   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
+## 4   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
+## 5 female      0-17 0.08590744 0.1840411 0.3011751 0.4288763
+## 6 female     18-24 0.12858414 0.2387296 0.3091489 0.3235374
+## 7 female     25-30 0.18290971 0.2853880 0.2920053 0.2396970
+## 8 female       31+ 0.16112036 0.2692996 0.3008711 0.2687089
 ```
 
    
@@ -696,29 +662,21 @@ With that in mind, we can get the right `select` like this:
 
 ```r
 probs <- predict(mobile.1, mobile, type = "p")
-mobile %>% dplyr::select(gender, age.group) %>% 
-    cbind(probs)
+mobile %>%
+  dplyr::select(gender, age.group) %>%
+  cbind(probs)
 ```
 
 ```
-##   gender age.group very.unsat     unsat
-## 1   male      0-17 0.06070852 0.1420302
-## 2   male     18-24 0.09212869 0.1932086
-## 3   male     25-30 0.13341018 0.2438110
-## 4   male       31+ 0.11667551 0.2252966
-## 5 female      0-17 0.08590744 0.1840411
-## 6 female     18-24 0.12858414 0.2387296
-## 7 female     25-30 0.18290971 0.2853880
-## 8 female       31+ 0.16112036 0.2692996
-##         sat  very.sat
-## 1 0.2752896 0.5219716
-## 2 0.3044732 0.4101894
-## 3 0.3084506 0.3143282
-## 4 0.3097920 0.3482359
-## 5 0.3011751 0.4288763
-## 6 0.3091489 0.3235374
-## 7 0.2920053 0.2396970
-## 8 0.3008711 0.2687089
+##   gender age.group very.unsat     unsat       sat  very.sat
+## 1   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
+## 2   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
+## 3   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
+## 4   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
+## 5 female      0-17 0.08590744 0.1840411 0.3011751 0.4288763
+## 6 female     18-24 0.12858414 0.2387296 0.3091489 0.3235374
+## 7 female     25-30 0.18290971 0.2853880 0.2920053 0.2396970
+## 8 female       31+ 0.16112036 0.2692996 0.3008711 0.2687089
 ```
 
    
@@ -750,10 +708,10 @@ getting the different satisfaction levels:
 
 
 ```r
-genders <- mobile.long %>% distinct(gender) %>% 
-    pluck("gender")
-age.groups <- mobile.long %>% distinct(age.group) %>% 
-    pluck("age.group")
+genders <- mobile.long %>% distinct(gender) %>% pluck("gender")
+age.groups <- mobile.long %>%
+  distinct(age.group) %>%
+  pluck("age.group")
 ```
 
  
@@ -791,24 +749,15 @@ cbind(new, pp)
 ```
 
 ```
-##   gender age.group very.unsat     unsat
-## 1 female      0-17 0.08590744 0.1840411
-## 2 female     18-24 0.12858414 0.2387296
-## 3 female     25-30 0.18290971 0.2853880
-## 4 female       31+ 0.16112036 0.2692996
-## 5   male      0-17 0.06070852 0.1420302
-## 6   male     18-24 0.09212869 0.1932086
-## 7   male     25-30 0.13341018 0.2438110
-## 8   male       31+ 0.11667551 0.2252966
-##         sat  very.sat
-## 1 0.3011751 0.4288763
-## 2 0.3091489 0.3235374
-## 3 0.2920053 0.2396970
-## 4 0.3008711 0.2687089
-## 5 0.2752896 0.5219716
-## 6 0.3044732 0.4101894
-## 7 0.3084506 0.3143282
-## 8 0.3097920 0.3482359
+##   gender age.group very.unsat     unsat       sat  very.sat
+## 1 female      0-17 0.08590744 0.1840411 0.3011751 0.4288763
+## 2 female     18-24 0.12858414 0.2387296 0.3091489 0.3235374
+## 3 female     25-30 0.18290971 0.2853880 0.2920053 0.2396970
+## 4 female       31+ 0.16112036 0.2692996 0.3008711 0.2687089
+## 5   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
+## 6   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
+## 7   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
+## 8   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
 ```
 
  
@@ -944,20 +893,19 @@ abortion
 
 ```
 ## # A tibble: 81 x 5
-##     year religion education attitude
-##    <dbl> <chr>    <chr>     <chr>   
-##  1  1972 Prot     Low       Neg     
-##  2  1972 Prot     Low       Mix     
-##  3  1972 Prot     Low       Pos     
-##  4  1972 Prot     Med       Neg     
-##  5  1972 Prot     Med       Mix     
-##  6  1972 Prot     Med       Pos     
-##  7  1972 Prot     High      Neg     
-##  8  1972 Prot     High      Mix     
-##  9  1972 Prot     High      Pos     
-## 10  1972 SProt    Low       Neg     
-## # ... with 71 more rows, and 1 more
-## #   variable: frequency <dbl>
+##     year religion education attitude frequency
+##    <dbl> <chr>    <chr>     <chr>        <dbl>
+##  1  1972 Prot     Low       Neg              9
+##  2  1972 Prot     Low       Mix             12
+##  3  1972 Prot     Low       Pos             48
+##  4  1972 Prot     Med       Neg             13
+##  5  1972 Prot     Med       Mix             43
+##  6  1972 Prot     Med       Pos            197
+##  7  1972 Prot     High      Neg              4
+##  8  1972 Prot     High      Mix              9
+##  9  1972 Prot     High      Pos            139
+## 10  1972 SProt    Low       Neg              9
+## # … with 71 more rows
 ```
 
      
@@ -1016,7 +964,7 @@ Solution
 This is actually harder to describe than it is to do.
 First thing is to decide on the ordering you want. You can go
 low to high or high to low (it doesn't matter).
-\marginnote{The        results might look different which way you go, but it won't        make any *material* difference.} I'm going negative to
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The        results might look different which way you go, but it won't        make any *material* difference.</span> I'm going negative to
 positive. Either way, you want `Mix` in the middle:
 
 ```r
@@ -1030,28 +978,26 @@ input to `ordered`:
 
 
 ```r
-abortion <- abortion %>% mutate(attitude.ord = ordered(attitude, 
-    lev))
+abortion <- abortion %>%
+  mutate(attitude.ord = ordered(attitude, lev))
 abortion
 ```
 
 ```
 ## # A tibble: 81 x 6
-##     year religion education attitude
-##    <dbl> <chr>    <chr>     <chr>   
-##  1  1972 Prot     Low       Neg     
-##  2  1972 Prot     Low       Mix     
-##  3  1972 Prot     Low       Pos     
-##  4  1972 Prot     Med       Neg     
-##  5  1972 Prot     Med       Mix     
-##  6  1972 Prot     Med       Pos     
-##  7  1972 Prot     High      Neg     
-##  8  1972 Prot     High      Mix     
-##  9  1972 Prot     High      Pos     
-## 10  1972 SProt    Low       Neg     
-## # ... with 71 more rows, and 2 more
-## #   variables: frequency <dbl>,
-## #   attitude.ord <ord>
+##     year religion education attitude frequency attitude.ord
+##    <dbl> <chr>    <chr>     <chr>        <dbl> <ord>       
+##  1  1972 Prot     Low       Neg              9 Neg         
+##  2  1972 Prot     Low       Mix             12 Mix         
+##  3  1972 Prot     Low       Pos             48 Pos         
+##  4  1972 Prot     Med       Neg             13 Neg         
+##  5  1972 Prot     Med       Mix             43 Mix         
+##  6  1972 Prot     Med       Pos            197 Pos         
+##  7  1972 Prot     High      Neg              4 Neg         
+##  8  1972 Prot     High      Mix              9 Mix         
+##  9  1972 Prot     High      Pos            139 Pos         
+## 10  1972 SProt    Low       Neg              9 Neg         
+## # … with 71 more rows
 ```
 
  
@@ -1111,8 +1057,10 @@ or, if you like working with data frames better:
 
 
 ```r
-lev4 <- abortion %>% count(attitude) %>% slice(c(2, 
-    1, 3)) %>% pull(attitude)
+lev4 <- abortion %>%
+  count(attitude) %>%
+  slice(c(2, 1, 3)) %>%
+  pull(attitude)
 lev4
 ```
 
@@ -1143,8 +1091,9 @@ order that you went to such great pains to make in the last part!
 
 ```r
 library(MASS)
-abortion.1 <- polr(attitude.ord ~ religion + education, 
-    data = abortion, weights = frequency)
+abortion.1 <- polr(attitude.ord ~ religion + education,
+  data = abortion, weights = frequency
+)
 ```
 
        
@@ -1178,10 +1127,12 @@ If you don't like `update`, you can also copy and paste and edit:
 
 
 ```r
-abortion.2a <- polr(attitude.ord ~ religion, data = abortion, 
-    weights = frequency)
-abortion.3a <- polr(attitude.ord ~ education, 
-    data = abortion, weights = frequency)
+abortion.2a <- polr(attitude.ord ~ religion,
+  data = abortion, weights = frequency
+)
+abortion.3a <- polr(attitude.ord ~ education,
+  data = abortion, weights = frequency
+)
 ```
 
        
@@ -1214,8 +1165,7 @@ drop1(abortion.1, test = "Chisq")
 ## religion   2 4139.2 65.635 5.592e-15 ***
 ## education  2 4152.6 79.104 < 2.2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
        
@@ -1244,12 +1194,12 @@ anova(abortion.3, abortion.1)
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: attitude.ord
-##                  Model Resid. df Resid. Dev
-## 1            education      3233   4131.176
-## 2 religion + education      3231   4065.541
-##     Test    Df LR stat.      Pr(Chi)
-## 1                                   
-## 2 1 vs 2     2 65.63505 5.551115e-15
+##                  Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1            education      3233   4131.176                      
+## 2 religion + education      3231   4065.541 1 vs 2     2 65.63505
+##        Pr(Chi)
+## 1             
+## 2 5.551115e-15
 ```
 
        
@@ -1273,12 +1223,9 @@ anova(abortion.2, abortion.1)
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: attitude.ord
-##                  Model Resid. df Resid. Dev
-## 1             religion      3233   4144.645
-## 2 religion + education      3231   4065.541
-##     Test    Df LR stat. Pr(Chi)
-## 1                              
-## 2 1 vs 2     2 79.10415       0
+##                  Model Resid. df Resid. Dev   Test    Df LR stat. Pr(Chi)
+## 1             religion      3233   4144.645                              
+## 2 religion + education      3231   4065.541 1 vs 2     2 79.10415       0
 ```
 
        
@@ -1319,10 +1266,8 @@ Use either `distinct` or `count` to get the levels of
 `education` and `religion`:
 
 ```r
-educations <- abortion %>% distinct(education) %>% 
-    pull(education)
-religions <- abortion %>% distinct(religion) %>% 
-    pull(religion)
+educations <- abortion %>% distinct(education) %>% pull(education)
+religions <- abortion %>% distinct(religion) %>% pull(religion)
 new <- crossing(education = educations, religion = religions)
 new
 ```
@@ -1348,26 +1293,16 @@ cbind(new, pp)
 ```
 
 ```
-##   education religion        Neg        Mix
-## 1      High     Cath 0.05681385 0.16191372
-## 2      High     Prot 0.02649659 0.08579955
-## 3      High    SProt 0.03342471 0.10504280
-## 4       Low     Cath 0.15709933 0.30706616
-## 5       Low     Prot 0.07767439 0.20363294
-## 6       Low    SProt 0.09665550 0.23547512
-## 7       Med     Cath 0.08336876 0.21375231
-## 8       Med     Prot 0.03947421 0.12089996
-## 9       Med    SProt 0.04962265 0.14566284
-##         Pos
-## 1 0.7812724
-## 2 0.8877039
-## 3 0.8615325
-## 4 0.5358345
-## 5 0.7186927
-## 6 0.6678694
-## 7 0.7028789
-## 8 0.8396258
-## 9 0.8047145
+##   education religion        Neg        Mix       Pos
+## 1      High     Cath 0.05681385 0.16191372 0.7812724
+## 2      High     Prot 0.02649659 0.08579955 0.8877039
+## 3      High    SProt 0.03342471 0.10504280 0.8615325
+## 4       Low     Cath 0.15709933 0.30706616 0.5358345
+## 5       Low     Prot 0.07767439 0.20363294 0.7186927
+## 6       Low    SProt 0.09665550 0.23547512 0.6678694
+## 7       Med     Cath 0.08336876 0.21375231 0.7028789
+## 8       Med     Prot 0.03947421 0.12089996 0.8396258
+## 9       Med    SProt 0.04962265 0.14566284 0.8047145
 ```
 
        
@@ -1447,15 +1382,12 @@ anova(abortion.1, abortion.4)
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: attitude.ord
-##                                       Model
-## 1                      religion + education
-## 2 religion + education + religion:education
-##   Resid. df Resid. Dev   Test    Df LR stat.
-## 1      3231   4065.541                      
-## 2      3227   4047.041 1 vs 2     4 18.49958
-##        Pr(Chi)
-## 1             
-## 2 0.0009853301
+##                                       Model Resid. df Resid. Dev   Test
+## 1                      religion + education      3231   4065.541       
+## 2 religion + education + religion:education      3227   4047.041 1 vs 2
+##      Df LR stat.      Pr(Chi)
+## 1                            
+## 2     4 18.49958 0.0009853301
 ```
 
        
@@ -1471,26 +1403,16 @@ cbind(new, pp)
 ```
 
 ```
-##   education religion        Neg        Mix
-## 1      High     Cath 0.07624521 0.20160124
-## 2      High     Prot 0.02248256 0.07434749
-## 3      High    SProt 0.02363341 0.07775848
-## 4       Low     Cath 0.11358676 0.26036670
-## 5       Low     Prot 0.08192969 0.21185155
-## 6       Low    SProt 0.12342416 0.27283576
-## 7       Med     Cath 0.08153700 0.21115988
-## 8       Med     Prot 0.04087702 0.12486250
-## 9       Med    SProt 0.04858716 0.14369236
-##         Pos
-## 1 0.7221536
-## 2 0.9031699
-## 3 0.8986081
-## 4 0.6260465
-## 5 0.7062188
-## 6 0.6037401
-## 7 0.7073031
-## 8 0.8342605
-## 9 0.8077205
+##   education religion        Neg        Mix       Pos
+## 1      High     Cath 0.07624521 0.20160124 0.7221536
+## 2      High     Prot 0.02248256 0.07434749 0.9031699
+## 3      High    SProt 0.02363341 0.07775848 0.8986081
+## 4       Low     Cath 0.11358676 0.26036670 0.6260465
+## 5       Low     Prot 0.08192969 0.21185155 0.7062188
+## 6       Low    SProt 0.12342416 0.27283576 0.6037401
+## 7       Med     Cath 0.08153700 0.21115988 0.7073031
+## 8       Med     Prot 0.04087702 0.12486250 0.8342605
+## 9       Med    SProt 0.04858716 0.14369236 0.8077205
 ```
 
  
@@ -1770,25 +1692,21 @@ ess
 
 ```
 ## # A tibble: 2,286 x 17
-##    cntry cname cedition cproddat cseqno name 
-##    <chr> <chr>    <dbl> <chr>     <dbl> <chr>
-##  1 GB    ESS1~        1 26.11.2~ 134168 ESS6~
-##  2 GB    ESS1~        1 26.11.2~ 134169 ESS6~
-##  3 GB    ESS1~        1 26.11.2~ 134170 ESS6~
-##  4 GB    ESS1~        1 26.11.2~ 134171 ESS6~
-##  5 GB    ESS1~        1 26.11.2~ 134172 ESS6~
-##  6 GB    ESS1~        1 26.11.2~ 134173 ESS6~
-##  7 GB    ESS1~        1 26.11.2~ 134174 ESS6~
-##  8 GB    ESS1~        1 26.11.2~ 134175 ESS6~
-##  9 GB    ESS1~        1 26.11.2~ 134176 ESS6~
-## 10 GB    ESS1~        1 26.11.2~ 134177 ESS6~
-## # ... with 2,276 more rows, and 11 more
-## #   variables: essround <dbl>,
-## #   edition <dbl>, idno <dbl>,
-## #   dweight <dbl>, pspwght <dbl>,
-## #   pweight <dbl>, prtvtgb <dbl>,
-## #   gndr <dbl>, agea <dbl>, eduyrs <dbl>,
-## #   inwtm <dbl>
+##    cntry cname cedition cproddat cseqno name  essround edition   idno
+##    <chr> <chr>    <dbl> <chr>     <dbl> <chr>    <dbl>   <dbl>  <dbl>
+##  1 GB    ESS1…        1 26.11.2… 134168 ESS6…        6     2.1 101014
+##  2 GB    ESS1…        1 26.11.2… 134169 ESS6…        6     2.1 101048
+##  3 GB    ESS1…        1 26.11.2… 134170 ESS6…        6     2.1 101055
+##  4 GB    ESS1…        1 26.11.2… 134171 ESS6…        6     2.1 101089
+##  5 GB    ESS1…        1 26.11.2… 134172 ESS6…        6     2.1 101097
+##  6 GB    ESS1…        1 26.11.2… 134173 ESS6…        6     2.1 101113
+##  7 GB    ESS1…        1 26.11.2… 134174 ESS6…        6     2.1 101121
+##  8 GB    ESS1…        1 26.11.2… 134175 ESS6…        6     2.1 101139
+##  9 GB    ESS1…        1 26.11.2… 134176 ESS6…        6     2.1 101154
+## 10 GB    ESS1…        1 26.11.2… 134177 ESS6…        6     2.1 101170
+## # … with 2,276 more rows, and 8 more variables: dweight <dbl>,
+## #   pspwght <dbl>, pweight <dbl>, prtvtgb <dbl>, gndr <dbl>, agea <dbl>,
+## #   eduyrs <dbl>, inwtm <dbl>
 ```
 
      
@@ -1848,9 +1766,9 @@ This seems to call for a pipeline. The major parties are numbered 1,
 to use `!is.na()`.
 
 ```r
-ess.major <- ess %>% select(prtvtgb:inwtm) %>% 
-    filter(prtvtgb < 4, agea < 999, eduyrs < 40, 
-        !is.na(inwtm))
+ess.major <- ess %>%
+  select(prtvtgb:inwtm) %>%
+  filter(prtvtgb < 4, agea < 999, eduyrs < 40, !is.na(inwtm))
 ```
 
      
@@ -1879,25 +1797,20 @@ the resulting data frame. For example, I first did this (note that my
 
 
 ```r
-ess %>% select(prtvtgb:inwtm) %>% filter(prtvtgb < 
-    4, !is.na(inwtm)) %>% summary()
+ess %>%
+  select(prtvtgb:inwtm) %>%
+  filter(prtvtgb < 4, !is.na(inwtm)) %>%
+  summary()
 ```
 
 ```
-##     prtvtgb           gndr      
-##  Min.   :1.000   Min.   :1.000  
-##  1st Qu.:1.000   1st Qu.:1.000  
-##  Median :2.000   Median :2.000  
-##  Mean   :1.803   Mean   :1.572  
-##  3rd Qu.:2.000   3rd Qu.:2.000  
-##  Max.   :3.000   Max.   :2.000  
-##       agea            eduyrs     
-##  Min.   : 18.00   Min.   : 0.00  
-##  1st Qu.: 44.00   1st Qu.:11.00  
-##  Median : 58.00   Median :13.00  
-##  Mean   : 61.74   Mean   :14.23  
-##  3rd Qu.: 71.00   3rd Qu.:16.00  
-##  Max.   :999.00   Max.   :88.00  
+##     prtvtgb           gndr            agea            eduyrs     
+##  Min.   :1.000   Min.   :1.000   Min.   : 18.00   Min.   : 0.00  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.: 44.00   1st Qu.:11.00  
+##  Median :2.000   Median :2.000   Median : 58.00   Median :13.00  
+##  Mean   :1.803   Mean   :1.572   Mean   : 61.74   Mean   :14.23  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.: 71.00   3rd Qu.:16.00  
+##  Max.   :3.000   Max.   :2.000   Max.   :999.00   Max.   :88.00  
 ##      inwtm       
 ##  Min.   :  7.00  
 ##  1st Qu.: 35.00  
@@ -1914,7 +1827,7 @@ doesn't make much sense, but it looks as if all the values are sensible
 ones (1 to 3 and 1, 2 respectively). However, the maximum values of
 age and years of education look like missing value codes, hence the
 other requirements I put in the question.
-\marginnote{If you do not take  out the *NA* values, they are shown separately on the end of  the *summary* for that column.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you do not take  out the *NA* values, they are shown separately on the end of  the *summary* for that column.</span>
 
 `Print`ing as the last step of your pipeline also works, but the
 advantage of `summary` is that you get to see whether there are
@@ -1936,9 +1849,9 @@ on a left-right spectrum), so this is nominal, and you'll need
 If I had included the minor parties and you were working on a
 left-right spectrum, you would have had to decide where to put the
 somewhat libertarian Greens
-\marginnote{The American Green party is more libertarian than Green parties elsewhere.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The American Green party is more libertarian than Green parties elsewhere.</span> 
 or the parties that exist only in Northern Ireland.
-\marginnote{Northern Ireland's political parties distinguish themselves by politics *and* religion. Northern Ireland has always had political tensions between its Protestants and its Catholics.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Northern Ireland's political parties distinguish themselves by politics *and* religion. Northern Ireland has always had political tensions between its Protestants and its Catholics.</span>
  
 
 (f) <a name="part:full">*</a> Take the political party voted for, and turn it into a
@@ -1956,8 +1869,7 @@ This, or something like it. `multinom` lives in package
 
 ```r
 library(nnet)
-ess.1 <- multinom(factor(prtvtgb) ~ gndr + agea + 
-    eduyrs + inwtm, data = ess.major)
+ess.1 <- multinom(factor(prtvtgb) ~ gndr + agea + eduyrs + inwtm, data = ess.major)
 ```
 
 ```
@@ -1983,8 +1895,7 @@ and then:
 
 
 ```r
-ess.1a <- multinom(party ~ gndr + agea + eduyrs + 
-    inwtm, data = ess.major)
+ess.1a <- multinom(party ~ gndr + agea + eduyrs + inwtm, data = ess.major)
 ```
 
 ```
@@ -2045,12 +1956,9 @@ ess.2a
 ## multinom(formula = factor(prtvtgb) ~ agea + eduyrs + inwtm, data = ess.major)
 ## 
 ## Coefficients:
-##   (Intercept)        agea     eduyrs
-## 2    1.632266 -0.02153694 -0.0593757
-## 3   -1.281031 -0.01869263  0.0886487
-##         inwtm
-## 2 0.009615167
-## 3 0.009337084
+##   (Intercept)        agea     eduyrs       inwtm
+## 2    1.632266 -0.02153694 -0.0593757 0.009615167
+## 3   -1.281031 -0.01869263  0.0886487 0.009337084
 ## 
 ## Residual Deviance: 2496.507 
 ## AIC: 2512.507
@@ -2067,7 +1975,7 @@ need to keep)  age, years of education and interview length.
 The actual numbers don't mean much; it's the indication that the
 variable has stayed in the model that makes a
 difference.
-\marginnote{There are three political parties; using the first  as a baseline, there are therefore $3-1=2$ coefficients for each variable.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are three political parties; using the first  as a baseline, there are therefore $3-1=2$ coefficients for each variable.</span>
 
 If you're wondering about the process: first `step` tries to
 take out each explanatory variable, one at a time, from the starting
@@ -2100,8 +2008,7 @@ is different, follow through with whatever your `step` said
 to do.
 
 ```r
-ess.2 <- multinom(party ~ agea + eduyrs + inwtm, 
-    data = ess.major)
+ess.2 <- multinom(party ~ agea + eduyrs + inwtm, data = ess.major)
 ```
 
 ```
@@ -2126,12 +2033,9 @@ anova(ess.2, ess.2a)
 ## 
 ## Response: party
 ## Response: factor(prtvtgb)
-##                   Model Resid. df Resid. Dev
-## 1 agea + eduyrs + inwtm      2438   2496.507
-## 2 agea + eduyrs + inwtm      2438   2496.507
-##     Test    Df LR stat. Pr(Chi)
-## 1                              
-## 2 1 vs 2     0        0       1
+##                   Model Resid. df Resid. Dev   Test    Df LR stat. Pr(Chi)
+## 1 agea + eduyrs + inwtm      2438   2496.507                              
+## 2 agea + eduyrs + inwtm      2438   2496.507 1 vs 2     0        0       1
 ```
 
  
@@ -2176,12 +2080,12 @@ anova(ess.3, ess.2)
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: party
-##                   Model Resid. df Resid. Dev
-## 1         agea + eduyrs      2440   2500.835
-## 2 agea + eduyrs + inwtm      2438   2496.507
-##     Test    Df LR stat.   Pr(Chi)
-## 1                                
-## 2 1 vs 2     2 4.327917 0.1148695
+##                   Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1         agea + eduyrs      2440   2500.835                      
+## 2 agea + eduyrs + inwtm      2438   2496.507 1 vs 2     2 4.327917
+##     Pr(Chi)
+## 1          
+## 2 0.1148695
 ```
 
  
@@ -2245,20 +2149,13 @@ summary(ess.major)
 ```
 
 ```
-##     prtvtgb           gndr      
-##  Min.   :1.000   Min.   :1.000  
-##  1st Qu.:1.000   1st Qu.:1.000  
-##  Median :2.000   Median :2.000  
-##  Mean   :1.803   Mean   :1.574  
-##  3rd Qu.:2.000   3rd Qu.:2.000  
-##  Max.   :3.000   Max.   :2.000  
-##       agea           eduyrs     
-##  Min.   :18.00   Min.   : 0.00  
-##  1st Qu.:44.00   1st Qu.:11.00  
-##  Median :58.00   Median :13.00  
-##  Mean   :57.19   Mean   :13.45  
-##  3rd Qu.:71.00   3rd Qu.:16.00  
-##  Max.   :94.00   Max.   :33.00  
+##     prtvtgb           gndr            agea           eduyrs     
+##  Min.   :1.000   Min.   :1.000   Min.   :18.00   Min.   : 0.00  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:44.00   1st Qu.:11.00  
+##  Median :2.000   Median :2.000   Median :58.00   Median :13.00  
+##  Mean   :1.803   Mean   :1.574   Mean   :57.19   Mean   :13.45  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:71.00   3rd Qu.:16.00  
+##  Max.   :3.000   Max.   :2.000   Max.   :94.00   Max.   :33.00  
 ##      inwtm       party  
 ##  Min.   :  7.0   1:484  
 ##  1st Qu.: 35.0   2:496  
@@ -2274,8 +2171,7 @@ Quartiles for age are 44 and 71, and for years of education are 11 and 16:
 
 
 ```r
-new <- crossing(agea = c(44, 71), eduyrs = c(11, 
-    16))
+new <- crossing(agea = c(44, 71), eduyrs = c(11, 16))
 new
 ```
 
@@ -2335,7 +2231,7 @@ A little history: back 150 or so years ago, Britain had two
 political parties, the Tories and the Whigs. The Tories became the
 Conservative party (and hence, in Britain and in Canada, the
 Conservatives are nicknamed Tories
-\marginnote{It amuses me that      Toronto's current (2018) mayor is politically a Tory.}). The Whigs became Liberals. At
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It amuses me that      Toronto's current (2018) mayor is politically a Tory.</span>). The Whigs became Liberals. At
 about the same time as 
 working people got to vote (not women, yet, but working men) the
 Labour Party came into existence. The Labour Party has always been
@@ -2369,8 +2265,7 @@ and then
 
 
 ```r
-ess.new <- crossing(agea = c(44, 71), eduyrs = c(11, 
-    16), inwtm = c(35, 50))
+ess.new <- crossing(agea = c(44, 71), eduyrs = c(11, 16), inwtm = c(35, 50))
 ess.new
 ```
 
@@ -2399,24 +2294,15 @@ cbind(ess.new, pp)
 ```
 
 ```
-##   agea eduyrs inwtm         1         2
-## 1   44     11    35 0.3455998 0.4993563
-## 2   44     11    50 0.3139582 0.5240179
-## 3   44     16    35 0.3606728 0.3872735
-## 4   44     16    50 0.3284883 0.4074380
-## 5   71     11    35 0.4810901 0.3886175
-## 6   71     11    50 0.4455030 0.4157036
-## 7   71     16    35 0.4945171 0.2968551
-## 8   71     16    50 0.4589823 0.3182705
-##           3
-## 1 0.1550439
-## 2 0.1620238
-## 3 0.2520536
-## 4 0.2640737
-## 5 0.1302924
-## 6 0.1387934
-## 7 0.2086277
-## 8 0.2227472
+##   agea eduyrs inwtm         1         2         3
+## 1   44     11    35 0.3455998 0.4993563 0.1550439
+## 2   44     11    50 0.3139582 0.5240179 0.1620238
+## 3   44     16    35 0.3606728 0.3872735 0.2520536
+## 4   44     16    50 0.3284883 0.4074380 0.2640737
+## 5   71     11    35 0.4810901 0.3886175 0.1302924
+## 6   71     11    50 0.4455030 0.4157036 0.1387934
+## 7   71     16    35 0.4945171 0.2968551 0.2086277
+## 8   71     16    50 0.4589823 0.3182705 0.2227472
 ```
 
  
@@ -2486,27 +2372,24 @@ gators.orig
 
 ```
 ## # A tibble: 16 x 9
-##    profile Gender Size  Lake   Fish
-##      <dbl> <chr>  <chr> <chr> <dbl>
-##  1       1 f      <2.3  geor~     3
-##  2       2 m      <2.3  geor~    13
-##  3       3 f      >2.3  geor~     8
-##  4       4 m      >2.3  geor~     9
-##  5       5 f      <2.3  hanc~    16
-##  6       6 m      <2.3  hanc~     7
-##  7       7 f      >2.3  hanc~     3
-##  8       8 m      >2.3  hanc~     4
-##  9       9 f      <2.3  okla~     3
-## 10      10 m      <2.3  okla~     2
-## 11      11 f      >2.3  okla~     0
-## 12      12 m      >2.3  okla~    13
-## 13      13 f      <2.3  traf~     2
-## 14      14 m      <2.3  traf~     3
-## 15      15 f      >2.3  traf~     0
-## 16      16 m      >2.3  traf~     8
-## # ... with 4 more variables:
-## #   Invertebrate <dbl>, Reptile <dbl>,
-## #   Bird <dbl>, Other <dbl>
+##    profile Gender Size  Lake      Fish Invertebrate Reptile  Bird Other
+##      <dbl> <chr>  <chr> <chr>    <dbl>        <dbl>   <dbl> <dbl> <dbl>
+##  1       1 f      <2.3  george       3            9       1     0     1
+##  2       2 m      <2.3  george      13           10       0     2     2
+##  3       3 f      >2.3  george       8            1       0     0     1
+##  4       4 m      >2.3  george       9            0       0     1     2
+##  5       5 f      <2.3  hancock     16            3       2     2     3
+##  6       6 m      <2.3  hancock      7            1       0     0     5
+##  7       7 f      >2.3  hancock      3            0       1     2     3
+##  8       8 m      >2.3  hancock      4            0       0     1     2
+##  9       9 f      <2.3  oklawaha     3            9       1     0     2
+## 10      10 m      <2.3  oklawaha     2            2       0     0     1
+## 11      11 f      >2.3  oklawaha     0            1       0     1     0
+## 12      12 m      >2.3  oklawaha    13            7       6     0     0
+## 13      13 f      <2.3  trafford     2            4       1     1     4
+## 14      14 m      <2.3  trafford     3            7       1     0     1
+## 15      15 f      >2.3  trafford     0            1       0     0     0
+## 16      16 m      >2.3  trafford     8            6       6     3     5
 ```
 
        
@@ -2532,27 +2415,25 @@ Solution
 I'm creating my "official" data frame here:
 
 ```r
-gators <- gators.orig %>% gather(Food.type, Frequency, 
-    Fish:Other)
+gators <- gators.orig %>% gather(Food.type, Frequency, Fish:Other)
 gators
 ```
 
 ```
 ## # A tibble: 80 x 6
-##    profile Gender Size  Lake  Food.type
-##      <dbl> <chr>  <chr> <chr> <chr>    
-##  1       1 f      <2.3  geor~ Fish     
-##  2       2 m      <2.3  geor~ Fish     
-##  3       3 f      >2.3  geor~ Fish     
-##  4       4 m      >2.3  geor~ Fish     
-##  5       5 f      <2.3  hanc~ Fish     
-##  6       6 m      <2.3  hanc~ Fish     
-##  7       7 f      >2.3  hanc~ Fish     
-##  8       8 m      >2.3  hanc~ Fish     
-##  9       9 f      <2.3  okla~ Fish     
-## 10      10 m      <2.3  okla~ Fish     
-## # ... with 70 more rows, and 1 more
-## #   variable: Frequency <dbl>
+##    profile Gender Size  Lake     Food.type Frequency
+##      <dbl> <chr>  <chr> <chr>    <chr>         <dbl>
+##  1       1 f      <2.3  george   Fish              3
+##  2       2 m      <2.3  george   Fish             13
+##  3       3 f      >2.3  george   Fish              8
+##  4       4 m      >2.3  george   Fish              9
+##  5       5 f      <2.3  hancock  Fish             16
+##  6       6 m      <2.3  hancock  Fish              7
+##  7       7 f      >2.3  hancock  Fish              3
+##  8       8 m      >2.3  hancock  Fish              4
+##  9       9 f      <2.3  oklawaha Fish              3
+## 10      10 m      <2.3  oklawaha Fish              2
+## # … with 70 more rows
 ```
 
        
@@ -2621,7 +2502,7 @@ Each row of the tidy `gators` represents as many
 alligators as are in the `Frequency` column. That is, if
 you look at female small alligators in Lake George that ate
 mainly fish, there are three of those.
-\marginnote{When you have variables that are categories, you might have more than one individual with exactly the same categories; on the other hand, if they had measured *Size* as, say, length in centimetres, it would have been very unlikely to get two alligators of exactly the same size.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When you have variables that are categories, you might have more than one individual with exactly the same categories; on the other hand, if they had measured *Size* as, say, length in centimetres, it would have been very unlikely to get two alligators of exactly the same size.</span>
 This to remind you to include the `weights` piece,
 otherwise `multinom` will assume that you have *one*
 observation per line and not as many as the number in
@@ -2668,7 +2549,7 @@ gators %>% count(Food.type, wt = Frequency)
 Each food type appears on 16 rows, but is the favoured diet of very
 different numbers of *alligators*. Note the use of `wt=`
 to specify a frequency variable.
-\marginnote{Discovered by me two minutes  ago.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Discovered by me two minutes  ago.</span>
 
 You ought to understand *why* those are different.
 
@@ -2677,8 +2558,9 @@ All right, back to modelling:
 
 ```r
 library(nnet)
-gators.1 <- multinom(Food.type ~ Gender + Size + 
-    Lake, weights = Frequency, data = gators)
+gators.1 <- multinom(Food.type ~ Gender + Size + Lake,
+  weights = Frequency, data = gators
+)
 ```
 
 ```
@@ -2708,33 +2590,23 @@ summary(gators.1)
 ##     weights = Frequency)
 ## 
 ## Coefficients:
-##              (Intercept)     Genderm
-## Fish           2.4322304  0.60674971
-## Invertebrate   2.6012531  0.14378459
-## Other          1.0014505  0.35423803
-## Reptile       -0.9829064 -0.02053375
-##                Size>2.3 Lakehancock
-## Fish         -0.7308535  -0.5751295
-## Invertebrate -2.0671545  -2.3557377
-## Other        -1.0214847   0.1914537
-## Reptile      -0.1741207   0.5534169
-##              Lakeoklawaha Laketrafford
-## Fish            0.5513785  -1.23681053
-## Invertebrate    1.4645820  -0.08096493
-## Other           0.5775317   0.32097943
-## Reptile         3.0807416   1.82333205
+##              (Intercept)     Genderm   Size>2.3 Lakehancock Lakeoklawaha
+## Fish           2.4322304  0.60674971 -0.7308535  -0.5751295    0.5513785
+## Invertebrate   2.6012531  0.14378459 -2.0671545  -2.3557377    1.4645820
+## Other          1.0014505  0.35423803 -1.0214847   0.1914537    0.5775317
+## Reptile       -0.9829064 -0.02053375 -0.1741207   0.5534169    3.0807416
+##              Laketrafford
+## Fish          -1.23681053
+## Invertebrate  -0.08096493
+## Other          0.32097943
+## Reptile        1.82333205
 ## 
 ## Std. Errors:
-##              (Intercept)   Genderm  Size>2.3
-## Fish           0.7706940 0.6888904 0.6523273
-## Invertebrate   0.7917210 0.7292510 0.7084028
-## Other          0.8747773 0.7623738 0.7250455
-## Reptile        1.2827234 0.9088217 0.8555051
-##              Lakehancock Lakeoklawaha
-## Fish           0.7952147     1.210229
-## Invertebrate   0.9463640     1.232835
-## Other          0.9072182     1.374545
-## Reptile        1.3797755     1.591542
+##              (Intercept)   Genderm  Size>2.3 Lakehancock Lakeoklawaha
+## Fish           0.7706940 0.6888904 0.6523273   0.7952147     1.210229
+## Invertebrate   0.7917210 0.7292510 0.7084028   0.9463640     1.232835
+## Other          0.8747773 0.7623738 0.7250455   0.9072182     1.374545
+## Reptile        1.2827234 0.9088217 0.8555051   1.3797755     1.591542
 ##              Laketrafford
 ## Fish            0.8661187
 ## Invertebrate    0.8814625
@@ -2785,8 +2657,9 @@ taking out `Gender`, preferably by copying and pasting:
 
 
 ```r
-gators.2x <- multinom(Food.type ~ Size + Lake, 
-    weights = Frequency, data = gators)
+gators.2x <- multinom(Food.type ~ Size + Lake,
+  weights = Frequency, data = gators
+)
 ```
 
 ```
@@ -2811,12 +2684,12 @@ anova(gators.2, gators.1)
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Food.type
-##                  Model Resid. df Resid. Dev
-## 1          Size + Lake       300   540.0803
-## 2 Gender + Size + Lake       296   537.8655
-##     Test    Df LR stat.   Pr(Chi)
-## 1                                
-## 2 1 vs 2     4 2.214796 0.6963214
+##                  Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1          Size + Lake       300   540.0803                      
+## 2 Gender + Size + Lake       296   537.8655 1 vs 2     4 2.214796
+##     Pr(Chi)
+## 1          
+## 2 0.6963214
 ```
 
  
@@ -2869,8 +2742,7 @@ Lakes
 ```
 
 ```
-## [1] "george"   "hancock"  "oklawaha"
-## [4] "trafford"
+## [1] "george"   "hancock"  "oklawaha" "trafford"
 ```
 
 ```r
@@ -2929,24 +2801,15 @@ preds1
 ```
 
 ```
-##       Lake Size        Bird      Fish
-## 1   george <2.3 0.029671502 0.4521032
-## 2   george >2.3 0.081071082 0.6574394
-## 3  hancock <2.3 0.070400215 0.5353040
-## 4  hancock >2.3 0.140898571 0.5701968
-## 5 oklawaha <2.3 0.008818267 0.2581872
-## 6 oklawaha >2.3 0.029419560 0.4584368
-## 7 trafford <2.3 0.035892547 0.1842997
-## 8 trafford >2.3 0.108222209 0.2957526
-##   Invertebrate      Other    Reptile
-## 1   0.41285699 0.09380190 0.01156641
-## 2   0.13967877 0.09791193 0.02389880
-## 3   0.09309885 0.25374163 0.04745531
-## 4   0.02307179 0.19400899 0.07182382
-## 5   0.60189518 0.05387241 0.07722691
-## 6   0.24864408 0.06866206 0.19483754
-## 7   0.51683770 0.17420330 0.08876673
-## 8   0.19296148 0.20066241 0.20240133
+##       Lake Size        Bird      Fish Invertebrate      Other    Reptile
+## 1   george <2.3 0.029671502 0.4521032   0.41285699 0.09380190 0.01156641
+## 2   george >2.3 0.081071082 0.6574394   0.13967877 0.09791193 0.02389880
+## 3  hancock <2.3 0.070400215 0.5353040   0.09309885 0.25374163 0.04745531
+## 4  hancock >2.3 0.140898571 0.5701968   0.02307179 0.19400899 0.07182382
+## 5 oklawaha <2.3 0.008818267 0.2581872   0.60189518 0.05387241 0.07722691
+## 6 oklawaha >2.3 0.029419560 0.4584368   0.24864408 0.06866206 0.19483754
+## 7 trafford <2.3 0.035892547 0.1842997   0.51683770 0.17420330 0.08876673
+## 8 trafford >2.3 0.108222209 0.2957526   0.19296148 0.20066241 0.20240133
 ```
 
  
@@ -2999,40 +2862,23 @@ cbind(new, pp)
 ```
 
 ```
-##        Lake Size Gender        Bird
-## 1    george <2.3      f 0.029671502
-## 2    george <2.3      m 0.029671502
-## 3    george >2.3      f 0.081071082
-## 4    george >2.3      m 0.081071082
-## 5   hancock <2.3      f 0.070400215
-## 6   hancock <2.3      m 0.070400215
-## 7   hancock >2.3      f 0.140898571
-## 8   hancock >2.3      m 0.140898571
-## 9  oklawaha <2.3      f 0.008818267
-## 10 oklawaha <2.3      m 0.008818267
-## 11 oklawaha >2.3      f 0.029419560
-## 12 oklawaha >2.3      m 0.029419560
-## 13 trafford <2.3      f 0.035892547
-## 14 trafford <2.3      m 0.035892547
-## 15 trafford >2.3      f 0.108222209
-## 16 trafford >2.3      m 0.108222209
-##         Fish Invertebrate      Other
-## 1  0.4521032   0.41285699 0.09380190
-## 2  0.4521032   0.41285699 0.09380190
-## 3  0.6574394   0.13967877 0.09791193
-## 4  0.6574394   0.13967877 0.09791193
-## 5  0.5353040   0.09309885 0.25374163
-## 6  0.5353040   0.09309885 0.25374163
-## 7  0.5701968   0.02307179 0.19400899
-## 8  0.5701968   0.02307179 0.19400899
-## 9  0.2581872   0.60189518 0.05387241
-## 10 0.2581872   0.60189518 0.05387241
-## 11 0.4584368   0.24864408 0.06866206
-## 12 0.4584368   0.24864408 0.06866206
-## 13 0.1842997   0.51683770 0.17420330
-## 14 0.1842997   0.51683770 0.17420330
-## 15 0.2957526   0.19296148 0.20066241
-## 16 0.2957526   0.19296148 0.20066241
+##        Lake Size Gender        Bird      Fish Invertebrate      Other
+## 1    george <2.3      f 0.029671502 0.4521032   0.41285699 0.09380190
+## 2    george <2.3      m 0.029671502 0.4521032   0.41285699 0.09380190
+## 3    george >2.3      f 0.081071082 0.6574394   0.13967877 0.09791193
+## 4    george >2.3      m 0.081071082 0.6574394   0.13967877 0.09791193
+## 5   hancock <2.3      f 0.070400215 0.5353040   0.09309885 0.25374163
+## 6   hancock <2.3      m 0.070400215 0.5353040   0.09309885 0.25374163
+## 7   hancock >2.3      f 0.140898571 0.5701968   0.02307179 0.19400899
+## 8   hancock >2.3      m 0.140898571 0.5701968   0.02307179 0.19400899
+## 9  oklawaha <2.3      f 0.008818267 0.2581872   0.60189518 0.05387241
+## 10 oklawaha <2.3      m 0.008818267 0.2581872   0.60189518 0.05387241
+## 11 oklawaha >2.3      f 0.029419560 0.4584368   0.24864408 0.06866206
+## 12 oklawaha >2.3      m 0.029419560 0.4584368   0.24864408 0.06866206
+## 13 trafford <2.3      f 0.035892547 0.1842997   0.51683770 0.17420330
+## 14 trafford <2.3      m 0.035892547 0.1842997   0.51683770 0.17420330
+## 15 trafford >2.3      f 0.108222209 0.2957526   0.19296148 0.20066241
+## 16 trafford >2.3      m 0.108222209 0.2957526   0.19296148 0.20066241
 ##       Reptile
 ## 1  0.01156641
 ## 2  0.01156641
@@ -3068,40 +2914,23 @@ cbind(new, pp)
 ```
 
 ```
-##        Lake Size Gender        Bird
-## 1    george <2.3      f 0.034528820
-## 2    george <2.3      m 0.023983587
-## 3    george >2.3      f 0.105463159
-## 4    george >2.3      m 0.067888065
-## 5   hancock <2.3      f 0.079170901
-## 6   hancock <2.3      m 0.051120681
-## 7   hancock >2.3      f 0.167234031
-## 8   hancock >2.3      m 0.110233536
-## 9  oklawaha <2.3      f 0.010861171
-## 10 oklawaha <2.3      m 0.008370118
-## 11 oklawaha >2.3      f 0.037755986
-## 12 oklawaha >2.3      m 0.027647882
-## 13 trafford <2.3      f 0.043846177
-## 14 trafford <2.3      m 0.034440739
-## 15 trafford >2.3      f 0.133999340
-## 16 trafford >2.3      m 0.104507582
-##         Fish Invertebrate      Other
-## 1  0.3930846   0.46546988 0.09399531
-## 2  0.5008716   0.37330933 0.09304268
-## 3  0.5780952   0.17991064 0.10337131
-## 4  0.6826531   0.13371938 0.09482794
-## 5  0.5071007   0.10120258 0.26099808
-## 6  0.6006664   0.07545143 0.24016625
-## 7  0.5157600   0.02705184 0.19850489
-## 8  0.6236556   0.02058879 0.18646783
-## 9  0.2146058   0.63335376 0.05267686
-## 10 0.3033923   0.56356778 0.05785201
-## 11 0.3592072   0.27861325 0.06593316
-## 12 0.4825354   0.23557146 0.06880557
-## 13 0.1449092   0.54510349 0.16453404
-## 14 0.2088069   0.49438416 0.18417900
-## 15 0.2132364   0.21081238 0.18105124
-## 16 0.3050805   0.18983929 0.20122886
+##        Lake Size Gender        Bird      Fish Invertebrate      Other
+## 1    george <2.3      f 0.034528820 0.3930846   0.46546988 0.09399531
+## 2    george <2.3      m 0.023983587 0.5008716   0.37330933 0.09304268
+## 3    george >2.3      f 0.105463159 0.5780952   0.17991064 0.10337131
+## 4    george >2.3      m 0.067888065 0.6826531   0.13371938 0.09482794
+## 5   hancock <2.3      f 0.079170901 0.5071007   0.10120258 0.26099808
+## 6   hancock <2.3      m 0.051120681 0.6006664   0.07545143 0.24016625
+## 7   hancock >2.3      f 0.167234031 0.5157600   0.02705184 0.19850489
+## 8   hancock >2.3      m 0.110233536 0.6236556   0.02058879 0.18646783
+## 9  oklawaha <2.3      f 0.010861171 0.2146058   0.63335376 0.05267686
+## 10 oklawaha <2.3      m 0.008370118 0.3033923   0.56356778 0.05785201
+## 11 oklawaha >2.3      f 0.037755986 0.3592072   0.27861325 0.06593316
+## 12 oklawaha >2.3      m 0.027647882 0.4825354   0.23557146 0.06880557
+## 13 trafford <2.3      f 0.043846177 0.1449092   0.54510349 0.16453404
+## 14 trafford <2.3      m 0.034440739 0.2088069   0.49438416 0.18417900
+## 15 trafford >2.3      f 0.133999340 0.2132364   0.21081238 0.18105124
+## 16 trafford >2.3      m 0.104507582 0.3050805   0.18983929 0.20122886
 ##        Reptile
 ## 1  0.012921439
 ## 2  0.008792768
@@ -3125,7 +2954,7 @@ cbind(new, pp)
 
 and this time there *is* an effect of gender, but it is
 smallish, as befits an effect that is not significant.
-\marginnote{There were only 216 alligators total, which is a small sample size for this kind of thing, especially with all those parameters to estimate.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There were only 216 alligators total, which is a small sample size for this kind of thing, especially with all those parameters to estimate.</span>
     
 
 
@@ -3144,24 +2973,15 @@ preds1
 ```
 
 ```
-##       Lake Size        Bird      Fish
-## 1   george <2.3 0.029671502 0.4521032
-## 2   george >2.3 0.081071082 0.6574394
-## 3  hancock <2.3 0.070400215 0.5353040
-## 4  hancock >2.3 0.140898571 0.5701968
-## 5 oklawaha <2.3 0.008818267 0.2581872
-## 6 oklawaha >2.3 0.029419560 0.4584368
-## 7 trafford <2.3 0.035892547 0.1842997
-## 8 trafford >2.3 0.108222209 0.2957526
-##   Invertebrate      Other    Reptile
-## 1   0.41285699 0.09380190 0.01156641
-## 2   0.13967877 0.09791193 0.02389880
-## 3   0.09309885 0.25374163 0.04745531
-## 4   0.02307179 0.19400899 0.07182382
-## 5   0.60189518 0.05387241 0.07722691
-## 6   0.24864408 0.06866206 0.19483754
-## 7   0.51683770 0.17420330 0.08876673
-## 8   0.19296148 0.20066241 0.20240133
+##       Lake Size        Bird      Fish Invertebrate      Other    Reptile
+## 1   george <2.3 0.029671502 0.4521032   0.41285699 0.09380190 0.01156641
+## 2   george >2.3 0.081071082 0.6574394   0.13967877 0.09791193 0.02389880
+## 3  hancock <2.3 0.070400215 0.5353040   0.09309885 0.25374163 0.04745531
+## 4  hancock >2.3 0.140898571 0.5701968   0.02307179 0.19400899 0.07182382
+## 5 oklawaha <2.3 0.008818267 0.2581872   0.60189518 0.05387241 0.07722691
+## 6 oklawaha >2.3 0.029419560 0.4584368   0.24864408 0.06866206 0.19483754
+## 7 trafford <2.3 0.035892547 0.1842997   0.51683770 0.17420330 0.08876673
+## 8 trafford >2.3 0.108222209 0.2957526   0.19296148 0.20066241 0.20240133
 ```
 
        
@@ -3342,24 +3162,20 @@ steak0
 
 ```
 ## # A tibble: 550 x 15
-##    respondent_id lottery_a smoke alcohol
-##            <dbl> <lgl>     <lgl> <lgl>  
-##  1    3237565956 FALSE     NA    NA     
-##  2    3234982343 TRUE      FALSE TRUE   
-##  3    3234973379 TRUE      FALSE TRUE   
-##  4    3234972383 FALSE     TRUE  TRUE   
-##  5    3234958833 FALSE     FALSE TRUE   
-##  6    3234955240 TRUE      FALSE FALSE  
-##  7    3234955097 TRUE      FALSE TRUE   
-##  8    3234955010 TRUE      FALSE TRUE   
-##  9    3234953052 TRUE      TRUE  TRUE   
-## 10    3234951249 FALSE     FALSE TRUE   
-## # ... with 540 more rows, and 11 more
-## #   variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>, steak <lgl>,
-## #   steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>,
+##    respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##            <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+##  1    3237565956 FALSE     NA    NA      NA     NA        NA    NA     
+##  2    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
+##  3    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
+##  4    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
+##  5    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
+##  6    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+##  7    3234955097 TRUE      FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
+##  8    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
+##  9    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE  
+## 10    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE  
+## # … with 540 more rows, and 7 more variables: steak <lgl>,
+## #   steak_prep <chr>, female <lgl>, age <chr>, hhold_income <chr>,
 ## #   educ <chr>, region <chr>
 ```
 
@@ -3382,61 +3198,33 @@ steak0 %>% summary()
 ```
 
 ```
-##  respondent_id       lottery_a      
-##  Min.   :3.235e+09   Mode :logical  
-##  1st Qu.:3.235e+09   FALSE:279      
-##  Median :3.235e+09   TRUE :267      
-##  Mean   :3.235e+09   NA's :4        
-##  3rd Qu.:3.235e+09                  
-##  Max.   :3.238e+09                  
-##    smoke          alcohol       
-##  Mode :logical   Mode :logical  
-##  FALSE:453       FALSE:125      
-##  TRUE :84        TRUE :416      
-##  NA's :13        NA's :9        
-##                                 
-##                                 
-##    gamble        skydiving      
-##  Mode :logical   Mode :logical  
-##  FALSE:280       FALSE:502      
-##  TRUE :257       TRUE :36       
-##  NA's :13        NA's :12       
-##                                 
-##                                 
-##    speed          cheated       
-##  Mode :logical   Mode :logical  
-##  FALSE:59        FALSE:447      
-##  TRUE :480       TRUE :92       
-##  NA's :11        NA's :11       
-##                                 
-##                                 
-##    steak          steak_prep       
-##  Mode :logical   Length:550        
-##  FALSE:109       Class :character  
-##  TRUE :430       Mode  :character  
-##  NA's :11                          
-##                                    
-##                                    
-##    female            age           
-##  Mode :logical   Length:550        
-##  FALSE:246       Class :character  
-##  TRUE :268       Mode  :character  
-##  NA's :36                          
-##                                    
-##                                    
-##  hhold_income           educ          
-##  Length:550         Length:550        
-##  Class :character   Class :character  
-##  Mode  :character   Mode  :character  
-##                                       
-##                                       
-##                                       
-##     region         
-##  Length:550        
-##  Class :character  
-##  Mode  :character  
-##                    
-##                    
+##  respondent_id       lottery_a         smoke          alcohol       
+##  Min.   :3.235e+09   Mode :logical   Mode :logical   Mode :logical  
+##  1st Qu.:3.235e+09   FALSE:279       FALSE:453       FALSE:125      
+##  Median :3.235e+09   TRUE :267       TRUE :84        TRUE :416      
+##  Mean   :3.235e+09   NA's :4         NA's :13        NA's :9        
+##  3rd Qu.:3.235e+09                                                  
+##  Max.   :3.238e+09                                                  
+##    gamble        skydiving         speed          cheated       
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
+##  FALSE:280       FALSE:502       FALSE:59        FALSE:447      
+##  TRUE :257       TRUE :36        TRUE :480       TRUE :92       
+##  NA's :13        NA's :12        NA's :11        NA's :11       
+##                                                                 
+##                                                                 
+##    steak          steak_prep          female            age           
+##  Mode :logical   Length:550         Mode :logical   Length:550        
+##  FALSE:109       Class :character   FALSE:246       Class :character  
+##  TRUE :430       Mode  :character   TRUE :268       Mode  :character  
+##  NA's :11                           NA's :36                          
+##                                                                       
+##                                                                       
+##  hhold_income           educ              region         
+##  Length:550         Length:550         Length:550        
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
 ## 
 ```
 
@@ -3458,61 +3246,33 @@ steak0 %>% drop_na() %>% summary()
 ```
 
 ```
-##  respondent_id       lottery_a      
-##  Min.   :3.235e+09   Mode :logical  
-##  1st Qu.:3.235e+09   FALSE:171      
-##  Median :3.235e+09   TRUE :160      
-##  Mean   :3.235e+09                  
-##  3rd Qu.:3.235e+09                  
-##  Max.   :3.235e+09                  
-##    smoke          alcohol       
-##  Mode :logical   Mode :logical  
-##  FALSE:274       FALSE:65       
-##  TRUE :57        TRUE :266      
-##                                 
-##                                 
-##                                 
-##    gamble        skydiving      
-##  Mode :logical   Mode :logical  
-##  FALSE:158       FALSE:308      
-##  TRUE :173       TRUE :23       
-##                                 
-##                                 
-##                                 
-##    speed          cheated       
-##  Mode :logical   Mode :logical  
-##  FALSE:28        FALSE:274      
-##  TRUE :303       TRUE :57       
-##                                 
-##                                 
-##                                 
-##   steak          steak_prep       
-##  Mode:logical   Length:331        
-##  TRUE:331       Class :character  
-##                 Mode  :character  
-##                                   
-##                                   
-##                                   
-##    female            age           
-##  Mode :logical   Length:331        
-##  FALSE:174       Class :character  
-##  TRUE :157       Mode  :character  
-##                                    
-##                                    
-##                                    
-##  hhold_income           educ          
-##  Length:331         Length:331        
-##  Class :character   Class :character  
-##  Mode  :character   Mode  :character  
-##                                       
-##                                       
-##                                       
-##     region         
-##  Length:331        
-##  Class :character  
-##  Mode  :character  
-##                    
-##                    
+##  respondent_id       lottery_a         smoke          alcohol       
+##  Min.   :3.235e+09   Mode :logical   Mode :logical   Mode :logical  
+##  1st Qu.:3.235e+09   FALSE:171       FALSE:274       FALSE:65       
+##  Median :3.235e+09   TRUE :160       TRUE :57        TRUE :266      
+##  Mean   :3.235e+09                                                  
+##  3rd Qu.:3.235e+09                                                  
+##  Max.   :3.235e+09                                                  
+##    gamble        skydiving         speed          cheated       
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
+##  FALSE:158       FALSE:308       FALSE:28        FALSE:274      
+##  TRUE :173       TRUE :23        TRUE :303       TRUE :57       
+##                                                                 
+##                                                                 
+##                                                                 
+##   steak          steak_prep          female            age           
+##  Mode:logical   Length:331         Mode :logical   Length:331        
+##  TRUE:331       Class :character   FALSE:174       Class :character  
+##                 Mode  :character   TRUE :157       Mode  :character  
+##                                                                      
+##                                                                      
+##                                                                      
+##  hhold_income           educ              region         
+##  Length:331         Length:331         Length:331        
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
 ## 
 ```
 
@@ -3529,7 +3289,7 @@ So now we'll save this into our "good" data frame, which means doing it again (n
 
 
 ```r
-steak <- steak0 %>% drop_na()
+steak0 %>% drop_na() -> steak
 ```
 
  
@@ -3551,98 +3311,56 @@ complete.cases(steak0)
 ```
 
 ```
-##   [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-##   [7] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-##  [13]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-##  [19]  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-##  [25]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-##  [31]  TRUE FALSE FALSE  TRUE FALSE FALSE
-##  [37]  TRUE FALSE FALSE FALSE FALSE  TRUE
-##  [43] FALSE  TRUE FALSE  TRUE  TRUE  TRUE
-##  [49]  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-##  [55] FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-##  [61] FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-##  [67] FALSE FALSE FALSE  TRUE FALSE FALSE
-##  [73] FALSE  TRUE  TRUE FALSE FALSE FALSE
-##  [79]  TRUE FALSE FALSE  TRUE FALSE FALSE
-##  [85] FALSE  TRUE  TRUE  TRUE FALSE FALSE
-##  [91]  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-##  [97]  TRUE  TRUE FALSE  TRUE FALSE  TRUE
-## [103] FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-## [109] FALSE  TRUE  TRUE FALSE FALSE  TRUE
-## [115] FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [121]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
-## [127] FALSE FALSE FALSE  TRUE  TRUE  TRUE
-## [133] FALSE FALSE  TRUE FALSE FALSE FALSE
-## [139]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [145]  TRUE FALSE  TRUE  TRUE  TRUE FALSE
-## [151]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [157]  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-## [163]  TRUE FALSE FALSE FALSE FALSE FALSE
-## [169]  TRUE FALSE  TRUE FALSE  TRUE  TRUE
-## [175] FALSE FALSE  TRUE  TRUE  TRUE FALSE
-## [181] FALSE  TRUE FALSE FALSE  TRUE FALSE
-## [187]  TRUE FALSE  TRUE  TRUE FALSE FALSE
-## [193]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [199] FALSE  TRUE FALSE FALSE FALSE  TRUE
-## [205]  TRUE FALSE  TRUE FALSE FALSE FALSE
-## [211] FALSE FALSE  TRUE  TRUE  TRUE  TRUE
-## [217] FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-## [223] FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-## [229]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
-## [235]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [241]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-## [247] FALSE  TRUE FALSE  TRUE FALSE  TRUE
-## [253] FALSE  TRUE FALSE  TRUE  TRUE  TRUE
-## [259]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
-## [265] FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-## [271]  TRUE  TRUE FALSE  TRUE FALSE FALSE
-## [277]  TRUE FALSE  TRUE FALSE FALSE FALSE
-## [283]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [289]  TRUE FALSE FALSE FALSE FALSE  TRUE
-## [295]  TRUE  TRUE FALSE  TRUE FALSE  TRUE
-## [301] FALSE  TRUE  TRUE  TRUE FALSE FALSE
-## [307]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
-## [313]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
-## [319] FALSE  TRUE FALSE  TRUE FALSE  TRUE
-## [325] FALSE FALSE  TRUE  TRUE FALSE  TRUE
-## [331]  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-## [337]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-## [343] FALSE  TRUE FALSE FALSE  TRUE FALSE
-## [349] FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-## [355]  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [361] FALSE  TRUE FALSE  TRUE  TRUE FALSE
-## [367] FALSE  TRUE  TRUE  TRUE  TRUE FALSE
-## [373] FALSE FALSE  TRUE FALSE FALSE  TRUE
-## [379]  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-## [385]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-## [391] FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [397]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [403]  TRUE FALSE  TRUE  TRUE  TRUE FALSE
-## [409]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [415] FALSE  TRUE FALSE  TRUE FALSE FALSE
-## [421]  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [427] FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [433]  TRUE FALSE FALSE  TRUE  TRUE FALSE
-## [439]  TRUE  TRUE FALSE FALSE  TRUE FALSE
-## [445]  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-## [451]  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-## [457]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [463]  TRUE FALSE  TRUE  TRUE  TRUE FALSE
-## [469]  TRUE  TRUE FALSE  TRUE FALSE FALSE
-## [475]  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [481] FALSE FALSE  TRUE  TRUE  TRUE  TRUE
-## [487]  TRUE FALSE  TRUE FALSE  TRUE FALSE
-## [493] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [499] FALSE  TRUE FALSE FALSE  TRUE FALSE
-## [505]  TRUE FALSE FALSE  TRUE FALSE  TRUE
-## [511] FALSE  TRUE FALSE  TRUE  TRUE FALSE
-## [517]  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [523] FALSE FALSE  TRUE  TRUE  TRUE FALSE
-## [529] FALSE FALSE  TRUE FALSE FALSE  TRUE
-## [535]  TRUE FALSE FALSE  TRUE  TRUE FALSE
-## [541] FALSE FALSE  TRUE  TRUE  TRUE  TRUE
-## [547] FALSE  TRUE FALSE FALSE
+##   [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
+##  [12]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE
+##  [23] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE
+##  [34]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE
+##  [45] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE
+##  [56]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE
+##  [67] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE
+##  [78] FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
+##  [89] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+## [100]  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE
+## [111]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
+## [122]  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
+## [133] FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
+## [144]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
+## [155] FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE
+## [166] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE
+## [177]  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE
+## [188] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [199] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE
+## [210] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE
+## [221]  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [232] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+## [243]  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
+## [254]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
+## [265] FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
+## [276] FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE
+## [287]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+## [298]  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [309] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
+## [320]  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE
+## [331]  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [342] FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
+## [353] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
+## [364]  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE
+## [375]  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [386]  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+## [397]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+## [408] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+## [419] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
+## [430] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE
+## [441] FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [452] FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [463]  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE
+## [474] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [485]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+## [496]  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE
+## [507] FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
+## [518]  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+## [529] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [540] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE
 ```
 
  
@@ -3678,20 +3396,16 @@ steak0 %>% slice(rows)
 
 ```
 ## # A tibble: 6 x 15
-##   respondent_id lottery_a smoke alcohol
-##           <dbl> <lgl>     <lgl> <lgl>  
-## 1    3234776895 FALSE     FALSE FALSE  
-## 2    3234776815 TRUE      TRUE  TRUE   
-## 3    3234776702 FALSE     FALSE FALSE  
-## 4    3234763650 TRUE      FALSE FALSE  
-## 5    3234763171 TRUE      FALSE TRUE   
-## 6    3234762715 FALSE     FALSE FALSE  
-## # ... with 11 more variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>, steak <lgl>,
-## #   steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>,
-## #   educ <chr>, region <chr>
+##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+## 1    3234776895 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
+## 2    3234776815 TRUE      TRUE  TRUE    FALSE  FALSE     TRUE  FALSE  
+## 3    3234776702 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
+## 4    3234763650 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+## 5    3234763171 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  FALSE  
+## 6    3234762715 FALSE     FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+## # … with 7 more variables: steak <lgl>, steak_prep <chr>, female <lgl>,
+## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
 ```
 
  
@@ -3707,75 +3421,44 @@ variables might have missing values in them, and they won't show
 up unless we turn them into a factor first:
 
 ```r
-steak0 %>% mutate_if(is.character, factor) %>% 
-    summary()
+steak0 %>%
+  mutate_if(is.character, factor) %>%
+  summary()
 ```
 
 ```
-##  respondent_id       lottery_a      
-##  Min.   :3.235e+09   Mode :logical  
-##  1st Qu.:3.235e+09   FALSE:279      
-##  Median :3.235e+09   TRUE :267      
-##  Mean   :3.235e+09   NA's :4        
-##  3rd Qu.:3.235e+09                  
-##  Max.   :3.238e+09                  
-##                                     
-##    smoke          alcohol       
-##  Mode :logical   Mode :logical  
-##  FALSE:453       FALSE:125      
-##  TRUE :84        TRUE :416      
-##  NA's :13        NA's :9        
-##                                 
-##                                 
-##                                 
-##    gamble        skydiving      
-##  Mode :logical   Mode :logical  
-##  FALSE:280       FALSE:502      
-##  TRUE :257       TRUE :36       
-##  NA's :13        NA's :12       
-##                                 
-##                                 
-##                                 
-##    speed          cheated       
-##  Mode :logical   Mode :logical  
-##  FALSE:59        FALSE:447      
-##  TRUE :480       TRUE :92       
-##  NA's :11        NA's :11       
-##                                 
-##                                 
-##                                 
-##    steak               steak_prep 
-##  Mode :logical   Medium     :132  
-##  FALSE:109       Medium rare:166  
-##  TRUE :430       Medium Well: 75  
-##  NA's :11        Rare       : 23  
-##                  Well       : 36  
-##                  NA's       :118  
-##                                   
-##    female           age     
-##  Mode :logical   >60  :131  
-##  FALSE:246       18-29:110  
-##  TRUE :268       30-44:133  
-##  NA's :36        45-60:140  
-##                  NA's : 36  
-##                             
-##                             
-##               hhold_income
-##  $0 - $24,999       : 51  
-##  $100,000 - $149,999: 76  
-##  $150,000+          : 54  
-##  $25,000 - $49,999  : 77  
-##  $50,000 - $99,999  :172  
-##  NA's               :120  
-##                           
-##                                educ    
-##  Bachelor degree                 :174  
-##  Graduate degree                 :133  
-##  High school degree              : 39  
-##  Less than high school degree    :  2  
-##  Some college or Associate degree:164  
-##  NA's                            : 38  
-##                                        
+##  respondent_id       lottery_a         smoke          alcohol       
+##  Min.   :3.235e+09   Mode :logical   Mode :logical   Mode :logical  
+##  1st Qu.:3.235e+09   FALSE:279       FALSE:453       FALSE:125      
+##  Median :3.235e+09   TRUE :267       TRUE :84        TRUE :416      
+##  Mean   :3.235e+09   NA's :4         NA's :13        NA's :9        
+##  3rd Qu.:3.235e+09                                                  
+##  Max.   :3.238e+09                                                  
+##                                                                     
+##    gamble        skydiving         speed          cheated       
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
+##  FALSE:280       FALSE:502       FALSE:59        FALSE:447      
+##  TRUE :257       TRUE :36        TRUE :480       TRUE :92       
+##  NA's :13        NA's :12        NA's :11        NA's :11       
+##                                                                 
+##                                                                 
+##                                                                 
+##    steak               steak_prep    female           age     
+##  Mode :logical   Medium     :132   Mode :logical   >60  :131  
+##  FALSE:109       Medium rare:166   FALSE:246       18-29:110  
+##  TRUE :430       Medium Well: 75   TRUE :268       30-44:133  
+##  NA's :11        Rare       : 23   NA's :36        45-60:140  
+##                  Well       : 36                   NA's : 36  
+##                  NA's       :118                              
+##                                                               
+##               hhold_income                               educ    
+##  $0 - $24,999       : 51   Bachelor degree                 :174  
+##  $100,000 - $149,999: 76   Graduate degree                 :133  
+##  $150,000+          : 54   High school degree              : 39  
+##  $25,000 - $49,999  : 77   Less than high school degree    :  2  
+##  $50,000 - $99,999  :172   Some college or Associate degree:164  
+##  NA's               :120   NA's                            : 38  
+##                                                                  
 ##                 region   
 ##  Pacific           : 91  
 ##  South Atlantic    : 88  
@@ -3807,17 +3490,14 @@ steak0 %>% select(1:8) %>% slice(rows)
 
 ```
 ## # A tibble: 6 x 8
-##   respondent_id lottery_a smoke alcohol
-##           <dbl> <lgl>     <lgl> <lgl>  
-## 1    3234776895 FALSE     FALSE FALSE  
-## 2    3234776815 TRUE      TRUE  TRUE   
-## 3    3234776702 FALSE     FALSE FALSE  
-## 4    3234763650 TRUE      FALSE FALSE  
-## 5    3234763171 TRUE      FALSE TRUE   
-## 6    3234762715 FALSE     FALSE FALSE  
-## # ... with 4 more variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>
+##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+## 1    3234776895 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
+## 2    3234776815 TRUE      TRUE  TRUE    FALSE  FALSE     TRUE  FALSE  
+## 3    3234776702 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
+## 4    3234763650 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+## 5    3234763171 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  FALSE  
+## 6    3234762715 FALSE     FALSE FALSE   FALSE  FALSE     TRUE  FALSE
 ```
 
  
@@ -3831,16 +3511,14 @@ steak0 %>% select(9:15) %>% slice(rows)
 
 ```
 ## # A tibble: 6 x 7
-##   steak steak_prep female age   hhold_income
-##   <lgl> <chr>      <lgl>  <chr> <chr>       
-## 1 TRUE  Medium ra~ TRUE   45-60 $0 - $24,999
-## 2 TRUE  Medium     TRUE   45-60 $150,000+   
-## 3 TRUE  Medium ra~ TRUE   >60   $50,000 - $~
-## 4 FALSE <NA>       FALSE  45-60 $100,000 - ~
-## 5 TRUE  Medium     FALSE  >60   <NA>        
-## 6 FALSE <NA>       FALSE  18-29 $50,000 - $~
-## # ... with 2 more variables: educ <chr>,
-## #   region <chr>
+##   steak steak_prep  female age   hhold_income    educ            region    
+##   <lgl> <chr>       <lgl>  <chr> <chr>           <chr>           <chr>     
+## 1 TRUE  Medium rare TRUE   45-60 $0 - $24,999    Some college o… West Sout…
+## 2 TRUE  Medium      TRUE   45-60 $150,000+       Bachelor degree New Engla…
+## 3 TRUE  Medium rare TRUE   >60   $50,000 - $99,… Graduate degree Mountain  
+## 4 FALSE <NA>        FALSE  45-60 $100,000 - $14… Some college o… South Atl…
+## 5 TRUE  Medium      FALSE  >60   <NA>            Graduate degree Pacific   
+## 6 FALSE <NA>        FALSE  18-29 $50,000 - $99,… Some college o… West Nort…
 ```
 
  
@@ -3858,7 +3536,7 @@ will return the rows for which the thing it was fed was true.
 
 ```r
 cc <- complete.cases(steak0)
-steak.complete <- steak0 %>% filter(cc)
+steak0 %>% filter(cc) -> steak.complete
 ```
 
      
@@ -3872,24 +3550,20 @@ steak.complete
 
 ```
 ## # A tibble: 331 x 15
-##    respondent_id lottery_a smoke alcohol
-##            <dbl> <lgl>     <lgl> <lgl>  
-##  1    3234982343 TRUE      FALSE TRUE   
-##  2    3234973379 TRUE      FALSE TRUE   
-##  3    3234972383 FALSE     TRUE  TRUE   
-##  4    3234958833 FALSE     FALSE TRUE   
-##  5    3234955240 TRUE      FALSE FALSE  
-##  6    3234955010 TRUE      FALSE TRUE   
-##  7    3234953052 TRUE      TRUE  TRUE   
-##  8    3234951249 FALSE     FALSE TRUE   
-##  9    3234948883 FALSE     FALSE TRUE   
-## 10    3234948197 TRUE      FALSE FALSE  
-## # ... with 321 more rows, and 11 more
-## #   variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>, steak <lgl>,
-## #   steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>,
+##    respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##            <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+##  1    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
+##  2    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
+##  3    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
+##  4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
+##  5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+##  6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
+##  7    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE  
+##  8    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE  
+##  9    3234948883 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  FALSE  
+## 10    3234948197 TRUE      FALSE FALSE   TRUE   FALSE     TRUE  FALSE  
+## # … with 321 more rows, and 7 more variables: steak <lgl>,
+## #   steak_prep <chr>, female <lgl>, age <chr>, hhold_income <chr>,
 ## #   educ <chr>, region <chr>
 ```
 
@@ -3903,75 +3577,44 @@ For proof, this is the easiest way I know:
 
 
 ```r
-steak.complete %>% mutate_if(is.character, factor) %>% 
-    summary()
+steak.complete %>%
+  mutate_if(is.character, factor) %>%
+  summary()
 ```
 
 ```
-##  respondent_id       lottery_a      
-##  Min.   :3.235e+09   Mode :logical  
-##  1st Qu.:3.235e+09   FALSE:171      
-##  Median :3.235e+09   TRUE :160      
-##  Mean   :3.235e+09                  
-##  3rd Qu.:3.235e+09                  
-##  Max.   :3.235e+09                  
-##                                     
-##    smoke          alcohol       
-##  Mode :logical   Mode :logical  
-##  FALSE:274       FALSE:65       
-##  TRUE :57        TRUE :266      
-##                                 
-##                                 
-##                                 
-##                                 
-##    gamble        skydiving      
-##  Mode :logical   Mode :logical  
-##  FALSE:158       FALSE:308      
-##  TRUE :173       TRUE :23       
-##                                 
-##                                 
-##                                 
-##                                 
-##    speed          cheated       
-##  Mode :logical   Mode :logical  
-##  FALSE:28        FALSE:274      
-##  TRUE :303       TRUE :57       
-##                                 
-##                                 
-##                                 
-##                                 
-##   steak               steak_prep 
-##  Mode:logical   Medium     :109  
-##  TRUE:331       Medium rare:128  
-##                 Medium Well: 56  
-##                 Rare       : 18  
-##                 Well       : 20  
-##                                  
-##                                  
-##    female           age    
-##  Mode :logical   >60  :82  
-##  FALSE:174       18-29:70  
-##  TRUE :157       30-44:93  
-##                  45-60:86  
-##                            
-##                            
-##                            
-##               hhold_income
-##  $0 - $24,999       : 37  
-##  $100,000 - $149,999: 66  
-##  $150,000+          : 39  
-##  $25,000 - $49,999  : 55  
-##  $50,000 - $99,999  :134  
-##                           
-##                           
-##                                educ    
-##  Bachelor degree                 :120  
-##  Graduate degree                 : 86  
-##  High school degree              : 20  
-##  Less than high school degree    :  1  
-##  Some college or Associate degree:104  
-##                                        
-##                                        
+##  respondent_id       lottery_a         smoke          alcohol       
+##  Min.   :3.235e+09   Mode :logical   Mode :logical   Mode :logical  
+##  1st Qu.:3.235e+09   FALSE:171       FALSE:274       FALSE:65       
+##  Median :3.235e+09   TRUE :160       TRUE :57        TRUE :266      
+##  Mean   :3.235e+09                                                  
+##  3rd Qu.:3.235e+09                                                  
+##  Max.   :3.235e+09                                                  
+##                                                                     
+##    gamble        skydiving         speed          cheated       
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
+##  FALSE:158       FALSE:308       FALSE:28        FALSE:274      
+##  TRUE :173       TRUE :23        TRUE :303       TRUE :57       
+##                                                                 
+##                                                                 
+##                                                                 
+##                                                                 
+##   steak               steak_prep    female           age    
+##  Mode:logical   Medium     :109   Mode :logical   >60  :82  
+##  TRUE:331       Medium rare:128   FALSE:174       18-29:70  
+##                 Medium Well: 56   TRUE :157       30-44:93  
+##                 Rare       : 18                   45-60:86  
+##                 Well       : 20                             
+##                                                             
+##                                                             
+##               hhold_income                               educ    
+##  $0 - $24,999       : 37   Bachelor degree                 :120  
+##  $100,000 - $149,999: 66   Graduate degree                 : 86  
+##  $150,000+          : 39   High school degree              : 20  
+##  $25,000 - $49,999  : 55   Less than high school degree    :  1  
+##  $50,000 - $99,999  :134   Some college or Associate degree:104  
+##                                                                  
+##                                                                  
 ##                 region  
 ##  South Atlantic    :68  
 ##  Pacific           :57  
@@ -4061,8 +3704,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv"
-sfcrime = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv"
+sfcrime=read_csv(my_url)
 ```
 
 ```
@@ -4086,22 +3729,20 @@ sfcrime
 
 ```
 ## # A tibble: 878,049 x 9
-##    Dates               Category Descript
-##    <dttm>              <chr>    <chr>   
-##  1 2015-05-13 23:53:00 WARRANTS WARRANT~
-##  2 2015-05-13 23:53:00 OTHER O~ TRAFFIC~
-##  3 2015-05-13 23:33:00 OTHER O~ TRAFFIC~
-##  4 2015-05-13 23:30:00 LARCENY~ GRAND T~
-##  5 2015-05-13 23:30:00 LARCENY~ GRAND T~
-##  6 2015-05-13 23:30:00 LARCENY~ GRAND T~
-##  7 2015-05-13 23:30:00 VEHICLE~ STOLEN ~
-##  8 2015-05-13 23:30:00 VEHICLE~ STOLEN ~
-##  9 2015-05-13 23:00:00 LARCENY~ GRAND T~
-## 10 2015-05-13 23:00:00 LARCENY~ GRAND T~
-## # ... with 878,039 more rows, and 6 more
-## #   variables: DayOfWeek <chr>,
-## #   PdDistrict <chr>, Resolution <chr>,
-## #   Address <chr>, X <dbl>, Y <dbl>
+##    Dates               Category Descript DayOfWeek PdDistrict Resolution
+##    <dttm>              <chr>    <chr>    <chr>     <chr>      <chr>     
+##  1 2015-05-13 23:53:00 WARRANTS WARRANT… Wednesday NORTHERN   ARREST, B…
+##  2 2015-05-13 23:53:00 OTHER O… TRAFFIC… Wednesday NORTHERN   ARREST, B…
+##  3 2015-05-13 23:33:00 OTHER O… TRAFFIC… Wednesday NORTHERN   ARREST, B…
+##  4 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday NORTHERN   NONE      
+##  5 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday PARK       NONE      
+##  6 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday INGLESIDE  NONE      
+##  7 2015-05-13 23:30:00 VEHICLE… STOLEN … Wednesday INGLESIDE  NONE      
+##  8 2015-05-13 23:30:00 VEHICLE… STOLEN … Wednesday BAYVIEW    NONE      
+##  9 2015-05-13 23:00:00 LARCENY… GRAND T… Wednesday RICHMOND   NONE      
+## 10 2015-05-13 23:00:00 LARCENY… GRAND T… Wednesday CENTRAL    NONE      
+## # … with 878,039 more rows, and 3 more variables: Address <chr>, X <dbl>,
+## #   Y <dbl>
 ```
 
      
@@ -4142,8 +3783,9 @@ by `arrange` to sort:
 
 
 ```r
-sfcrime %>% group_by(Category) %>% summarize(count = n()) %>% 
-    arrange(desc(count))
+sfcrime %>% group_by(Category) %>%
+summarize(count=n()) %>%
+arrange(desc(count))
 ```
 
 ```
@@ -4160,7 +3802,7 @@ sfcrime %>% group_by(Category) %>% summarize(count = n()) %>%
 ##  8 WARRANTS        42214
 ##  9 BURGLARY        36755
 ## 10 SUSPICIOUS OCC  31414
-## # ... with 29 more rows
+## # … with 29 more rows
 ```
 
  
@@ -4169,7 +3811,8 @@ or this one does the same thing and saves a step:
 
 
 ```r
-sfcrime %>% count(Category) %>% arrange(desc(n))
+sfcrime %>% count(Category) %>%
+arrange(desc(n))
 ```
 
 ```
@@ -4186,7 +3829,7 @@ sfcrime %>% count(Category) %>% arrange(desc(n))
 ##  8 WARRANTS        42214
 ##  9 BURGLARY        36755
 ## 10 SUSPICIOUS OCC  31414
-## # ... with 29 more rows
+## # … with 29 more rows
 ```
 
  
@@ -4224,15 +3867,15 @@ them out of the data frame that `count` produces. They are
 rows 1, 4, 5 and 6, so add a `slice` to your pipeline:
 
 ```r
-my.rows = c(1, 4, 5, 6)
-my.crimes = sfcrime %>% count(Category) %>% arrange(desc(n)) %>% 
-    slice(my.rows) %>% pull(Category)
+my.rows=c(1,4,5,6)
+my.crimes = sfcrime %>% count(Category) %>%
+arrange(desc(n)) %>%
+slice(my.rows) %>% pull(Category)
 my.crimes
 ```
 
 ```
-## [1] "LARCENY/THEFT" "ASSAULT"      
-## [3] "DRUG/NARCOTIC" "VEHICLE THEFT"
+## [1] "LARCENY/THEFT" "ASSAULT"       "DRUG/NARCOTIC" "VEHICLE THEFT"
 ```
 
      
@@ -4263,7 +3906,7 @@ Solution
 This is the ultimate "try it and see":
 
 ```r
-v = c("a", "m", 3, "Q")
+v=c('a','m',3,'Q')
 v %in% letters
 ```
 
@@ -4303,8 +3946,8 @@ right way around. We are testing the things in `Category` one
 at a time for membership in the set in `my.crimes`, so this:
 
 ```r
-sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>% 
-    select(c(Category, DayOfWeek, PdDistrict))
+sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
+select(c(Category,DayOfWeek,PdDistrict)) 
 sfcrimea
 ```
 
@@ -4322,7 +3965,7 @@ sfcrimea
 ##  8 LARCENY/THEFT Wednesday CENTRAL   
 ##  9 LARCENY/THEFT Wednesday NORTHERN  
 ## 10 ASSAULT       Wednesday INGLESIDE 
-## # ... with 359,518 more rows
+## # … with 359,518 more rows
 ```
 
    
@@ -4335,45 +3978,19 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"         
-##  [2] ".conflicts"         
-##  [3] "package:conflicted" 
-##  [4] "package:rstan"      
-##  [5] "package:StanHeaders"
-##  [6] "package:bootstrap"  
-##  [7] "package:rpart"      
-##  [8] "package:broom"      
-##  [9] "package:ggrepel"    
-## [10] "package:ggbiplot"   
-## [11] "package:grid"       
-## [12] "package:scales"     
-## [13] "package:plyr"       
-## [14] "package:lme4"       
-## [15] "package:Matrix"     
-## [16] "package:car"        
-## [17] "package:carData"    
-## [18] "package:survminer"  
-## [19] "package:ggpubr"     
-## [20] "package:magrittr"   
-## [21] "package:survival"   
-## [22] "package:nnet"       
-## [23] "package:smmr"       
-## [24] "package:forcats"    
-## [25] "package:stringr"    
-## [26] "package:dplyr"      
-## [27] "package:purrr"      
-## [28] "package:readr"      
-## [29] "package:tidyr"      
-## [30] "package:tibble"     
-## [31] "package:ggplot2"    
-## [32] "package:tidyverse"  
-## [33] "package:stats"      
-## [34] "package:graphics"   
-## [35] "package:grDevices"  
-## [36] "package:utils"      
-## [37] "package:datasets"   
-## [38] "package:methods"    
-## [39] "Autoloads"          
+##  [1] ".GlobalEnv"          ".conflicts"          "package:conflicted" 
+##  [4] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
+##  [7] "package:rpart"       "package:broom"       "package:ggrepel"    
+## [10] "package:ggbiplot"    "package:grid"        "package:scales"     
+## [13] "package:plyr"        "package:lme4"        "package:Matrix"     
+## [16] "package:car"         "package:carData"     "package:survminer"  
+## [19] "package:ggpubr"      "package:magrittr"    "package:survival"   
+## [22] "package:nnet"        "package:smmr"        "package:forcats"    
+## [25] "package:stringr"     "package:dplyr"       "package:purrr"      
+## [28] "package:readr"       "package:tidyr"       "package:tibble"     
+## [31] "package:ggplot2"     "package:tidyverse"   "package:stats"      
+## [34] "package:graphics"    "package:grDevices"   "package:utils"      
+## [37] "package:datasets"    "package:methods"     "Autoloads"          
 ## [40] "package:base"
 ```
 
@@ -4383,7 +4000,7 @@ so we need to get rid of `MASS`:
 
 
 ```r
-detach("package:MASS", unload = T)
+detach("package:MASS", unload=T)
 ```
 
 ```
@@ -4396,8 +4013,8 @@ and try again:
 
 
 ```r
-sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>% 
-    select(c(Category, DayOfWeek, PdDistrict))
+sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
+select(c(Category,DayOfWeek,PdDistrict)) 
 sfcrimea
 ```
 
@@ -4415,7 +4032,7 @@ sfcrimea
 ##  8 LARCENY/THEFT Wednesday CENTRAL   
 ##  9 LARCENY/THEFT Wednesday NORTHERN  
 ## 10 ASSAULT       Wednesday INGLESIDE 
-## # ... with 359,518 more rows
+## # … with 359,518 more rows
 ```
 
    
@@ -4459,7 +4076,7 @@ Solution
 This is `write_csv` again:
 
 ```r
-write_csv(sfcrimea, "sfcrime1.csv")
+write_csv(sfcrimea,"sfcrime1.csv")
 ```
 
    
@@ -4575,20 +4192,16 @@ head(steak)
 
 ```
 ## # A tibble: 6 x 15
-##   respondent_id lottery_a smoke alcohol
-##           <dbl> <lgl>     <lgl> <lgl>  
-## 1    3234982343 TRUE      FALSE TRUE   
-## 2    3234973379 TRUE      FALSE TRUE   
-## 3    3234972383 FALSE     TRUE  TRUE   
-## 4    3234958833 FALSE     FALSE TRUE   
-## 5    3234955240 TRUE      FALSE FALSE  
-## 6    3234955010 TRUE      FALSE TRUE   
-## # ... with 11 more variables: gamble <lgl>,
-## #   skydiving <lgl>, speed <lgl>,
-## #   cheated <lgl>, steak <lgl>,
-## #   steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>,
-## #   educ <chr>, region <chr>
+##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
+##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
+## 1    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
+## 2    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
+## 3    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
+## 4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
+## 5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
+## 6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
+## # … with 7 more variables: steak <lgl>, steak_prep <chr>, female <lgl>,
+## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
 ```
 
  
@@ -4640,8 +4253,7 @@ preps
 ```
 
 ```
-## [1] "Medium rare" "Rare"        "Medium"     
-## [4] "Medium Well" "Well"
+## [1] "Medium rare" "Rare"        "Medium"      "Medium Well" "Well"
 ```
 
      
@@ -4657,8 +4269,7 @@ preps1
 ```
 
 ```
-## [1] "Rare"        "Medium rare" "Medium"     
-## [4] "Medium Well" "Well"
+## [1] "Rare"        "Medium rare" "Medium"      "Medium Well" "Well"
 ```
 
  
@@ -4672,8 +4283,7 @@ preps2
 ```
 
 ```
-## [1] "Medium"      "Medium rare" "Medium Well"
-## [4] "Rare"        "Well"
+## [1] "Medium"      "Medium rare" "Medium Well" "Rare"        "Well"
 ```
 
  
@@ -4687,8 +4297,7 @@ preps3
 ```
 
 ```
-## [1] "Rare"        "Medium rare" "Medium"     
-## [4] "Medium Well" "Well"
+## [1] "Rare"        "Medium rare" "Medium"      "Medium Well" "Well"
 ```
 
  
@@ -4706,8 +4315,7 @@ So now I create my ordered response:
 
 
 ```r
-steak <- steak %>% mutate(steak_prep_ord = ordered(steak_prep, 
-    preps1))
+steak <- steak %>% mutate(steak_prep_ord = ordered(steak_prep, preps1))
 ```
 
  
@@ -4735,8 +4343,7 @@ The thing you have to be careful about is that you use the
 *ordered* factor that you just created as the response:
 
 ```r
-steak.1 <- polr(steak_prep_ord ~ educ + female + 
-    lottery_a, data = steak)
+steak.1 <- polr(steak_prep_ord ~ educ + female + lottery_a, data = steak)
 ```
 
      
@@ -4771,8 +4378,7 @@ drop1(steak.1, test = "Chisq")
 ## female     1 908.70 0.0108  0.91715  
 ## lottery_a  1 909.93 1.2425  0.26498  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -4817,12 +4423,9 @@ anova(steak.2, steak.1, test = "Chisq")
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
-##                       Model Resid. df
-## 1          educ + lottery_a       322
-## 2 educ + female + lottery_a       321
-##   Resid. Dev   Test    Df  LR stat.
-## 1   890.7028                       
-## 2   890.6920 1 vs 2     1 0.0108221
+##                       Model Resid. df Resid. Dev   Test    Df  LR stat.
+## 1          educ + lottery_a       322   890.7028                       
+## 2 educ + female + lottery_a       321   890.6920 1 vs 2     1 0.0108221
 ##     Pr(Chi)
 ## 1          
 ## 2 0.9171461
@@ -4852,8 +4455,7 @@ drop1(steak.2, test = "Chisq")
 ## educ       4 910.13 9.4299  0.05121 .
 ## lottery_a  1 907.96 1.2599  0.26167  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -4918,28 +4520,17 @@ cbind(steak.new, p)
 ```
 
 ```
-##                                educ
-## 1                   Bachelor degree
-## 2                   Bachelor degree
-## 3                   Graduate degree
-## 4                   Graduate degree
-## 5                High school degree
-## 6                High school degree
-## 7      Less than high school degree
-## 8      Less than high school degree
-## 9  Some college or Associate degree
-## 10 Some college or Associate degree
-##    lottery_a         Rare  Medium rare
-## 1      FALSE 5.191314e-02 3.832425e-01
-## 2       TRUE 4.181795e-02 3.386213e-01
-## 3      FALSE 7.954891e-02 4.691799e-01
-## 4       TRUE 6.444488e-02 4.277303e-01
-## 5      FALSE 5.280801e-02 3.867857e-01
-## 6       TRUE 4.254661e-02 3.421527e-01
-## 7      FALSE 8.507263e-08 1.111878e-06
-## 8       TRUE 6.780714e-08 8.862222e-07
-## 9      FALSE 5.499694e-02 3.951981e-01
-## 10      TRUE 4.433010e-02 3.505796e-01
+##                                educ lottery_a         Rare  Medium rare
+## 1                   Bachelor degree     FALSE 5.191314e-02 3.832425e-01
+## 2                   Bachelor degree      TRUE 4.181795e-02 3.386213e-01
+## 3                   Graduate degree     FALSE 7.954891e-02 4.691799e-01
+## 4                   Graduate degree      TRUE 6.444488e-02 4.277303e-01
+## 5                High school degree     FALSE 5.280801e-02 3.867857e-01
+## 6                High school degree      TRUE 4.254661e-02 3.421527e-01
+## 7      Less than high school degree     FALSE 8.507263e-08 1.111878e-06
+## 8      Less than high school degree      TRUE 6.780714e-08 8.862222e-07
+## 9  Some college or Associate degree     FALSE 5.499694e-02 3.951981e-01
+## 10 Some college or Associate degree      TRUE 4.433010e-02 3.505796e-01
 ##          Medium  Medium Well       Well
 ## 1  3.347391e-01 1.719854e-01 0.05811984
 ## 2  3.468434e-01 2.008621e-01 0.07185531
@@ -4964,28 +4555,17 @@ cbind(steak.new, round(p, 3))
 ```
 
 ```
-##                                educ
-## 1                   Bachelor degree
-## 2                   Bachelor degree
-## 3                   Graduate degree
-## 4                   Graduate degree
-## 5                High school degree
-## 6                High school degree
-## 7      Less than high school degree
-## 8      Less than high school degree
-## 9  Some college or Associate degree
-## 10 Some college or Associate degree
-##    lottery_a  Rare Medium rare Medium
-## 1      FALSE 0.052       0.383  0.335
-## 2       TRUE 0.042       0.339  0.347
-## 3      FALSE 0.080       0.469  0.292
-## 4       TRUE 0.064       0.428  0.316
-## 5      FALSE 0.053       0.387  0.333
-## 6       TRUE 0.043       0.342  0.346
-## 7      FALSE 0.000       0.000  0.000
-## 8       TRUE 0.000       0.000  0.000
-## 9      FALSE 0.055       0.395  0.330
-## 10      TRUE 0.044       0.351  0.344
+##                                educ lottery_a  Rare Medium rare Medium
+## 1                   Bachelor degree     FALSE 0.052       0.383  0.335
+## 2                   Bachelor degree      TRUE 0.042       0.339  0.347
+## 3                   Graduate degree     FALSE 0.080       0.469  0.292
+## 4                   Graduate degree      TRUE 0.064       0.428  0.316
+## 5                High school degree     FALSE 0.053       0.387  0.333
+## 6                High school degree      TRUE 0.043       0.342  0.346
+## 7      Less than high school degree     FALSE 0.000       0.000  0.000
+## 8      Less than high school degree      TRUE 0.000       0.000  0.000
+## 9  Some college or Associate degree     FALSE 0.055       0.395  0.330
+## 10 Some college or Associate degree      TRUE 0.044       0.351  0.344
 ##    Medium Well  Well
 ## 1        0.172 0.058
 ## 2        0.201 0.072
@@ -5060,12 +4640,9 @@ anova(steak.3, steak.2, test = "Chisq")
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
-##              Model Resid. df Resid. Dev
-## 1                1       327   901.4467
-## 2 educ + lottery_a       322   890.7028
-##     Test    Df LR stat.    Pr(Chi)
-## 1                                 
-## 2 1 vs 2     5 10.74387 0.05670146
+##              Model Resid. df Resid. Dev   Test    Df LR stat.    Pr(Chi)
+## 1                1       327   901.4467                                 
+## 2 educ + lottery_a       322   890.7028 1 vs 2     5 10.74387 0.05670146
 ```
 
  
@@ -5081,12 +4658,9 @@ anova(steak.3a, steak.2, test = "Chisq")
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
-##              Model Resid. df Resid. Dev
-## 1                1       327   901.4467
-## 2 educ + lottery_a       322   890.7028
-##     Test    Df LR stat.    Pr(Chi)
-## 1                                 
-## 2 1 vs 2     5 10.74387 0.05670146
+##              Model Resid. df Resid. Dev   Test    Df LR stat.    Pr(Chi)
+## 1                1       327   901.4467                                 
+## 2 educ + lottery_a       322   890.7028 1 vs 2     5 10.74387 0.05670146
 ```
 
  
@@ -5120,8 +4694,7 @@ drop1(steak.2, test = "Chisq")
 ## educ       4 910.13 9.4299  0.05121 .
 ## lottery_a  1 907.96 1.2599  0.26167  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -5144,8 +4717,7 @@ drop1(steak.4, test = "Chisq")
 ## <none>    907.96                 
 ## educ    4 909.45 9.484  0.05008 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -5214,11 +4786,11 @@ works here:
 
 ```r
 steak.5 <- polr(steak_prep_ord ~ 1, data = steak)
-steak.6 <- step(steak.5, scope = . ~ lottery_a + 
-    smoke + alcohol + gamble + skydiving + speed + 
-    cheated + female + age + hhold_income + educ + 
-    region, direction = "forward", test = "Chisq", 
-    trace = 0)
+steak.6 <- step(steak.5,
+  scope = . ~ lottery_a + smoke + alcohol + gamble + skydiving +
+    speed + cheated + female + age + hhold_income + educ + region,
+  direction = "forward", test = "Chisq", trace = 0
+)
 drop1(steak.6, test = "Chisq")
 ```
 
@@ -5231,8 +4803,7 @@ drop1(steak.6, test = "Chisq")
 ## <none>    907.96                 
 ## educ    4 909.45 9.484  0.05008 .
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -5318,8 +4889,8 @@ Solution
 The usual:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
-sfcrime = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
+sfcrime=read_csv(my_url)
 ```
 
 ```
@@ -5376,8 +4947,7 @@ uppercase letters in the right places:
 
 
 ```r
-sfcrime.1 = multinom(Category ~ DayOfWeek + PdDistrict, 
-    data = sfcrime)
+sfcrime.1=multinom(Category~DayOfWeek+PdDistrict,data=sfcrime)
 ```
 
 ```
@@ -5407,7 +4977,7 @@ Solution
 Same idea. Write it out, or use `update`:
 
 ```r
-sfcrime.2 = update(sfcrime.1, . ~ . - DayOfWeek)
+sfcrime.2=update(sfcrime.1,.~.-DayOfWeek)
 ```
 
 ```
@@ -5436,19 +5006,19 @@ This:
 
 
 ```r
-anova(sfcrime.2, sfcrime.1)
+anova(sfcrime.2,sfcrime.1)
 ```
 
 ```
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Category
-##                    Model Resid. df
-## 1             PdDistrict   1078554
-## 2 DayOfWeek + PdDistrict   1078536
-##   Resid. Dev   Test    Df LR stat. Pr(Chi)
-## 1   837716.5                              
-## 2   836300.0 1 vs 2    18 1416.511       0
+##                    Model Resid. df Resid. Dev   Test    Df LR stat.
+## 1             PdDistrict   1078554   837716.5                      
+## 2 DayOfWeek + PdDistrict   1078536   836300.0 1 vs 2    18 1416.511
+##   Pr(Chi)
+## 1        
+## 2       0
 ```
 
  
@@ -5482,23 +5052,21 @@ Solution
 I left this one fairly open, because you've done this kind of thing
 before, so what you need to do ought to be fairly clear:
 Construct the values to predict for with plural names:
-\marginnote{You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.</span>
 
 
 ```r
-DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% 
-    pull(DayOfWeek)
+DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
 DayOfWeeks
 ```
 
 ```
-## [1] "Wednesday" "Tuesday"   "Monday"   
-## [4] "Sunday"    "Saturday"  "Friday"   
+## [1] "Wednesday" "Tuesday"   "Monday"    "Sunday"    "Saturday"  "Friday"   
 ## [7] "Thursday"
 ```
 
 ```r
-PdDistricts = "TENDERLOIN"
+PdDistricts="TENDERLOIN"
 ```
 
  
@@ -5516,8 +5084,7 @@ appropriately above and the rest of it would be the same:
 
 
 ```r
-sfcrime.new = crossing(DayOfWeek = DayOfWeeks, 
-    PdDistrict = PdDistricts)
+sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
 ```
 
@@ -5540,7 +5107,7 @@ Then do the predictions:
 
 
 ```r
-p = predict(sfcrime.1, sfcrime.new, type = "probs")
+p=predict(sfcrime.1,sfcrime.new,type="probs")
 ```
 
  
@@ -5552,7 +5119,7 @@ it'll tell me:
 
 
 ```r
-p = predict(sfcrime.1, sfcrime.new, type = "bananas")
+p=predict(sfcrime.1,sfcrime.new,type="bananas")
 ```
 
 ```
@@ -5566,7 +5133,7 @@ since the other one makes the best guess at which category of response
 you'll get (the one with the highest probability). The predicted
 probabilities are more informative, since then you can see how they
 change, even if the predicted category stays the same.
-\marginnote{This is something we'll see again in discriminant analysis.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is something we'll see again in discriminant analysis.</span>
 
 Finally, display the results. I thought `cbind` wouldn't work
 here, because some of the variables are factors and some are numbers,
@@ -5574,26 +5141,18 @@ but `cbind`  is smarter than that:
 
 
 ```r
-cbind(sfcrime.new, p)
+cbind(sfcrime.new,p)
 ```
 
 ```
-##   DayOfWeek PdDistrict   ASSAULT
-## 1    Friday TENDERLOIN 0.2125997
-## 2    Monday TENDERLOIN 0.2072430
-## 3  Saturday TENDERLOIN 0.2425998
-## 4    Sunday TENDERLOIN 0.2548597
-## 5  Thursday TENDERLOIN 0.1938754
-## 6   Tuesday TENDERLOIN 0.1942447
-## 7 Wednesday TENDERLOIN 0.1874867
-##   DRUG/NARCOTIC LARCENY/THEFT VEHICLE THEFT
-## 1     0.4658122     0.2907793    0.03080879
-## 2     0.5001466     0.2656069    0.02700348
-## 3     0.4200751     0.3060611    0.03126405
-## 4     0.4287291     0.2868682    0.02954299
-## 5     0.5179500     0.2617658    0.02640888
-## 6     0.5208668     0.2593331    0.02555535
-## 7     0.5400287     0.2479498    0.02453490
+##   DayOfWeek PdDistrict   ASSAULT DRUG/NARCOTIC LARCENY/THEFT VEHICLE THEFT
+## 1    Friday TENDERLOIN 0.2125997     0.4658122     0.2907793    0.03080879
+## 2    Monday TENDERLOIN 0.2072430     0.5001466     0.2656069    0.02700348
+## 3  Saturday TENDERLOIN 0.2425998     0.4200751     0.3060611    0.03126405
+## 4    Sunday TENDERLOIN 0.2548597     0.4287291     0.2868682    0.02954299
+## 5  Thursday TENDERLOIN 0.1938754     0.5179500     0.2617658    0.02640888
+## 6   Tuesday TENDERLOIN 0.1942447     0.5208668     0.2593331    0.02555535
+## 7 Wednesday TENDERLOIN 0.1874867     0.5400287     0.2479498    0.02453490
 ```
 
  
@@ -5621,7 +5180,7 @@ changes from one weekday to another are even smaller). This supports
 what I guessed before, that with this much data even a small effect
 (the one shown here) is statistically
 significant.
-\marginnote{Statistical significance as an idea grew up in    the days before *big data*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Statistical significance as an idea grew up in    the days before *big data*.</span>
 I want to compare another district. What districts do we have?
 
 ```r
@@ -5658,8 +5217,8 @@ include both:
 
 ```r
 DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
-PdDistricts = c("RICHMOND", "TENDERLOIN")
-sfcrime.new = crossing(DayOfWeek = DayOfWeeks, PdDistrict = PdDistricts)
+PdDistricts=c("RICHMOND","TENDERLOIN")
+sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
 ```
 
@@ -5684,9 +5243,8 @@ sfcrime.new
 ```
 
 ```r
-p1 = predict(sfcrime.1, sfcrime.new, type = "probs")
-d1 = cbind(sfcrime.new, p1)
-d1
+p1=predict(sfcrime.1,sfcrime.new,type="probs")
+d1=cbind(sfcrime.new,p1) ; d1
 ```
 
 ```
@@ -5728,7 +5286,7 @@ more of this when we revisit ANOVA later), and compare the fit:
 
 
 ```r
-sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict)
+sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict)
 ```
 
 ```
@@ -5760,7 +5318,7 @@ it go a bit further thus:
 
 
 ```r
-sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict, maxit = 300)
+sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict,maxit=300)
 ```
 
 ```
@@ -5788,7 +5346,7 @@ sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict, maxit = 300)
 ```
 
 ```r
-anova(sfcrime.1, sfcrime.3)
+anova(sfcrime.1,sfcrime.3)
 ```
 
 ```
@@ -5818,9 +5376,8 @@ them to this model:
 
 
 ```r
-p3 = predict(sfcrime.3, sfcrime.new, type = "probs")
-d3 = cbind(sfcrime.new, p3)
-d3
+p3=predict(sfcrime.3,sfcrime.new,type="probs")
+d3=cbind(sfcrime.new,p3) ; d3
 ```
 
 ```
@@ -5853,8 +5410,8 @@ largest ones easier to find:
 
 
 ```r
-pdiff = round(p3 - p1, 4)
-cbind(sfcrime.new, pdiff)
+pdiff=round(p3-p1,4)
+cbind(sfcrime.new,pdiff)
 ```
 
 ```
@@ -5892,7 +5449,8 @@ the differences twice:
 
 
 ```r
-d1 = cbind(sfcrime.new, pdiff) %>% gather(crimetype, difference, ASSAULT:`VEHICLE THEFT`)
+d1 = cbind(sfcrime.new,pdiff) %>% 
+gather(crimetype,difference,ASSAULT:`VEHICLE THEFT`)
 d1 %>% arrange(difference) %>% slice(1:6)
 ```
 
@@ -5928,7 +5486,7 @@ Extra: there is a better way of doing those in one go:
 
 
 ```r
-d1 %>% top_n(6, difference)
+d1 %>% top_n(6,difference)
 ```
 
 ```
@@ -5942,7 +5500,7 @@ d1 %>% top_n(6, difference)
 ```
 
 ```r
-d1 %>% top_n(6, -difference)
+d1 %>% top_n(6,-difference)
 ```
 
 ```
@@ -5984,7 +5542,7 @@ The variables collected are:
 
 * `race`: the student's race (African-American,
 Asian,
-\marginnote{I'm always amused at how Americans put all Asians    into one group.}  Hispanic, White).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I'm always amused at how Americans put all Asians    into one group.</span>  Hispanic, White).
 
 * `ses`: Socio-economic status of student's family (low,
 middle, or high)
@@ -6058,7 +5616,7 @@ hsb
 ##  8    11 hispanic     middle public academic      34    46    45      39    36 male  
 ##  9    84 white        middle public general       63    57    54      58    51 male  
 ## 10    48 african-amer middle public academic      57    55    52      50    51 male  
-## # ... with 190 more rows
+## # … with 190 more rows
 ```
 
        
@@ -6106,7 +5664,7 @@ hsb
 ##  8    11 hispanic     middle public academic      34    46    45      39    36 male  
 ##  9    84 white        middle public general       63    57    54      58    51 male  
 ## 10    48 african-amer middle public academic      57    55    52      50    51 male  
-## # ... with 190 more rows
+## # … with 190 more rows
 ```
 
   
@@ -6378,7 +5936,7 @@ should have remained in your regression. If that was not what you got,
 find the median of any other variables you had, and put that into your
 `new`. For example, if you still had `math`, you'd do
 this:
-\marginnote{That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.</span>
 
 
 ```r
@@ -6554,7 +6112,7 @@ athletes
 ##  8 female Netball  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.  74.1
 ##  9 female Netball  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.  68.2
 ## 10 female Netball  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.  68.8
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
      
@@ -6603,8 +6161,7 @@ I'm doing this to give you a little intuition for later:
 ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport)) + geom_point()
 ```
 
-
-\includegraphics{16-ordinal-nominal-response_files/figure-latex/unnamed-chunk-152-1} 
+<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-152-1.png" width="672"  />
 
      
 
@@ -6806,7 +6363,7 @@ one, telling us that neither variable should be removed.
 those heights and weights playing each of the sports. Display the
 results. You might have to display them smaller, or reduce the
 number of decimal places
-\marginnote{For this, use *round*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">For this, use *round*.</span> 
 to fit them on the page.
 
 Solution

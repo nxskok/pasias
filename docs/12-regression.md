@@ -8,103 +8,83 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R
-## version 3.5.3
+## Warning: package 'ggplot2' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R
-## version 3.5.3
+## Warning: package 'tibble' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'tidyr' was built under R
-## version 3.5.3
+## Warning: package 'tidyr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'readr' was built under R
-## version 3.5.2
+## Warning: package 'readr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'purrr' was built under R
-## version 3.5.3
+## Warning: package 'purrr' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'dplyr' was built under R
-## version 3.5.2
+## Warning: package 'dplyr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'stringr' was built under R
-## version 3.5.2
+## Warning: package 'stringr' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'forcats' was built under R
-## version 3.5.1
+## Warning: package 'forcats' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'survminer' was built under
-## R version 3.5.1
+## Warning: package 'survminer' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R
-## version 3.5.1
+## Warning: package 'ggpubr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'magrittr' was built under R
-## version 3.5.1
+## Warning: package 'magrittr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'car' was built under R
-## version 3.5.1
+## Warning: package 'car' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'carData' was built under R
-## version 3.5.1
+## Warning: package 'carData' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggbiplot' was built under R
-## version 3.5.1
+## Warning: package 'ggbiplot' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'plyr' was built under R
-## version 3.5.1
+## Warning: package 'plyr' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'scales' was built under R
-## version 3.5.1
+## Warning: package 'scales' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'ggrepel' was built under R
-## version 3.5.1
+## Warning: package 'ggrepel' was built under R version 3.5.1
 ```
 
 ```
-## Warning: package 'broom' was built under R
-## version 3.5.2
+## Warning: package 'broom' was built under R version 3.5.2
 ```
 
 ```
-## Warning: package 'rstan' was built under R
-## version 3.5.3
+## Warning: package 'rstan' was built under R version 3.5.3
 ```
 
 ```
-## Warning: package 'StanHeaders' was built
-## under R version 3.5.1
+## Warning: package 'StanHeaders' was built under R version 3.5.1
 ```
 
 These problems are about simple regression (just one $x$-variable):
@@ -141,8 +121,8 @@ Solution
 I used `rains` as the name of my data frame: 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/calirain.txt"
-rains = read_table2(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/c32/calirain.txt"
+rains=read_table2(my_url)
 ```
 
 ```
@@ -174,20 +154,19 @@ rains
 
 ```
 ## # A tibble: 30 x 5
-##    station rainfall altitude latitude
-##    <chr>      <dbl>    <dbl>    <dbl>
-##  1 Eureka      39.6       43     40.8
-##  2 RedBlu~     23.3      341     40.2
-##  3 Thermal     18.2     4152     33.8
-##  4 FortBr~     37.5       74     39.4
-##  5 SodaSp~     49.3     6752     39.3
-##  6 SanFra~     21.8       52     37.8
-##  7 Sacram~     18.1       25     38.5
-##  8 SanJose     14.2       95     37.4
-##  9 GiantF~     42.6     6360     36.6
-## 10 Salinas     13.8       74     36.7
-## # ... with 20 more rows, and 1 more
-## #   variable: fromcoast <dbl>
+##    station      rainfall altitude latitude fromcoast
+##    <chr>           <dbl>    <dbl>    <dbl>     <dbl>
+##  1 Eureka           39.6       43     40.8         1
+##  2 RedBluff         23.3      341     40.2        97
+##  3 Thermal          18.2     4152     33.8        70
+##  4 FortBragg        37.5       74     39.4         1
+##  5 SodaSprings      49.3     6752     39.3       150
+##  6 SanFrancisco     21.8       52     37.8         5
+##  7 Sacramento       18.1       25     38.5        80
+##  8 SanJose          14.2       95     37.4        28
+##  9 GiantForest      42.6     6360     36.6       145
+## 10 Salinas          13.8       74     36.7        12
+## # … with 20 more rows
 ```
 
  
@@ -216,11 +195,10 @@ Solution
 
 
 ```r
-ggplot(rains, aes(y = rainfall, x = 1)) + geom_boxplot()
+ggplot(rains,aes(y=rainfall,x=1))+geom_boxplot()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-6-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
      
 There is only one rainfall over 60 inches, and the smallest one is
@@ -230,11 +208,10 @@ Another possible plot here is a histogram, since there is only one quantitative 
 
 
 ```r
-ggplot(rains, aes(x = rainfall)) + geom_histogram(bins = 7)
+ggplot(rains, aes(x=rainfall))+geom_histogram(bins=7)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-7-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
 
 
@@ -242,15 +219,14 @@ This clearly shows the rainfall value above 60 inches, but some other things are
 Extra: What stations have those extreme values? Should you wish to find out:
 
 ```r
-rains %>% filter(rainfall > 60)
+rains %>% filter(rainfall>60)
 ```
 
 ```
 ## # A tibble: 1 x 5
-##   station rainfall altitude latitude
-##   <chr>      <dbl>    <dbl>    <dbl>
-## 1 Cresce~     74.9       35     41.7
-## # ... with 1 more variable: fromcoast <dbl>
+##   station      rainfall altitude latitude fromcoast
+##   <chr>           <dbl>    <dbl>    <dbl>     <dbl>
+## 1 CrescentCity     74.9       35     41.7         1
 ```
 
  
@@ -263,15 +239,14 @@ Pacific Northwest.) Here it is:
 Which station has less than 2 inches of annual rainfall?
 
 ```r
-rains %>% filter(rainfall < 2)
+rains %>% filter(rainfall<2)  
 ```
 
 ```
 ## # A tibble: 1 x 5
-##   station rainfall altitude latitude
-##   <chr>      <dbl>    <dbl>    <dbl>
-## 1 DeathV~     1.66     -178     36.5
-## # ... with 1 more variable: fromcoast <dbl>
+##   station     rainfall altitude latitude fromcoast
+##   <chr>          <dbl>    <dbl>    <dbl>     <dbl>
+## 1 DeathValley     1.66     -178     36.5       194
 ```
 
  
@@ -294,23 +269,19 @@ That is, `altitude`, `latitude` and
 acceptable) is one plot at a time:
 
 ```r
-ggplot(rains, aes(y = rainfall, x = altitude)) + 
-    geom_point()
+ggplot(rains,aes(y=rainfall,x=altitude))+geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-10-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
      
 
 
 ```r
-ggplot(rains, aes(y = rainfall, x = latitude)) + 
-    geom_point()
+ggplot(rains,aes(y=rainfall,x=latitude))+geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-11-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
  
 
@@ -318,12 +289,10 @@ and finally
 
 
 ```r
-ggplot(rains, aes(y = rainfall, x = fromcoast)) + 
-    geom_point()
+ggplot(rains,aes(y=rainfall,x=fromcoast))+geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-12-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -334,13 +303,12 @@ Here is a funky way to get all three plots in one shot:
 
 
 ```r
-rains %>% gather(xname, x, altitude:fromcoast) %>% 
-    ggplot(aes(x = x, y = rainfall)) + geom_point() + 
-    facet_wrap(~xname, scales = "free")
+rains %>% gather(xname,x,altitude:fromcoast) %>%
+ggplot(aes(x=x,y=rainfall))+geom_point()+
+facet_wrap(~xname,scales="free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-13-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -365,13 +333,12 @@ too many:
 
 
 ```r
-rains %>% gather(xname, x, altitude:fromcoast) %>% 
-    ggplot(aes(x = x, y = rainfall)) + geom_point() + 
-    facet_wrap(~xname, scales = "free", ncol = 2)
+rains %>% gather(xname,x,altitude:fromcoast) %>%
+ggplot(aes(x=x,y=rainfall))+geom_point()+
+facet_wrap(~xname,scales="free",ncol=2)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-14-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -426,7 +393,7 @@ Save your `lm` into a
 variable, since it will get used again later:
 
 ```r
-rainfall.1 = lm(rainfall ~ latitude, data = rains)
+rainfall.1=lm(rainfall~latitude,data=rains)
 summary(rainfall.1)
 ```
 
@@ -440,15 +407,11 @@ summary(rainfall.1)
 ## -27.297  -7.956  -2.103   6.082  38.262 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) -113.3028    35.7210  -3.172
-## latitude       3.5950     0.9623   3.736
-##             Pr(>|t|)    
-## (Intercept)  0.00366 ** 
-## latitude     0.00085 ***
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -113.3028    35.7210  -3.172  0.00366 ** 
+## latitude       3.5950     0.9623   3.736  0.00085 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 13.82 on 28 degrees of freedom
 ## Multiple R-squared:  0.3326,	Adjusted R-squared:  0.3088 
@@ -467,7 +430,7 @@ Extra: Of course, I can easily do the others as well, though you don't have to:
 
 
 ```r
-rainfall.2 = lm(rainfall ~ fromcoast, data = rains)
+rainfall.2=lm(rainfall~fromcoast,data=rains)
 summary(rainfall.2)
 ```
 
@@ -481,15 +444,11 @@ summary(rainfall.2)
 ## -15.240  -9.431  -6.603   2.871  51.147 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 23.77306    4.61296   5.154
-## fromcoast   -0.05039    0.04431  -1.137
-##             Pr(>|t|)    
-## (Intercept) 1.82e-05 ***
-## fromcoast      0.265    
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 23.77306    4.61296   5.154 1.82e-05 ***
+## fromcoast   -0.05039    0.04431  -1.137    0.265    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 16.54 on 28 degrees of freedom
 ## Multiple R-squared:  0.04414,	Adjusted R-squared:   0.01 
@@ -511,7 +470,7 @@ Finally:
 
 
 ```r
-rainfall.3 = lm(rainfall ~ altitude, data = rains)
+rainfall.3=lm(rainfall~altitude,data=rains)
 summary(rainfall.3)
 ```
 
@@ -525,15 +484,11 @@ summary(rainfall.3)
 ## -20.620  -8.479  -2.729   4.555  58.271 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) 16.514799   3.539141   4.666
-## altitude     0.002394   0.001428   1.676
-##             Pr(>|t|)    
-## (Intercept)  6.9e-05 ***
-## altitude       0.105    
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 16.514799   3.539141   4.666  6.9e-05 ***
+## altitude     0.002394   0.001428   1.676    0.105    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 16.13 on 28 degrees of freedom
 ## Multiple R-squared:  0.09121,	Adjusted R-squared:  0.05875 
@@ -563,8 +518,7 @@ Solution
 This, then:
 
 ```r
-rainfall.4 = lm(rainfall ~ latitude + altitude + 
-    fromcoast, data = rains)
+rainfall.4=lm(rainfall~latitude+altitude+fromcoast,data=rains)
 summary(rainfall.4)
 ```
 
@@ -578,19 +532,13 @@ summary(rainfall.4)
 ## -28.722  -5.603  -0.531   3.510  33.317 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value
-## (Intercept) -1.024e+02  2.921e+01  -3.505
-## latitude     3.451e+00  7.949e-01   4.342
-## altitude     4.091e-03  1.218e-03   3.358
-## fromcoast   -1.429e-01  3.634e-02  -3.931
-##             Pr(>|t|)    
-## (Intercept) 0.001676 ** 
-## latitude    0.000191 ***
-## altitude    0.002431 ** 
-## fromcoast   0.000559 ***
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -1.024e+02  2.921e+01  -3.505 0.001676 ** 
+## latitude     3.451e+00  7.949e-01   4.342 0.000191 ***
+## altitude     4.091e-03  1.218e-03   3.358 0.002431 ** 
+## fromcoast   -1.429e-01  3.634e-02  -3.931 0.000559 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 11.1 on 26 degrees of freedom
 ## Multiple R-squared:  0.6003,	Adjusted R-squared:  0.5542 
@@ -650,7 +598,7 @@ smaller); the alternative is that the larger model is better, so
 that the extra complication is worth it:
 
 ```r
-anova(rainfall.1, rainfall.4)
+anova(rainfall.1,rainfall.4)  
 ```
 
 ```
@@ -658,15 +606,11 @@ anova(rainfall.1, rainfall.4)
 ## 
 ## Model 1: rainfall ~ latitude
 ## Model 2: rainfall ~ latitude + altitude + fromcoast
-##   Res.Df    RSS Df Sum of Sq      F   Pr(>F)
-## 1     28 5346.8                             
-## 2     26 3202.3  2    2144.5 8.7057 0.001276
-##     
-## 1   
-## 2 **
+##   Res.Df    RSS Df Sum of Sq      F   Pr(>F)   
+## 1     28 5346.8                                
+## 2     26 3202.3  2    2144.5 8.7057 0.001276 **
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -679,7 +623,7 @@ is the one we should go with.
 If you have studied these things: this one is a 
 "multiple-partial $F$-test", for testing the combined significance of more than one $x$
 but less than all the $x$'s.
-\marginnote{If you had just one $x$, you'd  use a $t$-test for its slope, and if you were testing all the $x$'s, you'd use the global $F$-test that appears in the regression output.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you had just one $x$, you'd  use a $t$-test for its slope, and if you were testing all the $x$'s, you'd use the global $F$-test that appears in the regression output.</span>
 
 
 
@@ -743,7 +687,7 @@ cigs
 ##  8  12.4     0.95  0.922  12.3
 ##  9  16.6     1.12  0.937  16.3
 ## 10  14.9     1.02  0.886  15.4
-## # ... with 15 more rows
+## # … with 15 more rows
 ```
 
  
@@ -780,19 +724,13 @@ summary(cigs.1)
 ## -2.89261 -0.78269  0.00428  0.92891  2.45082 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)   3.2022     3.4618   0.925
-## tar           0.9626     0.2422   3.974
-## nicotine     -2.6317     3.9006  -0.675
-## weight       -0.1305     3.8853  -0.034
-##             Pr(>|t|)    
-## (Intercept) 0.365464    
-## tar         0.000692 ***
-## nicotine    0.507234    
-## weight      0.973527    
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.2022     3.4618   0.925 0.365464    
+## tar           0.9626     0.2422   3.974 0.000692 ***
+## nicotine     -2.6317     3.9006  -0.675 0.507234    
+## weight       -0.1305     3.8853  -0.034 0.973527    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 1.446 on 21 degrees of freedom
 ## Multiple R-squared:  0.9186,	Adjusted R-squared:  0.907 
@@ -831,17 +769,12 @@ summary(cigs.2)
 ## -2.89941 -0.78470 -0.00144  0.91585  2.43064 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)   3.0896     0.8438   3.662
-## tar           0.9625     0.2367   4.067
-## nicotine     -2.6463     3.7872  -0.699
-##             Pr(>|t|)    
-## (Intercept) 0.001371 ** 
-## tar         0.000512 ***
-## nicotine    0.492035    
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.0896     0.8438   3.662 0.001371 ** 
+## tar           0.9625     0.2367   4.067 0.000512 ***
+## nicotine     -2.6463     3.7872  -0.699 0.492035    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 1.413 on 22 degrees of freedom
 ## Multiple R-squared:  0.9186,	Adjusted R-squared:  0.9112 
@@ -875,17 +808,12 @@ summary(cigs.2a)
 ## -2.89941 -0.78470 -0.00144  0.91585  2.43064 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)   3.0896     0.8438   3.662
-## tar           0.9625     0.2367   4.067
-## nicotine     -2.6463     3.7872  -0.699
-##             Pr(>|t|)    
-## (Intercept) 0.001371 ** 
-## tar         0.000512 ***
-## nicotine    0.492035    
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.0896     0.8438   3.662 0.001371 ** 
+## tar           0.9625     0.2367   4.067 0.000512 ***
+## nicotine     -2.6463     3.7872  -0.699 0.492035    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 1.413 on 22 degrees of freedom
 ## Multiple R-squared:  0.9186,	Adjusted R-squared:  0.9112 
@@ -933,15 +861,11 @@ summary(cigs.3)
 ## -3.3273 -1.2228  0.2304  1.2700  3.9357 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)   1.6647     0.9936   1.675
-## nicotine     12.3954     1.0542  11.759
-##             Pr(>|t|)    
-## (Intercept)    0.107    
-## nicotine    3.31e-11 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   1.6647     0.9936   1.675    0.107    
+## nicotine     12.3954     1.0542  11.759 3.31e-11 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 1.828 on 23 degrees of freedom
 ## Multiple R-squared:  0.8574,	Adjusted R-squared:  0.8512 
@@ -980,7 +904,7 @@ We'll explore that in a moment.
 (f) Make a "pairs plot": that is, scatter plots between all
 pairs of variables. This can be done by feeding the whole data frame
 into `plot`.
-\marginnote{This is a base graphics graph rather    than a ggplot one, but it will do for our purposes.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is a base graphics graph rather    than a ggplot one, but it will do for our purposes.</span>
 Do you see any strong relationships that do
 *not* include `co`? Does that shed any light on the last
 part? Explain briefly (or "at length" if that's how it comes
@@ -996,8 +920,7 @@ Plot the entire data frame:
 plot(cigs)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-25-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
  
 
@@ -1047,16 +970,14 @@ library(GGally)
 ```
 
 ```
-## Warning: package 'GGally' was built under R
-## version 3.5.1
+## Warning: package 'GGally' was built under R version 3.5.1
 ```
 
 ```r
 cigs %>% ggpairs()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-26-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -1082,8 +1003,7 @@ pairs plot of the other variables:
 cigs %>% select(-weight) %>% ggpairs()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-27-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
  
 
@@ -1185,8 +1105,7 @@ Fitting four explanatory variables with only ten observations is likely to be pr
 press ahead regardless:
 
 ```r
-boys.1 <- lm(uptake ~ age + height + weight + 
-    chest, data = boys)
+boys.1 <- lm(uptake ~ age + height + weight + chest, data = boys)
 summary(boys.1)
 ```
 
@@ -1196,29 +1115,20 @@ summary(boys.1)
 ## lm(formula = uptake ~ age + height + weight + chest, data = boys)
 ## 
 ## Residuals:
-##         1         2         3         4 
-## -0.020697  0.019741 -0.003649  0.038470 
-##         5         6         7         8 
-## -0.023639 -0.026026  0.050459 -0.014380 
-##         9        10 
-##  0.004294 -0.024573 
+##         1         2         3         4         5         6         7 
+## -0.020697  0.019741 -0.003649  0.038470 -0.023639 -0.026026  0.050459 
+##         8         9        10 
+## -0.014380  0.004294 -0.024573 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) -4.774739   0.862818  -5.534
-## age         -0.035214   0.015386  -2.289
-## height       0.051637   0.006215   8.308
-## weight      -0.023417   0.013428  -1.744
-## chest        0.034489   0.085239   0.405
-##             Pr(>|t|)    
-## (Intercept) 0.002643 ** 
-## age         0.070769 .  
-## height      0.000413 ***
-## weight      0.141640    
-## chest       0.702490    
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -4.774739   0.862818  -5.534 0.002643 ** 
+## age         -0.035214   0.015386  -2.289 0.070769 .  
+## height       0.051637   0.006215   8.308 0.000413 ***
+## weight      -0.023417   0.013428  -1.744 0.141640    
+## chest        0.034489   0.085239   0.405 0.702490    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.03721 on 5 degrees of freedom
 ## Multiple R-squared:  0.9675,	Adjusted R-squared:  0.9415 
@@ -1314,21 +1224,15 @@ summary(boys.2)
 ## lm(formula = uptake ~ height, data = boys)
 ## 
 ## Residuals:
-##       Min        1Q    Median        3Q 
-## -0.069879 -0.033144  0.001407  0.009581 
-##       Max 
-##  0.084012 
+##       Min        1Q    Median        3Q       Max 
+## -0.069879 -0.033144  0.001407  0.009581  0.084012 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) -3.843326   0.609198  -6.309
-## height       0.040718   0.004648   8.761
-##             Pr(>|t|)    
-## (Intercept) 0.000231 ***
-## height      2.26e-05 ***
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -3.843326   0.609198  -6.309 0.000231 ***
+## height       0.040718   0.004648   8.761 2.26e-05 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.05013 on 8 degrees of freedom
 ## Multiple R-squared:  0.9056,	Adjusted R-squared:  0.8938 
@@ -1341,8 +1245,7 @@ If you want, you can use `update` here, which looks like this:
 
 
 ```r
-boys.2a <- update(boys.1, . ~ . - age - weight - 
-    chest)
+boys.2a <- update(boys.1, . ~ . - age - weight - chest)
 summary(boys.2a)
 ```
 
@@ -1352,21 +1255,15 @@ summary(boys.2a)
 ## lm(formula = uptake ~ height, data = boys)
 ## 
 ## Residuals:
-##       Min        1Q    Median        3Q 
-## -0.069879 -0.033144  0.001407  0.009581 
-##       Max 
-##  0.084012 
+##       Min        1Q    Median        3Q       Max 
+## -0.069879 -0.033144  0.001407  0.009581  0.084012 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) -3.843326   0.609198  -6.309
-## height       0.040718   0.004648   8.761
-##             Pr(>|t|)    
-## (Intercept) 0.000231 ***
-## height      2.26e-05 ***
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -3.843326   0.609198  -6.309 0.000231 ***
+## height       0.040718   0.004648   8.761 2.26e-05 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.05013 on 8 degrees of freedom
 ## Multiple R-squared:  0.9056,	Adjusted R-squared:  0.8938 
@@ -1421,12 +1318,9 @@ anova(boys.2, boys.1)
 ## 
 ## Model 1: uptake ~ height
 ## Model 2: uptake ~ age + height + weight + chest
-##   Res.Df       RSS Df Sum of Sq      F
-## 1      8 0.0201016                    
-## 2      5 0.0069226  3  0.013179 3.1729
-##   Pr(>F)
-## 1       
-## 2  0.123
+##   Res.Df       RSS Df Sum of Sq      F Pr(>F)
+## 1      8 0.0201016                           
+## 2      5 0.0069226  3  0.013179 3.1729  0.123
 ```
 
  
@@ -1440,7 +1334,7 @@ That drop in R-squared from 97\% to 91\% was, it turns out, *not*
 significant: the three extra variables
 could have produced a change in R-squared like that, 
 *even if  they were worthless*.
-\marginnote{Recall that adding $x$'s to a regression will always make R-squared go up, even if they are just random noise.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Recall that adding $x$'s to a regression will always make R-squared go up, even if they are just random noise.</span>
 
 If you have learned about "adjusted R-squared", you might recall
 that this is supposed to go down *only* if the variables you took
@@ -1475,18 +1369,12 @@ cor(boys)
 ```
 
 ```
-##           uptake       age    height
-## uptake 1.0000000 0.1361907 0.9516347
-## age    0.1361907 1.0000000 0.3274830
-## height 0.9516347 0.3274830 1.0000000
-## weight 0.6576883 0.2307403 0.7898252
-## chest  0.7182659 0.1657523 0.7909452
-##           weight     chest
-## uptake 0.6576883 0.7182659
-## age    0.2307403 0.1657523
-## height 0.7898252 0.7909452
-## weight 1.0000000 0.8809605
-## chest  0.8809605 1.0000000
+##           uptake       age    height    weight     chest
+## uptake 1.0000000 0.1361907 0.9516347 0.6576883 0.7182659
+## age    0.1361907 1.0000000 0.3274830 0.2307403 0.1657523
+## height 0.9516347 0.3274830 1.0000000 0.7898252 0.7909452
+## weight 0.6576883 0.2307403 0.7898252 1.0000000 0.8809605
+## chest  0.7182659 0.1657523 0.7909452 0.8809605 1.0000000
 ```
 
  
@@ -1511,7 +1399,7 @@ variables have a stronger link with `uptake` than
 `age`. Height, however, seems to be the best way of relating
 oxygen uptake to any of the other variables. I think the suppositions
 from earlier about relating oxygen uptake to "bigness"
-\marginnote{This  is not, I don't think, a real word, but I mean size emphasizing  how big a boy is generally, rather than how small.} in some sense
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This  is not, I don't think, a real word, but I mean size emphasizing  how big a boy is generally, rather than how small.</span> in some sense
 are actually sound, but age and weight and `chest` capture
 "bigness" worse than height does. Later, when you learn about
 Principal Components, you will see that the first principal component,
@@ -1527,8 +1415,7 @@ from package `GGally`:
 boys %>% ggpairs()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-34-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
  
 
@@ -1614,20 +1501,18 @@ fb
 ##  8       0.5       132
 ##  9       0.6       154
 ## 10      -0.5       241
-## # ... with 30 more rows
+## # … with 30 more rows
 ```
 
 ```r
-ggplot(fb, aes(x = GMdensity, y = FBfriends)) + 
-    geom_point() + geom_smooth()
+ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-35-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
        
 
@@ -1682,15 +1567,11 @@ summary(fb.1)
 ## -339.89 -110.01   -5.12   99.80  303.64 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)   366.64      26.35  13.916
-## GMdensity      82.45      27.58   2.989
-##             Pr(>|t|)    
-## (Intercept)  < 2e-16 ***
-## GMdensity    0.00488 ** 
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   366.64      26.35  13.916  < 2e-16 ***
+## GMdensity      82.45      27.58   2.989  0.00488 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 165.7 on 38 degrees of freedom
 ## Multiple R-squared:  0.1904,	Adjusted R-squared:  0.1691 
@@ -1714,7 +1595,7 @@ sqrt(0.1904)
 
 which *would* look
 like as weak of a trend as we saw.
-\marginnote{Correlations have to go up beyond 0.50 before they start looking at all interesting.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Correlations have to go up beyond 0.50 before they start looking at all interesting.</span>
 
 
 
@@ -1817,12 +1698,11 @@ Just a modification
 of (a):
 
 ```r
-ggplot(fb, aes(x = GMdensity, y = FBfriends)) + 
-    geom_point() + geom_smooth(method = "lm")
+ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() +
+  geom_smooth(method = "lm")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-40-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
        
 
@@ -1841,8 +1721,7 @@ This is, to my mind, the easiest way:
 ggplot(fb.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-41-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
        
 
@@ -1859,16 +1738,15 @@ Compare that residual plot with this one:
 
 
 ```r
-ggplot(fb.1, aes(x = .fitted, y = .resid)) + geom_point() + 
-    geom_smooth()
+ggplot(fb.1, aes(x = .fitted, y = .resid)) +
+  geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-42-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
        
 Now, why did I try adding a smooth trend, and why is it not
@@ -1965,16 +1843,15 @@ Solution
 
 
 ```r
-ggplot(carp, aes(x = bodyweight, y = ENE)) + geom_point() + 
-    geom_smooth()
+ggplot(carp, aes(x = bodyweight, y = ENE)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-44-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
  
 
@@ -2025,15 +1902,11 @@ summary(carp.1)
 ## -2.800 -1.957 -1.173  1.847  4.572 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 11.40393    1.31464   8.675
-## bodyweight  -0.02710    0.01027  -2.640
-##             Pr(>|t|)    
-## (Intercept) 2.43e-05 ***
-## bodyweight    0.0297 *  
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 11.40393    1.31464   8.675 2.43e-05 ***
+## bodyweight  -0.02710    0.01027  -2.640   0.0297 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.928 on 8 degrees of freedom
 ## Multiple R-squared:  0.4656,	Adjusted R-squared:  0.3988 
@@ -2047,7 +1920,7 @@ need the value at this point.
 This kind of R-squared is actually pretty good for natural data, but
 the issue is whether we can improve it by fitting a non-linear
 model.
-\marginnote{The suspicion being that we can, since the    scatterplot suggested serious non-linearity.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The suspicion being that we can, since the    scatterplot suggested serious non-linearity.</span>
 
 
 
@@ -2065,12 +1938,10 @@ straight into `ggplot`:
 
 
 ```r
-ggplot(carp.1, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(carp.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-46-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -2089,8 +1960,7 @@ Add bodyweight-squared to
 the regression. Don't forget the `I()`:
 
 ```r
-carp.2 <- lm(ENE ~ bodyweight + I(bodyweight^2), 
-    data = carp)
+carp.2 <- lm(ENE ~ bodyweight + I(bodyweight^2), data = carp)
 summary(carp.2)
 ```
 
@@ -2104,17 +1974,12 @@ summary(carp.2)
 ## -2.0834 -1.7388 -0.5464  1.3841  2.9976 
 ## 
 ## Coefficients:
-##                   Estimate Std. Error
-## (Intercept)     13.7127373  1.3062494
-## bodyweight      -0.1018390  0.0288109
-## I(bodyweight^2)  0.0002735  0.0001016
-##                 t value Pr(>|t|)    
-## (Intercept)      10.498 1.55e-05 ***
-## bodyweight       -3.535  0.00954 ** 
-## I(bodyweight^2)   2.692  0.03101 *  
+##                   Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)     13.7127373  1.3062494  10.498 1.55e-05 ***
+## bodyweight      -0.1018390  0.0288109  -3.535  0.00954 ** 
+## I(bodyweight^2)  0.0002735  0.0001016   2.692  0.03101 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.194 on 7 degrees of freedom
 ## Multiple R-squared:  0.7374,	Adjusted R-squared:  0.6624 
@@ -2126,7 +1991,7 @@ summary(carp.2)
 R-squared has gone up from 47\% to 74\%, a substantial
 improvement. This suggests to me that the parabola model is a
 substantial improvement.
-\marginnote{Again, not a surprise, given our  initial scatterplot.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Again, not a surprise, given our  initial scatterplot.</span> 
 
 I try to avoid using the word "significant" in this context, since
 we haven't actually done a test of significance.
@@ -2155,7 +2020,7 @@ of 0.031. This is less than the default 0.05, so it *is*
 significant.
 This means, in short, that the quadratic model is a significant
 *improvement* over the linear one.
-\marginnote{Now we can use that word   *significant*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Now we can use that word   *significant*.</span> 
 Said longer: the null hypothesis being tested is that the slope
 coefficient of the squared term is zero (that is, that the squared
 term has nothing to add over the linear model). This is rejected,
@@ -2182,14 +2047,12 @@ that: plot the fitted values and join them with lines. Then I
 want to add the original data, just the points:
 
 ```r
-ggplot(carp.2, aes(x = carp$bodyweight, y = .fitted), 
-    colour = "blue") + geom_line(colour = "blue") + 
-    geom_point(data = carp, aes(x = bodyweight, 
-        y = ENE))
+ggplot(carp.2, aes(x = carp$bodyweight, y = .fitted), colour = "blue") +
+  geom_line(colour = "blue") +
+  geom_point(data = carp, aes(x = bodyweight, y = ENE))
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-48-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
        
 
@@ -2209,21 +2072,19 @@ carp.2a
 
 ```
 ## # A tibble: 10 x 10
-##     tank bodyweight   ENE .fitted .se.fit
-##    <dbl>      <dbl> <dbl>   <dbl>   <dbl>
-##  1     1       11.7  15.3   12.6    1.07 
-##  2     2       25.3   9.3   11.3    0.886
-##  3     3       90.2   6.5    6.75   1.07 
-##  4     4      213     6      4.43   1.25 
-##  5     5       10.2  15.7   12.7    1.10 
-##  6     6       17.6  10     12.0    0.980
-##  7     7       32.6   8.6   10.7    0.828
-##  8     8       81.3   6.4    7.24   1.01 
-##  9     9      142.    5.6    4.78   1.31 
-## 10    10      286.    6      6.94   2.05 
-## # ... with 5 more variables: .resid <dbl>,
-## #   .hat <dbl>, .sigma <dbl>, .cooksd <dbl>,
-## #   .std.resid <dbl>
+##     tank bodyweight   ENE .fitted .se.fit .resid  .hat .sigma .cooksd
+##    <dbl>      <dbl> <dbl>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>   <dbl>
+##  1     1       11.7  15.3   12.6    1.07   2.74  0.239   1.99 0.215  
+##  2     2       25.3   9.3   11.3    0.886 -2.01  0.163   2.19 0.0651 
+##  3     3       90.2   6.5    6.75   1.07  -0.252 0.240   2.37 0.00182
+##  4     4      213     6      4.43   1.25   1.57  0.325   2.24 0.122  
+##  5     5       10.2  15.7   12.7    1.10   3.00  0.251   1.90 0.279  
+##  6     6       17.6  10     12.0    0.980 -2.01  0.199   2.19 0.0866 
+##  7     7       32.6   8.6   10.7    0.828 -2.08  0.143   2.18 0.0583 
+##  8     8       81.3   6.4    7.24   1.01  -0.841 0.211   2.34 0.0166 
+##  9     9      142.    5.6    4.78   1.31   0.822 0.355   2.33 0.0398 
+## 10    10      286.    6      6.94   2.05  -0.940 0.875   2.11 3.40   
+## # … with 1 more variable: .std.resid <dbl>
 ```
 
  
@@ -2232,8 +2093,9 @@ so now you see what `carp.2a` has in it, and then:
 
 
 ```r
-g <- ggplot(carp.2a, aes(x = bodyweight, y = .fitted)) + 
-    geom_line(colour = "blue") + geom_point(aes(y = ENE))
+g <- ggplot(carp.2a, aes(x = bodyweight, y = .fitted)) +
+  geom_line(colour = "blue") +
+  geom_point(aes(y = ENE))
 ```
 
  
@@ -2251,8 +2113,7 @@ is `ENE`. The plot is this:
 g
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-50-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
  
 
@@ -2289,12 +2150,10 @@ fitted model object `carp.2` as your data frame for the
 `ggplot`:
 
 ```r
-ggplot(carp.2, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(carp.2, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-51-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -2312,7 +2171,7 @@ to `lm` in the same way that
 `^` does:
 
 ```r
-carp.3 <- lm(ENE ~ I(1/bodyweight), data = carp)
+carp.3 <- lm(ENE ~ I(1 / bodyweight), data = carp)
 summary(carp.3)
 ```
 
@@ -2326,15 +2185,11 @@ summary(carp.3)
 ## -1.29801 -0.12830  0.04029  0.26702  0.91707 
 ## 
 ## Coefficients:
-##                 Estimate Std. Error t value
-## (Intercept)       5.1804     0.2823   18.35
-## I(1/bodyweight) 107.6690     5.8860   18.29
-##                 Pr(>|t|)    
-## (Intercept)     8.01e-08 ***
-## I(1/bodyweight) 8.21e-08 ***
+##                 Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)       5.1804     0.2823   18.35 8.01e-08 ***
+## I(1/bodyweight) 107.6690     5.8860   18.29 8.21e-08 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.6121 on 8 degrees of freedom
 ## Multiple R-squared:  0.9766,	Adjusted R-squared:  0.9737 
@@ -2355,13 +2210,13 @@ Does the fitted value plot look reasonable now? This is `augment` again since th
 
 ```r
 library(broom)
-augment(carp.3, carp) %>% ggplot(aes(x = bodyweight, 
-    y = .fitted)) + geom_line(colour = "blue") + 
-    geom_point(aes(y = ENE))
+augment(carp.3, carp) %>%
+  ggplot(aes(x = bodyweight, y = .fitted)) +
+  geom_line(colour = "blue") +
+  geom_point(aes(y = ENE))
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/augment2-1} 
+<img src="12-regression_files/figure-html/augment2-1.png" width="672"  />
 
  
 
@@ -2374,12 +2229,10 @@ just did:
 
 
 ```r
-ggplot(carp.3, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(carp.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-53-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
  
 
@@ -2429,7 +2282,7 @@ template report with the document info at the top. This is my document info:
 ![](sh0.png)
  
 This is known in the jargon as a "YAML block".
-\marginnote{YAML      stands for *Yet Another Markup Language*, but we're not using      it in this course, other than as the top bit of an R Markdown document.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">YAML      stands for *Yet Another Markup Language*, but we're not using      it in this course, other than as the top bit of an R Markdown document.</span>
 Below that is the template R Markdown document, which you can delete now or later.
 
 
@@ -2531,16 +2384,15 @@ The R code you add should look like this, with the results shown
 
 ```r
 library(tidyverse)
-ggplot(sparrowhawks, aes(x = returning, y = newadults)) + 
-    geom_point() + geom_smooth()
+ggplot(sparrowhawks, aes(x = returning, y = newadults)) +
+  geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-55-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
 
  
 
@@ -2629,15 +2481,11 @@ summary(newadults.1)
 ## -5.8687 -1.2532  0.0508  2.0508  5.3071 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 31.93426    4.83762   6.601
-## returning   -0.30402    0.08122  -3.743
-##             Pr(>|t|)    
-## (Intercept) 3.86e-05 ***
-## returning    0.00325 ** 
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 31.93426    4.83762   6.601 3.86e-05 ***
+## returning   -0.30402    0.08122  -3.743  0.00325 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 3.667 on 11 degrees of freedom
 ## Multiple R-squared:  0.5602,	Adjusted R-squared:  0.5202 
@@ -2675,12 +2523,11 @@ will add the regression line to the plot:
 
 
 ```r
-ggplot(sparrowhawks, aes(x = returning, y = newadults)) + 
-    geom_point() + geom_smooth(method = "lm")
+ggplot(sparrowhawks, aes(x = returning, y = newadults)) +
+  geom_point() + geom_smooth(method = "lm")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-59-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
 
  
 
@@ -2765,7 +2612,7 @@ soc
 ##  8         13  33697
 ##  9          2  22444
 ## 10          8  32562
-## # ... with 40 more rows
+## # … with 40 more rows
 ```
 
  
@@ -2807,10 +2654,9 @@ soc %>% summarize_all(c("min", "max"))
 
 ```
 ## # A tibble: 1 x 4
-##   experience_min salary_min experience_max
-##            <dbl>      <dbl>          <dbl>
-## 1              1      16105             28
-## # ... with 1 more variable: salary_max <dbl>
+##   experience_min salary_min experience_max salary_max
+##            <dbl>      <dbl>          <dbl>      <dbl>
+## 1              1      16105             28      99139
 ```
 
  
@@ -2823,7 +2669,7 @@ Here is another:
 
 
 ```r
-soc %>% map_df(~quantile(.))
+soc %>% map_df(~ quantile(.))
 ```
 
 ```
@@ -2861,7 +2707,7 @@ This almost works:
 
 
 ```r
-soc %>% map_df(~enframe(quantile(.)))
+soc %>% map_df(~ enframe(quantile(.)))
 ```
 
 ```
@@ -2934,12 +2780,10 @@ Solution
 The usual:
 
 ```r
-ggplot(soc, aes(x = experience, y = salary)) + 
-    geom_point()
+ggplot(soc, aes(x = experience, y = salary)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-68-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
  
 
@@ -2972,15 +2816,11 @@ summary(soc.1)
 ## -17666.3  -5498.2   -726.7   4667.7  27811.6 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  11368.7     3160.3   3.597
-## experience    2141.4      160.8  13.314
-##             Pr(>|t|)    
-## (Intercept) 0.000758 ***
-## experience   < 2e-16 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  11368.7     3160.3   3.597 0.000758 ***
+## experience    2141.4      160.8  13.314  < 2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 8642 on 48 degrees of freedom
 ## Multiple R-squared:  0.7869,	Adjusted R-squared:  0.7825 
@@ -3010,12 +2850,10 @@ frame), and plot the `.fitted` and `.resid`
 columns in it, not forgetting the initial dots:
 
 ```r
-ggplot(soc.1, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(soc.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-70-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
 
        
 I see a "fanning-out": the residuals are getting bigger *in size* 
@@ -3032,16 +2870,14 @@ would look like this:
 
 
 ```r
-ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + 
-    geom_point() + geom_smooth()
+ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-71-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
 
  
 
@@ -3054,16 +2890,14 @@ is a smoother version:
 
 
 ```r
-ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + 
-    geom_point() + geom_smooth(span = 2)
+ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth(span = 2)
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-72-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
  
 
@@ -3102,8 +2936,7 @@ I explain that "masked" thing below.
 boxcox(salary ~ experience, data = soc)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-74-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
 
  
 
@@ -3122,7 +2955,7 @@ that you will have a terrible time debugging. That's what that
 So I'm going to be tidy and get rid of `MASS`, now that I'm
 finished with it. Let's first see which packages are loaded, rather a
 lot in my case:
-\marginnote{The packages before *tidyverse* other than *MASS* are all loaded by the *tidyverse*, which  is why there are so many.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The packages before *tidyverse* other than *MASS* are all loaded by the *tidyverse*, which  is why there are so many.</span>
 
 
 ```r
@@ -3130,48 +2963,20 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"         
-##  [2] ".conflicts"         
-##  [3] "package:GGally"     
-##  [4] "package:conflicted" 
-##  [5] "package:rstan"      
-##  [6] "package:StanHeaders"
-##  [7] "package:bootstrap"  
-##  [8] "package:rpart"      
-##  [9] "package:broom"      
-## [10] "package:ggrepel"    
-## [11] "package:ggbiplot"   
-## [12] "package:grid"       
-## [13] "package:scales"     
-## [14] "package:plyr"       
-## [15] "package:lme4"       
-## [16] "package:Matrix"     
-## [17] "package:car"        
-## [18] "package:carData"    
-## [19] "package:survminer"  
-## [20] "package:ggpubr"     
-## [21] "package:magrittr"   
-## [22] "package:survival"   
-## [23] "package:nnet"       
-## [24] "package:MASS"       
-## [25] "package:smmr"       
-## [26] "package:forcats"    
-## [27] "package:stringr"    
-## [28] "package:dplyr"      
-## [29] "package:purrr"      
-## [30] "package:readr"      
-## [31] "package:tidyr"      
-## [32] "package:tibble"     
-## [33] "package:ggplot2"    
-## [34] "package:tidyverse"  
-## [35] "package:stats"      
-## [36] "package:graphics"   
-## [37] "package:grDevices"  
-## [38] "package:utils"      
-## [39] "package:datasets"   
-## [40] "package:methods"    
-## [41] "Autoloads"          
-## [42] "package:base"
+##  [1] ".GlobalEnv"          ".conflicts"          "package:GGally"     
+##  [4] "package:conflicted"  "package:rstan"       "package:StanHeaders"
+##  [7] "package:bootstrap"   "package:rpart"       "package:broom"      
+## [10] "package:ggrepel"     "package:ggbiplot"    "package:grid"       
+## [13] "package:scales"      "package:plyr"        "package:lme4"       
+## [16] "package:Matrix"      "package:car"         "package:carData"    
+## [19] "package:survminer"   "package:ggpubr"      "package:magrittr"   
+## [22] "package:survival"    "package:nnet"        "package:MASS"       
+## [25] "package:smmr"        "package:forcats"     "package:stringr"    
+## [28] "package:dplyr"       "package:purrr"       "package:readr"      
+## [31] "package:tidyr"       "package:tibble"      "package:ggplot2"    
+## [34] "package:tidyverse"   "package:stats"       "package:graphics"   
+## [37] "package:grDevices"   "package:utils"       "package:datasets"   
+## [40] "package:methods"     "Autoloads"           "package:base"
 ```
 
  
@@ -3197,47 +3002,20 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"         
-##  [2] ".conflicts"         
-##  [3] "package:GGally"     
-##  [4] "package:conflicted" 
-##  [5] "package:rstan"      
-##  [6] "package:StanHeaders"
-##  [7] "package:bootstrap"  
-##  [8] "package:rpart"      
-##  [9] "package:broom"      
-## [10] "package:ggrepel"    
-## [11] "package:ggbiplot"   
-## [12] "package:grid"       
-## [13] "package:scales"     
-## [14] "package:plyr"       
-## [15] "package:lme4"       
-## [16] "package:Matrix"     
-## [17] "package:car"        
-## [18] "package:carData"    
-## [19] "package:survminer"  
-## [20] "package:ggpubr"     
-## [21] "package:magrittr"   
-## [22] "package:survival"   
-## [23] "package:nnet"       
-## [24] "package:smmr"       
-## [25] "package:forcats"    
-## [26] "package:stringr"    
-## [27] "package:dplyr"      
-## [28] "package:purrr"      
-## [29] "package:readr"      
-## [30] "package:tidyr"      
-## [31] "package:tibble"     
-## [32] "package:ggplot2"    
-## [33] "package:tidyverse"  
-## [34] "package:stats"      
-## [35] "package:graphics"   
-## [36] "package:grDevices"  
-## [37] "package:utils"      
-## [38] "package:datasets"   
-## [39] "package:methods"    
-## [40] "Autoloads"          
-## [41] "package:base"
+##  [1] ".GlobalEnv"          ".conflicts"          "package:GGally"     
+##  [4] "package:conflicted"  "package:rstan"       "package:StanHeaders"
+##  [7] "package:bootstrap"   "package:rpart"       "package:broom"      
+## [10] "package:ggrepel"     "package:ggbiplot"    "package:grid"       
+## [13] "package:scales"      "package:plyr"        "package:lme4"       
+## [16] "package:Matrix"      "package:car"         "package:carData"    
+## [19] "package:survminer"   "package:ggpubr"      "package:magrittr"   
+## [22] "package:survival"    "package:nnet"        "package:smmr"       
+## [25] "package:forcats"     "package:stringr"     "package:dplyr"      
+## [28] "package:purrr"       "package:readr"       "package:tidyr"      
+## [31] "package:tibble"      "package:ggplot2"     "package:tidyverse"  
+## [34] "package:stats"       "package:graphics"    "package:grDevices"  
+## [37] "package:utils"       "package:datasets"    "package:methods"    
+## [40] "Autoloads"           "package:base"
 ```
 
  
@@ -3246,11 +3024,11 @@ It has. Now any calls to `select` will use the right one. We hope.
 The output of `search` is called the **search list**, and
 it tells you where R will go looking for things. The first one
 `.GlobalEnv` is where all
-\marginnote{All the ones that are part of  this project, anyway.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">All the ones that are part of  this project, anyway.</span> 
 your
 variables, data frames etc.\ get stored, and that is what gets
 searched first.
-\marginnote{That means that if you write a function with  the same name as one that is built into R or a package, yours is the  one that will get called. This is probably a bad idea, since you  won't be able to get at R's function by that name.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That means that if you write a function with  the same name as one that is built into R or a package, yours is the  one that will get called. This is probably a bad idea, since you  won't be able to get at R's function by that name.</span> 
 Then R will go
 looking in each thing in turn until it finds what it is looking
 for. When you load a package with `library()`, it gets added to
@@ -3301,15 +3079,11 @@ summary(soc.3)
 ## -0.35435 -0.09046 -0.01725  0.09739  0.26355 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 9.841315   0.056356  174.63
-## experience  0.049979   0.002868   17.43
-##             Pr(>|t|)    
-## (Intercept)   <2e-16 ***
-## experience    <2e-16 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 9.841315   0.056356  174.63   <2e-16 ***
+## experience  0.049979   0.002868   17.43   <2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.1541 on 48 degrees of freedom
 ## Multiple R-squared:  0.8635,	Adjusted R-squared:  0.8607 
@@ -3324,8 +3098,10 @@ be able to start from `soc.2`. But you can also do this:
 
 
 ```r
-soc %>% mutate(log_salary = log(salary)) %>% lm(log_salary ~ 
-    experience, data = .) %>% summary()
+soc %>%
+  mutate(log_salary = log(salary)) %>%
+  lm(log_salary ~ experience, data = .) %>%
+  summary()
 ```
 
 ```
@@ -3338,15 +3114,11 @@ soc %>% mutate(log_salary = log(salary)) %>% lm(log_salary ~
 ## -0.35435 -0.09046 -0.01725  0.09739  0.26355 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 9.841315   0.056356  174.63
-## experience  0.049979   0.002868   17.43
-##             Pr(>|t|)    
-## (Intercept)   <2e-16 ***
-## experience    <2e-16 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 9.841315   0.056356  174.63   <2e-16 ***
+## experience  0.049979   0.002868   17.43   <2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.1541 on 48 degrees of freedom
 ## Multiple R-squared:  0.8635,	Adjusted R-squared:  0.8607 
@@ -3389,15 +3161,11 @@ summary(soc.1a)
 ## -0.35435 -0.09046 -0.01725  0.09739  0.26355 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 9.841315   0.056356  174.63
-## experience  0.049979   0.002868   17.43
-##             Pr(>|t|)    
-## (Intercept)   <2e-16 ***
-## experience    <2e-16 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 9.841315   0.056356  174.63   <2e-16 ***
+## experience  0.049979   0.002868   17.43   <2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.1541 on 48 degrees of freedom
 ## Multiple R-squared:  0.8635,	Adjusted R-squared:  0.8607 
@@ -3420,12 +3188,10 @@ As we did before, treating the regression object as if it were a
 data frame:
 
 ```r
-ggplot(soc.3, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(soc.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-82-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-82-1.png" width="672"  />
 
        
 
@@ -3438,12 +3204,10 @@ distributed as they should be? Well, that's easy enough to check:
 
 
 ```r
-ggplot(soc.3, aes(sample = .resid)) + stat_qq() + 
-    stat_qq_line()
+ggplot(soc.3, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-83-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-83-1.png" width="672"  />
 
  
 
@@ -3472,7 +3236,7 @@ exp(0.05)
  
 
 or to increase salary by about 5\%.
-\marginnote{Mathematically,  $e^x$ is approximately $1+x$ for small $x$, which winds up meaning that the  slope in a model like this, if it is small, indicates about the  percent increase in the response associated with a 1-unit change in  the explanatory variable. Note that this only works with $e^x$ and  natural logs, not base 10 logs or anything like that.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mathematically,  $e^x$ is approximately $1+x$ for small $x$, which winds up meaning that the  slope in a model like this, if it is small, indicates about the  percent increase in the response associated with a 1-unit change in  the explanatory variable. Note that this only works with $e^x$ and  natural logs, not base 10 logs or anything like that.</span>
 
 
 
@@ -3561,12 +3325,10 @@ quantitative variables, so that a scatterplot is called
 for. Also, the volume is the response, so that should go on the $y$-axis:
 
 ```r
-ggplot(trees, aes(x = diameter, y = volume)) + 
-    geom_point()
+ggplot(trees, aes(x = diameter, y = volume)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-86-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-86-1.png" width="672"  />
 
        
 
@@ -3575,16 +3337,15 @@ look like this:
 
 
 ```r
-ggplot(trees, aes(x = diameter, y = volume)) + 
-    geom_point() + geom_smooth()
+ggplot(trees, aes(x = diameter, y = volume)) +
+  geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-87-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-87-1.png" width="672"  />
 
        
 
@@ -3615,7 +3376,7 @@ I am guided by "form, direction, strength" in looking at a scatterplot:
 You don't need to be as formal as this, but you *do* need
 to get at the idea that it is an upward trend, apparently
 linear, and at least fairly strong.
-\marginnote{When this was graded, it was 3 marks, to clue you in that there are three things to say.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When this was graded, it was 3 marks, to clue you in that there are three things to say.</span>
 
 
 
@@ -3646,15 +3407,11 @@ summary(volume.1)
 ## -36.497  -9.982   1.751   8.959  28.139 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) -191.749     23.954  -8.005
-## diameter      10.894      0.801  13.600
-##             Pr(>|t|)    
-## (Intercept) 4.35e-05 ***
-## diameter    8.22e-07 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -191.749     23.954  -8.005 4.35e-05 ***
+## diameter      10.894      0.801  13.600 8.22e-07 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 20.38 on 8 degrees of freedom
 ## Multiple R-squared:  0.9585,	Adjusted R-squared:  0.9534 
@@ -3678,13 +3435,10 @@ glance(volume.1)
 
 ```
 ## # A tibble: 1 x 11
-##   r.squared adj.r.squared sigma statistic
-##       <dbl>         <dbl> <dbl>     <dbl>
-## 1     0.959         0.953  20.4      185.
-## # ... with 7 more variables: p.value <dbl>,
-## #   df <int>, logLik <dbl>, AIC <dbl>,
-## #   BIC <dbl>, deviance <dbl>,
-## #   df.residual <int>
+##   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
+##       <dbl>         <dbl> <dbl>     <dbl>   <dbl> <int>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953  20.4      185. 8.22e-7     2  -43.2  92.4  93.4
+## # … with 2 more variables: deviance <dbl>, df.residual <int>
 ```
 
  
@@ -3703,10 +3457,10 @@ tidy(volume.1)
 
 ```
 ## # A tibble: 2 x 5
-##   term   estimate std.error statistic p.value
-##   <chr>     <dbl>     <dbl>     <dbl>   <dbl>
-## 1 (Inte~   -192.     24.0       -8.01 4.35e-5
-## 2 diame~     10.9     0.801     13.6  8.22e-7
+##   term        estimate std.error statistic     p.value
+##   <chr>          <dbl>     <dbl>     <dbl>       <dbl>
+## 1 (Intercept)   -192.     24.0       -8.01 0.0000435  
+## 2 diameter        10.9     0.801     13.6  0.000000822
 ```
 
  
@@ -3714,7 +3468,7 @@ tidy(volume.1)
 This gives a table of intercepts, slopes and their P-values, but the
 value to this one is that it is a *data frame*, so if you want to
 pull anything out of it, you know how to do that:
-\marginnote{The  *summary* output is more designed for looking at than for  extracting things from.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The  *summary* output is more designed for looking at than for  extracting things from.</span>
 
 ```r
 tidy(volume.1) %>% filter(term == "diameter")
@@ -3722,9 +3476,9 @@ tidy(volume.1) %>% filter(term == "diameter")
 
 ```
 ## # A tibble: 1 x 5
-##   term   estimate std.error statistic p.value
-##   <chr>     <dbl>     <dbl>     <dbl>   <dbl>
-## 1 diame~     10.9     0.801      13.6 8.22e-7
+##   term     estimate std.error statistic     p.value
+##   <chr>       <dbl>     <dbl>     <dbl>       <dbl>
+## 1 diameter     10.9     0.801      13.6 0.000000822
 ```
 
  
@@ -3747,12 +3501,10 @@ against the fitted values), and on it you are looking for a
 random mess of nothingness:
 
 ```r
-ggplot(volume.1, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(volume.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-92-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
 
        
 
@@ -3851,15 +3603,11 @@ summary(volume.2)
 ## -29.708  -9.065  -5.722   3.032  40.816 
 ## 
 ## Coefficients:
-##                Estimate Std. Error t value
-## (Intercept)   -30.82634   13.82243   -2.23
-## I(diameter^2)   0.17091    0.01342   12.74
-##               Pr(>|t|)    
-## (Intercept)     0.0563 .  
-## I(diameter^2) 1.36e-06 ***
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   -30.82634   13.82243   -2.23   0.0563 .  
+## I(diameter^2)   0.17091    0.01342   12.74 1.36e-06 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 21.7 on 8 degrees of freedom
 ## Multiple R-squared:  0.953,	Adjusted R-squared:  0.9471 
@@ -3882,12 +3630,10 @@ predicts the data well. I should look at the residuals from this one:
 
 
 ```r
-ggplot(volume.2, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(volume.2, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-94-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-94-1.png" width="672"  />
 
  
 
@@ -3960,15 +3706,11 @@ summary(volume.3)
 ## -0.40989 -0.22341  0.01504  0.10459  0.53596 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value
-## (Intercept)    -5.9243     1.1759  -5.038
-## log(diameter)   3.1284     0.3527   8.870
-##               Pr(>|t|)    
-## (Intercept)      0.001 ** 
-## log(diameter) 2.06e-05 ***
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    -5.9243     1.1759  -5.038    0.001 ** 
+## log(diameter)   3.1284     0.3527   8.870 2.06e-05 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.3027 on 8 degrees of freedom
 ## Multiple R-squared:  0.9077,	Adjusted R-squared:  0.8962 
@@ -4005,12 +3747,10 @@ got, is still high. The residuals are these:
 
 
 ```r
-ggplot(volume.3, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(volume.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-97-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-97-1.png" width="672"  />
 
  
 
@@ -4116,21 +3856,17 @@ the one-line summaries of our three models:
 
 
 ```r
-bind_rows(glance(volume.1), glance(volume.2), 
-    glance(volume.3))
+bind_rows(glance(volume.1), glance(volume.2), glance(volume.3))
 ```
 
 ```
 ## # A tibble: 3 x 11
-##   r.squared adj.r.squared  sigma statistic
-##       <dbl>         <dbl>  <dbl>     <dbl>
-## 1     0.959         0.953 20.4       185. 
-## 2     0.953         0.947 21.7       162. 
-## 3     0.908         0.896  0.303      78.7
-## # ... with 7 more variables: p.value <dbl>,
-## #   df <int>, logLik <dbl>, AIC <dbl>,
-## #   BIC <dbl>, deviance <dbl>,
-## #   df.residual <int>
+##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
+##       <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <int>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953 20.4       185.  8.22e-7     2 -43.2  92.4  93.4 
+## 2     0.953         0.947 21.7       162.  1.36e-6     2 -43.8  93.7  94.6 
+## 3     0.908         0.896  0.303      78.7 2.06e-5     2  -1.12  8.25  9.16
+## # … with 2 more variables: deviance <dbl>, df.residual <int>
 ```
 
  
@@ -4153,20 +3889,17 @@ like `glance` that outputs a data frame:
 
 ```r
 model_list <- list(volume.1, volume.2, volume.3)
-map_df(model_list, ~glance(.))
+map_df(model_list, ~ glance(.))
 ```
 
 ```
 ## # A tibble: 3 x 11
-##   r.squared adj.r.squared  sigma statistic
-##       <dbl>         <dbl>  <dbl>     <dbl>
-## 1     0.959         0.953 20.4       185. 
-## 2     0.953         0.947 21.7       162. 
-## 3     0.908         0.896  0.303      78.7
-## # ... with 7 more variables: p.value <dbl>,
-## #   df <int>, logLik <dbl>, AIC <dbl>,
-## #   BIC <dbl>, deviance <dbl>,
-## #   df.residual <int>
+##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
+##       <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <int>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953 20.4       185.  8.22e-7     2 -43.2  92.4  93.4 
+## 2     0.953         0.947 21.7       162.  1.36e-6     2 -43.8  93.7  94.6 
+## 3     0.908         0.896  0.303      78.7 2.06e-5     2  -1.12  8.25  9.16
+## # … with 2 more variables: deviance <dbl>, df.residual <int>
 ```
 
  
@@ -4189,7 +3922,7 @@ and if you have a long enough tape measure you can measure it.
 
 The above works because the tangent of 45 degrees is 1. If you have a
 device that will measure the actual angle,
-\marginnote{These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [link](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [link](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).</span> 
 you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of
@@ -4283,16 +4016,14 @@ Solution
 Something like this:
 
 ```r
-ggplot(tortoises, aes(x = length, y = eggs)) + 
-    geom_point() + geom_smooth()
+ggplot(tortoises, aes(x = length, y = eggs)) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/looe-1} 
+<img src="12-regression_files/figure-html/looe-1.png" width="672"  />
 
    
  
@@ -4335,12 +4066,9 @@ summary(tortoises.1)
 ## -6.7790 -1.1772 -0.0065  2.0487  4.8556 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) -0.43532   17.34992  -0.025
-## length       0.02759    0.05631   0.490
-##             Pr(>|t|)
-## (Intercept)    0.980
-## length         0.631
+##             Estimate Std. Error t value Pr(>|t|)
+## (Intercept) -0.43532   17.34992  -0.025    0.980
+## length       0.02759    0.05631   0.490    0.631
 ## 
 ## Residual standard error: 3.411 on 16 degrees of freedom
 ## Multiple R-squared:  0.01478,	Adjusted R-squared:  -0.0468 
@@ -4367,8 +4095,7 @@ a special meaning in a model formula, and we want to *not*
 use that special meaning:
 
 ```r
-tortoises.2 <- lm(eggs ~ length + I(length^2), 
-    data = tortoises)
+tortoises.2 <- lm(eggs ~ length + I(length^2), data = tortoises)
 summary(tortoises.2)
 ```
 
@@ -4382,17 +4109,12 @@ summary(tortoises.2)
 ## -4.0091 -1.8480 -0.1896  2.0989  4.3605 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value
-## (Intercept) -8.999e+02  2.703e+02  -3.329
-## length       5.857e+00  1.750e+00   3.347
-## I(length^2) -9.425e-03  2.829e-03  -3.332
-##             Pr(>|t|)   
-## (Intercept)  0.00457 **
-## length       0.00441 **
-## I(length^2)  0.00455 **
+##               Estimate Std. Error t value Pr(>|t|)   
+## (Intercept) -8.999e+02  2.703e+02  -3.329  0.00457 **
+## length       5.857e+00  1.750e+00   3.347  0.00441 **
+## I(length^2) -9.425e-03  2.829e-03  -3.332  0.00455 **
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.671 on 15 degrees of freedom
 ## Multiple R-squared:  0.4338,	Adjusted R-squared:  0.3583 
@@ -4419,17 +4141,12 @@ summary(tortoises.2a)
 ## -4.0091 -1.8480 -0.1896  2.0989  4.3605 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value
-## (Intercept) -8.999e+02  2.703e+02  -3.329
-## length       5.857e+00  1.750e+00   3.347
-## I(length^2) -9.425e-03  2.829e-03  -3.332
-##             Pr(>|t|)   
-## (Intercept)  0.00457 **
-## length       0.00441 **
-## I(length^2)  0.00455 **
+##               Estimate Std. Error t value Pr(>|t|)   
+## (Intercept) -8.999e+02  2.703e+02  -3.329  0.00457 **
+## length       5.857e+00  1.750e+00   3.347  0.00441 **
+## I(length^2) -9.425e-03  2.829e-03  -3.332  0.00455 **
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.671 on 15 degrees of freedom
 ## Multiple R-squared:  0.4338,	Adjusted R-squared:  0.3583 
@@ -4476,12 +4193,10 @@ if it is for this:
 
 
 ```r
-ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-107-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
 
  
 
@@ -4489,16 +4204,15 @@ Up to you whether you put a smooth trend on it or not:
 
 
 ```r
-ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + 
-    geom_point() + geom_smooth()
+ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-108-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
 
  
 Looking at the plot, you see a curve, up and down. The most
@@ -4520,37 +4234,34 @@ plots. Normal quantile plot of the residuals:
 
 
 ```r
-ggplot(tortoises.1, aes(sample = .resid)) + stat_qq() + 
-    stat_qq_line()
+ggplot(tortoises.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-109-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-109-1.png" width="672"  />
 
  
 
 This is not the best: the low values are a bit too low, so that the
 whole picture is (a little) skewed to the left.
-\marginnote{The very   negative residuals are at the left and right of the residual plot;  they are there because the relationship is a curve. If you were to  look at the residuals from the model with length-squared, you  probably wouldn't see this.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The very   negative residuals are at the left and right of the residual plot;  they are there because the relationship is a curve. If you were to  look at the residuals from the model with length-squared, you  probably wouldn't see this.</span>
 
 Another plot you can make is to assess fan-out: you plot the
 *absolute value*
-\marginnote{The value, but throw away the minus sign if it has one.} of the residuals against the fitted values. The idea
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The value, but throw away the minus sign if it has one.</span> of the residuals against the fitted values. The idea
 is that if there is fan-out, the absolute value of the residuals will
 get bigger:
 
 
 ```r
-ggplot(tortoises.1, aes(x = .fitted, y = abs(.resid))) + 
-    geom_point() + geom_smooth()
+ggplot(tortoises.1, aes(x = .fitted, y = abs(.resid))) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-110-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-110-1.png" width="672"  />
 
  
 
@@ -4630,7 +4341,7 @@ crickets
 ##  8 exclamationis        26.2       86.6
 ##  9 exclamationis        26.2       87.5
 ## 10 exclamationis        26.2       89.1
-## # ... with 21 more rows
+## # … with 21 more rows
 ```
 
  
@@ -4674,16 +4385,13 @@ t.test(pulse_rate ~ species, data = crickets)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  pulse_rate by species
-## t = 5.2236, df = 28.719, p-value =
-## 1.401e-05
+## t = 5.2236, df = 28.719, p-value = 1.401e-05
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  14.08583 32.22677
 ## sample estimates:
-## mean in group exclamationis 
-##                    85.58571 
-##        mean in group niveus 
-##                    62.42941
+## mean in group exclamationis        mean in group niveus 
+##                    85.58571                    62.42941
 ```
 
  
@@ -4720,15 +4428,11 @@ summary(pulse.0)
 ## -20.486  -9.458  -1.729  13.342  22.271 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value
-## (Intercept)     85.586      3.316  25.807
-## speciesniveus  -23.156      4.478  -5.171
-##               Pr(>|t|)    
-## (Intercept)    < 2e-16 ***
-## speciesniveus 1.58e-05 ***
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)     85.586      3.316  25.807  < 2e-16 ***
+## speciesniveus  -23.156      4.478  -5.171 1.58e-05 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 12.41 on 29 degrees of freedom
 ## Multiple R-squared:  0.4797,	Adjusted R-squared:  0.4617 
@@ -4753,8 +4457,7 @@ variances. What if we do the pooled $t$-test instead?
 
 
 ```r
-t.test(pulse_rate ~ species, data = crickets, 
-    var.equal = T)
+t.test(pulse_rate ~ species, data = crickets, var.equal = T)
 ```
 
 ```
@@ -4762,16 +4465,13 @@ t.test(pulse_rate ~ species, data = crickets,
 ## 	Two Sample t-test
 ## 
 ## data:  pulse_rate by species
-## t = 5.1706, df = 29, p-value =
-## 1.579e-05
+## t = 5.1706, df = 29, p-value = 1.579e-05
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
 ##  13.99690 32.31571
 ## sample estimates:
-## mean in group exclamationis 
-##                    85.58571 
-##        mean in group niveus 
-##                    62.42941
+## mean in group exclamationis        mean in group niveus 
+##                    85.58571                    62.42941
 ```
 
  
@@ -4786,7 +4486,7 @@ however. Is it possible that temperature also has an effect? To
 assess this, draw a scatterplot of pulse rate against temperature,
 with the points distinguished, somehow, by the species they are
 from.
-\marginnote{This was the actual reason I thought of this      question originally:    I wanted you to do this.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was the actual reason I thought of this      question originally:    I wanted you to do this.</span>
 
 
 Solution
@@ -4796,12 +4496,11 @@ One of the wonderful things about `ggplot` is that doing
 the obvious thing works:
 
 ```r
-ggplot(crickets, aes(x = temperature, y = pulse_rate, 
-    colour = species)) + geom_point()
+ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
+  geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-116-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-116-1.png" width="672"  />
 
        
     
@@ -4833,10 +4532,10 @@ species being observed mainly in higher temperatures. This was
 *utterly invisible* to us when we did the $t$-test, but it
 shows the importance of accounting for all the relevant
 variables when you do your analysis.
-\marginnote{And it shows the        value of looking at relevant plots.} If the species had been
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">And it shows the        value of looking at relevant plots.</span> If the species had been
 observed at opposite temperatures, we might have
 concluded
-\marginnote{Mistakenly.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mistakenly.</span> 
 that *niveus* have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
@@ -4856,8 +4555,7 @@ This is actually a so-called "analysis of covariance model",
 which properly belongs in D29, but it's really just a regression:
 
 ```r
-pulse.1 <- lm(pulse_rate ~ species + temperature, 
-    data = crickets)
+pulse.1 <- lm(pulse_rate ~ species + temperature, data = crickets)
 summary(pulse.1)
 ```
 
@@ -4871,17 +4569,12 @@ summary(pulse.1)
 ## -3.0128 -1.1296 -0.3912  0.9650  3.7800 
 ## 
 ## Coefficients:
-##                Estimate Std. Error t value
-## (Intercept)    -7.21091    2.55094  -2.827
-## speciesniveus -10.06529    0.73526 -13.689
-## temperature     3.60275    0.09729  37.032
-##               Pr(>|t|)    
-## (Intercept)    0.00858 ** 
-## speciesniveus 6.27e-14 ***
-## temperature    < 2e-16 ***
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    -7.21091    2.55094  -2.827  0.00858 ** 
+## speciesniveus -10.06529    0.73526 -13.689 6.27e-14 ***
+## temperature     3.60275    0.09729  37.032  < 2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 1.786 on 28 degrees of freedom
 ## Multiple R-squared:  0.9896,	Adjusted R-squared:  0.9888 
@@ -4935,12 +4628,12 @@ accounting for temperature, which also makes a difference. (In the
 $t$-test, the temperatures were all mixed up). What we also see is
 that the $t$-interval is shifted up compared to the one from the
 regression. This is because the $t$-interval conflates
-\marginnote{Mixes up.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mixes up.</span> 
 two things: the *exclamationis* crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
-\marginnote{This is actually grammatically correct.} than they
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
 really are, when you account for temperature.
 
 This particular model constrains the slope with temperature to be the
@@ -4950,8 +4643,7 @@ between temperature and species:
 
 
 ```r
-pulse.2 <- lm(pulse_rate ~ species * temperature, 
-    data = crickets)
+pulse.2 <- lm(pulse_rate ~ species * temperature, data = crickets)
 summary(pulse.2)
 ```
 
@@ -4965,24 +4657,13 @@ summary(pulse.2)
 ## -3.7031 -1.3417 -0.1235  0.8100  3.6330 
 ## 
 ## Coefficients:
-##                           Estimate
-## (Intercept)               -11.0408
-## speciesniveus              -4.3484
-## temperature                 3.7514
-## speciesniveus:temperature  -0.2340
-##                           Std. Error t value
-## (Intercept)                   4.1515  -2.659
-## speciesniveus                 4.9617  -0.876
-## temperature                   0.1601  23.429
-## speciesniveus:temperature     0.2009  -1.165
-##                           Pr(>|t|)    
-## (Intercept)                  0.013 *  
-## speciesniveus                0.389    
-## temperature                 <2e-16 ***
-## speciesniveus:temperature    0.254    
+##                           Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)               -11.0408     4.1515  -2.659    0.013 *  
+## speciesniveus              -4.3484     4.9617  -0.876    0.389    
+## temperature                 3.7514     0.1601  23.429   <2e-16 ***
+## speciesniveus:temperature  -0.2340     0.2009  -1.165    0.254    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 1.775 on 27 degrees of freedom
 ## Multiple R-squared:  0.9901,	Adjusted R-squared:  0.989 
@@ -4993,7 +4674,7 @@ summary(pulse.2)
 
 To see whether adding the interaction term added anything to the
 prediction,
-\marginnote{Though it's hard to imagine being able to improve on an R-squared of 99%.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Though it's hard to imagine being able to improve on an R-squared of 99%.</span> 
 compare the model with and without using `anova`:
 
 
@@ -5028,7 +4709,7 @@ distinguish them. If there had been three species, we would have had
 to look at the `anova` output to hunt for a difference among
 species, since there would have been two slope coefficients, each with
 its own P-value.
-\marginnote{This wouldn't have told us about the overall  effect of species.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This wouldn't have told us about the overall  effect of species.</span> 
 
 If you haven't seen interactions before, don't worry about this. The
 idea behind it is that we are testing whether we needed lines with
@@ -5046,13 +4727,11 @@ for each species to our plot, thus:
 
 
 ```r
-ggplot(crickets, aes(x = temperature, y = pulse_rate, 
-    colour = species)) + geom_point() + geom_smooth(method = "lm", 
-    se = F)
+ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
+  geom_point() + geom_smooth(method = "lm", se = F)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-121-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
 
  
 
@@ -5072,12 +4751,10 @@ First, the plot of residuals against fitted values (after all,
 it *is* a regression):
 
 ```r
-ggplot(pulse.1, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(pulse.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-122-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
 
          
 
@@ -5094,12 +4771,10 @@ right place:
 
 
 ```r
-ggplot(pulse.1, aes(x = crickets$temperature, 
-    y = .resid)) + geom_point()
+ggplot(pulse.1, aes(x = crickets$temperature, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-123-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-123-1.png" width="672"  />
 
  
 
@@ -5112,12 +4787,10 @@ goes like this:
 
 
 ```r
-ggplot(pulse.1, aes(x = crickets$species, y = .resid)) + 
-    geom_boxplot()
+ggplot(pulse.1, aes(x = crickets$species, y = .resid)) + geom_boxplot()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-124-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-124-1.png" width="672"  />
 
  
 
@@ -5136,12 +4809,10 @@ normal quantile plot of all the residuals together:
 
 
 ```r
-ggplot(pulse.1, aes(sample = .resid)) + stat_qq() + 
-    stat_qq_line()
+ggplot(pulse.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-125-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
 
  
 
@@ -5166,11 +4837,11 @@ best roller-coasters in the United States. We will examine the 10
 roller-coasters that received the most votes. Two features of a
 roller-coaster that are of interest are the distance it drops from
 start to finish, measured here in feet
-\marginnote{Roller-coasters work by   gravity, so there must be some drop.} and the duration of the ride,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Roller-coasters work by   gravity, so there must be some drop.</span> and the duration of the ride,
 measured in seconds. Is it true that roller-coasters with a bigger
 drop also tend to have a longer ride? The data are at
 [link](http://www.utsc.utoronto.ca/~butler/c32/coasters.csv).
-\marginnote{These are not to be confused with what your mom insists that you place between your coffee mug and the table.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">These are not to be confused with what your mom insists that you place between your coffee mug and the table.</span>
 
 
 
@@ -5205,18 +4876,18 @@ coasters
 
 ```
 ## # A tibble: 10 x 4
-##    coaster_name     state       drop duration
-##    <chr>            <chr>      <dbl>    <dbl>
-##  1 Incredible Hulk  Florida      105      135
-##  2 Millennium Force Ohio         300      105
-##  3 Goliath          California   255      180
-##  4 Nitro            New Jersey   215      240
-##  5 Magnum XL-2000   Ohio         195      120
-##  6 The Beast        Ohio         141       65
-##  7 Son of Beast     Ohio         214      140
-##  8 Thunderbolt      Pennsylva~    95       90
-##  9 Ghost Rider      California   108      160
-## 10 Raven            Indiana       86       90
+##    coaster_name     state         drop duration
+##    <chr>            <chr>        <dbl>    <dbl>
+##  1 Incredible Hulk  Florida        105      135
+##  2 Millennium Force Ohio           300      105
+##  3 Goliath          California     255      180
+##  4 Nitro            New Jersey     215      240
+##  5 Magnum XL-2000   Ohio           195      120
+##  6 The Beast        Ohio           141       65
+##  7 Son of Beast     Ohio           214      140
+##  8 Thunderbolt      Pennsylvania    95       90
+##  9 Ghost Rider      California     108      160
+## 10 Raven            Indiana         86       90
 ```
 
  
@@ -5249,13 +4920,11 @@ which is time you probably don't want to spend.) Thus:
 
 ```r
 library(ggrepel)
-ggplot(coasters, aes(x = drop, y = duration, label = coaster_name)) + 
-    geom_point() + geom_text_repel() + geom_smooth(method = "lm", 
-    se = F)
+ggplot(coasters, aes(x = drop, y = duration, label = coaster_name)) +
+  geom_point() + geom_text_repel() + geom_smooth(method = "lm", se = F)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-127-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-127-1.png" width="672"  />
 
        
 
@@ -5325,8 +4994,9 @@ smoothest way to go:
 ```r
 library(broom)
 duration.1 <- lm(duration ~ drop, data = coasters)
-augment(duration.1, coasters) %>% select(coaster_name, 
-    duration, drop, .resid) %>% arrange(desc(abs(.resid)))
+augment(duration.1, coasters) %>%
+  select(coaster_name, duration, drop, .resid) %>%
+  arrange(desc(abs(.resid)))
 ```
 
 ```
@@ -5361,27 +5031,27 @@ to `augment` so that you have everything:
 
 
 ```r
-coasters %>% lm(duration ~ drop, data = .) %>% 
-    augment(coasters) %>% arrange(desc(abs(.resid)))
+coasters %>%
+  lm(duration ~ drop, data = .) %>%
+  augment(coasters) %>%
+  arrange(desc(abs(.resid)))
 ```
 
 ```
 ## # A tibble: 10 x 11
-##    coaster_name state  drop duration .fitted
-##    <chr>        <chr> <dbl>    <dbl>   <dbl>
-##  1 Nitro        New ~   215      240    143.
-##  2 The Beast    Ohio    141       65    125.
-##  3 Millennium ~ Ohio    300      105    164.
-##  4 Ghost Rider  Cali~   108      160    117.
-##  5 Goliath      Cali~   255      180    153.
-##  6 Thunderbolt  Penn~    95       90    114.
-##  7 Raven        Indi~    86       90    112.
-##  8 Incredible ~ Flor~   105      135    116.
-##  9 Magnum XL-2~ Ohio    195      120    138.
-## 10 Son of Beast Ohio    214      140    143.
-## # ... with 6 more variables: .se.fit <dbl>,
-## #   .resid <dbl>, .hat <dbl>, .sigma <dbl>,
-## #   .cooksd <dbl>, .std.resid <dbl>
+##    coaster_name state  drop duration .fitted .se.fit .resid  .hat .sigma
+##    <chr>        <chr> <dbl>    <dbl>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>
+##  1 Nitro        New …   215      240    143.    18.9  97.0  0.138   37.5
+##  2 The Beast    Ohio    141       65    125.    17.5 -60.1  0.118   48.8
+##  3 Millennium … Ohio    300      105    164.    33.4 -58.6  0.429   45.9
+##  4 Ghost Rider  Cali…   108      160    117.    21.6  42.8  0.180   51.5
+##  5 Goliath      Cali…   255      180    153.    24.9  27.3  0.239   53.2
+##  6 Thunderbolt  Penn…    95       90    114.    23.7 -24.0  0.216   53.5
+##  7 Raven        Indi…    86       90    112.    25.2 -21.8  0.245   53.6
+##  8 Incredible … Flor…   105      135    116.    22.1  18.6  0.188   53.9
+##  9 Magnum XL-2… Ohio    195      120    138.    17.0 -18.2  0.111   54.0
+## 10 Son of Beast Ohio    214      140    143.    18.8  -2.81 0.136   54.5
+## # … with 2 more variables: .cooksd <dbl>, .std.resid <dbl>
 ```
 
  
@@ -5390,7 +5060,7 @@ I wanted to hang on to the roller-coaster names, so I added the data
 frame name to `augment`. If you don't (that is, you just put
 `augment()` in the middle of a pipe), then `augment`
 "attempts to reconstruct the data from the model".
-\marginnote{A quote  from the package vignette.} That means you wouldn't get
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">A quote  from the package vignette.</span> That means you wouldn't get
 *everything* from the original data frame; you would just get the
 things that were in the regression. In this case, that means you would lose
 the coaster names.
@@ -5479,16 +5149,15 @@ Solution
 
 
 ```r
-ggplot(runs, aes(x = distance, y = blood_sugar)) + 
-    geom_point() + geom_smooth()
+ggplot(runs, aes(x = distance, y = blood_sugar)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/plymouth-1} 
+<img src="12-regression_files/figure-html/plymouth-1.png" width="672"  />
 
      
 
@@ -5535,15 +5204,11 @@ summary(runs.1)
 ## -7.8238 -3.6167  0.8333  4.0190  5.5476 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  191.624      5.439   35.23
-## distance     -25.371      1.618  -15.68
-##             Pr(>|t|)    
-## (Intercept) 8.05e-12 ***
-## distance    2.29e-08 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  191.624      5.439   35.23 8.05e-12 ***
+## distance     -25.371      1.618  -15.68 2.29e-08 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 4.788 on 10 degrees of freedom
 ## Multiple R-squared:  0.9609,	Adjusted R-squared:  0.957 
@@ -5619,7 +5284,7 @@ The important thing is that the name of the column of the new data
 frame must be *exactly* the same as the name of the explanatory
 variable in the regression. If they don't match, `predict`
 won't work. At least, it won't work properly.
-\marginnote{It won't give you an error, but it will go back to the *original* data frame to get distances to predict from, and you will get very confused.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It won't give you an error, but it will go back to the *original* data frame to get distances to predict from, and you will get very confused.</span>
 
 Then, `predict`:
 
@@ -5730,8 +5395,10 @@ I also remembered that if you finish with a `select`, you get the columns in the
 
 
 ```r
-pp %>% as_tibble() %>% bind_cols(dist.new) %>% 
-    select(c(distance, everything()))
+pp %>%
+  as_tibble() %>%
+  bind_cols(dist.new) %>%
+  select(c(distance, everything()))
 ```
 
 ```
@@ -5817,19 +5484,19 @@ pizza
 
 ```
 ## # A tibble: 24 x 4
-##    Type                  Calories   Fat  Cost
-##    <chr>                    <dbl> <dbl> <dbl>
-##  1 Domino's Deep Dish w~      385  19.5  1.87
-##  2 Pizza Hut's Stuffed ~      370  15    1.83
-##  3 Pizza Hut's Pan Pizz~      280  14    1.83
-##  4 Domino's Hand-Tossed~      305  12    1.67
-##  5 Pizza Hut's Hand-Tos~      230   9    1.63
-##  6 Little Caesars' Deep~      350  14.2  1.06
-##  7 Little Caesars' Orig~      230   8    0.81
-##  8 Freschetta Bakes & R~      364  15    0.98
-##  9 Freschetta Bakes & R~      334  11    1.23
-## 10 DiGiorno Rising Crus~      332  12    0.94
-## # ... with 14 more rows
+##    Type                                                Calories   Fat  Cost
+##    <chr>                                                  <dbl> <dbl> <dbl>
+##  1 Domino's Deep Dish with Pepperoni                        385  19.5  1.87
+##  2 Pizza Hut's Stuffed Crust with Pepperoni                 370  15    1.83
+##  3 Pizza Hut's Pan Pizza with Pepperoni                     280  14    1.83
+##  4 Domino's Hand-Tossed with Pepperoni                      305  12    1.67
+##  5 Pizza Hut's Hand-Tossed with Pepperoni                   230   9    1.63
+##  6 Little Caesars' Deep Dish with Pepperoni                 350  14.2  1.06
+##  7 Little Caesars' Original Round with Pepperoni            230   8    0.81
+##  8 Freschetta Bakes & Rises  4-Cheese                       364  15    0.98
+##  9 Freschetta Bakes & Rises Sauce Stuffed Crust 4-Che…      334  11    1.23
+## 10 DiGiorno Rising Crust Four Cheese                        332  12    0.94
+## # … with 14 more rows
 ```
 
     
@@ -5843,11 +5510,11 @@ Anyway, these are apparently the right thing.
 
 Extra: I wanted to mention something else that I discovered
 yesterday.
-\marginnote{R is like that: sometimes it seems as if it has  infinite depth.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">R is like that: sometimes it seems as if it has  infinite depth.</span> 
 There is a package called `rio` that will
 read (and write) data in a whole bunch of different formats in a
 unified way.
-\marginnote{It does this by figuring what kind of thing you have, from the extension to its filename, and then calling an appropriate function to read in or write out the data. This is an excellent example of *standing on the shoulders of giants* to make our lives easier. The software does the hard work of figuring out what kind of thing you have and how to read it in; all we do is say *import*.} Anyway, the usual installation thing, done once:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It does this by figuring what kind of thing you have, from the extension to its filename, and then calling an appropriate function to read in or write out the data. This is an excellent example of *standing on the shoulders of giants* to make our lives easier. The software does the hard work of figuring out what kind of thing you have and how to read it in; all we do is say *import*.</span> Anyway, the usual installation thing, done once:
 
 
 ```r
@@ -5865,8 +5532,7 @@ library(rio)
 ```
 
 ```
-## Warning: package 'rio' was built under R
-## version 3.5.1
+## Warning: package 'rio' was built under R version 3.5.1
 ```
 
 ```r
@@ -5875,20 +5541,13 @@ head(pizza3)
 ```
 
 ```
-##                                       Type
-## 1        Domino's Deep Dish with Pepperoni
-## 2 Pizza Hut's Stuffed Crust with Pepperoni
-## 3     Pizza Hut's Pan Pizza with Pepperoni
-## 4      Domino's Hand-Tossed with Pepperoni
-## 5   Pizza Hut's Hand-Tossed with Pepperoni
-## 6 Little Caesars' Deep Dish with Pepperoni
-##   Calories  Fat Cost
-## 1      385 19.5 1.87
-## 2      370 15.0 1.83
-## 3      280 14.0 1.83
-## 4      305 12.0 1.67
-## 5      230  9.0 1.63
-## 6      350 14.2 1.06
+##                                       Type Calories  Fat Cost
+## 1        Domino's Deep Dish with Pepperoni      385 19.5 1.87
+## 2 Pizza Hut's Stuffed Crust with Pepperoni      370 15.0 1.83
+## 3     Pizza Hut's Pan Pizza with Pepperoni      280 14.0 1.83
+## 4      Domino's Hand-Tossed with Pepperoni      305 12.0 1.67
+## 5   Pizza Hut's Hand-Tossed with Pepperoni      230  9.0 1.63
+## 6 Little Caesars' Deep Dish with Pepperoni      350 14.2 1.06
 ```
 
  
@@ -5913,20 +5572,13 @@ head(pizza4)
 ```
 
 ```
-##                                       Type
-## 1        Domino's Deep Dish with Pepperoni
-## 2 Pizza Hut's Stuffed Crust with Pepperoni
-## 3     Pizza Hut's Pan Pizza with Pepperoni
-## 4      Domino's Hand-Tossed with Pepperoni
-## 5   Pizza Hut's Hand-Tossed with Pepperoni
-## 6 Little Caesars' Deep Dish with Pepperoni
-##   Calories Fat (g) Cost ($)
-## 1      385    19.5     1.87
-## 2      370    15.0     1.83
-## 3      280    14.0     1.83
-## 4      305    12.0     1.67
-## 5      230     9.0     1.63
-## 6      350    14.2     1.06
+##                                       Type Calories Fat (g) Cost ($)
+## 1        Domino's Deep Dish with Pepperoni      385    19.5     1.87
+## 2 Pizza Hut's Stuffed Crust with Pepperoni      370    15.0     1.83
+## 3     Pizza Hut's Pan Pizza with Pepperoni      280    14.0     1.83
+## 4      Domino's Hand-Tossed with Pepperoni      305    12.0     1.67
+## 5   Pizza Hut's Hand-Tossed with Pepperoni      230     9.0     1.63
+## 6 Little Caesars' Deep Dish with Pepperoni      350    14.2     1.06
 ```
 
  
@@ -5945,16 +5597,15 @@ Solution
 All the variable names start with Capital Letters:
 
 ```r
-ggplot(pizza, aes(x = Fat, y = Calories)) + geom_point() + 
-    geom_smooth()
+ggplot(pizza, aes(x = Fat, y = Calories)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/alskhslafkhlksfhsasvvvv-1} 
+<img src="12-regression_files/figure-html/alskhslafkhlksfhsasvvvv-1.png" width="672"  />
 
        
 
@@ -5989,15 +5640,11 @@ summary(pizza.1)
 ## -55.44 -11.67   6.18  17.87  41.61 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  194.747     21.605   9.014
-## Fat           10.050      1.558   6.449
-##             Pr(>|t|)    
-## (Intercept) 7.71e-09 ***
-## Fat         1.73e-06 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  194.747     21.605   9.014 7.71e-09 ***
+## Fat           10.050      1.558   6.449 1.73e-06 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 25.79 on 22 degrees of freedom
 ## Multiple R-squared:  0.654,	Adjusted R-squared:  0.6383 
@@ -6025,16 +5672,14 @@ Use the regression object `pizza.1`:
 
 
 ```r
-ggplot(pizza.1, aes(x = .fitted, y = .resid)) + 
-    geom_point() + geom_smooth()
+ggplot(pizza.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-145-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
 
  
 
@@ -6049,12 +5694,10 @@ quantile plot of the residuals:
 
 
 ```r
-ggplot(pizza.1, aes(sample = .resid)) + stat_qq() + 
-    stat_qq_line()
+ggplot(pizza.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-146-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
 
  
 
@@ -6064,16 +5707,14 @@ Also a plot of the absolute residuals, for assessing fan-out:
 
 
 ```r
-ggplot(pizza.1, aes(x = .fitted, y = abs(.resid))) + 
-    geom_point() + geom_smooth()
+ggplot(pizza.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-147-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-147-1.png" width="672"  />
 
  
 
@@ -6099,17 +5740,12 @@ summary(pizza.2)
 ## -62.103 -14.280   5.513  15.423  35.474 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  90.2544    77.8156   1.160
-## Fat          25.9717    11.5121   2.256
-## I(Fat^2)     -0.5702     0.4086  -1.395
-##             Pr(>|t|)  
-## (Intercept)   0.2591  
-## Fat           0.0349 *
-## I(Fat^2)      0.1775  
+##             Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)  90.2544    77.8156   1.160   0.2591  
+## Fat          25.9717    11.5121   2.256   0.0349 *
+## I(Fat^2)     -0.5702     0.4086  -1.395   0.1775  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 25.25 on 21 degrees of freedom
 ## Multiple R-squared:  0.6834,	Adjusted R-squared:  0.6532 
@@ -6170,8 +5806,7 @@ Or, if you like:
 
 
 ```r
-as_tibble(preds) %>% bind_cols(new) %>% select(Fat, 
-    everything())
+as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
 ```
 
 ```
@@ -6230,8 +5865,7 @@ or, as before:
 
 
 ```r
-as_tibble(preds) %>% bind_cols(new) %>% select(Fat, 
-    everything())
+as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
 ```
 
 ```
@@ -6355,8 +5989,7 @@ t.test(fire$damage)
 ## 	One Sample t-test
 ## 
 ## data:  fire$damage
-## t = 12.678, df = 14, p-value =
-## 4.605e-09
+## t = 12.678, df = 14, p-value = 4.605e-09
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
 ##  21.94488 30.88178
@@ -6379,8 +6012,7 @@ with(fire, t.test(damage))
 ## 	One Sample t-test
 ## 
 ## data:  damage
-## t = 12.678, df = 14, p-value =
-## 4.605e-09
+## t = 12.678, df = 14, p-value = 4.605e-09
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
 ##  21.94488 30.88178
@@ -6408,16 +6040,14 @@ Solution
 We are predicting fire damage, so that goes on the $y$-axis:
 
 ```r
-ggplot(fire, aes(x = distance, y = damage)) + 
-    geom_point() + geom_smooth()
+ggplot(fire, aes(x = distance, y = damage)) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-156-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-156-1.png" width="672"  />
 
      
 
@@ -6464,15 +6094,11 @@ summary(damage.1)
 ## -3.4682 -1.4705 -0.1311  1.7915  3.3915 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  10.2779     1.4203   7.237
-## distance      4.9193     0.3927  12.525
-##             Pr(>|t|)    
-## (Intercept) 6.59e-06 ***
-## distance    1.25e-08 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  10.2779     1.4203   7.237 6.59e-06 ***
+## distance      4.9193     0.3927  12.525 1.25e-08 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.316 on 13 degrees of freedom
 ## Multiple R-squared:  0.9235,	Adjusted R-squared:  0.9176 
@@ -6500,8 +6126,7 @@ better than a straight line. Here's the parabola:
 
 
 ```r
-damage.2 <- lm(damage ~ distance + I(distance^2), 
-    data = fire)
+damage.2 <- lm(damage ~ distance + I(distance^2), data = fire)
 summary(damage.2)
 ```
 
@@ -6515,17 +6140,12 @@ summary(damage.2)
 ## -2.8856 -1.6915 -0.0179  1.5490  3.6278 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value
-## (Intercept)    13.3395     2.5303   5.272
-## distance        2.6400     1.6302   1.619
-## I(distance^2)   0.3376     0.2349   1.437
-##               Pr(>|t|)    
-## (Intercept)   0.000197 ***
-## distance      0.131327    
-## I(distance^2) 0.176215    
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    13.3395     2.5303   5.272 0.000197 ***
+## distance        2.6400     1.6302   1.619 0.131327    
+## I(distance^2)   0.3376     0.2349   1.437 0.176215    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.227 on 12 degrees of freedom
 ## Multiple R-squared:  0.9347,	Adjusted R-squared:  0.9238 
@@ -6555,19 +6175,13 @@ summary(damage.3)
 ## -3.2325 -1.8377  0.0322  1.1512  3.1806 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value
-## (Intercept)    10.8466     4.3618   2.487
-## distance        5.9555     4.9610   1.200
-## I(distance^2)  -0.8141     1.6409  -0.496
-## I(distance^3)   0.1141     0.1608   0.709
-##               Pr(>|t|)  
-## (Intercept)     0.0302 *
-## distance        0.2552  
-## I(distance^2)   0.6296  
-## I(distance^3)   0.4928  
+##               Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)    10.8466     4.3618   2.487   0.0302 *
+## distance        5.9555     4.9610   1.200   0.2552  
+## I(distance^2)  -0.8141     1.6409  -0.496   0.6296  
+## I(distance^3)   0.1141     0.1608   0.709   0.4928  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.274 on 11 degrees of freedom
 ## Multiple R-squared:  0.9376,	Adjusted R-squared:  0.9205 
@@ -6584,14 +6198,12 @@ How bendy is the cubic?
 
 
 ```r
-ggplot(fire, aes(x = distance, y = damage)) + 
-    geom_point() + geom_smooth(method = "lm") + 
-    geom_line(data = damage.3, aes(y = .fitted), 
-        colour = "red")
+ggplot(fire, aes(x = distance, y = damage)) + geom_point() +
+  geom_smooth(method = "lm") +
+  geom_line(data = damage.3, aes(y = .fitted), colour = "red")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-160-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-160-1.png" width="672"  />
 
  
 
@@ -6672,8 +6284,7 @@ t.test(fire$damage)
 ## 	One Sample t-test
 ## 
 ## data:  fire$damage
-## t = 12.678, df = 14, p-value =
-## 4.605e-09
+## t = 12.678, df = 14, p-value = 4.605e-09
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
 ##  21.94488 30.88178
@@ -6808,7 +6419,7 @@ satisf
 ##  8    54    45       48     2.4
 ##  9    26    52       62     2.9
 ## 10    77    29       50     2.1
-## # ... with 36 more rows
+## # … with 36 more rows
 ```
 
      
@@ -6834,24 +6445,19 @@ The obvious way is to do these one after the other:
 ggplot(satisf, aes(x = age, y = satis)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-168-1} 
-
-```r
-ggplot(satisf, aes(x = severity, y = satis)) + 
-    geom_point()
-```
-
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-168-2} 
+<img src="12-regression_files/figure-html/unnamed-chunk-168-1.png" width="384"  />
 
 ```r
-ggplot(satisf, aes(x = anxiety, y = satis)) + 
-    geom_point()
+ggplot(satisf, aes(x = severity, y = satis)) + geom_point()
 ```
 
+<img src="12-regression_files/figure-html/unnamed-chunk-168-2.png" width="384"  />
 
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-168-3} 
+```r
+ggplot(satisf, aes(x = anxiety, y = satis)) + geom_point()
+```
+
+<img src="12-regression_files/figure-html/unnamed-chunk-168-3.png" width="384"  />
 
        
 
@@ -6864,13 +6470,13 @@ in a pipeline:
 
 
 ```r
-satisf %>% gather(xname, x, age:anxiety) %>% ggplot(aes(x = x, 
-    y = satis)) + geom_point() + facet_wrap(~xname, 
-    scales = "free", ncol = 2)
+satisf %>%
+  gather(xname, x, age:anxiety) %>%
+  ggplot(aes(x = x, y = satis)) + geom_point() +
+  facet_wrap(~xname, scales = "free", ncol = 2)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-169-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-169-1.png" width="672"  />
 
  
 
@@ -6887,7 +6493,7 @@ variable went on which facet, just as long as we saw all of them
 somewhere. Inside `facet_wrap` there are *no dots*: a
 squiggle, followed by the name(s) of the variable(s) that
 distinguish(es) the facets.
-\marginnote{If there are more than one, they  should be separated by plus signs as in lm. Each facet then  has as many labels as variables. I haven't actually done this  myself, but from looking at examples, I think this is the way it  works.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If there are more than one, they  should be separated by plus signs as in lm. Each facet then  has as many labels as variables. I haven't actually done this  myself, but from looking at examples, I think this is the way it  works.</span> 
 The only "design" decision I made here was that the facets
 should be arranged somehow in two columns, but I didn't care which
 ones should be where.
@@ -6916,12 +6522,11 @@ of the facets:
 
 
 ```r
-ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() + 
-    facet_grid(. ~ xname, scales = "free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_grid(. ~ xname, scales = "free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-171-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
 
  
 
@@ -6932,12 +6537,11 @@ And now, making a *column* of plots, with `xname` as $y$:
 
 
 ```r
-ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() + 
-    facet_grid(xname ~ ., scales = "free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_grid(xname ~ ., scales = "free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-172-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-172-1.png" width="672"  />
 
  
 
@@ -6948,12 +6552,11 @@ the facets are all in a line. Compare this:
 
 
 ```r
-ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() + 
-    facet_wrap(~xname, ncol = 1, scales = "free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_wrap(~xname, ncol = 1, scales = "free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-173-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
 
  
 
@@ -6986,16 +6589,11 @@ cor(satisf)
 ```
 
 ```
-##               satis        age   severity
-## satis     1.0000000 -0.7867555 -0.6029417
-## age      -0.7867555  1.0000000  0.5679505
-## severity -0.6029417  0.5679505  1.0000000
-## anxiety  -0.6445910  0.5696775  0.6705287
-##             anxiety
-## satis    -0.6445910
-## age       0.5696775
-## severity  0.6705287
-## anxiety   1.0000000
+##               satis        age   severity    anxiety
+## satis     1.0000000 -0.7867555 -0.6029417 -0.6445910
+## age      -0.7867555  1.0000000  0.5679505  0.5696775
+## severity -0.6029417  0.5679505  1.0000000  0.6705287
+## anxiety  -0.6445910  0.5696775  0.6705287  1.0000000
 ```
 
      
@@ -7017,8 +6615,7 @@ Solution
 
 
 ```r
-satisf.1 <- lm(satis ~ age + severity + anxiety, 
-    data = satisf)
+satisf.1 <- lm(satis ~ age + severity + anxiety, data = satisf)
 summary(satisf.1)
 ```
 
@@ -7032,19 +6629,13 @@ summary(satisf.1)
 ## -18.3524  -6.4230   0.5196   8.3715  17.1601 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 158.4913    18.1259   8.744
-## age          -1.1416     0.2148  -5.315
-## severity     -0.4420     0.4920  -0.898
-## anxiety     -13.4702     7.0997  -1.897
-##             Pr(>|t|)    
-## (Intercept) 5.26e-11 ***
-## age         3.81e-06 ***
-## severity      0.3741    
-## anxiety       0.0647 .  
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 158.4913    18.1259   8.744 5.26e-11 ***
+## age          -1.1416     0.2148  -5.315 3.81e-06 ***
+## severity     -0.4420     0.4920  -0.898   0.3741    
+## anxiety     -13.4702     7.0997  -1.897   0.0647 .  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 10.06 on 42 degrees of freedom
 ## Multiple R-squared:  0.6822,	Adjusted R-squared:  0.6595 
@@ -7135,11 +6726,14 @@ low age, severity and anxiety. I'll use the quartiles for high and
 low. There is a straightforward but ugly way:
 
 ```r
-quartiles <- satisf %>% summarize(age_q1 = quantile(age, 
-    0.25), age_q3 = quantile(age, 0.75), severity_q1 = quantile(severity, 
-    0.25), severity_q3 = quantile(severity, 0.75), 
-    anxiety_q1 = quantile(anxiety, 0.25), anxiety_q3 = quantile(anxiety, 
-        0.75))
+quartiles <- satisf %>% summarize(
+  age_q1 = quantile(age, 0.25),
+  age_q3 = quantile(age, 0.75),
+  severity_q1 = quantile(severity, 0.25),
+  severity_q3 = quantile(severity, 0.75),
+  anxiety_q1 = quantile(anxiety, 0.25),
+  anxiety_q3 = quantile(anxiety, 0.75)
+)
 ```
 
      
@@ -7155,11 +6749,9 @@ quartiles
 
 ```
 ## # A tibble: 1 x 6
-##   age_q1 age_q3 severity_q1 severity_q3
-##    <dbl>  <dbl>       <dbl>       <dbl>
-## 1   31.2   44.8          48          53
-## # ... with 2 more variables:
-## #   anxiety_q1 <dbl>, anxiety_q3 <dbl>
+##   age_q1 age_q3 severity_q1 severity_q3 anxiety_q1 anxiety_q3
+##    <dbl>  <dbl>       <dbl>       <dbl>      <dbl>      <dbl>
+## 1   31.2   44.8          48          53        2.1       2.48
 ```
 
  
@@ -7167,9 +6759,10 @@ You can copy the numbers from here to below, or you can do some
 cleverness to get them in the right places:
 
 ```r
-quartiles %>% gather(var_q, quartile, everything()) %>% 
-    separate(var_q, c("var_name", "quartile_name")) %>% 
-    spread(var_name, quartile)
+quartiles %>%
+  gather(var_q, quartile, everything()) %>%
+  separate(var_q, c("var_name", "quartile_name")) %>%
+  spread(var_name, quartile)
 ```
 
 ```
@@ -7223,8 +6816,9 @@ warning comes from.
 
 
 ```r
-quartiles %>% gather(var_q, quartile, everything()) %>% 
-    separate(var_q, c("var_name", "quartile_name"))
+quartiles %>%
+  gather(var_q, quartile, everything()) %>%
+  separate(var_q, c("var_name", "quartile_name"))
 ```
 
 ```
@@ -7250,13 +6844,14 @@ The column `var_q` above encodes a variable *and* a
 quartile, so split them up. By default, `separate` splits at an
 underscore, which is why the things in `quartiles` were named
 with underscores.
-\marginnote{I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.</span>
 
 
 ```r
-qq <- quartiles %>% gather(var_q, quartile, everything()) %>% 
-    separate(var_q, c("var_name", "quartile_name")) %>% 
-    spread(var_name, quartile)
+qq <- quartiles %>%
+  gather(var_q, quartile, everything()) %>%
+  separate(var_q, c("var_name", "quartile_name")) %>%
+  spread(var_name, quartile)
 ```
 
 ```
@@ -7290,8 +6885,7 @@ which looks like this:
 
 
 ```r
-satisf.new <- with(qq, crossing(age, anxiety, 
-    severity))
+satisf.new <- with(qq, crossing(age, anxiety, severity))
 satisf.new
 ```
 
@@ -7327,24 +6921,15 @@ cbind(satisf.new, pp)
 ```
 
 ```
-##     age anxiety severity      fit      lwr
-## 1 31.25   2.100       48 73.31233 52.64296
-## 2 31.25   2.100       53 71.10231 49.86836
-## 3 31.25   2.475       48 68.26102 47.02617
-## 4 31.25   2.475       53 66.05100 44.90355
-## 5 44.75   2.100       48 57.90057 36.83964
-## 6 44.75   2.100       53 55.69055 34.48912
-## 7 44.75   2.475       48 52.84926 31.68774
-## 8 44.75   2.475       53 50.63924 29.99014
-##        upr
-## 1 93.98170
-## 2 92.33627
-## 3 89.49587
-## 4 87.19845
-## 5 78.96151
-## 6 76.89198
-## 7 74.01079
-## 8 71.28835
+##     age anxiety severity      fit      lwr      upr
+## 1 31.25   2.100       48 73.31233 52.64296 93.98170
+## 2 31.25   2.100       53 71.10231 49.86836 92.33627
+## 3 31.25   2.475       48 68.26102 47.02617 89.49587
+## 4 31.25   2.475       53 66.05100 44.90355 87.19845
+## 5 44.75   2.100       48 57.90057 36.83964 78.96151
+## 6 44.75   2.100       53 55.69055 34.48912 76.89198
+## 7 44.75   2.475       48 52.84926 31.68774 74.01079
+## 8 44.75   2.475       53 50.63924 29.99014 71.28835
 ```
 
  
@@ -7405,8 +6990,9 @@ We want `upr` minus `lwr`:
 
 
 ```r
-pp %>% as_tibble() %>% transmute(pi.length = upr - 
-    lwr)
+pp %>%
+  as_tibble() %>%
+  transmute(pi.length = upr - lwr)
 ```
 
 ```
@@ -7429,14 +7015,16 @@ Now, I don't want to keep the other stuff from `pp`, so I used
 `transmute` instead of `mutate`; `transmute`
 keeps *only* the new variable(s) that I calculate and throws away
 the others.
-\marginnote{Usually you want to keep the other variables around as  well, which is why you don't see transmute very often.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Usually you want to keep the other variables around as  well, which is why you don't see transmute very often.</span>
 
 Then I put that side by side with the values being predicted for:
 
 
 ```r
-pp %>% as_tibble() %>% transmute(pi.length = upr - 
-    lwr) %>% bind_cols(satisf.new)
+pp %>%
+  as_tibble() %>%
+  transmute(pi.length = upr - lwr) %>%
+  bind_cols(satisf.new)
 ```
 
 ```
@@ -7477,8 +7065,7 @@ each other to see where most of the values are:
 ggplot(satisf, aes(x = age, y = anxiety)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-189-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-189-1.png" width="672"  />
 
  
 
@@ -7516,19 +7103,13 @@ summary(satisf.1)
 ## -18.3524  -6.4230   0.5196   8.3715  17.1601 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 158.4913    18.1259   8.744
-## age          -1.1416     0.2148  -5.315
-## severity     -0.4420     0.4920  -0.898
-## anxiety     -13.4702     7.0997  -1.897
-##             Pr(>|t|)    
-## (Intercept) 5.26e-11 ***
-## age         3.81e-06 ***
-## severity      0.3741    
-## anxiety       0.0647 .  
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 158.4913    18.1259   8.744 5.26e-11 ***
+## age          -1.1416     0.2148  -5.315 3.81e-06 ***
+## severity     -0.4420     0.4920  -0.898   0.3741    
+## anxiety     -13.4702     7.0997  -1.897   0.0647 .  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 10.06 on 42 degrees of freedom
 ## Multiple R-squared:  0.6822,	Adjusted R-squared:  0.6595 
@@ -7556,17 +7137,12 @@ summary(satisf.2)
 ## -19.4453  -7.3285   0.6733   8.5126  18.0534 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 145.9412    11.5251  12.663
-## age          -1.2005     0.2041  -5.882
-## anxiety     -16.7421     6.0808  -2.753
-##             Pr(>|t|)    
-## (Intercept) 4.21e-16 ***
-## age         5.43e-07 ***
-## anxiety      0.00861 ** 
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 145.9412    11.5251  12.663 4.21e-16 ***
+## age          -1.2005     0.2041  -5.882 5.43e-07 ***
+## anxiety     -16.7421     6.0808  -2.753  0.00861 ** 
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 10.04 on 43 degrees of freedom
 ## Multiple R-squared:  0.6761,	Adjusted R-squared:  0.661 
@@ -7596,34 +7172,23 @@ step(satisf.1, direction = "backward", test = "F")
 ## Start:  AIC=216.18
 ## satis ~ age + severity + anxiety
 ## 
-##            Df Sum of Sq    RSS    AIC
-## - severity  1     81.66 4330.5 215.06
-## <none>                  4248.8 216.19
-## - anxiety   1    364.16 4613.0 217.97
-## - age       1   2857.55 7106.4 237.84
-##            F value   Pr(>F)    
-## - severity  0.8072  0.37407    
-## <none>                         
-## - anxiety   3.5997  0.06468 .  
-## - age      28.2471 3.81e-06 ***
+##            Df Sum of Sq    RSS    AIC F value   Pr(>F)    
+## - severity  1     81.66 4330.5 215.06  0.8072  0.37407    
+## <none>                  4248.8 216.19                     
+## - anxiety   1    364.16 4613.0 217.97  3.5997  0.06468 .  
+## - age       1   2857.55 7106.4 237.84 28.2471 3.81e-06 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Step:  AIC=215.06
 ## satis ~ age + anxiety
 ## 
-##           Df Sum of Sq    RSS    AIC F value
-## <none>                 4330.5 215.06        
-## - anxiety  1     763.4 5093.9 220.53  7.5804
-## - age      1    3483.9 7814.4 240.21 34.5935
-##              Pr(>F)    
-## <none>                 
-## - anxiety   0.00861 ** 
-## - age     5.434e-07 ***
+##           Df Sum of Sq    RSS    AIC F value    Pr(>F)    
+## <none>                 4330.5 215.06                      
+## - anxiety  1     763.4 5093.9 220.53  7.5804   0.00861 ** 
+## - age      1    3483.9 7814.4 240.21 34.5935 5.434e-07 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```
@@ -7655,7 +7220,7 @@ The `test="F"` on the end gets you the P-values. Using the
 $F$-test is right for regressions; for things like logistic regression
 that we see later, `test="Chisq"` is the right one to 
 use.
-\marginnote{This is F in quotes, meaning F-test, not F without quotes, meaning FALSE.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is F in quotes, meaning F-test, not F without quotes, meaning FALSE.</span>
 
 
 
@@ -7788,17 +7353,12 @@ summary(minutes.1)
 ## -8.8353 -3.5591 -0.0533  2.4018 15.1515 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)   3.3243     3.1108   1.069
-## drums         3.7681     0.6142   6.135
-## weight        5.0796     0.6655   7.632
-##             Pr(>|t|)    
-## (Intercept)      0.3    
-## drums       1.10e-05 ***
-## weight      6.89e-07 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.3243     3.1108   1.069      0.3    
+## drums         3.7681     0.6142   6.135 1.10e-05 ***
+## weight        5.0796     0.6655   7.632 6.89e-07 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 5.618 on 17 degrees of freedom
 ## Multiple R-squared:  0.9869,	Adjusted R-squared:  0.9854 
@@ -7852,12 +7412,10 @@ second one requires care, but the first and last should be straightforward.
 Residuals against fitted values:
 
 ```r
-ggplot(minutes.1, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(minutes.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-195-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-195-1.png" width="672"  />
 
      
 
@@ -7868,12 +7426,10 @@ for each explanatory variable) one at a time:
 
 
 ```r
-ggplot(minutes.1, aes(x = chemicals$drums, y = .resid)) + 
-    geom_point()
+ggplot(minutes.1, aes(x = chemicals$drums, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-196-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-196-1.png" width="672"  />
 
  
 
@@ -7881,20 +7437,17 @@ and
 
 
 ```r
-ggplot(minutes.1, aes(x = chemicals$weight, y = .resid)) + 
-    geom_point()
+ggplot(minutes.1, aes(x = chemicals$weight, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-197-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
 
  
 What would also work is to make a data frame first with the things to plot:
 
 
 ```r
-dd <- tibble(weight = chemicals$weight, drums = chemicals$drums, 
-    res = resid(minutes.1))
+dd <- tibble(weight = chemicals$weight, drums = chemicals$drums, res = resid(minutes.1))
 ```
 
  
@@ -7906,8 +7459,7 @@ and then:
 ggplot(dd, aes(x = weight, y = res)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-199-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-199-1.png" width="672"  />
 
  
 
@@ -7926,31 +7478,29 @@ as_tibble(d)
 
 ```
 ## # A tibble: 20 x 10
-##    minutes drums weight .fitted .se.fit
-##      <dbl> <dbl>  <dbl>   <dbl>   <dbl>
-##  1      58     7   5.11    55.7    1.70
-##  2     152    18  16.7    156.     2.47
-##  3      41     5   3.2     38.4    2.03
-##  4      93    14   7.03    91.8    2.91
-##  5     101    11  11.0    101.     2.17
-##  6      38     5   4.04    42.7    2.11
-##  7     203    23  22.1    202.     3.68
-##  8      78     9   7.03    72.9    1.45
-##  9     117    16  10.6    118.     2.06
-## 10      44     5   4.76    46.3    2.28
-## 11     121    17  11.0    123.     2.37
-## 12     112    12   9.51    96.8    1.27
-## 13      50     6   3.79    45.2    1.87
-## 14      82    12   6.45    81.3    2.22
-## 15      48     8   4.6     56.8    1.73
-## 16     127    15  13.9    130.     2.01
-## 17     140    17  13.0    134.     1.75
-## 18     155    21  15.2    160.     2.70
-## 19      39     6   3.64    44.4    1.88
-## 20      90    11   9.57    93.4    1.51
-## # ... with 5 more variables: .resid <dbl>,
-## #   .hat <dbl>, .sigma <dbl>, .cooksd <dbl>,
-## #   .std.resid <dbl>
+##    minutes drums weight .fitted .se.fit  .resid   .hat .sigma .cooksd
+##      <dbl> <dbl>  <dbl>   <dbl>   <dbl>   <dbl>  <dbl>  <dbl>   <dbl>
+##  1      58     7   5.11    55.7    1.70   2.34  0.0913   5.76 6.41e-3
+##  2     152    18  16.7    156.     2.47  -4.08  0.194    5.68 5.24e-2
+##  3      41     5   3.2     38.4    2.03   2.58  0.131    5.75 1.22e-2
+##  4      93    14   7.03    91.8    2.91   1.21  0.268    5.78 7.79e-3
+##  5     101    11  11.0    101.     2.17   0.453 0.149    5.79 4.45e-4
+##  6      38     5   4.04    42.7    2.11  -4.69  0.141    5.65 4.41e-2
+##  7     203    23  22.1    202.     3.68   0.903 0.429    5.78 1.13e-2
+##  8      78     9   7.03    72.9    1.45   5.05  0.0665   5.64 2.06e-2
+##  9     117    16  10.6    118.     2.06  -0.559 0.135    5.79 5.93e-4
+## 10      44     5   4.76    46.3    2.28  -2.34  0.165    5.75 1.37e-2
+## 11     121    17  11.0    123.     2.37  -2.36  0.179    5.75 1.56e-2
+## 12     112    12   9.51    96.8    1.27  15.2   0.0514   4.29 1.38e-1
+## 13      50     6   3.79    45.2    1.87   4.82  0.110    5.65 3.41e-2
+## 14      82    12   6.45    81.3    2.22   0.695 0.156    5.79 1.12e-3
+## 15      48     8   4.6     56.8    1.73  -8.84  0.0954   5.30 9.61e-2
+## 16     127    15  13.9    130.     2.01  -3.25  0.128    5.72 1.88e-2
+## 17     140    17  13.0    134.     1.75   6.43  0.0970   5.54 5.20e-2
+## 18     155    21  15.2    160.     2.70  -4.72  0.230    5.63 9.14e-2
+## 19      39     6   3.64    44.4    1.88  -5.42  0.112    5.61 4.40e-2
+## 20      90    11   9.57    93.4    1.51  -3.39  0.0725   5.72 1.02e-2
+## # … with 1 more variable: .std.resid <dbl>
 ```
 
  
@@ -7963,8 +7513,7 @@ everything comes:
 ggplot(d, aes(x = drums, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-201-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
 
  
 
@@ -7975,8 +7524,7 @@ and
 ggplot(d, aes(x = weight, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-202-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-202-1.png" width="672"  />
 
  
 
@@ -7984,12 +7532,13 @@ or you can even do that trick to put the two plots on facets:
 
 
 ```r
-d %>% gather(xname, x, drums:weight) %>% ggplot(aes(x = x, 
-    y = .resid)) + geom_point() + facet_wrap(~xname)
+d %>%
+  gather(xname, x, drums:weight) %>%
+  ggplot(aes(x = x, y = .resid)) + geom_point() +
+  facet_wrap(~xname)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-203-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
 
  
 
@@ -7997,12 +7546,10 @@ Last, the normal quantile plot:
 
 
 ```r
-ggplot(minutes.1, aes(sample = .resid)) + stat_qq() + 
-    stat_qq_line()
+ggplot(minutes.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-204-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
 
  
 
@@ -8052,12 +7599,10 @@ d %>% filter(.resid > 10)
 
 ```
 ## # A tibble: 1 x 10
-##   minutes drums weight .fitted .se.fit .resid
-##     <dbl> <dbl>  <dbl>   <dbl>   <dbl>  <dbl>
-## 1     112    12   9.51    96.8    1.27   15.2
-## # ... with 4 more variables: .hat <dbl>,
-## #   .sigma <dbl>, .cooksd <dbl>,
-## #   .std.resid <dbl>
+##   minutes drums weight .fitted .se.fit .resid   .hat .sigma .cooksd
+##     <dbl> <dbl>  <dbl>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
+## 1     112    12   9.51    96.8    1.27   15.2 0.0514   4.29   0.138
+## # … with 1 more variable: .std.resid <dbl>
 ```
 
  
@@ -8069,8 +7614,10 @@ Can we find "similar" numbers of `drums` and
 
 
 ```r
-chemicals %>% filter(between(weight, 8, 11), between(drums, 
-    10, 14))
+chemicals %>% filter(
+  between(weight, 8, 11),
+  between(drums, 10, 14)
+)
 ```
 
 ```
@@ -8086,21 +7633,20 @@ chemicals %>% filter(between(weight, 8, 11), between(drums,
 
 You might not have seen `between` before, but it works the way
 you'd expect.
-\marginnote{weight between 8 and 11, for example,  returning TRUE or FALSE.} Two other shipments with similar numbers of drums and
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">weight between 8 and 11, for example,  returning TRUE or FALSE.</span> Two other shipments with similar numbers of drums and
 total weight took around 90--100 minutes to handle, so the 112 does
 look about 15 minutes too long. This was actually an average-sized shipment:
 
 
 ```r
 library(ggrepel)
-d %>% mutate(my_label = ifelse(.resid > 10, "residual +", 
-    "")) %>% ggplot(aes(x = drums, y = weight, 
-    colour = minutes, label = my_label)) + geom_point() + 
-    geom_text_repel()
+d %>%
+  mutate(my_label = ifelse(.resid > 10, "residual +", "")) %>%
+  ggplot(aes(x = drums, y = weight, colour = minutes, label = my_label)) +
+  geom_point() + geom_text_repel()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-207-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-207-1.png" width="672"  />
 
  
 
@@ -8123,15 +7669,14 @@ another way to do that:
 
 
 ```r
-d %>% mutate(my_label = ifelse(.resid > 10, "residual +", 
-    "")) %>% ggplot(aes(x = drums, y = weight, 
-    colour = minutes, label = my_label)) + geom_point() + 
-    geom_text_repel() + scale_colour_gradient(low = "red", 
-    high = "blue")
+d %>%
+  mutate(my_label = ifelse(.resid > 10, "residual +", "")) %>%
+  ggplot(aes(x = drums, y = weight, colour = minutes, label = my_label)) +
+  geom_point() + geom_text_repel() +
+  scale_colour_gradient(low = "red", high = "blue")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-208-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-208-1.png" width="672"  />
 
  
 
@@ -8224,7 +7769,7 @@ salaries
 ##  8   40.7      5.5         30     4  
 ##  9   30.1      3.1          5     5.8
 ## 10   52.9      7.2         47     8.3
-## # ... with 14 more rows
+## # … with 14 more rows
 ```
 
         
@@ -8264,13 +7809,13 @@ one column (and the names of the $x$-variables in another
 column):
 
 ```r
-salaries %>% gather(xname, x, -salary) %>% ggplot(aes(x = x, 
-    y = salary)) + geom_point() + facet_wrap(~xname, 
-    ncol = 2, scales = "free")
+salaries %>%
+  gather(xname, x, -salary) %>%
+  ggplot(aes(x = x, y = salary)) + geom_point() +
+  facet_wrap(~xname, ncol = 2, scales = "free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/ivybridge-1} 
+<img src="12-regression_files/figure-html/ivybridge-1.png" width="672"  />
 
        
 
@@ -8306,16 +7851,11 @@ cor(salaries)
 ```
 
 ```
-##               salary  workqual experience
-## salary     1.0000000 0.6670958  0.8585582
-## workqual   0.6670958 1.0000000  0.4669511
-## experience 0.8585582 0.4669511  1.0000000
-## pubsucc    0.5581960 0.3227612  0.2537530
-##              pubsucc
-## salary     0.5581960
-## workqual   0.3227612
-## experience 0.2537530
-## pubsucc    1.0000000
+##               salary  workqual experience   pubsucc
+## salary     1.0000000 0.6670958  0.8585582 0.5581960
+## workqual   0.6670958 1.0000000  0.4669511 0.3227612
+## experience 0.8585582 0.4669511  1.0000000 0.2537530
+## pubsucc    0.5581960 0.3227612  0.2537530 1.0000000
 ```
 
        
@@ -8332,8 +7872,7 @@ Solution
 
 
 ```r
-salaries.1 <- lm(salary ~ workqual + experience + 
-    pubsucc, data = salaries)
+salaries.1 <- lm(salary ~ workqual + experience + pubsucc, data = salaries)
 summary(salaries.1)
 ```
 
@@ -8347,19 +7886,13 @@ summary(salaries.1)
 ## -3.2463 -0.9593  0.0377  1.1995  3.3089 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 17.84693    2.00188   8.915
-## workqual     1.10313    0.32957   3.347
-## experience   0.32152    0.03711   8.664
-## pubsucc      1.28894    0.29848   4.318
-##             Pr(>|t|)    
-## (Intercept) 2.10e-08 ***
-## workqual    0.003209 ** 
-## experience  3.33e-08 ***
-## pubsucc     0.000334 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 17.84693    2.00188   8.915 2.10e-08 ***
+## workqual     1.10313    0.32957   3.347 0.003209 ** 
+## experience   0.32152    0.03711   8.664 3.33e-08 ***
+## pubsucc      1.28894    0.29848   4.318 0.000334 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 1.753 on 20 degrees of freedom
 ## Multiple R-squared:  0.9109,	Adjusted R-squared:  0.8975 
@@ -8403,8 +7936,7 @@ If you need convincing of that, see what happens when we take
 the variable with the highest P-value out --- this is `workqual`:
 
 ```r
-salaries.2 <- lm(salary ~ experience + pubsucc, 
-    data = salaries)
+salaries.2 <- lm(salary ~ experience + pubsucc, data = salaries)
 summary(salaries.2)
 ```
 
@@ -8418,17 +7950,12 @@ summary(salaries.2)
 ## -5.2723 -0.7865 -0.3983  1.7277  3.2060 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 21.02546    2.14819   9.788
-## experience   0.37376    0.04104   9.107
-## pubsucc      1.52753    0.35331   4.324
-##             Pr(>|t|)    
-## (Intercept) 2.82e-09 ***
-## experience  9.70e-09 ***
-## pubsucc        3e-04 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 21.02546    2.14819   9.788 2.82e-09 ***
+## experience   0.37376    0.04104   9.107 9.70e-09 ***
+## pubsucc      1.52753    0.35331   4.324    3e-04 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.137 on 21 degrees of freedom
 ## Multiple R-squared:  0.8609,	Adjusted R-squared:  0.8477 
@@ -8444,14 +7971,14 @@ variables, is to compare the *adjusted* R-squared: this has gone
 down from 90\% to 85\%. The fact that this has gone down *at all*
 is enough to say that taking out `workqual` was a
 mistake.
-\marginnote{Adjusted R-squareds are easier to compare in this  context, since you don't have to make a judgement about whether it has changed substantially, whatever you think substantially means.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Adjusted R-squareds are easier to compare in this  context, since you don't have to make a judgement about whether it has changed substantially, whatever you think substantially means.</span>
 
 Another way of seeing whether a variable has anything to add in a
 regression containing the others is a **partial regression  plot**. 
 We take the residuals from `salaries.2` above and plot
 them against the variable we removed, namely
 `workqual`.
-\marginnote{The residuals have to be the ones from a  regression *not* including the $x$-variable you're testing.} If
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The residuals have to be the ones from a  regression *not* including the $x$-variable you're testing.</span> If
 `workqual` has nothing to add, there will be no pattern; if it
 *does* have something to add, there will be a trend. Like
 this. I use `augment` from `broom`:
@@ -8459,19 +7986,19 @@ this. I use `augment` from `broom`:
 
 ```r
 library(broom)
-salaries.2 %>% augment(salaries) %>% ggplot(aes(x = workqual, 
-    y = .resid)) + geom_point()
+salaries.2 %>%
+  augment(salaries) %>%
+  ggplot(aes(x = workqual, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/dartington-1} 
+<img src="12-regression_files/figure-html/dartington-1.png" width="672"  />
 
  
 
 This is a mostly straight upward trend. So we
 need to add a linear term in `workqual` to the
 regression.
-\marginnote{Or not take it out in the first place.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Or not take it out in the first place.</span>
  
 
 (g) Do you think it would be a mistake to take *both* of
@@ -8505,15 +8032,11 @@ anova(salaries.3, salaries.1)
 ## 
 ## Model 1: salary ~ experience
 ## Model 2: salary ~ workqual + experience + pubsucc
-##   Res.Df     RSS Df Sum of Sq      F
-## 1     22 181.191                    
-## 2     20  61.443  2    119.75 19.489
-##      Pr(>F)    
-## 1              
-## 2 2.011e-05 ***
+##   Res.Df     RSS Df Sum of Sq      F    Pr(>F)    
+## 1     22 181.191                                  
+## 2     20  61.443  2    119.75 19.489 2.011e-05 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
  
@@ -8538,12 +8061,10 @@ I intended that (i) should just be a matter of looking at residuals
 vs.\ fitted values:
 
 ```r
-ggplot(salaries.1, aes(x = .fitted, y = .resid)) + 
-    geom_point()
+ggplot(salaries.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-216-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-216-1.png" width="672"  />
 
     
 
@@ -8560,14 +8081,14 @@ you, run the code a piece at a time to see what it's doing:
 
 
 ```r
-salaries.1 %>% augment(salaries) %>% gather(xname, 
-    x, workqual:pubsucc) %>% ggplot(aes(x = x, 
-    y = .resid)) + geom_point() + facet_wrap(~xname, 
-    scales = "free", ncol = 2)
+salaries.1 %>%
+  augment(salaries) %>%
+  gather(xname, x, workqual:pubsucc) %>%
+  ggplot(aes(x = x, y = .resid)) + geom_point() +
+  facet_wrap(~xname, scales = "free", ncol = 2)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-217-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-217-1.png" width="672"  />
 
  
 
@@ -8577,12 +8098,10 @@ For (ii), look at a normal quantile plot of the residuals, which is not as diffi
 
 
 ```r
-ggplot(salaries.1, aes(sample = .resid)) + stat_qq() + 
-    stat_qq_line()
+ggplot(salaries.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-218-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-218-1.png" width="672"  />
 
  
 
@@ -8596,16 +8115,14 @@ Our graph for assessing fan-in or fan-out is to plot the *absolute* values of th
 
 
 ```r
-ggplot(salaries.1, aes(x = .fitted, y = abs(.resid))) + 
-    geom_point() + geom_smooth()
+ggplot(salaries.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-219-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-219-1.png" width="672"  />
 
  
 
@@ -8678,20 +8195,19 @@ gpa
 
 ```
 ## # A tibble: 105 x 5
-##    high_GPA math_SAT verb_SAT comp_GPA
-##       <dbl>    <dbl>    <dbl>    <dbl>
-##  1     3.45      643      589     3.76
-##  2     2.78      558      512     2.87
-##  3     2.52      583      503     2.54
-##  4     3.67      685      602     3.83
-##  5     3.24      592      538     3.29
-##  6     2.1       562      486     2.64
-##  7     2.82      573      548     2.86
-##  8     2.36      559      536     2.03
-##  9     2.42      552      583     2.81
-## 10     3.51      617      591     3.41
-## # ... with 95 more rows, and 1 more
-## #   variable: univ_GPA <dbl>
+##    high_GPA math_SAT verb_SAT comp_GPA univ_GPA
+##       <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
+##  1     3.45      643      589     3.76     3.52
+##  2     2.78      558      512     2.87     2.91
+##  3     2.52      583      503     2.54     2.4 
+##  4     3.67      685      602     3.83     3.47
+##  5     3.24      592      538     3.29     3.47
+##  6     2.1       562      486     2.64     2.37
+##  7     2.82      573      548     2.86     2.4 
+##  8     2.36      559      536     2.03     2.24
+##  9     2.42      552      583     2.81     3.02
+## 10     3.51      617      591     3.41     3.32
+## # … with 95 more rows
 ```
 
  
@@ -8714,16 +8230,15 @@ grades are used as an admission criterion to university, so we
 would hope they would have some predictive value.)
 
 ```r
-ggplot(gpa, aes(x = high_GPA, y = univ_GPA)) + 
-    geom_point() + geom_smooth()
+ggplot(gpa, aes(x = high_GPA, y = univ_GPA)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-221-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-221-1.png" width="672"  />
 
    
     
@@ -8789,15 +8304,11 @@ summary(gpa.1)
 ## -0.69040 -0.11922  0.03274  0.17397  0.91278 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  1.09682    0.16663   6.583
-## high_GPA     0.67483    0.05342  12.632
-##             Pr(>|t|)    
-## (Intercept) 1.98e-09 ***
-## high_GPA     < 2e-16 ***
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  1.09682    0.16663   6.583 1.98e-09 ***
+## high_GPA     0.67483    0.05342  12.632  < 2e-16 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.2814 on 103 degrees of freedom
 ## Multiple R-squared:  0.6077,	Adjusted R-squared:  0.6039 
@@ -8815,16 +8326,14 @@ fitted values:
 
 
 ```r
-ggplot(gpa.1, aes(x = .fitted, y = .resid)) + 
-    geom_point() + geom_smooth()
+ggplot(gpa.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-223-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-223-1.png" width="672"  />
 
  
 
@@ -8836,12 +8345,10 @@ Normal quantile plot of residuals:
 
 
 ```r
-ggplot(gpa.1, aes(sample = .resid)) + stat_qq() + 
-    stat_qq_line()
+ggplot(gpa.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-224-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-224-1.png" width="672"  />
 
  
 
@@ -8854,16 +8361,14 @@ fanning-in, which we can assess by looking at the absolute residuals:
 
 
 ```r
-ggplot(gpa.1, aes(x = .fitted, y = abs(.resid))) + 
-    geom_point() + geom_smooth()
+ggplot(gpa.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-225-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-225-1.png" width="672"  />
 
  
 
@@ -8897,8 +8402,7 @@ library(MASS)
 boxcox(univ_GPA ~ high_GPA, data = gpa)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-226-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-226-1.png" width="672"  />
 
  
 
@@ -8906,7 +8410,7 @@ It doesn't. All right, that answers *that* question.
 
 When I loaded `MASS`, I also loaded its `select`
 function,
-\marginnote{That is what that masked message above was  about.} and I might want to use the 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is what that masked message above was  about.</span> and I might want to use the 
 `tidyverse` `select`
 function later, and things could get confused. So let's "unload"
 `MASS` now:
@@ -8990,8 +8494,7 @@ or this way, if you like it better:
 
 
 ```r
-as_tibble(preds) %>% bind_cols(gpa.new) %>% select(high_GPA, 
-    everything())
+as_tibble(preds) %>% bind_cols(gpa.new) %>% select(high_GPA, everything())
 ```
 
 ```
@@ -9018,9 +8521,12 @@ that's the case, the prediction interval for 3.5 should be longer
 
 
 ```r
-gpa %>% summarize(mean = mean(high_GPA), med = median(high_GPA), 
-    q1 = quantile(high_GPA, 0.25), q3 = quantile(high_GPA, 
-        0.75))
+gpa %>% summarize(
+  mean = mean(high_GPA),
+  med = median(high_GPA),
+  q1 = quantile(high_GPA, 0.25),
+  q3 = quantile(high_GPA, 0.75)
+)
 ```
 
 ```
@@ -9073,8 +8579,7 @@ Create a new regression with all the explanatory variables you want in it:
 
 
 ```r
-gpa.2 <- lm(univ_GPA ~ high_GPA + math_SAT + verb_SAT, 
-    data = gpa)
+gpa.2 <- lm(univ_GPA ~ high_GPA + math_SAT + verb_SAT, data = gpa)
 summary(gpa.2)
 ```
 
@@ -9088,19 +8593,13 @@ summary(gpa.2)
 ## -0.68186 -0.13189  0.01289  0.16186  0.93994 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) 0.5793478  0.3422627   1.693
-## high_GPA    0.5454213  0.0850265   6.415
-## math_SAT    0.0004893  0.0010215   0.479
-## verb_SAT    0.0010202  0.0008123   1.256
-##             Pr(>|t|)    
-## (Intercept)   0.0936 .  
-## high_GPA     4.6e-09 ***
-## math_SAT      0.6330    
-## verb_SAT      0.2120    
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 0.5793478  0.3422627   1.693   0.0936 .  
+## high_GPA    0.5454213  0.0850265   6.415  4.6e-09 ***
+## math_SAT    0.0004893  0.0010215   0.479   0.6330    
+## verb_SAT    0.0010202  0.0008123   1.256   0.2120    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.2784 on 101 degrees of freedom
 ## Multiple R-squared:  0.6236,	Adjusted R-squared:  0.6124 
@@ -9185,17 +8684,12 @@ summary(gpa.3)
 ## -0.68430 -0.11268  0.01802  0.14901  0.95239 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) 0.6838723  0.2626724   2.604
-## high_GPA    0.5628331  0.0765729   7.350
-## verb_SAT    0.0012654  0.0006283   2.014
-##             Pr(>|t|)    
-## (Intercept)   0.0106 *  
-## high_GPA    5.07e-11 ***
-## verb_SAT      0.0466 *  
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 0.6838723  0.2626724   2.604   0.0106 *  
+## high_GPA    0.5628331  0.0765729   7.350 5.07e-11 ***
+## verb_SAT    0.0012654  0.0006283   2.014   0.0466 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.2774 on 102 degrees of freedom
 ## Multiple R-squared:  0.6227,	Adjusted R-squared:  0.6153 
@@ -9234,34 +8728,23 @@ step(gpa.2, direction = "backward", test = "F")
 ## Start:  AIC=-264.6
 ## univ_GPA ~ high_GPA + math_SAT + verb_SAT
 ## 
-##            Df Sum of Sq     RSS     AIC
-## - math_SAT  1    0.0178  7.8466 -266.36
-## - verb_SAT  1    0.1223  7.9511 -264.97
-## <none>                   7.8288 -264.60
-## - high_GPA  1    3.1896 11.0184 -230.71
-##            F value    Pr(>F)    
-## - math_SAT  0.2294     0.633    
-## - verb_SAT  1.5777     0.212    
-## <none>                          
-## - high_GPA 41.1486 4.601e-09 ***
+##            Df Sum of Sq     RSS     AIC F value    Pr(>F)    
+## - math_SAT  1    0.0178  7.8466 -266.36  0.2294     0.633    
+## - verb_SAT  1    0.1223  7.9511 -264.97  1.5777     0.212    
+## <none>                   7.8288 -264.60                      
+## - high_GPA  1    3.1896 11.0184 -230.71 41.1486 4.601e-09 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Step:  AIC=-266.36
 ## univ_GPA ~ high_GPA + verb_SAT
 ## 
-##            Df Sum of Sq     RSS     AIC
-## <none>                   7.8466 -266.36
-## - verb_SAT  1    0.3121  8.1587 -264.26
-## - high_GPA  1    4.1562 12.0028 -223.73
-##            F value    Pr(>F)    
-## <none>                          
-## - verb_SAT  4.0571   0.04662 *  
-## - high_GPA 54.0268 5.067e-11 ***
+##            Df Sum of Sq     RSS     AIC F value    Pr(>F)    
+## <none>                   7.8466 -266.36                      
+## - verb_SAT  1    0.3121  8.1587 -264.26  4.0571   0.04662 *  
+## - high_GPA  1    4.1562 12.0028 -223.73 54.0268 5.067e-11 ***
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```
@@ -9324,17 +8807,12 @@ summary(gpa.3)
 ## -0.68430 -0.11268  0.01802  0.14901  0.95239 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) 0.6838723  0.2626724   2.604
-## high_GPA    0.5628331  0.0765729   7.350
-## verb_SAT    0.0012654  0.0006283   2.014
-##             Pr(>|t|)    
-## (Intercept)   0.0106 *  
-## high_GPA    5.07e-11 ***
-## verb_SAT      0.0466 *  
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 0.6838723  0.2626724   2.604   0.0106 *  
+## high_GPA    0.5628331  0.0765729   7.350 5.07e-11 ***
+## verb_SAT    0.0012654  0.0006283   2.014   0.0466 *  
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.2774 on 102 degrees of freedom
 ## Multiple R-squared:  0.6227,	Adjusted R-squared:  0.6153 
@@ -9364,18 +8842,12 @@ cor(gpa)
 ```
 
 ```
-##           high_GPA  math_SAT  verb_SAT
-## high_GPA 1.0000000 0.7681423 0.7261478
-## math_SAT 0.7681423 1.0000000 0.8352272
-## verb_SAT 0.7261478 0.8352272 1.0000000
-## comp_GPA 0.7914721 0.6877209 0.6387512
-## univ_GPA 0.7795631 0.6627837 0.6503012
-##           comp_GPA  univ_GPA
-## high_GPA 0.7914721 0.7795631
-## math_SAT 0.6877209 0.6627837
-## verb_SAT 0.6387512 0.6503012
-## comp_GPA 1.0000000 0.9390459
-## univ_GPA 0.9390459 1.0000000
+##           high_GPA  math_SAT  verb_SAT  comp_GPA  univ_GPA
+## high_GPA 1.0000000 0.7681423 0.7261478 0.7914721 0.7795631
+## math_SAT 0.7681423 1.0000000 0.8352272 0.6877209 0.6627837
+## verb_SAT 0.7261478 0.8352272 1.0000000 0.6387512 0.6503012
+## comp_GPA 0.7914721 0.6877209 0.6387512 1.0000000 0.9390459
+## univ_GPA 0.7795631 0.6627837 0.6503012 0.9390459 1.0000000
 ```
 
  
@@ -9414,17 +8886,12 @@ summary(gpa.4)
 ## -0.68079 -0.12264  0.00741  0.16579  0.90010 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) 0.6072916  0.3425047   1.773
-## high_GPA    0.5710745  0.0827705   6.899
-## math_SAT    0.0012980  0.0007954   1.632
-##             Pr(>|t|)    
-## (Intercept)   0.0792 .  
-## high_GPA     4.5e-10 ***
-## math_SAT      0.1058    
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 0.6072916  0.3425047   1.773   0.0792 .  
+## high_GPA    0.5710745  0.0827705   6.899  4.5e-10 ***
+## math_SAT    0.0012980  0.0007954   1.632   0.1058    
 ## ---
-## Signif. codes:  
-##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1  ' ' 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.2792 on 102 degrees of freedom
 ## Multiple R-squared:  0.6177,	Adjusted R-squared:  0.6102 
