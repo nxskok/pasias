@@ -1487,7 +1487,7 @@ dividing the wolf values by 2.5:
 ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
   geom_line() +
   geom_line(aes(y = wolf / 2.5, colour = "wolf")) +
-  scale_y_continuous(sec.axis = sec_axis(~ . / 2.5, name = "wolf"))
+  scale_y_continuous(sec.axis = sec_axis(~ . * 2.5, name = "wolf"))
 ```
 
 <img src="13-dates-and-times_files/figure-html/unnamed-chunk-43-1.png" width="672"  />

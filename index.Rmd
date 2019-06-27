@@ -33,20 +33,18 @@ book. You will undoubtedly see bits of LaTeX still embedded in the
 text. I am trying to update my program to catch them, but I am sure to
 miss some. 
 
-I just figured out that you can convert LaTeX "label" and "ref" pairs
-into HTML "a name" and "a href='#'", which R Markdown can handle. I am
-ludicrously pleased with myself. To that effect, you will occasionally
+You will occasionally
 see question parts beginning with a *; this means that other question
 parts refer back to this one. (One of my favourite question strategies
 is to ask how two different approaches lead to the same answer, or
 more generally to demonstrate that there are different ways to see the
 same thing.)
 
-If you see anything, [file an
+Thanks to Dann Sioson for spotting some errors and making some useful suggestions.
+
+If *you* see anything, [file an
 issue](https://github.com/nxskok/pasias/issues) on the Github page for
-now. I want to fix problems programmatically at first, but when the
-majority of the problems have been caught, I will certainly take pull
-requests. I will acknowledge all the people who catch things. Likely
+now. Likely
 problems include:
 
 - some LaTeX construction that I didn't catch (eg. block quotes)
@@ -58,22 +56,24 @@ problems include:
 As I read through looking for problems like these, I realize that
 there ought to be a textbook that reflects my way of doing
 things. There isn't one (yet), though there are lecture
-notes. Reasonably recent versions of these are at:
+notes. Current versions of these are at:
 
-- [the STAC32 website](http://www.utsc.utoronto.ca/~butler/c32/notes/slides.pdf)
-- [the STAD29 website](https://www.utsc.utoronto.ca/~butler/d29/slides-sw.pdf)
+- [the STAC32 website](http://ritsokiguess.site/STAC32/)
+- [the STAC33 website](http://ritsokiguess.site/STAC33/)
+- [the STAD29 website](http://ritsokiguess.site/STAD29/)
 
 A little background:
 
 STAC32 is an introduction to R (and also SAS) as
 applied to statistical methods that have (mostly) been learned in
-previous courses. This could be a mathematical statistics course like
-[this](https://utsc.calendar.utoronto.ca/course/stab57h3), or a
-non-mathematical applied course like
+previous courses. This course is designed for students who have a second non-mathematical applied statistics course 
+such as
 [this](https://utsc.calendar.utoronto.ca/course/stab27h3). The idea is
 that students have already seen a little of regression and analysis of
-variance (and the things that precede them), and need only an
+variance (and the things that precede them), and need mainly an
 introduction of how to run them in R.
+
+STAC33 is an introduction to R and SAS for students who have a background in mathematical statistics. The way our courses are structured, these students have a strong mathematical background, but not very much experience in applications, which this course is designed to provide. The material covered is similar to STAC32, with a planned addition of some ideas in bootstrap and practical Bayesian statistics (these last two will eventually get questions here).
 
 STAD29 is an overview of a number of advanced statistical methods. I
 start from regression and proceed to some regression-like methods
@@ -92,16 +92,9 @@ have an [Applied Statistics Minor
 program](https://utsc.calendar.utoronto.ca/minor-program-applied-statistics-science)
 for which C32 and D29 are two of the last courses.
 
-My checklist:
-
-- look for multiple regression Qs in C32
-- add a chapter on bootstrap
-- add a chapter on `rstan`
-
-
 # Packages used somewhere in this book
 
-The bottom lines are used with the `conflicted` package: if a function by
+The bottom lines are below used with the `conflicted` package: if a function by
 the name shown is in two or more packages, prefer the one from the
 package shown.
 

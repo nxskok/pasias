@@ -40,6 +40,12 @@ sub main {
     $content=~s/\\part/\nNextyy part/g;
     $content=~s/\\begin\{solution\}/\nSolution\n\n/g;
 
+# \begin{frame}[fragile]{Course and instructor}
+    
+    $content=~s/\\begin\{frame\}\[fragile\]\{(.*?)\}/\#\# $1/g;
+    $content=~s/\\begin\{frame\}\{(.*?)\}/\#\# $1/g;
+    $content=~s/\\end\{frame\}//g;
+
     $content=~s/\n<<(.*)>>=/\n```\{r $1\}/g;
     $content=~s/\n@/\n```\n\n/g;
     # text formatting

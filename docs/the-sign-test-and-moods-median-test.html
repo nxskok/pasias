@@ -890,8 +890,8 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb647"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb647-1" data-line-number="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb647-2" data-line-number="2">x</a></code></pre></div>
-<pre><code>##  [1] 52.97216 35.99570 71.07192 53.54603 57.07000 40.48988 54.16665
-##  [8] 70.32499 64.35520 42.39438</code></pre>
+<pre><code>##  [1] 74.51855 73.59536 44.45449 87.48122 60.58244 65.20417 68.62422
+##  [8] 71.86792 53.50038 63.63712</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
 than 40 and how many are greater (or equal)?</li>
@@ -899,11 +899,10 @@ than 40 and how many are greater (or equal)?</li>
 <p>Solution</p>
 <p>The way we know this is to put <code>x</code> into a data frame first:</p>
 <div class="sourceCode" id="cb649"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb649-1" data-line-number="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>)</a></code></pre></div>
-<pre><code>## # A tibble: 2 x 2
+<pre><code>## # A tibble: 1 x 2
 ##   `x &lt; 40`     n
 ##   &lt;lgl&gt;    &lt;int&gt;
-## 1 FALSE        9
-## 2 TRUE         1</code></pre>
+## 1 FALSE       10</code></pre>
 <p>2 values less (and 8 greater-or-equal).</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>It turns out the sign test would reject <span class="math inline">\(H_0: M=40\)</span> against
@@ -923,7 +922,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       1 TRUE</code></pre>
+## 1      10 FALSE</code></pre>
 <p>This will fail sometimes. If all 10 of your sample values are greater
 than 40, which they might turn out to be, you’ll get a table with only
 one line, <code>FALSE</code> and 10; the minimum of the <code>n</code> values
@@ -935,7 +934,7 @@ should not reject. The fix is</p>
 <pre><code>## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     &lt;dbl&gt; &lt;lgl&gt;      
-## 1       1 TRUE</code></pre>
+## 1      10 TRUE</code></pre>
 <p>The above is almost the right thing, but not quite: we only want that value
 that I called <code>is_rejected</code>, rather than the whole data frame,
 so a <code>pull</code> will grab it:</p>
