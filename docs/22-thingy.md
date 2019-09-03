@@ -12,83 +12,9 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'readr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'survminer' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggpubr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'magrittr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'car' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'carData' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'scales' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggrepel' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'broom' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'rstan' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
+## Please use `env_bind_active()` instead.
+## This warning is displayed once per session.
 ```
 
 
@@ -2895,17 +2821,17 @@ wssq.2
 
 ```
 ## # A tibble: 9 x 3
-##   clusters km             wss
-##      <int> <list>       <dbl>
-## 1        2 <S3: kmeans>  701.
-## 2        3 <S3: kmeans>  576.
-## 3        4 <S3: kmeans>  492.
-## 4        5 <S3: kmeans>  449.
-## 5        6 <S3: kmeans>  413.
-## 6        7 <S3: kmeans>  382.
-## 7        8 <S3: kmeans>  355.
-## 8        9 <S3: kmeans>  334.
-## 9       10 <S3: kmeans>  313.
+##   clusters km         wss
+##      <int> <list>   <dbl>
+## 1        2 <kmeans>  701.
+## 2        3 <kmeans>  576.
+## 3        4 <kmeans>  492.
+## 4        5 <kmeans>  449.
+## 5        6 <kmeans>  413.
+## 6        7 <kmeans>  382.
+## 7        8 <kmeans>  355.
+## 8        9 <kmeans>  334.
+## 9       10 <kmeans>  313.
 ```
 
  
@@ -3048,17 +2974,17 @@ wssq.2
 
 ```
 ## # A tibble: 9 x 3
-##   clusters km             wss
-##      <int> <list>       <dbl>
-## 1        2 <S3: kmeans>  701.
-## 2        3 <S3: kmeans>  576.
-## 3        4 <S3: kmeans>  492.
-## 4        5 <S3: kmeans>  449.
-## 5        6 <S3: kmeans>  413.
-## 6        7 <S3: kmeans>  382.
-## 7        8 <S3: kmeans>  355.
-## 8        9 <S3: kmeans>  334.
-## 9       10 <S3: kmeans>  313.
+##   clusters km         wss
+##      <int> <list>   <dbl>
+## 1        2 <kmeans>  701.
+## 2        3 <kmeans>  576.
+## 3        4 <kmeans>  492.
+## 4        5 <kmeans>  449.
+## 5        6 <kmeans>  413.
+## 6        7 <kmeans>  382.
+## 7        8 <kmeans>  355.
+## 8        9 <kmeans>  334.
+## 9       10 <kmeans>  313.
 ```
 
  
@@ -6164,6 +6090,15 @@ and then
 
 ```r
 library(rpart)
+```
+
+```
+## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
+## Please use `quo_squash()` instead.
+## This warning is displayed once per session.
+```
+
+```r
 bridges.tree <- rpart(factor(cluster) ~ river + erected + purpose + length + lanes + clear_g +
   t_d + material + span + rel_l + type, data = bridges.rpart, method = "class")
 print(bridges.tree)

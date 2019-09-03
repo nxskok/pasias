@@ -10,42 +10,10 @@ library(tidyverse)
 ```
 
 ```
-## ✔ ggplot2 3.1.1          ✔ purrr   0.3.2     
-## ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
+## ✔ ggplot2 3.2.0          ✔ purrr   0.3.2     
+## ✔ tibble  2.1.3          ✔ dplyr   0.8.0.1   
 ## ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
 ## ✔ readr   1.3.1          ✔ forcats 0.3.0
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'readr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.1
 ```
 
 ```
@@ -61,51 +29,9 @@ library(smmr)
 
 
 ```
-## Warning: package 'survminer' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggpubr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'magrittr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'car' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'carData' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'scales' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggrepel' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'broom' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'rstan' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
+## Please use `env_bind_active()` instead.
+## This warning is displayed once per session.
 ```
 
 
@@ -270,6 +196,12 @@ you want to use `smmr` needs this:
 
 ```r
 library(smmr)
+```
+
+```
+## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
+## Please use `quo_squash()` instead.
+## This warning is displayed once per session.
 ```
 
  
@@ -1107,8 +1039,8 @@ x
 ```
 
 ```
-##  [1] 66.19438 21.58046 45.26720 64.17006 45.10825 27.65661 31.10692
-##  [8] 45.42886 60.60611 56.84129
+##  [1] 51.57503 58.90320 39.05541 49.29952 31.01597 62.22662 39.38857
+##  [8] 70.92066 40.40246 55.37272
 ```
 
 
@@ -1486,13 +1418,6 @@ these simulations.
 
 ```r
 library(smoothmest)
-```
-
-```
-## Warning: package 'smoothmest' was built under R version 3.5.1
-```
-
-```r
 rl=rdoublex(50,mu=0.5)
 rl
 ```

@@ -9,83 +9,9 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'readr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'survminer' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggpubr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'magrittr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'car' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'carData' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'scales' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggrepel' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'broom' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'rstan' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
+## Please use `env_bind_active()` instead.
+## This warning is displayed once per session.
 ```
 
 
@@ -119,6 +45,12 @@ Start with this (almost always):
 
 ```r
 library(tidyverse)
+```
+
+```
+## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
+## Please use `quo_squash()` instead.
+## This warning is displayed once per session.
 ```
 
  
@@ -214,7 +146,8 @@ They came from the top line of the data file, so we didn't
 have to specify them. This is the default behaviour of all the
 `read_` functions, so we don't have to ask for it
 specially. 
-In fact, if the top line of your data file is
+
+Extra: in fact, if the top line of your data file is
 *not* variable names, *that's* when you have to say
 something special. The `read_` functions have an
 option `col_names` which can either be `TRUE`
@@ -225,7 +158,14 @@ alternative when the column names that are in the file are
 *not* the ones you want to use; in that case, you would
 also say `skip=1` to skip the first line. For example,
 with file `a.txt` thus:
-`timinput{`.txt}        
+
+```
+a b
+1 2
+3 4
+5 6
+```
+        
 you could read the same data but call the columns `x` and
 `y` thus:
 
@@ -727,16 +667,17 @@ the two-sample $t$-test where `line` was not significant.
 So does production line make a difference or not?
 
 The plot says that it does, and the meaning of model `scrap.1`
-just above is that \emph{`speed` affects scrap when you account
-for `line`}, and emph{`line` affects scrap when you
-account for speed}. (In the two-sample $t$-test above we didn't
+just above is that
+\emph{`speed` affects scrap when you account for `line`}, and 
+\emph{`line` affects scrap when you account for speed}. 
+(In the two-sample $t$-test above we didn't
 account for speed at all, since the various speeds were all mixed up.)
 
 There is a moral to this story, which I would like you to get even if
 you don't get any of the statistics: if a variable makes a
 difference, it should be in your model and on your
 graph,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Meaning that the graph should contain all three variables, *speed*, *scrap* and *line*.</span>
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Meaning that the model should contain all three variables, *speed*, *scrap* and *line*.</span>
 because it enables you to get better (more precise) conclusions about your
 other variables. Here, there really is a difference between the
 production lines, but the $t$-test was too much of a blunt instrument

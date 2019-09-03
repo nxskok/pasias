@@ -18,83 +18,9 @@ in the Conflicts. This, despite appearances, is what we want.)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'readr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'survminer' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggpubr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'magrittr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'car' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'carData' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'scales' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggrepel' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'broom' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'rstan' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
+## Please use `env_bind_active()` instead.
+## This warning is displayed once per session.
 ```
 
 
@@ -2042,26 +1968,26 @@ jobs0 %>%
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      14     22            9     1    69 custserv  
-##  2      19     33            7     1     3 custserv  
-##  3      15     14           17     3    11 dispatcher
-##  4       8     20            8     3    40 dispatcher
-##  5      17     25            8     1    11 custserv  
-##  6      11     27           10     1    33 custserv  
-##  7      17     24            5     2    86 mechanic  
-##  8      15     26            9     1    60 custserv  
-##  9      21     25           11     2    46 mechanic  
-## 10      17     25            7     1    13 custserv  
-## 11      20     19           11     2    82 mechanic  
-## 12      28     16           10     2    23 mechanic  
-## 13      20     13           18     3    61 dispatcher
-## 14       3     20           14     1    31 custserv  
-## 15      19     11           13     3    55 dispatcher
-## 16      13     25           14     1    82 custserv  
-## 17      10     22           13     1    14 custserv  
-## 18       9     24            6     1    63 custserv  
-## 19      20     16           14     3    50 dispatcher
-## 20      21     15            7     3    53 dispatcher
+##  1      21     19            9     2    29 mechanic  
+##  2      21     15            7     3    53 dispatcher
+##  3      18     28            7     1    79 custserv  
+##  4      20     28            8     1    65 custserv  
+##  5      18     27           11     2    57 mechanic  
+##  6      17     18            9     3    56 dispatcher
+##  7       8     28           12     1    68 custserv  
+##  8      14     29            7     1    24 custserv  
+##  9      20     13           19     3    36 dispatcher
+## 10      23     16           10     2    80 mechanic  
+## 11      13     20           16     3     4 dispatcher
+## 12      14     18           14     3    37 dispatcher
+## 13       8     29           14     1    20 custserv  
+## 14       6     27           11     1    21 custserv  
+## 15      14     26           15     3    45 dispatcher
+## 16       7     13            7     1    61 custserv  
+## 17      10     24           12     1    18 custserv  
+## 18      19     23           12     2    26 mechanic  
+## 19      20     14           18     3    62 dispatcher
+## 20      19     27           14     2    71 mechanic
 ```
 
  
@@ -2101,6 +2027,15 @@ since there is no reason to make things difficult for yourself:
 
 ```r
 library(car)
+```
+
+```
+## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
+## Please use `quo_squash()` instead.
+## This warning is displayed once per session.
+```
+
+```r
 response.2 <- lm(response ~ job, data = jobs)
 Manova(response.2)
 ```

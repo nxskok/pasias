@@ -12,83 +12,9 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'readr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'survminer' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggpubr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'magrittr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'car' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'carData' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'scales' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggrepel' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'broom' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'rstan' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
+## Please use `env_bind_active()` instead.
+## This warning is displayed once per session.
 ```
 
 
@@ -314,26 +240,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       junk  time  weight
 ##    <dbl> <chr>      <chr> <chr>  <dbl>
-##  1    21 control    Time  3        129
-##  2    11 thiouracil Time  4        122
-##  3    26 control    Time  1         67
-##  4    14 thiouracil Time  3        103
-##  5    24 control    Time  4        141
-##  6     7 thyroxin   Time  4        171
-##  7     7 thyroxin   Time  2        105
-##  8    23 control    Time  0         46
-##  9     1 thyroxin   Time  2        121
-## 10    25 control    Time  0         63
-## 11    21 control    Time  4        164
-## 12    18 control    Time  1         86
-## 13    14 thiouracil Time  0         56
-## 14    23 control    Time  2        102
-## 15     5 thyroxin   Time  1         72
-## 16     4 thyroxin   Time  3        148
-## 17     2 thyroxin   Time  2         90
-## 18    14 thiouracil Time  4        108
-## 19    13 thiouracil Time  0         51
-## 20     6 thyroxin   Time  2         97
+##  1     5 thyroxin   Time  1         72
+##  2    21 control    Time  2        100
+##  3    18 control    Time  4        172
+##  4    16 thiouracil Time  1         61
+##  5    26 control    Time  3        112
+##  6     7 thyroxin   Time  2        105
+##  7    14 thiouracil Time  4        108
+##  8     6 thyroxin   Time  1         73
+##  9    13 thiouracil Time  4        119
+## 10    26 control    Time  0         49
+## 11    25 control    Time  4        154
+## 12     9 thiouracil Time  2        101
+## 13    18 control    Time  1         86
+## 14    20 control    Time  2        111
+## 15    24 control    Time  4        141
+## 16     9 thiouracil Time  1         80
+## 17    19 control    Time  2        123
+## 18     3 thyroxin   Time  2        108
+## 19    21 control    Time  0         49
+## 20     5 thyroxin   Time  2         97
 ```
 
  
@@ -359,26 +285,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    21 control    Time1     67     1
-##  2     6 thyroxin   Time1     73     1
-##  3    16 thiouracil Time0     46     0
-##  4    17 thiouracil Time0     53     0
-##  5     8 thiouracil Time2    109     2
-##  6     2 thyroxin   Time1     71     1
-##  7    17 thiouracil Time3    104     3
-##  8    10 thiouracil Time1     79     1
-##  9    19 control    Time1     93     1
-## 10    10 thiouracil Time3    106     3
-## 11     9 thiouracil Time4    122     4
-## 12     8 thiouracil Time0     61     0
-## 13    17 thiouracil Time1     72     1
-## 14     9 thiouracil Time2    101     2
-## 15    19 control    Time2    123     2
-## 16    10 thiouracil Time4    133     4
-## 17     2 thyroxin   Time3    110     3
-## 18    23 control    Time1     70     1
-## 19    26 control    Time2     90     2
-## 20     7 thyroxin   Time1     70     1
+##  1    24 control    Time3    110     3
+##  2    13 thiouracil Time3    100     3
+##  3    16 thiouracil Time4    107     4
+##  4     4 thyroxin   Time2    116     2
+##  5    21 control    Time4    164     4
+##  6     3 thyroxin   Time3    151     3
+##  7     2 thyroxin   Time4    138     4
+##  8     8 thiouracil Time3    120     3
+##  9    16 thiouracil Time2     78     2
+## 10     2 thyroxin   Time1     71     1
+## 11    12 thiouracil Time2    101     2
+## 12     3 thyroxin   Time4    189     4
+## 13    10 thiouracil Time0     53     0
+## 14     2 thyroxin   Time2     90     2
+## 15    24 control    Time0     51     0
+## 16    12 thiouracil Time4    140     4
+## 17    20 control    Time3    144     3
+## 18     8 thiouracil Time1     86     1
+## 19     4 thyroxin   Time4    177     4
+## 20    13 thiouracil Time4    119     4
 ```
 
  
@@ -515,6 +441,15 @@ according to subject and colouring them according to
 
 ```r
 library(ggplot2)
+```
+
+```
+## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
+## Please use `quo_squash()` instead.
+## This warning is displayed once per session.
+```
+
+```r
 ggplot(wt, aes(time, weight, group = subject, colour = drug)) + geom_line()
 ```
 
@@ -1394,18 +1329,18 @@ airport
 
 ```
 ## # A tibble: 200 x 6
-##      epi_1   epi_2 epi_3 epi_4 location child
-##      <dbl>   <dbl> <dbl> <dbl>    <dbl> <dbl>
-##  1   89.6   253.   214.   209.        1     1
-##  2  -55.5    -1.45  26.0  259.        1     2
-##  3  201.    280.   265.   174.        1     3
-##  4  448.    349.   386.   225.        1     4
-##  5   -4.60  315.   331.   333.        1     5
-##  6  231.    237.   488.   319.        1     6
-##  7  227.    469.   382.   359.        1     7
-##  8  336.    280.   362.   472.        1     8
-##  9   16.8   190.    90.9  145.        1     9
-## 10   54.5   359.   454.   199.        1    10
+##     epi_1  epi_2 epi_3 epi_4 location child
+##     <dbl>  <dbl> <dbl> <dbl>    <dbl> <dbl>
+##  1  89.6  253.   214.   209.        1     1
+##  2 -55.5   -1.45  26.0  259.        1     2
+##  3 201.   280.   265.   174.        1     3
+##  4 448.   349.   386.   225.        1     4
+##  5  -4.60 315.   331.   333.        1     5
+##  6 231.   237.   488.   319.        1     6
+##  7 227.   469.   382.   359.        1     7
+##  8 336.   280.   362.   472.        1     8
+##  9  16.8  190.    90.9  145.        1     9
+## 10  54.5  359.   454.   199.        1    10
 ## # … with 190 more rows
 ```
 

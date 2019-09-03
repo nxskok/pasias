@@ -11,83 +11,9 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'readr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'survminer' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggpubr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'magrittr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'car' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'carData' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'scales' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggrepel' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'broom' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'rstan' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
+## Please use `env_bind_active()` instead.
+## This warning is displayed once per session.
 ```
 
 
@@ -151,7 +77,7 @@ weather.0
 ```
 ## # A tibble: 365 x 14
 ##    day.count   day month season l.temp h.temp ave.temp l.temp.time
-##        <dbl> <dbl> <dbl> <chr>   <dbl>  <dbl>    <dbl> <time>     
+##        <dbl> <dbl> <dbl> <chr>   <dbl>  <dbl>    <dbl> <drtn>     
 ##  1         1     1     1 Winter   12.7   14       13.4 01:25      
 ##  2         2     2     1 Winter   11.3   14.7     13.5 07:30      
 ##  3         3     3     1 Winter   12.6   14.7     13.6 21:00      
@@ -162,8 +88,8 @@ weather.0
 ##  8         8     8     1 Winter   12.4   15.6     14.1 23:50      
 ##  9         9     9     1 Winter    9.2   18.4     12.9 07:10      
 ## 10        10    10     1 Winter    8.3   14.8     11   07:55      
-## # … with 355 more rows, and 6 more variables: h.temp.time <time>,
-## #   rain <dbl>, ave.wind <dbl>, gust.wind <dbl>, gust.wind.time <time>,
+## # … with 355 more rows, and 6 more variables: h.temp.time <drtn>,
+## #   rain <dbl>, ave.wind <dbl>, gust.wind <dbl>, gust.wind.time <drtn>,
 ## #   dir.wind <chr>
 ```
 
@@ -807,7 +733,9 @@ library(ggmap)
 ```
 
 ```
-## Warning: package 'ggmap' was built under R version 3.5.2
+## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
+## Please use `quo_squash()` instead.
+## This warning is displayed once per session.
 ```
 
 ```

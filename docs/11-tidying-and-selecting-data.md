@@ -8,83 +8,9 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'readr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'survminer' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggpubr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'magrittr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'car' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'carData' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'scales' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggrepel' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'broom' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'rstan' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
+## Please use `env_bind_active()` instead.
+## This warning is displayed once per session.
 ```
 
 
@@ -153,7 +79,7 @@ jays
 ##  9    90    15 Wedn… boxs… TOR   NA    BAL   W          4       2      NA
 ## 10    91    16 Thur… boxs… TOR   NA    BAL   W          7       6      NA
 ## # … with 15 more rows, and 10 more variables: wl <chr>, position <dbl>,
-## #   gb <chr>, winner <chr>, loser <chr>, save <chr>, `game time` <time>,
+## #   gb <chr>, winner <chr>, loser <chr>, save <chr>, `game time` <drtn>,
 ## #   Daynight <chr>, attendance <dbl>, streak <chr>
 ```
 
@@ -238,7 +164,7 @@ jays %>% filter(opp == "NYY") %>% print(width = Inf)
 ## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
 ## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
 ##   Oppruns innings wl    position gb    winner  loser    save   `game time`
-##     <dbl>   <dbl> <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>     
+##     <dbl>   <dbl> <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <drtn>     
 ## 1       1      NA 13-14        4 3.5   Dickey  Martin   Cecil  02:18      
 ## 2       6      NA 13-15        5 4.5   Pineda  Estrada  Miller 02:54      
 ## 3       1      NA 14-15        3 3.5   Buehrle Sabathia <NA>   02:30      
@@ -295,7 +221,7 @@ jays %>% filter(opp == "NYY") %>% select(wl:streak) %>% print(width = Inf)
 ```
 ## # A tibble: 3 x 10
 ##   wl    position gb    winner  loser    save   `game time` Daynight
-##   <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>      <chr>   
+##   <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <drtn>      <chr>   
 ## 1 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N       
 ## 2 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N       
 ## 3 14-15        3 3.5   Buehrle Sabathia <NA>   02:30       N       
@@ -482,6 +408,15 @@ of these non-normal data, is Mood's median test:
 
 ```r
 library(smmr)
+```
+
+```
+## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
+## Please use `quo_squash()` instead.
+## This warning is displayed once per session.
+```
+
+```r
 median_test(jays, attendance, Daynight)
 ```
 
@@ -3728,7 +3663,7 @@ billboard
 ```
 ## # A tibble: 317 x 83
 ##     year artist.inverted track time  genre date.entered date.peaked
-##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>     
+##    <dbl> <chr>           <chr> <drt> <chr> <date>       <date>     
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18 
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08 
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29 
@@ -3800,7 +3735,7 @@ billboard %>% gather(week, rank, x1st.week:x76th.week, na.rm = T)
 ```
 ## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre date.entered date.peaked week 
-##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##    <dbl> <chr>           <chr> <drt> <chr> <date>       <date>      <chr>
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
@@ -3827,7 +3762,7 @@ billboard %>% gather(week, rank, ends_with("week"), na.rm = T)
 ```
 ## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre date.entered date.peaked week 
-##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##    <dbl> <chr>           <chr> <drt> <chr> <date>       <date>      <chr>
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
@@ -4482,7 +4417,7 @@ bikes
 ```
 ## # A tibble: 1,958 x 9
 ##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  2    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  3    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
@@ -4561,7 +4496,7 @@ bikes %>% fill(X1)
 ```
 ## # A tibble: 1,958 x 9
 ##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
@@ -4591,7 +4526,7 @@ bikes %>% fill(X1) %>% rename(Time = X1)
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9   
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
@@ -4647,7 +4582,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 10
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
@@ -4678,7 +4613,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 10
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    isX  
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <lgl>
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <lgl>
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
@@ -4720,7 +4655,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 10
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
@@ -4767,7 +4702,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 10
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
@@ -4843,7 +4778,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   male  female X4    X5    X6    X7    X8    X9   
-##    <time> <chr> <chr>  <chr> <chr> <chr> <chr> <chr> <chr>
+##    <drtn> <chr> <chr>  <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
 ##  2 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
 ##  3 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
@@ -4873,7 +4808,7 @@ bikes %>%
 ```
 ## # A tibble: 3,916 x 9
 ##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
 ##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
@@ -4907,7 +4842,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
 ##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
@@ -4937,7 +4872,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
 ##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
@@ -5016,7 +4951,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 13
 ##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
-##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##    <drt> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
 ##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
 ##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
 ##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
@@ -5056,7 +4991,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 13
 ##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
-##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##    <drt> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
 ##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
 ##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
 ##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
@@ -5093,7 +5028,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 11
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
@@ -5215,7 +5150,7 @@ mybikes
 ```
 ## # A tibble: 1,958 x 5
 ##    Time   gender helmet passenger sidewalk
-##    <time> <chr>  <lgl>  <lgl>     <lgl>   
+##    <drtn> <chr>  <lgl>  <lgl>     <lgl>   
 ##  1 07:00  male   FALSE  FALSE     FALSE   
 ##  2 07:00  male   FALSE  FALSE     FALSE   
 ##  3 07:00  male   FALSE  FALSE     FALSE   
@@ -5253,7 +5188,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 5
 ##    Time   gender helmet passenger sidewalk
-##    <time> <chr>  <lgl>  <lgl>     <lgl>   
+##    <drtn> <chr>  <lgl>  <lgl>     <lgl>   
 ##  1 07:00  male   FALSE  FALSE     FALSE   
 ##  2 07:00  male   FALSE  FALSE     FALSE   
 ##  3 07:00  male   FALSE  FALSE     FALSE   
@@ -5532,7 +5467,7 @@ mybikes %>% count(Time) %>% print(n = Inf)
 ```
 ## # A tibble: 48 x 2
 ##    Time       n
-##    <time> <int>
+##    <drtn> <int>
 ##  1 07:00      5
 ##  2 07:15      8
 ##  3 07:30      9
@@ -5603,7 +5538,7 @@ mybikes %>%
 ```
 ## # A tibble: 1 x 2
 ##   Time       n
-##   <time> <int>
+##   <drtn> <int>
 ## 1 17:15    128
 ```
 
@@ -6024,13 +5959,6 @@ This will need `lubridate`:
 
 ```r
 library(lubridate)
-```
-
-```
-## Warning: package 'lubridate' was built under R version 3.5.1
-```
-
-```r
 heat %>% select(-text) %>% mutate(year = year(date)) %>% sample_n(10)
 ```
 

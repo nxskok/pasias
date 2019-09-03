@@ -8,83 +8,9 @@ library(tidyverse)
 
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'readr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'survminer' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggpubr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'magrittr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'car' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'carData' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggbiplot' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'scales' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'ggrepel' was built under R version 3.5.1
-```
-
-```
-## Warning: package 'broom' was built under R version 3.5.2
-```
-
-```
-## Warning: package 'rstan' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'StanHeaders' was built under R version 3.5.1
+## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
+## Please use `env_bind_active()` instead.
+## This warning is displayed once per session.
 ```
 
 These problems are about simple regression (just one $x$-variable):
@@ -970,7 +896,9 @@ library(GGally)
 ```
 
 ```
-## Warning: package 'GGally' was built under R version 3.5.1
+## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
+## Please use `quo_squash()` instead.
+## This warning is displayed once per session.
 ```
 
 ```r
@@ -5529,13 +5457,6 @@ packages too, and then you read in a file like this:
 
 ```r
 library(rio)
-```
-
-```
-## Warning: package 'rio' was built under R version 3.5.1
-```
-
-```r
 pizza3 <- import(my_url)
 head(pizza3)
 ```
@@ -7478,28 +7399,28 @@ as_tibble(d)
 
 ```
 ## # A tibble: 20 x 10
-##    minutes drums weight .fitted .se.fit  .resid   .hat .sigma .cooksd
-##      <dbl> <dbl>  <dbl>   <dbl>   <dbl>   <dbl>  <dbl>  <dbl>   <dbl>
-##  1      58     7   5.11    55.7    1.70   2.34  0.0913   5.76 6.41e-3
-##  2     152    18  16.7    156.     2.47  -4.08  0.194    5.68 5.24e-2
-##  3      41     5   3.2     38.4    2.03   2.58  0.131    5.75 1.22e-2
-##  4      93    14   7.03    91.8    2.91   1.21  0.268    5.78 7.79e-3
-##  5     101    11  11.0    101.     2.17   0.453 0.149    5.79 4.45e-4
-##  6      38     5   4.04    42.7    2.11  -4.69  0.141    5.65 4.41e-2
-##  7     203    23  22.1    202.     3.68   0.903 0.429    5.78 1.13e-2
-##  8      78     9   7.03    72.9    1.45   5.05  0.0665   5.64 2.06e-2
-##  9     117    16  10.6    118.     2.06  -0.559 0.135    5.79 5.93e-4
-## 10      44     5   4.76    46.3    2.28  -2.34  0.165    5.75 1.37e-2
-## 11     121    17  11.0    123.     2.37  -2.36  0.179    5.75 1.56e-2
-## 12     112    12   9.51    96.8    1.27  15.2   0.0514   4.29 1.38e-1
-## 13      50     6   3.79    45.2    1.87   4.82  0.110    5.65 3.41e-2
-## 14      82    12   6.45    81.3    2.22   0.695 0.156    5.79 1.12e-3
-## 15      48     8   4.6     56.8    1.73  -8.84  0.0954   5.30 9.61e-2
-## 16     127    15  13.9    130.     2.01  -3.25  0.128    5.72 1.88e-2
-## 17     140    17  13.0    134.     1.75   6.43  0.0970   5.54 5.20e-2
-## 18     155    21  15.2    160.     2.70  -4.72  0.230    5.63 9.14e-2
-## 19      39     6   3.64    44.4    1.88  -5.42  0.112    5.61 4.40e-2
-## 20      90    11   9.57    93.4    1.51  -3.39  0.0725   5.72 1.02e-2
+##    minutes drums weight .fitted .se.fit .resid   .hat .sigma .cooksd
+##      <dbl> <dbl>  <dbl>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
+##  1      58     7   5.11    55.7    1.70  2.34  0.0913   5.76 6.41e-3
+##  2     152    18  16.7    156.     2.47 -4.08  0.194    5.68 5.24e-2
+##  3      41     5   3.2     38.4    2.03  2.58  0.131    5.75 1.22e-2
+##  4      93    14   7.03    91.8    2.91  1.21  0.268    5.78 7.79e-3
+##  5     101    11  11.0    101.     2.17  0.453 0.149    5.79 4.45e-4
+##  6      38     5   4.04    42.7    2.11 -4.69  0.141    5.65 4.41e-2
+##  7     203    23  22.1    202.     3.68  0.903 0.429    5.78 1.13e-2
+##  8      78     9   7.03    72.9    1.45  5.05  0.0665   5.64 2.06e-2
+##  9     117    16  10.6    118.     2.06 -0.559 0.135    5.79 5.93e-4
+## 10      44     5   4.76    46.3    2.28 -2.34  0.165    5.75 1.37e-2
+## 11     121    17  11.0    123.     2.37 -2.36  0.179    5.75 1.56e-2
+## 12     112    12   9.51    96.8    1.27 15.2   0.0514   4.29 1.38e-1
+## 13      50     6   3.79    45.2    1.87  4.82  0.110    5.65 3.41e-2
+## 14      82    12   6.45    81.3    2.22  0.695 0.156    5.79 1.12e-3
+## 15      48     8   4.6     56.8    1.73 -8.84  0.0954   5.30 9.61e-2
+## 16     127    15  13.9    130.     2.01 -3.25  0.128    5.72 1.88e-2
+## 17     140    17  13.0    134.     1.75  6.43  0.0970   5.54 5.20e-2
+## 18     155    21  15.2    160.     2.70 -4.72  0.230    5.63 9.14e-2
+## 19      39     6   3.64    44.4    1.88 -5.42  0.112    5.61 4.40e-2
+## 20      90    11   9.57    93.4    1.51 -3.39  0.0725   5.72 1.02e-2
 ## # … with 1 more variable: .std.resid <dbl>
 ```
 
