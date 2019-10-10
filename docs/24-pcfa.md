@@ -77,7 +77,7 @@ weather.0
 ```
 ## # A tibble: 365 x 14
 ##    day.count   day month season l.temp h.temp ave.temp l.temp.time
-##        <dbl> <dbl> <dbl> <chr>   <dbl>  <dbl>    <dbl> <drtn>     
+##        <dbl> <dbl> <dbl> <chr>   <dbl>  <dbl>    <dbl> <time>     
 ##  1         1     1     1 Winter   12.7   14       13.4 01:25      
 ##  2         2     2     1 Winter   11.3   14.7     13.5 07:30      
 ##  3         3     3     1 Winter   12.6   14.7     13.6 21:00      
@@ -88,8 +88,8 @@ weather.0
 ##  8         8     8     1 Winter   12.4   15.6     14.1 23:50      
 ##  9         9     9     1 Winter    9.2   18.4     12.9 07:10      
 ## 10        10    10     1 Winter    8.3   14.8     11   07:55      
-## # … with 355 more rows, and 6 more variables: h.temp.time <drtn>,
-## #   rain <dbl>, ave.wind <dbl>, gust.wind <dbl>, gust.wind.time <drtn>,
+## # … with 355 more rows, and 6 more variables: h.temp.time <time>,
+## #   rain <dbl>, ave.wind <dbl>, gust.wind <dbl>, gust.wind.time <time>,
 ## #   dir.wind <chr>
 ```
 
@@ -171,14 +171,25 @@ weather %>%
 ```
 
 ```
-## # A tibble: 5 x 7
-##   name  ave.temp ave.wind gust.wind h.temp l.temp  rain
-##   <chr>    <dbl>    <dbl>     <dbl>  <dbl>  <dbl> <dbl>
-## 1 0%         7.3      0         3.2    9.8    3.1   0  
-## 2 25%       12        2.3      22.5   14.4    9.1   0  
-## 3 50%       15.8      3.5      29     19.1   12.9   0.3
-## 4 75%       19.3      5.2      38.6   23.3   16.3   5.3
-## 5 100%      26.6     16.6      86.9   31.5   22.6  74.9
+## Warning: All elements of `...` must be named.
+## Did you want `data = c(x)`?
+```
+
+```
+## # A tibble: 30 x 8
+##              data name  ave.temp ave.wind gust.wind h.temp l.temp  rain
+##    <list<df[,1]>> <chr>    <dbl>    <dbl>     <dbl>  <dbl>  <dbl> <dbl>
+##  1      [365 × 1] 0%        NA         NA      NA     NA      3.1    NA
+##  2      [365 × 1] 0%        NA         NA      NA      9.8   NA      NA
+##  3      [365 × 1] 0%         7.3       NA      NA     NA     NA      NA
+##  4      [365 × 1] 0%        NA         NA      NA     NA     NA       0
+##  5      [365 × 1] 0%        NA          0      NA     NA     NA      NA
+##  6      [365 × 1] 0%        NA         NA       3.2   NA     NA      NA
+##  7      [365 × 1] 25%       NA         NA      NA     NA      9.1    NA
+##  8      [365 × 1] 25%       NA         NA      NA     14.4   NA      NA
+##  9      [365 × 1] 25%       12         NA      NA     NA     NA      NA
+## 10      [365 × 1] 25%       NA         NA      NA     NA     NA       0
+## # … with 20 more rows
 ```
 
  
@@ -1016,14 +1027,25 @@ air %>%
 ```
 
 ```
-## # A tibble: 5 x 8
-##   name     CO    HC    NO   NO2    O3 solar.radiation  wind
-##   <chr> <dbl> <dbl> <dbl> <dbl> <dbl>           <dbl> <dbl>
-## 1 0%        2     2     1   5     2              30    5   
-## 2 25%       4     3     1   8     6              68.2  6   
-## 3 50%       4     3     2   9.5   8.5            76.5  8   
-## 4 75%       5     3     3  12    11              84.8  8.75
-## 5 100%      7     5     5  21    25             107   10
+## Warning: All elements of `...` must be named.
+## Did you want `data = c(x)`?
+```
+
+```
+## # A tibble: 35 x 9
+##              data name     CO    HC    NO   NO2    O3 solar.radiation  wind
+##    <list<df[,1]>> <chr> <dbl> <dbl> <dbl> <dbl> <dbl>           <dbl> <dbl>
+##  1       [42 × 1] 0%       NA    NA    NA    NA    NA            NA       5
+##  2       [42 × 1] 0%       NA    NA    NA    NA    NA            30      NA
+##  3       [42 × 1] 0%        2    NA    NA    NA    NA            NA      NA
+##  4       [42 × 1] 0%       NA    NA     1    NA    NA            NA      NA
+##  5       [42 × 1] 0%       NA    NA    NA     5    NA            NA      NA
+##  6       [42 × 1] 0%       NA    NA    NA    NA     2            NA      NA
+##  7       [42 × 1] 0%       NA     2    NA    NA    NA            NA      NA
+##  8       [42 × 1] 25%      NA    NA    NA    NA    NA            NA       6
+##  9       [42 × 1] 25%      NA    NA    NA    NA    NA            68.2    NA
+## 10       [42 × 1] 25%       4    NA    NA    NA    NA            NA      NA
+## # … with 25 more rows
 ```
 
  

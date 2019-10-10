@@ -1281,13 +1281,16 @@ anxiety %>% summarize_if(is.numeric,funs(mean,sd))
 
 ```
 ## Warning: funs() is soft deprecated as of dplyr 0.8.0
-## please use list() instead
+## Please use a list of either functions or lambdas: 
 ## 
-## # Before:
-## funs(name = f(.)
+##   # Simple named list: 
+##   list(mean = mean, median = median)
 ## 
-## # After: 
-## list(name = ~f(.))
+##   # Auto named with `tibble::lst()`: 
+##   tibble::lst(mean, median)
+## 
+##   # Using lambdas
+##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
 ## This warning is displayed once per session.
 ```
 
@@ -1813,11 +1816,16 @@ marks %>%
 ```
 
 ```
+## Warning: All elements of `...` must be named.
+## Did you want `data = c(score)`?
+```
+
+```
 ## # A tibble: 2 x 2
-##   class  data            
-##   <chr>  <list>          
-## 1 ken    <tibble [5 × 1]>
-## 2 thomas <tibble [6 × 1]>
+##   class            data
+##   <chr>  <list<df[,1]>>
+## 1 ken           [5 × 1]
+## 2 thomas        [6 × 1]
 ```
 
  
@@ -1842,11 +1850,16 @@ marks %>%
 ```
 
 ```
+## Warning: All elements of `...` must be named.
+## Did you want `data = c(score)`?
+```
+
+```
 ## # A tibble: 2 x 3
-##   class  data             qq       
-##   <chr>  <list>           <list>   
-## 1 ken    <tibble [5 × 1]> <dbl [5]>
-## 2 thomas <tibble [6 × 1]> <dbl [5]>
+##   class            data qq       
+##   <chr>  <list<df[,1]>> <list>   
+## 1 ken           [5 × 1] <dbl [5]>
+## 2 thomas        [6 × 1] <dbl [5]>
 ```
 
   
@@ -1870,19 +1883,24 @@ marks %>%
 ```
 
 ```
-## # A tibble: 10 x 2
-##    class     qq
-##    <chr>  <dbl>
-##  1 ken     59  
-##  2 ken     62  
-##  3 ken     69  
-##  4 ken     78  
-##  5 ken     81  
-##  6 thomas  61  
-##  7 thomas  65.2
-##  8 thomas  74.5
-##  9 thomas  78.5
-## 10 thomas  83
+## Warning: All elements of `...` must be named.
+## Did you want `data = c(score)`?
+```
+
+```
+## # A tibble: 10 x 3
+##    class            data    qq
+##    <chr>  <list<df[,1]>> <dbl>
+##  1 ken           [5 × 1]  59  
+##  2 ken           [5 × 1]  62  
+##  3 ken           [5 × 1]  69  
+##  4 ken           [5 × 1]  78  
+##  5 ken           [5 × 1]  81  
+##  6 thomas        [6 × 1]  61  
+##  7 thomas        [6 × 1]  65.2
+##  8 thomas        [6 × 1]  74.5
+##  9 thomas        [6 × 1]  78.5
+## 10 thomas        [6 × 1]  83
 ```
 
   
@@ -1954,11 +1972,16 @@ marks %>%
 ```
 
 ```
+## Warning: All elements of `...` must be named.
+## Did you want `data = c(score)`?
+```
+
+```
 ## # A tibble: 2 x 3
-##   class  data             qq              
-##   <chr>  <list>           <list>          
-## 1 ken    <tibble [5 × 1]> <tibble [5 × 2]>
-## 2 thomas <tibble [6 × 1]> <tibble [5 × 2]>
+##   class            data qq              
+##   <chr>  <list<df[,1]>> <list>          
+## 1 ken           [5 × 1] <tibble [5 × 2]>
+## 2 thomas        [6 × 1] <tibble [5 × 2]>
 ```
 
  
@@ -1977,19 +2000,24 @@ marks %>%
 ```
 
 ```
-## # A tibble: 10 x 3
-##    class  name  value
-##    <chr>  <chr> <dbl>
-##  1 ken    0%     59  
-##  2 ken    25%    62  
-##  3 ken    50%    69  
-##  4 ken    75%    78  
-##  5 ken    100%   81  
-##  6 thomas 0%     61  
-##  7 thomas 25%    65.2
-##  8 thomas 50%    74.5
-##  9 thomas 75%    78.5
-## 10 thomas 100%   83
+## Warning: All elements of `...` must be named.
+## Did you want `data = c(score)`?
+```
+
+```
+## # A tibble: 10 x 4
+##    class            data name  value
+##    <chr>  <list<df[,1]>> <chr> <dbl>
+##  1 ken           [5 × 1] 0%     59  
+##  2 ken           [5 × 1] 25%    62  
+##  3 ken           [5 × 1] 50%    69  
+##  4 ken           [5 × 1] 75%    78  
+##  5 ken           [5 × 1] 100%   81  
+##  6 thomas        [6 × 1] 0%     61  
+##  7 thomas        [6 × 1] 25%    65.2
+##  8 thomas        [6 × 1] 50%    74.5
+##  9 thomas        [6 × 1] 75%    78.5
+## 10 thomas        [6 × 1] 100%   83
 ```
 
  
@@ -2008,11 +2036,16 @@ marks %>%
 ```
 
 ```
-## # A tibble: 2 x 6
-##   class    `0`  `25`  `50`  `75` `100`
-##   <chr>  <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 ken       59  62    69    78      81
-## 2 thomas    61  65.2  74.5  78.5    83
+## Warning: All elements of `...` must be named.
+## Did you want `data = c(score)`?
+```
+
+```
+## # A tibble: 2 x 7
+##   class            data   `0`  `25`  `50`  `75` `100`
+##   <chr>  <list<df[,1]>> <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1 ken           [5 × 1]    59  62    69    78      81
+## 2 thomas        [6 × 1]    61  65.2  74.5  78.5    83
 ```
 
  

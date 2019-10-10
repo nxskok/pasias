@@ -331,8 +331,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="bayesian-statistics-with-rstan" class="section level1">
 <h1><span class="header-section-number">Chapter 18</span> Bayesian Statistics with <code>rstan</code></h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb1865"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1865-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1865-2" data-line-number="2"><span class="kw">library</span>(rstan)</a></code></pre></div>
+<div class="sourceCode" id="cb1872"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1872-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1872-2" data-line-number="2"><span class="kw">library</span>(rstan)</a></code></pre></div>
 <div id="estimating-proportion-in-favour-from-a-survey" class="section level2">
 <h2><span class="header-section-number">18.1</span> Estimating proportion in favour from a survey</h2>
 <p>You are probably familiar with the kind of surveys where you are given a statement, like “I am the kind of person that finishes a task they start”,
@@ -463,7 +463,7 @@ It doesn’t matter how many errors you make; what matters is that you find and 
 </ol>
 <p>Solution</p>
 <p>Go down to the console and type something like</p>
-<div class="sourceCode" id="cb1873"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1873-1" data-line-number="1">binomial_code &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;binomial.stan&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1880"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1880-1" data-line-number="1">binomial_code &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;binomial.stan&quot;</span>)</a></code></pre></div>
 <p>If it doesn’t work, make sure you installed and loaded <code>rstan</code> first, with <code>install.packages(&quot;rstan&quot;)</code> and <code>library(rstan)</code> respectively.</p>
 <p>If it sits there and does nothing for a while, this is actually a good sign. If it finds an error, it will tell you. If you get your command prompt <code>&gt;</code> back without it saying anything, that means it worked. (This is a Unix thing: no comment means no error.)</p>
 <ol start="8" style="list-style-type: lower-alpha">
@@ -475,19 +475,19 @@ A beta prior with <span class="math inline">\(\alpha=\beta=2\)</span> expresses 
 <p>Solution</p>
 <p>Look in your <code>data</code> section, and see what you need to provide values for.
 The order doesn’t matter; make a list with the named pieces and their values, in some order. You need values for these four things:</p>
-<div class="sourceCode" id="cb1874"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1874-1" data-line-number="1">binomial_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">277</span>, <span class="dt">x =</span> <span class="dv">69</span>, <span class="dt">alpha =</span> <span class="dv">2</span>, <span class="dt">beta =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1881"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1881-1" data-line-number="1">binomial_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">277</span>, <span class="dt">x =</span> <span class="dv">69</span>, <span class="dt">alpha =</span> <span class="dv">2</span>, <span class="dt">beta =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p>Extra: in case you are wondering where the parameters for the prior came from: in this case, I looked on the Wikipedia page for the beta distribution and saw that <span class="math inline">\(\alpha=\beta=2\)</span> is a good shape, so I used that.
 In practice, getting a reasonable prior is a more difficult problem, called “elicitation”.
 What you have to do is ask a subject matter expert what they think <code>p</code> might be, giving you a range of values such as a guessed-at 95% confidence interval, like “I think <code>p</code> is almost certainly between 0.1 and 0.6”.
 Then <em>you</em> as a statistician have to choose values for <code>alpha</code> and <code>beta</code> that match this, probably by trial and error.
 The <code>beta</code> distribution is part of R, so this is doable, for example like this:</p>
-<div class="sourceCode" id="cb1875"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1875-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1875-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb1875-3" data-line-number="3">    <span class="dt">lower =</span> <span class="kw">qbeta</span>(<span class="fl">0.025</span>, alpha, beta),</a>
-<a class="sourceLine" id="cb1875-4" data-line-number="4">    <span class="dt">upper =</span> <span class="kw">qbeta</span>(<span class="fl">0.975</span>, alpha, beta)</a>
-<a class="sourceLine" id="cb1875-5" data-line-number="5">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1875-6" data-line-number="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sse =</span> (lower <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>)<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>(upper <span class="op">-</span><span class="st"> </span><span class="fl">0.6</span>)<span class="op">^</span><span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1875-7" data-line-number="7"><span class="st">  </span><span class="kw">arrange</span>(sse)</a></code></pre></div>
+<div class="sourceCode" id="cb1882"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1882-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1882-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb1882-3" data-line-number="3">    <span class="dt">lower =</span> <span class="kw">qbeta</span>(<span class="fl">0.025</span>, alpha, beta),</a>
+<a class="sourceLine" id="cb1882-4" data-line-number="4">    <span class="dt">upper =</span> <span class="kw">qbeta</span>(<span class="fl">0.975</span>, alpha, beta)</a>
+<a class="sourceLine" id="cb1882-5" data-line-number="5">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1882-6" data-line-number="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sse =</span> (lower <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>)<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>(upper <span class="op">-</span><span class="st"> </span><span class="fl">0.6</span>)<span class="op">^</span><span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1882-7" data-line-number="7"><span class="st">  </span><span class="kw">arrange</span>(sse)</a></code></pre></div>
 <pre><code>## # A tibble: 100 x 5
 ##    alpha  beta  lower upper      sse
 ##    &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
@@ -510,15 +510,15 @@ The <code>beta</code> distribution is part of R, so this is doable, for example 
 <li><p>Find the 2.5 and 97.5 percentiles of the beta distribution for each of those values.
 The “inverse CDF” (the value <span class="math inline">\(x\)</span> that has this much of the probability below it) is what we want here; this is obtained in R by putting <code>q</code> in front of the name of the distribution. For example, does this make sense to you?</p></li>
 </ul>
-<div class="sourceCode" id="cb1877"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1877-1" data-line-number="1"><span class="kw">qnorm</span>(<span class="fl">0.025</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1884"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1884-1" data-line-number="1"><span class="kw">qnorm</span>(<span class="fl">0.025</span>)</a></code></pre></div>
 <pre><code>## [1] -1.959964</code></pre>
 <p>Also, <code>qbeta</code> is “vectorized”, so the <code>alpha</code> and
 <code>beta</code> can be entire columns rather than just numbers, and it
 will work. If you want to, you can use <code>map2</code> to do it for each
 <code>alpha</code> and <code>beta</code>, something like this (this does the lower end of the interval):</p>
-<div class="sourceCode" id="cb1879"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1879-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1879-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lower =</span> <span class="kw">map2_dbl</span>(alpha, beta, <span class="op">~</span><span class="st"> </span><span class="kw">qbeta</span>(<span class="fl">0.025</span>, .x, .y))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1879-3" data-line-number="3"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">abs</span>(lower <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1886"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1886-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1886-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lower =</span> <span class="kw">map2_dbl</span>(alpha, beta, <span class="op">~</span><span class="st"> </span><span class="kw">qbeta</span>(<span class="fl">0.025</span>, .x, .y))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1886-3" data-line-number="3"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">abs</span>(lower <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 100 x 3
 ##    alpha  beta  lower
 ##    &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
@@ -544,12 +544,12 @@ will work. If you want to, you can use <code>map2</code> to do it for each
 </ol>
 <p>Solution</p>
 <p>This is what I got:</p>
-<div class="sourceCode" id="cb1881"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1881-1" data-line-number="1">binomial<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(binomial_code, binomial_data)</a></code></pre></div>
+<div class="sourceCode" id="cb1888"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1888-1" data-line-number="1">binomial<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(binomial_code, binomial_data)</a></code></pre></div>
 <pre><code>## 
 ## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 5e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+## Chain 1: Gradient evaluation took 4e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -566,15 +566,15 @@ will work. If you want to, you can use <code>map2</code> to do it for each
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.007147 seconds (Warm-up)
-## Chain 1:                0.006352 seconds (Sampling)
-## Chain 1:                0.013499 seconds (Total)
+## Chain 1:  Elapsed Time: 0.008569 seconds (Warm-up)
+## Chain 1:                0.010005 seconds (Sampling)
+## Chain 1:                0.018574 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 7e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 2: Gradient evaluation took 8e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -591,15 +591,15 @@ will work. If you want to, you can use <code>map2</code> to do it for each
 ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.007143 seconds (Warm-up)
-## Chain 2:                0.007129 seconds (Sampling)
-## Chain 2:                0.014272 seconds (Total)
+## Chain 2:  Elapsed Time: 0.012439 seconds (Warm-up)
+## Chain 2:                0.007603 seconds (Sampling)
+## Chain 2:                0.020042 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 4e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+## Chain 3: Gradient evaluation took 5e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -616,15 +616,15 @@ will work. If you want to, you can use <code>map2</code> to do it for each
 ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.006948 seconds (Warm-up)
-## Chain 3:                0.006692 seconds (Sampling)
-## Chain 3:                0.01364 seconds (Total)
+## Chain 3:  Elapsed Time: 0.007632 seconds (Warm-up)
+## Chain 3:                0.009317 seconds (Sampling)
+## Chain 3:                0.016949 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 4).
 ## Chain 4: 
-## Chain 4: Gradient evaluation took 4e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+## Chain 4: Gradient evaluation took 7e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 ## Chain 4: Adjust your expectations accordingly!
 ## Chain 4: 
 ## Chain 4: 
@@ -641,23 +641,23 @@ will work. If you want to, you can use <code>map2</code> to do it for each
 ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.009232 seconds (Warm-up)
-## Chain 4:                0.006466 seconds (Sampling)
-## Chain 4:                0.015698 seconds (Total)
+## Chain 4:  Elapsed Time: 0.010153 seconds (Warm-up)
+## Chain 4:                0.010654 seconds (Sampling)
+## Chain 4:                0.020807 seconds (Total)
 ## Chain 4:</code></pre>
-<div class="sourceCode" id="cb1883"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1883-1" data-line-number="1">binomial<span class="fl">.1</span></a></code></pre></div>
+<div class="sourceCode" id="cb1890"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1890-1" data-line-number="1">binomial<span class="fl">.1</span></a></code></pre></div>
 <pre><code>## Inference for Stan model: binomial.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-## p       0.25    0.00 0.03    0.21    0.23    0.25    0.27    0.30  1610
-## lp__ -159.32    0.02 0.69 -161.32 -159.49 -159.06 -158.88 -158.84  1815
+## p       0.25    0.00 0.03    0.21    0.23    0.25    0.27    0.30  1516
+## lp__ -159.33    0.02 0.69 -161.28 -159.50 -159.05 -158.89 -158.84  1804
 ##      Rhat
 ## p       1
 ## lp__    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Sep  3 10:34:46 2019.
+## Samples were drawn using NUTS(diag_e) at Thu Oct 10 17:14:05 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -672,7 +672,7 @@ will work. If you want to, you can use <code>map2</code> to do it for each
 </ol>
 <p>Solution</p>
 <p>If you remember this well enough, you can do it by hand, but there’s no need:</p>
-<div class="sourceCode" id="cb1885"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1885-1" data-line-number="1"><span class="kw">prop.test</span>(<span class="dv">69</span>, <span class="dv">277</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1892"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1892-1" data-line-number="1"><span class="kw">prop.test</span>(<span class="dv">69</span>, <span class="dv">277</span>)</a></code></pre></div>
 <pre><code>## 
 ##  1-sample proportions test with continuity correction
 ## 
@@ -862,7 +862,7 @@ correct, compile it.</li>
 <p>Click the Check button top right of the window where your Stan
 code is. If it finds any errors, correct them and try again.</p>
 <p>To compile, the usual thing:</p>
-<div class="sourceCode" id="cb1894"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1894-1" data-line-number="1">reg_code &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;reg.stan&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1901"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1901-1" data-line-number="1">reg_code &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;reg.stan&quot;</span>)</a></code></pre></div>
 <p>and wait for it to do its thing. With luck, Check will have found all
 the errors and this will quietly (eventually) do its job.</p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -923,14 +923,14 @@ in and display the data; the values are separated by single spaces.</li>
 </ol>
 <p>Solution</p>
 <p>Thus:</p>
-<div class="sourceCode" id="cb1895"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1895-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt&quot;</span></a>
-<a class="sourceLine" id="cb1895-2" data-line-number="2">vocabulary &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1902"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1902-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt&quot;</span></a>
+<a class="sourceLine" id="cb1902-2" data-line-number="2">vocabulary &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   age = col_double(),
 ##   vocab = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1897"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1897-1" data-line-number="1">vocabulary</a></code></pre></div>
+<div class="sourceCode" id="cb1904"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1904-1" data-line-number="1">vocabulary</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ##      age vocab
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -951,20 +951,20 @@ error SD. What is the 95% posterior interval for the slope?</li>
 </ol>
 <p>Solution</p>
 <p>Two parts: set up the data, and then feed it into <code>sampling</code>:</p>
-<div class="sourceCode" id="cb1899"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1899-1" data-line-number="1">reg_data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb1899-2" data-line-number="2">  <span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">x =</span> vocabulary<span class="op">$</span>age, <span class="dt">y =</span> vocabulary<span class="op">$</span>vocab,</a>
-<a class="sourceLine" id="cb1899-3" data-line-number="3">  <span class="dt">prior_int_mean =</span> <span class="dv">-500</span>,</a>
-<a class="sourceLine" id="cb1899-4" data-line-number="4">  <span class="dt">prior_int_sd =</span> <span class="dv">125</span>,</a>
-<a class="sourceLine" id="cb1899-5" data-line-number="5">  <span class="dt">prior_slope_mean =</span> <span class="dv">500</span>,</a>
-<a class="sourceLine" id="cb1899-6" data-line-number="6">  <span class="dt">prior_slope_sd =</span> <span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb1899-7" data-line-number="7">  <span class="dt">prior_sigma_mean =</span> <span class="dv">200</span></a>
-<a class="sourceLine" id="cb1899-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb1899-9" data-line-number="9">reg<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(reg_code, reg_data)</a></code></pre></div>
+<div class="sourceCode" id="cb1906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1906-1" data-line-number="1">reg_data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb1906-2" data-line-number="2">  <span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">x =</span> vocabulary<span class="op">$</span>age, <span class="dt">y =</span> vocabulary<span class="op">$</span>vocab,</a>
+<a class="sourceLine" id="cb1906-3" data-line-number="3">  <span class="dt">prior_int_mean =</span> <span class="dv">-500</span>,</a>
+<a class="sourceLine" id="cb1906-4" data-line-number="4">  <span class="dt">prior_int_sd =</span> <span class="dv">125</span>,</a>
+<a class="sourceLine" id="cb1906-5" data-line-number="5">  <span class="dt">prior_slope_mean =</span> <span class="dv">500</span>,</a>
+<a class="sourceLine" id="cb1906-6" data-line-number="6">  <span class="dt">prior_slope_sd =</span> <span class="dv">100</span>,</a>
+<a class="sourceLine" id="cb1906-7" data-line-number="7">  <span class="dt">prior_sigma_mean =</span> <span class="dv">200</span></a>
+<a class="sourceLine" id="cb1906-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb1906-9" data-line-number="9">reg<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(reg_code, reg_data)</a></code></pre></div>
 <pre><code>## 
 ## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 7e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 1: Gradient evaluation took 6e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -981,15 +981,15 @@ error SD. What is the 95% posterior interval for the slope?</li>
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.113239 seconds (Warm-up)
-## Chain 1:                0.021644 seconds (Sampling)
-## Chain 1:                0.134883 seconds (Total)
+## Chain 1:  Elapsed Time: 0.100403 seconds (Warm-up)
+## Chain 1:                0.026668 seconds (Sampling)
+## Chain 1:                0.127071 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 5e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+## Chain 2: Gradient evaluation took 6e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -1006,9 +1006,9 @@ error SD. What is the 95% posterior interval for the slope?</li>
 ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.111417 seconds (Warm-up)
-## Chain 2:                0.026474 seconds (Sampling)
-## Chain 2:                0.137891 seconds (Total)
+## Chain 2:  Elapsed Time: 0.110347 seconds (Warm-up)
+## Chain 2:                0.024471 seconds (Sampling)
+## Chain 2:                0.134818 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 3).
@@ -1031,15 +1031,15 @@ error SD. What is the 95% posterior interval for the slope?</li>
 ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.099279 seconds (Warm-up)
-## Chain 3:                0.022469 seconds (Sampling)
-## Chain 3:                0.121748 seconds (Total)
+## Chain 3:  Elapsed Time: 0.108533 seconds (Warm-up)
+## Chain 3:                0.021749 seconds (Sampling)
+## Chain 3:                0.130282 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 4).
 ## Chain 4: 
-## Chain 4: Gradient evaluation took 8e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
+## Chain 4: Gradient evaluation took 6e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 4: Adjust your expectations accordingly!
 ## Chain 4: 
 ## Chain 4: 
@@ -1056,27 +1056,27 @@ error SD. What is the 95% posterior interval for the slope?</li>
 ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.090049 seconds (Warm-up)
-## Chain 4:                0.023887 seconds (Sampling)
-## Chain 4:                0.113936 seconds (Total)
+## Chain 4:  Elapsed Time: 0.103209 seconds (Warm-up)
+## Chain 4:                0.023716 seconds (Sampling)
+## Chain 4:                0.126925 seconds (Total)
 ## Chain 4:</code></pre>
-<div class="sourceCode" id="cb1901"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1901-1" data-line-number="1">reg<span class="fl">.1</span></a></code></pre></div>
+<div class="sourceCode" id="cb1908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1908-1" data-line-number="1">reg<span class="fl">.1</span></a></code></pre></div>
 <pre><code>## Inference for Stan model: reg.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
-##          mean se_mean     sd    2.5%     25%     50%     75%   97.5% n_eff
-## a     -614.04    2.67 101.47 -815.07 -682.45 -614.54 -546.18 -411.78  1448
-## b      520.85    0.72  27.82  465.51  502.83  520.69  539.66  575.39  1513
-## sigma  190.21    0.40  19.05  154.09  177.07  189.92  202.46  230.20  2229
-## lp__   373.66    0.03   1.27  370.29  373.08  374.01  374.60  375.11  1413
+##          mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff
+## a     -611.48    2.26 97.77 -801.80 -677.70 -612.36 -545.14 -422.60  1869
+## b      520.09    0.62 26.65  467.42  501.98  520.26  538.43  570.96  1850
+## sigma  189.32    0.39 18.99  154.57  176.05  188.11  202.32  228.67  2360
+## lp__   373.73    0.03  1.22  370.46  373.19  374.04  374.60  375.11  1627
 ##       Rhat
 ## a        1
 ## b        1
 ## sigma    1
 ## lp__     1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Sep  3 10:34:48 2019.
+## Samples were drawn using NUTS(diag_e) at Thu Oct 10 17:14:08 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -1088,39 +1088,39 @@ set)? Use an appropriate predictive distribution.</li>
 </ol>
 <p>Solution</p>
 <p>If you have done STAC67, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:</p>
-<div class="sourceCode" id="cb1903"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1903-1" data-line-number="1">reg_samples &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(reg<span class="fl">.1</span>)</a>
-<a class="sourceLine" id="cb1903-2" data-line-number="2"><span class="kw">cbind</span>(<span class="dt">a =</span> reg_samples<span class="op">$</span>a, <span class="dt">b =</span> reg_samples<span class="op">$</span>b, <span class="dt">sigma =</span> reg_samples<span class="op">$</span>sigma) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1903-3" data-line-number="3"><span class="st">  </span><span class="kw">as_tibble</span>() -&gt;<span class="st"> </span>sims</a>
-<a class="sourceLine" id="cb1903-4" data-line-number="4">sims</a></code></pre></div>
+<div class="sourceCode" id="cb1910"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1910-1" data-line-number="1">reg_samples &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(reg<span class="fl">.1</span>)</a>
+<a class="sourceLine" id="cb1910-2" data-line-number="2"><span class="kw">cbind</span>(<span class="dt">a =</span> reg_samples<span class="op">$</span>a, <span class="dt">b =</span> reg_samples<span class="op">$</span>b, <span class="dt">sigma =</span> reg_samples<span class="op">$</span>sigma) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1910-3" data-line-number="3"><span class="st">  </span><span class="kw">as_tibble</span>() -&gt;<span class="st"> </span>sims</a>
+<a class="sourceLine" id="cb1910-4" data-line-number="4">sims</a></code></pre></div>
 <pre><code>## # A tibble: 4,000 x 3
 ##        a     b sigma
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 -541.  536.  188.
-##  2 -708.  542.  180.
-##  3 -568.  531.  185.
-##  4 -770.  555.  186.
-##  5 -705.  552.  169.
-##  6 -824.  590.  150.
-##  7 -539.  548.  209.
-##  8 -590.  507.  191.
-##  9 -532.  511.  186.
-## 10 -494.  487.  212.
+##  1 -645.  518.  172.
+##  2 -621.  532.  166.
+##  3 -562.  504.  193.
+##  4 -657.  520.  179.
+##  5 -561.  503.  219.
+##  6 -559.  492.  191.
+##  7 -484.  494.  160.
+##  8 -575.  510.  172.
+##  9 -680.  537.  168.
+## 10 -641.  531.  174.
 ## # … with 3,990 more rows</code></pre>
 <p>and now we need to simulate some response values for our notional child of age 5. That means simulating for an <code>x</code> of 5, using each of those values of <code>a</code>, <code>b</code> and <code>sigma</code>:</p>
-<div class="sourceCode" id="cb1905"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1905-1" data-line-number="1">sims <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1905-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim_vocab =</span> <span class="kw">rnorm</span>(<span class="kw">nrow</span>(sims), a <span class="op">+</span><span class="st"> </span>b <span class="op">*</span><span class="st"> </span><span class="dv">5</span>, sigma)) -&gt;<span class="st"> </span>sims2</a>
-<a class="sourceLine" id="cb1905-3" data-line-number="3"><span class="kw">ggplot</span>(sims2, <span class="kw">aes</span>(<span class="dt">x =</span> sim_vocab)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1912"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1912-1" data-line-number="1">sims <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1912-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim_vocab =</span> <span class="kw">rnorm</span>(<span class="kw">nrow</span>(sims), a <span class="op">+</span><span class="st"> </span>b <span class="op">*</span><span class="st"> </span><span class="dv">5</span>, sigma)) -&gt;<span class="st"> </span>sims2</a>
+<a class="sourceLine" id="cb1912-3" data-line-number="3"><span class="kw">ggplot</span>(sims2, <span class="kw">aes</span>(<span class="dt">x =</span> sim_vocab)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>)</a></code></pre></div>
 <p><img src="27-stan_files/figure-html/unnamed-chunk-19-1.png" width="672"  /></p>
 <p>That’s the distribution of the vocabulary size of children aged 5. We can get a 95% interval from this the usual way: find the 2.5 and 97.5 percentiles:</p>
-<div class="sourceCode" id="cb1906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1906-1" data-line-number="1"><span class="kw">with</span>(sims2, <span class="kw">quantile</span>(sim_vocab, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb1913"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1913-1" data-line-number="1"><span class="kw">with</span>(sims2, <span class="kw">quantile</span>(sim_vocab, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)))</a></code></pre></div>
 <pre><code>##     2.5%    97.5% 
-## 1582.832 2393.181</code></pre>
+## 1586.062 2402.477</code></pre>
 <p>The actual child of age 5 that we observed had a vocabulary of 2060
 words, squarely in the middle of this interval.</p>
 <p>Is the posterior predictive interval like the prediction interval?</p>
-<div class="sourceCode" id="cb1908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1908-1" data-line-number="1">vocabulary<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(vocab <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> vocabulary)</a>
-<a class="sourceLine" id="cb1908-2" data-line-number="2">new &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb1908-3" data-line-number="3"><span class="kw">predict</span>(vocabulary<span class="fl">.1</span>, new, <span class="dt">interval =</span> <span class="st">&quot;p&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1915-1" data-line-number="1">vocabulary<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(vocab <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> vocabulary)</a>
+<a class="sourceLine" id="cb1915-2" data-line-number="2">new &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb1915-3" data-line-number="3"><span class="kw">predict</span>(vocabulary<span class="fl">.1</span>, new, <span class="dt">interval =</span> <span class="st">&quot;p&quot;</span>)</a></code></pre></div>
 <pre><code>##        fit      lwr      upr
 ## 1 2027.939 1818.223 2237.656</code></pre>
 <p>It seems a bit wider.</p>

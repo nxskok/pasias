@@ -255,13 +255,13 @@ bikes %>%
   mutate(gender = case_when(
     X2 == "X" & is.na(X3) ~ "Male",
     is.na(X2) & X3 == "X" ~ "Female",
-    TRUE ~ "Error!"
+    TRUE                  ~ "Error!"
   ))
 ```
 
             
 
-It seems nicest to format it like that, with the squiggles lining up,
+It seems nicest to format it with the squiggles lining up,
 so you can see what possible values `gender` might take.
 
 The structure of the `case_when` is that the thing you're
@@ -445,13 +445,16 @@ and the same for `passenger` and `sidewalk`. The warning
 is, whenever you see a `T` and an `F` in an
 `ifelse`, that you could probably get rid of the
 `ifelse` and use the logical condition directly.
-`r tufte::margin_note("If I  was helping you, and you were struggling with *ifelse* but  finally mastered it, it seemed easier to suggest that you used it  again for the others.}  For texttt{gender")`, though, you need the
+`r tufte::margin_note("If I  was helping you, and you were struggling with *ifelse* but  finally mastered it, it seemed easier to suggest that you used it  again for the others.")`
+
+For `gender`, though, you need the
 `ifelse` (or a `case_when`) because the values you want
 it to take are `male` and `female`, something other than
 `TRUE` and `FALSE`.
 
 I like to put brackets around logical conditions when I am assigning
-them to a variable. If I don't, I get something like
+them to a variable or defining new columns containing them.
+If I don't, I get something like
 
 ```{r eval=F}
 helmet <- V4 == "X"
@@ -459,7 +462,7 @@ helmet <- V4 == "X"
 
  
 
-which actually works, but is very hard to read. Well, I *think* it
+which actually works, but is hard to read. Well, I *think* it
 works. Let's check:
 
 ```{r }
@@ -470,9 +473,9 @@ y
 
 
 
-Yes it does. But I would never recommend writing it this way, because
-unless you are paying attention, you won't notice which `=` is
-saving in a variable, and which one is "logically equal".
+Yes it does. But I would not recommend writing it this way, because
+unless you are paying attention, you won't notice that `==` is
+testing for "logically equal" rather than putting something in a column.
 
 It works because of a thing called "operator precedence": the
 logical-equals is evaluated first, and the result of that is saved in

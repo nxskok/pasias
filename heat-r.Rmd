@@ -102,14 +102,14 @@ Solution
 You can check that each time a certain code appears, the
 text next to it is identical.
 The six codes and my brief descriptions are:
-\begin{description}
-\item[EHA] (Start of) Extended Heat Alert
-\item[EHAD] Extreme Heat Alert downgraded to Heat Alert
-\item[EHAE] Extended Heat Alert continues
-\item[HA] (Start of) Heat Alert
-\item[HAE] Heat Alert continues
-\item[HAU] Heat Alert upgraded to Extended Heat Alert
-\end{description}
+
+- EHA: (Start of) Extended Heat Alert
+- EHAD: Extreme Heat Alert downgraded to Heat Alert
+- EHAE: Extended Heat Alert continues
+- HA: (Start of) Heat Alert
+- HAE: Heat Alert continues
+- HAU: Heat Alert upgraded to Extended Heat Alert
+
 I thought there was such a thing as an Extreme Heat Alert,
 but here the word is (usually) Extended, meaning a heat
 alert that extends over several days, long in duration
@@ -147,11 +147,12 @@ in the data file: for example, August 4, 2012 is an HA
 day, but August 3 of that year was not part of any kind
 of heat alert.
 I had intended the answer to be this:
-\begin{quote}
-So we get the total number of heat alert events by
-totalling up the number of HA and EHA days:
-$59+93=152$.                 
-\end{quote}
+
+> So we get the total number of heat alert events by
+> totalling up the number of HA and EHA days:
+> $59+93=152$.                 
+
+
 This is not right because there are some
 consecutive EHA days, eg. 5--8 July 2010, so that EHA
 sometimes indicates the continuation of an extended heat
@@ -179,19 +180,19 @@ job to do something with the data and *explain*
 what you did so that somebody else can decide whether
 they believe you or not. A good explanation, even if it
 is not correct, will help you get at the truth because
-it will inspire someone to say ``in fact, it goes
-*this* way'', and then the two of you can jointly
+it will inspire someone to say ``in fact, it goes *this* way'',
+and then the two of you can jointly
 figure out what's actually going on.
 Detailed discussion follows. If you have *any*
 ambitions of working with data, you should try to follow
 the paragraphs below, because they indicate how you
-would get an *actual* answer to the question. I
-used R and `dplyr`, because that seemed to be the
-easiest route.
+would get an *actual* answer to the question.
+
 I think the key is the number of days between one heat
 alert day and the next one. `dplyr` has a
 function `diff` that works out exactly this. Building
 a pipeline, just because:
+
 ```{r }
 heat %>%
   select(-text) %>%
@@ -207,7 +208,7 @@ Oof. I have some things to keep track of here:
 
 * Get rid of the `text`, since it serves no purpose here.
 
-* The `date` column is a proper `Date` (I checked).
+* The `date` column is a proper `Date` (we checked).
 
 * Then I want the date as number of days; since it
 is a number of days internally, I just make it a number with
@@ -291,7 +292,6 @@ I wasn't quite sure how this would come out, but I knew it had
 something to do with the number of days between one heat alert day and
 the next, so I calculated those first and then figured out what to do
 with them.
- here down is SAS
 
 (d) We are going to investigate how many heat alert
 days
@@ -361,8 +361,8 @@ heat %>%
  
 The pattern is very scattered, as is commonly the case with
 environmental-science-type data, but there is a very small upward
-trend. So it seems that either answer is justified, either ``there is
-no trend'' or "there is something of an upward trend".
+trend. So it seems that either answer is justified, either ``there is no trend'' or
+"there is something of an upward trend".
 
 The other thing I notice on this plot is that if there are a lot of
 heat-alert days one year, there will probably also be a lot in the next

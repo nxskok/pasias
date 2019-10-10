@@ -79,7 +79,7 @@ jays
 ##  9    90    15 Wedn… boxs… TOR   NA    BAL   W          4       2      NA
 ## 10    91    16 Thur… boxs… TOR   NA    BAL   W          7       6      NA
 ## # … with 15 more rows, and 10 more variables: wl <chr>, position <dbl>,
-## #   gb <chr>, winner <chr>, loser <chr>, save <chr>, `game time` <drtn>,
+## #   gb <chr>, winner <chr>, loser <chr>, save <chr>, `game time` <time>,
 ## #   Daynight <chr>, attendance <dbl>, streak <chr>
 ```
 
@@ -164,7 +164,7 @@ jays %>% filter(opp == "NYY") %>% print(width = Inf)
 ## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
 ## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
 ##   Oppruns innings wl    position gb    winner  loser    save   `game time`
-##     <dbl>   <dbl> <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <drtn>     
+##     <dbl>   <dbl> <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>     
 ## 1       1      NA 13-14        4 3.5   Dickey  Martin   Cecil  02:18      
 ## 2       6      NA 13-15        5 4.5   Pineda  Estrada  Miller 02:54      
 ## 3       1      NA 14-15        3 3.5   Buehrle Sabathia <NA>   02:30      
@@ -221,7 +221,7 @@ jays %>% filter(opp == "NYY") %>% select(wl:streak) %>% print(width = Inf)
 ```
 ## # A tibble: 3 x 10
 ##   wl    position gb    winner  loser    save   `game time` Daynight
-##   <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <drtn>      <chr>   
+##   <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>      <chr>   
 ## 1 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N       
 ## 2 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N       
 ## 3 14-15        3 3.5   Buehrle Sabathia <NA>   02:30       N       
@@ -3203,13 +3203,16 @@ crickets %>%
 
 ```
 ## Warning: funs() is soft deprecated as of dplyr 0.8.0
-## please use list() instead
+## Please use a list of either functions or lambdas: 
 ## 
-## # Before:
-## funs(name = f(.)
+##   # Simple named list: 
+##   list(mean = mean, median = median)
 ## 
-## # After: 
-## list(name = ~f(.))
+##   # Auto named with `tibble::lst()`: 
+##   tibble::lst(mean, median)
+## 
+##   # Using lambdas
+##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
 ## This warning is displayed once per session.
 ```
 
@@ -3663,7 +3666,7 @@ billboard
 ```
 ## # A tibble: 317 x 83
 ##     year artist.inverted track time  genre date.entered date.peaked
-##    <dbl> <chr>           <chr> <drt> <chr> <date>       <date>     
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>     
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18 
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08 
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29 
@@ -3735,7 +3738,7 @@ billboard %>% gather(week, rank, x1st.week:x76th.week, na.rm = T)
 ```
 ## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre date.entered date.peaked week 
-##    <dbl> <chr>           <chr> <drt> <chr> <date>       <date>      <chr>
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
@@ -3762,7 +3765,7 @@ billboard %>% gather(week, rank, ends_with("week"), na.rm = T)
 ```
 ## # A tibble: 5,307 x 9
 ##     year artist.inverted track time  genre date.entered date.peaked week 
-##    <dbl> <chr>           <chr> <drt> <chr> <date>       <date>      <chr>
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
 ##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
 ##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
 ##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
@@ -4417,7 +4420,7 @@ bikes
 ```
 ## # A tibble: 1,958 x 9
 ##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  2    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  3    NA  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
@@ -4496,7 +4499,7 @@ bikes %>% fill(X1)
 ```
 ## # A tibble: 1,958 x 9
 ##    X1     X2    X3    X4    X5    X6    X7    X8    X9   
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
@@ -4526,7 +4529,7 @@ bikes %>% fill(X1) %>% rename(Time = X1)
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9   
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X    
@@ -4582,7 +4585,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 10
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
@@ -4613,7 +4616,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 10
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    isX  
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <lgl>
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <lgl>
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     TRUE 
@@ -4655,7 +4658,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 10
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male  
@@ -4695,14 +4698,14 @@ bikes %>%
   mutate(gender = case_when(
     X2 == "X" & is.na(X3) ~ "Male",
     is.na(X2) & X3 == "X" ~ "Female",
-    TRUE ~ "Error!"
+    TRUE                  ~ "Error!"
   ))
 ```
 
 ```
 ## # A tibble: 1,958 x 10
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> 
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     Male  
@@ -4718,7 +4721,7 @@ bikes %>%
 
             
 
-It seems nicest to format it like that, with the squiggles lining up,
+It seems nicest to format it with the squiggles lining up,
 so you can see what possible values `gender` might take.
 
 The structure of the `case_when` is that the thing you're
@@ -4778,7 +4781,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   male  female X4    X5    X6    X7    X8    X9   
-##    <drtn> <chr> <chr>  <chr> <chr> <chr> <chr> <chr> <chr>
+##    <time> <chr> <chr>  <chr> <chr> <chr> <chr> <chr> <chr>
 ##  1 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
 ##  2 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
 ##  3 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
@@ -4808,7 +4811,7 @@ bikes %>%
 ```
 ## # A tibble: 3,916 x 9
 ##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
 ##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
@@ -4842,7 +4845,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
 ##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
@@ -4872,7 +4875,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 9
 ##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
 ##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
 ##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
@@ -4951,7 +4954,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 13
 ##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
-##    <drt> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
 ##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
 ##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
 ##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
@@ -4991,7 +4994,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 13
 ##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
-##    <drt> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
 ##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
 ##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
 ##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
@@ -5028,7 +5031,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 11
 ##    Time   X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
-##    <drtn> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
+##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
 ##  1 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
 ##  2 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
 ##  3 07:00  X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
@@ -5048,13 +5051,16 @@ and the same for `passenger` and `sidewalk`. The warning
 is, whenever you see a `T` and an `F` in an
 `ifelse`, that you could probably get rid of the
 `ifelse` and use the logical condition directly.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If I  was helping you, and you were struggling with *ifelse* but  finally mastered it, it seemed easier to suggest that you used it  again for the others.}  For texttt{gender</span>, though, you need the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If I  was helping you, and you were struggling with *ifelse* but  finally mastered it, it seemed easier to suggest that you used it  again for the others.</span>
+
+For `gender`, though, you need the
 `ifelse` (or a `case_when`) because the values you want
 it to take are `male` and `female`, something other than
 `TRUE` and `FALSE`.
 
 I like to put brackets around logical conditions when I am assigning
-them to a variable. If I don't, I get something like
+them to a variable or defining new columns containing them.
+If I don't, I get something like
 
 
 ```r
@@ -5063,7 +5069,7 @@ helmet <- V4 == "X"
 
  
 
-which actually works, but is very hard to read. Well, I *think* it
+which actually works, but is hard to read. Well, I *think* it
 works. Let's check:
 
 
@@ -5079,9 +5085,9 @@ y
 
 
 
-Yes it does. But I would never recommend writing it this way, because
-unless you are paying attention, you won't notice which `=` is
-saving in a variable, and which one is "logically equal".
+Yes it does. But I would not recommend writing it this way, because
+unless you are paying attention, you won't notice that `==` is
+testing for "logically equal" rather than putting something in a column.
 
 It works because of a thing called "operator precedence": the
 logical-equals is evaluated first, and the result of that is saved in
@@ -5150,7 +5156,7 @@ mybikes
 ```
 ## # A tibble: 1,958 x 5
 ##    Time   gender helmet passenger sidewalk
-##    <drtn> <chr>  <lgl>  <lgl>     <lgl>   
+##    <time> <chr>  <lgl>  <lgl>     <lgl>   
 ##  1 07:00  male   FALSE  FALSE     FALSE   
 ##  2 07:00  male   FALSE  FALSE     FALSE   
 ##  3 07:00  male   FALSE  FALSE     FALSE   
@@ -5188,7 +5194,7 @@ bikes %>%
 ```
 ## # A tibble: 1,958 x 5
 ##    Time   gender helmet passenger sidewalk
-##    <drtn> <chr>  <lgl>  <lgl>     <lgl>   
+##    <time> <chr>  <lgl>  <lgl>     <lgl>   
 ##  1 07:00  male   FALSE  FALSE     FALSE   
 ##  2 07:00  male   FALSE  FALSE     FALSE   
 ##  3 07:00  male   FALSE  FALSE     FALSE   
@@ -5467,7 +5473,7 @@ mybikes %>% count(Time) %>% print(n = Inf)
 ```
 ## # A tibble: 48 x 2
 ##    Time       n
-##    <drtn> <int>
+##    <time> <int>
 ##  1 07:00      5
 ##  2 07:15      8
 ##  3 07:30      9
@@ -5538,7 +5544,7 @@ mybikes %>%
 ```
 ## # A tibble: 1 x 2
 ##   Time       n
-##   <drtn> <int>
+##   <time> <int>
 ## 1 17:15    128
 ```
 
@@ -5713,14 +5719,14 @@ Solution
 You can check that each time a certain code appears, the
 text next to it is identical.
 The six codes and my brief descriptions are:
-\begin{description}
-\item[EHA] (Start of) Extended Heat Alert
-\item[EHAD] Extreme Heat Alert downgraded to Heat Alert
-\item[EHAE] Extended Heat Alert continues
-\item[HA] (Start of) Heat Alert
-\item[HAE] Heat Alert continues
-\item[HAU] Heat Alert upgraded to Extended Heat Alert
-\end{description}
+
+- EHA: (Start of) Extended Heat Alert
+- EHAD: Extreme Heat Alert downgraded to Heat Alert
+- EHAE: Extended Heat Alert continues
+- HA: (Start of) Heat Alert
+- HAE: Heat Alert continues
+- HAU: Heat Alert upgraded to Extended Heat Alert
+
 I thought there was such a thing as an Extreme Heat Alert,
 but here the word is (usually) Extended, meaning a heat
 alert that extends over several days, long in duration
@@ -5758,11 +5764,12 @@ in the data file: for example, August 4, 2012 is an HA
 day, but August 3 of that year was not part of any kind
 of heat alert.
 I had intended the answer to be this:
-\begin{quote}
-So we get the total number of heat alert events by
-totalling up the number of HA and EHA days:
-$59+93=152$.                 
-\end{quote}
+
+> So we get the total number of heat alert events by
+> totalling up the number of HA and EHA days:
+> $59+93=152$.                 
+
+
 This is not right because there are some
 consecutive EHA days, eg. 5--8 July 2010, so that EHA
 sometimes indicates the continuation of an extended heat
@@ -5790,19 +5797,19 @@ job to do something with the data and *explain*
 what you did so that somebody else can decide whether
 they believe you or not. A good explanation, even if it
 is not correct, will help you get at the truth because
-it will inspire someone to say ``in fact, it goes
-*this* way'', and then the two of you can jointly
+it will inspire someone to say ``in fact, it goes *this* way'',
+and then the two of you can jointly
 figure out what's actually going on.
 Detailed discussion follows. If you have *any*
 ambitions of working with data, you should try to follow
 the paragraphs below, because they indicate how you
-would get an *actual* answer to the question. I
-used R and `dplyr`, because that seemed to be the
-easiest route.
+would get an *actual* answer to the question.
+
 I think the key is the number of days between one heat
 alert day and the next one. `dplyr` has a
 function `diff` that works out exactly this. Building
 a pipeline, just because:
+
 
 ```r
 heat %>%
@@ -5836,7 +5843,7 @@ Oof. I have some things to keep track of here:
 
 * Get rid of the `text`, since it serves no purpose here.
 
-* The `date` column is a proper `Date` (I checked).
+* The `date` column is a proper `Date` (we checked).
 
 * Then I want the date as number of days; since it
 is a number of days internally, I just make it a number with
@@ -5944,7 +5951,6 @@ I wasn't quite sure how this would come out, but I knew it had
 something to do with the number of days between one heat alert day and
 the next, so I calculated those first and then figured out what to do
 with them.
- here down is SAS
 
 (d) We are going to investigate how many heat alert
 days
@@ -6062,8 +6068,8 @@ heat %>%
  
 The pattern is very scattered, as is commonly the case with
 environmental-science-type data, but there is a very small upward
-trend. So it seems that either answer is justified, either ``there is
-no trend'' or "there is something of an upward trend".
+trend. So it seems that either answer is justified, either ``there is no trend'' or
+"there is something of an upward trend".
 
 The other thing I notice on this plot is that if there are a lot of
 heat-alert days one year, there will probably also be a lot in the next

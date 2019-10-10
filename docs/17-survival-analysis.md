@@ -378,6 +378,11 @@ whas100 %>%
 ```
 
 ```
+## Warning: `cols` is now required.
+## Please use `cols = c(age, bmi)`
+```
+
+```
 ## # A tibble: 5 x 2
 ##     age   bmi
 ##   <dbl> <dbl>
