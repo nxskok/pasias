@@ -79,11 +79,21 @@ result.
 Solution
 
 
-`gather` is the tool. All the columns apart from
-`Species` contain frequencies, so that's what's "the same". 
+`pivot_longer` is the tool. All the columns apart from
+`Species` contain frequencies. 
 They are frequencies in disease-location combinations, so
-I'll call the column of "what's different" `disloc`. Feel
+I'll call the column of "names" `disloc`. Feel
 free to call it `temp` for now if you prefer:
+
+```{r}
+tbl %>% pivot_longer(-Species, names_to="disloc", values_to = "frequency") -> tbl.2
+tbl.2
+        
+```
+
+You could also ues `gather` to achieve the same effect (with the rows in a different order, but that's not important right now).
+`r tufte::margin_note("This always reminds me of the late great Rik Mayall, who in the days before The Young Ones played a character called Kevin Turvey who \"investigated\" things with long, rambling stories with the rambles ending with \"but that's not important right now\".")`
+
 ```{r }
 (tbl %>% gather(disloc, frequency, px:ay) -> tbl.2)
 ```
@@ -134,6 +144,18 @@ splitting after the first character, thus:
 This is now tidy: eight frequencies in rows, and three non-frequency
 columns. (Go back and look at your answer to part (b)
 and note that the issues you found there have all been resolved now.)
+
+Extra: my reading of one of the vignettes (the one called `pivot`) for `tidyr` suggests that `pivot_longer` can do both the making longer and the separating in one shot. something that `gather` couldn't do:
+
+```{r}
+tbl %>% pivot_longer(-Species, names_to=c("disease", "location"), names_sep=1, values_to="frequency")
+```
+
+And I (amazingly) got that right first time!
+
+The idea is that you recognize that the column names are actually two things: a disease status and a location. To get `pivot_longer` to recognize that, you put two things in the `names_to`. Then you have to say how the two things in the columns are separated: this might be by an underscore or a dot, or, as here, "after the first character" (just as in `separate`). Using two names and some indication of what separates them then does a combined pivot-longer-and-separate, all in one shot.
+
+The more I use `pivot_longer`, the more I marvel at the excellence of its design: it seems to be easy to guess how to make things work.
 
 
 
@@ -197,7 +219,7 @@ not quite as simple as the log transformations we had before, because
 bigger frequencies are going to be more variable, so we fit a
 generalized linear model with a Poisson-distributed response and log
 link. (It's better if you know what that means, but you ought to be
-able to follow the logic if you don't.)
+able to follow the logic if you don't. [Chapter 29](http://ritsokiguess.site/pasias/frequency-table-analysis.html#frequency-table-analysis) has more on this.)
 
 First, fit a model predicting frequency from everything, including all
 the interactions. (The reason for doing it this way will become clear later):
@@ -227,7 +249,7 @@ for grabs (here, only the three-way interaction, which is not
 significant, so out it comes).
 
 Let's get rid of that three-way interaction. This is another use for
-`update` that we've seen in connection with multiple regression
+`update` that you might have seen in connection with multiple regression
 (to make small changes to a big model):
 
 ```{r }
@@ -314,8 +336,8 @@ like this:
 disease <- c("a", "a", "p", "p")
 Species <- c("A", "B", "A", "B")
 frequency <- c(10, 50, 30, 30)
-xx <- data.frame(disease, Species, frequency)
-xtabs(frequency ~ disease + Species)
+xx <- tibble(disease, Species, frequency)
+xtabs(frequency ~ disease + Species, data=xx)
 ```
 
  
@@ -332,8 +354,8 @@ drop1(xx.1, test = "Chisq")
  
 
 And so there is. Nothing can come out of the model. (This is the same
-kind of test as a chi-squared test for association, if you know about
-that.  The log-linear model is a multi-variable generalization of that.)
+kind of test as a chi-squared test for association.  
+The log-linear model is a multi-variable generalization of that.)
 
 
 

@@ -1405,7 +1405,7 @@ I chose to specify "everything but plant number", since there are several colour
 
 
 ```r
-toms1 %>% gather(colour,growthrate,blue:green)
+toms1 %>% gather(colour, growthrate, blue:green)
 ```
 
 ```
@@ -1427,9 +1427,9 @@ toms1 %>% gather(colour,growthrate,blue:green)
        
 This time I said "columns blue through green". Either way works for either.
 
-Reminder for `gather`: what makes the columns different
-(they're different colours), what makes them the same (they're all
-growth rates), which columns to gather together (all the colour ones). I had to have a trick for remembering this, which I no longer need with `pivot_longer` (since I give the inputs names, and I can remember which is which).
+Reminder for `gather`: first, what makes the columns different
+(they're different colours), then what makes them the same (they're all
+growth rates), and finally which columns to gather together (all the colour ones). I had to have a trick for remembering this, which I no longer need with `pivot_longer` (since I give the inputs names, and I can remember which is which).
 
 Since the column `plant` was never mentioned, this gets
 repeated as necessary, so now it denotes "plant within colour group", 
@@ -1946,8 +1946,18 @@ analysis.
 
 Solution
 
+This is `pivot_longer`. The column names are going to be stored in a column `drug`, and the corresponding values in a column called `painrelief` (use whatever names you like):
 
-`gather` the columns that are all measurements of one
+
+```r
+migraine %>% 
+  pivot_longer(everything(), names_to="drug", values_to="painrelief") -> migraine2
+```
+
+Since I was making all the columns longer, I used the select-helper `everything()` to do that. Using instead `DrugA:DrugC` or `starts_with("Drug")` would also be good. Try them. `starts_with` is not case-sensitive, as far as I remember.
+
+
+Or, `gather` the columns that are all measurements of one
 thing.
 The syntax of `gather` is: what
 makes the columns different, what makes them the same, and which
@@ -2050,7 +2060,7 @@ Extra: we can also use the "pipe" to do this all in one go:
 
 ```r
 migraine %>%
-  gather(drug, painrelief, DrugA:DrugC) %>%
+  pivot_longer(everything(), names_to="drug", values_to="painrelief") %>%
   aov(painrelief ~ drug, data = .) %>%
   summary()
 ```
@@ -2066,13 +2076,13 @@ migraine %>%
  
 
 with the same results as before. Notice that I never actually created
-a second data frame by name; it was created by `gather` and
+a second data frame by name; it was created by `pivot_longer` and
 then immediately used as input to `aov`.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">And then thrown away.</span> 
 I also used the
 `data=.` trick to use "the data frame that came out of the previous step" as my input to `aov`.
 
-Read the above like this: "take `migraine`, and then gather together the `DrugA` through `DrugC` columns into a column `painrelief`, labelling each by its drug, and then do an ANOVA of `painrelief` by `drug`, and then summarize the results."
+Read the above like this: "take `migraine`, and then make everything longer, creating new columns `drug` and `painrelief`, and then do an ANOVA of `painrelief` by `drug`, and then summarize the results."
 
 What is even more alarming is that I can feed the output from
 `aov` straight into `TukeyHSD`:
@@ -2080,7 +2090,7 @@ What is even more alarming is that I can feed the output from
 
 ```r
 migraine %>%
-  gather(drug, painrelief, DrugA:DrugC) %>%
+  pivot_longer(everything(), names_to="drug", values_to="painrelief") %>%
   aov(painrelief ~ drug, data = .) %>%
   TukeyHSD()
 ```
@@ -2112,7 +2122,7 @@ discover that this could be solved, and indeed it can:
 
 ```r
 migraine %>%
-  gather(drug, painrelief, DrugA:DrugC) %>%
+  pivot_longer(everything(), names_to="drug", values_to="painrelief") %>%
   aov(painrelief ~ drug, data = .) %>%
   {
     print(summary(.))
@@ -2144,19 +2154,18 @@ migraine %>%
 
  
 
-The odd-looking second-last line of that uses that `.` trick
+The odd-looking second-last line of that again uses the `.` trick
 for "whatever came out of the previous step". The thing inside the
 curly brackets is two commands one after the other; the first is to
 display the `summary` of that `aov`
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It needs  *print* around it to display it, as you need *print*  to display something within a loop or a function.</span> 
-and the second
-part after the `;` is to just pass whatever came out of the
+and the second is to just pass whatever came out of the
 previous line, the output from `aov`, on, unchanged, into
 `TukeyHSD`. 
 
-In the Unix world this is called `tee`,
+In the Unix/Linux world this is called `tee`,
 where you print something *and* pass it on to the next step. The
-name `tee` comes from a (real) pipe that plumbers would use to
+name `tee` comes from a (real physical) pipe that plumbers would use to
 split water flow into two, which looks like a letter T.
 
 
@@ -2195,8 +2204,8 @@ migraine2 %>%
  
 These confirm that A is worst, and there is nothing much to choose
 between B and C.
-You should *not* recommend drug C over drug B on this evidence,
-just because its (sample) mean is higher than B's. The point about significant
+You should *not* recommend drug B over drug C on this evidence,
+just because its (sample) mean is higher. The point about significant
 differences is that they are supposed to stand up to replication: in
 another experiment, or in real-life experiences with these drugs, the
 mean pain relief score for drug A is expected to be worst, but between
@@ -2211,26 +2220,21 @@ Another way is to draw a boxplot of pain-relief scores:
 ggplot(migraine2, aes(x = drug, y = painrelief)) + geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-58-1.png" width="672"  />
 
  
 
 The medians of drugs B and C are actually exactly the same. Because
 the pain relief values are all whole numbers (and there are only 9 in
 each group), you get that thing where enough of them are equal that
-the median and third quartiles are equal, actually for all three
+the median and third quartiles are equal, actually for two of the three
 groups. 
 
-Despite the outlier, I'm willing to call these groups sufficiently
-symmetric for the ANOVA to be OK (but I didn't ask you to draw the
+Despite the weird distributions, I'm willing to call these groups sufficiently
+symmetric for the ANOVA to be OK, but I didn't ask you to draw the
 boxplot, because I didn't want to confuse the issue with this. The
 point of this question was to get the data tidy enough to do an
-analysis.) Think about it for a moment: that outlier is a value of 8.
-This is really not that much bigger than the value of 7 that is the
-highest one on drug C. The 7 for drug C is not an outlier. The only
-reason the 8 came out as an outlier was because the IQR was only 1. If
-the IQR on drug B had happened to be a bit bigger, the 8 would not
-have been an outlier. 
+analysis.
 
 As I said, I didn't want you to have to get into this, but if you are
 worried, you know what the remedy is --- Mood's median test. Don't
@@ -2295,8 +2299,7 @@ Drug A gives worse pain relief (fewer hours) than both drugs B and C,
 which are not significantly different from each hour. This is exactly
 what you would have guessed from the boxplot.
 
-I gotta do something about those adjusted P-values bigger than 1!
-
+I adjusted the P-values as per Bonferroni by multiplying them by 3 (so that I could still compare with 0.05), but it makes no sense to have a P-value, which is a probability, greater than 1, so an "adjusted P-value" that comes out greater than 1 is rounded back down to 1. You interpret this as being "no evidence at all of a difference in medians" between drugs B and C.
 
 
 
@@ -2406,11 +2409,35 @@ result.
 Solution
 
 
-`gather` is the tool. All the columns apart from
-`Species` contain frequencies, so that's what's "the same". 
+`pivot_longer` is the tool. All the columns apart from
+`Species` contain frequencies. 
 They are frequencies in disease-location combinations, so
-I'll call the column of "what's different" `disloc`. Feel
+I'll call the column of "names" `disloc`. Feel
 free to call it `temp` for now if you prefer:
+
+
+```r
+tbl %>% pivot_longer(-Species, names_to="disloc", values_to = "frequency") -> tbl.2
+tbl.2
+```
+
+```
+## # A tibble: 8 x 3
+##   Species disloc frequency
+##   <chr>   <chr>      <dbl>
+## 1 A       px            44
+## 2 A       py            12
+## 3 A       ax            38
+## 4 A       ay            10
+## 5 B       px            28
+## 6 B       py            22
+## 7 B       ax            20
+## 8 B       ay            18
+```
+
+You could also ues `gather` to achieve the same effect (with the rows in a different order, but that's not important right now).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This always reminds me of the late great Rik Mayall, who in the days before The Young Ones played a character called Kevin Turvey who "investigated" things with long, rambling stories with the rambles ending with "but that's not important right now".</span>
+
 
 ```r
 (tbl %>% gather(disloc, frequency, px:ay) -> tbl.2)
@@ -2507,6 +2534,33 @@ This is now tidy: eight frequencies in rows, and three non-frequency
 columns. (Go back and look at your answer to part (b)
 and note that the issues you found there have all been resolved now.)
 
+Extra: my reading of one of the vignettes (the one called `pivot`) for `tidyr` suggests that `pivot_longer` can do both the making longer and the separating in one shot. something that `gather` couldn't do:
+
+
+```r
+tbl %>% pivot_longer(-Species, names_to=c("disease", "location"), names_sep=1, values_to="frequency")
+```
+
+```
+## # A tibble: 8 x 4
+##   Species disease location frequency
+##   <chr>   <chr>   <chr>        <dbl>
+## 1 A       p       x               44
+## 2 A       p       y               12
+## 3 A       a       x               38
+## 4 A       a       y               10
+## 5 B       p       x               28
+## 6 B       p       y               22
+## 7 B       a       x               20
+## 8 B       a       y               18
+```
+
+And I (amazingly) got that right first time!
+
+The idea is that you recognize that the column names are actually two things: a disease status and a location. To get `pivot_longer` to recognize that, you put two things in the `names_to`. Then you have to say how the two things in the columns are separated: this might be by an underscore or a dot, or, as here, "after the first character" (just as in `separate`). Using two names and some indication of what separates them then does a combined pivot-longer-and-separate, all in one shot.
+
+The more I use `pivot_longer`, the more I marvel at the excellence of its design: it seems to be easy to guess how to make things work.
+
 
 
 (f) Let's see if we can re-construct the original contingency
@@ -2596,7 +2650,7 @@ not quite as simple as the log transformations we had before, because
 bigger frequencies are going to be more variable, so we fit a
 generalized linear model with a Poisson-distributed response and log
 link. (It's better if you know what that means, but you ought to be
-able to follow the logic if you don't.)
+able to follow the logic if you don't. [Chapter 29](http://ritsokiguess.site/pasias/frequency-table-analysis.html#frequency-table-analysis) has more on this.)
 
 First, fit a model predicting frequency from everything, including all
 the interactions. (The reason for doing it this way will become clear later):
@@ -2637,7 +2691,7 @@ for grabs (here, only the three-way interaction, which is not
 significant, so out it comes).
 
 Let's get rid of that three-way interaction. This is another use for
-`update` that we've seen in connection with multiple regression
+`update` that you might have seen in connection with multiple regression
 (to make small changes to a big model):
 
 
@@ -2791,8 +2845,8 @@ like this:
 disease <- c("a", "a", "p", "p")
 Species <- c("A", "B", "A", "B")
 frequency <- c(10, 50, 30, 30)
-xx <- data.frame(disease, Species, frequency)
-xtabs(frequency ~ disease + Species)
+xx <- tibble(disease, Species, frequency)
+xtabs(frequency ~ disease + Species, data=xx)
 ```
 
 ```
@@ -2829,8 +2883,8 @@ drop1(xx.1, test = "Chisq")
  
 
 And so there is. Nothing can come out of the model. (This is the same
-kind of test as a chi-squared test for association, if you know about
-that.  The log-linear model is a multi-variable generalization of that.)
+kind of test as a chi-squared test for association.  
+The log-linear model is a multi-variable generalization of that.)
 
 
 
@@ -6229,7 +6283,7 @@ heat %>%
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-155-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-158-1.png" width="672"  />
 
  
 The pattern is very scattered, as is commonly the case with
