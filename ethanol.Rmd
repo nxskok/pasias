@@ -21,7 +21,8 @@ Solution
 
 Separated by single spaces:
 ```{r }
-sleep1 <- read_delim("ratsleep.txt", " ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ratsleep.txt"
+sleep1 <- read_delim(my_url, " ")
 sleep1
 ```
 
@@ -40,39 +41,55 @@ name `sleep` for my processed data frame.
 times for each treatment group are on one row, and we should have
 *one* column containing *all* the sleep times, and the
 corresponding row should show which treatment group that sleep time
-came from. 
-If you prefer to skip this part: read in the data from
-[link](http://www.utsc.utoronto.ca/~butler/c32/ratsleep2.txt), and
-proceed to the boxplots in (c).
-The `tidyr` function `gather` turns wide format (which
-we have) into long format (which we want). `gather` needs
-four things fed into it: a data frame, what makes the columns
-different, what makes them the same, and finally which columns are
-to be `gather`ed together (combined into one column), the
-first one, a colon, and the last one.  Save the result of
-`gather` into a data frame, and look at it. Do you have 20
-rows of not-very-many variables?
+came from. Transform this data frame into one that you could use for modelling or making graphs.
+
 
 
 
 Solution
 
+We will want *one* column of sleep times, with an additional categorical column saying what observation each sleep time was within its group (or, you might say, we don't really care about that much, but that's what we are going to get). 
 
-What makes the columns `obs1` through `obs5`
-different is that they are different observation numbers
+The columns `obs1` through `obs5` are
+different in that they are different observation numbers
 ("replicates", in the jargon). I'll call that `rep`. What
 makes them the same is that they are all sleep times. Columns
 `obs1` through `obs5` are the ones we want to
 combine, thus. 
 Here is where I use the name `sleep`: I save the result of
-the `gather` into a data frame `sleep`. Note that I
+the `pivot_longer` into a data frame `sleep`. Note that I
 also used the brackets-around-the-outside to display what I had,
 so that I didn't have to do a separate display. This is a handy
 way of saving *and* displaying in one shot:
-```{r }
-(sleep1 %>% gather(rep, sleeptime, obs1:obs5) -> sleep)
+
+```{r}
+(sleep1 %>% 
+  pivot_longer(-treatment, names_to="rep", values_to="sleeptime") -> sleep)
 ```
 
+Typically in this kind of work, you have a lot of columns that need to be made longer, and a much smaller number of columns that need to be repeated as necessary. You can either specify all the columns to make longer, or you can specify "not" the other columns. Above, my first input to `pivot_longer` was "everything but treatment", but you could also do it like this:
+
+```{r}
+sleep1 %>% 
+  pivot_longer(obs1:obs5, names_to="rep", values_to="sleeptime") 
+```
+
+or like this:
+
+```{r}
+sleep1 %>% 
+  pivot_longer(starts_with("obs"), names_to="rep", values_to="sleeptime") 
+```
+
+This one was a little unusual in that usually with these you have the *treatments* in the columns and the replicates in the rows. It doesn't matter, though: `pivot_longer` handles both cases.
+
+If you prefer the old `gather`, that also works:
+
+```{r }
+sleep1 %>% gather(rep, sleeptime, obs1:obs5) 
+```
+
+The rows come out in a different order this way, but it still works.
  
 We have 20 rows of 3 columns. I got all the rows, but you will
 probably get an output with ten rows as usual, and will need to click
@@ -138,6 +155,7 @@ base the IQRs on, the *sample* IQRs might vary a bit. So we
 should look at the heights of the boxes on the boxplot, and see
 whether they are grossly unequal. They appear to be to be of very
 similar heights, all things considered, so I am happy.
+
 If you want the SDs themselves:
 
 ```{r }
@@ -233,6 +251,6 @@ had 10 or 20 observations per group, we might be able to conclude
 that 2 is in between 1 and 4 as the boxplots suggest.
 
 
-
+Extra: I didn't ask about normality here, but like the equal-spreads assumption I'd say there's nothing controversial about it with these data. With normality good and equal spreads good, `aov` plus Tukey is the analysis of choice. 
 
 

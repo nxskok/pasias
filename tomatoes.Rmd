@@ -40,17 +40,27 @@ something suitable for feeding into `aov` later.)
 Solution
 
 
-This is a job for `gather`:
+This is a job for `pivot_longer`:
+
 ```{r }
-toms2 = toms1 %>% gather(colour,growthrate,blue:green)
+toms1 %>% 
+   pivot_longer(-plant, names_to="colour", values_to="growthrate") -> toms2
 toms2
 ```
 
-       
+I chose to specify "everything but plant number", since there are several colour columns with different names.
 
-Reminder: data frame to gather, what makes the columns different
+`gather` also works:
+
+```{r }
+toms1 %>% gather(colour,growthrate,blue:green)
+```
+       
+This time I said "columns blue through green". Either way works for either.
+
+Reminder for `gather`: what makes the columns different
 (they're different colours), what makes them the same (they're all
-growth rates), which columns to gather together (all the colour ones).
+growth rates), which columns to gather together (all the colour ones). I had to have a trick for remembering this, which I no longer need with `pivot_longer` (since I give the inputs names, and I can remember which is which).
 
 Since the column `plant` was never mentioned, this gets
 repeated as necessary, so now it denotes "plant within colour group", 
@@ -61,7 +71,7 @@ measures because plant number 1 in the blue group and plant number 1
 in the red group  are *different* plants.)
 
 There were 8 rows originally and 4 different colours, so there should
-be, and are, $8 \times 4=32$ rows in the gathered-up data set.
+be, and are, $8 \times 4=32$ rows in the made-longer data set.
 
 
 
@@ -221,9 +231,7 @@ doesn't use the data very efficiently: it doesn't use how *far*
 above or below the overall median the data values are.)
 
 The story here, as ever, is consistency: whatever you thought was
-wrong, looking at the boxplots, needs to guide the test you do. This
-should probably be a flow chart, but this way works too:
-
+wrong, looking at the boxplots, needs to guide the test you do:
 
 
 * if you are not happy with normality, go with

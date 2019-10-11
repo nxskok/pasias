@@ -8,7 +8,7 @@ graphically. (The issue previously was that the data were matched
 pairs: the same students threw both balls.)
 
 This seems to work most naturally by building a pipe, a line or two at
-a time. See if you can do it that way. (If you can't, use lots of
+a time. See if you can do it that way. (If you can't make it work, use lots of
 temporary data frames, one to hold the result of each part.)
 
 
@@ -32,8 +32,9 @@ throws
 
 
 
-(b) Create a new column that is the students turned into a
-`factor`, adding it to your data frame.
+(b) Create a new column that is the students turned into a `factor`,
+adding it to your data frame. The reason for this will become clear
+later.
 
 
 Solution
@@ -58,32 +59,51 @@ making a second column that says which ball was thrown.
 
 Solution
 
+The old way was literally `gather`, which you can still use (see below). If you have the most up-to-date version of `tidyr`, though, there is a new (easier) way to do it called `pivot_longer`. It goes like this:
 
-Literally `gather` (from `tidyr`):
+```{r}
+throws %>%
+  mutate(fs = factor(student)) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance")
+```
+
+The `names_to` is the name of a new categorical column whose values will be what is currently column names, and the `values_to` names a new quantitative (usually) column that will hold the values in those columns that you are making longer.
+
+If this doesn't work for you, go to the console (or make yourself a temporary code chunk) and run:
+
+```{r, eval=FALSE}
+install.packages("tidyr")
+```
+
+Once that works, if you made a code chunk for it, you can delete that now, since you won't be needing it again.
+
+The old way is
+literally `gather`, thus:
+
 ```{r }
 throws %>%
   mutate(fs = factor(student)) %>%
   gather(ball, distance, baseball:softball)
 ```
 
-       
-
 Two columns to include, consecutive ones, or two to omit, the first
 and last. So I think it's
 easier to name the ones you want to include. 
 
+`pivot_longer` does everything `gather` does and more besides, so if you're going to learn only one, go with `pivot_longer`.
+
 If you want to show off a little, you can use a select-helper, noting
-that the columns you want to gather up all end in "ball":
+that the columns you want to make longer all end in "ball":
 
 ```{r }
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, ends_with("ball"))
+  pivot_longer(ends_with("ball"), names_to="ball", values_to="distance")
 ```
 
        
 
-with the same result. Use whichever you like.
+The same result. Use whichever you like.
 
 
 
@@ -94,14 +114,16 @@ distance against type of ball.
 Solution
 
 
-The obvious thing:
+The obvious thing. No data frame in the `ggplot` because it's the data frame that came out of the previous part of the pipeline (that doesn't have a name):
+
 ```{r }
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
   ggplot(aes(x = ball, y = distance)) + geom_point()
 ```
 
+This is an odd type of scatterplot because the $x$-axis is actually a categorical variable. It's really what would be called something like a dotplot. We'll be using this as raw material for the plot we actually want.
        
 
 What this plot is missing is an indication of which student threw
@@ -127,7 +149,7 @@ a `geom_line`:
 ```{r }
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
   ggplot(aes(x = ball, y = distance, group = fs, colour = fs)) +
   geom_point() + geom_line()
 ```
@@ -139,7 +161,7 @@ You can see what happens if you use the student as a number:
 ```{r }
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
   ggplot(aes(x = ball, y = distance, group = student, colour = student)) +
   geom_point() + geom_line()
 ```
@@ -171,7 +193,7 @@ to get rid of is actually the `colour` one, so we do this:
 ```{r }
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
   ggplot(aes(x = ball, y = distance, group = fs, colour = fs)) +
   geom_point() + geom_line() +
   guides(colour = F)
@@ -184,7 +206,7 @@ That seems to have done it.
 
 
 (g) What do you see on the final spaghetti plot? What does that tell you
-about the relative distances a student can throw a baseball vs.\ a
+about the relative distances a student can throw a baseball vs. a
 softball? Explain briefly, blah blah blah.
 
 

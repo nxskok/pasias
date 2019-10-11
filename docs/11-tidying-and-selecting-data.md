@@ -523,7 +523,7 @@ graphically. (The issue previously was that the data were matched
 pairs: the same students threw both balls.)
 
 This seems to work most naturally by building a pipe, a line or two at
-a time. See if you can do it that way. (If you can't, use lots of
+a time. See if you can do it that way. (If you can't make it work, use lots of
 temporary data frames, one to hold the result of each part.)
 
 
@@ -577,8 +577,9 @@ throws
 
 
 
-(b) Create a new column that is the students turned into a
-`factor`, adding it to your data frame.
+(b) Create a new column that is the students turned into a `factor`,
+adding it to your data frame. The reason for this will become clear
+later.
 
 
 Solution
@@ -621,8 +622,46 @@ making a second column that says which ball was thrown.
 
 Solution
 
+The old way was literally `gather`, which you can still use (see below). If you have the most up-to-date version of `tidyr`, though, there is a new (easier) way to do it called `pivot_longer`. It goes like this:
 
-Literally `gather` (from `tidyr`):
+
+```r
+throws %>%
+  mutate(fs = factor(student)) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance")
+```
+
+```
+## # A tibble: 48 x 4
+##    student fs    ball     distance
+##      <dbl> <fct> <chr>       <dbl>
+##  1       1 1     baseball       65
+##  2       1 1     softball       57
+##  3       2 2     baseball       90
+##  4       2 2     softball       58
+##  5       3 3     baseball       75
+##  6       3 3     softball       66
+##  7       4 4     baseball       73
+##  8       4 4     softball       61
+##  9       5 5     baseball       79
+## 10       5 5     softball       65
+## # … with 38 more rows
+```
+
+The `names_to` is the name of a new categorical column whose values will be what is currently column names, and the `values_to` names a new quantitative (usually) column that will hold the values in those columns that you are making longer.
+
+If this doesn't work for you, go to the console (or make yourself a temporary code chunk) and run:
+
+
+```r
+install.packages("tidyr")
+```
+
+Once that works, if you made a code chunk for it, you can delete that now, since you won't be needing it again.
+
+The old way is
+literally `gather`, thus:
+
 
 ```r
 throws %>%
@@ -647,20 +686,20 @@ throws %>%
 ## # … with 38 more rows
 ```
 
-       
-
 Two columns to include, consecutive ones, or two to omit, the first
 and last. So I think it's
 easier to name the ones you want to include. 
 
+`pivot_longer` does everything `gather` does and more besides, so if you're going to learn only one, go with `pivot_longer`.
+
 If you want to show off a little, you can use a select-helper, noting
-that the columns you want to gather up all end in "ball":
+that the columns you want to make longer all end in "ball":
 
 
 ```r
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, ends_with("ball"))
+  pivot_longer(ends_with("ball"), names_to="ball", values_to="distance")
 ```
 
 ```
@@ -668,21 +707,21 @@ throws %>%
 ##    student fs    ball     distance
 ##      <dbl> <fct> <chr>       <dbl>
 ##  1       1 1     baseball       65
-##  2       2 2     baseball       90
-##  3       3 3     baseball       75
-##  4       4 4     baseball       73
-##  5       5 5     baseball       79
-##  6       6 6     baseball       68
-##  7       7 7     baseball       58
-##  8       8 8     baseball       41
-##  9       9 9     baseball       56
-## 10      10 10    baseball       70
+##  2       1 1     softball       57
+##  3       2 2     baseball       90
+##  4       2 2     softball       58
+##  5       3 3     baseball       75
+##  6       3 3     softball       66
+##  7       4 4     baseball       73
+##  8       4 4     softball       61
+##  9       5 5     baseball       79
+## 10       5 5     softball       65
 ## # … with 38 more rows
 ```
 
        
 
-with the same result. Use whichever you like.
+The same result. Use whichever you like.
 
 
 
@@ -693,17 +732,19 @@ distance against type of ball.
 Solution
 
 
-The obvious thing:
+The obvious thing. No data frame in the `ggplot` because it's the data frame that came out of the previous part of the pipeline (that doesn't have a name):
+
 
 ```r
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
   ggplot(aes(x = ball, y = distance)) + geom_point()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
+This is an odd type of scatterplot because the $x$-axis is actually a categorical variable. It's really what would be called something like a dotplot. We'll be using this as raw material for the plot we actually want.
        
 
 What this plot is missing is an indication of which student threw
@@ -730,12 +771,12 @@ a `geom_line`:
 ```r
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
   ggplot(aes(x = ball, y = distance, group = fs, colour = fs)) +
   geom_point() + geom_line()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
      
 
@@ -745,12 +786,12 @@ You can see what happens if you use the student as a number:
 ```r
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
   ggplot(aes(x = ball, y = distance, group = student, colour = student)) +
   geom_point() + geom_line()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
 
      
 
@@ -780,13 +821,13 @@ to get rid of is actually the `colour` one, so we do this:
 ```r
 throws %>%
   mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball) %>%
+  pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
   ggplot(aes(x = ball, y = distance, group = fs, colour = fs)) +
   geom_point() + geom_line() +
   guides(colour = F)
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
        
 
@@ -795,7 +836,7 @@ That seems to have done it.
 
 
 (g) What do you see on the final spaghetti plot? What does that tell you
-about the relative distances a student can throw a baseball vs.\ a
+about the relative distances a student can throw a baseball vs. a
 softball? Explain briefly, blah blah blah.
 
 
@@ -853,7 +894,8 @@ Solution
 Separated by single spaces:
 
 ```r
-sleep1 <- read_delim("ratsleep.txt", " ")
+my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ratsleep.txt"
+sleep1 <- read_delim(my_url, " ")
 ```
 
 ```
@@ -897,38 +939,134 @@ name `sleep` for my processed data frame.
 times for each treatment group are on one row, and we should have
 *one* column containing *all* the sleep times, and the
 corresponding row should show which treatment group that sleep time
-came from. 
-If you prefer to skip this part: read in the data from
-[link](http://www.utsc.utoronto.ca/~butler/c32/ratsleep2.txt), and
-proceed to the boxplots in (c).
-The `tidyr` function `gather` turns wide format (which
-we have) into long format (which we want). `gather` needs
-four things fed into it: a data frame, what makes the columns
-different, what makes them the same, and finally which columns are
-to be `gather`ed together (combined into one column), the
-first one, a colon, and the last one.  Save the result of
-`gather` into a data frame, and look at it. Do you have 20
-rows of not-very-many variables?
+came from. Transform this data frame into one that you could use for modelling or making graphs.
+
 
 
 
 Solution
 
+We will want *one* column of sleep times, with an additional categorical column saying what observation each sleep time was within its group (or, you might say, we don't really care about that much, but that's what we are going to get). 
 
-What makes the columns `obs1` through `obs5`
-different is that they are different observation numbers
+The columns `obs1` through `obs5` are
+different in that they are different observation numbers
 ("replicates", in the jargon). I'll call that `rep`. What
 makes them the same is that they are all sleep times. Columns
 `obs1` through `obs5` are the ones we want to
 combine, thus. 
 Here is where I use the name `sleep`: I save the result of
-the `gather` into a data frame `sleep`. Note that I
+the `pivot_longer` into a data frame `sleep`. Note that I
 also used the brackets-around-the-outside to display what I had,
 so that I didn't have to do a separate display. This is a handy
 way of saving *and* displaying in one shot:
 
+
 ```r
-(sleep1 %>% gather(rep, sleeptime, obs1:obs5) -> sleep)
+(sleep1 %>% 
+  pivot_longer(-treatment, names_to="rep", values_to="sleeptime") -> sleep)
+```
+
+```
+## # A tibble: 20 x 3
+##    treatment rep   sleeptime
+##    <chr>     <chr>     <dbl>
+##  1 e0        obs1       88.6
+##  2 e0        obs2       73.2
+##  3 e0        obs3       91.4
+##  4 e0        obs4       68  
+##  5 e0        obs5       75.2
+##  6 e1        obs1       63  
+##  7 e1        obs2       53.9
+##  8 e1        obs3       69.2
+##  9 e1        obs4       50.1
+## 10 e1        obs5       71.5
+## 11 e2        obs1       44.9
+## 12 e2        obs2       59.5
+## 13 e2        obs3       40.2
+## 14 e2        obs4       56.3
+## 15 e2        obs5       38.7
+## 16 e4        obs1       31  
+## 17 e4        obs2       39.6
+## 18 e4        obs3       45.3
+## 19 e4        obs4       25.2
+## 20 e4        obs5       22.7
+```
+
+Typically in this kind of work, you have a lot of columns that need to be made longer, and a much smaller number of columns that need to be repeated as necessary. You can either specify all the columns to make longer, or you can specify "not" the other columns. Above, my first input to `pivot_longer` was "everything but treatment", but you could also do it like this:
+
+
+```r
+sleep1 %>% 
+  pivot_longer(obs1:obs5, names_to="rep", values_to="sleeptime") 
+```
+
+```
+## # A tibble: 20 x 3
+##    treatment rep   sleeptime
+##    <chr>     <chr>     <dbl>
+##  1 e0        obs1       88.6
+##  2 e0        obs2       73.2
+##  3 e0        obs3       91.4
+##  4 e0        obs4       68  
+##  5 e0        obs5       75.2
+##  6 e1        obs1       63  
+##  7 e1        obs2       53.9
+##  8 e1        obs3       69.2
+##  9 e1        obs4       50.1
+## 10 e1        obs5       71.5
+## 11 e2        obs1       44.9
+## 12 e2        obs2       59.5
+## 13 e2        obs3       40.2
+## 14 e2        obs4       56.3
+## 15 e2        obs5       38.7
+## 16 e4        obs1       31  
+## 17 e4        obs2       39.6
+## 18 e4        obs3       45.3
+## 19 e4        obs4       25.2
+## 20 e4        obs5       22.7
+```
+
+or like this:
+
+
+```r
+sleep1 %>% 
+  pivot_longer(starts_with("obs"), names_to="rep", values_to="sleeptime") 
+```
+
+```
+## # A tibble: 20 x 3
+##    treatment rep   sleeptime
+##    <chr>     <chr>     <dbl>
+##  1 e0        obs1       88.6
+##  2 e0        obs2       73.2
+##  3 e0        obs3       91.4
+##  4 e0        obs4       68  
+##  5 e0        obs5       75.2
+##  6 e1        obs1       63  
+##  7 e1        obs2       53.9
+##  8 e1        obs3       69.2
+##  9 e1        obs4       50.1
+## 10 e1        obs5       71.5
+## 11 e2        obs1       44.9
+## 12 e2        obs2       59.5
+## 13 e2        obs3       40.2
+## 14 e2        obs4       56.3
+## 15 e2        obs5       38.7
+## 16 e4        obs1       31  
+## 17 e4        obs2       39.6
+## 18 e4        obs3       45.3
+## 19 e4        obs4       25.2
+## 20 e4        obs5       22.7
+```
+
+This one was a little unusual in that usually with these you have the *treatments* in the columns and the replicates in the rows. It doesn't matter, though: `pivot_longer` handles both cases.
+
+If you prefer the old `gather`, that also works:
+
+
+```r
+sleep1 %>% gather(rep, sleeptime, obs1:obs5) 
 ```
 
 ```
@@ -957,6 +1095,7 @@ way of saving *and* displaying in one shot:
 ## 20 e4        obs5       22.7
 ```
 
+The rows come out in a different order this way, but it still works.
  
 We have 20 rows of 3 columns. I got all the rows, but you will
 probably get an output with ten rows as usual, and will need to click
@@ -986,7 +1125,7 @@ Solution
 ggplot(sleep, aes(x = treatment, y = sleeptime)) + geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
  
 
@@ -1025,6 +1164,7 @@ base the IQRs on, the *sample* IQRs might vary a bit. So we
 should look at the heights of the boxes on the boxplot, and see
 whether they are grossly unequal. They appear to be to be of very
 similar heights, all things considered, so I am happy.
+
 If you want the SDs themselves:
 
 
@@ -1157,7 +1297,7 @@ had 10 or 20 observations per group, we might be able to conclude
 that 2 is in between 1 and 4 as the boxplots suggest.
 
 
-
+Extra: I didn't ask about normality here, but like the equal-spreads assumption I'd say there's nothing controversial about it with these data. With normality good and equal spreads good, `aov` plus Tukey is the analysis of choice. 
 
 
 
@@ -1233,11 +1373,39 @@ something suitable for feeding into `aov` later.)
 Solution
 
 
-This is a job for `gather`:
+This is a job for `pivot_longer`:
+
 
 ```r
-toms2 = toms1 %>% gather(colour,growthrate,blue:green)
+toms1 %>% 
+   pivot_longer(-plant, names_to="colour", values_to="growthrate") -> toms2
 toms2
+```
+
+```
+## # A tibble: 32 x 3
+##    plant colour growthrate
+##    <dbl> <chr>       <dbl>
+##  1     1 blue         5.34
+##  2     1 red         13.7 
+##  3     1 yellow       4.61
+##  4     1 green        2.72
+##  5     2 blue         7.45
+##  6     2 red         13.0 
+##  7     2 yellow       6.63
+##  8     2 green        1.08
+##  9     3 blue         7.15
+## 10     3 red         10.2 
+## # … with 22 more rows
+```
+
+I chose to specify "everything but plant number", since there are several colour columns with different names.
+
+`gather` also works:
+
+
+```r
+toms1 %>% gather(colour,growthrate,blue:green)
 ```
 
 ```
@@ -1256,12 +1424,12 @@ toms2
 ## 10     2 red         13.0 
 ## # … with 22 more rows
 ```
-
        
+This time I said "columns blue through green". Either way works for either.
 
-Reminder: data frame to gather, what makes the columns different
+Reminder for `gather`: what makes the columns different
 (they're different colours), what makes them the same (they're all
-growth rates), which columns to gather together (all the colour ones).
+growth rates), which columns to gather together (all the colour ones). I had to have a trick for remembering this, which I no longer need with `pivot_longer` (since I give the inputs names, and I can remember which is which).
 
 Since the column `plant` was never mentioned, this gets
 repeated as necessary, so now it denotes "plant within colour group", 
@@ -1272,7 +1440,7 @@ measures because plant number 1 in the blue group and plant number 1
 in the red group  are *different* plants.)
 
 There were 8 rows originally and 4 different colours, so there should
-be, and are, $8 \times 4=32$ rows in the gathered-up data set.
+be, and are, $8 \times 4=32$ rows in the made-longer data set.
 
 
 
@@ -1306,36 +1474,36 @@ cat tomatoes2.csv
 ```
 ## plant,colour,growthrate
 ## 1,blue,5.34
-## 2,blue,7.45
-## 3,blue,7.15
-## 4,blue,5.53
-## 5,blue,6.34
-## 6,blue,7.16
-## 7,blue,7.77
-## 8,blue,5.09
 ## 1,red,13.67
-## 2,red,13.04
-## 3,red,10.16
-## 4,red,13.12
-## 5,red,11.06
-## 6,red,11.43
-## 7,red,13.98
-## 8,red,13.49
 ## 1,yellow,4.61
-## 2,yellow,6.63
-## 3,yellow,5.29
-## 4,yellow,5.29
-## 5,yellow,4.76
-## 6,yellow,5.57
-## 7,yellow,6.57
-## 8,yellow,5.25
 ## 1,green,2.72
+## 2,blue,7.45
+## 2,red,13.04
+## 2,yellow,6.63
 ## 2,green,1.08
+## 3,blue,7.15
+## 3,red,10.16
+## 3,yellow,5.29
 ## 3,green,3.97
+## 4,blue,5.53
+## 4,red,13.12
+## 4,yellow,5.29
 ## 4,green,2.66
+## 5,blue,6.34
+## 5,red,11.06
+## 5,yellow,4.76
 ## 5,green,3.69
+## 6,blue,7.16
+## 6,red,11.43
+## 6,yellow,5.57
 ## 6,green,1.96
+## 7,blue,7.77
+## 7,red,13.98
+## 7,yellow,6.57
 ## 7,green,3.38
+## 8,blue,5.09
+## 8,red,13.49
+## 8,yellow,5.25
 ## 8,green,1.87
 ```
 
@@ -1361,7 +1529,7 @@ Nothing terribly surprising here. My data frame is called
 ggplot(toms2,aes(x=colour, y=growthrate))+geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
      
 
@@ -1522,9 +1690,7 @@ doesn't use the data very efficiently: it doesn't use how *far*
 above or below the overall median the data values are.)
 
 The story here, as ever, is consistency: whatever you thought was
-wrong, looking at the boxplots, needs to guide the test you do. This
-should probably be a flow chart, but this way works too:
-
+wrong, looking at the boxplots, needs to guide the test you do:
 
 
 * if you are not happy with normality, go with
@@ -2045,7 +2211,7 @@ Another way is to draw a boxplot of pain-relief scores:
 ggplot(migraine2, aes(x = drug, y = painrelief)) + geom_boxplot()
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
 
  
 
@@ -5797,7 +5963,7 @@ job to do something with the data and *explain*
 what you did so that somebody else can decide whether
 they believe you or not. A good explanation, even if it
 is not correct, will help you get at the truth because
-it will inspire someone to say ``in fact, it goes *this* way'',
+it will inspire someone to say "in fact, it goes *this* way",
 and then the two of you can jointly
 figure out what's actually going on.
 Detailed discussion follows. If you have *any*
@@ -6063,7 +6229,7 @@ heat %>%
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-149-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-155-1.png" width="672"  />
 
  
 The pattern is very scattered, as is commonly the case with
