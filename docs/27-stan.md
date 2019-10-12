@@ -359,8 +359,8 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 6e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 1: Gradient evaluation took 7e-06 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -377,15 +377,15 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.007814 seconds (Warm-up)
-## Chain 1:                0.007485 seconds (Sampling)
-## Chain 1:                0.015299 seconds (Total)
+## Chain 1:  Elapsed Time: 0.00771 seconds (Warm-up)
+## Chain 1:                0.006916 seconds (Sampling)
+## Chain 1:                0.014626 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 6e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 2: Gradient evaluation took 7e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -402,15 +402,15 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.007631 seconds (Warm-up)
-## Chain 2:                0.006982 seconds (Sampling)
-## Chain 2:                0.014613 seconds (Total)
+## Chain 2:  Elapsed Time: 0.007747 seconds (Warm-up)
+## Chain 2:                0.007242 seconds (Sampling)
+## Chain 2:                0.014989 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 6e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 3: Gradient evaluation took 5e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -427,9 +427,9 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.007656 seconds (Warm-up)
-## Chain 3:                0.0075 seconds (Sampling)
-## Chain 3:                0.015156 seconds (Total)
+## Chain 3:  Elapsed Time: 0.007561 seconds (Warm-up)
+## Chain 3:                0.007736 seconds (Sampling)
+## Chain 3:                0.015297 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 4).
@@ -452,9 +452,9 @@ binomial.1 <- sampling(binomial_code, binomial_data)
 ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.007598 seconds (Warm-up)
-## Chain 4:                0.006909 seconds (Sampling)
-## Chain 4:                0.014507 seconds (Total)
+## Chain 4:  Elapsed Time: 0.008341 seconds (Warm-up)
+## Chain 4:                0.007816 seconds (Sampling)
+## Chain 4:                0.016157 seconds (Total)
 ## Chain 4:
 ```
 
@@ -468,13 +468,13 @@ binomial.1
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-## p       0.25    0.00 0.03    0.20    0.23    0.25    0.27    0.30  1602
-## lp__ -159.35    0.02 0.69 -161.29 -159.54 -159.08 -158.89 -158.84  2013
+## p       0.25    0.00 0.03    0.20    0.23    0.25    0.27    0.30  1788
+## lp__ -159.34    0.02 0.71 -161.36 -159.50 -159.06 -158.89 -158.84  1509
 ##      Rhat
 ## p       1
 ## lp__    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Oct 12 14:13:36 2019.
+## Samples were drawn using NUTS(diag_e) at Sat Oct 12 18:51:24 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -940,15 +940,15 @@ reg.1 <- sampling(reg_code, reg_data)
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.106762 seconds (Warm-up)
-## Chain 1:                0.023951 seconds (Sampling)
-## Chain 1:                0.130713 seconds (Total)
+## Chain 1:  Elapsed Time: 0.138703 seconds (Warm-up)
+## Chain 1:                0.028864 seconds (Sampling)
+## Chain 1:                0.167567 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL 'reg' NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 9e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+## Chain 2: Gradient evaluation took 6e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -965,15 +965,15 @@ reg.1 <- sampling(reg_code, reg_data)
 ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.09572 seconds (Warm-up)
-## Chain 2:                0.029994 seconds (Sampling)
-## Chain 2:                0.125714 seconds (Total)
+## Chain 2:  Elapsed Time: 0.140316 seconds (Warm-up)
+## Chain 2:                0.055419 seconds (Sampling)
+## Chain 2:                0.195735 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL 'reg' NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 6e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 3: Gradient evaluation took 7e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -990,15 +990,15 @@ reg.1 <- sampling(reg_code, reg_data)
 ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.124126 seconds (Warm-up)
-## Chain 3:                0.024643 seconds (Sampling)
-## Chain 3:                0.148769 seconds (Total)
+## Chain 3:  Elapsed Time: 0.143484 seconds (Warm-up)
+## Chain 3:                0.028271 seconds (Sampling)
+## Chain 3:                0.171755 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL 'reg' NOW (CHAIN 4).
 ## Chain 4: 
-## Chain 4: Gradient evaluation took 5e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+## Chain 4: Gradient evaluation took 6e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 4: Adjust your expectations accordingly!
 ## Chain 4: 
 ## Chain 4: 
@@ -1015,9 +1015,9 @@ reg.1 <- sampling(reg_code, reg_data)
 ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.126394 seconds (Warm-up)
-## Chain 4:                0.026331 seconds (Sampling)
-## Chain 4:                0.152725 seconds (Total)
+## Chain 4:  Elapsed Time: 0.151611 seconds (Warm-up)
+## Chain 4:                0.022876 seconds (Sampling)
+## Chain 4:                0.174487 seconds (Total)
 ## Chain 4:
 ```
 
@@ -1030,18 +1030,18 @@ reg.1
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
-##          mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff
-## a     -616.46    2.44 97.63 -809.53 -681.69 -615.72 -550.39 -427.57  1608
-## b      521.82    0.67 26.86  469.54  503.56  521.97  540.39  572.51  1610
-## sigma  188.70    0.37 18.27  154.79  175.95  188.32  200.67  225.74  2457
-## lp__   373.73    0.03  1.19  370.57  373.18  374.03  374.61  375.12  1758
+##          mean se_mean     sd    2.5%     25%     50%     75%   97.5% n_eff
+## a     -613.17    2.43 100.92 -820.26 -680.76 -613.69 -544.86 -416.30  1719
+## b      520.55    0.66  27.29  466.76  502.34  520.61  539.07  573.67  1701
+## sigma  189.43    0.43  19.58  152.78  175.88  188.30  202.54  229.31  2081
+## lp__   373.66    0.03   1.29  370.35  373.10  373.99  374.58  375.11  1624
 ##       Rhat
 ## a        1
 ## b        1
 ## sigma    1
 ## lp__     1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Oct 12 14:13:38 2019.
+## Samples were drawn using NUTS(diag_e) at Sat Oct 12 18:51:26 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -1073,16 +1073,16 @@ sims
 ## # A tibble: 4,000 x 3
 ##        a     b sigma
 ##    <dbl> <dbl> <dbl>
-##  1 -326.  442.  182.
-##  2 -522.  505.  158.
-##  3 -476.  475.  194.
-##  4 -619.  513.  196.
-##  5 -660.  523.  195.
-##  6 -697.  524.  174.
-##  7 -604.  529.  179.
-##  8 -410.  471.  236.
-##  9 -685.  518.  159.
-## 10 -565.  494.  200.
+##  1 -578.  489.  173.
+##  2 -564.  502.  169.
+##  3 -574.  493.  181.
+##  4 -596.  528.  170.
+##  5 -617.  512.  203.
+##  6 -633.  526.  182.
+##  7 -414.  468.  195.
+##  8 -583.  525.  181.
+##  9 -714.  520.  190.
+## 10 -720.  529.  197.
 ## # … with 3,990 more rows
 ```
 
@@ -1110,7 +1110,7 @@ with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
 
 ```
 ##     2.5%    97.5% 
-## 1598.704 2406.313
+## 1602.376 2383.914
 ```
 
  

@@ -3050,7 +3050,7 @@ and there you see the `t` or "tab" characters separating the
 values, instead of spaces. (This is what I tried first, and once I
 looked at this, I realized that `read_tsv` was what I needed.)
 
-(b) Tidy these untidy data, going as directly as you can to something tidy. (Some later parts show you how it used to be done.) Begin by: (i) adding a column of row numbers, (ii) `rename`-ing the columns to species name, an underscore, and the variable contents (keeping `pulserate` as one word), and then use `pivot_longer`.
+(b) Tidy these untidy data, going as directly as you can to something tidy. (Some later parts show you how it used to be done.) Begin by: (i) adding a column of row numbers, (ii) `rename`-ing the columns to species name, an underscore, and the variable contents (keeping `pulserate` as one word), and then use `pivot_longer`. Note that the column names encode *two* things.
 
 
 
@@ -3059,6 +3059,44 @@ Solution
 
 
 Take this one piece of the pipeline at a time: that is, first check that you got the renaming right and looking at what you have, before proceeding to the `pivot_longer`. The syntax of `rename` is new name equals old name, and I like to split this over several lines to make it easier to read:
+
+
+```r
+crickets %>% 
+  mutate(row=row_number()) %>% 
+  rename(
+    exclamationis_temperature = X1,
+    exclamationis_pulserate = X2,
+    niveus_temperature = X3,
+    niveus_pulserate = X4
+  ) 
+```
+
+```
+## # A tibble: 17 x 5
+##    exclamationis_t… exclamationis_p… niveus_temperat… niveus_pulserate
+##               <dbl>            <dbl>            <dbl>            <dbl>
+##  1             20.8             67.9             17.2             44.3
+##  2             20.8             65.1             18.3             47.2
+##  3             24               77.3             18.3             47.6
+##  4             24               78.7             18.3             49.6
+##  5             24               79.4             18.9             50.3
+##  6             24               80.4             18.9             51.8
+##  7             26.2             85.8             20.4             60  
+##  8             26.2             86.6             21               58.5
+##  9             26.2             87.5             21               58.9
+## 10             26.2             89.1             22.1             60.7
+## 11             28.4             98.6             23.5             69.8
+## 12             29              101.              24.2             70.9
+## 13             30.4             99.3             25.9             76.2
+## 14             30.4            102.              26.5             76.1
+## 15             NA               NA               26.5             77  
+## 16             NA               NA               26.5             77.7
+## 17             NA               NA               28.6             84.7
+## # … with 1 more variable: row <int>
+```
+
+The first part of each column name is the species and the second part is what was measured each time, separated by an underscore. To handle that in `pivot_longer`, you give *two* names of new columns to create (in `names_to`), and say what they're separated by:
 
 
 ```r
@@ -3090,7 +3128,7 @@ crickets %>%
 ## # … with 58 more rows
 ```
 
-This is tidy, but we went a step too far: that column `measurement` should be *two* columns, called `temperature` and `pulserate`, which means it should be made wider:
+This is tidy now, but we went a step too far: that column `measurement` should be *two* columns, called `temperature` and `pulserate`, which means it should be made wider:
 
 
 ```r
@@ -3124,7 +3162,7 @@ crickets %>%
 ```
 
 
-The row numbers are cricket-within-species, which isn't very meaningful, but we needed something for the `pivot_wider` to key on, to recognize what needed to go in which row. 
+The row numbers are cricket-within-species, which isn't very meaningful, but we needed something for the `pivot_wider` to key on, to recognize what needed to go in which row. The way it works is it uses anything not mentioned in `names_from` or `values_from` as a "key": each unique combination belongs in a row. Here that would be the combination of row and species, which is a good key because each species appears once with each row number. 
 
 
 
@@ -3309,8 +3347,8 @@ you'll see what happened.
 (d) The two columns `exclamationis` and `niveus`
 that you just created are both temperature-pulse rate combos, but
 for different species. `gather` them together into one
-column, labelled by species. (This is a straight `tidyr`
-`gather`, even though they contain something odd-looking.)
+column, labelled by species. (This is a straight `tidyr` `pivot_longer` or
+`gather`, even though the columns contain something odd-looking.)
 
 
 Solution
@@ -3319,6 +3357,7 @@ Solution
 Thus, this, naming the new column `temp_pulse` since it
 contains both of those things. Add to the end of the pipe you
 started building in the previous part:
+
 
 ```r
 crickets %>%
@@ -6317,7 +6356,7 @@ heat %>%
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-159-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-160-1.png" width="672"  />
 
  
 The pattern is very scattered, as is commonly the case with
