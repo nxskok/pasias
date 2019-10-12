@@ -3050,7 +3050,7 @@ and there you see the `t` or "tab" characters separating the
 values, instead of spaces. (This is what I tried first, and once I
 looked at this, I realized that `read_tsv` was what I needed.)
 
-(b) Tidy these untidy data, going as directly as you can to something tidy. (Some later parts show you how it used to be done.) Begin by `rename`-ing the columns to species name, an underscore, and the variable contents (keeping `pulserate` as one word), and then use `pivot_longer`.
+(b) Tidy these untidy data, going as directly as you can to something tidy. (Some later parts show you how it used to be done.) Begin by: (i) adding a column of row numbers, (ii) `rename`-ing the columns to species name, an underscore, and the variable contents (keeping `pulserate` as one word), and then use `pivot_longer`.
 
 
 
@@ -3058,41 +3058,79 @@ Solution
 
 
 
+Take this one piece of the pipeline at a time: that is, first check that you got the renaming right and looking at what you have, before proceeding to the `pivot_longer`. The syntax of `rename` is new name equals old name, and I like to split this over several lines to make it easier to read:
+
 
 ```r
-crickets %>% rename(
-  exclamationis_temperature = X1,
-  exclamationis_pulserate = X2,
-  niveus_temperature = X3,
-  niveus_pulserate = X4
-)
+crickets %>% 
+  mutate(row=row_number()) %>% 
+  rename(
+    exclamationis_temperature = X1,
+    exclamationis_pulserate = X2,
+    niveus_temperature = X3,
+    niveus_pulserate = X4
+  ) %>% 
+  pivot_longer(-row, names_to=c("species", "measurement"), names_sep="_", values_to = "obs")
 ```
 
 ```
-## # A tibble: 17 x 4
-##    exclamationis_temp… exclamationis_pul… niveus_temperat… niveus_pulserate
-##                  <dbl>              <dbl>            <dbl>            <dbl>
-##  1                20.8               67.9             17.2             44.3
-##  2                20.8               65.1             18.3             47.2
-##  3                24                 77.3             18.3             47.6
-##  4                24                 78.7             18.3             49.6
-##  5                24                 79.4             18.9             50.3
-##  6                24                 80.4             18.9             51.8
-##  7                26.2               85.8             20.4             60  
-##  8                26.2               86.6             21               58.5
-##  9                26.2               87.5             21               58.9
-## 10                26.2               89.1             22.1             60.7
-## 11                28.4               98.6             23.5             69.8
-## 12                29                101.              24.2             70.9
-## 13                30.4               99.3             25.9             76.2
-## 14                30.4              102.              26.5             76.1
-## 15                NA                 NA               26.5             77  
-## 16                NA                 NA               26.5             77.7
-## 17                NA                 NA               28.6             84.7
+## # A tibble: 68 x 4
+##      row species       measurement   obs
+##    <int> <chr>         <chr>       <dbl>
+##  1     1 exclamationis temperature  20.8
+##  2     1 exclamationis pulserate    67.9
+##  3     1 niveus        temperature  17.2
+##  4     1 niveus        pulserate    44.3
+##  5     2 exclamationis temperature  20.8
+##  6     2 exclamationis pulserate    65.1
+##  7     2 niveus        temperature  18.3
+##  8     2 niveus        pulserate    47.2
+##  9     3 exclamationis temperature  24  
+## 10     3 exclamationis pulserate    77.3
+## # … with 58 more rows
+```
+
+This is tidy, but we went a step too far: that column `measurement` should be *two* columns, called `temperature` and `pulserate`, which means it should be made wider:
+
+
+```r
+crickets %>% 
+  mutate(row=row_number()) %>% 
+  rename(
+    exclamationis_temperature = X1,
+    exclamationis_pulserate = X2,
+    niveus_temperature = X3,
+    niveus_pulserate = X4
+  ) %>% 
+  pivot_longer(-row, names_to=c("species", "measurement"), names_sep="_", values_to = "obs") %>% 
+  pivot_wider(names_from=measurement, values_from=obs)
+```
+
+```
+## # A tibble: 34 x 4
+##      row species       temperature pulserate
+##    <int> <chr>               <dbl>     <dbl>
+##  1     1 exclamationis        20.8      67.9
+##  2     1 niveus               17.2      44.3
+##  3     2 exclamationis        20.8      65.1
+##  4     2 niveus               18.3      47.2
+##  5     3 exclamationis        24        77.3
+##  6     3 niveus               18.3      47.6
+##  7     4 exclamationis        24        78.7
+##  8     4 niveus               18.3      49.6
+##  9     5 exclamationis        24        79.4
+## 10     5 niveus               18.9      50.3
+## # … with 24 more rows
 ```
 
 
-(b) These data are rather far from being tidy. There need to be
+The row numbers are cricket-within-species, which isn't very meaningful, but we needed something for the `pivot_wider` to key on, to recognize what needed to go in which row. 
+
+
+
+(c) If you found (b) a bit much to take in, the rest of the way we take a rather more leisurely approach towards the tidying. This is the way it used to need to be done, with `gather`.
+
+These data are rather far from being tidy. There need to be
 three variables, temperature, pulse rate and species, and there
 are $14+17=31$ observations altogether. This one is tricky in that
 there are temperature and pulse rate for each of two levels of a
@@ -3268,7 +3306,7 @@ you'll see what happened.
       
 
 
-(c) The two columns `exclamationis` and `niveus`
+(d) The two columns `exclamationis` and `niveus`
 that you just created are both temperature-pulse rate combos, but
 for different species. `gather` them together into one
 column, labelled by species. (This is a straight `tidyr`
@@ -3315,10 +3353,39 @@ at the moment, `NA_NA`.
 This is going to get rather long, but don't fret: we debugged the two
 `unite` lines before, so if you get any errors, they must
 have come from the `gather`. So that would be the place to check.
+
+This, inevitably, can also be done with `pivot_long`:
+
+
+```r
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  pivot_longer(everything(), names_to="species", values_to="temp_pulse")
+```
+
+```
+## # A tibble: 34 x 2
+##    species       temp_pulse
+##    <chr>         <chr>     
+##  1 exclamationis 20.8_67.9 
+##  2 niveus        17.2_44.3 
+##  3 exclamationis 20.8_65.1 
+##  4 niveus        18.3_47.2 
+##  5 exclamationis 24_77.3   
+##  6 niveus        18.3_47.6 
+##  7 exclamationis 24_78.7   
+##  8 niveus        18.3_49.6 
+##  9 exclamationis 24_79.4   
+## 10 niveus        18.9_50.3 
+## # … with 24 more rows
+```
+
+Feel free to use this the rest of the way.
       
 
 
-(d) Now split up the temperature-pulse combos at the underscore, into
+(e) Now split up the temperature-pulse combos at the underscore, into
 two separate columns. This is `separate`. When specifying
 what to separate by, you can use a number ("split after this many characters") or a piece of text, in quotes ("when you see this text, split at it"). 
 
@@ -3363,7 +3430,7 @@ You'll note that `unite` and `separate` are opposites ("inverses") of each other
       
 
 
-(e) Almost there.  Temperature and pulse rate are still text
+(f) Almost there.  Temperature and pulse rate are still text
 (because `unite` turned them into text), but they should be
 numbers. Create new variables that are numerical versions of
 temperature and pulse rate (using `as.numeric`). Check that
@@ -3458,28 +3525,15 @@ crickets %>%
   unite(niveus, X3:X4) %>%
   gather(species, temp_pulse, exclamationis:niveus) %>%
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
-  mutate_at(vars(temperature:pulse_rate), funs(as.numeric))
+  mutate_at(vars(temperature:pulse_rate), ~as.numeric(.))
 ```
 
 ```
-## Warning: funs() is soft deprecated as of dplyr 0.8.0
-## Please use a list of either functions or lambdas: 
-## 
-##   # Simple named list: 
-##   list(mean = mean, median = median)
-## 
-##   # Auto named with `tibble::lst()`: 
-##   tibble::lst(mean, median)
-## 
-##   # Using lambdas
-##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once per session.
+## Warning in ~as.numeric(.): NAs introduced by coercion
 ```
 
 ```
-## Warning: NAs introduced by coercion
-
-## Warning: NAs introduced by coercion
+## Warning in ~as.numeric(.): NAs introduced by coercion
 ```
 
 ```
@@ -3510,13 +3564,15 @@ crickets %>%
   unite(niveus, X3:X4) %>%
   gather(species, temp_pulse, exclamationis:niveus) %>%
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
-  mutate_at(vars(2:3), funs(as.numeric))
+  mutate_at(vars(2:3), ~as.numeric(.))
 ```
 
 ```
-## Warning: NAs introduced by coercion
+## Warning in ~as.numeric(.): NAs introduced by coercion
+```
 
-## Warning: NAs introduced by coercion
+```
+## Warning in ~as.numeric(.): NAs introduced by coercion
 ```
 
 ```
@@ -6261,7 +6317,7 @@ heat %>%
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-157-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-159-1.png" width="672"  />
 
  
 The pattern is very scattered, as is commonly the case with

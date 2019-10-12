@@ -70,7 +70,7 @@ and there you see the `t` or "tab" characters separating the
 values, instead of spaces. (This is what I tried first, and once I
 looked at this, I realized that `read_tsv` was what I needed.)
 
-(b) Tidy these untidy data, going as directly as you can to something tidy. (Some later parts show you how it used to be done.) Begin by `rename`-ing the columns to species name, an underscore, and the variable contents (keeping `pulserate` as one word), and then use `pivot_longer`.
+(b) Tidy these untidy data, going as directly as you can to something tidy. (Some later parts show you how it used to be done.) Begin by: (i) adding a column of row numbers, (ii) `rename`-ing the columns to species name, an underscore, and the variable contents (keeping `pulserate` as one word), and then use `pivot_longer`.
 
 
 
@@ -78,17 +78,44 @@ Solution
 
 
 
+Take this one piece of the pipeline at a time: that is, first check that you got the renaming right and looking at what you have, before proceeding to the `pivot_longer`. The syntax of `rename` is new name equals old name, and I like to split this over several lines to make it easier to read:
+
 ```{r}
-crickets %>% rename(
-  exclamationis_temperature = X1,
-  exclamationis_pulserate = X2,
-  niveus_temperature = X3,
-  niveus_pulserate = X4
-)
+crickets %>% 
+  mutate(row=row_number()) %>% 
+  rename(
+    exclamationis_temperature = X1,
+    exclamationis_pulserate = X2,
+    niveus_temperature = X3,
+    niveus_pulserate = X4
+  ) %>% 
+  pivot_longer(-row, names_to=c("species", "measurement"), names_sep="_", values_to = "obs")
+```
+
+This is tidy, but we went a step too far: that column `measurement` should be *two* columns, called `temperature` and `pulserate`, which means it should be made wider:
+
+```{r}
+crickets %>% 
+  mutate(row=row_number()) %>% 
+  rename(
+    exclamationis_temperature = X1,
+    exclamationis_pulserate = X2,
+    niveus_temperature = X3,
+    niveus_pulserate = X4
+  ) %>% 
+  pivot_longer(-row, names_to=c("species", "measurement"), names_sep="_", values_to = "obs") %>% 
+  pivot_wider(names_from=measurement, values_from=obs)
+
 ```
 
 
-(b) These data are rather far from being tidy. There need to be
+The row numbers are cricket-within-species, which isn't very meaningful, but we needed something for the `pivot_wider` to key on, to recognize what needed to go in which row. 
+
+
+
+(c) If you found (b) a bit much to take in, the rest of the way we take a rather more leisurely approach towards the tidying. This is the way it used to need to be done, with `gather`.
+
+These data are rather far from being tidy. There need to be
 three variables, temperature, pulse rate and species, and there
 are $14+17=31$ observations altogether. This one is tricky in that
 there are temperature and pulse rate for each of two levels of a
@@ -189,7 +216,7 @@ you'll see what happened.
       
 
 
-(c) The two columns `exclamationis` and `niveus`
+(d) The two columns `exclamationis` and `niveus`
 that you just created are both temperature-pulse rate combos, but
 for different species. `gather` them together into one
 column, labelled by species. (This is a straight `tidyr`
@@ -218,10 +245,21 @@ at the moment, `NA_NA`.
 This is going to get rather long, but don't fret: we debugged the two
 `unite` lines before, so if you get any errors, they must
 have come from the `gather`. So that would be the place to check.
+
+This, inevitably, can also be done with `pivot_long`:
+
+```{r}
+crickets %>%
+  unite(exclamationis, X1:X2) %>%
+  unite(niveus, X3:X4) %>%
+  pivot_longer(everything(), names_to="species", values_to="temp_pulse")
+```
+
+Feel free to use this the rest of the way.
       
 
 
-(d) Now split up the temperature-pulse combos at the underscore, into
+(e) Now split up the temperature-pulse combos at the underscore, into
 two separate columns. This is `separate`. When specifying
 what to separate by, you can use a number ("split after this many characters") or a piece of text, in quotes ("when you see this text, split at it"). 
 
@@ -248,7 +286,7 @@ You'll note that `unite` and `separate` are opposites ("inverses") of each other
       
 
 
-(e) Almost there.  Temperature and pulse rate are still text
+(f) Almost there.  Temperature and pulse rate are still text
 (because `unite` turned them into text), but they should be
 numbers. Create new variables that are numerical versions of
 temperature and pulse rate (using `as.numeric`). Check that
@@ -315,7 +353,7 @@ crickets %>%
   unite(niveus, X3:X4) %>%
   gather(species, temp_pulse, exclamationis:niveus) %>%
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
-  mutate_at(vars(temperature:pulse_rate), funs(as.numeric))
+  mutate_at(vars(temperature:pulse_rate), ~as.numeric(.))
 ```
 
  
@@ -328,7 +366,7 @@ crickets %>%
   unite(niveus, X3:X4) %>%
   gather(species, temp_pulse, exclamationis:niveus) %>%
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
-  mutate_at(vars(2:3), funs(as.numeric))
+  mutate_at(vars(2:3), ~as.numeric(.))
 ```
 
  
