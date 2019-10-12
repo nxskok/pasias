@@ -331,9 +331,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="repeated-measures" class="section level1">
 <h1><span class="header-section-number">Chapter 24</span> Repeated measures</h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb3146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3146-1" data-line-number="1"><span class="kw">library</span>(car)</a>
-<a class="sourceLine" id="cb3146-2" data-line-number="2"><span class="kw">library</span>(lme4)</a>
-<a class="sourceLine" id="cb3146-3" data-line-number="3"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb3144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3144-1" data-line-number="1"><span class="kw">library</span>(car)</a>
+<a class="sourceLine" id="cb3144-2" data-line-number="2"><span class="kw">library</span>(lme4)</a>
+<a class="sourceLine" id="cb3144-3" data-line-number="3"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
 ## Please use `env_bind_active()` instead.
 ## This warning is displayed once per session.</code></pre>
@@ -356,8 +356,8 @@ measured 5 times). The data are in
 <p>Solution</p>
 <p>A <code>.csv</code> file, so <code>read_csv</code>. (I typed the data from
 Christensen (2001) into a spreadsheet.)</p>
-<div class="sourceCode" id="cb3148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3148-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/ratweight.csv&quot;</span></a>
-<a class="sourceLine" id="cb3148-2" data-line-number="2">weights &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb3146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3146-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/ratweight.csv&quot;</span></a>
+<a class="sourceLine" id="cb3146-2" data-line-number="2">weights &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   rat = col_double(),
@@ -368,7 +368,7 @@ Christensen (2001) into a spreadsheet.)</p>
 ##   Time3 = col_double(),
 ##   Time4 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3150-1" data-line-number="1">weights</a></code></pre></div>
+<div class="sourceCode" id="cb3148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3148-1" data-line-number="1">weights</a></code></pre></div>
 <pre><code>## # A tibble: 27 x 7
 ##      rat drug       Time0 Time1 Time2 Time3 Time4
 ##    &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -403,8 +403,8 @@ take that into account.</p>
 <p>Solution</p>
 <p>The response variable is the same idea as for any MANOVA: just
 glue the columns together:</p>
-<div class="sourceCode" id="cb3152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3152-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(weights, <span class="kw">cbind</span>(Time0, Time1, Time2, Time3, Time4))</a>
-<a class="sourceLine" id="cb3152-2" data-line-number="2">weights<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> weights)</a></code></pre></div>
+<div class="sourceCode" id="cb3150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3150-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(weights, <span class="kw">cbind</span>(Time0, Time1, Time2, Time3, Time4))</a>
+<a class="sourceLine" id="cb3150-2" data-line-number="2">weights<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> weights)</a></code></pre></div>
 <p>Now, we <em>don’t</em> look at <code>weights.1</code>, but we <em>do</em> use
 it as input to <code>Manova</code> in a moment.</p>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -414,9 +414,9 @@ for <code>idata</code> and <code>idesign</code>.</li>
 </ol>
 <p>Solution</p>
 <p>Something like this:</p>
-<div class="sourceCode" id="cb3153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3153-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3153-2" data-line-number="2">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
-<a class="sourceLine" id="cb3153-3" data-line-number="3">weights<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(weights<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
+<div class="sourceCode" id="cb3151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3151-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3151-2" data-line-number="2">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
+<a class="sourceLine" id="cb3151-3" data-line-number="3">weights<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(weights<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
 <p>The thought process is that the columns of the response
 (<code>Time.0</code> through <code>Time.4</code>) are all times. This is the
 “within-subject design” part of it: within a rat, the different
@@ -431,7 +431,7 @@ significant interaction? What does its significance (or lack
 thereof) mean?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3154-1" data-line-number="1">weights<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3152-1" data-line-number="1">weights<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
 ##             Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -456,9 +456,9 @@ need to do the <code>separate</code> thing that I did in class, though
 if you want to try it, go ahead.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3156-1" data-line-number="1">weights.long &lt;-<span class="st"> </span>weights <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3156-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(time, weight, Time0<span class="op">:</span>Time4)</a>
-<a class="sourceLine" id="cb3156-3" data-line-number="3">weights.long</a></code></pre></div>
+<div class="sourceCode" id="cb3154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3154-1" data-line-number="1">weights.long &lt;-<span class="st"> </span>weights <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3154-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(time, weight, Time0<span class="op">:</span>Time4)</a>
+<a class="sourceLine" id="cb3154-3" data-line-number="3">weights.long</a></code></pre></div>
 <pre><code>## # A tibble: 135 x 4
 ##      rat drug       time  weight
 ##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;  &lt;dbl&gt;
@@ -478,33 +478,33 @@ variable called <code>weight</code>. Watch out for that if you call the
 data frame <code>weight</code>, though.</p>
 <p>If you want to try the <code>separate</code> thing, that goes something
 like this:</p>
-<div class="sourceCode" id="cb3158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3158-1" data-line-number="1">weights <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3158-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(timex, weight, Time0<span class="op">:</span>Time4) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3158-3" data-line-number="3"><span class="st">  </span><span class="kw">separate</span>(timex, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;junk&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="dt">sep =</span> <span class="dv">4</span>) -&gt;<span class="st"> </span>weights2.long</a>
-<a class="sourceLine" id="cb3158-4" data-line-number="4">weights2.long <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3156-1" data-line-number="1">weights <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3156-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(timex, weight, Time0<span class="op">:</span>Time4) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3156-3" data-line-number="3"><span class="st">  </span><span class="kw">separate</span>(timex, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;junk&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="dt">sep =</span> <span class="dv">4</span>) -&gt;<span class="st"> </span>weights2.long</a>
+<a class="sourceLine" id="cb3156-4" data-line-number="4">weights2.long <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">20</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 20 x 5
 ##      rat drug       junk  time  weight
 ##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
-##  1    27 control    Time  1         82
-##  2    13 thiouracil Time  1         75
-##  3    15 thiouracil Time  1         69
-##  4    18 control    Time  3        139
-##  5     8 thiouracil Time  0         61
-##  6    16 thiouracil Time  1         61
-##  7     3 thyroxin   Time  3        151
-##  8    22 control    Time  0         56
-##  9     1 thyroxin   Time  2        121
-## 10    11 thiouracil Time  4        122
-## 11     3 thyroxin   Time  0         56
-## 12     4 thyroxin   Time  4        177
-## 13    10 thiouracil Time  3        106
-## 14     6 thyroxin   Time  2         97
-## 15    27 control    Time  2        110
-## 16     2 thyroxin   Time  2         90
-## 17    10 thiouracil Time  1         79
-## 18    19 control    Time  0         60
-## 19    17 thiouracil Time  1         72
-## 20    16 thiouracil Time  3         90</code></pre>
+##  1    16 thiouracil Time  4        107
+##  2    18 control    Time  1         86
+##  3     5 thyroxin   Time  4        144
+##  4    21 control    Time  4        164
+##  5     6 thyroxin   Time  3        116
+##  6    22 control    Time  4        151
+##  7     4 thyroxin   Time  3        148
+##  8    22 control    Time  3        121
+##  9     4 thyroxin   Time  4        177
+## 10     3 thyroxin   Time  1         75
+## 11    16 thiouracil Time  0         46
+## 12    18 control    Time  3        139
+## 13     1 thyroxin   Time  0         59
+## 14    14 thiouracil Time  4        108
+## 15    11 thiouracil Time  1         88
+## 16    17 thiouracil Time  1         72
+## 17    16 thiouracil Time  1         61
+## 18    20 control    Time  1         77
+## 19    14 thiouracil Time  3        103
+## 20    10 thiouracil Time  0         53</code></pre>
 <p>Separate after the fourth character (<code>sep=4</code>), which will put
 <code>Time</code> into <code>junk</code> and the actual time into
 <code>time</code>. I could also have organized the data file so that the
@@ -513,33 +513,33 @@ like an underscore, and you could have separated at that.
 Since the piece of the time we want is the number,
 <code>parse_number</code> (from <code>readr</code>, part of the
 <code>tidyverse</code>) should also work:</p>
-<div class="sourceCode" id="cb3160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3160-1" data-line-number="1">weights2.long &lt;-<span class="st"> </span>weights <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3160-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(timex, weight, Time0<span class="op">:</span>Time4) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3160-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(timex))</a>
-<a class="sourceLine" id="cb3160-4" data-line-number="4">weights2.long <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3158-1" data-line-number="1">weights2.long &lt;-<span class="st"> </span>weights <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3158-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(timex, weight, Time0<span class="op">:</span>Time4) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3158-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(timex))</a>
+<a class="sourceLine" id="cb3158-4" data-line-number="4">weights2.long <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">20</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
-##  1     9 thiouracil Time4    122     4
-##  2    17 thiouracil Time0     53     0
-##  3     1 thyroxin   Time1     85     1
-##  4    16 thiouracil Time1     61     1
-##  5    11 thiouracil Time2    100     2
-##  6    12 thiouracil Time1     75     1
-##  7    14 thiouracil Time3    103     3
-##  8    10 thiouracil Time4    133     4
-##  9     7 thyroxin   Time3    138     3
-## 10    21 control    Time0     49     0
-## 11     3 thyroxin   Time2    108     2
-## 12     6 thyroxin   Time3    116     3
-## 13     4 thyroxin   Time4    177     4
-## 14     2 thyroxin   Time1     71     1
-## 15    27 control    Time4    169     4
-## 16    24 control    Time0     51     0
-## 17    20 control    Time2    111     2
-## 18     2 thyroxin   Time0     54     0
-## 19    15 thiouracil Time4    138     4
-## 20    23 control    Time3    131     3</code></pre>
+##  1     4 thyroxin   Time1     85     1
+##  2    21 control    Time4    164     4
+##  3     7 thyroxin   Time2    105     2
+##  4    18 control    Time1     86     1
+##  5     9 thiouracil Time2    101     2
+##  6    19 control    Time1     93     1
+##  7    20 control    Time4    185     4
+##  8    11 thiouracil Time3    111     3
+##  9    27 control    Time1     82     1
+## 10    10 thiouracil Time0     53     0
+## 11    18 control    Time3    139     3
+## 12     3 thyroxin   Time1     75     1
+## 13    23 control    Time2    102     2
+## 14    23 control    Time3    131     3
+## 15    26 control    Time3    112     3
+## 16     3 thyroxin   Time3    151     3
+## 17    11 thiouracil Time1     88     1
+## 18     3 thyroxin   Time4    189     4
+## 19    20 control    Time3    144     3
+## 20    19 control    Time2    123     2</code></pre>
 <p>I decided to show you a random collection of rows, so that you can see
 that <code>parse_number</code> worked for various different times.</p>
 <ol start="7" style="list-style-type: lower-alpha">
@@ -554,11 +554,11 @@ latter using the data frame that came out of the
 <code>summarize</code>. The second factor <code>drug</code> goes as the
 <code>colour</code> and <code>group</code> both, since <code>time</code> has
 grabbed the <code>x</code> spot:</p>
-<div class="sourceCode" id="cb3162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3162-1" data-line-number="1">weights.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3162-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(time, drug) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3162-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.weight =</span> <span class="kw">mean</span>(weight)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3162-4" data-line-number="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean.weight, <span class="dt">colour =</span> drug, <span class="dt">group =</span> drug)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3162-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3160-1" data-line-number="1">weights.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3160-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(time, drug) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3160-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.weight =</span> <span class="kw">mean</span>(weight)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3160-4" data-line-number="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean.weight, <span class="dt">colour =</span> drug, <span class="dt">group =</span> drug)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3160-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-11-1.png" width="672"  /></p>
 <ol start="8" style="list-style-type: lower-alpha">
 <li>How does this plot show why the interaction was
@@ -595,10 +595,10 @@ gather together the columns <code>Time0</code> through
 the <code>x</code> part (<code>x</code> being 0, 1, 2, 3, 4), but I won’t
 do that here. Then we save the result into a new data frame
 <code>wt</code>, and take a look at the first few lines:</p>
-<div class="sourceCode" id="cb3163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3163-1" data-line-number="1">wt &lt;-<span class="st"> </span>weights <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3163-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3163-3" data-line-number="3"><span class="st">  </span><span class="kw">gather</span>(time, weight, Time0<span class="op">:</span>Time4)</a>
-<a class="sourceLine" id="cb3163-4" data-line-number="4">wt</a></code></pre></div>
+<div class="sourceCode" id="cb3161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3161-1" data-line-number="1">wt &lt;-<span class="st"> </span>weights <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3161-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3161-3" data-line-number="3"><span class="st">  </span><span class="kw">gather</span>(time, weight, Time0<span class="op">:</span>Time4)</a>
+<a class="sourceLine" id="cb3161-4" data-line-number="4">wt</a></code></pre></div>
 <pre><code>## # A tibble: 135 x 5
 ##      rat drug       subject time  weight
 ##    &lt;dbl&gt; &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;
@@ -615,7 +615,7 @@ do that here. Then we save the result into a new data frame
 ## # … with 125 more rows</code></pre>
 <p>Each rat is identified by <code>subject</code>, which repeats 5 times,
 once for each value of <code>time</code>:</p>
-<div class="sourceCode" id="cb3165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3165-1" data-line-number="1">wt <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(rat)</a></code></pre></div>
+<div class="sourceCode" id="cb3163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3163-1" data-line-number="1">wt <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(rat)</a></code></pre></div>
 <pre><code>## # A tibble: 27 x 2
 ##      rat     n
 ##    &lt;dbl&gt; &lt;int&gt;
@@ -635,11 +635,11 @@ pretty straightforward. In the data frame <code>wt</code>, we plot
 <code>time</code> (<span class="math inline">\(x\)</span>) against <code>weight</code> (<span class="math inline">\(y\)</span>), grouping the points
 according to subject and colouring them according to
 <code>drug</code>.</p>
-<div class="sourceCode" id="cb3167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3167-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<div class="sourceCode" id="cb3165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3165-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
 <pre><code>## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
 ## Please use `quo_squash()` instead.
 ## This warning is displayed once per session.</code></pre>
-<div class="sourceCode" id="cb3169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3169-1" data-line-number="1"><span class="kw">ggplot</span>(wt, <span class="kw">aes</span>(time, weight, <span class="dt">group =</span> subject, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3167-1" data-line-number="1"><span class="kw">ggplot</span>(wt, <span class="kw">aes</span>(time, weight, <span class="dt">group =</span> subject, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/mantequilla-1.png" width="576"  /></p>
 <p>This is often called, rather aptly, a “spaghetti plot”.</p>
 <p>I like this plot because, unlike the interaction plot, which shows
@@ -657,15 +657,15 @@ a range of colours like light blue to dark blue, with lighter being
 higher, for example.</p>
 <p>What, you want to see that? All right. This one is kind of silly, but
 you see the point:</p>
-<div class="sourceCode" id="cb3170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3170-1" data-line-number="1"><span class="kw">ggplot</span>(wt, <span class="kw">aes</span>(time, weight, <span class="dt">group =</span> subject, <span class="dt">colour =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3168-1" data-line-number="1"><span class="kw">ggplot</span>(wt, <span class="kw">aes</span>(time, weight, <span class="dt">group =</span> subject, <span class="dt">colour =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/alphington-1.png" width="576"  /></p>
 <p>The line segments get lighter as you go up the page.</p>
 <p>Since we went to the trouble of making the “long” data frame
 <code>wt</code>, we can also run a repeated measures analysis using the
 mixed-model idea (described more fully in the problem of the children
 near the new airport):</p>
-<div class="sourceCode" id="cb3171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3171-1" data-line-number="1">wt<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(weight <span class="op">~</span><span class="st"> </span>drug <span class="op">*</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>subject), <span class="dt">data =</span> wt)</a>
-<a class="sourceLine" id="cb3171-2" data-line-number="2"><span class="kw">drop1</span>(wt<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3169-1" data-line-number="1">wt<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(weight <span class="op">~</span><span class="st"> </span>drug <span class="op">*</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>subject), <span class="dt">data =</span> wt)</a>
+<a class="sourceLine" id="cb3169-2" data-line-number="2"><span class="kw">drop1</span>(wt<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -701,8 +701,8 @@ any patterns over time.</p>
 </ol>
 <p>Solution</p>
 <p>The usual, separated by a single space:</p>
-<div class="sourceCode" id="cb3173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3173-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/geriatrics.txt&quot;</span></a>
-<a class="sourceLine" id="cb3173-2" data-line-number="2">geriatrics &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3171-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/geriatrics.txt&quot;</span></a>
+<a class="sourceLine" id="cb3171-2" data-line-number="2">geriatrics &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   subject = col_double(),
@@ -712,7 +712,7 @@ any patterns over time.</p>
 ##   t3 = col_double(),
 ##   t4 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3175-1" data-line-number="1">geriatrics</a></code></pre></div>
+<div class="sourceCode" id="cb3173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3173-1" data-line-number="1">geriatrics</a></code></pre></div>
 <pre><code>## # A tibble: 21 x 6
 ##    subject treatment    t1    t2    t3    t4
 ##      &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -735,8 +735,8 @@ as the first stage of the repeated-measures analysis.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb3177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3177-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(geriatrics, <span class="kw">cbind</span>(t1, t2, t3, t4))</a>
-<a class="sourceLine" id="cb3177-2" data-line-number="2">geriatrics<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>treatment, <span class="dt">data =</span> geriatrics)</a></code></pre></div>
+<div class="sourceCode" id="cb3175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3175-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(geriatrics, <span class="kw">cbind</span>(t1, t2, t3, t4))</a>
+<a class="sourceLine" id="cb3175-2" data-line-number="2">geriatrics<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>treatment, <span class="dt">data =</span> geriatrics)</a></code></pre></div>
 <p>There is no need to look at this, since we are going to feed it into
 <code>Manova</code> in a moment, but in case you’re curious, you see (in <code>summary</code>) a
 regression of each of the four columns in <code>response</code> on
@@ -748,11 +748,11 @@ first. Make sure you do that.</li>
 <p>Solution</p>
 <p>Make sure <code>car</code> is loaded, and do the <code>idata</code> and
 <code>idesign</code> thing:</p>
-<div class="sourceCode" id="cb3178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3178-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3178-2" data-line-number="2">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
-<a class="sourceLine" id="cb3178-3" data-line-number="3">geriatrics<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(geriatrics<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
+<div class="sourceCode" id="cb3176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3176-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3176-2" data-line-number="2">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
+<a class="sourceLine" id="cb3176-3" data-line-number="3">geriatrics<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(geriatrics<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
 <p>In case you’re curious, <code>response</code> is an R <code>matrix</code>:</p>
-<div class="sourceCode" id="cb3179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3179-1" data-line-number="1"><span class="kw">class</span>(response)</a></code></pre></div>
+<div class="sourceCode" id="cb3177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3177-1" data-line-number="1"><span class="kw">class</span>(response)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <p>and
 not a data frame (because it was created by <code>cbind</code> which makes
@@ -765,7 +765,7 @@ analysis. What do you conclude? Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>Just “printing” it will get you what you want:</p>
-<div class="sourceCode" id="cb3181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3181-1" data-line-number="1">geriatrics<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3179-1" data-line-number="1">geriatrics<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
 ##                 Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -790,9 +790,9 @@ have done so.</li>
 </ol>
 <p>Solution</p>
 <p>The usual layout for <code>gather</code>:</p>
-<div class="sourceCode" id="cb3183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3183-1" data-line-number="1">geriatrics.long &lt;-<span class="st"> </span>geriatrics <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3183-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(time, intpct, t1<span class="op">:</span>t4)</a>
-<a class="sourceLine" id="cb3183-3" data-line-number="3">geriatrics.long</a></code></pre></div>
+<div class="sourceCode" id="cb3181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3181-1" data-line-number="1">geriatrics.long &lt;-<span class="st"> </span>geriatrics <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3181-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(time, intpct, t1<span class="op">:</span>t4)</a>
+<a class="sourceLine" id="cb3181-3" data-line-number="3">geriatrics.long</a></code></pre></div>
 <pre><code>## # A tibble: 84 x 4
 ##    subject treatment time  intpct
 ##      &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;
@@ -825,10 +825,10 @@ time-treatment combination.</li>
 </ol>
 <p>Solution</p>
 <p><code>group_by</code> followed by <code>summarize</code>, as ever:</p>
-<div class="sourceCode" id="cb3185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3185-1" data-line-number="1">geriatrics.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3185-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(treatment, time) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3185-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(intpct)) -&gt;<span class="st"> </span>means</a>
-<a class="sourceLine" id="cb3185-4" data-line-number="4">means</a></code></pre></div>
+<div class="sourceCode" id="cb3183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3183-1" data-line-number="1">geriatrics.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3183-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(treatment, time) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3183-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(intpct)) -&gt;<span class="st"> </span>means</a>
+<a class="sourceLine" id="cb3183-4" data-line-number="4">means</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 3
 ## # Groups:   treatment [3]
 ##    treatment time   mean
@@ -851,8 +851,8 @@ across the page. Use your data frame of means that you just calculated.</li>
 </ol>
 <p>Solution</p>
 <p>Once you have the means, this is not too bad:</p>
-<div class="sourceCode" id="cb3187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3187-1" data-line-number="1"><span class="kw">ggplot</span>(means, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean, <span class="dt">group =</span> treatment, <span class="dt">colour =</span> treatment)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3187-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3185-1" data-line-number="1"><span class="kw">ggplot</span>(means, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean, <span class="dt">group =</span> treatment, <span class="dt">colour =</span> treatment)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3185-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/ger_int-1.png" width="672"  /></p>
 <p>The “second factor” <code>treatment</code> appears as both
 <code>group</code> and <code>colour</code>.</p>
@@ -886,8 +886,8 @@ this (not the data frame of means).</li>
 </ol>
 <p>Solution</p>
 <p>This is almost easier to do than it is to ask you to do:</p>
-<div class="sourceCode" id="cb3188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3188-1" data-line-number="1"><span class="kw">ggplot</span>(geriatrics.long, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> intpct, <span class="dt">colour =</span> treatment, <span class="dt">group =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3188-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3186-1" data-line-number="1"><span class="kw">ggplot</span>(geriatrics.long, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> intpct, <span class="dt">colour =</span> treatment, <span class="dt">group =</span> subject)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3186-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/ger_spag-1.png" width="672"  /></p>
 <p>The basic difficulty here is to get all the parts. We need both a
 <code>colour</code> and a <code>group</code>; the latter controls the joining
@@ -913,8 +913,8 @@ control subjects? Would there still be an interaction?
 <label for="tufte-mn-201" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-201" class="margin-toggle"><span class="marginnote">This is rather like removing time zero in the example in class.</span></p>
 <p>All right, we need to start with the original wide data frame, and
 from <em>that</em> select everything but <code>ctrl</code>:</p>
-<div class="sourceCode" id="cb3189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3189-1" data-line-number="1">gg &lt;-<span class="st"> </span>geriatrics <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(treatment <span class="op">!=</span><span class="st"> &quot;ctrl&quot;</span>)</a>
-<a class="sourceLine" id="cb3189-2" data-line-number="2">gg</a></code></pre></div>
+<div class="sourceCode" id="cb3187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3187-1" data-line-number="1">gg &lt;-<span class="st"> </span>geriatrics <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(treatment <span class="op">!=</span><span class="st"> &quot;ctrl&quot;</span>)</a>
+<a class="sourceLine" id="cb3187-2" data-line-number="2">gg</a></code></pre></div>
 <pre><code>## # A tibble: 14 x 6
 ##    subject treatment    t1    t2    t3    t4
 ##      &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -935,7 +935,7 @@ from <em>that</em> select everything but <code>ctrl</code>:</p>
 <p>So now there are two treatments left, seven people on
 each:
 <label for="tufte-mn-202" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-202" class="margin-toggle"><span class="marginnote">The factor <em>treatment</em> still has three levels, but only two of them have any remaining data.</span></p>
-<div class="sourceCode" id="cb3191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3191-1" data-line-number="1">gg <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(treatment)</a></code></pre></div>
+<div class="sourceCode" id="cb3189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3189-1" data-line-number="1">gg <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(treatment)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   treatment     n
 ##   &lt;chr&gt;     &lt;int&gt;
@@ -945,13 +945,13 @@ each:
 the same stuff over again: construct the response, run the
 <code>lm</code>, create the stuff for <code>idata</code> and <code>idesign</code>,
 and run the <code>Manova</code>. There’s really nothing new here:</p>
-<div class="sourceCode" id="cb3193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3193-1" data-line-number="1"><span class="kw">attach</span>(gg)</a>
-<a class="sourceLine" id="cb3193-2" data-line-number="2">response &lt;-<span class="st"> </span><span class="kw">cbind</span>(t1, t2, t3, t4)</a>
-<a class="sourceLine" id="cb3193-3" data-line-number="3">gg<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>treatment)</a>
-<a class="sourceLine" id="cb3193-4" data-line-number="4">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3193-5" data-line-number="5">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
-<a class="sourceLine" id="cb3193-6" data-line-number="6">gg<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(gg<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
-<a class="sourceLine" id="cb3193-7" data-line-number="7">gg<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3191-1" data-line-number="1"><span class="kw">attach</span>(gg)</a>
+<a class="sourceLine" id="cb3191-2" data-line-number="2">response &lt;-<span class="st"> </span><span class="kw">cbind</span>(t1, t2, t3, t4)</a>
+<a class="sourceLine" id="cb3191-3" data-line-number="3">gg<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>treatment)</a>
+<a class="sourceLine" id="cb3191-4" data-line-number="4">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3191-5" data-line-number="5">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
+<a class="sourceLine" id="cb3191-6" data-line-number="6">gg<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(gg<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
+<a class="sourceLine" id="cb3191-7" data-line-number="7">gg<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
 ##                 Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -961,7 +961,7 @@ and run the <code>Manova</code>. There’s really nothing new here:</p>
 ## treatment:times  1   0.58168    4.635      3     10 0.0279590 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb3195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3195-1" data-line-number="1"><span class="kw">detach</span>(gg)</a></code></pre></div>
+<div class="sourceCode" id="cb3193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3193-1" data-line-number="1"><span class="kw">detach</span>(gg)</a></code></pre></div>
 <p>There is still an interaction, but it’s not as significant as it was
 before. I think it is still significant because the shape of the two
 time trends is not the same: the red <code>bt</code> group goes up further
@@ -992,8 +992,8 @@ difference, idealized somewhat of course. Let’s try to come up with
 something with the same kind of time effect, up at time 2 and then
 down afterwards, that is the same for two drugs A and B. Here’s what I
 came up with:</p>
-<div class="sourceCode" id="cb3196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3196-1" data-line-number="1">fake &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;fake.csv&quot;</span>, <span class="dt">header =</span> T)</a>
-<a class="sourceLine" id="cb3196-2" data-line-number="2">fake</a></code></pre></div>
+<div class="sourceCode" id="cb3194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3194-1" data-line-number="1">fake &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;fake.csv&quot;</span>, <span class="dt">header =</span> T)</a>
+<a class="sourceLine" id="cb3194-2" data-line-number="2">fake</a></code></pre></div>
 <pre><code>##    subject drug t1 t2 t3 t4
 ## 1        1    a 10 15 13 11
 ## 2        2    a 11 14 12  9
@@ -1013,10 +1013,10 @@ both a time effect and a drug effect.</p>
 <p>Let’s see whether we can demonstrate that. First, a spaghetti plot,
 which involves getting the data in long format first. I’m saving the
 long format to use again later.</p>
-<div class="sourceCode" id="cb3198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3198-1" data-line-number="1">fake <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(times, score, t1<span class="op">:</span>t4) -&gt;<span class="st"> </span>fake.long</a>
-<a class="sourceLine" id="cb3198-2" data-line-number="2">fake.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3198-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> times, <span class="dt">y =</span> score, <span class="dt">colour =</span> drug, <span class="dt">group =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3198-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3196-1" data-line-number="1">fake <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(times, score, t1<span class="op">:</span>t4) -&gt;<span class="st"> </span>fake.long</a>
+<a class="sourceLine" id="cb3196-2" data-line-number="2">fake.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3196-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> times, <span class="dt">y =</span> score, <span class="dt">colour =</span> drug, <span class="dt">group =</span> subject)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3196-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-26-1.png" width="672"  /></p>
 <p>The reds are consistently higher than the blues (drug effect), the
 pattern over time goes up and then down (time effect), but the time
@@ -1026,26 +1026,26 @@ doing an interaction plot (where <code>group=</code> and <code>colour=</code>
 are the same) or a spaghetti plot (where <code>group</code> has to be
 <code>subject</code> and the colour represents the treatment, usually).</p>
 <p>Let’s do the repeated-measures ANOVA and see whether my guess above is right:</p>
-<div class="sourceCode" id="cb3199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3199-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(fake, <span class="kw">cbind</span>(t1, t2, t3, t4))</a>
-<a class="sourceLine" id="cb3199-2" data-line-number="2">fake<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> fake)</a>
-<a class="sourceLine" id="cb3199-3" data-line-number="3">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3199-4" data-line-number="4">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
-<a class="sourceLine" id="cb3199-5" data-line-number="5">fake<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(fake<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
+<div class="sourceCode" id="cb3197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3197-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(fake, <span class="kw">cbind</span>(t1, t2, t3, t4))</a>
+<a class="sourceLine" id="cb3197-2" data-line-number="2">fake<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> fake)</a>
+<a class="sourceLine" id="cb3197-3" data-line-number="3">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3197-4" data-line-number="4">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
+<a class="sourceLine" id="cb3197-5" data-line-number="5">fake<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(fake<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
 <p>After typing this kind of stuff out a few too many times, I hope
 you’re getting the idea “function”. Also, the construction of the
 response is kind of annoying, where you have to list all the time
 columns. The trouble is, <code>response</code> has to be a <code>matrix</code>,
 which it is:</p>
-<div class="sourceCode" id="cb3200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3200-1" data-line-number="1"><span class="kw">class</span>(response)</a></code></pre></div>
+<div class="sourceCode" id="cb3198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3198-1" data-line-number="1"><span class="kw">class</span>(response)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <p>but if you do the obvious thing of selecting the columns of the data
 frame that you want:</p>
-<div class="sourceCode" id="cb3202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3202-1" data-line-number="1">fake <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(t1<span class="op">:</span>t4) -&gt;<span class="st"> </span>r</a>
-<a class="sourceLine" id="cb3202-2" data-line-number="2"><span class="kw">class</span>(r)</a></code></pre></div>
+<div class="sourceCode" id="cb3200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3200-1" data-line-number="1">fake <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(t1<span class="op">:</span>t4) -&gt;<span class="st"> </span>r</a>
+<a class="sourceLine" id="cb3200-2" data-line-number="2"><span class="kw">class</span>(r)</a></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
 <p>you get a data frame instead. I think this would work:</p>
-<div class="sourceCode" id="cb3204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3204-1" data-line-number="1">r &lt;-<span class="st"> </span>fake <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(t1<span class="op">:</span>t4) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>()</a>
-<a class="sourceLine" id="cb3204-2" data-line-number="2"><span class="kw">class</span>(r)</a></code></pre></div>
+<div class="sourceCode" id="cb3202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3202-1" data-line-number="1">r &lt;-<span class="st"> </span>fake <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(t1<span class="op">:</span>t4) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>()</a>
+<a class="sourceLine" id="cb3202-2" data-line-number="2"><span class="kw">class</span>(r)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <p>The idea is that you select the columns you want as a data frame first
 (with <code>select</code>), and then turn it into a <code>matrix</code> at the
@@ -1055,7 +1055,7 @@ since you’d have to have some way of telling the function which are
 the “time” columns. Anyway, hope you haven’t forgotten what we were
 doing:
 <label for="tufte-mn-204" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-204" class="margin-toggle"><span class="marginnote">I got sidetracked, surprise surprise.</span></p>
-<div class="sourceCode" id="cb3206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3206-1" data-line-number="1">fake<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3204-1" data-line-number="1">fake<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
 ##             Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -1073,7 +1073,7 @@ there is also a difference between the drugs (because the drug A
 scores are a bit higher than the drug B scores).</p>
 <p>What if we ignored the time effect? You’d think we could do something
 like this, treating the measurements at different times as replicates:</p>
-<div class="sourceCode" id="cb3208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3208-1" data-line-number="1"><span class="kw">head</span>(fake.long)</a></code></pre></div>
+<div class="sourceCode" id="cb3206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3206-1" data-line-number="1"><span class="kw">head</span>(fake.long)</a></code></pre></div>
 <pre><code>##   subject drug times score
 ## 1       1    a    t1    10
 ## 2       2    a    t1    11
@@ -1081,8 +1081,8 @@ like this, treating the measurements at different times as replicates:</p>
 ## 4       4    a    t1    10
 ## 5       5    a    t1    11
 ## 6       6    b    t1     7</code></pre>
-<div class="sourceCode" id="cb3210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3210-1" data-line-number="1">fake<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(score <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> fake.long)</a>
-<a class="sourceLine" id="cb3210-2" data-line-number="2"><span class="kw">summary</span>(fake<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3208-1" data-line-number="1">fake<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(score <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> fake.long)</a>
+<a class="sourceLine" id="cb3208-2" data-line-number="2"><span class="kw">summary</span>(fake<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## drug         1  133.2  133.23   30.54 2.54e-06 ***
 ## Residuals   38  165.8    4.36                     
@@ -1097,7 +1097,7 @@ haven’t really, because we have done so by cheating.</p>
 over all the times,
 <label for="tufte-mn-205" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-205" class="margin-toggle"><span class="marginnote">This would be allowable, since we are averaging <em>over</em> the time-dependence; we are creating 10 independent averages, from the 10 subjects. People do this kind of thing, instead of having to deal with the repeated measures.</span> for
 which we go back to the original data frame:</p>
-<div class="sourceCode" id="cb3212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3212-1" data-line-number="1">fake</a></code></pre></div>
+<div class="sourceCode" id="cb3210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3210-1" data-line-number="1">fake</a></code></pre></div>
 <pre><code>##    subject drug t1 t2 t3 t4
 ## 1        1    a 10 15 13 11
 ## 2        2    a 11 14 12  9
@@ -1109,10 +1109,10 @@ which we go back to the original data frame:</p>
 ## 8        8    b  5  9  7  5
 ## 9        9    b  7  8  6  5
 ## 10      10    b  8 12 11  9</code></pre>
-<div class="sourceCode" id="cb3214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3214-1" data-line-number="1">fake <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3214-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">avg.score =</span> (t1 <span class="op">+</span><span class="st"> </span>t2 <span class="op">+</span><span class="st"> </span>t3 <span class="op">+</span><span class="st"> </span>t4) <span class="op">/</span><span class="st"> </span><span class="dv">4</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3214-3" data-line-number="3"><span class="st">  </span><span class="kw">aov</span>(avg.score <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3214-4" data-line-number="4"><span class="st">  </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3212-1" data-line-number="1">fake <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3212-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">avg.score =</span> (t1 <span class="op">+</span><span class="st"> </span>t2 <span class="op">+</span><span class="st"> </span>t3 <span class="op">+</span><span class="st"> </span>t4) <span class="op">/</span><span class="st"> </span><span class="dv">4</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3212-3" data-line-number="3"><span class="st">  </span><span class="kw">aov</span>(avg.score <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3212-4" data-line-number="4"><span class="st">  </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value  Pr(&gt;F)   
 ## drug         1  33.31   33.31   17.33 0.00315 **
 ## Residuals    8  15.37    1.92                   
@@ -1171,8 +1171,8 @@ number of observations and variables.</li>
 </ol>
 <p>Solution</p>
 <p>The usual, data values separated by one space:</p>
-<div class="sourceCode" id="cb3216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3216-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/airport.txt&quot;</span></a>
-<a class="sourceLine" id="cb3216-2" data-line-number="2">airport &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3214-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/airport.txt&quot;</span></a>
+<a class="sourceLine" id="cb3214-2" data-line-number="2">airport &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   epi_1 = col_double(),
@@ -1182,7 +1182,7 @@ number of observations and variables.</li>
 ##   location = col_double(),
 ##   child = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3218-1" data-line-number="1">airport</a></code></pre></div>
+<div class="sourceCode" id="cb3216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3216-1" data-line-number="1">airport</a></code></pre></div>
 <pre><code>## # A tibble: 200 x 6
 ##     epi_1  epi_2 epi_3 epi_4 location child
 ##     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
@@ -1209,8 +1209,8 @@ see.)</p>
 values gathered together into one column.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3220-1" data-line-number="1">airport.long &lt;-<span class="st"> </span>airport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(when, epinephrine, epi_<span class="dv">1</span><span class="op">:</span>epi_<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb3220-2" data-line-number="2">airport.long</a></code></pre></div>
+<div class="sourceCode" id="cb3218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3218-1" data-line-number="1">airport.long &lt;-<span class="st"> </span>airport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(when, epinephrine, epi_<span class="dv">1</span><span class="op">:</span>epi_<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb3218-2" data-line-number="2">airport.long</a></code></pre></div>
 <pre><code>## # A tibble: 800 x 4
 ##    location child when  epinephrine
 ##       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
@@ -1240,10 +1240,10 @@ location (which you may have to turn from a number into a factor.)</li>
 </ol>
 <p>Solution</p>
 <p>I hope you are thinking “pipeline”:</p>
-<div class="sourceCode" id="cb3222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3222-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3222-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3222-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> epinephrine, <span class="dt">colour =</span> <span class="kw">factor</span>(location), <span class="dt">group =</span> child)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3222-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3220-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3220-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3220-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> epinephrine, <span class="dt">colour =</span> <span class="kw">factor</span>(location), <span class="dt">group =</span> child)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3220-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/toofat-1.png" width="672"  /></p>
 <p>This is different from the plot we had in C32, where I had you use a
 different colour for each <em>child</em>, and we ended up with a huge
@@ -1256,10 +1256,10 @@ can’t see the ones underneath because the ones on top are overwriting
 them. The solution to that is to make the lines (partly) transparent,
 which is controlled by a parameter <code>alpha</code>:
 <label for="tufte-mn-206" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-206" class="margin-toggle"><span class="marginnote">This is different from the 0.05 <em>alpha</em>.</span></p>
-<div class="sourceCode" id="cb3223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3223-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3223-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3223-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> epinephrine, <span class="dt">colour =</span> <span class="kw">factor</span>(location), <span class="dt">group =</span> child)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3223-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">alpha =</span> <span class="fl">0.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3221-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3221-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3221-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> epinephrine, <span class="dt">colour =</span> <span class="kw">factor</span>(location), <span class="dt">group =</span> child)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3221-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">alpha =</span> <span class="fl">0.2</span>)</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/skinnier-1.png" width="672"  /></p>
 <p>It seems to make the lines skinnier, so they look more like
 threads. Even given the lesser thickness, they seem to be a little bit
@@ -1289,13 +1289,13 @@ on the <span class="math inline">\(x\)</span>-axis and location as the second fa
 </ol>
 <p>Solution</p>
 <p>We’ve done this before:</p>
-<div class="sourceCode" id="cb3224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3224-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3224-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3224-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">floc =</span> <span class="kw">factor</span>(location)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3224-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(floc, time) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3224-5" data-line-number="5"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.epi =</span> <span class="kw">mean</span>(epinephrine)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3224-6" data-line-number="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean.epi, <span class="dt">group =</span> floc, <span class="dt">colour =</span> floc)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3224-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3222-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3222-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3222-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">floc =</span> <span class="kw">factor</span>(location)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3222-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(floc, time) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3222-5" data-line-number="5"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.epi =</span> <span class="kw">mean</span>(epinephrine)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3222-6" data-line-number="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean.epi, <span class="dt">group =</span> floc, <span class="dt">colour =</span> floc)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3222-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-36-1.png" width="672"  /></p>
 <p>I wanted the actual numerical times, so I made them again. Also, it
 seemed to be easier to create a factor version of the numeric location
@@ -1304,20 +1304,20 @@ that you need it here, since <code>group_by</code> works with the
 distinct values of a variable, whatever they are, and <code>group</code>
 in a boxplot may or may not insist on something other than a number. I
 should try it:</p>
-<div class="sourceCode" id="cb3225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3225-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3225-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3225-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(location, time) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3225-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.epi =</span> <span class="kw">mean</span>(epinephrine)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3225-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean.epi, <span class="dt">group =</span> location, <span class="dt">colour =</span> location)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3225-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3223-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3223-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3223-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(location, time) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3223-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.epi =</span> <span class="kw">mean</span>(epinephrine)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3223-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean.epi, <span class="dt">group =</span> location, <span class="dt">colour =</span> location)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3223-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-37-1.png" width="672"  /></p>
 <p>It seems that <code>colour</code> requires a non-number:</p>
-<div class="sourceCode" id="cb3226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3226-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3226-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3226-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(location, time) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3226-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.epi =</span> <span class="kw">mean</span>(epinephrine)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3226-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean.epi, <span class="dt">group =</span> location, <span class="dt">colour =</span> <span class="kw">factor</span>(location))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3226-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3224-1" data-line-number="1">airport.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3224-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">parse_number</span>(when)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3224-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(location, time) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3224-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.epi =</span> <span class="kw">mean</span>(epinephrine)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3224-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> mean.epi, <span class="dt">group =</span> location, <span class="dt">colour =</span> <span class="kw">factor</span>(location))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3224-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-38-1.png" width="672"  /></p>
 <p>With a long pipeline like this, none of us get it right the first time (I
 certainly didn’t), so be prepared to debug it one line at a time. The
@@ -1358,14 +1358,14 @@ from the file, for this. You’ll need to make sure your numeric
 <p>Solution</p>
 <p>The usual process. I’ll try the other way I used of making the
 <code>response</code>:</p>
-<div class="sourceCode" id="cb3227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3227-1" data-line-number="1">airport <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3227-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(epi_<span class="dv">1</span><span class="op">:</span>epi_<span class="dv">4</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3227-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>() -&gt;<span class="st"> </span>response</a>
-<a class="sourceLine" id="cb3227-4" data-line-number="4">airport<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(location), <span class="dt">data =</span> airport)</a>
-<a class="sourceLine" id="cb3227-5" data-line-number="5">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3227-6" data-line-number="6">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
-<a class="sourceLine" id="cb3227-7" data-line-number="7">airport<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(airport<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
-<a class="sourceLine" id="cb3227-8" data-line-number="8">airport<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3225-1" data-line-number="1">airport <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3225-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(epi_<span class="dv">1</span><span class="op">:</span>epi_<span class="dv">4</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3225-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>() -&gt;<span class="st"> </span>response</a>
+<a class="sourceLine" id="cb3225-4" data-line-number="4">airport<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(location), <span class="dt">data =</span> airport)</a>
+<a class="sourceLine" id="cb3225-5" data-line-number="5">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3225-6" data-line-number="6">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
+<a class="sourceLine" id="cb3225-7" data-line-number="7">airport<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(airport<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
+<a class="sourceLine" id="cb3225-8" data-line-number="8">airport<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
 ##                        Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -1409,14 +1409,14 @@ tweaking your definition of your <code>response</code> to omit the
 first time point. The rest of it stays the same, though you
 might want to change your model numbers rather than re-using
 the old ones as I did:</p>
-<div class="sourceCode" id="cb3229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3229-1" data-line-number="1">airport <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3229-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(epi_<span class="dv">2</span><span class="op">:</span>epi_<span class="dv">4</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3229-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>() -&gt;<span class="st"> </span>response</a>
-<a class="sourceLine" id="cb3229-4" data-line-number="4">airport<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(location), <span class="dt">data =</span> airport)</a>
-<a class="sourceLine" id="cb3229-5" data-line-number="5">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3229-6" data-line-number="6">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
-<a class="sourceLine" id="cb3229-7" data-line-number="7">airport<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(airport<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
-<a class="sourceLine" id="cb3229-8" data-line-number="8">airport<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3227-1" data-line-number="1">airport <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3227-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(epi_<span class="dv">2</span><span class="op">:</span>epi_<span class="dv">4</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3227-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>() -&gt;<span class="st"> </span>response</a>
+<a class="sourceLine" id="cb3227-4" data-line-number="4">airport<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(location), <span class="dt">data =</span> airport)</a>
+<a class="sourceLine" id="cb3227-5" data-line-number="5">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3227-6" data-line-number="6">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
+<a class="sourceLine" id="cb3227-7" data-line-number="7">airport<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(airport<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
+<a class="sourceLine" id="cb3227-8" data-line-number="8">airport<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
 ##                        Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -1464,19 +1464,19 @@ through all the time points at which they are observed.</p>
 <p>Let’s see if we can make it fly for this example. We need the data in
 “long” format, the way we arranged it for graphing: the data frame
 <code>airport.long</code>. I’d like to convert things to factors first:</p>
-<div class="sourceCode" id="cb3231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3231-1" data-line-number="1">airport.long <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb3231-2" data-line-number="2">  <span class="dt">fchild =</span> <span class="kw">factor</span>(child),</a>
-<a class="sourceLine" id="cb3231-3" data-line-number="3">  <span class="dt">flocation =</span> <span class="kw">factor</span>(location)</a>
-<a class="sourceLine" id="cb3231-4" data-line-number="4">) -&gt;<span class="st"> </span>fairport</a>
-<a class="sourceLine" id="cb3231-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb3231-6" data-line-number="6">airport<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>flocation <span class="op">*</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fchild), <span class="dt">data =</span> fairport)</a>
-<a class="sourceLine" id="cb3231-7" data-line-number="7"><span class="kw">anova</span>(airport<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3229-1" data-line-number="1">airport.long <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb3229-2" data-line-number="2">  <span class="dt">fchild =</span> <span class="kw">factor</span>(child),</a>
+<a class="sourceLine" id="cb3229-3" data-line-number="3">  <span class="dt">flocation =</span> <span class="kw">factor</span>(location)</a>
+<a class="sourceLine" id="cb3229-4" data-line-number="4">) -&gt;<span class="st"> </span>fairport</a>
+<a class="sourceLine" id="cb3229-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb3229-6" data-line-number="6">airport<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>flocation <span class="op">*</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fchild), <span class="dt">data =</span> fairport)</a>
+<a class="sourceLine" id="cb3229-7" data-line-number="7"><span class="kw">anova</span>(airport<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ##                Df Sum Sq Mean Sq F value
 ## flocation       1 168177  168177  29.900
 ## when            3 475671  158557  28.190
 ## flocation:when  3 366641  122214  21.728</code></pre>
-<div class="sourceCode" id="cb3233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3233-1" data-line-number="1"><span class="kw">drop1</span>(airport<span class="fl">.3</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3231-1" data-line-number="1"><span class="kw">drop1</span>(airport<span class="fl">.3</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1496,8 +1496,8 @@ should not consider removing it, the same conclusion as our
 The other choice for
 testing is to fit a model without what you
 are testing and use <code>anova</code> to compare the two models:</p>
-<div class="sourceCode" id="cb3235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3235-1" data-line-number="1">airport<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">update</span>(airport<span class="fl">.3</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>flocation<span class="op">:</span>when)</a>
-<a class="sourceLine" id="cb3235-2" data-line-number="2"><span class="kw">anova</span>(airport<span class="fl">.4</span>, airport<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3233-1" data-line-number="1">airport<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">update</span>(airport<span class="fl">.3</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>flocation<span class="op">:</span>when)</a>
+<a class="sourceLine" id="cb3233-2" data-line-number="2"><span class="kw">anova</span>(airport<span class="fl">.4</span>, airport<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## refitting model(s) with ML (instead of REML)</code></pre>
 <pre><code>## Data: fairport
 ## Models:
@@ -1546,14 +1546,14 @@ location 1, but in repeated measures guise. The awkwardness is that
 the profile analysis needs the wide-format data, while the mixed-model
 analysis needs long format, so we’ll have to repeat our process, once
 for each format of data set:</p>
-<div class="sourceCode" id="cb3238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3238-1" data-line-number="1">loc1 &lt;-<span class="st"> </span>airport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb3238-2" data-line-number="2">response &lt;-<span class="st"> </span>loc1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(epi_<span class="dv">1</span><span class="op">:</span>epi_<span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>()</a>
-<a class="sourceLine" id="cb3238-3" data-line-number="3">loc1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> loc1)</a>
-<a class="sourceLine" id="cb3238-4" data-line-number="4">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3238-5" data-line-number="5">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
-<a class="sourceLine" id="cb3238-6" data-line-number="6">loc1<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(loc1<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
+<div class="sourceCode" id="cb3236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3236-1" data-line-number="1">loc1 &lt;-<span class="st"> </span>airport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb3236-2" data-line-number="2">response &lt;-<span class="st"> </span>loc1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(epi_<span class="dv">1</span><span class="op">:</span>epi_<span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>()</a>
+<a class="sourceLine" id="cb3236-3" data-line-number="3">loc1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> loc1)</a>
+<a class="sourceLine" id="cb3236-4" data-line-number="4">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3236-5" data-line-number="5">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
+<a class="sourceLine" id="cb3236-6" data-line-number="6">loc1<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(loc1<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
 <pre><code>## Note: model has only an intercept; equivalent type-III tests substituted.</code></pre>
-<div class="sourceCode" id="cb3240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3240-1" data-line-number="1">loc1<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3238-1" data-line-number="1">loc1<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type III Repeated Measures MANOVA Tests: Pillai test statistic
 ##             Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -1579,10 +1579,10 @@ conclusion. This time, we have to start from the <em>long</em> data set
 (the one I’m using is the one called <code>fairport</code> with things as
 factors) and pull out the rows for location 1. The only remaining
 fixed effect is time:</p>
-<div class="sourceCode" id="cb3242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3242-1" data-line-number="1">fairport <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3242-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3242-3" data-line-number="3"><span class="st">  </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fchild), <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3242-4" data-line-number="4"><span class="st">  </span><span class="kw">drop1</span>(<span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3240-1" data-line-number="1">fairport <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3240-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3240-3" data-line-number="3"><span class="st">  </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fchild), <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3240-4" data-line-number="4"><span class="st">  </span><span class="kw">drop1</span>(<span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1598,9 +1598,9 @@ points to exactly the same conclusion.</p>
 <p>I should perhaps point out that you don’t <em>have</em> to do these
 models in a pipe. I just did because it was easier for me. But there’s
 nothing wrong with doing it like this:</p>
-<div class="sourceCode" id="cb3244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3244-1" data-line-number="1">tmp &lt;-<span class="st"> </span>fairport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb3244-2" data-line-number="2">tmp<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>child), <span class="dt">data =</span> tmp)</a>
-<a class="sourceLine" id="cb3244-3" data-line-number="3"><span class="kw">drop1</span>(tmp<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3242-1" data-line-number="1">tmp &lt;-<span class="st"> </span>fairport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb3242-2" data-line-number="2">tmp<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>child), <span class="dt">data =</span> tmp)</a>
+<a class="sourceLine" id="cb3242-3" data-line-number="3"><span class="kw">drop1</span>(tmp<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1620,10 +1620,10 @@ model the child-to-child variation in this case, but in other cases,
 things might be different. <code>lmer</code> allows more sophisticated
 things, like for example the random child effect depending linearly on
 time. To do that, you’d rewrite the above like this:</p>
-<div class="sourceCode" id="cb3246"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3246-1" data-line-number="1">fairport <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3246-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3246-3" data-line-number="3"><span class="st">  </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>when <span class="op">|</span><span class="st"> </span>fchild), <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3246-4" data-line-number="4"><span class="st">  </span><span class="kw">drop1</span>(<span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3244-1" data-line-number="1">fairport <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3244-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3244-3" data-line-number="3"><span class="st">  </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>when <span class="op">|</span><span class="st"> </span>fchild), <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3244-4" data-line-number="4"><span class="st">  </span><span class="kw">drop1</span>(<span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <p>The change is on the <code>lmer</code> line: the bit in brackets has a
 linear model in <code>when</code> for each child. I didn’t run that, so
 I’m not certain it works,
@@ -1632,14 +1632,14 @@ I’m not certain it works,
 so we expect to see <em>no</em> dependence of epinephrine level on time,
 either in the profile analysis or in the mixed-model analysis. There
 is a large amount of copying and pasting coming up:</p>
-<div class="sourceCode" id="cb3247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3247-1" data-line-number="1">airport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) -&gt;<span class="st"> </span>loc2</a>
-<a class="sourceLine" id="cb3247-2" data-line-number="2">loc2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(epi_<span class="dv">1</span><span class="op">:</span>epi_<span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>() -&gt;<span class="st"> </span>response</a>
-<a class="sourceLine" id="cb3247-3" data-line-number="3">loc2<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> loc1)</a>
-<a class="sourceLine" id="cb3247-4" data-line-number="4">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3247-5" data-line-number="5">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
-<a class="sourceLine" id="cb3247-6" data-line-number="6">loc2<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(loc2<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
+<div class="sourceCode" id="cb3245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3245-1" data-line-number="1">airport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) -&gt;<span class="st"> </span>loc2</a>
+<a class="sourceLine" id="cb3245-2" data-line-number="2">loc2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(epi_<span class="dv">1</span><span class="op">:</span>epi_<span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>() -&gt;<span class="st"> </span>response</a>
+<a class="sourceLine" id="cb3245-3" data-line-number="3">loc2<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> loc1)</a>
+<a class="sourceLine" id="cb3245-4" data-line-number="4">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3245-5" data-line-number="5">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a>
+<a class="sourceLine" id="cb3245-6" data-line-number="6">loc2<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(loc2<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a></code></pre></div>
 <pre><code>## Note: model has only an intercept; equivalent type-III tests substituted.</code></pre>
-<div class="sourceCode" id="cb3249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3249-1" data-line-number="1">loc2<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3247-1" data-line-number="1">loc2<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type III Repeated Measures MANOVA Tests: Pillai test statistic
 ##             Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -1653,9 +1653,9 @@ We can look at that by finding epinephrine means at each time. That
 would be easier if we had long format, but I think we can still do
 it. The magic word is <code>summarize_at</code> (well, the magic two
 words):</p>
-<div class="sourceCode" id="cb3251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3251-1" data-line-number="1">airport <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3251-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3251-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;epi&quot;</span>)), <span class="kw">funs</span>(mean))</a></code></pre></div>
+<div class="sourceCode" id="cb3249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3249-1" data-line-number="1">airport <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3249-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3249-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;epi&quot;</span>)), <span class="kw">funs</span>(mean))</a></code></pre></div>
 <pre><code>## Warning: funs() is soft deprecated as of dplyr 0.8.0
 ## Please use a list of either functions or lambdas: 
 ## 
@@ -1677,7 +1677,7 @@ higher than the others, so that’s what seems to be driving the time
 effect. And remember, these were the control children, so they had no
 new airport nearby.</p>
 <p>I want to try this:</p>
-<div class="sourceCode" id="cb3254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3254-1" data-line-number="1">airport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(location) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3252"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3252-1" data-line-number="1">airport <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(location) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ## # Groups:   location [2]
 ##   location           data
@@ -1688,21 +1688,21 @@ new airport nearby.</p>
 function that calculates the means of the <code>epi_1</code> through
 <code>epi_4</code> columns of a data frame like <code>airport</code>, and
 then apply it to each of those “nested” data frames.</p>
-<div class="sourceCode" id="cb3256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3256-1" data-line-number="1">epi.means &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb3256-2" data-line-number="2">  x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;epi&quot;</span>)), <span class="kw">funs</span>(mean))</a>
-<a class="sourceLine" id="cb3256-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb3256-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3256-5" data-line-number="5"><span class="kw">epi.means</span>(airport)</a></code></pre></div>
+<div class="sourceCode" id="cb3254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3254-1" data-line-number="1">epi.means &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb3254-2" data-line-number="2">  x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;epi&quot;</span>)), <span class="kw">funs</span>(mean))</a>
+<a class="sourceLine" id="cb3254-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb3254-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb3254-5" data-line-number="5"><span class="kw">epi.means</span>(airport)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##   epi_1 epi_2 epi_3 epi_4
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1  248.  309.  304.  298.</code></pre>
 <p>OK, and then:</p>
-<div class="sourceCode" id="cb3258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3258-1" data-line-number="1">airport <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3258-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(location) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3258-3" data-line-number="3"><span class="st">  </span><span class="kw">nest</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3258-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">means =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">epi.means</span>(.))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3258-5" data-line-number="5"><span class="st">  </span><span class="kw">unnest</span>(means)</a></code></pre></div>
+<div class="sourceCode" id="cb3256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3256-1" data-line-number="1">airport <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3256-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(location) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3256-3" data-line-number="3"><span class="st">  </span><span class="kw">nest</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3256-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">means =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">epi.means</span>(.))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3256-5" data-line-number="5"><span class="st">  </span><span class="kw">unnest</span>(means)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 6
 ## # Groups:   location [2]
 ##   location           data epi_1 epi_2 epi_3 epi_4
@@ -1716,10 +1716,10 @@ mean is mysteriously higher at time 2 and then epinephrine levels go
 back down again.</p>
 <p>Enough of that. Back to the mixed model analysis, with more copying
 and pasting. Here is the “simple time effect” at location 2:</p>
-<div class="sourceCode" id="cb3260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3260-1" data-line-number="1">fairport <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3260-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3260-3" data-line-number="3"><span class="st">  </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fchild), <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3260-4" data-line-number="4"><span class="st">  </span><span class="kw">drop1</span>(<span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3258-1" data-line-number="1">fairport <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3258-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(location <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3258-3" data-line-number="3"><span class="st">  </span><span class="kw">lmer</span>(epinephrine <span class="op">~</span><span class="st"> </span>when <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fchild), <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3258-4" data-line-number="4"><span class="st">  </span><span class="kw">drop1</span>(<span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1837,15 +1837,15 @@ rows and columns.</li>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb3262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3262-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt&quot;</span></a>
-<a class="sourceLine" id="cb3262-2" data-line-number="2">bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3260-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/bodyfat.txt&quot;</span></a>
+<a class="sourceLine" id="cb3260-2" data-line-number="2">bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   athlete = col_double(),
 ##   xray = col_double(),
 ##   ultrasound = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3264-1" data-line-number="1">bodyfat</a></code></pre></div>
+<div class="sourceCode" id="cb3262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3262-1" data-line-number="1">bodyfat</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 3
 ##    athlete  xray ultrasound
 ##      &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
@@ -1876,7 +1876,7 @@ whether the means are the same or different.</li>
 <code>paired=T</code>. Remember that this is (in effect) a one-sample
 <span class="math inline">\(t\)</span>-test, so that you can’t use a <code>data=</code>. You therefore have
 to wrap everything in a <code>with</code>:</p>
-<div class="sourceCode" id="cb3266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3266-1" data-line-number="1"><span class="kw">with</span>(bodyfat, <span class="kw">t.test</span>(xray, ultrasound, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb3264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3264-1" data-line-number="1"><span class="kw">with</span>(bodyfat, <span class="kw">t.test</span>(xray, ultrasound, <span class="dt">paired =</span> T))</a></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1912,15 +1912,15 @@ there to mean “just an intercept”. Display the results.</li>
 <p>Solution</p>
 <p>Construct the response variable, run <code>lm</code>, construct the
 within-subjects part of the design, run <code>Manova</code>:</p>
-<div class="sourceCode" id="cb3268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3268-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3268-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(xray<span class="op">:</span>ultrasound) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3268-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>() -&gt;<span class="st"> </span>response</a>
-<a class="sourceLine" id="cb3268-4" data-line-number="4">bodyfat<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb3268-5" data-line-number="5">methods &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3268-6" data-line-number="6">methods.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(methods)</a>
-<a class="sourceLine" id="cb3268-7" data-line-number="7">bodyfat<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(bodyfat<span class="fl">.1</span>, <span class="dt">idata =</span> methods.df, <span class="dt">idesign =</span> <span class="op">~</span>methods)</a></code></pre></div>
+<div class="sourceCode" id="cb3266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3266-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3266-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(xray<span class="op">:</span>ultrasound) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3266-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>() -&gt;<span class="st"> </span>response</a>
+<a class="sourceLine" id="cb3266-4" data-line-number="4">bodyfat<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb3266-5" data-line-number="5">methods &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3266-6" data-line-number="6">methods.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(methods)</a>
+<a class="sourceLine" id="cb3266-7" data-line-number="7">bodyfat<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(bodyfat<span class="fl">.1</span>, <span class="dt">idata =</span> methods.df, <span class="dt">idesign =</span> <span class="op">~</span>methods)</a></code></pre></div>
 <pre><code>## Note: model has only an intercept; equivalent type-III tests substituted.</code></pre>
-<div class="sourceCode" id="cb3270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3270-1" data-line-number="1">bodyfat<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3268-1" data-line-number="1">bodyfat<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type III Repeated Measures MANOVA Tests: Pillai test statistic
 ##             Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -1949,7 +1949,7 @@ of the Rings
 label saying which <code>method</code> they were obtained with; create
 a column which is the athlete number as a factor; fit the linear
 mixed model; see what we can drop from it:</p>
-<div class="sourceCode" id="cb3272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3272-1" data-line-number="1">bodyfat</a></code></pre></div>
+<div class="sourceCode" id="cb3270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3270-1" data-line-number="1">bodyfat</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 3
 ##    athlete  xray ultrasound
 ##      &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
@@ -1969,11 +1969,11 @@ mixed model; see what we can drop from it:</p>
 ## 14      14 14         15.5 
 ## 15      15 17         18   
 ## 16      16 18         18.2</code></pre>
-<div class="sourceCode" id="cb3274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3274-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3274-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(method, fat, xray<span class="op">:</span>ultrasound) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3274-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fathlete =</span> <span class="kw">factor</span>(athlete)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3274-4" data-line-number="4"><span class="st">  </span><span class="kw">lmer</span>(fat <span class="op">~</span><span class="st"> </span>method <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fathlete), <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3274-5" data-line-number="5"><span class="st">  </span><span class="kw">drop1</span>(<span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3272-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3272-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(method, fat, xray<span class="op">:</span>ultrasound) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3272-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fathlete =</span> <span class="kw">factor</span>(athlete)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3272-4" data-line-number="4"><span class="st">  </span><span class="kw">lmer</span>(fat <span class="op">~</span><span class="st"> </span>method <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fathlete), <span class="dt">data =</span> .) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3272-5" data-line-number="5"><span class="st">  </span><span class="kw">drop1</span>(<span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -1986,9 +1986,9 @@ P-value is different from the matched pairs or profile analysis, it is
 very close to those.</p>
 <p>If you’re not clear about the tidy data frame used for input to
 <code>lmer</code>, pull the top two lines off the chain and see what they produce:</p>
-<div class="sourceCode" id="cb3276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3276-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3276-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(method, fat, xray<span class="op">:</span>ultrasound) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3276-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fathlete =</span> <span class="kw">factor</span>(athlete))</a></code></pre></div>
+<div class="sourceCode" id="cb3274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3274-1" data-line-number="1">bodyfat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3274-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(method, fat, xray<span class="op">:</span>ultrasound) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3274-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fathlete =</span> <span class="kw">factor</span>(athlete))</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 4
 ##    athlete method   fat fathlete
 ##      &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;   
@@ -2056,8 +2056,8 @@ in the question.</li>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb3278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3278-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/king.csv&quot;</span></a>
-<a class="sourceLine" id="cb3278-2" data-line-number="2">king &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb3276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3276-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/king.csv&quot;</span></a>
+<a class="sourceLine" id="cb3276-2" data-line-number="2">king &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   id = col_double(),
@@ -2069,7 +2069,7 @@ in the question.</li>
 ##   i5 = col_double(),
 ##   i6 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3280-1" data-line-number="1">king</a></code></pre></div>
+<div class="sourceCode" id="cb3278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3278-1" data-line-number="1">king</a></code></pre></div>
 <pre><code>## # A tibble: 24 x 8
 ##       id context    i1    i2    i3    i4    i5    i6
 ##    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -2096,10 +2096,10 @@ variable for this method.</li>
 </ol>
 <p>Solution</p>
 <p><code>cbind</code> the appropriate columns together, to make a matrix:</p>
-<div class="sourceCode" id="cb3282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3282-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(king, <span class="kw">cbind</span>(i1, i2, i3, i4, i5, i6))</a></code></pre></div>
+<div class="sourceCode" id="cb3280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3280-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(king, <span class="kw">cbind</span>(i1, i2, i3, i4, i5, i6))</a></code></pre></div>
 <p>This is the “simple” but tedious way, and produces a matrix because
 the <code>i1</code> through <code>i6</code> are vectors (single columns):</p>
-<div class="sourceCode" id="cb3283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3283-1" data-line-number="1"><span class="kw">class</span>(response)</a></code></pre></div>
+<div class="sourceCode" id="cb3281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3281-1" data-line-number="1"><span class="kw">class</span>(response)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <p><code>i1:i6</code> does not work here, because we are outside of the
 <code>tidyverse</code>, and in that world, <code>:</code> only means
@@ -2108,20 +2108,20 @@ side of it are or represent numbers.</p>
 <p>The clever way to get the response is to <code>select</code> the columns
 and then turn them into a matrix. This <em>does</em> permit the colon
 because we are now in the <code>tidyverse</code>:</p>
-<div class="sourceCode" id="cb3285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3285-1" data-line-number="1">response &lt;-<span class="st"> </span>king <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3285-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(i1<span class="op">:</span>i6) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3285-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>()</a>
-<a class="sourceLine" id="cb3285-4" data-line-number="4"><span class="kw">class</span>(response)</a></code></pre></div>
+<div class="sourceCode" id="cb3283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3283-1" data-line-number="1">response &lt;-<span class="st"> </span>king <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3283-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(i1<span class="op">:</span>i6) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3283-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>()</a>
+<a class="sourceLine" id="cb3283-4" data-line-number="4"><span class="kw">class</span>(response)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <p>It is indeed a matrix.</p>
 <p>I tried to be extra-clever and use <code>starts_with</code>, but I have
 another column <code>id</code> that starts with <code>i</code> that I do
 <em>not</em> want to be part of the response. So I had to abandon that
 idea, but not before trying this:</p>
-<div class="sourceCode" id="cb3287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3287-1" data-line-number="1">response &lt;-<span class="st"> </span>king <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3287-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">&quot;i[0-9]&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3287-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>()</a>
-<a class="sourceLine" id="cb3287-4" data-line-number="4"><span class="kw">head</span>(response)</a></code></pre></div>
+<div class="sourceCode" id="cb3285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3285-1" data-line-number="1">response &lt;-<span class="st"> </span>king <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3285-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">&quot;i[0-9]&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3285-3" data-line-number="3"><span class="st">  </span><span class="kw">as.matrix</span>()</a>
+<a class="sourceLine" id="cb3285-4" data-line-number="4"><span class="kw">head</span>(response)</a></code></pre></div>
 <pre><code>##       i1  i2  i3  i4  i5  i6
 ## [1,] 150  44  71  59 132  74
 ## [2,] 335 270 156 160 118 230
@@ -2143,8 +2143,8 @@ means getting hold of the names of the columns that hold the
 different times, saving them, and also making a data frame out of them:</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3289"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3289-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3289-2" data-line-number="2">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a></code></pre></div>
+<div class="sourceCode" id="cb3287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3287-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3287-2" data-line-number="2">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a></code></pre></div>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Fit the repeated-measures ANOVA. This will involve fitting
 an <code>lm</code> first, if you have not already done so.</li>
@@ -2152,9 +2152,9 @@ an <code>lm</code> first, if you have not already done so.</li>
 <p>Solution</p>
 <p>Fit the <code>lm</code> first, and then pass that into <code>Manova</code>
 from <code>car</code>:</p>
-<div class="sourceCode" id="cb3290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3290-1" data-line-number="1">king<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>context, <span class="dt">data =</span> king)</a>
-<a class="sourceLine" id="cb3290-2" data-line-number="2">king<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(king<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
-<a class="sourceLine" id="cb3290-3" data-line-number="3">king<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3288-1" data-line-number="1">king<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>context, <span class="dt">data =</span> king)</a>
+<a class="sourceLine" id="cb3288-2" data-line-number="2">king<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(king<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
+<a class="sourceLine" id="cb3288-3" data-line-number="3">king<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
 ##               Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -2188,8 +2188,8 @@ the data that you have done so.</li>
 <p>Solution</p>
 <p>This is <code>gather</code> yet again: gather up columns <code>i1</code>
 through <code>i6</code> and call them something like <code>activity</code>:</p>
-<div class="sourceCode" id="cb3292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3292-1" data-line-number="1">king.long &lt;-<span class="st"> </span>king <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(time, activity, i1<span class="op">:</span>i6)</a>
-<a class="sourceLine" id="cb3292-2" data-line-number="2">king.long</a></code></pre></div>
+<div class="sourceCode" id="cb3290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3290-1" data-line-number="1">king.long &lt;-<span class="st"> </span>king <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(time, activity, i1<span class="op">:</span>i6)</a>
+<a class="sourceLine" id="cb3290-2" data-line-number="2">king.long</a></code></pre></div>
 <pre><code>## # A tibble: 144 x 4
 ##       id context time  activity
 ##    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;
@@ -2218,13 +2218,13 @@ and colouring the points and lines according to the <em>context</em>.</li>
 <p>Solution</p>
 <p>That means this, using <code>group</code> to indicate which points to
 join by lines, since it’s different from the <code>colour</code>:</p>
-<div class="sourceCode" id="cb3294"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3294-1" data-line-number="1"><span class="kw">ggplot</span>(king.long, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> activity, <span class="dt">colour =</span> context, <span class="dt">group =</span> id)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3294-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3292-1" data-line-number="1"><span class="kw">ggplot</span>(king.long, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> activity, <span class="dt">colour =</span> context, <span class="dt">group =</span> id)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3292-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-66-1.png" width="672"  /></p>
 <p>I’d say the <code>geom_point</code> is optional, so that this is also
 good, perhaps better even:</p>
-<div class="sourceCode" id="cb3295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3295-1" data-line-number="1"><span class="kw">ggplot</span>(king.long, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> activity, <span class="dt">colour =</span> context, <span class="dt">group =</span> id)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3295-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3293"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3293-1" data-line-number="1"><span class="kw">ggplot</span>(king.long, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> activity, <span class="dt">colour =</span> context, <span class="dt">group =</span> id)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3293-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-67-1.png" width="672"  /></p>
 <ol style="list-style-type: lower-roman">
 <li>Looking at your spaghetti plot, why do you think your
@@ -2242,11 +2242,11 @@ beyond time 2, whereas the rats in the <code>control</code> and
 decreasing so much after that.
 If you like, you can draw an interaction plot by working out the
 means for each <code>context</code>-<code>time</code> group first:</p>
-<div class="sourceCode" id="cb3296"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3296-1" data-line-number="1">king.long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3296-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(context, time) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3296-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(activity)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3296-4" data-line-number="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> m, <span class="dt">colour =</span> context, <span class="dt">group =</span> context)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3296-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3294"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3294-1" data-line-number="1">king.long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3294-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(context, time) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3294-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(activity)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3294-4" data-line-number="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> m, <span class="dt">colour =</span> context, <span class="dt">group =</span> context)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3294-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-68-1.png" width="672"  /></p>
 <p>This seems to illustrate the same things as I found on the spaghetti
 plot. It gains in clarity by only looking at means, but loses by not
@@ -2254,9 +2254,9 @@ considering the variability. Your call.</p>
 <p>This kind of thing also runs with <code>lmer</code> from package
 <code>lme4</code>. It uses the long data frame, thus, treating <code>id</code>
 (identifying the rats) as a random effect:</p>
-<div class="sourceCode" id="cb3297"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3297-1" data-line-number="1">king<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(activity <span class="op">~</span><span class="st"> </span>context <span class="op">*</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id), <span class="dt">data =</span> king.long)</a></code></pre></div>
+<div class="sourceCode" id="cb3295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3295-1" data-line-number="1">king<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(activity <span class="op">~</span><span class="st"> </span>context <span class="op">*</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id), <span class="dt">data =</span> king.long)</a></code></pre></div>
 <p>What can we drop? The only thing under consideration is the interaction:</p>
-<div class="sourceCode" id="cb3298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3298-1" data-line-number="1"><span class="kw">drop1</span>(king<span class="fl">.3</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3296"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3296-1" data-line-number="1"><span class="kw">drop1</span>(king<span class="fl">.3</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -2312,8 +2312,8 @@ Australian athlete data.)</li>
 <p>Solution</p>
 <p>We therefore need <code>read_tsv</code>. I’m not quite sure what to
 call this one:</p>
-<div class="sourceCode" id="cb3300"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3300-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/rm.txt&quot;</span></a>
-<a class="sourceLine" id="cb3300-2" data-line-number="2">treatments &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb3298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3298-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/rm.txt&quot;</span></a>
+<a class="sourceLine" id="cb3298-2" data-line-number="2">treatments &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   trt = col_character(),
@@ -2321,7 +2321,7 @@ call this one:</p>
 ##   subject = col_double(),
 ##   y = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3302"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3302-1" data-line-number="1">treatments</a></code></pre></div>
+<div class="sourceCode" id="cb3300"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3300-1" data-line-number="1">treatments</a></code></pre></div>
 <pre><code>## # A tibble: 27 x 4
 ##    trt   time  subject     y
 ##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -2354,8 +2354,8 @@ individual received.</li>
 <p>Solution</p>
 <p>The individuals are labelled in <code>subject</code> and the
 treatments are in <code>trt</code>, which means we need to do this:</p>
-<div class="sourceCode" id="cb3304"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3304-1" data-line-number="1"><span class="kw">ggplot</span>(treatments, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> y, <span class="dt">colour =</span> trt, <span class="dt">group =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3304-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3302"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3302-1" data-line-number="1"><span class="kw">ggplot</span>(treatments, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> y, <span class="dt">colour =</span> trt, <span class="dt">group =</span> subject)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3302-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="20-repeated-measures_files/figure-html/unnamed-chunk-72-1.png" width="672"  /></p>
 <p>I’m going to be all smug and tell you that I got this right first
 time. (I’m telling you this because it doesn’t happen often.)</p>
@@ -2407,8 +2407,8 @@ different from each other (here, <code>y</code> at different
 times). It needs two inputs: the current single column that
 contains the column names you are going to make, and the values to
 carry along with them, in that order:</p>
-<div class="sourceCode" id="cb3305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3305-1" data-line-number="1">tr2 &lt;-<span class="st"> </span>treatments <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">spread</span>(time, y)</a>
-<a class="sourceLine" id="cb3305-2" data-line-number="2">tr2</a></code></pre></div>
+<div class="sourceCode" id="cb3303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3303-1" data-line-number="1">tr2 &lt;-<span class="st"> </span>treatments <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">spread</span>(time, y)</a>
+<a class="sourceLine" id="cb3303-2" data-line-number="2">tr2</a></code></pre></div>
 <pre><code>## # A tibble: 9 x 5
 ##   trt   subject    T1    T2    T3
 ##   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -2433,21 +2433,21 @@ conclude from it?</li>
 </ol>
 <p>Solution</p>
 <p>Create the response variable first, and use it in an <code>lm</code>:</p>
-<div class="sourceCode" id="cb3307"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3307-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(tr2, <span class="kw">cbind</span>(T1, T2, T3))</a>
-<a class="sourceLine" id="cb3307-2" data-line-number="2">treatment<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> tr2)</a></code></pre></div>
+<div class="sourceCode" id="cb3305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3305-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(tr2, <span class="kw">cbind</span>(T1, T2, T3))</a>
+<a class="sourceLine" id="cb3305-2" data-line-number="2">treatment<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> tr2)</a></code></pre></div>
 <p>Now we have to construct the within-subject stuff, for which we need
 to get the different times we have. You can type them in again (fine
 here), or get them from the <code>response</code> you just made:</p>
-<div class="sourceCode" id="cb3308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3308-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
-<a class="sourceLine" id="cb3308-2" data-line-number="2">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a></code></pre></div>
+<div class="sourceCode" id="cb3306"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3306-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">colnames</span>(response)</a>
+<a class="sourceLine" id="cb3306-2" data-line-number="2">times.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times)</a></code></pre></div>
 <p>This is where the possible time effect is accounted for. Because time
 is within-subjects (each subject is measured at several different
 times) but treatment is between subjects (each subject only gets one
 treatment), the two things have to be treated separately, in this
 approach at least.</p>
 <p>Then, uppercase-M <code>Manova</code>:</p>
-<div class="sourceCode" id="cb3309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3309-1" data-line-number="1">treatment<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(treatment<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
-<a class="sourceLine" id="cb3309-2" data-line-number="2">treatment<span class="fl">.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3307"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3307-1" data-line-number="1">treatment<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(treatment<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times)</a>
+<a class="sourceLine" id="cb3307-2" data-line-number="2">treatment<span class="fl">.2</span></a></code></pre></div>
 <pre><code>## 
 ## Type II Repeated Measures MANOVA Tests: Pillai test statistic
 ##             Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -2464,10 +2464,10 @@ is significant, so the effect of treatment is different at the
 different times. And we <strong>stop there</strong>.</p>
 <p>Extra: <code>car</code> also includes a thing called <code>Anova</code> with a
 capital A. That looks a bit different but gives us some extra information:</p>
-<div class="sourceCode" id="cb3311"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3311-1" data-line-number="1">treatment<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">Anova</span>(treatment<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times, <span class="dt">type =</span> <span class="st">&quot;III&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3309-1" data-line-number="1">treatment<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">Anova</span>(treatment<span class="fl">.1</span>, <span class="dt">idata =</span> times.df, <span class="dt">idesign =</span> <span class="op">~</span>times, <span class="dt">type =</span> <span class="st">&quot;III&quot;</span>)</a></code></pre></div>
 <p>The “type” on the end is a Roman numeral 3, for the type of test to
 do. III is good:</p>
-<div class="sourceCode" id="cb3312"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3312-1" data-line-number="1"><span class="kw">summary</span>(treatment<span class="fl">.3</span>, <span class="dt">multivariate =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb3310"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3310-1" data-line-number="1"><span class="kw">summary</span>(treatment<span class="fl">.3</span>, <span class="dt">multivariate =</span> F)</a></code></pre></div>
 <pre><code>## 
 ## Univariate Type III Repeated-Measures ANOVA Assuming Sphericity
 ## 
@@ -2567,8 +2567,8 @@ package <code>lme4</code>, there is a function <code>lmer</code> that
 looks like <code>lm</code>, except for the way in which you specify
 the random effects. It looks like this, noting that  that we read in from the file and made
 the spaghetti plot out of:</p>
-<div class="sourceCode" id="cb3314"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3314-1" data-line-number="1">treatment<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(y <span class="op">~</span><span class="st"> </span>trt <span class="op">*</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>subject), <span class="dt">data =</span> treatments)</a>
-<a class="sourceLine" id="cb3314-2" data-line-number="2"><span class="kw">drop1</span>(treatment<span class="fl">.4</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3312"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3312-1" data-line-number="1">treatment<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(y <span class="op">~</span><span class="st"> </span>trt <span class="op">*</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>subject), <span class="dt">data =</span> treatments)</a>
+<a class="sourceLine" id="cb3312-2" data-line-number="2"><span class="kw">drop1</span>(treatment<span class="fl">.4</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:

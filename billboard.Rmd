@@ -36,7 +36,7 @@ billboard
 
 On yours, you will definitely see a little arrow top right saying
 "there are more columns", and you will have to click on it several
-times to see them all.
+times to see them all. A lot of the ones on the right will be missing.
 
  
 
@@ -56,7 +56,18 @@ briefly.
 Solution
 
 
-This is `gather`ing up all those columns, with
+
+As is often the case, the first step is `pivot_longer`, to reduce all those columns to something easier to deal with. The columns we want to make longer are the ones ending in "week":
+
+```{r}
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T)
+```
+
+The "values" (ranks) have missings in them, which we wanted to get rid of.
+
+
+This used to be `gather`ing up all those columns, with
 `na.rm=T` to get rid of the missings:
 ```{r }
 billboard %>% gather(week, rank, x1st.week:x76th.week, na.rm = T)
@@ -108,35 +119,32 @@ to that.
 
  
 
-(c) Display just your two new columns (for the first few
-rows). Add something appropriate onto the end of your pipe to do this.
-
-
-Solution
-
-
-A `select` is the thing:
-```{r }
-billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
-  select(week, rank)
-```
-
-         
 
 
 
-(d) Both your `week` and `rank` columns are
+(c) Both your `week` and `rank` columns are
 (probably) text. Create new columns that contain just the numeric
 values, and display just your new columns, again adding onto the
 end of your pipe. If it so happens that `rank` is already a number, leave it as it is.
-(In the previous part, you probably had some
-code that picked out a few columns to display them. Get rid of
-that.) 
+
  
 
 Solution
 
+
+My `rank` is already a number, so I could leave it; for later, I make a copy of it called `rakn_numbe`. The `week` has a number *in* it, which I can extract using `parse_number`:
+
+```{r}
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank)
+```
+
+
+
+
+The `gather` way follows.
 
 My `rank` is already a number, so I leave that. 
 I'm defining a new column `rank_number` that is just a copy 

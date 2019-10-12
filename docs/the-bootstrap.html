@@ -331,8 +331,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="the-bootstrap" class="section level1">
 <h1><span class="header-section-number">Chapter 17</span> The Bootstrap</h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb1848"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1848-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1848-2" data-line-number="2"><span class="kw">library</span>(bootstrap)</a></code></pre></div>
+<div class="sourceCode" id="cb1846"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1846-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1846-2" data-line-number="2"><span class="kw">library</span>(bootstrap)</a></code></pre></div>
 <div id="air-conditioning-failures" class="section level2">
 <h2><span class="header-section-number">17.1</span> Air conditioning failures</h2>
 <p>Back in 1963, there was a report on failures in
@@ -348,21 +348,21 @@ failure <em>rate</em>).</p>
 <p>There is randomization here. Your answers will differ slightly from
 mine, unless you throw in this before you start (or at least before
 you generate your first random numbers).</p>
-<div class="sourceCode" id="cb1849"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1849-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1847"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1847-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li>Read in the data, and observe that you have the correct number
 of rows. (Note that the failure times are in ascending order).</li>
 </ol>
 <p>Solution</p>
 <p>This is a <code>.csv</code> so <code>read_csv</code> is the thing:</p>
-<div class="sourceCode" id="cb1850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1850-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv&quot;</span></a>
-<a class="sourceLine" id="cb1850-2" data-line-number="2">aircon &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb1848"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1848-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv&quot;</span></a>
+<a class="sourceLine" id="cb1848-2" data-line-number="2">aircon &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   failure = col_double(),
 ##   hours = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1852-1" data-line-number="1">aircon</a></code></pre></div>
+<div class="sourceCode" id="cb1850"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1850-1" data-line-number="1">aircon</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 2
 ##    failure hours
 ##      &lt;dbl&gt; &lt;dbl&gt;
@@ -384,17 +384,17 @@ of rows. (Note that the failure times are in ascending order).</li>
 </ol>
 <p>Solution</p>
 <p>Make a suitable graph. The obvious one is a histogram:</p>
-<div class="sourceCode" id="cb1854"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1854-1" data-line-number="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">x =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1852-1" data-line-number="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">x =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>)</a></code></pre></div>
 <p><img src="26-bootstrap_files/figure-html/unnamed-chunk-6-1.png" width="672"  /></p>
 <p>You’ll have to play with the number of bins (there are only 12 observations). I got 7 from the Freedman-Diaconis rule:</p>
-<div class="sourceCode" id="cb1855"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1855-1" data-line-number="1"><span class="kw">nclass.FD</span>(aircon<span class="op">$</span>hours)</a></code></pre></div>
+<div class="sourceCode" id="cb1853"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1853-1" data-line-number="1"><span class="kw">nclass.FD</span>(aircon<span class="op">$</span>hours)</a></code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <p>I was a little suspicious that the data would not be much like normal (I have run into failure times before), so I kept away from the Sturges rule.</p>
 <p>Another possibility is a one-group boxplot:</p>
-<div class="sourceCode" id="cb1857"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1857-1" data-line-number="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">y =</span> hours, <span class="dt">x =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1855"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1855-1" data-line-number="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">y =</span> hours, <span class="dt">x =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="26-bootstrap_files/figure-html/unnamed-chunk-8-1.png" width="672"  /></p>
 <p>If you like, you can do a normal quantile plot. I rank that third here, because there is nothing immediately implying a comparison with the <em>normal</em> distribution, but I would accept it:</p>
-<div class="sourceCode" id="cb1858"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1858-1" data-line-number="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">sample =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1856"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1856-1" data-line-number="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">sample =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="26-bootstrap_files/figure-html/unnamed-chunk-9-1.png" width="672"  /></p>
 <p>Pick a visual and defend it.</p>
 <p>All three of these graphs are showing a strong skewness to the right.</p>
@@ -410,8 +410,8 @@ distribution like the exponential or gamma or Weibull.</p>
 </ol>
 <p>Solution</p>
 <p>Something like this, therefore:</p>
-<div class="sourceCode" id="cb1859"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1859-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(aircon<span class="op">$</span>hours, <span class="dt">replace =</span> T)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1859-2" data-line-number="2"><span class="st">  </span><span class="kw">map_dbl</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.)) -&gt;<span class="st"> </span>means</a></code></pre></div>
+<div class="sourceCode" id="cb1857"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1857-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(aircon<span class="op">$</span>hours, <span class="dt">replace =</span> T)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1857-2" data-line-number="2"><span class="st">  </span><span class="kw">map_dbl</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.)) -&gt;<span class="st"> </span>means</a></code></pre></div>
 <p>I often start with <code>rerun(1000)</code>, closing the bracket, and then wonder
 why it doesn’t work. In the <code>rerun</code>, you have to say two things: how
 many times to rerun, and <em>what</em> to rerun. So don’t close the bracket
@@ -421,7 +421,7 @@ on the <code>rerun</code> until you’ve done that.</p>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb1860"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1860-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="kw">tibble</span>(means), <span class="kw">aes</span>(<span class="dt">sample =</span> means)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1858"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1858-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="kw">tibble</span>(means), <span class="kw">aes</span>(<span class="dt">sample =</span> means)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="26-bootstrap_files/figure-html/unnamed-chunk-11-1.png" width="672"  /></p>
 <p>This is still skewed to the right (it has a curved shape, or, the low values and the high values are both too high compared to the normal).</p>
 <p>Extra: this is less skewed than the original data was, because, with a
@@ -436,7 +436,7 @@ mean is, so a normal quantile plot would be my first choice for this.</p>
 </ol>
 <p>Solution</p>
 <p>This is the 2.5 and 97.5 percentiles of the bootstrapped sampling distribution of the mean:</p>
-<div class="sourceCode" id="cb1861"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1861-1" data-line-number="1"><span class="kw">quantile</span>(means, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1859"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1859-1" data-line-number="1"><span class="kw">quantile</span>(means, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</a></code></pre></div>
 <pre><code>##      2.5%     97.5% 
 ##  46.49583 186.00417</code></pre>
 <ol start="6" style="list-style-type: lower-alpha">
@@ -445,20 +445,20 @@ the mean, and compare your two intervals.</li>
 </ol>
 <p>Solution</p>
 <p>The key is to remember that the original sample (and thus each bootstrap sample) had <span class="math inline">\(n=12\)</span>, so there are <span class="math inline">\(12-1=11\)</span> df. (The fact that there were 1000 bootstrap samples is neither here nor there). This is how I like to do it:</p>
-<div class="sourceCode" id="cb1863"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1863-1" data-line-number="1">t_star &lt;-<span class="st"> </span><span class="kw">qt</span>(<span class="fl">0.975</span>, <span class="dv">11</span>)</a>
-<a class="sourceLine" id="cb1863-2" data-line-number="2">t_star</a></code></pre></div>
+<div class="sourceCode" id="cb1861"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1861-1" data-line-number="1">t_star &lt;-<span class="st"> </span><span class="kw">qt</span>(<span class="fl">0.975</span>, <span class="dv">11</span>)</a>
+<a class="sourceLine" id="cb1861-2" data-line-number="2">t_star</a></code></pre></div>
 <pre><code>## [1] 2.200985</code></pre>
-<div class="sourceCode" id="cb1865"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1865-1" data-line-number="1"><span class="kw">mean</span>(means) <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>t_star <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(means)</a></code></pre></div>
+<div class="sourceCode" id="cb1863"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1863-1" data-line-number="1"><span class="kw">mean</span>(means) <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>t_star <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(means)</a></code></pre></div>
 <pre><code>## [1]  26.11472 191.30628</code></pre>
 <p>The <code>c(-1, 1)</code> thing is the calculation version of the <span class="math inline">\(\pm\)</span>,
 and gets both limits at once. Pull the above apart to see how it works. If
 you don’t like that, you might prefer something like this:</p>
-<div class="sourceCode" id="cb1867"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1867-1" data-line-number="1">mean &lt;-<span class="st"> </span><span class="kw">mean</span>(means)</a>
-<a class="sourceLine" id="cb1867-2" data-line-number="2">sd &lt;-<span class="st"> </span><span class="kw">sd</span>(means)</a>
-<a class="sourceLine" id="cb1867-3" data-line-number="3">margin &lt;-<span class="st"> </span>t_star <span class="op">*</span><span class="st"> </span>sd</a>
-<a class="sourceLine" id="cb1867-4" data-line-number="4">mean <span class="op">-</span><span class="st"> </span>margin</a></code></pre></div>
+<div class="sourceCode" id="cb1865"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1865-1" data-line-number="1">mean &lt;-<span class="st"> </span><span class="kw">mean</span>(means)</a>
+<a class="sourceLine" id="cb1865-2" data-line-number="2">sd &lt;-<span class="st"> </span><span class="kw">sd</span>(means)</a>
+<a class="sourceLine" id="cb1865-3" data-line-number="3">margin &lt;-<span class="st"> </span>t_star <span class="op">*</span><span class="st"> </span>sd</a>
+<a class="sourceLine" id="cb1865-4" data-line-number="4">mean <span class="op">-</span><span class="st"> </span>margin</a></code></pre></div>
 <pre><code>## [1] 26.11472</code></pre>
-<div class="sourceCode" id="cb1869"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1869-1" data-line-number="1">mean <span class="op">+</span><span class="st"> </span>margin</a></code></pre></div>
+<div class="sourceCode" id="cb1867"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1867-1" data-line-number="1">mean <span class="op">+</span><span class="st"> </span>margin</a></code></pre></div>
 <pre><code>## [1] 191.3063</code></pre>
 <p>I apologize for the crazy first line of that!
 As for comparison: the bootstrap-<span class="math inline">\(t\)</span> interval goes down a lot further,
@@ -472,12 +472,12 @@ sample size (<span class="math inline">\(n=12\)</span>) and the large variabilit
 </ol>
 <p>Solution</p>
 <p>This means (possibly) installing and (certainly) loading the <code>bootstrap</code> package, and then:</p>
-<div class="sourceCode" id="cb1871"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1871-1" data-line-number="1">theta &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb1871-2" data-line-number="2">  <span class="kw">mean</span>(x)</a>
-<a class="sourceLine" id="cb1871-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb1871-4" data-line-number="4">bca_all &lt;-<span class="st"> </span><span class="kw">with</span>(aircon, <span class="kw">bcanon</span>(hours, <span class="dv">1000</span>, theta))</a>
-<a class="sourceLine" id="cb1871-5" data-line-number="5">bca &lt;-<span class="st"> </span>bca_all<span class="op">$</span>confpoints</a>
-<a class="sourceLine" id="cb1871-6" data-line-number="6">bca</a></code></pre></div>
+<div class="sourceCode" id="cb1869"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1869-1" data-line-number="1">theta &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb1869-2" data-line-number="2">  <span class="kw">mean</span>(x)</a>
+<a class="sourceLine" id="cb1869-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb1869-4" data-line-number="4">bca_all &lt;-<span class="st"> </span><span class="kw">with</span>(aircon, <span class="kw">bcanon</span>(hours, <span class="dv">1000</span>, theta))</a>
+<a class="sourceLine" id="cb1869-5" data-line-number="5">bca &lt;-<span class="st"> </span>bca_all<span class="op">$</span>confpoints</a>
+<a class="sourceLine" id="cb1869-6" data-line-number="6">bca</a></code></pre></div>
 <pre><code>##      alpha bca point
 ## [1,] 0.025  60.00000
 ## [2,] 0.050  66.58333
@@ -491,10 +491,10 @@ sample size (<span class="math inline">\(n=12\)</span>) and the large variabilit
 to 248.2.</p>
 <p>I seem to need to define the function <code>theta</code> first and pass it into <code>bcanon</code> as the third input. You may have more luck with <code>bcanon(hours, 1000, mean)</code> than I did. Try it.</p>
 <p>Or, if you feel like some extra coding: turn this matrix into a data frame, grab the rows you want, and then the column you want:</p>
-<div class="sourceCode" id="cb1873"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1873-1" data-line-number="1">bca <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1873-2" data-line-number="2"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1873-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(alpha <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1873-4" data-line-number="4"><span class="st">  </span><span class="kw">pull</span>(<span class="st">`</span><span class="dt">bca point</span><span class="st">`</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1871"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1871-1" data-line-number="1">bca <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1871-2" data-line-number="2"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1871-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(alpha <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1871-4" data-line-number="4"><span class="st">  </span><span class="kw">pull</span>(<span class="st">`</span><span class="dt">bca point</span><span class="st">`</span>)</a></code></pre></div>
 <pre><code>## [1]  60.00 248.25</code></pre>
 <ol start="8" style="list-style-type: lower-alpha">
 <li>Compare the BCa confidence interval with the other ones. Which one would you recommend? Explain briefly.</li>
@@ -516,14 +516,14 @@ for the air-conditioning data? We explore this here.</p>
 have it lying around). The link is in the previous question.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb1875"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1875-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv&quot;</span></a>
-<a class="sourceLine" id="cb1875-2" data-line-number="2">aircon &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb1873"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1873-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv&quot;</span></a>
+<a class="sourceLine" id="cb1873-2" data-line-number="2">aircon &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   failure = col_double(),
 ##   hours = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1877"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1877-1" data-line-number="1">aircon</a></code></pre></div>
+<div class="sourceCode" id="cb1875"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1875-1" data-line-number="1">aircon</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 2
 ##    failure hours
 ##      &lt;dbl&gt; &lt;dbl&gt;
@@ -544,18 +544,18 @@ have it lying around). The link is in the previous question.</li>
 </ol>
 <p>Solution</p>
 <p>Input to <code>ci_median</code> is data frame and column:</p>
-<div class="sourceCode" id="cb1879"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1879-1" data-line-number="1"><span class="kw">ci_median</span>(aircon, hours)</a></code></pre></div>
+<div class="sourceCode" id="cb1877"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1877-1" data-line-number="1"><span class="kw">ci_median</span>(aircon, hours)</a></code></pre></div>
 <pre><code>## [1]   7.002319 129.998291</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Obtain the bootstrap distribution of the sample median. Make a normal quantile plot of it. What do you notice? Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>The usual do-it-yourself bootstrap:</p>
-<div class="sourceCode" id="cb1881"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1881-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(aircon<span class="op">$</span>hours, <span class="dt">replace =</span> T)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1881-2" data-line-number="2"><span class="st">  </span><span class="kw">map_dbl</span>(<span class="op">~</span><span class="st"> </span><span class="kw">median</span>(.)) -&gt;<span class="st"> </span>medians</a></code></pre></div>
+<div class="sourceCode" id="cb1879"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1879-1" data-line-number="1"><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(aircon<span class="op">$</span>hours, <span class="dt">replace =</span> T)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1879-2" data-line-number="2"><span class="st">  </span><span class="kw">map_dbl</span>(<span class="op">~</span><span class="st"> </span><span class="kw">median</span>(.)) -&gt;<span class="st"> </span>medians</a></code></pre></div>
 <p>I actually copied and pasted my code from the previous problem, changing <code>mean</code> to <code>median</code>.</p>
 <p>As for a plot, well, this:</p>
-<div class="sourceCode" id="cb1882"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1882-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="kw">tibble</span>(medians), <span class="kw">aes</span>(<span class="dt">sample =</span> medians)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1880"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1880-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="kw">tibble</span>(medians), <span class="kw">aes</span>(<span class="dt">sample =</span> medians)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="26-bootstrap_files/figure-html/unnamed-chunk-20-1.png" width="672"  /></p>
 <p>Not only does this not look very normal, but also there are those
 curious horizontal patches of points (that, you might recall, are
@@ -569,14 +569,14 @@ bins. (If you don’t have enough bins, some of the neighbouring
 possible values end up in the same bin; here, the aim is to have
 enough bins to show the discreteness, rather than the usual thing of
 having few enough bins to show the shape.)</p>
-<div class="sourceCode" id="cb1883"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1883-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="kw">tibble</span>(medians), <span class="kw">aes</span>(<span class="dt">x =</span> medians)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">30</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1881"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1881-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="kw">tibble</span>(medians), <span class="kw">aes</span>(<span class="dt">x =</span> medians)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">30</span>)</a></code></pre></div>
 <p><img src="26-bootstrap_files/figure-html/unnamed-chunk-21-1.png" width="672"  /></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Obtain a 95% bootstrap percentile confidence interval for the median. How does it compare with the one you obtained earlier?</li>
 </ol>
 <p>Solution</p>
 <p>Also, the usual:</p>
-<div class="sourceCode" id="cb1884"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1884-1" data-line-number="1"><span class="kw">quantile</span>(medians, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1882"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1882-1" data-line-number="1"><span class="kw">quantile</span>(medians, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</a></code></pre></div>
 <pre><code>##  2.5% 97.5% 
 ##  12.5 115.0</code></pre>
 <p>This goes down and up not quite so far as the interval from <code>smmr</code>. That might be because the <code>smmr</code> interval is too wide (based on a not-very-powerful test), or because the bootstrap quantile interval is too narrow (as it usually is). It’s hard to tell which it is.</p>
@@ -585,12 +585,12 @@ having few enough bins to show the shape.)</p>
 </ol>
 <p>Solution</p>
 <p>Yet more copying and pasting (from the previous question):</p>
-<div class="sourceCode" id="cb1886"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1886-1" data-line-number="1">theta &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb1886-2" data-line-number="2">  <span class="kw">median</span>(x)</a>
-<a class="sourceLine" id="cb1886-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb1886-4" data-line-number="4">bca_all &lt;-<span class="st"> </span><span class="kw">with</span>(aircon, <span class="kw">bcanon</span>(hours, <span class="dv">1000</span>, theta))</a>
-<a class="sourceLine" id="cb1886-5" data-line-number="5">bca &lt;-<span class="st"> </span>bca_all<span class="op">$</span>confpoints</a>
-<a class="sourceLine" id="cb1886-6" data-line-number="6">bca</a></code></pre></div>
+<div class="sourceCode" id="cb1884"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1884-1" data-line-number="1">theta &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb1884-2" data-line-number="2">  <span class="kw">median</span>(x)</a>
+<a class="sourceLine" id="cb1884-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb1884-4" data-line-number="4">bca_all &lt;-<span class="st"> </span><span class="kw">with</span>(aircon, <span class="kw">bcanon</span>(hours, <span class="dv">1000</span>, theta))</a>
+<a class="sourceLine" id="cb1884-5" data-line-number="5">bca &lt;-<span class="st"> </span>bca_all<span class="op">$</span>confpoints</a>
+<a class="sourceLine" id="cb1884-6" data-line-number="6">bca</a></code></pre></div>
 <pre><code>##      alpha bca point
 ## [1,] 0.025       7.0
 ## [2,] 0.050      12.5

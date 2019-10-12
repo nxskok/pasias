@@ -2435,7 +2435,7 @@ tbl.2
 ## 8 B       ay            18
 ```
 
-You could also ues `gather` to achieve the same effect (with the rows in a different order, but that's not important right now).
+You could also use `gather` to achieve the same effect (with the rows in a different order, but that's not important right now).
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This always reminds me of the late great Rik Mayall, who in the days before The Young Ones played a character called Kevin Turvey who "investigated" things with long, rambling stories with the rambles ending with "but that's not important right now".</span>
 
 
@@ -2534,7 +2534,7 @@ This is now tidy: eight frequencies in rows, and three non-frequency
 columns. (Go back and look at your answer to part (b)
 and note that the issues you found there have all been resolved now.)
 
-Extra: my reading of one of the vignettes (the one called `pivot`) for `tidyr` suggests that `pivot_longer` can do both the making longer and the separating in one shot. something that `gather` couldn't do:
+Extra: my reading of one of the vignettes (the one called `pivot`) for `tidyr` suggests that `pivot_longer` can do both the making longer and the separating in one shot, something that `gather` couldn't do:
 
 
 ```r
@@ -3050,6 +3050,46 @@ and there you see the `t` or "tab" characters separating the
 values, instead of spaces. (This is what I tried first, and once I
 looked at this, I realized that `read_tsv` was what I needed.)
 
+(b) Tidy these untidy data, going as directly as you can to something tidy. (Some later parts show you how it used to be done.) Begin by `rename`-ing the columns to species name, an underscore, and the variable contents (keeping `pulserate` as one word), and then use `pivot_longer`.
+
+
+
+Solution
+
+
+
+
+```r
+crickets %>% rename(
+  exclamationis_temperature = X1,
+  exclamationis_pulserate = X2,
+  niveus_temperature = X3,
+  niveus_pulserate = X4
+)
+```
+
+```
+## # A tibble: 17 x 4
+##    exclamationis_temp… exclamationis_pul… niveus_temperat… niveus_pulserate
+##                  <dbl>              <dbl>            <dbl>            <dbl>
+##  1                20.8               67.9             17.2             44.3
+##  2                20.8               65.1             18.3             47.2
+##  3                24                 77.3             18.3             47.6
+##  4                24                 78.7             18.3             49.6
+##  5                24                 79.4             18.9             50.3
+##  6                24                 80.4             18.9             51.8
+##  7                26.2               85.8             20.4             60  
+##  8                26.2               86.6             21               58.5
+##  9                26.2               87.5             21               58.9
+## 10                26.2               89.1             22.1             60.7
+## 11                28.4               98.6             23.5             69.8
+## 12                29                101.              24.2             70.9
+## 13                30.4               99.3             25.9             76.2
+## 14                30.4              102.              26.5             76.1
+## 15                NA                 NA               26.5             77  
+## 16                NA                 NA               26.5             77.7
+## 17                NA                 NA               28.6             84.7
+```
 
 
 (b) These data are rather far from being tidy. There need to be
@@ -3928,7 +3968,7 @@ billboard
 
 On yours, you will definitely see a little arrow top right saying
 "there are more columns", and you will have to click on it several
-times to see them all.
+times to see them all. A lot of the ones on the right will be missing.
 
  
 
@@ -3948,7 +3988,36 @@ briefly.
 Solution
 
 
-This is `gather`ing up all those columns, with
+
+As is often the case, the first step is `pivot_longer`, to reduce all those columns to something easier to deal with. The columns we want to make longer are the ones ending in "week":
+
+
+```r
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T)
+```
+
+```
+## # A tibble: 5,307 x 9
+##     year artist.inverted track time  genre date.entered date.peaked week 
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
+##  2  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x2nd…
+##  3  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x3rd…
+##  4  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x4th…
+##  5  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x5th…
+##  6  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x6th…
+##  7  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x7th…
+##  8  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x8th…
+##  9  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x9th…
+## 10  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x10t…
+## # … with 5,297 more rows, and 1 more variable: rank <dbl>
+```
+
+The "values" (ranks) have missings in them, which we wanted to get rid of.
+
+
+This used to be `gather`ing up all those columns, with
 `na.rm=T` to get rid of the missings:
 
 ```r
@@ -4041,53 +4110,51 @@ to that.
 
  
 
-(c) Display just your two new columns (for the first few
-rows). Add something appropriate onto the end of your pipe to do this.
-
-
-Solution
-
-
-A `select` is the thing:
-
-```r
-billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
-  select(week, rank)
-```
-
-```
-## # A tibble: 5,307 x 2
-##    week       rank
-##    <chr>     <dbl>
-##  1 x1st.week    78
-##  2 x1st.week    15
-##  3 x1st.week    71
-##  4 x1st.week    41
-##  5 x1st.week    57
-##  6 x1st.week    59
-##  7 x1st.week    83
-##  8 x1st.week    63
-##  9 x1st.week    77
-## 10 x1st.week    81
-## # … with 5,297 more rows
-```
-
-         
 
 
 
-(d) Both your `week` and `rank` columns are
+(c) Both your `week` and `rank` columns are
 (probably) text. Create new columns that contain just the numeric
 values, and display just your new columns, again adding onto the
 end of your pipe. If it so happens that `rank` is already a number, leave it as it is.
-(In the previous part, you probably had some
-code that picked out a few columns to display them. Get rid of
-that.) 
+
  
 
 Solution
 
+
+My `rank` is already a number, so I could leave it; for later, I make a copy of it called `rakn_numbe`. The `week` has a number *in* it, which I can extract using `parse_number`:
+
+
+```r
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank)
+```
+
+```
+## # A tibble: 5,307 x 11
+##     year artist.inverted track time  genre date.entered date.peaked week 
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
+##  2  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x2nd…
+##  3  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x3rd…
+##  4  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x4th…
+##  5  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x5th…
+##  6  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x6th…
+##  7  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x7th…
+##  8  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x8th…
+##  9  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x9th…
+## 10  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x10t…
+## # … with 5,297 more rows, and 3 more variables: rank <dbl>,
+## #   week_number <dbl>, rank_number <dbl>
+```
+
+
+
+
+The `gather` way follows.
 
 My `rank` is already a number, so I leave that. 
 I'm defining a new column `rank_number` that is just a copy 
@@ -4987,158 +5054,69 @@ There are only Males and Females, so the observer really did mark
 exactly one X. (As a bonus, you see that there were slightly more male
 cyclists than female ones.)
 
-Extra: I was wondering how `gather` would play out here. The
-way to do it seems to be to rename the columns first:
+Extra: I was wondering how `pivot_longer` would play out here. The
+way to do it seems to be to rename the columns we want first, and get rid of the others:
 
 
 ```r
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
-  rename(male = X2, female = X3)
+  rename(male = X2, female = X3) %>% 
+  select(-starts_with("X"))
 ```
 
 ```
-## # A tibble: 1,958 x 9
-##    Time   male  female X4    X5    X6    X7    X8    X9   
-##    <time> <chr> <chr>  <chr> <chr> <chr> <chr> <chr> <chr>
-##  1 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
-##  2 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
-##  3 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
-##  4 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
-##  5 07:00  X     <NA>   <NA>  X     <NA>  X     <NA>  X    
-##  6 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
-##  7 07:15  <NA>  X      X     <NA>  <NA>  X     <NA>  X    
-##  8 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
-##  9 07:15  <NA>  X      X     <NA>  <NA>  X     X     <NA> 
-## 10 07:15  X     <NA>   X     <NA>  <NA>  X     <NA>  X    
+## # A tibble: 1,958 x 3
+##    Time   male  female
+##    <time> <chr> <chr> 
+##  1 07:00  X     <NA>  
+##  2 07:00  X     <NA>  
+##  3 07:00  X     <NA>  
+##  4 07:00  X     <NA>  
+##  5 07:00  X     <NA>  
+##  6 07:15  X     <NA>  
+##  7 07:15  <NA>  X     
+##  8 07:15  X     <NA>  
+##  9 07:15  <NA>  X     
+## 10 07:15  X     <NA>  
 ## # … with 1,948 more rows
 ```
 
- 
-
-and then gather them up:
+Each row should have one X and one missing in it, so we may as well drop the missings as we pivot-longer:
 
 
 ```r
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
-  rename(male = X2, female = X3) %>%
-  gather(gender, what, male:female)
+  rename(male = X2, female = X3) %>% 
+  select(-starts_with("X")) %>% 
+  pivot_longer(-Time, names_to="gender", values_to="observed", values_drop_na = T)
 ```
 
 ```
-## # A tibble: 3,916 x 9
-##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
-##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   <NA> 
-##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-##  9 07:15  X     <NA>  <NA>  X     X     <NA>  male   <NA> 
-## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-## # … with 3,906 more rows
-```
-
- 
-
-I wasn't quite sure what to call "what makes them the same", at
-least not until I had seen how it came out. This is where the
-`X` or missing goes, so we want the lines where `what`
-is equal to `X`:
-
-
-```r
-bikes %>%
-  fill(X1) %>%
-  rename(Time = X1) %>%
-  rename(male = X2, female = X3) %>%
-  gather(gender, what, male:female) %>%
-  filter(what == "X")
-```
-
-```
-## # A tibble: 1,958 x 9
-##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
-##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-##  9 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
+## # A tibble: 1,958 x 3
+##    Time   gender observed
+##    <time> <chr>  <chr>   
+##  1 07:00  male   X       
+##  2 07:00  male   X       
+##  3 07:00  male   X       
+##  4 07:00  male   X       
+##  5 07:00  male   X       
+##  6 07:15  male   X       
+##  7 07:15  female X       
+##  8 07:15  male   X       
+##  9 07:15  female X       
+## 10 07:15  male   X       
 ## # … with 1,948 more rows
 ```
 
- 
-
-Another way to do this is to remove the missings in the `gather`:
+The `observed` column is kind of pointless, since its value is always X. But we do have a check: the previous data frame had 1958 rows, with an X in either the male or the female column. This data frame has the gender of each observed cyclist in the `gender` column, and it also has 1958 rows. So, either way, that's how many cyclists were observed in total.
 
 
-```r
-bikes %>%
-  fill(X1) %>%
-  rename(Time = X1) %>%
-  rename(male = X2, female = X3) %>%
-  gather(gender, what, male:female, na.rm = T)
-```
-
-```
-## # A tibble: 1,958 x 9
-##    Time   X4    X5    X6    X7    X8    X9    gender what 
-##    <time> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <chr>
-##  1 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  2 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  3 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  4 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  5 07:00  <NA>  X     <NA>  X     <NA>  X     male   X    
-##  6 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-##  7 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-##  8 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-##  9 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-## 10 07:15  X     <NA>  <NA>  X     <NA>  X     male   X    
-## # … with 1,948 more rows
-```
 
  
-
-In case you are wondering where the females went, all the males are
-listed first this way, and then all the females. To verify this, we
-can count the males and females obtained this way, and we should get
-the same thing we got before:
-
-
-```r
-bikes %>%
-  fill(X1) %>%
-  rename(Time = X1) %>%
-  rename(male = X2, female = X3) %>%
-  gather(gender, what, male:female, na.rm = T) %>%
-  count(gender)
-```
-
-```
-## # A tibble: 2 x 2
-##   gender     n
-##   <chr>  <int>
-## 1 female   861
-## 2 male    1097
-```
-
- 
-
-And this is what we had before.
-
-
 
 (f) Create variables `helmet`, `passenger` and
 `sidewalk` in your data frame that are `TRUE` if
@@ -5337,11 +5315,11 @@ to draw attention to the order of calculation. This is the same reason that
 evaluates this way rather than doing the addition first and getting
 54. BODMAS and all that.
 
-The `gather` approach works for these too. Rename the columns
-as `yes` and `no`, and then give the "what makes them the same" column a name like `helmet`.
-Give the "what makes them different" column a name like
+The `pivot_longer` approach works for these too. Rename the columns
+as `yes` and `no`, and then give the `names_to` column a name like `helmet`.
+Give the `values_to` column a name like
 `what2`, to make it easier to remove later. And then do the
-same with the others, one `gather` at a time.
+same with the others, one `pivot_longer` at a time. (Keep all the columns, and then discard them at the end if you want. That way you don't risk deleting something you might need later.)
 
 
 
@@ -6283,7 +6261,7 @@ heat %>%
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-158-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-157-1.png" width="672"  />
 
  
 The pattern is very scattered, as is commonly the case with

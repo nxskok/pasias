@@ -298,77 +298,33 @@ There are only Males and Females, so the observer really did mark
 exactly one X. (As a bonus, you see that there were slightly more male
 cyclists than female ones.)
 
-Extra: I was wondering how `gather` would play out here. The
-way to do it seems to be to rename the columns first:
+Extra: I was wondering how `pivot_longer` would play out here. The
+way to do it seems to be to rename the columns we want first, and get rid of the others:
 
 ```{r }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
-  rename(male = X2, female = X3)
+  rename(male = X2, female = X3) %>% 
+  select(-starts_with("X"))
 ```
 
- 
+Each row should have one X and one missing in it, so we may as well drop the missings as we pivot-longer:
 
-and then gather them up:
-
-```{r }
+```{r}
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
-  rename(male = X2, female = X3) %>%
-  gather(gender, what, male:female)
+  rename(male = X2, female = X3) %>% 
+  select(-starts_with("X")) %>% 
+  pivot_longer(-Time, names_to="gender", values_to="observed", values_drop_na = T)
 ```
 
- 
+The `observed` column is kind of pointless, since its value is always X. But we do have a check: the previous data frame had 1958 rows, with an X in either the male or the female column. This data frame has the gender of each observed cyclist in the `gender` column, and it also has 1958 rows. So, either way, that's how many cyclists were observed in total.
 
-I wasn't quite sure what to call "what makes them the same", at
-least not until I had seen how it came out. This is where the
-`X` or missing goes, so we want the lines where `what`
-is equal to `X`:
 
-```{r }
-bikes %>%
-  fill(X1) %>%
-  rename(Time = X1) %>%
-  rename(male = X2, female = X3) %>%
-  gather(gender, what, male:female) %>%
-  filter(what == "X")
-```
 
  
-
-Another way to do this is to remove the missings in the `gather`:
-
-```{r }
-bikes %>%
-  fill(X1) %>%
-  rename(Time = X1) %>%
-  rename(male = X2, female = X3) %>%
-  gather(gender, what, male:female, na.rm = T)
-```
-
- 
-
-In case you are wondering where the females went, all the males are
-listed first this way, and then all the females. To verify this, we
-can count the males and females obtained this way, and we should get
-the same thing we got before:
-
-```{r }
-bikes %>%
-  fill(X1) %>%
-  rename(Time = X1) %>%
-  rename(male = X2, female = X3) %>%
-  gather(gender, what, male:female, na.rm = T) %>%
-  count(gender)
-```
-
- 
-
-And this is what we had before.
-
-
 
 (f) Create variables `helmet`, `passenger` and
 `sidewalk` in your data frame that are `TRUE` if
@@ -499,11 +455,11 @@ to draw attention to the order of calculation. This is the same reason that
 evaluates this way rather than doing the addition first and getting
 54. BODMAS and all that.
 
-The `gather` approach works for these too. Rename the columns
-as `yes` and `no`, and then give the "what makes them the same" column a name like `helmet`.
-Give the "what makes them different" column a name like
+The `pivot_longer` approach works for these too. Rename the columns
+as `yes` and `no`, and then give the `names_to` column a name like `helmet`.
+Give the `values_to` column a name like
 `what2`, to make it easier to remove later. And then do the
-same with the others, one `gather` at a time.
+same with the others, one `pivot_longer` at a time. (Keep all the columns, and then discard them at the end if you want. That way you don't risk deleting something you might need later.)
 
 
 
