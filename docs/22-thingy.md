@@ -926,7 +926,7 @@ This is a "long" data frame, but for the cluster analysis, we need a wide one wi
 
 
 ```r
-(bc %>% spread(site2, bray_curtis) -> bc2)
+(bc %>% pivot_wider(names_from=site2, values_from=bray_curtis) -> bc2)
 ```
 
 ```
@@ -1169,6 +1169,7 @@ This time, the picture isn't quite so clear-cut, but clusters 1 and 5
 are the highest in terms of pollution and cluster 4 is the lowest. I'm
 guessing that whatever number of clusters you choose, you'll see some
 differences in terms of pollution.
+
 What is interesting is that `pollution` had *nothing* to
 do with the original formation of the clusters: that was based only on
 which species were found at each site. So, what we have shown here is that
@@ -2385,7 +2386,7 @@ student who likes dark beer tend not to like light beer, and vice versa?
 
 Let's think about what to do first.
 
-We need to: `gather` all the rating columns into one, labelled
+We need to: `pivot_longer` all the rating columns into one, labelled
 by `name` of beer. Then create a variable that is `dark`
 if we're looking at one of the dark beers and `light`
 otherwise. `ifelse` works like "if" in a spreadsheet: a
@@ -2408,7 +2409,7 @@ rating within each group. This gives one column of students, one
 column of beer types, 
 and one column of rating means. 
 
-Then we need to `spread` beer type
+Then we need to `pivot_wider` beer type
 into two columns so that we can make a scatterplot of the mean ratings
 for light and dark against
 each other. 
@@ -2424,14 +2425,15 @@ line does. That was how I debugged it.
 Off we go:
 
 
+
 ```r
 beer %>%
-  gather(name, rating, AnchorS:SierraN) %>%
+  pivot_longer(-student, names_to="name", values_to="rating") %>%
   mutate(beer.type = ifelse(name %in%
     c("AnchorS", "PetesW", "Guinness", "SierraN"), "dark", "light")) %>%
   group_by(student, beer.type) %>%
   summarize(mean.rat = mean(rating)) %>%
-  spread(beer.type, mean.rat) %>%
+  pivot_wider(names_from=beer.type, values_from=mean.rat) %>%
   ggplot(aes(x = dark, y = light)) + geom_point()
 ```
 
@@ -2573,7 +2575,8 @@ Named vectors are handily turned into a data frame with `enframe`:
 
 
 ```r
-enframe(beer.2$cluster)
+x <- enframe(beer.2$cluster)
+x
 ```
 
 ```
@@ -2590,6 +2593,20 @@ enframe(beer.2$cluster)
 ##  8 PetesW       1
 ##  9 SamAdams     2
 ## 10 SierraN      1
+```
+
+Or, to go back the other way, `deframe`:
+
+
+```r
+deframe(x)
+```
+
+```
+##  AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken   PetesW 
+##        1        2        2        2        2        1        2        1 
+## SamAdams  SierraN 
+##        2        1
 ```
 
  
@@ -2893,7 +2910,7 @@ which I called `wssq`:
 ggplot(wssq, aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-88-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-89-1.png" width="672"  />
 
        
 If you did it the loop way, you'll have to make a data frame
@@ -3825,7 +3842,7 @@ tibble(clusters = 1:10, wss = w) %>%
 ## Warning: Removed 1 rows containing missing values (geom_path).
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-119-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
 
  
 
@@ -3841,7 +3858,7 @@ already a data frame:
 wwx %>% ggplot(aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
 
  
 
@@ -4054,7 +4071,7 @@ first, so I call it here with the package name and the two colons:
 ggbiplot::ggbiplot(carsx.1, groups = factor(carsx$cluster))
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-126-1.png" width="672"  />
 
  
 Or you can do the predictions, then plot `LD1` against
@@ -4068,7 +4085,7 @@ data.frame(p$x, cluster = factor(carsx$cluster)) %>%
   coord_fixed()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-126-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-127-1.png" width="672"  />
 
  
 
@@ -5793,12 +5810,12 @@ mm
 
  
 
-This is long format, though, so we need to `spread` the
+This is long format, though, so we need to `pivot_wider` the
 `j` column to get a square array of dissimilarities:
 
 
 ```r
-mm <- mm %>% spread(j, diff)
+mm <- mm %>% pivot_wider(names_from=j, values_from=diff)
 mm
 ```
 
@@ -5940,7 +5957,7 @@ bridges.1 <- hclust(d1, method = "ward.D")
 plot(bridges.1, cex = 0.3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
 
      
 
@@ -5966,7 +5983,7 @@ plot(bridges.1, cex = 0.3)
 rect.hclust(bridges.1, 5)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-175-1.png" width="672"  />
 
      
 
@@ -5987,26 +6004,22 @@ Solution
 
 What I want you to do is to display the data for your chosen three
 bridges and make the case that they are "similar". I'm picking
-41, 42 and 48 from my third cluster. I used `print` with
-`width=Inf` to display all the columns (this is how it
-looks in the Console):
+41, 42 and 48 from my third cluster. On yours, scroll right to see the other variables.
+
 
 ```r
-bridges %>% slice(c(41, 42, 48)) %>% print(width = Inf)
+bridges %>% slice(c(41, 42, 48))
 ```
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
-## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THROUGH
-## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THROUGH
-## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THROUGH
-##   material span   rel_l type  
-##   <chr>    <chr>  <chr> <chr> 
-## 1 STEEL    MEDIUM S-F   SUSPEN
-## 2 STEEL    MEDIUM S-F   SUSPEN
-## 3 STEEL    MEDIUM S-F   SUSPEN
+##   id    river location erected purpose length lanes clear_g t_d  
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
+## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THRO…
+## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THRO…
+## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THRO…
+## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
+## #   type <chr>
 ```
 
      
@@ -6020,21 +6033,18 @@ got joined together further up:
 
 
 ```r
-bridges %>% slice(c(10, 12, 19)) %>% print(width = Inf)
+bridges %>% slice(c(10, 12, 19))
 ```
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected  purpose  length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>    <chr>    <chr>  <dbl> <chr>   <chr>  
-## 1 E19   A           29 CRAFTS   HIGHWAY  MEDIUM     2 N       THROUGH
-## 2 E22   A           24 EMERGING HIGHWAY  MEDIUM     4 G       THROUGH
-## 3 E4    A           27 MATURE   AQUEDUCT MEDIUM     1 N       THROUGH
-##   material span   rel_l type 
-##   <chr>    <chr>  <chr> <chr>
-## 1 WOOD     MEDIUM S     WOOD 
-## 2 WOOD     SHORT  S     WOOD 
-## 3 WOOD     SHORT  S     WOOD
+##   id    river location erected purpose length lanes clear_g t_d  
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
+## 1 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+## 2 E22   A           24 EMERGI… HIGHWAY MEDIUM     4 G       THRO…
+## 3 E4    A           27 MATURE  AQUEDU… MEDIUM     1 N       THRO…
+## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
+## #   type <chr>
 ```
 
      
@@ -6047,21 +6057,18 @@ three bridges in different clusters:
 
 
 ```r
-bridges %>% slice(c(8, 24, 52)) %>% print(width = Inf)
+bridges %>% slice(c(8, 24, 52))
 ```
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
-## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THROUGH
-## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THROUGH
-## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THROUGH
-##   material span   rel_l type    
-##   <chr>    <chr>  <chr> <chr>   
-## 1 IRON     MEDIUM S-F   SUSPEN  
-## 2 STEEL    MEDIUM F     SIMPLE-T
-## 3 STEEL    LONG   F     SUSPEN
+##   id    river location erected purpose length lanes clear_g t_d  
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
+## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THRO…
+## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THRO…
+## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
+## #   type <chr>
 ```
 
  
@@ -6136,19 +6143,17 @@ predict the cluster of:
 
 
 ```r
-bridges.rpart %>% slice(c(20, 29)) %>% print(width = Inf)
+bridges.rpart %>% slice(c(20, 29)) 
 ```
 
 ```
 ## # A tibble: 2 x 14
-##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
-## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THROUGH
-## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THROUGH
-##   material span   rel_l type     cluster
-##   <chr>    <chr>  <chr> <chr>      <int>
-## 1 STEEL    LONG   F     SIMPLE-T       3
-## 2 STEEL    MEDIUM F     SIMPLE-T       2
+##   id    river location erected purpose length lanes clear_g t_d  
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
+## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THRO…
+## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THRO…
+## # … with 5 more variables: material <chr>, span <chr>, rel_l <chr>,
+## #   type <chr>, cluster <int>
 ```
 
  
@@ -6531,7 +6536,7 @@ plot directly, with the points joined by lines:
 ggplot(withinss, aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-190-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-191-1.png" width="672"  />
 
      
 
@@ -7041,7 +7046,7 @@ ggbiplot(athletes.3, groups = factor(athletes2$cluster)) +
   scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
 
      
 
@@ -7101,7 +7106,7 @@ athletes %>%
   geom_point() + scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-205-1.png" width="672"  />
 
  
 

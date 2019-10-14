@@ -61,7 +61,7 @@ Solution
 
 Like this (the cleanest):
 ```{r }
-map_df(air, ~ quantile(.))
+air %>% map_df(~ quantile(.))
 ```
 
      
@@ -76,14 +76,15 @@ Or, with some more work, this:
 
 ```{r }
 air %>%
-  gather(xname, x, everything()) %>%
+  pivot_longer(everything(), names_to="xname", values_to="x") %>% 
   nest(-xname) %>%
   mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
   unnest(q) %>%
-  spread(xname, value) %>%
-  arrange(parse_number(name))
+  pivot_wider(names_from=name, values_from=value) %>% 
+  select(-data)
 ```
 
+This time, I put the percentiles in columns and variable names in rows (because it seemed to be easier that way).
  
 
 just like the weather problem (in fact, *exactly* like the weather
@@ -229,9 +230,8 @@ All the columns contain numbers, so `cbind` will do
 it. (The component scores are seven columns, so
 `bind_cols` won't do it unless you are careful.):
 ```{r }
-cbind(air, air.1$scores) %>%
+cbind(air, air.1$scores) %>%  
   mutate(row = row_number()) -> d
-class(d)
 head(d)
 ```
 
@@ -313,7 +313,7 @@ d %>% arrange(Comp.2) %>% slice(1)
 and for convenience, we'll grab the quantiles again:
 
 ```{r }
-map_df(air, ~ quantile(.))
+air %>% map_df(~ quantile(.))
 ```
 
  

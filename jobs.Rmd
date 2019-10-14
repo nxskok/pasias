@@ -301,12 +301,12 @@ or:
 ```{r }
 d %>%
   count(job, class) %>%
-  spread(class, n, fill = 0)
+  pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
  
 
-I didn't really need the `fill=0` since there are no missing
+I didn't really need the `values_fill` since there are no missing
 frequencies, but I've gotten used to putting it in.
 There are a lot of misclassifications, but there are a lot of people,
 so a large fraction of people actually got classified correctly. The
@@ -403,7 +403,7 @@ d %>%
   count(job_stat, wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
   select(-n) %>%
-  spread(job_stat, proportion)
+  pivot_wider(names_from=job_stat, values_from=proportion)
 ```
 
  

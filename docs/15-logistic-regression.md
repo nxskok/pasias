@@ -1596,12 +1596,12 @@ frequencies means there's no doubt about that), but the format is
 wrong: `infected` is my response variable, and we want the
 frequencies of `infected` being `y` or `n` in
 *separate* columns --- that is, we have to *untidy* the data
-a bit to make it suitable for modelling. This is `spread`, the
-opposite of `gather`:
+a bit to make it suitable for modelling. This is `pivot_wider`, the
+opposite of `pivot_longer`:
 
 
 ```r
-d %>% spread(infected, freq)
+d %>% pivot_wider(names_from=infected, values_from=freq)
 ```
 
 ```
@@ -4517,36 +4517,25 @@ If you want to be really fancy:
 ```r
 heart %>%
   summarize_if(is.numeric, funs(q1, q3)) %>%
-  gather(vq, quartile, everything()) %>%
-  separate(vq, c("variable", "q"), "_") %>%
-  spread(q, quartile)
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
+  pivot_longer(everything(), names_to=c("variable", "which_quartile"), names_sep="_", values_to="quartile") %>% 
+  pivot_wider(names_from=which_quartile, values_from=quartile)
 ```
 
 ```
 ## # A tibble: 7 x 3
 ##   variable      q1    q3
 ##   <chr>      <dbl> <dbl>
-## 1 age         48    61  
-## 2 colored      0     1  
-## 3 max.hr     133   166  
-## 4 oldpeak      0     1.6
-## 5 resting.bp 120   140  
-## 6 serum.chol 213   280  
-## 7 X1          68.2 203.
+## 1 X1          68.2 203. 
+## 2 age         48    61  
+## 3 resting.bp 120   140  
+## 4 serum.chol 213   280  
+## 5 max.hr     133   166  
+## 6 oldpeak      0     1.6
+## 7 colored      0     1
 ```
 
+You would *definitely* benefit from running this pipeline one line at a time to see how it works! The `summarize_if` produces columns with names like `age_q1`, which are then split up into a variable name and a "which quartile" by the fancy version of `pivot_longer`. (If you prefer, this is the vanilla version of `pivot_longer` followed by `separate`. For yourself, do it the way that makes sense to you.) Finally, I put Q1 and Q3 in their own columns so that you can see them side by side.
  
-
-The logic is (beyond what we had above) splitting up `vq` into
-the two things it really is (I had to put in the `"_"` at the
-end because it would otherwise also split up at the dots), and then I
-deliberately untidy the column that contains `q1` and
-`q3` into two columns of those names.
 
 The categorical variables are a bit trickier, because they will have
 different numbers of possible values. Here's my idea:
@@ -4555,7 +4544,7 @@ different numbers of possible values. Here's my idea:
 ```r
 heart %>%
   select_if(is.character) %>%
-  mutate_all(factor) %>%
+  mutate_all(~factor(.)) %>%
   summary()
 ```
 
@@ -4579,8 +4568,8 @@ My thought was that if you pass a genuine factor into `summary`
 its "levels" (different categories). So, to get to that point, I had
 to select all the categorical-as-text variables (which is actually all
 the ones that are not numeric), and then make a factor out of each of
-them. `mutate_all` does the same thing to all the columns: it
-runs `factor` on them, and saves the results back in variables
+them. `mutate_all` does the same thing to all the columns: "for
+each column, run `factor` on it", and saves the results back in variables
 of the same name as they were before. Using `summary` also
 shows how many observations we had in each category.
 
@@ -4590,38 +4579,29 @@ combinations. My go at that:
 
 
 ```r
-heart3 <- heart %>%
+heart %>%
   select_if(is.character) %>%
-  gather(vname, value, everything()) %>%
-  distinct()
-heart3 %>% print(n = Inf)
+  pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
+  distinct() %>% 
+  arrange(variable_name, value) -> heart3
+heart3
 ```
 
 ```
 ## # A tibble: 21 x 2
-##    vname            value       
+##    variable_name    value       
 ##    <chr>            <chr>       
-##  1 sex              male        
-##  2 sex              female      
-##  3 pain.type        asymptomatic
-##  4 pain.type        nonanginal  
-##  5 pain.type        atypical    
-##  6 pain.type        typical     
-##  7 high.blood.sugar no          
-##  8 high.blood.sugar yes         
-##  9 electro          hypertrophy 
-## 10 electro          normal      
-## 11 electro          STT         
-## 12 angina           no          
-## 13 angina           yes         
-## 14 slope            flat        
-## 15 slope            upsloping   
-## 16 slope            downsloping 
-## 17 thal             normal      
-## 18 thal             reversible  
-## 19 thal             fixed       
-## 20 heart.disease    yes         
-## 21 heart.disease    no
+##  1 angina           no          
+##  2 angina           yes         
+##  3 electro          hypertrophy 
+##  4 electro          normal      
+##  5 electro          STT         
+##  6 heart.disease    no          
+##  7 heart.disease    yes         
+##  8 high.blood.sugar no          
+##  9 high.blood.sugar yes         
+## 10 pain.type        asymptomatic
+## # … with 11 more rows
 ```
 
  
@@ -4637,16 +4617,16 @@ Hmm, another way would be to count everything:
 
 
 ```r
-heart3 <- heart %>%
+heart %>%
   select_if(is.character) %>%
-  gather(vname, value, everything()) %>%
-  count(vname, value)
-heart3 %>% print(n = Inf)
+  pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
+  count(variable_name, value) -> heart3
+heart3 
 ```
 
 ```
 ## # A tibble: 21 x 3
-##    vname            value            n
+##    variable_name    value            n
 ##    <chr>            <chr>        <int>
 ##  1 angina           no             181
 ##  2 angina           yes             89
@@ -4658,17 +4638,7 @@ heart3 %>% print(n = Inf)
 ##  8 high.blood.sugar no             230
 ##  9 high.blood.sugar yes             40
 ## 10 pain.type        asymptomatic   129
-## 11 pain.type        atypical        42
-## 12 pain.type        nonanginal      79
-## 13 pain.type        typical         20
-## 14 sex              female          87
-## 15 sex              male           183
-## 16 slope            downsloping     18
-## 17 slope            flat           122
-## 18 slope            upsloping      130
-## 19 thal             fixed           14
-## 20 thal             normal         152
-## 21 thal             reversible     104
+## # … with 11 more rows
 ```
 
  
@@ -4783,7 +4753,7 @@ heart3
 
 ```
 ## # A tibble: 21 x 3
-##    vname            value            n
+##    variable_name    value            n
 ##    <chr>            <chr>        <int>
 ##  1 angina           no             181
 ##  2 angina           yes             89
@@ -4800,7 +4770,7 @@ heart3
 
  
 
-then choose the rows with the right thing in `vname`, and then
+then choose the rows with the right thing in `variable_name`, and then
 pull just the `value` column. This is sufficiently like the
 previous one that I think we can write a function right away:
 
@@ -4808,7 +4778,7 @@ previous one that I think we can write a function right away:
 ```r
 get_categories <- function(d, x) {
   d %>%
-    filter(vname == x) %>%
+    filter(variable_name == x) %>%
     pull(value)
 }
 get_categories(heart3, "electro")

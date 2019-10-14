@@ -92,12 +92,12 @@ the quantiles for each variable:
 
 ```{r }
 weather %>%
-  gather(xname, x, everything()) %>%
+  pivot_longer(everything(), names_to="xname", values_to="x") %>%
   nest(-xname) %>%
   mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
   unnest(q) %>%
-  spread(xname, value) %>%
-  arrange(parse_number(name))
+  pivot_wider(names_from=name, values_from=value) %>%
+  select(-data)
 ```
 
  
@@ -114,12 +114,7 @@ That was a lot of work, but it depends on how you see it when you're coding it. 
 
 * Unnest this to make a long data frame with one row for each quantile for each variable.
 
-* put the variable names in columns and the percentiles in rows
-
-* finally, put the percentiles in numerical order (if you run this
-one line at a time, you'll see that the percentiles get out of
-order, and you can probably guess why).
-
+* put the variable names in columns and the percentiles in rows.
  
 
 (c) Run a principal components analysis (on the correlation matrix).
@@ -426,7 +421,8 @@ Having done these by percentile ranks in one of the other questions,
 let's see if we can do that here as well:
 
 ```{r }
-map_df(weather, percent_rank) %>%
+map_df(weather, ~percent_rank(.)) %>%
+  mutate(day=row_number()) %>% 
   slice(c(37, 211, 265, 47))
 ```
 
@@ -478,7 +474,15 @@ register_google(api_key)
 ```
 
  
-Let's make a map, but first we "geocode" Porto (and La Coruna,
+Let's make a map. To do it this way, you need a Google API key (the free-tier one is fine, but you need to have one). When you have one, you put something at the top of your code like this, with the actual key in the obvious place:
+
+```{r eval=F}
+api_key <- "your key here"
+register_google(api_key)
+```
+
+
+but first we "geocode" Porto (and La Coruna,
 for later). I like to do the lookup of longitude and latitude first,
 once and for all, since I find the geocoding a bit finicky (it's
 actually Google that's finicky, because sometimes it decides that

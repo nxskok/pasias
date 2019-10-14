@@ -393,11 +393,11 @@ mm
 
  
 
-This is long format, though, so we need to `spread` the
+This is long format, though, so we need to `pivot_wider` the
 `j` column to get a square array of dissimilarities:
 
 ```{r }
-mm <- mm %>% spread(j, diff)
+mm <- mm %>% pivot_wider(names_from=j, values_from=diff)
 mm
 ```
 
@@ -502,11 +502,10 @@ Solution
 
 What I want you to do is to display the data for your chosen three
 bridges and make the case that they are "similar". I'm picking
-41, 42 and 48 from my third cluster. I used `print` with
-`width=Inf` to display all the columns (this is how it
-looks in the Console):
+41, 42 and 48 from my third cluster. On yours, scroll right to see the other variables.
+
 ```{r }
-bridges %>% slice(c(41, 42, 48)) %>% print(width = Inf)
+bridges %>% slice(c(41, 42, 48))
 ```
 
      
@@ -519,7 +518,7 @@ You might not have been so lucky, for example, 10, 12 and 19, which
 got joined together further up:
 
 ```{r }
-bridges %>% slice(c(10, 12, 19)) %>% print(width = Inf)
+bridges %>% slice(c(10, 12, 19))
 ```
 
      
@@ -531,7 +530,7 @@ Extra: to get a feel for how different they might be, let's compare
 three bridges in different clusters:
 
 ```{r }
-bridges %>% slice(c(8, 24, 52)) %>% print(width = Inf)
+bridges %>% slice(c(8, 24, 52))
 ```
 
  
@@ -577,7 +576,7 @@ This takes some making sense of, so let's grab a couple of bridges to
 predict the cluster of:
 
 ```{r }
-bridges.rpart %>% slice(c(20, 29)) %>% print(width = Inf)
+bridges.rpart %>% slice(c(20, 29)) 
 ```
 
  

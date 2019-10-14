@@ -1045,13 +1045,13 @@ tab
 or if you prefer to make it look more like a table of frequencies:
 
 ```r
-tab %>% spread(class, n, fill = 0)
+tab %>% pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
 ```
 ## # A tibble: 4 x 5
 ##   obesity     a     b     c     d
-##   <chr>   <dbl> <dbl> <dbl> <dbl>
+##   <chr>   <int> <int> <int> <int>
 ## 1 a           7     3     2     0
 ## 2 b           2     9     2     1
 ## 3 c           3     4     1     3
@@ -1200,7 +1200,7 @@ tab %>%
   count(correct = (obesity == class), wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
   select(-n) %>%
-  spread(correct, proportion)
+  pivot_wider(names_from=correct, values_from=proportion)
 ```
 
 ```
@@ -1235,7 +1235,7 @@ tab %>%
   count(prediction_stat, wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
   select(-n) %>%
-  spread(prediction_stat, proportion)
+  pivot_wider(names_from=prediction_stat, values_from=proportion)
 ```
 
 ```
@@ -1701,13 +1701,13 @@ or
 ```r
 d %>%
   count(group, class) %>%
-  spread(class, n, fill = 0)
+  pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
 ```
 ## # A tibble: 3 x 4
 ##   group     a     b     c
-##   <chr> <dbl> <dbl> <dbl>
+##   <chr> <int> <int> <int>
 ## 1 a         4     0     0
 ## 2 b         0     3     0
 ## 3 c         0     0     5
@@ -1968,26 +1968,26 @@ jobs0 %>%
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1       6     18            6     1    62 custserv  
-##  2      17     17           19     3    24 dispatcher
-##  3      20     20            9     2    45 mechanic  
-##  4      13     27            7     1     8 custserv  
-##  5      13     20           10     2    22 mechanic  
-##  6       8     17           14     3     3 dispatcher
-##  7      20     19           16     3    19 dispatcher
-##  8      14     26           15     3    45 dispatcher
-##  9      15     26            4     1    70 custserv  
-## 10      10     17            8     1    22 custserv  
-## 11      12     12            6     3    23 dispatcher
-## 12      18     17           11     2    16 mechanic  
-## 13      16     19           12     3    52 dispatcher
-## 14       3     20           14     1    31 custserv  
-## 15      14     18            4     3     5 dispatcher
-## 16      16     16           17     3    14 dispatcher
-## 17       5     17            9     1    37 custserv  
-## 18      17     18            9     3    56 dispatcher
-## 19      15     13           13     3    65 dispatcher
-## 20       9     13           16     3    64 dispatcher
+##  1       1     30            6     1    23 custserv  
+##  2      11     20            9     1    46 custserv  
+##  3      17     18            8     2    73 mechanic  
+##  4      25     16           12     3    46 dispatcher
+##  5      21     23           11     2    36 mechanic  
+##  6      23     24            7     2    67 mechanic  
+##  7      10     29           11     1    12 custserv  
+##  8      15     10           13     3    31 dispatcher
+##  9      21     19            7     2    69 mechanic  
+## 10       9     20           12     1    64 custserv  
+## 11      13     12           15     3    35 dispatcher
+## 12      14     13           12     3    59 dispatcher
+## 13       6     18            4     1     7 custserv  
+## 14      15     21           10     1    49 custserv  
+## 15      21     31           11     1    26 custserv  
+## 16      17     16            6     2    52 mechanic  
+## 17      19     26            7     2    21 mechanic  
+## 18      17     15           10     3    15 dispatcher
+## 19      24     20           13     3    13 dispatcher
+## 20      16     21           10     2    19 mechanic
 ```
 
  
@@ -2290,13 +2290,13 @@ or:
 ```r
 d %>%
   count(job, class) %>%
-  spread(class, n, fill = 0)
+  pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
 ```
 ## # A tibble: 3 x 4
 ##   job        custserv mechanic dispatcher
-##   <fct>         <dbl>    <dbl>      <dbl>
+##   <fct>         <int>    <int>      <int>
 ## 1 custserv         68       13          4
 ## 2 mechanic         16       67         10
 ## 3 dispatcher        3       13         50
@@ -2304,7 +2304,7 @@ d %>%
 
  
 
-I didn't really need the `fill=0` since there are no missing
+I didn't really need the `values_fill` since there are no missing
 frequencies, but I've gotten used to putting it in.
 There are a lot of misclassifications, but there are a lot of people,
 so a large fraction of people actually got classified correctly. The
@@ -2450,7 +2450,7 @@ d %>%
   count(job_stat, wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
   select(-n) %>%
-  spread(job_stat, proportion)
+  pivot_wider(names_from=job_stat, values_from=proportion)
 ```
 
 ```
@@ -3291,13 +3291,13 @@ or
 ```r
 d %>%
   count(parent, class) %>%
-  spread(class, n, fill = 0)
+  pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
 ```
 ## # A tibble: 2 x 3
 ##   parent father mother
-##   <chr>   <dbl>  <dbl>
+##   <chr>   <int>  <int>
 ## 1 father      5      0
 ## 2 mother      1     23
 ```
@@ -4176,13 +4176,20 @@ d %>%
   group_by(soil) %>%
   mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
   count(soil_stat, wt = n) %>%
-  mutate(prop = nn / sum(nn)) %>%
-  select(-nn) %>%
-  spread(soil_stat, prop)
+  mutate(prop = n / sum(n)) %>%
+  select(-n) %>%
+  pivot_wider(names_from=soil_stat, values_from=prop)
 ```
 
 ```
-## Error: object 'nn' not found
+## # A tibble: 4 x 3
+## # Groups:   soil [4]
+##   soil  correct wrong
+##   <chr>   <dbl> <dbl>
+## 1 clay    0.375 0.625
+## 2 loam    0.75  0.25 
+## 3 salty   0.625 0.375
+## 4 sandy   0.5   0.5
 ```
 
  
@@ -5310,7 +5317,7 @@ d %>%
   mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
   count(stat, wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
-  spread(stat, proportion)
+  pivot_wider(names_from=stat, values_from=proportion)
 ```
 
 ```
@@ -5320,14 +5327,14 @@ d %>%
 ##    <chr>          <int>   <dbl>  <dbl>
 ##  1 BBall_female       3   0.231 NA    
 ##  2 BBall_female      10  NA      0.769
-##  3 BBall_male         3  NA      0.25 
-##  4 BBall_male         9   0.75  NA    
-##  5 Field_female       2  NA      0.286
-##  6 Field_female       5   0.714 NA    
-##  7 Field_male         5  NA      0.417
-##  8 Field_male         7   0.583 NA    
+##  3 BBall_male         9   0.75  NA    
+##  4 BBall_male         3  NA      0.25 
+##  5 Field_female       5   0.714 NA    
+##  6 Field_female       2  NA      0.286
+##  7 Field_male         7   0.583 NA    
+##  8 Field_male         5  NA      0.417
 ##  9 Gym_female         4   1     NA    
-## 10 Netball_female    10  NA      0.435
+## 10 Netball_female    13   0.565 NA    
 ## # … with 17 more rows
 ```
 
@@ -5349,7 +5356,7 @@ d %>%
   count(stat, wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
   select(-n) %>%
-  spread(stat, proportion, fill = 0)
+  pivot_wider(names_from=stat, values_from=proportion, values_fill = list(proportion=0))
 ```
 
 ```
@@ -5376,6 +5383,7 @@ d %>%
 ## 17 WPolo_male      0.412  0.588
 ```
 
+One extra thing: some of the `proportion` values were missing, because there weren't any misclassified (or maybe correctly-classified!) athletes. The `values_fill` sets any missings in `proportion` to zero.
  
 
 While we're about it, let's arrange in
@@ -5390,7 +5398,7 @@ d %>%
   count(stat, wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
   select(-n) %>%
-  spread(stat, proportion, fill = 0) %>%
+  pivot_wider(names_from=stat, values_from=proportion, values_fill = list(proportion=0)) %>% 
   replace_na(list(correct = 0, wrong = 0)) %>%
   arrange(wrong)
 ```

@@ -162,12 +162,12 @@ the quantiles for each variable:
 
 ```r
 weather %>%
-  gather(xname, x, everything()) %>%
+  pivot_longer(everything(), names_to="xname", values_to="x") %>%
   nest(-xname) %>%
   mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
   unnest(q) %>%
-  spread(xname, value) %>%
-  arrange(parse_number(name))
+  pivot_wider(names_from=name, values_from=value) %>%
+  select(-data)
 ```
 
 ```
@@ -176,20 +176,15 @@ weather %>%
 ```
 
 ```
-## # A tibble: 30 x 8
-##              data name  ave.temp ave.wind gust.wind h.temp l.temp  rain
-##    <list<df[,1]>> <chr>    <dbl>    <dbl>     <dbl>  <dbl>  <dbl> <dbl>
-##  1      [365 × 1] 0%        NA         NA      NA     NA      3.1    NA
-##  2      [365 × 1] 0%        NA         NA      NA      9.8   NA      NA
-##  3      [365 × 1] 0%         7.3       NA      NA     NA     NA      NA
-##  4      [365 × 1] 0%        NA         NA      NA     NA     NA       0
-##  5      [365 × 1] 0%        NA          0      NA     NA     NA      NA
-##  6      [365 × 1] 0%        NA         NA       3.2   NA     NA      NA
-##  7      [365 × 1] 25%       NA         NA      NA     NA      9.1    NA
-##  8      [365 × 1] 25%       NA         NA      NA     14.4   NA      NA
-##  9      [365 × 1] 25%       12         NA      NA     NA     NA      NA
-## 10      [365 × 1] 25%       NA         NA      NA     NA     NA       0
-## # … with 20 more rows
+## # A tibble: 6 x 6
+##   xname      `0%` `25%` `50%` `75%` `100%`
+##   <chr>     <dbl> <dbl> <dbl> <dbl>  <dbl>
+## 1 l.temp      3.1   9.1  12.9  16.3   22.6
+## 2 h.temp      9.8  14.4  19.1  23.3   31.5
+## 3 ave.temp    7.3  12    15.8  19.3   26.6
+## 4 rain        0     0     0.3   5.3   74.9
+## 5 ave.wind    0     2.3   3.5   5.2   16.6
+## 6 gust.wind   3.2  22.5  29    38.6   86.9
 ```
 
  
@@ -206,12 +201,7 @@ That was a lot of work, but it depends on how you see it when you're coding it. 
 
 * Unnest this to make a long data frame with one row for each quantile for each variable.
 
-* put the variable names in columns and the percentiles in rows
-
-* finally, put the percentiles in numerical order (if you run this
-one line at a time, you'll see that the percentiles get out of
-order, and you can probably guess why).
-
+* put the variable names in columns and the percentiles in rows.
  
 
 (c) Run a principal components analysis (on the correlation matrix).
@@ -689,18 +679,19 @@ let's see if we can do that here as well:
 
 
 ```r
-map_df(weather, percent_rank) %>%
+map_df(weather, ~percent_rank(.)) %>%
+  mutate(day=row_number()) %>% 
   slice(c(37, 211, 265, 47))
 ```
 
 ```
-## # A tibble: 4 x 6
-##   l.temp h.temp ave.temp  rain ave.wind gust.wind
-##    <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl>
-## 1  0.264 0.316     0.299 0.973    1         0.997
-## 2  1     0.997     1     0        0.654     0.626
-## 3  0.783 0.560     0.635 0.761    0         0    
-## 4  0     0.0275    0     0.582    0.162     0.275
+## # A tibble: 4 x 7
+##   l.temp h.temp ave.temp  rain ave.wind gust.wind   day
+##    <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
+## 1  0.264 0.316     0.299 0.973    1         0.997    37
+## 2  1     0.997     1     0        0.654     0.626   211
+## 3  0.783 0.560     0.635 0.761    0         0       265
+## 4  0     0.0275    0     0.582    0.162     0.275    47
 ```
 
  
@@ -766,7 +757,16 @@ library(ggrepel)
 
 
  
-Let's make a map, but first we "geocode" Porto (and La Coruna,
+Let's make a map. To do it this way, you need a Google API key (the free-tier one is fine, but you need to have one). When you have one, you put something at the top of your code like this, with the actual key in the obvious place:
+
+
+```r
+api_key <- "your key here"
+register_google(api_key)
+```
+
+
+but first we "geocode" Porto (and La Coruna,
 for later). I like to do the lookup of longitude and latitude first,
 once and for all, since I find the geocoding a bit finicky (it's
 actually Google that's finicky, because sometimes it decides that
@@ -828,7 +828,7 @@ mapp <- get_map("Porto", zoom = 5)
 ggmap(mapp) + geom_point(data = porto, aes(x = lon, y = lat), colour = "red")
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
  
 
@@ -875,7 +875,7 @@ ggmap(mapp) +
 ## Warning in max(x): no non-missing arguments to max; returning -Inf
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
  
 
@@ -991,7 +991,7 @@ Solution
 Like this (the cleanest):
 
 ```r
-map_df(air, ~ quantile(.))
+air %>% map_df(~ quantile(.))
 ```
 
 ```
@@ -1018,12 +1018,12 @@ Or, with some more work, this:
 
 ```r
 air %>%
-  gather(xname, x, everything()) %>%
+  pivot_longer(everything(), names_to="xname", values_to="x") %>% 
   nest(-xname) %>%
   mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
   unnest(q) %>%
-  spread(xname, value) %>%
-  arrange(parse_number(name))
+  pivot_wider(names_from=name, values_from=value) %>% 
+  select(-data)
 ```
 
 ```
@@ -1032,22 +1032,19 @@ air %>%
 ```
 
 ```
-## # A tibble: 35 x 9
-##              data name     CO    HC    NO   NO2    O3 solar.radiation  wind
-##    <list<df[,1]>> <chr> <dbl> <dbl> <dbl> <dbl> <dbl>           <dbl> <dbl>
-##  1       [42 × 1] 0%       NA    NA    NA    NA    NA            NA       5
-##  2       [42 × 1] 0%       NA    NA    NA    NA    NA            30      NA
-##  3       [42 × 1] 0%        2    NA    NA    NA    NA            NA      NA
-##  4       [42 × 1] 0%       NA    NA     1    NA    NA            NA      NA
-##  5       [42 × 1] 0%       NA    NA    NA     5    NA            NA      NA
-##  6       [42 × 1] 0%       NA    NA    NA    NA     2            NA      NA
-##  7       [42 × 1] 0%       NA     2    NA    NA    NA            NA      NA
-##  8       [42 × 1] 25%      NA    NA    NA    NA    NA            NA       6
-##  9       [42 × 1] 25%      NA    NA    NA    NA    NA            68.2    NA
-## 10       [42 × 1] 25%       4    NA    NA    NA    NA            NA      NA
-## # … with 25 more rows
+## # A tibble: 7 x 6
+##   xname            `0%` `25%` `50%` `75%` `100%`
+##   <chr>           <dbl> <dbl> <dbl> <dbl>  <dbl>
+## 1 wind                5   6     8    8.75     10
+## 2 solar.radiation    30  68.2  76.5 84.8     107
+## 3 CO                  2   4     4    5         7
+## 4 NO                  1   1     2    3         5
+## 5 NO2                 5   8     9.5 12        21
+## 6 O3                  2   6     8.5 11        25
+## 7 HC                  2   3     3    3         5
 ```
 
+This time, I put the percentiles in columns and variable names in rows (because it seemed to be easier that way).
  
 
 just like the weather problem (in fact, *exactly* like the weather
@@ -1089,7 +1086,7 @@ package `ggbiplot`:
 ggscreeplot(air.1)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
      
 
@@ -1230,16 +1227,8 @@ it. (The component scores are seven columns, so
 `bind_cols` won't do it unless you are careful.):
 
 ```r
-cbind(air, air.1$scores) %>%
+cbind(air, air.1$scores) %>%  
   mutate(row = row_number()) -> d
-class(d)
-```
-
-```
-## [1] "data.frame"
-```
-
-```r
 head(d)
 ```
 
@@ -1373,7 +1362,7 @@ and for convenience, we'll grab the quantiles again:
 
 
 ```r
-map_df(air, ~ quantile(.))
+air %>% map_df(~ quantile(.))
 ```
 
 ```
@@ -1476,7 +1465,7 @@ Solution
 ggbiplot(air.1, labels = d$row)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
  
 
@@ -1550,7 +1539,7 @@ the axes now:
 biplot(air.2$scores, air.2$loadings)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
  
 
@@ -2280,7 +2269,7 @@ pers %>%
 ## Warning: Removed 371 rows containing non-finite values (stat_count).
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
 
  
 

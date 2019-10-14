@@ -1085,16 +1085,15 @@ earlier to find the five-number summaries for each field:</p>
 <a class="sourceLine" id="cb348-2" data-line-number="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>field) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb348-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">qq =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">enframe</span>(<span class="kw">quantile</span>(.<span class="op">$</span>water)))) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb348-4" data-line-number="4"><span class="st">  </span><span class="kw">unnest</span>(qq) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb348-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pctile =</span> <span class="kw">parse_number</span>(name)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb348-6" data-line-number="6"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>name) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb348-7" data-line-number="7"><span class="st">  </span><span class="kw">spread</span>(pctile, value)</a></code></pre></div>
+<a class="sourceLine" id="cb348-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>data) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb348-6" data-line-number="6"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from=</span>name, <span class="dt">values_from=</span>value)</a></code></pre></div>
 <pre><code>## Warning: All elements of `...` must be named.
 ## Did you want `data = c(water)`?</code></pre>
-<pre><code>## # A tibble: 2 x 7
-##   field           data   `0`  `25`  `50`  `75` `100`
-##   &lt;chr&gt; &lt;list&lt;df[,1]&gt;&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 a           [14 × 1]   9.9 10.5   11.4  14.8  16.6
-## 2 b           [16 × 1]   7.1  8.33  11.8  12.6  13.9</code></pre>
+<pre><code>## # A tibble: 2 x 6
+##   field  `0%` `25%` `50%` `75%` `100%`
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 a       9.9 10.5   11.4  14.8   16.6
+## 2 b       7.1  8.33  11.8  12.6   13.9</code></pre>
 <p>This is a weird one: all the quantiles are greater for field A
 <em>except</em> for the median.</p>
 <ol start="3" style="list-style-type: lower-alpha">

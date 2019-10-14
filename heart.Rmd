@@ -347,18 +347,12 @@ If you want to be really fancy:
 ```{r }
 heart %>%
   summarize_if(is.numeric, funs(q1, q3)) %>%
-  gather(vq, quartile, everything()) %>%
-  separate(vq, c("variable", "q"), "_") %>%
-  spread(q, quartile)
+  pivot_longer(everything(), names_to=c("variable", "which_quartile"), names_sep="_", values_to="quartile") %>% 
+  pivot_wider(names_from=which_quartile, values_from=quartile)
 ```
 
+You would *definitely* benefit from running this pipeline one line at a time to see how it works! The `summarize_if` produces columns with names like `age_q1`, which are then split up into a variable name and a "which quartile" by the fancy version of `pivot_longer`. (If you prefer, this is the vanilla version of `pivot_longer` followed by `separate`. For yourself, do it the way that makes sense to you.) Finally, I put Q1 and Q3 in their own columns so that you can see them side by side.
  
-
-The logic is (beyond what we had above) splitting up `vq` into
-the two things it really is (I had to put in the `"_"` at the
-end because it would otherwise also split up at the dots), and then I
-deliberately untidy the column that contains `q1` and
-`q3` into two columns of those names.
 
 The categorical variables are a bit trickier, because they will have
 different numbers of possible values. Here's my idea:
@@ -366,7 +360,7 @@ different numbers of possible values. Here's my idea:
 ```{r }
 heart %>%
   select_if(is.character) %>%
-  mutate_all(factor) %>%
+  mutate_all(~factor(.)) %>%
   summary()
 ```
 
@@ -377,8 +371,8 @@ My thought was that if you pass a genuine factor into `summary`
 its "levels" (different categories). So, to get to that point, I had
 to select all the categorical-as-text variables (which is actually all
 the ones that are not numeric), and then make a factor out of each of
-them. `mutate_all` does the same thing to all the columns: it
-runs `factor` on them, and saves the results back in variables
+them. `mutate_all` does the same thing to all the columns: "for
+each column, run `factor` on it", and saves the results back in variables
 of the same name as they were before. Using `summary` also
 shows how many observations we had in each category.
 
@@ -387,11 +381,12 @@ somewhere so I don't have to type them below when I make all possible
 combinations. My go at that:
 
 ```{r }
-heart3 <- heart %>%
+heart %>%
   select_if(is.character) %>%
-  gather(vname, value, everything()) %>%
-  distinct()
-heart3 %>% print(n = Inf)
+  pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
+  distinct() %>% 
+  arrange(variable_name, value) -> heart3
+heart3
 ```
 
  
@@ -406,11 +401,11 @@ keeps one of each and throws away the rest.
 Hmm, another way would be to count everything:
 
 ```{r }
-heart3 <- heart %>%
+heart %>%
   select_if(is.character) %>%
-  gather(vname, value, everything()) %>%
-  count(vname, value)
-heart3 %>% print(n = Inf)
+  pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
+  count(variable_name, value) -> heart3
+heart3 
 ```
 
  
@@ -483,14 +478,14 @@ heart3
 
  
 
-then choose the rows with the right thing in `vname`, and then
+then choose the rows with the right thing in `variable_name`, and then
 pull just the `value` column. This is sufficiently like the
 previous one that I think we can write a function right away:
 
 ```{r }
 get_categories <- function(d, x) {
   d %>%
-    filter(vname == x) %>%
+    filter(variable_name == x) %>%
     pull(value)
 }
 get_categories(heart3, "electro")

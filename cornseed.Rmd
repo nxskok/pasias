@@ -362,9 +362,9 @@ d %>%
   group_by(soil) %>%
   mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
   count(soil_stat, wt = n) %>%
-  mutate(prop = nn / sum(nn)) %>%
-  select(-nn) %>%
-  spread(soil_stat, prop)
+  mutate(prop = n / sum(n)) %>%
+  select(-n) %>%
+  pivot_wider(names_from=soil_stat, values_from=prop)
 ```
 
  

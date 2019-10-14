@@ -254,7 +254,7 @@ tab
  
 or if you prefer to make it look more like a table of frequencies:
 ```{r }
-tab %>% spread(class, n, fill = 0)
+tab %>% pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
  
@@ -355,7 +355,7 @@ tab %>%
   count(correct = (obesity == class), wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
   select(-n) %>%
-  spread(correct, proportion)
+  pivot_wider(names_from=correct, values_from=proportion)
 ```
 
  
@@ -378,7 +378,7 @@ tab %>%
   count(prediction_stat, wt = n) %>%
   mutate(proportion = n / sum(n)) %>%
   select(-n) %>%
-  spread(prediction_stat, proportion)
+  pivot_wider(names_from=prediction_stat, values_from=proportion)
 ```
 
  

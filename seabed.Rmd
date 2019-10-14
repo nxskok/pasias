@@ -568,7 +568,7 @@ tell them apart.
 This is a "long" data frame, but for the cluster analysis, we need a wide one with sites in rows and columns, so let's create that:
 
 ```{r }
-(bc %>% spread(site2, bray_curtis) -> bc2)
+(bc %>% pivot_wider(names_from=site2, values_from=bray_curtis) -> bc2)
 ```
 
  
@@ -706,6 +706,7 @@ This time, the picture isn't quite so clear-cut, but clusters 1 and 5
 are the highest in terms of pollution and cluster 4 is the lowest. I'm
 guessing that whatever number of clusters you choose, you'll see some
 differences in terms of pollution.
+
 What is interesting is that `pollution` had *nothing* to
 do with the original formation of the clusters: that was based only on
 which species were found at each site. So, what we have shown here is that

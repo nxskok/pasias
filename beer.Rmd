@@ -218,7 +218,7 @@ student who likes dark beer tend not to like light beer, and vice versa?
 
 Let's think about what to do first.
 
-We need to: `gather` all the rating columns into one, labelled
+We need to: `pivot_longer` all the rating columns into one, labelled
 by `name` of beer. Then create a variable that is `dark`
 if we're looking at one of the dark beers and `light`
 otherwise. `ifelse` works like "if" in a spreadsheet: a
@@ -241,7 +241,7 @@ rating within each group. This gives one column of students, one
 column of beer types, 
 and one column of rating means. 
 
-Then we need to `spread` beer type
+Then we need to `pivot_wider` beer type
 into two columns so that we can make a scatterplot of the mean ratings
 for light and dark against
 each other. 
@@ -256,14 +256,15 @@ line does. That was how I debugged it.
 
 Off we go:
 
+
 ```{r iyrpoydf,message=F}
 beer %>%
-  gather(name, rating, AnchorS:SierraN) %>%
+  pivot_longer(-student, names_to="name", values_to="rating") %>%
   mutate(beer.type = ifelse(name %in%
     c("AnchorS", "PetesW", "Guinness", "SierraN"), "dark", "light")) %>%
   group_by(student, beer.type) %>%
   summarize(mean.rat = mean(rating)) %>%
-  spread(beer.type, mean.rat) %>%
+  pivot_wider(names_from=beer.type, values_from=mean.rat) %>%
   ggplot(aes(x = dark, y = light)) + geom_point()
 ```
 
@@ -384,7 +385,14 @@ This is what is known in the business as a "named vector": it has values (the cl
 Named vectors are handily turned into a data frame with `enframe`:
 
 ```{r }
-enframe(beer.2$cluster)
+x <- enframe(beer.2$cluster)
+x
+```
+
+Or, to go back the other way, `deframe`:
+
+```{r}
+deframe(x)
 ```
 
  

@@ -77,9 +77,8 @@ pepper %>%
   nest(-field) %>%
   mutate(qq = map(data, ~ enframe(quantile(.$water)))) %>%
   unnest(qq) %>%
-  mutate(pctile = parse_number(name)) %>%
-  select(-name) %>%
-  spread(pctile, value)
+  select(-data) %>% 
+  pivot_wider(names_from=name, values_from=value)
 ```
 
  

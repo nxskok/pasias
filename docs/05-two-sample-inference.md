@@ -1209,9 +1209,8 @@ pepper %>%
   nest(-field) %>%
   mutate(qq = map(data, ~ enframe(quantile(.$water)))) %>%
   unnest(qq) %>%
-  mutate(pctile = parse_number(name)) %>%
-  select(-name) %>%
-  spread(pctile, value)
+  select(-data) %>% 
+  pivot_wider(names_from=name, values_from=value)
 ```
 
 ```
@@ -1220,11 +1219,11 @@ pepper %>%
 ```
 
 ```
-## # A tibble: 2 x 7
-##   field           data   `0`  `25`  `50`  `75` `100`
-##   <chr> <list<df[,1]>> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 a           [14 × 1]   9.9 10.5   11.4  14.8  16.6
-## 2 b           [16 × 1]   7.1  8.33  11.8  12.6  13.9
+## # A tibble: 2 x 6
+##   field  `0%` `25%` `50%` `75%` `100%`
+##   <chr> <dbl> <dbl> <dbl> <dbl>  <dbl>
+## 1 a       9.9 10.5   11.4  14.8   16.6
+## 2 b       7.1  8.33  11.8  12.6   13.9
 ```
 
  
