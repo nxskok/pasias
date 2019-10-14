@@ -32,7 +32,7 @@ heliconia=read_csv("heliconia.csv")
 I suggested to look at *all* the rows. Here's why:
 
 ```{r }
-heliconia %>% print(n=Inf) 
+heliconia 
 ``` 
 
 The varieties with fewer values have missings (NAs) attached to the
@@ -139,22 +139,24 @@ compared to the normal. It is something more like a
 uniform distribution, which has no tails at all, than a normal
 distribution, which won't have outliers but it *does* have
 some kind of tails. So, "short tails". 
+
 Extra: that's all you needed, but I mentioned above that you might have
 been offended aesthetically by those missing values that were not
 really missing. Let's see if we can do this aesthetically. As you
 might expect, it uses several of the tools from the "tidyverse".
 First, tidy the data. The three columns of the data frame are all
 lengths, just lengths of different things, which need to be
-labelled. This is `gather` from `tidyr`. 
+labelled. This is `pivot_longer` from `tidyr`:
+
 ```{r }
-heliconia.long=heliconia %>% 
-gather(variety,length,bihai:caribaea_yellow,na.rm=T)
+heliconia %>% 
+  pivot_longer(everything(), names_to="variety", values_to="length", values_drop_na = T) -> heliconia.long
 heliconia.long  
 ``` 
 
 This is now aesthetic as well as tidy: all those `NA` lines
 have gone (you can check that 
-there are now $16+23+15=54$ rows of actual data, as there should be).
+there are now $16+23+15=54$ rows of actual data, as there should be). This was accomplished by the last thing in the `pivot_longer`: "in the values (that is, the lengths), drop any missing values."
 
 Now, how to get a normal quantile plot for each variety? This is
 `facet_wrap` on the end of the `ggplot` again. 
@@ -186,15 +188,14 @@ stat_qq()+stat_qq_line()+
 facet_wrap(~variety,scale="free",ncol=2)
 ``` 
 
-I think the square plots make it easier to see the shape of these:
+I think the squarer plots make it easier to see the shape of these:
 curved, S-bend, straightish.
 Almost the same code will get a histogram for each variety, which I'll
 also make squarish:
 
 ```{r }
 ggplot(heliconia.long,aes(x=length))+
-geom_histogram(binwidth=1)+facet_wrap(~variety,scale="free",ncol=2)
-
+geom_histogram(bins=5)+facet_wrap(~variety,scale="free",ncol=2)
 ``` 
 
 *bihai* has those two outliers, *caribaea* red has no tails

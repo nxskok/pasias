@@ -334,9 +334,9 @@ to "transpose" the result with the variable-quartile combinations in
 a column and the actual quartile values in another:
 
 ```{r }
-heart2 <- heart %>%
+heart %>%
   summarize_if(is.numeric, funs(q1, q3)) %>%
-  gather(vq, quartile, everything())
+  pivot_longer(everything(), names_to="vq", values_to="quartile") -> heart2
 heart2
 ```
 

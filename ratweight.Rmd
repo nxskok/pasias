@@ -117,13 +117,22 @@ interpretation is concerned.
  
 
 (f) We are going to draw an interaction plot in a moment. To
-set that up, use `gather` as in the lecture notes to create
+set that up, use `pivot_longer` or `gather` as in the lecture notes to create
 one column of weights and a second column of times. (You don't
 need to do the `separate` thing that I did in class, though
 if you want to try it, go ahead.)
  
 Solution
 
+Like this:
+
+```{r}
+weights %>% 
+  pivot_longer(starts_with("Time"), names_to="time", values_to="weight") -> weights.long
+weights.long
+```
+
+or this way:
 
 ```{r }
 weights.long <- weights %>%
@@ -137,31 +146,14 @@ My data frame was called `weights`, so I was OK with having a
 variable called `weight`. Watch out for that if you call the
 data frame `weight`, though.
 
-If you want to try the `separate` thing, that goes something
-like this:
-
-```{r }
-weights %>%
-  gather(timex, weight, Time0:Time4) %>%
-  separate(timex, into = c("junk", "time"), sep = 4) -> weights2.long
-weights2.long %>% sample_n(20)
-```
-
- 
-
-Separate after the fourth character (`sep=4`), which will put
-`Time` into `junk` and the actual time into
-`time`. I could also have organized the data file so that the
-word `Time` and the number were separated by some character,
-like an underscore, and you could have separated at that.
 Since the piece of the time we want is the number,
 `parse_number` (from `readr`, part of the
 `tidyverse`) should also work:
 
 ```{r }
-weights2.long <- weights %>%
-  gather(timex, weight, Time0:Time4) %>%
-  mutate(time = parse_number(timex))
+weights %>% 
+  pivot_longer(starts_with("Time"), names_to="timex", values_to="weight") %>% 
+  mutate(time = parse_number(timex)) -> weights2.long
 weights2.long %>% sample_n(20)
 ```
 
@@ -236,9 +228,9 @@ do that here. Then we save the result into a new data frame
 `wt`, and take a look at the first few lines:
 
 ```{r }
-wt <- weights %>%
+weights %>%
   mutate(subject = row_number()) %>%
-  gather(time, weight, Time0:Time4)
+  pivot_longer(starts_with("Time"), names_to="time", values_to="weight") -> wt
 wt
 ```
 

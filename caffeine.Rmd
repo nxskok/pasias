@@ -63,9 +63,17 @@ column of group labels `amount`. Is it a `factor`?
 Solution
 
 
-We are combining several columns into one, so this is `gather`:
+We are combining several columns into one, so this is `pivot_longer`:
+
+```{r}
+caffeine.untidy %>% 
+  pivot_longer(-Sub, names_to = "amount", values_to = "score") -> caffeine
+```
+
+or the old way:
+
 ```{r }
-caffeine <- caffeine.untidy %>%
+caffeine2 <- caffeine.untidy %>%
   gather(amount, score, c(High:None))
 ```
 
@@ -95,7 +103,7 @@ Indeed.
 
 Note that `amount` is text, not a factor. Does this matter? We'll see.
 
-This is entirely the kind of situation where you need `gather`,
+This is entirely the kind of situation where you need `pivot_longer`,
 so get used to seeing where it will be useful.
 
 
@@ -111,7 +119,7 @@ Solution
 ggplot(caffeine, aes(x = amount, y = score)) + geom_boxplot()
 ```
 
- 
+Note that this is *much more difficult* if you don't have a tidy data frame. (Try it and see.) 
 
 
 
@@ -200,5 +208,12 @@ because the confidence interval is rather long.
 `r tufte::margin_note("We'd need a  lot more students to make it narrower, but this is not surprising  since students vary in a lot of other ways that were not measured here.")`
 
 
+Extra: the normality and equal spreads assumptions look perfectly good, given the boxplots, and I don't think there's any reason to consider any other test. You might like to assess that with normal quantile plots:
+
+```{r}
+ggplot(caffeine, aes(sample=score)) + stat_qq() +
+  stat_qq_line() + facet_wrap(~amount, ncol=2)
+```
 
 
+There's nothing to worry about there normality-wise. If anything, there's a little evidence of *short* tails (in the None group especially), but you'll recall that short tails don't affect the mean and thus pose no problems for the ANOVA. Those three lines also have pretty much the same slope, indicating very similar spreads. Regular ANOVA is the best test here. (Running eg. Mood's median test would be a mistake here, because it doesn't use the data as efficiently (counting only aboves and belows) as the ANOVA does, and so the ANOVA will give a better picture of what differs from what.)

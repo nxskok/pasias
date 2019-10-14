@@ -63,15 +63,16 @@ see.)
 
 
 
-(c) Create and save a "long" data frame with all the epinephrine
+(c) Create and save a "longer" data frame with all the epinephrine
 values gathered together into one column.
 
 
 Solution
 
+`pivot_longer` (or `gather` if you prefer):
 
 ```{r }
-airport.long <- airport %>% gather(when, epinephrine, epi_1:epi_4)
+airport %>% pivot_longer(starts_with("epi"), names_to="when", values_to="epinephrine") -> airport.long
 airport.long
 ```
 
@@ -104,6 +105,7 @@ airport.long %>%
   geom_point() + geom_line()
 ```
 
+`r tufte::margin_note("The term accidental aRt is sometimes used for graphs that cross the boundary between being informative and looking like a piece of art, particularly if it was not done on purpose. This one is a bit like that.")`
          
 
 This is different from the plot we had in C32, where I had you use a

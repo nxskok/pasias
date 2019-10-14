@@ -352,8 +352,8 @@ since the variable name has a space in it. My code inefficiently sorts
 the differences twice:
 
 ```{r }
-d1 = cbind(sfcrime.new,pdiff) %>% 
-gather(crimetype,difference,ASSAULT:`VEHICLE THEFT`)
+cbind(sfcrime.new,pdiff) %>% 
+  pivot_longer(ASSAULT:`VEHICLE THEFT`, names_to="crimetype", values_to = "difference") -> d1
 d1 %>% arrange(difference) %>% slice(1:6)
 d1 %>% arrange(desc(difference)) %>% slice(1:6)
 ```

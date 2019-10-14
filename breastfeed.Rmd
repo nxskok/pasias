@@ -56,12 +56,12 @@ breastfeed %>% summarize(total = sum(bf.yes) + sum(bf.no))
 
  
 
-or if you want to go nuts (this one gathers all the frequencies
+or if you want to go nuts (this one pivot-longers all the frequencies
 together into one column and then adds them up):
 
 ```{r }
 breastfeed %>%
-  gather(yesno, freq, bf.yes:bf.no) %>%
+  pivot_longer(bf.yes:bf.no, names_to="yesno", values_to="freq") %>%
   summarize(total = sum(freq))
 ```
 

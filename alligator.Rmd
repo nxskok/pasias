@@ -43,7 +43,7 @@ My choice of "temporary" name reflects that I'm going to obtain a
 
 
 
-(b) Use `gather` to arrange the data
+(b) Use `pivot_longer` (or `gather`) to arrange the data
 suitably for analysis (which will be using
 `multinom`). Demonstrate (by looking at the first few rows
 of your new data frame) that you now have something tidy.
@@ -53,9 +53,18 @@ Solution
 
 
 I'm creating my "official" data frame here:
-```{r }
-gators <- gators.orig %>% gather(Food.type, Frequency, Fish:Other)
+
+```{r}
+gators.orig %>% 
+  pivot_longer(Fish:Other, names_to = "Food.type", values_to = "Frequency") -> gators
 gators
+```
+
+or if you prefer:
+
+```{r }
+gators2 <- gators.orig %>% gather(Food.type, Frequency, Fish:Other)
+gators2
 ```
 
        

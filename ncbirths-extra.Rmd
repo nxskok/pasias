@@ -15,6 +15,12 @@ suitable graph or otherwise.
 
 Solution
 
+```{r, echo=F}
+myurl <- "http://www.utsc.utoronto.ca/~butler/c32/ncbirths.csv"
+bw <- read_csv(myurl)
+```
+
+
 
 To figure it out from the data, we can
 see how ``Weeks Gestation`` depends
@@ -95,8 +101,9 @@ Here's that baby. I'm doing a bit of fiddling to show all the columns
 (as rows, since there's only one actual row). Don't worry about the
 second line of code below; we will investigate that later.
 ```{r }
-bw %>% filter(is.na(`Premie?`)) %>% 
-gather(name,value,everything())
+bw %>% 
+  filter(is.na(`Premie?`)) %>% 
+  pivot_longer(everything(), names_to="name", values_to="value")
 ``` 
 
 The *only* thing that was missing was its weeks of gestation, but
