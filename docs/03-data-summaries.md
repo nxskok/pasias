@@ -391,6 +391,24 @@ suitable graph or otherwise.
 Solution
 
 
+```
+## Parsed with column specification:
+## cols(
+##   `Father Age` = col_double(),
+##   `Mother Age` = col_double(),
+##   `Weeks Gestation` = col_double(),
+##   `Pre-natal Visits` = col_double(),
+##   `Marital Status` = col_double(),
+##   `Mother Weight Gained` = col_double(),
+##   `Low Birthweight?` = col_double(),
+##   `Weight (pounds)` = col_double(),
+##   `Premie?` = col_double(),
+##   `Few Visits?` = col_double()
+## )
+```
+
+
+
 To figure it out from the data, we can
 see how ``Weeks Gestation`` depends
 on ``Premie?``. Some possibilities are boxplots or a
@@ -406,7 +424,7 @@ ggplot(bw,aes(x=factor(`Premie?`),y=`Weeks Gestation`))+geom_boxplot()
 ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
 The warning is because the prematurity of one of the babies is not known.
 Or
@@ -420,7 +438,7 @@ ggplot(bw,aes(x=`Premie?`,y=`Weeks Gestation`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
 The same warning again, for the same reason.
 
@@ -503,8 +521,9 @@ Here's that baby. I'm doing a bit of fiddling to show all the columns
 second line of code below; we will investigate that later.
 
 ```r
-bw %>% filter(is.na(`Premie?`)) %>% 
-gather(name,value,everything())
+bw %>% 
+  filter(is.na(`Premie?`)) %>% 
+  pivot_longer(everything(), names_to="name", values_to="value")
 ```
 
 ```
@@ -551,7 +570,7 @@ ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
 You see a rather clear upward trend. Those very underweight babies
 came from very short pregnancies, but the vast majority of pregnancies
@@ -571,7 +590,7 @@ colour=`Premie?`))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
 That was rather silly because `ggplot` treated prematureness as a *continuous* variable, and plotted the values on a dark blue-light blue scale. This is the same issue as on the boxplot above, and has the same solution:
 
@@ -585,7 +604,7 @@ colour=factor(`Premie?`)))+geom_point()
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
 Better.
 
@@ -856,7 +875,7 @@ bin width, if you want to go that way:
 ggplot(nenana, aes(x = JulianDate)) + geom_histogram(bins = 8)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
        
 
@@ -876,7 +895,7 @@ We haven't done normal quantile plots yet, but looking ahead:
 ggplot(nenana, aes(sample = JulianDate)) + stat_qq() + stat_qq_line()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
  
 
@@ -1054,7 +1073,7 @@ Solution
 ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 This is actually a small-but-real downward trend, especially since
@@ -1077,7 +1096,7 @@ ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
  
 
@@ -1222,7 +1241,7 @@ Gender is categorical and CAS score is quantitative, so a boxplot would appear t
 ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
 The median for males is slightly higher, so male accountants are more anxious around computers than female accountants are.
 
@@ -1235,7 +1254,7 @@ ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
 facet_wrap(~gender,ncol=1)
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
 If you go this way, you have to make a call about where the centres of the histograms are. I guess the male one is slightly further to the right, but it's not so easy to tell. (Make a call.)
     
@@ -1412,7 +1431,7 @@ You might be wondering whether the test scores are related. They are both quanti
 ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-56-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
 
 The two variables can be on either axis, since there is no obvious
 response or explanatory variable. A higher score on one scale goes
@@ -1426,7 +1445,7 @@ This plot mixes up the males and females, so you might like to distinguish them,
 ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-58-1.png" width="672"  />
 
 There is a slight (but only slight) tendency for the males to be up
 and to the right, and for the females to be down and to the left. This
@@ -1626,7 +1645,7 @@ ggplot(marks, aes(x = class, y = score)) + geom_boxplot() +
   coord_flip()
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
  
 
@@ -1687,7 +1706,7 @@ ggplot(marks, aes(x = 1, y = score)) + geom_boxplot() +
   )
 ```
 
-<img src="03-data-summaries_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
 
        
  

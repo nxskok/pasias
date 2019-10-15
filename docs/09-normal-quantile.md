@@ -60,7 +60,7 @@ I suggested to look at *all* the rows. Here's why:
 
 
 ```r
-heliconia %>% print(n=Inf) 
+heliconia 
 ```
 
 ```
@@ -77,19 +77,7 @@ heliconia %>% print(n=Inf)
 ##  8  46.6         40.6            37.1
 ##  9  48.1         39.6            35.2
 ## 10  48.3         42.2            36.8
-## 11  48.2         40.7            36.7
-## 12  50.3         37.9            35.7
-## 13  50.1         39.2            36.0
-## 14  46.3         37.4            34.6
-## 15  46.9         38.2            34.6
-## 16  48.4         38.1            NA  
-## 17  NA           38.1            NA  
-## 18  NA           38.0            NA  
-## 19  NA           38.8            NA  
-## 20  NA           38.2            NA  
-## 21  NA           38.9            NA  
-## 22  NA           37.8            NA  
-## 23  NA           38.0            NA
+## # … with 13 more rows
 ```
 
 The varieties with fewer values have missings (NAs) attached to the
@@ -221,40 +209,42 @@ compared to the normal. It is something more like a
 uniform distribution, which has no tails at all, than a normal
 distribution, which won't have outliers but it *does* have
 some kind of tails. So, "short tails". 
+
 Extra: that's all you needed, but I mentioned above that you might have
 been offended aesthetically by those missing values that were not
 really missing. Let's see if we can do this aesthetically. As you
 might expect, it uses several of the tools from the "tidyverse".
 First, tidy the data. The three columns of the data frame are all
 lengths, just lengths of different things, which need to be
-labelled. This is `gather` from `tidyr`. 
+labelled. This is `pivot_longer` from `tidyr`:
+
 
 ```r
-heliconia.long=heliconia %>% 
-gather(variety,length,bihai:caribaea_yellow,na.rm=T)
+heliconia %>% 
+  pivot_longer(everything(), names_to="variety", values_to="length", values_drop_na = T) -> heliconia.long
 heliconia.long  
 ```
 
 ```
 ## # A tibble: 54 x 2
-##    variety length
-##    <chr>    <dbl>
-##  1 bihai     47.1
-##  2 bihai     46.8
-##  3 bihai     46.8
-##  4 bihai     47.1
-##  5 bihai     46.7
-##  6 bihai     47.4
-##  7 bihai     46.4
-##  8 bihai     46.6
-##  9 bihai     48.1
-## 10 bihai     48.3
+##    variety         length
+##    <chr>            <dbl>
+##  1 bihai             47.1
+##  2 caribaea_red      41.9
+##  3 caribaea_yellow   36.8
+##  4 bihai             46.8
+##  5 caribaea_red      42.0
+##  6 caribaea_yellow   37.0
+##  7 bihai             46.8
+##  8 caribaea_red      41.9
+##  9 caribaea_yellow   36.5
+## 10 bihai             47.1
 ## # … with 44 more rows
 ```
 
 This is now aesthetic as well as tidy: all those `NA` lines
 have gone (you can check that 
-there are now $16+23+15=54$ rows of actual data, as there should be).
+there are now $16+23+15=54$ rows of actual data, as there should be). This was accomplished by the last thing in the `pivot_longer`: "in the values (that is, the lengths), drop any missing values."
 
 Now, how to get a normal quantile plot for each variety? This is
 `facet_wrap` on the end of the `ggplot` again. 
@@ -292,7 +282,7 @@ facet_wrap(~variety,scale="free",ncol=2)
 
 <img src="09-normal-quantile_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
-I think the square plots make it easier to see the shape of these:
+I think the squarer plots make it easier to see the shape of these:
 curved, S-bend, straightish.
 Almost the same code will get a histogram for each variety, which I'll
 also make squarish:
@@ -300,7 +290,7 @@ also make squarish:
 
 ```r
 ggplot(heliconia.long,aes(x=length))+
-geom_histogram(binwidth=1)+facet_wrap(~variety,scale="free",ncol=2)
+geom_histogram(bins=5)+facet_wrap(~variety,scale="free",ncol=2)
 ```
 
 <img src="09-normal-quantile_files/figure-html/unnamed-chunk-12-1.png" width="672"  />

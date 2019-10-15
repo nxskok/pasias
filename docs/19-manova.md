@@ -360,7 +360,7 @@ first rather than the $x$s:
 
 ```r
 urine %>%
-  gather(yname, y, creatinine:chlorine) %>%
+  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") %>%
   ggplot(aes(x = obesity, y = y)) + geom_boxplot() +
   facet_wrap(~yname, scales = "free", ncol = 2)
 ```
@@ -381,7 +381,45 @@ the same $x$, I think.)
 The conclusions about the boxplots are, of course, the same. I think
 it makes it easier to have the three boxplots side by side, but it's
 up to you whether you think that gain is worth the extra coding.
- 
+
+Extra: let's take another look at that longer data frame:
+
+
+```r
+urine %>%
+  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") 
+```
+
+```
+## # A tibble: 135 x 4
+##    obesity     x yname          y
+##    <chr>   <dbl> <chr>      <dbl>
+##  1 a          24 creatinine 17.6 
+##  2 a          24 chloride    5.15
+##  3 a          24 chlorine    7.5 
+##  4 a          32 creatinine 13.4 
+##  5 a          32 chloride    5.75
+##  6 a          32 chlorine    7.1 
+##  7 a          17 creatinine 20.3 
+##  8 a          17 chloride    4.35
+##  9 a          17 chlorine    2.3 
+## 10 a          30 creatinine 22.3 
+## # … with 125 more rows
+```
+
+You might say that there is one quantitative variable now, the thing we called `y`, and *two* categorical variables, `obesity` and `yname`. So why not make a grouped boxplot? All right:
+
+
+```r
+urine %>%
+  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") %>%
+  ggplot(aes(x=yname, y=y, colour=obesity)) + geom_boxplot()
+```
+
+<img src="19-manova_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+
+This actually looks a lot like the facetted boxplots (if you imagine drawing a box around each group of four boxplots and removing the `scales="free"` before). There is, as the saying goes, more than one way to skin a cat.
+
 
 (c) How, if at all, do the groups differ on the variables of interest?
  
@@ -849,7 +887,7 @@ With that in mind, I would go for this one:
 ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, shape = Sex)) + geom_point()
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+<img src="19-manova_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
      
 
@@ -868,7 +906,7 @@ ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, size = Sex)) + geom_point()
 ## Warning: Using size for a discrete variable is not advised.
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-24-1.png" width="672"  />
+<img src="19-manova_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
      
 
@@ -891,7 +929,7 @@ ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, size = Sex)) + geom_point()
 ## Warning: Removed 72 rows containing missing values (geom_point).
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+<img src="19-manova_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
      
 
@@ -910,7 +948,7 @@ ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point(
 ## Warning: Removed 72 rows containing missing values (geom_point).
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="19-manova_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
      
 
@@ -946,7 +984,7 @@ ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point(
   scale_shape_manual(values = 1:10)
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+<img src="19-manova_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
      
 
@@ -967,7 +1005,7 @@ ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point(
   scale_shape_manual(values = c(66, 70, 71, 78, 82, 83, 52, 84, 3, 87))
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+<img src="19-manova_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
 
      
 

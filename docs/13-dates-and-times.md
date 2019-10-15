@@ -1318,13 +1318,13 @@ Solution
 The obvious starting point is to note that both the
 `caribou` and `wolf` columns are animal
 populations, just of different animals. One way of plotting both
-populations is to `gather` them up into one column, and
+populations is to `pivot_longer` them up into one longer column, and
 then plot them against time, with the two animals distinguished
 by colour:
 
 ```r
 denali %>%
-  gather(animal, population, caribou:wolf) %>%
+  pivot_longer(caribou:wolf, names_to="animal", values_to="population") %>%
   ggplot(aes(x = date, y = population, colour = animal)) +
   geom_point() + geom_line()
 ```

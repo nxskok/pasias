@@ -4475,17 +4475,9 @@ a column and the actual quartile values in another:
 
 
 ```r
-heart2 <- heart %>%
+heart %>%
   summarize_if(is.numeric, funs(q1, q3)) %>%
-  gather(vq, quartile, everything())
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-```
-
-```r
+  pivot_longer(everything(), names_to="vq", values_to="quartile") -> heart2
 heart2
 ```
 
@@ -5161,13 +5153,13 @@ breastfeed %>% summarize(total = sum(bf.yes) + sum(bf.no))
 
  
 
-or if you want to go nuts (this one gathers all the frequencies
+or if you want to go nuts (this one pivot-longers all the frequencies
 together into one column and then adds them up):
 
 
 ```r
 breastfeed %>%
-  gather(yesno, freq, bf.yes:bf.no) %>%
+  pivot_longer(bf.yes:bf.no, names_to="yesno", values_to="freq") %>%
   summarize(total = sum(freq))
 ```
 

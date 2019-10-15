@@ -1954,7 +1954,8 @@ migraine %>%
   pivot_longer(everything(), names_to="drug", values_to="painrelief") -> migraine2
 ```
 
-Since I was making all the columns longer, I used the select-helper `everything()` to do that. Using instead `DrugA:DrugC` or `starts_with("Drug")` would also be good. Try them. `starts_with` is not case-sensitive, as far as I remember.
+Since I was making all the columns longer, I used the select-helper `everything()` to do that. Using instead `DrugA:DrugC` or `starts_with("Drug")` would also be good. Try them. `starts_with` is not case-sensitive, as far as I remember, so `starts_with("drug")` will also work here.
+
 
 
 Or, `gather` the columns that are all measurements of one

@@ -76,10 +76,11 @@ mobile
 
  
 With multiple columns that are all frequencies, this is a job for
-`gather`:
+`pivot_longer`:
 
 ```r
-mobile.long <- mobile %>% gather(satisfied, frequency, very.unsat:very.sat)
+mobile %>% 
+  pivot_longer(very.unsat:very.sat, names_to="satisfied", values_to="frequency") -> mobile.long
 mobile.long
 ```
 
@@ -88,15 +89,15 @@ mobile.long
 ##    gender age.group satisfied  frequency
 ##    <chr>  <chr>     <chr>          <dbl>
 ##  1 male   0-17      very.unsat         3
-##  2 male   18-24     very.unsat         6
-##  3 male   25-30     very.unsat         9
-##  4 male   31+       very.unsat         5
-##  5 female 0-17      very.unsat         4
-##  6 female 18-24     very.unsat         8
-##  7 female 25-30     very.unsat        10
-##  8 female 31+       very.unsat         5
-##  9 male   0-17      unsat              9
-## 10 male   18-24     unsat             13
+##  2 male   0-17      unsat              9
+##  3 male   0-17      sat               18
+##  4 male   0-17      very.sat          24
+##  5 male   18-24     very.unsat         6
+##  6 male   18-24     unsat             13
+##  7 male   18-24     sat               16
+##  8 male   18-24     very.sat          28
+##  9 male   25-30     very.unsat         9
+## 10 male   25-30     unsat             13
 ## # … with 22 more rows
 ```
 
@@ -132,15 +133,15 @@ mobile.long
 ##    gender age.group satisfied  frequency
 ##    <chr>  <chr>     <chr>          <dbl>
 ##  1 male   0-17      very.unsat         3
-##  2 male   18-24     very.unsat         6
-##  3 male   25-30     very.unsat         9
-##  4 male   31+       very.unsat         5
-##  5 female 0-17      very.unsat         4
-##  6 female 18-24     very.unsat         8
-##  7 female 25-30     very.unsat        10
-##  8 female 31+       very.unsat         5
-##  9 male   0-17      unsat              9
-## 10 male   18-24     unsat             13
+##  2 male   0-17      unsat              9
+##  3 male   0-17      sat               18
+##  4 male   0-17      very.sat          24
+##  5 male   18-24     very.unsat         6
+##  6 male   18-24     unsat             13
+##  7 male   18-24     sat               16
+##  8 male   18-24     very.sat          28
+##  9 male   25-30     very.unsat         9
+## 10 male   25-30     unsat             13
 ## # … with 22 more rows
 ```
 
@@ -336,15 +337,15 @@ mobile.long2
 ##    gender age.group satisfied  frequency satis     
 ##    <chr>  <chr>     <chr>          <dbl> <ord>     
 ##  1 male   0-17      very.unsat         3 very.unsat
-##  2 male   18-24     very.unsat         6 very.unsat
-##  3 male   25-30     very.unsat         9 very.unsat
-##  4 male   31+       very.unsat         5 very.unsat
-##  5 female 0-17      very.unsat         4 very.unsat
-##  6 female 18-24     very.unsat         8 very.unsat
-##  7 female 25-30     very.unsat        10 very.unsat
-##  8 female 31+       very.unsat         5 very.unsat
-##  9 male   0-17      unsat              9 unsat     
-## 10 male   18-24     unsat             13 unsat     
+##  2 male   0-17      unsat              9 unsat     
+##  3 male   0-17      sat               18 sat       
+##  4 male   0-17      very.sat          24 very.sat  
+##  5 male   18-24     very.unsat         6 very.unsat
+##  6 male   18-24     unsat             13 unsat     
+##  7 male   18-24     sat               16 sat       
+##  8 male   18-24     very.sat          28 very.sat  
+##  9 male   25-30     very.unsat         9 very.unsat
+## 10 male   25-30     unsat             13 unsat     
 ## # … with 22 more rows
 ```
 
@@ -548,7 +549,7 @@ mobile %>%
 ##   gender age.group very.unsat     unsat       sat  very.sat
 ## 1   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
 ## 2   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
-## 3   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
+## 3   male     25-30 0.13341018 0.2438110 0.3084506 0.3143283
 ## 4   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
 ## 5 female      0-17 0.08590744 0.1840411 0.3011751 0.4288763
 ## 6 female     18-24 0.12858414 0.2387296 0.3091489 0.3235374
@@ -592,33 +593,19 @@ loaded, the help window offers you a choice of both `select`s;
 the one we want is "select/rename variables by name", and the actual
 package it comes from is `dplyr`.
 
-With that in mind, we can get the right `select` like this:
-
-
-```r
-probs <- predict(mobile.1, mobile, type = "p")
-mobile %>%
-  dplyr::select(gender, age.group) %>%
-  cbind(probs)
-```
+There is a third choice, which is the one I prefer now: install and load the package `conflicted`. When you run your code and it calls for something like `select` that is in two packages that you have loaded, it gives an error, like this:
 
 ```
-##   gender age.group very.unsat     unsat       sat  very.sat
-## 1   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
-## 2   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
-## 3   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
-## 4   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
-## 5 female      0-17 0.08590744 0.1840411 0.3011751 0.4288763
-## 6 female     18-24 0.12858414 0.2387296 0.3091489 0.3235374
-## 7 female     25-30 0.18290971 0.2853880 0.2920053 0.2396970
-## 8 female       31+ 0.16112036 0.2692996 0.3008711 0.2687089
+Error: [conflicted] `select` found in 2 packages.
+Either pick the one you want with `::` 
+* MASS::select
+* dplyr::select
+Or declare a preference with `conflict_prefer()`
+* conflict_prefer("select", "MASS")
+* conflict_prefer("select", "dplyr")
 ```
 
-   
-
-This gets the right `select` for sure: package name, two
-colons, function name means 
-"the function by that name that lives in that package".
+Fixing this costs you a bit of time upfront, but once you have fixed it, you know that the right thing is being run. What I do is to copy-paste one of those `conflict_prefer` lines, in this case the second one, and put it *before* the `select` that now causes the error. Right after the `library(conflicted)` is a good place. When you use `conflicted`, you will probably have to run several times to fix up all the conflicts, which will be a bit frustrating, and you will end up with several `conflict_prefer` lines, but once you have them there, you won't have to worry about the right function being called because you have explicitly said which one you want.
 
 This is a non-standard use of `cbind` because I wanted to grab
 only the gender and age group columns from `mobile` first, and
@@ -691,7 +678,7 @@ cbind(new, pp)
 ## 4 female       31+ 0.16112036 0.2692996 0.3008711 0.2687089
 ## 5   male      0-17 0.06070852 0.1420302 0.2752896 0.5219716
 ## 6   male     18-24 0.09212869 0.1932086 0.3044732 0.4101894
-## 7   male     25-30 0.13341018 0.2438110 0.3084506 0.3143282
+## 7   male     25-30 0.13341018 0.2438110 0.3084506 0.3143283
 ## 8   male       31+ 0.11667551 0.2252966 0.3097920 0.3482359
 ```
 
@@ -2338,7 +2325,7 @@ My choice of "temporary" name reflects that I'm going to obtain a
 
 
 
-(b) Use `gather` to arrange the data
+(b) Use `pivot_longer` (or `gather`) to arrange the data
 suitably for analysis (which will be using
 `multinom`). Demonstrate (by looking at the first few rows
 of your new data frame) that you now have something tidy.
@@ -2349,9 +2336,36 @@ Solution
 
 I'm creating my "official" data frame here:
 
+
 ```r
-gators <- gators.orig %>% gather(Food.type, Frequency, Fish:Other)
+gators.orig %>% 
+  pivot_longer(Fish:Other, names_to = "Food.type", values_to = "Frequency") -> gators
 gators
+```
+
+```
+## # A tibble: 80 x 6
+##    profile Gender Size  Lake   Food.type    Frequency
+##      <dbl> <chr>  <chr> <chr>  <chr>            <dbl>
+##  1       1 f      <2.3  george Fish                 3
+##  2       1 f      <2.3  george Invertebrate         9
+##  3       1 f      <2.3  george Reptile              1
+##  4       1 f      <2.3  george Bird                 0
+##  5       1 f      <2.3  george Other                1
+##  6       2 m      <2.3  george Fish                13
+##  7       2 m      <2.3  george Invertebrate        10
+##  8       2 m      <2.3  george Reptile              0
+##  9       2 m      <2.3  george Bird                 2
+## 10       2 m      <2.3  george Other                2
+## # … with 70 more rows
+```
+
+or if you prefer:
+
+
+```r
+gators2 <- gators.orig %>% gather(Food.type, Frequency, Fish:Other)
+gators2
 ```
 
 ```
@@ -5384,19 +5398,21 @@ the differences twice:
 
 
 ```r
-d1 = cbind(sfcrime.new,pdiff) %>% 
-gather(crimetype,difference,ASSAULT:`VEHICLE THEFT`)
+cbind(sfcrime.new,pdiff) %>% 
+  pivot_longer(ASSAULT:`VEHICLE THEFT`, names_to="crimetype", values_to = "difference") -> d1
 d1 %>% arrange(difference) %>% slice(1:6)
 ```
 
 ```
-##   DayOfWeek PdDistrict     crimetype difference
-## 1    Sunday TENDERLOIN DRUG/NARCOTIC    -0.0285
-## 2  Saturday   RICHMOND LARCENY/THEFT    -0.0231
-## 3   Tuesday TENDERLOIN LARCENY/THEFT    -0.0174
-## 4    Friday TENDERLOIN DRUG/NARCOTIC    -0.0162
-## 5    Sunday   RICHMOND       ASSAULT    -0.0122
-## 6 Wednesday   RICHMOND       ASSAULT    -0.0106
+## # A tibble: 6 x 4
+##   DayOfWeek PdDistrict crimetype     difference
+##   <chr>     <chr>      <chr>              <dbl>
+## 1 Sunday    TENDERLOIN DRUG/NARCOTIC    -0.0285
+## 2 Saturday  RICHMOND   LARCENY/THEFT    -0.0231
+## 3 Tuesday   TENDERLOIN LARCENY/THEFT    -0.0174
+## 4 Friday    TENDERLOIN DRUG/NARCOTIC    -0.0162
+## 5 Sunday    RICHMOND   ASSAULT          -0.0122
+## 6 Wednesday RICHMOND   ASSAULT          -0.0106
 ```
 
 ```r
@@ -5404,13 +5420,15 @@ d1 %>% arrange(desc(difference)) %>% slice(1:6)
 ```
 
 ```
-##   DayOfWeek PdDistrict     crimetype difference
-## 1    Sunday TENDERLOIN LARCENY/THEFT     0.0233
-## 2   Tuesday TENDERLOIN DRUG/NARCOTIC     0.0187
-## 3  Saturday   RICHMOND VEHICLE THEFT     0.0164
-## 4  Saturday TENDERLOIN LARCENY/THEFT     0.0161
-## 5  Thursday   RICHMOND       ASSAULT     0.0127
-## 6    Monday   RICHMOND LARCENY/THEFT     0.0127
+## # A tibble: 6 x 4
+##   DayOfWeek PdDistrict crimetype     difference
+##   <chr>     <chr>      <chr>              <dbl>
+## 1 Sunday    TENDERLOIN LARCENY/THEFT     0.0233
+## 2 Tuesday   TENDERLOIN DRUG/NARCOTIC     0.0187
+## 3 Saturday  RICHMOND   VEHICLE THEFT     0.0164
+## 4 Saturday  TENDERLOIN LARCENY/THEFT     0.0161
+## 5 Monday    RICHMOND   LARCENY/THEFT     0.0127
+## 6 Thursday  RICHMOND   ASSAULT           0.0127
 ```
 
  
@@ -5425,13 +5443,15 @@ d1 %>% top_n(6,difference)
 ```
 
 ```
-##   DayOfWeek PdDistrict     crimetype difference
-## 1  Thursday   RICHMOND       ASSAULT     0.0127
-## 2   Tuesday TENDERLOIN DRUG/NARCOTIC     0.0187
-## 3    Monday   RICHMOND LARCENY/THEFT     0.0127
-## 4  Saturday TENDERLOIN LARCENY/THEFT     0.0161
-## 5    Sunday TENDERLOIN LARCENY/THEFT     0.0233
-## 6  Saturday   RICHMOND VEHICLE THEFT     0.0164
+## # A tibble: 6 x 4
+##   DayOfWeek PdDistrict crimetype     difference
+##   <chr>     <chr>      <chr>              <dbl>
+## 1 Monday    RICHMOND   LARCENY/THEFT     0.0127
+## 2 Saturday  RICHMOND   VEHICLE THEFT     0.0164
+## 3 Saturday  TENDERLOIN LARCENY/THEFT     0.0161
+## 4 Sunday    TENDERLOIN LARCENY/THEFT     0.0233
+## 5 Thursday  RICHMOND   ASSAULT           0.0127
+## 6 Tuesday   TENDERLOIN DRUG/NARCOTIC     0.0187
 ```
 
 ```r
@@ -5439,13 +5459,15 @@ d1 %>% top_n(6,-difference)
 ```
 
 ```
-##   DayOfWeek PdDistrict     crimetype difference
-## 1    Sunday   RICHMOND       ASSAULT    -0.0122
-## 2 Wednesday   RICHMOND       ASSAULT    -0.0106
-## 3    Friday TENDERLOIN DRUG/NARCOTIC    -0.0162
-## 4    Sunday TENDERLOIN DRUG/NARCOTIC    -0.0285
-## 5  Saturday   RICHMOND LARCENY/THEFT    -0.0231
-## 6   Tuesday TENDERLOIN LARCENY/THEFT    -0.0174
+## # A tibble: 6 x 4
+##   DayOfWeek PdDistrict crimetype     difference
+##   <chr>     <chr>      <chr>              <dbl>
+## 1 Friday    TENDERLOIN DRUG/NARCOTIC    -0.0162
+## 2 Saturday  RICHMOND   LARCENY/THEFT    -0.0231
+## 3 Sunday    RICHMOND   ASSAULT          -0.0122
+## 4 Sunday    TENDERLOIN DRUG/NARCOTIC    -0.0285
+## 5 Tuesday   TENDERLOIN LARCENY/THEFT    -0.0174
+## 6 Wednesday RICHMOND   ASSAULT          -0.0106
 ```
 
  

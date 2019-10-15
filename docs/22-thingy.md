@@ -4603,7 +4603,7 @@ residuals against *all* the $x$-variables in a multiple regression:
 
 ```r
 decathlon.tmp %>%
-  gather(event, performance, everything()) %>%
+  pivot_longer(everything(), names_to="event", values_to="performance") %>%
   nest(-event) %>%
   mutate(quantile = map(data, ~ enframe(quantile(.$performance),
     name = "quantile",
@@ -4647,63 +4647,31 @@ everything else (just `performance` in this case). Then the big `mutate` line sa
 This produces a second list-column called `quantile`, which I
 then `unnest` to display all the quantiles for each event.
 
-Almost there. Now we have both the events and the quantiles, but it would be nice to put the quantiles in columns. Which seems to be `spread`:
+Almost there. Now we have both the events and the quantiles, but it would be nice to put the quantiles in columns. Which seems to be `pivot_wider`:
 
 
 ```r
-quantiles.long %>% spread(quantile, perf)
+quantiles.long %>% pivot_wider(names_from=quantile, values_from=perf)
 ```
 
 ```
 ## # A tibble: 10 x 7
-##    event                data   `0%` `100%`  `25%`  `50%`  `75%`
+##    event                data   `0%`  `25%`  `50%`  `75%` `100%`
 ##    <chr>      <list<df[,1]>>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-##  1 discus           [24 × 1]  38.1   48.7   42.5   44.6   45.9 
-##  2 high.jump        [24 × 1]   1.87   2.14   1.96   1.99   2.05
-##  3 javelin          [24 × 1]  50.7   69.4   58.8   62.4   65.8 
-##  4 long.jump        [24 × 1]   6.62   7.85   7.21   7.37   7.52
-##  5 pole.vault       [24 × 1]   4.5    5.4    4.68   4.9    5.1 
-##  6 shot.put         [24 × 1]  13.2   15.9   13.8   14.2   14.6 
-##  7 x100m            [24 × 1]  10.4   11.4   10.8   11.0   11.2 
-##  8 x110mh           [24 × 1]  13.7   15.3   14.2   14.4   14.7 
-##  9 x1500m           [24 × 1] 260.   288.   266.   275.   278.  
-## 10 x400m            [24 × 1]  46.0   51.2   48.3   48.7   49.7
+##  1 x100m            [24 × 1]  10.4   10.8   11.0   11.2   11.4 
+##  2 long.jump        [24 × 1]   6.62   7.21   7.37   7.52   7.85
+##  3 shot.put         [24 × 1]  13.2   13.8   14.2   14.6   15.9 
+##  4 high.jump        [24 × 1]   1.87   1.96   1.99   2.05   2.14
+##  5 x400m            [24 × 1]  46.0   48.3   48.7   49.7   51.2 
+##  6 x110mh           [24 × 1]  13.7   14.2   14.4   14.7   15.3 
+##  7 discus           [24 × 1]  38.1   42.5   44.6   45.9   48.7 
+##  8 pole.vault       [24 × 1]   4.5    4.68   4.9    5.1    5.4 
+##  9 javelin          [24 × 1]  50.7   58.8   62.4   65.8   69.4 
+## 10 x1500m           [24 × 1] 260.   266.   275.   278.   288.
 ```
-
- 
-
-except that now the quantiles are in the wrong order! Because they are
-text, they are sorted into alphabetical order by `spread`. So
-we need to turn them into numbers first. I overwrite the quantiles
-with the numeric versions of themselves (see what happens if you
-don't):
-
-
-```r
-quantiles.long %>%
-  mutate(quantile = parse_number(quantile)) %>%
-  spread(quantile, perf)
-```
-
-```
-## # A tibble: 10 x 7
-##    event                data    `0`   `25`   `50`   `75`  `100`
-##    <chr>      <list<df[,1]>>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-##  1 discus           [24 × 1]  38.1   42.5   44.6   45.9   48.7 
-##  2 high.jump        [24 × 1]   1.87   1.96   1.99   2.05   2.14
-##  3 javelin          [24 × 1]  50.7   58.8   62.4   65.8   69.4 
-##  4 long.jump        [24 × 1]   6.62   7.21   7.37   7.52   7.85
-##  5 pole.vault       [24 × 1]   4.5    4.68   4.9    5.1    5.4 
-##  6 shot.put         [24 × 1]  13.2   13.8   14.2   14.6   15.9 
-##  7 x100m            [24 × 1]  10.4   10.8   11.0   11.2   11.4 
-##  8 x110mh           [24 × 1]  13.7   14.2   14.4   14.7   15.3 
-##  9 x1500m           [24 × 1] 260.   266.   275.   278.   288.  
-## 10 x400m            [24 × 1]  46.0   48.3   48.7   49.7   51.2
-```
-
- 
 
 and that looks nice.
+
 Extra: I made a post on Twitter, [link](https://twitter.com/KenButler12/status/1100133496637542401). 
 To which Malcolm Barrett replied with this: [link](https://twitter.com/malco_barrett/status/1100141130186780672) 
 and this: [link](https://twitter.com/malco_barrett/status/1100140736945647616). 
@@ -5070,58 +5038,26 @@ or, for this, maybe better:
 cor(decathlon) %>%
   as.data.frame() %>%
   rownames_to_column("event") %>%
-  gather(event2, corr, -event) %>%
+  pivot_longer(-event, names_to="event2", values_to="corr") %>%
   filter(event < event2) %>%
   arrange(desc(abs(corr)))
 ```
 
 ```
-##         event     event2         corr
-## 1      x110mh      x400m  0.802854203
-## 2       x100m      x400m  0.789091241
-## 3       x100m     x110mh  0.673721520
-## 4   long.jump      x100m -0.613519318
-## 5   long.jump      x400m -0.548197160
-## 6  pole.vault     x110mh -0.518717326
-## 7      discus   shot.put  0.464495863
-## 8   high.jump  long.jump  0.463798523
-## 9      x1500m      x400m  0.446949386
-## 10     x110mh     x1500m  0.398005215
-## 11  long.jump     x110mh -0.394840852
-## 12 pole.vault      x400m -0.361823592
-## 13   shot.put     x110mh -0.283104686
-## 14  high.jump     x1500m  0.277792195
-## 15  long.jump pole.vault  0.219768900
-## 16 pole.vault   shot.put -0.193284491
-## 17   shot.put      x100m -0.173733960
-## 18   shot.put      x400m -0.172516054
-## 19     discus      x100m -0.149899598
-## 20      x100m     x1500m  0.149139491
-## 21     discus     x110mh -0.137777706
-## 22  high.jump pole.vault  0.135652689
-## 23     discus  long.jump  0.128910512
-## 24  high.jump    javelin -0.124544175
-## 25 pole.vault      x100m -0.120879657
-## 26     discus  high.jump -0.117702658
-## 27  long.jump     x1500m -0.116722829
-## 28    javelin   shot.put -0.113134672
-## 29     discus pole.vault -0.100450719
-## 30  long.jump   shot.put  0.083695699
-## 31  high.jump     x110mh -0.083563233
-## 32     discus      x400m -0.068778203
-## 33   shot.put     x1500m -0.061567926
-## 34 pole.vault     x1500m -0.059888360
-## 35    javelin     x110mh -0.052468568
-## 36    javelin pole.vault  0.052377148
-## 37  high.jump      x100m -0.037036192
-## 38    javelin      x100m  0.023637150
-## 39     discus    javelin  0.020977427
-## 40  high.jump   shot.put  0.020120488
-## 41     discus     x1500m  0.019890861
-## 42    javelin  long.jump  0.019693022
-## 43  high.jump      x400m  0.015217204
-## 44    javelin     x1500m -0.008858031
-## 45    javelin      x400m -0.005823468
+## # A tibble: 45 x 3
+##    event      event2      corr
+##    <chr>      <chr>      <dbl>
+##  1 x110mh     x400m      0.803
+##  2 x100m      x400m      0.789
+##  3 x100m      x110mh     0.674
+##  4 long.jump  x100m     -0.614
+##  5 long.jump  x400m     -0.548
+##  6 pole.vault x110mh    -0.519
+##  7 discus     shot.put   0.464
+##  8 high.jump  long.jump  0.464
+##  9 x1500m     x400m      0.447
+## 10 x110mh     x1500m     0.398
+## # … with 35 more rows
 ```
 
  
@@ -5139,7 +5075,7 @@ names will disappear.
 then it has row names, which I can grab and put into a column called
 `event`.
 
-* Then I make the data frame long, creating a column
+* Then I make the data frame longer, creating a column
 `event2` which is the second thing that each correlation will
 be between.
 
@@ -5178,7 +5114,7 @@ There are actually only a few high correlations:
 
 
 Some of the correlations are negative as expected, since they are
-between a running event and a jumping/throwing event.
+between a running event and a jumping/throwing event (that is, a long distance goes with a small time, both of which are good).
 
 I was wrong about javelin. It seems to be a unique skill in the
 decathlon, which is presumably why it's there: you want 10 events that
@@ -5957,7 +5893,7 @@ bridges.1 <- hclust(d1, method = "ward.D")
 plot(bridges.1, cex = 0.3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
 
      
 
@@ -5983,7 +5919,7 @@ plot(bridges.1, cex = 0.3)
 rect.hclust(bridges.1, 5)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-175-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
 
      
 
@@ -6536,7 +6472,7 @@ plot directly, with the points joined by lines:
 ggplot(withinss, aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-191-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-190-1.png" width="672"  />
 
      
 
@@ -7046,7 +6982,7 @@ ggbiplot(athletes.3, groups = factor(athletes2$cluster)) +
   scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
 
      
 
@@ -7106,7 +7042,7 @@ athletes %>%
   geom_point() + scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-205-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
 
  
 

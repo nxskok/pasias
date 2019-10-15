@@ -187,13 +187,40 @@ interpretation is concerned.
  
 
 (f) We are going to draw an interaction plot in a moment. To
-set that up, use `gather` as in the lecture notes to create
+set that up, use `pivot_longer` or `gather` as in the lecture notes to create
 one column of weights and a second column of times. (You don't
 need to do the `separate` thing that I did in class, though
 if you want to try it, go ahead.)
  
 Solution
 
+Like this:
+
+
+```r
+weights %>% 
+  pivot_longer(starts_with("Time"), names_to="time", values_to="weight") -> weights.long
+weights.long
+```
+
+```
+## # A tibble: 135 x 4
+##      rat drug     time  weight
+##    <dbl> <chr>    <chr>  <dbl>
+##  1     1 thyroxin Time0     59
+##  2     1 thyroxin Time1     85
+##  3     1 thyroxin Time2    121
+##  4     1 thyroxin Time3    156
+##  5     1 thyroxin Time4    191
+##  6     2 thyroxin Time0     54
+##  7     2 thyroxin Time1     71
+##  8     2 thyroxin Time2     90
+##  9     2 thyroxin Time3    110
+## 10     2 thyroxin Time4    138
+## # … with 125 more rows
+```
+
+or this way:
 
 
 ```r
@@ -225,59 +252,15 @@ My data frame was called `weights`, so I was OK with having a
 variable called `weight`. Watch out for that if you call the
 data frame `weight`, though.
 
-If you want to try the `separate` thing, that goes something
-like this:
-
-
-```r
-weights %>%
-  gather(timex, weight, Time0:Time4) %>%
-  separate(timex, into = c("junk", "time"), sep = 4) -> weights2.long
-weights2.long %>% sample_n(20)
-```
-
-```
-## # A tibble: 20 x 5
-##      rat drug       junk  time  weight
-##    <dbl> <chr>      <chr> <chr>  <dbl>
-##  1    17 thiouracil Time  0         53
-##  2     3 thyroxin   Time  1         75
-##  3     9 thiouracil Time  3        111
-##  4     9 thiouracil Time  1         80
-##  5     2 thyroxin   Time  1         71
-##  6    19 control    Time  1         93
-##  7    24 control    Time  2         94
-##  8    20 control    Time  2        111
-##  9    21 control    Time  2        100
-## 10     8 thiouracil Time  0         61
-## 11    18 control    Time  3        139
-## 12    19 control    Time  2        123
-## 13    22 control    Time  1         81
-## 14    20 control    Time  3        144
-## 15     3 thyroxin   Time  3        151
-## 16    12 thiouracil Time  0         51
-## 17    26 control    Time  3        112
-## 18    11 thiouracil Time  1         88
-## 19    20 control    Time  4        185
-## 20    10 thiouracil Time  0         53
-```
-
- 
-
-Separate after the fourth character (`sep=4`), which will put
-`Time` into `junk` and the actual time into
-`time`. I could also have organized the data file so that the
-word `Time` and the number were separated by some character,
-like an underscore, and you could have separated at that.
 Since the piece of the time we want is the number,
 `parse_number` (from `readr`, part of the
 `tidyverse`) should also work:
 
 
 ```r
-weights2.long <- weights %>%
-  gather(timex, weight, Time0:Time4) %>%
-  mutate(time = parse_number(timex))
+weights %>% 
+  pivot_longer(starts_with("Time"), names_to="timex", values_to="weight") %>% 
+  mutate(time = parse_number(timex)) -> weights2.long
 weights2.long %>% sample_n(20)
 ```
 
@@ -285,26 +268,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    12 thiouracil Time3    123     3
-##  2    27 control    Time3    139     3
-##  3    23 control    Time4    153     4
-##  4    24 control    Time0     51     0
-##  5    16 thiouracil Time3     90     3
-##  6     3 thyroxin   Time0     56     0
-##  7    11 thiouracil Time1     88     1
-##  8    10 thiouracil Time4    133     4
-##  9    20 control    Time3    144     3
-## 10    26 control    Time3    112     3
-## 11    21 control    Time0     49     0
-## 12    17 thiouracil Time4    122     4
-## 13     4 thyroxin   Time3    148     3
-## 14    17 thiouracil Time1     72     1
-## 15    27 control    Time2    110     2
-## 16    22 control    Time3    121     3
-## 17     7 thyroxin   Time3    138     3
-## 18    16 thiouracil Time0     46     0
-## 19    12 thiouracil Time0     51     0
-## 20     6 thyroxin   Time2     97     2
+##  1     3 thyroxin   Time3    151     3
+##  2    19 control    Time2    123     2
+##  3    25 control    Time1     91     1
+##  4    23 control    Time0     46     0
+##  5     9 thiouracil Time3    111     3
+##  6     1 thyroxin   Time0     59     0
+##  7     6 thyroxin   Time0     52     0
+##  8     5 thyroxin   Time0     57     0
+##  9    23 control    Time3    131     3
+## 10    20 control    Time1     77     1
+## 11     1 thyroxin   Time3    156     3
+## 12     5 thyroxin   Time1     72     1
+## 13    27 control    Time1     82     1
+## 14    16 thiouracil Time0     46     0
+## 15    10 thiouracil Time3    106     3
+## 16     9 thiouracil Time4    122     4
+## 17     2 thyroxin   Time1     71     1
+## 18     6 thyroxin   Time1     73     1
+## 19    18 control    Time0     57     0
+## 20     2 thyroxin   Time0     54     0
 ```
 
  
@@ -382,26 +365,26 @@ do that here. Then we save the result into a new data frame
 
 
 ```r
-wt <- weights %>%
+weights %>%
   mutate(subject = row_number()) %>%
-  gather(time, weight, Time0:Time4)
+  pivot_longer(starts_with("Time"), names_to="time", values_to="weight") -> wt
 wt
 ```
 
 ```
 ## # A tibble: 135 x 5
-##      rat drug       subject time  weight
-##    <dbl> <chr>        <int> <chr>  <dbl>
-##  1     1 thyroxin         1 Time0     59
-##  2     2 thyroxin         2 Time0     54
-##  3     3 thyroxin         3 Time0     56
-##  4     4 thyroxin         4 Time0     59
-##  5     5 thyroxin         5 Time0     57
-##  6     6 thyroxin         6 Time0     52
-##  7     7 thyroxin         7 Time0     52
-##  8     8 thiouracil       8 Time0     61
-##  9     9 thiouracil       9 Time0     59
-## 10    10 thiouracil      10 Time0     53
+##      rat drug     subject time  weight
+##    <dbl> <chr>      <int> <chr>  <dbl>
+##  1     1 thyroxin       1 Time0     59
+##  2     1 thyroxin       1 Time1     85
+##  3     1 thyroxin       1 Time2    121
+##  4     1 thyroxin       1 Time3    156
+##  5     1 thyroxin       1 Time4    191
+##  6     2 thyroxin       2 Time0     54
+##  7     2 thyroxin       2 Time1     71
+##  8     2 thyroxin       2 Time2     90
+##  9     2 thyroxin       2 Time3    110
+## 10     2 thyroxin       2 Time4    138
 ## # … with 125 more rows
 ```
 
@@ -699,7 +682,7 @@ is a significant interaction!
 (e) To understand the results that you got from the repeated
 measures analysis, you are going to draw a picture (or two). To do
 *that*, we are going to need the data in "long" format with
-one response value per line (instead of four). Use `gather`
+one response value per line (instead of four). Use `pivot_longer` or `gather`
 suitably to get the data in that format, and demonstrate that you
 have done so.
 
@@ -707,12 +690,21 @@ have done so.
 Solution
 
 
-The usual layout for `gather`:
+The usual layout:
+
 
 ```r
-geriatrics.long <- geriatrics %>%
+geriatrics %>% 
+  pivot_longer(t1:t4, names_to="time", values_to = "intpct") -> geriatrics.long
+```
+
+or with `gather`:
+
+
+```r
+geriatrics2.long <- geriatrics %>%
   gather(time, intpct, t1:t4)
-geriatrics.long
+geriatrics2.long
 ```
 
 ```
@@ -732,22 +724,22 @@ geriatrics.long
 ## # … with 74 more rows
 ```
 
-     
+Different order, but same result.
 
-I had to think a bit about "what makes the gathered columns the same". 
+I had to think a bit about "values", or "what makes the gathered columns the same". 
 They are all percentages of interactions of a specific type,
 so you could as well (or better) call them "percent". 
 
 Anyway, I have *one* column of interaction percents, and
 *one* column of times. If you check the whole thing, you'll see
-that you get all the time-1 measurements first, then all the time-2
+that `gather` gives you all the time-1 measurements first, then all the time-2
 measurements, and so on, so that the subject number loops through the
-21 subjects four times.
+21 subjects four times, while `pivot_longer` gives all the measurements for subject 1, then subject 2, and so on.
 
 The long data frame is, well, long.
 
 It's not necessary to pull out the numeric time values, though you
-could if you wanted to, via `separate` or by using
+could if you wanted to, by using
 `parse_number`.
     
 
@@ -1040,13 +1032,14 @@ long format to use again later.
 
 
 ```r
-fake %>% gather(times, score, t1:t4) -> fake.long
+fake %>% 
+  pivot_longer(t1:t4, names_to="times", values_to="score") -> fake.long
 fake.long %>%
   ggplot(aes(x = times, y = score, colour = drug, group = subject)) +
   geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
  
 
@@ -1163,13 +1156,15 @@ head(fake.long)
 ```
 
 ```
-##   subject drug times score
-## 1       1    a    t1    10
-## 2       2    a    t1    11
-## 3       3    a    t1    12
-## 4       4    a    t1    10
-## 5       5    a    t1    11
-## 6       6    b    t1     7
+## # A tibble: 6 x 4
+##   subject drug  times score
+##     <int> <fct> <chr> <int>
+## 1       1 a     t1       10
+## 2       1 a     t2       15
+## 3       1 a     t3       13
+## 4       1 a     t4       11
+## 5       2 a     t1       11
+## 6       2 a     t2       14
 ```
 
 ```r
@@ -1357,16 +1352,17 @@ see.)
 
 
 
-(c) Create and save a "long" data frame with all the epinephrine
+(c) Create and save a "longer" data frame with all the epinephrine
 values gathered together into one column.
 
 
 Solution
 
+`pivot_longer` (or `gather` if you prefer):
 
 
 ```r
-airport.long <- airport %>% gather(when, epinephrine, epi_1:epi_4)
+airport %>% pivot_longer(starts_with("epi"), names_to="when", values_to="epinephrine") -> airport.long
 airport.long
 ```
 
@@ -1375,15 +1371,15 @@ airport.long
 ##    location child when  epinephrine
 ##       <dbl> <dbl> <chr>       <dbl>
 ##  1        1     1 epi_1       89.6 
-##  2        1     2 epi_1      -55.5 
-##  3        1     3 epi_1      201.  
-##  4        1     4 epi_1      448.  
-##  5        1     5 epi_1       -4.60
-##  6        1     6 epi_1      231.  
-##  7        1     7 epi_1      227.  
-##  8        1     8 epi_1      336.  
-##  9        1     9 epi_1       16.8 
-## 10        1    10 epi_1       54.5 
+##  2        1     1 epi_2      253.  
+##  3        1     1 epi_3      214.  
+##  4        1     1 epi_4      209.  
+##  5        1     2 epi_1      -55.5 
+##  6        1     2 epi_2       -1.45
+##  7        1     2 epi_3       26.0 
+##  8        1     2 epi_4      259.  
+##  9        1     3 epi_1      201.  
+## 10        1     3 epi_2      280.  
 ## # … with 790 more rows
 ```
 
@@ -1419,6 +1415,7 @@ airport.long %>%
 
 <img src="20-repeated-measures_files/figure-html/toofat-1.png" width="672"  />
 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The term accidental aRt is sometimes used for graphs that cross the boundary between being informative and looking like a piece of art, particularly if it was not done on purpose. This one is a bit like that.</span>
          
 
 This is different from the plot we had in C32, where I had you use a
@@ -1494,7 +1491,7 @@ airport.long %>%
   geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
          
 
@@ -1516,7 +1513,7 @@ airport.long %>%
   geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
           
 
@@ -1532,7 +1529,7 @@ airport.long %>%
   geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
          
 With a long pipeline like this, none of us get it right the first time (I
@@ -2434,6 +2431,7 @@ between the two methods for measuring body fat.
 This goes to show that repeated measures gives the same answer as
 a matched-pairs $t$-test in the situation where they both
 apply. But repeated measures is, as we have seen, a lot more general.
+
 Since this really is repeated measures, we ought to be able to use
 a mixed model here too. We need "long" or "tidy" format, which
 we don't have yet. One pipe to save them all, to paraphrase Lord
@@ -2471,7 +2469,7 @@ bodyfat
 
 ```r
 bodyfat %>%
-  gather(method, fat, xray:ultrasound) %>%
+  pivot_longer(-athlete, names_to="method", values_to="fat") %>%
   mutate(fathlete = factor(athlete)) %>%
   lmer(fat ~ method + (1 | fathlete), data = .) %>%
   drop1(test = "Chisq")
@@ -2494,29 +2492,29 @@ P-value is different from the matched pairs or profile analysis, it is
 very close to those.
 
 If you're not clear about the tidy data frame used for input to
-`lmer`, pull the top two lines off the chain and see what they produce:
+`lmer`, pull the top two lines off the pipeline and see what they produce:
 
 
 ```r
 bodyfat %>%
-  gather(method, fat, xray:ultrasound) %>%
+  pivot_longer(-athlete, names_to="method", values_to="fat") %>%
   mutate(fathlete = factor(athlete))
 ```
 
 ```
 ## # A tibble: 32 x 4
-##    athlete method   fat fathlete
-##      <dbl> <chr>  <dbl> <fct>   
-##  1       1 xray    5    1       
-##  2       2 xray    7    2       
-##  3       3 xray    9.25 3       
-##  4       4 xray   12    4       
-##  5       5 xray   17.2  5       
-##  6       6 xray   29.5  6       
-##  7       7 xray    5.5  7       
-##  8       8 xray    6    8       
-##  9       9 xray    8    9       
-## 10      10 xray    8.5  10      
+##    athlete method       fat fathlete
+##      <dbl> <chr>      <dbl> <fct>   
+##  1       1 xray        5    1       
+##  2       1 ultrasound  4.75 1       
+##  3       2 xray        7    2       
+##  4       2 ultrasound  3.75 2       
+##  5       3 xray        9.25 3       
+##  6       3 ultrasound  9    3       
+##  7       4 xray       12    4       
+##  8       4 ultrasound 11.8  4       
+##  9       5 xray       17.2  5       
+## 10       5 ultrasound 17    5       
 ## # … with 22 more rows
 ```
 
@@ -2528,7 +2526,7 @@ by `xray`, and again with it measured by
 
 The mixed model took me two goes to get right: I forgot that I needed the
 `data=.` in `lmer`, because it works like `lm`
-with the model formula first, not the input data. If the chain is
+with the model formula first, not the input data. If the pipeline is
 going too fast for you, create the tidy data frame and save it, then
 use the saved data frame as input to `lmer`.
 
@@ -2866,7 +2864,7 @@ ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
   geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
 
      
 
@@ -2878,7 +2876,7 @@ ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
   geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
  
     
@@ -2912,7 +2910,7 @@ king.long %>%
   geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
 
    
 
@@ -3078,7 +3076,7 @@ ggplot(treatments, aes(x = time, y = y, colour = trt, group = subject)) +
   geom_point() + geom_line()
 ```
 
-<img src="20-repeated-measures_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
+<img src="20-repeated-measures_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
      
 

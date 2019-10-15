@@ -2266,10 +2266,19 @@ column of group labels `amount`. Is it a `factor`?
 Solution
 
 
-We are combining several columns into one, so this is `gather`:
+We are combining several columns into one, so this is `pivot_longer`:
+
 
 ```r
-caffeine <- caffeine.untidy %>%
+caffeine.untidy %>% 
+  pivot_longer(-Sub, names_to = "amount", values_to = "score") -> caffeine
+```
+
+or the old way:
+
+
+```r
+caffeine2 <- caffeine.untidy %>%
   gather(amount, score, c(High:None))
 ```
 
@@ -2286,18 +2295,18 @@ caffeine
 
 ```
 ## # A tibble: 36 x 3
-##      Sub amount score
-##    <dbl> <chr>  <dbl>
-##  1     1 High      72
-##  2     2 High      65
-##  3     3 High      68
-##  4     4 High      83
-##  5     5 High      79
-##  6     6 High      92
-##  7     7 High      69
-##  8     8 High      74
-##  9     9 High      78
-## 10    10 High      83
+##      Sub amount   score
+##    <dbl> <chr>    <dbl>
+##  1     1 High        72
+##  2     1 Moderate    68
+##  3     1 None        68
+##  4     2 High        65
+##  5     2 Moderate    80
+##  6     2 None        74
+##  7     3 High        68
+##  8     3 Moderate    64
+##  9     3 None        59
+## 10     4 High        83
 ## # … with 26 more rows
 ```
 
@@ -2327,7 +2336,7 @@ Indeed.
 
 Note that `amount` is text, not a factor. Does this matter? We'll see.
 
-This is entirely the kind of situation where you need `gather`,
+This is entirely the kind of situation where you need `pivot_longer`,
 so get used to seeing where it will be useful.
 
 
@@ -2344,9 +2353,9 @@ Solution
 ggplot(caffeine, aes(x = amount, y = score)) + geom_boxplot()
 ```
 
-<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
- 
+Note that this is *much more difficult* if you don't have a tidy data frame. (Try it and see.) 
 
 
 
@@ -2458,6 +2467,16 @@ because the confidence interval is rather long.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">We'd need a  lot more students to make it narrower, but this is not surprising  since students vary in a lot of other ways that were not measured here.</span>
 
 
+Extra: the normality and equal spreads assumptions look perfectly good, given the boxplots, and I don't think there's any reason to consider any other test. You might like to assess that with normal quantile plots:
 
 
+```r
+ggplot(caffeine, aes(sample=score)) + stat_qq() +
+  stat_qq_line() + facet_wrap(~amount, ncol=2)
+```
+
+<img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
+
+
+There's nothing to worry about there normality-wise. If anything, there's a little evidence of *short* tails (in the None group especially), but you'll recall that short tails don't affect the mean and thus pose no problems for the ANOVA. Those three lines also have pretty much the same slope, indicating very similar spreads. Regular ANOVA is the best test here. (Running eg. Mood's median test would be a mistake here, because it doesn't use the data as efficiently (counting only aboves and belows) as the ANOVA does, and so the ANOVA will give a better picture of what differs from what.)
 

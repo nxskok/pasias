@@ -683,8 +683,8 @@ levels, so untidy.
 
 
 
-(b) Copy your `gather` from before, only this time add
-`factor_key=T` to the end of it. Take a look at the
+(b) Copy your `pivot_longer` from before, only this time add
+`names_ptypes = list(amount=factor()` to the end of it. Take a look at the
 results. What has changed from before?
 
 
@@ -695,31 +695,31 @@ We'll save into `caffeine` again:
 
 
 ```r
-caffeine <- caffeine.untidy %>%
-  gather(amount, score, High:None, factor_key = T)
+caffeine.untidy %>%
+  pivot_longer(-Sub, names_to="amount", values_to="score", names_ptypes = list(amount=factor())) -> caffeine
 caffeine
 ```
 
 ```
 ## # A tibble: 36 x 3
-##      Sub amount score
-##    <dbl> <fct>  <dbl>
-##  1     1 High      72
-##  2     2 High      65
-##  3     3 High      68
-##  4     4 High      83
-##  5     5 High      79
-##  6     6 High      92
-##  7     7 High      69
-##  8     8 High      74
-##  9     9 High      78
-## 10    10 High      83
+##      Sub amount   score
+##    <dbl> <fct>    <dbl>
+##  1     1 High        72
+##  2     1 Moderate    68
+##  3     1 None        68
+##  4     2 High        65
+##  5     2 Moderate    80
+##  6     2 None        74
+##  7     3 High        68
+##  8     3 Moderate    64
+##  9     3 None        59
+## 10     4 High        83
 ## # … with 26 more rows
 ```
 
  
 
-The variable created for "how are the columns different" is now a
+The variable created for the "names" is now a
 `factor`: it was text before. Maybe we should have made it a
 factor before (it wouldn't have done any harm), but we got away with
 not doing so.
@@ -770,6 +770,8 @@ TukeyHSD(caffeine.old)
        
 
 End of digression.
+
+
 Now we'll do it using `lm`, with contrasts later, and see how
 things change:
 
@@ -982,7 +984,7 @@ c.hm <- c(1, -1, 0)
 
        
 
-Having the 1 and the $-1$ the other way around is also fine.
+Having the 1 and the $-1$ the other way around would also have been fine.
 
 
 
