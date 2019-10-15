@@ -135,7 +135,7 @@ survey-responses, just to different questions, and you might think of
 doing something like this:
 
 ```{r }
-pers %>% gather(item, response, -id)
+pers %>% pivot_longer(-id, names_to="item", values_to="response")
 ```
 
  
@@ -147,7 +147,7 @@ charts of responses facetted by item:
 
 ```{r }
 pers %>%
-  gather(item, response, -id) %>%
+  pivot_longer(-id, names_to="item", values_to="response") %>%
   ggplot(aes(x = response)) + geom_bar() + facet_wrap(~item)
 ```
 
@@ -206,7 +206,7 @@ That gives me an idea, though.
 
 ```{r }
 pers %>%
-  gather(item, rating, -id)
+  pivot_longer(-id, names_to="item", values_to="rating")
 ```
 
  
@@ -222,13 +222,13 @@ of thing, adding to my pipeline:
 
 ```{r }
 pers %>%
-  gather(item, rating, -id) %>%
+  pivot_longer(-id, names_to="item", values_to="rating") %>% 
   group_by(id) %>%
   summarize(m = mean(rating)) %>%
   filter(is.na(m))
 ```
 
- 
+This is different from `drop_na`, which would remove any rows (of the long data frame) that have a missing response. This, though, is exactly what we *don't* want, since we are trying to keep track of the subjects that have missing values.
 
 Most of the subjects had an actual numerical  mean here, whose value
 we don't care about; all we care about here is whether the mean is
@@ -239,12 +239,12 @@ So now we define a column `has_missing` that is true if the
 subject has any missing values and false otherwise:
 
 ```{r }
-pers.hm <- pers %>%
-  gather(item, rating, -id) %>%
+pers %>%
+  pivot_longer(-id, names_to="item", values_to="rating") %>% 
   group_by(id) %>%
   summarize(m = mean(rating)) %>%
-  mutate(has_missing = is.na(m))
-pers.hm %>% print(n = 15)
+  mutate(has_missing = is.na(m)) -> pers.hm
+pers.hm 
 ```
 
  

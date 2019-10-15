@@ -193,7 +193,7 @@ or you can even do that trick to put the two plots on facets:
 
 ```{r }
 d %>%
-  gather(xname, x, drums:weight) %>%
+  pivot_longer(drums:weight, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = .resid)) + geom_point() +
   facet_wrap(~xname)
 ```
