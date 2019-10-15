@@ -59,12 +59,12 @@ This is fine, but there is also a way of getting all three plots with
 *one* `ggplot`. This uses the `facet_wrap` trick,
 but to set *that* up, we have to have all the $x$-variables in
 *one* column, with an extra column labelling which $x$-variable
-that value was. This uses `gather`. The right way to do this is
+that value was. This uses `pivot_longer`. The right way to do this is
 in a pipeline:
 
 ```{r }
 satisf %>%
-  gather(xname, x, age:anxiety) %>%
+  pivot_longer(-satis, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = satis)) + geom_point() +
   facet_wrap(~xname, scales = "free", ncol = 2)
 ```
@@ -72,12 +72,12 @@ satisf %>%
  
 
 Steps: gather together the columns age through anxiety into one column
-called `x`, with a label in `xname`, then plot this new
+whose values go in `x`, with names in `xname`, then plot this new
 `x` against satisfaction score, with a separate facet for each
 different $x$ (in `xname`). 
 
-I showed you `facet_grid` in class. What's the difference
-between that and `facet_wrap`? The difference is that with
+What's the difference
+between `facet_grid` and `facet_wrap`? The difference is that with
 `facet_wrap`, we are letting `ggplot` arrange the
 facets how it wants to. In this case, we didn't care which explanatory
 variable went on which facet, just as long as we saw all of them
@@ -97,7 +97,10 @@ rather than calculating it twice (so that I ought now to go back and
 do the other one using the saved data frame, really):
 
 ```{r }
-satisf.long <- satisf %>% gather(xname, x, age:anxiety)
+satisf %>% 
+  pivot_longer(age:anxiety, names_to="xname", 
+               values_to="x") -> satisf.long
+satisf.long
 ```
 
  
@@ -293,40 +296,61 @@ the ugliness. Anyway, it gives what we want:
 quartiles
 ```
 
+```{r}
+quartiles %>% 
+  pivot_longer(everything(), names_to=c(".value", "which_q"), names_sep="_")
+```
+ 
+ 
  
 You can copy the numbers from here to below, or you can do some
 cleverness to get them in the right places:
 ```{r }
 quartiles %>%
-  gather(var_q, quartile, everything()) %>%
-  separate(var_q, c("var_name", "quartile_name")) %>%
-  spread(var_name, quartile)
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) %>%
+  pivot_wider(names_from=var_name, values_from=quartile)
 ```
 
- 
+This combo of `pivot_longer` and `separate` can be shortened further by specifying *two* names in `names_to`, and also specifying a `names_sep` to say what they're separated by: 
 
 ```{r }
-
+quartiles %>%
+  pivot_longer(everything(), names_to=c("var_q", "which_q"), 
+               names_sep="_", values_to="quartile") %>%
+  pivot_wider(names_from=var_q, values_from=quartile)
 ```
 
+Believe it or not, this can be shortened even further, thus:     
+     
+```{r}
+quartiles %>% 
+  pivot_longer(everything(), names_to=c(".value", "which_q"), names_sep="_")
+```
+     
+The place where this approach gains is when `pivot_longer` goes too far, making *everything* longer, when you want some of it to be wider and thus you needed a `pivot_wider` at the end. Once again, you use two things in the `names_to`, but this time instead of giving both variables names, you use the special name `.value` for the thing you want to end up in columns. The original data frame `quartiles` had columns with names like `severity_q1`, so here that is the first thing: `age` and `severity` and `anxiety` will be used as column names, and filled automatically with the values for `q1` and `q3`, so you don't specify a `values_to`. 
+
+This is one of those very dense pieces of coding, where you accomplish a lot in a small space. If it is too dense for you, you can go back to one of the two previous ways of doing it, eg. the simple `pivot_longer` followed by `separate` followed by `pivot_wider`. Sometimes there is value in using a larger number of simpler tools to get where you want.
      
 
-This is what we want for below. Let's test it line by line to see exactly
-what it did:
+Those data frames above are we want for below. Let's test the first way of coding it line by line to see exactly
+what it did: (The second way does the first two lines in one, and the third way does all three.)
+
 ```{r }
-quartiles %>% gather(var_q, quartile, everything())
+quartiles %>%
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") 
 ```
 
  
 
 Making long format. `everything()` is a select-helper saying
-"gather up *all* the columns". This is where the (ignorable)
-warning comes from.
+"gather up *all* the columns". 
+
 
 ```{r }
 quartiles %>%
-  gather(var_q, quartile, everything()) %>%
-  separate(var_q, c("var_name", "quartile_name"))
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) 
 ```
 
  
@@ -337,25 +361,26 @@ underscore, which is why the things in `quartiles` were named
 with underscores.
 `r tufte::margin_note("I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.")`
 
+Now put the variable names back in the columns:
+
 ```{r }
-qq <- quartiles %>%
-  gather(var_q, quartile, everything()) %>%
-  separate(var_q, c("var_name", "quartile_name")) %>%
-  spread(var_name, quartile)
+quartiles %>%
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) %>%
+  pivot_wider(names_from=var_name, values_from=quartile) -> qq
 qq
 ```
 
  
-Last, I want the original variables in columns, so I un-gather to get
-them there. I spread `var_name`, carrying along the values in
+I make `var_name` wider, carrying along the values in
 `quartile` (which means that the rows will get matched up by
-`quartile_name`). 
+`which_q`). 
 
 Now, let's think about why we were doing that. We want to do
 predictions of all possible combinations of those values of age and
 anxiety and severity.
 Doing "all possible combinations" calls for `crossing`,
-which looks like this:
+which looks like this. It uses the output from one of the above pipelines, which I saved in `qq`:
 
 ```{r }
 satisf.new <- with(qq, crossing(age, anxiety, severity))
@@ -381,7 +406,7 @@ cbind(satisf.new, pp)
  
 
 Looking at the predictions themselves (in `fit`), you can see
-that `age` has a huge effect. If you compare the 1st and 5nd
+that `age` has a huge effect. If you compare the 1st and 5th
 lines (or the 2nd and 6th, 3rd and 7th, \ldots) you see that
 increasing age by 13.5 years, while leaving the other variables the
 same, decreases the satisfaction score by over 15 on
@@ -436,13 +461,13 @@ Then I put that side by side with the values being predicted for:
 pp %>%
   as_tibble() %>%
   transmute(pi.length = upr - lwr) %>%
-  bind_cols(satisf.new)
+  bind_cols(satisf.new) %>% 
+  arrange(pi.length)
 ```
 
  
 
-Two of these are noticeably shorter than the others: the first one and
-the last one. These are low-everything and high-everything. If you
+Two of these are noticeably shorter than the others. These are high-everything and low-everything. If you
 look back at the scatterplot matrix of (<a href="#part:scatmat">here</a>), you'll
 see that the explanatory variables have positive correlations with
 each other. This means that when one of them is low, the other ones

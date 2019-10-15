@@ -65,7 +65,7 @@ one column (and the names of the $x$-variables in another
 column):
 ```{r ivybridge}
 salaries %>%
-  gather(xname, x, -salary) %>%
+  pivot_longer(-salary, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = salary)) + geom_point() +
   facet_wrap(~xname, ncol = 2, scales = "free")
 ```
@@ -259,7 +259,7 @@ you, run the code a piece at a time to see what it's doing:
 ```{r }
 salaries.1 %>%
   augment(salaries) %>%
-  gather(xname, x, workqual:pubsucc) %>%
+  pivot_longer(workqual:pubsucc, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = .resid)) + geom_point() +
   facet_wrap(~xname, scales = "free", ncol = 2)
 ```

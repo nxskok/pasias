@@ -202,6 +202,18 @@ number of days to add on to `date.entered`. So you have
 to subtract one from the number of weeks before you multiply
 it by seven to get a number of days.
 After that thinking, this:
+
+```{r}
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  select(date.entered, week_number, current)
+```
+
+or this, where the continuation after the `gather` is exactly the same as after the `pivot_longer`:
+
 ```{r }
 billboard %>%
   gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
@@ -231,7 +243,7 @@ chart).
 You might be thinking that this is not much of a check, and you would
 be right. A handy trick is to display a random sample of 10 (say) out
 of the 5,000-odd rows of the data frame. To do that, add the line
-`sample_n(10)` on the end, like this:
+`sample_n(10)` on the end, like this (tested with the `gather` variant, but you can do either):
 
 ```{r echo=F}
 set.seed(457299)
@@ -282,6 +294,20 @@ either `rank` (text) or what I called
 `rank_number` (a number). It doesn't matter here,
 since we are only checking for equal-to, not something like
 "less than":
+
+```{r}
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current)
+```
+
+or, with `gather`:
+
 ```{r size="scriptsize"}
 billboard %>%
   gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
@@ -330,6 +356,21 @@ Solution
 
 This is a question of using `count`, but on the
 `track` title:
+
+```{r}
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track)
+```
+
+or:
+ 
 ```{r }
 billboard %>%
   gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
@@ -354,6 +395,21 @@ But, this is a data frame, so anything we can do to a data frame we
 can do to this, like listing out only the row(s) where `n` is
 equal to its maximum value:
 
+```{r}
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track) %>% 
+  filter(n == max(n))
+```
+
+or:
+
 ```{r }
 billboard %>%
   gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
@@ -373,6 +429,21 @@ billboard %>%
 
 or arranging them in (most logically, descending) order by `n`
 to make it easier to pick out the top one:
+
+```{r}
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track) %>% 
+  arrange(desc(n))
+```
+
+or:
 
 ```{r }
 billboard %>%

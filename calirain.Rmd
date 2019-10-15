@@ -147,9 +147,10 @@ points is fine with me.
 Here is a funky way to get all three plots in one shot:
 
 ```{r }
-rains %>% gather(xname,x,altitude:fromcoast) %>%
-ggplot(aes(x=x,y=rainfall))+geom_point()+
-facet_wrap(~xname,scales="free")
+rains %>% 
+  pivot_longer(altitude:fromcoast, names_to="xname",values_to="x") %>%
+  ggplot(aes(x=x,y=rainfall))+geom_point()+
+  facet_wrap(~xname,scales="free")
 ```
 
  
@@ -174,14 +175,15 @@ display. Here, for example, two columns because I thought three was
 too many:
 
 ```{r }
-rains %>% gather(xname,x,altitude:fromcoast) %>%
-ggplot(aes(x=x,y=rainfall))+geom_point()+
-facet_wrap(~xname,scales="free",ncol=2)
+rains %>% 
+  pivot_longer(altitude:fromcoast, names_to="xname",values_to="x") %>%
+  ggplot(aes(x=x,y=rainfall))+geom_point()+
+  facet_wrap(~xname,scales="free",ncol=2)
 ```
 
  
 
-Now, the three plots have come out about square, which I like a lot better.
+Now, the three plots have come out about square, or at least "landscape", which I like a lot better.
 
 
 
