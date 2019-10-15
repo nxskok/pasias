@@ -754,7 +754,7 @@ library(ggrepel)
 
  
 
-
+find out about api keys
 
  
 Let's make a map. To do it this way, you need a Google API key (the free-tier one is fine, but you need to have one). When you have one, you put something at the top of your code like this, with the actual key in the obvious place:
@@ -817,18 +817,17 @@ mapp <- get_map("Porto", zoom = 5)
 ```
 
 ```
-## Source : https://maps.googleapis.com/maps/api/staticmap?center=Porto&zoom=5&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
-```
-
-```
-## Source : https://maps.googleapis.com/maps/api/geocode/json?address=Porto&key=xxx-Mj1-zNBW4GTnXNAYdGQJDNXU
+## Error: Google now requires an API key.
+##        See ?register_google for details.
 ```
 
 ```r
 ggmap(mapp) + geom_point(data = porto, aes(x = lon, y = lat), colour = "red")
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+```
+## Error in ggmap(mapp): object 'mapp' not found
+```
 
  
 
@@ -860,22 +859,8 @@ ggmap(mapp) +
 ```
 
 ```
-## Warning in min(x): no non-missing arguments to min; returning Inf
+## Error in ggmap(mapp): object 'mapp' not found
 ```
-
-```
-## Warning in max(x): no non-missing arguments to max; returning -Inf
-```
-
-```
-## Warning in min(x): no non-missing arguments to min; returning Inf
-```
-
-```
-## Warning in max(x): no non-missing arguments to max; returning -Inf
-```
-
-<img src="24-pcfa_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
  
 
@@ -1086,7 +1071,7 @@ package `ggbiplot`:
 ggscreeplot(air.1)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
 
      
 
@@ -1465,7 +1450,7 @@ Solution
 ggbiplot(air.1, labels = d$row)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
  
 
@@ -1539,7 +1524,7 @@ the axes now:
 biplot(air.2$scores, air.2$loadings)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -2231,7 +2216,7 @@ doing something like this:
 
 
 ```r
-pers %>% gather(item, response, -id)
+pers %>% pivot_longer(-id, names_to="item", values_to="response")
 ```
 
 ```
@@ -2239,15 +2224,15 @@ pers %>% gather(item, response, -id)
 ##       id item   response
 ##    <dbl> <chr>     <dbl>
 ##  1     1 PERS01        5
-##  2     2 PERS01        1
-##  3     3 PERS01        4
-##  4     4 PERS01        4
-##  5     5 PERS01        2
-##  6     6 PERS01        1
-##  7     7 PERS01        3
-##  8     8 PERS01        5
-##  9     9 PERS01        5
-## 10    10 PERS01        4
+##  2     1 PERS02        4
+##  3     1 PERS03        5
+##  4     1 PERS04        1
+##  5     1 PERS05        4
+##  6     1 PERS06        3
+##  7     1 PERS07        3
+##  8     1 PERS08        1
+##  9     1 PERS09        2
+## 10     1 PERS10        3
 ## # … with 20,186 more rows
 ```
 
@@ -2261,7 +2246,7 @@ charts of responses facetted by item:
 
 ```r
 pers %>%
-  gather(item, response, -id) %>%
+  pivot_longer(-id, names_to="item", values_to="response") %>%
   ggplot(aes(x = response)) + geom_bar() + facet_wrap(~item)
 ```
 
@@ -2269,7 +2254,7 @@ pers %>%
 ## Warning: Removed 371 rows containing non-finite values (stat_count).
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-66-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-65-1.png" width="672"  />
 
  
 
@@ -2338,7 +2323,7 @@ That gives me an idea, though.
 
 ```r
 pers %>%
-  gather(item, rating, -id)
+  pivot_longer(-id, names_to="item", values_to="rating")
 ```
 
 ```
@@ -2346,15 +2331,15 @@ pers %>%
 ##       id item   rating
 ##    <dbl> <chr>   <dbl>
 ##  1     1 PERS01      5
-##  2     2 PERS01      1
-##  3     3 PERS01      4
-##  4     4 PERS01      4
-##  5     5 PERS01      2
-##  6     6 PERS01      1
-##  7     7 PERS01      3
-##  8     8 PERS01      5
-##  9     9 PERS01      5
-## 10    10 PERS01      4
+##  2     1 PERS02      4
+##  3     1 PERS03      5
+##  4     1 PERS04      1
+##  5     1 PERS05      4
+##  6     1 PERS06      3
+##  7     1 PERS07      3
+##  8     1 PERS08      1
+##  9     1 PERS09      2
+## 10     1 PERS10      3
 ## # … with 20,186 more rows
 ```
 
@@ -2372,7 +2357,7 @@ of thing, adding to my pipeline:
 
 ```r
 pers %>%
-  gather(item, rating, -id) %>%
+  pivot_longer(-id, names_to="item", values_to="rating") %>% 
   group_by(id) %>%
   summarize(m = mean(rating)) %>%
   filter(is.na(m))
@@ -2395,7 +2380,7 @@ pers %>%
 ## # … with 16 more rows
 ```
 
- 
+This is different from `drop_na`, which would remove any rows (of the long data frame) that have a missing response. This, though, is exactly what we *don't* want, since we are trying to keep track of the subjects that have missing values.
 
 Most of the subjects had an actual numerical  mean here, whose value
 we don't care about; all we care about here is whether the mean is
@@ -2407,12 +2392,12 @@ subject has any missing values and false otherwise:
 
 
 ```r
-pers.hm <- pers %>%
-  gather(item, rating, -id) %>%
+pers %>%
+  pivot_longer(-id, names_to="item", values_to="rating") %>% 
   group_by(id) %>%
   summarize(m = mean(rating)) %>%
-  mutate(has_missing = is.na(m))
-pers.hm %>% print(n = 15)
+  mutate(has_missing = is.na(m)) -> pers.hm
+pers.hm 
 ```
 
 ```
@@ -2429,12 +2414,7 @@ pers.hm %>% print(n = 15)
 ##  8     8  3.18 FALSE      
 ##  9     9  3.34 FALSE      
 ## 10    10  3.18 FALSE      
-## 11    11  3.34 FALSE      
-## 12    12 NA    TRUE       
-## 13    13  3.59 FALSE      
-## 14    14  3.27 FALSE      
-## 15    15  3.75 FALSE      
-## # … with 444 more rows
+## # … with 449 more rows
 ```
 
  

@@ -229,9 +229,10 @@ Here is a funky way to get all three plots in one shot:
 
 
 ```r
-rains %>% gather(xname,x,altitude:fromcoast) %>%
-ggplot(aes(x=x,y=rainfall))+geom_point()+
-facet_wrap(~xname,scales="free")
+rains %>% 
+  pivot_longer(altitude:fromcoast, names_to="xname",values_to="x") %>%
+  ggplot(aes(x=x,y=rainfall))+geom_point()+
+  facet_wrap(~xname,scales="free")
 ```
 
 <img src="12-regression_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
@@ -259,16 +260,17 @@ too many:
 
 
 ```r
-rains %>% gather(xname,x,altitude:fromcoast) %>%
-ggplot(aes(x=x,y=rainfall))+geom_point()+
-facet_wrap(~xname,scales="free",ncol=2)
+rains %>% 
+  pivot_longer(altitude:fromcoast, names_to="xname",values_to="x") %>%
+  ggplot(aes(x=x,y=rainfall))+geom_point()+
+  facet_wrap(~xname,scales="free",ncol=2)
 ```
 
 <img src="12-regression_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
-Now, the three plots have come out about square, which I like a lot better.
+Now, the three plots have come out about square, or at least "landscape", which I like a lot better.
 
 
 
@@ -6386,13 +6388,13 @@ This is fine, but there is also a way of getting all three plots with
 *one* `ggplot`. This uses the `facet_wrap` trick,
 but to set *that* up, we have to have all the $x$-variables in
 *one* column, with an extra column labelling which $x$-variable
-that value was. This uses `gather`. The right way to do this is
+that value was. This uses `pivot_longer`. The right way to do this is
 in a pipeline:
 
 
 ```r
 satisf %>%
-  gather(xname, x, age:anxiety) %>%
+  pivot_longer(-satis, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = satis)) + geom_point() +
   facet_wrap(~xname, scales = "free", ncol = 2)
 ```
@@ -6402,12 +6404,12 @@ satisf %>%
  
 
 Steps: gather together the columns age through anxiety into one column
-called `x`, with a label in `xname`, then plot this new
+whose values go in `x`, with names in `xname`, then plot this new
 `x` against satisfaction score, with a separate facet for each
 different $x$ (in `xname`). 
 
-I showed you `facet_grid` in class. What's the difference
-between that and `facet_wrap`? The difference is that with
+What's the difference
+between `facet_grid` and `facet_wrap`? The difference is that with
 `facet_wrap`, we are letting `ggplot` arrange the
 facets how it wants to. In this case, we didn't care which explanatory
 variable went on which facet, just as long as we saw all of them
@@ -6428,7 +6430,27 @@ do the other one using the saved data frame, really):
 
 
 ```r
-satisf.long <- satisf %>% gather(xname, x, age:anxiety)
+satisf %>% 
+  pivot_longer(age:anxiety, names_to="xname", 
+               values_to="x") -> satisf.long
+satisf.long
+```
+
+```
+## # A tibble: 138 x 3
+##    satis xname        x
+##    <dbl> <chr>    <dbl>
+##  1    48 age       50  
+##  2    48 severity  51  
+##  3    48 anxiety    2.3
+##  4    57 age       36  
+##  5    57 severity  46  
+##  6    57 anxiety    2.3
+##  7    66 age       40  
+##  8    66 severity  48  
+##  9    66 anxiety    2.2
+## 10    70 age       41  
+## # … with 128 more rows
 ```
 
  
@@ -6675,46 +6697,86 @@ quartiles
 ## 1   31.2   44.8          48          53        2.1       2.48
 ```
 
+
+```r
+quartiles %>% 
+  pivot_longer(everything(), names_to=c(".value", "which_q"), names_sep="_")
+```
+
+```
+## # A tibble: 2 x 4
+##   which_q   age severity anxiety
+##   <chr>   <dbl>    <dbl>   <dbl>
+## 1 q1       31.2       48    2.1 
+## 2 q3       44.8       53    2.48
+```
+ 
+ 
  
 You can copy the numbers from here to below, or you can do some
 cleverness to get them in the right places:
 
 ```r
 quartiles %>%
-  gather(var_q, quartile, everything()) %>%
-  separate(var_q, c("var_name", "quartile_name")) %>%
-  spread(var_name, quartile)
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) %>%
+  pivot_wider(names_from=var_name, values_from=quartile)
 ```
 
 ```
 ## # A tibble: 2 x 4
-##   quartile_name   age anxiety severity
-##   <chr>         <dbl>   <dbl>    <dbl>
-## 1 q1             31.2    2.1        48
-## 2 q3             44.8    2.48       53
+##   which_q   age severity anxiety
+##   <chr>   <dbl>    <dbl>   <dbl>
+## 1 q1       31.2       48    2.1 
+## 2 q3       44.8       53    2.48
 ```
 
- 
+This combo of `pivot_longer` and `separate` can be shortened further by specifying *two* names in `names_to`, and also specifying a `names_sep` to say what they're separated by: 
 
-
-
-     
-
-This is what we want for below. Let's test it line by line to see exactly
-what it did:
 
 ```r
-quartiles %>% gather(var_q, quartile, everything())
+quartiles %>%
+  pivot_longer(everything(), names_to=c("var_q", "which_q"), 
+               names_sep="_", values_to="quartile") %>%
+  pivot_wider(names_from=var_q, values_from=quartile)
 ```
 
 ```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
+## # A tibble: 2 x 4
+##   which_q   age severity anxiety
+##   <chr>   <dbl>    <dbl>   <dbl>
+## 1 q1       31.2       48    2.1 
+## 2 q3       44.8       53    2.48
+```
+
+Believe it or not, this can be shortened even further, thus:     
+     
+
+```r
+quartiles %>% 
+  pivot_longer(everything(), names_to=c(".value", "which_q"), names_sep="_")
+```
+
+```
+## # A tibble: 2 x 4
+##   which_q   age severity anxiety
+##   <chr>   <dbl>    <dbl>   <dbl>
+## 1 q1       31.2       48    2.1 
+## 2 q3       44.8       53    2.48
+```
+     
+The place where this approach gains is when `pivot_longer` goes too far, making *everything* longer, when you want some of it to be wider and thus you needed a `pivot_wider` at the end. Once again, you use two things in the `names_to`, but this time instead of giving both variables names, you use the special name `.value` for the thing you want to end up in columns. The original data frame `quartiles` had columns with names like `severity_q1`, so here that is the first thing: `age` and `severity` and `anxiety` will be used as column names, and filled automatically with the values for `q1` and `q3`, so you don't specify a `values_to`. 
+
+This is one of those very dense pieces of coding, where you accomplish a lot in a small space. If it is too dense for you, you can go back to one of the two previous ways of doing it, eg. the simple `pivot_longer` followed by `separate` followed by `pivot_wider`. Sometimes there is value in using a larger number of simpler tools to get where you want.
+     
+
+Those data frames above are we want for below. Let's test the first way of coding it line by line to see exactly
+what it did: (The second way does the first two lines in one, and the third way does all three.)
+
+
+```r
+quartiles %>%
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") 
 ```
 
 ```
@@ -6732,31 +6794,26 @@ quartiles %>% gather(var_q, quartile, everything())
  
 
 Making long format. `everything()` is a select-helper saying
-"gather up *all* the columns". This is where the (ignorable)
-warning comes from.
+"gather up *all* the columns". 
+
 
 
 ```r
 quartiles %>%
-  gather(var_q, quartile, everything()) %>%
-  separate(var_q, c("var_name", "quartile_name"))
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) 
 ```
 
 ```
 ## # A tibble: 6 x 3
-##   var_name quartile_name quartile
-##   <chr>    <chr>            <dbl>
-## 1 age      q1               31.2 
-## 2 age      q3               44.8 
-## 3 severity q1               48   
-## 4 severity q3               53   
-## 5 anxiety  q1                2.1 
-## 6 anxiety  q3                2.48
+##   var_name which_q quartile
+##   <chr>    <chr>      <dbl>
+## 1 age      q1         31.2 
+## 2 age      q3         44.8 
+## 3 severity q1         48   
+## 4 severity q3         53   
+## 5 anxiety  q1          2.1 
+## 6 anxiety  q3          2.48
 ```
 
  
@@ -6767,42 +6824,35 @@ underscore, which is why the things in `quartiles` were named
 with underscores.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.</span>
 
+Now put the variable names back in the columns:
+
 
 ```r
-qq <- quartiles %>%
-  gather(var_q, quartile, everything()) %>%
-  separate(var_q, c("var_name", "quartile_name")) %>%
-  spread(var_name, quartile)
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-```
-
-```r
+quartiles %>%
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) %>%
+  pivot_wider(names_from=var_name, values_from=quartile) -> qq
 qq
 ```
 
 ```
 ## # A tibble: 2 x 4
-##   quartile_name   age anxiety severity
-##   <chr>         <dbl>   <dbl>    <dbl>
-## 1 q1             31.2    2.1        48
-## 2 q3             44.8    2.48       53
+##   which_q   age severity anxiety
+##   <chr>   <dbl>    <dbl>   <dbl>
+## 1 q1       31.2       48    2.1 
+## 2 q3       44.8       53    2.48
 ```
 
  
-Last, I want the original variables in columns, so I un-gather to get
-them there. I spread `var_name`, carrying along the values in
+I make `var_name` wider, carrying along the values in
 `quartile` (which means that the rows will get matched up by
-`quartile_name`). 
+`which_q`). 
 
 Now, let's think about why we were doing that. We want to do
 predictions of all possible combinations of those values of age and
 anxiety and severity.
 Doing "all possible combinations" calls for `crossing`,
-which looks like this:
+which looks like this. It uses the output from one of the above pipelines, which I saved in `qq`:
 
 
 ```r
@@ -6856,7 +6906,7 @@ cbind(satisf.new, pp)
  
 
 Looking at the predictions themselves (in `fit`), you can see
-that `age` has a huge effect. If you compare the 1st and 5nd
+that `age` has a huge effect. If you compare the 1st and 5th
 lines (or the 2nd and 6th, 3rd and 7th, \ldots) you see that
 increasing age by 13.5 years, while leaving the other variables the
 same, decreases the satisfaction score by over 15 on
@@ -6945,27 +6995,27 @@ Then I put that side by side with the values being predicted for:
 pp %>%
   as_tibble() %>%
   transmute(pi.length = upr - lwr) %>%
-  bind_cols(satisf.new)
+  bind_cols(satisf.new) %>% 
+  arrange(pi.length)
 ```
 
 ```
 ## # A tibble: 8 x 4
 ##   pi.length   age anxiety severity
 ##       <dbl> <dbl>   <dbl>    <dbl>
-## 1      41.3  31.2    2.1        48
-## 2      42.5  31.2    2.1        53
-## 3      42.5  31.2    2.48       48
+## 1      41.3  44.8    2.48       53
+## 2      41.3  31.2    2.1        48
+## 3      42.1  44.8    2.1        48
 ## 4      42.3  31.2    2.48       53
-## 5      42.1  44.8    2.1        48
+## 5      42.3  44.8    2.48       48
 ## 6      42.4  44.8    2.1        53
-## 7      42.3  44.8    2.48       48
-## 8      41.3  44.8    2.48       53
+## 7      42.5  31.2    2.1        53
+## 8      42.5  31.2    2.48       48
 ```
 
  
 
-Two of these are noticeably shorter than the others: the first one and
-the last one. These are low-everything and high-everything. If you
+Two of these are noticeably shorter than the others. These are high-everything and low-everything. If you
 look back at the scatterplot matrix of (<a href="#part:scatmat">here</a>), you'll
 see that the explanatory variables have positive correlations with
 each other. This means that when one of them is low, the other ones
@@ -6986,7 +7036,7 @@ each other to see where most of the values are:
 ggplot(satisf, aes(x = age, y = anxiety)) + geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-189-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-191-1.png" width="672"  />
 
  
 
@@ -7336,7 +7386,7 @@ Residuals against fitted values:
 ggplot(minutes.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-195-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
 
      
 
@@ -7350,7 +7400,7 @@ for each explanatory variable) one at a time:
 ggplot(minutes.1, aes(x = chemicals$drums, y = .resid)) + geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-196-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-198-1.png" width="672"  />
 
  
 
@@ -7361,7 +7411,7 @@ and
 ggplot(minutes.1, aes(x = chemicals$weight, y = .resid)) + geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-199-1.png" width="672"  />
 
  
 What would also work is to make a data frame first with the things to plot:
@@ -7380,7 +7430,7 @@ and then:
 ggplot(dd, aes(x = weight, y = res)) + geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-199-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
 
  
 
@@ -7434,7 +7484,7 @@ everything comes:
 ggplot(d, aes(x = drums, y = .resid)) + geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
 
  
 
@@ -7445,7 +7495,7 @@ and
 ggplot(d, aes(x = weight, y = .resid)) + geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-202-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
 
  
 
@@ -7454,12 +7504,12 @@ or you can even do that trick to put the two plots on facets:
 
 ```r
 d %>%
-  gather(xname, x, drums:weight) %>%
+  pivot_longer(drums:weight, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = .resid)) + geom_point() +
   facet_wrap(~xname)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-205-1.png" width="672"  />
 
  
 
@@ -7470,7 +7520,7 @@ Last, the normal quantile plot:
 ggplot(minutes.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-206-1.png" width="672"  />
 
  
 
@@ -7567,7 +7617,7 @@ d %>%
   geom_point() + geom_text_repel()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-207-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-209-1.png" width="672"  />
 
  
 
@@ -7597,7 +7647,7 @@ d %>%
   scale_colour_gradient(low = "red", high = "blue")
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-208-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-210-1.png" width="672"  />
 
  
 
@@ -7731,7 +7781,7 @@ column):
 
 ```r
 salaries %>%
-  gather(xname, x, -salary) %>%
+  pivot_longer(-salary, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = salary)) + geom_point() +
   facet_wrap(~xname, ncol = 2, scales = "free")
 ```
@@ -7985,7 +8035,7 @@ vs.\ fitted values:
 ggplot(salaries.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-216-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-218-1.png" width="672"  />
 
     
 
@@ -8004,12 +8054,12 @@ you, run the code a piece at a time to see what it's doing:
 ```r
 salaries.1 %>%
   augment(salaries) %>%
-  gather(xname, x, workqual:pubsucc) %>%
+  pivot_longer(workqual:pubsucc, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = .resid)) + geom_point() +
   facet_wrap(~xname, scales = "free", ncol = 2)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-217-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-219-1.png" width="672"  />
 
  
 
@@ -8022,7 +8072,7 @@ For (ii), look at a normal quantile plot of the residuals, which is not as diffi
 ggplot(salaries.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-218-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-220-1.png" width="672"  />
 
  
 
@@ -8043,7 +8093,7 @@ ggplot(salaries.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smoo
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-219-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-221-1.png" width="672"  />
 
  
 
@@ -8159,7 +8209,7 @@ ggplot(gpa, aes(x = high_GPA, y = univ_GPA)) + geom_point() +
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-221-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-223-1.png" width="672"  />
 
    
     
@@ -8254,7 +8304,7 @@ ggplot(gpa.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-223-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-225-1.png" width="672"  />
 
  
 
@@ -8269,7 +8319,7 @@ Normal quantile plot of residuals:
 ggplot(gpa.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-224-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-226-1.png" width="672"  />
 
  
 
@@ -8289,7 +8339,7 @@ ggplot(gpa.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-225-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-227-1.png" width="672"  />
 
  
 
@@ -8323,7 +8373,7 @@ library(MASS)
 boxcox(univ_GPA ~ high_GPA, data = gpa)
 ```
 
-<img src="12-regression_files/figure-html/unnamed-chunk-226-1.png" width="672"  />
+<img src="12-regression_files/figure-html/unnamed-chunk-228-1.png" width="672"  />
 
  
 

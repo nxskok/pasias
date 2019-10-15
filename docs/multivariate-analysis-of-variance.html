@@ -331,8 +331,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="multivariate-analysis-of-variance" class="section level1">
 <h1><span class="header-section-number">Chapter 23</span> Multivariate analysis of variance</h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb3090"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3090-1" data-line-number="1"><span class="kw">library</span>(car)</a>
-<a class="sourceLine" id="cb3090-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb3099"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3099-1" data-line-number="1"><span class="kw">library</span>(car)</a>
+<a class="sourceLine" id="cb3099-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <pre><code>## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
 ## Please use `env_bind_active()` instead.
 ## This warning is displayed once per session.</code></pre>
@@ -350,15 +350,15 @@ the groups.</p>
 2 numeric variables from 3 different groups.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3092"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3092-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt&quot;</span></a>
-<a class="sourceLine" id="cb3092-2" data-line-number="2">simple &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3101-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt&quot;</span></a>
+<a class="sourceLine" id="cb3101-2" data-line-number="2">simple &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   group = col_character(),
 ##   y1 = col_double(),
 ##   y2 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3094"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3094-1" data-line-number="1">simple</a></code></pre></div>
+<div class="sourceCode" id="cb3103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3103-1" data-line-number="1">simple</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 3
 ##    group    y1    y2
 ##    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -383,14 +383,14 @@ groups <code>a,b,c</code>.</p>
 among the groups? If necessary, run Tukey. What do you conclude?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3096"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3096-1" data-line-number="1">simple<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(y1 <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
-<a class="sourceLine" id="cb3096-2" data-line-number="2"><span class="kw">summary</span>(simple<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3105-1" data-line-number="1">simple<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(y1 <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
+<a class="sourceLine" id="cb3105-2" data-line-number="2"><span class="kw">summary</span>(simple<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## group        2  63.45   31.72    21.2 0.000393 ***
 ## Residuals    9  13.47    1.50                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb3098"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3098-1" data-line-number="1"><span class="kw">TukeyHSD</span>(simple<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3107-1" data-line-number="1"><span class="kw">TukeyHSD</span>(simple<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -408,14 +408,14 @@ ran Tukey and found that group <code>c</code> is significantly bigger on
 <li>Repeat all the previous part for <code>y2</code>.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3100-1" data-line-number="1">simple<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(y2 <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
-<a class="sourceLine" id="cb3100-2" data-line-number="2"><span class="kw">summary</span>(simple<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3109-1" data-line-number="1">simple<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(y2 <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
+<a class="sourceLine" id="cb3109-2" data-line-number="2"><span class="kw">summary</span>(simple<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value  Pr(&gt;F)   
 ## group        2  19.05   9.525   9.318 0.00642 **
 ## Residuals    9   9.20   1.022                   
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb3102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3102-1" data-line-number="1"><span class="kw">TukeyHSD</span>(simple<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3111-1" data-line-number="1"><span class="kw">TukeyHSD</span>(simple<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -436,7 +436,7 @@ points distinguished by which group they are from.</li>
 <p>Solution</p>
 <p><code>y1</code> and <code>y2</code> can be either way around, since
 they are both response variables (!):</p>
-<div class="sourceCode" id="cb3104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3104-1" data-line-number="1"><span class="kw">ggplot</span>(simple, <span class="kw">aes</span>(<span class="dt">x =</span> y1, <span class="dt">y =</span> y2, <span class="dt">colour =</span> group)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3113-1" data-line-number="1"><span class="kw">ggplot</span>(simple, <span class="kw">aes</span>(<span class="dt">x =</span> y1, <span class="dt">y =</span> y2, <span class="dt">colour =</span> group)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/unnamed-chunk-7-1.png" width="672"  /></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>How is it that group <code>b</code> is not distinguishable on
@@ -462,9 +462,9 @@ a P-value. Note the very small P-value.</li>
 <p>Solution</p>
 <p>This is just like the seed weight and yield example in class
 (deliberately so):</p>
-<div class="sourceCode" id="cb3105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3105-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(simple, <span class="kw">cbind</span>(y1, y2))</a>
-<a class="sourceLine" id="cb3105-2" data-line-number="2">simple<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
-<a class="sourceLine" id="cb3105-3" data-line-number="3"><span class="kw">summary</span>(simple<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3114-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(simple, <span class="kw">cbind</span>(y1, y2))</a>
+<a class="sourceLine" id="cb3114-2" data-line-number="2">simple<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
+<a class="sourceLine" id="cb3114-3" data-line-number="3"><span class="kw">summary</span>(simple<span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>##           Df Pillai approx F num Df den Df    Pr(&gt;F)    
 ## group      2 1.3534   9.4196      4     18 0.0002735 ***
 ## Residuals  9                                            
@@ -497,8 +497,8 @@ of observations and the right variables.</li>
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code>:</p>
-<div class="sourceCode" id="cb3107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3107-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/urine.csv&quot;</span></a>
-<a class="sourceLine" id="cb3107-2" data-line-number="2">urine &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb3116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3116-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/urine.csv&quot;</span></a>
+<a class="sourceLine" id="cb3116-2" data-line-number="2">urine &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   obesity = col_character(),
@@ -507,7 +507,7 @@ of observations and the right variables.</li>
 ##   chloride = col_double(),
 ##   chlorine = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3109-1" data-line-number="1">urine</a></code></pre></div>
+<div class="sourceCode" id="cb3118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3118-1" data-line-number="1">urine</a></code></pre></div>
 <pre><code>## # A tibble: 45 x 5
 ##    obesity     x creatinine chloride chlorine
 ##    &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -529,19 +529,19 @@ against obesity group.</li>
 </ol>
 <p>Solution</p>
 <p>Just churn through it:</p>
-<div class="sourceCode" id="cb3111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3111-1" data-line-number="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> creatinine)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3120-1" data-line-number="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> creatinine)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/peppercorn-1.png" width="672"  /></p>
-<div class="sourceCode" id="cb3112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3112-1" data-line-number="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> chlorine)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3121-1" data-line-number="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> chlorine)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/peppercorn-2.png" width="672"  /></p>
-<div class="sourceCode" id="cb3113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3113-1" data-line-number="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> chloride)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3122-1" data-line-number="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> chloride)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/peppercorn-3.png" width="672"  /></p>
 <p>This also works with facets, though it is different from the other
 ones we’ve done, in that we have to collect together the <span class="math inline">\(y\)</span>-variables
 first rather than the <span class="math inline">\(x\)</span>s:</p>
-<div class="sourceCode" id="cb3114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3114-1" data-line-number="1">urine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3114-2" data-line-number="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3114-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb3114-4" data-line-number="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>yname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3123-1" data-line-number="1">urine <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3123-2" data-line-number="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3123-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb3123-4" data-line-number="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>yname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/unnamed-chunk-10-1.png" width="672"  /></p>
 <p>I decided to throw a couple of things in here: first, the
 <code>scales=&quot;free&quot;</code> thing since the <span class="math inline">\(y\)</span>-variables (this time) are
@@ -555,8 +555,8 @@ the same <span class="math inline">\(x\)</span>, I think.)</p>
 it makes it easier to have the three boxplots side by side, but it’s
 up to you whether you think that gain is worth the extra coding.</p>
 <p>Extra: let’s take another look at that longer data frame:</p>
-<div class="sourceCode" id="cb3115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3115-1" data-line-number="1">urine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3115-2" data-line-number="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb3124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3124-1" data-line-number="1">urine <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3124-2" data-line-number="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) </a></code></pre></div>
 <pre><code>## # A tibble: 135 x 4
 ##    obesity     x yname          y
 ##    &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
@@ -572,9 +572,9 @@ up to you whether you think that gain is worth the extra coding.</p>
 ## 10 a          30 creatinine 22.3 
 ## # … with 125 more rows</code></pre>
 <p>You might say that there is one quantitative variable now, the thing we called <code>y</code>, and <em>two</em> categorical variables, <code>obesity</code> and <code>yname</code>. So why not make a grouped boxplot? All right:</p>
-<div class="sourceCode" id="cb3117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3117-1" data-line-number="1">urine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3117-2" data-line-number="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3117-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>yname, <span class="dt">y=</span>y, <span class="dt">colour=</span>obesity)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3126-1" data-line-number="1">urine <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3126-2" data-line-number="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3126-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>yname, <span class="dt">y=</span>y, <span class="dt">colour=</span>obesity)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/unnamed-chunk-12-1.png" width="672"  /></p>
 <p>This actually looks a lot like the facetted boxplots (if you imagine drawing a box around each group of four boxplots and removing the <code>scales=&quot;free&quot;</code> before). There is, as the saying goes, more than one way to skin a cat.</p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -596,9 +596,9 @@ as explanatory. (This is a so-called one-way MANOVA.)</li>
 </ol>
 <p>Solution</p>
 <p>Create the response variable and run <code>manova</code>:</p>
-<div class="sourceCode" id="cb3118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3118-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(urine, <span class="kw">cbind</span>(creatinine, chlorine, chloride))</a>
-<a class="sourceLine" id="cb3118-2" data-line-number="2">urine<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>obesity, <span class="dt">data =</span> urine)</a>
-<a class="sourceLine" id="cb3118-3" data-line-number="3"><span class="kw">summary</span>(urine<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3127-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(urine, <span class="kw">cbind</span>(creatinine, chlorine, chloride))</a>
+<a class="sourceLine" id="cb3127-2" data-line-number="2">urine<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>obesity, <span class="dt">data =</span> urine)</a>
+<a class="sourceLine" id="cb3127-3" data-line-number="3"><span class="kw">summary</span>(urine<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##           Df  Pillai approx F num Df den Df  Pr(&gt;F)  
 ## obesity    3 0.43144   2.2956      9    123 0.02034 *
 ## Residuals 41                                         
@@ -618,8 +618,8 @@ anyway. There was a lot of variability within the groups, which is
 why the P-value didn’t come out smaller.)
 The other way of doing this is the following, using
 <code>Manova</code> from <code>car</code>:</p>
-<div class="sourceCode" id="cb3120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3120-1" data-line-number="1">response<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>obesity, <span class="dt">data =</span> urine)</a>
-<a class="sourceLine" id="cb3120-2" data-line-number="2"><span class="kw">Manova</span>(response<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3129-1" data-line-number="1">response<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>obesity, <span class="dt">data =</span> urine)</a>
+<a class="sourceLine" id="cb3129-2" data-line-number="2"><span class="kw">Manova</span>(response<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>## 
 ## Type II MANOVA Tests: Pillai test statistic
 ##         Df test stat approx F num Df den Df  Pr(&gt;F)  
@@ -648,8 +648,8 @@ columns.</li>
 </ol>
 <p>Solution</p>
 <p>As in the hint:</p>
-<div class="sourceCode" id="cb3122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3122-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/ais.txt&quot;</span></a>
-<a class="sourceLine" id="cb3122-2" data-line-number="2">athletes &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb3131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3131-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/ais.txt&quot;</span></a>
+<a class="sourceLine" id="cb3131-2" data-line-number="2">athletes &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Sex = col_character(),
@@ -666,7 +666,7 @@ columns.</li>
 ##   Ht = col_double(),
 ##   Wt = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3124-1" data-line-number="1">athletes</a></code></pre></div>
+<div class="sourceCode" id="cb3133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3133-1" data-line-number="1">athletes</a></code></pre></div>
 <pre><code>## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
 ##    &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -704,11 +704,11 @@ called <code>Ht</code> and <code>Wt</code>.</li>
 </ol>
 <p>Solution</p>
 <p>Use <code>cbind</code> to glue the two columns together:</p>
-<div class="sourceCode" id="cb3126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3126-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(athletes, <span class="kw">cbind</span>(Ht, Wt))</a></code></pre></div>
+<div class="sourceCode" id="cb3135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3135-1" data-line-number="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(athletes, <span class="kw">cbind</span>(Ht, Wt))</a></code></pre></div>
 <p>Either way around, height or weight first, is good. Also good is the
 dollar sign, which you’ll need to do twice (and thus the <code>with</code>
 way is more elegant):</p>
-<div class="sourceCode" id="cb3127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3127-1" data-line-number="1">response_a &lt;-<span class="st"> </span><span class="kw">cbind</span>(athletes<span class="op">$</span>Ht, athletes<span class="op">$</span>Wt)</a></code></pre></div>
+<div class="sourceCode" id="cb3136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3136-1" data-line-number="1">response_a &lt;-<span class="st"> </span><span class="kw">cbind</span>(athletes<span class="op">$</span>Ht, athletes<span class="op">$</span>Wt)</a></code></pre></div>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Run a multivariate analysis of variance to see whether the
 height-weight combination depends significantly on gender, sport or the
@@ -720,8 +720,8 @@ combination of both. Display the results. Use the small-m
 what I should be calling my fitted model object, so I’m making
 something up. Don’t forget to use the right names for the
 variables, and to include an interaction:</p>
-<div class="sourceCode" id="cb3128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3128-1" data-line-number="1">htwt<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">*</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
-<a class="sourceLine" id="cb3128-2" data-line-number="2"><span class="kw">summary</span>(htwt<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3137-1" data-line-number="1">htwt<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">*</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
+<a class="sourceLine" id="cb3137-2" data-line-number="2"><span class="kw">summary</span>(htwt<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##            Df  Pillai approx F num Df den Df Pr(&gt;F)    
 ## Sex         1 0.52412  101.325      2    184 &lt;2e-16 ***
 ## Sport       9 0.87914   16.123     18    370 &lt;2e-16 ***
@@ -734,8 +734,8 @@ variables, and to include an interaction:</p>
 first with the same model formula as above, and then pass <em>that</em>
 into <code>Manova</code>. This way, you just “print” the final result,
 rather than passing it into <code>summary</code>:</p>
-<div class="sourceCode" id="cb3130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3130-1" data-line-number="1">htwt<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">*</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
-<a class="sourceLine" id="cb3130-2" data-line-number="2">htwt<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3139-1" data-line-number="1">htwt<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">*</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
+<a class="sourceLine" id="cb3139-2" data-line-number="2">htwt<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.2</span>)</a></code></pre></div>
 <pre><code>## Error in solve.default(wcrossprod(model.matrix(mod), w = wts)): Lapack routine dgesv: system is exactly singular: U[13,13] = 0</code></pre>
 <p>Except that this doesn’t work, for reasons that I don’t
 understand. <code>htwt.2</code> is fine; it’s the <code>Manova</code> that is
@@ -751,8 +751,8 @@ work. (You only need to use one of them.) Display your results.</li>
 significant. (This is what I meant by “briefly.”)
 To do that, in each case, replace the <code>*</code> with a <code>+</code>, or use
 <code>update</code>. Most of those work:</p>
-<div class="sourceCode" id="cb3132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3132-1" data-line-number="1">htwt<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
-<a class="sourceLine" id="cb3132-2" data-line-number="2"><span class="kw">summary</span>(htwt<span class="fl">.4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3141-1" data-line-number="1">htwt<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
+<a class="sourceLine" id="cb3141-2" data-line-number="2"><span class="kw">summary</span>(htwt<span class="fl">.4</span>)</a></code></pre></div>
 <pre><code>##            Df  Pillai approx F num Df den Df    Pr(&gt;F)    
 ## Sex         1 0.51888  102.454      2    190 &lt; 2.2e-16 ***
 ## Sport       9 0.86923   16.314     18    382 &lt; 2.2e-16 ***
@@ -760,16 +760,16 @@ To do that, in each case, replace the <code>*</code> with a <code>+</code>, or u
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb3134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3134-1" data-line-number="1">htwt<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">update</span>(htwt<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Sex<span class="op">:</span>Sport)</a></code></pre></div>
+<div class="sourceCode" id="cb3143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3143-1" data-line-number="1">htwt<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">update</span>(htwt<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Sex<span class="op">:</span>Sport)</a></code></pre></div>
 <pre><code>## Warning in if (projections) qr &lt;- lmcall$qr &lt;- TRUE: the condition has
 ## length &gt; 1 and only the first element will be used</code></pre>
 <pre><code>## Error in if (projections) qr &lt;- lmcall$qr &lt;- TRUE: argument is not interpretable as logical</code></pre>
 <p>It seems that <code>manova</code> things don’t like <code>update</code>. If
 that happened to you, try it another way.</p>
 <p>or, with <code>Manova</code>, the same two ways:</p>
-<div class="sourceCode" id="cb3137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3137-1" data-line-number="1">htwt<span class="fl">.6</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
-<a class="sourceLine" id="cb3137-2" data-line-number="2">htwt<span class="fl">.7</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.6</span>)</a>
-<a class="sourceLine" id="cb3137-3" data-line-number="3">htwt<span class="fl">.7</span></a></code></pre></div>
+<div class="sourceCode" id="cb3146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3146-1" data-line-number="1">htwt<span class="fl">.6</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
+<a class="sourceLine" id="cb3146-2" data-line-number="2">htwt<span class="fl">.7</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.6</span>)</a>
+<a class="sourceLine" id="cb3146-3" data-line-number="3">htwt<span class="fl">.7</span></a></code></pre></div>
 <pre><code>## 
 ## Type II MANOVA Tests: Pillai test statistic
 ##       Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -778,9 +778,9 @@ that happened to you, try it another way.</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb3139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3139-1" data-line-number="1">htwt<span class="fl">.8</span> &lt;-<span class="st"> </span><span class="kw">update</span>(htwt<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Sex<span class="op">:</span>Sport)</a>
-<a class="sourceLine" id="cb3139-2" data-line-number="2">htwt<span class="fl">.9</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.8</span>)</a>
-<a class="sourceLine" id="cb3139-3" data-line-number="3">htwt<span class="fl">.9</span></a></code></pre></div>
+<div class="sourceCode" id="cb3148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3148-1" data-line-number="1">htwt<span class="fl">.8</span> &lt;-<span class="st"> </span><span class="kw">update</span>(htwt<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Sex<span class="op">:</span>Sport)</a>
+<a class="sourceLine" id="cb3148-2" data-line-number="2">htwt<span class="fl">.9</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.8</span>)</a>
+<a class="sourceLine" id="cb3148-3" data-line-number="3">htwt<span class="fl">.9</span></a></code></pre></div>
 <pre><code>## 
 ## Type II MANOVA Tests: Pillai test statistic
 ##       Df test stat approx F num Df den Df    Pr(&gt;F)    
@@ -795,7 +795,7 @@ thing being <code>update</code>d is a regular <code>lm</code>; the
 <p>Any of these is good, and gets you the same answer.</p>
 <p>Extra: it you run <code>summary</code> on the output from <code>Manova</code>,
 you get more detail:</p>
-<div class="sourceCode" id="cb3141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3141-1" data-line-number="1"><span class="kw">summary</span>(htwt<span class="fl">.9</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3150-1" data-line-number="1"><span class="kw">summary</span>(htwt<span class="fl">.9</span>)</a></code></pre></div>
 <pre><code>## 
 ## Type II MANOVA Tests:
 ## 
@@ -884,24 +884,24 @@ pushing it, then plotting symbols. Symbol sizes are hard to
 distinguish a lot of, so it’s best to limit this (if you use it at
 all) to gender.
 With that in mind, I would go for this one:</p>
-<div class="sourceCode" id="cb3143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3143-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">colour =</span> Sport, <span class="dt">shape =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3152-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">colour =</span> Sport, <span class="dt">shape =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/unnamed-chunk-25-1.png" width="672"  /></p>
 <p>If you investigate, you’ll find that <code>ggplot</code> can handle about
 six different shapes (and we have ten sports), and it doesn’t care for
 using <code>size</code> to distinguish values of a categorical
 variable. It will try to draw the graph, but will give you a warning,
 such as these:</p>
-<div class="sourceCode" id="cb3144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3144-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">colour =</span> Sport, <span class="dt">size =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3153-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">colour =</span> Sport, <span class="dt">size =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <pre><code>## Warning: Using size for a discrete variable is not advised.</code></pre>
 <p><img src="19-manova_files/figure-html/unnamed-chunk-26-1.png" width="672"  /></p>
-<div class="sourceCode" id="cb3146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3146-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">size =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3155-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">size =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <pre><code>## Warning: Using size for a discrete variable is not advised.</code></pre>
 <pre><code>## Warning: The shape palette can deal with a maximum of 6 discrete values
 ## because more than 6 becomes difficult to discriminate; you have
 ## 10. Consider specifying shapes manually if you must have them.</code></pre>
 <pre><code>## Warning: Removed 72 rows containing missing values (geom_point).</code></pre>
 <p><img src="19-manova_files/figure-html/unnamed-chunk-27-1.png" width="672"  /></p>
-<div class="sourceCode" id="cb3150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3150-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3159-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <pre><code>## Warning: The shape palette can deal with a maximum of 6 discrete values
 ## because more than 6 becomes difficult to discriminate; you have
 ## 10. Consider specifying shapes manually if you must have them.</code></pre>
@@ -928,8 +928,8 @@ about as well if I’d used shape for brand and colour for gender.</p>
 <p>The warning message for <code>shape</code> contains the words ``specify
 shapes manually if you must have them’’. I was wondering how you can
 avoid that. Here’s how:</p>
-<div class="sourceCode" id="cb3153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3153-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb3153-2" data-line-number="2"><span class="st">  </span><span class="kw">scale_shape_manual</span>(<span class="dt">values =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3162-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb3162-2" data-line-number="2"><span class="st">  </span><span class="kw">scale_shape_manual</span>(<span class="dt">values =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/unnamed-chunk-29-1.png" width="672"  /></p>
 <p>I agree with <code>ggplot2</code> that this many shapes are hard to tell
 apart,
@@ -941,8 +941,8 @@ different values will do. A list of the possible shapes is in
 <a href="https://stackoverflow.com/questions/16813278/cycling-through-point-shapes-when-more-than-6-factor-levels">link</a>,
 at the bottom. You can even use regular letters, but you have to refer
 to them by numeric code:</p>
-<div class="sourceCode" id="cb3154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3154-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb3154-2" data-line-number="2"><span class="st">  </span><span class="kw">scale_shape_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">66</span>, <span class="dv">70</span>, <span class="dv">71</span>, <span class="dv">78</span>, <span class="dv">82</span>, <span class="dv">83</span>, <span class="dv">52</span>, <span class="dv">84</span>, <span class="dv">3</span>, <span class="dv">87</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb3163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3163-1" data-line-number="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb3163-2" data-line-number="2"><span class="st">  </span><span class="kw">scale_shape_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">66</span>, <span class="dv">70</span>, <span class="dv">71</span>, <span class="dv">78</span>, <span class="dv">82</span>, <span class="dv">83</span>, <span class="dv">52</span>, <span class="dv">84</span>, <span class="dv">3</span>, <span class="dv">87</span>))</a></code></pre></div>
 <p><img src="19-manova_files/figure-html/unnamed-chunk-30-1.png" width="672"  /></p>
 <p>I had to find something for <code>TSprnt</code>, since all the letters
 appeared to be taken.</p>

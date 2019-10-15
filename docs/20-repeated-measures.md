@@ -268,26 +268,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1     3 thyroxin   Time3    151     3
-##  2    19 control    Time2    123     2
-##  3    25 control    Time1     91     1
-##  4    23 control    Time0     46     0
-##  5     9 thiouracil Time3    111     3
-##  6     1 thyroxin   Time0     59     0
-##  7     6 thyroxin   Time0     52     0
-##  8     5 thyroxin   Time0     57     0
-##  9    23 control    Time3    131     3
-## 10    20 control    Time1     77     1
-## 11     1 thyroxin   Time3    156     3
-## 12     5 thyroxin   Time1     72     1
-## 13    27 control    Time1     82     1
-## 14    16 thiouracil Time0     46     0
-## 15    10 thiouracil Time3    106     3
-## 16     9 thiouracil Time4    122     4
-## 17     2 thyroxin   Time1     71     1
-## 18     6 thyroxin   Time1     73     1
-## 19    18 control    Time0     57     0
-## 20     2 thyroxin   Time0     54     0
+##  1    10 thiouracil Time4    133     4
+##  2     8 thiouracil Time0     61     0
+##  3     6 thyroxin   Time2     97     2
+##  4     3 thyroxin   Time1     75     1
+##  5    17 thiouracil Time0     53     0
+##  6    14 thiouracil Time4    108     4
+##  7     9 thiouracil Time0     59     0
+##  8     5 thyroxin   Time4    144     4
+##  9    21 control    Time1     67     1
+## 10    27 control    Time2    110     2
+## 11    20 control    Time1     77     1
+## 12    21 control    Time0     49     0
+## 13    22 control    Time1     81     1
+## 14     2 thyroxin   Time1     71     1
+## 15    12 thiouracil Time1     75     1
+## 16     6 thyroxin   Time4    140     4
+## 17    23 control    Time3    131     3
+## 18     3 thyroxin   Time2    108     2
+## 19    19 control    Time4    177     4
+## 20    15 thiouracil Time1     69     1
 ```
 
  
@@ -2813,11 +2813,12 @@ the data that you have done so.
 Solution
 
 
-This is `gather` yet again: gather up columns `i1`
+This is `pivot_longer` yet again: gather up columns `i1`
 through `i6` and call them something like `activity`:
 
 ```r
-king.long <- king %>% gather(time, activity, i1:i6)
+king %>% 
+  pivot_longer(i1:i6, names_to="time", values_to="activity") -> king.long
 king.long
 ```
 
@@ -2826,23 +2827,24 @@ king.long
 ##       id context time  activity
 ##    <dbl> <chr>   <chr>    <dbl>
 ##  1   101 control i1         150
-##  2   102 control i1         335
-##  3   103 control i1         149
-##  4   104 control i1         159
-##  5   105 control i1         292
-##  6   106 control i1         297
-##  7   107 control i1         170
-##  8   108 control i1         159
-##  9   109 same    i1         346
-## 10   110 same    i1         426
+##  2   101 control i2          44
+##  3   101 control i3          71
+##  4   101 control i4          59
+##  5   101 control i5         132
+##  6   101 control i6          74
+##  7   102 control i1         335
+##  8   102 control i2         270
+##  9   102 control i3         156
+## 10   102 control i4         160
 ## # … with 134 more rows
 ```
 
      
-Displaying the resulting data frame is a good way to display "some of" it. 
+Displaying the top 10 rows of the resulting data frame is a good way to display "some of" it. 
 You can always look at more if you like. There are more rows
 and fewer columns than there were before, which is
-encouraging. `gather` works columnwise: it gathers up all the
+encouraging. `pivot_longer` collects up all the time and activity values for the first rat, then the second, and so on. 
+If you compare, `gather` works columnwise: it gathers up all the
 values in the first time column `i1` first, then `i2`,
 and so on.
     

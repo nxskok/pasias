@@ -1968,26 +1968,26 @@ jobs0 %>%
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      15     21            4     1    44 custserv  
-##  2      24     20           15     2    13 mechanic  
-##  3      19     14           12     3    32 dispatcher
-##  4      10     12            9     3    38 dispatcher
-##  5      12     25            8     1    42 custserv  
-##  6      14     29           12     1     4 custserv  
-##  7      16     24           10     1    85 custserv  
-##  8      17     18           15     2    87 mechanic  
-##  9      16     22           12     3    63 dispatcher
-## 10      22     19           10     2    54 mechanic  
-## 11      20     25           12     1     6 custserv  
-## 12      18     20           10     3    66 dispatcher
-## 13      17     26            7     1    50 custserv  
-## 14      18     27           11     2    57 mechanic  
-## 15      19     25           13     2    44 mechanic  
-## 16      11     27           10     1    33 custserv  
-## 17      21     31           11     1    26 custserv  
-## 18      13     15           18     3    21 dispatcher
-## 19      14     19           14     2    39 mechanic  
-## 20      17     12           17     3     7 dispatcher
+##  1      13     21           11     1    25 custserv  
+##  2      25     16           12     3    46 dispatcher
+##  3      10     28            5     1    75 custserv  
+##  4      14     17            6     1     2 custserv  
+##  5       1     30            6     1    23 custserv  
+##  6      15     27           12     2     3 mechanic  
+##  7      13     14            7     2    41 mechanic  
+##  8      15     21            4     1    44 custserv  
+##  9      20     20            9     2    45 mechanic  
+## 10      15     26            9     1    60 custserv  
+## 11      17     15           10     3    15 dispatcher
+## 12      19     23           12     2    55 mechanic  
+## 13      17     17           12     3     2 dispatcher
+## 14      18     11           19     3    47 dispatcher
+## 15      18     31            9     1     9 custserv  
+## 16      19     15           13     3    28 dispatcher
+## 17      17     24            5     2    86 mechanic  
+## 18      16     18            5     1    57 custserv  
+## 19      10     24           12     1    18 custserv  
+## 20      15     24            7     1    48 custserv
 ```
 
  

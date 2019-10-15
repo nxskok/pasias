@@ -4327,6 +4327,36 @@ to subtract one from the number of weeks before you multiply
 it by seven to get a number of days.
 After that thinking, this:
 
+
+```r
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  select(date.entered, week_number, current)
+```
+
+```
+## # A tibble: 5,307 x 3
+##    date.entered week_number current   
+##    <date>             <dbl> <date>    
+##  1 2000-09-23             1 2000-09-23
+##  2 2000-09-23             2 2000-09-30
+##  3 2000-09-23             3 2000-10-07
+##  4 2000-09-23             4 2000-10-14
+##  5 2000-09-23             5 2000-10-21
+##  6 2000-09-23             6 2000-10-28
+##  7 2000-09-23             7 2000-11-04
+##  8 2000-09-23             8 2000-11-11
+##  9 2000-09-23             9 2000-11-18
+## 10 2000-09-23            10 2000-11-25
+## # … with 5,297 more rows
+```
+
+or this, where the continuation after the `gather` is exactly the same as after the `pivot_longer`:
+
+
 ```r
 billboard %>%
   gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
@@ -4373,7 +4403,7 @@ chart).
 You might be thinking that this is not much of a check, and you would
 be right. A handy trick is to display a random sample of 10 (say) out
 of the 5,000-odd rows of the data frame. To do that, add the line
-`sample_n(10)` on the end, like this:
+`sample_n(10)` on the end, like this (tested with the `gather` variant, but you can do either):
 
 
 
@@ -4439,6 +4469,38 @@ either `rank` (text) or what I called
 `rank_number` (a number). It doesn't matter here,
 since we are only checking for equal-to, not something like
 "less than":
+
+
+```r
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current)
+```
+
+```
+## # A tibble: 55 x 3
+##    artist.inverted     track                 current   
+##    <chr>               <chr>                 <date>    
+##  1 Aguilera, Christina What A Girl Wants     2000-01-15
+##  2 Aguilera, Christina What A Girl Wants     2000-01-22
+##  3 Savage Garden       I Knew I Loved You    2000-01-29
+##  4 Savage Garden       I Knew I Loved You    2000-02-05
+##  5 Savage Garden       I Knew I Loved You    2000-02-12
+##  6 Carey, Mariah       Thank God I Found You 2000-02-19
+##  7 Savage Garden       I Knew I Loved You    2000-02-26
+##  8 Lonestar            Amazed                2000-03-04
+##  9 Lonestar            Amazed                2000-03-11
+## 10 Destiny's Child     Say My Name           2000-03-18
+## # … with 45 more rows
+```
+
+or, with `gather`:
+
 
 ```r
 billboard %>%
@@ -4506,6 +4568,45 @@ Solution
 This is a question of using `count`, but on the
 `track` title:
 
+
+```r
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track)
+```
+
+```
+## # A tibble: 17 x 2
+##    track                                     n
+##    <chr>                                 <int>
+##  1 Amazed                                    2
+##  2 Be With You                               3
+##  3 Bent                                      1
+##  4 Come On Over Baby (All I Want Is You)     4
+##  5 Doesn't Really Matter                     3
+##  6 Everything You Want                       1
+##  7 I Knew I Loved You                        4
+##  8 Incomplete                                2
+##  9 Independent Women Part I                 11
+## 10 It's Gonna Be Me                          2
+## 11 Maria, Maria                             10
+## 12 Music                                     4
+## 13 Say My Name                               3
+## 14 Thank God I Found You                     1
+## 15 Try Again                                 1
+## 16 What A Girl Wants                         2
+## 17 With Arms Wide Open                       1
+```
+
+or:
+ 
+
 ```r
 billboard %>%
   gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
@@ -4555,6 +4656,29 @@ equal to its maximum value:
 
 
 ```r
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track) %>% 
+  filter(n == max(n))
+```
+
+```
+## # A tibble: 1 x 2
+##   track                        n
+##   <chr>                    <int>
+## 1 Independent Women Part I    11
+```
+
+or:
+
+
+```r
 billboard %>%
   gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
   mutate(
@@ -4580,6 +4704,45 @@ billboard %>%
 
 or arranging them in (most logically, descending) order by `n`
 to make it easier to pick out the top one:
+
+
+```r
+billboard %>% 
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
+  mutate(week_number=parse_number(week),
+         rank_number=rank) %>%
+  mutate(current = date.entered + (week_number - 1) * 7) %>%
+  filter(rank == 1) %>%
+  arrange(current) %>%
+  select(artist.inverted, track, current) %>%
+  count(track) %>% 
+  arrange(desc(n))
+```
+
+```
+## # A tibble: 17 x 2
+##    track                                     n
+##    <chr>                                 <int>
+##  1 Independent Women Part I                 11
+##  2 Maria, Maria                             10
+##  3 Come On Over Baby (All I Want Is You)     4
+##  4 I Knew I Loved You                        4
+##  5 Music                                     4
+##  6 Be With You                               3
+##  7 Doesn't Really Matter                     3
+##  8 Say My Name                               3
+##  9 Amazed                                    2
+## 10 Incomplete                                2
+## 11 It's Gonna Be Me                          2
+## 12 What A Girl Wants                         2
+## 13 Bent                                      1
+## 14 Everything You Want                       1
+## 15 Thank God I Found You                     1
+## 16 Try Again                                 1
+## 17 With Arms Wide Open                       1
+```
+
+or:
 
 
 ```r
@@ -6357,7 +6520,7 @@ heat %>%
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-160-1.png" width="672"  />
+<img src="11-tidying-and-selecting-data_files/figure-html/unnamed-chunk-165-1.png" width="672"  />
 
  
 The pattern is very scattered, as is commonly the case with

@@ -5961,12 +5961,7 @@ donner %>%
     med = median(age),
     q3 = quantile(age, 0.75)
   ) %>%
-  gather(stat, value, everything())
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
+  pivot_longer(everything(), names_to="stat", values_to="value")
 ```
 
 ```
@@ -5990,16 +5985,8 @@ ages <- donner %>%
     med = median(age),
     q3 = quantile(age, 0.75)
   ) %>%
-  gather(stat, value, everything()) %>%
+  pivot_longer(everything(), names_to="stat", values_to="value") %>% 
   pull(value)
-```
-
-```
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-```
-
-```r
 ages
 ```
 
@@ -6128,6 +6115,7 @@ was higher. This is confirmed here: for example, look at rows 1, 3
 and 5, which are all females of increasing ages; the probability of
 survival decreases. (Or look at males, in rows 2, 4 and 6; the
 effect is the same.)
+
 To see the effect of gender, look at two predictions of different
 genders but the same age (eg. rows 1 and 2). The female is always
 predicted to have the higher survival probability. This is also what
