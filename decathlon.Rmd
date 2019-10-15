@@ -290,7 +290,7 @@ residuals against *all* the $x$-variables in a multiple regression:
 
 ```{r }
 decathlon.tmp %>%
-  gather(event, performance, everything()) %>%
+  pivot_longer(everything(), names_to="event", values_to="performance") %>%
   nest(-event) %>%
   mutate(quantile = map(data, ~ enframe(quantile(.$performance),
     name = "quantile",
@@ -309,29 +309,14 @@ everything else (just `performance` in this case). Then the big `mutate` line sa
 This produces a second list-column called `quantile`, which I
 then `unnest` to display all the quantiles for each event.
 
-Almost there. Now we have both the events and the quantiles, but it would be nice to put the quantiles in columns. Which seems to be `spread`:
+Almost there. Now we have both the events and the quantiles, but it would be nice to put the quantiles in columns. Which seems to be `pivot_wider`:
 
 ```{r }
-quantiles.long %>% spread(quantile, perf)
+quantiles.long %>% pivot_wider(names_from=quantile, values_from=perf)
 ```
-
- 
-
-except that now the quantiles are in the wrong order! Because they are
-text, they are sorted into alphabetical order by `spread`. So
-we need to turn them into numbers first. I overwrite the quantiles
-with the numeric versions of themselves (see what happens if you
-don't):
-
-```{r }
-quantiles.long %>%
-  mutate(quantile = parse_number(quantile)) %>%
-  spread(quantile, perf)
-```
-
- 
 
 and that looks nice.
+
 Extra: I made a post on Twitter, [link](https://twitter.com/KenButler12/status/1100133496637542401). 
 To which Malcolm Barrett replied with this: [link](https://twitter.com/malco_barrett/status/1100141130186780672) 
 and this: [link](https://twitter.com/malco_barrett/status/1100140736945647616). 
@@ -545,7 +530,7 @@ or, for this, maybe better:
 cor(decathlon) %>%
   as.data.frame() %>%
   rownames_to_column("event") %>%
-  gather(event2, corr, -event) %>%
+  pivot_longer(-event, names_to="event2", values_to="corr") %>%
   filter(event < event2) %>%
   arrange(desc(abs(corr)))
 ```
@@ -565,7 +550,7 @@ names will disappear.
 then it has row names, which I can grab and put into a column called
 `event`.
 
-* Then I make the data frame long, creating a column
+* Then I make the data frame longer, creating a column
 `event2` which is the second thing that each correlation will
 be between.
 
@@ -604,7 +589,7 @@ There are actually only a few high correlations:
 
 
 Some of the correlations are negative as expected, since they are
-between a running event and a jumping/throwing event.
+between a running event and a jumping/throwing event (that is, a long distance goes with a small time, both of which are good).
 
 I was wrong about javelin. It seems to be a unique skill in the
 decathlon, which is presumably why it's there: you want 10 events that

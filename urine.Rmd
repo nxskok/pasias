@@ -50,7 +50,7 @@ first rather than the $x$s:
 
 ```{r }
 urine %>%
-  gather(yname, y, creatinine:chlorine) %>%
+  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") %>%
   ggplot(aes(x = obesity, y = y)) + geom_boxplot() +
   facet_wrap(~yname, scales = "free", ncol = 2)
 ```
@@ -69,7 +69,24 @@ the same $x$, I think.)
 The conclusions about the boxplots are, of course, the same. I think
 it makes it easier to have the three boxplots side by side, but it's
 up to you whether you think that gain is worth the extra coding.
- 
+
+Extra: let's take another look at that longer data frame:
+
+```{r}
+urine %>%
+  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") 
+```
+
+You might say that there is one quantitative variable now, the thing we called `y`, and *two* categorical variables, `obesity` and `yname`. So why not make a grouped boxplot? All right:
+
+```{r}
+urine %>%
+  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") %>%
+  ggplot(aes(x=yname, y=y, colour=obesity)) + geom_boxplot()
+```
+
+This actually looks a lot like the facetted boxplots (if you imagine drawing a box around each group of four boxplots and removing the `scales="free"` before). There is, as the saying goes, more than one way to skin a cat.
+
 
 (c) How, if at all, do the groups differ on the variables of interest?
  

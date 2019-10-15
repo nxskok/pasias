@@ -1,0 +1,116 @@
+---
+title: "play"
+output: html_notebook
+---
+
+playing with `pivot_longer`:
+
+```{r}
+library(tidyverse)
+```
+
+a fake family or two, copied from vignette:
+
+```{r}
+family <- tribble(
+  ~family,  ~dob_child1,  ~dob_child2, ~gender_child1, ~gender_child2,
+       1L, "1998-11-26", "2000-01-29",             1L,             2L,
+       2L, "1996-06-22",           NA,             2L,             NA,
+       3L, "2002-07-11", "2004-04-05",             2L,             2L,
+       4L, "2004-10-10", "2009-08-27",             1L,             1L,
+       5L, "2000-12-05", "2005-02-28",             2L,             1L,
+)
+family
+```
+
+what I think of is `pivot_longer` with two names_to:
+
+```{r}
+family %>% 
+  mutate_at(vars(starts_with("dob")), ~as.Date(.)) %>% 
+  pivot_longer(-family, names_to=c("variable", "child"), names_sep="_", values_to="value")
+```
+
+only it isn't. It would work if all the variables were of the same type.
+
+Here's what Hadley does:
+
+```{r}
+family %>% 
+  pivot_longer(
+    -family, 
+    names_to = c(".value", "child"), 
+    names_sep = "_", 
+    values_drop_na = TRUE
+  )
+```
+
+haven't grokked ".value" yet. Ah: when I am combining variables of different types, this is how it knows to get the column type right.
+
+Is this how I do my "making it too long" thing, and I have to make it wider? Let's go back to the Toronto weather data:
+
+```{r}
+my_url <- 
+  "http://ritsokiguess.site/STAC32/toronto_weather.csv"
+weather <- read_csv(my_url)
+```
+
+```{r}
+weather
+```
+
+let's do the pivot_wider first this time:
+
+```{r}
+weather %>% 
+  pivot_wider(names_from=element, values_from = d01:d31)
+```
+
+then we make it longer with two names_to, one of which is .value?
+
+```{r}
+weather %>% 
+  pivot_wider(names_from=element, values_from = d01:d31) %>% 
+  pivot_longer(starts_with("d"), 
+               names_to=c("day", ".value"), 
+               names_sep="_", 
+               names_prefix="d",
+               values_to="temperature")
+
+```
+
+Ooh!
+
+That works, although "casting" the day to integer doesn't. That is OK, though, since I am going to make a date of them later:
+
+```{r}
+weather %>% 
+  pivot_wider(names_from=element, values_from = d01:d31) %>% 
+  pivot_longer(starts_with("d"), 
+               names_to=c("day", ".value"), 
+               names_sep="_", 
+               names_prefix="d",
+               values_to="temperature") %>% 
+  unite(datestr, Year, Month, day, sep="-") %>% 
+  mutate(Date=as.Date(datestr))
+
+```
+
+
+
+Here's a simpler one (maybe):
+
+```{r}
+who
+```
+
+```{r}
+who %>% pivot_longer(
+  cols = new_sp_m014:newrel_f65,
+  names_to = c("diagnosis", "gender", "age"), 
+  names_pattern = "new_?(.*)_(.)(.*)",
+  values_to = "count",
+  values_drop_na = T
+)
+```
+

@@ -29,9 +29,10 @@ mobile
 
  
 With multiple columns that are all frequencies, this is a job for
-`gather`:
+`pivot_longer`:
 ```{r }
-mobile.long <- mobile %>% gather(satisfied, frequency, very.unsat:very.sat)
+mobile %>% 
+  pivot_longer(very.unsat:very.sat, names_to="satisfied", values_to="frequency") -> mobile.long
 mobile.long
 ```
 
@@ -377,20 +378,19 @@ loaded, the help window offers you a choice of both `select`s;
 the one we want is "select/rename variables by name", and the actual
 package it comes from is `dplyr`.
 
-With that in mind, we can get the right `select` like this:
+There is a third choice, which is the one I prefer now: install and load the package `conflicted`. When you run your code and it calls for something like `select` that is in two packages that you have loaded, it gives an error, like this:
 
-```{r }
-probs <- predict(mobile.1, mobile, type = "p")
-mobile %>%
-  dplyr::select(gender, age.group) %>%
-  cbind(probs)
+```
+Error: [conflicted] `select` found in 2 packages.
+Either pick the one you want with `::` 
+* MASS::select
+* dplyr::select
+Or declare a preference with `conflict_prefer()`
+* conflict_prefer("select", "MASS")
+* conflict_prefer("select", "dplyr")
 ```
 
-   
-
-This gets the right `select` for sure: package name, two
-colons, function name means 
-"the function by that name that lives in that package".
+Fixing this costs you a bit of time upfront, but once you have fixed it, you know that the right thing is being run. What I do is to copy-paste one of those `conflict_prefer` lines, in this case the second one, and put it *before* the `select` that now causes the error. Right after the `library(conflicted)` is a good place. When you use `conflicted`, you will probably have to run several times to fix up all the conflicts, which will be a bit frustrating, and you will end up with several `conflict_prefer` lines, but once you have them there, you won't have to worry about the right function being called because you have explicitly said which one you want.
 
 This is a non-standard use of `cbind` because I wanted to grab
 only the gender and age group columns from `mobile` first, and

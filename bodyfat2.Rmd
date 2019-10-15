@@ -125,6 +125,7 @@ between the two methods for measuring body fat.
 This goes to show that repeated measures gives the same answer as
 a matched-pairs $t$-test in the situation where they both
 apply. But repeated measures is, as we have seen, a lot more general.
+
 Since this really is repeated measures, we ought to be able to use
 a mixed model here too. We need "long" or "tidy" format, which
 we don't have yet. One pipe to save them all, to paraphrase Lord
@@ -136,7 +137,7 @@ mixed model; see what we can drop from it:
 ```{r }
 bodyfat
 bodyfat %>%
-  gather(method, fat, xray:ultrasound) %>%
+  pivot_longer(-athlete, names_to="method", values_to="fat") %>%
   mutate(fathlete = factor(athlete)) %>%
   lmer(fat ~ method + (1 | fathlete), data = .) %>%
   drop1(test = "Chisq")
@@ -149,11 +150,11 @@ P-value is different from the matched pairs or profile analysis, it is
 very close to those.
 
 If you're not clear about the tidy data frame used for input to
-`lmer`, pull the top two lines off the chain and see what they produce:
+`lmer`, pull the top two lines off the pipeline and see what they produce:
 
 ```{r }
 bodyfat %>%
-  gather(method, fat, xray:ultrasound) %>%
+  pivot_longer(-athlete, names_to="method", values_to="fat") %>%
   mutate(fathlete = factor(athlete))
 ```
 
@@ -165,7 +166,7 @@ by `xray`, and again with it measured by
 
 The mixed model took me two goes to get right: I forgot that I needed the
 `data=.` in `lmer`, because it works like `lm`
-with the model formula first, not the input data. If the chain is
+with the model formula first, not the input data. If the pipeline is
 going too fast for you, create the tidy data frame and save it, then
 use the saved data frame as input to `lmer`.
 
