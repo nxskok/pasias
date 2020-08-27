@@ -11,11 +11,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -134,7 +129,20 @@ Something like this:
 
 ```r
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
+times.df
+```
+
+```
+##   times
+## 1 Time0
+## 2 Time1
+## 3 Time2
+## 4 Time3
+## 5 Time4
+```
+
+```r
 weights.2 <- Manova(weights.1, idata = times.df, idesign = ~times)
 ```
 
@@ -268,26 +276,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    10 thiouracil Time4    133     4
-##  2     8 thiouracil Time0     61     0
-##  3     6 thyroxin   Time2     97     2
-##  4     3 thyroxin   Time1     75     1
-##  5    17 thiouracil Time0     53     0
-##  6    14 thiouracil Time4    108     4
-##  7     9 thiouracil Time0     59     0
-##  8     5 thyroxin   Time4    144     4
-##  9    21 control    Time1     67     1
-## 10    27 control    Time2    110     2
-## 11    20 control    Time1     77     1
-## 12    21 control    Time0     49     0
-## 13    22 control    Time1     81     1
-## 14     2 thyroxin   Time1     71     1
-## 15    12 thiouracil Time1     75     1
-## 16     6 thyroxin   Time4    140     4
-## 17    23 control    Time3    131     3
-## 18     3 thyroxin   Time2    108     2
-## 19    19 control    Time4    177     4
-## 20    15 thiouracil Time1     69     1
+##  1     1 thyroxin   Time4    191     4
+##  2    16 thiouracil Time1     61     1
+##  3    25 control    Time0     63     0
+##  4    24 control    Time0     51     0
+##  5    26 control    Time2     90     2
+##  6    12 thiouracil Time1     75     1
+##  7    16 thiouracil Time0     46     0
+##  8     9 thiouracil Time2    101     2
+##  9     9 thiouracil Time0     59     0
+## 10    13 thiouracil Time4    119     4
+## 11     2 thyroxin   Time0     54     0
+## 12    25 control    Time4    154     4
+## 13     1 thyroxin   Time0     59     0
+## 14    21 control    Time1     67     1
+## 15     6 thyroxin   Time2     97     2
+## 16    26 control    Time0     49     0
+## 17    22 control    Time1     81     1
+## 18    27 control    Time1     82     1
+## 19    20 control    Time0     52     0
+## 20    27 control    Time4    169     4
 ```
 
  
@@ -316,6 +324,10 @@ weights.long %>%
   summarize(mean.weight = mean(weight)) %>%
   ggplot(aes(x = time, y = mean.weight, colour = drug, group = drug)) +
   geom_point() + geom_line()
+```
+
+```
+## `summarise()` regrouping output by 'time' (override with `.groups` argument)
 ```
 
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
@@ -424,15 +436,6 @@ according to subject and colouring them according to
 
 ```r
 library(ggplot2)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 ggplot(wt, aes(time, weight, group = subject, colour = drug)) + geom_line()
 ```
 
@@ -487,9 +490,9 @@ drop1(wt.1, test = "Chisq")
 ## 
 ## Model:
 ## weight ~ drug * time + (1 | subject)
-##           Df    AIC   LRT   Pr(Chi)    
-## <none>        990.5                    
-## drug:time  8 1067.8 93.27 < 2.2e-16 ***
+##           npar    AIC   LRT   Pr(Chi)    
+## <none>          990.5                    
+## drug:time    8 1067.8 93.27 < 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -616,7 +619,7 @@ Make sure `car` is loaded, and do the `idata` and
 
 ```r
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 geriatrics.2 <- Manova(geriatrics.1, idata = times.df, idesign = ~times)
 ```
 
@@ -630,7 +633,7 @@ class(response)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -757,6 +760,13 @@ Solution
 geriatrics.long %>%
   group_by(treatment, time) %>%
   summarize(mean = mean(intpct)) -> means
+```
+
+```
+## `summarise()` regrouping output by 'treatment' (override with `.groups` argument)
+```
+
+```r
 means
 ```
 
@@ -942,7 +952,7 @@ attach(gg)
 response <- cbind(t1, t2, t3, t4)
 gg.1 <- lm(response ~ treatment)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 gg.2 <- Manova(gg.1, idata = times.df, idesign = ~times)
 gg.2
 ```
@@ -1059,7 +1069,7 @@ Let's do the repeated-measures ANOVA and see whether my guess above is right:
 response <- with(fake, cbind(t1, t2, t3, t4))
 fake.1 <- lm(response ~ drug, data = fake)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 fake.2 <- Manova(fake.1, idata = times.df, idesign = ~times)
 ```
 
@@ -1077,7 +1087,7 @@ class(response)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -1106,7 +1116,7 @@ class(r)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -1158,7 +1168,7 @@ head(fake.long)
 ```
 ## # A tibble: 6 x 4
 ##   subject drug  times score
-##     <int> <fct> <chr> <int>
+##     <int> <chr> <chr> <int>
 ## 1       1 a     t1       10
 ## 2       1 a     t2       15
 ## 3       1 a     t3       13
@@ -1491,6 +1501,10 @@ airport.long %>%
   geom_point() + geom_line()
 ```
 
+```
+## `summarise()` regrouping output by 'floc' (override with `.groups` argument)
+```
+
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
 
          
@@ -1513,6 +1527,10 @@ airport.long %>%
   geom_point() + geom_line()
 ```
 
+```
+## `summarise()` regrouping output by 'location' (override with `.groups` argument)
+```
+
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
 
           
@@ -1527,6 +1545,10 @@ airport.long %>%
   summarize(mean.epi = mean(epinephrine)) %>%
   ggplot(aes(x = time, y = mean.epi, group = location, colour = factor(location))) +
   geom_point() + geom_line()
+```
+
+```
+## `summarise()` regrouping output by 'location' (override with `.groups` argument)
 ```
 
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
@@ -1588,7 +1610,7 @@ airport %>%
   as.matrix() -> response
 airport.1 <- lm(response ~ factor(location), data = airport)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 airport.2 <- Manova(airport.1, idata = times.df, idesign = ~times)
 airport.2
 ```
@@ -1652,7 +1674,7 @@ airport %>%
   as.matrix() -> response
 airport.1 <- lm(response ~ factor(location), data = airport)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 airport.2 <- Manova(airport.1, idata = times.df, idesign = ~times)
 airport.2
 ```
@@ -1727,10 +1749,10 @@ anova(airport.3)
 
 ```
 ## Analysis of Variance Table
-##                Df Sum Sq Mean Sq F value
-## flocation       1 168177  168177  29.900
-## when            3 475671  158557  28.190
-## flocation:when  3 366641  122214  21.728
+##                npar Sum Sq Mean Sq F value
+## flocation         1 168177  168177  29.900
+## when              3 475671  158557  28.190
+## flocation:when    3 366641  122214  21.728
 ```
 
 ```r
@@ -1742,9 +1764,9 @@ drop1(airport.3, test = "Chisq")
 ## 
 ## Model:
 ## epinephrine ~ flocation * when + (1 | fchild)
-##                Df    AIC    LRT   Pr(Chi)    
-## <none>            9521.2                     
-## flocation:when  3 9577.6 62.475 1.739e-13 ***
+##                npar    AIC    LRT   Pr(Chi)    
+## <none>              9521.2                     
+## flocation:when    3 9577.6 62.475 1.739e-13 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -1777,9 +1799,9 @@ anova(airport.4, airport.3)
 ## Models:
 ## airport.4: epinephrine ~ flocation + when + (1 | fchild)
 ## airport.3: epinephrine ~ flocation * when + (1 | fchild)
-##           Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)    
-## airport.4  7 9577.6 9610.4 -4781.8   9563.6                             
-## airport.3 10 9521.2 9568.0 -4750.6   9501.2 62.475      3  1.739e-13 ***
+##           npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)    
+## airport.4    7 9577.6 9610.4 -4781.8   9563.6                         
+## airport.3   10 9521.2 9568.0 -4750.6   9501.2 62.475  3  1.739e-13 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -1836,7 +1858,7 @@ loc1 <- airport %>% filter(location == 1)
 response <- loc1 %>% select(epi_1:epi_4) %>% as.matrix()
 loc1.1 <- lm(response ~ 1, data = loc1)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 loc1.2 <- Manova(loc1.1, idata = times.df, idesign = ~times)
 ```
 
@@ -1895,9 +1917,9 @@ fairport %>%
 ## 
 ## Model:
 ## epinephrine ~ when + (1 | fchild)
-##        Df    AIC    LRT   Pr(Chi)    
-## <none>    4964.1                     
-## when    3 5032.1 74.048 5.796e-16 ***
+##        npar    AIC    LRT   Pr(Chi)    
+## <none>      4964.1                     
+## when      3 5032.1 74.048 5.796e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -1924,9 +1946,9 @@ drop1(tmp.1, test = "Chisq")
 ## 
 ## Model:
 ## epinephrine ~ when + (1 | child)
-##        Df    AIC    LRT   Pr(Chi)    
-## <none>    4964.1                     
-## when    3 5032.1 74.048 5.796e-16 ***
+##        npar    AIC    LRT   Pr(Chi)    
+## <none>      4964.1                     
+## when      3 5032.1 74.048 5.796e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -1971,7 +1993,7 @@ airport %>% filter(location == 2) -> loc2
 loc2 %>% select(epi_1:epi_4) %>% as.matrix() -> response
 loc2.1 <- lm(response ~ 1, data = loc1)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 loc2.2 <- Manova(loc2.1, idata = times.df, idesign = ~times)
 ```
 
@@ -2011,7 +2033,7 @@ airport %>%
 ```
 
 ```
-## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## Warning: `funs()` is deprecated as of dplyr 0.8.0.
 ## Please use a list of either functions or lambdas: 
 ## 
 ##   # Simple named list: 
@@ -2022,7 +2044,8 @@ airport %>%
 ## 
 ##   # Using lambdas
 ##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once per session.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```
@@ -2049,10 +2072,10 @@ airport %>% group_by(location) %>% nest()
 ```
 ## # A tibble: 2 x 2
 ## # Groups:   location [2]
-##   location           data
-##      <dbl> <list<df[,5]>>
-## 1        1      [100 × 5]
-## 2        2      [100 × 5]
+##   location data              
+##      <dbl> <list>            
+## 1        1 <tibble [100 × 5]>
+## 2        2 <tibble [100 × 5]>
 ```
 
  
@@ -2094,10 +2117,10 @@ airport %>%
 ```
 ## # A tibble: 2 x 6
 ## # Groups:   location [2]
-##   location           data epi_1 epi_2 epi_3 epi_4
-##      <dbl> <list<df[,5]>> <dbl> <dbl> <dbl> <dbl>
-## 1        1      [100 × 5]  247.  340.  356.  349.
-## 2        2      [100 × 5]  249.  279.  251.  247.
+##   location data               epi_1 epi_2 epi_3 epi_4
+##      <dbl> <list>             <dbl> <dbl> <dbl> <dbl>
+## 1        1 <tibble [100 × 5]>  247.  340.  356.  349.
+## 2        2 <tibble [100 × 5]>  249.  279.  251.  247.
 ```
 
  
@@ -2124,9 +2147,9 @@ fairport %>%
 ## 
 ## Model:
 ## epinephrine ~ when + (1 | fchild)
-##        Df    AIC    LRT   Pr(Chi)    
-## <none>    4336.8                     
-## when    3 4363.7 32.889 3.399e-07 ***
+##        npar    AIC    LRT   Pr(Chi)    
+## <none>      4336.8                     
+## when      3 4363.7 32.889 3.399e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -2388,7 +2411,7 @@ bodyfat %>%
   as.matrix() -> response
 bodyfat.1 <- lm(response ~ 1)
 methods <- colnames(response)
-methods.df <- data.frame(methods)
+methods.df <- data.frame(methods=factor(methods))
 bodyfat.2 <- Manova(bodyfat.1, idata = methods.df, idesign = ~methods)
 ```
 
@@ -2480,9 +2503,9 @@ bodyfat %>%
 ## 
 ## Model:
 ## fat ~ method + (1 | fathlete)
-##        Df    AIC     LRT Pr(Chi)
-## <none>    161.34                
-## method  1 159.44 0.10088  0.7508
+##        npar    AIC     LRT Pr(Chi)
+## <none>      161.34                
+## method    1 159.44 0.10088  0.7508
 ```
 
      
@@ -2669,7 +2692,7 @@ class(response)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -2692,7 +2715,7 @@ class(response)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -2745,7 +2768,7 @@ Solution
 
 ```r
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 ```
 
    
@@ -2912,6 +2935,10 @@ king.long %>%
   geom_point() + geom_line()
 ```
 
+```
+## `summarise()` regrouping output by 'context' (override with `.groups` argument)
+```
+
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-69-1.png" width="672"  />
 
    
@@ -2943,9 +2970,9 @@ drop1(king.3, test = "Chisq")
 ## 
 ## Model:
 ## activity ~ context * time + (1 | id)
-##              Df    AIC    LRT   Pr(Chi)    
-## <none>          1609.0                     
-## context:time 10 1622.7 33.764 0.0002025 ***
+##              npar    AIC    LRT   Pr(Chi)    
+## <none>            1609.0                     
+## context:time   10 1622.7 33.764 0.0002025 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -3192,7 +3219,7 @@ here), or get them from the `response` you just made:
 
 ```r
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 ```
 
  
@@ -3373,9 +3400,9 @@ drop1(treatment.4, test = "Chisq")
 ## 
 ## Model:
 ## y ~ trt * time + (1 | subject)
-##          Df    AIC   LRT   Pr(Chi)    
-## <none>      102.53                    
-## trt:time  4 120.44 25.91 3.299e-05 ***
+##          npar    AIC   LRT   Pr(Chi)    
+## <none>        102.53                    
+## trt:time    4 120.44 25.91 3.299e-05 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```

@@ -74,7 +74,7 @@ Make sure `car` is loaded, and do the `idata` and
 `idesign` thing:
 ```{r }
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 geriatrics.2 <- Manova(geriatrics.1, idata = times.df, idesign = ~times)
 ```
 
@@ -306,7 +306,7 @@ attach(gg)
 response <- cbind(t1, t2, t3, t4)
 gg.1 <- lm(response ~ treatment)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 gg.2 <- Manova(gg.1, idata = times.df, idesign = ~times)
 gg.2
 detach(gg)
@@ -389,7 +389,7 @@ Let's do the repeated-measures ANOVA and see whether my guess above is right:
 response <- with(fake, cbind(t1, t2, t3, t4))
 fake.1 <- lm(response ~ drug, data = fake)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 fake.2 <- Manova(fake.1, idata = times.df, idesign = ~times)
 ```
 

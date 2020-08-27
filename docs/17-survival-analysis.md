@@ -9,11 +9,6 @@ library(survminer)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 ##  The Worcester survey
@@ -131,16 +126,15 @@ y
 ```
 
 ```
-##   [1]    6   374  2421    98  1205  2065  1002  2201   189  2719+ 2638+
-##  [12]  492   302  2574+ 2610+ 2641+ 1669  2624  2578+ 2595+  123  2613+
-##  [23]  774  2012  2573+ 1874  2631+ 1907   538   104     6  1401  2710 
-##  [34]  841   148  2137+ 2190+ 2173+  461  2114+ 2157+ 2054+ 2124+ 2137+
-##  [45] 2031  2003+ 2074+  274  1984+ 1993+ 1939+ 1172    89   128  1939+
-##  [56]   14  1011  1497  1929+ 2084+  107   451  2183+ 1876+  936   363 
-##  [67] 1048  1889+ 2072+ 1879+ 1870+ 1859+ 2052+ 1846+ 2061+ 1912+ 1836+
-##  [78]  114  1557  1278  1836+ 1916+ 1934+ 1923+   44  1922+  274  1860+
-##  [89] 1806  2145+  182  2013+ 2174+ 1624   187  1883+ 1577    62  1969+
-## [100] 1054
+##   [1]    6   374  2421    98  1205  2065  1002  2201   189  2719+ 2638+  492 
+##  [13]  302  2574+ 2610+ 2641+ 1669  2624  2578+ 2595+  123  2613+  774  2012 
+##  [25] 2573+ 1874  2631+ 1907   538   104     6  1401  2710   841   148  2137+
+##  [37] 2190+ 2173+  461  2114+ 2157+ 2054+ 2124+ 2137+ 2031  2003+ 2074+  274 
+##  [49] 1984+ 1993+ 1939+ 1172    89   128  1939+   14  1011  1497  1929+ 2084+
+##  [61]  107   451  2183+ 1876+  936   363  1048  1889+ 2072+ 1879+ 1870+ 1859+
+##  [73] 2052+ 1846+ 2061+ 1912+ 1836+  114  1557  1278  1836+ 1916+ 1934+ 1923+
+##  [85]   44  1922+  274  1860+ 1806  2145+  182  2013+ 2174+ 1624   187  1883+
+##  [97] 1577    62  1969+ 1054
 ```
 
      
@@ -378,7 +372,7 @@ whas100 %>%
 ```
 
 ```
-## Warning: `cols` is now required.
+## Warning: `cols` is now required when using unnest().
 ## Please use `cols = c(age, bmi)`
 ```
 
@@ -595,6 +589,10 @@ ggcoxdiagnostics(whas100.2) + geom_smooth()
 ```
 
 ```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
@@ -652,6 +650,10 @@ Have we improved the residuals by adding the squared term?
 
 ```r
 ggcoxdiagnostics(whas100.3) + geom_smooth()
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
 ```
@@ -1202,15 +1204,15 @@ broom::tidy(drugusers.1a)
 ```
 
 ```
-## # A tibble: 6 x 7
-##   term         estimate std.error statistic    p.value conf.low conf.high
-##   <chr>           <dbl>     <dbl>     <dbl>      <dbl>    <dbl>     <dbl>
-## 1 age           -0.0238   0.00756     -3.15 0.00165    -0.0386   -0.00898
-## 2 ndrugtx        0.0348   0.00775      4.49 0.00000714  0.0196    0.0500 
-## 3 treatshort     0.255    0.0910       2.80 0.00515     0.0762    0.433  
-## 4 siteB         -0.173    0.102       -1.69 0.0902     -0.373     0.0271 
-## 5 herconeither   0.126    0.103        1.22 0.222      -0.0762    0.328  
-## 6 hercoone       0.247    0.123        2.01 0.0439      0.00671   0.488
+## # A tibble: 6 x 5
+##   term         estimate std.error statistic    p.value
+##   <chr>           <dbl>     <dbl>     <dbl>      <dbl>
+## 1 age           -0.0238   0.00756     -3.15 0.00165   
+## 2 ndrugtx        0.0348   0.00775      4.49 0.00000714
+## 3 treatshort     0.255    0.0910       2.80 0.00515   
+## 4 siteB         -0.173    0.102       -1.69 0.0902    
+## 5 herconeither   0.126    0.103        1.22 0.222     
+## 6 hercoone       0.247    0.123        2.01 0.0439
 ```
 
  
@@ -1655,19 +1657,19 @@ myeloma
 
 ```
 ## # A tibble: 65 x 11
-##     time vstatus logbun   hgb platelet   age logwbc  frac logpbm protein
-##    <dbl>   <dbl>  <dbl> <dbl>    <dbl> <dbl>  <dbl> <dbl>  <dbl>   <dbl>
-##  1  1.25       1   2.22   9.4        1    67   3.66     1   1.95      12
-##  2  1.25       1   1.94  12          1    38   3.99     1   1.95      20
-##  3  2          1   1.52   9.8        1    81   3.88     1   2          2
-##  4  2          1   1.75  11.3        0    75   3.81     1   1.26       0
-##  5  2          1   1.30   5.1        0    57   3.72     1   2          3
-##  6  3          1   1.54   6.7        1    46   4.48     0   1.93      12
-##  7  5          1   2.24  10.1        1    50   4.95     1   1.66       4
-##  8  5          1   1.68   6.5        1    74   3.73     0   1.73       5
-##  9  6          1   1.36   9          1    77   3.54     0   1.46       1
-## 10  6          1   2.11  10.2        0    70   3.54     1   1.36       1
-## # … with 55 more rows, and 1 more variable: scalc <dbl>
+##     time vstatus logbun   hgb platelet   age logwbc  frac logpbm protein scalc
+##    <dbl>   <dbl>  <dbl> <dbl>    <dbl> <dbl>  <dbl> <dbl>  <dbl>   <dbl> <dbl>
+##  1  1.25       1   2.22   9.4        1    67   3.66     1   1.95      12    10
+##  2  1.25       1   1.94  12          1    38   3.99     1   1.95      20    18
+##  3  2          1   1.52   9.8        1    81   3.88     1   2          2    15
+##  4  2          1   1.75  11.3        0    75   3.81     1   1.26       0    12
+##  5  2          1   1.30   5.1        0    57   3.72     1   2          3     9
+##  6  3          1   1.54   6.7        1    46   4.48     0   1.93      12    10
+##  7  5          1   2.24  10.1        1    50   4.95     1   1.66       4     9
+##  8  5          1   1.68   6.5        1    74   3.73     0   1.73       5     9
+##  9  6          1   1.36   9          1    77   3.54     0   1.46       1     8
+## 10  6          1   2.11  10.2        0    70   3.54     1   1.36       1     8
+## # … with 55 more rows
 ```
 
      
@@ -1686,19 +1688,19 @@ glimpse(myeloma)
 ```
 
 ```
-## Observations: 65
-## Variables: 11
-## $ time     <dbl> 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00, 6…
-## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-## $ logbun   <dbl> 2.2175, 1.9395, 1.5185, 1.7482, 1.3010, 1.5441, 2.2355,…
-## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5.1, 6.7, 10.1, 6.5, 9.0, 10.2, 9…
-## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1…
-## $ age      <dbl> 67, 38, 81, 75, 57, 46, 50, 74, 77, 70, 60, 67, 48, 61,…
-## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751, 3.8062, 3.7243, 4.4757, 4.9542,…
-## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000, 1.2553, 2.0000, 1.9345, 1.6628,…
-## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0, 1…
-## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13, 1…
+## Rows: 65
+## Columns: 11
+## $ time     <dbl> 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00, 6.00, …
+## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ logbun   <dbl> 2.2175, 1.9395, 1.5185, 1.7482, 1.3010, 1.5441, 2.2355, 1.68…
+## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5.1, 6.7, 10.1, 6.5, 9.0, 10.2, 9.7, 1…
+## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, …
+## $ age      <dbl> 67, 38, 81, 75, 57, 46, 50, 74, 77, 70, 60, 67, 48, 61, 53, …
+## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751, 3.8062, 3.7243, 4.4757, 4.9542, 3.73…
+## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, …
+## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000, 1.2553, 2.0000, 1.9345, 1.6628, 1.73…
+## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0, 1, 1, …
+## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13, 12, 10…
 ```
 
  
@@ -1877,8 +1879,8 @@ y.00 <- coxph(y ~ ., data = myeloma)
 ```
 
 ```
-## Warning in fitter(X, Y, strats, offset, init, control, weights = weights, :
-## Ran out of iterations and did not converge
+## Warning in fitter(X, Y, istrat, offset, init, control, weights = weights, : Ran
+## out of iterations and did not converge
 ```
 
 ```r
@@ -2217,10 +2219,10 @@ myeloma %>%
 
 ```
 ## # A tibble: 2 x 2
-##   logbun   hgb
-##    <dbl> <dbl>
-## 1   1.15   8.8
-## 2   1.57  12
+##   `25%` `75%`
+##   <dbl> <dbl>
+## 1  1.15  1.57
+## 2  8.8  12
 ```
 
  
@@ -2428,8 +2430,11 @@ ovarian %>% as.tibble()
 ```
 
 ```
-## Warning: `as.tibble()` is deprecated, use `as_tibble()` (but mind the new semantics).
-## This warning is displayed once per session.
+## Warning: `as.tibble()` is deprecated as of tibble 2.0.0.
+## Please use `as_tibble()` instead.
+## The signature and semantics have changed, see `?as_tibble`.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```
@@ -2495,9 +2500,9 @@ y
 ```
 
 ```
-##  [1]   59   115   156   421+  431   448+  464   475   477+  563   638 
-## [12]  744+  769+  770+  803+  855+ 1040+ 1106+ 1129+ 1206+ 1227+  268 
-## [23]  329   353   365   377+
+##  [1]   59   115   156   421+  431   448+  464   475   477+  563   638   744+
+## [13]  769+  770+  803+  855+ 1040+ 1106+ 1129+ 1206+ 1227+  268   329   353 
+## [25]  365   377+
 ```
 
      
@@ -2510,10 +2515,6 @@ complicated than that:
 
 ```r
 ov2 <- ovarian %>% mutate(y = Surv(futime, fustat))
-```
-
-```
-## Error: Column `y` must be length 26 (the number of rows) or one, not 52
 ```
 
  
@@ -2840,6 +2841,10 @@ you have `survminer` installed and loaded:
 
 ```r
 ggcoxdiagnostics(time.1) + geom_smooth()
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
 ```

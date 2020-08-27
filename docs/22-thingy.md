@@ -11,11 +11,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -75,22 +70,22 @@ seabed
 
 ```
 ## # A tibble: 30 x 30
-##       s1    s2    s3    s4    s5    s6    s7    s8    s9   s10   s11   s12
-##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 0     0.457 0.296 0.467 0.477 0.522 0.455 0.933 0.333 0.403 0.357 0.375
-##  2 0.457 0     0.481 0.556 0.348 0.229 0.415 0.930 0.222 0.447 0.566 0.215
-##  3 0.296 0.481 0     0.467 0.508 0.522 0.491 1     0.407 0.343 0.214 0.325
-##  4 0.467 0.556 0.467 0     0.786 0.692 0.870 1     0.639 0.379 0.532 0.549
-##  5 0.477 0.348 0.508 0.786 0     0.419 0.212 0.854 0.196 0.564 0.373 0.319
-##  6 0.522 0.229 0.522 0.692 0.419 0     0.509 0.933 0.243 0.571 0.530 0.237
-##  7 0.455 0.415 0.491 0.870 0.212 0.509 0     0.806 0.317 0.588 0.509 0.358
-##  8 0.933 0.930 1     1     0.854 0.933 0.806 0     0.895 1     0.938 0.929
-##  9 0.333 0.222 0.407 0.639 0.196 0.243 0.317 0.895 0     0.489 0.349 0.159
-## 10 0.403 0.447 0.343 0.379 0.564 0.571 0.588 1     0.489 0     0.449 0.419
-## # … with 20 more rows, and 18 more variables: s13 <dbl>, s14 <dbl>,
-## #   s15 <dbl>, s16 <dbl>, s17 <dbl>, s18 <dbl>, s19 <dbl>, s20 <dbl>,
-## #   s21 <dbl>, s22 <dbl>, s23 <dbl>, s24 <dbl>, s25 <dbl>, s26 <dbl>,
-## #   s27 <dbl>, s28 <dbl>, s29 <dbl>, s30 <dbl>
+##       s1    s2    s3    s4    s5    s6    s7    s8    s9   s10   s11   s12   s13
+##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 0     0.457 0.296 0.467 0.477 0.522 0.455 0.933 0.333 0.403 0.357 0.375 0.577
+##  2 0.457 0     0.481 0.556 0.348 0.229 0.415 0.930 0.222 0.447 0.566 0.215 0.671
+##  3 0.296 0.481 0     0.467 0.508 0.522 0.491 1     0.407 0.343 0.214 0.325 0.654
+##  4 0.467 0.556 0.467 0     0.786 0.692 0.870 1     0.639 0.379 0.532 0.549 0.302
+##  5 0.477 0.348 0.508 0.786 0     0.419 0.212 0.854 0.196 0.564 0.373 0.319 0.714
+##  6 0.522 0.229 0.522 0.692 0.419 0     0.509 0.933 0.243 0.571 0.530 0.237 0.676
+##  7 0.455 0.415 0.491 0.870 0.212 0.509 0     0.806 0.317 0.588 0.509 0.358 0.925
+##  8 0.933 0.930 1     1     0.854 0.933 0.806 0     0.895 1     0.938 0.929 0.929
+##  9 0.333 0.222 0.407 0.639 0.196 0.243 0.317 0.895 0     0.489 0.349 0.159 0.595
+## 10 0.403 0.447 0.343 0.379 0.564 0.571 0.588 1     0.489 0     0.449 0.419 0.415
+## # … with 20 more rows, and 17 more variables: s14 <dbl>, s15 <dbl>, s16 <dbl>,
+## #   s17 <dbl>, s18 <dbl>, s19 <dbl>, s20 <dbl>, s21 <dbl>, s22 <dbl>,
+## #   s23 <dbl>, s24 <dbl>, s25 <dbl>, s26 <dbl>, s27 <dbl>, s28 <dbl>,
+## #   s29 <dbl>, s30 <dbl>
 ```
 
      
@@ -851,9 +846,9 @@ sites
 ```
 
 ```
-##  [1] "s1"  "s2"  "s3"  "s4"  "s5"  "s6"  "s7"  "s8"  "s9"  "s10" "s11"
-## [12] "s12" "s13" "s14" "s15" "s16" "s17" "s18" "s19" "s20" "s21" "s22"
-## [23] "s23" "s24" "s25" "s26" "s27" "s28" "s29" "s30"
+##  [1] "s1"  "s2"  "s3"  "s4"  "s5"  "s6"  "s7"  "s8"  "s9"  "s10" "s11" "s12"
+## [13] "s13" "s14" "s15" "s16" "s17" "s18" "s19" "s20" "s21" "s22" "s23" "s24"
+## [25] "s25" "s26" "s27" "s28" "s29" "s30"
 ```
 
  
@@ -931,22 +926,22 @@ This is a "long" data frame, but for the cluster analysis, we need a wide one wi
 
 ```
 ## # A tibble: 30 x 31
-##    site1    s1   s10   s11   s12   s13   s14   s15   s16   s17   s18   s19
-##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 s1    0     0.403 0.357 0.375 0.577 0.633 0.208 0.857 1     0.569 0.169
-##  2 s10   0.403 0     0.449 0.419 0.415 0.710 0.424 0.856 1     0.380 0.333
-##  3 s11   0.357 0.449 0     0.463 0.481 0.765 0.491 0.66  1     0.627 0.343
-##  4 s12   0.375 0.419 0.463 0     0.667 0.413 0.342 0.548 0.860 0.254 0.253
-##  5 s13   0.577 0.415 0.481 0.667 0     1     0.608 0.875 1     0.667 0.524
-##  6 s14   0.633 0.710 0.765 0.413 1     0     0.458 0.656 0.692 0.604 0.633
-##  7 s15   0.208 0.424 0.491 0.342 0.608 0.458 0     0.856 0.733 0.548 0.25 
-##  8 s16   0.857 0.856 0.66  0.548 0.875 0.656 0.856 0     0.893 0.512 0.761
-##  9 s17   1     1     1     0.860 1     0.692 0.733 0.893 0     0.914 0.905
-## 10 s18   0.569 0.380 0.627 0.254 0.667 0.604 0.548 0.512 0.914 0     0.449
-## # … with 20 more rows, and 19 more variables: s2 <dbl>, s20 <dbl>,
-## #   s21 <dbl>, s22 <dbl>, s23 <dbl>, s24 <dbl>, s25 <dbl>, s26 <dbl>,
-## #   s27 <dbl>, s28 <dbl>, s29 <dbl>, s3 <dbl>, s30 <dbl>, s4 <dbl>,
-## #   s5 <dbl>, s6 <dbl>, s7 <dbl>, s8 <dbl>, s9 <dbl>
+##    site1    s1   s10   s11   s12   s13   s14   s15   s16   s17   s18   s19    s2
+##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 s1    0     0.403 0.357 0.375 0.577 0.633 0.208 0.857 1     0.569 0.169 0.457
+##  2 s10   0.403 0     0.449 0.419 0.415 0.710 0.424 0.856 1     0.380 0.333 0.447
+##  3 s11   0.357 0.449 0     0.463 0.481 0.765 0.491 0.66  1     0.627 0.343 0.566
+##  4 s12   0.375 0.419 0.463 0     0.667 0.413 0.342 0.548 0.860 0.254 0.253 0.215
+##  5 s13   0.577 0.415 0.481 0.667 0     1     0.608 0.875 1     0.667 0.524 0.671
+##  6 s14   0.633 0.710 0.765 0.413 1     0     0.458 0.656 0.692 0.604 0.633 0.421
+##  7 s15   0.208 0.424 0.491 0.342 0.608 0.458 0     0.856 0.733 0.548 0.25  0.375
+##  8 s16   0.857 0.856 0.66  0.548 0.875 0.656 0.856 0     0.893 0.512 0.761 0.472
+##  9 s17   1     1     1     0.860 1     0.692 0.733 0.893 0     0.914 0.905 0.862
+## 10 s18   0.569 0.380 0.627 0.254 0.667 0.604 0.548 0.512 0.914 0     0.449 0.315
+## # … with 20 more rows, and 18 more variables: s20 <dbl>, s21 <dbl>, s22 <dbl>,
+## #   s23 <dbl>, s24 <dbl>, s25 <dbl>, s26 <dbl>, s27 <dbl>, s28 <dbl>,
+## #   s29 <dbl>, s3 <dbl>, s30 <dbl>, s4 <dbl>, s5 <dbl>, s6 <dbl>, s7 <dbl>,
+## #   s8 <dbl>, s9 <dbl>
 ```
 
  
@@ -1094,10 +1089,10 @@ cluster
 ```
 
 ```
-##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 s18 
-##   1   2   1   1   3   2   3   3   2   1   1   2   1   3   1   2   3   2 
-## s19 s20 s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 
-##   1   1   3   2   3   2   2   2   2   2   3   2
+##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 s18 s19 s20 
+##   1   2   1   1   3   2   3   3   2   1   1   2   1   3   1   2   3   2   1   1 
+## s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 
+##   3   2   3   2   2   2   2   2   3   2
 ```
 
  
@@ -1149,10 +1144,10 @@ cluster
 ```
 
 ```
-##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 s18 
-##   1   2   1   1   3   4   3   5   2   1   1   2   1   3   1   4   5   2 
-## s19 s20 s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 
-##   1   1   3   4   3   2   4   4   4   2   3   4
+##  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 s18 s19 s20 
+##   1   2   1   1   3   4   3   5   2   1   1   2   1   3   1   4   5   2   1   1 
+## s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 
+##   3   4   3   2   4   4   4   2   3   4
 ```
 
 ```r
@@ -1369,6 +1364,20 @@ dissim <- function(i, j, d) {
   sum(x != y)
 }
 dissim(1, 2, fruit2)
+```
+
+```
+## Note: Using an external vector in selections is ambiguous.
+## ℹ Use `all_of(i)` instead of `i` to silence this message.
+## ℹ See <https://tidyselect.r-lib.org/reference/faq-external-vector.html>.
+## This message is displayed once per session.
+```
+
+```
+## Note: Using an external vector in selections is ambiguous.
+## ℹ Use `all_of(j)` instead of `j` to silence this message.
+## ℹ See <https://tidyselect.r-lib.org/reference/faq-external-vector.html>.
+## This message is displayed once per session.
 ```
 
 ```
@@ -2136,19 +2145,19 @@ beer
 
 ```
 ## # A tibble: 32 x 11
-##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
-##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
-##  1 S001          5     9     7      1       7        6        6      5
-##  2 S008          7     5     6      8       8        4        8      8
-##  3 S015          7     7     5      6       6        1        8      4
-##  4 S022          7     7     5      2       5        8        4      6
-##  5 S029          9     7     3      1       6        8        2      7
-##  6 S036          7     6     4      3       7        6        6      5
-##  7 S043          5     5     5      6       6        4        7      5
-##  8 S050          5     3     1      5       5        5        3      5
-##  9 S057          9     3     2      6       4        6        1      5
-## 10 S064          2     6     6      5       6        4        8      4
-## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
+##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW SamAdams
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>    <dbl>
+##  1 S001          5     9     7      1       7        6        6      5        9
+##  2 S008          7     5     6      8       8        4        8      8        7
+##  3 S015          7     7     5      6       6        1        8      4        7
+##  4 S022          7     7     5      2       5        8        4      6        8
+##  5 S029          9     7     3      1       6        8        2      7        6
+##  6 S036          7     6     4      3       7        6        6      5        4
+##  7 S043          5     5     5      6       6        4        7      5        5
+##  8 S050          5     3     1      5       5        5        3      5        5
+##  9 S057          9     3     2      6       4        6        1      5        3
+## 10 S064          2     6     6      5       6        4        8      4        4
+## # … with 22 more rows, and 1 more variable: SierraN <dbl>
 ```
 
        
@@ -2363,19 +2372,19 @@ beer
 
 ```
 ## # A tibble: 32 x 11
-##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
-##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
-##  1 S001          5     9     7      1       7        6        6      5
-##  2 S008          7     5     6      8       8        4        8      8
-##  3 S015          7     7     5      6       6        1        8      4
-##  4 S022          7     7     5      2       5        8        4      6
-##  5 S029          9     7     3      1       6        8        2      7
-##  6 S036          7     6     4      3       7        6        6      5
-##  7 S043          5     5     5      6       6        4        7      5
-##  8 S050          5     3     1      5       5        5        3      5
-##  9 S057          9     3     2      6       4        6        1      5
-## 10 S064          2     6     6      5       6        4        8      4
-## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
+##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW SamAdams
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>    <dbl>
+##  1 S001          5     9     7      1       7        6        6      5        9
+##  2 S008          7     5     6      8       8        4        8      8        7
+##  3 S015          7     7     5      6       6        1        8      4        7
+##  4 S022          7     7     5      2       5        8        4      6        8
+##  5 S029          9     7     3      1       6        8        2      7        6
+##  6 S036          7     6     4      3       7        6        6      5        4
+##  7 S043          5     5     5      6       6        4        7      5        5
+##  8 S050          5     3     1      5       5        5        3      5        5
+##  9 S057          9     3     2      6       4        6        1      5        3
+## 10 S064          2     6     6      5       6        4        8      4        4
+## # … with 22 more rows, and 1 more variable: SierraN <dbl>
 ```
 
        
@@ -2535,7 +2544,7 @@ beer.2$size
 ```
 
 ```
-## [1] 4 6
+## [1] 6 4
 ```
 
        
@@ -2562,9 +2571,9 @@ beer.2$cluster
 
 ```
 ##  AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken   PetesW 
-##        1        2        2        2        2        1        2        1 
+##        2        1        1        1        1        2        1        2 
 ## SamAdams  SierraN 
-##        2        1
+##        1        2
 ```
 
   
@@ -2583,16 +2592,16 @@ x
 ## # A tibble: 10 x 2
 ##    name     value
 ##    <chr>    <int>
-##  1 AnchorS      1
-##  2 Bass         2
-##  3 Becks        2
-##  4 Corona       2
-##  5 GordonB      2
-##  6 Guinness     1
-##  7 Heineken     2
-##  8 PetesW       1
-##  9 SamAdams     2
-## 10 SierraN      1
+##  1 AnchorS      2
+##  2 Bass         1
+##  3 Becks        1
+##  4 Corona       1
+##  5 GordonB      1
+##  6 Guinness     2
+##  7 Heineken     1
+##  8 PetesW       2
+##  9 SamAdams     1
+## 10 SierraN      2
 ```
 
 Or, to go back the other way, `deframe`:
@@ -2604,9 +2613,9 @@ deframe(x)
 
 ```
 ##  AnchorS     Bass    Becks   Corona  GordonB Guinness Heineken   PetesW 
-##        1        2        2        2        2        1        2        1 
+##        2        1        1        1        1        2        1        2 
 ## SamAdams  SierraN 
-##        2        1
+##        1        2
 ```
 
  
@@ -2623,16 +2632,16 @@ enframe(beer.2$cluster, name = "beer", value = "cluster") %>%
 ## # A tibble: 10 x 2
 ##    beer     cluster
 ##    <chr>      <int>
-##  1 AnchorS        1
-##  2 Guinness       1
-##  3 PetesW         1
-##  4 SierraN        1
-##  5 Bass           2
-##  6 Becks          2
-##  7 Corona         2
-##  8 GordonB        2
-##  9 Heineken       2
-## 10 SamAdams       2
+##  1 Bass           1
+##  2 Becks          1
+##  3 Corona         1
+##  4 GordonB        1
+##  5 Heineken       1
+##  6 SamAdams       1
+##  7 AnchorS        2
+##  8 Guinness       2
+##  9 PetesW         2
+## 10 SierraN        2
 ```
 
  
@@ -2730,7 +2739,7 @@ class(swiss.s)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -2797,7 +2806,7 @@ kmeans(swiss.s, 3, nstart = 20)$tot.withinss
 ```
 
 ```
-## [1] 576.466
+## [1] 576.1284
 ```
 
  
@@ -2819,9 +2828,9 @@ wssq
 ## 3        4  492.
 ## 4        5  449.
 ## 5        6  413.
-## 6        7  383.
-## 7        8  355.
-## 8        9  334.
+## 6        7  382.
+## 7        8  356.
+## 8        9  335.
 ## 9       10  313.
 ```
 
@@ -2843,12 +2852,12 @@ wssq.2
 ## 1        2 <kmeans>  701.
 ## 2        3 <kmeans>  576.
 ## 3        4 <kmeans>  492.
-## 4        5 <kmeans>  449.
-## 5        6 <kmeans>  413.
+## 4        5 <kmeans>  451.
+## 5        6 <kmeans>  415.
 ## 6        7 <kmeans>  382.
 ## 7        8 <kmeans>  355.
 ## 8        9 <kmeans>  334.
-## 9       10 <kmeans>  313.
+## 9       10 <kmeans>  318.
 ```
 
  
@@ -2874,8 +2883,8 @@ wss.1
 ```
 
 ```
-##  [1]       NA 701.2054 576.4660 491.7085 449.3900 412.9139 381.3926
-##  [8] 355.3168 333.5024 313.2374
+##  [1]       NA 701.2054 576.1284 491.7085 449.3900 412.6598 381.5568 357.6396
+##  [9] 334.8232 312.5101
 ```
 
        
@@ -2927,7 +2936,7 @@ tibble(clusters = 1:10, wss = wss.1) %>%
 ```
 
 ```
-## Warning: Removed 1 rows containing missing values (geom_path).
+## Warning: Removed 1 row(s) containing missing values (geom_path).
 ```
 
 <img src="22-thingy_files/figure-html/sasjhgajs-1.png" width="576"  />
@@ -2996,12 +3005,12 @@ wssq.2
 ## 1        2 <kmeans>  701.
 ## 2        3 <kmeans>  576.
 ## 3        4 <kmeans>  492.
-## 4        5 <kmeans>  449.
-## 5        6 <kmeans>  413.
+## 4        5 <kmeans>  451.
+## 5        6 <kmeans>  415.
 ## 6        7 <kmeans>  382.
 ## 7        8 <kmeans>  355.
 ## 8        9 <kmeans>  334.
-## 9       10 <kmeans>  313.
+## 9       10 <kmeans>  318.
 ```
 
  
@@ -3030,28 +3039,27 @@ swiss.7a
 ## 
 ## Cluster means:
 ##       length       left      right     bottom         top       diag
-## 1 -0.5683115  0.2617543  0.3254371  1.3197396  0.04670298 -0.8483286
-## 2  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 1  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 2 -0.5683115  0.2617543  0.3254371  1.3197396  0.04670298 -0.8483286
 ## 3 -0.2002681 -1.0290130 -0.9878119 -0.8397381 -0.71307204  0.9434354
 ## 4  1.1475776  0.6848546  0.2855308 -0.5788787 -0.40538184  0.7764051
 ## 
 ## Clustering vector:
-##   [1] 4 3 3 3 3 4 3 3 3 4 4 3 4 3 3 3 3 3 3 3 3 4 4 4 3 4 4 4 4 3 4 3 3 4 4
-##  [36] 4 4 3 4 3 3 3 3 4 3 3 3 3 3 3 3 4 3 4 3 3 4 3 4 3 3 3 3 3 3 4 3 3 3 2
-##  [71] 3 3 3 3 3 3 3 3 4 3 3 3 3 4 4 3 3 3 4 3 3 4 3 3 3 4 4 3 3 3 2 2 2 2 1
-## [106] 1 2 2 2 2 2 2 2 1 1 2 1 1 1 2 2 1 2 2 1 2 2 2 2 2 1 1 2 2 1 1 1 2 1 1
-## [141] 2 1 1 2 1 1 1 2 1 2 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 2 4 2 2 1 2 1 1 1 1
-## [176] 1 1 2 2 2 1 2 2 2 1 1 2 1 2 1 2 2 1 2 1 2 2 2 2 1
+##   [1] 4 3 3 3 3 4 3 3 3 4 4 3 4 3 3 3 3 3 3 3 3 4 4 4 3 4 4 4 4 3 4 3 3 4 4 4 4
+##  [38] 3 4 3 3 3 3 4 3 3 3 3 3 3 3 4 3 4 3 3 4 3 4 3 3 3 3 3 3 4 3 3 3 1 3 3 3 3
+##  [75] 3 3 3 3 4 3 3 3 3 4 4 3 3 3 4 3 3 4 3 3 3 4 4 3 3 3 1 1 1 1 2 2 1 1 1 1 1
+## [112] 1 1 2 2 1 2 2 2 1 1 2 1 1 2 1 1 1 1 1 2 2 1 1 2 2 2 1 2 2 1 2 2 1 2 2 2 1
+## [149] 2 1 2 2 2 2 2 2 2 2 2 1 1 2 2 2 2 1 4 1 1 2 1 2 2 2 2 2 2 1 1 1 2 1 1 1 2
+## [186] 2 1 2 1 2 1 1 2 1 2 1 1 1 1 2
 ## 
 ## Within cluster sum of squares by cluster:
-## [1]  95.51948 137.68573 166.12573  92.37757
+## [1] 137.68573  95.51948 166.12573  92.37757
 ##  (between_SS / total_SS =  58.8 %)
 ## 
 ## Available components:
 ## 
-## [1] "cluster"      "centers"      "totss"        "withinss"    
-## [5] "tot.withinss" "betweenss"    "size"         "iter"        
-## [9] "ifault"
+## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+## [6] "betweenss"    "size"         "iter"         "ifault"
 ```
 
  
@@ -3078,8 +3086,8 @@ swiss.7a[[1]]$centers
 
 ```
 ##       length       left      right     bottom         top       diag
-## 1 -0.5683115  0.2617543  0.3254371  1.3197396  0.04670298 -0.8483286
-## 2  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 1  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 2 -0.5683115  0.2617543  0.3254371  1.3197396  0.04670298 -0.8483286
 ## 3 -0.2002681 -1.0290130 -0.9878119 -0.8397381 -0.71307204  0.9434354
 ## 4  1.1475776  0.6848546  0.2855308 -0.5788787 -0.40538184  0.7764051
 ```
@@ -3355,7 +3363,7 @@ as_tibble(cars.s) %>%
 ## # A tibble: 1 x 6
 ##     mpg  disp    hp  drat    wt  qsec
 ##   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1     1    1.     1     1     1     1
+## 1     1     1     1     1  1.00     1
 ```
 
  
@@ -3402,26 +3410,25 @@ cars.1
 ```
 
 ```
-## K-means clustering with 3 clusters of sizes 6, 14, 12
+## K-means clustering with 3 clusters of sizes 12, 6, 14
 ## 
 ## Cluster means:
 ##          mpg       disp         hp       drat         wt       qsec
-## 1  1.6552394 -1.1624447 -1.0382807  1.2252295 -1.3738462  0.3075550
-## 2 -0.8280518  0.9874085  0.9119628 -0.6869112  0.7991807 -0.6024854
-## 3  0.1384407 -0.5707543 -0.5448163  0.1887816 -0.2454544  0.5491221
+## 1  0.1384407 -0.5707543 -0.5448163  0.1887816 -0.2454544  0.5491221
+## 2  1.6552394 -1.1624447 -1.0382807  1.2252295 -1.3738462  0.3075550
+## 3 -0.8280518  0.9874085  0.9119628 -0.6869112  0.7991807 -0.6024854
 ## 
 ## Clustering vector:
-##  [1] 3 3 3 3 2 3 2 3 3 3 3 2 2 2 2 2 2 1 1 1 3 2 2 2 2 1 1 1 2 3 2 3
+##  [1] 1 1 1 1 3 1 3 1 1 1 1 3 3 3 3 3 3 2 2 2 1 3 3 3 3 2 2 2 3 1 3 1
 ## 
 ## Within cluster sum of squares by cluster:
-## [1]  7.76019 33.37849 24.95528
+## [1] 24.95528  7.76019 33.37849
 ##  (between_SS / total_SS =  64.5 %)
 ## 
 ## Available components:
 ## 
-## [1] "cluster"      "centers"      "totss"        "withinss"    
-## [5] "tot.withinss" "betweenss"    "size"         "iter"        
-## [9] "ifault"
+## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+## [6] "betweenss"    "size"         "iter"         "ifault"
 ```
 
    
@@ -3465,38 +3472,38 @@ tibble(car = cars$Carname, cluster = cars.1$cluster) %>%
 ## # A tibble: 32 x 2
 ##    car                 cluster
 ##    <chr>                 <int>
-##  1 Fiat 128                  1
-##  2 Honda Civic               1
-##  3 Toyota Corolla            1
-##  4 Fiat X1-9                 1
-##  5 Porsche 914-2             1
-##  6 Lotus Europa              1
-##  7 Hornet Sportabout         2
-##  8 Duster 360                2
-##  9 Merc 450SE                2
-## 10 Merc 450SL                2
-## 11 Merc 450SLC               2
-## 12 Cadillac Fleetwood        2
-## 13 Lincoln Continental       2
-## 14 Chrysler Imperial         2
-## 15 Dodge Challenger          2
-## 16 AMC Javelin               2
-## 17 Camaro Z28                2
-## 18 Pontiac Firebird          2
-## 19 Ford Pantera L            2
-## 20 Maserati Bora             2
-## 21 Mazda RX4                 3
-## 22 Mazda RX4 Wag             3
-## 23 Datsun 710                3
-## 24 Hornet 4 Drive            3
-## 25 Valiant                   3
-## 26 Merc 240D                 3
-## 27 Merc 230                  3
-## 28 Merc 280                  3
-## 29 Merc 280C                 3
-## 30 Toyota Corona             3
-## 31 Ferrari Dino              3
-## 32 Volvo 142E                3
+##  1 Mazda RX4                 1
+##  2 Mazda RX4 Wag             1
+##  3 Datsun 710                1
+##  4 Hornet 4 Drive            1
+##  5 Valiant                   1
+##  6 Merc 240D                 1
+##  7 Merc 230                  1
+##  8 Merc 280                  1
+##  9 Merc 280C                 1
+## 10 Toyota Corona             1
+## 11 Ferrari Dino              1
+## 12 Volvo 142E                1
+## 13 Fiat 128                  2
+## 14 Honda Civic               2
+## 15 Toyota Corolla            2
+## 16 Fiat X1-9                 2
+## 17 Porsche 914-2             2
+## 18 Lotus Europa              2
+## 19 Hornet Sportabout         3
+## 20 Duster 360                3
+## 21 Merc 450SE                3
+## 22 Merc 450SL                3
+## 23 Merc 450SLC               3
+## 24 Cadillac Fleetwood        3
+## 25 Lincoln Continental       3
+## 26 Chrysler Imperial         3
+## 27 Dodge Challenger          3
+## 28 AMC Javelin               3
+## 29 Camaro Z28                3
+## 30 Pontiac Firebird          3
+## 31 Ford Pantera L            3
+## 32 Maserati Bora             3
 ```
 
    
@@ -3517,38 +3524,38 @@ cars %>%
 ## # A tibble: 32 x 2
 ##    Carname             cluster
 ##    <chr>                 <int>
-##  1 Fiat 128                  1
-##  2 Honda Civic               1
-##  3 Toyota Corolla            1
-##  4 Fiat X1-9                 1
-##  5 Porsche 914-2             1
-##  6 Lotus Europa              1
-##  7 Hornet Sportabout         2
-##  8 Duster 360                2
-##  9 Merc 450SE                2
-## 10 Merc 450SL                2
-## 11 Merc 450SLC               2
-## 12 Cadillac Fleetwood        2
-## 13 Lincoln Continental       2
-## 14 Chrysler Imperial         2
-## 15 Dodge Challenger          2
-## 16 AMC Javelin               2
-## 17 Camaro Z28                2
-## 18 Pontiac Firebird          2
-## 19 Ford Pantera L            2
-## 20 Maserati Bora             2
-## 21 Mazda RX4                 3
-## 22 Mazda RX4 Wag             3
-## 23 Datsun 710                3
-## 24 Hornet 4 Drive            3
-## 25 Valiant                   3
-## 26 Merc 240D                 3
-## 27 Merc 230                  3
-## 28 Merc 280                  3
-## 29 Merc 280C                 3
-## 30 Toyota Corona             3
-## 31 Ferrari Dino              3
-## 32 Volvo 142E                3
+##  1 Mazda RX4                 1
+##  2 Mazda RX4 Wag             1
+##  3 Datsun 710                1
+##  4 Hornet 4 Drive            1
+##  5 Valiant                   1
+##  6 Merc 240D                 1
+##  7 Merc 230                  1
+##  8 Merc 280                  1
+##  9 Merc 280C                 1
+## 10 Toyota Corona             1
+## 11 Ferrari Dino              1
+## 12 Volvo 142E                1
+## 13 Fiat 128                  2
+## 14 Honda Civic               2
+## 15 Toyota Corolla            2
+## 16 Fiat X1-9                 2
+## 17 Porsche 914-2             2
+## 18 Lotus Europa              2
+## 19 Hornet Sportabout         3
+## 20 Duster 360                3
+## 21 Merc 450SE                3
+## 22 Merc 450SL                3
+## 23 Merc 450SLC               3
+## 24 Cadillac Fleetwood        3
+## 25 Lincoln Continental       3
+## 26 Chrysler Imperial         3
+## 27 Dodge Challenger          3
+## 28 AMC Javelin               3
+## 29 Camaro Z28                3
+## 30 Pontiac Firebird          3
+## 31 Ford Pantera L            3
+## 32 Maserati Bora             3
 ```
 
  
@@ -3656,8 +3663,8 @@ w
 ```
 
 ```
-##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138
-##  [8] 20.76061 17.58753 15.19850
+##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138 20.76061
+##  [9] 17.97491 15.19850
 ```
 
 
@@ -3676,8 +3683,8 @@ w
 ```
 
 ```
-##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138
-##  [8] 20.76061 18.22591 15.51232
+##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138 20.76061
+##  [9] 17.33653 15.19850
 ```
 
  
@@ -3724,8 +3731,8 @@ wwx
 ## 3        4  50.9
 ## 4        5  38.2
 ## 5        6  29.3
-## 6        7  24.9
-## 7        8  20.8
+## 6        7  24.2
+## 7        8  21.0
 ## 8        9  17.3
 ## 9       10  15.2
 ```
@@ -3812,8 +3819,8 @@ w
 ```
 
 ```
-##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138
-##  [8] 20.76061 18.22591 15.51232
+##  [1]       NA 87.29448 66.09396 50.94273 38.22004 29.28816 24.23138 20.76061
+##  [9] 17.33653 15.19850
 ```
 
 ```r
@@ -3839,7 +3846,7 @@ tibble(clusters = 1:10, wss = w) %>%
 ```
 
 ```
-## Warning: Removed 1 rows containing missing values (geom_path).
+## Warning: Removed 1 row(s) containing missing values (geom_path).
 ```
 
 <img src="22-thingy_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
@@ -3942,32 +3949,32 @@ cars %>%
 ##  4 Fiat X1-9                 1
 ##  5 Porsche 914-2             1
 ##  6 Lotus Europa              1
-##  7 Hornet 4 Drive            2
-##  8 Valiant                   2
-##  9 Merc 240D                 2
-## 10 Merc 230                  2
-## 11 Toyota Corona             2
-## 12 Cadillac Fleetwood        3
-## 13 Lincoln Continental       3
-## 14 Chrysler Imperial         3
-## 15 Hornet Sportabout         4
-## 16 Merc 450SE                4
-## 17 Merc 450SL                4
-## 18 Merc 450SLC               4
-## 19 Dodge Challenger          4
-## 20 AMC Javelin               4
-## 21 Pontiac Firebird          4
-## 22 Duster 360                5
-## 23 Camaro Z28                5
-## 24 Ford Pantera L            5
-## 25 Maserati Bora             5
-## 26 Mazda RX4                 6
-## 27 Mazda RX4 Wag             6
-## 28 Datsun 710                6
-## 29 Merc 280                  6
-## 30 Merc 280C                 6
-## 31 Ferrari Dino              6
-## 32 Volvo 142E                6
+##  7 Mazda RX4                 2
+##  8 Mazda RX4 Wag             2
+##  9 Datsun 710                2
+## 10 Merc 280                  2
+## 11 Merc 280C                 2
+## 12 Ferrari Dino              2
+## 13 Volvo 142E                2
+## 14 Duster 360                3
+## 15 Camaro Z28                3
+## 16 Ford Pantera L            3
+## 17 Maserati Bora             3
+## 18 Hornet 4 Drive            4
+## 19 Valiant                   4
+## 20 Merc 240D                 4
+## 21 Merc 230                  4
+## 22 Toyota Corona             4
+## 23 Hornet Sportabout         5
+## 24 Merc 450SE                5
+## 25 Merc 450SL                5
+## 26 Merc 450SLC               5
+## 27 Dodge Challenger          5
+## 28 AMC Javelin               5
+## 29 Pontiac Firebird          5
+## 30 Cadillac Fleetwood        6
+## 31 Lincoln Continental       6
+## 32 Chrysler Imperial         6
 ```
 
  
@@ -4012,16 +4019,16 @@ carsx.1
 ## 
 ## Prior probabilities of groups:
 ##       1       2       3       4       5       6 
-## 0.18750 0.15625 0.09375 0.21875 0.12500 0.21875 
+## 0.18750 0.21875 0.12500 0.15625 0.21875 0.09375 
 ## 
 ## Group means:
 ##        mpg     disp       hp     drat       wt     qsec
 ## 1 30.06667  86.6500  75.5000 4.251667 1.873000 18.39833
-## 2 21.64000 178.1200  93.8000 3.430000 3.096000 20.51400
-## 3 11.83333 457.3333 216.6667 3.053333 5.339667 17.74000
-## 4 16.78571 315.6286 170.0000 3.050000 3.688571 17.32000
-## 5 14.60000 340.5000 272.2500 3.675000 3.537500 15.08750
-## 6 20.41429 147.0286 120.4286 3.888571 2.892143 17.62714
+## 2 20.41429 147.0286 120.4286 3.888571 2.892143 17.62714
+## 3 14.60000 340.5000 272.2500 3.675000 3.537500 15.08750
+## 4 21.64000 178.1200  93.8000 3.430000 3.096000 20.51400
+## 5 16.78571 315.6286 170.0000 3.050000 3.688571 17.32000
+## 6 11.83333 457.3333 216.6667 3.053333 5.339667 17.74000
 ## 
 ## Coefficients of linear discriminants:
 ##              LD1           LD2         LD3          LD4          LD5
@@ -4132,9 +4139,23 @@ powerful, both averagely powerful for their size.
 ##  Running, jumping, and throwing
 
 
- The decathlon is a men's
+ The [decathlon](https://en.wikipedia.org/wiki/Decathlon) is a men's
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Women  compete in a similar competition called the *heptathlon* with seven  events.</span> track-and-field competition in which competitors complete 10
 events over two days as follows, requiring the skills shown:
+
+
+|Event        |Skills                                 |
+|:------------|:--------------------------------------|
+|100m         |Running, speed                         |
+|Long jump    |Jumping, speed                         |
+|Shot put     |Throwing, strength                     |
+|High jump    |Jumping, agility                       |
+|400m         |Running, speed                         |
+|110m hurdles |Running, jumping, speed                |
+|Discus       |Throwing, agility (and maybe strength) |
+|Pole vault   |Jumping, agility                       |
+|Javelin      |Throwing, agility                      |
+|1500m        |Running, endurance                     |
 
 
 \begin{tabular}{ll}
@@ -4153,13 +4174,16 @@ Javelin & Throwing, agility\\
 \hline
 \end{tabular}
 
+(note: in the pdf version, this table might appear twice.)
+
 
 These are a mixture of running, jumping and throwing disciplines. The
 performance (time, distance or height) achieved in each event is
-converted to a number of points using standard tables,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">How I  understand it works is that  a *good* performance in an event is  worth 1000 points, and then, according to the event, each second or  centimetre better or worse than this is worth a certain number of  points up or down from 1000. At this level, the winner of the whole  decathlon will get somewhere near 10,000 points. A look at the  Wikipedia article reveals that it is not quite as simple as this,  but this is the idea.</span> and the winner of the entire decathlon is the
-competitor with the largest total of points. (A good decathlete has to
-be at least reasonably good at all the disciplines.)
+converted to a number of points using [standard tables](https://en.wikipedia.org/wiki/Decathlon#Points_system).
+and the winner of the entire decathlon is the
+competitor with the largest total of points. The basic idea is that a "good" performance in an event is worth 1000 points, and the score decreases if the athlete takes more seconds (running) or achieves fewer metres (jumping/throwing).
+A good decathlete has to
+be at least reasonably good at all the disciplines.
 
 For the decathlon competition at the 2013 Track and Field World
 Championship, a record was kept of each competitor's performance in
@@ -4343,8 +4367,8 @@ w
 ```
 
 ```
-##  [1]        NA 175.03246 151.08750 131.30247 113.59681 102.61744  89.64931  78.89089
-##  [9]  68.99662  60.77665  54.29991  47.64227  41.40352  35.39181  29.52008  25.05344
+##  [1]        NA 175.03246 151.08750 131.30247 113.59681 100.26941  89.56250  78.80407
+##  [9]  68.99662  60.77665  54.11902  47.64227  41.40352  35.39181  29.52008  25.49505
 ## [17]  21.02841  17.28444  13.80627  10.44197
 ```
 
@@ -4410,13 +4434,13 @@ ww
 ##  2        3 151. 
 ##  3        4 131. 
 ##  4        5 114. 
-##  5        6 100. 
-##  6        7  89.5
-##  7        8  78.8
+##  5        6 103. 
+##  6        7  89.6
+##  7        8  78.9
 ##  8        9  69.0
 ##  9       10  60.8
-## 10       11  54.3
-## 11       12  48.1
+## 10       11  54.1
+## 11       12  47.8
 ## 12       13  41.4
 ## 13       14  35.4
 ## 14       15  29.5
@@ -4546,15 +4570,19 @@ decathlon.tmp %>% map_df(~ quantile(.))
 ```
 
 ```
-## # A tibble: 5 x 10
-##   x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
-##   <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
-## 1  10.4      6.62     13.2      1.87  46.0   13.7   38.1       4.5 
-## 2  10.8      7.21     13.8      1.96  48.3   14.2   42.5       4.68
-## 3  11.0      7.37     14.2      1.99  48.7   14.4   44.6       4.9 
-## 4  11.2      7.52     14.6      2.05  49.7   14.7   45.9       5.1 
-## 5  11.4      7.85     15.9      2.14  51.2   15.3   48.7       5.4 
-## # … with 2 more variables: javelin <dbl>, x1500m <dbl>
+## # A tibble: 10 x 5
+##      `0%`  `25%`  `50%`  `75%` `100%`
+##     <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+##  1  10.4   10.8   11.0   11.2   11.4 
+##  2   6.62   7.21   7.37   7.52   7.85
+##  3  13.2   13.8   14.2   14.6   15.9 
+##  4   1.87   1.96   1.99   2.05   2.14
+##  5  46.0   48.3   48.7   49.7   51.2 
+##  6  13.7   14.2   14.4   14.7   15.3 
+##  7  38.1   42.5   44.6   45.9   48.7 
+##  8   4.5    4.68   4.9    5.1    5.4 
+##  9  50.7   58.8   62.4   65.8   69.4 
+## 10 260.   266.   275.   278.   288.
 ```
 
  
@@ -4623,18 +4651,18 @@ quantiles.long
 
 ```
 ## # A tibble: 50 x 4
-##    event               data quantile  perf
-##    <chr>     <list<df[,1]>> <chr>    <dbl>
-##  1 x100m           [24 × 1] 0%       10.4 
-##  2 x100m           [24 × 1] 25%      10.8 
-##  3 x100m           [24 × 1] 50%      11.0 
-##  4 x100m           [24 × 1] 75%      11.2 
-##  5 x100m           [24 × 1] 100%     11.4 
-##  6 long.jump       [24 × 1] 0%        6.62
-##  7 long.jump       [24 × 1] 25%       7.21
-##  8 long.jump       [24 × 1] 50%       7.37
-##  9 long.jump       [24 × 1] 75%       7.52
-## 10 long.jump       [24 × 1] 100%      7.85
+##    event     data              quantile  perf
+##    <chr>     <list>            <chr>    <dbl>
+##  1 x100m     <tibble [24 × 1]> 0%       10.4 
+##  2 x100m     <tibble [24 × 1]> 25%      10.8 
+##  3 x100m     <tibble [24 × 1]> 50%      11.0 
+##  4 x100m     <tibble [24 × 1]> 75%      11.2 
+##  5 x100m     <tibble [24 × 1]> 100%     11.4 
+##  6 long.jump <tibble [24 × 1]> 0%        6.62
+##  7 long.jump <tibble [24 × 1]> 25%       7.21
+##  8 long.jump <tibble [24 × 1]> 50%       7.37
+##  9 long.jump <tibble [24 × 1]> 75%       7.52
+## 10 long.jump <tibble [24 × 1]> 100%      7.85
 ## # … with 40 more rows
 ```
 
@@ -4656,18 +4684,18 @@ quantiles.long %>% pivot_wider(names_from=quantile, values_from=perf)
 
 ```
 ## # A tibble: 10 x 7
-##    event                data   `0%`  `25%`  `50%`  `75%` `100%`
-##    <chr>      <list<df[,1]>>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-##  1 x100m            [24 × 1]  10.4   10.8   11.0   11.2   11.4 
-##  2 long.jump        [24 × 1]   6.62   7.21   7.37   7.52   7.85
-##  3 shot.put         [24 × 1]  13.2   13.8   14.2   14.6   15.9 
-##  4 high.jump        [24 × 1]   1.87   1.96   1.99   2.05   2.14
-##  5 x400m            [24 × 1]  46.0   48.3   48.7   49.7   51.2 
-##  6 x110mh           [24 × 1]  13.7   14.2   14.4   14.7   15.3 
-##  7 discus           [24 × 1]  38.1   42.5   44.6   45.9   48.7 
-##  8 pole.vault       [24 × 1]   4.5    4.68   4.9    5.1    5.4 
-##  9 javelin          [24 × 1]  50.7   58.8   62.4   65.8   69.4 
-## 10 x1500m           [24 × 1] 260.   266.   275.   278.   288.
+##    event      data                `0%`  `25%`  `50%`  `75%` `100%`
+##    <chr>      <list>             <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+##  1 x100m      <tibble [24 × 1]>  10.4   10.8   11.0   11.2   11.4 
+##  2 long.jump  <tibble [24 × 1]>   6.62   7.21   7.37   7.52   7.85
+##  3 shot.put   <tibble [24 × 1]>  13.2   13.8   14.2   14.6   15.9 
+##  4 high.jump  <tibble [24 × 1]>   1.87   1.96   1.99   2.05   2.14
+##  5 x400m      <tibble [24 × 1]>  46.0   48.3   48.7   49.7   51.2 
+##  6 x110mh     <tibble [24 × 1]>  13.7   14.2   14.4   14.7   15.3 
+##  7 discus     <tibble [24 × 1]>  38.1   42.5   44.6   45.9   48.7 
+##  8 pole.vault <tibble [24 × 1]>   4.5    4.68   4.9    5.1    5.4 
+##  9 javelin    <tibble [24 × 1]>  50.7   58.8   62.4   65.8   69.4 
+## 10 x1500m     <tibble [24 × 1]> 260.   266.   275.   278.   288.
 ```
 
 and that looks nice.
@@ -4705,7 +4733,7 @@ tibble(clusters = 1:maxclust, wss = w) %>%
 ```
 
 ```
-## Warning: Removed 1 rows containing missing values (geom_path).
+## Warning: Removed 1 row(s) containing missing values (geom_path).
 ```
 
 <img src="22-thingy_files/figure-html/freddo-1.png" width="672"  />
@@ -4770,27 +4798,27 @@ decathlon.1
 ```
 
 ```
-## K-means clustering with 5 clusters of sizes 6, 5, 8, 1, 4
+## K-means clustering with 5 clusters of sizes 4, 8, 5, 6, 1
 ## 
 ## Cluster means:
 ##         x100m   long.jump   shot.put     high.jump      x400m
-## 1 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
-## 2  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
-## 3 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
-## 4  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
-## 5  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
+## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
+## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
+## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
 ##       x110mh     discus  pole.vault     javelin     x1500m
-## 1 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
-## 2 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
-## 3 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
-## 4  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
-## 5  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+## 1  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+## 2 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
+## 3 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
+## 4 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
+## 5  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
 ## 
 ## Clustering vector:
-##  [1] 1 1 3 1 1 3 3 2 3 1 2 3 5 1 2 3 5 2 3 5 2 3 4 5
+##  [1] 4 4 2 4 4 2 2 3 2 4 3 2 1 4 3 2 1 3 2 1 3 2 5 1
 ## 
 ## Within cluster sum of squares by cluster:
-## [1] 27.08131 26.24500 41.40072  0.00000 18.86978
+## [1] 18.86978 41.40072 26.24500 27.08131  0.00000
 ##  (between_SS / total_SS =  50.6 %)
 ## 
 ## Available components:
@@ -4820,30 +4848,30 @@ tibble(name = decathlon0$name, cluster = decathlon.1$cluster) %>%
 ## # A tibble: 24 x 2
 ##    name                    cluster
 ##    <chr>                     <int>
-##  1 Ashton Eaton                  1
-##  2 Damian Warner                 1
-##  3 Mihail Dudas                  1
-##  4 Michael Schrader              1
-##  5 Willem Coertzen               1
-##  6 Leonel Suarez                 1
-##  7 Eelco Sintnicolaas            2
-##  8 Ilya Shkurenyov               2
-##  9 Thomas van der Plaetsen       2
-## 10 Pelle Rietveld                2
-## 11 Kevin Mayer                   2
-## 12 Rico Freimuth                 3
-## 13 Carlos Chinin                 3
-## 14 Gunnar Nixon                  3
-## 15 Pascal Behrenbruch            3
-## 16 Eduard Mikhan                 3
-## 17 Artem Lukyanenko              3
-## 18 Andrei Krauchanka             3
-## 19 Mikk Pahapill                 3
-## 20 Marcus Nilsson                4
-## 21 Sergey Sviridov               5
-## 22 Brent Newdick                 5
-## 23 Maicel Uibo                   5
-## 24 Keisuke Ushiro                5
+##  1 Sergey Sviridov               1
+##  2 Brent Newdick                 1
+##  3 Maicel Uibo                   1
+##  4 Keisuke Ushiro                1
+##  5 Rico Freimuth                 2
+##  6 Carlos Chinin                 2
+##  7 Gunnar Nixon                  2
+##  8 Pascal Behrenbruch            2
+##  9 Eduard Mikhan                 2
+## 10 Artem Lukyanenko              2
+## 11 Andrei Krauchanka             2
+## 12 Mikk Pahapill                 2
+## 13 Eelco Sintnicolaas            3
+## 14 Ilya Shkurenyov               3
+## 15 Thomas van der Plaetsen       3
+## 16 Pelle Rietveld                3
+## 17 Kevin Mayer                   3
+## 18 Ashton Eaton                  4
+## 19 Damian Warner                 4
+## 20 Mihail Dudas                  4
+## 21 Michael Schrader              4
+## 22 Willem Coertzen               4
+## 23 Leonel Suarez                 4
+## 24 Marcus Nilsson                5
 ```
 
  
@@ -4873,17 +4901,17 @@ decathlon.1$centers
 
 ```
 ##         x100m   long.jump   shot.put     high.jump      x400m
-## 1 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
-## 2  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
-## 3 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
-## 4  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
-## 5  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
+## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
+## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
+## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
 ##       x110mh     discus  pole.vault     javelin     x1500m
-## 1 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
-## 2 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
-## 3 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
-## 4  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
-## 5  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+## 1  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+## 2 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
+## 3 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
+## 4 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
+## 5  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
 ```
 
    
@@ -4946,7 +4974,7 @@ decathlon.1$size
 ```
 
 ```
-## [1] 6 5 8 1 4
+## [1] 4 8 5 6 1
 ```
 
  
@@ -4960,17 +4988,17 @@ decathlon.1$centers
 
 ```
 ##         x100m   long.jump   shot.put     high.jump      x400m
-## 1 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
-## 2  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
-## 3 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
-## 4  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
-## 5  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
+## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
+## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
+## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
+## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
 ##       x110mh     discus  pole.vault     javelin     x1500m
-## 1 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
-## 2 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
-## 3 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
-## 4  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
-## 5  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+## 1  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
+## 2 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
+## 3 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
+## 4 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
+## 5  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
 ```
 
  
@@ -5893,7 +5921,7 @@ bridges.1 <- hclust(d1, method = "ward.D")
 plot(bridges.1, cex = 0.3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
 
      
 
@@ -5919,7 +5947,7 @@ plot(bridges.1, cex = 0.3)
 rect.hclust(bridges.1, 5)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-175-1.png" width="672"  />
 
      
 
@@ -6041,15 +6069,6 @@ and then
 
 ```r
 library(rpart)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 bridges.tree <- rpart(factor(cluster) ~ river + erected + purpose + length + lanes + clear_g +
   t_d + material + span + rel_l + type, data = bridges.rpart, method = "class")
 print(bridges.tree)
@@ -6329,22 +6348,22 @@ withinss
 ##  1        2 1426.
 ##  2        3 1201.
 ##  3        4 1043.
-##  4        5  970.
+##  4        5  968.
 ##  5        6  901.
 ##  6        7  836.
-##  7        8  778.
-##  8        9  731.
+##  7        8  782.
+##  8        9  735.
 ##  9       10  688.
 ## 10       11  654.
-## 11       12  626.
-## 12       13  610.
-## 13       14  581.
-## 14       15  566.
-## 15       16  550.
+## 11       12  631.
+## 12       13  605.
+## 13       14  583.
+## 14       15  562.
+## 15       16  551.
 ## 16       17  532.
-## 17       18  514.
+## 17       18  513.
 ## 18       19  502.
-## 19       20  483.
+## 19       20  487.
 ```
 
      
@@ -6439,21 +6458,21 @@ withinss
 ##  2        3 1201.
 ##  3        4 1043.
 ##  4        5  968.
-##  5        6  900.
+##  5        6  901.
 ##  6        7  836.
-##  7        8  785.
-##  8        9  731.
+##  7        8  777.
+##  8        9  733.
 ##  9       10  696.
-## 10       11  665.
-## 11       12  631.
-## 12       13  609.
-## 13       14  584.
+## 10       11  658.
+## 11       12  626.
+## 12       13  608.
+## 13       14  585.
 ## 14       15  569.
-## 15       16  543.
-## 16       17  530.
-## 17       18  519.
-## 18       19  498.
-## 19       20  494.
+## 15       16  551.
+## 16       17  527.
+## 17       18  511.
+## 18       19  504.
+## 19       20  489.
 ```
 
  
@@ -6472,7 +6491,7 @@ plot directly, with the points joined by lines:
 ggplot(withinss, aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-190-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-191-1.png" width="672"  />
 
      
 
@@ -6541,16 +6560,16 @@ athletes2
 ## # A tibble: 202 x 3
 ##    gender sport   cluster
 ##    <chr>  <chr>     <int>
-##  1 female Netball       3
+##  1 female Netball      12
 ##  2 female Netball       9
 ##  3 female Netball       9
 ##  4 female Netball       9
 ##  5 female Netball       9
 ##  6 female Netball       9
 ##  7 female Netball       9
-##  8 female Netball      10
+##  8 female Netball      11
 ##  9 female Netball       9
-## 10 female Netball      10
+## 10 female Netball      11
 ## # … with 192 more rows
 ```
 
@@ -6574,34 +6593,26 @@ athletes2 %>% filter(cluster == 1) %>% print(n = Inf)
 ```
 
 ```
-## # A tibble: 25 x 3
-##    gender sport   cluster
-##    <chr>  <chr>     <int>
-##  1 female Netball       1
-##  2 female Row           1
-##  3 female Swim          1
-##  4 female Swim          1
-##  5 female Swim          1
-##  6 female Swim          1
-##  7 female Swim          1
-##  8 female Field         1
-##  9 female T400m         1
-## 10 female T400m         1
-## 11 female T400m         1
-## 12 female T400m         1
-## 13 female T400m         1
-## 14 female T400m         1
-## 15 female T400m         1
-## 16 female Tennis        1
-## 17 female Tennis        1
-## 18 female Tennis        1
-## 19 female Gym           1
-## 20 female Gym           1
-## 21 female Gym           1
-## 22 female Gym           1
-## 23 male   T400m         1
-## 24 male   T400m         1
-## 25 male   T400m         1
+## # A tibble: 17 x 3
+##    gender sport  cluster
+##    <chr>  <chr>    <int>
+##  1 male   Swim         1
+##  2 male   Row          1
+##  3 male   Row          1
+##  4 male   Row          1
+##  5 male   Row          1
+##  6 male   Row          1
+##  7 male   Field        1
+##  8 male   TSprnt       1
+##  9 male   Field        1
+## 10 male   WPolo        1
+## 11 male   WPolo        1
+## 12 male   WPolo        1
+## 13 male   WPolo        1
+## 14 male   WPolo        1
+## 15 male   WPolo        1
+## 16 male   WPolo        1
+## 17 male   WPolo        1
 ```
 
      
@@ -6617,36 +6628,15 @@ athletes2 %>% filter(cluster == 2) %>% print(n = Inf)
 ```
 
 ```
-## # A tibble: 27 x 3
-##    gender sport  cluster
-##    <chr>  <chr>    <int>
-##  1 male   Swim         2
-##  2 male   Swim         2
-##  3 male   Swim         2
-##  4 male   Swim         2
-##  5 male   Swim         2
-##  6 male   Swim         2
-##  7 male   Row          2
-##  8 male   Row          2
-##  9 male   Row          2
-## 10 male   Row          2
-## 11 male   Row          2
-## 12 male   Row          2
-## 13 male   Row          2
-## 14 male   Row          2
-## 15 male   Row          2
-## 16 male   Row          2
-## 17 male   BBall        2
-## 18 male   BBall        2
-## 19 male   BBall        2
-## 20 male   BBall        2
-## 21 male   BBall        2
-## 22 male   BBall        2
-## 23 male   Field        2
-## 24 male   TSprnt       2
-## 25 male   WPolo        2
-## 26 male   WPolo        2
-## 27 male   WPolo        2
+## # A tibble: 6 x 3
+##   gender sport  cluster
+##   <chr>  <chr>    <int>
+## 1 male   BBall        2
+## 2 male   Field        2
+## 3 male   Field        2
+## 4 male   Field        2
+## 5 male   TSprnt       2
+## 6 male   WPolo        2
 ```
 
  
@@ -6660,19 +6650,14 @@ athletes2 %>% filter(cluster == 3) %>% print(n = Inf)
 ```
 
 ```
-## # A tibble: 10 x 3
-##    gender sport   cluster
-##    <chr>  <chr>     <int>
-##  1 female Netball       3
-##  2 female T400m         3
-##  3 female TSprnt        3
-##  4 female TSprnt        3
-##  5 female T400m         3
-##  6 female TSprnt        3
-##  7 female TSprnt        3
-##  8 female Tennis        3
-##  9 female Tennis        3
-## 10 male   Row           3
+## # A tibble: 5 x 3
+##   gender sport cluster
+##   <chr>  <chr>   <int>
+## 1 female Field       3
+## 2 female Field       3
+## 3 male   Field       3
+## 4 male   Field       3
+## 5 male   Field       3
 ```
 
  
@@ -6695,10 +6680,9 @@ athletes2a %>% filter(sport == "Row", cluster == 3)
 ```
 
 ```
-## # A tibble: 1 x 5
-##   gender sport    ht    wt cluster
-##   <chr>  <chr> <dbl> <dbl>   <int>
-## 1 male   Row    165.  53.8       3
+## # A tibble: 0 x 5
+## # … with 5 variables: gender <chr>, sport <chr>, ht <dbl>, wt <dbl>,
+## #   cluster <int>
 ```
 
  
@@ -6735,22 +6719,32 @@ athletes2 %>% filter(cluster == 4) %>% print(n = Inf)
 ```
 
 ```
-## # A tibble: 13 x 3
-##    gender sport  cluster
-##    <chr>  <chr>    <int>
-##  1 male   Swim         4
-##  2 male   Row          4
-##  3 male   Row          4
-##  4 male   Row          4
-##  5 male   BBall        4
-##  6 male   BBall        4
-##  7 male   TSprnt       4
-##  8 male   Field        4
-##  9 male   WPolo        4
-## 10 male   WPolo        4
-## 11 male   WPolo        4
-## 12 male   WPolo        4
-## 13 male   WPolo        4
+## # A tibble: 23 x 3
+##    gender sport   cluster
+##    <chr>  <chr>     <int>
+##  1 female Netball       4
+##  2 female Row           4
+##  3 female Swim          4
+##  4 female Swim          4
+##  5 female Swim          4
+##  6 female Swim          4
+##  7 female Swim          4
+##  8 female Field         4
+##  9 female T400m         4
+## 10 female T400m         4
+## 11 female T400m         4
+## 12 female T400m         4
+## 13 female T400m         4
+## 14 female T400m         4
+## 15 female T400m         4
+## 16 female Tennis        4
+## 17 female Tennis        4
+## 18 female Tennis        4
+## 19 female Gym           4
+## 20 female Gym           4
+## 21 female Gym           4
+## 22 female Gym           4
+## 23 male   T400m         4
 ```
 
  
@@ -6763,19 +6757,13 @@ athletes2 %>% filter(cluster == 5) %>% print(n = Inf)
 ```
 
 ```
-## # A tibble: 10 x 3
-##    gender sport  cluster
-##    <chr>  <chr>    <int>
-##  1 male   Swim         5
-##  2 male   Swim         5
-##  3 male   Row          5
-##  4 male   TSprnt       5
-##  5 male   TSprnt       5
-##  6 male   TSprnt       5
-##  7 male   T400m        5
-##  8 male   WPolo        5
-##  9 male   WPolo        5
-## 10 male   Tennis       5
+## # A tibble: 4 x 3
+##   gender sport  cluster
+##   <chr>  <chr>    <int>
+## 1 male   Field        5
+## 2 male   TSprnt       5
+## 3 male   TSprnt       5
+## 4 male   Tennis       5
 ```
 
  
@@ -6791,12 +6779,19 @@ athletes2 %>% filter(cluster == 6) %>% print(n = Inf)
 ```
 
 ```
-## # A tibble: 3 x 3
-##   gender sport cluster
-##   <chr>  <chr>   <int>
-## 1 male   BBall       6
-## 2 male   Field       6
-## 3 male   Field       6
+## # A tibble: 10 x 3
+##    gender sport  cluster
+##    <chr>  <chr>    <int>
+##  1 male   Swim         6
+##  2 male   Swim         6
+##  3 male   Row          6
+##  4 male   TSprnt       6
+##  5 male   TSprnt       6
+##  6 male   TSprnt       6
+##  7 male   T400m        6
+##  8 male   WPolo        6
+##  9 male   WPolo        6
+## 10 male   Tennis       6
 ```
 
  
@@ -6837,79 +6832,79 @@ athletes.3
 ## 
 ## Prior probabilities of groups:
 ##          1          2          3          4          5          6 
-## 0.12376238 0.13366337 0.04950495 0.06435644 0.04950495 0.01485149 
+## 0.08415842 0.02970297 0.02475248 0.11386139 0.01980198 0.04950495 
 ##          7          8          9         10         11         12 
-## 0.15841584 0.05445545 0.14356436 0.05445545 0.01980198 0.13366337 
+## 0.13366337 0.12871287 0.14356436 0.15346535 0.05445545 0.06435644 
 ## 
 ## Group means:
-##         RCC       WCC       Hc       Hg      Ferr      BMI       SSF
-## 1  4.292800  6.390000 39.96000 13.52400  70.08000 19.71680  52.53600
-## 2  4.989259  6.466667 45.27407 15.35556  82.62963 24.08185  52.92222
-## 3  4.967000  8.130000 44.32000 14.52000  52.20000 19.69700  49.86000
-## 4  4.814615 10.107692 44.26923 14.96923 121.30769 24.56846  57.79231
-## 5  5.182000  7.210000 46.44000 15.93000 200.30000 22.96800  47.22000
-## 6  5.376667  6.266667 48.50000 16.90000  87.33333 30.95667  75.76667
-## 7  4.974687  6.484375 45.22812 15.40000  62.43750 22.19406  39.20625
-## 8  5.015455  8.200000 46.01818 15.86364 128.18182 29.08909  92.78182
-## 9  4.167241  5.993103 38.24828 12.68966  53.48276 22.05897  96.97241
-## 10 4.336364  8.818182 39.13636 13.21818  70.00000 25.03727 150.16364
-## 11 6.000000  8.150000 52.37500 17.87500  52.50000 23.91750  45.27500
-## 12 4.592963  7.292593 42.65926 14.35926  46.03704 22.74333  86.31111
-##      `%Bfat`       LBM       Ht        Wt
-## 1  11.629600  47.89800 165.5560  54.21200
-## 2   9.353333  80.51852 192.1407  88.82593
-## 3  11.127000  51.58500 171.6800  58.04000
-## 4  10.161538  80.00000 190.3923  89.06154
-## 5   8.737000  68.60000 180.8200  75.27000
-## 6  12.316667 101.66667 194.5333 116.06667
-## 7   7.244687  67.84375 181.5750  73.12969
-## 8  16.624545  80.07636 182.0273  96.21364
-## 9  19.652069  56.45069 178.5828  70.30862
-## 10 26.948182  57.36364 177.1273  78.66364
-## 11  8.655000  71.00000 180.5250  77.85000
-## 12 18.587778  58.60296 178.0926  72.02963
+##         RCC      WCC       Hc       Hg      Ferr      BMI       SSF
+## 1  4.960000 9.729412 45.55294 15.51176 119.29412 25.20706  62.37059
+## 2  5.343333 6.716667 48.28333 16.63333  81.50000 29.52333  71.15000
+## 3  4.862000 7.880000 44.64000 15.48000 163.80000 30.91800 112.88000
+## 4  4.272609 6.439130 39.74783 13.43478  65.52174 19.65652  54.27391
+## 5  6.000000 8.150000 52.37500 17.87500  52.50000 23.91750  45.27500
+## 6  5.182000 7.210000 46.44000 15.93000 200.30000 22.96800  47.22000
+## 7  4.592963 7.292593 42.65926 14.35926  46.03704 22.74333  86.31111
+## 8  4.919615 6.534615 44.70385 15.13462  82.46154 23.93077  52.94231
+## 9  4.167241 5.993103 38.24828 12.68966  53.48276 22.05897  96.97241
+## 10 4.976129 6.458065 45.22903 15.38710  62.06452 22.26258  39.41935
+## 11 4.336364 8.818182 39.13636 13.21818  70.00000 25.03727 150.16364
+## 12 4.896154 7.711538 44.09231 14.62308  64.69231 19.83538  45.86923
+##      `%Bfat`      LBM       Ht        Wt
+## 1  11.151176 79.23529 188.2059  89.25588
+## 2  12.301667 93.50000 190.4000 106.73333
+## 3  19.948000 77.76800 177.3200  97.26000
+## 4  12.119565 47.23696 165.1652  53.79565
+## 5   8.655000 71.00000 180.5250  77.85000
+## 6   8.737000 68.60000 180.8200  75.27000
+## 7  18.587778 58.60296 178.0926  72.02963
+## 8   9.282308 80.88462 193.0885  89.17692
+## 9  19.652069 56.45069 178.5828  70.30862
+## 10  7.274194 68.16129 181.7484  73.47903
+## 11 26.948182 57.36364 177.1273  78.66364
+## 12  9.968462 52.68077 171.7769  58.51538
 ## 
 ## Coefficients of linear discriminants:
-##                 LD1           LD2         LD3         LD4
-## RCC      0.97065695 -0.6603068763  1.33756370  1.09562690
-## WCC      0.14419412  0.0976964684 -0.18593544  0.20949626
-## Hc       0.03993365 -0.0167282552  0.02944517  0.03757250
-## Hg       0.37674322 -0.0804231815  0.23604530  0.25585971
-## Ferr     0.01034932  0.0004759457 -0.01890123  0.01000745
-## BMI     -0.80345854 -0.1154590209  2.36621577  1.09372321
-## SSF      0.03104854  0.0201862368 -0.04266384 -0.01010683
-## `%Bfat` -0.26070019  0.3084472414  0.38633638 -0.56728329
-## LBM      0.13127761  0.2535714776  0.15237852 -0.95583785
-## Ht      -0.18753716 -0.0383066459  0.62101446  0.21807165
-## Wt       0.24096298 -0.0758565305 -0.86525933  0.47345760
-##                  LD5          LD6         LD7          LD8
-## RCC      0.823150984 -1.043582865 -0.07505452  3.349225162
-## WCC      0.040948618 -0.253978139  0.51122383 -0.208802305
-## Hc      -0.091527860  0.076362064  0.22579774 -0.064326188
-## Hg      -0.411820765  0.324683430 -0.49946561 -0.333561523
-## Ferr     0.016374918  0.014745757 -0.00126626  0.004707277
-## BMI      2.093393957 -0.074129274 -0.73341244 -1.414080937
-## SSF      0.042455393 -0.123300713 -0.04694265  0.039099433
-## `%Bfat`  0.001281886  0.805369458  0.62262118  0.321154264
-## LBM      0.326510350  0.150544819  0.47745059  0.502240317
-## Ht       0.617572863 -0.007326729 -0.13542176 -0.307307666
-## Wt      -1.003298275 -0.085364884 -0.21648376 -0.068463691
-##                  LD9         LD10        LD11
-## RCC      2.409712056 -2.458531332  3.02712544
-## WCC     -0.055087889 -0.096574434  0.08365257
-## Hc       0.323729320  0.495620032 -0.87338911
-## Hg      -2.113984890 -0.353250579  1.25812670
-## Ferr     0.001033493  0.001997618 -0.00132641
-## BMI      0.395756559 -0.745699734 -0.24072424
-## SSF     -0.046138514  0.008604107 -0.05862077
-## `%Bfat` -0.312212279 -0.634599730 -0.23032505
-## LBM     -0.603622986 -0.884218147 -0.69461824
-## Ht       0.039454667 -0.059206652  0.01561849
-## Wt       0.486302236  0.926849133  0.66518616
+##                  LD1          LD2          LD3         LD4
+## RCC     -1.266192600  0.256106446  0.808206001 -1.30196446
+## WCC     -0.153469467 -0.078994605  0.205088034  0.09363755
+## Hc      -0.093307975  0.021992675 -0.012087161 -0.01815509
+## Hg      -0.309019785  0.084450036  0.152385480 -0.26948443
+## Ferr    -0.008721007 -0.004551151  0.020550808  0.01356683
+## BMI      0.545370372 -0.625999624  1.090740309 -2.75390389
+## SSF     -0.024252589 -0.023301617  0.008850497  0.03559861
+## `%Bfat`  0.242726866 -0.161393823 -0.870521195 -0.10045502
+## LBM     -0.158151567 -0.102776410 -1.156645388  0.17357076
+## Ht       0.115146729 -0.138274596  0.210937402 -0.70318391
+## Wt      -0.116874717  0.168228574  0.637666201  0.71560429
+##                 LD5          LD6           LD7          LD8
+## RCC     -0.68662990 -1.015303339 -0.2586150774  3.268658092
+## WCC      0.17439964 -0.045305705 -0.4887843649 -0.305944872
+## Hc       0.12937102  0.113636476 -0.0404556230 -0.135696729
+## Hg       0.42377099  0.255088250 -0.0274859879 -0.065936163
+## Ferr    -0.01458943  0.014299265  0.0005406742  0.004488197
+## BMI     -1.83732490 -0.121556905  0.5594732320 -1.151700601
+## SSF     -0.05001738 -0.125402412 -0.0397575804  0.034224172
+## `%Bfat`  0.15729382  1.006527655 -0.3021704980  0.267305723
+## LBM     -0.21293485  0.388650860 -0.5767730346  0.397152230
+## Ht      -0.54935153  0.008858563  0.0444158866 -0.259559694
+## Wt       0.81228509 -0.302254866  0.4257184332 -0.045388285
+##                  LD9         LD10         LD11
+## RCC      2.227417465  2.459320033 -3.223590160
+## WCC      0.045035808  0.130954678 -0.104354274
+## Hc       0.378862179 -0.244242634  0.960241443
+## Hg      -2.060308226 -0.418372348 -1.406148260
+## Ferr     0.001074682 -0.001292279  0.001923835
+## BMI     -0.099913184  0.854373979  0.112541184
+## SSF     -0.049027821 -0.005826493  0.057489341
+## `%Bfat` -0.317551405  0.611206234  0.110412501
+## LBM     -0.688630708  0.895735977  0.511088448
+## Ht      -0.025683855  0.077943962 -0.024103789
+## Wt       0.672740432 -0.963283281 -0.478482727
 ## 
 ## Proportion of trace:
 ##    LD1    LD2    LD3    LD4    LD5    LD6    LD7    LD8    LD9   LD10 
-## 0.5386 0.2062 0.0805 0.0684 0.0435 0.0246 0.0216 0.0114 0.0044 0.0008 
+## 0.5493 0.1956 0.1011 0.0579 0.0404 0.0235 0.0191 0.0088 0.0033 0.0010 
 ##   LD11 
 ## 0.0000
 ```
@@ -6982,7 +6977,7 @@ ggbiplot(athletes.3, groups = factor(athletes2$cluster)) +
   scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
 
      
 
@@ -7042,7 +7037,7 @@ athletes %>%
   geom_point() + scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-205-1.png" width="672"  />
 
  
 

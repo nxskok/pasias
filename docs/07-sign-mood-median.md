@@ -6,20 +6,20 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ─────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0
+## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.1     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
 ```
 
 ```r
@@ -28,11 +28,6 @@ library(smmr)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -196,12 +191,6 @@ you want to use `smmr` needs this:
 
 ```r
 library(smmr)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
 ```
 
  
@@ -373,8 +362,8 @@ meds
 ```
 
 ```
-##  [1] 55.00 55.25 55.50 55.75 56.00 56.25 56.50 56.75 57.00 57.25 57.50
-## [12] 57.75 58.00
+##  [1] 55.00 55.25 55.50 55.75 56.00 56.25 56.50 56.75 57.00 57.25 57.50 57.75
+## [13] 58.00
 ```
 
 ```r
@@ -614,8 +603,8 @@ meds
 ```
 
 ```
-##  [1] 55.00 55.25 55.50 55.75 56.00 56.25 56.50 56.75 57.00 57.25 57.50
-## [12] 57.75 58.00
+##  [1] 55.00 55.25 55.50 55.75 56.00 56.25 56.50 56.75 57.00 57.25 57.50 57.75
+## [13] 58.00
 ```
 
 ```r
@@ -830,6 +819,10 @@ group_by(less) %>% summarize(howmany=n())
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 2 x 2
 ##   less  howmany
 ##   <lgl>   <int>
@@ -1039,8 +1032,8 @@ x
 ```
 
 ```
-##  [1] 68.44849 55.52248 48.29534 45.24656 43.70068 38.52335 46.47157
-##  [8] 78.05044 59.35920 30.83632
+##  [1] 53.87036 42.61026 67.23016 57.25636 56.87698 53.02503 47.22827 41.67414
+##  [9] 79.69798 73.37342
 ```
 
 
@@ -1061,11 +1054,10 @@ tibble(x) %>% count(x<40)
 ```
 
 ```
-## # A tibble: 2 x 2
+## # A tibble: 1 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        8
-## 2 TRUE         2
+## 1 FALSE       10
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1099,7 +1091,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       2 FALSE
+## 1      10 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1119,7 +1111,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       2 FALSE
+## 1      10 TRUE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1135,7 +1127,7 @@ pull(is_rejected)
 ```
 
 ```
-## [1] FALSE
+## [1] TRUE
 ```
 
 You might be wondering where the "1 or less" came from. Getting a
@@ -1423,16 +1415,15 @@ rl
 ```
 
 ```
-##  [1] -0.33323285  0.70569291 -1.22513053  0.68517708  0.12778518
-##  [6]  0.50749949  0.26700527  1.90236874  0.53288312 -0.37374732
-## [11]  0.27256566  0.53365929  0.43581431 -0.01545866  0.18594908
-## [16] -0.40403202  1.13540289  0.16137306 -0.23360644 -0.74050354
-## [21]  2.92089551 -2.72173880  0.48428815  1.23636045  0.17078618
-## [26]  1.72456334  0.07903058  0.25210411  0.09512810  2.52310082
-## [31] -2.13629814  0.81851434  0.74615575 -0.26068744  2.70683355
-## [36]  1.46981530  1.45646489 -0.20232517  6.65249860  1.51575026
-## [41] -0.07606399 -1.11338640 -1.20427995 -0.70986104 -1.66466321
-## [46]  0.55346854  0.66091469  0.72100677  0.92025176  0.98922656
+##  [1] -0.33323285  0.70569291 -1.22513053  0.68517708  0.87221482  0.49250051
+##  [7]  0.26700527  1.90236874  0.53288312  1.37374732  0.72743434  0.46634071
+## [13]  0.43581431 -0.01545866  0.18594908 -0.40403202 -0.13540289  0.83862694
+## [19] -0.23360644 -0.74050354  2.92089551 -2.72173880  0.51571185  1.23636045
+## [25]  0.82921382  1.72456334  0.07903058  0.74789589  0.90487190  2.52310082
+## [31]  3.13629814  0.81851434  0.74615575 -0.26068744  2.70683355  1.46981530
+## [37]  1.45646489  1.20232517  6.65249860 -0.51575026 -0.07606399  2.11338640
+## [43] -1.20427995  1.70986104 -1.66466321  0.55346854  0.33908531  0.72100677
+## [49]  0.92025176  0.98922656
 ```
 
 This seems to have some unusual values, far away from zero:
@@ -1462,13 +1453,13 @@ tt
 ## 	One Sample t-test
 ## 
 ## data:  rl
-## t = 2.2556, df = 49, p-value = 0.0286
+## t = 3.72, df = 49, p-value = 0.0005131
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
-##  0.04959344 0.85981931
+##  0.3399906 1.1388911
 ## sample estimates:
 ## mean of x 
-## 0.4547064
+## 0.7394408
 ```
 
 Or we can just pull out the P-value and even compare it to 0.05:
@@ -1480,7 +1471,7 @@ pval
 ```
 
 ```
-## [1] 0.02859596
+## [1] 0.0005130841
 ```
 
 ```r
@@ -1519,8 +1510,8 @@ tibble(pvals) %>% count(pvals<=0.05)
 ## # A tibble: 2 x 2
 ##   `pvals <= 0.05`     n
 ##   <lgl>           <int>
-## 1 FALSE             304
-## 2 TRUE              696
+## 1 FALSE             298
+## 2 TRUE              702
 ```
 
 And now we simulate the sign test. Since what we want is a P-value
@@ -1546,8 +1537,8 @@ tibble(pvals_sign) %>% count(pvals_sign<=0.05)
 ## # A tibble: 2 x 2
 ##   `pvals_sign <= 0.05`     n
 ##   <lgl>                <int>
-## 1 FALSE                  239
-## 2 TRUE                   761
+## 1 FALSE                  228
+## 2 TRUE                   772
 ```
 
 For data from this Laplace
@@ -1659,6 +1650,10 @@ Solution
 ```r
 cereals %>% group_by(who) %>%
 summarize(sugar_mean=mean(sugar))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1890,6 +1885,10 @@ you, if you can make it do so. Other ways:
 
 ```r
 math %>% group_by(course) %>% summarize(count = n())
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```

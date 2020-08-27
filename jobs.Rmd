@@ -633,27 +633,27 @@ think I have the machinery to do that.
 Let's start by gluing together the dataframes with the predictions from the regular `lda` (in `d`) and the ones from the cross-validation (in `dcv`). I think I can do that like this:
 
 ```{r }
-all <- bind_cols(d, dcv)
-head(all)
+d %>% left_join(dcv, by=c("id", "job"))
 ```
+There's already subtlety. The people are numbered separately within each actual `job`, so the thing that uniquely identifies each person (what database people call a "key") is the combination of the actual job they do *plus* their `id` within that job.\endnote{You might also think of using "bind-cols", except that this adds a number to all the column names which is a pain to deal with. I don't really need to look up the people in the second dataframe, since I know where they are (in the corresponding rows), but doing so seems to make everything else easier.}
 
+The columns with an `x` on the end of their names came from `d`, that is, the predictions without cross-validation, and the ones with a `y` came from cross-validation. Let's see if we can keep only the columns we need so that it's a bit less unwieldy:
+
+```{r}
+d %>% left_join(dcv, by=c("id", "job")) %>% 
+  select(outdoor = outdoor.x,
+         social = social.x,
+         conservative = conservative.x,
+         job, id, starts_with("class"),
+         starts_with("posterior")) -> all
+all
+```
+That's not too bad. We could shorten some variable names and reduce some decimal places, but that'll do for now.
  
-
-This now has a lot of columns (and a lot of rows, that will all
-display, it being an old-fashioned `data.frame`).
-
-How many individuals were predicted differently? If you look carefully, we have a column called `class` (predicted group membership from original LDA) and another called `class1` (from cross-validation):
+How many individuals were predicted differently? We have columns called `class.x` (predicted group membership from original LDA) and `class.y` (from cross-validation), and so:
 
 ```{r }
-all %>% select(starts_with("class")) %>% slice(1)
-```
-
- 
-
-and so
-
-```{r }
-all %>% filter(class != class1)
+all %>% filter(class.x != class.y)
 ```
 
  
@@ -664,11 +664,21 @@ try to make things simpler.
 Let's round them to three decimals, and then display only some of the columns:
 
 ```{r }
-all %>%
-  filter(class != class1) %>%
+all %>% filter(class.x != class.y) %>% 
   mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
   select(id, job, starts_with("posterior"))
 ```
+
+And then, because I can, let's re-format that to make it easier to read, `x` being regular LDA and `y` being cross-validation:
+
+```{r}
+all %>% filter(class.x != class.y) %>% 
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  select(id, job, starts_with("posterior")) %>% 
+  pivot_longer(starts_with("posterior"), names_to = c("post_job", "method"), names_pattern = "posterior\\.(.*)\\.(.)", values_to = "prob") %>% 
+  pivot_wider(names_from = method, values_from = prob)
+```
+
 
  
 As I suspected, the posterior probabilities in each case are almost
@@ -678,6 +688,7 @@ cross-validation just tweaked the posterior probabilities enough to
 call that individual a mechanic, and for the second one, actually a
 dispatcher, the first analysis was almost too close to call, and
 things under cross-validation got nudged onto the mechanic side again.
+
 All right, what *about* those people who got misclassified (say,
 by the LDA rather than the cross-validation, since it seems not to
 make much difference)?
@@ -685,7 +696,7 @@ make much difference)?
 Let's count them first:
 
 ```{r error=T}
-all %>% mutate(is_correct = ifelse(job == class, "correct", "wrong")) -> all.mis
+all %>% mutate(is_correct = ifelse(job == class.x, "correct", "wrong")) -> all.mis
 all.mis %>%
   count(is_correct == "wrong") %>%
   mutate(proportion = n / sum(n))
@@ -703,7 +714,7 @@ all.mis %>%
   filter(is_correct == "wrong") %>%
   mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
   select(
-    id, job, class, outdoor, social, conservative,
+    id, job, class.x, outdoor, social, conservative,
     starts_with("posterior")
   ) %>%
   sample_n(15)
@@ -717,22 +728,16 @@ each time I do it, and so that the discussion below always makes sense.
 Now we can look at the true and predicted jobs for these people, and
 the posterior probabilities (which I rounded earlier).
 
-The first one, id \#54, is actually a dispatcher. The posterior probability of being one, though, is only 0.242; the posterior probability of being a mechanic is much higher at 0.623, so that employee gets called (wrongly) a mechanic. 
-
-The third one, though, id \#61, is a very close call: posterior
+- The first one, id 6, is badly wrong; this was actually a mechanic, but the posterior probabilities say that it is a near-certain dispatcher.
+- The second one, id 65, is a little better, but the posterior probability of actually being a mechanic is only 0.269; the probability of being a dispatcher is much higher at 0.593, so that's what it gets classified as. 
+- The third one, though, id \#61, is a very close call: posterior
 probability 0.438 of being in customer service (correct), 0.453 of
 being a dispatcher, only slightly higher, but enough to make the
 prediction wrong.
 
-These ones are all misclassified (so we are not thinking about the
-ones that were gotten right). They tend to fall into two classes: ones
-that were "clearly" something other than what they actually were,
-like \#54 and \#56, and ones that could easily have been either of two
-things, but happened to come out on the wrong side, like \#61 and \#8.
-
 The implication from looking at our sample of 15 people is that some
 of them are "badly" misclassified (with a high posterior probability
-of having a different job from the one they actually hold), but most
+of having a different job from the one they actually hold), but a lot
 of them came out on the wrong end of a close call. This suggests that
 a number  of the correct classifications came out *right* almost
 by chance as well, with (hypothesizing) two close posterior

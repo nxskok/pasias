@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 ##  Hunter-gatherers in Australia
@@ -474,15 +469,6 @@ guess) utterly fail to reject:
 
 ```r
 library(smmr)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 sign_test(journey.times, minutes, 60)
 ```
 
@@ -990,6 +976,10 @@ fits a line; as we see later, `lm` does regressions in R:
 ```r
 ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() +
   geom_smooth(method = "lm")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
 <img src="04-one-sample-inference_files/figure-html/unnamed-chunk-31-1.png" width="672"  />

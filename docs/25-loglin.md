@@ -8,11 +8,6 @@ library(tidyverse)
 ```
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -144,12 +139,9 @@ drop1(wisc.1, test = "Chisq")
 ## 
 ## Model:
 ## frequency ~ social.stratum * encouragement * college.plans
-##                                            Df Deviance    AIC   LRT
-## <none>                                          115.28 259.52      
-## social.stratum:encouragement:college.plans  2   118.98 259.22 3.697
-##                                            Pr(>Chi)
-## <none>                                             
-## social.stratum:encouragement:college.plans   0.1575
+##                                            Df Deviance    AIC   LRT Pr(>Chi)
+## <none>                                          115.28 259.52               
+## social.stratum:encouragement:college.plans  2   118.98 259.22 3.697   0.1575
 ```
 
    

@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -362,19 +357,19 @@ athletes
 
 ```
 ## # A tibble: 202 x 13
-##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
-##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
-##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
-##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
-##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
-##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
-##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
-##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
-##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
-##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
-## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
-## # … with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
+##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht
+##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl>
+##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.
+##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.
+##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176 
+##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.
+##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183 
+##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.
+##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.
+##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.
+##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.
+## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.
+## # … with 192 more rows, and 1 more variable: Wt <dbl>
 ```
 
 I listed the data to check that I had it right, but I didn't ask you

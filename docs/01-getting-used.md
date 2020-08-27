@@ -10,11 +10,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 and so to the problems:
 
@@ -517,15 +512,6 @@ That goes like this. I'll explain the steps below.
 
 ```r
 library(tidyverse)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()
 ```
 
@@ -551,6 +537,10 @@ of adding this to the end of the plotting command:
 
 ```r
 ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()+geom_smooth(method="lm")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
 <img src="01-getting-used_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
@@ -675,6 +665,10 @@ equivalent on a Mac):
 ```r
 rats %>% group_by(group) %>%
 summarize(m=mean(density))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```

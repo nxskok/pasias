@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -94,6 +89,10 @@ or the more verbose form of the same thing:
 
 ```r
 plugged %>% group_by(year) %>% summarize(rows=n())
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -462,15 +461,6 @@ those two ways, you go ahead and do this:
 
 ```r
 library(readxl)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 parking <- read_excel("parking.xlsx", sheet = 2)
 parking
 ```

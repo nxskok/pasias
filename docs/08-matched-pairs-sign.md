@@ -8,11 +8,6 @@ library(smmr)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -419,15 +414,6 @@ zero, which is exactly what we want here:
 
 ```r
 library(smmr)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 sign_test(throws2,diff)
 ```
 

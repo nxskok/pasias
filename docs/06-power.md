@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -41,8 +36,8 @@ x
 ```
 
 ```
-##  [1] 21.59476 18.64044 21.83231 18.76556 18.64861 21.81889 21.62614
-##  [8] 20.18249 16.91266 20.63490
+##  [1] 21.59476 18.64044 21.83231 18.76556 18.64861 21.81889 21.62614 20.18249
+##  [9] 16.91266 20.63490
 ```
 
 95\% of the sampled values should be within 2 SDs of the mean, that
@@ -62,8 +57,8 @@ $-2$ and 2, for example):
 ```
 
 ```
-##  [1]  0.79738130 -0.67977910  0.91615386 -0.61722168 -0.67569291
-##  [6]  0.90944266  0.81307163  0.09124563 -1.54367207  0.31744905
+##  [1]  0.79738130 -0.67977910  0.91615386 -0.61722168 -0.67569291  0.90944266
+##  [7]  0.81307163  0.09124563 -1.54367207  0.31744905
 ```
 
 These ones look very much like $z$-scores. This, if you think about

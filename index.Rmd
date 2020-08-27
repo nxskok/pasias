@@ -19,10 +19,12 @@ output:
 # Introduction
 
 
-[This book](http://ritsokiguess.site/pasias/) will hold a collection
+[This book](http://ritsokiguess.site/pasias/) contains a collection
 of problems, and my solutions to them, in applied statistics with
 R. These come from my courses STAC32, STAC33, and STAD29 at the University of
 Toronto Scarborough. 
+
+This chapter is currently not compiling: `"27-stan.Rmd"`, and has been removed from `_bookdown.yml`.
 
 The problems were originally written in Sweave (that is, LaTeX with R
 code chunks), using the `exam` document class, using data sets stolen

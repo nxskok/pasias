@@ -265,7 +265,7 @@ airport %>%
   as.matrix() -> response
 airport.1 <- lm(response ~ factor(location), data = airport)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 airport.2 <- Manova(airport.1, idata = times.df, idesign = ~times)
 airport.2
 ```
@@ -316,7 +316,7 @@ airport %>%
   as.matrix() -> response
 airport.1 <- lm(response ~ factor(location), data = airport)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 airport.2 <- Manova(airport.1, idata = times.df, idesign = ~times)
 airport.2
 ```
@@ -446,7 +446,7 @@ loc1 <- airport %>% filter(location == 1)
 response <- loc1 %>% select(epi_1:epi_4) %>% as.matrix()
 loc1.1 <- lm(response ~ 1, data = loc1)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 loc1.2 <- Manova(loc1.1, idata = times.df, idesign = ~times)
 loc1.2
 ```
@@ -536,7 +536,7 @@ airport %>% filter(location == 2) -> loc2
 loc2 %>% select(epi_1:epi_4) %>% as.matrix() -> response
 loc2.1 <- lm(response ~ 1, data = loc1)
 times <- colnames(response)
-times.df <- data.frame(times)
+times.df <- data.frame(times=factor(times))
 loc2.2 <- Manova(loc2.1, idata = times.df, idesign = ~times)
 loc2.2
 ```

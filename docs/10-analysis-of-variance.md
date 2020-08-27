@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -175,6 +170,10 @@ movies %>%
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 4 x 2
 ##   rating  mean
 ##   <chr>  <dbl>
@@ -225,15 +224,6 @@ groups, and works in the same way as before:
 
 ```r
 library(smmr)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 median_test(movies, length, rating)
 ```
 
@@ -362,6 +352,10 @@ number of observations in each group:
 deer %>%
   group_by(month) %>%
   summarize(n = n(), med = median(food))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -893,6 +887,10 @@ movies %>%
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 4 x 3
 ##   rating count   med
 ##   <chr>  <int> <dbl>
@@ -1091,6 +1089,10 @@ column). We can remind ourselves of the sample medians:
 movies %>%
   group_by(rating) %>%
   summarize(count = n(), med = median(length))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1608,6 +1610,13 @@ medians <- movies %>%
   group_by(rating) %>%
   summarize(med = median(length)) %>%
   arrange(desc(med))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```r
 medians
 ```
 
@@ -2160,6 +2169,11 @@ unload it before I go on:
 
 ```r
 detach(package:car, unload = T)
+```
+
+```
+## Warning: 'car' namespace cannot be unloaded:
+##   namespace 'car' is imported by 'rstatix' so cannot be unloaded
 ```
 
        

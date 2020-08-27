@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 These problems are about simple regression (just one $x$-variable):
 
@@ -898,9 +893,9 @@ library(GGally)
 ```
 
 ```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
+## Registered S3 method overwritten by 'GGally':
+##   method from   
+##   +.gg   ggplot2
 ```
 
 ```r
@@ -1045,10 +1040,10 @@ summary(boys.1)
 ## lm(formula = uptake ~ age + height + weight + chest, data = boys)
 ## 
 ## Residuals:
-##         1         2         3         4         5         6         7 
-## -0.020697  0.019741 -0.003649  0.038470 -0.023639 -0.026026  0.050459 
-##         8         9        10 
-## -0.014380  0.004294 -0.024573 
+##         1         2         3         4         5         6         7         8 
+## -0.020697  0.019741 -0.003649  0.038470 -0.023639 -0.026026  0.050459 -0.014380 
+##         9        10 
+##  0.004294 -0.024573 
 ## 
 ## Coefficients:
 ##              Estimate Std. Error t value Pr(>|t|)    
@@ -1632,6 +1627,10 @@ ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() +
   geom_smooth(method = "lm")
 ```
 
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
 <img src="12-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
        
@@ -2001,20 +2000,19 @@ carp.2a
 ```
 
 ```
-## # A tibble: 10 x 10
-##     tank bodyweight   ENE .fitted .se.fit .resid  .hat .sigma .cooksd
-##    <dbl>      <dbl> <dbl>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>   <dbl>
-##  1     1       11.7  15.3   12.6    1.07   2.74  0.239   1.99 0.215  
-##  2     2       25.3   9.3   11.3    0.886 -2.01  0.163   2.19 0.0651 
-##  3     3       90.2   6.5    6.75   1.07  -0.252 0.240   2.37 0.00182
-##  4     4      213     6      4.43   1.25   1.57  0.325   2.24 0.122  
-##  5     5       10.2  15.7   12.7    1.10   3.00  0.251   1.90 0.279  
-##  6     6       17.6  10     12.0    0.980 -2.01  0.199   2.19 0.0866 
-##  7     7       32.6   8.6   10.7    0.828 -2.08  0.143   2.18 0.0583 
-##  8     8       81.3   6.4    7.24   1.01  -0.841 0.211   2.34 0.0166 
-##  9     9      142.    5.6    4.78   1.31   0.822 0.355   2.33 0.0398 
-## 10    10      286.    6      6.94   2.05  -0.940 0.875   2.11 3.40   
-## # … with 1 more variable: .std.resid <dbl>
+## # A tibble: 10 x 9
+##     tank bodyweight   ENE .fitted .resid .std.resid  .hat .sigma .cooksd
+##    <dbl>      <dbl> <dbl>   <dbl>  <dbl>      <dbl> <dbl>  <dbl>   <dbl>
+##  1     1       11.7  15.3   12.6   2.74       1.43  0.239   1.99 0.215  
+##  2     2       25.3   9.3   11.3  -2.01      -1.00  0.163   2.19 0.0651 
+##  3     3       90.2   6.5    6.75 -0.252     -0.132 0.240   2.37 0.00182
+##  4     4      213     6      4.43  1.57       0.871 0.325   2.24 0.122  
+##  5     5       10.2  15.7   12.7   3.00       1.58  0.251   1.90 0.279  
+##  6     6       17.6  10     12.0  -2.01      -1.02  0.199   2.19 0.0866 
+##  7     7       32.6   8.6   10.7  -2.08      -1.03  0.143   2.18 0.0583 
+##  8     8       81.3   6.4    7.24 -0.841     -0.431 0.211   2.34 0.0166 
+##  9     9      142.    5.6    4.78  0.822      0.466 0.355   2.33 0.0398 
+## 10    10      286.    6      6.94 -0.940     -1.21  0.875   2.11 3.40
 ```
 
  
@@ -2457,6 +2455,10 @@ ggplot(sparrowhawks, aes(x = returning, y = newadults)) +
   geom_point() + geom_smooth(method = "lm")
 ```
 
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
 <img src="12-regression_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
 
  
@@ -2603,14 +2605,11 @@ soc %>% map_df(~ quantile(.))
 ```
 
 ```
-## # A tibble: 5 x 2
-##   experience salary
-##        <dbl>  <dbl>
-## 1        1   16105 
-## 2       13.5 36990.
-## 3       20   50948.
-## 4       24.8 65204.
-## 5       28   99139
+## # A tibble: 2 x 5
+##    `0%`   `25%`  `50%`   `75%` `100%`
+##   <dbl>   <dbl>  <dbl>   <dbl>  <dbl>
+## 1     1    13.5    20     24.8     28
+## 2 16105 36990.  50948. 65204.   99139
 ```
 
  
@@ -2899,14 +2898,14 @@ search()
 ## [10] "package:ggrepel"     "package:ggbiplot"    "package:grid"       
 ## [13] "package:scales"      "package:plyr"        "package:lme4"       
 ## [16] "package:Matrix"      "package:car"         "package:carData"    
-## [19] "package:survminer"   "package:ggpubr"      "package:magrittr"   
-## [22] "package:survival"    "package:nnet"        "package:MASS"       
-## [25] "package:smmr"        "package:forcats"     "package:stringr"    
-## [28] "package:dplyr"       "package:purrr"       "package:readr"      
-## [31] "package:tidyr"       "package:tibble"      "package:ggplot2"    
-## [34] "package:tidyverse"   "package:stats"       "package:graphics"   
-## [37] "package:grDevices"   "package:utils"       "package:datasets"   
-## [40] "package:methods"     "Autoloads"           "package:base"
+## [19] "package:survminer"   "package:ggpubr"      "package:survival"   
+## [22] "package:nnet"        "package:MASS"        "package:smmr"       
+## [25] "package:forcats"     "package:stringr"     "package:dplyr"      
+## [28] "package:purrr"       "package:readr"       "package:tidyr"      
+## [31] "package:tibble"      "package:ggplot2"     "package:tidyverse"  
+## [34] "package:stats"       "package:graphics"    "package:grDevices"  
+## [37] "package:utils"       "package:datasets"    "package:methods"    
+## [40] "Autoloads"           "package:base"
 ```
 
  
@@ -2938,14 +2937,14 @@ search()
 ## [10] "package:ggrepel"     "package:ggbiplot"    "package:grid"       
 ## [13] "package:scales"      "package:plyr"        "package:lme4"       
 ## [16] "package:Matrix"      "package:car"         "package:carData"    
-## [19] "package:survminer"   "package:ggpubr"      "package:magrittr"   
-## [22] "package:survival"    "package:nnet"        "package:smmr"       
-## [25] "package:forcats"     "package:stringr"     "package:dplyr"      
-## [28] "package:purrr"       "package:readr"       "package:tidyr"      
-## [31] "package:tibble"      "package:ggplot2"     "package:tidyverse"  
-## [34] "package:stats"       "package:graphics"    "package:grDevices"  
-## [37] "package:utils"       "package:datasets"    "package:methods"    
-## [40] "Autoloads"           "package:base"
+## [19] "package:survminer"   "package:ggpubr"      "package:survival"   
+## [22] "package:nnet"        "package:smmr"        "package:forcats"    
+## [25] "package:stringr"     "package:dplyr"       "package:purrr"      
+## [28] "package:readr"       "package:tidyr"       "package:tibble"     
+## [31] "package:ggplot2"     "package:tidyverse"   "package:stats"      
+## [34] "package:graphics"    "package:grDevices"   "package:utils"      
+## [37] "package:datasets"    "package:methods"     "Autoloads"          
+## [40] "package:base"
 ```
 
  
@@ -3364,11 +3363,11 @@ glance(volume.1)
 ```
 
 ```
-## # A tibble: 1 x 11
+## # A tibble: 1 x 12
 ##   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
-##       <dbl>         <dbl> <dbl>     <dbl>   <dbl> <int>  <dbl> <dbl> <dbl>
-## 1     0.959         0.953  20.4      185. 8.22e-7     2  -43.2  92.4  93.4
-## # … with 2 more variables: deviance <dbl>, df.residual <int>
+##       <dbl>         <dbl> <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953  20.4      185. 8.22e-7     1  -43.2  92.4  93.4
+## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
  
@@ -3790,13 +3789,13 @@ bind_rows(glance(volume.1), glance(volume.2), glance(volume.3))
 ```
 
 ```
-## # A tibble: 3 x 11
+## # A tibble: 3 x 12
 ##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
-##       <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <int>  <dbl> <dbl> <dbl>
-## 1     0.959         0.953 20.4       185.  8.22e-7     2 -43.2  92.4  93.4 
-## 2     0.953         0.947 21.7       162.  1.36e-6     2 -43.8  93.7  94.6 
-## 3     0.908         0.896  0.303      78.7 2.06e-5     2  -1.12  8.25  9.16
-## # … with 2 more variables: deviance <dbl>, df.residual <int>
+##       <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953 20.4       185.  8.22e-7     1 -43.2  92.4  93.4 
+## 2     0.953         0.947 21.7       162.  1.36e-6     1 -43.8  93.7  94.6 
+## 3     0.908         0.896  0.303      78.7 2.06e-5     1  -1.12  8.25  9.16
+## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
  
@@ -3823,13 +3822,13 @@ map_df(model_list, ~ glance(.))
 ```
 
 ```
-## # A tibble: 3 x 11
+## # A tibble: 3 x 12
 ##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
-##       <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <int>  <dbl> <dbl> <dbl>
-## 1     0.959         0.953 20.4       185.  8.22e-7     2 -43.2  92.4  93.4 
-## 2     0.953         0.947 21.7       162.  1.36e-6     2 -43.8  93.7  94.6 
-## 3     0.908         0.896  0.303      78.7 2.06e-5     2  -1.12  8.25  9.16
-## # … with 2 more variables: deviance <dbl>, df.residual <int>
+##       <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953 20.4       185.  8.22e-7     1 -43.2  92.4  93.4 
+## 2     0.953         0.947 21.7       162.  1.36e-6     1 -43.8  93.7  94.6 
+## 3     0.908         0.896  0.303      78.7 2.06e-5     1  -1.12  8.25  9.16
+## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
  
@@ -4661,6 +4660,10 @@ ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
   geom_point() + geom_smooth(method = "lm", se = F)
 ```
 
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
 <img src="12-regression_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
 
  
@@ -4854,6 +4857,10 @@ ggplot(coasters, aes(x = drop, y = duration, label = coaster_name)) +
   geom_point() + geom_text_repel() + geom_smooth(method = "lm", se = F)
 ```
 
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
 <img src="12-regression_files/figure-html/unnamed-chunk-127-1.png" width="672"  />
 
        
@@ -4968,20 +4975,20 @@ coasters %>%
 ```
 
 ```
-## # A tibble: 10 x 11
-##    coaster_name state  drop duration .fitted .se.fit .resid  .hat .sigma
-##    <chr>        <chr> <dbl>    <dbl>   <dbl>   <dbl>  <dbl> <dbl>  <dbl>
-##  1 Nitro        New …   215      240    143.    18.9  97.0  0.138   37.5
-##  2 The Beast    Ohio    141       65    125.    17.5 -60.1  0.118   48.8
-##  3 Millennium … Ohio    300      105    164.    33.4 -58.6  0.429   45.9
-##  4 Ghost Rider  Cali…   108      160    117.    21.6  42.8  0.180   51.5
-##  5 Goliath      Cali…   255      180    153.    24.9  27.3  0.239   53.2
-##  6 Thunderbolt  Penn…    95       90    114.    23.7 -24.0  0.216   53.5
-##  7 Raven        Indi…    86       90    112.    25.2 -21.8  0.245   53.6
-##  8 Incredible … Flor…   105      135    116.    22.1  18.6  0.188   53.9
-##  9 Magnum XL-2… Ohio    195      120    138.    17.0 -18.2  0.111   54.0
-## 10 Son of Beast Ohio    214      140    143.    18.8  -2.81 0.136   54.5
-## # … with 2 more variables: .cooksd <dbl>, .std.resid <dbl>
+## # A tibble: 10 x 10
+##    coaster_name state  drop duration .fitted .resid .std.resid  .hat .sigma
+##    <chr>        <chr> <dbl>    <dbl>   <dbl>  <dbl>      <dbl> <dbl>  <dbl>
+##  1 Nitro        New …   215      240    143.  97.0      2.05   0.138   37.5
+##  2 The Beast    Ohio    141       65    125. -60.1     -1.26   0.118   48.8
+##  3 Millennium … Ohio    300      105    164. -58.6     -1.52   0.429   45.9
+##  4 Ghost Rider  Cali…   108      160    117.  42.8      0.928  0.180   51.5
+##  5 Goliath      Cali…   255      180    153.  27.3      0.614  0.239   53.2
+##  6 Thunderbolt  Penn…    95       90    114. -24.0     -0.532  0.216   53.5
+##  7 Raven        Indi…    86       90    112. -21.8     -0.493  0.245   53.6
+##  8 Incredible … Flor…   105      135    116.  18.6      0.404  0.188   53.9
+##  9 Magnum XL-2… Ohio    195      120    138. -18.2     -0.379  0.111   54.0
+## 10 Son of Beast Ohio    214      140    143.  -2.81    -0.0593 0.136   54.5
+## # … with 1 more variable: .cooksd <dbl>
 ```
 
  
@@ -5279,7 +5286,7 @@ class(pp)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -5414,18 +5421,18 @@ pizza
 
 ```
 ## # A tibble: 24 x 4
-##    Type                                                Calories   Fat  Cost
-##    <chr>                                                  <dbl> <dbl> <dbl>
-##  1 Domino's Deep Dish with Pepperoni                        385  19.5  1.87
-##  2 Pizza Hut's Stuffed Crust with Pepperoni                 370  15    1.83
-##  3 Pizza Hut's Pan Pizza with Pepperoni                     280  14    1.83
-##  4 Domino's Hand-Tossed with Pepperoni                      305  12    1.67
-##  5 Pizza Hut's Hand-Tossed with Pepperoni                   230   9    1.63
-##  6 Little Caesars' Deep Dish with Pepperoni                 350  14.2  1.06
-##  7 Little Caesars' Original Round with Pepperoni            230   8    0.81
-##  8 Freschetta Bakes & Rises  4-Cheese                       364  15    0.98
-##  9 Freschetta Bakes & Rises Sauce Stuffed Crust 4-Che…      334  11    1.23
-## 10 DiGiorno Rising Crust Four Cheese                        332  12    0.94
+##    Type                                                  Calories   Fat  Cost
+##    <chr>                                                    <dbl> <dbl> <dbl>
+##  1 Domino's Deep Dish with Pepperoni                          385  19.5  1.87
+##  2 Pizza Hut's Stuffed Crust with Pepperoni                   370  15    1.83
+##  3 Pizza Hut's Pan Pizza with Pepperoni                       280  14    1.83
+##  4 Domino's Hand-Tossed with Pepperoni                        305  12    1.67
+##  5 Pizza Hut's Hand-Tossed with Pepperoni                     230   9    1.63
+##  6 Little Caesars' Deep Dish with Pepperoni                   350  14.2  1.06
+##  7 Little Caesars' Original Round with Pepperoni              230   8    0.81
+##  8 Freschetta Bakes & Rises  4-Cheese                         364  15    0.98
+##  9 Freschetta Bakes & Rises Sauce Stuffed Crust 4-Cheese      334  11    1.23
+## 10 DiGiorno Rising Crust Four Cheese                          332  12    0.94
 ## # … with 14 more rows
 ```
 
@@ -6124,6 +6131,10 @@ How bendy is the cubic?
 ggplot(fire, aes(x = distance, y = damage)) + geom_point() +
   geom_smooth(method = "lm") +
   geom_line(data = damage.3, aes(y = .fitted), colour = "red")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
 <img src="12-regression_files/figure-html/unnamed-chunk-160-1.png" width="672"  />
@@ -6951,7 +6962,7 @@ class(pp)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -7448,30 +7459,29 @@ as_tibble(d)
 ```
 
 ```
-## # A tibble: 20 x 10
-##    minutes drums weight .fitted .se.fit .resid   .hat .sigma .cooksd
-##      <dbl> <dbl>  <dbl>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
-##  1      58     7   5.11    55.7    1.70  2.34  0.0913   5.76 6.41e-3
-##  2     152    18  16.7    156.     2.47 -4.08  0.194    5.68 5.24e-2
-##  3      41     5   3.2     38.4    2.03  2.58  0.131    5.75 1.22e-2
-##  4      93    14   7.03    91.8    2.91  1.21  0.268    5.78 7.79e-3
-##  5     101    11  11.0    101.     2.17  0.453 0.149    5.79 4.45e-4
-##  6      38     5   4.04    42.7    2.11 -4.69  0.141    5.65 4.41e-2
-##  7     203    23  22.1    202.     3.68  0.903 0.429    5.78 1.13e-2
-##  8      78     9   7.03    72.9    1.45  5.05  0.0665   5.64 2.06e-2
-##  9     117    16  10.6    118.     2.06 -0.559 0.135    5.79 5.93e-4
-## 10      44     5   4.76    46.3    2.28 -2.34  0.165    5.75 1.37e-2
-## 11     121    17  11.0    123.     2.37 -2.36  0.179    5.75 1.56e-2
-## 12     112    12   9.51    96.8    1.27 15.2   0.0514   4.29 1.38e-1
-## 13      50     6   3.79    45.2    1.87  4.82  0.110    5.65 3.41e-2
-## 14      82    12   6.45    81.3    2.22  0.695 0.156    5.79 1.12e-3
-## 15      48     8   4.6     56.8    1.73 -8.84  0.0954   5.30 9.61e-2
-## 16     127    15  13.9    130.     2.01 -3.25  0.128    5.72 1.88e-2
-## 17     140    17  13.0    134.     1.75  6.43  0.0970   5.54 5.20e-2
-## 18     155    21  15.2    160.     2.70 -4.72  0.230    5.63 9.14e-2
-## 19      39     6   3.64    44.4    1.88 -5.42  0.112    5.61 4.40e-2
-## 20      90    11   9.57    93.4    1.51 -3.39  0.0725   5.72 1.02e-2
-## # … with 1 more variable: .std.resid <dbl>
+## # A tibble: 20 x 9
+##    minutes drums weight .fitted .resid .std.resid   .hat .sigma  .cooksd
+##      <dbl> <dbl>  <dbl>   <dbl>  <dbl>      <dbl>  <dbl>  <dbl>    <dbl>
+##  1      58     7   5.11    55.7  2.34      0.437  0.0913   5.76 0.00641 
+##  2     152    18  16.7    156.  -4.08     -0.809  0.194    5.68 0.0524  
+##  3      41     5   3.2     38.4  2.58      0.493  0.131    5.75 0.0122  
+##  4      93    14   7.03    91.8  1.21      0.252  0.268    5.78 0.00779 
+##  5     101    11  11.0    101.   0.453     0.0873 0.149    5.79 0.000445
+##  6      38     5   4.04    42.7 -4.69     -0.900  0.141    5.65 0.0441  
+##  7     203    23  22.1    202.   0.903     0.213  0.429    5.78 0.0113  
+##  8      78     9   7.03    72.9  5.05      0.931  0.0665   5.64 0.0206  
+##  9     117    16  10.6    118.  -0.559    -0.107  0.135    5.79 0.000593
+## 10      44     5   4.76    46.3 -2.34     -0.456  0.165    5.75 0.0137  
+## 11     121    17  11.0    123.  -2.36     -0.463  0.179    5.75 0.0156  
+## 12     112    12   9.51    96.8 15.2       2.77   0.0514   4.29 0.138   
+## 13      50     6   3.79    45.2  4.82      0.909  0.110    5.65 0.0341  
+## 14      82    12   6.45    81.3  0.695     0.135  0.156    5.79 0.00112 
+## 15      48     8   4.6     56.8 -8.84     -1.65   0.0954   5.30 0.0961  
+## 16     127    15  13.9    130.  -3.25     -0.619  0.128    5.72 0.0188  
+## 17     140    17  13.0    134.   6.43      1.20   0.0970   5.54 0.0520  
+## 18     155    21  15.2    160.  -4.72     -0.957  0.230    5.63 0.0914  
+## 19      39     6   3.64    44.4 -5.42     -1.02   0.112    5.61 0.0440  
+## 20      90    11   9.57    93.4 -3.39     -0.626  0.0725   5.72 0.0102
 ```
 
  
@@ -7569,11 +7579,10 @@ d %>% filter(.resid > 10)
 ```
 
 ```
-## # A tibble: 1 x 10
-##   minutes drums weight .fitted .se.fit .resid   .hat .sigma .cooksd
-##     <dbl> <dbl>  <dbl>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
-## 1     112    12   9.51    96.8    1.27   15.2 0.0514   4.29   0.138
-## # … with 1 more variable: .std.resid <dbl>
+## # A tibble: 1 x 9
+##   minutes drums weight .fitted .resid .std.resid   .hat .sigma .cooksd
+##     <dbl> <dbl>  <dbl>   <dbl>  <dbl>      <dbl>  <dbl>  <dbl>   <dbl>
+## 1     112    12   9.51    96.8   15.2       2.77 0.0514   4.29   0.138
 ```
 
  

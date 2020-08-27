@@ -8,11 +8,6 @@ library(tidyverse)
 ```
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 ##  Do you like your mobile phone?
@@ -370,15 +365,6 @@ Solution
 
 ```r
 library(MASS)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 mobile.1 <- polr(satis ~ gender + age.group, weights = frequency, data = mobile.long)
 ```
 
@@ -497,12 +483,9 @@ anova(mobile.2, mobile.1)
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: satis
-##                Model Resid. df Resid. Dev   Test    Df LR stat.
-## 1             gender       416   1100.968                      
-## 2 gender + age.group       413   1087.804 1 vs 2     3 13.16411
-##       Pr(Chi)
-## 1            
-## 2 0.004294811
+##                Model Resid. df Resid. Dev   Test    Df LR stat.     Pr(Chi)
+## 1             gender       416   1100.968                                  
+## 2 gender + age.group       413   1087.804 1 vs 2     3 13.16411 0.004294811
 ```
 
     
@@ -1116,12 +1099,9 @@ anova(abortion.3, abortion.1)
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: attitude.ord
-##                  Model Resid. df Resid. Dev   Test    Df LR stat.
-## 1            education      3233   4131.176                      
-## 2 religion + education      3231   4065.541 1 vs 2     2 65.63505
-##        Pr(Chi)
-## 1             
-## 2 5.551115e-15
+##                  Model Resid. df Resid. Dev   Test    Df LR stat.      Pr(Chi)
+## 1            education      3233   4131.176                                   
+## 2 religion + education      3231   4065.541 1 vs 2     2 65.63505 5.551115e-15
 ```
 
        
@@ -1304,12 +1284,12 @@ anova(abortion.1, abortion.4)
 ## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: attitude.ord
-##                                       Model Resid. df Resid. Dev   Test
-## 1                      religion + education      3231   4065.541       
-## 2 religion + education + religion:education      3227   4047.041 1 vs 2
-##      Df LR stat.      Pr(Chi)
-## 1                            
-## 2     4 18.49958 0.0009853301
+##                                       Model Resid. df Resid. Dev   Test    Df
+## 1                      religion + education      3231   4065.541             
+## 2 religion + education + religion:education      3227   4047.041 1 vs 2     4
+##   LR stat.      Pr(Chi)
+## 1                      
+## 2 18.49958 0.0009853301
 ```
 
        
@@ -1614,21 +1594,20 @@ ess
 
 ```
 ## # A tibble: 2,286 x 17
-##    cntry cname cedition cproddat cseqno name  essround edition   idno
-##    <chr> <chr>    <dbl> <chr>     <dbl> <chr>    <dbl>   <dbl>  <dbl>
-##  1 GB    ESS1…        1 26.11.2… 134168 ESS6…        6     2.1 101014
-##  2 GB    ESS1…        1 26.11.2… 134169 ESS6…        6     2.1 101048
-##  3 GB    ESS1…        1 26.11.2… 134170 ESS6…        6     2.1 101055
-##  4 GB    ESS1…        1 26.11.2… 134171 ESS6…        6     2.1 101089
-##  5 GB    ESS1…        1 26.11.2… 134172 ESS6…        6     2.1 101097
-##  6 GB    ESS1…        1 26.11.2… 134173 ESS6…        6     2.1 101113
-##  7 GB    ESS1…        1 26.11.2… 134174 ESS6…        6     2.1 101121
-##  8 GB    ESS1…        1 26.11.2… 134175 ESS6…        6     2.1 101139
-##  9 GB    ESS1…        1 26.11.2… 134176 ESS6…        6     2.1 101154
-## 10 GB    ESS1…        1 26.11.2… 134177 ESS6…        6     2.1 101170
-## # … with 2,276 more rows, and 8 more variables: dweight <dbl>,
-## #   pspwght <dbl>, pweight <dbl>, prtvtgb <dbl>, gndr <dbl>, agea <dbl>,
-## #   eduyrs <dbl>, inwtm <dbl>
+##    cntry cname cedition cproddat cseqno name  essround edition   idno dweight
+##    <chr> <chr>    <dbl> <chr>     <dbl> <chr>    <dbl>   <dbl>  <dbl>   <dbl>
+##  1 GB    ESS1…        1 26.11.2… 134168 ESS6…        6     2.1 101014   1.01 
+##  2 GB    ESS1…        1 26.11.2… 134169 ESS6…        6     2.1 101048   2.02 
+##  3 GB    ESS1…        1 26.11.2… 134170 ESS6…        6     2.1 101055   1.01 
+##  4 GB    ESS1…        1 26.11.2… 134171 ESS6…        6     2.1 101089   0.505
+##  5 GB    ESS1…        1 26.11.2… 134172 ESS6…        6     2.1 101097   0.505
+##  6 GB    ESS1…        1 26.11.2… 134173 ESS6…        6     2.1 101113   1.01 
+##  7 GB    ESS1…        1 26.11.2… 134174 ESS6…        6     2.1 101121   0.505
+##  8 GB    ESS1…        1 26.11.2… 134175 ESS6…        6     2.1 101139   0.505
+##  9 GB    ESS1…        1 26.11.2… 134176 ESS6…        6     2.1 101154   1.01 
+## 10 GB    ESS1…        1 26.11.2… 134177 ESS6…        6     2.1 101170   1.01 
+## # … with 2,276 more rows, and 7 more variables: pspwght <dbl>, pweight <dbl>,
+## #   prtvtgb <dbl>, gndr <dbl>, agea <dbl>, eduyrs <dbl>, inwtm <dbl>
 ```
 
      
@@ -2002,12 +1981,9 @@ anova(ess.3, ess.2)
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: party
-##                   Model Resid. df Resid. Dev   Test    Df LR stat.
-## 1         agea + eduyrs      2440   2500.835                      
-## 2 agea + eduyrs + inwtm      2438   2496.507 1 vs 2     2 4.327917
-##     Pr(Chi)
-## 1          
-## 2 0.1148695
+##                   Model Resid. df Resid. Dev   Test    Df LR stat.   Pr(Chi)
+## 1         agea + eduyrs      2440   2500.835                                
+## 2 agea + eduyrs + inwtm      2438   2496.507 1 vs 2     2 4.327917 0.1148695
 ```
 
  
@@ -2633,12 +2609,9 @@ anova(gators.2, gators.1)
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Food.type
-##                  Model Resid. df Resid. Dev   Test    Df LR stat.
-## 1          Size + Lake       300   540.0803                      
-## 2 Gender + Size + Lake       296   537.8655 1 vs 2     4 2.214796
-##     Pr(Chi)
-## 1          
-## 2 0.6963214
+##                  Model Resid. df Resid. Dev   Test    Df LR stat.   Pr(Chi)
+## 1          Size + Lake       300   540.0803                                
+## 2 Gender + Size + Lake       296   537.8655 1 vs 2     4 2.214796 0.6963214
 ```
 
  
@@ -3111,21 +3084,20 @@ steak0
 
 ```
 ## # A tibble: 550 x 15
-##    respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
-##            <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
-##  1    3237565956 FALSE     NA    NA      NA     NA        NA    NA     
-##  2    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
-##  3    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
-##  4    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
-##  5    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
-##  6    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
-##  7    3234955097 TRUE      FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
-##  8    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
-##  9    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE  
-## 10    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE  
-## # … with 540 more rows, and 7 more variables: steak <lgl>,
-## #   steak_prep <chr>, female <lgl>, age <chr>, hhold_income <chr>,
-## #   educ <chr>, region <chr>
+##    respondent_id lottery_a smoke alcohol gamble skydiving speed cheated steak
+##            <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>   <lgl>
+##  1    3237565956 FALSE     NA    NA      NA     NA        NA    NA      NA   
+##  2    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE   TRUE 
+##  3    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE    TRUE 
+##  4    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE    TRUE 
+##  5    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE    TRUE 
+##  6    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE   TRUE 
+##  7    3234955097 TRUE      FALSE TRUE    FALSE  FALSE     TRUE  TRUE    FALSE
+##  8    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE   TRUE 
+##  9    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE   TRUE 
+## 10    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE   TRUE 
+## # … with 540 more rows, and 6 more variables: steak_prep <chr>, female <lgl>,
+## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
 ```
 
  
@@ -3202,26 +3174,26 @@ steak0 %>% drop_na() %>% summary()
 ##  Mean   :3.235e+09                                                  
 ##  3rd Qu.:3.235e+09                                                  
 ##  Max.   :3.235e+09                                                  
-##    gamble        skydiving         speed          cheated       
-##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
-##  FALSE:158       FALSE:308       FALSE:28        FALSE:274      
-##  TRUE :173       TRUE :23        TRUE :303       TRUE :57       
-##                                                                 
-##                                                                 
-##                                                                 
-##   steak          steak_prep          female            age           
-##  Mode:logical   Length:331         Mode :logical   Length:331        
-##  TRUE:331       Class :character   FALSE:174       Class :character  
-##                 Mode  :character   TRUE :157       Mode  :character  
-##                                                                      
-##                                                                      
-##                                                                      
-##  hhold_income           educ              region         
-##  Length:331         Length:331         Length:331        
-##  Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character  
-##                                                          
-##                                                          
+##    gamble        skydiving         speed          cheated         steak        
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical   Mode:logical  
+##  FALSE:158       FALSE:308       FALSE:28        FALSE:274       TRUE:331      
+##  TRUE :173       TRUE :23        TRUE :303       TRUE :57                      
+##                                                                                
+##                                                                                
+##                                                                                
+##   steak_prep          female            age            hhold_income      
+##  Length:331         Mode :logical   Length:331         Length:331        
+##  Class :character   FALSE:174       Class :character   Class :character  
+##  Mode  :character   TRUE :157       Mode  :character   Mode  :character  
+##                                                                          
+##                                                                          
+##                                                                          
+##      educ              region         
+##  Length:331         Length:331        
+##  Class :character   Class :character  
+##  Mode  :character   Mode  :character  
+##                                       
+##                                       
 ## 
 ```
 
@@ -3260,56 +3232,52 @@ complete.cases(steak0)
 ```
 
 ```
-##   [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
-##  [12]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE
-##  [23] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE
-##  [34]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE
-##  [45] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE
-##  [56]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-##  [67] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE
-##  [78] FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
-##  [89] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
-## [100]  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE
-## [111]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [122]  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
-## [133] FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
-## [144]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
-## [155] FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE
-## [166] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE
-## [177]  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE
-## [188] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [199] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE
-## [210] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE
-## [221]  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [232] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
-## [243]  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
-## [254]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
-## [265] FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
-## [276] FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE
-## [287]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE
-## [298]  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [309] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
-## [320]  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE
-## [331]  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [342] FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [353] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
-## [364]  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE
-## [375]  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [386]  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [397]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
-## [408] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
-## [419] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
-## [430] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-## [441] FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [452] FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [463]  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE
-## [474] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [485]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [496]  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE
-## [507] FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-## [518]  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
-## [529] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [540] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE
+##   [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [13]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
+##  [25]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE
+##  [37]  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE
+##  [49]  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE
+##  [61] FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE
+##  [73] FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
+##  [85] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE
+##  [97]  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE
+## [109] FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+## [121]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
+## [133] FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
+## [145]  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
+## [157]  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE
+## [169]  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+## [181] FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE
+## [193]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE
+## [205]  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE
+## [217] FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE
+## [229]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
+## [241]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+## [253] FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
+## [265] FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE
+## [277]  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [289]  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE
+## [301] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+## [313]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+## [325] FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
+## [337]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE
+## [349] FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
+## [361] FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
+## [373] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE
+## [385]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+## [397]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE
+## [409]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE
+## [421]  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+## [433]  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE
+## [445]  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
+## [457]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE
+## [469]  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
+## [481] FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE
+## [493] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE
+## [505]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE
+## [517]  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+## [529] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE
+## [541] FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE
 ```
 
  
@@ -3345,16 +3313,16 @@ steak0 %>% slice(rows)
 
 ```
 ## # A tibble: 6 x 15
-##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
-##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
-## 1    3234776895 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
-## 2    3234776815 TRUE      TRUE  TRUE    FALSE  FALSE     TRUE  FALSE  
-## 3    3234776702 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE  
-## 4    3234763650 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
-## 5    3234763171 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  FALSE  
-## 6    3234762715 FALSE     FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
-## # … with 7 more variables: steak <lgl>, steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
+##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated steak
+##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>   <lgl>
+## 1    3234776895 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE   TRUE 
+## 2    3234776815 TRUE      TRUE  TRUE    FALSE  FALSE     TRUE  FALSE   TRUE 
+## 3    3234776702 FALSE     FALSE FALSE   FALSE  FALSE     FALSE FALSE   TRUE 
+## 4    3234763650 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE   FALSE
+## 5    3234763171 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  FALSE   TRUE 
+## 6    3234762715 FALSE     FALSE FALSE   FALSE  FALSE     TRUE  FALSE   FALSE
+## # … with 6 more variables: steak_prep <chr>, female <lgl>, age <chr>,
+## #   hhold_income <chr>, educ <chr>, region <chr>
 ```
 
  
@@ -3460,14 +3428,14 @@ steak0 %>% select(9:15) %>% slice(rows)
 
 ```
 ## # A tibble: 6 x 7
-##   steak steak_prep  female age   hhold_income    educ            region    
-##   <lgl> <chr>       <lgl>  <chr> <chr>           <chr>           <chr>     
-## 1 TRUE  Medium rare TRUE   45-60 $0 - $24,999    Some college o… West Sout…
-## 2 TRUE  Medium      TRUE   45-60 $150,000+       Bachelor degree New Engla…
-## 3 TRUE  Medium rare TRUE   >60   $50,000 - $99,… Graduate degree Mountain  
-## 4 FALSE <NA>        FALSE  45-60 $100,000 - $14… Some college o… South Atl…
-## 5 TRUE  Medium      FALSE  >60   <NA>            Graduate degree Pacific   
-## 6 FALSE <NA>        FALSE  18-29 $50,000 - $99,… Some college o… West Nort…
+##   steak steak_prep  female age   hhold_income     educ               region     
+##   <lgl> <chr>       <lgl>  <chr> <chr>            <chr>              <chr>      
+## 1 TRUE  Medium rare TRUE   45-60 $0 - $24,999     Some college or A… West South…
+## 2 TRUE  Medium      TRUE   45-60 $150,000+        Bachelor degree    New England
+## 3 TRUE  Medium rare TRUE   >60   $50,000 - $99,9… Graduate degree    Mountain   
+## 4 FALSE <NA>        FALSE  45-60 $100,000 - $149… Some college or A… South Atla…
+## 5 TRUE  Medium      FALSE  >60   <NA>             Graduate degree    Pacific    
+## 6 FALSE <NA>        FALSE  18-29 $50,000 - $99,9… Some college or A… West North…
 ```
 
  
@@ -3499,21 +3467,20 @@ steak.complete
 
 ```
 ## # A tibble: 331 x 15
-##    respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
-##            <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
-##  1    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
-##  2    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
-##  3    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
-##  4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
-##  5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
-##  6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
-##  7    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE  
-##  8    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE  
-##  9    3234948883 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  FALSE  
-## 10    3234948197 TRUE      FALSE FALSE   TRUE   FALSE     TRUE  FALSE  
-## # … with 321 more rows, and 7 more variables: steak <lgl>,
-## #   steak_prep <chr>, female <lgl>, age <chr>, hhold_income <chr>,
-## #   educ <chr>, region <chr>
+##    respondent_id lottery_a smoke alcohol gamble skydiving speed cheated steak
+##            <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>   <lgl>
+##  1    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE   TRUE 
+##  2    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE    TRUE 
+##  3    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE    TRUE 
+##  4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE    TRUE 
+##  5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE   TRUE 
+##  6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE   TRUE 
+##  7    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE   TRUE 
+##  8    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE   TRUE 
+##  9    3234948883 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  FALSE   TRUE 
+## 10    3234948197 TRUE      FALSE FALSE   TRUE   FALSE     TRUE  FALSE   TRUE 
+## # … with 321 more rows, and 6 more variables: steak_prep <chr>, female <lgl>,
+## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
 ```
 
  
@@ -3540,38 +3507,30 @@ steak.complete %>%
 ##  3rd Qu.:3.235e+09                                                  
 ##  Max.   :3.235e+09                                                  
 ##                                                                     
-##    gamble        skydiving         speed          cheated       
-##  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
-##  FALSE:158       FALSE:308       FALSE:28        FALSE:274      
-##  TRUE :173       TRUE :23        TRUE :303       TRUE :57       
-##                                                                 
-##                                                                 
-##                                                                 
-##                                                                 
-##   steak               steak_prep    female           age    
-##  Mode:logical   Medium     :109   Mode :logical   >60  :82  
-##  TRUE:331       Medium rare:128   FALSE:174       18-29:70  
-##                 Medium Well: 56   TRUE :157       30-44:93  
-##                 Rare       : 18                   45-60:86  
-##                 Well       : 20                             
-##                                                             
-##                                                             
-##               hhold_income                               educ    
-##  $0 - $24,999       : 37   Bachelor degree                 :120  
-##  $100,000 - $149,999: 66   Graduate degree                 : 86  
-##  $150,000+          : 39   High school degree              : 20  
-##  $25,000 - $49,999  : 55   Less than high school degree    :  1  
-##  $50,000 - $99,999  :134   Some college or Associate degree:104  
-##                                                                  
-##                                                                  
-##                 region  
-##  South Atlantic    :68  
-##  Pacific           :57  
-##  East North Central:48  
-##  Middle Atlantic   :46  
-##  West North Central:29  
-##  Mountain          :24  
-##  (Other)           :59
+##    gamble        skydiving         speed          cheated         steak        
+##  Mode :logical   Mode :logical   Mode :logical   Mode :logical   Mode:logical  
+##  FALSE:158       FALSE:308       FALSE:28        FALSE:274       TRUE:331      
+##  TRUE :173       TRUE :23        TRUE :303       TRUE :57                      
+##                                                                                
+##                                                                                
+##                                                                                
+##                                                                                
+##        steak_prep    female           age                  hhold_income
+##  Medium     :109   Mode :logical   >60  :82   $0 - $24,999       : 37  
+##  Medium rare:128   FALSE:174       18-29:70   $100,000 - $149,999: 66  
+##  Medium Well: 56   TRUE :157       30-44:93   $150,000+          : 39  
+##  Rare       : 18                   45-60:86   $25,000 - $49,999  : 55  
+##  Well       : 20                              $50,000 - $99,999  :134  
+##                                                                        
+##                                                                        
+##                                educ                    region  
+##  Bachelor degree                 :120   South Atlantic    :68  
+##  Graduate degree                 : 86   Pacific           :57  
+##  High school degree              : 20   East North Central:48  
+##  Less than high school degree    :  1   Middle Atlantic   :46  
+##  Some college or Associate degree:104   West North Central:29  
+##                                         Mountain          :24  
+##                                         (Other)           :59
 ```
 
  
@@ -3735,6 +3694,10 @@ by `arrange` to sort:
 sfcrime %>% group_by(Category) %>%
 summarize(count=n()) %>%
 arrange(desc(count))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -3933,14 +3896,13 @@ search()
 ## [10] "package:ggbiplot"    "package:grid"        "package:scales"     
 ## [13] "package:plyr"        "package:lme4"        "package:Matrix"     
 ## [16] "package:car"         "package:carData"     "package:survminer"  
-## [19] "package:ggpubr"      "package:magrittr"    "package:survival"   
-## [22] "package:nnet"        "package:smmr"        "package:forcats"    
-## [25] "package:stringr"     "package:dplyr"       "package:purrr"      
-## [28] "package:readr"       "package:tidyr"       "package:tibble"     
-## [31] "package:ggplot2"     "package:tidyverse"   "package:stats"      
-## [34] "package:graphics"    "package:grDevices"   "package:utils"      
-## [37] "package:datasets"    "package:methods"     "Autoloads"          
-## [40] "package:base"
+## [19] "package:ggpubr"      "package:survival"    "package:nnet"       
+## [22] "package:smmr"        "package:forcats"     "package:stringr"    
+## [25] "package:dplyr"       "package:purrr"       "package:readr"      
+## [28] "package:tidyr"       "package:tibble"      "package:ggplot2"    
+## [31] "package:tidyverse"   "package:stats"       "package:graphics"   
+## [34] "package:grDevices"   "package:utils"       "package:datasets"   
+## [37] "package:methods"     "Autoloads"           "package:base"
 ```
 
  
@@ -4141,16 +4103,16 @@ head(steak)
 
 ```
 ## # A tibble: 6 x 15
-##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated
-##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>  
-## 1    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE  
-## 2    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE   
-## 3    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE   
-## 4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE   
-## 5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE  
-## 6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE  
-## # … with 7 more variables: steak <lgl>, steak_prep <chr>, female <lgl>,
-## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
+##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated steak
+##           <dbl> <lgl>     <lgl> <lgl>   <lgl>  <lgl>     <lgl> <lgl>   <lgl>
+## 1    3234982343 TRUE      FALSE TRUE    FALSE  FALSE     FALSE FALSE   TRUE 
+## 2    3234973379 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  TRUE    TRUE 
+## 3    3234972383 FALSE     TRUE  TRUE    TRUE   FALSE     TRUE  TRUE    TRUE 
+## 4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE    TRUE 
+## 5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE   TRUE 
+## 6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE   TRUE 
+## # … with 6 more variables: steak_prep <chr>, female <lgl>, age <chr>,
+## #   hhold_income <chr>, educ <chr>, region <chr>
 ```
 
  
@@ -4962,12 +4924,9 @@ anova(sfcrime.2,sfcrime.1)
 ## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Category
-##                    Model Resid. df Resid. Dev   Test    Df LR stat.
-## 1             PdDistrict   1078554   837716.5                      
-## 2 DayOfWeek + PdDistrict   1078536   836300.0 1 vs 2    18 1416.511
-##   Pr(Chi)
-## 1        
-## 2       0
+##                    Model Resid. df Resid. Dev   Test    Df LR stat. Pr(Chi)
+## 1             PdDistrict   1078554   837716.5                              
+## 2 DayOfWeek + PdDistrict   1078536   836300.0 1 vs 2    18 1416.511       0
 ```
 
  
@@ -5287,10 +5246,10 @@ sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict,maxit=300)
 ## iter 120 value 417908.465189
 ## iter 130 value 417890.580843
 ## iter 140 value 417874.839492
-## iter 150 value 417867.449343
+## iter 150 value 417867.449342
 ## iter 160 value 417862.626213
 ## iter 170 value 417858.654628
-## final  value 417858.031855 
+## final  value 417858.031854 
 ## converged
 ```
 

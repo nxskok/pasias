@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -76,21 +71,21 @@ bw
 
 ```
 ## # A tibble: 500 x 10
-##    `Father Age` `Mother Age` `Weeks Gestatio… `Pre-natal Visi…
-##           <dbl>        <dbl>            <dbl>            <dbl>
-##  1           27           26               38               14
-##  2           35           33               40               11
-##  3           34           22               37               10
-##  4           NA           16               38                9
-##  5           35           33               39               12
-##  6           32           24               36               12
-##  7           33           33               38               15
-##  8           38           35               38               16
-##  9           28           29               40                5
-## 10           NA           19               34               10
-## # … with 490 more rows, and 6 more variables: `Marital Status` <dbl>,
-## #   `Mother Weight Gained` <dbl>, `Low Birthweight?` <dbl>, `Weight
-## #   (pounds)` <dbl>, `Premie?` <dbl>, `Few Visits?` <dbl>
+##    `Father Age` `Mother Age` `Weeks Gestatio… `Pre-natal Visi… `Marital Status`
+##           <dbl>        <dbl>            <dbl>            <dbl>            <dbl>
+##  1           27           26               38               14                1
+##  2           35           33               40               11                1
+##  3           34           22               37               10                2
+##  4           NA           16               38                9                2
+##  5           35           33               39               12                1
+##  6           32           24               36               12                1
+##  7           33           33               38               15                2
+##  8           38           35               38               16                1
+##  9           28           29               40                5                1
+## 10           NA           19               34               10                2
+## # … with 490 more rows, and 5 more variables: `Mother Weight Gained` <dbl>,
+## #   `Low Birthweight?` <dbl>, `Weight (pounds)` <dbl>, `Premie?` <dbl>, `Few
+## #   Visits?` <dbl>
 ```
 
  
@@ -103,18 +98,18 @@ glimpse(bw)
 ```
 
 ```
-## Observations: 500
-## Variables: 10
-## $ `Father Age`           <dbl> 27, 35, 34, NA, 35, 32, 33, 38, 28, NA, 2…
-## $ `Mother Age`           <dbl> 26, 33, 22, 16, 33, 24, 33, 35, 29, 19, 2…
-## $ `Weeks Gestation`      <dbl> 38, 40, 37, 38, 39, 36, 38, 38, 40, 34, 3…
-## $ `Pre-natal Visits`     <dbl> 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 15,…
-## $ `Marital Status`       <dbl> 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 2,…
-## $ `Mother Weight Gained` <dbl> 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, 45…
-## $ `Low Birthweight?`     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,…
-## $ `Weight (pounds)`      <dbl> 6.8750, 6.8125, 7.2500, 8.8125, 8.8125, 5…
-## $ `Premie?`              <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0,…
-## $ `Few Visits?`          <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0,…
+## Rows: 500
+## Columns: 10
+## $ `Father Age`           <dbl> 27, 35, 34, NA, 35, 32, 33, 38, 28, NA, 28, 34…
+## $ `Mother Age`           <dbl> 26, 33, 22, 16, 33, 24, 33, 35, 29, 19, 26, 31…
+## $ `Weeks Gestation`      <dbl> 38, 40, 37, 38, 39, 36, 38, 38, 40, 34, 39, 39…
+## $ `Pre-natal Visits`     <dbl> 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 15, 15, …
+## $ `Marital Status`       <dbl> 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 2, 2, 2…
+## $ `Mother Weight Gained` <dbl> 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, 45, 22,…
+## $ `Low Birthweight?`     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0…
+## $ `Weight (pounds)`      <dbl> 6.8750, 6.8125, 7.2500, 8.8125, 8.8125, 5.8125…
+## $ `Premie?`              <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0…
+## $ `Few Visits?`          <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0…
 ```
 
  
@@ -489,6 +484,10 @@ max=max(`Weeks Gestation`))
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 3 x 4
 ##   `Premie?`     n   min   max
 ##       <dbl> <int> <dbl> <dbl>
@@ -767,18 +766,18 @@ problems(x)
 
 ```
 ## # A tibble: 87 x 5
-##      row col   expected  actual    file                                    
-##    <int> <chr> <chr>     <chr>     <chr>                                   
-##  1     1 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-##  2     2 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-##  3     3 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-##  4     4 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-##  5     5 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-##  6     6 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-##  7     7 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-##  8     8 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-##  9     9 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
-## 10    10 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c3…
+##      row col   expected  actual    file                                         
+##    <int> <chr> <chr>     <chr>     <chr>                                        
+##  1     1 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  2     2 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  3     3 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  4     4 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  5     5 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  6     6 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  7     7 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  8     8 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  9     9 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+## 10    10 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
 ## # … with 77 more rows
 ```
 
@@ -836,11 +835,11 @@ glimpse(nenana)
 ```
 
 ```
-## Observations: 87
-## Variables: 3
-## $ Year        <dbl> 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925…
-## $ JulianDate  <dbl> 120.4795, 131.3983, 123.6066, 132.4490, 131.2795, 13…
-## $ `Date&Time` <chr> "April 30 at 11:30 AM", "May 11 at 9:33 AM", "May 3 …
+## Rows: 87
+## Columns: 3
+## $ Year        <dbl> 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 192…
+## $ JulianDate  <dbl> 120.4795, 131.3983, 123.6066, 132.4490, 131.2795, 132.555…
+## $ `Date&Time` <chr> "April 30 at 11:30 AM", "May 11 at 9:33 AM", "May 3 at 2:…
 ```
 
  
@@ -912,15 +911,6 @@ this is how you handle the dates and times:
 
 ```r
 library(lubridate)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 nenana %>%
   mutate(longdt = str_c(Year, " ", `Date&Time`)) %>%
   mutate(datetime = ymd_hm(longdt, tz = "America/Anchorage"))
@@ -928,18 +918,18 @@ nenana %>%
 
 ```
 ## # A tibble: 87 x 5
-##     Year JulianDate `Date&Time`       longdt            datetime           
-##    <dbl>      <dbl> <chr>             <chr>             <dttm>             
-##  1  1917       120. April 30 at 11:3… 1917 April 30 at… 1917-04-30 11:30:00
-##  2  1918       131. May 11 at 9:33 AM 1918 May 11 at 9… 1918-05-11 09:33:00
-##  3  1919       124. May 3 at 2:33 PM  1919 May 3 at 2:… 1919-05-03 14:33:00
-##  4  1920       132. May 11 at 10:46 … 1920 May 11 at 1… 1920-05-11 10:46:00
-##  5  1921       131. May 11 at 6:42 AM 1921 May 11 at 6… 1921-05-11 06:42:00
-##  6  1922       133. May 12 at 1:20 PM 1922 May 12 at 1… 1922-05-12 13:20:00
-##  7  1923       129. May 9 at 2:00 AM  1923 May 9 at 2:… 1923-05-09 02:00:00
-##  8  1924       133. May 11 at 3:10 PM 1924 May 11 at 3… 1924-05-11 15:10:00
-##  9  1925       128. May 7 at 6:32 PM  1925 May 7 at 6:… 1925-05-07 18:32:00
-## 10  1926       117. April 26 at 4:03… 1926 April 26 at… 1926-04-26 16:03:00
+##     Year JulianDate `Date&Time`         longdt               datetime           
+##    <dbl>      <dbl> <chr>               <chr>                <dttm>             
+##  1  1917       120. April 30 at 11:30 … 1917 April 30 at 11… 1917-04-30 11:30:00
+##  2  1918       131. May 11 at 9:33 AM   1918 May 11 at 9:33… 1918-05-11 09:33:00
+##  3  1919       124. May 3 at 2:33 PM    1919 May 3 at 2:33 … 1919-05-03 14:33:00
+##  4  1920       132. May 11 at 10:46 AM  1920 May 11 at 10:4… 1920-05-11 10:46:00
+##  5  1921       131. May 11 at 6:42 AM   1921 May 11 at 6:42… 1921-05-11 06:42:00
+##  6  1922       133. May 12 at 1:20 PM   1922 May 12 at 1:20… 1922-05-12 13:20:00
+##  7  1923       129. May 9 at 2:00 AM    1923 May 9 at 2:00 … 1923-05-09 02:00:00
+##  8  1924       133. May 11 at 3:10 PM   1924 May 11 at 3:10… 1924-05-11 15:10:00
+##  9  1925       128. May 7 at 6:32 PM    1925 May 7 at 6:32 … 1925-05-07 18:32:00
+## 10  1926       117. April 26 at 4:03 PM 1926 April 26 at 4:… 1926-04-26 16:03:00
 ## # … with 77 more rows
 ```
 
@@ -1210,6 +1200,10 @@ anxiety %>% group_by(gender) %>% summarize(count=n())
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 2 x 2
 ##   gender count
 ##   <chr>  <int>
@@ -1273,6 +1267,10 @@ anxiety %>% group_by(gender) %>% summarize(med=median(CAS))
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 2 x 2
 ##   gender   med
 ##   <chr>  <dbl>
@@ -1299,7 +1297,7 @@ anxiety %>% summarize_if(is.numeric,funs(mean,sd))
 ```
 
 ```
-## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## Warning: `funs()` is deprecated as of dplyr 0.8.0.
 ## Please use a list of either functions or lambdas: 
 ## 
 ##   # Simple named list: 
@@ -1310,7 +1308,8 @@ anxiety %>% summarize_if(is.numeric,funs(mean,sd))
 ## 
 ##   # Using lambdas
 ##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once per session.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```
@@ -1771,6 +1770,10 @@ marks %>%
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 2 x 2
 ##   class    med
 ##   <chr>  <dbl>
@@ -1795,6 +1798,10 @@ marks %>%
     med = median(score),
     q3 = quantile(score, 0.75)
   )
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1841,10 +1848,10 @@ marks %>%
 
 ```
 ## # A tibble: 2 x 2
-##   class            data
-##   <chr>  <list<df[,1]>>
-## 1 ken           [5 × 1]
-## 2 thomas        [6 × 1]
+##   class  data            
+##   <chr>  <list>          
+## 1 ken    <tibble [5 × 1]>
+## 2 thomas <tibble [6 × 1]>
 ```
 
  
@@ -1875,10 +1882,10 @@ marks %>%
 
 ```
 ## # A tibble: 2 x 3
-##   class            data qq       
-##   <chr>  <list<df[,1]>> <list>   
-## 1 ken           [5 × 1] <dbl [5]>
-## 2 thomas        [6 × 1] <dbl [5]>
+##   class  data             qq       
+##   <chr>  <list>           <list>   
+## 1 ken    <tibble [5 × 1]> <dbl [5]>
+## 2 thomas <tibble [6 × 1]> <dbl [5]>
 ```
 
   
@@ -1908,18 +1915,18 @@ marks %>%
 
 ```
 ## # A tibble: 10 x 3
-##    class            data    qq
-##    <chr>  <list<df[,1]>> <dbl>
-##  1 ken           [5 × 1]  59  
-##  2 ken           [5 × 1]  62  
-##  3 ken           [5 × 1]  69  
-##  4 ken           [5 × 1]  78  
-##  5 ken           [5 × 1]  81  
-##  6 thomas        [6 × 1]  61  
-##  7 thomas        [6 × 1]  65.2
-##  8 thomas        [6 × 1]  74.5
-##  9 thomas        [6 × 1]  78.5
-## 10 thomas        [6 × 1]  83
+##    class  data                qq
+##    <chr>  <list>           <dbl>
+##  1 ken    <tibble [5 × 1]>  59  
+##  2 ken    <tibble [5 × 1]>  62  
+##  3 ken    <tibble [5 × 1]>  69  
+##  4 ken    <tibble [5 × 1]>  78  
+##  5 ken    <tibble [5 × 1]>  81  
+##  6 thomas <tibble [6 × 1]>  61  
+##  7 thomas <tibble [6 × 1]>  65.2
+##  8 thomas <tibble [6 × 1]>  74.5
+##  9 thomas <tibble [6 × 1]>  78.5
+## 10 thomas <tibble [6 × 1]>  83
 ```
 
   
@@ -1997,10 +2004,10 @@ marks %>%
 
 ```
 ## # A tibble: 2 x 3
-##   class            data qq              
-##   <chr>  <list<df[,1]>> <list>          
-## 1 ken           [5 × 1] <tibble [5 × 2]>
-## 2 thomas        [6 × 1] <tibble [5 × 2]>
+##   class  data             qq              
+##   <chr>  <list>           <list>          
+## 1 ken    <tibble [5 × 1]> <tibble [5 × 2]>
+## 2 thomas <tibble [6 × 1]> <tibble [5 × 2]>
 ```
 
  
@@ -2025,18 +2032,18 @@ marks %>%
 
 ```
 ## # A tibble: 10 x 4
-##    class            data name  value
-##    <chr>  <list<df[,1]>> <chr> <dbl>
-##  1 ken           [5 × 1] 0%     59  
-##  2 ken           [5 × 1] 25%    62  
-##  3 ken           [5 × 1] 50%    69  
-##  4 ken           [5 × 1] 75%    78  
-##  5 ken           [5 × 1] 100%   81  
-##  6 thomas        [6 × 1] 0%     61  
-##  7 thomas        [6 × 1] 25%    65.2
-##  8 thomas        [6 × 1] 50%    74.5
-##  9 thomas        [6 × 1] 75%    78.5
-## 10 thomas        [6 × 1] 100%   83
+##    class  data             name  value
+##    <chr>  <list>           <chr> <dbl>
+##  1 ken    <tibble [5 × 1]> 0%     59  
+##  2 ken    <tibble [5 × 1]> 25%    62  
+##  3 ken    <tibble [5 × 1]> 50%    69  
+##  4 ken    <tibble [5 × 1]> 75%    78  
+##  5 ken    <tibble [5 × 1]> 100%   81  
+##  6 thomas <tibble [6 × 1]> 0%     61  
+##  7 thomas <tibble [6 × 1]> 25%    65.2
+##  8 thomas <tibble [6 × 1]> 50%    74.5
+##  9 thomas <tibble [6 × 1]> 75%    78.5
+## 10 thomas <tibble [6 × 1]> 100%   83
 ```
 
  
@@ -2061,10 +2068,10 @@ marks %>%
 
 ```
 ## # A tibble: 2 x 7
-##   class            data   `0`  `25`  `50`  `75` `100`
-##   <chr>  <list<df[,1]>> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 ken           [5 × 1]    59  62    69    78      81
-## 2 thomas        [6 × 1]    61  65.2  74.5  78.5    83
+##   class  data               `0`  `25`  `50`  `75` `100`
+##   <chr>  <list>           <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1 ken    <tibble [5 × 1]>    59  62    69    78      81
+## 2 thomas <tibble [6 × 1]>    61  65.2  74.5  78.5    83
 ```
 
  

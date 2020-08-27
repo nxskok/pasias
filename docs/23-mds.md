@@ -11,11 +11,6 @@ library(ggrepel)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -68,22 +63,22 @@ wisc
 
 ```
 ## # A tibble: 12 x 13
-##    location Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee
-##    <chr>       <dbl>  <dbl>         <dbl>   <dbl>      <dbl>     <dbl>
-##  1 Appleton        0    130            98     102        103       100
-##  2 Beloit        130      0            33      50        185        73
-##  3 Fort.At…       98     33             0      36        164        54
-##  4 Madison       102     50            36       0        138        77
-##  5 Marshfi…      103    185           164     138          0       184
-##  6 Milwauk…      100     73            54      77        184         0
-##  7 Monroe        149     33            58      47        170       107
-##  8 Superior      315    377           359     330        219       394
-##  9 Wausau         91    186           166     139         45       181
-## 10 Dubuque       196     94           119      95        186       168
-## 11 St.Paul       257    304           287     258        161       322
-## 12 Chicago       186     97           113     146        276        93
-## # … with 6 more variables: Monroe <dbl>, Superior <dbl>, Wausau <dbl>,
-## #   Dubuque <dbl>, St.Paul <dbl>, Chicago <dbl>
+##    location Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee Monroe
+##    <chr>       <dbl>  <dbl>         <dbl>   <dbl>      <dbl>     <dbl>  <dbl>
+##  1 Appleton        0    130            98     102        103       100    149
+##  2 Beloit        130      0            33      50        185        73     33
+##  3 Fort.At…       98     33             0      36        164        54     58
+##  4 Madison       102     50            36       0        138        77     47
+##  5 Marshfi…      103    185           164     138          0       184    170
+##  6 Milwauk…      100     73            54      77        184         0    107
+##  7 Monroe        149     33            58      47        170       107      0
+##  8 Superior      315    377           359     330        219       394    362
+##  9 Wausau         91    186           166     139         45       181    186
+## 10 Dubuque       196     94           119      95        186       168     61
+## 11 St.Paul       257    304           287     258        161       322    289
+## 12 Chicago       186     97           113     146        276        93    130
+## # … with 5 more variables: Superior <dbl>, Wausau <dbl>, Dubuque <dbl>,
+## #   St.Paul <dbl>, Chicago <dbl>
 ```
 
        
@@ -108,30 +103,30 @@ d
 ```
 
 ```
-##               Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee
-## Beloit             130                                                  
-## Fort.Atkinson       98     33                                           
-## Madison            102     50            36                             
-## Marshfield         103    185           164     138                     
-## Milwaukee          100     73            54      77        184          
-## Monroe             149     33            58      47        170       107
-## Superior           315    377           359     330        219       394
-## Wausau              91    186           166     139         45       181
-## Dubuque            196     94           119      95        186       168
-## St.Paul            257    304           287     258        161       322
-## Chicago            186     97           113     146        276        93
-##               Monroe Superior Wausau Dubuque St.Paul
-## Beloit                                              
-## Fort.Atkinson                                       
-## Madison                                             
-## Marshfield                                          
-## Milwaukee                                           
-## Monroe                                              
-## Superior         362                                
-## Wausau           186      223                       
-## Dubuque           61      351    215                
-## St.Paul          289      162    175     274        
-## Chicago          130      467    275     184     395
+##               Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee Monroe
+## Beloit             130                                                         
+## Fort.Atkinson       98     33                                                  
+## Madison            102     50            36                                    
+## Marshfield         103    185           164     138                            
+## Milwaukee          100     73            54      77        184                 
+## Monroe             149     33            58      47        170       107       
+## Superior           315    377           359     330        219       394    362
+## Wausau              91    186           166     139         45       181    186
+## Dubuque            196     94           119      95        186       168     61
+## St.Paul            257    304           287     258        161       322    289
+## Chicago            186     97           113     146        276        93    130
+##               Superior Wausau Dubuque St.Paul
+## Beloit                                       
+## Fort.Atkinson                                
+## Madison                                      
+## Marshfield                                   
+## Milwaukee                                    
+## Monroe                                       
+## Superior                                     
+## Wausau             223                       
+## Dubuque            351    215                
+## St.Paul            162    175     274        
+## Chicago            467    275     184     395
 ```
 
  
@@ -324,10 +319,10 @@ print.default(d)
 ```
 
 ```
-##  [1] 130  98 102 103 100 149 315  91 196 257 186  33  50 185  73  33 377
-## [18] 186  94 304  97  36 164  54  58 359 166 119 287 113 138  77  47 330
-## [35] 139  95 258 146 184 170 219  45 186 161 276 107 394 181 168 322  93
-## [52] 362 186  61 289 130 223 351 162 467 215 175 275 274 184 395
+##  [1] 130  98 102 103 100 149 315  91 196 257 186  33  50 185  73  33 377 186  94
+## [20] 304  97  36 164  54  58 359 166 119 287 113 138  77  47 330 139  95 258 146
+## [39] 184 170 219  45 186 161 276 107 394 181 168 322  93 362 186  61 289 130 223
+## [58] 351 162 467 215 175 275 274 184 395
 ## attr(,"Labels")
 ##  [1] "Appleton"      "Beloit"        "Fort.Atkinson" "Madison"      
 ##  [5] "Marshfield"    "Milwaukee"     "Monroe"        "Superior"     
@@ -408,12 +403,6 @@ library(ggmap)
 ```
 
 ```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```
 ## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
 ```
 
@@ -483,10 +472,9 @@ cst
 ```
 
 ```
-##  [1] "Appleton WI"      "Beloit WI"        "Fort.Atkinson WI"
-##  [4] "Madison WI"       "Marshfield WI"    "Milwaukee WI"    
-##  [7] "Monroe WI"        "Superior WI"      "Wausau WI"       
-## [10] "Dubuque IA"       "St.Paul MN"       "Chicago IL"
+##  [1] "Appleton WI"      "Beloit WI"        "Fort.Atkinson WI" "Madison WI"      
+##  [5] "Marshfield WI"    "Milwaukee WI"     "Monroe WI"        "Superior WI"     
+##  [9] "Wausau WI"        "Dubuque IA"       "St.Paul MN"       "Chicago IL"
 ```
 
  
@@ -752,8 +740,10 @@ ddd <- as_tibble(v$points) %>%
 ```
 
 ```
-## Warning: `as_tibble.matrix()` requires a matrix with column names or a `.name_repair` argument. Using compatibility `.name_repair`.
-## This warning is displayed once per session.
+## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
+## Using compatibility `.name_repair`.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```r
@@ -874,27 +864,27 @@ stimuli
 
 ```
 ## # A tibble: 17 x 18
-##    X1        X2    X3    X4    X5    X6    X7    X8    X9   X10   X11   X12
-##    <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 inner…     0    22    23    24    26    27    26    23    24    23    23
-##  2 brick     22     0    27    27    27    29    29    28    16    18    28
-##  3 cardb…    23    27     0    18    19    28    23    24    24    29    27
-##  4 cork      24    27    18     0    15    28    25    26    28    28    20
-##  5 rubbe…    26    27    19    15     0    28    20    27    24    27    24
-##  6 felt      27    29    28    28    28     0    24    28    29    26    26
-##  7 leath…    26    29    23    25    20    24     0    22    28    28    27
-##  8 rigid…    23    28    24    26    27    28    22     0    27    29    29
-##  9 veryf…    24    16    24    28    24    29    28    27     0    21    24
-## 10 nylon…    23    18    29    28    27    26    28    29    21     0    22
-## 11 cellu…    23    28    27    20    24    26    27    29    24    22     0
-## 12 woven…    18    25    28    27    25    29    26    27    26    16    19
-## 13 block…    23    24    21    10    19    28    25    25    25    25    21
-## 14 ungla…    21    10    26    26    24    29    29    25    12    24    26
-## 15 velvet    28    29    28    28    29     4    24    29    29    27    27
-## 16 waxpa…    24    28    24    28    24    28    21    12    29    29    29
-## 17 gloss…    22    27    23    29    28    29    20    13    27    28    27
-## # … with 6 more variables: X13 <dbl>, X14 <dbl>, X15 <dbl>, X16 <dbl>,
-## #   X17 <dbl>, X18 <dbl>
+##    X1       X2    X3    X4    X5    X6    X7    X8    X9   X10   X11   X12   X13
+##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 inne…     0    22    23    24    26    27    26    23    24    23    23    18
+##  2 brick    22     0    27    27    27    29    29    28    16    18    28    25
+##  3 card…    23    27     0    18    19    28    23    24    24    29    27    28
+##  4 cork     24    27    18     0    15    28    25    26    28    28    20    27
+##  5 rubb…    26    27    19    15     0    28    20    27    24    27    24    25
+##  6 felt     27    29    28    28    28     0    24    28    29    26    26    29
+##  7 leat…    26    29    23    25    20    24     0    22    28    28    27    26
+##  8 rigi…    23    28    24    26    27    28    22     0    27    29    29    27
+##  9 very…    24    16    24    28    24    29    28    27     0    21    24    26
+## 10 nylo…    23    18    29    28    27    26    28    29    21     0    22    16
+## 11 cell…    23    28    27    20    24    26    27    29    24    22     0    19
+## 12 wove…    18    25    28    27    25    29    26    27    26    16    19     0
+## 13 bloc…    23    24    21    10    19    28    25    25    25    25    21    26
+## 14 ungl…    21    10    26    26    24    29    29    25    12    24    26    26
+## 15 velv…    28    29    28    28    29     4    24    29    29    27    27    28
+## 16 waxp…    24    28    24    28    24    28    21    12    29    29    29    27
+## 17 glos…    22    27    23    29    28    29    20    13    27    28    27    25
+## # … with 5 more variables: X14 <dbl>, X15 <dbl>, X16 <dbl>, X17 <dbl>,
+## #   X18 <dbl>
 ```
 
      
@@ -928,15 +918,12 @@ objects
 ```
 
 ```
-##  [1] "innersurfaceofpinebark" "brick"                 
-##  [3] "cardboard"              "cork"                  
-##  [5] "rubbereraser"           "felt"                  
-##  [7] "leatherwallet"          "rigidplasticsheet"     
-##  [9] "veryfinesandpaper"      "nylonscouringpad"      
-## [11] "cellulosekitchensponge" "wovenstraw"            
-## [13] "blockofstyrofoam"       "unglazedceramictile"   
-## [15] "velvet"                 "waxpaper"              
-## [17] "glossypaintedwood"
+##  [1] "innersurfaceofpinebark" "brick"                  "cardboard"             
+##  [4] "cork"                   "rubbereraser"           "felt"                  
+##  [7] "leatherwallet"          "rigidplasticsheet"      "veryfinesandpaper"     
+## [10] "nylonscouringpad"       "cellulosekitchensponge" "wovenstraw"            
+## [13] "blockofstyrofoam"       "unglazedceramictile"    "velvet"                
+## [16] "waxpaper"               "glossypaintedwood"
 ```
 
      
@@ -985,9 +972,9 @@ stimuli
 ## 17 gloss…               22    27        23    29           28    29
 ## # … with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
 ## #   veryfinesandpaper <dbl>, nylonscouringpad <dbl>,
-## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>,
-## #   blockofstyrofoam <dbl>, unglazedceramictile <dbl>, velvet <dbl>,
-## #   waxpaper <dbl>, glossypaintedwood <dbl>
+## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>, blockofstyrofoam <dbl>,
+## #   unglazedceramictile <dbl>, velvet <dbl>, waxpaper <dbl>,
+## #   glossypaintedwood <dbl>
 ```
 
      
@@ -1361,24 +1348,24 @@ data.frame(d.1, object = stimuli[, 1], clusters) %>% arrange(clusters)
 ```
 
 ```
-##             X1         X2                 object clusters
-## 1   -2.7066290   1.694420 innersurfaceofpinebark        1
-## 2  -10.4469053   7.232787       nylonscouringpad        1
-## 3   -5.3886609  -2.770991 cellulosekitchensponge        1
-## 4   -5.2762142   3.836948             wovenstraw        1
-## 5  -12.2011332   5.147970                  brick        2
-## 6  -11.0869483   2.800988      veryfinesandpaper        2
-## 7  -10.5902291   2.926805    unglazedceramictile        2
-## 8    3.8630322  -9.322759              cardboard        3
-## 9   -0.8424358 -14.884926                   cork        3
-## 10   0.1676463 -11.733873           rubbereraser        3
-## 11  -2.9950151 -11.927717       blockofstyrofoam        3
-## 12   5.1803473   9.328562                   felt        4
-## 13   6.3768882  10.477972                 velvet        4
-## 14  10.4636668  -1.016525          leatherwallet        5
-## 15  11.0208731   1.201504      rigidplasticsheet        5
-## 16  13.1702265   1.677039               waxpaper        5
-## 17  11.2914904   5.331796      glossypaintedwood        5
+##                                 X1         X2                 object clusters
+## innersurfaceofpinebark  -2.7066290   1.694420 innersurfaceofpinebark        1
+## nylonscouringpad       -10.4469053   7.232787       nylonscouringpad        1
+## cellulosekitchensponge  -5.3886609  -2.770991 cellulosekitchensponge        1
+## wovenstraw              -5.2762142   3.836948             wovenstraw        1
+## brick                  -12.2011332   5.147970                  brick        2
+## veryfinesandpaper      -11.0869483   2.800988      veryfinesandpaper        2
+## unglazedceramictile    -10.5902291   2.926805    unglazedceramictile        2
+## cardboard                3.8630322  -9.322759              cardboard        3
+## cork                    -0.8424358 -14.884926                   cork        3
+## rubbereraser             0.1676463 -11.733873           rubbereraser        3
+## blockofstyrofoam        -2.9950151 -11.927717       blockofstyrofoam        3
+## felt                     5.1803473   9.328562                   felt        4
+## velvet                   6.3768882  10.477972                 velvet        4
+## leatherwallet           10.4636668  -1.016525          leatherwallet        5
+## rigidplasticsheet       11.0208731   1.201504      rigidplasticsheet        5
+## waxpaper                13.1702265   1.677039               waxpaper        5
+## glossypaintedwood       11.2914904   5.331796      glossypaintedwood        5
 ```
 
  
@@ -1402,24 +1389,42 @@ save.3d
 ```
 
 ```
-##             X1         X2          X3                objects clusters
-## 1   -2.7066290   1.694420   4.1176385 innersurfaceofpinebark        1
-## 2  -10.4469053   7.232787  -1.9720211       nylonscouringpad        1
-## 3   -5.3886609  -2.770991  -6.8039573 cellulosekitchensponge        1
-## 4   -5.2762142   3.836948  -0.3083513             wovenstraw        1
-## 5  -12.2011332   5.147970   5.9802631                  brick        2
-## 6  -11.0869483   2.800988   4.9686770      veryfinesandpaper        2
-## 7  -10.5902291   2.926805   7.2124679    unglazedceramictile        2
-## 8    3.8630322  -9.322759   1.2376174              cardboard        3
-## 9   -0.8424358 -14.884926  -5.6157998                   cork        3
-## 10   0.1676463 -11.733873  -2.3880857           rubbereraser        3
-## 11  -2.9950151 -11.927717  -2.9877666       blockofstyrofoam        3
-## 12   5.1803473   9.328562 -15.2730895                   felt        4
-## 13   6.3768882  10.477972 -14.1837552                 velvet        4
-## 14  10.4636668  -1.016525  -1.9005177          leatherwallet        5
-## 15  11.0208731   1.201504  10.0016248      rigidplasticsheet        5
-## 16  13.1702265   1.677039   8.2862272               waxpaper        5
-## 17  11.2914904   5.331796   9.6288283      glossypaintedwood        5
+##                                 X1         X2          X3
+## innersurfaceofpinebark  -2.7066290   1.694420   4.1176385
+## nylonscouringpad       -10.4469053   7.232787  -1.9720211
+## cellulosekitchensponge  -5.3886609  -2.770991  -6.8039573
+## wovenstraw              -5.2762142   3.836948  -0.3083513
+## brick                  -12.2011332   5.147970   5.9802631
+## veryfinesandpaper      -11.0869483   2.800988   4.9686770
+## unglazedceramictile    -10.5902291   2.926805   7.2124679
+## cardboard                3.8630322  -9.322759   1.2376174
+## cork                    -0.8424358 -14.884926  -5.6157998
+## rubbereraser             0.1676463 -11.733873  -2.3880857
+## blockofstyrofoam        -2.9950151 -11.927717  -2.9877666
+## felt                     5.1803473   9.328562 -15.2730895
+## velvet                   6.3768882  10.477972 -14.1837552
+## leatherwallet           10.4636668  -1.016525  -1.9005177
+## rigidplasticsheet       11.0208731   1.201504  10.0016248
+## waxpaper                13.1702265   1.677039   8.2862272
+## glossypaintedwood       11.2914904   5.331796   9.6288283
+##                                       objects clusters
+## innersurfaceofpinebark innersurfaceofpinebark        1
+## nylonscouringpad             nylonscouringpad        1
+## cellulosekitchensponge cellulosekitchensponge        1
+## wovenstraw                         wovenstraw        1
+## brick                                   brick        2
+## veryfinesandpaper           veryfinesandpaper        2
+## unglazedceramictile       unglazedceramictile        2
+## cardboard                           cardboard        3
+## cork                                     cork        3
+## rubbereraser                     rubbereraser        3
+## blockofstyrofoam             blockofstyrofoam        3
+## felt                                     felt        4
+## velvet                                 velvet        4
+## leatherwallet                   leatherwallet        5
+## rigidplasticsheet           rigidplasticsheet        5
+## waxpaper                             waxpaper        5
+## glossypaintedwood           glossypaintedwood        5
 ```
 
  
@@ -1474,24 +1479,42 @@ save.3d
 ```
 
 ```
-##             X1         X2          X3                objects clusters
-## 1   -2.7066290   1.694420   4.1176385 innersurfaceofpinebark        1
-## 2  -10.4469053   7.232787  -1.9720211       nylonscouringpad        1
-## 3   -5.3886609  -2.770991  -6.8039573 cellulosekitchensponge        1
-## 4   -5.2762142   3.836948  -0.3083513             wovenstraw        1
-## 5  -12.2011332   5.147970   5.9802631                  brick        2
-## 6  -11.0869483   2.800988   4.9686770      veryfinesandpaper        2
-## 7  -10.5902291   2.926805   7.2124679    unglazedceramictile        2
-## 8    3.8630322  -9.322759   1.2376174              cardboard        3
-## 9   -0.8424358 -14.884926  -5.6157998                   cork        3
-## 10   0.1676463 -11.733873  -2.3880857           rubbereraser        3
-## 11  -2.9950151 -11.927717  -2.9877666       blockofstyrofoam        3
-## 12   5.1803473   9.328562 -15.2730895                   felt        4
-## 13   6.3768882  10.477972 -14.1837552                 velvet        4
-## 14  10.4636668  -1.016525  -1.9005177          leatherwallet        5
-## 15  11.0208731   1.201504  10.0016248      rigidplasticsheet        5
-## 16  13.1702265   1.677039   8.2862272               waxpaper        5
-## 17  11.2914904   5.331796   9.6288283      glossypaintedwood        5
+##                                 X1         X2          X3
+## innersurfaceofpinebark  -2.7066290   1.694420   4.1176385
+## nylonscouringpad       -10.4469053   7.232787  -1.9720211
+## cellulosekitchensponge  -5.3886609  -2.770991  -6.8039573
+## wovenstraw              -5.2762142   3.836948  -0.3083513
+## brick                  -12.2011332   5.147970   5.9802631
+## veryfinesandpaper      -11.0869483   2.800988   4.9686770
+## unglazedceramictile    -10.5902291   2.926805   7.2124679
+## cardboard                3.8630322  -9.322759   1.2376174
+## cork                    -0.8424358 -14.884926  -5.6157998
+## rubbereraser             0.1676463 -11.733873  -2.3880857
+## blockofstyrofoam        -2.9950151 -11.927717  -2.9877666
+## felt                     5.1803473   9.328562 -15.2730895
+## velvet                   6.3768882  10.477972 -14.1837552
+## leatherwallet           10.4636668  -1.016525  -1.9005177
+## rigidplasticsheet       11.0208731   1.201504  10.0016248
+## waxpaper                13.1702265   1.677039   8.2862272
+## glossypaintedwood       11.2914904   5.331796   9.6288283
+##                                       objects clusters
+## innersurfaceofpinebark innersurfaceofpinebark        1
+## nylonscouringpad             nylonscouringpad        1
+## cellulosekitchensponge cellulosekitchensponge        1
+## wovenstraw                         wovenstraw        1
+## brick                                   brick        2
+## veryfinesandpaper           veryfinesandpaper        2
+## unglazedceramictile       unglazedceramictile        2
+## cardboard                           cardboard        3
+## cork                                     cork        3
+## rubbereraser                     rubbereraser        3
+## blockofstyrofoam             blockofstyrofoam        3
+## felt                                     felt        4
+## velvet                                 velvet        4
+## leatherwallet                   leatherwallet        5
+## rigidplasticsheet           rigidplasticsheet        5
+## waxpaper                             waxpaper        5
+## glossypaintedwood           glossypaintedwood        5
 ```
 
  
@@ -1840,8 +1863,8 @@ print.default(d)
 ```
 
 ```
-##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
-## [24] 19  3 13  8 17
+##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5 19  3
+## [26] 13  8 17
 ## attr(,"Labels")
 ## [1] "C" "D" "G" "H" "M" "N" "Q" "W"
 ## attr(,"Size")
@@ -1866,8 +1889,8 @@ unclass(d)
 ```
 
 ```
-##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5
-## [24] 19  3 13  8 17
+##  [1] 16  9 19 19 19 12 20 19 17 18 17  1 16 18 19 20 12 19 11  3 20 16  5 19  3
+## [26] 13  8 17
 ## attr(,"Labels")
 ## [1] "C" "D" "G" "H" "M" "N" "Q" "W"
 ## attr(,"Size")
@@ -2156,19 +2179,19 @@ beer
 
 ```
 ## # A tibble: 32 x 11
-##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW
-##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>
-##  1 S001          5     9     7      1       7        6        6      5
-##  2 S008          7     5     6      8       8        4        8      8
-##  3 S015          7     7     5      6       6        1        8      4
-##  4 S022          7     7     5      2       5        8        4      6
-##  5 S029          9     7     3      1       6        8        2      7
-##  6 S036          7     6     4      3       7        6        6      5
-##  7 S043          5     5     5      6       6        4        7      5
-##  8 S050          5     3     1      5       5        5        3      5
-##  9 S057          9     3     2      6       4        6        1      5
-## 10 S064          2     6     6      5       6        4        8      4
-## # … with 22 more rows, and 2 more variables: SamAdams <dbl>, SierraN <dbl>
+##    student AnchorS  Bass Becks Corona GordonB Guinness Heineken PetesW SamAdams
+##    <chr>     <dbl> <dbl> <dbl>  <dbl>   <dbl>    <dbl>    <dbl>  <dbl>    <dbl>
+##  1 S001          5     9     7      1       7        6        6      5        9
+##  2 S008          7     5     6      8       8        4        8      8        7
+##  3 S015          7     7     5      6       6        1        8      4        7
+##  4 S022          7     7     5      2       5        8        4      6        8
+##  5 S029          9     7     3      1       6        8        2      7        6
+##  6 S036          7     6     4      3       7        6        6      5        4
+##  7 S043          5     5     5      6       6        4        7      5        5
+##  8 S050          5     3     1      5       5        5        3      5        5
+##  9 S057          9     3     2      6       4        6        1      5        3
+## 10 S064          2     6     6      5       6        4        8      4        4
+## # … with 22 more rows, and 1 more variable: SierraN <dbl>
 ```
 
 ```r
@@ -2485,9 +2508,9 @@ stimuli
 ## 17 gloss…               22    27        23    29           28    29
 ## # … with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
 ## #   veryfinesandpaper <dbl>, nylonscouringpad <dbl>,
-## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>,
-## #   blockofstyrofoam <dbl>, unglazedceramictile <dbl>, velvet <dbl>,
-## #   waxpaper <dbl>, glossypaintedwood <dbl>
+## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>, blockofstyrofoam <dbl>,
+## #   unglazedceramictile <dbl>, velvet <dbl>, waxpaper <dbl>,
+## #   glossypaintedwood <dbl>
 ```
 
      
@@ -2700,7 +2723,7 @@ as_tibble(stimuli.1$points) %>%
 ##  2 -11.1     4.13  brick                 
 ##  3   3.75   -9.49  cardboard             
 ##  4  -0.864 -11.7   cork                  
-##  5   0.948 -10.00  rubbereraser          
+##  5   0.948 -10.0   rubbereraser          
 ##  6   3.70   15.0   felt                  
 ##  7   9.53   -3.37  leatherwallet         
 ##  8  11.3    -0.513 rigidplasticsheet     

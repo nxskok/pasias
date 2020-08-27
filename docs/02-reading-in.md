@@ -8,11 +8,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -45,12 +40,6 @@ Start with this (almost always):
 
 ```r
 library(tidyverse)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
 ```
 
  
@@ -557,6 +546,10 @@ regression lines on the plot for each group separately. This is where
 ```r
 ggplot(soap, aes(x = speed, y = scrap, colour = line)) +
   geom_point() + geom_smooth(method = "lm", se = F)
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
 <img src="02-reading-in_files/figure-html/unnamed-chunk-21-1.png" width="672"  />

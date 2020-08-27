@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -794,11 +789,6 @@ as_tibble(prob) %>% bind_cols(dead_bugs)
 ```
 
 ```
-## Warning: Calling `as_tibble()` on a vector is discouraged, because the behavior is likely to change in the future. Use `tibble::enframe(name = NULL)` instead.
-## This warning is displayed once per session.
-```
-
-```
 ## # A tibble: 5 x 4
 ##   value log_conc exposed killed
 ##   <dbl>    <dbl>   <dbl>  <dbl>
@@ -888,15 +878,6 @@ in `MASS` that appears to do this:
 
 ```r
 library(MASS)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 lethal <- dose.p(bugs.1)
 lethal
 ```
@@ -998,11 +979,11 @@ enframe(lethal)
 
 ```
 ## # A tibble: 3 x 2
-##   name      value
-##   <chr>     <dbl>
-## 1 p = 0.25:  1.22
-## 2 p = 0.50:  1.57
-## 3 p = 0.75:  1.93
+##   name      value     
+##   <chr>     <glm.dose>
+## 1 p = 0.25: 1.220327  
+## 2 p = 0.50: 1.573717  
+## 3 p = 0.75: 1.927108
 ```
 
  
@@ -1016,11 +997,11 @@ enframe(lethal) %>% mutate(SE = attr(lethal, "SE"))
 
 ```
 ## # A tibble: 3 x 3
-##   name      value SE[,1]
-##   <chr>     <dbl>  <dbl>
-## 1 p = 0.25:  1.22 0.0703
-## 2 p = 0.50:  1.57 0.0516
-## 3 p = 0.75:  1.93 0.0653
+##   name      value      SE[,1]
+##   <chr>     <glm.dose>  <dbl>
+## 1 p = 0.25: 1.220327   0.0703
+## 2 p = 0.50: 1.573717   0.0516
+## 3 p = 0.75: 1.927108   0.0653
 ```
 
  
@@ -1036,11 +1017,11 @@ enframe(lethal) %>%
 
 ```
 ## # A tibble: 3 x 5
-##   name      value SE[,1] LCL[,1] UCL[,1]
-##   <chr>     <dbl>  <dbl>   <dbl>   <dbl>
-## 1 p = 0.25:  1.22 0.0703    1.08    1.36
-## 2 p = 0.50:  1.57 0.0516    1.47    1.68
-## 3 p = 0.75:  1.93 0.0653    1.80    2.06
+##   name      value      SE[,1] LCL[,1] UCL[,1]
+##   <chr>     <glm.dose>  <dbl>   <dbl>   <dbl>
+## 1 p = 0.25: 1.220327   0.0703    1.08    1.36
+## 2 p = 0.50: 1.573717   0.0516    1.47    1.68
+## 3 p = 0.75: 1.927108   0.0653    1.80    2.06
 ```
 
  
@@ -1259,7 +1240,7 @@ class(response)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -1291,7 +1272,7 @@ class(resp)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  
@@ -2149,20 +2130,20 @@ infect.1a %>% as_tibble()
 ```
 
 ```
-## # A tibble: 81 x 11
-##    infected   age weight sex   .fitted .se.fit .resid   .hat .sigma .cooksd
-##    <chr>    <dbl>  <dbl> <chr>   <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
-##  1 absent       2      1 fema…   0.407   0.763 -1.35  0.140   0.872 7.10e-2
-##  2 absent       9     13 fema…  -2.24    0.791 -0.450 0.0544  0.886 1.62e-3
-##  3 present     15      2 fema…   0.343   0.691  1.04  0.116   0.878 2.63e-2
-##  4 absent      15     16 fema…  -2.85    0.896 -0.336 0.0416  0.887 6.57e-4
-##  5 absent      18      2 fema…   0.381   0.682 -1.34  0.112   0.872 5.21e-2
-##  6 absent      20      9 fema…  -1.19    0.616 -0.729 0.0678  0.883 5.94e-3
-##  7 absent      26     13 fema…  -2.02    0.707 -0.498 0.0515  0.886 1.89e-3
-##  8 present     42      6 fema…  -0.227   0.519  1.28  0.0664  0.874 2.39e-2
-##  9 absent      51      9 fema…  -0.797   0.490 -0.863 0.0515  0.882 6.45e-3
-## 10 present     52      6 fema…  -0.100   0.494  1.22  0.0609  0.876 1.91e-2
-## # … with 71 more rows, and 1 more variable: .std.resid <dbl>
+## # A tibble: 81 x 10
+##    infected   age weight sex    .fitted .resid .std.resid   .hat .sigma  .cooksd
+##    <chr>    <dbl>  <dbl> <chr>    <dbl>  <dbl>      <dbl>  <dbl>  <dbl>    <dbl>
+##  1 absent       2      1 female   0.407 -1.35      -1.46  0.140   0.872 0.0710  
+##  2 absent       9     13 female  -2.24  -0.450     -0.463 0.0544  0.886 0.00162 
+##  3 present     15      2 female   0.343  1.04       1.10  0.116   0.878 0.0263  
+##  4 absent      15     16 female  -2.85  -0.336     -0.343 0.0416  0.887 0.000657
+##  5 absent      18      2 female   0.381 -1.34      -1.43  0.112   0.872 0.0521  
+##  6 absent      20      9 female  -1.19  -0.729     -0.755 0.0678  0.883 0.00594 
+##  7 absent      26     13 female  -2.02  -0.498     -0.511 0.0515  0.886 0.00189 
+##  8 present     42      6 female  -0.227  1.28       1.32  0.0664  0.874 0.0239  
+##  9 absent      51      9 female  -0.797 -0.863     -0.886 0.0515  0.882 0.00645 
+## 10 present     52      6 female  -0.100  1.22       1.26  0.0609  0.876 0.0191  
+## # … with 71 more rows
 ```
 
 ```r
@@ -2322,13 +2303,13 @@ pp %>% filter(age == 46.8, sex == "female")
 ```
 
 ```
-##   weight  age    sex  pred.old       pred
-## 1    9.0 46.8 female 0.2994990 0.55303814
-## 2   10.4 46.8 female 0.2370788 0.42818659
-## 3   11.8 46.8 female 0.1842462 0.27804272
-## 4   13.2 46.8 female 0.1410112 0.14407377
-## 5   14.6 46.8 female 0.1065959 0.05884193
-## 6   16.0 46.8 female 0.0797997 0.01935264
+##    weight  age    sex  pred.old       pred
+## 3     9.0 46.8 female 0.2994990 0.55303814
+## 15   10.4 46.8 female 0.2370788 0.42818659
+## 27   11.8 46.8 female 0.1842462 0.27804272
+## 39   13.2 46.8 female 0.1410112 0.14407377
+## 51   14.6 46.8 female 0.1065959 0.05884193
+## 63   16.0 46.8 female 0.0797997 0.01935264
 ```
 
  
@@ -2343,13 +2324,13 @@ pp %>% filter(weight == 9, sex == "male")
 ```
 
 ```
-##   weight   age  sex   pred.old      pred
-## 1      9  26.0 male 0.06560117 0.1066453
-## 2      9  46.8 male 0.08369818 0.2674861
-## 3      9  67.6 male 0.10622001 0.4412181
-## 4      9  88.4 male 0.13391640 0.5468890
-## 5      9 109.2 male 0.16748125 0.5660054
-## 6      9 130.0 male 0.20744380 0.4990420
+##    weight   age  sex   pred.old      pred
+## 2       9  26.0 male 0.06560117 0.1066453
+## 4       9  46.8 male 0.08369818 0.2674861
+## 6       9  67.6 male 0.10622001 0.4412181
+## 8       9  88.4 male 0.13391640 0.5468890
+## 10      9 109.2 male 0.16748125 0.5660054
+## 12      9 130.0 male 0.20744380 0.4990420
 ```
 
  
@@ -2373,7 +2354,7 @@ pp %>% filter(pred == max(pred))
 
 ```
 ##   weight   age    sex  pred.old      pred
-## 1      9 109.2 female 0.4849694 0.8154681
+## 9      9 109.2 female 0.4849694 0.8154681
 ```
 
  
@@ -2405,8 +2386,8 @@ pp %>% filter(pred > 0.8)
 
 ```
 ##   weight   age    sex  pred.old      pred
-## 1      9  88.4 female 0.4198664 0.8035256
-## 2      9 109.2 female 0.4849694 0.8154681
+## 7      9  88.4 female 0.4198664 0.8035256
+## 9      9 109.2 female 0.4849694 0.8154681
 ```
 
  
@@ -2421,15 +2402,15 @@ pp %>% arrange(desc(pred)) %>% slice(1:10)
 
 ```
 ##    weight   age    sex  pred.old      pred
-## 1     9.0 109.2 female 0.4849694 0.8154681
-## 2     9.0  88.4 female 0.4198664 0.8035256
-## 3     9.0 130.0 female 0.5505865 0.7714535
-## 4     9.0  67.6 female 0.3574375 0.7279306
-## 5    10.4 109.2 female 0.4063155 0.7278482
-## 6    10.4  88.4 female 0.3447044 0.7122362
-## 7    10.4 130.0 female 0.4710234 0.6713570
-## 8    10.4  67.6 female 0.2879050 0.6182061
-## 9    11.8 109.2 female 0.3321903 0.5790306
+## 9     9.0 109.2 female 0.4849694 0.8154681
+## 7     9.0  88.4 female 0.4198664 0.8035256
+## 11    9.0 130.0 female 0.5505865 0.7714535
+## 5     9.0  67.6 female 0.3574375 0.7279306
+## 21   10.4 109.2 female 0.4063155 0.7278482
+## 19   10.4  88.4 female 0.3447044 0.7122362
+## 23   10.4 130.0 female 0.4710234 0.6713570
+## 17   10.4  67.6 female 0.2879050 0.6182061
+## 33   11.8 109.2 female 0.3321903 0.5790306
 ## 10    9.0 109.2   male 0.1674812 0.5660054
 ```
 
@@ -3405,18 +3386,18 @@ str(x)
 
 ```
 ## 'data.frame':	315 obs. of  11 variables:
-##  $ decision   : 'haven_labelled' num  0 1 1 0 1 1 0 0 0 0 ...
+##  $ decision   : num  0 1 1 0 1 1 0 0 0 0 ...
 ##   ..- attr(*, "format.spss")= chr "F1.0"
-##   ..- attr(*, "labels")= Named num  0 1
-##   .. ..- attr(*, "names")= chr  "stop" "continue"
+##   ..- attr(*, "labels")= Named num [1:2] 0 1
+##   .. ..- attr(*, "names")= chr [1:2] "stop" "continue"
 ##  $ idealism   : num  8.2 6.8 8.2 7.4 1.7 5.6 7.2 7.8 7.8 8 ...
 ##   ..- attr(*, "format.spss")= chr "F12.4"
 ##  $ relatvsm   : num  5.1 5.3 6 6.2 3.1 7.7 6.7 4 4.7 7.6 ...
 ##   ..- attr(*, "format.spss")= chr "F12.4"
-##  $ gender     : 'haven_labelled' num  0 1 0 0 0 1 0 1 0 0 ...
+##  $ gender     : num  0 1 0 0 0 1 0 1 0 0 ...
 ##   ..- attr(*, "format.spss")= chr "F1.0"
-##   ..- attr(*, "labels")= Named num  0 1
-##   .. ..- attr(*, "names")= chr  "Female" "Male"
+##   ..- attr(*, "labels")= Named num [1:2] 0 1
+##   .. ..- attr(*, "names")= chr [1:2] "Female" "Male"
 ##  $ cosmetic   : num  1 1 1 1 1 1 1 1 1 1 ...
 ##   ..- attr(*, "format.spss")= chr "F1.0"
 ##  $ theory     : num  0 0 0 0 0 0 0 0 0 0 ...
@@ -3532,29 +3513,27 @@ xx %>% count(scenario, gender, decision)
 ```
 
 ```
-## # A tibble: 20 x 4
-##    scenario   gender decision     n
-##    <chr>      <chr>  <chr>    <int>
-##  1 cosmetic   Female continue     8
-##  2 cosmetic   Female stop        26
-##  3 cosmetic   Male   continue    17
-##  4 cosmetic   Male   stop        11
-##  5 meat       Female continue    11
-##  6 meat       Female stop        31
-##  7 meat       Male   continue    12
-##  8 meat       Male   stop         9
-##  9 medical    Female continue    19
-## 10 medical    Female stop        24
-## 11 medical    Male   continue    15
-## 12 medical    Male   stop         5
-## 13 theory     Female continue     8
-## 14 theory     Female stop        30
-## 15 theory     Male   continue    12
-## 16 theory     Male   stop        14
-## 17 veterinary Female continue    14
-## 18 veterinary Female stop        29
-## 19 veterinary Male   continue    12
-## 20 veterinary Male   stop         8
+##      scenario gender decision  n
+## 1    cosmetic Female continue  8
+## 2    cosmetic Female     stop 26
+## 3    cosmetic   Male continue 17
+## 4    cosmetic   Male     stop 11
+## 5        meat Female continue 11
+## 6        meat Female     stop 31
+## 7        meat   Male continue 12
+## 8        meat   Male     stop  9
+## 9     medical Female continue 19
+## 10    medical Female     stop 24
+## 11    medical   Male continue 15
+## 12    medical   Male     stop  5
+## 13     theory Female continue  8
+## 14     theory Female     stop 30
+## 15     theory   Male continue 12
+## 16     theory   Male     stop 14
+## 17 veterinary Female continue 14
+## 18 veterinary Female     stop 29
+## 19 veterinary   Male continue 12
+## 20 veterinary   Male     stop  8
 ```
 
  
@@ -3880,21 +3859,20 @@ heart
 
 ```
 ## # A tibble: 270 x 15
-##       X1   age sex   pain.type resting.bp serum.chol high.blood.sugar
-##    <dbl> <dbl> <chr> <chr>          <dbl>      <dbl> <chr>           
-##  1     1    70 male  asymptom…        130        322 no              
-##  2     2    67 fema… nonangin…        115        564 no              
-##  3     3    57 male  atypical         124        261 no              
-##  4     4    64 male  asymptom…        128        263 no              
-##  5     5    74 fema… atypical         120        269 no              
-##  6     6    65 male  asymptom…        120        177 no              
-##  7     7    56 male  nonangin…        130        256 yes             
-##  8     8    59 male  asymptom…        110        239 no              
-##  9     9    60 male  asymptom…        140        293 no              
-## 10    10    63 fema… asymptom…        150        407 no              
-## # … with 260 more rows, and 8 more variables: electro <chr>, max.hr <dbl>,
-## #   angina <chr>, oldpeak <dbl>, slope <chr>, colored <dbl>, thal <chr>,
-## #   heart.disease <chr>
+##       X1   age sex   pain.type resting.bp serum.chol high.blood.sugar electro
+##    <dbl> <dbl> <chr> <chr>          <dbl>      <dbl> <chr>            <chr>  
+##  1     1    70 male  asymptom…        130        322 no               hypert…
+##  2     2    67 fema… nonangin…        115        564 no               hypert…
+##  3     3    57 male  atypical         124        261 no               normal 
+##  4     4    64 male  asymptom…        128        263 no               normal 
+##  5     5    74 fema… atypical         120        269 no               hypert…
+##  6     6    65 male  asymptom…        120        177 no               normal 
+##  7     7    56 male  nonangin…        130        256 yes              hypert…
+##  8     8    59 male  asymptom…        110        239 no               hypert…
+##  9     9    60 male  asymptom…        140        293 no               hypert…
+## 10    10    63 fema… asymptom…        150        407 no               hypert…
+## # … with 260 more rows, and 7 more variables: max.hr <dbl>, angina <chr>,
+## #   oldpeak <dbl>, slope <chr>, colored <dbl>, thal <chr>, heart.disease <chr>
 ```
 
      
@@ -4439,7 +4417,7 @@ heart %>% summarize_if(is.numeric, funs(q1, q3))
 ```
 
 ```
-## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## Warning: `funs()` is deprecated as of dplyr 0.8.0.
 ## Please use a list of either functions or lambdas: 
 ## 
 ##   # Simple named list: 
@@ -4450,17 +4428,17 @@ heart %>% summarize_if(is.numeric, funs(q1, q3))
 ## 
 ##   # Using lambdas
 ##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once per session.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```
 ## # A tibble: 1 x 14
-##   X1_q1 age_q1 resting.bp_q1 serum.chol_q1 max.hr_q1 oldpeak_q1 colored_q1
-##   <dbl>  <dbl>         <dbl>         <dbl>     <dbl>      <dbl>      <dbl>
-## 1  68.2     48           120           213       133          0          0
-## # … with 7 more variables: X1_q3 <dbl>, age_q3 <dbl>, resting.bp_q3 <dbl>,
-## #   serum.chol_q3 <dbl>, max.hr_q3 <dbl>, oldpeak_q3 <dbl>,
-## #   colored_q3 <dbl>
+##   X1_q1 age_q1 resting.bp_q1 serum.chol_q1 max.hr_q1 oldpeak_q1 colored_q1 X1_q3
+##   <dbl>  <dbl>         <dbl>         <dbl>     <dbl>      <dbl>      <dbl> <dbl>
+## 1  68.2     48           120           213       133          0          0  203.
+## # … with 6 more variables: age_q3 <dbl>, resting.bp_q3 <dbl>,
+## #   serum.chol_q3 <dbl>, max.hr_q3 <dbl>, oldpeak_q3 <dbl>, colored_q3 <dbl>
 ```
 
  
@@ -4541,15 +4519,15 @@ heart %>%
 ```
 
 ```
-##      sex             pain.type   high.blood.sugar        electro   
-##  female: 87   asymptomatic:129   no :230          hypertrophy:137  
-##  male  :183   atypical    : 42   yes: 40          normal     :131  
-##               nonanginal  : 79                    STT        :  2  
-##               typical     : 20                                     
-##  angina            slope             thal     heart.disease
-##  no :181   downsloping: 18   fixed     : 14   no :150      
-##  yes: 89   flat       :122   normal    :152   yes:120      
-##            upsloping  :130   reversible:104                
+##      sex             pain.type   high.blood.sugar        electro    angina   
+##  female: 87   asymptomatic:129   no :230          hypertrophy:137   no :181  
+##  male  :183   atypical    : 42   yes: 40          normal     :131   yes: 89  
+##               nonanginal  : 79                    STT        :  2            
+##               typical     : 20                                               
+##          slope             thal     heart.disease
+##  downsloping: 18   fixed     : 14   no :150      
+##  flat       :122   normal    :152   yes:120      
+##  upsloping  :130   reversible:104                
 ## 
 ```
 
@@ -4702,7 +4680,8 @@ heart2 %>%
 ```
 
 ```
-## [1] 48 61
+## 25% 75% 
+##  48  61
 ```
 
  
@@ -4728,7 +4707,8 @@ get_quartiles(heart2, "age_")
 ```
 
 ```
-## [1] 48 61
+## 25% 75% 
+##  48  61
 ```
 
  
@@ -4813,18 +4793,18 @@ heart.new
 
 ```
 ## # A tibble: 2,304 x 9
-##    sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##    <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-##  1 fema… asymptom…        120        213    133       0 down…       0 fixed
-##  2 fema… asymptom…        120        213    133       0 down…       0 norm…
-##  3 fema… asymptom…        120        213    133       0 down…       0 reve…
-##  4 fema… asymptom…        120        213    133       0 down…       1 fixed
-##  5 fema… asymptom…        120        213    133       0 down…       1 norm…
-##  6 fema… asymptom…        120        213    133       0 down…       1 reve…
-##  7 fema… asymptom…        120        213    133       0 flat        0 fixed
-##  8 fema… asymptom…        120        213    133       0 flat        0 norm…
-##  9 fema… asymptom…        120        213    133       0 flat        0 reve…
-## 10 fema… asymptom…        120        213    133       0 flat        1 fixed
+##    sex    pain.type  resting.bp serum.chol max.hr oldpeak slope   colored thal  
+##    <chr>  <chr>           <dbl>      <dbl>  <dbl>   <dbl> <chr>     <dbl> <chr> 
+##  1 female asymptoma…        120        213    133       0 downsl…       0 fixed 
+##  2 female asymptoma…        120        213    133       0 downsl…       0 normal
+##  3 female asymptoma…        120        213    133       0 downsl…       0 rever…
+##  4 female asymptoma…        120        213    133       0 downsl…       1 fixed 
+##  5 female asymptoma…        120        213    133       0 downsl…       1 normal
+##  6 female asymptoma…        120        213    133       0 downsl…       1 rever…
+##  7 female asymptoma…        120        213    133       0 flat          0 fixed 
+##  8 female asymptoma…        120        213    133       0 flat          0 normal
+##  9 female asymptoma…        120        213    133       0 flat          0 rever…
+## 10 female asymptoma…        120        213    133       0 flat          1 fixed 
 ## # … with 2,294 more rows
 ```
 
@@ -4905,10 +4885,9 @@ heart.new %>% filter(pred == max(pred))
 
 ```
 ## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
-## # … with 1 more variable: pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal   pred
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr> <dbl>
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve… 0.984
 ```
 
          
@@ -4934,10 +4913,9 @@ heart.new %>% filter(pred > 0.98)
 
 ```
 ## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
-## # … with 1 more variable: pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal   pred
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr> <dbl>
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve… 0.984
 ```
 
  
@@ -4962,10 +4940,9 @@ heart.new %>% slice(1398)
 
 ```
 ## # A tibble: 1 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
-## # … with 1 more variable: pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal   pred
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr> <dbl>
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve… 0.984
 ```
 
  
@@ -4979,17 +4956,17 @@ heart.new %>% arrange(desc(pred)) %>% print(n = 8)
 
 ```
 ## # A tibble: 2,304 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  asymptom…        140        280    133     1.6 flat        1 reve…
-## 2 male  asymptom…        140        213    133     1.6 flat        1 reve…
-## 3 male  asymptom…        120        280    133     1.6 flat        1 reve…
-## 4 male  asymptom…        140        280    166     1.6 flat        1 reve…
-## 5 male  asymptom…        140        280    133     0   flat        1 reve…
-## 6 male  asymptom…        140        280    133     1.6 down…       1 reve…
-## 7 male  asymptom…        120        213    133     1.6 flat        1 reve…
-## 8 male  asymptom…        140        280    133     1.6 upsl…       1 reve…
-## # … with 2,296 more rows, and 1 more variable: pred <dbl>
+##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal   pred
+##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr> <dbl>
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve… 0.984
+## 2 male  asymptom…        140        213    133     1.6 flat        1 reve… 0.975
+## 3 male  asymptom…        120        280    133     1.6 flat        1 reve… 0.975
+## 4 male  asymptom…        140        280    166     1.6 flat        1 reve… 0.970
+## 5 male  asymptom…        140        280    133     0   flat        1 reve… 0.968
+## 6 male  asymptom…        140        280    133     1.6 down…       1 reve… 0.964
+## 7 male  asymptom…        120        213    133     1.6 flat        1 reve… 0.960
+## 8 male  asymptom…        140        280    133     1.6 upsl…       1 reve… 0.958
+## # … with 2,296 more rows
 ```
 
  
@@ -5599,6 +5576,10 @@ donner %>% group_by(gender) %>% summarize(m = mean(age))
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 2 x 2
 ##   gender     m
 ##   <chr>  <dbl>
@@ -5653,6 +5634,10 @@ donner %>% group_by(survived) %>% summarize(m = mean(age))
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 2 x 2
 ##   survived     m
 ##   <chr>    <dbl>
@@ -5684,6 +5669,10 @@ or like this:
 
 ```r
 donner %>% group_by(gender, survived) %>% summarize(n = n())
+```
+
+```
+## `summarise()` regrouping output by 'gender' (override with `.groups` argument)
 ```
 
 ```
@@ -5991,7 +5980,8 @@ ages
 ```
 
 ```
-## [1] 24 28 40
+## 25%     75% 
+##  24  28  40
 ```
 
  
@@ -6366,7 +6356,7 @@ class(resp)
 ```
 
 ```
-## [1] "matrix"
+## [1] "matrix" "array"
 ```
 
  

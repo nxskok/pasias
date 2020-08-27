@@ -11,11 +11,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 
@@ -325,6 +320,13 @@ This is a group-by and summarize, but there are two active ingredients and they 
 hayfever %>%
   group_by(a, b) %>%
   summarize(m = mean(relief)) -> d
+```
+
+```
+## `summarise()` regrouping output by 'a' (override with `.groups` argument)
+```
+
+```r
 d
 ```
 
@@ -358,6 +360,13 @@ hayfever %>%
   mutate(a = fct_inorder(a), b = fct_inorder(b)) %>%
   group_by(a, b) %>%
   summarize(m = mean(relief)) -> d2
+```
+
+```
+## `summarise()` regrouping output by 'a' (override with `.groups` argument)
+```
+
+```r
 d2
 ```
 
@@ -876,6 +885,10 @@ Count them, or find the distinct ones:
 
 ```r
 caffeine %>% group_by(amount) %>% summarize(count = n())
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -2536,6 +2549,10 @@ shirts %>%
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 5 x 2
 ##   treatment                 m
 ##   <fct>                 <dbl>
@@ -2554,6 +2571,10 @@ non-alphabetical order?
 
 ```r
 d %>% group_by(trt2) %>% summarize(m = mean(score))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -2963,6 +2984,10 @@ know about that, but colour is the most obvious thing):
 ```r
 ggplot(productivity, aes(x = last, y = improvement, colour = expenditure)) +
   geom_point() + geom_smooth(method = "lm", se = F)
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
 <img src="18-anova-revisited_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
@@ -3680,10 +3705,10 @@ preds
 ```
 
 ```
-##         1         2         3         4         5         6         7 
-##  1.055110  7.965396 15.862867  1.164081  8.074368 15.971838  4.501248 
-##         8         9 
-## 11.411535 19.309005
+##         1         2         3         4         5         6         7         8 
+##  1.055110  7.965396 15.862867  1.164081  8.074368 15.971838  4.501248 11.411535 
+##         9 
+## 19.309005
 ```
 
  
@@ -3793,6 +3818,10 @@ lines for each group.  So `geom_smooth` will get them:
 ```r
 ggplot(lepro, aes(x = pre, y = post, colour = drug)) +
   geom_point() + geom_smooth(method = "lm")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
 <img src="18-anova-revisited_files/figure-html/unnamed-chunk-117-1.png" width="672"  />

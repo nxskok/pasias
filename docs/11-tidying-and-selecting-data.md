@@ -7,11 +7,6 @@ library(tidyverse)
 
 
 
-```
-## Warning: `env_bind_fns()` is deprecated as of rlang 0.3.0.
-## Please use `env_bind_active()` instead.
-## This warning is displayed once per session.
-```
 
 
 ##  Tidying the Jays data
@@ -66,21 +61,21 @@ jays
 
 ```
 ## # A tibble: 25 x 21
-##      row  game date  box   team  venue opp   result  runs Oppruns innings
-##    <dbl> <dbl> <chr> <chr> <chr> <lgl> <chr> <chr>  <dbl>   <dbl>   <dbl>
-##  1    82     7 Mond… boxs… TOR   NA    TBR   L          1       2      NA
-##  2    83     8 Tues… boxs… TOR   NA    TBR   L          2       3      NA
-##  3    84     9 Wedn… boxs… TOR   NA    TBR   W         12       7      NA
-##  4    85    10 Thur… boxs… TOR   NA    TBR   L          2       4      NA
-##  5    86    11 Frid… boxs… TOR   NA    ATL   L          7       8      NA
-##  6    87    12 Satu… boxs… TOR   NA    ATL   W-wo       6       5      10
-##  7    88    13 Sund… boxs… TOR   NA    ATL   L          2       5      NA
-##  8    89    14 Tues… boxs… TOR   NA    BAL   W         13       6      NA
-##  9    90    15 Wedn… boxs… TOR   NA    BAL   W          4       2      NA
-## 10    91    16 Thur… boxs… TOR   NA    BAL   W          7       6      NA
-## # … with 15 more rows, and 10 more variables: wl <chr>, position <dbl>,
-## #   gb <chr>, winner <chr>, loser <chr>, save <chr>, `game time` <time>,
-## #   Daynight <chr>, attendance <dbl>, streak <chr>
+##      row  game date  box   team  venue opp   result  runs Oppruns innings wl   
+##    <dbl> <dbl> <chr> <chr> <chr> <lgl> <chr> <chr>  <dbl>   <dbl>   <dbl> <chr>
+##  1    82     7 Mond… boxs… TOR   NA    TBR   L          1       2      NA 4-3  
+##  2    83     8 Tues… boxs… TOR   NA    TBR   L          2       3      NA 4-4  
+##  3    84     9 Wedn… boxs… TOR   NA    TBR   W         12       7      NA 5-4  
+##  4    85    10 Thur… boxs… TOR   NA    TBR   L          2       4      NA 5-5  
+##  5    86    11 Frid… boxs… TOR   NA    ATL   L          7       8      NA 5-6  
+##  6    87    12 Satu… boxs… TOR   NA    ATL   W-wo       6       5      10 6-6  
+##  7    88    13 Sund… boxs… TOR   NA    ATL   L          2       5      NA 6-7  
+##  8    89    14 Tues… boxs… TOR   NA    BAL   W         13       6      NA 7-7  
+##  9    90    15 Wedn… boxs… TOR   NA    BAL   W          4       2      NA 8-7  
+## 10    91    16 Thur… boxs… TOR   NA    BAL   W          7       6      NA 9-7  
+## # … with 15 more rows, and 9 more variables: position <dbl>, gb <chr>,
+## #   winner <chr>, loser <chr>, save <chr>, `game time` <time>, Daynight <chr>,
+## #   attendance <dbl>, streak <chr>
 ```
 
 
@@ -158,21 +153,21 @@ jays %>% filter(opp == "NYY") %>% print(width = Inf)
 
 ```
 ## # A tibble: 3 x 21
-##     row  game date             box      team  venue opp   result  runs
-##   <dbl> <dbl> <chr>            <chr>    <chr> <lgl> <chr> <chr>  <dbl>
-## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3
-## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
-## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
-##   Oppruns innings wl    position gb    winner  loser    save   `game time`
-##     <dbl>   <dbl> <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>     
-## 1       1      NA 13-14        4 3.5   Dickey  Martin   Cecil  02:18      
-## 2       6      NA 13-15        5 4.5   Pineda  Estrada  Miller 02:54      
-## 3       1      NA 14-15        3 3.5   Buehrle Sabathia <NA>   02:30      
-##   Daynight attendance streak
-##   <chr>         <dbl> <chr> 
-## 1 N             19217 +     
-## 2 N             21519 -     
-## 3 N             21312 +
+##     row  game date             box      team  venue opp   result  runs Oppruns
+##   <dbl> <dbl> <chr>            <chr>    <chr> <lgl> <chr> <chr>  <dbl>   <dbl>
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3       1
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3       6
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5       1
+##   innings wl    position gb    winner  loser    save   `game time` Daynight
+##     <dbl> <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>      <chr>   
+## 1      NA 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N       
+## 2      NA 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N       
+## 3      NA 14-15        3 3.5   Buehrle Sabathia <NA>   02:30       N       
+##   attendance streak
+##        <dbl> <chr> 
+## 1      19217 +     
+## 2      21519 -     
+## 3      21312 +
 ```
 
  
@@ -202,16 +197,16 @@ jays %>% filter(opp == "NYY") %>% select(row:innings) %>% print(width = Inf)
 
 ```
 ## # A tibble: 3 x 11
-##     row  game date             box      team  venue opp   result  runs
-##   <dbl> <dbl> <chr>            <chr>    <chr> <lgl> <chr> <chr>  <dbl>
-## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3
-## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3
-## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5
-##   Oppruns innings
-##     <dbl>   <dbl>
-## 1       1      NA
-## 2       6      NA
-## 3       1      NA
+##     row  game date             box      team  venue opp   result  runs Oppruns
+##   <dbl> <dbl> <chr>            <chr>    <chr> <lgl> <chr> <chr>  <dbl>   <dbl>
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3       1
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3       6
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5       1
+##   innings
+##     <dbl>
+## 1      NA
+## 2      NA
+## 3      NA
 ```
 
 ```r
@@ -220,16 +215,16 @@ jays %>% filter(opp == "NYY") %>% select(wl:streak) %>% print(width = Inf)
 
 ```
 ## # A tibble: 3 x 10
-##   wl    position gb    winner  loser    save   `game time` Daynight
-##   <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>      <chr>   
-## 1 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N       
-## 2 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N       
-## 3 14-15        3 3.5   Buehrle Sabathia <NA>   02:30       N       
-##   attendance streak
-##        <dbl> <chr> 
-## 1      19217 +     
-## 2      21519 -     
-## 3      21312 +
+##   wl    position gb    winner  loser    save   `game time` Daynight attendance
+##   <chr>    <dbl> <chr> <chr>   <chr>    <chr>  <time>      <chr>         <dbl>
+## 1 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N             19217
+## 2 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N             21519
+## 3 14-15        3 3.5   Buehrle Sabathia <NA>   02:30       N             21312
+##   streak
+##   <chr> 
+## 1 +     
+## 2 -     
+## 3 +
 ```
 
  
@@ -352,6 +347,10 @@ jays %>%
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 2 x 3
 ##   Daynight mean.att sd.att
 ##   <chr>       <dbl>  <dbl>
@@ -374,6 +373,10 @@ jays %>%
     median.att = median(attendance),
     iqr.att = IQR(attendance)
   )
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -408,15 +411,6 @@ of these non-normal data, is Mood's median test:
 
 ```r
 library(smmr)
-```
-
-```
-## Warning: `quo_expr()` is deprecated as of rlang 0.2.0.
-## Please use `quo_squash()` instead.
-## This warning is displayed once per session.
-```
-
-```r
 median_test(jays, attendance, Daynight)
 ```
 
@@ -1175,6 +1169,10 @@ sleep %>%
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 4 x 2
 ##   treatment stddev
 ##   <chr>      <dbl>
@@ -1562,8 +1560,7 @@ with(toms2,leveneTest(growthrate,colour))
 ```
 
 ```
-## Warning in leveneTest.default(growthrate, colour): colour coerced to
-## factor.
+## Warning in leveneTest.default(growthrate, colour): colour coerced to factor.
 ```
 
 ```
@@ -1595,6 +1592,11 @@ I don't need `car` again, so let's get rid of it:
 
 ```r
 detach("package:car",unload=T)
+```
+
+```
+## Warning: 'car' namespace cannot be unloaded:
+##   namespace 'car' is imported by 'rstatix' so cannot be unloaded
 ```
 
  
@@ -2191,6 +2193,10 @@ drug:
 migraine2 %>%
   group_by(drug) %>%
   summarize(m = mean(painrelief))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -3004,11 +3010,11 @@ problems(d)
 
 ```
 ## # A tibble: 3 x 5
-##     row col   expected  actual    file                                     
-##   <int> <chr> <chr>     <chr>     <chr>                                    
-## 1    15 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32…
-## 2    16 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32…
-## 3    17 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32…
+##     row col   expected  actual    file                                          
+##   <int> <chr> <chr>     <chr>     <chr>                                         
+## 1    15 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32/cric…
+## 2    16 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32/cric…
+## 3    17 <NA>  1 columns 2 columns 'http://www.utsc.utoronto.ca/~butler/c32/cric…
 ```
 
  
@@ -3075,26 +3081,25 @@ crickets %>%
 
 ```
 ## # A tibble: 17 x 5
-##    exclamationis_t… exclamationis_p… niveus_temperat… niveus_pulserate
-##               <dbl>            <dbl>            <dbl>            <dbl>
-##  1             20.8             67.9             17.2             44.3
-##  2             20.8             65.1             18.3             47.2
-##  3             24               77.3             18.3             47.6
-##  4             24               78.7             18.3             49.6
-##  5             24               79.4             18.9             50.3
-##  6             24               80.4             18.9             51.8
-##  7             26.2             85.8             20.4             60  
-##  8             26.2             86.6             21               58.5
-##  9             26.2             87.5             21               58.9
-## 10             26.2             89.1             22.1             60.7
-## 11             28.4             98.6             23.5             69.8
-## 12             29              101.              24.2             70.9
-## 13             30.4             99.3             25.9             76.2
-## 14             30.4            102.              26.5             76.1
-## 15             NA               NA               26.5             77  
-## 16             NA               NA               26.5             77.7
-## 17             NA               NA               28.6             84.7
-## # … with 1 more variable: row <int>
+##    exclamationis_tem… exclamationis_pul… niveus_temperat… niveus_pulserate   row
+##                 <dbl>              <dbl>            <dbl>            <dbl> <int>
+##  1               20.8               67.9             17.2             44.3     1
+##  2               20.8               65.1             18.3             47.2     2
+##  3               24                 77.3             18.3             47.6     3
+##  4               24                 78.7             18.3             49.6     4
+##  5               24                 79.4             18.9             50.3     5
+##  6               24                 80.4             18.9             51.8     6
+##  7               26.2               85.8             20.4             60       7
+##  8               26.2               86.6             21               58.5     8
+##  9               26.2               87.5             21               58.9     9
+## 10               26.2               89.1             22.1             60.7    10
+## 11               28.4               98.6             23.5             69.8    11
+## 12               29                101.              24.2             70.9    12
+## 13               30.4               99.3             25.9             76.2    13
+## 14               30.4              102.              26.5             76.1    14
+## 15               NA                 NA               26.5             77      15
+## 16               NA                 NA               26.5             77.7    16
+## 17               NA                 NA               28.6             84.7    17
 ```
 
 The first part of each column name is the species and the second part is what was measured each time, separated by an underscore. To handle that in `pivot_longer`, you give *two* names of new columns to create (in `names_to`), and say what they're separated by:
@@ -3297,8 +3302,7 @@ d %>%
 ```
 
 ```
-## Warning: Expected 2 pieces. Additional pieces discarded in 3 rows [1, 2,
-## 3].
+## Warning: Expected 2 pieces. Additional pieces discarded in 3 rows [1, 2, 3].
 ```
 
 ```
@@ -3505,9 +3509,23 @@ crickets.1 <- crickets %>%
 ```
 
 ```
-## Warning: NAs introduced by coercion
+## Warning: Problem with `mutate()` input `temperature`.
+## ℹ NAs introduced by coercion
+## ℹ Input `temperature` is `as.numeric(temperature)`.
+```
 
-## Warning: NAs introduced by coercion
+```
+## Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion
+```
+
+```
+## Warning: Problem with `mutate()` input `pulse_rate`.
+## ℹ NAs introduced by coercion
+## ℹ Input `pulse_rate` is `as.numeric(pulse_rate)`.
+```
+
+```
+## Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion
 ```
 
 ```r
@@ -3569,7 +3587,19 @@ crickets %>%
 ```
 
 ```
+## Warning: Problem with `mutate()` input `temperature`.
+## ℹ NAs introduced by coercion
+## ℹ Input `temperature` is `(structure(function (..., .x = ..1, .y = ..2, . = ..1) ...`.
+```
+
+```
 ## Warning in ~as.numeric(.): NAs introduced by coercion
+```
+
+```
+## Warning: Problem with `mutate()` input `pulse_rate`.
+## ℹ NAs introduced by coercion
+## ℹ Input `pulse_rate` is `(structure(function (..., .x = ..1, .y = ..2, . = ..1) ...`.
 ```
 
 ```
@@ -3608,7 +3638,19 @@ crickets %>%
 ```
 
 ```
+## Warning: Problem with `mutate()` input `temperature`.
+## ℹ NAs introduced by coercion
+## ℹ Input `temperature` is `(structure(function (..., .x = ..1, .y = ..2, . = ..1) ...`.
+```
+
+```
 ## Warning in ~as.numeric(.): NAs introduced by coercion
+```
+
+```
+## Warning: Problem with `mutate()` input `pulse_rate`.
+## ℹ NAs introduced by coercion
+## ℹ Input `pulse_rate` is `(structure(function (..., .x = ..1, .y = ..2, . = ..1) ...`.
 ```
 
 ```
@@ -3916,6 +3958,10 @@ cars %>% group_by(cylinders) %>% summarize(m = mean(MPG), s = sd(MPG))
 ```
 
 ```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 4 x 3
 ##   cylinders     m     s
 ##       <dbl> <dbl> <dbl>
@@ -3936,6 +3982,10 @@ cars %>%
   group_by(cylinders) %>%
   summarize(m = mean(MPG), s = sd(MPG)) %>%
   filter(cylinders == 4)
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -4021,43 +4071,38 @@ billboard
 
 ```
 ## # A tibble: 317 x 83
-##     year artist.inverted track time  genre date.entered date.peaked
-##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>     
-##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18 
-##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08 
-##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29 
-##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16 
-##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14 
-##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26 
-##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18 
-##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24 
-##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12 
-## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04 
-## # … with 307 more rows, and 76 more variables: x1st.week <dbl>,
-## #   x2nd.week <dbl>, x3rd.week <dbl>, x4th.week <dbl>, x5th.week <dbl>,
-## #   x6th.week <dbl>, x7th.week <dbl>, x8th.week <dbl>, x9th.week <dbl>,
-## #   x10th.week <dbl>, x11th.week <dbl>, x12th.week <dbl>,
-## #   x13th.week <dbl>, x14th.week <dbl>, x15th.week <dbl>,
-## #   x16th.week <dbl>, x17th.week <dbl>, x18th.week <dbl>,
-## #   x19th.week <dbl>, x20th.week <dbl>, x21st.week <dbl>,
-## #   x22nd.week <dbl>, x23rd.week <dbl>, x24th.week <dbl>,
-## #   x25th.week <dbl>, x26th.week <dbl>, x27th.week <dbl>,
-## #   x28th.week <dbl>, x29th.week <dbl>, x30th.week <dbl>,
-## #   x31st.week <dbl>, x32nd.week <dbl>, x33rd.week <dbl>,
-## #   x34th.week <dbl>, x35th.week <dbl>, x36th.week <dbl>,
-## #   x37th.week <dbl>, x38th.week <dbl>, x39th.week <dbl>,
-## #   x40th.week <dbl>, x41st.week <dbl>, x42nd.week <dbl>,
-## #   x43rd.week <dbl>, x44th.week <dbl>, x45th.week <dbl>,
-## #   x46th.week <dbl>, x47th.week <dbl>, x48th.week <dbl>,
-## #   x49th.week <dbl>, x50th.week <dbl>, x51st.week <dbl>,
-## #   x52nd.week <dbl>, x53rd.week <dbl>, x54th.week <dbl>,
-## #   x55th.week <dbl>, x56th.week <dbl>, x57th.week <dbl>,
-## #   x58th.week <dbl>, x59th.week <dbl>, x60th.week <dbl>,
-## #   x61st.week <dbl>, x62nd.week <dbl>, x63rd.week <dbl>,
-## #   x64th.week <dbl>, x65th.week <dbl>, x66th.week <lgl>,
-## #   x67th.week <lgl>, x68th.week <lgl>, x69th.week <lgl>,
-## #   x70th.week <lgl>, x71st.week <lgl>, x72nd.week <lgl>,
-## #   x73rd.week <lgl>, x74th.week <lgl>, x75th.week <lgl>, x76th.week <lgl>
+##     year artist.inverted track time  genre date.entered date.peaked x1st.week
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>          <dbl>
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18         78
+##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08         15
+##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29         71
+##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16         41
+##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14         57
+##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26         59
+##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18         83
+##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24         63
+##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12         77
+## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04         81
+## # … with 307 more rows, and 75 more variables: x2nd.week <dbl>,
+## #   x3rd.week <dbl>, x4th.week <dbl>, x5th.week <dbl>, x6th.week <dbl>,
+## #   x7th.week <dbl>, x8th.week <dbl>, x9th.week <dbl>, x10th.week <dbl>,
+## #   x11th.week <dbl>, x12th.week <dbl>, x13th.week <dbl>, x14th.week <dbl>,
+## #   x15th.week <dbl>, x16th.week <dbl>, x17th.week <dbl>, x18th.week <dbl>,
+## #   x19th.week <dbl>, x20th.week <dbl>, x21st.week <dbl>, x22nd.week <dbl>,
+## #   x23rd.week <dbl>, x24th.week <dbl>, x25th.week <dbl>, x26th.week <dbl>,
+## #   x27th.week <dbl>, x28th.week <dbl>, x29th.week <dbl>, x30th.week <dbl>,
+## #   x31st.week <dbl>, x32nd.week <dbl>, x33rd.week <dbl>, x34th.week <dbl>,
+## #   x35th.week <dbl>, x36th.week <dbl>, x37th.week <dbl>, x38th.week <dbl>,
+## #   x39th.week <dbl>, x40th.week <dbl>, x41st.week <dbl>, x42nd.week <dbl>,
+## #   x43rd.week <dbl>, x44th.week <dbl>, x45th.week <dbl>, x46th.week <dbl>,
+## #   x47th.week <dbl>, x48th.week <dbl>, x49th.week <dbl>, x50th.week <dbl>,
+## #   x51st.week <dbl>, x52nd.week <dbl>, x53rd.week <dbl>, x54th.week <dbl>,
+## #   x55th.week <dbl>, x56th.week <dbl>, x57th.week <dbl>, x58th.week <dbl>,
+## #   x59th.week <dbl>, x60th.week <dbl>, x61st.week <dbl>, x62nd.week <dbl>,
+## #   x63rd.week <dbl>, x64th.week <dbl>, x65th.week <dbl>, x66th.week <lgl>,
+## #   x67th.week <lgl>, x68th.week <lgl>, x69th.week <lgl>, x70th.week <lgl>,
+## #   x71st.week <lgl>, x72nd.week <lgl>, x73rd.week <lgl>, x74th.week <lgl>,
+## #   x75th.week <lgl>, x76th.week <lgl>
 ```
 
  
@@ -4095,19 +4140,19 @@ billboard %>%
 
 ```
 ## # A tibble: 5,307 x 9
-##     year artist.inverted track time  genre date.entered date.peaked week 
-##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
-##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
-##  2  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x2nd…
-##  3  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x3rd…
-##  4  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x4th…
-##  5  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x5th…
-##  6  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x6th…
-##  7  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x7th…
-##  8  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x8th…
-##  9  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x9th…
-## 10  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x10t…
-## # … with 5,297 more rows, and 1 more variable: rank <dbl>
+##     year artist.inverted track  time  genre date.entered date.peaked week   rank
+##    <dbl> <chr>           <chr>  <tim> <chr> <date>       <date>      <chr> <dbl>
+##  1  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x1st…    78
+##  2  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x2nd…    63
+##  3  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x3rd…    49
+##  4  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x4th…    33
+##  5  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x5th…    23
+##  6  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x6th…    15
+##  7  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x7th…     7
+##  8  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x8th…     5
+##  9  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x9th…     1
+## 10  2000 Destiny's Child Indep… 03:38 Rock  2000-09-23   2000-11-18  x10t…     1
+## # … with 5,297 more rows
 ```
 
 The "values" (ranks) have missings in them, which we wanted to get rid of.
@@ -4122,19 +4167,19 @@ billboard %>% gather(week, rank, x1st.week:x76th.week, na.rm = T)
 
 ```
 ## # A tibble: 5,307 x 9
-##     year artist.inverted track time  genre date.entered date.peaked week 
-##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
-##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
-##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
-##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
-##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16  x1st…
-##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14  x1st…
-##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26  x1st…
-##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18  x1st…
-##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
-##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
-## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
-## # … with 5,297 more rows, and 1 more variable: rank <dbl>
+##     year artist.inverted  track time  genre date.entered date.peaked week   rank
+##    <dbl> <chr>            <chr> <tim> <chr> <date>       <date>      <chr> <dbl>
+##  1  2000 Destiny's Child  Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…    78
+##  2  2000 Santana          Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…    15
+##  3  2000 Savage Garden    I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…    71
+##  4  2000 Madonna          Music 03:45 Rock  2000-08-12   2000-09-16  x1st…    41
+##  5  2000 Aguilera, Chris… Come… 03:38 Rock  2000-08-05   2000-10-14  x1st…    57
+##  6  2000 Janet            Does… 04:17 Rock  2000-06-17   2000-08-26  x1st…    59
+##  7  2000 Destiny's Child  Say … 04:31 Rock  1999-12-25   2000-03-18  x1st…    83
+##  8  2000 Iglesias, Enriq… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…    63
+##  9  2000 Sisqo            Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…    77
+## 10  2000 Lonestar         Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…    81
+## # … with 5,297 more rows
 ```
 
          
@@ -4149,19 +4194,19 @@ billboard %>% gather(week, rank, ends_with("week"), na.rm = T)
 
 ```
 ## # A tibble: 5,307 x 9
-##     year artist.inverted track time  genre date.entered date.peaked week 
-##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
-##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
-##  2  2000 Santana         Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…
-##  3  2000 Savage Garden   I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…
-##  4  2000 Madonna         Music 03:45 Rock  2000-08-12   2000-09-16  x1st…
-##  5  2000 Aguilera, Chri… Come… 03:38 Rock  2000-08-05   2000-10-14  x1st…
-##  6  2000 Janet           Does… 04:17 Rock  2000-06-17   2000-08-26  x1st…
-##  7  2000 Destiny's Child Say … 04:31 Rock  1999-12-25   2000-03-18  x1st…
-##  8  2000 Iglesias, Enri… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…
-##  9  2000 Sisqo           Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…
-## 10  2000 Lonestar        Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…
-## # … with 5,297 more rows, and 1 more variable: rank <dbl>
+##     year artist.inverted  track time  genre date.entered date.peaked week   rank
+##    <dbl> <chr>            <chr> <tim> <chr> <date>       <date>      <chr> <dbl>
+##  1  2000 Destiny's Child  Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…    78
+##  2  2000 Santana          Mari… 04:18 Rock  2000-02-12   2000-04-08  x1st…    15
+##  3  2000 Savage Garden    I Kn… 04:07 Rock  1999-10-23   2000-01-29  x1st…    71
+##  4  2000 Madonna          Music 03:45 Rock  2000-08-12   2000-09-16  x1st…    41
+##  5  2000 Aguilera, Chris… Come… 03:38 Rock  2000-08-05   2000-10-14  x1st…    57
+##  6  2000 Janet            Does… 04:17 Rock  2000-06-17   2000-08-26  x1st…    59
+##  7  2000 Destiny's Child  Say … 04:31 Rock  1999-12-25   2000-03-18  x1st…    83
+##  8  2000 Iglesias, Enriq… Be W… 03:36 Latin 2000-04-01   2000-06-24  x1st…    63
+##  9  2000 Sisqo            Inco… 03:52 Rock  2000-06-24   2000-08-12  x1st…    77
+## 10  2000 Lonestar         Amaz… 04:25 Coun… 1999-06-05   2000-03-04  x1st…    81
+## # … with 5,297 more rows
 ```
 
  
@@ -4231,20 +4276,20 @@ billboard %>%
 
 ```
 ## # A tibble: 5,307 x 11
-##     year artist.inverted track time  genre date.entered date.peaked week 
-##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr>
-##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…
-##  2  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x2nd…
-##  3  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x3rd…
-##  4  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x4th…
-##  5  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x5th…
-##  6  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x6th…
-##  7  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x7th…
-##  8  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x8th…
-##  9  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x9th…
-## 10  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x10t…
-## # … with 5,297 more rows, and 3 more variables: rank <dbl>,
-## #   week_number <dbl>, rank_number <dbl>
+##     year artist.inverted track time  genre date.entered date.peaked week   rank
+##    <dbl> <chr>           <chr> <tim> <chr> <date>       <date>      <chr> <dbl>
+##  1  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x1st…    78
+##  2  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x2nd…    63
+##  3  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x3rd…    49
+##  4  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x4th…    33
+##  5  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x5th…    23
+##  6  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x6th…    15
+##  7  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x7th…     7
+##  8  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x8th…     5
+##  9  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x9th…     1
+## 10  2000 Destiny's Child Inde… 03:38 Rock  2000-09-23   2000-11-18  x10t…     1
+## # … with 5,297 more rows, and 2 more variables: week_number <dbl>,
+## #   rank_number <dbl>
 ```
 
 
@@ -4426,16 +4471,16 @@ billboard %>%
 ## # A tibble: 10 x 3
 ##    date.entered week_number current   
 ##    <date>             <dbl> <date>    
-##  1 2000-03-18            27 2000-09-16
-##  2 2000-08-12             3 2000-08-26
-##  3 2000-09-23             4 2000-10-14
-##  4 1999-12-04            11 2000-02-12
-##  5 2000-01-22             8 2000-03-11
-##  6 2000-05-27            16 2000-09-09
-##  7 2000-04-29             5 2000-05-27
-##  8 2000-06-10             4 2000-07-01
-##  9 2000-04-15            12 2000-07-01
-## 10 2000-08-26            18 2000-12-23
+##  1 2000-01-29            21 2000-06-17
+##  2 1999-10-09            15 2000-01-15
+##  3 2000-06-24             5 2000-07-22
+##  4 2000-02-05             1 2000-02-05
+##  5 2000-01-22            35 2000-09-16
+##  6 2000-04-22             3 2000-05-06
+##  7 2000-08-19             4 2000-09-09
+##  8 2000-08-19            17 2000-12-09
+##  9 2000-06-03             8 2000-07-22
+## 10 2000-02-26             1 2000-02-26
 ```
 
  
@@ -5410,20 +5455,19 @@ bikes %>%
 
 ```
 ## # A tibble: 1,958 x 13
-##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
-##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
-##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
-##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
-##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
-##  4 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
-##  5 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA    
-##  6 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
-##  7 07:15 <NA>  X     X     <NA>  <NA>  X     <NA>  X     female TRUE  
-##  8 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
-##  9 07:15 <NA>  X     X     <NA>  <NA>  X     X     <NA>  female TRUE  
-## 10 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
-## # … with 1,948 more rows, and 2 more variables: passenger <lgl>,
-## #   sidewalk <lgl>
+##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet passenger
+##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl>  <lgl>    
+##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA     NA       
+##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA     NA       
+##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA     NA       
+##  4 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA     NA       
+##  5 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   NA     NA       
+##  6 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE   NA       
+##  7 07:15 <NA>  X     X     <NA>  <NA>  X     <NA>  X     female TRUE   NA       
+##  8 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE   NA       
+##  9 07:15 <NA>  X     X     <NA>  <NA>  X     X     <NA>  female TRUE   NA       
+## 10 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE   NA       
+## # … with 1,948 more rows, and 1 more variable: sidewalk <lgl>
 ```
 
     
@@ -5450,20 +5494,19 @@ bikes %>%
 
 ```
 ## # A tibble: 1,958 x 13
-##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet
-##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl> 
-##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
-##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
-##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
-##  4 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
-##  5 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE 
-##  6 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
-##  7 07:15 <NA>  X     X     <NA>  <NA>  X     <NA>  X     female TRUE  
-##  8 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
-##  9 07:15 <NA>  X     X     <NA>  <NA>  X     X     <NA>  female TRUE  
-## 10 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE  
-## # … with 1,948 more rows, and 2 more variables: passenger <lgl>,
-## #   sidewalk <lgl>
+##    Time  X2    X3    X4    X5    X6    X7    X8    X9    gender helmet passenger
+##    <tim> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>  <lgl>  <lgl>    
+##  1 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE  FALSE    
+##  2 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE  FALSE    
+##  3 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE  FALSE    
+##  4 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE  FALSE    
+##  5 07:00 X     <NA>  <NA>  X     <NA>  X     <NA>  X     male   FALSE  FALSE    
+##  6 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE   FALSE    
+##  7 07:15 <NA>  X     X     <NA>  <NA>  X     <NA>  X     female TRUE   FALSE    
+##  8 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE   FALSE    
+##  9 07:15 <NA>  X     X     <NA>  <NA>  X     X     <NA>  female TRUE   FALSE    
+## 10 07:15 X     <NA>  X     <NA>  <NA>  X     <NA>  X     male   TRUE   FALSE    
+## # … with 1,948 more rows, and 1 more variable: sidewalk <lgl>
 ```
 
     
@@ -5748,6 +5791,10 @@ mybikes %>%
 ```
 
 ```
+## `summarise()` regrouping output by 'gender' (override with `.groups` argument)
+```
+
+```
 ## # A tibble: 4 x 3
 ## # Groups:   gender [2]
 ##   gender helmet the_ount
@@ -5769,6 +5816,10 @@ mybikes %>%
   group_by(gender, helmet) %>%
   summarize(the_count = n()) %>%
   mutate(prop = the_count / sum(the_count))
+```
+
+```
+## `summarise()` regrouping output by 'gender' (override with `.groups` argument)
 ```
 
 ```
@@ -5825,6 +5876,10 @@ mybikes %>%
   group_by(helmet, gender) %>%
   summarize(the_count = n()) %>%
   mutate(prop = the_count / sum(the_count))
+```
+
+```
+## `summarise()` regrouping output by 'helmet' (override with `.groups` argument)
 ```
 
 ```
@@ -6074,18 +6129,18 @@ heat
 
 ```
 ## # A tibble: 200 x 4
-##       id date       code  text                                             
-##    <dbl> <date>     <chr> <chr>                                            
-##  1   232 2016-09-08 HAU   Toronto's Medical Officer of Health has upgraded…
-##  2   231 2016-09-07 HAE   Toronto's Medical Officer of Health has continue…
-##  3   230 2016-09-06 HA    Toronto's Medical Officer of Health has issued a…
-##  4   228 2016-08-13 EHAE  Toronto's Medical Officer of Health has continue…
-##  5   227 2016-08-12 EHAE  Toronto's Medical Officer of Health has continue…
-##  6   226 2016-08-11 HAU   Toronto's Medical Officer of Health has upgraded…
-##  7   225 2016-08-10 HAE   Toronto's Medical Officer of Health has continue…
-##  8   224 2016-08-09 HA    Toronto's Medical Officer of Health has issued a…
-##  9   222 2016-08-05 HAE   Toronto's Medical Officer of Health has continue…
-## 10   221 2016-08-04 HA    Toronto's Medical Officer of Health has issued a…
+##       id date       code  text                                                  
+##    <dbl> <date>     <chr> <chr>                                                 
+##  1   232 2016-09-08 HAU   Toronto's Medical Officer of Health has upgraded the …
+##  2   231 2016-09-07 HAE   Toronto's Medical Officer of Health has continued the…
+##  3   230 2016-09-06 HA    Toronto's Medical Officer of Health has issued a Heat…
+##  4   228 2016-08-13 EHAE  Toronto's Medical Officer of Health has continued the…
+##  5   227 2016-08-12 EHAE  Toronto's Medical Officer of Health has continued the…
+##  6   226 2016-08-11 HAU   Toronto's Medical Officer of Health has upgraded the …
+##  7   225 2016-08-10 HAE   Toronto's Medical Officer of Health has continued the…
+##  8   224 2016-08-09 HA    Toronto's Medical Officer of Health has issued a Heat…
+##  9   222 2016-08-05 HAE   Toronto's Medical Officer of Health has continued the…
+## 10   221 2016-08-04 HA    Toronto's Medical Officer of Health has issued a Heat…
 ## # … with 190 more rows
 ```
 
@@ -6143,6 +6198,10 @@ Alternatively, `group_by` and `summarize`:
 
 ```r
 heat %>% group_by(code) %>% summarize(count = n())
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -6429,16 +6488,16 @@ heat %>% select(-text) %>% mutate(year = year(date)) %>% sample_n(10)
 ## # A tibble: 10 x 4
 ##       id date       code   year
 ##    <dbl> <date>     <chr> <dbl>
-##  1    48 2005-07-11 EHA    2005
-##  2   131 2011-07-22 EHAE   2011
-##  3   197 2015-08-16 HA     2015
-##  4   114 2010-07-08 EHA    2010
-##  5    47 2005-07-10 HA     2005
-##  6    62 2006-05-31 EHA    2006
-##  7   103 2009-08-17 HA     2009
-##  8   143 2012-06-21 EHAE   2012
-##  9    35 2005-06-07 HA     2005
-## 10    93 2008-06-09 EHA    2008
+##  1   219 2016-07-24 EHAE   2016
+##  2    47 2005-07-10 HA     2005
+##  3    67 2006-07-03 EHA    2006
+##  4   176 2013-06-26 EHAD   2013
+##  5   193 2015-07-28 HAE    2015
+##  6   141 2012-06-19 HA     2012
+##  7    55 2005-07-18 EHA    2005
+##  8   119 2010-09-02 EHA    2010
+##  9   102 2009-06-25 EHA    2009
+## 10     9 2001-08-09 EHA    2001
 ```
 
                  
@@ -6573,8 +6632,8 @@ heat %>%
 ```
 
 ```
-## Warning in cor.test.default(year, n, method = "kendall"): Cannot compute
-## exact p-value with ties
+## Warning in cor.test.default(year, n, method = "kendall"): Cannot compute exact
+## p-value with ties
 ```
 
 ```
