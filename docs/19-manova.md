@@ -185,7 +185,8 @@ they are both response variables (!):
 ggplot(simple, aes(x = y1, y = y2, colour = group)) + geom_point()
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-7-1} 
 
 
     
@@ -312,7 +313,7 @@ urine
 ##  8 a          30       12       6.3      14.5
 ##  9 a          28       10.1     5.45      0.9
 ## 10 a          24       14.7     3.75      2  
-## # … with 35 more rows
+## # ... with 35 more rows
 ```
 
      
@@ -332,19 +333,22 @@ Just churn through it:
 ggplot(urine, aes(x = obesity, y = creatinine)) + geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-1} 
 
 ```r
 ggplot(urine, aes(x = obesity, y = chlorine)) + geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-2.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-2} 
 
 ```r
 ggplot(urine, aes(x = obesity, y = chloride)) + geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/peppercorn-3.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/peppercorn-3} 
 
      
 
@@ -354,13 +358,13 @@ first rather than the $x$s:
 
 
 ```r
-urine %>%
-  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") %>%
-  ggplot(aes(x = obesity, y = y)) + geom_boxplot() +
-  facet_wrap(~yname, scales = "free", ncol = 2)
+urine %>% pivot_longer(creatinine:chlorine, names_to = "yname", values_to = "y") %>% 
+    ggplot(aes(x = obesity, y = y)) + geom_boxplot() + facet_wrap(~yname, scales = "free", 
+    ncol = 2)
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-10-1} 
 
  
 
@@ -369,7 +373,7 @@ I decided to throw a couple of things in here: first, the
 on different scales, and second, the `ncol=2` to arrange the
 facets in (3 cells of) a $2\times 2$ grid, rather than having them
 come out tall and skinny.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Like one of those crazy drinks at  Starbucks.</span> It's unusual to have faceted boxplots, but this is one
+\marginnote{Like one of those crazy drinks at  Starbucks.} It's unusual to have faceted boxplots, but this is one
 of those cases where it makes sense. (The key is different $y$'s but
 the same $x$, I think.)
 
@@ -381,8 +385,7 @@ Extra: let's take another look at that longer data frame:
 
 
 ```r
-urine %>%
-  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") 
+urine %>% pivot_longer(creatinine:chlorine, names_to = "yname", values_to = "y")
 ```
 
 ```
@@ -399,19 +402,19 @@ urine %>%
 ##  8 a          17 chloride    4.35
 ##  9 a          17 chlorine    2.3 
 ## 10 a          30 creatinine 22.3 
-## # … with 125 more rows
+## # ... with 125 more rows
 ```
 
 You might say that there is one quantitative variable now, the thing we called `y`, and *two* categorical variables, `obesity` and `yname`. So why not make a grouped boxplot? All right:
 
 
 ```r
-urine %>%
-  pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") %>%
-  ggplot(aes(x=yname, y=y, colour=obesity)) + geom_boxplot()
+urine %>% pivot_longer(creatinine:chlorine, names_to = "yname", values_to = "y") %>% 
+    ggplot(aes(x = yname, y = y, colour = obesity)) + geom_boxplot()
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-12-1} 
 
 This actually looks a lot like the facetted boxplots (if you imagine drawing a box around each group of four boxplots and removing the `scales="free"` before). There is, as the saying goes, more than one way to skin a cat.
 
@@ -556,17 +559,17 @@ athletes
 ## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht
 ##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl>
-##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.
-##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.
-##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176 
-##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.
-##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183 
-##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.
-##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.
-##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.
-##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.
-## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.
-## # … with 192 more rows, and 1 more variable: Wt <dbl>
+##  1 fema~ Netb~  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.
+##  2 fema~ Netb~  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.
+##  3 fema~ Netb~  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176 
+##  4 fema~ Netb~  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.
+##  5 fema~ Netb~  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183 
+##  6 fema~ Netb~  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.
+##  7 fema~ Netb~  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.
+##  8 fema~ Netb~  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.
+##  9 fema~ Netb~  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.
+## 10 fema~ Netb~  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.
+## # ... with 192 more rows, and 1 more variable: Wt <dbl>
 ```
 
      
@@ -882,7 +885,8 @@ With that in mind, I would go for this one:
 ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, shape = Sex)) + geom_point()
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-25-1} 
 
      
 
@@ -901,7 +905,8 @@ ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, size = Sex)) + geom_point()
 ## Warning: Using size for a discrete variable is not advised.
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-26-1} 
 
      
 
@@ -924,7 +929,8 @@ ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, size = Sex)) + geom_point()
 ## Warning: Removed 72 rows containing missing values (geom_point).
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-27-1} 
 
      
 
@@ -943,7 +949,8 @@ ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point(
 ## Warning: Removed 72 rows containing missing values (geom_point).
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-28-1} 
 
      
 
@@ -975,17 +982,18 @@ avoid that. Here's how:
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() +
-  scale_shape_manual(values = 1:10)
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() + 
+    scale_shape_manual(values = 1:10)
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-29-1} 
 
      
 
 I agree with `ggplot2` that this many shapes are hard to tell
 apart,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Having said that, the shapes are less anbiguous than  the colours, because if you're willing to study the legend, you can  work out exactly which sport a shape belongs to, whereas the colours  might be hard to tell apart at all.</span> but if you can figure this out,
+\marginnote{Having said that, the shapes are less anbiguous than  the colours, because if you're willing to study the legend, you can  work out exactly which sport a shape belongs to, whereas the colours  might be hard to tell apart at all.} but if you can figure this out,
 you achieve the goal of producing a plot with no warnings, so you get
 full marks. (We need 10 shapes because there are 10 different sports,
 so we have to specify 10 different values in `values=`: any 10
@@ -996,11 +1004,12 @@ to them by numeric code:
 
 
 ```r
-ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() +
-  scale_shape_manual(values = c(66, 70, 71, 78, 82, 83, 52, 84, 3, 87))
+ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() + 
+    scale_shape_manual(values = c(66, 70, 71, 78, 82, 83, 52, 84, 3, 87))
 ```
 
-<img src="19-manova_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
+
+\includegraphics{19-manova_files/figure-latex/unnamed-chunk-30-1} 
 
      
 

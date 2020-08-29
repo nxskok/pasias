@@ -635,7 +635,7 @@ Let's start by gluing together the dataframes with the predictions from the regu
 ```{r }
 d %>% left_join(dcv, by=c("id", "job"))
 ```
-There's already subtlety. The people are numbered separately within each actual `job`, so the thing that uniquely identifies each person (what database people call a "key") is the combination of the actual job they do *plus* their `id` within that job.\endnote{You might also think of using "bind-cols", except that this adds a number to all the column names which is a pain to deal with. I don't really need to look up the people in the second dataframe, since I know where they are (in the corresponding rows), but doing so seems to make everything else easier.}
+There's already subtlety. The people are numbered separately within each actual `job`, so the thing that uniquely identifies each person (what database people call a "key") is the combination of the actual job they do *plus* their `id` within that job. You might also think of using `bind_cols`, except that this adds a number to all the column names which is a pain to deal with. I don't really need to look up the people in the second dataframe, since I know where they are (in the corresponding rows), but doing so seems to make everything else easier.
 
 The columns with an `x` on the end of their names came from `d`, that is, the predictions without cross-validation, and the ones with a `y` came from cross-validation. Let's see if we can keep only the columns we need so that it's a bit less unwieldy:
 

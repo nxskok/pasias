@@ -31,7 +31,7 @@ then the SD:
 
 
 ```r
-x=rnorm(10,20,2)
+x = rnorm(10, 20, 2)
 x
 ```
 
@@ -53,7 +53,7 @@ $-2$ and 2, for example):
 
 
 ```r
-(x-20)/2
+(x - 20)/2
 ```
 
 ```
@@ -100,7 +100,7 @@ data frame like this:
 
 
 ```r
-d=tibble(x=rnorm(10,20,2))
+d = tibble(x = rnorm(10, 20, 2))
 d
 ```
 
@@ -121,7 +121,7 @@ d
 ```
 
 ```r
-d %>% summarize(m=mean(x), s=sd(x))
+d %>% summarize(m = mean(x), s = sd(x))
 ```
 
 ```
@@ -161,11 +161,8 @@ same. This one is easier than some because we don't have to do
 anything special to get a two-sided alternative hypothesis:
 
 ```r
-rerun(1000,rnorm(10,20,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+pvals <- rerun(1000, rnorm(10, 20, 2)) %>% map(~t.test(., mu = 20)) %>% map_dbl("p.value")
+tibble(pvals) %>% count(pvals <= 0.05)
 ```
 
 ```
@@ -219,11 +216,8 @@ Here's the code we just used:
 
 
 ```r
-rerun(1000,rnorm(10,20,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+pvals <- rerun(1000, rnorm(10, 20, 2)) %>% map(~t.test(., mu = 20)) %>% map_dbl("p.value")
+tibble(pvals) %>% count(pvals <= 0.05)
 ```
 
 One of those 20s needs to become 22. Not the one in the
@@ -234,11 +228,8 @@ the same:
 
 
 ```r
-rerun(1000,rnorm(10,22,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+pvals <- rerun(1000, rnorm(10, 22, 2)) %>% map(~t.test(., mu = 20)) %>% map_dbl("p.value")
+tibble(pvals) %>% count(pvals <= 0.05)
 ```
 
 ```
@@ -262,7 +253,7 @@ of 10):
 
 
 ```r
-t_stat=(22-20)/(2/sqrt(10))
+t_stat = (22 - 20)/(2/sqrt(10))
 t_stat
 ```
 
@@ -274,7 +265,7 @@ and the two-sided P-value should be about
 
 
 ```r
-2*(1-pt(t_stat,10-1))
+2 * (1 - pt(t_stat, 10 - 1))
 ```
 
 ```
@@ -306,7 +297,7 @@ This is `power.t.test`. The quantity `delta` is
 the difference between true and null means:
 
 ```r
-power.t.test(n=10,delta=22-20,sd=2,type="one.sample",alternative="two.sided")
+power.t.test(n = 10, delta = 22 - 20, sd = 2, type = "one.sample", alternative = "two.sided")
 ```
 
 ```
@@ -350,7 +341,7 @@ out of 1000:
 
 
 ```r
-prop.test(42,1000,0.05)
+prop.test(42, 1000, 0.05)
 ```
 
 ```
@@ -380,7 +371,7 @@ level is fine. We (correctly) rejected 798 times out of 1000:
 
 
 ```r
-prop.test(798,1000)
+prop.test(798, 1000)
 ```
 
 ```
@@ -410,11 +401,8 @@ if not, you can do more simulations, say 10,000:
 
 
 ```r
-rerun(10000,rnorm(10,22,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+pvals <- rerun(10000, rnorm(10, 22, 2)) %>% map(~t.test(., mu = 20)) %>% map_dbl("p.value")
+tibble(pvals) %>% count(pvals <= 0.05)
 ```
 
 ```
@@ -432,7 +420,7 @@ The confidence interval for the power is then
 
 
 ```r
-prop.test(7996,10000)
+prop.test(7996, 10000)
 ```
 
 ```
@@ -495,7 +483,7 @@ we want:
 
 
 ```r
-power.t.test(n=30,delta=10,sd=20,type="one.sample",alternative="two.sided")
+power.t.test(n = 30, delta = 10, sd = 20, type = "one.sample", alternative = "two.sided")
 ```
 
 ```
@@ -515,11 +503,8 @@ simulation). Though if you want to, you can do that as well, thus:
 
 
 ```r
-rerun(1000,rnorm(30,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+pvals <- rerun(1000, rnorm(30, 110, 20)) %>% map(~t.test(., mu = 100)) %>% map_dbl("p.value")
+tibble(pvals) %>% count(pvals <= 0.05)
 ```
 
 ```
@@ -551,7 +536,7 @@ doesn't matter (since I have named everything that's going into
 
 
 ```r
-power.t.test(delta=10,power=0.80,sd=20,type="one.sample",alternative="two.sided")  
+power.t.test(delta = 10, power = 0.8, sd = 20, type = "one.sample", alternative = "two.sided")
 ```
 
 ```
@@ -585,11 +570,8 @@ enough power, so we have to up the sample size a bit. How about we try
 
 
 ```r
-rerun(1000,rnorm(40,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+pvals <- rerun(1000, rnorm(40, 110, 20)) %>% map(~t.test(., mu = 100)) %>% map_dbl("p.value")
+tibble(pvals) %>% count(pvals <= 0.05)
 ```
 
 ```
@@ -607,12 +589,9 @@ it first, with the sample size as input. Copy-paste once more and edit:
 
 
 ```r
-sim_power=function(n) {
-rerun(1000,rnorm(30,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+sim_power = function(n) {
+    pvals <- rerun(1000, rnorm(30, 110, 20)) %>% map(~t.test(., mu = 100)) %>% map_dbl("p.value")
+    tibble(pvals) %>% count(pvals <= 0.05)
 }
 ```
 
@@ -662,7 +641,7 @@ really need them.
 proportion $p$ (for example, the proportion of people agreeing with
 some statement). Often, we want to know whether the proportion is
 "really" greater than 0.5.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That would mean assessing whether  an observed proportion could be greater than 0.5 just by chance, or  whether it is bigger enough than 0.5 to reject chance as a  plausible explanation.</span>  
+\marginnote{That would mean assessing whether  an observed proportion could be greater than 0.5 just by chance, or  whether it is bigger enough than 0.5 to reject chance as a  plausible explanation.}  
 That would entail testing a null
 $H_0: p=0.5$ against an alternative $H_a: p>0.5$. This is usually done
 by calculating the test statistic
@@ -845,10 +824,8 @@ for-each, with each of the simulated binomials playing the role of
 make a table of them, just like the example in class.
 
 ```r
-rerun(10000, rbinom(1, 500, 0.56)) %>%
-  map(~ prop.test(., 500, 0.5, alternative = "greater")) %>%
-  map_dbl("p.value") ->
-pvals
+pvals <- rerun(10000, rbinom(1, 500, 0.56)) %>% map(~prop.test(., 500, 0.5, alternative = "greater")) %>% 
+    map_dbl("p.value")
 tibble(pvals) %>% count(pvals <= 0.05)
 ```
 

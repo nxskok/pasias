@@ -71,7 +71,7 @@ whas
 ##  8     8    55      0    91   147     95  27.1     1     0     0     0     0
 ##  9     9    88      1    63   209    100  27.4     1     0     0     1     0
 ## 10    10    54      0   104   166    106  25.5     1     0     0     0     0
-## # … with 490 more rows, and 10 more variables: miord <dbl>, mitype <dbl>,
+## # ... with 490 more rows, and 10 more variables: miord <dbl>, mitype <dbl>,
 ## #   year <dbl>, admitdate <chr>, disdate <chr>, fdate <chr>, los <dbl>,
 ## #   dstat <dbl>, lenfol <dbl>, fstat <dbl>
 ```
@@ -117,42 +117,38 @@ These dates are day-month-year, so we need `dmy` from
 
 
 ```r
-whas2 <- whas %>% mutate(
-  admit = dmy(admitdate),
-  dis = dmy(disdate),
-  f = dmy(fdate)
-)
+whas2 <- whas %>% mutate(admit = dmy(admitdate), dis = dmy(disdate), f = dmy(fdate))
 glimpse(whas2)
 ```
 
 ```
 ## Rows: 500
 ## Columns: 25
-## $ id        <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
-## $ age       <dbl> 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67,…
-## $ gender    <dbl> 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0,…
-## $ hr        <dbl> 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 9…
-## $ sysbp     <dbl> 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, …
-## $ diasbp    <dbl> 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65…
-## $ bmi       <dbl> 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236,…
-## $ cvd       <dbl> 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1,…
-## $ afb       <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,…
-## $ sho       <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ chf       <dbl> 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ av3       <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-## $ miord     <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
-## $ mitype    <dbl> 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,…
-## $ year      <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-## $ admitdate <chr> "13-01-1997", "19-01-1997", "01-01-1997", "17-02-1997", "01…
-## $ disdate   <chr> "18-01-1997", "24-01-1997", "06-01-1997", "27-02-1997", "07…
-## $ fdate     <chr> "31-12-2002", "31-12-2002", "31-12-2002", "11-12-1997", "31…
-## $ los       <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, …
-## $ dstat     <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ lenfol    <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173…
-## $ fstat     <dbl> 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ admit     <date> 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01…
-## $ dis       <date> 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07…
-## $ f         <date> 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31…
+## $ id        <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17...
+## $ age       <dbl> 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 6...
+## $ gender    <dbl> 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, ...
+## $ hr        <dbl> 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95,...
+## $ sysbp     <dbl> 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193...
+## $ diasbp    <dbl> 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, ...
+## $ bmi       <dbl> 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.2423...
+## $ cvd       <dbl> 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, ...
+## $ afb       <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, ...
+## $ sho       <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ chf       <dbl> 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, ...
+## $ av3       <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ miord     <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, ...
+## $ mitype    <dbl> 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, ...
+## $ year      <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
+## $ admitdate <chr> "13-01-1997", "19-01-1997", "01-01-1997", "17-02-1997", "...
+## $ disdate   <chr> "18-01-1997", "24-01-1997", "06-01-1997", "27-02-1997", "...
+## $ fdate     <chr> "31-12-2002", "31-12-2002", "31-12-2002", "11-12-1997", "...
+## $ los       <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14...
+## $ dstat     <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ lenfol    <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 21...
+## $ fstat     <dbl> 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, ...
+## $ admit     <date> 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-...
+## $ dis       <date> 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-...
+## $ f         <date> 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-...
 ```
 
  
@@ -202,31 +198,31 @@ whas %>% mutate_at(vars(ends_with("date")), funs(d = dmy)) %>% glimpse()
 ```
 ## Rows: 500
 ## Columns: 25
-## $ id          <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17…
-## $ age         <dbl> 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 6…
-## $ gender      <dbl> 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, …
-## $ hr          <dbl> 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95,…
-## $ sysbp       <dbl> 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193…
-## $ diasbp      <dbl> 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, …
-## $ bmi         <dbl> 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.2423…
-## $ cvd         <dbl> 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, …
-## $ afb         <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, …
-## $ sho         <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-## $ chf         <dbl> 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, …
-## $ av3         <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-## $ miord       <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, …
-## $ mitype      <dbl> 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, …
-## $ year        <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-## $ admitdate   <chr> "13-01-1997", "19-01-1997", "01-01-1997", "17-02-1997", "…
-## $ disdate     <chr> "18-01-1997", "24-01-1997", "06-01-1997", "27-02-1997", "…
-## $ fdate       <chr> "31-12-2002", "31-12-2002", "31-12-2002", "11-12-1997", "…
-## $ los         <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14…
-## $ dstat       <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-## $ lenfol      <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 21…
-## $ fstat       <dbl> 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, …
-## $ admitdate_d <date> 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-…
-## $ disdate_d   <date> 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-…
-## $ fdate_d     <date> 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-…
+## $ id          <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ...
+## $ age         <dbl> 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54,...
+## $ gender      <dbl> 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0...
+## $ hr          <dbl> 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 9...
+## $ sysbp       <dbl> 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 1...
+## $ diasbp      <dbl> 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80...
+## $ bmi         <dbl> 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24...
+## $ cvd         <dbl> 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0...
+## $ afb         <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0...
+## $ sho         <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...
+## $ chf         <dbl> 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0...
+## $ av3         <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...
+## $ miord       <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0...
+## $ mitype      <dbl> 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1...
+## $ year        <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+## $ admitdate   <chr> "13-01-1997", "19-01-1997", "01-01-1997", "17-02-1997",...
+## $ disdate     <chr> "18-01-1997", "24-01-1997", "06-01-1997", "27-02-1997",...
+## $ fdate       <chr> "31-12-2002", "31-12-2002", "31-12-2002", "11-12-1997",...
+## $ los         <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, ...
+## $ dstat       <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...
+## $ lenfol      <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, ...
+## $ fstat       <dbl> 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0...
+## $ admitdate_d <date> 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-0...
+## $ disdate_d   <date> 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-0...
+## $ fdate_d     <date> 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-1...
 ```
 
  
@@ -264,45 +260,42 @@ so subtracting them requires care; you have to divide by the
 length of a day (in whatever units), thus:
 
 ```r
-whas3 <- whas2 %>% mutate(
-  diff1 = (dis - admit) / ddays(1),
-  diff2 = (f - admit) / ddays(1),
-  diff3 = (f - dis) / ddays(1)
-)
+whas3 <- whas2 %>% mutate(diff1 = (dis - admit)/ddays(1), diff2 = (f - admit)/ddays(1), 
+    diff3 = (f - dis)/ddays(1))
 glimpse(whas3)
 ```
 
 ```
 ## Rows: 500
 ## Columns: 28
-## $ id        <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
-## $ age       <dbl> 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67,…
-## $ gender    <dbl> 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0,…
-## $ hr        <dbl> 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 9…
-## $ sysbp     <dbl> 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, …
-## $ diasbp    <dbl> 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65…
-## $ bmi       <dbl> 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236,…
-## $ cvd       <dbl> 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1,…
-## $ afb       <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,…
-## $ sho       <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ chf       <dbl> 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ av3       <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-## $ miord     <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
-## $ mitype    <dbl> 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,…
-## $ year      <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-## $ admitdate <chr> "13-01-1997", "19-01-1997", "01-01-1997", "17-02-1997", "01…
-## $ disdate   <chr> "18-01-1997", "24-01-1997", "06-01-1997", "27-02-1997", "07…
-## $ fdate     <chr> "31-12-2002", "31-12-2002", "31-12-2002", "11-12-1997", "31…
-## $ los       <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, …
-## $ dstat     <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ lenfol    <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173…
-## $ fstat     <dbl> 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ admit     <date> 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01…
-## $ dis       <date> 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07…
-## $ f         <date> 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31…
-## $ diff1     <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, …
-## $ diff2     <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173…
-## $ diff3     <dbl> 2173, 2167, 2185, 287, 2125, 0, 2117, 1492, 916, 2170, 2168…
+## $ id        <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17...
+## $ age       <dbl> 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 6...
+## $ gender    <dbl> 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, ...
+## $ hr        <dbl> 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95,...
+## $ sysbp     <dbl> 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193...
+## $ diasbp    <dbl> 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, ...
+## $ bmi       <dbl> 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.2423...
+## $ cvd       <dbl> 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, ...
+## $ afb       <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, ...
+## $ sho       <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ chf       <dbl> 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, ...
+## $ av3       <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ miord     <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, ...
+## $ mitype    <dbl> 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, ...
+## $ year      <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
+## $ admitdate <chr> "13-01-1997", "19-01-1997", "01-01-1997", "17-02-1997", "...
+## $ disdate   <chr> "18-01-1997", "24-01-1997", "06-01-1997", "27-02-1997", "...
+## $ fdate     <chr> "31-12-2002", "31-12-2002", "31-12-2002", "11-12-1997", "...
+## $ los       <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14...
+## $ dstat     <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ lenfol    <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 21...
+## $ fstat     <dbl> 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, ...
+## $ admit     <date> 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-...
+## $ dis       <date> 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-...
+## $ f         <date> 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-...
+## $ diff1     <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14...
+## $ diff2     <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 21...
+## $ diff3     <dbl> 2173, 2167, 2185, 287, 2125, 0, 2117, 1492, 916, 2170, 21...
 ```
 
        
@@ -373,7 +366,7 @@ with(whas3, all.equal(los, diff1))
  
 
 so they really are all equal, all 500 of them.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The computer  scientists among you will note that I shouldn't have done this,  because *diff1* through *diff3* are double-precision  decimal numbers, so I should have tested their equality with  *lenfol* and *los* by working out the absolute  differences and testing whether they were all *small*. On  consulting the help for *all.equal*, though, I find that it  *does* work properly, because it actually tests whether the  things being compared differ by less than a quantity  *tolerance* which defaults to 0.000000015, and if  they  do it calls them equal. This is all tied in with the difference  between integers and decimal numbers as they are represented on a  computer: exactly and approximately, respectively. A  double-precision number has about 16 significant digits of accuracy;  equal things won't have all 16 digits equal, most likely, but they  would be expected to have at least 8 of those digits the  same. CSCA08 stuff, I imagine. This is where you can casually toss  around terms like *machine epsilon*. Oh! I just realized  something. You know how very very small P-values are shown in R as  *<2.2e-16*? *That's* the machine epsilon. Anything smaller than that is  indistinguishable from zero, and you can't have a P-value be  *exactly* zero. The default *tolerance* I mentioned  above is the square root of this, which is normally used for such  things.</span>
+\marginnote{The computer  scientists among you will note that I shouldn't have done this,  because *diff1* through *diff3* are double-precision  decimal numbers, so I should have tested their equality with  *lenfol* and *los* by working out the absolute  differences and testing whether they were all *small*. On  consulting the help for *all.equal*, though, I find that it  *does* work properly, because it actually tests whether the  things being compared differ by less than a quantity  *tolerance* which defaults to 0.000000015, and if  they  do it calls them equal. This is all tied in with the difference  between integers and decimal numbers as they are represented on a  computer: exactly and approximately, respectively. A  double-precision number has about 16 significant digits of accuracy;  equal things won't have all 16 digits equal, most likely, but they  would be expected to have at least 8 of those digits the  same. CSCA08 stuff, I imagine. This is where you can casually toss  around terms like *machine epsilon*. Oh! I just realized  something. You know how very very small P-values are shown in R as  *<2.2e-16*? *That's* the machine epsilon. Anything smaller than that is  indistinguishable from zero, and you can't have a P-value be  *exactly* zero. The default *tolerance* I mentioned  above is the square root of this, which is normally used for such  things.}
 
 
 
@@ -393,7 +386,8 @@ is a numeric 0 or 1, in `factor()`:
 ggplot(whas3, aes(x = factor(fstat), y = lenfol)) + geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-11-1} 
 
        
 
@@ -401,12 +395,12 @@ Or create a factor version of `fstat` first:
 
 
 ```r
-whas3 %>%
-  mutate(ffstat = factor(fstat)) %>%
-  ggplot(aes(x = ffstat, y = lenfol)) + geom_boxplot()
+whas3 %>% mutate(ffstat = factor(fstat)) %>% ggplot(aes(x = ffstat, y = lenfol)) + 
+    geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-12-1} 
 
  
 
@@ -420,12 +414,12 @@ this also works:
 
 
 ```r
-whas3 %>%
-  mutate(cfstat = as.character(fstat)) %>%
-  ggplot(aes(x = cfstat, y = lenfol)) + geom_boxplot()
+whas3 %>% mutate(cfstat = as.character(fstat)) %>% ggplot(aes(x = cfstat, y = lenfol)) + 
+    geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-13-1} 
 
  
 
@@ -474,19 +468,19 @@ mizuna
 ## # A tibble: 13 x 5
 ##    date                height water temperature notes                           
 ##    <dttm>               <dbl> <dbl>       <dbl> <chr>                           
-##  1 2010-02-16 00:00:00    0     400        21   planted seeds; water soaked up …
-##  2 2010-02-18 00:00:00    0       0        22.5 2 of 6 seeds not appeared; soil…
+##  1 2010-02-16 00:00:00    0     400        21   planted seeds; water soaked up ~
+##  2 2010-02-18 00:00:00    0       0        22.5 2 of 6 seeds not appeared; soil~
 ##  3 2010-02-19 00:00:00    0     200        20.9 4 of 6 plants broken surface    
 ##  4 2010-02-22 00:00:00    3.2   100        20.8 Last seed hasn’t broken surface 
 ##  5 2010-02-23 00:00:00    4.5   100        22.9 Plants growing well.            
-##  6 2010-02-25 00:00:00    6     100        21.8 Last seed sprouted; plants look…
+##  6 2010-02-25 00:00:00    6     100        21.8 Last seed sprouted; plants look~
 ##  7 2010-02-26 00:00:00    6.5   200        21.2 <NA>                            
 ##  8 2010-03-01 00:00:00    9.5   200        21.8 <NA>                            
 ##  9 2010-03-03 00:00:00   11.1   200        21.7 Plants needing more water       
 ## 10 2010-03-05 00:00:00   13     250        21.9 <NA>                            
-## 11 2010-03-08 00:00:00   14.5   500        22.5 No water left, leaves droopy. A…
+## 11 2010-03-08 00:00:00   14.5   500        22.5 No water left, leaves droopy. A~
 ## 12 2010-03-10 00:00:00   16     200        21.2 Plants green and healthy        
-## 13 2010-03-17 00:00:00   18.5   800        20.8 Harvest. Tips of plants turning…
+## 13 2010-03-17 00:00:00   18.5   800        20.8 Harvest. Tips of plants turning~
 ```
 
      
@@ -510,7 +504,8 @@ Solution
 ggplot(mizuna, aes(x = date, y = height)) + geom_point() + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-15-1} 
 
        
 
@@ -530,11 +525,12 @@ plot, by adding `label=water` to the *original*
 
 ```r
 library(ggrepel)
-ggplot(mizuna, aes(x = date, y = height, label = water)) +
-  geom_point() + geom_line() + geom_text_repel(colour = "red")
+ggplot(mizuna, aes(x = date, y = height, label = water)) + geom_point() + geom_line() + 
+    geom_text_repel(colour = "red")
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-16-1} 
 
  
 
@@ -545,11 +541,12 @@ me wonder whether this would work better (I explain `alpha` afterwards):
 
 ```r
 library(ggrepel)
-ggplot(mizuna, aes(x = date, y = height, label = water)) +
-  geom_point() + geom_line() + geom_label_repel(colour = "red", alpha = 0.7)
+ggplot(mizuna, aes(x = date, y = height, label = water)) + geom_point() + geom_line() + 
+    geom_label_repel(colour = "red", alpha = 0.7)
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-17-1} 
 
  
 
@@ -683,10 +680,8 @@ The cesarean rate is `cesarean` divided by
 
 ```r
 library(lubridate)
-b2 <- births %>%
-  mutate(datestr = str_c("2012", month, "1", sep = " ")) %>%
-  mutate(thedate = ymd(datestr)) %>%
-  mutate(cesarean_rate = cesarean / (cesarean + vaginal))
+b2 <- births %>% mutate(datestr = str_c("2012", month, "1", sep = " ")) %>% mutate(thedate = ymd(datestr)) %>% 
+    mutate(cesarean_rate = cesarean/(cesarean + vaginal))
 b2
 ```
 
@@ -713,7 +708,7 @@ b2
 If you don't like that, create columns that contain 2012 and 1 all
 the way down. If you set a column name equal to a single value, that
 single value gets repeated the right number of times:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is  an example of R's so-called *recycling rules*.</span>
+\marginnote{This is  an example of R's so-called *recycling rules*.}
 
 
 ```r
@@ -747,11 +742,9 @@ month and day disappear:
 
 
 ```r
-b3 <- births %>%
-  mutate(year = 2012, day = 1) %>%
-  unite(datestr, year, month, day) %>%
-  mutate(thedate = ymd(datestr)) %>%
-  mutate(cesarean_rate = cesarean / (cesarean + vaginal))
+b3 <- births %>% mutate(year = 2012, day = 1) %>% unite(datestr, year, month, day) %>% 
+    mutate(thedate = ymd(datestr)) %>% mutate(cesarean_rate = cesarean/(cesarean + 
+    vaginal))
 b3
 ```
 
@@ -798,7 +791,8 @@ ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-22-1} 
 
         
 
@@ -807,15 +801,16 @@ have a trend on the plot, but you can do that in some contrasting way:
 
 
 ```r
-ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() +
-  geom_line(linetype = "dashed") + geom_smooth()
+ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() + geom_line(linetype = "dashed") + 
+    geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-23-1} 
 
  
 I see a downward trend. ("A downward trend with a wiggle" if you
@@ -850,7 +845,7 @@ passing it through `as.numeric` might turn it into that:
 
 
 ```r
-b2 %>% mutate(numeric_date = as.numeric(thedate)) -> b5
+b5 <- b2 %>% mutate(numeric_date = as.numeric(thedate))
 b5
 ```
 
@@ -949,16 +944,16 @@ wolves hunt and kill caribou). This is a large national park, so
 caribou are found in very large herds, so big, in fact, that the
 well-being of the entire herd is not threatened by wolf
 attacks.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In fact, it is believed that wolves help keep caribou    herds strong by preventing over-population: that is, the weakest    caribou are the ones taken by wolves.</span> 
+\marginnote{In fact, it is believed that wolves help keep caribou    herds strong by preventing over-population: that is, the weakest    caribou are the ones taken by wolves.} 
 Can the size of the caribou population
 be used to predict the size of the wolf population?
 The data can be found at
 [link](http://www.utsc.utoronto.ca/~butler/c32/caribou.txt). The
 columns 
 are: the date of the survey,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The survey is always taken in    the fall, but the date varies.</span> 
+\marginnote{The survey is always taken in    the fall, but the date varies.} 
 the name of the park employee in charge  of the survey, the caribou population (in hundreds) and the wolf  population (actual count).
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Counting animals in a region,    especially rare, hard-to-find animals, is a whole science in    itself. These numbers are probably estimates (with some    uncertainty).</span> 
+\marginnote{Counting animals in a region,    especially rare, hard-to-find animals, is a whole science in    itself. These numbers are probably estimates (with some    uncertainty).} 
 
 
 (a) Take a look at the data file. How would you describe its
@@ -1050,7 +1045,7 @@ line that goes all the way down. Thus four columns, `date`,
 `name`, `caribou` and `wolf`. This means that the
 spaces within the names don't cause any problems at all, since the
 spaces aren't in the same place in *every* line.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The only way this would fail is if *every* first name had the same number of letters in it; then the space between first name and initial of last name *would* be in the same place in every line.</span>
+\marginnote{The only way this would fail is if *every* first name had the same number of letters in it; then the space between first name and initial of last name *would* be in the same place in every line.}
 
 
 
@@ -1064,12 +1059,12 @@ Solution
 What you do is to look at the format of the dates as they are
 now. They appear to be month-day-year, American
 style.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not a surprise since Denali National Park is in  Alaska.</span>  
+\marginnote{Not a surprise since Denali National Park is in  Alaska.}  
 Thus the function needed is `mdy`. It doesn't matter
 whether the months are names or numbers:
 
 ```r
-denali %>% mutate(date = mdy(date)) -> denali
+denali <- denali %>% mutate(date = mdy(date))
 denali
 ```
 
@@ -1090,7 +1085,7 @@ denali
 
 I lived on the edge and overwrote both my column and the whole data
 frame.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It's actually not *really* living on the edge,  because if it doesn't work, you go back and read the data in from  the file again.</span>
+\marginnote{It's actually not *really* living on the edge,  because if it doesn't work, you go back and read the data in from  the file again.}
 
 The dates are displayed in ISO format, year-month-day. You see at the
 top of the column that they now really *are* dates, not just
@@ -1159,9 +1154,7 @@ each month like this:
 
 
 ```r
-denali %>%
-  mutate(mon = month(date, label = T), wd = wday(date, label = T)) %>%
-  count(mon)
+denali %>% mutate(mon = month(date, label = T), wd = wday(date, label = T)) %>% count(mon)
 ```
 
 ```
@@ -1190,11 +1183,12 @@ Nothing terribly surprising here:
 ggplot(denali, aes(x = caribou, y = wolf)) + geom_point()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-33-1} 
 
        
 If you like, add a smooth trend to it:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This wiggles more than  I would like, with such a small number of observations. Try putting  someting like *span=2* in the smooth to make it less wiggly.</span>
+\marginnote{This wiggles more than  I would like, with such a small number of observations. Try putting  someting like *span=2* in the smooth to make it less wiggly.}
 
 
 ```r
@@ -1205,7 +1199,8 @@ ggplot(denali, aes(x = caribou, y = wolf)) + geom_point() + geom_smooth(se = F)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-34-1} 
 
        
 
@@ -1230,12 +1225,12 @@ I'm going to use `geom_text_repel` for the labels from package
 
 
 ```r
-denali %>%
-  mutate(year = year(date)) %>%
-  ggplot(aes(x = caribou, y = wolf, label = year)) + geom_point() + geom_text_repel()
+denali %>% mutate(year = year(date)) %>% ggplot(aes(x = caribou, y = wolf, label = year)) + 
+    geom_point() + geom_text_repel()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-35-1} 
 
  
 
@@ -1243,20 +1238,19 @@ I thought about joining up the points in year order. This is actually
 *not* `geom_line` as you would have guessed, since what that
 does is to join points in the order of the variable on the
 $x$-axis.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I have to say that I didn't know that until just now.</span>
+\marginnote{I have to say that I didn't know that until just now.}
 To join points in the order that they are in the data (what we want
 here, because the points are in time order in the data), use instead 
 `geom_path`:
 
 
 ```r
-denali %>%
-  mutate(year = year(date)) %>%
-  ggplot(aes(x = caribou, y = wolf, label = year)) + geom_point() +
-  geom_text_repel() + geom_path()
+denali %>% mutate(year = year(date)) %>% ggplot(aes(x = caribou, y = wolf, label = year)) + 
+    geom_point() + geom_text_repel() + geom_path()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-36-1} 
 
  
 
@@ -1283,7 +1277,8 @@ goes on the $x$-axis):
 ggplot(denali, aes(x = date, y = caribou)) + geom_point() + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-37-1} 
 
  
 
@@ -1313,13 +1308,12 @@ then plot them against time, with the two animals distinguished
 by colour:
 
 ```r
-denali %>%
-  pivot_longer(caribou:wolf, names_to="animal", values_to="population") %>%
-  ggplot(aes(x = date, y = population, colour = animal)) +
-  geom_point() + geom_line()
+denali %>% pivot_longer(caribou:wolf, names_to = "animal", values_to = "population") %>% 
+    ggplot(aes(x = date, y = population, colour = animal)) + geom_point() + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-38-1} 
 
        
 This is not quite the story, though, because the caribou and wolf
@@ -1341,7 +1335,8 @@ All right, so let's put the caribou on the left:
 ggplot(denali, aes(x = date, y = caribou)) + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-39-1} 
 
  
 
@@ -1353,7 +1348,8 @@ from the wolf populations, that we're going to add in a moment. This looks rathe
 ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-40-1} 
 
  
 
@@ -1363,12 +1359,12 @@ second `geom_line`, overriding the `y` and the
 
 
 ```r
-ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
-  geom_line() +
-  geom_line(aes(y = wolf, colour = "wolf"))
+ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) + geom_line() + geom_line(aes(y = wolf, 
+    colour = "wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-41-1} 
 
  
 
@@ -1376,19 +1372,19 @@ What has happened is that we get lines of different colour for each
 animal, with a legend. So far so good. The problem is that the wolf
 numbers are about 2.5 times bigger than the caribou
 numbers,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which means, if you stop to think about it, that  there are *actually* about 40 times more caribou than wolves.</span>
+\marginnote{Which means, if you stop to think about it, that  there are *actually* about 40 times more caribou than wolves.}
 so that
 we don't get a good sense of how they go up and down together. If we
 divided the wolf numbers by 2.5, we would see this better:
 
 
 ```r
-ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
-  geom_line() +
-  geom_line(aes(y = wolf / 2.5, colour = "wolf"))
+ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) + geom_line() + geom_line(aes(y = wolf/2.5, 
+    colour = "wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-42-1} 
 
  
 
@@ -1398,13 +1394,12 @@ dividing the wolf values by 2.5:
 
 
 ```r
-ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
-  geom_line() +
-  geom_line(aes(y = wolf / 2.5, colour = "wolf")) +
-  scale_y_continuous(sec.axis = sec_axis(~ . * 2.5, name = "wolf"))
+ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) + geom_line() + geom_line(aes(y = wolf/2.5, 
+    colour = "wolf")) + scale_y_continuous(sec.axis = sec_axis(~. * 2.5, name = "wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
+
+\includegraphics{13-dates-and-times_files/figure-latex/unnamed-chunk-43-1} 
 
  
 
@@ -1422,7 +1417,7 @@ than the other. Lies and statistics.
 
 In my opinion, too many people just plot series against time, possibly
 with a second $y$-axis.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">And all too often with Excel (spit).</span>
+\marginnote{And all too often with Excel (spit).}
 Variables that vary together, like the wolf
 and caribou populations here, ought to be plotted \emph{against each
 other} on a scatterplot, possibly with the time points labelled.
