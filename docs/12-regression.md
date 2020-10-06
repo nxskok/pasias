@@ -42,8 +42,8 @@ Solution
 I used `rains` as the name of my data frame: 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/calirain.txt"
-rains = read_table2(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/c32/calirain.txt"
+rains=read_table2(my_url)
 ```
 
 ```
@@ -87,7 +87,7 @@ rains
 ##  8 SanJose          14.2       95     37.4        28
 ##  9 GiantForest      42.6     6360     36.6       145
 ## 10 Salinas          13.8       74     36.7        12
-## # ... with 20 more rows
+## # … with 20 more rows
 ```
 
  
@@ -116,11 +116,10 @@ Solution
 
 
 ```r
-ggplot(rains, aes(y = rainfall, x = 1)) + geom_boxplot()
+ggplot(rains,aes(y=rainfall,x=1))+geom_boxplot()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-6-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
      
 There is only one rainfall over 60 inches, and the smallest one is
@@ -130,11 +129,10 @@ Another possible plot here is a histogram, since there is only one quantitative 
 
 
 ```r
-ggplot(rains, aes(x = rainfall)) + geom_histogram(bins = 7)
+ggplot(rains, aes(x=rainfall))+geom_histogram(bins=7)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-7-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
 
 
@@ -142,7 +140,7 @@ This clearly shows the rainfall value above 60 inches, but some other things are
 Extra: What stations have those extreme values? Should you wish to find out:
 
 ```r
-rains %>% filter(rainfall > 60)
+rains %>% filter(rainfall>60)
 ```
 
 ```
@@ -162,7 +160,7 @@ Pacific Northwest.) Here it is:
 Which station has less than 2 inches of annual rainfall?
 
 ```r
-rains %>% filter(rainfall < 2)
+rains %>% filter(rainfall<2)  
 ```
 
 ```
@@ -192,21 +190,19 @@ That is, `altitude`, `latitude` and
 acceptable) is one plot at a time:
 
 ```r
-ggplot(rains, aes(y = rainfall, x = altitude)) + geom_point()
+ggplot(rains,aes(y=rainfall,x=altitude))+geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-10-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
      
 
 
 ```r
-ggplot(rains, aes(y = rainfall, x = latitude)) + geom_point()
+ggplot(rains,aes(y=rainfall,x=latitude))+geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-11-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
  
 
@@ -214,11 +210,10 @@ and finally
 
 
 ```r
-ggplot(rains, aes(y = rainfall, x = fromcoast)) + geom_point()
+ggplot(rains,aes(y=rainfall,x=fromcoast))+geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-12-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -229,12 +224,13 @@ Here is a funky way to get all three plots in one shot:
 
 
 ```r
-rains %>% pivot_longer(altitude:fromcoast, names_to = "xname", values_to = "x") %>% 
-    ggplot(aes(x = x, y = rainfall)) + geom_point() + facet_wrap(~xname, scales = "free")
+rains %>% 
+  pivot_longer(altitude:fromcoast, names_to="xname",values_to="x") %>%
+  ggplot(aes(x=x,y=rainfall))+geom_point()+
+  facet_wrap(~xname,scales="free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-13-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -259,13 +255,13 @@ too many:
 
 
 ```r
-rains %>% pivot_longer(altitude:fromcoast, names_to = "xname", values_to = "x") %>% 
-    ggplot(aes(x = x, y = rainfall)) + geom_point() + facet_wrap(~xname, scales = "free", 
-    ncol = 2)
+rains %>% 
+  pivot_longer(altitude:fromcoast, names_to="xname",values_to="x") %>%
+  ggplot(aes(x=x,y=rainfall))+geom_point()+
+  facet_wrap(~xname,scales="free",ncol=2)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-14-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -320,7 +316,7 @@ Save your `lm` into a
 variable, since it will get used again later:
 
 ```r
-rainfall.1 = lm(rainfall ~ latitude, data = rains)
+rainfall.1=lm(rainfall~latitude,data=rains)
 summary(rainfall.1)
 ```
 
@@ -357,7 +353,7 @@ Extra: Of course, I can easily do the others as well, though you don't have to:
 
 
 ```r
-rainfall.2 = lm(rainfall ~ fromcoast, data = rains)
+rainfall.2=lm(rainfall~fromcoast,data=rains)
 summary(rainfall.2)
 ```
 
@@ -397,7 +393,7 @@ Finally:
 
 
 ```r
-rainfall.3 = lm(rainfall ~ altitude, data = rains)
+rainfall.3=lm(rainfall~altitude,data=rains)
 summary(rainfall.3)
 ```
 
@@ -445,7 +441,7 @@ Solution
 This, then:
 
 ```r
-rainfall.4 = lm(rainfall ~ latitude + altitude + fromcoast, data = rains)
+rainfall.4=lm(rainfall~latitude+altitude+fromcoast,data=rains)
 summary(rainfall.4)
 ```
 
@@ -525,7 +521,7 @@ smaller); the alternative is that the larger model is better, so
 that the extra complication is worth it:
 
 ```r
-anova(rainfall.1, rainfall.4)
+anova(rainfall.1,rainfall.4)  
 ```
 
 ```
@@ -550,7 +546,7 @@ is the one we should go with.
 If you have studied these things: this one is a 
 "multiple-partial $F$-test", for testing the combined significance of more than one $x$
 but less than all the $x$'s.
-\marginnote{If you had just one $x$, you'd  use a $t$-test for its slope, and if you were testing all the $x$'s, you'd use the global $F$-test that appears in the regression output.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you had just one $x$, you'd  use a $t$-test for its slope, and if you were testing all the $x$'s, you'd use the global $F$-test that appears in the regression output.</span>
 
 
 
@@ -614,7 +610,7 @@ cigs
 ##  8  12.4     0.95  0.922  12.3
 ##  9  16.6     1.12  0.937  16.3
 ## 10  14.9     1.02  0.886  15.4
-## # ... with 15 more rows
+## # … with 15 more rows
 ```
 
  
@@ -831,7 +827,7 @@ We'll explore that in a moment.
 (f) Make a "pairs plot": that is, scatter plots between all
 pairs of variables. This can be done by feeding the whole data frame
 into `plot`.
-\marginnote{This is a base graphics graph rather    than a ggplot one, but it will do for our purposes.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is a base graphics graph rather    than a ggplot one, but it will do for our purposes.</span>
 Do you see any strong relationships that do
 *not* include `co`? Does that shed any light on the last
 part? Explain briefly (or "at length" if that's how it comes
@@ -847,8 +843,7 @@ Plot the entire data frame:
 plot(cigs)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-25-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-25-1.png" width="672"  />
 
  
 
@@ -907,8 +902,7 @@ library(GGally)
 cigs %>% ggpairs()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-26-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
  
 
@@ -934,8 +928,7 @@ pairs plot of the other variables:
 cigs %>% select(-weight) %>% ggpairs()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-27-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
  
 
@@ -1266,7 +1259,7 @@ That drop in R-squared from 97\% to 91\% was, it turns out, *not*
 significant: the three extra variables
 could have produced a change in R-squared like that, 
 *even if  they were worthless*.
-\marginnote{Recall that adding $x$'s to a regression will always make R-squared go up, even if they are just random noise.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Recall that adding $x$'s to a regression will always make R-squared go up, even if they are just random noise.</span>
 
 If you have learned about "adjusted R-squared", you might recall
 that this is supposed to go down *only* if the variables you took
@@ -1331,7 +1324,7 @@ variables have a stronger link with `uptake` than
 `age`. Height, however, seems to be the best way of relating
 oxygen uptake to any of the other variables. I think the suppositions
 from earlier about relating oxygen uptake to "bigness"
-\marginnote{This  is not, I don't think, a real word, but I mean size emphasizing  how big a boy is generally, rather than how small.} in some sense
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This  is not, I don't think, a real word, but I mean size emphasizing  how big a boy is generally, rather than how small.</span> in some sense
 are actually sound, but age and weight and `chest` capture
 "bigness" worse than height does. Later, when you learn about
 Principal Components, you will see that the first principal component,
@@ -1347,8 +1340,7 @@ from package `GGally`:
 boys %>% ggpairs()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-34-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
 
  
 
@@ -1434,7 +1426,7 @@ fb
 ##  8       0.5       132
 ##  9       0.6       154
 ## 10      -0.5       241
-## # ... with 30 more rows
+## # … with 30 more rows
 ```
 
 ```r
@@ -1445,8 +1437,7 @@ ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-35-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
        
 
@@ -1529,7 +1520,7 @@ sqrt(0.1904)
 
 which *would* look
 like as weak of a trend as we saw.
-\marginnote{Correlations have to go up beyond 0.50 before they start looking at all interesting.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Correlations have to go up beyond 0.50 before they start looking at all interesting.</span>
 
 
 
@@ -1632,15 +1623,15 @@ Just a modification
 of (a):
 
 ```r
-ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() + geom_smooth(method = "lm")
+ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() +
+  geom_smooth(method = "lm")
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-40-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
        
 
@@ -1659,8 +1650,7 @@ This is, to my mind, the easiest way:
 ggplot(fb.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-41-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
        
 
@@ -1677,15 +1667,15 @@ Compare that residual plot with this one:
 
 
 ```r
-ggplot(fb.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
+ggplot(fb.1, aes(x = .fitted, y = .resid)) +
+  geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-42-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
        
 Now, why did I try adding a smooth trend, and why is it not
@@ -1782,15 +1772,15 @@ Solution
 
 
 ```r
-ggplot(carp, aes(x = bodyweight, y = ENE)) + geom_point() + geom_smooth()
+ggplot(carp, aes(x = bodyweight, y = ENE)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-44-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
  
 
@@ -1859,7 +1849,7 @@ need the value at this point.
 This kind of R-squared is actually pretty good for natural data, but
 the issue is whether we can improve it by fitting a non-linear
 model.
-\marginnote{The suspicion being that we can, since the    scatterplot suggested serious non-linearity.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The suspicion being that we can, since the    scatterplot suggested serious non-linearity.</span>
 
 
 
@@ -1880,8 +1870,7 @@ straight into `ggplot`:
 ggplot(carp.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-46-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -1931,7 +1920,7 @@ summary(carp.2)
 R-squared has gone up from 47\% to 74\%, a substantial
 improvement. This suggests to me that the parabola model is a
 substantial improvement.
-\marginnote{Again, not a surprise, given our  initial scatterplot.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Again, not a surprise, given our  initial scatterplot.</span> 
 
 I try to avoid using the word "significant" in this context, since
 we haven't actually done a test of significance.
@@ -1960,7 +1949,7 @@ of 0.031. This is less than the default 0.05, so it *is*
 significant.
 This means, in short, that the quadratic model is a significant
 *improvement* over the linear one.
-\marginnote{Now we can use that word   *significant*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Now we can use that word   *significant*.</span> 
 Said longer: the null hypothesis being tested is that the slope
 coefficient of the squared term is zero (that is, that the squared
 term has nothing to add over the linear model). This is rejected,
@@ -1987,12 +1976,12 @@ that: plot the fitted values and join them with lines. Then I
 want to add the original data, just the points:
 
 ```r
-ggplot(carp.2, aes(x = carp$bodyweight, y = .fitted), colour = "blue") + geom_line(colour = "blue") + 
-    geom_point(data = carp, aes(x = bodyweight, y = ENE))
+ggplot(carp.2, aes(x = carp$bodyweight, y = .fitted), colour = "blue") +
+  geom_line(colour = "blue") +
+  geom_point(data = carp, aes(x = bodyweight, y = ENE))
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-48-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
        
 
@@ -2032,8 +2021,9 @@ so now you see what `carp.2a` has in it, and then:
 
 
 ```r
-g <- ggplot(carp.2a, aes(x = bodyweight, y = .fitted)) + geom_line(colour = "blue") + 
-    geom_point(aes(y = ENE))
+g <- ggplot(carp.2a, aes(x = bodyweight, y = .fitted)) +
+  geom_line(colour = "blue") +
+  geom_point(aes(y = ENE))
 ```
 
  
@@ -2051,8 +2041,7 @@ is `ENE`. The plot is this:
 g
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-50-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
  
 
@@ -2092,8 +2081,7 @@ fitted model object `carp.2` as your data frame for the
 ggplot(carp.2, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-51-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -2111,7 +2099,7 @@ to `lm` in the same way that
 `^` does:
 
 ```r
-carp.3 <- lm(ENE ~ I(1/bodyweight), data = carp)
+carp.3 <- lm(ENE ~ I(1 / bodyweight), data = carp)
 summary(carp.3)
 ```
 
@@ -2150,12 +2138,13 @@ Does the fitted value plot look reasonable now? This is `augment` again since th
 
 ```r
 library(broom)
-augment(carp.3, carp) %>% ggplot(aes(x = bodyweight, y = .fitted)) + geom_line(colour = "blue") + 
-    geom_point(aes(y = ENE))
+augment(carp.3, carp) %>%
+  ggplot(aes(x = bodyweight, y = .fitted)) +
+  geom_line(colour = "blue") +
+  geom_point(aes(y = ENE))
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/augment2-1} 
+<img src="12-regression_files/figure-html/augment2-1.png" width="672"  />
 
  
 
@@ -2171,8 +2160,7 @@ just did:
 ggplot(carp.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-53-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
  
 
@@ -2222,7 +2210,7 @@ template report with the document info at the top. This is my document info:
 ![](sh0.png)
  
 This is known in the jargon as a "YAML block".
-\marginnote{YAML      stands for *Yet Another Markup Language*, but we're not using      it in this course, other than as the top bit of an R Markdown document.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">YAML      stands for *Yet Another Markup Language*, but we're not using      it in this course, other than as the top bit of an R Markdown document.</span>
 Below that is the template R Markdown document, which you can delete now or later.
 
 
@@ -2324,15 +2312,15 @@ The R code you add should look like this, with the results shown
 
 ```r
 library(tidyverse)
-ggplot(sparrowhawks, aes(x = returning, y = newadults)) + geom_point() + geom_smooth()
+ggplot(sparrowhawks, aes(x = returning, y = newadults)) +
+  geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-55-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-55-1.png" width="672"  />
 
  
 
@@ -2463,15 +2451,15 @@ will add the regression line to the plot:
 
 
 ```r
-ggplot(sparrowhawks, aes(x = returning, y = newadults)) + geom_point() + geom_smooth(method = "lm")
+ggplot(sparrowhawks, aes(x = returning, y = newadults)) +
+  geom_point() + geom_smooth(method = "lm")
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-59-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-59-1.png" width="672"  />
 
  
 
@@ -2556,7 +2544,7 @@ soc
 ##  8         13  33697
 ##  9          2  22444
 ## 10          8  32562
-## # ... with 40 more rows
+## # … with 40 more rows
 ```
 
  
@@ -2613,7 +2601,7 @@ Here is another:
 
 
 ```r
-soc %>% map_df(~quantile(.))
+soc %>% map_df(~ quantile(.))
 ```
 
 ```
@@ -2648,7 +2636,7 @@ This almost works:
 
 
 ```r
-soc %>% map_df(~enframe(quantile(.)))
+soc %>% map_df(~ enframe(quantile(.)))
 ```
 
 ```
@@ -2724,8 +2712,7 @@ The usual:
 ggplot(soc, aes(x = experience, y = salary)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-68-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
  
 
@@ -2795,8 +2782,7 @@ columns in it, not forgetting the initial dots:
 ggplot(soc.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-70-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
 
        
 I see a "fanning-out": the residuals are getting bigger *in size* 
@@ -2820,8 +2806,7 @@ ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-71-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-71-1.png" width="672"  />
 
  
 
@@ -2841,8 +2826,7 @@ ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth(sp
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-72-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-72-1.png" width="672"  />
 
  
 
@@ -2881,8 +2865,7 @@ I explain that "masked" thing below.
 boxcox(salary ~ experience, data = soc)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-74-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
 
  
 
@@ -2901,7 +2884,7 @@ that you will have a terrible time debugging. That's what that
 So I'm going to be tidy and get rid of `MASS`, now that I'm
 finished with it. Let's first see which packages are loaded, rather a
 lot in my case:
-\marginnote{The packages before *tidyverse* other than *MASS* are all loaded by the *tidyverse*, which  is why there are so many.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The packages before *tidyverse* other than *MASS* are all loaded by the *tidyverse*, which  is why there are so many.</span>
 
 
 ```r
@@ -2970,11 +2953,11 @@ It has. Now any calls to `select` will use the right one. We hope.
 The output of `search` is called the **search list**, and
 it tells you where R will go looking for things. The first one
 `.GlobalEnv` is where all
-\marginnote{All the ones that are part of  this project, anyway.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">All the ones that are part of  this project, anyway.</span> 
 your
 variables, data frames etc.\ get stored, and that is what gets
 searched first.
-\marginnote{That means that if you write a function with  the same name as one that is built into R or a package, yours is the  one that will get called. This is probably a bad idea, since you  won't be able to get at R's function by that name.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That means that if you write a function with  the same name as one that is built into R or a package, yours is the  one that will get called. This is probably a bad idea, since you  won't be able to get at R's function by that name.</span> 
 Then R will go
 looking in each thing in turn until it finds what it is looking
 for. When you load a package with `library()`, it gets added to
@@ -3044,8 +3027,10 @@ be able to start from `soc.2`. But you can also do this:
 
 
 ```r
-soc %>% mutate(log_salary = log(salary)) %>% lm(log_salary ~ experience, data = .) %>% 
-    summary()
+soc %>%
+  mutate(log_salary = log(salary)) %>%
+  lm(log_salary ~ experience, data = .) %>%
+  summary()
 ```
 
 ```
@@ -3135,8 +3120,7 @@ data frame:
 ggplot(soc.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-82-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-82-1.png" width="672"  />
 
        
 
@@ -3152,8 +3136,7 @@ distributed as they should be? Well, that's easy enough to check:
 ggplot(soc.3, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-83-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-83-1.png" width="672"  />
 
  
 
@@ -3182,7 +3165,7 @@ exp(0.05)
  
 
 or to increase salary by about 5\%.
-\marginnote{Mathematically,  $e^x$ is approximately $1+x$ for small $x$, which winds up meaning that the  slope in a model like this, if it is small, indicates about the  percent increase in the response associated with a 1-unit change in  the explanatory variable. Note that this only works with $e^x$ and  natural logs, not base 10 logs or anything like that.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mathematically,  $e^x$ is approximately $1+x$ for small $x$, which winds up meaning that the  slope in a model like this, if it is small, indicates about the  percent increase in the response associated with a 1-unit change in  the explanatory variable. Note that this only works with $e^x$ and  natural logs, not base 10 logs or anything like that.</span>
 
 
 
@@ -3274,8 +3257,7 @@ for. Also, the volume is the response, so that should go on the $y$-axis:
 ggplot(trees, aes(x = diameter, y = volume)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-86-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-86-1.png" width="672"  />
 
        
 
@@ -3284,15 +3266,15 @@ look like this:
 
 
 ```r
-ggplot(trees, aes(x = diameter, y = volume)) + geom_point() + geom_smooth()
+ggplot(trees, aes(x = diameter, y = volume)) +
+  geom_point() + geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-87-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-87-1.png" width="672"  />
 
        
 
@@ -3323,7 +3305,7 @@ I am guided by "form, direction, strength" in looking at a scatterplot:
 You don't need to be as formal as this, but you *do* need
 to get at the idea that it is an upward trend, apparently
 linear, and at least fairly strong.
-\marginnote{When this was graded, it was 3 marks, to clue you in that there are three things to say.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When this was graded, it was 3 marks, to clue you in that there are three things to say.</span>
 
 
 
@@ -3385,7 +3367,7 @@ glance(volume.1)
 ##   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
 ##       <dbl>         <dbl> <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
 ## 1     0.959         0.953  20.4      185. 8.22e-7     1  -43.2  92.4  93.4
-## # ... with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
  
@@ -3415,7 +3397,7 @@ tidy(volume.1)
 This gives a table of intercepts, slopes and their P-values, but the
 value to this one is that it is a *data frame*, so if you want to
 pull anything out of it, you know how to do that:
-\marginnote{The  *summary* output is more designed for looking at than for  extracting things from.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The  *summary* output is more designed for looking at than for  extracting things from.</span>
 
 ```r
 tidy(volume.1) %>% filter(term == "diameter")
@@ -3451,8 +3433,7 @@ random mess of nothingness:
 ggplot(volume.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-92-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-92-1.png" width="672"  />
 
        
 
@@ -3581,8 +3562,7 @@ predicts the data well. I should look at the residuals from this one:
 ggplot(volume.2, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-94-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-94-1.png" width="672"  />
 
  
 
@@ -3699,8 +3679,7 @@ got, is still high. The residuals are these:
 ggplot(volume.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-97-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-97-1.png" width="672"  />
 
  
 
@@ -3816,7 +3795,7 @@ bind_rows(glance(volume.1), glance(volume.2), glance(volume.3))
 ## 1     0.959         0.953 20.4       185.  8.22e-7     1 -43.2  92.4  93.4 
 ## 2     0.953         0.947 21.7       162.  1.36e-6     1 -43.8  93.7  94.6 
 ## 3     0.908         0.896  0.303      78.7 2.06e-5     1  -1.12  8.25  9.16
-## # ... with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
  
@@ -3839,7 +3818,7 @@ like `glance` that outputs a data frame:
 
 ```r
 model_list <- list(volume.1, volume.2, volume.3)
-map_df(model_list, ~glance(.))
+map_df(model_list, ~ glance(.))
 ```
 
 ```
@@ -3849,7 +3828,7 @@ map_df(model_list, ~glance(.))
 ## 1     0.959         0.953 20.4       185.  8.22e-7     1 -43.2  92.4  93.4 
 ## 2     0.953         0.947 21.7       162.  1.36e-6     1 -43.8  93.7  94.6 
 ## 3     0.908         0.896  0.303      78.7 2.06e-5     1  -1.12  8.25  9.16
-## # ... with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
  
@@ -3872,7 +3851,7 @@ and if you have a long enough tape measure you can measure it.
 
 The above works because the tangent of 45 degrees is 1. If you have a
 device that will measure the actual angle,
-\marginnote{These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [link](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">These days, there  are apps that will let you do this with your phone. I found one called Clinometer. See also [link](https://gabrielhemery.com/how-to-calculate-tree-height-using-a-smartphone/).</span> 
 you
 can be any distance away from the tree, point the device at the top,
 record the angle, and do some trigonometry to estimate the height of
@@ -3973,8 +3952,7 @@ ggplot(tortoises, aes(x = length, y = eggs)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/looe-1} 
+<img src="12-regression_files/figure-html/looe-1.png" width="672"  />
 
    
  
@@ -4147,8 +4125,7 @@ if it is for this:
 ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-107-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
 
  
 
@@ -4156,15 +4133,15 @@ Up to you whether you put a smooth trend on it or not:
 
 
 ```r
-ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
+ggplot(tortoises.1, aes(x = .fitted, y = .resid)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-108-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
 
  
 Looking at the plot, you see a curve, up and down. The most
@@ -4189,32 +4166,31 @@ plots. Normal quantile plot of the residuals:
 ggplot(tortoises.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-109-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-109-1.png" width="672"  />
 
  
 
 This is not the best: the low values are a bit too low, so that the
 whole picture is (a little) skewed to the left.
-\marginnote{The very   negative residuals are at the left and right of the residual plot;  they are there because the relationship is a curve. If you were to  look at the residuals from the model with length-squared, you  probably wouldn't see this.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The very   negative residuals are at the left and right of the residual plot;  they are there because the relationship is a curve. If you were to  look at the residuals from the model with length-squared, you  probably wouldn't see this.</span>
 
 Another plot you can make is to assess fan-out: you plot the
 *absolute value*
-\marginnote{The value, but throw away the minus sign if it has one.} of the residuals against the fitted values. The idea
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The value, but throw away the minus sign if it has one.</span> of the residuals against the fitted values. The idea
 is that if there is fan-out, the absolute value of the residuals will
 get bigger:
 
 
 ```r
-ggplot(tortoises.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
+ggplot(tortoises.1, aes(x = .fitted, y = abs(.resid))) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-110-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-110-1.png" width="672"  />
 
  
 
@@ -4294,7 +4270,7 @@ crickets
 ##  8 exclamationis        26.2       86.6
 ##  9 exclamationis        26.2       87.5
 ## 10 exclamationis        26.2       89.1
-## # ... with 21 more rows
+## # … with 21 more rows
 ```
 
  
@@ -4439,7 +4415,7 @@ however. Is it possible that temperature also has an effect? To
 assess this, draw a scatterplot of pulse rate against temperature,
 with the points distinguished, somehow, by the species they are
 from.
-\marginnote{This was the actual reason I thought of this      question originally:    I wanted you to do this.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was the actual reason I thought of this      question originally:    I wanted you to do this.</span>
 
 
 Solution
@@ -4449,11 +4425,11 @@ One of the wonderful things about `ggplot` is that doing
 the obvious thing works:
 
 ```r
-ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) + geom_point()
+ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
+  geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-116-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-116-1.png" width="672"  />
 
        
     
@@ -4485,10 +4461,10 @@ species being observed mainly in higher temperatures. This was
 *utterly invisible* to us when we did the $t$-test, but it
 shows the importance of accounting for all the relevant
 variables when you do your analysis.
-\marginnote{And it shows the        value of looking at relevant plots.} If the species had been
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">And it shows the        value of looking at relevant plots.</span> If the species had been
 observed at opposite temperatures, we might have
 concluded
-\marginnote{Mistakenly.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mistakenly.</span> 
 that *niveus* have the
 higher pulse rates on average. I come back to this later when I
 discuss the confidence interval for species difference that
@@ -4581,12 +4557,12 @@ accounting for temperature, which also makes a difference. (In the
 $t$-test, the temperatures were all mixed up). What we also see is
 that the $t$-interval is shifted up compared to the one from the
 regression. This is because the $t$-interval conflates
-\marginnote{Mixes up.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Mixes up.</span> 
 two things: the *exclamationis* crickets do have a
 higher pulse rate, but they were also observed at higher temperatures,
 which makes it look as if their pulse rates are more
 higher
-\marginnote{This is actually grammatically correct.} than they
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is actually grammatically correct.</span> than they
 really are, when you account for temperature.
 
 This particular model constrains the slope with temperature to be the
@@ -4627,7 +4603,7 @@ summary(pulse.2)
 
 To see whether adding the interaction term added anything to the
 prediction,
-\marginnote{Though it's hard to imagine being able to improve on an R-squared of 99%.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Though it's hard to imagine being able to improve on an R-squared of 99%.</span> 
 compare the model with and without using `anova`:
 
 
@@ -4662,7 +4638,7 @@ distinguish them. If there had been three species, we would have had
 to look at the `anova` output to hunt for a difference among
 species, since there would have been two slope coefficients, each with
 its own P-value.
-\marginnote{This wouldn't have told us about the overall  effect of species.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This wouldn't have told us about the overall  effect of species.</span> 
 
 If you haven't seen interactions before, don't worry about this. The
 idea behind it is that we are testing whether we needed lines with
@@ -4680,16 +4656,15 @@ for each species to our plot, thus:
 
 
 ```r
-ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) + geom_point() + 
-    geom_smooth(method = "lm", se = F)
+ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
+  geom_point() + geom_smooth(method = "lm", se = F)
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-121-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-121-1.png" width="672"  />
 
  
 
@@ -4712,8 +4687,7 @@ it *is* a regression):
 ggplot(pulse.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-122-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-122-1.png" width="672"  />
 
          
 
@@ -4733,8 +4707,7 @@ right place:
 ggplot(pulse.1, aes(x = crickets$temperature, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-123-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-123-1.png" width="672"  />
 
  
 
@@ -4750,8 +4723,7 @@ goes like this:
 ggplot(pulse.1, aes(x = crickets$species, y = .resid)) + geom_boxplot()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-124-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-124-1.png" width="672"  />
 
  
 
@@ -4773,8 +4745,7 @@ normal quantile plot of all the residuals together:
 ggplot(pulse.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-125-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-125-1.png" width="672"  />
 
  
 
@@ -4799,11 +4770,11 @@ best roller-coasters in the United States. We will examine the 10
 roller-coasters that received the most votes. Two features of a
 roller-coaster that are of interest are the distance it drops from
 start to finish, measured here in feet
-\marginnote{Roller-coasters work by   gravity, so there must be some drop.} and the duration of the ride,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Roller-coasters work by   gravity, so there must be some drop.</span> and the duration of the ride,
 measured in seconds. Is it true that roller-coasters with a bigger
 drop also tend to have a longer ride? The data are at
 [link](http://www.utsc.utoronto.ca/~butler/c32/coasters.csv).
-\marginnote{These are not to be confused with what your mom insists that you place between your coffee mug and the table.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">These are not to be confused with what your mom insists that you place between your coffee mug and the table.</span>
 
 
 
@@ -4882,16 +4853,15 @@ which is time you probably don't want to spend.) Thus:
 
 ```r
 library(ggrepel)
-ggplot(coasters, aes(x = drop, y = duration, label = coaster_name)) + geom_point() + 
-    geom_text_repel() + geom_smooth(method = "lm", se = F)
+ggplot(coasters, aes(x = drop, y = duration, label = coaster_name)) +
+  geom_point() + geom_text_repel() + geom_smooth(method = "lm", se = F)
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-127-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-127-1.png" width="672"  />
 
        
 
@@ -4961,8 +4931,9 @@ smoothest way to go:
 ```r
 library(broom)
 duration.1 <- lm(duration ~ drop, data = coasters)
-augment(duration.1, coasters) %>% select(coaster_name, duration, drop, .resid) %>% 
-    arrange(desc(abs(.resid)))
+augment(duration.1, coasters) %>%
+  select(coaster_name, duration, drop, .resid) %>%
+  arrange(desc(abs(.resid)))
 ```
 
 ```
@@ -4997,24 +4968,27 @@ to `augment` so that you have everything:
 
 
 ```r
-coasters %>% lm(duration ~ drop, data = .) %>% augment(coasters) %>% arrange(desc(abs(.resid)))
+coasters %>%
+  lm(duration ~ drop, data = .) %>%
+  augment(coasters) %>%
+  arrange(desc(abs(.resid)))
 ```
 
 ```
 ## # A tibble: 10 x 10
 ##    coaster_name state  drop duration .fitted .resid .std.resid  .hat .sigma
 ##    <chr>        <chr> <dbl>    <dbl>   <dbl>  <dbl>      <dbl> <dbl>  <dbl>
-##  1 Nitro        New ~   215      240    143.  97.0      2.05   0.138   37.5
+##  1 Nitro        New …   215      240    143.  97.0      2.05   0.138   37.5
 ##  2 The Beast    Ohio    141       65    125. -60.1     -1.26   0.118   48.8
-##  3 Millennium ~ Ohio    300      105    164. -58.6     -1.52   0.429   45.9
-##  4 Ghost Rider  Cali~   108      160    117.  42.8      0.928  0.180   51.5
-##  5 Goliath      Cali~   255      180    153.  27.3      0.614  0.239   53.2
-##  6 Thunderbolt  Penn~    95       90    114. -24.0     -0.532  0.216   53.5
-##  7 Raven        Indi~    86       90    112. -21.8     -0.493  0.245   53.6
-##  8 Incredible ~ Flor~   105      135    116.  18.6      0.404  0.188   53.9
-##  9 Magnum XL-2~ Ohio    195      120    138. -18.2     -0.379  0.111   54.0
+##  3 Millennium … Ohio    300      105    164. -58.6     -1.52   0.429   45.9
+##  4 Ghost Rider  Cali…   108      160    117.  42.8      0.928  0.180   51.5
+##  5 Goliath      Cali…   255      180    153.  27.3      0.614  0.239   53.2
+##  6 Thunderbolt  Penn…    95       90    114. -24.0     -0.532  0.216   53.5
+##  7 Raven        Indi…    86       90    112. -21.8     -0.493  0.245   53.6
+##  8 Incredible … Flor…   105      135    116.  18.6      0.404  0.188   53.9
+##  9 Magnum XL-2… Ohio    195      120    138. -18.2     -0.379  0.111   54.0
 ## 10 Son of Beast Ohio    214      140    143.  -2.81    -0.0593 0.136   54.5
-## # ... with 1 more variable: .cooksd <dbl>
+## # … with 1 more variable: .cooksd <dbl>
 ```
 
  
@@ -5023,7 +4997,7 @@ I wanted to hang on to the roller-coaster names, so I added the data
 frame name to `augment`. If you don't (that is, you just put
 `augment()` in the middle of a pipe), then `augment`
 "attempts to reconstruct the data from the model".
-\marginnote{A quote  from the package vignette.} That means you wouldn't get
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">A quote  from the package vignette.</span> That means you wouldn't get
 *everything* from the original data frame; you would just get the
 things that were in the regression. In this case, that means you would lose
 the coaster names.
@@ -5112,15 +5086,15 @@ Solution
 
 
 ```r
-ggplot(runs, aes(x = distance, y = blood_sugar)) + geom_point() + geom_smooth()
+ggplot(runs, aes(x = distance, y = blood_sugar)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/plymouth-1} 
+<img src="12-regression_files/figure-html/plymouth-1.png" width="672"  />
 
      
 
@@ -5247,7 +5221,7 @@ The important thing is that the name of the column of the new data
 frame must be *exactly* the same as the name of the explanatory
 variable in the regression. If they don't match, `predict`
 won't work. At least, it won't work properly.
-\marginnote{It won't give you an error, but it will go back to the *original* data frame to get distances to predict from, and you will get very confused.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It won't give you an error, but it will go back to the *original* data frame to get distances to predict from, and you will get very confused.</span>
 
 Then, `predict`:
 
@@ -5358,7 +5332,10 @@ I also remembered that if you finish with a `select`, you get the columns in the
 
 
 ```r
-pp %>% as_tibble() %>% bind_cols(dist.new) %>% select(c(distance, everything()))
+pp %>%
+  as_tibble() %>%
+  bind_cols(dist.new) %>%
+  select(c(distance, everything()))
 ```
 
 ```
@@ -5456,7 +5433,7 @@ pizza
 ##  8 Freschetta Bakes & Rises  4-Cheese                         364  15    0.98
 ##  9 Freschetta Bakes & Rises Sauce Stuffed Crust 4-Cheese      334  11    1.23
 ## 10 DiGiorno Rising Crust Four Cheese                          332  12    0.94
-## # ... with 14 more rows
+## # … with 14 more rows
 ```
 
     
@@ -5470,11 +5447,11 @@ Anyway, these are apparently the right thing.
 
 Extra: I wanted to mention something else that I discovered
 yesterday.
-\marginnote{R is like that: sometimes it seems as if it has  infinite depth.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">R is like that: sometimes it seems as if it has  infinite depth.</span> 
 There is a package called `rio` that will
 read (and write) data in a whole bunch of different formats in a
 unified way.
-\marginnote{It does this by figuring what kind of thing you have, from the extension to its filename, and then calling an appropriate function to read in or write out the data. This is an excellent example of *standing on the shoulders of giants* to make our lives easier. The software does the hard work of figuring out what kind of thing you have and how to read it in; all we do is say *import*.} Anyway, the usual installation thing, done once:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It does this by figuring what kind of thing you have, from the extension to its filename, and then calling an appropriate function to read in or write out the data. This is an excellent example of *standing on the shoulders of giants* to make our lives easier. The software does the hard work of figuring out what kind of thing you have and how to read it in; all we do is say *import*.</span> Anyway, the usual installation thing, done once:
 
 
 ```r
@@ -5550,15 +5527,15 @@ Solution
 All the variable names start with Capital Letters:
 
 ```r
-ggplot(pizza, aes(x = Fat, y = Calories)) + geom_point() + geom_smooth()
+ggplot(pizza, aes(x = Fat, y = Calories)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/alskhslafkhlksfhsasvvvv-1} 
+<img src="12-regression_files/figure-html/alskhslafkhlksfhsasvvvv-1.png" width="672"  />
 
        
 
@@ -5632,8 +5609,7 @@ ggplot(pizza.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-145-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-145-1.png" width="672"  />
 
  
 
@@ -5651,8 +5627,7 @@ quantile plot of the residuals:
 ggplot(pizza.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-146-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
 
  
 
@@ -5669,8 +5644,7 @@ ggplot(pizza.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth(
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-147-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-147-1.png" width="672"  />
 
  
 
@@ -6003,8 +5977,7 @@ ggplot(fire, aes(x = distance, y = damage)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-156-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-156-1.png" width="672"  />
 
      
 
@@ -6155,16 +6128,16 @@ How bendy is the cubic?
 
 
 ```r
-ggplot(fire, aes(x = distance, y = damage)) + geom_point() + geom_smooth(method = "lm") + 
-    geom_line(data = damage.3, aes(y = .fitted), colour = "red")
+ggplot(fire, aes(x = distance, y = damage)) + geom_point() +
+  geom_smooth(method = "lm") +
+  geom_line(data = damage.3, aes(y = .fitted), colour = "red")
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-160-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-160-1.png" width="672"  />
 
  
 
@@ -6380,7 +6353,7 @@ satisf
 ##  8    54    45       48     2.4
 ##  9    26    52       62     2.9
 ## 10    77    29       50     2.1
-## # ... with 36 more rows
+## # … with 36 more rows
 ```
 
      
@@ -6406,22 +6379,19 @@ The obvious way is to do these one after the other:
 ggplot(satisf, aes(x = age, y = satis)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-168-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-168-1.png" width="384"  />
 
 ```r
 ggplot(satisf, aes(x = severity, y = satis)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-168-2} 
+<img src="12-regression_files/figure-html/unnamed-chunk-168-2.png" width="384"  />
 
 ```r
 ggplot(satisf, aes(x = anxiety, y = satis)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-168-3} 
+<img src="12-regression_files/figure-html/unnamed-chunk-168-3.png" width="384"  />
 
        
 
@@ -6434,12 +6404,13 @@ in a pipeline:
 
 
 ```r
-satisf %>% pivot_longer(-satis, names_to = "xname", values_to = "x") %>% ggplot(aes(x = x, 
-    y = satis)) + geom_point() + facet_wrap(~xname, scales = "free", ncol = 2)
+satisf %>%
+  pivot_longer(-satis, names_to="xname", values_to="x") %>%
+  ggplot(aes(x = x, y = satis)) + geom_point() +
+  facet_wrap(~xname, scales = "free", ncol = 2)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-169-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-169-1.png" width="672"  />
 
  
 
@@ -6456,7 +6427,7 @@ variable went on which facet, just as long as we saw all of them
 somewhere. Inside `facet_wrap` there are *no dots*: a
 squiggle, followed by the name(s) of the variable(s) that
 distinguish(es) the facets.
-\marginnote{If there are more than one, they  should be separated by plus signs as in lm. Each facet then  has as many labels as variables. I haven't actually done this  myself, but from looking at examples, I think this is the way it  works.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If there are more than one, they  should be separated by plus signs as in lm. Each facet then  has as many labels as variables. I haven't actually done this  myself, but from looking at examples, I think this is the way it  works.</span> 
 The only "design" decision I made here was that the facets
 should be arranged somehow in two columns, but I didn't care which
 ones should be where.
@@ -6470,7 +6441,9 @@ do the other one using the saved data frame, really):
 
 
 ```r
-satisf.long <- satisf %>% pivot_longer(age:anxiety, names_to = "xname", values_to = "x")
+satisf %>% 
+  pivot_longer(age:anxiety, names_to="xname", 
+               values_to="x") -> satisf.long
 satisf.long
 ```
 
@@ -6488,7 +6461,7 @@ satisf.long
 ##  8    66 severity  48  
 ##  9    66 anxiety    2.2
 ## 10    70 age       41  
-## # ... with 128 more rows
+## # … with 128 more rows
 ```
 
  
@@ -6503,12 +6476,11 @@ of the facets:
 
 
 ```r
-ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() + facet_grid(. ~ xname, 
-    scales = "free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_grid(. ~ xname, scales = "free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-171-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-171-1.png" width="672"  />
 
  
 
@@ -6519,12 +6491,11 @@ And now, making a *column* of plots, with `xname` as $y$:
 
 
 ```r
-ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() + facet_grid(xname ~ ., 
-    scales = "free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_grid(xname ~ ., scales = "free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-172-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-172-1.png" width="672"  />
 
  
 
@@ -6535,12 +6506,11 @@ the facets are all in a line. Compare this:
 
 
 ```r
-ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() + facet_wrap(~xname, ncol = 1, 
-    scales = "free")
+ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
+  facet_wrap(~xname, ncol = 1, scales = "free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-173-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-173-1.png" width="672"  />
 
  
 
@@ -6710,9 +6680,14 @@ low age, severity and anxiety. I'll use the quartiles for high and
 low. There is a straightforward but ugly way:
 
 ```r
-quartiles <- satisf %>% summarize(age_q1 = quantile(age, 0.25), age_q3 = quantile(age, 
-    0.75), severity_q1 = quantile(severity, 0.25), severity_q3 = quantile(severity, 
-    0.75), anxiety_q1 = quantile(anxiety, 0.25), anxiety_q3 = quantile(anxiety, 0.75))
+quartiles <- satisf %>% summarize(
+  age_q1 = quantile(age, 0.25),
+  age_q3 = quantile(age, 0.75),
+  severity_q1 = quantile(severity, 0.25),
+  severity_q3 = quantile(severity, 0.75),
+  anxiety_q1 = quantile(anxiety, 0.25),
+  anxiety_q3 = quantile(anxiety, 0.75)
+)
 ```
 
      
@@ -6735,7 +6710,8 @@ quartiles
 
 
 ```r
-quartiles %>% pivot_longer(everything(), names_to = c(".value", "which_q"), names_sep = "_")
+quartiles %>% 
+  pivot_longer(everything(), names_to=c(".value", "which_q"), names_sep="_")
 ```
 
 ```
@@ -6752,9 +6728,10 @@ You can copy the numbers from here to below, or you can do some
 cleverness to get them in the right places:
 
 ```r
-quartiles %>% pivot_longer(everything(), names_to = "var_q", values_to = "quartile") %>% 
-    separate(var_q, c("var_name", "which_q")) %>% pivot_wider(names_from = var_name, 
-    values_from = quartile)
+quartiles %>%
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) %>%
+  pivot_wider(names_from=var_name, values_from=quartile)
 ```
 
 ```
@@ -6769,8 +6746,10 @@ This combo of `pivot_longer` and `separate` can be shortened further by specifyi
 
 
 ```r
-quartiles %>% pivot_longer(everything(), names_to = c("var_q", "which_q"), names_sep = "_", 
-    values_to = "quartile") %>% pivot_wider(names_from = var_q, values_from = quartile)
+quartiles %>%
+  pivot_longer(everything(), names_to=c("var_q", "which_q"), 
+               names_sep="_", values_to="quartile") %>%
+  pivot_wider(names_from=var_q, values_from=quartile)
 ```
 
 ```
@@ -6785,7 +6764,8 @@ Believe it or not, this can be shortened even further, thus:
      
 
 ```r
-quartiles %>% pivot_longer(everything(), names_to = c(".value", "which_q"), names_sep = "_")
+quartiles %>% 
+  pivot_longer(everything(), names_to=c(".value", "which_q"), names_sep="_")
 ```
 
 ```
@@ -6806,7 +6786,8 @@ what it did: (The second way does the first two lines in one, and the third way 
 
 
 ```r
-quartiles %>% pivot_longer(everything(), names_to = "var_q", values_to = "quartile")
+quartiles %>%
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") 
 ```
 
 ```
@@ -6829,8 +6810,9 @@ Making long format. `everything()` is a select-helper saying
 
 
 ```r
-quartiles %>% pivot_longer(everything(), names_to = "var_q", values_to = "quartile") %>% 
-    separate(var_q, c("var_name", "which_q"))
+quartiles %>%
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) 
 ```
 
 ```
@@ -6851,15 +6833,16 @@ The column `var_q` above encodes a variable *and* a
 quartile, so split them up. By default, `separate` splits at an
 underscore, which is why the things in `quartiles` were named
 with underscores.
-\marginnote{I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.</span>
 
 Now put the variable names back in the columns:
 
 
 ```r
-qq <- quartiles %>% pivot_longer(everything(), names_to = "var_q", values_to = "quartile") %>% 
-    separate(var_q, c("var_name", "which_q")) %>% pivot_wider(names_from = var_name, 
-    values_from = quartile)
+quartiles %>%
+  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
+  separate(var_q, c("var_name", "which_q")) %>%
+  pivot_wider(names_from=var_name, values_from=quartile) -> qq
 qq
 ```
 
@@ -6989,7 +6972,9 @@ We want `upr` minus `lwr`:
 
 
 ```r
-pp %>% as_tibble() %>% transmute(pi.length = upr - lwr)
+pp %>%
+  as_tibble() %>%
+  transmute(pi.length = upr - lwr)
 ```
 
 ```
@@ -7012,14 +6997,17 @@ Now, I don't want to keep the other stuff from `pp`, so I used
 `transmute` instead of `mutate`; `transmute`
 keeps *only* the new variable(s) that I calculate and throws away
 the others.
-\marginnote{Usually you want to keep the other variables around as  well, which is why you don't see transmute very often.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Usually you want to keep the other variables around as  well, which is why you don't see transmute very often.</span>
 
 Then I put that side by side with the values being predicted for:
 
 
 ```r
-pp %>% as_tibble() %>% transmute(pi.length = upr - lwr) %>% bind_cols(satisf.new) %>% 
-    arrange(pi.length)
+pp %>%
+  as_tibble() %>%
+  transmute(pi.length = upr - lwr) %>%
+  bind_cols(satisf.new) %>% 
+  arrange(pi.length)
 ```
 
 ```
@@ -7059,8 +7047,7 @@ each other to see where most of the values are:
 ggplot(satisf, aes(x = age, y = anxiety)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-191-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-191-1.png" width="672"  />
 
  
 
@@ -7215,7 +7202,7 @@ The `test="F"` on the end gets you the P-values. Using the
 $F$-test is right for regressions; for things like logistic regression
 that we see later, `test="Chisq"` is the right one to 
 use.
-\marginnote{This is F in quotes, meaning F-test, not F without quotes, meaning FALSE.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is F in quotes, meaning F-test, not F without quotes, meaning FALSE.</span>
 
 
 
@@ -7410,8 +7397,7 @@ Residuals against fitted values:
 ggplot(minutes.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-197-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
 
      
 
@@ -7425,8 +7411,7 @@ for each explanatory variable) one at a time:
 ggplot(minutes.1, aes(x = chemicals$drums, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-198-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-198-1.png" width="672"  />
 
  
 
@@ -7437,8 +7422,7 @@ and
 ggplot(minutes.1, aes(x = chemicals$weight, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-199-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-199-1.png" width="672"  />
 
  
 What would also work is to make a data frame first with the things to plot:
@@ -7457,8 +7441,7 @@ and then:
 ggplot(dd, aes(x = weight, y = res)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-201-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-201-1.png" width="672"  />
 
  
 
@@ -7511,8 +7494,7 @@ everything comes:
 ggplot(d, aes(x = drums, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-203-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-203-1.png" width="672"  />
 
  
 
@@ -7523,8 +7505,7 @@ and
 ggplot(d, aes(x = weight, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-204-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
 
  
 
@@ -7532,12 +7513,13 @@ or you can even do that trick to put the two plots on facets:
 
 
 ```r
-d %>% pivot_longer(drums:weight, names_to = "xname", values_to = "x") %>% ggplot(aes(x = x, 
-    y = .resid)) + geom_point() + facet_wrap(~xname)
+d %>%
+  pivot_longer(drums:weight, names_to="xname", values_to="x") %>%
+  ggplot(aes(x = x, y = .resid)) + geom_point() +
+  facet_wrap(~xname)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-205-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-205-1.png" width="672"  />
 
  
 
@@ -7548,8 +7530,7 @@ Last, the normal quantile plot:
 ggplot(minutes.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-206-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-206-1.png" width="672"  />
 
  
 
@@ -7613,7 +7594,10 @@ Can we find "similar" numbers of `drums` and
 
 
 ```r
-chemicals %>% filter(between(weight, 8, 11), between(drums, 10, 14))
+chemicals %>% filter(
+  between(weight, 8, 11),
+  between(drums, 10, 14)
+)
 ```
 
 ```
@@ -7629,19 +7613,20 @@ chemicals %>% filter(between(weight, 8, 11), between(drums, 10, 14))
 
 You might not have seen `between` before, but it works the way
 you'd expect.
-\marginnote{weight between 8 and 11, for example,  returning TRUE or FALSE.} Two other shipments with similar numbers of drums and
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">weight between 8 and 11, for example,  returning TRUE or FALSE.</span> Two other shipments with similar numbers of drums and
 total weight took around 90--100 minutes to handle, so the 112 does
 look about 15 minutes too long. This was actually an average-sized shipment:
 
 
 ```r
 library(ggrepel)
-d %>% mutate(my_label = ifelse(.resid > 10, "residual +", "")) %>% ggplot(aes(x = drums, 
-    y = weight, colour = minutes, label = my_label)) + geom_point() + geom_text_repel()
+d %>%
+  mutate(my_label = ifelse(.resid > 10, "residual +", "")) %>%
+  ggplot(aes(x = drums, y = weight, colour = minutes, label = my_label)) +
+  geom_point() + geom_text_repel()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-209-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-209-1.png" width="672"  />
 
  
 
@@ -7664,13 +7649,14 @@ another way to do that:
 
 
 ```r
-d %>% mutate(my_label = ifelse(.resid > 10, "residual +", "")) %>% ggplot(aes(x = drums, 
-    y = weight, colour = minutes, label = my_label)) + geom_point() + geom_text_repel() + 
-    scale_colour_gradient(low = "red", high = "blue")
+d %>%
+  mutate(my_label = ifelse(.resid > 10, "residual +", "")) %>%
+  ggplot(aes(x = drums, y = weight, colour = minutes, label = my_label)) +
+  geom_point() + geom_text_repel() +
+  scale_colour_gradient(low = "red", high = "blue")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-210-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-210-1.png" width="672"  />
 
  
 
@@ -7763,7 +7749,7 @@ salaries
 ##  8   40.7      5.5         30     4  
 ##  9   30.1      3.1          5     5.8
 ## 10   52.9      7.2         47     8.3
-## # ... with 14 more rows
+## # … with 14 more rows
 ```
 
         
@@ -7803,12 +7789,13 @@ one column (and the names of the $x$-variables in another
 column):
 
 ```r
-salaries %>% pivot_longer(-salary, names_to = "xname", values_to = "x") %>% ggplot(aes(x = x, 
-    y = salary)) + geom_point() + facet_wrap(~xname, ncol = 2, scales = "free")
+salaries %>%
+  pivot_longer(-salary, names_to="xname", values_to="x") %>%
+  ggplot(aes(x = x, y = salary)) + geom_point() +
+  facet_wrap(~xname, ncol = 2, scales = "free")
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/ivybridge-1} 
+<img src="12-regression_files/figure-html/ivybridge-1.png" width="672"  />
 
        
 
@@ -7964,14 +7951,14 @@ variables, is to compare the *adjusted* R-squared: this has gone
 down from 90\% to 85\%. The fact that this has gone down *at all*
 is enough to say that taking out `workqual` was a
 mistake.
-\marginnote{Adjusted R-squareds are easier to compare in this  context, since you don't have to make a judgement about whether it has changed substantially, whatever you think substantially means.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Adjusted R-squareds are easier to compare in this  context, since you don't have to make a judgement about whether it has changed substantially, whatever you think substantially means.</span>
 
 Another way of seeing whether a variable has anything to add in a
 regression containing the others is a **partial regression  plot**. 
 We take the residuals from `salaries.2` above and plot
 them against the variable we removed, namely
 `workqual`.
-\marginnote{The residuals have to be the ones from a  regression *not* including the $x$-variable you're testing.} If
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The residuals have to be the ones from a  regression *not* including the $x$-variable you're testing.</span> If
 `workqual` has nothing to add, there will be no pattern; if it
 *does* have something to add, there will be a trend. Like
 this. I use `augment` from `broom`:
@@ -7979,18 +7966,19 @@ this. I use `augment` from `broom`:
 
 ```r
 library(broom)
-salaries.2 %>% augment(salaries) %>% ggplot(aes(x = workqual, y = .resid)) + geom_point()
+salaries.2 %>%
+  augment(salaries) %>%
+  ggplot(aes(x = workqual, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/dartington-1} 
+<img src="12-regression_files/figure-html/dartington-1.png" width="672"  />
 
  
 
 This is a mostly straight upward trend. So we
 need to add a linear term in `workqual` to the
 regression.
-\marginnote{Or not take it out in the first place.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Or not take it out in the first place.</span>
  
 
 (g) Do you think it would be a mistake to take *both* of
@@ -8056,8 +8044,7 @@ vs.\ fitted values:
 ggplot(salaries.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-218-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-218-1.png" width="672"  />
 
     
 
@@ -8074,13 +8061,14 @@ you, run the code a piece at a time to see what it's doing:
 
 
 ```r
-salaries.1 %>% augment(salaries) %>% pivot_longer(workqual:pubsucc, names_to = "xname", 
-    values_to = "x") %>% ggplot(aes(x = x, y = .resid)) + geom_point() + facet_wrap(~xname, 
-    scales = "free", ncol = 2)
+salaries.1 %>%
+  augment(salaries) %>%
+  pivot_longer(workqual:pubsucc, names_to="xname", values_to="x") %>%
+  ggplot(aes(x = x, y = .resid)) + geom_point() +
+  facet_wrap(~xname, scales = "free", ncol = 2)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-219-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-219-1.png" width="672"  />
 
  
 
@@ -8093,8 +8081,7 @@ For (ii), look at a normal quantile plot of the residuals, which is not as diffi
 ggplot(salaries.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-220-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-220-1.png" width="672"  />
 
  
 
@@ -8115,8 +8102,7 @@ ggplot(salaries.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smoo
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-221-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-221-1.png" width="672"  />
 
  
 
@@ -8201,7 +8187,7 @@ gpa
 ##  8     2.36      559      536     2.03     2.24
 ##  9     2.42      552      583     2.81     3.02
 ## 10     3.51      617      591     3.41     3.32
-## # ... with 95 more rows
+## # … with 95 more rows
 ```
 
  
@@ -8224,15 +8210,15 @@ grades are used as an admission criterion to university, so we
 would hope they would have some predictive value.)
 
 ```r
-ggplot(gpa, aes(x = high_GPA, y = univ_GPA)) + geom_point() + geom_smooth()
+ggplot(gpa, aes(x = high_GPA, y = univ_GPA)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-223-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-223-1.png" width="672"  />
 
    
     
@@ -8327,8 +8313,7 @@ ggplot(gpa.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-225-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-225-1.png" width="672"  />
 
  
 
@@ -8343,8 +8328,7 @@ Normal quantile plot of residuals:
 ggplot(gpa.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-226-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-226-1.png" width="672"  />
 
  
 
@@ -8364,8 +8348,7 @@ ggplot(gpa.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-227-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-227-1.png" width="672"  />
 
  
 
@@ -8399,8 +8382,7 @@ library(MASS)
 boxcox(univ_GPA ~ high_GPA, data = gpa)
 ```
 
-
-\includegraphics{12-regression_files/figure-latex/unnamed-chunk-228-1} 
+<img src="12-regression_files/figure-html/unnamed-chunk-228-1.png" width="672"  />
 
  
 
@@ -8408,7 +8390,7 @@ It doesn't. All right, that answers *that* question.
 
 When I loaded `MASS`, I also loaded its `select`
 function,
-\marginnote{That is what that masked message above was  about.} and I might want to use the 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is what that masked message above was  about.</span> and I might want to use the 
 `tidyverse` `select`
 function later, and things could get confused. So let's "unload"
 `MASS` now:
@@ -8519,8 +8501,12 @@ that's the case, the prediction interval for 3.5 should be longer
 
 
 ```r
-gpa %>% summarize(mean = mean(high_GPA), med = median(high_GPA), q1 = quantile(high_GPA, 
-    0.25), q3 = quantile(high_GPA, 0.75))
+gpa %>% summarize(
+  mean = mean(high_GPA),
+  med = median(high_GPA),
+  q1 = quantile(high_GPA, 0.25),
+  q3 = quantile(high_GPA, 0.75)
+)
 ```
 
 ```

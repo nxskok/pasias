@@ -83,7 +83,7 @@ weather.0
 ##  8         8     8     1 Winter   12.4   15.6     14.1 23:50       13:25      
 ##  9         9     9     1 Winter    9.2   18.4     12.9 07:10       14:05      
 ## 10        10    10     1 Winter    8.3   14.8     11   07:55       12:20      
-## # ... with 355 more rows, and 5 more variables: rain <dbl>, ave.wind <dbl>,
+## # … with 355 more rows, and 5 more variables: rain <dbl>, ave.wind <dbl>,
 ## #   gust.wind <dbl>, gust.wind.time <time>, dir.wind <chr>
 ```
 
@@ -93,7 +93,7 @@ There are lots of columns, of which we only want a few:
 
 
 ```r
-(weather <- weather.0 %>% select(l.temp:ave.temp, rain:gust.wind))
+(weather.0 %>% select(l.temp:ave.temp, rain:gust.wind) -> weather)
 ```
 
 ```
@@ -110,7 +110,7 @@ There are lots of columns, of which we only want a few:
 ##  8   12.4   15.6     14.1   1.5      5.9      33.8
 ##  9    9.2   18.4     12.9   0        0.2      16.1
 ## 10    8.3   14.8     11     0        1.4      24.1
-## # ... with 355 more rows
+## # … with 355 more rows
 ```
 
  
@@ -126,7 +126,7 @@ Solution
 This is cleanest, but you may not have seen the idea before:
 
 ```r
-map_df(weather, ~quantile(.))
+map_df(weather, ~ quantile(.))
 ```
 
 ```
@@ -156,9 +156,13 @@ the quantiles for each variable:
 
 
 ```r
-weather %>% pivot_longer(everything(), names_to = "xname", values_to = "x") %>% nest(-xname) %>% 
-    mutate(q = map(data, ~enframe(quantile(.$x)))) %>% unnest(q) %>% pivot_wider(names_from = name, 
-    values_from = value) %>% select(-data)
+weather %>%
+  pivot_longer(everything(), names_to="xname", values_to="x") %>%
+  nest(-xname) %>%
+  mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
+  unnest(q) %>%
+  pivot_wider(names_from=name, values_from=value) %>%
+  select(-data)
 ```
 
 ```
@@ -250,8 +254,7 @@ Solution
 ggscreeplot(weather.1)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/adskjheuya-1} 
+<img src="24-pcfa_files/figure-html/adskjheuya-1.png" width="672"  />
 
      
 
@@ -366,8 +369,7 @@ have to go back to the base-graphics version, which goes a bit like this:
 biplot(weather.2$scores, weather.2$loadings)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-12-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -392,7 +394,10 @@ want (the first three):
       
 
 ```r
-d <- as_tibble(weather.1$scores) %>% select(1:3) %>% bind_cols(weather) %>% mutate(day = row_number())
+as_tibble(weather.1$scores) %>%
+  select(1:3) %>%
+  bind_cols(weather) %>%
+  mutate(day = row_number()) -> d
 d %>% print(n = 20)
 ```
 
@@ -420,7 +425,7 @@ d %>% print(n = 20)
 ## 18 -1.95  -1.82     1.28       7.5   10.9      9    17        1.4      24.1    18
 ## 19 -2.13  -1.60    -0.293      6.4   11.4      8.7   2.5      3.3      32.2    19
 ## 20 -1.29  -2.62     0.448      6.9   12.2      9.2   2.8      1.1      17.7    20
-## # ... with 345 more rows
+## # … with 345 more rows
 ```
 
       
@@ -454,7 +459,7 @@ d %>% arrange(Comp.1)
 ##  8  -3.62  2.47  -0.992    7.7   13.9     11.3  20.1     10.3      66       4
 ##  9  -3.44  0.576 -2.10     5.7   11.4      8.4   0        9.8      51.5   363
 ## 10  -3.36  2.19  -0.705    9.1   13       11.3  20.3      9.3      62.8    38
-## # ... with 355 more rows
+## # … with 355 more rows
 ```
 
        
@@ -491,7 +496,7 @@ d %>% arrange(desc(Comp.2))
 ##  8  0.0301   3.49 -0.0846   18.5   22.3     20.3  22.9     10.3      43.5   260
 ##  9 -0.745    3.45  1.99     15.9   21.4     19.9  46.2      7.7      45.1   281
 ## 10 -0.105    3.20 -0.493    17.9   21.8     19.5  16.5      9.3      49.9   290
-## # ... with 355 more rows
+## # … with 355 more rows
 ```
 
        
@@ -525,7 +530,7 @@ d %>% arrange(desc(Comp.3))
 ##  8 -4.48    2.11    1.90    6.8   11.5      8.9  50.5      6.8      61.2    34
 ##  9 -1.77    0.693   1.72   10.7   15.6     13    32.8      4        38.6   312
 ## 10 -4.89    3.50    1.64    6.5   12.9     10.3  57.4     10.3      66      35
-## # ... with 355 more rows
+## # … with 355 more rows
 ```
 
  
@@ -551,8 +556,7 @@ year, which was called `day.count`:
 ggbiplot(weather.1, labels = weather.0$day.count, labels.size = 2)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-18-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
      
 
@@ -660,7 +664,7 @@ weather %>% slice(47)
 
 This is predominantly low on temperature. In fact, it is kind of low
 on wind and rain too.
-\marginnote{If you ignore the wind gust, anyway.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you ignore the wind gust, anyway.</span>
 This makes sense, because not only is it at the "wrong" end of the
 temperature arrows, it is kind of at the wrong end of the wind/rain
 arrows as well.
@@ -670,7 +674,9 @@ let's see if we can do that here as well:
 
 
 ```r
-map_df(weather, ~percent_rank(.)) %>% mutate(day = row_number()) %>% slice(c(37, 211, 265, 47))
+map_df(weather, ~percent_rank(.)) %>%
+  mutate(day=row_number()) %>% 
+  slice(c(37, 211, 265, 47))
 ```
 
 ```
@@ -797,7 +803,7 @@ air
 ##  8     5              72     6     4    21    14     4
 ##  9     7              82     5     1    11    11     3
 ## 10     8              64     5     2    13     9     4
-## # ... with 32 more rows
+## # … with 32 more rows
 ```
 
      
@@ -818,7 +824,7 @@ Solution
 Like this (the cleanest):
 
 ```r
-air %>% map_df(~quantile(.))
+air %>% map_df(~ quantile(.))
 ```
 
 ```
@@ -846,9 +852,13 @@ Or, with some more work, this:
 
 
 ```r
-air %>% pivot_longer(everything(), names_to = "xname", values_to = "x") %>% nest(-xname) %>% mutate(q = map(data, 
-    ~enframe(quantile(.$x)))) %>% unnest(q) %>% pivot_wider(names_from = name, values_from = value) %>% 
-    select(-data)
+air %>%
+  pivot_longer(everything(), names_to="xname", values_to="x") %>% 
+  nest(-xname) %>%
+  mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
+  unnest(q) %>%
+  pivot_wider(names_from=name, values_from=value) %>% 
+  select(-data)
 ```
 
 ```
@@ -911,8 +921,7 @@ package `ggbiplot`:
 ggscreeplot(air.1)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-28-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
      
 
@@ -1049,7 +1058,8 @@ it. (The component scores are seven columns, so
 `bind_cols` won't do it unless you are careful.):
 
 ```r
-d <- cbind(air, air.1$scores) %>% mutate(row = row_number())
+cbind(air, air.1$scores) %>%  
+  mutate(row = row_number()) -> d
 head(d)
 ```
 
@@ -1076,13 +1086,16 @@ This is probably the easiest way, but you see that there is a mixture
 of base R and Tidyverse. The result is actually a base R `data.frame`, so displaying it will display *all* of it, hence my use of `head`.
 If you want to do it the all-Tidyverse
 way
-\marginnote{There really ought to be a radio station *CTDY: All Tidyverse, All The Time*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There really ought to be a radio station *CTDY: All Tidyverse, All The Time*.</span>
 then you need to bear in mind that `bind_cols` *only* 
 accepts vectors or data frames, not matrices, so a bit of care is needed first:
 
 
 ```r
-dd <- air.1$scores %>% as_tibble() %>% bind_cols(air) %>% mutate(row = row_number())
+air.1$scores %>%
+  as_tibble() %>%
+  bind_cols(air) %>%
+  mutate(row = row_number()) -> dd
 dd
 ```
 
@@ -1100,7 +1113,7 @@ dd
 ##  8 -3.98    0.926 -0.379 -0.619 -0.810  -1.29   0.735     5              72     6     4    21    14
 ##  9 -0.152  -0.974  0.337 -0.145  0.139  -0.681 -0.539     7              82     5     1    11    11
 ## 10 -0.784   0.939  0.985 -0.632 -0.219  -0.303 -0.375     8              64     5     2    13     9
-## # ... with 32 more rows, and 2 more variables: HC <dbl>, row <int>
+## # … with 32 more rows, and 2 more variables: HC <dbl>, row <int>
 ```
 
  
@@ -1144,7 +1157,7 @@ It's row 8.
 We said earlier that component 1 depends negatively on carbon monoxide
 and nitrogen dioxide, so that an observation that is *low* on
 component 1 should be *high* on these things.
-\marginnote{You might  have said that component 1 depended on other things as well, in  which case you ought to consider whether observation 8 is, as  appropriate, high or low on these as well.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You might  have said that component 1 depended on other things as well, in  which case you ought to consider whether observation 8 is, as  appropriate, high or low on these as well.</span>
 
 So are these values high or low? That was the reason for having you
 make the five-number summary <a href="#part:fivenum">here</a>. For
@@ -1180,7 +1193,7 @@ and for convenience, we'll grab the quantiles again:
 
 
 ```r
-air %>% map_df(~quantile(.))
+air %>% map_df(~ quantile(.))
 ```
 
 ```
@@ -1214,7 +1227,7 @@ observation come. Another way to approach this is to calculate
 
 
 ```r
-pct_rank <- air %>% mutate_all(~percent_rank(.))
+air %>% mutate_all(~ percent_rank(.)) -> pct_rank
 pct_rank
 ```
 
@@ -1232,7 +1245,7 @@ pct_rank
 ##  8 0               0.390 0.829 0.878 1     0.829 0.780
 ##  9 0.317           0.659 0.610 0     0.610 0.707 0.171
 ## 10 0.488           0.195 0.610 0.317 0.829 0.512 0.780
-## # ... with 32 more rows
+## # … with 32 more rows
 ```
 
  
@@ -1285,8 +1298,7 @@ Solution
 ggbiplot(air.1, labels = d$row)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-39-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
  
 
@@ -1360,8 +1372,7 @@ the axes now:
 biplot(air.2$scores, air.2$loadings)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-41-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
  
 
@@ -1452,7 +1463,7 @@ If you wanted to, you could obtain the factor scores for the 3-factor
 solution, and plot them on a three-dimensional plot using
 `rgl`, rotating them to see the structure. A three dimensional
 "biplot"
-\marginnote{A three-dimensional biplot ought to be called a *triplot*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">A three-dimensional biplot ought to be called a *triplot*.</span> 
 would also be a cool thing to look at.
 
 
@@ -1489,7 +1500,7 @@ Solution
 
 
 I saved my data into `cov5.txt`,
-\marginnote{Not to be confused    with *covfefe*.} delimited by single spaces, so:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not to be confused    with *covfefe*.</span> delimited by single spaces, so:
 
 ```r
 corr <- read_delim("cov5.txt", " ", col_names = F)
@@ -1600,13 +1611,12 @@ Solution
 ggscreeplot(corr.1)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/sdljhljsahja-1} 
+<img src="24-pcfa_files/figure-html/sdljhljsahja-1.png" width="672"  />
 
      
 
 There is kind of an elbow at 3, which would suggest two components/factors.
-\marginnote{There is also kind of an elbow at 4, which would suggest three factors, but that's really too many with only 5 variables. That wouldn't be much of a *reduction* in the number of variables, which is what principal components is trying to achieve.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There is also kind of an elbow at 4, which would suggest three factors, but that's really too many with only 5 variables. That wouldn't be much of a *reduction* in the number of variables, which is what principal components is trying to achieve.</span>
 
 You can also use the eigenvalue-bigger-than-1 thing: 
 
@@ -1757,7 +1767,7 @@ corr.list$n.obs
 and logically this is because, to R, a data frame *is* a special
 kind of a list, so anything that works for a list also works for a
 data frame, plus some extra things besides.
-\marginnote{In computer  science terms, a data frame is said to **inherit** from a list: it is a list plus extra stuff.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In computer  science terms, a data frame is said to **inherit** from a list: it is a list plus extra stuff.</span> 
 
 The same idea applies to extracting things from the output of a
 regression (with `lm`) or something like a `t.test`: the
@@ -2028,7 +2038,7 @@ pers
 ##  8     8      5      2      4      2      4      1      4      3      3      5      4      1      4
 ##  9     9      5      1      4      3      2      1      4      4      2      3      4      1      4
 ## 10    10      4      1      5      1      4      3      4      1      5      4      5      1      5
-## # ... with 449 more rows, and 31 more variables: PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
+## # … with 449 more rows, and 31 more variables: PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
 ## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
 ## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
 ## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>,
@@ -2054,7 +2064,7 @@ doing something like this:
 
 
 ```r
-pers %>% pivot_longer(-id, names_to = "item", values_to = "response")
+pers %>% pivot_longer(-id, names_to="item", values_to="response")
 ```
 
 ```
@@ -2071,7 +2081,7 @@ pers %>% pivot_longer(-id, names_to = "item", values_to = "response")
 ##  8     1 PERS08        1
 ##  9     1 PERS09        2
 ## 10     1 PERS10        3
-## # ... with 20,186 more rows
+## # … with 20,186 more rows
 ```
 
  
@@ -2083,16 +2093,16 @@ charts of responses facetted by item:
 
 
 ```r
-pers %>% pivot_longer(-id, names_to = "item", values_to = "response") %>% ggplot(aes(x = response)) + 
-    geom_bar() + facet_wrap(~item)
+pers %>%
+  pivot_longer(-id, names_to="item", values_to="response") %>%
+  ggplot(aes(x = response)) + geom_bar() + facet_wrap(~item)
 ```
 
 ```
 ## Warning: Removed 371 rows containing non-finite values (stat_count).
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/unnamed-chunk-60-1} 
+<img src="24-pcfa_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
 
  
 
@@ -2130,7 +2140,7 @@ There are.
 To remove them, just this:
 
 ```r
-pers.ok <- pers %>% drop_na()
+pers %>% drop_na() -> pers.ok
 ```
 
        
@@ -2160,7 +2170,8 @@ That gives me an idea, though.
 
 
 ```r
-pers %>% pivot_longer(-id, names_to = "item", values_to = "rating")
+pers %>%
+  pivot_longer(-id, names_to="item", values_to="rating")
 ```
 
 ```
@@ -2177,7 +2188,7 @@ pers %>% pivot_longer(-id, names_to = "item", values_to = "rating")
 ##  8     1 PERS08      1
 ##  9     1 PERS09      2
 ## 10     1 PERS10      3
-## # ... with 20,186 more rows
+## # … with 20,186 more rows
 ```
 
  
@@ -2193,8 +2204,11 @@ of thing, adding to my pipeline:
 
 
 ```r
-pers %>% pivot_longer(-id, names_to = "item", values_to = "rating") %>% group_by(id) %>% summarize(m = mean(rating)) %>% 
-    filter(is.na(m))
+pers %>%
+  pivot_longer(-id, names_to="item", values_to="rating") %>% 
+  group_by(id) %>%
+  summarize(m = mean(rating)) %>%
+  filter(is.na(m))
 ```
 
 ```
@@ -2215,7 +2229,7 @@ pers %>% pivot_longer(-id, names_to = "item", values_to = "rating") %>% group_by
 ##  8    84    NA
 ##  9    96    NA
 ## 10   159    NA
-## # ... with 16 more rows
+## # … with 16 more rows
 ```
 
 This is different from `drop_na`, which would remove any rows (of the long data frame) that have a missing response. This, though, is exactly what we *don't* want, since we are trying to keep track of the subjects that have missing values.
@@ -2230,8 +2244,11 @@ subject has any missing values and false otherwise:
 
 
 ```r
-pers.hm <- pers %>% pivot_longer(-id, names_to = "item", values_to = "rating") %>% group_by(id) %>% summarize(m = mean(rating)) %>% 
-    mutate(has_missing = is.na(m))
+pers %>%
+  pivot_longer(-id, names_to="item", values_to="rating") %>% 
+  group_by(id) %>%
+  summarize(m = mean(rating)) %>%
+  mutate(has_missing = is.na(m)) -> pers.hm
 ```
 
 ```
@@ -2239,7 +2256,7 @@ pers.hm <- pers %>% pivot_longer(-id, names_to = "item", values_to = "rating") %
 ```
 
 ```r
-pers.hm
+pers.hm 
 ```
 
 ```
@@ -2256,7 +2273,7 @@ pers.hm
 ##  8     8  3.18 FALSE      
 ##  9     9  3.34 FALSE      
 ## 10    10  3.18 FALSE      
-## # ... with 449 more rows
+## # … with 449 more rows
 ```
 
  
@@ -2290,7 +2307,7 @@ pers %>% bind_cols(pers.hm)
 ##  8      8      5      2      4      2      4      1      4      3      3      5      4      1      4
 ##  9      9      5      1      4      3      2      1      4      4      2      3      4      1      4
 ## 10     10      4      1      5      1      4      3      4      1      5      4      5      1      5
-## # ... with 449 more rows, and 34 more variables: PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
+## # … with 449 more rows, and 34 more variables: PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
 ## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
 ## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
 ## #   PERS29 <dbl>, PERS30 <dbl>, PERS31 <dbl>, PERS32 <dbl>, PERS33 <dbl>, PERS34 <dbl>,
@@ -2318,12 +2335,13 @@ use only the columns with actual data in them: that is,
 `PERS01` through `PERS44`:
 
 ```r
-pers.1 <- pers.ok %>% select(starts_with("PERS")) %>% princomp(cor = T)
+pers.1 <- pers.ok %>%
+  select(starts_with("PERS")) %>%
+  princomp(cor = T)
 ggscreeplot(pers.1)
 ```
 
-
-\includegraphics{24-pcfa_files/figure-latex/saljhsajd-1} 
+<img src="24-pcfa_files/figure-html/saljhsajd-1.png" width="672"  />
 
        
 
@@ -2401,7 +2419,9 @@ looked at this. Don't forget to grab only the appropriate
 columns from `pers.ok`:
 
 ```r
-pers.ok.1 <- pers.ok %>% select(starts_with("PERS")) %>% factanal(5, scores = "r")
+pers.ok.1 <- pers.ok %>%
+  select(starts_with("PERS")) %>%
+  factanal(5, scores = "r")
 ```
 
        
@@ -2544,7 +2564,9 @@ I wonder whether 6 factors is different?
 
 
 ```r
-pers.ok.2 <- pers.ok %>% select(starts_with("PERS")) %>% factanal(6, scores = "r")
+pers.ok.2 <- pers.ok %>%
+  select(starts_with("PERS")) %>%
+  factanal(6, scores = "r")
 pers.ok.2$loadings
 ```
 
@@ -2623,7 +2645,7 @@ Solution
 
 For this, we need the factor scores obtained in part
 (<a href="#part:score">here</a>).
-\marginnote{There are two types of scores here:        a person's scores on the psychological test, 1 through 5, and        their factor scores, which are decimal numbers centred at        zero. Try not to get these confused.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are two types of scores here:        a person's scores on the psychological test, 1 through 5, and        their factor scores, which are decimal numbers centred at        zero. Try not to get these confused.</span>
 I'm thinking that I will create a data frame
 with the original data (with the missing values removed) and the
 factor scores together, and then look in there. This will have a
@@ -2633,7 +2655,9 @@ This is based on my 5-factor solution. I'm adding a column
 missing data) we are looking at:
 
 ```r
-scores.1 <- as_tibble(pers.ok.1$scores) %>% bind_cols(pers.ok) %>% mutate(id = row_number())
+scores.1 <- as_tibble(pers.ok.1$scores) %>%
+  bind_cols(pers.ok) %>%
+  mutate(id = row_number())
 scores.1
 ```
 
@@ -2651,7 +2675,7 @@ scores.1
 ##  8 -0.589    0.747  -0.257   1.18  -0.517      8      5      2      4      2      4      1      4
 ##  9 -0.836    1.02    0.620   1.36  -0.705      9      5      1      4      3      2      1      4
 ## 10  0.984    0.298  -1.06    0.681 -0.553     10      4      1      5      1      4      3      4
-## # ... with 423 more rows, and 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## # … with 423 more rows, and 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
 ## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
 ## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
 ## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
@@ -2682,7 +2706,7 @@ scores.1 %>% filter(Factor1 == max(Factor1))
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07
 ##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1    1.70   -2.14   0.471  -0.525   0.681   231      1      4      5      4      4      5      5
-## # ... with 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
+## # … with 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
 ## #   PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>,
 ## #   PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>,
 ## #   PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>,
@@ -2709,7 +2733,7 @@ scores.1 %>% arrange(Factor1) %>% print(n = 5)
 ## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3      2
 ## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3      4
 ## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3      5
-## # ... with 428 more rows, and 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## # … with 428 more rows, and 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
 ## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
 ## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
 ## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
@@ -2732,7 +2756,7 @@ scores.1 %>% filter(abs(Factor1) == max(abs(Factor1)))
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07
 ##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1      3
-## # ... with 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
+## # … with 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
 ## #   PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>,
 ## #   PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>,
 ## #   PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>,
@@ -2750,7 +2774,9 @@ values in it and look at that:
 
 
 ```r
-scores.1 %>% mutate(abso = abs(Factor1)) %>% filter(abso == max(abso))
+scores.1 %>%
+  mutate(abso = abs(Factor1)) %>%
+  filter(abso == max(abso))
 ```
 
 ```
@@ -2758,7 +2784,7 @@ scores.1 %>% mutate(abso = abs(Factor1)) %>% filter(abso == max(abso))
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07
 ##     <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <int>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 ## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1      3
-## # ... with 38 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
+## # … with 38 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>, PERS11 <dbl>, PERS12 <dbl>,
 ## #   PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>, PERS17 <dbl>, PERS18 <dbl>,
 ## #   PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>, PERS23 <dbl>, PERS24 <dbl>,
 ## #   PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>, PERS29 <dbl>, PERS30 <dbl>,
@@ -2786,7 +2812,7 @@ scores.1 %>% arrange(desc(abs(Factor1))) %>% print(n = 5)
 ## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3      2
 ## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3      4
 ## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3      5
-## # ... with 428 more rows, and 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
+## # … with 428 more rows, and 37 more variables: PERS08 <dbl>, PERS09 <dbl>, PERS10 <dbl>,
 ## #   PERS11 <dbl>, PERS12 <dbl>, PERS13 <dbl>, PERS14 <dbl>, PERS15 <dbl>, PERS16 <dbl>,
 ## #   PERS17 <dbl>, PERS18 <dbl>, PERS19 <dbl>, PERS20 <dbl>, PERS21 <dbl>, PERS22 <dbl>,
 ## #   PERS23 <dbl>, PERS24 <dbl>, PERS25 <dbl>, PERS26 <dbl>, PERS27 <dbl>, PERS28 <dbl>,
@@ -2816,8 +2842,11 @@ ones have positive loadings and the last three have negative loadings:
 
 ```r
 f1 <- c(3, 13, 28, 33, 38, 8, 18, 23, 43)
-scores.1 %>% mutate(abso = abs(Factor1)) %>% filter(abso == max(abso)) %>% select(id, Factor1, num_range("PERS", 
-    f1, width = 2)) %>% print(width = Inf)
+scores.1 %>%
+  mutate(abso = abs(Factor1)) %>%
+  filter(abso == max(abso)) %>%
+  select(id, Factor1, num_range("PERS", f1, width = 2)) %>%
+  print(width = Inf)
 ```
 
 ```
@@ -2851,13 +2880,16 @@ Having struggled through that, factors 2 and 3 are repeats of
 this. The high loaders on factor 2 are the ones shown in `f2`
 below, with the first five loading positively and the last three
 negatively.
-\marginnote{I think the last four items in the entire survey  are different; otherwise the total number of items would be a  multiple of 5.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I think the last four items in the entire survey  are different; otherwise the total number of items would be a  multiple of 5.</span>
 
 
 ```r
 f2 <- c(1, 11, 16, 26, 36, 6, 21, 31)
-scores.1 %>% mutate(abso = abs(Factor2)) %>% filter(abso == max(abso)) %>% select(id, Factor2, num_range("PERS", 
-    f2, width = 2)) %>% print(width = Inf)
+scores.1 %>%
+  mutate(abso = abs(Factor2)) %>%
+  filter(abso == max(abso)) %>%
+  select(id, Factor2, num_range("PERS", f2, width = 2)) %>%
+  print(width = Inf)
 ```
 
 ```
@@ -2885,8 +2917,11 @@ this is:
 
 ```r
 f3 <- c(4, 14, 19, 29, 39, 9, 24, 34)
-scores.1 %>% mutate(abso = abs(Factor3)) %>% filter(abso == max(abso)) %>% select(id, Factor3, num_range("PERS", 
-    f3, width = 2)) %>% print(width = Inf)
+scores.1 %>%
+  mutate(abso = abs(Factor3)) %>%
+  filter(abso == max(abso)) %>%
+  select(id, Factor3, num_range("PERS", f3, width = 2)) %>%
+  print(width = Inf)
 ```
 
 ```

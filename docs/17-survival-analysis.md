@@ -16,9 +16,9 @@ library(survminer)
 
  The Worcester survey was a long-term study of
 all myocardial-infarction
-\marginnote{Heart attack.} victims admitted to hospitals in the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Heart attack.</span> victims admitted to hospitals in the
 Worcester, Massachusetts area.
-\marginnote{Worcester is pronounced, by locals, *Woo-stuh*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Worcester is pronounced, by locals, *Woo-stuh*.</span> 
 The data have been well studied, and can be found in
 the file [link](http://www.utsc.utoronto.ca/~butler/d29/whas100.csv).
 
@@ -97,7 +97,7 @@ whas100
 ##  8     8     8 11/15/1994 11/24/2000    56   2201     1    81      1  28.3
 ##  9     9     9 8/18/1995  2/23/1996      5    189     1    76      0  27.1
 ## 10    10    10 7/22/1995  12/31/2002     9   2719     0    40      0  21.8
-## # ... with 90 more rows
+## # … with 90 more rows
 ```
 
      
@@ -235,12 +235,12 @@ drop1(whas100.1, test = "Chisq")
      
 
 This is here equivalent to
-\marginnote{Not exactly the same as that output, because it  is doing a test that would be the same if you had an infinitely  large sample, but is slightly different with an ordinary finite number of observations.} the output 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not exactly the same as that output, because it  is doing a test that would be the same if you had an infinitely  large sample, but is slightly different with an ordinary finite number of observations.</span> the output 
 from `summary`, but where it
 scores is if you have a categorical explanatory variable like
 "treatment" with more than two levels: `drop1` will tell you
 about keeping or dropping it as a whole.
-\marginnote{Our categorical  variable *gender* has only two levels.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Our categorical  variable *gender* has only two levels.</span>
 
 If you prefer: 
 
@@ -345,7 +345,9 @@ or
 
 
 ```r
-whas100 %>% select(age, bmi) %>% summary()
+whas100 %>%
+  select(age, bmi) %>%
+  summary()
 ```
 
 ```
@@ -363,7 +365,10 @@ Or, pure tidyverse: use `summarize_all`, which summarizes all the columns (after
 
 
 ```r
-whas100 %>% select(age, bmi) %>% summarize_all(~list(quantile(.))) %>% unnest()
+whas100 %>%
+  select(age, bmi) %>%
+  summarize_all(~ list(quantile(.))) %>%
+  unnest()
 ```
 
 ```
@@ -498,8 +503,7 @@ This is actually easy once you work out what to do:
 ggsurvplot(pp2, conf.int = F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-16-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
  
 
@@ -592,8 +596,7 @@ ggcoxdiagnostics(whas100.2) + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-18-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
      
 
@@ -657,8 +660,7 @@ ggcoxdiagnostics(whas100.3) + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-20-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
  
 
@@ -712,8 +714,7 @@ And then the plot:
 ggsurvplot(pp3, conf.int = F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-23-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
  
 
@@ -835,7 +836,7 @@ drugusers
 ##  8     8     8    27       2     1     0    22      1     3
 ##  9     9     9    40       3     1     0   210      1     2
 ## 10    10    10    36       7     1     0   184      1     2
-## # ... with 618 more rows
+## # … with 618 more rows
 ```
 
  
@@ -855,7 +856,7 @@ Solution
 
 First off, `summary` is a quick way to show how many missing
 values there are:
-\marginnote{It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using *mutate-if*. However, we don't have any text  columns here, so what we do here is good for this data set.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using *mutate-if*. However, we don't have any text  columns here, so what we do here is good for this data set.</span>
 
 ```r
 summary(drugusers)
@@ -897,7 +898,7 @@ Following the instructions, and saving back into the original dataframe:
 
 
 ```r
-drugusers <- drugusers %>% drop_na()
+drugusers %>% drop_na() -> drugusers
 ```
 
  
@@ -982,12 +983,19 @@ Most of them have only two levels, so it doesn't matter whether
 we make them categorical or leave them as numbers, but for
 `herco` it matters. Let's give them all sensible values,
 mostly with `ifelse`,
-\marginnote{Case-when is much clearer than using nested if-elses when you have three or more categories, as for *herco*.} thus:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Case-when is much clearer than using nested if-elses when you have three or more categories, as for *herco*.</span> thus:
 
 ```r
-drugusers <- drugusers %>% mutate(treat = ifelse(treat == 0, "short", "long"), site = ifelse(site == 
-    0, "A", "B"), censor = ifelse(censor == 1, "returned", "no-return"), herco = case_when(herco == 
-    1 ~ "both", herco == 2 ~ "one", herco == 3 ~ "neither"))
+drugusers %>% mutate(
+  treat = ifelse(treat == 0, "short", "long"),
+  site = ifelse(site == 0, "A", "B"),
+  censor = ifelse(censor == 1, "returned", "no-return"),
+  herco = case_when(
+    herco == 1 ~ "both",
+    herco == 2 ~ "one",
+    herco == 3 ~ "neither"
+  )
+) -> drugusers
 ```
 
        
@@ -1013,7 +1021,7 @@ drugusers
 ##  8     8     8    27       2 long  A        22 returned  neither
 ##  9     9     9    40       3 long  A       210 returned  one    
 ## 10    10    10    36       7 long  A       184 returned  one    
-## # ... with 600 more rows
+## # … with 600 more rows
 ```
 
  
@@ -1034,7 +1042,7 @@ This is `Surv` in package `survival`. The response
 variable needs to encode two things: the time until the event of
 interest (return to drug use) and whether or not that event
 happened for each patient.
-\marginnote{Some people define the response variable right inside the *coxph*, in the same way as putting something like *log(y)* as a response in an *lm*, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Some people define the response variable right inside the *coxph*, in the same way as putting something like *log(y)* as a response in an *lm*, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.</span>
 In this case, that is
 `censor="returned"`. 
 
@@ -1104,8 +1112,7 @@ ends, and studies of this kind carry on for years:
 ggplot(drugusers, aes(x = censor, y = time)) + geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-35-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
  
 Yep. The smallest time for a censored observation would be an upper outlier
@@ -1121,11 +1128,11 @@ non-censored observations. Then, this works:
 
 
 ```r
-ggplot(drugusers, aes(x = treat, y = time, colour = censor)) + geom_boxplot()
+ggplot(drugusers, aes(x = treat, y = time, colour = censor)) +
+  geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-36-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
  
 
@@ -1262,7 +1269,7 @@ Solution
 
 `site` and `herco` are the two variables to come
 out.
-\marginnote{The researchers were probably relieved that there        was not quite a significant effect of *site*.} I like
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The researchers were probably relieved that there        was not quite a significant effect of *site*.</span> I like
 `update`, but there is no
 problem about copying-pasting your `coxph` and taking out
 what you no longer need.
@@ -1297,7 +1304,7 @@ anova(drugusers.2, drugusers.1)
 
 There is no significant difference between these two 
 models,
-\marginnote{Not at the 0.05 level, anyway.} so we can go with the 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Not at the 0.05 level, anyway.</span> so we can go with the 
 smaller, simpler one
 (with just `age`, `ndrugtx` and `treat`).
     
@@ -1460,8 +1467,7 @@ This:
 ggsurvplot(pp, conf.int = F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-45-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
    
 
@@ -1583,7 +1589,7 @@ The variables are:
 * `logbun`: log of BUN test score (BUN test is a test of
 kidney function, not to be confused with cha siu
 bao
-\marginnote{Barbecued pork in a bun. A staple of Chinese dim sum and  Chinese bakeries, such as Ding Dong bakery on Spadina.}).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Barbecued pork in a bun. A staple of Chinese dim sum and  Chinese bakeries, such as Ding Dong bakery on Spadina.</span>).
 
 * `hgb`: hemoglobin (at diagnosis).
 
@@ -1663,7 +1669,7 @@ myeloma
 ##  8  5          1   1.68   6.5        1    74   3.73     0   1.73       5     9
 ##  9  6          1   1.36   9          1    77   3.54     0   1.46       1     8
 ## 10  6          1   2.11  10.2        0    70   3.54     1   1.36       1     8
-## # ... with 55 more rows
+## # … with 55 more rows
 ```
 
      
@@ -1684,23 +1690,23 @@ glimpse(myeloma)
 ```
 ## Rows: 65
 ## Columns: 11
-## $ time     <dbl> 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00, 6.00...
-## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
-## $ logbun   <dbl> 2.2175, 1.9395, 1.5185, 1.7482, 1.3010, 1.5441, 2.2355, 1....
-## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5.1, 6.7, 10.1, 6.5, 9.0, 10.2, 9.7,...
-## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1...
-## $ age      <dbl> 67, 38, 81, 75, 57, 46, 50, 74, 77, 70, 60, 67, 48, 61, 53...
-## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751, 3.8062, 3.7243, 4.4757, 4.9542, 3....
-## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0...
-## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000, 1.2553, 2.0000, 1.9345, 1.6628, 1....
-## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0, 1, 1...
-## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13, 12, ...
+## $ time     <dbl> 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00, 6.00, …
+## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ logbun   <dbl> 2.2175, 1.9395, 1.5185, 1.7482, 1.3010, 1.5441, 2.2355, 1.68…
+## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5.1, 6.7, 10.1, 6.5, 9.0, 10.2, 9.7, 1…
+## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, …
+## $ age      <dbl> 67, 38, 81, 75, 57, 46, 50, 74, 77, 70, 60, 67, 48, 61, 53, …
+## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751, 3.8062, 3.7243, 4.4757, 4.9542, 3.73…
+## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, …
+## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000, 1.2553, 2.0000, 1.9345, 1.6628, 1.73…
+## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0, 1, 1, …
+## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13, 12, 10…
 ```
 
  
 
 which gives a bit more of a picture of the values.
-\marginnote{Don't  confuse this with *glance* from *broom*, which gives a one-line summary of a *model*, containing things like R-squared and a test for the overall model significance.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Don't  confuse this with *glance* from *broom*, which gives a one-line summary of a *model*, containing things like R-squared and a test for the overall model significance.</span> 
 Or if you were
 serious about checking, you could do
 
@@ -2159,12 +2165,16 @@ myeloma %>% select(logbun, hgb) %>% summary()
 
 The obvious `tidyverse` way is actually a bit
 inelegant, because you have to calculate two things for two variables:
-\marginnote{Because *summarize* will only allow you to have a single-number answer.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Because *summarize* will only allow you to have a single-number answer.</span> 
 
 
 ```r
-myeloma %>% summarize(logbun.q1 = quantile(logbun, 0.25), logbun.q3 = quantile(logbun, 
-    0.75), hgb.q1 = quantile(hgb, 0.25), hgb.q3 = quantile(hgb, 0.75))
+myeloma %>% summarize(
+  logbun.q1 = quantile(logbun, 0.25),
+  logbun.q3 = quantile(logbun, 0.75),
+  hgb.q1 = quantile(hgb, 0.25),
+  hgb.q3 = quantile(hgb, 0.75)
+)
 ```
 
 ```
@@ -2181,7 +2191,9 @@ There is a `tidyverse` way to obtain the quartiles of
 loaded with the `tidyverse`:
 
 ```r
-myeloma %>% select(logbun, hgb) %>% map(quantile, c(0.25, 0.75))
+myeloma %>%
+  select(logbun, hgb) %>%
+  map(quantile, c(0.25, 0.75))
 ```
 
 ```
@@ -2200,7 +2212,9 @@ This is what R calls a `list`. It would look nicer as a data
 frame. There is a way to get that:
 
 ```r
-myeloma %>% select(logbun, hgb) %>% map_df(~quantile(., c(0.25, 0.75)))
+myeloma %>%
+  select(logbun, hgb) %>%
+  map_df(~ quantile(., c(0.25, 0.75)))
 ```
 
 ```
@@ -2215,7 +2229,7 @@ myeloma %>% select(logbun, hgb) %>% map_df(~quantile(., c(0.25, 0.75)))
 The `25%` and `75%` have gone missing. They were
 actually the `names` of each of the components of the list,
 which I don't think we easily have access to.
-\marginnote{The way, as we  have seen elsewhere, is to use *tidy(quantile)* or *enframe(quantile)*, which  produce a two-column data frame with the percentiles shown.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The way, as we  have seen elsewhere, is to use *tidy(quantile)* or *enframe(quantile)*, which  produce a two-column data frame with the percentiles shown.</span>
     
 
 
@@ -2294,8 +2308,7 @@ This is easier than you think: it's just `ggsurvplot` from `survminer`:
 ggsurvplot(s, conf.int = F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-64-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-64-1.png" width="672"  />
 
      
     
@@ -2330,7 +2343,7 @@ new
 
 The best survival curve is the top-right green one. This is
 stratum
-\marginnote{Strata is plural; the singular is *stratum*. Like  data and datum.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Strata is plural; the singular is *stratum*. Like  data and datum.</span> 
 2, from the legend at the top. In `new`,
 this goes with a low value of `logbun` and a *high* value
 of `hgb`. 
@@ -2438,7 +2451,7 @@ ovarian %>% as.tibble()
 ##  8    475      1  59.9        2     2       2
 ##  9    477      0  64.2        2     1       1
 ## 10    563      1  55.2        1     2       2
-## # ... with 16 more rows
+## # … with 16 more rows
 ```
 
  
@@ -2550,7 +2563,7 @@ print.default(y)
  
 
 The `attr(,"class")` thing at the bottom of this says that `y` is actually  a `Surv` object, which is how it knows to display as it does, as 26 values some of which have plusses.
-\marginnote{Internally, printing a *Surv* thing calls the method *print.Surv*, which is defined in the *survival* package.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Internally, printing a *Surv* thing calls the method *print.Surv*, which is defined in the *survival* package.</span>
 
 The way R works out the length of something is its total number of
 entries, which for this matrix is $26 \times 2=52$. The only things
@@ -2561,7 +2574,7 @@ or length 1 (in which case it is repeated 26 times).
 With some cajoling, you can get this into a data frame, but with more
 cajoling than seems necessary. It's much easier to leave it as a
 separate thing outside a data frame.
-\marginnote{In some respects, it's  like that two-column response in logistic regression, where each row of the data frame represents several observations pooled together.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In some respects, it's  like that two-column response in logistic regression, where each row of the data frame represents several observations pooled together.</span>
 
 I gave `ov2` a "temporary" name because I am not going to use
 it again.
@@ -2651,7 +2664,9 @@ frame first. This is the slick way to do that:
 
 
 ```r
-time.1a <- ovarian %>% mutate(rxf = factor(rx)) %>% coxph(y ~ age + rxf, data = .)
+time.1a <- ovarian %>%
+  mutate(rxf = factor(rx)) %>%
+  coxph(y ~ age + rxf, data = .)
 summary(time.1a)
 ```
 
@@ -2794,8 +2809,7 @@ important things like `age`. Here, that could be a boxplot:
 ggplot(ovarian, aes(x = factor(rx), y = age)) + geom_boxplot()
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-74-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
 
  
 
@@ -2837,8 +2851,7 @@ ggcoxdiagnostics(time.1) + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-75-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
 
      
 
@@ -2893,7 +2906,11 @@ or, if you prefer,
 
 
 ```r
-ovarian %>% summarize(q1 = quantile(age, 0.25), q3 = quantile(age, 0.75))
+ovarian %>%
+  summarize(
+    q1 = quantile(age, 0.25),
+    q3 = quantile(age, 0.75)
+  )
 ```
 
 ```
@@ -3003,8 +3020,7 @@ Thus. The `conf.int=F` means to skip the confidence interval
 ggsurvplot(s, conf.int = F)
 ```
 
-
-\includegraphics{17-survival-analysis_files/figure-latex/unnamed-chunk-80-1} 
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
 
    
 
@@ -3019,7 +3035,7 @@ Solution
 The best survival curve, in terms of surviving longest, is up and to
 the right, so the green one is best and the blue one is
 worst.
-\marginnote{In other cases, having the event happen sooner is    better. For example, you might be poisoning rats, in which case    you want them to die quicker. Or the event might be something    desirable like becoming qualified to fly an airplane. In those    cases, down and to the left is better.} To figure out which those
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In other cases, having the event happen sooner is    better. For example, you might be poisoning rats, in which case    you want them to die quicker. Or the event might be something    desirable like becoming qualified to fly an airplane. In those    cases, down and to the left is better.</span> To figure out which those
 are, we have to go back to the data frame we created:
 
 ```r

@@ -74,8 +74,8 @@ With multiple columns that are all frequencies, this is a job for
 `pivot_longer`:
 
 ```r
-mobile.long <- mobile %>% pivot_longer(very.unsat:very.sat, names_to = "satisfied", 
-    values_to = "frequency")
+mobile %>% 
+  pivot_longer(very.unsat:very.sat, names_to="satisfied", values_to="frequency") -> mobile.long
 mobile.long
 ```
 
@@ -93,7 +93,7 @@ mobile.long
 ##  8 male   18-24     very.sat          28
 ##  9 male   25-30     very.unsat         9
 ## 10 male   25-30     unsat             13
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
      
@@ -137,7 +137,7 @@ mobile.long
 ##  8 male   18-24     very.sat          28
 ##  9 male   25-30     very.unsat         9
 ## 10 male   25-30     unsat             13
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
      
@@ -164,7 +164,8 @@ appear in the data *in the order that we want*. This is good
 news, because we can use `fct_inorder` like this:
 
 ```r
-mobile.long <- mobile.long %>% mutate(satis = fct_inorder(satisfied))
+mobile.long %>%
+  mutate(satis = fct_inorder(satisfied)) -> mobile.long
 ```
 
      
@@ -235,7 +236,9 @@ data frame as a vector:
 
 
 ```r
-v1 <- mobile.long %>% distinct(satisfied) %>% pluck("satisfied")
+v1 <- mobile.long %>%
+  distinct(satisfied) %>%
+  pluck("satisfied")
 v1
 ```
 
@@ -249,7 +252,9 @@ which is in the correct order, or
 
 
 ```r
-v2 <- mobile.long %>% count(satisfied) %>% pluck("satisfied")
+v2 <- mobile.long %>%
+  count(satisfied) %>%
+  pluck("satisfied")
 v2
 ```
 
@@ -292,7 +297,10 @@ rows in the right order:
 
 
 ```r
-v5 <- mobile.long %>% count(satisfied) %>% slice(c(4, 2, 1, 3)) %>% pluck("satisfied")
+v5 <- mobile.long %>%
+  count(satisfied) %>%
+  slice(c(4, 2, 1, 3)) %>%
+  pluck("satisfied")
 v5
 ```
 
@@ -314,7 +322,8 @@ variable thus, using your vector of categories:
 
 
 ```r
-mobile.long2 <- mobile.long %>% mutate(satis = ordered(satisfied, v1))
+mobile.long %>%
+  mutate(satis = ordered(satisfied, v1)) -> mobile.long2
 mobile.long2
 ```
 
@@ -332,7 +341,7 @@ mobile.long2
 ##  8 male   18-24     very.sat          28 very.sat  
 ##  9 male   25-30     very.unsat         9 very.unsat
 ## 10 male   25-30     unsat             13 unsat     
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
  
@@ -514,7 +523,9 @@ read in from the file was called `mobile`, and I  need
 
 ```r
 probs <- predict(mobile.1, mobile, type = "p")
-mobile %>% select(gender, age.group) %>% cbind(probs)
+mobile %>%
+  select(gender, age.group) %>%
+  cbind(probs)
 ```
 
 ```
@@ -603,7 +614,9 @@ getting the different satisfaction levels:
 
 ```r
 genders <- mobile.long %>% distinct(gender) %>% pluck("gender")
-age.groups <- mobile.long %>% distinct(age.group) %>% pluck("age.group")
+age.groups <- mobile.long %>%
+  distinct(age.group) %>%
+  pluck("age.group")
 ```
 
  
@@ -797,7 +810,7 @@ abortion
 ##  8  1972 Prot     High      Mix              9
 ##  9  1972 Prot     High      Pos            139
 ## 10  1972 SProt    Low       Neg              9
-## # ... with 71 more rows
+## # … with 71 more rows
 ```
 
      
@@ -856,7 +869,7 @@ Solution
 This is actually harder to describe than it is to do.
 First thing is to decide on the ordering you want. You can go
 low to high or high to low (it doesn't matter).
-\marginnote{The        results might look different which way you go, but it won't        make any *material* difference.} I'm going negative to
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The        results might look different which way you go, but it won't        make any *material* difference.</span> I'm going negative to
 positive. Either way, you want `Mix` in the middle:
 
 ```r
@@ -870,7 +883,8 @@ input to `ordered`:
 
 
 ```r
-abortion <- abortion %>% mutate(attitude.ord = ordered(attitude, lev))
+abortion <- abortion %>%
+  mutate(attitude.ord = ordered(attitude, lev))
 abortion
 ```
 
@@ -888,7 +902,7 @@ abortion
 ##  8  1972 Prot     High      Mix              9 Mix         
 ##  9  1972 Prot     High      Pos            139 Pos         
 ## 10  1972 SProt    Low       Neg              9 Neg         
-## # ... with 71 more rows
+## # … with 71 more rows
 ```
 
  
@@ -948,7 +962,10 @@ or, if you like working with data frames better:
 
 
 ```r
-lev4 <- abortion %>% count(attitude) %>% slice(c(2, 1, 3)) %>% pull(attitude)
+lev4 <- abortion %>%
+  count(attitude) %>%
+  slice(c(2, 1, 3)) %>%
+  pull(attitude)
 lev4
 ```
 
@@ -979,7 +996,9 @@ order that you went to such great pains to make in the last part!
 
 ```r
 library(MASS)
-abortion.1 <- polr(attitude.ord ~ religion + education, data = abortion, weights = frequency)
+abortion.1 <- polr(attitude.ord ~ religion + education,
+  data = abortion, weights = frequency
+)
 ```
 
        
@@ -1013,8 +1032,12 @@ If you don't like `update`, you can also copy and paste and edit:
 
 
 ```r
-abortion.2a <- polr(attitude.ord ~ religion, data = abortion, weights = frequency)
-abortion.3a <- polr(attitude.ord ~ education, data = abortion, weights = frequency)
+abortion.2a <- polr(attitude.ord ~ religion,
+  data = abortion, weights = frequency
+)
+abortion.3a <- polr(attitude.ord ~ education,
+  data = abortion, weights = frequency
+)
 ```
 
        
@@ -1573,17 +1596,17 @@ ess
 ## # A tibble: 2,286 x 17
 ##    cntry cname cedition cproddat cseqno name  essround edition   idno dweight
 ##    <chr> <chr>    <dbl> <chr>     <dbl> <chr>    <dbl>   <dbl>  <dbl>   <dbl>
-##  1 GB    ESS1~        1 26.11.2~ 134168 ESS6~        6     2.1 101014   1.01 
-##  2 GB    ESS1~        1 26.11.2~ 134169 ESS6~        6     2.1 101048   2.02 
-##  3 GB    ESS1~        1 26.11.2~ 134170 ESS6~        6     2.1 101055   1.01 
-##  4 GB    ESS1~        1 26.11.2~ 134171 ESS6~        6     2.1 101089   0.505
-##  5 GB    ESS1~        1 26.11.2~ 134172 ESS6~        6     2.1 101097   0.505
-##  6 GB    ESS1~        1 26.11.2~ 134173 ESS6~        6     2.1 101113   1.01 
-##  7 GB    ESS1~        1 26.11.2~ 134174 ESS6~        6     2.1 101121   0.505
-##  8 GB    ESS1~        1 26.11.2~ 134175 ESS6~        6     2.1 101139   0.505
-##  9 GB    ESS1~        1 26.11.2~ 134176 ESS6~        6     2.1 101154   1.01 
-## 10 GB    ESS1~        1 26.11.2~ 134177 ESS6~        6     2.1 101170   1.01 
-## # ... with 2,276 more rows, and 7 more variables: pspwght <dbl>, pweight <dbl>,
+##  1 GB    ESS1…        1 26.11.2… 134168 ESS6…        6     2.1 101014   1.01 
+##  2 GB    ESS1…        1 26.11.2… 134169 ESS6…        6     2.1 101048   2.02 
+##  3 GB    ESS1…        1 26.11.2… 134170 ESS6…        6     2.1 101055   1.01 
+##  4 GB    ESS1…        1 26.11.2… 134171 ESS6…        6     2.1 101089   0.505
+##  5 GB    ESS1…        1 26.11.2… 134172 ESS6…        6     2.1 101097   0.505
+##  6 GB    ESS1…        1 26.11.2… 134173 ESS6…        6     2.1 101113   1.01 
+##  7 GB    ESS1…        1 26.11.2… 134174 ESS6…        6     2.1 101121   0.505
+##  8 GB    ESS1…        1 26.11.2… 134175 ESS6…        6     2.1 101139   0.505
+##  9 GB    ESS1…        1 26.11.2… 134176 ESS6…        6     2.1 101154   1.01 
+## 10 GB    ESS1…        1 26.11.2… 134177 ESS6…        6     2.1 101170   1.01 
+## # … with 2,276 more rows, and 7 more variables: pspwght <dbl>, pweight <dbl>,
 ## #   prtvtgb <dbl>, gndr <dbl>, agea <dbl>, eduyrs <dbl>, inwtm <dbl>
 ```
 
@@ -1644,8 +1667,9 @@ This seems to call for a pipeline. The major parties are numbered 1,
 to use `!is.na()`.
 
 ```r
-ess.major <- ess %>% select(prtvtgb:inwtm) %>% filter(prtvtgb < 4, agea < 999, eduyrs < 
-    40, !is.na(inwtm))
+ess.major <- ess %>%
+  select(prtvtgb:inwtm) %>%
+  filter(prtvtgb < 4, agea < 999, eduyrs < 40, !is.na(inwtm))
 ```
 
      
@@ -1674,7 +1698,10 @@ the resulting data frame. For example, I first did this (note that my
 
 
 ```r
-ess %>% select(prtvtgb:inwtm) %>% filter(prtvtgb < 4, !is.na(inwtm)) %>% summary()
+ess %>%
+  select(prtvtgb:inwtm) %>%
+  filter(prtvtgb < 4, !is.na(inwtm)) %>%
+  summary()
 ```
 
 ```
@@ -1701,7 +1728,7 @@ doesn't make much sense, but it looks as if all the values are sensible
 ones (1 to 3 and 1, 2 respectively). However, the maximum values of
 age and years of education look like missing value codes, hence the
 other requirements I put in the question.
-\marginnote{If you do not take  out the *NA* values, they are shown separately on the end of  the *summary* for that column.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you do not take  out the *NA* values, they are shown separately on the end of  the *summary* for that column.</span>
 
 `Print`ing as the last step of your pipeline also works, but the
 advantage of `summary` is that you get to see whether there are
@@ -1723,9 +1750,9 @@ on a left-right spectrum), so this is nominal, and you'll need
 If I had included the minor parties and you were working on a
 left-right spectrum, you would have had to decide where to put the
 somewhat libertarian Greens
-\marginnote{The American Green party is more libertarian than Green parties elsewhere.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The American Green party is more libertarian than Green parties elsewhere.</span> 
 or the parties that exist only in Northern Ireland.
-\marginnote{Northern Ireland's political parties distinguish themselves by politics *and* religion. Northern Ireland has always had political tensions between its Protestants and its Catholics.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Northern Ireland's political parties distinguish themselves by politics *and* religion. Northern Ireland has always had political tensions between its Protestants and its Catholics.</span>
  
 
 (f) <a name="part:full">*</a> Take the political party voted for, and turn it into a
@@ -1849,7 +1876,7 @@ need to keep)  age, years of education and interview length.
 The actual numbers don't mean much; it's the indication that the
 variable has stayed in the model that makes a
 difference.
-\marginnote{There are three political parties; using the first  as a baseline, there are therefore $3-1=2$ coefficients for each variable.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are three political parties; using the first  as a baseline, there are therefore $3-1=2$ coefficients for each variable.</span>
 
 If you're wondering about the process: first `step` tries to
 take out each explanatory variable, one at a time, from the starting
@@ -2102,7 +2129,7 @@ A little history: back 150 or so years ago, Britain had two
 political parties, the Tories and the Whigs. The Tories became the
 Conservative party (and hence, in Britain and in Canada, the
 Conservatives are nicknamed Tories
-\marginnote{It amuses me that      Toronto's current (2018) mayor is politically a Tory.}). The Whigs became Liberals. At
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It amuses me that      Toronto's current (2018) mayor is politically a Tory.</span>). The Whigs became Liberals. At
 about the same time as 
 working people got to vote (not women, yet, but working men) the
 Labour Party came into existence. The Labour Party has always been
@@ -2287,7 +2314,8 @@ I'm creating my "official" data frame here:
 
 
 ```r
-gators <- gators.orig %>% pivot_longer(Fish:Other, names_to = "Food.type", values_to = "Frequency")
+gators.orig %>% 
+  pivot_longer(Fish:Other, names_to = "Food.type", values_to = "Frequency") -> gators
 gators
 ```
 
@@ -2305,7 +2333,7 @@ gators
 ##  8       2 m      <2.3  george Reptile              0
 ##  9       2 m      <2.3  george Bird                 2
 ## 10       2 m      <2.3  george Other                2
-## # ... with 70 more rows
+## # … with 70 more rows
 ```
 
 or if you prefer:
@@ -2330,7 +2358,7 @@ gators2
 ##  8       8 m      >2.3  hancock  Fish              4
 ##  9       9 f      <2.3  oklawaha Fish              3
 ## 10      10 m      <2.3  oklawaha Fish              2
-## # ... with 70 more rows
+## # … with 70 more rows
 ```
 
        
@@ -2399,7 +2427,7 @@ Each row of the tidy `gators` represents as many
 alligators as are in the `Frequency` column. That is, if
 you look at female small alligators in Lake George that ate
 mainly fish, there are three of those.
-\marginnote{When you have variables that are categories, you might have more than one individual with exactly the same categories; on the other hand, if they had measured *Size* as, say, length in centimetres, it would have been very unlikely to get two alligators of exactly the same size.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When you have variables that are categories, you might have more than one individual with exactly the same categories; on the other hand, if they had measured *Size* as, say, length in centimetres, it would have been very unlikely to get two alligators of exactly the same size.</span>
 This to remind you to include the `weights` piece,
 otherwise `multinom` will assume that you have *one*
 observation per line and not as many as the number in
@@ -2446,7 +2474,7 @@ gators %>% count(Food.type, wt = Frequency)
 Each food type appears on 16 rows, but is the favoured diet of very
 different numbers of *alligators*. Note the use of `wt=`
 to specify a frequency variable.
-\marginnote{Discovered by me two minutes  ago.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Discovered by me two minutes  ago.</span>
 
 You ought to understand *why* those are different.
 
@@ -2455,7 +2483,9 @@ All right, back to modelling:
 
 ```r
 library(nnet)
-gators.1 <- multinom(Food.type ~ Gender + Size + Lake, weights = Frequency, data = gators)
+gators.1 <- multinom(Food.type ~ Gender + Size + Lake,
+  weights = Frequency, data = gators
+)
 ```
 
 ```
@@ -2552,7 +2582,9 @@ taking out `Gender`, preferably by copying and pasting:
 
 
 ```r
-gators.2x <- multinom(Food.type ~ Size + Lake, weights = Frequency, data = gators)
+gators.2x <- multinom(Food.type ~ Size + Lake,
+  weights = Frequency, data = gators
+)
 ```
 
 ```
@@ -2844,7 +2876,7 @@ cbind(new, pp)
 
 and this time there *is* an effect of gender, but it is
 smallish, as befits an effect that is not significant.
-\marginnote{There were only 216 alligators total, which is a small sample size for this kind of thing, especially with all those parameters to estimate.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There were only 216 alligators total, which is a small sample size for this kind of thing, especially with all those parameters to estimate.</span>
     
 
 
@@ -3064,7 +3096,7 @@ steak0
 ##  8    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE   TRUE 
 ##  9    3234953052 TRUE      TRUE  TRUE    TRUE   FALSE     TRUE  FALSE   TRUE 
 ## 10    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE   TRUE 
-## # ... with 540 more rows, and 6 more variables: steak_prep <chr>, female <lgl>,
+## # … with 540 more rows, and 6 more variables: steak_prep <chr>, female <lgl>,
 ## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
 ```
 
@@ -3178,7 +3210,7 @@ So now we'll save this into our "good" data frame, which means doing it again (n
 
 
 ```r
-steak <- steak0 %>% drop_na()
+steak0 %>% drop_na() -> steak
 ```
 
  
@@ -3289,7 +3321,7 @@ steak0 %>% slice(rows)
 ## 4    3234763650 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE   FALSE
 ## 5    3234763171 TRUE      FALSE TRUE    TRUE   FALSE     TRUE  FALSE   TRUE 
 ## 6    3234762715 FALSE     FALSE FALSE   FALSE  FALSE     TRUE  FALSE   FALSE
-## # ... with 6 more variables: steak_prep <chr>, female <lgl>, age <chr>,
+## # … with 6 more variables: steak_prep <chr>, female <lgl>, age <chr>,
 ## #   hhold_income <chr>, educ <chr>, region <chr>
 ```
 
@@ -3306,7 +3338,9 @@ variables might have missing values in them, and they won't show
 up unless we turn them into a factor first:
 
 ```r
-steak0 %>% mutate_if(is.character, factor) %>% summary()
+steak0 %>%
+  mutate_if(is.character, factor) %>%
+  summary()
 ```
 
 ```
@@ -3396,12 +3430,12 @@ steak0 %>% select(9:15) %>% slice(rows)
 ## # A tibble: 6 x 7
 ##   steak steak_prep  female age   hhold_income     educ               region     
 ##   <lgl> <chr>       <lgl>  <chr> <chr>            <chr>              <chr>      
-## 1 TRUE  Medium rare TRUE   45-60 $0 - $24,999     Some college or A~ West South~
+## 1 TRUE  Medium rare TRUE   45-60 $0 - $24,999     Some college or A… West South…
 ## 2 TRUE  Medium      TRUE   45-60 $150,000+        Bachelor degree    New England
-## 3 TRUE  Medium rare TRUE   >60   $50,000 - $99,9~ Graduate degree    Mountain   
-## 4 FALSE <NA>        FALSE  45-60 $100,000 - $149~ Some college or A~ South Atla~
+## 3 TRUE  Medium rare TRUE   >60   $50,000 - $99,9… Graduate degree    Mountain   
+## 4 FALSE <NA>        FALSE  45-60 $100,000 - $149… Some college or A… South Atla…
 ## 5 TRUE  Medium      FALSE  >60   <NA>             Graduate degree    Pacific    
-## 6 FALSE <NA>        FALSE  18-29 $50,000 - $99,9~ Some college or A~ West North~
+## 6 FALSE <NA>        FALSE  18-29 $50,000 - $99,9… Some college or A… West North…
 ```
 
  
@@ -3419,7 +3453,7 @@ will return the rows for which the thing it was fed was true.
 
 ```r
 cc <- complete.cases(steak0)
-steak.complete <- steak0 %>% filter(cc)
+steak0 %>% filter(cc) -> steak.complete
 ```
 
      
@@ -3445,7 +3479,7 @@ steak.complete
 ##  8    3234951249 FALSE     FALSE TRUE    TRUE   FALSE     FALSE FALSE   TRUE 
 ##  9    3234948883 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  FALSE   TRUE 
 ## 10    3234948197 TRUE      FALSE FALSE   TRUE   FALSE     TRUE  FALSE   TRUE 
-## # ... with 321 more rows, and 6 more variables: steak_prep <chr>, female <lgl>,
+## # … with 321 more rows, and 6 more variables: steak_prep <chr>, female <lgl>,
 ## #   age <chr>, hhold_income <chr>, educ <chr>, region <chr>
 ```
 
@@ -3459,7 +3493,9 @@ For proof, this is the easiest way I know:
 
 
 ```r
-steak.complete %>% mutate_if(is.character, factor) %>% summary()
+steak.complete %>%
+  mutate_if(is.character, factor) %>%
+  summary()
 ```
 
 ```
@@ -3576,8 +3612,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv"
-sfcrime = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv"
+sfcrime=read_csv(my_url)
 ```
 
 ```
@@ -3601,19 +3637,20 @@ sfcrime
 
 ```
 ## # A tibble: 878,049 x 9
-##    Dates               Category Descript DayOfWeek PdDistrict Resolution Address
-##    <dttm>              <chr>    <chr>    <chr>     <chr>      <chr>      <chr>  
-##  1 2015-05-13 23:53:00 WARRANTS WARRANT~ Wednesday NORTHERN   ARREST, B~ OAK ST~
-##  2 2015-05-13 23:53:00 OTHER O~ TRAFFIC~ Wednesday NORTHERN   ARREST, B~ OAK ST~
-##  3 2015-05-13 23:33:00 OTHER O~ TRAFFIC~ Wednesday NORTHERN   ARREST, B~ VANNES~
-##  4 2015-05-13 23:30:00 LARCENY~ GRAND T~ Wednesday NORTHERN   NONE       1500 B~
-##  5 2015-05-13 23:30:00 LARCENY~ GRAND T~ Wednesday PARK       NONE       100 Bl~
-##  6 2015-05-13 23:30:00 LARCENY~ GRAND T~ Wednesday INGLESIDE  NONE       0 Bloc~
-##  7 2015-05-13 23:30:00 VEHICLE~ STOLEN ~ Wednesday INGLESIDE  NONE       AVALON~
-##  8 2015-05-13 23:30:00 VEHICLE~ STOLEN ~ Wednesday BAYVIEW    NONE       KIRKWO~
-##  9 2015-05-13 23:00:00 LARCENY~ GRAND T~ Wednesday RICHMOND   NONE       600 Bl~
-## 10 2015-05-13 23:00:00 LARCENY~ GRAND T~ Wednesday CENTRAL    NONE       JEFFER~
-## # ... with 878,039 more rows, and 2 more variables: X <dbl>, Y <dbl>
+##    Dates               Category Descript DayOfWeek PdDistrict Resolution
+##    <dttm>              <chr>    <chr>    <chr>     <chr>      <chr>     
+##  1 2015-05-13 23:53:00 WARRANTS WARRANT… Wednesday NORTHERN   ARREST, B…
+##  2 2015-05-13 23:53:00 OTHER O… TRAFFIC… Wednesday NORTHERN   ARREST, B…
+##  3 2015-05-13 23:33:00 OTHER O… TRAFFIC… Wednesday NORTHERN   ARREST, B…
+##  4 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday NORTHERN   NONE      
+##  5 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday PARK       NONE      
+##  6 2015-05-13 23:30:00 LARCENY… GRAND T… Wednesday INGLESIDE  NONE      
+##  7 2015-05-13 23:30:00 VEHICLE… STOLEN … Wednesday INGLESIDE  NONE      
+##  8 2015-05-13 23:30:00 VEHICLE… STOLEN … Wednesday BAYVIEW    NONE      
+##  9 2015-05-13 23:00:00 LARCENY… GRAND T… Wednesday RICHMOND   NONE      
+## 10 2015-05-13 23:00:00 LARCENY… GRAND T… Wednesday CENTRAL    NONE      
+## # … with 878,039 more rows, and 3 more variables: Address <chr>, X <dbl>,
+## #   Y <dbl>
 ```
 
      
@@ -3654,7 +3691,9 @@ by `arrange` to sort:
 
 
 ```r
-sfcrime %>% group_by(Category) %>% summarize(count = n()) %>% arrange(desc(count))
+sfcrime %>% group_by(Category) %>%
+summarize(count=n()) %>%
+arrange(desc(count))
 ```
 
 ```
@@ -3675,7 +3714,7 @@ sfcrime %>% group_by(Category) %>% summarize(count = n()) %>% arrange(desc(count
 ##  8 WARRANTS        42214
 ##  9 BURGLARY        36755
 ## 10 SUSPICIOUS OCC  31414
-## # ... with 29 more rows
+## # … with 29 more rows
 ```
 
  
@@ -3684,7 +3723,8 @@ or this one does the same thing and saves a step:
 
 
 ```r
-sfcrime %>% count(Category) %>% arrange(desc(n))
+sfcrime %>% count(Category) %>%
+arrange(desc(n))
 ```
 
 ```
@@ -3701,7 +3741,7 @@ sfcrime %>% count(Category) %>% arrange(desc(n))
 ##  8 WARRANTS        42214
 ##  9 BURGLARY        36755
 ## 10 SUSPICIOUS OCC  31414
-## # ... with 29 more rows
+## # … with 29 more rows
 ```
 
  
@@ -3739,9 +3779,10 @@ them out of the data frame that `count` produces. They are
 rows 1, 4, 5 and 6, so add a `slice` to your pipeline:
 
 ```r
-my.rows = c(1, 4, 5, 6)
-my.crimes = sfcrime %>% count(Category) %>% arrange(desc(n)) %>% slice(my.rows) %>% 
-    pull(Category)
+my.rows=c(1,4,5,6)
+my.crimes = sfcrime %>% count(Category) %>%
+arrange(desc(n)) %>%
+slice(my.rows) %>% pull(Category)
 my.crimes
 ```
 
@@ -3777,7 +3818,7 @@ Solution
 This is the ultimate "try it and see":
 
 ```r
-v = c("a", "m", 3, "Q")
+v=c('a','m',3,'Q')
 v %in% letters
 ```
 
@@ -3817,8 +3858,8 @@ right way around. We are testing the things in `Category` one
 at a time for membership in the set in `my.crimes`, so this:
 
 ```r
-sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>% select(c(Category, DayOfWeek, 
-    PdDistrict))
+sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
+select(c(Category,DayOfWeek,PdDistrict)) 
 sfcrimea
 ```
 
@@ -3836,7 +3877,7 @@ sfcrimea
 ##  8 LARCENY/THEFT Wednesday CENTRAL   
 ##  9 LARCENY/THEFT Wednesday NORTHERN  
 ## 10 ASSAULT       Wednesday INGLESIDE 
-## # ... with 359,518 more rows
+## # … with 359,518 more rows
 ```
 
    
@@ -3870,7 +3911,7 @@ so we need to get rid of `MASS`:
 
 
 ```r
-detach("package:MASS", unload = T)
+detach("package:MASS", unload=T)
 ```
 
 ```
@@ -3883,8 +3924,8 @@ and try again:
 
 
 ```r
-sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>% select(c(Category, DayOfWeek, 
-    PdDistrict))
+sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
+select(c(Category,DayOfWeek,PdDistrict)) 
 sfcrimea
 ```
 
@@ -3902,7 +3943,7 @@ sfcrimea
 ##  8 LARCENY/THEFT Wednesday CENTRAL   
 ##  9 LARCENY/THEFT Wednesday NORTHERN  
 ## 10 ASSAULT       Wednesday INGLESIDE 
-## # ... with 359,518 more rows
+## # … with 359,518 more rows
 ```
 
    
@@ -3946,7 +3987,7 @@ Solution
 This is `write_csv` again:
 
 ```r
-write_csv(sfcrimea, "sfcrime1.csv")
+write_csv(sfcrimea,"sfcrime1.csv")
 ```
 
    
@@ -4070,7 +4111,7 @@ head(steak)
 ## 4    3234958833 FALSE     FALSE TRUE    FALSE  FALSE     TRUE  TRUE    TRUE 
 ## 5    3234955240 TRUE      FALSE FALSE   FALSE  FALSE     TRUE  FALSE   TRUE 
 ## 6    3234955010 TRUE      FALSE TRUE    TRUE   TRUE      TRUE  FALSE   TRUE 
-## # ... with 6 more variables: steak_prep <chr>, female <lgl>, age <chr>,
+## # … with 6 more variables: steak_prep <chr>, female <lgl>, age <chr>,
 ## #   hhold_income <chr>, educ <chr>, region <chr>
 ```
 
@@ -4656,9 +4697,11 @@ works here:
 
 ```r
 steak.5 <- polr(steak_prep_ord ~ 1, data = steak)
-steak.6 <- step(steak.5, scope = . ~ lottery_a + smoke + alcohol + gamble + skydiving + 
-    speed + cheated + female + age + hhold_income + educ + region, direction = "forward", 
-    test = "Chisq", trace = 0)
+steak.6 <- step(steak.5,
+  scope = . ~ lottery_a + smoke + alcohol + gamble + skydiving +
+    speed + cheated + female + age + hhold_income + educ + region,
+  direction = "forward", test = "Chisq", trace = 0
+)
 drop1(steak.6, test = "Chisq")
 ```
 
@@ -4757,8 +4800,8 @@ Solution
 The usual:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
-sfcrime = read_csv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
+sfcrime=read_csv(my_url)
 ```
 
 ```
@@ -4815,7 +4858,7 @@ uppercase letters in the right places:
 
 
 ```r
-sfcrime.1 = multinom(Category ~ DayOfWeek + PdDistrict, data = sfcrime)
+sfcrime.1=multinom(Category~DayOfWeek+PdDistrict,data=sfcrime)
 ```
 
 ```
@@ -4845,7 +4888,7 @@ Solution
 Same idea. Write it out, or use `update`:
 
 ```r
-sfcrime.2 = update(sfcrime.1, . ~ . - DayOfWeek)
+sfcrime.2=update(sfcrime.1,.~.-DayOfWeek)
 ```
 
 ```
@@ -4874,7 +4917,7 @@ This:
 
 
 ```r
-anova(sfcrime.2, sfcrime.1)
+anova(sfcrime.2,sfcrime.1)
 ```
 
 ```
@@ -4917,7 +4960,7 @@ Solution
 I left this one fairly open, because you've done this kind of thing
 before, so what you need to do ought to be fairly clear:
 Construct the values to predict for with plural names:
-\marginnote{You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.</span>
 
 
 ```r
@@ -4931,7 +4974,7 @@ DayOfWeeks
 ```
 
 ```r
-PdDistricts = "TENDERLOIN"
+PdDistricts="TENDERLOIN"
 ```
 
  
@@ -4949,7 +4992,7 @@ appropriately above and the rest of it would be the same:
 
 
 ```r
-sfcrime.new = crossing(DayOfWeek = DayOfWeeks, PdDistrict = PdDistricts)
+sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
 ```
 
@@ -4972,7 +5015,7 @@ Then do the predictions:
 
 
 ```r
-p = predict(sfcrime.1, sfcrime.new, type = "probs")
+p=predict(sfcrime.1,sfcrime.new,type="probs")
 ```
 
  
@@ -4984,7 +5027,7 @@ it'll tell me:
 
 
 ```r
-p = predict(sfcrime.1, sfcrime.new, type = "bananas")
+p=predict(sfcrime.1,sfcrime.new,type="bananas")
 ```
 
 ```
@@ -4998,7 +5041,7 @@ since the other one makes the best guess at which category of response
 you'll get (the one with the highest probability). The predicted
 probabilities are more informative, since then you can see how they
 change, even if the predicted category stays the same.
-\marginnote{This is something we'll see again in discriminant analysis.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is something we'll see again in discriminant analysis.</span>
 
 Finally, display the results. I thought `cbind` wouldn't work
 here, because some of the variables are factors and some are numbers,
@@ -5006,7 +5049,7 @@ but `cbind`  is smarter than that:
 
 
 ```r
-cbind(sfcrime.new, p)
+cbind(sfcrime.new,p)
 ```
 
 ```
@@ -5045,7 +5088,7 @@ changes from one weekday to another are even smaller). This supports
 what I guessed before, that with this much data even a small effect
 (the one shown here) is statistically
 significant.
-\marginnote{Statistical significance as an idea grew up in    the days before *big data*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Statistical significance as an idea grew up in    the days before *big data*.</span>
 I want to compare another district. What districts do we have?
 
 ```r
@@ -5082,8 +5125,8 @@ include both:
 
 ```r
 DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
-PdDistricts = c("RICHMOND", "TENDERLOIN")
-sfcrime.new = crossing(DayOfWeek = DayOfWeeks, PdDistrict = PdDistricts)
+PdDistricts=c("RICHMOND","TENDERLOIN")
+sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
 ```
 
@@ -5108,9 +5151,8 @@ sfcrime.new
 ```
 
 ```r
-p1 = predict(sfcrime.1, sfcrime.new, type = "probs")
-d1 = cbind(sfcrime.new, p1)
-d1
+p1=predict(sfcrime.1,sfcrime.new,type="probs")
+d1=cbind(sfcrime.new,p1) ; d1
 ```
 
 ```
@@ -5152,7 +5194,7 @@ more of this when we revisit ANOVA later), and compare the fit:
 
 
 ```r
-sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict)
+sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict)
 ```
 
 ```
@@ -5184,7 +5226,7 @@ it go a bit further thus:
 
 
 ```r
-sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict, maxit = 300)
+sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict,maxit=300)
 ```
 
 ```
@@ -5212,7 +5254,7 @@ sfcrime.3 = update(sfcrime.1, . ~ . + DayOfWeek * PdDistrict, maxit = 300)
 ```
 
 ```r
-anova(sfcrime.1, sfcrime.3)
+anova(sfcrime.1,sfcrime.3)
 ```
 
 ```
@@ -5242,9 +5284,8 @@ them to this model:
 
 
 ```r
-p3 = predict(sfcrime.3, sfcrime.new, type = "probs")
-d3 = cbind(sfcrime.new, p3)
-d3
+p3=predict(sfcrime.3,sfcrime.new,type="probs")
+d3=cbind(sfcrime.new,p3) ; d3
 ```
 
 ```
@@ -5277,8 +5318,8 @@ largest ones easier to find:
 
 
 ```r
-pdiff = round(p3 - p1, 4)
-cbind(sfcrime.new, pdiff)
+pdiff=round(p3-p1,4)
+cbind(sfcrime.new,pdiff)
 ```
 
 ```
@@ -5316,8 +5357,8 @@ the differences twice:
 
 
 ```r
-d1 <- cbind(sfcrime.new, pdiff) %>% pivot_longer(ASSAULT:`VEHICLE THEFT`, names_to = "crimetype", 
-    values_to = "difference")
+cbind(sfcrime.new,pdiff) %>% 
+  pivot_longer(ASSAULT:`VEHICLE THEFT`, names_to="crimetype", values_to = "difference") -> d1
 d1 %>% arrange(difference) %>% slice(1:6)
 ```
 
@@ -5357,7 +5398,7 @@ Extra: there is a better way of doing those in one go:
 
 
 ```r
-d1 %>% top_n(6, difference)
+d1 %>% top_n(6,difference)
 ```
 
 ```
@@ -5373,7 +5414,7 @@ d1 %>% top_n(6, difference)
 ```
 
 ```r
-d1 %>% top_n(6, -difference)
+d1 %>% top_n(6,-difference)
 ```
 
 ```
@@ -5417,7 +5458,7 @@ The variables collected are:
 
 * `race`: the student's race (African-American,
 Asian,
-\marginnote{I'm always amused at how Americans put all Asians    into one group.}  Hispanic, White).
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I'm always amused at how Americans put all Asians    into one group.</span>  Hispanic, White).
 
 * `ses`: Socio-economic status of student's family (low,
 middle, or high)
@@ -5491,7 +5532,7 @@ hsb
 ##  8    11 hispanic     middle public academic      34    46    45      39    36 male  
 ##  9    84 white        middle public general       63    57    54      58    51 male  
 ## 10    48 african-amer middle public academic      57    55    52      50    51 male  
-## # ... with 190 more rows
+## # … with 190 more rows
 ```
 
        
@@ -5539,7 +5580,7 @@ hsb
 ##  8    11 hispanic     middle public academic      34    46    45      39    36 male  
 ##  9    84 white        middle public general       63    57    54      58    51 male  
 ## 10    48 african-amer middle public academic      57    55    52      50    51 male  
-## # ... with 190 more rows
+## # … with 190 more rows
 ```
 
   
@@ -5811,7 +5852,7 @@ should have remained in your regression. If that was not what you got,
 find the median of any other variables you had, and put that into your
 `new`. For example, if you still had `math`, you'd do
 this:
-\marginnote{That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.</span>
 
 
 ```r
@@ -5987,7 +6028,7 @@ athletes
 ##  8 female Netball  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.  74.1
 ##  9 female Netball  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.  68.2
 ## 10 female Netball  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.  68.8
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
      
@@ -6036,8 +6077,7 @@ I'm doing this to give you a little intuition for later:
 ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport)) + geom_point()
 ```
 
-
-\includegraphics{16-ordinal-nominal-response_files/figure-latex/unnamed-chunk-152-1} 
+<img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-152-1.png" width="672"  />
 
      
 
@@ -6239,7 +6279,7 @@ one, telling us that neither variable should be removed.
 those heights and weights playing each of the sports. Display the
 results. You might have to display them smaller, or reduce the
 number of decimal places
-\marginnote{For this, use *round*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">For this, use *round*.</span> 
 to fit them on the page.
 
 Solution

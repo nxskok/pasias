@@ -48,7 +48,7 @@ The appropriate function, the data values being separated by a space,
 will be `read_delim`. Put the URL as the first thing in
 `read_delim`, or (better) define it into a variable
 first:
-\marginnote{I say *better* because otherwise the read line gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I say *better* because otherwise the read line gets rather long. This way you read it as *the URL is some long thing that I don't care about especially, and I what I need to do is to read the data from that URL, separated by spaces.*</span>
 
 
 ```r
@@ -113,7 +113,7 @@ juice
 ##  8     8       5.6    268
 ##  9     9       5.6    239
 ## 10    10       5.9    212
-## # ... with 14 more rows
+## # … with 14 more rows
 ```
 
  
@@ -206,8 +206,7 @@ to get the variables from),  and the "how to plot" is
 ggplot(juice, aes(x = pectin, y = sweetness)) + geom_point()
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-11-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
          
 
@@ -229,8 +228,7 @@ ggplot(juice, aes(x = pectin, y = sweetness)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-12-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
          
 The smooth trend is kind of downhill, but not very convincing.
@@ -296,7 +294,7 @@ soap
 ##  8     8   321   175 a    
 ##  9     9   410   270 a    
 ## 10    10   260   170 a    
-## # ... with 17 more rows
+## # … with 17 more rows
 ```
 
     
@@ -319,8 +317,7 @@ Solution
 ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 10)
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-14-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -347,8 +344,7 @@ with. This is 8 bins rather than 10:
 ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 8)
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-15-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
 
  
 
@@ -370,8 +366,7 @@ Solution
 ggplot(soap, aes(x = line, y = scrap)) + geom_boxplot()
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-16-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
 
 
@@ -444,8 +439,7 @@ that I explain afterwards:
 ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 10) + facet_grid(line ~ .)
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-18-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
  
 
@@ -493,8 +487,7 @@ Same mechanism as before:
 ggplot(soap, aes(x = speed, y = scrap)) + geom_point()
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-19-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
  
 
@@ -526,7 +519,7 @@ and scrap for *each* production line. To do that, we want
 to plot the scrap-speed points distinguished for each production
 line. `ggplot` makes that easy: you add a
 `colour`
-\marginnote{If you are concerned about the spelling: the guy who wrote ggplot is from New Zealand, where they spell *colour* the same way we do. However, if you want to use *color*, that works too.} to say what you want to
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you are concerned about the spelling: the guy who wrote ggplot is from New Zealand, where they spell *colour* the same way we do. However, if you want to use *color*, that works too.</span> to say what you want to
 distinguish by colour. This is two quantitative variables and one
 categorical variable, if you want to think of it that way:
 
@@ -534,8 +527,7 @@ categorical variable, if you want to think of it that way:
 ggplot(soap, aes(x = speed, y = scrap, colour = line)) + geom_point()
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-20-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
 
        
 
@@ -552,16 +544,15 @@ regression lines on the plot for each group separately. This is where
 
 
 ```r
-ggplot(soap, aes(x = speed, y = scrap, colour = line)) + geom_point() + geom_smooth(method = "lm", 
-    se = F)
+ggplot(soap, aes(x = speed, y = scrap, colour = line)) +
+  geom_point() + geom_smooth(method = "lm", se = F)
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-21-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
        
 
@@ -588,12 +579,12 @@ expecting you to follow the code, but you can admire the result!
 
 ```r
 soap2 <- soap %>% select(-line)
-ggplot(soap, aes(x = speed, y = scrap)) + geom_point(data = soap2, colour = "grey") + 
-    geom_point(aes(colour = line)) + facet_wrap(~line)
+ggplot(soap, aes(x = speed, y = scrap)) +
+  geom_point(data = soap2, colour = "grey") +
+  geom_point(aes(colour = line)) + facet_wrap(~line)
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-22-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 $
 
 The idea is that we plot all the points in grey (to 
@@ -679,7 +670,7 @@ There is a moral to this story, which I would like you to get even if
 you don't get any of the statistics: if a variable makes a
 difference, it should be in your model and on your
 graph,
-\marginnote{Meaning that the model should contain all three variables, *speed*, *scrap* and *line*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Meaning that the model should contain all three variables, *speed*, *scrap* and *line*.</span>
 because it enables you to get better (more precise) conclusions about your
 other variables. Here, there really is a difference between the
 production lines, but the $t$-test was too much of a blunt instrument
@@ -784,8 +775,7 @@ part), and a `geom_point()` after (the "how to plot it"):
 ggplot(shipments, aes(x = size, y = cost)) + geom_point()
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-26-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
      
 
@@ -837,8 +827,7 @@ variable `warehouse`, which suggests drawing boxplots:
 ggplot(shipments, aes(x = warehouse, y = size)) + geom_boxplot()
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-27-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
      
 
@@ -856,11 +845,11 @@ different colours:
 
 
 ```r
-ggplot(shipments, aes(x = size, y = cost, colour = warehouse)) + geom_point()
+ggplot(shipments, aes(x = size, y = cost, colour = warehouse)) +
+  geom_point()
 ```
 
-
-\includegraphics{02-reading-in_files/figure-latex/unnamed-chunk-28-1} 
+<img src="02-reading-in_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
      
 
@@ -882,7 +871,7 @@ In the place where I got these data, it said "larger shipments are sent to Wareh
 That
 is to say, very large shipments are more expensive to handle, but not
 as expensive as you might think.
-\marginnote{This is the same idea that it  costs more to ride the GO bus from UTSC to York U than it does to  ride from UTSC to Scarborough Town, but if you work out how much it  costs per kilometre, the longer journey costs less per km. As of  when I'm writing this, $5.30 for the 7.2 km to Scarborough Town and  $6.75 for the 38 km to York. That's quite an economy of scale,  isn't it?} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is the same idea that it  costs more to ride the GO bus from UTSC to York U than it does to  ride from UTSC to Scarborough Town, but if you work out how much it  costs per kilometre, the longer journey costs less per km. As of  when I'm writing this, $5.30 for the 7.2 km to Scarborough Town and  $6.75 for the 38 km to York. That's quite an economy of scale,  isn't it?</span> 
 That makes sense with our scatterplot, because the
 *slope* for larger shipments is less than for smaller shipments.
 

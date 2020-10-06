@@ -15,7 +15,7 @@ library(tidyverse)
 
 
  5199 male high school seniors in Wisconsin
-\marginnote{I don't  know why Wisconsin again, but that's what it is.} were classified by
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I don't  know why Wisconsin again, but that's what it is.</span> were classified by
 socio-economic status (low, lower-middle, upper-middle, high), by
 the degree that their parents encouraged them in their education (low
 or high),
@@ -111,8 +111,9 @@ Solution
 
 
 ```r
-wisc.1 <- glm(frequency ~ social.stratum * encouragement * college.plans, data = wisc, 
-    family = "poisson")
+wisc.1 <- glm(frequency ~ social.stratum * encouragement * college.plans,
+  data = wisc, family = "poisson"
+)
 ```
 
    
@@ -220,7 +221,8 @@ influence parental encouragement rather than the other way around, hence:
 
 
 ```r
-xtabs(frequency ~ social.stratum + encouragement, data = wisc) %>% prop.table(margin = 1)
+xtabs(frequency ~ social.stratum + encouragement, data = wisc) %>%
+  prop.table(margin = 1)
 ```
 
 ```
@@ -240,7 +242,8 @@ Next, this:
 
 
 ```r
-xtabs(frequency ~ social.stratum + college.plans, data = wisc) %>% prop.table(margin = 1)
+xtabs(frequency ~ social.stratum + college.plans, data = wisc) %>%
+  prop.table(margin = 1)
 ```
 
 ```
@@ -267,7 +270,8 @@ Finally, this:
 
 
 ```r
-xtabs(frequency ~ encouragement + college.plans, data = wisc) %>% prop.table(margin = 1)
+xtabs(frequency ~ encouragement + college.plans, data = wisc) %>%
+  prop.table(margin = 1)
 ```
 
 ```
@@ -353,7 +357,7 @@ vote0
 ##  8     8 upper middle >75   female conservative
 ##  9     9 upper middle >75   female conservative
 ## 10    10 upper middle >75   female conservative
-## # ... with 1,247 more rows
+## # … with 1,247 more rows
 ```
 
      
@@ -394,7 +398,7 @@ votes
 ##  8 lower middle >75   male   labour           4
 ##  9 lower middle 26-40 female conservative    17
 ## 10 lower middle 26-40 female labour          13
-## # ... with 48 more rows
+## # … with 48 more rows
 ```
 
      
@@ -707,7 +711,8 @@ This is `xtabs` again. The 3-way interaction is a bit
 tricky, so we'll do the simple one first:
 
 ```r
-xtabs(n ~ vote + sex, data = votes) %>% prop.table(margin = 2)
+xtabs(n ~ vote + sex, data = votes) %>%
+  prop.table(margin = 2)
 ```
 
 ```
@@ -860,7 +865,7 @@ prop.table(xt, c(2, 3))
 This is making each `class`-`age` combination add up to
 1, so that we can clearly see what fraction of voters voted for each
 party in each case.
-\marginnote{The reason I thought of doing this is that these two are all the variables except response.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The reason I thought of doing this is that these two are all the variables except response.</span>
 In the first two subtables, the two youngest
 subgroups are clearly different from the others, with a smaller
 proportion of people voting Conservative rather than Labour than for

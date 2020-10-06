@@ -71,7 +71,7 @@ bw
 
 ```
 ## # A tibble: 500 x 10
-##    `Father Age` `Mother Age` `Weeks Gestatio~ `Pre-natal Visi~ `Marital Status`
+##    `Father Age` `Mother Age` `Weeks Gestatio… `Pre-natal Visi… `Marital Status`
 ##           <dbl>        <dbl>            <dbl>            <dbl>            <dbl>
 ##  1           27           26               38               14                1
 ##  2           35           33               40               11                1
@@ -83,7 +83,7 @@ bw
 ##  8           38           35               38               16                1
 ##  9           28           29               40                5                1
 ## 10           NA           19               34               10                2
-## # ... with 490 more rows, and 5 more variables: `Mother Weight Gained` <dbl>,
+## # … with 490 more rows, and 5 more variables: `Mother Weight Gained` <dbl>,
 ## #   `Low Birthweight?` <dbl>, `Weight (pounds)` <dbl>, `Premie?` <dbl>, `Few
 ## #   Visits?` <dbl>
 ```
@@ -100,16 +100,16 @@ glimpse(bw)
 ```
 ## Rows: 500
 ## Columns: 10
-## $ `Father Age`           <dbl> 27, 35, 34, NA, 35, 32, 33, 38, 28, NA, 28, ...
-## $ `Mother Age`           <dbl> 26, 33, 22, 16, 33, 24, 33, 35, 29, 19, 26, ...
-## $ `Weeks Gestation`      <dbl> 38, 40, 37, 38, 39, 36, 38, 38, 40, 34, 39, ...
-## $ `Pre-natal Visits`     <dbl> 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 15, 15...
-## $ `Marital Status`       <dbl> 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 2, 2,...
-## $ `Mother Weight Gained` <dbl> 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, 45, 2...
-## $ `Low Birthweight?`     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,...
-## $ `Weight (pounds)`      <dbl> 6.8750, 6.8125, 7.2500, 8.8125, 8.8125, 5.81...
-## $ `Premie?`              <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0,...
-## $ `Few Visits?`          <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,...
+## $ `Father Age`           <dbl> 27, 35, 34, NA, 35, 32, 33, 38, 28, NA, 28, 34…
+## $ `Mother Age`           <dbl> 26, 33, 22, 16, 33, 24, 33, 35, 29, 19, 26, 31…
+## $ `Weeks Gestation`      <dbl> 38, 40, 37, 38, 39, 36, 38, 38, 40, 34, 39, 39…
+## $ `Pre-natal Visits`     <dbl> 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 15, 15, …
+## $ `Marital Status`       <dbl> 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 2, 2, 2…
+## $ `Mother Weight Gained` <dbl> 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, 45, 22,…
+## $ `Low Birthweight?`     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0…
+## $ `Weight (pounds)`      <dbl> 6.8750, 6.8125, 7.2500, 8.8125, 8.8125, 5.8125…
+## $ `Premie?`              <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0…
+## $ `Few Visits?`          <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0…
 ```
 
  
@@ -151,10 +151,10 @@ you don't have several variables, check to see that you didn't use
 `read_delim` or something by mistake.) After the 
 "500 observations of 10 variables" line(s) in each case, you see all the
 variables by name, with what type of values they have,
-\marginnote{these    are mostly *int* or *integer*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">these    are mostly *int* or *integer*.</span>
 and the first few of the
 values.
-\marginnote{Other possible variable types are *num* for    (real, decimal) numbers such as birth weight, *chr* for    text, and *Factor* (with the number of levels) for    factors/categorical variables. We don't have any of the last two    here. There is also *lgl* for *logical*, things that were    actually recorded as TRUE or FALSE. We have some variables that    are actually logical ones, but they are recorded as integer    values.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Other possible variable types are *num* for    (real, decimal) numbers such as birth weight, *chr* for    text, and *Factor* (with the number of levels) for    factors/categorical variables. We don't have any of the last two    here. There is also *lgl* for *logical*, things that were    actually recorded as TRUE or FALSE. We have some variables that    are actually logical ones, but they are recorded as integer    values.</span>
 
 The variable `Weight (pounds)` is the birthweight (in pounds),
 `Premie?` is 1 for a premature baby and 0 for a full-term baby,
@@ -162,7 +162,7 @@ and `Weeks Gestation` is the number of weeks the pregnancy
 lasted. Don't forget to put backticks around each of those when
 you use them
 later.
-\marginnote{The backticks look different from each other for  annoying technical reasons, but they're all backticks.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The backticks look different from each other for  annoying technical reasons, but they're all backticks.</span>
  
 
 
@@ -186,8 +186,7 @@ principle. That would give
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 10)
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-12-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -201,8 +200,7 @@ you'll lose the shape:
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 4)
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-13-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -218,8 +216,7 @@ up and down:
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 30)
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-14-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
  
 
@@ -275,7 +272,7 @@ bin width, so we can use it as follows:
 
 
 ```r
-w <- 2 * IQR(bw$`Weight (pounds)`) * 500^(-1/3)
+w <- 2 * IQR(bw$`Weight (pounds)`) * 500^(-1 / 3)
 w
 ```
 
@@ -287,8 +284,7 @@ w
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(binwidth = w)
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-16-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
 
  
 
@@ -320,8 +316,7 @@ Another way to go is a "density plot". This is a smoothed-out version of a histo
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_density()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-18-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
 
  
 
@@ -355,14 +350,13 @@ quantitative variable. You can draw a boxplot for that, too, but the
 ggplot(bw, aes(x = 1, y = `Weight (pounds)`)) + geom_boxplot()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-19-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
 
  
 
 The high weight is actually an outlier, but look at all those outliers
 at the bottom!
-\marginnote{When Tukey, a name we will see again, invented  the boxplot in the 1950s, 500 observations would have been  considered a big data set. He designed the boxplot to produce a  sensible number of outliers for the typical size of data set of his  day, but a boxplot of a large data set tends to have a lot of  outliers that are probably not really outliers at all.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When Tukey, a name we will see again, invented  the boxplot in the 1950s, 500 observations would have been  considered a big data set. He designed the boxplot to produce a  sensible number of outliers for the typical size of data set of his  day, but a boxplot of a large data set tends to have a lot of  outliers that are probably not really outliers at all.</span>
 
 *I* think the reason for those extra very low values is that they
 are the premature births (that can result in *very* small
@@ -418,30 +412,28 @@ the graphing part: you still have to do the explanation) if this
 were being marked:
 
 ```r
-ggplot(bw, aes(x = factor(`Premie?`), y = `Weeks Gestation`)) + geom_boxplot()
+ggplot(bw,aes(x=factor(`Premie?`),y=`Weeks Gestation`))+geom_boxplot()
 ```
 
 ```
 ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-21-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
 The warning is because the prematurity of one of the babies is not known.
 Or
 
 
 ```r
-ggplot(bw, aes(x = `Premie?`, y = `Weeks Gestation`)) + geom_point()
+ggplot(bw,aes(x=`Premie?`,y=`Weeks Gestation`))+geom_point()
 ```
 
 ```
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-22-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
 The same warning again, for the same reason.
 
@@ -467,7 +459,9 @@ Another way to attack this is to use `summarize`, finding the
 max and min:
 
 ```r
-bw %>% summarize(n = n(), min = min(`Weeks Gestation`), max = max(`Weeks Gestation`))
+bw %>% summarize( n=n(),
+min=min(`Weeks Gestation`),
+max=max(`Weeks Gestation`))
 ```
 
 ```
@@ -478,12 +472,15 @@ bw %>% summarize(n = n(), min = min(`Weeks Gestation`), max = max(`Weeks Gestati
 ```
 
 only this is for *all* the babies, premature or not.
-\marginnote{I  explain the missing values below.} So we want it by prematurity,
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I  explain the missing values below.</span> So we want it by prematurity,
 which means a `group_by` first:
 
 
 ```r
-bw %>% group_by(`Premie?`) %>% summarize(n = n(), min = min(`Weeks Gestation`), max = max(`Weeks Gestation`))
+bw %>% group_by(`Premie?`) %>%
+summarize( n=n(),
+min=min(`Weeks Gestation`),
+max=max(`Weeks Gestation`))
 ```
 
 ```
@@ -516,15 +513,16 @@ the one by whether a baby was born prematurely or not, we learn a bit
 more about that missing ``Premie?``: evidently its weeks of
 gestation was missing as well, since the min and max of that were
 missing.
-\marginnote{If there had been a weeks of gestation, we could have figured out whether it was premature or not, according to whether the weeks of gestation was less than 37.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If there had been a weeks of gestation, we could have figured out whether it was premature or not, according to whether the weeks of gestation was less than 37.</span>
 
 Here's that baby. I'm doing a bit of fiddling to show all the columns
 (as rows, since there's only one actual row). Don't worry about the
 second line of code below; we will investigate that later.
 
 ```r
-bw %>% filter(is.na(`Premie?`)) %>% pivot_longer(everything(), names_to = "name", 
-    values_to = "value")
+bw %>% 
+  filter(is.na(`Premie?`)) %>% 
+  pivot_longer(everything(), names_to="name", values_to="value")
 ```
 
 ```
@@ -564,15 +562,14 @@ to be a scatterplot because these are both quantitative variables:
 
 
 ```r
-ggplot(bw, aes(x = `Weeks Gestation`, y = `Weight (pounds)`)) + geom_point()
+ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`))+geom_point()
 ```
 
 ```
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-26-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-26-1.png" width="672"  />
 
 You see a rather clear upward trend. Those very underweight babies
 came from very short pregnancies, but the vast majority of pregnancies
@@ -584,31 +581,29 @@ births that were premature? Piece of cake with `ggplot`:
 
 
 ```r
-ggplot(bw, aes(x = `Weeks Gestation`, y = `Weight (pounds)`, colour = `Premie?`)) + 
-    geom_point()
+ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`,
+colour=`Premie?`))+geom_point()
 ```
 
 ```
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-27-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
 
 That was rather silly because `ggplot` treated prematureness as a *continuous* variable, and plotted the values on a dark blue-light blue scale. This is the same issue as on the boxplot above, and has the same solution:
 
 
 ```r
-ggplot(bw, aes(x = `Weeks Gestation`, y = `Weight (pounds)`, colour = factor(`Premie?`))) + 
-    geom_point()
+ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`,
+colour=factor(`Premie?`)))+geom_point()
 ```
 
 ```
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-28-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
 Better.
 
@@ -754,7 +749,7 @@ x
 ##  8 "1924\t132.6323\tMay"        
 ##  9 "1925\t127.7726\tMay"        
 ## 10 "1926\t116.6691\tApril"      
-## # ... with 77 more rows
+## # … with 77 more rows
 ```
 
  
@@ -773,17 +768,17 @@ problems(x)
 ## # A tibble: 87 x 5
 ##      row col   expected  actual    file                                         
 ##    <int> <chr> <chr>     <chr>     <chr>                                        
-##  1     1 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-##  2     2 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-##  3     3 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-##  4     4 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-##  5     5 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-##  6     6 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-##  7     7 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-##  8     8 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-##  9     9 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-## 10    10 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen~
-## # ... with 77 more rows
+##  1     1 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  2     2 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  3     3 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  4     4 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  5     5 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  6     6 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  7     7 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  8     8 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+##  9     9 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+## 10    10 <NA>  1 columns 5 columns 'http://www.utsc.utoronto.ca/~butler/c32/nen…
+## # … with 77 more rows
 ```
 
  
@@ -828,7 +823,7 @@ nenana
 ##  8  1924       133. May 11 at 3:10 PM   
 ##  9  1925       128. May 7 at 6:32 PM    
 ## 10  1926       117. April 26 at 4:03 PM 
-## # ... with 77 more rows
+## # … with 77 more rows
 ```
 
        
@@ -842,9 +837,9 @@ glimpse(nenana)
 ```
 ## Rows: 87
 ## Columns: 3
-## $ Year        <dbl> 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1...
-## $ JulianDate  <dbl> 120.4795, 131.3983, 123.6066, 132.4490, 131.2795, 132.5...
-## $ `Date&Time` <chr> "April 30 at 11:30 AM", "May 11 at 9:33 AM", "May 3 at ...
+## $ Year        <dbl> 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 192…
+## $ JulianDate  <dbl> 120.4795, 131.3983, 123.6066, 132.4490, 131.2795, 132.555…
+## $ `Date&Time` <chr> "April 30 at 11:30 AM", "May 11 at 9:33 AM", "May 3 at 2:…
 ```
 
  
@@ -879,8 +874,7 @@ bin width, if you want to go that way:
 ggplot(nenana, aes(x = JulianDate)) + geom_histogram(bins = 8)
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-35-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
 
        
 
@@ -900,8 +894,7 @@ We haven't done normal quantile plots yet, but looking ahead:
 ggplot(nenana, aes(sample = JulianDate)) + stat_qq() + stat_qq_line()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-36-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
 
  
 
@@ -910,7 +903,7 @@ normally-distributed. It bulges away from the line because there are
 more values just below 120 than you would expect for a
 normal. This corresponds to the histogram bar centred just below 120
 being taller than you would have expected.
-\marginnote{That is to say, the  principal deviation from normality is not the hole on the histogram, the bar centred around 123 being too short, but that the bar centred just below 120 is too *tall*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is to say, the  principal deviation from normality is not the hole on the histogram, the bar centred around 123 being too short, but that the bar centred just below 120 is too *tall*.</span>
 
 Extra: looking *way* ahead (to almost the end of the R stuff),
 this is how you handle the dates and times:
@@ -918,25 +911,26 @@ this is how you handle the dates and times:
 
 ```r
 library(lubridate)
-nenana %>% mutate(longdt = str_c(Year, " ", `Date&Time`)) %>% mutate(datetime = ymd_hm(longdt, 
-    tz = "America/Anchorage"))
+nenana %>%
+  mutate(longdt = str_c(Year, " ", `Date&Time`)) %>%
+  mutate(datetime = ymd_hm(longdt, tz = "America/Anchorage"))
 ```
 
 ```
 ## # A tibble: 87 x 5
 ##     Year JulianDate `Date&Time`         longdt               datetime           
 ##    <dbl>      <dbl> <chr>               <chr>                <dttm>             
-##  1  1917       120. April 30 at 11:30 ~ 1917 April 30 at 11~ 1917-04-30 11:30:00
-##  2  1918       131. May 11 at 9:33 AM   1918 May 11 at 9:33~ 1918-05-11 09:33:00
-##  3  1919       124. May 3 at 2:33 PM    1919 May 3 at 2:33 ~ 1919-05-03 14:33:00
-##  4  1920       132. May 11 at 10:46 AM  1920 May 11 at 10:4~ 1920-05-11 10:46:00
-##  5  1921       131. May 11 at 6:42 AM   1921 May 11 at 6:42~ 1921-05-11 06:42:00
-##  6  1922       133. May 12 at 1:20 PM   1922 May 12 at 1:20~ 1922-05-12 13:20:00
-##  7  1923       129. May 9 at 2:00 AM    1923 May 9 at 2:00 ~ 1923-05-09 02:00:00
-##  8  1924       133. May 11 at 3:10 PM   1924 May 11 at 3:10~ 1924-05-11 15:10:00
-##  9  1925       128. May 7 at 6:32 PM    1925 May 7 at 6:32 ~ 1925-05-07 18:32:00
-## 10  1926       117. April 26 at 4:03 PM 1926 April 26 at 4:~ 1926-04-26 16:03:00
-## # ... with 77 more rows
+##  1  1917       120. April 30 at 11:30 … 1917 April 30 at 11… 1917-04-30 11:30:00
+##  2  1918       131. May 11 at 9:33 AM   1918 May 11 at 9:33… 1918-05-11 09:33:00
+##  3  1919       124. May 3 at 2:33 PM    1919 May 3 at 2:33 … 1919-05-03 14:33:00
+##  4  1920       132. May 11 at 10:46 AM  1920 May 11 at 10:4… 1920-05-11 10:46:00
+##  5  1921       131. May 11 at 6:42 AM   1921 May 11 at 6:42… 1921-05-11 06:42:00
+##  6  1922       133. May 12 at 1:20 PM   1922 May 12 at 1:20… 1922-05-12 13:20:00
+##  7  1923       129. May 9 at 2:00 AM    1923 May 9 at 2:00 … 1923-05-09 02:00:00
+##  8  1924       133. May 11 at 3:10 PM   1924 May 11 at 3:10… 1924-05-11 15:10:00
+##  9  1925       128. May 7 at 6:32 PM    1925 May 7 at 6:32 … 1925-05-07 18:32:00
+## 10  1926       117. April 26 at 4:03 PM 1926 April 26 at 4:… 1926-04-26 16:03:00
+## # … with 77 more rows
 ```
 
  
@@ -949,8 +943,11 @@ The benefit of doing that is we can extract anything from the dates, such as the
 
 
 ```r
-nenana2 <- nenana %>% mutate(longdt = str_c(Year, " ", `Date&Time`)) %>% mutate(datetime = ymd_hm(longdt, 
-    tz = "America/Anchorage")) %>% mutate(jd = yday(datetime))
+nenana %>%
+  mutate(longdt = str_c(Year, " ", `Date&Time`)) %>%
+  mutate(datetime = ymd_hm(longdt, tz = "America/Anchorage")) %>%
+  mutate(jd = yday(datetime)) ->
+nenana2
 nenana2 %>% select(JulianDate, jd, datetime)
 ```
 
@@ -968,7 +965,7 @@ nenana2 %>% select(JulianDate, jd, datetime)
 ##  8       133.   132 1924-05-11 15:10:00
 ##  9       128.   127 1925-05-07 18:32:00
 ## 10       117.   116 1926-04-26 16:03:00
-## # ... with 77 more rows
+## # … with 77 more rows
 ```
 
  
@@ -978,7 +975,9 @@ rounds off to the nearest integer (since these are actually decimal numbers):
 
 
 ```r
-nenana2 %>% filter(round(JulianDate) != round(jd)) %>% select(JulianDate, jd, datetime)
+nenana2 %>%
+  filter(round(JulianDate) != round(jd)) %>%
+  select(JulianDate, jd, datetime)
 ```
 
 ```
@@ -995,7 +994,7 @@ nenana2 %>% filter(round(JulianDate) != round(jd)) %>% select(JulianDate, jd, da
 ##  8       129.   128 1930-05-08 19:03:00
 ##  9       129.   128 1933-05-08 19:30:00
 ## 10       121.   120 1934-04-30 14:07:00
-## # ... with 51 more rows
+## # … with 51 more rows
 ```
 
 
@@ -1012,7 +1011,9 @@ rather than only three:
 
 ```r
 options(pillar.sigfig = 6)
-nenana2 %>% filter(round(JulianDate) != round(jd)) %>% select(JulianDate, jd, datetime)
+nenana2 %>%
+  filter(round(JulianDate) != round(jd)) %>%
+  select(JulianDate, jd, datetime)
 ```
 
 ```
@@ -1029,7 +1030,7 @@ nenana2 %>% filter(round(JulianDate) != round(jd)) %>% select(JulianDate, jd, da
 ##  8    128.794   128 1930-05-08 19:03:00
 ##  9    128.813   128 1933-05-08 19:30:00
 ## 10    120.588   120 1934-04-30 14:07:00
-## # ... with 51 more rows
+## # … with 51 more rows
 ```
 
 
@@ -1062,8 +1063,7 @@ Solution
 ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-42-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 This is actually a small-but-real downward trend, especially since
@@ -1086,8 +1086,7 @@ ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-43-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
  
 
@@ -1132,8 +1131,8 @@ Solution
 Read in and display the data. This, I think, is the easiest way.
 
 ```r
-url = "http://www.utsc.utoronto.ca/~butler/c32/compatt.txt"
-anxiety = read_delim(url, " ")
+url="http://www.utsc.utoronto.ca/~butler/c32/compatt.txt"
+anxiety=read_delim(url," ")
 ```
 
 ```
@@ -1163,7 +1162,7 @@ anxiety
 ##  8 female  2.55  1.9 
 ##  9 male    3.15  3.32
 ## 10 male    2.8   2.74
-## # ... with 25 more rows
+## # … with 25 more rows
 ```
 
 There is a total of 35 students with a CAS score, a CARS score and a
@@ -1197,7 +1196,7 @@ This also works (and is therefore good):
 
 
 ```r
-anxiety %>% group_by(gender) %>% summarize(count = n())
+anxiety %>% group_by(gender) %>% summarize(count=n())
 ```
 
 ```
@@ -1233,11 +1232,10 @@ Solution
 Gender is categorical and CAS score is quantitative, so a boxplot would appear to be the thing:
 
 ```r
-ggplot(anxiety, aes(x = gender, y = CAS)) + geom_boxplot()
+ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-47-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
 The median for males is slightly higher, so male accountants are more anxious around computers than female accountants are.
 
@@ -1246,11 +1244,11 @@ would also work:
 
 
 ```r
-ggplot(anxiety, aes(x = CAS)) + geom_histogram(bins = 6) + facet_wrap(~gender, ncol = 1)
+ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
+facet_wrap(~gender,ncol=1)
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-48-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
 If you go this way, you have to make a call about where the centres of the histograms are. I guess the male one is slightly further to the right, but it's not so easy to tell. (Make a call.)
     
@@ -1265,7 +1263,7 @@ Solution
 Group-by and summarize:
 
 ```r
-anxiety %>% group_by(gender) %>% summarize(med = median(CAS))
+anxiety %>% group_by(gender) %>% summarize(med=median(CAS))
 ```
 
 ```
@@ -1295,7 +1293,7 @@ Solution
 Without naming them explicitly means using some other way to pick them out of the data frame, either `summarize\_if` or `summarize\_at`. To do it the first way, ask what these two columns have in common: they are the only two numeric (quantitative) columns:
 
 ```r
-anxiety %>% summarize_if(is.numeric, funs(mean, sd))
+anxiety %>% summarize_if(is.numeric,funs(mean,sd))
 ```
 
 ```
@@ -1325,7 +1323,7 @@ Or the second way, asking yourself what the *names* of those columns have in com
 
 
 ```r
-anxiety %>% summarize_at(vars(starts_with("C")), funs(mean, sd))
+anxiety %>% summarize_at(vars(starts_with("C")),funs(mean,sd))
 ```
 
 ```
@@ -1339,7 +1337,7 @@ Either of these is good, or anything equivalent (like noting that the two anxiet
 
 
 ```r
-anxiety %>% summarize_at(vars(ends_with("S")), funs(mean, sd))
+anxiety %>% summarize_at(vars(ends_with("S")),funs(mean,sd))
 ```
 
 ```
@@ -1357,7 +1355,7 @@ and SD of all of them. This uses two tools that we haven't seen yet:
 
 
 ```r
-anxiety %>% select(2:3) %>% summarize_all(funs(mean, sd))
+anxiety %>% select(2:3) %>% summarize_all(funs(mean,sd))
 ```
 
 ```
@@ -1395,7 +1393,8 @@ In case you were wondering about how to do this separately by gender, well, put 
 
 
 ```r
-anxiety %>% group_by(gender) %>% summarize_if(is.numeric, funs(mean, sd))
+anxiety %>% group_by(gender) %>%
+summarize_if(is.numeric,funs(mean,sd))
 ```
 
 ```
@@ -1410,8 +1409,8 @@ or
 
 
 ```r
-anxiety %>% group_by(gender) %>% summarize_at(vars(starts_with("C")), funs(mean, 
-    sd))
+anxiety %>% group_by(gender) %>%
+summarize_at(vars(starts_with("C")),funs(mean,sd))
 ```
 
 ```
@@ -1428,11 +1427,10 @@ You might be wondering whether the test scores are related. They are both quanti
 
 
 ```r
-ggplot(anxiety, aes(x = CAS, y = CARS)) + geom_point()
+ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-57-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-57-1.png" width="672"  />
 
 The two variables can be on either axis, since there is no obvious
 response or explanatory variable. A higher score on one scale goes
@@ -1443,11 +1441,10 @@ This plot mixes up the males and females, so you might like to distinguish them,
 
 
 ```r
-ggplot(anxiety, aes(x = CAS, y = CARS, colour = gender)) + geom_point()
+ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-58-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-58-1.png" width="672"  />
 
 There is a slight (but only slight) tendency for the males to be up
 and to the right, and for the females to be down and to the left. This
@@ -1630,13 +1627,12 @@ library(tidyverse)
 ggplot(marks, aes(x = class, y = score)) + geom_boxplot()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/paignton-1} 
+<img src="03-data-summaries_files/figure-html/paignton-1.png" width="672"  />
 
        
 
 Remember: on a regular boxplot,
-\marginnote{Boxplots can also go across the page, but for us, they don't.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Boxplots can also go across the page, but for us, they don't.</span> 
 the groups go across ($x$), the
 variable measured goes up ($y$).
 
@@ -1644,11 +1640,11 @@ Extra: this might work:
 
 
 ```r
-ggplot(marks, aes(x = class, y = score)) + geom_boxplot() + coord_flip()
+ggplot(marks, aes(x = class, y = score)) + geom_boxplot() +
+  coord_flip()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-62-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
  
 
@@ -1692,8 +1688,7 @@ Replace your $x$-coordinate by some kind of dummy thing like
 ggplot(marks, aes(x = 1, y = score)) + geom_boxplot()
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/torquay-1} 
+<img src="03-data-summaries_files/figure-html/torquay-1.png" width="672"  />
 
        
 
@@ -1703,12 +1698,14 @@ rid of the ticks below:
 
 
 ```r
-ggplot(marks, aes(x = 1, y = score)) + geom_boxplot() + theme(axis.text.x = element_blank(), 
-    axis.title.x = element_blank())
+ggplot(marks, aes(x = 1, y = score)) + geom_boxplot() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank()
+  )
 ```
 
-
-\includegraphics{03-data-summaries_files/figure-latex/unnamed-chunk-63-1} 
+<img src="03-data-summaries_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
 
        
  
@@ -1767,7 +1764,9 @@ Extra: if you wanted median by group, this is the approved
 
 
 ```r
-marks %>% group_by(class) %>% summarize(med = median(score))
+marks %>%
+  group_by(class) %>%
+  summarize(med = median(score))
 ```
 
 ```
@@ -1792,8 +1791,13 @@ boxplots in (<a href="#part:sbsbox">here</a>). They should be the same. Or you c
 
 
 ```r
-marks %>% group_by(class) %>% summarize(q1 = quantile(score, 0.25), med = median(score), 
-    q3 = quantile(score, 0.75))
+marks %>%
+  group_by(class) %>%
+  summarize(
+    q1 = quantile(score, 0.25),
+    med = median(score),
+    q3 = quantile(score, 0.75)
+  )
 ```
 
 ```
@@ -1833,7 +1837,8 @@ to handle this. Here's step 1:
 
 
 ```r
-marks %>% nest(-class)
+marks %>%
+  nest(-class)
 ```
 
 ```
@@ -1845,8 +1850,8 @@ marks %>% nest(-class)
 ## # A tibble: 2 x 2
 ##   class  data            
 ##   <chr>  <list>          
-## 1 ken    <tibble [5 x 1]>
-## 2 thomas <tibble [6 x 1]>
+## 1 ken    <tibble [5 × 1]>
+## 2 thomas <tibble [6 × 1]>
 ```
 
  
@@ -1865,7 +1870,9 @@ mini-data-frames, calculate the five-number summary of the column called `score`
 
 
 ```r
-marks %>% nest(-class) %>% mutate(qq = map(data, ~quantile(.$score)))
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ quantile(.$score)))
 ```
 
 ```
@@ -1877,8 +1884,8 @@ marks %>% nest(-class) %>% mutate(qq = map(data, ~quantile(.$score)))
 ## # A tibble: 2 x 3
 ##   class  data             qq       
 ##   <chr>  <list>           <list>   
-## 1 ken    <tibble [5 x 1]> <dbl [5]>
-## 2 thomas <tibble [6 x 1]> <dbl [5]>
+## 1 ken    <tibble [5 × 1]> <dbl [5]>
+## 2 thomas <tibble [6 × 1]> <dbl [5]>
 ```
 
   
@@ -1889,13 +1896,16 @@ are the things we're for-eaching over.
 
 This obtains a new list-column called `qq`, with the
 five-number summary for each group.
-\marginnote{It's actually a  coincidence that the five-number summary and Ken's class both have  five values in them.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It's actually a  coincidence that the five-number summary and Ken's class both have  five values in them.</span> 
 
 Now we want to display the quantiles. This is the easiest way:
 
 
 ```r
-marks %>% nest(-class) %>% mutate(qq = map(data, ~quantile(.$score))) %>% unnest(qq)
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ quantile(.$score))) %>%
+  unnest(qq)
 ```
 
 ```
@@ -1907,16 +1917,16 @@ marks %>% nest(-class) %>% mutate(qq = map(data, ~quantile(.$score))) %>% unnest
 ## # A tibble: 10 x 3
 ##    class  data                qq
 ##    <chr>  <list>           <dbl>
-##  1 ken    <tibble [5 x 1]>  59  
-##  2 ken    <tibble [5 x 1]>  62  
-##  3 ken    <tibble [5 x 1]>  69  
-##  4 ken    <tibble [5 x 1]>  78  
-##  5 ken    <tibble [5 x 1]>  81  
-##  6 thomas <tibble [6 x 1]>  61  
-##  7 thomas <tibble [6 x 1]>  65.2
-##  8 thomas <tibble [6 x 1]>  74.5
-##  9 thomas <tibble [6 x 1]>  78.5
-## 10 thomas <tibble [6 x 1]>  83
+##  1 ken    <tibble [5 × 1]>  59  
+##  2 ken    <tibble [5 × 1]>  62  
+##  3 ken    <tibble [5 × 1]>  69  
+##  4 ken    <tibble [5 × 1]>  78  
+##  5 ken    <tibble [5 × 1]>  81  
+##  6 thomas <tibble [6 × 1]>  61  
+##  7 thomas <tibble [6 × 1]>  65.2
+##  8 thomas <tibble [6 × 1]>  74.5
+##  9 thomas <tibble [6 × 1]>  78.5
+## 10 thomas <tibble [6 × 1]>  83
 ```
 
   
@@ -1982,7 +1992,9 @@ which quantile is which. So let's rewrite our code to use this:
 
 
 ```r
-marks %>% nest(-class) %>% mutate(qq = map(data, ~enframe((quantile(.$score)))))
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ enframe((quantile(.$score)))))
 ```
 
 ```
@@ -1994,8 +2006,8 @@ marks %>% nest(-class) %>% mutate(qq = map(data, ~enframe((quantile(.$score)))))
 ## # A tibble: 2 x 3
 ##   class  data             qq              
 ##   <chr>  <list>           <list>          
-## 1 ken    <tibble [5 x 1]> <tibble [5 x 2]>
-## 2 thomas <tibble [6 x 1]> <tibble [5 x 2]>
+## 1 ken    <tibble [5 × 1]> <tibble [5 × 2]>
+## 2 thomas <tibble [6 × 1]> <tibble [5 × 2]>
 ```
 
  
@@ -2007,8 +2019,10 @@ And finally `unnest` `qq`:
 
 
 ```r
-marks %>% nest(-class) %>% mutate(qq = map(data, ~enframe((quantile(.$score))))) %>% 
-    unnest(qq)
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ enframe((quantile(.$score))))) %>%
+  unnest(qq)
 ```
 
 ```
@@ -2020,16 +2034,16 @@ marks %>% nest(-class) %>% mutate(qq = map(data, ~enframe((quantile(.$score)))))
 ## # A tibble: 10 x 4
 ##    class  data             name  value
 ##    <chr>  <list>           <chr> <dbl>
-##  1 ken    <tibble [5 x 1]> 0%     59  
-##  2 ken    <tibble [5 x 1]> 25%    62  
-##  3 ken    <tibble [5 x 1]> 50%    69  
-##  4 ken    <tibble [5 x 1]> 75%    78  
-##  5 ken    <tibble [5 x 1]> 100%   81  
-##  6 thomas <tibble [6 x 1]> 0%     61  
-##  7 thomas <tibble [6 x 1]> 25%    65.2
-##  8 thomas <tibble [6 x 1]> 50%    74.5
-##  9 thomas <tibble [6 x 1]> 75%    78.5
-## 10 thomas <tibble [6 x 1]> 100%   83
+##  1 ken    <tibble [5 × 1]> 0%     59  
+##  2 ken    <tibble [5 × 1]> 25%    62  
+##  3 ken    <tibble [5 × 1]> 50%    69  
+##  4 ken    <tibble [5 × 1]> 75%    78  
+##  5 ken    <tibble [5 × 1]> 100%   81  
+##  6 thomas <tibble [6 × 1]> 0%     61  
+##  7 thomas <tibble [6 × 1]> 25%    65.2
+##  8 thomas <tibble [6 × 1]> 50%    74.5
+##  9 thomas <tibble [6 × 1]> 75%    78.5
+## 10 thomas <tibble [6 × 1]> 100%   83
 ```
 
  
@@ -2038,9 +2052,13 @@ Success! Or even:
 
 
 ```r
-marks %>% nest(-class) %>% mutate(qq = map(data, ~enframe((quantile(.$score))))) %>% 
-    unnest(qq) %>% mutate(qn = parse_number(name)) %>% select(-name) %>% spread(qn, 
-    value)
+marks %>%
+  nest(-class) %>%
+  mutate(qq = map(data, ~ enframe((quantile(.$score))))) %>%
+  unnest(qq) %>%
+  mutate(qn = parse_number(name)) %>%
+  select(-name) %>%
+  spread(qn, value)
 ```
 
 ```
@@ -2052,8 +2070,8 @@ marks %>% nest(-class) %>% mutate(qq = map(data, ~enframe((quantile(.$score)))))
 ## # A tibble: 2 x 7
 ##   class  data               `0`  `25`  `50`  `75` `100`
 ##   <chr>  <list>           <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 ken    <tibble [5 x 1]>    59  62    69    78      81
-## 2 thomas <tibble [6 x 1]>    61  65.2  74.5  78.5    83
+## 1 ken    <tibble [5 × 1]>    59  62    69    78      81
+## 2 thomas <tibble [6 × 1]>    61  65.2  74.5  78.5    83
 ```
 
  
