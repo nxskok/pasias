@@ -285,7 +285,7 @@ mtcars
 ##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
 ##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # … with 22 more rows
+## # ... with 22 more rows
 ```
 
 The top bit is the code, the bottom bit with the `##` the
@@ -381,7 +381,8 @@ This is what you should see:
 boxplot(mtcars$mpg)
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+
+\includegraphics{01-getting-used_files/figure-latex/unnamed-chunk-10-1} 
 
 The long upper whisker supports our guess from before that the
 distribution is right-skewed.
@@ -512,10 +513,11 @@ That goes like this. I'll explain the steps below.
 
 ```r
 library(tidyverse)
-ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()
+ggplot(mtcars, aes(x = hp, y = mpg)) + geom_point()
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+
+\includegraphics{01-getting-used_files/figure-latex/unnamed-chunk-11-1} 
 $ %$ %$ 
 
 This shows a somewhat downward trend, which is what you'd expect,
@@ -536,14 +538,15 @@ of adding this to the end of the plotting command:
 
 
 ```r
-ggplot(mtcars, aes(x=hp, y=mpg))+geom_point()+geom_smooth(method="lm")
+ggplot(mtcars, aes(x = hp, y = mpg)) + geom_point() + geom_smooth(method = "lm")
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+
+\includegraphics{01-getting-used_files/figure-latex/unnamed-chunk-12-1} 
 
 The line definitely goes downhill. Decide for yourself how well you
 think a line fits these data.
@@ -604,8 +607,8 @@ Solution
 Like this:
 
 ```r
-my_url="https://www.utsc.utoronto.ca/~butler/c32/jumping.txt"
-rats=read_delim(my_url," ")
+my_url = "https://www.utsc.utoronto.ca/~butler/c32/jumping.txt"
+rats = read_delim(my_url, " ")
 ```
 
 ```
@@ -646,7 +649,7 @@ rats
 ##  8 Control     554
 ##  9 Control     603
 ## 10 Control     569
-## # … with 20 more rows
+## # ... with 20 more rows
 ```
 
 There are 30 rows and two columns, as there should be.
@@ -663,8 +666,7 @@ percent signs (called the "pipe symbol"), type control-shift-M (or
 equivalent on a Mac):
 
 ```r
-rats %>% group_by(group) %>%
-summarize(m=mean(density))
+rats %>% group_by(group) %>% summarize(m = mean(density))
 ```
 
 ```
@@ -693,10 +695,11 @@ On a boxplot, the groups go across and the values go up and down,
 so the right syntax is this:
 
 ```r
-ggplot(rats,aes(x=group, y=density))+geom_boxplot()
+ggplot(rats, aes(x = group, y = density)) + geom_boxplot()
 ```
 
-<img src="01-getting-used_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+
+\includegraphics{01-getting-used_files/figure-latex/unnamed-chunk-16-1} 
 
 Given the amount of variability, the control and low-jump groups are
 very similar (with the control group having a couple of outliers), but
@@ -953,7 +956,7 @@ cars
 ##  8 Mazda GLC           34.1   1.98         4         65 Japan  
 ##  9 Buick Estate Wagon  16.9   4.36         8        155 U.S.   
 ## 10 Audi 5000           20.3   2.83         5        103 Germany
-## # … with 28 more rows
+## # ... with 28 more rows
 ```
 
        
@@ -1156,7 +1159,7 @@ cars
 ##  8 Mazda GLC           34.1   1.98         4         65 Japan  
 ##  9 Buick Estate Wagon  16.9   4.36         8        155 U.S.   
 ## 10 Audi 5000           20.3   2.83         5        103 Germany
-## # … with 28 more rows
+## # ... with 28 more rows
 ```
 
  

@@ -67,17 +67,17 @@ wisc
 ##    <chr>       <dbl>  <dbl>         <dbl>   <dbl>      <dbl>     <dbl>  <dbl>
 ##  1 Appleton        0    130            98     102        103       100    149
 ##  2 Beloit        130      0            33      50        185        73     33
-##  3 Fort.At…       98     33             0      36        164        54     58
+##  3 Fort.At~       98     33             0      36        164        54     58
 ##  4 Madison       102     50            36       0        138        77     47
-##  5 Marshfi…      103    185           164     138          0       184    170
-##  6 Milwauk…      100     73            54      77        184         0    107
+##  5 Marshfi~      103    185           164     138          0       184    170
+##  6 Milwauk~      100     73            54      77        184         0    107
 ##  7 Monroe        149     33            58      47        170       107      0
 ##  8 Superior      315    377           359     330        219       394    362
 ##  9 Wausau         91    186           166     139         45       181    186
 ## 10 Dubuque       196     94           119      95        186       168     61
 ## 11 St.Paul       257    304           287     258        161       322    289
 ## 12 Chicago       186     97           113     146        276        93    130
-## # … with 5 more variables: Superior <dbl>, Wausau <dbl>, Dubuque <dbl>,
+## # ... with 5 more variables: Superior <dbl>, Wausau <dbl>, Dubuque <dbl>,
 ## #   St.Paul <dbl>, Chicago <dbl>
 ```
 
@@ -96,9 +96,7 @@ names  of the places, so we won't lose anything by getting rid of the
 
 
 ```r
-d <- wisc %>%
-  select(-location) %>%
-  as.dist()
+d <- wisc %>% select(-location) %>% as.dist()
 d
 ```
 
@@ -241,13 +239,12 @@ I think the best use of your judgement is to go straight to
 
 
 ```r
-ggplot(dd, aes(x = X1, y = X2, label = city)) +
-  geom_point() +
-  geom_text_repel() +
-  coord_fixed()
+ggplot(dd, aes(x = X1, y = X2, label = city)) + geom_point() + geom_text_repel() + 
+    coord_fixed()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-10-1} 
 
  
 
@@ -433,7 +430,8 @@ wisc.map <- get_map(location = "Milwaukee, WI", zoom = 6)
 ggmap(wisc.map)
 ```
 
-<img src="23-mds_files/figure-html/laskhsal-1.png" width="576"  />
+
+\includegraphics{23-mds_files/figure-latex/laskhsal-1} 
 
    
 
@@ -485,8 +483,7 @@ like this:
 
 
 ```r
-tibble(cst) %>%
-  ggmap::mutate_geocode(cst) -> g
+g <- tibble(cst) %>% ggmap::mutate_geocode(cst)
 ```
 
 ```
@@ -585,9 +582,7 @@ or even
 
 
 ```r
-g %>%
-  select(lat, lon) %>%
-  map_df(range)
+g %>% select(lat, lon) %>% map_df(range)
 ```
 
 ```
@@ -621,7 +616,8 @@ wisc.map.2 <- get_map(location = c(-94, 41.8, -87, 46.8), maptype = "roadmap")
 ggmap(wisc.map.2)
 ```
 
-<img src="23-mds_files/figure-html/lhsdljhadkfj-1.png" width="576"  />
+
+\includegraphics{23-mds_files/figure-latex/lhsdljhadkfj-1} 
 
  
 
@@ -635,7 +631,8 @@ Now we need to mark our 12 cities on the map. This is a
 ggmap(wisc.map.2) + geom_point(data = g, aes(x = lon, y = lat))
 ```
 
-<img src="23-mds_files/figure-html/sldkhdlf-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/sldkhdlf-1} 
 
  
 
@@ -723,7 +720,7 @@ cmdscale(d, 1, eig = T)$GOF
 
 The goodness-of-fit of the two-dimensional solution is pretty
 good,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As it ought to be, since there is a real answer  here: the cities do} exist as locations in two dimensions, if you ignore the curvature of the earth. The goodness of fit isn't  100% because the roads bend a bit.</span>
+\marginnote{As it ought to be, since there is a real answer  here: the cities do} exist as locations in two dimensions, if you ignore the curvature of the earth. The goodness of fit isn't  100% because the roads bend a bit.}
 but that of the one-dimensional solution (which arranges all the
 cities along a line) is pretty awful in comparison.
 
@@ -735,8 +732,7 @@ ones, as many as there are cities.
 ```r
 ones <- rep(1, 12)
 v <- cmdscale(d, 1, eig = T)
-ddd <- as_tibble(v$points) %>%
-  mutate(one = ones, city = cities)
+ddd <- as_tibble(v$points) %>% mutate(one = ones, city = cities)
 ```
 
 ```
@@ -775,11 +771,11 @@ the name `V1`), and the plot:
 
 
 ```r
-ggplot(ddd, aes(x = one, y = V1, label = city)) +
-  geom_point() + geom_text_repel()
+ggplot(ddd, aes(x = one, y = V1, label = city)) + geom_point() + geom_text_repel()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-22-1} 
 
  
 
@@ -799,14 +795,14 @@ pretty awful.
  Which objects feel similar to one another and which ones
 feel different? Can we draw them on a "map"? 30
 subjects
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Probably students in a psychology course. You know  how it goes.</span> were each
+\marginnote{Probably students in a psychology course. You know  how it goes.} were each
 given 17 different objects to feel, for example "inner surface of pine  bark", 
 "rubber eraser" and 
 "nylon scouring pad". The
 subjects had to group the objects into a maximum of 8 groups such that
 the objects within a group felt similar, and the ones in different
 groups felt different.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The maximum number of groups was to  ensure that each subject actually *did* group some objects  together, rather than saying that they all feel different.</span> A
+\marginnote{The maximum number of groups was to  ensure that each subject actually *did* group some objects  together, rather than saying that they all feel different.} A
 dissimilarity matrix was formed by counting how many subjects put each
 pair of objects into *different* groups, so that the
 dissimilarity ranged from 0 (the objects were always put together in
@@ -866,24 +862,24 @@ stimuli
 ## # A tibble: 17 x 18
 ##    X1       X2    X3    X4    X5    X6    X7    X8    X9   X10   X11   X12   X13
 ##    <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 inne…     0    22    23    24    26    27    26    23    24    23    23    18
+##  1 inne~     0    22    23    24    26    27    26    23    24    23    23    18
 ##  2 brick    22     0    27    27    27    29    29    28    16    18    28    25
-##  3 card…    23    27     0    18    19    28    23    24    24    29    27    28
+##  3 card~    23    27     0    18    19    28    23    24    24    29    27    28
 ##  4 cork     24    27    18     0    15    28    25    26    28    28    20    27
-##  5 rubb…    26    27    19    15     0    28    20    27    24    27    24    25
+##  5 rubb~    26    27    19    15     0    28    20    27    24    27    24    25
 ##  6 felt     27    29    28    28    28     0    24    28    29    26    26    29
-##  7 leat…    26    29    23    25    20    24     0    22    28    28    27    26
-##  8 rigi…    23    28    24    26    27    28    22     0    27    29    29    27
-##  9 very…    24    16    24    28    24    29    28    27     0    21    24    26
-## 10 nylo…    23    18    29    28    27    26    28    29    21     0    22    16
-## 11 cell…    23    28    27    20    24    26    27    29    24    22     0    19
-## 12 wove…    18    25    28    27    25    29    26    27    26    16    19     0
-## 13 bloc…    23    24    21    10    19    28    25    25    25    25    21    26
-## 14 ungl…    21    10    26    26    24    29    29    25    12    24    26    26
-## 15 velv…    28    29    28    28    29     4    24    29    29    27    27    28
-## 16 waxp…    24    28    24    28    24    28    21    12    29    29    29    27
-## 17 glos…    22    27    23    29    28    29    20    13    27    28    27    25
-## # … with 5 more variables: X14 <dbl>, X15 <dbl>, X16 <dbl>, X17 <dbl>,
+##  7 leat~    26    29    23    25    20    24     0    22    28    28    27    26
+##  8 rigi~    23    28    24    26    27    28    22     0    27    29    29    27
+##  9 very~    24    16    24    28    24    29    28    27     0    21    24    26
+## 10 nylo~    23    18    29    28    27    26    28    29    21     0    22    16
+## 11 cell~    23    28    27    20    24    26    27    29    24    22     0    19
+## 12 wove~    18    25    28    27    25    29    26    27    26    16    19     0
+## 13 bloc~    23    24    21    10    19    28    25    25    25    25    21    26
+## 14 ungl~    21    10    26    26    24    29    29    25    12    24    26    26
+## 15 velv~    28    29    28    28    29     4    24    29    29    27    27    28
+## 16 waxp~    24    28    24    28    24    28    21    12    29    29    29    27
+## 17 glos~    22    27    23    29    28    29    20    13    27    28    27    25
+## # ... with 5 more variables: X14 <dbl>, X15 <dbl>, X16 <dbl>, X17 <dbl>,
 ## #   X18 <dbl>
 ```
 
@@ -951,26 +947,26 @@ stimuli
 
 ```
 ## # A tibble: 17 x 18
-##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
+##    object innersurfaceofp~ brick cardboard  cork rubbereraser  felt
 ##    <chr>             <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
-##  1 inner…                0    22        23    24           26    27
+##  1 inner~                0    22        23    24           26    27
 ##  2 brick                22     0        27    27           27    29
-##  3 cardb…               23    27         0    18           19    28
+##  3 cardb~               23    27         0    18           19    28
 ##  4 cork                 24    27        18     0           15    28
-##  5 rubbe…               26    27        19    15            0    28
+##  5 rubbe~               26    27        19    15            0    28
 ##  6 felt                 27    29        28    28           28     0
-##  7 leath…               26    29        23    25           20    24
-##  8 rigid…               23    28        24    26           27    28
-##  9 veryf…               24    16        24    28           24    29
-## 10 nylon…               23    18        29    28           27    26
-## 11 cellu…               23    28        27    20           24    26
-## 12 woven…               18    25        28    27           25    29
-## 13 block…               23    24        21    10           19    28
-## 14 ungla…               21    10        26    26           24    29
+##  7 leath~               26    29        23    25           20    24
+##  8 rigid~               23    28        24    26           27    28
+##  9 veryf~               24    16        24    28           24    29
+## 10 nylon~               23    18        29    28           27    26
+## 11 cellu~               23    28        27    20           24    26
+## 12 woven~               18    25        28    27           25    29
+## 13 block~               23    24        21    10           19    28
+## 14 ungla~               21    10        26    26           24    29
 ## 15 velvet               28    29        28    28           29     4
-## 16 waxpa…               24    28        24    28           24    28
-## 17 gloss…               22    27        23    29           28    29
-## # … with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
+## 16 waxpa~               24    28        24    28           24    28
+## 17 gloss~               22    27        23    29           28    29
+## # ... with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
 ## #   veryfinesandpaper <dbl>, nylonscouringpad <dbl>,
 ## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>, blockofstyrofoam <dbl>,
 ## #   unglazedceramictile <dbl>, velvet <dbl>, waxpaper <dbl>,
@@ -1090,12 +1086,12 @@ This is the procedure. Talking about it is coming in a minute.
 
 ```r
 d.1 <- cmdscale(d, 2)
-data.frame(d.1, stim = objects) %>%
-  ggplot(aes(x = X1, y = X2, label = stim)) + geom_point() +
-  geom_text_repel(size = 2)
+data.frame(d.1, stim = objects) %>% ggplot(aes(x = X1, y = X2, label = stim)) + geom_point() + 
+    geom_text_repel(size = 2)
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-28-1} 
 
      
 
@@ -1142,7 +1138,7 @@ I note that any map that is the same as this apart from rotation and
 reflection is also fine (since the distances will be the same). I saw
 a lot of maps that were like mine but upside down (with `cork`
 at the top).
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I lie. Last year, *I* got cork at the top,  and a lot of other people got cork at the bottom as you see here.</span> No problem there.
+\marginnote{I lie. Last year, *I* got cork at the top,  and a lot of other people got cork at the bottom as you see here.} No problem there.
     
 
 
@@ -1170,7 +1166,7 @@ wax paper. Distance 12. Smallish.
 
 * unglazed ceramic
 tile
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The first association that *unglazed* made for me      was *donut*!</span> and very fine sandpaper. Distance 12. Smallish.
+\marginnote{The first association that *unglazed* made for me      was *donut*!} and very fine sandpaper. Distance 12. Smallish.
 
 There won't be a perfect relationship between distance in the
 distance matrix and on the map. In this case, there is an upper
@@ -1254,7 +1250,8 @@ d.3 <- hclust(d, method = "ward.D")
 plot(d.3)
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-32-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-32-1} 
 
      
 
@@ -1267,7 +1264,8 @@ plot(d.3)
 rect.hclust(d.3, 5)
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-33-1} 
 
  
     
@@ -1321,13 +1319,12 @@ would go like this:
 
 ```r
 clusters <- cutree(d.3, 5)
-data.frame(d.1, names = stimuli[, 1], cluster = factor(clusters)) %>%
-  ggplot(aes(x = X1, y = X2, label = objects, colour = cluster)) +
-  geom_point() +
-  geom_text_repel(size = 2)
+data.frame(d.1, names = stimuli[, 1], cluster = factor(clusters)) %>% ggplot(aes(x = X1, 
+    y = X2, label = objects, colour = cluster)) + geom_point() + geom_text_repel(size = 2)
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-34-1} 
 
      
 
@@ -1375,7 +1372,7 @@ Then you can think about what makes the clusters different in terms of
 mixed up, with `X1` and (usually) `X2` negative; cluster
 3 has strongly positive `X2`; cluster 4 has very
 *negative* `X2`;
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Oxford semicolon, for the grammar mavens among you.</span> 
+\marginnote{Oxford semicolon, for the grammar mavens among you.} 
 and cluster 5 has strongly positive `X1`.
 
 I wonder whether our three-dimensional solution distinguishes clusters
@@ -1383,8 +1380,7 @@ I wonder whether our three-dimensional solution distinguishes clusters
 
 
 ```r
-save.3d <- data.frame(d.2a$points, objects, clusters) %>%
-  arrange(clusters)
+save.3d <- data.frame(d.2a$points, objects, clusters) %>% arrange(clusters)
 save.3d
 ```
 
@@ -1453,12 +1449,12 @@ found that `LD3` is basically worthless, so I can plot
 
 
 ```r
-data.frame(ppp$x, cluster = factor(save.3d$clusters)) %>%
-  ggplot(aes(x = LD1, y = LD2, colour = cluster)) +
-  geom_point()
+data.frame(ppp$x, cluster = factor(save.3d$clusters)) %>% ggplot(aes(x = LD1, y = LD2, 
+    colour = cluster)) + geom_point()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-38-1} 
 
      
 
@@ -1559,7 +1555,8 @@ A biplot would be another way to look at that:
 ggbiplot(save.3d.lda, groups = factor(save.3d$clusters))
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-41-1} 
 
  
 Points on the right have `X1` and `X2` large, and
@@ -1672,7 +1669,7 @@ everything that is not numbers:
 
 
 ```r
-letters %>% dplyr::select(-X1) -> letters2
+letters2 <- letters %>% dplyr::select(-X1)
 letters2 <- 21 - letters2
 letters2
 ```
@@ -1834,7 +1831,7 @@ supplied.
 Extra: You can even get the letter names from the thing I called `d`,
 but I can't remember how, so I have to cheat. I said that `d`
 has a "print method"
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The way that a multicoloured function  like *print* works is that when you ask to show something,  like *d*, R first looks to see what kind of thing you want to show (by calling *class*), and determines that it is a *dist* object. Then it looks to see if there is a function called *print.dist* (there is), and if there is, it calls that (to produce that nice display). If there isn't, it calls *print.default*, which just displays its input without doing anything special. This is why printing the output from an *lm* looks very different from printing a data frame: the first calls *print.lm* and the second calls *print.data.frame*, or *print.tbl-df* for a tibble.</span> 
+\marginnote{The way that a multicoloured function  like *print* works is that when you ask to show something,  like *d*, R first looks to see what kind of thing you want to show (by calling *class*), and determines that it is a *dist* object. Then it looks to see if there is a function called *print.dist* (there is), and if there is, it calls that (to produce that nice display). If there isn't, it calls *print.default*, which just displays its input without doing anything special. This is why printing the output from an *lm* looks very different from printing a data frame: the first calls *print.lm* and the second calls *print.data.frame*, or *print.tbl-df* for a tibble.} 
 that controls how it looks:
 
 
@@ -1959,13 +1956,12 @@ frame. So I can proceed:
 
 
 ```r
-data.frame(d.1, names = letter_names) %>%
-  ggplot(aes(x = X1, y = X2, label = names)) +
-  geom_point() + geom_text_repel() +
-  coord_fixed()
+data.frame(d.1, names = letter_names) %>% ggplot(aes(x = X1, y = X2, label = names)) + 
+    geom_point() + geom_text_repel() + coord_fixed()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-53-1} 
 
      
 
@@ -1987,12 +1983,12 @@ figuring out where to put the text relative to the point.
 
 
 ```r
-data.frame(d.1, names = letter_names) %>%
-  ggplot(aes(x = X1, y = X2, label = names)) +
-  geom_text() + coord_fixed()
+data.frame(d.1, names = letter_names) %>% ggplot(aes(x = X1, y = X2, label = names)) + 
+    geom_text() + coord_fixed()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-54-1} 
 
  
 
@@ -2070,7 +2066,7 @@ letters and assert that it is large (compared to the others).
 These are actually not *all* the large ones: M and W, H and N, M
 and N are also large (which lends some support to these letters being
 a foursome
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Set of four. Match-play golf has a game called  *foursomes* where the two players on each team take it in turns to hit the ball, as opposed to the game called *fourballs*, where each of the two players plays their own ball, and the team's score on a hole is the better of the two players' scores.</span> rather than two pairs).
+\marginnote{Set of four. Match-play golf has a game called  *foursomes* where the two players on each team take it in turns to hit the ball, as opposed to the game called *fourballs*, where each of the two players plays their own ball, and the team's score on a hole is the better of the two players' scores.} rather than two pairs).
 
 If you prefer, you can work from your `dist` object, the thing
 I called `d`:
@@ -2191,14 +2187,11 @@ beer
 ##  8 S050          5     3     1      5       5        5        3      5        5
 ##  9 S057          9     3     2      6       4        6        1      5        3
 ## 10 S064          2     6     6      5       6        4        8      4        4
-## # … with 22 more rows, and 1 more variable: SierraN <dbl>
+## # ... with 22 more rows, and 1 more variable: SierraN <dbl>
 ```
 
 ```r
-d <- beer %>%
-  dplyr::select(-student) %>%
-  t() %>%
-  dist()
+d <- beer %>% dplyr::select(-student) %>% t() %>% dist()
 ```
 
 
@@ -2277,12 +2270,12 @@ beer_names
 ```
 
 ```r
-data.frame(beer.1$points, beer = beer_names) %>%
-  ggplot(aes(x = X1, y = X2, label = beer)) +
-  geom_point() + geom_text_repel()
+data.frame(beer.1$points, beer = beer_names) %>% ggplot(aes(x = X1, y = X2, label = beer)) + 
+    geom_point() + geom_text_repel()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-61-1} 
 
      
  
@@ -2349,11 +2342,12 @@ the ratings are whole numbers, they are likely to be duplicated, so I
 
 
 ```r
-ggplot(beer, aes(x = SamAdams, y = GordonB)) + geom_jitter() +
-  geom_abline(intercept = 0, slope = 1)
+ggplot(beer, aes(x = SamAdams, y = GordonB)) + geom_jitter() + geom_abline(intercept = 0, 
+    slope = 1)
 ```
 
-<img src="23-mds_files/figure-html/adkjalkjdsg-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/adkjalkjdsg-1} 
 
  
 
@@ -2363,11 +2357,12 @@ different, for example `Becks` and `SierraN`:
 
 
 ```r
-ggplot(beer, aes(x = Becks, y = SierraN)) + geom_jitter() +
-  geom_abline(intercept = 0, slope = 1)
+ggplot(beer, aes(x = Becks, y = SierraN)) + geom_jitter() + geom_abline(intercept = 0, 
+    slope = 1)
 ```
 
-<img src="23-mds_files/figure-html/adkjalkjdsh-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/adkjalkjdsh-1} 
 
  
 
@@ -2487,26 +2482,26 @@ stimuli
 
 ```
 ## # A tibble: 17 x 18
-##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
+##    object innersurfaceofp~ brick cardboard  cork rubbereraser  felt
 ##    <chr>             <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
-##  1 inner…                0    22        23    24           26    27
+##  1 inner~                0    22        23    24           26    27
 ##  2 brick                22     0        27    27           27    29
-##  3 cardb…               23    27         0    18           19    28
+##  3 cardb~               23    27         0    18           19    28
 ##  4 cork                 24    27        18     0           15    28
-##  5 rubbe…               26    27        19    15            0    28
+##  5 rubbe~               26    27        19    15            0    28
 ##  6 felt                 27    29        28    28           28     0
-##  7 leath…               26    29        23    25           20    24
-##  8 rigid…               23    28        24    26           27    28
-##  9 veryf…               24    16        24    28           24    29
-## 10 nylon…               23    18        29    28           27    26
-## 11 cellu…               23    28        27    20           24    26
-## 12 woven…               18    25        28    27           25    29
-## 13 block…               23    24        21    10           19    28
-## 14 ungla…               21    10        26    26           24    29
+##  7 leath~               26    29        23    25           20    24
+##  8 rigid~               23    28        24    26           27    28
+##  9 veryf~               24    16        24    28           24    29
+## 10 nylon~               23    18        29    28           27    26
+## 11 cellu~               23    28        27    20           24    26
+## 12 woven~               18    25        28    27           25    29
+## 13 block~               23    24        21    10           19    28
+## 14 ungla~               21    10        26    26           24    29
 ## 15 velvet               28    29        28    28           29     4
-## 16 waxpa…               24    28        24    28           24    28
-## 17 gloss…               22    27        23    29           28    29
-## # … with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
+## 16 waxpa~               24    28        24    28           24    28
+## 17 gloss~               22    27        23    29           28    29
+## # ... with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
 ## #   veryfinesandpaper <dbl>, nylonscouringpad <dbl>,
 ## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>, blockofstyrofoam <dbl>,
 ## #   unglazedceramictile <dbl>, velvet <dbl>, waxpaper <dbl>,
@@ -2703,7 +2698,7 @@ stimuli.1.d
 The repeated stimuli down the left are row names, but since they're
 row names, we won't be able to use them in
 `ggplot`.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Next year, I'll make everyone turn matrices  into data frames first so that we won't deal with old-fashioned data frames, row names and the like.</span>
+\marginnote{Next year, I'll make everyone turn matrices  into data frames first so that we won't deal with old-fashioned data frames, row names and the like.}
 
 Remember that we are turning a matrix and a column into a data frame,
 so we need either the more forgiving `data.frame`, or to turn
@@ -2711,8 +2706,7 @@ so we need either the more forgiving `data.frame`, or to turn
 
 
 ```r
-as_tibble(stimuli.1$points) %>%
-  mutate(name = objects)
+as_tibble(stimuli.1$points) %>% mutate(name = objects)
 ```
 
 ```
@@ -2749,13 +2743,12 @@ so we have all we need:
 
 
 ```r
-ggplot(stimuli.1.d, aes(x = X1, y = X2, label = names)) +
-  geom_point() +
-  geom_text_repel(size = 2) +
-  coord_fixed()
+ggplot(stimuli.1.d, aes(x = X1, y = X2, label = names)) + geom_point() + geom_text_repel(size = 2) + 
+    coord_fixed()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-73-1} 
 
  
 
@@ -2825,7 +2818,7 @@ The point here is that a high stress *means* that distances
 in real life and on the map won't correspond very well. That's
 what I want you to say.
 Extra: another way to assess this is with a Shepard
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This always      makes me think of the number 190 (now 985) bus, but that's the wrong      spelling. Spelled like this, this is also the name of the      illustrator of the original pre-Disney Winnie-the-Pooh      stories. See https://en.wikipedia.org/wiki/E.-H.-Shepard, replacing the dashes by underscores.</span>
+\marginnote{This always      makes me think of the number 190 (now 985) bus, but that's the wrong      spelling. Spelled like this, this is also the name of the      illustrator of the original pre-Disney Winnie-the-Pooh      stories. See https://en.wikipedia.org/wiki/E.-H.-Shepard, replacing the dashes by underscores.}
 diagram. That would go like this:
 
 ```r
@@ -2844,11 +2837,11 @@ distances `y`, making a data frame first:
 
 
 ```r
-with(stimuli.sh, data.frame(x = x, y = y)) %>%
-  ggplot(aes(x = x, y = y)) + geom_point()
+with(stimuli.sh, data.frame(x = x, y = y)) %>% ggplot(aes(x = x, y = y)) + geom_point()
 ```
 
-<img src="23-mds_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
+
+\includegraphics{23-mds_files/figure-latex/unnamed-chunk-75-1} 
 
  
 
@@ -2895,7 +2888,7 @@ isoMDS(d, k = 3)$stress
 
 What this does is to obtain the map and throw all of it away except
 for the stress value.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which seems like a very SAS way of doing  things.</span> 
+\marginnote{Which seems like a very SAS way of doing  things.} 
 
 I think this stress value, just under 10\%, or on the "fair" end of
 "good", is a worthwhile improvement over the just-over-20\% that we
@@ -2905,7 +2898,7 @@ with. You might agree with me, or you might  not: for example, you
 might be looking for a bigger improvement. Either is good, as far as
 I'm concerned, as long as your answer does something to balance the
 smaller stress value
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Using more dimensions will  *certainly* decrease the stress, in the same way that adding  an $x$-variable to a regression will increase R-squared; it's the  same issue, of whether the change is big enough to be worth having.</span> with the difficulty of interpreting it.
+\marginnote{Using more dimensions will  *certainly* decrease the stress, in the same way that adding  an $x$-variable to a regression will increase R-squared; it's the  same issue, of whether the change is big enough to be worth having.} with the difficulty of interpreting it.
 
 The kind of `rgl` code you'll need is something like this (not tested):
 

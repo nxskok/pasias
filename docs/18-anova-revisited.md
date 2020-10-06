@@ -113,11 +113,11 @@ Try to use one of the explanatory variables as `x` and the other
 one as `fill` (or `colour`):
 
 ```r
-ggplot(acidrain, aes(x = rain_pH, y = soil_acidity, fill = soil_depth)) +
-  geom_boxplot()
+ggplot(acidrain, aes(x = rain_pH, y = soil_acidity, fill = soil_depth)) + geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-5-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-5-1} 
 
      
 
@@ -128,11 +128,12 @@ be categorical. The easiest way to make it such is to wrap it in
 
 
 ```r
-ggplot(acidrain, aes(x = factor(rain_pH), y = soil_acidity, fill = soil_depth)) +
-  geom_boxplot()
+ggplot(acidrain, aes(x = factor(rain_pH), y = soil_acidity, fill = soil_depth)) + 
+    geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-6-1} 
 
      
 
@@ -143,11 +144,12 @@ If you prefer, exchange `x` and `fill`:
 
 
 ```r
-ggplot(acidrain, aes(fill = factor(rain_pH), y = soil_acidity, x = soil_depth)) +
-  geom_boxplot()
+ggplot(acidrain, aes(fill = factor(rain_pH), y = soil_acidity, x = soil_depth)) + 
+    geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-7-1} 
 
      
 
@@ -290,7 +292,7 @@ hayfever
 ##  8    4.7 low   medium         4
 ##  9    4.8 low   high           1
 ## 10    4.5 low   high           2
-## # … with 26 more rows
+## # ... with 26 more rows
 ```
 
      
@@ -298,7 +300,7 @@ hayfever
 I have 36 observations (patients). There are two categorical columns
 `a` and `b` corresponding to the two active ingredients,
 and they each seem to have levels low, medium and high.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">It's important to be clear about the distinction between a categorical variable, that lives in a data frame column, and its levels, the values that appear in the column. This is especially important if you're trying to decide whether a data frame is tidy, since typically an untidy data frame will have factor levels as column names rather than the factor itself, and you need to be able to tell the difference.</span>
+\marginnote{It's important to be clear about the distinction between a categorical variable, that lives in a data frame column, and its levels, the values that appear in the column. This is especially important if you're trying to decide whether a data frame is tidy, since typically an untidy data frame will have factor levels as column names rather than the factor itself, and you need to be able to tell the difference.}
 
 The `replicate` column labels each observation *within*
 its A-B combination, so that each treatment combination was indeed
@@ -317,9 +319,7 @@ Solution
 This is a group-by and summarize, but there are two active ingredients and they *both* have to go in the group-by:
 
 ```r
-hayfever %>%
-  group_by(a, b) %>%
-  summarize(m = mean(relief)) -> d
+d <- hayfever %>% group_by(a, b) %>% summarize(m = mean(relief))
 ```
 
 ```
@@ -356,10 +356,8 @@ These levels are in the wrong logical order, but they are in the right order in 
 
 
 ```r
-hayfever %>%
-  mutate(a = fct_inorder(a), b = fct_inorder(b)) %>%
-  group_by(a, b) %>%
-  summarize(m = mean(relief)) -> d2
+d2 <- hayfever %>% mutate(a = fct_inorder(a), b = fct_inorder(b)) %>% group_by(a, 
+    b) %>% summarize(m = mean(relief))
 ```
 
 ```
@@ -399,21 +397,21 @@ name you gave it.  I'm going to use my proper-order data frame for
 this:
 
 ```r
-ggplot(d2, aes(x = a, y = m, colour = b, group = b)) +
-  geom_point() + geom_line()
+ggplot(d2, aes(x = a, y = m, colour = b, group = b)) + geom_point() + geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-13-1} 
 
      
 Or, you probably had this:
 
 ```r
-ggplot(d, aes(x = a, y = m, colour = b, group = b)) +
-  geom_point() + geom_line()
+ggplot(d, aes(x = a, y = m, colour = b, group = b)) + geom_point() + geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-14-1} 
 
      
 
@@ -421,11 +419,11 @@ Since `a` and `b` both have three levels, you could just as well use them the ot
 
 
 ```r
-ggplot(d2, aes(x = b, y = m, colour = a, group = a)) +
-  geom_point() + geom_line()
+ggplot(d2, aes(x = b, y = m, colour = a, group = a)) + geom_point() + geom_line()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-15-1} 
 
  
 
@@ -452,12 +450,12 @@ the `geom_point` for the means and add one instead for the
 data, taken from the original data frame:
 
 ```r
-ggplot(d2, aes(x = a, y = m, colour = b, group = b)) +
-  geom_line() +
-  geom_point(data = hayfever, aes(y = relief))
+ggplot(d2, aes(x = a, y = m, colour = b, group = b)) + geom_line() + geom_point(data = hayfever, 
+    aes(y = relief))
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-16-1} 
 
      
 
@@ -509,9 +507,7 @@ Solution
 First, we pull out only the data where A is `medium`, and then we do a one-way analysis of B on that data. This is the slick way, though you can certainly save the result of `filter` first:
 
 ```r
-hayfever %>%
-  filter(a == "medium") %>%
-  aov(relief ~ b, data = .) -> simple_medium
+simple_medium <- hayfever %>% filter(a == "medium") %>% aov(relief ~ b, data = .)
 summary(simple_medium)
 ```
 
@@ -559,9 +555,7 @@ Solution
 Same idea: pull out only the data where A is `high`, do a one-way analysis of B, and do Tukey if needed:
 
 ```r
-hayfever %>%
-  filter(a == "high") %>%
-  aov(relief ~ b, data = .) -> simple_high
+simple_high <- hayfever %>% filter(a == "high") %>% aov(relief ~ b, data = .)
 summary(simple_high)
 ```
 
@@ -704,8 +698,8 @@ We'll save into `caffeine` again:
 
 
 ```r
-caffeine.untidy %>%
-  pivot_longer(-Sub, names_to="amount", values_to="score", names_ptypes = list(amount=factor())) -> caffeine
+caffeine <- caffeine.untidy %>% pivot_longer(-Sub, names_to = "amount", values_to = "score", 
+    names_ptypes = list(amount = factor()))
 caffeine
 ```
 
@@ -723,7 +717,7 @@ caffeine
 ##  8     3 Moderate    64
 ##  9     3 None        59
 ## 10     4 High        83
-## # … with 26 more rows
+## # ... with 26 more rows
 ```
 
  
@@ -1165,11 +1159,11 @@ sum(c.hm * c.mn)
 This does *not* add up to zero, so these two contrasts are not
 orthogonal, and we can't do what we just did. R will give us an answer
 if we try it, but it'll be the *wrong* answer.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">SAS, for example, has a way of making non-orthogonal contrasts orthogonal in a way that the user doesn't have to worry about, but in R, you are closer to the ground, so to speak, and you have to make it happen yourself.</span>
+\marginnote{SAS, for example, has a way of making non-orthogonal contrasts orthogonal in a way that the user doesn't have to worry about, but in R, you are closer to the ground, so to speak, and you have to make it happen yourself.}
 
 The best
 description I have seen of what to do here is by David Howell,
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Howell is the author of a famous text on Statistics in Psychology.</span> at
+\marginnote{Howell is the author of a famous text on Statistics in Psychology.} at
 [link](https://www.uvm.edu/~dhowell/StatPages/More_Stuff/R/AnovaOneway.html)
 (at the bottom).
 Let
@@ -1179,7 +1173,7 @@ First we need a vector that is all 1's, which I have called
 `c0` below. Since each of our contrasts `c.hm` and
 `c.mn` have 3 things in them (3 groups), we need to add a
 "dummy" 3rd contrast to give us a $3\times 3$ array of numbers:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">which we are going to invert, as a matrix. But I get ahead of myself.</span>
+\marginnote{which we are going to invert, as a matrix. But I get ahead of myself.}
 
 
 ```r
@@ -1213,7 +1207,7 @@ minv <- solve(t(m))
 
 and then we remove the first column, which represents the contrast
 that we didn't want anyway (what Howell calls "deaugmenting"):
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one. You can access data frames this way too, but the Tidyverse makes it much easier.</span>
+\marginnote{We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one. You can access data frames this way too, but the Tidyverse makes it much easier.}
 
 
 ```r
@@ -1361,7 +1355,7 @@ studyhours
 ##  8     8 math      9
 ##  9     9 math     10
 ## 10    10 math     11
-## # … with 65 more rows
+## # ... with 65 more rows
 ```
 
         
@@ -1373,7 +1367,8 @@ So far so good. 75 students, in tidy format.
 ggplot(studyhours, aes(x = major, y = hours)) + geom_boxplot()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-45-1} 
 
  
 
@@ -1396,7 +1391,8 @@ kind of model:
 boxcox(hours ~ major, data = studyhours)
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-46-1} 
 
  
 
@@ -1474,7 +1470,7 @@ average of the others, like
 $$\mbox{math}-(\mbox{English}+\mbox{socsci})/2.$$ 
 This translates into contrast-ese like this, making sure to get Math
 in the middle where it belongs:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As I failed to do the first time.</span>
+\marginnote{As I failed to do the first time.}
 
 
 ```r
@@ -1511,7 +1507,7 @@ Zero. Orthogonal.
 
 So we are safely in "familiar" territory, not in the 
 here-be-dragons
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">On ancient maps, people didn't know what was  in certain parts of the world, because no-one had ever explored  them, so they wrote on the map *here be dragons*.</span> land of
+\marginnote{On ancient maps, people didn't know what was  in certain parts of the world, because no-one had ever explored  them, so they wrote on the map *here be dragons*.} land of
 non-orthogonal contrasts.
 
 
@@ -1612,7 +1608,7 @@ interested in, so there is no reason for following up with
 Tukey or anything else. But you have to be able to say ahead of
 time which contrasts you want to test. This is in
 contrast
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In contrast. Get it? No? Well, never mind then.</span> to Tukey, where you don't have to decide
+\marginnote{In contrast. Get it? No? Well, never mind then.} to Tukey, where you don't have to decide
 which comparisons interest you until right at the end.
 
 Another question you might have had is 
@@ -1620,7 +1616,7 @@ Another question you might have had is
 you run an ANOVA using `lm`, you get the ANOVA table by
 passing the fitted model object into `anova` rather than
 `summary`:
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">*anova* is one of R's  multi-purpose tools; what it does depends on what you feed it.</span>
+\marginnote{*anova* is one of R's  multi-purpose tools; what it does depends on what you feed it.}
 
 ```r
 anova(studyhours.1)
@@ -1702,11 +1698,8 @@ had much cause to do so far. But now we do. What we want to do is to
 
 
 ```r
-studyhoursx <- studyhours %>%
-  mutate(mathrest = fct_recode(major,
-    "rest" = "english",
-    "rest" = "socsci"
-  ))
+studyhoursx <- studyhours %>% mutate(mathrest = fct_recode(major, rest = "english", 
+    rest = "socsci"))
 studyhoursx %>% count(mathrest)
 ```
 
@@ -1788,7 +1781,7 @@ learning and for testing leads to better test scores. An experiment
 was carried out to test this. During the learning phase, subjects
 learned a list of 80 words in a room painted orange and decorated with
 posters, paintings and other paraphernalia.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is a fancy  word for *stuff*.</span> A memory test was given to all subjects
+\marginnote{This is a fancy  word for *stuff*.} A memory test was given to all subjects
 immediately after they had learned the words, to give the impression
 that the experiment was over. (The results of this test were
 discarded.) One day later, subjects were unexpectedly re-tested under
@@ -1907,7 +1900,7 @@ smith
 ##  8     8 same       20
 ##  9     9 same       11
 ## 10    10 same       21
-## # … with 40 more rows
+## # ... with 40 more rows
 ```
 
        
@@ -1946,7 +1939,7 @@ smith
 ##  8     8 same       20
 ##  9     9 same       11
 ## 10    10 same       21
-## # … with 40 more rows
+## # ... with 40 more rows
 ```
 
     
@@ -2091,7 +2084,7 @@ time we have two means being compared with one, so we need to give
 the two means half weight. 2nd and 3rd against 5th:
 
 ```r
-c2 <- c(0, 1 / 2, 1 / 2, 0, -1)
+c2 <- c(0, 1/2, 1/2, 0, -1)
 ```
 
    
@@ -2102,7 +2095,7 @@ c2 <- c(0, 1 / 2, 1 / 2, 0, -1)
 4th with weight $1/2$ (2 of them):
 
 ```r
-c1 <- c(-1 / 2, 1 / 3, 1 / 3, -1 / 2, 1 / 3)
+c1 <- c(-1/2, 1/3, 1/3, -1/2, 1/3)
 ```
 
    
@@ -2185,7 +2178,7 @@ multiplication works by combining a *row* with a column. No
 matter, *transposing* a matrix interchanges rows and columns, so
 that in math, we want to look at the matrix $M^T M$. In R,
 `%*%` means "matrix multiply".
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.</span> Thus,
+\marginnote{In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.} Thus,
 
 
 ```r
@@ -2389,7 +2382,7 @@ shirts
 ##  8 male_seeing_model   6  
 ##  9 male_seeing_model   5.3
 ## 10 male_seeing_model   6.3
-## # … with 115 more rows
+## # ... with 115 more rows
 ```
 
      
@@ -2434,7 +2427,7 @@ shirts
 ##  8 male_seeing_model   6  
 ##  9 male_seeing_model   5.3
 ## 10 male_seeing_model   6.3
-## # … with 115 more rows
+## # ... with 115 more rows
 ```
 
  
@@ -2514,7 +2507,7 @@ if you want to (and if you know what you are doing):
 
 
 ```r
-shirts %>% mutate(trt2 = fct_inorder(treatment)) -> d
+d <- shirts %>% mutate(trt2 = fct_inorder(treatment))
 levels(d$trt2)
 ```
 
@@ -2543,9 +2536,7 @@ We will use this later when assessing the significance of the
 contrasts. It's the usual group-by and summarize:
 
 ```r
-shirts %>%
-  group_by(treatment) %>%
-  summarize(m = mean(score))
+shirts %>% group_by(treatment) %>% summarize(m = mean(score))
 ```
 
 ```
@@ -2754,7 +2745,7 @@ all(z[row(z) != col(z)] == 0)
 
 That says (a little breathlessly) that it is true that all the
 elements of $M^TM$ that are off the diagonal are zero.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The thing inside the square brackets says only to look at the elements of $M^TM$ whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the *same* are *on* the diagonal, for example the element in row 2, column 2.</span>
+\marginnote{The thing inside the square brackets says only to look at the elements of $M^TM$ whose row number and whose column number are different; it is perhaps easier to reason that elements of a matrix whose row number and column number are the *same* are *on* the diagonal, for example the element in row 2, column 2.}
   
 
 (h) Predict evaluation score from 
@@ -2938,7 +2929,7 @@ productivity
 ##  8 low                 7.7   7.9
 ##  9 low                 6     6.3
 ## 10 moderate            6.7   8.8
-## # … with 17 more rows
+## # ... with 17 more rows
 ```
 
    
@@ -2958,8 +2949,7 @@ a factor (with the levels in the right order) now:
 
 
 ```r
-productivity %>%
-  mutate(expenditure = fct_inorder(expenditure)) -> productivity
+productivity <- productivity %>% mutate(expenditure = fct_inorder(expenditure))
 ```
 
  
@@ -2982,15 +2972,16 @@ categorical variable using colour (or `shape` etc., if you
 know about that, but colour is the most obvious thing):
 
 ```r
-ggplot(productivity, aes(x = last, y = improvement, colour = expenditure)) +
-  geom_point() + geom_smooth(method = "lm", se = F)
+ggplot(productivity, aes(x = last, y = improvement, colour = expenditure)) + geom_point() + 
+    geom_smooth(method = "lm", se = F)
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-95-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-95-1} 
 
      
 
@@ -3286,7 +3277,7 @@ new
  
 
 (oh, how I wish I'd given those variables shorter names),
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The expenditure levels have come out in alphabetical order again.</span> and then:
+\marginnote{The expenditure levels have come out in alphabetical order again.} and then:
 
 
 ```r
@@ -3391,7 +3382,7 @@ lepro
 ##  8 A        10    13
 ##  9 D         6     2
 ## 10 D        19    14
-## # … with 20 more rows
+## # ... with 20 more rows
 ```
 
  
@@ -3415,7 +3406,8 @@ batting an eyelid:
 ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point()
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-104-1} 
 
        
  
@@ -3646,7 +3638,7 @@ drop1(lepro.2, test = "F")
  
 
 This is actually not significant.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is why I didn't ask you to test this, since it would have confused the story.</span>
+\marginnote{This is why I didn't ask you to test this, since it would have confused the story.}
 This is one of those cases where the non-significant `drug` has
 a slightly *bigger* AIC than `<none>`, so `drop1`
 considers it best to leave it in the model.
@@ -3657,7 +3649,7 @@ three drugs at `pre` scores 5, 12 and 20. To do this, obtain
 a new data frame that has all 9 combinations of drugs and
 `pre` scores, and then feed this into `predict` using
 your preferred model.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Analysis of covariance is just a linear  model, so *predict* works the same here as in regression.</span>
+\marginnote{Analysis of covariance is just a linear  model, so *predict* works the same here as in regression.}
  
 Solution
 
@@ -3750,11 +3742,12 @@ Solution
 
 
 ```r
-ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point() +
-  geom_line(data = allpreds, aes(y = preds, linetype = drug))
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point() + geom_line(data = allpreds, 
+    aes(y = preds, linetype = drug))
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-115-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-115-1} 
 
  
 
@@ -3769,7 +3762,7 @@ so I have to specify `data=` by name.
 The `linetype=` is really overkill, but I just wanted to show
 you that you can distinguish the drugs by line type as
 well.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The line types show up in the legend too, though they're not so easy to see.</span>
+\marginnote{The line types show up in the legend too, though they're not so easy to see.}
  
 
 (k) Are the lines on your plot parallel, with the same slopes? Is this what you would
@@ -3816,20 +3809,20 @@ lines for each group.  So `geom_smooth` will get them:
 
 
 ```r
-ggplot(lepro, aes(x = pre, y = post, colour = drug)) +
-  geom_point() + geom_smooth(method = "lm")
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point() + geom_smooth(method = "lm")
 ```
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="18-anova-revisited_files/figure-html/unnamed-chunk-117-1.png" width="672"  />
+
+\includegraphics{18-anova-revisited_files/figure-latex/unnamed-chunk-117-1} 
 
  
 
 The grey intervals are a bit confusing.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You can get rid of them by saying *se=F* inside the geom-smooth, as normal.</span> They are
+\marginnote{You can get rid of them by saying *se=F* inside the geom-smooth, as normal.} They are
 confidence intervals for the mean `post` score (as we did for regression
 early on in the course). But I left them there to show that they
 overlap substantially and thus that those slopes are not 
