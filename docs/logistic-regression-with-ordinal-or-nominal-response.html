@@ -2819,34 +2819,44 @@ lot fewer rows than you did before.)</li>
 right way around. We are testing the things in <code>Category</code> one
 at a time for membership in the set in <code>my.crimes</code>, so this:</p>
 <div class="sourceCode" id="cb2501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2501-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2501-1"></a>sfcrimea =<span class="st"> </span>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Category <span class="op">%in%</span><span class="st"> </span>my.crimes) <span class="op">%&gt;%</span></span>
-<span id="cb2501-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2501-2"></a><span class="kw">select</span>(<span class="kw">c</span>(Category,DayOfWeek,PdDistrict)) </span></code></pre></div>
-<pre><code>## Error in select(., c(Category, DayOfWeek, PdDistrict)): unused argument (c(Category, DayOfWeek, PdDistrict))</code></pre>
-<div class="sourceCode" id="cb2503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2503-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2503-1"></a>sfcrimea</span></code></pre></div>
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;sfcrimea&#39; not found</code></pre>
+<span id="cb2501-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2501-2"></a><span class="kw">select</span>(<span class="kw">c</span>(Category,DayOfWeek,PdDistrict)) </span>
+<span id="cb2501-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2501-3"></a>sfcrimea</span></code></pre></div>
+<pre><code>## # A tibble: 359,528 x 3
+##    Category      DayOfWeek PdDistrict
+##    &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     
+##  1 LARCENY/THEFT Wednesday NORTHERN  
+##  2 LARCENY/THEFT Wednesday PARK      
+##  3 LARCENY/THEFT Wednesday INGLESIDE 
+##  4 VEHICLE THEFT Wednesday INGLESIDE 
+##  5 VEHICLE THEFT Wednesday BAYVIEW   
+##  6 LARCENY/THEFT Wednesday RICHMOND  
+##  7 LARCENY/THEFT Wednesday CENTRAL   
+##  8 LARCENY/THEFT Wednesday CENTRAL   
+##  9 LARCENY/THEFT Wednesday NORTHERN  
+## 10 ASSAULT       Wednesday INGLESIDE 
+## # … with 359,518 more rows</code></pre>
 <p>That didn’t work. Remember what this was? This is because <code>MASS</code> is still loaded:</p>
-<div class="sourceCode" id="cb2505"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2505-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2505-1"></a><span class="kw">search</span>()</span></code></pre></div>
-<pre><code>##  [1] &quot;.GlobalEnv&quot;          &quot;package:magrittr&quot;    &quot;package:MASS&quot;       
-##  [4] &quot;package:bindrcpp&quot;    &quot;.conflicts&quot;          &quot;package:conflicted&quot; 
-##  [7] &quot;package:rstan&quot;       &quot;package:StanHeaders&quot; &quot;package:bootstrap&quot;  
-## [10] &quot;package:rpart&quot;       &quot;package:broom&quot;       &quot;package:ggrepel&quot;    
-## [13] &quot;package:ggbiplot&quot;    &quot;package:grid&quot;        &quot;package:scales&quot;     
-## [16] &quot;package:plyr&quot;        &quot;package:lme4&quot;        &quot;package:Matrix&quot;     
-## [19] &quot;package:car&quot;         &quot;package:carData&quot;     &quot;package:survminer&quot;  
-## [22] &quot;package:ggpubr&quot;      &quot;package:survival&quot;    &quot;package:nnet&quot;       
-## [25] &quot;package:smmr&quot;        &quot;package:forcats&quot;     &quot;package:stringr&quot;    
-## [28] &quot;package:dplyr&quot;       &quot;package:purrr&quot;       &quot;package:readr&quot;      
-## [31] &quot;package:tidyr&quot;       &quot;package:tibble&quot;      &quot;package:ggplot2&quot;    
-## [34] &quot;package:tidyverse&quot;   &quot;package:stats&quot;       &quot;package:graphics&quot;   
-## [37] &quot;package:grDevices&quot;   &quot;package:utils&quot;       &quot;package:datasets&quot;   
-## [40] &quot;package:methods&quot;     &quot;Autoloads&quot;           &quot;package:base&quot;</code></pre>
+<div class="sourceCode" id="cb2503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2503-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2503-1"></a><span class="kw">search</span>()</span></code></pre></div>
+<pre><code>##  [1] &quot;.GlobalEnv&quot;          &quot;.conflicts&quot;          &quot;package:conflicted&quot; 
+##  [4] &quot;package:rstan&quot;       &quot;package:StanHeaders&quot; &quot;package:bootstrap&quot;  
+##  [7] &quot;package:rpart&quot;       &quot;package:broom&quot;       &quot;package:ggrepel&quot;    
+## [10] &quot;package:ggbiplot&quot;    &quot;package:grid&quot;        &quot;package:scales&quot;     
+## [13] &quot;package:plyr&quot;        &quot;package:lme4&quot;        &quot;package:Matrix&quot;     
+## [16] &quot;package:car&quot;         &quot;package:carData&quot;     &quot;package:survminer&quot;  
+## [19] &quot;package:ggpubr&quot;      &quot;package:survival&quot;    &quot;package:nnet&quot;       
+## [22] &quot;package:smmr&quot;        &quot;package:forcats&quot;     &quot;package:stringr&quot;    
+## [25] &quot;package:dplyr&quot;       &quot;package:purrr&quot;       &quot;package:readr&quot;      
+## [28] &quot;package:tidyr&quot;       &quot;package:tibble&quot;      &quot;package:ggplot2&quot;    
+## [31] &quot;package:tidyverse&quot;   &quot;package:stats&quot;       &quot;package:graphics&quot;   
+## [34] &quot;package:grDevices&quot;   &quot;package:utils&quot;       &quot;package:datasets&quot;   
+## [37] &quot;package:methods&quot;     &quot;Autoloads&quot;           &quot;package:base&quot;</code></pre>
 <p>so we need to get rid of <code>MASS</code>:</p>
-<div class="sourceCode" id="cb2507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2507-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2507-1"></a><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>, <span class="dt">unload=</span>T)</span></code></pre></div>
-<pre><code>## Warning: &#39;MASS&#39; namespace cannot be unloaded:
-##   namespace &#39;MASS&#39; is imported by &#39;lme4&#39; so cannot be unloaded</code></pre>
+<div class="sourceCode" id="cb2505"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2505-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2505-1"></a><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>, <span class="dt">unload=</span>T)</span></code></pre></div>
+<pre><code>## Error in detach(&quot;package:MASS&quot;, unload = T): invalid &#39;name&#39; argument</code></pre>
 <p>and try again:</p>
-<div class="sourceCode" id="cb2509"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2509-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2509-1"></a>sfcrimea =<span class="st"> </span>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Category <span class="op">%in%</span><span class="st"> </span>my.crimes) <span class="op">%&gt;%</span></span>
-<span id="cb2509-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2509-2"></a><span class="kw">select</span>(<span class="kw">c</span>(Category,DayOfWeek,PdDistrict)) </span>
-<span id="cb2509-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2509-3"></a>sfcrimea</span></code></pre></div>
+<div class="sourceCode" id="cb2507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2507-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2507-1"></a>sfcrimea =<span class="st"> </span>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Category <span class="op">%in%</span><span class="st"> </span>my.crimes) <span class="op">%&gt;%</span></span>
+<span id="cb2507-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2507-2"></a><span class="kw">select</span>(<span class="kw">c</span>(Category,DayOfWeek,PdDistrict)) </span>
+<span id="cb2507-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2507-3"></a>sfcrimea</span></code></pre></div>
 <pre><code>## # A tibble: 359,528 x 3
 ##    Category      DayOfWeek PdDistrict
 ##    &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     
@@ -2867,7 +2877,7 @@ models.)</p>
 <p>Down to a “mere” 359,000 rows. Don’t be stressed that the
 <code>Category</code> factor still has 39 levels (the original 39 crime
 categories); only four of them have any data in them:</p>
-<div class="sourceCode" id="cb2511"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2511-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2511-1"></a>sfcrimea <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Category)</span></code></pre></div>
+<div class="sourceCode" id="cb2509"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2509-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2509-1"></a>sfcrimea <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Category)</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   Category           n
 ##   &lt;chr&gt;          &lt;int&gt;
@@ -2882,7 +2892,7 @@ want to look at.</p>
 </ol>
 <p>Solution</p>
 <p>This is <code>write_csv</code> again:</p>
-<div class="sourceCode" id="cb2513"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2513-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2513-1"></a><span class="kw">write_csv</span>(sfcrimea,<span class="st">&quot;sfcrime1.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2511"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2511-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2511-1"></a><span class="kw">write_csv</span>(sfcrimea,<span class="st">&quot;sfcrime1.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="how-do-you-like-your-steak" class="section level2" number="19.8">
 <h2><span class="header-section-number">19.8</span> How do you like your steak?</h2>
@@ -2934,7 +2944,7 @@ cleaned-up data from a previous question, with the missing values removed.</p>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb2514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2514-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2514-1"></a>steak &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;steak1.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2512"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2512-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2512-1"></a>steak &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;steak1.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   respondent_id = col_double(),
@@ -2953,7 +2963,7 @@ cleaned-up data from a previous question, with the missing values removed.</p>
 ##   educ = col_character(),
 ##   region = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb2516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2516-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2516-1"></a><span class="kw">head</span>(steak)</span></code></pre></div>
+<div class="sourceCode" id="cb2514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2514-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2514-1"></a><span class="kw">head</span>(steak)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 15
 ##   respondent_id lottery_a smoke alcohol gamble skydiving speed cheated steak
 ##           &lt;dbl&gt; &lt;lgl&gt;     &lt;lgl&gt; &lt;lgl&gt;   &lt;lgl&gt;  &lt;lgl&gt;     &lt;lgl&gt; &lt;lgl&gt;   &lt;lgl&gt;
@@ -2966,7 +2976,7 @@ cleaned-up data from a previous question, with the missing values removed.</p>
 ## # … with 6 more variables: steak_prep &lt;chr&gt;, female &lt;lgl&gt;, age &lt;chr&gt;,
 ## #   hhold_income &lt;chr&gt;, educ &lt;chr&gt;, region &lt;chr&gt;</code></pre>
 <p>We should also (re-)load <code>MASS</code>, since we’ll be needing it:</p>
-<div class="sourceCode" id="cb2518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2518-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2518-1"></a><span class="kw">library</span>(MASS)</span></code></pre></div>
+<div class="sourceCode" id="cb2516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2516-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2516-1"></a><span class="kw">library</span>(MASS)</span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>We are going to predict <code>steak_prep</code> from some of
 the other variables. Why is the model-fitting function <code>polr</code>
@@ -2989,22 +2999,22 @@ order, create an ordered factor where the levels are in a sensible order.</li>
 </ol>
 <p>Solution</p>
 <p>This is the most direct way to find out:</p>
-<div class="sourceCode" id="cb2519"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2519-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2519-1"></a>preps &lt;-<span class="st"> </span>steak <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(steak_prep) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(steak_prep)</span>
-<span id="cb2519-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2519-2"></a>preps</span></code></pre></div>
+<div class="sourceCode" id="cb2517"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2517-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2517-1"></a>preps &lt;-<span class="st"> </span>steak <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(steak_prep) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(steak_prep)</span>
+<span id="cb2517-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2517-2"></a>preps</span></code></pre></div>
 <pre><code>## [1] &quot;Medium rare&quot; &quot;Rare&quot;        &quot;Medium&quot;      &quot;Medium Well&quot; &quot;Well&quot;</code></pre>
 <p>This is almost the right order (<code>distinct</code> uses the order in
 the data frame). We just need to switch the first two around, and then
 we’ll be done:</p>
-<div class="sourceCode" id="cb2521"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2521-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2521-1"></a>preps1 &lt;-<span class="st"> </span>preps[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)]</span>
-<span id="cb2521-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2521-2"></a>preps1</span></code></pre></div>
+<div class="sourceCode" id="cb2519"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2519-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2519-1"></a>preps1 &lt;-<span class="st"> </span>preps[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)]</span>
+<span id="cb2519-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2519-2"></a>preps1</span></code></pre></div>
 <pre><code>## [1] &quot;Rare&quot;        &quot;Medium rare&quot; &quot;Medium&quot;      &quot;Medium Well&quot; &quot;Well&quot;</code></pre>
 <p>If you used <code>count</code>, there’s a bit more work to do:</p>
-<div class="sourceCode" id="cb2523"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2523-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2523-1"></a>preps2 &lt;-<span class="st"> </span>steak <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(steak_prep) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(steak_prep)</span>
-<span id="cb2523-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2523-2"></a>preps2</span></code></pre></div>
+<div class="sourceCode" id="cb2521"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2521-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2521-1"></a>preps2 &lt;-<span class="st"> </span>steak <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(steak_prep) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(steak_prep)</span>
+<span id="cb2521-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2521-2"></a>preps2</span></code></pre></div>
 <pre><code>## [1] &quot;Medium&quot;      &quot;Medium rare&quot; &quot;Medium Well&quot; &quot;Rare&quot;        &quot;Well&quot;</code></pre>
 <p>because <code>count</code> puts them in alphabetical order, so:</p>
-<div class="sourceCode" id="cb2525"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2525-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2525-1"></a>preps3 &lt;-<span class="st"> </span>preps2[<span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span>
-<span id="cb2525-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2525-2"></a>preps3</span></code></pre></div>
+<div class="sourceCode" id="cb2523"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2523-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2523-1"></a>preps3 &lt;-<span class="st"> </span>preps2[<span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span>
+<span id="cb2523-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2523-2"></a>preps3</span></code></pre></div>
 <pre><code>## [1] &quot;Rare&quot;        &quot;Medium rare&quot; &quot;Medium&quot;      &quot;Medium Well&quot; &quot;Well&quot;</code></pre>
 <p>These use the idea in the
 attitudes-to-abortion question: create a vector of the levels in the
@@ -3015,7 +3025,7 @@ get the levels without typing or copying-pasting, so that you don’t
 make any silly errors copying them (which will mess everything up
 later).</p>
 <p>So now I create my ordered response:</p>
-<div class="sourceCode" id="cb2527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2527-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2527-1"></a>steak &lt;-<span class="st"> </span>steak <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">steak_prep_ord =</span> <span class="kw">ordered</span>(steak_prep, preps1))</span></code></pre></div>
+<div class="sourceCode" id="cb2525"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2525-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2525-1"></a>steak &lt;-<span class="st"> </span>steak <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">steak_prep_ord =</span> <span class="kw">ordered</span>(steak_prep, preps1))</span></code></pre></div>
 <p>or using one of the other <code>preps</code> vectors containing the levels
 in the correct order.
 As far as <code>polr</code> is concerned,
@@ -3033,7 +3043,7 @@ results.</li>
 <p>Solution</p>
 <p>The thing you have to be careful about is that you use the
 <em>ordered</em> factor that you just created as the response:</p>
-<div class="sourceCode" id="cb2528"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2528-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2528-1"></a>steak<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(steak_prep_ord <span class="op">~</span><span class="st"> </span>educ <span class="op">+</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>lottery_a, <span class="dt">data =</span> steak)</span></code></pre></div>
+<div class="sourceCode" id="cb2526"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2526-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2526-1"></a>steak<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(steak_prep_ord <span class="op">~</span><span class="st"> </span>educ <span class="op">+</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>lottery_a, <span class="dt">data =</span> steak)</span></code></pre></div>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Run <code>drop1</code> on your fitted model, with
 <code>test="Chisq"</code>. Which explanatory variable should be removed
@@ -3043,7 +3053,7 @@ doesn’t get printed in order.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb2529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2529-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2529-1"></a><span class="kw">drop1</span>(steak<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2527-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2527-1"></a><span class="kw">drop1</span>(steak<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3067,13 +3077,13 @@ this part.)</li>
 <p>Solution</p>
 <p>You could type or copy-paste the whole model again, but
 <code>update</code> is quicker:</p>
-<div class="sourceCode" id="cb2531"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2531-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2531-1"></a>steak<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(steak<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>female)</span></code></pre></div>
+<div class="sourceCode" id="cb2529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2529-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2529-1"></a>steak<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(steak<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>female)</span></code></pre></div>
 <p>That’s all.</p>
 <p>I wanted to get some support for my <code>drop1</code> above (since I was
 a bit worried about those out-of-order rows). Now that we have fitted
 a model with <code>female</code> and one without, we can compare them
 using <code>anova</code>:</p>
-<div class="sourceCode" id="cb2532"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2532-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2532-1"></a><span class="kw">anova</span>(steak<span class="fl">.2</span>, steak<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2530"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2530-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2530-1"></a><span class="kw">anova</span>(steak<span class="fl">.2</span>, steak<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
@@ -3088,7 +3098,7 @@ the output table; the P-value wrapped onto the second line, and is in
 fact exactly the same as in the <code>drop1</code> output (it is doing
 exactly the same test). As non-significant as you could wish for.</p>
 <p>I was curious about whether either of the other <span class="math inline">\(x\)</span>’s could come out now:</p>
-<div class="sourceCode" id="cb2534"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2534-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2534-1"></a><span class="kw">drop1</span>(steak<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2532"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2532-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2532-1"></a><span class="kw">drop1</span>(steak<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3115,11 +3125,11 @@ study whose educational level is “less than high school”.</li>
 <p>Again, I’m leaving it to you to follow all the steps. My variables
 remaining are <code>educ</code> and <code>lottery_a</code>. The second of
 these is a logical, TRUE and FALSE, so I just filled in the two values:</p>
-<div class="sourceCode" id="cb2536"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2536-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2536-1"></a>educs &lt;-<span class="st"> </span>steak <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(educ) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(educ)</span>
-<span id="cb2536-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2536-2"></a>lottery_as &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>)</span>
-<span id="cb2536-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2536-3"></a></span>
-<span id="cb2536-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2536-4"></a>steak.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">educ =</span> educs, <span class="dt">lottery_a =</span> lottery_as)</span>
-<span id="cb2536-5"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2536-5"></a>steak.new</span></code></pre></div>
+<div class="sourceCode" id="cb2534"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2534-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2534-1"></a>educs &lt;-<span class="st"> </span>steak <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(educ) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(educ)</span>
+<span id="cb2534-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2534-2"></a>lottery_as &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb2534-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2534-3"></a></span>
+<span id="cb2534-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2534-4"></a>steak.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">educ =</span> educs, <span class="dt">lottery_a =</span> lottery_as)</span>
+<span id="cb2534-5"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2534-5"></a>steak.new</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ##    educ                             lottery_a
 ##    &lt;chr&gt;                            &lt;lgl&gt;    
@@ -3137,8 +3147,8 @@ these is a logical, TRUE and FALSE, so I just filled in the two values:</p>
 <code>female</code>, so this. As before, if you forget what <code>type</code>
 should be, put in <em>something</em>, and it will tell you what your
 choices are:</p>
-<div class="sourceCode" id="cb2538"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2538-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2538-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(steak<span class="fl">.2</span>, steak.new, <span class="dt">type =</span> <span class="st">&quot;probs&quot;</span>)</span>
-<span id="cb2538-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2538-2"></a><span class="kw">cbind</span>(steak.new, p)</span></code></pre></div>
+<div class="sourceCode" id="cb2536"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2536-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2536-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(steak<span class="fl">.2</span>, steak.new, <span class="dt">type =</span> <span class="st">&quot;probs&quot;</span>)</span>
+<span id="cb2536-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2536-2"></a><span class="kw">cbind</span>(steak.new, p)</span></code></pre></div>
 <pre><code>##                                educ lottery_a         Rare  Medium rare
 ## 1                   Bachelor degree     FALSE 5.191314e-02 3.832425e-01
 ## 2                   Bachelor degree      TRUE 4.181795e-02 3.386213e-01
@@ -3163,7 +3173,7 @@ choices are:</p>
 ## 10 3.442957e-01 1.929005e-01 0.06789415</code></pre>
 <p>I find this hard to read, so I’m going to round off those
 predictions. Three or four decimals seems to be sensible:</p>
-<div class="sourceCode" id="cb2540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2540-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2540-1"></a><span class="kw">cbind</span>(steak.new, <span class="kw">round</span>(p, <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2538"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2538-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2538-1"></a><span class="kw">cbind</span>(steak.new, <span class="kw">round</span>(p, <span class="dv">3</span>))</span></code></pre></div>
 <pre><code>##                                educ lottery_a  Rare Medium rare Medium
 ## 1                   Bachelor degree     FALSE 0.052       0.383  0.335
 ## 2                   Bachelor degree      TRUE 0.042       0.339  0.347
@@ -3210,13 +3220,13 @@ Explain briefly.</li>
 <p>Solution</p>
 <p>The fitting part is the challenge, since the testing part is
 <code>anova</code> again. The direct fit is this:</p>
-<div class="sourceCode" id="cb2542"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2542-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2542-1"></a>steak<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(steak_prep_ord <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> steak)</span></code></pre></div>
+<div class="sourceCode" id="cb2540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2540-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2540-1"></a>steak<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(steak_prep_ord <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> steak)</span></code></pre></div>
 <p>and the <code>update</code> version is this, about equally long, starting
 from <code>steak.2</code> since that is the best model so far:</p>
-<div class="sourceCode" id="cb2543"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2543-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2543-1"></a>steak<span class="fl">.3</span>a &lt;-<span class="st"> </span><span class="kw">update</span>(steak<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>educ <span class="op">-</span><span class="st"> </span>lottery_a)</span></code></pre></div>
+<div class="sourceCode" id="cb2541"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2541-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2541-1"></a>steak<span class="fl">.3</span>a &lt;-<span class="st"> </span><span class="kw">update</span>(steak<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>educ <span class="op">-</span><span class="st"> </span>lottery_a)</span></code></pre></div>
 <p>You can use whichever you like. Either way, the second part is
 <code>anova</code>, and the two possible answers should be the same:</p>
-<div class="sourceCode" id="cb2544"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2544-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2544-1"></a><span class="kw">anova</span>(steak<span class="fl">.3</span>, steak<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2542"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2542-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2542-1"></a><span class="kw">anova</span>(steak<span class="fl">.3</span>, steak<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
@@ -3224,7 +3234,7 @@ from <code>steak.2</code> since that is the best model so far:</p>
 ## 1                1       327   901.4467                                 
 ## 2 educ + lottery_a       322   890.7028 1 vs 2     5 10.74387 0.05670146</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb2546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2546-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2546-1"></a><span class="kw">anova</span>(steak<span class="fl">.3</span>a, steak<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2544"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2544-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2544-1"></a><span class="kw">anova</span>(steak<span class="fl">.3</span>a, steak<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Likelihood ratio tests of ordinal regression models
 ## 
 ## Response: steak_prep_ord
@@ -3242,7 +3252,7 @@ say that one or both of them is “potentially useful” or
 “provocative” or something like that.</p>
 <p>If you think that removing these two variables is questionable, you
 might like to go back to that <code>drop1</code> output I had above:</p>
-<div class="sourceCode" id="cb2548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2548-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2548-1"></a><span class="kw">drop1</span>(steak<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2546-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2546-1"></a><span class="kw">drop1</span>(steak<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3255,8 +3265,8 @@ might like to go back to that <code>drop1</code> output I had above:</p>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The smallest AIC goes with <code>lottery_a</code>, so that comes out (it
 is nowhere near significant):</p>
-<div class="sourceCode" id="cb2550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2550-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2550-1"></a>steak<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">update</span>(steak<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>lottery_a)</span>
-<span id="cb2550-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2550-2"></a><span class="kw">drop1</span>(steak<span class="fl">.4</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2548-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2548-1"></a>steak<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">update</span>(steak<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>lottery_a)</span>
+<span id="cb2548-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2548-2"></a><span class="kw">drop1</span>(steak<span class="fl">.4</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3290,7 +3300,7 @@ people like their steaks, and we didn’t even consider those. Why did
 I choose what I did here? Well, I wanted to fit a regression predicting
 steak preference from everything else, do a big backward
 elimination, but:</p>
-<div class="sourceCode" id="cb2552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2552-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2552-1"></a>steak<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(steak_prep_ord <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> steak)</span></code></pre></div>
+<div class="sourceCode" id="cb2550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2550-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2550-1"></a>steak<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(steak_prep_ord <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> steak)</span></code></pre></div>
 <pre><code>## Warning: glm.fit: algorithm did not converge</code></pre>
 <pre><code>## Error in polr(steak_prep_ord ~ ., data = steak): attempt to find suitable starting values failed</code></pre>
 <p>The <code>.</code> in place of explanatory
@@ -3307,13 +3317,13 @@ cannot even get the initial guess! (It apparently is known to suck at
 this, in problems as big and complicated as this one.)</p>
 <p>I don’t normally recommend forward selection, but I wonder whether it
 works here:</p>
-<div class="sourceCode" id="cb2555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2555-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-1"></a>steak<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(steak_prep_ord <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> steak)</span>
-<span id="cb2555-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-2"></a>steak<span class="fl">.6</span> &lt;-<span class="st"> </span><span class="kw">step</span>(steak<span class="fl">.5</span>,</span>
-<span id="cb2555-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-3"></a>  <span class="dt">scope =</span> . <span class="op">~</span><span class="st"> </span>lottery_a <span class="op">+</span><span class="st"> </span>smoke <span class="op">+</span><span class="st"> </span>alcohol <span class="op">+</span><span class="st"> </span>gamble <span class="op">+</span><span class="st"> </span>skydiving <span class="op">+</span></span>
-<span id="cb2555-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-4"></a><span class="st">    </span>speed <span class="op">+</span><span class="st"> </span>cheated <span class="op">+</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>hhold_income <span class="op">+</span><span class="st"> </span>educ <span class="op">+</span><span class="st"> </span>region,</span>
-<span id="cb2555-5"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-5"></a>  <span class="dt">direction =</span> <span class="st">&quot;forward&quot;</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>, <span class="dt">trace =</span> <span class="dv">0</span></span>
-<span id="cb2555-6"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-6"></a>)</span>
-<span id="cb2555-7"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-7"></a><span class="kw">drop1</span>(steak<span class="fl">.6</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2553-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2553-1"></a>steak<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(steak_prep_ord <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> steak)</span>
+<span id="cb2553-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2553-2"></a>steak<span class="fl">.6</span> &lt;-<span class="st"> </span><span class="kw">step</span>(steak<span class="fl">.5</span>,</span>
+<span id="cb2553-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2553-3"></a>  <span class="dt">scope =</span> . <span class="op">~</span><span class="st"> </span>lottery_a <span class="op">+</span><span class="st"> </span>smoke <span class="op">+</span><span class="st"> </span>alcohol <span class="op">+</span><span class="st"> </span>gamble <span class="op">+</span><span class="st"> </span>skydiving <span class="op">+</span></span>
+<span id="cb2553-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2553-4"></a><span class="st">    </span>speed <span class="op">+</span><span class="st"> </span>cheated <span class="op">+</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>hhold_income <span class="op">+</span><span class="st"> </span>educ <span class="op">+</span><span class="st"> </span>region,</span>
+<span id="cb2553-5"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2553-5"></a>  <span class="dt">direction =</span> <span class="st">&quot;forward&quot;</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>, <span class="dt">trace =</span> <span class="dv">0</span></span>
+<span id="cb2553-6"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2553-6"></a>)</span>
+<span id="cb2553-7"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2553-7"></a><span class="kw">drop1</span>(steak<span class="fl">.6</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3377,15 +3387,15 @@ part of it).</li>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb2557"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2557-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2557-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv&quot;</span></span>
-<span id="cb2557-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2557-2"></a>sfcrime &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb2555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2555-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv&quot;</span></span>
+<span id="cb2555-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2555-2"></a>sfcrime &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Category = col_character(),
 ##   DayOfWeek = col_character(),
 ##   PdDistrict = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb2559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2559-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2559-1"></a>sfcrime</span></code></pre></div>
+<div class="sourceCode" id="cb2557"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2557-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2557-1"></a>sfcrime</span></code></pre></div>
 <pre><code>## # A tibble: 359,528 x 3
 ##    Category      DayOfWeek PdDistrict
 ##    &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     
@@ -3413,7 +3423,7 @@ come with it.)</li>
 <p>Solution</p>
 <p>The modelling part is easy enough, as long as you can get the
 uppercase letters in the right places:</p>
-<div class="sourceCode" id="cb2561"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2561-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2561-1"></a>sfcrime<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">multinom</span>(Category<span class="op">~</span>DayOfWeek<span class="op">+</span>PdDistrict,<span class="dt">data=</span>sfcrime)</span></code></pre></div>
+<div class="sourceCode" id="cb2559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2559-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2559-1"></a>sfcrime<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">multinom</span>(Category<span class="op">~</span>DayOfWeek<span class="op">+</span>PdDistrict,<span class="dt">data=</span>sfcrime)</span></code></pre></div>
 <pre><code>## # weights:  68 (48 variable)
 ## initial  value 498411.639069 
 ## iter  10 value 430758.073422
@@ -3429,7 +3439,7 @@ district. Hand in the output from the fitting process as well.</li>
 </ol>
 <p>Solution</p>
 <p>Same idea. Write it out, or use <code>update</code>:</p>
-<div class="sourceCode" id="cb2563"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2563-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2563-1"></a>sfcrime<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(sfcrime<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>DayOfWeek)</span></code></pre></div>
+<div class="sourceCode" id="cb2561"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2561-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2561-1"></a>sfcrime<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(sfcrime<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">-</span>DayOfWeek)</span></code></pre></div>
 <pre><code>## # weights:  44 (30 variable)
 ## initial  value 498411.639069 
 ## iter  10 value 426003.543845
@@ -3443,7 +3453,7 @@ obtained. What does the <code>anova</code> tell you?</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb2565"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2565-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2565-1"></a><span class="kw">anova</span>(sfcrime<span class="fl">.2</span>,sfcrime<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2563"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2563-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2563-1"></a><span class="kw">anova</span>(sfcrime<span class="fl">.2</span>,sfcrime<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Category
@@ -3473,11 +3483,11 @@ obtaining the predictions and then displaying them suitably.</li>
 before, so what you need to do ought to be fairly clear:
 Construct the values to predict for with plural names:
 <label for="tufte-mn-153" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-153" class="margin-toggle"><span class="marginnote">You are almost certainly going to get the Capital Letters wrong in <em>DayOfWeek</em>, once, somewhere in the process. I did.</span></p>
-<div class="sourceCode" id="cb2567"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2567-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2567-1"></a>DayOfWeeks &lt;-<span class="st"> </span>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(DayOfWeek) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(DayOfWeek)</span>
-<span id="cb2567-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2567-2"></a>DayOfWeeks</span></code></pre></div>
+<div class="sourceCode" id="cb2565"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2565-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2565-1"></a>DayOfWeeks &lt;-<span class="st"> </span>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(DayOfWeek) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(DayOfWeek)</span>
+<span id="cb2565-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2565-2"></a>DayOfWeeks</span></code></pre></div>
 <pre><code>## [1] &quot;Wednesday&quot; &quot;Tuesday&quot;   &quot;Monday&quot;    &quot;Sunday&quot;    &quot;Saturday&quot;  &quot;Friday&quot;   
 ## [7] &quot;Thursday&quot;</code></pre>
-<div class="sourceCode" id="cb2569"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2569-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2569-1"></a>PdDistricts &lt;-<span class="st"> &quot;TENDERLOIN&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2567"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2567-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2567-1"></a>PdDistricts &lt;-<span class="st"> &quot;TENDERLOIN&quot;</span></span></code></pre></div>
 <p>The days of the week are in the order they came out in the data. I
 could fix this up, but the thing that matters for us is that Saturday
 and Sunday came out next to each other.</p>
@@ -3486,8 +3496,8 @@ actually plural and the other plural came out wrong.</p>
 <p>Then, make data frame of combinations. The nice thing is that if we
 had more than one district, we’d just define <code>PdDistricts</code>
 appropriately above and the rest of it would be the same:</p>
-<div class="sourceCode" id="cb2570"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2570-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2570-1"></a>sfcrime.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">DayOfWeek=</span>DayOfWeeks,<span class="dt">PdDistrict=</span>PdDistricts)</span>
-<span id="cb2570-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2570-2"></a>sfcrime.new</span></code></pre></div>
+<div class="sourceCode" id="cb2568"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2568-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2568-1"></a>sfcrime.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">DayOfWeek=</span>DayOfWeeks,<span class="dt">PdDistrict=</span>PdDistricts)</span>
+<span id="cb2568-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2568-2"></a>sfcrime.new</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 2
 ##   DayOfWeek PdDistrict
 ##   &lt;chr&gt;     &lt;chr&gt;     
@@ -3499,12 +3509,12 @@ appropriately above and the rest of it would be the same:</p>
 ## 6 Tuesday   TENDERLOIN
 ## 7 Wednesday TENDERLOIN</code></pre>
 <p>Then do the predictions:</p>
-<div class="sourceCode" id="cb2572"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2572-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2572-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(sfcrime<span class="fl">.1</span>,sfcrime.new,<span class="dt">type=</span><span class="st">&quot;probs&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2570"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2570-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2570-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(sfcrime<span class="fl">.1</span>,sfcrime.new,<span class="dt">type=</span><span class="st">&quot;probs&quot;</span>)</span></code></pre></div>
 <p>I can never remember the <code>type</code> thing for these models, because
 they are <em>all different</em>. I just make a guess, and if I guess
 something that this version of <code>predict</code> doesn’t know about,
 it’ll tell me:</p>
-<div class="sourceCode" id="cb2573"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2573-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2573-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(sfcrime<span class="fl">.1</span>,sfcrime.new,<span class="dt">type=</span><span class="st">&quot;bananas&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2571"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2571-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2571-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(sfcrime<span class="fl">.1</span>,sfcrime.new,<span class="dt">type=</span><span class="st">&quot;bananas&quot;</span>)</span></code></pre></div>
 <pre><code>## Error in match.arg(type): &#39;arg&#39; should be one of &quot;class&quot;, &quot;probs&quot;</code></pre>
 <p>I can work out from this that <code>type</code> should be <code>probs</code>,
 since the other one makes the best guess at which category of response
@@ -3515,7 +3525,7 @@ change, even if the predicted category stays the same.
 <p>Finally, display the results. I thought <code>cbind</code> wouldn’t work
 here, because some of the variables are factors and some are numbers,
 but <code>cbind</code> is smarter than that:</p>
-<div class="sourceCode" id="cb2575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2575-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2575-1"></a><span class="kw">cbind</span>(sfcrime.new,p)</span></code></pre></div>
+<div class="sourceCode" id="cb2573"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2573-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2573-1"></a><span class="kw">cbind</span>(sfcrime.new,p)</span></code></pre></div>
 <pre><code>##   DayOfWeek PdDistrict   ASSAULT DRUG/NARCOTIC LARCENY/THEFT VEHICLE THEFT
 ## 1    Friday TENDERLOIN 0.2125997     0.4658122     0.2907793    0.03080879
 ## 2    Monday TENDERLOIN 0.2072430     0.5001466     0.2656069    0.02700348
@@ -3544,7 +3554,7 @@ what I guessed before, that with this much data even a small effect
 significant.
 <label for="tufte-mn-155" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-155" class="margin-toggle"><span class="marginnote">Statistical significance as an idea grew up in the days before <em>big data</em>.</span>
 I want to compare another district. What districts do we have?</p>
-<div class="sourceCode" id="cb2577"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2577-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2577-1"></a>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(PdDistrict)</span></code></pre></div>
+<div class="sourceCode" id="cb2575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2575-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2575-1"></a>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(PdDistrict)</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ##    PdDistrict     n
 ##    &lt;chr&gt;      &lt;int&gt;
@@ -3562,10 +3572,10 @@ I want to compare another district. What districts do we have?</p>
 district. Let’s look at the lowest-crime district <code>RICHMOND</code>. I
 copy and paste my code. Since I want to compare two districts, I
 include both:</p>
-<div class="sourceCode" id="cb2579"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2579-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2579-1"></a>DayOfWeeks &lt;-<span class="st"> </span>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(DayOfWeek) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(DayOfWeek)</span>
-<span id="cb2579-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2579-2"></a>PdDistricts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;RICHMOND&quot;</span>,<span class="st">&quot;TENDERLOIN&quot;</span>)</span>
-<span id="cb2579-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2579-3"></a>sfcrime.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">DayOfWeek=</span>DayOfWeeks,<span class="dt">PdDistrict=</span>PdDistricts)</span>
-<span id="cb2579-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2579-4"></a>sfcrime.new</span></code></pre></div>
+<div class="sourceCode" id="cb2577"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2577-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2577-1"></a>DayOfWeeks &lt;-<span class="st"> </span>sfcrime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(DayOfWeek) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(DayOfWeek)</span>
+<span id="cb2577-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2577-2"></a>PdDistricts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;RICHMOND&quot;</span>,<span class="st">&quot;TENDERLOIN&quot;</span>)</span>
+<span id="cb2577-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2577-3"></a>sfcrime.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">DayOfWeek=</span>DayOfWeeks,<span class="dt">PdDistrict=</span>PdDistricts)</span>
+<span id="cb2577-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2577-4"></a>sfcrime.new</span></code></pre></div>
 <pre><code>## # A tibble: 14 x 2
 ##    DayOfWeek PdDistrict
 ##    &lt;chr&gt;     &lt;chr&gt;     
@@ -3583,8 +3593,8 @@ include both:</p>
 ## 12 Tuesday   TENDERLOIN
 ## 13 Wednesday RICHMOND  
 ## 14 Wednesday TENDERLOIN</code></pre>
-<div class="sourceCode" id="cb2581"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2581-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2581-1"></a>p1 &lt;-<span class="st"> </span><span class="kw">predict</span>(sfcrime<span class="fl">.1</span>,sfcrime.new,<span class="dt">type=</span><span class="st">&quot;probs&quot;</span>)</span>
-<span id="cb2581-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2581-2"></a>d1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(sfcrime.new,p1) ; d1</span></code></pre></div>
+<div class="sourceCode" id="cb2579"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2579-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2579-1"></a>p1 &lt;-<span class="st"> </span><span class="kw">predict</span>(sfcrime<span class="fl">.1</span>,sfcrime.new,<span class="dt">type=</span><span class="st">&quot;probs&quot;</span>)</span>
+<span id="cb2579-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2579-2"></a>d1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(sfcrime.new,p1) ; d1</span></code></pre></div>
 <pre><code>##    DayOfWeek PdDistrict   ASSAULT DRUG/NARCOTIC LARCENY/THEFT VEHICLE THEFT
 ## 1     Friday   RICHMOND 0.1666304    0.04944552     0.5466635    0.23726062
 ## 2     Friday TENDERLOIN 0.2125997    0.46581221     0.2907793    0.03080879
@@ -3614,7 +3624,7 @@ and <em>independently</em> there is an effect of location. The
 the model. This may or may not be supported by the actual data.</p>
 <p>The way to assess this is to fit a model with interaction (we will see
 more of this when we revisit ANOVA later), and compare the fit:</p>
-<div class="sourceCode" id="cb2583"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2583-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2583-1"></a>sfcrime<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">update</span>(sfcrime<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">+</span>DayOfWeek<span class="op">*</span>PdDistrict)</span></code></pre></div>
+<div class="sourceCode" id="cb2581"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2581-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2581-1"></a>sfcrime<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">update</span>(sfcrime<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">+</span>DayOfWeek<span class="op">*</span>PdDistrict)</span></code></pre></div>
 <pre><code>## # weights:  284 (210 variable)
 ## initial  value 498411.639069 
 ## iter  10 value 429631.807781
@@ -3629,11 +3639,11 @@ more of this when we revisit ANOVA later), and compare the fit:</p>
 ## iter 100 value 418036.670485
 ## final  value 418036.670485 
 ## stopped after 100 iterations</code></pre>
-<div class="sourceCode" id="cb2585"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2585-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2585-1"></a><span class="co"># anova(sfcrime.1,sfcrime.3)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2583"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2583-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2583-1"></a><span class="co"># anova(sfcrime.1,sfcrime.3)</span></span></code></pre></div>
 <p>This one didn’t actually complete the fitting process: it got to 100
 times around and stopped (since that’s the default limit). We can make
 it go a bit further thus:</p>
-<div class="sourceCode" id="cb2586"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2586-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2586-1"></a>sfcrime<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">update</span>(sfcrime<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">+</span>DayOfWeek<span class="op">*</span>PdDistrict,<span class="dt">maxit=</span><span class="dv">300</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2584"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2584-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2584-1"></a>sfcrime<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">update</span>(sfcrime<span class="fl">.1</span>,.<span class="op">~</span>.<span class="op">+</span>DayOfWeek<span class="op">*</span>PdDistrict,<span class="dt">maxit=</span><span class="dv">300</span>)</span></code></pre></div>
 <pre><code>## # weights:  284 (210 variable)
 ## initial  value 498411.639069 
 ## iter  10 value 429631.807781
@@ -3655,7 +3665,7 @@ it go a bit further thus:</p>
 ## iter 170 value 417858.654628
 ## final  value 417858.031854 
 ## converged</code></pre>
-<div class="sourceCode" id="cb2588"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2588-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2588-1"></a><span class="kw">anova</span>(sfcrime<span class="fl">.1</span>,sfcrime<span class="fl">.3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2586"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2586-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2586-1"></a><span class="kw">anova</span>(sfcrime<span class="fl">.1</span>,sfcrime<span class="fl">.3</span>)</span></code></pre></div>
 <pre><code>## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Category
@@ -3674,8 +3684,8 @@ the previous discussion, the differential effect of day of week in
 different districts might not be very big. We can even assess that; we
 have all the machinery for the predictions, and we just have to apply
 them to this model:</p>
-<div class="sourceCode" id="cb2590"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2590-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2590-1"></a>p3 &lt;-<span class="st"> </span><span class="kw">predict</span>(sfcrime<span class="fl">.3</span>,sfcrime.new,<span class="dt">type=</span><span class="st">&quot;probs&quot;</span>)</span>
-<span id="cb2590-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2590-2"></a>d3 &lt;-<span class="st"> </span><span class="kw">cbind</span>(sfcrime.new,p3) ; d3</span></code></pre></div>
+<div class="sourceCode" id="cb2588"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2588-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2588-1"></a>p3 &lt;-<span class="st"> </span><span class="kw">predict</span>(sfcrime<span class="fl">.3</span>,sfcrime.new,<span class="dt">type=</span><span class="st">&quot;probs&quot;</span>)</span>
+<span id="cb2588-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2588-2"></a>d3 &lt;-<span class="st"> </span><span class="kw">cbind</span>(sfcrime.new,p3) ; d3</span></code></pre></div>
 <pre><code>##    DayOfWeek PdDistrict   ASSAULT DRUG/NARCOTIC LARCENY/THEFT VEHICLE THEFT
 ## 1     Friday   RICHMOND 0.1756062    0.05241934     0.5447797    0.22719474
 ## 2     Friday TENDERLOIN 0.2163513    0.44958359     0.3006968    0.03336831
@@ -3698,8 +3708,8 @@ through 6 contain the actual predictions; let’s take the difference
 between them, and glue it back onto the district and day of week. I
 rounded the prediction differences off to 4 decimals to make the
 largest ones easier to find:</p>
-<div class="sourceCode" id="cb2592"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2592-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2592-1"></a>pdiff &lt;-<span class="st"> </span><span class="kw">round</span>(p3<span class="op">-</span>p1, <span class="dv">4</span>)</span>
-<span id="cb2592-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2592-2"></a><span class="kw">cbind</span>(sfcrime.new, pdiff)</span></code></pre></div>
+<div class="sourceCode" id="cb2590"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2590-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2590-1"></a>pdiff &lt;-<span class="st"> </span><span class="kw">round</span>(p3<span class="op">-</span>p1, <span class="dv">4</span>)</span>
+<span id="cb2590-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2590-2"></a><span class="kw">cbind</span>(sfcrime.new, pdiff)</span></code></pre></div>
 <pre><code>##    DayOfWeek PdDistrict ASSAULT DRUG/NARCOTIC LARCENY/THEFT VEHICLE THEFT
 ## 1     Friday   RICHMOND  0.0090        0.0030       -0.0019       -0.0101
 ## 2     Friday TENDERLOIN  0.0038       -0.0162        0.0099        0.0026
@@ -3726,9 +3736,9 @@ display the top and bottom few values. Note that
 I have to put those little “backticks” around <code>VEHICLE THEFT</code>
 since the variable name has a space in it. My code inefficiently sorts
 the differences twice:</p>
-<div class="sourceCode" id="cb2594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2594-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2594-1"></a><span class="kw">cbind</span>(sfcrime.new,pdiff) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2594-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2594-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(ASSAULT<span class="op">:</span><span class="st">`</span><span class="dt">VEHICLE THEFT</span><span class="st">`</span>, <span class="dt">names_to=</span><span class="st">&quot;crimetype&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;difference&quot;</span>) -&gt;<span class="st"> </span>d1</span>
-<span id="cb2594-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2594-3"></a>d1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(difference) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2592"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2592-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2592-1"></a><span class="kw">cbind</span>(sfcrime.new,pdiff) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2592-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2592-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(ASSAULT<span class="op">:</span><span class="st">`</span><span class="dt">VEHICLE THEFT</span><span class="st">`</span>, <span class="dt">names_to=</span><span class="st">&quot;crimetype&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;difference&quot;</span>) -&gt;<span class="st"> </span>d1</span>
+<span id="cb2592-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2592-3"></a>d1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(difference) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   DayOfWeek PdDistrict crimetype     difference
 ##   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;              &lt;dbl&gt;
@@ -3738,7 +3748,7 @@ the differences twice:</p>
 ## 4 Friday    TENDERLOIN DRUG/NARCOTIC    -0.0162
 ## 5 Sunday    RICHMOND   ASSAULT          -0.0122
 ## 6 Wednesday RICHMOND   ASSAULT          -0.0106</code></pre>
-<div class="sourceCode" id="cb2596"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2596-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2596-1"></a>d1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(difference)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2594-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2594-1"></a>d1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(difference)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   DayOfWeek PdDistrict crimetype     difference
 ##   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;              &lt;dbl&gt;
@@ -3750,7 +3760,7 @@ the differences twice:</p>
 ## 6 Thursday  RICHMOND   ASSAULT           0.0127</code></pre>
 <p>I don’t know what, if anything, you make of those.</p>
 <p>Extra: there is a better way of doing those in one go:</p>
-<div class="sourceCode" id="cb2598"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2598-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2598-1"></a>d1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">top_n</span>(<span class="dv">6</span>, difference)</span></code></pre></div>
+<div class="sourceCode" id="cb2596"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2596-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2596-1"></a>d1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">top_n</span>(<span class="dv">6</span>, difference)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   DayOfWeek PdDistrict crimetype     difference
 ##   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;              &lt;dbl&gt;
@@ -3760,7 +3770,7 @@ the differences twice:</p>
 ## 4 Sunday    TENDERLOIN LARCENY/THEFT     0.0233
 ## 5 Thursday  RICHMOND   ASSAULT           0.0127
 ## 6 Tuesday   TENDERLOIN DRUG/NARCOTIC     0.0187</code></pre>
-<div class="sourceCode" id="cb2600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2600-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2600-1"></a>d1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">top_n</span>(<span class="dv">6</span>, <span class="op">-</span>difference)</span></code></pre></div>
+<div class="sourceCode" id="cb2598"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2598-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2598-1"></a>d1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">top_n</span>(<span class="dv">6</span>, <span class="op">-</span>difference)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   DayOfWeek PdDistrict crimetype     difference
 ##   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;              &lt;dbl&gt;
@@ -3806,8 +3816,8 @@ variables.</p>
 </ol>
 <p>Solution</p>
 <p>This is a <code>.csv</code> file (I tried to make it easy for you):</p>
-<div class="sourceCode" id="cb2602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2602-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2602-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/hsb.csv&quot;</span></span>
-<span id="cb2602-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2602-2"></a>hsb &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb2600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2600-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2600-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/hsb.csv&quot;</span></span>
+<span id="cb2600-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2600-2"></a>hsb &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   id = col_double(),
@@ -3822,7 +3832,7 @@ variables.</p>
 ##   socst = col_double(),
 ##   gender = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb2604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2604-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2604-1"></a>hsb</span></code></pre></div>
+<div class="sourceCode" id="cb2602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2602-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2602-1"></a>hsb</span></code></pre></div>
 <pre><code>## # A tibble: 200 x 11
 ##       id race         ses    schtyp prog        read write  math science socst gender
 ##    &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; 
@@ -3855,8 +3865,8 @@ variable have to be?</li>
 <p>Solution</p>
 <p>It has to be an <code>ordered</code> factor, which you can create in
 the data frame (or outside, if you prefer):</p>
-<div class="sourceCode" id="cb2606"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2606-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2606-1"></a>hsb &lt;-<span class="st"> </span>hsb <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">ses =</span> <span class="kw">ordered</span>(ses, <span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;middle&quot;</span>, <span class="st">&quot;high&quot;</span>)))</span>
-<span id="cb2606-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2606-2"></a>hsb</span></code></pre></div>
+<div class="sourceCode" id="cb2604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2604-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2604-1"></a>hsb &lt;-<span class="st"> </span>hsb <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">ses =</span> <span class="kw">ordered</span>(ses, <span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;middle&quot;</span>, <span class="st">&quot;high&quot;</span>)))</span>
+<span id="cb2604-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2604-2"></a>hsb</span></code></pre></div>
 <pre><code>## # A tibble: 200 x 11
 ##       id race         ses    schtyp prog        read write  math science socst gender
 ##    &lt;dbl&gt; &lt;chr&gt;        &lt;ord&gt;  &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; 
@@ -3872,14 +3882,14 @@ the data frame (or outside, if you prefer):</p>
 ## 10    48 african-amer middle public academic      57    55    52      50    51 male  
 ## # … with 190 more rows</code></pre>
 <p><code>ses</code> is now <code>ord</code>. Good. Now fit the model:</p>
-<div class="sourceCode" id="cb2608"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2608-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2608-1"></a>ses<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(ses <span class="op">~</span><span class="st"> </span>read <span class="op">+</span><span class="st"> </span>write <span class="op">+</span><span class="st"> </span>math <span class="op">+</span><span class="st"> </span>science <span class="op">+</span><span class="st"> </span>socst, <span class="dt">data =</span> hsb)</span></code></pre></div>
+<div class="sourceCode" id="cb2606"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2606-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2606-1"></a>ses<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">polr</span>(ses <span class="op">~</span><span class="st"> </span>read <span class="op">+</span><span class="st"> </span>write <span class="op">+</span><span class="st"> </span>math <span class="op">+</span><span class="st"> </span>science <span class="op">+</span><span class="st"> </span>socst, <span class="dt">data =</span> hsb)</span></code></pre></div>
 <p>No errors is good.</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Remove any non-significant explanatory variables one at a
 time. Use <code>drop1</code> to decide which one to remove next.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2609"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2609-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2609-1"></a><span class="kw">drop1</span>(ses<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2607"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2607-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2607-1"></a><span class="kw">drop1</span>(ses<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3896,8 +3906,8 @@ time. Use <code>drop1</code> to decide which one to remove next.</li>
 <p>I would have expected the AIC column to come out in order, but it
 doesn’t. Never mind. Scan for the largest P-value, which belongs to
 <code>read</code>. (This also has the lowest AIC.) So, remove <code>read</code>:</p>
-<div class="sourceCode" id="cb2611"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2611-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2611-1"></a>ses<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(ses<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>read)</span>
-<span id="cb2611-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2611-2"></a><span class="kw">drop1</span>(ses<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2609"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2609-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2609-1"></a>ses<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(ses<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>read)</span>
+<span id="cb2609-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2609-2"></a><span class="kw">drop1</span>(ses<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3913,8 +3923,8 @@ doesn’t. Never mind. Scan for the largest P-value, which belongs to
 <p>Note how the P-value for <code>science</code> has come down a long way.</p>
 <p>A close call, but <code>math</code> goes next. The <code>update</code>
 doesn’t take long to type:</p>
-<div class="sourceCode" id="cb2613"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2613-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2613-1"></a>ses<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">update</span>(ses<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>math)</span>
-<span id="cb2613-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2613-2"></a><span class="kw">drop1</span>(ses<span class="fl">.3</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2611"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2611-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2611-1"></a>ses<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">update</span>(ses<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>math)</span>
+<span id="cb2611-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2611-2"></a><span class="kw">drop1</span>(ses<span class="fl">.3</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3933,8 +3943,8 @@ my guess, <code>math</code>). That is, we didn’t need both
 them.</p>
 <p>I think we can guess what will happen now: <code>write</code> comes out,
 and the other two variables will stay, so that’ll be where we stop:</p>
-<div class="sourceCode" id="cb2615"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2615-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2615-1"></a>ses<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">update</span>(ses<span class="fl">.3</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>write)</span>
-<span id="cb2615-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2615-2"></a><span class="kw">drop1</span>(ses<span class="fl">.4</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2613"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2613-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2613-1"></a>ses<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">update</span>(ses<span class="fl">.3</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>write)</span>
+<span id="cb2613-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2613-2"></a><span class="kw">drop1</span>(ses<span class="fl">.4</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -3953,7 +3963,7 @@ your <code>drop1</code> to give P-values (expect to lose something, but
 not too much, if that’s not there).</p>
 <p>Extras: I talked about correlation among the explanatory variables
 earlier, which I can explore:</p>
-<div class="sourceCode" id="cb2617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2617-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2617-1"></a>hsb <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(read<span class="op">:</span>socst) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cor</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2615"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2615-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2615-1"></a>hsb <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(read<span class="op">:</span>socst) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cor</span>()</span></code></pre></div>
 <pre><code>##              read     write      math   science     socst
 ## read    1.0000000 0.5967765 0.6622801 0.6301579 0.6214843
 ## write   0.5967765 1.0000000 0.6174493 0.5704416 0.6047932
@@ -3972,7 +3982,7 @@ highest correlation is between math and reading, which surprises me
 <p>So there was not as much insight there as I expected.</p>
 <p>The other thing is that you can use <code>step</code> for the
 variable-elimination task as well:</p>
-<div class="sourceCode" id="cb2619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2619-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2619-1"></a>ses<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">step</span>(ses<span class="fl">.1</span>, <span class="dt">direction =</span> <span class="st">&quot;backward&quot;</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2617-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2617-1"></a>ses<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">step</span>(ses<span class="fl">.1</span>, <span class="dt">direction =</span> <span class="st">&quot;backward&quot;</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Start:  AIC=404.63
 ## ses ~ read + write + math + science + socst
 ## 
@@ -4028,10 +4038,10 @@ regression had any other explanatory variables in it, also put the
 </ol>
 <p>Solution</p>
 <p>Thus, most obviously:</p>
-<div class="sourceCode" id="cb2621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2621-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2621-1"></a>sciences &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">44</span>, <span class="dv">58</span>)</span>
-<span id="cb2621-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2621-2"></a>socsts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">46</span>, <span class="dv">61</span>)</span>
-<span id="cb2621-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2621-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">science =</span> sciences, <span class="dt">socst =</span> socsts)</span>
-<span id="cb2621-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2621-4"></a>new</span></code></pre></div>
+<div class="sourceCode" id="cb2619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2619-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2619-1"></a>sciences &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">44</span>, <span class="dv">58</span>)</span>
+<span id="cb2619-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2619-2"></a>socsts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">46</span>, <span class="dv">61</span>)</span>
+<span id="cb2619-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2619-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">science =</span> sciences, <span class="dt">socst =</span> socsts)</span>
+<span id="cb2619-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2619-4"></a>new</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   science socst
 ##     &lt;dbl&gt; &lt;dbl&gt;
@@ -4047,14 +4057,14 @@ find the median of any other variables you had, and put that into your
 <code>new</code>. For example, if you still had <code>math</code>, you’d do
 this:
 <label for="tufte-mn-157" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-157" class="margin-toggle"><span class="marginnote">That is <em>maths</em> as the apparently-plural of <em>math</em>, not as the British name for mathematics.</span></p>
-<div class="sourceCode" id="cb2623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2623-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2623-1"></a>hsb <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">median</span>(math))</span></code></pre></div>
+<div class="sourceCode" id="cb2621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2621-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2621-1"></a>hsb <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">median</span>(math))</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##       m
 ##   &lt;dbl&gt;
 ## 1    52</code></pre>
-<div class="sourceCode" id="cb2625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2625-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2625-1"></a>maths &lt;-<span class="st"> </span><span class="dv">52</span></span>
-<span id="cb2625-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2625-2"></a>new2 &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">science =</span> sciences, <span class="dt">socst =</span> socsts, <span class="dt">math =</span> maths)</span>
-<span id="cb2625-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2625-3"></a>new2</span></code></pre></div>
+<div class="sourceCode" id="cb2623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2623-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2623-1"></a>maths &lt;-<span class="st"> </span><span class="dv">52</span></span>
+<span id="cb2623-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2623-2"></a>new2 &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">science =</span> sciences, <span class="dt">socst =</span> socsts, <span class="dt">math =</span> maths)</span>
+<span id="cb2623-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2623-3"></a>new2</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   science socst  math
 ##     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -4070,8 +4080,8 @@ each <code>ses</code> category.</li>
 <p>Solution</p>
 <p>This is <code>predict</code>, and we’ve done the setup. My best model
 was called <code>ses.4</code>:</p>
-<div class="sourceCode" id="cb2627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2627-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2627-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(ses<span class="fl">.4</span>, new, <span class="dt">type =</span> <span class="st">&quot;probs&quot;</span>)</span>
-<span id="cb2627-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2627-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<div class="sourceCode" id="cb2625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2625-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2625-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(ses<span class="fl">.4</span>, new, <span class="dt">type =</span> <span class="st">&quot;probs&quot;</span>)</span>
+<span id="cb2625-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2625-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
 <pre><code>##   science socst       low    middle      high
 ## 1      44    46 0.3262510 0.5056113 0.1681377
 ## 2      44    61 0.1885566 0.5150763 0.2963671
@@ -4133,8 +4143,8 @@ gymnastics, netball, rowing, swimming, 400m running, tennis, sprinting
 <p>Solution</p>
 <p>The data values are separated by tabs, so <code>read_tsv</code> is
 the thing:</p>
-<div class="sourceCode" id="cb2629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2629-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2629-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/ais.txt&quot;</span></span>
-<span id="cb2629-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2629-2"></a>athletes &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb2627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2627-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2627-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/ais.txt&quot;</span></span>
+<span id="cb2627-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2627-2"></a>athletes &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Sex = col_character(),
@@ -4151,7 +4161,7 @@ the thing:</p>
 ##   Ht = col_double(),
 ##   Wt = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2631"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2631-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2631-1"></a>athletes</span></code></pre></div>
+<div class="sourceCode" id="cb2629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2629-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2629-1"></a>athletes</span></code></pre></div>
 <pre><code>## # A tibble: 202 x 13
 ##    Sex    Sport     RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht    Wt
 ##    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -4167,7 +4177,7 @@ the thing:</p>
 ## 10 female Netball  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.  68.8
 ## # … with 192 more rows</code></pre>
 <p>If you didn’t remember that, this also works:</p>
-<div class="sourceCode" id="cb2633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2633-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2633-1"></a>athletes &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2631"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2631-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2631-1"></a>athletes &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Sex = col_character(),
@@ -4192,7 +4202,7 @@ and weight on the <span class="math inline">\(y\)</span>-axis.</li>
 </ol>
 <p>Solution</p>
 <p>I’m doing this to give you a little intuition for later:</p>
-<div class="sourceCode" id="cb2635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2635-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2635-1"></a><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">colour =</span> Sport)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2633-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2633-1"></a><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">colour =</span> Sport)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
 <p><img src="16-ordinal-nominal-response_files/figure-html/unnamed-chunk-151-1.png" width="672"  /></p>
 <p>The reason for giving you the axes to use is (i) neither variable is
 really a response, so it doesn’t actually matter which one goes on
@@ -4217,8 +4227,8 @@ number to allow the estimation to finish.</li>
 <p>Solution</p>
 <p>120 steps is actually enough, but any number larger than 110 is
 fine. It doesn’t matter if your guess is way too high. Like this:</p>
-<div class="sourceCode" id="cb2636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2636-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2636-1"></a><span class="kw">library</span>(nnet)</span>
-<span id="cb2636-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2636-2"></a>sport<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">multinom</span>(Sport <span class="op">~</span><span class="st"> </span>Ht <span class="op">+</span><span class="st"> </span>Wt, <span class="dt">data =</span> athletes, <span class="dt">maxit =</span> <span class="dv">200</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2634-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2634-1"></a><span class="kw">library</span>(nnet)</span>
+<span id="cb2634-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2634-2"></a>sport<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">multinom</span>(Sport <span class="op">~</span><span class="st"> </span>Ht <span class="op">+</span><span class="st"> </span>Wt, <span class="dt">data =</span> athletes, <span class="dt">maxit =</span> <span class="dv">200</span>)</span></code></pre></div>
 <pre><code>## # weights:  40 (27 variable)
 ## initial  value 465.122189 
 ## iter  10 value 410.089598
@@ -4243,7 +4253,7 @@ not be removed from this model.</li>
 <p>Solution</p>
 <p>The idea is to fit a model without <code>Wt</code>, and then show that
 it fits significantly worse:</p>
-<div class="sourceCode" id="cb2638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2638-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2638-1"></a>sport<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(sport<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Wt)</span></code></pre></div>
+<div class="sourceCode" id="cb2636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2636-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2636-1"></a>sport<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(sport<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Wt)</span></code></pre></div>
 <pre><code>## # weights:  30 (18 variable)
 ## initial  value 465.122189 
 ## iter  10 value 447.375728
@@ -4254,7 +4264,7 @@ it fits significantly worse:</p>
 ## iter  60 value 394.116434
 ## final  value 394.116429 
 ## converged</code></pre>
-<div class="sourceCode" id="cb2640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2640-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2640-1"></a><span class="kw">anova</span>(sport<span class="fl">.2</span>, sport<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2638-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2638-1"></a><span class="kw">anova</span>(sport<span class="fl">.2</span>, sport<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Likelihood ratio tests of Multinomial Models
 ## 
 ## Response: Sport
@@ -4271,12 +4281,12 @@ to help in distinguishing the sports. For example, the field athletes
 seem to be heavy for their height compared to the other athletes (look
 back at the graph you made).</p>
 <p><code>drop1</code>, the obvious thing, doesn’t work here:</p>
-<div class="sourceCode" id="cb2642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2642-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2642-1"></a><span class="kw">drop1</span>(sport<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>, <span class="dt">trace =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb2640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2640-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2640-1"></a><span class="kw">drop1</span>(sport<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>, <span class="dt">trace =</span> T)</span></code></pre></div>
 <pre><code>## trying - Ht</code></pre>
 <pre><code>## Error in if (trace) {: argument is not interpretable as logical</code></pre>
 <p>I gotta figure out what that error is.
 Does <code>step</code>?</p>
-<div class="sourceCode" id="cb2645"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2645-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2645-1"></a><span class="kw">step</span>(sport<span class="fl">.1</span>, <span class="dt">direction =</span> <span class="st">&quot;backward&quot;</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2643"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2643-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2643-1"></a><span class="kw">step</span>(sport<span class="fl">.1</span>, <span class="dt">direction =</span> <span class="st">&quot;backward&quot;</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <pre><code>## Start:  AIC=754.62
 ## Sport ~ Ht + Wt
 ## 
@@ -4336,10 +4346,10 @@ to fit them on the page.</li>
 <p>This is (again) the easier way: fill vectors with the given
 values, use <code>crossing</code> to get the combinations, and feed
 that into <code>predict</code>, thus:</p>
-<div class="sourceCode" id="cb2648"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2648-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2648-1"></a>Hts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">160</span>, <span class="dv">180</span>, <span class="dv">200</span>)</span>
-<span id="cb2648-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2648-2"></a>Wts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">100</span>)</span>
-<span id="cb2648-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2648-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">Ht =</span> Hts, <span class="dt">Wt =</span> Wts)</span>
-<span id="cb2648-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2648-4"></a>new</span></code></pre></div>
+<div class="sourceCode" id="cb2646"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2646-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2646-1"></a>Hts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">160</span>, <span class="dv">180</span>, <span class="dv">200</span>)</span>
+<span id="cb2646-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2646-2"></a>Wts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">100</span>)</span>
+<span id="cb2646-3"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2646-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">Ht =</span> Hts, <span class="dt">Wt =</span> Wts)</span>
+<span id="cb2646-4"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2646-4"></a>new</span></code></pre></div>
 <pre><code>## # A tibble: 9 x 2
 ##      Ht    Wt
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -4353,8 +4363,8 @@ that into <code>predict</code>, thus:</p>
 ## 8   200    75
 ## 9   200   100</code></pre>
 <p>and then</p>
-<div class="sourceCode" id="cb2650"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2650-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2650-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(sport<span class="fl">.1</span>, new, <span class="dt">type =</span> <span class="st">&quot;probs&quot;</span>)</span>
-<span id="cb2650-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2650-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<div class="sourceCode" id="cb2648"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2648-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2648-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(sport<span class="fl">.1</span>, new, <span class="dt">type =</span> <span class="st">&quot;probs&quot;</span>)</span>
+<span id="cb2648-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2648-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
 <pre><code>##    Ht  Wt        BBall        Field          Gym      Netball          Row         Swim
 ## 1 160  50 2.147109e-03 5.676191e-03 7.269646e-02 0.1997276344 0.0320511810 0.0429354624
 ## 2 160  75 1.044581e-04 7.203893e-01 2.240720e-09 0.0716686494 0.0537984065 0.0291616004
@@ -4379,7 +4389,7 @@ that into <code>predict</code>, thus:</p>
 <p>This still spills onto a second line (even printed this small). Let’s
 round the predicted probabilities to 2 decimals, which, with luck,
 will also kill the scientific notation:</p>
-<div class="sourceCode" id="cb2652"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2652-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2652-1"></a><span class="kw">cbind</span>(new, <span class="kw">round</span>(p, <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2650"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2650-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2650-1"></a><span class="kw">cbind</span>(new, <span class="kw">round</span>(p, <span class="dv">2</span>))</span></code></pre></div>
 <pre><code>##    Ht  Wt BBall Field  Gym Netball  Row Swim T400m Tennis TSprnt WPolo
 ## 1 160  50  0.00  0.01 0.07    0.20 0.03 0.04  0.35   0.19   0.10  0.00
 ## 2 160  75  0.00  0.72 0.00    0.07 0.05 0.03  0.00   0.01   0.11  0.01

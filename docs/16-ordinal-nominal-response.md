@@ -3835,18 +3835,24 @@ at a time for membership in the set in `my.crimes`, so this:
 ```r
 sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
 select(c(Category,DayOfWeek,PdDistrict)) 
-```
-
-```
-## Error in select(., c(Category, DayOfWeek, PdDistrict)): unused argument (c(Category, DayOfWeek, PdDistrict))
-```
-
-```r
 sfcrimea
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'sfcrimea' not found
+## # A tibble: 359,528 x 3
+##    Category      DayOfWeek PdDistrict
+##    <chr>         <chr>     <chr>     
+##  1 LARCENY/THEFT Wednesday NORTHERN  
+##  2 LARCENY/THEFT Wednesday PARK      
+##  3 LARCENY/THEFT Wednesday INGLESIDE 
+##  4 VEHICLE THEFT Wednesday INGLESIDE 
+##  5 VEHICLE THEFT Wednesday BAYVIEW   
+##  6 LARCENY/THEFT Wednesday RICHMOND  
+##  7 LARCENY/THEFT Wednesday CENTRAL   
+##  8 LARCENY/THEFT Wednesday CENTRAL   
+##  9 LARCENY/THEFT Wednesday NORTHERN  
+## 10 ASSAULT       Wednesday INGLESIDE 
+## # … with 359,518 more rows
 ```
 
    
@@ -3859,20 +3865,19 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"          "package:magrittr"    "package:MASS"       
-##  [4] "package:bindrcpp"    ".conflicts"          "package:conflicted" 
-##  [7] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
-## [10] "package:rpart"       "package:broom"       "package:ggrepel"    
-## [13] "package:ggbiplot"    "package:grid"        "package:scales"     
-## [16] "package:plyr"        "package:lme4"        "package:Matrix"     
-## [19] "package:car"         "package:carData"     "package:survminer"  
-## [22] "package:ggpubr"      "package:survival"    "package:nnet"       
-## [25] "package:smmr"        "package:forcats"     "package:stringr"    
-## [28] "package:dplyr"       "package:purrr"       "package:readr"      
-## [31] "package:tidyr"       "package:tibble"      "package:ggplot2"    
-## [34] "package:tidyverse"   "package:stats"       "package:graphics"   
-## [37] "package:grDevices"   "package:utils"       "package:datasets"   
-## [40] "package:methods"     "Autoloads"           "package:base"
+##  [1] ".GlobalEnv"          ".conflicts"          "package:conflicted" 
+##  [4] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
+##  [7] "package:rpart"       "package:broom"       "package:ggrepel"    
+## [10] "package:ggbiplot"    "package:grid"        "package:scales"     
+## [13] "package:plyr"        "package:lme4"        "package:Matrix"     
+## [16] "package:car"         "package:carData"     "package:survminer"  
+## [19] "package:ggpubr"      "package:survival"    "package:nnet"       
+## [22] "package:smmr"        "package:forcats"     "package:stringr"    
+## [25] "package:dplyr"       "package:purrr"       "package:readr"      
+## [28] "package:tidyr"       "package:tibble"      "package:ggplot2"    
+## [31] "package:tidyverse"   "package:stats"       "package:graphics"   
+## [34] "package:grDevices"   "package:utils"       "package:datasets"   
+## [37] "package:methods"     "Autoloads"           "package:base"
 ```
 
  
@@ -3885,8 +3890,7 @@ detach("package:MASS", unload=T)
 ```
 
 ```
-## Warning: 'MASS' namespace cannot be unloaded:
-##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+## Error in detach("package:MASS", unload = T): invalid 'name' argument
 ```
 
  

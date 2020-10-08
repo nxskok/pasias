@@ -472,13 +472,15 @@ Frequency tables are usually wide, and we can make this one so by `spread`ing `p
 ```r
 d %>%
   count(status, class) %>%
-  spread(class, n)
+  pivot_wider(names_from = class, values_from = n)
 ```
 
 ```
-##        status counterfeit genuine
+## # A tibble: 2 x 3
+##   status      counterfeit genuine
+##   <chr>             <int>   <int>
 ## 1 counterfeit         100      NA
-## 2     genuine           1      99
+## 2 genuine               1      99
 ```
 
  
@@ -491,13 +493,15 @@ actually a frequency that is zero, which you can fix up thus:
 ```r
 d %>%
   count(status, class) %>%
-  spread(class, n, fill = 0)
+  pivot_wider(names_from = class, values_from = n, values_fill = 0) 
 ```
 
 ```
-##        status counterfeit genuine
+## # A tibble: 2 x 3
+##   status      counterfeit genuine
+##   <chr>             <int>   <int>
 ## 1 counterfeit         100       0
-## 2     genuine           1      99
+## 2 genuine               1      99
 ```
 
  
@@ -1939,26 +1943,26 @@ jobs0 %>%
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      13     12           15     3    35 dispatcher
-##  2      23     24            7     2    67 mechanic  
-##  3      13     22           12     2     9 mechanic  
-##  4      18     24           13     2    30 mechanic  
-##  5      13     21           14     1    34 custserv  
-##  6      10     31           13     1    15 custserv  
-##  7      20     13           19     3    36 dispatcher
-##  8      11     20            9     1    46 custserv  
-##  9       9     24            6     1    63 custserv  
-## 10      11     22           11     1    38 custserv  
-## 11      16     28           13     2    11 mechanic  
-## 12      22     22            6     1    40 custserv  
-## 13      24     18           13     2    75 mechanic  
-## 14      17     20            6     1    81 custserv  
-## 15       3     20           14     1    31 custserv  
-## 16      14     18           14     3    37 dispatcher
-## 17      13     16           11     2    65 mechanic  
-## 18      10     24            5     1    30 custserv  
-## 19      14     26           17     1    67 custserv  
-## 20      14     27            6     1    72 custserv
+##  1      13     27            7     1     8 custserv  
+##  2      16     24           10     1    85 custserv  
+##  3      13     12           15     3    35 dispatcher
+##  4      15     13            6     2    70 mechanic  
+##  5      15     22           12     2    12 mechanic  
+##  6      24     20           13     3    13 dispatcher
+##  7      14     18            4     3     5 dispatcher
+##  8      21     19            9     2    29 mechanic  
+##  9      21     19            7     2    69 mechanic  
+## 10       6     18            6     1    62 custserv  
+## 11      13     25           14     1    82 custserv  
+## 12      16     16           17     3    14 dispatcher
+## 13       8     20            8     3    40 dispatcher
+## 14      17     21           12     2    50 mechanic  
+## 15      14     29            7     1    24 custserv  
+## 16      21     31           11     1    26 custserv  
+## 17      25     20            8     2    91 mechanic  
+## 18      25     29           11     2    66 mechanic  
+## 19      13     20           18     3    49 dispatcher
+## 20       0     27           11     1    17 custserv
 ```
 
  
@@ -5729,15 +5733,18 @@ The tidyverse way of doing this is equally good. This is the tidied-up way:
 
 
 ```r
-d %>% count(soil, class) %>% spread(class, n, fill = 0)
+d %>% count(soil, class) %>% 
+  pivot_wider(names_from = class, values_from = n, values_fill = 0)
 ```
 
 ```
-##    soil clay loam salty sandy
-## 1  clay    3    0     3     2
-## 2  loam    0    6     0     2
-## 3 salty    1    1     5     1
-## 4 sandy    2    1     1     4
+## # A tibble: 4 x 5
+##   soil   clay salty sandy  loam
+##   <chr> <int> <int> <int> <int>
+## 1 clay      3     3     2     0
+## 2 loam      0     0     2     6
+## 3 salty     1     5     1     1
+## 4 sandy     2     1     4     1
 ```
 
  

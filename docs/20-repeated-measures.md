@@ -252,26 +252,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1     3 thyroxin   Time3    151     3
-##  2    18 control    Time0     57     0
-##  3    27 control    Time1     82     1
-##  4    24 control    Time2     94     2
-##  5    22 control    Time0     56     0
-##  6    10 thiouracil Time1     79     1
-##  7    10 thiouracil Time3    106     3
-##  8     5 thyroxin   Time4    144     4
-##  9    14 thiouracil Time1     78     1
-## 10     6 thyroxin   Time4    140     4
-## 11    16 thiouracil Time3     90     3
-## 12    24 control    Time3    110     3
-## 13    11 thiouracil Time1     88     1
-## 14     2 thyroxin   Time2     90     2
-## 15    15 thiouracil Time1     69     1
-## 16    16 thiouracil Time1     61     1
-## 17    27 control    Time0     57     0
-## 18    22 control    Time2    104     2
-## 19     8 thiouracil Time1     86     1
-## 20    17 thiouracil Time4    122     4
+##  1    16 thiouracil Time0     46     0
+##  2    25 control    Time4    154     4
+##  3    27 control    Time4    169     4
+##  4    14 thiouracil Time0     56     0
+##  5    20 control    Time1     77     1
+##  6    27 control    Time0     57     0
+##  7     1 thyroxin   Time3    156     3
+##  8    10 thiouracil Time0     53     0
+##  9    25 control    Time1     91     1
+## 10    13 thiouracil Time2     92     2
+## 11     5 thyroxin   Time2     97     2
+## 12    24 control    Time4    141     4
+## 13    24 control    Time0     51     0
+## 14    11 thiouracil Time3    111     3
+## 15    12 thiouracil Time4    140     4
+## 16    11 thiouracil Time1     88     1
+## 17     2 thyroxin   Time4    138     4
+## 18    19 control    Time2    123     2
+## 19    11 thiouracil Time0     59     0
+## 20    21 control    Time0     49     0
 ```
 
  

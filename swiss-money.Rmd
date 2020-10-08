@@ -310,7 +310,7 @@ Frequency tables are usually wide, and we can make this one so by `spread`ing `p
 ```{r }
 d %>%
   count(status, class) %>%
-  spread(class, n)
+  pivot_wider(names_from = class, values_from = n)
 ```
 
  
@@ -322,7 +322,7 @@ actually a frequency that is zero, which you can fix up thus:
 ```{r }
 d %>%
   count(status, class) %>%
-  spread(class, n, fill = 0)
+  pivot_wider(names_from = class, values_from = n, values_fill = 0) 
 ```
 
  

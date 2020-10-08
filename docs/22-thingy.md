@@ -3148,15 +3148,17 @@ or even
 ```r
 tibble(obs = swiss$status, pred = swiss.7$cluster) %>%
   count(obs, pred) %>%
-  spread(pred, n, fill = 0)
+  pivot_wider(names_from = obs, values_from = n, values_fill = 0)
 ```
 
 ```
-## # A tibble: 2 x 5
-##   obs           `1`   `2`   `3`   `4`
-##   <chr>       <dbl> <dbl> <dbl> <dbl>
-## 1 counterfeit    50     1     0    49
-## 2 genuine         0    31    68     1
+## # A tibble: 4 x 3
+##    pred counterfeit genuine
+##   <int>       <int>   <int>
+## 1     1          50       0
+## 2     2           1      31
+## 3     4          49       1
+## 4     3           0      68
 ```
 
  

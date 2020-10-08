@@ -2058,7 +2058,7 @@ marks %>%
   unnest(qq) %>%
   mutate(qn = parse_number(name)) %>%
   select(-name) %>%
-  spread(qn, value)
+  pivot_wider(names_from = qn, values_from = value)
 ```
 
 ```
@@ -2079,7 +2079,7 @@ marks %>%
 This deliberately untidies the final answer to make it nicer to look
 at. (The lines before that create a numeric quantile, so that it sorts
 into the right order, and then get rid of the original quantile
-percents. Investigate what happens if you do a similar `spread`
+percents. Investigate what happens if you do a similar `pivot_wider`
 without doing that.)
 
 
