@@ -122,7 +122,7 @@ is a significant interaction!
 (e) To understand the results that you got from the repeated
 measures analysis, you are going to draw a picture (or two). To do
 *that*, we are going to need the data in "long" format with
-one response value per line (instead of four). Use `pivot_longer` or `gather`
+one response value per line (instead of four). Use `pivot_longer`
 suitably to get the data in that format, and demonstrate that you
 have done so.
 
@@ -135,27 +135,13 @@ The usual layout:
 ```{r}
 geriatrics %>% 
   pivot_longer(t1:t4, names_to="time", values_to = "intpct") -> geriatrics.long
+geriatrics.long
 ```
 
-or with `gather`:
 
-```{r }
-geriatrics2.long <- geriatrics %>%
-  gather(time, intpct, t1:t4)
-geriatrics2.long
-```
-
-Different order, but same result.
-
-I had to think a bit about "values", or "what makes the gathered columns the same". 
-They are all percentages of interactions of a specific type,
-so you could as well (or better) call them "percent". 
-
-Anyway, I have *one* column of interaction percents, and
+I have *one* column of interaction percents, and
 *one* column of times. If you check the whole thing, you'll see
-that `gather` gives you all the time-1 measurements first, then all the time-2
-measurements, and so on, so that the subject number loops through the
-21 subjects four times, while `pivot_longer` gives all the measurements for subject 1, then subject 2, and so on.
+that `pivot_longer` gives all the measurements for subject 1, then subject 2, and so on.
 
 The long data frame is, well, long.
 

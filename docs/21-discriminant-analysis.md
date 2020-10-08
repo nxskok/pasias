@@ -91,7 +91,7 @@ swiss
 ##  8   214.  130.  129.    7.2  10.7  142. genuine
 ##  9   215.  129.  130.    8.2  11    142. genuine
 ## 10   215.  130.  130.    9.2  10    141. genuine
-## # ... with 190 more rows
+## # … with 190 more rows
 ```
 
        
@@ -353,8 +353,7 @@ you?), you saw that the LD scores were in a column called
 ggplot(d, aes(x = status, y = LD1)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/antioch-1} 
+<img src="21-discriminant-analysis_files/figure-html/antioch-1.png" width="672"  />
 
    
 
@@ -371,8 +370,7 @@ Or you could do faceted histograms of `LD1` by `status`:
 ggplot(d, aes(x = LD1)) + geom_histogram(bins = 10) + facet_grid(status ~ .)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-12-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
  
 
@@ -406,8 +404,7 @@ boxplot seems a nice way to display it:
 ggplot(d, aes(y = left, x = status)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/gtabita-1} 
+<img src="21-discriminant-analysis_files/figure-html/gtabita-1.png" width="672"  />
 
       
 
@@ -421,8 +418,7 @@ Compare that to `diag`:
 ggplot(d, aes(y = diag, x = status)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/iggle-1} 
+<img src="21-discriminant-analysis_files/figure-html/iggle-1.png" width="672"  />
 
  
 
@@ -474,7 +470,9 @@ Frequency tables are usually wide, and we can make this one so by `spread`ing `p
 
 
 ```r
-d %>% count(status, class) %>% spread(class, n)
+d %>%
+  count(status, class) %>%
+  spread(class, n)
 ```
 
 ```
@@ -491,7 +489,9 @@ actually a frequency that is zero, which you can fix up thus:
 
 
 ```r
-d %>% count(status, class) %>% spread(class, n, fill = 0)
+d %>%
+  count(status, class) %>%
+  spread(class, n, fill = 0)
 ```
 
 ```
@@ -528,8 +528,10 @@ there is some doubt about whether the bill is real or fake. 0.99 seems like a ve
 
 
 ```r
-d %>% mutate(max.post = pmax(posterior.counterfeit, posterior.genuine)) %>% filter(max.post < 
-    0.99) %>% dplyr::select(-c(length:diag))
+d %>%
+  mutate(max.post = pmax(posterior.counterfeit, posterior.genuine)) %>%
+  filter(max.post < 0.99) %>%
+  dplyr::select(-c(length:diag))
 ```
 
 ```
@@ -557,8 +559,12 @@ for each row separately. This also should work:
 
 
 ```r
-d %>% mutate(max.post = map2_dbl(posterior.counterfeit, posterior.genuine, ~max(.x, 
-    .y))) %>% filter(max.post < 0.99) %>% select(-c(length:diag))
+d %>%
+  mutate(max.post = map2_dbl(
+    posterior.counterfeit, posterior.genuine, ~ max(.x, .y)
+  )) %>%
+  filter(max.post < 0.99) %>%
+  select(-c(length:diag))
 ```
 
 ```
@@ -572,7 +578,7 @@ d %>% mutate(max.post = map2_dbl(posterior.counterfeit, posterior.genuine, ~max(
 Because we're using `map`, `max` is applied to the pairs
 of values of `posterior.counterfeit` and `posterior.genuine`, 
 *taken one at a time.*
-\marginnote{The *map2* is because we are for-eaching over the corresponding values in *counterfeit* and *genuine*. In the *do this*, there can no longer be one *it*; the *.x* and *.y* refer to each of the *counterfeit* and *genuine* values in that order.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *map2* is because we are for-eaching over the corresponding values in *counterfeit* and *genuine*. In the *do this*, there can no longer be one *it*; the *.x* and *.y* refer to each of the *counterfeit* and *genuine* values in that order.</span>
  
 
 
@@ -825,7 +831,7 @@ dd
 ##  8 a          30       12       6.3      14.5 c           0.230      0.197 
 ##  9 a          28       10.1     5.45      0.9 a           0.481      0.0752
 ## 10 a          24       14.7     3.75      2   a           0.323      0.247 
-## # ... with 35 more rows, and 5 more variables: posterior.c <dbl>,
+## # … with 35 more rows, and 5 more variables: posterior.c <dbl>,
 ## #   posterior.d <dbl>, x.LD1 <dbl>, x.LD2 <dbl>, x.LD3 <dbl>
 ```
 
@@ -860,7 +866,7 @@ ddd
 ##  8 a          30       12       6.3      14.5 c     -0.853  0.0890  1.23   0.230
 ##  9 a          28       10.1     5.45      0.9 a     -1.23   1.95   -0.543  0.481
 ## 10 a          24       14.7     3.75      2   a     -0.530  0.406  -1.06   0.323
-## # ... with 35 more rows, and 3 more variables: b <dbl>, c <dbl>, d <dbl>
+## # … with 35 more rows, and 3 more variables: b <dbl>, c <dbl>, d <dbl>
 ```
 
  
@@ -869,7 +875,7 @@ are now absolutely sure what kind of thing everything is. I also had
 to be slightly careful with the vector of `class` values; in
 `ddd` it has to have a name, so I have to make sure I give it
 one.
-\marginnote{If you run into an error like *Argument 2 must have names* here, that means that the second thing, *class*, needs  to have a name and doesn't have one.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you run into an error like *Argument 2 must have names* here, that means that the second thing, *class*, needs  to have a name and doesn't have one.</span>
 Any of these ways (in general) is good. The last way is a more
 careful approach, since you are making sure things are of the right
 type rather than relying on R to convert them for you, but I don't
@@ -881,8 +887,7 @@ Now make the plot, making sure that you are using columns with the right names. 
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = obesity)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-28-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
  
  
@@ -927,15 +932,14 @@ the *average* individual within a group stacks up.
 ggbiplot(urine.1, groups = urine$obesity)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-29-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
  
 
 This shows (in a way that is perhaps easier to see) how the linear
 discriminants are related to the original variables, and thus how the
 groups differ in terms of the original variables.
-\marginnote{This was why  we were doing discriminant analysis in the first place.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was why  we were doing discriminant analysis in the first place.</span> 
 Most of the B's are high creatinine and high chloride (on the right); most of the D's are low on both (on the left). LD2 has a bit of `chloride`, but not much of anything else.
 Extra: the way we used to do this was with "base graphics", which involved plotting the `lda` output itself:
 
@@ -944,8 +948,7 @@ Extra: the way we used to do this was with "base graphics", which involved plott
 plot(urine.1)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-30-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-30-1.png" width="672"  />
 
  
 
@@ -957,8 +960,7 @@ one. You can plot just the first two, like this:
 plot(urine.1, dimen = 2)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-31-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-31-1.png" width="672"  />
 
  
 This is easier than using `ggplot`, but (i) less flexible and
@@ -1003,7 +1005,7 @@ later:
 
 
 ```r
-tab <- d %>% count(obesity, class)
+d %>% count(obesity, class) -> tab
 tab
 ```
 
@@ -1029,7 +1031,7 @@ tab
 or if you prefer to make it look more like a table of frequencies:
 
 ```r
-tab %>% pivot_wider(names_from = class, values_from = n, values_fill = list(n = 0))
+tab %>% pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
 ```
@@ -1085,7 +1087,9 @@ It's a shortcut for this:
 
 
 ```r
-tab %>% mutate(is_correct = (obesity == class)) %>% count(is_correct, wt = n)
+tab %>%
+  mutate(is_correct = (obesity == class)) %>%
+  count(is_correct, wt = n)
 ```
 
 ```
@@ -1107,7 +1111,9 @@ wrong. We can find the proportions correct and wrong:
 
 
 ```r
-tab %>% count(correct = (obesity == class), wt = n) %>% mutate(proportion = n/sum(n))
+tab %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -1140,7 +1146,10 @@ do any summarizing:
 
 
 ```r
-tab %>% group_by(obesity) %>% count(correct = (obesity == class), wt = n) %>% mutate(proportion = n/sum(n))
+tab %>%
+  group_by(obesity) %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -1166,8 +1175,12 @@ read, a kind of "untidying":
 
 
 ```r
-tab %>% group_by(obesity) %>% count(correct = (obesity == class), wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    select(-n) %>% pivot_wider(names_from = correct, values_from = proportion)
+tab %>%
+  group_by(obesity) %>%
+  count(correct = (obesity == class), wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  pivot_wider(names_from=correct, values_from=proportion)
 ```
 
 ```
@@ -1196,9 +1209,13 @@ values than TRUE and FALSE:
 
 
 ```r
-tab %>% group_by(obesity) %>% mutate(prediction_stat = ifelse(obesity == class, "correct", 
-    "wrong")) %>% count(prediction_stat, wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    select(-n) %>% pivot_wider(names_from = prediction_stat, values_from = proportion)
+tab %>%
+  group_by(obesity) %>%
+  mutate(prediction_stat = ifelse(obesity == class, "correct", "wrong")) %>%
+  count(prediction_stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  pivot_wider(names_from=prediction_stat, values_from=proportion)
 ```
 
 ```
@@ -1319,7 +1336,7 @@ summary(simple.3)
 
 This P-value is small, so there is some way in which some of the
 groups differ on some of the variables.
-\marginnote{That sounds like the  ultimate in evasiveness!}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That sounds like the  ultimate in evasiveness!</span>
     
 
 
@@ -1418,8 +1435,7 @@ This was the old-fashioned way:
 plot(simple.4)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-43-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
    
 
@@ -1454,7 +1470,7 @@ head(d)
 
  
 or like this, for fun:
-\marginnote{For suitable definitions of fun.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">For suitable definitions of fun.</span>
 
 
 ```r
@@ -1491,8 +1507,7 @@ true groups:
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = group)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-47-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
  
 
@@ -1504,8 +1519,7 @@ vs.\ `y2`, coloured by groups:
 ggplot(simple, aes(x = y1, y = y2, colour = group)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-48-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
  
 
@@ -1523,8 +1537,7 @@ against groups via boxplot:
 ggplot(d, aes(x = group, y = x.LD1)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-49-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 
@@ -1657,7 +1670,9 @@ d %>% count(group, class)
 or
 
 ```r
-d %>% count(group, class) %>% pivot_wider(names_from = class, values_from = n, values_fill = list(n = 0))
+d %>%
+  count(group, class) %>%
+  pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
 ```
@@ -1683,8 +1698,9 @@ have a ton of decimal places which I like to round off first before I
 display them, eg. to 3 decimals here:
 
 ```r
-d %>% select(y1, y2, group, class, starts_with("posterior")) %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3))
+d %>%
+  select(y1, y2, group, class, starts_with("posterior")) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3))
 ```
 
 ```
@@ -1719,16 +1735,17 @@ observation 6, and then I use this new variable as the `size`
 of the point I plot:
 
 ```r
-simple %>% mutate(is6 = (row_number() == 6)) %>% ggplot(aes(x = y1, y = y2, colour = group, 
-    size = is6)) + geom_point()
+simple %>%
+  mutate(is6 = (row_number() == 6)) %>%
+  ggplot(aes(x = y1, y = y2, colour = group, size = is6)) +
+  geom_point()
 ```
 
 ```
 ## Warning: Using size for a discrete variable is not advised.
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-54-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-54-1.png" width="672"  />
 
  
 
@@ -1752,7 +1769,7 @@ it is like any of the other groups.
 
 
  244
-\marginnote{Grammatically, I am supposed to write this as  *two hundred and forty-four* in words, since I am not supposed to  start a sentence with a number. But, I say, deal with it. Or, I  suppose, *there are 244 people who work...*.} people work at a
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Grammatically, I am supposed to write this as  *two hundred and forty-four* in words, since I am not supposed to  start a sentence with a number. But, I say, deal with it. Or, I  suppose, *there are 244 people who work...*.</span> people work at a
 certain company. 
 They each have one of three jobs: customer service, mechanic,
 dispatcher. In the data set, these are labelled 1, 2 and 3
@@ -1810,14 +1827,14 @@ jobs0
 ##  8      13     27            7     1     8
 ##  9      18     31            9     1     9
 ## 10      16     35           13     1    10
-## # ... with 234 more rows
+## # … with 234 more rows
 ```
 
      
 
 We got all that was promised, plus a label `id` for each
 employee, which we will from here on ignore.
-\marginnote{Until much later.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Until much later.</span>
     
 
 
@@ -1839,7 +1856,8 @@ actually use for the analysis below:
 
 ```r
 job_labels <- c("custserv", "mechanic", "dispatcher")
-jobs <- jobs0 %>% mutate(job = factor(job, labels = job_labels))
+jobs <- jobs0 %>%
+  mutate(job = factor(job, labels = job_labels))
 ```
 
        
@@ -1866,7 +1884,7 @@ jobs
 ##  8      13     27            7 custserv     8
 ##  9      18     31            9 custserv     9
 ## 10      16     35           13 custserv    10
-## # ... with 234 more rows
+## # … with 234 more rows
 ```
 
  
@@ -1878,13 +1896,18 @@ All is good here. If you forget the `labels` thing, you'll get
 a factor, but its levels will be 1, 2, and 3, and you will have to
 remember which jobs they go with. I'm a fan of giving factors named
 levels, so that you can remember what stands for what.
-\marginnote{When  you're *recording* the data, you may find it convenient to use  short codes to represent the possibly long factor levels, but in  that case you should also use a *codebook* so that you know what  the codes represent. When I read the data into R, I would create a  factor with named levels, like I did here, if I don't already have one.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When  you're *recording* the data, you may find it convenient to use  short codes to represent the possibly long factor levels, but in  that case you should also use a *codebook* so that you know what  the codes represent. When I read the data into R, I would create a  factor with named levels, like I did here, if I don't already have one.</span>
 
 Extra: another way of doing this is to make a lookup table, that is, a little table that shows which job goes with which number:
 
 
 ```r
-lookup_tab <- tribble(~job, ~jobname, 1, "custserv", 2, "mechanic", 3, "dispatcher")
+lookup_tab <- tribble(
+  ~job, ~jobname,
+  1, "custserv",
+  2, "mechanic",
+  3, "dispatcher"
+)
 lookup_tab
 ```
 
@@ -1903,7 +1926,9 @@ I carefully put the numbers in a column called `job` because I want to match the
 
 
 ```r
-jobs0 %>% left_join(lookup_tab) %>% sample_n(20)
+jobs0 %>%
+  left_join(lookup_tab) %>%
+  sample_n(20)
 ```
 
 ```
@@ -1914,26 +1939,26 @@ jobs0 %>% left_join(lookup_tab) %>% sample_n(20)
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      22     24            6     1    54 custserv  
-##  2      14     16            6     3    48 dispatcher
-##  3      17     18            9     3    56 dispatcher
-##  4      15     17            8     2    77 mechanic  
-##  5      14     19           13     2    14 mechanic  
-##  6      21     15           10     2     2 mechanic  
-##  7      18     26           10     2    48 mechanic  
-##  8      21     25           11     2    46 mechanic  
-##  9      17     16            6     2    52 mechanic  
-## 10      13     25           14     1    82 custserv  
-## 11      17     18           15     2    87 mechanic  
-## 12      15     29            8     2     4 mechanic  
-## 13      17     23           10     2    88 mechanic  
-## 14      17     12           17     3     7 dispatcher
-## 15      11     27           10     1    33 custserv  
-## 16      17     19           11     2    24 mechanic  
-## 17      15     26            9     1    60 custserv  
-## 18      10     24           12     1    18 custserv  
-## 19      14     18            4     2     8 mechanic  
-## 20      21     19            9     2    29 mechanic
+##  1      13     12           15     3    35 dispatcher
+##  2      23     24            7     2    67 mechanic  
+##  3      13     22           12     2     9 mechanic  
+##  4      18     24           13     2    30 mechanic  
+##  5      13     21           14     1    34 custserv  
+##  6      10     31           13     1    15 custserv  
+##  7      20     13           19     3    36 dispatcher
+##  8      11     20            9     1    46 custserv  
+##  9       9     24            6     1    63 custserv  
+## 10      11     22           11     1    38 custserv  
+## 11      16     28           13     2    11 mechanic  
+## 12      22     22            6     1    40 custserv  
+## 13      24     18           13     2    75 mechanic  
+## 14      17     20            6     1    81 custserv  
+## 15       3     20           14     1    31 custserv  
+## 16      14     18           14     3    37 dispatcher
+## 17      13     16           11     2    65 mechanic  
+## 18      10     24            5     1    30 custserv  
+## 19      14     26           17     1    67 custserv  
+## 20      14     27            6     1    72 custserv
 ```
 
  
@@ -2152,8 +2177,7 @@ Following my suggestion, plot these the standard way with
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = job)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-62-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
  
 I was mostly right about the customer service people: small
@@ -2224,7 +2248,9 @@ or:
 
 
 ```r
-d %>% count(job, class) %>% pivot_wider(names_from = class, values_from = n, values_fill = list(n = 0))
+d %>%
+  count(job, class) %>%
+  pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
 ```
@@ -2267,7 +2293,9 @@ the correct or wrong classification:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == class, "correct", "wrong"))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong"))
 ```
 
 ```
@@ -2291,8 +2319,10 @@ count the number of rows:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>% 
-    count(job_stat, wt = n)
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  count(job_stat, wt = n)
 ```
 
 ```
@@ -2307,8 +2337,11 @@ and turn these into proportions:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>% 
-    count(job_stat, wt = n) %>% mutate(proportion = n/sum(n))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -2337,8 +2370,12 @@ proportions for each (true) job:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>% 
-    group_by(job) %>% count(job_stat, wt = n) %>% mutate(proportion = n/sum(n))
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  group_by(job) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -2360,9 +2397,14 @@ or even split out the correct and wrong ones into their own columns:
 
 
 ```r
-d %>% count(job, class) %>% mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>% 
-    group_by(job) %>% count(job_stat, wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    select(-n) %>% pivot_wider(names_from = job_stat, values_from = proportion)
+d %>%
+  count(job, class) %>%
+  mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
+  group_by(job) %>%
+  count(job_stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  pivot_wider(names_from=job_stat, values_from=proportion)
 ```
 
 ```
@@ -2407,7 +2449,10 @@ models. I think the
 clearest way to make one of these is with `tribble`:
 
 ```r
-new <- tribble(~outdoor, ~social, ~conservative, 20, 17, 8)
+new <- tribble(
+  ~outdoor, ~social, ~conservative,
+  20, 17, 8
+)
 new
 ```
 
@@ -2453,7 +2498,7 @@ The `class` thing gives our predicted job, and the
 So we reckon there's a 78\% chance that this person is a mechanic;
 they might be a dispatcher but they are unlikely to be in customer
 service. Our best guess is that they are a mechanic.
-\marginnote{I  discovered that I used *pp* twice, and I want to use the first one again later, so I had to rename this one.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I  discovered that I used *pp* twice, and I want to use the first one again later, so I had to rename this one.</span>
 
 Does this pass the sanity-check test? First figure out where our new
 employee stands compared to the others:
@@ -2522,7 +2567,10 @@ discriminants'' above:
 
 
 ```r
-new <- crossing(outdoor = outdoors, social = socials, conservative = conservatives)
+new <- crossing(
+  outdoor = outdoors, social = socials,
+  conservative = conservatives
+)
 pp2 <- predict(job.1, new)
 px <- round(pp2$x, 2)
 cbind(new, pp2$class, px)
@@ -2695,7 +2743,7 @@ This is another way of saying that with small data sets, your
 conclusions are more "fragile" or less likely to be
 generalizable. With a larger data set like this one, cross-validation,
 which is the right thing to do, makes almost no difference.
-\marginnote{So we should do it, when assessing how good the classification is.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">So we should do it, when assessing how good the classification is.</span>
 
 All right, I suppose I do want to investigate the individuals whose
 predicted jobs changed, and look at their posterior probabilities. I
@@ -2705,7 +2753,7 @@ Let's start by gluing together the dataframes with the predictions from the regu
 
 
 ```r
-d %>% left_join(dcv, by = c("id", "job"))
+d %>% left_join(dcv, by=c("id", "job"))
 ```
 
 ```
@@ -3696,9 +3744,12 @@ The columns with an `x` on the end of their names came from `d`, that is, the pr
 
 
 ```r
-all <- d %>% left_join(dcv, by = c("id", "job")) %>% select(outdoor = outdoor.x, 
-    social = social.x, conservative = conservative.x, job, id, starts_with("class"), 
-    starts_with("posterior"))
+d %>% left_join(dcv, by=c("id", "job")) %>% 
+  select(outdoor = outdoor.x,
+         social = social.x,
+         conservative = conservative.x,
+         job, id, starts_with("class"),
+         starts_with("posterior")) -> all
 all
 ```
 
@@ -4469,8 +4520,9 @@ Let's round them to three decimals, and then display only some of the columns:
 
 
 ```r
-all %>% filter(class.x != class.y) %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% select(id, job, starts_with("posterior"))
+all %>% filter(class.x != class.y) %>% 
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  select(id, job, starts_with("posterior"))
 ```
 
 ```
@@ -4489,10 +4541,11 @@ And then, because I can, let's re-format that to make it easier to read, `x` bei
 
 
 ```r
-all %>% filter(class.x != class.y) %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% select(id, job, starts_with("posterior")) %>% pivot_longer(starts_with("posterior"), 
-    names_to = c("post_job", "method"), names_pattern = "posterior\\.(.*)\\.(.)", 
-    values_to = "prob") %>% pivot_wider(names_from = method, values_from = prob)
+all %>% filter(class.x != class.y) %>% 
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  select(id, job, starts_with("posterior")) %>% 
+  pivot_longer(starts_with("posterior"), names_to = c("post_job", "method"), names_pattern = "posterior\\.(.*)\\.(.)", values_to = "prob") %>% 
+  pivot_wider(names_from = method, values_from = prob)
 ```
 
 ```
@@ -4525,8 +4578,10 @@ Let's count them first:
 
 
 ```r
-all.mis <- all %>% mutate(is_correct = ifelse(job == class.x, "correct", "wrong"))
-all.mis %>% count(is_correct == "wrong") %>% mutate(proportion = n/sum(n))
+all %>% mutate(is_correct = ifelse(job == class.x, "correct", "wrong")) -> all.mis
+all.mis %>%
+  count(is_correct == "wrong") %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -4544,9 +4599,14 @@ the number of columns to look at:
 
 ```r
 set.seed(457299)
-all.mis %>% filter(is_correct == "wrong") %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% select(id, job, class.x, outdoor, social, conservative, starts_with("posterior")) %>% 
-    sample_n(15)
+all.mis %>%
+  filter(is_correct == "wrong") %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  select(
+    id, job, class.x, outdoor, social, conservative,
+    starts_with("posterior")
+  ) %>%
+  sample_n(15)
 ```
 
 ```
@@ -4697,7 +4757,7 @@ adhd
 ##  8 mother     2     3     1     1
 ##  9 mother     1     3     3     1
 ## 10 mother     3     3     3     3
-## # ... with 19 more rows
+## # … with 19 more rows
 ```
 
      
@@ -4822,8 +4882,7 @@ head(d)
 ggplot(d, aes(x = parent, y = LD1)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-90-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-90-1.png" width="672"  />
 
  
 The fathers look to be a very compact group with `LD1` score
@@ -4883,7 +4942,9 @@ or
 
 
 ```r
-d %>% count(parent, class) %>% pivot_wider(names_from = class, values_from = n, values_fill = list(n = 0))
+d %>%
+  count(parent, class) %>%
+  pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
 ```
@@ -4914,7 +4975,9 @@ will give us the row of the *original* data frame:
 
 
 ```r
-d %>% mutate(id = row_number()) %>% filter(parent != class)
+d %>%
+  mutate(id = row_number()) %>%
+  filter(parent != class)
 ```
 
 ```
@@ -5016,7 +5079,7 @@ Solution
 
 We have two data frames, `d` and 
 `dd`
-\marginnote{I have to learn to come up with better names.}  
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I have to learn to come up with better names.</span>  
 that respectively
 contain everything from the (original) `lda` output and the
 cross-validated output. Let's glue them together, look at what we
@@ -5048,9 +5111,14 @@ head(all)
 The ones with a 1 on the end are the cross-validated ones. We need the posterior probabilities, rounded, and they need to  have shorter names:
 
 ```r
-all %>% select(parent, starts_with("posterior"), LD1) %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% rename_at(vars(starts_with("posterior")), ~str_replace(., "posterior", 
-    "p")) %>% arrange(LD1)
+all %>%
+  select(parent, starts_with("posterior"), LD1) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  rename_at(
+    vars(starts_with("posterior")),
+    ~ str_replace(., "posterior", "p")
+  ) %>%
+  arrange(LD1)
 ```
 
 ```
@@ -5092,7 +5160,7 @@ The `rename_at` changes the names of the columns that start
 with `posterior` to start with `p` instead (shorter). I
 learned about this today (having wondered whether it existed or not),
 and it took about three goes for me to get it right.
-\marginnote{*str-replace* is from *stringr*, and takes three inputs: a piece of text, the text to look for, and the text to replace it with. The piece of text in this case is one of the columns whose name starts with *posterior*; the dot represents *it* in the usual fashion.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">*str-replace* is from *stringr*, and takes three inputs: a piece of text, the text to look for, and the text to replace it with. The piece of text in this case is one of the columns whose name starts with *posterior*; the dot represents *it* in the usual fashion.</span>
 The first column is the actual parent; the other five columns are: the
 posterior probabilities from before, for father and for mother (two
 columns), and the posterior probabilities from cross-validation for
@@ -5153,9 +5221,14 @@ Let's add something to the output we had before: the original
 scores on `q1` through `q4`:
 
 ```r
-all %>% select(q1:q4, parent, starts_with("posterior"), LD1) %>% mutate_at(vars(starts_with("posterior")), 
-    ~round(., 3)) %>% rename_at(vars(starts_with("posterior")), ~str_replace(., "posterior", 
-    "p")) %>% arrange(LD1)
+all %>%
+  select(q1:q4, parent, starts_with("posterior"), LD1) %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  rename_at(
+    vars(starts_with("posterior")),
+    ~ str_replace(., "posterior", "p")
+  ) %>%
+  arrange(LD1)
 ```
 
 ```
@@ -5278,7 +5351,7 @@ cornseed
 ##  8     8 loam   65.7  27.7       5.3
 ##  9     9 sandy  67.3  48.3       5.5
 ## 10    10 sandy  61.3  28.9       6.9
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
      
@@ -5407,7 +5480,7 @@ cornseed %>% select(field, soil)
 ##  8     8 loam 
 ##  9     9 sandy
 ## 10    10 sandy
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
  
@@ -5461,8 +5534,7 @@ I didn't ask you to, but you could check this by seeing how
 ggplot(cornseed, aes(x = soil, y = herbicide)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-103-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
 
 
 
@@ -5475,8 +5547,7 @@ Or by `water`:
 ggplot(cornseed, aes(x = soil, y = water)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-104-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
 
  
 
@@ -5545,8 +5616,7 @@ Then we use this as input to `ggplot`:
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = soil)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-107-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-107-1.png" width="672"  />
 
  
 
@@ -5594,8 +5664,7 @@ discriminant scores by `soil` group, thus:
 ggplot(d, aes(x = soil, y = x.LD1)) + geom_boxplot()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-108-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-108-1.png" width="672"  />
 
    
 This says more or less the same thing as your plot of `LD1` and
@@ -5679,8 +5748,10 @@ Extra: we can calculate misclassification rates, first overall, which is easier:
 
 
 ```r
-d %>% count(soil, class) %>% mutate(soil_stat = ifelse(soil == class, "correct", 
-    "wrong")) %>% count(soil_stat, wt = n)
+d %>%
+  count(soil, class) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n)
 ```
 
 ```
@@ -5693,14 +5764,17 @@ d %>% count(soil, class) %>% mutate(soil_stat = ifelse(soil == class, "correct",
 
 
 ```r
-d %>% count(soil, class) %>% mutate(soil_stat = ifelse(soil == class, "correct", 
-    "wrong")) %>% count(soil_stat, wt = n) %>% mutate(prop = nn/sum(nn))
+d %>%
+  count(soil, class) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n) %>%
+  mutate(prop = nn / sum(nn))
 ```
 
 ```
 ## Error: Problem with `mutate()` input `prop`.
 ## x object 'nn' not found
-## i Input `prop` is `nn/sum(nn)`.
+## ℹ Input `prop` is `nn/sum(nn)`.
 ```
 
 
@@ -5719,8 +5793,11 @@ about soil type; it's better to know them than not to.
 Or do it by actual soil type:
 
 ```r
-d %>% count(soil, class) %>% group_by(soil) %>% mutate(soil_stat = ifelse(soil == 
-    class, "correct", "wrong")) %>% count(soil_stat, wt = n)
+d %>%
+  count(soil, class) %>%
+  group_by(soil) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n)
 ```
 
 ```
@@ -5742,9 +5819,14 @@ d %>% count(soil, class) %>% group_by(soil) %>% mutate(soil_stat = ifelse(soil =
 
 
 ```r
-d %>% count(soil, class) %>% group_by(soil) %>% mutate(soil_stat = ifelse(soil == 
-    class, "correct", "wrong")) %>% count(soil_stat, wt = n) %>% mutate(prop = n/sum(n)) %>% 
-    select(-n) %>% pivot_wider(names_from = soil_stat, values_from = prop)
+d %>%
+  count(soil, class) %>%
+  group_by(soil) %>%
+  mutate(soil_stat = ifelse(soil == class, "correct", "wrong")) %>%
+  count(soil_stat, wt = n) %>%
+  mutate(prop = n / sum(n)) %>%
+  select(-n) %>%
+  pivot_wider(names_from=soil_stat, values_from=prop)
 ```
 
 ```
@@ -5766,7 +5848,7 @@ observations, so it's probably wise *not* to say that loam is
 *always* easiest to get right.
 
 I didn't have you look at posterior probabilities here.
-\marginnote{Rest assured that I will on the final exam!} With 32 fields, this is rather a lot
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Rest assured that I will on the final exam!</span> With 32 fields, this is rather a lot
 to list them all, but what we can do is to look at the ones that were
 misclassified (the true soil type differs from the predicted soil
 type). Before that, though, we need to make a data frame with the stuff in
@@ -5776,7 +5858,9 @@ the posterior probabilities to a small number of decimals.
 Then, we can fire away with this:
 
 ```r
-dd <- d %>% mutate_at(vars(starts_with("posterior")), ~round(., 3)) %>% mutate(row = row_number())
+d %>%
+  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(row = row_number()) -> dd
 dd %>% filter(soil != class)
 ```
 
@@ -5836,7 +5920,9 @@ soils that were actually loam:
 
 
 ```r
-dd %>% filter(soil == "loam") %>% select(soil, yield, water, herbicide, class, starts_with("posterior"))
+dd %>%
+  filter(soil == "loam") %>%
+  select(soil, yield, water, herbicide, class, starts_with("posterior"))
 ```
 
 ```
@@ -5960,8 +6046,7 @@ could, since it's a discriminant analysis:
 ggbiplot(cornseed.2, groups = cornseed$soil)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-120-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-120-1.png" width="672"  />
 
  
 
@@ -6037,17 +6122,17 @@ athletes
 ## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht
 ##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl>
-##  1 fema~ Netb~  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.
-##  2 fema~ Netb~  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.
-##  3 fema~ Netb~  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176 
-##  4 fema~ Netb~  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.
-##  5 fema~ Netb~  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183 
-##  6 fema~ Netb~  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.
-##  7 fema~ Netb~  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.
-##  8 fema~ Netb~  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.
-##  9 fema~ Netb~  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.
-## 10 fema~ Netb~  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.
-## # ... with 192 more rows, and 1 more variable: Wt <dbl>
+##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.
+##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.
+##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176 
+##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.
+##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183 
+##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.
+##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.
+##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.
+##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.
+## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.
+## # … with 192 more rows, and 1 more variable: Wt <dbl>
 ```
 
  
@@ -6068,16 +6153,17 @@ give the name of the new combo column first, and then the names of
 the columns you want to combine, either by listing them or by
 using a select-helper. They will be separated by an underscore by
 default, which is usually easiest to handle.
-\marginnote{The opposite      of *unite* is *separate*, which splits a combined      column like my *combo* into separate columns; it too uses    underscore as the default separator.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The opposite      of *unite* is *separate*, which splits a combined      column like my *combo* into separate columns; it too uses    underscore as the default separator.</span> 
 In `unite`, you can
 group the columns to "unite" with `c()`, as in class, or
 not, as here. Either way is good.
-\marginnote{You used to have to group    them, but you don't any more. Hence my old code has them grouped,    but my new code does not.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You used to have to group    them, but you don't any more. Hence my old code has them grouped,    but my new code does not.</span>
 We'll be using height and weight in the
 analysis to come, so I decided to display just those:
 
 ```r
-athletesc <- athletes %>% unite(combo, Sport, Sex)
+athletes %>%
+  unite(combo, Sport, Sex) -> athletesc
 athletesc %>% select(combo, Ht, Wt)
 ```
 
@@ -6095,7 +6181,7 @@ athletesc %>% select(combo, Ht, Wt)
 ##  8 Netball_female  174.  74.1
 ##  9 Netball_female  174.  68.2
 ## 10 Netball_female  174.  68.8
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
      
@@ -6111,7 +6197,9 @@ columns we want start with S followed by either e or p, so we could do this:
 
 
 ```r
-athletes %>% unite(combo, matches("^S(e|p)")) %>% select(combo, Ht, Wt)
+athletes %>%
+  unite(combo, matches("^S(e|p)")) %>%
+  select(combo, Ht, Wt)
 ```
 
 ```
@@ -6128,7 +6216,7 @@ athletes %>% unite(combo, matches("^S(e|p)")) %>% select(combo, Ht, Wt)
 ##  8 female_Netball  174.  74.1
 ##  9 female_Netball  174.  68.2
 ## 10 female_Netball  174.  68.8
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
  
@@ -6144,7 +6232,9 @@ columns we want to `unite` are the only two text ones:
 
 
 ```r
-athletes %>% unite(combo, select_if(is.character)) %>% select(combo, Ht, Wt)
+athletes %>%
+  unite(combo, select_if(is.character)) %>%
+  select(combo, Ht, Wt)
 ```
 
 ```
@@ -6163,8 +6253,9 @@ and got an answer! This is how it goes:
 
 
 ```r
-athletes %>% unite(combo, names(select_if(., is.character))) %>% select(combo, Ht, 
-    Wt)
+athletes %>%
+  unite(combo, names(select_if(., is.character))) %>%
+  select(combo, Ht, Wt)
 ```
 
 ```
@@ -6181,7 +6272,7 @@ athletes %>% unite(combo, names(select_if(., is.character))) %>% select(combo, H
 ##  8 female_Netball  174.  74.1
 ##  9 female_Netball  174.  68.2
 ## 10 female_Netball  174.  68.8
-## # ... with 192 more rows
+## # … with 192 more rows
 ```
 
  
@@ -6460,8 +6551,7 @@ And so, to the graph:
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = combo)) + geom_point()
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-131-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-131-1.png" width="672"  />
 
  
 If you can distinguish seventeen different colours, your eyes are
@@ -6470,11 +6560,11 @@ although I wonder how much better that will be:
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo)) + geom_point() + scale_shape_manual(values = 1:17)
+ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo)) + geom_point() +
+  scale_shape_manual(values = 1:17)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-132-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-132-1.png" width="672"  />
 
      
 
@@ -6486,12 +6576,11 @@ Or even this:
 
 
 ```r
-ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo, colour = combo)) + geom_point() + 
-    scale_shape_manual(values = 1:17)
+ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo, colour = combo)) + geom_point() +
+  scale_shape_manual(values = 1:17)
 ```
 
-
-\includegraphics{21-discriminant-analysis_files/figure-latex/unnamed-chunk-133-1} 
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-133-1.png" width="672"  />
 
  
 Perhaps having colours *and* shapes makes the combos easier to
@@ -6675,7 +6764,7 @@ tab %>% as_tibble()
 ##  8 Row_male       BBall_female     0
 ##  9 Swim_female    BBall_female     0
 ## 10 Swim_male      BBall_female     0
-## # ... with 279 more rows
+## # … with 279 more rows
 ```
 
  
@@ -6701,7 +6790,7 @@ tab %>% as_tibble() %>% filter(n > 0)
 ##  8 Row_male     BBall_male       2
 ##  9 Swim_male    BBall_male       4
 ## 10 T400m_male   BBall_male       1
-## # ... with 60 more rows
+## # … with 60 more rows
 ```
 
  
@@ -6804,7 +6893,9 @@ take it in steps:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == class, "correct", "wrong"))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong"))
 ```
 
 ```
@@ -6891,8 +6982,10 @@ things in the `n` column:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == class, "correct", "wrong")) %>% 
-    count(stat, wt = n)
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n)
 ```
 
 ```
@@ -6911,8 +7004,11 @@ the total of `n`:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == class, "correct", "wrong")) %>% 
-    count(stat, wt = n) %>% mutate(proportion = n/sum(n))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -6934,8 +7030,12 @@ we define `stat` (it doesn't matter which way):
 
 
 ```r
-d %>% count(combo, class) %>% group_by(combo) %>% mutate(stat = ifelse(combo == class, 
-    "correct", "wrong")) %>% count(stat, wt = n) %>% mutate(proportion = n/sum(n))
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -6953,7 +7053,7 @@ d %>% count(combo, class) %>% group_by(combo) %>% mutate(stat = ifelse(combo == 
 ##  8 Field_male     wrong       5      0.417
 ##  9 Gym_female     correct     4      1    
 ## 10 Netball_female correct    13      0.565
-## # ... with 17 more rows
+## # … with 17 more rows
 ```
 
  
@@ -6969,9 +7069,13 @@ columns. This almost works:
 
 
 ```r
-d %>% count(combo, class) %>% group_by(combo) %>% mutate(stat = ifelse(combo == class, 
-    "correct", "wrong")) %>% count(stat, wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    pivot_wider(names_from = stat, values_from = proportion)
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  pivot_wider(names_from=stat, values_from=proportion)
 ```
 
 ```
@@ -6989,7 +7093,7 @@ d %>% count(combo, class) %>% group_by(combo) %>% mutate(stat = ifelse(combo == 
 ##  8 Field_male         5  NA      0.417
 ##  9 Gym_female         4   1     NA    
 ## 10 Netball_female    13   0.565 NA    
-## # ... with 17 more rows
+## # … with 17 more rows
 ```
 
  
@@ -7003,9 +7107,14 @@ served its purpose:
 
 
 ```r
-d %>% count(combo, class) %>% group_by(combo) %>% mutate(stat = ifelse(combo == class, 
-    "correct", "wrong")) %>% count(stat, wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    select(-n) %>% pivot_wider(names_from = stat, values_from = proportion, values_fill = list(proportion = 0))
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  pivot_wider(names_from=stat, values_from=proportion, values_fill = list(proportion=0))
 ```
 
 ```
@@ -7040,10 +7149,16 @@ order of misclassification probability:
 
 
 ```r
-d %>% count(combo, class) %>% group_by(combo) %>% mutate(stat = ifelse(combo == class, 
-    "correct", "wrong")) %>% count(stat, wt = n) %>% mutate(proportion = n/sum(n)) %>% 
-    select(-n) %>% pivot_wider(names_from = stat, values_from = proportion, values_fill = list(proportion = 0)) %>% 
-    replace_na(list(correct = 0, wrong = 0)) %>% arrange(wrong)
+d %>%
+  count(combo, class) %>%
+  group_by(combo) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  count(stat, wt = n) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  pivot_wider(names_from=stat, values_from=proportion, values_fill = list(proportion=0)) %>% 
+  replace_na(list(correct = 0, wrong = 0)) %>%
+  arrange(wrong)
 ```
 
 ```
@@ -7144,7 +7259,9 @@ head(d)
 ```
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == class, "correct", "wrong"))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong"))
 ```
 
 ```
@@ -7228,8 +7345,11 @@ defining the proportions:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == class, "correct", "wrong")) %>% 
-    group_by(combo) %>% mutate(proportion = n/sum(n))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  group_by(combo) %>%
+  mutate(proportion = n / sum(n))
 ```
 
 ```
@@ -7247,7 +7367,7 @@ d %>% count(combo, class) %>% mutate(stat = ifelse(combo == class, "correct", "w
 ##  8 BBall_male   Swim_male          2 wrong       0.167 
 ##  9 BBall_male   WPolo_male         1 wrong       0.0833
 ## 10 Field_female Field_female       5 correct     0.714 
-## # ... with 60 more rows
+## # … with 60 more rows
 ```
 
  
@@ -7257,9 +7377,13 @@ proportions in descending order:
 
 
 ```r
-d %>% count(combo, class) %>% mutate(stat = ifelse(combo == class, "correct", "wrong")) %>% 
-    group_by(combo) %>% mutate(proportion = n/sum(n)) %>% filter(stat == "wrong") %>% 
-    arrange(desc(proportion))
+d %>%
+  count(combo, class) %>%
+  mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
+  group_by(combo) %>%
+  mutate(proportion = n / sum(n)) %>%
+  filter(stat == "wrong") %>%
+  arrange(desc(proportion))
 ```
 
 ```
@@ -7277,7 +7401,7 @@ d %>% count(combo, class) %>% mutate(stat = ifelse(combo == class, "correct", "w
 ##  8 Swim_male     BBall_male         4 wrong      0.308
 ##  9 Tennis_female Netball_female     2 wrong      0.286
 ## 10 Tennis_female T400m_female       2 wrong      0.286
-## # ... with 49 more rows
+## # … with 49 more rows
 ```
 
  

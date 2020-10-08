@@ -79,7 +79,7 @@ ggplot(treatments, aes(x = time, y = y, colour = trt, group = subject)) +
      
 
 I'm going to be all smug and tell you that I got this right first
-time. (I'm telling you this because it doesn't happen often.)
+time. (I'm telling you this because it doesn't happen often.) If it didn't come out that way for you, no stress: figure out what went wrong, fix it, and no one is any the wiser. On a spaghetti plot, you want to join together the points that belong to the same *subject*, and you want to colour them by *treatment*, so `colour` needs to be `trt` and `group` needs to be `subject`, since otherwise *all* the observations on the same treatment will get connected by lines, which is not what you want. You can use `group` in other contexts too, but for us we would normally distinguish groups by colour, and here we have two grouping variables (subject and treatment), which we want to distinguish in different ways.
 
 
 (d) On your spaghetti plot, how do the values of `y` for
@@ -117,8 +117,7 @@ better than the rest).
 
 (e) Explain briefly how the data are in the wrong format for a
 repeated-measures ANOVA (done using MANOVA, as in class), and use
-`spread` to get the data set into the right format. (Hint:
-there is an example of `spread` in assignment 2.)
+`pivot_wider` to get the data set into the right format.
 
 Solution
 
@@ -127,21 +126,24 @@ For MANOVA, we want the three responses (here, the values of
 `y` at the three different times) in three separate
 columns, with *all* the measurements for one subject in one
 row (rather than on three separate rows, as here).
-`spread` is the flip-side of `gather`: instead of
+`pivot_wider` is the flip-side of `pivot_longer`: instead of
 making different columns that all measure the same thing into one
-column, we split one column that contains things that are slightly
+column, we split one column that contains things that are (slightly)
 different from each other (here, `y` at different
-times). It needs two inputs: the current single column that
-contains the column names you are going to make, and the values to
-carry along with them, in that order:
+times). It needs two inputs: `names_from`, the current single column that
+contains the column names you are going to make, and `values_from`, the values to
+carry along with them:
+
 ```{r }
-tr2 <- treatments %>% spread(time, y)
+treatments %>% pivot_wider(names_from = time, values_from = y) -> tr2
 tr2
 ```
 
   
 
 (I got this right the first time too. I must be having a good day!)
+
+Technical detail: in `pivot_longer`, the column names are in quotes because they don't exist yet, but in `pivot_wider`, they are *not* in quotes because they are columns that already exist.
 
 Note that the `time` and `y` columns have
 *disappeared*: the columns labelled with the time points are
@@ -302,9 +304,9 @@ The way to read that model is "`y` depends on the combination of treatment and t
 This is the way in which the model captures the idea that
 each subject is different. 
 
-You don't get a test for the random effects; you are assuming that the
-subjects will be different from each other and you want to adjust for
-that.
+You don't get a test for the random effects; you are *assuming* that the
+subjects will be different from each other and you want to *adjust* for
+that, rather than testing for it.
 `r tufte::margin_note("This is rather like the test for blocks in a randomized  block design: you want to *allow* for differences among blocks,  but you don't especially care to test that there *are* any. In  fact, blocks are a lot like subjects, in that they are typically  things like different experimental plots in which plants are grown,  or different days on which the experiment is conducted, and you want to generalize from the blocks you observed, which are certainly *not* all possible blocks, to the population of all possible blocks.")`
 All you get is tests for the fixed effects that are currently up for
 grabs, in this case the interaction, which is strongly significant.

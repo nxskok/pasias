@@ -126,7 +126,7 @@ The row numbers are cricket-within-species, which isn't very meaningful, but we 
 
 
 
-(c) If you found (b) a bit much to take in, the rest of the way we take a rather more leisurely approach towards the tidying. This is the way it used to need to be done, with `gather`.
+(c) If you found (b) a bit much to take in, the rest of the way we take a rather more leisurely approach towards the tidying. 
 
 These data are rather far from being tidy. There need to be
 three variables, temperature, pulse rate and species, and there
@@ -247,30 +247,19 @@ started building in the previous part:
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
-  gather(species, temp_pulse, exclamationis:niveus)
+  pivot_longer(exclamationis:niveus, names_to = "species", values_to = "temp_pulse")
 ```
 
  
 
-Yep. If you scroll down with Next, you'll see the other species of
+Yep. You'll see both species of
 crickets, and you'll see some missing values at the bottom, labelled,
 at the moment, `NA_NA`. 
 
 This is going to get rather long, but don't fret: we debugged the two
 `unite` lines before, so if you get any errors, they must
-have come from the `gather`. So that would be the place to check.
+have come from the `pivot_longer`. So that would be the place to check.
 
-This, inevitably, can also be done with `pivot_long`:
-
-```{r}
-crickets %>%
-  unite(exclamationis, X1:X2) %>%
-  unite(niveus, X3:X4) %>%
-  pivot_longer(everything(), names_to="species", values_to="temp_pulse")
-```
-
-Feel free to use this the rest of the way.
-      
 
 
 (e) Now split up the temperature-pulse combos at the underscore, into
@@ -290,13 +279,13 @@ end. We are creating two new variables `temperature` and
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
-  gather(species, temp_pulse, exclamationis:niveus) %>%
+  pivot_longer(exclamationis:niveus, names_to = "species", values_to = "temp_pulse") %>% 
   separate(temp_pulse, c("temperature", "pulse_rate"), "_")
 ```
 
  
 
-You'll note that `unite` and `separate` are opposites ("inverses") of each other, but we haven't just done something and then undone it, because we have a `gather` in between; in fact, arranging it this way has done precisely the tidying we wanted.
+You'll note that `unite` and `separate` are opposites ("inverses") of each other, but we haven't just done something and then undone it, because we have a `pivot_longer` in between; in fact, arranging it this way has done precisely the tidying we wanted.
       
 
 
@@ -327,7 +316,7 @@ here).
 crickets.1 <- crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
-  gather(species, temp_pulse, exclamationis:niveus) %>%
+  pivot_longer(exclamationis:niveus, names_to = "species", values_to = "temp_pulse") %>% 
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
   mutate(temperature = as.numeric(temperature)) %>%
   mutate(pulse_rate = as.numeric(pulse_rate))
@@ -354,20 +343,17 @@ There is (inevitably) another way to do this. We are doing the
 `as.numeric` twice, exactly the same on two different columns,
 and when you are doing the same thing on a number of columns, here a
 `mutate` with the same function, you have the option of using
-`mutate_if` or `mutate_at`. These are like
-`summarize_if` and `summarize_at` that we used way
-back to compute numerical summaries of a bunch of columns: the
-`if` variant works on columns that share a property, like being
-numeric, and the `at` variant works on columns whose names have
-something in common or that we can list, which is what we want here:
+`across`. This is the same idea 
+that we used way
+back to compute numerical summaries of a bunch of columns:
 
 ```{r }
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
-  gather(species, temp_pulse, exclamationis:niveus) %>%
+  pivot_longer(exclamationis:niveus, names_to = "species", values_to = "temp_pulse") %>% 
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
-  mutate_at(vars(temperature:pulse_rate), ~as.numeric(.))
+  mutate(across(c(temperature, pulse_rate), ~as.numeric(.)))
 ```
 
  
@@ -378,18 +364,18 @@ Can't I just say that these are columns 2 and 3?
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
-  gather(species, temp_pulse, exclamationis:niveus) %>%
+  pivot_longer(exclamationis:niveus, names_to = "species", values_to = "temp_pulse") %>% 
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
-  mutate_at(vars(2:3), ~as.numeric(.))
+  mutate(across(2:3, ~as.numeric(.)))
 ```
 
  
 
-Yes. Equally good. What goes into the `vars`
+Yes. Equally good. What goes into the `across`
 is the same as can go into a `select`: column numbers, names,
 or any of those "select helpers" like `starts_with`.
 
-You might think of `mutate_if` here, but if you scroll back, you'll find that all the columns are text, before you convert temperature and pulse rate to numbers, and so there's no way to pick out just the two columns you want that way. 
+You might think of using `across` here on the quantitative columns, but remember the reason for doing this: all the columns are text, before you convert temperature and pulse rate to numbers, and so there's no way to pick out just the two columns you want that way. 
 
 Check that the temperature and pulse rate columns are now labelled
 `dbl`, which means they actually *are* decimal numbers

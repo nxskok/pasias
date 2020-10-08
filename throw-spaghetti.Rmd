@@ -53,13 +53,13 @@ note the variable type at the top of the column.
 
 
 
-(c) Gather together all the throwing distances into one column,
+(c) Collect together all the throwing distances into one column,
 making a second column that says which ball was thrown.
 
 
 Solution
 
-The old way was literally `gather`, which you can still use (see below). If you have the most up-to-date version of `tidyr`, though, there is a new (easier) way to do it called `pivot_longer`. It goes like this:
+Use `pivot_longer`. It goes like this:
 
 ```{r}
 throws %>%
@@ -69,28 +69,6 @@ throws %>%
 
 The `names_to` is the name of a new categorical column whose values will be what is currently column names, and the `values_to` names a new quantitative (usually) column that will hold the values in those columns that you are making longer.
 
-If this doesn't work for you, go to the console (or make yourself a temporary code chunk) and run:
-
-```{r, eval=FALSE}
-install.packages("tidyr")
-```
-
-Once that works, if you made a code chunk for it, you can delete that now, since you won't be needing it again.
-
-The old way is
-literally `gather`, thus:
-
-```{r }
-throws %>%
-  mutate(fs = factor(student)) %>%
-  gather(ball, distance, baseball:softball)
-```
-
-Two columns to include, consecutive ones, or two to omit, the first
-and last. So I think it's
-easier to name the ones you want to include. 
-
-`pivot_longer` does everything `gather` does and more besides, so if you're going to learn only one, go with `pivot_longer`.
 
 If you want to show off a little, you can use a select-helper, noting
 that the columns you want to make longer all end in "ball":
@@ -184,7 +162,7 @@ using `guides`.
 Solution
 
 
-You won't have seen this before. Here's what to do: Find what's
+You may not have seen this before. Here's what to do: Find what's
 at the top of the legend that you want to remove. Here that is
 `fs`. Find where `fs` appears in your
 `aes`. It actually appears in two places: in

@@ -56,8 +56,8 @@ Solution
 
 The usual:
 ```{r napoli,cache=T}
-my_url="http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
-sfcrime=read_csv(my_url)
+my_url <- "http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv"
+sfcrime <- read_csv(my_url)
 sfcrime
 ```
 
@@ -84,7 +84,7 @@ The modelling part is easy enough, as long as you can get the
 uppercase letters in the right places:
 
 ```{r roma,cache=T}
-sfcrime.1=multinom(Category~DayOfWeek+PdDistrict,data=sfcrime)
+sfcrime.1 <- multinom(Category~DayOfWeek+PdDistrict,data=sfcrime)
 ```
 
  
@@ -101,7 +101,7 @@ Solution
 
 Same idea. Write it out, or use `update`:
 ```{r }
-sfcrime.2=update(sfcrime.1,.~.-DayOfWeek)
+sfcrime.2 <- update(sfcrime.1,.~.-DayOfWeek)
 ```
 
    
@@ -156,9 +156,9 @@ Construct the values to predict for with plural names:
 `r tufte::margin_note("You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.")`
 
 ```{r }
-DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
+DayOfWeeks <- sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
 DayOfWeeks
-PdDistricts="TENDERLOIN"
+PdDistricts <- "TENDERLOIN"
 ```
 
  
@@ -175,7 +175,7 @@ had more than one district, we'd just define `PdDistricts`
 appropriately above and the rest of it would be the same:
 
 ```{r }
-sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
+sfcrime.new <- crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
 ```
 
@@ -184,7 +184,7 @@ sfcrime.new
 Then do the predictions:
 
 ```{r }
-p=predict(sfcrime.1,sfcrime.new,type="probs")
+p <- predict(sfcrime.1,sfcrime.new,type="probs")
 ```
 
  
@@ -195,7 +195,7 @@ something that this version of `predict` doesn't know about,
 it'll tell me:
 
 ```{r error=T}
-p=predict(sfcrime.1,sfcrime.new,type="bananas")
+p <- predict(sfcrime.1,sfcrime.new,type="bananas")
 ```
 
  
@@ -260,12 +260,12 @@ options(width=90)
  
 
 ```{r size="footnotesize"}
-DayOfWeeks = sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
-PdDistricts=c("RICHMOND","TENDERLOIN")
-sfcrime.new=crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
+DayOfWeeks <- sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
+PdDistricts <- c("RICHMOND","TENDERLOIN")
+sfcrime.new <- crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
-p1=predict(sfcrime.1,sfcrime.new,type="probs")
-d1=cbind(sfcrime.new,p1) ; d1
+p1 <- predict(sfcrime.1,sfcrime.new,type="probs")
+d1 <- cbind(sfcrime.new,p1) ; d1
 ```
 
  
@@ -288,7 +288,7 @@ The way to assess this is to fit a model with interaction (we will see
 more of this when we revisit ANOVA later), and compare the fit:
 
 ```{r model-three-one,cache=T} 
-sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict)
+sfcrime.3 <- update(sfcrime.1,.~.+DayOfWeek*PdDistrict)
 # anova(sfcrime.1,sfcrime.3)
 ```
 
@@ -299,7 +299,7 @@ times around and stopped (since that's the default limit). We can make
 it go a bit further thus:
 
 ```{r model-three-two,cache=T}
-sfcrime.3=update(sfcrime.1,.~.+DayOfWeek*PdDistrict,maxit=300)
+sfcrime.3 <- update(sfcrime.1,.~.+DayOfWeek*PdDistrict,maxit=300)
 anova(sfcrime.1,sfcrime.3)
 ```
 
@@ -317,8 +317,8 @@ have all the machinery for the predictions, and we just have to apply
 them to this model:
 
 ```{r size="footnotesize"}
-p3=predict(sfcrime.3,sfcrime.new,type="probs")
-d3=cbind(sfcrime.new,p3) ; d3
+p3 <- predict(sfcrime.3,sfcrime.new,type="probs")
+d3 <- cbind(sfcrime.new,p3) ; d3
 ```
 
  
@@ -332,8 +332,8 @@ rounded the prediction differences off to 4 decimals to make the
 largest ones easier to find:
 
 ```{r size="footnotesize"}
-pdiff=round(p3-p1,4)
-cbind(sfcrime.new,pdiff)
+pdiff <- round(p3-p1, 4)
+cbind(sfcrime.new, pdiff)
 ```
 
  
@@ -344,7 +344,7 @@ though significant. Some of the differences largest in size are
 Drugs-Narcotics in Tenderloin, but even they are not big.
 
 The programmer in me wants to find a way to display the largest and
-smallest few differences. My idea is to use `gather` to make
+smallest few differences. My idea is to use `pivot_longer` to make
 *one* column of differences and sort it, then 
 display the top and bottom few values. Note that
 I have to put those little "backticks" around `VEHICLE THEFT`
@@ -365,8 +365,8 @@ I don't know what, if anything, you make of those.
 Extra: there is a better way of doing those in one go:
 
 ```{r }
-d1 %>% top_n(6,difference)
-d1 %>% top_n(6,-difference)
+d1 %>% top_n(6, difference)
+d1 %>% top_n(6, -difference)
 ```
 
  

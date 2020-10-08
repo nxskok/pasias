@@ -6,18 +6,18 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ----------------------------------- tidyverse 1.3.0 --
+## ── Attaching packages ─────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## v ggplot2 3.3.2     v purrr   0.3.4
-## v tibble  3.0.3     v dplyr   1.0.2
-## v tidyr   1.1.2     v stringr 1.4.0
-## v readr   1.3.1     v forcats 0.5.0
+## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0
 ```
 
 ```
-## -- Conflicts -------------------------------------- tidyverse_conflicts() --
+## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -82,7 +82,7 @@ times
 ##  8  35  
 ##  9  52.8
 ## 10  60.1
-## # ... with 11 more rows
+## # … with 11 more rows
 ```
 
  
@@ -418,8 +418,8 @@ Tidyverse-flavoured code, with the `map_dbl` inside a
 
 
 ```r
-tibble(meds = seq(55, 58, 0.25)) %>% mutate(pvals = map_dbl(meds, pval_sign, times, 
-    time))
+tibble(meds = seq(55, 58, 0.25)) %>%
+  mutate(pvals = map_dbl(meds, pval_sign, times, time))
 ```
 
 ```
@@ -525,14 +525,14 @@ is true. Here's how it goes:
 lo <- 40
 hi <- 50
 while (abs(hi - lo) > 0.1) {
-    try <- (hi + lo)/2
-    ptry <- pval_sign(try, times, time)
-    print(c(try, ptry))
-    if (ptry < 0.05) {
-        lo <- try
-    } else {
-        hi <- try
-    }
+  try <- (hi + lo) / 2
+  ptry <- pval_sign(try, times, time)
+  print(c(try, ptry))
+  if (ptry < 0.05) {
+    lo <- try
+  } else {
+    hi <- try
+  }
 }
 ```
 
@@ -608,7 +608,7 @@ meds
 ```
 
 ```r
-pvals <- map_dbl(meds, ~with(times, pval_sign0(., time)))
+pvals <- map_dbl(meds, ~ with(times, pval_sign0(., time)))
 data.frame(meds, pvals)
 ```
 
@@ -654,7 +654,7 @@ This is a more accurate interval than we got above. (The
 `while` loop for the bisection keeps going until the two
 guesses at the appropriate end of the interval are less than 0.01
 apart, by default.)
-\marginnote{You can change this by adding something like *tol=1e-4* to the end of your *ci-median*.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">You can change this by adding something like *tol=1e-4* to the end of your *ci-median*.</span> 
 
 If you want some other confidence level, you add `conf.level`
 on the end, as you would for `t.test`:
@@ -726,7 +726,7 @@ name different from `chips`, so that you don't get
 confused:
 
 ```r
-bags = read_csv("chips.txt")
+bags=read_csv("chips.txt")
 ```
 
 ```
@@ -781,7 +781,7 @@ of values above and below:
 
 
 ```r
-bags %>% count(chips < 1100)
+bags %>% count(chips<1100)
 ```
 
 ```
@@ -799,7 +799,7 @@ also do this, which creates a new variable `less` that is
 
 
 ```r
-bags %>% mutate(less = (chips < 1100)) %>% count(less)
+bags %>% mutate(less=(chips<1100)) %>% count(less)
 ```
 
 ```
@@ -814,7 +814,8 @@ or the more verbose
 
 
 ```r
-bags %>% mutate(less = (chips < 1100)) %>% group_by(less) %>% summarize(howmany = n())
+bags %>% mutate(less=(chips<1100)) %>%
+group_by(less) %>% summarize(howmany=n())
 ```
 
 ```
@@ -844,7 +845,7 @@ distribution with $n=16, p=0.5$:
 
 
 ```r
-sum(dbinom(0:1, 16, 0.5))
+sum(dbinom(0:1,16,0.5))
 ```
 
 ```
@@ -855,7 +856,7 @@ Or, equivalently, count *up* from 15:
 
 
 ```r
-sum(dbinom(15:16, 16, 0.5))
+sum(dbinom(15:16,16,0.5))
 ```
 
 ```
@@ -880,7 +881,7 @@ This will mean reading the output carefully:
 
 ```r
 library(smmr)
-sign_test(bags, chips, 1100)
+sign_test(bags,chips,1100)
 ```
 
 ```
@@ -906,7 +907,7 @@ Alternatively, you can do this:
 
 
 ```r
-sign_test0(bags$chips, 1100)
+sign_test0(bags$chips,1100)
 ```
 
 ```
@@ -935,7 +936,7 @@ Solution
 Once everything is in place, this is simplicity itself:
 
 ```r
-ci_median(bags, chips)
+ci_median(bags,chips)
 ```
 
 ```
@@ -992,7 +993,7 @@ Solution
 
 
 ```r
-power.t.test(delta = 50 - 40, n = 10, sd = 15, type = "one.sample", alternative = "two.sided")
+power.t.test(delta=50-40,n=10,sd=15,type="one.sample",alternative="two.sided")
 ```
 
 ```
@@ -1026,13 +1027,13 @@ SD 15, so we use `rnorm` with this mean and SD, obtaining
 10 values:
 
 ```r
-x = rnorm(10, 50, 15)
+x=rnorm(10,50,15)  
 x
 ```
 
 ```
-##  [1] 58.39743 55.62936 38.17767 36.72953 36.39678 67.65275 43.65678 50.95290
-##  [9] 56.04447 84.37084
+##  [1] 56.50243 66.10818 35.95109 57.32715 46.33851 36.98813 56.04851 67.12285
+##  [9] 64.60149 43.59170
 ```
 
 
@@ -1049,15 +1050,15 @@ Solution
  The way we know this is to put `x` into a data frame first:
 
 ```r
-tibble(x) %>% count(x < 40)
+tibble(x) %>% count(x<40)
 ```
 
 ```
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        7
-## 2 TRUE         3
+## 1 FALSE        8
+## 2 TRUE         2
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1082,15 +1083,16 @@ This is actually easier than you might think. The output from
 whose minimum value you want. I add to my pipeline:
 
 ```r
-tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>% mutate(is_rejected = (the_min <= 
-    1))
+tibble(x) %>% count(x<40) %>%
+summarize(the_min=min(n)) %>%
+mutate(is_rejected=(the_min<=1))
 ```
 
 ```
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       3 FALSE
+## 1       2 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1101,15 +1103,16 @@ should not reject. The fix is
 
 
 ```r
-tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>% mutate(is_rejected = (the_min <= 
-    1 | the_min == 10))
+tibble(x) %>% count(x<40) %>%
+summarize(the_min=min(n)) %>%
+mutate(is_rejected=(the_min<=1 | the_min==10))
 ```
 
 ```
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       3 FALSE
+## 1       2 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1118,8 +1121,10 @@ so a `pull` will grab it:
 
 
 ```r
-tibble(x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>% mutate(is_rejected = (the_min <= 
-    1 | the_min == 10)) %>% pull(is_rejected)
+tibble(x) %>% count(x<40) %>%
+summarize(the_min=min(n)) %>%
+mutate(is_rejected=(the_min<=1 | the_min==10)) %>%
+pull(is_rejected)
 ```
 
 ```
@@ -1135,7 +1140,7 @@ observed value below 40 and the rest above is
 
 
 ```r
-2 * pbinom(1, 10, 0.5)
+2*pbinom(1,10,0.5)  
 ```
 
 ```
@@ -1147,7 +1152,7 @@ rest above is
 
 
 ```r
-2 * pbinom(2, 10, 0.5)
+2*pbinom(2,10,0.5)    
 ```
 
 ```
@@ -1207,10 +1212,14 @@ same each time. I discuss the results below and the code below that.
 
 ```r
 set.seed(457299)
-rerun(1000, rnorm(10, 50, 15)) %>% map(~tibble(x = .)) %>% map(~count(., x < 40)) %>% 
-    map(~summarize(., the_min = min(n))) %>% map(~mutate(., is_rejected = (the_min <= 
-    1 | the_min == 10))) %>% map_lgl(~pull(., is_rejected)) %>% tibble(was_true = .) %>% 
-    count(was_true)
+rerun(1000,rnorm(10,50,15)) %>% 
+map(~tibble(x=.)) %>% 
+map(~count(.,x<40)) %>% 
+map(~summarize(.,the_min=min(n))) %>% 
+map(~mutate(.,is_rejected=(the_min<=1 | the_min==10))) %>% 
+map_lgl(~pull(.,is_rejected)) %>% 
+tibble(was_true=.) %>% 
+count(was_true)
 ```
 
 ```
@@ -1281,9 +1290,12 @@ whether or not a median of 40 would be rejected for that sample:
 
 
 ```r
-is_reject = function(x) {
-    tibble(x = x) %>% count(x < 40) %>% summarize(the_min = min(n)) %>% mutate(is_rejected = the_min <= 
-        1 | the_min == 10) %>% pull(is_rejected)
+is_reject=function(x) {
+tibble(x=x) %>%
+count(x<40) %>%
+summarize(the_min=min(n)) %>%
+mutate(is_rejected=the_min<=1 | the_min==10) %>%
+pull(is_rejected)
 }
 ```
 
@@ -1296,8 +1308,10 @@ set my random number seed so that I get the same results as before:
 
 ```r
 set.seed(457299)
-rerun(1000, rnorm(10, 50, 15)) %>% map_lgl(~is_reject(.)) %>% tibble(rejected = .) %>% 
-    count(rejected)
+rerun(1000,rnorm(10,50,15)) %>%
+map_lgl(~is_reject(.)) %>%
+tibble(rejected=.) %>%
+count(rejected)
 ```
 
 ```
@@ -1333,7 +1347,7 @@ omit the sample size `n`:
 
 
 ```r
-power.t.test(delta = 50 - 40, power = 0.243, sd = 15, type = "one.sample", alternative = "two.sided")
+power.t.test(delta=50-40,power=0.243,sd=15,type="one.sample",alternative="two.sided")
 ```
 
 ```
@@ -1354,7 +1368,7 @@ tests: in this case, the $t$-test is $10/6=1.67$ times more
 efficient. The data that you have are being used "more    efficiently" 
 by the $t$-test.
 It is possible to derive
-\marginnote{Meaning, I forget how to do it.      But it has something to do with looking at alternatives that are      very close to the null.}  
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Meaning, I forget how to do it.      But it has something to do with looking at alternatives that are      very close to the null.</span>  
 the limiting relative efficiency of
 the $t$ test relative to the sign test when the data are actually
 normal, as the sample size gets larger. This turns out not to
@@ -1372,7 +1386,7 @@ story can be very different.
 Of course you knew I would investigate this. There is a
 distribution called the "Laplace" or "double exponential"
 distribution, that has very long tails.
-\marginnote{If you've ever run    into the exponential distribution, you'll recall that this is    right skewed with a very long tail. The Laplace distribution looks    like two of these glued back to back.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you've ever run    into the exponential distribution, you'll recall that this is    right skewed with a very long tail. The Laplace distribution looks    like two of these glued back to back.</span> 
 The distribution is not in
 base R, but there is a package called `smoothmest` that
 contains a function `rdoublex` to generate random values from
@@ -1381,7 +1395,7 @@ of the power of the sign test for Laplace data, by the same
 simulation technique that we did above. Like the normal, the Laplace
 distribution is symmetric, so its mean and median are the same
 (which makes our life easier).
-\marginnote{This is about the *only*  way in which the normal and Laplace distributions are alike.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is about the *only*  way in which the normal and Laplace distributions are alike.</span>
 
 Let's test the hypothesis that the median is zero. We'll suppose that
 the true median is 0.5 (this is called `mu` in
@@ -1397,7 +1411,7 @@ these simulations.
 
 ```r
 library(smoothmest)
-rl = rdoublex(50, mu = 0.5)
+rl=rdoublex(50,mu=0.5)
 rl
 ```
 
@@ -1417,11 +1431,12 @@ This seems to have some unusual values, far away from zero:
 
 
 ```r
-tibble(rl) %>% ggplot(aes(sample = rl)) + stat_qq() + stat_qq_line()
+tibble(rl) %>%
+ggplot(aes(sample=rl))+
+stat_qq()+stat_qq_line()
 ```
 
-
-\includegraphics{07-sign-mood-median_files/figure-latex/unnamed-chunk-50-1} 
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
 You see the long tails compared to the normal.
 
@@ -1430,7 +1445,7 @@ reject a null median of zero (at $\alpha=0.05$):
 
 
 ```r
-tt = t.test(rl)
+tt=t.test(rl)  
 tt
 ```
 
@@ -1452,7 +1467,7 @@ Or we can just pull out the P-value and even compare it to 0.05:
 
 
 ```r
-pval = tt$p.value
+pval=tt$p.value  
 pval
 ```
 
@@ -1461,7 +1476,7 @@ pval
 ```
 
 ```r
-is.reject = (pval <= 0.05)
+is.reject=(pval<=0.05)
 is.reject
 ```
 
@@ -1479,14 +1494,17 @@ simulation; the difference here is the true distribution:
 
 
 ```r
-pvals <- rerun(1000, rdoublex(50, mu = 0.5)) %>% map(~t.test(., mu = 0)) %>% map_dbl("p.value")
+rerun(1000,rdoublex(50,mu=0.5)) %>%
+map(~t.test(.,mu=0)) %>%
+map_dbl("p.value") ->
+pvals
 ```
 
 and then count them:
 
 
 ```r
-tibble(pvals) %>% count(pvals <= 0.05)
+tibble(pvals) %>% count(pvals<=0.05)
 ```
 
 ```
@@ -1504,14 +1522,16 @@ two-sided P-value that we want, so that the procedure is a step simpler:
 
 
 ```r
-pvals_sign <- rerun(1000, rdoublex(50, mu = 0.5)) %>% map_dbl(~pval_sign0(0, .))
+rerun(1000,rdoublex(50,mu=0.5)) %>%
+map_dbl(~pval_sign0(0,.)) ->
+pvals_sign
 ```
 
 and then
 
 
 ```r
-tibble(pvals_sign) %>% count(pvals_sign <= 0.05)
+tibble(pvals_sign) %>% count(pvals_sign<=0.05)
 ```
 
 ```
@@ -1541,8 +1561,8 @@ I finish by "unloading" the two packages that got loaded:
 
 
 ```r
-detach(package:smoothmest, unload = T)
-detach(package:MASS, unload = T)
+detach(package:smoothmest, unload=T)
+detach(package:MASS, unload=T)
 ```
 
 ```
@@ -1577,8 +1597,8 @@ Solution
 
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/cereal-sugar.txt"
-cereals = read_delim(my_url, " ")
+my_url="http://www.utsc.utoronto.ca/~butler/c32/cereal-sugar.txt"
+cereals=read_delim(my_url," ")
 ```
 
 ```
@@ -1607,7 +1627,7 @@ cereals
 ##  8 children  43  
 ##  9 children  44.2
 ## 10 children  44  
-## # ... with 30 more rows
+## # … with 30 more rows
 ```
 
 The variable `who` is a categorical variable saying who the
@@ -1629,7 +1649,8 @@ Solution
 `group_by` and `summarize`:
 
 ```r
-cereals %>% group_by(who) %>% summarize(sugar_mean = mean(sugar))
+cereals %>% group_by(who) %>%
+summarize(sugar_mean=mean(sugar))
 ```
 
 ```
@@ -1662,11 +1683,10 @@ The usual:
 
 
 ```r
-ggplot(cereals, aes(x = who, y = sugar)) + geom_boxplot()
+ggplot(cereals,aes(x=who,y=sugar))+geom_boxplot()
 ```
 
-
-\includegraphics{07-sign-mood-median_files/figure-latex/unnamed-chunk-60-1} 
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
 
 I see outliers: two high ones on the adults' cereals, and one high and
 one low on the children's cereals.
@@ -1714,7 +1734,7 @@ use package `smmr` to run it with:
 
 ```r
 library(smmr)
-median_test(cereals, sugar, who)
+median_test(cereals,sugar,who)
 ```
 
 ```
@@ -1755,7 +1775,7 @@ curious about how the $t$-test stacks up here:
 
 
 ```r
-t.test(sugar ~ who, data = cereals)
+t.test(sugar~who,data=cereals)
 ```
 
 ```
@@ -1907,7 +1927,7 @@ Extra: there is an experimental design issue here. You might have noticed that e
 difference in mean phobia scores after the students have taken the two
 courses. What do you conclude? (You have no \textsl{a
 priori}
-\marginnote{That is, before looking at the data. This is  Latin. It's also the place that the Bayesian *prior distribution*  comes from. The *posterior distribution* comes from the Latin  *a posteriori*, which means *afterwards*, that is, after  you have looked at the data.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">That is, before looking at the data. This is  Latin. It's also the place that the Bayesian *prior distribution*  comes from. The *posterior distribution* comes from the Latin  *a posteriori*, which means *afterwards*, that is, after  you have looked at the data.</span> 
 reason to
 suppose that a particular one of the tests will produce a higher mean
 than the other, so do a two-sided test.)
@@ -1960,8 +1980,7 @@ Solution
 ggplot(math, aes(x = course, y = phobia)) + geom_boxplot()
 ```
 
-
-\includegraphics{07-sign-mood-median_files/figure-latex/unnamed-chunk-68-1} 
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-68-1.png" width="672"  />
 
  
 
@@ -1969,7 +1988,7 @@ Boxplot `a` is just weird. The bar across the middle is
 actually at the top, and it has no bottom. (Noting something sensible
 like this is enough.) Boxplot `b` is hugely spread
 out.
-\marginnote{The two groups have very different spreads, but that is  not a problem as long as we remember to do the Welch-Satterthwaite  test that does not assume equal spreads. This is the default in R,  so we are good, at least with that.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The two groups have very different spreads, but that is  not a problem as long as we remember to do the Welch-Satterthwaite  test that does not assume equal spreads. This is the default in R,  so we are good, at least with that.</span>
 
 By way of explanation: the course `a` scores have a number of
 values equal so that the 3rd quartile and the median are the name, and
@@ -2042,12 +2061,12 @@ all integers, so it is perhaps wise to be cautious.)
 We have the machinery to assess the normality for these, in one shot:
 
 ```r
-ggplot(math, aes(sample = phobia)) + stat_qq() + stat_qq_line() + facet_wrap(~course, 
-    ncol = 1, scales = "free")
+ggplot(math, aes(sample = phobia)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~course, ncol = 1, scales = "free")
 ```
 
-
-\includegraphics{07-sign-mood-median_files/figure-latex/unnamed-chunk-70-1} 
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-70-1.png" width="672"  />
 
    
 
@@ -2183,7 +2202,7 @@ group 1 and all the large ones were in group 2. This is lopsided
 enough to reject with, though, because of the small frequencies, there
 actually was a warning about 
 "chi-squared approximation may be inaccurate".
-\marginnote{There *was*, in the   *chisq.test* inside *median-test*, but in  *smmr* I didn't pass that warning back to the outside world.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There *was*, in the   *chisq.test* inside *median-test*, but in  *smmr* I didn't pass that warning back to the outside world.</span>
 
 
 
@@ -2274,8 +2293,7 @@ distributed. Side-by-side boxplots will do it:
 ggplot(instr, aes(x = group, y = score)) + geom_boxplot()
 ```
 
-
-\includegraphics{07-sign-mood-median_files/figure-latex/unnamed-chunk-75-1} 
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
 
      
 
@@ -2284,12 +2302,12 @@ would do this way:
 
 
 ```r
-ggplot(instr, aes(sample = score)) + stat_qq() + stat_qq_line() + facet_wrap(~group, 
-    ncol = 1)
+ggplot(instr, aes(sample = score)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~group, ncol = 1)
 ```
 
-
-\includegraphics{07-sign-mood-median_files/figure-latex/unnamed-chunk-76-1} 
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-76-1.png" width="672"  />
 
  
     
@@ -2449,7 +2467,7 @@ to see whether males and females agree or disagree on some burning
 issue of the day. You collect random samples of, say, 500 males and
 500 females, and you count how many of them say Yes or No to your
 statement.
-\marginnote{To simplify things, we'll assume that everyone gave a Yes or a No answer, though you could add a column like *No answer* if you wanted to make it more realistic.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">To simplify things, we'll assume that everyone gave a Yes or a No answer, though you could add a column like *No answer* if you wanted to make it more realistic.</span>
 You might get results like this:
 
 
@@ -2530,7 +2548,7 @@ B. So the row totals are fixed. What about the columns? These are
 whether each observation was above or below the overall median. There
 were 18 observations altogether, so there *must* be 9 above and 9
 below.
-\marginnote{Except in the case of the previous problem, where there were multiple observations equal to the overall median. Which we ignore for the moment.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Except in the case of the previous problem, where there were multiple observations equal to the overall median. Which we ignore for the moment.</span> 
 So the column totals are fixed as well. All
 totals fixed, so we should be using Yates's correction. I didn't,
 because I wanted to keep things simple, but I should have done.

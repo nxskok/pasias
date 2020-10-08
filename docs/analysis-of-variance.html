@@ -1798,13 +1798,10 @@ column of group labels <code>amount</code>. Is it a <code>factor</code>?</li>
 <p>We are combining several columns into one, so this is <code>pivot_longer</code>:</p>
 <div class="sourceCode" id="cb862"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb862-1"><a href="analysis-of-variance.html#cb862-1"></a>caffeine.untidy <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb862-2"><a href="analysis-of-variance.html#cb862-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>Sub, <span class="dt">names_to =</span> <span class="st">&quot;amount&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;score&quot;</span>) -&gt;<span class="st"> </span>caffeine</span></code></pre></div>
-<p>or the old way:</p>
-<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb863-1"><a href="analysis-of-variance.html#cb863-1"></a>caffeine2 &lt;-<span class="st"> </span>caffeine.untidy <span class="op">%&gt;%</span></span>
-<span id="cb863-2"><a href="analysis-of-variance.html#cb863-2"></a><span class="st">  </span><span class="kw">gather</span>(amount, score, <span class="kw">c</span>(High<span class="op">:</span>None))</span></code></pre></div>
 <p>I didn’t ask you to list the resulting data frame, but it is smart to
-at least look for yourself, to make sure <code>gather</code> has done
+at least look for yourself, to make sure <code>pivot_longer</code> has done
 what you expected.</p>
-<div class="sourceCode" id="cb864"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb864-1"><a href="analysis-of-variance.html#cb864-1"></a>caffeine</span></code></pre></div>
+<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb863-1"><a href="analysis-of-variance.html#cb863-1"></a>caffeine</span></code></pre></div>
 <pre><code>## # A tibble: 36 x 3
 ##      Sub amount   score
 ##    &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
@@ -1822,7 +1819,7 @@ what you expected.</p>
 <p>A column of amounts of caffeine, and a column of test scores. This is
 what we expected. There should be 12 each of the <code>amount</code>s,
 which you can check if you like:</p>
-<div class="sourceCode" id="cb866"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb866-1"><a href="analysis-of-variance.html#cb866-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</span></code></pre></div>
+<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb865-1"><a href="analysis-of-variance.html#cb865-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   amount       n
 ##   &lt;chr&gt;    &lt;int&gt;
@@ -1837,8 +1834,8 @@ so get used to seeing where it will be useful.</p>
 <li>Obtain side-by-side boxplots of test scores by amount of caffeine.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb868"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb868-1"><a href="analysis-of-variance.html#cb868-1"></a><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">x =</span> amount, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-68-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb867"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb867-1"><a href="analysis-of-variance.html#cb867-1"></a><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">x =</span> amount, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-67-1.png" width="672"  /></p>
 <p>Note that this is <em>much more difficult</em> if you don’t have a tidy data frame. (Try it and see.)</p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Does caffeine amount seem to have an effect? If so, what
@@ -1859,8 +1856,8 @@ do you conclude?</li>
 </ol>
 <p>Solution</p>
 <p>Something like this:</p>
-<div class="sourceCode" id="cb869"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb869-1"><a href="analysis-of-variance.html#cb869-1"></a>caff<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
-<span id="cb869-2"><a href="analysis-of-variance.html#cb869-2"></a><span class="kw">summary</span>(caff<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb868"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb868-1"><a href="analysis-of-variance.html#cb868-1"></a>caff<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
+<span id="cb868-2"><a href="analysis-of-variance.html#cb868-2"></a><span class="kw">summary</span>(caff<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
 ## amount       2  477.7  238.86   3.986 0.0281 *
 ## Residuals   33 1977.5   59.92                 
@@ -1886,8 +1883,8 @@ there are differences to find that we don’t know about yet.</p>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb871"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb871-1"><a href="analysis-of-variance.html#cb871-1"></a>caff<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">TukeyHSD</span>(caff<span class="fl">.1</span>)</span>
-<span id="cb871-2"><a href="analysis-of-variance.html#cb871-2"></a>caff<span class="fl">.3</span></span></code></pre></div>
+<div class="sourceCode" id="cb870"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb870-1"><a href="analysis-of-variance.html#cb870-1"></a>caff<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">TukeyHSD</span>(caff<span class="fl">.1</span>)</span>
+<span id="cb870-2"><a href="analysis-of-variance.html#cb870-2"></a>caff<span class="fl">.3</span></span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -1910,9 +1907,9 @@ around) is negative, but we are not at all clear about how big it is,
 because the confidence interval is rather long.
 <label for="tufte-mn-49" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-49" class="margin-toggle"><span class="marginnote">We’d need a lot more students to make it narrower, but this is not surprising since students vary in a lot of other ways that were not measured here.</span></p>
 <p>Extra: the normality and equal spreads assumptions look perfectly good, given the boxplots, and I don’t think there’s any reason to consider any other test. You might like to assess that with normal quantile plots:</p>
-<div class="sourceCode" id="cb873"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb873-1"><a href="analysis-of-variance.html#cb873-1"></a><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">sample=</span>score)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></span>
-<span id="cb873-2"><a href="analysis-of-variance.html#cb873-2"></a><span class="st">  </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>amount, <span class="dt">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-71-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb872"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb872-1"><a href="analysis-of-variance.html#cb872-1"></a><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">sample=</span>score)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></span>
+<span id="cb872-2"><a href="analysis-of-variance.html#cb872-2"></a><span class="st">  </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>amount, <span class="dt">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-70-1.png" width="672"  /></p>
 <p>There’s nothing to worry about there normality-wise. If anything, there’s a little evidence of <em>short</em> tails (in the None group especially), but you’ll recall that short tails don’t affect the mean and thus pose no problems for the ANOVA. Those three lines also have pretty much the same slope, indicating very similar spreads. Regular ANOVA is the best test here. (Running eg. Mood’s median test would be a mistake here, because it doesn’t use the data as efficiently (counting only aboves and belows) as the ANOVA does, and so the ANOVA will give a better picture of what differs from what.)</p>
 
 </div>

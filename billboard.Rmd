@@ -67,20 +67,6 @@ billboard %>%
 The "values" (ranks) have missings in them, which we wanted to get rid of.
 
 
-This used to be `gather`ing up all those columns, with
-`na.rm=T` to get rid of the missings:
-```{r }
-billboard %>% gather(week, rank, x1st.week:x76th.week, na.rm = T)
-```
-
-         
-
-Another way to do this is with a select-helper: all those column names
-end with `week`, so we can select them all thus:
-
-```{r }
-billboard %>% gather(week, rank, ends_with("week"), na.rm = T)
-```
 
  
 
@@ -88,14 +74,14 @@ There are now only 9 columns, a lot fewer than we started with. This
 is (I didn't need you to say) because we have collected together all
 those `week` columns into one (a column called `rank`
 with an indication of which `week` it came from). The logic of
-the `gather` is that all those columns contain ranks (which is
+the `pivot_longer` is that all those columns contain ranks (which is
 what make them the same), but they are ranks from different weeks
 (which is what makes them different).
 
 What has actually happened is that we have turned "wide" format into
 "long" format. This is not very insightful, so I would like you to
 go a bit further in your explanation. The original data frame encodes
-the rank of each song in each week, and what the `gather` has
+the rank of each song in each week, and what the `pivot_longer` has
 done is to make that explicit: in the new data frame, each song's rank
 in each week appears in *one* row, so that there are as many rows
 as there are song-week combinations. The original data frame had 317
@@ -144,40 +130,6 @@ billboard %>%
 
 
 
-The `gather` way follows.
-
-My `rank` is already a number, so I leave that. 
-I'm defining a new column `rank_number` that is just a copy 
-of `rank`, so that I can check the two new things 
-that should now both be numbers.
-`parse_number` is the easiest. Create new column(s),
-with `mutate`, that are the `parse_number`-ed
-versions of the old one(s).
-```{r }
-billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
-  mutate(
-    week_number = parse_number(week),
-    rank_number = rank
-  ) %>%
-  select(ends_with("number"))
-```
-
-         
-You see that these are indeed numbers. (I gave my new columns names
-that ended with `number`, which meant that I could select them
-with the select-helper `ends_with`. I'm not insisting that you
-do this, but it's a handy trick.)
-
-If your `rank` already looks like a number but happens to be
-text, you can also convert it with `as.numeric` (or
-`as.integer`, since it is actually text that looks like a whole
-number. For converting `rank`, these are also good, but for
-converting `week`, you need something that will pull out the
-number. (`str_extract` from `stringr` will also do it,
-but that's beyond our scope now. It's on page 212 of the R book if
-you wish to investigate it. But `parse_number` is a lot
-easier.) 
 
  
 
@@ -211,20 +163,6 @@ billboard %>%
   mutate(current = date.entered + (week_number - 1) * 7) %>%
   select(date.entered, week_number, current)
 ```
-
-or this, where the continuation after the `gather` is exactly the same as after the `pivot_longer`:
-
-```{r }
-billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
-  mutate(
-    week_number = parse_number(week),
-    rank_number = rank
-  ) %>%
-  mutate(current = date.entered + (week_number - 1) * 7) %>%
-  select(date.entered, week_number, current)
-```
-
          
 
 Don't forget to use your `week`-turned-into-number, or else it
@@ -243,7 +181,7 @@ chart).
 You might be thinking that this is not much of a check, and you would
 be right. A handy trick is to display a random sample of 10 (say) out
 of the 5,000-odd rows of the data frame. To do that, add the line
-`sample_n(10)` on the end, like this (tested with the `gather` variant, but you can do either):
+`sample_n(10)` on the end, like this:
 
 ```{r echo=F}
 set.seed(457299)
@@ -253,7 +191,7 @@ set.seed(457299)
 
 ```{r }
 billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
   mutate(
     week_number = parse_number(week),
     rank_number = rank
@@ -266,11 +204,11 @@ billboard %>%
  
 
 This gives a variety of rows to check. The first `current`
-should be $27-1=26$ weeks, or about 6 months, after the date the song
-entered the chart, and so it is; the second one should be $3-1=2$
-weeks after entry, and it is. The third one should be 3 weeks after
-September 23; this is (as I figure it) September $23+21=44$, and
-September has 30 days, so this is really October 14. Check.
+should be $7-1=6$ weeks, or about a month and a half, after the date the song
+entered the chart, and so it is; the second and third ones should be $18-1=17$
+weeks after entry, which is very close to a third of a year ($17 \times 3 = 51$), or four months. November to March is indeed four months. The fourth one is the first week on the charts, so the current date and the date entered should be (and are) the same.
+And so on.
+
 
 Your random selection of rows is likely to be different from mine, but
 the same kind of thinking will enable you to check whether it makes
@@ -306,20 +244,6 @@ billboard %>%
   select(artist.inverted, track, current)
 ```
 
-or, with `gather`:
-
-```{r size="scriptsize"}
-billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
-  mutate(
-    week_number = parse_number(week),
-    rank_number = rank
-  ) %>%
-  mutate(current = date.entered + (week_number - 1) * 7) %>%
-  filter(rank == 1) %>%
-  arrange(current) %>%
-  select(artist.inverted, track, current)
-```
 
          
 
@@ -369,24 +293,8 @@ billboard %>%
   count(track)
 ```
 
-or:
- 
-```{r }
-billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
-  mutate(
-    week_number = parse_number(week),
-    rank_number = rank
-  ) %>%
-  mutate(current = date.entered + (week_number - 1) * 7) %>%
-  filter(rank == 1) %>%
-  arrange(current) %>%
-  select(artist.inverted, track, current) %>%
-  count(track)
-```
 
-         
-
+        
 Then you can scan down the `n` column, find that the
 biggest number is 11, and say: it's the song "Independent Women Part I" by Destiny's Child. This is 3 points (out of 4, when the question
 was to be handed in).
@@ -408,23 +316,6 @@ billboard %>%
   filter(n == max(n))
 ```
 
-or:
-
-```{r }
-billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
-  mutate(
-    week_number = parse_number(week),
-    rank_number = rank
-  ) %>%
-  mutate(current = date.entered + (week_number - 1) * 7) %>%
-  filter(rank == 1) %>%
-  arrange(current) %>%
-  select(artist.inverted, track, current) %>%
-  count(track) %>%
-  filter(n == max(n))
-```
-
  
 
 or arranging them in (most logically, descending) order by `n`
@@ -443,26 +334,9 @@ billboard %>%
   arrange(desc(n))
 ```
 
-or:
-
-```{r }
-billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
-  mutate(
-    week_number = parse_number(week),
-    rank_number = rank
-  ) %>%
-  mutate(current = date.entered + (week_number - 1) * 7) %>%
-  filter(rank == 1) %>%
-  arrange(current) %>%
-  select(artist.inverted, track, current) %>%
-  count(track) %>%
-  arrange(desc(n))
-```
-
  
 
-Either of those will net you the 4th point.
+Either of those would have netted you the 4th point.
 
 If you want to be a little bit more careful, you can make an
 artist-track combination as below. This would catch occasions where
@@ -481,7 +355,7 @@ wherever it appears:
 
 ```{r }
 billboard %>%
-  gather(week, rank, x1st.week:x76th.week, na.rm = T) %>%
+  pivot_longer(x1st.week:x76th.week, names_to = "week", values_to = "rank", values_drop_na = T) %>%
   mutate(
     week_number = parse_number(week),
     rank_number = rank

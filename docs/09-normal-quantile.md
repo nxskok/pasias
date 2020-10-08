@@ -39,7 +39,7 @@ Solution
 The usual `read_csv`:
 
 ```r
-heliconia = read_csv("heliconia.csv")
+heliconia=read_csv("heliconia.csv")
 ```
 
 ```
@@ -55,7 +55,7 @@ I suggested to look at *all* the rows. Here's why:
 
 
 ```r
-heliconia
+heliconia 
 ```
 
 ```
@@ -72,7 +72,7 @@ heliconia
 ##  8  46.6         40.6            37.1
 ##  9  48.1         39.6            35.2
 ## 10  48.3         42.2            36.8
-## # ... with 13 more rows
+## # … with 13 more rows
 ```
 
 The varieties with fewer values have missings (NAs) attached to the
@@ -95,7 +95,7 @@ There's a certain amount of repetitiveness here (that we work
 around later):
 
 ```r
-ggplot(heliconia, aes(sample = bihai)) + stat_qq() + stat_qq_line()
+ggplot(heliconia,aes(sample=bihai))+stat_qq()+stat_qq_line()
 ```
 
 ```
@@ -106,8 +106,7 @@ ggplot(heliconia, aes(sample = bihai)) + stat_qq() + stat_qq_line()
 ## Warning: Removed 7 rows containing non-finite values (stat_qq_line).
 ```
 
-
-\includegraphics{09-normal-quantile_files/figure-latex/unnamed-chunk-6-1} 
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-6-1.png" width="672"  />
 
 I'm saving the comments until we've seen all three.
 
@@ -124,11 +123,10 @@ Solution
 Same idea again:
 
 ```r
-ggplot(heliconia, aes(sample = caribaea_red)) + stat_qq() + stat_qq_line()
+ggplot(heliconia,aes(sample=caribaea_red))+stat_qq()+stat_qq_line()
 ```
 
-
-\includegraphics{09-normal-quantile_files/figure-latex/unnamed-chunk-7-1} 
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-7-1.png" width="672"  />
 
 
 
@@ -143,7 +141,7 @@ And, one more time:
 
 
 ```r
-ggplot(heliconia, aes(sample = caribaea_yellow)) + stat_qq() + stat_qq_line()
+ggplot(heliconia,aes(sample=caribaea_yellow))+stat_qq()+stat_qq_line()
 ```
 
 ```
@@ -154,8 +152,7 @@ ggplot(heliconia, aes(sample = caribaea_yellow)) + stat_qq() + stat_qq_line()
 ## Warning: Removed 8 rows containing non-finite values (stat_qq_line).
 ```
 
-
-\includegraphics{09-normal-quantile_files/figure-latex/unnamed-chunk-8-1} 
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-8-1.png" width="672"  />
 
 I did a lot of copying and pasting there.
 
@@ -218,9 +215,9 @@ labelled. This is `pivot_longer` from `tidyr`:
 
 
 ```r
-heliconia.long <- heliconia %>% pivot_longer(everything(), names_to = "variety", 
-    values_to = "length", values_drop_na = T)
-heliconia.long
+heliconia %>% 
+  pivot_longer(everything(), names_to="variety", values_to="length", values_drop_na = T) -> heliconia.long
+heliconia.long  
 ```
 
 ```
@@ -237,7 +234,7 @@ heliconia.long
 ##  8 caribaea_red      41.9
 ##  9 caribaea_yellow   36.5
 ## 10 bihai             47.1
-## # ... with 44 more rows
+## # … with 44 more rows
 ```
 
 This is now aesthetic as well as tidy: all those `NA` lines
@@ -249,12 +246,12 @@ Now, how to get a normal quantile plot for each variety? This is
 
 
 ```r
-ggplot(heliconia.long, aes(sample = length)) + stat_qq() + stat_qq_line() + facet_wrap(~variety, 
-    scale = "free")
+ggplot(heliconia.long,aes(sample=length))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~variety,scale="free")
 ```
 
-
-\includegraphics{09-normal-quantile_files/figure-latex/unnamed-chunk-10-1} 
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
 
 These are a bit elongated vertically. The `scale="free"` allows
 a different vertical scale for each plot (otherwise there would be one
@@ -273,12 +270,12 @@ rows as needed:
 
 
 ```r
-ggplot(heliconia.long, aes(sample = length)) + stat_qq() + stat_qq_line() + facet_wrap(~variety, 
-    scale = "free", ncol = 2)
+ggplot(heliconia.long,aes(sample=length))+
+stat_qq()+stat_qq_line()+
+facet_wrap(~variety,scale="free",ncol=2)
 ```
 
-
-\includegraphics{09-normal-quantile_files/figure-latex/unnamed-chunk-11-1} 
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
 
 I think the squarer plots make it easier to see the shape of these:
 curved, S-bend, straightish.
@@ -287,18 +284,17 @@ also make squarish:
 
 
 ```r
-ggplot(heliconia.long, aes(x = length)) + geom_histogram(bins = 5) + facet_wrap(~variety, 
-    scale = "free", ncol = 2)
+ggplot(heliconia.long,aes(x=length))+
+geom_histogram(bins=5)+facet_wrap(~variety,scale="free",ncol=2)
 ```
 
-
-\includegraphics{09-normal-quantile_files/figure-latex/unnamed-chunk-12-1} 
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
 *bihai* has those two outliers, *caribaea* red has no tails
 to speak of (or you might say "it's bimodal", which would be another
 explanation of the pattern on the normal quantile 
 plot
-\marginnote{If you  have studied a thing called kurtosis, the fourth moment about  the mean, you'll know that this measures *both* tail length  *and* peakedness, so a short-tailed distribution also has a  strong peak. Or, maybe, in this case, two strong peaks.}), and
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you  have studied a thing called kurtosis, the fourth moment about  the mean, you'll know that this measures *both* tail length  *and* peakedness, so a short-tailed distribution also has a  strong peak. Or, maybe, in this case, two strong peaks.</span>), and
 *caribaea* yellow is shoulder-shruggingly normal (I looked at
 that and said, "well, I *guess* it's normal".)  After you've
 looked at the normal quantile plots, you see what a crude tool a
@@ -332,8 +328,8 @@ Solution
 `read_tsv` is the right thing:
 
 ```r
-my_url = "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
-athletes = read_tsv(my_url)
+my_url="http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+athletes=read_tsv(my_url)
 ```
 
 ```
@@ -363,17 +359,17 @@ athletes
 ## # A tibble: 202 x 13
 ##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht
 ##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl>
-##  1 fema~ Netb~  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.
-##  2 fema~ Netb~  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.
-##  3 fema~ Netb~  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176 
-##  4 fema~ Netb~  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.
-##  5 fema~ Netb~  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183 
-##  6 fema~ Netb~  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.
-##  7 fema~ Netb~  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.
-##  8 fema~ Netb~  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.
-##  9 fema~ Netb~  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.
-## 10 fema~ Netb~  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.
-## # ... with 192 more rows, and 1 more variable: Wt <dbl>
+##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.
+##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.
+##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176 
+##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.
+##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183 
+##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.
+##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.
+##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.
+##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.
+## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.
+## # … with 192 more rows, and 1 more variable: Wt <dbl>
 ```
 
 I listed the data to check that I had it right, but I didn't ask you
@@ -393,11 +389,11 @@ As you would expect:
 
 
 ```r
-ggplot(athletes, aes(sample = Ferr)) + stat_qq() + stat_qq_line()
+ggplot(athletes, aes(sample=Ferr))+
+stat_qq()+stat_qq_line()
 ```
 
-
-\includegraphics{09-normal-quantile_files/figure-latex/unnamed-chunk-14-1} 
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
 This is almost a classic right skew: the values are too bunched up at
 the bottom and too spread out at the top. The curved shape should be
@@ -419,11 +415,11 @@ you add something that will put each sport in its own facet:
 
 
 ```r
-ggplot(athletes, aes(sample = Ferr)) + stat_qq() + stat_qq_line() + facet_wrap(~Sport)
+ggplot(athletes,aes(sample=Ferr))+stat_qq()+stat_qq_line()+
+facet_wrap(~Sport)
 ```
 
-
-\includegraphics{09-normal-quantile_files/figure-latex/unnamed-chunk-15-1} 
+<img src="09-normal-quantile_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
   
 
 (d)[2] Looking at the plots in the previous part, would you say

@@ -77,7 +77,7 @@ spider
 ##  8      0.36  present
 ##  9      0.363 absent 
 ## 10      0.364 present
-## # ... with 18 more rows
+## # … with 18 more rows
 ```
 
      
@@ -100,8 +100,7 @@ Solution
 ggplot(spider, aes(x = Spiders, y = Grain.size)) + geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/starcross-1} 
+<img src="15-logistic-regression_files/figure-html/starcross-1.png" width="672"  />
 
      
 
@@ -144,7 +143,7 @@ spider
 ##  8      0.36  present
 ##  9      0.363 absent 
 ## 10      0.364 present
-## # ... with 18 more rows
+## # … with 18 more rows
 ```
 
      
@@ -172,7 +171,7 @@ spider
 ##  8      0.36  present
 ##  9      0.363 absent 
 ## 10      0.364 present
-## # ... with 18 more rows
+## # … with 18 more rows
 ```
 
  
@@ -275,7 +274,13 @@ Another way to make the data frame of values to predict from  is directly, using
 
 
 ```r
-new <- tribble(~Grain.size, 0.2, 0.5, 0.8, 1.1)
+new <- tribble(
+  ~Grain.size,
+  0.2,
+  0.5,
+  0.8,
+  1.1
+)
 new
 ```
 
@@ -457,8 +462,14 @@ columns don't have to line up, since it's the commas that
 determine where one value ends and the next one begins:
 
 ```r
-dead_bugs <- tribble(~log_conc, ~exposed, ~killed, 0.96, 50, 6, 1.33, 48, 16, 1.63, 
-    46, 24, 2.04, 49, 42, 2.32, 50, 44)
+dead_bugs <- tribble(
+  ~log_conc, ~exposed, ~killed,
+  0.96, 50, 6,
+  1.33, 48, 16,
+  1.63, 46, 24,
+  2.04, 49, 42,
+  2.32, 50, 44
+)
 dead_bugs
 ```
 
@@ -558,7 +569,7 @@ out this way. Also, you'll note, the column names have those
 "backticks" around them, because they contain illegal characters
 like a minus sign and spaces. Perhaps a good way to
 pre-empt
-\marginnote{My daughter learned the word pre-empt because we  like to play a bridge app on my phone; in the game of bridge, you  make a pre-emptive bid when you have no great strength but a lot of  cards of one suit, say seven, and it won't be too bad if that suit  is trumps, no matter what your partner has. If you have a weakish hand with a lot of cards in one suit, your opponents are probably going  to be able to bid and make something, so you pre-emptively bid first  to try and make it difficult for them.}  all these problems is to
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">My daughter learned the word pre-empt because we  like to play a bridge app on my phone; in the game of bridge, you  make a pre-emptive bid when you have no great strength but a lot of  cards of one suit, say seven, and it won't be too bad if that suit  is trumps, no matter what your partner has. If you have a weakish hand with a lot of cards in one suit, your opponents are probably going  to be able to bid and make something, so you pre-emptively bid first  to try and make it difficult for them.</span>  all these problems is to
 make a copy of the data file with the illegal characters replaced by
 underscores, which is my file `exposed2.txt`:
 
@@ -634,8 +645,10 @@ insects were exposed in total to each dose, so we can work it
 out. Like this:
 
 ```r
-response <- dead_bugs %>% mutate(survived = exposed - killed) %>% select(killed, 
-    survived) %>% as.matrix()
+dead_bugs %>%
+  mutate(survived = exposed - killed) %>%
+  select(killed, survived) %>%
+  as.matrix() -> response
 response
 ```
 
@@ -661,7 +674,10 @@ data frame and use `cbind` to glue its columns together:
 
 
 ```r
-resp2 <- with(dead_bugs, cbind(killed, survived = exposed - killed))
+resp2 <- with(
+  dead_bugs,
+  cbind(killed, survived = exposed - killed)
+)
 resp2
 ```
 
@@ -811,7 +827,7 @@ Extra: this is kind of a strange prediction problem, because we know what
 the *response* variable should be, and we want to know what the
 explanatory variable's value is. Normally we do predictions the
 other way around.
-\marginnote{This kind of thing is sometimes called an inverse prediction.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This kind of thing is sometimes called an inverse prediction.</span>
 So the only way to get a more accurate figure is
 to try some different log-concentrations, and see which one gets
 closest to a probability 0.5 of killing the insect.
@@ -994,8 +1010,9 @@ and now we make the intervals by making new columns containing the lower and upp
 
 
 ```r
-enframe(lethal) %>% mutate(SE = attr(lethal, "SE")) %>% mutate(LCL = value - 2 * 
-    SE, UCL = value + 2 * SE)
+enframe(lethal) %>%
+  mutate(SE = attr(lethal, "SE")) %>%
+  mutate(LCL = value - 2 * SE, UCL = value + 2 * SE)
 ```
 
 ```
@@ -1062,8 +1079,16 @@ function).
 Or, use a `tribble`:
 
 ```r
-dr <- tribble(~dose, ~damaged, 10, 10, 20, 28, 30, 53, 40, 77, 50, 91, 60, 98, 70, 
-    99)
+dr <- tribble(
+  ~dose, ~damaged,
+  10, 10,
+  20, 28,
+  30, 53,
+  40, 77,
+  50, 91,
+  60, 98,
+  70, 99
+)
 dr
 ```
 
@@ -1085,7 +1110,10 @@ Or, make a data frame with the values typed in:
 
 
 ```r
-dr2 <- tibble(dose = seq(10, 70, 10), damaged = c(10, 28, 53, 77, 91, 98, 99))
+dr2 <- tibble(
+  dose = seq(10, 70, 10),
+  damaged = c(10, 28, 53, 77, 91, 98, 99)
+)
 dr2
 ```
 
@@ -1175,7 +1203,7 @@ multiply or divide) two vectors of different lengths, it recycles the
 smaller one by repeating it until it's as long as the longer one. So
 rather than `100-damaged` giving an error, it does what you
 want.
-\marginnote{The usual application of this is to combine a number  with a vector. If you try to subtract a length-2 vector from a  length-6 vector, R will repeat the shorter one three times and do  the subtraction, but if you try to subtract a length-2 vector from a length-*7* vector, where you'd have to repeat the shorter one a fractional number of times, R will do it, but you'll get a warning, because this is probably *not* what you wanted. Try it and see.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The usual application of this is to combine a number  with a vector. If you try to subtract a length-2 vector from a  length-6 vector, R will repeat the shorter one three times and do  the subtraction, but if you try to subtract a length-2 vector from a length-*7* vector, where you'd have to repeat the shorter one a fractional number of times, R will do it, but you'll get a warning, because this is probably *not* what you wanted. Try it and see.</span>
 
 I took the risk of saving the new data frame over the old one. If it
 had failed for some reason, I could have started again.
@@ -1237,7 +1265,9 @@ to do it with `cbind`, or use some other trickery, like this:
 
 
 ```r
-resp <- dr %>% select(damaged, undamaged) %>% as.matrix()
+dr %>%
+  select(damaged, undamaged) %>%
+  as.matrix() -> resp
 class(resp)
 ```
 
@@ -1436,7 +1466,7 @@ infect
 ##  8 present     42      6 female
 ##  9 absent      51      9 female
 ## 10 present     52      6 female
-## # ... with 71 more rows
+## # … with 71 more rows
 ```
 
  
@@ -1479,7 +1509,7 @@ infect %>% print(n = 20)
 ## 18 present     91     12 female
 ## 19 present    105      5 female
 ## 20 present    114      8 female
-## # ... with 61 more rows
+## # … with 61 more rows
 ```
 
  
@@ -1552,7 +1582,7 @@ opposite of `pivot_longer`:
 
 
 ```r
-d %>% pivot_wider(names_from = infected, values_from = freq)
+d %>% pivot_wider(names_from=infected, values_from=freq)
 ```
 
 ```
@@ -1597,15 +1627,13 @@ What comes to my mind for the numerical variables `age` and
 ggplot(infect, aes(x = infected, y = age)) + geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/fodudu-1} 
+<img src="15-logistic-regression_files/figure-html/fodudu-1.png" width="672"  />
 
 ```r
 ggplot(infect, aes(x = infected, y = weight)) + geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/fodudu-2} 
+<img src="15-logistic-regression_files/figure-html/fodudu-2.png" width="672"  />
 
      
 
@@ -1659,8 +1687,7 @@ so that the plot is just this:
 ggplot(infect, aes(x = sex)) + geom_bar()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-50-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
 
  
 
@@ -1688,8 +1715,7 @@ variable, which is specified by `fill`. Here's the basic idea:
 ggplot(infect, aes(x = sex, fill = infected)) + geom_bar()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-51-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-51-1.png" width="672"  />
 
  
 
@@ -1703,11 +1729,11 @@ There are two ways to improve this. One is known as a "grouped bar chart", which
 
 
 ```r
-ggplot(infect, aes(x = sex, fill = infected)) + geom_bar(position = "dodge")
+ggplot(infect, aes(x = sex, fill = infected)) +
+  geom_bar(position = "dodge")
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-52-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
 
  
 
@@ -1729,11 +1755,11 @@ colour. This is `position="fill"`:
 
 
 ```r
-ggplot(infect, aes(x = sex, fill = infected)) + geom_bar(position = "fill")
+ggplot(infect, aes(x = sex, fill = infected)) +
+  geom_bar(position = "fill")
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-53-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-53-1.png" width="672"  />
 
  
 
@@ -1840,8 +1866,9 @@ fans among you can do it this way:
 
 
 ```r
-infect.1a <- infect %>% mutate(infected = factor(infected)) %>% glm(infected ~ age + 
-    weight + sex, family = "binomial", data = .)
+infect %>%
+  mutate(infected = factor(infected)) %>%
+  glm(infected ~ age + weight + sex, family = "binomial", data = .) -> infect.1a
 summary(infect.1a)
 ```
 
@@ -1929,7 +1956,7 @@ drop1(infect.1, test = "Chisq")
  
 
 The P-values are similar, but not identical.
-\marginnote{The *test* is this way because it's a generalized linear model rather than a regular regression.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *test* is this way because it's a generalized linear model rather than a regular regression.</span>
 
 I have to stop and think about this. There is a lot of theory that
 says there are several ways to do stuff in regression, but they are
@@ -2062,7 +2089,7 @@ I didn't ask you to comment on these, since the question is long
 enough already. But that's not going to stop me!
 
 These are predicted probabilities of infection.
-\marginnote{When you have one observation per line, the predictions are of the *second* of the two levels of the response variable. When you make that two-column response, the predictions are of the probability of being in the *first* column. That's what it is. As the young people say, don't @ me.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When you have one observation per line, the predictions are of the *second* of the two levels of the response variable. When you make that two-column response, the predictions are of the probability of being in the *first* column. That's what it is. As the young people say, don't @ me.</span>
 
 The way I remember the one-column-response thing is that the first
 level is the baseline (as it is in a regression with a categorical
@@ -2116,19 +2143,19 @@ infect.1a %>% as_tibble()
 ##  8 present     42      6 female  -0.227  1.28       1.32  0.0664  0.874 0.0239  
 ##  9 absent      51      9 female  -0.797 -0.863     -0.886 0.0515  0.882 0.00645 
 ## 10 present     52      6 female  -0.100  1.22       1.26  0.0609  0.876 0.0191  
-## # ... with 71 more rows
+## # … with 71 more rows
 ```
 
 ```r
-ggplot(infect.1a, aes(x = weight, y = .resid)) + geom_point() + geom_smooth()
+ggplot(infect.1a, aes(x = weight, y = .resid)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-61-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
 
  
 
@@ -2143,15 +2170,15 @@ The corresponding plot with age goes the same way:
 
 
 ```r
-ggplot(infect.1a, aes(x = age, y = .resid)) + geom_point() + geom_smooth()
+ggplot(infect.1a, aes(x = age, y = .resid)) + geom_point() +
+  geom_smooth()
 ```
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-62-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-62-1.png" width="672"  />
 
  
 Crawley found the slightest suggestion of an up-and-down curve in
@@ -2198,7 +2225,7 @@ drop1(infect.2, test = "Chisq")
 The squared terms are both significant. The linear terms,
 `age` and `weight`, have to stay, regardless of their
 significance.
-\marginnote{When you have higher-order terms, you have to keep the lower-order ones as well: higher powers, or interactions (as we see in ANOVA later).}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When you have higher-order terms, you have to keep the lower-order ones as well: higher powers, or interactions (as we see in ANOVA later).</span>
 What do the squared terms do to the predictions? Before, there was a
 clear one-directional trend in the relationships with `age` and
 `weight`. Has that changed? Let's see. We'll need a few more
@@ -2243,7 +2270,7 @@ infect.new
 ##  8      9  88.4 male  
 ##  9      9 109.  female
 ## 10      9 109.  male  
-## # ... with 62 more rows
+## # … with 62 more rows
 ```
 
  
@@ -2442,7 +2469,7 @@ questionnaire assessed "idealism": a high score reflects a belief
 that ethical behaviour will always lead to good consequences (and thus
 that  if a behaviour leads to any bad consequences at all, it is
 unethical).
-\marginnote{I get confused about the difference between morals  and ethics. This is a very short description of that difference:  http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html. The basic idea is that morals are part of who you are, derived from religion, philosophy etc. Ethics are how you act in a particular situation: that is, your morals, what you believe, inform your ethics, what you do. That's why the students had to play the role of an  ethics committee, rather than a morals committee; presumably the researcher had good morals, but an ethics committee had to evaluate what he was planning to do, rather than his character as a person.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I get confused about the difference between morals  and ethics. This is a very short description of that difference:  http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html. The basic idea is that morals are part of who you are, derived from religion, philosophy etc. Ethics are how you act in a particular situation: that is, your morals, what you believe, inform your ethics, what you do. That's why the students had to play the role of an  ethics committee, rather than a morals committee; presumably the researcher had good morals, but an ethics committee had to evaluate what he was planning to do, rather than his character as a person.</span>
 
 After being exposed to all of that, each student stated their decision
 about whether the research should continue or stop.
@@ -2467,7 +2494,7 @@ variables in the data set are these:
 
 
 A more detailed discussion
-\marginnote{If you can believe it.} of this
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you can believe it.</span> of this
 study is at
 [link](http://core.ecu.edu/psyc/wuenschk/MV/Multreg/Logistic-SPSS.PDF). 
 
@@ -2517,7 +2544,7 @@ decide
 ##  8 stop          7.8        4   Male   cosmetic
 ##  9 stop          7.8        4.7 Female cosmetic
 ## 10 stop          8          7.6 Female cosmetic
-## # ... with 305 more rows
+## # … with 305 more rows
 ```
 
        
@@ -2669,7 +2696,7 @@ same result:
 
 
 ```r
-xtabs(~decision + gender, data = decide)
+xtabs(~ decision + gender, data = decide)
 ```
 
 ```
@@ -2759,8 +2786,9 @@ with the two new variables on the end. You have to remember to
 turn `decision` into a `factor` again:
 
 ```r
-decide.2 <- glm(factor(decision) ~ gender + idealism + relativism, data = decide, 
-    family = "binomial")
+decide.2 <- glm(factor(decision) ~ gender + idealism + relativism,
+  data = decide, family = "binomial"
+)
 summary(decide.2)
 ```
 
@@ -3186,7 +3214,7 @@ The probability of "stop" is a lot higher for females than for males
 (that is the strong `gender` effect we found earlier), but the
 *pattern* is about the same for males and females: the difference in
 probabilities
-\marginnote{Strictly, we should look at the difference in log-odds.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Strictly, we should look at the difference in log-odds.</span>
 is about the same, and also both genders have almost the highest predicted
 probability for `theory` (the highest male one is actually for
 `meat` but there's not much in it)
@@ -3275,8 +3303,12 @@ the quartiles:
 
 
 ```r
-decide %>% summarize(i_q1 = quantile(idealism, 0.25), i_q3 = quantile(idealism, 0.75), 
-    r_q1 = quantile(relativism, 0.25), r_q3 = quantile(relativism, 0.75))
+decide %>% summarize(
+  i_q1 = quantile(idealism, 0.25),
+  i_q3 = quantile(idealism, 0.75),
+  r_q1 = quantile(relativism, 0.25),
+  r_q3 = quantile(relativism, 0.75)
+)
 ```
 
 ```
@@ -3293,8 +3325,10 @@ Let's use the scenario `cosmetic` that was middling in its
 effects, and think about females:
 
 ```r
-new <- crossing(idealism = c(5.6, 7.5), relativism = c(5.4, 6.8), gender = "Female", 
-    scenario = "cosmetic")
+new <- crossing(
+  idealism = c(5.6, 7.5), relativism = c(5.4, 6.8),
+  gender = "Female", scenario = "cosmetic"
+)
 new
 ```
 
@@ -3339,7 +3373,7 @@ These data came from a psychology study (with, probably, the students
 in a class serving as experimental subjects). Social scientists like
 to use SPSS software, so the data came to me as an SPSS `.sav`
 file.
-\marginnote{If you took STAB23, you'll have used PSPP, which is  a free version of SPSS.} The least-fuss way of handling this that I
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you took STAB23, you'll have used PSPP, which is  a free version of SPSS.</span> The least-fuss way of handling this that I
 could think of was to use `import` from the `rio`
 package, which I think I mentioned before:
 
@@ -3410,11 +3444,27 @@ errors --- "impossible" values occur distressingly often in real data:
 
 
 ```r
-xx <- x %>% mutate(decision = case_when(decision == 0 ~ "stop", decision == 1 ~ "continue", 
-    TRUE ~ "error"), gender = case_when(gender == 0 ~ "Female", gender == 1 ~ "Male", 
-    TRUE ~ "error"), scenario = case_when(scenario == 1 ~ "cosmetic", scenario == 
-    2 ~ "theory", scenario == 3 ~ "meat", scenario == 4 ~ "veterinary", scenario == 
-    5 ~ "medical", TRUE ~ "error"))
+xx <- x %>%
+  mutate(
+    decision = case_when(
+      decision == 0 ~ "stop",
+      decision == 1 ~ "continue",
+      TRUE ~ "error"
+    ),
+    gender = case_when(
+      gender == 0 ~ "Female",
+      gender == 1 ~ "Male",
+      TRUE ~ "error"
+    ),
+    scenario = case_when(
+      scenario == 1 ~ "cosmetic",
+      scenario == 2 ~ "theory",
+      scenario == 3 ~ "meat",
+      scenario == 4 ~ "veterinary",
+      scenario == 5 ~ "medical",
+      TRUE ~ "error"
+    )
+  )
 xx %>% as_tibble() %>% select(-(cosmetic:veterin))
 ```
 
@@ -3432,7 +3482,7 @@ xx %>% as_tibble() %>% select(-(cosmetic:veterin))
 ##  8 stop          7.8      4   Male         2.05         1.39 cosmetic
 ##  9 stop          7.8      4.7 Female       2.05         1.55 cosmetic
 ## 10 stop          8        7.6 Female       2.08         2.03 cosmetic
-## # ... with 305 more rows
+## # … with 305 more rows
 ```
 
  
@@ -3495,7 +3545,9 @@ would be smart:
 
 
 ```r
-xx %>% select(decision, idealism, relatvsm, gender, scenario) %>% write_csv("decision.csv")
+xx %>%
+  select(decision, idealism, relatvsm, gender, scenario) %>%
+  write_csv("decision.csv")
 ```
 
  
@@ -3564,8 +3616,7 @@ gg <- get_map("Catbrain", zoom = 14, maptype = "roadmap")
 ggmap(gg)
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-102-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-102-1.png" width="672"  />
 
  
 The car dealerships are along Lysander Road. Change the `zoom`
@@ -3583,14 +3634,13 @@ plotting points on the map as well:
 
 
 ```r
-lons <- c(-2.6, -2.62)
+lons <- c(-2.60, -2.62)
 lats <- c(51.51, 51.52, 51.53)
 points <- crossing(lon = lons, lat = lats)
 ggmap(gg) + geom_point(data = points, aes(x = lon, y = lat))
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-103-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
 
  
 
@@ -3605,10 +3655,17 @@ process known as "geocoding"):
 
 
 ```r
-places <- tribble(~where, "Catbrain UK", "Bristol UK", "Taunton UK", "Newport UK", 
-    "Gloucester UK")
-places <- places %>% mutate_geocode(where) %>% mutate(plotname = ifelse(where == 
-    "Catbrain UK", where, ""))
+places <- tribble(
+  ~where,
+  "Catbrain UK",
+  "Bristol UK",
+  "Taunton UK",
+  "Newport UK",
+  "Gloucester UK"
+)
+places %>%
+  mutate_geocode(where) %>%
+  mutate(plotname = ifelse(where == "Catbrain UK", where, "")) -> places
 ```
 
 ```
@@ -3637,12 +3694,12 @@ places
 
 ```
 ## # A tibble: 5 x 4
-##   where           lon   lat plotname     
-##   <chr>         <dbl> <dbl> <chr>        
-## 1 Catbrain UK   -2.61  51.5 "Catbrain UK"
-## 2 Bristol UK    -2.59  51.5 ""           
-## 3 Taunton UK    -3.11  51.0 ""           
-## 4 Newport UK    -3.00  51.6 ""           
+##   where           lon   lat plotname   
+##   <chr>         <dbl> <dbl> <chr>      
+## 1 Catbrain UK   -2.61  51.5 Catbrain UK
+## 2 Bristol UK    -2.59  51.5 ""         
+## 3 Taunton UK    -3.11  51.0 ""         
+## 4 Newport UK    -3.00  51.6 ""         
 ## 5 Gloucester UK -2.24  51.9 ""
 ```
 
@@ -3664,8 +3721,9 @@ gg <- get_map("Catbrain", zoom = 9, maptype = "roadmap")
 ```
 
 ```r
-ggmap(gg) + geom_point(data = places, aes(x = lon, y = lat)) + geom_point(data = places, 
-    colour = "red") + geom_text_repel(data = places, aes(label = plotname))
+ggmap(gg) + geom_point(data = places, aes(x = lon, y = lat)) +
+  geom_point(data = places, colour = "red") +
+  geom_text_repel(data = places, aes(label = plotname))
 ```
 
 ```
@@ -3684,8 +3742,7 @@ ggmap(gg) + geom_point(data = places, aes(x = lon, y = lat)) + geom_point(data =
 ## Warning in max(x): no non-missing arguments to max; returning -Inf
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-105-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
 
  
 
@@ -3804,17 +3861,17 @@ heart
 ## # A tibble: 270 x 15
 ##       X1   age sex   pain.type resting.bp serum.chol high.blood.sugar electro
 ##    <dbl> <dbl> <chr> <chr>          <dbl>      <dbl> <chr>            <chr>  
-##  1     1    70 male  asymptom~        130        322 no               hypert~
-##  2     2    67 fema~ nonangin~        115        564 no               hypert~
+##  1     1    70 male  asymptom…        130        322 no               hypert…
+##  2     2    67 fema… nonangin…        115        564 no               hypert…
 ##  3     3    57 male  atypical         124        261 no               normal 
-##  4     4    64 male  asymptom~        128        263 no               normal 
-##  5     5    74 fema~ atypical         120        269 no               hypert~
-##  6     6    65 male  asymptom~        120        177 no               normal 
-##  7     7    56 male  nonangin~        130        256 yes              hypert~
-##  8     8    59 male  asymptom~        110        239 no               hypert~
-##  9     9    60 male  asymptom~        140        293 no               hypert~
-## 10    10    63 fema~ asymptom~        150        407 no               hypert~
-## # ... with 260 more rows, and 7 more variables: max.hr <dbl>, angina <chr>,
+##  4     4    64 male  asymptom…        128        263 no               normal 
+##  5     5    74 fema… atypical         120        269 no               hypert…
+##  6     6    65 male  asymptom…        120        177 no               normal 
+##  7     7    56 male  nonangin…        130        256 yes              hypert…
+##  8     8    59 male  asymptom…        110        239 no               hypert…
+##  9     9    60 male  asymptom…        140        293 no               hypert…
+## 10    10    63 fema… asymptom…        150        407 no               hypert…
+## # … with 260 more rows, and 7 more variables: max.hr <dbl>, angina <chr>,
 ## #   oldpeak <dbl>, slope <chr>, colored <dbl>, thal <chr>, heart.disease <chr>
 ```
 
@@ -3863,9 +3920,10 @@ A lot of typing, since there are so many variables. Don't forget
 that the response variable *must* be a factor:
 
 ```r
-heart.1 <- glm(factor(heart.disease) ~ age + sex + pain.type + resting.bp + serum.chol + 
-    high.blood.sugar + electro + max.hr + angina + oldpeak + slope + colored + thal, 
-    family = "binomial", data = heart)
+heart.1 <- glm(factor(heart.disease) ~ age + sex + pain.type + resting.bp + serum.chol +
+  high.blood.sugar + electro + max.hr + angina + oldpeak + slope + colored + thal,
+family = "binomial", data = heart
+)
 ```
 
  
@@ -4379,7 +4437,7 @@ heart %>% summarize_if(is.numeric, funs(q1, q3))
 ##   X1_q1 age_q1 resting.bp_q1 serum.chol_q1 max.hr_q1 oldpeak_q1 colored_q1 X1_q3
 ##   <dbl>  <dbl>         <dbl>         <dbl>     <dbl>      <dbl>      <dbl> <dbl>
 ## 1  68.2     48           120           213       133          0          0  203.
-## # ... with 6 more variables: age_q3 <dbl>, resting.bp_q3 <dbl>,
+## # … with 6 more variables: age_q3 <dbl>, resting.bp_q3 <dbl>,
 ## #   serum.chol_q3 <dbl>, max.hr_q3 <dbl>, oldpeak_q3 <dbl>, colored_q3 <dbl>
 ```
 
@@ -4395,8 +4453,9 @@ a column and the actual quartile values in another:
 
 
 ```r
-heart2 <- heart %>% summarize_if(is.numeric, funs(q1, q3)) %>% pivot_longer(everything(), 
-    names_to = "vq", values_to = "quartile")
+heart %>%
+  summarize_if(is.numeric, funs(q1, q3)) %>%
+  pivot_longer(everything(), names_to="vq", values_to="quartile") -> heart2
 heart2
 ```
 
@@ -4426,9 +4485,10 @@ If you want to be really fancy:
 
 
 ```r
-heart %>% summarize_if(is.numeric, funs(q1, q3)) %>% pivot_longer(everything(), names_to = c("variable", 
-    "which_quartile"), names_sep = "_", values_to = "quartile") %>% pivot_wider(names_from = which_quartile, 
-    values_from = quartile)
+heart %>%
+  summarize_if(is.numeric, funs(q1, q3)) %>%
+  pivot_longer(everything(), names_to=c("variable", "which_quartile"), names_sep="_", values_to="quartile") %>% 
+  pivot_wider(names_from=which_quartile, values_from=quartile)
 ```
 
 ```
@@ -4452,7 +4512,10 @@ different numbers of possible values. Here's my idea:
 
 
 ```r
-heart %>% select_if(is.character) %>% mutate_all(~factor(.)) %>% summary()
+heart %>%
+  select_if(is.character) %>%
+  mutate_all(~factor(.)) %>%
+  summary()
 ```
 
 ```
@@ -4486,8 +4549,11 @@ combinations. My go at that:
 
 
 ```r
-heart3 <- heart %>% select_if(is.character) %>% pivot_longer(everything(), names_to = "variable_name", 
-    values_to = "value") %>% distinct() %>% arrange(variable_name, value)
+heart %>%
+  select_if(is.character) %>%
+  pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
+  distinct() %>% 
+  arrange(variable_name, value) -> heart3
 heart3
 ```
 
@@ -4505,14 +4571,14 @@ heart3
 ##  8 high.blood.sugar no          
 ##  9 high.blood.sugar yes         
 ## 10 pain.type        asymptomatic
-## # ... with 11 more rows
+## # … with 11 more rows
 ```
 
  
 
 Gosh, that was easier than I thought. A *lot* easier. The
 technique is a lot like that idea for making facetted plots of
-something against "all the $x$s": you gather everything up into one
+something against "all the $x$s": you collect everything up into one
 column containing a variable name and another column containing the
 variable value. This contains a lot of repeats; the `distinct`
 keeps one of each and throws away the rest.
@@ -4521,9 +4587,11 @@ Hmm, another way would be to count everything:
 
 
 ```r
-heart3 <- heart %>% select_if(is.character) %>% pivot_longer(everything(), names_to = "variable_name", 
-    values_to = "value") %>% count(variable_name, value)
-heart3
+heart %>%
+  select_if(is.character) %>%
+  pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
+  count(variable_name, value) -> heart3
+heart3 
 ```
 
 ```
@@ -4540,7 +4608,7 @@ heart3
 ##  8 high.blood.sugar no             230
 ##  9 high.blood.sugar yes             40
 ## 10 pain.type        asymptomatic   129
-## # ... with 11 more rows
+## # … with 11 more rows
 ```
 
  
@@ -4581,14 +4649,15 @@ heart2
 
 and pull out the rows whose names contain `age_`. This is done
 using `str_detect`
-\marginnote{If you're selecting *columns*,  you can use select-helpers, but for rows, not.} from
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">If you're selecting *columns*,  you can use select-helpers, but for rows, not.</span> from
 `stringr`.
-\marginnote{Which is loaded with the *tidyverse*  so you don't have to load it.} 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Which is loaded with the *tidyverse*  so you don't have to load it.</span> 
 Here's how it goes for `age`:
 
 
 ```r
-heart2 %>% filter(str_detect(vq, "age_"))
+heart2 %>%
+  filter(str_detect(vq, "age_"))
 ```
 
 ```
@@ -4605,7 +4674,9 @@ and one more step to get just the quartiles:
 
 
 ```r
-heart2 %>% filter(str_detect(vq, "age_")) %>% pull(quartile)
+heart2 %>%
+  filter(str_detect(vq, "age_")) %>%
+  pull(quartile)
 ```
 
 ```
@@ -4620,7 +4691,9 @@ We'll be doing this a few times, so we should write a function to do it:
 
 ```r
 get_quartiles <- function(d, x) {
-    d %>% filter(str_detect(vq, x)) %>% pull(quartile)
+  d %>%
+    filter(str_detect(vq, x)) %>%
+    pull(quartile)
 }
 ```
 
@@ -4664,7 +4737,7 @@ heart3
 ##  8 high.blood.sugar no             230
 ##  9 high.blood.sugar yes             40
 ## 10 pain.type        asymptomatic   129
-## # ... with 11 more rows
+## # … with 11 more rows
 ```
 
  
@@ -4676,7 +4749,9 @@ previous one that I think we can write a function right away:
 
 ```r
 get_categories <- function(d, x) {
-    d %>% filter(variable_name == x) %>% pull(value)
+  d %>%
+    filter(variable_name == x) %>%
+    pull(value)
 }
 get_categories(heart3, "electro")
 ```
@@ -4708,9 +4783,11 @@ All combos of all of those (and there will be a lot of those):
 
 
 ```r
-heart.new <- crossing(sex = sexes, pain.type = pain.types, resting.bp = resting.bps, 
-    serum.chol = serum.chols, max.hr = max.hrs, oldpeak = oldpeaks, slope = slopes, 
-    colored = coloreds, thal = thals)
+heart.new <- crossing(
+  sex = sexes, pain.type = pain.types, resting.bp = resting.bps,
+  serum.chol = serum.chols, max.hr = max.hrs, oldpeak = oldpeaks, slope = slopes,
+  colored = coloreds, thal = thals
+)
 heart.new
 ```
 
@@ -4718,17 +4795,17 @@ heart.new
 ## # A tibble: 2,304 x 9
 ##    sex    pain.type  resting.bp serum.chol max.hr oldpeak slope   colored thal  
 ##    <chr>  <chr>           <dbl>      <dbl>  <dbl>   <dbl> <chr>     <dbl> <chr> 
-##  1 female asymptoma~        120        213    133       0 downsl~       0 fixed 
-##  2 female asymptoma~        120        213    133       0 downsl~       0 normal
-##  3 female asymptoma~        120        213    133       0 downsl~       0 rever~
-##  4 female asymptoma~        120        213    133       0 downsl~       1 fixed 
-##  5 female asymptoma~        120        213    133       0 downsl~       1 normal
-##  6 female asymptoma~        120        213    133       0 downsl~       1 rever~
-##  7 female asymptoma~        120        213    133       0 flat          0 fixed 
-##  8 female asymptoma~        120        213    133       0 flat          0 normal
-##  9 female asymptoma~        120        213    133       0 flat          0 rever~
-## 10 female asymptoma~        120        213    133       0 flat          1 fixed 
-## # ... with 2,294 more rows
+##  1 female asymptoma…        120        213    133       0 downsl…       0 fixed 
+##  2 female asymptoma…        120        213    133       0 downsl…       0 normal
+##  3 female asymptoma…        120        213    133       0 downsl…       0 rever…
+##  4 female asymptoma…        120        213    133       0 downsl…       1 fixed 
+##  5 female asymptoma…        120        213    133       0 downsl…       1 normal
+##  6 female asymptoma…        120        213    133       0 downsl…       1 rever…
+##  7 female asymptoma…        120        213    133       0 flat          0 fixed 
+##  8 female asymptoma…        120        213    133       0 flat          0 normal
+##  9 female asymptoma…        120        213    133       0 flat          0 rever…
+## 10 female asymptoma…        120        213    133       0 flat          1 fixed 
+## # … with 2,294 more rows
 ```
 
  
@@ -4759,7 +4836,7 @@ and the easiest way to add these to `heart.new` is this:
 
 
 ```r
-heart.new <- heart.new %>% mutate(pred = p)
+heart.new %>% mutate(pred = p) -> heart.new
 ```
 
  
@@ -4775,15 +4852,15 @@ heart.new %>% sample_n(8)
 ## # A tibble: 8 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  typical          120        280    133     0   upsl~       1 fixed
-## 2 male  nonangin~        120        213    133     0   upsl~       0 norm~
-## 3 male  typical          120        280    133     0   flat        1 fixed
-## 4 male  asymptom~        120        280    133     0   upsl~       0 norm~
-## 5 male  typical          140        213    166     0   flat        0 fixed
-## 6 male  atypical         140        280    166     0   upsl~       1 reve~
-## 7 fema~ typical          140        280    133     1.6 down~       0 fixed
-## 8 male  nonangin~        140        213    166     1.6 down~       0 norm~
-## # ... with 1 more variable: pred <dbl>
+## 1 male  nonangin…        120        280    133     1.6 flat        0 norm…
+## 2 male  atypical         140        213    166     0   upsl…       1 reve…
+## 3 fema… nonangin…        140        213    133     0   upsl…       0 reve…
+## 4 fema… nonangin…        120        280    133     1.6 flat        0 reve…
+## 5 fema… typical          120        213    166     1.6 down…       0 fixed
+## 6 male  nonangin…        140        280    166     0   upsl…       1 fixed
+## 7 male  typical          140        213    133     0   flat        1 fixed
+## 8 fema… atypical         120        213    166     0   down…       1 reve…
+## # … with 1 more variable: pred <dbl>
 ```
 
  
@@ -4810,7 +4887,7 @@ heart.new %>% filter(pred == max(pred))
 ## # A tibble: 1 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal   pred
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr> <dbl>
-## 1 male  asymptom~        140        280    133     1.6 flat        1 reve~ 0.984
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve… 0.984
 ```
 
          
@@ -4838,7 +4915,7 @@ heart.new %>% filter(pred > 0.98)
 ## # A tibble: 1 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal   pred
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr> <dbl>
-## 1 male  asymptom~        140        280    133     1.6 flat        1 reve~ 0.984
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve… 0.984
 ```
 
  
@@ -4865,7 +4942,7 @@ heart.new %>% slice(1398)
 ## # A tibble: 1 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal   pred
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr> <dbl>
-## 1 male  asymptom~        140        280    133     1.6 flat        1 reve~ 0.984
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve… 0.984
 ```
 
  
@@ -4881,15 +4958,15 @@ heart.new %>% arrange(desc(pred)) %>% print(n = 8)
 ## # A tibble: 2,304 x 10
 ##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal   pred
 ##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr> <dbl>
-## 1 male  asymptom~        140        280    133     1.6 flat        1 reve~ 0.984
-## 2 male  asymptom~        140        213    133     1.6 flat        1 reve~ 0.975
-## 3 male  asymptom~        120        280    133     1.6 flat        1 reve~ 0.975
-## 4 male  asymptom~        140        280    166     1.6 flat        1 reve~ 0.970
-## 5 male  asymptom~        140        280    133     0   flat        1 reve~ 0.968
-## 6 male  asymptom~        140        280    133     1.6 down~       1 reve~ 0.964
-## 7 male  asymptom~        120        213    133     1.6 flat        1 reve~ 0.960
-## 8 male  asymptom~        140        280    133     1.6 upsl~       1 reve~ 0.958
-## # ... with 2,296 more rows
+## 1 male  asymptom…        140        280    133     1.6 flat        1 reve… 0.984
+## 2 male  asymptom…        140        213    133     1.6 flat        1 reve… 0.975
+## 3 male  asymptom…        120        280    133     1.6 flat        1 reve… 0.975
+## 4 male  asymptom…        140        280    166     1.6 flat        1 reve… 0.970
+## 5 male  asymptom…        140        280    133     0   flat        1 reve… 0.968
+## 6 male  asymptom…        140        280    133     1.6 down…       1 reve… 0.964
+## 7 male  asymptom…        120        213    133     1.6 flat        1 reve… 0.960
+## 8 male  asymptom…        140        280    133     1.6 upsl…       1 reve… 0.958
+## # … with 2,296 more rows
 ```
 
  
@@ -5058,8 +5135,9 @@ together into one column and then adds them up):
 
 
 ```r
-breastfeed %>% pivot_longer(bf.yes:bf.no, names_to = "yesno", values_to = "freq") %>% 
-    summarize(total = sum(freq))
+breastfeed %>%
+  pivot_longer(bf.yes:bf.no, names_to="yesno", values_to="freq") %>%
+  summarize(total = sum(freq))
 ```
 
 ```
@@ -5156,7 +5234,9 @@ or, more Tidyverse-like, but we have to remember to turn it into a
 
 
 ```r
-response <- breastfeed %>% select(starts_with("bf")) %>% as.matrix()
+response <- breastfeed %>%
+  select(starts_with("bf")) %>%
+  as.matrix()
 response
 ```
 
@@ -5304,12 +5384,17 @@ proportions/probabilities, you could do something like this:
 
 
 ```r
-breastfeed %>% mutate(total = bf.yes + bf.no, obs = bf.yes/total) %>% mutate(pred = p) %>% 
-    ggplot(aes(x = gest.age, y = obs)) + geom_line(aes(y = pred)) + geom_point(aes(size = total))
+breastfeed %>%
+  mutate(
+    total = bf.yes + bf.no,
+    obs = bf.yes / total
+  ) %>%
+  mutate(pred = p) %>%
+  ggplot(aes(x = gest.age, y = obs)) +
+  geom_line(aes(y = pred)) + geom_point(aes(size = total))
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-144-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-144-1.png" width="672"  />
 
  
 
@@ -5404,7 +5489,7 @@ donner
 ##  8    62 male   no      
 ##  9    65 male   no      
 ## 10    45 female no      
-## # ... with 35 more rows
+## # … with 35 more rows
 ```
 
      
@@ -5453,8 +5538,7 @@ Starting with `age` vs. `gender`:
 ggplot(donner, aes(x = gender, y = age)) + geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-146-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-146-1.png" width="672"  />
 
      
 
@@ -5465,8 +5549,7 @@ or:
 ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + facet_grid(gender ~ .)
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-147-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-147-1.png" width="672"  />
 
  
 
@@ -5513,8 +5596,7 @@ Age vs. `survived` is the same idea:
 ggplot(donner, aes(x = survived, y = age)) + geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-150-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-150-1.png" width="672"  />
 
      
 
@@ -5522,12 +5604,10 @@ or:
 
 
 ```r
-ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + facet_grid(survived ~ 
-    .)
+ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + facet_grid(survived ~ .)
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-151-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-151-1.png" width="672"  />
 
  
 
@@ -5615,8 +5695,7 @@ For a graph, borrow the grouped bar-plot idea from the parasites question:
 ggplot(donner, aes(x = gender, fill = survived)) + geom_bar(position = "dodge")
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-156-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-156-1.png" width="672"  />
 
  
 
@@ -5844,8 +5923,12 @@ So, let's get the median and quartiles of age:
 
 
 ```r
-donner %>% summarize(q1 = quantile(age, 0.25), med = median(age), q3 = quantile(age, 
-    0.75))
+donner %>%
+  summarize(
+    q1 = quantile(age, 0.25),
+    med = median(age),
+    q3 = quantile(age, 0.75)
+  )
 ```
 
 ```
@@ -5861,8 +5944,13 @@ only these came out sideways, so we can "transpose" them:
 
 
 ```r
-donner %>% summarize(q1 = quantile(age, 0.25), med = median(age), q3 = quantile(age, 
-    0.75)) %>% pivot_longer(everything(), names_to = "stat", values_to = "value")
+donner %>%
+  summarize(
+    q1 = quantile(age, 0.25),
+    med = median(age),
+    q3 = quantile(age, 0.75)
+  ) %>%
+  pivot_longer(everything(), names_to="stat", values_to="value")
 ```
 
 ```
@@ -5880,9 +5968,14 @@ and now if we "pull out" the `value` column, we are good:
 
 
 ```r
-ages <- donner %>% summarize(q1 = quantile(age, 0.25), med = median(age), q3 = quantile(age, 
-    0.75)) %>% pivot_longer(everything(), names_to = "stat", values_to = "value") %>% 
-    pull(value)
+ages <- donner %>%
+  summarize(
+    q1 = quantile(age, 0.25),
+    med = median(age),
+    q3 = quantile(age, 0.75)
+  ) %>%
+  pivot_longer(everything(), names_to="stat", values_to="value") %>% 
+  pull(value)
 ages
 ```
 
@@ -5897,7 +5990,9 @@ The same kind of idea will get us both genders without typing any genders:
 
 
 ```r
-genders <- donner %>% count(gender) %>% pull(gender)
+genders <- donner %>%
+  count(gender) %>%
+  pull(gender)
 genders
 ```
 
@@ -5909,11 +6004,14 @@ genders
 
 We don't care how many there are of each gender; it's just a device to
 get the different genders.
-\marginnote{The counts are in a column called  *n* which we calculate and then ignore.} This is another way:
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The counts are in a column called  *n* which we calculate and then ignore.</span> This is another way:
 
 
 ```r
-genders <- donner %>% select(gender) %>% distinct() %>% pull(gender)
+genders <- donner %>%
+  select(gender) %>%
+  distinct() %>%
+  pull(gender)
 genders
 ```
 
@@ -6033,7 +6131,7 @@ what the model is saying.
 arrive in the intensive care unit (ICU) of a hospital. These are seriously
 ill patients who may die despite the ICU's best attempts. APACHE
 stands for "Acute Physiology And Chronic Health Evaluation".
-\marginnote{As with many of these acronyms, you get the idea that the acronym came first and they devised some words to fit it.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">As with many of these acronyms, you get the idea that the acronym came first and they devised some words to fit it.</span>
 The scale score is calculated from several physiological measurements
 such as body temperature, heart rate and the Glasgow coma scale, as
 well as the patient's age. The final result is a score between 0 and
@@ -6088,7 +6186,7 @@ icu
 ##  8      8       22      5
 ##  9      9       33      3
 ## 10     10       19      6
-## # ... with 28 more rows
+## # … with 28 more rows
 ```
 
      
@@ -6144,8 +6242,10 @@ numbers of patients (since a patient must have either lived or
 died): 
 
 ```r
-response <- icu %>% mutate(survivals = patients - deaths) %>% select(deaths, survivals) %>% 
-    as.matrix()
+response <- icu %>%
+  mutate(survivals = patients - deaths) %>%
+  select(deaths, survivals) %>%
+  as.matrix()
 response
 ```
 
@@ -6419,12 +6519,14 @@ This means calculating the observed proportions first, adding the
 predicted probabilities, and then making the plot, like this:
 
 ```r
-icu %>% mutate(obs_prop = deaths/patients) %>% mutate(pred = p) %>% ggplot(aes(x = apache, 
-    y = pred)) + geom_line() + geom_point(aes(y = obs_prop))
+icu %>%
+  mutate(obs_prop = deaths / patients) %>%
+  mutate(pred = p) %>%
+  ggplot(aes(x = apache, y = pred)) + geom_line() +
+  geom_point(aes(y = obs_prop))
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-174-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
 
      
 
@@ -6449,18 +6551,20 @@ That's what I asked for, and is full marks if you got it. However, the
 points are not all based on the same number of observations. One way
 to show that on your plot is to vary the size of the plotted
 point
-\marginnote{By size is meant the *area* of the circle,  which is what our brains perceive as the size of   two-dimensional, like the area of a slice in a pie chart. On the  plot, the radius of the circle for 20 is less than twice that of the circle for 10, because the area depends on the radius *squared*.}
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">By size is meant the *area* of the circle,  which is what our brains perceive as the size of   two-dimensional, like the area of a slice in a pie chart. On the  plot, the radius of the circle for 20 is less than twice that of the circle for 10, because the area depends on the radius *squared*.</span>
 according to the number of patients it was based on. This is not hard
 to do, since we have exactly that in `patients`:
 
 
 ```r
-icu %>% mutate(obs_prop = deaths/patients) %>% mutate(pred = p) %>% ggplot(aes(x = apache, 
-    y = pred)) + geom_line() + geom_point(aes(y = obs_prop, size = patients))
+icu %>%
+  mutate(obs_prop = deaths / patients) %>%
+  mutate(pred = p) %>%
+  ggplot(aes(x = apache, y = pred)) + geom_line() +
+  geom_point(aes(y = obs_prop, size = patients))
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-175-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-175-1.png" width="672"  />
 
      
 The points that are far from the prediction are mostly based on a
@@ -6772,8 +6876,7 @@ enough even with this small data set. Here's a visual:
 ggplot(ha, aes(x = second, y = anxiety)) + geom_boxplot()
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-183-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-183-1.png" width="672"  />
 
      
 
@@ -6800,15 +6903,14 @@ bar chart:
 ggplot(ha, aes(x = anger, fill = second)) + geom_bar(position = "dodge")
 ```
 
-
-\includegraphics{15-logistic-regression_files/figure-latex/unnamed-chunk-184-1} 
+<img src="15-logistic-regression_files/figure-html/unnamed-chunk-184-1.png" width="672"  />
 
  
 
 A small majority of people who took the anger management did not have
 a second heart attack, while a small minority of those who did not,
 did.
-\marginnote{Read that carefully.} But with these small numbers, the
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Read that carefully.</span> But with these small numbers, the
 difference, even though it points the way we would have guessed, is
 not large enough to be significant:
 
