@@ -27,12 +27,14 @@ MathJax.Hub.Config({
 
 <title>Chapter 21 Analysis of variance revisited | Problems and Solutions in Applied Statistics</title>
 
-<script src="libs/header-attrs-2.4/header-attrs.js"></script>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -351,9 +353,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="analysis-of-variance-revisited" class="section level1" number="21">
 <h1><span class="header-section-number">Chapter 21</span> Analysis of variance revisited</h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb2812"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2812-1"><a href="analysis-of-variance-revisited.html#cb2812-1"></a><span class="kw">library</span>(MASS)</span>
-<span id="cb2812-2"><a href="analysis-of-variance-revisited.html#cb2812-2"></a><span class="kw">library</span>(car)</span>
-<span id="cb2812-3"><a href="analysis-of-variance-revisited.html#cb2812-3"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb2820"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2820-1"><a href="analysis-of-variance-revisited.html#cb2820-1"></a><span class="kw">library</span>(MASS)</span>
+<span id="cb2820-2"><a href="analysis-of-variance-revisited.html#cb2820-2"></a><span class="kw">library</span>(car)</span>
+<span id="cb2820-3"><a href="analysis-of-variance-revisited.html#cb2820-3"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
 <div id="acid-rain" class="section level2" number="21.1">
 <h2><span class="header-section-number">21.1</span> Acid rain</h2>
 <p>One of the first noticeable effects of climate change was
@@ -377,8 +379,8 @@ different dates, in April and June 1991. The data are in
 </ol>
 <p>Solution</p>
 <p>This time, it’s a <code>.csv</code>:</p>
-<div class="sourceCode" id="cb2813"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2813-1"><a href="analysis-of-variance-revisited.html#cb2813-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv&quot;</span></span>
-<span id="cb2813-2"><a href="analysis-of-variance-revisited.html#cb2813-2"></a>acidrain &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb2821"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2821-1"><a href="analysis-of-variance-revisited.html#cb2821-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/acidrain.csv&quot;</span></span>
+<span id="cb2821-2"><a href="analysis-of-variance-revisited.html#cb2821-2"></a>acidrain &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   soil_depth = col_character(),
@@ -386,7 +388,7 @@ different dates, in April and June 1991. The data are in
 ##   rain_pH = col_double(),
 ##   soil_acidity = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2815"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2815-1"><a href="analysis-of-variance-revisited.html#cb2815-1"></a>acidrain</span></code></pre></div>
+<div class="sourceCode" id="cb2823"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2823-1"><a href="analysis-of-variance-revisited.html#cb2823-1"></a>acidrain</span></code></pre></div>
 <pre><code>## # A tibble: 18 x 4
 ##    soil_depth date       rain_pH soil_acidity
 ##    &lt;chr&gt;      &lt;date&gt;       &lt;dbl&gt;        &lt;dbl&gt;
@@ -425,21 +427,21 @@ you might not get the boxplot you want. How can you fix that?)</li>
 <code>dbl</code>) rather than the categorical variable you need.
 Try to use one of the explanatory variables as <code>x</code> and the other
 one as <code>fill</code> (or <code>colour</code>):</p>
-<div class="sourceCode" id="cb2817"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2817-1"><a href="analysis-of-variance-revisited.html#cb2817-1"></a><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">x =</span> rain_pH, <span class="dt">y =</span> soil_acidity, <span class="dt">fill =</span> soil_depth)) <span class="op">+</span></span>
-<span id="cb2817-2"><a href="analysis-of-variance-revisited.html#cb2817-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2825"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2825-1"><a href="analysis-of-variance-revisited.html#cb2825-1"></a><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">x =</span> rain_pH, <span class="dt">y =</span> soil_acidity, <span class="dt">fill =</span> soil_depth)) <span class="op">+</span></span>
+<span id="cb2825-2"><a href="analysis-of-variance-revisited.html#cb2825-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-5-1.png" width="672"  /></p>
 <p>That looks as if it worked, but it didn’t. See the boxplot below for
 how it’s supposed to be. I need <code>x</code> for the boxplot needs to
 be categorical. The easiest way to make it such is to wrap it in
 <code>factor</code>:</p>
-<div class="sourceCode" id="cb2818"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2818-1"><a href="analysis-of-variance-revisited.html#cb2818-1"></a><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(rain_pH), <span class="dt">y =</span> soil_acidity, <span class="dt">fill =</span> soil_depth)) <span class="op">+</span></span>
-<span id="cb2818-2"><a href="analysis-of-variance-revisited.html#cb2818-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2826"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2826-1"><a href="analysis-of-variance-revisited.html#cb2826-1"></a><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(rain_pH), <span class="dt">y =</span> soil_acidity, <span class="dt">fill =</span> soil_depth)) <span class="op">+</span></span>
+<span id="cb2826-2"><a href="analysis-of-variance-revisited.html#cb2826-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-6-1.png" width="672"  /></p>
 <p>Even though <code>soil_depth</code> looks like numbers, the printout of
 the data frame reveals that it is text, so that is OK.</p>
 <p>If you prefer, exchange <code>x</code> and <code>fill</code>:</p>
-<div class="sourceCode" id="cb2819"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2819-1"><a href="analysis-of-variance-revisited.html#cb2819-1"></a><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(rain_pH), <span class="dt">y =</span> soil_acidity, <span class="dt">x =</span> soil_depth)) <span class="op">+</span></span>
-<span id="cb2819-2"><a href="analysis-of-variance-revisited.html#cb2819-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2827"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2827-1"><a href="analysis-of-variance-revisited.html#cb2827-1"></a><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(rain_pH), <span class="dt">y =</span> soil_acidity, <span class="dt">x =</span> soil_depth)) <span class="op">+</span></span>
+<span id="cb2827-2"><a href="analysis-of-variance-revisited.html#cb2827-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-7-1.png" width="672"  /></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What does your grouped boxplot say about likely
@@ -468,9 +470,9 @@ it? You may want to create a column that is the factor version of
 </ol>
 <p>Solution</p>
 <p>Following my own hint:</p>
-<div class="sourceCode" id="cb2820"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2820-1"><a href="analysis-of-variance-revisited.html#cb2820-1"></a>acidrain &lt;-<span class="st"> </span>acidrain <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">frph =</span> <span class="kw">factor</span>(rain_pH))</span>
-<span id="cb2820-2"><a href="analysis-of-variance-revisited.html#cb2820-2"></a>soil<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(soil_acidity <span class="op">~</span><span class="st"> </span>frph <span class="op">*</span><span class="st"> </span>soil_depth, <span class="dt">data =</span> acidrain)</span>
-<span id="cb2820-3"><a href="analysis-of-variance-revisited.html#cb2820-3"></a><span class="kw">summary</span>(soil<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2828"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2828-1"><a href="analysis-of-variance-revisited.html#cb2828-1"></a>acidrain &lt;-<span class="st"> </span>acidrain <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">frph =</span> <span class="kw">factor</span>(rain_pH))</span>
+<span id="cb2828-2"><a href="analysis-of-variance-revisited.html#cb2828-2"></a>soil<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(soil_acidity <span class="op">~</span><span class="st"> </span>frph <span class="op">*</span><span class="st"> </span>soil_depth, <span class="dt">data =</span> acidrain)</span>
+<span id="cb2828-3"><a href="analysis-of-variance-revisited.html#cb2828-3"></a><span class="kw">summary</span>(soil<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##                 Df Sum Sq Mean Sq F value Pr(&gt;F)
 ## frph             1 0.0304 0.03042   0.759  0.401
 ## soil_depth       2 0.0671 0.03357   0.838  0.457
@@ -482,8 +484,8 @@ on the boxplot is based on <em>three</em> observations only. So the
 interaction would have to be a lot bigger to be significant.</p>
 <p>The usual procedure after finding a non-significant
 interaction is to take it out:</p>
-<div class="sourceCode" id="cb2822"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2822-1"><a href="analysis-of-variance-revisited.html#cb2822-1"></a>soil<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(soil<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>frph<span class="op">:</span>soil_depth)</span>
-<span id="cb2822-2"><a href="analysis-of-variance-revisited.html#cb2822-2"></a><span class="kw">summary</span>(soil<span class="fl">.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2830"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2830-1"><a href="analysis-of-variance-revisited.html#cb2830-1"></a>soil<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(soil<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>frph<span class="op">:</span>soil_depth)</span>
+<span id="cb2830-2"><a href="analysis-of-variance-revisited.html#cb2830-2"></a><span class="kw">summary</span>(soil<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)
 ## frph         1 0.0304 0.03042   0.871  0.366
 ## soil_depth   2 0.0671 0.03357   0.962  0.406
@@ -512,8 +514,8 @@ have what you were expecting.</li>
 </ol>
 <p>Solution</p>
 <p>Aligned columns separated by spaces, so <code>read_table</code>:</p>
-<div class="sourceCode" id="cb2824"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2824-1"><a href="analysis-of-variance-revisited.html#cb2824-1"></a>my_url &lt;-<span class="st"> &quot;https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt&quot;</span></span>
-<span id="cb2824-2"><a href="analysis-of-variance-revisited.html#cb2824-2"></a>hayfever &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb2832"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2832-1"><a href="analysis-of-variance-revisited.html#cb2832-1"></a>my_url &lt;-<span class="st"> &quot;https://www.utsc.utoronto.ca/~butler/d29/hayfever.txt&quot;</span></span>
+<span id="cb2832-2"><a href="analysis-of-variance-revisited.html#cb2832-2"></a>hayfever &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   relief = col_double(),
@@ -521,7 +523,7 @@ have what you were expecting.</li>
 ##   b = col_character(),
 ##   replicate = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2826"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2826-1"><a href="analysis-of-variance-revisited.html#cb2826-1"></a>hayfever</span></code></pre></div>
+<div class="sourceCode" id="cb2834"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2834-1"><a href="analysis-of-variance-revisited.html#cb2834-1"></a>hayfever</span></code></pre></div>
 <pre><code>## # A tibble: 36 x 4
 ##    relief a     b      replicate
 ##     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
@@ -552,11 +554,11 @@ frame and display that.</li>
 </ol>
 <p>Solution</p>
 <p>This is a group-by and summarize, but there are two active ingredients and they <em>both</em> have to go in the group-by:</p>
-<div class="sourceCode" id="cb2828"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2828-1"><a href="analysis-of-variance-revisited.html#cb2828-1"></a>hayfever <span class="op">%&gt;%</span></span>
-<span id="cb2828-2"><a href="analysis-of-variance-revisited.html#cb2828-2"></a><span class="st">  </span><span class="kw">group_by</span>(a, b) <span class="op">%&gt;%</span></span>
-<span id="cb2828-3"><a href="analysis-of-variance-revisited.html#cb2828-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(relief)) -&gt;<span class="st"> </span>d</span></code></pre></div>
+<div class="sourceCode" id="cb2836"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2836-1"><a href="analysis-of-variance-revisited.html#cb2836-1"></a>hayfever <span class="op">%&gt;%</span></span>
+<span id="cb2836-2"><a href="analysis-of-variance-revisited.html#cb2836-2"></a><span class="st">  </span><span class="kw">group_by</span>(a, b) <span class="op">%&gt;%</span></span>
+<span id="cb2836-3"><a href="analysis-of-variance-revisited.html#cb2836-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(relief)) -&gt;<span class="st"> </span>d</span></code></pre></div>
 <pre><code>## `summarise()` regrouping output by &#39;a&#39; (override with `.groups` argument)</code></pre>
-<div class="sourceCode" id="cb2830"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2830-1"><a href="analysis-of-variance-revisited.html#cb2830-1"></a>d</span></code></pre></div>
+<div class="sourceCode" id="cb2838"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2838-1"><a href="analysis-of-variance-revisited.html#cb2838-1"></a>d</span></code></pre></div>
 <pre><code>## # A tibble: 9 x 3
 ## # Groups:   a [3]
 ##   a      b          m
@@ -574,12 +576,12 @@ frame and display that.</li>
 have put brackets around my whole pipeline to display its result, but
 I still need to save the data frame <code>d</code> to use in a moment.</p>
 <p>These levels are in the wrong logical order, but they are in the right order in the original data frame, so we can use <code>fct_inorder</code> first, thus:</p>
-<div class="sourceCode" id="cb2832"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2832-1"><a href="analysis-of-variance-revisited.html#cb2832-1"></a>hayfever <span class="op">%&gt;%</span></span>
-<span id="cb2832-2"><a href="analysis-of-variance-revisited.html#cb2832-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="kw">fct_inorder</span>(a), <span class="dt">b =</span> <span class="kw">fct_inorder</span>(b)) <span class="op">%&gt;%</span></span>
-<span id="cb2832-3"><a href="analysis-of-variance-revisited.html#cb2832-3"></a><span class="st">  </span><span class="kw">group_by</span>(a, b) <span class="op">%&gt;%</span></span>
-<span id="cb2832-4"><a href="analysis-of-variance-revisited.html#cb2832-4"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(relief)) -&gt;<span class="st"> </span>d2</span></code></pre></div>
+<div class="sourceCode" id="cb2840"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2840-1"><a href="analysis-of-variance-revisited.html#cb2840-1"></a>hayfever <span class="op">%&gt;%</span></span>
+<span id="cb2840-2"><a href="analysis-of-variance-revisited.html#cb2840-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="kw">fct_inorder</span>(a), <span class="dt">b =</span> <span class="kw">fct_inorder</span>(b)) <span class="op">%&gt;%</span></span>
+<span id="cb2840-3"><a href="analysis-of-variance-revisited.html#cb2840-3"></a><span class="st">  </span><span class="kw">group_by</span>(a, b) <span class="op">%&gt;%</span></span>
+<span id="cb2840-4"><a href="analysis-of-variance-revisited.html#cb2840-4"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(relief)) -&gt;<span class="st"> </span>d2</span></code></pre></div>
 <pre><code>## `summarise()` regrouping output by &#39;a&#39; (override with `.groups` argument)</code></pre>
-<div class="sourceCode" id="cb2834"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2834-1"><a href="analysis-of-variance-revisited.html#cb2834-1"></a>d2</span></code></pre></div>
+<div class="sourceCode" id="cb2842"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2842-1"><a href="analysis-of-variance-revisited.html#cb2842-1"></a>d2</span></code></pre></div>
 <pre><code>## # A tibble: 9 x 3
 ## # Groups:   a [3]
 ##   a      b          m
@@ -600,16 +602,16 @@ I still need to save the data frame <code>d</code> to use in a moment.</p>
 <p>My column of mean relief values is called <code>m</code>. Use whatever
 name you gave it. I’m going to use my proper-order data frame for
 this:</p>
-<div class="sourceCode" id="cb2836"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2836-1"><a href="analysis-of-variance-revisited.html#cb2836-1"></a><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></span>
-<span id="cb2836-2"><a href="analysis-of-variance-revisited.html#cb2836-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2844"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2844-1"><a href="analysis-of-variance-revisited.html#cb2844-1"></a><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></span>
+<span id="cb2844-2"><a href="analysis-of-variance-revisited.html#cb2844-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
 <p>Or, you probably had this:</p>
-<div class="sourceCode" id="cb2837"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2837-1"><a href="analysis-of-variance-revisited.html#cb2837-1"></a><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></span>
-<span id="cb2837-2"><a href="analysis-of-variance-revisited.html#cb2837-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2845"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2845-1"><a href="analysis-of-variance-revisited.html#cb2845-1"></a><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></span>
+<span id="cb2845-2"><a href="analysis-of-variance-revisited.html#cb2845-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-14-1.png" width="672"  /></p>
 <p>Since <code>a</code> and <code>b</code> both have three levels, you could just as well use them the other way around:</p>
-<div class="sourceCode" id="cb2838"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2838-1"><a href="analysis-of-variance-revisited.html#cb2838-1"></a><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> b, <span class="dt">y =</span> m, <span class="dt">colour =</span> a, <span class="dt">group =</span> a)) <span class="op">+</span></span>
-<span id="cb2838-2"><a href="analysis-of-variance-revisited.html#cb2838-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2846"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2846-1"><a href="analysis-of-variance-revisited.html#cb2846-1"></a><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> b, <span class="dt">y =</span> m, <span class="dt">colour =</span> a, <span class="dt">group =</span> a)) <span class="op">+</span></span>
+<span id="cb2846-2"><a href="analysis-of-variance-revisited.html#cb2846-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-15-1.png" width="672"  /></p>
 <p>The plot looks different depending on how you draw it, but the
 conclusion from it (below) will be the same.</p>
@@ -628,9 +630,9 @@ doesn’t show. Another idea is to add the data to the interaction
 plot, colour-coded in the same way. I would do this by taking out
 the <code>geom_point</code> for the means and add one instead for the
 data, taken from the original data frame:</p>
-<div class="sourceCode" id="cb2839"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2839-1"><a href="analysis-of-variance-revisited.html#cb2839-1"></a><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></span>
-<span id="cb2839-2"><a href="analysis-of-variance-revisited.html#cb2839-2"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb2839-3"><a href="analysis-of-variance-revisited.html#cb2839-3"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> hayfever, <span class="kw">aes</span>(<span class="dt">y =</span> relief))</span></code></pre></div>
+<div class="sourceCode" id="cb2847"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2847-1"><a href="analysis-of-variance-revisited.html#cb2847-1"></a><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></span>
+<span id="cb2847-2"><a href="analysis-of-variance-revisited.html#cb2847-2"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb2847-3"><a href="analysis-of-variance-revisited.html#cb2847-3"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> hayfever, <span class="kw">aes</span>(<span class="dt">y =</span> relief))</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-16-1.png" width="672"  /></p>
 <p>Technique: for that last <code>geom_point</code>, put in anything that
 changes: a new data frame, and a new <code>y</code> for the plot, but the
@@ -643,8 +645,8 @@ interaction is real and will be significant.</p>
 <li>Run an analysis of variance with interaction. What do you conclude?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2840"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2840-1"><a href="analysis-of-variance-revisited.html#cb2840-1"></a>hayfever<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(relief <span class="op">~</span><span class="st"> </span>a <span class="op">*</span><span class="st"> </span>b, <span class="dt">data =</span> hayfever)</span>
-<span id="cb2840-2"><a href="analysis-of-variance-revisited.html#cb2840-2"></a><span class="kw">summary</span>(hayfever<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2848"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2848-1"><a href="analysis-of-variance-revisited.html#cb2848-1"></a>hayfever<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(relief <span class="op">~</span><span class="st"> </span>a <span class="op">*</span><span class="st"> </span>b, <span class="dt">data =</span> hayfever)</span>
+<span id="cb2848-2"><a href="analysis-of-variance-revisited.html#cb2848-2"></a><span class="kw">summary</span>(hayfever<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)    
 ## a            2 220.02  110.01  1827.9 &lt;2e-16 ***
 ## b            2 123.66   61.83  1027.3 &lt;2e-16 ***
@@ -661,10 +663,10 @@ an appropriate Tukey, if warranted.)</li>
 </ol>
 <p>Solution</p>
 <p>First, we pull out only the data where A is <code>medium</code>, and then we do a one-way analysis of B on that data. This is the slick way, though you can certainly save the result of <code>filter</code> first:</p>
-<div class="sourceCode" id="cb2842"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2842-1"><a href="analysis-of-variance-revisited.html#cb2842-1"></a>hayfever <span class="op">%&gt;%</span></span>
-<span id="cb2842-2"><a href="analysis-of-variance-revisited.html#cb2842-2"></a><span class="st">  </span><span class="kw">filter</span>(a <span class="op">==</span><span class="st"> &quot;medium&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb2842-3"><a href="analysis-of-variance-revisited.html#cb2842-3"></a><span class="st">  </span><span class="kw">aov</span>(relief <span class="op">~</span><span class="st"> </span>b, <span class="dt">data =</span> .) -&gt;<span class="st"> </span>simple_medium</span>
-<span id="cb2842-4"><a href="analysis-of-variance-revisited.html#cb2842-4"></a><span class="kw">summary</span>(simple_medium)</span></code></pre></div>
+<div class="sourceCode" id="cb2850"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2850-1"><a href="analysis-of-variance-revisited.html#cb2850-1"></a>hayfever <span class="op">%&gt;%</span></span>
+<span id="cb2850-2"><a href="analysis-of-variance-revisited.html#cb2850-2"></a><span class="st">  </span><span class="kw">filter</span>(a <span class="op">==</span><span class="st"> &quot;medium&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2850-3"><a href="analysis-of-variance-revisited.html#cb2850-3"></a><span class="st">  </span><span class="kw">aov</span>(relief <span class="op">~</span><span class="st"> </span>b, <span class="dt">data =</span> .) -&gt;<span class="st"> </span>simple_medium</span>
+<span id="cb2850-4"><a href="analysis-of-variance-revisited.html#cb2850-4"></a><span class="kw">summary</span>(simple_medium)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## b            2  34.16  17.081   262.8 1.04e-08 ***
 ## Residuals    9   0.59   0.065                     
@@ -672,7 +674,7 @@ an appropriate Tukey, if warranted.)</li>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>There is definitely some effect of ingredient B when A is medium. What
 is it? Tukey will tell us:</p>
-<div class="sourceCode" id="cb2844"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2844-1"><a href="analysis-of-variance-revisited.html#cb2844-1"></a><span class="kw">TukeyHSD</span>(simple_medium)</span></code></pre></div>
+<div class="sourceCode" id="cb2852"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2852-1"><a href="analysis-of-variance-revisited.html#cb2852-1"></a><span class="kw">TukeyHSD</span>(simple_medium)</span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -689,16 +691,16 @@ is it? Tukey will tell us:</p>
 </ol>
 <p>Solution</p>
 <p>Same idea: pull out only the data where A is <code>high</code>, do a one-way analysis of B, and do Tukey if needed:</p>
-<div class="sourceCode" id="cb2846"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2846-1"><a href="analysis-of-variance-revisited.html#cb2846-1"></a>hayfever <span class="op">%&gt;%</span></span>
-<span id="cb2846-2"><a href="analysis-of-variance-revisited.html#cb2846-2"></a><span class="st">  </span><span class="kw">filter</span>(a <span class="op">==</span><span class="st"> &quot;high&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb2846-3"><a href="analysis-of-variance-revisited.html#cb2846-3"></a><span class="st">  </span><span class="kw">aov</span>(relief <span class="op">~</span><span class="st"> </span>b, <span class="dt">data =</span> .) -&gt;<span class="st"> </span>simple_high</span>
-<span id="cb2846-4"><a href="analysis-of-variance-revisited.html#cb2846-4"></a><span class="kw">summary</span>(simple_high)</span></code></pre></div>
+<div class="sourceCode" id="cb2854"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2854-1"><a href="analysis-of-variance-revisited.html#cb2854-1"></a>hayfever <span class="op">%&gt;%</span></span>
+<span id="cb2854-2"><a href="analysis-of-variance-revisited.html#cb2854-2"></a><span class="st">  </span><span class="kw">filter</span>(a <span class="op">==</span><span class="st"> &quot;high&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2854-3"><a href="analysis-of-variance-revisited.html#cb2854-3"></a><span class="st">  </span><span class="kw">aov</span>(relief <span class="op">~</span><span class="st"> </span>b, <span class="dt">data =</span> .) -&gt;<span class="st"> </span>simple_high</span>
+<span id="cb2854-4"><a href="analysis-of-variance-revisited.html#cb2854-4"></a><span class="kw">summary</span>(simple_high)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## b            2 107.02   53.51     796 7.49e-11 ***
 ## Residuals    9   0.61    0.07                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb2848"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2848-1"><a href="analysis-of-variance-revisited.html#cb2848-1"></a><span class="kw">TukeyHSD</span>(simple_high)</span></code></pre></div>
+<div class="sourceCode" id="cb2856"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2856-1"><a href="analysis-of-variance-revisited.html#cb2856-1"></a><span class="kw">TukeyHSD</span>(simple_high)</span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -749,8 +751,8 @@ does matter, so the first thing we have to do is to re-do the
 display it. This is the untidy format, so name it appropriately:</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2850"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2850-1"><a href="analysis-of-variance-revisited.html#cb2850-1"></a>my_url &lt;-<span class="st"> &quot;http://individual.utoronto.ca/kbutler/stad29/caffeine.csv&quot;</span></span>
-<span id="cb2850-2"><a href="analysis-of-variance-revisited.html#cb2850-2"></a>caffeine.untidy &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb2858"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2858-1"><a href="analysis-of-variance-revisited.html#cb2858-1"></a>my_url &lt;-<span class="st"> &quot;http://individual.utoronto.ca/kbutler/stad29/caffeine.csv&quot;</span></span>
+<span id="cb2858-2"><a href="analysis-of-variance-revisited.html#cb2858-2"></a>caffeine.untidy &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Sub = col_double(),
@@ -758,7 +760,7 @@ display it. This is the untidy format, so name it appropriately:</li>
 ##   Moderate = col_double(),
 ##   None = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2852"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2852-1"><a href="analysis-of-variance-revisited.html#cb2852-1"></a>caffeine.untidy</span></code></pre></div>
+<div class="sourceCode" id="cb2860"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2860-1"><a href="analysis-of-variance-revisited.html#cb2860-1"></a>caffeine.untidy</span></code></pre></div>
 <pre><code>## # A tibble: 12 x 4
 ##      Sub  High Moderate  None
 ##    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
@@ -783,9 +785,9 @@ results. What has changed from before?</li>
 </ol>
 <p>Solution</p>
 <p>We’ll save into <code>caffeine</code> again:</p>
-<div class="sourceCode" id="cb2854"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2854-1"><a href="analysis-of-variance-revisited.html#cb2854-1"></a>caffeine.untidy <span class="op">%&gt;%</span></span>
-<span id="cb2854-2"><a href="analysis-of-variance-revisited.html#cb2854-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>Sub, <span class="dt">names_to=</span><span class="st">&quot;amount&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;score&quot;</span>, <span class="dt">names_ptypes =</span> <span class="kw">list</span>(<span class="dt">amount=</span><span class="kw">factor</span>())) -&gt;<span class="st"> </span>caffeine</span>
-<span id="cb2854-3"><a href="analysis-of-variance-revisited.html#cb2854-3"></a>caffeine</span></code></pre></div>
+<div class="sourceCode" id="cb2862"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2862-1"><a href="analysis-of-variance-revisited.html#cb2862-1"></a>caffeine.untidy <span class="op">%&gt;%</span></span>
+<span id="cb2862-2"><a href="analysis-of-variance-revisited.html#cb2862-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>Sub, <span class="dt">names_to=</span><span class="st">&quot;amount&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;score&quot;</span>, <span class="dt">names_ptypes =</span> <span class="kw">list</span>(<span class="dt">amount=</span><span class="kw">factor</span>())) -&gt;<span class="st"> </span>caffeine</span>
+<span id="cb2862-3"><a href="analysis-of-variance-revisited.html#cb2862-3"></a>caffeine</span></code></pre></div>
 <pre><code>## # A tibble: 36 x 3
 ##      Sub amount   score
 ##    &lt;dbl&gt; &lt;fct&gt;    &lt;dbl&gt;
@@ -812,14 +814,14 @@ not doing so.</p>
 <p>Solution</p>
 <p>Extra: I’m going to run the ANOVA the “old way” first, so that we can
 compare results. You don’t need to do this:</p>
-<div class="sourceCode" id="cb2856"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2856-1"><a href="analysis-of-variance-revisited.html#cb2856-1"></a>caffeine.old &lt;-<span class="st"> </span><span class="kw">aov</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
-<span id="cb2856-2"><a href="analysis-of-variance-revisited.html#cb2856-2"></a><span class="kw">summary</span>(caffeine.old)</span></code></pre></div>
+<div class="sourceCode" id="cb2864"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2864-1"><a href="analysis-of-variance-revisited.html#cb2864-1"></a>caffeine.old &lt;-<span class="st"> </span><span class="kw">aov</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
+<span id="cb2864-2"><a href="analysis-of-variance-revisited.html#cb2864-2"></a><span class="kw">summary</span>(caffeine.old)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
 ## amount       2  477.7  238.86   3.986 0.0281 *
 ## Residuals   33 1977.5   59.92                 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb2858"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2858-1"><a href="analysis-of-variance-revisited.html#cb2858-1"></a><span class="kw">TukeyHSD</span>(caffeine.old)</span></code></pre></div>
+<div class="sourceCode" id="cb2866"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2866-1"><a href="analysis-of-variance-revisited.html#cb2866-1"></a><span class="kw">TukeyHSD</span>(caffeine.old)</span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -833,8 +835,8 @@ compare results. You don’t need to do this:</p>
 <p>End of digression.</p>
 <p>Now we’ll do it using <code>lm</code>, with contrasts later, and see how
 things change:</p>
-<div class="sourceCode" id="cb2860"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2860-1"><a href="analysis-of-variance-revisited.html#cb2860-1"></a>caffeine<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
-<span id="cb2860-2"><a href="analysis-of-variance-revisited.html#cb2860-2"></a><span class="kw">summary</span>(caffeine<span class="fl">.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2868"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2868-1"><a href="analysis-of-variance-revisited.html#cb2868-1"></a>caffeine<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
+<span id="cb2868-2"><a href="analysis-of-variance-revisited.html#cb2868-2"></a><span class="kw">summary</span>(caffeine<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ amount, data = caffeine)
@@ -865,7 +867,7 @@ since high was the baseline. This is, as we saw from Tukey,
 significant. But it is not what I said we wanted to test.</p>
 <p>Extra: in case you’re curious, you can also get the regular analysis of
 variance table as below. <code>anova</code> is multi-talented:</p>
-<div class="sourceCode" id="cb2862"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2862-1"><a href="analysis-of-variance-revisited.html#cb2862-1"></a><span class="kw">anova</span>(caffeine<span class="fl">.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2870"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2870-1"><a href="analysis-of-variance-revisited.html#cb2870-1"></a><span class="kw">anova</span>(caffeine<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: score
@@ -879,7 +881,7 @@ often what you want to do next. That’s why we used <code>aov</code> before.</p
 <p>Since we have a regression model (albeit a peculiar one), we can test
 whether we should remove <code>amount</code> (that is, whether it has any
 impact on test scores) this way too:</p>
-<div class="sourceCode" id="cb2864"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2864-1"><a href="analysis-of-variance-revisited.html#cb2864-1"></a><span class="kw">drop1</span>(caffeine<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2872"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2872-1"><a href="analysis-of-variance-revisited.html#cb2872-1"></a><span class="kw">drop1</span>(caffeine<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -896,7 +898,7 @@ that R has them.</li>
 </ol>
 <p>Solution</p>
 <p>Count them, or find the distinct ones:</p>
-<div class="sourceCode" id="cb2866"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2866-1"><a href="analysis-of-variance-revisited.html#cb2866-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(amount) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb2874"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2874-1"><a href="analysis-of-variance-revisited.html#cb2874-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(amount) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>())</span></code></pre></div>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   amount   count
@@ -905,7 +907,7 @@ that R has them.</li>
 ## 2 Moderate    12
 ## 3 None        12</code></pre>
 <p>or there is this shortcut to the above:</p>
-<div class="sourceCode" id="cb2869"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2869-1"><a href="analysis-of-variance-revisited.html#cb2869-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</span></code></pre></div>
+<div class="sourceCode" id="cb2877"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2877-1"><a href="analysis-of-variance-revisited.html#cb2877-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   amount       n
 ##   &lt;fct&gt;    &lt;int&gt;
@@ -913,7 +915,7 @@ that R has them.</li>
 ## 2 Moderate    12
 ## 3 None        12</code></pre>
 <p>Or</p>
-<div class="sourceCode" id="cb2871"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2871-1"><a href="analysis-of-variance-revisited.html#cb2871-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(amount)</span></code></pre></div>
+<div class="sourceCode" id="cb2879"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2879-1"><a href="analysis-of-variance-revisited.html#cb2879-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(amount)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 1
 ##   amount  
 ##   &lt;fct&gt;   
@@ -924,10 +926,10 @@ that R has them.</li>
 <p>These would all have worked if <code>amount</code> had been text rather a
 factor. If you have a genuine <code>factor</code>, you can also ask for
 its <code>levels</code>:</p>
-<div class="sourceCode" id="cb2873"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2873-1"><a href="analysis-of-variance-revisited.html#cb2873-1"></a><span class="kw">with</span>(caffeine, <span class="kw">levels</span>(amount))</span></code></pre></div>
+<div class="sourceCode" id="cb2881"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2881-1"><a href="analysis-of-variance-revisited.html#cb2881-1"></a><span class="kw">with</span>(caffeine, <span class="kw">levels</span>(amount))</span></code></pre></div>
 <pre><code>## [1] &quot;High&quot;     &quot;Moderate&quot; &quot;None&quot;</code></pre>
 <p>or <code>summary</code> will count them up and list them:</p>
-<div class="sourceCode" id="cb2875"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2875-1"><a href="analysis-of-variance-revisited.html#cb2875-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(amount) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2883"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2883-1"><a href="analysis-of-variance-revisited.html#cb2883-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(amount) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
 <pre><code>##       amount  
 ##  High    :12  
 ##  Moderate:12  
@@ -945,26 +947,26 @@ High and a <span class="math inline">\(-1\)</span> to represent Moderate.</li>
 </ol>
 <p>Solution</p>
 <p>Put a 0 in for None:</p>
-<div class="sourceCode" id="cb2877"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2877-1"><a href="analysis-of-variance-revisited.html#cb2877-1"></a>c.hm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2885"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2885-1"><a href="analysis-of-variance-revisited.html#cb2885-1"></a>c.hm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">0</span>)</span></code></pre></div>
 <p>Having the 1 and the <span class="math inline">\(-1\)</span> the other way around would also have been fine.</p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Create a contrast that compares “any caffeine” against
 “none” by comparing None against the average of Moderate and High.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2878"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2878-1"><a href="analysis-of-variance-revisited.html#cb2878-1"></a>c.any &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">-0.5</span>, <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2886"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2886-1"><a href="analysis-of-variance-revisited.html#cb2886-1"></a>c.any &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">-0.5</span>, <span class="dv">1</span>)</span></code></pre></div>
 <p>Note that both our contrasts have coefficients that add up to zero, as
 they must:</p>
-<div class="sourceCode" id="cb2879"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2879-1"><a href="analysis-of-variance-revisited.html#cb2879-1"></a><span class="kw">sum</span>(c.hm)</span></code></pre></div>
+<div class="sourceCode" id="cb2887"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2887-1"><a href="analysis-of-variance-revisited.html#cb2887-1"></a><span class="kw">sum</span>(c.hm)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
-<div class="sourceCode" id="cb2881"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2881-1"><a href="analysis-of-variance-revisited.html#cb2881-1"></a><span class="kw">sum</span>(c.any)</span></code></pre></div>
+<div class="sourceCode" id="cb2889"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2889-1"><a href="analysis-of-variance-revisited.html#cb2889-1"></a><span class="kw">sum</span>(c.any)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <ol start="7" style="list-style-type: lower-alpha">
 <li>Verify that your two contrasts are orthogonal.</li>
 </ol>
 <p>Solution</p>
 <p>Multiply them together and check that what you get adds up to zero:</p>
-<div class="sourceCode" id="cb2883"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2883-1"><a href="analysis-of-variance-revisited.html#cb2883-1"></a><span class="kw">sum</span>(c.hm <span class="op">*</span><span class="st"> </span>c.any)</span></code></pre></div>
+<div class="sourceCode" id="cb2891"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2891-1"><a href="analysis-of-variance-revisited.html#cb2891-1"></a><span class="kw">sum</span>(c.hm <span class="op">*</span><span class="st"> </span>c.any)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>Zero, so orthogonal. You can check that writing <code>c.any</code> as
 <code>c(-1,-1,2)</code> would also work (and still be orthogonal with
@@ -976,15 +978,15 @@ they must:</p>
 called it).</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2885"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2885-1"><a href="analysis-of-variance-revisited.html#cb2885-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.hm, c.any)</span>
-<span id="cb2885-2"><a href="analysis-of-variance-revisited.html#cb2885-2"></a><span class="kw">contrasts</span>(caffeine<span class="op">$</span>amount) &lt;-<span class="st"> </span>m</span></code></pre></div>
+<div class="sourceCode" id="cb2893"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2893-1"><a href="analysis-of-variance-revisited.html#cb2893-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.hm, c.any)</span>
+<span id="cb2893-2"><a href="analysis-of-variance-revisited.html#cb2893-2"></a><span class="kw">contrasts</span>(caffeine<span class="op">$</span>amount) &lt;-<span class="st"> </span>m</span></code></pre></div>
 <ol style="list-style-type: lower-roman">
 <li>Fit the ANOVA as an <code>lm</code>, and look at the
 <code>summary</code>. What do you conclude about your contrasts?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2886"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2886-1"><a href="analysis-of-variance-revisited.html#cb2886-1"></a>caff<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
-<span id="cb2886-2"><a href="analysis-of-variance-revisited.html#cb2886-2"></a><span class="kw">summary</span>(caff<span class="fl">.3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2894"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2894-1"><a href="analysis-of-variance-revisited.html#cb2894-1"></a>caff<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
+<span id="cb2894-2"><a href="analysis-of-variance-revisited.html#cb2894-2"></a><span class="kw">summary</span>(caff<span class="fl">.3</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ amount, data = caffeine)
@@ -1020,11 +1022,11 @@ contrast tells us that having any caffeine is better than having none.</p>
 caffeine and moderate vs. none as your two contrasts?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb2888"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2888-1"><a href="analysis-of-variance-revisited.html#cb2888-1"></a>c.hm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">0</span>)</span>
-<span id="cb2888-2"><a href="analysis-of-variance-revisited.html#cb2888-2"></a>c.mn &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">-1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2896"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2896-1"><a href="analysis-of-variance-revisited.html#cb2896-1"></a>c.hm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">0</span>)</span>
+<span id="cb2896-2"><a href="analysis-of-variance-revisited.html#cb2896-2"></a>c.mn &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">-1</span>)</span></code></pre></div>
 <p>So far so good: the coefficients add up to zero and they reflect the
 right comparisons. But now:</p>
-<div class="sourceCode" id="cb2889"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2889-1"><a href="analysis-of-variance-revisited.html#cb2889-1"></a><span class="kw">sum</span>(c.hm <span class="op">*</span><span class="st"> </span>c.mn)</span></code></pre></div>
+<div class="sourceCode" id="cb2897"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2897-1"><a href="analysis-of-variance-revisited.html#cb2897-1"></a><span class="kw">sum</span>(c.hm <span class="op">*</span><span class="st"> </span>c.mn)</span></code></pre></div>
 <pre><code>## [1] -1</code></pre>
 <p>This does <em>not</em> add up to zero, so these two contrasts are not
 orthogonal, and we can’t do what we just did. R will give us an answer
@@ -1042,9 +1044,9 @@ me try to follow his method.</p>
 <code>c.mn</code> have 3 things in them (3 groups), we need to add a
 “dummy” 3rd contrast to give us a <span class="math inline">\(3\times 3\)</span> array of numbers:
 <label for="tufte-mn-179" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-179" class="margin-toggle"><span class="marginnote">which we are going to invert, as a matrix. But I get ahead of myself.</span></p>
-<div class="sourceCode" id="cb2891"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2891-1"><a href="analysis-of-variance-revisited.html#cb2891-1"></a>c0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>)</span>
-<span id="cb2891-2"><a href="analysis-of-variance-revisited.html#cb2891-2"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c0, c.hm, c.mn)</span>
-<span id="cb2891-3"><a href="analysis-of-variance-revisited.html#cb2891-3"></a>m</span></code></pre></div>
+<div class="sourceCode" id="cb2899"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2899-1"><a href="analysis-of-variance-revisited.html#cb2899-1"></a>c0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb2899-2"><a href="analysis-of-variance-revisited.html#cb2899-2"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c0, c.hm, c.mn)</span>
+<span id="cb2899-3"><a href="analysis-of-variance-revisited.html#cb2899-3"></a>m</span></code></pre></div>
 <pre><code>##      c0 c.hm c.mn
 ## [1,]  1    1    0
 ## [2,]  1   -1    1
@@ -1055,17 +1057,17 @@ the extra dummy one. Next we invert this matrix of contrasts,
 which we can do because it’s square. <code>t(m)</code> means
 “take the matrix transpose of <code>m</code>”, if you’re trying to keep up at the
 back, and <code>solve</code> finds a matrix inverse:</p>
-<div class="sourceCode" id="cb2893"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2893-1"><a href="analysis-of-variance-revisited.html#cb2893-1"></a>minv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(m))</span></code></pre></div>
+<div class="sourceCode" id="cb2901"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2901-1"><a href="analysis-of-variance-revisited.html#cb2901-1"></a>minv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(m))</span></code></pre></div>
 <p>and then we remove the first column, which represents the contrast
 that we didn’t want anyway (what Howell calls “deaugmenting”):
 <label for="tufte-mn-180" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-180" class="margin-toggle"><span class="marginnote">We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one. You can access data frames this way too, but the Tidyverse makes it much easier.</span></p>
-<div class="sourceCode" id="cb2894"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2894-1"><a href="analysis-of-variance-revisited.html#cb2894-1"></a>m.contr &lt;-<span class="st"> </span>minv[, <span class="dv">-1</span>]</span>
-<span id="cb2894-2"><a href="analysis-of-variance-revisited.html#cb2894-2"></a>m.contr</span></code></pre></div>
+<div class="sourceCode" id="cb2902"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2902-1"><a href="analysis-of-variance-revisited.html#cb2902-1"></a>m.contr &lt;-<span class="st"> </span>minv[, <span class="dv">-1</span>]</span>
+<span id="cb2902-2"><a href="analysis-of-variance-revisited.html#cb2902-2"></a>m.contr</span></code></pre></div>
 <pre><code>##            c.hm       c.mn
 ## [1,]  0.6666667  0.3333333
 ## [2,] -0.3333333  0.3333333
 ## [3,] -0.3333333 -0.6666667</code></pre>
-<div class="sourceCode" id="cb2896"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2896-1"><a href="analysis-of-variance-revisited.html#cb2896-1"></a><span class="kw">contrasts</span>(caffeine<span class="op">$</span>amount) &lt;-<span class="st"> </span>m.contr</span></code></pre></div>
+<div class="sourceCode" id="cb2904"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2904-1"><a href="analysis-of-variance-revisited.html#cb2904-1"></a><span class="kw">contrasts</span>(caffeine<span class="op">$</span>amount) &lt;-<span class="st"> </span>m.contr</span></code></pre></div>
 <p>The columns of <code>m.contr</code> are our new
 contrasts. Note that they appear to be something else: high vs. the
 average of moderate and none, and none vs. the average of moderate
@@ -1074,8 +1076,8 @@ and high. Note that they are actually
 used to test what we want. I think Howell is famous enough to be
 trusted.
 Now fit the model again:</p>
-<div class="sourceCode" id="cb2897"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2897-1"><a href="analysis-of-variance-revisited.html#cb2897-1"></a>caff<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
-<span id="cb2897-2"><a href="analysis-of-variance-revisited.html#cb2897-2"></a><span class="kw">summary</span>(caff<span class="fl">.4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2905"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2905-1"><a href="analysis-of-variance-revisited.html#cb2905-1"></a>caff<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
+<span id="cb2905-2"><a href="analysis-of-variance-revisited.html#cb2905-2"></a><span class="kw">summary</span>(caff<span class="fl">.4</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ amount, data = caffeine)
@@ -1135,15 +1137,15 @@ that the researcher wants to make?</li>
 <p>Separated by one space. There appear to be some strange quotes
 in there, but we’ll ignore those and see whether they cause any
 trouble:</p>
-<div class="sourceCode" id="cb2899"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2899-1"><a href="analysis-of-variance-revisited.html#cb2899-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt&quot;</span></span>
-<span id="cb2899-2"><a href="analysis-of-variance-revisited.html#cb2899-2"></a>studyhours &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2907"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2907-1"><a href="analysis-of-variance-revisited.html#cb2907-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/studyhours.txt&quot;</span></span>
+<span id="cb2907-2"><a href="analysis-of-variance-revisited.html#cb2907-2"></a>studyhours &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   id = col_double(),
 ##   major = col_character(),
 ##   hours = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2901"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2901-1"><a href="analysis-of-variance-revisited.html#cb2901-1"></a>studyhours</span></code></pre></div>
+<div class="sourceCode" id="cb2909"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2909-1"><a href="analysis-of-variance-revisited.html#cb2909-1"></a>studyhours</span></code></pre></div>
 <pre><code>## # A tibble: 75 x 3
 ##       id major hours
 ##    &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
@@ -1159,7 +1161,7 @@ trouble:</p>
 ## 10    10 math     11
 ## # … with 65 more rows</code></pre>
 <p>So far so good. 75 students, in tidy format.</p>
-<div class="sourceCode" id="cb2903"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2903-1"><a href="analysis-of-variance-revisited.html#cb2903-1"></a><span class="kw">ggplot</span>(studyhours, <span class="kw">aes</span>(<span class="dt">x =</span> major, <span class="dt">y =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2911"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2911-1"><a href="analysis-of-variance-revisited.html#cb2911-1"></a><span class="kw">ggplot</span>(studyhours, <span class="kw">aes</span>(<span class="dt">x =</span> major, <span class="dt">y =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-45-1.png" width="672"  /></p>
 <p>This suggests that the math students study more than the others, but
 the English and social science students study about the same amount.</p>
@@ -1172,7 +1174,7 @@ like square root, perhaps. The spreads are not that unequal, but it
 lowest on both.</p>
 <p>Extra: Box-Cox also works on ANOVA-type data, since that is an <code>lm</code>
 kind of model:</p>
-<div class="sourceCode" id="cb2904"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2904-1"><a href="analysis-of-variance-revisited.html#cb2904-1"></a><span class="kw">boxcox</span>(hours <span class="op">~</span><span class="st"> </span>major, <span class="dt">data =</span> studyhours)</span></code></pre></div>
+<div class="sourceCode" id="cb2912"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2912-1"><a href="analysis-of-variance-revisited.html#cb2912-1"></a><span class="kw">boxcox</span>(hours <span class="op">~</span><span class="st"> </span>major, <span class="dt">data =</span> studyhours)</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-46-1.png" width="672"  /></p>
 <p>This suggests that some kind of transformation would be a good idea
 (no transformation, power 1, is not supported by the data). My guess
@@ -1190,15 +1192,15 @@ Math against the average of the other two.)</li>
 <p>Solution</p>
 <p>We need to know what the categories of <code>major</code> are, so that
 we can set up the contrasts correctly, so let’s start with that:</p>
-<div class="sourceCode" id="cb2905"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2905-1"><a href="analysis-of-variance-revisited.html#cb2905-1"></a>studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(major) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2913"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2913-1"><a href="analysis-of-variance-revisited.html#cb2913-1"></a>studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(major) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
 <pre><code>##     major          
 ##  Length:75         
 ##  Class :character  
 ##  Mode  :character</code></pre>
 <p>Oh. Yeah. We never turned <code>major</code> into a factor. We’d better do
 that, and then try again:</p>
-<div class="sourceCode" id="cb2907"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2907-1"><a href="analysis-of-variance-revisited.html#cb2907-1"></a>studyhours &lt;-<span class="st"> </span>studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">major =</span> <span class="kw">factor</span>(major))</span>
-<span id="cb2907-2"><a href="analysis-of-variance-revisited.html#cb2907-2"></a>studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(major) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2915"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2915-1"><a href="analysis-of-variance-revisited.html#cb2915-1"></a>studyhours &lt;-<span class="st"> </span>studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">major =</span> <span class="kw">factor</span>(major))</span>
+<span id="cb2915-2"><a href="analysis-of-variance-revisited.html#cb2915-2"></a>studyhours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(major) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
 <pre><code>##      major   
 ##  english:25  
 ##  math   :25  
@@ -1208,7 +1210,7 @@ that, and then try again:</p>
 so we’ll do that first. Just set it up with a 1 for one of them and a
 <span class="math inline">\(-1\)</span> for the other and 0 for math, in the right order according to
 what the levels are, viz:</p>
-<div class="sourceCode" id="cb2909"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2909-1"><a href="analysis-of-variance-revisited.html#cb2909-1"></a>c.eng.socsci &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">-1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2917"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2917-1"><a href="analysis-of-variance-revisited.html#cb2917-1"></a>c.eng.socsci &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">-1</span>)</span></code></pre></div>
 <p>Or <code>c(-1,0,1)</code> would be just as good.</p>
 <p>The other one is a bit trickier, because you want math against the
 average of the others, like
@@ -1216,7 +1218,7 @@ average of the others, like
 This translates into contrast-ese like this, making sure to get Math
 in the middle where it belongs:
 <label for="tufte-mn-181" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-181" class="margin-toggle"><span class="marginnote">As I failed to do the first time.</span></p>
-<div class="sourceCode" id="cb2910"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2910-1"><a href="analysis-of-variance-revisited.html#cb2910-1"></a>c.math.others &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">-0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2918"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2918-1"><a href="analysis-of-variance-revisited.html#cb2918-1"></a>c.math.others &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">-0.5</span>)</span></code></pre></div>
 <p>The coefficients have to add up to zero, so I have to have two halves
 to balance my one 1. Or I can use two <span class="math inline">\(-1\)</span>s and a 2.</p>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -1225,7 +1227,7 @@ to balance my one 1. Or I can use two <span class="math inline">\(-1\)</span>s a
 <p>Solution</p>
 <p>Multiply them together (elementwise, which is how R does it)
 and show that what you get adds up to zero:</p>
-<div class="sourceCode" id="cb2911"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2911-1"><a href="analysis-of-variance-revisited.html#cb2911-1"></a><span class="kw">sum</span>(c.eng.socsci <span class="op">*</span><span class="st"> </span>c.math.others)</span></code></pre></div>
+<div class="sourceCode" id="cb2919"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2919-1"><a href="analysis-of-variance-revisited.html#cb2919-1"></a><span class="kw">sum</span>(c.eng.socsci <span class="op">*</span><span class="st"> </span>c.math.others)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>Zero. Orthogonal.</p>
 <p>So we are safely in “familiar” territory, not in the
@@ -1240,13 +1242,13 @@ data frame <code>studyhours</code> (or whatever you called it).</li>
 <p>Solution</p>
 <p>So, like the example in class (where the
 <code>contrasts(model)</code> was admittedly rather confusing):</p>
-<div class="sourceCode" id="cb2913"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2913-1"><a href="analysis-of-variance-revisited.html#cb2913-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.math.others, c.eng.socsci)</span>
-<span id="cb2913-2"><a href="analysis-of-variance-revisited.html#cb2913-2"></a>m</span></code></pre></div>
+<div class="sourceCode" id="cb2921"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2921-1"><a href="analysis-of-variance-revisited.html#cb2921-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.math.others, c.eng.socsci)</span>
+<span id="cb2921-2"><a href="analysis-of-variance-revisited.html#cb2921-2"></a>m</span></code></pre></div>
 <pre><code>##      c.math.others c.eng.socsci
 ## [1,]          -0.5            1
 ## [2,]           1.0            0
 ## [3,]          -0.5           -1</code></pre>
-<div class="sourceCode" id="cb2915"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2915-1"><a href="analysis-of-variance-revisited.html#cb2915-1"></a><span class="kw">contrasts</span>(studyhours<span class="op">$</span>major) &lt;-<span class="st"> </span>m</span></code></pre></div>
+<div class="sourceCode" id="cb2923"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2923-1"><a href="analysis-of-variance-revisited.html#cb2923-1"></a><span class="kw">contrasts</span>(studyhours<span class="op">$</span>major) &lt;-<span class="st"> </span>m</span></code></pre></div>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Fit the model using <code>lm</code>. What do you conclude about
 your contrasts?</li>
@@ -1255,8 +1257,8 @@ your contrasts?</li>
 <p>Pretend the ANOVA is a regression (though you can fit ANOVAs
 either way: we just used <code>aov</code> before because we were
 going to follow up with Tukey):</p>
-<div class="sourceCode" id="cb2916"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2916-1"><a href="analysis-of-variance-revisited.html#cb2916-1"></a>studyhours<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(hours <span class="op">~</span><span class="st"> </span>major, <span class="dt">data =</span> studyhours)</span>
-<span id="cb2916-2"><a href="analysis-of-variance-revisited.html#cb2916-2"></a><span class="kw">summary</span>(studyhours<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2924"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2924-1"><a href="analysis-of-variance-revisited.html#cb2924-1"></a>studyhours<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(hours <span class="op">~</span><span class="st"> </span>major, <span class="dt">data =</span> studyhours)</span>
+<span id="cb2924-2"><a href="analysis-of-variance-revisited.html#cb2924-2"></a><span class="kw">summary</span>(studyhours<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = hours ~ major, data = studyhours)
@@ -1303,7 +1305,7 @@ you run an ANOVA using <code>lm</code>, you get the ANOVA table by
 passing the fitted model object into <code>anova</code> rather than
 <code>summary</code>:
 <label for="tufte-mn-184" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-184" class="margin-toggle"><span class="marginnote"><em>anova</em> is one of R’s multi-purpose tools; what it does depends on what you feed it.</span></p>
-<div class="sourceCode" id="cb2918"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2918-1"><a href="analysis-of-variance-revisited.html#cb2918-1"></a><span class="kw">anova</span>(studyhours<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2926"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2926-1"><a href="analysis-of-variance-revisited.html#cb2926-1"></a><span class="kw">anova</span>(studyhours<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: hours
@@ -1316,15 +1318,15 @@ passing the fitted model object into <code>anova</code> rather than
 contrasts. (The example in class had four models of chainsaw, so 3 df
 for model, so 3 contrasts possible.) What if we don’t use all those
 contrasts up? Try it and see:</p>
-<div class="sourceCode" id="cb2920"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2920-1"><a href="analysis-of-variance-revisited.html#cb2920-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.math.others)</span>
-<span id="cb2920-2"><a href="analysis-of-variance-revisited.html#cb2920-2"></a>m</span></code></pre></div>
+<div class="sourceCode" id="cb2928"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2928-1"><a href="analysis-of-variance-revisited.html#cb2928-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.math.others)</span>
+<span id="cb2928-2"><a href="analysis-of-variance-revisited.html#cb2928-2"></a>m</span></code></pre></div>
 <pre><code>##      c.math.others
 ## [1,]          -0.5
 ## [2,]           1.0
 ## [3,]          -0.5</code></pre>
-<div class="sourceCode" id="cb2922"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2922-1"><a href="analysis-of-variance-revisited.html#cb2922-1"></a><span class="kw">contrasts</span>(studyhours<span class="op">$</span>major) &lt;-<span class="st"> </span>m</span>
-<span id="cb2922-2"><a href="analysis-of-variance-revisited.html#cb2922-2"></a>studyhours<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(hours <span class="op">~</span><span class="st"> </span>major, <span class="dt">data =</span> studyhours)</span>
-<span id="cb2922-3"><a href="analysis-of-variance-revisited.html#cb2922-3"></a><span class="kw">summary</span>(studyhours<span class="fl">.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2930"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2930-1"><a href="analysis-of-variance-revisited.html#cb2930-1"></a><span class="kw">contrasts</span>(studyhours<span class="op">$</span>major) &lt;-<span class="st"> </span>m</span>
+<span id="cb2930-2"><a href="analysis-of-variance-revisited.html#cb2930-2"></a>studyhours<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(hours <span class="op">~</span><span class="st"> </span>major, <span class="dt">data =</span> studyhours)</span>
+<span id="cb2930-3"><a href="analysis-of-variance-revisited.html#cb2930-3"></a><span class="kw">summary</span>(studyhours<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = hours ~ major, data = studyhours)
@@ -1355,12 +1357,12 @@ with categorical variables which are genuine factors, which we haven’t
 had much cause to do so far. But now we do. What we want to do is to
 <em>recode</em> the levels of <code>major</code>, which is done by
 <code>fct_recode</code>:</p>
-<div class="sourceCode" id="cb2924"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2924-1"><a href="analysis-of-variance-revisited.html#cb2924-1"></a>studyhoursx &lt;-<span class="st"> </span>studyhours <span class="op">%&gt;%</span></span>
-<span id="cb2924-2"><a href="analysis-of-variance-revisited.html#cb2924-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mathrest =</span> <span class="kw">fct_recode</span>(major,</span>
-<span id="cb2924-3"><a href="analysis-of-variance-revisited.html#cb2924-3"></a>    <span class="st">&quot;rest&quot;</span> =<span class="st"> &quot;english&quot;</span>,</span>
-<span id="cb2924-4"><a href="analysis-of-variance-revisited.html#cb2924-4"></a>    <span class="st">&quot;rest&quot;</span> =<span class="st"> &quot;socsci&quot;</span></span>
-<span id="cb2924-5"><a href="analysis-of-variance-revisited.html#cb2924-5"></a>  ))</span>
-<span id="cb2924-6"><a href="analysis-of-variance-revisited.html#cb2924-6"></a>studyhoursx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(mathrest)</span></code></pre></div>
+<div class="sourceCode" id="cb2932"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2932-1"><a href="analysis-of-variance-revisited.html#cb2932-1"></a>studyhoursx &lt;-<span class="st"> </span>studyhours <span class="op">%&gt;%</span></span>
+<span id="cb2932-2"><a href="analysis-of-variance-revisited.html#cb2932-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mathrest =</span> <span class="kw">fct_recode</span>(major,</span>
+<span id="cb2932-3"><a href="analysis-of-variance-revisited.html#cb2932-3"></a>    <span class="st">&quot;rest&quot;</span> =<span class="st"> &quot;english&quot;</span>,</span>
+<span id="cb2932-4"><a href="analysis-of-variance-revisited.html#cb2932-4"></a>    <span class="st">&quot;rest&quot;</span> =<span class="st"> &quot;socsci&quot;</span></span>
+<span id="cb2932-5"><a href="analysis-of-variance-revisited.html#cb2932-5"></a>  ))</span>
+<span id="cb2932-6"><a href="analysis-of-variance-revisited.html#cb2932-6"></a>studyhoursx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(mathrest)</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   mathrest     n
 ##   &lt;fct&gt;    &lt;int&gt;
@@ -1382,7 +1384,7 @@ had 25 students in each major. Now I have 25 students for whom
 <code>mathrest</code> is <code>math</code> (the math majors) and <span class="math inline">\(50=25+25\)</span>
 students for whom <code>mathrest</code> is <code>rest</code> (everyone else).</p>
 <p>Now, the <span class="math inline">\(t\)</span>-test.</p>
-<div class="sourceCode" id="cb2926"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2926-1"><a href="analysis-of-variance-revisited.html#cb2926-1"></a><span class="kw">t.test</span>(hours <span class="op">~</span><span class="st"> </span>mathrest, <span class="dt">data =</span> studyhoursx, <span class="dt">var.equal =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb2934"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2934-1"><a href="analysis-of-variance-revisited.html#cb2934-1"></a><span class="kw">t.test</span>(hours <span class="op">~</span><span class="st"> </span>mathrest, <span class="dt">data =</span> studyhoursx, <span class="dt">var.equal =</span> T)</span></code></pre></div>
 <pre><code>## 
 ## 	Two Sample t-test
 ## 
@@ -1475,15 +1477,15 @@ original researcher’s name was Smith).</p>
 <p>Solution</p>
 <p>The usual thing — read in the data appropriately and look at the
 data frame you got:</p>
-<div class="sourceCode" id="cb2928"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2928-1"><a href="analysis-of-variance-revisited.html#cb2928-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/smith.txt&quot;</span></span>
-<span id="cb2928-2"><a href="analysis-of-variance-revisited.html#cb2928-2"></a>smith &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2936"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2936-1"><a href="analysis-of-variance-revisited.html#cb2936-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/smith.txt&quot;</span></span>
+<span id="cb2936-2"><a href="analysis-of-variance-revisited.html#cb2936-2"></a>smith &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   id = col_double(),
 ##   context = col_character(),
 ##   words = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2930"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2930-1"><a href="analysis-of-variance-revisited.html#cb2930-1"></a>smith</span></code></pre></div>
+<div class="sourceCode" id="cb2938"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2938-1"><a href="analysis-of-variance-revisited.html#cb2938-1"></a>smith</span></code></pre></div>
 <pre><code>## # A tibble: 50 x 3
 ##       id context words
 ##    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
@@ -1507,8 +1509,8 @@ data frame now looks.</li>
 <p>Solution</p>
 <p>Use <code>mutate</code> and assign everything back to what it was
 before:</p>
-<div class="sourceCode" id="cb2932"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2932-1"><a href="analysis-of-variance-revisited.html#cb2932-1"></a>smith &lt;-<span class="st"> </span>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">context =</span> <span class="kw">factor</span>(context))</span>
-<span id="cb2932-2"><a href="analysis-of-variance-revisited.html#cb2932-2"></a>smith</span></code></pre></div>
+<div class="sourceCode" id="cb2940"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2940-1"><a href="analysis-of-variance-revisited.html#cb2940-1"></a>smith &lt;-<span class="st"> </span>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">context =</span> <span class="kw">factor</span>(context))</span>
+<span id="cb2940-2"><a href="analysis-of-variance-revisited.html#cb2940-2"></a>smith</span></code></pre></div>
 <pre><code>## # A tibble: 50 x 3
 ##       id context words
 ##    &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;
@@ -1533,10 +1535,10 @@ and what order are they in?</li>
 <p>You have lots of choices now, since <code>context</code> is a factor
 (and can also be treated as text).
 The most obvious factor-based way is this:</p>
-<div class="sourceCode" id="cb2934"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2934-1"><a href="analysis-of-variance-revisited.html#cb2934-1"></a><span class="kw">levels</span>(smith<span class="op">$</span>context)</span></code></pre></div>
+<div class="sourceCode" id="cb2942"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2942-1"><a href="analysis-of-variance-revisited.html#cb2942-1"></a><span class="kw">levels</span>(smith<span class="op">$</span>context)</span></code></pre></div>
 <pre><code>## [1] &quot;different&quot;  &quot;imaginary&quot;  &quot;photograph&quot; &quot;placebo&quot;    &quot;same&quot;</code></pre>
 <p>or use <code>summary</code>:</p>
-<div class="sourceCode" id="cb2936"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2936-1"><a href="analysis-of-variance-revisited.html#cb2936-1"></a>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(context) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2944"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2944-1"><a href="analysis-of-variance-revisited.html#cb2944-1"></a>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(context) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
 <pre><code>##        context  
 ##  different :10  
 ##  imaginary :10  
@@ -1544,7 +1546,7 @@ The most obvious factor-based way is this:</p>
 ##  placebo   :10  
 ##  same      :10</code></pre>
 <p>Or treat <code>context</code> as text, such as this way:</p>
-<div class="sourceCode" id="cb2938"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2938-1"><a href="analysis-of-variance-revisited.html#cb2938-1"></a>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(context)</span></code></pre></div>
+<div class="sourceCode" id="cb2946"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2946-1"><a href="analysis-of-variance-revisited.html#cb2946-1"></a>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(context)</span></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   context        n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -1555,7 +1557,7 @@ The most obvious factor-based way is this:</p>
 ## 5 same          10</code></pre>
 <p>These all display the contexts in alphabetical order.</p>
 <p>Or display the distinct values:</p>
-<div class="sourceCode" id="cb2940"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2940-1"><a href="analysis-of-variance-revisited.html#cb2940-1"></a>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(context)</span></code></pre></div>
+<div class="sourceCode" id="cb2948"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2948-1"><a href="analysis-of-variance-revisited.html#cb2948-1"></a>smith <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(context)</span></code></pre></div>
 <pre><code>## # A tibble: 5 x 1
 ##   context   
 ##   &lt;fct&gt;     
@@ -1565,7 +1567,7 @@ The most obvious factor-based way is this:</p>
 ## 4 photograph
 ## 5 placebo</code></pre>
 <p>or, without using the <code>tidyverse</code>,</p>
-<div class="sourceCode" id="cb2942"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2942-1"><a href="analysis-of-variance-revisited.html#cb2942-1"></a><span class="kw">unique</span>(smith<span class="op">$</span>context)</span></code></pre></div>
+<div class="sourceCode" id="cb2950"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2950-1"><a href="analysis-of-variance-revisited.html#cb2950-1"></a><span class="kw">unique</span>(smith<span class="op">$</span>context)</span></code></pre></div>
 <pre><code>## [1] same       different  imaginary  photograph placebo   
 ## Levels: different imaginary photograph placebo same</code></pre>
 <p>These two <em>don’t</em> display things in alphabetical order, because
@@ -1584,29 +1586,29 @@ easiest. The first one is actually the hardest.)</li>
 <ul>
 <li>Different and placebo have same means. These are 1st and 4th.</li>
 </ul>
-<div class="sourceCode" id="cb2944"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2944-1"><a href="analysis-of-variance-revisited.html#cb2944-1"></a>c4 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2952"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2952-1"><a href="analysis-of-variance-revisited.html#cb2952-1"></a>c4 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">0</span>)</span></code></pre></div>
 <ul>
 <li>Imaginary and photograph have same means. 2nd and 3rd:</li>
 </ul>
-<div class="sourceCode" id="cb2945"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2945-1"><a href="analysis-of-variance-revisited.html#cb2945-1"></a>c3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2953"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2953-1"><a href="analysis-of-variance-revisited.html#cb2953-1"></a>c3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span></code></pre></div>
 <ul>
 <li>Imaginary and photograph together same as <code>same</code>. This
 time we have two means being compared with one, so we need to give
 the two means half weight. 2nd and 3rd against 5th:</li>
 </ul>
-<div class="sourceCode" id="cb2946"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2946-1"><a href="analysis-of-variance-revisited.html#cb2946-1"></a>c2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">-1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2954"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2954-1"><a href="analysis-of-variance-revisited.html#cb2954-1"></a>c2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">-1</span>)</span></code></pre></div>
 <ul>
 <li>(Same and imaginary and photograph) vs. (different or placebo):
 2nd, 3rd and 5th with weight <span class="math inline">\(1/3\)</span> (three of them) against 1st and
 4th with weight <span class="math inline">\(1/2\)</span> (2 of them):</li>
 </ul>
-<div class="sourceCode" id="cb2947"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2947-1"><a href="analysis-of-variance-revisited.html#cb2947-1"></a>c1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>, <span class="dv">-1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2955"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2955-1"><a href="analysis-of-variance-revisited.html#cb2955-1"></a>c1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>, <span class="dv">-1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>)</span></code></pre></div>
 <p>Variations: you can switch the sign on everything within a
 contrast (since it doesn’t matter which is plus and which is
 minus). You can also multiply through by anything to get rid of
 the fractions, for example these:</p>
-<div class="sourceCode" id="cb2948"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2948-1"><a href="analysis-of-variance-revisited.html#cb2948-1"></a>c2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">-2</span>)</span>
-<span id="cb2948-2"><a href="analysis-of-variance-revisited.html#cb2948-2"></a>c1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">-3</span>, <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2956"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2956-1"><a href="analysis-of-variance-revisited.html#cb2956-1"></a>c2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">-2</span>)</span>
+<span id="cb2956-2"><a href="analysis-of-variance-revisited.html#cb2956-2"></a>c1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">-3</span>, <span class="dv">2</span>)</span></code></pre></div>
 <p>All that matters is that the coefficients add up to zero, and that they are the right size and sign relative to each other.</p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Pick two of your contrasts (doesn’t matter which two) and
@@ -1615,11 +1617,11 @@ demonstrate that they are orthogonal.</li>
 <p>Solution</p>
 <p>Multiply your chosen contrasts together elementwise, and show
 that the results add to zero, eg. by showing the whole thing:</p>
-<div class="sourceCode" id="cb2949"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2949-1"><a href="analysis-of-variance-revisited.html#cb2949-1"></a>c1 <span class="op">*</span><span class="st"> </span>c2</span></code></pre></div>
+<div class="sourceCode" id="cb2957"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2957-1"><a href="analysis-of-variance-revisited.html#cb2957-1"></a>c1 <span class="op">*</span><span class="st"> </span>c2</span></code></pre></div>
 <pre><code>## [1]  0.0000000  0.1666667  0.1666667  0.0000000 -0.3333333</code></pre>
 <p>which adds to zero because it is <span class="math inline">\(2/6\)</span> minus <span class="math inline">\(1/3\)</span>,
 or by explicitly summing the elementwise product:</p>
-<div class="sourceCode" id="cb2951"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2951-1"><a href="analysis-of-variance-revisited.html#cb2951-1"></a><span class="kw">sum</span>(c1 <span class="op">*</span><span class="st"> </span>c3)</span></code></pre></div>
+<div class="sourceCode" id="cb2959"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2959-1"><a href="analysis-of-variance-revisited.html#cb2959-1"></a><span class="kw">sum</span>(c1 <span class="op">*</span><span class="st"> </span>c3)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>Any pair is good.</p>
 <ol start="6" style="list-style-type: lower-alpha">
@@ -1628,8 +1630,8 @@ tell <code>lm</code> that these are the contrasts for <code>context</code>.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb2953"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2953-1"><a href="analysis-of-variance-revisited.html#cb2953-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c1, c2, c3, c4)</span>
-<span id="cb2953-2"><a href="analysis-of-variance-revisited.html#cb2953-2"></a><span class="kw">contrasts</span>(smith<span class="op">$</span>context) &lt;-<span class="st"> </span>m</span></code></pre></div>
+<div class="sourceCode" id="cb2961"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2961-1"><a href="analysis-of-variance-revisited.html#cb2961-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c1, c2, c3, c4)</span>
+<span id="cb2961-2"><a href="analysis-of-variance-revisited.html#cb2961-2"></a><span class="kw">contrasts</span>(smith<span class="op">$</span>context) &lt;-<span class="st"> </span>m</span></code></pre></div>
 <p>Slipping off into another aside, you might have been wondering whether
 there was a way to test
 <em>all</em> the contrasts for orthogonality at once. There is, and it
@@ -1640,7 +1642,7 @@ matter, <em>transposing</em> a matrix interchanges rows and columns, so
 that in math, we want to look at the matrix <span class="math inline">\(M^T M\)</span>. In R,
 <code>%*%</code> means “matrix multiply”.
 <label for="tufte-mn-186" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-186" class="margin-toggle"><span class="marginnote">In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.</span> Thus,</p>
-<div class="sourceCode" id="cb2954"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2954-1"><a href="analysis-of-variance-revisited.html#cb2954-1"></a><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</span></code></pre></div>
+<div class="sourceCode" id="cb2962"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2962-1"><a href="analysis-of-variance-revisited.html#cb2962-1"></a><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</span></code></pre></div>
 <pre><code>##           c1  c2 c3 c4
 ## c1 0.8333333 0.0  0  0
 ## c2 0.0000000 1.5  0  0
@@ -1658,8 +1660,8 @@ the four contrasts is orthogonal to each of the other three.</p>
 </ol>
 <p>Solution</p>
 <p>We’re past the hard part:</p>
-<div class="sourceCode" id="cb2956"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2956-1"><a href="analysis-of-variance-revisited.html#cb2956-1"></a>smith<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(words <span class="op">~</span><span class="st"> </span>context, <span class="dt">data =</span> smith)</span>
-<span id="cb2956-2"><a href="analysis-of-variance-revisited.html#cb2956-2"></a><span class="kw">summary</span>(smith<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2964"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2964-1"><a href="analysis-of-variance-revisited.html#cb2964-1"></a>smith<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(words <span class="op">~</span><span class="st"> </span>context, <span class="dt">data =</span> smith)</span>
+<span id="cb2964-2"><a href="analysis-of-variance-revisited.html#cb2964-2"></a><span class="kw">summary</span>(smith<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = words ~ context, data = smith)
@@ -1762,14 +1764,14 @@ have, and is that what you should have?</li>
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code>:</p>
-<div class="sourceCode" id="cb2958"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2958-1"><a href="analysis-of-variance-revisited.html#cb2958-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/shirts.csv&quot;</span></span>
-<span id="cb2958-2"><a href="analysis-of-variance-revisited.html#cb2958-2"></a>shirts &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb2966"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2966-1"><a href="analysis-of-variance-revisited.html#cb2966-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/shirts.csv&quot;</span></span>
+<span id="cb2966-2"><a href="analysis-of-variance-revisited.html#cb2966-2"></a>shirts &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   treatment = col_character(),
 ##   score = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2960"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2960-1"><a href="analysis-of-variance-revisited.html#cb2960-1"></a>shirts</span></code></pre></div>
+<div class="sourceCode" id="cb2968"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2968-1"><a href="analysis-of-variance-revisited.html#cb2968-1"></a>shirts</span></code></pre></div>
 <pre><code>## # A tibble: 125 x 2
 ##    treatment         score
 ##    &lt;chr&gt;             &lt;dbl&gt;
@@ -1793,9 +1795,9 @@ that you read in from the file.)</li>
 </ol>
 <p>Solution</p>
 <p>Thus:</p>
-<div class="sourceCode" id="cb2962"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2962-1"><a href="analysis-of-variance-revisited.html#cb2962-1"></a>shirts &lt;-<span class="st"> </span>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">treatment =</span> <span class="kw">factor</span>(treatment))</span></code></pre></div>
+<div class="sourceCode" id="cb2970"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2970-1"><a href="analysis-of-variance-revisited.html#cb2970-1"></a>shirts &lt;-<span class="st"> </span>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">treatment =</span> <span class="kw">factor</span>(treatment))</span></code></pre></div>
 <p>and for checking:</p>
-<div class="sourceCode" id="cb2963"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2963-1"><a href="analysis-of-variance-revisited.html#cb2963-1"></a>shirts</span></code></pre></div>
+<div class="sourceCode" id="cb2971"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2971-1"><a href="analysis-of-variance-revisited.html#cb2971-1"></a>shirts</span></code></pre></div>
 <pre><code>## # A tibble: 125 x 2
 ##    treatment         score
 ##    &lt;fct&gt;             &lt;dbl&gt;
@@ -1819,11 +1821,11 @@ them except for <code>distinct</code> is good.)</li>
 </ol>
 <p>Solution</p>
 <p>This is the most direct:</p>
-<div class="sourceCode" id="cb2965"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2965-1"><a href="analysis-of-variance-revisited.html#cb2965-1"></a><span class="kw">levels</span>(shirts<span class="op">$</span>treatment)</span></code></pre></div>
+<div class="sourceCode" id="cb2973"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2973-1"><a href="analysis-of-variance-revisited.html#cb2973-1"></a><span class="kw">levels</span>(shirts<span class="op">$</span>treatment)</span></code></pre></div>
 <pre><code>## [1] &quot;control&quot;               &quot;female_seeing_model&quot;   &quot;female_seeing_student&quot;
 ## [4] &quot;male_seeing_model&quot;     &quot;male_seeing_student&quot;</code></pre>
 <p>or you can do one of the <code>tidyverse</code>-style ways, such as</p>
-<div class="sourceCode" id="cb2967"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2967-1"><a href="analysis-of-variance-revisited.html#cb2967-1"></a>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(treatment)</span></code></pre></div>
+<div class="sourceCode" id="cb2975"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2975-1"><a href="analysis-of-variance-revisited.html#cb2975-1"></a>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(treatment)</span></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   treatment                 n
 ##   &lt;fct&gt;                 &lt;int&gt;
@@ -1833,7 +1835,7 @@ them except for <code>distinct</code> is good.)</li>
 ## 4 male_seeing_model        25
 ## 5 male_seeing_student      25</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb2969"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2969-1"><a href="analysis-of-variance-revisited.html#cb2969-1"></a>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(treatment)</span></code></pre></div>
+<div class="sourceCode" id="cb2977"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2977-1"><a href="analysis-of-variance-revisited.html#cb2977-1"></a>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(treatment)</span></code></pre></div>
 <pre><code>## # A tibble: 5 x 1
 ##   treatment            
 ##   &lt;fct&gt;                
@@ -1848,8 +1850,8 @@ appear in the factor. So that’s why I asked you not to do it that way.</p>
 <p>Alphabetical order, is the moral of the story.</p>
 <p>Extra: you can make them appear in the order they appear in the data,
 if you want to (and if you know what you are doing):</p>
-<div class="sourceCode" id="cb2971"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2971-1"><a href="analysis-of-variance-revisited.html#cb2971-1"></a>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">trt2 =</span> <span class="kw">fct_inorder</span>(treatment)) -&gt;<span class="st"> </span>d</span>
-<span id="cb2971-2"><a href="analysis-of-variance-revisited.html#cb2971-2"></a><span class="kw">levels</span>(d<span class="op">$</span>trt2)</span></code></pre></div>
+<div class="sourceCode" id="cb2979"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2979-1"><a href="analysis-of-variance-revisited.html#cb2979-1"></a>shirts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">trt2 =</span> <span class="kw">fct_inorder</span>(treatment)) -&gt;<span class="st"> </span>d</span>
+<span id="cb2979-2"><a href="analysis-of-variance-revisited.html#cb2979-2"></a><span class="kw">levels</span>(d<span class="op">$</span>trt2)</span></code></pre></div>
 <pre><code>## [1] &quot;male_seeing_model&quot;     &quot;male_seeing_student&quot;   &quot;female_seeing_model&quot;  
 ## [4] &quot;female_seeing_student&quot; &quot;control&quot;</code></pre>
 <p><code>fct_inorder</code> <em>creates</em> a factor whose levels are in the
@@ -1864,9 +1866,9 @@ Obtain a table of mean evaluation scores for each treatment group.</li>
 <p>Solution</p>
 <p>We will use this later when assessing the significance of the
 contrasts. It’s the usual group-by and summarize:</p>
-<div class="sourceCode" id="cb2973"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2973-1"><a href="analysis-of-variance-revisited.html#cb2973-1"></a>shirts <span class="op">%&gt;%</span></span>
-<span id="cb2973-2"><a href="analysis-of-variance-revisited.html#cb2973-2"></a><span class="st">  </span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span></span>
-<span id="cb2973-3"><a href="analysis-of-variance-revisited.html#cb2973-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(score))</span></code></pre></div>
+<div class="sourceCode" id="cb2981"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2981-1"><a href="analysis-of-variance-revisited.html#cb2981-1"></a>shirts <span class="op">%&gt;%</span></span>
+<span id="cb2981-2"><a href="analysis-of-variance-revisited.html#cb2981-2"></a><span class="st">  </span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span></span>
+<span id="cb2981-3"><a href="analysis-of-variance-revisited.html#cb2981-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(score))</span></code></pre></div>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   treatment                 m
@@ -1878,7 +1880,7 @@ contrasts. It’s the usual group-by and summarize:</p>
 ## 5 male_seeing_student    3.25</code></pre>
 <p>Extra: how does this come out if you have your factor levels in a
 non-alphabetical order?</p>
-<div class="sourceCode" id="cb2976"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2976-1"><a href="analysis-of-variance-revisited.html#cb2976-1"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(trt2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(score))</span></code></pre></div>
+<div class="sourceCode" id="cb2984"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2984-1"><a href="analysis-of-variance-revisited.html#cb2984-1"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(trt2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(score))</span></code></pre></div>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   trt2                      m
@@ -1913,17 +1915,17 @@ treatments and for the control group</p></li>
 appropriate values.</p>
 <p>Solution</p>
 <p>These, in that order, are comparisons of treatments 4 and 5:</p>
-<div class="sourceCode" id="cb2979"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2979-1"><a href="analysis-of-variance-revisited.html#cb2979-1"></a>c_mms &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">-1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2987"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2987-1"><a href="analysis-of-variance-revisited.html#cb2987-1"></a>c_mms &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">-1</span>)</span></code></pre></div>
 <p>treatments 2 and 3:</p>
-<div class="sourceCode" id="cb2980"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2980-1"><a href="analysis-of-variance-revisited.html#cb2980-1"></a>c_fms &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2988"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2988-1"><a href="analysis-of-variance-revisited.html#cb2988-1"></a>c_fms &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span></code></pre></div>
 <p>(in these two the 1 and <span class="math inline">\(-1\)</span> can also be the other way around)</p>
 <p>the average of 2 and 3 vs. the average of 4 and 5:</p>
-<div class="sourceCode" id="cb2981"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2981-1"><a href="analysis-of-variance-revisited.html#cb2981-1"></a>c_mf &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">-0.5</span>, <span class="fl">-0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2989"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2989-1"><a href="analysis-of-variance-revisited.html#cb2989-1"></a>c_mf &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">-0.5</span>, <span class="fl">-0.5</span>)</span></code></pre></div>
 <p>or you can use 1 and <span class="math inline">\(-1\)</span> instead of the 0.5s, or you can switch the
 signs around. I like the 0.5 values to remind me it’s an average of
 two means.</p>
 <p>Finally</p>
-<div class="sourceCode" id="cb2982"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2982-1"><a href="analysis-of-variance-revisited.html#cb2982-1"></a>c_tc &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">-0.25</span>, <span class="fl">-0.25</span>, <span class="fl">-0.25</span>, <span class="fl">-0.25</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2990"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2990-1"><a href="analysis-of-variance-revisited.html#cb2990-1"></a>c_tc &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">-0.25</span>, <span class="fl">-0.25</span>, <span class="fl">-0.25</span>, <span class="fl">-0.25</span>)</span></code></pre></div>
 <p>or multiply through by 4 to get rid of the fractions, or have the
 negative sign on the first one and positive signs on the others.</p>
 <p>I tried to give the contrasts mnemonic but short names, so that I
@@ -1935,7 +1937,7 @@ demonstrate that they are orthogonal.</li>
 <p>Solution</p>
 <p>Multiply them together (elementwise, which is what <code>*</code>
 does) and add them up, showing that you get zero, for example:</p>
-<div class="sourceCode" id="cb2983"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2983-1"><a href="analysis-of-variance-revisited.html#cb2983-1"></a><span class="kw">sum</span>(c_mf <span class="op">*</span><span class="st"> </span>c_tc)</span></code></pre></div>
+<div class="sourceCode" id="cb2991"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2991-1"><a href="analysis-of-variance-revisited.html#cb2991-1"></a><span class="kw">sum</span>(c_mf <span class="op">*</span><span class="st"> </span>c_tc)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>Check (mops brow).</p>
 <ol start="7" style="list-style-type: lower-alpha">
@@ -1945,12 +1947,12 @@ data frame (whatever you called it).</li>
 </ol>
 <p>Solution</p>
 <p>I called my data frame <code>shirts</code>, so I need to do this:</p>
-<div class="sourceCode" id="cb2985"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2985-1"><a href="analysis-of-variance-revisited.html#cb2985-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c_mms, c_fms, c_mf, c_tc)</span>
-<span id="cb2985-2"><a href="analysis-of-variance-revisited.html#cb2985-2"></a><span class="kw">contrasts</span>(shirts<span class="op">$</span>treatment) &lt;-<span class="st"> </span>m</span></code></pre></div>
+<div class="sourceCode" id="cb2993"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2993-1"><a href="analysis-of-variance-revisited.html#cb2993-1"></a>m &lt;-<span class="st"> </span><span class="kw">cbind</span>(c_mms, c_fms, c_mf, c_tc)</span>
+<span id="cb2993-2"><a href="analysis-of-variance-revisited.html#cb2993-2"></a><span class="kw">contrasts</span>(shirts<span class="op">$</span>treatment) &lt;-<span class="st"> </span>m</span></code></pre></div>
 <p>There’s no output here; we’ll see in a moment whether it worked.</p>
 <p>Extra: once you’ve created the matrix <code>m</code>, it gives you a
 second way to test the contrasts for orthogonality, all at once:</p>
-<div class="sourceCode" id="cb2986"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2986-1"><a href="analysis-of-variance-revisited.html#cb2986-1"></a><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</span></code></pre></div>
+<div class="sourceCode" id="cb2994"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2994-1"><a href="analysis-of-variance-revisited.html#cb2994-1"></a><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</span></code></pre></div>
 <pre><code>##       c_mms c_fms c_mf c_tc
 ## c_mms     2     0    0 0.00
 ## c_fms     0     2    0 0.00
@@ -1963,8 +1965,8 @@ themselves, hence the non-zeros down the diagonal, but all the
 off-diagonal entries are zero. Hence each contrast is orthogonal to
 each other contrast.</p>
 <p>Or even:</p>
-<div class="sourceCode" id="cb2988"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2988-1"><a href="analysis-of-variance-revisited.html#cb2988-1"></a>z &lt;-<span class="st"> </span><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</span>
-<span id="cb2988-2"><a href="analysis-of-variance-revisited.html#cb2988-2"></a><span class="kw">all</span>(z[<span class="kw">row</span>(z) <span class="op">!=</span><span class="st"> </span><span class="kw">col</span>(z)] <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2996"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2996-1"><a href="analysis-of-variance-revisited.html#cb2996-1"></a>z &lt;-<span class="st"> </span><span class="kw">t</span>(m) <span class="op">%*%</span><span class="st"> </span>m</span>
+<span id="cb2996-2"><a href="analysis-of-variance-revisited.html#cb2996-2"></a><span class="kw">all</span>(z[<span class="kw">row</span>(z) <span class="op">!=</span><span class="st"> </span><span class="kw">col</span>(z)] <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>That says (a little breathlessly) that it is true that all the
 elements of <span class="math inline">\(M^TM\)</span> that are off the diagonal are zero.
@@ -1976,8 +1978,8 @@ treatment <em>as a regression</em>, and display the results.</li>
 <p>Solution</p>
 <p>Once you have everything set up, it’s just a matter of going
 through the process:</p>
-<div class="sourceCode" id="cb2990"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2990-1"><a href="analysis-of-variance-revisited.html#cb2990-1"></a>score<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>treatment, <span class="dt">data =</span> shirts)</span>
-<span id="cb2990-2"><a href="analysis-of-variance-revisited.html#cb2990-2"></a><span class="kw">summary</span>(score<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2998"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2998-1"><a href="analysis-of-variance-revisited.html#cb2998-1"></a>score<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>treatment, <span class="dt">data =</span> shirts)</span>
+<span id="cb2998-2"><a href="analysis-of-variance-revisited.html#cb2998-2"></a><span class="kw">summary</span>(score<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ treatment, data = shirts)
@@ -2080,15 +2082,15 @@ recorded this as well.</p>
 <p>The data values are separated by one space, so let’s use
 <code>read_delim</code> and display whatever displays (probably the
 first ten lines):</p>
-<div class="sourceCode" id="cb2992"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2992-1"><a href="analysis-of-variance-revisited.html#cb2992-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/productivity.txt&quot;</span></span>
-<span id="cb2992-2"><a href="analysis-of-variance-revisited.html#cb2992-2"></a>productivity &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3000"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3000-1"><a href="analysis-of-variance-revisited.html#cb3000-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/productivity.txt&quot;</span></span>
+<span id="cb3000-2"><a href="analysis-of-variance-revisited.html#cb3000-2"></a>productivity &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   expenditure = col_character(),
 ##   improvement = col_double(),
 ##   last = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb2994"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2994-1"><a href="analysis-of-variance-revisited.html#cb2994-1"></a>productivity</span></code></pre></div>
+<div class="sourceCode" id="cb3002"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3002-1"><a href="analysis-of-variance-revisited.html#cb3002-1"></a>productivity</span></code></pre></div>
 <pre><code>## # A tibble: 27 x 3
 ##    expenditure improvement  last
 ##    &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;
@@ -2113,8 +2115,8 @@ to keep typing it!</p>
 sorted into alphabetical order unless we stop them. They are actually
 in the right order in the data file, so maybe we should turn them into
 a factor (with the levels in the right order) now:</p>
-<div class="sourceCode" id="cb2996"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2996-1"><a href="analysis-of-variance-revisited.html#cb2996-1"></a>productivity <span class="op">%&gt;%</span></span>
-<span id="cb2996-2"><a href="analysis-of-variance-revisited.html#cb2996-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">expenditure =</span> <span class="kw">fct_inorder</span>(expenditure)) -&gt;<span class="st"> </span>productivity</span></code></pre></div>
+<div class="sourceCode" id="cb3004"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3004-1"><a href="analysis-of-variance-revisited.html#cb3004-1"></a>productivity <span class="op">%&gt;%</span></span>
+<span id="cb3004-2"><a href="analysis-of-variance-revisited.html#cb3004-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">expenditure =</span> <span class="kw">fct_inorder</span>(expenditure)) -&gt;<span class="st"> </span>productivity</span></code></pre></div>
 <p>If you don’t do this, your answers below will be different from
 mine. Probably not in any kind of consequential way, but different
 nonetheless.</p>
@@ -2128,8 +2130,8 @@ lines for each expenditure group.</li>
 <p>Two quantitative and one categorical variable, so plot the
 categorical variable using colour (or <code>shape</code> etc., if you
 know about that, but colour is the most obvious thing):</p>
-<div class="sourceCode" id="cb2997"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2997-1"><a href="analysis-of-variance-revisited.html#cb2997-1"></a><span class="kw">ggplot</span>(productivity, <span class="kw">aes</span>(<span class="dt">x =</span> last, <span class="dt">y =</span> improvement, <span class="dt">colour =</span> expenditure)) <span class="op">+</span></span>
-<span id="cb2997-2"><a href="analysis-of-variance-revisited.html#cb2997-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb3005"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3005-1"><a href="analysis-of-variance-revisited.html#cb3005-1"></a><span class="kw">ggplot</span>(productivity, <span class="kw">aes</span>(<span class="dt">x =</span> last, <span class="dt">y =</span> improvement, <span class="dt">colour =</span> expenditure)) <span class="op">+</span></span>
+<span id="cb3005-2"><a href="analysis-of-variance-revisited.html#cb3005-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-95-1.png" width="672"  /></p>
 <p>The <code>se=F</code> is optional; no problem if you don’t include it. (If
@@ -2166,8 +2168,8 @@ the results through <code>drop1</code> with <code>test="F"</code> (the
 <p>Solution</p>
 <p>This looks exactly like a regression with a categorical variable,
 and is. Just the two main effects, thus:</p>
-<div class="sourceCode" id="cb2999"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2999-1"><a href="analysis-of-variance-revisited.html#cb2999-1"></a>improvement<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(improvement <span class="op">~</span><span class="st"> </span>last <span class="op">+</span><span class="st"> </span>expenditure, <span class="dt">data =</span> productivity)</span>
-<span id="cb2999-2"><a href="analysis-of-variance-revisited.html#cb2999-2"></a><span class="kw">drop1</span>(improvement<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3007"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3007-1"><a href="analysis-of-variance-revisited.html#cb3007-1"></a>improvement<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(improvement <span class="op">~</span><span class="st"> </span>last <span class="op">+</span><span class="st"> </span>expenditure, <span class="dt">data =</span> productivity)</span>
+<span id="cb3007-2"><a href="analysis-of-variance-revisited.html#cb3007-2"></a><span class="kw">drop1</span>(improvement<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -2188,7 +2190,7 @@ numbers in the <code>Estimate</code> column are consistent with your graph.</li>
 </ol>
 <p>Solution</p>
 <p>To begin:</p>
-<div class="sourceCode" id="cb3001"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3001-1"><a href="analysis-of-variance-revisited.html#cb3001-1"></a><span class="kw">summary</span>(improvement<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3009"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3009-1"><a href="analysis-of-variance-revisited.html#cb3009-1"></a><span class="kw">summary</span>(improvement<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = improvement ~ last + expenditure, data = productivity)
@@ -2263,8 +2265,8 @@ are not surprised.</li>
 <p>Solution</p>
 <p>I like <code>update</code> for this (writing out the whole model is an
 alternative):</p>
-<div class="sourceCode" id="cb3003"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3003-1"><a href="analysis-of-variance-revisited.html#cb3003-1"></a>improvement<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(improvement<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> </span>last<span class="op">:</span>expenditure)</span>
-<span id="cb3003-2"><a href="analysis-of-variance-revisited.html#cb3003-2"></a><span class="kw">drop1</span>(improvement<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3011"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3011-1"><a href="analysis-of-variance-revisited.html#cb3011-1"></a>improvement<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(improvement<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> </span>last<span class="op">:</span>expenditure)</span>
+<span id="cb3011-2"><a href="analysis-of-variance-revisited.html#cb3011-2"></a><span class="kw">drop1</span>(improvement<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -2293,7 +2295,7 @@ the lines in the graph, so that even a small difference in slopes can
 be signficant. You might argue that my red line is not <em>quite</em>
 as steep as the others, but the difference does look very small.</p>
 <p>Let’s take a look at the <code>summary</code> for my interaction model:</p>
-<div class="sourceCode" id="cb3005"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3005-1"><a href="analysis-of-variance-revisited.html#cb3005-1"></a><span class="kw">summary</span>(improvement<span class="fl">.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3013"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3013-1"><a href="analysis-of-variance-revisited.html#cb3013-1"></a><span class="kw">summary</span>(improvement<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = improvement ~ last + expenditure + last:expenditure, 
@@ -2335,10 +2337,10 @@ at least, I led you through it wrong). The right way to do this would
 have been to fit the interaction model <em>first</em>, see that it is
 significant, and then done some predictions to assess the effects of
 things:</p>
-<div class="sourceCode" id="cb3007"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3007-1"><a href="analysis-of-variance-revisited.html#cb3007-1"></a>lasts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
-<span id="cb3007-2"><a href="analysis-of-variance-revisited.html#cb3007-2"></a>expenditures &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;moderate&quot;</span>, <span class="st">&quot;high&quot;</span>)</span>
-<span id="cb3007-3"><a href="analysis-of-variance-revisited.html#cb3007-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">last =</span> lasts, <span class="dt">expenditure =</span> expenditures)</span>
-<span id="cb3007-4"><a href="analysis-of-variance-revisited.html#cb3007-4"></a>new</span></code></pre></div>
+<div class="sourceCode" id="cb3015"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3015-1"><a href="analysis-of-variance-revisited.html#cb3015-1"></a>lasts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
+<span id="cb3015-2"><a href="analysis-of-variance-revisited.html#cb3015-2"></a>expenditures &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;moderate&quot;</span>, <span class="st">&quot;high&quot;</span>)</span>
+<span id="cb3015-3"><a href="analysis-of-variance-revisited.html#cb3015-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">last =</span> lasts, <span class="dt">expenditure =</span> expenditures)</span>
+<span id="cb3015-4"><a href="analysis-of-variance-revisited.html#cb3015-4"></a>new</span></code></pre></div>
 <pre><code>## # A tibble: 9 x 2
 ##    last expenditure
 ##   &lt;dbl&gt; &lt;chr&gt;      
@@ -2353,8 +2355,8 @@ things:</p>
 ## 9    11 moderate</code></pre>
 <p>(oh, how I wish I’d given those variables shorter names),
 <label for="tufte-mn-188" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-188" class="margin-toggle"><span class="marginnote">The expenditure levels have come out in alphabetical order again.</span> and then:</p>
-<div class="sourceCode" id="cb3009"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3009-1"><a href="analysis-of-variance-revisited.html#cb3009-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(improvement<span class="fl">.2</span>, new)</span>
-<span id="cb3009-2"><a href="analysis-of-variance-revisited.html#cb3009-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<div class="sourceCode" id="cb3017"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3017-1"><a href="analysis-of-variance-revisited.html#cb3017-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(improvement<span class="fl">.2</span>, new)</span>
+<span id="cb3017-2"><a href="analysis-of-variance-revisited.html#cb3017-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
 <pre><code>##   last expenditure         p
 ## 1    7        high  2.517338
 ## 2    7         low  6.805256
@@ -2401,15 +2403,15 @@ right thing.</li>
 <p>Take a look at the data file. The values have multiple spaces
 between them, but they are aligned with each other and the
 column headings, so <code>read_table</code> is the thing:</p>
-<div class="sourceCode" id="cb3011"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3011-1"><a href="analysis-of-variance-revisited.html#cb3011-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt&quot;</span></span>
-<span id="cb3011-2"><a href="analysis-of-variance-revisited.html#cb3011-2"></a>lepro &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb3019"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3019-1"><a href="analysis-of-variance-revisited.html#cb3019-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/leprosy.txt&quot;</span></span>
+<span id="cb3019-2"><a href="analysis-of-variance-revisited.html#cb3019-2"></a>lepro &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   drug = col_character(),
 ##   pre = col_double(),
 ##   post = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb3013"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3013-1"><a href="analysis-of-variance-revisited.html#cb3013-1"></a>lepro</span></code></pre></div>
+<div class="sourceCode" id="cb3021"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3021-1"><a href="analysis-of-variance-revisited.html#cb3021-1"></a>lepro</span></code></pre></div>
 <pre><code>## # A tibble: 30 x 3
 ##    drug    pre  post
 ##    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -2434,7 +2436,7 @@ different colour.</li>
 <p>Solution</p>
 <p>This is the kind of thing that <code>ggplot</code> does without
 batting an eyelid:</p>
-<div class="sourceCode" id="cb3015"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3015-1"><a href="analysis-of-variance-revisited.html#cb3015-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb3023"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3023-1"><a href="analysis-of-variance-revisited.html#cb3023-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-104-1.png" width="672"  /></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Does it appear that including the pre-treatment score was a
@@ -2469,9 +2471,9 @@ the model.)</li>
 <p>Solution</p>
 <p>This is what you’d guess. <code>lm</code> handles the interaction
 properly, even though <code>pre</code> is a quantitative variable.</p>
-<div class="sourceCode" id="cb3016"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3016-1"><a href="analysis-of-variance-revisited.html#cb3016-1"></a>lepro<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">*</span><span class="st"> </span>drug, <span class="dt">data =</span> lepro)</span></code></pre></div>
+<div class="sourceCode" id="cb3024"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3024-1"><a href="analysis-of-variance-revisited.html#cb3024-1"></a>lepro<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">*</span><span class="st"> </span>drug, <span class="dt">data =</span> lepro)</span></code></pre></div>
 <p>I wanted to take a look, so I did:</p>
-<div class="sourceCode" id="cb3017"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3017-1"><a href="analysis-of-variance-revisited.html#cb3017-1"></a><span class="kw">summary</span>(lepro<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3025"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3025-1"><a href="analysis-of-variance-revisited.html#cb3025-1"></a><span class="kw">summary</span>(lepro<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = post ~ pre * drug, data = lepro)
@@ -2504,7 +2506,7 @@ the interaction term significant?</li>
 </ol>
 <p>Solution</p>
 <p>Just this:</p>
-<div class="sourceCode" id="cb3019"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3019-1"><a href="analysis-of-variance-revisited.html#cb3019-1"></a><span class="kw">drop1</span>(lepro<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3027"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3027-1"><a href="analysis-of-variance-revisited.html#cb3027-1"></a><span class="kw">drop1</span>(lepro<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -2521,9 +2523,9 @@ do (in addition, that is, to the fact that I just asked you to do it)?</li>
 </ol>
 <p>Solution</p>
 <p>Change the <code>*</code> to a <code>+</code>:</p>
-<div class="sourceCode" id="cb3021"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3021-1"><a href="analysis-of-variance-revisited.html#cb3021-1"></a>lepro<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">+</span><span class="st"> </span>drug, <span class="dt">data =</span> lepro)</span></code></pre></div>
+<div class="sourceCode" id="cb3029"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3029-1"><a href="analysis-of-variance-revisited.html#cb3029-1"></a>lepro<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">+</span><span class="st"> </span>drug, <span class="dt">data =</span> lepro)</span></code></pre></div>
 <p>Or use <code>update</code> (not much in it, here):</p>
-<div class="sourceCode" id="cb3022"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3022-1"><a href="analysis-of-variance-revisited.html#cb3022-1"></a>lepro<span class="fl">.2</span>a &lt;-<span class="st"> </span><span class="kw">update</span>(lepro<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>pre<span class="op">:</span>drug)</span></code></pre></div>
+<div class="sourceCode" id="cb3030"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3030-1"><a href="analysis-of-variance-revisited.html#cb3030-1"></a>lepro<span class="fl">.2</span>a &lt;-<span class="st"> </span><span class="kw">update</span>(lepro<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>pre<span class="op">:</span>drug)</span></code></pre></div>
 <p>We just said that the interaction could come out, since it wasn’t
 significant, so this is exactly the model that we should be fitting.</p>
 <ol start="8" style="list-style-type: lower-alpha">
@@ -2535,7 +2537,7 @@ of drugs make sense?</li>
 </ol>
 <p>Solution</p>
 <p>Mine was the no-interaction model <code>lepro.2</code>:</p>
-<div class="sourceCode" id="cb3023"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3023-1"><a href="analysis-of-variance-revisited.html#cb3023-1"></a><span class="kw">summary</span>(lepro<span class="fl">.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3031"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3031-1"><a href="analysis-of-variance-revisited.html#cb3031-1"></a><span class="kw">summary</span>(lepro<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = post ~ pre + drug, data = lepro)
@@ -2570,7 +2572,7 @@ higher score is worse, and the two “real” drugs are both better than
 the fake one.</p>
 <p>Whether there is a real drug difference, I didn’t ask you to assess,
 but you could do it by <code>drop1</code> again, this way:</p>
-<div class="sourceCode" id="cb3025"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3025-1"><a href="analysis-of-variance-revisited.html#cb3025-1"></a><span class="kw">drop1</span>(lepro<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3033"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3033-1"><a href="analysis-of-variance-revisited.html#cb3033-1"></a><span class="kw">drop1</span>(lepro<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -2599,10 +2601,10 @@ your preferred model.
 <code>crossing</code>. I’m doing this in small steps for clarity:
 first, I define all the drugs and <code>pre</code> values, and then I
 feed them into <code>crossing</code>:</p>
-<div class="sourceCode" id="cb3027"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3027-1"><a href="analysis-of-variance-revisited.html#cb3027-1"></a>drugs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;F&quot;</span>)</span>
-<span id="cb3027-2"><a href="analysis-of-variance-revisited.html#cb3027-2"></a>pres &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">12</span>, <span class="dv">20</span>)</span>
-<span id="cb3027-3"><a href="analysis-of-variance-revisited.html#cb3027-3"></a>lepro.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">drug =</span> drugs, <span class="dt">pre =</span> pres)</span>
-<span id="cb3027-4"><a href="analysis-of-variance-revisited.html#cb3027-4"></a>lepro.new</span></code></pre></div>
+<div class="sourceCode" id="cb3035"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3035-1"><a href="analysis-of-variance-revisited.html#cb3035-1"></a>drugs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;F&quot;</span>)</span>
+<span id="cb3035-2"><a href="analysis-of-variance-revisited.html#cb3035-2"></a>pres &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">12</span>, <span class="dv">20</span>)</span>
+<span id="cb3035-3"><a href="analysis-of-variance-revisited.html#cb3035-3"></a>lepro.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">drug =</span> drugs, <span class="dt">pre =</span> pres)</span>
+<span id="cb3035-4"><a href="analysis-of-variance-revisited.html#cb3035-4"></a>lepro.new</span></code></pre></div>
 <pre><code>## # A tibble: 9 x 2
 ##   drug    pre
 ##   &lt;chr&gt; &lt;dbl&gt;
@@ -2620,16 +2622,16 @@ feed them into <code>crossing</code>:</p>
 <code>predict</code> won’t work.</p>
 <p>Now I obtain the predictions, from my best model <code>lepro.2</code>. I
 don’t need intervals or anything like that:</p>
-<div class="sourceCode" id="cb3029"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3029-1"><a href="analysis-of-variance-revisited.html#cb3029-1"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(lepro<span class="fl">.2</span>, lepro.new)</span>
-<span id="cb3029-2"><a href="analysis-of-variance-revisited.html#cb3029-2"></a>preds</span></code></pre></div>
+<div class="sourceCode" id="cb3037"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3037-1"><a href="analysis-of-variance-revisited.html#cb3037-1"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(lepro<span class="fl">.2</span>, lepro.new)</span>
+<span id="cb3037-2"><a href="analysis-of-variance-revisited.html#cb3037-2"></a>preds</span></code></pre></div>
 <pre><code>##         1         2         3         4         5         6         7         8 
 ##  1.055110  7.965396 15.862867  1.164081  8.074368 15.971838  4.501248 11.411535 
 ##         9 
 ## 19.309005</code></pre>
 <p>only it would be easier to see the predictions side by side with the
 values they are predictions for:</p>
-<div class="sourceCode" id="cb3031"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3031-1"><a href="analysis-of-variance-revisited.html#cb3031-1"></a>allpreds &lt;-<span class="st"> </span><span class="kw">cbind</span>(lepro.new, preds)</span>
-<span id="cb3031-2"><a href="analysis-of-variance-revisited.html#cb3031-2"></a>allpreds</span></code></pre></div>
+<div class="sourceCode" id="cb3039"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3039-1"><a href="analysis-of-variance-revisited.html#cb3039-1"></a>allpreds &lt;-<span class="st"> </span><span class="kw">cbind</span>(lepro.new, preds)</span>
+<span id="cb3039-2"><a href="analysis-of-variance-revisited.html#cb3039-2"></a>allpreds</span></code></pre></div>
 <pre><code>##   drug pre     preds
 ## 1    A   5  1.055110
 ## 2    A  12  7.965396
@@ -2647,8 +2649,8 @@ the trick of using the original data frame (and plot the points),
 and the data frame of predictions (and join those points with lines).</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb3033"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3033-1"><a href="analysis-of-variance-revisited.html#cb3033-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb3033-2"><a href="analysis-of-variance-revisited.html#cb3033-2"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> allpreds, <span class="kw">aes</span>(<span class="dt">y =</span> preds, <span class="dt">linetype =</span> drug))</span></code></pre></div>
+<div class="sourceCode" id="cb3041"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3041-1"><a href="analysis-of-variance-revisited.html#cb3041-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb3041-2"><a href="analysis-of-variance-revisited.html#cb3041-2"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> allpreds, <span class="kw">aes</span>(<span class="dt">y =</span> preds, <span class="dt">linetype =</span> drug))</span></code></pre></div>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-115-1.png" width="672"  /></p>
 <p>Inside the <code>aes</code> for the <code>geom_line</code>, I only have to
 specify the things that have changed, so that the <code>x</code>
@@ -2671,8 +2673,8 @@ would make the lines <em>not</em> be parallel.
 If your best model
 <em>did</em> have the interaction term still in it, your predictions
 would have been these:</p>
-<div class="sourceCode" id="cb3034"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3034-1"><a href="analysis-of-variance-revisited.html#cb3034-1"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(lepro<span class="fl">.1</span>, lepro.new)</span>
-<span id="cb3034-2"><a href="analysis-of-variance-revisited.html#cb3034-2"></a><span class="kw">cbind</span>(lepro.new, preds)</span></code></pre></div>
+<div class="sourceCode" id="cb3042"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3042-1"><a href="analysis-of-variance-revisited.html#cb3042-1"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(lepro<span class="fl">.1</span>, lepro.new)</span>
+<span id="cb3042-2"><a href="analysis-of-variance-revisited.html#cb3042-2"></a><span class="kw">cbind</span>(lepro.new, preds)</span></code></pre></div>
 <pre><code>##   drug pre      preds
 ## 1    A   5  2.0955414
 ## 2    A  12  7.3121019
@@ -2690,8 +2692,8 @@ scores goes up by 7.5.</p>
 <p>The <code>ggplot</code> in this case is actually a lot easier than the
 other <code>ggplot</code>, because the lines are now just the regression
 lines for each group. So <code>geom_smooth</code> will get them:</p>
-<div class="sourceCode" id="cb3036"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3036-1"><a href="analysis-of-variance-revisited.html#cb3036-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span></span>
-<span id="cb3036-2"><a href="analysis-of-variance-revisited.html#cb3036-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3044"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3044-1"><a href="analysis-of-variance-revisited.html#cb3044-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span></span>
+<span id="cb3044-2"><a href="analysis-of-variance-revisited.html#cb3044-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="18-anova-revisited_files/figure-html/unnamed-chunk-117-1.png" width="672"  /></p>
 <p>The grey intervals are a bit confusing.

@@ -65,11 +65,11 @@ These dates are day-month-year, so we need `dmy` from
 `lubridate`: 
 
 ```{r }
-whas2 <- whas %>% mutate(
+whas %>% mutate(
   admit = dmy(admitdate),
   dis = dmy(disdate),
   f = dmy(fdate)
-)
+) -> whas2
 glimpse(whas2)
 ```
 
@@ -90,33 +90,32 @@ closing bracket, the latter being on the last line. Your choice here is
 a matter of taste or (in your working life) the coding norms of the
 team you're working with.
 
-You may have been offended by the repetition above. It so happens that
+Extra: you may have been offended by the repetition above. It so happens that
 these columns' names all end in `date` and they are the only
 ones that do, so we can use a "select helper" to select only them,
-and then submit all of them to a `mutate` via `mutate_at`,
+and then submit all of them to a `mutate` via `across`,
 which goes like this:
 
 ```{r }
-whas %>% mutate_at(vars(ends_with("date")), funs(d = dmy)) %>% glimpse()
+whas %>% mutate(across(ends_with("date"), ~dmy(.))) %>% glimpse()
 ```
 
  
 
-One line, as you see, not three. The syntax of this is that we first
-say which columns we want to mutate. We can use any of the
-select-helpers for this, including listing the column numbers or
+One line, as you see, not three. The English-language version of this reads "for each of the columns whose
+name ends with `date`, work out `dmy` of it", that is to say, convert it into a date.
+We can use any of the
+select-helpers in this, including listing the column numbers or
 names; in this case our date variables all ended with
-`date`. Then we have to give a function, or more than one
-function, to mutate them with; in this case we wanted to run all the
-dates-as-text through `dmy`. Because I said `d=dmy`, it
-takes the original date variable names, glues an underscore on the end
-and then the `d` that I said, so we create new variables by
-those names (at the end of the `glimpse` output). If I had just
-said `funs(dmy)`, we would have *overwritten* the original
-values, and `admitdate`, `disdate` and `fdate`
-would now be `date`s. Losing the original variables would have
-been OK here, but I wanted to show you how to create new variables.
+`date`. 
 
+This overwrites the original date columns (you can see that they are now `date`s), but you can give them new names thus. This is inside the `across` inside the `mutate`, so it needs two close-brackets after (the probable reason for the error if you get one):
+
+```{r }
+whas %>% mutate(across(ends_with("date"), ~dmy(.), .names = "{.col}_d")) %>% glimpse()
+```
+
+The three columns on the end are the new actual-dates we created. To give them new names, use `.names` inside `across`, and in *that* is a recipe that says how to make the new names. `{.col}` means the name the column had before, and the `_d` after that means to add that to the old name to make the new one.
 
 
 (c) Create three new variables `diff1, diff2, diff3` that
@@ -154,7 +153,7 @@ calculated as `diff1`, and `lenfol` should be the time
 from being admitted to last followup, which is my `diff2`. My
 output from `glimpse` confirms that. 
 
-Of course, checking that the first few values match is a nice
+Extra: of course, checking that the first few values match is a nice
 confirmation, but is not actually a *proof*. For that, we should
 compare all 500 values, and it would be best to do it in such a way
 that R is comparing all 500 values for us, since it would be a lot
@@ -231,8 +230,52 @@ whas3 %>%
   ggplot(aes(x = cfstat, y = lenfol)) + geom_boxplot()
 ```
 
+ Extra: this is an example of what's called "survival data": the purpose of the study was to see what affected how long a person survived after a heart attack. Each patient was followed up for the number of days in `lenfol`, but followup could have stopped for two (or more) reasons: the patient died (indicated by `fstat` being 1), or something else happened to them (`fstat` is 0), such as moving away from where the study was conducted, getting another disease, the funding for this study running out, or simply losing touch with the people doing the study. Such a patient is called "lost to followup" or "censored", and all we know about their survival is that they were still alive when last seen, but we don't know how long they lived after that.
  
+For example:
+
+```{r}
+whas %>% select(id, lenfol, fstat)
+```
+
+The patient with id 4 died after 297 days, but patients 1 through 3 lived for over 2000 days and were still alive when last seen. My guess for patients 1 through 3 is that the study ended and they were still alive:
+
+```{r}
+whas %>% summarize(maxfol = max(lenfol)/365.25)
+```
+
+The longest time anyone was followed up was six and a half years. Studies like this are funded for some number of years (say 10), and people can join after the beginning. (If they happen to join near the end, they won't get followed up for very long.)
+
+We're not going to analyze these data, but if we were, we would want to take advantage of the information in the patient who lived for "at least 2178 days". Looking only at the patients who we knew to have died would be wasteful and might introduce a bias; for example, if we were comparing several treatments, and one of the treatments was so good that almost everybody on it was still alive at the end, we would want to have a strong inference that this treatment was the best.
+
+With that in mind, let's redraw our boxplot with better labels for the followup status:
+
+```{r}
+whas3 %>% 
+  mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
+  ggplot(aes(x = followup_status, y = lenfol)) + geom_boxplot()
+```
+
+Now we have a clearer sense of what is going on. Out of the patients who died, some of them survived a long time, but most of them died fairly quickly. Out of the patients who were censored, the times they were observed were all over the place, which suggests that (at least for the ones still in the study at the end) they joined the study at all kinds of different times.
+
+Another graph that is possible here is a facetted histogram:
+
+```{r}
+whas3 %>% 
+  mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
+  ggplot(aes(x = lenfol)) + geom_histogram(bins = 10) +
+  facet_wrap(~followup_status)
+```
+
+The right-skewed distribution of times to death is what we saw from the boxplot, but what is that periodic thing on the left? Let's convert the days to years and draw again:
 
 
+```{r}
+whas3 %>% 
+  mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
+  mutate(followup_years = lenfol/365.25) %>% 
+  ggplot(aes(x = followup_years)) + geom_histogram(bins = 20) +
+  facet_wrap(~followup_status)
+```
 
-
+That's odd. On the left, it looks as if there were bursts of patients admitted to the study at around 1.5, 3.5, and 5.5 years from the end. (These are, remember, all people who survived and mostly people who survived to the end.) Not what I would have expected -- I would have expected a steady stream of patients, the heart attack victims as they happened to come in.

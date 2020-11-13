@@ -117,11 +117,11 @@ These dates are day-month-year, so we need `dmy` from
 
 
 ```r
-whas2 <- whas %>% mutate(
+whas %>% mutate(
   admit = dmy(admitdate),
   dis = dmy(disdate),
   f = dmy(fdate)
-)
+) -> whas2
 glimpse(whas2)
 ```
 
@@ -172,31 +172,58 @@ closing bracket, the latter being on the last line. Your choice here is
 a matter of taste or (in your working life) the coding norms of the
 team you're working with.
 
-You may have been offended by the repetition above. It so happens that
+Extra: you may have been offended by the repetition above. It so happens that
 these columns' names all end in `date` and they are the only
 ones that do, so we can use a "select helper" to select only them,
-and then submit all of them to a `mutate` via `mutate_at`,
+and then submit all of them to a `mutate` via `across`,
 which goes like this:
 
 
 ```r
-whas %>% mutate_at(vars(ends_with("date")), funs(d = dmy)) %>% glimpse()
+whas %>% mutate(across(ends_with("date"), ~dmy(.))) %>% glimpse()
 ```
 
 ```
-## Warning: `funs()` is deprecated as of dplyr 0.8.0.
-## Please use a list of either functions or lambdas: 
-## 
-##   # Simple named list: 
-##   list(mean = mean, median = median)
-## 
-##   # Auto named with `tibble::lst()`: 
-##   tibble::lst(mean, median)
-## 
-##   # Using lambdas
-##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
+## Rows: 500
+## Columns: 22
+## $ id        <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
+## $ age       <dbl> 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67,…
+## $ gender    <dbl> 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0,…
+## $ hr        <dbl> 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 9…
+## $ sysbp     <dbl> 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, …
+## $ diasbp    <dbl> 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65…
+## $ bmi       <dbl> 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236,…
+## $ cvd       <dbl> 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1,…
+## $ afb       <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,…
+## $ sho       <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ chf       <dbl> 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
+## $ av3       <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
+## $ miord     <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
+## $ mitype    <dbl> 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,…
+## $ year      <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ admitdate <date> 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01…
+## $ disdate   <date> 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07…
+## $ fdate     <date> 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31…
+## $ los       <dbl> 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, …
+## $ dstat     <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ lenfol    <dbl> 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173…
+## $ fstat     <dbl> 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
+```
+
+ 
+
+One line, as you see, not three. The English-language version of this reads "for each of the columns whose
+name ends with `date`, work out `dmy` of it", that is to say, convert it into a date.
+We can use any of the
+select-helpers in this, including listing the column numbers or
+names; in this case our date variables all ended with
+`date`. 
+
+This overwrites the original date columns (you can see that they are now `date`s), but you can give them new names thus. This is inside the `across` inside the `mutate`, so it needs two close-brackets after (the probable reason for the error if you get one):
+
+
+```r
+whas %>% mutate(across(ends_with("date"), ~dmy(.), .names = "{.col}_d")) %>% glimpse()
 ```
 
 ```
@@ -229,23 +256,7 @@ whas %>% mutate_at(vars(ends_with("date")), funs(d = dmy)) %>% glimpse()
 ## $ fdate_d     <date> 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-…
 ```
 
- 
-
-One line, as you see, not three. The syntax of this is that we first
-say which columns we want to mutate. We can use any of the
-select-helpers for this, including listing the column numbers or
-names; in this case our date variables all ended with
-`date`. Then we have to give a function, or more than one
-function, to mutate them with; in this case we wanted to run all the
-dates-as-text through `dmy`. Because I said `d=dmy`, it
-takes the original date variable names, glues an underscore on the end
-and then the `d` that I said, so we create new variables by
-those names (at the end of the `glimpse` output). If I had just
-said `funs(dmy)`, we would have *overwritten* the original
-values, and `admitdate`, `disdate` and `fdate`
-would now be `date`s. Losing the original variables would have
-been OK here, but I wanted to show you how to create new variables.
-
+The three columns on the end are the new actual-dates we created. To give them new names, use `.names` inside `across`, and in *that* is a recipe that says how to make the new names. `{.col}` means the name the column had before, and the `_d` after that means to add that to the old name to make the new one.
 
 
 (c) Create three new variables `diff1, diff2, diff3` that
@@ -317,7 +328,7 @@ calculated as `diff1`, and `lenfol` should be the time
 from being admitted to last followup, which is my `diff2`. My
 output from `glimpse` confirms that. 
 
-Of course, checking that the first few values match is a nice
+Extra: of course, checking that the first few values match is a nice
 confirmation, but is not actually a *proof*. For that, we should
 compare all 500 values, and it would be best to do it in such a way
 that R is comparing all 500 values for us, since it would be a lot
@@ -393,7 +404,7 @@ is a numeric 0 or 1, in `factor()`:
 ggplot(whas3, aes(x = factor(fstat), y = lenfol)) + geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
 
        
 
@@ -406,7 +417,7 @@ whas3 %>%
   ggplot(aes(x = ffstat, y = lenfol)) + geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-12-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
 
  
 
@@ -425,13 +436,92 @@ whas3 %>%
   ggplot(aes(x = cfstat, y = lenfol)) + geom_boxplot()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-13-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-14-1.png" width="672"  />
 
+ Extra: this is an example of what's called "survival data": the purpose of the study was to see what affected how long a person survived after a heart attack. Each patient was followed up for the number of days in `lenfol`, but followup could have stopped for two (or more) reasons: the patient died (indicated by `fstat` being 1), or something else happened to them (`fstat` is 0), such as moving away from where the study was conducted, getting another disease, the funding for this study running out, or simply losing touch with the people doing the study. Such a patient is called "lost to followup" or "censored", and all we know about their survival is that they were still alive when last seen, but we don't know how long they lived after that.
  
+For example:
+
+
+```r
+whas %>% select(id, lenfol, fstat)
+```
+
+```
+## # A tibble: 500 x 3
+##       id lenfol fstat
+##    <dbl>  <dbl> <dbl>
+##  1     1   2178     0
+##  2     2   2172     0
+##  3     3   2190     0
+##  4     4    297     1
+##  5     5   2131     0
+##  6     6      1     1
+##  7     7   2122     0
+##  8     8   1496     1
+##  9     9    920     1
+## 10    10   2175     0
+## # … with 490 more rows
+```
+
+The patient with id 4 died after 297 days, but patients 1 through 3 lived for over 2000 days and were still alive when last seen. My guess for patients 1 through 3 is that the study ended and they were still alive:
+
+
+```r
+whas %>% summarize(maxfol = max(lenfol)/365.25)
+```
+
+```
+## # A tibble: 1 x 1
+##   maxfol
+##    <dbl>
+## 1   6.46
+```
+
+The longest time anyone was followed up was six and a half years. Studies like this are funded for some number of years (say 10), and people can join after the beginning. (If they happen to join near the end, they won't get followed up for very long.)
+
+We're not going to analyze these data, but if we were, we would want to take advantage of the information in the patient who lived for "at least 2178 days". Looking only at the patients who we knew to have died would be wasteful and might introduce a bias; for example, if we were comparing several treatments, and one of the treatments was so good that almost everybody on it was still alive at the end, we would want to have a strong inference that this treatment was the best.
+
+With that in mind, let's redraw our boxplot with better labels for the followup status:
+
+
+```r
+whas3 %>% 
+  mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
+  ggplot(aes(x = followup_status, y = lenfol)) + geom_boxplot()
+```
+
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+
+Now we have a clearer sense of what is going on. Out of the patients who died, some of them survived a long time, but most of them died fairly quickly. Out of the patients who were censored, the times they were observed were all over the place, which suggests that (at least for the ones still in the study at the end) they joined the study at all kinds of different times.
+
+Another graph that is possible here is a facetted histogram:
+
+
+```r
+whas3 %>% 
+  mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
+  ggplot(aes(x = lenfol)) + geom_histogram(bins = 10) +
+  facet_wrap(~followup_status)
+```
+
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-18-1.png" width="672"  />
+
+The right-skewed distribution of times to death is what we saw from the boxplot, but what is that periodic thing on the left? Let's convert the days to years and draw again:
 
 
 
+```r
+whas3 %>% 
+  mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
+  mutate(followup_years = lenfol/365.25) %>% 
+  ggplot(aes(x = followup_years)) + geom_histogram(bins = 20) +
+  facet_wrap(~followup_status)
+```
 
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+
+That's odd. On the left, it looks as if there were bursts of patients admitted to the study at around 1.5, 3.5, and 5.5 years from the end. (These are, remember, all people who survived and mostly people who survived to the end.) Not what I would have expected -- I would have expected a steady stream of patients, the heart attack victims as they happened to come in.
 
 
 ##  Growth of Mizuna lettuce seeds
@@ -510,7 +600,7 @@ Solution
 ggplot(mizuna, aes(x = date, y = height)) + geom_point() + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
 
        
 
@@ -534,7 +624,7 @@ ggplot(mizuna, aes(x = date, y = height, label = water)) +
   geom_point() + geom_line() + geom_text_repel(colour = "red")
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-16-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
 
  
 
@@ -549,7 +639,7 @@ ggplot(mizuna, aes(x = date, y = height, label = water)) +
   geom_point() + geom_line() + geom_label_repel(colour = "red", alpha = 0.7)
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
 
  
 
@@ -798,7 +888,7 @@ ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-22-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
 
         
 
@@ -815,7 +905,7 @@ ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() +
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-23-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
  
 I see a downward trend. ("A downward trend with a wiggle" if you
@@ -1190,7 +1280,7 @@ Nothing terribly surprising here:
 ggplot(denali, aes(x = caribou, y = wolf)) + geom_point()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-33-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
 
        
 If you like, add a smooth trend to it:
@@ -1205,7 +1295,7 @@ ggplot(denali, aes(x = caribou, y = wolf)) + geom_point() + geom_smooth(se = F)
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-34-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
        
 
@@ -1235,7 +1325,7 @@ denali %>%
   ggplot(aes(x = caribou, y = wolf, label = year)) + geom_point() + geom_text_repel()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
 
  
 
@@ -1256,7 +1346,7 @@ denali %>%
   geom_text_repel() + geom_path()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 
@@ -1283,7 +1373,7 @@ goes on the $x$-axis):
 ggplot(denali, aes(x = date, y = caribou)) + geom_point() + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
 
  
 
@@ -1319,7 +1409,7 @@ denali %>%
   geom_point() + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-38-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-44-1.png" width="672"  />
 
        
 This is not quite the story, though, because the caribou and wolf
@@ -1341,7 +1431,7 @@ All right, so let's put the caribou on the left:
 ggplot(denali, aes(x = date, y = caribou)) + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-45-1.png" width="672"  />
 
  
 
@@ -1353,7 +1443,7 @@ from the wolf populations, that we're going to add in a moment. This looks rathe
 ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) + geom_line()
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-46-1.png" width="672"  />
 
  
 
@@ -1368,7 +1458,7 @@ ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
   geom_line(aes(y = wolf, colour = "wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-47-1.png" width="672"  />
 
  
 
@@ -1388,7 +1478,7 @@ ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
   geom_line(aes(y = wolf / 2.5, colour = "wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-48-1.png" width="672"  />
 
  
 
@@ -1404,7 +1494,7 @@ ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
   scale_y_continuous(sec.axis = sec_axis(~ . * 2.5, name = "wolf"))
 ```
 
-<img src="13-dates-and-times_files/figure-html/unnamed-chunk-43-1.png" width="672"  />
+<img src="13-dates-and-times_files/figure-html/unnamed-chunk-49-1.png" width="672"  />
 
  
 

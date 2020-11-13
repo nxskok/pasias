@@ -1546,9 +1546,9 @@ square array:
 
 
 ```r
-fruit_spread <- combos %>%
+combos %>%
   mutate(dissim = map2_int(fruit, other, dissim, fruit2)) %>%
-  spread(other, dissim)
+  pivot_wider(names_from = other, values_from = dissim) -> fruit_spread
 fruit_spread
 ```
 

@@ -11,7 +11,7 @@ library(tidyverse)
 
 ```
 ## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
-## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tibble  3.0.4     ✓ dplyr   1.0.2
 ## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 ## ✓ readr   1.3.1     ✓ forcats 0.5.0
 ```
@@ -1032,8 +1032,8 @@ x
 ```
 
 ```
-##  [1] 59.65680 39.97196 47.33336 41.27752 56.15259 39.66668 44.48941 43.53997
-##  [9] 45.68467 46.83751
+##  [1] 54.86450 65.10858 22.15768 38.05706 42.41133 72.24686 35.44998 34.23035
+##  [9] 56.61626 39.42888
 ```
 
 
@@ -1057,8 +1057,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        8
-## 2 TRUE         2
+## 1 FALSE        5
+## 2 TRUE         5
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1092,7 +1092,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       2 FALSE
+## 1       5 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1112,7 +1112,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       2 FALSE
+## 1       5 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
